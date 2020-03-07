@@ -78,12 +78,12 @@ BADR.Bomber:
 	GivesExperience:
 		Experience: 1000
 	Interactable:
-	
+
 BADR.CBomber:
 	Inherits: BADR.Bomber
 	Armament:
 		Weapon: CarpetBomb
-		
+
 BADR.NBomber:
 	Inherits: BADR.Bomber
 	AmmoPool:
@@ -174,7 +174,7 @@ MIG:
 		CruiseAltitude: 2560
 		InitialFacing: 192
 		TurnSpeed: 4
-		Speed: 225
+		Speed: 205
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
@@ -202,7 +202,7 @@ MIG:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: afld, afld.gdi
-		
+
 FROG:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -233,7 +233,7 @@ FROG:
 		CruiseAltitude: 2560
 		InitialFacing: 192
 		TurnSpeed: 4
-		Speed: 180
+		Speed: 225
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
@@ -380,7 +380,7 @@ TRAN:
 	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 40,36
-		
+
 TRAN.Eagle:
 	Inherits: TRAN
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -395,7 +395,7 @@ TRAN.Eagle:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
 		IconPalette: chrometd
-		Prerequisites: hpad2, ~aircraft.eagle, ~techlevel.infonly
+		Prerequisites: hpad2, ~aircraft.eagle, gtek, ~techlevel.infonly
 		Description: Fast Infantry Transport Helicopter.\n  Infantry can fire from weapon ports.
 	Health:
 		HP: 28000
@@ -666,7 +666,7 @@ U2:
 	RejectsOrders:
 	Interactable:
 	-MapEditorData:
-	
+
 U2Bomber:
 	Inherits: ^NeutralPlane
 	RenderSprites:
@@ -708,7 +708,7 @@ U2Bomber:
 	Interactable:
 	Rearmable:
 		RearmActors: boris
-	
+
 A10:
 	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -742,7 +742,7 @@ A10:
 		CruiseAltitude: 2560
 		InitialFacing: 192
 		TurnSpeed: 4
-		Speed: 180
+		Speed: 225
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
@@ -786,7 +786,7 @@ a10.bomber:
 		CruiseAltitude: 2560
 		InitialFacing: 192
 		TurnSpeed: 4
-		Speed: 180
+		Speed: 225
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		MoveIntoShroud: False
@@ -812,7 +812,7 @@ a10.bomber:
 	Interactable:
 	GivesExperience:
 		Experience: 1000
-		
+
 c17:
 	Inherits: ^NeutralPlane
 	RenderSprites:
@@ -867,7 +867,7 @@ c17:
 	GivesExperience:
 		Experience: 1000
 	-MapEditorData:
-	
+
 c17.cargo:
 	Inherits: c17
 	RenderSprites:
@@ -895,7 +895,7 @@ c17.clustermines:
 		Image: c17
 		PlayerPalette: overlayplayertd
 	-ParaDrop:
-		
+
 APCH:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -982,7 +982,7 @@ ORCA:
 		TurnSpeed: 5
 		TakeoffSounds: orcaup1.aud
 		LandingSounds: orcadwn1.aud
-		Speed: 201
+		Speed: 181
 	Health:
 		HP: 18500
 	RevealsShroud:
@@ -1020,7 +1020,7 @@ ORCA:
 		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad2
-		
+
 ORCAB:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1029,7 +1029,7 @@ ORCAB:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad2, ~aircraft.eagle, gtek, ~techlevel.high
+		Prerequisites: ~hpad2, ~aircraft.eagle, ~techlevel.high
 		IconPalette: chrometd
 		Description: VTOL Bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft
 	Valued:
@@ -1288,7 +1288,7 @@ KIROV:
 	Explodes:
 		Weapon: KirovExplode
 		RequiresCondition: !airborne
-		
+
 ORCACA:
 	Inherits: ^HelicopterTD
 	Valued:
@@ -1307,8 +1307,8 @@ ORCACA:
 	Aircraft:
 		AltitudeVelocity: 0c100
 		IdealSeparation: 0c768
-		TurnSpeed: 4
-		Speed: 135
+		TurnSpeed: 5
+		Speed: 155
 		TakeoffSounds: dropup1.aud
 		LandingSounds: dropdwn1.aud
 		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
@@ -1316,8 +1316,8 @@ ORCACA:
 		IdleTurnSpeed: 1
 		Voice: Move
 	Carryall:
-		BeforeLoadDelay: 10
-		BeforeUnloadDelay: 15
+		BeforeLoadDelay: 5
+		BeforeUnloadDelay: 10
 		LocalOffset: 0, 0, -128
 		Voice: Action
 		AllowDropOff: True
@@ -1341,7 +1341,7 @@ ORCACA:
 		VoiceSet: CarryAllVoice
 	WithMoveAnimation:
 		MoveSequence: move
-		
+
 ORCACA.reinforce:
 	Inherits: ORCACA
 	-Buildable:
@@ -1356,8 +1356,8 @@ ORCACA.reinforce:
 	Aircraft:
 		AltitudeVelocity: 0c100
 		IdealSeparation: 0c256
-		TurnSpeed: 4
-		Speed: 135
+		TurnSpeed: 6
+		Speed: 155
 		TakeoffSounds: dropup1.aud
 		LandingSounds: dropdwn1.aud
 		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
@@ -1370,7 +1370,7 @@ ORCACA.reinforce:
 	-Voiced:
 	RejectsOrders:
 	Interactable:
-	
+
 HARR:
 	Inherits: ^Helicopter
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1437,7 +1437,7 @@ HARR:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: hpad, hpad2
-		
+
 SCRIN:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -1475,7 +1475,7 @@ SCRIN:
 	Aircraft:
 		CruiseAltitude: 2560
 		TurnSpeed: 5
-		Speed: 225
+		Speed: 205
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		CanHover: False
@@ -1513,7 +1513,7 @@ SCRIN:
 	ProductionCostMultiplier@markedBonus:
 		Multiplier: 90
 		Prerequisites: structures.marked
-		
+
 HORN:
 	Inherits: ^PlaneTD
 	Valued:
@@ -1617,7 +1617,7 @@ YF23.bomber:
 	Interactable:
 	GivesExperience:
 		Experience: 1000
-		
+
 DPOD2:
 	Inherits@2: ^ExistsInWorld
 	Valued:
@@ -1664,7 +1664,7 @@ DPOD2:
 		Moves: True
 		Velocity: 113
 		Explosion: DropPodVisual
-		
+
 DPOD1:
 	Inherits: DPOD2
 	RenderSprites:
