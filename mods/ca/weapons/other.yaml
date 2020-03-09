@@ -1193,3 +1193,43 @@ CyCannon:
 			Concrete: 40
 			Brick: 70
 		DamageTypes: Prone350Percent, TriggerProne, ExplosionDeath
+
+CryoGun:
+	ReloadDelay: 90
+	Range: 5c512
+	ValidTargets: Ground, Water
+	Projectile: LaserZap
+		Width: 25
+		Duration: 20
+		ZOffset: 2047
+		Color: FFFFFF
+		SecondaryBeam: true
+		SecondaryBeamWidth: 50
+		SecondaryBeamZOffset: 2047
+		SecondaryBeamColor: 57BEFFBB
+		Blockable: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 550
+		Falloff: 100, 25, 12, 0
+		Versus:
+			None: 100
+			Wood: 15
+			Light: 35
+			Heavy: 5
+			Concrete: 5
+			Brick: 1
+		DamageTypes: SmallExplosionDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: cryohit
+		ImpactSounds: cryozap.aud
+	Warhead@chill: GrantExternalCondition
+		Condition: chilled
+		Duration: 120
+		Range: 0c448
+	Warhead@cryoresidue: CreateTintedCells
+		LayerName: cryoresidue
+		Spread: 1c0
+		Level: 100
+		Falloff: 100, 52, 15, 2
+		MaxLevel: 600
