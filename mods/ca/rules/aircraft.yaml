@@ -1511,7 +1511,7 @@ HARR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~techlevel.high
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~aircraft.soviets, ~techlevel.high
 		Description: Fast VTOL Attack Plane armed\nwith powerful explosive missiles.\n  Strong vs Structures, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
@@ -1551,6 +1551,73 @@ HARR:
 	AmmoPool:
 		Ammo: 4
 		PipCount: 4
+		AmmoCondition: ammo
+	Contrail@1:
+		Offset: -400,-443,0
+	Contrail@2:
+		Offset: -400,443,0
+	SelectionDecorations:
+	SpawnActorOnDeath:
+		Actor: HARR.Husk
+	SmokeTrailWhenDamaged:
+		Offset: -427,0,0
+	Selectable:
+		DecorationBounds: 36,28
+	Voiced:
+		VoiceSet: HarrierVoice
+	ProducibleWithLevel:
+		Prerequisites: aircraft.upgraded
+	Rearmable:
+		RearmActors: hpad, hpad2
+
+HARRFighter:
+	Inherits: ^Helicopter
+	Inherits@AUTOTARGET: ^AutoTargetAir
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~techlevel.high
+		Description: Fast VTOL Attack Plane armed\nwith powerful Air-to-Air missiles.\n  Strong vs Aircraft\n  Weak vs Ground
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Harrier Fighter
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 22000
+	RevealsShroud:
+		Range: 12c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	Armament:
+		Weapon: Nike.Harrier
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo || being-warped
+	AttackAircraft:
+		FacingTolerance: 20
+		Voice: Attack
+	Aircraft:
+		CruiseAltitude: 2560
+		TurnSpeed: 5
+		Speed: 225
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		CanHover: False
+		TakeoffSounds: mtoff1.aud, mtoff2.aud
+		LandingSounds: mland1.aud, mland2.aud
+		IdealSeparation: 1c682
+		Voice: Move
+		CanSlide: False
+		AltitudeVelocity: 0c200
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+	AmmoPool:
+		Ammo: 2
+		PipCount: 2
 		AmmoCondition: ammo
 	Contrail@1:
 		Offset: -400,-443,0

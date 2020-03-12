@@ -2056,6 +2056,68 @@ IFV:
 		ValidTargets: Vehicle, Ship
 		RequiresCondition: engturr
 
+BATF2:
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 198
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
+		Description: Tough heavy bombardment tank\n with lasers to intercept missiles.\n  Special Ability: Can crush enemy vehicles.
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Battle Fortress
+	Health:
+		HP: 100000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 56
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		Voice: Move
+	RevealsShroud:
+		Range: 4c0
+	Armament:
+		Weapon: 155mm.BATF
+		LocalOffset: 624,0,208
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: PointLaser
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	Explodes:
+		Weapon: ArtilleryExplode
+		EmptyWeapon: UnitExplodeSmall
+		LoadedChance: 75
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 44,38,0,-4
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	Voiced:
+		VoiceSet: BattleFortressVoice
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	PointDefense:
+		Armament: secondary
+		PointDefenseTypes: Missile
+		ValidStances: Enemy
+
 IFV.AI:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2827,7 +2889,7 @@ BATF:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 198
-		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
+		Prerequisites: tent, radar, ~weap, ~vehicles.france,  ~!vehicles.france, ~techlevel.low
 		Description: Tough infantry transport\nwith weapon ports for infantry.\n  Special Ability: Can crush enemy vehicles.
 	Valued:
 		Cost: 2000
@@ -2920,7 +2982,7 @@ BATF:
 		Voice: Attack
 
 BATF.AI:
-	Inherits: BATF
+	Inherits: BATF2
 	RenderSprites:
 		Image: batf
 	Buildable:
