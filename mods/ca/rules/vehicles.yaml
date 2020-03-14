@@ -2059,15 +2059,15 @@ IFV:
 BATF2:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 198
 		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
-		Description: Tough heavy bombardment tank\n with lasers to intercept missiles.\n  Special Ability: Can crush enemy vehicles.
+		Description: Tough support tank with anti-air and pointlaser defense to intercept missiles.\n  Special Ability: Can crush enemy vehicles.
 	Valued:
-		Cost: 3000
+		Cost: 2000
 	Tooltip:
 		Name: Battle Fortress
 	Health:
@@ -2080,7 +2080,7 @@ BATF2:
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
 		Voice: Move
 	RevealsShroud:
-		Range: 4c0
+		Range: 8c0
 	Armament:
 		Weapon: ZSU-23
 		LocalOffset: 624,0,208
@@ -2117,6 +2117,8 @@ BATF2:
 		Armament: secondary
 		PointDefenseTypes: Missile, Bullet
 		ValidStances: Enemy
+	AutoTarget:
+		ScanRadius: 10
 
 IFV.AI:
 	Inherits: ^Tank
