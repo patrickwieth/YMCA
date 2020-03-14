@@ -2098,3 +2098,33 @@ rmboc:
 	WithInfantryBody@Warped:
 		StandSequences: stand
 		RequiresCondition: being-warped || empdisable
+
+CRYOT:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 50
+		Prerequisites: ~infantry.germany, dome, ~tent, ~techlevel.medium
+		Description: Support infantry that slows enemies and makes them take more damage.
+		IconPalette: chrometd
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Cryo Trooper
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 7000
+	Mobile:
+		Speed: 41
+	Armament@PRIMARY:
+		Weapon: CryoGun
+		LocalOffset: 341,0,256
+		PauseOnCondition: being-warped
+	TakeCover:
+		ProneOffset: 227,0,-245
+	AttackFrontal:
+		PauseOnCondition: being-warped
