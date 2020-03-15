@@ -546,7 +546,7 @@ JEEP:
 		TurnSpeed: 10
 		Speed: 157
 	RevealsShroud:
-		Range: 8c0
+		Range: 14c0
 	Turreted:
 		TurnSpeed: 10
 		Offset: 0,0,128
@@ -589,7 +589,7 @@ APC:
 		Speed: 135
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
 	RevealsShroud:
-		Range: 4c0
+		Range: 7c0
 	Armament:
 		Weapon: M60mg
 		LocalOffset: 85,0,171
@@ -1016,7 +1016,7 @@ HMMV:
 		TurnSpeed: 10
 		Speed: 157
 	RevealsShroud:
-		Range: 8c0
+		Range: 14c0
 	Turreted:
 		TurnSpeed: 10
 		Offset: -85,0,128
@@ -1061,7 +1061,7 @@ BGGY:
 	Mobile:
 		Speed: 157
 	RevealsShroud:
-		Range: 8c0
+		Range: 14c0
 	Turreted:
 		TurnSpeed: 10
 		Offset: -43,0,128
@@ -1111,7 +1111,7 @@ APC2:
 		Speed: 135
 		PauseOnCondition: being-captured || empdisable || being-warped || notmobile
 	RevealsShroud:
-		Range: 4c0
+		Range: 7c0
 	Armament:
 		Weapon: M60mgTD
 		LocalOffset: 85,0,171
@@ -1826,7 +1826,7 @@ BTR:
 		Speed: 135
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
 	RevealsShroud:
-		Range: 5c0
+		Range: 7c0
 	Turreted:
 		TurnSpeed: 10
 		Offset: 20,0,175
@@ -1875,10 +1875,10 @@ IFV:
 		Speed: 113
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
 	RevealsShroud:
-		Range: 5c0
+		Range: 7c0
 		RequiresCondition: !spyturr
 	RevealsShroud@SPY:
-		Range: 10c0
+		Range: 15c0
 		RequiresCondition: spyturr
 	Turreted:
 		TurnSpeed: 10
@@ -2115,7 +2115,7 @@ BATF2:
 		AddToArmyValue: true
 	PointDefense:
 		Armament: secondary
-		PointDefenseTypes: Missile, Bullet
+		PointDefenseTypes: Missile, BulletCA
 		ValidStances: Enemy
 	AutoTarget:
 		ScanRadius: 10
@@ -2697,7 +2697,7 @@ MSAR:
 	Inherits: ^VehicleTD
 	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Valued:
-		Cost: 1000
+		Cost: 1500
 	Tooltip:
 		Name: Mobile Sensor Array
 		RequiresCondition: !deployed
@@ -2725,7 +2725,7 @@ MSAR:
 		Range: 6c0
 	RevealsShroud@DEPLOYED:
 		RequiresCondition: !undeployed
-		Range: 10c0
+		Range: 16c0
 	RenderSprites:
 		Image: msar
 	Repairable:
@@ -2754,6 +2754,14 @@ MSAR:
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
 		UndeployOnPickup: true
+	Armament@Deployed:
+		Name: primary
+		Turret: primary
+		Weapon: SuperPointLaser
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: deployed
 	DetectCloaked@Deployed:
 		Range: 10c0
 		CloakTypes: Cloak
@@ -2773,6 +2781,11 @@ MSAR:
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Vehicle, ChaosImmune
+	PointDefense@Deployed:
+		Armament: primary
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
+		RequiresCondition: deployed
 
 PTNK:
 	Inherits: ^Tank

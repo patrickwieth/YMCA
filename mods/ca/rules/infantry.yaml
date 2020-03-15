@@ -92,7 +92,7 @@ E1:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 10
 		Prerequisites: ~barracksRA, ~techlevel.infonly
-		Description: General-purpose infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		Description: General-purpose infantry with good scouting abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	Selectable:
 		Class: E1
 	Valued:
@@ -103,6 +103,8 @@ E1:
 		AddToArmyValue: true
 	Health:
 		HP: 5000
+	RevealsShroud:
+		Range: 12c0
 	Armament@PRIMARY:
 		Weapon: M1Carbine
 		PauseOnCondition: being-warped
@@ -578,7 +580,7 @@ CHAN:
 		Class: CHAN
 	Tooltip:
 		Name: Scientist
-		
+
 MOEBIUS:
 	Inherits: ^CivInfantry
 	-Wanders:
@@ -744,7 +746,7 @@ SHOK:
 	ProductionCostMultiplier@RussiaBonus:
 		Multiplier: 90
 		Prerequisites: infantry.russia
-		
+
 SHOK.nod:
 	Inherits: SHOK
 	RenderSprites:
@@ -754,7 +756,7 @@ SHOK.nod:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 130
 		Prerequisites: ~inf.soviet.stolen, ~infantry.nod, ~tmpl, ~techlevel.high
-		
+
 N1:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -766,7 +768,7 @@ N1:
 		BuildPaletteOrder: 10
 		Prerequisites: ~!bio.nod, ~barrackstd, ~techlevel.infonly
 		IconPalette: chrometd
-		Description: General-purpose infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		Description: General-purpose infantry with good scouting abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 100
 	Tooltip:
@@ -775,6 +777,8 @@ N1:
 		AddToArmyValue: true
 	Health:
 		HP: 5000
+	RevealsShroud:
+		Range: 12c0
 	Armament@PRIMARY:
 		Weapon: M16Carbine
 		PauseOnCondition: being-warped
@@ -793,7 +797,7 @@ N1:
 		Prerequisites: barracks.upgraded
 	Selectable:
 		Class: E1
-		
+
 N1R1:
 	Inherits: N1
 	RenderSprites:
@@ -852,7 +856,7 @@ N2:
 		Prerequisites: barracks.upgraded
 	Selectable:
 		Class: E2
-		
+
 N2R1:
 	Inherits: N2
 	RenderSprites:
@@ -924,7 +928,7 @@ N3:
 		Prerequisites: barracks.upgraded
 	Selectable:
 		Class: E3
-		
+
 N3R1:
 	Inherits: N3
 	RenderSprites:
@@ -1048,7 +1052,7 @@ N5:
 	FirepowerMultiplier@BIOLAB:
 		RequiresCondition: nodupg || biofirepower
 		Modifier: 110
-		
+
 N5R1:
 	Inherits: N5
 	RenderSprites:
@@ -1150,7 +1154,7 @@ N6:
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-		
+
 VICE:
 	Inherits: ^Viceroid
 	Mobile:
@@ -1164,7 +1168,7 @@ VICE:
 	AttackWander:
 	Targetable:
 		TargetTypes: Ground, Infantry, Creep, ChaosImmune
-	
+
 SNIPER:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1185,7 +1189,7 @@ SNIPER:
 	Health:
 		HP: 2500
 	RevealsShroud:
-		Range: 8c0
+		Range: 14c0
 	Armament@PRIMARY:
 		Weapon: sniper
 		PauseOnCondition: being-warped
@@ -1233,7 +1237,7 @@ SNIPER:
 		VoiceSet: SniperVoice
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
-		
+
 BORIS:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1308,7 +1312,7 @@ BORIS:
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-		
+
 MORT:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1352,7 +1356,7 @@ MORT:
 		DeathSequencePalette: playertd
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
-		
+
 SAB:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1426,7 +1430,7 @@ SAB:
 	ProductionCostMultiplier@LegionBonus:
 		Multiplier: 80
 		Prerequisites: infantry.legion
-		
+
 ACOL:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1513,7 +1517,7 @@ ACOL:
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-		
+
 JUMPJET:
 	Inherits@1: ^ExistsInWorld
 	Inherits@3: ^IronCurtainable
@@ -1540,7 +1544,7 @@ JUMPJET:
 	HiddenUnderFog:
 		Type: GroundPosition
 	RevealsShroud:
-		Range: 6c0
+		Range: 10c0
 		Type: GroundPosition
 	AttackMove:
 	Guard:
@@ -1717,7 +1721,7 @@ JUMPJET:
 		InvalidTargets: NoAutoTarget
 	KillsSelf:
 		RequiresCondition: empdisable && cruising
-		
+
 JUMPJET.Husk:
 	BodyOrientation:
 		QuantizedFacings: 1
@@ -1753,7 +1757,7 @@ JUMPJET.Husk:
 		RequiresCondition: water-death
 		FallbackSequence: die-splash
 	Interactable:
-	
+
 E8:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -1846,7 +1850,7 @@ n1c:
 		BuildPaletteOrder: 10
 		Prerequisites: ~bio.nod, ~hand, ~techlevel.medium
 		IconPalette: chrometd
-		Description: General-purpose infantry\n  Strong vs Infantry\n  Weak vs Vehicles, Artillery
+		Description: General-purpose infantry with good scout abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Artillery
 	Valued:
 		Cost: 150
 	Tooltip:
@@ -1856,6 +1860,8 @@ n1c:
 		AddToArmyValue: true
 	Health:
 		HP: 10000
+	RevealsShroud:
+		Range: 12c0
 	Mobile:
 		Speed: 49
 		Voice: Move
@@ -1906,7 +1912,7 @@ n1c:
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-		
+
 n3c:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -2002,7 +2008,7 @@ n3c:
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-		
+
 rmboc:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
