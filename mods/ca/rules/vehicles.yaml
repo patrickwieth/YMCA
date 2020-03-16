@@ -1186,7 +1186,7 @@ LTNK:
 	Turreted:
 		TurnSpeed: 7
 	Armament:
-		Weapon: 30mm
+		Weapon: Laser.Tank
 		Recoil: 85
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
@@ -1194,6 +1194,15 @@ LTNK:
 		PauseOnCondition: empdisable || being-warped || parachute
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
+	AttackCharges:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable
+		ChargeLevel: 50
+		ChargingCondition: charging
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: obelpowr.aud
+		Interval: 30, 40
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
@@ -2754,6 +2763,10 @@ MSAR:
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
 		UndeployOnPickup: true
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
 	Armament@Deployed:
 		Name: primary
 		Turret: primary
