@@ -232,9 +232,9 @@ V2RL:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
 		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
-		Description: Big and slow tank, with anti-air capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
+		Description: Big and slow tank, with anti-air and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Valued:
-		Cost: 1700
+		Cost: 3000
 	Tooltip:
 		Name: Mammoth Tank
 		GenericName: Tank
@@ -277,6 +277,17 @@ V2RL:
 		Recoil: 43
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
+	Armament@TERNARY:
+		Name: ternary
+		Turret: ternary
+		Weapon: AdvancedPointLaser
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+	PointDefense:
+		Armament: secondary
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
 	SpeedMultiplier@IRAQTANK:
 		RequiresCondition: iraqtank
 		Modifier: 125
@@ -2125,6 +2136,7 @@ BATF2:
 	PointDefense:
 		Armament: secondary
 		PointDefenseTypes: Missile, BulletCA
+		PauseOnCondition: empdisable || being-warped
 		ValidStances: Enemy
 	AutoTarget:
 		ScanRadius: 10
@@ -2703,7 +2715,7 @@ TNKD:
 		DecorationBounds: 28,28
 
 MSAR:
-	Inherits: ^Tank
+	Inherits: ^VehicleTD
 	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Valued:
 		Cost: 1500
@@ -2734,7 +2746,7 @@ MSAR:
 		Range: 6c0
 	RevealsShroud@DEPLOYED:
 		RequiresCondition: !undeployed
-		Range: 16c0
+		Range: 10c0
 	RenderSprites:
 		Image: msar
 	Repairable:
@@ -2763,18 +2775,6 @@ MSAR:
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
 		UndeployOnPickup: true
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped
-	Armament@Deployed:
-		Name: primary
-		Turret: primary
-		Weapon: SuperPointLaser
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: deployed
 	DetectCloaked@Deployed:
 		Range: 10c0
 		CloakTypes: Cloak
@@ -2794,11 +2794,21 @@ MSAR:
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Vehicle, ChaosImmune
-	PointDefense@Deployed:
-		Armament: primary
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+	PointDefense:
+		Armament: secondary
 		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
 		RequiresCondition: deployed
+		ValidStances: Enemy
+		PauseOnCondition: empdisable || being-warped
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: SuperPointLaser
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
 
 PTNK:
 	Inherits: ^Tank
