@@ -285,7 +285,7 @@ V2RL:
 		ForceTargetStances: enemy
 		PauseOnCondition: empdisable || being-warped
 	PointDefense:
-		Armament: secondary
+		Armament: ternary
 		PointDefenseTypes: Missile, BulletCA
 		ValidStances: Enemy
 	SpeedMultiplier@IRAQTANK:
@@ -1162,8 +1162,8 @@ LTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: astrip, ~!vehicles.legion, ~vehicles.nod, ~techlevel.low
-		Description: Fast, light tank.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious
+		Prerequisites: astrip, ~vehicles.nod, ~techlevel.low
+		Description: Fast, light tank.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious, shoots Laser if you have Bio-Lab
 	Valued:
 		Cost: 675
 	Tooltip:
@@ -1197,12 +1197,20 @@ LTNK:
 	Turreted:
 		TurnSpeed: 7
 	Armament:
+		Weapon: 30mm
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,0,90
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped || parachute
+	Armament@SECONDARY:
 		Weapon: Laser.Tank
 		Recoil: 85
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped || parachute
+		RequiresCondition: nodupg
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 	AttackCharges:
