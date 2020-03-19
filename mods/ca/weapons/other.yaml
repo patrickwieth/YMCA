@@ -434,8 +434,9 @@ Laser.Adv:
 
 Laser.Tank:
 	Inherits: Laser
-	ReloadDelay: 60
+	ReloadDelay: 180
 	Report: obelmod1.aud
+	Range: 7c512
 	Projectile: LaserZap
 		Width: 56
 		HitAnim: laserfire
@@ -444,7 +445,7 @@ Laser.Tank:
 		SecondaryBeam: true
 		SecondaryBeamWidth: 90
 		SecondaryBeamZOffset: 2047
-		SecondaryBeamColor: FF00FF40
+		SecondaryBeamColor: FF000040
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
 		Spread: 42
@@ -525,14 +526,42 @@ PointLaser:
 		SecondaryBeamColor: 03fcfc30
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
+		Spread: 5
 		Damage: 1
 
-SuperPointLaser:
+AdvancedPointLaser:
 	Inherits: Laser
-	ReloadDelay: 10
+	ReloadDelay: 30
 	ValidTargets: Ground, Missile, BulletCA
 	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
 	Range: 2c768
+	Report: vpalwe2d.aud
+	Projectile: LaserZap
+		Width: 30
+		Duration: 3
+		-HitAnim:
+		Color: 03f0fc
+		ZOffset: 2047
+		SecondaryBeam: true
+		SecondaryBeamWidth: 50
+		SecondaryBeamZOffset: 2047
+		SecondaryBeamColor: ff000030
+		Blockable: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 5
+		Damage: 1
+
+AdvancedPointLaser.soviet:
+	Inherits: AdvancedPointLaser
+	Projectile: LaserZap
+		SecondaryBeamColor: ff000030
+
+SuperPointLaser:
+	Inherits: Laser
+	ReloadDelay: 20
+	ValidTargets: Ground, Missile, BulletCA
+	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
+	Range: 3c768
 	Report: vpalwe2d.aud
 	Projectile: LaserZap
 		Width: 30
@@ -543,10 +572,16 @@ SuperPointLaser:
 		SecondaryBeam: true
 		SecondaryBeamWidth: 50
 		SecondaryBeamZOffset: 2047
-		SecondaryBeamColor: 03fcfc30
+		SecondaryBeamColor: 0303fc30
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
+		Spread: 5
 		Damage: 1
+
+SuperPointLaser.gdi:
+	Inherits: SuperpointLaser
+	Projectile: LaserZap
+		SecondaryBeamColor: d1a70030
 
 PrisLaser:
 	ValidTargets: Ground, Water
@@ -687,6 +722,39 @@ FrogBomb:
 			Heavy: 30
 			Concrete: 55
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+
+RadBomb:
+	ValidTargets: Ground, Water
+	InvalidTargets: Air
+	ReloadDelay: 50
+	Report: chute1.aud
+	Burst: 5
+	BurstDelays: 10
+	Range: 4c512
+	TargetActorCenter: true
+	Projectile: GravityBomb
+		Image: BOMBLET
+		Velocity: 25, 0, -74
+		Acceleration: 0, 0, 0
+		Shadow: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 726
+		Damage: 300
+		Falloff: 1000, 650, 350, 150, 30, 7, 0
+		ValidTargets: Ground, Water
+		Versus:
+			None: 100
+			Wood: 55
+			Light: 35
+			Heavy: 30
+			Concrete: 55
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@1Radiation: CreateTintedCells
+		Spread: 1c0
+		Falloff: 100, 75, 50, 25, 0
+		Level: 250
+		MaxLevel: 2500
+
 	Warhead@Cluster: FireCluster
 		Weapon: ClusterBomb
 		RandomClusterCount: 3

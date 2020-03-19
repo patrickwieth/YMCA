@@ -262,6 +262,64 @@ FROG:
 	Rearmable:
 		RearmActors: afld, afld.gdi
 
+FROGDIRTY:
+	Inherits: ^Plane
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 51
+		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.high
+		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
+	Valued:
+		Cost: 1850
+	Tooltip:
+		Name: Frogfoot Dirty Bomber
+	Health:
+		HP: 16000
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	Armament@PRIMARY:
+		Weapon: RadBomb
+		LocalOffset: 256,-213,0
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 128
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 4
+		Speed: 225
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeoffSounds: migtoff1.aud
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+	AmmoPool:
+		Ammo: 5
+		PipCount: 5
+		AmmoCondition: ammo
+	SelectionDecorations:
+	Contrail@1:
+		Offset: -258,-723,0
+	Contrail@2:
+		Offset: -258,723,0
+	SpawnActorOnDeath:
+		Actor: FROG.Husk
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,0
+		Interval: 2
+	Selectable:
+		DecorationBounds: 30,28,0,2
+	ProducibleWithLevel:
+		Prerequisites: aircraft.upgraded
+	Rearmable:
+		RearmActors: afld, afld.gdi
+
 YAK:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1443,7 +1501,7 @@ ORCACA:
 		AltitudeVelocity: 0c100
 		IdealSeparation: 0c768
 		TurnSpeed: 5
-		Speed: 155
+		Speed: 175
 		TakeoffSounds: dropup1.aud
 		LandingSounds: dropdwn1.aud
 		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
