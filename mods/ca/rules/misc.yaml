@@ -22,12 +22,12 @@ MINP:
 	Inherits: MINV
 	Explodes:
 		Weapon: APMine
-		
+
 MINVS:
 	Inherits: ^Mine
 	Explodes:
 		Weapon: ATMine
-		
+
 MINS:
 	Inherits: ^Mine
 	Explodes:
@@ -228,7 +228,7 @@ camera.spyplane:
 	Inherits: CAMERA
 	EditorOnlyTooltip:
 		Name: (support power proxy camera)
-		
+
 camera.sathack:
 	Inherits: CAMERA
 	-RenderSpritesEditorOnly:
@@ -243,7 +243,7 @@ camera.sathack:
 	DetectCloaked:
 		Range: 10c0
 		CloakTypes: Cloak
-		
+
 camera.nrepair.ai:
 	Inherits: CAMERA
 	EditorOnlyTooltip:
@@ -289,7 +289,7 @@ camera.cloud:
 		FallbackSequence: die
 	PeriodicExplosion:
 		Weapon: Cloud
-		
+
 camera.cloud2:
 	Inherits: camera.cloud
 	RenderSprites:
@@ -300,7 +300,44 @@ camera.cloud2:
 		Damage: 300
 		DamageInterval: 5
 		DamageTypes: ToxinDeath
-	
+
+camera.cloud.noTint:
+	Interactable:
+	ConditionManager:
+	EditorOnlyTooltip:
+		Name: (support power)
+	RenderSprites:
+		Image: cloud1
+		Palette: tseffect-ignore-lighting-alpha75
+	WithSpriteBody:
+	BodyOrientation:
+		QuantizedFacings: 1
+	AlwaysVisible:
+	HitShape:
+	Mobile:
+		Speed: 20
+		Locomotor: cloud
+	Wanders:
+		WanderMoveRadius: 5
+		ReduceMoveRadiusDelay: 1
+	RevealsShroud:
+		Range: 6c0
+	Health:
+		HP: 30000
+	DamagedByTerrain:
+		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
+		Damage: 500
+		DamageInterval: 5
+		DamageTypes: ToxinDeath
+	Hovers:
+	WithDeathAnimation:
+		DeathSequencePalette: tseffect
+		DeathPaletteIsPlayerPalette: False
+		UseDeathTypeSuffix: False
+		CrushedSequence: die
+		FallbackSequence: die
+	PeriodicExplosion:
+		Weapon: Cloud.noTint
 
 SONAR:
 	Inherits: camera.spyplane
@@ -346,7 +383,7 @@ FLARE.dropzone:
 		DeliveryOffset: -1,1
 		DeliveringActor: orcaca.reinforce
 		Facing: 0
-		
+
 FLAREH.dropzone:
 	Inherits: FLARE
 	RevealsShroud:
@@ -523,7 +560,7 @@ powerproxy.paratroopers:
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
-		
+
 powerproxy.paratroopers2:
 	AlwaysVisible:
 	ParatroopersPower:
@@ -547,7 +584,7 @@ powerproxy.paratroopers2:
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
-		
+
 powerproxy.airstrike:
 	AlwaysVisible:
 	AirstrikePower:
@@ -581,7 +618,7 @@ vehicles.upgraded:
 aircraft.upgraded:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 inf.soviet.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
@@ -589,7 +626,7 @@ inf.soviet.stolen:
 veh.soviet.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 rad.soviet.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
@@ -597,7 +634,7 @@ rad.soviet.stolen:
 tec.soviet.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 inf.allies.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
@@ -605,7 +642,7 @@ inf.allies.stolen:
 veh.allies.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 rad.allies.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
@@ -613,7 +650,7 @@ rad.allies.stolen:
 tec.allies.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 inf.gdi.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
@@ -621,7 +658,7 @@ inf.gdi.stolen:
 veh.gdi.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 rad.gdi.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
@@ -629,15 +666,15 @@ rad.gdi.stolen:
 tec.gdi.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 inf.nod.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 veh.nod.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-	
+
 rad.nod.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
@@ -702,7 +739,7 @@ CTFLAG:
 	MapEditorData:
 		Categories: Decoration
 	Interactable:
-	
+
 SPLIT2:
 	Inherits: ^TibTree
 	RenderSprites:

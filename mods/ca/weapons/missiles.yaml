@@ -663,40 +663,53 @@ HonestJohn:
 		Footprint: xxx xxx xxx
 
 HonestJohn.legion
-	Inherits: HonestJohn
+	ReloadDelay: 130
+	Burst: 2
+	BurstDelays: 50
+	Range: 14c0
+	MinRange: 4c0
+	Report: rocket2.aud
+	Projectile: BulletCA
+		Blockable: false
+		Shadow: true
+		Inaccuracy: 0c511
+		Image: missile
+		TrailImage: smokey
+		TrailDelay: 3
+		Speed: 210
+		LaunchAngle: 37
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		Falloff: 500, 368, 135, 50, 18, 7, 0
+		Versus:
+			None: 100
+			Wood: 95
+			Concrete: 60
+			Light: 65
+			Heavy: 40
+			Brick: 15
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+	Warhead@2Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		Falloff: 500, 368, 135, 50, 18, 7, 0
+		Delay: 3
+		Versus:
+			None: 100
+			Wood: 95
+			Concrete: 60
+			Light: 65
+			Heavy: 40
+			Brick: 15
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
 	Warhead@13Spawn: SpawnActor
-		Actors: camera.cloud
+		Actors: camera.cloud.noTint
 		Range: 5
 		ForceGround: false
 		Image: Cloud1d
-		Palette: tseffect-ignore-lighting-alpha75
-		ValidTargets: Ground, Water
-	Warhead@14Spawn: SpawnActor
-		Actors: camera.cloud2, camera.cloud
-		Range: 5
-		ForceGround: false
-		Image: Cloud1d
-		Palette: tseffect-ignore-lighting-alpha75
-		ValidTargets: Ground, Water
-	Warhead@15Spawn: SpawnActor
-		Actors: camera.cloud2, camera.cloud
-		Range: 5
-		ForceGround: false
-		Image: Cloud1d
-		Palette: tseffect-ignore-lighting-alpha75
-		ValidTargets: Ground, Water
-	Warhead@16Spawn: SpawnActor
-		Actors: camera.cloud2
-		Range: 5
-		ForceGround: false
-		Image: Cloud2d
-		Palette: tseffect-ignore-lighting-alpha75
-		ValidTargets: Ground, Water
-	Warhead@17Spawn: SpawnActor
-		Actors: camera.cloud2
-		Range: 5
-		ForceGround: false
-		Image: Cloud2d
 		Palette: tseffect-ignore-lighting-alpha75
 		ValidTargets: Ground, Water
 
