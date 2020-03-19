@@ -1162,8 +1162,8 @@ LTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: astrip, ~vehicles.nod, ~techlevel.low
-		Description: Fast, light tank.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious, shoots Laser if you have Bio-Lab
+		Prerequisites: astrip, ~vehicles.nod, ~!bio.nod, ~techlevel.low
+		Description: Fast, light tank.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious
 	Valued:
 		Cost: 675
 	Tooltip:
@@ -1203,14 +1203,6 @@ LTNK:
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped || parachute
-	Armament@SECONDARY:
-		Weapon: Laser.Tank
-		Recoil: 85
-		RecoilRecovery: 17
-		LocalOffset: 720,0,90
-		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped || parachute
-		RequiresCondition: nodupg
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 	AttackCharges:
@@ -1229,6 +1221,24 @@ LTNK:
 		RequiresCondition: !onwater
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+
+LTNK.Laser:
+	Inherits: LTNK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 40
+		IconPalette: chrometd
+		Prerequisites: astrip, ~bio.nod, ~vehicles.nod, ~techlevel.low
+		Description: Fast, light tank shooting laser.\n  Strong vs heavy Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious
+	Tooltip:
+		Name: Laser Light Tank
+	Armament:
+		Weapon: Laser.Tank
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,0,90
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped || parachute
 
 MTNK:
 	Inherits: ^TankTD
