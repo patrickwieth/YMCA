@@ -1569,7 +1569,7 @@ MLRS:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 91
-		Prerequisites: tmpl, ~vehicles.nod, ~!vehicles.blackh, ~techlevel.high
+		Prerequisites: tmpl, ~vehicles.nod, ~!vehicles.legion, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Long-range rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
@@ -1621,6 +1621,21 @@ MLRS:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+
+MLRS.legion:
+	Inherits: MLRS
+	Buildable:
+		BuildPaletteOrder: 91
+		Prerequisites: tmpl, ~vehicles.nod, ~vehicles.legion, ~techlevel.high
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Long-range rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
+	Tooltip:
+		Name: SSM Launcher
+	Armament:
+		Weapon: honestjohn.legion
+		LocalOffset: 0,171,0, 0,-171,0
+		PauseOnCondition: empdisable || being-warped
 
 STNK.nod:
 	Inherits: ^VehicleTD
