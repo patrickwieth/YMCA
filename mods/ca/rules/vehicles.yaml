@@ -2977,13 +2977,13 @@ MWTNK:
 BATF:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 198
 		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
-		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.
+		Description: Tough infantry transport\nwith weapon ports for infantry.\n  Special Ability: Can crush enemy vehicles.
 	Valued:
 		Cost: 3000
 	Tooltip:
@@ -2999,48 +2999,59 @@ BATF:
 		Voice: Move
 	RevealsShroud:
 		Range: 4c0
-	AttackFrontal:
-		FacingTolerance: 20
+	AttackTurreted:
+		Turrets: primary, secondary, tertiary
+		Armaments: primary, secondary, tertiary
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
-	Armament@DEFAULT:
+	Armament@PRIMARY:
 		Name: primary
-		Weapon: HeliGunAG
-		LocalOffset: 685,0,271
+		Turret: primary
+		Weapon: 25mm
+		LocalOffset: 200,0,300
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: cargo
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: 25mm
+		FireDelay: 8
+		LocalOffset: 200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: cargo >= 2
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: BikeRockets
+		LocalOffset: -200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: cargo >= 3
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 200,-300,0
+		TurnSpeed: 3
+		PauseOnCondition: !cargo
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 200,300,0
+		TurnSpeed: 3
+		PauseOnCondition: cargo < 2
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -300,0,358
+		TurnSpeed: 3
+		PauseOnCondition: cargo < 3
 	WithMuzzleOverlay:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
 		PipCount: 5
 		LoadingCondition: notmobile
-		PassengerConditions:
-			e1: loaded
-			e2: loaded
-			e3: loaded-air
-			e4: loaded
-			e7: loaded
-			e8: loaded
-			n1: loaded
-			n2: loaded
-			n3: loaded-air
-			n4: loaded
-			n5: loaded
-			rmbo: loaded
-			boris: loaded
-			acol: loaded
-			mort: loaded
-			sniper: loaded
-			shok: loaded
-			shok.nod: loaded
-			sab: loaded
-			n1c: loaded
-			n3c: loaded-air
-			rmboc: loaded
-			tecn: loaded
-			tecn2: loaded
-			tecn3: loaded
+		LoadedCondition: cargo
+		EjectOnDeath: true
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
@@ -3048,18 +3059,6 @@ BATF:
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
-	AutoTargetPriority@DEFAULT:
-		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air
-	AutoTargetPriority@ATTACKANYTHING:
-		RequiresCondition: (stance-attackanything || assault-move) && !loaded-air
-	AutoTargetPriority@DEFAULT_AIR:
-		RequiresCondition: !stance-attackanything && !assault-move && loaded-air
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
-		InvalidTargets: NoAutoTarget, WaterStructure
-	AutoTargetPriority@ATTACKANYTHING_AIR:
-		RequiresCondition: (stance-attackanything || assault-move) && loaded-air
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		InvalidTargets: NoAutoTarget
 	Voiced:
 		VoiceSet: BattleFortressVoice
 	UpdatesPlayerStatistics:
@@ -3085,16 +3084,54 @@ BATF:
 		ValidStances: Enemy
 
 BATF.AI:
-	Inherits: BATF2
+	Inherits: BATF
+	Buildable:
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low, ~botplayer
 	RenderSprites:
 		Image: batf
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 198
-		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~botplayer, ~techlevel.high
-		Description: Tough infantry transport\nwith weapon ports for infantry.\n  Special Ability: Can crush enemy vehicles.
-	Cargo:
-		InitialUnits: e1,e1,e3,e3,e3
+	-Armament@PRIMARY:
+	-Armament@SECONDARY:
+	-Armament@TERTIARY:
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: 25mm
+		LocalOffset: 200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: 25mm
+		FireDelay: 8
+		LocalOffset: 200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: BikeRockets
+		LocalOffset: -200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	-Turreted@PRIMARY:
+	-Turreted@SECONDARY:
+	-Turreted@TERTIARY:
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 200,-300,0
+		TurnSpeed: 3
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 200,300,0
+		TurnSpeed: 3
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -300,0,358
+		TurnSpeed: 3
+	-Cargo:
+	Mobile:
+		PauseOnCondition: being-captured || empdisable || being-warped
 
 MEMP:
 	Inherits: ^TankTD
