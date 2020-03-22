@@ -449,7 +449,14 @@ Laser.Tank:
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
 		Spread: 42
-		Damage: 20000
+		Damage: 18000
+		Versus:
+			None: 32
+			Wood: 52
+			Light: 96
+			Heavy: 68
+			Concrete: 40
+			Brick: 32
 
 LaserTur:
 	Inherits: Laser
@@ -564,7 +571,8 @@ AdvancedPointLaser.gdi:
 AdvancedPointLaser.soviet:
 	Inherits: AdvancedPointLaser
 	Projectile: TeslaZap
-		Color: ff0333
+		Palette: pointTesla
+		DimZaps: 0
 
 SuperPointLaser:
 	Inherits: Laser
@@ -732,6 +740,23 @@ FrogBomb:
 			Heavy: 30
 			Concrete: 55
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@Cluster: FireCluster
+		Weapon: ClusterBomb
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
 
 RadBomb:
 	ValidTargets: Ground, Water
@@ -764,24 +789,6 @@ RadBomb:
 		Falloff: 100, 75, 50, 25, 0
 		Level: 250
 		MaxLevel: 2500
-
-	Warhead@Cluster: FireCluster
-		Weapon: ClusterBomb
-		RandomClusterCount: 3
-		Dimensions: 3,3
-		Footprint: xxx x_x xxx
-	Warhead@2Smu: LeaveSmudge
-		SmudgeType: Crater
-		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
-	Warhead@3Eff: CreateEffect
-		Explosions: artillery_explosion
-		ImpactSounds: kaboom15.aud
-		ValidTargets: Ground, Ship, Trees
-	Warhead@4EffWater: CreateEffect
-		Explosions: large_splash
-		ImpactSounds: splashl1.aud, splashl2.aud
-		ValidTargets: Water, Underwater
-		InvalidTargets: Ship, Structure, Bridge
 
 SonicZap:
 	ReloadDelay: 120
