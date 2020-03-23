@@ -169,8 +169,8 @@ E2:
 	Explodes:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
-		DamageSource: Killer
 		Chance: 33
+		DamageSource: Killer
 		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
@@ -280,9 +280,10 @@ E4:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 	Explodes:
-		Weapon: VisualExplode
-		EmptyWeapon: VisualExplode
-		Chance: 20
+		Weapon: UnitExplodeFlameSmall
+		EmptyWeapon: UnitExplodeFlameSmall
+		Chance: 33
+		DamageSource: Killer
 		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
@@ -295,9 +296,9 @@ E6:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
 		Prerequisites: ~barracksRA, ~techlevel.infonly
-		Description: Infiltrates and captures\nenemy structures.\n  Unarmed
+		Description: Infiltrates and captures\nenemy structures.n\Can also repair friendly structures & bridges.\n  Special Ability:  Repair\n  Unarmed
 	Valued:
-		Cost: 400
+		Cost: 500
 	Tooltip:
 		Name: Engineer
 	UpdatesPlayerStatistics:
@@ -747,7 +748,7 @@ SHOK:
 		Multiplier: 90
 		Prerequisites: infantry.russia
 
-SHOK.nod:
+SHOK.Nod:
 	Inherits: SHOK
 	RenderSprites:
 		Image: SHOK
@@ -760,7 +761,6 @@ SHOK.nod:
 N1:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
@@ -806,11 +806,12 @@ N1R1:
 		Prerequisites: techlevel.infonly
 		InitialLevels: 1
 	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: n1
 
 N2:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
@@ -851,6 +852,7 @@ N2:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
 		Chance: 33
+		DamageSource: Killer
 		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
@@ -865,6 +867,8 @@ N2R1:
 		Prerequisites: techlevel.infonly
 		InitialLevels: 1
 	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: n2
 
 N3:
 	Inherits: ^Soldier
@@ -937,6 +941,8 @@ N3R1:
 		Prerequisites: techlevel.infonly
 		InitialLevels: 1
 	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: n3
 
 N4:
 	Inherits: ^Soldier
@@ -983,9 +989,10 @@ N4:
 		DeathSequencePalette: playertd
 	WithMuzzleOverlay:
 	Explodes:
-		Weapon: VisualExplode
-		EmptyWeapon: VisualExplode
+		Weapon: UnitExplodeFlameSmall
+		EmptyWeapon: UnitExplodeFlameSmall
 		Chance: 33
+		DamageSource: Killer
 		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
@@ -1038,9 +1045,10 @@ N5:
 		DefaultAttackSequence: shoot
 	WithMuzzleOverlay:
 	Explodes:
-		Weapon: VisualExplodeChem
-		EmptyWeapon: VisualExplodeChem
+		Weapon: UnitExplodeChemSmall
+		EmptyWeapon: UnitExplodeChemSmall
 		Chance: 33
+		DamageSource: Killer
 		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
@@ -1061,6 +1069,8 @@ N5R1:
 		Prerequisites: techlevel.infonly
 		InitialLevels: 1
 	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: n5
 
 RMBO:
 	Inherits: ^Soldier
@@ -1131,7 +1141,7 @@ N6:
 		BuildPaletteOrder: 60
 		Prerequisites: ~barrackstd, ~techlevel.infonly
 		IconPalette: chrometd
-		Description: Infiltrates and captures\nenemy structures.\Can also repair friendly structures, bridges & tank husks.\n  Special Ability:  Repair\n  Unarmed
+		Description: Infiltrates and captures\nenemy structures.n\Can also repair friendly structures & bridges.\n  Special Ability:  Repair\n  Unarmed
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -1169,11 +1179,13 @@ VICE:
 	Targetable:
 		TargetTypes: Ground, Infantry, Creep, ChaosImmune
 
-SNIPER:
+SNIP:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
+	RenderSprites:
+		Image: sniper
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1238,10 +1250,12 @@ SNIPER:
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 
-BORIS:
+BORI:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	RenderSprites:
+		Image: boris
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1285,7 +1299,7 @@ BORIS:
 		LocalOffset: 30,0,250
 		PauseOnCondition: being-warped
 	AirstrikeMaster:
-		Actors: U2Bomber
+		Actors: U2.Bomber
 		SquadSize: 1
 		RespawnTicks: 150
 		InstaRepair: true
@@ -1348,9 +1362,9 @@ MORT:
 	WithInfantryBody:
 		DefaultAttackSequence: throw
 	Explodes:
-		Weapon: VisualExplodeChem
-		EmptyWeapon: VisualExplodeChem
-		Chance: 50
+		Weapon: UnitExplodeChemSmall
+		EmptyWeapon: UnitExplodeChemSmall
+		Chance: 33
 		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
@@ -1518,7 +1532,7 @@ ACOL:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-JUMPJET:
+JJET:
 	Inherits@1: ^ExistsInWorld
 	Inherits@3: ^IronCurtainable
 	Inherits@4: ^SpriteActor
@@ -1534,6 +1548,7 @@ JUMPJET:
 		QuantizedFacings: 8
 		UseClassicFacingFudge: true
 	RenderSprites:
+		Image: jumpjet
 		PlayerPalette: overlayplayertd
 	OwnerLostAction:
 		Action: Kill
@@ -1642,7 +1657,6 @@ JUMPJET:
 		CanHover: true
 		CanSlide: true
 		VTOL: true
-		LandOnCondition: empdisable
 	AttackAircraft:
 		AttackType: Hover
 		FacingTolerance: 0
@@ -1667,7 +1681,7 @@ JUMPJET:
 	DeathSounds@airborne:
 		RequiresCondition: airborne
 	SpawnActorOnDeath@airborne:
-		Actor: JUMPJET.Husk
+		Actor: JJET.Husk
 		RequiresCondition: airborne
 	WithDeathAnimation:
 		DeathSequencePalette: overlayplayertd
@@ -1722,7 +1736,7 @@ JUMPJET:
 	KillsSelf:
 		RequiresCondition: empdisable && cruising
 
-JUMPJET.Husk:
+JJET.Husk:
 	BodyOrientation:
 		QuantizedFacings: 1
 	HiddenUnderFog:
@@ -1841,7 +1855,7 @@ E8:
 		Modifier: 110
 
 
-n1c:
+N1C:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	RenderSprites:
@@ -1913,7 +1927,7 @@ n1c:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-n3c:
+N3C:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	RenderSprites:
@@ -2009,7 +2023,7 @@ n3c:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-rmboc:
+RMBC:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@EMP: ^EmpDisable
@@ -2054,11 +2068,13 @@ rmboc:
 	WithInfantryBody:
 		DefaultAttackSequence: shoot
 	Armament@PRIMARY:
-		Weapon: cycannon
+		Weapon: CyCannon
+		LocalOffset: 0,0,555
 		PauseOnCondition: being-warped
 	Armament@Garrison:
 		Name: mounted
 		Weapon: cycannon
+		LocalOffset: 0,0,555
 		PauseOnCondition: being-warped
 	Explodes:
 		Weapon: UnitExplodeSmall
@@ -2095,7 +2111,7 @@ rmboc:
 		RequiresCondition: tibheal
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
-		TargetTypes: Ground, Tank, ChaosImmune
+		TargetTypes: Ground, Infantry, Vehicle, ChaosImmune
 	Targetable@REPAIR:
 		RequiresCondition: !parachute && damaged && !being-warped
 		TargetTypes: Repair

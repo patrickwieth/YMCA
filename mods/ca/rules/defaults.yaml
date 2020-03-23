@@ -76,33 +76,33 @@
 		Prerequisite: botplayer
 		RequiresCondition: owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai
 	ProductionTimeMultiplier@brutalbonus:
-		Multiplier: 80
+		Multiplier: 84
 		Prerequisites: is-brutal-ai
 	ProductionTimeMultiplier@hardbonus:
-		Multiplier: 90
+		Multiplier: 92
 		Prerequisites: is-hard-ai
 	ProductionCostMultiplier@brutalbonus:
-		Multiplier: 90
+		Multiplier: 92
 		Prerequisites: is-brutal-ai
 	ProductionCostMultiplier@hardbonus:
-		Multiplier: 95
+		Multiplier: 96
 		Prerequisites: is-hard-ai
 
 ^BotGroundProductionBonus:
 	ProductionTimeMultiplier@brutalbonus:
-		Multiplier: 30
+		Multiplier: 45
 		Prerequisites: is-brutal-ai
 	ProductionTimeMultiplier@hardbonus:
-		Multiplier: 45
+		Multiplier: 55
 		Prerequisites: is-hard-ai
 	ProductionTimeMultiplier@normalbonus:
-		Multiplier: 60
+		Multiplier: 65
 		Prerequisites: is-normal-ai
 	ProductionCostMultiplier@brutalbonus:
-		Multiplier: 90
+		Multiplier: 92
 		Prerequisites: is-brutal-ai
 	ProductionCostMultiplier@hardbonus:
-		Multiplier: 95
+		Multiplier: 96
 		Prerequisites: is-hard-ai
 
 ^BotAirProductionBonus:
@@ -140,15 +140,15 @@
 # ResourcePurifier on Proc's so AI income is still tied to harvesters, so eco sniping AI is possible.
 ^BotIncome:
 	ResourcePurifier@brutalincome:
-		Modifier: 24
+		Modifier: 18
 		RequiresCondition: owned-by-brutal-ai
 		ShowTicks: False
 	ResourcePurifier@hardincome:
-		Modifier: 20
+		Modifier: 16
 		RequiresCondition: owned-by-hard-ai
 		ShowTicks: False
 	ResourcePurifier@normalincome:
-		Modifier: 16
+		Modifier: 14
 		RequiresCondition: owned-by-normal-ai
 		ShowTicks: False
 
@@ -860,6 +860,7 @@
 			ChronoDeath: 8
 			ToxinDeath: 9
 			RadiationDeath: 10
+			FrozenDeath: 11
 		CrushedSequence: die-crushed
 	AttackMove:
 	Passenger:
@@ -964,6 +965,12 @@
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity.weak
 		RequiresCondition: !(hazmatsuits || being-warped)
+	DamagedByTintedCells@FROZEN:
+		Damage: 100
+		DamageInterval: 16
+		DamageTypes: FrozenDeath
+		LayerName: cryoresidue
+		RequiresCondition: !being-warped
 	Cloak@GPSHIDE:
 		Palette: cloak
 
@@ -1029,6 +1036,7 @@
 	Inherits@11: ^Frenzy
 	Inherits@12: ^NaniteRepair
 	Inherits@13: ^GpsScramble
+	Inherits@14: ^Chillable
 	Inherits@gflash: ^GreenFlash
 	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
@@ -1241,7 +1249,6 @@
 		InitialFacing: 224
 		CanSlide: True
 		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
-		LandOnCondition: empdisable
 	GpsDot:
 		String: Helicopter
 	Hovers@CRUISING:
@@ -1791,7 +1798,7 @@
 		GenericName: Destroyed Plane
 	Aircraft:
 	FallsToEarth:
-		Spins: False
+		MaximumSpinSpeed: 0
 		Moves: True
 		Velocity: 86
 		Explosion: UnitExplodePlane
@@ -1799,6 +1806,11 @@
 	RevealOnDeath:
 		Duration: 60
 		Radius: 4c0
+		
+^PlaneHuskEmpty:
+	Inherits: ^PlaneHusk
+	FallsToEarth:
+		Explosion: UnitExplodePlaneEmpty
 
 ^HelicopterHusk:
 	Inherits: ^BasicHusk
@@ -1819,6 +1831,11 @@
 	RevealOnDeath:
 		Duration: 60
 		Radius: 4c0
+		
+^HelicopterHuskEmpty:
+	Inherits: ^PlaneHusk
+	FallsToEarth:
+		Explosion: UnitExplodeHeliEmpty
 		
 ^TechHusk:
 	Inherits@1: ^BasicBuilding
