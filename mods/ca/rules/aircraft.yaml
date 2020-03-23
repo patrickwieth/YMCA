@@ -775,6 +775,10 @@ HIND:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: HIND.Husk
+		RequiresCondition: ammo
+	SpawnActorOnDeath@Empty:
+		Actor: HIND.Husk.Empty
+		RequiresCondition: !ammo
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -782,7 +786,7 @@ HIND:
 	Selectable:
 		DecorationBounds: 38,32
 	Rearmable:
-		RearmActors: hpad, hpad2
+		RearmActors: hpad, hpad.td
 
 TSLAHIND:
 	Inherits: ^Helicopter
@@ -2003,7 +2007,7 @@ POD2:
 		Moves: True
 		Velocity: 113
 		Explosion: DropPodVisual
-
+		
 POD1:
 	Inherits: POD2
 	RenderSprites:

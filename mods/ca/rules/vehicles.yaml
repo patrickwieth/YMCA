@@ -3292,3 +3292,69 @@ CRYO:
 	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 28,28
+
+SLNG:
+	Inherits: ^VehicleTD
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAir
+	Inherits@BERSERK: ^Berserk
+	Valued:
+		Cost: 1150
+	Tooltip:
+		Name: Slingshot
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 130
+		Prerequisites: gtek, ~vehicles.zocom, ~techlevel.high
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast, lightly armoured anti-air unit.\n  Strong vs Aircraft\n Weak vs Infantry, Vehicles, Buildings
+	Mobile:
+		Speed: 113
+		Locomotor: hover
+	LeavesTrails:
+		Image: twake
+		Palette: effect
+		TerrainTypes: Water
+		TrailWhileStationary: true
+		StationaryInterval: 18
+		MovingInterval: 6
+	Health:
+		HP: 13500
+	Armor:
+		Type: Light
+	RevealsShroud:
+		Range: 5c0
+	Turreted:
+		TurnSpeed: 10
+	Hovers:
+		BobDistance: -35
+		RequiresCondition: !empdisable && !being-warped
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	KillsSelf@SINK:
+		RequiresCondition: onwater && empdisable
+	Armament@PRIMARY:
+		Recoil: 10
+		Weapon: SlingshotAA
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 450,170,400, 450,-170,400
+		PauseOnCondition: empdisable || being-warped
+	AutoTarget:
+		ScanRadius: 10
+	AttackTurreted:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: false
+		OpportunityFire: False
+		PauseOnCondition: empdisable || being-warped
+	WithSpriteTurret:
+	WithMuzzleOverlay:
+	Explodes:
+		Weapon: ArtilleryExplode
+		EmptyWeapon: UnitExplodeSmall
+		LoadedChance: 75
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
