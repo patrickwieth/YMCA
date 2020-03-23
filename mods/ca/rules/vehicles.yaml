@@ -1645,7 +1645,7 @@ STNK.nod:
 	RenderSprites:
 		Image: STNKTnod
 	Valued:
-		Cost: 900
+		Cost: 1200
 	Tooltip:
 		Name: Stealth Tank
 		GenericName: Tank
@@ -1656,7 +1656,7 @@ STNK.nod:
 		Prerequisites: hq, ~vehicles.nod, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
-		Description: Long-range missile tank that can cloak.\nCan attack Aircraft.\nHas weak armor. Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry.
+		Description: Long-range missile tank that can cloak.\nCan attack Aircraft. Has Point Laser Defense system. \nHas weak armor. Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry, Energy Weapons.
 	Mobile:
 		Speed: 135
 	Health:
@@ -1703,6 +1703,17 @@ STNK.nod:
 	ProductionCostMultiplier@BlackhBonus:
 		Multiplier: 90
 		Prerequisites: vehicles.blackh
+	Armament@TERNARY:
+		Name: ternary
+		Turret: ternary
+		Weapon: AdvancedPointLaser
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+	PointDefense:
+		Armament: ternary
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
 
 BIKE:
 	Inherits: ^VehicleTD
@@ -2117,7 +2128,7 @@ BATF2:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 198
-		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~!vehicles.france, ~techlevel.low
 		Description: Tough support tank with anti-air and pointlaser defense to intercept missiles.\n  Special Ability: Can crush enemy vehicles.
 	Valued:
 		Cost: 3000
@@ -2545,9 +2556,9 @@ RTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
 		Prerequisites: weap, ~vehicles.england, ~techlevel.low
-		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor.\n  Strong vs Vehicles\n  Weak vs Aircraft.
+		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft.
 	Valued:
-		Cost: 800
+		Cost: 1200
 	Tooltip:
 		Name: Mirage Tank
 	UpdatesPlayerStatistics:
@@ -2599,6 +2610,17 @@ RTNK:
 		Prerequisites: vehicles.upgraded
 	Voiced:
 		VoiceSet: MirageVoice
+	Armament@TERNARY:
+		Name: ternary
+		Turret: ternary
+		Weapon: AdvancedPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+	PointDefense:
+		Armament: ternary
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
 
 V3RL:
 	Inherits: ^Vehicle
@@ -2960,10 +2982,10 @@ BATF:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 198
-		Prerequisites: tent, radar, ~weap, ~vehicles.france,  ~!vehicles.france, ~techlevel.low
-		Description: Tough infantry transport\nwith weapon ports for infantry.\n  Special Ability: Can crush enemy vehicles.
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.
 	Valued:
-		Cost: 2000
+		Cost: 3000
 	Tooltip:
 		Name: Battle Fortress
 	Health:
@@ -3042,15 +3064,25 @@ BATF:
 		VoiceSet: BattleFortressVoice
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	AttackGarrisoned:
-		Armaments: mounted
-		MuzzlePalette: tdeffect
-		PortOffsets: 768,0,0, 448,-682,0, -448,-682,0, -768,0,0, -448,682,0, 448,682,0
-		PortYaws: 0, 176, 341, 512, 682, 853
-		PortCones: 88, 88, 88, 88, 88, 88
+	WithSpriteTurret@PRIMARY:
+		Turret: primary
+	WithSpriteTurret@SECONDARY:
+		Turret: secondary
+	WithSpriteTurret@TERTIARY:
+		Turret: tertiary
+		Sequence: turret2
+	Armament@QUARTARY:
+		Name: quartary
+		Turret: quartary
+		Weapon: SuperPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
 		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: loaded || loaded-air
-		Voice: Attack
+	PointDefense:
+		Armament: quartary
+		PointDefenseTypes: Missile, BulletCA
+		PauseOnCondition: empdisable || being-warped
+		ValidStances: Enemy
 
 BATF.AI:
 	Inherits: BATF2
