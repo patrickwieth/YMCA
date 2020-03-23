@@ -2171,7 +2171,7 @@ CRYOT:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 50
 		Prerequisites: ~infantry.germany, dome, ~tent, ~techlevel.medium
-		Description: Support infantry that slows enemies and makes them take more damage.
+		Description: Support infantry that slows enemies and makes them take more damage. Can intercept incoming bullets and rockets.
 		IconPalette: chrometd
 	Valued:
 		Cost: 500
@@ -2191,3 +2191,14 @@ CRYOT:
 		ProneOffset: 227,0,-245
 	AttackFrontal:
 		PauseOnCondition: being-warped
+	Armament@TERNARY:
+		Name: ternary
+		Turret: ternary
+		Weapon: AdvancedPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+	PointDefense:
+		Armament: ternary
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
