@@ -1057,7 +1057,7 @@ BGGY:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.nod, ~techlevel.low
+		Prerequisites: ~!bio.nod, ~vehicles.nod, ~techlevel.low
 		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units.\n  Strong vs Infantry\n  Weak vs Tanks
 	Valued:
 		Cost: 350
@@ -1090,6 +1090,30 @@ BGGY:
 		CloakTypes: Cloak, Thief
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+
+BGGY.Laser:
+	Inherits: BGGY
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: ~bio.nod, ~vehicles.nod, ~techlevel.high
+		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units and has Point Laser Defense.\n  Strong vs Infantry\n  Weak vs Energy Weapons
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Laser Buggy
+	Armament@TERNARY:
+		Name: ternary
+		Turret: ternary
+		Weapon: AdvancedPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+	PointDefense:
+		Armament: ternary
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
 
 APC2:
 	Inherits: ^TankTD
@@ -1645,7 +1669,7 @@ STNK.nod:
 	RenderSprites:
 		Image: STNKTnod
 	Valued:
-		Cost: 1200
+		Cost: 900
 	Tooltip:
 		Name: Stealth Tank
 		GenericName: Tank
@@ -1703,17 +1727,6 @@ STNK.nod:
 	ProductionCostMultiplier@BlackhBonus:
 		Multiplier: 90
 		Prerequisites: vehicles.blackh
-	Armament@TERNARY:
-		Name: ternary
-		Turret: ternary
-		Weapon: AdvancedPointLaser
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
-	PointDefense:
-		Armament: ternary
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
 
 BIKE:
 	Inherits: ^VehicleTD
