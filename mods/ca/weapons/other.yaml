@@ -449,7 +449,14 @@ Laser.Tank:
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
 		Spread: 42
-		Damage: 20000
+		Damage: 18000
+		Versus:
+			None: 32
+			Wood: 52
+			Light: 96
+			Heavy: 68
+			Concrete: 40
+			Brick: 32
 
 LaserTur:
 	Inherits: Laser
@@ -507,6 +514,46 @@ PortaLaserE:
 	Inherits: PortaLaser
 	Range: 8c0
 
+VenomLaser:
+	ReloadDelay: 20
+	ValidTargets: Ground, Water
+	Range: 6c0
+	Report: venmfire1.aud, venmfire2.aud
+	Projectile: LaserZap
+		Width: 35
+		HitAnim: laserfire
+		Color: FF000080
+		ZOffset: 2047
+		SecondaryBeam: true
+		SecondaryBeamWidth: 65
+		SecondaryBeamZOffset: 2047
+		SecondaryBeamColor: FF000040
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 5500
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+		Versus:
+			None: 120
+			Wood: 60
+			Light: 72
+			Heavy: 28
+			Concrete: 28
+			Brick: 28
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
+
+VenomLaserAA:
+	Inherits: VenomLaser
+	ValidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Air
+		Damage: 3500
+		Versus:
+			Light: 40
+			Heavy: 50
+	-Warhead@2Smu:
+
 PointLaser:
 	Inherits: Laser
 	ReloadDelay: 50
@@ -540,7 +587,7 @@ AdvancedPointLaser:
 		Width: 30
 		Duration: 3
 		-HitAnim:
-		Color: 03f0fc
+		Color: ff0000
 		ZOffset: 2047
 		SecondaryBeam: true
 		SecondaryBeamWidth: 50
@@ -551,10 +598,23 @@ AdvancedPointLaser:
 		Spread: 5
 		Damage: 1
 
-AdvancedPointLaser.soviet:
+AdvancedPointLaser.allies:
+	Inherits: AdvancedPointLaser
+	Report: cryozap.aud
+	Projectile: LaserZap
+		Color: ffffff
+		SecondaryBeamColor: 57BEFFBB
+
+AdvancedPointLaser.gdi:
 	Inherits: AdvancedPointLaser
 	Projectile: LaserZap
-		SecondaryBeamColor: ff000030
+		Color: ebba34
+
+AdvancedPointLaser.soviet:
+	Inherits: AdvancedPointLaser
+	Projectile: TeslaZap
+		Palette: pointTesla
+		DimZaps: 0
 
 SuperPointLaser:
 	Inherits: Laser
@@ -577,6 +637,13 @@ SuperPointLaser:
 	Warhead@1Dam: SpreadDamage
 		Spread: 5
 		Damage: 1
+
+SuperPointLaser.allies:
+	Inherits: SuperPointLaser
+	Report: cryozap.aud
+	Projectile: LaserZap
+		Color: ffffff
+		SecondaryBeamColor: 57BEFFBB
 
 SuperPointLaser.gdi:
 	Inherits: SuperPointLaser
@@ -722,39 +789,6 @@ FrogBomb:
 			Heavy: 30
 			Concrete: 55
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-
-RadBomb:
-	ValidTargets: Ground, Water
-	InvalidTargets: Air
-	ReloadDelay: 50
-	Report: chute1.aud
-	Burst: 5
-	BurstDelays: 10
-	Range: 4c512
-	TargetActorCenter: true
-	Projectile: GravityBomb
-		Image: BOMBLET
-		Velocity: 25, 0, -74
-		Acceleration: 0, 0, 0
-		Shadow: true
-	Warhead@1Dam: SpreadDamage
-		Spread: 726
-		Damage: 300
-		Falloff: 1000, 650, 350, 150, 30, 7, 0
-		ValidTargets: Ground, Water
-		Versus:
-			None: 100
-			Wood: 55
-			Light: 35
-			Heavy: 30
-			Concrete: 55
-		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-	Warhead@1Radiation: CreateTintedCells
-		Spread: 1c0
-		Falloff: 100, 75, 50, 25, 0
-		Level: 250
-		MaxLevel: 2500
-
 	Warhead@Cluster: FireCluster
 		Weapon: ClusterBomb
 		RandomClusterCount: 3
@@ -772,6 +806,38 @@ RadBomb:
 		ImpactSounds: splashl1.aud, splashl2.aud
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure, Bridge
+
+RadBomb:
+	ValidTargets: Ground, Water
+	InvalidTargets: Air
+	ReloadDelay: 50
+	Report: chute1.aud
+	Burst: 5
+	BurstDelays: 10
+	Range: 4c512
+	TargetActorCenter: true
+	Projectile: GravityBomb
+		Image: BOMBLET
+		Velocity: 25, 0, -74
+		Acceleration: 0, 0, 0
+		Shadow: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 726
+		Damage: 200
+		Falloff: 1000, 650, 350, 150, 30, 7, 0
+		ValidTargets: Ground, Water
+		Versus:
+			None: 100
+			Wood: 55
+			Light: 35
+			Heavy: 30
+			Concrete: 55
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@1Radiation: CreateTintedCells
+		Spread: 1c0
+		Falloff: 100, 75, 50, 25, 0
+		Level: 250
+		MaxLevel: 2500
 
 SonicZap:
 	ReloadDelay: 120
@@ -1129,7 +1195,7 @@ Cloud.noTint:
 	Projectile: InstantHit
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
-		Damage: 500
+		Damage: 200
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 5
 		ValidTargets: Ground, Trees

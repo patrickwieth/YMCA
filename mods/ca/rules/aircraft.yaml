@@ -179,8 +179,8 @@ MIG:
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 4
 		PipCount: 4
@@ -364,8 +364,8 @@ YAK:
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 30
 		PipCount: 6
@@ -393,11 +393,11 @@ CHEMYAK:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 30
 		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.low
-		Description: Attack Plane armed with\nchemical spray.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		Description: Attack Plane armed with\ntoxin spray.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 1250
 	Tooltip:
-		Name: Yak Chemical Plane
+		Name: Yak Toxin Plane
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -429,8 +429,8 @@ CHEMYAK:
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 30
 		PipCount: 4
@@ -524,8 +524,8 @@ TRAN.Eagle:
 	Health:
 		HP: 28000
 	Aircraft:
-		TurnSpeed: 4
-		Speed: 90
+		TurnSpeed: 5
+		Speed: 120
 	Armor:
 		Type: Heavy
 	AttackGarrisoned:
@@ -567,8 +567,8 @@ TRAN.Eagle:
 			tecn2: loaded
 			tecn3: loaded
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 		RequiresCondition: loaded || loaded-air
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air
@@ -667,8 +667,8 @@ HELI:
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 	WithIdleOverlay@ROTORAIR:
 		Offset: 0,0,85
 		Sequence: rotor
@@ -735,8 +735,8 @@ HIND:
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 	WithIdleOverlay@ROTORAIR:
 		Sequence: rotor
 		RequiresCondition: airborne
@@ -802,8 +802,8 @@ TSLAHIND:
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 	WithIdleOverlay@ROTORAIR:
 		Sequence: rotor
 		RequiresCondition: airborne
@@ -1103,7 +1103,7 @@ APCH:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad2, ~aircraft.nod, ~techlevel.medium
+		Prerequisites: ~hpad2, ~aircraft.nod, ~aircraft.marked, ~techlevel.medium
 		IconPalette: chrometd
 		Description: Helicopter Gunship with a Chaingun.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Tanks
 	Aircraft:
@@ -1201,8 +1201,8 @@ ORCA:
 	SpawnActorOnDeath:
 		Actor: ORCA.Husk
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 		Interval: 2
@@ -1675,8 +1675,8 @@ HARRFighter:
 		CanSlide: False
 		AltitudeVelocity: 0c200
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: AttackAnything
+		InitialStanceAI: AttackAnything
 	AmmoPool:
 		Ammo: 2
 		PipCount: 2
@@ -1747,8 +1747,8 @@ SCRIN:
 		CanSlide: False
 		AltitudeVelocity: 0c200
 	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+		InitialStance: Defend
+		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 9
 		PipCount: 3
@@ -1936,3 +1936,68 @@ DPOD1:
 		Moves: True
 		Velocity: 113
 		Explosion: DropPodVisual2
+
+VENM:
+	Inherits: ^HelicopterTD
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Venom
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad2, ~aircraft.marked, ~techlevel.medium
+		IconPalette: chrometd
+		Description: VTOL Gunship armed\nwith laser.\n  Strong vs Infantry, Aircraft\n  Weak vs Vehicles
+	Aircraft:
+		AltitudeVelocity: 0c100
+		TurnSpeed: 5
+		TakeoffSounds: orcaup1.aud
+		LandingSounds: orcadwn1.aud
+		Speed: 201
+	Health:
+		HP: 14000
+	RevealsShroud:
+		Range: 13c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	Armament@PRIMARY:
+		Weapon: VenomLaser
+		LocalOffset: 600,0,-270
+		PauseOnCondition: !ammo || being-warped
+	Armament@SECONDARY:
+		Weapon: VenomLaserAA
+		LocalOffset: 600,0,-270
+		PauseOnCondition: !ammo || being-warped
+	AttackAircraft:
+		FacingTolerance: 10
+		AttackType: Hover
+	AmmoPool:
+		Ammo: 16
+		PipCount: 5
+		ReloadCount: 4
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 200
+		Count: 1
+		ResetOnFire: true
+	SpawnActorOnDeath:
+		Actor: VENM.Husk
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+	SmokeTrailWhenDamaged:
+		Offset: -427,0,0
+		Interval: 2
+	WithMoveAnimation:
+		MoveSequence: move
+	SelectionDecorations:
+	Selectable:
+		DecorationBounds: 30,24
+	Rearmable:
+		RearmActors: hpad, hpad2

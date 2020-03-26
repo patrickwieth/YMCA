@@ -280,7 +280,7 @@ V2RL:
 	Armament@TERNARY:
 		Name: ternary
 		Turret: ternary
-		Weapon: AdvancedPointLaser
+		Weapon: AdvancedPointLaser.soviet
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
 		PauseOnCondition: empdisable || being-warped
@@ -1057,7 +1057,7 @@ BGGY:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.nod, ~techlevel.low
+		Prerequisites: ~!bio.nod, ~vehicles.nod, ~techlevel.low
 		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units.\n  Strong vs Infantry\n  Weak vs Tanks
 	Valued:
 		Cost: 350
@@ -1090,6 +1090,30 @@ BGGY:
 		CloakTypes: Cloak, Thief
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+
+BGGY.Laser:
+	Inherits: BGGY
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: ~bio.nod, ~vehicles.nod, ~techlevel.high
+		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units and has Point Laser Defense.\n  Strong vs Infantry\n  Weak vs Energy Weapons
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Laser Buggy
+	Armament@TERNARY:
+		Name: ternary
+		Turret: ternary
+		Weapon: AdvancedPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+	PointDefense:
+		Armament: ternary
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
 
 APC2:
 	Inherits: ^TankTD
@@ -1162,7 +1186,7 @@ LTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: astrip, ~vehicles.nod, ~!bio.nod, ~techlevel.low
+		Prerequisites: ~vehicles.nod, ~!bio.nod, ~techlevel.low
 		Description: Fast, light tank.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious
 	Valued:
 		Cost: 675
@@ -1228,7 +1252,7 @@ LTNK.Laser:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: astrip, ~bio.nod, ~vehicles.nod, ~techlevel.low
+		Prerequisites: ~bio.nod, ~vehicles.nod, ~techlevel.low
 		Description: Fast, light tank shooting laser.\n  Strong vs heavy Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious
 	Tooltip:
 		Name: Laser Light Tank
@@ -1629,9 +1653,9 @@ MLRS.legion:
 		Prerequisites: tmpl, ~vehicles.nod, ~vehicles.legion, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
-		Description: Long-range rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
+		Description: Long-range chemical rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
 	Tooltip:
-		Name: SSM Launcher
+		Name: SSM Toxin Launcher
 	Armament:
 		Weapon: honestjohn.legion
 		LocalOffset: 0,171,0, 0,-171,0
@@ -1656,7 +1680,7 @@ STNK.nod:
 		Prerequisites: hq, ~vehicles.nod, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
-		Description: Long-range missile tank that can cloak.\nCan attack Aircraft.\nHas weak armor. Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry.
+		Description: Long-range missile tank that can cloak.\nCan attack Aircraft. Has Point Laser Defense system. \nHas weak armor. Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry, Energy Weapons.
 	Mobile:
 		Speed: 135
 	Health:
@@ -2117,7 +2141,7 @@ BATF2:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 198
-		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~!vehicles.france, ~techlevel.low
 		Description: Tough support tank with anti-air and pointlaser defense to intercept missiles.\n  Special Ability: Can crush enemy vehicles.
 	Valued:
 		Cost: 3000
@@ -2545,9 +2569,9 @@ RTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
 		Prerequisites: weap, ~vehicles.england, ~techlevel.low
-		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor.\n  Strong vs Vehicles\n  Weak vs Aircraft.
+		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft.
 	Valued:
-		Cost: 800
+		Cost: 1200
 	Tooltip:
 		Name: Mirage Tank
 	UpdatesPlayerStatistics:
@@ -2599,6 +2623,17 @@ RTNK:
 		Prerequisites: vehicles.upgraded
 	Voiced:
 		VoiceSet: MirageVoice
+	Armament@TERNARY:
+		Name: ternary
+		Turret: ternary
+		Weapon: AdvancedPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
+	PointDefense:
+		Armament: ternary
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
 
 V3RL:
 	Inherits: ^Vehicle
@@ -2909,7 +2944,7 @@ MWTNK:
 		Name: Microwave Tank
 		GenericName: Tank
 	Health:
-		HP: 20000
+		HP: 40000
 	Armor:
 		Type: Light
 	Mobile:
@@ -2955,15 +2990,15 @@ MWTNK:
 BATF:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 198
-		Prerequisites: tent, radar, ~weap, ~vehicles.france,  ~!vehicles.france, ~techlevel.low
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
 		Description: Tough infantry transport\nwith weapon ports for infantry.\n  Special Ability: Can crush enemy vehicles.
 	Valued:
-		Cost: 2000
+		Cost: 3000
 	Tooltip:
 		Name: Battle Fortress
 	Health:
@@ -2977,48 +3012,59 @@ BATF:
 		Voice: Move
 	RevealsShroud:
 		Range: 4c0
-	AttackFrontal:
-		FacingTolerance: 20
+	AttackTurreted:
+		Turrets: primary, secondary, tertiary
+		Armaments: primary, secondary, tertiary
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
-	Armament@DEFAULT:
+	Armament@PRIMARY:
 		Name: primary
-		Weapon: HeliGunAG
-		LocalOffset: 685,0,271
+		Turret: primary
+		Weapon: 25mm
+		LocalOffset: 200,0,300
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: cargo
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: 25mm
+		FireDelay: 8
+		LocalOffset: 200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: cargo >= 2
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: BikeRockets
+		LocalOffset: -200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: cargo >= 3
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 200,-300,0
+		TurnSpeed: 3
+		PauseOnCondition: !cargo
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 200,300,0
+		TurnSpeed: 3
+		PauseOnCondition: cargo < 2
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -300,0,358
+		TurnSpeed: 3
+		PauseOnCondition: cargo < 3
 	WithMuzzleOverlay:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
 		PipCount: 5
 		LoadingCondition: notmobile
-		PassengerConditions:
-			e1: loaded
-			e2: loaded
-			e3: loaded-air
-			e4: loaded
-			e7: loaded
-			e8: loaded
-			n1: loaded
-			n2: loaded
-			n3: loaded-air
-			n4: loaded
-			n5: loaded
-			rmbo: loaded
-			boris: loaded
-			acol: loaded
-			mort: loaded
-			sniper: loaded
-			shok: loaded
-			shok.nod: loaded
-			sab: loaded
-			n1c: loaded
-			n3c: loaded-air
-			rmboc: loaded
-			tecn: loaded
-			tecn2: loaded
-			tecn3: loaded
+		LoadedCondition: cargo
+		EjectOnDeath: true
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
@@ -3026,43 +3072,79 @@ BATF:
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
-	AutoTargetPriority@DEFAULT:
-		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air
-	AutoTargetPriority@ATTACKANYTHING:
-		RequiresCondition: (stance-attackanything || assault-move) && !loaded-air
-	AutoTargetPriority@DEFAULT_AIR:
-		RequiresCondition: !stance-attackanything && !assault-move && loaded-air
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
-		InvalidTargets: NoAutoTarget, WaterStructure
-	AutoTargetPriority@ATTACKANYTHING_AIR:
-		RequiresCondition: (stance-attackanything || assault-move) && loaded-air
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		InvalidTargets: NoAutoTarget
 	Voiced:
 		VoiceSet: BattleFortressVoice
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	AttackGarrisoned:
-		Armaments: mounted
-		MuzzlePalette: tdeffect
-		PortOffsets: 768,0,0, 448,-682,0, -448,-682,0, -768,0,0, -448,682,0, 448,682,0
-		PortYaws: 0, 176, 341, 512, 682, 853
-		PortCones: 88, 88, 88, 88, 88, 88
+	WithSpriteTurret@PRIMARY:
+		Turret: primary
+	WithSpriteTurret@SECONDARY:
+		Turret: secondary
+	WithSpriteTurret@TERTIARY:
+		Turret: tertiary
+		Sequence: turret2
+	Armament@QUARTARY:
+		Name: quartary
+		Turret: quartary
+		Weapon: SuperPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
 		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: loaded || loaded-air
-		Voice: Attack
+	PointDefense:
+		Armament: quartary
+		PointDefenseTypes: Missile, BulletCA
+		PauseOnCondition: empdisable || being-warped
+		ValidStances: Enemy
 
 BATF.AI:
-	Inherits: BATF2
+	Inherits: BATF
+	Buildable:
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low, ~botplayer
 	RenderSprites:
 		Image: batf
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 198
-		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~botplayer, ~techlevel.high
-		Description: Tough infantry transport\nwith weapon ports for infantry.\n  Special Ability: Can crush enemy vehicles.
-	Cargo:
-		InitialUnits: e1,e1,e3,e3,e3
+	-Armament@PRIMARY:
+	-Armament@SECONDARY:
+	-Armament@TERTIARY:
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: 25mm
+		LocalOffset: 200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: 25mm
+		FireDelay: 8
+		LocalOffset: 200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: BikeRockets
+		LocalOffset: -200,0,300
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	-Turreted@PRIMARY:
+	-Turreted@SECONDARY:
+	-Turreted@TERTIARY:
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 200,-300,0
+		TurnSpeed: 3
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 200,300,0
+		TurnSpeed: 3
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -300,0,358
+		TurnSpeed: 3
+	-Cargo:
+	Mobile:
+		PauseOnCondition: being-captured || empdisable || being-warped
 
 MEMP:
 	Inherits: ^TankTD
@@ -3081,7 +3163,7 @@ MEMP:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 45000
+		HP: 65000
 	Armor:
 		Type: Heavy
 	Mobile:
@@ -3250,3 +3332,69 @@ CRYOL:
 	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 28,28
+
+SLINGSHOT:
+	Inherits: ^VehicleTD
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAir
+	Inherits@BERSERK: ^Berserk
+	Valued:
+		Cost: 1150
+	Tooltip:
+		Name: Slingshot
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 130
+		Prerequisites: gtek, ~vehicles.zocom, ~techlevel.high
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast, lightly armoured anti-air unit.\n  Strong vs Aircraft\n Weak vs Infantry, Vehicles, Buildings
+	Mobile:
+		Speed: 113
+		Locomotor: hover
+	LeavesTrails:
+		Image: twake
+		Palette: effect
+		TerrainTypes: Water
+		TrailWhileStationary: true
+		StationaryInterval: 18
+		MovingInterval: 6
+	Health:
+		HP: 13500
+	Armor:
+		Type: Light
+	RevealsShroud:
+		Range: 5c0
+	Turreted:
+		TurnSpeed: 10
+	Hovers:
+		BobDistance: -35
+		RequiresCondition: !empdisable && !being-warped
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	KillsSelf@SINK:
+		RequiresCondition: onwater && empdisable
+	Armament@PRIMARY:
+		Recoil: 10
+		Weapon: SlingshotAA
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 450,170,400, 450,-170,400
+		PauseOnCondition: empdisable || being-warped
+	AutoTarget:
+		ScanRadius: 10
+	AttackTurreted:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: false
+		OpportunityFire: False
+		PauseOnCondition: empdisable || being-warped
+	WithSpriteTurret:
+	WithMuzzleOverlay:
+	Explodes:
+		Weapon: ArtilleryExplode
+		EmptyWeapon: UnitExplodeSmall
+		LoadedChance: 75
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
