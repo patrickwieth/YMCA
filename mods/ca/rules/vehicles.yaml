@@ -277,17 +277,6 @@ V2RL:
 		Recoil: 43
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-	Armament@TERNARY:
-		Name: ternary
-		Turret: ternary
-		Weapon: AdvancedPointLaser.soviet
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
-	PointDefense:
-		Armament: ternary
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
 	SpeedMultiplier@IRAQTANK:
 		RequiresCondition: iraqtank
 		Modifier: 125
@@ -305,7 +294,7 @@ V2RL:
 	SelfHealing:
 		Step: 100
 		Delay: 3
-		HealIfBelow: 50
+		HealIfBelow: 100
 		DamageCooldown: 150
 	SelectionDecorations:
 	ProducibleWithLevel:
@@ -315,6 +304,27 @@ V2RL:
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: AdvancedPointLaser.soviet
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: !ammo || empdisable || being-warped
+	PointDefense:
+		Armament: pointdefense
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Red
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 ARTY:
 	Inherits: ^Tank
@@ -1103,17 +1113,27 @@ BGGY.Laser:
 		Cost: 1000
 	Tooltip:
 		Name: Laser Buggy
-	Armament@TERNARY:
-		Name: ternary
-		Turret: ternary
-		Weapon: AdvancedPointLaser.allies
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: AdvancedPointLaser
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: !ammo || empdisable || being-warped
 	PointDefense:
-		Armament: ternary
+		Armament: pointdefense
 		PointDefenseTypes: Missile, BulletCA
 		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Red
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 APC2:
 	Inherits: ^TankTD
@@ -1310,14 +1330,6 @@ MTNK:
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
-		Weapon: PointLaser
-		LocalOffset: 0,10,90
-		RequiresCondition: gdiupg
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		Turrets: primary, secondary
 		PauseOnCondition: empdisable || being-warped
@@ -1330,8 +1342,16 @@ MTNK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: secondary
+		Weapon: PointLaser
+		LocalOffset: 0,10,90
+		RequiresCondition: gdiupg
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
 	PointDefense:
-		Armament: secondary
+		Armament: pointdefense
 		PointDefenseTypes: Missile
 		RequiresCondition: gdiupg
 		ValidStances: Enemy
@@ -1380,14 +1400,6 @@ MTNK.Drone:
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
 		PauseOnCondition: disabled || empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
-		Weapon: PointLaser
-		LocalOffset: 0,10,90
-		RequiresCondition: gdiupg
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		Turrets: primary, secondary
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -1418,12 +1430,20 @@ MTNK.Drone:
 	ProximityExternalCondition@POWERSOUND:
 		Condition: disablesound
 		RequiresCondition: disabled || empdisable
-		AffectsParent: True
+		AffectsParent: true
 		Range: 1c0
 		EnableSound: vrobon
 		DisableSound: vroboff
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: secondary
+		Weapon: PointLaser
+		LocalOffset: 0,10,90
+		RequiresCondition: gdiupg
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
 	PointDefense:
-		Armament: secondary
+		Armament: pointdefense
 		PointDefenseTypes: Missile
 		RequiresCondition: gdiupg
 		ValidStances: Enemy
@@ -1567,7 +1587,7 @@ MSAM:
 		LocalYaw: 100, -100
 		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
-		TargetFrozenActors: True
+		TargetFrozenActors: true
 		ForceFireIgnoresActors: False
 		OpportunityFire: False
 		PauseOnCondition: empdisable || being-warped
@@ -2163,13 +2183,6 @@ BATF2:
 		LocalOffset: 624,0,208
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
-		Weapon: SuperPointLaser
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
 	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
@@ -2190,13 +2203,26 @@ BATF2:
 		VoiceSet: BattleFortressVoice
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
+	Armament@pointdefense:
+		Name: pointdefense
+		Weapon: SuperPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: !ammo || empdisable || being-warped
 	PointDefense:
-		Armament: secondary
+		Armament: pointdefense
 		PointDefenseTypes: Missile, BulletCA
-		PauseOnCondition: empdisable || being-warped
 		ValidStances: Enemy
-	AutoTarget:
-		ScanRadius: 10
+	AmmoPool:
+		Ammo: 24
+		PipCount: 6
+		PipType: Blue
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 IFV.AI:
 	Inherits: ^Tank
@@ -2569,7 +2595,7 @@ RTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
 		Prerequisites: weap, ~vehicles.england, ~techlevel.low
-		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft.
+		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -2623,17 +2649,27 @@ RTNK:
 		Prerequisites: vehicles.upgraded
 	Voiced:
 		VoiceSet: MirageVoice
-	Armament@TERNARY:
-		Name: ternary
-		Turret: ternary
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
 		Weapon: AdvancedPointLaser.allies
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: !ammo || empdisable || being-warped
 	PointDefense:
-		Armament: ternary
+		Armament: pointdefense
 		PointDefenseTypes: Missile, BulletCA
 		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Blue
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 V3RL:
 	Inherits: ^Vehicle
@@ -2906,19 +2942,27 @@ MSAR:
 		TargetTypes: Ground, Vehicle, ChaosImmune
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
-	PointDefense:
-		Armament: secondary
-		PointDefenseTypes: Missile, BulletCA
-		RequiresCondition: deployed
-		ValidStances: Enemy
-		PauseOnCondition: empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
 		Weapon: SuperPointLaser.gdi
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: !ammo || empdisable || being-warped
+	PointDefense:
+		Armament: pointdefense
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 24
+		PipCount: 6
+		PipType: Yellow
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 24
+		ResetOnFire: True
 
 PTNK:
 	Inherits: ^Tank
@@ -3125,18 +3169,27 @@ BATF:
 	WithSpriteTurret@TERTIARY:
 		Turret: tertiary
 		Sequence: turret2
-	Armament@QUARTARY:
-		Name: quartary
-		Turret: quartary
-		Weapon: SuperPointLaser.allies
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: AdvancedPointLaser.allies
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: !ammo || empdisable || being-warped
 	PointDefense:
-		Armament: quartary
+		Armament: pointdefense
 		PointDefenseTypes: Missile, BulletCA
-		PauseOnCondition: empdisable || being-warped
 		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Blue
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 BATF.AI:
 	Inherits: BATF

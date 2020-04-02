@@ -2134,14 +2134,24 @@ CRYOT:
 		ProneOffset: 227,0,-245
 	AttackFrontal:
 		PauseOnCondition: being-warped
-	Armament@TERNARY:
-		Name: ternary
-		Turret: ternary
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
 		Weapon: AdvancedPointLaser.allies
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: !ammo || empdisable || being-warped
 	PointDefense:
-		Armament: ternary
+		Armament: pointdefense
 		PointDefenseTypes: Missile, BulletCA
 		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Blue
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
