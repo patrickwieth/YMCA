@@ -42,6 +42,7 @@ V2RL:
 	SelectionDecorations:
 	Explodes:
 		Weapon: BarrelExplode
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
@@ -103,7 +104,8 @@ V2RL:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 1TNK.Husk
-		RequiresCondition: !onwater
+		RequiresCondition: !onwater && !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -148,6 +150,8 @@ V2RL:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 2TNK.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -209,11 +213,13 @@ V2RL:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 3TNK.Husk
-		RequiresCondition: !iraqtank
+		RequiresCondition: !iraqtank && !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	Explodes@IRAQTANK:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
 		RequiresCondition: iraqtank
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -286,11 +292,13 @@ V2RL:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 4TNK.Husk
-		RequiresCondition: !iraqtank
+		RequiresCondition: !iraqtank && !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	Explodes@IRAQTANK:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
 		RequiresCondition: iraqtank
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelfHealing:
 		Step: 100
 		Delay: 3
@@ -366,6 +374,7 @@ ARTY:
 		Weapon: ArtilleryExplode
 		EmptyWeapon: UnitExplodeSmall
 		LoadedChance: 75
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -422,7 +431,7 @@ SPEC:
 		Palette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
-		RequiresCondition: !cloak-force-disabled && !invisibility
+		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped
 	Cloak@GPSHIDE:
 		RequiresCondition: (gpshide || crate-cloak) && !(cloak-force-disabled || invisibility || hidden)
 	GrantConditionOnDamageState@UNCLOAK:
@@ -471,6 +480,8 @@ HARV:
 		String: Harvester
 	SpawnActorOnDeath:
 		Actor: HARV.EmptyHusk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	HarvesterHuskModifier:
 		FullHuskActor: HARV.FullHusk
 		FullnessThreshold: 50
@@ -488,9 +499,11 @@ HARV:
 	Explodes@Ore:
 		RequiresCondition: !no-ore && onore
 		Weapon: OreExplosion
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	Explodes@Tib:
 		RequiresCondition: !no-ore && ontib
 		Weapon: TibExplosion
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	WithHarvesterSpriteBody:
 		ImageByFullness: harvempty, harvhalf, harv
 	-WithFacingSpriteBody:
@@ -536,6 +549,8 @@ MCV:
 	BaseBuilding:
 	SpawnActorOnDeath:
 		Actor: MCV.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	TransferTimedExternalConditionOnTransform:
 		Condition: invulnerability
 	-Crushable:
@@ -663,6 +678,7 @@ MNLY:
 	RenderDetectionCircle:
 	Explodes:
 		Weapon: ATMine
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	RenderSprites:
 		Image: MNLY
 	Rearmable:
@@ -698,6 +714,7 @@ TRUK:
 		PlayerExperience: 50
 	SpawnActorOnDeath:
 		Actor: moneycrate
+		RequiresCondition: !being-warped
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Vehicle, ChaosImmune
@@ -737,6 +754,8 @@ MGG:
 	RenderShroudCircle:
 	SpawnActorOnDeath:
 		Actor: MGG.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ProximityExternalCondition@GAPGEN:
 		Condition: ggshroud
 		Range: 6c0
@@ -860,6 +879,7 @@ DTRK:
 		Weapon: MiniNuke
 		EmptyWeapon: MiniNuke
 		DamageSource: Killer
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	AttackFrontal:
 		FacingTolerance: 128
 		Voice: Attack
@@ -1004,6 +1024,8 @@ AMCV:
 	BaseBuilding:
 	SpawnActorOnDeath:
 		Actor: AMCV.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	TransferTimedExternalConditionOnTransform:
 		Condition: invulnerability
 	-Crushable:
@@ -1262,7 +1284,8 @@ LTNK:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: LTNK.Husk
-		RequiresCondition: !onwater
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
+		RequiresCondition: !onwater && !being-warped
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -1337,6 +1360,8 @@ MTNK:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: MTNK.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -1408,6 +1433,8 @@ MTNK.Drone:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: MTNK.Drone.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -1505,6 +1532,8 @@ HTNK:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: HTNK.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelfHealing:
 		Step: 100
 		Delay: 3
@@ -1539,7 +1568,9 @@ HTNK.ION:
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
 	SpawnActorOnDeath:
-		Actor: HTNK.ION.Husk
+		Actor: HTNK.Ion.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 
 MSAM:
 	Inherits: ^TankTD
@@ -1594,6 +1625,7 @@ MSAM:
 	WithSpriteTurret:
 	Explodes:
 		Weapon: ArtilleryExplode
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
@@ -1658,6 +1690,7 @@ MLRS:
 	AutoTarget:
 	Explodes:
 		Weapon: BarrelExplode
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ReloadAmmoPool@1:
 		Delay: 120
 		Count: 2
@@ -1718,7 +1751,7 @@ STNK.nod:
 		Palette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
-		RequiresCondition: !cloak-force-disabled && !invisibility
+		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
@@ -1830,6 +1863,7 @@ FTNK:
 	Explodes:
 		Weapon: BarrelExplode
 		EmptyWeapon: BarrelExplode
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	ProductionCostMultiplier@BlackhBonus:
@@ -1873,7 +1907,9 @@ HARV2:
 	GpsDot:
 		String: Harvester
 	SpawnActorOnDeath:
-		Actor: HARV2.Husk
+		Actor: HAR2.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	WithHarvestAnimation:
 	WithDockingAnimation:
 	SelfHealing:
@@ -1890,9 +1926,11 @@ HARV2:
 	Explodes@Ore:
 		RequiresCondition: !no-ore && onore
 		Weapon: OreExplosion
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	Explodes@Tib:
 		RequiresCondition: !no-ore && ontib
 		Weapon: TibExplosion
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	-Crushable:
 	Targetable:
@@ -2361,6 +2399,7 @@ TITAN:
 		Weapon: ArtilleryExplode
 		EmptyWeapon: UnitExplodeSmall
 		LoadedChance: 100
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	Voiced:
 		VoiceSet: GhostVoice
 	SelfHealing@DEFAULT:
@@ -2422,6 +2461,7 @@ TTRK:
 		Weapon: UnitExplodeToxinTruck
 		EmptyWeapon: UnitExplodeToxinTruck
 		DamageSource: Killer
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 
 DISR:
 	Inherits: ^TankTD
@@ -2497,8 +2537,10 @@ DISR:
 	-Crushable:
 	SpawnActorOnDeath:
 		Actor: DISR.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 
-HMLRS:
+HSAM:
 	Inherits: ^VehicleTD
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -2583,6 +2625,7 @@ HMLRS:
 		Weapon: ArtilleryExplode
 		EmptyWeapon: UnitExplodeSmall
 		LoadedChance: 75
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -2627,6 +2670,8 @@ RTNK:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: RTNK.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	Cloak@NORMAL:
 		InitialDelay: 100
 		CloakDelay: 100
@@ -2724,6 +2769,7 @@ V3RL:
 	SelectionDecorations:
 	Explodes:
 		Weapon: BarrelExplode
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
@@ -2852,6 +2898,8 @@ TNKD:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: TNKD.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	Voiced:
 		VoiceSet: TnkdVoice
@@ -3005,6 +3053,8 @@ PTNK:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: PTNK.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	Voiced:
 		VoiceSet: PrismVoice
@@ -3062,7 +3112,9 @@ MWTNK:
 		Condition: aiming
 	WithSpriteTurret:
 	SpawnActorOnDeath:
-		Actor: MWTNK.Husk
+		Actor: WTNK.Husk
+		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	Voiced:
 		VoiceSet: MWTnkVoice
@@ -3353,6 +3405,7 @@ CDRONE:
 	Explodes:
 		Weapon: ChaosDroneExplode
 		EmptyWeapon: VisualExplodeHusk
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	AttackFrontal:
 		FacingTolerance: 128
 		PauseOnCondition: empdisable || being-warped
@@ -3447,6 +3500,7 @@ CHPR:
 	SpawnActorOnDeath:
 		Actor: CHPR.Husk
 		RequiresCondition: !being-warped
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -3507,6 +3561,9 @@ CRYO:
 		PauseOnCondition: empdisable || being-warped
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
+	Explodes:
+		Weapon: CryoExplosion
+		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 28,28

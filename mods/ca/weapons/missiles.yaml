@@ -42,6 +42,14 @@
 ^AntiAirMissile:
 	Inherits: ^AntiGroundMissile
 	ValidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 100
+			Wood: 100
+			Light: 100
+			Heavy: 100
+			Concrete: 100
+			Brick: 100
 	Warhead@3Eff: CreateEffect
 		ImpactActors: false
 
@@ -62,9 +70,9 @@ Maverick:
 		Damage: 14000
 		Versus:
 			None: 25
-			Wood: 45
-			Light: 105
-			Heavy: 70
+			Wood: 35
+			Light: 100
+			Heavy: 85
 			Concrete: 75
 			Brick: 80
 
@@ -101,12 +109,12 @@ HellfireAG:
 		HorizontalRateOfTurn: 10
 		RangeLimit: 8c512
 	Warhead@1Dam: SpreadDamage
-		Damage: 4000
+		Damage: 4500
 		Versus:
-			None: 30
-			Wood: 90
-			Light: 90
-			Concrete: 100
+			None: 25
+			Wood: 65
+			Light: 80
+			Concrete: 90
 			Brick: 100
 
 HellfireAG.Orca:
@@ -125,16 +133,16 @@ HellfireAG.Harrier:
 		ContrailLength: 10
 		Inaccuracy: 512
 	Warhead@1Dam: SpreadDamage
-		Spread: 341
+		Spread: 448
 		Damage: 1600
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water, Trees
 		Versus:
 			None: 100
-			Wood: 68
-			Light: 55
+			Wood: 60
+			Light: 60
 			Heavy: 45
-			Concrete: 55
+			Concrete: 40
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
@@ -170,11 +178,8 @@ HellfireAA:
 		HorizontalRateOfTurn: 10
 		RangeLimit: 7c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 4000
+		Damage: 3000
 		ValidTargets: Air
-		Versus:
-			Wood: 75
-			Light: 75
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 
@@ -197,11 +202,8 @@ WidowAA:
 		RangeLimit: 12c0
 		ContrailLength: 6
 	Warhead@1Dam: SpreadDamage
-		Damage: 8000
+		Damage: 6000
 		ValidTargets: Air
-		Versus:
-			Wood: 75
-			Light: 75
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 
@@ -264,22 +266,19 @@ Nike:
 		RangeLimit: 12c0
 		Speed: 341
 	Warhead@1Dam: SpreadDamage
-		Damage: 5750
+		Damage: 7500
 		ValidTargets: Air
-		Versus:
-			Light: 75
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 		ImpactSounds: kaboom25.aud
 
 Nike.Harrier:
 	Inherits: Nike
-	ReloadDelay: 15
+	ReloadDelay: 30
 	Projectile: MissileCA
-		RangeLimit: 18c0
-		Speed: 441
+		RangeLimit: 12c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 7800
+		Damage: 15500
 		ValidTargets: Air
 		Versus:
 			Light: 75
@@ -294,16 +293,14 @@ RedEye:
 		HorizontalRateOfTurn: 20
 		Speed: 298
 	Warhead@1Dam: SpreadDamage
-		Damage: 4000
+		Damage: 2800
 		ValidTargets: Air
-		Versus:
-			Light: 60
 
 RedEye.CYB:
 	Inherits: RedEye
 	Report: rocket.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 5000
+		Damage: 3500
 
 RedEyeE:
 	Inherits: RedEye
@@ -313,7 +310,7 @@ RedEyeE.CYB:
 	Inherits: RedEyeE
 	Report: rocket.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 5000
+		Damage: 3500
 
 Stinger:
 	Inherits: ^AntiGroundMissile
@@ -345,6 +342,10 @@ StingerAA:
 	Projectile: MissileCA
 		Speed: 255
 		CloseEnough: 298
+	Warhead@1Dam: SpreadDamage
+		Damage: 2600
+		Versus:
+			Light: 100
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 		ImpactSounds: kaboom25.aud
@@ -464,7 +465,7 @@ TorpTube:
 		Versus:
 			None: 40
 			Wood: 60
-			Light: 30
+			Light: 60
 			Heavy: 50
 			Concrete: 60
 			Brick: 60
@@ -499,7 +500,7 @@ HonestJohnSub:
 		Inaccuracy: 1c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
-		Damage: 2000
+		Damage: 1000
 		Versus:
 			None: 70
 			Wood: 100
@@ -523,7 +524,10 @@ SubMissileAA:
 	ReloadDelay: 100
 	ValidTargets: Air
 	Warhead@1Dam: SpreadDamage
-		Damage: 1500
+		Damage: 450
+		Versus:
+			Light: 100
+			Heavy: 100
 
 SCUD:
 	Inherits: ^AntiGroundMissile
@@ -593,7 +597,7 @@ KatyushaRockets:
 	Report: missile6.aud
 	Burst: 8
 	BurstDelays: 6
-	Projectile: BulletCA
+	Projectile: Bullet
 		Blockable: false
 		Shadow: true
 		Inaccuracy: 3c512
@@ -604,7 +608,7 @@ KatyushaRockets:
 	ValidTargets: Ground, Trees, Water
 	Warhead@1Dam: SpreadDamage
 		Spread: 384
-		Damage: 6000
+		Damage: 3000
 		Versus:
 			None: 100
 			Wood: 95
@@ -776,7 +780,9 @@ IFVRockets:
 	Burst: 2
 	BurstDelays: 5
 	Warhead@1Dam: SpreadDamage
-		Damage: 4000
+		Damage: 2500
+		Versus:
+			Light: 50
 
 IFVRocketsAA:
 	Inherits: RedEye
@@ -785,8 +791,20 @@ IFVRocketsAA:
 	Burst: 2
 	BurstDelays: 5
 	Warhead@1Dam: SpreadDamage
+		Damage: 2700
+
+IFVRocketsE:
+	Inherits: IFVRockets
+	Range: 5c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 3200
+
+IFVRocketsAAE:
+	Inherits: IFVRocketsAA
+	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 
+>>>>>>> 9c8df3bac8d924851f638f9a1f30fa3eb6127544
 BTRRockets:
 	Inherits: Dragon
 	Range: 4c512
@@ -806,9 +824,7 @@ BTRRocketsAA:
 	Burst: 2
 	BurstDelays: 5
 	Warhead@1Dam: SpreadDamage
-		Damage: 2000
-		Versus
-			Light: 75
+		Damage: 1800
 
 227mm:
 	Inherits: ^AntiGroundMissile
@@ -891,13 +907,8 @@ BTRRocketsAA:
 		RangeLimit: 12c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 683
-		Damage: 4500
+		Damage: 2200
 		ValidTargets: Air
-		Versus:
-			None: 35
-			Wood: 60
-			Light: 40
-			Heavy: 80
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 		ImpactSounds: xplos.aud
@@ -923,19 +934,12 @@ BTRRocketsAA:
 		CruiseAltitude: 2c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 683
-		Damage: 5000
+		Damage: 2400
 		ValidTargets: Air
-		Versus:
-			None: 35
-			Wood: 60
-			Light: 40
-			Heavy: 80
-
 
 227mmAAH:
 	Inherits: 227mmAA
 	Report: hovrmis1.aud
-
 
 227mm.stnk:
 	ReloadDelay: 70
@@ -996,13 +1000,8 @@ BTRRocketsAA:
 		RangeLimit: 9c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
-		Damage: 6000
+		Damage: 1800
 		ValidTargets: Air
-		Versus:
-			None: 25
-			Wood: 75
-			Light: 25
-			Heavy: 70
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
@@ -1064,12 +1063,12 @@ BoatMissileAA:
 		ImpactSounds: xplos.aud
 
 Rah66AG:
-	ReloadDelay: 30
+	ReloadDelay: 15
 	Range: 5c0
 	MinRange: 0c768
 	Report: rocket2.aud
 	Burst: 2
-	BurstDelays: 2
+	BurstDelays: 3
 	ValidTargets: Ground, Water
 	InvalidTargets: Air
 	Projectile: BulletCA
@@ -1089,7 +1088,7 @@ Rah66AG:
 			None: 60
 			Wood: 60
 			Concrete: 30
-			Light: 50
+			Light: 45
 			Heavy: 25
 			Brick: 15
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
@@ -1216,8 +1215,8 @@ ScrinTorp:
 			None: 10
 			Wood: 35
 			Concrete: 55
-			Light: 90
-			Heavy: 60
+			Light: 25
+			Heavy: 65
 			Brick: 35
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
@@ -1252,11 +1251,8 @@ ScrinTorpAA:
 		-TrailImage:
 		RangeLimit: 12c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 2500
+		Damage: 1600
 		ValidTargets: Air
-		Versus:
-			Wood: 75
-			Light: 65
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 		ImpactSounds: expnew17.aud
@@ -1311,7 +1307,7 @@ U2Bomb:
 
 CryoMissile:
 	ReloadDelay: 125
-	Range: 9c0
+	Range: 8c0
 	MinRange: 2c0
 	Report: cryomissile.aud
 	Burst: 2
@@ -1342,7 +1338,7 @@ CryoMissile:
 			Heavy: 5
 			Concrete: 5
 			Brick: 1
-		DamageTypes: SmallExplosionDeath
+		DamageTypes: FrozenDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: cryoblast
 		ImpactSounds: cryoblast.aud
@@ -1356,3 +1352,13 @@ CryoMissile:
 		Level: 100
 		Falloff: 100, 75, 52, 15, 2
 		MaxLevel: 600
+
+BATFRockets:
+	Inherits: Dragon
+	Burst: 2
+	Range: 4c768
+	Warhead@1Dam: SpreadDamage
+		Damage: 2200
+		Versus:
+			Concrete: 50
+			Light: 25
