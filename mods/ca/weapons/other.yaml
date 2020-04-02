@@ -515,7 +515,7 @@ PortaLaserE:
 	Range: 8c0
 
 VenomLaser:
-	ReloadDelay: 30
+	ReloadDelay: 25
 	ValidTargets: Ground, Water
 	Range: 6c0
 	Report: venmfire1.aud, venmfire2.aud
@@ -535,7 +535,7 @@ VenomLaser:
 		Versus:
 			Wood: 25
 			Concrete: 10
-			Light: 50
+			Light: 90
 			Heavy: 10
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -546,10 +546,12 @@ VenomLaserAA:
 	ValidTargets: Air
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Air
-		Damage: 3500
+		Damage: 2000
 		Versus:
-			Light: 40
-			Heavy: 50
+			Wood: 100
+			Concrete: 100
+			Light: 100
+			Heavy: 100
 	-Warhead@2Smu:
 
 PointLaser:
@@ -1141,6 +1143,7 @@ V3Launcher:
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Ground, Water
+
 Flare:
 	ReloadDelay: 1
 	Range: 10c0
@@ -1273,8 +1276,33 @@ TimeWarp:
 		ExplosionPalette: ra2effect-ignore-lighting-alpha75
 		ValidTargets: Ground, Air, Water
 		ImpactSounds: chrono2.aud
-	Warhead@Damage: WarpDamage
+	Warhead@Damage1: WarpDamage
 		Spread: 1c0
+		Damage: 1
+		ValidTargets: Temporal
+	Warhead@Damage2: WarpDamage
+		Spread: 1c0
+		Delay: 25
+		Damage: 1
+		ValidTargets: Temporal
+	Warhead@Damage3: WarpDamage
+		Spread: 1c0
+		Delay: 50
+		Damage: 1
+		ValidTargets: Temporal
+	Warhead@Damage4: WarpDamage
+		Spread: 1c0
+		Delay: 75
+		Damage: 1
+		ValidTargets: Temporal
+	Warhead@Damage5: WarpDamage
+		Spread: 1c0
+		Delay: 100
+		Damage: 1
+		ValidTargets: Temporal
+	Warhead@Damage6: WarpDamage
+		Spread: 1c0
+		Delay: 125
 		Damage: 1
 		ValidTargets: Temporal
 	Warhead@3Flash: ChronoFlashEffect
@@ -1389,42 +1417,31 @@ CyCannon:
 			Brick: 70
 		DamageTypes: Prone350Percent, TriggerProne, ExplosionDeath
 
-CryoGun:
-	ReloadDelay: 90
-	Range: 5c512
-	ValidTargets: Ground, Water
-	Projectile: LaserZap
-		Width: 25
-		Duration: 20
-		ZOffset: 2047
-		Color: FFFFFF
-		SecondaryBeam: true
-		SecondaryBeamWidth: 50
-		SecondaryBeamZOffset: 2047
-		SecondaryBeamColor: 57BEFFBB
-		Blockable: true
-	Warhead@1Dam: SpreadDamage
-		Spread: 341
-		Damage: 550
-		Falloff: 100, 25, 12, 0
-		Versus:
-			None: 100
-			Wood: 15
-			Light: 35
-			Heavy: 5
-			Concrete: 5
-			Brick: 1
-		DamageTypes: SmallExplosionDeath
-	Warhead@2Eff: CreateEffect
-		Explosions: cryohit
-		ImpactSounds: cryozap.aud
-	Warhead@chill: GrantExternalCondition
-		Condition: chilled
-		Duration: 120
-		Range: 0c448
-	Warhead@cryoresidue: CreateTintedCells
-		LayerName: cryoresidue
-		Spread: 1c0
-		Level: 100
-		Falloff: 100, 52, 15, 2
-		MaxLevel: 600
+NeutronCannon:
+	ValidTargets: Temporal
+	ReloadDelay: 1
+	Range: 5c0
+	Projectile: InstantHit
+	Warhead@Damage: WarpDamage
+		Damage: 220
+		Spread: 1
+		ValidTargets: Temporal
+		DamageTypes: ChronoDeath
+
+NeutronCannonVisual:
+	ValidTargets: Temporal
+	ReloadDelay: 120
+	Range: 5c0
+	Report: chronogun.aud
+	Projectile: RadBeam
+		Amplitude: 176
+		WaveLength: 284
+		Color: 80C8FF
+	Warhead@Damage: WarpDamage
+		Damage: 1
+		Spread: 1
+		ValidTargets: Temporal
+		DamageTypes: ChronoDeath
+	Warhead@Stars: CreateEffect
+		Explosions: chrono_zap
+		ValidTargets: Ground, Water
