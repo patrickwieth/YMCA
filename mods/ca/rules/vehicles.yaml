@@ -3393,7 +3393,6 @@ CDRONE:
 CHPR:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		Image: chpr
@@ -3405,7 +3404,7 @@ CHPR:
 		Prerequisites: atek, ~vehicles.germany, ~techlevel.high
 		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
-		Cost: 3000
+		Cost: 1700
 	Tooltip:
 		Name: Chrono Prison
 		GenericName: Tank
@@ -3418,20 +3417,26 @@ CHPR:
 	Mobile:
 		Speed: 52
 		Locomotor: heavytracked
+		Voice: Move
 	Passenger:
 		CargoType: Vehicle
 		Weight: 2
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 3
+		TurnSpeed: 2
 		Offset: -156,0,0
 	Armament@PRIMARY:
-		Weapon: Railgun
+		Weapon: NeutronCannon
+		LocalOffset: 600,0,480
+		PauseOnCondition: empdisable || being-warped
+	Armament@PRIMARYVISUAL:
+		Weapon: NeutronCannonVisual
 		LocalOffset: 600,0,480
 		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
 	WithMuzzleOverlay:
 	WithSpriteTurret@inactiveturret:
 		RequiresCondition: !aiming
@@ -3441,6 +3446,7 @@ CHPR:
 		Sequence: turretactive
 	SpawnActorOnDeath:
 		Actor: CHPR.Husk
+		RequiresCondition: !being-warped
 	SelectionDecorations:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -3451,6 +3457,21 @@ CHPR:
 	-Crushable:
 	GrantConditionWhileAiming:
 		Condition: aiming
+	Voiced:
+		VoiceSet: ChronoVoice
+	AutoTarget:
+		AttackAnythingCondition: stance-attackanything
+	AttackMove:
+		AssaultMoveCondition: assault-move
+		Voice: Attack
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+		ValidTargets: Temporal
+		InvalidTargets: NoAutoTarget
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+		ValidTargets: Temporal
+		InvalidTargets: NoAutoTarget
 
 CRYO:
 	Inherits: ^TankTD
