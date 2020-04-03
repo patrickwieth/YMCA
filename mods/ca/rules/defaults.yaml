@@ -40,7 +40,7 @@
 		Type: Rectangle
 			TopLeft: -1536, -1024
 			BottomRight: 1536, 1024
-			
+
 ^BotBuilding:
 	GrantConditionOnBotOwner@BrutalAI:
 		Condition: owned-by-brutal-ai
@@ -116,7 +116,7 @@
 		Multiplier: 95
 		Prerequisites: is-normal-ai
 
-# The Bot does not know how to sell up when he does not have an income. This provides an income, when floating less than 2000$ 	
+# The Bot does not know how to sell up when he does not have an income. This provides an income, when floating less than 2000$
 ^BotFallbackInsurance:
 	GrantConditionOnPlayerResources@botinsurance:
 		Condition: noinsurance
@@ -229,7 +229,7 @@
 		ValidStances: Ally, Enemy, Neutral
 		RequiresCondition: rank-elite
 		ZOffset: 256
-		
+
 ^Berserk:
 	SpeedMultiplier@BERSERK:
 		RequiresCondition: berserkactive
@@ -251,7 +251,7 @@
 	GrantCondition@BERSERK:
 		RequiresCondition: berserk && !invulnerability
 		Condition: berserkactive
-		
+
 ^Frenzy:
 	SpeedMultiplier@FRENZY:
 		RequiresCondition: frenzy
@@ -266,11 +266,11 @@
 		Palette: frenzy
 	TimedConditionBar@FRENZY:
 		Condition: frenzy
-		
+
 ^Warpable:
 	Warpable:
 		Condition: being-warped
-		RevokeDelay: 30
+		RevokeDelay: 120
 		DamageTypes: ChronoDeath
 		ScaleWithCurrentHealthPercentage: true
 		ShowSelectionBar: true
@@ -293,7 +293,7 @@
 		Weapon: TemporalExplode
 		EmptyWeapon: TemporalExplode
 		DeathTypes: ChronoDeath
-		
+
 ^GDIUpgrade:
 	DamageMultiplier@GDIUPG:
 		RequiresCondition: gdiupg
@@ -319,7 +319,7 @@
 	GrantCondition@HAZMAT:
 		Condition: hazmatsuits
 		RequiresCondition: nodupg
-		
+
 ^BinoUpgrade:
 	ExternalCondition@Bino:
 		Condition: bino
@@ -337,7 +337,7 @@
 		BlinkPatterns:
 			bino && gdiupg: On, Off
 		RequiresSelection: True
-		
+
 ^GapGenShroud:
 	ExternalCondition@GAPGEN:
 		Condition: ggshroud
@@ -370,13 +370,13 @@
 		Condition: invulnerability
 	ExternalCondition@INVULNERABILITY:
 		Condition: invulnerability
-		
+
 ^IronCurtainable-Kills:
 	Inherits: ^IronCurtainable
 	KillsSelf@Immolate:
 		DamageTypes: FireDeath
 		RequiresCondition: invulnerability
-		
+
 ^ForceShieldable:
 	WithColoredOverlay@FS:
 		Palette: forces
@@ -392,7 +392,7 @@
 	PowerMultiplier@FSPOWERDOWN:
 		RequiresCondition: forceshield && !invulnerability
 		Modifier: 0
-		
+
 ^EmpDisable:
 	WithColoredOverlay@EMPDISABLE:
 		RequiresCondition: empdisable
@@ -409,7 +409,7 @@
 		Modifier: 0
 	ExternalCondition@EMPDISABLE:
 		Condition: empdisable
-		
+
 ^NaniteRepair:
 	SelfHealing@NREPAIR:
 		PercentageStep: 1
@@ -448,21 +448,21 @@
 	GrantConditionOnPrerequisite@NREPAIR:
 		Prerequisites: nrepair
 		Condition: nrepair
-		
+
 ^GreenFlash:
 	ExternalCondition@GHIGH:
 		Condition: greenhighlight
 	WithColoredOverlay@GHIGH:
 		RequiresCondition: greenhighlight
 		Palette: greenhighlight
-		
+
 ^WhiteFlash:
 	ExternalCondition@HIGH:
 		Condition: highlight
 	WithColoredOverlay@HIGH:
 		RequiresCondition: highlight
 		Palette: highlight
-		
+
 ^Cloakable:
 	Cloak@EXTERNALCLOAK:
 		RequiresCondition: invisibility && !cloak-force-disabled
@@ -486,7 +486,7 @@
 	WithColoredOverlay@STEALTHGEN:
 		RequiresCondition: invisibility
 		Palette: cloakgreen
-		
+
 ^Cloakable-Kills:
 	Inherits: ^Cloakable
 	KillsSelf@Mutation:
@@ -620,7 +620,7 @@
 		Prerequisites: global-bounty
 	GivesBounty:
 		RequiresCondition: global-bounty
-		
+
 ^FlatSelectionMode:
 	Selectable:
 		PriorityModifiers: Ctrl
@@ -628,7 +628,7 @@
 ^LowPrioritySelectionMode:
 	Selectable:
 		PriorityModifiers: Ctrl, Alt
-		
+
 ^ProductionSpeedBoost:
 	ProductionCostMultiplier@IndustrialPlant:
 		Multiplier: 75
@@ -750,7 +750,7 @@
 		DamageInterval: 16
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity
-		
+
 ^VehicleTD:
 	Inherits@1: ^Vehicle
 	RenderSprites:
@@ -766,7 +766,7 @@
 		Locomotor: tracked
 	Targetable:
 		TargetTypes: Ground, Vehicle, Tank
-		
+
 ^TankTD:
 	Inherits: ^Tank
 	RenderSprites:
@@ -1224,7 +1224,7 @@
 	ProductionCostMultiplier@EagleBonus:
 		Multiplier: 90
 		Prerequisites: structures.eagle
-		
+
 ^PlaneTD:
 	Inherits@1: ^Plane
 	RenderSprites:
@@ -1255,7 +1255,7 @@
 		RequiresCondition: cruising
 	BodyOrientation:
 		UseClassicFacingFudge: True
-		
+
 ^HelicopterTD:
 	Inherits@1: ^Helicopter
 	RenderSprites:
@@ -1386,7 +1386,7 @@
 	Explodes@temporal:
 		Weapon: TemporalExplodeLarge
 		EmptyWeapon: TemporalExplodeLarge
-		
+
 ^BuildingTD:
 	Inherits@1: ^Building
 	RenderSprites:
@@ -1479,7 +1479,7 @@
 	Explodes@temporal:
 		Weapon: TemporalExplode
 		EmptyWeapon: TemporalExplode
-	
+
 ^DefenseTD:
 	Inherits@1: ^Defense
 	RenderSprites:
@@ -1646,7 +1646,7 @@
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
 	Interactable:
-	
+
 ^TibTree:
 	Inherits@1: ^SpriteActor
 	Interactable:
@@ -1792,7 +1792,7 @@
 		CrushClasses: wall
 		CrushSound: destw.aud
 		CrushedByFriendlies: true
-		
+
 ^HuskTD:
 	Inherits: ^Husk
 	Burns:
@@ -1836,7 +1836,7 @@
 	RevealOnDeath:
 		Duration: 60
 		Radius: 4c0
-		
+
 ^TechHusk:
 	Inherits@1: ^BasicBuilding
 	Health:
@@ -1991,7 +1991,7 @@
 	GrantCondition@IDISABLE:
 		RequiresCondition: lowpower || empdisable
 		Condition: disabled
-		
+
 ^DisableOnLowPowerOrForceDisabled:
 	WithColoredOverlay@IDISABLE:
 		RequiresCondition: disabled && !(invulnerability || empdisable || forceshield || being-warped)
@@ -2044,7 +2044,7 @@
 	WithBuildingRepairDecoration:
 		Offsets:
 			powerdown: -10, 0
-			
+
 ^DisableOnLowPowerOrPowerDownOrForceDisable:
 	Inherits: ^DisableOnLowPower
 	GrantCondition@IDISABLE:
@@ -2167,7 +2167,7 @@
 			Radius: 427
 	MapEditorData:
 		Categories: Critter
-		
+
 ^ShootableMissile:
 	Inherits@1: ^ExistsInWorld
 	Inherits@4: ^SpriteActor
