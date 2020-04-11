@@ -2490,12 +2490,8 @@ DISR:
 	SpawnActorOnDeath:
 		Actor: DISR.Husk
 		RequiresCondition: !being-warped
-<<<<<<< HEAD
 		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
 
-=======
-
->>>>>>> 9c8df3bac8d924851f638f9a1f30fa3eb6127544
 HSAM:
 	Inherits: ^VehicleTD
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2989,6 +2985,53 @@ PTNK:
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
 	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: PTNK.Husk
+		RequiresCondition: !being-warped
+	SelectionDecorations:
+	Voiced:
+		VoiceSet: PrismVoice
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 28,28
+		
+PCAN:
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 130
+		Prerequisites: radar, ~vehicles.england, ~techlevel.high
+		Description: A prototype long range artillery that fires highly focused beams of light.\n  Strong vs Buildings, Vehicles, Infantry\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Prism Cannon
+		GenericName: Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 22000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 82
+		Voice: Move
+	RevealsShroud:
+		Range: 6c0
+	Armament:
+		Weapon: PrisCLaser
+		FireDelay: 10
+		LocalOffset: 400,0,180
+		PauseOnCondition: empdisable || being-warped
+	AttackFrontal:
+		TargetFrozenActors: True
+		OpportunityFire: False
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
 	SpawnActorOnDeath:
 		Actor: PTNK.Husk
 		RequiresCondition: !being-warped
@@ -3497,7 +3540,7 @@ CHPR:
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped || moving
 	AttackTurreted:
-		ForceFireIgnoresActors: True		
+		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped || moving
 	WithMuzzleOverlay:
 	WithSpriteTurret:
