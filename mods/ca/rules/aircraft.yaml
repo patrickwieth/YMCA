@@ -142,25 +142,25 @@ B2B:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
 
-MIG:
+Stealth_Fighter:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld, stek, ~techlevel.high
-		Description: Fast Ground-Attack Plane.\n  Strong vs Buildings, Vehicles\n  Weak vs Infantry, Aircraft
+		Prerequisites:  atek, ~afld.allies, ~aircraft.allies, ~techlevel.high
+		Description: Stealth Ground-Attack Plane.\n  Strong vs Buildings, Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 2000
 	Tooltip:
-		Name: MiG Attack Plane
+		Name: Stealth Fighter
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
 		HP: 15000
 	RevealsShroud:
-		Range: 13c0
+		Range: 10c0
 		Type: GroundPosition
 		MoveRecalculationThreshold: 0
 	Armament:
@@ -174,7 +174,7 @@ MIG:
 		CruiseAltitude: 2560
 		InitialFacing: 192
 		TurnSpeed: 4
-		Speed: 205
+		Speed: 175
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
@@ -182,9 +182,8 @@ MIG:
 		InitialStance: Defend
 		InitialStanceAI: Defend
 	AmmoPool:
-		Ammo: 4
-		PipCount: 4
-		ReloadDelay: 60
+		Ammo: 2
+		ReloadDelay: 100
 		AmmoCondition: ammo
 	Selectable:
 		Bounds: 36,28,0,2
@@ -195,14 +194,26 @@ MIG:
 	Contrail@2:
 		Offset: -598,683,0
 	SpawnActorOnDeath:
-		Actor: MIG.Husk
+		Actor: stealth_fighter.Husk
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
+	Cloak:
+		InitialDelay: 125
+		CloakDelay: 60
+		UncloakOn: Attack, Unload, Infiltrate, Demolish
+		CloakTypes: Cloak
+		RequiresCondition: !cloak-force-disabled
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: afld, afld.gdi
+	RenderSprites:
+		Image: stealth_fighter
+		Scale: 0.9
 
 FROG:
 	Inherits: ^Plane
@@ -1006,6 +1017,77 @@ a10.bomber:
 	GivesExperience:
 		Experience: 1000
 
+AURORA:
+	Inherits: ^PlaneTD
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@SLOW: ^SlowsWhenDamaged
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 50
+		Prerequisites: ~afld.gdi, ~aircraft.gdi, ~techlevel.high
+		Description: Super Sonic Bomber.\n  Strong vs Buildings, Light Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Aurora
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 20000
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	Armament:
+		Weapon: AuroraRocket
+		LocalYaw: -40, 24
+		PauseOnCondition: !ammo || being-warped
+	AttackAircraft:
+		FacingTolerance: 128
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 5
+		Speed: 225
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeoffSounds: migtoff1.aud
+	GrantConditionOnActivity:
+		Condition: supersonic
+	SpeedMultiplier:
+		Modifier: 266
+		RequiresCondition: supersonic && ammo
+	SpeedMultiplier@DAMAGED:
+		Modifier: 67
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+	AmmoPool:
+		Ammo: 1
+		ReloadDelay: 125
+		AmmoCondition: ammo
+	Selectable:
+		Bounds: 36,28,0,2
+		DecorationBounds: 40,29,0,1
+	SelectionDecorations:
+	Contrail@1:
+		Offset: -598,-683,0
+	Contrail@2:
+		Offset: -598,683,0
+	SpawnActorOnDeath:
+		Actor: aurora.Husk
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,171
+		Interval: 2
+	ProducibleWithLevel:
+		Prerequisites: aircraft.upgraded
+	Rearmable:
+		RearmActors: afld, afld.gdi
+	RenderSprites:
+		Scale: 0.9
+
 c17:
 	Inherits: ^NeutralPlane
 	RenderSprites:
@@ -1572,8 +1654,8 @@ HARR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~aircraft.soviets, ~techlevel.high
-		Description: Fast VTOL Attack Plane armed\nwith powerful explosive missiles.\n  Strong vs Structures, Infantry\n  Weak vs Aircraft
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~techlevel.high
+		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n  Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -1610,7 +1692,7 @@ HARR:
 		InitialStance: Defend
 		InitialStanceAI: Defend
 	AmmoPool:
-		Ammo: 4
+		Ammo: 8
 		PipCount: 4
 		ReloadDelay: 60
 		AmmoCondition: ammo
@@ -1633,15 +1715,15 @@ HARR:
 		RearmActors: hpad, hpad2
 
 Raptor:
-	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetAir
+	Inherits: ^Plane
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~techlevel.high
-		Description: Fast VTOL Attack Plane armed\nwith powerful Air-to-Air missiles.\n  Strong vs Aircraft\n  Weak vs Ground
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 50
+		Prerequisites: ~afld.allies, ~aircraft.allies, ~techlevel.high
+		Description: Fast Fighter Jet armed\nwith powerful Air-to-Air missiles.\n  Strong vs Aircraft\n  Weak vs Ground
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -1649,31 +1731,25 @@ Raptor:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 22000
+		HP: 20000
 	RevealsShroud:
 		Range: 12c0
 		Type: GroundPosition
 		MoveRecalculationThreshold: 0
 	Armament:
-		Weapon: Nike.Harrier
+		Weapon: Nike.Raptor
 		LocalOffset: 0,213,-85, 0,-213,-85
 		PauseOnCondition: !ammo || being-warped
 	AttackAircraft:
-		FacingTolerance: 20
-		Voice: Attack
+		FacingTolerance: 128
 	Aircraft:
 		CruiseAltitude: 2560
-		TurnSpeed: 5
+		InitialFacing: 192
+		TurnSpeed: 4
 		Speed: 225
 		RepulsionSpeed: 40
 		MaximumPitch: 56
-		CanHover: False
-		TakeoffSounds: mtoff1.aud, mtoff2.aud
-		LandingSounds: mland1.aud, mland2.aud
-		IdealSeparation: 1c682
-		Voice: Move
-		CanSlide: False
-		AltitudeVelocity: 0c200
+		TakeoffSounds: migtoff1.aud
 	AutoTarget:
 		InitialStance: AttackAnything
 		InitialStanceAI: AttackAnything
@@ -1681,23 +1757,25 @@ Raptor:
 		Ammo: 4
 		PipCount: 4
 		AmmoCondition: ammo
-	Contrail@1:
-		Offset: -400,-443,0
-	Contrail@2:
-		Offset: -400,443,0
-	SelectionDecorations:
-	SpawnActorOnDeath:
-		Actor: HARR.Husk
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
 	Selectable:
-		DecorationBounds: 36,28
-	Voiced:
-		VoiceSet: HarrierVoice
+		Bounds: 36,28,0,2
+		DecorationBounds: 40,29,0,1
+	SelectionDecorations:
+	Contrail@1:
+		Offset: -598,-683,0
+	Contrail@2:
+		Offset: -598,683,0
+	SpawnActorOnDeath:
+		Actor: raptor.Husk
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,171
+		Interval: 2
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
-		RearmActors: hpad, hpad2
+		RearmActors: afld, afld.gdi, afld.allies
+	RenderSprites:
+		Scale: 0.9
 
 SCRIN:
 	Inherits: ^HelicopterTD

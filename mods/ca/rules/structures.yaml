@@ -4455,8 +4455,8 @@ AFLD.allies:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 130
-		Prerequisites: radar, ~structures.allies, ~techlevel.high
-		Description: Produces and reloads aircraft.\n  Special Ability: Recon Drone
+		Prerequisites: dome, ~structures.allies, ~techlevel.high
+		Description: Produces and reloads aircraft.\n
 		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
@@ -4488,6 +4488,30 @@ AFLD.allies:
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
+	ProvidesPrerequisite@allies:
+		Factions: allies, england, france, germany
+		Prerequisite: aircraft.allies
+	ProvidesPrerequisite@alliedstructure:
+		RequiresPrerequisites: structures.allies
+		Prerequisite: aircraft.allies
+	ProvidesPrerequisite@england:
+		Factions: england
+		Prerequisite: aircraft.england
+	ProvidesPrerequisite@englishstructure:
+		RequiresPrerequisites: structures.england
+		Prerequisite: aircraft.england
+	ProvidesPrerequisite@france:
+		Factions: france
+		Prerequisite: aircraft.france
+	ProvidesPrerequisite@frenchstructure:
+		RequiresPrerequisites: structures.france
+		Prerequisite: aircraft.france
+	ProvidesPrerequisite@germany:
+		Factions: germany
+		Prerequisite: aircraft.germany
+	ProvidesPrerequisite@germanstructure:
+		RequiresPrerequisites: structures.germany
+		Prerequisite: aircraft.germany
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
