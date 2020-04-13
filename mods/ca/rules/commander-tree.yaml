@@ -1,0 +1,36 @@
+^default.cameo_filler:
+	Interactable:
+	AlwaysVisible:
+	Tooltip:
+		Name: Filler
+	Buildable:
+		Queue: Upgrade
+		ShowTooltip: false
+	Valued:
+		Cost: 0
+	KillsSelf:
+		RemoveInstead: true
+	RenderSprites:
+		Image: hack.cameo_filler
+
+^default.generals_power:
+	Interactable:
+	AlwaysVisible:
+	Buildable:
+		BuildDurationModifier: 100
+		Queue: queue.usa_generals_power, queue.air_gen_generals_power, queue.laser_gen_generals_power, queue.super_gen_generals_power, queue.gla_generals_power, queue.toxin_gen_generals_power, queue.demo_gen_generals_power, queue.stealth_gen_generals_power, queue.prc_generals_power, queue.inf_gen_generals_power, queue.nuke_gen_generals_power, queue.tank_gen_generals_power
+		BuildLimit: 1
+		IconPalette: cameo
+	RenderSprites:
+	ProvidesPrerequisite@powername:
+
+generals_power.spy_drone:
+	Inherits: ^default.generals_power
+	Tooltip:
+		Name: Spy Drone
+	Buildable:
+		Queue: queue.usa_generals_power, queue.air_gen_generals_power, queue.laser_gen_generals_power, queue.super_gen_generals_power
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points
+		Description: Enables Spy Drone support power from Command Center.
