@@ -59,7 +59,7 @@ namespace OpenRA.Mods.CA.Projectiles
 
 			// projectile starts at the source position
 			pos = args.Source;
-			
+
 			// initially no distance has been travelled by the pulse
 			totalDistanceTravelled = 0;
 
@@ -99,7 +99,7 @@ namespace OpenRA.Mods.CA.Projectiles
 			}
 			else
 			{
-				args.Weapon.Impact(Target.FromPos(pos), new WarheadArgs(args));
+				args.Weapon.Impact(Target.FromPos(pos), args.SourceActor, args.DamageModifiers);
 			}
 		}
 	}
