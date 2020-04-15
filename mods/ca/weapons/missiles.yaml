@@ -589,8 +589,6 @@ V3Weapon:
 		Explosions: large_splash
 		ImpactSounds: splashl1.aud, splashl2.aud
 
-<<<<<<< HEAD
-=======
 KatyushaRockets:
 	Inherits: ^AntiGroundMissile
 	ReloadDelay: 240
@@ -624,7 +622,6 @@ KatyushaRockets:
 		ImpactSounds: kaboom15.aud
 		ValidTargets: Ground, Ship, Trees
 
->>>>>>> da56199fd9e90662d45a14af7e6012aecc47c169
 HonestJohn:
 	ReloadDelay: 130
 	Burst: 2
@@ -774,13 +771,8 @@ BikeRocketsAA:
 	Burst: 2
 	BurstDelays: 5
 	Warhead@1Dam: SpreadDamage
-<<<<<<< HEAD
 		Damage: 2500
 
-=======
-		Damage: 1800
-
->>>>>>> 99816109e5ca8e9ed7177f5dbed96811f0b417b8
 IFVRockets:
 	Inherits: Dragon
 	Range: 4c512
@@ -799,13 +791,8 @@ IFVRocketsAA:
 	Burst: 2
 	BurstDelays: 5
 	Warhead@1Dam: SpreadDamage
-<<<<<<< HEAD
 		Damage: 2700
 
-=======
-		Damage: 1800
-		
->>>>>>> 9c8df3bac8d924851f638f9a1f30fa3eb6127544
 IFVRocketsE:
 	Inherits: IFVRockets
 	Range: 5c0
@@ -815,13 +802,8 @@ IFVRocketsE:
 IFVRocketsAAE:
 	Inherits: IFVRocketsAA
 	Warhead@1Dam: SpreadDamage
-<<<<<<< HEAD
 		Damage: 3000
 
-=======
-		Damage: 2000
-		
->>>>>>> 9c8df3bac8d924851f638f9a1f30fa3eb6127544
 BTRRockets:
 	Inherits: Dragon
 	Range: 4c512
@@ -954,10 +936,6 @@ BTRRocketsAA:
 		Damage: 2400
 		ValidTargets: Air
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 99816109e5ca8e9ed7177f5dbed96811f0b417b8
 227mmAAH:
 	Inherits: 227mmAA
 	Report: hovrmis1.aud
@@ -1372,6 +1350,46 @@ CryoMissile:
 		Spread: 1c0
 		Level: 100
 		Falloff: 100, 75, 52, 15, 2
+		MaxLevel: 600
+
+CryoGun:
+	ReloadDelay: 90
+	Range: 5c512
+	ValidTargets: Ground, Water
+	Projectile: LaserZap
+		Width: 25
+		Duration: 20
+		ZOffset: 2047
+		Color: FFFFFF
+		SecondaryBeam: true
+		SecondaryBeamWidth: 50
+		SecondaryBeamZOffset: 2047
+		SecondaryBeamColor: 57BEFFBB
+		Blockable: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 550
+		Falloff: 100, 25, 12, 0
+		Versus:
+			None: 100
+			Wood: 15
+			Light: 35
+			Heavy: 5
+			Concrete: 5
+			Brick: 1
+		DamageTypes: SmallExplosionDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: cryohit
+		ImpactSounds: cryozap.aud
+	Warhead@chill: GrantExternalCondition
+		Condition: chilled
+		Duration: 120
+		Range: 0c448
+	Warhead@cryoresidue: CreateTintedCells
+		LayerName: cryoresidue
+		Spread: 1c0
+		Level: 100
+		Falloff: 100, 52, 15, 2
 		MaxLevel: 600
 
 BATFRockets:
