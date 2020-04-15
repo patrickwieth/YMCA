@@ -126,12 +126,12 @@ HellfireAG.Harrier:
 	Range: 12c0
 	MinRange: 2c0
 	Report: migmis.aud, migmis2.aud
-	Burst: 2
-	BurstDelays: 10
+	Burst: 4
+	BurstDelays: 5
 	Projectile: MissileCA
 		RangeLimit: 12c512
 		ContrailLength: 10
-		Inaccuracy: 512
+		Inaccuracy: 2c512
 	Warhead@1Dam: SpreadDamage
 		Spread: 448
 		Damage: 1600
@@ -140,9 +140,9 @@ HellfireAG.Harrier:
 		Versus:
 			None: 100
 			Wood: 60
-			Light: 60
-			Heavy: 45
-			Concrete: 40
+			Light: 70
+			Heavy: 35
+			Concrete: 30
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
@@ -272,7 +272,7 @@ Nike:
 		Explosions: med_explosion_air
 		ImpactSounds: kaboom25.aud
 
-Nike.Harrier:
+Nike.Raptor:
 	Inherits: Nike
 	ReloadDelay: 30
 	Projectile: MissileCA
@@ -387,7 +387,6 @@ StingerGTWR:
 		ExplosionPalette: temptd
 		ImpactSounds: kaboom15.aud
 		ValidTargets: Ground, Air, Ship, Trees
-
 
 APTusk:
 	Inherits: ^AntiGroundMissile
@@ -570,7 +569,7 @@ V3Weapon:
 	-Report:
 	ValidTargets: Ground, Trees, Water
 	Warhead@1Dam: SpreadDamage
-		Spread: 341
+		Spread: 1c0
 		Damage: 3400
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water, Trees
@@ -597,7 +596,7 @@ KatyushaRockets:
 	Report: missile6.aud
 	Burst: 8
 	BurstDelays: 6
-	Projectile: Bullet
+	Projectile: BulletCA
 		Blockable: false
 		Shadow: true
 		Inaccuracy: 3c512
@@ -608,7 +607,7 @@ KatyushaRockets:
 	ValidTargets: Ground, Trees, Water
 	Warhead@1Dam: SpreadDamage
 		Spread: 384
-		Damage: 3000
+		Damage: 5000
 		Versus:
 			None: 100
 			Wood: 95
@@ -804,6 +803,7 @@ IFVRocketsAAE:
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 
+>>>>>>> 9c8df3bac8d924851f638f9a1f30fa3eb6127544
 BTRRockets:
 	Inherits: Dragon
 	Range: 4c512
@@ -1401,3 +1401,34 @@ BATFRockets:
 		Versus:
 			Concrete: 50
 			Light: 25
+
+AuroraRocket:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 5
+	Range: 5c0
+	Report: vmigweaa.wav, vmigweab.wav
+	BurstDelays: 7
+	Projectile: Bullet
+		Speed: 256
+		Inaccuracy: 316
+		TrailImage: smokey
+		TrailInterval: 1
+		Blockable: false
+		Image: V2
+		Shadow: True
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c512
+		Damage: 30000
+		Versus:
+			None: 100
+			Wood: 100
+			Light: 100
+			Heavy: 75
+			Concrete: 75
+			Brick: 80
+	Warhead@3Eff_impact: CreateEffect
+		Explosions: nuke
+		ImpactSounds: kaboom1.aud
+		ImpactActors: false
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash

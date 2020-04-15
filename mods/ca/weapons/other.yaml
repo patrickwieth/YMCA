@@ -533,10 +533,12 @@ VenomLaser:
 		Damage: 5500
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
-			Wood: 25
-			Concrete: 10
-			Light: 90
-			Heavy: 10
+			None: 120
+			Wood: 60
+			Light: 72
+			Heavy: 28
+			Concrete: 28
+			Brick: 28
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
@@ -557,7 +559,7 @@ VenomLaserAA:
 PointLaser:
 	Inherits: Laser
 	ReloadDelay: 50
-	ValidTargets: Ground, Missile
+	ValidTargets: Ground, Air, Missile
 	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
 	Range: 1c768
 	Report: vpalwe2d.aud
@@ -578,8 +580,8 @@ PointLaser:
 
 AdvancedPointLaser:
 	Inherits: Laser
-	ReloadDelay: 30
-	ValidTargets: Ground, Missile, BulletCA
+	ReloadDelay: 10
+	ValidTargets: Ground, Air, Missile, BulletCA
 	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
 	Range: 2c768
 	Report: vpalwe2d.aud
@@ -609,6 +611,7 @@ AdvancedPointLaser.gdi:
 	Inherits: AdvancedPointLaser
 	Projectile: LaserZap
 		Color: ebba34
+		SecondaryBeamColor: d1a70030
 
 AdvancedPointLaser.soviet:
 	Inherits: AdvancedPointLaser
@@ -618,8 +621,8 @@ AdvancedPointLaser.soviet:
 
 SuperPointLaser:
 	Inherits: Laser
-	ReloadDelay: 20
-	ValidTargets: Ground, Missile, BulletCA
+	ReloadDelay: 5
+	ValidTargets: Ground, Air, Missile, BulletCA
 	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
 	Range: 3c768
 	Report: vpalwe2d.aud
@@ -724,7 +727,26 @@ PrisTBurst:
 		Damage: 2100
 		Versus:
 			Wood: 35
-		
+
+PrisCLaser:
+	Inherits: PrisLaser
+	Report: pcanfire.aud
+	ReloadDelay: 75
+	Range: 10c0
+	Projectile: LaserZap
+		Width: 30
+		Duration: 15
+		Color: 00FFDEC8
+		SecondaryBeamWidth: 60
+		SecondaryBeamColor: 84f5ff
+		Blockable: true
+	Warhead@1Dam: SpreadDamage
+		Damage: 7500
+		Spread: 348
+		Versus:
+			Wood: 110
+	-Warhead@Burst:
+
 PrisCLaser:
 	Inherits: PrisLaser
 	Report: pcanfire.aud
@@ -857,8 +879,8 @@ RadBomb:
 	Warhead@1Radiation: CreateTintedCells
 		Spread: 1c0
 		Falloff: 100, 75, 50, 25, 0
-		Level: 250
-		MaxLevel: 2500
+		Level: 500
+		MaxLevel: 5000
 
 SonicZap:
 	ReloadDelay: 120
@@ -1132,19 +1154,55 @@ MicrowaveZap:
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
 		Spread: 512
-		Damage: 5000
+		Damage: 2500
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
 			None: 100
-			Wood: 45
-			Concrete: 50
-			Light: 70
-			Heavy: 85
+			Wood: 10
+			Concrete: 10
+			Light: 10
+			Heavy: 10
 	Warhead@emp: GrantExternalCondition
 		Range: 0c511
-		Duration: 90
+		Duration: 120
 		Condition: empdisable
 		ValidTargets: Ground, Structure, Vehicle
+	Warhead@microwave: GrantExternalCondition
+		Range: 0c511
+		Duration: 130
+		Condition: 	microwaved
+		ValidTargets: Ground, Vehicle
+	Warhead@Burst: FireCluster
+		Weapon: MWBurst
+		RandomClusterCount: 2
+		ValidTargets: Infantry, Vehicle
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
+MicrowaveZapSound:
+	Inherits: MicrowaveZap
+	Report: coreup1.aud
+	Projectile: InstantHit
+	Warhead1@Dam: SpreadDamage
+		Damage: 1
+		Versus:
+			None: 0
+			Wood: 0
+			Concrete: 0
+			Light: 0
+			Heavy: 0
+			Brick: 0
+	-Warhead@emp:
+	-Warhead@microwave:
+
+MwBurst:
+	Inherits: MicrowaveZap
+	-Report:
+	Range: 3c0
+	Projectile: Railgun
+		-HitAnim:
+	-Warhead@Burst:
+	Warhead@3Eff: CreateEffect
 
 MicrowaveZapSound:
 	Inherits: MicrowaveZap
@@ -1285,8 +1343,8 @@ RadEruptionWeapon:
 	Warhead@1Radiation: CreateTintedCells
 		Spread: 2c0
 		Falloff: 100, 75, 50, 25, 0
-		Level: 250
-		MaxLevel: 750
+		Level: 500
+		MaxLevel: 7500
 
 ChronoAI:
 	ReloadDelay: 1
@@ -1315,6 +1373,12 @@ TimeWarp:
 		ImpactSounds: chrono2.aud
 	Warhead@Damage1: WarpDamage
 		Spread: 1c0
+		Delay: 100
+		Damage: 1
+		ValidTargets: Temporal
+	Warhead@Damage6: WarpDamage
+		Spread: 1c0
+		Delay: 125
 		Damage: 1
 		ValidTargets: Temporal
 	Warhead@3Flash: ChronoFlashEffect
@@ -1495,14 +1559,14 @@ NeutronCannonSound:
 	Projectile: InstantHit
 
 SonicPulse:
-	ReloadDelay: 120
+	ReloadDelay: 60
 	Range: 9c0
 	Report: sonicpulse1.aud, sonicpulse2.aud
 	Projectile: LinearPulse
 	Warhead@1Dam: SpreadDamage
 		Spread: 0c256
 		Falloff: 100, 50, 25, 5, 0
-		Damage: 7500
+		Damage: 15000
 		ValidTargets: Ground, Water
 		ValidStances: Enemy, Neutral
 		Versus:
@@ -1518,6 +1582,117 @@ SonicPulse:
 		ExplosionPalette: effect-ignore-lighting-alpha40
 		ValidTargets: Ground, Air, Ship, Trees
 	Warhead@2Eff: CreateEffect
-		Explosions: sonicblast1, sonicblast2
-		ExplosionPalette: effect-ignore-lighting-alpha40
-		ValidTargets: Ground, Air, Ship, Trees
+		Explosions: cryohit
+		ImpactSounds: cryozap.aud
+	Warhead@chill: GrantExternalCondition
+		Condition: chilled
+		Duration: 120
+		Range: 0c448
+	Warhead@cryoresidue: CreateTintedCells
+		LayerName: cryoresidue
+		Spread: 1c0
+		Level: 100
+		Falloff: 100, 52, 15, 2
+		MaxLevel: 600
+
+NeutronCannon:
+	ValidTargets: Temporal
+	ReloadDelay: 5
+	Burst: 22
+	BurstDelays: 5
+	Range: 5c0
+	Projectile: InstantHit
+	Warhead@Damage: WarpDamage
+		Damage: 750
+		Spread: 1
+		Versus:
+			None: 40
+			Wood: 60
+			Light: 50
+			Heavy: 100
+			Concrete: 55
+			Brick: 55
+		ValidTargets: Temporal
+		DamageTypes: ChronoDeath
+
+NeutronCannonBeam:
+	ValidTargets: Temporal
+	ReloadDelay: 5
+	Range: 5c0
+	TargetActorCenter: true
+	Projectile: LaserZap
+		Width: 60
+		Duration: 15
+		Color: 80C8FF88
+		ZOffset: 2046
+		SecondaryBeam: true
+		SecondaryBeamWidth: 120
+		SecondaryBeamZOffset: 2046
+		SecondaryBeamColor: 80C8FF33
+	Warhead@Damage: SpreadDamage
+		Damage: 1
+		Spread: 1
+		Versus:
+			None: 0
+			Wood: 0
+			Light: 0
+			Heavy: 0
+			Concrete: 0
+			Brick: 0
+		ValidTargets: Temporal
+		DamageTypes: ChronoDeath
+
+NeutronCannonPulse:
+	Inherits: NeutronCannonBeam
+	ReloadDelay: 20
+	Projectile: AreaBeam
+		Speed: 0c768
+		Duration: 8
+		Width: 60
+		Shape: Flat
+		ZOffset: 2047
+		TrackTarget: true
+		Color: d8f9f7cc
+
+NeutronCannonSound:
+	Inherits: NeutronCannonBeam
+	Report: chronogun.aud
+	ReloadDelay: 60
+	Projectile: InstantHit
+
+StealthBomb:
+	ValidTargets: Ground, Water
+	InvalidTargets: Air
+	ReloadDelay: 50
+	Report: chute1.aud
+	Burst: 2
+	BurstDelays: 10
+	Range: 3c512
+	TargetActorCenter: true
+	Projectile: Bullet
+		Image: DRAGON
+		TrailImage: smokey
+		Speed: 300
+		Shadow: true
+	Warhead@1Dam: SpreadDamage
+		Damage: 30000
+		ValidTargets: Ground, Water
+		Versus:
+			None: 100
+			Wood: 55
+			Light: 50
+			Heavy: 100
+			Concrete: 45
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: med_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge

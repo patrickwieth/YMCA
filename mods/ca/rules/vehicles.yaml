@@ -6,7 +6,7 @@ V2RL:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
-		Prerequisites: dome, ~vehicles.soviet, ~!vehicles.russia, ~techlevel.medium
+		Prerequisites: dome, ~vehicles.soviet, ~!vehicles.ukraine, ~techlevel.medium
 		Description: Long-range rocket artillery.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 900
@@ -90,7 +90,7 @@ V2RL:
 	RevealsShroud:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 7
+		TurnSpeed: 14
 	Armament:
 		Weapon: 25mm
 		Recoil: 85
@@ -134,7 +134,7 @@ V2RL:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 10
 		Offset: 0,0,20
 	Armament:
 		Weapon: 90mm
@@ -190,7 +190,7 @@ V2RL:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 10
 		Offset: 0,0,20
 	GrantConditionOnFaction@IRAQTANK:
 		Condition: iraqtank
@@ -261,7 +261,7 @@ V2RL:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 2
+		TurnSpeed: 4
 	GrantConditionOnFaction@IRAQTANK:
 		Condition: iraqtank
 		Factions: iraq
@@ -280,17 +280,6 @@ V2RL:
 		Recoil: 43
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-	Armament@TERNARY:
-		Name: ternary
-		Turret: ternary
-		Weapon: AdvancedPointLaser.soviet
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
-	PointDefense:
-		Armament: ternary
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
 	SpeedMultiplier@IRAQTANK:
 		RequiresCondition: iraqtank
 		Modifier: 125
@@ -309,7 +298,7 @@ V2RL:
 	SelfHealing:
 		Step: 100
 		Delay: 3
-		HealIfBelow: 50
+		HealIfBelow: 100
 		DamageCooldown: 150
 	SelectionDecorations:
 	ProducibleWithLevel:
@@ -319,6 +308,27 @@ V2RL:
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: AdvancedPointLaser.soviet
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: !ammo || empdisable || being-warped
+	PointDefense:
+		Armament: pointdefense
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Red
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 ARTY:
 	Inherits: ^Tank
@@ -341,7 +351,7 @@ ARTY:
 	Armor:
 		Type: Light
 	Mobile:
-		TurnSpeed: 2
+		TurnSpeed: 4
 		Speed: 56
 		Locomotor: lighttracked
 	RevealsShroud:
@@ -400,7 +410,7 @@ SPEC:
 	Armor:
 		Type: Light
 	Mobile:
-		TurnSpeed: 5
+		TurnSpeed: 10
 		Speed: 100
 		Locomotor: lighttracked
 	Armament:
@@ -563,7 +573,7 @@ JEEP:
 	Armor:
 		Type: Light
 	Mobile:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Speed: 157
 	RevealsShroud:
 		Range: 14c0
@@ -844,7 +854,7 @@ DTRK:
 		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
 		Description: Truck with actively armed nuclear\nexplosives. Has very weak armor.
 	Valued:
-		Cost: 2000
+		Cost: 2500
 	Tooltip:
 		Name: Demolition Truck
 	UpdatesPlayerStatistics:
@@ -1038,12 +1048,12 @@ HMMV:
 	Armor:
 		Type: Light
 	Mobile:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Speed: 157
 	RevealsShroud:
 		Range: 14c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Offset: -85,0,128
 	Armament:
 		Weapon: M60mgTD
@@ -1071,7 +1081,7 @@ BGGY:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.nod, ~techlevel.low
+		Prerequisites: ~!bio.nod, ~vehicles.nod, ~techlevel.low
 		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units.\n  Strong vs Infantry\n  Weak vs Tanks
 	Valued:
 		Cost: 350
@@ -1088,7 +1098,7 @@ BGGY:
 	RevealsShroud:
 		Range: 14c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Offset: -43,0,128
 	Armament:
 		Weapon: M60mgTD
@@ -1104,6 +1114,40 @@ BGGY:
 		CloakTypes: Cloak, Thief
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+
+BGGY.Laser:
+	Inherits: BGGY
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: ~bio.nod, ~vehicles.nod, ~techlevel.high
+		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units and has Point Laser Defense.\n  Strong vs Infantry\n  Weak vs Energy Weapons
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Laser Buggy
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: AdvancedPointLaser
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: !ammo || empdisable || being-warped
+	PointDefense:
+		Armament: pointdefense
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Red
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 APC2:
 	Inherits: ^TankTD
@@ -1209,7 +1253,7 @@ LTNK:
 	RevealsShroud:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 7
+		TurnSpeed: 14
 	Armament:
 		Weapon: 30mm
 		Recoil: 85
@@ -1287,7 +1331,7 @@ MTNK:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 10
 		Offset: 0,0,30
 	Turreted@SECONDARY:
 		Turret: secondary
@@ -1299,14 +1343,6 @@ MTNK:
 		RecoilRecovery: 26
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
-		Weapon: PointLaser
-		LocalOffset: 0,10,90
-		RequiresCondition: gdiupg
-		ForceTargetStances: enemy
 		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		Turrets: primary, secondary
@@ -1321,8 +1357,16 @@ MTNK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: secondary
+		Weapon: PointLaser
+		LocalOffset: 0,10,90
+		RequiresCondition: gdiupg
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
 	PointDefense:
-		Armament: secondary
+		Armament: pointdefense
 		PointDefenseTypes: Missile
 		RequiresCondition: gdiupg
 		ValidStances: Enemy
@@ -1358,7 +1402,7 @@ MTNK.Drone:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 10
 		Offset: 0,0,20
 	Turreted@SECONDARY:
 		Turret: secondary
@@ -1371,14 +1415,6 @@ MTNK.Drone:
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
 		PauseOnCondition: disabled || empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
-		Weapon: PointLaser
-		LocalOffset: 0,10,90
-		RequiresCondition: gdiupg
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		Turrets: primary, secondary
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -1410,12 +1446,20 @@ MTNK.Drone:
 	ProximityExternalCondition@POWERSOUND:
 		Condition: disablesound
 		RequiresCondition: disabled || empdisable
-		AffectsParent: True
+		AffectsParent: true
 		Range: 1c0
 		EnableSound: vrobon
 		DisableSound: vroboff
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: secondary
+		Weapon: PointLaser
+		LocalOffset: 0,10,90
+		RequiresCondition: gdiupg
+		ForceTargetStances: enemy
+		PauseOnCondition: empdisable || being-warped
 	PointDefense:
-		Armament: secondary
+		Armament: pointdefense
 		PointDefenseTypes: Missile
 		RequiresCondition: gdiupg
 		ValidStances: Enemy
@@ -1455,7 +1499,7 @@ HTNK:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 2
+		TurnSpeed: 4
 	Armament@PRIMARY:
 		Weapon: 130mmTD
 		LocalOffset: 900,180,340, 900,-180,340
@@ -1500,7 +1544,7 @@ HTNK.Ion:
 		Queue: Vehicle
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~!vehicles.talon, ~miss.gdi, ~techlevel.high
+		Prerequisites: ~gtek, ~vehicles.gdi, ~miss.gdi, ~techlevel.high
 		Description: Big and slow tank, with anti-air capability.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
 	Tooltip:
 		Name: Ion Mammoth Tank
@@ -1548,7 +1592,7 @@ MSAM:
 	RevealsShroud:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Offset: -256,0,128
 	Armament@PRIMARY:
 		Weapon: 227mm
@@ -1562,7 +1606,7 @@ MSAM:
 		LocalYaw: 100, -100
 		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
-		TargetFrozenActors: True
+		TargetFrozenActors: true
 		ForceFireIgnoresActors: False
 		OpportunityFire: False
 		PauseOnCondition: empdisable || being-warped
@@ -1603,7 +1647,7 @@ MLRS:
 	RevealsShroud:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 2
+		TurnSpeed: 4
 		Offset: -128,0,128
 		RealignDelay: 0
 	Armament:
@@ -1711,7 +1755,7 @@ STNK.Nod:
 		LocalOffset: 213,43,128, 213,-43,128
 		PauseOnCondition: empdisable || being-warped
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Offset: 0,0,10
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
@@ -1755,7 +1799,7 @@ BIKE:
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with\nrockets.\nCan attack Aircraft.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry
 	Mobile:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Speed: 180
 	Health:
 		HP: 11000
@@ -1803,7 +1847,7 @@ FTNK:
 	Health:
 		HP: 40000
 	Armor:
-		Type: Light
+		Type: Heavy
 	RevealsShroud:
 		Range: 8c0
 	Armament:
@@ -1918,7 +1962,7 @@ BTR:
 	RevealsShroud:
 		Range: 7c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Offset: 20,0,175
 	Armament@E3:
 		Weapon: BTRrockets
@@ -1971,7 +2015,7 @@ IFV:
 		Range: 15c0
 		RequiresCondition: spyturr
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Offset: 20,0,60
 	Armament@E1:
 		Weapon: M60mg
@@ -2177,13 +2221,6 @@ BATF2:
 		LocalOffset: 624,0,208
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
-		Weapon: SuperPointLaser
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
 	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
@@ -2204,13 +2241,26 @@ BATF2:
 		VoiceSet: BattleFortressVoice
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
+	Armament@pointdefense:
+		Name: pointdefense
+		Weapon: SuperPointLaser.allies
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: !ammo || empdisable || being-warped
 	PointDefense:
-		Armament: secondary
+		Armament: pointdefense
 		PointDefenseTypes: Missile, BulletCA
-		PauseOnCondition: empdisable || being-warped
 		ValidStances: Enemy
-	AutoTarget:
-		ScanRadius: 10
+	AmmoPool:
+		Ammo: 24
+		PipCount: 6
+		PipType: Blue
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 IFV.AI:
 	Inherits: ^Tank
@@ -2237,7 +2287,7 @@ IFV.AI:
 	RevealsShroud:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Offset: 20,0,60
 	Armament@DEFAULT:
 		Weapon: 25mm
@@ -2340,7 +2390,7 @@ TITN:
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
 	Turreted:
-		TurnSpeed: 3
+		TurnSpeed: 6
 		Offset: 0,0,0
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
@@ -2377,7 +2427,7 @@ JUGG:
 		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~miss.gdi, ~techlevel.high
 		Description: Tough Artillery Battle-Mech.\n  Strong vs Infantry, Structures\n Weak vs Aircraft
 	Valued:
-		Cost: 1500
+		Cost: 2000
 	Armament@PRIMARY:
 		Weapon: JuggernautGun
 		LocalOffset: 830,0,500, 830,100,500, 830,-100,500
@@ -2389,7 +2439,7 @@ JUGG:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 	Turreted:
-		TurnSpeed: 3
+		TurnSpeed: 6
 		Offset: -20,0,20
 	-Armament@SECONDARY:
 	-SelfHealing@DEFAULT:
@@ -2437,7 +2487,7 @@ DISR:
 	Armor:
 		Type: Heavy
 	Mobile:
-		TurnSpeed: 4
+		TurnSpeed: 8
 		Speed: 56
 		Voice: Move
 	Passenger:
@@ -2468,7 +2518,7 @@ DISR:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: gdiupg
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 10
 		Offset: -300,0,0
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
@@ -2528,7 +2578,7 @@ HSAM:
 	RevealsShroud:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 		Offset: -200,0,0
 	Hovers:
 		BobDistance: -35
@@ -2592,7 +2642,7 @@ RTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
 		Prerequisites: weap, ~vehicles.england, ~techlevel.low
-		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft.
+		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -2609,7 +2659,7 @@ RTNK:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 10
 	Armament:
 		Weapon: 120mmHEAT
 		Recoil: 128
@@ -2647,17 +2697,27 @@ RTNK:
 		Prerequisites: vehicles.upgraded
 	Voiced:
 		VoiceSet: MirageVoice
-	Armament@TERNARY:
-		Name: ternary
-		Turret: ternary
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
 		Weapon: AdvancedPointLaser.allies
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: !ammo || empdisable || being-warped
 	PointDefense:
-		Armament: ternary
+		Armament: pointdefense
 		PointDefenseTypes: Missile, BulletCA
 		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Blue
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 V3RL:
 	Inherits: ^Vehicle
@@ -2681,7 +2741,7 @@ V3RL:
 		Type: Light
 	Mobile:
 		Speed: 56
-		TurnSpeed: 4
+		TurnSpeed: 8
 		Voice: Move
 		PauseOnCondition: aiming || being-captured || empdisable || being-warped
 	RevealsShroud:
@@ -2764,7 +2824,7 @@ KATY:
 		Queue: Vehicle
 		BuildPaletteOrder: 150
 		IconPalette: chrometd
-		Prerequisites: stek, ~vehicles.ukraine, ~techlevel.high
+		Prerequisites: dome, ~vehicles.ukraine, ~techlevel.high
 		Description: Long-range rocket artillery.\n  Strong vs Infantry, Light armor, Buildings\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 1500
@@ -2778,7 +2838,7 @@ KATY:
 		Type: Light
 	Mobile:
 		Speed: 68
-		TurnSpeed: 4
+		TurnSpeed: 8
 		PauseOnCondition: being-captured || empdisable || being-warped
 	RevealsShroud:
 		Range: 5c0
@@ -2820,12 +2880,12 @@ TNKD:
 		Type: Heavy
 	Mobile:
 		Speed: 68
-		TurnSpeed: 4
+		TurnSpeed: 8
 		Voice: Move
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 2
+		TurnSpeed: 4
 		Offset: -80,0,20
 	Armament:
 		Weapon: 183mm
@@ -2932,19 +2992,27 @@ MSAR:
 		TargetTypes: Ground, Vehicle, ChaosImmune
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
-	PointDefense:
-		Armament: secondary
-		PointDefenseTypes: Missile, BulletCA
-		RequiresCondition: deployed
-		ValidStances: Enemy
-		PauseOnCondition: empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
 		Weapon: SuperPointLaser.gdi
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: !ammo || empdisable || being-warped
+	PointDefense:
+		Armament: pointdefense
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 24
+		PipCount: 6
+		PipType: Yellow
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 24
+		ResetOnFire: True
 
 PTNK:
 	Inherits: ^Tank
@@ -2954,7 +3022,7 @@ PTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 130
-		Prerequisites: radar, ~vehicles.allies, ~techlevel.high
+		Prerequisites: radar, ~!vehicles.england, ~vehicles.allies, ~techlevel.high
 		Description: A prototype mobile Prism tower.\n  Strong vs Vehicles, Infantry\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 1350
@@ -2973,7 +3041,7 @@ PTNK:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 10
 		Offset: 100,0,0
 	Armament:
 		Weapon: PrisTLaser
@@ -2995,7 +3063,7 @@ PTNK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
-		
+
 PCAN:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -3062,7 +3130,7 @@ WTNK:
 		Name: Microwave Tank
 		GenericName: Tank
 	Health:
-		HP: 40000
+		HP: 30000
 	Armor:
 		Type: Light
 	Mobile:
@@ -3071,7 +3139,7 @@ WTNK:
 	RevealsShroud:
 		Range: 8c0
 	Turreted:
-		TurnSpeed: 4
+		TurnSpeed: 8
 		Offset: 0,0,0
 	Armament@PRIMARY:
 		Weapon: MicrowaveZap
@@ -3161,17 +3229,17 @@ BATF:
 	Turreted@PRIMARY:
 		Turret: primary
 		Offset: 200,-300,0
-		TurnSpeed: 3
+		TurnSpeed: 6
 		PauseOnCondition: !cargo
 	Turreted@SECONDARY:
 		Turret: secondary
 		Offset: 200,300,0
-		TurnSpeed: 3
+		TurnSpeed: 6
 		PauseOnCondition: cargo < 2
 	Turreted@TERTIARY:
 		Turret: tertiary
 		Offset: -300,0,358
-		TurnSpeed: 3
+		TurnSpeed: 6
 		PauseOnCondition: cargo < 3
 	WithMuzzleOverlay:
 	Cargo:
@@ -3199,18 +3267,27 @@ BATF:
 	WithSpriteTurret@TERTIARY:
 		Turret: tertiary
 		Sequence: turret2
-	Armament@QUARTARY:
-		Name: quartary
-		Turret: quartary
-		Weapon: SuperPointLaser.allies
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: AdvancedPointLaser.allies
 		LocalOffset: 0,10,90
 		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: !ammo || empdisable || being-warped
 	PointDefense:
-		Armament: quartary
+		Armament: pointdefense
 		PointDefenseTypes: Missile, BulletCA
-		PauseOnCondition: empdisable || being-warped
 		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Blue
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
 
 BATF.AI:
 	Inherits: BATF
@@ -3249,15 +3326,15 @@ BATF.AI:
 	Turreted@PRIMARY:
 		Turret: primary
 		Offset: 200,-300,0
-		TurnSpeed: 3
+		TurnSpeed: 6
 	Turreted@SECONDARY:
 		Turret: secondary
 		Offset: 200,300,0
-		TurnSpeed: 3
+		TurnSpeed: 6
 	Turreted@TERTIARY:
 		Turret: tertiary
 		Offset: -300,0,358
-		TurnSpeed: 3
+		TurnSpeed: 6
 	-Cargo:
 	Mobile:
 		PauseOnCondition: being-captured || empdisable || being-warped
@@ -3448,7 +3525,7 @@ CHPR:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 2
+		TurnSpeed: 4
 		Offset: -156,0,0
 	Armament@PRIMARY:
 		Weapon: NeutronCannon
@@ -3513,7 +3590,7 @@ CHPR:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 120
-		Prerequisites: stek, ~vehicles.ukraine, ~techlevel.high
+		Prerequisites: dome, ~vehicles.iraq, ~techlevel.high
 		Description: Heavy artillery that fires shells with cluster warheads.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 1350
@@ -3530,7 +3607,7 @@ CHPR:
 	RevealsShroud:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 3
+		TurnSpeed: 6
 		Offset: -200, 0, 0
 	Armament@PRIMARY:
 		Weapon: 152mm
@@ -3575,8 +3652,8 @@ CRYO:
 		Description: Long-range support artillery that slows enemies and makes them take more damage.\n  Strong vs Infantry, Vehicles, Buildings\n  Weak vs Aircraft
 	Mobile:
 		Speed: 82
-		TurnSpeed: 4
-		PauseOnCondition:  being-captured || empdisable || being-warped
+		TurnSpeed: 6
+		PauseOnCondition: aiming || being-captured || empdisable || being-warped
 	Health:
 		HP: 32000
 	Armor:
@@ -3604,7 +3681,7 @@ SLNG:
 	Inherits@AUTOTARGET: ^AutoTargetAir
 	Inherits@BERSERK: ^Berserk
 	Valued:
-		Cost: 1150
+		Cost: 650
 	Tooltip:
 		Name: Slingshot
 	UpdatesPlayerStatistics:
@@ -3632,7 +3709,7 @@ SLNG:
 	RevealsShroud:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 20
 	Hovers:
 		BobDistance: -35
 		RequiresCondition: !empdisable && !being-warped
