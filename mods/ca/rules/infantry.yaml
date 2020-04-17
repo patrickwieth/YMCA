@@ -172,7 +172,7 @@ E2:
 		EmptyWeapon: UnitExplodeSmall
 		Chance: 33
 		DamageSource: Killer
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 
@@ -285,7 +285,7 @@ E4:
 		EmptyWeapon: UnitExplodeFlameSmall
 		Chance: 33
 		DamageSource: Killer
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 
@@ -854,7 +854,7 @@ N2:
 		EmptyWeapon: UnitExplodeSmall
 		Chance: 33
 		DamageSource: Killer
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Selectable:
@@ -994,7 +994,7 @@ N4:
 		EmptyWeapon: UnitExplodeFlameSmall
 		Chance: 33
 		DamageSource: Killer
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Selectable:
@@ -1085,7 +1085,7 @@ N5:
 		EmptyWeapon: UnitExplodeChemSmall
 		Chance: 33
 		DamageSource: Killer
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	GrantCondition@HAZMAT:
@@ -1404,7 +1404,7 @@ MORT:
 		Weapon: UnitExplodeChemSmall
 		EmptyWeapon: UnitExplodeChemSmall
 		Chance: 33
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 	ProducibleWithLevel:
@@ -1831,6 +1831,7 @@ E8:
 		HP: 18000
 	Mobile:
 		Voice: Move
+		PauseOnCondition: !undeployed && being-warped
 	RevealsShroud:
 		Range: 5c0
 	Armament@PRIMARY:
@@ -1862,28 +1863,22 @@ E8:
 		Weapon: RadEruptionWeapon
 		RequiresCondition: deployed
 		InitialDelay: 20
-	GrantTimedConditionOnDeploy:
+	GrantConditionOnDeploy:
 		DeployedCondition: deployed
-		DeployAnimation: deploy
-		UndeployAnimation: undeploy
-		BodyNames: deployed
-		CooldownTicks: 100
-		DeployedTicks: 20
+		UndeployedCondition: undeployed
+		UndeployOnMove: True
 		Facing: 92
 		Voice: Attack
 		PauseOnCondition: being-warped
-		DischargingColor: 00FF0080
-		ChargingColor: FFFF0080
 	WithInfantryBody:
-		RequiresCondition: !deployed
+		RequiresCondition: !being-warped && undeployed
 	WithSpriteBody@DEPLOYED:
 		Sequence: deployed
-		RequiresCondition: deployed && deploying
+		RequiresCondition: !undeployed
 		Name: deployed
 	WithMakeAnimation:
 		Sequence: deploy
 		BodyNames: deployed
-		Condition: deploying
 	GrantCondition@HAZMAT:
 		Condition: hazmatsuits
 		-RequiresCondition:
@@ -2122,7 +2117,7 @@ RMBC:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
 		Chance: 100
-		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
+		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequencePalette: playerd2k
 	Selectable:
