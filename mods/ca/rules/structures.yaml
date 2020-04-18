@@ -719,6 +719,7 @@ AGUN:
 		InitialFacing: 224
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
 	Armament:
 		Weapon: ZSU-23
 		LocalOffset: 520,100,450, 520,-150,450
@@ -875,9 +876,10 @@ PBOX:
 		Weapon: vulcan
 		LocalOffset: 456,0,86
 		MuzzleSequence: muzzle
-		RequiresCondition: !being-warped
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
-		RequiresCondition: !build-incomplete && !being-warped
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: empdisable || being-warped
 	RenderRangeCircle:
 		FallbackRange: 6c0
 	Power:
@@ -926,9 +928,10 @@ HBOX:
 		Weapon: vulcan
 		LocalOffset: 456,0,86
 		MuzzleSequence: muzzle
-		RequiresCondition: !being-warped
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
-		RequiresCondition: !build-incomplete && !being-warped
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: empdisable || being-warped
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -959,16 +962,18 @@ GUN:
 	Turreted:
 		TurnSpeed: 12
 		InitialFacing: 56
+		PauseOnCondition: empdisable || being-warped
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: empdisable || being-warped
 	Armament:
 		Weapon: TurretGun
 		LocalOffset: 512,0,112
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	Power:
 		Amount: -40
@@ -1003,9 +1008,9 @@ FTUR:
 	Armament:
 		Weapon: FireballLauncher
 		LocalOffset: 512,0,0
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !build-incomplete
 	-QuantizeFacingsFromSequence:
 	BodyOrientation:
@@ -3599,8 +3604,10 @@ GTWR:
 		Weapon: gtchaingun
 		LocalOffset: 256,0,256
 		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
+		PauseOnCondition: empdisable || being-warped
 	AutoTarget:
 	BodyOrientation:
 		QuantizedFacings: 8
@@ -3613,7 +3620,7 @@ GTWR:
 
 ATWR:
 	Inherits: ^DefenseTD
-	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
@@ -3643,10 +3650,9 @@ ATWR:
 		Weapon: StingerGTWR
 		LocalOffset: 256,128,0, 256,-128,0
 		LocalYaw: -100,100
-		PauseOnCondition: disabled || empdisable
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable
+		PauseOnCondition: disabled || empdisable || being-warped
 	BodyOrientation:
 		QuantizedFacings: 8
 	RenderRangeCircle:
@@ -3709,10 +3715,9 @@ STWR:
 	WithEmbeddedTurretSpriteBody:
 	Armament:
 		Weapon: SonicPulse
-		PauseOnCondition: empdisable && being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: disabled || empdisable || being-warped
 	WithMuzzleOverlay:
 	RenderRangeCircle:
 	Power:
@@ -3765,16 +3770,14 @@ OBLI:
 	Armament:
 		Weapon: Laser
 		LocalOffset: 0,-85,1280
-		PauseOnCondition: disabled || empdisable
 		RequiresCondition: !marked
 	Armament@Marked:
 		Weapon: Laser.Adv
 		LocalOffset: 0,-85,1280
-		PauseOnCondition: disabled || empdisable
 		RequiresCondition: marked
 	AttackCharges:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable
+		PauseOnCondition: disabled || empdisable || being-warped
 		ChargeLevel: 50
 		ChargingCondition: charging
 	AmbientSound:
@@ -5231,49 +5234,24 @@ HTUR:
 	-ProductionCostMultiplier@FranceBonus:
 
 GUN.Nod:
-	Inherits: ^DefenseTD
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: GUN
 	RenderSprites:
 		Image: gun2
-	Valued:
-		Cost: 800
-	Tooltip:
-		Name: Turret
+		PlayerPalette: overlayplayertd
+	ActorPreviewPlaceBuildingPreview:
+		OverridePalette: placebuildingtd
 	Buildable:
 		BuildPaletteOrder: 70
 		Prerequisites: hand, ~structures.nod, ~techlevel.medium
 		Queue: Defense
 		IconPalette: chrometd
 		Description: Basic Anti-Tank base defense.\n  Strong vs Tanks, vehicles\n  Weak vs Infantry
-	Building:
-	Health:
-		HP: 40000
-	Armor:
-		Type: Concrete
-	RevealsShroud:
-		Range: 7c0
-	WithBuildingBib:
-		HasMinibib: true
-	Turreted:
-		TurnSpeed: 12
-		InitialFacing: 56
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
 	Armament:
 		Weapon: TurretGunTD
 		LocalOffset: 512,0,112
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-	AttackTurreted:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: empdisable || being-warped
-	WithMuzzleOverlay:
-	Power:
-		Amount: -40
-		RequiresCondition: !being-warped
-	BodyOrientation:
-		UseClassicFacingFudge: True
-
+		
 LTUR:
 	Inherits: GUN.Nod
 	RenderSprites:
@@ -5291,6 +5269,7 @@ LTUR:
 	Turreted:
 		TurnSpeed: 12
 		InitialFacing: 34
+		PauseOnCondition: empdisable || being-warped
 	GrantConditionOnFaction@marked:
 		Condition: marked
 		Factions: marked
