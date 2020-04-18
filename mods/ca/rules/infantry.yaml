@@ -2209,3 +2209,33 @@ CRYOT:
 		Delay: 120
 		Count: 6
 		ResetOnFire: True
+
+RAILGUNR:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 50
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~techlevel.infonly
+		Description: Heavy Infantry with Railgun. Strong vs Heavy Tanks\n  Weak vs Infantry, Buildings
+		IconPalette: chrometd
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Railgunner
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 9000
+	Mobile:
+		Speed: 61
+	Armament@PRIMARY:
+		Weapon: Railgun.Infantry
+		LocalOffset: 341,0,256
+		PauseOnCondition: being-warped
+	TakeCover:
+		ProneOffset: 227,0,-245
+	AttackFrontal:
+		PauseOnCondition: being-warped
