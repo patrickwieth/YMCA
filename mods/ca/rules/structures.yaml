@@ -3620,7 +3620,7 @@ GTWR:
 
 ATWR:
 	Inherits: ^DefenseTD
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits@IDISABLE: ^DisableOnLowPower
 	Inherits@AUTOTARGET: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
@@ -3646,10 +3646,8 @@ ATWR:
 	Turreted:
 		TurnSpeed: 255
 		Offset: 128,128,384
-	Armament@primary:
-		Weapon: StingerGTWR
-		LocalOffset: 256,128,0, 256,-128,0
-		LocalYaw: -100,100
+	Armament:
+		Weapon: SonicPulse
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -3715,9 +3713,10 @@ STWR:
 	WithEmbeddedTurretSpriteBody:
 	Armament:
 		Weapon: SonicPulse
+		PauseOnCondition: empdisable && being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable || being-warped
+		PauseOnCondition: empdisable && being-warped
 	WithMuzzleOverlay:
 	RenderRangeCircle:
 	Power:
@@ -5245,13 +5244,13 @@ GUN.Nod:
 		Prerequisites: hand, ~structures.nod, ~techlevel.medium
 		Queue: Defense
 		IconPalette: chrometd
-		Description: Basic Anti-Tank base defense.\n  Strong vs Tanks, vehicles\n  Weak vs Infantry
+		Description: Basic anti-tank base defense.\n  Can detect cloaked units.\n  Strong vs Tanks, Vehicles\n  Weak vs Infantry
 	Armament:
 		Weapon: TurretGunTD
 		LocalOffset: 512,0,112
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-		
+
 LTUR:
 	Inherits: GUN.Nod
 	RenderSprites:
