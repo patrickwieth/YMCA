@@ -1764,17 +1764,6 @@ STNK.Nod:
 	ProductionCostMultiplier@BlackhBonus:
 		Multiplier: 90
 		Prerequisites: vehicles.blackh
-	Armament@TERNARY:
-		Name: ternary
-		Turret: ternary
-		Weapon: AdvancedPointLaser
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
-	PointDefense:
-		Armament: ternary
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
 
 BIKE:
 	Inherits: ^VehicleTD
@@ -2903,6 +2892,52 @@ TNKD:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+
+TNKD2:
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: weap, ~vehicles.allies, ~!vehicles.allies, ~techlevel.medium
+		Description: Tank Destroyer.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 550
+	Tooltip:
+		Name: Tank Destroyer
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 60000
+	Armor:
+		Type: Light
+	Mobile:
+		TurnSpeed: 4
+		Speed: 56
+		Locomotor: lighttracked
+	RevealsShroud:
+		Range: 5c0
+	Armament:
+		Weapon: 183mm
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 868,0,0
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	Explodes:
+		Weapon: ArtilleryExplode
+		EmptyWeapon: UnitExplodeSmall
+		LoadedChance: 75
+		RequiresCondition: !being-warped
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
 
 MSAR:
 	Inherits: ^VehicleTD
