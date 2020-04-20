@@ -2239,3 +2239,63 @@ RAILGUNR:
 		ProneOffset: 227,0,-245
 	AttackFrontal:
 		PauseOnCondition: being-warped
+
+jarmen_kell:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Jarmen Kell
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 7
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~techlevel.infonly
+		Description: Elite sniper infantry.\n\nCan kill enemy vehicle drivers, allowing other infantry to capture them.\n\nCamouflaged.
+		ReadyAudio: JarmenCreated
+		BuildLimit: 1
+	Health:
+		HP: 10000
+	Mobile:
+		Voice: Move
+		Speed: 61
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: ReturnFire
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry
+		InvalidTargets: NoAutoTarget
+	Armament@PRIMARY:
+		Weapon: sniper
+	Armament@DRIVER_SNIPE:
+		Name: driver_snipe
+		Weapon: sniper.jarmen_kell.vehicle
+		PauseOnCondition: !ammo
+	AttackFrontal:
+		Armaments: primary, driver_snipe
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	Cloak:
+		InitialDelay: 250
+		CloakDelay: 120
+		UncloakOn: Attack, Unload, Infiltrate, Demolish
+		CloakTypes: Cloak
+		IsPlayerPalette: true
+		RequiresCondition: !cloak-force-disabled
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	AmmoPool:
+		Ammo: 1
+		Armaments: driver_snipe
+		Name: driver_snipe
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		AmmoPool: driver_snipe
+		Delay: 750
+	Voiced:
+		VoiceSet: JarmenVoice
+	RenderSprites:
+		Image: jarmen_kell
