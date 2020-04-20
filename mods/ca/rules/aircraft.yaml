@@ -1764,6 +1764,92 @@ KIRO:
 		Weapon: KirovExplode
 		RequiresCondition: !airborne
 
+BLIMP:
+	Inherits: ^Helicopter
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	RenderSprites:
+		Image: Blimp
+		Scale: 1.2
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 55
+		Prerequisites: ~afld, stek, ~aircraft.russia, ~!aircraft.russia, ~techlevel.high
+		Description: Heavily Armoured Airship, equipped with\nBombs.\n  Strong vs Structures.\n  Weak vs Anti Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Blimp Flying Headquarter
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 100000
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	Armament@PRIMARY:
+		Weapon: AirshipParaBomb
+		LocalOffset: -20,0,0
+		PauseOnCondition: being-warped
+	Armament@SECONDARY:
+		Weapon: AirshipParaBombS
+		LocalOffset: -20,0,0
+		PauseOnCondition: being-warped
+	AttackFrontal:
+		Voice: Attack
+	AttackAircraft:
+		FacingTolerance: 20
+		AttackType: Hover
+	Aircraft:
+		CruiseAltitude: 2c0
+		InitialFacing: 192
+		TurnSpeed: 3
+		Speed: 56
+		Voice: Move
+		AltitudeVelocity: 0c50
+		CanForceLand: False
+	AutoTarget:
+		InitialStance: AttackAnything
+		InitialStanceAI: AttackAnything
+		ScanRadius: 10
+	SelectionDecorations:
+	SpawnActorOnDeath:
+		Actor: kiro.Husk
+	SmokeTrailWhenDamaged@1:
+		Offset: -100,500,100
+	SmokeTrailWhenDamaged@2:
+		Offset: -100,-500,100
+	Selectable:
+		Bounds: 40,30,0,2
+		DecorationBounds: 44,33,0,1
+	SelfHealing:
+		Step: 100
+		Delay: 3
+		HealIfBelow: 50
+		DamageCooldown: 150
+	Voiced:
+		VoiceSet: KirovVoice
+	Explodes:
+		Weapon: KirovExplode
+		RequiresCondition: !airborne
+	Production:
+		Produces: Infantry, Soldier
+		PauseOnCondition: forceshield || invulnerability || being-warped
+	GrantExternalConditionToProduced:
+		Condition: produced, parachute
+	PrimaryBuilding:
+		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: -170,810,0
+		ExitCell: 1,2
+		ProductionTypes: Soldier, Infantry
+
 OCAR:
 	Inherits: ^HelicopterTD
 	RenderSprites:
