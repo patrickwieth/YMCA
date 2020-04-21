@@ -389,7 +389,7 @@ MADTankDetonate:
 		ImpactActors: false
 
 Laser:
-	ReloadDelay: 120
+	ReloadDelay: 100
 	ValidTargets: Ground, Water
 	Range: 9c512
 	Report: oblfire.aud
@@ -404,7 +404,7 @@ Laser:
 		SecondaryBeamColor: FF000040
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
-		Damage: 35000
+		Damage: 37500
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
 			Light: 101
@@ -1076,7 +1076,7 @@ IonZap:
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 6350
-		ValidStances: Ally, Neutral, Enemy
+		ValidStances: Neutral, Enemy
 		InvalidTargets: Air
 		AffectsParent: false
 		Versus:
@@ -1087,10 +1087,24 @@ IonZap:
 			Concrete: 55
 			Brick: 45
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
-	Warhead@2Eff: CreateEffect
+	Warhead@2Dam: SpreadDamage
+		Spread: 512
+		Damage: 2250
+		ValidStances: Ally
+		InvalidTargets: Air
+		AffectsParent: false
+		Versus:
+			None: 50
+			Wood: 75
+			Light: 75
+			Heavy: 120
+			Concrete: 55
+			Brick: 45
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@3Eff: CreateEffect
 		Explosions: ion_ring
 		ExplosionPalette: tseffect
-	Warhead@3Smu_impact: LeaveSmudge
+	Warhead@4Smu_impact: LeaveSmudge
 		SmudgeType: Scorch
 
 BurnFX:
@@ -1584,17 +1598,18 @@ SonicPulse:
 	Range: 9c0
 	Report: sonicpulse1.aud, sonicpulse2.aud
 	Projectile: LinearPulse
+		Speed: 768
 	Warhead@1Dam: SpreadDamage
 		Spread: 0c256
-		Falloff: 100, 50, 25, 5, 0
-		Damage: 15000
+		Falloff: 100, 50, 25, 0
+		Damage: 9000
 		ValidTargets: Ground, Water
 		ValidStances: Enemy, Neutral
 		Versus:
-			None: 80
+			None: 70
 			Wood: 45
-			Light: 100
-			Heavy: 120
+			Light: 90
+			Heavy: 100
 			Concrete: 35
 			Brick: 20
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
@@ -1602,19 +1617,6 @@ SonicPulse:
 		Explosions: sonicpulse1, sonicpulse2
 		ExplosionPalette: effect-ignore-lighting-alpha40
 		ValidTargets: Ground, Air, Ship, Trees
-	Warhead@2Eff: CreateEffect
-		Explosions: cryohit
-		ImpactSounds: cryozap.aud
-	Warhead@chill: GrantExternalCondition
-		Condition: chilled
-		Duration: 120
-		Range: 0c448
-	Warhead@cryoresidue: CreateTintedCells
-		LayerName: cryoresidue
-		Spread: 1c0
-		Level: 100
-		Falloff: 100, 52, 15, 2
-		MaxLevel: 600
 
 NeutronCannon:
 	ValidTargets: Temporal
