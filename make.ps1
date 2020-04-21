@@ -5,6 +5,11 @@
 ###############################################################
 function All-Command
 {
+	If (!(Test-Path "*.sln"))
+	{
+		return
+	}
+
 	if ((CheckForDotnet) -eq 1)
 	{
 		return
@@ -18,6 +23,13 @@ function All-Command
 	else
 	{
 		Write-Host "Build succeeded." -ForegroundColor Green
+	}
+
+	if (!(Test-Path "IP2LOCATION-LITE-DB1.IPV6.BIN.ZIP") -Or (((get-date) - (get-item "IP2LOCATION-LITE-DB1.IPV6.BIN.ZIP").LastWriteTime) -gt (new-timespan -days 30)))
+	{
+		echo "Downloading IP2Location GeoIP database."
+		$target = Join-Path $pwd.ToString() "IP2LOCATION-LITE-DB1.IPV6.BIN.ZIP"
+		(New-Object System.Net.WebClient).DownloadFile("https://download.ip2location.com/lite/IP2LOCATION-LITE-DB1.IPV6.BIN.ZIP", $target)
 	}
 }
 
@@ -117,6 +129,12 @@ function Test-Command
 
 function Check-Command
 {
+	If (!(Test-Path "*.sln"))
+	{
+		Write-Host "No custom solution file found. Skipping static code checks." -ForegroundColor Cyan
+		return
+	}
+
 	Write-Host "Compiling in debug configuration..." -ForegroundColor Cyan
 	dotnet build /p:Configuration=Debug /nologo
 	if ($lastexitcode -ne 0)
@@ -167,7 +185,7 @@ function Docs-Command
 
 function CheckForUtility
 {
-	if (Test-Path OpenRA.Utility.exe)
+	if (Test-Path $utilityPath)
 	{
 		return 0
 	}

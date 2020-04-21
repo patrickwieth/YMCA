@@ -389,7 +389,7 @@ MADTankDetonate:
 		ImpactActors: false
 
 Laser:
-	ReloadDelay: 120
+	ReloadDelay: 100
 	ValidTargets: Ground, Water
 	Range: 9c512
 	Report: oblfire.aud
@@ -404,7 +404,7 @@ Laser:
 		SecondaryBeamColor: FF000040
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
-		Damage: 35000
+		Damage: 37500
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
 			Light: 101
@@ -515,7 +515,7 @@ PortaLaserE:
 	Range: 8c0
 
 VenomLaser:
-	ReloadDelay: 20
+	ReloadDelay: 25
 	ValidTargets: Ground, Water
 	Range: 6c0
 	Report: venmfire1.aud, venmfire2.aud
@@ -548,10 +548,12 @@ VenomLaserAA:
 	ValidTargets: Air
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Air
-		Damage: 3500
+		Damage: 2000
 		Versus:
-			Light: 40
-			Heavy: 50
+			Wood: 100
+			Concrete: 100
+			Light: 100
+			Heavy: 100
 	-Warhead@2Smu:
 
 PointLaser:
@@ -697,7 +699,7 @@ PrisTLaser:
 		Damage: 3875
 		Versus:
 			None: 150
-			Wood: 90
+			Wood: 75
 			Concrete: 100
 			Light: 95
 			Heavy: 60
@@ -723,6 +725,46 @@ PrisTBurst:
 	Inherits: PrisBurst
 	Warhead@1Dam: SpreadDamage
 		Damage: 2100
+		Versus:
+			Wood: 35
+
+PrisCLaser:
+	Inherits: PrisLaser
+	Report: pcanfire.aud
+	ReloadDelay: 75
+	Range: 10c0
+	Projectile: LaserZap
+		Width: 30
+		Duration: 15
+		Color: 00FFDEC8
+		SecondaryBeamWidth: 60
+		SecondaryBeamColor: 84f5ff
+		Blockable: true
+	Warhead@1Dam: SpreadDamage
+		Damage: 7500
+		Spread: 348
+		Versus:
+			Wood: 110
+	-Warhead@Burst:
+
+PrisCLaser:
+	Inherits: PrisLaser
+	Report: pcanfire.aud
+	ReloadDelay: 75
+	Range: 10c0
+	Projectile: LaserZap
+		Width: 30
+		Duration: 15
+		Color: 00FFDEC8
+		SecondaryBeamWidth: 60
+		SecondaryBeamColor: 84f5ff
+		Blockable: true
+	Warhead@1Dam: SpreadDamage
+		Damage: 7500
+		Spread: 348
+		Versus:
+			Wood: 110
+	-Warhead@Burst:
 
 AirshipParaBomb:
 	ReloadDelay: 40
@@ -739,7 +781,7 @@ AirshipParaBomb:
 		Shadow: True
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 25000
+		Damage: 20000
 		InvalidTargets: Air
 		Versus:
 			None: 30
@@ -985,6 +1027,27 @@ Railgun:
 			Brick: 15
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 
+Railgun.Infantry:
+	Inherits: Railgun
+	ReloadDelay: 90
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+		Versus:
+			None: 50
+			Wood: 25
+			Light: 65
+			Heavy: 100
+			Concrete: 15
+	Warhead@2Dam: SpreadDamage
+		Damage: 500
+		Versus:
+			None: 50
+			Wood: 25
+			Light: 65
+			Heavy: 100
+			Concrete: 40
+			Brick: 15
+
 IonZap:
 	ReloadDelay: 50
 	Range: 5c768
@@ -1013,7 +1076,7 @@ IonZap:
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 6350
-		ValidStances: Ally, Neutral, Enemy
+		ValidStances: Neutral, Enemy
 		InvalidTargets: Air
 		AffectsParent: false
 		Versus:
@@ -1024,10 +1087,24 @@ IonZap:
 			Concrete: 55
 			Brick: 45
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
-	Warhead@2Eff: CreateEffect
+	Warhead@2Dam: SpreadDamage
+		Spread: 512
+		Damage: 2250
+		ValidStances: Ally
+		InvalidTargets: Air
+		AffectsParent: false
+		Versus:
+			None: 50
+			Wood: 75
+			Light: 75
+			Heavy: 120
+			Concrete: 55
+			Brick: 45
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@3Eff: CreateEffect
 		Explosions: ion_ring
 		ExplosionPalette: tseffect
-	Warhead@3Smu_impact: LeaveSmudge
+	Warhead@4Smu_impact: LeaveSmudge
 		SmudgeType: Scorch
 
 BurnFX:
@@ -1112,7 +1189,7 @@ MicrowaveZap:
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
 		Spread: 512
-		Damage: 5000
+		Damage: 2500
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
 			None: 100
@@ -1132,7 +1209,7 @@ MicrowaveZap:
 		ValidTargets: Ground, Vehicle
 	Warhead@Burst: FireCluster
 		Weapon: MWBurst
-		RandomClusterCount: 3
+		RandomClusterCount: 2
 		ValidTargets: Infantry, Vehicle
 		Dimensions: 3,3
 		Footprint: xxx x_x xxx
@@ -1162,6 +1239,21 @@ MwBurst:
 	-Warhead@Burst:
 	Warhead@3Eff: CreateEffect
 
+MicrowaveZapSound:
+	Inherits: MicrowaveZap
+	Report: coreup1.aud
+	Projectile: InstantHit
+	Warhead@1Dam: SpreadDamage
+		Damage: 1
+		Versus:
+			None: 0
+			Wood: 0
+			Concrete: 0
+			Light: 0
+			Heavy: 0
+			Brick: 0
+	-Warhead@emp:
+
 HornetLauncher:
 	ReloadDelay: 175
 	Burst: 5
@@ -1181,6 +1273,7 @@ V3Launcher:
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Ground, Water
+
 Flare:
 	ReloadDelay: 1
 	Range: 10c0
@@ -1254,8 +1347,8 @@ ChaosDroneTargeting:
 	Warhead@1Dam: TargetDamage
 
 RadBeamWeapon:
-	ValidTargets: Ground
-	InvalidTargets: Structure, Wall
+	ValidTargets: Ground, Water
+	InvalidTargets: Air
 	Range: 6c0
 	ReloadDelay: 100
 	Report: idesat1a.aud
@@ -1268,10 +1361,10 @@ RadBeamWeapon:
 		Damage: 100000
 		Versus:
 			None: 100
-			Light: 5
-			Heavy: 2
-			Wood: 0
-			Concrete: 0
+			Light: 7
+			Heavy: 5
+			Wood: 2
+			Concrete: 2
 			Brick: 0
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
@@ -1285,8 +1378,8 @@ RadEruptionWeapon:
 	Warhead@1Radiation: CreateTintedCells
 		Spread: 2c0
 		Falloff: 100, 75, 50, 25, 0
-		Level: 250
-		MaxLevel: 750
+		Level: 500
+		MaxLevel: 7500
 
 ChronoAI:
 	ReloadDelay: 1
@@ -1314,31 +1407,6 @@ TimeWarp:
 		ValidTargets: Ground, Air, Water
 		ImpactSounds: chrono2.aud
 	Warhead@Damage1: WarpDamage
-		Spread: 1c0
-		Delay: 100
-		Damage: 1
-		ValidTargets: Temporal
-	Warhead@Damage6: WarpDamage
-		Spread: 1c0
-		Delay: 125
-		Damage: 1
-		ValidTargets: Temporal
-	Warhead@Damage2: WarpDamage
-		Spread: 1c0
-		Delay: 25
-		Damage: 1
-		ValidTargets: Temporal
-	Warhead@Damage3: WarpDamage
-		Spread: 1c0
-		Delay: 50
-		Damage: 1
-		ValidTargets: Temporal
-	Warhead@Damage4: WarpDamage
-		Spread: 1c0
-		Delay: 75
-		Damage: 1
-		ValidTargets: Temporal
-	Warhead@Damage5: WarpDamage
 		Spread: 1c0
 		Delay: 100
 		Damage: 1
@@ -1460,45 +1528,95 @@ CyCannon:
 			Brick: 70
 		DamageTypes: Prone350Percent, TriggerProne, ExplosionDeath
 
-CryoGun:
-	ReloadDelay: 90
-	Range: 5c512
-	ValidTargets: Ground, Water
-	Projectile: LaserZap
-		Width: 25
-		Duration: 20
-		ZOffset: 2047
-		Color: FFFFFF
-		SecondaryBeam: true
-		SecondaryBeamWidth: 50
-		SecondaryBeamZOffset: 2047
-		SecondaryBeamColor: 57BEFFBB
-		Blockable: true
-	Warhead@1Dam: SpreadDamage
-		Spread: 341
-		Damage: 550
-		Falloff: 100, 25, 12, 0
+NeutronCannon:
+	ValidTargets: Temporal
+	ReloadDelay: 5
+	Burst: 22
+	BurstDelays: 5
+	Range: 5c0
+	Projectile: InstantHit
+	Warhead@Damage: WarpDamage
+		Damage: 750
+		Spread: 1
 		Versus:
-			None: 100
-			Wood: 15
-			Light: 35
-			Heavy: 5
-			Concrete: 5
-			Brick: 1
-		DamageTypes: SmallExplosionDeath
-	Warhead@2Eff: CreateEffect
-		Explosions: cryohit
-		ImpactSounds: cryozap.aud
-	Warhead@chill: GrantExternalCondition
-		Condition: chilled
-		Duration: 120
-		Range: 0c448
-	Warhead@cryoresidue: CreateTintedCells
-		LayerName: cryoresidue
-		Spread: 1c0
-		Level: 100
-		Falloff: 100, 52, 15, 2
-		MaxLevel: 600
+			None: 40
+			Wood: 60
+			Light: 50
+			Heavy: 100
+			Concrete: 55
+			Brick: 55
+		ValidTargets: Temporal
+		DamageTypes: ChronoDeath
+
+NeutronCannonBeam:
+	ValidTargets: Temporal
+	ReloadDelay: 5
+	Range: 5c0
+	TargetActorCenter: true
+	Projectile: LaserZap
+		Width: 60
+		Duration: 15
+		Color: 80C8FF88
+		ZOffset: 2046
+		SecondaryBeam: true
+		SecondaryBeamWidth: 120
+		SecondaryBeamZOffset: 2046
+		SecondaryBeamColor: 80C8FF33
+	Warhead@Damage: SpreadDamage
+		Damage: 1
+		Spread: 1
+		Versus:
+			None: 0
+			Wood: 0
+			Light: 0
+			Heavy: 0
+			Concrete: 0
+			Brick: 0
+		ValidTargets: Temporal
+		DamageTypes: ChronoDeath
+
+NeutronCannonPulse:
+	Inherits: NeutronCannonBeam
+	ReloadDelay: 20
+	Projectile: AreaBeam
+		Speed: 0c768
+		Duration: 8
+		Width: 60
+		Shape: Flat
+		ZOffset: 2047
+		TrackTarget: true
+		Color: d8f9f7cc
+
+NeutronCannonSound:
+	Inherits: NeutronCannonBeam
+	Report: chronogun.aud
+	ReloadDelay: 60
+	Projectile: InstantHit
+
+SonicPulse:
+	ReloadDelay: 60
+	Range: 9c0
+	Report: sonicpulse1.aud, sonicpulse2.aud
+	Projectile: LinearPulse
+		Speed: 768
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c256
+		Falloff: 100, 50, 25, 0
+		Damage: 9000
+		ValidTargets: Ground, Water
+		ValidStances: Enemy, Neutral
+		Versus:
+			None: 70
+			Wood: 45
+			Light: 90
+			Heavy: 100
+			Concrete: 35
+			Brick: 20
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: sonicpulse1, sonicpulse2
+		ExplosionPalette: effect-ignore-lighting-alpha40
+		ValidTargets: Ground, Air, Ship, Trees
 
 NeutronCannon:
 	ValidTargets: Temporal
@@ -1564,3 +1682,40 @@ NeutronCannonSound:
 	Report: chronogun.aud
 	ReloadDelay: 60
 	Projectile: InstantHit
+
+StealthBomb:
+	ValidTargets: Ground, Water
+	InvalidTargets: Air
+	ReloadDelay: 50
+	Report: chute1.aud
+	Burst: 2
+	BurstDelays: 10
+	Range: 3c512
+	TargetActorCenter: true
+	Projectile: Bullet
+		Image: DRAGON
+		TrailImage: smokey
+		Speed: 300
+		Shadow: true
+	Warhead@1Dam: SpreadDamage
+		Damage: 30000
+		ValidTargets: Ground, Water
+		Versus:
+			None: 100
+			Wood: 55
+			Light: 50
+			Heavy: 100
+			Concrete: 45
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: med_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge

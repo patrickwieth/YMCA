@@ -483,8 +483,8 @@ Player:
 					CheckRadius: 3c0
 	HarvesterBotModuleCA:
 		RequiresCondition: enable-brutal-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai || enable-naval-ai
-		HarvesterTypes: harv, harv2
-		RefineryTypes: proc, proc2
+		HarvesterTypes: harv, har2
+		RefineryTypes: proc, proc.td
 		HarvestersPerRefinery: 2
 	CaptureManagerBotModule:
 		RequiresCondition: enable-brutal-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai
@@ -493,20 +493,20 @@ Player:
 		MaximumCaptureTargetOptions: 15
 	BuildingRepairBotModule:
 		RequiresCondition: enable-brutal-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai || enable-naval-ai
-	McvManagerBotModule@BrutalHard:
+	McvManagerBotModuleCA@BrutalHard:
 		RequiresCondition: enable-brutal-ai || enable-hard-ai
 		McvTypes: mcv, amcv
 		ConstructionYardTypes: fact, afac
-		McvFactoryTypes: weap, awep, astrip
+		McvFactoryTypes: weap, weap.td, airs
 		ScanForNewMcvInterval: 80
 		MaxBaseRadius: 25
 		MinimumConstructionYardCount: 2
-	McvManagerBotModule@NormalEasy:
+	McvManagerBotModuleCA@NormalEasy:
 		RequiresCondition: enable-normal-ai || enable-easy-ai || enable-naval-ai
 		McvTypes: mcv, amcv
 		ConstructionYardTypes: fact, afac
-		McvFactoryTypes: weap, awep, astrip
-	BaseBuilderBotModule@brutal:
+		McvFactoryTypes: weap, weap.td, airs
+	BaseBuilderBotModuleCA@brutal:
 		RequiresCondition: enable-brutal-ai
 		MinimumExcessPower: 50
 		MaximumExcessPower: 350
@@ -514,32 +514,32 @@ Player:
 		ExcessPowerIncreaseThreshold: 1
 		PlaceDefenseTowardsEnemyChance: 75
 		ConstructionYardTypes: fact,afac
-		RefineryTypes: proc,proc2
-		PowerTypes: powr,apwr,nuke,nuk2
+		RefineryTypes: proc,proc.td
+		PowerTypes: powr,apwr,nuke,nuk2,tpwr
 		BarracksTypes: barr,tent,hand,pyle
-		VehiclesFactoryTypes: weap,astrip,awep
-		ProductionTypes: barr,tent,hand,pyle,astrip,weap,awep,afld,afld.gdi,hpad,hpad2
+		VehiclesFactoryTypes: weap,airs,weap.td
+		ProductionTypes: barr,tent,hand,pyle,airs,weap,weap.td,afld,afld.gdi,hpad,hpad.td
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
-		SiloTypes: silo,silo2
+		SiloTypes: silo,silo.td
 		MaxBaseRadius: 26
 		BuildingDelays:
 			kenn: 2800
 			weap: 2800
-			awep: 2800
-			astrip: 2800
+			weap.td: 2800
+			airs: 2800
 			dome: 4500
 			hq: 4500
 			afld: 5000
 			afld.gdi: 5000
 			hpad: 5000
-			hpad2: 5000
+			hpad.td: 5000
 			syrd: 6000
 			spen: 6000
 			syrd.gdi: 6000
 			spen.nod: 6000
 		BuildingLimits:
 			proc: 4
-			proc2: 4
+			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -548,12 +548,12 @@ Player:
 			dome: 1
 			hq: 1
 			weap: 3
-			awep: 3
-			astrip: 5
-			afld: 1
-			hpad: 2
-			hpad2: 2
-			afld.gdi: 1
+			weap.td: 3
+			airs: 3
+			afld: 2
+			hpad: 3
+			hpad.td: 3
+			afld.gdi: 2
 			atek: 1
 			stek: 1
 			gtek: 1
@@ -566,20 +566,20 @@ Player:
 			syrd.gdi: 2
 		BuildingFractions:
 			proc: 30
-			proc2: 30
+			proc.td: 30
 			hand: 3
 			pyle: 3
 			barr: 3
 			tent: 3
 			kenn: 1
 			weap: 5
-			awep: 5
-			astrip: 5
+			weap.td: 5
+			airs: 5
 			pbox: 7
 			hbox: 7
 			gtwr: 7
 			gun: 7
-			gun2: 7
+			gun.td: 7
 			tsla: 9
 			obli: 8
 			ltur: 10
@@ -587,41 +587,44 @@ Player:
 			ttur: 10
 			htur: 7
 			atwr: 10
+			stwr: 8
 			pris: 8
-			agun: 5
-			cram: 5
-			sam: 5
-			nsam: 5
+			agun: 7
+			cram: 7
+			sam: 7
+			nsam: 7
 			atek: 1
 			stek: 1
+			silo: 1
+			silo.td: 1
 			fix: 1
 			dome: 10
 			tmpl: 1
 			gtek: 1
 			rep: 1
 			hq: 10
-			afld: 1
-			afld.gdi: 1
+			afld: 2
+			afld.gdi: 2
 			mslo: 1
 			iron: 1
 			pdox: 1
 			sgen: 1
 			eye: 1
 			weat: 1
-			nmslo: 1
+			mslo.nod: 1
 			indp: 1
 			bio.nod: 1
 			miss.gdi: 1
 			orep: 1
 			patr: 1
-			hpad: 1
-			hpad2: 1
+			hpad: 2
+			hpad.td: 2
 			spen: 1
 			syrd: 1
 			spen.nod: 1
 			syrd.gdi: 1
 
-	BaseBuilderBotModule@hard:
+	BaseBuilderBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
 		MinimumExcessPower: 80
 		MaximumExcessPower: 200
@@ -629,32 +632,32 @@ Player:
 		ExcessPowerIncreaseThreshold: 4
 		PlaceDefenseTowardsEnemyChance: 75
 		ConstructionYardTypes: fact,afac
-		RefineryTypes: proc,proc2
-		PowerTypes: powr,apwr,nuke,nuk2
+		RefineryTypes: proc,proc.td
+		PowerTypes: powr,apwr,nuke,nuk2,tpwr
 		BarracksTypes: barr,tent,hand,pyle
-		VehiclesFactoryTypes: weap,astrip,awep
-		ProductionTypes: barr,tent,hand,pyle,astrip,weap,awep,afld,afld.gdi,hpad,hpad2
+		VehiclesFactoryTypes: weap,airs,weap.td
+		ProductionTypes: barr,tent,hand,pyle,airs,weap,weap.td,afld,afld.gdi,hpad,hpad.td
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
-		SiloTypes: silo,silo2
+		SiloTypes: silo,silo.td
 		MaxBaseRadius: 23
 		BuildingDelays:
 			kenn: 2800
 			weap: 2800
-			awep: 2800
-			astrip: 2800
+			weap.td: 2800
+			airs: 2800
 			dome: 4500
 			hq: 4500
 			afld: 5000
 			afld.gdi: 5000
 			hpad: 5000
-			hpad2: 5000
+			hpad.td: 5000
 			syrd: 6000
 			spen: 6000
 			syrd.gdi: 6000
 			spen.nod: 6000
 		BuildingLimits:
 			proc: 4
-			proc2: 4
+			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -663,12 +666,12 @@ Player:
 			dome: 1
 			hq: 1
 			weap: 3
-			awep: 3
-			astrip: 5
-			afld: 1
+			weap.td: 3
+			airs: 3
+			afld: 2
 			hpad: 2
-			hpad2: 2
-			afld.gdi: 1
+			hpad.td: 2
+			afld.gdi: 2
 			atek: 1
 			stek: 1
 			gtek: 1
@@ -681,20 +684,20 @@ Player:
 			syrd.gdi: 2
 		BuildingFractions:
 			proc: 30
-			proc2: 30
+			proc.td: 30
 			hand: 3
 			pyle: 3
 			barr: 3
 			tent: 3
 			kenn: 1
 			weap: 5
-			awep: 5
-			astrip: 5
+			weap.td: 5
+			airs: 5
 			pbox: 7
 			hbox: 7
 			gtwr: 7
 			gun: 7
-			gun2: 7
+			gun.td: 7
 			tsla: 7
 			obli: 6
 			ltur: 10
@@ -702,40 +705,43 @@ Player:
 			ttur: 10
 			htur: 5
 			atwr: 8
+			stwr: 6
 			pris: 6
-			agun: 3
-			cram: 3
-			sam: 3
-			nsam: 3
+			agun: 5
+			cram: 5
+			sam: 5
+			nsam: 5
 			atek: 1
 			stek: 1
+			silo: 1
+			silo.td: 1
 			fix: 1
 			dome: 10
 			tmpl: 1
 			gtek: 1
 			rep: 1
 			hq: 10
-			afld: 1
-			afld.gdi: 1
+			afld: 2
+			afld.gdi: 2
 			mslo: 1
 			iron: 1
 			pdox: 1
 			sgen: 1
 			eye: 1
 			weat: 1
-			nmslo: 1
+			mslo.nod: 1
 			indp: 1
 			bio.nod: 1
 			miss.gdi: 1
 			orep: 1
 			patr: 1
-			hpad: 1
-			hpad2: 1
+			hpad: 2
+			hpad.td: 2
 			spen: 1
 			syrd: 1
 			spen.nod: 1
 			syrd.gdi: 1
-	BaseBuilderBotModule@normal:
+	BaseBuilderBotModuleCA@normal:
 		RequiresCondition: enable-normal-ai
 		MinimumExcessPower: 80
 		MaximumExcessPower: 300
@@ -743,31 +749,31 @@ Player:
 		ExcessPowerIncreaseThreshold: 4
 		PlaceDefenseTowardsEnemyChance: 75
 		ConstructionYardTypes: fact,afac
-		RefineryTypes: proc,proc2
-		PowerTypes: powr,apwr,nuke,nuk2
+		RefineryTypes: proc,proc.td
+		PowerTypes: powr,apwr,nuke,nuk2,tpwr
 		BarracksTypes: barr,tent,hand,pyle
-		VehiclesFactoryTypes: weap,astrip,awep
-		ProductionTypes: barr,tent,hand,pyle,astrip,weap,awep,afld,afld.gdi,hpad,hpad2
+		VehiclesFactoryTypes: weap,airs,weap.td
+		ProductionTypes: barr,tent,hand,pyle,airs,weap,weap.td,afld,afld.gdi,hpad,hpad.td
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
-		SiloTypes: silo,silo2
+		SiloTypes: silo,silo.td
 		BuildingDelays:
 			kenn: 2800
 			weap: 2800
-			awep: 2800
-			astrip: 2800
+			weap.td: 2800
+			airs: 2800
 			dome: 4500
 			hq: 4500
 			afld: 5000
 			afld.gdi: 5000
 			hpad: 5000
-			hpad2: 5000
+			hpad.td: 5000
 			syrd: 6000
 			spen: 6000
 			syrd.gdi: 6000
 			spen.nod: 6000
 		BuildingLimits:
 			proc: 4
-			proc2: 4
+			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -776,11 +782,11 @@ Player:
 			dome: 1
 			hq: 1
 			weap: 3
-			awep: 3
-			astrip: 5
+			weap.td: 3
+			airs: 3
 			afld: 1
 			hpad: 2
-			hpad2: 2
+			hpad.td: 2
 			afld.gdi: 1
 			atek: 1
 			stek: 1
@@ -794,20 +800,20 @@ Player:
 			syrd.gdi: 2
 		BuildingFractions:
 			proc: 30
-			proc2: 30
+			proc.td: 30
 			hand: 3
 			pyle: 3
 			barr: 3
 			tent: 3
 			kenn: 1
 			weap: 5
-			awep: 5
-			astrip: 5
+			weap.td: 5
+			airs: 5
 			pbox: 7
 			hbox: 7
 			gtwr: 7
 			gun: 7
-			gun2: 7
+			gun.td: 7
 			tsla: 5
 			obli: 5
 			ltur: 10
@@ -815,6 +821,7 @@ Player:
 			ttur: 10
 			htur: 3
 			atwr: 7
+			stwr: 5
 			pris: 5
 			agun: 3
 			cram: 3
@@ -822,33 +829,35 @@ Player:
 			nsam: 3
 			atek: 1
 			stek: 1
+			silo: 1
+			silo.td: 1
 			fix: 1
 			dome: 10
 			tmpl: 1
 			gtek: 1
 			rep: 1
 			hq: 10
-			afld: 1
-			afld.gdi: 1
+			afld: 2
+			afld.gdi: 2
 			mslo: 1
 			iron: 1
 			pdox: 1
 			sgen: 1
 			eye: 1
 			weat: 1
-			nmslo: 1
+			mslo.nod: 1
 			indp: 1
 			bio.nod: 1
 			miss.gdi: 1
 			orep: 1
 			patr: 1
-			hpad: 1
-			hpad2: 1
+			hpad: 2
+			hpad.td: 2
 			spen: 1
 			syrd: 1
 			spen.nod: 1
 			syrd.gdi: 1
-	BaseBuilderBotModule@easy:
+	BaseBuilderBotModuleCA@easy:
 		RequiresCondition: enable-easy-ai
 		MinimumExcessPower: 80
 		MaximumExcessPower: 250
@@ -856,31 +865,31 @@ Player:
 		ExcessPowerIncreaseThreshold: 4
 		PlaceDefenseTowardsEnemyChance: 75
 		ConstructionYardTypes: fact,afac
-		RefineryTypes: proc,proc2
-		PowerTypes: powr,apwr,nuke,nuk2
+		RefineryTypes: proc,proc.td
+		PowerTypes: powr,apwr,nuke,nuk2,tpwr
 		BarracksTypes: barr,tent,hand,pyle
-		VehiclesFactoryTypes: weap,astrip,awep
-		ProductionTypes: barr,tent,hand,pyle,astrip,weap,awep,afld,afld.gdi,hpad,hpad2
+		VehiclesFactoryTypes: weap,airs,weap.td
+		ProductionTypes: barr,tent,hand,pyle,airs,weap,weap.td,afld,afld.gdi,hpad,hpad.td
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
-		SiloTypes: silo,silo2
+		SiloTypes: silo,silo.td
 		BuildingDelays:
 			kenn: 2800
 			weap: 2800
-			awep: 2800
-			astrip: 2800
+			weap.td: 2800
+			airs: 2800
 			dome: 4500
 			hq: 4500
 			afld: 5000
 			afld.gdi: 5000
 			hpad: 5000
-			hpad2: 5000
+			hpad.td: 5000
 			syrd: 6000
 			spen: 6000
 			syrd.gdi: 6000
 			spen.nod: 6000
 		BuildingLimits:
 			proc: 4
-			proc2: 4
+			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -889,11 +898,11 @@ Player:
 			dome: 1
 			hq: 1
 			weap: 3
-			awep: 3
-			astrip: 5
+			weap.td: 3
+			airs: 3
 			afld: 1
 			hpad: 2
-			hpad2: 2
+			hpad.td: 2
 			afld.gdi: 1
 			atek: 1
 			stek: 1
@@ -907,20 +916,20 @@ Player:
 			syrd.gdi: 2
 		BuildingFractions:
 			proc: 30
-			proc2: 30
+			proc.td: 30
 			hand: 2
 			pyle: 2
 			barr: 2
 			tent: 2
 			kenn: 1
 			weap: 3
-			awep: 3
-			astrip: 3
+			weap.td: 3
+			airs: 3
 			pbox: 7
 			hbox: 7
 			gtwr: 7
 			gun: 7
-			gun2: 7
+			gun.td: 7
 			tsla: 5
 			obli: 5
 			ltur: 10
@@ -928,6 +937,7 @@ Player:
 			ttur: 10
 			htur: 3
 			atwr: 7
+			stwr: 5
 			pris: 5
 			agun: 3
 			cram: 3
@@ -935,6 +945,8 @@ Player:
 			nsam: 3
 			atek: 1
 			stek: 1
+			silo: 1
+			silo.td: 1
 			fix: 1
 			dome: 10
 			tmpl: 1
@@ -949,19 +961,19 @@ Player:
 			sgen: 1
 			eye: 1
 			weat: 1
-			nmslo: 1
+			mslo.nod: 1
 			indp: 1
 			bio.nod: 1
 			miss.gdi: 1
 			orep: 1
 			patr: 1
 			hpad: 1
-			hpad2: 1
+			hpad.td: 1
 			spen: 1
 			syrd: 1
 			spen.nod: 1
 			syrd.gdi: 1
-	BaseBuilderBotModule@naval:
+	BaseBuilderBotModuleCA@naval:
 		RequiresCondition: enable-naval-ai
 		MinimumExcessPower: 60
 		MaximumExcessPower: 300
@@ -969,16 +981,16 @@ Player:
 		ExcessPowerIncreaseThreshold: 4
 		PlaceDefenseTowardsEnemyChance: 75
 		ConstructionYardTypes: fact,afac
-		RefineryTypes: proc,proc2
-		PowerTypes: powr,apwr,nuke,nuk2
+		RefineryTypes: proc,proc.td
+		PowerTypes: powr,apwr,nuke,nuk2,tpwr
 		BarracksTypes: barr,tent,hand,pyle
-		VehiclesFactoryTypes: weap,astrip,awep
-		ProductionTypes: barr,tent,hand,pyle,astrip,weap,awep,afld,afld.gdi,hpad,hpad2
+		VehiclesFactoryTypes: weap,airs,weap.td
+		ProductionTypes: barr,tent,hand,pyle,airs,weap,weap.td,afld,afld.gdi,hpad,hpad.td
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
-		SiloTypes: silo,silo2
+		SiloTypes: silo,silo.td
 		BuildingLimits:
 			proc: 4
-			proc2: 4
+			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -987,12 +999,12 @@ Player:
 			dome: 1
 			hq: 1
 			weap: 3
-			awep: 3
-			astrip: 5
-			afld: 1
-			hpad: 2
-			hpad2: 2
-			afld.gdi: 1
+			weap.td: 3
+			airs: 3
+			afld: 3
+			hpad: 5
+			hpad.td: 5
+			afld.gdi: 3
 			atek: 1
 			stek: 1
 			gtek: 1
@@ -1005,20 +1017,20 @@ Player:
 			syrd.gdi: 2
 		BuildingFractions:
 			proc: 30
-			proc2: 30
+			proc.td: 30
 			hand: 2
 			pyle: 2
 			barr: 2
 			tent: 2
 			kenn: 1
 			weap: 3
-			awep: 3
-			astrip: 3
+			weap.td: 3
+			airs: 3
 			pbox: 7
 			hbox: 7
 			gtwr: 7
 			gun: 7
-			gun2: 7
+			gun.td: 7
 			tsla: 5
 			obli: 5
 			ltur: 10
@@ -1026,6 +1038,7 @@ Player:
 			ttur: 10
 			htur: 3
 			atwr: 7
+			stwr: 5
 			pris: 5
 			agun: 3
 			cram: 3
@@ -1039,8 +1052,8 @@ Player:
 			gtek: 1
 			rep: 1
 			hq: 10
-			afld: 1
-			afld.gdi: 1
+			afld: 3
+			afld.gdi: 3
 			mslo: 1
 			iron: 1
 			pdox: 1
@@ -1051,10 +1064,10 @@ Player:
 			orep: 1
 			patr: 1
 			weat: 1
-			nmslo: 1
+			mslo.nod: 1
 			eye: 1
-			hpad: 1
-			hpad2: 1
+			hpad: 3
+			hpad.td: 3
 			spen: 1
 			syrd: 1
 			spen.nod: 1
@@ -1062,8 +1075,8 @@ Player:
 	SquadManagerBotModuleCA@brutal:
 		RequiresCondition: enable-brutal-ai
 		SquadSize: 30
-		ExcludeFromSquadsTypes: harv, harv2, mcv, amcv, dog, e6, n6
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,icbmsub
+		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog, e6, n6
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub
 		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod
 		ConstructionYardTypes: fact,afac
 		IdleScanRadius: 18
@@ -1081,6 +1094,7 @@ Player:
 		RequiresCondition: enable-brutal-ai
 		IdleBaseUnitsMaximum: 50
 		UnitBuilderMinCredits: 1800
+		MaxAircraft: 8
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1095,7 +1109,7 @@ Player:
 			n6: 5
 			n1c: 65
 			n3c: 40
-			rmboc: 15
+			rmbc: 15
 			mort: 15
 			medi: 3
 			mech: 3
@@ -1103,13 +1117,13 @@ Player:
 			sab: 2
 			shok: 15
 			e8: 15
-			jumpjet: 15
+			jjet: 15
 			acol: 15
 			rmbo: 15
 			e7: 15
 			boris: 15
 			harv: 10
-			harv2: 10
+			har2: 10
 			apc: 20
 			jeep: 30
 			apc2: 20
@@ -1122,7 +1136,7 @@ Player:
 			msam: 25
 			mlrs: 20
 			spec: 20
-			hmlrs: 25
+			hsam: 25
 			1tnk: 70
 			ifv.ai: 70
 			2tnk: 45
@@ -1137,30 +1151,33 @@ Player:
 			htnk: 40
 			htnk.ion: 40
 			v3rl: 10
-			titan: 40
+			titn: 40
 			jugg: 10
-			cdrone: 3
+			cryo: 10
+			cdrn: 3
 			ctnk: 3
+			chpr: 3
 			batf.ai: 10
-			mwtnk: 3
+			wtnk: 3
 			ttnk: 25
 			stnk.nod: 15
 			ftnk: 15
+			slng: 5
 			hind: 5
 			slingshot: 5
 			heli: 5
 			apch: 5
 			venm: 5
 			orca: 5
-			orcab: 3
-			scrin: 5
-			rah66: 3
+			orcb: 3
+			scrn: 5
+			rah: 3
 			mig: 3
 			harr: 3
 			yak: 2
 			frog: 2
 			disr: 10
-			kirov: 2
+			kiro: 2
 			a10: 5
 			ss: 1
 			msub: 1
@@ -1171,11 +1188,11 @@ Player:
 			pt2: 1
 			dd2: 1
 			ss2: 2
-			icbmsub: 1
+			isub: 1
 		UnitLimits:
 			dog: 2
 			sab: 2
-			cdrone: 1
+			cdrn: 1
 			apc: 2
 			apc2: 2
 			hmmv: 2
@@ -1187,22 +1204,23 @@ Player:
 			medi: 1
 			msub: 4
 			ca: 4
-			icbmsub: 4
+			isub: 4
 			carr: 4
-			jumpjet: 5
-			kirov: 3
+			jjet: 5
+			kiro: 3
 			harv: 8
-			harv2: 8
+			har2: 8
 	SquadManagerBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
 		SquadSize: 25
-		ExcludeFromSquadsTypes: harv, harv2, mcv, amcv, dog, e6, n6
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,icbmsub
+		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog, e6, n6
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub
 		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod
 		ConstructionYardTypes: fact,afac
 	UnitBuilderBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
 		IdleBaseUnitsMaximum: 50
+		MaxAircraft: 6
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1217,7 +1235,7 @@ Player:
 			n6: 5
 			n1c: 65
 			n3c: 40
-			rmboc: 15
+			rmbc: 15
 			mort: 15
 			medi: 3
 			mech: 3
@@ -1225,13 +1243,13 @@ Player:
 			sab: 2
 			shok: 15
 			e8: 15
-			jumpjet: 15
+			jjet: 15
 			acol: 15
 			rmbo: 15
 			e7: 15
 			boris: 15
 			harv: 10
-			harv2: 10
+			har2: 10
 			apc: 20
 			jeep: 30
 			apc2: 20
@@ -1244,7 +1262,7 @@ Player:
 			msam: 25
 			mlrs: 20
 			spec: 20
-			hmlrs: 25
+			hsam: 25
 			1tnk: 70
 			ifv.ai: 70
 			2tnk: 45
@@ -1259,30 +1277,33 @@ Player:
 			htnk: 40
 			htnk.ion: 40
 			v3rl: 10
-			titan: 40
+			titn: 40
 			jugg: 10
-			cdrone: 3
+			cryo: 10
+			cdrn: 3
 			ctnk: 3
+			chpr: 3
 			batf.ai: 10
-			mwtnk: 3
+			wtnk: 3
 			ttnk: 25
 			stnk.nod: 15
 			ftnk: 15
+			slng: 5
 			hind: 5
 			slingshot: 5
 			heli: 5
 			apch: 5
 			venm: 5
 			orca: 5
-			orcab: 3
-			scrin: 5
-			rah66: 3
+			orcb: 3
+			scrn: 5
+			rah: 3
 			mig: 3
 			harr: 3
 			yak: 2
 			frog: 2
 			disr: 10
-			kirov: 2
+			kiro: 2
 			a10: 5
 			ss: 1
 			msub: 1
@@ -1293,11 +1314,11 @@ Player:
 			pt2: 1
 			dd2: 1
 			ss2: 2
-			icbmsub: 1
+			isub: 1
 		UnitLimits:
 			dog: 2
 			sab: 2
-			cdrone: 1
+			cdrn: 1
 			apc: 2
 			apc2: 2
 			hmmv: 2
@@ -1309,22 +1330,23 @@ Player:
 			medi: 1
 			msub: 4
 			ca: 4
-			icbmsub: 4
+			isub: 4
 			carr: 4
-			jumpjet: 5
-			kirov: 3
+			jjet: 5
+			kiro: 3
 			harv: 8
-			harv2: 8
+			har2: 8
 	SquadManagerBotModuleCA@normal:
 		RequiresCondition: enable-normal-ai
 		SquadSize: 20
-		ExcludeFromSquadsTypes: harv, harv2, mcv, amcv, dog
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,icbmsub
+		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub
 		ConstructionYardTypes: fact,afac
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
 	UnitBuilderBotModuleCA@normal:
 		RequiresCondition: enable-normal-ai
 		IdleBaseUnitsMaximum: 50
+		MaxAircraft: 4
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1339,7 +1361,7 @@ Player:
 			n6: 5
 			n1c: 65
 			n3c: 40
-			rmboc: 15
+			rmbc: 15
 			mort: 15
 			medi: 3
 			mech: 3
@@ -1347,13 +1369,13 @@ Player:
 			sab: 2
 			shok: 15
 			e8: 15
-			jumpjet: 15
+			jjet: 15
 			acol: 15
 			rmbo: 15
 			e7: 15
 			boris: 15
 			harv: 10
-			harv2: 10
+			har2: 10
 			apc: 20
 			jeep: 30
 			apc2: 20
@@ -1366,7 +1388,7 @@ Player:
 			msam: 25
 			mlrs: 20
 			spec: 20
-			hmlrs: 25
+			hsam: 25
 			1tnk: 70
 			ifv.ai: 70
 			2tnk: 45
@@ -1381,30 +1403,33 @@ Player:
 			htnk: 40
 			htnk.ion: 40
 			v3rl: 10
-			titan: 40
+			titn: 40
 			jugg: 10
-			cdrone: 3
+			cryo: 10
+			cdrn: 3
 			ctnk: 3
+			chpr: 3
 			batf.ai: 10
-			mwtnk: 3
+			wtnk: 3
 			ttnk: 25
 			stnk.nod: 15
 			ftnk: 15
+			slng: 5
 			hind: 5
 			slingshot: 5
 			heli: 5
 			apch: 5
 			venm: 5
 			orca: 5
-			orcab: 3
-			scrin: 5
-			rah66: 3
+			orcb: 3
+			scrn: 5
+			rah: 3
 			mig: 3
 			harr: 3
 			yak: 2
 			frog: 2
 			disr: 10
-			kirov: 2
+			kiro: 2
 			a10: 5
 			ss: 1
 			msub: 1
@@ -1415,11 +1440,11 @@ Player:
 			pt2: 1
 			dd2: 1
 			ss2: 2
-			icbmsub: 1
+			isub: 1
 		UnitLimits:
 			dog: 2
 			sab: 2
-			cdrone: 1
+			cdrn: 1
 			apc: 2
 			apc2: 2
 			hmmv: 2
@@ -1431,28 +1456,22 @@ Player:
 			medi: 1
 			msub: 4
 			ca: 4
-			icbmsub: 4
+			isub: 4
 			carr: 4
-			jumpjet: 5
-			kirov: 2
+			jjet: 5
+			kiro: 2
 			harv: 8
-			harv2: 8
-			a10: 2
-			frog: 2
-			harr: 2
-			mig: 2
-			yak: 2
-			scrin: 2
-			orcab: 2
+			har2: 8
 	SquadManagerBotModuleCA@easy:
 		RequiresCondition: enable-easy-ai
-		SquadSize: 10
-		ExcludeFromSquadsTypes: harv, harv2, mcv, amcv, dog
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,icbmsub
+		SquadSize: 15
+		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub
 		ConstructionYardTypes: fact,afac
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
 	UnitBuilderBotModuleCA@easy:
 		RequiresCondition: enable-easy-ai
+		MaxAircraft: 2
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1467,7 +1486,7 @@ Player:
 			n6: 5
 			n1c: 65
 			n3c: 40
-			rmboc: 15
+			rmbc: 15
 			mort: 15
 			medi: 3
 			mech: 3
@@ -1475,13 +1494,13 @@ Player:
 			sab: 2
 			shok: 15
 			e8: 15
-			jumpjet: 15
+			jjet: 15
 			acol: 15
 			rmbo: 15
 			e7: 15
 			boris: 15
 			harv: 10
-			harv2: 10
+			har2: 10
 			apc: 20
 			jeep: 30
 			apc2: 20
@@ -1494,7 +1513,7 @@ Player:
 			msam: 25
 			mlrs: 20
 			spec: 20
-			hmlrs: 25
+			hsam: 25
 			1tnk: 70
 			ifv.ai: 70
 			2tnk: 45
@@ -1509,30 +1528,33 @@ Player:
 			htnk: 40
 			htnk.ion: 40
 			v3rl: 10
-			titan: 40
+			titn: 40
 			jugg: 10
-			cdrone: 3
+			cryo: 10
+			cdrn: 3
 			ctnk: 3
+			chpr: 3
 			batf.ai: 10
-			mwtnk: 3
+			wtnk: 3
 			ttnk: 25
 			stnk.nod: 15
 			ftnk: 15
+			slng: 5
 			hind: 5
 			slingshot: 5
 			heli: 5
 			apch: 5
 			venm: 5
 			orca: 5
-			orcab: 3
-			scrin: 5
-			rah66: 3
+			orcb: 3
+			scrn: 5
+			rah: 3
 			mig: 3
 			harr: 3
 			yak: 2
 			frog: 2
 			disr: 10
-			kirov: 2
+			kiro: 2
 			a10: 5
 			ss: 1
 			msub: 1
@@ -1543,11 +1565,11 @@ Player:
 			pt2: 1
 			dd2: 1
 			ss2: 2
-			icbmsub: 1
+			isub: 1
 		UnitLimits:
 			dog: 2
 			sab: 2
-			cdrone: 1
+			cdrn: 1
 			apc: 2
 			apc2: 2
 			hmmv: 2
@@ -1559,33 +1581,22 @@ Player:
 			medi: 1
 			msub: 4
 			ca: 4
-			icbmsub: 4
+			isub: 4
 			carr: 4
-			jumpjet: 5
-			kirov: 1
+			jjet: 5
+			kiro: 1
 			harv: 8
-			harv2: 8
-			a10: 1
-			frog: 1
-			harr: 1
-			mig: 1
-			yak: 1
-			scrin: 1
-			orcab: 1
-			apch: 1
-			rah66: 1
-			hind: 1
-			orca: 1
-			heli: 1
+			har2: 8
 	SquadManagerBotModuleCA@naval:
 		RequiresCondition: enable-naval-ai
 		SquadSize: 1
-		ExcludeFromSquadsTypes: harv, harv2, mcv, amcv, dog
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,dd2,ss2,icbmsub
+		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,dd2,ss2,isub
 		ConstructionYardTypes: fact,afac
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
 	UnitBuilderBotModuleCA@naval:
 		RequiresCondition: enable-naval-ai
+		MaxAircraft: 4
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1598,11 +1609,11 @@ Player:
 			n5: 15
 			n1c: 65
 			n3c: 40
-			rmboc: 15
+			rmbc: 15
 			dog: 2
 			harv: 10
-			harv2: 10
-			hmlrs: 40
+			har2: 10
+			hsam: 40
 			1tnk: 70
 			ltnk: 40
 			hind: 5
@@ -1611,15 +1622,15 @@ Player:
 			apch: 5
 			venm: 5
 			orca: 5
-			orcab: 3
-			scrin: 5
-			rah66: 3
+			orcb: 3
+			scrn: 5
+			rah: 3
 			mig: 3
 			harr: 3
 			yak: 2
 			frog: 2
 			disr: 10
-			kirov: 2
+			kiro: 2
 			a10: 5
 			ss: 20
 			msub: 10
@@ -1630,7 +1641,7 @@ Player:
 			pt2: 20
 			dd2: 10
 			ss2: 20
-			icbmsub: 10
+			isub: 10
 		UnitLimits:
 			harv: 8
-			harv2: 8
+			har2: 8

@@ -71,6 +71,16 @@ UnitExplodePlane:
 	Warhead@2Eff: CreateEffect
 		Explosions: large_napalm
 
+UnitExplodePlaneLight:
+	Inherits: UnitExplodePlane
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+
+UnitExplodePlaneEmpty:
+	Inherits: UnitExplode
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+
 UnitExplodeHeli:
 	Inherits: UnitExplode
 	Warhead@1Dam: SpreadDamage
@@ -78,16 +88,33 @@ UnitExplodeHeli:
 	Warhead@2Eff: CreateEffect
 		Explosions: napalm
 
-VisualExplode:
+UnitExplodeHeliEmpty:
+	Inherits: UnitExplodeHeli
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+
+UnitExplodeDrone:
+	Inherits: UnitExplodeHeli
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+
+UnitExplodeDroneEmpty:
+	Inherits: UnitExplodeHeli
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+
+UnitExplodeFlameSmall:
 	Inherits: ^Explosion
-	-Warhead@1Dam:
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
 	Warhead@2Eff: CreateEffect
 		Explosions: offseted_napalm
 		ImpactSounds: firebl3.aud
 
-VisualExplodeChem:
+UnitExplodeChemSmall:
 	Inherits: ^Explosion
-	-Warhead@1Dam:
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
 	Warhead@2Eff: CreateEffect
 		Explosions: small_chem
 		ExplosionPalette: temptd
@@ -650,7 +677,7 @@ CryoExplosion:
 		Level: 100
 		Falloff: 100, 75, 52, 15, 2
 		MaxLevel: 600
-		
+
 TemporalExplode:
 	Warhead@1Eff: CreateEffect
 		Explosions: chronowarp_effect
@@ -658,7 +685,7 @@ TemporalExplode:
 		ImpactSounds: chronowarp.aud
 		ValidTargets: Ground, Water, Air
 	Warhead@3Flash: ChronoFlashEffect
-		
+
 
 TemporalExplodeLarge:
 	Warhead@1Eff: CreateEffect
@@ -667,3 +694,38 @@ TemporalExplodeLarge:
 		ImpactSounds: chronowarp.aud
 		ValidTargets: Ground, Water, Air
 	Warhead@3Flash: ChronoFlashEffect
+
+TPWRZap:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 80
+	Range: 5c0
+	ValidTargets: Ground, Water, Infantry, Tank
+	-Report:
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 1000
+		AffectsParent: True
+		Versus:
+			Wood: 120
+			Concrete: 110
+	Warhead@Burst: FireShrapnel
+		Weapon: TPWRArc1
+		Amount: 1
+		AimChance: 90
+		ValidTargets: Ground, Water, Infantry, Tank
+		ThrowWithoutTarget: true
+		
+TPWRArc1:
+	Inherits: TTankZap
+	Range: 3c0
+	Projectile: TeslaZap
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Ground, Water, Infantry, Tank
+	-Warhead@3Eff:
+	Warhead@Burst: FireShrapnel
+		Weapon: TPWRArc2
+		AimChance: 80
+
+TPWRArc2:
+	Inherits: TPWRArc1
+	-Warhead@Burst:

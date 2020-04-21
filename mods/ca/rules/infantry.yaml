@@ -147,7 +147,7 @@ E2:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 5000
+		HP: 6000
 	Mobile:
 		speed: 73
 	Armament@PRIMARY:
@@ -170,9 +170,9 @@ E2:
 	Explodes:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
-		DamageSource: Killer
 		Chance: 33
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		DamageSource: Killer
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 
@@ -185,7 +185,7 @@ E3:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 30
 		Prerequisites: ~barracksRA, ~techlevel.infonly
-		Description: Anti-tank/Anti-aircraft infantry.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
+		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Selectable:
 		Class: E3
 	Valued:
@@ -195,7 +195,7 @@ E3:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 2500
+		HP: 3500
 	Mobile:
 		speed: 54
 	Armament@PRIMARY:
@@ -251,7 +251,7 @@ E4:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 70
 		Prerequisites: ~barr, ~!infantry.iraq, ftur, ~techlevel.infonly
-		Description: Advanced anti-structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
+		Description: Anti-infantry/anti-structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 200
 	Tooltip:
@@ -259,7 +259,7 @@ E4:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 7000
+		HP: 8000
 	Mobile:
 		speed: 73
 	Armament:
@@ -281,10 +281,11 @@ E4:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 	Explodes:
-		Weapon: VisualExplode
-		EmptyWeapon: VisualExplode
-		Chance: 20
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		Weapon: UnitExplodeFlameSmall
+		EmptyWeapon: UnitExplodeFlameSmall
+		Chance: 33
+		DamageSource: Killer
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 
@@ -296,9 +297,9 @@ E6:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
 		Prerequisites: ~barracksRA, ~techlevel.infonly
-		Description: Infiltrates and captures\nenemy structures.\n  Unarmed
+		Description: Infiltrates and captures\nenemy structures.n\Can also repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
 	Valued:
-		Cost: 400
+		Cost: 500
 	Tooltip:
 		Name: Engineer
 	UpdatesPlayerStatistics:
@@ -328,7 +329,7 @@ SPY:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 90
 		Prerequisites: ~infantry.allies, dome, ~tent, ~techlevel.medium
-		Description: Infiltrates enemy structures for intel or\nsabotage. Exact effect depends on the\nbuilding infiltrated.\nLoses disguise when attacking.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft\n  Special Ability: Disguised
+		Description: Infiltrates enemy structures for intel or\nsabotage. Exact effect depends on the\nbuilding infiltrated.\nLoses disguise when attacking.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft\n  Special Ability: Disguise
 	Valued:
 		Cost: 500
 	-Tooltip:
@@ -697,7 +698,7 @@ SHOK:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 115
 		Prerequisites: ~barr, tsla, ~infantry.soviet, ~techlevel.high
-		Description: Elite infantry with portable Tesla coils.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft\n  Special Ability: Can over-charge Tesla Coil
+		Description: Elite infantry with portable Tesla weapon.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft\n  Special Ability: Can over-charge Tesla Coil
 	Valued:
 		Cost: 350
 	Tooltip:
@@ -748,7 +749,7 @@ SHOK:
 		Multiplier: 90
 		Prerequisites: infantry.russia
 
-SHOK.nod:
+SHOK.Nod:
 	Inherits: SHOK
 	RenderSprites:
 		Image: SHOK
@@ -761,7 +762,6 @@ SHOK.nod:
 N1:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
@@ -807,11 +807,12 @@ N1R1:
 		Prerequisites: techlevel.infonly
 		InitialLevels: 1
 	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: n1
 
 N2:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
@@ -827,7 +828,7 @@ N2:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 5000
+		HP: 6000
 	Mobile:
 		speed: 73
 	Armament@PRIMARY:
@@ -852,7 +853,8 @@ N2:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
 		Chance: 33
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		DamageSource: Killer
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Selectable:
@@ -866,6 +868,8 @@ N2R1:
 		Prerequisites: techlevel.infonly
 		InitialLevels: 1
 	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: n2
 
 N3:
 	Inherits: ^Soldier
@@ -878,7 +882,7 @@ N3:
 		BuildPaletteOrder: 30
 		Prerequisites: ~!bio.nod, ~barrackstd, ~techlevel.infonly
 		IconPalette: chrometd
-		Description: Anti-tank/Anti-aircraft infantry.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
+		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 300
 	Tooltip:
@@ -886,7 +890,7 @@ N3:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 2500
+		HP: 3500
 	Mobile:
 		speed: 54
 	Armament@PRIMARY:
@@ -938,6 +942,8 @@ N3R1:
 		Prerequisites: techlevel.infonly
 		InitialLevels: 1
 	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: n3
 
 N4:
 	Inherits: ^Soldier
@@ -948,9 +954,9 @@ N4:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 70
-		Prerequisites: ~infantry.nod, ~!infantry.marked, hand, ~techlevel.infonly
+		Prerequisites: ~infantry.nod, ~!bio.nod, hand, ~techlevel.infonly
 		IconPalette: chrometd
-		Description: Advanced Anti-infantry unit.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
+		Description: Anti-infantry/anti-structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 200
 	Tooltip:
@@ -958,7 +964,7 @@ N4:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 7000
+		HP: 8000
 	Mobile:
 		speed: 73
 	Armament:
@@ -984,10 +990,11 @@ N4:
 		DeathSequencePalette: playertd
 	WithMuzzleOverlay:
 	Explodes:
-		Weapon: VisualExplode
-		EmptyWeapon: VisualExplode
+		Weapon: UnitExplodeFlameSmall
+		EmptyWeapon: UnitExplodeFlameSmall
 		Chance: 33
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		DamageSource: Killer
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Selectable:
@@ -997,22 +1004,21 @@ N5:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 115
-		Prerequisites: ~infantry.marked, hand, ~techlevel.infonly
+		BuildPaletteOrder: 70
+		Prerequisites: ~bio.nod, ~hand, ~techlevel.infonly
 		IconPalette: chrometd
-		Description: Advanced general-purpose infantry.\n  Strong vs all Ground units
+		Description: Advanced general-purpose infantry.\n  Strong vs all Ground Units
 	Valued:
-		Cost: 225
+		Cost: 250
 	Tooltip:
 		Name: Chemical Warrior
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 7000
+		HP: 8000
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 	Armament:
@@ -1031,18 +1037,55 @@ N5:
 	TakeCover:
 		ProneOffset: 160,0,-254
 	Mobile:
-		Locomotor: chem
-	AttackFrontal:
+		Speed: 49
+		Voice: Move
 		PauseOnCondition: being-warped
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: CyborgVoice
 	-Crushable:
 	WithInfantryBody:
 		DefaultAttackSequence: shoot
+	-KillsSelf@Mutation:
+	-GrantCondition@HAZMAT:
+	-WithDecoration@HAZMAT:
+	DamagedByTerrain:
+		Terrain: Tiberium, BlueTiberium
+		Damage: -100
+		DamageInterval: 16
+		DamageTypes: ToxinDeath
+	GrantConditionOnTerrain@THEAL:
+		Condition: tibheal
+		TerrainTypes: Tiberium, BlueTiberium
+	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADWEAK:
+	WithDecoration@THEAL:
+		Image: pips
+		Sequence: medic
+		Palette: temptd
+		ReferencePoint: Bottom, Left
+		RequiresCondition: tibheal
+	SpeedMultiplier@NODUPG:
+		RequiresCondition: nodupg
+		Modifier: 120
+	DamageMultiplier@NODUPG:
+		RequiresCondition: nodupg
+		Modifier: 35
 	WithMuzzleOverlay:
 	Explodes:
-		Weapon: VisualExplodeChem
-		EmptyWeapon: VisualExplodeChem
+		Weapon: UnitExplodeChemSmall
+		EmptyWeapon: UnitExplodeChemSmall
 		Chance: 33
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		DamageSource: Killer
+		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	GrantCondition@HAZMAT:
@@ -1053,6 +1096,9 @@ N5:
 	FirepowerMultiplier@BIOLAB:
 		RequiresCondition: nodupg || biofirepower
 		Modifier: 110
+	Targetable:
+		RequiresCondition: !parachute && !being-warped
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
 N5R1:
 	Inherits: N5
@@ -1062,6 +1108,8 @@ N5R1:
 		Prerequisites: techlevel.infonly
 		InitialLevels: 1
 	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: n5
 
 RMBO:
 	Inherits: ^Soldier
@@ -1132,7 +1180,7 @@ N6:
 		BuildPaletteOrder: 60
 		Prerequisites: ~barrackstd, ~techlevel.infonly
 		IconPalette: chrometd
-		Description: Infiltrates and captures\nenemy structures.\Can also repair friendly structures, bridges & tank husks.\n  Special Ability:  Repair\n  Unarmed
+		Description: Infiltrates and captures\nenemy structures.n\Can also repair friendly structures & bridges.\n  Special Ability:  Repair\n  Unarmed
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -1170,11 +1218,13 @@ VICE:
 	Targetable:
 		TargetTypes: Ground, Infantry, Creep, ChaosImmune
 
-SNIPER:
+SNIP:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
+	RenderSprites:
+		Image: sniper
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1239,10 +1289,12 @@ SNIPER:
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 
-BORIS:
+BORI:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	RenderSprites:
+		Image: boris
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1286,7 +1338,7 @@ BORIS:
 		LocalOffset: 30,0,250
 		PauseOnCondition: being-warped
 	AirstrikeMaster:
-		Actors: U2Bomber
+		Actors: U2.Bomber
 		SquadSize: 1
 		RespawnTicks: 150
 		InstaRepair: true
@@ -1323,8 +1375,8 @@ MORT:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 40
-		Prerequisites: ~inf.nod.stolen, ~infantry.nod
-		Description: Infantry armed with a Chemical Mortar.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
+		Prerequisites: ~infantry.legion, ~infantry.nod
+		Description: Artillery Infantry armed with a Chemical Mortar.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 250
 	Tooltip:
@@ -1349,10 +1401,10 @@ MORT:
 	WithInfantryBody:
 		DefaultAttackSequence: throw
 	Explodes:
-		Weapon: VisualExplodeChem
-		EmptyWeapon: VisualExplodeChem
-		Chance: 50
-		DeathTypes: BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath
+		Weapon: UnitExplodeChemSmall
+		EmptyWeapon: UnitExplodeChemSmall
+		Chance: 33
+		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 	ProducibleWithLevel:
@@ -1368,7 +1420,7 @@ SAB:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 90
 		Prerequisites: hq, ~infantry.nod, ~techlevel.medium
-		Description: Covert Infantry. Infiltrates enemy structures and steals technology.\nCan detect cloaked units and spies.\n  Special Ability: Infiltrate\n Special Ability: Stealth
+		Description: Covert infantry. Infiltrates enemy structures and steals technology.\nCan detect cloaked units and spies.\n  Special Ability: Infiltrate\n Special Ability: Stealth
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -1441,7 +1493,7 @@ ACOL:
 		BuildPaletteOrder: 115
 		IconPalette: chrometd
 		Prerequisites: ~hand, hq, obli, ~infantry.marked, ~techlevel.high
-		Description: Elite infantry with a portable Oblisk.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft\n Special Ability: Regains health on tiberium
+		Description: Elite infantry with a laser weapon.\n  Strong vs Infantry, Light Armor\n  Weak vs Aircraft\n Special Ability: Regains health on tiberium
 	Valued:
 		Cost: 350
 	Tooltip:
@@ -1519,7 +1571,7 @@ ACOL:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-JUMPJET:
+JJET:
 	Inherits@1: ^ExistsInWorld
 	Inherits@3: ^IronCurtainable
 	Inherits@4: ^SpriteActor
@@ -1535,6 +1587,7 @@ JUMPJET:
 		QuantizedFacings: 8
 		UseClassicFacingFudge: true
 	RenderSprites:
+		Image: jumpjet
 		PlayerPalette: overlayplayertd
 	OwnerLostAction:
 		Action: Kill
@@ -1576,7 +1629,7 @@ JUMPJET:
 		BuildPaletteOrder: 59
 		Prerequisites: ~pyle, hq, ~infantry.gdi, ~techlevel.infonly
 		IconPalette: chrometd
-		Description: Flying General-purpose infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		Description: Flying general-purpose infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 350
 	Tooltip:
@@ -1643,7 +1696,6 @@ JUMPJET:
 		CanHover: true
 		CanSlide: true
 		VTOL: true
-		LandOnCondition: empdisable
 	AttackAircraft:
 		AttackType: Hover
 		FacingTolerance: 0
@@ -1668,7 +1720,7 @@ JUMPJET:
 	DeathSounds@airborne:
 		RequiresCondition: airborne
 	SpawnActorOnDeath@airborne:
-		Actor: JUMPJET.Husk
+		Actor: JJET.Husk
 		RequiresCondition: airborne
 	WithDeathAnimation:
 		DeathSequencePalette: overlayplayertd
@@ -1723,7 +1775,7 @@ JUMPJET:
 	KillsSelf:
 		RequiresCondition: empdisable && cruising
 
-JUMPJET.Husk:
+JJET.Husk:
 	BodyOrientation:
 		QuantizedFacings: 1
 	HiddenUnderFog:
@@ -1768,17 +1820,18 @@ E8:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 70
 		Prerequisites: ~infantry.iraq, ttur, radar, ~techlevel.infonly
-		Description: Anti-Infantry unit.\n  Strong vs Infantry, Vehicles\n  Weak vs Tanks, Aircraft
+		Description: Anti-infantry unit.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Valued:
-		Cost: 500
+		Cost: 800
 	Tooltip:
 		Name: Desolator
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 9000
+		HP: 18000
 	Mobile:
 		Voice: Move
+		PauseOnCondition: !undeployed && being-warped
 	RevealsShroud:
 		Range: 5c0
 	Armament@PRIMARY:
@@ -1810,28 +1863,22 @@ E8:
 		Weapon: RadEruptionWeapon
 		RequiresCondition: deployed
 		InitialDelay: 20
-	GrantTimedConditionOnDeploy:
+	GrantConditionOnDeploy:
 		DeployedCondition: deployed
-		DeployAnimation: deploy
-		UndeployAnimation: undeploy
-		BodyNames: deployed
-		CooldownTicks: 100
-		DeployedTicks: 20
+		UndeployedCondition: undeployed
+		UndeployOnMove: True
 		Facing: 92
 		Voice: Attack
 		PauseOnCondition: being-warped
-		DischargingColor: 00FF0080
-		ChargingColor: FFFF0080
 	WithInfantryBody:
-		RequiresCondition: !deployed
+		RequiresCondition: !being-warped && undeployed
 	WithSpriteBody@DEPLOYED:
 		Sequence: deployed
-		RequiresCondition: deployed && deploying
+		RequiresCondition: !undeployed
 		Name: deployed
 	WithMakeAnimation:
 		Sequence: deploy
 		BodyNames: deployed
-		Condition: deploying
 	GrantCondition@HAZMAT:
 		Condition: hazmatsuits
 		-RequiresCondition:
@@ -1842,9 +1889,10 @@ E8:
 		Modifier: 110
 
 
-n1c:
+N1C:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	RenderSprites:
 	Buildable:
 		Queue: Infantry
@@ -1914,16 +1962,17 @@ n1c:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-n3c:
+N3C:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	RenderSprites:
 	Buildable:
 		Queue: Infantry
 		BuildPaletteOrder: 20
 		Prerequisites: ~bio.nod, ~hand, ~techlevel.medium
 		IconPalette: chrometd
-		Description: Anti-tank infantry\n  Strong vs Tanks\n  Weak vs Infantry, Artillery
+		Description: Anti-tank cyborg infantry\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry, Artillery
 	Valued:
 		Cost: 350
 	Tooltip:
@@ -2010,11 +2059,11 @@ n3c:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-rmboc:
+RMBC:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@EMP: ^EmpDisable
-	Inherits@MW: ^Microwaveable
 	RenderSprites:
 		PlayerPalette: playerd2k
 		Image: cycom
@@ -2024,7 +2073,7 @@ rmboc:
 		BuildPaletteOrder: 121
 		Prerequisites: bio.nod, ~hand, ~techlevel.high
 		IconPalette: chrometd
-		Description: Elite infantry unit. Armed with\na Plasma cannon.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+		Description: Elite cyborg infantry unit. Armed with\na Plasma cannon.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -2056,17 +2105,19 @@ rmboc:
 	WithInfantryBody:
 		DefaultAttackSequence: shoot
 	Armament@PRIMARY:
-		Weapon: cycannon
+		Weapon: CyCannon
+		LocalOffset: 0,0,555
 		PauseOnCondition: being-warped
 	Armament@Garrison:
 		Name: mounted
 		Weapon: cycannon
+		LocalOffset: 0,0,555
 		PauseOnCondition: being-warped
 	Explodes:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
 		Chance: 100
-		DeathTypes: DefaultDeath, BulletDeath, SmallExplosionDeath, ExplosionDeath, FireDeath, ElectricityDeath, PoisonDeath, ToxinDeath, RadiationDeath
+		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequencePalette: playerd2k
 	Selectable:
@@ -2098,7 +2149,7 @@ rmboc:
 		RequiresCondition: tibheal
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
-		TargetTypes: Ground, Vehicle, ChaosImmune
+		TargetTypes: Ground, Vehicle, Tank, ChaosImmune
 	Targetable@REPAIR:
 		RequiresCondition: !parachute && damaged && !being-warped
 		TargetTypes: Repair
@@ -2158,3 +2209,93 @@ CRYOT:
 		Delay: 120
 		Count: 6
 		ResetOnFire: True
+
+RAILGUNR:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 50
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~techlevel.infonly
+		Description: Heavy Infantry with Railgun. Strong vs Heavy Tanks\n  Weak vs Infantry, Buildings
+		IconPalette: chrometd
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Railgunner
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 9000
+	Mobile:
+		Speed: 61
+	Armament@PRIMARY:
+		Weapon: Railgun.Infantry
+		LocalOffset: 341,0,256
+		PauseOnCondition: being-warped
+	TakeCover:
+		ProneOffset: 227,0,-245
+	AttackFrontal:
+		PauseOnCondition: being-warped
+
+jarmen_kell:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Jarmen Kell
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 7
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~techlevel.infonly
+		Description: Elite sniper infantry.\n\nCan kill enemy vehicle drivers, allowing other infantry to capture them.\n\nCamouflaged.
+		ReadyAudio: JarmenCreated
+		BuildLimit: 1
+	Health:
+		HP: 10000
+	Mobile:
+		Voice: Move
+		Speed: 61
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: ReturnFire
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry
+		InvalidTargets: NoAutoTarget
+	Armament@PRIMARY:
+		Weapon: sniper
+	Armament@DRIVER_SNIPE:
+		Name: driver_snipe
+		Weapon: sniper.jarmen_kell.vehicle
+		PauseOnCondition: !ammo
+	AttackFrontal:
+		Armaments: primary, driver_snipe
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	Cloak:
+		InitialDelay: 250
+		CloakDelay: 120
+		UncloakOn: Attack, Unload, Infiltrate, Demolish
+		CloakTypes: Cloak
+		IsPlayerPalette: true
+		RequiresCondition: !cloak-force-disabled
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	AmmoPool:
+		Ammo: 1
+		Armaments: driver_snipe
+		Name: driver_snipe
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		AmmoPool: driver_snipe
+		Delay: 750
+	Voiced:
+		VoiceSet: JarmenVoice
+	RenderSprites:
+		Image: jarmen_kell

@@ -13,7 +13,7 @@ MSLO:
 		BuildPaletteOrder: 140
 		Prerequisites: stek, ~techlevel.unrestricted, ~techlevel.superw, ~structures.soviet
 		BuildLimit: 1
-		Description: Provides an atomic bomb.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Atom Bomb
+		Description: Provides an atomic bomb.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Atom Bomb
 	Building:
 		Footprint: xx
 		Dimensions: 2,1
@@ -76,7 +76,7 @@ GAP:
 		Queue: Defense
 		BuildPaletteOrder: 110
 		Prerequisites: atek, ~structures.allies, ~techlevel.high
-		Description: Obscures the enemy's view with shroud.\nRequires power to operate.
+		Description: Obscures the enemy's view with shroud.\n  Requires power to operate.
 	Selectable:
 		Bounds: 24,24
 		DecorationBounds: 24,48,0,-12
@@ -90,7 +90,7 @@ GAP:
 	RevealsShroud:
 		Range: 6c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	CreatesShroud:
 		Range: 6c0
 		RequiresCondition: !disabled || !empdisable || !being-warped
@@ -421,7 +421,7 @@ IRON:
 		BuildPaletteOrder: 130
 		Prerequisites: stek, ~structures.soviet, ~techlevel.superw
 		BuildLimit: 1
-		Description: Makes a group of units invulnerable\nfor a short time.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Iron Curtain
+		Description: Makes a group of units invulnerable\nfor a short time.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Iron Curtain
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -444,7 +444,7 @@ IRON:
 		Range: 5c0
 		RequiresCondition: disabled
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	GrantExternalConditionPowerCA@IRONCURTAIN:
 		OrderName: ironcurtain
 		Icon: invuln
@@ -485,7 +485,7 @@ PDOX:
 		BuildPaletteOrder: 120
 		Prerequisites: atek, ~structures.allies, ~techlevel.superw
 		BuildLimit: 1
-		Description: Teleports a group of units across the\nmap for a short time.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Chronoshift
+		Description: Teleports a group of units across the\nmap for a short time.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Chronoshift
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -504,7 +504,7 @@ PDOX:
 		Range: 5c0
 		RequiresCondition: disabled
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	ProvidesPrerequisite@germany:
 		Factions: germany
 		Prerequisite: pdox.germany
@@ -525,7 +525,7 @@ PDOX:
 		BeginChargeSpeechNotification: ChronosphereCharging
 		EndChargeSpeechNotification: ChronosphereReady
 		LaunchSound: chrono2.aud
-		KillCargo: yes
+		KillCargo: true
 		DisplayRadarPing: True
 		Range: 2
 		DisplayTimerStances: Ally, Neutral, Enemy
@@ -560,7 +560,7 @@ PDOX:
 		ChargeInterval: 4500
 		Description: Time Warp
 		ActivationDelay: 25
-		LongDesc: Disrupts time and space at target area\nCauses units & structures to be frozen in time.
+		LongDesc: Disrupts time and space at target area,\ncausing units & structures to be frozen in time.
 		Weapon: TimeWarp
 		AirburstAltitude: 0c0
 		AllowMultiple: false
@@ -598,8 +598,8 @@ TSLA:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
-		Prerequisites: weap, ~structures.soviet, ~techlevel.medium
-		Description: Advanced base defense.\nCan be buffed or made work during low power by Shock Troopers.\nRequires power to operate.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+		Prerequisites: weap, ~structures.soviet, ~techlevel.high
+		Description: Advanced base defense.\n  Can be buffed or made work during low power by Shock Troopers.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -618,7 +618,7 @@ TSLA:
 		TargetTypes: TeslaBoost
 		RequiresCondition: !powerdown
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	WithTeslaChargeAnimation:
 	Armament:
 		Weapon: TeslaZap
@@ -687,6 +687,7 @@ TSLA:
 		Count: 12
 		ResetOnFire: True
 		PauseOnCondition: disabled || empdisable
+		RequiresSelection: true
 
 AGUN:
 	Inherits: ^Defense
@@ -696,7 +697,7 @@ AGUN:
 		Queue: Defense
 		BuildPaletteOrder: 90
 		Prerequisites: dome, ~structures.allies, ~techlevel.medium
-		Description: Anti-Air base defense.\nRequires power to operate.\n  Strong vs Aircraft\n  Weak vs Ground units
+		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Strong vs Aircraft\n  Weak vs Ground Units
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -712,12 +713,13 @@ AGUN:
 	RevealsShroud:
 		Range: 8c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Turreted:
 		TurnSpeed: 15
 		InitialFacing: 224
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
 	Armament:
 		Weapon: ZSU-23
 		LocalOffset: 520,100,450, 520,-150,450
@@ -751,7 +753,7 @@ DOME:
 		Queue: Building
 		BuildPaletteOrder: 90
 		Prerequisites: proc, ~structures.ra, ~techlevel.medium
-		Description: Provides an overview\nof the battlefield.\nRequires power to operate.
+		Description: Provides an overview\nof the battlefield.\n  Requires power to operate.
 		BuildDurationModifier: 25
 	Valued:
 		Cost: 1800
@@ -796,7 +798,7 @@ DOME:
 		Types: SabInfiltrate
 		Proxy: rad.soviet.stolen
 	AirstrikePowerCA@clustermines:
-		ChargeInterval: 8000
+		ChargeInterval: 6000
 		Prerequisites: structures.france, techlevel.superw
 		Description: Cluster Mines
 		LongDesc: Send a cargo plane\nto deploy a minefield.
@@ -823,7 +825,7 @@ DOME:
 		OrderName: gpsscramble
 		Icon: gpsscram
 		IconPalette: chrometd
-		ChargeInterval: 6000
+		ChargeInterval: 4500
 		Weapon: GpsScramble
 		Description: GPS Scramble
 		Condition: gpshide
@@ -852,7 +854,7 @@ PBOX:
 		Queue: Defense
 		BuildPaletteOrder: 40
 		Prerequisites: tent, ~structures.allies, ~!structures.england, ~techlevel.low
-		Description: Static defense with a fireport for\na garrisoned soldier.\nCan detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 600
 	CustomSellValue:
@@ -864,7 +866,7 @@ PBOX:
 	RevealsShroud:
 		Range: 6c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Turreted:
 		TurnSpeed: 255
 	-QuantizeFacingsFromSequence:
@@ -874,10 +876,10 @@ PBOX:
 		Weapon: vulcan
 		LocalOffset: 456,0,86
 		MuzzleSequence: muzzle
-		RequiresCondition: !being-warped
-	-SpawnActorsOnSell:
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
-		RequiresCondition: !build-incomplete && !being-warped
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: empdisable || being-warped
 	RenderRangeCircle:
 		FallbackRange: 6c0
 	Power:
@@ -895,7 +897,7 @@ HBOX:
 		Queue: Defense
 		BuildPaletteOrder: 50
 		Prerequisites: tent, ~structures.england, ~techlevel.low
-		Description: Camouflaged static defense with a fireport\nfor a garrisoned soldier.\nCan detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 700
 	CustomSellValue:
@@ -920,16 +922,16 @@ HBOX:
 	-QuantizeFacingsFromSequence:
 	BodyOrientation:
 		QuantizedFacings: 8
-	-SpawnActorsOnSell:
 	RenderRangeCircle:
 		FallbackRange: 6c0
 	Armament:
 		Weapon: vulcan
 		LocalOffset: 456,0,86
 		MuzzleSequence: muzzle
-		RequiresCondition: !being-warped
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
-		RequiresCondition: !build-incomplete && !being-warped
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: empdisable || being-warped
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -943,7 +945,7 @@ GUN:
 		Queue: Defense
 		BuildPaletteOrder: 70
 		Prerequisites: tent, ~structures.allies, ~techlevel.medium
-		Description: Anti-Armor base defense.\nCan detect cloaked units.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Description: Basic anti-tank base defense.\n  Can detect cloaked units.\n  Strong vs Tanks, Vehicles\n  Weak vs Infantry
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -956,20 +958,22 @@ GUN:
 	RevealsShroud:
 		Range: 7c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Turreted:
 		TurnSpeed: 12
 		InitialFacing: 56
+		PauseOnCondition: empdisable || being-warped
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: empdisable || being-warped
 	Armament:
 		Weapon: TurretGun
 		LocalOffset: 512,0,112
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	Power:
 		Amount: -40
@@ -984,7 +988,7 @@ FTUR:
 		Queue: Defense
 		BuildPaletteOrder: 60
 		Prerequisites: barr, ~!structures.iraq, ~structures.soviet, ~techlevel.low
-		Description: Anti-Infantry base defense.\nCan detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -997,16 +1001,16 @@ FTUR:
 	RevealsShroud:
 		Range: 6c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Turreted:
 		TurnSpeed: 255
 		Offset: 0,0,112
 	Armament:
 		Weapon: FireballLauncher
 		LocalOffset: 512,0,0
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
-		PauseOnCondition: empdisable && being-warped
+		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !build-incomplete
 	-QuantizeFacingsFromSequence:
 	BodyOrientation:
@@ -1034,7 +1038,7 @@ SAM:
 		Queue: Defense
 		BuildPaletteOrder: 100
 		Prerequisites: dome, ~structures.soviet, ~techlevel.medium
-		Description: Anti-Air base defense.\nRequires power to operate.\n  Strong vs Aircraft\n  Weak vs Ground units
+		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -1049,12 +1053,13 @@ SAM:
 	RevealsShroud:
 		Range: 8c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Turreted:
 		TurnSpeed: 30
 		InitialFacing: 0
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
 	Armament:
 		Weapon: Nike
 		LocalOffset: 0,0,320
@@ -1106,10 +1111,10 @@ ATEK:
 	GpsPower:
 		PauseOnCondition: disabled
 		Icon: gps
-		OneShot: yes
+		OneShot: true
 		ChargeInterval: 12000
 		Description: GPS Satellite
-		LongDesc: Reveals map terrain and provides tactical\ninformation. Requires power and active radar.
+		LongDesc: Reveals map terrain and provides tactical information. Requires power and active radar.
 		RevealDelay: 375
 		LaunchSpeechNotification: SatelliteLaunched
 		DisplayTimerStances: Ally, Neutral, Enemy
@@ -1160,7 +1165,7 @@ WEAP:
 	Tooltip:
 		Name: War Factory
 	Building:
-		Footprint: xxx xxx ===
+		Footprint: xxx xxx +++
 		Dimensions: 3,3
 		LocalCenterOffset: 0,-512,0
 	Health:
@@ -1395,11 +1400,25 @@ FACT:
 		ActorTypes: e1,e1,e1,tecn,tecn,e6
 	BaseBuilding:
 	Transforms:
-		RequiresCondition: factundeploy && !build-incomplete
-		PauseOnCondition: chrono-vortex || being-captured || being-demolished
+		RequiresCondition: factundeploy
+		PauseOnCondition: chrono-vortex || being-captured || being-demolished || build-incomplete
 		IntoActor: mcv
 		Offset: 1,1
 		Facing: 96
+	TransformsIntoMobile:
+		RequiresCondition: factundeploy
+		Locomotor: heavywheeled
+		RequiresForceMove: true
+	TransformsIntoPassenger:
+		RequiresCondition: factundeploy
+		CargoType: Vehicle
+		RequiresForceMove: true
+	TransformsIntoRepairable:
+		RequiresCondition: factundeploy
+		RepairActors: fix
+		RequiresForceMove: true
+	TransformsIntoTransforms:
+		RequiresCondition: factundeploy && build-incomplete
 	Sellable:
 		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !being-demolished
 	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
@@ -1442,14 +1461,14 @@ PROC:
 		Queue: Building
 		BuildPaletteOrder: 60
 		Prerequisites: anypower, ~structures.ra, ~techlevel.infonly
-		Description: Refines Ore and Gems\ninto credits.
+		Description: Processes raw Tiberium, Ore and Gems\ninto credits.
 		BuildDurationModifier: 25
 	Valued:
 		Cost: 2000
 	Tooltip:
 		Name: Ore Refinery
 	Building:
-		Footprint: _X_ xxx X== ===
+		Footprint: _X_ xxx X++ +++
 		Dimensions: 3,4
 		LocalCenterOffset: 0,-512,0
 	Selectable:
@@ -1537,7 +1556,7 @@ SILO:
 	RevealsShroud:
 		Range: 4c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	-WithSpriteBody:
 	WithResourceLevelSpriteBody:
 		Sequence: stages
@@ -1927,7 +1946,7 @@ APWR:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 110
-		Prerequisites: dome, ~techlevel.medium, ~structures.ra
+		Prerequisites: dome, ~techlevel.medium, ~structures.ra, ~!structures.russia
 		Description: Provides double the power of\na standard Power Plant.
 		BuildDurationModifier: 25
 	Valued:
@@ -1963,6 +1982,53 @@ APWR:
 		UseDeathTypeSuffix: false
 	InfiltrateForPowerOutage:
 		Types: SpyInfiltrate, PowerInfiltrate
+
+TPWR:
+	Inherits: APWR
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 110
+		Prerequisites: dome, ~techlevel.medium, ~structures.russia
+		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Tesla Reactor
+	WithIdleOverlay@POWER:
+		Offset: -20,-70,0
+		Sequence: power
+		RequiresCondition: overcharge && !(empdisable || being-warped || build-incomplete)
+	GrantTimedConditionOnDeploy@OVERCHARGE:
+		DeployedCondition: overcharge
+		CooldownTicks: 300
+		DeployedTicks: 900
+		PauseOnCondition: disabled || empdisable || being-warped
+		DischargingColor: 0080FF60
+		ChargingColor: FFFF0080
+		StartsFullyCharged: false
+		DeploySound: btesat1a.aud
+		RequiresCondition: !(owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
+	GrantConditionOnDamageState@VOLATILE:
+		Condition: volatile
+		ValidDamageStates: Medium, Heavy, Critical
+	PowerMultiplier:
+		Modifier: 200
+		RequiresCondition: overcharge
+	PeriodicExplosion:
+		Weapon: TPWRZap
+		RequiresCondition: overcharge && volatile
+	SoundOnDamageTransition:
+		DamagedSounds: bpowdiea.aud
+		DestroyedSounds: bpowdieb.aud
+	GrantPeriodicCondition@BOTHELPER:
+		Condition: overcharge
+		CooldownDuration: 300
+		ActiveDuration: 900
+		StartsGranted: false
+		ShowSelectionBar: false
+		ActiveColor: 0080FF60
+		CooldownColor: FFFF0080
+		RequiresCondition: (owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
 
 STEK:
 	Inherits: ^ScienceBuilding
@@ -2048,7 +2114,7 @@ BARR:
 	Tooltip:
 		Name: Soviet Barracks
 	Building:
-		Footprint: xx xx ==
+		Footprint: xx xx ++
 		Dimensions: 2,3
 		LocalCenterOffset: 0,-512,0
 	Health:
@@ -2158,7 +2224,6 @@ KENN:
 	WithBuildingBib:
 		HasMinibib: True
 	RallyPoint:
-		Offset: 0,2
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -280,400,0
@@ -2209,7 +2274,7 @@ TENT:
 	Tooltip:
 		Name: Allied Barracks
 	Building:
-		Footprint: xx xx ==
+		Footprint: xx xx ++
 		Dimensions: 2,3
 		LocalCenterOffset: 0,-512,0
 	Health:
@@ -2314,7 +2379,7 @@ FIX:
 	Tooltip:
 		Name: Service Depot
 	Building:
-		Footprint: _=_ xxx _=_
+		Footprint: _+_ +++ _+_
 		Dimensions: 3,3
 	Selectable:
 		Bounds: 68,34,0,3
@@ -2335,7 +2400,7 @@ FIX:
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	Power:
@@ -2355,7 +2420,7 @@ SBAG:
 		Queue: Defense
 		BuildPaletteOrder: 10
 		Prerequisites: ~structures.sandbag, ~techlevel.low
-		Description: Stops infantry and light vehicles.\nCan be crushed by tanks.
+		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -2379,7 +2444,7 @@ FENC:
 		Queue: Defense
 		BuildPaletteOrder: 20
 		Prerequisites: fact, ~structures.soviet, ~techlevel.low
-		Description: Stops infantry and light vehicles.\nCan be crushed by tanks.
+		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -2403,7 +2468,7 @@ BRIK:
 		Queue: Defense
 		BuildPaletteOrder: 30
 		Prerequisites: anypower, ~techlevel.medium
-		Description: Stop units and blocks enemy fire.
+		Description: Stops units and blocks enemy fire.
 	Valued:
 		Cost: 200
 	CustomSellValue:
@@ -2433,7 +2498,7 @@ CHAIN:
 		Queue: Defense
 		BuildPaletteOrder: 20
 		Prerequisites: afac, ~structures.nod, ~techlevel.low
-		Description: Stops infantry and light vehicles.\nCan be crushed by tanks.
+		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -2593,7 +2658,7 @@ PYLE:
 	Tooltip:
 		Name: GDI Barracks
 	Building:
-		Footprint: xx xx ==
+		Footprint: xx xx ++
 		Dimensions: 2,3
 		LocalCenterOffset: 0,-512,0
 	Health:
@@ -2697,7 +2762,7 @@ HAND:
 	Tooltip:
 		Name: Hand of Nod
 	Building:
-		Footprint: xx xx ==
+		Footprint: xx xx ++
 		Dimensions: 2,3
 		LocalCenterOffset: 0,-512,0
 	Health:
@@ -2784,9 +2849,11 @@ HAND:
 		Condition: nodupgbuilt
 		Prerequisites: bio.nod
 
-AWEP:
+WEAP.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^3x2Shape
+	RenderSprites:
+		Image: awep
 	Selectable:
 		Bounds: 72,48
 	HitShape:
@@ -2797,7 +2864,7 @@ AWEP:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
-		Prerequisites: proc2, ~structures.awep, ~structures.td, ~techlevel.low
+		Prerequisites: proc.td, ~structures.weap.td, ~structures.td, ~techlevel.low
 		IconPalette: chrometd
 		Description: Produces vehicles.
 		BuildDurationModifier: 25
@@ -2806,7 +2873,7 @@ AWEP:
 	Tooltip:
 		Name: Weapons Factory
 	Building:
-		Footprint: xxx xxx ===
+		Footprint: xxx xxx +++
 		Dimensions: 3,3
 		LocalCenterOffset: 0,-512,0
 	Health:
@@ -3002,8 +3069,10 @@ AWEP:
 		Condition: gdiupgbuilt
 		Prerequisites: miss.gdi
 
-ASTRIP:
+AIRS:
 	Inherits: ^BuildingTD
+	RenderSprites:
+		Image: astrip
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,-512,256, 0,-1451,384, 0,512,128, 0,1536,85
 		Type: Rectangle
@@ -3012,7 +3081,7 @@ ASTRIP:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
-		Prerequisites: proc2, ~structures.nod, ~!structures.legion, ~techlevel.low
+		Prerequisites: proc.td, ~structures.nod, ~!structures.legion, ~techlevel.low
 		IconPalette: chrometd
 		Description: Provides a dropzone\nfor vehicle reinforcements
 		BuildDurationModifier: 25
@@ -3021,7 +3090,7 @@ ASTRIP:
 	Tooltip:
 		Name: Airstrip
 	Building:
-		Footprint: XXXX xxxx ====
+		Footprint: XXX+ xxx+ ++++
 		Dimensions: 4,3
 		LocalCenterOffset: 0,-512,0
 	Health:
@@ -3035,7 +3104,6 @@ ASTRIP:
 		Sequence: idle-dish
 		RequiresCondition: !build-incomplete
 	RallyPoint:
-		Offset: 4,2
 	Exit@1:
 		SpawnOffset: -1024,0,0
 		ExitCell: 3,1
@@ -3184,7 +3252,7 @@ ASTRIP:
 		OrderName: nodairdrop
 		SquadSize: 3
 		UnitType: c17
-		Prerequisites: astrip
+		Prerequisites: airs
 		Icon: airdropicon
 		ChargeInterval: 13500
 		Description: Air Drop
@@ -3303,7 +3371,7 @@ NUK2:
 		BuildPaletteOrder: 110
 		Prerequisites: hq, ~structures.td, ~techlevel.low
 		IconPalette: chrometd
-		Description: Provides power for other structures.
+		Description: Provides double the power of\na standard Nuclear Power Plant.
 		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
@@ -3373,11 +3441,25 @@ AFAC:
 		Name: Construction Yard
 	BaseBuilding:
 	Transforms:
-		RequiresCondition: factundeploy && !build-incomplete
-		PauseOnCondition: chrono-vortex || being-captured || being-demolished
-		IntoActor: amcv
+		RequiresCondition: factundeploy
+		PauseOnCondition: chrono-vortex || being-captured || being-demolished || build-incomplete
+		IntoActor: mcv
 		Offset: 1,1
 		Facing: 96
+	TransformsIntoMobile:
+		RequiresCondition: factundeploy
+		Locomotor: heavywheeled
+		RequiresForceMove: true
+	TransformsIntoPassenger:
+		RequiresCondition: factundeploy
+		CargoType: Vehicle
+		RequiresForceMove: true
+	TransformsIntoRepairable:
+		RequiresCondition: factundeploy
+		RepairActors: fix
+		RequiresForceMove: true
+	TransformsIntoTransforms:
+		RequiresCondition: factundeploy && build-incomplete
 	Sellable:
 		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !being-demolished
 	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
@@ -3410,9 +3492,9 @@ AFAC:
 	ProvidesPrerequisite@legion:
 		Factions: legion
 		Prerequisite: structures.legion
-	ProvidesPrerequisite@AWEPFAC:
+	ProvidesPrerequisite@weap.tdFAC:
 		Factions: gdi, talon, zocom, eagle, legion
-		Prerequisite: structures.awep
+		Prerequisite: structures.weap.td
 	ProvidesPrerequisite@sandbag:
 		Factions: gdi, talon, zocom, eagle
 		Prerequisite: structures.sandbag
@@ -3456,7 +3538,7 @@ NSAM:
 		Queue: Defense
 		BuildPaletteOrder: 100
 		Prerequisites: hq, ~structures.nod, ~techlevel.medium
-		Description: Anti-Aircraft base defense.\n  Strong vs Aircraft\n  Cannot target Ground units.
+		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Cannot target Ground Units.
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -3476,6 +3558,7 @@ NSAM:
 		RealignDelay: -1
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
 	AttackPopupTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable
@@ -3505,7 +3588,7 @@ GTWR:
 		BuildPaletteOrder: 50
 		Prerequisites: pyle, ~structures.gdi, ~techlevel.low
 		IconPalette: chrometd
-		Description: Basic defensive structure.\n  Strong vs Infantry\n  Weak vs Tanks
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -3518,13 +3601,15 @@ GTWR:
 	RevealsShroud:
 		Range: 7c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Armament:
 		Weapon: gtchaingun
 		LocalOffset: 256,0,256
 		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
+		PauseOnCondition: empdisable || being-warped
 	AutoTarget:
 	BodyOrientation:
 		QuantizedFacings: 8
@@ -3534,7 +3619,6 @@ GTWR:
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
-	-SpawnActorsOnSell:
 
 ATWR:
 	Inherits: ^DefenseTD
@@ -3543,9 +3627,9 @@ ATWR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
-		Prerequisites: hq, ~structures.gdi, ~techlevel.medium
+		Prerequisites: hq, ~structures.gdi, ~!structures.zocom, ~techlevel.high
 		IconPalette: chrometd
-		Description: Ground defensive structure.\n  Strong vs Tanks, Infantry\n  Weak vs Aircraft
+		Description: Advanced base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -3560,7 +3644,7 @@ ATWR:
 	RevealsShroud:
 		Range: 8c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Turreted:
 		TurnSpeed: 255
 		Offset: 128,128,384
@@ -3568,10 +3652,9 @@ ATWR:
 		Weapon: StingerGTWR
 		LocalOffset: 256,128,0, 256,-128,0
 		LocalYaw: -100,100
-		PauseOnCondition: disabled || empdisable
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable
+		PauseOnCondition: disabled || empdisable || being-warped
 	BodyOrientation:
 		QuantizedFacings: 8
 	RenderRangeCircle:
@@ -3579,7 +3662,6 @@ ATWR:
 	Power:
 		Amount: -50
 		RequiresCondition: !being-warped
-	-SpawnActorsOnSell:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !disabled && !being-warped
@@ -3606,6 +3688,54 @@ ATWR:
 		ResetOnFire: True
 		PauseOnCondition: disabled || empdisable
 
+STWR:
+	Inherits: ^Defense
+	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits@AUTOTARGET: ^AutoTargetGround
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: hq, ~structures.zocom, ~techlevel.high
+		Description: Advanced base defense that emits devastating sonic shockwaves.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Sonic Tower
+	Building:
+	Health:
+		HP: 55000
+	Armor:
+		Type: Concrete
+	RevealsShroud:
+		Range: 8c0
+	WithBuildingBib:
+		HasMinibib: true
+	Turreted:
+		TurnSpeed: 5
+		InitialFacing: 48
+	-WithSpriteBody:
+	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
+	Armament:
+		Weapon: SonicPulse
+		PauseOnCondition: empdisable && being-warped
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+	WithMuzzleOverlay:
+	RenderRangeCircle:
+	Power:
+		Amount: -80
+		RequiresCondition: !being-warped
+	BodyOrientation:
+		UseClassicFacingFudge: True
+	DetectCloaked:
+		Range: 6c0
+		RequiresCondition: !disabled && !being-warped
+	Selectable:
+		Bounds: 24,24
+		DecorationBounds: 24,40,0,-8
+
 OBLI:
 	Inherits: ^DefenseTD
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
@@ -3615,7 +3745,7 @@ OBLI:
 		BuildPaletteOrder: 80
 		Prerequisites: hq, ~structures.nod, ~techlevel.high
 		IconPalette: chrometd
-		Description: Experimental Base defence.\nRequires power to operate.\nCan detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+		Description: Advanced experimental base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -3634,7 +3764,7 @@ OBLI:
 	RevealsShroud:
 		Range: 8c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	-WithSpriteBody:
 	WithChargeSpriteBody:
 		Sequence: active
@@ -3644,16 +3774,14 @@ OBLI:
 	Armament:
 		Weapon: Laser
 		LocalOffset: 0,-85,1280
-		PauseOnCondition: disabled || empdisable
 		RequiresCondition: !marked
 	Armament@Marked:
 		Weapon: Laser.Adv
 		LocalOffset: 0,-85,1280
-		PauseOnCondition: disabled || empdisable
 		RequiresCondition: marked
 	AttackCharges:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable
+		PauseOnCondition: disabled || empdisable || being-warped
 		ChargeLevel: 50
 		ChargingCondition: charging
 	AmbientSound:
@@ -3663,7 +3791,6 @@ OBLI:
 	Power:
 		Amount: -90
 		RequiresCondition: !being-warped
-	-SpawnActorsOnSell:
 	ProvidesPrerequisite@buildingname:
 	DetectCloaked:
 		Range: 6c0
@@ -3708,7 +3835,7 @@ HQ:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
-		Prerequisites: proc2, ~structures.td, ~techlevel.medium
+		Prerequisites: proc.td, ~structures.td, ~techlevel.medium
 		IconPalette: chrometd
 		Description: Provides an overview of the battlefield.\n  Requires power to operate.
 		BuildDurationModifier: 25
@@ -3789,8 +3916,8 @@ HQ:
 		SelectTargetSpeechNotification: SelectTarget
 		DisplayRadarPing: True
 		ChargeInterval: 4500
-		DropPodType: dpod2
-		DropPodType2: dpod1
+		DropPodType: pod2
+		DropPodType2: pod1
 		DropItems: N3R1,N1R1,N1R1,N2R1,N2R1,N3R1,N3R1
 		PodScatter: 3
 		SpawnSounds: meteor1.aud, meteor2.aud
@@ -3875,7 +4002,7 @@ EYE:
 		Prerequisites: gtek, ~structures.gdi, ~techlevel.superw
 		IconPalette: chrometd
 		BuildLimit: 1
-		Description: Provides radar and Orbital Ion Cannon support power.\n  Requires power to operate.\n  Special Ability: Ion Cannon\nMaximum 1 can be built
+		Description: Provides radar and Orbital Ion Cannon support power.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Ion Cannon
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -3988,7 +4115,7 @@ REP:
 	Tooltip:
 		Name: Repair Facility
 	Building:
-		Footprint: _x_ xxx _x_
+		Footprint: _+_ +++ _+_
 		Dimensions: 3,3
 	Selectable:
 		Bounds: 68,34,0,3
@@ -4001,7 +4128,7 @@ REP:
 	RevealsShroud:
 		Range: 5c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Reservable:
 	RallyPoint:
 	RepairsUnits:
@@ -4020,9 +4147,11 @@ REP:
 	ProvidesPrerequisite@repair:
 		Prerequisite: repair
 
-HPAD2:
+HPAD.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
+	RenderSprites:
+		Image: hpad2
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 768,-512,0, 768,512,0, -281,-512,0, -630,512,0
@@ -4164,7 +4293,7 @@ HPAD2:
 		Condition: gdiupgbuilt
 		Prerequisites: miss.gdi
 
-PROC2:
+PROC.TD:
 	Inherits: ^BuildingTD
 	Inherits@2: ^BotIncome
 	HitShape:
@@ -4176,6 +4305,7 @@ PROC2:
 			TopLeft: -512, -1450
 			BottomRight: 896, -512
 	RenderSprites:
+		Image: proc2
 		FactionImages:
 			nod: nodproc
 			blackh: nodproc
@@ -4230,7 +4360,7 @@ PROC2:
 		UseDeathTypeSuffix: false
 		DeathSequencePalette: overlayplayertd
 	FreeActor:
-		Actor: HARV2
+		Actor: HAR2
 		SpawnOffset: 1,2
 		Facing: 64
 	WithResourceLevelOverlay:
@@ -4242,16 +4372,18 @@ PROC2:
 	SelectionDecorations:
 	CashHackable:
 
-SILO2:
+SILO.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x1Shape
+	RenderSprites:
+		Image: silo2
 	Valued:
 		Cost: 150
 	Tooltip:
 		Name: Silo
 	Buildable:
 		BuildPaletteOrder: 35
-		Prerequisites: proc2, ~structures.td, ~techlevel.infonly
+		Prerequisites: proc.td, ~structures.td, ~techlevel.infonly
 		Queue: Defense
 		IconPalette: chrometd
 		Description: Stores processed Tiberium, Ore and Gems
@@ -4266,7 +4398,7 @@ SILO2:
 	RevealsShroud:
 		Range: 4c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
 		RequiresCondition: !being-warped
@@ -4289,7 +4421,7 @@ SILO2:
 		Weapon: SmallBuildingExplode
 		EmptyWeapon: SmallBuildingExplode
 
-AFLD.gdi:
+AFLD.GDI:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
 	RenderSprites:
@@ -4444,6 +4576,91 @@ AFLD.gdi:
 		Condition: gdiupgbuilt
 		Prerequisites: miss.gdi
 
+AFLD.allies:
+	Inherits: ^Building
+	Inherits@shape: ^3x2Shape
+	RenderSprites:
+		Image: afldgdi
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 130
+		Prerequisites: dome, ~structures.allies, ~techlevel.high
+		Description: Produces and reloads aircraft.\n
+		BuildDurationModifier: 25
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Airfield
+	Building:
+		Footprint: xxx xxx
+		Dimensions: 3,2
+	Health:
+		HP: 100000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 5c0
+	Exit@1:
+		RequiresCondition: !being-captured
+		ExitCell: 1,1
+		Facing: 192
+	RallyPoint:
+	Production:
+		Produces: Aircraft, Plane
+		PauseOnCondition: forceshield || invulnerability || being-warped
+	Reservable:
+	ProductionBar:
+		ProductionType: Aircraft
+	SupportPowerChargeBar:
+	PrimaryBuilding:
+		PrimaryCondition: primary
+	Power:
+		Amount: -20
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@allies:
+		Factions: allies, england, france, germany
+		Prerequisite: aircraft.allies
+	ProvidesPrerequisite@alliedstructure:
+		RequiresPrerequisites: structures.allies
+		Prerequisite: aircraft.allies
+	ProvidesPrerequisite@england:
+		Factions: england
+		Prerequisite: aircraft.england
+	ProvidesPrerequisite@englishstructure:
+		RequiresPrerequisites: structures.england
+		Prerequisite: aircraft.england
+	ProvidesPrerequisite@france:
+		Factions: france
+		Prerequisite: aircraft.france
+	ProvidesPrerequisite@frenchstructure:
+		RequiresPrerequisites: structures.france
+		Prerequisite: aircraft.france
+	ProvidesPrerequisite@germany:
+		Factions: germany
+		Prerequisite: aircraft.germany
+	ProvidesPrerequisite@germanstructure:
+		RequiresPrerequisites: structures.germany
+		Prerequisite: aircraft.germany
+	ProvidesPrerequisite@buildingname:
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
+		RequiresCondition: !being-warped
+	WithDecoration@primary:
+		RequiresSelection: true
+		Image: pips
+		Sequence: tag-primary
+		ReferencePoint: Top
+		ZOffset: 256
+		RequiresCondition: primary
+	WithResupplyAnimation:
+		RequiresCondition: !build-incomplete
+	InfiltrateForSupportPower:
+		Types: SpyInfiltrate
+		Proxy: powerproxy.airstrike
+
 GTEK:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
@@ -4454,10 +4671,10 @@ GTEK:
 		Queue: Building
 		BuildPaletteOrder: 150
 		IconPalette: chrometd
-		Prerequisites: awep, hq, ~structures.gdi, ~techlevel.high
+		Prerequisites: weap.td, hq, ~structures.gdi, ~techlevel.high
 		Description: Provides GDI advanced technologies.
 	Valued:
-		Cost: 2500
+		Cost: 1500
 	Tooltip:
 		Name: GDI Tech Center
 	Building:
@@ -4552,9 +4769,9 @@ TMPL:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 140
-		Prerequisites: hq, ~structures.nod
+		Prerequisites: airs, hq, ~structures.nod
 		IconPalette: chrometd
-		Description: Provides Nod advanced technologies.\nRequires power to operate.\n  Special Ability: Neutron Bomb
+		Description: Provides Nod advanced technologies.\n  Requires power to operate.\n  Special Ability: Cluster Missile
 	Building:
 		Footprint: xxx xxx ===
 		Dimensions: 3,3
@@ -4669,7 +4886,7 @@ PRIS:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
-		Prerequisites: radar, ~structures.allies, ~!structures.france, ~techlevel.high
+		Prerequisites: radar, ~structures.allies, ~techlevel.high
 		Description: Experimental base defense.\nRequires power to operate.\nCan detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1300
@@ -4687,7 +4904,7 @@ PRIS:
 	RevealsShroud:
 		Range: 8c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	WithSpriteBody:
 		PauseOnCondition: disabled || empdisable || being-warped
 		RequiresCondition: !charging
@@ -4967,7 +5184,7 @@ HTUR:
 		Queue: Defense
 		BuildPaletteOrder: 100
 		Prerequisites: radar, ~structures.france, ~techlevel.high
-		Description: Artillery base defence.\n  Strong vs Ground units\n  Cannot target Air targets.
+		Description: Artillery base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Ground Units\n  Weak vs Aircraft
 	Valued:
 		Cost: 1650
 	Tooltip:
@@ -4987,6 +5204,7 @@ HTUR:
 		RealignDelay: -1
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
 	AttackTurreted:
 		PauseOnCondition: disabled || empdisable || being-warped
 	Armament:
@@ -5012,7 +5230,7 @@ HTUR:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Selectable:
 		Bounds: 48,48
 	DetectCloaked:
@@ -5020,50 +5238,27 @@ HTUR:
 		RequiresCondition: !disabled && !being-warped
 	-ProductionCostMultiplier@FranceBonus:
 
-GUN2:
-	Inherits: ^DefenseTD
-	Inherits@AUTOTARGET: ^AutoTargetGround
-	Valued:
-		Cost: 800
-	Tooltip:
-		Name: Turret
+GUN.Nod:
+	Inherits: GUN
+	RenderSprites:
+		Image: gun2
+		PlayerPalette: overlayplayertd
+	ActorPreviewPlaceBuildingPreview:
+		OverridePalette: placebuildingtd
 	Buildable:
 		BuildPaletteOrder: 70
 		Prerequisites: hand, ~structures.nod, ~techlevel.medium
 		Queue: Defense
 		IconPalette: chrometd
-		Description: Basic Anti-Tank base defense.\n  Strong vs Tanks, vehicles\n  Weak vs Infantry
-	Building:
-	Health:
-		HP: 40000
-	Armor:
-		Type: Concrete
-	RevealsShroud:
-		Range: 7c0
-	WithBuildingBib:
-		HasMinibib: Yes
-	Turreted:
-		TurnSpeed: 12
-		InitialFacing: 56
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
+		Description: Basic anti-tank base defense.\n  Can detect cloaked units.\n  Strong vs Tanks, Vehicles\n  Weak vs Infantry
 	Armament:
 		Weapon: TurretGunTD
 		LocalOffset: 512,0,112
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-	AttackTurreted:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: empdisable || being-warped
-	WithMuzzleOverlay:
-	Power:
-		Amount: -40
-		RequiresCondition: !being-warped
-	BodyOrientation:
-		UseClassicFacingFudge: True
 
 LTUR:
-	Inherits: GUN2
+	Inherits: GUN.Nod
 	RenderSprites:
 		Image: ltur
 	Valued:
@@ -5075,10 +5270,11 @@ LTUR:
 		Prerequisites: hand, ~structures.nod, ~techlevel.low
 		Queue: Defense
 		IconPalette: chrometd
-		Description: Anti-Infantry base defense.\nCan detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Turreted:
 		TurnSpeed: 12
 		InitialFacing: 34
+		PauseOnCondition: empdisable || being-warped
 	GrantConditionOnFaction@marked:
 		Condition: marked
 		Factions: marked
@@ -5105,7 +5301,7 @@ TTUR:
 		BuildPaletteOrder: 60
 		Prerequisites: barr, ~structures.iraq, ~techlevel.low
 		IconPalette: chrometd
-		Description: Anti-Infantry base defense.\nCan detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 650
 	Tooltip:
@@ -5118,7 +5314,7 @@ TTUR:
 	RevealsShroud:
 		Range: 6c0
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Turreted:
 		TurnSpeed: 255
 		Offset: 0,0,112
@@ -5149,13 +5345,13 @@ SGEN:
 		Prerequisites: tmpl, ~structures.nod, ~techlevel.superw
 		BuildLimit: 1
 		IconPalette: chrometd
-		Description: Makes a group of units invisible\nfor a short time.\nRequires power to operate.\n  Special Ability: Tiberium Stealth\nMaximum 1 can be built.
+		Description: Makes a group of units invisible for a short time.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Tiberium Stealth
 	Valued:
 		Cost: 1500
 	Tooltip:
 		Name: Stealth Generator
 	Building:
-		Footprint: xxx xx=
+		Footprint: xxx xx+
 		Dimensions: 3,2
 		LocalCenterOffset: 0,0,0
 	SelectionDecorations:
@@ -5214,7 +5410,7 @@ CRAM:
 		BuildPaletteOrder: 90
 		Prerequisites: hq, ~structures.gdi, ~techlevel.medium
 		IconPalette: chrometd
-		Description: Anti-Air base defense.\nRequires power to operate.\nCan detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground units
+		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -5259,7 +5455,7 @@ LASP:
 		BuildPaletteOrder: 30
 		Prerequisites: ~structures.nod, nuk2, ~techlevel.medium
 		IconPalette: chrometd
-		Description: Stops infantry and blocks enemy fire.\nCan NOT be crushed by tanks.
+		Description: Stops infantry and blocks enemy fire.\n   Cannot be crushed by tanks.
 	Valued:
 		Cost: 200
 	CustomSellValue:
@@ -5372,7 +5568,7 @@ PATR:
 		Prerequisites: gtek, ~structures.gdi, ~techlevel.high
 		BuildLimit: 1
 		IconPalette: chrometd
-		Description: Launches E.M. Pulse Missiles that disable vehicles & structures.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: E.M. Pulse Missile
+		Description: Launches E.M. Pulse Missiles that disable vehicles & structures.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: E.M. Pulse Missile
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -5396,6 +5592,7 @@ PATR:
 		RealignDelay: -1
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
 	AttackTurreted:
 		PauseOnCondition: disabled || empdisable || being-warped
 		RequiresCondition: !build-incomplete && !reloading
@@ -5430,7 +5627,7 @@ PATR:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
 	WithBuildingBib:
-		HasMinibib: Yes
+		HasMinibib: true
 	Selectable:
 		Bounds: 48,48
 	RejectsOrders:
@@ -5452,7 +5649,7 @@ INDP:
 		Queue: Building
 		BuildPaletteOrder: 200
 		Prerequisites: ~structures.soviet, stek, ~techlevel.high
-		Description: Reduces cost of vehicles & aircraft by 25%\nand increases production speed bt 10%\n Can not be Captured.\n Maximum 1 can be built.
+		Description: Reduces cost of vehicles & aircraft by 25%\nand increases production speed bt 10%.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 	Valued:
 		Cost: 2500
@@ -5513,7 +5710,7 @@ OREP:
 		Queue: Building
 		BuildPaletteOrder: 200
 		Prerequisites: ~structures.allies, atek, ~techlevel.high
-		Description: Refines income from ore, gems & tiberium by 25%.\nMaximum 1 can be built.\nCan not be captured.
+		Description: Refines income from ore, gems & tiberium by 25%.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 	-Capturable:
 	-CaptureNotification:
@@ -5541,7 +5738,7 @@ OREP:
 	Sellable:
 		RequiresCondition: !build-incomplete && !being-demolished && !being-warped
 
-MISS.gdi:
+MISS.GDI:
 	Inherits: ^ScienceBuilding
 	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^3x2Shape
@@ -5566,7 +5763,7 @@ MISS.gdi:
 		Queue: Building
 		BuildPaletteOrder: 200
 		Prerequisites: ~structures.gdi, gtek, ~techlevel.high
-		Description: Allows the construction of advanced weaponry &\nequips all units with composite armor,\nreducing damage taken by 10%.\nMaximum 1 can be built.\nCan not be captured.
+		Description: Allows the construction of advanced weaponry &\nequips all units with composite armor,\nreducing damage taken by 10%.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 	-Capturable:
 	-CaptureNotification:
@@ -5596,7 +5793,7 @@ MISS.gdi:
 	Sellable:
 		RequiresCondition: !build-incomplete && !being-demolished && !being-warped
 
-BIO.nod:
+BIO.Nod:
 	Inherits: ^ScienceBuilding
 	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^2x2Shape
@@ -5622,7 +5819,7 @@ BIO.nod:
 		BuildPaletteOrder: 200
 		IconPalette: chrometd
 		Prerequisites: ~structures.nod, tmpl, ~techlevel.high
-		Description: Replaces basic infantry with cyborgs.\nMaximum 1 can be built.\nCan not be captured.
+		Description: Replaces basic infantry with cyborgs.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 	-Capturable:
 	-CaptureNotification:
@@ -5649,10 +5846,12 @@ BIO.nod:
 	Sellable:
 		RequiresCondition: !build-incomplete && !being-demolished && !being-warped
 
-NMSLO:
+MSLO.Nod:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x1Shape
+	RenderSprites:
+		Image: nmslo
 	Selectable:
 		Bounds: 48,24,0,12
 	Valued:
@@ -5665,7 +5864,7 @@ NMSLO:
 		IconPalette: chrometd
 		Prerequisites: tmpl, ~techlevel.unrestricted, ~techlevel.superw, ~structures.nod
 		BuildLimit: 1
-		Description: Provides a chemical missile.\nRequires power to operate.\nMaximum 1 can be built.\n  Special Ability: Chemical Missile
+		Description: Provides a chemical missile.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Chemical Missile
 	Building:
 		Footprint: xx
 		Dimensions: 2,1
@@ -5735,7 +5934,7 @@ WEAT:
 		BuildPaletteOrder: 130
 		Prerequisites: atek, ~structures.allies, ~techlevel.superw
 		BuildLimit: 1
-		Description: Provides Lightning Storm support power.\n  Requires power to operate.\n  Special Ability: Lightning Storm\nMaximum 1 can be built
+		Description: Provides Lightning Storm support power.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Lightning Storm
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -5810,3 +6009,50 @@ WEAT:
 	ProvidesPrerequisite@buildingname:
 	MustBeDestroyed:
 		RequiredForShortGame: false
+
+STWR:
+	Inherits: ^Defense
+	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@AUTOTARGET: ^AutoTargetGround
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: hq, ~structures.zocom, ~techlevel.medium
+		Description: Advanced base defense that emits devastating sonic shockwaves.\nCan detect cloaked units.\n  Strong vs Infatnry, Vehicles\n  Weak vs Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Sonic Tower
+	Building:
+	Health:
+		HP: 50000
+	Armor:
+		Type: Concrete
+	RevealsShroud:
+		Range: 8c0
+	WithBuildingBib:
+		HasMinibib: true
+	Turreted:
+		TurnSpeed: 5
+		InitialFacing: 48
+	-WithSpriteBody:
+	WithEmbeddedTurretSpriteBody:
+	Armament:
+		Weapon: SonicPulse
+		PauseOnCondition: empdisable && being-warped
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: empdisable && being-warped
+	WithMuzzleOverlay:
+	RenderRangeCircle:
+	Power:
+		Amount: -80
+		RequiresCondition: !being-warped
+	BodyOrientation:
+		UseClassicFacingFudge: True
+	DetectCloaked:
+		Range: 6c0
+		RequiresCondition: !disabled && !being-warped
+	Selectable:
+		Bounds: 24,24
+		DecorationBounds: 24,40,0,-8
