@@ -221,7 +221,7 @@ SPEN:
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 	RenderDetectionCircle:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
@@ -357,7 +357,7 @@ SYRD:
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 	RenderDetectionCircle:
 	ProvidesPrerequisite@allies:
 		Factions: allies, england, france, germany
@@ -648,7 +648,7 @@ TSLA:
 	ProvidesPrerequisite@buildingname:
 	DetectCloaked:
 		Range: 6c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 	ProductionCostMultiplier@RussiaBonus:
 		Multiplier: 90
 		Prerequisites: structures.russia
@@ -724,7 +724,6 @@ AGUN:
 		Weapon: ZSU-23
 		LocalOffset: 520,100,450, 520,-150,450
 		MuzzleSequence: muzzle
-		PauseOnCondition: disabled || empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -738,7 +737,7 @@ AGUN:
 		UseClassicFacingFudge: True
 	DetectCloaked:
 		Range: 8c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 
 DOME:
 	Inherits: ^Building
@@ -876,7 +875,6 @@ PBOX:
 		Weapon: vulcan
 		LocalOffset: 456,0,86
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: empdisable || being-warped
@@ -928,7 +926,6 @@ HBOX:
 		Weapon: vulcan
 		LocalOffset: 456,0,86
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: empdisable || being-warped
@@ -970,7 +967,6 @@ GUN:
 		Weapon: TurretGun
 		LocalOffset: 512,0,112
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: empdisable || being-warped
@@ -1008,7 +1004,6 @@ FTUR:
 	Armament:
 		Weapon: FireballLauncher
 		LocalOffset: 512,0,0
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !build-incomplete
@@ -1064,10 +1059,9 @@ SAM:
 		Weapon: Nike
 		LocalOffset: 0,0,320
 		MuzzleSequence: muzzle
-		PauseOnCondition: disabled || empdisable
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable
+		PauseOnCondition: disabled || empdisable || being-warped
 	WithMuzzleOverlay:
 	RenderRangeCircle:
 		RangeCircleType: aa
@@ -1078,7 +1072,7 @@ SAM:
 		UseClassicFacingFudge: True
 	DetectCloaked:
 		Range: 8c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 
 ATEK:
 	Inherits: ^ScienceBuilding
@@ -1401,7 +1395,7 @@ FACT:
 	BaseBuilding:
 	Transforms:
 		RequiresCondition: factundeploy
-		PauseOnCondition: chrono-vortex || being-captured || being-demolished || build-incomplete
+		PauseOnCondition: chrono-vortex || being-captured || being-demolished || build-incomplete || being-warped
 		IntoActor: mcv
 		Offset: 1,1
 		Facing: 96
@@ -1420,7 +1414,7 @@ FACT:
 	TransformsIntoTransforms:
 		RequiresCondition: factundeploy && build-incomplete
 	Sellable:
-		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !being-demolished
+		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !being-demolished && !being-warped
 	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
 		Condition: factundeploy
 		Prerequisites: global-factundeploy
@@ -2587,6 +2581,14 @@ VEHICLES.ANY:
 	Buildable:
 		Description: Vehicle Production
 
+VEHICLES.NOD:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		Name: Vehicle Production
+	Buildable:
+		Description: Vehicle Production
+
 TECHCENTER:
 	AlwaysVisible:
 	Interactable:
@@ -3109,7 +3111,7 @@ AIRS:
 		ExitCell: 3,1
 	ProductionAirdrop:
 		Produces: Vehicle
-		PauseOnCondition: forceshield
+		PauseOnCondition: forceshield || invulnerability || being-warped
 		ActorType: c17.cargo
 		ReadyAudio: ReinforcementsArrived
 	ProvidesPrerequisite@any:
@@ -3442,8 +3444,8 @@ AFAC:
 	BaseBuilding:
 	Transforms:
 		RequiresCondition: factundeploy
-		PauseOnCondition: chrono-vortex || being-captured || being-demolished || build-incomplete
-		IntoActor: mcv
+		PauseOnCondition: chrono-vortex || being-captured || being-demolished || build-incomplete || being-warped
+		IntoActor: amcv
 		Offset: 1,1
 		Facing: 96
 	TransformsIntoMobile:
@@ -3461,7 +3463,7 @@ AFAC:
 	TransformsIntoTransforms:
 		RequiresCondition: factundeploy && build-incomplete
 	Sellable:
-		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !being-demolished
+		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !being-demolished && !being-warped
 	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
 		Condition: factundeploy
 		Prerequisites: global-factundeploy
@@ -3561,11 +3563,10 @@ NSAM:
 		PauseOnCondition: disabled || empdisable || being-warped
 	AttackPopupTurreted:
 		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable
+		PauseOnCondition: disabled || empdisable || being-warped
 	Armament:
 		Weapon: Nike
 		MuzzleSequence: muzzle
-		PauseOnCondition: disabled || empdisable
 	WithMuzzleOverlay:
 	Power:
 		Amount: -40
@@ -3578,7 +3579,7 @@ NSAM:
 		SequencePalette: placebuildingtd
 	DetectCloaked:
 		Range: 8c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 
 GTWR:
 	Inherits: ^DefenseTD
@@ -3606,7 +3607,6 @@ GTWR:
 		Weapon: gtchaingun
 		LocalOffset: 256,0,256
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: empdisable || being-warped
@@ -3731,7 +3731,7 @@ STWR:
 		UseClassicFacingFudge: True
 	DetectCloaked:
 		Range: 6c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 	Selectable:
 		Bounds: 24,24
 		DecorationBounds: 24,40,0,-8
@@ -4769,7 +4769,7 @@ TMPL:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 140
-		Prerequisites: hq, ~structures.nod
+		Prerequisites: vehicles.nod, hq, ~structures.nod, ~techlevel.high
 		IconPalette: chrometd
 		Description: Provides Nod advanced technologies.\n  Requires power to operate.\n  Special Ability: Cluster Missile
 	Building:
@@ -4915,7 +4915,6 @@ PRIS:
 	Armament:
 		Weapon: PrisLaser
 		LocalOffset: 0,-85,956
-		PauseOnCondition: disabled || empdisable || being-warped
 	AttackCharges:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -5042,7 +5041,7 @@ SPEN.nod:
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 	RenderDetectionCircle:
 	HitShape:
 		Type: Rectangle
@@ -5153,7 +5152,7 @@ SYRD.gdi:
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 	RenderDetectionCircle:
 	HitShape:
 		TargetableOffsets: 768,0,0, 768,-1024,0, 768,1024,0
@@ -5211,7 +5210,6 @@ HTUR:
 		Weapon: 203mm
 		MuzzleSequence: muzzle
 		LocalOffset: 1000,200,60, 1000,0,60, 1000,-200,60
-		PauseOnCondition: disabled || empdisable || being-warped
 	WithMuzzleOverlay:
 	GrantConditionOnPowerState@LOWPOWER:
 		Condition: lowpower
@@ -5235,7 +5233,7 @@ HTUR:
 		Bounds: 48,48
 	DetectCloaked:
 		Range: 6c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 	-ProductionCostMultiplier@FranceBonus:
 
 GUN.Nod:
@@ -5255,7 +5253,6 @@ GUN.Nod:
 		Weapon: TurretGunTD
 		LocalOffset: 512,0,112
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped
 
 LTUR:
 	Inherits: GUN.Nod
@@ -5282,12 +5279,10 @@ LTUR:
 	Armament:
 		Weapon: LaserTur
 		LocalOffset: 512,0,172
-		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !marked
 	Armament@Marked:
 		Weapon: LaserTur.Adv
 		LocalOffset: 512,0,172
-		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: marked
 	Power:
 		Amount: -25
@@ -5321,7 +5316,6 @@ TTUR:
 	Armament:
 		Weapon: ChemballLauncher
 		LocalOffset: 512,0,0
-		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !build-incomplete
@@ -5420,7 +5414,7 @@ CRAM:
 		Weapon: Gatt.0
 		LocalOffset: 520,0,450
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 0 && !being-warped
+		RequiresCondition: gattling == 0
 	Armament@GAT1:
 		Weapon: Gatt.1
 		LocalOffset: 520,0,450
@@ -5445,7 +5439,7 @@ CRAM:
 		RevokeAll: True
 	DetectCloaked:
 		Range: 8c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 
 LASP:
 	Inherits: ^Building
