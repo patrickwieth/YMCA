@@ -6056,3 +6056,64 @@ STWR:
 	Selectable:
 		Bounds: 24,24
 		DecorationBounds: 24,40,0,-8
+
+PLDT:
+	Inherits: ^DefenseTD
+	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@AUTOTARGET: ^AutoTargetGround
+	RenderSprites:
+		Scale: 0.5
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: hq, prerequisite.point_defense_turret, ~structures.gdi, ~techlevel.high
+		IconPalette: chrometd
+		Description: Shoots down bullets and missiles with lazers. PEW PEW
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Point Laser Defense Tower
+	Building:
+		Dimensions: 1,1
+		Footprint: x
+	Health:
+		HP: 60000
+	Armor:
+		Type: Concrete
+	RevealsShroud:
+		Range: 8c0
+	Turreted:
+		TurnSpeed: 255
+		Offset: 128,128,384
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+	BodyOrientation:
+		QuantizedFacings: 8
+	RenderRangeCircle:
+	DrawLineToTarget:
+	Power:
+		Amount: -50
+		RequiresCondition: !being-warped
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: AdvancedPointLaser.gdi
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: !ammo || disabled || empdisable || being-warped
+	PointDefense:
+		Armament: pointdefense
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 4
+		PipType: Yellow
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
+		PauseOnCondition: disabled || empdisable
