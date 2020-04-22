@@ -7,23 +7,7 @@
    information, see COPYING.
 ]]
 
-GPModifier = Map.LobbyOption("gpmodifier")
-
-if GPModifier == "one" then
-	PointsPerRank = { 1, 1, 1, 1, 1 }
-elseif GPModifier == "normal" then
-	PointsPerRank = { 1, 1, 1, 1, 3 }
-elseif GPModifier == "two" then
-	PointsPerRank = { 2, 2, 2, 2, 2 }
-elseif GPModifier == "double" then
-	PointsPerRank = { 2, 2, 2, 2, 6 }
-elseif GPModifier == "three" then
-	PointsPerRank = { 3, 3, 3, 3, 3 }
-elseif GPModifier == "triple" then
-	PointsPerRank = { 3, 3, 3, 3, 9 }
-else
-	PointsPerRank = { 5, 0, 15, 0, 5 }
-end
+PointsPerRank = { 5, 0, 15, 0, 5 }
 
 PointActorExists =
 {
@@ -155,9 +139,7 @@ TickGeneralsPowers = function()
 end
 
 Tick = function()
-	if GPModifier ~= "disabled" then
 		TickGeneralsPowers()
-	end
 end
 
 WorldLoaded = function()
@@ -177,9 +159,7 @@ WorldLoaded = function()
 
 	players = { mp0, mp1, mp2, mp3, mp4, mp5, mp6, mp7, mp8, mp9, mp10, mp11 }
 
-	if GPModifier ~= "disabled" then
-		for _,player in pairs(players) do
-			ReducePoints(player)
-		end
+	for _,player in pairs(players) do
+		ReducePoints(player)
 	end
 end
