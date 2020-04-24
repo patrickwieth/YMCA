@@ -20,6 +20,8 @@
 		BuildDurationModifier: 100
 		Queue: queue.usa_generals_power, queue.air_gen_generals_power, queue.laser_gen_generals_power, queue.super_gen_generals_power, queue.gla_generals_power, queue.toxin_gen_generals_power, queue.demo_gen_generals_power, queue.stealth_gen_generals_power, queue.prc_generals_power, queue.inf_gen_generals_power, queue.nuke_gen_generals_power, queue.tank_gen_generals_power
 		BuildLimit: 1
+	ProvidesPrerequisite@powername:
+		Prerequisite: prerequisite.point_defense_turret
 	RenderSprites:
 	ProvidesPrerequisite@powername:
 
@@ -33,6 +35,17 @@ generals_power.spy_drone:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points
 		Description: Enables Spy Drone support power from Command Center.
+
+commander_tree.point_defense_turret:
+	Inherits: ^default.generals_power
+	Tooltip:
+		Name: Point Laser Defense Turret
+	Buildable:
+		Queue: queue.usa_generals_power, queue.air_gen_generals_power, queue.laser_gen_generals_power, queue.super_gen_generals_power
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points
+		Description: Enables to build Point Laser Defense systems to shoot down incoming shells and missiles.
 
 hack.cameo_filler.3:
 	Inherits: ^default.cameo_filler
@@ -97,3 +110,6 @@ prerequisite.5_stars:
 		Name: General's Promotion
 	Buildable:
 		Description: General's Promotion
+
+prerequisite.point_defense_turret:
+	Inherits: ^default.generals_power_prerequisite
