@@ -1264,18 +1264,49 @@ LTNK:
 		Prerequisites: vehicles.upgraded
 
 LTNK.Laser:
-	Inherits: LTNK
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
 	RenderSprites:
-	WithDamageOverlay:
-	Cloak@GPSHIDE:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
 		Prerequisites: ~bio.nod, ~vehicles.nod, ~techlevel.low
 		Description: Fast, light tank shooting laser.\n  Strong vs heavy Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious
+	Valued:
+		Cost: 675
 	Tooltip:
 		Name: Laser Light Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 41250
+	Armor:
+		Type: Heavy
+	Mobile:
+		Locomotor: Amphibious
+		Speed: 100
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	Targetable:
+		TargetTypes: Ground, Vehicle
+		RequiresCondition: !onwater && !parachute && !being-warped
+	Targetable@WATER:
+		TargetTypes: Ground, Vehicle, Water, Ship
+		RequiresCondition: onwater && (!parachute && !being-warped)
+	WithFacingSpriteBody:
+		RequiresCondition: !onwater || parachute
+	WithFacingSpriteBody@WATER:
+		Sequence: idle-water
+		Name: body-water
+		RequiresCondition: onwater && !parachute
+	RevealsShroud:
+		Range: 5c0
+	Turreted:
+		TurnSpeed: 14
 	Armament:
 		Weapon: Laser.Tank
 		Recoil: 85
@@ -1283,6 +1314,15 @@ LTNK.Laser:
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped || parachute
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: LTNK.Husk
+		RequiresCondition: !onwater && !being-warped
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
 
 MTNK:
 	Inherits: ^TankTD
