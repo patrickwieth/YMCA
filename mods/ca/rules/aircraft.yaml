@@ -2530,3 +2530,73 @@ VENM:
 		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+Dropship:
+	Inherits: ^Plane
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 50
+		Prerequisites: ~afld.gdi, ~aircraft.gdi, ~techlevel.high
+		Description: Superheavy cargo lifter plane.\nMaximum 1 can be built.\n Special Ability: Supertransport\nTransports up to 15 Infantry or Vehicles.\nDeploys those with a parachute (force fire to unload)\n  Unarmed
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Dropship Transport
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 20000
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	AmmoPool:
+		Ammo: 10
+		Delay: 60
+		PipCount: 0
+	ReloadAmmoPool:
+		Delay: 60
+		Count: -10
+	AttackAircraft:
+		FacingTolerance: 128
+	Armament:
+		Weapon: DropDummy
+	ParaDrop:
+		ChuteSound: chute1.aud
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 3
+		Speed: 156
+		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeOffOnCreation: False
+	Cargo:
+		MaxWeight: 12
+		PipCount: 12
+		Types: Infantry, Vehicle
+	SpawnActorOnDeath:
+		Actor: dropship.Husk
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,0
+		Interval: 2
+	Selectable:
+		DecorationBounds: 50,40,0,2
+	Contrail@1:
+		Offset: -400,-483,0
+	Contrail@2:
+		Offset: -450,-683,-10
+	Contrail@3:
+		Offset: -500,-883,-20
+	Contrail@4:
+		Offset: -400,483,0
+	Contrail@5:
+		Offset: -450,683,-10
+	Contrail@6:
+		Offset: -500,883,-20
+	RenderSprites:
+		Image: dropship
+	Rearmable:
+		RearmActors: afld, afld.gdi, afld.allies
