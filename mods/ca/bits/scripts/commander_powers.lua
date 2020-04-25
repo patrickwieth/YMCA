@@ -138,12 +138,7 @@ TickGeneralsPowers = function()
 	end
 end
 
-Tick = function()
-		TickGeneralsPowers()
-    TickDropship()
-end
-
-WorldLoaded = function()
+WorldLoadedCommanderTree = function()
 	neutral = Player.GetPlayer("Neutral")
 	mp0 = Player.GetPlayer("Multi0")
 	mp1 = Player.GetPlayer("Multi1")
@@ -163,6 +158,4 @@ WorldLoaded = function()
 	for _,player in pairs(players) do
 		ReducePoints(player)
 	end
-
-  WorldLoadedDropship()
 end
