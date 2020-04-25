@@ -1,4 +1,4 @@
-WorldLoaded = function()
+WorldLoadedDropship = function()
 	players=Player.GetPlayers(function(p) return p end)
 	table.remove(players) -- remove 'everyone'
 	table.remove(players,1) -- remove 'neutral'
@@ -7,7 +7,7 @@ end
 
 Transports={}
 
-Tick = function()
+TickDropship = function()
 	local dropships
 	for _,p in pairs(players)
 	do

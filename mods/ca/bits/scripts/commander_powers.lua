@@ -140,6 +140,7 @@ end
 
 Tick = function()
 		TickGeneralsPowers()
+    TickDropship()
 end
 
 WorldLoaded = function()
@@ -162,4 +163,6 @@ WorldLoaded = function()
 	for _,player in pairs(players) do
 		ReducePoints(player)
 	end
+
+  WorldLoadedDropship()
 end
