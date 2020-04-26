@@ -16,19 +16,22 @@ using OpenRA.Mods.Common.Activities;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Traits;
 
-namespace OpenRA.Mods.Yupgi_alert.Traits
+namespace OpenRA.Mods.CA.Traits
 {
 	public enum ActivityType { FlyAttack, Fly, ReturnToBase }
 
 	public class GrantConditionOnActivityInfo : ITraitInfo
 	{
 		[Desc("Activity to grant condition on",
-			"Currently valid activities are `Fly`, `FlyAttack`, `ReturnToBase`.")]
+			"Currently valid activities are `Fly`, `FlyAttack` and `ReturnToBase`.")]
 		public readonly ActivityType Activity = ActivityType.FlyAttack;
 
 		[GrantedConditionReference]
 		[Desc("The condition to grant")]
 		public readonly string Condition = null;
+
+		[Desc("Sound to play when Active.")]
+		public readonly string ActiveSound = null;
 
 		public object Create(ActorInitializer init) { return new GrantConditionOnActivity(init, this); }
 	}
@@ -59,6 +62,9 @@ namespace OpenRA.Mods.Yupgi_alert.Traits
 				return;
 
 			token = manager.GrantCondition(self, cond);
+
+			if (!string.IsNullOrEmpty(info.ActiveSound))
+				Game.Sound.Play(SoundType.World, info.ActiveSound, self.CenterPosition);
 		}
 
 		void RevokeCondition(Actor self)

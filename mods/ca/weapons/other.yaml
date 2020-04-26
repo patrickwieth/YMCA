@@ -1199,46 +1199,41 @@ MicrowaveZap:
 			Light: 10
 			Heavy: 10
 	Warhead@emp: GrantExternalCondition
-		Range: 0c511
-		Duration: 120
+		Range: 0c256
+		Duration: 90
 		Condition: empdisable
 		ValidTargets: Ground, Structure, Vehicle
-	Warhead@microwave: GrantExternalCondition
-		Range: 0c511
-		Duration: 130
-		Condition: 	microwaved
-		ValidTargets: Ground, Vehicle
-	Warhead@Burst: FireCluster
-		Weapon: MWBurst
-		RandomClusterCount: 2
-		ValidTargets: Infantry, Vehicle
-		Dimensions: 3,3
-		Footprint: xxx x_x xxx
+	Warhead@Arc: FireShrapnel
+		Weapon: MicrowaveArc
+		Amount: 1
+		AimChance: 100
+		ValidTargets: Vehicle, Ship
+		ThrowWithoutTarget: false
 
-MicrowaveZapSound:
+MicrowaveArc:
 	Inherits: MicrowaveZap
-	Report: coreup1.aud
-	Projectile: InstantHit
-	Warhead1@Dam: SpreadDamage
-		Damage: 1
-		Versus:
-			None: 0
-			Wood: 0
-			Concrete: 0
-			Light: 0
-			Heavy: 0
-			Brick: 0
-	-Warhead@emp:
-	-Warhead@microwave:
-
-MwBurst:
-	Inherits: MicrowaveZap
+	Range: 1c256
+	Projectile: Bullet
+		Image: mwarc
+		Sequences: idle, idle2, idle3
+		Palette: tseffect-ignore-lighting-alpha75
+		Speed: 260
+	Warhead@1Dam: SpreadDamage
+		Damage: 1250
 	-Report:
-	Range: 3c0
-	Projectile: Railgun
-		-HitAnim:
-	-Warhead@Burst:
-	Warhead@3Eff: CreateEffect
+	Warhead@emp: GrantExternalCondition
+		Duration: 30
+	Warhead@Arc: FireShrapnel
+		Weapon: MicrowaveArc2
+		Amount: 2
+		AimChance: 70
+
+MicrowaveArc2:
+	Inherits: MicrowaveArc
+	-Warhead@Arc:
+	-Warhead@1Dam:
+	Warhead@emp: GrantExternalCondition
+		Duration: 15
 
 MicrowaveZapSound:
 	Inherits: MicrowaveZap
@@ -1254,6 +1249,7 @@ MicrowaveZapSound:
 			Heavy: 0
 			Brick: 0
 	-Warhead@emp:
+	-Warhead@Arc:
 
 HornetLauncher:
 	ReloadDelay: 175
@@ -1618,6 +1614,10 @@ SonicPulse:
 		Explosions: sonicpulse1, sonicpulse2
 		ExplosionPalette: effect-ignore-lighting-alpha40
 		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@2Eff: CreateEffect
+		Explosions: sonicblast1, sonicblast2
+		ExplosionPalette: effect-ignore-lighting-alpha40
+		ValidTargets: Ground, Air, Ship, Trees
 
 NeutronCannon:
 	ValidTargets: Temporal
@@ -1720,3 +1720,40 @@ StealthBomb:
 		ImpactSounds: splashl1.aud, splashl2.aud
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure, Bridge
+
+JDAM:
+	ValidTargets: Ground, Water, Trees
+	InvalidTargets: Air
+	ReloadDelay: 50
+	Report: bwhis.aud
+	Range: 3c0
+	TargetActorCenter: true
+	Projectile: GravityBomb
+		Image: B2BOMB
+		Velocity: 75, 0, -74
+		Acceleration: 0, 0, 0
+		Shadow: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 5000
+		Falloff: 1000, 255, 128, 50, 18, 7, 0
+		ValidTargets: Ground, Water
+		Versus:
+			None: 100
+			Wood: 85
+			Light: 90
+			Heavy: 60
+			Concrete: 75
+			Brick: 75
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+	Warhead@3Eff: CreateEffect
+		Explosions: fuelbomb
+		ImpactSounds: xplobig4.aud
+		ExplosionPalette: ra2effect-ignore-lighting-alpha75
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
