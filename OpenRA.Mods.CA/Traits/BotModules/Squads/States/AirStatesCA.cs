@@ -67,19 +67,34 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 			var map = owner.World.Map;
 			var dangerRadius = owner.SquadManager.Info.DangerScanRadius;
 			detectedEnemyTarget = null;
-			var maxX = (map.MapSize.X % dangerRadius) == 0 ? map.MapSize.X : map.MapSize.X + dangerRadius;
-			var maxY = (map.MapSize.Y % dangerRadius) == 0 ? map.MapSize.Y : map.MapSize.Y + dangerRadius;
+			var initialMaxX = (map.MapSize.X % dangerRadius) == 0 ? map.MapSize.X : map.MapSize.X + dangerRadius;
+			var initialMaxY = (map.MapSize.Y % dangerRadius) == 0 ? map.MapSize.Y : map.MapSize.Y + dangerRadius;
+			var maxX = initialMaxX;
+			var maxY = initialMaxY;
 
 			// Random starting coordinates for scanning the map to find a target.
 			var startX = owner.World.LocalRandom.Next(0, map.MapSize.X);
 			var startY = owner.World.LocalRandom.Next(0, map.MapSize.Y);
-			var scanReset = false;
+			var initialStartY = startY;
 
-			for (var i = startX; i < maxX; i += dangerRadius * 2)
+			var scanReset = false;
+			var scanDirectionX = startX % 2;
+			var scanDirectionY = startY % 2;
+			var scanIncrement = dangerRadius * 2;
+
+			for (var x = startX; x <= maxX; x += scanIncrement)
 			{
-				for (var j = startY; j < maxY; j += dangerRadius * 2)
+				// On second pass of initial column, maximum y should be the initial y.
+				if (x == startX && scanReset)
+					maxY = initialStartY;
+
+				for (var y = startY; y <= maxY; y += scanIncrement)
 				{
-					var pos = new CPos(i, j);
+					// Translate to position based on the scan direction.
+					var posX = scanDirectionX == 0 ? initialMaxX - x : x;
+					var posY = scanDirectionY == 0 ? initialMaxY - y : y;
+
+					var pos = new CPos(posX, posY);
 					if (NearToPosSafely(owner, map.CenterOfCell(pos), out detectedEnemyTarget))
 					{
 						if (needTarget && detectedEnemyTarget == null)
@@ -89,14 +104,16 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 					}
 				}
 
-				// If the next iteration will be beyond the maximum, reset to 0,0 and continue scanning until we're back to the starting coordinates.
-				if (i + dangerRadius * 2 >= maxX && !scanReset)
+				// On first pass of initial column, set to start from y = 0 on subsequent columns.
+				if (x == startX && !scanReset)
+					startY = 0;
+
+				// If the next iteration will be beyond the maximum, reset x so it starts from 0 on next iteration and set max to where it started.
+				if (x + scanIncrement > maxX && !scanReset)
 				{
 					scanReset = true;
 					maxX = startX;
-					maxY = startY;
-					i = 0;
-					startY = 0;
+					x = scanIncrement * -1;
 				}
 			}
 
