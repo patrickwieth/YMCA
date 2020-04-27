@@ -55,22 +55,32 @@ commander_tree.basic_logistics:
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
-		IconPalette: chrometd
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points
-		Description: Enables to build Carryalls and Transport Helicopters.
+		Description: Enables to build Chinook and Personal Carrier Vehicles.
 
-commander_tree.expert_logistics:
+commander_tree.advanced_logistics:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Basic Logistics
+		Name: Advanced Logistics
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		IconPalette: chrometd
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points
-		Description: Enables to build Dropships.
+		Prerequisites: prerequisite.has_points, ~commander_tree.basic_logistics
+		Description: Enables to build Carryalls and gives Reinforcements.
+
+commander_tree.expert_logistics:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Expert Logistics
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~commander_tree.advanced_logistics
+		Description: Enables to build Dropships and gives Paratroopers.
 
 hack.cameo_filler.3:
 	Inherits: ^default.cameo_filler
@@ -140,6 +150,9 @@ prerequisite.point_defense_turret:
 	Inherits: ^default.commander_tree_prerequisite
 
 prerequisite.basic_logistics:
+	Inherits: ^default.commander_tree_prerequisite
+
+prerequisite.advanced_logistics:
 	Inherits: ^default.commander_tree_prerequisite
 
 prerequisite.expert_logistics:
