@@ -25,17 +25,6 @@
 	RenderSprites:
 	ProvidesPrerequisite@powername:
 
-generals_power.spy_drone:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Spy Drone
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points
-		Description: Enables Spy Drone support power from Command Center.
-
 commander_tree.point_defense_turret:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -82,19 +71,90 @@ commander_tree.expert_logistics:
 		Prerequisites: prerequisite.has_points, ~commander_tree.advanced_logistics
 		Description: Enables to build Dropships and gives Paratroopers.
 
+commander_tree.V3_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: V3 Launcher
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!commander_tree.akatsiya, ~!commander_tree.katyusha
+		Description: Enables to build the V3 Launcher as Advanced Siege Vehicle. The V3 has the longest range, but the Rocket can be shot down.
+
+commander_tree.Akatsiya:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Akatsiya
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!commander_tree.v3_launcher, ~!commander_tree.katyusha
+		Description: Enables to build the Akatsiya as Advanced Siege Vehicle. The Akatsiya has the best armor and can hit moving targets with its cluster bombs.
+
+commander_tree.Katyusha:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Katyusha
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!commander_tree.v3_launcher, ~!commander_tree.akatsiya
+		Description: Enables to build the Katyusha as Advanced Siege Vehicle. The Katyusha fires the most projectiles.
+
+commander_tree.Mammoth_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tank
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet
+		Description: Enables to build the Mammoth Tank. The Mammoth is a slow and very heavy tank, which can be further specialized.
+
+commander_tree.Mammoth_Tank_PD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tesla Zap Defense Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_ew, ~!commander_tree.mammoth_tank_ns
+		Description: The Mammoth Tank is upgraded with a Tesla Zap Defense System to shoot down incoming projectiles.
+
+commander_tree.Mammoth_Tank_EW:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tesla Weapon Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_PD, ~!commander_tree.mammoth_tank_ns
+		Description: The Mammoth Tank is upgraded with a Tesla Weapon System. Energy based weapons systems cannot be shot down by point defense systems.
+
+commander_tree.Mammoth_Tank_NS:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Nuclear Shells Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pd, ~!commander_tree.mammoth_tank_ew
+		Description: The Mammoth is upgraded with Nuclear Shells. Nuclear Shells deal area damage.
+
 hack.cameo_filler.3:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		Queue: queue.toxin_gen_generals_power, queue.demo_gen_generals_power
 		BuildPaletteOrder: 28
 		Prerequisites: disabled, ~prerequisite.zh_units
-
-hack.cameo_filler.4:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		Queue: queue.prc_generals_power, queue.inf_gen_generals_power, queue.nuke_gen_generals_power, queue.tank_gen_generals_power
-		BuildPaletteOrder: 25
-		Prerequisites: disabled, ~!prerequisite.zh_units
 
 hack.has_points:
 	AlwaysVisible:
@@ -145,15 +205,3 @@ prerequisite.5_stars:
 		Name: General's Promotion
 	Buildable:
 		Description: General's Promotion
-
-prerequisite.point_defense_turret:
-	Inherits: ^default.commander_tree_prerequisite
-
-prerequisite.basic_logistics:
-	Inherits: ^default.commander_tree_prerequisite
-
-prerequisite.advanced_logistics:
-	Inherits: ^default.commander_tree_prerequisite
-
-prerequisite.expert_logistics:
-	Inherits: ^default.commander_tree_prerequisite
