@@ -1,5 +1,6 @@
 BADR:
 	Inherits: ^NeutralPlane
+	Inherits@EMP: ^EmpDisable
 	ParaDrop:
 		DropRange: 4c0
 		ChuteSound: chute1.aud
@@ -38,7 +39,8 @@ BADR:
 	Interactable:
 
 BADR.Bomber:
-	Inherits: ^Plane
+	Inherits: ^NeutralPlane
+	Inherits@EMP: ^EmpDisable
 	AttackBomber:
 	Armament:
 		Weapon: ParaBomb
@@ -96,7 +98,8 @@ BADR.NBomber:
 		Weapon: AtomBomb
 
 B2B:
-	Inherits: ^Plane
+	Inherits: ^NeutralPlane
+	Inherits@EMP: ^EmpDisable
 	AttackBomber:
 	Armament:
 		Weapon: InfernoBomb
@@ -230,10 +233,10 @@ MIG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld, stek, ~techlevel.high
+		Prerequisites: ~afld, stek, ~!aircraft.ukraine, ~techlevel.high
 		Description: Precision strike aircraft.\n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 2000
+		Cost: 1750
 	Tooltip:
 		Name: MiG Attack Plane
 	UpdatesPlayerStatistics:
@@ -278,6 +281,18 @@ MIG:
 		Offset: -598,-683,0
 	Contrail@2:
 		Offset: -598,683,0
+	Contrail@AB1:
+		Offset: -400,-50,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
+	Contrail@AB2:
+		Offset: -400,50,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: MIG.Husk
 		RequiresCondition: ammo && !empdisable
@@ -298,6 +313,42 @@ MIG:
 	Rearmable:
 		RearmActors: afld, afld.gdi
 
+SUK:
+	Inherits: ^Plane
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 51
+		Prerequisites: ~afld, stek, ~aircraft.ukraine, ~techlevel.high
+		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Sukhoi Attack Plane
+	Health:
+		HP: 20000
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	Armament:
+		Weapon: MaverickSU
+		LocalOffset: 0,-640,0, 0,640,0
+		LocalYaw: -40, 24
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 20
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 4
+		Speed: 225
+
 FROG:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -306,27 +357,24 @@ FROG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~aircraft.ukraine, ~techlevel.high
-		Description: Ground attack aircraft with cluster bombs.\n  Strong vs Buildings, Light Armor, Infantry\n  Weak vs Aircraft
+		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.high
+		Description: Bomber armed with explosive bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1850
 	Tooltip:
-		Name: Frogfoot Attack Plane
+		Name: Frogfoot Dirty Bomber
 	Health:
-		HP: 20000
+		HP: 16000
 	RevealsShroud:
 		Range: 10c0
 		Type: GroundPosition
 		MoveRecalculationThreshold: 0
 	Armament@PRIMARY:
-		Weapon: FrogBomb
+		Weapon: RadBomb
 		LocalOffset: 256,-213,0
 		PauseOnCondition: !ammo
 	AttackAircraft:
 		FacingTolerance: 128
-		PersistentTargeting: false
-		OpportunityFire: false
-		PauseOnCondition: empdisable || being-warped
 	Aircraft:
 		CruiseAltitude: 2560
 		InitialFacing: 192
@@ -397,25 +445,38 @@ FROGDIRTY:
 		InitialStance: HoldFire
 		InitialStanceAI: HoldFire
 	AmmoPool:
-		Ammo: 5
-		PipCount: 5
+		Ammo: 8
+		PipCount: 4
+		ReloadDelay: 30
 		AmmoCondition: ammo
 	SelectionDecorations:
 	Contrail@1:
-		Offset: -258,-723,0
+		Offset: -598,-683,-40
 	Contrail@2:
-		Offset: -258,723,0
+		Offset: -598,683,-40
+	Contrail@AB1:
+		Offset: -400,-70,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
+	Contrail@AB2:
+		Offset: -400,70,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
 	SpawnActorOnDeath:
-		Actor: FROG.Husk
+		Actor: SUK.Husk
 		RequiresCondition: ammo && !empdisable
 	SpawnActorOnDeath@Empty:
-		Actor: FROG.Husk.empty
+		Actor: SUK.Husk.empty
 		RequiresCondition: !ammo && !empdisable
 	SpawnActorOnDeath@EMP:
-		Actor: FROG.Husk.EMP
+		Actor: SUK.Husk.EMP
 		RequiresCondition: ammo && empdisable
 	SpawnActorOnDeath@EmptyEMP:
-		Actor: FROG.Husk.empty.EMP
+		Actor: SUK.Husk.empty.EMP
 		RequiresCondition: !ammo && empdisable
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
@@ -498,6 +559,10 @@ YAK:
 		DecorationBounds: 30,28,0,2
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
+	Contrail@1:
+		Offset: -98,-683,-10
+	Contrail@2:
+		Offset: -98,683,-10
 
 CHEMYAK:
 	Inherits: ^Plane
@@ -563,6 +628,10 @@ CHEMYAK:
 		DecorationBounds: 30,28,0,2
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
+	Contrail@1:
+		Offset: -98,-683,-10
+	Contrail@2:
+		Offset: -98,683,-10
 
 TRAN:
 	Inherits: ^Helicopter
@@ -1054,7 +1123,8 @@ HUEY:
 		RearmActors: hpad, hpad.td
 
 U2:
-	Inherits: ^Plane
+	Inherits: ^NeutralPlane
+	Inherits@EMP: ^EmpDisable
 	Health:
 		HP: 200000
 	Tooltip:
@@ -1075,6 +1145,18 @@ U2:
 		Offset: -725,683,0
 	Contrail@2:
 		Offset: -725,-683,0
+	Contrail@AB1:
+		Offset: -400,-70,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
+	Contrail@AB2:
+		Offset: -400,70,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: U2.Husk
 		RequiresCondition: !empdisable
@@ -1089,7 +1171,8 @@ U2:
 	-MapEditorData:
 
 U2.Bomber:
-	Inherits: ^Plane
+	Inherits: ^NeutralPlane
+	Inherits@EMP: ^EmpDisable
 	RenderSprites:
 		Image: U2
 	Health:
@@ -1111,6 +1194,18 @@ U2.Bomber:
 		Offset: -725,683,0
 	Contrail@2:
 		Offset: -725,-683,0
+	Contrail@AB1:
+		Offset: -400,-70,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
+	Contrail@AB2:
+		Offset: -400,70,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
 	AttackAircraft:
 		FacingTolerance: 20
 		PersistentTargeting: false
@@ -1154,7 +1249,7 @@ A10:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 20000
+		HP: 22000
 	RevealsShroud:
 		Range: 10c0
 		Type: GroundPosition
@@ -1214,7 +1309,8 @@ A10:
 		RearmActors: afld, afld.gdi, afld.allies
 
 A10.bomber:
-	Inherits: ^PlaneTD
+	Inherits: ^NeutralPlane
+	Inherits@EMP: ^EmpDisable
 	Tooltip:
 		Name: Warthog
 	Health:
@@ -1241,6 +1337,13 @@ A10.bomber:
 	-Voiced:
 	RenderSprites:
 		Image: a10
+		PlayerPalette: overlayplayertd
+	EjectOnDeath:
+		PilotActor: N1
+		SuccessRate: 50
+		EjectOnGround: false
+		EjectInAir: true
+		AllowUnsuitableCell: true
 	RejectsOrders:
 	Contrail@1:
 		Offset: -258,-823,0
@@ -1337,7 +1440,8 @@ AURORA:
 		Scale: 0.9
 
 C17:
-	Inherits: ^Plane
+	Inherits: ^NeutralPlane
+	Inherits@EMP: ^EmpDisable
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	-EjectOnDeath:
@@ -1661,7 +1765,8 @@ ORCB:
 	-ProductionCostMultiplier@EagleBonus:
 
 UAV:
-	Inherits: ^PlaneTD
+	Inherits: ^NeutralPlane
+	Inherits@EMP: ^EmpDisable
 	Health:
 		HP: 30000
 	Tooltip:
@@ -1699,6 +1804,9 @@ UAV:
 	Interactable:
 	GivesExperience:
 		Experience: 1000
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	-EjectOnDeath:
 
 RAH:
 	Inherits: ^HelicopterTD
@@ -1804,8 +1912,9 @@ KIRO:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: ~afld, stek, ~aircraft.russia, ~techlevel.high
-		Description: Heavily armoured airship equipped with Tesla bombs.\n  Strong vs Buildings, Infantry, Slow Vehicles\n  Weak vs Aircraft
+		BuildDurationModifier: 115
+		Prerequisites: ~afld, stek, ~aircraft.soviet, ~techlevel.high
+		Description: Heavily armoured airship equipped with specialised bombs.\n  Vulnerable when dropping bombs.\n  Strong vs Buildings, Infantry, Slow Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -1821,17 +1930,41 @@ KIRO:
 		Type: GroundPosition
 		MoveRecalculationThreshold: 0
 	Armament@PRIMARY:
-		Weapon: AirshipParaBomb
+		Weapon: KirovBomb
 		LocalOffset: -20,0,0
-	Armament@SECONDARY:
-		Weapon: AirshipParaBombS
+		PauseOnCondition: !ammo
+		RequiresCondition: !russiabombs && !ukrainebombs && !iraqbombs
+	Armament@PRIMARY-RUSSIA:
+		Weapon: KirovTeslaBomb
 		LocalOffset: -20,0,0
-	AttackFrontal:
-		Voice: Attack
+		PauseOnCondition: !ammo
+		RequiresCondition: russiabombs
+	Armament@PRIMARY-UKRAINE:
+		Weapon: KirovClusterBomb
+		LocalOffset: -20,0,0
+		PauseOnCondition: !ammo
+		RequiresCondition: ukrainebombs
+	Armament@PRIMARY-IRAQ:
+		Weapon: KirovNukeBomb
+		LocalOffset: -20,0,0
+		PauseOnCondition: !ammo
+		RequiresCondition: iraqbombs
+	AmmoPool:
+		Ammo: 8
+		PipCount: 8
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 360
+		Count: 8
+		DelayOnFire: 120
+		DelayAfterReset: 50
+		ShowSelectionBar: true
+		SelectionBarColor: ff00ff
 	AttackAircraft:
-		FacingTolerance: 20
+		FacingTolerance: 128
 		AttackType: Hover
 		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
 	Aircraft:
 		CruiseAltitude: 2c0
 		InitialFacing: 192
@@ -1873,17 +2006,32 @@ KIRO:
 		Offset: -100,-500,100
 	Selectable:
 		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
+		DecorationBounds: 40,40,0,1
 	SelfHealing:
-		Step: 100
+		PercentageStep: 1
 		Delay: 3
-		HealIfBelow: 50
+		HealIfBelow: 75
 		DamageCooldown: 150
 	Voiced:
 		VoiceSet: KirovVoice
 	Explodes:
 		Weapon: KirovExplode
 		RequiresCondition: !airborne
+	DamageMultiplier@doorsopen:
+		RequiresCondition: doorsopen
+		Modifier: 200
+	GrantConditionOnAttack@doorsopen:
+		Condition: doorsopen
+		RevokeDelay: 50
+	GrantConditionOnFaction@russia:
+		Condition: russiabombs
+		Factions: russia
+	GrantConditionOnFaction@ukraine:
+		Condition: ukrainebombs
+		Factions: ukraine
+	GrantConditionOnFaction@iraq:
+		Condition: iraqbombs
+		Factions: iraq
 
 BLIMP:
 	Inherits: ^Helicopter
@@ -2057,7 +2205,7 @@ HARR:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 26000
+		HP: 30000
 	RevealsShroud:
 		Range: 12c0
 		Type: GroundPosition
@@ -2352,6 +2500,10 @@ HORN:
 		LandingDistance: 8c0
 	Contrail@1:
 		Offset: -432,0,0
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
 	-Contrail@2:
 	Interactable:
 	DetectCloaked:
@@ -2399,6 +2551,18 @@ YF23.Bomber:
 		Offset: -325,483,0
 	Contrail@2:
 		Offset: -325,-483,0
+	Contrail@AB1:
+		Offset: -400,-80,-10
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
+	Contrail@AB2:
+		Offset: -400,80,-10
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: YF23.Husk
 		RequiresCondition: !empdisable
@@ -2585,7 +2749,7 @@ AURO:
 		CruiseAltitude: 2560
 		InitialFacing: 192
 		TurnSpeed: 4
-		Speed: 200
+		Speed: 180
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: cjetbana.aud
@@ -2596,16 +2760,16 @@ AURO:
 	AmmoPool:
 		Ammo: 1
 		PipCount: 1
-		ReloadDelay: 100
+		ReloadDelay: 240
 		AmmoCondition: ammo
 	GrantConditionOnActivity@AFTERBURNER:
 		Condition: afterburner
 		ActiveSound: cjetband.aud
 	SpeedMultiplier@AFTERBURNER:
-		Modifier: 130
+		Modifier: 150
 		RequiresCondition: afterburner && ammo
 	DamageMultiplier@AFTERBURNER:
-		Modifier: 50
+		Modifier: 80
 		RequiresCondition: afterburner && ammo
 	Selectable:
 		Bounds: 36,28,0,2
