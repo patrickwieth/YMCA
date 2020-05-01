@@ -135,7 +135,7 @@ commander_tree.Mammoth_Tank_EW:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_PD, ~!commander_tree.mammoth_tank_ns
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pd, ~!commander_tree.mammoth_tank_ns
 		Description: The Mammoth Tank is upgraded with a Tesla Weapon System. Energy based weapons systems cannot be shot down by point defense systems.
 
 commander_tree.Mammoth_Tank_NS:
@@ -148,6 +148,50 @@ commander_tree.Mammoth_Tank_NS:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pd, ~!commander_tree.mammoth_tank_ew
 		Description: The Mammoth is upgraded with Nuclear Shells. Nuclear Shells deal area damage.
+
+commander_tree.Mammoth_Tank_GDI:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tank
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi
+		Description: Enables to build the Mammoth Tank. The Mammoth is a slow and very heavy tank, which can be further specialized.
+
+commander_tree.Mammoth_Tank_Ion:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Ion Mammoth Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_gdi_pd, ~!commander_tree.mammoth_tank_ew
+		Description: The Mammoth is upgraded with an Ion cannon. Energy based weapon systems cannot be shot down by point defense systems.
+
+commander_tree.Mammoth_Tank_GDI_PD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Point Defense Laser Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_ns
+		Description: The Mammoth Tank is upgraded with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Mammoth_Tank_NR:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Nanite Repair Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_gdi_pd
+		Description: The Mammoth Tank is upgraded with a Nanite Repair System. This makes it more durable and vastly increases its self repair capabilites.
 
 hack.cameo_filler.3:
 	Inherits: ^default.cameo_filler
