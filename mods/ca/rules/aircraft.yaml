@@ -348,6 +348,55 @@ SUK:
 		InitialFacing: 192
 		TurnSpeed: 4
 		Speed: 225
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeoffSounds: migtoff1.aud
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+	AmmoPool:
+		Ammo: 8
+		PipCount: 4
+		ReloadDelay: 30
+		AmmoCondition: ammo
+	SelectionDecorations:
+	Contrail@1:
+		Offset: -598,-683,-40
+	Contrail@2:
+		Offset: -598,683,-40
+	Contrail@AB1:
+		Offset: -400,-70,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
+	Contrail@AB2:
+		Offset: -400,70,-20
+		UsePlayerColor: false
+		ZOffset: -512
+		Color: cc550080
+		TrailLength: 10
+	SpawnActorOnDeath:
+		Actor: SUK.Husk
+		RequiresCondition: ammo && !empdisable
+	SpawnActorOnDeath@Empty:
+		Actor: SUK.Husk.empty
+		RequiresCondition: !ammo && !empdisable
+	SpawnActorOnDeath@EMP:
+		Actor: SUK.Husk.EMP
+		RequiresCondition: ammo && empdisable
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: SUK.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,0
+		Interval: 2
+	Selectable:
+		DecorationBounds: 30,28,0,2
+	ProducibleWithLevel:
+		Prerequisites: aircraft.upgraded
+	Rearmable:
+		RearmActors: afld, afld.gdi, afld.allies
 
 FROG:
 	Inherits: ^Plane
@@ -370,7 +419,7 @@ FROG:
 		Type: GroundPosition
 		MoveRecalculationThreshold: 0
 	Armament@PRIMARY:
-		Weapon: RadBomb
+		Weapon: FrogBomb
 		LocalOffset: 256,-213,0
 		PauseOnCondition: !ammo
 	AttackAircraft:
