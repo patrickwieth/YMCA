@@ -75,6 +75,29 @@ Maverick:
 			Heavy: 85
 			Concrete: 75
 			Brick: 80
+			
+MaverickSU:
+	Inherits: Maverick
+	Range: 10c0
+	Report: vbleatta.aud, vbleattb.aud
+	Burst: 4
+	Projectile: Missile
+		Inaccuracy: 1c0
+		Speed: 180
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Versus:
+			Wood: 18
+			Light: 65
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: gexp14a.aud, gexp14b.aud, gexp14c.aud, gexp14d.aud
+		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: med_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
 
 Dragon:
 	Inherits: ^AntiGroundMissile
@@ -266,7 +289,9 @@ Nike:
 		RangeLimit: 12c0
 		Speed: 341
 	Warhead@1Dam: SpreadDamage
-		Damage: 7500
+		Damage: 6750
+		Range: 0, 0c64, 0c256, 4c256
+		Falloff: 100, 100, 15, 5
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
@@ -294,7 +319,8 @@ RedEye:
 		Speed: 298
 	Warhead@1Dam: SpreadDamage
 		Damage: 2800
-		ValidTargets: Air
+		-Range:
+		-Falloff:
 
 RedEye.CYB:
 	Inherits: RedEye
@@ -780,6 +806,7 @@ IFVRockets:
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
 		Versus:
+			Wood: 55
 			Concrete: 60
 			Light: 50
 

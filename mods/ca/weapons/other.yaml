@@ -84,7 +84,7 @@ Napalmtd:
 		ValidTargets: Ground, Water
 		Versus:
 			None: 100
-			Wood: 55
+			Wood: 58
 			Light: 75
 			Heavy: 65
 			Concrete: 35
@@ -257,36 +257,41 @@ PortaTeslaCharge:
 
 TTankZap:
 	Inherits: ^TeslaWeapon
-	ReloadDelay: 140
-	Range: 8c0
+	ReloadDelay: 130
+	Range: 7c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
 		Damage: 10000
 		Versus:
-			Wood: 120
-			Concrete: 110
-	Warhead@Burst: FireShrapnel
+			Wood: 60
+			Concrete: 60
+	Warhead@Arc: FireShrapnel
 		Weapon: TTankArc1
 		Amount: 1
-		AimChance: 90
-		ValidTargets: Infantry
-		ThrowWithoutTarget: true
+		AimChance: 85
+		ThrowWithoutTarget: false
 
 TTankArc1:
 	Inherits: TTankZap
 	Range: 1c768
 	Projectile: TeslaZap
 	Warhead@1Dam: SpreadDamage
-		ValidTargets: Infantry
+		ValidTargets: Infantry, Vehicle, Ship
+		Versus:
+			Light: 30
+			Heavy: 30
 	-Report:
 	-Warhead@3Eff:
-	Warhead@Burst: FireShrapnel
+	Warhead@Arc: FireShrapnel
 		Weapon: TTankArc2
-		AimChance: 80
+		ValidTargets: Infantry
+		AimChance: 75
 
 TTankArc2:
 	Inherits: TTankArc1
-	-Warhead@Burst:
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Infantry
+	-Warhead@Arc:
 
 DogJaw:
 	ValidTargets: Infantry
@@ -347,6 +352,21 @@ RepairIFV:
 		Explosions: idle
 		ExplosionPalette: tseffect-ignore-lighting-alpha75
 
+RepairNanite:
+	Report: srepaira.aud
+	Warhead@highlight: GrantExternalCondition
+		Range: 4c0
+		Duration: 2
+		Condition: highlight
+		ValidStances: Ally
+		ValidTargets: Ground, Vehicle
+	Warhead@repair: GrantExternalCondition
+		Range: 4c0
+		Duration: 750
+		Condition: nrepair
+		ValidStances: Ally
+		ValidTargets: Ground, Vehicle
+
 Demolish:
 	Warhead@1Dam: SpreadDamage
 		DamageTypes: DefaultDeath
@@ -373,6 +393,11 @@ MADTankThump:
 		Spread: 7c0
 		Damage: 1
 		InvalidTargets: MADTank, Infantry
+	Warhead@Concussion: GrantExternalCondition
+		Range: 7c0
+		Duration: 100
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
 
 MADTankDetonate:
 	InvalidTargets: MADTank, Infantry
@@ -387,6 +412,11 @@ MADTankDetonate:
 		Explosions: med_explosion
 		ImpactSounds: madexplo.aud
 		ImpactActors: false
+	Warhead@Concussion: GrantExternalCondition
+		Range: 7c0
+		Duration: 600
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
 
 Laser:
 	ReloadDelay: 100
@@ -766,10 +796,10 @@ PrisCLaser:
 			Wood: 110
 	-Warhead@Burst:
 
-AirshipParaBomb:
-	ReloadDelay: 40
+KirovBomb:
+	ReloadDelay: 35
 	ValidTargets: Ground, Water
-	InvalidTargets: Air, Structure
+	InvalidTargets: Air
 	Report: bwhis.aud
 	Range: 1c0
 	TargetActorCenter: true
@@ -781,30 +811,114 @@ AirshipParaBomb:
 		Shadow: True
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 20000
+		Falloff: 100, 40, 5, 0
+		Damage: 10500
 		InvalidTargets: Air
 		Versus:
-			None: 30
-			Wood: 75
-			Light: 65
-			Heavy: 30
-			Concrete: 40
+			None: 40
+			Wood: 100
+			Light: 60
+			Heavy: 40
+			Concrete: 55
 			Brick: 50
-		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+KirovTeslaBomb:
+	Inherits: KirovBomb
+	Warhead@1Dam: SpreadDamage
+		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+	Warhead@3Eff: CreateEffect
 		Explosions: tsla_bomb
 		ExplosionPalette: ra2effect
 		ImpactSounds: kirbo1.aud, kirbo2.aud
-		ValidTargets: Ground, Water, Ship, Trees
+	Warhead@5Tesla: FireShrapnel
+		Weapon: KirovTeslaArc
+		Amount: 3
+		AimChance: 75
+		AllowDirectHit: true
+		ThrowWithoutTarget: false
 
-AirshipParaBombS:
-	Inherits: AirshipParaBomb
-	ValidTargets: Ground, Water, Structure
-	InvalidTargets: Air
-	TargetActorCenter: false
+KirovClusterBomb:
+	Inherits: KirovBomb
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			Concrete: 60
+	Warhead@6Cluster: FireCluster
+		Weapon: KirovCluster
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
+KirovNukeBomb:
+	Inherits: KirovBomb
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			Light: 70
+			Heavy: 50
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: nuke3
+		ImpactSounds: kaboom1.aud
+	Warhead@7Radio: CreateTintedCells
+		Spread: 1c0
+		Level: 300
+		Falloff: 100, 55, 32, 5
+		MaxLevel: 750
+		LayerName: radioactivity.medium
+
+KirovTeslaArc:
+	Inherits: TTankZap
+	Range: 3c512
+	Report: shktrop1.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+		ValidTargets: Infantry, Vehicle, Ship
+	-Warhead@3Eff:
+	-Warhead@Arc:
+
+KirovCluster:
+	ReloadDelay: 35
+	Range: 3c0
+	Projectile: Bullet
+		Image: BOMB
+		Speed: 96
+		LaunchAngle: 0, 32
+		Inaccuracy: 1c0
+		BounceCount: 0
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 1100
+		Versus:
+			None: 40
+			Wood: 100
+			Light: 65
+			Heavy: 40
+			Concrete: 60
+			Brick: 50
+	Warhead@Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Structure, Wall, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: med_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
 
 FrogBomb:
 	ValidTargets: Ground, Water
@@ -880,7 +994,8 @@ RadBomb:
 		Spread: 1c0
 		Falloff: 100, 75, 50, 25, 0
 		Level: 500
-		MaxLevel: 5000
+		MaxLevel: 7500
+		LayerName: radioactivity.strong
 
 SonicZap:
 	ReloadDelay: 120
@@ -1103,7 +1218,7 @@ IonZap:
 			Brick: 45
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 	Warhead@3Eff: CreateEffect
-		Explosions: ion_ring
+		Explosions: shock_wave
 		ExplosionPalette: tseffect
 	Warhead@4Smu_impact: LeaveSmudge
 		SmudgeType: Scorch
@@ -1277,9 +1392,9 @@ Flare:
 	ValidTargets: Structure
 	TargetActorCenter: true
 	Projectile: LaserZap
-		Width: 26
+		Width: 45
 		Duration: 8
-		SecondaryBeamWidth: 90
+		SecondaryBeamWidth: 65
 		SecondaryBeamColor: FF000030
 		ZOffset: 4096
 	Warhead@1Dam: TargetDamage
@@ -1300,6 +1415,7 @@ Cloud:
 		Level: 50
 		Falloff: 100, 75, 52, 15, 2
 		MaxLevel: 750
+		LayerName: radioactivity.strong
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
 		Damage: 500
@@ -1377,6 +1493,7 @@ RadEruptionWeapon:
 		Falloff: 100, 75, 50, 25, 0
 		Level: 500
 		MaxLevel: 7500
+		LayerName: radioactivity.strong
 
 ChronoAI:
 	ReloadDelay: 1
@@ -1729,29 +1846,28 @@ JDAM:
 	Range: 3c0
 	TargetActorCenter: true
 	Projectile: GravityBomb
-		Image: B2BOMB
+		Image: MOAB_BOMB
 		Velocity: 75, 0, -74
 		Acceleration: 0, 0, 0
 		Shadow: true
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 5000
-		Falloff: 1000, 255, 128, 50, 18, 7, 0
+		Damage: 3800
+		Falloff: 1000, 255, 128, 50, 0
 		ValidTargets: Ground, Water
 		Versus:
-			None: 100
-			Wood: 85
-			Light: 90
-			Heavy: 60
-			Concrete: 75
-			Brick: 75
+			None: 80
+			Wood: 100
+			Light: 80
+			Heavy: 65
+			Concrete: 60
+			Brick: 65
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 	Warhead@3Eff: CreateEffect
 		Explosions: fuelbomb
 		ImpactSounds: xplobig4.aud
-		ExplosionPalette: ra2effect-ignore-lighting-alpha75
 	Warhead@Flames: FireCluster
 		Weapon: BurnFx
 		RandomClusterCount: 3

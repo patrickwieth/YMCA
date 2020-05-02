@@ -82,6 +82,8 @@ DOG:
 	Voiced:
 		VoiceSet: DogVoice
 	-TakeCover:
+	-Captures@DRIVER_KILL:
+	-CaptureManager:
 
 E1:
 	Inherits: ^Soldier
@@ -422,6 +424,7 @@ E7:
 	IgnoresDisguise:
 	DetectCloaked:
 		CloakTypes: Cloak, Thief
+		Range: 5c0
 	Voiced:
 		VoiceSet: TanyaVoice
 	ProducibleWithLevel:
@@ -1041,7 +1044,7 @@ N5:
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADSTRONG:
 	-DamagedByTintedCells@RADWEAK:
 	WithDecoration@THEAL:
 		Image: pips
@@ -1141,6 +1144,7 @@ RMBO:
 	IgnoresDisguise:
 	DetectCloaked:
 		CloakTypes: Cloak, Thief
+		Range: 5c0
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
@@ -1203,16 +1207,17 @@ SNIP:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 55
+		BuildLimit: 5
 		Prerequisites: ~infantry.england, dome, ~techlevel.medium
-		Description: Special marksman infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft\n  Special Ability: Stealth
+		Description: Elite marksman infantry.\n Armed with a powerful sniper rifle.\n  Maximum 5 can be trained.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft, Structures\n  Special Ability: Camouflage\n  Special Ability: Kill Driver
 	Valued:
-		Cost: 500
+		Cost: 850
 	Tooltip:
 		Name: Sniper
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 2500
+		HP: 4500
 	RevealsShroud:
 		Range: 14c0
 	Armament@PRIMARY:
@@ -1220,6 +1225,20 @@ SNIP:
 	Armament@Garrison:
 		Weapon: sniperE
 		Name: mounted
+	Armament@DRIVER_SNIPE:
+		Name: driver_snipe
+		Weapon: sniper.vehicle
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 1
+		Armaments: driver_snipe
+		Name: driver_snipe
+		AmmoCondition: ammo
+	ReloadArmamentsBar:
+		Armaments: driver_snipe
+	ReloadAmmoPool:
+		AmmoPool: driver_snipe
+		Delay: 750
 	Mobile:
 		speed: 73
 		Locomotor: foot
@@ -1232,7 +1251,7 @@ SNIP:
 		IsPlayerPalette: true
 		CloakTypes: Cloak
 		RequiresCondition: !cloak-force-disabled
-		UncloakOn: Unload, Infiltrate, Demolish, Dock, Move
+		UncloakOn: Unload, Infiltrate, Demolish, Dock, Attack
 	Cloak@GPSHIDE:
 		RequiresCondition: (gpshide || crate-cloak) && !(cloak-force-disabled || invisibility || hidden)
 	GrantConditionOnDamageState@UNCLOAK:
@@ -1247,6 +1266,7 @@ SNIP:
 		RequiresCondition: hidden
 	AttackFrontal:
 		Voice: Attack
+		Armaments: primary, driver_snipe, laser
 		PauseOnCondition: being-warped
 	WithInfantryBody:
 		DefaultAttackSequence: shoot
@@ -1327,6 +1347,7 @@ BORI:
 	IgnoresDisguise:
 	DetectCloaked:
 		CloakTypes: Cloak, Thief
+		Range: 5c0
 	Voiced:
 		VoiceSet: BorisVoice
 	ProducibleWithLevel:
@@ -1515,7 +1536,8 @@ ACOL:
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADSTRONG:
+	-DamagedByTintedCells@RADMED:
 	-DamagedByTintedCells@RADWEAK:
 	-GrantCondition@HAZMAT:
 	WithDecoration@THEAL:
@@ -1807,7 +1829,7 @@ E8:
 		ProneOffset: 384,0,-395
 	AttackFrontal:
 		Voice: Attack
-		PauseOnCondition: being-warped
+		PauseOnCondition: being-warped || !undeployed
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -1903,7 +1925,8 @@ N1C:
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADSTRONG:
+	-DamagedByTintedCells@RADMED:
 	-DamagedByTintedCells@RADWEAK:
 	WithDecoration@THEAL:
 		Image: pips
@@ -2000,7 +2023,8 @@ N3C:
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADSTRONG:
+	-DamagedByTintedCells@RADMED:
 	-DamagedByTintedCells@RADWEAK:
 	WithDecoration@THEAL:
 		Image: pips
@@ -2096,7 +2120,8 @@ RMBC:
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADSTRONG:
+	-DamagedByTintedCells@RADMED:
 	-DamagedByTintedCells@RADWEAK:
 	WithDecoration@THEAL:
 		Image: pips
@@ -2106,7 +2131,7 @@ RMBC:
 		RequiresCondition: tibheal
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
-		TargetTypes: Ground, Vehicle, Tank, ChaosImmune
+		TargetTypes: Ground, Vehicle, Tank, ChaosImmune, DriverKillImmune
 	Targetable@REPAIR:
 		RequiresCondition: !parachute && damaged && !being-warped
 		TargetTypes: Repair

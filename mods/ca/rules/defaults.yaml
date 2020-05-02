@@ -240,7 +240,7 @@
 		Sequence: rank-veteran-1
 		Palette: effect
 		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Enemy, Neutral
+		ValidStances: Ally, Enemy
 		RequiresCondition: rank-veteran == 1
 		ZOffset: 256
 	WithDecoration@RANK-2:
@@ -248,7 +248,7 @@
 		Sequence: rank-veteran-2
 		Palette: effect
 		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Enemy, Neutral
+		ValidStances: Ally, Enemy
 		RequiresCondition: rank-veteran == 2
 		ZOffset: 256
 	WithDecoration@RANK-ELITE:
@@ -256,7 +256,7 @@
 		Sequence: rank-elite
 		Palette: effect
 		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Enemy, Neutral
+		ValidStances: Ally, Enemy
 		RequiresCondition: rank-elite
 		ZOffset: 256
 
@@ -449,28 +449,28 @@
 
 ^NaniteRepair:
 	SelfHealing@NREPAIR:
-		PercentageStep: 1
-		Delay: 25
+		PercentageStep: 3
+		Delay: 30
 		HealIfBelow: 100
 		DamageCooldown: 0
-		RequiresCondition: nrepairheal
+		RequiresCondition: nrepair
 	WithColoredOverlay@NREPAIR:
-		RequiresCondition: nrepairheal && !(empdisable || invulnerability || invisibility)
+		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility)
 		Palette: nrepair
 	TimedConditionBar@NREPAIR:
 		Condition: nrepair
-		Color: 0000FF
+		Color: 25cde999
 	WithIdleOverlay@NREPAIR:
 		Sequence: emp-overlay
 		Palette: tseffect
-		RequiresCondition: nrepairheal
+		RequiresCondition: nrepair && damaged
 	WithDecoration@NREPAIR:
 		Image: pips
 		Palette: chrometd
 		Sequence: pip-repair
 		ReferencePoint: Bottom, Center
 		ZOffset: 256
-		RequiresCondition: nrepairheal
+		RequiresCondition: nrepair
 		BlinkInterval: 64
 		RequiresSelection: True
 		ValidStances: Ally, Neutral
@@ -479,12 +479,27 @@
 	GrantConditionOnDamageState@NREPAIR:
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
-	GrantCondition@NREPAIR:
-		RequiresCondition: damaged && nrepair
-		Condition: nrepairheal
-	GrantConditionOnPrerequisite@NREPAIR:
-		Prerequisites: nrepair
-		Condition: nrepair
+
+^AffectedByDriverKill:
+	GrantConditionIfOwnerIsNeutral:
+		Condition: driver_dead
+	Capturable@DRIVER_DEAD:
+		Types: driverless_vehicle
+		RequiresCondition: driver_dead
+		ValidStances: Neutral
+		CancelActivity: true
+	SelfHealing@DRIVER_DEAD:
+		PercentageStep: -1
+		Delay: 20
+		HealIfBelow: 101
+		DamageCooldown: 0
+		RequiresCondition: driver_dead
+	CaptureManager:
+
+^CanCaptureDriverlessVehicles:
+	Captures@DRIVER_KILL:
+		CaptureTypes: driverless_vehicle
+	CaptureManager:
 
 ^GreenFlash:
 	ExternalCondition@GHIGH:
@@ -581,6 +596,31 @@
 	WithColoredOverlay@chilled5:
 		Palette: cold5
 		RequiresCondition: chilled > 4
+
+^Concussion:
+	TimedConditionBar@concussion:
+		Condition: concussion
+		Color: ffffff
+	ExternalCondition@concussion:
+		Condition: concussion
+	SpeedMultiplier@concussion:
+		Modifier: 80
+		RequiresCondition: concussion
+	ReloadDelayMultiplier@concussion:
+		Modifier: 150
+		RequiresCondition: concussion
+	WithDecoration@Concussion:
+		Image: pips
+		Sequence: pip-conc
+		Palette: chrome
+		ReferencePoint: Top, Center
+		ZOffset: 256
+		RequiresCondition: concussion
+		BlinkInterval: 16
+		BlinkPatterns:
+			concussion: On, On, Off
+		RequiresSelection: False
+		ValidStances: Ally, Neutral, Enemy
 
 ^GpsScramble:
 	Cloak@GPSHIDE:
@@ -689,6 +729,8 @@
 	Inherits@12: ^GpsScramble
 	Inherits@13: ^BotGroundProductionBonus
 	Inherits@14: ^Chillable
+	Inherits@15: ^AffectedByDriverKill
+	Inherits@16: ^Concussion
 	Inherits@gflash: ^GreenFlash
 	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
@@ -700,7 +742,7 @@
 	DrawLineToTarget:
 	UpdatesPlayerStatistics:
 	Mobile:
-		PauseOnCondition: being-captured || empdisable || being-warped
+		PauseOnCondition: being-captured || empdisable || being-warped || driver_dead
 		Locomotor: wheeled
 		TurnSpeed: 10
 	SelectionDecorations:
@@ -718,8 +760,12 @@
 		ValidDamageStates: Light, Medium, Heavy, Critical
 	Repairable:
 		RepairActors: fix, rep
-	Chronoshiftable:
+	ChronoshiftableWithSpriteEffect:
+		Image: chrono
+		WarpInSequence: warpin
+		WarpOutSequence: warpout
 		RequiresCondition: !being-warped
+		Palette: ra2effect-ignore-lighting-alpha75
 	Passenger:
 		CargoType: Vehicle
 	AttackMove:
@@ -782,11 +828,16 @@
 	Crushable:
 		CrushClasses: tank
 		WarnProbability: 10
-	DamagedByTintedCells@RAD:
+	DamagedByTintedCells@RADSTRONG:
 		Damage: 100
 		DamageInterval: 16
 		DamageTypes: RadiationDeath
-		LayerName: radioactivity
+		LayerName: radioactivity.strong
+	DamagedByTintedCells@RADMED:
+		Damage: 95
+		DamageInterval: 16
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity.medium
 
 ^VehicleTD:
 	Inherits@1: ^Vehicle
@@ -827,6 +878,7 @@
 	Inherits@11: ^GpsScramble
 	Inherits@12: ^BotGroundProductionBonus
 	Inherits@13: ^Chillable
+	Inherits@14: ^Concussion
 	Inherits@bounty: ^GlobalBounty
 	Inherits@SELECTION_MODE: ^FlatSelectionMode
 	RenderSprites:
@@ -995,11 +1047,17 @@
 	DetectCloaked:
 		CloakTypes: Cloak
 		Range: 1c0
-	DamagedByTintedCells@RAD:
+	DamagedByTintedCells@RADSTRONG:
 		Damage: 750
 		DamageInterval: 16
 		DamageTypes: RadiationDeath
-		LayerName: radioactivity
+		LayerName: radioactivity.strong
+		RequiresCondition: !(hazmatsuits || being-warped)
+	DamagedByTintedCells@RADMED:
+		Damage: 300
+		DamageInterval: 16
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity.medium
 		RequiresCondition: !(hazmatsuits || being-warped)
 	DamagedByTintedCells@RADWEAK:
 		Damage: 100
@@ -1018,6 +1076,7 @@
 
 ^Soldier:
 	Inherits: ^Infantry
+	Inherits@DRIVER: ^CanCaptureDriverlessVehicles
 	UpdatesPlayerStatistics:
 	MustBeDestroyed:
 	ProximityCaptor:
@@ -1080,6 +1139,7 @@
 	Inherits@13: ^GpsScramble
 	Inherits@14: ^Chillable
 	Inherits@15: ^BotGroundProductionBonus
+	Inherits@16: ^Concussion
 	Inherits@gflash: ^GreenFlash
 	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
@@ -1112,8 +1172,12 @@
 		Notification: NavalUnitLost
 	ProximityCaptor:
 		Types: Ship
-	Chronoshiftable:
-	RepairableNear:
+	ChronoshiftableWithSpriteEffect:
+		Image: chrono
+		WarpInSequence: warpin
+		WarpOutSequence: warpout
+		Palette: ra2effect-ignore-lighting-alpha75
+	RepairableNearCA:
 		RepairActors: syrd, spen, syrd.gdi, spen.nod
 	GpsDot:
 		String: Ship
@@ -1143,11 +1207,16 @@
 	RevealOnDeath:
 		Duration: 100
 		Radius: 2c512
-	DamagedByTintedCells@RAD:
+	DamagedByTintedCells@RADSTRONG:
 		Damage: 100
 		DamageInterval: 16
 		DamageTypes: RadiationDeath
-		LayerName: radioactivity
+		LayerName: radioactivity.strong
+	DamagedByTintedCells@RADMED:
+		Damage: 95
+		DamageInterval: 16
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity.medium
 
 ^NeutralPlane:
 	Inherits@1: ^ExistsInWorld
@@ -1842,7 +1911,11 @@
 	Targetable:
 		TargetTypes: Ground, Husk, NoAutoTarget
 		RequiresForceFire: true
-	Chronoshiftable:
+	ChronoshiftableWithSpriteEffect:
+		Image: chrono
+		WarpInSequence: warpin
+		WarpOutSequence: warpout
+		Palette: ra2effect-ignore-lighting-alpha75
 	Tooltip:
 		GenericName: Destroyed Vehicle
 	BodyOrientation:
@@ -2281,24 +2354,6 @@
 	GrantConditionOnDamageState@DAMAGED:
 		Condition: damaged
 
-^AffectedByDriverKill:
-	WithColoredOverlay@DRIVER_KILLED:
-		RequiresCondition: driver_killed
-		Palette: driver_killed
-	ExternalConditionThatRevokedOnCapture@DRIVER_KILLED:
-		Condition: driver_killed
-		TotalCap: 1
-	TimedConditionBar@DRIVER_KILLED:
-		Condition: driver_killed
-		Color: AAAAAA
-	Capturable@DRIVER_KILLED:
-		Types: driverless_vehcile
-		CaptureThreshold: 100
-		RequiresCondition: driver_killed
-		ValidStances: Enemy, Neutral, Ally
-	MustBeDestroyed:
-		RequiresCondition: !driver_killed
-
 ^PointDefenseSystem:
 	Turreted:
 		TurnSpeed: 255
@@ -2327,3 +2382,5 @@
 		Count: 12
 		ResetOnFire: True
 		PauseOnCondition: disabled || empdisable
+
+^PointDefenseSystemSMALL
