@@ -670,29 +670,6 @@ TSLA:
 		RequiresCondition: charged
 		ZOffset: 256
 		BlinkInterval: 64
-	Armament@POINTDEFENSE:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.soviet
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Red
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
-		RequiresSelection: true
 
 AGUN:
 	Inherits: ^Defense
@@ -3670,28 +3647,6 @@ ATWR:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !disabled && !being-warped
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.gdi
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Yellow
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
 
 STWR:
 	Inherits: ^Defense
@@ -3800,28 +3755,6 @@ OBLI:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !disabled && !being-warped
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Red
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
 
 HQ:
 	Inherits: ^BuildingTD
@@ -4929,28 +4862,6 @@ PRIS:
 		Amount: -75
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	Armament@POINTDEFENSE:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.allies
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Blue
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
 
 SPEN.nod:
 	Inherits: ^Building
@@ -5561,7 +5472,7 @@ PATR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
-		Prerequisites: gtek, ~structures.gdi, ~techlevel.high
+		Prerequisites: gtek, ~structures.gdi, ~techlevel.superw
 		BuildLimit: 1
 		IconPalette: chrometd
 		Description: Launches E.M. Pulse Missiles that disable vehicles & structures.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: E.M. Pulse Missile
