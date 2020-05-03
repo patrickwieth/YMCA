@@ -125,7 +125,7 @@ VisualExplodeHusk:
 	-Warhead@1Dam:
 	Warhead@2Eff: CreateEffect
 		Explosions: large_explosion
-		
+
 VisualExplodeAirborne:
 	Inherits: VisualExplodeHusk
 	Warhead@2Eff: CreateEffect
@@ -159,9 +159,6 @@ ArtilleryExplode:
 	Inherits: ^Explosion
 	Warhead@1Dam: SpreadDamage
 		Damage: 15000
-	Warhead@2Eff: CreateEffect
-		Explosions: self_destruct
-		ImpactSounds: kaboom22.aud
 
 V2Explode:
 	Inherits: SCUD
@@ -184,7 +181,6 @@ SmallBuildingExplode:
 	Warhead@2Eff: CreateEffect
 		Explosions: building, building_napalm, large_explosion, self_destruct
 	Warhead@Flames: FireCluster
-		Weapon: BurnFx
 		RandomClusterCount: 1
 		Dimensions: 2,2
 		Footprint: xx xx
@@ -233,7 +229,6 @@ KirovExplode:
 		Versus:
 			None: 120
 			Wood: 100
-			Light: 60
 			Heavy: 35
 			Concrete: 35
 			Brick: 10
@@ -245,8 +240,6 @@ KirovExplode:
 	Warhead@3EffWater: CreateEffect
 		Explosions: large_napalm
 		ImpactSounds: firebl3.aud
-		ValidTargets: Water, Underwater
-		InvalidTargets: Ship, Structure, Bridge
 	Warhead@Smu: LeaveSmudge
 		SmudgeType: Scorch
 		Size: 2
@@ -379,37 +372,25 @@ CrateNuke:
 	Warhead@Flash: FlashEffect
 		FlashType: Nuke
 
-
 UnitExplodeIraqTank:
 	Inherits: CrateNuke
 	Warhead@3Eff_impact: CreateEffect
 		Explosions: nuke3
 	Warhead@1Dam_impact: SpreadDamage
-		Spread: 1c0
 		Damage: 1000
 		Falloff: 368, 135, 50, 18, 0
 	-Warhead@2Res_impact:
 	Warhead@4Dam_areanuke1: SpreadDamage
-		Spread: 1c0
 		Damage: 500
 		Falloff: 600, 400, 250, 150,  0
-		Delay: 5
-		ValidTargets: Ground, Water, Air
 	-Warhead@5Res_areanuke1:
 	Warhead@6Smu_areanuke1: LeaveSmudge
 		Size: 2
 	Warhead@TREEKILL: SpreadDamage
-		Spread: 1c0
-		Damage: 6000
 		Falloff: 600, 400, 250, 150, 0
-		Delay: 5
-		ValidTargets: Trees
-		DamageTypes: Incendiary
 	Warhead@18Radio: CreateTintedCells
-		Spread: 1c0
 		Level: 300
 		Falloff: 100, 55, 32, 5
-		MaxLevel: 750
 		LayerName: radioactivity.weak
 	-Warhead@Flames:
 	-Warhead@Flash:
@@ -590,7 +571,7 @@ UnitExplodeToxinTruck:
 		Level: 350
 		Falloff: 100, 75, 52, 37, 24, 15, 2
 		MaxLevel: 750
-		LayerName: radioactivity.strong    
+		LayerName: radioactivity.strong
 	Warhead@15Spawn: SpawnActor
 		Actors: camera.cloud2, camera.cloud
 		Range: 5
@@ -710,7 +691,6 @@ TPWRZap:
 	ValidTargets: Ground, Water, Infantry, Tank
 	-Report:
 	Warhead@1Dam: SpreadDamage
-		Spread: 42
 		Damage: 1000
 		AffectsParent: True
 		Versus:
@@ -722,11 +702,10 @@ TPWRZap:
 		AimChance: 90
 		ValidTargets: Ground, Water, Infantry, Tank
 		ThrowWithoutTarget: true
-		
+
 TPWRArc1:
 	Inherits: TTankZap
 	Range: 3c0
-	Projectile: TeslaZap
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Ground, Water, Infantry, Tank
 	-Warhead@3Eff:

@@ -276,7 +276,6 @@ MIG:
 	Selectable:
 		Bounds: 36,28,0,2
 		DecorationBounds: 40,29,0,1
-	SelectionDecorations:
 	Contrail@1:
 		Offset: -598,-683,0
 	Contrail@2:
@@ -359,7 +358,6 @@ SUK:
 		PipCount: 4
 		ReloadDelay: 30
 		AmmoCondition: ammo
-	SelectionDecorations:
 	Contrail@1:
 		Offset: -598,-683,-40
 	Contrail@2:
@@ -591,7 +589,6 @@ YAK:
 		PipCount: 6
 		ReloadDelay: 7
 		AmmoCondition: ammo
-	SelectionDecorations:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: YAK.Husk
@@ -707,7 +704,6 @@ TRAN:
 	Aircraft:
 		TurnSpeed: 5
 		Speed: 135
-		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
 		AltitudeVelocity: 0c58
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
@@ -737,7 +733,6 @@ TRAN:
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
 		RequiresCondition: empdisable
-	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 40,36
 	WithCargoHatchAnimation:
@@ -865,7 +860,6 @@ TRAN.paradrop:
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
 		RequiresCondition: empdisable
-	SelectionDecorations:
 	Interactable:
 	GivesExperience:
 		Experience: 1000
@@ -1077,8 +1071,6 @@ TSLAHIND:
 		PipCount: 6
 		ReloadDelay: 8
 		AmmoCondition: ammo
-	SelectionDecorations:
-	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: HIND.Husk
 		RequiresCondition: ammo
@@ -1148,7 +1140,6 @@ HUEY:
 		PipCount: 6
 		ReloadDelay: 8
 		AmmoCondition: ammo
-	SelectionDecorations:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: HIND.Husk
@@ -1332,7 +1323,6 @@ A10:
 	Selectable:
 		Bounds: 36,28,0,2
 		DecorationBounds: 40,29,0,1
-	SelectionDecorations:
 	Contrail@1:
 		Offset: -258,-823,0
 	Contrail@2:
@@ -1389,10 +1379,6 @@ A10.bomber:
 		PlayerPalette: overlayplayertd
 	EjectOnDeath:
 		PilotActor: N1
-		SuccessRate: 50
-		EjectOnGround: false
-		EjectInAir: true
-		AllowUnsuitableCell: true
 	RejectsOrders:
 	Contrail@1:
 		Offset: -258,-823,0
@@ -1485,15 +1471,8 @@ C17.Cargo:
 	Inherits: C17
 	RenderSprites:
 		Image: c17
-		PlayerPalette: overlayplayertd
 	Aircraft:
-		CruiseAltitude: 2560
-		TurnSpeed: 5
 		Speed: 266
-		LandingSounds: vc130diva.aud, vc130divb.aud
-		Repulsable: False
-		MaximumPitch: 36
-		IdleBehavior: LeaveMap
 	-Targetable@AIRBORNE:
 
 C17.Clustermines:
@@ -1503,10 +1482,8 @@ C17.Clustermines:
 		Weapon: ClusterMineSpawner
 	AmmoPool:
 		Ammo: 1
-	RejectsOrders:
 	RenderSprites:
 		Image: c17
-		PlayerPalette: overlayplayertd
 	-ParaDrop:
 
 APCH:
@@ -1580,7 +1557,6 @@ APCH:
 		RequiresCondition: !ammo && empdisable
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
-	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 30,24
 	Rearmable:
@@ -1654,7 +1630,6 @@ ORCA:
 		Interval: 2
 	WithMoveAnimation:
 		MoveSequence: move
-	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 30,24
 	Rearmable:
@@ -1716,7 +1691,6 @@ ORCB:
 	Selectable:
 		Bounds: 36,28,0,2
 		DecorationBounds: 40,29,0,1
-	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: ORCB.Husk
 		RequiresCondition: ammo && !empdisable
@@ -1858,7 +1832,6 @@ RAH:
 		PipCount: 4
 		AmmoCondition: ammo
 		ReloadCount: 2
-	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: RAH.Husk
 		RequiresCondition: ammo && !empdisable
@@ -1955,7 +1928,6 @@ KIRO:
 		InitialStance: AttackAnything
 		InitialStanceAI: AttackAnything
 		ScanRadius: 10
-	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: KIRO.Husk
 		RequiresCondition: !empdisable
@@ -1987,7 +1959,7 @@ KIRO:
 		DecorationBounds: 40,40,0,1
 	SelfHealing:
 		PercentageStep: 1
-		Delay: 3
+		Delay: 25
 		HealIfBelow: 75
 		DamageCooldown: 150
 	Voiced:
@@ -2102,7 +2074,6 @@ OCAR:
 		Speed: 175
 		TakeoffSounds: dropup1.aud
 		LandingSounds: dropdwn1.aud
-		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
 		Repulsable: True
 		IdleTurnSpeed: 1
 		Voice: Move
@@ -2129,7 +2100,6 @@ OCAR:
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 		Interval: 2
-	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 30,24
 	Voiced:
@@ -2140,25 +2110,10 @@ OCAR:
 OCAR.Reinforce:
 	Inherits: OCAR
 	-Buildable:
-	RenderSprites:
-		Image: orcaca
 	Carryall:
-		BeforeLoadDelay: 10
-		BeforeUnloadDelay: 15
-		LocalOffset: 0, 0, -128
-		Voice: Action
 		DropRange: 30c0
 	Aircraft:
-		AltitudeVelocity: 0c100
 		IdealSeparation: 0c256
-		TurnSpeed: 6
-		Speed: 155
-		TakeoffSounds: dropup1.aud
-		LandingSounds: dropdwn1.aud
-		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
-		Repulsable: True
-		IdleTurnSpeed: 1
-		Voice: Move
 	-Selectable:
 	SelectionDecorations:
 		RenderSelectionBars: False
@@ -2229,7 +2184,6 @@ HARR:
 		UsePlayerColor: false
 		ZOffset: -512
 		Color: FFFFFF80
-	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: HARR.Husk
 		RequiresCondition: ammo && !empdisable
@@ -2251,7 +2205,7 @@ HARR:
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
-		RearmActors: hpad, hpad2
+		RearmActors: hpad, hpad.td
 
 Raptor:
 	Inherits: ^Plane
@@ -2315,8 +2269,7 @@ Raptor:
 		RearmActors: afld, afld.gdi, afld.allies
 	RenderSprites:
 		Scale: 0.9
-
-SCRIN:
+SCRN:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2386,7 +2339,6 @@ SCRIN:
 		Color: 00FF0080
 		UsePlayerColor: false
 		ZOffset: -512
-	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: SCRN.Husk
 		RequiresCondition: ammo && !empdisable
@@ -2421,8 +2373,6 @@ HORN:
 		Name: Hornet
 	Health:
 		HP: 7200
-	Armor:
-		Type: Light
 	RevealsShroud:
 		Range: 2c0
 		Type: GroundPosition
@@ -2478,8 +2428,6 @@ HORN:
 		LandingDistance: 8c0
 	Contrail@1:
 		Offset: -432,0,0
-		UsePlayerColor: false
-		ZOffset: -512
 		Color: cc550080
 		TrailLength: 10
 	-Contrail@2:
@@ -2605,11 +2553,7 @@ POD1:
 	Inherits: POD2
 	RenderSprites:
 		Image: pod2
-		PlayerPalette: overlayplayertd
 	CrashLanding:
-		Spins: False
-		Moves: True
-		Velocity: 113
 		Explosion: DropPodVisual2
 
 VENM:
@@ -2684,7 +2628,6 @@ VENM:
 		Interval: 2
 	WithMoveAnimation:
 		MoveSequence: move
-	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 30,24
 	Rearmable:
@@ -2852,7 +2795,6 @@ AURO:
 	Selectable:
 		Bounds: 36,28,0,2
 		DecorationBounds: 40,29,0,1
-	SelectionDecorations:
 	Contrail@AB1:
 		Offset: -400,-70,-50
 		UsePlayerColor: false

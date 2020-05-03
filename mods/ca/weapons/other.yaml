@@ -43,24 +43,19 @@ ChemballLauncher:
 	Inherits: FireballLauncher
 	ReloadDelay: 70
 	Projectile: Bullet
-		Speed: 250
 		TrailImage: cb2
 		TrailPalette: temptd
 		Image: cb1
 		Palette: temptd
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 90
-			Wood: 50
 			Light: 70
 			Heavy: 35
 			Concrete: 35
-			Brick: 20
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: med_chem
 		ExplosionPalette: temptd
-		ImpactSounds: firetrt1.aud
 	-Warhead@Flames:
 
 Napalmtd:
@@ -140,13 +135,10 @@ Flamer:
 	Range: 3c769
 	StartBurstReport: flamer2.aud
 	Warhead@1Dam: SpreadDamage
-		Spread: 288
-		Falloff: 100, 50, 25, 12, 6, 3, 0
 		Damage: 1300
 
 FlamerE:
 	Inherits: Flamer
-	Projectile: Bullet
 	Range: 5c0
 
 Chemspray:
@@ -162,7 +154,6 @@ Chemspray:
 
 ChemsprayE:
 	Inherits: Chemspray
-	Projectile: Bullet
 	Range: 5c0
 
 Napalm:
@@ -260,8 +251,6 @@ TTankZap:
 	ReloadDelay: 130
 	Range: 7c0
 	Warhead@1Dam: SpreadDamage
-		Spread: 42
-		Damage: 10000
 		Versus:
 			Wood: 60
 			Concrete: 60
@@ -274,7 +263,6 @@ TTankZap:
 TTankArc1:
 	Inherits: TTankZap
 	Range: 1c768
-	Projectile: TeslaZap
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Infantry, Vehicle, Ship
 		Versus:
@@ -305,6 +293,17 @@ DogJaw:
 		ValidTargets: Infantry
 		InvalidTargets: Ant
 		DamageTypes: DefaultDeath
+
+Commandeer:
+	ReloadDelay: 5
+	Range: 1c0
+	Report: ggarenta.aud, ggarentb.aud, ggarentc.aud
+	ValidTargets: NoCrew
+	Projectile: InstantHit
+	Warhead@1Change: ChangeOwner
+		Range: 0c511
+		ValidStances: Neutral
+		ValidTargets: NoCrew
 
 Heal:
 	ReloadDelay: 80
@@ -340,13 +339,6 @@ RepairIFV:
 	Burst: 10
 	BurstDelays: 30
 	Report: repair11.aud
-	Warhead@1Dam: SpreadDamage
-		Damage: -3000
-	Warhead@highlight: GrantExternalCondition
-		Range: 0c511
-		Duration: 2
-		Condition: highlight
-		ValidTargets: Ground, Vehicle
 	Warhead@3Eff: CreateEffect
 		Image: sparks_overlay
 		Explosions: idle
@@ -379,6 +371,72 @@ Demolish:
 		Dimensions: 3,3
 		Footprint: xxx xxx xxx
 
+PlaceC4:
+	ReloadDelay: 10
+	Range: 1c849
+	Projectile: InstantHit
+	Report: icolseta.aud
+	ValidTargets: C4, Vehicle, Structure
+	InvalidTargets: C4Attached
+	Warhead@AttachDelayedWeapon: AttachDelayedWeapon
+		Weapon: C4
+		Type: c4
+		TriggerTime: 60
+		DeathTypes: ExplosionDeath
+		Range: 1
+	Warhead@TargetValidator: SpreadDamage
+	Warhead@highlight: GrantExternalCondition
+		Range: 0c256
+		Duration: 2
+		Condition: highlight
+		ValidTargets: Ground, Structure, Vehicle
+
+C4:
+	Projectile: InstantHit
+	Warhead@1Dam: HealthPercentageDamage
+		ValidTargets: Air, Ground, Water
+		Spread: 64
+		Damage: 100
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: icolexpa.aud
+		ValidTargets: Ground, Water, Air
+	Warhead@Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Structure, Wall, Trees
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+
+DefuseKit:
+	ReloadDelay: 50
+	Range: 2c0
+	Report: gdefuse.aud
+	ValidTargets: C4Attached
+	Projectile: LaserZap
+		Width: 48
+		Duration: 4
+		Color: FFFFFF80
+	Warhead@emp: GrantExternalCondition
+		Range: 128
+		Duration: 3
+		Condition: detach
+		ValidTargets: C4Attached
+		ValidStances: Ally
+	Warhead@DetachDelayedWeapon: DetachDelayedWeapon
+		Types: c4
+		Range: 128
+		ValidStances: Ally
+		ValidTargets: C4Attached
+	Warhead@TargetValidator: SpreadDamage
+		ValidTargets: C4Attached
+
+IFVDefuseKit:
+	Inherits: DefuseKit
+	Range: 4c512
 
 DemoTruckTargeting:
 	ValidTargets: DetonateAttack
@@ -449,13 +507,7 @@ Laser.Adv:
 	Inherits: Laser
 	Report: obelmod1.aud
 	Projectile: LaserZap
-		Width: 56
-		HitAnim: laserfire
 		Color: FF00FF80
-		ZOffset: 2047
-		SecondaryBeam: true
-		SecondaryBeamWidth: 90
-		SecondaryBeamZOffset: 2047
 		SecondaryBeamColor: FF00FF40
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
@@ -496,11 +548,7 @@ LaserTur:
 	Projectile: LaserZap
 		Width: 45
 		Duration: 5
-		HitAnim: laserfire
-		ZOffset: 2047
-		SecondaryBeam: true
 		SecondaryBeamWidth: 65
-		SecondaryBeamZOffset: 2047
 		SecondaryBeamColor: FF000030
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
@@ -527,11 +575,7 @@ PortaLaser:
 	Projectile: LaserZap
 		Width: 30
 		Duration: 3
-		HitAnim: laserfire
-		ZOffset: 2047
-		SecondaryBeam: true
 		SecondaryBeamWidth: 50
-		SecondaryBeamZOffset: 2047
 		SecondaryBeamColor: FF000030
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
@@ -598,10 +642,7 @@ PointLaser:
 		Duration: 3
 		-HitAnim:
 		Color: 03f0fc
-		ZOffset: 2047
-		SecondaryBeam: true
 		SecondaryBeamWidth: 50
-		SecondaryBeamZOffset: 2047
 		SecondaryBeamColor: 03fcfc30
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
@@ -749,7 +790,6 @@ PrisBurst:
 	Warhead@3Eff: CreateEffect
 		Explosions: small_explosion
 		-ImpactSounds:
-		ValidTargets: Ground, Water, Ship, Trees
 
 PrisTBurst:
 	Inherits: PrisBurst
@@ -1389,6 +1429,7 @@ V3Launcher:
 Flare:
 	ReloadDelay: 1
 	Range: 10c0
+	MinRange: 3c0
 	ValidTargets: Structure
 	TargetActorCenter: true
 	Projectile: LaserZap
@@ -1418,7 +1459,7 @@ Cloud:
 		LayerName: radioactivity.strong
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
-		Damage: 500
+		Damage: 400
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 5
 		ValidTargets: Ground, Trees
