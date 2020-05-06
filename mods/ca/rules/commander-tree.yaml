@@ -702,7 +702,7 @@ commander_tree.Mobile_Sensor_PLD:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi
+		Prerequisites: prerequisite.has_points, ~vehicles.td
 		Description: Upgrades the Mobile Sensor Array with a Point Laser Defense System.
 
 commander_tree.Railgunner:
@@ -816,13 +816,181 @@ commander_tree.Stealth_Fighter:
 		Description: Enables to build the Stealth Fighter. It is a cloaked aircraft optimized to take out single heavy armored vehicles.
 
 #Nod
-
-hack.cameo_filler.3:
-	Inherits: ^default.cameo_filler
+commander_tree.Buggy_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Buggy Point Laser Defense System
 	Buildable:
-		Queue: queue.toxin_gen_generals_power, queue.demo_gen_generals_power
-		BuildPaletteOrder: 28
-		Prerequisites: disabled, ~prerequisite.zh_units
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod
+		Description: Upgrades the Buggy with a Point Laser Defense system to shoot down incoming projectiles.
+
+commander_tree.Buggy_AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Buggy Anti-Air Laser
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod
+		Description: Upgrades the Buggy with an Anti-Air Laser to shoot down aircraft.
+
+commander_tree.SSM_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SSM Launcher
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!commander_tree.ssm_toxin_launcher
+		Description: Enables to build the SSM Launcher a high range artillery.
+
+commander_tree.SSM_Toxin_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SSM Toxin Launcher
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!commander_tree.ssm_launcher
+		Description: Enables to build the SSM Toxin Launcher a high range artillery releasing toxic clouds.
+
+commander_tree.Flame_Tank_Cloak:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Flame Tank Cloak Device
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!commander_tree.flame_tank_pld
+		Description: Gives the Flame Tank a Cloak Device making it harder to detect.
+
+commander_tree.Flame_Tank_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Flame Tank Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!commander_tree.flame_tank_cloak
+		Description: Upgrades the Flame Tank with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Stealth_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod
+		Description: Enables to build the Stealth Tank. It is a cloaked tank with strong missiles vs. vehicles.
+
+commander_tree.Stealth_Tank_Scrin:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank Scrin Weapon
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank_explosive_rockets
+		Description: Upgrades the Stealth Tank with a Scrin Weapon.
+
+commander_tree.Stealth_Tank_Explosive_Rockets:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank Explosive Rockets
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank_scrin
+		Description: Upgrades the Stealth Tank's missiles with a high explosive load.
+
+commander_tree.Recon_Bike_Scrin:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Scrin Weapon
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!commander_tree.recon_bike_rocket_hail
+		Description: Upgrades the Recon Bike with a Scrin Weapon.
+
+commander_tree.Recon_Bike_Rocket_Hail:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Rocket Hail
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!commander_tree.recon_bike_scrin
+		Description: Upgrades the Stealth Tank's missiles with a high explosive load.
+
+commander_tree.Light_Tank_Laser:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Light Tank Laser Weapon
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod
+		Description: Upgrades the Light Tank with a Laser weapon.
+
+commander_tree.Chemical_Mortar:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Mortar Infantry
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~commander.tree.advanced_infantry_training
+		Description: Enables to build mortar infantry firing chemical shells
+
+commander_tree.Elite_Cyborg:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Mortar Infantry
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~commander.tree.advanced_infantry_training
+		Description: Enables to build mortar infantry firing chemical shells
+
+commander_tree.Rebel_Leader:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Mortar Infantry
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~commander.tree.advanced_infantry_training
+		Description: Enables to build mortar infantry firing chemical shells
+
+commander_tree.Reinforcements_Coordinator:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Reinforcements Coordinator
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~
+		Description: Enables to build the Reinforcements Coordinator, which brings directly to the frontline.
 
 hack.has_points:
 	AlwaysVisible:
