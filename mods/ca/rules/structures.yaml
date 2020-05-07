@@ -219,7 +219,7 @@ SPEN:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !forceshield || !invulnerability || !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	RallyPoint:
 	ProductionBar:
 		ProductionType: Ship
@@ -358,7 +358,7 @@ SYRD:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !forceshield || !invulnerability || !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	RallyPoint:
 	ProductionBar:
 		ProductionType: Ship
@@ -473,7 +473,7 @@ IRON:
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
 		AllowMultiple: false
-		LongDesc: Makes a vehicles or structures invulnerable\nfor 20 seconds. Lethal to Infantry.
+		LongDesc: Makes selected vehicles and structures temporarily invulnerable\n  Warning: Harmful to Infantry.
 		OnFireSound: ironcur9.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -699,6 +699,10 @@ TSLA:
 		RequiresCondition: charged
 		ZOffset: 256
 		BlinkInterval: 64
+		RequiresSelection: true
+	ProvidesPrerequisite@TSLA:
+		Factions: soviet, russia, ukraine, iraq
+		Prerequisite: structures.tsla
 
 AGUN:
 	Inherits: ^Defense
@@ -848,11 +852,11 @@ DOME:
 		Condition: gpshide
 		ValidStances: Ally
 		Range: 3
-		Duration: 1000
+		Duration: 2500
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
 		AllowMultiple: false
-		LongDesc: Makes selected ground units invisible when stationary\nfor 1 minute.
+		LongDesc: Makes selected ground units temporarily invisible when stationary.
 		OnFireSound:  sscrambl.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -1175,7 +1179,7 @@ ATEK:
 		AllowMultiple: false
 		Sequence: false-active
 		Description: Force Shield
-		LongDesc: Makes friendly structures invulnerable\nfor 10 seconds. Causes structure power failure.
+		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
 		OnFireSound: forceon.aud
 		DisplayTimerStances: Ally
 		SelectTargetSpeechNotification: SelectTarget
@@ -1851,7 +1855,7 @@ AFLD:
 		DirectionArrowAnimation: paradirection
 	ParatroopersPower@Russianparatroopers:
 		OrderName: stormtroopers
-		Prerequisites: aircraft.russia, , ~techlevel.high
+		Prerequisites: aircraft.russia, ~techlevel.high
 		Icon: stormtroopers
 		ChargeInterval: 9000
 		Description: Storm-troopers
@@ -2146,7 +2150,7 @@ STEK:
 		AirburstAltitude: 0c0
 		AllowMultiple: false
 		Description: Force Shield
-		LongDesc: Makes friendly structures invulnerable\nfor 10 seconds. Causes structure power failure.
+		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
 		OnFireSound: forceon.aud
 		DisplayTimerStances: Ally
 		SelectTargetSpeechNotification: SelectTarget
@@ -2215,10 +2219,10 @@ BARR:
 		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
-	ProvidesPrerequisite@barracks:
-		Prerequisite: barracks
-	ProvidesPrerequisite@barracksRA:
-		Prerequisite: barracksRA
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantryra:
+		Prerequisite: infantry.ra
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: infantry.soviet
@@ -2381,10 +2385,10 @@ TENT:
 		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
-	ProvidesPrerequisite@barracksRA:
-		Prerequisite: barracksRA
-	ProvidesPrerequisite@barracks:
-		Prerequisite: barracks
+	ProvidesPrerequisite@infantryra:
+		Prerequisite: infantry.ra
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
 	ProvidesPrerequisite@allies:
 		Factions: allies, england, france, germany
 		Prerequisite: infantry.allies
@@ -2477,6 +2481,7 @@ FIX:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	WithBuildingBib:
 		HasMinibib: true
 	WithResupplyAnimation:
@@ -2633,7 +2638,7 @@ WOOD:
 	WithWallSpriteBody:
 		Type: woodfence
 
-BARRACKS:
+INFANTRY.ANY:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
@@ -2641,7 +2646,7 @@ BARRACKS:
 	Buildable:
 		Description: Infantry Production
 
-BARRACKSTD:
+INFANTRY.RA:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
@@ -2649,7 +2654,15 @@ BARRACKSTD:
 	Buildable:
 		Description: Infantry Production
 
-VEHICLES.TD:
+INFANTRY.TD:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		Name: Infantry Production
+	Buildable:
+		Description: Infantry Production
+
+VEHICLES.ANY:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
@@ -2657,7 +2670,7 @@ VEHICLES.TD:
 	Buildable:
 		Description: Vehicle Production
 
-VEHICLES.ANY:
+VEHICLES.TD:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
@@ -2721,6 +2734,15 @@ INFANTRY.MECH:
 	Buildable:
 		Description: Mechanical Barracks
 
+STRUCTURES.TSLA:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		GenericName:
+		Name: Tesla Coil
+	Buildable:
+		Description: Tesla Coil
+
 PYLE:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
@@ -2776,10 +2798,10 @@ PYLE:
 		PrimaryCondition: primary
 	ProductionBar:
 		ProductionType: Infantry
-	ProvidesPrerequisite@barracks:
-		Prerequisite: barracks
-	ProvidesPrerequisite@barrackstd:
-		Prerequisite: barrackstd
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantrytd:
+		Prerequisite: infantry.td
 	ProvidesPrerequisite@gdi:
 		Factions: gdi, talon, zocom, eagle
 		Prerequisite: infantry.gdi
@@ -2880,10 +2902,10 @@ HAND:
 		ProductionType: Infantry
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	ProvidesPrerequisite@barracks:
-		Prerequisite: barracks
-	ProvidesPrerequisite@barrackstd:
-		Prerequisite: barrackstd
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantrytd:
+		Prerequisite: infantry.td
 	ProvidesPrerequisite@nod:
 		Factions: nod, blackh, marked, legion
 		Prerequisite: infantry.nod
@@ -4192,7 +4214,7 @@ REP:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	Power:
@@ -4780,7 +4802,7 @@ GTEK:
 		AirburstAltitude: 0c0
 		AllowMultiple: false
 		Description: Force Shield
-		LongDesc: Makes friendly structures invulnerable\nfor 10 seconds. Causes structure power failure.
+		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
 		OnFireSound: forceon.aud
 		DisplayTimerStances: Ally
 		SelectTargetSpeechNotification: SelectTarget
@@ -4791,12 +4813,13 @@ GTEK:
 		PauseOnCondition: disabled || empdisable ||  being-warped
 	DetonateWeaponPower@Nrepair:
 		OrderName: nrepair
+		Prerequisites: ~structures.talon
 		Icon: nrepair
 		Cursor: repair
 		ChargeInterval: 7500
 		Description: Nanite Repair
 		ActivationDelay: 10
-		LongDesc: Repairs damaged vehicles\nfor 30 seconds.
+		LongDesc: Repairs selected damaged vehicles.
 		Weapon: RepairNanite
 		AirburstAltitude: 0
 		AllowMultiple: false
@@ -4899,7 +4922,7 @@ TMPL:
 		AllowMultiple: false
 		Sequence: false-active
 		Description: Force Shield
-		LongDesc: Makes friendly structures invulnerable\nfor 10 seconds. Causes structure power failure.
+		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
 		OnFireSound: forceon.aud
 		DisplayTimerStances: Ally
 		SelectTargetSpeechNotification: SelectTarget
@@ -4923,7 +4946,7 @@ TMPL:
 		AirburstAltitude: 0c0
 		Sequence: false-active
 		AllowMultiple: false
-		LongDesc: Increases Vehicle & Infantry movement and attack speed\nfor 20 seconds.
+		LongDesc: Temporarily increases ground unit movement and attack speed.
 		OnFireSound: nodfrenzy.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -5066,7 +5089,7 @@ SPEN.nod:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	RallyPoint:
 	ProductionBar:
 		ProductionType: Ship
@@ -5179,7 +5202,7 @@ SYRD.gdi:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	RallyPoint:
 	ProductionBar:
 		ProductionType: Ship
@@ -5421,7 +5444,7 @@ SGEN:
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
 		AllowMultiple: false
-		LongDesc: Makes a vehicles or structures invisible\nfor 30 seconds. Harmful to Infantry.
+		LongDesc: Makes vehicles and structures temporarily invisible.\n  Warning: Harmful to Infantry.
 		OnFireSound: cloak6.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower

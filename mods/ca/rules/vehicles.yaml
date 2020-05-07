@@ -161,6 +161,88 @@ V2RL:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+		
+2TNK.Chrono:
+	Inherits: 2TNK
+	RenderSprites:
+		Image: 2tnk
+		FactionImages:
+			england: rtnk
+			germany: tnkd
+	-Buildable:
+	GrantConditionOnFaction@England:
+		Factions: england
+		Condition: england
+	GrantConditionOnFaction@Germany:
+		Factions: germany
+		Condition: germany
+	Armament:
+		RequiresCondition: !(germany || england)
+	Armament@Germany:
+		Weapon: 183mm
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 868,0,0
+		MuzzleSequence: muzzle
+		RequiresCondition: germany
+	Armament@England:
+		Weapon: 120mmHEAT
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: england
+	Tooltip:
+		Name: Medium Tank
+		GenericName: Tank
+		RequiresCondition: !germany
+	Tooltip@germany:
+		Name: Tank Destroyer
+		GenericName: Tank
+		RequiresCondition: germany
+	MirageTooltip@Tree:
+		Name: Mirage Tank
+		GenericName: Civilian building
+		GenericVisibility: Enemy, Neutral
+		RequiresCondition: tree && england
+	Mirage:
+		RequiresCondition: england && !empdisable && !being-warped && !driver-dead
+		RevealOn: Attack, Move
+		MirageCondition: tree
+		DefaultTargetTypes: v08, v09, v10, v11, v12, v13, v14, v15, v16, v17, v18
+		InitialDelay: 100
+		RevealDelay: 100
+	WithMirageSpriteBody:
+		RequiresCondition: tree && england
+		Name: tree
+	SpawnActorOnDeath:
+		RequiresCondition: !(being-warped || warpout) && warpin && !(england || germany)
+	SpawnActorOnDeath@England:
+		Actor: RTNK.Husk
+		RequiresCondition: warpin && england && !(being-warped || warpout)
+	SpawnActorOnDeath@Germany:
+		Actor: TNKD.Husk
+		RequiresCondition: warpin && germany && !(being-warped || warpout)
+	GrantTimedCondition@warpin:
+		Condition: warpin
+		Duration: 850
+	KillsSelf@warpout:
+		GrantsCondition: warpout
+		RequiresCondition: !warpin
+	Explodes@warpout:
+		Weapon: UnitExplodeWarpOut
+		EmptyWeapon: UnitExplodeWarpOut
+		RequiresCondition: warpout
+	AutoTargetPriority@TANKDEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move && germany
+		ValidTargets: Tank
+		InvalidTargets: NoAutoTarget, WaterStructure
+		Priority: 10
+	AutoTargetPriority@TANKATTACKANYTHING:
+		RequiresCondition: (stance-attackanything || assault-move) && germany
+		ValidTargets: Tank
+		InvalidTargets: NoAutoTarget
+		Priority: 10
 
 3TNK:
 	Inherits: ^Tank
@@ -393,6 +475,24 @@ ARTY.nod:
 		Prerequisites: ~vehicles.nod, ~techlevel.medium
 	Armament:
 		Weapon: 155mmTD
+		
+ARTY.Chrono:
+	Inherits: ARTY
+	RenderSprites:
+		Image: arty
+	-Buildable:
+	GrantTimedCondition@warpin:
+		Condition: warpin
+		Duration: 850
+	KillsSelf@warpout:
+		GrantsCondition: warpout
+		RequiresCondition: !warpin
+	Explodes:
+		RequiresCondition: !warpout
+	Explodes@warpout:
+		Weapon: UnitExplodeWarpOut
+		EmptyWeapon: UnitExplodeWarpOut
+		RequiresCondition: warpout
 
 ISU:
 	Inherits: ^Tank
@@ -718,6 +818,7 @@ MNLY:
 		Range: 4c0
 	Minelayer:
 		Mine: MINV
+		TileUnknownName: build-valid
 	MineImmune:
 	AmmoPool:
 		Ammo: 5
@@ -861,7 +962,7 @@ TTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 125
-		Prerequisites: tsla, dome, ~vehicles.russia, ~techlevel.medium
+		Prerequisites: structures.tsla, dome, ~vehicles.russia, ~techlevel.medium
 		Description: Tank with mounted Tesla coil.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
 	Valued:
 		Cost: 1250
@@ -1240,7 +1341,7 @@ APC2:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.td, ~!gtek, ~vehicles.apc2, barracks, ~techlevel.low
+		Prerequisites: ~vehicles.td, ~!gtek, ~vehicles.apc2, infantry.any, ~techlevel.low
 		IconPalette: chrometd
 		Description: Tough infantry transport.\n  Strong vs Infantry\n  Weak vs Tanks, Aircraft
 	Valued:
@@ -1294,7 +1395,7 @@ VULC:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.gdi, ~gtek, ~barracks, ~techlevel.high
+		Prerequisites: ~vehicles.gdi, ~gtek, ~infantry.any, ~techlevel.high
 		IconPalette: chrometd
 		Description: Tough infantry transport, armed with a powerful AA gun.\n  Strong vs Aircraft\n  Weak vs Infantry, Tanks
 	Valued:
@@ -2149,7 +2250,7 @@ IFV:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 60
-		Prerequisites: barracks, ~vehicles.ifv, ~techlevel.low
+		Prerequisites: infantry.any, ~vehicles.ifv, ~techlevel.low
 		Description: Adaptable infantry transport.\n  Can attack Aircraft.\n  Strong vs Light Armor, Aircraft\n  Weak vs Infantry, Tanks\n  Special Ability: Transform
 	Valued:
 		Cost: 750
@@ -3041,6 +3142,16 @@ TNKD:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+	AutoTargetPriority@TANKDEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+		ValidTargets: Tank
+		InvalidTargets: NoAutoTarget, WaterStructure
+		Priority: 10
+	AutoTargetPriority@TANKATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+		ValidTargets: Tank
+		InvalidTargets: NoAutoTarget
+		Priority: 10
 
 TNKD2:
 	Inherits: ^Tank
