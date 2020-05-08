@@ -818,7 +818,7 @@ DOME:
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: rad.soviet.stolen
-	AirstrikePowerCA@clustermines:
+	AirstrikePower@clustermines:
 		ChargeInterval: 6000
 		Prerequisites: structures.france, techlevel.superw
 		Description: Cluster Mines
@@ -2056,7 +2056,7 @@ TPWR:
 	Inherits: APWR
 	Buildable:
 		Prerequisites: dome, ~techlevel.medium, ~structures.russia
-		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload
+		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload (Toggle)\n  Warning: Unstable when damaged and overloaded.
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -2065,19 +2065,35 @@ TPWR:
 		Offset: -20,-70,0
 		Sequence: power
 		RequiresCondition: overcharge && !(empdisable || being-warped || build-incomplete)
-	GrantTimedConditionOnDeploy@OVERCHARGE:
+	GrantTimedCondition@LOCKOUT:
+		Duration: 1500
+		Condition: lockout
+		RequiresCondition: overcharge
+	GrantTimedCondition@COOLDOWN:
+		Duration: 250
+		Condition: cooldown
+		RequiresCondition: !overcharge
+	TimedConditionBar@LOCKOUT:
+		Condition: lockout
+		Color: FF0000
+	TimedConditionBar@COOLDOWN:
+		Condition: cooldown
+		Color: FFFF0080
+	GrantConditionOnDeploy@OVERCHARGE:
+		DeploySounds: btesat1a.aud
+		UndeploySounds: btesat1a.aud
 		DeployedCondition: overcharge
-		CooldownTicks: 300
-		DeployedTicks: 900
-		PauseOnCondition: disabled || empdisable || being-warped
-		DischargingColor: 0080FF60
-		ChargingColor: FFFF0080
-		StartsFullyCharged: false
-		DeploySound: btesat1a.aud
-		RequiresCondition: !(owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
+		DeployCursor: powerdown
+		DeployBlockedCursor: powerdown-blocked
+		PauseOnCondition: lockout || cooldown
+		SkipMakeAnimation: true
+		RequiresCondition: !(empdisable || being-warped || build-incomplete) && !(owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
 	GrantConditionOnDamageState@VOLATILE:
 		Condition: volatile
 		ValidDamageStates: Heavy, Critical
+	GrantConditionOnDamageState@CRITICAL:
+		Condition: critical
+		ValidDamageStates: Critical
 	PowerMultiplier:
 		Modifier: 200
 		RequiresCondition: overcharge
@@ -2095,7 +2111,7 @@ TPWR:
 		ShowSelectionBar: false
 		ActiveColor: 0080FF60
 		CooldownColor: FFFF0080
-		RequiresCondition: (owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
+		RequiresCondition: !critical && (owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
 
 STEK:
 	Inherits: ^ScienceBuilding
@@ -3224,10 +3240,13 @@ AIRS:
 	Exit@1:
 		SpawnOffset: -1024,0,0
 		ExitCell: 3,1
-	ProductionAirdrop:
+	ProductionAirdropCA:
 		Produces: Vehicle
 		PauseOnCondition: forceshield || invulnerability || being-warped
 		ActorType: c17.cargo
+		EntryType: DropSiteClosestEdge
+		ExitType: StraightAhead
+		LandingFacing: 64
 		ReadyAudio: ReinforcementsArrived
 	ProvidesPrerequisite@any:
 		Factions: gdi, talon, zocom, eagle, nod, marked, blackh, legion, allies, england, france, germany, soviet, russia, ukraine, iraq
@@ -3378,6 +3397,7 @@ AIRS:
 	WithDeliveryAnimation:
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 	ProductionBar:
@@ -4271,6 +4291,7 @@ HPAD.TD:
 	WithBuildingBib:
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
@@ -4605,7 +4626,7 @@ AFLD.GDI:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
-	AirstrikePowerCA@EagleAirDef:
+	InterceptorPower@EagleAirDef:
 		OrderName: interceptors
 		Prerequisites: aircraft.eagle, techlevel.superw
 		Icon: airsupport
@@ -4626,7 +4647,6 @@ AFLD.GDI:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
-		Mission: Guard
 		GuardDuration: 500
 		Cordon: 5c0
 	ProductionBar:
@@ -4634,6 +4654,7 @@ AFLD.GDI:
 	SupportPowerChargeBar:
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -5084,6 +5105,7 @@ SPEN.nod:
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	RepairsUnits:
 		HpPerStep: 1000
 		StartRepairingNotification: Repairing
@@ -5197,6 +5219,7 @@ SYRD.gdi:
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	RepairsUnits:
 		HpPerStep: 1000
 		StartRepairingNotification: Repairing
@@ -6016,11 +6039,9 @@ MSLO.Nod:
 WEAT:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	HitShape:
-		TargetableOffsets: 0,0,0, 0,512,128, 420,-598,213
-		Type: Rectangle
-			TopLeft: -1024, -384
-			BottomRight: 1024, 1024
+	Inherits@shape: ^2x2Shape
+	Selectable:
+		Bounds: 48,48
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -6032,9 +6053,8 @@ WEAT:
 	Tooltip:
 		Name: Weather Control Device
 	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
+		Footprint: xx xx
+		Dimensions: 2,2
 	Health:
 		HP: 100000
 	Armor:
@@ -6100,50 +6120,5 @@ WEAT:
 		Types: SpyInfiltrate, SabInfiltrate
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-
-STWR:
-	Inherits: ^Defense
-	Inherits@IDISABLE: ^DisableOnLowPower
-	Inherits@AUTOTARGET: ^AutoTargetGround
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 80
-		Prerequisites: hq, ~structures.zocom, ~techlevel.medium
-		Description: Advanced base defense that emits devastating sonic shockwaves.\nCan detect cloaked units.\n  Strong vs Infatnry, Vehicles\n  Weak vs Aircraft
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: Sonic Tower
-	Building:
-	Health:
-		HP: 50000
-	Armor:
-		Type: Concrete
-	RevealsShroud:
-		Range: 8c0
 	WithBuildingBib:
 		HasMinibib: true
-	Turreted:
-		TurnSpeed: 5
-		InitialFacing: 48
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
-	Armament:
-		Weapon: SonicPulse
-		PauseOnCondition: empdisable && being-warped
-	AttackTurreted:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: empdisable && being-warped
-	WithMuzzleOverlay:
-	RenderRangeCircle:
-	Power:
-		Amount: -80
-		RequiresCondition: !being-warped
-	BodyOrientation:
-		UseClassicFacingFudge: True
-	DetectCloaked:
-		Range: 6c0
-		RequiresCondition: !disabled && !being-warped
-	Selectable:
-		Bounds: 24,24
-		DecorationBounds: 24,40,0,-8
