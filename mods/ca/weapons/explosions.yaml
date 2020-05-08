@@ -120,6 +120,15 @@ UnitExplodeChemSmall:
 		ExplosionPalette: temptd
 		ImpactSounds: firebl3.aud
 
+UnitExplodeWarpOut:
+	Inherits: ^Explosion
+	-Warhead@1Dam:
+	Warhead@2Eff: CreateEffect
+		Image: chrono
+		Explosions: warpout
+		ExplosionPalette: ra2effect-ignore-lighting-alpha75
+		ImpactSounds: chrono2.aud
+
 VisualExplodeHusk:
 	Inherits: ^Explosion
 	-Warhead@1Dam:
@@ -130,6 +139,13 @@ VisualExplodeAirborne:
 	Inherits: VisualExplodeHusk
 	Warhead@2Eff: CreateEffect
 		Explosions: med_explosion_air
+		
+VisualUnitExplodeWater:
+	Inherits: VisualExplodeHusk
+	-Warhead@Smu:
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
 
 UnitExplodeShip:
 	Inherits: ^Explosion
@@ -702,13 +718,13 @@ TPWRZap:
 		AimChance: 90
 		ValidTargets: Ground, Water, Infantry, Tank
 		ThrowWithoutTarget: true
+	-Warhead@3Eff:
 
 TPWRArc1:
 	Inherits: TTankZap
 	Range: 3c0
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Ground, Water, Infantry, Tank
-	-Warhead@3Eff:
 	Warhead@Burst: FireShrapnel
 		Weapon: TPWRArc2
 		AimChance: 80

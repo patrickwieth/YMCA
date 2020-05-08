@@ -166,6 +166,18 @@ CRATE:
 		Sound: ironcur9.aud
 		Condition: invulnerability
 		Duration: 600
+	SupportPowerCrateAction@airstrike:
+		Proxy: powerproxy.airstrike
+		SelectionShares: 5
+		Notification: ReinforceAva
+		Sequence: airstrike
+		TimeDelay: 4500
+	SupportPowerCrateAction@parabombs:
+		Proxy: powerproxy.parabombs
+		SelectionShares: 5
+		Notification: ReinforceAva
+		Sequence: parabombs
+		TimeDelay: 4500
 
 MONEYCRATE:
 	Inherits: ^Crate
@@ -500,6 +512,7 @@ powerproxy.parabombs:
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
+		OrderName: crateparabombs
 
 powerproxy.sonarpulse:
 	AlwaysVisible:
@@ -565,14 +578,21 @@ powerproxy.paratroopers2:
 
 powerproxy.airstrike:
 	AlwaysVisible:
-	AirstrikePower:
-		SquadSize: 3
+	ClassicAirstrikePower:
+		Squad:
+			a10.bomber:
+				SpawnDelay: 20
+				SpawnOffset: -1536,1024,0
+				TargetOffset: -536,0,0
+			a10.bomber:
+				SpawnDelay: 0
+				SpawnOffset: 0,0,0
+				TargetOffset: 0,0,0
 		Icon: airstrike
 		Description: Air Strike (Single Use)
-		LongDesc: An A10 drops a load of napalm\nbombs on your target.
+		LongDesc: A10 strike planes drop napalm\nbombs on your target.
 		OneShot: true
 		AllowMultiple: true
-		UnitType: a10.bomber
 		EndChargeSpeechNotification: ReinforceAva
 		SelectTargetSpeechNotification: SelectTarget
 		IncomingSpeechNotification: EnemyPlanesApproaching
@@ -584,6 +604,9 @@ powerproxy.airstrike:
 		ArrowSequence: arrow
 		ClockSequence: clockTD
 		CircleSequence: circles
+		Strikes: 2
+		CircleDelay: 20
+		OrderName: crateairstrike
 
 barracks.upgraded:
 	AlwaysVisible:
@@ -602,6 +625,9 @@ inf.soviet.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
 		Prerequisite: infantry.shok
+		Factions: blackh, marked, legion
+	ProvidesPrerequisite@stolenshok:
+		Prerequisite: structures.tsla
 		Factions: blackh, marked, legion
 
 #weap, 3tnk, even from allies (need to fix later)
@@ -746,7 +772,7 @@ fact.colorpicker:
 	-MapEditorData:
 	RenderSprites:
 		Image: afac
-		Palette: chrometd
+		Palette: colorpicker
 
 CTFLAG:
 	Inherits: ^TechBuilding

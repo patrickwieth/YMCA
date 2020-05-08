@@ -22,11 +22,16 @@ MSLO:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	NukePower:
 		PauseOnCondition: disabled || empdisable || being-warped
 		Cursor: nuke
@@ -91,7 +96,11 @@ GAP:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
-		Range: 6c0
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 		HasMinibib: true
 	CreatesShroud:
@@ -110,12 +119,6 @@ GAP:
 		Type: Rectangle
 			TopLeft: -512, -512
 			BottomRight: 512, 512
-	ProximityExternalCondition@GAPGEN:
-		Condition: ggshroud
-		Range: 6c0
-		AffectsParent: False
-		RequiresCondition: !disabled || !empdisable || !being-warped
-		ValidStances: Enemy
 
 SPEN:
 	Inherits: ^Building
@@ -151,7 +154,11 @@ SPEN:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,-213,0
@@ -212,7 +219,7 @@ SPEN:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !forceshield || !invulnerability || !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	RallyPoint:
 	ProductionBar:
 		ProductionType: Ship
@@ -310,7 +317,11 @@ SYRD:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,1024,0
@@ -347,7 +358,7 @@ SYRD:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !forceshield || !invulnerability || !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	RallyPoint:
 	ProductionBar:
 		ProductionType: Ship
@@ -437,11 +448,16 @@ IRON:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	WithBuildingBib:
 		HasMinibib: true
 	GrantExternalConditionPowerCA@IRONCURTAIN:
@@ -457,7 +473,7 @@ IRON:
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
 		AllowMultiple: false
-		LongDesc: Makes a vehicles or structures invulnerable\nfor 20 seconds. Lethal to Infantry.
+		LongDesc: Makes selected vehicles and structures temporarily invulnerable\n  Warning: Harmful to Infantry.
 		OnFireSound: ironcur9.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -501,11 +517,16 @@ PDOX:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	WithBuildingBib:
 		HasMinibib: true
 	ProvidesPrerequisite@germany:
@@ -623,7 +644,11 @@ TSLA:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 6c0
 		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
 	Targetable@TeslaBoost:
 		TargetTypes: TeslaBoost
 		RequiresCondition: !powerdown
@@ -674,6 +699,10 @@ TSLA:
 		RequiresCondition: charged
 		ZOffset: 256
 		BlinkInterval: 64
+		RequiresSelection: true
+	ProvidesPrerequisite@TSLA:
+		Factions: soviet, russia, ukraine, iraq
+		Prerequisite: structures.tsla
 
 AGUN:
 	Inherits: ^Defense
@@ -695,7 +724,11 @@ AGUN:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
@@ -753,10 +786,16 @@ DOME:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 6c0
 		Range: 10c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
+		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+		RequiresCondition: !disabled
 	WithBuildingBib:
 	ProvidesRadar:
 		RequiresCondition: !jammed && !disabled && !being-warped
@@ -779,7 +818,7 @@ DOME:
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: rad.soviet.stolen
-	AirstrikePowerCA@clustermines:
+	AirstrikePower@clustermines:
 		ChargeInterval: 6000
 		Prerequisites: structures.france, techlevel.superw
 		Description: Cluster Mines
@@ -813,11 +852,11 @@ DOME:
 		Condition: gpshide
 		ValidStances: Ally
 		Range: 3
-		Duration: 1000
+		Duration: 2500
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
 		AllowMultiple: false
-		LongDesc: Makes selected ground units invisible when stationary\nfor 1 minute.
+		LongDesc: Makes selected ground units temporarily invisible when stationary.
 		OnFireSound:  sscrambl.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -846,7 +885,11 @@ PBOX:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
@@ -888,7 +931,11 @@ HBOX:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	Cloak:
 		InitialDelay: 125
 		CloakDelay: 60
@@ -936,7 +983,11 @@ GUN:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 7c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
@@ -978,7 +1029,11 @@ FTUR:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
@@ -1029,7 +1084,11 @@ SAM:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
@@ -1083,7 +1142,11 @@ ATEK:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	GpsPower:
 		PauseOnCondition: disabled
@@ -1116,7 +1179,7 @@ ATEK:
 		AllowMultiple: false
 		Sequence: false-active
 		Description: Force Shield
-		LongDesc: Makes friendly structures invulnerable\nfor 10 seconds. Causes structure power failure.
+		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
 		OnFireSound: forceon.aud
 		DisplayTimerStances: Ally
 		SelectTargetSpeechNotification: SelectTarget
@@ -1153,7 +1216,11 @@ WEAP:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	WithProductionDoorOverlay:
 		RequiresCondition: !build-incomplete
@@ -1383,7 +1450,11 @@ FACT:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Production:
 		Produces: Building, Defense
 		PauseOnCondition: forceshield || invulnerability || being-warped
@@ -1476,7 +1547,11 @@ PROC:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Refinery:
 		DockAngle: 64
 		DockOffset: 1,2
@@ -1591,7 +1666,11 @@ HPAD:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
@@ -1690,7 +1769,11 @@ AFLD:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Exit@1:
 		RequiresCondition: !being-captured
 		ExitCell: 1,1
@@ -1773,7 +1856,7 @@ AFLD:
 		DirectionArrowAnimation: paradirection
 	ParatroopersPower@Russianparatroopers:
 		OrderName: stormtroopers
-		Prerequisites: aircraft.russia, , ~techlevel.high
+		Prerequisites: aircraft.russia, ~techlevel.high
 		Icon: stormtroopers
 		ChargeInterval: 9000
 		Description: Storm-troopers
@@ -1974,7 +2057,7 @@ TPWR:
 	Inherits: APWR
 	Buildable:
 		Prerequisites: dome, ~techlevel.medium, ~structures.russia
-		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload
+		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload (Toggle)\n  Warning: Unstable when damaged and overloaded.
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -1983,19 +2066,35 @@ TPWR:
 		Offset: -20,-70,0
 		Sequence: power
 		RequiresCondition: overcharge && !(empdisable || being-warped || build-incomplete)
-	GrantTimedConditionOnDeploy@OVERCHARGE:
+	GrantTimedCondition@LOCKOUT:
+		Duration: 1500
+		Condition: lockout
+		RequiresCondition: overcharge
+	GrantTimedCondition@COOLDOWN:
+		Duration: 250
+		Condition: cooldown
+		RequiresCondition: !overcharge
+	TimedConditionBar@LOCKOUT:
+		Condition: lockout
+		Color: FF0000
+	TimedConditionBar@COOLDOWN:
+		Condition: cooldown
+		Color: FFFF0080
+	GrantConditionOnDeploy@OVERCHARGE:
+		DeploySounds: btesat1a.aud
+		UndeploySounds: btesat1a.aud
 		DeployedCondition: overcharge
-		CooldownTicks: 300
-		DeployedTicks: 900
-		PauseOnCondition: disabled || empdisable || being-warped
-		DischargingColor: 0080FF60
-		ChargingColor: FFFF0080
-		StartsFullyCharged: false
-		DeploySound: btesat1a.aud
-		RequiresCondition: !(owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
+		DeployCursor: powerdown
+		DeployBlockedCursor: powerdown-blocked
+		PauseOnCondition: lockout || cooldown
+		SkipMakeAnimation: true
+		RequiresCondition: !(empdisable || being-warped || build-incomplete) && !(owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
 	GrantConditionOnDamageState@VOLATILE:
 		Condition: volatile
 		ValidDamageStates: Heavy, Critical
+	GrantConditionOnDamageState@CRITICAL:
+		Condition: critical
+		ValidDamageStates: Critical
 	PowerMultiplier:
 		Modifier: 200
 		RequiresCondition: overcharge
@@ -2013,7 +2112,7 @@ TPWR:
 		ShowSelectionBar: false
 		ActiveColor: 0080FF60
 		CooldownColor: FFFF0080
-		RequiresCondition: (owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
+		RequiresCondition: !critical && (owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
 
 STEK:
 	Inherits: ^ScienceBuilding
@@ -2043,7 +2142,11 @@ STEK:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	Power:
 		Amount: -100
@@ -2064,7 +2167,7 @@ STEK:
 		AirburstAltitude: 0c0
 		AllowMultiple: false
 		Description: Force Shield
-		LongDesc: Makes friendly structures invulnerable\nfor 10 seconds. Causes structure power failure.
+		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
 		OnFireSound: forceon.aud
 		DisplayTimerStances: Ally
 		SelectTargetSpeechNotification: SelectTarget
@@ -2106,7 +2209,11 @@ BARR:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	RallyPoint:
 	Exit@1:
@@ -2129,10 +2236,10 @@ BARR:
 		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
-	ProvidesPrerequisite@barracks:
-		Prerequisite: barracks
-	ProvidesPrerequisite@barracksRA:
-		Prerequisite: barracksRA
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantryra:
+		Prerequisite: infantry.ra
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: infantry.soviet
@@ -2268,7 +2375,11 @@ TENT:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	RallyPoint:
 	Exit@1:
@@ -2291,10 +2402,10 @@ TENT:
 		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
-	ProvidesPrerequisite@barracksRA:
-		Prerequisite: barracksRA
-	ProvidesPrerequisite@barracks:
-		Prerequisite: barracks
+	ProvidesPrerequisite@infantryra:
+		Prerequisite: infantry.ra
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
 	ProvidesPrerequisite@allies:
 		Factions: allies, england, france, germany
 		Prerequisite: infantry.allies
@@ -2374,7 +2485,11 @@ FIX:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Reservable:
 	RallyPoint:
 	RepairsUnits:
@@ -2383,6 +2498,7 @@ FIX:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	WithBuildingBib:
 		HasMinibib: true
 	WithResupplyAnimation:
@@ -2539,7 +2655,7 @@ WOOD:
 	WithWallSpriteBody:
 		Type: woodfence
 
-BARRACKS:
+INFANTRY.ANY:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
@@ -2547,7 +2663,7 @@ BARRACKS:
 	Buildable:
 		Description: Infantry Production
 
-BARRACKSTD:
+INFANTRY.RA:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
@@ -2555,7 +2671,15 @@ BARRACKSTD:
 	Buildable:
 		Description: Infantry Production
 
-VEHICLES.TD:
+INFANTRY.TD:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		Name: Infantry Production
+	Buildable:
+		Description: Infantry Production
+
+VEHICLES.ANY:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
@@ -2563,7 +2687,7 @@ VEHICLES.TD:
 	Buildable:
 		Description: Vehicle Production
 
-VEHICLES.ANY:
+VEHICLES.TD:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
@@ -2627,6 +2751,15 @@ INFANTRY.MECH:
 	Buildable:
 		Description: Mechanical Barracks
 
+STRUCTURES.TSLA:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		GenericName:
+		Name: Tesla Coil
+	Buildable:
+		Description: Tesla Coil
+
 PYLE:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
@@ -2658,7 +2791,11 @@ PYLE:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	RallyPoint:
 	Exit@1:
@@ -2678,10 +2815,10 @@ PYLE:
 		PrimaryCondition: primary
 	ProductionBar:
 		ProductionType: Infantry
-	ProvidesPrerequisite@barracks:
-		Prerequisite: barracks
-	ProvidesPrerequisite@barrackstd:
-		Prerequisite: barrackstd
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantrytd:
+		Prerequisite: infantry.td
 	ProvidesPrerequisite@gdi:
 		Factions: gdi, talon, zocom, eagle
 		Prerequisite: infantry.gdi
@@ -2761,7 +2898,11 @@ HAND:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	RallyPoint:
 	Exit@1:
@@ -2778,10 +2919,10 @@ HAND:
 		ProductionType: Infantry
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	ProvidesPrerequisite@barracks:
-		Prerequisite: barracks
-	ProvidesPrerequisite@barrackstd:
-		Prerequisite: barrackstd
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantrytd:
+		Prerequisite: infantry.td
 	ProvidesPrerequisite@nod:
 		Factions: nod, blackh, marked, legion
 		Prerequisite: infantry.nod
@@ -2871,7 +3012,11 @@ WEAP.TD:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	ProvidesPrerequisite@any:
 		Factions: gdi, talon, zocom, eagle, nod, marked, blackh, legion, allies, england, france, germany, soviet, russia, ukraine, iraq
 		Prerequisite: vehicles.any
@@ -3083,7 +3228,11 @@ AIRS:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 7c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	WithBuildingBib:
 	WithIdleOverlay@DISH:
 		Sequence: idle-dish
@@ -3092,10 +3241,13 @@ AIRS:
 	Exit@1:
 		SpawnOffset: -1024,0,0
 		ExitCell: 3,1
-	ProductionAirdrop:
+	ProductionAirdropCA:
 		Produces: Vehicle
 		PauseOnCondition: forceshield || invulnerability || being-warped
 		ActorType: c17.cargo
+		EntryType: DropSiteClosestEdge
+		ExitType: StraightAhead
+		LandingFacing: 64
 		ReadyAudio: ReinforcementsArrived
 	ProvidesPrerequisite@any:
 		Factions: gdi, talon, zocom, eagle, nod, marked, blackh, legion, allies, england, france, germany, soviet, russia, ukraine, iraq
@@ -3246,6 +3398,7 @@ AIRS:
 	WithDeliveryAnimation:
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 	ProductionBar:
@@ -3304,7 +3457,7 @@ NUKE:
 	Armor:
 		Type: Wood
 	RevealsShroud:
-		Range: 5c0
+		Range: 4c0
 	WithBuildingBib:
 	WithDeathAnimation:
 		DeathSequence: dead
@@ -3400,7 +3553,11 @@ AFAC:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	Production:
 		Produces: Building, Defense
@@ -3521,7 +3678,11 @@ NSAM:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	Turreted:
 		TurnSpeed: 30
 		InitialFacing: 0
@@ -3568,7 +3729,11 @@ GTWR:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
-		Range: 7c0
+		MinRange: 5c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
 	Armament:
@@ -3607,7 +3772,11 @@ ATWR:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 6c0
 		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
@@ -3648,7 +3817,11 @@ STWR:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 6c0
 		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
@@ -3695,7 +3868,11 @@ OBLI:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 6c0
 		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
 	WithBuildingBib:
 		HasMinibib: true
 	-WithSpriteBody:
@@ -3767,11 +3944,16 @@ HQ:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 6c0
 		Range: 10c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+		RequiresCondition: !disabled
 	ProvidesRadar:
 		RequiresCondition: !jammed && !disabled && !being-warped
 	WithBuildingBib:
@@ -3930,11 +4112,16 @@ EYE:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 6c0
 		Range: 10c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+		RequiresCondition: !disabled
 	WithBuildingBib:
 	ProvidesRadar:
 		RequiresCondition: !jammed && !disabled && !being-warped
@@ -4034,7 +4221,11 @@ REP:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 		HasMinibib: true
 	Reservable:
@@ -4045,7 +4236,7 @@ REP:
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	Power:
@@ -4083,7 +4274,11 @@ HPAD.TD:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Exit@1:
 		SpawnOffset: 0,-256,0
 		ExitCell: 0,0
@@ -4098,6 +4293,7 @@ HPAD.TD:
 	WithBuildingBib:
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
@@ -4238,7 +4434,11 @@ PROC.TD:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	WithBuildingBib:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
@@ -4350,7 +4550,11 @@ AFLD.GDI:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Exit@1:
 		RequiresCondition: !being-captured
 		ExitCell: 1,1
@@ -4424,7 +4628,7 @@ AFLD.GDI:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
-	AirstrikePowerCA@EagleAirDef:
+	InterceptorPower@EagleAirDef:
 		OrderName: interceptors
 		Prerequisites: aircraft.eagle, techlevel.superw
 		Icon: airsupport
@@ -4445,7 +4649,6 @@ AFLD.GDI:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
-		Mission: Guard
 		GuardDuration: 500
 		Cordon: 5c0
 	ProductionBar:
@@ -4453,6 +4656,7 @@ AFLD.GDI:
 	SupportPowerChargeBar:
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -4588,7 +4792,16 @@ GTEK:
 	Armor:
 		Type: Wood
 	RevealsShroud:
-		Range: 4c0
+		MinRange: 5c0
+		Range: 6c0
+		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
+	RevealsShroud@Offline:
+		Range: 5c0
+		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: tec.gdi.stolen
@@ -4612,7 +4825,7 @@ GTEK:
 		AirburstAltitude: 0c0
 		AllowMultiple: false
 		Description: Force Shield
-		LongDesc: Makes friendly structures invulnerable\nfor 10 seconds. Causes structure power failure.
+		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
 		OnFireSound: forceon.aud
 		DisplayTimerStances: Ally
 		SelectTargetSpeechNotification: SelectTarget
@@ -4623,12 +4836,13 @@ GTEK:
 		PauseOnCondition: disabled || empdisable ||  being-warped
 	DetonateWeaponPower@Nrepair:
 		OrderName: nrepair
+		Prerequisites: ~structures.talon
 		Icon: nrepair
 		Cursor: repair
 		ChargeInterval: 7500
 		Description: Nanite Repair
 		ActivationDelay: 10
-		LongDesc: Repairs damaged vehicles\nfor 30 seconds.
+		LongDesc: Repairs selected damaged vehicles.
 		Weapon: RepairNanite
 		AirburstAltitude: 0
 		AllowMultiple: false
@@ -4674,7 +4888,16 @@ TMPL:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
+	RevealsShroud@Offline:
 		Range: 5c0
+		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	NukePower@Cluster:
 		OrderName: clustermissile
 		Icon: clustermissile
@@ -4722,7 +4945,7 @@ TMPL:
 		AllowMultiple: false
 		Sequence: false-active
 		Description: Force Shield
-		LongDesc: Makes friendly structures invulnerable\nfor 10 seconds. Causes structure power failure.
+		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
 		OnFireSound: forceon.aud
 		DisplayTimerStances: Ally
 		SelectTargetSpeechNotification: SelectTarget
@@ -4746,7 +4969,7 @@ TMPL:
 		AirburstAltitude: 0c0
 		Sequence: false-active
 		AllowMultiple: false
-		LongDesc: Increases Vehicle & Infantry movement and attack speed\nfor 20 seconds.
+		LongDesc: Temporarily increases ground unit movement and attack speed.
 		OnFireSound: nodfrenzy.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -4792,7 +5015,11 @@ PRIS:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 6c0
 		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
 	WithBuildingBib:
 		HasMinibib: true
 	WithSpriteBody:
@@ -4852,7 +5079,11 @@ SPEN.nod:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,-213,0
@@ -4876,12 +5107,13 @@ SPEN.nod:
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	RepairsUnits:
 		HpPerStep: 1000
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	RallyPoint:
 	ProductionBar:
 		ProductionType: Ship
@@ -4955,7 +5187,11 @@ SYRD.gdi:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 4c0
 		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,1024,0
@@ -4985,12 +5221,13 @@ SYRD.gdi:
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	RepairsUnits:
 		HpPerStep: 1000
 		StartRepairingNotification: Repairing
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
-		RequiresCondition: !being-warped
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	RallyPoint:
 	ProductionBar:
 		ProductionType: Ship
@@ -5060,7 +5297,11 @@ HTUR:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
-		Range: 5c0
+		MinRange: 6c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
 	Turreted:
 		TurnSpeed: 2
 		InitialFacing: 0
@@ -5152,7 +5393,11 @@ TTUR:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
@@ -5198,11 +5443,16 @@ SGEN:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	WithBuildingBib:
 	GrantExternalConditionPowerCA@STEALTHGEN:
 		Prerequisites: techlevel.superw
@@ -5219,7 +5469,7 @@ SGEN:
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
 		AllowMultiple: false
-		LongDesc: Makes a vehicles or structures invisible\nfor 30 seconds. Harmful to Infantry.
+		LongDesc: Makes vehicles and structures temporarily invisible.\n  Warning: Harmful to Infantry.
 		OnFireSound: cloak6.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -5327,7 +5577,7 @@ LASP:
 		Amount: -15
 		RequiresCondition: !being-warped
 	RevealsShroud:
-		Range: 4c0
+		Range: 3c0
 	LineBuild:
 		Range: 10
 		NodeTypes: laserfencenode
@@ -5415,11 +5665,16 @@ PATR:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	Turreted:
 		TurnSpeed: 2
 		InitialFacing: 0
@@ -5507,6 +5762,10 @@ INDP:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
 	Power:
@@ -5541,6 +5800,10 @@ OREP:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
 	Buildable:
@@ -5563,6 +5826,7 @@ OREP:
 		RequiresCondition: !disabled && !being-warped
 	RevealsShroud:
 		Range: 4c0
+		MinRange: 3c0
 	Power:
 		Amount: -150
 		RequiresCondition: !being-warped
@@ -5593,6 +5857,10 @@ MISS.GDI:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
 	Buildable:
@@ -5617,6 +5885,7 @@ MISS.GDI:
 		Prerequisite: hmlrs.buildable
 	RevealsShroud:
 		Range: 4c0
+		MinRange: 3c0
 	Power:
 		Amount: -150
 		RequiresCondition: !being-warped
@@ -5647,6 +5916,10 @@ BIO.Nod:
 	Armor:
 		Type: Concrete
 	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
 	Buildable:
@@ -5667,6 +5940,7 @@ BIO.Nod:
 		Name: Bio-Tech Lab
 	RevealsShroud:
 		Range: 4c0
+		MinRange: 3c0
 	Power:
 		Amount: -150
 		RequiresCondition: !being-warped
@@ -5708,11 +5982,16 @@ MSLO.Nod:
 	Armor:
 		Type: Wood
 	RevealsShroud:
+		MinRange: 5c0
 		Range: 6c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	NukePower@Chemmiss:
 		OrderName: chemmissile
 		Icon: chemmissile
@@ -5762,11 +6041,9 @@ MSLO.Nod:
 WEAT:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	HitShape:
-		TargetableOffsets: 0,0,0, 0,512,128, 420,-598,213
-		Type: Rectangle
-			TopLeft: -1024, -384
-			BottomRight: 1024, 1024
+	Inherits@shape: ^2x2Shape
+	Selectable:
+		Bounds: 48,48
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -5778,19 +6055,23 @@ WEAT:
 	Tooltip:
 		Name: Weather Control Device
 	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
+		Footprint: xx xx
+		Dimensions: 2,2
 	Health:
 		HP: 100000
 	Armor:
 		Type: Wood
 	RevealsShroud:
-		Range: 10c0
+		MinRange: 5c0
+		Range: 6c0
 		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
 	RevealsShroud@Offline:
 		Range: 5c0
 		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
 	WithBuildingBib:
 	DetonateWeaponPower@LightningStorm:
 		OrderName: storm
@@ -5841,53 +6122,8 @@ WEAT:
 		Types: SpyInfiltrate, SabInfiltrate
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-
-STWR:
-	Inherits: ^Defense
-	Inherits@IDISABLE: ^DisableOnLowPower
-	Inherits@AUTOTARGET: ^AutoTargetGround
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 80
-		Prerequisites: hq, ~structures.zocom, ~techlevel.medium
-		Description: Advanced base defense that emits devastating sonic shockwaves.\nCan detect cloaked units.\n  Strong vs Infatnry, Vehicles\n  Weak vs Aircraft
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: Sonic Tower
-	Building:
-	Health:
-		HP: 50000
-	Armor:
-		Type: Concrete
-	RevealsShroud:
-		Range: 8c0
 	WithBuildingBib:
 		HasMinibib: true
-	Turreted:
-		TurnSpeed: 5
-		InitialFacing: 48
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
-	Armament:
-		Weapon: SonicPulse
-		PauseOnCondition: empdisable && being-warped
-	AttackTurreted:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: empdisable && being-warped
-	WithMuzzleOverlay:
-	RenderRangeCircle:
-	Power:
-		Amount: -80
-		RequiresCondition: !being-warped
-	BodyOrientation:
-		UseClassicFacingFudge: True
-	DetectCloaked:
-		Range: 6c0
-		RequiresCondition: !disabled && !being-warped
-	Selectable:
-		Bounds: 24,24
-		DecorationBounds: 24,40,0,-8
 
 PLDT:
 	Inherits: ^DefenseTD

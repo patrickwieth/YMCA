@@ -378,7 +378,7 @@
 ^BinoUpgrade:
 	ExternalCondition@Bino:
 		Condition: bino
-	RevealsShroudMultiplier@Bino:
+	RangeMultiplier@Bino:
 		Modifier: 120
 		RequiresCondition: bino
 	WithDecoration@Bino:
@@ -392,14 +392,6 @@
 		BlinkPatterns:
 			bino && gdiupg: On, Off
 		RequiresSelection: True
-
-^GapGenShroud:
-	ExternalCondition@GAPGEN:
-		Condition: ggshroud
-	RevealsShroudMultiplier@GAPGEN:
-		Modifier: 80
-		RequiresCondition: ggshroud
-
 
 ^InfantryExperienceHospitalOverrides:
 	WithDecoration@RANK-1:
@@ -717,6 +709,14 @@
 		RequiresCondition: stance-attackanything || assault-move
 	AttackMove:
 		AssaultMoveCondition: assault-move
+		
+^AutoTargetNavalAssaultMove:
+	Inherits: ^AutoTargetGroundAssaultMove
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense
+		InvalidTargets: NoAutoTarget
+	AutoTargetPriority@ATTACKANYTHING:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine, Bridge
 
 ^AutoTargetAir:
 	AutoTarget:
@@ -744,6 +744,15 @@
 		RequiresCondition: stance-attackanything || assault-move
 	AttackMove:
 		AssaultMoveCondition: assault-move
+		
+^AutoTargetAllNavalAssaultMove:
+	Inherits: ^AutoTargetAllAssaultMove
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, Bridge
+		InvalidTargets: NoAutoTarget
+	AutoTargetPriority@ATTACKANYTHING:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense, Bridge
+		InvalidTargets: NoAutoTarget
 
 ^GlobalBounty:
 	GrantConditionOnPrerequisite@GLOBALBOUNTY:
@@ -776,7 +785,6 @@
 	Inherits@5: ^EmpDisable
 	Inherits@6: ^GDIUpgrade
 	Inherits@7: ^BinoUpgrade
-	Inherits@8: ^GapGenShroud
 	Inherits@9: ^Warpable
 	Inherits@10: ^Frenzy
 	Inherits@11: ^NaniteRepair
@@ -925,7 +933,6 @@
 	Inherits@3: ^InfantryExperienceHospitalOverrides
 	Inherits@4: ^SpriteActor
 	Inherits@5: ^NodUpgrade
-	Inherits@6: ^GapGenShroud
 	Inherits@7: ^Warpable
 	Inherits@8: ^Cloakable-Kills
 	Inherits@9: ^IronCurtainable-Kills
@@ -1187,7 +1194,6 @@
 	Inherits@6: ^Cloakable
 	Inherits@7: ^GDIUpgrade
 	Inherits@8: ^BinoUpgrade
-	Inherits@9: ^GapGenShroud
 	Inherits@10: ^Warpable
 	Inherits@11: ^Frenzy
 	Inherits@12: ^NaniteRepair
@@ -1232,6 +1238,9 @@
 		WarpInSequence: warpin
 		WarpOutSequence: warpout
 		Palette: ra2effect-ignore-lighting-alpha75
+	RepairableNear:
+		RepairActors: syrd, spen, syrd.gdi, spen.nod
+	#For AI
 	RepairableNearCA:
 		RepairActors: syrd, spen, syrd.gdi, spen.nod
 	GpsDot:
@@ -1367,7 +1376,6 @@
 	Inherits@4: ^EmpDisable
 	Inherits@5: ^GDIUpgrade
 	Inherits@6: ^BinoUpgrade
-	Inherits@7: ^GapGenShroud
 	Inherits@8: ^Warpable
 	Inherits@9: ^BotAirProductionBonus
 	Inherits@10: ^Chillable
@@ -1503,7 +1511,6 @@
 	Inherits@2: ^Cloakable
 	Inherits@3: ^ForceShieldable
 	Inherits@4: ^EmpDisable
-	Inherits@5: ^GapGenShroud
 	Inherits@6: ^Warpable
 	Inherits@7: ^BotBuilding
 	Inherits@8: ^Chillable
@@ -1527,11 +1534,10 @@
 	CaptureManager:
 		BeingCapturedCondition: being-captured
 	Capturable:
+		RequiresCondition: !build-incomplete
 		Types: building
-		RequiresCondition: !being-warped
 	CapturableProgressBar:
 	CapturableProgressBlink:
-	BotRepairOrSellCaptures:
 	SpawnActorsOnSell:
 		ActorTypes: e1,e1,e1,tecn,tecn2
 	SpawnActorOnDeath@1:
@@ -1591,6 +1597,8 @@
 
 ^Defense:
 	Inherits: ^Building
+	Inherits@Concussion: ^Concussion
+	-SpeedMultiplier@concussion:
 	WithColoredOverlay@IRONCURTAIN:
 		RequiresCondition: invulnerability
 	Selectable:
@@ -1709,6 +1717,7 @@
 	Tooltip:
 		Name: Civilian Building
 		GenericVisibility: None
+	FrozenUnderFog:
 	MapEditorData:
 		Categories: Tech building
 
