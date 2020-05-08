@@ -94,13 +94,10 @@
 			Wood: 85
 			Light: 90
 			Heavy: 100
-			Concrete: 50
 			Brick: 32
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 	Warhead@3Eff: CreateEffect
-		Explosions: small_explosion
 		ImpactSounds: firetrt1.aud
-		ValidTargets: Ground, Ship, Trees
 
 125mm:
 	Inherits: ^Cannon
@@ -178,10 +175,6 @@ TitanGun:
 			Concrete: 30
 			Light: 60
 			Heavy: 105
-	Warhead@3EffGround: CreateEffect
-		Explosions: large_explosion
-		ImpactSounds: kaboom12.aud
-		ValidTargets: Ground, Ship, Trees
 
 ^Artillery:
 	Inherits: ^Cannon
@@ -240,19 +233,13 @@ TitanGun:
 	Burst: 3
 	BurstDelays: 7
 	Projectile: BulletCA
-		Speed: 180
-		Inaccuracy: 2c511
 		Image: firetrail
-	Projectile: BulletCA
-		Inaccuracy: 1c138
 		TrailImage: smokey
 		TrailDelay: 1
 		Speed: 180
 		LaunchAngle: 90
 	Warhead@1Dam: SpreadDamage
-		Spread: 426
 		Damage: 12000
-		Falloff: 100, 55, 20, 5
 		Versus:
 			None: 70
 			Wood: 55
@@ -271,7 +258,7 @@ TitanGun:
 		RandomClusterCount: 1
 		Dimensions: 1,1
 		Footprint: X
-		
+
 380mm:
 	Inherits: ^Artillery
 	ReloadDelay: 120
@@ -296,9 +283,14 @@ TitanGun:
 	Warhead@3Eff: CreateEffect
 		Explosions: large_artillery_explosion
 		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
-	Warhead@Concussion: GrantExternalCondition
+	Warhead@Concussion1: GrantExternalCondition
+		Range: 1c512
+		Duration: 120
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
+	Warhead@Concussion2: GrantExternalCondition
 		Range: 3c0
-		Duration: 100
+		Duration: 60
 		Condition: concussion
 		ValidTargets: Ground, Infantry, Vehicle, Ship
 	Warhead@5Shake: ShakeScreen
@@ -340,10 +332,7 @@ TitanGun:
 		Versus:
 			None: 60
 			Wood: 55
-			Light: 60
-			Heavy: 25
 			Concrete: 50
-			Brick: 60
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
 
@@ -363,8 +352,6 @@ JuggernautGun:
 		Falloff: 800, 368, 135, 50, 18, 7, 0
 		Versus:
 			None: 90
-			Wood: 60
-			Light: 60
 			Heavy: 40
 			Concrete: 45
 			Brick: 55
@@ -380,11 +367,9 @@ JuggernautGun:
 	Projectile: BulletCA
 		Speed: 426
 	Warhead@1Dam: SpreadDamage
-		Damage: 4000
 		Versus:
 			None: 15
 			Wood: 30
-			Light: 75
 			Heavy: 60
 			Concrete: 20
 			Brick: 20
@@ -408,7 +393,6 @@ Grenade:
 			Heavy: 35
 			Concrete: 100
 			Brick: 100
-		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@2Dam: SpreadDamage
 		Spread: 28
 		Damage: 3000
@@ -421,7 +405,6 @@ Grenade:
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion
-		ImpactSounds: kaboom25.aud
 	Warhead@4EffWater: CreateEffect
 		Explosions: small_splash
 
@@ -437,7 +420,6 @@ Mortar:
 	Report: nade.aud
 	Projectile: BulletCA
 		Speed: 166
-		Blockable: false
 		LaunchAngle: 92
 		Inaccuracy: 768
 		Image: BOMB
@@ -475,7 +457,6 @@ MortarE:
 DepthCharge:
 	Inherits: ^Artillery
 	-Report:
-	ReloadDelay: 60
 	Range: 5c0
 	ValidTargets: Underwater
 	Projectile: BulletCA
@@ -496,7 +477,6 @@ DepthCharge:
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
 		ImpactSounds: h2obomb2.aud
-		ValidTargets: Water, Underwater
 	Warhead@3Eff: CreateEffect
 		Explosions: small_explosion
 		ImpactSounds: kaboom15.aud

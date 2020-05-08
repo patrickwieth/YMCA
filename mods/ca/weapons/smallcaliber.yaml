@@ -21,7 +21,6 @@
 ZSU-23:
 	Inherits: ^AACannon
 	ReloadDelay: 8
-	Range: 8c0
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
 		Range: 0, 0c64, 0c256, 3c768
@@ -33,7 +32,6 @@ FLAK-23-AA:
 	Report: flak1.aud, flak2.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 700
-		ValidTargets: Air
 
 FLAK-23-AG:
 	Inherits: ^AACannon
@@ -68,7 +66,6 @@ FLAK-23-AG:
 Gatt.0:
 	Inherits: ^AACannon
 	ReloadDelay: 15
-	Range: 8c0
 	Report: vgatlo1a.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 900
@@ -76,7 +73,6 @@ Gatt.0:
 		Falloff: 100, 100, 15, 5
 	Warhead@2Eff: CreateEffect
 		ValidTargets: Air
-		Explosions: small_explosion_air
 		ImpactSoundChance: 20
 
 Gatt.1:
@@ -89,16 +85,46 @@ Gatt.1:
 Gatt.2:
 	Inherits: Gatt.1
 	Report: vgatlo5a.aud, vgatlo5b.aud
-	ReloadDelay: 5
 	Warhead@1Dam: SpreadDamage
 		Damage: 1700
 
 Gatt.3:
 	Inherits: Gatt.2
 	Report: vgatlo8a.aud, vgatlo8b.aud
-	ReloadDelay: 5
 	Warhead@1Dam: SpreadDamage
 		Damage: 1900
+		
+MGatt.0:
+	Inherits: ^AACannon
+	ReloadDelay: 15
+	Report: vgatlo1a.aud
+	Range: 7c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 250
+		Range: 0, 0c64, 0c256, 3c256
+		Falloff: 100, 100, 15, 5
+	Warhead@2Eff: CreateEffect
+		ValidTargets: Air
+		ImpactSoundChance: 20
+
+MGatt.1:
+	Inherits: MGatt.0
+	ReloadDelay: 5
+	Report: vgatlo2a.aud, vgatlo2b.aud, vgatlo2c.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 300
+
+MGatt.2:
+	Inherits: MGatt.1
+	Report: vgatlo5a.aud, vgatlo5b.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 400
+
+MGatt.3:
+	Inherits: MGatt.2
+	Report: vgatlo8a.aud, vgatlo8b.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 500
 
 ^HeavyMG:
 	ReloadDelay: 30
@@ -277,26 +303,21 @@ Vulcan2:
 	Inherits: ^LightMG
 	ReloadDelay: 50
 	Burst: 3
-	Range: 6c0
 	Report: tsgun4.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 5000
 
 Vulcan3:
 	Inherits: ^LightMG
-	ReloadDelay: 30
 	Range: 4c0
 	Burst: 3
 	Report: infgun3.aud
-	Warhead@1Dam: SpreadDamage
-		Damage: 1000
 
 ChainGun.Yak.R:
 	Inherits: ^HeavyMG
 	Burst: 5
 	ReloadDelay: 25
 	BurstDelays: 2
-	Range: 6c0
 	-Report:
 	StartBurstReport: gun13.aud
 	FirstBurstTargetOffset: -512,213,0
@@ -313,6 +334,7 @@ ChainGun.Yak.R:
 			Heavy: 25
 			Concrete: 25
 			Brick: 25
+
 ChainGun.Yak.L:
 	Inherits: ChainGun.Yak.R
 	FirstBurstTargetOffset: -512,-213,0
@@ -354,7 +376,6 @@ M16CarbineE:
 
 M60mg:
 	Inherits: ^LightMG
-	ReloadDelay: 30
 	Range: 4c0
 	Report: pillbox1.aud
 	Burst: 5
@@ -371,7 +392,6 @@ M60mgJJ:
 	Projectile: Bullet
 		Blockable: false
 	Report: vblhatta.aud, vblhattb.aud
-	ReloadDelay: 30
 	Burst: 3
 
 M60mgIFV:
@@ -383,7 +403,7 @@ M60mgIFV:
 	Range: 8c512
 	Report: gun5.aud
 	ValidTargets: Ground, Infantry
-	InvalidTargets: Vehicle, Water, Structure, Wall, Husk
+	InvalidTargets: Vehicle, Tank, Ship, Water, Structure, Wall, Husk
 	Projectile: Bullet
 		Speed: 1c682
 	Warhead@1Dam: SpreadDamage
@@ -435,11 +455,8 @@ SMG:
 	Burst: 3
 	BurstDelays: 2
 	Range: 7c0
-	Projectile: Bullet
-		Speed: 1c682
 	Warhead@1Dam: SpreadDamage
-		Spread: 42
-		Damage: 5000
+		Damage: 5100
 		ValidTargets: Infantry
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@2Eff: CreateEffect
@@ -488,7 +505,7 @@ AKME:
 
 SNIPER:
 	ReloadDelay: 110
-	Range: 6c768
+	Range: 6c0
 	Report: snipe.aud
 	ValidTargets: Ground, Infantry
 	InvalidTargets: Vehicle, Tank, Water, Structure, Wall, Husk, Chrono
@@ -510,11 +527,11 @@ SNIPER:
 SNIPERE:
 	Inherits: SNIPER
 	Range: 9c0
-	
+
 
 SNIPER.vehicle:
 	ReloadDelay: 600
-	Range: 6c768
+	Range: 6c0
 	Report: ijarwe2a.aud
 	ValidTargets: Vehicle, Tank
 	InvalidTargets: Infantry, Ship, Structure, Wall, Husk, Air, DriverKillImmune

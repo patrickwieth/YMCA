@@ -64,6 +64,10 @@ MSLO:
 	WithNukeLaunchAnimation:
 		RequiresCondition: !build-incomplete
 	ProvidesPrerequisite@buildingname:
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 GAP:
 	Inherits: ^ScienceBuilding
@@ -80,7 +84,6 @@ GAP:
 	Selectable:
 		Bounds: 24,24
 		DecorationBounds: 24,48,0,-12
-	SelectionDecorations:
 	WithSpriteBody:
 		PauseOnCondition: disabled || empdisable || being-warped
 	Health:
@@ -136,13 +139,11 @@ SPEN:
 		BuildDurationModifier: 25
 	Targetable:
 		TargetTypes: Ground, Water, Structure, WaterStructure, C4, DetonateAttack, SpyInfiltrate
-		RequiresCondition: !being-warped
 	Building:
 		Footprint: XXX xxx XXX
 		Dimensions: 3,3
 		TerrainTypes: Water
 	RequiresBuildableArea:
-		AreaTypes: building
 		Adjacent: 8
 	-GivesBuildableArea:
 	Health:
@@ -297,7 +298,6 @@ SYRD:
 		Name: Naval Yard
 	Targetable:
 		TargetTypes: Ground, Water, Structure, WaterStructure, C4, DetonateAttack, SpyInfiltrate
-		RequiresCondition: !being-warped
 	Building:
 		Footprint: XXX xxx XXX
 		Dimensions: 3,3
@@ -432,7 +432,6 @@ IRON:
 	Selectable:
 		Bounds: 48,28,0,2
 		DecorationBounds: 50,50,0,-12
-	SelectionDecorations:
 	Health:
 		HP: 100000
 	Armor:
@@ -473,6 +472,10 @@ IRON:
 		RequiresCondition: !being-warped
 	MustBeDestroyed:
 		RequiredForShortGame: false
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 PDOX:
 	Inherits: ^ScienceBuilding
@@ -594,6 +597,10 @@ PDOX:
 	MustBeDestroyed:
 		RequiredForShortGame: false
 	ProvidesPrerequisite@buildingname:
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 TSLA:
 	Inherits: ^Defense
@@ -610,9 +617,7 @@ TSLA:
 	Tooltip:
 		Name: Tesla Coil
 	Selectable:
-		Bounds: 24,24
 		DecorationBounds: 24,40,0,-8
-	SelectionDecorations:
 	Health:
 		HP: 40000
 	Armor:
@@ -652,7 +657,6 @@ TSLA:
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
 	DetectCloaked:
-		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
 	ProductionCostMultiplier@RussiaBonus:
 		Multiplier: 90
@@ -670,29 +674,6 @@ TSLA:
 		RequiresCondition: charged
 		ZOffset: 256
 		BlinkInterval: 64
-	Armament@POINTDEFENSE:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.soviet
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Red
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
-		RequiresSelection: true
 
 AGUN:
 	Inherits: ^Defense
@@ -708,9 +689,7 @@ AGUN:
 	Tooltip:
 		Name: AA Gun
 	Selectable:
-		Bounds: 24,24
 		DecorationBounds: 24,32,0,-4
-	SelectionDecorations:
 	Health:
 		HP: 40000
 	Armor:
@@ -769,7 +748,6 @@ DOME:
 		LocalCenterOffset: 0,-512,0
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-		RequiresCondition: !being-warped
 	Health:
 		HP: 100000
 	Armor:
@@ -1147,6 +1125,9 @@ ATEK:
 		DisplayRadarPing: True
 		Cursor: ability
 		PauseOnCondition: disabled || empdisable ||  being-warped
+	InfiltrateForSupportPower@tec:
+		Types: SabInfiltrate
+		Proxy: tec.allies.stolen
 
 WEAP:
 	Inherits: ^Building
@@ -1302,6 +1283,21 @@ WEAP:
 	ProvidesPrerequisite@markedstructure:
 		RequiresPrerequisites: structures.marked
 		Prerequisite: vehicles.marked
+	ProvidesPrerequisite@mrj:
+		Factions: allies, france, england, germany
+		Prerequisite: vehicles.mrj
+	ProvidesPrerequisite@ifv:
+		Factions: allies, france, england, germany
+		Prerequisite: vehicles.ifv
+	ProvidesPrerequisite@ptnk:
+		Factions: allies, france, england, germany
+		Prerequisite: vehicles.ptnk
+	ProvidesPrerequisite@3tnk:
+		Factions: soviet, russia, ukraine, iraq
+		Prerequisite: vehicles.3tnk
+	ProvidesPrerequisite@v3rl:
+		Factions: soviet, russia, ukraine, iraq
+		Prerequisite: vehicles.v3rl
 	PrimaryBuilding:
 		PrimaryCondition: primary
 		SelectionNotification: PrimaryBuildingSelected
@@ -1313,7 +1309,6 @@ WEAP:
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-		RequiresCondition: !being-warped
 	InfiltrateForSupportPower:
 		Proxy: vehicles.upgraded
 		Types: SpyInfiltrate
@@ -1401,7 +1396,7 @@ FACT:
 	BaseBuilding:
 	Transforms:
 		RequiresCondition: factundeploy
-		PauseOnCondition: chrono-vortex || being-captured || being-demolished || build-incomplete || being-warped
+		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
 		IntoActor: mcv
 		Offset: 1,1
 		Facing: 96
@@ -1420,7 +1415,7 @@ FACT:
 	TransformsIntoTransforms:
 		RequiresCondition: factundeploy && build-incomplete
 	Sellable:
-		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !being-demolished && !being-warped
+		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !c4 && !being-warped
 	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
 		Condition: factundeploy
 		Prerequisites: global-factundeploy
@@ -1474,10 +1469,8 @@ PROC:
 	Selectable:
 		Bounds: 72,50,0,4
 		DecorationBounds: 72,70,0,-2
-	SelectionDecorations:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
-		RequiresCondition: !being-warped
 	Health:
 		HP: 90000
 	Armor:
@@ -1545,7 +1538,6 @@ SILO:
 		Cost: 150
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
-		RequiresCondition: !being-warped
 	Tooltip:
 		Name: Silo
 	-GivesBuildableArea:
@@ -1660,7 +1652,6 @@ HPAD:
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-		RequiresCondition: !being-warped
 	InfiltrateForSupportPower:
 		Types: SpyInfiltrate
 		Proxy: powerproxy.paratroopers2
@@ -1878,7 +1869,6 @@ AFLD:
 		Prerequisite: afld
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-		RequiresCondition: !being-warped
 	InfiltrateForSupportPower:
 		Proxy: powerproxy.airstrike
 		Types: SpyInfiltrate
@@ -1929,7 +1919,6 @@ POWR:
 		RequiresCondition: !being-warped
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, PowerInfiltrate
-		RequiresCondition: !being-warped
 	ScalePowerWithHealth:
 	WithDeathAnimation:
 		DeathSequence: dead
@@ -1962,7 +1951,6 @@ APWR:
 	Selectable:
 		Bounds: 72,48
 		DecorationBounds: 72,68,0,-10
-	SelectionDecorations:
 	Health:
 		HP: 70000
 	Armor:
@@ -1975,7 +1963,6 @@ APWR:
 		RequiresCondition: !being-warped
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, PowerInfiltrate
-		RequiresCondition: !being-warped
 	ScalePowerWithHealth:
 	WithDeathAnimation:
 		DeathSequence: dead
@@ -1986,8 +1973,6 @@ APWR:
 TPWR:
 	Inherits: APWR
 	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 110
 		Prerequisites: dome, ~techlevel.medium, ~structures.russia
 		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload
 	Valued:
@@ -2010,7 +1995,7 @@ TPWR:
 		RequiresCondition: !(owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
 	GrantConditionOnDamageState@VOLATILE:
 		Condition: volatile
-		ValidDamageStates: Medium, Heavy, Critical
+		ValidDamageStates: Heavy, Critical
 	PowerMultiplier:
 		Modifier: 200
 		RequiresCondition: overcharge
@@ -2093,7 +2078,6 @@ STEK:
 		Proxy: tec.soviet.stolen
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
-		RequiresCondition: !being-warped
 
 BARR:
 	Inherits: ^Building
@@ -2179,6 +2163,9 @@ BARR:
 	ProvidesPrerequisite@iraqistructure:
 		RequiresPrerequisites: structures.iraq
 		Prerequisite: infantry.iraq
+	ProvidesPrerequisite@shok:
+		Factions: soviet, russia, ukraine, iraq
+		Prerequisite: infantry.shok
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -2188,10 +2175,9 @@ BARR:
 		Types: SpyInfiltrate
 	InfiltrateForSupportPower@sab:
 		Types: SabInfiltrate
-		Proxy: inf.nod.stolen
+		Proxy: inf.soviet.stolen
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-		RequiresCondition: !being-warped
 	WithDecoration@primary:
 		RequiresSelection: true
 		Image: pips
@@ -2354,10 +2340,9 @@ TENT:
 		Types: SpyInfiltrate
 	InfiltrateForSupportPower@sab:
 		Types: SabInfiltrate
-		Proxy: inf.gdi.stolen
+		Proxy: inf.allies.stolen
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, SabInfiltrate
-		RequiresCondition: !being-warped
 	WithDecoration@primary:
 		RequiresSelection: true
 		Image: pips
@@ -2384,7 +2369,6 @@ FIX:
 	Selectable:
 		Bounds: 68,34,0,3
 		DecorationBounds: 72,48
-	SelectionDecorations:
 	Health:
 		HP: 80000
 	Armor:
@@ -2737,7 +2721,6 @@ PYLE:
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-		RequiresCondition: !being-warped
 	InfiltrateForSupportPower@inf:
 		Types: SabInfiltrate
 		Proxy: inf.gdi.stolen
@@ -2795,7 +2778,6 @@ HAND:
 		ProductionType: Infantry
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-		RequiresCondition: !being-warped
 	ProvidesPrerequisite@barracks:
 		Prerequisite: barracks
 	ProvidesPrerequisite@barrackstd:
@@ -3019,13 +3001,9 @@ WEAP.TD:
 	ProvidesPrerequisite@msam:
 		Factions: gdi, zocom, talon, eagle
 		Prerequisite: vehicles.msam
-	ProvidesPrerequisite@titan:
-		Factions: talon
-		Prerequisite: vehicles.titan
-	ProvidesPrerequisite@titanstolen:
-		Factions: nod, legion, marked, blackh
-		Prerequisite: vehicles.titan
-		RequiresPrerequisites: rad.gdi.stolen
+	ProvidesPrerequisite@htnk:
+		Factions: gdi, talon, zocom, eagle
+		Prerequisite: vehicles.htnk
 	WithBuildingBib:
 	WithProductionDoorOverlay:
 		RequiresCondition: !build-incomplete
@@ -3043,7 +3021,6 @@ WEAP.TD:
 		SelectionNotification: PrimaryBuildingSelected
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-		RequiresCondition: !being-warped
 	ProductionBar:
 		ProductionType: Vehicle
 	Power:
@@ -3241,21 +3218,8 @@ AIRS:
 		Factions: nod, blackh, marked, legion
 		Prerequisite: vehicles.arty
 	ProvidesPrerequisite@apc2:
-		Factions: nod, blackh, marked, legion, gdi, zocom, talon, eagle
 		Prerequisite: vehicles.apc2
 		RequiresPrerequisites: inf.gdi.stolen
-	ProvidesPrerequisite@mtnk:
-		Factions: nod, blackh, marked, legion, gdi, zocom, eagle
-		Prerequisite: vehicles.mtnk
-		RequiresPrerequisites: veh.gdi.stolen
-	ProvidesPrerequisite@msam:
-		Factions: gdi, zocom, talon, eagle
-		Prerequisite: vehicles.msam
-		RequiresPrerequisites: rad.gdi.stolen
-	ProvidesPrerequisite@titanstolen:
-		Factions: nod, legion, marked, blackh
-		Prerequisite: vehicles.titan
-		RequiresPrerequisites: rad.gdi.stolen
 	ParatroopersPower@airdrop:
 		OrderName: nodairdrop
 		SquadSize: 3
@@ -3284,7 +3248,6 @@ AIRS:
 		PrimaryCondition: primary
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-		RequiresCondition: !being-warped
 	ProductionBar:
 		ProductionType: Vehicle
 	Power:
@@ -3354,7 +3317,6 @@ NUKE:
 		Prerequisite: anypower
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, PowerInfiltrate
-		RequiresCondition: !being-warped
 	ScalePowerWithHealth:
 	ProvidesPrerequisite@buildingname:
 	InfiltrateForPowerOutage:
@@ -3407,7 +3369,6 @@ NUK2:
 		RequiresCondition: !forceshield || !being-warped
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, PowerInfiltrate
-		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
 	ScalePowerWithHealth:
 	InfiltrateForPowerOutage:
@@ -3451,7 +3412,7 @@ AFAC:
 	BaseBuilding:
 	Transforms:
 		RequiresCondition: factundeploy
-		PauseOnCondition: chrono-vortex || being-captured || being-demolished || build-incomplete || being-warped
+		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
 		IntoActor: amcv
 		Offset: 1,1
 		Facing: 96
@@ -3470,7 +3431,7 @@ AFAC:
 	TransformsIntoTransforms:
 		RequiresCondition: factundeploy && build-incomplete
 	Sellable:
-		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !being-demolished && !being-warped
+		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !c4 && !being-warped
 	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
 		Condition: factundeploy
 		Prerequisites: global-factundeploy
@@ -3641,9 +3602,6 @@ ATWR:
 		Cost: 1000
 	Tooltip:
 		Name: Advanced Guard Tower
-	Building:
-		Dimensions: 1,1
-		Footprint: x
 	Health:
 		HP: 60000
 	Armor:
@@ -3664,36 +3622,12 @@ ATWR:
 		PauseOnCondition: disabled || empdisable || being-warped
 	BodyOrientation:
 		QuantizedFacings: 8
-	RenderRangeCircle:
-	DrawLineToTarget:
 	Power:
 		Amount: -50
 		RequiresCondition: !being-warped
 	DetectCloaked:
 		Range: 6c0
-		RequiresCondition: !disabled && !being-warped
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.gdi
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Yellow
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
+		RequiresCondition: !(disabled || empdisable || being-warped)
 
 STWR:
 	Inherits: ^Defense
@@ -3730,17 +3664,14 @@ STWR:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
 	WithMuzzleOverlay:
-	RenderRangeCircle:
 	Power:
 		Amount: -80
 		RequiresCondition: !being-warped
 	BodyOrientation:
 		UseClassicFacingFudge: True
 	DetectCloaked:
-		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
 	Selectable:
-		Bounds: 24,24
 		DecorationBounds: 24,40,0,-8
 
 OBLI:
@@ -3757,13 +3688,8 @@ OBLI:
 		Cost: 1500
 	Tooltip:
 		Name: Obelisk of Light
-	Building:
-		Dimensions: 1,1
-		Footprint: x
 	Selectable:
-		Bounds: 24,24
 		DecorationBounds: 22,44,0,-10
-	SelectionDecorations:
 	Health:
 		HP: 75000
 	Armor:
@@ -3801,7 +3727,7 @@ OBLI:
 	ProvidesPrerequisite@buildingname:
 	DetectCloaked:
 		Range: 6c0
-		RequiresCondition: !disabled && !being-warped
+		RequiresCondition: !(disabled || empdisable || being-warped)
 
 HQ:
 	Inherits: ^BuildingTD
@@ -3836,7 +3762,6 @@ HQ:
 		PauseOnCondition: disabled || being-warped
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate,  SabInfiltrate
-		RequiresCondition: !being-warped
 	Health:
 		HP: 100000
 	Armor:
@@ -3998,7 +3923,6 @@ EYE:
 		LocalCenterOffset: 0,-512,0
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, SabInfiltrate
-		RequiresCondition: !being-warped
 	WithSpriteBody:
 		PauseOnCondition: disabled || being-warped
 	Health:
@@ -4105,7 +4029,6 @@ REP:
 	Selectable:
 		Bounds: 68,34,0,3
 		DecorationBounds: 72,48
-	SelectionDecorations:
 	Health:
 		HP: 80000
 	Armor:
@@ -4232,7 +4155,6 @@ HPAD.TD:
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-		RequiresCondition: !being-warped
 	WithDecoration@primary:
 		RequiresSelection: true
 		Image: pips
@@ -4320,7 +4242,6 @@ PROC.TD:
 	WithBuildingBib:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
-		RequiresCondition: !being-warped
 	Refinery:
 		DockAngle: 112
 		DockOffset: 0,2
@@ -4354,7 +4275,6 @@ PROC.TD:
 		Amount: -30
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	SelectionDecorations:
 	CashHackable:
 
 SILO.TD:
@@ -4386,7 +4306,6 @@ SILO.TD:
 		HasMinibib: true
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
-		RequiresCondition: !being-warped
 	-WithSpriteBody:
 	WithResourceLevelSpriteBody:
 		Sequence: stages
@@ -4399,7 +4318,6 @@ SILO.TD:
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
-	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 49,30
 	Explodes:
@@ -4541,7 +4459,6 @@ AFLD.GDI:
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-		RequiresCondition: !being-warped
 	WithDecoration@primary:
 		RequiresSelection: true
 		Image: pips
@@ -4650,8 +4567,6 @@ GTEK:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^3x2Shape
-	RenderSprites:
-		PlayerPalette: overlayplayer
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 150
@@ -4670,7 +4585,6 @@ GTEK:
 		HP: 100000
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
-		RequiresCondition: !being-warped
 	Armor:
 		Type: Wood
 	RevealsShroud:
@@ -4733,9 +4647,6 @@ GTEK:
 		TargetCircleColor: ffffff90
 		LaunchSound: srepaira.aud
 	SupportPowerChargeBar:
-	GrantConditionOnPowerState@LOWPOWER:
-		Condition: lowpower
-		ValidPowerStates: Low, Critical
 
 TMPL:
 	Inherits: ^ScienceBuildingTD
@@ -4853,7 +4764,6 @@ TMPL:
 		RequiresCondition: !build-incomplete
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
-		RequiresCondition: !being-warped
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: tec.nod.stolen
@@ -4876,9 +4786,7 @@ PRIS:
 		Name: Prism Tower
 	Building:
 	Selectable:
-		Bounds: 24,24
 		DecorationBounds: 24,40,0,-8
-	SelectionDecorations:
 	Health:
 		HP: 35000
 	Armor:
@@ -4909,28 +4817,6 @@ PRIS:
 		Amount: -75
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	Armament@POINTDEFENSE:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.allies
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Blue
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
 
 SPEN.nod:
 	Inherits: ^Building
@@ -4954,14 +4840,12 @@ SPEN.nod:
 		BuildDurationModifier: 25
 	Targetable:
 		TargetTypes: Ground, Water, WaterStructure, Structure, C4, DetonateAttack, SpyInfiltrate
-		RequiresCondition: !being-warped
 	Building:
 		Footprint: XXX xxx XXX
 		Dimensions: 3,3
 		TerrainTypes: Water
 	-GivesBuildableArea:
 	RequiresBuildableArea:
-		AreaTypes: building
 		Adjacent: 8
 	Health:
 		HP: 100000
@@ -5059,14 +4943,12 @@ SYRD.gdi:
 		Name: Naval Yard
 	Targetable:
 		TargetTypes: Ground, Water, WaterStructure, Structure, C4, DetonateAttack, SpyInfiltrate
-		RequiresCondition: !being-warped
 	Building:
 		Footprint: XXX xxx XXX
 		Dimensions: 3,3
 		TerrainTypes: Water
 	-GivesBuildableArea:
 	RequiresBuildableArea:
-		AreaTypes: building
 		Adjacent: 8
 	Health:
 		HP: 100000
@@ -5193,14 +5075,6 @@ HTUR:
 		MuzzleSequence: muzzle
 		LocalOffset: 1000,200,60, 1000,0,60, 1000,-200,60
 	WithMuzzleOverlay:
-	GrantConditionOnPowerState@LOWPOWER:
-		Condition: lowpower
-		ValidPowerStates: Low, Critical
-	ToggleConditionOnOrder:
-		DisabledSound: EnablePower
-		EnabledSound: DisablePower
-		Condition: powerdown
-		OrderName: PowerDown
 	Power:
 		Amount: -100
 		RequiresCondition: !being-warped
@@ -5214,7 +5088,6 @@ HTUR:
 	Selectable:
 		Bounds: 48,48
 	DetectCloaked:
-		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
 	-ProductionCostMultiplier@FranceBonus:
 
@@ -5226,15 +5099,10 @@ GUN.Nod:
 	ActorPreviewPlaceBuildingPreview:
 		OverridePalette: placebuildingtd
 	Buildable:
-		BuildPaletteOrder: 70
 		Prerequisites: hand, ~structures.nod, ~techlevel.medium
-		Queue: Defense
 		IconPalette: chrometd
-		Description: Basic anti-tank base defense.\n  Can detect cloaked units.\n  Strong vs Tanks, Vehicles\n  Weak vs Infantry
 	Armament:
 		Weapon: TurretGunTD
-		LocalOffset: 512,0,112
-		MuzzleSequence: muzzle
 
 LTUR:
 	Inherits: GUN.Nod
@@ -5247,13 +5115,9 @@ LTUR:
 	Buildable:
 		BuildPaletteOrder: 60
 		Prerequisites: hand, ~structures.nod, ~techlevel.low
-		Queue: Defense
-		IconPalette: chrometd
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Turreted:
-		TurnSpeed: 12
 		InitialFacing: 34
-		PauseOnCondition: empdisable || being-warped
 	GrantConditionOnFaction@marked:
 		Condition: marked
 		Factions: marked
@@ -5268,7 +5132,6 @@ LTUR:
 		RequiresCondition: marked
 	Power:
 		Amount: -25
-		RequiresCondition: !being-warped
 
 TTUR:
 	Inherits: ^DefenseTD
@@ -5330,7 +5193,6 @@ SGEN:
 		Footprint: xxx xx+
 		Dimensions: 3,2
 		LocalCenterOffset: 0,0,0
-	SelectionDecorations:
 	Health:
 		HP: 100000
 	Armor:
@@ -5378,19 +5240,17 @@ SGEN:
 		Type: Rectangle
 			TopLeft: -1536, -1024
 			BottomRight: 1024, 1024
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 CRAM:
 	Inherits: AGUN
 	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 90
 		Prerequisites: hq, ~structures.gdi, ~techlevel.medium
 		IconPalette: chrometd
 		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
-	Valued:
-		Cost: 800
-	Tooltip:
-		Name: AA Gun
 	-Armament:
 	Armament@GAT0:
 		Weapon: Gatt.0
@@ -5437,7 +5297,6 @@ LASP:
 	CustomSellValue:
 		Value: 0
 	RequiresBuildableArea:
-		AreaTypes: building
 		Adjacent: 7
 	Tooltip:
 		Name: Laser Fence
@@ -5461,8 +5320,9 @@ LASP:
 	-CaptureManager:
 	-CapturableProgressBar:
 	-CapturableProgressBlink:
+	-MustBeDestroyed:
 	Sellable:
-		RequiresCondition: !build-incomplete && !being-demolished && !being-warped
+		RequiresCondition: !build-incomplete && !c4 && !being-warped
 	Power:
 		Amount: -15
 		RequiresCondition: !being-warped
@@ -5492,8 +5352,6 @@ LASF:
 	-RenderSprites:
 	RenderSprites:
 		Palette: effect-ignore-lighting-alpha85
-	Demolishable:
-		-Condition:
 	-Targetable:
 	-Building:
 	-SoundOnDamageTransition:
@@ -5541,7 +5399,7 @@ PATR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
-		Prerequisites: gtek, ~structures.gdi, ~techlevel.high
+		Prerequisites: gtek, ~structures.gdi, ~techlevel.superw
 		BuildLimit: 1
 		IconPalette: chrometd
 		Description: Launches E.M. Pulse Missiles that disable vehicles & structures.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: E.M. Pulse Missile
@@ -5608,6 +5466,10 @@ PATR:
 		Bounds: 48,48
 	RejectsOrders:
 		Except: Sell, PowerDown
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 INDP:
 	Inherits: ^ScienceBuilding
@@ -5652,7 +5514,6 @@ INDP:
 		RequiresCondition: !being-warped
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
-		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
@@ -5661,7 +5522,7 @@ INDP:
 		Prerequisite: indplowpower
 		RequiresCondition: disabled || empdisable || being-warped
 	Sellable:
-		RequiresCondition: !build-incomplete && !being-demolished && !being-warped
+		RequiresCondition: !build-incomplete && !c4 && !being-warped
 
 OREP:
 	Inherits: ^ScienceBuilding
@@ -5707,12 +5568,11 @@ OREP:
 		RequiresCondition: !being-warped
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
-		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
 	Sellable:
-		RequiresCondition: !build-incomplete && !being-demolished && !being-warped
+		RequiresCondition: !build-incomplete && !c4 && !being-warped
 
 MISS.GDI:
 	Inherits: ^ScienceBuilding
@@ -5762,12 +5622,11 @@ MISS.GDI:
 		RequiresCondition: !being-warped
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
-		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
 	Sellable:
-		RequiresCondition: !build-incomplete && !being-demolished && !being-warped
+		RequiresCondition: !build-incomplete && !c4 && !being-warped
 
 BIO.Nod:
 	Inherits: ^ScienceBuilding
@@ -5813,14 +5672,13 @@ BIO.Nod:
 		RequiresCondition: !being-warped
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
-		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
 	ProvidesPrerequisite@Name:
 		RequiresCondition: !being-warped
 	Sellable:
-		RequiresCondition: !build-incomplete && !being-demolished && !being-warped
+		RequiresCondition: !build-incomplete && !c4 && !being-warped
 
 MSLO.Nod:
 	Inherits: ^ScienceBuilding
@@ -5896,6 +5754,10 @@ MSLO.Nod:
 	WithNukeLaunchAnimation:
 		RequiresCondition: !build-incomplete
 	ProvidesPrerequisite@buildingname:
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 WEAT:
 	Inherits: ^ScienceBuilding
@@ -5919,17 +5781,6 @@ WEAT:
 		Footprint: xx xx ==
 		Dimensions: 2,3
 		LocalCenterOffset: 0,-512,0
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure
-		RequiresCondition: !being-warped
-	GrantConditionOnPowerState@LOWPOWER:
-		Condition: lowpower
-		ValidPowerStates: Low, Critical
-	ToggleConditionOnOrder:
-		DisabledSound: EnablePower
-		EnabledSound: DisablePower
-		Condition: powerdown
-		OrderName: PowerDown
 	Health:
 		HP: 100000
 	Armor:
@@ -5972,6 +5823,7 @@ WEAT:
 		TargetCircleColor: 0000FF90
 		Duration: 350
 		ActiveCondition: active
+		PaletteEffectType: LightningStorm
 	WithIdleOverlay@ACTIVE:
 		Sequence: active-overlay
 		Palette: d2keffect
@@ -5985,6 +5837,10 @@ WEAT:
 	ProvidesPrerequisite@buildingname:
 	MustBeDestroyed:
 		RequiredForShortGame: false
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 STWR:
 	Inherits: ^Defense
