@@ -1843,41 +1843,36 @@ NeutronCannonSound:
 	Projectile: InstantHit
 
 StealthBomb:
-	ValidTargets: Ground, Water
-	InvalidTargets: Air
+	Inherits: ^AntiGroundMissile
 	ReloadDelay: 50
+	Range: 3c512
+	MinRange: 2c0
 	Report: chute1.aud
 	Burst: 2
-	BurstDelays: 10
-	Range: 3c512
-	TargetActorCenter: true
-	Projectile: Bullet
-		Image: DRAGON
-		TrailImage: smokey
-		Speed: 300
-		Shadow: true
+	BurstDelays: 7
+	Projectile: Missile
+		Image: b2bomb
+		Speed: 200
+		Inaccuracy: 316
+		CruiseAltitude: 2c0
+		RangeLimit: 14c410
 	Warhead@1Dam: SpreadDamage
-		Damage: 30000
-		ValidTargets: Ground, Water
+		Damage: 40000
 		Versus:
-			None: 100
-			Wood: 55
-			Light: 50
-			Heavy: 100
-			Concrete: 45
-		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+			None: 25
+			Wood: 35
+			Light: 60
+			Heavy: 110
+			Concrete: 50
+			Brick: 80
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 	Warhead@3Eff: CreateEffect
-		Explosions: large_explosion
-		ImpactSounds: kaboom15.aud
-		ValidTargets: Ground, Ship, Trees
-	Warhead@4EffWater: CreateEffect
-		Explosions: med_splash
-		ImpactSounds: splashl1.aud, splashl2.aud
-		ValidTargets: Water, Underwater
-		InvalidTargets: Ship, Structure, Bridge
+		Explosions: med_explosion
+		ImpactSounds: madexplo.aud
+		ImpactActors: false
+		ValidTargets: Ground, Water, Ship, Trees
 
 JDAM:
 	ValidTargets: Ground, Water, Trees
