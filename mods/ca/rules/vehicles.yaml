@@ -161,7 +161,7 @@ V2RL:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
-		
+
 2TNK.Chrono:
 	Inherits: 2TNK
 	RenderSprites:
@@ -475,7 +475,7 @@ ARTY.nod:
 		Prerequisites: ~vehicles.nod, ~techlevel.medium
 	Armament:
 		Weapon: 155mmTD
-		
+
 ARTY.Chrono:
 	Inherits: ARTY
 	RenderSprites:
@@ -1580,7 +1580,7 @@ LTNK.Laser:
 		Weapon: Laser.Tank
 		Recoil: 85
 		RecoilRecovery: 17
-		LocalOffset: 720,0,90
+		LocalOffset: 520,0,90
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped || parachute
 	AttackTurreted:
@@ -4124,3 +4124,38 @@ FTRK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+
+COORDINATOR:
+	Inherits: ^Vehicle
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Reinforcement Coordinator
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 235
+		IconPalette: chrometd
+		Prerequisites: ~vehicles.nod, ~commander_tree.reinforcements_coordinator, ~techlevel.high
+		BuildDurationModifier: 50
+		Description: Coordinates newly built vehicles to be airdropped close to the Coordinator.
+	Health:
+		HP: 22000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Speed: 82
+	RevealsShroud:
+		Range: 7c0
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: 0,0,256
+		PauseOnCondition: empdisable || being-warped
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	Transforms:
+		IntoActor: coordinator.struct
+		Offset: 0,0
+		Facing: 96
+		PauseOnCondition: empdisable || being-warped
