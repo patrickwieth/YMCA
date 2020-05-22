@@ -324,9 +324,9 @@ V2RL:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
 		Prerequisites: stek, ~vehicles.soviet, ~techlevel.high
-		Description: Big and slow tank, with anti-air and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+		Description: Big and slow tank, with anti-air.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Valued:
-		Cost: 3000
+		Cost: 1700
 	Tooltip:
 		Name: Mammoth Tank
 		GenericName: Tank
@@ -396,27 +396,70 @@ V2RL:
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.soviet
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 6
-		PipType: Red
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
+
+4TNK.PLD:
+	Inherits: 4TNK
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		IconPalette: chrometd
+		BuildPaletteOrder: 180
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pld, ~techlevel.high
+		Description: Big and slow tank, with anti-air and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Valued:
+		Cost: 2700
+
+4TNK.Speaker:
+	Inherits: 4TNK
+	Buildable:
+		Queue: Vehicle
+		IconPalette: chrometd
+		BuildPaletteOrder: 180
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pt, ~techlevel.high
+		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
+	Valued:
+		Cost: 2500
+	ProximityExternalCondition@Propaganda:
+		Condition: propaganda
+		Range: 7c0
+		AffectsParent: False
+
+4TNK.Nuke:
+	Inherits: 4TNK
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		IconPalette: chrometd
+		BuildPaletteOrder: 180
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_ns, ~techlevel.high
+		Description: Big and slow tank, with anti-air and nuke shells.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Point Laser Defense
+	Valued:
+		Cost: 3000
+	Armament@PRIMARY:
+		Weapon: 130mm.Nuke
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 191
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	-Armament@SECONDARY:
+
+4TNK.Tesla:
+	Inherits: 4TNK
+	Buildable:
+		Queue: Vehicle
+		IconPalette: chrometd
+		BuildPaletteOrder: 180
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_tt, ~techlevel.high
+		Description: Big and slow tank with Tesla weapon.\nCan crush concrete walls.\n  Strong vs Vehicles\n  Weak vs Aircraft
+	Valued:
+		Cost: 2400
+	Armament@PRIMARY:
+		Weapon: 4TankZap
+		LocalOffset: 900,0,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	-Armament@SECONDARY:
 
 ARTY:
 	Inherits: ^Tank
@@ -1607,7 +1650,7 @@ MTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
-		Prerequisites: ~vehicles.td, ~vehicles.mtnk, vehicles.any, ~techlevel.low
+		Prerequisites: ~vehicles.td, ~vehicles.mtnk, vehicles.any, ~!commander_tree.medium_tank_pld, ~techlevel.low
 		IconPalette: chrometd
 		Description: Main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -1643,22 +1686,11 @@ MTNK:
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
-		Weapon: PointLaser
-		LocalOffset: 0,10,90
-		RequiresCondition: gdiupg
-		ForceTargetStances: enemy
 	AttackTurreted:
 		Turrets: primary, secondary
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	WithSpriteTurret@default:
-		RequiresCondition: !gdiupg
-	WithSpriteTurret@gdiupg:
-		Sequence: turretpd
-		RequiresCondition: gdiupg
 	SpawnActorOnDeath:
 		Actor: MTNK.Husk
 		RequiresCondition: !being-warped
@@ -1666,19 +1698,20 @@ MTNK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: secondary
-		Weapon: PointLaser
-		LocalOffset: 0,10,90
-		RequiresCondition: gdiupg
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile
-		RequiresCondition: gdiupg
-		ValidStances: Enemy
+
+MTNK.PLD:
+	Inherits: MTNK
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 80
+		Prerequisites: ~vehicles.td, ~vehicles.mtnk, vehicles.any, ~commander_tree.medium_tank_pld, ~techlevel.low
+		IconPalette: chrometd
+		Description: Main battle tank with Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1500
+	WithSpriteTurret@gdiupg:
+		Sequence: turretpd
 
 MTNK.Drone:
 	Inherits: ^TankTD
@@ -1690,7 +1723,7 @@ MTNK.Drone:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
-		Prerequisites: ~vehicles.talon, weap.td, ~techlevel.low
+		Prerequisites: ~vehicles.talon, weap.td, ~!commander_tree.medium_tank_pld, ~techlevel.low
 		IconPalette: chrometd
 		Description: Drone battle tank.\n  Requires power to operate.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -1754,19 +1787,6 @@ MTNK.Drone:
 		Range: 1c0
 		EnableSound: vrobon
 		DisableSound: vroboff
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: secondary
-		Weapon: PointLaser
-		LocalOffset: 0,10,90
-		RequiresCondition: gdiupg
-		ForceTargetStances: enemy
-		PauseOnCondition: empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile
-		RequiresCondition: gdiupg
-		ValidStances: Enemy
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune
 	-CaptureManager:
@@ -1775,6 +1795,18 @@ MTNK.Drone:
 	-Capturable@DRIVER_DEAD:
 	-GrantConditionIfOwnerIsNeutral:
 	-SelfHealing@DRIVER_DEAD:
+
+MTNK.Drone.PLD:
+	Inherits: MTNK.Drone
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 85
+		Prerequisites: ~vehicles.talon, weap.td, ~commander_tree.medium_tank_pld, ~techlevel.low
+		IconPalette: chrometd
+		Description: Drone battle tank with Point Laser Defense.\n  Requires power to operate.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1320
 
 HTNK:
 	Inherits: ^TankTD
@@ -2888,10 +2920,10 @@ RTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
-		Prerequisites: weap, ~vehicles.england, ~techlevel.low
-		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
+		Prerequisites: weap, ~vehicles.england, ~!commander_tree.mirage_pld, ~techlevel.low
+		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor.\n  Strong vs Vehicles\n  Weak vs Aircraft.
 	Valued:
-		Cost: 1500
+		Cost: 800
 	Tooltip:
 		Name: Mirage Tank
 		RequiresCondition: !tree
@@ -2967,27 +2999,18 @@ RTNK:
 		Prerequisites: vehicles.upgraded
 	Voiced:
 		VoiceSet: MirageVoice
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.allies
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 6
-		PipType: Blue
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
+
+RTNK.PLD:
+	Inherits: RTNK
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 75
+		IconPalette: chrometd
+		Prerequisites: weap, ~vehicles.england, ~commander_tree.mirage_pld, ~techlevel.low
+		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
+	Valued:
+		Cost: 1400
 
 V3RL:
 	Inherits: ^Vehicle
@@ -3246,7 +3269,7 @@ MSAR:
 	Inherits: ^VehicleTD
 	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Valued:
-		Cost: 1500
+		Cost: 750
 	Tooltip:
 		Name: Mobile Sensor Array
 		RequiresCondition: !deployed
@@ -3259,7 +3282,7 @@ MSAR:
 		Queue: Vehicle
 		BuildPaletteOrder: 240
 		IconPalette: chrometd
-		Prerequisites: hq, ~vehicles.gdi, ~techlevel.high
+		Prerequisites: hq, ~vehicles.gdi, ~!commander_tree.mobile_sensor_pld, ~techlevel.high
 		BuildDurationModifier: 50
 		Description: When deployed, provides radar and increases nearby vehicle weapon range.\n  Detects cloaked units.\n  Unarmed
 	Health:
@@ -3279,7 +3302,7 @@ MSAR:
 		RequiresCondition: undeployed
 	RevealsShroud@DEPLOYED:
 		RequiresCondition: !undeployed
-		Range: 10c0
+		Range: 14c0
 	RenderSprites:
 		Image: msar
 	Repairable:
@@ -3328,29 +3351,21 @@ MSAR:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
 		RequiresCondition: !parachute && !being-warped
-	AttackFrontal:
-		PauseOnCondition: empdisable || being-warped
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: SuperPointLaser.gdi
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 24
-		PipCount: 6
-		PipType: Yellow
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 24
-		ResetOnFire: True
+
+MSAR.PLD:
+	Inherits: MSAR
+	Inherits@PLD: ^PointLaserDefenseSystemBig
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 240
+		IconPalette: chrometd
+		Prerequisites: hq, ~vehicles.gdi, ~commander_tree.mobile_sensor_pld, ~techlevel.high
+		BuildDurationModifier: 50
+		Description: When deployed, provides radar and increases nearby vehicle weapon range.\n  Detects cloaked units.\n  Unarmed
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Mobile Sensor Array
 
 PTNK:
 	Inherits: ^Tank
@@ -3526,9 +3541,9 @@ BATF:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
-		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 3000
+		Cost: 2000
 	Tooltip:
 		Name: Battle Fortress
 	Health:
@@ -3616,30 +3631,21 @@ BATF:
 	WithSpriteTurret@TERTIARY:
 		Turret: tertiary
 		Sequence: turret2
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.allies
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 6
-		PipType: Blue
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
 	SpawnActorOnDeath:
 		Actor: BATF.Husk
 		RequiresCondition: !being-warped
+
+BATF.PLD:
+	Inherits: BATF
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		IconPalette: chrometd
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 3000
 
 BATF.AI:
 	Inherits: BATF
@@ -4139,6 +4145,7 @@ COORDINATOR:
 		IconPalette: chrometd
 		Prerequisites: ~vehicles.nod, ~commander_tree.reinforcements_coordinator, ~techlevel.high
 		BuildDurationModifier: 50
+		BuildLimit: 1
 		Description: Coordinates newly built vehicles to be airdropped close to the Coordinator.
 	Health:
 		HP: 22000

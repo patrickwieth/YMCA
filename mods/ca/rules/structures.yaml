@@ -1397,7 +1397,6 @@ WEAP:
 FACT:
 	Inherits: ^Building
 	Inherits: ^BotFallbackInsurance
-	Inherits: ^PointDefenseSystem
 	Selectable:
 		Bounds: 72,72
 	Building:
@@ -3531,7 +3530,6 @@ AFAC:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^3x2Shape
 	Inherits: ^BotFallbackInsurance
-	Inherits: ^PointDefenseSystem
 	RenderSprites:
 		FactionImages:
 			nod: nodfact
@@ -6127,6 +6125,7 @@ WEAT:
 
 PLDT:
 	Inherits: ^DefenseTD
+	Inherits@PLD: ^PointLaserDefenseSystemBig
 	Inherits@IDISABLE: ^DisableOnLowPower
 	Inherits@AUTOTARGET: ^AutoTargetGround
 	RenderSprites:
@@ -6150,12 +6149,6 @@ PLDT:
 		Type: Concrete
 	RevealsShroud:
 		Range: 8c0
-	Turreted:
-		TurnSpeed: 255
-		Offset: 128,128,384
-	AttackTurreted:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable || being-warped
 	BodyOrientation:
 		QuantizedFacings: 8
 	RenderRangeCircle:
@@ -6163,37 +6156,15 @@ PLDT:
 	Power:
 		Amount: -50
 		RequiresCondition: !being-warped
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.gdi
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Yellow
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
 
-COORDINATOR.STRUCT:
+Coordinator.Struct:
 	Inherits: ^Building
 	Selectable:
 		Bounds: 24,24
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 35
-		Prerequisites: proc, ~structures.ra, ~techlevel.infonly
+		Prerequisites: ~disabled
 		Description: Stores excess refined\nTiberium, Ore and Gems.
 	Valued:
 		Cost: 150

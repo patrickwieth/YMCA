@@ -246,6 +246,14 @@ PortaTeslaCharge:
 		Condition: highlight
 		ValidTargets: Ground, Vehicle
 
+4TankZap:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 80
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 12000
+	Range: 6c0
+
 TTankZap:
 	Inherits: ^TeslaWeapon
 	ReloadDelay: 130
@@ -630,25 +638,6 @@ VenomLaserAA:
 			Heavy: 100
 	-Warhead@2Smu:
 
-PointLaser:
-	Inherits: Laser
-	ReloadDelay: 50
-	ValidTargets: Ground, Air, Missile
-	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
-	Range: 1c768
-	Report: vpalwe2d.aud
-	Projectile: LaserZap
-		Width: 30
-		Duration: 3
-		-HitAnim:
-		Color: 03f0fc
-		SecondaryBeamWidth: 50
-		SecondaryBeamColor: 03fcfc30
-		Blockable: true
-	Warhead@1Dam: SpreadDamage
-		Spread: 5
-		Damage: 1
-
 AdvancedPointLaser:
 	Inherits: Laser
 	ReloadDelay: 10
@@ -691,38 +680,8 @@ AdvancedPointLaser.soviet:
 		DimZaps: 0
 
 SuperPointLaser:
-	Inherits: Laser
-	ReloadDelay: 5
-	ValidTargets: Ground, Air, Missile, BulletCA
-	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
+	Inherits: AdvancedPointLaser
 	Range: 3c768
-	Report: vpalwe2d.aud
-	Projectile: LaserZap
-		Width: 30
-		Duration: 3
-		-HitAnim:
-		Color: fc0303
-		ZOffset: 2047
-		SecondaryBeam: true
-		SecondaryBeamWidth: 50
-		SecondaryBeamZOffset: 2047
-		SecondaryBeamColor: 0303fc30
-		Blockable: true
-	Warhead@1Dam: SpreadDamage
-		Spread: 5
-		Damage: 1
-
-SuperPointLaser.allies:
-	Inherits: SuperPointLaser
-	Report: cryozap.aud
-	Projectile: LaserZap
-		Color: ffffff
-		SecondaryBeamColor: 57BEFFBB
-
-SuperPointLaser.gdi:
-	Inherits: SuperPointLaser
-	Projectile: LaserZap
-		SecondaryBeamColor: d1a70030
 
 PrisLaser:
 	ValidTargets: Ground, Water
