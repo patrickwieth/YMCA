@@ -3848,10 +3848,10 @@ CHPR:
 		Queue: Vehicle
 		BuildPaletteOrder: 225
 		IconPalette: chrometd
-		Prerequisites: atek, ~vehicles.germany, ~techlevel.high
+		Prerequisites: atek, ~vehicles.germany, ~commander_tree.chrono_prison, ~techlevel.high
 		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
-		Cost: 1700
+		Cost: 1500
 	Tooltip:
 		Name: Chrono Prison
 		GenericName: Tank
@@ -3929,6 +3929,64 @@ CHPR:
 	SpawnActorOnDeath:
 		Actor: CHPR.Husk
 		RequiresCondition: !being-warped
+
+CHPR.Range:
+	Inherits: CHPR
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 225
+		IconPalette: chrometd
+		Prerequisites: atek, ~vehicles.germany, ~commander_tree.chrono_prison_range, ~techlevel.high
+		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
+	Valued:
+		Cost: 1700
+	Tooltip:
+		Name: Chrono Prison Range Upgraded
+	Armament@PRIMARY:
+		Weapon: NeutronCannon.Range
+		LocalOffset: 600,0,480
+	Armament@PRIMARYVISUAL:
+		Weapon: NeutronCannonBeam.Range
+		LocalOffset: 600,0,480
+	Armament@PRIMARYVISUALCORE:
+		Weapon: NeutronCannonPulse
+		LocalOffset: 600,0,480
+	Armament@PRIMARYSOUND:
+		Weapon: NeutronCannonSound
+		LocalOffset: 600,0,480
+
+CHPR.AA:
+	Inherits: CHPR
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 225
+		IconPalette: chrometd
+		Prerequisites: atek, ~vehicles.germany, ~commander_tree.chrono_prison_aa, ~techlevel.high
+		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Chrono Prison Anti-Air
+	Armament@PRIMARY:
+		Weapon: NeutronCannon.AA
+		LocalOffset: 600,0,480
+	Armament@PRIMARYVISUAL:
+		Weapon: NeutronCannonBeam.AA
+		LocalOffset: 600,0,480
+	Armament@PRIMARYVISUALCORE:
+		Weapon: NeutronCannonPulse.AA
+		LocalOffset: 600,0,480
+	Armament@PRIMARYSOUND:
+		Weapon: NeutronCannonSound.AA
+		LocalOffset: 600,0,480
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+		ValidTargets: Air
+		InvalidTargets: NoAutoTarget
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+		ValidTargets: Air
+		InvalidTargets: NoAutoTarget
 
 2S3:
 	Inherits: ^Tank

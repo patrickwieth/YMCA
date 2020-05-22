@@ -1712,6 +1712,25 @@ NeutronCannon:
 		ValidTargets: Temporal
 		DamageTypes: ChronoDeath
 
+NeutronCannon.Range:
+	Inherits: NeutronCannon
+	Range: 7c0
+
+NeutronCannon.AA:
+	Inherits: NeutronCannon
+	Warhead@Damage: WarpDamage
+		Damage: 750
+		Spread: 1
+		Versus:
+			None: 40
+			Wood: 60
+			Light: 50
+			Heavy: 100
+			Concrete: 55
+			Brick: 55
+		ValidTargets: Air
+		DamageTypes: ChronoDeath
+
 NeutronCannonBeam:
 	ValidTargets: Temporal
 	ReloadDelay: 5
@@ -1739,6 +1758,25 @@ NeutronCannonBeam:
 		ValidTargets: Temporal
 		DamageTypes: ChronoDeath
 
+NeutronCannonBeam.Range:
+	Inherits: NeutronCannonBeam
+	Range: 7c0
+
+NeutronCannonBeam.AA:
+	Inherits: NeutronCannonBeam
+	ValidTargets: Air
+	Warhead@Damage: SpreadDamage
+		Damage: 1
+		Spread: 1
+		Versus:
+			None: 0
+			Wood: 0
+			Light: 0
+			Heavy: 0
+			Concrete: 0
+			Brick: 0
+		ValidTargets: Air
+
 NeutronCannonPulse:
 	Inherits: NeutronCannonBeam
 	ReloadDelay: 20
@@ -1751,8 +1789,26 @@ NeutronCannonPulse:
 		TrackTarget: true
 		Color: d8f9f7cc
 
+NeutronCannonPulse.AA:
+	Inherits: NeutronCannonBeam.AA
+	ReloadDelay: 20
+	Projectile: AreaBeam
+		Speed: 0c768
+		Duration: 8
+		Width: 60
+		Shape: Flat
+		ZOffset: 2047
+		TrackTarget: true
+		Color: d8f9f7cc
+
 NeutronCannonSound:
 	Inherits: NeutronCannonBeam
+	Report: chronogun.aud
+	ReloadDelay: 60
+	Projectile: InstantHit
+
+NeutronCannonSound.AA:
+	Inherits: NeutronCannonBeam.AA
 	Report: chronogun.aud
 	ReloadDelay: 60
 	Projectile: InstantHit
