@@ -709,7 +709,7 @@
 		RequiresCondition: stance-attackanything || assault-move
 	AttackMove:
 		AssaultMoveCondition: assault-move
-		
+
 ^AutoTargetNavalAssaultMove:
 	Inherits: ^AutoTargetGroundAssaultMove
 	AutoTargetPriority@DEFAULT:
@@ -744,7 +744,7 @@
 		RequiresCondition: stance-attackanything || assault-move
 	AttackMove:
 		AssaultMoveCondition: assault-move
-		
+
 ^AutoTargetAllNavalAssaultMove:
 	Inherits: ^AutoTargetAllAssaultMove
 	AutoTargetPriority@DEFAULT:
@@ -941,6 +941,7 @@
 	Inherits@12: ^BotGroundProductionBonus
 	Inherits@13: ^Chillable
 	Inherits@14: ^Concussion
+	Inherits@15: ^Propaganda
 	Inherits@bounty: ^GlobalBounty
 	Inherits@SELECTION_MODE: ^FlatSelectionMode
 	RenderSprites:
@@ -2384,7 +2385,7 @@
 	GrantConditionOnDamageState@DAMAGED:
 		Condition: damaged
 
-^PointDefenseSystem:
+^PointLaserDefenseSystem:
 	Turreted:
 		TurnSpeed: 255
 	AttackTurreted:
@@ -2403,7 +2404,7 @@
 		ValidStances: Enemy
 	AmmoPool:
 		Ammo: 12
-		PipCount: 4
+		PipCount: 6
 		PipType: Red
 		Armaments: pointdefense
 		AmmoCondition: ammo
@@ -2413,4 +2414,35 @@
 		ResetOnFire: True
 		PauseOnCondition: disabled || empdisable
 
-^PointDefenseSystemSMALL
+^PointLaserDefenseSystemSmall:
+	Inherits: ^PointLaserDefenseSystem
+	AmmoPool:
+		Ammo: 6
+		PipCount: 2
+	ReloadAmmoPool:
+		Count: 6
+
+^PointLaserDefenseSystemBig:
+	Inherits: ^PointLaserDefenseSystem
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: SuperPointLaser
+	AmmoPool:
+		Ammo: 24
+		PipCount: 6
+	ReloadAmmoPool:
+		Count: 24
+
+^Propaganda:
+	SpeedMultiplier@Propaganda:
+		RequiresCondition: propaganda
+		Modifier: 125
+	ReloadDelayMultiplier@Propaganda:
+		RequiresCondition: propaganda
+		Modifier: 75
+	ExternalCondition@Propaganda:
+		Condition: propaganda
+	WithColoredOverlay@Propaganda:
+		RequiresCondition: propaganda
+		Palette: frenzy

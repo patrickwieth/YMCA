@@ -1397,7 +1397,6 @@ WEAP:
 FACT:
 	Inherits: ^Building
 	Inherits: ^BotFallbackInsurance
-	Inherits: ^PointDefenseSystem
 	Selectable:
 		Bounds: 72,72
 	Building:
@@ -3531,7 +3530,6 @@ AFAC:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^3x2Shape
 	Inherits: ^BotFallbackInsurance
-	Inherits: ^PointDefenseSystem
 	RenderSprites:
 		FactionImages:
 			nod: nodfact
@@ -6127,6 +6125,7 @@ WEAT:
 
 PLDT:
 	Inherits: ^DefenseTD
+	Inherits@PLD: ^PointLaserDefenseSystemBig
 	Inherits@IDISABLE: ^DisableOnLowPower
 	Inherits@AUTOTARGET: ^AutoTargetGround
 	RenderSprites:
@@ -6150,12 +6149,6 @@ PLDT:
 		Type: Concrete
 	RevealsShroud:
 		Range: 8c0
-	Turreted:
-		TurnSpeed: 255
-		Offset: 128,128,384
-	AttackTurreted:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable || being-warped
 	BodyOrientation:
 		QuantizedFacings: 8
 	RenderRangeCircle:
@@ -6163,25 +6156,90 @@ PLDT:
 	Power:
 		Amount: -50
 		RequiresCondition: !being-warped
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser.gdi
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || disabled || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 4
-		PipType: Yellow
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
-		PauseOnCondition: disabled || empdisable
+
+Coordinator.Struct:
+	Inherits: ^Building
+	Selectable:
+		Bounds: 24,24
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 35
+		Prerequisites: ~disabled
+		Description: Stores excess refined\nTiberium, Ore and Gems.
+	Valued:
+		Cost: 150
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack
+	Tooltip:
+		Name: Reinforcement Coordinator
+	-GivesBuildableArea:
+	Health:
+		HP: 30000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 4c0
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: 0,0,256
+		PauseOnCondition: empdisable || being-warped
+	Transforms:
+		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
+		IntoActor: coordinator
+		Offset: 0,0
+		Facing: 96
+	Exit@1:
+		ExitCell: 0,1
+		ProductionTypes: Vehicle
+	Exit@2:
+		ExitCell: 1,0
+		ProductionTypes: Vehicle
+	Exit@3:
+		ExitCell: 1,1
+		ProductionTypes: Vehicle
+	Exit@4:
+		ExitCell: 0,-1
+		ProductionTypes: Vehicle
+	Exit@5:
+		ExitCell: -1,0
+		ProductionTypes: Vehicle
+	Exit@6:
+		ExitCell: -1,-1
+		ProductionTypes: Vehicle
+	Exit@7:
+		ExitCell: -1,1
+		ProductionTypes: Vehicle
+	Exit@8:
+		ExitCell: 1,-1
+		ProductionTypes: Vehicle
+	Exit@9:
+		ExitCell: 0,2
+		ProductionTypes: Vehicle
+	Exit@10:
+		ExitCell: 2,0
+		ProductionTypes: Vehicle
+	Exit@11:
+		ExitCell: 2,2
+		ProductionTypes: Vehicle
+	Exit@12:
+		ExitCell: 0,-2
+		ProductionTypes: Vehicle
+	Exit@13:
+		ExitCell: -2,0
+		ProductionTypes: Vehicle
+	Exit@14:
+		ExitCell: -2,-2
+		ProductionTypes: Vehicle
+	Exit@15:
+		ExitCell: -2,2
+		ProductionTypes: Vehicle
+	Exit@16:
+		ExitCell: 2,-2
+		ProductionTypes: Vehicle
+	RallyPoint:
+		Offset: 5,5
+	ProductionParadrop:
+		Produces: Vehicle
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: c17.cargo
+		ReadyAudio: ReinforcementsArrived

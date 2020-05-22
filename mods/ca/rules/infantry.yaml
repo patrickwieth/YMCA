@@ -2156,3 +2156,43 @@ jarmen_kell:
 		VoiceSet: JarmenVoice
 	RenderSprites:
 		Image: jarmen_kell
+
+LEADER:
+	Inherits@1: ^CivInfantry
+	Inherits@2: ^ArmedCivilian
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 7
+		Prerequisites: ~infantry.nod, ~commander_tree.rebel_leader ~techlevel.infonly
+		Description: Nod Rebel Leader.\n\nNewly trained infantry enters the game from the closest map edge \n as long as no primary infantry building is set. \n Does not work with water.
+		BuildLimit: 1
+	Valued:
+		Cost: 1500
+	-Wanders:
+	Tooltip:
+		Name: Nod Rebel Leader
+	Selectable:
+		Class: GNRL
+	Mobile:
+		Voice: Move
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: StavrosVoice
+	-ScaredyCat:
+	TakeCover:
+		DamageModifiers:
+			Prone50Percent: 50
+		DamageTriggers: TriggerProne
+	WithInfantryBody:
+		IdleSequences: idle1
+	ProductionFromMapEdge:
+		Produces: Infantry, Soldier
