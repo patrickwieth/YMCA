@@ -1338,37 +1338,34 @@ BGGY:
 
 BGGY.Laser:
 	Inherits: BGGY
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
 		IconPalette: chrometd
-		Prerequisites: ~bio.nod, ~vehicles.nod, ~techlevel.high
+		Prerequisites: ~bio.nod, ~vehicles.nod, ~commander_tree.buggy_pld, ~techlevel.high
 		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units and has Point Laser Defense.\n  Strong vs Infantry\n  Weak vs Energy Weapons
 	Valued:
-		Cost: 1000
+		Cost: 900
 	Tooltip:
-		Name: Laser Buggy
-	Armament@pointdefense:
-		Name: pointdefense
-		Turret: pointdefense
-		Weapon: AdvancedPointLaser
-		LocalOffset: 0,10,90
-		ForceTargetStances: enemy
-		PauseOnCondition: !ammo || empdisable || being-warped
-	PointDefense:
-		Armament: pointdefense
-		PointDefenseTypes: Missile, BulletCA
-		ValidStances: Enemy
-	AmmoPool:
-		Ammo: 12
-		PipCount: 6
-		PipType: Red
-		Armaments: pointdefense
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 240
-		Count: 12
-		ResetOnFire: True
+		Name: Point Laser Buggy
+
+BGGY.AA:
+	Inherits: BGGY
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: ~bio.nod, ~vehicles.nod, ~commander_tree.buggy_aa, ~techlevel.high
+		Description: Fast scout and anti-aircraft vehicle.\nCan detect cloaked units.\n  Strong vs Infantry, Aircraft\n  Weak vs Vehicles
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Anti-Air Buggy
+	Armament@Secondary:
+		Weapon: VenomLaserAA
+		LocalOffset: 171,0,43
+		MuzzleSequence: muzzle
 
 APC2:
 	Inherits: ^TankTD
@@ -2024,7 +2021,7 @@ MLRS:
 	Selectable:
 		DecorationBounds: 28,28
 
-MLRS.legion:
+MLRS.Toxin:
 	Inherits: MLRS
 	Buildable:
 		BuildPaletteOrder: 91
@@ -2035,7 +2032,7 @@ MLRS.legion:
 	Tooltip:
 		Name: SSM Toxin Launcher
 	Armament:
-		Weapon: honestjohn.legion
+		Weapon: honestjohn.toxin
 		LocalOffset: 0,171,0, 0,-171,0
 		PauseOnCondition: empdisable || being-warped
 
@@ -3268,8 +3265,6 @@ TNKD2:
 MSAR:
 	Inherits: ^VehicleTD
 	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
-	Valued:
-		Cost: 750
 	Tooltip:
 		Name: Mobile Sensor Array
 		RequiresCondition: !deployed
@@ -3285,6 +3280,8 @@ MSAR:
 		Prerequisites: hq, ~vehicles.gdi, ~!commander_tree.mobile_sensor_pld, ~techlevel.high
 		BuildDurationModifier: 50
 		Description: When deployed, provides radar and increases nearby vehicle weapon range.\n  Detects cloaked units.\n  Unarmed
+	Valued:
+		Cost: 900
 	Health:
 		HP: 22000
 	Armor:
@@ -3352,6 +3349,19 @@ MSAR:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
 		RequiresCondition: !parachute && !being-warped
 
+MSAR.Nod:
+	Inherits: MSAR
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 240
+		IconPalette: chrometd
+		Prerequisites: hq, ~vehicles.gdi, ~!commander_tree.mobile_sensor_pld, ~techlevel.high
+		BuildDurationModifier: 50
+		Description: When deployed, provides radar and detects cloaked units.\n  Unarmed
+	Valued:
+		Cost: 600
+	-ProximityExternalCondition@Bino:
+
 MSAR.PLD:
 	Inherits: MSAR
 	Inherits@PLD: ^PointLaserDefenseSystemBig
@@ -3361,11 +3371,23 @@ MSAR.PLD:
 		IconPalette: chrometd
 		Prerequisites: hq, ~vehicles.gdi, ~commander_tree.mobile_sensor_pld, ~techlevel.high
 		BuildDurationModifier: 50
-		Description: When deployed, provides radar and increases nearby vehicle weapon range.\n  Detects cloaked units.\n  Unarmed
+		Description: When deployed, provides radar and increases nearby vehicle weapon range.\n Has Point Laser Defense System.\n Detects cloaked units.\n  Unarmed
 	Valued:
 		Cost: 1500
-	Tooltip:
-		Name: Mobile Sensor Array
+
+MSAR.PLD.Nod:
+	Inherits: MSAR
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 240
+		IconPalette: chrometd
+		Prerequisites: hq, ~vehicles.gdi, ~commander_tree.mobile_sensor_pld, ~techlevel.high
+		BuildDurationModifier: 50
+		Description: When deployed, provides radar and Point Laser Defense.\n Detects cloaked units.\n  Unarmed
+	Valued:
+		Cost: 1000
+	-ProximityExternalCondition@Bino:
 
 PTNK:
 	Inherits: ^Tank
