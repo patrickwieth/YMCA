@@ -456,11 +456,11 @@ DemoTruckTargeting:
 MADTankThump:
 	InvalidTargets: MADTank, Infantry
 	Warhead@1Dam: HealthPercentageDamage
-		Spread: 7c0
+		Spread: 9c0
 		Damage: 1
 		InvalidTargets: MADTank, Infantry
 	Warhead@Concussion: GrantExternalCondition
-		Range: 7c0
+		Range: 9c0
 		Duration: 100
 		Condition: concussion
 		ValidTargets: Ground, Infantry, Vehicle, Ship
@@ -468,8 +468,8 @@ MADTankThump:
 MADTankDetonate:
 	InvalidTargets: MADTank, Infantry
 	Warhead@1Dam: HealthPercentageDamage
-		Spread: 7c0
-		Damage: 19
+		Spread: 9c0
+		Damage: 29
 		InvalidTargets: MADTank, Infantry
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
@@ -479,7 +479,7 @@ MADTankDetonate:
 		ImpactSounds: madexplo.aud
 		ImpactActors: false
 	Warhead@Concussion: GrantExternalCondition
-		Range: 7c0
+		Range: 9c0
 		Duration: 600
 		Condition: concussion
 		ValidTargets: Ground, Infantry, Vehicle, Ship
@@ -524,9 +524,9 @@ Laser.Adv:
 
 Laser.Tank:
 	Inherits: Laser
-	ReloadDelay: 180
+	ReloadDelay: 200
 	Report: obelmod1.aud
-	Range: 7c512
+	Range: 6c512
 	Projectile: LaserZap
 		Width: 56
 		HitAnim: laserfire
@@ -544,7 +544,7 @@ Laser.Tank:
 			None: 32
 			Wood: 52
 			Light: 96
-			Heavy: 68
+			Heavy: 58
 			Concrete: 40
 			Brick: 32
 
@@ -1859,41 +1859,36 @@ NeutronCannonSound:
 	Projectile: InstantHit
 
 StealthBomb:
-	ValidTargets: Ground, Water
-	InvalidTargets: Air
+	Inherits: ^AntiGroundMissile
 	ReloadDelay: 50
+	Range: 3c512
+	MinRange: 2c0
 	Report: chute1.aud
 	Burst: 2
-	BurstDelays: 10
-	Range: 3c512
-	TargetActorCenter: true
-	Projectile: Bullet
-		Image: DRAGON
-		TrailImage: smokey
-		Speed: 300
-		Shadow: true
+	BurstDelays: 7
+	Projectile: Missile
+		Image: b2bomb
+		Speed: 200
+		Inaccuracy: 316
+		CruiseAltitude: 2c0
+		RangeLimit: 14c410
 	Warhead@1Dam: SpreadDamage
-		Damage: 30000
-		ValidTargets: Ground, Water
+		Damage: 40000
 		Versus:
-			None: 100
-			Wood: 55
-			Light: 50
-			Heavy: 100
-			Concrete: 45
-		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+			None: 25
+			Wood: 35
+			Light: 60
+			Heavy: 110
+			Concrete: 50
+			Brick: 80
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 	Warhead@3Eff: CreateEffect
-		Explosions: large_explosion
-		ImpactSounds: kaboom15.aud
-		ValidTargets: Ground, Ship, Trees
-	Warhead@4EffWater: CreateEffect
-		Explosions: med_splash
-		ImpactSounds: splashl1.aud, splashl2.aud
-		ValidTargets: Water, Underwater
-		InvalidTargets: Ship, Structure, Bridge
+		Explosions: med_explosion
+		ImpactSounds: madexplo.aud
+		ImpactActors: false
+		ValidTargets: Ground, Water, Ship, Trees
 
 JDAM:
 	ValidTargets: Ground, Water, Trees
