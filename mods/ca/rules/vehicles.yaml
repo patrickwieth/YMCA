@@ -1117,7 +1117,7 @@ CTNK:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 45000
+		HP: 55000
 	Armor:
 		Type: Heavy
 	Mobile:
@@ -1336,7 +1336,7 @@ BGGY:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
-BGGY.Laser:
+BGGY.PLD:
 	Inherits: BGGY
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
@@ -1965,7 +1965,7 @@ MLRS:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 150
-		Prerequisites: tmpl, ~vehicles.nod, ~!vehicles.blackh, ~techlevel.high
+		Prerequisites: tmpl, ~vehicles.nod, ~!vehicles.blackh, ~!commander_tree.ssm_toxin_launcher, ~!commander_tree.ssm_multi_launcher, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Long-range incendiary rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
@@ -2025,7 +2025,7 @@ MLRS.Toxin:
 	Inherits: MLRS
 	Buildable:
 		BuildPaletteOrder: 91
-		Prerequisites: tmpl, ~vehicles.nod, ~vehicles.legion, ~commander_tree.ssm_toxin_launcher, ~techlevel.high
+		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.ssm_toxin_launcher, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Long-range chemical rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
@@ -2040,7 +2040,7 @@ MLRS.Multi:
 	Inherits: MLRS
 	Buildable:
 		BuildPaletteOrder: 91
-		Prerequisites: tmpl, ~vehicles.nod, ~vehicles.legion, ~commander_tree.ssm_multi_launcher, ~techlevel.high
+		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.ssm_multi_launcher, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Long-range multiple rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
@@ -2067,7 +2067,7 @@ STNK.Nod:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: hq, ~vehicles.nod, ~techlevel.high
+		Prerequisites: hq, ~vehicles.nod, commander_tree.stealth_tank, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Medium-range missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry.
@@ -2119,6 +2119,32 @@ STNK.Nod:
 	ProductionCostMultiplier@BlackhBonus:
 		Multiplier: 90
 		Prerequisites: vehicles.blackh
+
+STNK.Nod.Scrin:
+	Inherits: STNK.Nod
+	Buildable:
+		BuildPaletteOrder: 130
+		Prerequisites: hq, ~vehicles.nod, commander_tree.stealth_tank, ~techlevel.high
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Cloaked tank that fires Scrin torpedoes.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Aircraft.
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Stealth Scrin Tank
+
+STNK.Nod.Explosive:
+	Inherits: STNK.Nod
+	Buildable:
+		BuildPaletteOrder: 130
+		Prerequisites: hq, ~vehicles.nod, commander_tree.stealth_tank, ~techlevel.high
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Medium-range explosive missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Aircraft\n  Weak vs Heavy Tanks.
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Stealth HE Tank
 
 BIKE:
 	Inherits: ^VehicleTD
@@ -3664,6 +3690,7 @@ BATF:
 		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
+		InitialUnits: tecn,tecn,tecn
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:

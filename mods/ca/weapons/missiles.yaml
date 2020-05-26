@@ -396,7 +396,7 @@ APTusk:
 			None: 35
 			Wood: 60
 			Light: 45
-			Heavy: 65
+			Heavy: 100
 			Concrete: 60
 
 TorpTube:
@@ -608,6 +608,7 @@ KatyushaRockets:
 		ValidTargets: Ground, Ship, Trees
 
 HonestJohn:
+	Inherits: ^AntiGroundMissile
 	ReloadDelay: 130
 	Burst: 2
 	BurstDelays: 50
@@ -623,6 +624,7 @@ HonestJohn:
 		TrailDelay: 3
 		Speed: 210
 		LaunchAngle: 37
+		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 500
@@ -686,6 +688,7 @@ HonestJohn:
 		Footprint: xxx xxx xxx
 
 HonestJohn.toxin:
+	Inherits: ^AntiGroundMissile
 	ReloadDelay: 130
 	Burst: 2
 	BurstDelays: 50
@@ -701,6 +704,7 @@ HonestJohn.toxin:
 		TrailDelay: 3
 		Speed: 210
 		LaunchAngle: 37
+		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 500
@@ -735,6 +739,45 @@ HonestJohn.toxin:
 		Image: Cloud1d
 		Palette: tseffect-ignore-lighting-alpha75
 		ValidTargets: Ground, Water
+
+HonestJohn.multi:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 130
+	Burst: 2
+	BurstDelays: 50
+	Range: 16c0
+	MinRange: 4c0
+	Report: rocket2.aud
+	Projectile: BulletCA
+		Blockable: false
+		Shadow: true
+		Inaccuracy: 0c511
+		Image: missile
+		TrailImage: smokey
+		TrailDelay: 3
+		Speed: 210
+		LaunchAngle: 37
+		PointDefenseType: Missile
+	Warhead@Burst: FireShrapnel
+		Weapon: Dragon.multi
+		Amount: 8
+		ThrowWithoutTarget: True
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		Falloff: 500, 368, 135, 50, 18, 7, 0
+		Versus:
+			None: 100
+			Wood: 95
+			Concrete: 60
+			Light: 65
+			Heavy: 40
+			Brick: 15
+
+Dragon.multi:
+	Inherits: ^AntiGroundMissile
+	Range: 2c0
+	Projectile: MissileCA
 
 BikeRockets:
 	Inherits: Dragon
@@ -791,7 +834,6 @@ IFVRocketsAAE:
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 
->>>>>>> 9c8df3bac8d924851f638f9a1f30fa3eb6127544
 BTRRockets:
 	Inherits: Dragon
 	Range: 4c512
@@ -1343,6 +1385,7 @@ BATFRockets:
 	Warhead@1Dam: SpreadDamage
 		Damage: 2200
 		Versus:
+			Heavy: 120
 			Concrete: 40
 			Light: 25
 
