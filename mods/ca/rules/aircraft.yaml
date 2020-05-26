@@ -890,7 +890,7 @@ HELI:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad, ~aircraft.allies, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 1500
@@ -1115,16 +1115,16 @@ HUEY:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.soviet, ~!aircraft.russia, ~aircraft.russia, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
-		Cost: 1350
+		Cost: 850
 	Tooltip:
 		Name: Huey
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 28000
+		HP: 14000
 	RevealsShroud:
 		Range: 10c0
 		MinRange: 8c0
@@ -1187,6 +1187,26 @@ HUEY:
 		DecorationBounds: 38,32
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+CRYOHUEY:
+	Inherits: HUEY
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		IconPalette: chrometd
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.cryo_huey, ~techlevel.medium
+		Description: Helicopter gunship armed\nwith cryo missiles slowing enemy units.\n  Strong as Support\n  Weak vs Aircraft
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Cryo Huey
+	Armament@PRIMARY:
+		Weapon: CryoMissile
+		LocalOffset: 85,-213,-185, 85,213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
 
 U2:
 	Inherits: ^NeutralPlane
@@ -2331,7 +2351,7 @@ Raptor:
 		RearmActors: afld, afld.gdi, afld.allies
 	RenderSprites:
 		Scale: 0.9
-    
+
 SCRN:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -2779,7 +2799,7 @@ AURORA:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: atek, ~afld.allies, ~aircraft.allies, ~techlevel.high
+		Prerequisites: atek, ~afld.allies, ~aircraft.allies, ~commander_tree.aurora, ~techlevel.high
 		Description: Supersonic bomber armed with the Mother of all Bombs.\n  Strong vs Buildings, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 3000
