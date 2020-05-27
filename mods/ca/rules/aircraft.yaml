@@ -169,7 +169,7 @@ Stealth_Fighter:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 15000
+		HP: 20000
 	RevealsShroud:
 		Range: 10c0
 		Type: GroundPosition
@@ -189,6 +189,7 @@ Stealth_Fighter:
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
+		IdleBehavior: Land
 	AutoTarget:
 		InitialStance: Defend
 		InitialStanceAI: Defend
@@ -412,12 +413,12 @@ FROG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.high
+		Prerequisites: ~afld, ~aircraft.soviet, ~!aircraft.iraq, ~techlevel.high
 		Description: Bomber armed with explosive bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1850
 	Tooltip:
-		Name: Frogfoot Dirty Bomber
+		Name: Frogfoot Bomber
 	Health:
 		HP: 16000
 	RevealsShroud:
@@ -473,7 +474,7 @@ FROGDIRTY:
 		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.high
 		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
-		Cost: 1850
+		Cost: 1650
 	Tooltip:
 		Name: Frogfoot Dirty Bomber
 	Health:
@@ -720,6 +721,7 @@ TRAN:
 	Aircraft:
 		TurnSpeed: 5
 		Speed: 135
+		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
 		AltitudeVelocity: 0c58
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
@@ -760,7 +762,7 @@ TRAN.Eagle:
 	RenderSprites:
 		Image: ctran
 	Valued:
-		Cost: 2000
+		Cost: 1600
 	Tooltip:
 		Name: Combat Chinook
 	Buildable:
@@ -1044,7 +1046,7 @@ TSLAHIND:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.soviet, ~aircraft.russia, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.russia, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith tesla coils.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 1600
@@ -1169,13 +1171,13 @@ HUEY:
 		Actor: HIND.Husk
 		RequiresCondition: ammo && !empdisable
 	SpawnActorOnDeath@Empty:
-		Actor: HIND.Husk.empty
+		Actor: HUEY.Husk.empty
 		RequiresCondition: !ammo && !empdisable
 	SpawnActorOnDeath@EMP:
-		Actor: HIND.Husk.EMP
+		Actor: HUEY.Husk.EMP
 		RequiresCondition: ammo && empdisable
 	SpawnActorOnDeath@EmptyEMP:
-		Actor: HIND.Husk.empty.EMP
+		Actor: HUEY.Husk.empty.EMP
 		RequiresCondition: !ammo && empdisable
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
@@ -1973,7 +1975,7 @@ KIRO:
 		PauseOnCondition: !ammo
 		RequiresCondition: iraqbombs
 	AmmoPool:
-		Ammo: 8
+		Ammo: 16
 		PipCount: 8
 		AmmoCondition: ammo
 	ReloadAmmoPoolCA:
@@ -2032,7 +2034,7 @@ KIRO:
 	SelfHealing:
 		PercentageStep: 1
 		Delay: 25
-		HealIfBelow: 75
+		HealIfBelow: 100
 		DamageCooldown: 150
 	Voiced:
 		VoiceSet: KirovVoice

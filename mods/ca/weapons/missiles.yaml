@@ -59,7 +59,7 @@ Maverick:
 	Report: missile7.aud
 	Burst: 2
 	BurstDelays: 7
-	Projectile: Missile
+	Projectile: MissileCA
 		Speed: 256
 		Inaccuracy: 316
 		CruiseAltitude: 2c0
@@ -78,7 +78,7 @@ MaverickSU:
 	Range: 10c0
 	Report: vbleatta.aud, vbleattb.aud
 	Burst: 4
-	Projectile: Missile
+	Projectile: MissileCA
 		Inaccuracy: 1c0
 		Speed: 180
 	Warhead@1Dam: SpreadDamage
@@ -396,7 +396,7 @@ APTusk:
 			None: 35
 			Wood: 60
 			Light: 45
-			Heavy: 65
+			Heavy: 100
 			Concrete: 60
 
 TorpTube:
@@ -608,6 +608,7 @@ KatyushaRockets:
 		ValidTargets: Ground, Ship, Trees
 
 HonestJohn:
+	Inherits: ^AntiGroundMissile
 	ReloadDelay: 130
 	Burst: 2
 	BurstDelays: 50
@@ -623,6 +624,7 @@ HonestJohn:
 		TrailDelay: 3
 		Speed: 210
 		LaunchAngle: 37
+		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 500
@@ -686,6 +688,7 @@ HonestJohn:
 		Footprint: xxx xxx xxx
 
 HonestJohn.toxin:
+	Inherits: ^AntiGroundMissile
 	ReloadDelay: 130
 	Burst: 2
 	BurstDelays: 50
@@ -701,6 +704,7 @@ HonestJohn.toxin:
 		TrailDelay: 3
 		Speed: 210
 		LaunchAngle: 37
+		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 500
@@ -791,7 +795,6 @@ IFVRocketsAAE:
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 
->>>>>>> 9c8df3bac8d924851f638f9a1f30fa3eb6127544
 BTRRockets:
 	Inherits: Dragon
 	Range: 4c512
@@ -1160,6 +1163,7 @@ ScrinTorp:
 		LaunchAngle: 10
 	Warhead@1Dam: SpreadDamage
 		Damage: 900
+		Spread: 192
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water
 		Versus:
@@ -1342,6 +1346,7 @@ BATFRockets:
 	Warhead@1Dam: SpreadDamage
 		Damage: 2200
 		Versus:
+			Heavy: 120
 			Concrete: 40
 			Light: 25
 
@@ -1359,8 +1364,8 @@ AuroraRocket:
 		Shadow: true
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 3800
-		Falloff: 1000, 255, 128, 50, 0
+		Damage: 4500
+		Falloff: 1000, 512, 128, 64, 0
 		ValidTargets: Ground, Water
 		Versus:
 			None: 80

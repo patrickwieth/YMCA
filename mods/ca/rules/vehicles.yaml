@@ -117,6 +117,7 @@ V2RL:
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
+		IconPalette: chrometd
 		BuildPaletteOrder: 50
 		Prerequisites: weap, ~vehicles.allies, ~commander_tree.scout_tank_pld, ~techlevel.low
 		Description: Fast tank, good for scouting.\nHas Point Laser Defense System\n  Strong vs Light Armor\n  Weak vs Infantry, Tanks, Aircraft\n  Special Ability: Amphibious
@@ -1130,7 +1131,7 @@ CTNK:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 45000
+		HP: 55000
 	Armor:
 		Type: Heavy
 	Mobile:
@@ -1208,7 +1209,7 @@ QTNK:
 		DecorationBounds: 44,38,0,-4
 	WithRangeCircle:
 		Color: FFFF0080
-		Range: 7c0
+		Range: 9c0
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, MADTank, Vehicle, C4, ChaosImmune
@@ -3673,6 +3674,7 @@ BATF:
 		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
+		InitialUnits: e1,e1,e1
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
@@ -3709,19 +3711,6 @@ BATF.PLD:
 	Valued:
 		Cost: 3000
 
-BATF.Arty:
-	Inherits: BATF.Bunker
-	Buildable:
-		Queue: Vehicle
-		IconPalette: chrometd
-		BuildPaletteOrder: 230
-		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress_pld, ~techlevel.low
-		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
-	Tooltip:
-		Name: Artillery Fortress
-	Valued:
-		Cost: 3000
-
 BATF.Bunker:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -3729,11 +3718,11 @@ BATF.Bunker:
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 198
-		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
-		Description: Tough support tank with anti-air and pointlaser defense to intercept missiles.\n  Special Ability: Can crush enemy vehicles.
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress_bunker, ~techlevel.low
+		Description: Tough infantry transport\nwith weapon ports for infantry.\n  Special Ability: Can crush enemy vehicles.
 	Valued:
-		Cost: 3000
+		Cost: 2000
 	Tooltip:
 		Name: Battle Fortress (Bunker)
 	Health:
@@ -3744,6 +3733,9 @@ BATF.Bunker:
 		Locomotor: sheavytracked
 		Speed: 56
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		Voice: Move
+	Passenger:
+		Weight: 2
 		Voice: Move
 	RevealsShroud:
 		Range: 8c0
@@ -3820,6 +3812,44 @@ BATF.Bunker:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: loaded || loaded-air
 		Voice: Attack
+
+BATF.Arty:
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		IconPalette: chrometd
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress_arty, ~techlevel.low
+		Description: Tough artillery tank.\n  Special Ability: Can crush enemy vehicles.
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Artillery Fortress
+	Health:
+		HP: 110000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 56
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		Voice: Move
+	RevealsShroud:
+		Range: 8c0
+	Armament:
+		Weapon: 155mm.BATF
+		LocalOffset: 624,0,208
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+	Voiced:
+		VoiceSet: BattleFortressVoice
 
 BATF.AI:
 	Inherits: BATF
