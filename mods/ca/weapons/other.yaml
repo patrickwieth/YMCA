@@ -39,6 +39,15 @@ FireballLauncher:
 		Versus:
 			Light: 50
 
+FireballLauncher.Tank:
+	Inherits: FireballLauncher
+	Burst: 2
+	Projectile: Bullet
+		Inaccuracy: 484
+	Warhead@1Dam: SpreadDamage
+		Spread: 313
+		Damage: 8000
+
 ChemballLauncher:
 	Inherits: FireballLauncher
 	ReloadDelay: 70
@@ -128,6 +137,17 @@ BigFlamer:
 		RandomClusterCount: 1
 		Dimensions: 1,1
 		Footprint: x
+
+BigChemspray:
+	Inherits: BigFlamer
+	Projectile: Bullet
+		Image: chemall
+		Palette: ra2effect-ignore-lighting-alpha50
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			Heavy: 50
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+	-Warhead@Flames:
 
 Flamer:
 	Inherits: BigFlamer
@@ -1869,7 +1889,6 @@ StealthBomb:
 	Projectile: Missile
 		Image: b2bomb
 		Speed: 200
-		Inaccuracy: 316
 		CruiseAltitude: 2c0
 		RangeLimit: 14c410
 	Warhead@1Dam: SpreadDamage
