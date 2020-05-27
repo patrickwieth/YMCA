@@ -790,6 +790,44 @@ BikeRockets:
 			Light: 38
 			Concrete: 70
 
+BikeRocketHail:
+	Inherits: BikeRockets
+	ReloadDelay: 100
+	Burst: 7
+	Range: 10c0
+	Projectile: MissileCA
+		Inaccuracy: 1c0
+		RangeLimit: 12c0
+
+BikeScrinTorp:
+	Inherits: BikeRockets
+	Report: scrin5b.aud
+	Projectile: Missile
+		MaximumLaunchSpeed: 192
+		Blockable: false
+		HorizontalRateOfTurn: 5
+		Shadow: true
+		Image: laserfired2k
+		Palette: d2k
+		MinimumLaunchSpeed: 75
+		Speed: 384
+		Inaccuracy: 0
+		-TrailImage:
+	Warhead@1Dam: SpreadDamage
+		Damage: 7000
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: expnew17.aud, expnew16.aud
+		ValidTargets: Ground, Air
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splashm1.aud, splashm2.aud, splashm3.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Building, Wall
+
 BikeRocketsAA:
 	Inherits: RedEye
 	Report: bazook1.aud
@@ -986,6 +1024,21 @@ BTRRocketsAA:
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure, Bridge
 
+STNKScrinTorp:
+	Inherits: BikeScrinTorp
+
+227mm.stnk.HE:
+	Inherits: 227mm.stnk
+	ReloadDelay: 100
+	Range: 6c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 800
+		Damage: 12000
+		ValidTargets: Ground, Water
+	Warhead@3Eff: CreateEffect
+		Explosions: large_artillery_explosion
+		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
+
 227mm.stnkAA:
 	Inherits: ^AntiAirMissile
 	ReloadDelay: 70
@@ -1006,6 +1059,12 @@ BTRRocketsAA:
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 		ImpactSounds: xplos.aud
+
+227mm.stnkAA.HE:
+	Inherits: 227mm.stnkAA
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 2500
 
 BoatMissile:
 	ReloadDelay: 70
