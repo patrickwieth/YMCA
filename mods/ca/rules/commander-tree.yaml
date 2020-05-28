@@ -637,7 +637,7 @@ commander_tree.Mammoth_Tank_Ion:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_gdi_pld, ~!commander_tree.mammoth_tank_nr
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~miss.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_gdi_pld, ~!commander_tree.mammoth_tank_nr
 		Description: The Mammoth is upgraded with an Ion cannon. Energy based weapon systems cannot be shot down by point defense systems.
 
 commander_tree.Mammoth_Tank_GDI_PLD:
@@ -649,7 +649,7 @@ commander_tree.Mammoth_Tank_GDI_PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_nr
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi,  ~miss.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_nr
 		Description: The Mammoth Tank is upgraded with a Point Laser Defense System to shoot down incoming projectiles.
 
 commander_tree.Mammoth_Tank_NR:
@@ -661,7 +661,7 @@ commander_tree.Mammoth_Tank_NR:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_gdi_pld
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~miss.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_gdi_pld
 		Description: The Mammoth Tank is upgraded with a Nanite Repair System. This makes it more durable and vastly increases its self repair capabilites.
 
 commander_tree.Titan_PLD:
@@ -685,7 +685,7 @@ commander_tree.Titan_Railgun:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~!commander_tree.Titan_pld
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~!commander_tree.titan_pld
 		Description: Upgrades the Titan with a Railgun. The Railgun is strong vs. tanks and is an energy based weapon.
 
 commander_tree.Slingshot:
@@ -709,7 +709,7 @@ commander_tree.Hover_MLRS:
 		BuildPaletteOrder: 0
 		IconPalette: chrometd
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!commander_tree.hailstorm_mlrs
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~miss.gdi, ~!commander_tree.hailstorm_mlrs
 		Description: Enables to build the Hover MLRS. The Hover MLRS improves the MLRS' agility and gives it stronger rockets.
 
 commander_tree.Hailstorm_MLRS:
@@ -721,7 +721,7 @@ commander_tree.Hailstorm_MLRS:
 		BuildPaletteOrder: 0
 		IconPalette: chrometd
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!commander_tree.hover_mlrs
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~miss.gdi, ~!commander_tree.hover_mlrs
 		Description: Enables to build the Hailstorm MLRS. The Hailstorm MLRS improves the MLRS to fire a lot of rockets over long distances but removes its anti-air capabilities.
 
 commander_tree.Mobile_Sensor_PLD:
@@ -769,7 +769,7 @@ commander_tree.APC_Vulcan:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi,  ~gtek,
 		Description: Upgrades the APC with a Vulcan cannon to attack air units.
 
 commander_tree.Mobile_EMP:
@@ -794,7 +794,7 @@ commander_tree.Mobile_EMP_Stable_Reactor:
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, ~gtek, ~commander_tree.mobile_emp, ~!commander_tree.mobile_emp_volatile_reactor
-		Description: Upgrades the EMP reactor to surive the activation and Mobile EMP can be used multiple times.
+		Description: Upgrades the EMP reactor to allow multiple EMP Waves and don't self destruct on use.
 
 commander_tree.Mobile_EMP_Volatile_Reactor:
 	Inherits: ^default.commander_tree_item
@@ -811,31 +811,31 @@ commander_tree.Mobile_EMP_Volatile_Reactor:
 commander_tree.Jumpjet:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mobile EMP
+		Name: Jumpjet Trooper
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~commander_tree.advanced_infantry_training
-		Description: Enables to build the flying Jumpjet infantry.
+		Description: Enables to build the flying Jumpjet infantry which can be further specialized.
 
 commander_tree.Jumpjet_Railgun:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mobile EMP Stable Reactor Upgrade
+		Name: Jumpjet Railgunner
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.talon, ~gtek, ~commander_tree.jumpjet, ~!commander_tree.jumpjet_rockets
-		Description: Equips the Jumpjet with a Railgun, making it strong vs vehicles.
+		Description: Equips the Jumpjet with a Railgun, making it strong vs tanks, loses the ability to shoot aircraft.
 
 commander_tree.Jumpjet_Rockets:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mobile EMP Volatile Reactor Upgrade
+		Name: Jumpjet Rocket Trooper
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -852,7 +852,7 @@ commander_tree.Stealth_Fighter:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.gdi
+		Prerequisites: prerequisite.has_points, ~gtek, ~aircraft.gdi
 		Description: Enables to build the Stealth Fighter. It is a cloaked aircraft optimized to take out single heavy armored vehicles.
 
 #Nod

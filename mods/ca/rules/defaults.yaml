@@ -831,6 +831,7 @@
 		Palette: ra2effect-ignore-lighting-alpha75
 	Passenger:
 		CargoType: Vehicle
+		Weight: 3
 	AttackMove:
 	HiddenUnderFog:
 	ActorLostNotification:
@@ -913,6 +914,8 @@
 
 ^Tank:
 	Inherits: ^Vehicle
+	Passenger:
+		Weight: 4
 	Mobile:
 		Locomotor: tracked
 	Targetable:
@@ -2391,8 +2394,9 @@
 	AttackTurreted:
 		Turrets: pointdefense, primary
 		RequiresCondition: !build-incomplete
-		Armaments: pointdefense
-		PauseOnCondition: empdisable || being-warped
+		Turrets: primary, secondary, tertiary, pointdefense
+		Armaments: primary, secondary, tertiary, pointdefense
+		PauseOnCondition: empdisable || being-warped || parachute
 	Armament@pointdefense:
 		Name: pointdefense
 		Turret: pointdefense
@@ -2415,6 +2419,9 @@
 		Count: 12
 		ResetOnFire: True
 		PauseOnCondition: disabled || empdisable
+	WithRangeCircle:
+		Color: FF000080
+		Range: 2c768
 
 ^PointLaserDefenseSystemSmall:
 	Inherits: ^PointLaserDefenseSystem
@@ -2435,6 +2442,8 @@
 		PipCount: 6
 	ReloadAmmoPool:
 		Count: 24
+	WithRangeCircle:
+		Range: 3c768
 
 ^Propaganda:
 	SpeedMultiplier@Propaganda:
