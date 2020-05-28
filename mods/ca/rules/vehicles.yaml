@@ -1157,6 +1157,7 @@ CTNK:
 		LocalOffset: -160,276,232
 		LocalYaw: -60
 	AttackFrontal:
+		Armaments: primaryfrontal, secondaryfrontal
 		PauseOnCondition: empdisable || being-warped
 	PortableChrono:
 		ChargeDelay: 250
@@ -1412,7 +1413,7 @@ APC2:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.td, ~!gtek, ~vehicles.apc2, infantry.any, ~techlevel.low
+		Prerequisites: ~vehicles.td, ~vehicles.apc2, infantry.any, ~!commander_tree.apc_vulcan, ~techlevel.low
 		IconPalette: chrometd
 		Description: Tough infantry transport.\n  Strong vs Infantry\n  Weak vs Tanks, Aircraft
 	Valued:
@@ -1466,7 +1467,7 @@ VULC:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.gdi, ~gtek, ~infantry.any, ~techlevel.high
+		Prerequisites: ~vehicles.gdi, ~gtek, ~commander_tree.apc_vulcan, ~infantry.any, ~techlevel.high
 		IconPalette: chrometd
 		Description: Tough infantry transport, armed with a powerful AA gun.\n  Strong vs Aircraft\n  Weak vs Infantry, Tanks
 	Valued:
@@ -1543,7 +1544,7 @@ LTNK:
 		Prerequisites: ~vehicles.nod, ~!bio.nod, ~techlevel.low
 		Description: Fast, light tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft\n  Special Ability: Amphibious
 	Valued:
-		Cost: 675
+		Cost: 750
 	Tooltip:
 		Name: Light Tank
 	UpdatesPlayerStatistics:
@@ -1743,8 +1744,6 @@ MTNK.Drone:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@IDISABLE: ^DisableOnLowPower
-	RenderSprites:
-		Image: drone
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
@@ -1838,12 +1837,11 @@ HTNK:
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
-	RenderSprites:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 185
 		IconPalette: chrometd
-		Prerequisites: techcenter, ~vehicles.htnk, ~!miss.gdi, ~techlevel.high
+		Prerequisites: techcenter, ~vehicles.htnk, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_nr, ~!commander_tree.mammoth_tank_gdi_pld, ~techlevel.high
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
 	Valued:
 		Cost: 1700
@@ -1906,20 +1904,72 @@ HTNK:
 
 HTNK.Ion:
 	Inherits: HTNK
-	RenderSprites:
-		Image: htnk.ion
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~miss.gdi, ~techlevel.high
-		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_ion, ~techlevel.high
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Ion Mammoth Tank
+	Valued:
+		Cost: 2000
 	Armament@PRIMARY:
 		Weapon: IonZap
 		LocalOffset: 870,0,360
 	SpawnActorOnDeath:
 		Actor: HTNK.Ion.Husk
+
+HTNK.PLD:
+	Inherits: HTNK
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		BuildPaletteOrder: 190
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi_pld, ~techlevel.high
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Tooltip:
+		Name: Mammoth Tank (PLD)
+	Valued:
+		Cost: 2700
+
+HTNK.Nanite:
+	Inherits: HTNK
+	Buildable:
+		BuildPaletteOrder: 190
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_nr, ~techlevel.high
+		Description: Big and slow tank with anti-air capability.\n  Is very tough and repairs itself with Nanite Repair System.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Point Laser Defense
+	Tooltip:
+		Name: Nanite Mammoth Tank
+	Valued:
+		Cost: 3000
+	Health:
+		HP: 110000
+	SelfHealing:
+		PercentageStep: 2
+		Delay: 25
+		HealIfBelow: 100
+		DamageCooldown: 10
+		RequiresCondition: !(empdisable || driver-dead)
+	WithColoredOverlay@NREPAIR:
+		RequiresCondition: damaged && !(empdisable || invulnerability || invisibility)
+		Palette: nrepair
+	WithIdleOverlay@NREPAIR:
+		Sequence: emp-overlay
+		Palette: tseffect
+		RequiresCondition:  damaged
+	WithDecoration@NREPAIR:
+		Image: pips
+		Palette: chrometd
+		Sequence: pip-repair
+		ReferencePoint: Bottom, Center
+		ZOffset: 256
+		BlinkInterval: 64
+		RequiresSelection: True
+		ValidStances: Ally, Neutral
+	GrantConditionOnDamageState@NREPAIR:
+		Condition: damaged
+		ValidDamageStates: Light, Medium, Heavy, Critical
 
 MSAM:
 	Inherits: ^TankTD
@@ -1940,7 +1990,7 @@ MSAM:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: hq, ~vehicles.msam, ~vehicles.td, ~techlevel.medium, ~!hmlrs.buildable
+		Prerequisites: hq, ~vehicles.msam, ~vehicles.td, ~techlevel.medium, ~!commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles
@@ -1989,7 +2039,7 @@ MSAM.Hailstorm:
 		Name: Hailstorm MLRS
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: hq, ~vehicles.msam, ~vehicles.td, ~techlevel.medium, ~!hmlrs.buildable
+		Prerequisites: hq, ~vehicles.msam, ~vehicles.td, ~techlevel.medium, ~commander_tree.hailstorm_mlrs
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Multiple Launch Rocket System.\nLong-range unguided multiple rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles\n  Weak vs. Aircraft, Heavy Tanks
@@ -2228,18 +2278,18 @@ BIKE:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Armament@PRIMARY:
+	Armament@PRIMARYFRONTAL:
 		Weapon: BikeRockets
 		LocalOffset: -128, -170, 170, -128, 170, 170
 		LocalYaw: 100, -100
-	Armament@SECONDARY:
+	Armament@SECONDARYFRONTAL:
 		Name: secondary
 		Weapon: BikeRocketsAA
 		LocalOffset: -128, -170, 170, -128, 170, 170
 		LocalYaw: 100, -100
 	AttackFrontal:
+		Armaments: primaryfrontal, secondaryfrontal
 		PauseOnCondition: empdisable || being-warped
-		Armaments: primary, secondary
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -2271,9 +2321,9 @@ BIKE.Scrin:
 		Name: Scrin Bike
 	Health:
 		HP: 18000
-	Armament@PRIMARY:
+	Armament@PRIMARYFRONTAL:
 		Weapon: BikeScrinTorp
-	-Armament@SECONDARY:
+	-Armament@SECONDARYFRONTAL:
 
 BIKE.RocketHail:
 	Inherits: BIKE
@@ -2287,9 +2337,9 @@ BIKE.RocketHail:
 		Cost: 1000
 	Tooltip:
 		Name: Rocket Hail Bike
-	Armament@PRIMARY:
+	Armament@PRIMARYFRONTAL:
 		Weapon: BikeRocketHail
-	-Armament@SECONDARY:
+	-Armament@SECONDARYFRONTAL:
 
 FTNK:
 	Inherits: ^TankTD
@@ -2322,14 +2372,14 @@ FTNK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Armament@primary:
+	Armament@PRIMARYFRONTAL:
 		Weapon: BigFlamer
 		MuzzleSequence: muzzle
 		MuzzlePalette: tdeffect
 		LocalOffset: 512,128,42, 512,-128,42
 	WithMuzzleOverlay:
 	AttackFrontal:
-		Armaments: primary
+		Armaments: primaryfrontal, secondaryfrontal
 		PauseOnCondition: empdisable || being-warped
 	Explodes:
 		Weapon: BarrelExplode
@@ -2823,7 +2873,7 @@ TITN:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~miss.gdi, ~techlevel.high
+		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~techlevel.high
 		Description: Tough combat battle-mech.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks
 	Valued:
 		Cost: 2000
@@ -2903,7 +2953,7 @@ TITN.PLD:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~miss.gdi, ~techlevel.high
+		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~commander_tree.titan_pld, ~techlevel.high
 		Description: Tough combat battle-mech.\n  Has Point Laser Defense System.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks
 	Valued:
 		Cost: 3000
@@ -2916,12 +2966,15 @@ TITN.Railgun:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~miss.gdi, ~techlevel.high
-		Description: Tough combat battle-mech with railgun.\n  Cannot be intercepted by Point Laser Defense.\n  Strong vs Tanks
+		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~commander_tree.titan_railgun, ~techlevel.high
+		Description: Tough combat battle-mech with railgun.\n  Cannot be intercepted by Point Laser Defense.\n  Strong vs Tanks, Weak vs Aircraft, Infantry
 	Valued:
-		Cost: 2500
+		Cost: 3000
 	Tooltip:
 		Name: Titan (Railgun)
+	Armament@PRIMARY:
+		Weapon: Railgun.Titan
+	-Armament@SECONDARY:
 
 JUGG:
 	Inherits: TITN
@@ -3055,7 +3108,7 @@ HSAM:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 165
-		Prerequisites: ~miss.gdi, ~vehicles.gdi, ~!vehicles.talon, ~techlevel.medium
+		Prerequisites: ~vehicles.gdi, ~commander_tree.hailstorm_mlrs, ~techlevel.medium
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Prototype Hover Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Infantry, Vehicles, Buildings
@@ -3378,7 +3431,7 @@ TNKD:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
-		Prerequisites: ~vehicles.germany, dome, ~techlevel.low
+		Prerequisites: ~vehicles.germany, ~!vehicles.germany, dome, ~techlevel.low
 		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
 	Valued:
 		Cost: 1150
@@ -3444,11 +3497,11 @@ TNKD2:
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 70
-		Prerequisites: weap, ~vehicles.allies, ~!vehicles.allies, ~techlevel.medium
-		Description: Tank Destroyer.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		BuildPaletteOrder: 90
+		Prerequisites: ~vehicles.germany, dome, ~techlevel.low
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
 	Valued:
-		Cost: 550
+		Cost: 750
 	Tooltip:
 		Name: Tank Destroyer
 	UpdatesPlayerStatistics:
@@ -3456,13 +3509,19 @@ TNKD2:
 	Health:
 		HP: 60000
 	Armor:
-		Type: Light
+		Type: Heavy
 	Mobile:
-		TurnSpeed: 4
-		Speed: 56
-		Locomotor: lighttracked
+		Speed: 90
+		TurnSpeed: 8
+		Voice: Move
+	Passenger:
+		Voice: Move
 	RevealsShroud:
-		Range: 5c0
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Armament:
 		Weapon: 183mm
 		Recoil: 85
@@ -3475,13 +3534,21 @@ TNKD2:
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
-	Explodes:
-		Weapon: ArtilleryExplode
-		EmptyWeapon: UnitExplodeSmall
-		LoadedChance: 75
+	SpawnActorOnDeath:
+		Actor: TNKD.Husk
 		RequiresCondition: !being-warped
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
+	Voiced:
+		VoiceSet: TnkdVoice
+	AutoTargetPriority@TANKDEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+		ValidTargets: Tank
+		InvalidTargets: NoAutoTarget, WaterStructure
+		Priority: 10
+	AutoTargetPriority@TANKATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+		ValidTargets: Tank
+		InvalidTargets: NoAutoTarget
+		Priority: 10
 
 MSAR:
 	Inherits: ^VehicleTD
@@ -4078,7 +4145,7 @@ MEMP:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
 		IconPalette: chrometd
-		Prerequisites: gtek, ~vehicles.gdi, ~techlevel.high
+		Prerequisites: gtek, ~vehicles.gdi, ~commander_tree.mobile_emp, ~techlevel.high
 		Description: Self destructs to disable nearby vehicles & structures.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1150
@@ -4158,7 +4225,7 @@ MEMP.Volatile:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
 		IconPalette: chrometd
-		Prerequisites: gtek, ~vehicles.gdi, ~techlevel.high
+		Prerequisites: gtek, ~vehicles.gdi, ~commander_tree.mobile_emp_volatile_reactor, ~techlevel.high
 		Description: Self destructs to disable nearby vehicles & structures.\nUpgraded with Volatile Reactor to EMP on destruction.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1350
@@ -4174,7 +4241,7 @@ MEMP.Stable:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
 		IconPalette: chrometd
-		Prerequisites: gtek, ~vehicles.gdi, ~techlevel.high
+		Prerequisites: gtek, ~vehicles.gdi, ~commander_tree.mobile_emp_stable_reactor, ~techlevel.high
 		Description: Releases EMP Wave to disable nearby vehicles & structures.\n\nUpgraded with Stable Reactor to allow multiple EMP Waves.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1350

@@ -1561,7 +1561,7 @@ JJET:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 59
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~techlevel.infonly
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.jumpjet, ~!commander_tree.jumpjet_railgun, ~!commander_tree.jumpjet_rockets, ~techlevel.infonly
 		IconPalette: chrometd
 		Description: Flying general-purpose infantry.\n  Can detect cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
@@ -1677,6 +1677,44 @@ JJET:
 	DetectCloaked:
 		Range: 3c0
 		CloakTypes: Cloak, Thief
+
+JJET.Rocket:
+	Inherits: JJET
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 59
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.jumpjet_rockets, ~techlevel.infonly
+		IconPalette: chrometd
+		Description: Flying general-purpose infantry.\n  Can detect cloaked units.\n  Strong vs Vehicles\n  Weak vs Infantry
+	Valued:
+		Cost: 450
+	Tooltip:
+		Name: Jump-Jet Rocket Trooper
+	Armament@AIR:
+		Weapon: RedEye
+		RequiresCondition: undeployed
+	Armament@GROUND:
+		Weapon: Dragon
+		RequiresCondition: deployed
+
+JJET.Railgun:
+	Inherits: JJET
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 59
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.jumpjet_railgun, ~techlevel.infonly
+		IconPalette: chrometd
+		Description: Flying anti-tank infantry.\n  Can detect cloaked units.\n  Strong vs Tanks\n  Weak vs Aircraft
+	Valued:
+		Cost: 750
+	Tooltip:
+		Name: Jump-Jet Railgunner
+	-Armament@AIR:
+	Armament@GROUND:
+		Weapon: Railgun.Infantry
+		RequiresCondition: deployed
 
 E8:
 	Inherits: ^Soldier
