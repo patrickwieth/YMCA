@@ -795,6 +795,10 @@ msam:
 		UseClassicFacingFudge: True
 	icon: msamicnh
 
+msam.hailstorm:
+	Inherits: msam
+	icon: hailstormicon
+
 msam.nod:
 	Inherits: ^VehicleOverlays
 	idle: msam
@@ -897,32 +901,20 @@ mlrs.destroyed:
 
 stnk:
 	Inherits: ^VehicleOverlays
-	idle: stnk
+	idle: stnktnod
 		Facings: 32
 		UseClassicFacingFudge: True
-	turret: stnk
-		Start: 38
+	turret: stnktnod
+		Start: 32
 		Facings: 32
-	icon: stnkicon
+	icon: stnkicnh
 
-stnk.nod.scrin:
-	Inherits: ^VehicleOverlays
-	idle: stnk
-		Facings: 32
-		UseClassicFacingFudge: True
-	turret: stnk
-		Start: 38
-		Facings: 32
+stnk.scrin:
+	Inherits: stnk
 	icon: stealthtankscrinicon
 
-stnk.nod.he:
-	Inherits: ^VehicleOverlays
-	idle: stnk
-		Facings: 32
-		UseClassicFacingFudge: True
-	turret: stnk
-		Start: 38
-		Facings: 32
+stnk.he:
+	Inherits: stnk
 	icon: stealthtankrocketsicon
 
 stnk.destroyed:
@@ -948,16 +940,6 @@ stnknod.destroyed:
 		Facings: 32
 		UseClassicFacingFudge: True
 		ZOffset: -512
-
-stnktnod:
-	Inherits: ^VehicleOverlays
-	idle: stnktnod
-		Facings: 32
-		UseClassicFacingFudge: True
-	turret: stnktnod
-		Start: 32
-		Facings: 32
-	icon: stnkicnh
 
 bike:
 	Inherits: ^VehicleOverlays
@@ -1253,7 +1235,7 @@ ifv.destroyed:
 		Facings: 32
 		UseClassicFacingFudge: True
 
-titan:
+titn:
 	Inherits: ^VehicleOverlays
 	stand: titanlegs
 		Facings: 16
@@ -1269,6 +1251,14 @@ titan:
 		Length: 12
 		Tick: 30
 	icon: titanicnh
+
+titn.pld:
+	Inherits: titn
+	icon: titanpldicon
+
+titn.railgun:
+	Inherits: titn
+	icon: titanrailgunicon
 
 jugg:
 	Inherits: ^VehicleOverlays
@@ -1412,20 +1402,15 @@ msar:
 		Tick: 80
 	icon: msaricnh
 
+msar.nod:
+	Inherits: msar
+
 msar.pld:
-	Inherits: ^VehicleOverlays
-	idle: msar
-		Facings: 32
-		UseClassicFacingFudge: True
-	spinner: msarspinner
-		Length: 32
-	make: msarmake
-		Length: *
-		Tick: 50
-	idle-static: msardeployed
-		Length: 14
-		Tick: 80
+	Inherits: msar
 	icon: msarpldicon
+
+msar.pld.nod:
+	Inherits: msar.pld
 
 ptnk:
 	Inherits: ^VehicleOverlays
@@ -1578,6 +1563,14 @@ memp:
 		Tick: 40
 		ZOffset: 511
 	icon: mempicnh
+
+memp.volatile:
+	Inherits: memp
+	icon: mempvolatileicon
+
+memp.stable:
+	Inherits: memp
+	icon: mempstableicon
 
 cdrone:
 	Inherits: ^VehicleOverlays

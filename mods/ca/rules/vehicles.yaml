@@ -94,10 +94,11 @@ V2RL:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Turreted:
+	Turreted@PRIMARY:
 		TurnSpeed: 14
-	Armament:
+	Armament@PRIMARY:
 		Weapon: 25mm
+		Turret: primary
 		Recoil: 85
 		RecoilRecovery: 25
 		LocalOffset: 768,0,90
@@ -119,13 +120,16 @@ V2RL:
 		Queue: Vehicle
 		IconPalette: chrometd
 		BuildPaletteOrder: 50
-		IconPalette: chrometd
 		Prerequisites: weap, ~vehicles.allies, ~commander_tree.scout_tank_pld, ~techlevel.low
 		Description: Fast tank, good for scouting.\nHas Point Laser Defense System\n  Strong vs Light Armor\n  Weak vs Infantry, Tanks, Aircraft\n  Special Ability: Amphibious
 	Valued:
 		Cost: 1200
 	Tooltip:
 		Name: Scout Tank (PLD)
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		Armaments: pointdefense, primary
+		PauseOnCondition: empdisable || being-warped || parachute
 
 2TNK:
 	Inherits: ^Tank
@@ -1144,11 +1148,11 @@ CTNK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Armament@PRIMARY:
+	Armament@PRIMARYFRONTAL:
 		Weapon: APTusk
 		LocalOffset: -160,-276,232
 		LocalYaw: 60
-	Armament@SECONDARY:
+	Armament@SECONDARYFRONTAL:
 		Weapon: APTusk
 		LocalOffset: -160,276,232
 		LocalYaw: -60
@@ -1343,11 +1347,12 @@ BGGY:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Turreted:
+	Turreted@PRIMARY:
 		TurnSpeed: 20
 		Offset: -43,0,128
-	Armament:
+	Armament@PRIMARY:
 		Weapon: M60mgTD
+		Turret: primary
 		LocalOffset: 171,0,43
 		MuzzleSequence: muzzle
 	AttackTurreted:
@@ -1363,8 +1368,8 @@ BGGY:
 		Prerequisites: vehicles.upgraded
 
 BGGY.PLD:
-	Inherits: BGGY
 	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: BGGY
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
@@ -1695,14 +1700,11 @@ MTNK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Turreted:
+	Turreted@PRIMARY:
 		TurnSpeed: 10
 		Offset: 0,0,30
-	Turreted@SECONDARY:
-		Turret: secondary
-		Offset: 0,0,40
-		TurnSpeed: 255
-	Armament:
+	Armament@PRIMARY:
+		Turret: primary
 		Weapon: 120mm
 		Recoil: 128
 		RecoilRecovery: 26
@@ -1865,9 +1867,10 @@ HTNK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Turreted:
+	Turreted@PRIMARY:
 		TurnSpeed: 4
 	Armament@PRIMARY:
+		Turret: primary
 		Weapon: 130mmTD
 		LocalOffset: 900,180,340, 900,-180,340
 		Recoil: 171
@@ -1875,6 +1878,7 @@ HTNK:
 		MuzzleSequence: muzzle
 	Armament@SECONDARY:
 		Name: secondary
+		Turret: primary
 		Weapon: MammothTusk
 		LocalOffset: -85,384,340, -85,-384,340
 		LocalYaw: -100,100
@@ -1977,6 +1981,22 @@ MSAM:
 	Selectable:
 		DecorationBounds: 28,28
 
+MSAM.Hailstorm:
+	Inherits: MSAM
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Hailstorm MLRS
+	Buildable:
+		BuildPaletteOrder: 120
+		Prerequisites: hq, ~vehicles.msam, ~vehicles.td, ~techlevel.medium, ~!hmlrs.buildable
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Multiple Launch Rocket System.\nLong-range unguided multiple rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles\n  Weak vs. Aircraft, Heavy Tanks
+	Armament@PRIMARY:
+		Weapon: 227mm.Hailstorm
+	-Armament@SECONDARY:
+
 MLRS:
 	Inherits: ^TankTD
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2077,13 +2097,11 @@ MLRS.Multi:
 		LocalOffset: 0,171,0, 0,-171,0
 		PauseOnCondition: empdisable || being-warped
 
-STNK.Nod:
+STNK:
 	Inherits: ^VehicleTD
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
-	RenderSprites:
-		Image: STNKTnod
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -2146,8 +2164,8 @@ STNK.Nod:
 		Multiplier: 90
 		Prerequisites: vehicles.blackh
 
-STNK.Nod.Scrin:
-	Inherits: STNK.Nod
+STNK.Scrin:
+	Inherits: STNK
 	Buildable:
 		BuildPaletteOrder: 130
 		Prerequisites: hq, ~vehicles.nod,  ~commander_tree.stealth_tank_scrin, ~techlevel.high
@@ -2162,8 +2180,8 @@ STNK.Nod.Scrin:
 		Weapon: STNKScrinTorp
 	-Armament@SECONDARY:
 
-STNK.Nod.HE:
-	Inherits: STNK.Nod
+STNK.HE:
+	Inherits: STNK
 	Buildable:
 		BuildPaletteOrder: 130
 		Prerequisites: hq, ~vehicles.nod,  ~commander_tree.stealth_tank_explosive_rockets, ~techlevel.high
@@ -2801,8 +2819,6 @@ TITN:
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
-	RenderSprites:
-		Image: titan
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
@@ -2844,6 +2860,7 @@ TITN:
 		Range: 4c0
 	Armament@PRIMARY:
 		Weapon: TitanGun
+		Turret: primary
 		LocalOffset: 830,260,100
 		Recoil: 171
 		RecoilRecovery: 30
@@ -2851,11 +2868,12 @@ TITN:
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: TitanTusk
+		Turret: primary
 		LocalOffset: -85,-384,340
 		LocalYaw: -100,100
 		Recoil: 43
 		MuzzleSequence: muzzle
-	Turreted:
+	Turreted@PRIMARY:
 		TurnSpeed: 6
 		Offset: 0,0,0
 	AttackTurreted:
@@ -2877,6 +2895,33 @@ TITN:
 		LocalOffset: 0,0,700
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+
+TITN.PLD:
+	Inherits: TITN
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 195
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~miss.gdi, ~techlevel.high
+		Description: Tough combat battle-mech.\n  Has Point Laser Defense System.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Titan (PLD)
+
+TITN.Railgun:
+	Inherits: TITN
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 195
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~vehicles.talon, ~miss.gdi, ~techlevel.high
+		Description: Tough combat battle-mech with railgun.\n  Cannot be intercepted by Point Laser Defense.\n  Strong vs Tanks
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Titan (Railgun)
 
 JUGG:
 	Inherits: TITN
@@ -3131,9 +3176,10 @@ RTNK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Turreted:
+	Turreted@PRIMARY:
 		TurnSpeed: 10
-	Armament:
+	Armament@PRIMARY:
+		Turret: primary
 		Weapon: 120mmHEAT
 		Recoil: 128
 		RecoilRecovery: 38
@@ -3475,8 +3521,6 @@ MSAR:
 	RevealsShroud@DEPLOYED:
 		RequiresCondition: !undeployed
 		Range: 14c0
-	RenderSprites:
-		Image: msar
 	Repairable:
 		RequireForceMoveCondition: !undeployed
 	Passenger:
@@ -3549,10 +3593,12 @@ MSAR.PLD:
 		Description: When deployed, provides radar and increases nearby vehicle weapon range.\n Has Point Laser Defense System.\n Detects cloaked units.\n  Unarmed
 	Valued:
 		Cost: 1500
+	Armament@pointdefense:
+		PauseOnCondition: !ammo || disabled || empdisable || being-warped || !deployed
 
 MSAR.PLD.Nod:
 	Inherits: MSAR
-	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits@PLD: ^PointLaserDefenseSystemBig
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 240
@@ -3562,6 +3608,8 @@ MSAR.PLD.Nod:
 		Description: When deployed, provides radar and Point Laser Defense.\n Detects cloaked units.\n  Unarmed
 	Valued:
 		Cost: 1000
+	Armament@pointdefense:
+		PauseOnCondition: !ammo || disabled || empdisable || being-warped || !deployed
 	-ProximityExternalCondition@Bino:
 
 PTNK:
@@ -4033,7 +4081,7 @@ MEMP:
 		Prerequisites: gtek, ~vehicles.gdi, ~techlevel.high
 		Description: Self destructs to disable nearby vehicles & structures.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 1350
+		Cost: 1150
 	Tooltip:
 		Name: Mobile E.M.P
 		GenericName: Tank
@@ -4051,11 +4099,10 @@ MEMP:
 		DeployedCondition: deployed
 		ChargingDamageWeapon: EMPExplode
 		ChargingSequence: charging
-		ChargeDelay: 24
-		DetonationDelay: 48
+		ChargeDelay: 6
+		DetonationDelay: 42
 		DetonationWeapon: MEMP
 		ChargeSound: mobempcharge1.aud
-		DetonationSound: mobemp1.aud
 		Voice: Attack
 	ChronoshiftableWithSpriteEffect:
 		RequiresCondition: !being-warped && !deployed
@@ -4104,6 +4151,62 @@ MEMP:
 	-Capturable@DRIVER_DEAD:
 	-GrantConditionIfOwnerIsNeutral:
 	-SelfHealing@DRIVER_DEAD:
+
+MEMP.Volatile:
+	Inherits: MEMP
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 260
+		IconPalette: chrometd
+		Prerequisites: gtek, ~vehicles.gdi, ~techlevel.high
+		Description: Self destructs to disable nearby vehicles & structures.\nUpgraded with Volatile Reactor to EMP on destruction.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Mobile E.M.P (Volatile)
+	Explodes:
+		Weapon: MEMP
+		EmptyWeapon: VisualExplodeHusk
+
+MEMP.Stable:
+	Inherits: MEMP
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 260
+		IconPalette: chrometd
+		Prerequisites: gtek, ~vehicles.gdi, ~techlevel.high
+		Description: Releases EMP Wave to disable nearby vehicles & structures.\n\nUpgraded with Stable Reactor to allow multiple EMP Waves.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Mobile E.M.P (Stable)
+	-ChargingSelfDestruct:
+	AmmoPool:
+		Name: explosion
+		Armaments: explosion
+		ReloadDelay: 0
+		PipType: Red
+		InitialAmmo: 0
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 200
+		Count: 1
+		DelayAfterReset: 50
+		ShowSelectionBar: true
+		SelectionBarColor: ff00ff
+		AmmoPool: explosion
+	PeriodicExplosion:
+		Weapon: MEMP
+		RequiresCondition: deployed && ammo
+		AmmoPoolName: explosion
+		InitialDelay: 48
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: True
+		DeploySounds: mobempcharge1.aud
+		Voice: Attack
+		PauseOnCondition: being-warped
 
 CDRN:
 	Inherits: ^VehicleTD
@@ -4188,8 +4291,6 @@ CHPR:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
-	RenderSprites:
-		Image: chpr
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 225
