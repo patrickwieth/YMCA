@@ -117,7 +117,6 @@ V2RL:
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
-		IconPalette: chrometd
 		BuildPaletteOrder: 50
 		IconPalette: chrometd
 		Prerequisites: weap, ~vehicles.allies, ~commander_tree.scout_tank_pld, ~techlevel.low
@@ -3131,9 +3130,11 @@ RTNK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Turreted:
+	Turreted@PRIMARY:
 		TurnSpeed: 10
-	Armament:
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
 		Weapon: 120mmHEAT
 		Recoil: 128
 		RecoilRecovery: 38
@@ -3173,16 +3174,35 @@ RTNK:
 		VoiceSet: MirageVoice
 
 RTNK.PLD:
-	Inherits: RTNK
 	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: RTNK
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
 		IconPalette: chrometd
 		Prerequisites: weap, ~vehicles.england, ~commander_tree.mirage_pld, ~techlevel.low
 		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
+	Tooltip:
+		Name: Mirage Tank (PLD)
 	Valued:
 		Cost: 1400
+
+RTNK.Firerate:
+	Inherits: RTNK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 75
+		IconPalette: chrometd
+		Prerequisites: weap, ~vehicles.england, ~commander_tree.mirage_pld, ~techlevel.low
+		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
+	Tooltip:
+		Name: Mirage Tank (firerate)
+	Valued:
+		Cost: 1200
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: 120mmHEAT.firerate
 
 V3RL:
 	Inherits: ^Vehicle
