@@ -1401,7 +1401,7 @@
 	Aircraft:
 		CruisingCondition: cruising
 		IdleBehavior: Land
-		PauseOnCondition: empdisable && !airborne
+		PauseOnCondition: empdisable && !airborne || being-warped
 	KillsSelf:
 		RequiresCondition: empdisable && cruising
 	Targetable@GROUND:
@@ -1412,7 +1412,9 @@
 	Targetable@REPAIR:
 		RequiresCondition: !airborne && damaged && !being-warped
 	Targetable@Temporal:
-		RequiresCondition: !airborne || airborne
+		RequiresCondition: !airborne
+	Targetable@TemporalAir:
+		RequiresCondition: airborne
 	Targetable@c4:
 		RequiresCondition: c4 && !airborne
 	ProductionCostMultiplier@EagleBonus:

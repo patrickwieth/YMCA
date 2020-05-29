@@ -364,7 +364,7 @@ V2RL:
 		Speed: 52
 		Locomotor: heavytracked
 	Passenger:
-		Weight: 2
+		Weight: 5
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 6c0
@@ -1027,7 +1027,7 @@ TTNK:
 		Prerequisites: structures.tsla, dome, ~vehicles.russia, ~techlevel.medium
 		Description: Tank with mounted Tesla coil.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
 	Valued:
-		Cost: 1250
+		Cost: 1150
 	Tooltip:
 		Name: Tesla Tank
 		GenericName: Tank
@@ -1070,6 +1070,21 @@ TTNK:
 	SpawnActorOnDeath:
 		Actor: TTNK.Husk
 		RequiresCondition: !being-warped
+
+TTNK.Arc:
+	Inherits: TTNK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 125
+		IconPalette: chrometd
+		Prerequisites: structures.tsla, dome, ~commander_tree.tesla_tank_arc, ~techlevel.medium
+		Description: Tank with mounted Tesla coil.\n  Tesla Zaps have improved Arcing.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Tesla Tank (Arc)
+	Armament:
+		Weapon: TTankZap.Arc
 
 DTRK:
 	Inherits: ^Vehicle
@@ -1126,7 +1141,7 @@ CTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
-		Prerequisites: atek, ~vehicles.allies, ~commander_tree.chrono_tank, ~techlevel.high
+		Prerequisites: atek, ~vehicles.allies, ~commander_tree.chrono_tank, ~!commander_tree.chrono_tank_pld, ~techlevel.high
 		Description: Advanced tank armed with anti-ground missiles.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft\n  Special Ability: Teleport
 	Valued:
 		Cost: 1350
@@ -1858,7 +1873,7 @@ HTNK:
 		Speed: 52
 		Locomotor: heavytracked
 	Passenger:
-		Weight: 2
+		Weight: 5
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 6c0
@@ -2893,7 +2908,7 @@ TITN:
 		Voice: Move
 	Passenger:
 		PipType: Red
-		Weight: 3
+		Weight: 5
 		Voice: Move
 	QuantizeFacingsFromSequence:
 		Sequence: stand
@@ -3023,7 +3038,7 @@ DISR:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Valued:
-		Cost: 1400
+		Cost: 1500
 	Tooltip:
 		Name: Disruptor
 	UpdatesPlayerStatistics:
@@ -3043,7 +3058,7 @@ DISR:
 		Speed: 56
 		Voice: Move
 	Passenger:
-		Weight: 2
+		Weight: 5
 		Voice: Move
 	RevealsShroud:
 		MinRange: 4c0
@@ -3190,7 +3205,7 @@ RTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
-		Prerequisites: weap, ~vehicles.england, ~!commander_tree.mirage_pld, ~techlevel.low
+		Prerequisites: weap, ~vehicles.england, ~!commander_tree.mirage_pld, ~!commander_tree.mirage_fire_rate, ~techlevel.low
 		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor.\n  Strong vs Vehicles\n  Weak vs Aircraft.
 	Valued:
 		Cost: 800
@@ -3279,7 +3294,7 @@ RTNK.PLD:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
 		IconPalette: chrometd
-		Prerequisites: weap, ~vehicles.england, ~commander_tree.mirage_pld, ~techlevel.low
+		Prerequisites: weap, ~commander_tree.mirage_pld, ~techlevel.low
 		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
 	Tooltip:
 		Name: Mirage Tank (PLD)
@@ -3292,7 +3307,7 @@ RTNK.Firerate:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
 		IconPalette: chrometd
-		Prerequisites: weap, ~vehicles.england, ~commander_tree.mirage_pld, ~techlevel.low
+		Prerequisites: weap, ~!commander_tree.mirage_fire_rate, ~techlevel.low
 		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
 	Tooltip:
 		Name: Mirage Tank (firerate)
@@ -3311,7 +3326,7 @@ V3RL:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 160
-		Prerequisites: techcenter, ~vehicles.v3rl, ~!vehicles.ukraine, ~techlevel.high
+		Prerequisites: techcenter, ~vehicles.v3rl, ~commander_tree.v3_launcher, ~techlevel.high
 		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 1500
@@ -3410,7 +3425,7 @@ KATY:
 		Queue: Vehicle
 		BuildPaletteOrder: 150
 		IconPalette: chrometd
-		Prerequisites: dome, ~vehicles.ukraine, ~techlevel.high
+		Prerequisites: dome, ~commander_tree.katyusha, ~techlevel.high
 		Description: Long-range rocket artillery.\n  Strong vs Infantry, Light armor, Buildings\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 1500
@@ -3518,7 +3533,7 @@ TNKD2:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
-		Prerequisites: ~vehicles.germany, dome, ~techlevel.low
+		Prerequisites: ~vehicles.germany, dome, ~!commander_tree.tank_destroyer_pld,  ~!commander_tree.tank_destroyer_burst, ~techlevel.low
 		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
 	Valued:
 		Cost: 750
@@ -3542,7 +3557,7 @@ TNKD2:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Armament:
+	Armament@PRIMARYFRONTAL:
 		Weapon: 183mm
 		Recoil: 85
 		RecoilRecovery: 25
@@ -3550,6 +3565,7 @@ TNKD2:
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
 	AttackFrontal:
+		Armaments: primaryfrontal, secondaryfrontal
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
@@ -3569,6 +3585,35 @@ TNKD2:
 		ValidTargets: Tank
 		InvalidTargets: NoAutoTarget
 		Priority: 10
+
+TNKD2.PLD:
+	Inherits: TNKD2
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 90
+		IconPalette: chrometd
+		Prerequisites: dome, ~commander_tree.tank_destroyer_pld, ~techlevel.low
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Tank Destroyer
+
+TNKD2.Burstfire:
+	Inherits: TNKD2
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 90
+		IconPalette: chrometd
+		Prerequisites: dome, ~commander_tree.tank_destroyer_burst, ~techlevel.low
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
+	Valued:
+		Cost: 1150
+	Tooltip:
+		Name: Tank Destroyer
+	Armament@PRIMARYFRONTAL:
+		Weapon: 183mm.Burst
 
 MSAR:
 	Inherits: ^VehicleTD
@@ -3694,7 +3739,7 @@ MSAR.PLD.Nod:
 		BuildDurationModifier: 50
 		Description: When deployed, provides radar and Point Laser Defense.\n Detects cloaked units.\n  Unarmed
 	Valued:
-		Cost: 1000
+		Cost: 1200
 	Armament@pointdefense:
 		PauseOnCondition: !ammo || disabled || empdisable || being-warped || !deployed
 	-ProximityExternalCondition@Bino:
@@ -3886,7 +3931,7 @@ BATF:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
-		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~techlevel.low
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~!commander_tree.battle_fortress_pld, ~!commander_tree.battle_fortress_bunker, ~!commander_tree.battle_fortress_arty, ~techlevel.low
 		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 2000
@@ -3902,7 +3947,7 @@ BATF:
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
 		Voice: Move
 	Passenger:
-		Weight: 2
+		Weight: 5
 		Voice: Move
 	RevealsShroud:
 		MinRange: 4c0
@@ -4020,7 +4065,7 @@ BATF.Bunker:
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
 		Voice: Move
 	Passenger:
-		Weight: 2
+		Weight: 5
 		Voice: Move
 	RevealsShroud:
 		Range: 8c0
@@ -4382,10 +4427,10 @@ CHPR:
 		Queue: Vehicle
 		BuildPaletteOrder: 225
 		IconPalette: chrometd
-		Prerequisites: atek, ~commander_tree.chrono_prison, ~techlevel.high
+		Prerequisites: atek, ~commander_tree.chrono_prison, ~!commander_tree.chrono_prison_range, ~!commander_tree.chrono_prison_aa, ~techlevel.high
 		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
-		Cost: 1500
+		Cost: 1700
 	Tooltip:
 		Name: Chrono Prison
 		GenericName: Tank
@@ -4400,7 +4445,7 @@ CHPR:
 		Locomotor: heavytracked
 		Voice: Move
 	Passenger:
-		Weight: 2
+		Weight: 5
 		Voice: Move
 	RevealsShroud:
 		MinRange: 4c0
@@ -4473,7 +4518,7 @@ CHPR.Range:
 		Prerequisites: atek, ~commander_tree.chrono_prison_range, ~techlevel.high
 		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
-		Cost: 1700
+		Cost: 2000
 	Tooltip:
 		Name: Chrono Prison Range Upgraded
 	Armament@PRIMARY:
@@ -4498,7 +4543,7 @@ CHPR.AA:
 		Prerequisites: atek, ~commander_tree.chrono_prison_aa, ~techlevel.high
 		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
-		Cost: 1600
+		Cost: 2000
 	Tooltip:
 		Name: Chrono Prison Anti-Air
 	Armament@PRIMARY:
@@ -4515,11 +4560,11 @@ CHPR.AA:
 		LocalOffset: 600,0,480
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move
-		ValidTargets: Air
+		ValidTargets: TemporalAir
 		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@ATTACKANYTHING:
 		RequiresCondition: stance-attackanything || assault-move
-		ValidTargets: Air
+		ValidTargets: TemporalAir
 		InvalidTargets: NoAutoTarget
 
 2S3:
@@ -4530,7 +4575,7 @@ CHPR.AA:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 120
-		Prerequisites: dome, ~vehicles.iraq, ~techlevel.high
+		Prerequisites: dome, ~commander_tree.akatsiya, ~techlevel.high
 		Description: Heavy artillery that fires shells with cluster warheads.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 1350
