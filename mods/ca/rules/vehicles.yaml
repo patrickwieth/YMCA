@@ -564,8 +564,8 @@ ISU:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
-		Prerequisites: weap, radar, ~vehicles.ukraine, ~techlevel.medium
-		Description: Powerful Medium-range artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Aircraft\n  Special Ability: Concussion Shells
+		Prerequisites: weap, radar, ~commander_tree.isu, ~!commander_tree.isu_concussion, ~techlevel.medium
+		Description: Powerful Medium-range artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1250
 	Tooltip:
@@ -609,6 +609,16 @@ ISU:
 	SpawnActorOnDeath:
 		Actor: ISU.Husk
 		RequiresCondition: !being-warped
+
+ISU.Concussion:
+	Inherits: ISU
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 175
+		Prerequisites: weap, radar, ~commander_tree.isu_concussion, ~techlevel.medium
+		Description: Powerful Medium-range artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Aircraft\n  Special Ability: Concussion Shells
+	Armament:
+		Weapon: 380mm.Concussion
 
 SPEC:
 	Inherits: ARTY.nod
