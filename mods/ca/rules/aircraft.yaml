@@ -551,7 +551,7 @@ YAK:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 30
-		Prerequisites: ~afld, ~!aircraft.iraq, ~techlevel.low
+		Prerequisites: ~afld, ~!commander_tree.Chemyak, ~techlevel.low
 		Description: Attack Plane armed with\ndual machine guns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 750
@@ -630,8 +630,9 @@ CHEMYAK:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 30
-		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.low
-		Description: Attack Plane armed with\ntoxin spray.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		IconPalette: chrometd
+		Prerequisites: ~afld, ~commander_tree.chemyak, ~!commander_tree.chemyak_volatile_tanks, ~techlevel.low
+		Description: Attack Plane armed with\ntoxin spray.\n  Strong vs Infantry, Light armor\n  Weak vs Aircraft
 	Valued:
 		Cost: 750
 	Tooltip:
@@ -691,6 +692,22 @@ CHEMYAK:
 		Offset: -98,-683,-10
 	Contrail@2:
 		Offset: -98,683,-10
+
+CHEMYAK.Volatile:
+	Inherits: CHEMYAK
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 30
+		IconPalette: chrometd
+		Prerequisites: ~afld, ~commander_tree.chemyak_volatile_tanks, ~techlevel.low
+		Description: Attack Plane armed with\ntoxin spray.\nReleases Toxin Clouds on crash.\n  Strong vs Infantry, Light armor\n  Weak vs Aircraft
+	Valued:
+		Cost: 750
+	Tooltip:
+		Name: Yak Toxin Plane (Volatile)
+	SpawnActorOnDeath:
+		Actor: YAK.Volatile.Husk
 
 TRAN:
 	Inherits: ^Helicopter
