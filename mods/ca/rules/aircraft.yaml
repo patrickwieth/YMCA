@@ -234,7 +234,7 @@ MIG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld, stek, ~!aircraft.ukraine, ~techlevel.high
+		Prerequisites: ~afld, stek, ~commander_tree.mig, ~techlevel.high
 		Description: Precision strike aircraft.\n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1750
@@ -405,6 +405,22 @@ SUK:
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 
+SUK.Concussion:
+	Inherits: SUK
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 51
+		IconPalette: chrometd
+		Prerequisites: ~afld, stek, ~aircraft.ukraine, ~techlevel.high
+		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Missiles cause concussion on units\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Sukhoi Attack Plane (Concussion)
+	Armament:
+		Weapon: MaverickSU.Concussion
+
 FROG:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -413,7 +429,7 @@ FROG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~aircraft.soviet, ~!aircraft.iraq, ~techlevel.high
+		Prerequisites: ~afld, ~aircraft.soviet, ~commander_tree.frogfoot, ~techlevel.high
 		Description: Bomber armed with explosive bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1850
@@ -471,7 +487,7 @@ FROGDIRTY:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.high
+		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot, ~techlevel.high
 		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
 		Cost: 1650
@@ -1132,7 +1148,7 @@ HUEY:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.allies, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.cryo_huey, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 850
@@ -1951,7 +1967,7 @@ KIRO:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
 		BuildDurationModifier: 115
-		Prerequisites: ~afld, stek, ~aircraft.soviet, ~techlevel.high
+		Prerequisites: ~afld, stek, ~aircraft.soviet, ~commander_tree.kirov, ~techlevel.high
 		Description: Heavily armoured airship equipped with specialised bombs.\n  Vulnerable when dropping bombs.\n  Strong vs Buildings, Infantry, Slow Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
@@ -2083,10 +2099,10 @@ BLIMP:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: ~afld, stek, ~aircraft.russia, ~!aircraft.russia, ~techlevel.high
+		Prerequisites: ~afld, stek, ~commander_tree.airship, ~techlevel.high
 		Description: Heavily Armoured Airship trains infantry directly onto the Battlefield.
 	Valued:
-		Cost: 2000
+		Cost: 2500
 	Tooltip:
 		Name: Airship of the People
 	UpdatesPlayerStatistics:
@@ -2224,7 +2240,7 @@ HARR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~techlevel.high
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier,  ~techlevel.high
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n  Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
