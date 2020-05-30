@@ -26,6 +26,7 @@ BADR:
 		Offset: -432,-560,0
 	SpawnActorOnDeath:
 		Actor: BADR.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged@0:
 		Offset: -432,560,0
 		Interval: 2
@@ -66,10 +67,10 @@ BADR.Bomber:
 		Offset: -432,-560,0
 	SpawnActorOnDeath:
 		Actor: BADR.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: BADR.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged@0:
 		Offset: -432,560,0
 		Interval: 2
@@ -125,10 +126,10 @@ B2B:
 		Offset: -432,-560,0
 	SpawnActorOnDeath:
 		Actor: B2B.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable  && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: B2B.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable  && !being-warped
 	SmokeTrailWhenDamaged@0:
 		Offset: -432,560,0
 		Interval: 2
@@ -163,7 +164,7 @@ Stealth_Fighter:
 		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~commander_tree.stealth_fighter, ~techlevel.high
 		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 2200
+		Cost: 2000
 	Tooltip:
 		Name: Stealth Fighter
 	UpdatesPlayerStatistics:
@@ -207,12 +208,13 @@ Stealth_Fighter:
 		Offset: -598,683,0
 	SpawnActorOnDeath:
 		Actor: stealth_fighter.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
 	Cloak:
 		InitialDelay: 125
-		CloakDelay: 60
+		CloakDelay: 20
 		UncloakOn: Attack, Unload, Infiltrate, Demolish
 		CloakTypes: Cloak
 		RequiresCondition: !cloak-force-disabled
@@ -299,16 +301,16 @@ MIG:
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: MIG.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: MIG.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: MIG.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: MIG.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -385,16 +387,16 @@ SUK:
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: SUK.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: SUK.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: SUK.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: SUK.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -469,6 +471,7 @@ FROG:
 		Offset: -258,723,0
 	SpawnActorOnDeath:
 		Actor: FROG.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -539,17 +542,17 @@ FROGDIRTY:
 		Color: cc550080
 		TrailLength: 10
 	SpawnActorOnDeath:
-		Actor: SUK.Husk
-		RequiresCondition: ammo && !empdisable
+		Actor: FROG.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
-		Actor: SUK.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		Actor: FROG.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
-		Actor: SUK.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		Actor: FROG.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
-		Actor: SUK.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		Actor: FROG.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -621,10 +624,10 @@ YAK:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: YAK.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: YAK.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -695,6 +698,10 @@ CHEMYAK:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: YAK.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: YAK.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -780,10 +787,10 @@ TRAN:
 		PipCount: 8
 	SpawnActorOnDeath:
 		Actor: TRAN.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	Selectable:
 		DecorationBounds: 40,36
 	WithCargoHatchAnimation:
@@ -907,10 +914,10 @@ TRAN.paradrop:
 		Image: tran3
 	SpawnActorOnDeath:
 		Actor: TRAN.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	Interactable:
 	GivesExperience:
 		Experience: 1000
@@ -979,16 +986,16 @@ HELI:
 	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: HELI.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HELI.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HELI.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: HELI.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -1059,10 +1066,10 @@ HIND:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: HIND.Husk
-		RequiresCondition: ammo
+		RequiresCondition: ammo && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HIND.Husk.Empty
-		RequiresCondition: !ammo
+		RequiresCondition: !ammo && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -1128,10 +1135,10 @@ TSLAHIND:
 		AmmoCondition: ammo
 	SpawnActorOnDeath:
 		Actor: HIND.Husk
-		RequiresCondition: ammo
+		RequiresCondition: ammo && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HIND.Husk.Empty
-		RequiresCondition: !ammo
+		RequiresCondition: !ammo && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -1202,16 +1209,16 @@ HUEY:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: HIND.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HUEY.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HUEY.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: HUEY.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -1278,10 +1285,10 @@ U2:
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: U2.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: U2.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -1c43,0,0
 		Interval: 2
@@ -1338,10 +1345,10 @@ U2.Bomber:
 		LandingDistance: 1c0
 	SpawnActorOnDeath:
 		Actor: U2.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: U2.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -1c43,0,0
 		Interval: 2
@@ -1412,16 +1419,16 @@ A10:
 		Offset: -258,823,0
 	SpawnActorOnDeath:
 		Actor: A10.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: A10.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: A10.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: A10.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -1469,16 +1476,16 @@ A10.bomber:
 		Offset: -258,823,0
 	SpawnActorOnDeath:
 		Actor: A10.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: A10.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: A10.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: A10.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -1534,10 +1541,10 @@ C17:
 		Color: FFFFFF80
 	SpawnActorOnDeath:
 		Actor: C17.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: C17.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged@0:
 		Offset: -432,560,0
 		Interval: 2
@@ -1632,16 +1639,16 @@ APCH:
 		InitialStanceAI: Defend
 	SpawnActorOnDeath:
 		Actor: APCH.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: APCH.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: APCH.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: APCH.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	Selectable:
@@ -1703,16 +1710,16 @@ ORCA:
 		AmmoCondition: ammo
 	SpawnActorOnDeath:
 		Actor: ORCA.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: ORCA.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: ORCA.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: ORCA.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	AutoTarget:
 		InitialStance: Defend
 		InitialStanceAI: Defend
@@ -1788,16 +1795,16 @@ ORCB:
 		DecorationBounds: 40,29,0,1
 	SpawnActorOnDeath:
 		Actor: ORCB.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: ORCB.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: ORCB.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: ORCB.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -1834,10 +1841,10 @@ UAV:
 		RenderSelectionBars: False
 	SpawnActorOnDeath:
 		Actor: UAV.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: UAV.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -1c43,0,0
 		Interval: 2
@@ -1937,16 +1944,16 @@ RAH:
 		ReloadCount: 2
 	SpawnActorOnDeath:
 		Actor: RAH.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: RAH.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: RAH.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: RAH.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	Selectable:
@@ -2037,10 +2044,10 @@ KIRO:
 		ScanRadius: 10
 	SpawnActorOnDeath:
 		Actor: KIRO.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: KIRO.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	WithIdleOverlay@ROTOR1AIR:
 		Offset: -180,597,250
 		Sequence: rotor
@@ -2125,7 +2132,11 @@ BLIMP:
 		CanForceLand: False
 	SelectionDecorations:
 	SpawnActorOnDeath:
-		Actor: kiro.Husk
+		Actor: BLIMP.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: BLIMP.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged@1:
 		Offset: -100,500,100
 	SmokeTrailWhenDamaged@2:
@@ -2204,10 +2215,10 @@ OCAR:
 		Type: GroundPosition
 	SpawnActorOnDeath:
 		Actor: OCAR.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: OCAR.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 		Interval: 2
@@ -2301,16 +2312,16 @@ HARR:
 		Color: FFFFFF80
 	SpawnActorOnDeath:
 		Actor: HARR.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HARR.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HARR.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: HARR.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	Selectable:
@@ -2376,6 +2387,7 @@ Raptor:
 		Offset: -598,683,0
 	SpawnActorOnDeath:
 		Actor: raptor.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -2462,16 +2474,16 @@ SCRN:
 		ZOffset: -512
 	SpawnActorOnDeath:
 		Actor: SCRN.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: SCRN.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: SCRN.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: SCRN.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	Selectable:
@@ -2532,16 +2544,16 @@ HORN:
 	RejectsOrders:
 	SpawnActorOnDeath:
 		Actor: HORN.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HORN.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HORN.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: HORN.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	-EjectOnDeath:
 	-Selectable:
 	-ActorLostNotification:
@@ -2615,10 +2627,10 @@ YF23.Bomber:
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: YF23.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: YF23.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -2738,16 +2750,16 @@ VENM:
 		ResetOnFire: true
 	SpawnActorOnDeath:
 		Actor: VENM.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: VENM.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: VENM.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: VENM.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	AutoTarget:
 		InitialStance: Defend
 		InitialStanceAI: Defend
@@ -2802,6 +2814,7 @@ Dropship:
 		Types: Infantry, Vehicle
 	SpawnActorOnDeath:
 		Actor: dropship.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -2903,16 +2916,16 @@ AURORA:
 		Offset: -300,800,-50
 	SpawnActorOnDeath:
 		Actor: AURO.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: AURO.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: AURO.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: AURO.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -3007,16 +3020,16 @@ AURO:
 		Offset: -300,800,-50
 	SpawnActorOnDeath:
 		Actor: AURO.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: AURO.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: AURO.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: AURO.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
