@@ -2642,15 +2642,40 @@ JUGG:
 		Description: Tough artillery battle-mech.\n  Strong vs Infantry, Structures\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 50
+		Voice: Move
+	SpeedMultiplier
+		Modifier: 0
+		RequiresCondition: attacking
 	Armament@PRIMARY:
 		Weapon: JuggernautGun
 		LocalOffset: 830,0,500, 830,100,500, 830,-100,500
+		PauseOnCondition: !ammo || moving
 	AttackTurreted:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 	Turreted:
-		TurnSpeed: 6
+		TurnSpeed: 3
 		Offset: -20,0,20
+	GrantConditionOnAttack:
+		Condition: attacking
+		RevokeDelay: 60
+		RevokeAll: false
+	GrantConditionOnMovement:
+		Condition: moving
+		ValidMovementTypes: Horizontal, Vertical, Turn
+	AmmoPool:
+		Ammo: 3
+		PipCount: 0
+		Armaments: primary
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 100
+		Count: 3
+		ResetOnFire: True
+		PauseOnCondition: moving
 	-Armament@SECONDARY:
 	-SelfHealing@DEFAULT:
 	Health:
