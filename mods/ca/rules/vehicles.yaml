@@ -2298,7 +2298,6 @@ BIKE:
 		LocalOffset: -128, -170, 170, -128, 170, 170
 		LocalYaw: 100, -100
 	Armament@SECONDARYFRONTAL:
-		Name: secondary
 		Weapon: BikeRocketsAA
 		LocalOffset: -128, -170, 170, -128, 170, 170
 		LocalYaw: 100, -100
@@ -3533,12 +3532,13 @@ TNKD2:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
-		Prerequisites: ~vehicles.germany, dome, ~!commander_tree.tank_destroyer_pld,  ~!commander_tree.tank_destroyer_burst, ~techlevel.low
+		Prerequisites: ~vehicles.germany, dome, ~techlevel.low
 		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
 	Valued:
 		Cost: 750
 	Tooltip:
 		Name: Tank Destroyer
+		GenericName: Tank
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -3546,7 +3546,7 @@ TNKD2:
 	Armor:
 		Type: Heavy
 	Mobile:
-		Speed: 90
+		Speed: 68
 		TurnSpeed: 8
 		Voice: Move
 	Passenger:
@@ -3557,24 +3557,25 @@ TNKD2:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Armament@PRIMARYFRONTAL:
+	Armament@primaryfrontal:
+		Name: primaryfrontal
 		Weapon: 183mm
-		Recoil: 85
-		RecoilRecovery: 25
 		LocalOffset: 868,0,0
 		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped
 	AttackFrontal:
-		Armaments: primaryfrontal, secondaryfrontal
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
+		Armaments: primaryfrontal
 		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
-		Actor: TNKD.Husk
+		Actor: TNKD2.Husk
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: TnkdVoice
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 28,28
 	AutoTargetPriority@TANKDEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move
 		ValidTargets: Tank
@@ -3587,8 +3588,8 @@ TNKD2:
 		Priority: 10
 
 TNKD2.PLD:
-	Inherits: TNKD2
 	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: TNKD2
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
@@ -3598,7 +3599,7 @@ TNKD2.PLD:
 	Valued:
 		Cost: 1350
 	Tooltip:
-		Name: Tank Destroyer
+		Name: Tank Destroyer (PLD)
 
 TNKD2.Burstfire:
 	Inherits: TNKD2
@@ -3611,8 +3612,9 @@ TNKD2.Burstfire:
 	Valued:
 		Cost: 1150
 	Tooltip:
-		Name: Tank Destroyer
-	Armament@PRIMARYFRONTAL:
+		Name: Tank Destroyer (Burst)
+	Armament@primaryfrontal:
+		Name: primaryfrontal
 		Weapon: 183mm.Burst
 
 MSAR:
@@ -4547,24 +4549,36 @@ CHPR.AA:
 	Tooltip:
 		Name: Chrono Prison Anti-Air
 	Armament@PRIMARY:
-		Weapon: NeutronCannon.AA
+		Weapon: NeutronCannon
 		LocalOffset: 600,0,480
 	Armament@PRIMARYVISUAL:
-		Weapon: NeutronCannonBeam.AA
+		Weapon: NeutronCannonBeam
 		LocalOffset: 600,0,480
 	Armament@PRIMARYVISUALCORE:
-		Weapon: NeutronCannonPulse.AA
+		Weapon: NeutronCannonPulse
 		LocalOffset: 600,0,480
 	Armament@PRIMARYSOUND:
+		Weapon: NeutronCannonSound
+		LocalOffset: 600,0,480
+	Armament@PRIMARYAA:
+		Weapon: NeutronCannon.AA
+		LocalOffset: 600,0,480
+	Armament@PRIMARYVISUALAA:
+		Weapon: NeutronCannonBeam.AA
+		LocalOffset: 600,0,480
+	Armament@PRIMARYVISUALCOREAA:
+		Weapon: NeutronCannonPulse.AA
+		LocalOffset: 600,0,480
+	Armament@PRIMARYSOUNDAA:
 		Weapon: NeutronCannonSound.AA
 		LocalOffset: 600,0,480
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move
-		ValidTargets: TemporalAir
+		ValidTargets: TemporalAir, Temporal
 		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@ATTACKANYTHING:
 		RequiresCondition: stance-attackanything || assault-move
-		ValidTargets: TemporalAir
+		ValidTargets: TemporalAir, Temporal
 		InvalidTargets: NoAutoTarget
 
 2S3:
