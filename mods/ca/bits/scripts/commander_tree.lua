@@ -110,7 +110,7 @@ TickGeneralsPowers = function()
 			Levels[player.InternalName] = Levels[player.InternalName] + 1
 			Points[player.InternalName] = Points[player.InternalName] + PointsPerRank[2]
 
-			Media.PlaySpeechNotification(player, "RankUp")
+			--[[ Media.PlaySpeechNotification(player, "RankUp") ]]
 		end
 
 		if player.Experience >= RankXPs[3] and not (Levels[player.InternalName] > 1) then
