@@ -802,7 +802,7 @@ PrisCLaser:
 	Inherits: PrisLaser
 	Report: pcanfire.aud
 	ReloadDelay: 75
-	Range: 10c0
+	Range: 11c0
 	Projectile: LaserZap
 		Width: 30
 		Duration: 15
@@ -811,29 +811,14 @@ PrisCLaser:
 		SecondaryBeamColor: 84f5ff
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
-		Damage: 7500
+		Damage: 10500
 		Spread: 348
 		Versus:
+			None: 150
 			Wood: 110
-	-Warhead@Burst:
-
-PrisCLaser:
-	Inherits: PrisLaser
-	Report: pcanfire.aud
-	ReloadDelay: 75
-	Range: 10c0
-	Projectile: LaserZap
-		Width: 30
-		Duration: 15
-		Color: 00FFDEC8
-		SecondaryBeamWidth: 60
-		SecondaryBeamColor: 84f5ff
-		Blockable: true
-	Warhead@1Dam: SpreadDamage
-		Damage: 7500
-		Spread: 348
-		Versus:
-			Wood: 110
+			Concrete: 100
+			Light: 95
+			Heavy: 70
 	-Warhead@Burst:
 
 PrisBlaster:
@@ -1038,11 +1023,15 @@ RadBomb:
 			Heavy: 30
 			Concrete: 55
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-	Warhead@1Radiation: CreateTintedCells
+	Warhead@2Eff: CreateEffect
+		Explosions: med_explosion
+		ImpactSounds: xplos.aud
+		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@3Radiation: CreateTintedCells
 		Spread: 1c0
-		Falloff: 100, 75, 50, 25, 0
+		Falloff: 100, 75, 50, 25, 5, 0
 		Level: 500
-		MaxLevel: 7500
+		MaxLevel: 10000
 		LayerName: radioactivity.strong
 
 SonicZap:
@@ -1211,6 +1200,11 @@ Railgun.Infantry:
 			Heavy: 100
 			Concrete: 20
 			Brick: 15
+
+Railgun.Jumpjet:
+	Inherits: Railgun.Infantry
+	Projectile: Railgun
+		ZOffset: 6046
 
 Railgun.Titan:
 	Inherits: Railgun

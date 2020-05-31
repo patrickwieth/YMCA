@@ -7,7 +7,7 @@
    information, see COPYING.
 ]]
 
-PointsPerRank = { 5, 0, 15, 0, 5 }
+PointsPerRank = { 15, 0, 0, 0, 0 }
 
 PointActorExists =
 {
@@ -88,12 +88,12 @@ TickGeneralsPowers = function()
 	for _,player in pairs(players) do
 		if player.IsLocalPlayer then
 			if Levels[player.InternalName] < 4 then
-				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nGeneral's Points: " .. Points[player.InternalName] .. "\nProgress to Next Rank: " .. player.Experience - RankXPs[Levels[player.InternalName] + 1] .. "/" .. RankXPs[Levels[player.InternalName] + 2] - RankXPs[Levels[player.InternalName] + 1] .. "", player.Color)
+				UserInterface.SetMissionText("Commander Specialization Points: " .. Points[player.InternalName] .. "", player.Color)
 			else
-				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nGeneral's Points: " .. Points[player.InternalName] .. "", player.Color)
+				UserInterface.SetMissionText("Commander Specialization Points: " .. Points[player.InternalName] .. "", player.Color)
 			end
 		end
-
+--[[
 		if Points[player.InternalName] > 0 and not PointActorExists[player.InternalName] then
 			HasPointsActors[player.InternalName] = Actor.Create("hack.has_points", true, { Owner = player })
 
@@ -135,6 +135,7 @@ TickGeneralsPowers = function()
 			Media.PlaySpeechNotification(player, "RankUp")
 			Actor.Create("hack.rank_5", true, { Owner = player })
 		end
+    ]]
 	end
 end
 
