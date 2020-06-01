@@ -575,6 +575,17 @@ TNKD.Husk:
 	RenderSprites:
 		Image: tnkd.destroyed
 
+TNKD2.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (Tank Destroyer)
+	TransformOnCapture:
+		IntoActor: tnkd2
+	InfiltrateForTransform:
+		IntoActor: tnkd2
+	RenderSprites:
+		Image: tnkd2.destroyed
+
 APC2.Husk:
 	Inherits: ^HuskTD
 	Tooltip:
@@ -636,7 +647,7 @@ MTNK.DRONE.Husk:
 	InfiltrateForTransform:
 		IntoActor: mtnk.drone
 	RenderSprites:
-		Image: drone.destroyed
+		Image: mtnk.drone.destroyed
 		PlayerPalette: overlayplayertd
 
 HTNK.Husk:
@@ -1534,3 +1545,42 @@ aurora.Husk:
 	RenderSprites:
 		Image: aurora
 		Scale: 0.9
+
+Dropship.Husk:
+	Inherits: ^PlaneHusk
+	Tooltip:
+		Name: Dropship
+	Aircraft:
+		TurnSpeed: 3
+		Speed: 156
+	Contrail@1:
+		Offset: -400,-483,0
+	Contrail@2:
+		Offset: -450,-683,-10
+	Contrail@3:
+		Offset: -500,-883,-20
+	Contrail@4:
+		Offset: -400,483,0
+	Contrail@5:
+		Offset: -450,683,-10
+	Contrail@6:
+		Offset: -500,883,-20
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,0
+		Interval: 2
+		MinDamage: Undamaged
+	RenderSprites:
+		Image: dropship
+		PlayerPalette: overlayplayer
+
+Dropship.Husk.EMP:
+	Inherits: Dropship.Husk
+	Inherits: ^EmpVisualEffect
+
+Dropship.Husk.Empty:
+	Inherits: ^PlaneHuskEmpty
+	Inherits: Dropship.Husk
+
+Dropship.Husk.Empty.EMP:
+	Inherits: Dropship.Husk.Empty
+	Inherits: ^EmpVisualEffect

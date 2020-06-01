@@ -7,7 +7,7 @@
    information, see COPYING.
 ]]
 
-PointsPerRank = { 15, 0, 0, 0, 0 }
+PointsPerRank = { 15, 1, 1, 1, 1 }
 
 PointActorExists =
 {
@@ -74,7 +74,7 @@ Levels =
 }
 
 Ranks = { "1 Star General", "2 Stars General", "3 Stars General", "4 Stars General", "5 Stars General" }
-RankXPs = { 0, 800, 1500, 2500, 5000 }
+RankXPs = { 0, 10, 20, 2500, 5000 }
 
 ReducePoints = function(player)
 	Trigger.OnProduction(player.GetActorsByType("player")[1], function()
@@ -88,12 +88,12 @@ TickGeneralsPowers = function()
 	for _,player in pairs(players) do
 		if player.IsLocalPlayer then
 			if Levels[player.InternalName] < 4 then
-				UserInterface.SetMissionText("Commander Specialization Points: " .. Points[player.InternalName] .. "", player.Color)
+				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nGeneral's Points: " .. Points[player.InternalName] .. "\nProgress to Next Rank: " .. player.Experience - RankXPs[Levels[player.InternalName] + 1] .. "/" .. RankXPs[Levels[player.InternalName] + 2] - RankXPs[Levels[player.InternalName] + 1] .. "", player.Color)
 			else
-				UserInterface.SetMissionText("Commander Specialization Points: " .. Points[player.InternalName] .. "", player.Color)
+				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nGeneral's Points: " .. Points[player.InternalName] .. "", player.Color)
 			end
 		end
---[[
+
 		if Points[player.InternalName] > 0 and not PointActorExists[player.InternalName] then
 			HasPointsActors[player.InternalName] = Actor.Create("hack.has_points", true, { Owner = player })
 
@@ -117,7 +117,7 @@ TickGeneralsPowers = function()
 			Levels[player.InternalName] = Levels[player.InternalName] + 1
 			Points[player.InternalName] = Points[player.InternalName] + PointsPerRank[3]
 
-			Media.PlaySpeechNotification(player, "RankUp")
+			--[[ Media.PlaySpeechNotification(player, "RankUp")  ]]
 			Actor.Create("hack.rank_3", true, { Owner = player })
 		end
 
@@ -125,17 +125,16 @@ TickGeneralsPowers = function()
 			Levels[player.InternalName] = Levels[player.InternalName] + 1
 			Points[player.InternalName] = Points[player.InternalName] + PointsPerRank[4]
 
-			Media.PlaySpeechNotification(player, "RankUp")
+			--[[ Media.PlaySpeechNotification(player, "RankUp")  ]]
 		end
 
 		if player.Experience >= RankXPs[5] and not (Levels[player.InternalName] > 3) then
 			Levels[player.InternalName] = Levels[player.InternalName] + 1
 			Points[player.InternalName] = Points[player.InternalName] + PointsPerRank[5]
 
-			Media.PlaySpeechNotification(player, "RankUp")
+			--[[ Media.PlaySpeechNotification(player, "RankUp")  ]]
 			Actor.Create("hack.rank_5", true, { Owner = player })
 		end
-    ]]
 	end
 end
 
