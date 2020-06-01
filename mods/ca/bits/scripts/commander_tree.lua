@@ -7,7 +7,7 @@
    information, see COPYING.
 ]]
 
-PointsPerRank = { 15, 1, 1, 1, 1 }
+PointsPerRank = { 8, 1, 1, 1, 1 }
 
 PointActorExists =
 {
@@ -74,7 +74,7 @@ Levels =
 }
 
 Ranks = { "1 Star General", "2 Stars General", "3 Stars General", "4 Stars General", "5 Stars General" }
-RankXPs = { 0, 10, 20, 2500, 5000 }
+RankXPs = { 0, 10, 100, 2500, 5000 }
 
 ReducePoints = function(player)
 	Trigger.OnProduction(player.GetActorsByType("player")[1], function()
@@ -88,9 +88,9 @@ TickGeneralsPowers = function()
 	for _,player in pairs(players) do
 		if player.IsLocalPlayer then
 			if Levels[player.InternalName] < 4 then
-				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nGeneral's Points: " .. Points[player.InternalName] .. "\nProgress to Next Rank: " .. player.Experience - RankXPs[Levels[player.InternalName] + 1] .. "/" .. RankXPs[Levels[player.InternalName] + 2] - RankXPs[Levels[player.InternalName] + 1] .. "", player.Color)
+				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\Commander Specialization Points: " .. Points[player.InternalName] .. "\nProgress to Next Rank: " .. player.Experience - RankXPs[Levels[player.InternalName] + 1] .. "/" .. RankXPs[Levels[player.InternalName] + 2] - RankXPs[Levels[player.InternalName] + 1] .. "", player.Color)
 			else
-				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nGeneral's Points: " .. Points[player.InternalName] .. "", player.Color)
+				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nCommander Specialization Points: " .. Points[player.InternalName] .. "", player.Color)
 			end
 		end
 
