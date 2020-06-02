@@ -1440,6 +1440,8 @@ BGGY.PLD:
 		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units and has Point Laser Defense.\n  Strong vs Infantry\n  Weak vs Energy Weapons
 	Valued:
 		Cost: 900
+	Health:
+		HP: 18000
 	Tooltip:
 		Name: Point Laser Buggy
 
@@ -1453,6 +1455,8 @@ BGGY.AA:
 		Description: Fast scout and anti-aircraft vehicle.\nCan detect cloaked units.\n  Strong vs Infantry, Aircraft\n  Weak vs Vehicles
 	Valued:
 		Cost: 600
+	Health:
+		HP: 21000
 	Tooltip:
 		Name: Anti-Air Buggy
 	Armament@Secondary:
@@ -2378,7 +2382,7 @@ BIKE.Scrin:
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with\nrockets.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 1000
+		Cost: 900
 	Tooltip:
 		Name: Scrin Bike
 	Health:
@@ -2481,11 +2485,13 @@ FTNK.PLD:
 		Prerequisites: hq, ~vehicles.nod, tmpl, ~commander_tree.flame_tank_pld, ~techlevel.low
 		Queue: Vehicle
 		IconPalette: chrometd
-		Description: Heavily armored flame-throwing vehicle.\nHas Point Laser Defense\n  Strong vs Infantry, Buildings, Vehicles\n  Heavy Tanks, Aircraft, Energy Weapons
+		Description: Heavily armored flame-throwing vehicle.\nHas Point Laser Defense\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft, Energy Weapons
 	Valued:
 		Cost: 1400
 	Tooltip:
 		Name: Flame Tank (PLD)
+	Health:
+		HP: 50000
 
 FTNK.Fireball:
 	Inherits: FTNK
@@ -3046,7 +3052,10 @@ JUGG:
 	Tooltip:
 		Name: Juggernaut
 	Buildable:
-		BuildPaletteOrder: 200
+		Queue: Vehicle
+		BuildPaletteOrder: 195
+		IconPalette: chrometd
+		Prerequisites: gtek, ~vehicles.talon, ~techlevel.high
 		Description: Tough artillery battle-mech.\n  Strong vs Infantry, Structures\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
@@ -4854,7 +4863,7 @@ COORDINATOR:
 		Prerequisites: ~vehicles.nod, ~commander_tree.reinforcements_coordinator, ~techlevel.high
 		BuildDurationModifier: 50
 		BuildLimit: 1
-		Description: Coordinates newly built vehicles to be airdropped close to the Coordinator when deployed.\n Use the rally point when deployed or units will be dropped onto each other.
+		Description: Coordinates newly built vehicles to be airdropped close to the Coordinator when deployed.\n Airstrips must not be primary production buildings for the Coordinator to work. \n Use the rally point when deployed or units will be dropped onto each other.
 	Health:
 		HP: 22000
 	Armor:
