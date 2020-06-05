@@ -280,11 +280,9 @@ V2RL:
 		Cost: 1150
 	Tooltip:
 		Name: Heavy Tank
-		GenericName: Tank
 		RequiresCondition: !iraqtank
 	Tooltip@Iraq:
 		Name: Atomic Heavy Tank
-		GenericName: Tank
 		RequiresCondition: iraqtank
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
@@ -330,6 +328,47 @@ V2RL:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+
+3TNK.PLD:
+	Inherits: 3TNK
+	Inherits@PLD: ^PointLaserDefenseSystem
+	RenderSprites:
+		FactionImages:
+			iraq: 3tnki
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 100
+		Prerequisites: vehicles.any, ~vehicles.3tnk, ~techlevel.low
+		Description: Soviet main battle tank with dual cannons.\n  Has Point Laser Defense.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Energy Weapons
+	Valued:
+		Cost: 1750
+	Tooltip:
+		Name: Heavy Tank (PLD)
+		RequiresCondition: !iraqtank
+	Tooltip@Iraq:
+		Name: Atomic Heavy Tank (PLD)
+		RequiresCondition: iraqtank
+
+3TNK.AP:
+	Inherits: 3TNK
+	RenderSprites:
+		FactionImages:
+			iraq: 3tnki
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 100
+		Prerequisites: vehicles.any, ~vehicles.3tnk, ~techlevel.low
+		Description: Soviet main battle tank with dual cannons.\n  Has armor piercing shells.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Point Laser Defense
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Heavy Tank (AP)
+		RequiresCondition: !iraqtank
+	Tooltip@Iraq:
+		Name: Atomic Heavy Tank (AP)
+		RequiresCondition: iraqtank
+	Armament:
+		Weapon: 125mm.AP
 
 4TNK:
 	Inherits: ^Tank
@@ -1454,13 +1493,13 @@ BGGY.AA:
 		Prerequisites: ~bio.nod, ~vehicles.nod, ~commander_tree.buggy_aa, ~techlevel.high
 		Description: Fast scout and anti-aircraft vehicle.\nCan detect cloaked units.\n  Strong vs Infantry, Aircraft\n  Weak vs Vehicles
 	Valued:
-		Cost: 600
+		Cost: 700
 	Health:
 		HP: 21000
 	Tooltip:
 		Name: Anti-Air Buggy
 	Armament@Secondary:
-		Weapon: VenomLaserAA
+		Weapon: BuggyLaserAA
 		LocalOffset: 171,0,43
 		MuzzleSequence: muzzle
 
@@ -1609,7 +1648,7 @@ LTNK:
 		Prerequisites: ~vehicles.nod, ~techlevel.low
 		Description: Fast, light tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft\n  Special Ability: Amphibious
 	Valued:
-		Cost: 750
+		Cost: 625
 	Tooltip:
 		Name: Light Tank
 	UpdatesPlayerStatistics:
@@ -2581,7 +2620,7 @@ BTR:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
-		Prerequisites: barr, ~vehicles.soviet, ~techlevel.low
+		Prerequisites: barr, ~vehicles.soviet, ~!vehicles.soviet, ~techlevel.low
 		Description: Tough infantry transport.\n  Can attack Aircraft.\n  Strong vs Light Armor, Aircraft\n  Weak vs Tanks
 	Valued:
 		Cost: 750
@@ -4848,6 +4887,30 @@ FTRK:
 	Selectable:
 		DecorationBounds: 28,28
 
+FTRK.Barrage:
+	Inherits: FTRK
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 130
+		Prerequisites: ~vehicles.soviet, ~techlevel.low
+		Description: Mobile unit with mounted Flak cannon.\n  Strong vs Infantry, Light armor, Aircraft\n  Weak vs Tanks
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Mobile Flak (Barrage)
+	Armament@AA:
+		Weapon: FLAK-23-AA.Barrage
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+	Armament@AG:
+		Weapon: FLAK-23-AG.Barrage
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+
 COORDINATOR:
 	Inherits: ^Vehicle
 	Valued:
@@ -4883,3 +4946,66 @@ COORDINATOR:
 		Offset: 0,0
 		Facing: 96
 		PauseOnCondition: empdisable || being-warped
+
+BeamCannon:
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		Prerequisites: tmpl, ~vehicles.nod, ~techlevel.high
+		Description: Prototype energy beam weapon.\n   Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Beam Cannon
+		GenericName: Tank
+	Health:
+		HP: 30000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 100
+		Voice: Move
+	Passenger:
+		Voice: Move
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		TurnSpeed: 8
+		Offset: 0,0,0
+	Armament@PRIMARY:
+		Weapon: BeamCannon
+		LocalOffset: 100,0,200
+	Armament@SECONDARY:
+		Weapon: BeamCannonVisual
+		Name: secondary
+		LocalOffset: 100,0,200
+	AttackTurreted:
+		TargetFrozenActors: True
+		OpportunityFire: False
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	Targetable:
+		RequiresCondition: !being-warped
+		TargetTypes: Ground, Vehicle, C4, BeamCannon
+	SpawnActorOnDeath:
+		Actor: BeamCannon.Husk
+		RequiresCondition: !being-warped
+	Voiced:
+		VoiceSet: MWTnkVoice
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 28,28
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
