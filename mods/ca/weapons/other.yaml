@@ -680,6 +680,20 @@ VenomLaserAA:
 			Heavy: 100
 	-Warhead@2Smu:
 
+BuggyLaserAA:
+	Inherits: VenomLaser
+	ReloadDelay: 10
+	ValidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Air
+		Damage: 1000
+		Versus:
+			Wood: 100
+			Concrete: 100
+			Light: 100
+			Heavy: 100
+	-Warhead@2Smu:
+
 AdvancedPointLaser:
 	Inherits: Laser
 	ReloadDelay: 10
@@ -1708,6 +1722,12 @@ CyCannon:
 			Brick: 70
 		DamageTypes: Prone350Percent, TriggerProne, ExplosionDeath
 
+CyCannon.Range:
+	Inherits: CyCannon
+	Range: 8c0
+	Projectile: Missile
+		RangeLimit: 9c0
+
 NeutronCannon:
 	ValidTargets: Temporal
 	ReloadDelay: 5
@@ -1992,3 +2012,88 @@ DropDummy:
 	Warhead: SpreadDamage
 		Spread: 56
 		Damage: 1
+
+BeamCannon:
+	ReloadDelay: 10
+	Range: 8c0
+	TargetActorCenter: false
+	InvalidTargets: Air
+	Report: lastur1.aud
+	Projectile: AreaBeam
+		Speed: 1c428
+		Duration: 11
+		DamageInterval: 3
+		Width: 220
+		Shape: Flat
+		ZOffset: 4096
+		BeyondTargetRange: 0c256
+		Blockable: true
+		TrackTarget: true
+		Color: ff000025
+	Warhead@1Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 100, 100
+		Damage: 1000
+		AffectsParent: false
+		ValidStances: Neutral, Enemy
+		ValidTargets: Ground, Water
+		Versus:
+			Heavy: 80
+			Concrete: 130
+			Wood: 180
+		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+	Warhead@2Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 50, 50
+		Damage: 500
+		InvalidTargets: BeamCannon, Air
+		AffectsParent: false
+		ValidStances: Ally
+		Versus:
+			Heavy: 80
+			Concrete: 120
+			Brick: 150
+			Wood: 180
+		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+
+BeamCannonVisual:
+	ReloadDelay: 10
+	Range: 8c0
+	TargetActorCenter: false
+	InvalidTargets: Air
+	Projectile: AreaBeam
+		Speed: 1c428
+		Duration: 11
+		DamageInterval: 3
+		Width: 90
+		Shape: Flat
+		ZOffset: 4096
+		BeyondTargetRange: 0c256
+		Blockable: true
+		TrackTarget: true
+		Color: ff000035
+	Warhead@1Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 100, 100
+		Damage: 10
+		AffectsParent: false
+		ValidStances: Neutral, Enemy
+		ValidTargets: Ground, Water
+		Versus:
+			Heavy: 80
+			Concrete: 100
+			Wood: 200
+		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+	Warhead@2Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 50, 50
+		Damage: 10
+		InvalidTargets: BeamCannon, Air
+		AffectsParent: false
+		ValidStances: Ally
+		Versus:
+			Heavy: 80
+			Concrete: 150
+			Brick: 150
+			Wood: 200
+		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath

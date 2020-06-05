@@ -2080,6 +2080,30 @@ RMBC:
 	WithInfantryBody@Warped:
 		RequiresCondition: being-warped || empdisable
 
+RMBC.range:
+	Inherits: RMBC
+	RenderSprites:
+		PlayerPalette: playerd2k
+		Image: cycom
+		Scale: 1
+	Buildable:
+		Queue: Infantry
+		BuildPaletteOrder: 121
+		Prerequisites: bio.nod, ~hand, ~commander_tree.elite_cyborg, ~techlevel.high
+		IconPalette: chrometd
+		Description: Elite cyborg infantry unit armed with\na plasma cannon.\n  Has upgraded range \n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Cyborg Elite (Range)
+	Armament@PRIMARY:
+		Weapon: CyCannon.Range
+		LocalOffset: 0,0,555
+	Armament@Garrison:
+		Name: mounted
+		Weapon: cycannon.Range
+		LocalOffset: 0,0,555
+
 CRYOT:
 	Inherits: ^Soldier
 	Inherits: ^PointLaserDefenseSystemSmall
@@ -2111,7 +2135,7 @@ CRYOT:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 
-RAILGUNR:
+Railgunner:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -2136,10 +2160,26 @@ RAILGUNR:
 		Weapon: Railgun.Infantry
 		LocalOffset: 341,0,256
 		PauseOnCondition: being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: Railgun.Infantry
+		LocalOffset: 341,0,256
 	TakeCover:
 		ProneOffset: 227,0,-245
 	AttackFrontal:
 		PauseOnCondition: being-warped
+
+Railgunner.noCrush:
+	Inherits: Railgunner
+	Buildable:
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.railgunner, ~techlevel.infonly
+		Description: Heavy Infantry with Railgun. \n  Cannot be crushed. \n  Strong vs Heavy Tanks\n  Weak vs Infantry, Buildings
+		IconPalette: chrometd
+	Valued:
+		Cost: 650
+	Tooltip:
+		Name: Railgunner (Crushproof)
+	-Crushable:
 
 jarmen_kell:
 	Inherits: ^Soldier

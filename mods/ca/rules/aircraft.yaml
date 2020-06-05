@@ -229,6 +229,18 @@ Stealth_Fighter:
 		Image: stealth_fighter
 		Scale: 0.9
 
+Stealth_Fighter.Ammo:
+	Inherits: Stealth_Fighter
+	Buildable:
+		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~commander_tree.stealth_fighter, ~techlevel.high
+		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. \n  Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2200
+	Tooltip:
+		Name: Stealth Fighter (Double Payload)
+	AmmoPool:
+		Ammo: 4
+
 MIG:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -318,6 +330,50 @@ MIG:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: afld, afld.gdi
+
+MIG.AA:
+	Inherits: MIG
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig, ~techlevel.high
+		Description: Precision strike aircraft.\n  Can attack aircraft. \n  Strong vs Vehicles, Defenses, Aircraft \n  Weak vs Infantry
+	Valued:
+		Cost: 1750
+	Tooltip:
+		Name: MiG Fighter Plane
+	Armament@primary:
+		Weapon: Maverick
+	Armament@secondary:
+		Weapon: HellfireAA
+
+MIG.Nuke:
+	Inherits: MIG
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig, ~techlevel.high
+		Description: Nuclear attack bomber aircraft.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
+	Valued:
+		Cost: 3000
+	Aircraft:
+		Speed: 205
+	Tooltip:
+		Name: MiG Nuclear Attack Bomber
+	AmmoPool:
+		Ammo: 1
+		PipCount: 1
+	Armament:
+		Weapon: AtomBomb.Mig
+
+MIG.Tesla:
+	Inherits: MIG
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig, ~techlevel.high
+		Description: Precision strike aircraft.\n  Missiles emit Tesla zaps on impact. \n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: MiG Attack Plane (Tesla)
+	Armament:
+		Weapon: Maverick.Tesla
 
 SUK:
 	Inherits: ^Plane
@@ -2879,7 +2935,7 @@ AURORA:
 		CruiseAltitude: 2560
 		InitialFacing: 192
 		TurnSpeed: 4
-		Speed: 150
+		Speed: 175
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: cjetbana.aud
