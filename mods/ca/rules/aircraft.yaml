@@ -344,7 +344,7 @@ MIG.AA:
 	Armament@primary:
 		Weapon: Maverick
 	Armament@secondary:
-		Weapon: HellfireAA
+		Weapon: WidowAA
 
 MIG.Nuke:
 	Inherits: MIG
@@ -1304,6 +1304,30 @@ CRYOHUEY:
 		MuzzleSequence: muzzle
 		PauseOnCondition: !ammo
 	-Armament@SECONDARY:
+
+HUEY.Grenade:
+	Inherits: HUEY
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		IconPalette: chrometd
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.grenade_huey, ~techlevel.medium
+		Description: Helicopter gunship armed\nwith grenade machine gun.\n  Strong vs. light Vehicles, Buildings \n  Weak vs Aircraft
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Grenade Huey
+	AmmoPool:
+		Ammo: 15
+		PipCount: 3
+	Armament@PRIMARY:
+		Weapon: Grenade.Huey
+		LocalOffset: 85,-213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+
 
 U2:
 	Inherits: ^NeutralPlane
@@ -2398,7 +2422,7 @@ Raptor:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld.allies, ~aircraft.allies, ~techlevel.high
+		Prerequisites: ~afld.allies, ~aircraft.allies, ~commander_tree.raptor, ~techlevel.high
 		Description: Fast Fighter Jet armed\nwith powerful Air-to-Air missiles.\n  Strong vs Aircraft\n  Weak vs Ground
 	Valued:
 		Cost: 2000
