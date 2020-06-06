@@ -136,7 +136,7 @@ commander_tree.Prism_Tank:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.allies
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~radar, ~!commander_tree.prism_cannon, ~!commander_tree.prism_blaster, ~!vehicles.england
 		Description: Enables to build the Prism Tank, an energy based weapon with high range.\n  Srong versus light vehicles and infantry.
 
 commander_tree.Prism_Cannon:
@@ -147,8 +147,8 @@ commander_tree.Prism_Cannon:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~atek, ~!commander_tree.prism_blaster, ~!vehicles.france
-		Description: Upgrades the Prism Tank to the Prism Cannon. \n  Has higher range and more damage but does not split its beam. \n  It is stronger vs. base defenses and single units but less effective against large armies.
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~radar, ~!commander_tree.prism_blaster, ~!commander_tree.prism_tank, ~!vehicles.france
+		Description: Enables to build the Prism Cannon. \n  Has higher range and more damage than the Prism Tank, but does not split its beam. \n  It is stronger vs. base defenses and single units but less effective against large armies.
 
 commander_tree.Prism_Blaster:
 	Inherits: ^default.commander_tree_item
@@ -159,8 +159,8 @@ commander_tree.Prism_Blaster:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~atek, ~!commander_tree.prism_cannon, ~!vehicles.germany
-		Description: Upgrades the Prism Tank to the Prism Blaster. \n  Has less range, but does split its beam to more targets. \n  It is stronger vs. large armies and less effective against base defenses and single targets.
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~radar, ~!commander_tree.prism_cannon, ~!commander_tree.prism_tank, ~!vehicles.germany
+		Description: Enables to build the Prism Blaster. \n  Has less range than the Prism Tank, but does split its beam to more targets. \n  It is stronger vs. large armies and less effective against base defenses and single targets.
 
 commander_tree.Aurora:
 	Inherits: ^default.commander_tree_item
@@ -181,7 +181,7 @@ commander_tree.Raptor:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.allies
+		Prerequisites: prerequisite.has_points, ~aircraft.allies
 		Description: Enables to build the Raptor. It is a supersonic air superiority fighter. \n  Very effective vs. other air units.
 
 commander_tree.Scout_Tank_PLD:
@@ -277,6 +277,17 @@ commander_tree.Huey_Cryo:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~atek, ~vehicles.allies
 		Description: Upgrades the attack of the Huey with cryo missiles, slowing down enemies.
+
+commander_tree.Grenade_Huey:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Grenade Huey Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~atek, ~vehicles.allies
+		Description: Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
 
 commander_tree.Battle_Fortress_PLD:
 	Inherits: ^default.commander_tree_item
@@ -476,6 +487,39 @@ commander_tree.Mig:
 		Prerequisites: prerequisite.has_points, stek, ~aircraft.soviet
 		Description: Enables to build the Mig. \n  It is an attack fighter best suited for taking out single vehicles.
 
+commander_tree.Mig.Nuke:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Mig
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~stek, ~commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.tesla, ~aircraft.iraq
+		Description: Upgrades the Mig to a Nuke bomber. \n  It drops a single nuclear bomb with devastating damage.
+
+commander_tree.Mig.AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mig Anti-Aircraft
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~stek, ~commander_tree.mig, ~!commander_tree.mig.tesla, ~!commander_tree.mig.nuke, ~aircraft.soviet, ~!aircraft.ukraine
+		Description: Upgrades the Mig to be able to attack aircraft.
+
+commander_tree.Mig.Tesla:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tesla Mig
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.nuke, ~aircraft.russia
+		Description: Upgrades the missiles of the Mig to emit Tesla zaps. \n  It increases the damage of the mig vs. groups of enemies.
+
 commander_tree.ISU:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -484,7 +528,7 @@ commander_tree.ISU:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, radar, ~vehicles.soviet, ~!vehicles.russia
+		Prerequisites: prerequisite.has_points, radar, ~vehicles.soviet, ~vehicles.ukraine
 		Description: Enables to build the ISU Bombard Tank. \n  It moves slowly and shoots slow grenades dealing a lot of damage on impact.
 
 commander_tree.ISU_Concussion:
@@ -496,7 +540,7 @@ commander_tree.ISU_Concussion:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, stek, ~vehicles.soviet, ~!vehicles.russia, ~commander_tree.isu
+		Prerequisites: prerequisite.has_points, stek, ~vehicles.soviet, ~vehicles.ukraine, ~commander_tree.isu
 		Description: Upgrades the ISU Bombard Tank to cause concussion on units at the impact zone.
 
 commander_tree.Tesla_Tank_Arc:
@@ -521,6 +565,39 @@ commander_tree.Flak_Track:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.soviet
 		Description: Upgrades the BTR with Flak cannons. \n  This makes it less efficient vs. vehicles and better vs. air units.
+
+commander_tree.Flak_Track.Barrage:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mobile Barrage Flak
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.russia
+		Description: Upgrades the Flak Track with fast firing Flak cannons. \n  This makes it better vs. Point Laser Defense Systems and groups of units.
+
+commander_tree.Heavy_Tank.AP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Heavy Tank Armor Piercing Shells
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~stek, ~!vehicles.iraq ~!commander_tree.heavy_tank.pld
+		Description: Upgrades the Heavy Tank with Armor Piercing Shells. \n  This makes it much stronger vs. Heavy Tanks.
+
+commander_tree.Heavy_Tank.PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Heavy Tank Point Laser Defense
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~stek, ~!commander_tree.heavy_tank.ap
+		Description: Upgrades the Heavy Tank with a Point Laser Defense System. \n  This makes it more effective vs. projectile based weapons.
 
 commander_tree.V3_Launcher:
 	Inherits: ^default.commander_tree_item
@@ -748,6 +825,18 @@ commander_tree.Railgunner:
 		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~commander_tree.advanced_infantry_training
 		Description: Enables to build the Railgunner, a strong tank destroyer infantry.
 
+commander_tree.Railgunner.No_Crush:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Railgunner Crush-Proof
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~commander_tree.railgunner, ~commander_tree.advanced_infantry_training
+		Description: Upgrades the combat suit of the Railgunner, \n so that it can now longer be crushed by vehicles.
+
 commander_tree.Medium_Tank_PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -854,6 +943,17 @@ commander_tree.Stealth_Fighter:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~gtek, ~aircraft.gdi
 		Description: Enables to build the Stealth Fighter. \n  It is a cloaked aircraft optimized to take out single heavy armored vehicles.
+
+commander_tree.Stealth_Fighter.Payload:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Fighter Double Payload
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~gtek, ~commander_tree.stealth_fighter, ~aircraft.gdi
+		Description: Doubles the Payload of the Stealth Fighter. \n  It allows the Stealth Fighter to take out a second target without resuppyling.
 
 #Nod
 commander_tree.Buggy_PLD:
@@ -1059,6 +1159,18 @@ commander_tree.Elite_Cyborg:
 		Prerequisites: prerequisite.has_points, ~infantry.nod, ~bio.nod, ~commander_tree.advanced_infantry_training
 		Description: Enables to build the Elite Cyborg. \n  A very tough cyborg infantry with scrin weaponry. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
 
+commander_tree.Elite_Cyborg.Range:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Elite Cyborg (Range)
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~bio.nod, ~commander_tree.elite_cyborg, ~commander_tree.advanced_infantry_training
+		Description: Upgrades the range of the Elite Cyborg.
+
 commander_tree.Banshee:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -1094,6 +1206,19 @@ commander_tree.Reinforcements_Coordinator:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, commander_tree.advanced_logistics
 		Description: Enables to build the Reinforcements Coordinator. \n It coordinates reinforcements directly to the frontline when deployed.
+
+commander_tree.Beam_Cannon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Beam Cannon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~tmpl
+		Description: Enables to build the Beam Cannon. \n It shoots a continuous energy beam at distant targets Strong vs. Vehicles, Weak vs. Aircraft.
+
 
 hack.has_points:
 	AlwaysVisible:
