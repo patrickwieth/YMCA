@@ -4969,7 +4969,7 @@ Beam_Cannon:
 		Name: Beam Cannon
 		GenericName: Tank
 	Health:
-		HP: 20000
+		HP: 18000
 	Armor:
 		Type: Light
 	Mobile:
@@ -4990,38 +4990,56 @@ Beam_Cannon:
 		Weapon: BeamCannon
 		Name: primary0
 		LocalOffset: 100,0,200
-		RequiresCondition: !charged && !attacking1 && !attacking2 && !attacking3
+		RequiresCondition: !charged && !attacking1 && !attacking2 && !attacking3 && !attacking4 && !attacking5
 	GrantConditionOnAttack:
 		ArmamentNames: primary0
-		RevokeDelay: 20
+		RevokeDelay: 21
 		Condition: attacking0
 	Armament@1:
 		Name: primary1
 		Weapon: BeamCannonBoosted1
 		LocalOffset: 100,0,200
-		RequiresCondition: charged == 1 && !attacking0 && !attacking2 && !attacking3
+		RequiresCondition: charged == 1 && !attacking0 && !attacking2 && !attacking3 && !attacking4 && !attacking5
 	GrantConditionOnAttack:
-		ArmamentNames: primary0
-		RevokeDelay: 20
+		ArmamentNames: primary1
+		RevokeDelay: 21
 		Condition: attacking1
 	Armament@2:
 		Name: primary2
 		Weapon: BeamCannonBoosted2
 		LocalOffset: 100,0,200
-		RequiresCondition: charged == 2 && !attacking0 && !attacking1 && !attacking3
+		RequiresCondition: charged == 2 && !attacking0 && !attacking1 && !attacking3 && !attacking4 && !attacking5
 	GrantConditionOnAttack:
-		ArmamentNames: primary0
-		RevokeDelay: 20
+		ArmamentNames: primary2
+		RevokeDelay: 21
 		Condition: attacking2
 	Armament@3:
 		Name: primary3
 		Weapon: BeamCannonBoosted3
 		LocalOffset: 100,0,200
-		RequiresCondition: charged >= 3 && !attacking0 && !attacking1 && !attacking2
+		RequiresCondition: charged == 3 && !attacking0 && !attacking1 && !attacking2 && !attacking4 && !attacking5
 	GrantConditionOnAttack:
-		ArmamentNames: attacking3
-		RevokeDelay: 20
-		Condition: triggered
+		ArmamentNames: primary3
+		RevokeDelay: 21
+		Condition: attacking3
+	Armament@4:
+		Name: primary4
+		Weapon: BeamCannonBoosted4
+		LocalOffset: 100,0,200
+		RequiresCondition: charged == 4 && !attacking0 && !attacking1 && !attacking2 && !attacking3 && !attacking5
+	GrantConditionOnAttack:
+		ArmamentNames: primary4
+		RevokeDelay: 21
+		Condition: attacking4
+	Armament@5:
+		Name: primary5
+		Weapon: BeamCannonBoosted5
+		LocalOffset: 100,0,200
+		RequiresCondition: charged >= 5 && !attacking0 && !attacking1 && !attacking2 && !attacking3 && !attacking4
+	GrantConditionOnAttack:
+		ArmamentNames: primary5
+		RevokeDelay: 21
+		Condition: attacking5
 	Armament@TERTIARY:
 		Weapon: BeamCannonVisual
 		Name: tertiary
@@ -5037,7 +5055,7 @@ Beam_Cannon:
 		RequiresCondition: !charged
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
-		Armaments: primary0, primary1, primary2, primary3, secondary, tertiary
+		Armaments: primary0, primary1, primary2, primary3, primary4, primary5, secondary, tertiary
 		OpportunityFire: False
 	WithMuzzleOverlay:
 	WithSpriteTurret:
