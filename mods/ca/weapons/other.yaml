@@ -2014,19 +2014,19 @@ DropDummy:
 		Damage: 1
 
 BeamCannon:
-	ReloadDelay: 10
+	ReloadDelay: 20
 	Range: 8c0
 	TargetActorCenter: false
 	InvalidTargets: Air
-	Report: lastur1.aud
+	Report: scrin5b.aud
 	Projectile: AreaBeam
 		Speed: 1c428
-		Duration: 11
+		Duration: 21
 		DamageInterval: 3
-		Width: 220
+		Width: 150
 		Shape: Flat
 		ZOffset: 4096
-		BeyondTargetRange: 0c256
+		BeyondTargetRange: 0c0
 		Blockable: true
 		TrackTarget: true
 		Color: ff000025
@@ -2056,14 +2056,47 @@ BeamCannon:
 			Wood: 180
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 
+BeamCannonBoosted1:
+	Inherits: BeamCannon
+	Range: 8c512
+	Projectile: AreaBeam
+		Width: 175
+		Color: ff000050
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+	Warhead@2Dam: SpreadDamage
+		Damage: 1000
+
+BeamCannonBoosted2:
+	Inherits: BeamCannon
+	Range: 9c0
+	Projectile: AreaBeam
+		Width: 200
+		Color: ff000075
+	Warhead@1Dam: SpreadDamage
+		Damage: 2250
+	Warhead@2Dam: SpreadDamage
+		Damage: 1250
+
+BeamCannonBoosted3:
+	Inherits: BeamCannon
+	Range: 9c512
+	Projectile: AreaBeam
+		Width: 225
+		Color: ff0000a0
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+	Warhead@2Dam: SpreadDamage
+		Damage: 1500
+
 BeamCannonVisual:
-	ReloadDelay: 10
+	ReloadDelay: 20
 	Range: 8c0
 	TargetActorCenter: false
 	InvalidTargets: Air
 	Projectile: AreaBeam
 		Speed: 1c428
-		Duration: 11
+		Duration: 21
 		DamageInterval: 3
 		Width: 90
 		Shape: Flat
@@ -2097,3 +2130,17 @@ BeamCannonVisual:
 			Brick: 150
 			Wood: 200
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+
+BeamCannonCharge:
+	Inherits: BeamCannonVisual
+	ValidTargets: BeamCannonBoost
+	Projectile: AreaBeam
+		DamageInterval: 20
+	Range: 5c0
+	-Warhead@1Dam:
+	Warhead@charge: GrantExternalCondition
+		Range: 42
+		Duration: 20
+		Condition: charged
+		ValidStances: Ally
+		ValidTargets: BeamCannonBoost

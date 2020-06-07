@@ -4951,6 +4951,12 @@ Beam_Cannon:
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	AutoTargetPriority@DEFAULT:
+		InvalidTargets: NoAutoTarget, WaterStructure, BeamCannonBoost
+	AutoTargetPriority@ATTACKANYTHING:
+		InvalidTargets: NoAutoTarget, BeamCannonBoost
+	AttackMove:
+		AttackMoveCondition: attack-move
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 0
@@ -4958,12 +4964,12 @@ Beam_Cannon:
 		Prerequisites: tmpl, ~vehicles.nod, commander_tree.Beam_Cannon, ~techlevel.high
 		Description: Prototype energy beam weapon.\n   Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
-		Cost: 1350
+		Cost: 1450
 	Tooltip:
 		Name: Beam Cannon
 		GenericName: Tank
 	Health:
-		HP: 30000
+		HP: 20000
 	Armor:
 		Type: Light
 	Mobile:
@@ -4982,18 +4988,63 @@ Beam_Cannon:
 		Offset: 0,0,0
 	Armament@PRIMARY:
 		Weapon: BeamCannon
+		Name: primary0
 		LocalOffset: 100,0,200
-	Armament@SECONDARY:
+		RequiresCondition: !charged && !attacking1 && !attacking2 && !attacking3
+	GrantConditionOnAttack:
+		ArmamentNames: primary0
+		RevokeDelay: 20
+		Condition: attacking0
+	Armament@1:
+		Name: primary1
+		Weapon: BeamCannonBoosted1
+		LocalOffset: 100,0,200
+		RequiresCondition: charged == 1 && !attacking0 && !attacking2 && !attacking3
+	GrantConditionOnAttack:
+		ArmamentNames: primary0
+		RevokeDelay: 20
+		Condition: attacking1
+	Armament@2:
+		Name: primary2
+		Weapon: BeamCannonBoosted2
+		LocalOffset: 100,0,200
+		RequiresCondition: charged == 2 && !attacking0 && !attacking1 && !attacking3
+	GrantConditionOnAttack:
+		ArmamentNames: primary0
+		RevokeDelay: 20
+		Condition: attacking2
+	Armament@3:
+		Name: primary3
+		Weapon: BeamCannonBoosted3
+		LocalOffset: 100,0,200
+		RequiresCondition: charged >= 3 && !attacking0 && !attacking1 && !attacking2
+	GrantConditionOnAttack:
+		ArmamentNames: attacking3
+		RevokeDelay: 20
+		Condition: triggered
+	Armament@TERTIARY:
 		Weapon: BeamCannonVisual
-		Name: secondary
+		Name: tertiary
 		LocalOffset: 100,0,200
+	Armament@charge:
+		Name: secondary
+		Weapon: BeamCannonCharge
+		LocalOffset: 100,0,200
+		TargetStances: Ally
+		ForceTargetStances: None
+		Cursor: ability
+		OutsideRangeCursor: ability
+		RequiresCondition: !charged
 	AttackTurreted:
-		TargetFrozenActors: True
+		PauseOnCondition: empdisable || being-warped || parachute
+		Armaments: primary0, primary1, primary2, primary3, secondary, tertiary
 		OpportunityFire: False
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
 	WithMuzzleOverlay:
 	WithSpriteTurret:
+	ExternalCondition@CHARGED:
+		Condition: charged
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
 	Targetable:
 		RequiresCondition: !being-warped
 		TargetTypes: Ground, Vehicle, C4, BeamCannon
