@@ -445,6 +445,8 @@ MEDI:
 		Name: Medic
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
+	Selectable:
+		Priority: 7
 	Health:
 		HP: 5000
 	RevealsShroud:
@@ -488,6 +490,8 @@ MECH:
 		Name: Mechanic
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
+	Selectable:
+		Priority: 7
 	Health:
 		HP: 5000
 	Mobile:
@@ -2242,6 +2246,7 @@ jarmen_kell:
 LEADER:
 	Inherits@1: ^CivInfantry
 	Inherits@2: ^ArmedCivilian
+	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -2255,6 +2260,8 @@ LEADER:
 	-Wanders:
 	Tooltip:
 		Name: Nod Rebel Leader
+	Selectable:
+		Priority: 7
 	Selectable:
 		Class: GNRL
 	Mobile:
@@ -2279,3 +2286,13 @@ LEADER:
 		IdleSequences: idle1
 	ProductionFromMapEdge:
 		Produces: Infantry, Soldier
+	PrimaryBuilding:
+		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
+	WithDecoration@primary:
+		RequiresSelection: true
+		Image: pips
+		Sequence: tag-primary
+		ReferencePoint: Top
+		ZOffset: 256
+		RequiresCondition: primary
