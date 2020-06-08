@@ -252,14 +252,18 @@ V2RL:
 		Weapon: UnitExplodeWarpOut
 		EmptyWeapon: UnitExplodeWarpOut
 		RequiresCondition: warpout
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry, Water, Underwater, Defense
+	AutoTargetPriority@ATTACKANYTHING:
+		ValidTargets: Infantry, Water, Underwater, Structure, Defense, Mine
 	AutoTargetPriority@TANKDEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move && germany
-		ValidTargets: Tank
+		ValidTargets: Vehicle
 		InvalidTargets: NoAutoTarget, WaterStructure
 		Priority: 10
 	AutoTargetPriority@TANKATTACKANYTHING:
 		RequiresCondition: (stance-attackanything || assault-move) && germany
-		ValidTargets: Tank
+		ValidTargets: Vehicle
 		InvalidTargets: NoAutoTarget
 		Priority: 10
 
@@ -738,7 +742,7 @@ HARV:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 10
-		Prerequisites: ~proc, ~vehicles.ra, ~techlevel.infonly
+		Prerequisites: ~proc, ~vehicles.ra, ~!orep, ~techlevel.infonly
 		Description: Collects Ore, Gems and Tiberium for processing.\n  Unarmed
 	Valued:
 		Cost: 1400
@@ -750,6 +754,7 @@ HARV:
 		DecorationBounds: 42,42
 	Harvester:
 		Capacity: 30
+		PipCount: 6
 		Resources: Tiberium, BlueTiberium, Ore, Gems
 		BaleUnloadDelay: 1
 		SearchFromProcRadius: 30
@@ -770,10 +775,7 @@ HARV:
 		String: Harvester
 	SpawnActorOnDeath:
 		Actor: HARV.EmptyHusk
-		RequiresCondition: !being-warped
-	HarvesterHuskModifier:
-		FullHuskActor: HARV.FullHusk
-		FullnessThreshold: 50
+		RequiresCondition: !being-warped && !orep-upgrade
 	SelfHealing:
 		PercentageStep: 1
 		Delay: 25
@@ -791,12 +793,69 @@ HARV:
 	Explodes@Tib:
 		RequiresCondition: !no-ore && ontib && !being-warped
 		Weapon: TibExplosion
-	WithHarvesterSpriteBody:
-		ImageByFullness: harvempty, harvhalf, harv
-	-WithFacingSpriteBody:
+	WithFacingSpriteBody:
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	GrantConditionOnPrerequisite@OREPUPGRADE:
+		Prerequisites: orep
+		Condition: orep-upgrade
+	KillsSelf@OREPUPGRADE:
+		Delay: 1
+		RemoveInstead: true
+		RequiresCondition: orep-upgrade
+	GrantCondition@WARPOUT:
+		Condition: being-warped
+		RequiresCondition: orep-upgrade
+	PeriodicExplosion@WARPOUT:
+		Weapon: HarvSwap
+		RequiresCondition: orep-upgrade
+
+HARV.Chrono:
+	Inherits: HARV
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 10
+		Prerequisites: ~proc, ~orep, ~vehicles.allies, ~techlevel.high
+		Description: Collects Ore, Gems and Tiberium for processing.\n  Unarmed\n  Special Ability: Teleport
+	Valued:
+		Cost: 1400
+	RenderSprites:
+		Image: charv
+	Tooltip:
+		Name: Chrono Miner
+		GenericName: Harvester
+	Mobile:
+		Speed: 56
+		Locomotor: heavywheeled
+		Voice: Move
+	Harvester:
+		Capacity: 20
+		PipCount: 4
+		HarvestVoice: Harvest
+		DeliverVoice: Deliver
+	ChronoResourceDelivery:
+		Image: chrono
+		Palette: ra2effect-ignore-lighting-alpha75
+		WarpInSequence: warpout
+		WarpOutSequence: warpout
+		WarpInSound: vchrtele.aud
+		WarpOutSound: ichrmova.aud
+	Voiced:
+		VoiceSet: ChronoMinerVoice
+	SpawnActorOnDeath:
+		Actor: HARV.Chrono.EmptyHusk
+		RequiresCondition: !being-warped
+	-GrantConditionOnPrerequisite@OREPUPGRADE:
+	-KillsSelf@OREPUPGRADE:
+	-GrantCondition@WARPOUT:
+	-PeriodicExplosion@WARPOUT:
+	DamageMultiplier@orep2:
+		RequiresCondition: orep2
+		Modifier: 60
+	GrantConditionOnPrerequisite@orep2:
+		Condition: orep2
+		Prerequisites: orep2
 
 MCV:
 	Inherits: ^Vehicle
@@ -911,7 +970,7 @@ APC:
 		Type: Heavy
 	Mobile:
 		Speed: 135
-		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 7c0
@@ -930,8 +989,15 @@ APC:
 		MaxWeight: 5
 		PipCount: 5
 		LoadingCondition: notmobile
+		LoadedCondition: cargo
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
 
 MNLY:
 	Inherits: ^Tank
@@ -1012,7 +1078,8 @@ TRUK:
 		RequiresCondition: !being-warped
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
-	-ProductionCostMultiplier@IndustrialPlant:
+	-ProductionCostMultiplier@IndustrialPlantLevel1:
+	-ProductionCostMultiplier@IndustrialPlantLevel2:
 
 MGG:
 	Inherits: ^Vehicle
@@ -1299,7 +1366,7 @@ QTNK:
 	Armor:
 		Type: Heavy
 	Mobile:
-		PauseOnCondition: deployed || being-captured || empdisable || being-warped
+		PauseOnCondition: deployed || being-captured || empdisable || being-warped || driver-dead
 		Speed: 56
 	ChronoshiftableWithSpriteEffect:
 		RequiresCondition: !deployed && !being-captured && !being-warped
@@ -1532,7 +1599,7 @@ APC2:
 		Type: Heavy
 	Mobile:
 		Speed: 135
-		PauseOnCondition: being-captured || empdisable || being-warped || notmobile
+		PauseOnCondition: being-captured || empdisable || being-warped || notmobile || driver-dead
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 7c0
@@ -1551,8 +1618,15 @@ APC2:
 		MaxWeight: 5
 		PipCount: 5
 		LoadingCondition: notmobile
+		LoadedCondition: cargo
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
 
 APC2.Reinforce:
 	Inherits: APC2
@@ -1561,7 +1635,6 @@ APC2.Reinforce:
 	-Buildable:
 	Cargo:
 		InitialUnits: n1,n1,n2,n3,n3
-		EjectOnDeath: False
 
 VULC:
 	Inherits: ^TankTD
@@ -1573,9 +1646,9 @@ VULC:
 		BuildPaletteOrder: 40
 		Prerequisites: ~vehicles.gdi, ~gtek, ~commander_tree.apc_vulcan, ~infantry.any, ~techlevel.high
 		IconPalette: chrometd
-		Description: Tough infantry transport, armed with a powerful AA gun.\n  Strong vs Aircraft\n  Weak vs Infantry, Tanks
+		Description: Tough infantry transport, armed with a powerful chain gun.\n  Strong vs Aircraft, Light Armor, Infantry\n  Weak vs Tanks
 	Valued:
-		Cost: 750
+		Cost: 800
 	Tooltip:
 		Name: Vulcan
 	UpdatesPlayerStatistics:
@@ -1598,21 +1671,53 @@ VULC:
 		LocalOffset: 220,0,350
 		MuzzleSequence: muzzle
 		RequiresCondition: gattling == 0
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
 	Armament@GAT1:
 		Weapon: MGatt.1
 		LocalOffset: 220,0,350
 		MuzzleSequence: muzzle
 		RequiresCondition: gattling == 1
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
 	Armament@GAT2:
 		Weapon: MGatt.2
 		LocalOffset: 220,0,350
 		MuzzleSequence: muzzle
 		RequiresCondition: gattling == 2
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
 	Armament@GAT3:
 		Weapon: MGatt.3
 		LocalOffset: 220,0,350
 		MuzzleSequence: muzzle
 		RequiresCondition: gattling == 3
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@GAT0G:
+		Name: secondary
+		Weapon: MGatt.0G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 0
+		PauseOnCondition: engage-air
+		ReloadingCondition: engage-ground
+	Armament@GAT1G:
+		Name: secondary
+		Weapon: MGatt.1G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 1
+		PauseOnCondition: engage-air
+		ReloadingCondition: engage-ground
+	Armament@GAT2G:
+		Name: secondary
+		Weapon: MGatt.2G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 2
+		ReloadingCondition: engage-ground
+		PauseOnCondition: engage-air
 	GrantConditionOnAttack:
 		Condition: gattling
 		RequiredShotsPerInstance: 1,6,12
@@ -1620,20 +1725,40 @@ VULC:
 		RevokeDelay: 40
 		RevokeOnNewTarget: False
 		RevokeAll: True
+	GrantConditionOnAttack@GROUND:
+		ArmamentNames: secondary
+		Condition: gattling-ground
+		RequiredShotsPerInstance: 1,6
+		MaximumInstances: 2
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
+		Armaments: primary, secondary
 	Turreted:
 		TurnSpeed: 7
 		Offset: 0,0,150
 	WithMuzzleOverlay:
 	WithSpriteTurret:
+		RequiresCondition: !gattling-ground
+	WithSpriteTurret@GROUND:
+		Sequence: turret-ground
+		RequiresCondition: gattling-ground
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
 		PipCount: 5
 		LoadingCondition: notmobile
+		LoadedCondition: cargo
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
 
 LTNK:
 	Inherits: ^TankTD
@@ -1923,6 +2048,8 @@ MTNK.Drone:
 	-Capturable@DRIVER_DEAD:
 	-GrantConditionIfOwnerIsNeutral:
 	-SelfHealing@DRIVER_DEAD:
+	-Targetable@DRIVERKILL:
+	-Targetable@AICAPTURE:
 
 MTNK.Drone.PLD:
 	Inherits: MTNK.Drone
@@ -2101,7 +2228,7 @@ MSAM:
 	Mobile:
 		Speed: 82
 	Health:
-		HP: 17000
+		HP: 16000
 	Armor:
 		Type: Light
 	RevealsShroud:
@@ -2123,9 +2250,7 @@ MSAM:
 		LocalOffset: 213,-128,0, 213,128,0
 		LocalYaw: 100, -100
 	AttackTurreted:
-		TargetFrozenActors: true
-		ForceFireIgnoresActors: False
-		OpportunityFire: False
+		TargetFrozenActors: True
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	Explodes:
@@ -2171,7 +2296,7 @@ MLRS:
 		Description: Long-range incendiary rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
 	Mobile:
 		Speed: 82
-		PauseOnCondition: aiming || being-captured || empdisable || being-warped
+		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
 	Health:
 		HP: 15000
 	Armor:
@@ -2297,11 +2422,11 @@ STNK:
 	Cloak@GPSHIDE:
 		RequiresCondition: (gpshide || crate-cloak) && !(cloak-force-disabled || invisibility || hidden || driver-dead)
 	Armament@PRIMARY:
-		Weapon: 227mm.stnk
+		Weapon: StnkMissile
 		LocalOffset: 213,43,128, 213,-43,128
 	Armament@SECONDARY:
 		Name: secondary
-		Weapon: 227mm.stnkAA
+		Weapon: StnkMissileAA
 		LocalOffset: 213,43,128, 213,-43,128
 	Turreted:
 		TurnSpeed: 20
@@ -2570,6 +2695,7 @@ HAR2:
 		DecorationBounds: 36,36
 	Harvester:
 		Capacity: 30
+		PipCount: 6
 		Resources: Tiberium, BlueTiberium, Ore, Gems
 		BaleUnloadDelay: 1
 		SearchFromProcRadius: 30
@@ -2634,7 +2760,7 @@ BTR:
 		Type: Heavy
 	Mobile:
 		Speed: 100
-		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 7c0
@@ -2663,8 +2789,15 @@ BTR:
 		MaxWeight: 5
 		PipCount: 5
 		LoadingCondition: notmobile
+		LoadedCondition: cargo
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
 
 IFV:
 	Inherits: ^Tank
@@ -2687,7 +2820,7 @@ IFV:
 		Type: Heavy
 	Mobile:
 		Speed: 113
-		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 5c0
@@ -2900,6 +3033,12 @@ IFV:
 	AutoTargetPriority@DEFAULTREPAIR:
 		ValidTargets: Vehicle, Ship
 		RequiresCondition: engturr
+	Capturable:
+		RequiresCondition: !being-warped && !full
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !full
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !full
 
 IFV.AI:
 	Inherits: ^Tank
@@ -2971,6 +3110,9 @@ IFV.AI:
 		Image: ifv
 	GrantRandomCondition:
 		Conditions: defturr, samturr, gunturr
+	-Capturable:
+	-Capturable@DRIVER_DEAD:
+	-Targetable@DRIVERKILL:
 
 TITN:
 	Inherits: ^TankTD
@@ -3190,21 +3332,21 @@ DISR:
 	Armament@PRIMARY:
 		Weapon: SonicZap
 		LocalOffset: 0,0,200
-		RequiresCondition: !gdiupg
+		RequiresCondition: !gdiupg2
 	Armament@SECONDARY:
 		Weapon: SonicZapVisual
 		Name: secondary
 		LocalOffset: 0,0,200
-		RequiresCondition: !gdiupg
+		RequiresCondition: !gdiupg2
 	Armament@PRIMARYUPG:
 		Weapon: SonicZap.UPG
 		LocalOffset: 0,0,200
-		RequiresCondition: gdiupg
+		RequiresCondition: gdiupg2
 	Armament@SECONDARYUPG:
 		Weapon: SonicZapVisual.UPG
 		Name: secondary
 		LocalOffset: 0,0,200
-		RequiresCondition: gdiupg
+		RequiresCondition: gdiupg2
 	Turreted:
 		TurnSpeed: 10
 		Offset: -300,0,0
@@ -3286,30 +3428,29 @@ HSAM:
 		Weapon: 227mmH
 		LocalOffset: 213,128,0, 213,-128,0
 		LocalYaw: 100, -100
-		RequiresCondition: !gdiupg
+		RequiresCondition: !gdiupg2
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: 227mmAAH
 		LocalOffset: 213,-128,0, 213,128,0
 		LocalYaw: 100, -100
-		RequiresCondition: !gdiupg
-	Armament@PRIMARY-UPG:
+		RequiresCondition: !gdiupg2
+	Armament@PRIMARY-UPG2:
 		Weapon: 227mm.upg
 		LocalOffset: 213,128,0, 213,-128,0
 		LocalYaw: 100, -100
-		RequiresCondition: gdiupg
-	Armament@SECONDARY-UPG:
+		RequiresCondition: gdiupg2
+	Armament@SECONDARY-UPG2:
 		Name: secondary
 		Weapon: 227mmAA.upg
 		LocalOffset: 213,-128,0, 213,128,0
 		LocalYaw: 100, -100
-		RequiresCondition: gdiupg
+		RequiresCondition: gdiupg2
 	AutoTarget:
 		ScanRadius: 10
 	AttackTurreted:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: false
-		OpportunityFire: False
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	Explodes:
@@ -3463,7 +3604,7 @@ V3RL:
 		Speed: 56
 		TurnSpeed: 8
 		Voice: Move
-		PauseOnCondition: aiming || being-captured || empdisable || being-warped
+		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
 	Passenger:
 		Voice: Move
 	RevealsShroud:
@@ -3493,7 +3634,7 @@ V3RL:
 		RevokeAll: false
 	MissileSpawnerMaster:
 		Actors: V3
-		RespawnTicks: 300
+		RespawnTicks: 250
 	Explodes:
 		Weapon: BarrelExplode
 	ProducibleWithLevel:
@@ -3635,14 +3776,18 @@ TNKD:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry, Water, Underwater, Defense
+	AutoTargetPriority@ATTACKANYTHING:
+		ValidTargets: Infantry, Water, Underwater, Structure, Defense, Mine
 	AutoTargetPriority@TANKDEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move
-		ValidTargets: Tank
+		ValidTargets: Vehicle
 		InvalidTargets: NoAutoTarget, WaterStructure
 		Priority: 10
 	AutoTargetPriority@TANKATTACKANYTHING:
-		RequiresCondition: stance-attackanything || assault-move
-		ValidTargets: Tank
+		RequiresCondition: (stance-attackanything || assault-move)
+		ValidTargets: Vehicle
 		InvalidTargets: NoAutoTarget
 		Priority: 10
 
@@ -4068,7 +4213,7 @@ BATF:
 	Mobile:
 		Locomotor: sheavytracked
 		Speed: 56
-		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
 		Voice: Move
 	Passenger:
 		Weight: 5
@@ -4090,7 +4235,6 @@ BATF:
 		Weapon: BATFGun
 		LocalOffset: 200,0,300
 		MuzzleSequence: muzzle
-		RequiresCondition: cargo
 	Armament@SECONDARY:
 		Name: secondary
 		Turret: secondary
@@ -4098,29 +4242,26 @@ BATF:
 		FireDelay: 8
 		LocalOffset: 200,0,300
 		MuzzleSequence: muzzle
-		RequiresCondition: cargo >= 2
 	Armament@TERTIARY:
 		Name: tertiary
 		Turret: tertiary
 		Weapon: BATFRockets
 		LocalOffset: -200,0,300
 		MuzzleSequence: muzzle
-		RequiresCondition: cargo >= 3
+		RequiresCondition: cargo
 	Turreted@PRIMARY:
 		Turret: primary
 		Offset: 200,-300,0
 		TurnSpeed: 6
-		PauseOnCondition: !cargo
 	Turreted@SECONDARY:
 		Turret: secondary
 		Offset: 200,300,0
 		TurnSpeed: 6
-		PauseOnCondition: cargo < 2
 	Turreted@TERTIARY:
 		Turret: tertiary
 		Offset: -300,0,358
 		TurnSpeed: 6
-		PauseOnCondition: cargo < 3
+		PauseOnCondition: !cargo
 	WithMuzzleOverlay:
 	Cargo:
 		Types: Infantry
@@ -4150,6 +4291,12 @@ BATF:
 	SpawnActorOnDeath:
 		Actor: BATF.Husk
 		RequiresCondition: !being-warped
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
 
 BATF.PLD:
 	Inherits: BATF
@@ -4406,6 +4553,8 @@ MEMP:
 	-Capturable@DRIVER_DEAD:
 	-GrantConditionIfOwnerIsNeutral:
 	-SelfHealing@DRIVER_DEAD:
+	-Targetable@DRIVERKILL:
+	-Targetable@AICAPTURE:
 
 MEMP.Volatile:
 	Inherits: MEMP
@@ -4541,6 +4690,8 @@ CDRN:
 	-Capturable@DRIVER_DEAD:
 	-GrantConditionIfOwnerIsNeutral:
 	-SelfHealing@DRIVER_DEAD:
+	-Targetable@DRIVERKILL:
+	-Targetable@AICAPTURE:
 
 CHPR:
 	Inherits: ^Tank
@@ -4759,7 +4910,7 @@ CRYO:
 	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Valued:
-		Cost: 1400
+		Cost: 1350
 	Tooltip:
 		Name: Cryo Launcher
 	UpdatesPlayerStatistics:
@@ -4773,7 +4924,7 @@ CRYO:
 	Mobile:
 		Speed: 82
 		TurnSpeed: 6
-		PauseOnCondition: aiming || being-captured || empdisable || being-warped
+		PauseOnCondition:  being-captured || empdisable || being-warped || driver-dead
 	Health:
 		HP: 32000
 	Armor:

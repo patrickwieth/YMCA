@@ -105,7 +105,7 @@ GAP:
 		HasMinibib: true
 	CreatesShroud:
 		Range: 6c0
-		RequiresCondition: !disabled || !empdisable || !being-warped
+		RequiresCondition: !disabled && !empdisable && !being-warped
 	RenderShroudCircle:
 	Power:
 		Amount: -60
@@ -122,7 +122,6 @@ GAP:
 
 SPEN:
 	Inherits: ^Building
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Selectable:
 		Bounds: 72,48
 	RenderSprites:
@@ -229,7 +228,7 @@ SPEN:
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
-		RequiresCondition: !(disabled || empdisable || being-warped)
+		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
@@ -280,12 +279,11 @@ SPEN:
 		Type: Rectangle
 			TopLeft: -555, -1110
 			BottomRight: 555, 1110
-	-SpawnActorOnDeath@1:
-	-SpawnActorOnDeath@2:
+	-SpawnActorOnDeath:
+	-SpawnRandomActorOnDeath:
 
 SYRD:
 	Inherits: ^Building
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Selectable:
 		Bounds: 72,48
 	RenderSprites:
@@ -368,7 +366,7 @@ SYRD:
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
-		RequiresCondition: !(disabled || empdisable || being-warped)
+		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
 	ProvidesPrerequisite@allies:
 		Factions: allies, england, france, germany
@@ -420,8 +418,8 @@ SYRD:
 		Type: Rectangle
 			TopLeft: -512, 598
 			BottomRight: 512, 1110
-	-SpawnActorOnDeath@1:
-	-SpawnActorOnDeath@2:
+	-SpawnActorOnDeath:
+	-SpawnRandomActorOnDeath:
 
 IRON:
 	Inherits: ^ScienceBuilding
@@ -463,7 +461,7 @@ IRON:
 	GrantExternalConditionPowerCA@IRONCURTAIN:
 		OrderName: ironcurtain
 		Icon: invuln
-		ChargeInterval: 3000
+		ChargeInterval: 4500
 		Weapon: IronCurtain
 		Description: Iron Curtain
 		Condition: invulnerability
@@ -546,7 +544,7 @@ PDOX:
 		PauseOnCondition: disabled || empdisable || being-warped
 		Duration: 600
 		Icon: chrono
-		ChargeInterval: 3000
+		ChargeInterval: 4500
 		Description: Chronoshift
 		LongDesc: Teleports a group of units across the map.
 		SelectTargetSpeechNotification: SelectTarget
@@ -1461,8 +1459,6 @@ FACT:
 		Cost: 2500
 	Tooltip:
 		Name: Construction Yard
-	SpawnActorsOnSell:
-		ActorTypes: e1,e1,e1,tecn,tecn,e6
 	BaseBuilding:
 	Transforms:
 		RequiresCondition: factundeploy
@@ -1480,7 +1476,7 @@ FACT:
 		RequiresForceMove: true
 	TransformsIntoRepairable:
 		RequiresCondition: factundeploy
-		RepairActors: fix
+		RepairActors: fix, rep
 		RequiresForceMove: true
 	TransformsIntoTransforms:
 		RequiresCondition: factundeploy && build-incomplete
@@ -1518,6 +1514,8 @@ FACT:
 		Damage: 950
 	TransferTimedExternalConditionOnTransform:
 		Condition: invulnerability
+	SpawnActorsOnSell:
+		ActorTypes: e1,e1,e1,e1,e6
 
 PROC:
 	Inherits: ^Building
@@ -1560,10 +1558,30 @@ PROC:
 	DrawLineToTarget:
 	CustomSellValue:
 		Value: 300
+	GrantConditionOnPrerequisite@OREP:
+		Prerequisites: orep
+		Condition: orep-built
+	GrantConditionOnPrerequisite@NOOREP:
+		Prerequisites: !orep
+		Condition: orep-notbuilt
+	GrantCondition@SPAWNHARV:
+		Condition: spawn-harv
+		GrantPermanently: true
+		RequiresCondition: orep-notbuilt
+	GrantCondition@SPAWNCHARV:
+		Condition: spawn-charv
+		GrantPermanently: true
+		RequiresCondition: orep-built
 	FreeActor:
 		Actor: HARV
 		SpawnOffset: 1,2
 		Facing: 64
+		RequiresCondition: spawn-harv && !spawn-charv && !build-incomplete
+	FreeActor@CHARV:
+		Actor: HARV.Chrono
+		SpawnOffset: 1,2
+		Facing: 64
+		RequiresCondition: spawn-charv && !spawn-harv && !build-incomplete
 	InfiltrateForCash:
 		Percentage: 50
 		Types: ThiefInfiltrate
@@ -2083,8 +2101,6 @@ TPWR:
 		DeploySounds: btesat1a.aud
 		UndeploySounds: btesat1a.aud
 		DeployedCondition: overcharge
-		DeployCursor: powerdown
-		DeployBlockedCursor: powerdown-blocked
 		PauseOnCondition: lockout || cooldown
 		SkipMakeAnimation: true
 		RequiresCondition: !(empdisable || being-warped || build-incomplete) && !(owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
@@ -2812,6 +2828,7 @@ PYLE:
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	PrimaryBuilding:
 		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
 	ProvidesPrerequisite@infantryany:
@@ -2972,16 +2989,11 @@ HAND:
 	InfiltrateForSupportPower@spy:
 		Proxy: barracks.upgraded
 		Types: SpyInfiltrate
-	GrantExternalConditionToProduced@nodupg:
-		Condition: nodupg
-		RequiresCondition: nodupgbuilt
-	GrantConditionOnPrerequisite@nodupg:
-		Condition: nodupgbuilt
-		Prerequisites: bio.nod
 
 WEAP.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^3x2Shape
+	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: awep
 	Selectable:
@@ -3191,12 +3203,6 @@ WEAP.TD:
 	ProvidesPrerequisite@msam:
 		Factions: gdi, zocom, talon, eagle
 		Prerequisite: vehicles.msam
-	GrantExternalConditionToProduced@gdiupg:
-		Condition: gdiupg
-		RequiresCondition: gdiupgbuilt
-	GrantConditionOnPrerequisite@gdiupg:
-		Condition: gdiupgbuilt
-		Prerequisites: miss.gdi
 
 AIRS:
 	Inherits: ^BuildingTD
@@ -3581,7 +3587,7 @@ AFAC:
 		RequiresForceMove: true
 	TransformsIntoRepairable:
 		RequiresCondition: factundeploy
-		RepairActors: fix
+		RepairActors: fix, rep
 		RequiresForceMove: true
 	TransformsIntoTransforms:
 		RequiresCondition: factundeploy && build-incomplete
@@ -3647,6 +3653,8 @@ AFAC:
 		Damage: 950
 	TransferTimedExternalConditionOnTransform:
 		Condition: invulnerability
+	SpawnActorsOnSell:
+		ActorTypes: n1,n1,n1,n1,n6
 
 NSAM:
 	Inherits: ^DefenseTD
@@ -3718,7 +3726,7 @@ GTWR:
 		IconPalette: chrometd
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Valued:
-		Cost: 500
+		Cost: 600
 	Tooltip:
 		Name: Guard Tower
 	Building:
@@ -3748,7 +3756,7 @@ GTWR:
 	Turreted:
 		TurnSpeed: 255
 	Power:
-		Amount: -10
+		Amount: -20
 		RequiresCondition: !being-warped
 
 ATWR:
@@ -4247,6 +4255,7 @@ REP:
 HPAD.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
+	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: hpad2
 	HitShape:
@@ -4387,12 +4396,6 @@ HPAD.TD:
 		EndChargeSpeechNotification: ReinforceAva
 		LaunchSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
-	GrantExternalConditionToProduced@gdiupg:
-		Condition: gdiupg
-		RequiresCondition: gdiupgbuilt
-	GrantConditionOnPrerequisite@gdiupg:
-		Condition: gdiupgbuilt
-		Prerequisites: miss.gdi
 
 PROC.TD:
 	Inherits: ^BuildingTD
@@ -4481,7 +4484,7 @@ SILO.TD:
 	RenderSprites:
 		Image: silo2
 	Valued:
-		Cost: 150
+		Cost: 300
 	Tooltip:
 		Name: Silo
 	Buildable:
@@ -4495,7 +4498,7 @@ SILO.TD:
 		Dimensions: 2,1
 	-GivesBuildableArea:
 	Health:
-		HP: 30000
+		HP: 60000
 	Armor:
 		Type: Wood
 	RevealsShroud:
@@ -4510,9 +4513,10 @@ SILO.TD:
 	StoresResources:
 		PipCount: 5
 		PipColor: Green
-		Capacity: 3000
+		Capacity: 6000
 	-MustBeDestroyed:
-	-SpawnActorsOnSell:
+	SpawnActorsOnSell:
+		ActorTypes: c1,c7
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
@@ -4525,6 +4529,7 @@ SILO.TD:
 AFLD.GDI:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: afldgdi
 	HitShape:
@@ -4673,12 +4678,6 @@ AFLD.GDI:
 	InfiltrateForSupportPower:
 		Types: SpyInfiltrate
 		Proxy: powerproxy.airstrike
-	GrantExternalConditionToProduced@gdiupg:
-		Condition: gdiupg
-		RequiresCondition: gdiupgbuilt
-	GrantConditionOnPrerequisite@gdiupg:
-		Condition: gdiupgbuilt
-		Prerequisites: miss.gdi
 
 AFLD.allies:
 	Inherits: ^Building
@@ -5045,7 +5044,6 @@ PRIS:
 
 SPEN.nod:
 	Inherits: ^Building
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	RenderSprites:
 		Image: SPENNOD
 		PlayerPalette: playernavy
@@ -5137,7 +5135,7 @@ SPEN.nod:
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
-		RequiresCondition: !(disabled || empdisable || being-warped)
+		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
 	HitShape:
 		Type: Rectangle
@@ -5148,13 +5146,13 @@ SPEN.nod:
 		Type: Rectangle
 			TopLeft: -555, -1110
 			BottomRight: 555, 1110
-	-SpawnActorOnDeath@1:
-	-SpawnActorOnDeath@2:
+	-SpawnActorOnDeath:
+	-SpawnRandomActorOnDeath:
 	-SpawnActorsOnSell:
 
 SYRD.gdi:
 	Inherits: ^Building
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: GSYRD
 		PlayerPalette: playernavy
@@ -5251,7 +5249,7 @@ SYRD.gdi:
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
-		RequiresCondition: !(disabled || empdisable || being-warped)
+		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
 	HitShape:
 		TargetableOffsets: 768,0,0, 768,-1024,0, 768,1024,0
@@ -5263,15 +5261,9 @@ SYRD.gdi:
 		Type: Rectangle
 			TopLeft: -512, 598
 			BottomRight: 512, 1110
-	-SpawnActorOnDeath@1:
-	-SpawnActorOnDeath@2:
+	-SpawnActorOnDeath:
+	-SpawnRandomActorOnDeath:
 	-SpawnActorsOnSell:
-	GrantExternalConditionToProduced@gdiupg:
-		Condition: gdiupg
-		RequiresCondition: gdiupgbuilt
-	GrantConditionOnPrerequisite@gdiupg:
-		Condition: gdiupgbuilt
-		Prerequisites: miss.gdi
 
 HTUR:
 	Inherits: ^Defense
@@ -5457,7 +5449,7 @@ SGEN:
 		OrderName: stealthgen
 		Icon: invis
 		IconPalette: chrometd
-		ChargeInterval: 3000
+		ChargeInterval: 4500
 		Weapon: StealthBubble
 		Description: Tiberium Stealth
 		Condition: invisibility
@@ -5696,7 +5688,7 @@ PATR:
 		PauseOnCondition: empdisable || disabled || being-warped
 		Cursor: empmissile
 		Icon: empmissile
-		ChargeInterval: 3000
+		ChargeInterval: 4500
 		Description: E.M. Missile
 		LongDesc: Fires a Tomahawk missile which disables\nall mechanical units in the area.
 		BeginChargeSpeechNotification: EMMissilePrepping
@@ -5775,6 +5767,10 @@ INDP:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
 	ProvidesPrerequisite@buildingname:
+	ProvidesDelayedPrerequisite@indp2:
+		Prerequisite: indp2
+		Delay: 0
+		RequiresCondition: !disabled && !empdisable && !being-warped
 	ProvidesPrerequisite@disabled:
 		Prerequisite: indplowpower
 		RequiresCondition: disabled || empdisable || being-warped
@@ -5808,20 +5804,24 @@ OREP:
 		Queue: Building
 		BuildPaletteOrder: 200
 		Prerequisites: ~structures.allies, atek, ~techlevel.high
-		Description: Refines income from ore, gems & tiberium by 25%.\n  Maximum 1 can be built.\n  Cannot be captured.
+		Description: Refines income from ore, gems & tiberium by 5-10%.\nProvides access to advanced chrono harvester technology.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 	-Capturable:
 	-CaptureNotification:
 	-CapturableProgressBar:
 	-CapturableProgressBlink:
 	-CaptureManager:
+	ProvidesPrerequisite@buildingname:
 	Valued:
 		Cost: 2500
 	Tooltip:
 		Name: Ore Purifier
-	ResourcePurifier:
-		Modifier: 25
+	ResourcePurifier@orep1:
+		Modifier: 5
 		RequiresCondition: !disabled && !being-warped
+	ResourcePurifier@orep2:
+		Modifier: 5
+		RequiresCondition: !disabled && !being-warped && orep2
 	RevealsShroud:
 		Range: 4c0
 		MinRange: 3c0
@@ -5835,6 +5835,13 @@ OREP:
 		UseDeathTypeSuffix: false
 	Sellable:
 		RequiresCondition: !build-incomplete && !c4 && !being-warped
+	GrantConditionOnPrerequisite@orep2:
+		Condition: orep2
+		Prerequisites: orep2
+	ProvidesDelayedPrerequisite@orep2:
+		Prerequisite: orep2
+		Delay: 7500
+		RequiresCondition: !disabled && !empdisable && !being-warped
 
 MISS.GDI:
 	Inherits: ^ScienceBuilding
@@ -5865,7 +5872,7 @@ MISS.GDI:
 		Queue: Building
 		BuildPaletteOrder: 200
 		Prerequisites: ~structures.gdi, gtek, ~techlevel.high
-		Description: Allows the construction of advanced weaponry &\nequips all units with composite armor,\nreducing damage taken by 10%.\n  Maximum 1 can be built.\n  Cannot be captured.
+		Description: Allows the construction of advanced weaponry &\nimproves all vehicles, aircraft & naval units with with composite armor,\nreducing damage taken by 10%.\nImproved unit ammunition will also become available after a short research time,\nincreasing unit damage dealt by 10%\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 	-Capturable:
 	-CaptureNotification:
@@ -5876,8 +5883,16 @@ MISS.GDI:
 		Cost: 2500
 	Tooltip:
 		Name: Research Center
-	ProvidesPrerequisite@Name:
-		RequiresCondition: !being-warped
+	ProvidesDelayedPrerequisite@UPGRADE1:
+		Prerequisite: miss.gdi
+		Delay: 3
+		Notification: UnitArmorUpgraded
+		RequiresCondition: !disabled && !empdisable && !being-warped
+	ProvidesDelayedPrerequisite@UPGRADE2:
+		Prerequisite: miss.gdi2
+		Delay: 7500
+		Notification: UnitFirepowerUpgraded
+		RequiresCondition: !disabled && !empdisable && !being-warped
 	ProvidesPrerequisite@HMLRS:
 		Factions: gdi, zocom, eagle
 		Prerequisite: hmlrs.buildable
@@ -5951,6 +5966,10 @@ BIO.Nod:
 		RequiresCondition: !being-warped
 	Sellable:
 		RequiresCondition: !build-incomplete && !c4 && !being-warped
+	ProvidesDelayedPrerequisite@nodupg2:
+		Prerequisite: bio.nod2
+		Delay: 7500
+		RequiresCondition: !disabled && !empdisable && !being-warped
 
 MSLO.Nod:
 	Inherits: ^ScienceBuilding

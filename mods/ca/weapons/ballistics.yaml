@@ -219,12 +219,22 @@ TitanGun:
 ^Artillery:
 	Inherits: ^Cannon
 	ReloadDelay: 60
+<<<<<<< HEAD
 	Range: 14c0
 	Projectile: BulletCA
 		Speed: 204
 		Blockable: false
 		LaunchAngle: 62
 		Inaccuracy: 2c938
+=======
+	Range: 8c0
+	Projectile: Bullet
+		Speed: 224
+		Blockable: false
+		LaunchAngle: 62
+		Inaccuracy: 1c938
+		Shadow: true
+>>>>>>> 4822269a4004f902ae4077e286f68bb378fbeffd
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
 		Damage: 14000
@@ -273,9 +283,15 @@ TitanGun:
 
 155mmSpec:
 	Inherits: 155mmTD
+<<<<<<< HEAD
 	ReloadDelay: 190
 	MinRange: 5c0
 	Range: 14c0
+=======
+	ReloadDelay: 200
+	MinRange: 3c0
+	Range: 13c0
+>>>>>>> 4822269a4004f902ae4077e286f68bb378fbeffd
 	Burst: 3
 	BurstDelays: 7
 	Projectile: BulletCA
@@ -307,7 +323,7 @@ TitanGun:
 
 380mm:
 	Inherits: ^Artillery
-	ReloadDelay: 120
+	ReloadDelay: 150
 	Report: bgraatta.aud
 	MinRange: 2c0
 	Range: 9c768
@@ -317,7 +333,7 @@ TitanGun:
 		Image: 380mm
 		Inaccuracy: 1c138
 	Warhead@1Dam: SpreadDamage
-		Damage: 14500
+		Damage: 18000
 		Falloff: 100, 55, 20, 5
 		Versus:
 			None: 90
@@ -366,6 +382,7 @@ TitanGun:
 
 8Inch:
 	Inherits: ^Artillery
+<<<<<<< HEAD
 	MinRange: 5c0
 	ReloadDelay: 250
 	Range: 25c0
@@ -374,22 +391,46 @@ TitanGun:
 	TargetActorCenter: true
 	Projectile: BulletCA
 		Inaccuracy: 2c938
+=======
+	MinRange: 3c0
+	ReloadDelay: 120
+	Range: 21c768
+	Report: tank6.aud
+	TargetActorCenter: true
+	Projectile: Bullet
+		Speed: 345
+		LaunchAngle: 40
+		Inaccuracy: 2c511
+>>>>>>> 4822269a4004f902ae4077e286f68bb378fbeffd
 	Warhead@1Dam: SpreadDamage
-		Spread: 213
+		Spread: 256
 		Damage: 2000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Versus:
-			None: 60
-			Wood: 55
+			None: 100
+			Wood: 100
 			Concrete: 50
+			Heavy: 55
+	Warhead@3Eff: CreateEffect
+		Explosions: building, building2
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
+		
+8Inch.NoReport:
+	Inherits: 8Inch
+	-Report:
 
 JuggernautGun:
 	Inherits: ^Artillery
+<<<<<<< HEAD
 	MinRange: 5c0
 	ReloadDelay: 100
 	Range: 13c0
+=======
+	MinRange: 2c0
+	ReloadDelay: 120
+	Range: 10c0
+>>>>>>> 4822269a4004f902ae4077e286f68bb378fbeffd
 	Burst: 3
 	StartBurstReport: jugger1.aud
 	TargetActorCenter: true
@@ -419,7 +460,7 @@ JuggernautGun:
 		Versus:
 			None: 15
 			Wood: 30
-			Heavy: 60
+			Heavy: 90
 			Concrete: 20
 			Brick: 20
 
@@ -505,7 +546,7 @@ Mortar:
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
-		InvalidTargets: Vehicle, Tank, Structure, Wall, Husk, Trees
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 	Warhead@3Eff: CreateEffect
 		Explosions: small_chem
 		ExplosionPalette: temptd
@@ -551,6 +592,13 @@ DepthCharge:
 		Explosions: small_explosion
 		ImpactSounds: kaboom15.aud
 		ValidTargets: Submarine
+		
+DepthCharge.destroyer:
+	Inherits: DepthCharge
+	Burst: 2
+	BurstDelays: 5
+	Projectile: Bullet
+		Inaccuracy: 256
 
 203mm:
 	ReloadDelay: 120
@@ -581,7 +629,7 @@ DepthCharge:
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
-		InvalidTargets: Vehicle, Tank, Structure, Wall, Husk, Trees
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 	Warhead@3Eff: CreateEffect
 		Explosions: artillery_explosion
 		ImpactSounds: kaboom15.aud

@@ -295,6 +295,7 @@ ATMine:
 		Spread: 256
 		Damage: 40000
 		AffectsParent: true
+		ValidTargets: Ground, Water, Underwater
 		InvalidTargets: Mine
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Eff: CreateEffect
@@ -307,7 +308,7 @@ ATMine:
 APMine:
 	Inherits: ATMine
 	Warhead@1Dam: SpreadDamage
-		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: napalm
 		ImpactSounds: mine1.aud
@@ -661,12 +662,12 @@ MEMP:
 		SmudgeType: Scorch
 	Warhead@3Smu_area: LeaveSmudge
 		SmudgeType: Scorch
-		InvalidTargets: Vehicle, Tank, Structure, Wall, Husk, Trees
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 		Size: 1
 		Delay: 3
 	Warhead@4Smu_area2: LeaveSmudge
 		SmudgeType: Scorch
-		InvalidTargets: Vehicle, Tank, Structure, Wall, Husk, Trees
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 		Size: 2,1
 		Delay: 6
 
@@ -714,7 +715,6 @@ TemporalExplode:
 		ExplosionPalette: ra2effect-ignore-lighting-alpha75
 		ImpactSounds: chronowarp.aud
 		ValidTargets: Ground, Water, Air
-	Warhead@3Flash: ChronoFlashEffect
 
 
 TemporalExplodeLarge:
@@ -729,7 +729,7 @@ TPWRZap:
 	Inherits: ^TeslaWeapon
 	ReloadDelay: 80
 	Range: 5c0
-	ValidTargets: Ground, Water, Infantry, Tank
+	ValidTargets: Ground, Water, Infantry, Vehicle
 	-Report:
 	Warhead@1Dam: SpreadDamage
 		Damage: 1000
@@ -741,7 +741,7 @@ TPWRZap:
 		Weapon: TPWRArc1
 		Amount: 1
 		AimChance: 90
-		ValidTargets: Ground, Water, Infantry, Tank
+		ValidTargets: Ground, Water, Infantry, Vehicle
 		ThrowWithoutTarget: true
 	-Warhead@3Eff:
 
@@ -749,7 +749,7 @@ TPWRArc1:
 	Inherits: TTankZap
 	Range: 3c0
 	Warhead@1Dam: SpreadDamage
-		ValidTargets: Ground, Water, Infantry, Tank
+		ValidTargets: Ground, Water, Infantry, Vehicle
 	Warhead@Burst: FireShrapnel
 		Weapon: TPWRArc2
 		AimChance: 80

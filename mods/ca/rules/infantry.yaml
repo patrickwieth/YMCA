@@ -560,10 +560,6 @@ EINSTEIN:
 
 DELPHI:
 	Inherits: ^CivInfantry
-	RenderSprites:
-		PlayerPalette: player
-	WithDeathAnimation:
-		DeathSequencePalette: player
 	-Wanders:
 	Tooltip:
 		Name: Agent Delphi
@@ -572,12 +568,11 @@ DELPHI:
 
 CHAN:
 	Inherits: ^CivInfantry
+	Inherits@CREW: ^CanCaptureDriverlessVehicles
 	RenderSprites:
-		PlayerPalette: player
+		Palette: player
 	WithDeathAnimation:
 		DeathSequencePalette: player
-	Valued:
-		Cost: 500
 	Selectable:
 		Class: CHAN
 	Tooltip:
@@ -616,7 +611,6 @@ GNRL:
 		Voice: Move
 	Voiced:
 		VoiceSet: StavrosVoice
-	-ScaredyCat:
 	TakeCover:
 		DamageModifiers:
 			Prone50Percent: 50
@@ -881,17 +875,17 @@ N3:
 		PauseOnCondition: !ammo || being-warped
 	Armament@SECONDARY:
 		Name: secondary
-		Weapon: Dragon
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@Garrison:
-		Name: mounted
-		Weapon: RedEyeE
+		Weapon: Dragon.TD
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
 	Armament@GarrisonAA:
 		Name: mounted
-		Weapon: DragonE
+		Weapon: RedEyeE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DragonE.TD
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
 	AmmoPool:
@@ -980,6 +974,7 @@ N5:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@nodupg2: ^NodCyborgUpgrade
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -988,13 +983,13 @@ N5:
 		IconPalette: chrometd
 		Description: Advanced general-purpose infantry.\n  Strong vs all Ground Units
 	Valued:
-		Cost: 250
+		Cost: 325
 	Tooltip:
 		Name: Chemical Warrior
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 8000
+		HP: 28000
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 	Armament:
@@ -1011,7 +1006,7 @@ N5:
 	TakeCover:
 		ProneOffset: 160,0,-254
 	Mobile:
-		Speed: 49
+		Speed: 56
 		Voice: Move
 	AttackFrontal:
 		Voice: Attack
@@ -1043,12 +1038,6 @@ N5:
 		Palette: temptd
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
 	WithMuzzleOverlay:
 	Explodes:
 		Weapon: UnitExplodeChemSmall
@@ -1058,14 +1047,11 @@ N5:
 		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
-	-GrantCondition@HAZMAT:
 	-WithDecoration@HAZMAT:
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
 	GrantConditionOnPrerequisite@BIO:
 		Condition: biofirepower
 	FirepowerMultiplier@BIOLAB:
-		RequiresCondition: nodupg || biofirepower
+		RequiresCondition: biofirepower
 		Modifier: 110
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
@@ -1481,6 +1467,7 @@ SAB:
 ACOL:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@nodupg2: ^NodCyborgUpgrade
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1510,7 +1497,7 @@ ACOL:
 		LocalOffset: 427,0,341
 	TakeCover:
 		ProneOffset: 227,0,-245
-		PauseOnCondition: being-warped || nodupg
+		PauseOnCondition: being-warped || nodupg1
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
@@ -1547,12 +1534,21 @@ ACOL:
 		Palette: temptd
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
+	SpeedMultiplier@nodupg1:
+		RequiresCondition: nodupg1 && !nodupg2
+		Modifier: 115
+	DamageMultiplier@nodupg1:
+		RequiresCondition: nodupg1 && !nodupg2
+		Modifier: 28
+	SpeedMultiplier@nodupg2:
+		RequiresCondition: nodupg2
+		Modifier: 130
+	DamageMultiplier@nodupg2:
+		RequiresCondition: nodupg2
+		Modifier: 22
+	RangeMultiplier@nodupg2:
+		RequiresCondition: nodupg2
+		Modifier: 115
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -1809,7 +1805,7 @@ E8:
 	GrantConditionOnPrerequisite@BIO:
 		Condition: biofirepower
 	FirepowerMultiplier@BIOLAB:
-		RequiresCondition: nodupg || biofirepower
+		RequiresCondition: biofirepower
 		Modifier: 110
 	-DamagedByTintedCells@RADSTRONG:
 	-DamagedByTintedCells@RADMED:
@@ -1822,6 +1818,7 @@ N1C:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BOTHELPER: ^BotCaptureHelper
+	Inherits@nodupg2: ^NodCyborgUpgrade
 	RenderSprites:
 	Buildable:
 		Queue: Infantry
@@ -1830,18 +1827,16 @@ N1C:
 		IconPalette: chrometd
 		Description: General-purpose infantry with good scout abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Artillery
 	Valued:
-		Cost: 150
+		Cost: 250
 	Tooltip:
 		Name: Cyborg
 	-TakeCover:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 10000
-	RevealsShroud:
-		Range: 12c0
+		HP: 35000
 	Mobile:
-		speed: 73
+		Speed: 56
 		Voice: Move
 	AttackFrontal:
 		Voice: Attack
@@ -1858,10 +1853,9 @@ N1C:
 		Weapon: Vulcan3
 	-KillsSelf@Mutation:
 	-GrantConditionOnPrerequisite@BIO:
-	-GrantCondition@HAZMAT:
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
+	-GrantConditionOnPrerequisite@NODUPG1:
 	-WithDecoration@HAZMAT:
+	-GrantCondition@HAZMAT:
 	-DamagedByTerrain:
 	DamagedByTerrain:
 		Terrain: Tiberium, BlueTiberium
@@ -1880,12 +1874,6 @@ N1C:
 		Palette: temptd
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -1893,6 +1881,7 @@ N3C:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@nodupg2: ^NodCyborgUpgrade
 	RenderSprites:
 	Buildable:
 		Queue: Infantry
@@ -1901,17 +1890,18 @@ N3C:
 		IconPalette: chrometd
 		Description: Anti-tank cyborg infantry\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry, Artillery
 	Valued:
-		Cost: 350
+		Cost: 400
 	Tooltip:
 		Name: Cyborg Reaper
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	-TakeCover:
 	Health:
-		HP:  9000
+		HP:  25000
 	RevealsShroud:
 		Range: 4c768
 	Mobile:
+		Speed: 49
 		Voice: Move
 	AttackFrontal:
 		Voice: Attack
@@ -1954,10 +1944,9 @@ N3C:
 		ScanRadius: 5
 	-KillsSelf@Mutation:
 	-GrantConditionOnPrerequisite@BIO:
-	-GrantCondition@HAZMAT:
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
+	-GrantConditionOnPrerequisite@NODUPG1:
 	-WithDecoration@HAZMAT:
+	-GrantCondition@HAZMAT:
 	-DamagedByTerrain:
 	DamagedByTerrain:
 		Terrain: Tiberium, BlueTiberium
@@ -1976,12 +1965,6 @@ N3C:
 		Palette: temptd
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -1990,6 +1973,7 @@ RMBC:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@EMP: ^EmpDisable
+	Inherits@nodupg2: ^NodCyborgUpgrade
 	RenderSprites:
 		PlayerPalette: playerd2k
 		Image: cycom
@@ -2007,7 +1991,7 @@ RMBC:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 45000
+		HP: 42000
 	Armor:
 		Type: Heavy
 	Mobile:
@@ -2051,11 +2035,9 @@ RMBC:
 	-KillsSelf@Mutation:
 	-KillsSelf@Immolate:
 	-GrantConditionOnPrerequisite@BIO:
-	-WithDecoration@HAZMAT:
+	-GrantConditionOnPrerequisite@NODUPG1:
 	-GrantCondition@HAZMAT:
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
-	-ExternalCondition@NODUPG:
+	-WithDecoration@HAZMAT:
 	-DamagedByTerrain:
 	DamagedByTerrain:
 		Terrain: Tiberium, BlueTiberium
@@ -2075,7 +2057,7 @@ RMBC:
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
 	Targetable:
-		TargetTypes: Ground, Vehicle, Tank, ChaosImmune, DriverKillImmune
+		TargetTypes: Ground, Vehicle, C4Immune, ChaosImmune, DriverKillImmune
 	Targetable@REPAIR:
 		RequiresCondition: !parachute && damaged && !being-warped
 		TargetTypes: Repair

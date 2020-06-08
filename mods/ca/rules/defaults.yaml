@@ -82,105 +82,97 @@
 		Prerequisite: botplayer
 		RequiresCondition: owned-by-brutal-ai || owned-by-vhard-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai
 	ProductionTimeMultiplier@brutalbonus:
-		Multiplier: 85
+		Multiplier: 88
 		Prerequisites: is-brutal-ai
 	ProductionTimeMultiplier@vhardbonus:
-		Multiplier: 90
+		Multiplier: 92
 		Prerequisites: is-vhard-ai
 	ProductionTimeMultiplier@hardbonus:
-		Multiplier: 95
-		Prerequisites: is-hard-ai
-	ProductionCostMultiplier@brutalbonus:
-		Multiplier: 94
-		Prerequisites: is-brutal-ai
-	ProductionCostMultiplier@vhardbonus:
 		Multiplier: 96
-		Prerequisites: is-vhard-ai
-	ProductionCostMultiplier@hardbonus:
-		Multiplier: 98
 		Prerequisites: is-hard-ai
+
+^BotDefenseProductionBonus:
+	ProductionTimeMultiplier@brutalbonus:
+		Multiplier: 80
+		Prerequisites: is-brutal-ai
+	ProductionTimeMultiplier@vhardbonus:
+		Multiplier: 85
+		Prerequisites: is-vhard-ai
+	ProductionTimeMultiplier@hardbonus:
+		Multiplier: 90
+		Prerequisites: is-hard-ai
+	ProductionTimeMultiplier@normalbonus:
+		Multiplier: 95
+		Prerequisites: is-normal-ai
 
 ^BotGroundProductionBonus:
 	ProductionTimeMultiplier@brutalbonus:
-		Multiplier: 48
+		Multiplier: 40
 		Prerequisites: is-brutal-ai
 	ProductionTimeMultiplier@vhardbonus:
-		Multiplier: 56
+		Multiplier: 50
 		Prerequisites: is-vhard-ai
 	ProductionTimeMultiplier@hardbonus:
-		Multiplier: 64
+		Multiplier: 60
 		Prerequisites: is-hard-ai
 	ProductionTimeMultiplier@normalbonus:
 		Multiplier: 80
 		Prerequisites: is-normal-ai
-	ProductionCostMultiplier@brutalbonus:
-		Multiplier: 94
-		Prerequisites: is-brutal-ai
-	ProductionCostMultiplier@vhardbonus:
-		Multiplier: 96
-		Prerequisites: is-vhard-ai
-	ProductionCostMultiplier@hardbonus:
-		Multiplier: 98
-		Prerequisites: is-hard-ai
 
 ^BotAirProductionBonus:
 	ProductionTimeMultiplier@brutalbonus:
-		Multiplier: 84
+		Multiplier: 80
 		Prerequisites: is-brutal-ai
 	ProductionTimeMultiplier@vhardbonus:
-		Multiplier: 88
+		Multiplier: 85
 		Prerequisites: is-vhard-ai
 	ProductionTimeMultiplier@hardbonus:
-		Multiplier: 92
+		Multiplier: 90
 		Prerequisites: is-hard-ai
 	ProductionTimeMultiplier@normalbonus:
-		Multiplier: 96
+		Multiplier: 95
 		Prerequisites: is-normal-ai
 
-# The Bot does not know how to sell up when he does not have an income. This provides an income, when floating less than 2000$
+# The Bot does not know how to sell up when he does not have an income. This provides an income, when floating less than 2500$
 ^BotFallbackInsurance:
 	GrantConditionOnPlayerResources@botinsurance:
 		Condition: noinsurance
-		Threshold: 2000
+		Threshold: 2500
 	CashTrickler@brutalinsurance:
-		Interval: 500
+		Interval: 250
 		Amount: 1000
 		ShowTicks: False
 		RequiresCondition: owned-by-brutal-ai && !noinsurance
 	CashTrickler@vhardinsurance:
-		Interval: 500
-		Amount: 800
+		Interval: 250
+		Amount: 750
 		ShowTicks: False
 		RequiresCondition: owned-by-vhard-ai && !noinsurance
 	CashTrickler@hardinsurance:
-		Interval: 500
-		Amount: 600
+		Interval: 250
+		Amount: 500
 		ShowTicks: False
 		RequiresCondition: owned-by-hard-ai && !noinsurance
 	CashTrickler@normalinsurance:
-		Interval: 500
-		Amount: 400
+		Interval: 250
+		Amount: 250
 		ShowTicks: False
 		RequiresCondition: owned-by-normal-ai && !noinsurance
 
-# ResourcePurifier on Proc's so AI income is still tied to harvesters, so eco sniping AI is possible.
+# RefineryResourceMultiplier on Proc's so AI income is still tied to harvesters, so eco sniping AI is possible.
 ^BotIncome:
-	ResourcePurifier@brutalincome:
-		Modifier: 13
+	RefineryResourceMultiplier@brutalincome:
+		Modifier: 160
 		RequiresCondition: owned-by-brutal-ai
-		ShowTicks: False
-	ResourcePurifier@vhardincome:
-		Modifier: 11
+	RefineryResourceMultiplier@vhardincome:
+		Modifier: 150
 		RequiresCondition: owned-by-vhard-ai
-		ShowTicks: False
-	ResourcePurifier@hardincome:
-		Modifier: 9
+	RefineryResourceMultiplier@hardincome:
+		Modifier: 140
 		RequiresCondition: owned-by-hard-ai
-		ShowTicks: False
-	ResourcePurifier@normalincome:
-		Modifier: 5
+	RefineryResourceMultiplier@normalincome:
+		Modifier: 120
 		RequiresCondition: owned-by-normal-ai
-		ShowTicks: False
 
 #Hacky but helps Bots deal with abandoned vehicles due to snipers
 ^BotCaptureHelper:
@@ -236,15 +228,6 @@
 	FirepowerMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
 		Modifier: 125
-	SpeedMultiplier@RANK-1:
-		RequiresCondition: rank-veteran == 1
-		Modifier: 105
-	SpeedMultiplier@RANK-2:
-		RequiresCondition: rank-veteran == 2
-		Modifier: 110
-	SpeedMultiplier@RANK-ELITE:
-		RequiresCondition: rank-elite
-		Modifier: 120
 	ReloadDelayMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
 		Modifier: 95
@@ -355,38 +338,72 @@
 
 
 ^GDIUpgrade:
-	DamageMultiplier@GDIUPG:
-		RequiresCondition: gdiupg
+	DamageMultiplier@GDIUPG1:
+		RequiresCondition: gdiupg1
 		Modifier: 90
-	ExternalCondition@GDIUPG:
-		Condition: gdiupg
+	FirepowerMultiplier@GDIUPG2:
+		RequiresCondition: gdiupg2
+		Modifier: 110
+	ExternalCondition@GDIUPG1:
+		Condition: gdiupg1
+	ExternalCondition@GDIUPG2:
+		Condition: gdiupg2
 	WithDecoration@GDIUPG:
 		Image: pips
 		Sequence: pip-armor
 		Palette: effect
 		ReferencePoint: Bottom, Left
 		ValidStances: Ally
-		RequiresCondition: gdiupg
+		RequiresCondition: gdiupg1
 		ZOffset: 256
 		BlinkInterval: 64
 		BlinkPatterns:
-			gdiupg && bino: Off, On
+			gdiupg1 && bino: Off, On
 		RequiresSelection: True
 
-^NodUpgrade:
-	ExternalCondition@NODUPG:
-		Condition: nodupg
+^GDIUpgradeProducer:
+	GrantExternalConditionToProduced@GDIUPG1:
+		Condition: gdiupg1
+		RequiresCondition: gdiupglevel1
+	GrantExternalConditionToProduced@GDIUPG2:
+		Condition: gdiupg2
+		RequiresCondition: gdiupglevel2
+	GrantConditionOnPrerequisite@GDIUPG1:
+		Condition: gdiupglevel1
+		Prerequisites: miss.gdi
+	GrantConditionOnPrerequisite@GDIUPG2:
+		Condition: gdiupglevel2
+		Prerequisites: miss.gdi2
+
+^NodHazmatUpgrade:
+	GrantConditionOnPrerequisite@NODUPG1:
+		Condition: nodupg1
+		Prerequisites: bio.nod
 	GrantCondition@HAZMAT:
 		Condition: hazmatsuits
-		RequiresCondition: nodupg
+		RequiresCondition: nodupg1
+
+^NodCyborgUpgrade:
+	SpeedMultiplier@NODUPG2:
+		RequiresCondition: nodupg2
+		Modifier: 115
+	DamageMultiplier@NODUPG2:
+		RequiresCondition: nodupg2
+		Modifier: 85
+	GrantConditionOnPrerequisite@NODUPG2:
+		Condition: nodupg2
+		Prerequisites: bio.nod2
 
 ^BinoUpgrade:
-	ExternalCondition@Bino:
+	ExternalCondition@BINO:
 		Condition: bino
-	RangeMultiplier@Bino:
+	RangeMultiplier@BINO:
 		Modifier: 120
 		RequiresCondition: bino
-	WithDecoration@Bino:
+	InaccuracyMultiplier@BINO:
+		Modifier: 50
+		RequiresCondition: bino
+	WithDecoration@BINO:
 		Image: pips
 		Sequence: pip-bino
 		Palette: chrome
@@ -395,7 +412,7 @@
 		RequiresCondition: bino
 		BlinkInterval: 64
 		BlinkPatterns:
-			bino && gdiupg: On, Off
+			bino && gdiupg1: On, Off
 		RequiresSelection: True
 
 ^InfantryExperienceHospitalOverrides:
@@ -517,8 +534,12 @@
 		DamageCooldown: 0
 		RequiresCondition: driver-dead
 	CaptureManager:
+	Targetable@DRIVERKILL:
+		TargetTypes: DriverKill
+		RequiresCondition: !driver-dead
 	Targetable@AICAPTURE:
 		TargetTypes: NoCrew
+		RequiresCondition: driver-dead
 
 ^CanCaptureDriverlessVehicles:
 	Captures@DRIVER_KILL:
@@ -721,7 +742,7 @@
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense
 		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@ATTACKANYTHING:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine, Bridge
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
 
 ^AutoTargetAir:
 	AutoTarget:
@@ -753,10 +774,10 @@
 ^AutoTargetAllNavalAssaultMove:
 	Inherits: ^AutoTargetAllAssaultMove
 	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, Bridge
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
 		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@ATTACKANYTHING:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense, Bridge
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
 		InvalidTargets: NoAutoTarget
 
 ^GlobalBounty:
@@ -774,13 +795,16 @@
 	Selectable:
 		PriorityModifiers: Ctrl, Alt
 
-^ProductionSpeedBoost:
-	ProductionCostMultiplier@IndustrialPlant:
-		Multiplier: 75
-		Prerequisites: indp, !indplowpower
+^ProductionEfficiencyBoost:
 	ProductionTimeMultiplier@IndustrialPlant:
 		Multiplier: 133
 		Prerequisites: indp, !indplowpower
+	ProductionCostMultiplier@IndustrialPlantLevel1:
+		Multiplier: 90
+		Prerequisites: indp, !indp2, !indplowpower
+	ProductionCostMultiplier@IndustrialPlantLevel2:
+		Multiplier: 75
+		Prerequisites: indp2, !indplowpower
 
 ^Vehicle:
 	Inherits@1: ^ExistsInWorld
@@ -802,7 +826,7 @@
 	Inherits@gflash: ^GreenFlash
 	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
-	Inherits@production: ^ProductionSpeedBoost
+	Inherits@production: ^ProductionEfficiencyBoost
 	Inherits@SELECTION_MODE: ^FlatSelectionMode
 	Huntable:
 	OwnerLostAction:
@@ -907,6 +931,9 @@
 		DamageInterval: 8
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity.medium
+	DetectCloaked@UNDERBRIDGE:
+		CloakTypes: Underbridge
+		Range: 5c0
 
 ^VehicleTD:
 	Inherits@1: ^Vehicle
@@ -923,8 +950,6 @@
 		Weight: 4
 	Mobile:
 		Locomotor: tracked
-	Targetable:
-		TargetTypes: Ground, Vehicle, Tank
 
 ^TankTD:
 	Inherits: ^Tank
@@ -940,7 +965,7 @@
 	Inherits@2: ^GainsExperience
 	Inherits@3: ^InfantryExperienceHospitalOverrides
 	Inherits@4: ^SpriteActor
-	Inherits@5: ^NodUpgrade
+	Inherits@5: ^NodHazmatUpgrade
 	Inherits@7: ^Warpable
 	Inherits@8: ^Cloakable-Kills
 	Inherits@9: ^IronCurtainable-Kills
@@ -1182,20 +1207,33 @@
 
 ^CivInfantry:
 	Inherits: ^Infantry
+	-RenderSprites:
+	RenderSprites:
+		Palette: temptd
+	WithDeathAnimation:
+		DeathPaletteIsPlayerPalette: false
+		DeathSequencePalette: temptd
 	Selectable:
 		Class: CivInfantry
 	Valued:
 		Cost: 10
+	GrantConditionOnFaction@FACTION:
+		Factions: allies, england, france, germany, soviet, russia, ukraine, iraq, gdi, zocom, eagle, talon, nod, blackh, legion, marked
+		Condition: owned-by-faction
 	Tooltip:
 		Name: Civilian
 		GenericVisibility: None
+		RequiresCondition: !owned-by-faction
+	Tooltip@FACTION:
+		Name: Technician
+		GenericVisibility: None
+		RequiresCondition: owned-by-faction
 	RevealsShroud:
 		Range: 3c0
 	Passenger:
 		PipType: Gray
 	ProximityCaptor:
 		Types: CivilianInfantry
-	ScaredyCat:
 	Voiced:
 		VoiceSet: CivilianMaleVoice
 	Wanders:
@@ -1206,8 +1244,18 @@
 
 ^ArmedCivilian:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Armament:
+	GrantConditionOnFaction@RA:
+		Factions: allies, england, france, germany, soviet, russia, ukraine, iraq
+		Condition: ra-faction
+	GrantConditionOnFaction@TD:
+		Factions: gdi, zocom, eagle, talon, nod, blackh, legion, marked
+		Condition: td-faction
+	Armament@RA:
 		Weapon: Pistol
+		RequiresCondition: ra-faction
+	Armament@TD:
+		Weapon: PistolTD
+		RequiresCondition: td-faction
 	AttackFrontal:
 	WithInfantryBody:
 		DefaultAttackSequence: shoot
@@ -1232,8 +1280,10 @@
 	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
 	Inherits@SELECTION_MODE: ^FlatSelectionMode
-	Inherits@production: ^ProductionSpeedBoost
+	Inherits@production: ^ProductionEfficiencyBoost
 	Huntable:
+	RenderSprites:
+		PlayerPalette: playernavy
 	OwnerLostAction:
 		Action: Kill
 	DrawLineToTarget:
@@ -1308,6 +1358,68 @@
 		DamageInterval: 16
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity.medium
+	GrantConditionOnTerrain@UNDERBRIDGE:
+		Condition: under-bridge
+		TerrainTypes: Bridge, Tunnel
+	Cloak@UNDERBRIDGE:
+		CloakTypes: Underbridge
+		UncloakOn: Unload
+		InitialDelay: 0
+		CloakDelay: 0
+		Palette: submerged
+		RequiresCondition: under-bridge
+	DamageMultiplier@UNDERBRIDGE:
+		RequiresCondition: under-bridge
+		Modifier: 1
+	Targetable@UNDERBRIDGE:
+		RequiresCondition: under-bridge
+		TargetTypes: Underbridge
+	DetectCloaked@UNDERBRIDGE:
+		CloakTypes: Underbridge
+		Range: 5c0
+	GrantConditionOnBotOwner@IAMBOT:
+		Condition: botowner
+		Bots: brutal, vhard, hard, normal, easy, naval
+	Wanders@NOIDLENAVY:
+		WanderMoveRadius: 3
+		RequiresCondition: (botowner && under-bridge)
+
+^Submarine:
+	Inherits@1: ^Ship
+	Targetable:
+		TargetTypes: Ground, Water, Ship, Submarine, Repair
+		RequiresCondition: !underwater && !being-warped
+	Targetable@UNDERWATER:
+		TargetTypes: Underwater, Submarine
+		RequiresCondition: underwater && !being-warped
+	GrantConditionOnTerrain@CROSSINGFORD:
+		Condition: crossing-ford
+		TerrainTypes: Ford
+	Cloak:
+		CloakTypes: Underwater
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Heal
+		InitialDelay: 0
+		CloakDelay: 50
+		CloakSound: subshow1.aud
+		UncloakSound: subshow1.aud
+		CloakedCondition: underwater
+		Palette: submerged
+		PauseOnCondition: cloak-force-disabled || invisibility || being-warped || crossing-ford
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 4c0
+	RenderDetectionCircle:
+	Explodes:
+		Weapon: UnitExplodeSubmarine
+		EmptyWeapon: UnitExplodeSubmarine
+		RequiresCondition: !under-bridge && !being-warped
+	-MustBeDestroyed:
+	Wanders@NOIDLENAVY:
+		WanderMoveRadius: 3
+		RequiresCondition: (botowner && crossing-ford) ||  (botowner && under-bridge)
 
 ^NeutralPlane:
 	Inherits@1: ^ExistsInWorld
@@ -1409,7 +1521,7 @@
 	Inherits@10: ^Chillable
 	Inherits@gflash: ^GreenFlash
 	Inherits@wflash: ^WhiteFlash
-	Inherits@production: ^ProductionSpeedBoost
+	Inherits@production: ^ProductionEfficiencyBoost
 	Inherits@C4: ^C4Plantable
 	Cloak@EXTERNALCLOAK:
 		RequiresCondition: invisibility || crate-cloak && (!cloak-force-disabled && !airborne && !being-warped)
@@ -1557,6 +1669,7 @@
 		RepairStep: 700
 		PlayerExperience: 25
 		RepairingNotification: Repairing
+		RequiresCondition: !being-warped
 	EngineerRepairable:
 	AcceptsDeliveredCash:
 	WithMakeAnimation:
@@ -1564,18 +1677,18 @@
 	CaptureManager:
 		BeingCapturedCondition: being-captured
 	Capturable:
-		RequiresCondition: !build-incomplete
+		RequiresCondition: !build-incomplete && !being-warped
 		Types: building
 	CapturableProgressBar:
 	CapturableProgressBlink:
 	SpawnActorsOnSell:
-		ActorTypes: e1,e1,e1,tecn,tecn2
-	SpawnActorOnDeath@1:
+		ActorTypes: e1,e1,e1,e1,e1,e1,e1,e1,e1,e1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+	SpawnActorOnDeath:
 		Actor: e1
 		Probability: 5
 		RequiresCondition: !being-warped
-	SpawnActorOnDeath@2:
-		Actor: tecn
+	SpawnRandomActorOnDeath:
+		Actors: c1,c7,c10
 		Probability: 10
 		RequiresCondition: !being-warped
 	MustBeDestroyed:
@@ -1591,6 +1704,7 @@
 		ReferencePoint: Center
 		Palette: player
 		IsPlayerPalette: True
+		RequiresCondition: !being-warped
 	Targetable:
 		RequiresCondition: !being-warped
 	-ExternalCondition@CRATE-CLOAK:
@@ -1602,31 +1716,27 @@
 	Inherits@1: ^Building
 	RenderSprites:
 		PlayerPalette: overlayplayertd
-	SpawnActorOnDeath@1:
+	SpawnActorOnDeath:
 		Actor: n1
 	SpawnActorsOnSell:
-		ActorTypes: n1,n1,n1,tecn,tecn2
+		ActorTypes: n1,n1,n1,n1,n1,n1,n1,n1,n1,n1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+	ActorPreviewPlaceBuildingPreview:
 	ActorPreviewPlaceBuildingPreview:
 		OverridePalette: placebuildingtd
 
 ^ScienceBuilding:
 	Inherits: ^Building
 	SpawnActorsOnSell:
-		ActorTypes: e1,e1,e1,e1,tecn,tecn2,tecn,tecn2,tecn3,tecn,tecn,tecn2,tecn,tecn3,e6,e6,e6,e6,e6
+		ActorTypes: e1,e1,e1,e1,e1,e1,e1,e1,e1,e1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
 
 ^ScienceBuildingTD:
-	Inherits@1: ^Building
-	RenderSprites:
-		PlayerPalette: overlayplayertd
+	Inherits@1: ^BuildingTD
 	SpawnActorsOnSell:
-		ActorTypes: n1,n1,n1,n1,tecn,tecn,tecn,tecn2,tecn,tecn3,tecn,tecn,tecn2,tecn3,n6,n6,n6,n6,n6
-	SpawnActorOnDeath@1:
-		Actor: n1
-	ActorPreviewPlaceBuildingPreview:
-		OverridePalette: placebuildingtd
+		ActorTypes: n1,n1,n1,n1,n1,n1,n1,n1,n1,n1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
 
 ^Defense:
 	Inherits: ^Building
+	Inherits@botbonus: ^BotDefenseProductionBonus
 	Inherits@Concussion: ^Concussion
 	-SpeedMultiplier@concussion:
 	WithColoredOverlay@IRONCURTAIN:
@@ -1677,6 +1787,9 @@
 	Explodes@temporal:
 		Weapon: TemporalExplode
 		EmptyWeapon: TemporalExplode
+	DetectCloaked@UNDERBRIDGE:
+		CloakTypes: Underbridge
+		Range: 6c0
 
 ^DefenseTD:
 	Inherits@1: ^Defense
@@ -1815,14 +1928,14 @@
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
 		Categories: Civilian building
-	SpawnActorOnDeath@1:
-		Actor: c1
+	SpawnRandomActorOnDeath@1:
+		Actors: c1,c2,c3,c4
 		Probability: 40
-	SpawnActorOnDeath@2:
-		Actor: c4
+	SpawnRandomActorOnDeath@2:
+		Actors: c10,c4,c5,c6
 		Probability: 20
-	SpawnActorOnDeath@3:
-		Actor: c3
+	SpawnRandomActorOnDeath@3:
+		Actors: c5,c7,c8,c9
 		Probability: 15
 	Explodes:
 		Weapon: SmallBuildingExplode
@@ -2190,7 +2303,7 @@
 	Tooltip:
 		Name: Mine
 	Targetable:
-		TargetTypes: Ground, Mine
+		TargetTypes: Ground, Water, Mine
 	Immobile:
 		OccupiesSpace: true
 	HitShape:
@@ -2406,6 +2519,8 @@
 	HitShape:
 	RejectsOrders:
 	Interactable:
+	WithFacingSpriteBody:
+	WithShadow:
 
 ^SlowsWhenDamaged:
 	SpeedMultiplier@DAMAGED:

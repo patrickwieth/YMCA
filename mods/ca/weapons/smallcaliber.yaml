@@ -8,7 +8,8 @@
 		Blockable: false
 		Inaccuracy: 0c3
 	Warhead@1Dam: SpreadDamage
-		Spread: 313
+		Range: 0, 0c64, 0c256, 3c0
+		Falloff: 100, 100, 20, 10
 		Damage: 2000
 		ValidTargets: Air
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
@@ -24,14 +25,13 @@ ZSU-23:
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
 		Range: 0, 0c64, 0c256, 3c768
-		Falloff: 100, 100, 15, 5
 
 FLAK-23-AA:
 	Inherits: ^AACannon
 	Range: 7c512
 	Report: flak1.aud, flak2.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 700
+		Damage: 850
 
 FLAK-23-AG:
 	Inherits: ^AACannon
@@ -45,7 +45,9 @@ FLAK-23-AG:
 		Blockable: True
 		Inaccuracy: 0c768
 	Warhead@1Dam: SpreadDamage
-		Spread: 128
+		-Range:
+		Spread: 0c128
+		Falloff: 100, 37, 14, 5, 0
 		Damage: 1800
 		Versus:
 			None: 120
@@ -62,6 +64,30 @@ FLAK-23-AG:
 		Explosions: small_splash
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure, Bridge
+		
+FLAK-SEAS-AA:
+	Inherits: FLAK-23-AA
+	Report: vflaat1a.aud, vflaat1b.aud
+	ReloadDelay: 10
+	Range: 8c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 2200
+		
+FLAK-SEAS-AG:
+	Inherits: FLAK-23-AG
+	Range: 5c256
+	Report: vflaat1a.aud, vflaat1b.aud
+	Projectile: Bullet
+		LaunchAngle: 82
+	Warhead@1Dam: SpreadDamage
+		Damage: 2200
+		Versus:
+			None: 150
+			Wood: 60
+			Light: 35
+			Heavy: 25
+			Concrete: 20
+			Brick: 20
 
 FLAK-23-AA.Barrage:
 	Inherits: FLAK-23-AA
@@ -86,7 +112,6 @@ Gatt.0:
 	Warhead@1Dam: SpreadDamage
 		Damage: 900
 		Range: 0, 0c64, 0c256, 3c256
-		Falloff: 100, 100, 15, 5
 	Warhead@2Eff: CreateEffect
 		ValidTargets: Air
 		ImpactSoundChance: 20
@@ -116,9 +141,7 @@ MGatt.0:
 	Report: vgatlo1a.aud
 	Range: 7c512
 	Warhead@1Dam: SpreadDamage
-		Damage: 250
-		Range: 0, 0c64, 0c256, 3c256
-		Falloff: 100, 100, 15, 5
+		Damage: 290
 	Warhead@2Eff: CreateEffect
 		ValidTargets: Air
 		ImpactSoundChance: 20
@@ -128,19 +151,19 @@ MGatt.1:
 	ReloadDelay: 5
 	Report: vgatlo2a.aud, vgatlo2b.aud, vgatlo2c.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 300
+		Damage: 345
 
 MGatt.2:
 	Inherits: MGatt.1
 	Report: vgatlo5a.aud, vgatlo5b.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 400
+		Damage: 480
 
 MGatt.3:
 	Inherits: MGatt.2
 	Report: vgatlo8a.aud, vgatlo8b.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 500
+		Damage: 575
 
 ^HeavyMG:
 	ReloadDelay: 30
@@ -179,6 +202,7 @@ MGatt.3:
 			Concrete: 10
 			Brick: 10
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+
 
 Vulcan:
 	Inherits: ^HeavyMG
@@ -357,17 +381,23 @@ ChainGun.Yak.L:
 
 Pistol:
 	Inherits: ^LightMG
-	ReloadDelay: 7
+	Burst: 10
+	BurstDelays: 8
+	ReloadDelay: 80
 	Range: 3c0
 	Report: gun27.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 100
+		Damage: 134
 		Versus:
 			None: 100
 	Warhead@2Eff: CreateEffect
 		Explosions: piff
 	Warhead@3EffWater: CreateEffect
 		Explosions: water_piff
+		
+PistolTD:
+	Inherits: Pistol
+	Report: gun18.aud
 
 M1Carbine:
 	Inherits: ^LightMG
@@ -419,12 +449,33 @@ M60mgIFV:
 	Inherits: M60mg
 	ReloadDelay: 20
 
+MGatt.0G:
+	Inherits: ^HeavyMG
+	Range: 4c0
+	ReloadDelay: 15
+	Report: vgatlo1a.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 200
+
+MGatt.1G:
+	Inherits: MGatt.0G
+	ReloadDelay: 5
+	Report: vgatlo2a.aud, vgatlo2b.aud, vgatlo2c.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 300
+
+MGatt.2G:
+	Inherits: MGatt.1G
+	Report: vgatlo5a.aud, vgatlo5b.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 400
+
 ^SnipeWeapon:
 	ReloadDelay: 80
 	Range: 8c512
 	Report: gun5.aud
 	ValidTargets: Ground, Infantry
-	InvalidTargets: Vehicle, Tank, Ship, Water, Structure, Wall, Husk
+	InvalidTargets: Vehicle, Ship, Water, Structure, Wall, Husk
 	Projectile: Bullet
 		Speed: 1c682
 	Warhead@1Dam: SpreadDamage
@@ -529,12 +580,12 @@ SNIPER:
 	Range: 9c0
 	Report: snipe.aud
 	ValidTargets: Ground, Infantry
-	InvalidTargets: Vehicle, Tank, Water, Structure, Wall, Husk, Chrono
+	InvalidTargets: Vehicle, Water, Structure, Wall, Husk, Chrono
 	Projectile: Bullet
 		Speed: 2c682
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
-		Damage: 9000
+		Damage: 45000
 		ValidTargets: Barrel, Infantry
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@2Eff: CreateEffect
@@ -549,19 +600,18 @@ SNIPERE:
 	Inherits: SNIPER
 	Range: 9c0
 
-
 SNIPER.vehicle:
 	ReloadDelay: 600
 	Range: 6c0
 	Report: ijarwe2a.aud
-	ValidTargets: Vehicle, Tank
+	ValidTargets: DriverKill
 	InvalidTargets: Infantry, Ship, Structure, Wall, Husk, Air, DriverKillImmune
 	Projectile: InstantHit
 		Blockable: true
 	Warhead@1Dam: TargetDamage
-		ValidTargets: Vehicle, Tank
+		ValidTargets: DriverKill
 	Warhead@3: ChangeOwnerToNeutral
-		ValidTargets: Vehicle, Tank
+		ValidTargets: DriverKill
 		InvalidTargets: Infantry, Ship, Structure, Wall, Husk, Air, DriverKillImmune
 		ValidStances: Enemy
 		Range: 0c256
@@ -569,7 +619,7 @@ SNIPER.vehicle:
 		Range: 0c256
 		Duration: 2
 		Condition: highlight
-		ValidTargets: Vehicle, Tank
+		ValidTargets: Vehicle
 
 HeliGunAG:
 	Inherits: ChainGun
