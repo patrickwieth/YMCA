@@ -39,6 +39,15 @@ FireballLauncher:
 		Versus:
 			Light: 50
 
+FireballLauncher.Tank:
+	Inherits: FireballLauncher
+	Burst: 2
+	Projectile: Bullet
+		Inaccuracy: 484
+	Warhead@1Dam: SpreadDamage
+		Spread: 768
+		Damage: 12000
+
 ChemballLauncher:
 	Inherits: FireballLauncher
 	ReloadDelay: 70
@@ -128,6 +137,34 @@ BigFlamer:
 		RandomClusterCount: 1
 		Dimensions: 1,1
 		Footprint: x
+
+BigChemspray:
+	Inherits: BigFlamer
+	ReloadDelay: 40
+	Projectile: Bullet
+		Image: chemall
+		Palette: ra2effect-ignore-lighting-alpha50
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			Heavy: 50
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+	-Warhead@Flames:
+
+BigChemspray.Yak:
+	Inherits: BigFlamer
+	Projectile: Bullet
+		Image: chemall
+		Palette: ra2effect-ignore-lighting-alpha50
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 300
+			Wood: 60
+			Light: 59
+			Heavy: 50
+			Concrete: 15
+			Brick: 2
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+	-Warhead@Flames:
 
 Flamer:
 	Inherits: BigFlamer
@@ -246,39 +283,52 @@ PortaTeslaCharge:
 		Condition: highlight
 		ValidTargets: Ground, Vehicle
 
+4TankZap:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 80
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 12000
+	Range: 6c0
+
 TTankZap:
 	Inherits: ^TeslaWeapon
-	ReloadDelay: 130
+	ReloadDelay: 110
 	Range: 7c0
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			Wood: 60
 			Concrete: 60
+
+TTankZap.Arc:
+	Inherits: TTankZap
+	ReloadDelay: 130
 	Warhead@Arc: FireShrapnel
 		Weapon: TTankArc1
 		Amount: 1
-		AimChance: 85
+		AimChance: 100
 		ThrowWithoutTarget: false
 
 TTankArc1:
 	Inherits: TTankZap
-	Range: 1c768
+	Range: 1c0
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Infantry, Vehicle, Ship
 		Versus:
-			Light: 30
-			Heavy: 30
+			Light: 50
+			Heavy: 50
 	-Report:
 	-Warhead@3Eff:
 	Warhead@Arc: FireShrapnel
 		Weapon: TTankArc2
-		ValidTargets: Infantry
-		AimChance: 75
+		AimChance: 100
 
 TTankArc2:
 	Inherits: TTankArc1
 	Warhead@1Dam: SpreadDamage
-		ValidTargets: Infantry
+		Versus:
+			Light: 40
+			Heavy: 40
 	-Warhead@Arc:
 
 DogJaw:
@@ -611,7 +661,7 @@ VenomLaser:
 			Wood: 60
 			Light: 72
 			Heavy: 28
-			Concrete: 28
+			Concrete: 14
 			Brick: 28
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -630,24 +680,19 @@ VenomLaserAA:
 			Heavy: 100
 	-Warhead@2Smu:
 
-PointLaser:
-	Inherits: Laser
-	ReloadDelay: 50
-	ValidTargets: Ground, Air, Missile
-	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
-	Range: 1c768
-	Report: vpalwe2d.aud
-	Projectile: LaserZap
-		Width: 30
-		Duration: 3
-		-HitAnim:
-		Color: 03f0fc
-		SecondaryBeamWidth: 50
-		SecondaryBeamColor: 03fcfc30
-		Blockable: true
+BuggyLaserAA:
+	Inherits: VenomLaser
+	ReloadDelay: 10
+	ValidTargets: Air
 	Warhead@1Dam: SpreadDamage
-		Spread: 5
-		Damage: 1
+		ValidTargets: Air
+		Damage: 1000
+		Versus:
+			Wood: 100
+			Concrete: 100
+			Light: 100
+			Heavy: 100
+	-Warhead@2Smu:
 
 AdvancedPointLaser:
 	Inherits: Laser
@@ -691,38 +736,8 @@ AdvancedPointLaser.soviet:
 		DimZaps: 0
 
 SuperPointLaser:
-	Inherits: Laser
-	ReloadDelay: 5
-	ValidTargets: Ground, Air, Missile, BulletCA
-	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
+	Inherits: AdvancedPointLaser
 	Range: 3c768
-	Report: vpalwe2d.aud
-	Projectile: LaserZap
-		Width: 30
-		Duration: 3
-		-HitAnim:
-		Color: fc0303
-		ZOffset: 2047
-		SecondaryBeam: true
-		SecondaryBeamWidth: 50
-		SecondaryBeamZOffset: 2047
-		SecondaryBeamColor: 0303fc30
-		Blockable: true
-	Warhead@1Dam: SpreadDamage
-		Spread: 5
-		Damage: 1
-
-SuperPointLaser.allies:
-	Inherits: SuperPointLaser
-	Report: cryozap.aud
-	Projectile: LaserZap
-		Color: ffffff
-		SecondaryBeamColor: 57BEFFBB
-
-SuperPointLaser.gdi:
-	Inherits: SuperPointLaser
-	Projectile: LaserZap
-		SecondaryBeamColor: d1a70030
 
 PrisLaser:
 	ValidTargets: Ground, Water
@@ -802,7 +817,7 @@ PrisCLaser:
 	Inherits: PrisLaser
 	Report: pcanfire.aud
 	ReloadDelay: 75
-	Range: 10c0
+	Range: 11c0
 	Projectile: LaserZap
 		Width: 30
 		Duration: 15
@@ -811,30 +826,24 @@ PrisCLaser:
 		SecondaryBeamColor: 84f5ff
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
-		Damage: 7500
+		Damage: 9500
 		Spread: 348
 		Versus:
+			None: 150
 			Wood: 110
+			Concrete: 100
+			Light: 95
+			Heavy: 60
 	-Warhead@Burst:
 
-PrisCLaser:
-	Inherits: PrisLaser
-	Report: pcanfire.aud
-	ReloadDelay: 75
-	Range: 10c0
-	Projectile: LaserZap
-		Width: 30
-		Duration: 15
-		Color: 00FFDEC8
-		SecondaryBeamWidth: 60
-		SecondaryBeamColor: 84f5ff
-		Blockable: true
-	Warhead@1Dam: SpreadDamage
-		Damage: 7500
-		Spread: 348
-		Versus:
-			Wood: 110
-	-Warhead@Burst:
+PrisBlaster:
+	Inherits: PrisTLaser
+	Range: 7c0
+	Warhead@Burst: FireCluster
+		Weapon: PrisBurst
+		RandomClusterCount: 5
+		Dimensions: 5,5
+		Footprint: _xxx_ xxxxx xx_xx xxxxx _xxx_
 
 KirovBomb:
 	ReloadDelay: 35
@@ -926,7 +935,6 @@ KirovTeslaArc:
 		Damage: 3000
 		ValidTargets: Infantry, Vehicle, Ship
 	-Warhead@3Eff:
-	-Warhead@Arc:
 
 KirovCluster:
 	ReloadDelay: 35
@@ -1030,11 +1038,15 @@ RadBomb:
 			Heavy: 30
 			Concrete: 55
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-	Warhead@1Radiation: CreateTintedCells
+	Warhead@2Eff: CreateEffect
+		Explosions: med_explosion
+		ImpactSounds: xplos.aud
+		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@3Radiation: CreateTintedCells
 		Spread: 1c0
-		Falloff: 100, 75, 50, 25, 0
+		Falloff: 100, 75, 50, 25, 5, 0
 		Level: 500
-		MaxLevel: 7500
+		MaxLevel: 10000
 		LayerName: radioactivity.strong
 
 SonicZap:
@@ -1196,6 +1208,33 @@ Railgun.Infantry:
 			Concrete: 15
 	Warhead@2Dam: SpreadDamage
 		Damage: 500
+		Versus:
+			None: 10
+			Wood: 25
+			Light: 65
+			Heavy: 100
+			Concrete: 20
+			Brick: 15
+
+Railgun.Jumpjet:
+	Inherits: Railgun.Infantry
+	Projectile: Railgun
+		ZOffset: 6046
+
+Railgun.Titan:
+	Inherits: Railgun
+	Range: 7c512
+	ReloadDelay: 90
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
+		Versus:
+			None: 10
+			Wood: 25
+			Light: 65
+			Heavy: 90
+			Concrete: 15
+	Warhead@2Dam: SpreadDamage
+		Damage: 1000
 		Versus:
 			None: 10
 			Wood: 25
@@ -1683,6 +1722,12 @@ CyCannon:
 			Brick: 70
 		DamageTypes: Prone350Percent, TriggerProne, ExplosionDeath
 
+CyCannon.Range:
+	Inherits: CyCannon
+	Range: 8c0
+	Projectile: Missile
+		RangeLimit: 9c0
+
 NeutronCannon:
 	ValidTargets: Temporal
 	ReloadDelay: 5
@@ -1701,6 +1746,26 @@ NeutronCannon:
 			Concrete: 55
 			Brick: 55
 		ValidTargets: Temporal
+		DamageTypes: ChronoDeath
+
+NeutronCannon.Range:
+	Inherits: NeutronCannon
+	Range: 7c0
+
+NeutronCannon.AA:
+	Inherits: NeutronCannon
+	ValidTargets: TemporalAir
+	Warhead@Damage: WarpDamage
+		Damage: 750
+		Spread: 1
+		Versus:
+			None: 40
+			Wood: 60
+			Light: 50
+			Heavy: 100
+			Concrete: 55
+			Brick: 55
+		ValidTargets: TemporalAir
 		DamageTypes: ChronoDeath
 
 NeutronCannonBeam:
@@ -1730,6 +1795,16 @@ NeutronCannonBeam:
 		ValidTargets: Temporal
 		DamageTypes: ChronoDeath
 
+NeutronCannonBeam.Range:
+	Inherits: NeutronCannonBeam
+	Range: 7c0
+
+NeutronCannonBeam.AA:
+	Inherits: NeutronCannonBeam
+	ValidTargets: TemporalAir
+	Warhead@Damage: SpreadDamage
+		ValidTargets: TemporalAir
+
 NeutronCannonPulse:
 	Inherits: NeutronCannonBeam
 	ReloadDelay: 20
@@ -1742,8 +1817,26 @@ NeutronCannonPulse:
 		TrackTarget: true
 		Color: d8f9f7cc
 
+NeutronCannonPulse.AA:
+	Inherits: NeutronCannonBeam.AA
+	ReloadDelay: 20
+	Projectile: AreaBeam
+		Speed: 0c768
+		Duration: 8
+		Width: 60
+		Shape: Flat
+		ZOffset: 2047
+		TrackTarget: true
+		Color: d8f9f7cc
+
 NeutronCannonSound:
 	Inherits: NeutronCannonBeam
+	Report: chronogun.aud
+	ReloadDelay: 60
+	Projectile: InstantHit
+
+NeutronCannonSound.AA:
+	Inherits: NeutronCannonBeam.AA
 	Report: chronogun.aud
 	ReloadDelay: 60
 	Projectile: InstantHit
@@ -1853,7 +1946,6 @@ StealthBomb:
 	Projectile: Missile
 		Image: b2bomb
 		Speed: 200
-		Inaccuracy: 316
 		CruiseAltitude: 2c0
 		RangeLimit: 14c410
 	Warhead@1Dam: SpreadDamage
@@ -1909,3 +2001,169 @@ JDAM:
 		RandomClusterCount: 3
 		Dimensions: 3,3
 		Footprint: xxx xxx xxx
+
+DropDummy:
+	ValidTargets: Ground
+	InvalidTargets: Infantry, Ship, Tank, Structure, Air
+	ReloadDelay: 10
+	Range: 4c0
+	Projectile: Bullet
+		Speed: 200
+	Warhead: SpreadDamage
+		Spread: 56
+		Damage: 1
+
+BeamCannon:
+	ReloadDelay: 20
+	Range: 8c0
+	TargetActorCenter: false
+	InvalidTargets: Air
+	Report: scrin5b.aud
+	Projectile: AreaBeam
+		Speed: 1c428
+		Duration: 21
+		DamageInterval: 3
+		Width: 150
+		Shape: Flat
+		ZOffset: 4096
+		BeyondTargetRange: 0c0
+		Blockable: true
+		TrackTarget: true
+		Color: ff000025
+	Warhead@1Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 100, 100
+		Damage: 1000
+		AffectsParent: false
+		ValidStances: Neutral, Enemy
+		ValidTargets: Ground, Water
+		Versus:
+			Heavy: 80
+			Concrete: 130
+			Wood: 180
+		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+	Warhead@2Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 50, 50
+		Damage: 500
+		InvalidTargets: BeamCannon, Air
+		AffectsParent: false
+		ValidStances: Ally
+		Versus:
+			Heavy: 80
+			Concrete: 120
+			Brick: 150
+			Wood: 180
+		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+
+BeamCannonBoosted1:
+	Inherits: BeamCannon
+	Range: 8c512
+	Projectile: AreaBeam
+		Width: 175
+		Color: ff000035
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+	Warhead@2Dam: SpreadDamage
+		Damage: 1000
+
+BeamCannonBoosted2:
+	Inherits: BeamCannon
+	Range: 9c0
+	Projectile: AreaBeam
+		Width: 190
+		Color: ff000045
+	Warhead@1Dam: SpreadDamage
+		Damage: 2250
+	Warhead@2Dam: SpreadDamage
+		Damage: 1250
+
+BeamCannonBoosted3:
+	Inherits: BeamCannon
+	Range: 9c512
+	Projectile: AreaBeam
+		Width: 205
+		Color: ff000055
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+	Warhead@2Dam: SpreadDamage
+		Damage: 1500
+
+BeamCannonBoosted4:
+	Inherits: BeamCannon
+	Range: 10c0
+	Projectile: AreaBeam
+		Width: 220
+		Color: ff000065
+	Warhead@1Dam: SpreadDamage
+		Damage: 2750
+	Warhead@2Dam: SpreadDamage
+		Damage: 1750
+
+BeamCannonBoosted5:
+	Inherits: BeamCannon
+	Range: 10c512
+	Projectile: AreaBeam
+		Width: 235
+		Color: ff000075
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+	Warhead@2Dam: SpreadDamage
+		Damage: 2000
+
+BeamCannonVisual:
+	ReloadDelay: 20
+	Range: 8c0
+	TargetActorCenter: false
+	InvalidTargets: Air
+	Projectile: AreaBeam
+		Speed: 1c428
+		Duration: 21
+		DamageInterval: 3
+		Width: 90
+		Shape: Flat
+		ZOffset: 4096
+		Blockable: true
+		TrackTarget: true
+		Color: ff000035
+	Warhead@1Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 100, 100
+		Damage: 10
+		AffectsParent: false
+		ValidStances: Neutral, Enemy
+		ValidTargets: Ground, Water
+		Versus:
+			Heavy: 80
+			Concrete: 100
+			Wood: 200
+		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+	Warhead@2Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 50, 50
+		Damage: 10
+		InvalidTargets: BeamCannon, Air
+		AffectsParent: false
+		ValidStances: Ally
+		Versus:
+			Heavy: 80
+			Concrete: 150
+			Brick: 150
+			Wood: 200
+		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
+
+BeamCannonCharge:
+	Inherits: BeamCannonVisual
+	ValidTargets: BeamCannonBoost
+	Projectile: LaserZap
+		Duration: 21
+		Width: 90
+		Color: ff000035
+	Range: 6c0
+	-Warhead@1Dam:
+	Warhead@charge: GrantExternalCondition
+		Range: 42
+		Duration: 20
+		Condition: charged
+		ValidStances: Ally
+		ValidTargets: BeamCannonBoost

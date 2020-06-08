@@ -73,6 +73,15 @@ Maverick:
 			Heavy: 85
 			Brick: 80
 
+Maverick.Tesla:
+	Inherits: Maverick
+	Warhead@5Tesla: FireShrapnel
+		Weapon: KirovTeslaArc
+		Amount: 1
+		AimChance: 75
+		AllowDirectHit: true
+		ThrowWithoutTarget: false
+
 MaverickSU:
 	Inherits: Maverick
 	Range: 10c0
@@ -91,6 +100,14 @@ MaverickSU:
 		ImpactSounds: gexp14a.aud, gexp14b.aud, gexp14c.aud, gexp14d.aud
 	Warhead@4EffWater: CreateEffect
 		ImpactSounds: splashl1.aud, splashl2.aud
+
+MaverickSU.Concussion:
+	Inherits: MaverickSU
+	Warhead@Concussion1: GrantExternalCondition
+		Range: 1c512
+		Duration: 240
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
 
 Dragon:
 	Inherits: ^AntiGroundMissile
@@ -129,8 +146,9 @@ HellfireAG:
 		Versus:
 			None: 25
 			Wood: 65
-			Light: 80
-			Concrete: 90
+			Light: 70
+			Heavy: 115
+			Concrete: 80
 			Brick: 100
 
 HellfireAG.Orca:
@@ -280,8 +298,9 @@ Nike:
 Nike.Raptor:
 	Inherits: Nike
 	ReloadDelay: 30
+	Report: vbleatta.aud, vbleattb.aud
 	Projectile: MissileCA
-		RangeLimit: 12c0
+		RangeLimit: 14c0
 	Warhead@1Dam: SpreadDamage
 		Damage: 15500
 		ValidTargets: Air
@@ -397,7 +416,7 @@ APTusk:
 			Wood: 60
 			Light: 45
 			Heavy: 100
-			Concrete: 60
+			Concrete: 40
 
 TorpTube:
 	ReloadDelay: 100
@@ -687,7 +706,7 @@ HonestJohn:
 		Dimensions: 3,3
 		Footprint: xxx xxx xxx
 
-HonestJohn.legion:
+HonestJohn.toxin:
 	Inherits: ^AntiGroundMissile
 	ReloadDelay: 130
 	Burst: 2
@@ -740,6 +759,45 @@ HonestJohn.legion:
 		Palette: tseffect-ignore-lighting-alpha75
 		ValidTargets: Ground, Water
 
+HonestJohn.multi:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 130
+	Burst: 2
+	BurstDelays: 50
+	Range: 16c0
+	MinRange: 4c0
+	Report: rocket2.aud
+	Projectile: BulletCA
+		Blockable: false
+		Shadow: true
+		Inaccuracy: 0c511
+		Image: missile
+		TrailImage: smokey
+		TrailDelay: 3
+		Speed: 210
+		LaunchAngle: 37
+		PointDefenseType: Missile
+	Warhead@Burst: FireShrapnel
+		Weapon: Dragon.multi
+		Amount: 8
+		ThrowWithoutTarget: True
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		Falloff: 500, 368, 135, 50, 18, 7, 0
+		Versus:
+			None: 100
+			Wood: 95
+			Concrete: 60
+			Light: 65
+			Heavy: 40
+			Brick: 15
+
+Dragon.multi:
+	Inherits: ^AntiGroundMissile
+	Range: 2c0
+	Projectile: MissileCA
+
 BikeRockets:
 	Inherits: Dragon
 	Range: 4c512
@@ -750,6 +808,44 @@ BikeRockets:
 		Damage: 4400
 			Light: 38
 			Concrete: 70
+
+BikeRocketHail:
+	Inherits: BikeRockets
+	ReloadDelay: 100
+	Burst: 7
+	Range: 10c0
+	Projectile: MissileCA
+		Inaccuracy: 1c0
+		RangeLimit: 12c0
+
+BikeScrinTorp:
+	Inherits: BikeRockets
+	Report: scrin5b.aud
+	Projectile: Missile
+		MaximumLaunchSpeed: 192
+		Blockable: false
+		HorizontalRateOfTurn: 5
+		Shadow: true
+		Image: laserfired2k
+		Palette: d2k
+		MinimumLaunchSpeed: 75
+		Speed: 384
+		Inaccuracy: 0
+		-TrailImage:
+	Warhead@1Dam: SpreadDamage
+		Damage: 7000
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: expnew17.aud, expnew16.aud
+		ValidTargets: Ground, Air
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splashm1.aud, splashm2.aud, splashm3.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Building, Wall
 
 BikeRocketsAA:
 	Inherits: RedEye
@@ -849,6 +945,20 @@ BTRRocketsAA:
 	Warhead@4EffWater: CreateEffect
 		ImpactSounds: splashl1.aud, splashl2.aud
 
+227mm.Hailstorm:
+	Inherits: 227mm
+	ReloadDelay: 240
+	Burst: 8
+	BurstDelays: 4
+	Range: 18c0
+	MinRange: 6c0
+	Projectile: MissileCA
+		Speed: 266
+		Inaccuracy: 3c512
+		CruiseAltitude: 5c0
+		RangeLimit: 16c0
+		LockOnProbability: 0
+
 227mm.upg:
 	Inherits: 227mm
 	Report: vaegattb.aud, vaegatta.aud
@@ -947,6 +1057,21 @@ BTRRocketsAA:
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure, Bridge
 
+STNKScrinTorp:
+	Inherits: BikeScrinTorp
+
+227mm.stnk.HE:
+	Inherits: 227mm.stnk
+	ReloadDelay: 100
+	Range: 6c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 800
+		Damage: 12000
+		ValidTargets: Ground, Water
+	Warhead@3Eff: CreateEffect
+		Explosions: large_artillery_explosion
+		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
+
 227mm.stnkAA:
 	Inherits: ^AntiAirMissile
 	ReloadDelay: 70
@@ -967,6 +1092,12 @@ BTRRocketsAA:
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 		ImpactSounds: xplos.aud
+
+227mm.stnkAA.HE:
+	Inherits: 227mm.stnkAA
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 2500
 
 BoatMissile:
 	ReloadDelay: 70
@@ -1355,7 +1486,7 @@ AuroraRocket:
 	InvalidTargets: Air
 	ReloadDelay: 50
 	Report: bwhis.aud
-	Range: 3c0
+	Range: 4c0
 	TargetActorCenter: true
 	Projectile: GravityBomb
 		Image: MOAB_BOMB
@@ -1364,15 +1495,15 @@ AuroraRocket:
 		Shadow: true
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 4500
-		Falloff: 1000, 512, 128, 64, 0
+		Damage: 6000
+		Falloff: 1000, 512, 256, 128, 0
 		ValidTargets: Ground, Water
 		Versus:
 			None: 80
-			Wood: 100
-			Light: 80
-			Heavy: 65
-			Concrete: 60
+			Wood: 80
+			Light: 100
+			Heavy: 75
+			Concrete: 50
 			Brick: 65
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge

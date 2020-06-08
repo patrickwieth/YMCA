@@ -349,6 +349,11 @@
 		EmptyWeapon: TemporalExplode
 		DeathTypes: ChronoDeath
 
+^WarpableAir:
+	Targetable@TemporalAir:
+		TargetTypes: TemporalAir
+
+
 ^GDIUpgrade:
 	DamageMultiplier@GDIUPG:
 		RequiresCondition: gdiupg
@@ -831,6 +836,7 @@
 		Palette: ra2effect-ignore-lighting-alpha75
 	Passenger:
 		CargoType: Vehicle
+		Weight: 3
 	AttackMove:
 	HiddenUnderFog:
 	ActorLostNotification:
@@ -893,12 +899,12 @@
 		WarnProbability: 10
 	DamagedByTintedCells@RADSTRONG:
 		Damage: 100
-		DamageInterval: 16
+		DamageInterval: 8
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity.strong
 	DamagedByTintedCells@RADMED:
 		Damage: 95
-		DamageInterval: 16
+		DamageInterval: 8
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity.medium
 
@@ -913,6 +919,8 @@
 
 ^Tank:
 	Inherits: ^Vehicle
+	Passenger:
+		Weight: 4
 	Mobile:
 		Locomotor: tracked
 	Targetable:
@@ -941,6 +949,7 @@
 	Inherits@12: ^BotGroundProductionBonus
 	Inherits@13: ^Chillable
 	Inherits@14: ^Concussion
+	Inherits@15: ^Propaganda
 	Inherits@bounty: ^GlobalBounty
 	Inherits@SELECTION_MODE: ^FlatSelectionMode
 	RenderSprites:
@@ -1110,23 +1119,41 @@
 		CloakTypes: Cloak
 		Range: 1c0
 	DamagedByTintedCells@RADSTRONG:
-		Damage: 750
-		DamageInterval: 16
+		Damage: 500
+		DamageInterval: 8
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity.strong
 		RequiresCondition: !(hazmatsuits || being-warped)
 	DamagedByTintedCells@RADMED:
-		Damage: 300
-		DamageInterval: 16
+		Damage: 250
+		DamageInterval: 8
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity.medium
 		RequiresCondition: !(hazmatsuits || being-warped)
 	DamagedByTintedCells@RADWEAK:
-		Damage: 100
-		DamageInterval: 16
+		Damage: 125
+		DamageInterval: 8
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity.weak
 		RequiresCondition: !(hazmatsuits || being-warped)
+	DamagedByTintedCells@RADSTRONGHAZMAT:
+		Damage: 50
+		DamageInterval: 8
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity.strong
+		RequiresCondition: hazmatsuits
+	DamagedByTintedCells@RADMEDHAZMAT:
+		Damage: 25
+		DamageInterval: 8
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity.medium
+		RequiresCondition: hazmatsuits
+	DamagedByTintedCells@RADWEAKHAZMAT:
+		Damage: 12
+		DamageInterval: 8
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity.weak
+		RequiresCondition: hazmatsuits
 	DamagedByTintedCells@FROZEN:
 		Damage: 100
 		DamageInterval: 16
@@ -1377,6 +1404,7 @@
 	Inherits@5: ^GDIUpgrade
 	Inherits@6: ^BinoUpgrade
 	Inherits@8: ^Warpable
+	Inherits@8a:^WarpableAir
 	Inherits@9: ^BotAirProductionBonus
 	Inherits@10: ^Chillable
 	Inherits@gflash: ^GreenFlash
@@ -1397,7 +1425,7 @@
 	Aircraft:
 		CruisingCondition: cruising
 		IdleBehavior: Land
-		PauseOnCondition: empdisable && !airborne
+		PauseOnCondition: empdisable && !airborne || being-warped
 	KillsSelf:
 		RequiresCondition: empdisable && cruising
 	Targetable@GROUND:
@@ -1409,6 +1437,8 @@
 		RequiresCondition: !airborne && damaged && !being-warped
 	Targetable@Temporal:
 		RequiresCondition: !airborne
+	Targetable@TemporalAir:
+		RequiresCondition: airborne
 	Targetable@c4:
 		RequiresCondition: c4 && !airborne
 	ProductionCostMultiplier@EagleBonus:
@@ -2383,3 +2413,72 @@
 		Modifier: 100
 	GrantConditionOnDamageState@DAMAGED:
 		Condition: damaged
+
+^PointLaserDefenseSystem:
+	Turreted@pointdefense:
+		TurnSpeed: 255
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		Turrets: primary, secondary, tertiary, pointdefense
+		Armaments: primary, secondary, tertiary, pointdefense
+		PauseOnCondition: empdisable || being-warped || parachute
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: AdvancedPointLaser
+		LocalOffset: 0,10,90
+		ForceTargetStances: enemy
+		PauseOnCondition: !ammo || disabled || empdisable || being-warped
+	PointDefense:
+		Armament: pointdefense
+		PointDefenseTypes: Missile, BulletCA
+		ValidStances: Enemy
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		PipType: Red
+		Armaments: pointdefense
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 240
+		Count: 12
+		ResetOnFire: True
+		PauseOnCondition: disabled || empdisable
+	WithRangeCircle:
+		Color: FF000080
+		Range: 2c768
+
+^PointLaserDefenseSystemSmall:
+	Inherits: ^PointLaserDefenseSystem
+	AmmoPool:
+		Ammo: 6
+		PipCount: 2
+	ReloadAmmoPool:
+		Count: 6
+
+^PointLaserDefenseSystemBig:
+	Inherits: ^PointLaserDefenseSystem
+	Armament@pointdefense:
+		Name: pointdefense
+		Turret: pointdefense
+		Weapon: SuperPointLaser
+	AmmoPool:
+		Ammo: 24
+		PipCount: 6
+	ReloadAmmoPool:
+		Count: 24
+	WithRangeCircle:
+		Range: 3c768
+
+^Propaganda:
+	SpeedMultiplier@Propaganda:
+		RequiresCondition: propaganda
+		Modifier: 125
+	ReloadDelayMultiplier@Propaganda:
+		RequiresCondition: propaganda
+		Modifier: 75
+	ExternalCondition@Propaganda:
+		Condition: propaganda
+	WithColoredOverlay@Propaganda:
+		RequiresCondition: propaganda
+		Palette: frenzy

@@ -26,6 +26,7 @@ BADR:
 		Offset: -432,-560,0
 	SpawnActorOnDeath:
 		Actor: BADR.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged@0:
 		Offset: -432,560,0
 		Interval: 2
@@ -66,10 +67,10 @@ BADR.Bomber:
 		Offset: -432,-560,0
 	SpawnActorOnDeath:
 		Actor: BADR.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: BADR.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged@0:
 		Offset: -432,560,0
 		Interval: 2
@@ -125,10 +126,10 @@ B2B:
 		Offset: -432,-560,0
 	SpawnActorOnDeath:
 		Actor: B2B.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable  && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: B2B.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable  && !being-warped
 	SmokeTrailWhenDamaged@0:
 		Offset: -432,560,0
 		Interval: 2
@@ -160,10 +161,10 @@ Stealth_Fighter:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~techlevel.high
+		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~commander_tree.stealth_fighter, ~techlevel.high
 		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 2200
+		Cost: 2000
 	Tooltip:
 		Name: Stealth Fighter
 	UpdatesPlayerStatistics:
@@ -207,12 +208,13 @@ Stealth_Fighter:
 		Offset: -598,683,0
 	SpawnActorOnDeath:
 		Actor: stealth_fighter.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
 	Cloak:
 		InitialDelay: 125
-		CloakDelay: 60
+		CloakDelay: 20
 		UncloakOn: Attack, Unload, Infiltrate, Demolish
 		CloakTypes: Cloak
 		RequiresCondition: !cloak-force-disabled
@@ -224,8 +226,20 @@ Stealth_Fighter:
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 	RenderSprites:
-		Image: stealth_fighter
 		Scale: 0.9
+
+Stealth_Fighter.payload:
+	Inherits: Stealth_Fighter
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~commander_tree.stealth_fighter, ~techlevel.high
+		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. \n  Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2200
+	Tooltip:
+		Name: Stealth Fighter (Double Payload)
+	AmmoPool:
+		Ammo: 4
 
 MIG:
 	Inherits: ^Plane
@@ -234,7 +248,7 @@ MIG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld, stek, ~!aircraft.ukraine, ~techlevel.high
+		Prerequisites: ~afld, stek, ~commander_tree.mig, ~techlevel.high
 		Description: Precision strike aircraft.\n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1750
@@ -299,23 +313,67 @@ MIG:
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: MIG.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: MIG.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: MIG.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: MIG.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
-		RearmActors: afld, afld.gdi
+		RearmActors: afld, afld.gdi, afld.allies
+
+MIG.AA:
+	Inherits: MIG
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig.aa, ~techlevel.high
+		Description: Precision strike aircraft.\n  Can attack aircraft. \n  Strong vs Vehicles, Defenses, Aircraft \n  Weak vs Infantry
+	Valued:
+		Cost: 1750
+	Tooltip:
+		Name: MiG Fighter Plane
+	Armament@primary:
+		Weapon: Maverick
+	Armament@secondary:
+		Weapon: WidowAA
+
+MIG.Nuke:
+	Inherits: MIG
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig.nuke, ~techlevel.high
+		Description: Nuclear attack bomber aircraft.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
+	Valued:
+		Cost: 3000
+	Aircraft:
+		Speed: 205
+	Tooltip:
+		Name: MiG Nuclear Attack Bomber
+	AmmoPool:
+		Ammo: 1
+		PipCount: 1
+	Armament:
+		Weapon: AtomBomb.Mig
+
+MIG.Tesla:
+	Inherits: MIG
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig.tesla, ~techlevel.high
+		Description: Precision strike aircraft.\n  Missiles emit Tesla zaps on impact. \n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: MiG Attack Plane (Tesla)
+	Armament:
+		Weapon: Maverick.Tesla
 
 SUK:
 	Inherits: ^Plane
@@ -325,7 +383,7 @@ SUK:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
-		Prerequisites: ~afld, stek, ~aircraft.ukraine, ~techlevel.high
+		Prerequisites: ~afld, stek, ~commander_tree.sukhoi, ~!commander_tree.sukhoi_concussion, ~techlevel.high
 		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
@@ -385,16 +443,16 @@ SUK:
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: SUK.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: SUK.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: SUK.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: SUK.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -405,6 +463,22 @@ SUK:
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 
+SUK.Conc:
+	Inherits: SUK
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 51
+		IconPalette: chrometd
+		Prerequisites: ~afld, stek, ~commander_tree.sukhoi_concussion, ~techlevel.high
+		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Missiles cause concussion on units\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Sukhoi Attack Plane (Concussion)
+	Armament:
+		Weapon: MaverickSU.Concussion
+
 FROG:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -413,7 +487,7 @@ FROG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~aircraft.soviet, ~!aircraft.iraq, ~techlevel.high
+		Prerequisites: ~afld, ~aircraft.soviet, ~commander_tree.frogfoot, ~techlevel.high
 		Description: Bomber armed with explosive bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1850
@@ -453,6 +527,7 @@ FROG:
 		Offset: -258,723,0
 	SpawnActorOnDeath:
 		Actor: FROG.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -470,11 +545,12 @@ FROGDIRTY:
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
+		IconPalette: chrometd
 		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.high
+		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot, ~techlevel.high
 		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
-		Cost: 1650
+		Cost: 1550
 	Tooltip:
 		Name: Frogfoot Dirty Bomber
 	Health:
@@ -523,17 +599,17 @@ FROGDIRTY:
 		Color: cc550080
 		TrailLength: 10
 	SpawnActorOnDeath:
-		Actor: SUK.Husk
-		RequiresCondition: ammo && !empdisable
+		Actor: FROG.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
-		Actor: SUK.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		Actor: FROG.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
-		Actor: SUK.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		Actor: FROG.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
-		Actor: SUK.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		Actor: FROG.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -551,7 +627,7 @@ YAK:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 30
-		Prerequisites: ~afld, ~!aircraft.iraq, ~techlevel.low
+		Prerequisites: ~afld, ~!commander_tree.chemyak, ~techlevel.low
 		Description: Attack Plane armed with\ndual machine guns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 750
@@ -605,10 +681,10 @@ YAK:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: YAK.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: YAK.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -630,8 +706,9 @@ CHEMYAK:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 30
-		Prerequisites: ~afld, ~aircraft.iraq, ~techlevel.low
-		Description: Attack Plane armed with\ntoxin spray.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		IconPalette: chrometd
+		Prerequisites: ~afld, ~commander_tree.chemyak, ~!commander_tree.chemyak_volatile_tanks, ~techlevel.low
+		Description: Attack Plane armed with\ntoxin spray.\n  Strong vs Infantry, Light armor\n  Weak vs Aircraft
 	Valued:
 		Cost: 750
 	Tooltip:
@@ -645,14 +722,14 @@ CHEMYAK:
 		Type: GroundPosition
 		MoveRecalculationThreshold: 0
 	Armament@PRIMARY:
-		Weapon: Chemspray
-		LocalOffset: 256,-213,0
+		Weapon: BigChemspray.Yak
+		LocalOffset: 256,-213,-400
 		MuzzleSequence: muzzle
 		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Name: secondary
-		Weapon: Chemspray
-		LocalOffset: 256,213,0
+		Weapon: BigChemspray.Yak
+		LocalOffset: 256,213,-400
 		MuzzleSequence: muzzle
 		PauseOnCondition: !ammo
 	AttackAircraft:
@@ -670,7 +747,7 @@ CHEMYAK:
 		InitialStance: Defend
 		InitialStanceAI: Defend
 	AmmoPool:
-		Ammo: 30
+		Ammo: 20
 		PipCount: 4
 		ReloadDelay: 11
 		AmmoCondition: ammo
@@ -678,6 +755,10 @@ CHEMYAK:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: YAK.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: YAK.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,0
 		Interval: 2
@@ -692,6 +773,22 @@ CHEMYAK:
 	Contrail@2:
 		Offset: -98,683,-10
 
+CHEMYAK.Volatile:
+	Inherits: CHEMYAK
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 30
+		IconPalette: chrometd
+		Prerequisites: ~afld, ~commander_tree.chemyak_volatile_tanks, ~techlevel.low
+		Description: Attack Plane armed with\ntoxin spray.\nReleases Toxin Clouds on crash.\n  Strong vs Infantry, Light armor\n  Weak vs Aircraft
+	Valued:
+		Cost: 750
+	Tooltip:
+		Name: Yak Toxin Plane (Volatile)
+	SpawnActorOnDeath:
+		Actor: YAK.Volatile.Husk
+
 TRAN:
 	Inherits: ^Helicopter
 	RenderSprites:
@@ -700,7 +797,7 @@ TRAN:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
-		Prerequisites: ~aircraft.all, ~!aircraft.eagle, ~techlevel.infonly
+		Prerequisites: ~aircraft.all, ~!aircraft.eagle, ~techlevel.infonly, ~commander_tree.basic_logistics
 		Description: Fast infantry transport helicopter.\n  Unarmed
 	Valued:
 		Cost: 900
@@ -747,10 +844,10 @@ TRAN:
 		PipCount: 8
 	SpawnActorOnDeath:
 		Actor: TRAN.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	Selectable:
 		DecorationBounds: 40,36
 	WithCargoHatchAnimation:
@@ -874,10 +971,10 @@ TRAN.paradrop:
 		Image: tran3
 	SpawnActorOnDeath:
 		Actor: TRAN.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	Interactable:
 	GivesExperience:
 		Experience: 1000
@@ -890,7 +987,7 @@ HELI:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad, ~aircraft.allies, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 1500
@@ -946,16 +1043,16 @@ HELI:
 	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: HELI.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HELI.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HELI.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: HELI.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -972,7 +1069,7 @@ HIND:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.soviet, ~!aircraft.russia, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.soviet, ~!commander_tree.tesla_hind, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 1350
@@ -1026,10 +1123,10 @@ HIND:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: HIND.Husk
-		RequiresCondition: ammo
+		RequiresCondition: ammo && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HIND.Husk.Empty
-		RequiresCondition: !ammo
+		RequiresCondition: !ammo && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -1046,7 +1143,7 @@ TSLAHIND:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.russia, ~techlevel.medium
+		Prerequisites: ~hpad, ~commander_tree.tesla_hind, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith tesla coils.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 1600
@@ -1095,10 +1192,10 @@ TSLAHIND:
 		AmmoCondition: ammo
 	SpawnActorOnDeath:
 		Actor: HIND.Husk
-		RequiresCondition: ammo
+		RequiresCondition: ammo && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HIND.Husk.Empty
-		RequiresCondition: !ammo
+		RequiresCondition: !ammo && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -1115,16 +1212,16 @@ HUEY:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.soviet, ~!aircraft.russia, ~aircraft.russia, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.huey.cryo, ~!commander_tree.huey.grenade, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
-		Cost: 1350
+		Cost: 850
 	Tooltip:
 		Name: Huey
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 28000
+		HP: 14000
 	RevealsShroud:
 		Range: 10c0
 		MinRange: 8c0
@@ -1168,17 +1265,17 @@ HUEY:
 		AmmoCondition: ammo
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
-		Actor: HIND.Husk
-		RequiresCondition: ammo && !empdisable
+		Actor: HUEY.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HUEY.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HUEY.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: HUEY.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	ProducibleWithLevel:
@@ -1187,6 +1284,45 @@ HUEY:
 		DecorationBounds: 38,32
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+HUEY.cryo:
+	Inherits: HUEY
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.cryo, ~techlevel.medium
+		Description: Helicopter gunship armed\nwith cryo missiles slowing enemy units.\n  Strong as Support\n  Weak vs Aircraft
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Cryo Huey
+	Armament@PRIMARY:
+		Weapon: CryoMissile
+		LocalOffset: 85,-213,-185, 85,213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+
+HUEY.Grenade:
+	Inherits: HUEY
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.grenade, ~techlevel.medium
+		Description: Helicopter gunship armed\nwith grenade machine gun.\n  Strong vs. light Vehicles, Buildings \n  Weak vs Aircraft
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Grenade Huey
+	AmmoPool:
+		Ammo: 25
+		PipCount: 5
+	Armament@PRIMARY:
+		Weapon: Grenade.Huey
+		LocalOffset: 85,-213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
 
 U2:
 	Inherits: ^NeutralPlane
@@ -1225,10 +1361,10 @@ U2:
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: U2.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: U2.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -1c43,0,0
 		Interval: 2
@@ -1285,10 +1421,10 @@ U2.Bomber:
 		LandingDistance: 1c0
 	SpawnActorOnDeath:
 		Actor: U2.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: U2.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -1c43,0,0
 		Interval: 2
@@ -1359,16 +1495,16 @@ A10:
 		Offset: -258,823,0
 	SpawnActorOnDeath:
 		Actor: A10.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: A10.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: A10.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: A10.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -1416,16 +1552,16 @@ A10.bomber:
 		Offset: -258,823,0
 	SpawnActorOnDeath:
 		Actor: A10.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: A10.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: A10.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: A10.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -1481,10 +1617,10 @@ C17:
 		Color: FFFFFF80
 	SpawnActorOnDeath:
 		Actor: C17.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: C17.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged@0:
 		Offset: -432,560,0
 		Interval: 2
@@ -1579,16 +1715,16 @@ APCH:
 		InitialStanceAI: Defend
 	SpawnActorOnDeath:
 		Actor: APCH.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: APCH.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: APCH.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: APCH.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	Selectable:
@@ -1650,16 +1786,16 @@ ORCA:
 		AmmoCondition: ammo
 	SpawnActorOnDeath:
 		Actor: ORCA.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: ORCA.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: ORCA.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: ORCA.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	AutoTarget:
 		InitialStance: Defend
 		InitialStanceAI: Defend
@@ -1735,16 +1871,16 @@ ORCB:
 		DecorationBounds: 40,29,0,1
 	SpawnActorOnDeath:
 		Actor: ORCB.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: ORCB.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: ORCB.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: ORCB.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -1781,10 +1917,10 @@ UAV:
 		RenderSelectionBars: False
 	SpawnActorOnDeath:
 		Actor: UAV.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: UAV.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -1c43,0,0
 		Interval: 2
@@ -1884,16 +2020,16 @@ RAH:
 		ReloadCount: 2
 	SpawnActorOnDeath:
 		Actor: RAH.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: RAH.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: RAH.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: RAH.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	Selectable:
@@ -1914,7 +2050,7 @@ KIRO:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
 		BuildDurationModifier: 115
-		Prerequisites: ~afld, stek, ~aircraft.soviet, ~techlevel.high
+		Prerequisites: ~afld, stek, ~aircraft.soviet, ~commander_tree.kirov, ~techlevel.high
 		Description: Heavily armoured airship equipped with specialised bombs.\n  Vulnerable when dropping bombs.\n  Strong vs Buildings, Infantry, Slow Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
@@ -1984,10 +2120,10 @@ KIRO:
 		ScanRadius: 10
 	SpawnActorOnDeath:
 		Actor: KIRO.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: KIRO.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	WithIdleOverlay@ROTOR1AIR:
 		Offset: -180,597,250
 		Sequence: rotor
@@ -2046,10 +2182,10 @@ BLIMP:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: ~afld, stek, ~aircraft.russia, ~!aircraft.russia, ~techlevel.high
+		Prerequisites: ~afld, stek, ~commander_tree.airship, ~techlevel.high
 		Description: Heavily Armoured Airship trains infantry directly onto the Battlefield.
 	Valued:
-		Cost: 2000
+		Cost: 2500
 	Tooltip:
 		Name: Airship of the People
 	UpdatesPlayerStatistics:
@@ -2072,7 +2208,11 @@ BLIMP:
 		CanForceLand: False
 	SelectionDecorations:
 	SpawnActorOnDeath:
-		Actor: kiro.Husk
+		Actor: BLIMP.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: BLIMP.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged@1:
 		Offset: -100,500,100
 	SmokeTrailWhenDamaged@2:
@@ -2103,6 +2243,13 @@ BLIMP:
 		SpawnOffset: -170,810,0
 		ExitCell: 1,2
 		ProductionTypes: Soldier, Infantry
+	WithDecoration@primary:
+		RequiresSelection: true
+		Image: pips
+		Sequence: tag-primary
+		ReferencePoint: Top
+		ZOffset: 256
+		RequiresCondition: primary
 
 OCAR:
 	Inherits: ^HelicopterTD
@@ -2111,14 +2258,14 @@ OCAR:
 	Valued:
 		Cost: 1500
 	Tooltip:
-		Name: Orca Carryall
+		Name: Carryall
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 45
-		Prerequisites: ~hpad.td, rep, ~aircraft.gdi, ~techlevel.high
+		Prerequisites: ~aircraft.all, ~techlevel.high, ~commander_tree.advanced_logistics
 		IconPalette: chrometd
 		Description: Fast VTOL Vehicle Transporter.\n  Unarmed
 	Aircraft:
@@ -2151,10 +2298,10 @@ OCAR:
 		Type: GroundPosition
 	SpawnActorOnDeath:
 		Actor: OCAR.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: OCAR.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 		Interval: 2
@@ -2187,7 +2334,7 @@ HARR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~techlevel.high
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier,  ~techlevel.high
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n  Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
@@ -2248,16 +2395,16 @@ HARR:
 		Color: FFFFFF80
 	SpawnActorOnDeath:
 		Actor: HARR.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HARR.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HARR.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: HARR.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	Selectable:
@@ -2271,13 +2418,13 @@ HARR:
 
 Raptor:
 	Inherits: ^Plane
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAir
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld.allies, ~aircraft.allies, ~techlevel.high
+		Prerequisites: ~afld.allies, ~aircraft.allies, ~commander_tree.raptor, ~techlevel.high
 		Description: Fast Fighter Jet armed\nwith powerful Air-to-Air missiles.\n  Strong vs Aircraft\n  Weak vs Ground
 	Valued:
 		Cost: 2000
@@ -2306,6 +2453,7 @@ Raptor:
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
 	AutoTarget:
+		ScanRadius: 10
 		InitialStance: AttackAnything
 		InitialStanceAI: AttackAnything
 	AmmoPool:
@@ -2322,6 +2470,7 @@ Raptor:
 		Offset: -598,683,0
 	SpawnActorOnDeath:
 		Actor: raptor.Husk
+		RequiresCondition: !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -2331,6 +2480,7 @@ Raptor:
 		RearmActors: afld, afld.gdi, afld.allies
 	RenderSprites:
 		Scale: 0.9
+
 SCRN:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -2342,7 +2492,7 @@ SCRN:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~techlevel.high
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee, ~techlevel.high
 		Description: Fast VTOL attack craft armed\nwith powerful plasma cannons.\n  Strong vs Heavy Armor, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 2000
@@ -2407,16 +2557,16 @@ SCRN:
 		ZOffset: -512
 	SpawnActorOnDeath:
 		Actor: SCRN.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: SCRN.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: SCRN.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: SCRN.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
 	Selectable:
@@ -2477,16 +2627,16 @@ HORN:
 	RejectsOrders:
 	SpawnActorOnDeath:
 		Actor: HORN.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: HORN.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HORN.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: HORN.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	-EjectOnDeath:
 	-Selectable:
 	-ActorLostNotification:
@@ -2560,10 +2710,10 @@ YF23.Bomber:
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: YF23.Husk
-		RequiresCondition: !empdisable
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: YF23.Husk.EMP
-		RequiresCondition: empdisable
+		RequiresCondition: empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -2649,7 +2799,7 @@ VENM:
 		LandingSounds: orcadwn1.aud
 		Speed: 201
 	Health:
-		HP: 20000
+		HP: 15000
 	RevealsShroud:
 		Range: 13c0
 		MinRange: 11c0
@@ -2683,16 +2833,16 @@ VENM:
 		ResetOnFire: true
 	SpawnActorOnDeath:
 		Actor: VENM.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: VENM.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: VENM.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: VENM.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	AutoTarget:
 		InitialStance: Defend
 		InitialStanceAI: Defend
@@ -2706,6 +2856,73 @@ VENM:
 	Rearmable:
 		RearmActors: hpad, hpad.td
 
+Dropship:
+	Inherits: ^Plane
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 50
+		Prerequisites: ~aircraft.all, ~techlevel.high, ~commander_tree.expert_logistics
+		Description: Superheavy cargo lifter plane.\nMaximum 1 can be built.\n Special Ability: Supertransport\nTransports up to 15 Infantry or Vehicles.\nDeploys those with a parachute (force fire to unload)\n  Unarmed
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Dropship Transport
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 20000
+	AmmoPool:
+		Ammo: 1
+		Delay: 60
+		PipCount: 0
+	ReloadAmmoPool:
+		Delay: 60
+		Count: 1
+	AttackAircraft:
+		FacingTolerance: 5
+	Armament:
+		Weapon: DropDummy
+	ParaDrop:
+		DropRange: 5c0
+		ChuteSound: chute1.aud
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 3
+		Speed: 156
+		TakeOffOnResupply: false
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeOffOnCreation: False
+	Cargo:
+		MaxWeight: 15
+		PipCount: 15
+		Types: Infantry, Vehicle
+	SpawnActorOnDeath:
+		Actor: dropship.Husk
+		RequiresCondition: !being-warped
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,0
+		Interval: 2
+	Selectable:
+		DecorationBounds: 50,40,0,2
+	Contrail@1:
+		Offset: -400,-483,0
+	Contrail@2:
+		Offset: -450,-683,-10
+	Contrail@3:
+		Offset: -500,-883,-20
+	Contrail@4:
+		Offset: -400,483,0
+	Contrail@5:
+		Offset: -450,683,-10
+	Contrail@6:
+		Offset: -500,883,-20
+	RenderSprites:
+		Image: dropship
+	Rearmable:
+		RearmActors: afld, afld.gdi, afld.allies
 
 AURORA:
 	Inherits: ^PlaneTD
@@ -2716,7 +2933,7 @@ AURORA:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: atek, ~afld.allies, ~aircraft.allies, ~techlevel.high
+		Prerequisites: atek, ~afld.allies, ~aircraft.allies, ~commander_tree.aurora, ~techlevel.high
 		Description: Supersonic bomber armed with the Mother of all Bombs.\n  Strong vs Buildings, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 3000
@@ -2744,7 +2961,7 @@ AURORA:
 		CruiseAltitude: 2560
 		InitialFacing: 192
 		TurnSpeed: 4
-		Speed: 150
+		Speed: 175
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: cjetbana.aud
@@ -2786,16 +3003,16 @@ AURORA:
 		Offset: -300,800,-50
 	SpawnActorOnDeath:
 		Actor: AURO.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: AURO.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: AURO.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: AURO.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
@@ -2890,23 +3107,23 @@ AURO:
 		Offset: -300,800,-50
 	SpawnActorOnDeath:
 		Actor: AURO.Husk
-		RequiresCondition: ammo && !empdisable
+		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
 		Actor: AURO.Husk.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: AURO.Husk.EMP
-		RequiresCondition: ammo && empdisable
+		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: AURO.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: !ammo && empdisable && !being-warped
 	SmokeTrailWhenDamaged:
 		Offset: -853,0,171
 		Interval: 2
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
-		RearmActors: afld, afld.gdi
+		RearmActors: afld, afld.gdi, afld.allies
 	Voiced:
 		VoiceSet: AuroraVoice
 	-ProductionCostMultiplier@EagleBonus:

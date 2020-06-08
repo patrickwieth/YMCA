@@ -99,6 +99,10 @@
 	Warhead@3Eff: CreateEffect
 		ImpactSounds: firetrt1.aud
 
+120mmHEAT.firerate:
+	Inherits: 120mmHEAT
+	ReloadDelay: 25
+
 125mm:
 	Inherits: ^Cannon
 	ReloadDelay: 70
@@ -107,6 +111,12 @@
 		Versus:
 			Concrete: 40
 			Heavy: 115
+
+125mm.AP:
+	Inherits: 125mm
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			Heavy: 230
 
 130mm:
 	Inherits: ^Cannon
@@ -118,6 +128,30 @@
 		Versus:
 			Heavy: 115
 		InvalidTargets: Air
+
+130mm.Nuke:
+	Inherits: ^Cannon
+	ReloadDelay: 90
+	Burst: 2
+	InvalidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 12000
+		Falloff: 100, 36, 12, 5, 0
+		Delay: 5
+		ValidTargets: Ground, Trees, Water, Underwater, Air
+		Versus:
+			Wood: 50
+			Brick: 25
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff_impact: CreateEffect
+		Explosions: nuke3
+		ImpactSounds: kaboom1.aud
+	Warhead@4Radiation: CreateTintedCells
+		Level: 300
+		Falloff: 100, 25, 12
+		LayerName: radioactivity.weak
 
 130mmTD:
 	Inherits: 130mm
@@ -141,6 +175,12 @@
 			Concrete: 20
 			Brick: 32
 		InvalidTargets: Air
+
+183mm.Burst:
+	Inherits: 183mm
+	ReloadDelay: 100
+	Burst: 3
+	BurstDelays: 7
 
 TurretGun:
 	Inherits: ^Cannon
@@ -221,6 +261,10 @@ TitanGun:
 			Light: 100
 			Heavy: 42
 
+155mm.BATF:
+	Inherits: 155mm
+	ReloadDelay: 20
+
 155mmTD:
 	Inherits: 155mm
 	Report: tnkfire2.aud
@@ -285,6 +329,9 @@ TitanGun:
 	Warhead@3Eff: CreateEffect
 		Explosions: large_artillery_explosion
 		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
+
+380mm.Concussion:
+	Inherits: 380mm
 	Warhead@Concussion1: GrantExternalCondition
 		Range: 1c512
 		Duration: 240
@@ -413,6 +460,26 @@ Grenade:
 GrenadeE:
 	Inherits: Grenade
 	Range: 6c768
+
+Grenade.Huey:
+	Inherits: Grenade
+	Range: 6c768
+	Burst: 5
+	BurstDelays: 2
+	Projectile: BulletCA
+		Speed: 136
+		Inaccuracy: 1c554
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 2000
+		Versus:
+			None: 80
+			Wood: 60
+			Light: 100
+			Heavy: 35
+			Concrete: 30
+			Brick: 50
+	-Warhead@2Dam: SpreadDamage
 
 Mortar:
 	Inherits: ^Artillery

@@ -13,53 +13,1210 @@
 	RenderSprites:
 		Image: hack.cameo_filler
 
-^default.generals_power:
+^default.commander_tree_item:
 	Interactable:
 	AlwaysVisible:
 	Buildable:
 		BuildDurationModifier: 100
-		Queue: queue.usa_generals_power, queue.air_gen_generals_power, queue.laser_gen_generals_power, queue.super_gen_generals_power, queue.gla_generals_power, queue.toxin_gen_generals_power, queue.demo_gen_generals_power, queue.stealth_gen_generals_power, queue.prc_generals_power, queue.inf_gen_generals_power, queue.nuke_gen_generals_power, queue.tank_gen_generals_power
+		Queue: Commander_Tree
 		BuildLimit: 1
 	ProvidesPrerequisite@powername:
 		Prerequisite: prerequisite.point_defense_turret
 	RenderSprites:
 	ProvidesPrerequisite@powername:
 
-generals_power.spy_drone:
-	Inherits: ^default.generals_power
-	Tooltip:
-		Name: Spy Drone
-	Buildable:
-		Queue: queue.usa_generals_power, queue.air_gen_generals_power, queue.laser_gen_generals_power, queue.super_gen_generals_power
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points
-		Description: Enables Spy Drone support power from Command Center.
-
 commander_tree.point_defense_turret:
-	Inherits: ^default.generals_power
+	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Point Laser Defense Turret
 	Buildable:
-		Queue: queue.usa_generals_power, queue.air_gen_generals_power, queue.laser_gen_generals_power, queue.super_gen_generals_power
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, anypower
+		Description: Enables to build the Point Laser Defense Turret.\n  It shoots down incoming shells and missiles.
+
+commander_tree.basic_logistics:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Basic Logistics
+	Buildable:
+		Queue: Commander_Tree
 		BuildPaletteOrder: 0
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points
-		Description: Enables to build Point Laser Defense systems to shoot down incoming shells and missiles.
+		Prerequisites: prerequisite.has_points, anypower
+		Description: Enables to build the Chinook and the Supply Truck.
 
-hack.cameo_filler.3:
-	Inherits: ^default.cameo_filler
+commander_tree.advanced_logistics:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Advanced Logistics
 	Buildable:
-		Queue: queue.toxin_gen_generals_power, queue.demo_gen_generals_power
-		BuildPaletteOrder: 28
-		Prerequisites: disabled, ~prerequisite.zh_units
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.all, ~commander_tree.basic_logistics
+		Description: Enables to build Carryalls and Minelayer vehicles.
 
-hack.cameo_filler.4:
-	Inherits: ^default.cameo_filler
+commander_tree.expert_logistics:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Expert Logistics
 	Buildable:
-		Queue: queue.prc_generals_power, queue.inf_gen_generals_power, queue.nuke_gen_generals_power, queue.tank_gen_generals_power
-		BuildPaletteOrder: 25
-		Prerequisites: disabled, ~!prerequisite.zh_units
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.all, ~!aircraft.nod, ~commander_tree.advanced_logistics
+		Description: Enables to build Dropships, which can paradrop units.
+
+commander_tree.advanced_infantry_training:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Advanced Infantry Training
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, anypower
+		Description: Enables to build specialized Infantry.
+
+#ALLIES
+commander_tree.Aurora:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Aurora
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~atek
+		Description: Enables to build the Aurora, a supersonic bomber. \n  It drops the Mother of all Bombs. \n  Very efficient versus groups of weakly armored units.
+
+commander_tree.Raptor:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Raptor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.allies
+		Description: Enables to build the Raptor. It is a supersonic air superiority fighter. \n  Very effective vs. other air units.
+
+commander_tree.Longbow:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Longbow
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.allies
+		Description: Enables to build the Longbow Helicopter. \n  It is strong vs. tanks and aircraft.
+
+commander_tree.Harrier:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Harrier
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, atek, ~aircraft.allies
+		Description: Enables to build the Harrier, a VTOL aircraft.  \n  Strong vs. groups of light armored ground units.
+
+commander_tree.Prism_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Prism Tank
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~radar, ~!commander_tree.prism_cannon, ~!commander_tree.prism_blaster, ~!vehicles.england
+		Description: Enables to build the Prism Tank, an energy based weapon with high range.\n  Srong versus light vehicles and infantry.
+
+commander_tree.Prism_Cannon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Prism Cannon
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~radar, ~!commander_tree.prism_blaster, ~!commander_tree.prism_tank, ~!vehicles.france
+		Description: Enables to build the Prism Cannon. \n  Has higher range and more damage than the Prism Tank, but does not split its beam. \n  It is stronger vs. base defenses and single units but less effective against large armies.
+
+commander_tree.Prism_Blaster:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Prism Blaster
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~radar, ~!commander_tree.prism_cannon, ~!commander_tree.prism_tank, ~!vehicles.germany
+		Description: Enables to build the Prism Blaster. \n  Has less range than the Prism Tank, but does split its beam to more targets. \n  It is stronger vs. large armies and less effective against base defenses and single targets.
+
+commander_tree.Aurora:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Aurora
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~atek
+		Description: Enables to build the Aurora, a supersonic bomber.\n  Drops the Mother of all Bombs. \n  Very efficient versus groups of light armored units.
+
+commander_tree.Raptor:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Raptor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.allies
+		Description: Enables to build the Raptor. It is a supersonic air superiority fighter. \n  Very effective vs. other air units.
+
+commander_tree.Scout_Tank_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Scout Tank Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~atek
+		Description: Upgrades the Scout Tank with a Point Laser Defense to shoot down incoming projectiles.
+
+commander_tree.Chrono_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Tank
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, atek, ~vehicles.allies
+		Description: Enables to build the Chrono Tank. \n  It can teleport over short distances and has missiles vs. tanks.
+
+commander_tree.Chrono_Tank_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Tank Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~atek, ~commander_tree.chrono_tank
+		Description: Upgrades the Chrono Tank with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Chrono_Prison:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Prison
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek
+		Description: Enables to build the Chrono Prison. \n  It traps other units in the Time Aether, \n  teleporting them out of existence shortly thereafter.
+
+commander_tree.Chrono_Prison_AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Prison Anti-Air Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~atek, ~!commander_tree.chrono_prison_range, ~commander_tree.chrono_prison
+		Description: Upgrades the Chrono Prison to be able to also trap air units in the Time Aether.
+
+commander_tree.Chrono_Prison_Range:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Prison Range Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~atek, ~!commander_tree.chrono_prison_aa, ~commander_tree.chrono_prison, ~vehicles.germany
+		Description: Increases the range of the Chrono Prison allowing it to stop more distant targets.
+
+commander_tree.Cryo_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Cryo Launcher
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, atek, ~vehicles.allies
+		Description: Allows to build Cryo Launcher. \n  An artillery support unit slowing enemy vehicles and making them more vulnerable.
+
+commander_tree.Huey.Cryo:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Cryo Huey Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~atek, ~vehicles.allies
+		Description: Upgrades the attack of the Huey with cryo missiles, slowing down enemies.
+
+commander_tree.Huey.Grenade:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Grenade Huey Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~atek, ~vehicles.allies
+		Description: Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
+
+commander_tree.Battle_Fortress_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battle Fortress Point Laser Defense
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.france, ~atek, ~!commander_tree.battle_fortress_bunker, ~!commander_tree.battle_fortress_arty
+		Description: Upgrades the Battle Fortress with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Battle_Fortress_Arty:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battle Fortress Artillery Armament
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.france, ~atek, ~!commander_tree.battle_fortress_bunker, ~!commander_tree.battle_fortress_pld
+		Description: Rearms the Battle Fortress as a Heavy Artillery.
+
+commander_tree.Battle_Fortress_Bunker:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battle Fortress Bunker
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.france, ~atek, ~!commander_tree.battle_fortress_arty, ~!commander_tree.battle_fortress_pld
+		Description: Rearms the Battle Fortress with a Bunker from which Infantry can shoot.
+
+commander_tree.Mirage_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mirage Tank Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.england, ~atek, ~!commander_tree.mirage_fire_rate
+		Description: Upgrades the Mirage Tank with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Mirage_Fire_Rate:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mirage Tank Fire Rate Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.england, ~atek, ~!commander_tree.mirage_pld
+		Description: Upgrades the Mirage Tank with a higher fire rate.
+
+commander_tree.Tank_Destroyer_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tank Destroyer Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.germany, ~atek, ~!commander_tree.tank_destroyer_burst
+		Description: Upgrades the Tank Destroyer with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Tank_Destroyer_Burst:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tank Destroyer Burst Fire Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.germany, ~atek, ~!commander_tree.tank_destroyer_pld
+		Description: Upgrades the Tank Destroyer with burst fire capabilities.
+
+#Soviet
+commander_tree.Tesla_Hind:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tesla Hind
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.russia
+		Description: Upgrades the Hind with Tesla Coils making it stronger vs vehicles.
+
+commander_tree.Frogfoot:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Frogfoot
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!aircraft.iraq
+		Description: Enables to build the Frogfoot. \n  A bomber optimized to take down large groups of ground units or buildings.
+
+commander_tree.Dirty_Frogfoot:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Dirty Frogfoot
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.iraq
+		Description: Enables to build the Dirty Frogfoot. \n  It is a bomber armed with dirty bombs leaving a lot of radiation at the strike site.
+
+commander_tree.Chemyak:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemyak
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.iraq
+		Description: Equips the Yak Plane with chemical spray. \n  It is more efficient vs. heavy vehicles and buildings.
+
+commander_tree.Chemyak_Volatile_Tanks:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemyak Volatile Tanks
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.iraq, ~stek, ~commander_tree.chemyak
+		Description: Modifies the chemical tanks of the Chemyak to release toxin clouds on crash.
+
+commander_tree.Sukhoi:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Sukhoi
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~aircraft.ukraine
+		Description: Allows to build the Sukhoi. \n  It is a attack fighter to take down small groups of vehicles.
+
+commander_tree.Sukhoi_Concussion:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Sukhoi Concussion Bombs
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.ukraine, ~stek, ~commander_tree.sukhoi
+		Description: Upgrades the bombs of Sukhois to cause concussion near the strike site.
+
+commander_tree.Airship:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Airship of the People
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~aircraft.soviet
+		Description: Enables to build the Airship of the People. \n  It greatly accelerates the Revolution by paradropping revolutionaries on the field.
+
+commander_tree.Kirov:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Kirov
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~aircraft.soviet
+		Description: Enables to build the Kirov. \n  It is a slow moving blimp dropping devastating bombs.
+
+commander_tree.Mig:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mig
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~aircraft.soviet
+		Description: Enables to build the Mig. \n  It is an attack fighter best suited for taking out single vehicles.
+
+commander_tree.Mig.Nuke:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Mig
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~stek, ~commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.tesla, ~aircraft.iraq
+		Description: Upgrades the Mig to a Nuke bomber. \n  It drops a single nuclear bomb with devastating damage.
+
+commander_tree.Mig.AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mig Anti-Aircraft
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~stek, ~commander_tree.mig, ~!commander_tree.mig.tesla, ~!commander_tree.mig.nuke, ~aircraft.soviet, ~!aircraft.ukraine
+		Description: Upgrades the Mig to be able to attack aircraft.
+
+commander_tree.Mig.Tesla:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tesla Mig
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.nuke, ~aircraft.russia
+		Description: Upgrades the missiles of the Mig to emit Tesla zaps. \n  It increases the damage of the mig vs. groups of enemies.
+
+commander_tree.ISU:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: ISU Bombard Tank
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~vehicles.soviet, ~vehicles.ukraine
+		Description: Enables to build the ISU Bombard Tank. \n  It moves slowly and shoots slow grenades dealing a lot of damage on impact.
+
+commander_tree.ISU_Concussion:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: ISU Bombard Tank Concussion Shells
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~vehicles.soviet, ~vehicles.ukraine, ~commander_tree.isu
+		Description: Upgrades the ISU Bombard Tank to cause concussion on units at the impact zone.
+
+commander_tree.Tesla_Tank_Arc:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tesla Tank Arcing
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~stek, ~vehicles.russia
+		Description: Upgrades the Tesla Tanks Coils to allow its Zaps to arc over to more units. \n  This makes the Tesla Tank effective against large groups.
+
+commander_tree.Flak_Track:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Flak_Track
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.soviet
+		Description: Upgrades the BTR with Flak cannons. \n  This makes it less efficient vs. vehicles and better vs. air units.
+
+commander_tree.Flak_Track.Barrage:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mobile Barrage Flak
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.russia
+		Description: Upgrades the Flak Track with fast firing Flak cannons. \n  This makes it better vs. Point Laser Defense Systems and groups of units.
+
+commander_tree.Heavy_Tank.AP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Heavy Tank Armor Piercing Shells
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~stek, ~!vehicles.iraq ~!commander_tree.heavy_tank.pld
+		Description: Upgrades the Heavy Tank with Armor Piercing Shells. \n  This makes it much stronger vs. Heavy Tanks.
+
+commander_tree.Heavy_Tank.PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Heavy Tank Point Laser Defense
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~stek, ~!commander_tree.heavy_tank.ap
+		Description: Upgrades the Heavy Tank with a Point Laser Defense System. \n  This makes it more effective vs. projectile based weapons.
+
+commander_tree.V3_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: V3 Launcher
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, ~!commander_tree.akatsiya, ~!commander_tree.katyusha
+		Description: Enables to build the V3 Launcher as Advanced Siege Vehicle. \n  The V3 has the longest range, but the Rocket can be shot down.
+
+commander_tree.Akatsiya:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Akatsiya
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.ukraine, ~!commander_tree.v3_launcher, ~!commander_tree.katyusha
+		Description: Enables to build the Akatsiya as Advanced Siege Vehicle. \n  The Akatsiya has the best armor and can hit moving targets with its cluster bombs.
+
+commander_tree.Katyusha:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Katyusha
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.russia, ~!commander_tree.v3_launcher, ~!commander_tree.akatsiya
+		Description: Enables to build the Katyusha as Advanced Siege Vehicle. \n  The Katyusha fires the most projectiles.
+
+commander_tree.Mammoth_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tank
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~vehicles.soviet
+		Description: Enables to build the Mammoth Tank.\n  The Mammoth is a slow and very heavy tank, which can be further specialized.
+
+commander_tree.Mammoth_Tank_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Point Laser Defense Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~stek, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_tt, ~!commander_tree.mammoth_tank_ns, ~!commander_tree.mammoth_tank_pt
+		Description: Upgrades the Mammoth with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Mammoth_Tank_TT:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tesla Turret Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~stek, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_ns, ~!commander_tree.mammoth_tank_pt
+		Description: The Mammoth Tank is upgraded with a Tesla Weapon System. \n  Energy based weapons systems cannot be shot down by Point Defense Systems. \n  The Mammoth can no longer shoot on aircraft.
+
+commander_tree.Mammoth_Tank_NS:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Nuclear Shells Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, ~stek, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_tt, ~!commander_tree.mammoth_tank_pt
+		Description: The Mammoth is upgraded with Nuclear Shells. \n  Nuclear Shells deal a lot of damage to the target and its surroundings. \n  Nuclear Shells are weak vs. Point Laser Defense Systems.
+
+commander_tree.Mammoth_Tank_PT:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Propaganda Tower Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, ~stek, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_tt, ~!commander_tree.mammoth_tank_ns
+		Description: The Mammoth is upgraded with a Propaganda Speaker.\n  This gives infantry in its proximity a boost in combat.
+
+#GDI
+commander_tree.Mammoth_Tank_GDI:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tank
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, gtek, ~!vehicles.talon
+		Description: Enables to build the Mammoth Tank. \n  The Mammoth is a slow and very heavy tank, which can be further specialized.
+
+commander_tree.Mammoth_Tank_Ion:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Ion Mammoth Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~miss.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_gdi_pld, ~!commander_tree.mammoth_tank_nr
+		Description: The Mammoth is upgraded with an Ion cannon. \n  Energy based weapon systems cannot be shot down by Point Laser Defense Systems.
+
+commander_tree.Mammoth_Tank_GDI_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Point Defense Laser Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi,  ~miss.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_nr
+		Description: Upgrades the Mammoth with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Mammoth_Tank_NR:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Nanite Repair Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.zocom, ~miss.gdi, ~commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_gdi_pld
+		Description: The Mammoth Tank is upgraded with a Nanite Repair System. \n  This makes it more durable and vastly increases its self repair capabilites.
+
+commander_tree.Titan_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Titan Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~miss.gdi, ~!commander_tree.titan_railgun
+		Description: Upgrades the Titan with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Titan_Railgun:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Titan Railgun Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~miss.gdi, ~!commander_tree.titan_pld
+		Description: Upgrades the Titan with a Railgun. \n  The Railgun is strong vs. tanks and is an energy based weapon.
+
+commander_tree.Slingshot:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Slingshot
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, gtek, ~vehicles.gdi
+		Description: Enables to build the Slingshot. \n  The Slingshot is a hovercraft specialized to shoot down aircraft.
+
+commander_tree.Hover_MLRS:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hover_MLRS
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.zocom, ~miss.gdi, ~!commander_tree.hailstorm_mlrs
+		Description: Enables to build the Hover MLRS. \n  The Hover MLRS improves the MLRS' agility and gives it stronger rockets.
+
+commander_tree.Hailstorm_MLRS:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hailstorm MLRS
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~miss.gdi, ~!commander_tree.hover_mlrs
+		Description: Enables to build the Hailstorm MLRS. \n  The Hailstorm MLRS fires a lot of rockets over long distances. \n This upgrade removes the anti-air capabilities.
+
+commander_tree.Mobile_Sensor_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mobile Sensor Point Laser Defense
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.td
+		Description: Upgrades the Mobile Sensor Array with a Point Laser Defense System.
+
+commander_tree.Railgunner:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Railgunner
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~commander_tree.advanced_infantry_training
+		Description: Enables to build the Railgunner, a strong tank destroyer infantry.
+
+commander_tree.Railgunner.No_Crush:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Railgunner Crush-Proof
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~commander_tree.railgunner, ~commander_tree.advanced_infantry_training
+		Description: Upgrades the combat suit of the Railgunner, \n so that it can now longer be crushed by vehicles.
+
+commander_tree.Medium_Tank_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Medium Tank Point Laser Defense
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~gtek, ~vehicles.gdi
+		Description: Upgrades the Medium Tank with a Point Laser Defense System.
+
+commander_tree.APC_Vulcan:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: APC_Vulcan
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~gtek, ~!vehicles.zocom
+		Description: Upgrades the APC with a Vulcan cannon to attack air units.
+
+commander_tree.Mobile_EMP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mobile EMP
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, gtek, ~vehicles.gdi
+		Description: Enables to build the Mobile EMP unit.
+
+commander_tree.Mobile_EMP_Stable_Reactor:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mobile EMP Stable Reactor Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, ~miss.gdi, ~commander_tree.mobile_emp, ~!commander_tree.mobile_emp_volatile_reactor
+		Description: Upgrades the EMP reactor to allow multiple EMP Waves and don't self destruct on use.
+
+commander_tree.Mobile_EMP_Volatile_Reactor:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mobile EMP Volatile Reactor Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, ~miss.gdi, ~commander_tree.mobile_emp, ~!commander_tree.mobile_emp_stable_reactor
+		Description: Upgrades the EMP reactor to set off an EMP blast when the vehicle is destroyed.
+
+commander_tree.Jumpjet:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Jumpjet Trooper
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~commander_tree.advanced_infantry_training
+		Description: Enables to build the flying Jumpjet infantry, which can be further specialized.
+
+commander_tree.Jumpjet_Railgun:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Jumpjet Railgunner
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.talon, ~gtek, ~commander_tree.jumpjet, ~!commander_tree.jumpjet_rockets
+		Description: Equips the Jumpjet with a Railgun. \n  This makes it strong vs tanks.
+
+commander_tree.Jumpjet_Rockets:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Jumpjet Rocket Trooper
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.zocom, ~gtek, ~commander_tree.jumpjet, ~!commander_tree.jumpjet_railgun
+		Description: Equips the Jumpjet with a rocket launcher.\n This makes it strong vs aircraft and vehicles.
+
+commander_tree.Stealth_Fighter:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Fighter
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~gtek, ~aircraft.gdi
+		Description: Enables to build the Stealth Fighter. \n  It is a cloaked aircraft optimized to take out single heavy armored vehicles.
+
+commander_tree.Stealth_Fighter.Payload:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Fighter Double Payload
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~gtek, ~commander_tree.stealth_fighter, ~aircraft.gdi
+		Description: Doubles the Payload of the Stealth Fighter. \n  It allows the Stealth Fighter to take out a second target without resuppyling.
+
+#Nod
+commander_tree.Buggy_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Buggy Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, ~tmpl, ~!commander_tree.buggy_aa
+		Description: Upgrades the Buggy with a Point Laser Defense system to shoot down incoming projectiles.
+
+commander_tree.Buggy_AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Buggy Anti-Air Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~tmpl, ~!commander_tree.buggy_pld
+		Description: Upgrades the Buggy with an Anti-Air Laser to shoot down aircraft.
+
+commander_tree.SSM_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SSM Launcher
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.nod, ~!commander_tree.ssm_toxin_launcher,  ~!commander_tree.ssm_multi_launcher
+		Description: Enables to build the SSM Launcher, a high range artillery.
+
+commander_tree.SSM_Toxin_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SSM Toxin Launcher
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.legion, ~tmpl, ~!commander_tree.ssm_launcher, ~!commander_tree.ssm_multi_launcher
+		Description: Upgrades the SSM Launcher with Toxin missiles.\n  The toxin clouds remain for a prolonged time on the impact site dealing damage.
+
+commander_tree.SSM_Multi_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SSM Multi Launcher
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.marked, ~tmpl, ~!commander_tree.ssm_launcher, ~!commander_tree.ssm_toxin_launcher
+		Description: Upgrades the SSM Launcher's missiles to split up in multiple missiles on impact. \n  This makes the SSM Launcher more effective against large groups of vehicles.
+
+commander_tree.Chem_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Tank
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.legion, ~tmpl, ~!commander_tree.flame_tank_pld,  ~!commander_tree.fireball_tank
+		Description: Upgrades the Flame Tank to a Chemical Tank improving its damage against armored targets.
+
+commander_tree.Flame_Tank_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Flame Tank Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, ~tmpl, ~!commander_tree.chem_tank, ~!commander_tree.fireball_tank
+		Description: Upgrades the Flame Tank with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Fireball_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Fireball Tank
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.blackh, ~tmpl, ~!commander_tree.chem_tank, ~!commander_tree.flame_tank_pld
+		Description: Upgrades the Flame Tank to a Fireball Tank. \n  It shoots fireballs with greater range, reducing the necessity to fight at very close range.
+
+commander_tree.Stealth_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod
+		Description: Enables to build the Stealth Tank. \n It is a cloaked tank with strong missiles vs. vehicles and aircraft.
+
+commander_tree.Stealth_Tank_Scrin:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank Scrin Weapon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.blackh, ~tmpl, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank_explosive_rockets
+		Description: Upgrades the Stealth Tank with a Scrin Weapon. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
+
+commander_tree.Stealth_Tank_Explosive_Rockets:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank Explosive Rockets
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.marked, ~tmpl, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank_scrin
+		Description: Upgrades the Stealth Tank's missiles with a high explosive load.
+
+commander_tree.Recon_Bike_Scrin:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Scrin Weapon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, ~tmpl, ~!commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_pld
+		Description: Upgrades the Recon Bike with a Scrin Weapon.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+
+commander_tree.Recon_Bike_Rocket_Hail:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Rocket Hail
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, ~tmpl, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_pld
+		Description: Upgrades the Recon Bike to shoot more missiles at high range. \n  This makes the recon bike a hit and run artillery unit. \n  The recon bike loses its ability to fight flying targets.
+
+commander_tree.Recon_Bike_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, ~tmpl, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_rocket_hail
+		Description: Upgrades the Recon Bike with a Point Laser Defense System to shoot down incoming projectiles.
+
+commander_tree.Light_Tank_Laser:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Light Tank Laser Weapon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~tmpl
+		Description: Upgrades the Light Tank with a Laser weapon. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
+
+commander_tree.Chemical_Mortar:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Mortar Infantry
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, ~commander_tree.advanced_infantry_training
+		Description: Enables to build mortar infantry firing chemical shells
+
+commander_tree.Elite_Cyborg:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Elite Cyborg
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~bio.nod, ~commander_tree.advanced_infantry_training
+		Description: Enables to build the Elite Cyborg. \n  A very tough cyborg infantry with scrin weaponry. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
+
+commander_tree.Elite_Cyborg.Range:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Elite Cyborg (Range)
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~bio.nod, ~commander_tree.elite_cyborg, ~commander_tree.advanced_infantry_training
+		Description: Upgrades the range of the Elite Cyborg.
+
+commander_tree.Banshee:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Banshee
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~tmpl, ~aircraft.nod
+		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+
+commander_tree.Rebel_Leader:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nod Rebel Leader
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~tmpl
+		Description: Enables to recruit the Rebel Leader who allows to train infantry from the map edges.
+
+commander_tree.Reinforcements_Coordinator:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Reinforcements Coordinator
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, commander_tree.advanced_logistics
+		Description: Enables to build the Reinforcements Coordinator. \n It coordinates reinforcements directly to the frontline when deployed.
+
+commander_tree.Beam_Cannon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Beam Cannon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~tmpl
+		Description: Enables to build the Beam Cannon. \n It shoots a continuous energy beam at distant targets Strong vs. Vehicles, Weak vs. Aircraft.
 
 hack.has_points:
 	AlwaysVisible:
@@ -103,13 +1260,10 @@ prerequisite.5_stars:
 	Buildable:
 		Description: 5 Star Rank
 
-^default.generals_power_prerequisite:
+^default.commander_tree_prerequisite:
 	AlwaysVisible:
 	Interactable:
 	Tooltip:
-		Name: General's Promotion
+		Name: Commander's Specialization
 	Buildable:
-		Description: General's Promotion
-
-prerequisite.point_defense_turret:
-	Inherits: ^default.generals_power_prerequisite
+		Description: Commander's Specialization

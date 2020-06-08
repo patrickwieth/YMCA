@@ -3380,7 +3380,7 @@ AIRS:
 		ChargeInterval: 18000
 		Description: Air Drop
 		LongDesc: Cargo Planes air drop tanks anywhere on the map.
-		DropItems: ltnk, ftnk, STNK.nod
+		DropItems: ltnk, ftnk, STNK
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
 		EndChargeSpeechNotification: ReinforceAva
@@ -4874,7 +4874,7 @@ TMPL:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 140
-		Prerequisites: vehicles.nod, hq, ~structures.nod, ~techlevel.high
+		Prerequisites: hq, ~vehicles.nod, ~structures.nod, ~techlevel.high
 		IconPalette: chrometd
 		Description: Provides Nod advanced technologies.\n  Requires power to operate.\n  Special Ability: Cluster Missile
 	Building:
@@ -6122,3 +6122,129 @@ WEAT:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 	WithBuildingBib:
 		HasMinibib: true
+
+PLDT:
+	Inherits: ^DefenseTD
+	Inherits@PLD: ^PointLaserDefenseSystemBig
+	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@AUTOTARGET: ^AutoTargetGround
+	RenderSprites:
+		Scale: 0.5
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: anypower, ~commander_tree.point_defense_turret, ~techlevel.high
+		IconPalette: chrometd
+		Description: Shoots down bullets and missiles with lazers. PEW PEW
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Point Laser Defense Tower
+	Building:
+		Dimensions: 1,1
+		Footprint: x
+	Health:
+		HP: 60000
+	Armor:
+		Type: Concrete
+	RevealsShroud:
+		Range: 8c0
+	BodyOrientation:
+		QuantizedFacings: 8
+	RenderRangeCircle:
+	DrawLineToTarget:
+	Power:
+		Amount: -50
+		RequiresCondition: !being-warped
+
+Coordinator.Struct:
+	Inherits: ^Building
+	Selectable:
+		Bounds: 24,24
+	Valued:
+		Cost: 150
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack
+	Tooltip:
+		Name: Reinforcement Coordinator
+	-GivesBuildableArea:
+	Health:
+		HP: 30000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 4c0
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: 0,0,256
+		PauseOnCondition: empdisable || being-warped
+	Transforms:
+		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
+		IntoActor: coordinator
+		Offset: 0,0
+		Facing: 96
+	Exit@1:
+		ExitCell: 0,1
+		ProductionTypes: Vehicle
+	Exit@2:
+		ExitCell: 1,0
+		ProductionTypes: Vehicle
+	Exit@3:
+		ExitCell: 1,1
+		ProductionTypes: Vehicle
+	Exit@4:
+		ExitCell: 0,-1
+		ProductionTypes: Vehicle
+	Exit@5:
+		ExitCell: -1,0
+		ProductionTypes: Vehicle
+	Exit@6:
+		ExitCell: -1,-1
+		ProductionTypes: Vehicle
+	Exit@7:
+		ExitCell: -1,1
+		ProductionTypes: Vehicle
+	Exit@8:
+		ExitCell: 1,-1
+		ProductionTypes: Vehicle
+	Exit@9:
+		ExitCell: 0,2
+		ProductionTypes: Vehicle
+	Exit@10:
+		ExitCell: 2,0
+		ProductionTypes: Vehicle
+	Exit@11:
+		ExitCell: 2,2
+		ProductionTypes: Vehicle
+	Exit@12:
+		ExitCell: 0,-2
+		ProductionTypes: Vehicle
+	Exit@13:
+		ExitCell: -2,0
+		ProductionTypes: Vehicle
+	Exit@14:
+		ExitCell: -2,-2
+		ProductionTypes: Vehicle
+	Exit@15:
+		ExitCell: -2,2
+		ProductionTypes: Vehicle
+	Exit@16:
+		ExitCell: 2,-2
+		ProductionTypes: Vehicle
+	RallyPoint:
+		Offset: 5,5
+	ProductionParadrop:
+		Produces: Vehicle
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: c17.cargo
+		ReadyAudio: ReinforcementsArrived
+	PrimaryBuilding:
+		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
+	WithDecoration@primary:
+		RequiresSelection: true
+		Image: pips
+		Sequence: tag-primary
+		ReferencePoint: Top
+		ZOffset: 256
+		RequiresCondition: primary
