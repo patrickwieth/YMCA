@@ -403,6 +403,7 @@ PT2:
 
 DD2:
 	Inherits: ^Ship
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Inherits@AUTOTARGET: ^AutoTargetNavalAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Buildable:
@@ -452,14 +453,6 @@ DD2:
 		RecoilRecovery: 0
 		MuzzleSequence: muzzle
 		PauseOnCondition: under-bridge
-	Armament@SECONDARY:
-		Name: secondary
-		Turret: secondary
-		Weapon: PointLaser
-		LocalOffset: 0,10,90
-		PauseOnCondition: under-bridge
-		RequiresCondition: gdiupg2
-		ForceTargetStances: enemy
 	AttackTurreted:
 		Turrets: primary, secondary
 		Armaments: primary, secondary
@@ -474,11 +467,6 @@ DD2:
 	WithMuzzleOverlay:
 	Selectable:
 		DecorationBounds: 38,38
-	PointDefense:
-		Armament: secondary
-		PointDefenseTypes: Missile
-		RequiresCondition: gdiupg2
-		ValidStances: Enemy
 
 SS2:
 	Inherits: ^Submarine
@@ -588,7 +576,7 @@ ISUB:
 		InitialStance: HoldFire
 	Selectable:
 		DecorationBounds: 44,44
-		
+
 ICBM:
 	Inherits: ^ShootableMissile
 	RenderSprites:
@@ -619,7 +607,7 @@ ICBM:
 	Explodes:
 		Weapon: VisualExplodeAirborne
 		RequiresCondition: airborne
-		
+
 CARR:
 	Inherits: ^Ship
 	Inherits@AUTOTARGET: ^AutoTargetNavalAssaultMove
@@ -689,7 +677,7 @@ CARR:
 	ProductionCostMultiplier@talonBonus:
 		Multiplier: 90
 		Prerequisites: structures.talon
-		
+
 SB:
 	Inherits: ^Ship
 	Inherits@AUTOTARGET: ^AutoTargetAllNavalAssaultMove
