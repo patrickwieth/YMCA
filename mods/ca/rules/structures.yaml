@@ -4996,6 +4996,13 @@ PRIS:
 	Inherits: ^Defense
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		InvalidTargets: NoAutoTarget, WaterStructure, PrismTower
+	AutoTargetPriority@ATTACKANYTHING:
+		InvalidTargets: NoAutoTarget, PrismTower
+	AutoTargetPriority@TESLANORMAL:
+		RequiresCondition: !assault-move && !attack-move
+		ValidTargets: PrismTower
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
@@ -5018,30 +5025,113 @@ PRIS:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 6c0
-	WithBuildingBib:
-		HasMinibib: true
-	WithSpriteBody:
-		PauseOnCondition: disabled || empdisable || being-warped
-		RequiresCondition: !charging
-	WithChargeSpriteBody:
-		Sequence: active
-		Name: bodyactive
-		RequiresCondition: charging
-	Armament:
-		Weapon: PrisLaser
-		LocalOffset: 0,-85,956
-	AttackCharges:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable || being-warped
-		ChargingCondition: charging
-	AmbientSound:
-		RequiresCondition: charging
-		SoundFiles: bpripow.aud
-		Interval: 30, 40
 	Power:
 		Amount: -75
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
+	WithBuildingBib:
+		HasMinibib: true
+	WithSpriteBody@charged:
+		PauseOnCondition: disabled || empdisable || being-warped
+		RequiresCondition: !charging
+	WithSpriteBody@charging:
+		Sequence: active
+		Name: bodyactive
+		RequiresCondition: charging
+	GrantCondition@charging:
+		Condition: charging
+		RequiresCondition: aiming && !fired
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		Armaments: primary, secondary, tertiary
+		PauseOnCondition: disabled || empdisable || being-warped
+	Turreted:
+		TurnSpeed: 255
+		Offset: 0,0,112
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: bpripow.aud
+		Interval: 30, 40
+	Armament@primary:
+		Weapon: PrisLaser
+		LocalOffset: 0,0,996
+		Name: primary
+		TargetStances: Enemy, Neutral
+		ForceTargetStances: Enemy, Neutral
+		PauseOnCondition: !ammo
+	GrantConditionOnAttack@primary:
+		ArmamentNames: primary
+		Condition: fired
+		MaximumInstances: 1
+		RevokeDelay: 40
+	Armament@secondary:
+		Weapon: PrisLaserCharge
+		LocalOffset: 0,0,996
+		Name: secondary
+		TargetStances: Ally
+		ForceTargetStances: Ally
+		Cursor: ability
+		OutsideRangeCursor: ability
+		PauseOnCondition: !ammo || fired
+	GrantConditionOnAttack@secondary:
+		ArmamentNames: secondary
+		Condition: fired
+		MaximumInstances: 1
+		RevokeDelay: 40
+	Armament@tertiary:
+		Name: tertiary
+		Weapon: PrisLaserAim
+		PauseOnCondition: aiming
+	GrantConditionOnAttack@tertiary:
+		ArmamentNames: tertiary
+		Condition: aiming
+		MaximumInstances: 1
+		RevokeDelay: 10
+	ProximityExternalCondition@aiming:
+		Condition: aiming
+		Range: 8c512
+		RequiresCondition: aiming && !fired
+	ExternalCondition@aiming:
+		Condition: aiming
+	ExternalCondition@CHARGED:
+		Condition: charged
+	Targetable@PrismTower:
+		TargetTypes: PrismTower
+	Targetable@PrismTowerChargeable:
+		TargetTypes: PrismTowerChargeable
+		RequiresCondition: !charged && !ammo
+	AmmoPoolCA:
+		Name: primary
+		Ammo: 1
+		PipCount: 1
+		InitialAmmo: 0
+		PipType: Red
+		Armaments: primary, secondary
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA@normal:
+		AmmoPool: primary
+		Delay: 40
+		Count: 1
+		ResetOnFire: False
+		RequiresCondition: charging
+		ShowSelectionBar: true
+		SelectionBarColor: 0000ff
+	ReloadAmmoPoolCA@discharge:
+		AmmoPool: primary
+		Delay: 10
+		Count: -1
+		ResetOnFire: False
+		PauseOnCondition: aiming || !ammo
+		ShowSelectionBar: true
+		SelectionBarColor: ff0000
+	ReloadAmmoPoolCA@charge:
+		AmmoPool: primary
+		Delay: 1
+		Count: 1
+		RequiresCondition: charged
+		ShowSelectionBar: false
+		SelectionBarColor: 00ff00
+
 
 SPEN.nod:
 	Inherits: ^Building

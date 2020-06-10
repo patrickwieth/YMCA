@@ -739,7 +739,7 @@ SuperPointLaser:
 	Inherits: AdvancedPointLaser
 	Range: 3c768
 
-PrisLaser:
+PrisLaserPrototype:
 	ValidTargets: Ground, Water
 	ReloadDelay: 40
 	Range: 8c512
@@ -774,8 +774,53 @@ PrisLaser:
 		Dimensions: 3,3
 		Footprint: xxx x_x xxx
 
-PrisTLaser:
+PrisLaser:
+	Inherits: PrisLaserPrototype
+	InvalidTargets: PrismTower
+	ReloadDelay: 1
+
+PrisLaserAim:
 	Inherits: PrisLaser
+	ReloadDelay: 10
+	-Report:
+	Projectile: LaserZapCA
+		Width: 0
+		-HitAnim:
+		SecondaryBeam: false
+	-Warhead@1Dam: SpreadDamage
+	-Warhead@2Smu: LeaveSmudge
+	-Warhead@3Eff: CreateEffect
+	-Warhead@Burst: FireCluster
+
+PrisLaserCharge:
+	Inherits: PrisLaser
+	ValidTargets: PrismTowerChargeable
+	-Report:
+	-InvalidTargets:
+	Projectile: LaserZapCA
+		Width: 35
+		targetOffset: 0,0,996
+		-HitAnim: plaserfire
+		Color: 00FFFFC8
+		ZOffset: 4047
+		SecondaryBeam: true
+		SecondaryBeamWidth: 65
+		SecondaryBeamZOffset: 4047
+		SecondaryBeamColor: 75D1FF
+	-Warhead@1Dam: SpreadDamage
+	-Warhead@2Smu: LeaveSmudge
+	-Warhead@3Eff: CreateEffect
+	-Warhead@Burst: FireCluster
+	Warhead@charge: GrantExternalCondition
+		Range: 42
+		Duration: 2
+		Condition: charged
+		ValidStances: Ally
+		ValidTargets: PrismTower
+
+
+PrisTLaser:
+	Inherits: PrisLaserPrototype
 	Report: ptnkfire.aud
 	ReloadDelay: 45
 	Range: 9c0
@@ -814,7 +859,7 @@ PrisTBurst:
 			Wood: 35
 
 PrisCLaser:
-	Inherits: PrisLaser
+	Inherits: PrisLaserPrototype
 	Report: pcanfire.aud
 	ReloadDelay: 75
 	Range: 11c0
