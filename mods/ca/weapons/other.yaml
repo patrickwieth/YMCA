@@ -1193,16 +1193,16 @@ Railgun.Infantry:
 	Warhead@1Dam: SpreadDamage
 		Damage: 2000
 		Versus:
-			None: 10
-			Wood: 25
+			None: 20
+			Wood: 35
 			Light: 65
 			Heavy: 90
 			Concrete: 15
 	Warhead@2Dam: SpreadDamage
 		Damage: 500
 		Versus:
-			None: 10
-			Wood: 25
+			None: 20
+			Wood: 35
 			Light: 65
 			Heavy: 100
 			Concrete: 20
@@ -2018,14 +2018,14 @@ DropDummy:
 		Damage: 1
 
 BeamCannon:
-	ReloadDelay: 20
+	ReloadDelay: 60
 	Range: 8c0
 	TargetActorCenter: false
 	InvalidTargets: Air
 	Report: scrin5b.aud
 	Projectile: AreaBeam
 		Speed: 1c428
-		Duration: 21
+		Duration: 61
 		DamageInterval: 3
 		Width: 150
 		Shape: Flat
@@ -2035,7 +2035,7 @@ BeamCannon:
 		TrackTarget: true
 		Color: ff000025
 	Warhead@1Dam: SpreadDamage
-		Range: 0, 32
+		Range: 0, 16
 		Falloff: 100, 100
 		Damage: 500
 		AffectsParent: false
@@ -2043,8 +2043,8 @@ BeamCannon:
 		ValidTargets: Ground, Water
 		Versus:
 			Heavy: 80
-			Concrete: 130
-			Wood: 180
+			Concrete: 50
+			Wood: 100
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 	Warhead@2Dam: SpreadDamage
 		Range: 0, 32
@@ -2067,7 +2067,7 @@ BeamCannonBoosted1:
 		Width: 175
 		Color: ff000035
 	Warhead@1Dam: SpreadDamage
-		Damage: 750
+		Damage: 1000
 	Warhead@2Dam: SpreadDamage
 		Damage: 500
 
@@ -2078,7 +2078,7 @@ BeamCannonBoosted2:
 		Width: 190
 		Color: ff000045
 	Warhead@1Dam: SpreadDamage
-		Damage: 1000
+		Damage: 1500
 	Warhead@2Dam: SpreadDamage
 		Damage: 750
 
@@ -2089,7 +2089,7 @@ BeamCannonBoosted3:
 		Width: 205
 		Color: ff000055
 	Warhead@1Dam: SpreadDamage
-		Damage: 1250
+		Damage: 2000
 	Warhead@2Dam: SpreadDamage
 		Damage: 1000
 
@@ -2100,7 +2100,7 @@ BeamCannonBoosted4:
 		Width: 220
 		Color: ff000065
 	Warhead@1Dam: SpreadDamage
-		Damage: 1500
+		Damage: 2500
 	Warhead@2Dam: SpreadDamage
 		Damage: 1250
 
@@ -2111,18 +2111,18 @@ BeamCannonBoosted5:
 		Width: 235
 		Color: ff000075
 	Warhead@1Dam: SpreadDamage
-		Damage: 1750
+		Damage: 3000
 	Warhead@2Dam: SpreadDamage
 		Damage: 1500
 
 BeamCannonVisual:
-	ReloadDelay: 20
+	ReloadDelay: 60
 	Range: 8c0
 	TargetActorCenter: false
 	InvalidTargets: Air
 	Projectile: AreaBeam
 		Speed: 1c428
-		Duration: 21
+		Duration: 61
 		DamageInterval: 3
 		Width: 90
 		Shape: Flat
@@ -2160,18 +2160,17 @@ BeamCannonCharge:
 	Inherits: BeamCannonVisual
 	ValidTargets: BeamCannonBoost
 	Projectile: LaserZap
-		Duration: 21
+		Duration: 61
 		Width: 90
 		Color: ff000035
 	Range: 6c0
 	-Warhead@1Dam:
 	Warhead@charge: GrantExternalCondition
 		Range: 42
-		Duration: 20
+		Duration: 60
 		Condition: charged
 		ValidStances: Ally
 		ValidTargets: BeamCannonBoost
-=======
 
 HarvSwap:
 	ReloadDelay: 1
@@ -2188,5 +2187,3 @@ HarvSwap:
 		Sequence: idle
 		ValidTargets: Air, Ground, Water
 	Warhead@3Flash: ChronoFlashEffect
-
->>>>>>> 4822269a4004f902ae4077e286f68bb378fbeffd
