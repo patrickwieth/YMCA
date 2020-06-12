@@ -307,7 +307,7 @@ TitanGun:
 
 380mm:
 	Inherits: ^Artillery
-	ReloadDelay: 120
+	ReloadDelay: 150
 	Report: bgraatta.aud
 	MinRange: 2c0
 	Range: 9c768
@@ -317,7 +317,7 @@ TitanGun:
 		Image: 380mm
 		Inaccuracy: 1c138
 	Warhead@1Dam: SpreadDamage
-		Damage: 14500
+		Damage: 18000
 		Falloff: 100, 55, 20, 5
 		Versus:
 			None: 90
@@ -370,20 +370,28 @@ TitanGun:
 	ReloadDelay: 250
 	Range: 25c0
 	Burst: 2
-	Report: turret1.aud
+	Report: tank6.aud
 	TargetActorCenter: true
 	Projectile: BulletCA
 		Inaccuracy: 2c938
+		LaunchAngle: 40
 	Warhead@1Dam: SpreadDamage
-		Spread: 213
+		Spread: 256
 		Damage: 2000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Versus:
-			None: 60
-			Wood: 55
+			None: 100
+			Wood: 100
 			Concrete: 50
+			Heavy: 55
+	Warhead@3Eff: CreateEffect
+		Explosions: building, building2
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
+
+8Inch.NoReport:
+	Inherits: 8Inch
+	-Report:
 
 JuggernautGun:
 	Inherits: ^Artillery
@@ -419,7 +427,7 @@ JuggernautGun:
 		Versus:
 			None: 15
 			Wood: 30
-			Heavy: 60
+			Heavy: 90
 			Concrete: 20
 			Brick: 20
 
@@ -463,15 +471,16 @@ GrenadeE:
 
 Grenade.Huey:
 	Inherits: Grenade
-	Range: 6c768
-	Burst: 5
+	Range: 7c768
+	ReloadDelay: 80
+	Burst: 10
 	BurstDelays: 2
 	Projectile: BulletCA
 		Speed: 136
 		Inaccuracy: 1c554
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
-		Damage: 2000
+		Damage: 3000
 		Versus:
 			None: 80
 			Wood: 60
@@ -504,7 +513,7 @@ Mortar:
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
-		InvalidTargets: Vehicle, Tank, Structure, Wall, Husk, Trees
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 	Warhead@3Eff: CreateEffect
 		Explosions: small_chem
 		ExplosionPalette: temptd
@@ -551,6 +560,13 @@ DepthCharge:
 		ImpactSounds: kaboom15.aud
 		ValidTargets: Submarine
 
+DepthCharge.destroyer:
+	Inherits: DepthCharge
+	Burst: 2
+	BurstDelays: 5
+	Projectile: Bullet
+		Inaccuracy: 256
+
 203mm:
 	ReloadDelay: 120
 	InvalidTargets: Air
@@ -580,7 +596,7 @@ DepthCharge:
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
-		InvalidTargets: Vehicle, Tank, Structure, Wall, Husk, Trees
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
 	Warhead@3Eff: CreateEffect
 		Explosions: artillery_explosion
 		ImpactSounds: kaboom15.aud

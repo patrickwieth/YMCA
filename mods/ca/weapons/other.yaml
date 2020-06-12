@@ -184,6 +184,7 @@ Chemspray:
 		Image: chemall
 		Palette: ra2effect-ignore-lighting-alpha50
 	Warhead@1Dam: SpreadDamage
+		Damage: 1450
 		Versus:
 			Heavy: 50
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
@@ -256,6 +257,7 @@ PortaTesla:
 	Warhead@1Dam: SpreadDamage
 		Damage: 4500
 		Versus:
+			None: 350
 			Wood: 73
 			Heavy: 90
 
@@ -296,6 +298,7 @@ TTankZap:
 	ReloadDelay: 110
 	Range: 7c0
 	Warhead@1Dam: SpreadDamage
+		Damage: 11000
 		Versus:
 			Wood: 60
 			Concrete: 60
@@ -314,6 +317,7 @@ TTankArc1:
 	Range: 1c0
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Infantry, Vehicle, Ship
+		ValidStances: Enemy, Neutral
 		Versus:
 			Light: 50
 			Heavy: 50
@@ -427,7 +431,7 @@ PlaceC4:
 	Projectile: InstantHit
 	Report: icolseta.aud
 	ValidTargets: C4, Vehicle, Structure
-	InvalidTargets: C4Attached
+	InvalidTargets: C4Attached, C4Immune
 	Warhead@AttachDelayedWeapon: AttachDelayedWeapon
 		Weapon: C4
 		Type: c4
@@ -448,6 +452,9 @@ C4:
 		Spread: 64
 		Damage: 100
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+		Versus:
+			Light: 150
+			Heavy: 150
 	Warhead@2Eff: CreateEffect
 		Explosions: large_explosion
 		ImpactSounds: icolexpa.aud
@@ -545,6 +552,7 @@ Laser:
 		Damage: 37500
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
+			None: 250
 			Light: 101
 			Wood: 60
 			Heavy: 101
@@ -604,7 +612,6 @@ LaserTur:
 	Warhead@1Dam: SpreadDamage
 		Damage: 5500
 		Versus:
-			None: 120
 			Wood: 73
 			Heavy: 60
 
@@ -631,6 +638,7 @@ PortaLaser:
 	Warhead@1Dam: SpreadDamage
 		Damage: 1500
 		Versus:
+			None: 175
 			Wood: 73
 			Heavy: 90
 
@@ -657,12 +665,11 @@ VenomLaser:
 		Damage: 5500
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
-			None: 120
-			Wood: 60
-			Light: 72
-			Heavy: 28
-			Concrete: 14
-			Brick: 28
+			None: 200
+			Wood: 25
+			Concrete: 10
+			Light: 90
+			Heavy: 10
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
@@ -934,6 +941,7 @@ KirovTeslaArc:
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 		ValidTargets: Infantry, Vehicle, Ship
+		ValidStances: Enemy, Neutral
 	-Warhead@3Eff:
 
 KirovCluster:
@@ -1149,8 +1157,8 @@ SonicZapVisual.UPG:
 		Color: 00ffc435
 
 Railgun:
-	ReloadDelay: 75
-	Range: 8c512
+	ReloadDelay: 70
+	Range: 8c0
 	Report: railuse5.aud
 	InvalidTargets: Air
 	Projectile: Railgun
@@ -1165,33 +1173,17 @@ Railgun:
 		HitAnimSequence: small_explosion
 		ZOffset: 2046
 	Warhead@1Dam: SpreadDamage
-		Range: 0, 32
-		Falloff: 1000, 1000
-		Damage: 1375
-		ValidStances: Neutral, Enemy
+		Spread: 0c64
+		Falloff: 100, 37, 14, 5, 0
+		Damage: 9000
+		ValidStances: Ally, Neutral, Enemy
 		InvalidTargets: Air
-		AffectsParent: false
 		Versus:
 			None: 100
 			Wood: 65
-			Light: 65
-			Heavy: 50
+			Light: 100
+			Heavy: 85
 			Concrete: 15
-		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
-	Warhead@2Dam: SpreadDamage
-		Range: 0, 32
-		Falloff: 1000, 1000
-		Damage: 650
-		ValidStances: Ally
-		InvalidTargets: Air
-		AffectsParent: false
-		Versus:
-			None: 100
-			Wood: 65
-			Light: 75
-			Heavy: 50
-			Concrete: 40
-			Brick: 15
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 
 Railgun.Infantry:
@@ -1201,16 +1193,16 @@ Railgun.Infantry:
 	Warhead@1Dam: SpreadDamage
 		Damage: 2000
 		Versus:
-			None: 10
-			Wood: 25
+			None: 20
+			Wood: 35
 			Light: 65
 			Heavy: 90
 			Concrete: 15
 	Warhead@2Dam: SpreadDamage
 		Damage: 500
 		Versus:
-			None: 10
-			Wood: 25
+			None: 20
+			Wood: 35
 			Light: 65
 			Heavy: 100
 			Concrete: 20
@@ -1223,7 +1215,7 @@ Railgun.Jumpjet:
 
 Railgun.Titan:
 	Inherits: Railgun
-	Range: 7c512
+	Range: 6c512
 	ReloadDelay: 90
 	Warhead@1Dam: SpreadDamage
 		Damage: 4000
@@ -1244,7 +1236,7 @@ Railgun.Titan:
 			Brick: 15
 
 IonZap:
-	ReloadDelay: 50
+	ReloadDelay: 70
 	Range: 5c768
 	Report: ion1.aud
 	InvalidTargets: Air
@@ -1270,7 +1262,7 @@ IonZap:
 		ZOffset: 2045
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
-		Damage: 6350
+		Damage: 8900
 		ValidStances: Neutral, Enemy
 		InvalidTargets: Air
 		AffectsParent: false
@@ -1414,6 +1406,7 @@ MicrowaveArc:
 		Speed: 260
 	Warhead@1Dam: SpreadDamage
 		Damage: 1250
+		ValidStances: Enemy, Neutral
 	-Report:
 	Warhead@emp: GrantExternalCondition
 		Duration: 30
@@ -1456,10 +1449,20 @@ HornetLauncher:
 		ValidTargets: Ground, Water
 
 V3Launcher:
-	ReloadDelay: 300
-	Range: 22c0
-	MinRange: 9c0
+	ReloadDelay: 250
+	Range: 22c511
+	MinRange: 6c0
 	Report: vv3latta.aud, vv3lattb.aud
+	ValidTargets: Ground, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Water
+
+ICBMLauncher:
+	ReloadDelay: 300
+	Range: 25c0
+	MinRange: 10c0
+	Report: nukemisl.aud
 	ValidTargets: Ground, Water
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
@@ -1537,6 +1540,7 @@ ChaosDroneTargeting:
 	Range: 2c0
 	Projectile: InstantHit
 	ValidTargets: Infantry, Vehicle, Ship
+	InvalidTargets: ChaosImmune
 	Warhead@1Dam: TargetDamage
 
 RadBeamWeapon:
@@ -1551,13 +1555,13 @@ RadBeamWeapon:
 		Thickness: 32
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
-		Damage: 100000
+		Damage: 16000
 		Versus:
-			None: 100
-			Light: 7
-			Heavy: 5
-			Wood: 2
-			Concrete: 2
+			None: 300
+			Light: 45
+			Heavy: 30
+			Wood: 12
+			Concrete: 12
 			Brick: 0
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
@@ -2014,14 +2018,14 @@ DropDummy:
 		Damage: 1
 
 BeamCannon:
-	ReloadDelay: 20
+	ReloadDelay: 60
 	Range: 8c0
 	TargetActorCenter: false
 	InvalidTargets: Air
 	Report: scrin5b.aud
 	Projectile: AreaBeam
 		Speed: 1c428
-		Duration: 21
+		Duration: 61
 		DamageInterval: 3
 		Width: 150
 		Shape: Flat
@@ -2031,29 +2035,29 @@ BeamCannon:
 		TrackTarget: true
 		Color: ff000025
 	Warhead@1Dam: SpreadDamage
-		Range: 0, 32
+		Range: 0, 16
 		Falloff: 100, 100
-		Damage: 1000
+		Damage: 500
 		AffectsParent: false
 		ValidStances: Neutral, Enemy
 		ValidTargets: Ground, Water
 		Versus:
 			Heavy: 80
-			Concrete: 130
-			Wood: 180
+			Concrete: 50
+			Wood: 100
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 	Warhead@2Dam: SpreadDamage
 		Range: 0, 32
 		Falloff: 50, 50
-		Damage: 500
+		Damage: 250
 		InvalidTargets: BeamCannon, Air
 		AffectsParent: false
 		ValidStances: Ally
 		Versus:
 			Heavy: 80
-			Concrete: 120
-			Brick: 150
-			Wood: 180
+			Concrete: 50
+			Brick: 100
+			Wood: 100
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 
 BeamCannonBoosted1:
@@ -2063,9 +2067,9 @@ BeamCannonBoosted1:
 		Width: 175
 		Color: ff000035
 	Warhead@1Dam: SpreadDamage
-		Damage: 2000
-	Warhead@2Dam: SpreadDamage
 		Damage: 1000
+	Warhead@2Dam: SpreadDamage
+		Damage: 500
 
 BeamCannonBoosted2:
 	Inherits: BeamCannon
@@ -2074,9 +2078,9 @@ BeamCannonBoosted2:
 		Width: 190
 		Color: ff000045
 	Warhead@1Dam: SpreadDamage
-		Damage: 2250
+		Damage: 1500
 	Warhead@2Dam: SpreadDamage
-		Damage: 1250
+		Damage: 750
 
 BeamCannonBoosted3:
 	Inherits: BeamCannon
@@ -2085,9 +2089,9 @@ BeamCannonBoosted3:
 		Width: 205
 		Color: ff000055
 	Warhead@1Dam: SpreadDamage
-		Damage: 2500
+		Damage: 2000
 	Warhead@2Dam: SpreadDamage
-		Damage: 1500
+		Damage: 1000
 
 BeamCannonBoosted4:
 	Inherits: BeamCannon
@@ -2096,9 +2100,9 @@ BeamCannonBoosted4:
 		Width: 220
 		Color: ff000065
 	Warhead@1Dam: SpreadDamage
-		Damage: 2750
+		Damage: 2500
 	Warhead@2Dam: SpreadDamage
-		Damage: 1750
+		Damage: 1250
 
 BeamCannonBoosted5:
 	Inherits: BeamCannon
@@ -2109,16 +2113,16 @@ BeamCannonBoosted5:
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 	Warhead@2Dam: SpreadDamage
-		Damage: 2000
+		Damage: 1500
 
 BeamCannonVisual:
-	ReloadDelay: 20
+	ReloadDelay: 60
 	Range: 8c0
 	TargetActorCenter: false
 	InvalidTargets: Air
 	Projectile: AreaBeam
 		Speed: 1c428
-		Duration: 21
+		Duration: 61
 		DamageInterval: 3
 		Width: 90
 		Shape: Flat
@@ -2156,14 +2160,30 @@ BeamCannonCharge:
 	Inherits: BeamCannonVisual
 	ValidTargets: BeamCannonBoost
 	Projectile: LaserZap
-		Duration: 21
+		Duration: 61
 		Width: 90
 		Color: ff000035
 	Range: 6c0
 	-Warhead@1Dam:
 	Warhead@charge: GrantExternalCondition
 		Range: 42
-		Duration: 20
+		Duration: 60
 		Condition: charged
 		ValidStances: Ally
 		ValidTargets: BeamCannonBoost
+
+HarvSwap:
+	ReloadDelay: 1
+	Projectile: InstantExplode
+	Warhead@2Eff: CreateEffect
+		Explosions: chronowarp_effect
+		ExplosionPalette: ra2effect-ignore-lighting-alpha75
+		ValidTargets: Ground, Air, Water
+		ImpactSounds: chrono2.aud
+	Warhead@teleport: SpawnActor
+		Actors: harv.chrono
+		Range: 1
+		Image: chronoappear
+		Sequence: idle
+		ValidTargets: Air, Ground, Water
+	Warhead@3Flash: ChronoFlashEffect

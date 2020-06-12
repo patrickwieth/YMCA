@@ -383,7 +383,7 @@ Player:
 				FineScanRadius: 2
 				Consideration@1:
 					Against: Enemy
-					Types: Air, Tank, Vehicle, Infantry, Water
+					Types: Air, Vehicle, Infantry, Water
 					Attractiveness: 2
 					TargetMetric: Value
 					CheckRadius: 2c0
@@ -426,7 +426,7 @@ Player:
 					CheckRadius: 2c0
 				Consideration@3:
 					Against: Ally
-					Types: Vehicle, Tank
+					Types: Vehicle
 					Attractiveness: 5
 					TargetMetric: Value
 					CheckRadius: 3c0
@@ -442,7 +442,7 @@ Player:
 				FineScanRadius: 2
 				Consideration@1:
 					Against: Enemy
-					Types: Structure, Tank, Vehicle
+					Types: Structure, Vehicle
 					Attractiveness: -10
 					TargetMetric: Value
 					CheckRadius: 3c0
@@ -454,7 +454,7 @@ Player:
 					CheckRadius: 2c0
 				Consideration@3:
 					Against: Ally
-					Types: Tank, Vehicle
+					Types: Vehicle
 					Attractiveness: 3
 					TargetMetric: Value
 					CheckRadius: 3c0
@@ -470,7 +470,7 @@ Player:
 				FineScanRadius: 2
 				Consideration@3:
 					Against: Ally
-					Types: Tank, Vehicle, Infantry
+					Types: Vehicle, Infantry
 					Attractiveness: 2
 					TargetMetric: Value
 					CheckRadius: 3c0
@@ -479,7 +479,7 @@ Player:
 				MinimumAttractiveness: 1000
 				Consideration@1:
 					Against: Ally
-					Types: Tank, Vehicle
+					Types: Vehicle
 					Attractiveness: 2
 					TargetMetric: Value
 					CheckRadius: 4c0
@@ -489,20 +489,20 @@ Player:
 				FineScanRadius: 2
 				Consideration@2:
 					Against: Enemy
-					Types: Infantry, Tank, Vehicle
+					Types: Infantry, Vehicle
 					Attractiveness: -2
 					TargetMetric: Value
 					CheckRadius: 2c0
 				Consideration@3:
 					Against: Ally
-					Types: Infantry, Tank, Vehicle
+					Types: Infantry, Vehicle
 					Attractiveness: 2
 					TargetMetric: Value
 					CheckRadius: 3c0
 	HarvesterBotModuleCA:
 		RequiresCondition: enable-brutal-ai || enable-vhard-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai || enable-naval-ai
-		HarvesterTypes: harv, har2
-		RefineryTypes: proc, proc.td
+		HarvesterTypes: harv,har2,harv.chrono
+		RefineryTypes: proc,proc.td
 		HarvestersPerRefinery: 2
 	CaptureManagerBotModuleCA:
 		RequiresCondition: enable-brutal-ai || enable-vhard-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai
@@ -566,8 +566,6 @@ Player:
 			weat: 8000
 			eye: 8000
 		BuildingLimits:
-			proc: 4
-			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -621,6 +619,7 @@ Player:
 			cram: 9
 			sam: 9
 			nsam: 9
+			gap: 1
 			atek: 1
 			stek: 1
 			silo: 1
@@ -651,7 +650,6 @@ Player:
 			syrd: 1
 			spen.nod: 1
 			syrd.gdi: 1
-
 	BaseBuilderBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
 		MinimumExcessPower: 50
@@ -694,8 +692,6 @@ Player:
 			weat: 8000
 			eye: 8000
 		BuildingLimits:
-			proc: 4
-			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -749,6 +745,7 @@ Player:
 			cram: 7
 			sam: 7
 			nsam: 7
+			gap: 1
 			atek: 1
 			stek: 1
 			silo: 1
@@ -820,8 +817,6 @@ Player:
 			weat: 8000
 			eye: 8000
 		BuildingLimits:
-			proc: 4
-			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -875,6 +870,7 @@ Player:
 			cram: 5
 			sam: 5
 			nsam: 5
+			gap: 1
 			atek: 1
 			stek: 1
 			silo: 1
@@ -946,8 +942,6 @@ Player:
 			weat: 8000
 			eye: 8000
 		BuildingLimits:
-			proc: 4
-			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -1001,6 +995,7 @@ Player:
 			cram: 3
 			sam: 3
 			nsam: 3
+			gap: 1
 			atek: 1
 			stek: 1
 			silo: 1
@@ -1048,8 +1043,6 @@ Player:
 		SiloTypes: silo,silo.td
 		AntiAirTypes: sam, nsam, agun, cram
 		BuildingLimits:
-			proc: 4
-			proc.td: 4
 			barr: 3
 			tent: 3
 			pyle: 3
@@ -1103,6 +1096,7 @@ Player:
 			cram: 3
 			sam: 3
 			nsam: 3
+			gap: 1
 			atek: 1
 			stek: 1
 			fix: 1
@@ -1134,29 +1128,25 @@ Player:
 	SquadManagerBotModuleCA@brutal-vhard:
 		RequiresCondition: enable-brutal-ai || enable-vhard-ai
 		SquadSize: 30
-		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog, e6, n6
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub
+		ExcludeFromSquadsTypes: harv, har2, harv.chrono, mcv, amcv, dog, e6, n6
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub,sb,seas
 		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod
 		ConstructionYardTypes: fact,afac
 		IdleScanRadius: 18
 		AttackScanRadius: 9
 		MaxBaseRadius: 16
-		RushInterval: 600
 		RushAttackScanRadius: 25
 		ProtectUnitScanRadius: 28
 		ProtectionScanRadius: 10
-		AssignRolesInterval: 50
-		AttackForceInterval: 75
 		DangerScanRadius: 8
-		MinimumAttackForceDelay: 0
 	UnitBuilderBotModuleCA@brutal-vhard:
 		RequiresCondition: enable-brutal-ai || enable-vhard-ai
 		IdleBaseUnitsMaximum: 50
 		UnitBuilderMinCredits: 1800
 		MaxAircraft: 8
 		UnitDelays:
-			mcv: 1250
-			amcv: 1250
+			mcv: 6750
+			amcv: 6750
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1185,8 +1175,6 @@ Player:
 			rmbo: 15
 			e7: 15
 			bori: 15
-			harv: 10
-			har2: 10
 			apc: 20
 			jeep: 30
 			apc2: 20
@@ -1255,6 +1243,8 @@ Player:
 			dd2: 1
 			ss2: 2
 			isub: 1
+			sb: 1
+			seas: 1
 		UnitLimits:
 			dog: 2
 			sab: 2
@@ -1275,13 +1265,15 @@ Player:
 			carr: 4
 			jjet: 8
 			kiro: 3
-			harv: 8
-			har2: 8
+			ss: 10
+			ss2: 10
+			sb: 10
+			seas: 10
 	SquadManagerBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
 		SquadSize: 25
-		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog, e6, n6
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub
+		ExcludeFromSquadsTypes: harv, har2, harv.chrono, mcv, amcv, dog, e6, n6
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub,sb,seas
 		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod
 		ConstructionYardTypes: fact,afac
 	UnitBuilderBotModuleCA@hard:
@@ -1289,8 +1281,8 @@ Player:
 		IdleBaseUnitsMaximum: 50
 		MaxAircraft: 6
 		UnitDelays:
-			mcv: 1250
-			amcv: 1250
+			mcv: 6750
+			amcv: 6750
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1319,8 +1311,6 @@ Player:
 			rmbo: 15
 			e7: 15
 			bori: 15
-			harv: 10
-			har2: 10
 			apc: 20
 			jeep: 30
 			apc2: 20
@@ -1389,6 +1379,8 @@ Player:
 			dd2: 1
 			ss2: 2
 			isub: 1
+			sb: 1
+			seas: 1
 		UnitLimits:
 			dog: 2
 			sab: 2
@@ -1409,13 +1401,15 @@ Player:
 			carr: 4
 			jjet: 8
 			kiro: 3
-			harv: 8
-			har2: 8
+			ss: 10
+			ss2: 10
+			sb: 10
+			seas: 10
 	SquadManagerBotModuleCA@normal:
 		RequiresCondition: enable-normal-ai
 		SquadSize: 20
-		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub
+		ExcludeFromSquadsTypes: harv, har2, harv.chrono, mcv, amcv, dog
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
 		ConstructionYardTypes: fact,afac
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
 	UnitBuilderBotModuleCA@normal:
@@ -1423,8 +1417,8 @@ Player:
 		IdleBaseUnitsMaximum: 50
 		MaxAircraft: 4
 		UnitDelays:
-			mcv: 1250
-			amcv: 1250
+			mcv: 6750
+			amcv: 6750
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1453,8 +1447,6 @@ Player:
 			rmbo: 15
 			e7: 15
 			bori: 15
-			harv: 10
-			har2: 10
 			apc: 20
 			jeep: 30
 			apc2: 20
@@ -1523,6 +1515,8 @@ Player:
 			dd2: 1
 			ss2: 2
 			isub: 1
+			sb: 1
+			seas: 1
 		UnitLimits:
 			dog: 2
 			sab: 2
@@ -1543,21 +1537,23 @@ Player:
 			carr: 4
 			jjet: 8
 			kiro: 2
-			harv: 8
-			har2: 8
+			ss: 10
+			ss2: 10
+			sb: 10
+			seas: 10
 	SquadManagerBotModuleCA@easy:
 		RequiresCondition: enable-easy-ai
 		SquadSize: 15
-		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub
+		ExcludeFromSquadsTypes: harv, har2, harv.chrono, mcv, amcv, dog
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
 		ConstructionYardTypes: fact,afac
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
 	UnitBuilderBotModuleCA@easy:
 		RequiresCondition: enable-easy-ai
 		MaxAircraft: 2
 		UnitDelays:
-			mcv: 1250
-			amcv: 1250
+			mcv: 6750
+			amcv: 6750
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1586,8 +1582,6 @@ Player:
 			rmbo: 15
 			e7: 15
 			bori: 15
-			harv: 10
-			har2: 10
 			apc: 20
 			jeep: 30
 			apc2: 20
@@ -1656,6 +1650,8 @@ Player:
 			dd2: 1
 			ss2: 2
 			isub: 1
+			sb: 1
+			seas: 1
 		UnitLimits:
 			dog: 2
 			sab: 2
@@ -1676,21 +1672,23 @@ Player:
 			carr: 4
 			jjet: 8
 			kiro: 1
-			harv: 8
-			har2: 8
+			ss: 10
+			ss2: 10
+			sb: 10
+			seas: 10
 	SquadManagerBotModuleCA@naval:
 		RequiresCondition: enable-naval-ai
 		SquadSize: 1
-		ExcludeFromSquadsTypes: harv, har2, mcv, amcv, dog
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,dd2,ss2,isub
+		ExcludeFromSquadsTypes: harv, har2, harv.chrono, mcv, amcv, dog
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,dd2,ss2,isub,sb,seas
 		ConstructionYardTypes: fact,afac
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
 	UnitBuilderBotModuleCA@naval:
 		RequiresCondition: enable-naval-ai
 		MaxAircraft: 4
 		UnitDelays:
-			mcv: 1250
-			amcv: 1250
+			mcv: 6750
+			amcv: 6750
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -1705,8 +1703,6 @@ Player:
 			n3c: 40
 			rmbc: 15
 			dog: 2
-			harv: 10
-			har2: 10
 			hsam: 40
 			1tnk: 70
 			ltnk: 40
@@ -1737,6 +1733,5 @@ Player:
 			dd2: 10
 			ss2: 20
 			isub: 10
-		UnitLimits:
-			harv: 8
-			har2: 8
+			sb: 10
+			seas: 10

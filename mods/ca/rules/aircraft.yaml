@@ -248,7 +248,7 @@ MIG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld, stek, ~commander_tree.mig, ~techlevel.high
+		Prerequisites: ~afld, stek, ~commander_tree.mig, ~commander_tree.mig.aa, ~commander_tree.mig.tesla, ~commander_tree.mig.nuke, ~techlevel.high
 		Description: Precision strike aircraft.\n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1750
@@ -1315,8 +1315,8 @@ HUEY.Grenade:
 	Tooltip:
 		Name: Grenade Huey
 	AmmoPool:
-		Ammo: 25
-		PipCount: 5
+		Ammo: 40
+		PipCount: 4
 	Armament@PRIMARY:
 		Weapon: Grenade.Huey
 		LocalOffset: 85,-213,-185
@@ -2681,10 +2681,12 @@ YF23.Bomber:
 		MaximumPitch: 56
 		MoveIntoShroud: False
 	AmmoPool:
-		Ammo: 12
+		Ammo: 10
 		AmmoCondition: ammo
 	ReloadAmmoPool:
+		Delay: 250
 		Count: 2
+		ResetOnFire: true
 	-Selectable:
 	SelectionDecorations:
 		RenderSelectionBars: False
@@ -2827,10 +2829,6 @@ VENM:
 		PipCount: 6
 		ReloadDelay: 16
 		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 200
-		Count: 1
-		ResetOnFire: true
 	SpawnActorOnDeath:
 		Actor: VENM.Husk
 		RequiresCondition: ammo && !empdisable && !being-warped
