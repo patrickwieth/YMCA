@@ -481,8 +481,10 @@ MEDI:
 	Voiced:
 		VoiceSet: MedicVoice
 	AutoTarget:
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry
+	AutoTargetPriority@ATTACKDUMMY:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
+		InvalidTargets: NoAutoTarget
+		ValidStances: Enemy
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Targetable:
@@ -518,6 +520,10 @@ MECH:
 		OutsideRangeCursor: repair
 		TargetStances: Ally
 		ForceTargetStances: None
+	AutoTargetPriority@REPAIR:
+		ValidTargets: Repair, C4Attached
+		ValidStances: Ally
+		Priority: 2
 	Armament@defuse:
 		Weapon: DefuseKit
 		Cursor: goldwrench
@@ -538,11 +544,12 @@ MECH:
 		ArmamentNames: tertiary
 		Condition: attacking
 		RevokeDelay: 30
-	AutoTargetPriority@REPAIR:
-		ValidTargets: Repair, C4Attached
-		ValidStances: Ally
-		Priority: 2
+	AutoTargetPriority@ATTACKDUMMY:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
+		InvalidTargets: NoAutoTarget
+		ValidStances: Enemy
 	AttackFrontal:
+		Armaments: primary, secondary, tertiary
 		Voice: Action
 		PauseOnCondition: being-warped
 	CaptureManager:
