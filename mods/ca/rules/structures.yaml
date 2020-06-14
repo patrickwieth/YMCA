@@ -3792,14 +3792,50 @@ ATWR:
 		HasMinibib: true
 	Turreted:
 		TurnSpeed: 255
-		Offset: 128,128,384
+		Offset: 0,0,0
 	Armament@primary:
 		Weapon: StingerGTWR
+		Name: primary
 		LocalOffset: 256,128,0, 256,-128,0
 		LocalYaw: -100,100
+		PauseOnCondition: !ammo
+	GrantConditionOnAttack@primary:
+		ArmamentNames: primary
+		Condition: fired
+		MaximumInstances: 1
+		RevokeDelay: 50
+	Armament@secondary:
+		Weapon: StingerGTWR.Relay
+		Name: secondary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo
+	GrantConditionOnAttack@secondary:
+		ArmamentNames: secondary
+		Condition: relayfired
+		MaximumInstances: 1
+		RevokeDelay: 15
+	GrantConditionOnAttack@secondary:
+		ArmamentNames: secondary
+		Condition: fired
+		MaximumInstances: 1
+		RevokeDelay: 50
+	Armament@tertiary:
+		Weapon: Flare.AGT
+		LocalOffset: 0,0,800
+		RequiresCondition: relayable
 	AttackTurreted:
+		Armaments: primary, secondary, tertiary
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
+	AmmoPool:
+		Armaments: primary, secondary
+		Ammo: 2
+		PipCount: 0
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 50
+		Count: 2
 	BodyOrientation:
 		QuantizedFacings: 8
 	Power:
@@ -3808,6 +3844,13 @@ ATWR:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
+	ProximityExternalCondition@RELAYABLE:
+		Range: 13c0
+		ValidStances: Ally
+		Condition: relayable
+		RequiresCondition: !fired || relayfired
+	ExternalCondition@RELAYABLE:
+		Condition: relayable
 
 STWR:
 	Inherits: ^Defense
