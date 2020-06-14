@@ -432,7 +432,6 @@ E7:
 
 MEDI:
 	Inherits: ^Soldier
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -445,8 +444,6 @@ MEDI:
 		Name: Medic
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	Selectable:
-		Priority: 7
 	Health:
 		HP: 5000
 	RevealsShroud:
@@ -459,8 +456,22 @@ MEDI:
 		OutsideRangeCursor: heal
 		TargetStances: Ally
 		ForceTargetStances: None
+	Armament@secondary:
+		Weapon: DummyWeapon
+		PauseOnCondition: attacking
+	GrantConditionOnAttack:
+		ArmamentNames: secondary
+		Condition: attacking
+		RevokeDelay: 30
+		AttackSequences:
+			primary: heal
+			secondary: stand
 	AttackFrontal:
 		PauseOnCondition: being-warped
+	AutoTargetPriority@HEAL:
+		ValidTargets: Infantry
+		ValidStances: Ally
+		Priority: 2
 	WithInfantryBody:
 		IdleSequences: idle
 		StandSequences: stand
@@ -477,7 +488,6 @@ MEDI:
 
 MECH:
 	Inherits: ^Soldier
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -490,8 +500,6 @@ MECH:
 		Name: Mechanic
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	Selectable:
-		Priority: 7
 	Health:
 		HP: 5000
 	Mobile:
@@ -518,9 +526,25 @@ MECH:
 		ValidTargets: C4Attached
 		InvalidTargets: NoAutoTarget
 		ValidStances: Ally
+	Armament@tertiary:
+		Weapon: DummyWeapon
+		PauseOnCondition: attacking
+	GrantConditionOnAttack:
+		ArmamentNames: tertiary
+		Condition: attacking
+		RevokeDelay: 30
+		AttackSequences:
+			primary: repair
+			secondary: repair
+			tertiary: stand
+	AutoTargetPriority@REPAIR:
+		ValidTargets: Repair, C4Attached
+		ValidStances: Ally
+		Priority: 2
 	AttackFrontal:
 		Voice: Action
 		PauseOnCondition: being-warped
+
 	CaptureManager:
 	Captures:
 		CaptureTypes: husk
