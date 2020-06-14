@@ -452,20 +452,19 @@ MEDI:
 		PipType: Blue
 	Armament:
 		Weapon: Heal
+		Name: primary
 		Cursor: heal
 		OutsideRangeCursor: heal
 		TargetStances: Ally
 		ForceTargetStances: None
 	Armament@secondary:
 		Weapon: DummyWeapon
+		Name: secondary
 		PauseOnCondition: attacking
 	GrantConditionOnAttack:
 		ArmamentNames: secondary
 		Condition: attacking
 		RevokeDelay: 30
-		AttackSequences:
-			primary: heal
-			secondary: stand
 	AttackFrontal:
 		PauseOnCondition: being-warped
 	AutoTargetPriority@HEAL:
@@ -476,6 +475,9 @@ MEDI:
 		IdleSequences: idle
 		StandSequences: stand
 		DefaultAttackSequence: heal
+		AttackSequences:
+			primary: heal
+			secondary: idle
 	Voiced:
 		VoiceSet: MedicVoice
 	AutoTarget:
@@ -511,6 +513,7 @@ MECH:
 		Voice: Move
 	Armament:
 		Weapon: Repair
+		Name: primary
 		Cursor: repair
 		OutsideRangeCursor: repair
 		TargetStances: Ally
@@ -526,17 +529,15 @@ MECH:
 		ValidTargets: C4Attached
 		InvalidTargets: NoAutoTarget
 		ValidStances: Ally
+		Priority: 3
 	Armament@tertiary:
 		Weapon: DummyWeapon
+		Name: tertiary
 		PauseOnCondition: attacking
 	GrantConditionOnAttack:
 		ArmamentNames: tertiary
 		Condition: attacking
 		RevokeDelay: 30
-		AttackSequences:
-			primary: repair
-			secondary: repair
-			tertiary: stand
 	AutoTargetPriority@REPAIR:
 		ValidTargets: Repair, C4Attached
 		ValidStances: Ally
@@ -544,7 +545,6 @@ MECH:
 	AttackFrontal:
 		Voice: Action
 		PauseOnCondition: being-warped
-
 	CaptureManager:
 	Captures:
 		CaptureTypes: husk
@@ -558,6 +558,10 @@ MECH:
 		IdleSequences: idle
 		DefaultAttackSequence: repair
 		StandSequences: stand
+		AttackSequences:
+			primary: repair
+			secondary: repair
+			tertiary: idle
 	Voiced:
 		VoiceSet: MechanicVoice
 	AutoTarget:
