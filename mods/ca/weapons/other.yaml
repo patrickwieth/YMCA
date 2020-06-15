@@ -1186,8 +1186,54 @@ Railgun:
 			Concrete: 15
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 
+RailgunPrototype:
+	ReloadDelay: 75
+	Range: 8c512
+	Report: railuse5.aud
+	InvalidTargets: Air
+	Projectile: Railgun
+		Duration: 10
+		Blockable: true
+		DamageActorsInLine: false
+		BeamColor: 00FFFFC8
+		BeamWidth: 40
+		HelixThickness: 16
+		HelixRadius: 32
+		HitAnim: explosion
+		HitAnimSequence: small_explosion
+		ZOffset: 2046
+	Warhead@1Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 1000, 1000
+		Damage: 1375
+		ValidStances: Neutral, Enemy
+		InvalidTargets: Air
+		AffectsParent: false
+		Versus:
+			None: 100
+			Wood: 65
+			Light: 65
+			Heavy: 50
+			Concrete: 15
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@2Dam: SpreadDamage
+		Range: 0, 32
+		Falloff: 1000, 1000
+		Damage: 650
+		ValidStances: Ally
+		InvalidTargets: Air
+		AffectsParent: false
+		Versus:
+			None: 100
+			Wood: 65
+			Light: 75
+			Heavy: 50
+			Concrete: 40
+			Brick: 15
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+
 Railgun.Infantry:
-	Inherits: Railgun
+	Inherits: RailgunPrototype
 	Range: 7c512
 	ReloadDelay: 90
 	Warhead@1Dam: SpreadDamage
@@ -1214,7 +1260,7 @@ Railgun.Jumpjet:
 		ZOffset: 6046
 
 Railgun.Titan:
-	Inherits: Railgun
+	Inherits: RailgunPrototype
 	Range: 6c512
 	ReloadDelay: 90
 	Warhead@1Dam: SpreadDamage
