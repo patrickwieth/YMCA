@@ -164,8 +164,11 @@ E2:
 
 E3:
 	Inherits: ^Soldier
+	Inherits: ^WhiteFlash
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: relayTarget
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -198,7 +201,7 @@ E3:
 		Name: tertiary
 		Weapon: Dragon.Relay
 		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
+		PauseOnCondition: !ammo || being-warped || !relayTarget
 	Armament@Garrison:
 		Name: mounted
 		Weapon: DragonE
@@ -220,12 +223,19 @@ E3:
 	TakeCover:
 		ProneOffset: 384,0,-395
 	AttackFrontal:
-		Armaments: primary, secondary, tertiary
+		Armaments: primary, secondary
 		PauseOnCondition: being-warped
+	AttackFollow:
+		Armaments: tertiary
+		PauseOnCondition: being-warped || !relayTarget
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	AutoTarget:
-		ScanRadius: 20
+	GrantCondition@relayHighlight:
+		RequiresCondition: relayTarget
+		Condition: highlight
+	ExternalCondition@relayTarget:
+		Condition: relayTarget
 
 E3R1:
 	Inherits: E3
@@ -554,12 +564,6 @@ MECH:
 
 EINSTEIN:
 	Inherits: ^CivInfantry
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 100
-		Prerequisites:  infantry.any, ~commander_tree.advanced_infantry_training, ~techlevel.infonly
-		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance .\n  Unarmed
 	RenderSprites:
 		PlayerPalette: player
 	WithDeathAnimation:
@@ -571,11 +575,6 @@ EINSTEIN:
 		speed: 73
 	Voiced:
 		VoiceSet: EinsteinVoice
-	AttackFrontal:
-		PauseOnCondition: being-warped
-	Armament@PRIMARY:
-		LocalOffset: 0,0,150
-		Weapon: relayMarker
 
 DELPHI:
 	Inherits: ^CivInfantry
@@ -894,6 +893,7 @@ N3:
 	Mobile:
 		speed: 54
 	Armament@PRIMARY:
+		Name: primary
 		Weapon: RedEye
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
@@ -901,11 +901,13 @@ N3:
 		Name: secondary
 		Weapon: Dragon
 		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
+		PauseOnCondition: !ammo || being-warped || relayedUnit
+		RequiresCondition: !relayedUnit
 	Armament@TERTIARY:
 		Name: tertiary
 		Weapon: Dragon.Relay
 		LocalOffset: 0,0,555
+		RequiresCondition: relayedUnit
 		PauseOnCondition: !ammo || being-warped
 	Armament@Garrison:
 		Name: mounted
@@ -1502,6 +1504,33 @@ SAB:
 	ProductionCostMultiplier@LegionBonus:
 		Multiplier: 80
 		Prerequisites: infantry.legion
+
+SpecOps:
+	Inherits: SAB
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 100
+		Prerequisites:  infantry.allies, ~commander_tree.advanced_infantry_training, ~techlevel.infonly
+		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance .\n Can detect other stealthed units.
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Special Operations
+	Armament@PRIMARY:
+		LocalOffset: 0,0,150
+		Weapon: relayMarker
+	Armament@SECONADARY:
+		Name: Seconadry
+		Weapon: SilencedPPK
+	Armament@Garrison:
+		Name: mounted
+		Weapon: relayMarker
+	Cloak:
+		UncloakOn: Unload, Infiltrate, Demolish, Dock
+	-Infiltrates@tec:
+	-Infiltrates@pwr:
+	-ProductionCostMultiplier@LegionBonus:
 
 ACOL:
 	Inherits: ^Soldier
@@ -2189,6 +2218,7 @@ Railgunner:
 	Armament@Garrison:
 		Name: mounted
 		Weapon: Railgun.Infantry
+		PauseOnCondition: being-warped
 		LocalOffset: 341,0,256
 	TakeCover:
 		ProneOffset: 227,0,-245
