@@ -231,9 +231,6 @@ E3:
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	AutoTarget:
-	GrantCondition@relayHighlight:
-		RequiresCondition: relayTarget
-		Condition: highlight
 	ExternalCondition@relayTarget:
 		Condition: relayTarget
 
@@ -901,22 +898,20 @@ N3:
 		Name: secondary
 		Weapon: Dragon
 		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped || relayedUnit
-		RequiresCondition: !relayedUnit
+		PauseOnCondition: !ammo || being-warped
 	Armament@TERTIARY:
 		Name: tertiary
 		Weapon: Dragon.Relay
 		LocalOffset: 0,0,555
-		RequiresCondition: relayedUnit
-		PauseOnCondition: !ammo || being-warped
+		PauseOnCondition: !ammo || being-warped || !relayTarget
 	Armament@Garrison:
 		Name: mounted
-		Weapon: RedEyeE
+		Weapon: DragonE
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
 	Armament@GarrisonAA:
-		Name: mounted
-		Weapon: DragonE
+		Name: mountedaa
+		Weapon: RedEyeE
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
 	AmmoPool:
@@ -930,16 +925,23 @@ N3:
 	TakeCover:
 		ProneOffset: 384,0,-395
 	AttackFrontal:
-		Armaments: primary, secondary, tertiary
+		Armaments: primary, secondary
 		PauseOnCondition: being-warped
+	AttackFollow:
+		Armaments: tertiary
+		PauseOnCondition: being-warped || !relayTarget
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	AutoTarget:
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
-	AutoTarget:
-		ScanRadius: 20
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Selectable:
 		Class: E3
+	ExternalCondition@relayTarget:
+		Condition: relayTarget
+
 
 N3R1:
 	Inherits: N3
@@ -1518,7 +1520,7 @@ SpecOps:
 	Tooltip:
 		Name: Special Operations
 	Armament@PRIMARY:
-		LocalOffset: 0,0,150
+		LocalOffset: 150,0,300
 		Weapon: relayMarker
 	Armament@SECONADARY:
 		Name: Seconadry
