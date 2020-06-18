@@ -533,7 +533,7 @@ MADTankDetonate:
 		Condition: concussion
 		ValidTargets: Ground, Infantry, Vehicle, Ship
 
-Laser:
+LaserPrototype:
 	ReloadDelay: 100
 	ValidTargets: Ground, Water
 	Range: 9c512
@@ -561,6 +561,10 @@ Laser:
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
 
+Laser:
+	Inherits: LaserPrototype
+	ReloadDelay: 20
+
 Laser.Adv:
 	Inherits: Laser
 	Report: obelmod1.aud
@@ -573,7 +577,7 @@ Laser.Adv:
 		Damage: 40000
 
 Laser.Tank:
-	Inherits: Laser
+	Inherits: LaserPrototype
 	ReloadDelay: 200
 	Report: obelmod1.aud
 	Range: 6c512
@@ -599,7 +603,7 @@ Laser.Tank:
 			Brick: 32
 
 LaserTur:
-	Inherits: Laser
+	Inherits: LaserPrototype
 	ReloadDelay: 40
 	Range: 6c0
 	Report: lastur1.aud
@@ -622,7 +626,7 @@ LaserTur.Adv:
 		SecondaryBeamColor: FF00FF30
 
 PortaLaser:
-	Inherits: Laser
+	Inherits: LaserPrototype
 	ReloadDelay: 30
 	Burst: 2
 	BurstDelays: 3
@@ -702,7 +706,7 @@ BuggyLaserAA:
 	-Warhead@2Smu:
 
 AdvancedPointLaser:
-	Inherits: Laser
+	Inherits: LaserPrototype
 	ReloadDelay: 10
 	ValidTargets: Ground, Air, Missile, BulletCA
 	InvalidTargets: Infantry, Vehicle, Tank, Structure, Wall
