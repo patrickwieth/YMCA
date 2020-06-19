@@ -39,7 +39,7 @@ jobs:
         draft: true
         prerelease: false
 
-    - name: Upload Release Asset
+    - name: Upload Release Asset (Linux AppImage)
       id: upload-release-asset
       uses: actions/upload-release-asset@v1
       env:
@@ -47,6 +47,28 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./build/CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x86_64.AppImage
-        asset_name: Linux AppImage (64 bit)
+        asset_name: CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x86_64.AppImage
+        asset_content_type: application/octet-stream
+
+    - name: Upload Release Asset (Windows Portable)
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x64-winportable.zip
+        asset_name: CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x64-winportable.zip
+        asset_content_type: application/zip
+
+    - name: Upload Release Asset (Windows Setup)
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x64.exe
+        asset_name: CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x64.exe
         asset_content_type: application/octet-stream
 
