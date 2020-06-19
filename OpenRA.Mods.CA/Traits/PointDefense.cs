@@ -76,14 +76,17 @@ namespace OpenRA.Mods.CA.Traits
 			if ((self.CenterPosition - position).HorizontalLengthSquared > armament.MaxRange().LengthSquared)
 				return false;
 
+			Game.Debug(hasFiredThisTick.ToString());
+
 			if (hasFiredThisTick)
 				return false;
+
+			hasFiredThisTick = true;
 
 			self.World.AddFrameEndTask(w =>
 			{
 				if (!self.IsDead)
 					armament.CheckFire(self, null, Target.FromPos(position));
-					hasFiredThisTick = true;
 			});
 			return true;
 		}
