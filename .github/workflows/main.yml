@@ -38,8 +38,30 @@ jobs:
     - name: Build CA
       run: docker run -e RELEASE_VERSION=${{ steps.branch_name.outputs.SOURCE_TAG }} -v $GITHUB_WORKSPACE:/workdir --rm miob/openra-build ./build-docker.sh
 
-    - uses: actions/upload-artifact@v2
+#    - uses: actions/upload-artifact@v2
+#      with:
+#        name: release-${{ steps.branch_name.outputs.SOURCE_TAG }}
+#        path: ./build/
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: release-${{ steps.branch_name.outputs.SOURCE_TAG }}
-        path: ./build/
+        tag_name: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+        release_name: Release ${{ steps.branch_name.outputs.SOURCE_TAG }}
+        draft: true
+        prerelease: false
+
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x86_64.AppImage
+        asset_name: Linux AppImage (64 bit)
+        asset_content_type: application/octet-stream
 
