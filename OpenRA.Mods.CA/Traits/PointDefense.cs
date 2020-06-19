@@ -58,7 +58,6 @@ namespace OpenRA.Mods.CA.Traits
 			Tick(self);
 		}
 
-
 		bool IPointDefense.Destroy(WPos position, Player attacker, string type)
 		{
 			if (IsTraitDisabled || armament.IsTraitDisabled || armament.IsTraitPaused)
@@ -75,8 +74,6 @@ namespace OpenRA.Mods.CA.Traits
 
 			if ((self.CenterPosition - position).HorizontalLengthSquared > armament.MaxRange().LengthSquared)
 				return false;
-
-			Game.Debug(hasFiredThisTick.ToString());
 
 			if (hasFiredThisTick)
 				return false;
