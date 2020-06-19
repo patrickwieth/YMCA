@@ -48,8 +48,9 @@ namespace OpenRA.Mods.CA.Traits
 
 		public override void RulesetLoaded(Ruleset rules, ActorInfo ai)
 		{
-			if (ai.TraitInfos<AmmoPoolInfo>().Count(ap => ap.Name == AmmoPool) != 1)
-				throw new YamlException("ReloadsAmmoPool.AmmoPool requires exactly one AmmoPool with matching Name!");
+			if (ai.TraitInfos<AmmoPoolCAInfo>().Count(ap => ap.Name == AmmoPool) != 1)
+
+			throw new YamlException("ReloadsAmmoPool.AmmoPool requires exactly one AmmoPool with matching Name! Name: " + AmmoPool);
 
 			base.RulesetLoaded(rules, ai);
 		}
@@ -57,7 +58,7 @@ namespace OpenRA.Mods.CA.Traits
 
 	public class ReloadAmmoPoolCA : PausableConditionalTrait<ReloadAmmoPoolCAInfo>, ITick, INotifyAttack, ISync, ISelectionBar
 	{
-		AmmoPool ammoPool;
+		AmmoPoolCA ammoPool;
 		IReloadAmmoModifier[] modifiers;
 
 		[Sync]
@@ -69,7 +70,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		protected override void Created(Actor self)
 		{
-			ammoPool = self.TraitsImplementing<AmmoPool>().Single(ap => ap.Info.Name == Info.AmmoPool);
+			ammoPool = self.TraitsImplementing<AmmoPoolCA>().Single(ap => ap.Info.Name == Info.AmmoPool);
 			modifiers = self.TraitsImplementing<IReloadAmmoModifier>().ToArray();
 			base.Created(self);
 
@@ -115,7 +116,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (--remainingDelay > 0 && ammoPool.HasAmmo)
 				return;
 
-			if (!ammoPool.HasFullAmmo && --remainingTicks == 0)
+			if ((!ammoPool.HasFullAmmo || reloadCount < 0) && --remainingTicks == 0)
 			{
 				remainingTicks = Util.ApplyPercentageModifiers(reloadDelay, modifiers.Select(m => m.GetReloadAmmoModifier()));
 				if (!string.IsNullOrEmpty(sound))

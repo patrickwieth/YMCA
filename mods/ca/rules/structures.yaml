@@ -5070,6 +5070,13 @@ PRIS:
 	Inherits: ^Defense
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		InvalidTargets: NoAutoTarget, WaterStructure, PrismTower
+	AutoTargetPriority@ATTACKANYTHING:
+		InvalidTargets: NoAutoTarget, PrismTower
+	AutoTargetPriority@TESLANORMAL:
+		RequiresCondition: !assault-move && !attack-move
+		ValidTargets: PrismTower
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
@@ -5092,30 +5099,100 @@ PRIS:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 6c0
-	WithBuildingBib:
-		HasMinibib: true
-	WithSpriteBody:
-		PauseOnCondition: disabled || empdisable || being-warped
-		RequiresCondition: !charging
-	WithChargeSpriteBody:
-		Sequence: active
-		Name: bodyactive
-		RequiresCondition: charging
-	Armament:
-		Weapon: PrisLaser
-		LocalOffset: 0,-85,956
-	AttackCharges:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable || being-warped
-		ChargingCondition: charging
-	AmbientSound:
-		RequiresCondition: charging
-		SoundFiles: bpripow.aud
-		Interval: 30, 40
 	Power:
 		Amount: -75
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
+	WithBuildingBib:
+		HasMinibib: true
+	WithSpriteBody@charged:
+		PauseOnCondition: disabled || empdisable || being-warped
+		RequiresCondition: !charging
+	WithSpriteBody@charging:
+		Sequence: active
+		Name: bodyactive
+		RequiresCondition: charging
+	GrantCondition@charging:
+		Condition: charging
+		RequiresCondition: !fired && !ammo
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: bpripow.aud
+		Interval: 30, 40
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		Armaments: primary, secondary, tertiary
+		PauseOnCondition: disabled || empdisable || being-warped
+	Turreted:
+		TurnSpeed: 255
+		Offset: 0,0,112
+	Targetable@PrismTower:
+		TargetTypes: PrismTower
+	Targetable@PrismTowerChargeable:
+		TargetTypes: PrismTowerChargeable
+		RequiresCondition: !ammo
+	Armament@primary:
+		Weapon: PrisLaser
+		LocalOffset: 0,0,996
+		Name: primary
+		PauseOnCondition: !ammo && !powercharged
+	GrantConditionOnAttack@primary:
+		ArmamentNames: primary
+		Condition: fired
+		MaximumInstances: 1
+		RevokeDelay: 40
+	Armament@secondary:
+		Weapon: PrisLaserCharge
+		LocalOffset: 0,0,986
+		Name: secondary
+		TargetStances: Ally
+		ForceTargetStances: Ally
+		PauseOnCondition: fired && !powercharged
+		RequiresCondition: ammo
+	GrantConditionOnAttack@secondary:
+		ArmamentNames: secondary
+		Condition: fired
+		MaximumInstances: 1
+		RevokeDelay: 40
+	ExternalCondition@POWERCHARGED:
+		Condition: powercharged
+	ProximityExternalCondition@aiming:
+		Condition: aiming
+		Range: 8c512
+		RequiresCondition: aiming && !fired
+	ExternalCondition@aiming:
+		Condition: aiming
+	GrantConditionWhileAiming:
+		Condition: aiming
+	AmmoPoolCA:
+		Name: primary
+		Ammo: 5
+		PipCount: 0
+		InitialAmmo: 1
+		PipType: Red
+		Armaments: primary, secondary
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA@autocharge:
+		Delay: 25
+		Count: 1
+		ResetOnFire: False
+		RequiresCondition: ammo < 1 && !fired
+		ShowSelectionBar: true
+		SelectionBarColor: 0000ff
+	ReloadAmmoPoolCA@discharge:
+		Delay: 15
+		Count: -1
+		ResetOnFire: False
+		RequiresCondition: ammo > 1
+		ShowSelectionBar: false
+		SelectionBarColor: ff0000
+	ReloadAmmoPoolCA@powercharge:
+		AmmoPool: primary
+		Delay: 1
+		Count: 1
+		RequiresCondition: powercharged
+		ShowSelectionBar: false
+		SelectionBarColor: 00ff00
 
 SPEN.nod:
 	Inherits: ^Building
