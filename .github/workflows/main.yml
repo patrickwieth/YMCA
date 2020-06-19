@@ -4,11 +4,17 @@ name: CI
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
+#on:
+#  push:
+#    branches: [ yeeeees-docker ]
+#  pull_request:
+#    branches: [ yeeeees-docker ]
+
 on:
   push:
-    branches: [ yeeeees-docker ]
-  pull_request:
-    branches: [ yeeeees-docker ]
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,15 +28,11 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
-    # Runs a single command using the runners shell
-    #    - name: build docker image
-    #  run: docker build . -t yees
-
     - name: Build CA
-      run: docker run -e RELEASE_VERSION=foobar -v $GITHUB_WORKSPACE:/workdir --rm miob/openra-build ./build-docker.sh
+      run: docker run -e RELEASE_VERSION=${{ github.ref }} -v $GITHUB_WORKSPACE:/workdir --rm miob/openra-build ./build-docker.sh
 
     - uses: actions/upload-artifact@v2
       with:
-        name: my-artifact
+        name: release-${{ github.ref }}
         path: ./build/
 
