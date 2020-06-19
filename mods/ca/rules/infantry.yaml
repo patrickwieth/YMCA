@@ -432,7 +432,6 @@ E7:
 
 MEDI:
 	Inherits: ^Soldier
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -445,8 +444,6 @@ MEDI:
 		Name: Medic
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	Selectable:
-		Priority: 7
 	Health:
 		HP: 5000
 	RevealsShroud:
@@ -455,21 +452,39 @@ MEDI:
 		PipType: Blue
 	Armament:
 		Weapon: Heal
+		Name: primary
 		Cursor: heal
 		OutsideRangeCursor: heal
 		TargetStances: Ally
 		ForceTargetStances: None
+	Armament@secondary:
+		Weapon: DummyWeapon
+		Name: secondary
+		PauseOnCondition: attacking
+	GrantConditionOnAttack:
+		ArmamentNames: secondary
+		Condition: attacking
+		RevokeDelay: 30
 	AttackFrontal:
 		PauseOnCondition: being-warped
+	AutoTargetPriority@HEAL:
+		ValidTargets: Infantry
+		ValidStances: Ally
+		Priority: 2
 	WithInfantryBody:
 		IdleSequences: idle
 		StandSequences: stand
 		DefaultAttackSequence: heal
+		AttackSequences:
+			primary: heal
+			secondary: idle
 	Voiced:
 		VoiceSet: MedicVoice
 	AutoTarget:
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry
+	AutoTargetPriority@ATTACKDUMMY:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
+		InvalidTargets: NoAutoTarget
+		ValidStances: Enemy
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Targetable:
@@ -477,7 +492,6 @@ MEDI:
 
 MECH:
 	Inherits: ^Soldier
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -490,8 +504,6 @@ MECH:
 		Name: Mechanic
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	Selectable:
-		Priority: 7
 	Health:
 		HP: 5000
 	Mobile:
@@ -503,10 +515,15 @@ MECH:
 		Voice: Move
 	Armament:
 		Weapon: Repair
+		Name: primary
 		Cursor: repair
 		OutsideRangeCursor: repair
 		TargetStances: Ally
 		ForceTargetStances: None
+	AutoTargetPriority@REPAIR:
+		ValidTargets: Repair, C4Attached
+		ValidStances: Ally
+		Priority: 2
 	Armament@defuse:
 		Weapon: DefuseKit
 		Cursor: goldwrench
@@ -518,7 +535,21 @@ MECH:
 		ValidTargets: C4Attached
 		InvalidTargets: NoAutoTarget
 		ValidStances: Ally
+		Priority: 3
+	Armament@tertiary:
+		Weapon: DummyWeapon
+		Name: tertiary
+		PauseOnCondition: attacking
+	GrantConditionOnAttack:
+		ArmamentNames: tertiary
+		Condition: attacking
+		RevokeDelay: 30
+	AutoTargetPriority@ATTACKDUMMY:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
+		InvalidTargets: NoAutoTarget
+		ValidStances: Enemy
 	AttackFrontal:
+		Armaments: primary, secondary, tertiary
 		Voice: Action
 		PauseOnCondition: being-warped
 	CaptureManager:
@@ -534,6 +565,10 @@ MECH:
 		IdleSequences: idle
 		DefaultAttackSequence: repair
 		StandSequences: stand
+		AttackSequences:
+			primary: repair
+			secondary: repair
+			tertiary: idle
 	Voiced:
 		VoiceSet: MechanicVoice
 	AutoTarget:
