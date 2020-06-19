@@ -3940,12 +3940,30 @@ OBLI:
 	Armament:
 		Weapon: Laser
 		LocalOffset: 0,-85,1280
+		PauseOnCondition: !ammo && charged <= 2
 		RequiresCondition: !marked
 	Armament@Marked:
 		Weapon: Laser.Adv
 		LocalOffset: 0,-85,1280
+		PauseOnCondition: !ammo && charged <= 2
 		RequiresCondition: marked
-	AttackCharges:
+	AmmoPool:
+		Ammo: 1
+		PipCount: 0
+		AmmoCondition: ammo
+	ReloadAmmoPool@1:
+		Delay: 100
+		Count: 1
+		RequiresCondition: !charged
+	ReloadAmmoPool@2:
+		Delay: 45
+		Count: 1
+		RequiresCondition: charged == 1
+	ReloadAmmoPool@3:
+		Delay: 10
+		Count: 1
+		RequiresCondition: charged == 2
+	AttackCharges@1:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
 		ChargeLevel: 50
@@ -3961,6 +3979,12 @@ OBLI:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
+	ExternalCondition@CHARGED:
+		Condition: charged
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+	Targetable@BeamCannon:
+		TargetTypes: BeamCannon
 
 HQ:
 	Inherits: ^BuildingTD
