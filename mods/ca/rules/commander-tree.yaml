@@ -81,8 +81,14 @@ commander_tree.expert_logistics:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 5
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, aircraft.all, ~!aircraft.nod, commander_tree.advanced_logistics
+		Prerequisites: prerequisite.has_points, ~aircraft.all, ~!aircraft.nod, commander_tree.advanced_logistics
 		Description: Enables to build Dropships, which can paradrop units.
+
+hack.cameo_filler.2a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 5
+		Prerequisites: prerequisite.has_points, ~!aircraft.all, ~!vehicles.nod
 
 commander_tree.advanced_infantry_training:
 	Inherits: ^default.commander_tree_item
@@ -1082,7 +1088,7 @@ hack.cameo_filler.200:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 202
-		Prerequisites: prerequisite.has_points, ~infantry.gdi, disabled
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, disabled, ~commander_tree.advanced_infantry_training
 
 commander_tree.Jumpjet:
 	Inherits: ^default.commander_tree_item
@@ -1105,7 +1111,7 @@ commander_tree.Jumpjet_Railgun:
 		IconPalette: chrometd
 		BuildPaletteOrder: 204
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.talon, gtek, commander_tree.jumpjet, ~!commander_tree.jumpjet_rockets
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.talon, gtek, commander_tree.jumpjet, ~!commander_tree.jumpjet_rockets, ~commander_tree.advanced_infantry_training
 		Description: Equips the Jumpjet with a Railgun. \n  This makes it strong vs tanks.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.jjet
@@ -1119,7 +1125,7 @@ commander_tree.Jumpjet_Rockets:
 		IconPalette: chrometd
 		BuildPaletteOrder: 205
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.zocom, gtek, commander_tree.jumpjet, ~!commander_tree.jumpjet_railgun
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.zocom, gtek, commander_tree.jumpjet, ~!commander_tree.jumpjet_railgun, ~commander_tree.advanced_infantry_training
 		Description: Equips the Jumpjet with a rocket launcher.\n This makes it strong vs aircraft and vehicles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.jjet
@@ -1128,13 +1134,13 @@ hack.cameo_filler.201:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 206
-		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.eagle, disabled
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~!infantry.eagle, disabled, ~commander_tree.advanced_infantry_training
 
 hack.cameo_filler.202:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 207
-		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~infantry.eagle, ~filler.jjet, disabled
+		Prerequisites: prerequisite.has_points, ~infantry.gdi, ~infantry.eagle, ~filler.jjet, disabled, ~commander_tree.advanced_infantry_training
 
 commander_tree.Slingshot:
 	Inherits: ^default.commander_tree_item
@@ -1270,13 +1276,13 @@ hack.cameo_filler.212:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 223
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled, ~!vehicles.zocom
 
 hack.cameo_filler.213:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 224
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled, ~!vehicles.zocom
 
 commander_tree.Mobile_EMP:
 	Inherits: ^default.commander_tree_item
@@ -1299,7 +1305,7 @@ commander_tree.Mobile_EMP_Stable_Reactor:
 		IconPalette: chrometd
 		BuildPaletteOrder: 226
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, miss.gdi, ~commander_tree.mobile_emp, ~!commander_tree.mobile_emp_volatile_reactor
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, miss.gdi, commander_tree.mobile_emp, ~!commander_tree.mobile_emp_volatile_reactor
 		Description: Upgrades the EMP reactor to allow multiple EMP Waves and don't self destruct on use.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.emp
@@ -1313,7 +1319,7 @@ commander_tree.Mobile_EMP_Volatile_Reactor:
 		IconPalette: chrometd
 		BuildPaletteOrder: 227
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, miss.gdi, ~commander_tree.mobile_emp, ~!commander_tree.mobile_emp_stable_reactor
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, miss.gdi, commander_tree.mobile_emp, ~!commander_tree.mobile_emp_stable_reactor
 		Description: Upgrades the EMP reactor to set off an EMP blast when the vehicle is destroyed.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.emp
@@ -1460,196 +1466,28 @@ hack.cameo_filler.219:
 		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
 
 #Nod
-commander_tree.Buggy_PLD:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Buggy Point Laser Defense System
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, ~tmpl, ~!commander_tree.buggy_aa
-		Description: Upgrades the Buggy with a Point Laser Defense system to shoot down incoming projectiles.
-
-commander_tree.Buggy_AA:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Buggy Anti-Air Laser
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~tmpl, ~!commander_tree.buggy_pld
-		Description: Upgrades the Buggy with an Anti-Air Laser to shoot down aircraft.
-
-commander_tree.SSM_Launcher:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: SSM Launcher
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.nod, ~!commander_tree.ssm_toxin_launcher,  ~!commander_tree.ssm_multi_launcher
-		Description: Enables to build the SSM Launcher, a high range artillery.
-
-commander_tree.SSM_Toxin_Launcher:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: SSM Toxin Launcher
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.legion, ~tmpl, ~!commander_tree.ssm_launcher, ~!commander_tree.ssm_multi_launcher
-		Description: Upgrades the SSM Launcher with Toxin missiles.\n  The toxin clouds remain for a prolonged time on the impact site dealing damage.
-
-commander_tree.SSM_Multi_Launcher:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: SSM Multi Launcher
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.marked, ~tmpl, ~!commander_tree.ssm_launcher, ~!commander_tree.ssm_toxin_launcher
-		Description: Upgrades the SSM Launcher's missiles to split up in multiple missiles on impact. \n  This makes the SSM Launcher more effective against large groups of vehicles.
-
-commander_tree.Chem_Tank:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Chemical Tank
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.legion, ~tmpl, ~!commander_tree.flame_tank_pld,  ~!commander_tree.fireball_tank
-		Description: Upgrades the Flame Tank to a Chemical Tank improving its damage against armored targets.
-
-commander_tree.Flame_Tank_PLD:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Flame Tank Point Laser Defense System
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, ~tmpl, ~!commander_tree.chem_tank, ~!commander_tree.fireball_tank
-		Description: Upgrades the Flame Tank with a Point Laser Defense System to shoot down incoming projectiles.
-
-commander_tree.Fireball_Tank:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Fireball Tank
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.blackh, ~tmpl, ~!commander_tree.chem_tank, ~!commander_tree.flame_tank_pld
-		Description: Upgrades the Flame Tank to a Fireball Tank. \n  It shoots fireballs with greater range, reducing the necessity to fight at very close range.
-
-commander_tree.Stealth_Tank:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Stealth Tank
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod
-		Description: Enables to build the Stealth Tank. \n It is a cloaked tank with strong missiles vs. vehicles and aircraft.
-
-commander_tree.Stealth_Tank_Scrin:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Stealth Tank Scrin Weapon
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.blackh, ~tmpl, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank_explosive_rockets
-		Description: Upgrades the Stealth Tank with a Scrin Weapon. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
-
-commander_tree.Stealth_Tank_Explosive_Rockets:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Stealth Tank Explosive Rockets
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.marked, ~tmpl, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank_scrin
-		Description: Upgrades the Stealth Tank's missiles with a high explosive load.
-
-commander_tree.Recon_Bike_Scrin:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Recon Bike Scrin Weapon
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, ~tmpl, ~!commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_pld
-		Description: Upgrades the Recon Bike with a Scrin Weapon.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
-
-commander_tree.Recon_Bike_Rocket_Hail:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Recon Bike Rocket Hail
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, ~tmpl, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_pld
-		Description: Upgrades the Recon Bike to shoot more missiles at high range. \n  This makes the recon bike a hit and run artillery unit. \n  The recon bike loses its ability to fight flying targets.
-
-commander_tree.Recon_Bike_PLD:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Recon Bike Point Laser Defense System
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, ~tmpl, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_rocket_hail
-		Description: Upgrades the Recon Bike with a Point Laser Defense System to shoot down incoming projectiles.
-
-commander_tree.Light_Tank_Laser:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Light Tank Laser Weapon
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~tmpl
-		Description: Upgrades the Light Tank with a Laser weapon. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
-
 commander_tree.Chemical_Mortar:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Chemical Mortar Infantry
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 0
+		BuildPaletteOrder: 300
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, ~commander_tree.advanced_infantry_training
 		Description: Enables to build mortar infantry firing chemical shells
+
+hack.cameo_filler.300:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 301
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, disabled, ~commander_tree.advanced_infantry_training
+
+hack.cameo_filler.301:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 302
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, disabled, ~commander_tree.advanced_infantry_training
 
 commander_tree.Elite_Cyborg:
 	Inherits: ^default.commander_tree_item
@@ -1658,9 +1496,9 @@ commander_tree.Elite_Cyborg:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 0
+		BuildPaletteOrder: 303
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~bio.nod, ~commander_tree.advanced_infantry_training
+		Prerequisites: prerequisite.has_points, ~infantry.nod, bio.nod, ~commander_tree.advanced_infantry_training
 		Description: Enables to build the Elite Cyborg. \n  A very tough cyborg infantry with scrin weaponry. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
 
 commander_tree.Elite_Cyborg.Range:
@@ -1669,10 +1507,16 @@ commander_tree.Elite_Cyborg.Range:
 		Name: Elite Cyborg (Range)
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 0
+		BuildPaletteOrder: 304
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~bio.nod, ~commander_tree.elite_cyborg, ~commander_tree.advanced_infantry_training
+		Prerequisites: prerequisite.has_points, ~infantry.nod, bio.nod, ~commander_tree.elite_cyborg, ~commander_tree.advanced_infantry_training
 		Description: Upgrades the range of the Elite Cyborg.
+
+hack.cameo_filler.302:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 305
+		Prerequisites: prerequisite.has_points, ~infantry.nod, disabled, ~commander_tree.advanced_infantry_training
 
 commander_tree.Rebel_Leader:
 	Inherits: ^default.commander_tree_item
@@ -1681,10 +1525,22 @@ commander_tree.Rebel_Leader:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 0
+		BuildPaletteOrder: 306
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~tmpl
+		Prerequisites: prerequisite.has_points, ~infantry.nod, tmpl, ~commander_tree.advanced_infantry_training
 		Description: Enables to recruit the Rebel Leader who allows to train infantry from the map edges.
+
+hack.cameo_filler.303:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 307
+		Prerequisites: prerequisite.has_points, ~infantry.nod, disabled, ~commander_tree.advanced_infantry_training
+
+hack.cameo_filler.304:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 308
+		Prerequisites: prerequisite.has_points, ~infantry.nod, disabled, ~commander_tree.advanced_infantry_training
 
 commander_tree.Reinforcements_Coordinator:
 	Inherits: ^default.commander_tree_item
@@ -1697,6 +1553,292 @@ commander_tree.Reinforcements_Coordinator:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, commander_tree.advanced_logistics
 		Description: Enables to build the Reinforcements Coordinator. \n It coordinates reinforcements directly to the frontline when deployed.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.coordinator
+
+commander_tree.Buggy_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Buggy Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 309
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~!commander_tree.buggy_aa
+		Description: Upgrades the Buggy with a Point Laser Defense system to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.buggy
+
+commander_tree.Buggy_AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Buggy Anti-Air Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 310
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, tmpl, ~!commander_tree.buggy_pld
+		Description: Upgrades the Buggy with an Anti-Air Laser to shoot down aircraft.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.buggy
+
+hack.cameo_filler.305:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 311
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~vehicles.blackh, disabled
+
+hack.cameo_filler.306:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 312
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, disabled, ~filler.buggy
+
+hack.cameo_filler.307:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 313
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
+
+commander_tree.SSM_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SSM Launcher
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 314
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.nod, ~!commander_tree.ssm_toxin_launcher,  ~!commander_tree.ssm_multi_launcher
+		Description: Enables to build the SSM Launcher, a high range artillery.
+
+commander_tree.SSM_Toxin_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SSM Toxin Launcher
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 315
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.legion, tmpl, ~!commander_tree.ssm_launcher, ~!commander_tree.ssm_multi_launcher
+		Description: Upgrades the SSM Launcher with Toxin missiles.\n  The toxin clouds remain for a prolonged time on the impact site dealing damage.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.ssm
+
+commander_tree.SSM_Multi_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SSM Multi Launcher
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 316
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.marked, tmpl, ~!commander_tree.ssm_launcher, ~!commander_tree.ssm_toxin_launcher
+		Description: Upgrades the SSM Launcher's missiles to split up in multiple missiles on impact. \n  This makes the SSM Launcher more effective against large groups of vehicles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.ssm
+
+hack.cameo_filler.308:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 317
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, disabled
+
+hack.cameo_filler.309:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 318
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, disabled
+
+commander_tree.Chem_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Tank
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 319
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.legion, tmpl, ~!commander_tree.flame_tank_pld,  ~!commander_tree.fireball_tank
+		Description: Upgrades the Flame Tank to a Chemical Tank improving its damage against armored targets.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.flametank
+
+commander_tree.Flame_Tank_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Flame Tank Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 320
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~!commander_tree.chem_tank, ~!commander_tree.fireball_tank
+		Description: Upgrades the Flame Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.flametank
+
+commander_tree.Fireball_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Fireball Tank
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 321
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.blackh, tmpl, ~!commander_tree.chem_tank, ~!commander_tree.flame_tank_pld
+		Description: Upgrades the Flame Tank to a Fireball Tank. \n  It shoots fireballs with greater range, reducing the necessity to fight at very close range.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.flametank
+
+hack.cameo_filler.310:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 322
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
+
+hack.cameo_filler.311:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 323
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, disabled
+
+hack.cameo_filler.312:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 324
+		Prerequisites: prerequisite.has_points, ~vehicles.blackh, ~filler.flametank, disabled
+
+commander_tree.Stealth_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 325
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod
+		Description: Enables to build the Stealth Tank. \n It is a cloaked tank with strong missiles vs. vehicles and aircraft.
+
+commander_tree.Stealth_Tank_Scrin:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank Scrin Weapon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 326
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.blackh, tmpl, commander_tree.stealth_tank, ~!commander_tree.stealth_tank_explosive_rockets
+		Description: Upgrades the Stealth Tank with a Scrin Weapon. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
+
+commander_tree.Stealth_Tank_Explosive_Rockets:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank Explosive Rockets
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 327
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.marked, tmpl, commander_tree.stealth_tank, ~!commander_tree.stealth_tank_scrin
+		Description: Upgrades the Stealth Tank's missiles with a high explosive load.
+
+hack.cameo_filler.313:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 328
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
+
+hack.cameo_filler.314:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 329
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~vehicles.legion, disabled
+
+commander_tree.Recon_Bike_Scrin:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Scrin Weapon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 330
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~!commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_pld
+		Description: Upgrades the Recon Bike with a Scrin Weapon.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.bike
+
+commander_tree.Recon_Bike_Rocket_Hail:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Rocket Hail
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 331
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_pld
+		Description: Upgrades the Recon Bike to shoot more missiles at high range. \n  This makes the recon bike a hit and run artillery unit. \n  The recon bike loses its ability to fight flying targets.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.bike
+
+commander_tree.Recon_Bike_PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 332
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, tmpl, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_rocket_hail
+		Description: Upgrades the Recon Bike with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.bike
+
+hack.cameo_filler.315:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 333
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
+
+hack.cameo_filler.316:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 334
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~filler.bike, disabled
+
+commander_tree.Light_Tank_Laser:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Light Tank Laser Weapon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 335
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, tmpl
+		Description: Upgrades the Light Tank with a Laser weapon. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
+
+hack.cameo_filler.317:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 336
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
+
+hack.cameo_filler.318:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 337
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
 
 commander_tree.Beam_Cannon:
 	Inherits: ^default.commander_tree_item
@@ -1705,10 +1847,22 @@ commander_tree.Beam_Cannon:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 0
+		BuildPaletteOrder: 338
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~tmpl
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, tmpl
 		Description: Enables to build the Beam Cannon. \n It shoots a continuous energy beam at distant targets Strong vs. Vehicles, Weak vs. Aircraft.
+
+hack.cameo_filler.319:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 339
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
+
+hack.cameo_filler.320:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 340
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
 
 commander_tree.Banshee:
 	Inherits: ^default.commander_tree_item
@@ -1717,10 +1871,22 @@ commander_tree.Banshee:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 0
+		BuildPaletteOrder: 341
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~tmpl, ~aircraft.nod
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.nod
 		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+
+hack.cameo_filler.321:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 342
+		Prerequisites: prerequisite.has_points, ~aircraft.nod, disabled
+
+hack.cameo_filler.322:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 343
+		Prerequisites: prerequisite.has_points, ~aircraft.nod, disabled
 
 hack.has_points:
 	AlwaysVisible:
