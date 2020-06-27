@@ -5109,6 +5109,7 @@ COORDINATOR:
 		Type: Heavy
 	Mobile:
 		Speed: 82
+		RequiresCondition: !deployed
 	RevealsShroud:
 		Range: 7c0
 	WithIdleOverlay@SPINNER:
@@ -5117,11 +5118,74 @@ COORDINATOR:
 		PauseOnCondition: empdisable || being-warped
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
-	Transforms:
-		IntoActor: coordinator.struct
-		Offset: 0,0
-		Facing: 96
-		PauseOnCondition: empdisable || being-warped
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+	RallyPoint:
+		Offset: 5,5
+		RequiresCondition: deployed
+	ProductionParadrop:
+		Produces: Vehicle
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: c17.cargo
+		ReadyAudio: ReinforcementsArrived
+	Exit@1:
+		ExitCell: 0,1
+		ProductionTypes: Vehicle
+	Exit@2:
+		ExitCell: 1,0
+		ProductionTypes: Vehicle
+	Exit@3:
+		ExitCell: 1,1
+		ProductionTypes: Vehicle
+	Exit@4:
+		ExitCell: 0,-1
+		ProductionTypes: Vehicle
+	Exit@5:
+		ExitCell: -1,0
+		ProductionTypes: Vehicle
+	Exit@6:
+		ExitCell: -1,-1
+		ProductionTypes: Vehicle
+	Exit@7:
+		ExitCell: -1,1
+		ProductionTypes: Vehicle
+	Exit@8:
+		ExitCell: 1,-1
+		ProductionTypes: Vehicle
+	Exit@9:
+		ExitCell: 0,2
+		ProductionTypes: Vehicle
+	Exit@10:
+		ExitCell: 2,0
+		ProductionTypes: Vehicle
+	Exit@11:
+		ExitCell: 2,2
+		ProductionTypes: Vehicle
+	Exit@12:
+		ExitCell: 0,-2
+		ProductionTypes: Vehicle
+	Exit@13:
+		ExitCell: -2,0
+		ProductionTypes: Vehicle
+	Exit@14:
+		ExitCell: -2,-2
+		ProductionTypes: Vehicle
+	Exit@15:
+		ExitCell: -2,2
+		ProductionTypes: Vehicle
+	Exit@16:
+		ExitCell: 2,-2
+		ProductionTypes: Vehicle
+	PrimaryBuilding:
+		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
+	WithDecoration@primary:
+		RequiresSelection: true
+		Image: pips
+		Sequence: tag-primary
+		ReferencePoint: Top
+		ZOffset: 256
+		RequiresCondition: primary
 
 Beam_Cannon:
 	Inherits: ^Tank

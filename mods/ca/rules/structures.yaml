@@ -1834,6 +1834,8 @@ AFLD:
 	ProvidesPrerequisite@iraqistructure:
 		RequiresPrerequisites: structures.iraq
 		Prerequisite: aircraft.iraq
+	ProvidesPrerequisite@afld.generic:
+		Prerequisite: afld.generic
 	AirstrikePower@spyplane:
 		OrderName: spyplane
 		Prerequisites: aircraft.soviet
@@ -4664,6 +4666,8 @@ AFLD.GDI:
 	ProvidesPrerequisite@eaglestructure:
 		RequiresPrerequisites: structures.eagle
 		Prerequisite: aircraft.eagle
+	ProvidesPrerequisite@afld.generic:
+		Prerequisite: afld.generic
 	AirstrikePower@uav:
 		OrderName: gdiuav
 		Prerequisites: aircraft.gdi, !aircraft.talon
@@ -4820,6 +4824,8 @@ AFLD.allies:
 	ProvidesPrerequisite@germanstructure:
 		RequiresPrerequisites: structures.germany
 		Prerequisite: aircraft.germany
+	ProvidesPrerequisite@afld.generic:
+		Prerequisite: afld.generic
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
@@ -6332,95 +6338,3 @@ PLDT:
 	Power:
 		Amount: -50
 		RequiresCondition: !being-warped
-
-Coordinator.Struct:
-	Inherits: ^Building
-	Selectable:
-		Bounds: 24,24
-	Valued:
-		Cost: 150
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack
-	Tooltip:
-		Name: Reinforcement Coordinator
-	-GivesBuildableArea:
-	Health:
-		HP: 30000
-	Armor:
-		Type: Wood
-	RevealsShroud:
-		Range: 4c0
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-		Offset: 0,0,256
-		PauseOnCondition: empdisable || being-warped
-	Transforms:
-		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
-		IntoActor: coordinator
-		Offset: 0,0
-		Facing: 96
-	Exit@1:
-		ExitCell: 0,1
-		ProductionTypes: Vehicle
-	Exit@2:
-		ExitCell: 1,0
-		ProductionTypes: Vehicle
-	Exit@3:
-		ExitCell: 1,1
-		ProductionTypes: Vehicle
-	Exit@4:
-		ExitCell: 0,-1
-		ProductionTypes: Vehicle
-	Exit@5:
-		ExitCell: -1,0
-		ProductionTypes: Vehicle
-	Exit@6:
-		ExitCell: -1,-1
-		ProductionTypes: Vehicle
-	Exit@7:
-		ExitCell: -1,1
-		ProductionTypes: Vehicle
-	Exit@8:
-		ExitCell: 1,-1
-		ProductionTypes: Vehicle
-	Exit@9:
-		ExitCell: 0,2
-		ProductionTypes: Vehicle
-	Exit@10:
-		ExitCell: 2,0
-		ProductionTypes: Vehicle
-	Exit@11:
-		ExitCell: 2,2
-		ProductionTypes: Vehicle
-	Exit@12:
-		ExitCell: 0,-2
-		ProductionTypes: Vehicle
-	Exit@13:
-		ExitCell: -2,0
-		ProductionTypes: Vehicle
-	Exit@14:
-		ExitCell: -2,-2
-		ProductionTypes: Vehicle
-	Exit@15:
-		ExitCell: -2,2
-		ProductionTypes: Vehicle
-	Exit@16:
-		ExitCell: 2,-2
-		ProductionTypes: Vehicle
-	RallyPoint:
-		Offset: 5,5
-	ProductionParadrop:
-		Produces: Vehicle
-		PauseOnCondition: forceshield || invulnerability || being-warped
-		ActorType: c17.cargo
-		ReadyAudio: ReinforcementsArrived
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
