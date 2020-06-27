@@ -4135,6 +4135,12 @@ WTNK:
 	Inherits: ^TankTD
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+		InvalidTargets: NoAutoTarget, empdisabled
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+		InvalidTargets: NoAutoTarget, empdisabled
 	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		Image: mwtnk
