@@ -1283,6 +1283,7 @@ DTRK:
 		Voice: Move
 	Voiced:
 		VoiceSet: TTruckVoice
+	-Passenger:
 
 CTNK:
 	Inherits: ^Vehicle
@@ -1347,6 +1348,8 @@ CTNK.PLD:
 		Description: Advanced tank armed with anti-ground missiles.\nHas Point Laser Defense System\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft, Energy Weapons\n  Special Ability: Teleport
 	Valued:
 		Cost: 2000
+	Tooltip:
+		Name: Chrono Tank (PLD)
 
 QTNK:
 	Inherits: ^Tank
@@ -1847,7 +1850,7 @@ LTNK.Laser:
 		Prerequisites: ~vehicles.nod, tmpl, ~commander_tree.light_tank_laser, ~techlevel.low
 		Description: Fast, light tank shooting laser.\n  Strong vs heavy Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious
 	Valued:
-		Cost: 675
+		Cost: 650
 	Tooltip:
 		Name: Laser Light Tank
 	UpdatesPlayerStatistics:
@@ -2820,7 +2823,7 @@ IFV:
 	Health:
 		HP: 30000
 	Armor:
-		Type: Heavy
+		Type: Light
 	Mobile:
 		Speed: 113
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
@@ -4567,10 +4570,16 @@ MEMP.Volatile:
 		Description: Self destructs to disable nearby vehicles & structures.\nUpgraded with Volatile Reactor to EMP on destruction.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1350
+	Health:
+		HP: 45000
 	Tooltip:
 		Name: Mobile E.M.P (Volatile)
+	Mobile:
+		PauseOnCondition: deployed || disabled || empdisable || being-warped
+		Voice: Move
+		Speed: 115
 	Explodes:
-		Weapon: MEMP
+		Weapon: MEMP.smaller
 		EmptyWeapon: VisualExplodeHusk
 
 MEMP.Stable:
@@ -5092,7 +5101,7 @@ COORDINATOR:
 	Valued:
 		Cost: 1000
 	Tooltip:
-		Name: Reinforcement Coordinator
+		Name: Reinforcements Coordinator
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -5109,7 +5118,7 @@ COORDINATOR:
 		Type: Heavy
 	Mobile:
 		Speed: 82
-		RequiresCondition: !deployed
+		RequiresCondition: !primary
 	RevealsShroud:
 		Range: 7c0
 	WithIdleOverlay@SPINNER:
@@ -5118,11 +5127,9 @@ COORDINATOR:
 		PauseOnCondition: empdisable || being-warped
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
-	GrantConditionOnDeploy:
-		DeployedCondition: deployed
 	RallyPoint:
 		Offset: 5,5
-		RequiresCondition: deployed
+		RequiresCondition: primary
 	ProductionParadrop:
 		Produces: Vehicle
 		PauseOnCondition: forceshield || invulnerability || being-warped
