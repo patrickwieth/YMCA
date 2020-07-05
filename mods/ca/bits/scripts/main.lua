@@ -6,4 +6,5 @@ end
 Tick = function()
 		TickGeneralsPowers()
     TickDropship()
+    TickTugOfWar()
 end

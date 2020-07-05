@@ -135,6 +135,7 @@ TickGeneralsPowers = function()
 			--[[ Media.PlaySpeechNotification(player, "RankUp")  ]]
 			Actor.Create("hack.rank_5", true, { Owner = player })
 		end
+
 	end
 end
 
