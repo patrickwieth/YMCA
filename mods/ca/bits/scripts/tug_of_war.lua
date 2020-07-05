@@ -1,11 +1,21 @@
 
 TickTugOfWar = function()
-  if NamedActor("WarPoint0") != nil {
-    GameDebug("warpoint0 found")
-    --for _,player in pairs(players) do
-      --for _,unit in pairs(player.GetActors()) do
-        --unit.Move(CPos.New(10,10), 0)
-      --end
-    --end
-  }
+
+  Media.Debug("bla" )
+  warpoint0 = Map.NamedActor("WarPoint0")
+
+  if ( Map.NamedActor("WarPoint0") ~= nil )
+  then
+    Media.DisplayMessage(tostring(DateTime.GameTime))
+
+    for _,player in pairs(players) do
+      for _,unit in pairs(player.GetGroundAttackers()) do
+        unit.AttackMove(warpoint0.Location, 0)
+      end
+    end
+  else
+    Media.DisplayMessage("warpoint0 not found")
+  end
+
+
 end
