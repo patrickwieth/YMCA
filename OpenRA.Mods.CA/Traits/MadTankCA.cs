@@ -99,12 +99,22 @@ namespace OpenRA.Mods.CA.Traits
 			conditionManager = self.TraitOrDefault<ConditionManager>();
 		}
 
+		public bool CanDeploy()
+		{
+			if (IsTraitPaused || IsTraitDisabled)
+				return false;
+
+			return true;
+		}
+
 		public IEnumerable<IOrderTargeter> Orders
 		{
 			get
 			{
-				yield return new TargetTypeOrderTargeter(new BitSet<TargetableType>("DetonateAttack"), "DetonateAttack", 5, "attack", true, false) { ForceAttack = false };
-				yield return new DeployOrderTargeter("Detonate", 5);
+				if (!IsTraitDisabled) {
+					yield return new TargetTypeOrderTargeter(new BitSet<TargetableType>("DetonateAttack"), "DetonateAttack", 5, "attack", true, false) { ForceAttack = false };
+					yield return new DeployOrderTargeter("Detonate", 5);
+				}
 			}
 		}
 
@@ -121,7 +131,7 @@ namespace OpenRA.Mods.CA.Traits
 			return new Order("Detonate", self, queued);
 		}
 
-		bool IIssueDeployOrder.CanIssueDeployOrder(Actor self, bool queued) { return true; }
+		bool IIssueDeployOrder.CanIssueDeployOrder(Actor self, bool queued) { return !IsTraitPaused && !IsTraitDisabled; }
 
 		string IOrderVoice.VoicePhraseForOrder(Actor self, Order order)
 		{
@@ -133,7 +143,10 @@ namespace OpenRA.Mods.CA.Traits
 
 		void IResolveOrder.ResolveOrder(Actor self, Order order)
 		{
-			if (order.OrderString == "DetonateAttack")
+			if (!queued && !CanDeploy())
+				return;
+
+			if (order.OrderString == "DetonateAttack" && !IsTraitPaused && !IsTraitDisabled)
 			{
 				self.QueueActivity(order.Queued, new DetonationSequence(self, this, order.Target));
 				self.ShowTargetLines();
