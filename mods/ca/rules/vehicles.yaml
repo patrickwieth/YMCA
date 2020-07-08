@@ -5345,7 +5345,7 @@ TSHMEC:
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@Voxel: ^TSRenderVoxel
 	Valued:
-		Cost: 3500
+		Cost: 10000
 	Tooltip:
 		Name: Mammoth Mk. II
 	Buildable:
@@ -5356,12 +5356,15 @@ TSHMEC:
 		Description: Slow heavy walker.\nArmed with dual railguns and rocket launchers.\n  Strong vs Infantry, Vehicles, Aircraft and Buildings\n  Weak vs Nothing\nMaximum 5 can be built.
 	Mobile:
 		Locomotor: heavytracked
-		TurnSpeed: 3
-		Speed: 42
+		TurnSpeed: 2
+		Speed: 35
 	Health:
-		HP: 150000
+		HP: 200000
 	SelfHealing:
-		Step: 500
+		PercentageStep: 1
+		Delay: 25
+		HealIfBelow: 100
+		DamageCooldown: 50
 	Repairable:
 		HpPerStep: 3500
 	Armor:
@@ -5369,18 +5372,35 @@ TSHMEC:
 	RevealsShroud:
 		Range: 8c0
 	Armament@MISSILES:
-		Weapon: Dragon
-		LocalOffset: -120,-150,600, -120,150,600
+		Name: missiles
+		Weapon: Dragon.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -200,200
+		MuzzleSequence: muzzle1
+	Armament@AAMISSILES:
+		Name: aamissiles
+		Weapon: RedEye.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -100,100
+		MuzzleSequence: muzzle1
 	Armament@RAILGUN:
-		Weapon: Railgun.Titan
-		LocalOffset: 170,-150,510, 170,150,510
+		Name: railgun
+		Weapon: Railgun.MKII
+		LocalOffset: 550,-420,650, 550,420,650
+		MuzzleSequence: muzzle2
 	AttackFrontal:
+		Armaments: railgun
+	AttackFollow:
+		Armaments: missiles, aamissiles
+	WithMuzzleOverlay:
 	SelectionDecorations:
 	Selectable:
+		Bounds: 40,35,0,-10
+		DecorationBounds: 44,38,0,-11
 	AcceptsDeliveredExperience:							##########
 		ValidTypes: vehicle								##########
 	-WithVoxelBody:
-	DeliversCash:
-		Payload: 1500
+	WithVoxelWalkerBody:
+		TickRate: 1
 	RenderVoxels:
-		Scale: 1
+		Scale: 10
