@@ -1,5 +1,9 @@
 
 TickTugOfWar = function()
+  if DateTime.GameTime % 25 > 0
+  then
+    return
+  end
 
   Media.Debug("bla" )
   warpoint0 = Map.NamedActor("WarPoint0")
