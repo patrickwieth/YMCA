@@ -6338,3 +6338,37 @@ PLDT:
 	Power:
 		Amount: -50
 		RequiresCondition: !being-warped
+
+OILP:
+	Inherits: ^BuildingTD
+	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@shape: ^1x1Shape
+	Selectable:
+		Bounds: 24,24
+	RenderSprites:
+		Palette: player
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 200
+		IconPalette: chrometd
+		Prerequisites: ~anypower, ~techlevel.high
+		Description: Gives a steady income from oil drilling.
+	Valued:
+		Cost: 500
+	Health:
+		HP: 25000
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+	Tooltip:
+		Name: Oil Pump
+		ShowOwnerRow: True
+	Power:
+		Amount: -25
+		RequiresCondition: !being-warped
+	CashTrickler:
+		Interval: 125
+		Amount: 10
+		PauseOnCondition: disabled
+	Explodes:
+		Weapon: BarrelExplode
