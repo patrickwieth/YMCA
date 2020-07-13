@@ -143,7 +143,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		void IResolveOrder.ResolveOrder(Actor self, Order order)
 		{
-			if (!queued && !CanDeploy())
+			if (!order.Queued && !CanDeploy())
 				return;
 
 			if (order.OrderString == "DetonateAttack" && !IsTraitPaused && !IsTraitDisabled)
