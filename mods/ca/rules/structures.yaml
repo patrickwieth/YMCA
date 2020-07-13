@@ -3408,6 +3408,29 @@ AIRS:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
+	ParatroopersPower@trollcrate:
+		OrderName: trollcrateairdrop
+		SquadSize: 1
+		UnitType: c17.no_color
+		Prerequisites: airs
+		Icon: trollcrateicon
+		ChargeInterval: 18000
+		Description: Troll Crate
+		LongDesc: A Cargo Plane air drops a crate with a nice present inside.
+		DropItems: crate.troll
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		EndChargeSpeechNotification: ReinforceAva
+		LaunchSpeechNotification: ReinforcementsArrived
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPoster: lrairdropicon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
 	WithDeliveryAnimation:
 	PrimaryBuilding:
 		PrimaryCondition: primary
@@ -6361,7 +6384,7 @@ OILP:
 		Queue: Building
 		BuildPaletteOrder: 200
 		IconPalette: chrometd
-		Prerequisites: ~anypower, ~techlevel.high
+		Prerequisites: ~anypower, ~commander_tree.oil_pumps
 		Description: Gives a steady income from oil drilling.
 	Valued:
 		Cost: 500
@@ -6376,6 +6399,8 @@ OILP:
 	Power:
 		Amount: -25
 		RequiresCondition: !being-warped
+	WithSpriteBody:
+		PauseOnCondition: disabled || being-warped
 	CashTrickler:
 		Interval: 125
 		Amount: 10

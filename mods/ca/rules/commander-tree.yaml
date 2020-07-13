@@ -38,11 +38,23 @@ commander_tree.point_defense_turret:
 		Prerequisites: prerequisite.has_points, ~anypower
 		Description: Enables to build the Point Laser Defense Turret.\n  It shoots down incoming shells and missiles.
 
+commander_tree.oil_pumps:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Oil Pump
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 1
+		IconPalette: chrometd
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~anypower, ~global.oilpumps
+		Description: Enables to build Oil Pumps.\n  Generates slow trickling endless income.
+
 hack.cameo_filler.1:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 2
-		Prerequisites: prerequisite.has_points, ~anypower, disabled
+		Prerequisites: prerequisite.has_points, ~anypower, ~!global.oilpumps, disabled
 
 hack.cameo_filler.2:
 	Inherits: ^default.cameo_filler
