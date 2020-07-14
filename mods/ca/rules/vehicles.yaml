@@ -1248,6 +1248,7 @@ TTNK.Arc:
 DTRK:
 	Inherits: ^Vehicle
 	Inherits@BERSERK: ^Berserk
+	Inherits@UNLOAD: ^UnloadCondition
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 265
@@ -1268,19 +1269,26 @@ DTRK:
 		Voice: Move
 	RevealsShroud:
 		Range: 4c0
-	Explodes:
+	Explodes@NUKE:
 		Weapon: MiniNuke
 		EmptyWeapon: MiniNuke
 		DamageSource: Killer
+		RequiresCondition: !unloaded
+	Explodes@UNARMED:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		RequiresCondition: unloaded && !being-warped
 	AttackFrontal:
 		FacingTolerance: 128
 		Voice: Attack
+		RequiresCondition: !unloaded
 	Armament@PRIMARY:
 		Weapon: DemoTruckTargeting
 	GrantConditionOnAttack:
 		Condition: triggered
 	GrantConditionOnDeploy:
 		DeployedCondition: triggered
+		RequiresCondition: !unloaded
 	-DamageMultiplier@IRONCURTAIN:
 	KillsSelf:
 		RequiresCondition: invulnerability || triggered || berserk
@@ -1291,7 +1299,20 @@ DTRK:
 		Voice: Move
 	Voiced:
 		VoiceSet: TTruckVoice
-	-Passenger:
+
+TTRK:
+	Inherits: DTRK
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 255
+		Prerequisites: ~vehicles.ttrk, ~tmpl, ~vehicles.nod, ~techlevel.high
+		Description: Truck actively armed with\n a Tiberium bomb. Has very weak armor.
+	Tooltip:
+		Name: Toxin Truck
+	Explodes@NUKE:
+		Weapon: UnitExplodeToxinTruck
+		EmptyWeapon: UnitExplodeToxinTruck
 
 CTNK:
 	Inherits: ^Vehicle
@@ -1361,6 +1382,7 @@ CTNK.PLD:
 
 QTNK:
 	Inherits: ^Tank
+	Inherits@UNLOAD: ^UnloadCondition
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 250
@@ -1390,7 +1412,7 @@ QTNK:
 		Range: 4c0
 	MadTankCA:
 		DeployedCondition: deployed
-		PauseOnCondition: invulnerability
+		RequiresCondition: !invulnerability && !unloaded
 	Selectable:
 		DecorationBounds: 44,38,0,-4
 	WithRangeCircle:
@@ -1402,7 +1424,6 @@ QTNK:
 	ProductionCostMultiplier@UkraineBonus:
 		Multiplier: 90
 		Prerequisites: vehicles.ukraine
-	-Passenger:
 
 AMCV:
 	Inherits: ^VehicleTD
@@ -3298,20 +3319,6 @@ JUGG:
 		HP: 50000
 	Voiced:
 		VoiceSet: DisrVoice
-
-TTRK:
-	Inherits: DTRK
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	Buildable:
-		BuildPaletteOrder: 255
-		Prerequisites: ~vehicles.ttrk, ~tmpl, ~vehicles.nod, ~techlevel.high
-		Description: Truck actively armed with\n a Tiberium bomb. Has very weak armor.
-	Tooltip:
-		Name: Toxin Truck
-	Explodes:
-		Weapon: UnitExplodeToxinTruck
-		EmptyWeapon: UnitExplodeToxinTruck
 
 DISR:
 	Inherits: ^TankTD
