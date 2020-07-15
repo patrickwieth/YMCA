@@ -2276,22 +2276,22 @@ OCAR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 45
-		Prerequisites: ~aircraft.all, ~techlevel.high, ~commander_tree.advanced_logistics
+		Prerequisites: ~aircraft.all, ~!aircraft.eagle, ~techlevel.high, ~commander_tree.advanced_logistics
 		IconPalette: chrometd
 		Description: Fast VTOL Vehicle Transporter.\n  Unarmed
 	Aircraft:
 		AltitudeVelocity: 0c100
 		IdealSeparation: 0c768
-		TurnSpeed: 5
-		Speed: 175
+		TurnSpeed: 6
+		Speed: 195
 		TakeoffSounds: dropup1.aud
 		LandingSounds: dropdwn1.aud
 		Repulsable: True
 		IdleTurnSpeed: 1
 		Voice: Move
 	Carryall:
-		BeforeLoadDelay: 5
-		BeforeUnloadDelay: 10
+		BeforeLoadDelay: 0
+		BeforeUnloadDelay: 0
 		LocalOffset: 0, 0, -128
 		Voice: Action
 		AllowDropOff: True
@@ -2322,6 +2322,24 @@ OCAR:
 		VoiceSet: CarryAllVoice
 	WithMoveAnimation:
 		MoveSequence: move
+	SpeedMultiplier@EagleBonus
+		Modifier: 120
+		Prerequisites: structures.eagle
+
+OCAR.Eagle:
+	Inherits: OCAR
+	Buildable:
+		Queue: Aircraft
+		Prerequisites: ~aircraft.eagle, ~techlevel.high, ~commander_tree.advanced_logistics
+	Tooltip:
+		Name: Carryall (Auto)
+	-Carryall:
+	AutoCarryall:
+		BeforeLoadDelay: 0
+		BeforeUnloadDelay: 0
+		LocalOffset: 0, 0, -128
+		Voice: Action
+		AllowDropOff: True
 
 OCAR.Reinforce:
 	Inherits: OCAR
