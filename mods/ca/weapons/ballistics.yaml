@@ -159,6 +159,7 @@
 
 183mm:
 	Inherits: ^Cannon
+	Inherits: ^ShellAP
 	ReloadDelay: 70
 	Report: tnkd2_fire.aud
 	Range: 5c0
@@ -166,14 +167,7 @@
 		Speed: 768
 		Image: 183MM
 	Warhead@1Dam: SpreadDamage
-		Damage: 12000
-		Versus:
-			Heavy: 130
-			None: 10
-			Wood: 15
-			Light: 50
-			Concrete: 20
-			Brick: 32
+		Damage: 10000
 		InvalidTargets: Air
 
 183mm.Burst:
@@ -218,29 +212,10 @@ TitanGun:
 
 ^Artillery:
 	Inherits: ^Cannon
+	Inherits: ^ShellArtillery
 	ReloadDelay: 60
-	Range: 14c0
-	Projectile: BulletCA
-		Speed: 204
-		Blockable: false
-		LaunchAngle: 62
-		Inaccuracy: 2c938
 	Warhead@1Dam: SpreadDamage
-		Spread: 426
 		Damage: 14000
-		Versus:
-			None: 50
-			Wood: 60
-			Light: 60
-			Heavy: 25
-			Concrete: 60
-			Brick: 60
-		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: artillery_explosion
-		ImpactSounds: kaboom25.aud
-	Warhead@4EffWater: CreateEffect
-		Explosions: med_splash
 
 155mm:
 	Inherits: ^Artillery
@@ -252,14 +227,6 @@ TitanGun:
 		Inaccuracy: 2c138
 	Warhead@1Dam: SpreadDamage
 		Damage: 6500
-		Falloff: 100, 55, 20, 5
-		Versus:
-			None: 85
-			Wood: 100
-			Concrete: 100
-			Brick: 100
-			Light: 100
-			Heavy: 42
 
 155mm.BATF:
 	Inherits: 155mm
@@ -267,6 +234,9 @@ TitanGun:
 	Warhead@1Dam: SpreadDamage
 		Damage: 20000
 		Falloff: 100, 75, 50, 25
+	Warhead@3Eff: CreateEffect
+		Explosions: large_artillery_explosion
+		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
 
 155mmTD:
 	Inherits: 155mm
@@ -291,7 +261,7 @@ TitanGun:
 	Warhead@1Dam: SpreadDamage
 		Damage: 12000
 
-380mm:
+152mm:
 	Inherits: ^Artillery
 	ReloadDelay: 150
 	Report: bgraatta.aud
@@ -300,7 +270,7 @@ TitanGun:
 	TargetActorCenter: true
 	Projectile: BulletCA
 		Speed: 145
-		Image: 380mm
+		Image: 152mm
 		Inaccuracy: 1c138
 	Warhead@1Dam: SpreadDamage
 		Damage: 18000
@@ -316,8 +286,8 @@ TitanGun:
 		Explosions: large_artillery_explosion
 		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
 
-380mm.Concussion:
-	Inherits: 380mm
+152mm.Concussion:
+	Inherits: 152mm
 	Warhead@Concussion1: GrantExternalCondition
 		Range: 1c512
 		Duration: 240
@@ -333,7 +303,7 @@ TitanGun:
 		Intensity: 1
 		Multiplier: 0.5,0.5
 
-152mm:
+152mm.Akatsiya:
 	Inherits: 155mm
 	ReloadDelay: 150
 	Range: 14c0
@@ -353,23 +323,17 @@ TitanGun:
 8Inch:
 	Inherits: ^Artillery
 	MinRange: 5c0
-	ReloadDelay: 250
+	ReloadDelay: 200
 	Range: 25c0
 	Burst: 2
 	Report: tank6.aud
 	TargetActorCenter: true
 	Projectile: BulletCA
-		Inaccuracy: 2c938
 		LaunchAngle: 40
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
 		Damage: 2000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
-		Versus:
-			None: 100
-			Wood: 100
-			Concrete: 50
-			Heavy: 55
 	Warhead@3Eff: CreateEffect
 		Explosions: building, building2
 	Warhead@4EffWater: CreateEffect
@@ -393,11 +357,6 @@ JuggernautGun:
 		Spread: 348
 		Damage: 1375
 		Falloff: 800, 368, 135, 50, 18, 7, 0
-		Versus:
-			None: 90
-			Heavy: 40
-			Concrete: 45
-			Brick: 55
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
 
