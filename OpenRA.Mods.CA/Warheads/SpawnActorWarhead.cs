@@ -8,6 +8,7 @@
  */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRA.GameRules;
@@ -154,6 +155,18 @@ namespace OpenRA.Mods.CA.Warheads
 
 							positionable.SetVisualPosition(unit, pos);
 							w.Add(unit);
+
+							foreach (Actor passenger in args.SourceActor.TraitOrDefault<Cargo>().Passengers)
+							{
+							    //Game.Debug(String.Join("; ", passenger.TraitOrDefault<Cargo>().Passengers));
+									Game.Debug(passenger.Info.Name);
+
+									var newPassenger = firedBy.World.CreateActor(false, passenger.Info.Name, td);
+
+
+									unit.TraitOrDefault<Cargo>().Load(unit, newPassenger);
+							}
+
 
 							if (Paradrop)
 								unit.QueueActivity(new Parachute(unit));
