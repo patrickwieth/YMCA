@@ -5361,3 +5361,69 @@ Beam_Cannon:
 		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
+
+MAMMOTHMK2:
+	Inherits: ^Tank
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@Voxel: ^TSRenderVoxel
+	Valued:
+		Cost: 10000
+	Tooltip:
+		Name: Mammoth Mk. II
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: gtek, ~techlevel.high
+		Queue: Vehicle
+		BuildLimit: 3
+		Description: Slow heavy walker.\nArmed with dual railguns and rocket launchers.\n  Strong vs Infantry, Vehicles, Aircraft and Buildings\n  Weak vs Nothing\nMaximum 5 can be built.
+	Mobile:
+		Locomotor: heavytracked
+		TurnSpeed: 2
+		Speed: 35
+	Health:
+		HP: 200000
+	SelfHealing:
+		PercentageStep: 1
+		Delay: 25
+		HealIfBelow: 100
+		DamageCooldown: 50
+	Repairable:
+		HpPerStep: 3500
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 8c0
+	Armament@MISSILES:
+		Name: missiles
+		Weapon: Dragon.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -200,200
+		MuzzleSequence: muzzle1
+	Armament@AAMISSILES:
+		Name: aamissiles
+		Weapon: RedEye.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -100,100
+		MuzzleSequence: muzzle1
+	Armament@RAILGUN:
+		Name: railgun
+		Weapon: Railgun.MKII
+		LocalOffset: 550,-420,650, 550,420,650
+		MuzzleSequence: muzzle2
+	AttackFrontal:
+		Armaments: railgun
+	AttackFollow:
+		Armaments: missiles, aamissiles
+	WithMuzzleOverlay:
+	SelectionDecorations:
+	Selectable:
+		Bounds: 40,35,0,-10
+		DecorationBounds: 44,38,0,-11
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: vehicle								##########
+	-WithVoxelBody:
+	WithVoxelWalkerBody:
+		TickRate: 1
+	RenderVoxels:
+		Scale: 10
