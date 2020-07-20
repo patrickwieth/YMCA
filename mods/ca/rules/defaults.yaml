@@ -837,7 +837,7 @@
 	DrawLineToTarget:
 	UpdatesPlayerStatistics:
 	Mobile:
-		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead
+		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead || notmobile
 		Locomotor: wheeled
 		TurnSpeed: 10
 	SelectionDecorations:
@@ -2582,27 +2582,27 @@
 		Armament: pointdefense
 		PointDefenseTypes: Missile, Bullet
 		ValidStances: Enemy
-	AmmoPool:
+	AmmoPool@pld:
 		Ammo: 12
 		PipCount: 6
 		PipType: Red
 		Armaments: pointdefense
 		AmmoCondition: ammo
-	ReloadAmmoPool:
+	ReloadAmmoPool@pld:
 		Delay: 240
 		Count: 12
 		ResetOnFire: True
 		PauseOnCondition: disabled || empdisable
-	WithRangeCircle:
+	WithRangeCircle@pld:
 		Color: FF000080
 		Range: 2c768
 
 ^PointLaserDefenseSystemSmall:
 	Inherits: ^PointLaserDefenseSystem
-	AmmoPool:
+	AmmoPool@pld:
 		Ammo: 6
 		PipCount: 2
-	ReloadAmmoPool:
+	ReloadAmmoPool@pld:
 		Count: 6
 
 ^PointLaserDefenseSystemBig:
@@ -2611,10 +2611,10 @@
 		Name: pointdefense
 		Turret: pointdefense
 		Weapon: SuperPointLaser
-	AmmoPool:
+	AmmoPool@pld:
 		Ammo: 24
 		PipCount: 6
-	ReloadAmmoPool:
+	ReloadAmmoPool@pld:
 		Count: 24
 	WithRangeCircle:
 		Range: 3c768
@@ -2623,7 +2623,16 @@
 	SpeedMultiplier@Propaganda:
 		RequiresCondition: propaganda
 		Modifier: 125
+	DamageMultiplier@Propaganda:
+		RequiresCondition: propaganda
+		Modifier: 75
+	RangeMultiplier@Propaganda:
+		RequiresCondition: propaganda
+		Modifier: 125
 	ReloadDelayMultiplier@Propaganda:
+		RequiresCondition: propaganda
+		Modifier: 75
+	ReloadAmmoDelayMultiplier@Propaganda:
 		RequiresCondition: propaganda
 		Modifier: 75
 	ExternalCondition@Propaganda:
@@ -2631,3 +2640,43 @@
 	WithColoredOverlay@Propaganda:
 		RequiresCondition: propaganda
 		Palette: frenzy
+
+^UnloadCondition:
+	Passenger:
+		CargoCondition: loaded
+	Carryable:
+		CarriedCondition: loaded
+	GrantTimedCondition@UNLOADED:
+		Duration: 250
+		Condition: unloaded
+		RequiresCondition: !loaded
+	TimedConditionBar@unloaded:
+		Condition: unloaded
+		Color: FF0000
+
+^RenderVoxel:
+	BodyOrientation:
+		QuantizedFacings: 32
+		CameraPitch: 130
+		UseClassicPerspectiveFudge: false
+	RenderVoxels:
+		Scale: 5.5
+		NormalsPalette: normals
+		PlayerPalette: playerra2
+		LightYaw: 800
+		LightPitch: 150
+		LightAmbientColor: -0.5,-0.5,-0.5
+		LightDiffuseColor: 1.4,1.4,1.4
+	WithVoxelBody:
+		ShowShadow: true
+
+^TSRenderVoxel:
+	Inherits: ^RenderVoxel
+	RenderVoxels:
+		Scale: 6.8
+		NormalsPalette: ts-normals
+		PlayerPalette: playerra2
+		LightAmbientColor: 0.6, 0.6, 0.6
+		LightDiffuseColor: 0.4, 0.4, 0.4
+		LightPitch: 142
+		LightYaw: 682

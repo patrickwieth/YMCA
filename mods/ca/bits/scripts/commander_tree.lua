@@ -7,7 +7,7 @@
    information, see COPYING.
 ]]
 
-PointsPerRank = { 8, 1, 1, 1, 1 }
+PointsPerRank = { 5, 1, 1, 1, 1 }
 
 PointActorExists =
 {
@@ -74,7 +74,7 @@ Levels =
 }
 
 Ranks = { "1 Star General", "2 Stars General", "3 Stars General", "4 Stars General", "5 Stars General" }
-RankXPs = { 0, 10, 100, 2500, 5000 }
+RankXPs = { 0, 100, 300, 1000, 5000 }
 
 ReducePoints = function(player)
 	Trigger.OnProduction(player.GetActorsByType("player")[1], function()

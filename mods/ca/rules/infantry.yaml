@@ -187,21 +187,21 @@ E3:
 		HP: 3500
 	Mobile:
 		speed: 54
-	Armament@PRIMARY:
+	Armament@primary:
 		Name: primary
+		Weapon: Dragon.Relay
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@tertiary:
+		Name: tertiary
 		Weapon: RedEye
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
-	Armament@SECONDARY:
+	Armament@secondary:
 		Name: secondary
 		Weapon: Dragon
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
-	Armament@TERTIARY:
-		Name: tertiary
-		Weapon: Dragon.Relay
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped || !relayTarget
 	Armament@Garrison:
 		Name: mounted
 		Weapon: DragonE
@@ -223,7 +223,7 @@ E3:
 	TakeCover:
 		ProneOffset: 384,0,-395
 	AttackFrontal:
-		Armaments: primary, secondary
+		Armaments: primary, secondary, tertiary
 		PauseOnCondition: being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
@@ -923,21 +923,21 @@ N3:
 		HP: 3500
 	Mobile:
 		speed: 54
-	Armament@PRIMARY:
+	Armament@primary:
 		Name: primary
 		Weapon: RedEye
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
-	Armament@SECONDARY:
+	Armament@secondary:
 		Name: secondary
 		Weapon: Dragon
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
-	Armament@TERTIARY:
+	Armament@tertiary:
 		Name: tertiary
 		Weapon: Dragon.Relay
 		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped || !relayTarget
+		PauseOnCondition: !ammo || being-warped
 	Armament@Garrison:
 		Name: mounted
 		Weapon: DragonE
@@ -959,7 +959,7 @@ N3:
 	TakeCover:
 		ProneOffset: 384,0,-395
 	AttackFrontal:
-		Armaments: primary, secondary
+		Armaments: primary, secondary, tertiary
 		PauseOnCondition: being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
@@ -1554,7 +1554,7 @@ SpecOps:
 		LocalOffset: 150,0,300
 		Weapon: relayMarker
 	Armament@SECONADARY:
-		Name: Seconadry
+		Name: Secondary
 		Weapon: SilencedPPK
 	Armament@Garrison:
 		Name: mounted
@@ -2220,6 +2220,11 @@ CRYOT:
 		Weapon: CryoGun
 		LocalOffset: 341,0,256
 		PauseOnCondition: being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: CryoGun
+		LocalOffset: 341,0,256
+		PauseOnCondition: being-warped
 	TakeCover:
 		ProneOffset: 227,0,-245
 	AttackFrontal:
@@ -2233,7 +2238,7 @@ Railgunner:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 50
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.railgunner, ~techlevel.infonly
+		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.railgunner, ~!commander_tree.railgunner.no_crush, ~techlevel.infonly
 		Description: Heavy Infantry with Railgun. Strong vs Heavy Tanks\n  Weak vs Infantry, Buildings
 		IconPalette: chrometd
 	Valued:

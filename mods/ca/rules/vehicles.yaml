@@ -671,7 +671,7 @@ ISU:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	Armament:
-		Weapon: 380mm
+		Weapon: 152mm
 		LocalOffset: 824,0,208
 		MuzzleSequence: muzzle
 	AttackFrontal:
@@ -704,7 +704,7 @@ ISU.Concussion:
 	Tooltip:
 		Name: ISU Bombard Tank (Concussion)
 	Armament:
-		Weapon: 380mm.Concussion
+		Weapon: 152mm.Concussion
 
 SPEC:
 	Inherits: ARTY.nod
@@ -819,6 +819,13 @@ HARV:
 	PeriodicExplosion@WARPOUT:
 		Weapon: HarvSwap
 		RequiresCondition: orep-upgrade
+	-Carryable:
+	CarryableHarvester:
+	AutoCarryable:
+		CarriedCondition: notmobile
+		ReservedCondition: carryall-reserved
+		LockedCondition: notmobile
+
 
 HARV.Chrono:
 	Inherits: HARV
@@ -1248,6 +1255,7 @@ TTNK.Arc:
 DTRK:
 	Inherits: ^Vehicle
 	Inherits@BERSERK: ^Berserk
+	Inherits@UNLOAD: ^UnloadCondition
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 265
@@ -1268,19 +1276,26 @@ DTRK:
 		Voice: Move
 	RevealsShroud:
 		Range: 4c0
-	Explodes:
+	Explodes@NUKE:
 		Weapon: MiniNuke
 		EmptyWeapon: MiniNuke
 		DamageSource: Killer
+		RequiresCondition: !unloaded
+	Explodes@UNARMED:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		RequiresCondition: unloaded && !being-warped
 	AttackFrontal:
 		FacingTolerance: 128
 		Voice: Attack
+		RequiresCondition: !unloaded
 	Armament@PRIMARY:
 		Weapon: DemoTruckTargeting
 	GrantConditionOnAttack:
 		Condition: triggered
 	GrantConditionOnDeploy:
 		DeployedCondition: triggered
+		RequiresCondition: !unloaded
 	-DamageMultiplier@IRONCURTAIN:
 	KillsSelf:
 		RequiresCondition: invulnerability || triggered || berserk
@@ -1291,7 +1306,20 @@ DTRK:
 		Voice: Move
 	Voiced:
 		VoiceSet: TTruckVoice
-	-Passenger:
+
+TTRK:
+	Inherits: DTRK
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 255
+		Prerequisites: ~vehicles.ttrk, ~tmpl, ~vehicles.nod, ~techlevel.high
+		Description: Truck actively armed with\n a Tiberium bomb. Has very weak armor.
+	Tooltip:
+		Name: Toxin Truck
+	Explodes@NUKE:
+		Weapon: UnitExplodeToxinTruck
+		EmptyWeapon: UnitExplodeToxinTruck
 
 CTNK:
 	Inherits: ^Vehicle
@@ -1361,6 +1389,7 @@ CTNK.PLD:
 
 QTNK:
 	Inherits: ^Tank
+	Inherits@UNLOAD: ^UnloadCondition
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 250
@@ -1388,8 +1417,9 @@ QTNK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	MadTank:
+	MadTankCA:
 		DeployedCondition: deployed
+		RequiresCondition: !invulnerability && !unloaded
 	Selectable:
 		DecorationBounds: 44,38,0,-4
 	WithRangeCircle:
@@ -1401,7 +1431,6 @@ QTNK:
 	ProductionCostMultiplier@UkraineBonus:
 		Multiplier: 90
 		Prerequisites: vehicles.ukraine
-	-Passenger:
 
 AMCV:
 	Inherits: ^VehicleTD
@@ -2754,6 +2783,12 @@ HAR2:
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	-Carryable:
+	CarryableHarvester:
+	AutoCarryable:
+		CarriedCondition: notmobile
+		ReservedCondition: carryall-reserved
+		LockedCondition: notmobile
 
 BTR:
 	Inherits: ^Tank
@@ -2820,6 +2855,15 @@ IFV:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
+	Inherits: ^PointLaserDefenseSystem
+	Armament@pointdefense:
+		RequiresCondition: cryoturr
+	AmmoPool@pld:
+		PipCount: 0
+		RequiresCondition: cryoturr
+	ReloadAmmoPool@pld:
+		RequiresCondition: cryoturr
+	-WithRangeCircle@pld:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 60
@@ -2937,6 +2981,22 @@ IFV:
 		Weapon: LaserTur
 		LocalOffset: 385,0,300
 		RequiresCondition: acolturr
+	Armament@snipe:
+		Weapon: sniperE
+		LocalOffset: 250,0,150
+		RequiresCondition: snipeturr
+	Armament@Railgun:
+		Weapon: Railgun.Infantry
+		LocalOffset: 560,0,200
+		RequiresCondition: railgunturr
+	Armament@Cryo:
+		Weapon: CryoGun
+		LocalOffset: 560,0,200
+		RequiresCondition: cryoturr
+	Armament@Relay:
+		Weapon: relayMarker
+		LocalOffset: 250,0,150
+		RequiresCondition: relayturr
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
 		PauseOnCondition: empdisable || being-warped
@@ -2957,7 +3017,7 @@ IFV:
 		RequiresCondition: samturr
 		Sequence: turret2
 	WithSpriteTurret@gun:
-		RequiresCondition: gunturr || tecnturr
+		RequiresCondition: gunturr || tecnturr || snipeturr || relayturr
 		Sequence: turret3
 	WithSpriteTurret@frg:
 		Sequence: turret4
@@ -2976,7 +3036,7 @@ IFV:
 		RequiresCondition: desoturr
 	WithSpriteTurret@com:
 		Sequence: turret9
-		RequiresCondition: commturr
+		RequiresCondition: commturr || railgunturr || cryoturr
 	WithSpriteTurret@rep:
 		Sequence: turret10
 		RequiresCondition: engturr
@@ -3009,15 +3069,21 @@ IFV:
 			bori: commturr
 			e7: commturr
 			sab: commturr
-			snip: commturr
+			snip: snipeturr
 			spy: spyturr
 			thf: spyturr
 			medi: medturr
 			acol: acolturr
 			rmbc: acolturr
+			rmbc.range: acolturr
 			tecn: tecnturr
 			tecn2: tecnturr
 			tecn3: tecnturr
+			leader: spyturr
+			railgunner: railgunturr
+			railgunner.nocrush: railgunturr
+			cryot: cryoturr
+			specops: relayturr
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	WithIdleOverlay@MEDIC:
@@ -3076,7 +3142,7 @@ IFV.AI:
 	Health:
 		HP: 30000
 	Armor:
-		Type: Heavy
+		Type: Light
 	Mobile:
 		Speed: 113
 	RevealsShroud:
@@ -3297,20 +3363,6 @@ JUGG:
 		HP: 50000
 	Voiced:
 		VoiceSet: DisrVoice
-
-TTRK:
-	Inherits: DTRK
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	Buildable:
-		BuildPaletteOrder: 255
-		Prerequisites: ~vehicles.ttrk, ~tmpl, ~vehicles.nod, ~techlevel.high
-		Description: Truck actively armed with\n a Tiberium bomb. Has very weak armor.
-	Tooltip:
-		Name: Toxin Truck
-	Explodes:
-		Weapon: UnitExplodeToxinTruck
-		EmptyWeapon: UnitExplodeToxinTruck
 
 DISR:
 	Inherits: ^TankTD
@@ -4393,19 +4445,21 @@ BATF.Bunker:
 			n4: loaded
 			n5: loaded
 			rmbo: loaded
-			boris: loaded
+			bori: loaded
 			acol: loaded
 			mort: loaded
-			sniper: loaded
+			snip: loaded
 			shok: loaded
 			shok.nod: loaded
 			sab: loaded
 			n1c: loaded
 			n3c: loaded-air
-			rmboc: loaded
+			rmbc: loaded
 			tecn: loaded
 			tecn2: loaded
 			tecn3: loaded
+			railgunner: loaded
+			cryot: loaded
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
@@ -4904,7 +4958,7 @@ CHPR.AA:
 		TurnSpeed: 6
 		Offset: -200, 0, 0
 	Armament@PRIMARY:
-		Weapon: 152mm
+		Weapon: 152mm.Akatsiya
 		LocalOffset: 1050,0,440
 		Recoil: 100
 		RecoilRecovery: 30
@@ -5338,3 +5392,70 @@ Beam_Cannon:
 		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
+
+MAMMOTHMK2:
+	Inherits: ^Tank
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@Voxel: ^TSRenderVoxel
+	Valued:
+		Cost: 10000
+	Tooltip:
+		Name: Mammoth Mk. II
+	Buildable:
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		Prerequisites: gtek, ~techlevel.high
+		Queue: Vehicle
+		BuildLimit: 3
+		Description: Slow heavy walker.\nArmed with dual railguns and rocket launchers.\n  Strong vs Infantry, Vehicles, Aircraft and Buildings\n  Weak vs Nothing\nMaximum 5 can be built.
+	Mobile:
+		Locomotor: heavytracked
+		TurnSpeed: 2
+		Speed: 35
+	Health:
+		HP: 200000
+	SelfHealing:
+		PercentageStep: 1
+		Delay: 25
+		HealIfBelow: 100
+		DamageCooldown: 50
+	Repairable:
+		HpPerStep: 3500
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 8c0
+	Armament@MISSILES:
+		Name: missiles
+		Weapon: Dragon.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -200,200
+		MuzzleSequence: muzzle1
+	Armament@AAMISSILES:
+		Name: aamissiles
+		Weapon: RedEye.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -100,100
+		MuzzleSequence: muzzle1
+	Armament@RAILGUN:
+		Name: railgun
+		Weapon: Railgun.MKII
+		LocalOffset: 550,-420,650, 550,420,650
+		MuzzleSequence: muzzle2
+	AttackFrontal:
+		Armaments: railgun
+	AttackFollow:
+		Armaments: missiles, aamissiles
+	WithMuzzleOverlay:
+	SelectionDecorations:
+	Selectable:
+		Bounds: 40,35,0,-10
+		DecorationBounds: 44,38,0,-11
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: vehicle								##########
+	-WithVoxelBody:
+	WithVoxelWalkerBody:
+		TickRate: 1
+	RenderVoxels:
+		Scale: 10

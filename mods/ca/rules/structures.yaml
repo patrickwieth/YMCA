@@ -690,6 +690,7 @@ TSLA:
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
 	DetectCloaked:
+		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
 	ProductionCostMultiplier@RussiaBonus:
 		Multiplier: 90
@@ -3798,6 +3799,7 @@ ATWR:
 		Range: 6c0
 	WithBuildingBib:
 		HasMinibib: true
+	RenderRangeCircle:
 	Turreted:
 		TurnSpeed: 255
 		Offset: 0,0,0
@@ -3859,6 +3861,13 @@ ATWR:
 		RequiresCondition: !fired || relayfired
 	ExternalCondition@RELAYABLE:
 		Condition: relayable
+	-RenderRangeCircle:
+	WithRangeCircle@1:
+		Color: C12900
+		Range: 7c0
+	WithRangeCircle@2:
+		Color: 29C000
+		Range: 13c0
 
 STWR:
 	Inherits: ^Defense
@@ -3905,6 +3914,7 @@ STWR:
 	BodyOrientation:
 		UseClassicFacingFudge: True
 	DetectCloaked:
+		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
 	Selectable:
 		DecorationBounds: 24,40,0,-8
@@ -5012,6 +5022,29 @@ TMPL:
 		TrailImage: smokey2
 		TrailSequences: idle
 		TrailPalette: tseffect-ignore-lighting-alpha75
+	ParatroopersPower@trollcrate:
+		OrderName: trollcrateairdrop
+		SquadSize: 1
+		UnitType: c17.no_color
+		Prerequisites: airs
+		Icon: trollcrateicon
+		ChargeInterval: 18000
+		Description: Troll Crate
+		LongDesc: A Cargo Plane air drops a crate with a nice present inside.
+		DropItems: crate.troll
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		EndChargeSpeechNotification: ReinforceAva
+		LaunchSpeechNotification: ReinforcementsArrived
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPoster: lrairdropicon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
 	WithBuildingBib:
 	GrantExternalConditionPowerCA@FSHIELD:
 		OrderName: fshield
@@ -6344,3 +6377,39 @@ PLDT:
 	Power:
 		Amount: -50
 		RequiresCondition: !being-warped
+
+OILP:
+	Inherits: ^BuildingTD
+	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@shape: ^1x1Shape
+	Selectable:
+		Bounds: 24,24
+	RenderSprites:
+		Palette: player
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 200
+		IconPalette: chrometd
+		Prerequisites: ~anypower, ~commander_tree.oil_pumps
+		Description: Gives a steady income from oil drilling.
+	Valued:
+		Cost: 500
+	Health:
+		HP: 25000
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+	Tooltip:
+		Name: Oil Pump
+		ShowOwnerRow: True
+	Power:
+		Amount: -25
+		RequiresCondition: !being-warped
+	WithSpriteBody:
+		PauseOnCondition: disabled || being-warped
+	CashTrickler:
+		Interval: 125
+		Amount: 10
+		PauseOnCondition: disabled
+	Explodes:
+		Weapon: BarrelExplode
