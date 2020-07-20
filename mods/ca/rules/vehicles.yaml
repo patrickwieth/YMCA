@@ -2855,6 +2855,15 @@ IFV:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
+	Inherits: ^PointLaserDefenseSystem
+	Armament@pointdefense:
+		RequiresCondition: cryoturr
+	AmmoPool@pld:
+		PipCount: 0
+		RequiresCondition: cryoturr
+	ReloadAmmoPool@pld:
+		RequiresCondition: cryoturr
+	-WithRangeCircle@pld:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 60
@@ -2972,6 +2981,22 @@ IFV:
 		Weapon: LaserTur
 		LocalOffset: 385,0,300
 		RequiresCondition: acolturr
+	Armament@snipe:
+		Weapon: sniperE
+		LocalOffset: 250,0,150
+		RequiresCondition: snipeturr
+	Armament@Railgun:
+		Weapon: Railgun.Infantry
+		LocalOffset: 560,0,200
+		RequiresCondition: railgunturr
+	Armament@Cryo:
+		Weapon: CryoGun
+		LocalOffset: 560,0,200
+		RequiresCondition: cryoturr
+	Armament@Relay:
+		Weapon: relayMarker
+		LocalOffset: 250,0,150
+		RequiresCondition: relayturr
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
 		PauseOnCondition: empdisable || being-warped
@@ -2992,7 +3017,7 @@ IFV:
 		RequiresCondition: samturr
 		Sequence: turret2
 	WithSpriteTurret@gun:
-		RequiresCondition: gunturr || tecnturr
+		RequiresCondition: gunturr || tecnturr || snipeturr || relayturr
 		Sequence: turret3
 	WithSpriteTurret@frg:
 		Sequence: turret4
@@ -3011,7 +3036,7 @@ IFV:
 		RequiresCondition: desoturr
 	WithSpriteTurret@com:
 		Sequence: turret9
-		RequiresCondition: commturr
+		RequiresCondition: commturr || railgunturr || cryoturr
 	WithSpriteTurret@rep:
 		Sequence: turret10
 		RequiresCondition: engturr
@@ -3044,19 +3069,21 @@ IFV:
 			bori: commturr
 			e7: commturr
 			sab: commturr
-			snip: commturr
+			snip: snipeturr
 			spy: spyturr
 			thf: spyturr
 			medi: medturr
 			acol: acolturr
 			rmbc: acolturr
+			rmbc.range: acolturr
 			tecn: tecnturr
 			tecn2: tecnturr
 			tecn3: tecnturr
 			leader: spyturr
-			railgunner: gunturr
-			railgunner.nocrush: gunturr
-			cryot: gunturr
+			railgunner: railgunturr
+			railgunner.nocrush: railgunturr
+			cryot: cryoturr
+			specops: relayturr
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	WithIdleOverlay@MEDIC:
