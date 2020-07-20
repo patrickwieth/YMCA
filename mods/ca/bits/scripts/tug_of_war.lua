@@ -18,7 +18,7 @@ TickTugOfWar = function()
       end
     end
   else
-    Media.DisplayMessage("warpoint0 not found")
+    --Media.DisplayMessage("warpoint0 not found")
   end
 
 

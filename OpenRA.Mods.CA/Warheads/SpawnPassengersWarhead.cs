@@ -1,4 +1,4 @@
-﻿#region Copyright & License Information
+#region Copyright & License Information
 /*
  * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
  * This file is a part of a third-party plugin for OpenRA, which is
@@ -8,6 +8,7 @@
  */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRA.GameRules;
@@ -21,7 +22,7 @@ using OpenRA.Traits;
 namespace OpenRA.Mods.CA.Warheads
 {
 	[Desc("Spawn actors upon explosion. Don't use this with buildings.")]
-	public class SpawnActorWarhead : WarheadAS, IRulesetLoaded<WeaponInfo>
+	public class SpawnPassengerWarhead : WarheadAS, IRulesetLoaded<WeaponInfo>
 	{
 		[Desc("The cell range to try placing the actors within.")]
 		public readonly int Range = 10;
@@ -69,7 +70,7 @@ namespace OpenRA.Mods.CA.Warheads
 				var buildingInfo = actorInfo.TraitInfoOrDefault<BuildingInfo>();
 
 				if (buildingInfo != null)
-					throw new YamlException("SpawnActorWarhead cannot be used to spawn building actor '{0}'!".F(a));
+					throw new YamlException("SpawnPassengerWarhead cannot be used to spawn building actor '{0}'!".F(a));
 			}
 		}
 
@@ -88,8 +89,9 @@ namespace OpenRA.Mods.CA.Warheads
 			var targetCells = map.FindTilesInCircle(targetCell, Range);
 			var cell = targetCells.GetEnumerator();
 
-			foreach (var a in Actors)
+			foreach (var passenger in args.SourceActor.TraitOrDefault<Cargo>().Passengers)
 			{
+        var a = passenger.Info.Name;
 				var placed = false;
 				var td = new TypeDictionary();
 				var ai = map.Rules.Actors[a.ToLowerInvariant()];
@@ -154,6 +156,16 @@ namespace OpenRA.Mods.CA.Warheads
 
 							positionable.SetVisualPosition(unit, pos);
 							w.Add(unit);
+
+							foreach (var p in passenger.TraitOrDefault<Cargo>().Passengers)
+							{
+							    //Game.Debug(String.Join("; ", passenger.TraitOrDefault<Cargo>().Passengers));
+									Game.Debug(p.Info.Name);
+
+									var newPassenger = firedBy.World.CreateActor(false, p.Info.Name, td);
+
+									unit.TraitOrDefault<Cargo>().Load(unit, newPassenger);
+							}
 
 							if (Paradrop)
 								unit.QueueActivity(new Parachute(unit));
