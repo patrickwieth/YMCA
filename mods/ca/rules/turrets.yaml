@@ -182,3 +182,60 @@
 			railgunner.nocrush: railgunturr
 			cryot: cryoturr
 			specops: relayturr
+
+^heavy_turrets:
+	Turreted:
+		TurnSpeed: 4
+	Armament@doubleturret1:
+		Weapon: 130mm
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: doubleturret || htnkturret
+	Armament@doubleturret2:
+		Name: secondary
+		Weapon: MammothTusk
+		LocalOffset: -85,384,340, -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+		RequiresCondition: doubleturret || htnkturret
+	WithSpriteTurret@doubleturret:
+		RequiresCondition: doubleturret
+		Sequence: doubleturret
+	WithSpriteTurret@htnkturret:
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+		RequiresCondition: htnkturret
+		Sequence: htnkturret
+	Armament@teslaturret:
+		Weapon: 4TankZap
+		LocalOffset: 900,0,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: teslaturret
+	WithSpriteTurret@teslaturret:
+		RequiresCondition: teslaturret
+		Sequence: teslaturret
+	Armament@ionturret:
+		Weapon: IonZap
+		LocalOffset: 870,0,360
+		RequiresCondition: ionturret
+	WithSpriteTurret@ionturret:
+		RequiresCondition: ionturret
+		Sequence: ionturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Cargo@turret:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			e1: doubleturret
+			n1: htnkturret
+			e2: teslaturret
+			n2: ionturret
