@@ -183,10 +183,37 @@
 			cryot: cryoturr
 			specops: relayturr
 
+^medium_turrets:
+	Turreted:
+		TurnSpeed: 8
+	Armament@PRIMARY:                             ## Stealth Tank Turret
+		Weapon: StnkMissile
+		LocalOffset: 213,43,128, 213,-43,128
+		RequiresCondition: stnkturret
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: StnkMissile.AA
+		LocalOffset: 213,43,128, 213,-43,128
+		RequiresCondition: stnkturret
+	WithSpriteTurret@stnkturret:
+		RequiresCondition: stnkturret
+		Sequence: stnkturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+		Offset: 0,0,100
+	Cargo@turret:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			n4: stnkturret
+
 ^heavy_turrets:
 	Turreted:
 		TurnSpeed: 4
-	Armament@doubleturret1:
+	Armament@doubleturret1:                      ## Double Barrels (Soviet Mammoth)
 		Weapon: 130mm
 		LocalOffset: 900,180,340, 900,-180,340
 		Recoil: 171
@@ -204,22 +231,27 @@
 	WithSpriteTurret@doubleturret:
 		RequiresCondition: doubleturret
 		Sequence: doubleturret
-	WithSpriteTurret@htnkturret:
+	WithSpriteTurret@htnkturret:                 ## Double Barrels (GDI Mammoth)
 		Palette: overlayplayertd
 		IsPlayerPalette: true
 		RequiresCondition: htnkturret
 		Sequence: htnkturret
-	Armament@teslaturret:
+	Armament@teslaturret:                        ## Tesla Turret
 		Weapon: 4TankZap
 		LocalOffset: 900,0,340
 		Recoil: 171
 		RecoilRecovery: 30
 		MuzzleSequence: muzzle
-		RequiresCondition: teslaturret
+		RequiresCondition: teslaturret || tesladome
 	WithSpriteTurret@teslaturret:
-		RequiresCondition: teslaturret
 		Sequence: teslaturret
-	Armament@ionturret:
+		RequiresCondition: teslaturret
+	WithIdleOverlay@tesladome:                   ## Tesla Dome
+		Sequence: tesladome
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: tesladome
+		Offset: 0,0,100
+	Armament@ionturret:                          ## Ion Turret
 		Weapon: IonZap
 		LocalOffset: 870,0,360
 		RequiresCondition: ionturret
@@ -228,6 +260,60 @@
 		Sequence: ionturret
 		Palette: overlayplayertd
 		IsPlayerPalette: true
+	Armament@ssmturret:                          ## SSM Turret
+		Weapon: honestjohn
+		LocalOffset: 0,171,0, 0,-171,0
+		RequiresCondition: ssmturret
+	WithSpriteTurret@ssmturret:
+		RequiresCondition: ssmturret
+		Sequence: ssmturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@mlrsturret:                         ## MLRS Turret
+		Weapon: 227mm
+		LocalOffset: 213,128,0, 213,-128,0
+		LocalYaw: 100, -100
+		RequiresCondition: mlrsturret
+	WithSpriteTurret@mlrsturret:
+		RequiresCondition: mlrsturret
+		Sequence: mlrsturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@artyturret:                         ## Artillery Turret
+		Weapon: 155mm
+		LocalOffset: 624,0,208
+		MuzzleSequence: muzzle
+		RequiresCondition: artyturret
+	WithSpriteTurret@artyturret:
+		RequiresCondition: artyturret
+		Sequence: artyturret
+	Armament@titanturret1:                         ## Titan Turret
+		Weapon: TitanGun
+		Turret: primary
+		LocalOffset: 830,260,100
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: titanturret
+	Armament@titanturret2:
+		Name: secondary
+		Weapon: TitanTusk
+		Turret: primary
+		LocalOffset: -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+		RequiresCondition: titanturret
+	WithSpriteTurret@titanturret:
+		RequiresCondition: titanturret
+		Sequence: titanturret
+	Armament@juggerturret:                         ## Juggernaut Turret
+		Weapon: JuggernautGun
+		LocalOffset: 830,0,500, 830,100,500, 830,-100,500
+		RequiresCondition: juggerturret
+	WithSpriteTurret@juggerturret:
+		RequiresCondition: juggerturret
+		Sequence: juggerturret
 	Cargo@turret:
 		Types: Infantry
 		MaxWeight: 1
@@ -239,3 +325,9 @@
 			n1: htnkturret
 			e2: teslaturret
 			n2: ionturret
+			e3: tesladome
+			n3: ssmturret
+			e4: mlrsturret
+			n4: artyturret
+			e6: titanturret
+			n6: juggerturret
