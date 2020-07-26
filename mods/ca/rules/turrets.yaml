@@ -264,9 +264,32 @@
 		Weapon: honestjohn
 		LocalOffset: 0,171,0, 0,-171,0
 		RequiresCondition: ssmturret
-	WithSpriteTurret@ssmturret:
+	GrantConditionOnAttack:
+		Condition: aiming
+		RevokeDelay: 1
+		RevokeAll: false
 		RequiresCondition: ssmturret
-		Sequence: ssmturret
+	GrantTimedCondition@attack:
+		Duration: 50
+		Condition: attacked1
+		RequiresCondition: !aiming && ssmturret
+	GrantTimedCondition@attack:
+		Duration: 120
+		Condition: attacked2
+		RequiresCondition: !attacked1 && ssmturret
+	WithSpriteTurret@ssmturret1:
+		RequiresCondition: !attacked1 && !attacked2 && ssmturret
+		Sequence: ssmturretfull
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	WithSpriteTurret@@ssmturret2:
+		RequiresCondition: attacked2 && ssmturret
+		Sequence: ssmturrethalf
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	WithSpriteTurret@@ssmturret3:
+		RequiresCondition: attacked1 && ssmturret
+		Sequence: ssmturretempty
 		Palette: overlayplayertd
 		IsPlayerPalette: true
 	Armament@mlrsturret:                         ## MLRS Turret
@@ -307,6 +330,8 @@
 	WithSpriteTurret@titanturret:
 		RequiresCondition: titanturret
 		Sequence: titanturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
 	Armament@juggerturret:                         ## Juggernaut Turret
 		Weapon: JuggernautGun
 		LocalOffset: 830,0,500, 830,100,500, 830,-100,500
@@ -314,6 +339,55 @@
 	WithSpriteTurret@juggerturret:
 		RequiresCondition: juggerturret
 		Sequence: juggerturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@sonicturret1:                         ## Sonic Turret
+		Weapon: SonicZap
+		LocalOffset: 0,0,200
+		RequiresCondition: sonicturret
+	Armament@sonicturret2:
+		Weapon: SonicZapVisual
+		LocalOffset: 0,0,200
+		RequiresCondition: sonicturret
+	WithSpriteTurret@sonicturret:
+		RequiresCondition: sonicturret
+		Sequence: sonicturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@hoverturret1:                         ## Hover Turret
+		Weapon: 227mmH
+		LocalOffset: 213,128,0, 213,-128,0
+		LocalYaw: 100, -100
+		RequiresCondition: hoverturret
+	Armament@hoverturret2:
+		Name: secondary
+		Weapon: 227mmAAH
+		LocalOffset: 213,-128,0, 213,128,0
+		LocalYaw: 100, -100
+		RequiresCondition: hoverturret
+	WithSpriteTurret@hoverturret:
+		RequiresCondition: hoverturret
+		Sequence: hoverturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@tankdturret:                         ## Tank Destroyer Turret
+		Weapon: 183mm
+		LocalOffset: 868,0,0
+		MuzzleSequence: muzzle
+		RequiresCondition: tankdturret
+	WithSpriteTurret@tankdturret:
+		RequiresCondition: tankdturret
+		Sequence: tankdturret
+	Armament@mirageturret:                         ## Mirage Turret
+		Weapon: 120mmHEAT
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: mirageturret
+	WithSpriteTurret@mirageturret:
+		RequiresCondition: mirageturret
+		Sequence: mirageturret
 	Cargo@turret:
 		Types: Infantry
 		MaxWeight: 1
@@ -331,3 +405,8 @@
 			n4: artyturret
 			e6: titanturret
 			n6: juggerturret
+			n1c: sonicturret
+			n3c: hoverturret
+			e8: tankdturret
+			e7: mirageturret
+			sab: cloak
