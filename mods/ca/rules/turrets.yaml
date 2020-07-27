@@ -183,6 +183,40 @@
 			cryot: cryoturr
 			specops: relayturr
 
+^light_tank_turrets:
+	Turreted:
+		TurnSpeed: 12
+	Armament@batfturret:                         ## BATF Turret
+		Weapon: BATFRockets
+		LocalOffset: -200,0,300
+		MuzzleSequence: muzzle
+		RequiresCondition: batfturret
+	WithSpriteTurret@batfturret:
+		RequiresCondition: batfturret
+		Sequence: batfturret
+	Armament@slingturret:                         ## Slingshot Turret
+		Recoil: 10
+		Weapon: SlingshotAA
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 450,170,400, 450,-170,400
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: slingturret
+	WithSpriteTurret@slingturret:
+		RequiresCondition: slingturret
+		Sequence: slingturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Cargo@turret:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			e1: batfturret
+			n1: slingturret
+
 ^medium_turrets:
 	Turreted:
 		TurnSpeed: 8
@@ -407,14 +441,107 @@
 		Sequence: microwaveturret
 		Palette: overlayplayertd
 		IsPlayerPalette: true
-	Armament@batfturret:                         ## BATF Turret
-		Weapon: BATFRockets
-		LocalOffset: -200,0,300
+	Armament@chronoturret1:                         ## Chrono Turret
+		Weapon: NeutronCannon
+		LocalOffset: 600,0,480
+		RequiresCondition: chronoturret
+	Armament@chronoturret2:
+		Weapon: NeutronCannonBeam
+		LocalOffset: 600,0,480
+		RequiresCondition: chronoturret
+	Armament@chronoturret3:
+		Weapon: NeutronCannonPulse
+		LocalOffset: 600,0,480
+		RequiresCondition: chronoturret
+	Armament@chronoturret4:
+		Weapon: NeutronCannonSound
+		LocalOffset: 600,0,480
+		RequiresCondition: chronoturret
+	WithSpriteTurret@chronoturret:
+		RequiresCondition: chronoturret
+		Sequence: chronoturret
+	WithSpriteTurret@chronoturretactive:
+		RequiresCondition: chronoturretactive
+		Sequence: chronoturretactive
+	Armament@flakturret:                         ## Flak Turret
+		Weapon: FLAK-23-AA
+		Recoil: 85
+		LocalOffset: 512,0,192
 		MuzzleSequence: muzzle
-		RequiresCondition: batfturret
-	WithSpriteTurret@batfturret:
-		RequiresCondition: batfturret
-		Sequence: batfturret
+		RequiresCondition: flakturret
+	Armament@AG:
+		Weapon: FLAK-23-AG
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+		RequiresCondition: flakturret
+	WithSpriteTurret@flakturret:
+		RequiresCondition: flakturret
+		Sequence: flakturret
+	Armament@mbtturret:                         ## Main Battle Turret
+		Weapon: 120mm
+		Recoil: 128
+		RecoilRecovery: 26
+		LocalOffset: 768,0,90
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: mbtturret
+	WithSpriteTurret@mbtturret:
+		RequiresCondition: mbtturret
+		Sequence: mbtturret
+	Armament@mediumturret:                         ## Medium Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: mediumturret
+	WithSpriteTurret@mediumturret:
+		RequiresCondition: mediumturret
+		Sequence: mediumturret
+	Armament@mbtpldturret:                         ## Main Battle PLD Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: mbtpldturret
+	WithSpriteTurret@mbtpldturret:
+		RequiresCondition: mbtpldturret
+		Sequence: mbtpldturret
+	Armament@droneturret:                         ## Drone Tank Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: droneturret
+	WithSpriteTurret@droneturret:
+		RequiresCondition: droneturret
+		Sequence: droneturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@heavyturret:                         ## Heavy Turret
+		Weapon: 125mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 768,85,90, 768,-85,90
+		MuzzleSequence: muzzle
+		RequiresCondition: heavyturret
+	WithSpriteTurret@heavyturret:
+		RequiresCondition: heavyturret
+		Sequence: heavyturret
+	Armament@akatsiyaturret:                         ## Akatsiya Turret
+		Weapon: 152mm.Akatsiya
+		LocalOffset: 1050,0,440
+		Recoil: 100
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped || moving
+		RequiresCondition: akatsiyaturret
+	WithSpriteTurret@akatsiyaturret:
+		RequiresCondition: akatsiyaturret
+		Sequence: akatsiyaturret
 	Cargo@turret:
 		Types: Infantry
 		MaxWeight: 1
@@ -438,5 +565,13 @@
 			e7: mirageturret
 			acol: prismturret
 			rmbc: microwaveturret
-			rmbc.range: batfturret
+			rmbc.range: flakturret
+			railgunner: chronoturret
+			railgunner.nocrush: chronoturretactive
+			cryot: mediumturret
+			leader: mbtturret
+			dog: mbtpldturret
+			spy: droneturret
+			jarmen_kell: heavyturret
+			medi: akatsiyaturret
 			sab: cloak
