@@ -85,6 +85,63 @@ chassis.armored_fighting_vehicle:
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !full
 
+chassis.walker:
+	Inherits: ^Tank
+	Inherits@turrets: ^heavy_turrets
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		Prerequisites: gtek, ~vehicles.talon, ~!commander_tree.titan_pld, ~!commander_tree.titan_railgun, ~techlevel.high
+		Description: Tough combat battle-mech.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks
+	Valued:
+		Cost: 2000
+	Selectable:
+		Bounds: 30,40,0,0
+	Tooltip:
+		Name: Titan
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 100000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 50
+		Voice: Move
+	Passenger:
+		PipType: Red
+		Weight: 5
+		Voice: Move
+	QuantizeFacingsFromSequence:
+		Sequence: stand
+	WithFacingSpriteBody:
+		Sequence: stand
+	WithMoveAnimation:
+		MoveSequence: run
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Armaments: primary, secondary, tertiary
+		Voice: Attack
+	WithMuzzleOverlay:
+	Explodes:
+		Weapon: ArtilleryExplode
+		LoadedChance: 100
+	Voiced:
+		VoiceSet: GhostVoice
+	Carryable:
+		LocalOffset: 0,0,700
+
 chassis.mammoth:
 	Inherits: ^Tank
 	Inherits@turrets: ^heavy_turrets

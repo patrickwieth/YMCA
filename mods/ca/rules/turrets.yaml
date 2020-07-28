@@ -235,6 +235,18 @@
 		Palette: overlayplayertd
 		IsPlayerPalette: true
 		Offset: 0,0,100
+	Armament@droneturret:                         ## Drone Tank Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: droneturret
+	WithSpriteTurret@droneturret:
+		RequiresCondition: droneturret
+		Sequence: droneturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
 	Cargo@turret:
 		Types: Infantry
 		MaxWeight: 1
@@ -243,6 +255,7 @@
 		LoadedCondition: full
 		PassengerConditions:
 			n4: stnkturret
+			spy: droneturret
 
 ^heavy_turrets:
 	Turreted:
@@ -422,7 +435,7 @@
 	WithSpriteTurret@mirageturret:
 		RequiresCondition: mirageturret
 		Sequence: mirageturret
-	Armament@prismturret:                         ## Prism Turret
+	Armament@prismturret:                          ## Prism Turret
 		Weapon: PrisTLaser
 		LocalOffset: 100,0,140
 		RequiresCondition: prismturret
@@ -478,6 +491,16 @@
 	WithSpriteTurret@flakturret:
 		RequiresCondition: flakturret
 		Sequence: flakturret
+	Armament@mediumturret:                         ## Medium Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: mediumturret
+	WithSpriteTurret@mediumturret:
+		RequiresCondition: mediumturret
+		Sequence: mediumturret
 	Armament@mbtturret:                         ## Main Battle Turret
 		Weapon: 120mm
 		Recoil: 128
@@ -489,16 +512,21 @@
 	WithSpriteTurret@mbtturret:
 		RequiresCondition: mbtturret
 		Sequence: mbtturret
-	Armament@mediumturret:                         ## Medium Turret
-		Weapon: 90mm
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@mbtnodturret:                         ## Main Battle Turret
+		Weapon: 120mm
 		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 720,0,80
+		RecoilRecovery: 26
+		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
-		RequiresCondition: mediumturret
-	WithSpriteTurret@mediumturret:
-		RequiresCondition: mediumturret
-		Sequence: mediumturret
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: mbtnodturret
+	WithSpriteTurret@mbtnodturret:
+		RequiresCondition: mbtnodturret
+		Sequence: mbtnodturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
 	Armament@mbtpldturret:                         ## Main Battle PLD Turret
 		Weapon: 90mm
 		Recoil: 128
@@ -509,19 +537,9 @@
 	WithSpriteTurret@mbtpldturret:
 		RequiresCondition: mbtpldturret
 		Sequence: mbtpldturret
-	Armament@droneturret:                         ## Drone Tank Turret
-		Weapon: 90mm
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 720,0,80
-		MuzzleSequence: muzzle
-		RequiresCondition: droneturret
-	WithSpriteTurret@droneturret:
-		RequiresCondition: droneturret
-		Sequence: droneturret
 		Palette: overlayplayertd
 		IsPlayerPalette: true
-	Armament@heavyturret:                         ## Heavy Turret
+	Armament@heavyturret:                          ## Heavy Turret
 		Weapon: 125mm
 		Recoil: 128
 		RecoilRecovery: 38
@@ -542,14 +560,24 @@
 	WithSpriteTurret@akatsiyaturret:
 		RequiresCondition: akatsiyaturret
 		Sequence: akatsiyaturret
-	Cargo@turret:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
+	Armament@shipturret:                         ## Ship Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: shipturret
+	WithSpriteTurret@shipturret:
+		RequiresCondition: shipturret
+		Sequence: shipturret
+	Cargo:
+		Types: HeavyTurret
+		MaxWeight: 7
+		PipCount: 7
 		LoadingCondition: notmobile
 		LoadedCondition: full
 		PassengerConditions:
-			e1: doubleturret
+			double_turret: doubleturret
 			n1: htnkturret
 			e2: teslaturret
 			n2: ionturret
@@ -571,7 +599,50 @@
 			cryot: mediumturret
 			leader: mbtturret
 			dog: mbtpldturret
-			spy: droneturret
+			spy: mbtnodturret
 			jarmen_kell: heavyturret
 			medi: akatsiyaturret
+			mech: shipturret
+			thf: shipturret
+			shok: shipturret
 			sab: cloak
+
+double_turret:
+	Inherits: ^Tank
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with 2 Barrels
+	Valued:
+		Cost: 100
+	Tooltip:
+		Name: Double Barrel Turret
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	RevealsShroud:
+		Range: 2c0
+	Mobile:
+		TurnSpeed: 8
+		Speed: 56
+	Passenger:
+		CargoType: HeavyTurret
+		Weight: 3
+		CargoCondition: heavyturret
+	ProximityExternalCondition@Bino:
+		Condition: bino
+		Range: 1c0
+		EnableSound: dsaping1.aud
+		AffectsParent: False
+	ScriptTags:
+	Cargo:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			shell.ap: doubleturret
