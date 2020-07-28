@@ -1,0 +1,648 @@
+^light_turrets:
+	Turreted:
+		TurnSpeed: 10
+		Offset: 20,0,0
+	Armament@Default:
+		Weapon: IFVRockets
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: !full
+	Armament@DefaultAA:
+		Name: secondary
+		Weapon: IFVRocketsAA
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: !full
+	Armament@E1:
+		Weapon: M60mg
+		MuzzleSequence: muzzle
+		LocalOffset: 250,0,150
+		RequiresCondition: gunturr || tecnturr
+	Armament@E2:
+		Weapon: 25mmFRAG
+		MuzzleSequence: muzzle
+		LocalOffset: 450,0,200
+		RequiresCondition: fragturr
+	Armament@E3:
+		Weapon: IFVRocketsE
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturr
+	Armament@E3AA:
+		Name: secondary
+		Weapon: IFVRocketsAAE
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturr
+	Armament@E4:
+		Weapon: FireballLauncher
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 350,0,150
+		MuzzleSequence: muzzle2
+		RequiresCondition: flamturr
+	Armament@E5:
+		Weapon: ChemballLauncher
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 350,0,150
+		MuzzleSequence: muzzle2
+		RequiresCondition: chemturr
+	Armament@E7:
+		Weapon: smg
+		MuzzleSequence: muzzle
+		LocalOffset: 560,0,200
+		RequiresCondition: commturr
+	Armament@Shok:
+		Weapon: TTankZap
+		LocalOffset: 0,0,213
+		RequiresCondition: testurr
+	Armament@Deso:
+		Weapon: RadBeamWeapon
+		LocalOffset: 400,0,213
+		RequiresCondition: desoturr
+	Armament@Repair:
+		Weapon: RepairIFV
+		LocalOffset: 0,0,213
+		Cursor: repair
+		OutsideRangeCursor: repair
+		TargetStances: Ally
+		ForceTargetStances: None
+		RequiresCondition: engturr
+		MuzzleSequence: emp-overlay
+		MuzzlePalette: tseffect-ignore-lighting-alpha75
+	Armament@defuse:
+		Weapon: IFVDefuseKit
+		Cursor: goldwrench
+		OutsideRangeCursor: goldwrench
+		TargetStances: Ally
+		RequiresCondition: engturr
+		ForceTargetStances: None
+		Name: secondary
+	AutoTargetPriority@defuse:
+		ValidTargets: C4Attached
+		InvalidTargets: NoAutoTarget
+		ValidStances: Ally
+	Armament@Acol:
+		Weapon: LaserTur
+		LocalOffset: 385,0,300
+		RequiresCondition: acolturr
+	Armament@snipe:
+		Weapon: sniperE
+		LocalOffset: 250,0,150
+		RequiresCondition: snipeturr
+	Armament@Railgun:
+		Weapon: Railgun.Infantry
+		LocalOffset: 560,0,200
+		RequiresCondition: railgunturr
+	Armament@Cryo:
+		Weapon: CryoGun
+		LocalOffset: 560,0,200
+		RequiresCondition: cryoturr
+	Armament@Relay:
+		Weapon: relayMarker
+		LocalOffset: 250,0,150
+		RequiresCondition: relayturr
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: spyturr
+		Offset: 0,0,200
+	WithIdleOverlay@TESLA:
+		Sequence: tesla
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: testurr
+	WithSpriteTurret@samturr:
+		RequiresCondition: !full
+		Sequence: turret
+	WithSpriteTurret@samturr2:
+		RequiresCondition: samturr
+		Sequence: turret2
+	WithSpriteTurret@gun:
+		RequiresCondition: gunturr || tecnturr || snipeturr || relayturr
+		Sequence: turret3
+	WithSpriteTurret@frg:
+		Sequence: turret4
+		RequiresCondition: fragturr
+	WithSpriteTurret@fla:
+		Sequence: turret5
+		RequiresCondition: flamturr
+	WithSpriteTurret@che:
+		Sequence: turret6
+		RequiresCondition: chemturr
+	WithSpriteTurret@las:
+		Sequence: turret7
+		RequiresCondition: acolturr
+	WithSpriteTurret@des:
+		Sequence: turret8
+		RequiresCondition: desoturr
+	WithSpriteTurret@com:
+		Sequence: turret9
+		RequiresCondition: commturr || railgunturr || cryoturr
+	WithSpriteTurret@rep:
+		Sequence: turret10
+		RequiresCondition: engturr
+	Cargo@turret:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			e1: gunturr
+			e2: fragturr
+			e3: samturr
+			e4: flamturr
+			n1: gunturr
+			n1c: gunturr
+			n2: fragturr
+			n3: samturr
+			n3c: samturr
+			n4: flamturr
+			n5: chemturr
+			e8: desoturr
+			e6: engturr
+			n6: engturr
+			mech: engturr
+			mort: chemturr
+			shok: testurr
+			shok.nod: testurr
+			rmbo: commturr
+			bori: commturr
+			e7: commturr
+			sab: commturr
+			snip: snipeturr
+			spy: spyturr
+			thf: spyturr
+			medi: medturr
+			acol: acolturr
+			rmbc: acolturr
+			rmbc.range: acolturr
+			tecn: tecnturr
+			tecn2: tecnturr
+			tecn3: tecnturr
+			leader: spyturr
+			railgunner: railgunturr
+			railgunner.nocrush: railgunturr
+			cryot: cryoturr
+			specops: relayturr
+
+^light_tank_turrets:
+	Turreted:
+		TurnSpeed: 12
+	Armament@batfturret:                         ## BATF Turret
+		Weapon: BATFRockets
+		LocalOffset: -200,0,300
+		MuzzleSequence: muzzle
+		RequiresCondition: batfturret
+	WithSpriteTurret@batfturret:
+		RequiresCondition: batfturret
+		Sequence: batfturret
+	Armament@slingturret:                         ## Slingshot Turret
+		Recoil: 10
+		Weapon: SlingshotAA
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 450,170,400, 450,-170,400
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: slingturret
+	WithSpriteTurret@slingturret:
+		RequiresCondition: slingturret
+		Sequence: slingturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Cargo@turret:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			e1: batfturret
+			n1: slingturret
+
+^medium_turrets:
+	Turreted:
+		TurnSpeed: 8
+	Armament@PRIMARY:                             ## Stealth Tank Turret
+		Weapon: StnkMissile
+		LocalOffset: 213,43,128, 213,-43,128
+		RequiresCondition: stnkturret
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: StnkMissile.AA
+		LocalOffset: 213,43,128, 213,-43,128
+		RequiresCondition: stnkturret
+	WithSpriteTurret@stnkturret:
+		RequiresCondition: stnkturret
+		Sequence: stnkturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+		Offset: 0,0,100
+	Armament@droneturret:                         ## Drone Tank Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: droneturret
+	WithSpriteTurret@droneturret:
+		RequiresCondition: droneturret
+		Sequence: droneturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Cargo@turret:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			n4: stnkturret
+			spy: droneturret
+
+^heavy_turrets:
+	Turreted:
+		TurnSpeed: 4
+	Armament@doubleturret1:                      ## Double Barrels (Soviet Mammoth)
+		Weapon: 130mm
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: doubleturret || htnkturret
+	Armament@doubleturret2:
+		Name: secondary
+		Weapon: MammothTusk
+		LocalOffset: -85,384,340, -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+		RequiresCondition: doubleturret || htnkturret
+	WithSpriteTurret@doubleturret:
+		RequiresCondition: doubleturret
+		Sequence: doubleturret
+	WithSpriteTurret@htnkturret:                 ## Double Barrels (GDI Mammoth)
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+		RequiresCondition: htnkturret
+		Sequence: htnkturret
+	Armament@teslaturret:                        ## Tesla Turret
+		Weapon: 4TankZap
+		LocalOffset: 900,0,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: teslaturret || tesladome
+	WithSpriteTurret@teslaturret:
+		Sequence: teslaturret
+		RequiresCondition: teslaturret
+	WithIdleOverlay@tesladome:                   ## Tesla Dome
+		Sequence: tesladome
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: tesladome
+		Offset: 0,0,100
+	Armament@ionturret:                          ## Ion Turret
+		Weapon: IonZap
+		LocalOffset: 870,0,360
+		RequiresCondition: ionturret
+	WithSpriteTurret@ionturret:
+		RequiresCondition: ionturret
+		Sequence: ionturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@ssmturret:                          ## SSM Turret
+		Weapon: honestjohn
+		LocalOffset: 0,171,0, 0,-171,0
+		RequiresCondition: ssmturret
+	GrantConditionOnAttack:
+		Condition: aiming
+		RevokeDelay: 1
+		RevokeAll: false
+		RequiresCondition: ssmturret
+	GrantTimedCondition@attack:
+		Duration: 50
+		Condition: attacked1
+		RequiresCondition: !aiming && ssmturret
+	GrantTimedCondition@attack:
+		Duration: 120
+		Condition: attacked2
+		RequiresCondition: !attacked1 && ssmturret
+	WithSpriteTurret@ssmturret1:
+		RequiresCondition: !attacked1 && !attacked2 && ssmturret
+		Sequence: ssmturretfull
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	WithSpriteTurret@@ssmturret2:
+		RequiresCondition: attacked2 && ssmturret
+		Sequence: ssmturrethalf
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	WithSpriteTurret@@ssmturret3:
+		RequiresCondition: attacked1 && ssmturret
+		Sequence: ssmturretempty
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@mlrsturret:                         ## MLRS Turret
+		Weapon: 227mm
+		LocalOffset: 213,128,0, 213,-128,0
+		LocalYaw: 100, -100
+		RequiresCondition: mlrsturret
+	WithSpriteTurret@mlrsturret:
+		RequiresCondition: mlrsturret
+		Sequence: mlrsturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@artyturret:                         ## Artillery Turret
+		Weapon: 155mm
+		LocalOffset: 624,0,208
+		MuzzleSequence: muzzle
+		RequiresCondition: artyturret
+	WithSpriteTurret@artyturret:
+		RequiresCondition: artyturret
+		Sequence: artyturret
+	Armament@titanturret1:                         ## Titan Turret
+		Weapon: TitanGun
+		Turret: primary
+		LocalOffset: 830,260,100
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: titanturret
+	Armament@titanturret2:
+		Name: secondary
+		Weapon: TitanTusk
+		Turret: primary
+		LocalOffset: -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+		RequiresCondition: titanturret
+	WithSpriteTurret@titanturret:
+		RequiresCondition: titanturret
+		Sequence: titanturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@juggerturret:                         ## Juggernaut Turret
+		Weapon: JuggernautGun
+		LocalOffset: 830,0,500, 830,100,500, 830,-100,500
+		RequiresCondition: juggerturret
+	WithSpriteTurret@juggerturret:
+		RequiresCondition: juggerturret
+		Sequence: juggerturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@sonicturret1:                         ## Sonic Turret
+		Weapon: SonicZap
+		LocalOffset: 0,0,200
+		RequiresCondition: sonicturret
+	Armament@sonicturret2:
+		Weapon: SonicZapVisual
+		LocalOffset: 0,0,200
+		RequiresCondition: sonicturret
+	WithSpriteTurret@sonicturret:
+		RequiresCondition: sonicturret
+		Sequence: sonicturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@hoverturret1:                         ## Hover Turret
+		Weapon: 227mmH
+		LocalOffset: 213,128,0, 213,-128,0
+		LocalYaw: 100, -100
+		RequiresCondition: hoverturret
+	Armament@hoverturret2:
+		Name: secondary
+		Weapon: 227mmAAH
+		LocalOffset: 213,-128,0, 213,128,0
+		LocalYaw: 100, -100
+		RequiresCondition: hoverturret
+	WithSpriteTurret@hoverturret:
+		RequiresCondition: hoverturret
+		Sequence: hoverturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@tankdturret:                         ## Tank Destroyer Turret
+		Weapon: 183mm
+		LocalOffset: 868,0,0
+		MuzzleSequence: muzzle
+		RequiresCondition: tankdturret
+	WithSpriteTurret@tankdturret:
+		RequiresCondition: tankdturret
+		Sequence: tankdturret
+	Armament@mirageturret:                         ## Mirage Turret
+		Weapon: 120mmHEAT
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: mirageturret
+	WithSpriteTurret@mirageturret:
+		RequiresCondition: mirageturret
+		Sequence: mirageturret
+	Armament@prismturret:                          ## Prism Turret
+		Weapon: PrisTLaser
+		LocalOffset: 100,0,140
+		RequiresCondition: prismturret
+	WithSpriteTurret@prismturret:
+		RequiresCondition: prismturret
+		Sequence: prismturret
+	Armament@microwaveturret:                         ## Microwave Turret
+		Weapon: MicrowaveZap
+		FireDelay: 7
+		LocalOffset: 500,0,140
+		MuzzleSequence: muzzle
+		MuzzlePalette: tseffect-ignore-lighting-alpha75
+		RequiresCondition: microwaveturret
+	WithSpriteTurret@microwaveturret:
+		RequiresCondition: microwaveturret
+		Sequence: microwaveturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@chronoturret1:                         ## Chrono Turret
+		Weapon: NeutronCannon
+		LocalOffset: 600,0,480
+		RequiresCondition: chronoturret
+	Armament@chronoturret2:
+		Weapon: NeutronCannonBeam
+		LocalOffset: 600,0,480
+		RequiresCondition: chronoturret
+	Armament@chronoturret3:
+		Weapon: NeutronCannonPulse
+		LocalOffset: 600,0,480
+		RequiresCondition: chronoturret
+	Armament@chronoturret4:
+		Weapon: NeutronCannonSound
+		LocalOffset: 600,0,480
+		RequiresCondition: chronoturret
+	WithSpriteTurret@chronoturret:
+		RequiresCondition: chronoturret
+		Sequence: chronoturret
+	WithSpriteTurret@chronoturretactive:
+		RequiresCondition: chronoturretactive
+		Sequence: chronoturretactive
+	Armament@flakturret:                         ## Flak Turret
+		Weapon: FLAK-23-AA
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+		RequiresCondition: flakturret
+	Armament@AG:
+		Weapon: FLAK-23-AG
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+		RequiresCondition: flakturret
+	WithSpriteTurret@flakturret:
+		RequiresCondition: flakturret
+		Sequence: flakturret
+	Armament@mediumturret:                         ## Medium Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: mediumturret
+	WithSpriteTurret@mediumturret:
+		RequiresCondition: mediumturret
+		Sequence: mediumturret
+	Armament@mbtturret:                         ## Main Battle Turret
+		Weapon: 120mm
+		Recoil: 128
+		RecoilRecovery: 26
+		LocalOffset: 768,0,90
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: mbtturret
+	WithSpriteTurret@mbtturret:
+		RequiresCondition: mbtturret
+		Sequence: mbtturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@mbtnodturret:                         ## Main Battle Turret
+		Weapon: 120mm
+		Recoil: 128
+		RecoilRecovery: 26
+		LocalOffset: 768,0,90
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: mbtnodturret
+	WithSpriteTurret@mbtnodturret:
+		RequiresCondition: mbtnodturret
+		Sequence: mbtnodturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@mbtpldturret:                         ## Main Battle PLD Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: mbtpldturret
+	WithSpriteTurret@mbtpldturret:
+		RequiresCondition: mbtpldturret
+		Sequence: mbtpldturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@heavyturret:                          ## Heavy Turret
+		Weapon: 125mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 768,85,90, 768,-85,90
+		MuzzleSequence: muzzle
+		RequiresCondition: heavyturret
+	WithSpriteTurret@heavyturret:
+		RequiresCondition: heavyturret
+		Sequence: heavyturret
+	Armament@akatsiyaturret:                         ## Akatsiya Turret
+		Weapon: 152mm.Akatsiya
+		LocalOffset: 1050,0,440
+		Recoil: 100
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped || moving
+		RequiresCondition: akatsiyaturret
+	WithSpriteTurret@akatsiyaturret:
+		RequiresCondition: akatsiyaturret
+		Sequence: akatsiyaturret
+	Armament@shipturret:                         ## Ship Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: shipturret
+	WithSpriteTurret@shipturret:
+		RequiresCondition: shipturret
+		Sequence: shipturret
+	Cargo:
+		Types: HeavyTurret
+		MaxWeight: 7
+		PipCount: 7
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			double_turret: doubleturret
+			n1: htnkturret
+			e2: teslaturret
+			n2: ionturret
+			e3: tesladome
+			n3: ssmturret
+			e4: mlrsturret
+			n4: artyturret
+			e6: titanturret
+			n6: juggerturret
+			n1c: sonicturret
+			n3c: hoverturret
+			e8: tankdturret
+			e7: mirageturret
+			acol: prismturret
+			rmbc: microwaveturret
+			rmbc.range: flakturret
+			railgunner: chronoturret
+			railgunner.nocrush: chronoturretactive
+			cryot: mediumturret
+			leader: mbtturret
+			dog: mbtpldturret
+			spy: mbtnodturret
+			jarmen_kell: heavyturret
+			medi: akatsiyaturret
+			mech: shipturret
+			thf: shipturret
+			shok: shipturret
+			sab: cloak
+
+double_turret:
+	Inherits: ^Tank
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with 2 Barrels
+	Valued:
+		Cost: 100
+	Tooltip:
+		Name: Double Barrel Turret
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	RevealsShroud:
+		Range: 2c0
+	Mobile:
+		TurnSpeed: 8
+		Speed: 56
+	Passenger:
+		CargoType: HeavyTurret
+		Weight: 3
+		CargoCondition: heavyturret
+	ProximityExternalCondition@Bino:
+		Condition: bino
+		Range: 1c0
+		EnableSound: dsaping1.aud
+		AffectsParent: False
+	ScriptTags:
+	Cargo:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			shell.ap: doubleturret

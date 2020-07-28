@@ -1,17 +1,17 @@
-chassis.armored_wheeled:
+chassis.armored_fighting_vehicle:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
-	-WithRangeCircle@pld:
+	Inherits@turrets: ^light_turrets
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 60
+		BuildPaletteOrder: 0
 		Prerequisites: infantry.any, ~vehicles.ifv, ~techlevel.low
 		Description: Adaptable infantry transport.\n  Can attack Aircraft.\n  Strong vs Light Armor, Aircraft\n  Weak vs Infantry, Tanks\n  Special Ability: Transform
 	Valued:
-		Cost: 750
+		Cost: 1000
 	Tooltip:
-		Name: Infantry Fighting Vehicle
+		Name: Light Armored Fighting Vehicle
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -36,193 +36,16 @@ chassis.armored_wheeled:
 	RevealsShroud@SPYGAPGEN:
 		Range: 8c0
 		RequiresCondition: spyturr
-	Turreted:
-		TurnSpeed: 10
-		Offset: 20,0,0
-	Armament@Default:
-		Weapon: IFVRockets
-		LocalOffset: 192,10,176, 192,-10,176
-		RequiresCondition: !full
-	Armament@DefaultAA:
-		Name: secondary
-		Weapon: IFVRocketsAA
-		LocalOffset: 192,10,176, 192,-10,176
-		RequiresCondition: !full
-	Armament@E1:
-		Weapon: M60mg
-		MuzzleSequence: muzzle
-		LocalOffset: 250,0,150
-		RequiresCondition: gunturr || tecnturr
-	Armament@E2:
-		Weapon: 25mmFRAG
-		MuzzleSequence: muzzle
-		LocalOffset: 450,0,200
-		RequiresCondition: fragturr
-	Armament@E3:
-		Weapon: IFVRocketsE
-		LocalOffset: 192,10,176, 192,-10,176
-		RequiresCondition: samturr
-	Armament@E3AA:
-		Name: secondary
-		Weapon: IFVRocketsAAE
-		LocalOffset: 192,10,176, 192,-10,176
-		RequiresCondition: samturr
-	Armament@E4:
-		Weapon: FireballLauncher
-		Recoil: 85
-		RecoilRecovery: 25
-		LocalOffset: 350,0,150
-		MuzzleSequence: muzzle2
-		RequiresCondition: flamturr
-	Armament@E5:
-		Weapon: ChemballLauncher
-		Recoil: 85
-		RecoilRecovery: 25
-		LocalOffset: 350,0,150
-		MuzzleSequence: muzzle2
-		RequiresCondition: chemturr
-	Armament@E7:
-		Weapon: smg
-		MuzzleSequence: muzzle
-		LocalOffset: 560,0,200
-		RequiresCondition: commturr
-	Armament@Shok:
-		Weapon: TTankZap
-		LocalOffset: 0,0,213
-		RequiresCondition: testurr
-	Armament@Deso:
-		Weapon: RadBeamWeapon
-		LocalOffset: 400,0,213
-		RequiresCondition: desoturr
-	Armament@Repair:
-		Weapon: RepairIFV
-		LocalOffset: 0,0,213
-		Cursor: repair
-		OutsideRangeCursor: repair
-		TargetStances: Ally
-		ForceTargetStances: None
-		RequiresCondition: engturr
-		MuzzleSequence: emp-overlay
-		MuzzlePalette: tseffect-ignore-lighting-alpha75
-	Armament@defuse:
-		Weapon: IFVDefuseKit
-		Cursor: goldwrench
-		OutsideRangeCursor: goldwrench
-		TargetStances: Ally
-		RequiresCondition: engturr
-		ForceTargetStances: None
-		Name: secondary
-	AutoTargetPriority@defuse:
-		ValidTargets: C4Attached
-		InvalidTargets: NoAutoTarget
-		ValidStances: Ally
-	Armament@Acol:
-		Weapon: LaserTur
-		LocalOffset: 385,0,300
-		RequiresCondition: acolturr
-	Armament@snipe:
-		Weapon: sniperE
-		LocalOffset: 250,0,150
-		RequiresCondition: snipeturr
-	Armament@Railgun:
-		Weapon: Railgun.Infantry
-		LocalOffset: 560,0,200
-		RequiresCondition: railgunturr
-	Armament@Cryo:
-		Weapon: CryoGun
-		LocalOffset: 560,0,200
-		RequiresCondition: cryoturr
-	Armament@Relay:
-		Weapon: relayMarker
-		LocalOffset: 250,0,150
-		RequiresCondition: relayturr
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: spyturr
-		Offset: 0,0,200
-	WithIdleOverlay@TESLA:
-		Sequence: tesla
-		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: testurr
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !spyturr
 	WithMuzzleOverlay:
-	WithSpriteTurret@samturr:
-		RequiresCondition: !full
-		Sequence: turret
-	WithSpriteTurret@samturr2:
-		RequiresCondition: samturr
-		Sequence: turret2
-	WithSpriteTurret@gun:
-		RequiresCondition: gunturr || tecnturr || snipeturr || relayturr
-		Sequence: turret3
-	WithSpriteTurret@frg:
-		Sequence: turret4
-		RequiresCondition: fragturr
-	WithSpriteTurret@fla:
-		Sequence: turret5
-		RequiresCondition: flamturr
-	WithSpriteTurret@che:
-		Sequence: turret6
-		RequiresCondition: chemturr
-	WithSpriteTurret@las:
-		Sequence: turret7
-		RequiresCondition: acolturr
-	WithSpriteTurret@des:
-		Sequence: turret8
-		RequiresCondition: desoturr
-	WithSpriteTurret@com:
-		Sequence: turret9
-		RequiresCondition: commturr || railgunturr || cryoturr
-	WithSpriteTurret@rep:
-		Sequence: turret10
-		RequiresCondition: engturr
 	Cargo:
-		Types: Infantry
+		Types: Vehicle
 		MaxWeight: 1
 		PipCount: 1
 		LoadingCondition: notmobile
 		LoadedCondition: full
-		PassengerConditions:
-			e1: gunturr
-			e2: fragturr
-			e3: samturr
-			e4: flamturr
-			n1: gunturr
-			n1c: gunturr
-			n2: fragturr
-			n3: samturr
-			n3c: samturr
-			n4: flamturr
-			n5: chemturr
-			e8: desoturr
-			e6: engturr
-			n6: engturr
-			mech: engturr
-			mort: chemturr
-			shok: testurr
-			shok.nod: testurr
-			rmbo: commturr
-			bori: commturr
-			e7: commturr
-			sab: commturr
-			snip: snipeturr
-			spy: spyturr
-			thf: spyturr
-			medi: medturr
-			acol: acolturr
-			rmbc: acolturr
-			rmbc.range: acolturr
-			tecn: tecnturr
-			tecn2: tecnturr
-			tecn3: tecnturr
-			leader: spyturr
-			railgunner: railgunturr
-			railgunner.nocrush: railgunturr
-			cryot: cryoturr
-			specops: relayturr
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	WithIdleOverlay@MEDIC:
@@ -262,29 +85,79 @@ chassis.armored_wheeled:
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !full
 
-Chassis.Mammoth:
+chassis.walker:
 	Inherits: ^Tank
+	Inherits@turrets: ^heavy_turrets
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
-	RenderSprites:
-		FactionImages:
-			iraq: 4tnki
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_tt, ~!commander_tree.mammoth_tank_ns, ~!commander_tree.mammoth_tank_pt, ~techlevel.high
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		Prerequisites: gtek, ~vehicles.talon, ~!commander_tree.titan_pld, ~!commander_tree.titan_railgun, ~techlevel.high
+		Description: Tough combat battle-mech.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks
+	Valued:
+		Cost: 2000
+	Selectable:
+		Bounds: 30,40,0,0
+	Tooltip:
+		Name: Titan
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 100000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 50
+		Voice: Move
+	Passenger:
+		PipType: Red
+		Weight: 5
+		Voice: Move
+	QuantizeFacingsFromSequence:
+		Sequence: stand
+	WithFacingSpriteBody:
+		Sequence: stand
+	WithMoveAnimation:
+		MoveSequence: run
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Armaments: primary, secondary, tertiary
+		Voice: Attack
+	WithMuzzleOverlay:
+	Explodes:
+		Weapon: ArtilleryExplode
+		LoadedChance: 100
+	Voiced:
+		VoiceSet: GhostVoice
+	Carryable:
+		LocalOffset: 0,0,700
+
+chassis.mammoth:
+	Inherits: ^Tank
+	Inherits@turrets: ^heavy_turrets
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 0
+		Prerequisites: stek, ~vehicles.soviet
 		Description: Big and slow tank, with anti-air.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Valued:
 		Cost: 1700
 	Tooltip:
-		Name: Mammoth Tank
+		Name: Mammoth Chassis
 		GenericName: Tank
-		RequiresCondition: !iraqtank
-	Tooltip@Iraq:
-		Name: Atomic Mammoth Tank
-		GenericName: Tank
-		RequiresCondition: iraqtank
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -302,47 +175,24 @@ Chassis.Mammoth:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Turreted:
-		TurnSpeed: 4
-	GrantConditionOnFaction@IRAQTANK:
-		Condition: iraqtank
-		Factions: iraq
-	Armament@PRIMARY:
-		Weapon: 130mm
-		LocalOffset: 900,180,340, 900,-180,340
-		Recoil: 171
-		RecoilRecovery: 30
-		MuzzleSequence: muzzle
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: MammothTusk
-		LocalOffset: -85,384,340, -85,-384,340
-		LocalYaw: -100,100
-		Recoil: 43
-		MuzzleSequence: muzzle
-	SpeedMultiplier@IRAQTANK:
-		RequiresCondition: iraqtank
-		Modifier: 125
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 4TNK.Husk
-		RequiresCondition: !iraqtank && !being-warped
-	Explodes@IRAQTANK:
-		Weapon: UnitExplodeIraqTank
-		EmptyWeapon: UnitExplodeIraqTank
-		RequiresCondition: iraqtank && !being-warped
-	SelfHealing:
-		PercentageStep: 1
-		Delay: 25
-		HealIfBelow: 50
-		DamageCooldown: 150
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
+		RequiresCondition: !being-warped
 	Selectable:
 		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
+	Cloak@NORMAL:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		CloakedCondition: hidden
+		UncloakSound: appear1.aud
+		Palette: cloak
+		IsPlayerPalette: false
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		RequiresCondition: cloak && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
