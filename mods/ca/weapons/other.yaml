@@ -1,4 +1,5 @@
 ^FireWeapon:
+	Inherits: ^Fire
 	ValidTargets: Ground, Water, Trees
 	ReloadDelay: 65
 	Range: 5c0
@@ -7,26 +8,6 @@
 		Damage: 30000
 		ValidTargets: Ground, Water, Trees
 		AffectsParent: false
-		Versus:
-			None: 90
-			Wood: 50
-			Light: 60
-			Heavy: 25
-			Concrete: 25
-			Brick: 20
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
-	Warhead@2Smu: LeaveSmudge
-		SmudgeType: Scorch
-		InvalidTargets: Structure, Wall
-	Warhead@3Eff: CreateEffect
-		Explosions: napalm
-		ImpactSounds: firetrt1.aud
-		ImpactActors: false
-	Warhead@Flames: FireCluster
-		Weapon: BurnFx
-		RandomClusterCount: 3
-		Dimensions: 3,3
-		Footprint: xxx xxx xxx
 
 FireballLauncher:
 	Inherits: ^FireWeapon
@@ -35,9 +16,6 @@ FireballLauncher:
 		Speed: 250
 		TrailImage: fb2
 		Image: FB1
-	Warhead@1Dam: SpreadDamage
-		Versus:
-			Light: 50
 
 FireballLauncher.Tank:
 	Inherits: FireballLauncher
@@ -50,6 +28,7 @@ FireballLauncher.Tank:
 
 ChemballLauncher:
 	Inherits: FireballLauncher
+	Inherits: ^Chemical
 	ReloadDelay: 70
 	Projectile: Bullet
 		TrailImage: cb2
@@ -68,6 +47,7 @@ ChemballLauncher:
 	-Warhead@Flames:
 
 Napalmtd:
+	Inherits: ^NapalmBomb
 	ValidTargets: Ground, Water, Trees
 	InvalidTargets: Air
 	ReloadDelay: 50
@@ -86,26 +66,9 @@ Napalmtd:
 		Damage: 1500
 		Falloff: 1000, 255, 128, 50, 18, 7, 0
 		ValidTargets: Ground, Water
-		Versus:
-			None: 100
-			Wood: 58
-			Light: 75
-			Heavy: 65
-			Concrete: 35
-			Brick: 25
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-	Warhead@2Smu: LeaveSmudge
-		SmudgeType: Scorch
-	Warhead@3Eff: CreateEffect
-		Explosions: napalm
-		ImpactSounds: flamer2.aud
-	Warhead@Flames: FireCluster
-		Weapon: BurnFx
-		RandomClusterCount: 3
-		Dimensions: 3,3
-		Footprint: xxx xxx xxx
 
 BigFlamer:
+	Inherits: ^Fire
 	ReloadDelay: 50
 	Range: 4c256
 	StartBurstReport: flamer3.aud
@@ -120,18 +83,7 @@ BigFlamer:
 	Warhead@1Dam: SpreadDamage
 		Spread: 288
 		Falloff: 100, 50, 25, 12, 6, 3, 0
-		Damage: 2200
-		Versus:
-			None: 300
-			Wood: 100
-			Light: 59
-			Heavy: 30
-			Concrete: 30
-			Brick: 2
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-	Warhead@2Smu: LeaveSmudge
-		SmudgeType: Scorch
-		InvalidTargets: Vehicle, Building, Wall
+		Damage: 2500
 	Warhead@Flames: FireCluster
 		Weapon: BurnFx
 		RandomClusterCount: 1
@@ -140,31 +92,18 @@ BigFlamer:
 
 BigChemspray:
 	Inherits: BigFlamer
+	Inherits: ^Chemical
 	ReloadDelay: 40
 	Projectile: Bullet
 		Image: chemall
 		Palette: ra2effect-ignore-lighting-alpha50
-	Warhead@1Dam: SpreadDamage
-		Versus:
-			Heavy: 50
-		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	-Warhead@Flames:
 
 BigChemspray.Yak:
-	Inherits: BigFlamer
+	Inherits: BigChemspray
 	Projectile: Bullet
 		Image: chemall
 		Palette: ra2effect-ignore-lighting-alpha50
-	Warhead@1Dam: SpreadDamage
-		Versus:
-			None: 300
-			Wood: 60
-			Light: 59
-			Heavy: 50
-			Concrete: 15
-			Brick: 2
-		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
-	-Warhead@Flames:
 
 Flamer:
 	Inherits: BigFlamer
@@ -180,14 +119,12 @@ FlamerE:
 
 Chemspray:
 	Inherits: Flamer
+	Inherits: ^Chemical
 	Projectile: Bullet
 		Image: chemall
 		Palette: ra2effect-ignore-lighting-alpha50
 	Warhead@1Dam: SpreadDamage
 		Damage: 1450
-		Versus:
-			Heavy: 50
-		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	-Warhead@Flames:
 
 ChemsprayE:
@@ -196,6 +133,7 @@ ChemsprayE:
 
 Napalm:
 	Inherits: ^FireWeapon
+	Inherits: ^Napalm
 	ReloadDelay: 20
 	Range: 4c512
 	Projectile: Bullet
@@ -205,12 +143,9 @@ Napalm:
 	Warhead@1Dam: SpreadDamage
 		Spread: 170
 		Damage: 10000
-		Versus:
-			Wood: 100
-			Concrete: 50
-			Brick: 50
 
 ^TeslaWeapon:
+	Inherits: ^Energy
 	ReloadDelay: 3
 	Range: 8c0
 	Report: tesla1.aud
@@ -218,8 +153,6 @@ Napalm:
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
 		Damage: 10000
-		Versus:
-			None: 1000
 		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: 1, 3
@@ -255,11 +188,7 @@ PortaTesla:
 	Range: 6c0
 	Report: shktrop1.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 4500
-		Versus:
-			None: 350
-			Wood: 73
-			Heavy: 90
+		Damage: 5500
 
 PortaTeslaE:
 	Inherits: PortaTesla
@@ -292,12 +221,6 @@ Tesla.Hind:
 	Report: shktrop1.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 4500
-		Versus:
-			None: 350
-			Light: 100
-			Heavy: 90
-			Wood: 60
-			Concrete: 30
 
 4TankZap:
 	Inherits: ^TeslaWeapon
@@ -313,9 +236,6 @@ TTankZap:
 	Range: 7c0
 	Warhead@1Dam: SpreadDamage
 		Damage: 11000
-		Versus:
-			Wood: 60
-			Concrete: 60
 
 TTankZap.Arc:
 	Inherits: TTankZap
@@ -548,6 +468,7 @@ MADTankDetonate:
 		ValidTargets: Ground, Infantry, Vehicle, Ship
 
 LaserPrototype:
+	Inherits: ^Energy
 	ReloadDelay: 100
 	ValidTargets: Ground, Water
 	Range: 9c512
@@ -565,12 +486,6 @@ LaserPrototype:
 		Spread: 42
 		Damage: 37500
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 250
-			Light: 101
-			Wood: 60
-			Heavy: 101
-			Concrete: 45
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
@@ -592,6 +507,7 @@ Laser.Adv:
 
 Laser.Tank:
 	Inherits: LaserPrototype
+	Inherits: ^EnergyAP
 	ReloadDelay: 180
 	Report: obelmod1.aud
 	Range: 6c512
@@ -607,16 +523,15 @@ Laser.Tank:
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
 		Spread: 42
-		Damage: 18000
-		Versus:
-			None: 32
-			Wood: 52
-			Light: 96
-			Heavy: 58
-			Concrete: 40
-			Brick: 32
+		Damage: 12000
+
+Laser.Tank.Adv:
+	Inherits: Laser.Tank
+	Warhead@1Dam: SpreadDamage
+		Damage: 13200
 
 LaserTur:
+	Inherits: ^EnergyLight
 	Inherits: LaserPrototype
 	ReloadDelay: 40
 	Range: 6c0
@@ -629,9 +544,6 @@ LaserTur:
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
 		Damage: 5500
-		Versus:
-			Wood: 73
-			Heavy: 60
 
 LaserTur.Adv:
 	Inherits: LaserTur
@@ -641,6 +553,7 @@ LaserTur.Adv:
 
 PortaLaser:
 	Inherits: LaserPrototype
+	Inherits: ^Energy
 	ReloadDelay: 30
 	Burst: 2
 	BurstDelays: 3
@@ -655,16 +568,13 @@ PortaLaser:
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
 		Damage: 1500
-		Versus:
-			None: 175
-			Wood: 73
-			Heavy: 90
 
 PortaLaserE:
 	Inherits: PortaLaser
 	Range: 8c0
 
 VenomLaser:
+	Inherits: ^EnergyLight
 	ReloadDelay: 25
 	ValidTargets: Ground, Water
 	Range: 5c0
@@ -680,14 +590,8 @@ VenomLaser:
 		SecondaryBeamColor: FF000040
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
-		Damage: 5500
+		Damage: 5000
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 200
-			Wood: 50
-			Concrete: 10
-			Light: 90
-			Heavy: 20
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
@@ -698,11 +602,6 @@ VenomLaserAA:
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Air
 		Damage: 2000
-		Versus:
-			Wood: 100
-			Concrete: 100
-			Light: 100
-			Heavy: 100
 	-Warhead@2Smu:
 
 BuggyLaserAA:
@@ -711,12 +610,7 @@ BuggyLaserAA:
 	ValidTargets: Air
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Air
-		Damage: 1000
-		Versus:
-			Wood: 100
-			Concrete: 100
-			Light: 100
-			Heavy: 100
+		Damage: 1200
 	-Warhead@2Smu:
 
 AdvancedPointLaser:
@@ -741,31 +635,13 @@ AdvancedPointLaser:
 		Spread: 3
 		Damage: 1
 
-AdvancedPointLaser.allies:
-	Inherits: AdvancedPointLaser
-	Report: cryozap.aud
-	Projectile: LaserZap
-		Color: ffffff
-		SecondaryBeamColor: 57BEFFBB
-
-AdvancedPointLaser.gdi:
-	Inherits: AdvancedPointLaser
-	Projectile: LaserZap
-		Color: ebba34
-		SecondaryBeamColor: d1a70030
-
-AdvancedPointLaser.soviet:
-	Inherits: AdvancedPointLaser
-	Projectile: TeslaZap
-		Palette: pointTesla
-		DimZaps: 0
-
 SuperPointLaser:
 	Inherits: AdvancedPointLaser
 	ReloadDelay: 2
 	Range: 3c768
 
 PrisLaserPrototype:
+	Inherits: ^Energy
 	ValidTargets: Ground, Water
 	ReloadDelay: 40
 	Range: 8c512
@@ -783,11 +659,6 @@ PrisLaserPrototype:
 		Spread: 512
 		Damage: 13000
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-		Versus:
-			None: 55
-			Wood: 70
-			Light: 75
-			Heavy: 70
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
@@ -845,7 +716,6 @@ PrisLaserCharge:
 		ValidStances: Ally
 		ValidTargets: PrismTower
 
-
 PrisTLaser:
 	Inherits: PrisLaserPrototype
 	Report: ptnkfire.aud
@@ -855,12 +725,6 @@ PrisTLaser:
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
 		Damage: 3875
-		Versus:
-			None: 150
-			Wood: 75
-			Concrete: 100
-			Light: 95
-			Heavy: 60
 	Warhead@Burst: FireCluster
 		Weapon: PrisTBurst
 
@@ -887,6 +751,7 @@ PrisTBurst:
 
 PrisCLaser:
 	Inherits: PrisLaserPrototype
+	Inherits: ^EnergyAP
 	Report: pcanfire.aud
 	ReloadDelay: 75
 	Range: 11c0
@@ -918,6 +783,7 @@ PrisBlaster:
 		Footprint: _xxx_ xxxxx xx_xx xxxxx _xxx_
 
 KirovBomb:
+	Inherits: ^ShellHE
 	ReloadDelay: 35
 	ValidTargets: Ground, Water
 	InvalidTargets: Air
@@ -935,13 +801,6 @@ KirovBomb:
 		Falloff: 100, 40, 5, 0
 		Damage: 10500
 		InvalidTargets: Air
-		Versus:
-			None: 40
-			Wood: 100
-			Light: 60
-			Heavy: 40
-			Concrete: 55
-			Brick: 50
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
@@ -984,10 +843,6 @@ KirovClusterBomb:
 
 KirovNukeBomb:
 	Inherits: KirovBomb
-	Warhead@1Dam: SpreadDamage
-		Versus:
-			Light: 70
-			Heavy: 50
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: nuke3
@@ -1010,6 +865,7 @@ KirovTeslaArc:
 	-Warhead@3Eff:
 
 KirovCluster:
+	Inherits: ^ShellHE
 	ReloadDelay: 35
 	Range: 3c0
 	Projectile: Bullet
@@ -1021,13 +877,6 @@ KirovCluster:
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
 		Damage: 1100
-		Versus:
-			None: 40
-			Wood: 100
-			Light: 65
-			Heavy: 40
-			Concrete: 60
-			Brick: 50
 	Warhead@Smu: LeaveSmudge
 		SmudgeType: Crater
 		InvalidTargets: Structure, Wall, Trees
@@ -1042,6 +891,7 @@ KirovCluster:
 		InvalidTargets: Ship, Structure, Bridge
 
 FrogBomb:
+	Inherits: ^Bomb
 	ValidTargets: Ground, Water
 	InvalidTargets: Air
 	ReloadDelay: 50
@@ -1060,12 +910,6 @@ FrogBomb:
 		Damage: 1000
 		Falloff: 1000, 650, 350, 150, 30, 7, 0
 		ValidTargets: Ground, Water
-		Versus:
-			None: 100
-			Wood: 55
-			Light: 35
-			Heavy: 30
-			Concrete: 55
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@Cluster: FireCluster
 		Weapon: ClusterBomb
@@ -1086,36 +930,15 @@ FrogBomb:
 		InvalidTargets: Ship, Structure, Bridge
 
 RadBomb:
-	ValidTargets: Ground, Water
-	InvalidTargets: Air
-	ReloadDelay: 50
-	Report: chute1.aud
-	Burst: 5
-	BurstDelays: 10
-	Range: 4c512
-	TargetActorCenter: true
-	Projectile: GravityBomb
-		Image: BOMBLET
-		Velocity: 25, 0, -74
-		Acceleration: 0, 0, 0
-		Shadow: true
+	Inherits: FrogBomb
 	Warhead@1Dam: SpreadDamage
-		Spread: 726
 		Damage: 200
-		Falloff: 1000, 650, 350, 150, 30, 7, 0
-		ValidTargets: Ground, Water
-		Versus:
-			None: 100
-			Wood: 55
-			Light: 35
-			Heavy: 30
-			Concrete: 55
-		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-	Warhead@2Eff: CreateEffect
+	-Warhead@Cluster:
+	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion
 		ImpactSounds: xplos.aud
 		ValidTargets: Ground, Air, Ship, Trees
-	Warhead@3Radiation: CreateTintedCells
+	Warhead@4Radiation: CreateTintedCells
 		Spread: 1c0
 		Falloff: 100, 75, 50, 25, 5, 0
 		Level: 500
@@ -1123,6 +946,7 @@ RadBomb:
 		LayerName: radioactivity.strong
 
 SonicZap:
+	Inherits: ^EnergyArtillery
 	ReloadDelay: 120
 	Range: 6c0
 	TargetActorCenter: false
@@ -1146,10 +970,6 @@ SonicZap:
 		AffectsParent: false
 		ValidStances: Neutral, Enemy
 		ValidTargets: Ground, Water
-		Versus:
-			Heavy: 80
-			Concrete: 130
-			Wood: 180
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 	Warhead@2Dam: SpreadDamage
 		Range: 0, 32
@@ -1158,11 +978,6 @@ SonicZap:
 		InvalidTargets: Disruptor, Air
 		AffectsParent: false
 		ValidStances: Ally
-		Versus:
-			Heavy: 80
-			Concrete: 120
-			Brick: 150
-			Wood: 180
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 
 SonicZap.UPG:
@@ -1196,10 +1011,6 @@ SonicZapVisual:
 		AffectsParent: false
 		ValidStances: Neutral, Enemy
 		ValidTargets: Ground, Water
-		Versus:
-			Heavy: 80
-			Concrete: 100
-			Wood: 200
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 	Warhead@2Dam: SpreadDamage
 		Range: 0, 32
@@ -1208,11 +1019,6 @@ SonicZapVisual:
 		InvalidTargets: Disruptor, Air
 		AffectsParent: false
 		ValidStances: Ally
-		Versus:
-			Heavy: 80
-			Concrete: 150
-			Brick: 150
-			Wood: 200
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 
 SonicZapVisual.UPG:
@@ -1222,6 +1028,7 @@ SonicZapVisual.UPG:
 		Color: 00ffc435
 
 Railgun:
+	Inherits: ^Energy
 	ReloadDelay: 70
 	Range: 8c0
 	Report: railuse5.aud
@@ -1243,15 +1050,10 @@ Railgun:
 		Damage: 9000
 		ValidStances: Ally, Neutral, Enemy
 		InvalidTargets: Air
-		Versus:
-			None: 100
-			Wood: 65
-			Light: 100
-			Heavy: 85
-			Concrete: 15
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 
 RailgunPrototype:
+	Inherits: ^EnergyAP
 	ReloadDelay: 75
 	Range: 8c512
 	Report: railuse5.aud
@@ -1270,31 +1072,18 @@ RailgunPrototype:
 	Warhead@1Dam: SpreadDamage
 		Range: 0, 32
 		Falloff: 1000, 1000
-		Damage: 1375
+		Damage: 575
 		ValidStances: Neutral, Enemy
 		InvalidTargets: Air
 		AffectsParent: false
-		Versus:
-			None: 10
-			Wood: 65
-			Light: 65
-			Heavy: 50
-			Concrete: 15
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 	Warhead@2Dam: SpreadDamage
 		Range: 0, 32
 		Falloff: 1000, 1000
-		Damage: 650
+		Damage: 250
 		ValidStances: Ally
 		InvalidTargets: Air
 		AffectsParent: false
-		Versus:
-			None: 10
-			Wood: 65
-			Light: 75
-			Heavy: 50
-			Concrete: 40
-			Brick: 15
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 
 Railgun.Infantry:
@@ -1302,22 +1091,9 @@ Railgun.Infantry:
 	Range: 7c512
 	ReloadDelay: 90
 	Warhead@1Dam: SpreadDamage
-		Damage: 2000
-		Versus:
-			None: 20
-			Wood: 35
-			Light: 65
-			Heavy: 90
-			Concrete: 15
+		Damage: 1400
 	Warhead@2Dam: SpreadDamage
-		Damage: 500
-		Versus:
-			None: 20
-			Wood: 35
-			Light: 65
-			Heavy: 100
-			Concrete: 20
-			Brick: 15
+		Damage: 300
 
 Railgun.Jumpjet:
 	Inherits: Railgun.Infantry
@@ -1329,22 +1105,9 @@ Railgun.Titan:
 	Range: 6c512
 	ReloadDelay: 90
 	Warhead@1Dam: SpreadDamage
-		Damage: 3000
-		Versus:
-			None: 10
-			Wood: 25
-			Light: 65
-			Heavy: 90
-			Concrete: 15
+		Damage: 2000
 	Warhead@2Dam: SpreadDamage
 		Damage: 1000
-		Versus:
-			None: 10
-			Wood: 25
-			Light: 65
-			Heavy: 100
-			Concrete: 20
-			Brick: 15
 
 Railgun.MKII:
 	Inherits: Railgun.Titan
@@ -1353,6 +1116,7 @@ Railgun.MKII:
 	ReloadDelay: 45
 
 IonZap:
+	Inherits: ^EnergyAP
 	ReloadDelay: 70
 	Range: 5c768
 	Report: ion1.aud
@@ -1383,13 +1147,6 @@ IonZap:
 		ValidStances: Neutral, Enemy
 		InvalidTargets: Air
 		AffectsParent: false
-		Versus:
-			None: 50
-			Wood: 75
-			Light: 75
-			Heavy: 120
-			Concrete: 55
-			Brick: 45
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 	Warhead@2Dam: SpreadDamage
 		Spread: 512
@@ -1397,13 +1154,6 @@ IonZap:
 		ValidStances: Ally
 		InvalidTargets: Air
 		AffectsParent: false
-		Versus:
-			None: 50
-			Wood: 75
-			Light: 75
-			Heavy: 120
-			Concrete: 55
-			Brick: 45
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: shock_wave
@@ -1447,16 +1197,9 @@ OrcaBomb:
 		Shadow: true
 	Warhead@1Dam: SpreadDamage
 		Spread: 726
-		Damage: 700
+		Damage: 200
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water
-		Versus:
-			None: 100
-			Wood: 20
-			Light: 20
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
 		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -1515,7 +1258,7 @@ MicrowaveZap:
 
 MicrowaveArc:
 	Inherits: MicrowaveZap
-	Range: 1c256
+	Range: 1c512
 	Projectile: Bullet
 		Image: mwarc
 		Sequences: idle, idle2, idle3
@@ -1695,6 +1438,7 @@ ChaosDroneTargeting:
 	Warhead@1Dam: TargetDamage
 
 RadBeamWeapon:
+	Inherits: ^Radiation
 	ValidTargets: Ground, Water
 	InvalidTargets: Air
 	Range: 6c0
@@ -1707,14 +1451,6 @@ RadBeamWeapon:
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
 		Damage: 16000
-		Versus:
-			None: 300
-			Light: 45
-			Heavy: 30
-			Wood: 12
-			Concrete: 12
-			Brick: 0
-		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
 RadBeamWeaponE:
 	Inherits: RadBeamWeapon
@@ -1855,6 +1591,7 @@ MineSpawnerWater:
 
 CyCannon:
 	Inherits: ^EnergyBlast
+	Inherits: ^Energy
 	Projectile: Missile
 		MaximumLaunchSpeed: 192
 		Blockable: false
@@ -1867,14 +1604,7 @@ CyCannon:
 		RangeLimit: 6c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 128
-		Damage: 13000
-		Versus:
-			None: 75
-			Wood: 35
-			Light: 100
-			Heavy: 75
-			Concrete: 25
-			Brick: 70
+		Damage: 11000
 		DamageTypes: Prone350Percent, TriggerProne, ExplosionDeath
 
 CyCannon.Range:
@@ -1884,6 +1614,7 @@ CyCannon.Range:
 		RangeLimit: 9c0
 
 NeutronCannon:
+	Inherits: ^EnergyAP
 	ValidTargets: Temporal
 	ReloadDelay: 5
 	Burst: 22
@@ -1891,15 +1622,8 @@ NeutronCannon:
 	Range: 5c0
 	Projectile: InstantHit
 	Warhead@Damage: WarpDamage
-		Damage: 750
+		Damage: 500
 		Spread: 1
-		Versus:
-			None: 30
-			Wood: 60
-			Light: 50
-			Heavy: 100
-			Concrete: 55
-			Brick: 55
 		ValidTargets: Temporal
 		DamageTypes: ChronoDeath
 
@@ -1911,15 +1635,8 @@ NeutronCannon.AA:
 	Inherits: NeutronCannon
 	ValidTargets: TemporalAir
 	Warhead@Damage: WarpDamage
-		Damage: 750
+		Damage: 375
 		Spread: 1
-		Versus:
-			None: 40
-			Wood: 60
-			Light: 50
-			Heavy: 100
-			Concrete: 55
-			Brick: 55
 		ValidTargets: TemporalAir
 		DamageTypes: ChronoDeath
 
@@ -1940,13 +1657,6 @@ NeutronCannonBeam:
 	Warhead@Damage: SpreadDamage
 		Damage: 1
 		Spread: 1
-		Versus:
-			None: 0
-			Wood: 0
-			Light: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
 		ValidTargets: Temporal
 		DamageTypes: ChronoDeath
 
@@ -2011,8 +1721,9 @@ SonicPulse:
 		Versus:
 			None: 70
 			Wood: 45
-			Light: 90
+			Light: 100
 			Heavy: 100
+			Reflector: 100
 			Concrete: 35
 			Brick: 20
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
@@ -2025,73 +1736,9 @@ SonicPulse:
 		ExplosionPalette: effect-ignore-lighting-alpha40
 		ValidTargets: Ground, Air, Ship, Trees
 
-NeutronCannon:
-	ValidTargets: Temporal
-	ReloadDelay: 5
-	Burst: 22
-	BurstDelays: 5
-	Range: 5c0
-	Projectile: InstantHit
-	Warhead@Damage: WarpDamage
-		Damage: 750
-		Spread: 1
-		Versus:
-			None: 40
-			Wood: 60
-			Light: 50
-			Heavy: 100
-			Concrete: 55
-			Brick: 55
-		ValidTargets: Temporal
-		DamageTypes: ChronoDeath
-
-NeutronCannonBeam:
-	ValidTargets: Temporal
-	ReloadDelay: 5
-	Range: 5c0
-	TargetActorCenter: true
-	Projectile: LaserZap
-		Width: 60
-		Duration: 15
-		Color: 80C8FF88
-		ZOffset: 2046
-		SecondaryBeam: true
-		SecondaryBeamWidth: 120
-		SecondaryBeamZOffset: 2046
-		SecondaryBeamColor: 80C8FF33
-	Warhead@Damage: SpreadDamage
-		Damage: 1
-		Spread: 1
-		Versus:
-			None: 0
-			Wood: 0
-			Light: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
-		ValidTargets: Temporal
-		DamageTypes: ChronoDeath
-
-NeutronCannonPulse:
-	Inherits: NeutronCannonBeam
-	ReloadDelay: 20
-	Projectile: AreaBeam
-		Speed: 0c768
-		Duration: 8
-		Width: 60
-		Shape: Flat
-		ZOffset: 2047
-		TrackTarget: true
-		Color: d8f9f7cc
-
-NeutronCannonSound:
-	Inherits: NeutronCannonBeam
-	Report: chronogun.aud
-	ReloadDelay: 60
-	Projectile: InstantHit
-
 StealthBomb:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^ShellAP
 	ReloadDelay: 50
 	Range: 3c512
 	MinRange: 2c0
@@ -2104,14 +1751,7 @@ StealthBomb:
 		CruiseAltitude: 2c0
 		RangeLimit: 14c410
 	Warhead@1Dam: SpreadDamage
-		Damage: 40000
-		Versus:
-			None: 25
-			Wood: 35
-			Light: 60
-			Heavy: 110
-			Concrete: 50
-			Brick: 80
+		Damage: 25000
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
@@ -2122,6 +1762,7 @@ StealthBomb:
 		ValidTargets: Ground, Water, Ship, Trees
 
 JDAM:
+	Inherits: ^ShellHE
 	ValidTargets: Ground, Water, Trees
 	InvalidTargets: Air
 	ReloadDelay: 50
@@ -2138,13 +1779,6 @@ JDAM:
 		Damage: 3800
 		Falloff: 1000, 255, 128, 50, 0
 		ValidTargets: Ground, Water
-		Versus:
-			None: 80
-			Wood: 100
-			Light: 80
-			Heavy: 65
-			Concrete: 60
-			Brick: 65
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -2169,6 +1803,7 @@ DropDummy:
 		Damage: 1
 
 BeamCannon:
+	Inherits: ^EnergyArtillery
 	ReloadDelay: 60
 	Range: 8c0
 	TargetActorCenter: false
@@ -2192,10 +1827,6 @@ BeamCannon:
 		AffectsParent: false
 		ValidStances: Neutral, Enemy
 		ValidTargets: Ground, Water
-		Versus:
-			Heavy: 80
-			Concrete: 50
-			Wood: 100
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 	Warhead@2Dam: SpreadDamage
 		Range: 0, 32
@@ -2204,11 +1835,6 @@ BeamCannon:
 		InvalidTargets: BeamCannon, Air
 		AffectsParent: false
 		ValidStances: Ally
-		Versus:
-			Heavy: 80
-			Concrete: 50
-			Brick: 100
-			Wood: 100
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 
 BeamCannonBoosted1:

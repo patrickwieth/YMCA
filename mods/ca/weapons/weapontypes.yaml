@@ -1,20 +1,34 @@
 ^Fire:
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 25
-			Wood: 50
-			Light: 55
-			Heavy: 100
+			None: 200
+			Light: 50
+			Reflector: 50
+			Heavy: 25
+			Wood: 100
 			Concrete: 30
-			Reflector: 100
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Structure, Wall
+	Warhead@3Eff: CreateEffect
+		Explosions: napalm
+		ImpactSounds: firetrt1.aud
+		ImpactActors: false
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
 
 ^Napalm:
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 100
-			Wood: 65
-			Light: 50
+			None: 200
+			Light: 100
+			Reflector: 100
 			Heavy: 25
+			Wood: 100
 			Concrete: 35
 			Brick: 20
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
@@ -29,43 +43,111 @@
 		Dimensions: 1,1
 		Footprint: X
 
+^NapalmBomb:
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 100
+			Wood: 75
+			Light: 75
+			Reflector: 75
+			Heavy: 65
+			Concrete: 35
+			Brick: 25
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+	Warhead@3Eff: CreateEffect
+		Explosions: napalm
+		ImpactSounds: flamer2.aud
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+
+^Bomb:
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 85
+			Light: 75
+			Reflector: 75
+			Heavy: 35
+			Wood: 100
+			Concrete: 55
+			Brick: 25
+
+^Chemical:
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 150
+			Light: 100
+			Reflector: 125
+			Heavy: 50
+			Wood: 75
+			Concrete: 35
+			Brick: 20
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+
+^Radiation:
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 300
+			Light: 45
+			Heavy: 30
+			Wood: 12
+			Concrete: 12
+			Brick: 0
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+
+^Missile:
+	Projectile: MissileCA
+		PointDefenseType: Missile
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 10
+			Light: 50
+			Reflector: 50
+			Heavy: 100
+			Wood: 75
+			Concrete: 75
+
 ^MissileAP:
 	Projectile: MissileCA
 		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 25
-			Wood: 50
-			Light: 55
+			None: 10
+			Light: 75
+			Reflector: 75
 			Heavy: 150
-			Concrete: 30
-			Reflector: 100
+			Wood: 50
+			Concrete: 50
 
 ^MissileHE:
 	Projectile: MissileCA
 		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 80
-			Wood: 75
-			Light: 100
+			None: 100
+			Light: 150
+			Reflector: 150
 			Heavy: 50
-			Concrete: 30
-			Reflector: 100
+			Wood: 100
+			Concrete: 25
 
 ^MissileArtillery:
 	Projectile: MissileCA
 		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 80
+			None: 75
+			Light: 100
+			Reflector: 100
+			Heavy: 50
 			Wood: 100
-			Light: 80
-			Heavy: 40
-			Concrete: 50
-			Reflector: 80
+			Concrete: 100
 
-^ShellHEAT:
+^Shell:
 	Projectile: BulletCA
 		Speed: 682
 		Image: 120MM
@@ -73,13 +155,29 @@
 		PointDefenseType: Bullet
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 80
-			Wood: 60
+			None: 20
 			Light: 100
-			Heavy: 50
-			Concrete: 40
-			Brick: 45
 			Reflector: 100
+			Heavy: 75
+			Wood: 50
+			Concrete: 25
+			Brick: 45
+
+^ShellHE:
+	Projectile: BulletCA
+		Speed: 682
+		Image: 120MM
+		Shadow: True
+		PointDefenseType: Bullet
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 100
+			Light: 150
+			Reflector: 150
+			Heavy: 50
+			Wood: 100
+			Concrete: 25
+			Brick: 45
 
 ^ShellAP:
 	Projectile: BulletCA
@@ -90,12 +188,12 @@
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 10
-			Wood: 30
-			Light: 80
+			Light: 75
+			Reflector: 75
 			Heavy: 200
-			Concrete: 20
+			Wood: 50
+			Concrete: 25
 			Brick: 35
-			Reflector: 100
 
 ^ShellArtillery:
 	Range: 14c0
@@ -110,12 +208,12 @@
 		Falloff: 100, 55, 20, 5
 		Versus:
 			None: 85
+			Light: 100
+			Reflector: 100
+			Heavy: 45
 			Wood: 100
 			Concrete: 100
 			Brick: 100
-			Light: 100
-			Heavy: 42
-			Reflector: 70
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: artillery_explosion
@@ -123,35 +221,46 @@
 	Warhead@4EffWater: CreateEffect
 		Explosions: med_splash
 
-^EnergyNormal:
+^Energy:
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 70
-			Wood: 65
-			Light: 70
-			Heavy: 50
-			Concrete: 40
-			Brick: 45
+			None: 75
+			Light: 125
 			Reflector: 20
+			Heavy: 100
+			Wood: 100
+			Concrete: 25
+			Brick: 45
+
+^EnergyLight:
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 150
+			Light: 100
+			Reflector: 20
+			Heavy: 50
+			Wood: 75
+			Concrete: 15
+			Brick: 45
 
 ^EnergyArtillery:
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 90
-			Wood: 75
-			Light: 100
-			Heavy: 40
-			Concrete: 50
-			Brick: 45
+			None: 85
+			Light: 150
 			Reflector: 20
+			Heavy: 75
+			Wood: 100
+			Concrete: 100
+			Brick: 45
 
 ^EnergyAP:
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 30
-			Wood: 55
-			Light: 80
-			Heavy: 100
-			Concrete: 30
-			Brick: 45
+			None: 20
+			Light: 75
 			Reflector: 20
+			Heavy: 150
+			Wood: 75
+			Concrete: 50
+			Brick: 45
