@@ -545,7 +545,14 @@
 		RecoilRecovery: 38
 		LocalOffset: 768,85,90, 768,-85,90
 		MuzzleSequence: muzzle
-		RequiresCondition: heavyturret
+		RequiresCondition: heavyturret && !shell.ap
+	Armament@heavyturret.ap:                          ## Heavy Turret
+		Weapon: 130mm.Nuke
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 768,85,90, 768,-85,90
+		MuzzleSequence: muzzle
+		RequiresCondition: heavyturret && shell.ap
 	WithSpriteTurret@heavyturret:
 		RequiresCondition: heavyturret
 		Sequence: heavyturret
@@ -571,13 +578,13 @@
 		RequiresCondition: shipturret
 		Sequence: shipturret
 	Cargo:
-		Types: HeavyTurret
+		Types: HeavyTurret, Infantry
 		MaxWeight: 7
 		PipCount: 7
 		LoadingCondition: notmobile
 		LoadedCondition: full
 		PassengerConditions:
-			double_turret: doubleturret
+			double_turret: heavyturret
 			n1: htnkturret
 			e2: teslaturret
 			n2: ionturret
@@ -606,6 +613,14 @@
 			thf: shipturret
 			shok: shipturret
 			sab: cloak
+	ExternalCondition@test:
+		Condition: test
+	Inherits: ^ammo
+
+^ammo:
+	Cargo:
+		PassengerConditions:
+			shell.ap: shell.ap
 
 double_turret:
 	Inherits: ^Tank
@@ -632,17 +647,3 @@ double_turret:
 		CargoType: HeavyTurret
 		Weight: 3
 		CargoCondition: heavyturret
-	ProximityExternalCondition@Bino:
-		Condition: bino
-		Range: 1c0
-		EnableSound: dsaping1.aud
-		AffectsParent: False
-	ScriptTags:
-	Cargo:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
-		LoadingCondition: notmobile
-		LoadedCondition: full
-		PassengerConditions:
-			shell.ap: doubleturret
