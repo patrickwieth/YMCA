@@ -1,4 +1,3 @@
-
 ^light_turrets:
 	muzzle: minigun
 	muzzle-gunfire2: gunfire2
@@ -70,6 +69,21 @@
 		Facings: 32
 		Offset: 0,-4
 		UseClassicFacingFudge: True
+	jeepturret: jeep
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	humveeturret: hmmv
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	vulcanturret: vulc
+		Facings: 32
+		UseClassicFacingFudge: True
+	buggyturret: bggy
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
 
 ^medium_turrets:
 	ltnkturret: ltnk
@@ -88,16 +102,47 @@
 	stnkturret: stnktnod
 		Start: 32
 		Facings: 32
+	droneturret: dronet
+		Facings: 32
+		UseClassicFacingFudge: True
 	btrturret: samtur
 		Facings: 32
 		UseClassicFacingFudge: True
 
 ^heavy_turrets:
-	doubleturret: 4tnk
+	flakturret: ftrk
+		Start: 32
+		Facings: 32
+		Offset: 0,-5
+		UseClassicFacingFudge: True
+	slingturret: slng
+		Start: 32
+		Facings: 32
+		Offset: 0,-2
+		UseClassicFacingFudge: True
+	slingmuzzle: slngmz
+		Length: 6
+		Facings: 8
+	droneturret: dronet
+		Facings: 32
+		Offset: 0,-3
+		UseClassicFacingFudge: True
+	doubleturret: 3tnk
+		Start: 32
+		Facings: 32
+		Offset: 0,-5
+		UseClassicFacingFudge: True
+	atomicdoubleturret: 3tnki
+		Facings: 32
+		UseClassicFacingFudge: True
+	atomic_heavy_double_turret: 4tnki
+		Facings: 32
+		UseClassicFacingFudge: True
+	heavydoubleturret: 4tnk
 		Start: 32
 		Facings: 32
 		UseClassicFacingFudge: True
-	htnkturret: htnk
+	heavydoubleturret2: htnk
 		Start: 32
 		Facings: 32
 		UseClassicFacingFudge: True
@@ -168,30 +213,13 @@
 		Facings: 32
 		Offset: 0,-5
 		UseClassicFacingFudge: True
-	batfturret: batf
-		Start: 32
+	chronoturret: chpr
+		Start: 64
 		Facings: 32
 		UseClassicFacingFudge: True
 	chronoturretactive: chpr
 		Start: 32
 		Facings: 32
-		UseClassicFacingFudge: True
-	chronoturret: chpr
-		Start: 64
-		Facings: 32
-		UseClassicFacingFudge: True
-	slingturret: slng
-		Start: 32
-		Facings: 32
-		Offset: 0,-2
-		UseClassicFacingFudge: True
-	slingmuzzle: slngmz
-		Length: 6
-		Facings: 8
-	flakturret: ftrk
-		Start: 32
-		Facings: 32
-		Offset: 0,-5
 		UseClassicFacingFudge: True
 	mediumturret: 2tnk
 		Start: 32
@@ -213,22 +241,211 @@
 		Facings: 32
 		Offset: 0,-4
 		UseClassicFacingFudge: True
-	droneturret: dronet
-		Facings: 32
-		Offset: 0,-3
-		UseClassicFacingFudge: True
-	heavyturret: 3tnk
-		Start: 32
-		Facings: 32
-		Offset: 0,-5
-		UseClassicFacingFudge: True
 	akatsiyaturret: 2s3
 		Start: 32
 		Facings: 32
 		UseClassicFacingFudge: True
-	shipturret: turr
+
+
+flak_turret:
+	Inherits: ^VehicleOverlays
+	idle: ftrk
+		Start: 32
 		Facings: 32
-		Offset: 0,-6
+		UseClassicFacingFudge: True
+	icon: ftrkicon
+
+double_turret:
+	Inherits: ^VehicleOverlays
+	idle: 3tnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: 3tnkicon
+
+atomic_double_turret:
+	Inherits: ^VehicleOverlays
+	idle: 3tnki
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: 3tnkiicon
+
+atomic_heavy_double_turret:
+	Inherits: ^VehicleOverlays
+	idle: 4tnki
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: 4tnkiicon
+
+heavy_double_turret:
+	Inherits: ^VehicleOverlays
+	idle: 4tnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: 4tnkicon
+
+heavy_double_turret2:
+	Inherits: ^VehicleOverlays
+	idle: htnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: htnkicnh
+
+tesla_turret:
+	Inherits: ^VehicleOverlays
+	idle: 4tnkteslatur
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: 4tnkteslaicon
+
+ion_turret:
+	Inherits: ^VehicleOverlays
+	idle: htnktion
+		Start: 0
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: htnkionicon
+
+tesla_dome:
+	Inherits: ^VehicleOverlays
+	idle: ttnk
+		Start: 32
+		Length: 32
+	icon: ttnkicon
+
+ssm_turret:
+	Inherits: ^VehicleOverlays
+	idle: mlrs
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: mlrsicnh
+
+mlrs_turret:
+	Inherits: ^VehicleOverlays
+	idle: msam
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: msamicnh
+
+arty_turret:
+	Inherits: ^VehicleOverlays
+	idle: artytur
+		Start: 0
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: artyicon
+
+titan_turret:
+	Inherits: ^VehicleOverlays
+	idle: titanturr
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: titanicnh
+
+jugger_turret:
+	Inherits: ^VehicleOverlays
+	idle: juggt
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: juggicnh
+
+sonic_turret:
+	Inherits: ^VehicleOverlays
+	idle: sonict
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: disricon
+
+hover_turret:
+	Inherits: ^VehicleOverlays
+	idle: hvrtur
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: hmlrsicnh
+
+tankd_turret:
+	Inherits: ^VehicleOverlays
+	idle: tnkd
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: tnkdicon
+
+mirage_turret:
+	Inherits: ^VehicleOverlays
+	idle: rtnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: rtnkicon
+
+prism_turret:
+	Inherits: ^VehicleOverlays
+	idle: ptnkt
+		Facings: 32
+		Offset: 0,-5
+		UseClassicFacingFudge: True
+	icon: ptnkicon
+
+microwave_turret:
+	Inherits: ^VehicleOverlays
+	idle: mwtnkt
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: mwtnkicnh
+
+chrono_turret:
+	Inherits: ^VehicleOverlays
+	idle: chpr
+		Start: 64
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: chpricnh
+
+medium_turret:
+	Inherits: ^VehicleOverlays
+	idle: 2tnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: 2tnkicon
+
+mbt_turret:
+	Inherits: ^VehicleOverlays
+	idle: mtnk
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: mtnkicnh
+
+mbtpld_turret:
+	Inherits: ^VehicleOverlays
+	idle: mtnk
+		Start: 64
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: mtnkpldicon
+
+mbtnod_turret:
+	Inherits: ^VehicleOverlays
+	idle: mtnknod
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: mtnknodicnh
+
+akatsiya_turret:
+	Inherits: ^VehicleOverlays
+	idle: 2s3
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: 2s3icnh
+
 
 # light turrets
 
@@ -369,6 +586,37 @@ ship_turret3:
 		UseClassicFacingFudge: True
 	icon: ifvicon
 
+jeep_turret:
+	Inherits: ^VehicleOverlays
+	idle: jeep
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: jeepicon
+
+humvee_turret:
+	Inherits: ^VehicleOverlays
+	idle: hmmv
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: jeepicnh
+
+vulcan_turret:
+	Inherits: ^VehicleOverlays
+	idle: vulc
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: vulcicnh
+
+buggy_turret:
+	Inherits: ^VehicleOverlays
+	idle: bggy
+		Start: 32
+		Facings: 32
+		UseClassicFacingFudge: True
+	icon: bggyicon
+
 ## medium turrets
 
 ltnk_turret:
@@ -417,57 +665,4 @@ btr_turret:
 		UseClassicFacingFudge: True
 	icon: btricon
 
-jeep_turret:
-	Inherits: ^VehicleOverlays
-	idle: jeep
-		Start: 32
-		Facings: 32
-		UseClassicFacingFudge: True
-	icon: jeepicon
-
-humvee_turret:
-	Inherits: ^VehicleOverlays
-	idle: hmmv
-		Start: 32
-		Facings: 32
-		UseClassicFacingFudge: True
-	icon: jeepicnh
-
-vulcan_turret:
-	Inherits: ^VehicleOverlays
-	idle: vulc
-		Facings: 32
-		UseClassicFacingFudge: True
-	icon: vulcicnh
-
-buggy_turret:
-	Inherits: ^VehicleOverlays
-	idle: bggy
-		Start: 32
-		Facings: 32
-		UseClassicFacingFudge: True
-	icon: bggyicon
-
 ## heavy turrets
-
-double_turret:
-	Inherits: ^VehicleOverlays
-	idle: 3tnk
-		Start: 32
-		Facings: 32
-		UseClassicFacingFudge: True
-	icon: 3tnkicon
-
-atomic_double_turret:
-	Inherits: ^VehicleOverlays
-	idle: 3tnki
-		Facings: 32
-		UseClassicFacingFudge: True
-	icon: 3tnkiicon
-
-atomic_heavy_double_turret:
-	Inherits: ^VehicleOverlays
-	idle: 4tnki
-		Facings: 32
-		UseClassicFacingFudge: True
-	icon: 4tnkiicon

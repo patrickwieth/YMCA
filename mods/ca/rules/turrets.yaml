@@ -238,6 +238,111 @@
 		IsPlayerPalette: true
 		RequiresCondition: shipturret3
 		Sequence: shipturret3
+	Armament@jeepturret:                         ## Jeep Turret
+		Weapon: M60mg
+		MuzzleSequence: muzzle
+		LocalOffset: 128,0,43
+		RequiresCondition: jeepturret
+	WithSpriteTurret@jeepturret:
+		RequiresCondition: jeepturret
+		Sequence: jeepturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@humveeturret:                         ## Humvee Turret
+		Weapon: M60mgTD
+		LocalOffset: 171,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: humveeturret
+	WithSpriteTurret@humveeturret:
+		RequiresCondition: humveeturret
+		Sequence: humveeturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@vulcanturret0:                         ## Vulcan Turret
+		Weapon: MGatt.0
+		LocalOffset: 220,0,350
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling == 0 && vulcanturret
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@vulcanturret1:
+		Weapon: MGatt.1
+		LocalOffset: 220,0,350
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling == 1 && vulcanturret
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@vulcanturret2:
+		Weapon: MGatt.2
+		LocalOffset: 220,0,350
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling == 2 && vulcanturret
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@vulcanturret3:
+		Weapon: MGatt.3
+		LocalOffset: 220,0,350
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling == 3 && vulcanturret
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@vulcanturret0G:
+		Name: secondary
+		Weapon: MGatt.0G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 0 && vulcanturret
+		PauseOnCondition: engage-air
+		ReloadingCondition: engage-ground
+	Armament@vulcanturret1G:
+		Name: secondary
+		Weapon: MGatt.1G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 1 && vulcanturret
+		PauseOnCondition: engage-air
+		ReloadingCondition: engage-ground
+	Armament@vulcanturret2G:
+		Name: secondary
+		Weapon: MGatt.2G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 2 && vulcanturret
+		ReloadingCondition: engage-ground
+		PauseOnCondition: engage-air
+	GrantConditionOnAttack:
+		Condition: gattling
+		RequiredShotsPerInstance: 1,6,12
+		MaximumInstances: 3
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
+		RequiresCondition: vulcanturret
+	GrantConditionOnAttack@GROUND:
+		ArmamentNames: secondary
+		Condition: gattling-ground
+		RequiredShotsPerInstance: 1,6
+		MaximumInstances: 2
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
+		RequiresCondition: vulcanturret
+	WithSpriteTurret@vulcanturret:
+		RequiresCondition: vulcanturret
+		Sequence: vulcanturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@buggyturret:                         ## Buggy Turret
+		Weapon: M60mgTD
+		Turret: primary
+		LocalOffset: 171,0,43
+		MuzzleSequence: muzzle
+		RequiresCondition: buggyturret
+	WithSpriteTurret@buggyturret:
+		RequiresCondition: buggyturret
+		Sequence: buggyturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
 	Cargo:
 		Types: light_turret
 		MaxWeight: 8
@@ -263,6 +368,10 @@
 			ship_turret: shipturret
 			ship_turret2: shipturret2
 			ship_turret3: shipturret3
+			jeep_turret: jeepturret
+			humvee_turret: humveeturret
+			vulcan_turret: vulcanturret
+			buggy_turret: buggyturret
 
 ^medium_turrets:
 	Turreted:
@@ -338,113 +447,7 @@
 		Sequence: droneturret
 		Palette: overlayplayertd
 		IsPlayerPalette: true
-	Armament@jeepturret:                         ## Jeep Turret
-		Weapon: M60mg
-		MuzzleSequence: muzzle
-		LocalOffset: 128,0,43
-		RequiresCondition: jeepturret
-	WithSpriteTurret@jeepturret:
-		RequiresCondition: jeepturret
-		Sequence: jeepturret
-		Palette: overlayplayertd
-		IsPlayerPalette: true
-	Armament@humveeturret:                         ## Humvee Turret
-		Weapon: M60mgTD
-		LocalOffset: 171,0,85
-		MuzzleSequence: muzzle
-		RequiresCondition: humveeturret
-	WithSpriteTurret@humveeturret:
-		RequiresCondition: humveeturret
-		Sequence: humveeturret
-		Palette: overlayplayertd
-		IsPlayerPalette: true
-	Armament@vulcanturret0:                         ## Vulcan Turret
-		Weapon: MGatt.0
-		LocalOffset: 220,0,350
-		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 0 && vulcanturret
-		PauseOnCondition: engage-ground
-		ReloadingCondition: engage-air
-	Armament@vulcanturret1:
-		Weapon: MGatt.1
-		LocalOffset: 220,0,350
-		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 1 && vulcanturret
-		PauseOnCondition: engage-ground
-		ReloadingCondition: engage-air
-	Armament@vulcanturret2:
-		Weapon: MGatt.2
-		LocalOffset: 220,0,350
-		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 2 && vulcanturret
-		PauseOnCondition: engage-ground
-		ReloadingCondition: engage-air
-	Armament@vulcanturret3:
-		Weapon: MGatt.3
-		LocalOffset: 220,0,350
-		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 3 && vulcanturret
-		PauseOnCondition: engage-ground
-		ReloadingCondition: engage-air
-	Armament@vulcanturret0G:
-		Name: secondary
-		Weapon: MGatt.0G
-		LocalOffset: 321,0,85
-		MuzzleSequence: muzzle
-		RequiresCondition: gattling-ground == 0 && vulcanturret
-		PauseOnCondition: engage-air
-		ReloadingCondition: engage-ground
-	Armament@vulcanturret1G:
-		Name: secondary
-		Weapon: MGatt.1G
-		LocalOffset: 321,0,85
-		MuzzleSequence: muzzle
-		RequiresCondition: gattling-ground == 1 && vulcanturret
-		PauseOnCondition: engage-air
-		ReloadingCondition: engage-ground
-	Armament@vulcanturret2G:
-		Name: secondary
-		Weapon: MGatt.2G
-		LocalOffset: 321,0,85
-		MuzzleSequence: muzzle
-		RequiresCondition: gattling-ground == 2 && vulcanturret
-		ReloadingCondition: engage-ground
-		PauseOnCondition: engage-air
-		RequiresCondition: vulcanturret
-	GrantConditionOnAttack:
-		Condition: gattling
-		RequiredShotsPerInstance: 1,6,12
-		MaximumInstances: 3
-		RevokeDelay: 40
-		RevokeOnNewTarget: False
-		RevokeAll: True
-		RequiresCondition: vulcanturret
-	GrantConditionOnAttack@GROUND:
-		ArmamentNames: secondary
-		Condition: gattling-ground
-		RequiredShotsPerInstance: 1,6
-		MaximumInstances: 2
-		RevokeDelay: 40
-		RevokeOnNewTarget: False
-		RevokeAll: True
-		RequiresCondition: vulcanturret
-	WithSpriteTurret@vulcanturret:
-		RequiresCondition: vulcanturret
-		Sequence: vulcanturret
-		Palette: overlayplayertd
-		IsPlayerPalette: true
-	Armament@buggyturret:                         ## Buggy Turret
-		Weapon: M60mgTD
-		Turret: primary
-		LocalOffset: 171,0,43
-		MuzzleSequence: muzzle
-		RequiresCondition: buggyturret
-	WithSpriteTurret@buggyturret:
-		RequiresCondition: buggyturret
-		Sequence: buggyturret
-		Palette: overlayplayertd
-		IsPlayerPalette: true
-	Cargo@turret:
+	Cargo:
 		Types: Infantry
 		MaxWeight: 8
 		PipCount: 8
@@ -457,14 +460,25 @@
 			1tnk_turret: 1tnkturret
 			sherman_turret: shermanturret
 			btr_turret: btrturret
-			jeep_turret: jeepturret
-			humvee_turret: humveeturret
-			vulcan_turret: vulcanturret
-			buggy_turret: buggyturret
 
 ^heavy_turrets:
 	Turreted:
 		TurnSpeed: 4
+	Armament@flakturret:                         ## Flak Turret
+		Weapon: FLAK-23-AA
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+		RequiresCondition: flakturret
+	Armament@AG:
+		Weapon: FLAK-23-AG
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+		RequiresCondition: flakturret
+	WithSpriteTurret@flakturret:
+		RequiresCondition: flakturret
+		Sequence: flakturret
 	Armament@doubleturret:                      ## Double Barrels
 		Weapon: 130mm
 		LocalOffset: 900,180,340, 900,-180,340
@@ -714,21 +728,6 @@
 	WithSpriteTurret@chronoturretactive:
 		RequiresCondition: chronoturretactive
 		Sequence: chronoturretactive
-	Armament@flakturret:                         ## Flak Turret
-		Weapon: FLAK-23-AA
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
-		RequiresCondition: flakturret
-	Armament@AG:
-		Weapon: FLAK-23-AG
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
-		RequiresCondition: flakturret
-	WithSpriteTurret@flakturret:
-		RequiresCondition: flakturret
-		Sequence: flakturret
 	Armament@mediumturret:                         ## Medium Turret
 		Weapon: 90mm
 		Recoil: 128
