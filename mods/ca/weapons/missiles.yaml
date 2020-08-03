@@ -1,45 +1,12 @@
 ^AntiGroundMissile:
+	Inherits: ^Missile
 	ReloadDelay: 50
 	Range: 5c0
 	MinRange: 0c512
-	Report: missile6.aud
-	Projectile: MissileCA
-		Speed: 213
-		Arm: 2
-		Blockable: false
-		Inaccuracy: 128
-		Image: DRAGON
-		TrailImage: smokey
-		Shadow: True
-		HorizontalRateOfTurn: 5
-		RangeLimit: 6c0
-		PointDefenseType: Missile
-		LockOnProbability: 80
-		LockOnInaccuracy: 128
 	Warhead@1Dam: SpreadDamage
 		Spread: 128
 		Damage: 5000
 		ValidTargets: Ground, Water, Air
-		Versus:
-			None: 10
-			Wood: 74
-			Light: 34
-			Heavy: 100
-			Concrete: 75
-			Brick: 50
-		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-	Warhead@2Smu: LeaveSmudge
-		SmudgeType: Crater
-		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
-	Warhead@3Eff: CreateEffect
-		Explosions: med_explosion
-		ImpactSounds: kaboom25.aud
-		ValidTargets: Ground, Air, Ship, Trees
-	Warhead@4EffWater: CreateEffect
-		Explosions: med_splash
-		ImpactSounds: splash9.aud
-		ValidTargets: Water, Underwater
-		InvalidTargets: Ship, Structure, Bridge
 
 ^AntiAirMissile:
 	Inherits: ^AntiGroundMissile
@@ -50,18 +17,13 @@
 		Range: 0, 0c64, 0c256, 3c0
 		Falloff: 100, 100, 20, 10
 		ValidTargets: Air
-		Versus:
-			None: 100
-			Wood: 100
-			Light: 100
-			Concrete: 100
-			Brick: 100
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 		ImpactActors: false
 
 Maverick:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileAP
 	Range: 9c0
 	MinRange: 2c0
 	Report: missile7.aud
@@ -74,13 +36,7 @@ Maverick:
 		RangeLimit: 14c410
 		LockOnInaccuracy: 316
 	Warhead@1Dam: SpreadDamage
-		Damage: 14000
-		Versus:
-			None: 25
-			Wood: 35
-			Light: 100
-			Heavy: 85
-			Brick: 80
+		Damage: 10000
 
 Maverick.Tesla:
 	Inherits: Maverick
@@ -93,6 +49,7 @@ Maverick.Tesla:
 
 MaverickSU:
 	Inherits: Maverick
+	Inherits: ^MissileHE
 	Range: 10c0
 	Report: vbleatta.aud, vbleattb.aud
 	Burst: 4
@@ -102,14 +59,6 @@ MaverickSU:
 		LockOnInaccuracy: 1024
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
-		Versus:
-			Wood: 18
-			Light: 65
-	Warhead@3Eff: CreateEffect
-		Explosions: large_explosion
-		ImpactSounds: gexp14a.aud, gexp14b.aud, gexp14c.aud, gexp14d.aud
-	Warhead@4EffWater: CreateEffect
-		ImpactSounds: splashl1.aud, splashl2.aud
 
 MaverickSU.Concussion:
 	Inherits: MaverickSU
@@ -121,12 +70,15 @@ MaverickSU.Concussion:
 
 Dragon:
 	Inherits: ^AntiGroundMissile
-	InvalidTargets: relayTarget
 	Projectile: MissileCA
 		LockOnProbability: 95
 
-Dragon.TD:
+Dragon.Inf:
 	Inherits: Dragon
+	InvalidTargets: relayTarget
+
+Dragon.TD:
+	Inherits: Dragon.Inf
 	Report: bazook1.aud
 
 Dragon.CYB:
@@ -137,7 +89,6 @@ Dragon.CYB:
 
 Dragon.Relay:
 	Inherits: Dragon
-	-InvalidTargets:
 	ValidTargets: relayTarget
 	Range: 20c0
 	Projectile: MissileCA
@@ -160,22 +111,17 @@ DragonE.CYB:
 		Damage: 8500
 
 Dragon.MKII:
-	ReloadDelay: 80
 	Inherits: DragonE
 	Inherits: ^MissileHE
+	ReloadDelay: 80
 	Range: 9c0
 	Burst: 6
 	BurstDelays: 5
-	Report: rocket.aud
 	Projectile: MissileCA
 		Speed: 413
-		Arm: 2
-		Blockable: false
 		Inaccuracy: 2c512
 		Image: DRAGON
 		TrailImage: smokey
-		Shadow: True
-		HorizontalRateOfTurn: 5
 		RangeLimit: 8c0
 		PointDefenseType: Missile
 		LockOnProbability: 50
@@ -189,12 +135,10 @@ Dragon.MKII:
 		Spread: 800
 		Damage: 6000
 		ValidTargets: Ground, Water
-	Warhead@3Eff: CreateEffect
-		Explosions: large_artillery_explosion
-		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
 
 HellfireAG:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileAP
 	ReloadDelay: 60
 	MinRange: 1c256
 	Burst: 4
@@ -205,13 +149,6 @@ HellfireAG:
 		RangeLimit: 8c512
 	Warhead@1Dam: SpreadDamage
 		Damage: 4500
-		Versus:
-			None: 25
-			Wood: 65
-			Light: 70
-			Heavy: 115
-			Concrete: 80
-			Brick: 100
 
 HellfireAG.Orca:
 	Inherits: HellfireAG
@@ -219,6 +156,7 @@ HellfireAG.Orca:
 
 HellfireAG.Harrier:
 	Inherits: HellfireAG
+	Inherits: ^MissileHE
 	Range: 12c0
 	MinRange: 2c0
 	Report: migmis.aud, migmis2.aud
@@ -226,34 +164,24 @@ HellfireAG.Harrier:
 	BurstDelays: 5
 	Projectile: MissileCA
 		RangeLimit: 12c512
-		ContrailLength: 10
 		Inaccuracy: 2c512
 	Warhead@1Dam: SpreadDamage
 		Spread: 448
-		Damage: 1600
+		Damage: 1000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water, Trees
-		Versus:
-			None: 100
-			Wood: 60
-			Light: 70
-			Heavy: 35
-			Concrete: 30
-		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: large_explosion
-		ImpactSounds: kaboom15.aud
-	Warhead@4EffWater: CreateEffect
-		ImpactSounds: splashl1.aud, splashl2.aud
 
 HellfireAG.Horn:
 	Inherits: HellfireAG.Harrier
-		Range: 5c0
-		MinRange: 1c0
-		Burst: 2
-		Projectile: MissileCA
-			RangeLimit: 7c512
-			ContrailLength: 0
+	Inherits: ^MissileArtillery
+	Range: 5c0
+	MinRange: 1c0
+	Burst: 2
+	Projectile: MissileCA
+		RangeLimit: 7c512
+		ContrailLength: 5
+		Inaccuracy: 1c512
+		-ContrailLength:
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 850
@@ -269,7 +197,7 @@ HellfireAA:
 		HorizontalRateOfTurn: 10
 		RangeLimit: 7c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 3000
+		Damage: 6000
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
@@ -292,13 +220,14 @@ WidowAA:
 		RangeLimit: 12c0
 		ContrailLength: 6
 	Warhead@1Dam: SpreadDamage
-		Damage: 6000
+		Damage: 12000
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 
 MammothTusk:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileHE
 	ReloadDelay: 60
 	Range: 6c512
 	Burst: 2
@@ -311,18 +240,6 @@ MammothTusk:
 		LockOnInaccuracy: 512
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
-		Versus:
-			None: 100
-			Light: 35
-			Heavy: 35
-		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
-	Warhead@3Eff: CreateEffect
-		ImpactSounds: kaboom15.aud
-		ValidTargets: Ground, Trees
-	Warhead@5EffAir: CreateEffect
-		Explosions: med_explosion_air
-		ImpactSounds: kaboom25.aud
-		ValidTargets: Air
 
 TitanTusk:
 	Inherits: MammothTusk
@@ -333,11 +250,7 @@ TitanTusk:
 		Image: MISSILE
 		RangeLimit: 10c614
 	Warhead@1Dam: SpreadDamage
-		Damage: 10000
-
-APCTusk:
-	Inherits: MammothTusk
-	ValidTargets: Air, Ground, Infantry
+		Damage: 5000
 
 Nike:
 	Inherits: ^AntiAirMissile
@@ -352,7 +265,7 @@ Nike:
 		RangeLimit: 12c0
 		Speed: 341
 	Warhead@1Dam: SpreadDamage
-		Damage: 5400
+		Damage: 10000
 		Range: 0, 0c64, 0c256, 4c256
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
@@ -365,7 +278,7 @@ Nike.Raptor:
 	Projectile: MissileCA
 		RangeLimit: 14c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 15500
+		Damage: 30000
 		ValidTargets: Air
 		Versus:
 			Light: 75
@@ -379,14 +292,14 @@ RedEye:
 		HorizontalRateOfTurn: 20
 		Speed: 298
 	Warhead@1Dam: SpreadDamage
-		Damage: 2800
+		Damage: 5600
 		Range: 0, 0c64, 0c256, 3c0
 
 RedEye.CYB:
 	Inherits: RedEye
 	Report: rocket.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 3500
+		Damage: 7000
 
 RedEyeE:
 	Inherits: RedEye
@@ -396,7 +309,7 @@ RedEyeE.CYB:
 	Inherits: RedEyeE
 	Report: rocket.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 3500
+		Damage: 7000
 
 RedEye.MKII:
 	Inherits: RedEyeE
@@ -404,7 +317,7 @@ RedEye.MKII:
 	Burst: 2
 	BurstDelays: 5
 	Warhead@1Dam: SpreadDamage
-		Damage: 5000
+		Damage: 10000
 
 Stinger:
 	Inherits: ^AntiGroundMissile
@@ -425,15 +338,6 @@ Stinger:
 	Warhead@1Dam: SpreadDamage
 		Spread: 368
 		Damage: 7000
-		Versus:
-			None: 36
-			Wood: 80
-			Light: 75
-			Heavy: 65
-			Concrete: 60
-			Brick: 60
-	Warhead@3Eff: CreateEffect
-		ImpactSounds: kaboom15.aud
 
 StingerAA:
 	Inherits: Stinger
@@ -462,6 +366,7 @@ StingerAA:
 
 StingerGTWR:
 	Inherits: Stinger
+	Inherits: ^MissileHE
 	ReloadDelay: 50
 	Range: 7c0
 	Report: rocket2.aud
@@ -474,21 +379,8 @@ StingerGTWR:
 		LockOnInaccuracy: 512
 	Warhead@1Dam: SpreadDamage
 		Spread: 0c384
-		Damage: 9000
+		Damage: 8000
 		ValidTargets: Ground, Water
-		Versus:
-			None: 55
-			Wood: 55
-			Light: 70
-			Heavy: 60
-			Concrete: 40
-			Brick: 40
-	Warhead@2Smu: LeaveSmudge
-		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
-	Warhead@3Eff: CreateEffect
-		Explosions: frag_3
-		ExplosionPalette: temptd
-		ImpactSounds: kaboom15.aud
 
 StingerGTWR.Relay:
 	Inherits: StingerGTWR
@@ -499,6 +391,7 @@ StingerGTWR.Relay:
 
 APTusk:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileAP
 	ReloadDelay: 70
 	Range: 6c0
 	Projectile: MissileCA
@@ -508,15 +401,10 @@ APTusk:
 		LockOnProbability: 80
 		LockOnInaccuracy: 256
 	Warhead@1Dam: SpreadDamage
-		Damage: 7000
-		Versus:
-			None: 35
-			Wood: 60
-			Light: 45
-			Heavy: 100
-			Concrete: 40
+		Damage: 5000
 
 TorpTube:
+	Inherits: ^Missile
 	ReloadDelay: 100
 	Range: 9c0
 	Report: torpedo1.aud
@@ -540,12 +428,6 @@ TorpTube:
 		Spread: 426
 		Damage: 12000
 		ValidTargets: Water, Underwater, Bridge
-		Versus:
-			Wood: 75
-			Light: 65
-			Heavy: 100
-			Concrete: 100
-			Brick: 500
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: artillery_explosion
@@ -573,10 +455,6 @@ TorpTube:
 		Spread: 511
 		Damage: 2500
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
-		Versus:
-			None: 60
-			Wood: 55
-			Concrete: 50
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: building, building2
@@ -599,6 +477,7 @@ SubMissile:
 #Used by ICBM, Missile but just Explosion
 HonestJohnSub:
 	Inherits: SubMissile
+	Inherits: ^MissileArtillery
 	Report: nukemisl.aud
 	BurstDelays: 6
 	Projectile: BulletCA
@@ -606,13 +485,6 @@ HonestJohnSub:
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 10000
-		Versus:
-			None: 70
-			Wood: 100
-			Concrete: 90
-			Light: 75
-			Heavy: 35
-			Brick: 70
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 	Warhead@1Dam_impact: SpreadDamage
 		Spread: 1c0
@@ -658,6 +530,7 @@ HonestJohnSub:
 
 SCUD:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
 	ReloadDelay: 240
 	Range: 10c0
 	MinRange: 4c0
@@ -677,13 +550,6 @@ SCUD:
 		Damage: 3400
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water, Trees
-		Versus:
-			None: 90
-			Wood: 65
-			Light: 70
-			Heavy: 40
-			Concrete: 40
-			Brick: 45
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: building, building2
@@ -693,6 +559,7 @@ SCUD:
 
 V3Weapon:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
 	-Report:
 	ValidTargets: Ground, Trees, Water
 	Warhead@1Dam: SpreadDamage
@@ -700,13 +567,6 @@ V3Weapon:
 		Damage: 3400
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water, Trees
-		Versus:
-			None: 90
-			Wood: 65
-			Light: 70
-			Heavy: 40
-			Concrete: 40
-			Brick: 45
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: building, building2
@@ -716,36 +576,17 @@ V3Weapon:
 
 KatyushaRockets:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
 	ReloadDelay: 240
 	Range: 16c0
 	MinRange: 4c0
 	Report: missile6.aud
 	Burst: 8
 	BurstDelays: 6
-	Projectile: BulletCA
-		Blockable: false
-		Shadow: true
-		Inaccuracy: 3c512
-		Image: dragon
-		TrailImage: smokey
-		Speed: 250
-		LaunchAngle: 65
 	ValidTargets: Ground, Trees, Water
 	Warhead@1Dam: SpreadDamage
 		Spread: 384
 		Damage: 5000
-		Versus:
-			None: 100
-			Wood: 95
-			Concrete: 55
-			Light: 80
-			Heavy: 45
-		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: frag_3
-		ExplosionPalette: temptd
-		ImpactSounds: kaboom15.aud
-		ValidTargets: Ground, Ship, Trees
 
 HonestJohn:
 	Inherits: ^AntiGroundMissile
@@ -774,6 +615,7 @@ HonestJohn:
 			Wood: 95
 			Concrete: 60
 			Light: 65
+			Reflector: 65
 			Heavy: 40
 			Brick: 15
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
@@ -787,6 +629,7 @@ HonestJohn:
 			Wood: 95
 			Concrete: 60
 			Light: 65
+			Reflector: 65
 			Heavy: 40
 			Brick: 15
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
@@ -800,6 +643,7 @@ HonestJohn:
 			Wood: 95
 			Concrete: 60
 			Light: 65
+			Reflector: 65
 			Heavy: 40
 			Brick: 15
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
@@ -813,6 +657,7 @@ HonestJohn:
 			Wood: 95
 			Concrete: 60
 			Light: 65
+			Reflector: 65
 			Heavy: 40
 			Brick: 15
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
@@ -854,6 +699,7 @@ HonestJohn.toxin:
 			Wood: 95
 			Concrete: 60
 			Light: 65
+			Reflector: 65
 			Heavy: 40
 			Brick: 15
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
@@ -867,6 +713,7 @@ HonestJohn.toxin:
 			Wood: 95
 			Concrete: 60
 			Light: 65
+			Reflector: 65
 			Heavy: 40
 			Brick: 15
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
@@ -911,6 +758,7 @@ HonestJohn.multi:
 			Wood: 95
 			Concrete: 60
 			Light: 65
+			Reflector: 65
 			Heavy: 40
 			Brick: 15
 
@@ -941,6 +789,7 @@ BikeRocketHail:
 
 BikeScrinTorp:
 	Inherits: BikeRockets
+	Inherits: ^Energy
 	Report: scrin5b.aud
 	Projectile: Missile
 		MaximumLaunchSpeed: 192
@@ -954,7 +803,7 @@ BikeScrinTorp:
 		Inaccuracy: 0
 		-TrailImage:
 	Warhead@1Dam: SpreadDamage
-		Damage: 7000
+		Damage: 8000
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
 		ImpactSounds: expnew17.aud, expnew16.aud
@@ -1041,6 +890,7 @@ BTRRocketsAA:
 #Artillery Missiles, lock-on but act dumb
 227mm:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
 	ReloadDelay: 120
 	Burst: 2
 	BurstDelays: 4
@@ -1058,12 +908,6 @@ BTRRocketsAA:
 		Damage: 1300
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water, Trees
-		Versus:
-			None: 70
-			Wood: 50
-			Light: 60
-			Heavy: 40
-			Concrete: 40
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
@@ -1087,10 +931,11 @@ BTRRocketsAA:
 
 227mmH:
 	Inherits: 227mm
+	Inherits: ^MissileAP
 	Report: hovrmis1.aud
 
 227mm.upg:
-	Inherits: 227mm
+	Inherits: 227mmH
 	Report: vaegattb.aud, vaegatta.aud
 	Range: 11c0
 	Projectile: MissileCA
@@ -1101,8 +946,6 @@ BTRRocketsAA:
 		LockOnInaccuracy: 512
 	Warhead@1Dam: SpreadDamage
 		Damage: 1200
-		Versus:
-			None: 100
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 
 227mmAA:
@@ -1120,7 +963,7 @@ BTRRocketsAA:
 		HorizontalRateOfTurn: 15
 		CruiseAltitude: 2c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 1500
+		Damage: 3000
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
@@ -1137,7 +980,7 @@ BTRRocketsAA:
 		ContrailLength: 15
 		ContrailColor: 00FFFFE6
 	Warhead@1Dam: SpreadDamage
-		Damage: 1700
+		Damage: 3400
 
 227mmAAH:
 	Inherits: 227mmAA
@@ -1158,12 +1001,6 @@ StnkMissile:
 		LockOnProbability: 95
 	Warhead@1Dam: SpreadDamage
 		Damage: 5500
-		Versus:
-			None: 25
-			Wood: 75
-			Light: 100
-			Concrete: 85
-			Heavy: 100
 	Warhead@3Eff: CreateEffect
 		ImpactSounds: xplos.aud
 	Warhead@4EffWater: CreateEffect
@@ -1174,6 +1011,7 @@ STNKScrinTorp:
 
 StnkMissile.HE:
 	Inherits: StnkMissile
+	Inherits: ^MissileHE
 	ReloadDelay: 100
 	Range: 6c0
 	Warhead@1Dam: SpreadDamage
@@ -1198,7 +1036,7 @@ StnkMissile.AA:
 		Speed: 283
 		RangeLimit: 9c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 2600
+		Damage: 5000
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
@@ -1206,12 +1044,14 @@ StnkMissile.AA:
 
 StnkMissile.AA.HE:
 	Inherits: StnkMissile.AA
+	Inherits: ^MissileHE
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
 		Damage: 2500
 
 BoatMissile:
 	Inherits: Stinger
+	Inherits: ^MissileHE
 	Report: rocket2.aud
 	Range: 7c0
 	Burst: 2
@@ -1219,13 +1059,6 @@ BoatMissile:
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 7000
-		Versus:
-			None: 100
-			Wood: 68
-			Light: 55
-			Heavy: 40
-			Concrete: 50
-			Brick: 50
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: frag_3
@@ -1261,6 +1094,7 @@ Rah66AG:
 		TrailDelay: 3
 		Speed: 250
 		LaunchAngle: 10
+		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
 		Damage: 800
@@ -1276,6 +1110,7 @@ Rah66AG:
 		InvalidTargets: Ship, Structure, Bridge
 
 ScrinTorp:
+	Inherits: ^EnergyAP
 	ValidTargets: Ground, Water, Trees
 	ReloadDelay: 50
 	MinRange: 0c512
@@ -1297,13 +1132,6 @@ ScrinTorp:
 		Spread: 192
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water
-		Versus:
-			None: 10
-			Wood: 35
-			Concrete: 55
-			Light: 25
-			Heavy: 65
-			Brick: 35
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -1332,7 +1160,7 @@ ScrinTorpAA:
 		-TrailImage:
 		RangeLimit: 12c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 1600
+		Damage: 3200
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
@@ -1344,6 +1172,7 @@ ScrinTorpAA:
 		ValidTargets: Air
 
 U2Bomb:
+	Inherits: ^Bomb
 	ReloadDelay: 300
 	Range: 8c0
 	Report: missile1.aud
@@ -1362,12 +1191,6 @@ U2Bomb:
 		Spread: 1c0
 		Damage: 60000
 		Falloff: 368, 135, 25
-		Versus:
-			None: 30
-			Wood: 75
-			Light: 65
-			Heavy: 30
-			Concrete: 40
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
@@ -1383,52 +1206,14 @@ U2Bomb:
 		InvalidTargets: Ship, Structure
 
 CryoMissile:
+	Inherits: ^MissileCryo
 	ReloadDelay: 125
 	Range: 8c0
 	MinRange: 2c0
-	Report: cryomissile.aud
 	Burst: 2
 	BurstDelays: 6
-	Projectile: BulletCA
-		Blockable: false
-		Shadow: true
-		Inaccuracy: 1c341
-		Image: dragon
-		TrailImage: smokey
-		TrailPalette: cold1
-		TrailInterval: 1
-		TrailDelay: 1
-		Speed: 300
-		LaunchAngle: 65
-		ContrailLength: 17
-		ContrailColor: 8fc6ffaa
-		ContrailWidth: 0c48
-	ValidTargets: Ground, Trees, Water, Underwater, Air
 	Warhead@1Dam: SpreadDamage
-		Spread: 341
 		Damage: 2500
-		Falloff: 100, 50, 25, 0
-		Versus:
-			None: 50
-			Wood: 20
-			Light: 100
-			Heavy: 70
-			Concrete: 75
-			Brick: 1
-		DamageTypes: FrozenDeath
-	Warhead@2Eff: CreateEffect
-		Explosions: cryoblast
-		ImpactSounds: cryoblast.aud
-	Warhead@chill: GrantExternalCondition
-		Condition: chilled
-		Duration: 150
-		Range: 1c768
-	Warhead@cryoresidue: CreateTintedCells
-		LayerName: cryoresidue
-		Spread: 1c0
-		Level: 100
-		Falloff: 100, 75, 52, 15, 2
-		MaxLevel: 600
 
 CryoGun:
 	ReloadDelay: 90
@@ -1472,16 +1257,14 @@ CryoGun:
 
 BATFRockets:
 	Inherits: Dragon
+	Inherits: ^MissileAP
 	Burst: 2
 	Range: 4c768
 	Warhead@1Dam: SpreadDamage
 		Damage: 2200
-		Versus:
-			Heavy: 120
-			Concrete: 40
-			Light: 25
 
 AuroraRocket:
+	Inherits: ^MissileHE
 	ValidTargets: Ground, Water, Trees
 	InvalidTargets: Air
 	ReloadDelay: 50
