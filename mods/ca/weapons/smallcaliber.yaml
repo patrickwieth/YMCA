@@ -1,4 +1,5 @@
 ^AACannon:
+	Inherits: ^BulletHeavy
 	ReloadDelay: 10
 	Range: 8c0
 	Report: aacanon3.aud
@@ -36,6 +37,7 @@ FLAK-23-AA:
 
 FLAK-23-AG:
 	Inherits: ^AACannon
+	Inherits: ^Bullet
 	Report: flak1.aud, flak2.aud
 	Range: 4c768
 	ValidTargets: Ground, Water
@@ -50,13 +52,6 @@ FLAK-23-AG:
 		Spread: 0c128
 		Falloff: 100, 37, 14, 5, 0
 		Damage: 1800
-		Versus:
-			None: 120
-			Wood: 30
-			Light: 35
-			Heavy: 10
-			Concrete: 20
-			Brick: 20
 		ValidTargets: Ground, Water
 	Warhead@2Eff: CreateEffect
 		Explosions: flak_explosion_ground
@@ -76,19 +71,13 @@ FLAK-SEAS-AA:
 
 FLAK-SEAS-AG:
 	Inherits: FLAK-23-AG
+	Inherits: ^BulletHeavy
 	Range: 5c256
 	Report: vflaat1a.aud, vflaat1b.aud
 	Projectile: Bullet
 		LaunchAngle: 82
 	Warhead@1Dam: SpreadDamage
 		Damage: 2200
-		Versus:
-			None: 150
-			Wood: 60
-			Light: 35
-			Heavy: 25
-			Concrete: 20
-			Brick: 20
 
 FLAK-23-AA.Barrage:
 	Inherits: FLAK-23-AA
@@ -167,6 +156,7 @@ MGatt.3:
 		Damage: 575
 
 ^HeavyMG:
+	Inherits: ^BulletHeavy
 	ReloadDelay: 30
 	Range: 6c0
 	Report: gun13.aud
@@ -175,13 +165,6 @@ MGatt.3:
 	Warhead@1Dam: SpreadDamage
 		Spread: 128
 		Damage: 2500
-		Versus:
-			None: 120
-			Wood: 60
-			Light: 72
-			Heavy: 28
-			Concrete: 28
-			Brick: 28
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: piffs
@@ -193,40 +176,27 @@ MGatt.3:
 
 ^LightMG:
 	Inherits: ^HeavyMG
+	Inherits: ^Bullet
 	Warhead@1Dam: SpreadDamage
 		Damage: 1000
-		Versus:
-			None: 150
-			Wood: 10
-			Light: 40
-			Heavy: 10
-			Concrete: 10
-			Brick: 10
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
-
 
 Vulcan:
 	Inherits: ^HeavyMG
 	Warhead@1Dam: SpreadDamage
 		Damage: 1000
-		Versus:
-			None: 200
-			Wood: 50
-			Light: 50
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
 	Warhead@4Dam_2: SpreadDamage
 		Spread: 128
 		Damage: 1000
 		Delay: 2
 		Versus:
-			None: 200
-			Wood: 50
-			Light: 50
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
+			None: 120
+			Light: 75
+			Reflector: 100
+			Heavy: 30
+			Wood: 60
+			Concrete: 15
+			Brick: 5
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@4Eff_2: CreateEffect
 		Explosions: piffs
@@ -242,12 +212,13 @@ Vulcan:
 		Damage: 1000
 		Delay: 4
 		Versus:
-			None: 200
-			Wood: 50
-			Light: 50
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
+			None: 120
+			Light: 75
+			Reflector: 100
+			Heavy: 30
+			Wood: 60
+			Concrete: 15
+			Brick: 5
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@6Eff_3: CreateEffect
 		Explosions: piffs
@@ -263,12 +234,13 @@ Vulcan:
 		Damage: 1000
 		Delay: 6
 		Versus:
-			None: 200
-			Wood: 50
-			Light: 50
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
+			None: 120
+			Light: 75
+			Reflector: 100
+			Heavy: 30
+			Wood: 60
+			Concrete: 15
+			Brick: 5
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@8Eff_4: CreateEffect
 		Explosions: piffs
@@ -284,12 +256,13 @@ Vulcan:
 		Damage: 1000
 		Delay: 8
 		Versus:
-			None: 200
-			Wood: 50
-			Light: 50
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
+			None: 120
+			Light: 75
+			Reflector: 100
+			Heavy: 30
+			Wood: 60
+			Concrete: 15
+			Brick: 5
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@10Eff_5: CreateEffect
 		Explosions: piffs
@@ -305,12 +278,13 @@ Vulcan:
 		Damage: 1000
 		Delay: 10
 		Versus:
-			None: 200
-			Wood: 50
-			Light: 50
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
+			None: 120
+			Light: 75
+			Reflector: 100
+			Heavy: 30
+			Wood: 60
+			Concrete: 15
+			Brick: 5
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@12Eff_6: CreateEffect
 		Explosions: piffs
@@ -333,12 +307,6 @@ ChainGun:
 	MinRange: 0c768
 	Projectile: Bullet
 		Blockable: false
-	Warhead@1Dam: SpreadDamage
-		Versus:
-			None: 144
-			Wood: 50
-			Light: 65
-			Heavy: 20
 
 Vulcan2:
 	Inherits: ^LightMG
@@ -368,13 +336,6 @@ ChainGun.Yak.R:
 		Blockable: false
 	Warhead@1Dam: SpreadDamage
 		Damage: 3200
-		Versus:
-			None: 200
-			Wood: 30
-			Light: 50
-			Heavy: 25
-			Concrete: 25
-			Brick: 25
 
 ChainGun.Yak.L:
 	Inherits: ChainGun.Yak.R
@@ -427,8 +388,6 @@ M60mg:
 	Report: pillbox1.aud
 	Burst: 5
 	Warhead@1Dam: SpreadDamage
-		Versus:
-			Light: 30
 
 M60mgTD:
 	Inherits: M60mg
@@ -472,6 +431,7 @@ MGatt.2G:
 		Damage: 400
 
 ^SnipeWeapon:
+	Inherits: ^Bullet
 	ReloadDelay: 80
 	Range: 8c512
 	Report: gun5.aud
@@ -545,6 +505,7 @@ SMGE:
 	Range: 9c0
 
 AKM:
+	Inherits: ^Bullet
 	Report: mg11.aud
 	ReloadDelay: 15
 	Burst: 1
@@ -556,13 +517,6 @@ AKM:
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
 		Damage: 15000
-		Versus:
-			None: 100
-			Wood: 10
-			Light: 35
-			Heavy: 15
-			Concrete: 15
-			Brick: 10
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: piff
@@ -577,6 +531,7 @@ AKME:
 	Range: 9c0
 
 SNIPER:
+	Inherits: ^SnipeWeapon
 	ReloadDelay: 110
 	Range: 9c0
 	Report: snipe.aud
@@ -629,6 +584,7 @@ HeliGunAG:
 		Damage: 5000
 
 SlingshotAA:
+	Inherits: ^BulletHeavy
 	ReloadDelay: 7
 	Report: slngfire1.aud, slngfire2.aud, slngfire3.aud
 	Range: 9c0
@@ -642,22 +598,3 @@ SlingshotAA:
 	Warhead@2Eff: CreateEffect
 		Explosions: piffs
 		ValidTargets: Air
-
-sniper.jarmen_kell.vehicle:
-	Inherits: ^SnipeWeapon
-	ReloadDelay: 750
-	Range: 5c640
-	Report: ijarwe2a.wav
-	ValidTargets: Vehicle, Tank, Ship
-	InvalidTargets: Infantry, Structure, Wall, Husk, NoDriverKill
-	Warhead@1Dam: TargetDamage
-		ValidTargets: Vehicle, Tank, Ship
-	Warhead@2Dis: GrantExternalCondition
-		Range: 0c512
-		ValidTargets: Vehicle, Tank
-		Condition: driver_killed
-	Warhead@3Dis: GrantExternalCondition
-		Range: 0c512
-		Duration: 500
-		ValidTargets: Ship
-		Condition: hacked

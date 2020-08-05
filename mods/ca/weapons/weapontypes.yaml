@@ -47,10 +47,10 @@
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 100
-			Wood: 75
 			Light: 75
 			Reflector: 75
-			Heavy: 65
+			Heavy: 55
+			Wood: 75
 			Concrete: 35
 			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
@@ -68,7 +68,7 @@
 ^Bomb:
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 85
+			None: 90
 			Light: 75
 			Reflector: 75
 			Heavy: 35
@@ -93,13 +93,37 @@
 		Versus:
 			None: 300
 			Light: 45
+			Reflector: 20
 			Heavy: 30
 			Wood: 12
 			Concrete: 12
 			Brick: 0
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
+^Bullet:
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 150
+			Light: 40
+			Reflector: 50
+			Heavy: 10
+			Wood: 10
+			Concrete: 5
+			Brick: 5
+
+^BulletHeavy:
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 120
+			Light: 75
+			Reflector: 100
+			Heavy: 30
+			Wood: 60
+			Concrete: 15
+			Brick: 5
+
 ^Shell:
+	Report: cannon2.aud
 	Projectile: BulletCA
 		Speed: 682
 		Image: 120MM
@@ -114,11 +138,53 @@
 			Wood: 50
 			Concrete: 25
 			Brick: 45
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
+		ImpactSounds: kaboom12.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
 
-^ShellHE:
+^ShellHeavy:
+	Report: cannon1.aud
 	Projectile: BulletCA
 		Speed: 682
 		Image: 120MM
+		Shadow: True
+		PointDefenseType: Bullet
+	Warhead@1Dam: SpreadDamage
+		Versus:
+			None: 15
+			Light: 100
+			Reflector: 100
+			Heavy: 120
+			Wood: 50
+			Concrete: 50
+			Brick: 45
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+^ShellHE:
+	Report: tnkfire3.aud
+	Projectile: BulletCA
+		Speed: 582
+		Image: 120MMHEATN
 		Shadow: True
 		PointDefenseType: Bullet
 	Warhead@1Dam: SpreadDamage
@@ -130,8 +196,22 @@
 			Wood: 100
 			Concrete: 25
 			Brick: 45
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: xplosml2.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
 
 ^ShellAP:
+	Report: tnkd2_fire.aud
 	Projectile: BulletCA
 		Speed: 768
 		Image: 183MM
@@ -146,8 +226,21 @@
 			Wood: 50
 			Concrete: 25
 			Brick: 35
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
+		ImpactSounds: firetrt1.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
 
 ^ShellArtillery:
+	Report: tank5.aud
 	Range: 14c0
 	Projectile: BulletCA
 		Speed: 204
@@ -168,7 +261,7 @@
 			Brick: 100
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
-		Explosions: artillery_explosion
+		Explosions: large_explosion
 		ImpactSounds: kaboom25.aud
 	Warhead@4EffWater: CreateEffect
 		Explosions: med_splash
@@ -344,9 +437,10 @@
 		Falloff: 100, 50, 25, 0
 		Versus:
 			None: 50
-			Wood: 20
 			Light: 100
+			Reflector: 50
 			Heavy: 70
+			Wood: 25
 			Concrete: 75
 			Brick: 1
 		DamageTypes: FrozenDeath

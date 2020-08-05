@@ -1,4 +1,5 @@
 ^Cannon:
+	Inherits: ^Shell
 	ReloadDelay: 50
 	Range: 4c768
 	Report: cannon1.aud
@@ -10,25 +11,7 @@
 	Warhead@1Dam: SpreadDamage
 		Spread: 128
 		Damage: 4000
-		Versus:
-			None: 30
-			Wood: 75
-			Light: 75
-			Concrete: 35
-			Brick: 50
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-	Warhead@2Smu: LeaveSmudge
-		SmudgeType: Crater
-		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
-	Warhead@3Eff: CreateEffect
-		Explosions: small_explosion
-		ImpactSounds: kaboom12.aud
-		ValidTargets: Ground, Ship, Trees
-	Warhead@4EffWater: CreateEffect
-		Explosions: small_splash
-		ImpactSounds: splash9.aud
-		ValidTargets: Water, Underwater
-		InvalidTargets: Ship, Structure, Bridge
 
 25mm:
 	Inherits: ^Cannon
@@ -39,30 +22,13 @@
 		Image: 50CAL
 	Warhead@1Dam: SpreadDamage
 		Damage: 3100
-		Versus:
-			None: 32
-			Wood: 52
-			Light: 116
-			Heavy: 48
-			Concrete: 40
-			Brick: 32
 
 25mmFRAG:
 	Inherits: ^Cannon
+	Inherits: ^ShellHE
 	Report: tnkfire3.aud
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
-		Versus:
-			None: 82
-			Wood: 140
-			Light: 90
-			Heavy: 28
-			Concrete: 90
-			Brick: 32
-	Warhead@3EffGround: CreateEffect
-		Explosions: large_explosion
-		ImpactSounds: kaboom12.aud
-		ValidTargets: Ground, Ship, Trees
 
 30mm:
 	Inherits: 25mm
@@ -73,10 +39,8 @@
 
 90mm:
 	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
 	Warhead@1Dam: SpreadDamage
-		Versus:
-			Concrete: 50
-			Heavy: 115
 
 120mm:
 	Inherits: 90mm
@@ -84,20 +48,11 @@
 
 120mmHEAT:
 	Inherits: 90mm
+	Inherits: ^ShellHE
 	Report: vmiratta.aud
 	Projectile: BulletCA
 		Speed: 682
 		Image: 120MMHEATN
-	Warhead@1Dam: SpreadDamage
-		Versus:
-			None: 75
-			Wood: 85
-			Light: 90
-			Heavy: 100
-			Brick: 32
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-	Warhead@3Eff: CreateEffect
-		ImpactSounds: firetrt1.aud
 
 120mmHEAT.firerate:
 	Inherits: 120mmHEAT
@@ -105,12 +60,9 @@
 
 125mm:
 	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
 	ReloadDelay: 70
 	Burst: 2
-	Warhead@1Dam: SpreadDamage
-		Versus:
-			Concrete: 40
-			Heavy: 115
 
 125mm.AP:
 	Inherits: 125mm
@@ -118,17 +70,17 @@
 
 130mm:
 	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
 	ReloadDelay: 90
 	Burst: 2
 	InvalidTargets: Air, Infantry
 	Warhead@1Dam: SpreadDamage
 		Damage: 6000
-		Versus:
-			Heavy: 115
 		InvalidTargets: Air
 
 130mm.Nuke:
 	Inherits: ^Cannon
+	Inherits: ^ShellHE
 	ReloadDelay: 90
 	Burst: 2
 	InvalidTargets: Air
@@ -138,9 +90,6 @@
 		Falloff: 100, 36, 12, 5, 0
 		Delay: 5
 		ValidTargets: Ground, Trees, Water, Underwater, Air
-		Versus:
-			Wood: 50
-			Brick: 25
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@3Eff_impact: CreateEffect
@@ -181,13 +130,6 @@ TurretGun:
 	Report: turret1.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 6000
-		Versus:
-			None: 20
-			Wood: 50
-	Warhead@3EffGround: CreateEffect
-		Explosions: large_explosion
-		ImpactSounds: kaboom12.aud
-		ValidTargets: Ground, Ship, Trees
 
 TurretGunTD:
 	Inherits: TurretGun
@@ -195,18 +137,13 @@ TurretGunTD:
 
 TitanGun:
 	Inherits: TurretGunTD
+	Inherits: ^ShellHeavy
 	ReloadDelay: 90
 	Report: vtadatta.aud, vtadattb.aud, vtadattc.aud
 	Range: 5c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 255
 		Damage: 14000
-		Versus:
-			None: 70
-			Wood: 62
-			Concrete: 30
-			Light: 60
-			Heavy: 105
 
 ^Artillery:
 	Inherits: ^Cannon
@@ -261,6 +198,7 @@ TitanGun:
 
 152mm:
 	Inherits: ^Artillery
+	Inherits: ^ShellArtillery
 	ReloadDelay: 150
 	Report: bgraatta.aud
 	MinRange: 2c0
@@ -274,11 +212,6 @@ TitanGun:
 		Damage: 18000
 		Falloff: 100, 55, 20, 5
 		Versus:
-			None: 90
-			Wood: 100
-			Concrete: 100
-			Brick: 100
-			Light: 100
 			Heavy: 82
 	Warhead@3Eff: CreateEffect
 		Explosions: large_artillery_explosion
@@ -366,13 +299,6 @@ JuggernautGun:
 	InvalidTargets: Underwater
 	Projectile: BulletCA
 		Speed: 426
-	Warhead@1Dam: SpreadDamage
-		Versus:
-			None: 15
-			Wood: 30
-			Heavy: 90
-			Concrete: 20
-			Brick: 20
 
 Grenade:
 	Inherits: ^Artillery
@@ -386,22 +312,17 @@ Grenade:
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
 		Damage: 4000
-		Versus:
-			None: 80
-			Wood: 100
-			Light: 35
-			Heavy: 35
-			Concrete: 100
-			Brick: 100
 	Warhead@2Dam: SpreadDamage
 		Spread: 28
 		Damage: 3000
 		Versus:
-			None: 200
+			None: 85
+			Light: 100
+			Reflector: 100
+			Heavy: 45
 			Wood: 100
-			Light: 25
-			Heavy: 25
 			Concrete: 100
+			Brick: 100
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion
@@ -425,16 +346,9 @@ Grenade.Huey:
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
 		Damage: 4000
-		Versus:
-			None: 80
-			Wood: 60
-			Light: 100
-			Heavy: 35
-			Concrete: 30
-			Brick: 50
 	-Warhead@2Dam: SpreadDamage
 
-Mortar:
+MortarPrototype:
 	Inherits: ^Artillery
 	ReloadDelay: 90
 	Range: 11c0
@@ -447,13 +361,6 @@ Mortar:
 		Image: BOMB
 	Warhead@1Dam: SpreadDamage
 		Damage: 5500
-		Versus:
-			None: 60
-			Wood: 100
-			Light: 45
-			Heavy: 45
-			Concrete: 50
-			Brick: 75
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -465,6 +372,18 @@ Mortar:
 	Warhead@4EffWater: CreateEffect
 		Explosions: small_splash
 		ImpactSounds: splashm1.aud, splashm2.aud, splashm3.aud
+
+Mortar.Chemical:
+	Inherits: MortarPrototype
+	ReloadDelay: 90
+	Range: 11c0
+	MinRange: 1c0
+	Report: nade.aud
+	Projectile: BulletCA
+		Speed: 166
+		LaunchAngle: 92
+		Inaccuracy: 768
+		Image: BOMB
 	Warhead@18Radio: CreateTintedCells
 		Spread: 1c0
 		Level: 50
@@ -472,7 +391,7 @@ Mortar:
 		MaxLevel: 300
 		LayerName: radioactivity.weak
 
-MortarE:
+MortarE.Chemical:
 	Inherits: Mortar
 	Range: 12c768
 
@@ -490,10 +409,6 @@ DepthCharge:
 		Damage: 6000
 		ValidTargets: Submarine
 		Versus:
-			None: 100
-			Wood: 100
-			Concrete: 100
-			Light: 100
 			Heavy: 100
 		DamageTypes: ExplosionDeath
 	Warhead@4EffWater: CreateEffect
@@ -512,6 +427,7 @@ DepthCharge.destroyer:
 		Inaccuracy: 256
 
 203mm:
+	Inherits: ^ShellArtillery
 	ReloadDelay: 100
 	InvalidTargets: Air
 	Range: 14c0
@@ -530,13 +446,6 @@ DepthCharge.destroyer:
 		InvalidTargets: Air
 		Spread: 626
 		Damage: 15000
-		Versus:
-			None: 40
-			Wood: 45
-			Light: 60
-			Heavy: 50
-			Concrete: 60
-			Brick: 60
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
@@ -565,13 +474,6 @@ ClusterBomb:
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
 		Damage: 10000
-		Versus:
-			None: 80
-			Wood: 55
-			Light: 70
-			Heavy: 40
-			Concrete: 50
-			Brick: 80
 	Warhead@Smu: LeaveSmudge
 		SmudgeType: Crater
 		InvalidTargets: Structure, Wall, Trees
@@ -594,7 +496,3 @@ BATFGun:
 	Inherits: 25mm
 	Warhead@1Dam: SpreadDamage
 		Damage: 1750
-		Versus:
-			Wood: 40
-			Concrete: 15
-			Light: 100

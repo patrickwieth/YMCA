@@ -1,15 +1,9 @@
 ^Explosion:
+	Inherits: ^Bomb
 	ValidTargets: Ground, Water, Air
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
 		Damage: 5000
-		Versus:
-			None: 90
-			Wood: 75
-			Light: 60
-			Heavy: 25
-			Concrete: 50
-			Brick: 100
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@Smu: LeaveSmudge
 		SmudgeType: Crater
@@ -32,9 +26,6 @@ CrateNapalm:
 		Damage: 6000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Trees
-		Versus:
-			Wood: 100
-			Brick: 50
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Eff: CreateEffect
@@ -238,11 +229,6 @@ BarrelExplode:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 5
 		ValidTargets: Ground, Trees
-		Versus:
-			None: 120
-			Wood: 100
-			Light: 50
-			Brick: 10
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, Incendiary
 	Warhead@2Eff: CreateEffect
 		Explosions: napalm
@@ -266,12 +252,6 @@ KirovExplode:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 2
 		ValidTargets: Ground, Trees
-		Versus:
-			None: 120
-			Wood: 100
-			Heavy: 35
-			Concrete: 35
-			Brick: 10
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Eff: CreateEffect
 		Explosions: large_napalm
@@ -321,14 +301,10 @@ APMine:
 		Footprint: xx xx
 
 OreExplosion:
+	Inherits: ^Bomb
 	Warhead@1Dam: SpreadDamage
 		Spread: 9
 		Damage: 1000
-		Versus:
-			None: 90
-			Wood: 70
-			Light: 60
-			Heavy: 20
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Res: CreateResource
 		AddsResourceType: Ore
@@ -338,14 +314,10 @@ OreExplosion:
 		ImpactSounds: kaboom25.aud
 
 TibExplosion:
+	Inherits: ^Bomb
 	Warhead@1Dam: SpreadDamage
 		Spread: 9
 		Damage: 1000
-		Versus:
-			None: 90
-			Wood: 70
-			Light: 60
-			Heavy: 20
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Res: CreateResource
 		AddsResourceType: Tiberium
@@ -361,8 +333,6 @@ CrateNuke:
 		Damage: 5000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Trees, Water, Air
-		Versus:
-			Brick: 25
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Res_impact: DestroyResource
@@ -376,8 +346,6 @@ CrateNuke:
 		Falloff: 1000, 600, 400, 250, 150, 100, 0
 		Delay: 5
 		ValidTargets: Ground, Water, Air
-		Versus:
-			Brick: 25
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@5Res_areanuke1: DestroyResource
@@ -533,6 +501,7 @@ MiniNuke:
 		FlashType: Nuke
 
 UnitExplodeVice:
+	Inherits: ^Chemical
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
 		Damage: 5000
@@ -540,13 +509,6 @@ UnitExplodeVice:
 		Delay: 5
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 120
-			Wood: 200
-			Light: 50
-			Heavy: 25
-			Concrete: 25
-			Brick: 10
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -640,16 +602,9 @@ MEMP:
 	Report: mobemp1.aud
 	Warhead@1Dam_impact: SpreadDamage
 		Range: 0, 1c1, 2c1, 3c1, 3c512, 4c1, 4c512
-		Damage: 4500
+		Damage: 800
 		Falloff: 1000, 368, 135, 90, 68, 37, 10
 		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
-		Versus:
-			None: 20
-			Wood: 20
-			Light: 20
-			Heavy: 20
-			Concrete: 25
-			Brick: 25
 	Warhead@2Eff: CreateEffect
 		ExplosionPalette: tsunit-ignore-lighting-alpha75
 		Explosions: pulse_explosion3
