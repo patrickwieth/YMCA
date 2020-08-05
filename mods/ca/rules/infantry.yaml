@@ -1421,7 +1421,7 @@ BORI:
 	TakeCover:
 		SpeedModifier: 70
 
-MORT:
+Mortar.Chemical:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -1462,6 +1462,81 @@ MORT:
 		DeathSequencePalette: playertd
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
+	SpeedMultiplier@NODUPG:
+		RequiresCondition: nodupg
+		Modifier: 120
+	DamageMultiplier@NODUPG:
+		RequiresCondition: nodupg
+		Modifier: 50
+
+Mortar:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 40
+		Prerequisites: ~commander_tree.mortar, ~infantry.soviet
+		Description: Artillery Infantry armed with a Mortar.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 200
+	Tooltip:
+		Name: Mortar
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 2500
+	Armament@PRIMARY:
+		Weapon: mortar
+		LocalOffset: 0,0,155
+		FireDelay: 15
+	Armament@Garrison:
+		Name: mounted
+		Weapon: mortarE
+		LocalOffset: 0,0,155
+		FireDelay: 15
+	AttackFrontal:
+		PauseOnCondition: being-warped
+	WithInfantryBody:
+		DefaultAttackSequence: throw
+	Explodes:
+		Weapon: UnitExplodeChemSmall
+		EmptyWeapon: UnitExplodeChemSmall
+		Chance: 33
+		RequiresCondition: !being-warped
+	WithDeathAnimation:
+		DeathSequencePalette: playertd
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+
+Mortar.Chemical:
+	Inherits: Mortar
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 40
+		Prerequisites: ~commander_tree.chemical_mortar, ~infantry.nod
+		Description: Artillery Infantry armed with a Chemical Mortar.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 200
+	Tooltip:
+		Name: Chemical Mortar
+	Armament@PRIMARY:
+		Weapon: mortar.chemical
+		LocalOffset: 0,0,155
+		FireDelay: 15
+	Armament@Garrison:
+		Name: mounted
+		Weapon: mortarE.chemical
+		LocalOffset: 0,0,155
+		FireDelay: 15
+	Explodes:
+		Weapon: UnitExplodeChemSmall
+		EmptyWeapon: UnitExplodeChemSmall
+		Chance: 33
+		RequiresCondition: !being-warped
 
 SAB:
 	Inherits: ^Soldier
@@ -1544,8 +1619,8 @@ SpecOps:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 100
-		Prerequisites: ~infantry.allies, atek, ~commander_tree.advanced_infantry_training, ~techlevel.infonly
-		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance .\n Can detect other stealthed units.
+		Prerequisites: ~infantry.allies, atek, ~commander_tree.advanced_infantry_training, ~commander_tree.spec_ops, ~techlevel.infonly
+		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
 	Valued:
 		Cost: 1000
 	Tooltip:

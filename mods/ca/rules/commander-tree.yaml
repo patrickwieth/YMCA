@@ -93,14 +93,14 @@ commander_tree.expert_logistics:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 5
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.all, ~!aircraft.nod, commander_tree.advanced_logistics
+		Prerequisites: prerequisite.has_points, ~anypower, ~aircraft.all, ~!aircraft.nod, commander_tree.advanced_logistics
 		Description: Enables to build Dropships, which can paradrop units.
 
 hack.cameo_filler.2a:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 5
-		Prerequisites: prerequisite.has_points, ~!aircraft.all, ~!vehicles.nod, disabled
+		Prerequisites: prerequisite.has_points, ~anypower, ~!aircraft.all, ~!vehicles.nod, disabled
 
 commander_tree.advanced_infantry_training:
 	Inherits: ^default.commander_tree_item
@@ -118,15 +118,26 @@ hack.cameo_filler.3:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 7
-		Prerequisites: prerequisite.has_points, ~infantry.any, disabled
+		Prerequisites: prerequisite.has_points, ~!infantry.blackh, ~!infantry.legion, ~!infantry.soviet, ~!infantry.allies, ~infantry.any, disabled
 
 hack.cameo_filler.4:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 7
+		BuildPaletteOrder: 8
 		Prerequisites: prerequisite.has_points, ~infantry.any, disabled
 
 #ALLIES
+commander_tree.Spec_Ops:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Spec Ops
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 7
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.allies, atek
+		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
+
 commander_tree.Prism_Tank:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -578,6 +589,17 @@ hack.cameo_filler.29:
 
 
 #Soviet
+commander_tree.Mortar:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mortar
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 6
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~infantry.soviet
+		Description: Enables to build the Mortar Infantry. \n  It fires mortar shells over a great distance, good vs light armored units and buildings.
+
 commander_tree.ISU:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -598,14 +620,8 @@ commander_tree.ISU_Concussion:
 		IconPalette: chrometd
 		BuildPaletteOrder: 101
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, stek, ~vehicles.ukraine, ~commander_tree.isu
+		Prerequisites: prerequisite.has_points, stek, ~vehicles.ukraine, commander_tree.isu
 		Description: Upgrades the ISU Bombard Tank to cause concussion on units at the impact zone.
-
-hack.cameo_filler.100:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 102
-		Prerequisites: prerequisite.has_points, ~vehicles.ukraine, ~!commander_tree.isu, disabled
 
 hack.cameo_filler.100a:
 	Inherits: ^default.cameo_filler
@@ -640,7 +656,7 @@ hack.cameo_filler.102:
 commander_tree.Flak_Track:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Flak_Track
+		Name: Flak Track
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
@@ -960,7 +976,7 @@ commander_tree.Sukhoi_Concussion:
 		IconPalette: chrometd
 		BuildPaletteOrder: 138
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.ukraine, stek, ~commander_tree.sukhoi
+		Prerequisites: prerequisite.has_points, ~aircraft.ukraine, stek, commander_tree.sukhoi
 		Description: Upgrades the bombs of Sukhois to cause concussion near the strike site.
 
 hack.cameo_filler.118:
@@ -1477,6 +1493,30 @@ hack.cameo_filler.219:
 		BuildPaletteOrder: 241
 		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
 
+commander_tree.Mammoth_MKII:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth MK.II
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 242
+		IconPalette: chrometd
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi,
+		Description: Enables to build the Mammoth MK.II. \n  It is epic walker with dual Railguns and high explosive Rockets against ground and air.
+
+hack.cameo_filler.219a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 242
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
+
+hack.cameo_filler.219b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 242
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
+
 #Nod
 commander_tree.Chemical_Mortar:
 	Inherits: ^default.commander_tree_item
@@ -1484,22 +1524,10 @@ commander_tree.Chemical_Mortar:
 		Name: Chemical Mortar Infantry
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 300
+		BuildPaletteOrder: 7
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, ~commander_tree.advanced_infantry_training
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, commander_tree.advanced_infantry_training
 		Description: Enables to build mortar infantry firing chemical shells
-
-hack.cameo_filler.300:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 301
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, disabled, ~commander_tree.advanced_infantry_training
-
-hack.cameo_filler.301:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 302
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, disabled, ~commander_tree.advanced_infantry_training
 
 commander_tree.Elite_Cyborg:
 	Inherits: ^default.commander_tree_item
@@ -1563,7 +1591,7 @@ commander_tree.Reinforcements_Coordinator:
 		IconPalette: chrometd
 		BuildPaletteOrder: 5
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, commander_tree.advanced_logistics
+		Prerequisites: prerequisite.has_points, ~vehicles.nod
 		Description: Enables to build the Reinforcements Coordinator. \n It coordinates reinforcements directly to the frontline when deployed.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.coordinator
@@ -1888,11 +1916,38 @@ commander_tree.Banshee:
 		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.nod
 		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
 
+commander_tree.Banshee:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Banshee
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 341
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee_bomber, ~aircraft.nod
+		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.banshee
+
+commander_tree.Banshee_Bomber:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Banshee Bomber
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 341
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee, ~aircraft.nod
+		Description: Enables to build the Banshee Bomber, a dedicated Anti-Tank Bomber.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.banshee
+
 hack.cameo_filler.321:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 342
-		Prerequisites: prerequisite.has_points, ~aircraft.nod, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.nod, ~filler.banshee, disabled
 
 hack.cameo_filler.322:
 	Inherits: ^default.cameo_filler

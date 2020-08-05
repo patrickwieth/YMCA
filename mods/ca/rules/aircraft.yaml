@@ -2514,8 +2514,6 @@ SCRN:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	RenderSprites:
-		Image: scrin
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -2609,6 +2607,23 @@ SCRN:
 	ProductionCostMultiplier@markedBonus:
 		Multiplier: 90
 		Prerequisites: structures.marked
+
+SCRN.Bomber:
+	Inherits: SCRN
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		-IconPalette: chrometd
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee_bomber, ~techlevel.high
+		Description: Fast VTOL bomber craft armed\nwith powerful plasma bombs.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Banshee Bomber
+	Armament@PRIMARY:
+		Weapon: ScrinBomb
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
 
 HORN:
 	Inherits: ^PlaneTD
