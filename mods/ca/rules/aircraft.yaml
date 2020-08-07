@@ -1743,6 +1743,26 @@ APCH:
 	Rearmable:
 		RearmActors: hpad, hpad.td
 
+APCH.Flyby:
+	Inherits: APCH
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~techlevel.medium
+		IconPalette: chrometd
+		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move and with more ammo. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
+	Tooltip:
+		Name: Apache Flyby
+	-AttackAircraft:
+	Turreted:
+		TurnSpeed: 255
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	AmmoPool:
+		Ammo: 16
+		PipCount: 8
+
 ORCA:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -2444,6 +2464,21 @@ HARR:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+HARR.avionics:
+	Inherits: HARR
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier,  ~techlevel.high
+		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n Avionics upgrade allows it to attack without flying over. \n Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Harrier (Avionics)
+	AttackAircraft:
+		AttackType: Hover
 
 Raptor:
 	Inherits: ^Plane
