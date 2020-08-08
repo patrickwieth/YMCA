@@ -157,14 +157,16 @@ namespace OpenRA.Mods.CA.Warheads
 							positionable.SetVisualPosition(unit, pos);
 							w.Add(unit);
 
-							foreach (var p in passenger.TraitOrDefault<Cargo>().Passengers)
+							if( passenger.TraitOrDefault<Cargo>() != null )
 							{
-							    //Game.Debug(String.Join("; ", passenger.TraitOrDefault<Cargo>().Passengers));
-									Game.Debug(p.Info.Name);
+								foreach (var p in passenger.TraitOrDefault<Cargo>().Passengers)
+								{
+								    //Game.Debug(String.Join("; ", passenger.TraitOrDefault<Cargo>().Passengers));
+										//Game.Debug(p.Info.Name);
 
-									var newPassenger = firedBy.World.CreateActor(false, p.Info.Name, td);
-
-									unit.TraitOrDefault<Cargo>().Load(unit, newPassenger);
+										var newPassenger = firedBy.World.CreateActor(false, p.Info.Name, td);
+										unit.TraitOrDefault<Cargo>().Load(unit, newPassenger);
+								}
 							}
 
 							if (Paradrop)
