@@ -1738,8 +1738,8 @@ ChronoAI:
 		ExplosionPalette: ra2effect-ignore-lighting-alpha75
 		ValidTargets: Ground, Air, Water
 		ImpactSounds: chrono2.aud
-	Warhead@teleport: SpawnPassenger
-		Actors: apc
+	Warhead@teleport: SpawnActor
+		Actors: 2tnk.chrono, 2tnk.chrono, 2tnk.chrono, arty.chrono, arty.chrono
 		Range: 5
 		Image: chronoappear
 		Sequence: idle
@@ -2346,3 +2346,13 @@ DummyWeapon:
 	ValidTargets: Ground, Vehicle, Infantry
 	Warhead@1Dam: SpreadDamage
 		Damage: 1
+
+ProducePassengers:
+	ReloadDelay: 100
+	Projectile: InstantExplode
+	Warhead@teleport: SpawnPassenger
+		Actors: apc
+		Range: 5
+		Image: chronoappear
+		Sequence: idle
+		ValidTargets: Air, Ground, Water
