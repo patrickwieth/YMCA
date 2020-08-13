@@ -1,193 +1,53 @@
+^turret_prototype:
+	Inherits: ^Tank
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret Prototype
+	Tooltip:
+		Name: Turret
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	RevealsShroud:
+		Range: 2c0
+	Mobile:
+		TurnSpeed: 8
+		Speed: 56
+
+^light_turret_prototype:
+	Inherits: ^turret_prototype
+	Valued:
+		Cost: 100
+	Passenger:
+		CargoType: light_turret
+		Weight: 5
+
+^medium_turret_prototype:
+	Inherits: ^turret_prototype
+	Valued:
+		Cost: 200
+	Passenger:
+		CargoType: medium_turret
+		Weight: 5
+
+^heavy_turret_prototype:
+	Inherits: ^turret_prototype
+	Valued:
+		Cost: 300
+	Passenger:
+		CargoType: heavy_turret
+		Weight: 5
+
 ^light_turrets:
 	Turreted:
-		TurnSpeed: 10
-		Offset: 20,0,0
-	Armament@Default:
-		Weapon: IFVRockets
-		LocalOffset: 192,10,176, 192,-10,176
-		RequiresCondition: !full
-	Armament@DefaultAA:
-		Name: secondary
-		Weapon: IFVRocketsAA
-		LocalOffset: 192,10,176, 192,-10,176
-		RequiresCondition: !full
-	Armament@E1:
-		Weapon: M60mg
-		MuzzleSequence: muzzle
-		LocalOffset: 250,0,150
-		RequiresCondition: gunturr || tecnturr
-	Armament@E2:
-		Weapon: 25mmFRAG
-		MuzzleSequence: muzzle
-		LocalOffset: 450,0,200
-		RequiresCondition: fragturr
-	Armament@E3:
-		Weapon: IFVRocketsE
-		LocalOffset: 192,10,176, 192,-10,176
-		RequiresCondition: samturr
-	Armament@E3AA:
-		Name: secondary
-		Weapon: IFVRocketsAAE
-		LocalOffset: 192,10,176, 192,-10,176
-		RequiresCondition: samturr
-	Armament@E4:
-		Weapon: FireballLauncher
-		Recoil: 85
-		RecoilRecovery: 25
-		LocalOffset: 350,0,150
-		MuzzleSequence: muzzle2
-		RequiresCondition: flamturr
-	Armament@E5:
-		Weapon: ChemballLauncher
-		Recoil: 85
-		RecoilRecovery: 25
-		LocalOffset: 350,0,150
-		MuzzleSequence: muzzle2
-		RequiresCondition: chemturr
-	Armament@E7:
-		Weapon: smg
-		MuzzleSequence: muzzle
-		LocalOffset: 560,0,200
-		RequiresCondition: commturr
-	Armament@Shok:
-		Weapon: TTankZap
-		LocalOffset: 0,0,213
-		RequiresCondition: testurr
-	Armament@Deso:
-		Weapon: RadBeamWeapon
-		LocalOffset: 400,0,213
-		RequiresCondition: desoturr
-	Armament@Repair:
-		Weapon: RepairIFV
-		LocalOffset: 0,0,213
-		Cursor: repair
-		OutsideRangeCursor: repair
-		TargetStances: Ally
-		ForceTargetStances: None
-		RequiresCondition: engturr
-		MuzzleSequence: emp-overlay
-		MuzzlePalette: tseffect-ignore-lighting-alpha75
-	Armament@defuse:
-		Weapon: IFVDefuseKit
-		Cursor: goldwrench
-		OutsideRangeCursor: goldwrench
-		TargetStances: Ally
-		RequiresCondition: engturr
-		ForceTargetStances: None
-		Name: secondary
-	AutoTargetPriority@defuse:
-		ValidTargets: C4Attached
-		InvalidTargets: NoAutoTarget
-		ValidStances: Ally
-	Armament@Acol:
-		Weapon: LaserTur
-		LocalOffset: 385,0,300
-		RequiresCondition: acolturr
-	Armament@snipe:
-		Weapon: sniperE
-		LocalOffset: 250,0,150
-		RequiresCondition: snipeturr
-	Armament@Railgun:
-		Weapon: Railgun.Infantry
-		LocalOffset: 560,0,200
-		RequiresCondition: railgunturr
-	Armament@Cryo:
-		Weapon: CryoGun
-		LocalOffset: 560,0,200
-		RequiresCondition: cryoturr
-	Armament@Relay:
-		Weapon: relayMarker
-		LocalOffset: 250,0,150
-		RequiresCondition: relayturr
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: spyturr
-		Offset: 0,0,200
-	WithIdleOverlay@TESLA:
-		Sequence: tesla
-		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: testurr
-	WithSpriteTurret@samturr:
-		RequiresCondition: !full
-		Sequence: turret
-	WithSpriteTurret@samturr2:
-		RequiresCondition: samturr
-		Sequence: turret2
-	WithSpriteTurret@gun:
-		RequiresCondition: gunturr || tecnturr || snipeturr || relayturr
-		Sequence: turret3
-	WithSpriteTurret@frg:
-		Sequence: turret4
-		RequiresCondition: fragturr
-	WithSpriteTurret@fla:
-		Sequence: turret5
-		RequiresCondition: flamturr
-	WithSpriteTurret@che:
-		Sequence: turret6
-		RequiresCondition: chemturr
-	WithSpriteTurret@las:
-		Sequence: turret7
-		RequiresCondition: acolturr
-	WithSpriteTurret@des:
-		Sequence: turret8
-		RequiresCondition: desoturr
-	WithSpriteTurret@com:
-		Sequence: turret9
-		RequiresCondition: commturr || railgunturr || cryoturr
-	WithSpriteTurret@rep:
-		Sequence: turret10
-		RequiresCondition: engturr
-	Cargo@turret:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
-		LoadingCondition: notmobile
-		LoadedCondition: full
-		PassengerConditions:
-			e1: gunturr
-			e2: fragturr
-			e3: samturr
-			e4: flamturr
-			n1: gunturr
-			n1c: gunturr
-			n2: fragturr
-			n3: samturr
-			n3c: samturr
-			n4: flamturr
-			n5: chemturr
-			e8: desoturr
-			e6: engturr
-			n6: engturr
-			mech: engturr
-			mort: chemturr
-			shok: testurr
-			shok.nod: testurr
-			rmbo: commturr
-			bori: commturr
-			e7: commturr
-			sab: commturr
-			snip: snipeturr
-			spy: spyturr
-			thf: spyturr
-			medi: medturr
-			acol: acolturr
-			rmbc: acolturr
-			rmbc.range: acolturr
-			tecn: tecnturr
-			tecn2: tecnturr
-			tecn3: tecnturr
-			leader: spyturr
-			railgunner: railgunturr
-			railgunner.nocrush: railgunturr
-			cryot: cryoturr
-			specops: relayturr
-
-^light_tank_turrets:
-	Turreted:
 		TurnSpeed: 12
+		Offset: 20,0,0
 	Armament@batfturret:                         ## BATF Turret
-		Weapon: BATFRockets
+		Weapon: BATFGun
 		LocalOffset: -200,0,300
 		MuzzleSequence: muzzle
 		RequiresCondition: batfturret
@@ -207,19 +67,351 @@
 		Sequence: slingturret
 		Palette: overlayplayertd
 		IsPlayerPalette: true
-	Cargo@turret:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
+	RevealsShroud@reconturret:                         ## Recon Turret
+		Range: 14c0
+		MinRange: 8c0
+		RequiresCondition: reconturret
+	DetectCloaked@reconturret:
+		Range: 10c0
+		CloakTypes: Cloak, Thief
+		RequiresCondition: reconturret
+	WithIdleOverlay@reconturret:
+		Sequence: reconturret
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: reconturret
+		Offset: 0,0,200
+	WithIdleOverlay@medicturret:                         ## Medic Turret
+		Sequence: medicturret
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: medicturret
+		Offset: 0,0,40
+	ProximityExternalCondition@medicturret:
+		RequiresCondition: medicturret
+		EnableSound: heal2.aud
+		Condition: hospitalheal
+		Range: 3c0
+	Armament@minitesla:                         ## Mini Tesla Turret
+		Weapon: TTankZap
+		LocalOffset: 0,0,213
+		RequiresCondition: minitesla
+	WithIdleOverlay@minitesla:
+		Sequence: minitesla
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: minitesla
+	Armament@samturret:                         ## Sam Turret
+		Weapon: IFVRocketsE
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturret
+	Armament@samturretAA:
+		Name: secondary
+		Weapon: IFVRocketsAAE
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturret
+	WithSpriteTurret@samturret:
+		RequiresCondition: samturret
+		Sequence: samturret
+	Armament@samturret2:                         ## Sam Turret 2
+		Weapon: IFVRockets
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturret2
+	Armament@samturret2AA:
+		Name: secondary
+		Weapon: IFVRocketsAA
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturret2
+	WithSpriteTurret@samturret2:
+		RequiresCondition: samturret2
+		Sequence: samturret2
+	Armament@gunturret:                         ## Machine Gun Turret
+		Weapon: M60mg
+		MuzzleSequence: muzzle
+		LocalOffset: 250,0,150
+		RequiresCondition: gunturret
+	WithSpriteTurret@gunturret:
+		RequiresCondition: gunturret
+		Sequence: gunturret
+	Armament@fragturret:                         ## Frag Turret
+		Weapon: 25mmFRAG
+		MuzzleSequence: muzzle
+		LocalOffset: 450,0,200
+		RequiresCondition: fragturret
+	WithSpriteTurret@fragturret:
+		Sequence: fragturret
+		RequiresCondition: fragturret
+	Armament@flameturret:                         ## Flame Turret
+		Weapon: FireballLauncher
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 350,0,150
+		MuzzleSequence: muzzle-gunfire2
+		RequiresCondition: flameturret
+	WithSpriteTurret@flameturret:
+		Sequence: flameturret
+		RequiresCondition: flameturret
+	Armament@chemturret:                         ## Chemical Turret
+		Weapon: ChemballLauncher
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 350,0,150
+		MuzzleSequence: muzzle-gunfire2
+		RequiresCondition: chemturret
+	WithSpriteTurret@chemturret:
+		Sequence: chemturret
+		RequiresCondition: chemturret
+	Armament@laserturret:                         ## Laser Turret
+		Weapon: LaserTur
+		LocalOffset: 385,0,300
+		RequiresCondition: laserturret
+	WithSpriteTurret@laserturret:
+		Sequence: laserturret
+		RequiresCondition: laserturret
+	Armament@desolatorturret:                         ## Desolator Turret
+		Weapon: RadBeamWeapon
+		LocalOffset: 400,0,213
+		RequiresCondition: desolatorturret
+	WithSpriteTurret@desolatorturret:
+		Sequence: desolatorturret
+		RequiresCondition: desolatorturret
+	Armament@commandoturret:                         ## Commando Turret
+		Weapon: smg
+		MuzzleSequence: muzzle
+		LocalOffset: 560,0,200
+		RequiresCondition: commandoturret
+	WithSpriteTurret@commandoturret:
+		Sequence: commandoturret
+		RequiresCondition: commandoturret
+	Armament@repairturret:                         ## Repair Turret
+		Weapon: RepairIFV
+		LocalOffset: 0,0,213
+		Cursor: repair
+		OutsideRangeCursor: repair
+		TargetStances: Ally
+		ForceTargetStances: None
+		MuzzleSequence: emp-overlay
+		MuzzlePalette: tseffect-ignore-lighting-alpha75
+		RequiresCondition: repairturret
+	Armament@defuse:
+		Weapon: IFVDefuseKit
+		Cursor: goldwrench
+		OutsideRangeCursor: goldwrench
+		TargetStances: Ally
+		ForceTargetStances: None
+		Name: secondary
+		RequiresCondition: repairturret
+	AutoTargetPriority@defuse:
+		ValidTargets: C4Attached
+		InvalidTargets: NoAutoTarget
+		ValidStances: Ally
+		RequiresCondition: repairturret
+	WithSpriteTurret@repairturret:
+		Sequence: repairturret
+		RequiresCondition: repairturret
+	Armament@shipturret:                         ## Ship Turret
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: shipturret
+	WithSpriteTurret@shipturret:
+		RequiresCondition: shipturret
+		Sequence: shipturret
+	Armament@shipturret2:                         ## Ship Turret 2
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: shipturret2
+	WithSpriteTurret@shipturret2:
+		RequiresCondition: shipturret2
+		Sequence: shipturret2
+	Armament@shipturret3:                         ## Ship Turret 3
+		Weapon: 8inch
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: shipturret3
+	WithSpriteTurret@shipturret3:
+		RequiresCondition: shipturret3
+		Sequence: shipturret3
+	Armament@jeepturret:                         ## Jeep Turret
+		Weapon: M60mg
+		MuzzleSequence: muzzle
+		LocalOffset: 128,0,43
+		RequiresCondition: jeepturret
+	WithSpriteTurret@jeepturret:
+		RequiresCondition: jeepturret
+		Sequence: jeepturret
+	Armament@humveeturret:                         ## Humvee Turret
+		Weapon: M60mgTD
+		LocalOffset: 171,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: humveeturret
+	WithSpriteTurret@humveeturret:
+		RequiresCondition: humveeturret
+		Sequence: humveeturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@vulcanturret0:                         ## Vulcan Turret
+		Weapon: MGatt.0
+		LocalOffset: 220,0,350
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling == 0 && vulcanturret
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@vulcanturret1:
+		Weapon: MGatt.1
+		LocalOffset: 220,0,350
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling == 1 && vulcanturret
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@vulcanturret2:
+		Weapon: MGatt.2
+		LocalOffset: 220,0,350
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling == 2 && vulcanturret
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@vulcanturret3:
+		Weapon: MGatt.3
+		LocalOffset: 220,0,350
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling == 3 && vulcanturret
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@vulcanturret0G:
+		Name: secondary
+		Weapon: MGatt.0G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 0 && vulcanturret
+		PauseOnCondition: engage-air
+		ReloadingCondition: engage-ground
+	Armament@vulcanturret1G:
+		Name: secondary
+		Weapon: MGatt.1G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 1 && vulcanturret
+		PauseOnCondition: engage-air
+		ReloadingCondition: engage-ground
+	Armament@vulcanturret2G:
+		Name: secondary
+		Weapon: MGatt.2G
+		LocalOffset: 321,0,85
+		MuzzleSequence: muzzle
+		RequiresCondition: gattling-ground == 2 && vulcanturret
+		ReloadingCondition: engage-ground
+		PauseOnCondition: engage-air
+	GrantConditionOnAttack:
+		Condition: gattling
+		RequiredShotsPerInstance: 1,6,12
+		MaximumInstances: 3
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
+		RequiresCondition: vulcanturret
+	GrantConditionOnAttack@GROUND:
+		ArmamentNames: secondary
+		Condition: gattling-ground
+		RequiredShotsPerInstance: 1,6
+		MaximumInstances: 2
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
+		RequiresCondition: vulcanturret
+	WithSpriteTurret@vulcanturret:
+		RequiresCondition: vulcanturret
+		Sequence: vulcanturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@buggyturret:                         ## Buggy Turret
+		Weapon: M60mgTD
+		Turret: primary
+		LocalOffset: 171,0,43
+		MuzzleSequence: muzzle
+		RequiresCondition: buggyturret
+	WithSpriteTurret@buggyturret:
+		RequiresCondition: buggyturret
+		Sequence: buggyturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Cargo:
+		Types: light_turret, ammo
+		MaxWeight: 8
+		PipCount: 8
 		LoadingCondition: notmobile
 		LoadedCondition: full
 		PassengerConditions:
-			e1: batfturret
-			n1: slingturret
+			batf_turret: batfturret
+			sling_turret: slingturret
+			recon_turret: reconturret
+			medic_turret: medicturret
+			mini_tesla: minitesla
+			sam_turret: samturret
+			sam_turret2: samturret2
+			gun_turret: gunturret
+			frag_turret: fragturret
+			flame_turret: flameturret
+			chem_turret: chemturret
+			laser_turret: laserturret
+			desolator_turret: desolatorturret
+			commando_turret: commandoturret
+			repair_turret: repairturret
+			ship_turret: shipturret
+			ship_turret2: shipturret2
+			ship_turret3: shipturret3
+			jeep_turret: jeepturret
+			humvee_turret: humveeturret
+			vulcan_turret: vulcanturret
+			buggy_turret: buggyturret
 
 ^medium_turrets:
 	Turreted:
 		TurnSpeed: 8
+	Armament@btrturret:                             ## BTR Turret
+		Weapon: IFVRockets
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: btrturret
+	WithSpriteTurret@btrturret:
+		RequiresCondition: btrturret
+		Sequence: btrturret
+	Armament@shermanturret:                             ## Sherman Turret
+		Weapon: Laser.Tank
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 520,0,90
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped || parachute
+		RequiresCondition: shermanturret
+	WithSpriteTurret@shermanturret:
+		RequiresCondition: shermanturret
+		Sequence: shermanturret
+	Armament@ltnkturret:                             ## Light Tank Turret
+		Weapon: 30mm
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,0,90
+		MuzzleSequence: muzzle
+		RequiresCondition: ltnkturret
+	WithSpriteTurret@ltnkturret:
+		RequiresCondition: ltnkturret
+		Sequence: ltnkturret
+		Palette: overlayplayertd
+		IsPlayerPalette: true
+	Armament@1tnkturret:                             ## 1Tank Turret
+		Weapon: 25mm
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 768,0,90
+		MuzzleSequence: muzzle
+		RequiresCondition: onetnkturret
+	WithSpriteTurret@1tnkturret:
+		Sequence: 1tnkturret
+		RequiresCondition: onetnkturret
 	Armament@PRIMARY:                             ## Stealth Tank Turret
 		Weapon: StnkMissile
 		LocalOffset: 213,43,128, 213,-43,128
@@ -247,42 +439,121 @@
 		Sequence: droneturret
 		Palette: overlayplayertd
 		IsPlayerPalette: true
-	Cargo@turret:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
+	Cargo:
+		Types: medium_turret, ammo
+		MaxWeight: 8
+		PipCount: 8
 		LoadingCondition: notmobile
 		LoadedCondition: full
 		PassengerConditions:
-			n4: stnkturret
-			spy: droneturret
+			stnk_turret: stnkturret
+			drone_turret: droneturret
+			ltnk_turret: ltnkturret
+			1tnk_turret: onetnkturret
+			sherman_turret: shermanturret
+			btr_turret: btrturret
 
 ^heavy_turrets:
 	Turreted:
 		TurnSpeed: 4
-	Armament@doubleturret1:                      ## Double Barrels (Soviet Mammoth)
+	Armament@flakturret:                         ## Flak Turret
+		Weapon: FLAK-23-AA
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+		RequiresCondition: flakturret
+	Armament@AG:
+		Weapon: FLAK-23-AG
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+		RequiresCondition: flakturret
+	WithSpriteTurret@flakturret:
+		RequiresCondition: flakturret
+		Sequence: flakturret
+	Armament@doubleturret:                          ## Double Turret
+		Weapon: 125mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 768,85,90, 768,-85,90
+		MuzzleSequence: muzzle
+		RequiresCondition: doubleturret && !shell.ap
+	Armament@heavyturret.ap:           #test
+		Weapon: 130mm.Nuke
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 768,85,90, 768,-85,90
+		MuzzleSequence: muzzle
+		RequiresCondition: doubleturret && shell.ap
+	WithSpriteTurret@doubleturret:
+		RequiresCondition: doubleturret
+		Sequence: doubleturret
+	Armament@atomicdoubleturret:                      ## Atomic Double Barrels
+		Weapon: 125mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 768,85,90, 768,-85,90
+		MuzzleSequence: muzzle
+		RequiresCondition: atomicdoubleturret && !shell.ap
+	WithSpriteTurret@atomicdoubleturret:
+		RequiresCondition: atomicdoubleturret
+		Sequence: atomicdoubleturret
+	Armament@atomicheavydoubleturret:                      ## Atomic Heavy Double Barrels
 		Weapon: 130mm
 		LocalOffset: 900,180,340, 900,-180,340
 		Recoil: 171
 		RecoilRecovery: 30
 		MuzzleSequence: muzzle
-		RequiresCondition: doubleturret || htnkturret
-	Armament@doubleturret2:
+		RequiresCondition: atomicheavydoubleturret
+	Armament@atomicheavydoubleturret2:
 		Name: secondary
 		Weapon: MammothTusk
 		LocalOffset: -85,384,340, -85,-384,340
 		LocalYaw: -100,100
 		Recoil: 43
 		MuzzleSequence: muzzle
-		RequiresCondition: doubleturret || htnkturret
-	WithSpriteTurret@doubleturret:
-		RequiresCondition: doubleturret
-		Sequence: doubleturret
-	WithSpriteTurret@htnkturret:                 ## Double Barrels (GDI Mammoth)
+		RequiresCondition: atomicheavydoubleturret
+	WithSpriteTurret@atomicheavydoubleturret:
+		RequiresCondition: atomicheavydoubleturret
+		Sequence: atomicheavydoubleturret
+	Armament@heavydoubleturret:                      ## Heavy Double Barrels (Soviet Mammoth)
+		Weapon: 130mm
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: heavydoubleturret
+	Armament@doubleturret:
+		Name: secondary
+		Weapon: MammothTusk
+		LocalOffset: -85,384,340, -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+		RequiresCondition: heavydoubleturret
+	WithSpriteTurret@heavydoubleturret:
+		RequiresCondition: heavydoubleturret
+		Sequence: heavydoubleturret
+	Armament@heavydoubleturret2:                      ## Heavy Double Barrels (GDI Mammoth)
+		Weapon: 130mm
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: heavydoubleturret2
+	Armament@heavydoubleturret2.2:
+		Name: secondary
+		Weapon: MammothTusk
+		LocalOffset: -85,384,340, -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+		RequiresCondition: heavydoubleturret2
+	WithSpriteTurret@heavydoubleturret2:
 		Palette: overlayplayertd
 		IsPlayerPalette: true
-		RequiresCondition: htnkturret
-		Sequence: htnkturret
+		RequiresCondition: heavydoubleturret2
+		Sequence: heavydoubleturret2
 	Armament@teslaturret:                        ## Tesla Turret
 		Weapon: 4TankZap
 		LocalOffset: 900,0,340
@@ -476,21 +747,6 @@
 	WithSpriteTurret@chronoturretactive:
 		RequiresCondition: chronoturretactive
 		Sequence: chronoturretactive
-	Armament@flakturret:                         ## Flak Turret
-		Weapon: FLAK-23-AA
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
-		RequiresCondition: flakturret
-	Armament@AG:
-		Weapon: FLAK-23-AG
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
-		RequiresCondition: flakturret
-	WithSpriteTurret@flakturret:
-		RequiresCondition: flakturret
-		Sequence: flakturret
 	Armament@mediumturret:                         ## Medium Turret
 		Weapon: 90mm
 		Recoil: 128
@@ -539,16 +795,6 @@
 		Sequence: mbtpldturret
 		Palette: overlayplayertd
 		IsPlayerPalette: true
-	Armament@heavyturret:                          ## Heavy Turret
-		Weapon: 125mm
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 768,85,90, 768,-85,90
-		MuzzleSequence: muzzle
-		RequiresCondition: heavyturret
-	WithSpriteTurret@heavyturret:
-		RequiresCondition: heavyturret
-		Sequence: heavyturret
 	Armament@akatsiyaturret:                         ## Akatsiya Turret
 		Weapon: 152mm.Akatsiya
 		LocalOffset: 1050,0,440
@@ -560,89 +806,571 @@
 	WithSpriteTurret@akatsiyaturret:
 		RequiresCondition: akatsiyaturret
 		Sequence: akatsiyaturret
-	Armament@shipturret:                         ## Ship Turret
-		Weapon: 90mm
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 720,0,80
-		MuzzleSequence: muzzle
-		RequiresCondition: shipturret
-	WithSpriteTurret@shipturret:
-		RequiresCondition: shipturret
-		Sequence: shipturret
 	Cargo:
-		Types: HeavyTurret
-		MaxWeight: 7
-		PipCount: 7
+		Types: heavy_turret, ammo
+		MaxWeight: 8
+		PipCount: 8
 		LoadingCondition: notmobile
 		LoadedCondition: full
 		PassengerConditions:
+			flak_turret: flakturret
 			double_turret: doubleturret
-			n1: htnkturret
-			e2: teslaturret
-			n2: ionturret
-			e3: tesladome
-			n3: ssmturret
-			e4: mlrsturret
-			n4: artyturret
-			e6: titanturret
-			n6: juggerturret
-			n1c: sonicturret
-			n3c: hoverturret
-			e8: tankdturret
-			e7: mirageturret
-			acol: prismturret
-			rmbc: microwaveturret
-			rmbc.range: flakturret
-			railgunner: chronoturret
-			railgunner.nocrush: chronoturretactive
-			cryot: mediumturret
-			leader: mbtturret
-			dog: mbtpldturret
-			spy: mbtnodturret
-			jarmen_kell: heavyturret
-			medi: akatsiyaturret
-			mech: shipturret
-			thf: shipturret
-			shok: shipturret
-			sab: cloak
+			atomic_double_turret: atomicdoubleturret
+			atomic_heavy_double_turret: atomicheavydoubleturret
+			heavy_double_turret: heavydoubleturret
+			heavy_double_turret2: heavydoubleturret2
+			tesla_turret: teslaturret
+			ion_turret: ionturret
+			tesla_dome: tesladome
+			ssm_turret: ssmturret
+			mlrs_turret: mlrsturret
+			arty_turret: artyturret
+			titan_turret: titanturret
+			jugger_turret: juggerturret
+			sonic_turret: sonicturret
+			hover_turret: hoverturret
+			tankd_turret: tankdturret
+			mirage_turret: mirageturret
+			prism_turret: prismturret
+			microwave_turret: microwaveturret
+			chrono_turret: chronoturret
+			chronoturretactive: chronoturretactive
+			medium_turret: mediumturret
+			mbt_turret: mbtturret
+			mbtpld_turret: mbtpldturret
+			mbtnod_turret: mbtnodturret
+			akatsiya_turret: akatsiyaturret
+	Inherits: ^ammo
 
-double_turret:
-	Inherits: ^Tank
+^ammo:
+	Cargo:
+		PassengerConditions:
+			shell.ap: shell.ap
+
+batf_turret:
+	Inherits: ^light_turret_prototype
 	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Mini Cannon
+	Tooltip:
+		Name: BATF Turret
+
+sling_turret:
+	Inherits: ^light_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Anti-Air Barrels
+	Tooltip:
+		Name: Slingshot Turret
+
+recon_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Recon
+	Tooltip:
+		Name: Recon Turret
+
+medic_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Medic Kit
+	Tooltip:
+		Name: Medic Turret
+
+mini_tesla:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Tesla
+	Tooltip:
+		Name: Mini Tesla Turret
+
+sam_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Sam
+	Tooltip:
+		Name: Sam Turret
+
+sam_turret2:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Sam
+	Tooltip:
+		Name: Sam Turret 2
+
+gun_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Gun
+	Tooltip:
+		Name: Gun Turret
+
+frag_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Grenade Machine Gun
+	Tooltip:
+		Name: Frag Turret
+
+flame_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Flame Sprayer
+	Tooltip:
+		Name: Flame Turret
+
+chem_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Chemical Sprayer
+	Tooltip:
+		Name: Chem Turret
+
+laser_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Laser gun
+	Tooltip:
+		Name: Laser Turret
+
+desolator_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Radiation Emitter
+	Tooltip:
+		Name: Desolator Turret
+
+commando_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Commando
+	Tooltip:
+		Name: Commando Turret
+
+repair_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Repair Tools
+	Tooltip:
+		Name: Repair Turret
+
+ship_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with small rocket pod.
+	Tooltip:
+		Name: Mini Rocket Launcher
+
+ship_turret2:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with small cannon
+	Tooltip:
+		Name: Railgun
+
+ship_turret3:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with small Dual Cannon
+	Tooltip:
+		Name: Small Double Barrel Turret
+
+jeep_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with machine gun
+	Tooltip:
+		Name: Jeep Turret
+
+humvee_turret:
+	Inherits: ^light_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with machine gun
+	Tooltip:
+		Name: Humvee Turret
+
+vulcan_turret:
+	Inherits: ^light_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with gattling
+	Tooltip:
+		Name: Vulcan Turret
+
+buggy_turret:
+	Inherits: ^light_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with machine gun
+	Tooltip:
+		Name: Buggy Turret
+
+## medium turret units
+
+ltnk_turret:
+	Inherits: ^medium_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with light turret
+	Tooltip:
+		Name: Light Turret
+
+1tnk_turret:
+	Inherits: ^medium_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with 1 turret
+	Tooltip:
+		Name: 1 Turret
+
+sherman_turret:
+	Inherits: ^medium_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Sherman turret
+	Tooltip:
+		Name: Sherman Turret
+
+btr_turret:
+	Inherits: ^medium_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with BTR turret
+	Tooltip:
+		Name: BTR Turret
+
+drone_turret:
+	Inherits: ^medium_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with compact turret
+	Tooltip:
+		Name: Drone Turret
+
+stnk_turret:
+	Inherits: ^medium_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with stealth
+	Tooltip:
+		Name: Stealth Tank Turret
+
+## heavy turret units
+
+flak_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Flak
+	Tooltip:
+		Name: Flak Turret
+
+heavy_double_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
 		BuildPaletteOrder: 0
 		Prerequisites: ~infantry.ra, ~techlevel.infonly
 		Description: Turret with 2 Barrels
-	Valued:
-		Cost: 100
+	Tooltip:
+		Name: Heavy Double Barrel Turret
+
+heavy_double_turret2:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with 2 Barrels
+	Tooltip:
+		Name: Heavy Double Barrel Turret
+
+tesla_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Dual Coils
+	Tooltip:
+		Name: Dual Coil Turret
+
+ion_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Ion Cannon
+	Tooltip:
+		Name: Ion Turret
+
+tesla_dome:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Energy Dome
+	Tooltip:
+		Name: Energy Dome
+
+ssm_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with 2 Missiles
+	Tooltip:
+		Name: SSM Turret
+
+mlrs_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Multi Missile Launcher
+	Tooltip:
+		Name: MLRS Turret
+
+arty_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with big Artillery Barrel
+	Tooltip:
+		Name: Artillery Turret
+
+titan_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Massive Turret with big Barrel
+	Tooltip:
+		Name: Titan Turret
+
+jugger_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: When 2 Barrels just don't cut it
+	Tooltip:
+		Name: Heavy Triple Artillery Turret
+
+sonic_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Sonic Turret capable of firing energized beams.
+	Tooltip:
+		Name: Sonic Turret
+
+hover_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Missile Station Turret capable of firing multiple Missiles
+	Tooltip:
+		Name: Missile Station Turret
+
+tankd_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Flat Turret capable of firing shells.
+	Tooltip:
+		Name: Flat Turret
+
+mirage_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret capable of firing shells and with enhanced Sensors
+	Tooltip:
+		Name: Mirage Turret
+
+prism_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Energy Reflectors
+	Tooltip:
+		Name: Prism Turret
+
+microwave_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Compact Turret with Energy Barrel
+	Tooltip:
+		Name: Microwave Turret
+
+chrono_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Energy Blaster, charging up for energized shots.
+	Tooltip:
+		Name: Chrono Turret
+
+medium_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret capable firing shells.
+	Tooltip:
+		Name: Medium Turret
+
+mbt_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret capable firing big shells and enhanced sensor systems.
+	Tooltip:
+		Name: Main Battle Turret
+
+mbtpld_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret capable firing big shells and enhanced sensor systems.
+	Tooltip:
+		Name: Main Battle Turret with Sensors
+
+mbtnod_turret:
+	Inherits: ^heavy_turret_prototype
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret capable firing big shells
+	Tooltip:
+		Name: Main Battle Turret
+
+akatsiya_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with large artillery barrel
+	Tooltip:
+		Name: Heavy Artillery Turret
+
+double_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with 2 Barrels
 	Tooltip:
 		Name: Double Barrel Turret
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 5000
-	RevealsShroud:
-		Range: 2c0
-	Mobile:
-		TurnSpeed: 8
-		Speed: 56
-	Passenger:
-		CargoType: HeavyTurret
-		Weight: 3
-		CargoCondition: heavyturret
-	ProximityExternalCondition@Bino:
-		Condition: bino
-		Range: 1c0
-		EnableSound: dsaping1.aud
-		AffectsParent: False
-	ScriptTags:
-	Cargo:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
-		LoadingCondition: notmobile
-		LoadedCondition: full
-		PassengerConditions:
-			shell.ap: doubleturret
+
+atomic_double_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with 2 Barrels
+	Tooltip:
+		Name: Atomic Double Barrel Turret
+
+atomic_heavy_double_turret:
+	Inherits: ^heavy_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with 2 Barrels
+	Tooltip:
+		Name: Atomic Heavy Double Barrel Turret

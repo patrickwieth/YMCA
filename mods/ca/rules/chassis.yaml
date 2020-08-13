@@ -1,8 +1,9 @@
 chassis.armored_fighting_vehicle:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	Inherits@turrets: ^light_turrets
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 0
@@ -29,61 +30,147 @@ chassis.armored_fighting_vehicle:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 		RequiresCondition: !spyturr
-	RevealsShroud@SPY:
-		Range: 14c0
-		MinRange: 8c0
-		RequiresCondition: spyturr
-	RevealsShroud@SPYGAPGEN:
-		Range: 8c0
-		RequiresCondition: spyturr
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !spyturr
 	WithMuzzleOverlay:
-	Cargo:
-		Types: Vehicle
-		MaxWeight: 1
-		PipCount: 1
-		LoadingCondition: notmobile
-		LoadedCondition: full
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	WithIdleOverlay@MEDIC:
-		Sequence: medic
-		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: medturr
-		Offset: 0,0,40
-	ProximityExternalCondition@MEDIC:
-		RequiresCondition: medturr
-		EnableSound: heal2.aud
-		Condition: hospitalheal
-		Range: 3c0
-	AutoTarget:
-		AttackAnythingCondition: stance-attackanything
-		ScanRadius: 6
-	AutoTargetPriority@DEFAULTAA:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
-		RequiresCondition: (!stance-attackanything && !assault-move) && (!full || samturr)
-	AutoTargetPriority@ATTACKANYTHINGAA:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		RequiresCondition: (stance-attackanything || assault-move) && (!full || samturr)
-	AutoTargetPriority@DEFAULTG:
-		RequiresCondition: !stance-attackanything && !assault-move && full && !samturr
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense
-	AutoTargetPriority@ATTACKANYTHINGG:
-		RequiresCondition: (stance-attackanything || assault-move) && full && !samturr
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
-	AttackMove:
-		AssaultMoveCondition: assault-move
-	AutoTargetPriority@DEFAULTREPAIR:
-		ValidTargets: Vehicle, Ship
-		RequiresCondition: engturr
 	Capturable:
 		RequiresCondition: !being-warped && !full
 	Capturable@DRIVER_DEAD:
 		RequiresCondition: driver-dead && !full
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !full
+
+chassis.jeep:
+	Inherits: ^VehicleTD
+	Inherits@turrets: ^light_turrets
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		Prerequisites: weap, ~vehicles.allies, ~techlevel.low
+		Description: Fast scout & anti-infantry vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 400
+	Tooltip:
+		Name: Ranger
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 15000
+	Armor:
+		Type: Light
+	Mobile:
+		TurnSpeed: 20
+		Speed: 157
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 14c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		Offset: -85,0,128
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+
+chassis.buggy:
+	Inherits: ^VehicleTD
+	Inherits@turrets: ^light_turrets
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	RenderSprites:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: ~vehicles.nod, ~!commander_tree.buggy_pld, ~!commander_tree.buggy_aa, ~techlevel.low
+		Description: Fast scout & anti-infantry vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 350
+	Tooltip:
+		Name: Buggy
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 14000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 157
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 14c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted@PRIMARY:
+		Offset: -43,0,128
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+
+chassis.light_tank:
+	Inherits: ^Tank
+	Inherits@turrets: ^medium_turrets
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	RenderSprites:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		Prerequisites: ~vehicles.nod, ~techlevel.low
+		Description: Fast, light tank chassis.\n  Can mount light turrets.\n
+	Valued:
+		Cost: 625
+	Tooltip:
+		Name: Light Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 41250
+	Armor:
+		Type: Heavy
+	Mobile:
+		Locomotor: Amphibious
+		Speed: 100
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4
+		RequiresCondition: !onwater && !parachute && !being-warped
+	Targetable@WATER:
+		TargetTypes: Ground, Vehicle, Water, Ship
+		RequiresCondition: onwater && (!parachute && !being-warped)
+	WithFacingSpriteBody:
+		RequiresCondition: !onwater || parachute
+	WithFacingSpriteBody@WATER:
+		Sequence: idle-water
+		Name: body-water
+		RequiresCondition: onwater && !parachute
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: LTNK.Husk
+		RequiresCondition: !onwater && !being-warped
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
 
 chassis.walker:
 	Inherits: ^Tank
@@ -111,7 +198,7 @@ chassis.walker:
 		Type: Heavy
 	Mobile:
 		Locomotor: sheavytracked
-		Speed: 50
+		Speed: 45
 		Voice: Move
 	Passenger:
 		PipType: Red
@@ -186,13 +273,56 @@ chassis.mammoth:
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
-	Cloak@NORMAL:
-		InitialDelay: 90
-		CloakDelay: 90
-		CloakSound: trans1.aud
-		CloakedCondition: hidden
-		UncloakSound: appear1.aud
-		Palette: cloak
-		IsPlayerPalette: false
-		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
-		RequiresCondition: cloak && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+	ScriptTags:
+
+chassis.heavy_absorber:
+	Inherits: ^Tank
+	Inherits@turrets: ^heavy_turrets
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 225
+		IconPalette: chrometd
+		Prerequisites: atek, ~commander_tree.chrono_prison, ~!commander_tree.chrono_prison_range, ~!commander_tree.chrono_prison_aa, ~techlevel.high
+		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
+	Valued:
+		Cost: 1700
+	Tooltip:
+		Name: Heavy Absorber
+		GenericName: Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 75000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Speed: 52
+		Locomotor: heavytracked
+		Voice: Move
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		Offset: -156,0,0
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: CHPR.Husk
+		RequiresCondition: !being-warped
+	Selectable:
+		DecorationBounds: 44,38,0,-4
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	Voiced:
+		VoiceSet: ChronoVoice
+	SpawnActorOnDeath:
+		Actor: CHPR.Husk
+		RequiresCondition: !being-warped
