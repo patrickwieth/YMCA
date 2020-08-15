@@ -498,7 +498,7 @@ V2RL:
 		Queue: Vehicle
 		IconPalette: chrometd
 		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pld, ~techlevel.high
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_pld.reflector, ~techlevel.high
 		Description: Big and slow tank, with anti-air and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Mammoth Tank (PLD)
@@ -511,6 +511,20 @@ V2RL:
 	Health:
 		HP: 88000
 
+4TNK.PLD.Reflector:
+	Inherits: 4TNK.PLD
+	Inherits: ^ReflectorArmor
+	Buildable:
+		-IconPalette: chrometd
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pld.reflector, ~techlevel.high
+		Description: Big and slow tank, with anti-air.\nHas Point Laser Defense and Reflector Armor.\nCan crush concrete walls.\n  Strong vs Projectiles, Energy Weapons \n  Weak vs Chemicals, Flame, Bullet and many Projectiles
+	Tooltip:
+		Name: Mammoth Tank (PLD, Reflector)
+		RequiresCondition: !iraqtank
+	Tooltip@Iraq:
+		Name: Atomic Mammoth Tank (PLD, Reflector)
+		RequiresCondition: iraqtank
+
 4TNK.Speaker:
 	Inherits: 4TNK
 	RenderSprites:
@@ -519,7 +533,7 @@ V2RL:
 		Queue: Vehicle
 		IconPalette: chrometd
 		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pt, ~techlevel.high
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pt, ~!commander_tree.mammoth_tank_pt.reflector, ~techlevel.high
 		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
 	Tooltip:
 		Name: Propaganda Mammoth Tank
@@ -540,12 +554,15 @@ V2RL:
 	Inherits: 4TNK.Speaker
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette: chrometd
 		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pt.reflector, ~techlevel.high
 		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
 	Tooltip:
 		Name: Propaganda Mammoth Tank (Reflector)
 		RequiresCondition: !iraqtank
+	Tooltip@Iraq:
+		Name: Atomic Propaganda Mammoth Tank (Reflector)
+		RequiresCondition: iraqtank
 
 4TNK.Nuke:
 	Inherits: 4TNK
@@ -555,7 +572,7 @@ V2RL:
 		Queue: Vehicle
 		IconPalette: chrometd
 		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_ns, ~techlevel.high
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_ns, ~!commander_tree.mammoth_tank_ns.reflector, ~techlevel.high
 		Description: Big and slow tank, with anti-air and nuke shells.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry\n  Weak vs Point Laser Defense, Aircraft
 	Tooltip:
 		Name: Mammoth Tank (Nuke Shells)
@@ -579,9 +596,9 @@ V2RL:
 	Inherits: 4TNK.Nuke
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette: chrometd
 		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_ns.reflector, ~techlevel.high
-		Description: Big and slow tank, with anti-air and nuke shells.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Energy Weapons\n  Weak vs Point Laser Defense, Aircraft
+		Description: Big and slow tank, with anti-air and nuke shells.\nHas Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Energy Weapons\n  Weak vs Point Laser Defense, Aircraft
 	Tooltip:
 		Name: Nuke Mammoth Tank (Reflector)
 		RequiresCondition: !iraqtank
@@ -621,7 +638,7 @@ V2RL:
 	Inherits: 4TNK.Tesla
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette: chrometd
 		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_tt.reflector, ~techlevel.high
 		Description: Big and slow tank with Tesla weapon.\n Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles\n  Weak vs Aircraft
 	Tooltip:
@@ -2104,7 +2121,7 @@ MTNK.Reflector:
 	Inherits: MTNK
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette: chrometd
 		Prerequisites: ~vehicles.td, ~vehicles.mtnk, vehicles.any, ~commander_tree.medium_tank.reflector, ~techlevel.low
 		Description: Main battle tank with Reflector Armor.\n  Strong vs Energy Weapons\n  Weak vs Infantry, Aircraft
 	Tooltip:
@@ -2204,6 +2221,18 @@ MTNK.Drone.PLD:
 		Description: Drone battle tank with Point Laser Defense.\n  Requires power to operate.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1320
+	Tooltip:
+		Name: Battle Drone (PLD)
+
+MTNK.Drone.Reflector:
+	Inherits: MTNK.Drone
+	Inherits: ^ReflectorArmor
+	Buildable:
+		-IconPalette: chrometd
+		Prerequisites: ~vehicles.talon, weap.td, ~commander_tree.medium_tank.reflector, ~techlevel.low
+		Description: Drone battle tank with Reflector Armor.\n It is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
+	Tooltip:
+		Name: Battle Drone (Reflector)
 
 HTNK:
 	Inherits: ^TankTD
@@ -2280,7 +2309,7 @@ HTNK.Ion:
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_ion, ~techlevel.high
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_ion.reflector, ~techlevel.high
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Ion Mammoth Tank
@@ -2296,7 +2325,7 @@ HTNK.Ion.Reflector:
 	Inherits: HTNK.Ion
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette: chrometd
 		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_ion.reflector, ~techlevel.high
 		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
@@ -2308,7 +2337,7 @@ HTNK.PLD:
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi_pld, ~techlevel.high
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi_pld, ~!commander_tree.mammoth_tank_gdi_pld.reflector, ~techlevel.high
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Mammoth Tank (PLD)
@@ -2321,8 +2350,8 @@ HTNK.PLD.Reflector:
 	Inherits: HTNK.PLD
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_ion.reflector, ~techlevel.high
+		-IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi_pld.reflector, ~techlevel.high
 		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Projectiles, Energy Weapons \n  Weak vs Chemicals, Flame, Bullet and many Projectiles
 	Tooltip:
 		Name: Mammoth Tank (PLD, Reflector)
@@ -2332,7 +2361,7 @@ HTNK.Nanite:
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_nr, ~techlevel.high
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_nr, ~!commander_tree.mammoth_tank_nr.reflector, ~techlevel.high
 		Description: Big and slow tank with anti-air capability.\n  Is very tough and repairs itself with Nanite Repair System.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Point Laser Defense
 	Tooltip:
 		Name: Nanite Mammoth Tank
@@ -2370,8 +2399,8 @@ HTNK.Nanite.Reflector:
 	Inherits: HTNK.Nanite
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_ion.reflector, ~techlevel.high
+		-IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_nr.reflector, ~techlevel.high
 		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft, Energy Weapons \n  Weak vs Conventional Weapons
 	Tooltip:
 		Name: Nanite Mammoth Tank (Reflector)
@@ -2566,7 +2595,7 @@ STNK:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank_scrin, ~!commander_tree.stealth_tank_explosive_rockets, ~techlevel.high
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank.pld,, ~!commander_tree.stealth_tank_scrin, ~!commander_tree.stealth_tank_explosive_rockets, ~techlevel.high
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Medium-range missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry.
@@ -2729,7 +2758,7 @@ BIKE.PLD.Reflector:
 	Inherits: BIKE.PLD
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette:
 		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_pld.reflector, ~techlevel.low
 		Description: Fast scout vehicle, armed with rockets.\n  Has Reflector Armor and Point Laser Defense.\n  Strong vs Energy Weapons, Projectile Weapons, Weak vs. Chemicals, Flame, Bullet and many Projectiles
 	Valued:
@@ -2759,7 +2788,7 @@ BIKE.Scrin.Reflector:
 	Inherits: BIKE.Scrin
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette:
 		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin.reflector, ~techlevel.low
 		Description: Fast scout vehicle, armed with energy balls.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -2787,7 +2816,7 @@ BIKE.RocketHail.Reflector:
 	Inherits: BIKE.RocketHail
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette:
 		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail.reflector, ~techlevel.low
 		Description: Fast artillery vehicle, armed with\n many rockets.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -2869,7 +2898,7 @@ FTNK.Chem.Reflector:
 	Inherits: FTNK.Chem
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette:
 		Prerequisites: hq, ~vehicles.nod, ~commander_tree.chem_tank.reflector, ~techlevel.low
 		Description: Heavily armored chemical-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
@@ -2895,7 +2924,7 @@ FTNK.PLD.Reflector:
 	Inherits: FTNK.PLD
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette:
 		Prerequisites: hq, ~vehicles.nod, tmpl, ~commander_tree.flame_tank_pld.reflector, ~techlevel.low
 		Description: Heavily armored flame-throwing vehicle.\n  Has Reflector Armor and Point Laser Defense.\n  Strong vs Energy Weapons, Projectile Weapons, Weak vs. Chemicals, Flame, Bullet and many Projectiles
 	Tooltip:
@@ -2922,7 +2951,7 @@ FTNK.Fireball.Reflector:
 	Inherits: FTNK.Fireball
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette:
 		Prerequisites: hq, ~vehicles.nod, ~commander_tree.fireball_tank.reflector, ~techlevel.low
 		Description: Heavily armored fireball-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
@@ -3505,7 +3534,7 @@ TITN.PLD.Reflector:
 	Inherits: TITN.PLD
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette: chrometd
 		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan_pld.reflector, ~techlevel.high
 		Description: Tough combat battle-mech.\n  Has Point Laser Defense System and Reflector Armor.\n  Can attack Aircraft.\n  Strong vs Energy Weapons, Projectile Weapons, Weak vs. Chemicals, Flame, Bullet and many Projectiles
 	Tooltip:
@@ -3532,7 +3561,7 @@ TITN.Railgun.Reflector:
 	Inherits: TITN.Railgun
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		-IconPalette: chrometd
 		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan_railgun.reflector, ~techlevel.high
 		Description: Tough combat battle-mech with railgun.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Tanks, Energy Weapons, Weak vs Aircraft, Infantry
 	Tooltip:
@@ -3893,7 +3922,6 @@ RTNK.Reflector:
 	Inherits: RTNK
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
 		Prerequisites: weap, ~commander_tree.mirage.reflector, ~techlevel.low
 		Description: Advanced Battle tank that can cloak when stationary.\n Has Reflector Armor, very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Aircraft.
 	Tooltip:
