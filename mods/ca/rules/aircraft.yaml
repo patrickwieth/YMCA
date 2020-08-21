@@ -876,7 +876,7 @@ TRAN.Eagle:
 		TurnSpeed: 5
 		Speed: 135
 	Armor:
-		Type: Heavy
+		Type: Light
 	AttackGarrisoned:
 		Armaments: mounted
 		MuzzlePalette: tdeffect
@@ -1743,6 +1743,26 @@ APCH:
 	Rearmable:
 		RearmActors: hpad, hpad.td
 
+APCH.Flyby:
+	Inherits: APCH
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~techlevel.medium
+		IconPalette: chrometd
+		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move and with more ammo. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
+	Tooltip:
+		Name: Apache Flyby
+	-AttackAircraft:
+	Turreted:
+		TurnSpeed: 255
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	AmmoPool:
+		Ammo: 16
+		PipCount: 8
+
 ORCA:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -2290,15 +2310,15 @@ OCAR:
 		IdleTurnSpeed: 1
 		Voice: Move
 	Carryall:
-		BeforeLoadDelay: 0
-		BeforeUnloadDelay: 0
-		LocalOffset: 0, 0, -128
+		BeforeLoadDelay: 10
+		BeforeUnloadDelay: 15
+		LocalOffset: 0, 0, -256
 		Voice: Action
 		AllowDropOff: True
 	Health:
 		HP: 30000
 	Armor:
-		Type: Heavy
+		Type: Light
 	RevealsShroud:
 		Range: 10c0
 		MinRange: 8c0
@@ -2335,11 +2355,23 @@ OCAR.Eagle:
 		Name: Carryall (Auto)
 	-Carryall:
 	AutoCarryall:
-		BeforeLoadDelay: 0
-		BeforeUnloadDelay: 0
-		LocalOffset: 0, 0, -128
+		BeforeLoadDelay: 10
+		BeforeUnloadDelay: 15
+		LocalOffset: 0, 0, -256
 		Voice: Action
 		AllowDropOff: True
+	Aircraft:
+		CruiseAltitude: 2160
+		CruisingCondition: cruising
+		InitialFacing: 0
+		Speed: 144
+		TurnSpeed: 4
+		Repulsable: False
+		AirborneCondition: airborne
+		CanSlide: True
+		VTOL: true
+		IdleTurnSpeed: 1
+		MinAirborneAltitude: 400
 
 OCAR.Reinforce:
 	Inherits: OCAR
@@ -2445,6 +2477,21 @@ HARR:
 	Rearmable:
 		RearmActors: hpad, hpad.td
 
+HARR.avionics:
+	Inherits: HARR
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier,  ~techlevel.high
+		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n Avionics upgrade allows it to attack without flying over. \n Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Harrier (Avionics)
+	AttackAircraft:
+		AttackType: Hover
+
 Raptor:
 	Inherits: ^Plane
 	Inherits@AUTOTARGET: ^AutoTargetAir
@@ -2514,8 +2561,6 @@ SCRN:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	RenderSprites:
-		Image: scrin
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -2609,6 +2654,23 @@ SCRN:
 	ProductionCostMultiplier@markedBonus:
 		Multiplier: 90
 		Prerequisites: structures.marked
+
+SCRN.Bomber:
+	Inherits: SCRN
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		-IconPalette: chrometd
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee_bomber, ~techlevel.high
+		Description: Fast VTOL bomber craft armed\nwith powerful plasma bombs.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Banshee Bomber
+	Armament@PRIMARY:
+		Weapon: ScrinBomb
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
 
 HORN:
 	Inherits: ^PlaneTD
@@ -2856,8 +2918,8 @@ VENM:
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
 	AmmoPool:
-		Ammo: 12
-		PipCount: 6
+		Ammo: 10
+		PipCount: 5
 		ReloadDelay: 16
 		AmmoCondition: ammo
 	SpawnActorOnDeath:

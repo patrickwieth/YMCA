@@ -504,7 +504,7 @@
 		DamageCooldown: 0
 		RequiresCondition: nrepair
 	WithColoredOverlay@NREPAIR:
-		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility)
+		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && !nrepair ## currently disabled
 		Palette: nrepair
 	TimedConditionBar@NREPAIR:
 		Condition: nrepair
@@ -2660,6 +2660,15 @@
 	TimedConditionBar@unloaded:
 		Condition: unloaded
 		Color: FF0000
+
+^ReflectorArmor:
+	WithColoredOverlay@energized:
+		RequiresCondition: energized
+		Palette: nrepair
+	Armor:
+		Type: Reflector
+	ExternalCondition@energized:
+		Condition: energized
 
 ^RenderVoxel:
 	BodyOrientation:

@@ -93,14 +93,14 @@ commander_tree.expert_logistics:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 5
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.all, ~!aircraft.nod, commander_tree.advanced_logistics
+		Prerequisites: prerequisite.has_points, ~anypower, ~aircraft.all, ~!aircraft.nod, commander_tree.advanced_logistics
 		Description: Enables to build Dropships, which can paradrop units.
 
 hack.cameo_filler.2a:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 5
-		Prerequisites: prerequisite.has_points, ~!aircraft.all, ~!vehicles.nod, disabled
+		Prerequisites: prerequisite.has_points, ~anypower, ~!aircraft.all, ~!vehicles.nod, disabled
 
 commander_tree.advanced_infantry_training:
 	Inherits: ^default.commander_tree_item
@@ -118,15 +118,26 @@ hack.cameo_filler.3:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 7
-		Prerequisites: prerequisite.has_points, ~infantry.any, disabled
+		Prerequisites: prerequisite.has_points, ~!infantry.blackh, ~!infantry.legion, ~!infantry.soviet, ~!infantry.allies, ~infantry.any, disabled
 
 hack.cameo_filler.4:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 7
+		BuildPaletteOrder: 8
 		Prerequisites: prerequisite.has_points, ~infantry.any, disabled
 
 #ALLIES
+commander_tree.Spec_Ops:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Spec Ops
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 7
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~infantry.allies, commander_tree.advanced_infantry_training, atek
+		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
+
 commander_tree.Prism_Tank:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -188,14 +199,35 @@ commander_tree.Scout_Tank_PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 13
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, ~!commander_tree.scout_tank.reflector
 		Description: Upgrades the Scout Tank with a Point Laser Defense to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.scout_tank
+
+commander_tree.Scout_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Scout Tank Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 13
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.france, atek, ~!commander_tree.scout_tank_pld
+		Description: Equips the Scout Tank with a Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.scout_tank
 
 hack.cameo_filler.7:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 14
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, disabled, ~filler.scout_tank, ~!vehicles.france
+
+hack.cameo_filler.7a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 14
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, disabled, ~vehicles.france
 
 hack.cameo_filler.8:
 	Inherits: ^default.cameo_filler
@@ -222,14 +254,35 @@ commander_tree.Chrono_Tank_PLD:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 15
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, commander_tree.chrono_tank
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, commander_tree.chrono_tank, ~!commander_tree.chrono_tank.reflector
 		Description: Upgrades the Chrono Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.chrono_tank
+
+commander_tree.Chrono_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Tank Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 15
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.germany, atek, commander_tree.chrono_tank, ~!commander_tree.chrono_tank_pld
+		Description: Equips the Chrono Tank with a Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.chrono_tank
 
 hack.cameo_filler.9:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 16
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.germany, ~filler.chrono_tank, atek, disabled
+
+hack.cameo_filler.9a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 16
+		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, disabled
 
 commander_tree.Chrono_Prison:
 	Inherits: ^default.commander_tree_item
@@ -320,8 +373,6 @@ commander_tree.Battle_Fortress_PLD:
 		Description: Upgrades the Battle Fortress with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
-	ProvidesPrerequisite@filler2:
-		Prerequisite: filler.batf2
 
 commander_tree.Battle_Fortress_Arty:
 	Inherits: ^default.commander_tree_item
@@ -335,8 +386,6 @@ commander_tree.Battle_Fortress_Arty:
 		Description: Rearms the Battle Fortress as a Heavy Artillery.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
-	ProvidesPrerequisite@filler2:
-		Prerequisite: filler.batf2
 
 commander_tree.Battle_Fortress_Bunker:
 	Inherits: ^default.commander_tree_item
@@ -347,11 +396,9 @@ commander_tree.Battle_Fortress_Bunker:
 		BuildPaletteOrder: 26
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~!commander_tree.battle_fortress_arty, ~!commander_tree.battle_fortress_pld
-		Description: Rearms the Battle Fortress with a Bunker from which Infantry can shoot.
+		Description: Rearms the Battle Fortress with a Bunker from which Infantry can shoot. \nEquips the Battle Fortress with Reflector Armor, which is very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
-	ProvidesPrerequisite@filler2:
-		Prerequisite: filler.batf2
 
 hack.cameo_filler.14:
 	Inherits: ^default.cameo_filler
@@ -363,7 +410,7 @@ hack.cameo_filler.15:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 28
-		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, disabled, ~filler.batf2
+		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, disabled, ~filler.batf
 
 commander_tree.Mirage_PLD:
 	Inherits: ^default.commander_tree_item
@@ -393,11 +440,24 @@ commander_tree.Mirage_Fire_Rate:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.mirage
 
+commander_tree.Mirage.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mirage Tank Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 30
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.england, atek, ~!commander_tree.mirage_pld, ~!commander_tree.mirage_fire_rate
+		Description: Equips the Mirage Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mirage
+
 hack.cameo_filler.16:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 31
-		Prerequisites: prerequisite.has_points, ~vehicles.england, atek, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.england, atek, disabled, ~filler.mirage
 
 hack.cameo_filler.17:
 	Inherits: ^default.cameo_filler
@@ -414,7 +474,7 @@ commander_tree.Tank_Destroyer_PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 33
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, ~!commander_tree.tank_destroyer_burst
+		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, ~!commander_tree.tank_destroyer_burst, ~!commander_tree.tank_destroyer.reflector
 		Description: Upgrades the Tank Destroyer with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tnkd
@@ -428,8 +488,21 @@ commander_tree.Tank_Destroyer_Burst:
 		IconPalette: chrometd
 		BuildPaletteOrder: 34
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, ~!commander_tree.tank_destroyer_pld
+		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, ~!commander_tree.tank_destroyer_pld, ~!commander_tree.tank_destroyer.reflector
 		Description: Upgrades the Tank Destroyer with burst fire capabilities.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.tnkd
+
+commander_tree.Tank_Destroyer.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tank Destroyer Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 34
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, ~!commander_tree.tank_destroyer_pld, ~!commander_tree.tank_destroyer_burst
+		Description: Equips the Tank Destroyer with Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tnkd
 
@@ -437,7 +510,7 @@ hack.cameo_filler.18:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 35
-		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, disabled, ~filler.tnkd
 
 hack.cameo_filler.19:
 	Inherits: ^default.cameo_filler
@@ -467,7 +540,7 @@ commander_tree.Huey.Grenade:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 38
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.cryo
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, ~!commander_tree.huey.cryo
 		Description: Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.huey
@@ -478,11 +551,17 @@ hack.cameo_filler.20:
 		BuildPaletteOrder: 39
 		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, disabled
 
+hack.cameo_filler.20a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 39
+		Prerequisites: prerequisite.has_points, ~aircraft.england, atek, disabled
+
 hack.cameo_filler.21:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 40
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, disabled, ~filler.huey
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, atek, disabled, ~filler.huey
 
 commander_tree.Aurora:
 	Inherits: ^default.commander_tree_item
@@ -578,6 +657,17 @@ hack.cameo_filler.29:
 
 
 #Soviet
+commander_tree.Mortar:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mortar
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 6
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~infantry.soviet, commander_tree.advanced_infantry_training
+		Description: Enables to build the Mortar Infantry. \n  It fires mortar shells over a great distance, good vs light armored units and buildings.
+
 commander_tree.ISU:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -598,14 +688,8 @@ commander_tree.ISU_Concussion:
 		IconPalette: chrometd
 		BuildPaletteOrder: 101
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, stek, ~vehicles.ukraine, ~commander_tree.isu
+		Prerequisites: prerequisite.has_points, stek, ~vehicles.ukraine, commander_tree.isu
 		Description: Upgrades the ISU Bombard Tank to cause concussion on units at the impact zone.
-
-hack.cameo_filler.100:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 102
-		Prerequisites: prerequisite.has_points, ~vehicles.ukraine, ~!commander_tree.isu, disabled
 
 hack.cameo_filler.100a:
 	Inherits: ^default.cameo_filler
@@ -640,7 +724,7 @@ hack.cameo_filler.102:
 commander_tree.Flak_Track:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Flak_Track
+		Name: Flak Track
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 0
@@ -679,7 +763,7 @@ commander_tree.Heavy_Tank.AP:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 109
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.3tnk, stek, ~!vehicles.iraq, ~!commander_tree.heavy_tank.pld
+		Prerequisites: prerequisite.has_points, ~vehicles.3tnk, stek, ~!vehicles.iraq, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.reflector
 		Description: Upgrades the Heavy Tank with Armor Piercing Shells. \n  This makes it much stronger vs. Heavy Tanks.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.3tnk
@@ -692,16 +776,23 @@ commander_tree.Heavy_Tank.PLD:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 110
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.3tnk, stek, ~!commander_tree.heavy_tank.ap
+		Prerequisites: prerequisite.has_points, ~vehicles.3tnk, stek, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector
 		Description: Upgrades the Heavy Tank with a Point Laser Defense System. \n  This makes it more effective vs. projectile based weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.3tnk
 
-hack.cameo_filler.105:
-	Inherits: ^default.cameo_filler
+commander_tree.Heavy_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Heavy Tank Reflector Armor
 	Buildable:
-		BuildPaletteOrder: 111
-		Prerequisites: prerequisite.has_points, ~vehicles.3tnk, disabled
+		Queue: Commander_Tree
+		BuildPaletteOrder: 110
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.3tnk, stek, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.pld
+		Description: Equips the Heavy Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.3tnk
 
 hack.cameo_filler.106:
 	Inherits: ^default.cameo_filler
@@ -714,6 +805,12 @@ hack.cameo_filler.107:
 	Buildable:
 		BuildPaletteOrder: 113
 		Prerequisites: prerequisite.has_points, ~vehicles.3tnk, ~!vehicles.iraq, ~filler.3tnk, disabled
+
+hack.cameo_filler.107a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 113
+		Prerequisites: prerequisite.has_points, ~vehicles.3tnk, ~filler.3tnk, disabled
 
 commander_tree.V3_Launcher:
 	Inherits: ^default.commander_tree_item
@@ -793,7 +890,7 @@ hack.cameo_filler.111:
 commander_tree.Mammoth_Tank_PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mammoth Point Laser Defense Upgrade
+		Name: Mammoth Point Laser Defense
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -804,10 +901,24 @@ commander_tree.Mammoth_Tank_PLD:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietmammoth
 
+commander_tree.Mammoth_Tank_PLD.Reflector:
+	Inherits: ^default.commander_tree_item
+	Inherits: ^ReflectorArmor
+	Tooltip:
+		Name: Mammoth PLD Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 122
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, ~commander_tree.mammoth_tank_pld
+		Description: Equips the Mammoth (PLD) with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietmammoth
+
 commander_tree.Mammoth_Tank_TT:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mammoth Tesla Turret Upgrade
+		Name: Mammoth Tesla Turret
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -818,10 +929,24 @@ commander_tree.Mammoth_Tank_TT:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietmammoth
 
+commander_tree.Mammoth_Tank_TT.Reflector:
+	Inherits: ^default.commander_tree_item
+	Inherits: ^ReflectorArmor
+	Tooltip:
+		Name: Mammoth Tesla Turret Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 123
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, ~commander_tree.mammoth_tank_tt
+		Description: The Mammoth Tesla Tank is equipped with Reflector Armor. \n  Reflector Armor is very good vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietmammoth
+
 commander_tree.Mammoth_Tank_NS:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mammoth Nuclear Shells Upgrade
+		Name: Mammoth Nuclear Shells
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -832,10 +957,24 @@ commander_tree.Mammoth_Tank_NS:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietmammoth
 
+commander_tree.Mammoth_Tank_NS.Reflector:
+	Inherits: ^default.commander_tree_item
+	Inherits: ^ReflectorArmor
+	Tooltip:
+		Name: Mammoth (Nuke) Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 124
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, stek, ~commander_tree.mammoth_tank_ns
+		Description: Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietmammoth
+
 commander_tree.Mammoth_Tank_PT:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mammoth Propaganda Tower Upgrade
+		Name: Mammoth Propaganda Tower
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -843,6 +982,20 @@ commander_tree.Mammoth_Tank_PT:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, stek, commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_tt, ~!commander_tree.mammoth_tank_ns
 		Description: The Mammoth is upgraded with a Propaganda Speaker.\n  This gives infantry in its proximity a boost in combat.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietmammoth
+
+commander_tree.Mammoth_Tank_PT.Reflector:
+	Inherits: ^default.commander_tree_item
+	Inherits: ^ReflectorArmor
+	Tooltip:
+		Name: Propaganda Mammoth Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 125
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, stek, ~commander_tree.mammoth_tank_pt
+		Description: Equips the Propaganda Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietmammoth
 
@@ -960,7 +1113,7 @@ commander_tree.Sukhoi_Concussion:
 		IconPalette: chrometd
 		BuildPaletteOrder: 138
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.ukraine, stek, ~commander_tree.sukhoi
+		Prerequisites: prerequisite.has_points, ~aircraft.ukraine, stek, commander_tree.sukhoi
 		Description: Upgrades the bombs of Sukhois to cause concussion near the strike site.
 
 hack.cameo_filler.118:
@@ -1187,10 +1340,21 @@ commander_tree.Hover_MLRS:
 		BuildPaletteOrder: 211
 		IconPalette: chrometd
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.zocom, miss.gdi, ~!commander_tree.hailstorm_mlrs
-		Description: Enables to build the Hover MLRS. \n  The Hover MLRS improves the MLRS' agility and gives it stronger rockets.
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, miss.gdi, ~!commander_tree.hailstorm_mlrs
+		Description: Enables to build the Hover MLRS. \n  The Hover MLRS improves the MLRS' agility and gives it high explosive rockets.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.mlrs
+		Prerequisite: filler.hmlrs
+
+commander_tree.Hover_MLRS.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hover_MLRS
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 211
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, miss.gdi, commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs
+		Description: Equips the Hover MLRS with Reflector Armor. \n Very resistent vs. Energy Weapons.
 
 commander_tree.Hailstorm_MLRS:
 	Inherits: ^default.commander_tree_item
@@ -1210,19 +1374,31 @@ hack.cameo_filler.205:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 213
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, ~filler.hmlrs, disabled
+
+hack.cameo_filler.205a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 213
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, ~filler.mlrs, disabled
+
+hack.cameo_filler.205b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 213
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, ~filler.mlrs, disabled
 
 hack.cameo_filler.206:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 214
-		Prerequisites: prerequisite.has_points, ~vehicles.zocom, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.eagle, disabled
 
-hack.cameo_filler.207:
+hack.cameo_filler.206a:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 215
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled, ~filler.mlrs, ~!vehicles.zocom
+		BuildPaletteOrder: 214
+		Prerequisites: prerequisite.has_points, ~vehicles.eagle, disabled
 
 commander_tree.Mobile_Sensor_PLD:
 	Inherits: ^default.commander_tree_item
@@ -1257,14 +1433,29 @@ commander_tree.Medium_Tank_PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 219
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, gtek, ~vehicles.gdi
+		Prerequisites: prerequisite.has_points, gtek, ~vehicles.gdi, ~!commander_tree.medium_tank.reflector
 		Description: Upgrades the Medium Tank with a Point Laser Defense System.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mtnk
+
+commander_tree.Medium_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Medium Tank Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 219
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, gtek, ~vehicles.gdi, ~!commander_tree.medium_tank_pld
+		Description: Equips the Medium Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mtnk
 
 hack.cameo_filler.210:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 220
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled, ~filler.mtnk
 
 hack.cameo_filler.211:
 	Inherits: ^default.cameo_filler
@@ -1311,7 +1502,7 @@ commander_tree.Mobile_EMP:
 commander_tree.Mobile_EMP_Stable_Reactor:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mobile EMP Stable Reactor Upgrade
+		Name: Mobile EMP Stable Reactor
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -1325,7 +1516,7 @@ commander_tree.Mobile_EMP_Stable_Reactor:
 commander_tree.Mobile_EMP_Volatile_Reactor:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mobile EMP Volatile Reactor Upgrade
+		Name: Mobile EMP Volatile Reactor
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -1363,7 +1554,7 @@ commander_tree.Mammoth_Tank_GDI:
 commander_tree.Mammoth_Tank_Ion:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Ion Mammoth Upgrade
+		Name: Ion Mammoth
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -1374,24 +1565,50 @@ commander_tree.Mammoth_Tank_Ion:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.gdimammoth
 
+commander_tree.Mammoth_Tank_Ion.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Ion Mammoth Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 231
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.zocom, ~!vehicles.talon, miss.gdi, ~commander_tree.mammoth_tank_ion
+		Description: Equips the Ion Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth
+
 commander_tree.Mammoth_Tank_GDI_PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mammoth Point Defense Laser Upgrade
+		Name: Mammoth Tank Point Laser Defense
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
 		BuildPaletteOrder: 232
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, miss.gdi, commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_nr
-		Description: Upgrades the Mammoth with a Point Laser Defense System to shoot down incoming projectiles.
+		Description: Upgrades the Mammoth Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth
+
+commander_tree.Mammoth_Tank_GDI_PLD.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tank Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 232
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, miss.gdi, ~commander_tree.mammoth_tank_gdi_pld
+		Description: Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.gdimammoth
 
 commander_tree.Mammoth_Tank_NR:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Mammoth Nanite Repair Upgrade
+		Name: Mammoth Nanite Repair
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -1402,11 +1619,18 @@ commander_tree.Mammoth_Tank_NR:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.gdimammoth
 
-hack.cameo_filler.216:
-	Inherits: ^default.cameo_filler
+commander_tree.Mammoth_Tank_NR.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nanite Mammoth Tank Reflector Armor
 	Buildable:
-		BuildPaletteOrder: 234
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~filler.gdimammoth, disabled
+		Queue: Commander_Tree
+		BuildPaletteOrder: 233
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.zocom, miss.gdi, ~commander_tree.mammoth_tank_nr
+		Description: Equips the Nanite Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth
 
 commander_tree.Titan_PLD:
 	Inherits: ^default.commander_tree_item
@@ -1422,10 +1646,23 @@ commander_tree.Titan_PLD:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan
 
+commander_tree.Titan_PLD.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Titan Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 235
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~commander_tree.titan_pld
+		Description: Equips the Titan with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.titan
+
 commander_tree.Titan_Railgun:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Titan Railgun Upgrade
+		Name: Titan Railgun
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
@@ -1436,11 +1673,18 @@ commander_tree.Titan_Railgun:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan
 
-hack.cameo_filler.217:
-	Inherits: ^default.cameo_filler
+commander_tree.Titan_Railgun.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Titan Railgun Reflector Armor
 	Buildable:
-		BuildPaletteOrder: 237
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~filler.titan, disabled
+		Queue: Commander_Tree
+		BuildPaletteOrder: 236
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~commander_tree.titan_railgun
+		Description: Equips the Titan with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.titan
 
 hack.cameo_filler.218:
 	Inherits: ^default.cameo_filler
@@ -1477,6 +1721,30 @@ hack.cameo_filler.219:
 		BuildPaletteOrder: 241
 		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
 
+commander_tree.Mammoth_MKII:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth MK.II
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 242
+		IconPalette: chrometd
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi,
+		Description: Enables to build the Mammoth MK.II. \n  It is epic walker with dual Railguns and high explosive Rockets against ground and air.
+
+hack.cameo_filler.219a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 242
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
+
+hack.cameo_filler.219b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 242
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
+
 #Nod
 commander_tree.Chemical_Mortar:
 	Inherits: ^default.commander_tree_item
@@ -1484,22 +1752,10 @@ commander_tree.Chemical_Mortar:
 		Name: Chemical Mortar Infantry
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 300
+		BuildPaletteOrder: 7
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, ~commander_tree.advanced_infantry_training
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, commander_tree.advanced_infantry_training
 		Description: Enables to build mortar infantry firing chemical shells
-
-hack.cameo_filler.300:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 301
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, disabled, ~commander_tree.advanced_infantry_training
-
-hack.cameo_filler.301:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 302
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, disabled, ~commander_tree.advanced_infantry_training
 
 commander_tree.Elite_Cyborg:
 	Inherits: ^default.commander_tree_item
@@ -1563,7 +1819,7 @@ commander_tree.Reinforcements_Coordinator:
 		IconPalette: chrometd
 		BuildPaletteOrder: 5
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, commander_tree.advanced_logistics
+		Prerequisites: prerequisite.has_points, ~vehicles.nod
 		Description: Enables to build the Reinforcements Coordinator. \n It coordinates reinforcements directly to the frontline when deployed.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.coordinator
@@ -1680,6 +1936,19 @@ commander_tree.Chem_Tank:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.flametank
 
+commander_tree.Chem_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Tank Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 319
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.legion, tmpl, commander_tree.chem_tank
+		Description: Equips the Chem Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.flametank
+
 commander_tree.Flame_Tank_PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -1691,6 +1960,19 @@ commander_tree.Flame_Tank_PLD:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~!commander_tree.chem_tank, ~!commander_tree.fireball_tank
 		Description: Upgrades the Flame Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.flametank
+
+commander_tree.Flame_Tank_PLD.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Flame Tank Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 320
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~commander_tree.flame_tank_pld
+		Description: Equips the Flame Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.flametank
 
@@ -1708,23 +1990,30 @@ commander_tree.Fireball_Tank:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.flametank
 
-hack.cameo_filler.310:
-	Inherits: ^default.cameo_filler
+commander_tree.Fireball_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Fireball Tank Reflector Armor
 	Buildable:
-		BuildPaletteOrder: 322
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
+		Queue: Commander_Tree
+		BuildPaletteOrder: 321
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.blackh, tmpl, ~commander_tree.fireball_tank
+		Description: Equips the Fireball Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.flametank
 
 hack.cameo_filler.311:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 323
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
 
-hack.cameo_filler.312:
+hack.cameo_filler.311a:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 324
-		Prerequisites: prerequisite.has_points, ~vehicles.blackh, ~filler.flametank, disabled
+		BuildPaletteOrder: 323
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~vehicles.marked, ~!filler.flametank, disabled
 
 commander_tree.Stealth_Tank:
 	Inherits: ^default.commander_tree_item
@@ -1762,17 +2051,22 @@ commander_tree.Stealth_Tank_Explosive_Rockets:
 		Prerequisites: prerequisite.has_points, ~vehicles.marked, tmpl, commander_tree.stealth_tank, ~!commander_tree.stealth_tank_scrin
 		Description: Upgrades the Stealth Tank's missiles with a high explosive load.
 
+commander_tree.Stealth_Tank.PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Tank Point Laser Defense
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 327
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.legion, tmpl, commander_tree.stealth_tank, ~!commander_tree.stealth_tank_scrin
+		Description: Upgrades the Stealth Tank with a Point Laser Defense System.
+
 hack.cameo_filler.313:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 328
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
-
-hack.cameo_filler.314:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 329
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~vehicles.legion, disabled
 
 commander_tree.Recon_Bike_Scrin:
 	Inherits: ^default.commander_tree_item
@@ -1785,6 +2079,19 @@ commander_tree.Recon_Bike_Scrin:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~!commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_pld
 		Description: Upgrades the Recon Bike with a Scrin Weapon.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.bike
+
+commander_tree.Recon_Bike_Scrin.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Scrin Bike Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 330
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~commander_tree.recon_bike_scrin
+		Description: Equips the Scrin Bike with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike
 
@@ -1802,6 +2109,17 @@ commander_tree.Recon_Bike_Rocket_Hail:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike
 
+commander_tree.Recon_Bike_Rocket_Hail.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Rocket Hail Bike Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 331
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~commander_tree.recon_bike_rocket_hail
+		Description: Equips the Rocket Hail Bike with Reflector Armor. \n Very resistent vs. Energy Weapons.
+
 commander_tree.Recon_Bike_PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -1816,17 +2134,24 @@ commander_tree.Recon_Bike_PLD:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike
 
+commander_tree.Recon_Bike_PLD.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Bike Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 332
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, tmpl, ~commander_tree.recon_bike_pld
+		Description: Equips the Recon Bike with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.bike
+
 hack.cameo_filler.315:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 333
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
-
-hack.cameo_filler.316:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 334
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~filler.bike, disabled
 
 commander_tree.Light_Tank_Laser:
 	Inherits: ^default.commander_tree_item
@@ -1888,11 +2213,38 @@ commander_tree.Banshee:
 		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.nod
 		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
 
+commander_tree.Banshee:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Banshee
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 341
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee_bomber, ~aircraft.nod
+		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.banshee
+
+commander_tree.Banshee_Bomber:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Banshee Bomber
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 341
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee, ~aircraft.nod
+		Description: Enables to build the Banshee Bomber, a dedicated Anti-Tank Bomber.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.banshee
+
 hack.cameo_filler.321:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 342
-		Prerequisites: prerequisite.has_points, ~aircraft.nod, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.nod, ~filler.banshee, disabled
 
 hack.cameo_filler.322:
 	Inherits: ^default.cameo_filler
