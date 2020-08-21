@@ -15,6 +15,7 @@ ParaBomb:
 			None: 30
 			Wood: 30
 			Light: 65
+			Reflector: 65
 			Heavy: 80
 			Concrete: 50
 			Brick: 50
@@ -344,8 +345,9 @@ Atomic:
 		LayerName: radioactivity.strong
 
 IonCannon:
+	Inherits: ^EnergyArtillery
 	ValidTargets: Ground, Water, Air
-	Warhead@1Dam_impact: SpreadDamage
+	Warhead@1Dam: SpreadDamage
 		Range: 0, 1c1, 2c1, 2c512
 		Damage: 3000
 		Falloff: 1000, 1000, 250, 100
@@ -369,19 +371,13 @@ IonCannon:
 		Delay: 6
 
 Empicbm:
+	Inherits: ^EnergyArtillery
 	ValidTargets: Ground, Water
-	Warhead@1Dam_impact: SpreadDamage
+	Warhead@1Dam: SpreadDamage
 		Range: 0, 1c1, 2c1, 3c1, 3c512, 4c1, 4c512
-		Damage: 4500
+		Damage: 1000
 		Falloff: 1000, 368, 135, 90, 68, 37, 10
 		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
-		Versus:
-			None: 20
-			Wood: 20
-			Light: 20
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
 	Warhead@2Eff: CreateEffect
 		ExplosionPalette: tseffect-ignore-lighting-alpha75
 		Explosions: pulse_explosion
@@ -421,30 +417,16 @@ THLauncher:
 		TrailDelay: 3
 		Speed: 300
 		LaunchAngle: 45
-	Warhead@2Dam_impact: SpreadDamage
-		Range: 1c0
-		Damage: 4500
-		Falloff: 1000
-		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-		Versus:
-			None: 80
-			Wood: 60
-			Light: 60
-			Heavy: 40
-			Concrete: 60
-			Brick: 50
-	Warhead@1Dam_impact: SpreadDamage
+	Warhead@1Dam: SpreadDamage
 		Range: 0, 1c1, 2c1, 3c1, 3c512, 4c1, 4c512
-		Damage: 4500
+		Damage: 900
 		Falloff: 1000, 368, 135, 90, 68, 37, 10
 		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
-		Versus:
-			None: 20
-			Wood: 20
-			Light: 20
-			Heavy: 20
-			Concrete: 20
-			Brick: 20
+	Warhead@2Dam: SpreadDamage
+		Range: 1c0
+		Damage: 3000
+		Falloff: 1000
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Eff: CreateEffect
 		ExplosionPalette: tseffect-ignore-lighting-alpha75
 		Explosions: pulse_explosion
@@ -482,6 +464,7 @@ IronCurtain:
 			None: 100
 			Wood: 0
 			Light: 0
+			Reflector: 0
 			Heavy: 0
 			Concrete: 0
 			Brick: 0
@@ -496,6 +479,7 @@ IronCurtain:
 			None: 100
 			Wood: 0
 			Light: 0
+			Reflector: 0
 			Heavy: 0
 			Concrete: 0
 			Brick: 0
@@ -510,6 +494,7 @@ IronCurtain:
 			None: 100
 			Wood: 0
 			Light: 0
+			Reflector: 0
 			Heavy: 0
 			Concrete: 0
 			Brick: 0
@@ -532,6 +517,7 @@ ForceShield:
 			None: 0
 			Wood: 0
 			Light: 0
+			Reflector: 0
 			Heavy: 0
 			Concrete: 0
 			Brick: 0
@@ -561,6 +547,7 @@ StealthBubble:
 			None: 100
 			Wood: 0
 			Light: 0
+			Reflector: 0
 			Heavy: 0
 			Concrete: 0
 			Brick: 0
@@ -576,6 +563,7 @@ StealthBubble:
 			None: 100
 			Wood: 0
 			Light: 0
+			Reflector: 0
 			Heavy: 0
 			Concrete: 0
 			Brick: 0
@@ -591,6 +579,7 @@ StealthBubble:
 			None: 100
 			Wood: 0
 			Light: 0
+			Reflector: 0
 			Heavy: 0
 			Concrete: 0
 			Brick: 0
@@ -611,6 +600,7 @@ Chemicbm:
 			Wood: 50
 			Concrete: 30
 			Light: 60
+			Reflector: 60
 			Heavy: 30
 			Brick: 30
 		DamageTypes: Prone50Percent, TriggerProne, ToxinDeath
@@ -630,6 +620,7 @@ Chemicbm:
 			Wood: 50
 			Concrete: 30
 			Light: 60
+			Reflector: 60
 			Heavy: 30
 			Brick: 30
 		AffectsParent: true
@@ -646,6 +637,7 @@ Chemicbm:
 			Wood: 50
 			Concrete: 30
 			Light: 60
+			Reflector: 60
 			Heavy: 30
 			Brick: 30
 		AffectsParent: true
@@ -662,6 +654,7 @@ Chemicbm:
 			Wood: 50
 			Concrete: 30
 			Light: 60
+			Reflector: 60
 			Heavy: 30
 			Brick: 30
 		AffectsParent: true
@@ -845,6 +838,7 @@ DeathHandCluster:
 			Brick: 20
 			Wood: 30
 			Light: 60
+			Reflector: 60
 			Heavy: 60
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Smu: LeaveSmudge
@@ -882,6 +876,7 @@ WeatherStormInit:
 		Delay: 50
 		ImpactSounds: sweaintr.aud
 		ValidTargets: Ground, Air, Water
+
 WeatherCloudDirectInit:
 	Projectile: InstantHit
 	ReloadDelay: 140
@@ -956,6 +951,7 @@ WeatherBolt:
 			Wood: 80
 			Heavy: 55
 			Concrete: 35
+			Reflector: 20
 			Brick: 55
 	Warhead@4: CreateEffect
 		Explosions: weatherbolt1, weatherbolt2, weatherbolt3, weatherbolt1f, weatherbolt2f, weatherbolt3f
