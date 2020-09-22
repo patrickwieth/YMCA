@@ -1,5 +1,8 @@
+
+
 Trigger.OnAnyProduction(
   function(producer, produced, productionType)
+
     if produced.IsTaggable
     then
       Trigger.OnPassengerEntered(produced,
