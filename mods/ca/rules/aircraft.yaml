@@ -1749,9 +1749,9 @@ APCH.Flyby:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~techlevel.medium
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, commander_tree.apache.flyby ,~techlevel.medium
 		IconPalette: chrometd
-		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move and with more ammo. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
+		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Tooltip:
 		Name: Apache Flyby
 	-AttackAircraft:
@@ -1760,8 +1760,8 @@ APCH.Flyby:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 	AmmoPool:
-		Ammo: 16
-		PipCount: 8
+		Ammo: 12
+		PipCount: 6
 
 ORCA:
 	Inherits: ^HelicopterTD
@@ -1977,8 +1977,6 @@ RAH:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	RenderSprites:
-		Image: rah66
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -2069,6 +2067,33 @@ RAH:
 		RearmActors: hpad, hpad.td
 	Voiced:
 		VoiceSet: OxannaVoice
+
+RAH.Bomber:
+	Inherits: RAH
+	Armament@PRIMARY:
+		Weapon: NapalmTD
+		LocalOffset: 2,-256,-43, 2,256,-43
+		PauseOnCondition: !ammo
+	Tooltip:
+		Name: Comanche Bomber
+	AttackAircraft:
+		FacingTolerance: 128
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 6
+		Speed: 170
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeoffSounds: migtoff1.aud
+		IdleBehavior: Land
+		CanHover: false
+		VTOL: false
+		CanSlide: false
+
 
 KIRO:
 	Inherits: ^Helicopter

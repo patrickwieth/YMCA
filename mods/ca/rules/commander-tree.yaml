@@ -2209,20 +2209,6 @@ commander_tree.Banshee:
 		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.nod
 		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
 
-commander_tree.Banshee:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Banshee
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 341
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee_bomber, ~aircraft.nod
-		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.banshee
-
 commander_tree.Banshee_Bomber:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -2247,6 +2233,56 @@ hack.cameo_filler.322:
 	Buildable:
 		BuildPaletteOrder: 343
 		Prerequisites: prerequisite.has_points, ~aircraft.nod, disabled
+
+commander_tree.Apache.Flyby:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Apache Flyby
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 344
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion
+		Description: Upgrades the Apache to be able to fire on the move.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.flyby
+
+hack.cameo_filler.321:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 345
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion, disabled
+
+hack.cameo_filler.322:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 346
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion, disabled
+
+commander_tree.Comanche.Bomber:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Comanche Bomber
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 344
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.blackh, ~!aircraft.blackh, ~aircraft.legion
+		Description: Upgrades the Comanche with heavy bombs, making it slower but more devastating.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.comanche
+
+hack.cameo_filler.321:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 345
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.blackh, ~!aircraft.blackh, disabled
+
+hack.cameo_filler.322:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 346
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.blackh, ~!aircraft.blackh, disabled
 
 hack.has_points:
 	AlwaysVisible:
