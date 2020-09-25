@@ -1220,6 +1220,44 @@ hack.cameo_filler.123:
 		BuildPaletteOrder: 151
 		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~aircraft.!ukraine, ~filler.mig, disabled
 
+commander_tree.Surveillance_BTR:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Surveillance BTR
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 152
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.nona_svk, ~vehicles.soviet
+		Description: Enables to build the Surveillance BTR.\n  It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.btr
+
+commander_tree.Nona_SVK:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nona SVK
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 153
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.surveillance_btr, ~vehicles.soviet
+		Description: Enables to build the Nona SVK.\n  It is a highly mobile artillery unit, excelling at hit and run tactics.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.btr
+
+hack.cameo_filler.124:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 153
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled,
+
+hack.cameo_filler.125:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 154
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~!filler.btr
+
 #GDI
 commander_tree.Railgunner:
 	Inherits: ^default.commander_tree_item

@@ -2077,22 +2077,24 @@ RAH.Bomber:
 	Tooltip:
 		Name: Comanche Bomber
 	AttackAircraft:
-		FacingTolerance: 128
+		FacingTolerance: 20
+		Voice: Attack
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
 	Aircraft:
 		CruiseAltitude: 2560
-		InitialFacing: 192
-		TurnSpeed: 6
-		Speed: 170
+		TurnSpeed: 5
+		Speed: 205
 		RepulsionSpeed: 40
 		MaximumPitch: 56
-		TakeoffSounds: migtoff1.aud
-		IdleBehavior: Land
-		CanHover: false
-		VTOL: false
-		CanSlide: false
+		CanHover: False
+		TakeoffSounds: dropup1.aud
+		LandingSounds: dropdwn1.aud
+		IdealSeparation: 1c682
+		Voice: Move
+		CanSlide: False
+		AltitudeVelocity: 0c200
 
 
 KIRO:
@@ -2508,14 +2510,30 @@ HARR.avionics:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier,  ~techlevel.high
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier.avionics, ~techlevel.high
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n Avionics upgrade allows it to attack without flying over. \n Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
-	Valued:
-		Cost: 2000
 	Tooltip:
 		Name: Harrier (Avionics)
 	AttackAircraft:
 		AttackType: Hover
+
+HARR.payload:
+	Inherits: HARR
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier.payload, ~techlevel.high
+		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n Has increased payload. \n Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Harrier (Payload)
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		ReloadDelay: 60
+		AmmoCondition: ammo
 
 Raptor:
 	Inherits: ^Plane
@@ -2972,6 +2990,40 @@ VENM:
 		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+VENM.HeavyLaser:
+	Inherits: VENM
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Venom (Heavy Laser)
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.heavy_laser, ~techlevel.medium
+		IconPalette: chrometd
+		Description: VTOL gunship armed\nwith a heavy laser.\n  Strong vs Tanks\n  Weak vs Infantry, Buildings
+	AmmoPool:
+		Ammo: 4
+		PipCount: 4
+		ReloadDelay: 50
+	Aircraft:
+		Speed: 180
+	Armament@PRIMARY:
+		Weapon: Laser.Heavy
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+	-AttackAircraft:
+	AttackCharges:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+		ChargeLevel: 50
+		ChargingCondition: charging
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: obelpowr.aud
+		Interval: 30, 40
 
 Dropship:
 	Inherits: ^Plane
