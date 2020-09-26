@@ -1900,7 +1900,7 @@ ORCA.AP:
 		AddToArmyValue: true
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~techlevel.high
-		IconPalette: chrometd
+		IconPalette: chrome
 		Description: VTOL gunship armed\nwith armor-piercing missiles.\n  Strong vs Tanks\n  Weak vs Infantry
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca.AP
@@ -1919,7 +1919,7 @@ ORCA.HE:
 		AddToArmyValue: true
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~techlevel.high
-		IconPalette: chrometd
+		IconPalette: chrome
 		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca.HE
@@ -1940,7 +1940,7 @@ ORCA.Payload:
 		AddToArmyValue: true
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~techlevel.high
-		IconPalette: chrometd
+		IconPalette: chrome
 	AmmoPool:
 		Ammo: 12
 		PipCount: 6
@@ -2080,7 +2080,7 @@ UAV:
 		PlayerPalette: overlayplayertd
 	-EjectOnDeath:
 
-RAH:
+RAH66:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2175,17 +2175,37 @@ RAH:
 	Voiced:
 		VoiceSet: OxannaVoice
 
-RAH.Bomber:
-	Inherits: RAH
+RAH66.Bomber:
+	Inherits: ^HelicopterTD
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
 		IconPalette: chrometd
 		Prerequisites: ~hpad.td, tmpl, ~aircraft.blackh, ~techlevel.high
-	Armament@PRIMARY:
-		Weapon: NapalmTD
-		LocalOffset: 2,-256,-43, 2,256,-43
-		PauseOnCondition: !ammo
+		Description: Stealth helicopter armed\nwith napalm rockets.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
+	Valued:
+		Cost: 1500
 	Tooltip:
 		Name: Comanche Bomber
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 18000
+	RevealsShroud:
+		Range: 10c0
+		MinRange: 8c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 8c0
+		Type: GroundPosition
+	Armament@PRIMARY:
+		Weapon: NapalmTD
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
 	AttackAircraft:
 		FacingTolerance: 20
 		Voice: Attack
@@ -2205,6 +2225,56 @@ RAH.Bomber:
 		Voice: Move
 		CanSlide: False
 		AltitudeVelocity: 0c200
+	Cloak@NORMAL:
+		InitialDelay: 100
+		CloakDelay: 200
+		CloakSound: trans1.aud
+		UncloakSound: appear1.aud
+		Palette: cloak
+		IsPlayerPalette: false
+		RequiresCondition: !cloak-force-disabled && airborne && !invisibility
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+	WithIdleOverlay@ROTORAIR:
+		Offset: 10,0,80
+		Sequence: rotor
+		RequiresCondition: airborne
+		Palette: player
+	WithIdleOverlay@ROTORGROUND:
+		Offset: 10,0,80
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+		Palette: player
+	AmmoPool:
+		Ammo: 8
+		PipCount: 4
+		AmmoCondition: ammo
+		ReloadCount: 2
+	SpawnActorOnDeath:
+		Actor: RAH.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: RAH.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: RAH.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: RAH.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+	SmokeTrailWhenDamaged:
+		Offset: -427,0,0
+	Selectable:
+		DecorationBounds: 36,28
+	Rearmable:
+		RearmActors: hpad, hpad.td
+	Voiced:
+		VoiceSet: OxannaVoice
+
 
 KIRO:
 	Inherits: ^Helicopter
@@ -3153,7 +3223,7 @@ VENM.Payload:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
 		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.payload, ~techlevel.medium
-		IconPalette: chrometd
+		IconPalette: chrome
 	AmmoPool:
 		Ammo: 10
 		PipCount: 5
@@ -3170,7 +3240,7 @@ VENM.HeavyLaser:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
 		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.heavy_laser, ~techlevel.medium
-		IconPalette: chrometd
+		IconPalette: chrome
 		Description: VTOL gunship armed\nwith a heavy laser.\n  Strong vs Tanks\n  Weak vs Infantry, Buildings
 	AmmoPool:
 		Ammo: 4
