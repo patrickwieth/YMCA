@@ -1802,7 +1802,7 @@ APCH.Flyby:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
 		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, commander_tree.apache.flyby ,~techlevel.medium
-		IconPalette: chrometd
+		IconPalette: chrome
 		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Tooltip:
 		Name: Apache Flyby
@@ -2183,9 +2183,9 @@ RAH66.Bomber:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		IconPalette: chrometd
+		IconPalette: chrome
 		Prerequisites: ~hpad.td, tmpl, ~aircraft.blackh, ~techlevel.high
-		Description: Stealth helicopter armed\nwith napalm rockets.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
+		Description: Stealth helicopter armed\nwith napalm bombs.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -2203,7 +2203,7 @@ RAH66.Bomber:
 		Range: 8c0
 		Type: GroundPosition
 	Armament@PRIMARY:
-		Weapon: NapalmTD
+		Weapon: Napalm.Comanche
 		LocalOffset: 0,-213,-85, 0,213,-85
 		PauseOnCondition: !ammo
 	AttackAircraft:
@@ -2213,18 +2213,13 @@ RAH66.Bomber:
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
 	Aircraft:
-		CruiseAltitude: 2560
-		TurnSpeed: 5
-		Speed: 210
-		RepulsionSpeed: 40
-		MaximumPitch: 56
+		TurnSpeed: 4
+		Speed: 175
 		CanHover: False
 		TakeoffSounds: dropup1.aud
 		LandingSounds: dropdwn1.aud
-		IdealSeparation: 1c682
 		Voice: Move
 		CanSlide: False
-		AltitudeVelocity: 0c200
 	Cloak@NORMAL:
 		InitialDelay: 100
 		CloakDelay: 200
@@ -2250,10 +2245,10 @@ RAH66.Bomber:
 		RequiresCondition: !airborne
 		Palette: player
 	AmmoPool:
-		Ammo: 8
-		PipCount: 4
+		Ammo: 6
+		PipCount: 3
 		AmmoCondition: ammo
-		ReloadCount: 2
+		ReloadCount: 1
 	SpawnActorOnDeath:
 		Actor: RAH.Husk
 		RequiresCondition: ammo && !empdisable && !being-warped
