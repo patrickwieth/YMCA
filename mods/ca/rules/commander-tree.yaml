@@ -305,7 +305,7 @@ commander_tree.Chrono_Prison_AA:
 		IconPalette: chrometd
 		BuildPaletteOrder: 18
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, ~!commander_tree.chrono_prison_range, commander_tree.chrono_prison
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.england, atek, ~!commander_tree.chrono_prison_range, commander_tree.chrono_prison
 		Description: Upgrades the Chrono Prison to be able to also trap air units in the Time Aether.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.prison
@@ -329,6 +329,12 @@ hack.cameo_filler.10:
 	Buildable:
 		BuildPaletteOrder: 20
 		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, disabled, ~filler.prison
+
+hack.cameo_filler.10a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 20
+		Prerequisites: prerequisite.has_points, ~vehicles.england, atek, disabled
 
 hack.cameo_filler.11:
 	Inherits: ^default.cameo_filler
@@ -620,6 +626,18 @@ commander_tree.Longbow:
 		Prerequisites: prerequisite.has_points, ~aircraft.allies
 		Description: Enables to build the Longbow Helicopter. \n  It is strong vs. tanks and aircraft.
 
+hack.cameo_filler.26:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 47
+		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~!filler.longbow, disabled
+
+hack.cameo_filler.27:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 47
+		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~!filler.longbow, disabled
+
 commander_tree.Longbow.Artillery:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -654,7 +672,7 @@ commander_tree.Longbow.Cryo:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 48
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, commander_tree.longbow, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies, ~!aircraft.germany
+		Prerequisites: prerequisite.has_points, commander_tree.longbow, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies, ~!aircraft.france
 		Description: Upgrades the missiles of the Longbow with Cryo explosives. \n  In addition to the damage targets are also slowed.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.longbow
@@ -663,13 +681,19 @@ hack.cameo_filler.26:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 49
-		Prerequisites: prerequisite.has_points, ~aircraft.england, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.germany, disabled
 
 hack.cameo_filler.27:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 49
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, ~filler.longbow, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~filler.longbow, disabled
+
+hack.cameo_filler.27:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 49
+		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~filler.longbow, disabled
 
 commander_tree.Harrier:
 	Inherits: ^default.commander_tree_item
@@ -679,7 +703,7 @@ commander_tree.Harrier:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 50
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, atek, ~aircraft.allies
+		Prerequisites: prerequisite.has_points, atek, ~aircraft.allies, ~!aircraft.germany
 		Description: Enables to build the Harrier, a VTOL aircraft.  \n  Strong vs. groups of light armored ground units.
 
 commander_tree.Harrier.Avionics:
@@ -690,7 +714,7 @@ commander_tree.Harrier.Avionics:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 51
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, atek, ~!commander_tree.harrier.payload, ~aircraft.england
+		Prerequisites: prerequisite.has_points, atek, commander_tree.harrier, ~!commander_tree.harrier.payload, ~aircraft.england
 		Description: Upgrades the Avionics of the Harrier, allowing it to hover when shooting  \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.harrier
@@ -703,7 +727,7 @@ commander_tree.Harrier.Payload:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 51
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, atek, ~!commander_tree.harrier.avionics, ~aircraft.allies, ~!aircraft.germany
+		Prerequisites: prerequisite.has_points, atek, commander_tree.harrier, ~!commander_tree.harrier.avionics, ~aircraft.allies, ~!aircraft.germany
 		Description: Increases the Payload of the Harrier \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.harrier
@@ -712,13 +736,7 @@ hack.cameo_filler.28:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 51
-		Prerequisites: prerequisite.has_points, ~aircraft.germany, atek, disabled
-
-hack.cameo_filler.28:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 51
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, atek, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.france, atek, disabled
 
 hack.cameo_filler.29:
 	Inherits: ^default.cameo_filler
@@ -916,7 +934,7 @@ commander_tree.Katyusha:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 116
+		BuildPaletteOrder: 115
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.russia, ~!commander_tree.v3_launcher, ~!commander_tree.akatsiya
 		Description: Enables to build the Katyusha as Advanced Siege Vehicle. \n  The Katyusha fires the most projectiles.
@@ -926,14 +944,52 @@ commander_tree.Katyusha:
 hack.cameo_filler.108:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 117
+		BuildPaletteOrder: 116
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
 
 hack.cameo_filler.109:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 118
+		BuildPaletteOrder: 116
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
+
+commander_tree.Surveillance_BTR:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Surveillance BTR
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 117
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.nona_svk, ~vehicles.soviet
+		Description: Enables to build the Surveillance BTR.\n  It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.btr
+
+commander_tree.Nona_SVK:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nona SVK
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 117
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.surveillance_btr, ~vehicles.soviet
+		Description: Enables to build the Nona SVK.\n  It is a highly mobile artillery unit, excelling at hit and run tactics.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.btr
+
+hack.cameo_filler.109a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 118
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled,
+
+hack.cameo_filler.109b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 118
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~!filler.btr
 
 commander_tree.Mammoth_Tank:
 	Inherits: ^default.commander_tree_item
@@ -1290,44 +1346,6 @@ hack.cameo_filler.123:
 	Buildable:
 		BuildPaletteOrder: 151
 		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~aircraft.!ukraine, ~filler.mig, disabled
-
-commander_tree.Surveillance_BTR:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Surveillance BTR
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 152
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.nona_svk, ~vehicles.soviet
-		Description: Enables to build the Surveillance BTR.\n  It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.btr
-
-commander_tree.Nona_SVK:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Nona SVK
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 153
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.surveillance_btr, ~vehicles.soviet
-		Description: Enables to build the Nona SVK.\n  It is a highly mobile artillery unit, excelling at hit and run tactics.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.btr
-
-hack.cameo_filler.124:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 153
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled,
-
-hack.cameo_filler.125:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 154
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~!filler.btr
 
 #GDI
 commander_tree.Railgunner:

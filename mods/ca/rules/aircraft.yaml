@@ -1101,6 +1101,10 @@ HELI.Artillery:
 	-Armament@PRIMARY
 	Armament@SECONDARY:
 		Weapon: HellfireAG.Arty
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		ReloadCount: 2
 
 HELI.Payload:
 	Inherits: HELI
@@ -1829,7 +1833,7 @@ ORCA:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~techlevel.high
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~!commander_tree.orca.ap, ~!commander_tree.orca.he, ~!commander_tree.orca.payload, ~techlevel.high
 		IconPalette: chrometd
 		Description: VTOL gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Aircraft:
@@ -1899,7 +1903,7 @@ ORCA.AP:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~techlevel.high
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.ap, ~techlevel.high
 		IconPalette: chrome
 		Description: VTOL gunship armed\nwith armor-piercing missiles.\n  Strong vs Tanks\n  Weak vs Infantry
 	Armament@PRIMARY:
@@ -1918,7 +1922,7 @@ ORCA.HE:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~techlevel.high
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.he, ~techlevel.high
 		IconPalette: chrome
 		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
 	Armament@PRIMARY:
@@ -1939,7 +1943,7 @@ ORCA.Payload:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~techlevel.high
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.payload, ~techlevel.high
 		IconPalette: chrome
 	AmmoPool:
 		Ammo: 12
@@ -2596,7 +2600,7 @@ HARR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier,  ~techlevel.high
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier, ~!commander_tree.harrier.avionics, ~!commander_tree.harrier.payload, ~techlevel.high
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n  Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
