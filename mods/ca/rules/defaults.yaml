@@ -343,6 +343,35 @@
 	Targetable@TemporalAir:
 		TargetTypes: TemporalAir
 
+^Suppressable:
+	SpeedMultiplier@SUPPRESSION:
+		RequiresCondition: suppression
+		Modifier: 40
+	ReloadDelayMultiplier@SUPPRESSION:
+		RequiresCondition: suppression
+		Modifier: 125
+	ExternalCondition@SUPPRESSION:
+		Condition: suppression
+	WithColoredOverlay@SUPPRESSION:
+		RequiresCondition: suppression
+		Palette: suppression
+	TimedConditionBar@SUPPRESSION:
+		Condition: suppression
+		Color: f454d0
+
+^PowerDrainable:
+	PowerMultiplier@POWERDRAIN:
+		RequiresCondition: powerdrain
+		Modifier: 50
+	ExternalCondition@POWERDRAIN:
+		Condition: powerdrain
+	WithDecoration@POWERDRAIN:
+		Image: poweroff
+		Sequence: offline
+		Palette: chrome
+		RequiresCondition: powerdrain
+		ReferencePoint: Center
+		ValidStances: Ally, Enemy, Neutral
 
 ^GDIUpgrade:
 	DamageMultiplier@GDIUPG1:
@@ -725,6 +754,27 @@
 		Interval: 5
 		RequiresCondition: c4
 
+^MindControllable:
+	ExternalCondition@prevent-mindcontrol:
+		Condition: prevent-mindcontrol
+	MindControllable:
+		Condition: controlled
+		PauseOnCondition: prevent-mindcontrol
+	WithMindControlArc:
+		Color: c71585
+		Transparency: 55
+		Offset: 0,0,511
+		Angle: 32
+		Width: 116
+	Targetable@MC:
+		TargetTypes: MindControl
+		RequiresCondition: !controlled && !prevent-mindcontrol
+	WithIdleOverlay@mindcontrol:
+		Sequence: mind-overlay
+		Palette: scrin
+		RequiresCondition: controlled
+		Offset: 0,0,300
+
 ^AutoTargetGround:
 	AutoTarget:
 		AttackAnythingCondition: stance-attackanything
@@ -797,14 +847,6 @@
 	GivesBounty:
 		RequiresCondition: global-bounty
 
-^FlatSelectionMode:
-	Selectable:
-		PriorityModifiers: Ctrl
-
-^LowPrioritySelectionMode:
-	Selectable:
-		PriorityModifiers: Ctrl, Alt
-
 ^ProductionEfficiencyBoost:
 	ProductionTimeMultiplier@IndustrialPlant:
 		Multiplier: 133
@@ -832,12 +874,14 @@
 	Inherits@14: ^Chillable
 	Inherits@15: ^AffectedByDriverKill
 	Inherits@16: ^Concussion
+	Inherits@17: ^Suppressable
 	Inherits@C4: ^C4Plantable
 	Inherits@gflash: ^GreenFlash
 	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
 	Inherits@production: ^ProductionEfficiencyBoost
-	Inherits@SELECTION_MODE: ^FlatSelectionMode
+	Inherits@selection: ^SelectableCombatUnit
+	Inherits@mind: ^MindControllable
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -861,7 +905,7 @@
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
 	Repairable:
-		RepairActors: fix, rep
+		RepairActors: fix, rep, srep
 	ChronoshiftableWithSpriteEffect:
 		Image: chrono
 		WarpInSequence: warpin
@@ -995,8 +1039,10 @@
 	Inherits@13: ^Chillable
 	Inherits@14: ^Concussion
 	Inherits@15: ^Propaganda
+	Inherits@16: ^Suppressable
 	Inherits@bounty: ^GlobalBounty
-	Inherits@SELECTION_MODE: ^FlatSelectionMode
+	Inherits@selection: ^SelectableCombatUnit
+	Inherits@mind: ^MindControllable
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	Huntable:
@@ -1296,10 +1342,12 @@
 	Inherits@14: ^Chillable
 	Inherits@15: ^BotGroundProductionBonus
 	Inherits@16: ^Concussion
+	Inherits@17: ^Suppressable
 	Inherits@gflash: ^GreenFlash
 	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
-	Inherits@SELECTION_MODE: ^FlatSelectionMode
+	Inherits@selection: ^SelectableCombatUnit
+	Inherits@mind: ^MindControllable
 	Inherits@production: ^ProductionEfficiencyBoost
 	Huntable:
 	RenderSprites:
@@ -1456,7 +1504,8 @@
 	Inherits@3: ^IronCurtainable
 	Inherits@4: ^SpriteActor
 	Inherits@bounty: ^GlobalBounty
-	Inherits@SELECTION_MODE: ^FlatSelectionMode
+	Inherits@selection: ^SelectableCombatUnit
+	Inherits@mind: ^MindControllable
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -1563,10 +1612,9 @@
 		UncloakSound: appear1.aud
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal
 	Repairable:
-		RepairActors: fix, rep
+		RepairActors: fix, rep, srep
 	Aircraft:
 		CruisingCondition: cruising
-		IdleBehavior: Land
 		PauseOnCondition: empdisable && !airborne || being-warped
 	KillsSelf:
 		RequiresCondition: empdisable && cruising
@@ -1632,6 +1680,7 @@
 	Inherits@4: ^C4Plantable
 	Inherits@shape: ^1x1Shape
 	Inherits@bounty: ^GlobalBounty
+	Inherits@selection: ^SelectableBuilding
 	SelectionDecorations:
 	WithSpriteControlGroupDecoration:
 	Selectable:
@@ -1779,6 +1828,8 @@
 	Inherits: ^Building
 	Inherits@botbonus: ^BotDefenseProductionBonus
 	Inherits@Concussion: ^Concussion
+	Inherits@selection: ^SelectableCombatBuilding
+	Inherits@mind: ^MindControllable
 	-SpeedMultiplier@concussion:
 	WithColoredOverlay@IRONCURTAIN:
 		RequiresCondition: invulnerability
@@ -2475,6 +2526,40 @@
 		Modifier: 0
 	Power:
 		RequiresCondition: !disabled
+
+^Selectable:
+	Selectable:
+	SelectionDecorations:
+	WithSpriteControlGroupDecoration:
+	DrawLineToTarget:
+
+^SelectableCombatUnit:
+	Inherits@selectiondecorations: ^Selectable
+	Selectable:
+		Priority: 10
+		PriorityModifiers: Ctrl
+
+^SelectableSupportUnit:
+	Inherits@selectiondecorations: ^Selectable
+	Selectable:
+		Priority: 8
+		PriorityModifiers: Ctrl, Alt
+
+^SelectableEconomicUnit:
+	Inherits@selectiondecorations: ^Selectable
+	Selectable:
+		Priority: 6
+		PriorityModifiers: Ctrl, Alt
+
+^SelectableCombatBuilding:
+	Inherits@selectiondecorations: ^Selectable
+	Selectable:
+		Priority: 4
+
+^SelectableBuilding:
+	Inherits@selectiondecorations: ^Selectable
+	Selectable:
+		Priority: 2
 
 ^Viceroid:
 	Inherits@1: ^ExistsInWorld

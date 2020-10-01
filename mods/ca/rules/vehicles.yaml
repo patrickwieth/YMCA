@@ -706,6 +706,28 @@ ARTY.nod:
 	Armament:
 		Weapon: 155mmTD
 
+HOWI:
+	Inherits: ARTY.nod
+	RenderSprites:
+		Image: howi
+	Tooltip:
+		Name: Howitzer
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: ~vehicles.nod, tmpl, ~techlevel.medium
+	Health:
+		HP: 15000
+	-AttackFrontal:
+	AttackTurreted:
+	Turreted:
+		TurnSpeed: 2
+	Armament:
+		Weapon: 155mmTDM
+		LocalOffset: 624,0,208
+	Mobile:
+		Speed: 68
+	WithSpriteTurret:
+
 ARTY.Chrono:
 	Inherits: ARTY
 	RenderSprites:
@@ -832,7 +854,6 @@ SPEC:
 
 HARV:
 	Inherits: ^Vehicle
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 10
@@ -960,7 +981,6 @@ HARV.Chrono:
 
 MCV:
 	Inherits: ^Vehicle
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
@@ -1029,7 +1049,7 @@ JEEP:
 		Range: 14c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
-		Range: 4c0
+		Range: 8c0
 	Turreted:
 		TurnSpeed: 10
 		Offset: 0,0,128
@@ -1102,7 +1122,6 @@ APC:
 
 MNLY:
 	Inherits: ^Tank
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 275
@@ -1151,7 +1170,6 @@ MNLY:
 
 TRUK:
 	Inherits: ^Vehicle
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 280
@@ -1184,12 +1202,10 @@ TRUK:
 
 MGG:
 	Inherits: ^Vehicle
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 245
 		Prerequisites: atek, ~vehicles.allies, ~techlevel.high
-		BuildDurationModifier: 50
 		Description: Regenerates the shroud nearby, obscuring the area.\n  Unarmed
 	Valued:
 		Cost: 1000
@@ -1237,7 +1253,6 @@ MRJ:
 		Queue: Vehicle
 		BuildPaletteOrder: 235
 		Prerequisites: techcenter, ~vehicles.mrj, ~techlevel.high
-		BuildDurationModifier: 50
 		Description: Jams nearby enemy radar systems.\n  Unarmed\n  Special Ability: Jams Missile-Lock Systems
 	Health:
 		HP: 22000
@@ -1478,7 +1493,7 @@ CTNK.Reflector:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
-		Prerequisites: atek, ~vehicles.allies, ~commander_tree.chrono_tank_pld, ~techlevel.high
+		Prerequisites: atek, ~vehicles.allies, ~commander_tree.chrono_tank.reflector, ~techlevel.high
 		Description: Advanced tank armed with anti-ground missiles.\nHas Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft\n  Special Ability: Teleport
 	Tooltip:
 		Name: Chrono Tank (Reflector)
@@ -1530,7 +1545,6 @@ QTNK:
 
 AMCV:
 	Inherits: ^VehicleTD
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
@@ -1602,7 +1616,7 @@ HMMV:
 		Range: 14c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
-		Range: 4c0
+		Range: 8c0
 	Turreted:
 		TurnSpeed: 20
 		Offset: -85,0,128
@@ -1652,7 +1666,7 @@ BGGY:
 		Range: 14c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
-		Range: 4c0
+		Range: 8c0
 	Turreted@PRIMARY:
 		TurnSpeed: 20
 		Offset: -43,0,128
@@ -1691,6 +1705,7 @@ BGGY.PLD:
 
 BGGY.AA:
 	Inherits: BGGY
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
@@ -1698,7 +1713,7 @@ BGGY.AA:
 		Prerequisites: ~bio.nod, ~vehicles.nod, ~commander_tree.buggy_aa, ~techlevel.high
 		Description: Fast scout and anti-aircraft vehicle.\nCan detect cloaked units.\n  Strong vs Infantry, Aircraft\n  Weak vs Vehicles
 	Valued:
-		Cost: 700
+		Cost: 600
 	Health:
 		HP: 21000
 	Tooltip:
@@ -2959,7 +2974,6 @@ FTNK.Fireball.Reflector:
 
 HAR2:
 	Inherits: ^VehicleTD
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	RenderSprites:
 		Image: harv2
 	Valued:
@@ -3046,7 +3060,7 @@ BTR:
 	Health:
 		HP: 28000
 	Armor:
-		Type: Heavy
+		Type: Light
 	Mobile:
 		Speed: 100
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
@@ -3087,6 +3101,91 @@ BTR:
 		RequiresCondition: driver-dead && !cargo
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
+
+BTR.Surveillance:
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 45
+		Prerequisites: barr, ~vehicles.soviet, ~commander_tree.surveillance_btr, ~techlevel.low
+		Description: Tough infantry transport.\n  Can detect stealth units.\n  Is unarmed. \n  Special Ability: Radar Jamming.
+	Valued:
+		Cost: 750
+	Tooltip:
+		Name: Surveillance BTR
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 28000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 100
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 14c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 8c0
+	DetectCloaked:
+		Range: 6c0
+		CloakTypes: Cloak, Thief
+		RequiresCondition: !(empdisable || being-warped)
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: 0,0,256
+		PauseOnCondition: empdisable || being-warped
+	ProximityExternalCondition@Relay:
+		Range: 18c0
+		ValidStances: Enemy, Neutral
+		Condition: jammed
+	WithRangeCircle@JAMMER:
+		Type: jammer
+		Range: 18c0
+		Color: 0000FF80
+	RenderJammerCircle:
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		PipCount: 5
+		LoadingCondition: notmobile
+		LoadedCondition: cargo
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
+
+NonaSVK:
+	Inherits: BTR
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 45
+		Prerequisites: ~vehicles.soviet, ~commander_tree.nona_svk, ~techlevel.low
+		Description: Light Artillery.\n  Highly mobile artillery unit.\n  Strong vs Light Armor, Infantry, Buildings \n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Nona SVK
+	Health:
+		HP: 15000
+	Mobile:
+		Speed: 110
+		TurnSpeed: 15
+	-Cargo:
+	Turreted:
+		TurnSpeed: 20
+		Offset: 5,0,70
+	Armament@1:
+		Weapon: 155mm
+		LocalOffset: 392,0,276
+		MuzzleSequence: muzzle
+	-Armament@2AA:
 
 IFV:
 	Inherits: ^Tank
@@ -3699,13 +3798,11 @@ DISR:
 		Actor: DISR.Husk
 		RequiresCondition: !being-warped
 
-HSAM:
+HMLRS:
 	Inherits: ^VehicleTD
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
-	RenderSprites:
-		Image: hmlrs
 	Valued:
 		Cost: 1150
 	Tooltip:
@@ -3788,10 +3885,10 @@ HSAM:
 		Prerequisites: vehicles.upgraded
 
 HMLRS.Reflector:
-	Inherits: HSAM
+	Inherits: HMLRS
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrometd
+		IconPalette: chrome
 		Prerequisites: ~vehicles.gdi, gtek, ~commander_tree.hover_mlrs.reflector, ~techlevel.medium
 		Description: Prototype Hover Multiple Launch Rocket System.\nLong-range guided artillery.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Energy Weapons, Weak vs. Conventional Weapons
 	Tooltip:
@@ -3805,7 +3902,7 @@ RTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
-		Prerequisites: weap, ~vehicles.england, ~!commander_tree.mirage_pld, ~!commander_tree.mirage_fire_rate, ~techlevel.low
+		Prerequisites: weap, ~vehicles.england, ~!commander_tree.mirage_pld, ~!commander_tree.mirage_fire_rate, ~!commander_tree.mirage.reflector, ~techlevel.low
 		Description: Advanced Battle tank that can cloak when stationary.\nHas high explosive shells.\n  Strong vs Light Vehicles\n  Weak vs Aircraft.
 	Valued:
 		Cost: 800
@@ -4245,7 +4342,6 @@ TNKD2.Reflector:
 
 MSAR:
 	Inherits: ^VehicleTD
-	Inherits@SELECTION_MODE: ^LowPrioritySelectionMode
 	Tooltip:
 		Name: Mobile Sensor Array
 		RequiresCondition: !deployed

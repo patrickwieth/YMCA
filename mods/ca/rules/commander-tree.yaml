@@ -305,7 +305,7 @@ commander_tree.Chrono_Prison_AA:
 		IconPalette: chrometd
 		BuildPaletteOrder: 18
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, ~!commander_tree.chrono_prison_range, commander_tree.chrono_prison
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.england, atek, ~!commander_tree.chrono_prison_range, commander_tree.chrono_prison
 		Description: Upgrades the Chrono Prison to be able to also trap air units in the Time Aether.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.prison
@@ -329,6 +329,12 @@ hack.cameo_filler.10:
 	Buildable:
 		BuildPaletteOrder: 20
 		Prerequisites: prerequisite.has_points, ~vehicles.germany, atek, disabled, ~filler.prison
+
+hack.cameo_filler.10a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 20
+		Prerequisites: prerequisite.has_points, ~vehicles.england, atek, disabled
 
 hack.cameo_filler.11:
 	Inherits: ^default.cameo_filler
@@ -624,13 +630,70 @@ hack.cameo_filler.26:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 48
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~!filler.longbow, disabled
+
+hack.cameo_filler.27:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 48
+		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~!filler.longbow, disabled
+
+commander_tree.Longbow.Artillery:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Longbow Artillery Missiles
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 48
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, commander_tree.longbow, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.cryo, ~aircraft.allies, ~!aircraft.england
+		Description: Upgrades the missiles of Longbow Helicopter for high range use. \n  This allows the Longbow to be used against defensive structures efficiently.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.longbow
+
+commander_tree.Longbow.Payload:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Longbow Payload
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 48
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, commander_tree.longbow, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.artillery, ~aircraft.germany
+		Description: Doubles the payload of the Longbow Helicopter. \n
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.longbow
+
+commander_tree.Longbow.Cryo:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Longbow Cryo Missiles
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 48
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, commander_tree.longbow, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies, ~!aircraft.france
+		Description: Upgrades the missiles of the Longbow with Cryo explosives. \n  In addition to the damage targets are also slowed.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.longbow
+
+hack.cameo_filler.26:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 49
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.germany, disabled
 
 hack.cameo_filler.27:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 49
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~filler.longbow, disabled
+
+hack.cameo_filler.27:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 49
+		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~filler.longbow, disabled
 
 commander_tree.Harrier:
 	Inherits: ^default.commander_tree_item
@@ -640,20 +703,46 @@ commander_tree.Harrier:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 50
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, atek, ~aircraft.allies
+		Prerequisites: prerequisite.has_points, atek, ~aircraft.allies, ~!aircraft.germany
 		Description: Enables to build the Harrier, a VTOL aircraft.  \n  Strong vs. groups of light armored ground units.
+
+commander_tree.Harrier.Avionics:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Harrier Avionics Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 51
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, atek, commander_tree.harrier, ~!commander_tree.harrier.payload, ~aircraft.england
+		Description: Upgrades the Avionics of the Harrier, allowing it to hover when shooting  \n
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.harrier
+
+commander_tree.Harrier.Payload:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Harrier Payload Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 51
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, atek, commander_tree.harrier, ~!commander_tree.harrier.avionics, ~aircraft.allies, ~!aircraft.germany
+		Description: Increases the Payload of the Harrier \n
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.harrier
 
 hack.cameo_filler.28:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 51
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.france, atek, disabled
 
 hack.cameo_filler.29:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 52
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.england, atek, ~filler.harrier, disabled
 
 
 #Soviet
@@ -845,7 +934,7 @@ commander_tree.Katyusha:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 116
+		BuildPaletteOrder: 115
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.russia, ~!commander_tree.v3_launcher, ~!commander_tree.akatsiya
 		Description: Enables to build the Katyusha as Advanced Siege Vehicle. \n  The Katyusha fires the most projectiles.
@@ -855,14 +944,52 @@ commander_tree.Katyusha:
 hack.cameo_filler.108:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 117
+		BuildPaletteOrder: 116
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
 
 hack.cameo_filler.109:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 118
+		BuildPaletteOrder: 116
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
+
+commander_tree.Surveillance_BTR:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Surveillance BTR
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 117
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.nona_svk, ~vehicles.soviet
+		Description: Enables to build the Surveillance BTR.\n  It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.btr
+
+commander_tree.Nona_SVK:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nona SVK
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 117
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.surveillance_btr, ~vehicles.soviet
+		Description: Enables to build the Nona SVK.\n  It is a highly mobile artillery unit, excelling at hit and run tactics.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.btr
+
+hack.cameo_filler.109a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 118
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled,
+
+hack.cameo_filler.109b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 118
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~filler.btr
 
 commander_tree.Mammoth_Tank:
 	Inherits: ^default.commander_tree_item
@@ -903,7 +1030,6 @@ commander_tree.Mammoth_Tank_PLD:
 
 commander_tree.Mammoth_Tank_PLD.Reflector:
 	Inherits: ^default.commander_tree_item
-	Inherits: ^ReflectorArmor
 	Tooltip:
 		Name: Mammoth PLD Reflector Armor
 	Buildable:
@@ -931,7 +1057,6 @@ commander_tree.Mammoth_Tank_TT:
 
 commander_tree.Mammoth_Tank_TT.Reflector:
 	Inherits: ^default.commander_tree_item
-	Inherits: ^ReflectorArmor
 	Tooltip:
 		Name: Mammoth Tesla Turret Reflector Armor
 	Buildable:
@@ -959,7 +1084,6 @@ commander_tree.Mammoth_Tank_NS:
 
 commander_tree.Mammoth_Tank_NS.Reflector:
 	Inherits: ^default.commander_tree_item
-	Inherits: ^ReflectorArmor
 	Tooltip:
 		Name: Mammoth (Nuke) Reflector Armor
 	Buildable:
@@ -987,7 +1111,6 @@ commander_tree.Mammoth_Tank_PT:
 
 commander_tree.Mammoth_Tank_PT.Reflector:
 	Inherits: ^default.commander_tree_item
-	Inherits: ^ReflectorArmor
 	Tooltip:
 		Name: Propaganda Mammoth Reflector Armor
 	Buildable:
@@ -998,12 +1121,6 @@ commander_tree.Mammoth_Tank_PT.Reflector:
 		Description: Equips the Propaganda Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietmammoth
-
-hack.cameo_filler.112:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 126
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~filler.sovietmammoth
 
 commander_tree.Tesla_Hind:
 	Inherits: ^default.commander_tree_item
@@ -1084,7 +1201,7 @@ commander_tree.Chemyak_Volatile_Tanks:
 		IconPalette: chrometd
 		BuildPaletteOrder: 135
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.iraq, stek, ~commander_tree.chemyak
+		Prerequisites: prerequisite.has_points, ~aircraft.iraq, stek, commander_tree.chemyak
 		Description: Modifies the chemical tanks of the Chemyak to release toxin clouds on crash.
 
 hack.cameo_filler.117:
@@ -1721,29 +1838,85 @@ hack.cameo_filler.219:
 		BuildPaletteOrder: 241
 		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
 
+
+commander_tree.Orca.Payload:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Payload Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.he, ~!commander_tree.orca.ap, ~aircraft.gdi, ~!aircraft.zocom
+		Description: Increases the Payload of the Orca.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.Orca.AP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Armor-Piercing Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.he, ~!commander_tree.orca.payload, ~aircraft.gdi, ~!aircraft.eagle
+		Description: Equips the Orca with armor-piercing missiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.Orca.HE:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca High-Explosive Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.payload, ~!commander_tree.orca.ap, ~aircraft.gdi, ~!aircraft.talon
+		Description: Equips the Orca with high-explosive missiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+hack.cameo_filler.220:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 244
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
+
+hack.cameo_filler.221:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 245
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, ~filler.orca, disabled
+
 commander_tree.Mammoth_MKII:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Mammoth MK.II
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 242
+		BuildPaletteOrder: 250
 		IconPalette: chrometd
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi,
 		Description: Enables to build the Mammoth MK.II. \n  It is epic walker with dual Railguns and high explosive Rockets against ground and air.
 
-hack.cameo_filler.219a:
+hack.cameo_filler.222:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 242
-		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
+		BuildPaletteOrder: 251
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled
 
-hack.cameo_filler.219b:
+hack.cameo_filler.223:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 242
-		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
+		BuildPaletteOrder: 251
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, disabled
+
 
 #Nod
 commander_tree.Chemical_Mortar:
@@ -2210,24 +2383,12 @@ commander_tree.Banshee:
 		IconPalette: chrometd
 		BuildPaletteOrder: 341
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.nod
-		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
-
-commander_tree.Banshee:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Banshee
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 341
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee_bomber, ~aircraft.nod
+		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee.bomber, ~!commander_tree.banshee.payload, ~aircraft.nod
 		Description: Enables to build the Banshee, a versatile VTOL fighter.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.banshee
 
-commander_tree.Banshee_Bomber:
+commander_tree.Banshee.Bomber:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Banshee Bomber
@@ -2235,8 +2396,21 @@ commander_tree.Banshee_Bomber:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 341
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee, ~aircraft.nod
+		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee, ~!commander_tree.banshee.payload, ~aircraft.nod
 		Description: Enables to build the Banshee Bomber, a dedicated Anti-Tank Bomber.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.banshee
+
+commander_tree.Banshee.Payload:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Banshee Payload Upgraded
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 341
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~!commander_tree.banshee, ~!commander_tree.banshee.bomber, ~aircraft.nod
+		Description: Enables to build the Banshee with increased Payload. It is more expensive and a bit slower than the normal Banshee.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.banshee
 
@@ -2250,7 +2424,95 @@ hack.cameo_filler.322:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 343
-		Prerequisites: prerequisite.has_points, ~aircraft.nod, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.nod, ~filler.banshee, disabled
+
+commander_tree.Apache.Flyby:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Apache Flyby
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 344
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion
+		Description: Upgrades the Apache to be able to fire on the move.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.flyby
+
+hack.cameo_filler.322a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 344
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion, disabled
+
+hack.cameo_filler.322b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 344
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion, disabled
+
+commander_tree.Comanche.Bomber:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Comanche Bomber
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 345
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.blackh
+		Description: Upgrades the Comanche with heavy bombs, making it slower but more devastating.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.comanche
+
+hack.cameo_filler.322c:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 345
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.blackh, disabled
+
+hack.cameo_filler.322d:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 345
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.blackh, disabled
+
+commander_tree.Venom.Heavy_Laser:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Venom Heavy Laser
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 346
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.marked, ~!commander_tree.venom.payload
+		Description: Upgrades the Venom with a heavy laser, \n  making it slower but very effective vs. Heavy Tanks.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.venom
+
+commander_tree.Venom.Payload:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Venom Payload Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 346
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.marked, ~!commander_tree.venom.heavy_laser
+		Description: Upgrades the payload of the Venom.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.venom
+
+hack.cameo_filler.321:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 346
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.marked, disabled
+
+hack.cameo_filler.322:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 346
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.marked, ~filler.venom, disabled
 
 hack.has_points:
 	AlwaysVisible:

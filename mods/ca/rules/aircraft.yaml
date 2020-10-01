@@ -990,7 +990,7 @@ HELI:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.artillery, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 1500
@@ -1064,6 +1064,62 @@ HELI:
 		DecorationBounds: 36,28
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+HELI.Cryo:
+	Inherits: HELI
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow.cryo, ~techlevel.medium
+		Description: Helicopter gunship armed\nwith cryo-missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Reflector
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Longbow (Cryo)
+	AmmoPool:
+		Ammo: 10
+		PipCount: 5
+	Armament@PRIMARY:
+		Weapon: HellfireAA.Cryo
+	Armament@SECONDARY:
+		Weapon: HellfireAG.Cryo
+
+HELI.Artillery:
+	Inherits: HELI
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow.artillery, ~techlevel.medium
+		Description: Helicopter gunship armed\nwith artillery missiles.\n  Strong vs Buildings, Groups of Units \n  Weak vs Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Longbow (Artillery)
+	-Armament@PRIMARY
+	Armament@SECONDARY:
+		Weapon: HellfireAG.Arty
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		ReloadCount: 2
+
+HELI.Payload:
+	Inherits: HELI
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow.payload, ~techlevel.medium
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Longbow (Payload)
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
 
 HIND:
 	Inherits: ^Helicopter
@@ -1677,7 +1733,7 @@ APCH:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~techlevel.medium
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~!commander_tree.apache.flyby, ~techlevel.medium
 		IconPalette: chrometd
 		Description: Helicopter gunship with a chaingun.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Aircraft:
@@ -1749,9 +1805,9 @@ APCH.Flyby:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~techlevel.medium
-		IconPalette: chrometd
-		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move and with more ammo. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
+		Prerequisites: ~hpad.td, ~aircraft.legion, ~commander_tree.apache.flyby, ~techlevel.medium
+		IconPalette: chrome
+		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Tooltip:
 		Name: Apache Flyby
 	-AttackAircraft:
@@ -1760,8 +1816,8 @@ APCH.Flyby:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 	AmmoPool:
-		Ammo: 16
-		PipCount: 8
+		Ammo: 12
+		PipCount: 6
 
 ORCA:
 	Inherits: ^HelicopterTD
@@ -1777,7 +1833,7 @@ ORCA:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~techlevel.high
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~!commander_tree.orca.ap, ~!commander_tree.orca.he, ~!commander_tree.orca.payload, ~techlevel.high
 		IconPalette: chrometd
 		Description: VTOL gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Aircraft:
@@ -1839,6 +1895,61 @@ ORCA:
 		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+ORCA.AP:
+	Inherits: ORCA
+	Tooltip:
+		Name: Orca (AP)
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.ap, ~techlevel.high
+		IconPalette: chrome
+		Description: VTOL gunship armed\nwith armor-piercing missiles.\n  Strong vs Tanks\n  Weak vs Infantry
+	Armament@PRIMARY:
+		Weapon: HellfireAG.Orca.AP
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Weapon: HellfireAA.Orca.AP
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+
+ORCA.HE:
+	Inherits: ORCA
+	Tooltip:
+		Name: Orca (HE)
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.he, ~techlevel.high
+		IconPalette: chrome
+		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
+	Armament@PRIMARY:
+		Weapon: HellfireAG.Orca.HE
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Weapon: HellfireAA.Orca.HE
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+
+ORCA.Payload:
+	Inherits: ORCA
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Orca (Payload)
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.payload, ~techlevel.high
+		IconPalette: chrome
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		ReloadCount: 2
+		AmmoCondition: ammo
 
 ORCB:
 	Inherits: ^HelicopterTD
@@ -1973,18 +2084,16 @@ UAV:
 		PlayerPalette: overlayplayertd
 	-EjectOnDeath:
 
-RAH:
+RAH66:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	RenderSprites:
-		Image: rah66
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: ~hpad.td, tmpl, ~aircraft.blackh, ~techlevel.high
+		Prerequisites: ~hpad.td, tmpl, ~aircraft.blackh, ~!commander_tree.comanche.bomber, ~techlevel.high
 		Description: Stealth helicopter armed\nwith napalm rockets.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
 	Valued:
 		Cost: 1500
@@ -2069,6 +2178,102 @@ RAH:
 		RearmActors: hpad, hpad.td
 	Voiced:
 		VoiceSet: OxannaVoice
+
+RAH66.Bomber:
+	Inherits: ^HelicopterTD
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		IconPalette: chrome
+		Prerequisites: ~hpad.td, tmpl, ~commander_tree.comanche.bomber, ~techlevel.high
+		Description: Stealth helicopter armed\nwith napalm bombs.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Comanche Bomber
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 18000
+	RevealsShroud:
+		Range: 10c0
+		MinRange: 8c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 8c0
+		Type: GroundPosition
+	Armament@PRIMARY:
+		Weapon: Napalm.Comanche
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 20
+		Voice: Attack
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		TurnSpeed: 4
+		Speed: 175
+		CanHover: False
+		TakeoffSounds: dropup1.aud
+		LandingSounds: dropdwn1.aud
+		Voice: Move
+		CanSlide: False
+	Cloak@NORMAL:
+		InitialDelay: 100
+		CloakDelay: 200
+		CloakSound: trans1.aud
+		UncloakSound: appear1.aud
+		Palette: cloak
+		IsPlayerPalette: false
+		RequiresCondition: !cloak-force-disabled && airborne && !invisibility
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+	WithIdleOverlay@ROTORAIR:
+		Offset: 10,0,80
+		Sequence: rotor
+		RequiresCondition: airborne
+		Palette: player
+	WithIdleOverlay@ROTORGROUND:
+		Offset: 10,0,80
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+		Palette: player
+	AmmoPool:
+		Ammo: 6
+		PipCount: 3
+		AmmoCondition: ammo
+		ReloadCount: 1
+	SpawnActorOnDeath:
+		Actor: RAH.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: RAH.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: RAH.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: RAH.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+	SmokeTrailWhenDamaged:
+		Offset: -427,0,0
+	Selectable:
+		DecorationBounds: 36,28
+	Rearmable:
+		RearmActors: hpad, hpad.td
+	Voiced:
+		VoiceSet: OxannaVoice
+
 
 KIRO:
 	Inherits: ^Helicopter
@@ -2395,7 +2600,7 @@ HARR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier,  ~techlevel.high
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier, ~!commander_tree.harrier.avionics, ~!commander_tree.harrier.payload, ~techlevel.high
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n  Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
@@ -2483,14 +2688,30 @@ HARR.avionics:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier,  ~techlevel.high
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier.avionics, ~techlevel.high
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n Avionics upgrade allows it to attack without flying over. \n Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
-	Valued:
-		Cost: 2000
 	Tooltip:
 		Name: Harrier (Avionics)
 	AttackAircraft:
 		AttackType: Hover
+
+HARR.payload:
+	Inherits: HARR
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier.payload, ~techlevel.high
+		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n Has increased payload. \n Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Harrier (Payload)
+	AmmoPool:
+		Ammo: 12
+		PipCount: 6
+		ReloadDelay: 60
+		AmmoCondition: ammo
 
 Raptor:
 	Inherits: ^Plane
@@ -2566,7 +2787,7 @@ SCRN:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee, ~techlevel.high
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee, ~!commander_tree.banshee.bomber, ~!commander_tree.banshee.payload, ~techlevel.high
 		Description: Fast VTOL attack craft armed\nwith powerful plasma cannons.\n  Strong vs Heavy Armor, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 2000
@@ -2601,7 +2822,7 @@ SCRN:
 	Aircraft:
 		CruiseAltitude: 2560
 		TurnSpeed: 5
-		Speed: 205
+		Speed: 210
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		CanHover: False
@@ -2662,7 +2883,7 @@ SCRN.Bomber:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		-IconPalette: chrometd
-		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee_bomber, ~techlevel.high
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee.bomber, ~techlevel.high
 		Description: Fast VTOL bomber craft armed\nwith powerful plasma bombs.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Aircraft
 	Tooltip:
 		Name: Banshee Bomber
@@ -2671,6 +2892,28 @@ SCRN.Bomber:
 		LocalOffset: 0,213,-85, 0,-213,-85
 		PauseOnCondition: !ammo
 	-Armament@SECONDARY:
+
+SCRN.Payload:
+	Inherits: SCRN
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		-IconPalette: chrometd
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee.payload, ~techlevel.high
+	Tooltip:
+		Name: Banshee (Payload)
+	Valued:
+		Cost: 2500
+	Aircraft:
+		CruiseAltitude: 2560
+		TurnSpeed: 5
+		Speed: 190
+	AmmoPool:
+		Ammo: 15
+		PipCount: 5
+		ReloadDelay: 25
+		AmmoCondition: ammo
 
 HORN:
 	Inherits: ^PlaneTD
@@ -2882,7 +3125,7 @@ VENM:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.marked, ~techlevel.medium
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~!commander_tree.venom.payload, ~!commander_tree.venom.heavy_laser, ~techlevel.medium
 		IconPalette: chrometd
 		Description: VTOL gunship armed\nwith laser.\n  Strong vs Infantry, Light Armor, Aircraft\n  Weak vs Tanks, Buildings
 	Aircraft:
@@ -2918,8 +3161,8 @@ VENM:
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
 	AmmoPool:
-		Ammo: 10
-		PipCount: 5
+		Ammo: 6
+		PipCount: 3
 		ReloadDelay: 16
 		AmmoCondition: ammo
 	SpawnActorOnDeath:
@@ -2947,6 +3190,85 @@ VENM:
 		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad.td
+	ReloadAmmoPool@1:
+		Delay: 30
+		Count: 1
+		RequiresCondition: charged == 1
+	ReloadAmmoPool@2:
+		Delay: 15
+		Count: 1
+		RequiresCondition: charged == 2
+	ReloadAmmoPool@3:
+		Delay: 10
+		Count: 1
+		RequiresCondition: charged == 3
+	ReloadAmmoPool@4:
+		Delay: 7
+		Count: 1
+		RequiresCondition: charged >= 4
+	ExternalCondition@CHARGED:
+		Condition: charged
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+	Targetable@BeamCannon:
+		TargetTypes: BeamCannon
+
+VENM.Payload:
+	Inherits: VENM
+	Tooltip:
+		Name: Venom (Payload)
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.payload, ~techlevel.medium
+		IconPalette: chrome
+	AmmoPool:
+		Ammo: 10
+		PipCount: 5
+		ReloadDelay: 50
+
+VENM.HeavyLaser:
+	Inherits: VENM
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Venom (Heavy Laser)
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.heavy_laser, ~techlevel.medium
+		IconPalette: chrome
+		Description: VTOL gunship armed\nwith a heavy laser.\n  Strong vs Tanks\n  Weak vs Infantry, Buildings
+	AmmoPool:
+		Ammo: 4
+		PipCount: 4
+		ReloadDelay: 50
+	Aircraft:
+		Speed: 170
+	Armament@PRIMARY:
+		Weapon: Laser.Heavy
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+	-AttackAircraft:
+	AttackCharges:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+		ChargeLevel: 50
+		ChargingCondition: charging
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: obelpowr.aud
+		Interval: 30, 40
+	ReloadAmmoPool@1:
+		Delay: 100
+	ReloadAmmoPool@2:
+		Delay: 50
+	ReloadAmmoPool@3:
+		Delay: 33
+	ReloadAmmoPool@4:
+		Delay: 25
 
 Dropship:
 	Inherits: ^Plane
