@@ -1,11 +1,17 @@
 WorldLoaded = function()
   WorldLoadedCommanderTree()
   WorldLoadedDropship()
-  WorldLoadedToW()
+  if (Player.GetPlayer("Multi0").HasPrerequisites({"tugofwar"}) == true)
+  then
+    Media.DisplayMessage("deine mudder, schwänze in der hölle... du weißt schon")
+    WorldLoadedToW()
+  end
 end
 
 Tick = function()
-		TickGeneralsPowers()
-    TickDropship()
-    TickTugOfWar()
+	TickGeneralsPowers()
+  TickDropship()
+  if Player.GetPlayer("Multi0").HasPrerequisites({"tugofwar"})
+  then TickTugOfWar()
+  end
 end
