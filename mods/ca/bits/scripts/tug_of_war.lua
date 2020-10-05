@@ -28,14 +28,28 @@ warpointb1 = Map.NamedActor("warpointb1")
 warpointb2 = Map.NamedActor("warpointb2")
 warpointb3 = Map.NamedActor("warpointb3")
 
-if ( Map.NamedActor("warpointa3") ~= nil ) then
+if (warpointa3 ~= nil) then
 	insertIndex = 1
-elseif ( Map.NamedActor("warpointa2") ~= nil ) then
+	if (warpointb3  == nil) then
+		Media.DisplayMessage("warpointa3 exists but warpointb3 does not, this is not a good idea...")
+	end
+	if (warpointa2 == nil or warpointb2 == nil or warpointa1 == nil or warpointb1 == nil or warpoint0 == nil) then
+		Media.DisplayMessage("if you use warpointa3 you also need all other warpoints a1,a2,b1,b2 and 0.")
+	end
+elseif ( warpointa2 ~= nil ) then
 	insertIndex = 3
+	if (warpointb2  == nil) then
+		Media.DisplayMessage("warpointa2 exists but warpointb2 does not, this is not a good idea...")
+	end
+	if (warpointa1 == nil or warpointb1 == nil or warpoint0 == nil) then
+		Media.DisplayMessage("if you use warpointa2 you also need the lower warpoints a1,b1 and 0.")
+	end
 else
+	if (warpointa1 == nil or warpointb1 == nil or warpoint0 == nil) then
+		Media.DisplayMessage("you need at least the warpoints a1,b1 and 0.")
+	end
 	insertIndex = 5
 end
-
 
 
 TickTugOfWar = function()
@@ -75,7 +89,6 @@ end
 
 AttackMoveUnits = function()
 	if ( warpointa3 ~= nil ) then
-
 		AttackMoveUnitsFromTable(teamAunits[1], warpointa3.Location)
 		AttackMoveUnitsFromTable(teamAunits[2], warpointa2.Location)
 		AttackMoveUnitsFromTable(teamAunits[3], warpointa1.Location)
@@ -85,7 +98,6 @@ AttackMoveUnits = function()
 		AttackMoveUnitsFromTable(teamAunits[7], warpointb3.Location)
 
 	elseif ( warpointa2 ~= nil ) then
-		Media.DisplayMessage("med move")
 		AttackMoveUnitsFromTable(teamAunits[3], warpointa2.Location)
 		AttackMoveUnitsFromTable(teamAunits[4], warpointa1.Location)
 		AttackMoveUnitsFromTable(teamAunits[5], warpoint0.Location)
