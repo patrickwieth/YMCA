@@ -1200,6 +1200,8 @@ WEAP:
 	Inherits@shape: ^3x2Shape
 	Selectable:
 		Bounds: 72,48
+	RenderSprites:
+		Image: weap
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
@@ -1398,6 +1400,13 @@ WEAP:
 		SequencePalette: placebuilding
 
 WEAP.tow:
+	Inherits: WEAP
+	Buildable:
+		Prerequisites: proc, ~structures.ra, ~tow
+	Production:
+		Produces: Chassis
+
+WEAP.auto:
 	Inherits: ^Building
 	Inherits@shape: ^3x3Shape
 	Selectable:
@@ -1445,13 +1454,12 @@ WEAP.tow:
 		Weapon: ProducePassengers
 		InitialDelay: 100
 	ProductionCA:
-		Produces: Chassis
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	Production:
 		Produces: Vehicle
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	GrantExternalConditionToProduced:
 		Condition: autoproduced
+	ProvidesPrerequisite@weap.tow:
+		Prerequisite: weap.tow
 	ProvidesPrerequisite@weap:
 		Prerequisite: weap
 	ProvidesPrerequisite@hand:
@@ -3286,6 +3294,13 @@ WEAP.TD:
 		Factions: gdi, zocom, talon, eagle
 		Prerequisite: vehicles.msam
 
+WEAP.TD.tow:
+	Inherits: WEAP.TD
+	Buildable:
+		Prerequisites: proc.td, ~structures.gdi, ~tow
+	Production:
+		Produces: Chassis
+
 AIRS:
 	Inherits: ^BuildingTD
 	RenderSprites:
@@ -3507,6 +3522,19 @@ AIRS:
 	InfiltrateForSupportPower@spy:
 		Proxy: vehicles.upgraded
 		Types: SpyInfiltrate
+
+AIRS.tow:
+	Inherits: AIRS
+	Buildable:
+		Prerequisites:  proc.td, ~structures.nod, ~tow
+	ProductionAirdropCA:
+		Produces: Chassis
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: c17.cargo
+		EntryType: DropSiteClosestEdge
+		ExitType: StraightAhead
+		LandingFacing: 64
+		ReadyAudio: ReinforcementsArrived
 
 NUKE:
 	Inherits: ^BuildingTD
