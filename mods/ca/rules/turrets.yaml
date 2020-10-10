@@ -42,6 +42,88 @@
 		CargoType: heavy_turret
 		Weight: 5
 
+CRATE.light_turret:
+	Inherits: ^Crate
+	Buildable:
+		Queue: Turret
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		Prerequisites: ~vehicles.any
+		Description: Paradrops a Turret Prototype
+	RevealsShroud:
+		Range: 2c0
+	GiveUnitCrateAction@batf_turret:
+		SelectionShares: 5
+		Units: batf_turret
+		ValidFactions: allies, england, france, germany, soviet, russia, ukraine, iraq, gdi, talon, zocom, eagle, nod, blackh, marked, legion
+	GiveUnitCrateAction@sling_turret:
+		SelectionShares: 5
+		Units: sling_turret
+		ValidFactions: allies, england, france, germany, soviet, russia, ukraine, iraq, gdi, talon, zocom, eagle, nod, blackh, marked, legion
+	GiveUnitCrateAction@recon_turret:
+		SelectionShares: 5
+		Units: recon_turret
+	GiveUnitCrateAction@medic_turret:
+		SelectionShares: 5
+		Units: medic_turret
+	GiveUnitCrateAction@sam_turret:
+		SelectionShares: 5
+		Units: sam_turret
+	GiveUnitCrateAction@gun_turret:
+		SelectionShares: 5
+		Units: gun_turret
+	GiveUnitCrateAction@frag_turret:
+		SelectionShares: 5
+		Units: frag_turret
+	GiveUnitCrateAction@flame_turret:
+		SelectionShares: 5
+		Units: flame_turret
+	GiveUnitCrateAction@chem_turret:
+		SelectionShares: 5
+		Units: chem_turret
+	GiveUnitCrateAction@laser_turret:
+		SelectionShares: 5
+		Units: laser_turret
+	GiveUnitCrateAction@desolator_turret:
+		SelectionShares: 5
+		Units: desolator_turret
+	GiveUnitCrateAction@commando_turret:
+		SelectionShares: 5
+		Units: commando_turret
+	GiveUnitCrateAction@repair_turret:
+		SelectionShares: 5
+		Units: repair_turret
+	GiveUnitCrateAction@ship_turret:
+		SelectionShares: 5
+		Units: ship_turret
+	GiveUnitCrateAction@jeep_turret:
+		SelectionShares: 5
+		Units: jeep_turret
+	GiveUnitCrateAction@humvee_turret:
+		SelectionShares: 5
+		Units: humvee_turret
+	GiveUnitCrateAction@vulcan_turret:
+		SelectionShares: 5
+		Units: vulcan_turret
+	GiveUnitCrateAction@buggy_turret:
+		SelectionShares: 5
+		Units: buggy_turret
+	GiveUnitCrateAction@flak_turret:
+		SelectionShares: 5
+		Units: flak_turret
+	GiveUnitCrateAction@mini_tesla:
+		SelectionShares: 5
+		Units: mini_tesla
+	GiveUnitCrateAction@sam_turret2:
+		SelectionShares: 5
+		Units: sam_turret2
+	GiveUnitCrateAction@ship_turret2:
+		SelectionShares: 5
+		Units: ship_turret2
+	GiveUnitCrateAction@ship_turret3:
+		SelectionShares: 5
+		Units: ship_turret3
+
 ^light_turrets:
 	Turreted:
 		TurnSpeed: 12
@@ -368,6 +450,7 @@
 			humvee_turret: humveeturret
 			vulcan_turret: vulcanturret
 			buggy_turret: buggyturret
+			flak_turret: flakturret
 
 ^medium_turrets:
 	Turreted:
@@ -813,7 +896,6 @@
 		LoadingCondition: notmobile
 		LoadedCondition: full
 		PassengerConditions:
-			flak_turret: flakturret
 			double_turret: doubleturret
 			atomic_double_turret: atomicdoubleturret
 			atomic_heavy_double_turret: atomicheavydoubleturret
@@ -1053,6 +1135,16 @@ buggy_turret:
 	Tooltip:
 		Name: Buggy Turret
 
+flak_turret:
+	Inherits: ^light_turret_prototype
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Description: Turret with Flak
+	Tooltip:
+		Name: Flak Turret
+
+
 ## medium turret units
 
 ltnk_turret:
@@ -1115,16 +1207,8 @@ stnk_turret:
 	Tooltip:
 		Name: Stealth Tank Turret
 
-## heavy turret units
 
-flak_turret:
-	Inherits: ^heavy_turret_prototype
-	Buildable:
-		BuildPaletteOrder: 0
-		Prerequisites: ~infantry.ra, ~techlevel.infonly
-		Description: Turret with Flak
-	Tooltip:
-		Name: Flak Turret
+## heavy turret units
 
 heavy_double_turret:
 	Inherits: ^heavy_turret_prototype

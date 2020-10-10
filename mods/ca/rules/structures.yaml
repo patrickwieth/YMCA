@@ -771,7 +771,7 @@ DOME:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
-		Prerequisites: proc, ~structures.ra
+		Prerequisites: proc, ~structures.ra, ~!tow
 		Description: Provides an overview\nof the battlefield.\n  Requires power to operate.
 		BuildDurationModifier: 25
 	Valued:
@@ -867,6 +867,26 @@ DOME:
 		Cursor: ability
 		PauseOnCondition: disabled || empdisable || being-warped
 		DisplayTimerStances: Ally
+
+DOME.tow:
+	Inherits: DOME
+	Buildable:
+		Prerequisites: proc, ~structures.ra, ~tow
+		Description: Provides an overview\nof the battlefield. Calls in paradrops with Turret Prototpyes. \n  Requires power to operate.
+	ProductionParadrop:
+		Produces: Turret
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: c17.cargo
+		ReadyAudio: ReinforcementsArrived
+	Exit@1:
+		ExitCell: 0,1
+		ProductionTypes: Turret
+	RallyPoint:
+		Offset: 5,5
+		RequiresCondition: primary
+	PrimaryBuilding:
+		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 
 PBOX:
 	Inherits: ^Defense
@@ -4115,7 +4135,7 @@ HQ:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
-		Prerequisites: proc.td, ~structures.td
+		Prerequisites: proc.td, ~structures.td, ~!tow
 		IconPalette: chrometd
 		Description: Provides an overview of the battlefield.\n  Requires power to operate.
 		BuildDurationModifier: 25
@@ -4271,6 +4291,26 @@ HQ:
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: rad.gdi.stolen
+
+HQ.tow:
+	Inherits: HQ
+	Buildable:
+		Prerequisites: proc.td, ~structures.td, ~tow
+		Description: Provides an overview\nof the battlefield. Calls in paradrops with Turret Prototpyes. \n  Requires power to operate.
+	ProductionParadrop:
+		Produces: Turret
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: c17.cargo
+		ReadyAudio: ReinforcementsArrived
+	Exit@1:
+		ExitCell: 0,1
+		ProductionTypes: Turret
+	RallyPoint:
+		Offset: 5,5
+		RequiresCondition: primary
+	PrimaryBuilding:
+		PrimaryCondition: primary
+		SelectionNotification: PrimaryBuildingSelected
 
 EYE:
 	Inherits: ^ScienceBuildingTD

@@ -169,7 +169,7 @@ end
 Trigger.OnAnyProduction(
   function(producer, produced, productionType)
 
-    if producer.Type == 'weap.tow'
+    if producer.Type == 'weap.auto'
     then
 			--Media.DisplayMessage("insert at # " .. #autoproduced+1 .. "autoproduced length " .. tostring( #autoproduced ))
 
