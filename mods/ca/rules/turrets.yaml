@@ -44,11 +44,24 @@
 
 CRATE.light_turret:
 	Inherits: ^Crate
+	Parachutable:
+		FallRate: 26
+		KilledOnImpassableTerrain: true
+		ParachutingCondition: parachute
+	WithParachute:
+		ShadowImage: parach-shadow
+		ShadowSequence: idle
+		Image: parach
+		Sequence: idle
+		OpeningSequence: open
+		Offset: 0,0,200
+		RequiresCondition: parachute
 	Buildable:
-		Queue: Turret
+		Queue: Chassis
+		BuildAtProductionType: Turret
 		BuildPaletteOrder: 0
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.any
+		Prerequisites: ~vehicles.any, radar
 		Description: Paradrops a Turret Prototype
 	RevealsShroud:
 		Range: 2c0
