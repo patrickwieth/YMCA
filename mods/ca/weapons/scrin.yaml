@@ -46,17 +46,10 @@ IntruderDiscs:
 	Range: 5c0
 	ReloadDelay: 85
 	Burst: 3
-	Projectile: Bullet
+	Projectile: BulletCA
 		Inaccuracy: 0c128
 	Warhead@1Dam: SpreadDamage
 		Damage: 3250
-		Versus:
-			None: 70
-			Wood: 100
-			Light: 65
-			Heavy: 70
-			Concrete: 100
-			Brick: 85
 
 EnslaveInfantry:
 	Range: 7c0
@@ -128,12 +121,13 @@ GunWalkerZapAA:
 		Falloff: 100, 100, 30, 15
 
 PlasmaDiscs:
+	Inherits: ^ShellHeavy
 	Range: 5c512
 	Report: seeker-fire1.aud, seeker-fire2.aud, seeker-fire3.aud
 	ReloadDelay: 55
 	Burst: 5
 	BurstDelays: 4
-	Projectile: Bullet
+	Projectile: BulletCA
 		Image: plasdiscsm
 		TrailImage: smokey
 		TrailPalette: scrinplasma
@@ -144,14 +138,7 @@ PlasmaDiscs:
 		Blockable: false
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
-		Damage: 2000
-		Versus:
-			None: 40
-			Wood: 75
-			Light: 70
-			Heavy: 100
-			Concrete: 85
-			Brick: 50
+		Damage: 1800
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -209,7 +196,7 @@ InterloperLaser:
 			Concrete: 50
 
 CorrupterSpew:
-	Inherits: BigFlamer
+	Inherits: BigChemspray
 	StartBurstReport: corrupter-fire1.aud
 	ReloadDelay: 110
 	Burst: 12
@@ -304,7 +291,7 @@ RuinerCannon:
 	Burst: 4
 	BurstDelays: 20
 	Range: 14c0
-	Projectile: Bullet
+	Projectile: BulletCA
 		Image: tibglob
 		Palette: scrin
 	Warhead@1Dam: SpreadDamage
@@ -402,24 +389,18 @@ StormRiderZapAA:
 
 DevastatorDiscs:
 	Inherits: PlasmaDiscs
+	Inherits: ^ShellArtillery
 	Range: 14c0
 	ReloadDelay: 180
 	Report: devastator-fire1.aud, devastator-fire2.aud, devastator-fire3.aud
 	Burst: 7
 	BurstDelays: 5
-	Projectile: Bullet
+	Projectile: BulletCA
 		Image: plasdisclg
 		Inaccuracy: 1c768
 		Speed: 180
 	Warhead@1Dam: SpreadDamage
 		Damage: 4250
-		Versus:
-			None: 100
-			Wood: 70
-			Light: 60
-			Heavy: 30
-			Concrete: 80
-			Brick: 90
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
@@ -543,13 +524,14 @@ StormcrawlerZap:
 			Heavy: 60
 
 ShardLauncher:
+	Inherits: ^Missile
 	StartBurstReport: shard-fire1.aud
 	ReloadDelay: 25
 	Burst: 5
 	BurstDelays: 4
 	Range: 7c512
 	ValidTargets: Air
-	Projectile: Missile
+	Projectile: MissileCA
 		Speed: 366
 		Palette: scrin
 		ContrailWidth: 0c48
@@ -565,12 +547,6 @@ ShardLauncher:
 		Range: 0, 0c64, 0c256, 3c0
 		Falloff: 100, 100, 30, 15
 		Damage: 2500
-		Versus:
-			None: 175
-			Wood: 73
-			Concrete: 45
-			Light: 101
-			Heavy: 90
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: idle, idle2, idle3, idle4
@@ -585,7 +561,7 @@ RavagerShards:
 	ReloadDelay: 40
 	BurstDelays: 5
 	Range: 5c512
-	Projectile: Missile
+	Projectile: MissileCA
 		Speed: 213
 		Palette: scrin
 		ContrailWidth: 0c48
@@ -602,32 +578,18 @@ RavagerShards:
 		-Falloff:
 		Spread: 128
 		Damage: 1000
-		Versus:
-			None: 90
-			Wood: 55
-			Light: 100
-			Heavy: 85
-			Concrete: 75
-			Brick: 50
 
 LaceratorShards:
 	Inherits: RavagerShards
 	StartBurstReport: lacerator-fire1.aud, lacerator-fire2.aud
 	ReloadDelay: 35
 	Burst: 3
-	Projectile: Missile
+	Projectile: MissileCA
 		Image: bshard
 		ContrailColor: 4499FFAA
 	Warhead@1Dam: SpreadDamage
 		Spread: 128
 		Damage: 2000
-		Versus:
-			None: 40
-			Wood: 75
-			Light: 70
-			Heavy: 100
-			Concrete: 85
-			Brick: 50
 	Warhead@3Eff: CreateEffect
 		Image: bshardhit
 
