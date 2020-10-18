@@ -147,6 +147,7 @@ PlasmaDiscs:
 		ImpactSounds: seeker-hit1.aud, seeker-hit2.aud
 
 ^ScrinLaser:
+	Inherits: ^Energy
 	ValidTargets: Ground, Water
 	Range: 7c512
 	ReloadDelay: 60
@@ -165,12 +166,6 @@ PlasmaDiscs:
 		Spread: 42
 		Damage: 7000
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 90
-			Light: 65
-			Wood: 30
-			Heavy: 100
-			Concrete: 80
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
@@ -188,12 +183,6 @@ InterloperLaser:
 		SecondaryBeamWidth: 55
 	Warhead@1Dam: SpreadDamage
 		Damage: 1700
-		Versus:
-			None: 100
-			Light: 100
-			Wood: 50
-			Heavy: 100
-			Concrete: 50
 
 CorrupterSpew:
 	Inherits: BigChemspray
@@ -210,6 +199,7 @@ CorrupterSpew:
 
 DevourerLaser:
 	Inherits: ^ScrinLaser
+	Inherits: ^EnergyAP
 	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
 	FirstBurstTargetOffset: 0,-600,0
 	FollowingBurstTargetOffset: -0,100,0
@@ -224,6 +214,30 @@ DevourerLaser:
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 1000
+
+WarshipLaser:
+	Inherits: ^ScrinLaser
+	Range: 8c512
+	ReloadDelay: 20
+	Report: interloper-fire1.aud, interloper-fire2.aud
+	FirstBurstTargetOffset: 0,-600,0
+	FollowingBurstTargetOffset: -0,120,0
+	Burst: 13
+	BurstDelays: 1
+	Projectile: LaserZap
+		TrackTarget: false
+		Duration: 3
+		LaunchEffectImage: devo
+		LaunchEffectSequence: muzzle
+		LaunchEffectPalette: scrin
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1000
+	Warhead@chill: GrantExternalCondition
+		Condition: warshipTarget
+		Duration: 40
+		Delay: 14
+		Range: 1c768
 
 RiftCannon:
 	Inherits: ^ScrinLaser
@@ -262,6 +276,7 @@ MiniRift:
 			None: 55
 			Wood: 30
 			Light: 70
+			Reflector: 25
 			Heavy: 100
 			Concrete: 80
 			Brick: 25
@@ -269,7 +284,7 @@ MiniRift:
 		ValidStances: Enemy, Neutral
 	Warhead@2Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 300
+		Damage: 600
 		Falloff: 100, 70, 0
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
@@ -277,11 +292,23 @@ MiniRift:
 			None: 55
 			Wood: 30
 			Light: 70
+			Reflector: 25
 			Heavy: 100
 			Concrete: 80
 			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 		ValidStances: Ally
+
+MediumRift:
+	Inherits: MiniRift
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 2400
+		Falloff: 100, 70, 50
+	Warhead@2Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 2400
+		Falloff: 100, 70, 50
 
 RuinerCannon:
 	Inherits: 155mm
@@ -403,6 +430,78 @@ DevastatorDiscs:
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
+
+DevastatorShards:
+	Inherits: LaceratorShards
+	Inherits: ^MissileAP
+	Range: 11c0
+	ReloadDelay: 180
+	Burst: 7
+	BurstDelays: 5
+	Projectile: MissileCA
+		Speed: 213
+		Palette: scrin
+		ContrailWidth: 0c48
+		ContrailLength: 9
+		Image: bshard
+		ContrailColor: 4499FFAA
+		Jammable: false
+		Inaccuracy: 128
+		HorizontalRateOfTurn: 35
+		RangeLimit: 11c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 4250
+	-Warhead@2Smu: LeaveSmudge
+	Warhead@3Eff: CreateEffect
+		Explosions: idle, idle2, idle3, idle4
+		ExplosionPalette: scrin
+		Image: bshardhit
+		ValidTargets: Air, Ground, Water, Trees
+	-Warhead@4EffWater: CreateEffect
+
+DevastatorRift:
+	Inherits: ^Energy
+	ReloadDelay: 200
+	Range: 11c0
+	Report: darkener-fire1.aud, darkener-fire2.aud
+	InvalidTargets: Air
+	Projectile: Railgun
+		Duration: 14  
+		DamageActorsInLine: false
+		BeamColor: 000000
+		BeamWidth: 40
+		BeamAlphaDeltaPerTick: -16
+		HelixThickness: 32
+		HelixRadius: 10
+		HelixRadiusDeltaPerTick: 16
+		HelixAlphaDeltaPerTick: -16
+		HelixAngleDeltaPerTick: 16
+		QuantizationCount: 4
+		HelixColor: 080C0C
+		HitAnim: explosion
+		HitAnimSequence: ionexp
+		HitAnimPalette: temptd
+		Inaccuracy: 64
+		ZOffset: 2045
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 8900
+		ValidStances: Neutral, Enemy
+		InvalidTargets: Air
+		AffectsParent: false
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@2Dam: SpreadDamage
+		Spread: 512
+		Damage: 2250
+		ValidStances: Ally
+		InvalidTargets: Air
+		AffectsParent: false
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@Spawn: SpawnActor
+		Actors: camera.mediumrift
+		Range: 1
+		ForceGround: false
+		ValidTargets: Ground, Water
 
 InvaderLauncher:
 	ReloadDelay: 10

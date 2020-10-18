@@ -1125,9 +1125,8 @@ DEVA:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		BuildDurationModifier: 75
 		Prerequisites: scrt, grav, ~aircraft.scrin, ~techlevel.high
-		Description: Long-range siege warship.\n  Maximum 5 can be built.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Aircraft, Tanks
+		Description: Long-range siege warship.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Aircraft, Tanks
 		IconPalette: chrome
 	Voiced:
 		VoiceSet: DevastatorVoice
@@ -1198,7 +1197,31 @@ DEVA:
 		Modifier: 90
 
 DEVA.Shards:
-	Inherits: ^Helicopter
+	Inherits: DEVA
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Prerequisites: scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Description: Long-range anti-tank warship.\n  Strong vs Tanks\n  Weak vs Aircraft
+	Valued:
+		Cost: 2200
+	Tooltip:
+		Name: Devastator Shardlauncher
+	Armament@PRIMARY:
+		Weapon: DevastatorShards
+		LocalOffset: 500,0,0
+
+DEVA.Rift:
+	Inherits: DEVA
+	Buildable:
+		Prerequisites: scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Description: Long-range anti-tank warship.\n  Strong vs masses of units\n  Weak vs Aircraft
+	Valued:
+		Cost: 2200
+	Tooltip:
+		Name: Devastator Rift Opener
+	Armament@PRIMARY:
+		Weapon: DevastatorRift
+		LocalOffset: 500,0,0
 
 PAC:
 	Inherits: ^Helicopter
@@ -1208,14 +1231,13 @@ PAC:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		BuildDurationModifier: 75
 		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~techlevel.high
-		Description: Warship that launches a squadron\nof assault craft.\n  Maximum 5 can be built.\n	Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Buildings, Defenses
+		Description: Carrier that launches a squadron\nof assault craft.\n	Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Buildings, Defenses
 		IconPalette: chrome
 	Voiced:
 		VoiceSet: PlanetaryAssaultCarrierVoice
 	Valued:
-		Cost: 2600
+		Cost: 2400
 	Tooltip:
 		Name: Planetary Assault Carrier
 	UpdatesPlayerStatistics:
@@ -1303,6 +1325,81 @@ PAC:
 	DamageMultiplier@SHIELDS:
 		RequiresCondition: shields-upgrade
 		Modifier: 90
+
+PAC.suicide:
+	Inherits: PAC
+	Buildable:
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Description: Carrier with suicide drones.\n	Strong vs Vehicles, Infantry\n  Weak vs Anti-Air
+		IconPalette: chrome
+	Valued:
+		Cost: 3600
+	Tooltip:
+		Name: Suicide Drone Carrier
+
+PAC.support:
+	Inherits: PAC
+	Buildable:
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Description: Massive Carrier with repair drones.\n	Repair drones have point laser defense.\n  Can teleport infantry directly into the field.\n  Strong vs Projectile based attacks.\n  Weak without army.
+		IconPalette: chrome
+	RenderSprites:
+		Scale: 1.2
+	Valued:
+		Cost: 5000
+	Tooltip:
+		Name: Support Carrier
+
+PAC.laser:
+	Inherits: PAC
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Description: Massive Warship with multiple laser systems.\n	Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Reflector
+		IconPalette: chrome
+	RenderSprites:
+		Scale: 1.1
+	Valued:
+		Cost: 3600
+	Tooltip:
+		Name: Planetary Assault Warship
+	Health:
+		HP: 80000
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: WarshipLaser
+		LocalOffset: 600,0,0
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: WarshipLaser
+		LocalOffset: 0,400,0
+		PauseOnCondition: !ammo
+	Armament@TERTIARY:
+		Name: tertiary
+		Weapon: WarshipLaser
+		LocalOffset: 0,-400,0
+		PauseOnCondition: !ammo
+	GrantConditionOnAttack:
+		Condition: fireStage
+		IsCyclic: true
+		MaximumInstances: 2
+		ArmamentNames: primary, secondary, tertiary
+	-AttackFrontal:
+	AttackOmni:
+		PauseOnCondition: empdisable || being-warped
+	AmmoPool:
+		Ammo: 39
+		AmmoCondition: ammo
+		ReloadDelay: 0
+	ReloadAmmoPool@1:
+		Delay: 120
+		Count: 39
+	-CarrierMaster@carr1:
+	-Exit@0:
+	-Exit@1:
+	-Exit@2:
+	-Exit@3:
 
 INVA:
 	Inherits: ^Plane
@@ -3130,6 +3227,20 @@ camera.minirift:
 		Weapon: MiniRift
 	KillsSelf:
 		Delay: 120
+	WithSpriteBody:
+		-StartSequence:
+	-AmbientSound:
+	-WithDeathAnimation:
+
+camera.mediumrift:
+	Inherits: camera.rift
+	RenderSprites:
+		Image: miniriftanim
+		Scale: 2
+	PeriodicExplosion:
+		Weapon: MediumRift
+	KillsSelf:
+		Delay: 180
 	WithSpriteBody:
 		-StartSequence:
 	-AmbientSound:
