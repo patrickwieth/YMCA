@@ -1366,30 +1366,30 @@ PAC.laser:
 	Health:
 		HP: 80000
 	Armament@PRIMARY:
-		Name: primary
 		Weapon: WarshipLaser
-		LocalOffset: 600,0,0
-		PauseOnCondition: !ammo
+		LocalOffset: 900,0,0
+		RequiresCondition: gattling == 0
 	Armament@SECONDARY:
-		Name: secondary
-		Weapon: WarshipLaser
-		LocalOffset: 0,400,0
-		PauseOnCondition: !ammo
+		Weapon: WarshipLaser.2
+		LocalOffset: 0,450,0
+		RequiresCondition: gattling == 1
 	Armament@TERTIARY:
-		Name: tertiary
-		Weapon: WarshipLaser
-		LocalOffset: 0,-400,0
-		PauseOnCondition: !ammo
-	GrantConditionOnAttack:
-		Condition: fireStage
-		IsCyclic: true
+		Weapon: WarshipLaser.3
+		LocalOffset: 0,-450,0
+		RequiresCondition: gattling == 2
+	GrantConditionOnAttack@GROUND:
+		Condition: gattling
+		RequiredShotsPerInstance: 13
 		MaximumInstances: 2
-		ArmamentNames: primary, secondary, tertiary
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
 	-AttackFrontal:
 	AttackOmni:
 		PauseOnCondition: empdisable || being-warped
 	AmmoPool:
 		Ammo: 39
+		PipCount: 3
 		AmmoCondition: ammo
 		ReloadDelay: 0
 	ReloadAmmoPool@1:
