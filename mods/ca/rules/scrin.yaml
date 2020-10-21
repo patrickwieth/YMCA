@@ -425,7 +425,7 @@ SEEK:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: vehicles.any, ~vehicles.seek, ~techlevel.low
+		Prerequisites: vehicles.any, ~vehicles.seek
 		Queue: Vehicle
 		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
@@ -482,6 +482,28 @@ SEEK:
 	SpawnActorOnDeath:
 		Actor: SEEK.Husk
 		RequiresCondition: !being-warped
+
+SEEK.PLD:
+	Inherits: SEEK
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Seeker (PLD)
+	Buildable:
+		Prerequisites: vehicles.any, ~vehicles.seek
+		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		IconPalette: chrome
+
+SEEK.Reflector:
+	Inherits: SEEK
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Seeker (Reflector)
+	Buildable:
+		Prerequisites: vehicles.any, ~vehicles.seek
+		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		IconPalette: chrome
 
 LACE:
 	Inherits: ^Vehicle
@@ -1143,17 +1165,59 @@ TPOD:
 		RequiresCondition: travelerspeed
 		Modifier: 115
 
-TPOD:
-	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
+TPOD.chainer:
+	Inherits: TPOD
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.tpod
 		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
-		Name: Annihilator Tripod
+		Name: Chainer Tripod
+
+TPOD.chainer.reflector:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Chainer Tripod (Reflector)
+
+TPOD.acid:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with corrosive acid weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Tripod
+
+TPOD.acid.reflector:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Tripod (Reflector)
+
+TPOD.PLD:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Annihilator Tripod (PLD)
+
+TPOD.PLD.reflector:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Annihilator Tripod (PLD, Reflector)
 
 RPTP:
 	Inherits: TPOD
@@ -1172,6 +1236,60 @@ RPTP:
 		LocalOffset: 700,550,1000, 700,-550,1000
 	SpawnActorOnDeath:
 		Actor: RPTP.Husk
+
+RPTP.range:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Range Tripod
+
+RPTP.range.reflector:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Range Tripod (Reflector)
+
+RPTP.acid:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with corrosive acid weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Tripod
+
+RPTP.acid.reflector:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Tripod (Reflector)
+
+RPTP.PLD:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Annihilator Tripod (PLD)
+
+RPTP.PLD.reflector:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Annihilator Tripod (PLD, Reflector)
 
 SMCV:
 	Inherits: ^Vehicle
@@ -1304,6 +1422,37 @@ STMR:
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	-EjectOnDeath:
+
+STMR.hunter:
+	Inherits: STMR
+	Inherits@AUTOTARGET: ^AutoTargetAir
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 40
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~techlevel.medium
+		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Tanks, Buildings
+		IconPalette: chrome
+	Valued:
+		Cost: 1650
+	Tooltip:
+		Name: Stormhunter
+	-Armament@PRIMARY:
+
+STMR.bomber:
+	Inherits: STMR
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 40
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~techlevel.medium
+		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Tanks, Buildings
+		IconPalette: chrome
+	Valued:
+		Cost: 1650
+	Tooltip:
+		Name: Stormbomber
 
 DEVA:
 	Inherits: ^Helicopter
