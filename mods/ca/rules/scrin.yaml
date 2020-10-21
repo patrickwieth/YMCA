@@ -345,7 +345,7 @@ GUNW:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
-		Prerequisites: wsph, ~vehicles.scrin, ~techlevel.low
+		Prerequisites: wsph, ~vehicles.scrin
 		Description: Light assault walker.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
 		IconPalette: chrome
 	Valued:
@@ -396,6 +396,18 @@ GUNW:
 		RequiresCondition: travelerspeed
 		Modifier: 115
 
+GUNW.sensor:
+	Inherits: GUNW
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.gunwalker.sensor
+		Description: Light assault walker.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
+		IconPalette: chrome
+	Valued:
+		Cost: 650
+	Tooltip:
+		Name: Gun Walker (Sensors)
+
 SEEK:
 	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -413,7 +425,7 @@ SEEK:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: vehicles.any, ~vehicles.seek, ~techlevel.low
+		Prerequisites: vehicles.any, ~vehicles.seek
 		Queue: Vehicle
 		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
@@ -471,6 +483,28 @@ SEEK:
 		Actor: SEEK.Husk
 		RequiresCondition: !being-warped
 
+SEEK.PLD:
+	Inherits: SEEK
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Seeker (PLD)
+	Buildable:
+		Prerequisites: vehicles.any, ~vehicles.seek
+		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		IconPalette: chrome
+
+SEEK.Reflector:
+	Inherits: SEEK
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Seeker (Reflector)
+	Buildable:
+		Prerequisites: vehicles.any, ~vehicles.seek
+		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		IconPalette: chrome
+
 LACE:
 	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -488,7 +522,7 @@ LACE:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: vehicles.any, ~vehicles.traveler, ~techlevel.low
+		Prerequisites: vehicles.any, ~vehicles.traveler
 		Queue: Vehicle
 		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
@@ -544,6 +578,39 @@ LACE:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
+LACE.PLD:
+	Inherits: LACE
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Lacerator (PLD)
+	Buildable:
+		Prerequisites: vehicles.any, ~vehicles.traveler
+		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		IconPalette: chrome
+
+LACE.Reflector:
+	Inherits: LACE
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Lacerator (Reflector)
+	Buildable:
+		Prerequisites: vehicles.any, ~vehicles.traveler
+		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		IconPalette: chrome
+
+LACE.AP:
+	Inherits: LACE
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Lacerator (AP)
+	Buildable:
+		Prerequisites: vehicles.any, ~vehicles.traveler
+		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		IconPalette: chrome
+
 INTL:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -559,7 +626,7 @@ INTL:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 40
-		Prerequisites: wsph, ~vehicles.scrin, ~techlevel.low
+		Prerequisites: wsph, ~vehicles.scrin
 		Queue: Vehicle
 		Description: Heavily armoured transport craft.\n  Can detect mines.\n  Strong vs Light Vehicles\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
@@ -611,6 +678,32 @@ INTL:
 		CloakTypes: Mine
 		RequiresCondition: !(empdisable || being-warped)
 
+INTL.AA:
+	Inherits: INTL
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Buildable:
+		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.interloper.aa
+		Description: Heavily armoured transport craft.\n  Can detect mines.\n  Strong vs Light Vehicles, Aircraft\n  Weak vs Tanks
+		IconPalette: chrome
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Interloper (AA)
+
+INTL.Teleport:
+	Inherits: INTL
+	Buildable:
+		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.interloper.teleport
+		Description: Heavily armoured transport craft.\n  Can detect mines.\n  Can teleport short distances.\n  Strong vs Light Vehicles\n  Weak vs Tanks, Aircraft
+		IconPalette: chrome
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Interloper (Teleport)
+	PortableChrono:
+		ChargeDelay: 500
+		MaxDistance:	6
+
 CORR:
 	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -628,7 +721,7 @@ CORR:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 65
-		Prerequisites: nerv, ~vehicles.scrin, ~techlevel.medium
+		Prerequisites: nerv, ~vehicles.scrin
 		Queue: Vehicle
 		Description: Short-ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
@@ -664,6 +757,28 @@ CORR:
 		RequiresCondition: travelerspeed
 		Modifier: 115
 
+CORR.Area:
+	Inherits: CORR
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Area Corrupter
+	Buildable:
+		Prerequisites: nerv, ~vehicles.scrin, ~commander_tree.corrupter.area
+		Description: Short-ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
+		IconPalette: chrome
+
+CORR.Range:
+	Inherits: CORR
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Ranged Corrupter
+	Buildable:
+		Prerequisites: nerv, ~vehicles.scrin, ~commander_tree.corrupter.range
+		Description: Ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
+		IconPalette: chrome
+
 STCR:
 	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -681,7 +796,7 @@ STCR:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 65
-		Prerequisites: nerv, ~vehicles.reaper, ~techlevel.medium
+		Prerequisites: nerv, ~vehicles.reaper
 		Queue: Vehicle
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
 		IconPalette: scrin
@@ -720,6 +835,28 @@ STCR:
 		DamageCooldown: 0
 		RequiresCondition: !empdisable && !being-warped
 
+STCR.PLD:
+	Inherits: STCR
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Stormcrawler
+	Buildable:
+		Prerequisites: nerv, ~vehicles.reaper, ~commander_tree.stormcrawler.pld
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
+		IconPalette: scrin
+
+STCR.Reflector:
+	Inherits: STCR
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Stormcrawler
+	Buildable:
+		Prerequisites: nerv, ~vehicles.reaper, ~commander_tree.stormcrawler.reflector
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
+		IconPalette: scrin
+
 DEVO:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -728,8 +865,8 @@ DEVO:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
-		Prerequisites: radar, ~vehicles.devo, ~techlevel.medium
-		Description: Medium hover tank.\n  Can move in any direction while firing.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
+		Prerequisites: radar, ~vehicles.devo
+		Description: Light hover tank.\n  Can move in any direction while firing.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 		IconPalette: chrome
 	Valued:
 		Cost: 1250
@@ -777,6 +914,32 @@ DEVO:
 		Multiplier: 90
 		Prerequisites: vehicles.reaper
 
+DEVO.acid:
+	Inherits: DEVO
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 135
+		Prerequisites: radar, ~vehicles.devo, ~commander_tree.devourer.acid
+		Description: Light hover tank.\n  Can move in any direction while firing.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Devourer Tank
+
+DEVO.heavy:
+	Inherits: DEVO
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 135
+		Prerequisites: radar, ~vehicles.devo, ~commander_tree.devourer.heavy
+		Description: Light hover tank.\n  Can move in any direction while firing.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
+		IconPalette: chrome
+	Valued:
+		Cost: 1500
+	Health:
+		HP: 45000
+	Tooltip:
+		Name: Heavy Devourer Tank
+
 DARK:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -787,7 +950,7 @@ DARK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
-		Prerequisites: nerv, ~vehicles.harbinger, ~techlevel.medium
+		Prerequisites: nerv, ~vehicles.harbinger
 		Description: Heavy hover tank with armed with rift cannon.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 		IconPalette: scrin
 	Valued:
@@ -839,6 +1002,28 @@ DARK:
 		Offset: 43, 128, 0
 		ZOffset: -129
 
+DARK.chain:
+	Inherits: DARK
+	Buildable:
+		Prerequisites: nerv, ~vehicles.harbinger, ~commander_tree.darkener.chain
+		Description: Heavy hover tank with armed with rift cannon.\n  Rift beams chain to other targets.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
+		IconPalette: scrin
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Chain Darkener Tank
+
+DARK.disc:
+	Inherits: DARK
+	Buildable:
+		Prerequisites: nerv, ~vehicles.harbinger, ~commander_tree.darkener.chain
+		Description: Heavy hover tank with armed with plasma disc cannon.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
+		IconPalette: scrin
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Disc Darkener Tank
+
 RUIN:
 	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -856,7 +1041,7 @@ RUIN:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 150
-		Prerequisites: scrt, ~vehicles.harbinger, ~techlevel.high
+		Prerequisites: scrt, ~vehicles.harbinger
 		Queue: Vehicle
 		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
@@ -896,6 +1081,19 @@ RUIN:
 		Offset: 43, 128, 0
 		ZOffset: -129
 
+RUIN.barrage:
+	Inherits: ^Vehicle
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Barrage Ruiner
+	Buildable:
+		BuildPaletteOrder: 150
+		Prerequisites: scrt, ~vehicles.harbinger, ~commander_tree.ruiner.barrage
+		Queue: Vehicle
+		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
+		IconPalette: chrome
+
 TPOD:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -904,7 +1102,7 @@ TPOD:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
-		Prerequisites: techcenter, ~vehicles.tpod, ~techlevel.high
+		Prerequisites: techcenter, ~vehicles.tpod
 		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Voiced:
@@ -967,10 +1165,64 @@ TPOD:
 		RequiresCondition: travelerspeed
 		Modifier: 115
 
+TPOD.chainer:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Chainer Tripod
+
+TPOD.chainer.reflector:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Chainer Tripod (Reflector)
+
+TPOD.acid:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with corrosive acid weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Tripod
+
+TPOD.acid.reflector:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Tripod (Reflector)
+
+TPOD.PLD:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Annihilator Tripod (PLD)
+
+TPOD.PLD.reflector:
+	Inherits: TPOD
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Annihilator Tripod (PLD, Reflector)
+
 RPTP:
 	Inherits: TPOD
 	Buildable:
-		Prerequisites: scrt, ~vehicles.reaper, ~techlevel.high
+		Prerequisites: scrt, ~vehicles.reaper
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -984,6 +1236,60 @@ RPTP:
 		LocalOffset: 700,550,1000, 700,-550,1000
 	SpawnActorOnDeath:
 		Actor: RPTP.Husk
+
+RPTP.range:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Range Tripod
+
+RPTP.range.reflector:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Range Tripod (Reflector)
+
+RPTP.acid:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with corrosive acid weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Tripod
+
+RPTP.acid.reflector:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Acid Tripod (Reflector)
+
+RPTP.PLD:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Annihilator Tripod (PLD)
+
+RPTP.PLD.reflector:
+	Inherits: RPTP
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Annihilator Tripod (PLD, Reflector)
 
 SMCV:
 	Inherits: ^Vehicle
@@ -1116,6 +1422,37 @@ STMR:
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	-EjectOnDeath:
+
+STMR.hunter:
+	Inherits: STMR
+	Inherits@AUTOTARGET: ^AutoTargetAir
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 40
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~techlevel.medium
+		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Tanks, Buildings
+		IconPalette: chrome
+	Valued:
+		Cost: 1650
+	Tooltip:
+		Name: Stormhunter
+	-Armament@PRIMARY:
+
+STMR.bomber:
+	Inherits: STMR
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 40
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~techlevel.medium
+		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Tanks, Buildings
+		IconPalette: chrome
+	Valued:
+		Cost: 1650
+	Tooltip:
+		Name: Stormbomber
 
 DEVA:
 	Inherits: ^Helicopter
@@ -1366,30 +1703,30 @@ PAC.laser:
 	Health:
 		HP: 80000
 	Armament@PRIMARY:
-		Name: primary
 		Weapon: WarshipLaser
-		LocalOffset: 600,0,0
-		PauseOnCondition: !ammo
+		LocalOffset: 900,0,0
+		RequiresCondition: gattling == 0
 	Armament@SECONDARY:
-		Name: secondary
-		Weapon: WarshipLaser
-		LocalOffset: 0,400,0
-		PauseOnCondition: !ammo
+		Weapon: WarshipLaser.2
+		LocalOffset: 0,450,0
+		RequiresCondition: gattling == 1
 	Armament@TERTIARY:
-		Name: tertiary
-		Weapon: WarshipLaser
-		LocalOffset: 0,-400,0
-		PauseOnCondition: !ammo
-	GrantConditionOnAttack:
-		Condition: fireStage
-		IsCyclic: true
+		Weapon: WarshipLaser.3
+		LocalOffset: 0,-450,0
+		RequiresCondition: gattling == 2
+	GrantConditionOnAttack@GROUND:
+		Condition: gattling
+		RequiredShotsPerInstance: 13
 		MaximumInstances: 2
-		ArmamentNames: primary, secondary, tertiary
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
 	-AttackFrontal:
 	AttackOmni:
 		PauseOnCondition: empdisable || being-warped
 	AmmoPool:
 		Ammo: 39
+		PipCount: 3
 		AmmoCondition: ammo
 		ReloadDelay: 0
 	ReloadAmmoPool@1:
