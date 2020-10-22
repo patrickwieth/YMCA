@@ -184,6 +184,13 @@ InterloperLaser:
 	Warhead@1Dam: SpreadDamage
 		Damage: 1700
 
+InterloperLaser.AA:
+	Inherits: InterloperLaser
+	Range: 7c0
+	ValidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+
 CorrupterSpew:
 	Inherits: BigChemspray
 	StartBurstReport: corrupter-fire1.aud
@@ -195,6 +202,20 @@ CorrupterSpew:
 		Speed: 130
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+
+CorrupterSpew.area:
+	Inherits: CorrupterSpew
+	FirstBurstTargetOffset: 0,-1200,0
+	FollowingBurstTargetOffset: -0,200,0
+
+CorrupterSpew.range:
+	Inherits: ChemballLauncher
+	StartBurstReport: corrupter-fire1.aud
+	ReloadDelay: 110
+	Warhead@1Dam: SpreadDamage
+		Spread: 768
+		Damage: 10000
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
 DevourerLaser:
@@ -216,7 +237,10 @@ DevourerLaser:
 		Damage: 1000
 
 DevourerAcid:
-	Inherits: ^ScrinLaser
+	Inherits: ^Chemical
+	ValidTargets: Ground, Water
+	Range: 7c512
+	ReloadDelay: 60
 	Projectile: Bullet
 		Speed: 204
 		Blockable: True
@@ -232,6 +256,10 @@ DevourerAcid:
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 1000
+	Warhead@3Eff: CreateEffect
+		Explosions: devo
+		ExplosionPalette: scrin
+		ValidTargets: Ground, Ship, Trees
 
 WarshipLaser:
 	Inherits: ^ScrinLaser
@@ -267,6 +295,22 @@ WarshipLaser.3:
 	Projectile: LaserZap
 		Color: FF0000AA
 
+DarkDiscCannon:
+	Inherits: PlasmaDiscs
+	Inherits: ^ShellAP
+	Range: 6c0
+	Burst: 1
+	ReloadDelay: 120
+	Report: devastator-fire1.aud, devastator-fire2.aud, devastator-fire3.aud
+	Projectile: BulletCA
+		Image: plasdisclg
+		Speed: 180
+	Warhead@1Dam: SpreadDamage
+		Damage: 12000
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+
 RiftCannon:
 	Inherits: ^ScrinLaser
 	Range: 6c0
@@ -294,22 +338,22 @@ RiftCannon.chain:
 	Warhead@1Dam: SpreadDamage
 		Damage: 5000
 	Warhead@Arc: FireShrapnel
-		Weapon: RiftCannon.Arc
+		Weapon: RiftCannon.arc
 		Amount: 1
 		AimChance: 100
 
-RiftCannon.Arc:
+RiftCannon.arc:
 	Inherits: RiftCannon
 	Range: 1c512
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 	Warhead@Arc: FireShrapnel
-		Weapon: RiftCannon.Arc2
+		Weapon: RiftCannon.arc2
 		AimChance: 100
 		Amount: 1
 
-RiftCannon.Arc2:
-	Inherits: RiftCannon.Arc
+RiftCannon.arc2:
+	Inherits: RiftCannon.arc
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 	-Warhead@Arc:
@@ -389,6 +433,10 @@ RuinerCannon:
 		ExplosionPalette: scrin
 		Image: tibexplode
 
+RuinerCannon.barrage:
+	Inherits: RuinerCannon
+	ReloadDelay: 80
+
 TripodLaser:
 	Inherits: Laser
 	Range: 6c0
@@ -412,6 +460,9 @@ TripodLaser:
 			Wood: 62
 			Heavy: 105
 			Concrete: 30
+
+TripodLaser.acid:
+	Inherits: TripodLaser
 
 TripodLaser.chain:
 	Inherits: TripodLaser
@@ -456,6 +507,10 @@ ReaperLaser:
 		SecondaryBeamColor: 00FF0050
 
 ReaperLaser.range:
+	Inherits: TripodLaser
+	Range: 7c0
+
+Reaper.acid:
 	Inherits: TripodLaser
 	Range: 7c0
 
