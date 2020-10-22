@@ -404,9 +404,19 @@ GUNW.sensor:
 		Description: Light assault walker.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
 		IconPalette: chrome
 	Valued:
-		Cost: 650
+		Cost: 800
 	Tooltip:
 		Name: Gun Walker (Sensors)
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 14c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 8c0
+	DetectCloaked:
+		Range: 6c0
+		CloakTypes: Cloak, Thief
+		RequiresCondition: !(empdisable || being-warped)
 
 SEEK:
 	Inherits: ^Vehicle
@@ -487,7 +497,7 @@ SEEK.PLD:
 	Inherits: SEEK
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Valued:
-		Cost: 800
+		Cost: 1200
 	Tooltip:
 		Name: Seeker (PLD)
 	Buildable:
@@ -584,7 +594,7 @@ LACE.PLD:
 	Inherits: LACE
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Valued:
-		Cost: 700
+		Cost: 1100
 	Tooltip:
 		Name: Lacerator (PLD)
 	Buildable:
@@ -686,7 +696,7 @@ INTL:
 
 INTL.AA:
 	Inherits: INTL
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAir
 	Buildable:
 		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.interloper.aa
 		Description: Heavily armoured transport craft.\n  Can detect mines.\n  Strong vs Light Vehicles, Aircraft\n  Weak vs Tanks
@@ -695,12 +705,15 @@ INTL.AA:
 		Cost: 800
 	Tooltip:
 		Name: Interloper (AA)
+	Armament:
+		Weapon: InterloperLaser.AA
+		LocalOffset: 400,110,30, 400,-110,30
 
 INTL.Teleport:
 	Inherits: INTL
 	Buildable:
 		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.interloper.teleport
-		Description: Heavily armoured transport craft.\n  Can detect mines.\n  Can teleport short distances.\n  Strong vs Light Vehicles\n  Weak vs Tanks, Aircraft
+		Description: Heavily armoured transport craft.\n  Can detect mines.\n  Can teleport short distances (use alt-key).\n  Strong vs Light Vehicles\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
 	Valued:
 		Cost: 800
@@ -773,6 +786,8 @@ CORR.Area:
 		Prerequisites: nerv, ~vehicles.scrin, ~commander_tree.corrupter.area
 		Description: Short-ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
+	Armament:
+		Weapon: CorrupterSpew.area
 
 CORR.Range:
 	Inherits: CORR
@@ -784,6 +799,8 @@ CORR.Range:
 		Prerequisites: nerv, ~vehicles.scrin, ~commander_tree.corrupter.range
 		Description: Ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
+	Armament:
+		Weapon: CorrupterSpew.range
 
 STCR:
 	Inherits: ^Vehicle
@@ -845,7 +862,7 @@ STCR.PLD:
 	Inherits: STCR
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Valued:
-		Cost: 1000
+		Cost: 1600
 	Tooltip:
 		Name: Stormcrawler
 	Buildable:
@@ -932,6 +949,9 @@ DEVO.acid:
 		IconPalette: chrome
 	Tooltip:
 		Name: Acid Devourer Tank
+	Armament:
+		Weapon: DevourerAcid
+		LocalOffset: 750,0,208
 
 DEVO.heavy:
 	Inherits: DEVO
@@ -939,7 +959,7 @@ DEVO.heavy:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
 		Prerequisites: radar, ~vehicles.devo, ~commander_tree.devourer.heavy
-		Description: Light hover tank.\n  Can move in any direction while firing.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
+		Description: Heavy hover tank.\n  Can move in any direction while firing.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 		IconPalette: chrome
 	Valued:
 		Cost: 1500
@@ -947,6 +967,10 @@ DEVO.heavy:
 		HP: 45000
 	Tooltip:
 		Name: Heavy Devourer Tank
+	Armor:
+		Type: Heavy
+	Mobile:
+		Speed: 90
 
 DARK:
 	Inherits: ^Tank
@@ -1020,6 +1044,8 @@ DARK.chain:
 		Cost: 1350
 	Tooltip:
 		Name: Chain Darkener Tank
+	Armament:
+		Weapon: RiftCannon.chain
 
 DARK.disc:
 	Inherits: DARK
@@ -1031,6 +1057,8 @@ DARK.disc:
 		Cost: 1350
 	Tooltip:
 		Name: Disc Darkener Tank
+	Armament:
+		Weapon: DarkDiscCannon
 
 RUIN:
 	Inherits: ^Vehicle
@@ -1090,7 +1118,7 @@ RUIN:
 		ZOffset: -129
 
 RUIN.barrage:
-	Inherits: ^Vehicle
+	Inherits: RUIN
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -1101,6 +1129,8 @@ RUIN.barrage:
 		Queue: Vehicle
 		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
+	Armament:
+		Weapon: RuinerCannon.barrage
 
 TPOD:
 	Inherits: ^Tank
@@ -1181,6 +1211,8 @@ TPOD.chainer:
 		IconPalette: chrome
 	Tooltip:
 		Name: Chainer Tripod
+	Armament@PRIMARY:
+		Weapon: TripodLaser.chain
 
 TPOD.chainer.reflector:
 	Inherits: TPOD.chainer
@@ -1200,6 +1232,8 @@ TPOD.acid:
 		IconPalette: chrome
 	Tooltip:
 		Name: Acid Tripod
+	Armament@PRIMARY:
+		Weapon: TripodLaser.acid
 
 TPOD.acid.reflector:
 	Inherits: TPOD.acid
@@ -1270,7 +1304,7 @@ RPTP.range.reflector:
 		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
-		Name: Range Tripod (Reflector)
+		Name: Range Reaper Tripod (Reflector)
 
 RPTP.acid:
 	Inherits: RPTP
@@ -1279,7 +1313,9 @@ RPTP.acid:
 		Description: Heavy assault walker with corrosive acid weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
-		Name: Acid Tripod
+		Name: Acid Reaper Tripod
+	Armament@PRIMARY:
+		Weapon: Reaper.Acid
 
 RPTP.acid.reflector:
 	Inherits: RPTP.acid
@@ -1289,7 +1325,9 @@ RPTP.acid.reflector:
 		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
-		Name: Acid Tripod (Reflector)
+		Name: Acid Reaper Tripod (Reflector)
+	Armament@PRIMARY:
+		Weapon: Reaper.Acid
 
 RPTP.PLD:
 	Inherits: RPTP
@@ -1299,7 +1337,7 @@ RPTP.PLD:
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
-		Name: Annihilator Tripod (PLD)
+		Name: Reaper Tripod (PLD)
 
 RPTP.PLD.reflector:
 	Inherits: RPTP.PLD
@@ -1309,7 +1347,7 @@ RPTP.PLD.reflector:
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
-		Name: Annihilator Tripod (PLD, Reflector)
+		Name: Reaper Tripod (PLD, Reflector)
 
 SMCV:
 	Inherits: ^Vehicle
