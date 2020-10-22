@@ -485,6 +485,7 @@ SEEK:
 
 SEEK.PLD:
 	Inherits: SEEK
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -496,6 +497,7 @@ SEEK.PLD:
 
 SEEK.Reflector:
 	Inherits: SEEK
+	Inherits: ^ReflectorArmor
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -580,6 +582,7 @@ LACE:
 
 LACE.PLD:
 	Inherits: LACE
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -591,6 +594,7 @@ LACE.PLD:
 
 LACE.Reflector:
 	Inherits: LACE
+	Inherits: ^ReflectorArmor
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -610,6 +614,8 @@ LACE.AP:
 		Prerequisites: vehicles.any, ~vehicles.traveler
 		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
+	Armament@PRIMARY:
+		Weapon: LaceratorShards.AP
 
 INTL:
 	Inherits: ^Tank
@@ -837,6 +843,7 @@ STCR:
 
 STCR.PLD:
 	Inherits: STCR
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -848,6 +855,7 @@ STCR.PLD:
 
 STCR.Reflector:
 	Inherits: STCR
+	Inherits: ^ReflectorArmor
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -1175,7 +1183,8 @@ TPOD.chainer:
 		Name: Chainer Tripod
 
 TPOD.chainer.reflector:
-	Inherits: TPOD
+	Inherits: TPOD.chainer
+	Inherits: ^ReflectorArmor
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.tpod
 		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1193,7 +1202,8 @@ TPOD.acid:
 		Name: Acid Tripod
 
 TPOD.acid.reflector:
-	Inherits: TPOD
+	Inherits: TPOD.acid
+	Inherits: ^ReflectorArmor
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.tpod
 		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1203,6 +1213,7 @@ TPOD.acid.reflector:
 
 TPOD.PLD:
 	Inherits: TPOD
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.tpod
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1211,7 +1222,8 @@ TPOD.PLD:
 		Name: Annihilator Tripod (PLD)
 
 TPOD.PLD.reflector:
-	Inherits: TPOD
+	Inherits: TPOD.PLD
+	Inherits: ^ReflectorArmor
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.tpod
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1241,13 +1253,18 @@ RPTP.range:
 	Inherits: RPTP
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.reaper
-		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		Description: Heavy assault walker with long-range beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
 		Name: Range Tripod
+	Valued:
+		Cost: 2500
+	Armament@PRIMARY:
+		Weapon: ReaperLaser.range
 
 RPTP.range.reflector:
-	Inherits: RPTP
+	Inherits: RPTP.range
+	Inherits: ^ReflectorArmor
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.reaper
 		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1265,7 +1282,8 @@ RPTP.acid:
 		Name: Acid Tripod
 
 RPTP.acid.reflector:
-	Inherits: RPTP
+	Inherits: RPTP.acid
+	Inherits: ^ReflectorArmor
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.reaper
 		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1275,6 +1293,7 @@ RPTP.acid.reflector:
 
 RPTP.PLD:
 	Inherits: RPTP
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.reaper
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1283,7 +1302,8 @@ RPTP.PLD:
 		Name: Annihilator Tripod (PLD)
 
 RPTP.PLD.reflector:
-	Inherits: RPTP
+	Inherits: RPTP.PLD
+	Inherits: ^ReflectorArmor
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.reaper
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1297,7 +1317,7 @@ SMCV:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
-		Prerequisites: srep, ~vehicles.scrin, ~techlevel.infonly
+		Prerequisites: srep, ~vehicles.scrin
 		IconPalette: chrome
 		Description: Deploys into another Colony Platform.\n  Unarmed
 	RenderSprites:
@@ -1353,7 +1373,7 @@ STMR:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin, ~techlevel.medium
+		Prerequisites: nerv, grav, ~aircraft.scrin
 		Description: Durable patrol craft.\n  Strong vs Infantry, Light Armor, Aircraft\n  Weak vs Tanks, Buildings
 		IconPalette: chrome
 	Valued:
@@ -1430,11 +1450,11 @@ STMR.hunter:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin, ~techlevel.medium
+		Prerequisites: nerv, grav, ~aircraft.scrin
 		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Tanks, Buildings
 		IconPalette: chrome
 	Valued:
-		Cost: 1650
+		Cost: 1250
 	Tooltip:
 		Name: Stormhunter
 	-Armament@PRIMARY:
@@ -1446,13 +1466,17 @@ STMR.bomber:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin, ~techlevel.medium
+		Prerequisites: nerv, grav, ~aircraft.scrin
 		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Tanks, Buildings
 		IconPalette: chrome
 	Valued:
 		Cost: 1650
 	Tooltip:
 		Name: Stormbomber
+	Armament@PRIMARY:
+		Weapon: Scrinbombs
+		LocalOffset: 350,213,-85, 350,-213,-85
+	-Armament@SECONDARY:
 
 DEVA:
 	Inherits: ^Helicopter
@@ -1462,7 +1486,7 @@ DEVA:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Prerequisites: scrt, grav, ~aircraft.scrin
 		Description: Long-range siege warship.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Aircraft, Tanks
 		IconPalette: chrome
 	Voiced:
@@ -1537,7 +1561,7 @@ DEVA.Shards:
 	Inherits: DEVA
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
-		Prerequisites: scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Prerequisites: scrt, grav, ~aircraft.scrin
 		Description: Long-range anti-tank warship.\n  Strong vs Tanks\n  Weak vs Aircraft
 	Valued:
 		Cost: 2200
@@ -1550,7 +1574,7 @@ DEVA.Shards:
 DEVA.Rift:
 	Inherits: DEVA
 	Buildable:
-		Prerequisites: scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Prerequisites: scrt, grav, ~aircraft.scrin
 		Description: Long-range anti-tank warship.\n  Strong vs masses of units\n  Weak vs Aircraft
 	Valued:
 		Cost: 2200
@@ -1568,7 +1592,7 @@ PAC:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin
 		Description: Carrier that launches a squadron\nof assault craft.\n	Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Buildings, Defenses
 		IconPalette: chrome
 	Voiced:
@@ -1666,7 +1690,7 @@ PAC:
 PAC.suicide:
 	Inherits: PAC
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin
 		Description: Carrier with suicide drones.\n	Strong vs Vehicles, Infantry\n  Weak vs Anti-Air
 		IconPalette: chrome
 	Valued:
@@ -1677,7 +1701,7 @@ PAC.suicide:
 PAC.support:
 	Inherits: PAC
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin
 		Description: Massive Carrier with repair drones.\n	Repair drones have point laser defense.\n  Can teleport infantry directly into the field.\n  Strong vs Projectile based attacks.\n  Weak without army.
 		IconPalette: chrome
 	RenderSprites:
@@ -1691,7 +1715,7 @@ PAC.laser:
 	Inherits: PAC
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~techlevel.high
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin
 		Description: Massive Warship with multiple laser systems.\n	Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Reflector
 		IconPalette: chrome
 	RenderSprites:

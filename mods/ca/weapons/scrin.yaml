@@ -271,6 +271,31 @@ RiftCannon:
 		ForceGround: false
 		ValidTargets: Ground, Water
 
+RiftCannon.chain:
+	Inherits: RiftCannon
+	Warhead@1Dam: SpreadDamage
+		Damage: 5000
+	Warhead@Arc: FireShrapnel
+		Weapon: RiftCannon.Arc
+		Amount: 1
+		AimChance: 100
+
+RiftCannon.Arc:
+	Inherits: RiftCannon
+	Range: 1c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+	Warhead@Arc: FireShrapnel
+		Weapon: RiftCannon.Arc2
+		AimChance: 100
+		Amount: 1
+
+RiftCannon.Arc2:
+	Inherits: RiftCannon.Arc
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+	-Warhead@Arc:
+
 MiniRift:
 	ReloadDelay: 10
 	Range: 1c0
@@ -370,6 +395,37 @@ TripodLaser:
 			Heavy: 105
 			Concrete: 30
 
+TripodLaser.chain:
+	Inherits: TripodLaser
+	Warhead@1Dam: SpreadDamage
+		Damage: 2700
+	Warhead@Arc: FireShrapnel
+		Weapon: TripodLaser.Arc
+		Amount: 1
+		AimChance: 100
+
+TripodLaser.Arc:
+	Inherits: TripodLaser
+	Range: 1c512
+	Projectile: LaserZap
+		Width: 35
+		SecondaryBeamWidth: 55
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+	Warhead@Arc: FireShrapnel
+		Weapon: TripodLaser.Arc2
+		AimChance: 100
+		Amount: 1
+
+TripodLaser.Arc2:
+	Inherits: TripodLaser.Arc
+	Projectile: LaserZap
+		Width: 25
+		SecondaryBeamWidth: 45
+	Warhead@1Dam: SpreadDamage
+		Damage: 500
+	-Warhead@Arc:
+
 ReaperLaser:
 	Inherits: TripodLaser
 	Range: 5c0
@@ -380,6 +436,10 @@ ReaperLaser:
 		Duration: 30
 		Color: 00FF0090
 		SecondaryBeamColor: 00FF0050
+
+ReaperLaser.range:
+	Inherits: TripodLaser
+	Range: 7c0
 
 StormriderZap:
 	Range: 7c0
@@ -701,6 +761,10 @@ LaceratorShards:
 	Warhead@3Eff: CreateEffect
 		Image: bshardhit
 
+LaceratorShards.AP:
+	Inherits: RavagerShards
+	Inherits: ^MissileAP
+
 RiftInit:
 	ValidTargets: Ground, Water
 	Projectile: InstantExplode
@@ -770,3 +834,29 @@ StormSpikeSpawner:
 		Buildings: scol.temp
 		Range: 3
 		ValidTargets: Air, Ground, Water
+
+Scrinbombs:
+	Inherits: ^Bomb
+	ValidTargets: Ground, Water, Trees
+	InvalidTargets: Air
+	ReloadDelay: 100
+	Report: chute1.aud
+	Burst: 7
+	BurstDelays: 6
+	Range: 4c256
+	TargetActorCenter: true
+	Projectile: GravityBomb
+		Image: plasdiscsm
+		Velocity: 25, 0, -74
+		Acceleration: 0, 0, 0
+		Shadow: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 1000
+		Falloff: 1000, 255, 128, 50, 18, 7, 0
+		ValidTargets: Ground, Water
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
+		ImpactSounds: seeker-hit1.aud, seeker-hit2.aud
