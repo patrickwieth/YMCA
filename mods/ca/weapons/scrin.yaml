@@ -206,8 +206,16 @@ CorrupterSpew:
 
 CorrupterSpew.area:
 	Inherits: CorrupterSpew
-	FirstBurstTargetOffset: 0,-1200,0
-	FollowingBurstTargetOffset: -0,200,0
+	Projectile: Bullet
+		Speed: 90
+		Inaccuracy: 48
+	FirstBurstTargetOffset: 0,-2400,0
+	FollowingBurstTargetOffset: 0,400,0
+
+CorrupterSpew.area2:
+	Inherits: CorrupterSpew.area
+	FirstBurstTargetOffset: 0,2400,0
+	FollowingBurstTargetOffset: -0,400,0
 
 CorrupterSpew.range:
 	Inherits: ChemballLauncher
@@ -245,7 +253,7 @@ DevourerAcid:
 		Speed: 204
 		Blockable: True
 		LaunchAngle: 56
-		Inaccuracy: 1024
+		Inaccuracy: 512
 		ContrailLength: 30
 		ContrailColor: 5dff00
 	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
@@ -255,9 +263,10 @@ DevourerAcid:
 	BurstDelays: 1
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
-		Damage: 1000
+		Damage: 1300
 	Warhead@3Eff: CreateEffect
-		Explosions: devo
+		Explosions: muzzle
+		Image: devo
 		ExplosionPalette: scrin
 		ValidTargets: Ground, Ship, Trees
 
@@ -273,9 +282,7 @@ WarshipLaser:
 	Projectile: LaserZap
 		TrackTarget: false
 		Duration: 3
-		LaunchEffectImage: devo
-		LaunchEffectSequence: muzzle
-		LaunchEffectPalette: scrin
+		ZOffset: 0
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 1000
@@ -287,13 +294,13 @@ WarshipLaser:
 
 WarshipLaser.2:
 	Inherits: WarshipLaser
-	Projectile: LaserZap
-		Color: 0000FFAA
+	FirstBurstTargetOffset: -50,-300,0
+	FollowingBurstTargetOffset: 10,60,0
 
 WarshipLaser.3:
 	Inherits: WarshipLaser
-	Projectile: LaserZap
-		Color: FF0000AA
+	FirstBurstTargetOffset: -50,300,0
+	FollowingBurstTargetOffset: 10,-60,0
 
 DarkDiscCannon:
 	Inherits: PlasmaDiscs
@@ -334,16 +341,27 @@ RiftCannon:
 		ValidTargets: Ground, Water
 
 RiftCannon.chain:
-	Inherits: RiftCannon
+	Inherits: ^Energy
+	Report: tesla1.aud
+	Projectile: TeslaZap
+	ReloadDelay: 110
+	Range: 7c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 5000
+		Spread: 42
+		Damage: 10000
+		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: 1, 3
+		Image: fire
 	Warhead@Arc: FireShrapnel
 		Weapon: RiftCannon.arc
-		Amount: 1
 		AimChance: 100
+		Amount: 1
+		AllowDirectHit: true
+		ThrowWithoutTarget: false
 
 RiftCannon.arc:
-	Inherits: RiftCannon
+	Inherits: RiftCannon.chain
 	Range: 1c512
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
@@ -351,6 +369,8 @@ RiftCannon.arc:
 		Weapon: RiftCannon.arc2
 		AimChance: 100
 		Amount: 1
+		AllowDirectHit: true
+		ThrowWithoutTarget: false
 
 RiftCannon.arc2:
 	Inherits: RiftCannon.arc
@@ -412,7 +432,7 @@ RuinerCannon:
 	Report: ruiner-fire1.aud
 	ReloadDelay: 160
 	Burst: 4
-	BurstDelays: 20
+	BurstDelays: 10
 	Range: 14c0
 	Projectile: BulletCA
 		Image: tibglob
@@ -435,6 +455,7 @@ RuinerCannon:
 
 RuinerCannon.barrage:
 	Inherits: RuinerCannon
+	Range: 16c0
 	ReloadDelay: 80
 
 TripodLaser:
@@ -452,7 +473,7 @@ TripodLaser:
 		SecondaryBeamWidth: 75
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
-		Damage: 5700
+		Damage: 7700
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
 			None: 80
@@ -461,13 +482,34 @@ TripodLaser:
 			Heavy: 105
 			Concrete: 30
 
-TripodLaser.acid:
-	Inherits: TripodLaser
+Tripod.acid:
+	Inherits: ^Chemical
+	ValidTargets: Ground, Water
+	Range: 6c0
+	ReloadDelay: 60
+	Projectile: Bullet
+		Speed: 204
+		Blockable: True
+		LaunchAngle: 56
+		Inaccuracy: 512
+		ContrailLength: 30
+		ContrailColor: 5dff00
+	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
+	Burst: 13
+	BurstDelays: 1
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1300
+	Warhead@3Eff: CreateEffect
+		Explosions: muzzle
+		Image: devo
+		ExplosionPalette: scrin
+		ValidTargets: Ground, Ship, Trees
 
 TripodLaser.chain:
 	Inherits: TripodLaser
 	Warhead@1Dam: SpreadDamage
-		Damage: 2700
+		Damage: 3700
 	Warhead@Arc: FireShrapnel
 		Weapon: TripodLaser.Arc
 		Amount: 1
@@ -480,7 +522,7 @@ TripodLaser.Arc:
 		Width: 35
 		SecondaryBeamWidth: 55
 	Warhead@1Dam: SpreadDamage
-		Damage: 1000
+		Damage: 1500
 	Warhead@Arc: FireShrapnel
 		Weapon: TripodLaser.Arc2
 		AimChance: 100
@@ -492,7 +534,7 @@ TripodLaser.Arc2:
 		Width: 25
 		SecondaryBeamWidth: 45
 	Warhead@1Dam: SpreadDamage
-		Damage: 500
+		Damage: 750
 	-Warhead@Arc:
 
 ReaperLaser:
@@ -507,12 +549,11 @@ ReaperLaser:
 		SecondaryBeamColor: 00FF0050
 
 ReaperLaser.range:
-	Inherits: TripodLaser
+	Inherits: ReaperLaser
 	Range: 7c0
 
 Reaper.acid:
-	Inherits: TripodLaser
-	Range: 7c0
+	Inherits: Tripod.acid
 
 StormriderZap:
 	Range: 7c0
@@ -616,14 +657,12 @@ DevastatorRift:
 		BeamAlphaDeltaPerTick: -16
 		HelixThickness: 32
 		HelixRadius: 10
+		HelixPitch: 40
 		HelixRadiusDeltaPerTick: 16
 		HelixAlphaDeltaPerTick: -16
 		HelixAngleDeltaPerTick: 16
 		QuantizationCount: 4
 		HelixColor: 080C0C
-		HitAnim: explosion
-		HitAnimSequence: ionexp
-		HitAnimPalette: temptd
 		Inaccuracy: 64
 		ZOffset: 2045
 	Warhead@1Dam: SpreadDamage
@@ -837,6 +876,22 @@ LaceratorShards:
 LaceratorShards.AP:
 	Inherits: RavagerShards
 	Inherits: ^MissileAP
+	Projectile: MissileCA
+		Speed: 213
+		Palette: scrin
+		ContrailWidth: 0c48
+		ContrailLength: 9
+		ContrailColor: 4499FFAA
+		Jammable: false
+		Inaccuracy: 128
+		Image: shard
+		HorizontalRateOfTurn: 35
+		RangeLimit: 7c512
+	Warhead@3Eff: CreateEffect
+		Explosions: idle, idle2, idle3, idle4
+		ExplosionPalette: scrin
+		Image: bshardhit
+		ValidTargets: Air, Ground, Water, Trees
 
 RiftInit:
 	ValidTargets: Ground, Water

@@ -731,7 +731,7 @@ CORR:
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
-		Cost: 1000
+		Cost: 800
 	Tooltip:
 		Name: Corrupter
 	Selectable:
@@ -786,8 +786,20 @@ CORR.Area:
 		Prerequisites: nerv, ~vehicles.scrin, ~commander_tree.corrupter.area
 		Description: Short-ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
-	Armament:
+	Armament@PRIMARY:
 		Weapon: CorrupterSpew.area
+		RequiresCondition: gattling == 0
+	Armament@SECONDARY:
+		Weapon: CorrupterSpew.area2
+		RequiresCondition: gattling == 1
+	GrantConditionOnAttack@GROUND:
+		Condition: gattling
+		RequiredShotsPerInstance: 12
+		MaximumInstances: 1
+		IsCyclic: true
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
 
 CORR.Range:
 	Inherits: CORR
@@ -864,10 +876,10 @@ STCR.PLD:
 	Valued:
 		Cost: 1600
 	Tooltip:
-		Name: Stormcrawler
+		Name: Stormcrawler (PLD)
 	Buildable:
 		Prerequisites: nerv, ~vehicles.reaper, ~commander_tree.stormcrawler.pld
-		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
 		IconPalette: scrin
 
 STCR.Reflector:
@@ -876,10 +888,10 @@ STCR.Reflector:
 	Valued:
 		Cost: 1000
 	Tooltip:
-		Name: Stormcrawler
+		Name: Stormcrawler (Reflector)
 	Buildable:
 		Prerequisites: nerv, ~vehicles.reaper, ~commander_tree.stormcrawler.reflector
-		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
 		IconPalette: scrin
 
 DEVO:
@@ -1203,7 +1215,7 @@ TPOD:
 		RequiresCondition: travelerspeed
 		Modifier: 115
 
-TPOD.chainer:
+TPOD.chain:
 	Inherits: TPOD
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.tpod
@@ -1214,8 +1226,8 @@ TPOD.chainer:
 	Armament@PRIMARY:
 		Weapon: TripodLaser.chain
 
-TPOD.chainer.reflector:
-	Inherits: TPOD.chainer
+TPOD.chain.reflector:
+	Inherits: TPOD.chain
 	Inherits: ^ReflectorArmor
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.tpod
@@ -1233,7 +1245,7 @@ TPOD.acid:
 	Tooltip:
 		Name: Acid Tripod
 	Armament@PRIMARY:
-		Weapon: TripodLaser.acid
+		Weapon: Tripod.acid
 
 TPOD.acid.reflector:
 	Inherits: TPOD.acid
@@ -1254,6 +1266,8 @@ TPOD.PLD:
 		IconPalette: chrome
 	Tooltip:
 		Name: Annihilator Tripod (PLD)
+	Armament@pointdefense:
+		LocalOffset: 450,0,500
 
 TPOD.PLD.reflector:
 	Inherits: TPOD.PLD
@@ -1338,6 +1352,8 @@ RPTP.PLD:
 		IconPalette: chrome
 	Tooltip:
 		Name: Reaper Tripod (PLD)
+	Armament@pointdefense:
+		LocalOffset: 450,0,500
 
 RPTP.PLD.reflector:
 	Inherits: RPTP.PLD
@@ -1489,13 +1505,16 @@ STMR.hunter:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
 		Prerequisites: nerv, grav, ~aircraft.scrin
-		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Tanks, Buildings
+		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Vehicles, Infantry, Buildings
 		IconPalette: chrome
 	Valued:
 		Cost: 1250
 	Tooltip:
 		Name: Stormhunter
 	-Armament@PRIMARY:
+	Aircraft:
+		TurnSpeed: 6
+		Speed: 195
 
 STMR.bomber:
 	Inherits: STMR
@@ -1505,7 +1524,7 @@ STMR.bomber:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
 		Prerequisites: nerv, grav, ~aircraft.scrin
-		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Tanks, Buildings
+		Description: Durable patrol anti-air craft.\n  Strong vs Light Vehicles\n  Weak vs Aircraft
 		IconPalette: chrome
 	Valued:
 		Cost: 1650
@@ -1766,34 +1785,27 @@ PAC.laser:
 		HP: 80000
 	Armament@PRIMARY:
 		Weapon: WarshipLaser
-		LocalOffset: 900,0,0
+		LocalOffset: 1500,0,0
 		RequiresCondition: gattling == 0
 	Armament@SECONDARY:
 		Weapon: WarshipLaser.2
-		LocalOffset: 0,450,0
+		LocalOffset: 0,550,0
 		RequiresCondition: gattling == 1
 	Armament@TERTIARY:
 		Weapon: WarshipLaser.3
-		LocalOffset: 0,-450,0
+		LocalOffset: 0,-550,0
 		RequiresCondition: gattling == 2
 	GrantConditionOnAttack@GROUND:
 		Condition: gattling
 		RequiredShotsPerInstance: 13
 		MaximumInstances: 2
-		RevokeDelay: 40
+		IsCyclic: true
+		RevokeDelay: 80
 		RevokeOnNewTarget: False
 		RevokeAll: True
 	-AttackFrontal:
 	AttackOmni:
 		PauseOnCondition: empdisable || being-warped
-	AmmoPool:
-		Ammo: 39
-		PipCount: 3
-		AmmoCondition: ammo
-		ReloadDelay: 0
-	ReloadAmmoPool@1:
-		Delay: 120
-		Count: 39
 	-CarrierMaster@carr1:
 	-Exit@0:
 	-Exit@1:
