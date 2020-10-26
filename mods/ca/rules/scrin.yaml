@@ -787,17 +787,16 @@ CORR.Area:
 		Description: Short-ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
 	Armament@PRIMARY:
-		Weapon: CorrupterSpew.area
-		RequiresCondition: gattling == 0
-	Armament@SECONDARY:
 		Weapon: CorrupterSpew.area2
-		RequiresCondition: gattling == 1
+		PauseOnCondition: spew
+	Armament@SECONDARY:
+		Weapon: CorrupterSpew.area
+		PauseOnCondition: !spew
 	GrantConditionOnAttack@GROUND:
-		Condition: gattling
+		Condition: spew
 		RequiredShotsPerInstance: 12
 		MaximumInstances: 1
-		IsCyclic: true
-		RevokeDelay: 40
+		RevokeDelay: 20
 		RevokeOnNewTarget: False
 		RevokeAll: True
 
@@ -1246,6 +1245,7 @@ TPOD.acid:
 		Name: Acid Tripod
 	Armament@PRIMARY:
 		Weapon: Tripod.acid
+		-MuzzleSequence: muzzle
 
 TPOD.acid.reflector:
 	Inherits: TPOD.acid
@@ -1330,6 +1330,7 @@ RPTP.acid:
 		Name: Acid Reaper Tripod
 	Armament@PRIMARY:
 		Weapon: Reaper.Acid
+		-MuzzleSequence: muzzle
 
 RPTP.acid.reflector:
 	Inherits: RPTP.acid
@@ -1784,27 +1785,30 @@ PAC.laser:
 	Health:
 		HP: 80000
 	Armament@PRIMARY:
+		Name: primary
 		Weapon: WarshipLaser
 		LocalOffset: 1500,0,0
-		RequiresCondition: gattling == 0
 	Armament@SECONDARY:
+		Name: secondary
 		Weapon: WarshipLaser.2
 		LocalOffset: 0,550,0
-		RequiresCondition: gattling == 1
+		PauseOnCondition: !laser1
 	Armament@TERTIARY:
+		Name: tertiary
 		Weapon: WarshipLaser.3
 		LocalOffset: 0,-550,0
-		RequiresCondition: gattling == 2
+		PauseOnCondition: !laser2
 	GrantConditionOnAttack@GROUND:
-		Condition: gattling
-		RequiredShotsPerInstance: 13
-		MaximumInstances: 2
-		IsCyclic: true
-		RevokeDelay: 80
+		ArmamentNames: primary
+		Condition: laser1
+		RevokeDelay: 40
 		RevokeOnNewTarget: False
-		RevokeAll: True
-	-AttackFrontal:
-	AttackOmni:
+	GrantConditionOnAttack@GROUND:
+		ArmamentNames: secondary
+		Condition: laser2
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
 	-CarrierMaster@carr1:
 	-Exit@0:
