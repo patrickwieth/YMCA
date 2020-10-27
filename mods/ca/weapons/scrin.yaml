@@ -209,13 +209,17 @@ CorrupterSpew.area:
 	Projectile: Bullet
 		Speed: 90
 		Inaccuracy: 48
-	FirstBurstTargetOffset: 0,-2400,0
-	FollowingBurstTargetOffset: 0,400,0
+	FirstBurstTargetOffset: 0,-1800,0
+	FollowingBurstTargetOffset: -0,300,0
+	Burst: 13
+	BurstDelays: 1
 
 CorrupterSpew.area2:
 	Inherits: CorrupterSpew.area
-	FirstBurstTargetOffset: 0,2400,0
-	FollowingBurstTargetOffset: -0,400,0
+	FirstBurstTargetOffset: 0,-1800,0
+	FollowingBurstTargetOffset: -0,300,0
+	Burst: 13
+	BurstDelays: 1
 
 CorrupterSpew.range:
 	Inherits: ChemballLauncher
@@ -273,10 +277,10 @@ DevourerAcid:
 WarshipLaser:
 	Inherits: ^ScrinLaser
 	Range: 8c512
-	ReloadDelay: 70
+	ReloadDelay: 40
 	Report: interloper-fire1.aud, interloper-fire2.aud
-	FirstBurstTargetOffset: 0,-600,0
-	FollowingBurstTargetOffset: -0,120,0
+	FirstBurstTargetOffset: 0,-1300,0
+	FollowingBurstTargetOffset: 0,200,0
 	Burst: 13
 	BurstDelays: 1
 	Projectile: LaserZap
@@ -286,21 +290,16 @@ WarshipLaser:
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 1000
-	Warhead@chill: GrantExternalCondition
-		Condition: warshipTarget
-		Duration: 40
-		Delay: 14
-		Range: 1c768
 
 WarshipLaser.2:
 	Inherits: WarshipLaser
-	FirstBurstTargetOffset: -50,-300,0
-	FollowingBurstTargetOffset: 10,60,0
+	FirstBurstTargetOffset: -300, -300, 0
+	FollowingBurstTargetOffset: 50, 60, 0
 
 WarshipLaser.3:
 	Inherits: WarshipLaser
-	FirstBurstTargetOffset: -50,300,0
-	FollowingBurstTargetOffset: 10,-60,0
+	FirstBurstTargetOffset: -300, 300, 0
+	FollowingBurstTargetOffset: 50, -60, 0
 
 DarkDiscCannon:
 	Inherits: PlasmaDiscs
@@ -320,6 +319,7 @@ DarkDiscCannon:
 
 RiftCannon:
 	Inherits: ^ScrinLaser
+	Inherits: ^EnergyAP
 	Range: 6c0
 	Report: darkener-fire1.aud, darkener-fire2.aud
 	ReloadDelay: 120
@@ -337,32 +337,38 @@ RiftCannon:
 	Warhead@Spawn: SpawnActor
 		Actors: camera.minirift
 		Range: 1
-		ForceGround: false
+		ForceGround: False
 		ValidTargets: Ground, Water
 
 RiftCannon.chain:
-	Inherits: ^Energy
-	Report: tesla1.aud
-	Projectile: TeslaZap
+	Inherits: ^EnergyAP
+	Report: darkener-fire1.aud, darkener-fire2.aud
 	ReloadDelay: 110
-	Range: 7c0
+	Range: 6c0
+	Projectile: LaserZap
+		Color: 000000FF
+		Width: 70
+		SecondaryBeamColor: 00000099
+		SecondaryBeamWidth: 90
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
 		Damage: 10000
-		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: 1, 3
-		Image: fire
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@Arc: FireShrapnel
 		Weapon: RiftCannon.arc
 		AimChance: 100
 		Amount: 1
 		AllowDirectHit: true
 		ThrowWithoutTarget: false
+	Warhead@Spawn: SpawnActor
+		Actors: camera.minirift
+		Range: 1
+		ForceGround: False
+		ValidTargets: Ground, Water
 
 RiftCannon.arc:
 	Inherits: RiftCannon.chain
-	Range: 1c512
+	Range: 2c512
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
 	Warhead@Arc: FireShrapnel
@@ -379,6 +385,7 @@ RiftCannon.arc2:
 	-Warhead@Arc:
 
 MiniRift:
+	Inherits: ^EnergyAP
 	ReloadDelay: 10
 	Range: 1c0
 	ValidTargets: Ground, Water
@@ -389,14 +396,6 @@ MiniRift:
 		Falloff: 100, 70, 0
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 55
-			Wood: 30
-			Light: 70
-			Reflector: 25
-			Heavy: 100
-			Concrete: 80
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 		ValidStances: Enemy, Neutral
 	Warhead@2Dam: SpreadDamage
@@ -405,14 +404,6 @@ MiniRift:
 		Falloff: 100, 70, 0
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 55
-			Wood: 30
-			Light: 70
-			Reflector: 25
-			Heavy: 100
-			Concrete: 80
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 		ValidStances: Ally
 
@@ -475,12 +466,6 @@ TripodLaser:
 		Spread: 42
 		Damage: 7700
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 80
-			Light: 70
-			Wood: 62
-			Heavy: 105
-			Concrete: 30
 
 Tripod.acid:
 	Inherits: ^Chemical
@@ -507,22 +492,42 @@ Tripod.acid:
 		ValidTargets: Ground, Ship, Trees
 
 TripodLaser.chain:
-	Inherits: TripodLaser
+	Inherits: ^Energy
+	Range: 6c0
+	ValidTargets: Ground, Water
+	Report: tripod-fire1.aud, tripod-fire2.aud, tripod-fire3.aud
+	ReloadDelay: 45
+	Burst: 2
+	BurstDelays: 15
+	Projectile: LaserZap
+		Duration: 20
+		Color: FAFAFFFF
+		Width: 45
+		HitAnim: plaserfire
+		SecondaryBeam: true
+		SecondaryBeamColor: 382EFFAA
+		SecondaryBeamZOffset: 2047
+		SecondaryBeamWidth: 75
 	Warhead@1Dam: SpreadDamage
-		Damage: 3700
+		Spread: 42
+		Damage: 5700
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
 	Warhead@Arc: FireShrapnel
 		Weapon: TripodLaser.Arc
 		Amount: 1
 		AimChance: 100
 
 TripodLaser.Arc:
-	Inherits: TripodLaser
+	Inherits: TripodLaser.chain
 	Range: 1c512
 	Projectile: LaserZap
 		Width: 35
 		SecondaryBeamWidth: 55
 	Warhead@1Dam: SpreadDamage
-		Damage: 1500
+		Damage: 2000
 	Warhead@Arc: FireShrapnel
 		Weapon: TripodLaser.Arc2
 		AimChance: 100
@@ -534,7 +539,7 @@ TripodLaser.Arc2:
 		Width: 25
 		SecondaryBeamWidth: 45
 	Warhead@1Dam: SpreadDamage
-		Damage: 750
+		Damage: 1000
 	-Warhead@Arc:
 
 ReaperLaser:
