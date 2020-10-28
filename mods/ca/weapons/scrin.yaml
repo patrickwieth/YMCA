@@ -201,25 +201,34 @@ CorrupterSpew:
 		Palette: ra2effect-ignore-lighting-alpha50
 		Speed: 130
 	Warhead@1Dam: SpreadDamage
+		Damage: 1250
 		Spread: 341
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
-CorrupterSpew.area:
+CorrupterSpew.area1:
 	Inherits: CorrupterSpew
 	Projectile: Bullet
 		Speed: 90
-		Inaccuracy: 48
-	FirstBurstTargetOffset: 0,-1800,0
-	FollowingBurstTargetOffset: -0,300,0
-	Burst: 13
+		Inaccuracy: 256
+	FirstBurstTargetOffset: -1000,-1800,0
+	FollowingBurstTargetOffset: 100,180,0
+	Burst: 10
 	BurstDelays: 1
 
 CorrupterSpew.area2:
-	Inherits: CorrupterSpew.area
-	FirstBurstTargetOffset: 0,-1800,0
-	FollowingBurstTargetOffset: -0,300,0
-	Burst: 13
-	BurstDelays: 1
+	Inherits: CorrupterSpew.area1
+	FirstBurstTargetOffset: 0,0,0
+	FollowingBurstTargetOffset: -100,180,0
+
+CorrupterSpew.area3:
+	Inherits: CorrupterSpew.area1
+	FirstBurstTargetOffset: -800,2400,0
+	FollowingBurstTargetOffset: 120,-240,0
+
+CorrupterSpew.area4:
+	Inherits: CorrupterSpew.area1
+	FirstBurstTargetOffset: 1000,0,0
+	FollowingBurstTargetOffset: -120,-240,0
 
 CorrupterSpew.range:
 	Inherits: ChemballLauncher
@@ -276,8 +285,9 @@ DevourerAcid:
 
 WarshipLaser:
 	Inherits: ^ScrinLaser
+	Inherits: ^EnergyAP
 	Range: 8c512
-	ReloadDelay: 40
+	ReloadDelay: 50
 	Report: interloper-fire1.aud, interloper-fire2.aud
 	FirstBurstTargetOffset: 0,-1300,0
 	FollowingBurstTargetOffset: 0,200,0
@@ -289,17 +299,25 @@ WarshipLaser:
 		ZOffset: 0
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
-		Damage: 1000
+		Damage: 1200
 
 WarshipLaser.2:
 	Inherits: WarshipLaser
-	FirstBurstTargetOffset: -300, -300, 0
-	FollowingBurstTargetOffset: 50, 60, 0
+	Inherits: ^Energy
+	FirstBurstTargetOffset: -600, -300, 0
+	FollowingBurstTargetOffset: 100, 60, 0
+	Projectile: LaserZap
+		Color: FAFAFFFF
+		SecondaryBeamColor: 382EFFAA
 
 WarshipLaser.3:
 	Inherits: WarshipLaser
-	FirstBurstTargetOffset: -300, 300, 0
-	FollowingBurstTargetOffset: 50, -60, 0
+	Inherits: ^Energy
+	FirstBurstTargetOffset: -600, 300, 0
+	FollowingBurstTargetOffset: 100, -60, 0
+	Projectile: LaserZap
+		Color: FAFAFFFF
+		SecondaryBeamColor: 382EFFAA
 
 DarkDiscCannon:
 	Inherits: PlasmaDiscs
@@ -503,7 +521,6 @@ TripodLaser.chain:
 		Duration: 20
 		Color: FAFAFFFF
 		Width: 45
-		HitAnim: plaserfire
 		SecondaryBeam: true
 		SecondaryBeamColor: 382EFFAA
 		SecondaryBeamZOffset: 2047
@@ -515,6 +532,10 @@ TripodLaser.chain:
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
+		ImpactSounds: xplos.aud
+		ValidTargets: Ground, Water, Ship, Trees
 	Warhead@Arc: FireShrapnel
 		Weapon: TripodLaser.Arc
 		Amount: 1
@@ -650,7 +671,7 @@ DevastatorShards:
 
 DevastatorRift:
 	Inherits: ^Energy
-	ReloadDelay: 200
+	ReloadDelay: 500
 	Range: 11c0
 	Report: darkener-fire1.aud, darkener-fire2.aud
 	InvalidTargets: Air
