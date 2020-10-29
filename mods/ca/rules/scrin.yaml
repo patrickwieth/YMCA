@@ -757,7 +757,7 @@ CORR:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Armament:
+	Armament@PRIMARY:
 		Weapon: CorrupterSpew
 		LocalOffset: 750,0,0
 	AttackFrontal:
@@ -787,15 +787,21 @@ CORR.Area:
 		Description: Short-ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
 	Armament@PRIMARY:
-		Weapon: CorrupterSpew.area2
+		Weapon: CorrupterSpew.area1
 		PauseOnCondition: spew
 	Armament@SECONDARY:
-		Weapon: CorrupterSpew.area
+		Weapon: CorrupterSpew.area2
 		PauseOnCondition: !spew
+	Armament@TERTIARY:
+		Weapon: CorrupterSpew.area3
+		PauseOnCondition: spew != 2
+	Armament@QUARTIARY:
+		Weapon: CorrupterSpew.area4
+		PauseOnCondition: spew < 3
 	GrantConditionOnAttack@GROUND:
 		Condition: spew
-		RequiredShotsPerInstance: 12
-		MaximumInstances: 1
+		RequiredShotsPerInstance: 10
+		MaximumInstances: 3
 		RevokeDelay: 20
 		RevokeOnNewTarget: False
 		RevokeAll: True
@@ -810,7 +816,7 @@ CORR.Range:
 		Prerequisites: nerv, ~vehicles.scrin, ~commander_tree.corrupter.range
 		Description: Ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
-	Armament:
+	Armament@PRIMARY:
 		Weapon: CorrupterSpew.range
 
 STCR:
@@ -1737,7 +1743,6 @@ PAC:
 		Delay: 25
 		HealIfBelow: 75
 		DamageCooldown: 150
-		RequiresCondition: regen-upgrade
 	GrantConditionOnPrerequisite@SHIELDS:
 		Condition: shields-upgrade
 		Prerequisites: shields.upgrade
@@ -1788,27 +1793,28 @@ PAC.laser:
 		Name: primary
 		Weapon: WarshipLaser
 		LocalOffset: 1500,0,0
+		PauseOnCondition: laser
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: WarshipLaser.2
 		LocalOffset: 0,550,0
-		PauseOnCondition: !laser1
+		PauseOnCondition: laser != 1
 	Armament@TERTIARY:
 		Name: tertiary
 		Weapon: WarshipLaser.3
 		LocalOffset: 0,-550,0
-		PauseOnCondition: !laser2
+		PauseOnCondition: laser != 2
 	GrantConditionOnAttack@GROUND:
-		ArmamentNames: primary
-		Condition: laser1
-		RevokeDelay: 40
+		ArmamentNames: primary, secondary, tertiary
+		Condition: laser
+		RequiredShotsPerInstance: 13
+		MaximumInstances: 3
+		RevokeDelay: 10
 		RevokeOnNewTarget: False
-	GrantConditionOnAttack@GROUND:
-		ArmamentNames: secondary
-		Condition: laser2
-		RevokeDelay: 40
-		RevokeOnNewTarget: False
-	AttackFrontal:
+		RevokeAll: True
+	-AttackFrontal:
+	AttackOmni:
+		Armaments: primary, secondary, tertiary
 		PauseOnCondition: empdisable || being-warped
 	-CarrierMaster@carr1:
 	-Exit@0:
