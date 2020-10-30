@@ -1157,7 +1157,7 @@ TPOD:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
-		Prerequisites: techcenter, ~vehicles.tpod, ~!commander_tree.tripod.chain, ~!commander_tree.tripod.acid, ~!commander_tree.tripod.pld
+		Prerequisites: techcenter, ~vehicles.tpod, ~!commander_tree.tripod.chainer, ~!commander_tree.tripod.acid, ~!commander_tree.tripod.pld
 		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Voiced:
@@ -1223,7 +1223,7 @@ TPOD:
 TPOD.chain:
 	Inherits: TPOD
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.chain, ~!commander_tree.tripod.chain.reflector
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.chainer, ~!commander_tree.tripod.chain.reflector
 		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
@@ -1235,7 +1235,7 @@ TPOD.chain.reflector:
 	Inherits: TPOD.chain
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.chain.reflector
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.chainer.reflector
 		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
@@ -1434,7 +1434,7 @@ STMR:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter, ~!commander_tree.stormbomber
 		Description: Durable patrol craft.\n  Strong vs Infantry, Light Armor, Aircraft\n  Weak vs Tanks, Buildings
 		IconPalette: chrome
 	Valued:
@@ -1511,7 +1511,7 @@ STMR.hunter:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~commander_tree.stormhunter
 		Description: Durable patrol anti-air craft.\n  Strong vs Aircraft\n  Weak vs Vehicles, Infantry, Buildings
 		IconPalette: chrome
 	Valued:
@@ -1530,7 +1530,7 @@ STMR.bomber:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~commander_tree.stormbomber
 		Description: Durable patrol anti-air craft.\n  Strong vs Light Vehicles\n  Weak vs Aircraft
 		IconPalette: chrome
 	Valued:
@@ -1550,7 +1550,7 @@ DEVA:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: scrt, grav, ~aircraft.scrin
+		Prerequisites: scrt, grav, ~aircraft.scrin, ~!commander_tree.devastator.shard, ~!commander_tree.devastator.beam
 		Description: Long-range siege warship.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Aircraft, Tanks
 		IconPalette: chrome
 	Voiced:
@@ -1625,7 +1625,7 @@ DEVA.Shards:
 	Inherits: DEVA
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
-		Prerequisites: scrt, grav, ~aircraft.scrin
+		Prerequisites: scrt, grav, ~aircraft.scrin, ~commander_tree.devastator.shard
 		Description: Long-range anti-tank warship.\n  Strong vs Tanks\n  Weak vs Aircraft
 	Valued:
 		Cost: 2200
@@ -1638,7 +1638,7 @@ DEVA.Shards:
 DEVA.Rift:
 	Inherits: DEVA
 	Buildable:
-		Prerequisites: scrt, grav, ~aircraft.scrin
+		Prerequisites: scrt, grav, ~aircraft.scrin, ~commander_tree.devastator.beam
 		Description: Long-range anti-tank warship.\n  Strong vs masses of units\n  Weak vs Aircraft
 	Valued:
 		Cost: 2200
@@ -1656,7 +1656,7 @@ PAC:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~!commander_tree.carrier.warship, ~!commander_tree.carrier.suicide, ~!commander_tree.carrier.support
 		Description: Carrier that launches a squadron\nof assault craft.\n	Strong vs Vehicles, Aircraft\n  Weak vs Infantry, Buildings, Defenses
 		IconPalette: chrome
 	Voiced:
@@ -1753,7 +1753,7 @@ PAC:
 PAC.suicide:
 	Inherits: PAC
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.suicide
 		Description: Carrier with suicide drones.\n	Strong vs Vehicles, Infantry\n  Weak vs Anti-Air
 		IconPalette: chrome
 	Valued:
@@ -1764,7 +1764,7 @@ PAC.suicide:
 PAC.support:
 	Inherits: PAC
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.support
 		Description: Massive Carrier with repair drones.\n	Repair drones have point laser defense.\n  Can teleport infantry directly into the field.\n  Strong vs Projectile based attacks.\n  Weak without army.
 		IconPalette: chrome
 	RenderSprites:
@@ -1778,7 +1778,7 @@ PAC.laser:
 	Inherits: PAC
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin
+		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.warship
 		Description: Massive Warship with multiple laser systems.\n	Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Reflector
 		IconPalette: chrome
 	RenderSprites:
