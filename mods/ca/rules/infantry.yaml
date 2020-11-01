@@ -895,7 +895,7 @@ N2:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 40
-		Prerequisites: infantry.any, ~infantry.gdi,  ~commander_tree.advanced_infantry_training, ~techlevel.infonly
+		Prerequisites: infantry.any, ~infantry.gdi, ~!commander_tree.advanced_infantry_training
 		IconPalette: chrometd
 		Description: Infantry armed with grenades.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
@@ -945,6 +945,21 @@ N2R1:
 	-Buildable:
 	UpdatesPlayerStatistics:
 		OverrideActor: n2
+
+N2.Emp:
+	Inherits: N2
+	Buildable:
+		Prerequisites: infantry.any, ~infantry.gdi, ~commander_tree.advanced_infantry_training
+		IconPalette: chrometd
+		Description: Infantry armed with EMP grenades (disable vehicles).\n  Strong vs Buildings, Infantry\n  Weak vs Artillery, Aircraft
+	Valued:
+		Cost: 160
+	Tooltip:
+		Name: EMP Grenadier
+	Armament@PRIMARY:
+		Weapon: EMPGrenade
+		LocalOffset: 0,0,555
+		FireDelay: 15
 
 N3:
 	Inherits: ^Soldier
