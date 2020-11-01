@@ -1616,21 +1616,15 @@ DEVA:
 	ProductionCostMultiplier@VANQBONUS:
 		Multiplier: 90
 		Prerequisites: vehicles.harbinger
-	GrantConditionOnPrerequisite@REGEN:
-		Condition: regen-upgrade
-		Prerequisites: regen.upgrade
 	SelfHealing@REGEN:
 		PercentageStep: 3
 		Delay: 25
 		HealIfBelow: 75
 		DamageCooldown: 150
-		RequiresCondition: regen-upgrade
-	GrantConditionOnPrerequisite@SHIELDS:
-		Condition: shields-upgrade
-		Prerequisites: shields.upgrade
-	DamageMultiplier@SHIELDS:
-		RequiresCondition: shields-upgrade
-		Modifier: 90
+	-KillsSelf:
+	SpeedMultiplier@EMPDISABLE:
+		Modifier: 0
+		RequiresCondition: empdisable
 
 DEVA.Shards:
 	Inherits: DEVA
@@ -1731,6 +1725,7 @@ PAC:
 		SlaveDisposalOnKill: KillSlaves
 		SpawnAllAtOnce: false
 		LoadedCondition: inva-loaded
+		PauseOnCondition: empdisable || being-warped
 	Exit@0:
 		SpawnOffset: -100,0,0
 		Facing: 60
@@ -1746,20 +1741,15 @@ PAC:
 	DeathSounds:
 		Voice: Die
 	-EjectOnDeath:
-	GrantConditionOnPrerequisite@REGEN:
-		Condition: regen-upgrade
-		Prerequisites: regen.upgrade
 	SelfHealing@REGEN:
-		PercentageStep: 3
+		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 75
 		DamageCooldown: 150
-	GrantConditionOnPrerequisite@SHIELDS:
-		Condition: shields-upgrade
-		Prerequisites: shields.upgrade
-	DamageMultiplier@SHIELDS:
-		RequiresCondition: shields-upgrade
-		Modifier: 90
+	-KillsSelf:
+	SpeedMultiplier@EMPDISABLE:
+		Modifier: 0
+		RequiresCondition: empdisable
 
 PAC.suicide:
 	Inherits: PAC
@@ -1908,12 +1898,6 @@ INVA:
 		TrailLength: 10
 	-Contrail@2:
 	Interactable:
-	GrantConditionOnPrerequisite@SHIELDS:
-		Condition: shields-upgrade
-		Prerequisites: shields.upgrade
-	DamageMultiplier@SHIELDS:
-		RequiresCondition: shields-upgrade
-		Modifier: 80
 
 #
 # ---- Husks
