@@ -173,7 +173,7 @@ E3:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 30
-		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Prerequisites: ~infantry.ra, ~!commander_tree.advanced_infantry_training
 		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Selectable:
 		Class: E3
@@ -231,14 +231,62 @@ E3:
 	ExternalCondition@relayTarget:
 		Condition: relayTarget
 
-E3R1:
+E3.cryo:
 	Inherits: E3
-	RenderSprites:
-		Image: E3
-	ProducibleWithLevel:
-		Prerequisites: techlevel.infonly
-		InitialLevels: 1
-	-Buildable:
+	Buildable:
+		Prerequisites: ~infantry.ra, ~commander_tree.advanced_infantry_training
+		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
+	Tooltip:
+		Name: Cryo Rocket Soldier
+	Armament@primary:
+		Name: primary
+		Weapon: Dragon.Relay.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@tertiary:
+		Name: tertiary
+		Weapon: RedEye.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@secondary:
+		Name: secondary
+		Weapon: Dragon.Inf.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DragonE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@GarrisonAA:
+		Name: mountedaa
+		Weapon: RedEyeE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	-WithInfantryBody:
+	WithInfantryBody:
+		IdleSequences: idle-cryo1, idle-cryo2
+		StandSequences: stand-cryo, stand-cryo2
+		AttackSequences: shoot-cryo
+		DefaultAttackSequence: shoot-cryo
+		MoveSequence: run-cryo
+	-WithDeathAnimation:
+	WithDeathAnimation:
+		DeathSequence: die-cryo
+		DeathSequencePalette: overlayplayertd
+		DeathTypes:
+			DefaultDeath: 1
+			BulletDeath: 2
+			SmallExplosionDeath: 3
+			ExplosionDeath: 4
+			FireDeath: 5
+			ElectricityDeath: 6
+			PoisonDeath: 7
+			ChronoDeath: 8
+			ToxinDeath: 9
+			RadiationDeath: 10
+			FrozenDeath: 11
+		CrushedSequence: die-crushed
 
 E4:
 	Inherits: ^Soldier
@@ -1084,7 +1132,6 @@ N5:
 	Voiced:
 		VoiceSet: CyborgVoice
 	-Crushable:
-	-KillsSelf@Mutation:
 	-DamagedByTerrain:
 	DamagedByTerrain:
 		Terrain: Tiberium, BlueTiberium
@@ -2020,7 +2067,6 @@ N1C:
 		VoiceSet: CyborgVoice
 	Armament:
 		Weapon: Vulcan3
-	-KillsSelf@Mutation:
 	-GrantConditionOnPrerequisite@BIO:
 	-GrantCondition@HAZMAT:
 	GrantCondition@HAZMAT:
@@ -2116,7 +2162,6 @@ N3C:
 		Count: 1
 	AutoTarget:
 		ScanRadius: 5
-	-KillsSelf@Mutation:
 	-GrantConditionOnPrerequisite@BIO:
 	-GrantCondition@HAZMAT:
 	GrantCondition@HAZMAT:
@@ -2211,7 +2256,6 @@ RMBC:
 		Bounds: 24,24,0,-4
 		DecorationBounds: 12,20,0,-4
 	-Crushable:
-	-KillsSelf@Mutation:
 	-KillsSelf@Immolate:
 	-GrantConditionOnPrerequisite@BIO:
 	-WithDecoration@HAZMAT:
