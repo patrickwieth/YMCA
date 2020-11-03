@@ -371,7 +371,7 @@ RiftCannon.chain:
 		SecondaryBeamWidth: 90
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
-		Damage: 10000
+		Damage: 3000
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@Arc: FireShrapnel
 		Weapon: RiftCannon.arc
@@ -716,6 +716,16 @@ InvaderLauncher:
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Air, Ground, Water
+
+InvaderLauncher.Support:
+	Inherits: InvaderLauncher
+	ValidTargets: Repair
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Repair
+
+InvaderLauncher.Suicide:
+	Inherits: InvaderLauncher
+	Burst: 4
 
 InvaderZap:
 	Inherits: ^EnergyAP

@@ -723,6 +723,7 @@ INTL.Teleport:
 	PortableChrono:
 		ChargeDelay: 500
 		MaxDistance:	6
+		KillCargo: false
 
 CORR:
 	Inherits: ^Vehicle
@@ -1761,9 +1762,17 @@ PAC.suicide:
 		Cost: 3600
 	Tooltip:
 		Name: Suicide Drone Carrier
+	Armament@PRIMARY:
+		Weapon: InvaderLauncher.Suicide
+	CarrierMaster@carr1:
+		Actors: inva.suicide, inva.suicide, inva.suicide, inva.suicide
 
 PAC.support:
 	Inherits: PAC
+	-AutoTarget:
+	-AutoTargetPriority@DEFAULT:
+	-AutoTargetPriority@ATTACKANYTHING:
+	-AttackMove:
 	Buildable:
 		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.support
 		Description: Massive Carrier with repair drones.\n	Repair drones have point laser defense.\n  Can teleport infantry directly into the field.\n  Strong vs Projectile based attacks.\n  Weak without army.
@@ -1774,6 +1783,17 @@ PAC.support:
 		Cost: 5000
 	Tooltip:
 		Name: Support Carrier
+	Armament@PRIMARY:
+		Weapon: InvaderLauncher.Support
+	AutoTarget:
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Vehicle, Ship
+	AutoTargetPriority@REPAIR:
+		ValidTargets: Repair
+		ValidStances: Ally
+		Priority: 2
+	CarrierMaster@carr1:
+		Actors: inva.support, inva.support, inva.support
 
 PAC.laser:
 	Inherits: PAC
@@ -1898,6 +1918,21 @@ INVA:
 		TrailLength: 10
 	-Contrail@2:
 	Interactable:
+
+INVA.support:
+	Inherits: INVA
+	Armament@PRIMARY:
+		Weapon: Repair
+		Name: primary
+		Cursor: repair
+		OutsideRangeCursor: repair
+		TargetStances: Ally
+		ForceTargetStances: None
+	-Armament@SECONDARY:
+
+INVA.suicide:
+	Inherits: INVA
+
 
 #
 # ---- Husks
