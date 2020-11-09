@@ -764,6 +764,57 @@ InvaderZapAA:
 		ValidTargets: Air
 		ValidStances: Enemy, Neutral
 
+InvaderSuicide:
+	Inherits: ^EnergyAP
+	Range: 0c0
+	ReloadDelay: 50
+	Burst: 3
+	BurstDelays: 5
+	Projectile: Bullet
+		Image: scrinzapdown
+		Speed: 1c128
+		Palette: scrin
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1250
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: idle
+		ExplosionPalette: scrin
+		Image: scrinzaphitsm
+		ValidTargets: Ground, Ship, Air, Trees
+	Warhead@3EffWater: CreateEffect
+		Explosions: water_piffs
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+InvaderExplosion:
+	ValidTargets: Ground, Trees, Water, Underwater, Air
+	Warhead@1Dam_impact: SpreadDamage
+		Spread: 1c0
+		Damage: 10000
+		Falloff: 100, 37, 13, 5
+		ValidTargets: Ground, Trees, Water, Air
+		Versus:
+			Wood: 25
+			Concrete: 25
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall
+		Size: 2
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 6
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+	Warhead@3Eff: CreateEffect
+		Explosions: b2bexp, b2bexp2
+		ExplosionPalette: tseffect
+		ImpactSounds: expnew06.aud
+
 PlasmaTurretGun:
 	Inherits: ^EnergyLight
 	Range: 6c0
