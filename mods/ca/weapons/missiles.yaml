@@ -94,6 +94,34 @@ Dragon.Relay:
 	Projectile: MissileCA
 		RangeLimit: 21c0
 
+Dragon.Inf.Cryo:
+	Inherits: Dragon.Inf
+	Projectile: MissileCA
+		Image: cryomiss
+	Warhead@1Dam: SpreadDamage
+		DamageTypes: Prone50Percent, TriggerProne, FrozenDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: cryohit
+		ImpactSounds: cryohit.aud
+	Warhead@chill: GrantExternalCondition
+		Condition: chilled
+		Duration: 65
+		Range: 0c341
+
+Dragon.Relay.Cryo:
+	Inherits: Dragon.Relay
+	Projectile: MissileCA
+		Image: cryomiss
+	Warhead@1Dam: SpreadDamage
+		DamageTypes: Prone50Percent, TriggerProne, FrozenDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: cryohit
+		ImpactSounds: cryohit.aud
+	Warhead@chill: GrantExternalCondition
+		Condition: chilled
+		Duration: 65
+		Range: 0c341
+
 DragonE:
 	Inherits: ^AntiGroundMissile
 	Range: 7c0
@@ -194,6 +222,12 @@ HellfireAG.Harrier:
 		Damage: 1000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water, Trees
+
+HellfireAG.Harrier.Avionics:
+	Inherits: HellfireAG.Harrier
+	Range: 8c0
+	Projectile: MissileCA
+	Burst: 2
 
 HellfireAG.Horn:
 	Inherits: HellfireAG.Harrier
@@ -302,7 +336,6 @@ Nike:
 		Speed: 341
 	Warhead@1Dam: SpreadDamage
 		Damage: 10000
-		Range: 0, 0c64, 0c256, 4c256
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
@@ -314,7 +347,7 @@ Nike.Raptor:
 	Projectile: MissileCA
 		RangeLimit: 14c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 30000
+		Damage: 20000
 		ValidTargets: Air
 		Versus:
 			Light: 75
@@ -336,6 +369,19 @@ RedEye.CYB:
 	Report: rocket.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 7000
+
+RedEye.CRYO:
+	Inherits: RedEye
+	Projectile: MissileCA
+		Image: cryomiss
+	Warhead@3Eff: CreateEffect
+		Explosions: cryohit
+		ImpactSounds: cryoblast.aud
+	Warhead@chill: GrantExternalCondition
+		Condition: chilled
+		Duration: 65
+		Range: 0c341
+		ValidTargets: Air
 
 RedEyeE:
 	Inherits: RedEye
@@ -937,7 +983,7 @@ BTRRocketsAA:
 		Speed: 266
 		Inaccuracy: 512
 		CruiseAltitude: 5c0
-		LockOnProbability: 80
+		LockOnProbability: 60
 		RangeLimit: 13c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
@@ -967,7 +1013,7 @@ BTRRocketsAA:
 
 227mmH:
 	Inherits: 227mm
-	Inherits: ^MissileAP
+	Inherits: ^MissileHE
 	Report: hovrmis1.aud
 
 227mm.upg:
@@ -979,6 +1025,7 @@ BTRRocketsAA:
 		ContrailLength: 15
 		ContrailColor: 00FFFFE6
 		Inaccuracy: 341
+		RangeLimit: 12c0
 		LockOnInaccuracy: 512
 	Warhead@1Dam: SpreadDamage
 		Damage: 1200
@@ -1249,7 +1296,7 @@ CryoMissile:
 	Burst: 2
 	BurstDelays: 6
 	Warhead@1Dam: SpreadDamage
-		Damage: 2500
+		Damage: 5000
 
 CryoGun:
 	ReloadDelay: 90

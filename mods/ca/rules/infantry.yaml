@@ -173,7 +173,7 @@ E3:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 30
-		Prerequisites: ~infantry.ra, ~techlevel.infonly
+		Prerequisites: ~infantry.ra, ~!commander_tree.advanced_infantry_training
 		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Selectable:
 		Class: E3
@@ -231,14 +231,62 @@ E3:
 	ExternalCondition@relayTarget:
 		Condition: relayTarget
 
-E3R1:
+E3.cryo:
 	Inherits: E3
-	RenderSprites:
-		Image: E3
-	ProducibleWithLevel:
-		Prerequisites: techlevel.infonly
-		InitialLevels: 1
-	-Buildable:
+	Buildable:
+		Prerequisites: ~infantry.ra, ~commander_tree.advanced_infantry_training
+		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
+	Tooltip:
+		Name: Cryo Rocket Soldier
+	Armament@primary:
+		Name: primary
+		Weapon: Dragon.Relay.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@tertiary:
+		Name: tertiary
+		Weapon: RedEye.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@secondary:
+		Name: secondary
+		Weapon: Dragon.Inf.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DragonE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@GarrisonAA:
+		Name: mountedaa
+		Weapon: RedEyeE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	-WithInfantryBody:
+	WithInfantryBody:
+		IdleSequences: idle-cryo1, idle-cryo2
+		StandSequences: stand-cryo, stand-cryo2
+		AttackSequences: shoot-cryo
+		DefaultAttackSequence: shoot-cryo
+		MoveSequence: run-cryo
+	-WithDeathAnimation:
+	WithDeathAnimation:
+		DeathSequence: die-cryo
+		DeathSequencePalette: overlayplayertd
+		DeathTypes:
+			DefaultDeath: 1
+			BulletDeath: 2
+			SmallExplosionDeath: 3
+			ExplosionDeath: 4
+			FireDeath: 5
+			ElectricityDeath: 6
+			PoisonDeath: 7
+			ChronoDeath: 8
+			ToxinDeath: 9
+			RadiationDeath: 10
+			FrozenDeath: 11
+		CrushedSequence: die-crushed
 
 E4:
 	Inherits: ^Soldier
@@ -847,7 +895,7 @@ N2:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 40
-		Prerequisites: infantry.any, ~infantry.gdi,  ~commander_tree.advanced_infantry_training, ~techlevel.infonly
+		Prerequisites: infantry.any, ~infantry.gdi, ~!commander_tree.advanced_infantry_training
 		IconPalette: chrometd
 		Description: Infantry armed with grenades.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
@@ -897,6 +945,21 @@ N2R1:
 	-Buildable:
 	UpdatesPlayerStatistics:
 		OverrideActor: n2
+
+N2.Emp:
+	Inherits: N2
+	Buildable:
+		Prerequisites: infantry.any, ~infantry.gdi, ~commander_tree.advanced_infantry_training
+		IconPalette: chrometd
+		Description: Infantry armed with EMP grenades (disable vehicles).\n  Strong vs Buildings, Infantry\n  Weak vs Artillery, Aircraft
+	Valued:
+		Cost: 160
+	Tooltip:
+		Name: EMP Grenadier
+	Armament@PRIMARY:
+		Weapon: EMPGrenade
+		LocalOffset: 0,0,555
+		FireDelay: 15
 
 N3:
 	Inherits: ^Soldier
@@ -1084,7 +1147,6 @@ N5:
 	Voiced:
 		VoiceSet: CyborgVoice
 	-Crushable:
-	-KillsSelf@Mutation:
 	-DamagedByTerrain:
 	DamagedByTerrain:
 		Terrain: Tiberium, BlueTiberium
@@ -1312,8 +1374,6 @@ SNIP:
 		CloakTypes: Cloak
 		RequiresCondition: !cloak-force-disabled
 		UncloakOn: Unload, Infiltrate, Demolish, Dock, Attack
-	Cloak@GPSHIDE:
-		RequiresCondition: (gpshide || crate-cloak) && !(cloak-force-disabled || invisibility || hidden)
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
@@ -1596,8 +1656,6 @@ SAB:
 		UncloakOn: Unload, Infiltrate, Demolish, Dock, Attack
 		CloakSound: gstealon.aud
 		UncloakSound: gstealof.aud
-	Cloak@GPSHIDE:
-		RequiresCondition: (gpshide || crate-cloak) && !(cloak-force-disabled || invisibility || hidden)
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
@@ -2020,7 +2078,6 @@ N1C:
 		VoiceSet: CyborgVoice
 	Armament:
 		Weapon: Vulcan3
-	-KillsSelf@Mutation:
 	-GrantConditionOnPrerequisite@BIO:
 	-GrantCondition@HAZMAT:
 	GrantCondition@HAZMAT:
@@ -2116,7 +2173,6 @@ N3C:
 		Count: 1
 	AutoTarget:
 		ScanRadius: 5
-	-KillsSelf@Mutation:
 	-GrantConditionOnPrerequisite@BIO:
 	-GrantCondition@HAZMAT:
 	GrantCondition@HAZMAT:
@@ -2211,7 +2267,6 @@ RMBC:
 		Bounds: 24,24,0,-4
 		DecorationBounds: 12,20,0,-4
 	-Crushable:
-	-KillsSelf@Mutation:
 	-KillsSelf@Immolate:
 	-GrantConditionOnPrerequisite@BIO:
 	-WithDecoration@HAZMAT:
@@ -2439,6 +2494,7 @@ LEADER:
 		Voice: Move
 	Passenger:
 		Voice: Move
+		CargoCondition: loaded
 	Guard:
 		Voice: Move
 	Voiced:
@@ -2451,6 +2507,7 @@ LEADER:
 		IdleSequences: idle1
 	ProductionFromMapEdge:
 		Produces: Infantry, Soldier
+		PauseOnCondition: loaded
 	PrimaryBuilding:
 		PrimaryCondition: primary
 		SelectionNotification: PrimaryBuildingSelected

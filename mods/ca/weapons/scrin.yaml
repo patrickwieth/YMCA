@@ -46,17 +46,10 @@ IntruderDiscs:
 	Range: 5c0
 	ReloadDelay: 85
 	Burst: 3
-	Projectile: Bullet
+	Projectile: BulletCA
 		Inaccuracy: 0c128
 	Warhead@1Dam: SpreadDamage
 		Damage: 3250
-		Versus:
-			None: 70
-			Wood: 100
-			Light: 65
-			Heavy: 70
-			Concrete: 100
-			Brick: 85
 
 EnslaveInfantry:
 	Range: 7c0
@@ -87,6 +80,7 @@ EnslaveVehicle:
 		ValidStances: Neutral, Enemy
 
 GunWalkerZap:
+	Inherits: ^Bullet
 	Range: 4c512
 	Report: gunwalker-fire1.aud, gunwalker-fire2.aud
 	ReloadDelay: 30
@@ -99,12 +93,6 @@ GunWalkerZap:
 		Inaccuracy: 0c64
 	Warhead@1Dam: SpreadDamage
 		Damage: 2700
-		Versus:
-			None: 100
-			Wood: 25
-			Concrete: 15
-			Light: 25
-			Heavy: 15
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: idle
@@ -118,6 +106,7 @@ GunWalkerZap:
 
 GunWalkerZapAA:
 	Inherits: GunWalkerZap
+	Inherits: ^BulletHeavy
 	Range: 7c512
 	Projectile: Bullet
 		Image: scrinzapup
@@ -126,24 +115,19 @@ GunWalkerZapAA:
 		Inaccuracy: 0
 	ValidTargets: Air
 	Warhead@1Dam: SpreadDamage
-		Damage: 1300
+		Damage: 1600
 		ValidTargets: Air
 		Range: 0, 0c64, 0c256, 3c0
 		Falloff: 100, 100, 30, 15
-		Versus:
-			None: 100
-			Wood: 100
-			Concrete: 100
-			Light: 100
-			Heavy: 100
 
 PlasmaDiscs:
+	Inherits: ^ShellHeavy
 	Range: 5c512
 	Report: seeker-fire1.aud, seeker-fire2.aud, seeker-fire3.aud
 	ReloadDelay: 55
 	Burst: 5
 	BurstDelays: 4
-	Projectile: Bullet
+	Projectile: BulletCA
 		Image: plasdiscsm
 		TrailImage: smokey
 		TrailPalette: scrinplasma
@@ -154,14 +138,7 @@ PlasmaDiscs:
 		Blockable: false
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
-		Damage: 2000
-		Versus:
-			None: 40
-			Wood: 75
-			Light: 70
-			Heavy: 100
-			Concrete: 85
-			Brick: 50
+		Damage: 1800
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -170,6 +147,7 @@ PlasmaDiscs:
 		ImpactSounds: seeker-hit1.aud, seeker-hit2.aud
 
 ^ScrinLaser:
+	Inherits: ^Energy
 	ValidTargets: Ground, Water
 	Range: 7c512
 	ReloadDelay: 60
@@ -188,12 +166,6 @@ PlasmaDiscs:
 		Spread: 42
 		Damage: 7000
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 90
-			Light: 65
-			Wood: 30
-			Heavy: 100
-			Concrete: 80
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
@@ -210,16 +182,18 @@ InterloperLaser:
 		Duration: 3
 		SecondaryBeamWidth: 55
 	Warhead@1Dam: SpreadDamage
-		Damage: 1700
-		Versus:
-			None: 100
-			Light: 100
-			Wood: 50
-			Heavy: 100
-			Concrete: 50
+		Damage: 2500
+
+InterloperLaser.AA:
+	Inherits: InterloperLaser
+	Range: 7c0
+	ValidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Air
+		Damage: 2400
 
 CorrupterSpew:
-	Inherits: BigFlamer
+	Inherits: BigChemspray
 	StartBurstReport: corrupter-fire1.aud
 	ReloadDelay: 110
 	Burst: 12
@@ -228,12 +202,47 @@ CorrupterSpew:
 		Palette: ra2effect-ignore-lighting-alpha50
 		Speed: 130
 	Warhead@1Dam: SpreadDamage
+		Damage: 1250
 		Spread: 341
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
-	-Warhead@Flames:
+
+CorrupterSpew.area1:
+	Inherits: CorrupterSpew
+	Projectile: Bullet
+		Speed: 90
+		Inaccuracy: 256
+	FirstBurstTargetOffset: -1000,-1800,0
+	FollowingBurstTargetOffset: 100,180,0
+	Burst: 10
+	BurstDelays: 1
+
+CorrupterSpew.area2:
+	Inherits: CorrupterSpew.area1
+	FirstBurstTargetOffset: 0,0,0
+	FollowingBurstTargetOffset: -100,180,0
+
+CorrupterSpew.area3:
+	Inherits: CorrupterSpew.area1
+	FirstBurstTargetOffset: -800,2400,0
+	FollowingBurstTargetOffset: 120,-240,0
+
+CorrupterSpew.area4:
+	Inherits: CorrupterSpew.area1
+	FirstBurstTargetOffset: 1000,0,0
+	FollowingBurstTargetOffset: -120,-240,0
+
+CorrupterSpew.range:
+	Inherits: ChemballLauncher
+	StartBurstReport: corrupter-fire1.aud
+	ReloadDelay: 110
+	Warhead@1Dam: SpreadDamage
+		Spread: 768
+		Damage: 10000
+		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
 DevourerLaser:
 	Inherits: ^ScrinLaser
+	Inherits: ^EnergyAP
 	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
 	FirstBurstTargetOffset: 0,-600,0
 	FollowingBurstTargetOffset: -0,100,0
@@ -249,8 +258,87 @@ DevourerLaser:
 		Spread: 341
 		Damage: 1000
 
+DevourerAcid:
+	Inherits: ^Chemical
+	ValidTargets: Ground, Water
+	Range: 7c512
+	ReloadDelay: 60
+	Projectile: Bullet
+		Speed: 204
+		Blockable: True
+		LaunchAngle: 56
+		Inaccuracy: 512
+		ContrailLength: 30
+		ContrailColor: 5dff00
+	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
+	FirstBurstTargetOffset: 0,-600,0
+	FollowingBurstTargetOffset: -0,100,0
+	Burst: 13
+	BurstDelays: 1
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1300
+	Warhead@3Eff: CreateEffect
+		Explosions: muzzle
+		Image: devo
+		ExplosionPalette: scrin
+		ValidTargets: Ground, Ship, Trees
+
+WarshipLaser:
+	Inherits: ^ScrinLaser
+	Inherits: ^EnergyAP
+	Range: 8c512
+	ReloadDelay: 50
+	Report: interloper-fire1.aud, interloper-fire2.aud
+	FirstBurstTargetOffset: 0,-1300,0
+	FollowingBurstTargetOffset: 0,200,0
+	Burst: 13
+	BurstDelays: 1
+	Projectile: LaserZap
+		TrackTarget: false
+		Duration: 3
+		ZOffset: 0
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1200
+
+WarshipLaser.2:
+	Inherits: WarshipLaser
+	Inherits: ^Energy
+	FirstBurstTargetOffset: -600, -300, 0
+	FollowingBurstTargetOffset: 100, 60, 0
+	Projectile: LaserZap
+		Color: FAFAFFFF
+		SecondaryBeamColor: 382EFFAA
+
+WarshipLaser.3:
+	Inherits: WarshipLaser
+	Inherits: ^Energy
+	FirstBurstTargetOffset: -600, 300, 0
+	FollowingBurstTargetOffset: 100, -60, 0
+	Projectile: LaserZap
+		Color: FAFAFFFF
+		SecondaryBeamColor: 382EFFAA
+
+DarkDiscCannon:
+	Inherits: PlasmaDiscs
+	Inherits: ^ShellAP
+	Range: 6c0
+	Burst: 1
+	ReloadDelay: 120
+	Report: devastator-fire1.aud, devastator-fire2.aud, devastator-fire3.aud
+	Projectile: BulletCA
+		Image: plasdisclg
+		Speed: 180
+	Warhead@1Dam: SpreadDamage
+		Damage: 12000
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+
 RiftCannon:
 	Inherits: ^ScrinLaser
+	Inherits: ^EnergyAP
 	Range: 6c0
 	Report: darkener-fire1.aud, darkener-fire2.aud
 	ReloadDelay: 120
@@ -268,10 +356,55 @@ RiftCannon:
 	Warhead@Spawn: SpawnActor
 		Actors: camera.minirift
 		Range: 1
-		ForceGround: false
+		ForceGround: False
 		ValidTargets: Ground, Water
 
+RiftCannon.chain:
+	Inherits: ^EnergyAP
+	Report: darkener-fire1.aud, darkener-fire2.aud
+	ReloadDelay: 110
+	Range: 6c0
+	Projectile: LaserZap
+		Color: 000000FF
+		Width: 70
+		SecondaryBeamColor: 00000099
+		SecondaryBeamWidth: 90
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 3000
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+	Warhead@Arc: FireShrapnel
+		Weapon: RiftCannon.arc
+		AimChance: 100
+		Amount: 1
+		AllowDirectHit: true
+		ThrowWithoutTarget: false
+	Warhead@Spawn: SpawnActor
+		Actors: camera.minirift
+		Range: 1
+		ForceGround: False
+		ValidTargets: Ground, Water
+
+RiftCannon.arc:
+	Inherits: RiftCannon.chain
+	Range: 2c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+	Warhead@Arc: FireShrapnel
+		Weapon: RiftCannon.arc2
+		AimChance: 100
+		Amount: 1
+		AllowDirectHit: true
+		ThrowWithoutTarget: false
+
+RiftCannon.arc2:
+	Inherits: RiftCannon.arc
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+	-Warhead@Arc:
+
 MiniRift:
+	Inherits: ^EnergyAP
 	ReloadDelay: 10
 	Range: 1c0
 	ValidTargets: Ground, Water
@@ -282,39 +415,36 @@ MiniRift:
 		Falloff: 100, 70, 0
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 55
-			Wood: 30
-			Light: 70
-			Heavy: 100
-			Concrete: 80
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 		ValidStances: Enemy, Neutral
 	Warhead@2Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 300
+		Damage: 600
 		Falloff: 100, 70, 0
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 55
-			Wood: 30
-			Light: 70
-			Heavy: 100
-			Concrete: 80
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 		ValidStances: Ally
+
+MediumRift:
+	Inherits: MiniRift
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 2400
+		Falloff: 100, 70, 50
+	Warhead@2Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 2400
+		Falloff: 100, 70, 50
 
 RuinerCannon:
 	Inherits: 155mm
 	Report: ruiner-fire1.aud
 	ReloadDelay: 160
 	Burst: 4
-	BurstDelays: 20
-	Range: 10c0
-	Projectile: Bullet
+	BurstDelays: 10
+	Range: 14c0
+	Projectile: BulletCA
 		Image: tibglob
 		Palette: scrin
 	Warhead@1Dam: SpreadDamage
@@ -333,6 +463,11 @@ RuinerCannon:
 		ExplosionPalette: scrin
 		Image: tibexplode
 
+RuinerCannon.barrage:
+	Inherits: RuinerCannon
+	Range: 16c0
+	ReloadDelay: 80
+
 TripodLaser:
 	Inherits: Laser
 	Range: 6c0
@@ -348,14 +483,86 @@ TripodLaser:
 		SecondaryBeamWidth: 75
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
+		Damage: 7700
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+
+Tripod.acid:
+	Inherits: ^Chemical
+	ValidTargets: Ground, Water
+	Range: 6c0
+	ReloadDelay: 60
+	Projectile: Bullet
+		Speed: 204
+		Blockable: True
+		LaunchAngle: 56
+		Inaccuracy: 512
+		ContrailLength: 30
+		ContrailColor: 5dff00
+	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
+	Burst: 13
+	BurstDelays: 1
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1300
+	Warhead@3Eff: CreateEffect
+		Explosions: muzzle
+		Image: devo
+		ExplosionPalette: scrin
+		ValidTargets: Ground, Ship, Trees
+
+TripodLaser.chain:
+	Inherits: ^Energy
+	Range: 6c0
+	ValidTargets: Ground, Water
+	Report: tripod-fire1.aud, tripod-fire2.aud, tripod-fire3.aud
+	ReloadDelay: 45
+	Burst: 2
+	BurstDelays: 15
+	Projectile: LaserZap
+		Duration: 20
+		Color: FAFAFFFF
+		Width: 45
+		SecondaryBeam: true
+		SecondaryBeamColor: 382EFFAA
+		SecondaryBeamZOffset: 2047
+		SecondaryBeamWidth: 75
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
 		Damage: 5700
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 80
-			Light: 70
-			Wood: 62
-			Heavy: 105
-			Concrete: 30
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
+		ImpactSounds: xplos.aud
+		ValidTargets: Ground, Water, Ship, Trees
+	Warhead@Arc: FireShrapnel
+		Weapon: TripodLaser.Arc
+		Amount: 1
+		AimChance: 100
+
+TripodLaser.Arc:
+	Inherits: TripodLaser.chain
+	Range: 1c512
+	Projectile: LaserZap
+		Width: 35
+		SecondaryBeamWidth: 55
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+	Warhead@Arc: FireShrapnel
+		Weapon: TripodLaser.Arc2
+		AimChance: 100
+		Amount: 1
+
+TripodLaser.Arc2:
+	Inherits: TripodLaser.Arc
+	Projectile: LaserZap
+		Width: 25
+		SecondaryBeamWidth: 45
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+	-Warhead@Arc:
 
 ReaperLaser:
 	Inherits: TripodLaser
@@ -368,7 +575,15 @@ ReaperLaser:
 		Color: 00FF0090
 		SecondaryBeamColor: 00FF0050
 
+ReaperLaser.range:
+	Inherits: ReaperLaser
+	Range: 7c0
+
+Reaper.acid:
+	Inherits: Tripod.acid
+
 StormriderZap:
+	Inherits: ^BulletHeavy
 	Range: 7c0
 	Report: stormrider-fire1.aud, stormrider-fire2.aud, stormrider-fire3.aud
 	ReloadDelay: 40
@@ -382,12 +597,6 @@ StormriderZap:
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 2600
-		Versus:
-			None: 100
-			Wood: 50
-			Concrete: 30
-			Light: 85
-			Heavy: 35
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: idle
@@ -412,27 +621,91 @@ StormRiderZapAA:
 
 DevastatorDiscs:
 	Inherits: PlasmaDiscs
+	Inherits: ^ShellArtillery
 	Range: 14c0
 	ReloadDelay: 180
 	Report: devastator-fire1.aud, devastator-fire2.aud, devastator-fire3.aud
 	Burst: 7
 	BurstDelays: 5
-	Projectile: Bullet
+	Projectile: BulletCA
 		Image: plasdisclg
 		Inaccuracy: 1c768
 		Speed: 180
 	Warhead@1Dam: SpreadDamage
 		Damage: 4250
-		Versus:
-			None: 100
-			Wood: 70
-			Light: 60
-			Heavy: 30
-			Concrete: 80
-			Brick: 90
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
+
+DevastatorShards:
+	Inherits: LaceratorShards
+	Inherits: ^MissileAP
+	Range: 11c0
+	ReloadDelay: 180
+	Burst: 7
+	BurstDelays: 5
+	Projectile: MissileCA
+		Speed: 213
+		Palette: scrin
+		ContrailWidth: 0c48
+		ContrailLength: 9
+		Image: bshard
+		ContrailColor: 4499FFAA
+		Jammable: false
+		Inaccuracy: 128
+		HorizontalRateOfTurn: 35
+		RangeLimit: 11c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 4250
+	-Warhead@2Smu: LeaveSmudge
+	Warhead@3Eff: CreateEffect
+		Explosions: idle, idle2, idle3, idle4
+		ExplosionPalette: scrin
+		Image: bshardhit
+		ValidTargets: Air, Ground, Water, Trees
+	-Warhead@4EffWater: CreateEffect
+
+DevastatorRift:
+	Inherits: ^Energy
+	ReloadDelay: 500
+	Range: 11c0
+	Report: darkener-fire1.aud, darkener-fire2.aud
+	InvalidTargets: Air
+	Projectile: Railgun
+		Duration: 14
+		DamageActorsInLine: false
+		BeamColor: 000000
+		BeamWidth: 40
+		BeamAlphaDeltaPerTick: -16
+		HelixThickness: 32
+		HelixRadius: 10
+		HelixPitch: 40
+		HelixRadiusDeltaPerTick: 16
+		HelixAlphaDeltaPerTick: -16
+		HelixAngleDeltaPerTick: 16
+		QuantizationCount: 4
+		HelixColor: 080C0C
+		Inaccuracy: 64
+		ZOffset: 2045
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 8900
+		ValidStances: Neutral, Enemy
+		InvalidTargets: Air
+		AffectsParent: false
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@2Dam: SpreadDamage
+		Spread: 512
+		Damage: 2250
+		ValidStances: Ally
+		InvalidTargets: Air
+		AffectsParent: false
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@Spawn: SpawnActor
+		Actors: camera.mediumrift
+		Range: 1
+		ForceGround: false
+		ValidTargets: Ground, Water
 
 InvaderLauncher:
 	ReloadDelay: 10
@@ -444,7 +717,18 @@ InvaderLauncher:
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Air, Ground, Water
 
+InvaderLauncher.Support:
+	Inherits: InvaderLauncher
+	ValidTargets: Repair
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Repair
+
+InvaderLauncher.Suicide:
+	Inherits: InvaderLauncher
+	Burst: 4
+
 InvaderZap:
+	Inherits: ^EnergyAP
 	Range: 5c0
 	Report: gunwalker-fire1.aud, gunwalker-fire2.aud
 	ReloadDelay: 50
@@ -457,13 +741,7 @@ InvaderZap:
 		Blockable: false
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
-		Damage: 1500
-		Versus:
-			None: 70
-			Wood: 10
-			Concrete: 15
-			Light: 70
-			Heavy: 100
+		Damage: 1250
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: idle
@@ -486,7 +764,59 @@ InvaderZapAA:
 		ValidTargets: Air
 		ValidStances: Enemy, Neutral
 
+InvaderSuicide:
+	Inherits: ^EnergyAP
+	Range: 0c0
+	ReloadDelay: 50
+	Burst: 3
+	BurstDelays: 5
+	Projectile: Bullet
+		Image: scrinzapdown
+		Speed: 1c128
+		Palette: scrin
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1250
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: idle
+		ExplosionPalette: scrin
+		Image: scrinzaphitsm
+		ValidTargets: Ground, Ship, Air, Trees
+	Warhead@3EffWater: CreateEffect
+		Explosions: water_piffs
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+InvaderExplosion:
+	ValidTargets: Ground, Trees, Water, Underwater, Air
+	Warhead@1Dam_impact: SpreadDamage
+		Spread: 1c0
+		Damage: 10000
+		Falloff: 100, 37, 13, 5
+		ValidTargets: Ground, Trees, Water, Air
+		Versus:
+			Wood: 25
+			Concrete: 25
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall
+		Size: 2
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 6
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+	Warhead@3Eff: CreateEffect
+		Explosions: b2bexp, b2bexp2
+		ExplosionPalette: tseffect
+		ImpactSounds: expnew06.aud
+
 PlasmaTurretGun:
+	Inherits: ^EnergyLight
 	Range: 6c0
 	StartBurstReport: plasma-fire1.aud
 	ReloadDelay: 15
@@ -498,12 +828,6 @@ PlasmaTurretGun:
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 2200
-		Versus:
-			None: 100
-			Wood: 25
-			Concrete: 10
-			Light: 35
-			Heavy: 20
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: idle
@@ -553,13 +877,14 @@ StormcrawlerZap:
 			Heavy: 60
 
 ShardLauncher:
+	Inherits: ^Missile
 	StartBurstReport: shard-fire1.aud
 	ReloadDelay: 25
 	Burst: 5
 	BurstDelays: 4
 	Range: 7c512
 	ValidTargets: Air
-	Projectile: Missile
+	Projectile: MissileCA
 		Speed: 366
 		Palette: scrin
 		ContrailWidth: 0c48
@@ -575,12 +900,6 @@ ShardLauncher:
 		Range: 0, 0c64, 0c256, 3c0
 		Falloff: 100, 100, 30, 15
 		Damage: 2500
-		Versus:
-			None: 175
-			Wood: 73
-			Concrete: 45
-			Light: 101
-			Heavy: 90
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: idle, idle2, idle3, idle4
@@ -595,7 +914,7 @@ RavagerShards:
 	ReloadDelay: 40
 	BurstDelays: 5
 	Range: 5c512
-	Projectile: Missile
+	Projectile: MissileCA
 		Speed: 213
 		Palette: scrin
 		ContrailWidth: 0c48
@@ -612,34 +931,40 @@ RavagerShards:
 		-Falloff:
 		Spread: 128
 		Damage: 1000
-		Versus:
-			None: 90
-			Wood: 55
-			Light: 100
-			Heavy: 85
-			Concrete: 75
-			Brick: 50
 
 LaceratorShards:
 	Inherits: RavagerShards
 	StartBurstReport: lacerator-fire1.aud, lacerator-fire2.aud
 	ReloadDelay: 35
 	Burst: 3
-	Projectile: Missile
+	Projectile: MissileCA
 		Image: bshard
 		ContrailColor: 4499FFAA
 	Warhead@1Dam: SpreadDamage
 		Spread: 128
 		Damage: 2000
-		Versus:
-			None: 40
-			Wood: 75
-			Light: 70
-			Heavy: 100
-			Concrete: 85
-			Brick: 50
 	Warhead@3Eff: CreateEffect
 		Image: bshardhit
+
+LaceratorShards.AP:
+	Inherits: RavagerShards
+	Inherits: ^MissileAP
+	Projectile: MissileCA
+		Speed: 213
+		Palette: scrin
+		ContrailWidth: 0c48
+		ContrailLength: 9
+		ContrailColor: 4499FFAA
+		Jammable: false
+		Inaccuracy: 128
+		Image: shard
+		HorizontalRateOfTurn: 35
+		RangeLimit: 7c512
+	Warhead@3Eff: CreateEffect
+		Explosions: idle, idle2, idle3, idle4
+		ExplosionPalette: scrin
+		Image: bshardhit
+		ValidTargets: Air, Ground, Water, Trees
 
 RiftInit:
 	ValidTargets: Ground, Water
@@ -670,6 +995,19 @@ Rift:
 			Concrete: 70
 			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+
+SuppressionField:
+	Projectile: InstantExplode
+	ReloadDelay: 1
+	ValidTargets: Ground, Air, Ship
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 1
+	Warhead@2sup: GrantExternalCondition
+		Range: 3c512
+		Duration: 600
+		Condition: suppression
+		ValidTargets: Ground, Air, Ship
 
 BuzzerVortex:
 	ReloadDelay: 5
@@ -710,3 +1048,29 @@ StormSpikeSpawner:
 		Buildings: scol.temp
 		Range: 3
 		ValidTargets: Air, Ground, Water
+
+Scrinbombs:
+	Inherits: ^Bomb
+	ValidTargets: Ground, Water, Trees
+	InvalidTargets: Air
+	ReloadDelay: 100
+	Report: chute1.aud
+	Burst: 7
+	BurstDelays: 6
+	Range: 4c256
+	TargetActorCenter: true
+	Projectile: GravityBomb
+		Image: plasdiscsm
+		Velocity: 25, 0, -74
+		Acceleration: 0, 0, 0
+		Shadow: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 1000
+		Falloff: 1000, 255, 128, 50, 18, 7, 0
+		ValidTargets: Ground, Water
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
+		ImpactSounds: seeker-hit1.aud, seeker-hit2.aud

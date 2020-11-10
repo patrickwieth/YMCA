@@ -102,11 +102,17 @@ BigChemspray:
 		Image: chemall
 		Palette: ra2effect-ignore-lighting-alpha50
 	-Warhead@Flames:
+	Warhead@3Eff: CreateEffect
+		Explosions: med_chem
+		ExplosionPalette: temptd
 
 BigChemspray.Yak:
 	Inherits: BigChemspray
+	Burst: 10
+	BurstDelays: 2
 	Projectile: Bullet
 		Image: chemall
+		Inaccuracy: 1c512
 		Palette: ra2effect-ignore-lighting-alpha50
 
 Flamer:
@@ -512,6 +518,7 @@ Laser.Adv:
 Laser.Heavy:
 	Inherits: Laser
 	Inherits: ^EnergyAP
+	ReloadDelay: 100
 	Range: 7c512
 	Warhead@1Dam: SpreadDamage
 		Damage: 30000
@@ -554,7 +561,7 @@ LaserTur:
 		SecondaryBeamColor: FF000030
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
-		Damage: 5500
+		Damage: 7500
 
 LaserTur.Adv:
 	Inherits: LaserTur
@@ -1136,7 +1143,7 @@ Railgun.MKII:
 	ReloadDelay: 45
 
 IonZap:
-	Inherits: ^EnergyAP
+	Inherits: ^Energy
 	ReloadDelay: 70
 	Range: 5c768
 	Report: ion1.aud
@@ -1163,7 +1170,7 @@ IonZap:
 		ZOffset: 2045
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
-		Damage: 8900
+		Damage: 12900
 		ValidStances: Neutral, Enemy
 		InvalidTargets: Air
 		AffectsParent: false
@@ -1500,7 +1507,6 @@ TimeWarp:
 		ValidTargets: Ground, Air, Water
 		ImpactSounds: chrono2.aud
 	Warhead@Damage1: WarpDamage
-		Spread: 1c0
 		Delay: 100
 		Damage: 1
 		ValidTargets: Temporal
@@ -1510,6 +1516,11 @@ TimeWarp:
 		Damage: 1
 		ValidTargets: Temporal
 	Warhead@3Flash: ChronoFlashEffect
+	Warhead@4Warp: GrantExternalCondition
+		Range: 1c512
+		Duration: 375
+		Condition: being-warped
+		ValidTargets: Temporal
 
 ClusterMineSpawner:
 	ValidTargets: Ground, Water

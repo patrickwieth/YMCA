@@ -1271,10 +1271,10 @@ HUEY:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.huey.cryo, ~!commander_tree.huey.grenade, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.huey.cryo, ~!commander_tree.huey.grenade,  ~commander_tree.huey.recon, ~techlevel.medium
 		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
-		Cost: 850
+		Cost: 700
 	Tooltip:
 		Name: Huey
 	UpdatesPlayerStatistics:
@@ -1343,6 +1343,63 @@ HUEY:
 		DecorationBounds: 38,32
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+HUEY.recon:
+	Inherits: HUEY
+	Buildable:
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.recon, ~techlevel.medium
+		Description: Helicopter equipped with sensor equipment.\n Can detect stealth units.\n Sniper can shoot from the Huey.\n Spec Ops can use their marker from the Huey.\n  Strong as Support\n  Weak vs Aircraft
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Recon Huey
+	RevealsShroud:
+		Range: 14c0
+		MinRange: 8c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 10c0
+		Type: GroundPosition
+	DetectCloaked:
+		CloakTypes: Cloak, Thief
+		Range: 8c0
+	Aircraft:
+		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
+	-Armament@PRIMARY:
+	-Armament@SECONDARY:
+	Armament@Relay:
+		Weapon: relayMarker
+		LocalOffset: 250,0,150
+		RequiresCondition: relayturr
+	Armament@snipe:
+		Weapon: sniperE
+		LocalOffset: 250,0,150
+		RequiresCondition: snipeturr
+	Armament@flare:
+		Name: primary
+		Weapon: Flare
+		LocalOffset: 30,0,250
+		RequiresCondition: commturr
+	AirstrikeMaster:
+		Actors: U2.Bomber
+		SquadSize: 1
+		RespawnTicks: 150
+		InstaRepair: true
+		SlaveDisposalOnKill: KillSlaves
+		SpawnAllAtOnce: true
+		SpawnerArmamentName: primary
+	Cargo:
+		Types: Infantry
+		MaxWeight: 1
+		PipCount: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			bori: commturr
+			snip: snipeturr
+			specops: relayturr
+
 
 HUEY.cryo:
 	Inherits: HUEY
@@ -2408,6 +2465,10 @@ KIRO:
 	GrantConditionOnFaction@iraq:
 		Condition: iraqbombs
 		Factions: iraq
+	-KillsSelf:
+	SpeedMultiplier@EMPDISABLE:
+		Modifier: 0
+		RequiresCondition: empdisable
 
 BLIMP:
 	Inherits: ^Helicopter
@@ -2692,6 +2753,8 @@ HARR.avionics:
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n Avionics upgrade allows it to attack without flying over. \n Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Tooltip:
 		Name: Harrier (Avionics)
+	Armament:
+		Weapon: HellfireAG.Harrier.Avionics
 	AttackAircraft:
 		AttackType: Hover
 
@@ -3250,13 +3313,8 @@ VENM.HeavyLaser:
 	Armament@PRIMARY:
 		Weapon: Laser.Heavy
 		PauseOnCondition: !ammo
+		ReloadingCondition: charging
 	-Armament@SECONDARY:
-	-AttackAircraft:
-	AttackCharges:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable || being-warped
-		ChargeLevel: 50
-		ChargingCondition: charging
 	AmbientSound:
 		RequiresCondition: charging
 		SoundFiles: obelpowr.aud

@@ -329,7 +329,7 @@
 		RequiresCondition: being-warped
 		Palette: lowpower
 	TimedConditionBar@temporal:
-		Condition:  being-warped
+		Condition: being-warped
 		Color: 2f74e2
 	WithIdleOverlay@temporal:
 		Sequence: chrono-overlay
@@ -338,6 +338,8 @@
 		Weapon: TemporalExplode
 		EmptyWeapon: TemporalExplode
 		DeathTypes: ChronoDeath
+	ExternalCondition@temporal:
+		Condition: being-warped
 
 ^WarpableAir:
 	Targetable@TemporalAir:
@@ -372,6 +374,12 @@
 		RequiresCondition: powerdrain
 		ReferencePoint: Center
 		ValidStances: Ally, Enemy, Neutral
+	DamagedByTerrain@POWERDRAIN:
+		Damage: 750
+		DamageInterval: 15
+		RequiresCondition: powerdrain
+		DamageTypes: DefaultDeath
+		Terrain: Clear, Rough, Road, Beach
 
 ^GDIUpgrade:
 	DamageMultiplier@GDIUPG1:
@@ -707,25 +715,11 @@
 		ValidStances: Ally, Neutral, Enemy
 
 ^GpsScramble:
-	Cloak@GPSHIDE:
-		InitialDelay: 250
-		CloakDelay: 250
-		UncloakSound: appear1.aud
-		Palette: cloakra
-		IsPlayerPalette: true
-		CloakTypes: Cloak
-		RequiresCondition: (gpshide || crate-cloak) && !(cloak-force-disabled || invisibility)
-		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, Move, SelfHeal
-	TimedConditionBar@GPSHIDE:
-		Condition: gpshide
-		Color: 606060
-	ExternalCondition@GPSHIDE:
-		Condition: gpshide
-	ExternalCondition@CRATE-CLOAK:
-		Condition: crate-cloak
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Heavy, Critical
+	RangeMultiplier@GPSSCRAMBLE:
+		Modifier: 60
+		RequiresCondition: gpsscramble
+	ExternalCondition@GPSSCRAMBLE:
+		Condition: gpsscramble
 
 ^C4Plantable:
 	DelayedWeaponAttachable@C4:
@@ -839,6 +833,19 @@
 	AutoTargetPriority@ATTACKANYTHING:
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
 		InvalidTargets: NoAutoTarget
+
+^AutoTargetAllAssaultMoveAntiAir:
+	Inherits: ^AutoTargetAllAssaultMove
+	AutoTargetPriority@DEFAULTAA:
+		RequiresCondition: !stance-attackanything && !assault-move
+		ValidTargets: Air
+		InvalidTargets: NoAutoTarget
+		Priority: 10
+	AutoTargetPriority@ATTACKANYTHINGAA:
+		RequiresCondition: stance-attackanything || assault-move
+		ValidTargets: Air
+		InvalidTargets: NoAutoTarget
+		Priority: 10
 
 ^GlobalBounty:
 	GrantConditionOnPrerequisite@GLOBALBOUNTY:
@@ -1005,8 +1012,6 @@
 		PlayerPalette: overlayplayertd
 	WithDamageOverlay:
 		Image: smoke_mtd
-	Cloak@GPSHIDE:
-		Palette: cloak
 
 ^Tank:
 	Inherits: ^Vehicle
@@ -1021,8 +1026,6 @@
 		PlayerPalette: overlayplayertd
 	WithDamageOverlay:
 		Image: smoke_mtd
-	Cloak@GPSHIDE:
-		Palette: cloak
 
 ^Infantry:
 	Inherits@1: ^ExistsInWorld
@@ -1031,7 +1034,6 @@
 	Inherits@4: ^SpriteActor
 	Inherits@5: ^NodHazmatUpgrade
 	Inherits@7: ^Warpable
-	Inherits@8: ^Cloakable-Kills
 	Inherits@9: ^IronCurtainable-Kills
 	Inherits@10: ^Frenzy
 	Inherits@11: ^GpsScramble
@@ -1251,8 +1253,8 @@
 		DamageTypes: FrozenDeath
 		LayerName: cryoresidue
 		RequiresCondition: !being-warped
-	Cloak@GPSHIDE:
-		Palette: cloak
+	ExternalCondition@CLOAKGENERATOR:
+		Condition: invisibility
 
 ^Soldier:
 	Inherits: ^Infantry
@@ -1598,18 +1600,14 @@
 	Inherits@8a:^WarpableAir
 	Inherits@9: ^BotAirProductionBonus
 	Inherits@10: ^Chillable
+	Inherits@11: ^Suppressable
 	Inherits@gflash: ^GreenFlash
 	Inherits@wflash: ^WhiteFlash
 	Inherits@production: ^ProductionEfficiencyBoost
 	Inherits@C4: ^C4Plantable
 	Cloak@EXTERNALCLOAK:
 		RequiresCondition: invisibility || crate-cloak && (!cloak-force-disabled && !airborne && !being-warped)
-		InitialDelay: 0
 		CloakDelay: 90
-		IsPlayerPalette: true
-		Palette: cloakgreen
-		CloakSound: cloak5.aud
-		UncloakSound: appear1.aud
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal
 	Repairable:
 		RepairActors: fix, rep, srep
@@ -1636,6 +1634,8 @@
 		Prerequisites: structures.eagle
 	Explodes:
 		RequiresCondition: !airborne && !being-warped
+	SpeedMultiplier@SUPPRESSION:
+		Modifier: 60
 
 ^PlaneTD:
 	Inherits@1: ^Plane
@@ -1830,6 +1830,7 @@
 	Inherits@Concussion: ^Concussion
 	Inherits@selection: ^SelectableCombatBuilding
 	Inherits@mind: ^MindControllable
+	Inherits@gpsscramble: ^GpsScramble
 	-SpeedMultiplier@concussion:
 	WithColoredOverlay@IRONCURTAIN:
 		RequiresCondition: invulnerability
@@ -2268,6 +2269,8 @@
 	Capturable:
 		Types: building
 		ValidStances: Enemy, Neutral, Ally
+	CapturableProgressBar:
+	CapturableProgressBlink:
 	TransformOnCapture:
 		ForceHealthPercentage: 25
 	Tooltip:
