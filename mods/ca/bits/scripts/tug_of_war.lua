@@ -57,6 +57,17 @@ TickTugOfWar = function()
   then
     return
   end
+
+
+	Media.DisplayMessage(tostring(mp0))
+	Media.DisplayMessage(tostring(mp1))
+	if(mp0.IsBot) then
+		Media.DisplayMessage("mp0 is bot")
+	end
+	if(mp1.IsBot) then
+		Media.DisplayMessage("mp1 is bot")
+	end
+
 	--Media.DisplayMessage(tostring(DateTime.GameTime))
 
 	if DateTime.GameTime % 500 == 0
