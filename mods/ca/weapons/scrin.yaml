@@ -840,6 +840,7 @@ PlasmaTurretGun:
 		InvalidTargets: Ship, Structure, Bridge
 
 StormColumnZap:
+	Inherits: ^Energy
 	ReloadDelay: 30
 	Burst: 5
 	BurstDelays: 3
@@ -851,12 +852,6 @@ StormColumnZap:
 		Angle: 90
 	Warhead@1Dam: SpreadDamage
 		Damage: 2000
-		Versus:
-			None: 60
-			Wood: 50
-			Concrete: 100
-			Light: 100
-			Heavy: 100
 		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: 1, 3
@@ -864,17 +859,12 @@ StormColumnZap:
 
 StormcrawlerZap:
 	Inherits: StormColumnZap
+	Inherits: ^EnergyLight
 	ReloadDelay: 30
 	Range: 4c768
 	StartBurstReport: stormcrawler-fire1.aud, stormcrawler-fire2.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 850
-		Versus:
-			None: 175
-			Wood: 80
-			Concrete: 80
-			Light: 60
-			Heavy: 60
 
 ShardLauncher:
 	Inherits: ^Missile
