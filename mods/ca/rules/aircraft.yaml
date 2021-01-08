@@ -377,7 +377,7 @@ MIG.Tesla:
 
 SUK:
 	Inherits: ^Plane
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
@@ -386,7 +386,7 @@ SUK:
 		Prerequisites: ~afld, stek, ~commander_tree.sukhoi, ~!commander_tree.sukhoi_concussion
 		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
 	Valued:
-		Cost: 2000
+		Cost: 1800
 	Tooltip:
 		Name: Sukhoi Attack Plane
 	Health:
@@ -399,11 +399,13 @@ SUK:
 	RevealsShroud@GAPGEN:
 		Range: 8c0
 		Type: GroundPosition
-	Armament:
+	Armament@primary:
 		Weapon: MaverickSU
 		LocalOffset: 0,-640,0, 0,640,0
 		LocalYaw: -40, 24
 		PauseOnCondition: !ammo
+	Armament@secondary:
+		Weapon: WidowAA.SU
 	AttackAircraft:
 		FacingTolerance: 20
 		PersistentTargeting: false
@@ -472,8 +474,6 @@ SUK.Conc:
 		IconPalette: chrometd
 		Prerequisites: ~afld, stek, ~commander_tree.sukhoi_concussion, ~techlevel.high
 		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Missiles cause concussion on units\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
-	Valued:
-		Cost: 2000
 	Tooltip:
 		Name: Sukhoi Attack Plane (Concussion)
 	Armament:
