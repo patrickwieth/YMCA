@@ -2718,7 +2718,7 @@ BIKE:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~!commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_pld, ~!commander_tree.recon_bike_scrin, ~techlevel.low
+		Prerequisites: ~vehicles.nod, ~!commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_explosive
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with\nrockets.\n  Can attack Aircraft.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry
@@ -2751,37 +2751,11 @@ BIKE:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
-BIKE.PLD:
-	Inherits@PLD: ^PointLaserDefenseSystem
-	Inherits: BIKE
-	Buildable:
-		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_pld, ~techlevel.low, ~!commander_tree.recon_bike_pld.reflector
-		Queue: Vehicle
-		IconPalette: chrometd
-		Description: Fast scout vehicle, armed with rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry
-	Valued:
-		Cost: 1100
-	Tooltip:
-		Name: Recon Bike (PLD)
-
-BIKE.PLD.Reflector:
-	Inherits: BIKE.PLD
-	Inherits: ^ReflectorArmor
-	Buildable:
-		-IconPalette:
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_pld.reflector, ~techlevel.low
-		Description: Fast scout vehicle, armed with rockets.\n  Has Reflector Armor and Point Laser Defense.\n  Strong vs Energy Weapons, Projectile Weapons, Weak vs. Chemicals, Flame, Bullet and many Projectiles
-	Valued:
-		Cost: 1350
-	Tooltip:
-		Name: Recon Bike (PLD, Reflector)
-
 BIKE.Scrin:
 	Inherits: BIKE
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_scrin.reflector, ~techlevel.low
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_scrin.reflector, ~!commander_tree.recon_bike_pld.reflector
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with energy balls.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry, Aircraft
@@ -2795,15 +2769,29 @@ BIKE.Scrin:
 		Weapon: BikeScrinTorp
 	-Armament@SECONDARYFRONTAL:
 
+BIKE.Scrin.PLD:
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: BIKE.Scrin
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin.pld
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Scrin Bike (PLD)
+
 BIKE.Scrin.Reflector:
 	Inherits: BIKE.Scrin
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette:
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin.reflector, ~techlevel.low
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin.reflector
 		Description: Fast scout vehicle, armed with energy balls.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 1100
+		Cost: 800
 	Tooltip:
 		Name: Scrin Bike (Reflector)
 
@@ -2811,7 +2799,7 @@ BIKE.RocketHail:
 	Inherits: BIKE
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_rocket_hail.reflector, ~techlevel.low
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_rocket_hail.reflector, ~!commander_tree.recon_bike_rocket_hail.pld
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast artillery vehicle, armed with\n many rockets.\n   Strong vs Vehicles, Tanks\n  Weak vs Infantry, Aircraft
@@ -2823,17 +2811,73 @@ BIKE.RocketHail:
 		Weapon: BikeRocketHail
 	-Armament@SECONDARYFRONTAL:
 
+BIKE.RocketHail.PLD:
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: BIKE.RocketHail
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail.pld
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with explosive rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Vehicles, Projectiles\n  Weak vs Infantry, Aircraft, Energy Weapons
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Rocket Hail Bike (PLD)
+
 BIKE.RocketHail.Reflector:
 	Inherits: BIKE.RocketHail
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette:
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail.reflector, ~techlevel.low
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail.reflector
 		Description: Fast artillery vehicle, armed with\n many rockets.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 1250
+		Cost: 1000
 	Tooltip:
 		Name: Rocket Hail Bike (Reflector)
+
+BIKE.Explosive:
+	Inherits: BIKE
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_explosive, ~!commander_tree.recon_bike_explosive.pld, ~!commander_tree.recon_bike_explosive.reflector
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with\n explosive rockets.\n  Can attack Aircraft.\n  Strong vs Light Vehicles, Aircraft, Infantry\n  Weak vs Heavy Vehicles, PLD
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Explosive Rocket Bike
+	Armament@PRIMARYFRONTAL:
+		Weapon: BikeRocketExplosive
+	-Armament@SECONDARYFRONTAL:
+
+BIKE.Explosive.PLD:
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: BIKE.Explosive
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_explosive.pld
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with explosive rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Light Vehicles, Aircraft, Infantry\n  Weak vs Heavy Vehicles, Energy Weapons
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Explosive Rocket Bike (PLD)
+
+BIKE.Explosive.Reflector:
+	Inherits: BIKE.Explosive
+	Inherits: ^ReflectorArmor
+	Buildable:
+		-IconPalette:
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_explosive.reflector
+		Description: Fast scout vehicle, armed with\n explosive rockets.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Light Vehicles, Aircraft, Infantry, Energy Weapons\n  Weak vs Heavy Vehicles, PLD
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Explosive Rocket Bike (Reflector)
 
 FTNK:
 	Inherits: ^TankTD
