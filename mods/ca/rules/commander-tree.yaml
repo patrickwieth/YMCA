@@ -1012,128 +1012,89 @@ commander_tree.Mammoth_Tank:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 119
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, stek, ~vehicles.soviet
+		Prerequisites: prerequisite.has_points, stek, ~vehicles.soviet, ~disabled
 		Description: Enables to build the Mammoth Tank.\n  The Mammoth is a slow and very heavy tank, which can be further specialized.
 
-hack.cameo_filler.110:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~!filler.sovietmammoth
-
-hack.cameo_filler.111:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 121
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~!filler.sovietmammoth
-
-commander_tree.Mammoth_Tank_PLD:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mammoth Point Laser Defense
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 122
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_tt, ~!commander_tree.mammoth_tank_ns, ~!commander_tree.mammoth_tank_pt
-		Description: Upgrades the Mammoth with a Point Laser Defense System to shoot down incoming projectiles.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietmammoth
-
-commander_tree.Mammoth_Tank_PLD.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mammoth PLD Reflector Armor
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 122
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, ~commander_tree.mammoth_tank_pld, disabled
-		Description: Equips the Mammoth (PLD) with Reflector Armor. \n Very resistent vs. Energy Weapons.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietmammoth
-
-commander_tree.Mammoth_Tank_TT:
+commander_tree.Mammoth_Tank.TT:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Mammoth Tesla Turret
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 123
+		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_ns, ~!commander_tree.mammoth_tank_pt
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, ~!commander_tree.mammoth_tank.ns, ~!commander_tree.mammoth_tank.pt
 		Description: The Mammoth Tank is upgraded with a Tesla Weapon System. \n  Energy based weapons systems cannot be shot down by Point Defense Systems. \n  The Mammoth can no longer shoot on aircraft.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietmammoth
 
-commander_tree.Mammoth_Tank_TT.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mammoth Tesla Turret Reflector Armor
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 123
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, ~commander_tree.mammoth_tank_tt
-		Description: The Mammoth Tesla Tank is equipped with Reflector Armor. \n  Reflector Armor is very good vs. Energy Weapons.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietmammoth
-
-commander_tree.Mammoth_Tank_NS:
+commander_tree.Mammoth_Tank.NS:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Mammoth Nuclear Shells
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 124
+		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, stek, commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_tt, ~!commander_tree.mammoth_tank_pt
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, stek, ~!commander_tree.mammoth_tank.tt, ~!commander_tree.mammoth_tank.pt
 		Description: The Mammoth is upgraded with Nuclear Shells. \n  Nuclear Shells deal a lot of damage to the target and its surroundings. \n  Nuclear Shells are weak vs. Point Laser Defense Systems.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietmammoth
 
-commander_tree.Mammoth_Tank_NS.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mammoth (Nuke) Reflector Armor
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 124
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, stek, ~commander_tree.mammoth_tank_ns
-		Description: Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietmammoth
-
-commander_tree.Mammoth_Tank_PT:
+commander_tree.Mammoth_Tank.PT:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Mammoth Propaganda Tower
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 125
+		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, stek, commander_tree.mammoth_tank, ~!commander_tree.mammoth_tank_pld, ~!commander_tree.mammoth_tank_tt, ~!commander_tree.mammoth_tank_ns
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, stek, ~!commander_tree.mammoth_tank.tt, ~!commander_tree.mammoth_tank.ns
 		Description: The Mammoth is upgraded with a Propaganda Speaker.\n  This gives infantry in its proximity a boost in combat.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietmammoth
 
-commander_tree.Mammoth_Tank_PT.Reflector:
+commander_tree.Mammoth_Tank.PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Propaganda Mammoth Reflector Armor
+		Name: Mammoth Point Laser Defense
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 125
+		IconPalette: chrometd
+		BuildPaletteOrder: 121
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, stek, ~commander_tree.mammoth_tank_pt
-		Description: Equips the Propaganda Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, ~filler.sovietmammoth, ~!commander_tree.mammoth_tank.reflector
+		Description: Upgrades the Mammoth with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietmammoth
+		Prerequisite: filler.sovietmammoth2
+
+commander_tree.Mammoth_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth PLD Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 121
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, ~filler.sovietmammoth, ~!commander_tree.mammoth_tank.pld
+		Description: Equips the Mammoth with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietmammoth2
+
+hack.cameo_filler.110:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 122
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+
+hack.cameo_filler.111:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 122
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~filler.sovietmammoth2
 
 commander_tree.Tesla_Hind:
 	Inherits: ^default.commander_tree_item
@@ -1669,7 +1630,7 @@ hack.cameo_filler.215:
 		BuildPaletteOrder: 229
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.zocom, disabled
 
-commander_tree.Mammoth_Tank_GDI:
+commander_tree.Mammoth_Tank_GDI.Hover:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Mammoth Tank
@@ -1678,24 +1639,38 @@ commander_tree.Mammoth_Tank_GDI:
 		IconPalette: chrometd
 		BuildPaletteOrder: 230
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, gtek, ~!vehicles.talon
-		Description: Enables to build the Mammoth Tank. \n  The Mammoth is a slow and very heavy tank, which can be further specialized.
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, gtek, ~!vehicles.talon, ~!commander_tree.mammoth_tank_gdi.ion, ~!commander_tree.mammoth_tank_gdi.nr
+		Description: The Mammoth is upgraded with Hover technology. \n  This gives the Mammoth much more maneuverability.
 
-commander_tree.Mammoth_Tank_Ion:
+commander_tree.Mammoth_Tank_GDI.Ion:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Ion Mammoth
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 231
+		BuildPaletteOrder: 230
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.zocom, ~!vehicles.talon, miss.gdi, commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_gdi_pld, ~!commander_tree.mammoth_tank_nr
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.zocom, ~!vehicles.talon, gtek, ~!commander_tree.mammoth_tank_gdi.nr, ~!commander_tree.mammoth_tank_gdi.hover
 		Description: The Mammoth is upgraded with an Ion cannon. \n  Energy based weapon systems cannot be shot down by Point Laser Defense Systems.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.gdimammoth
 
-commander_tree.Mammoth_Tank_Ion.Reflector:
+commander_tree.Mammoth_Tank_GDI.NR:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Nanite Repair
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 230
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.zocom, gtek, ~!commander_tree.mammoth_tank_gdi.ion, ~!commander_tree.mammoth_tank_gdi.hover
+		Description: The Mammoth Tank is upgraded with a Nanite Repair System. \n  This makes it more durable and vastly increases its self repair capabilites.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth
+
+commander_tree.Mammoth_Tank_GDI.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Ion Mammoth Reflector Armor
@@ -1703,89 +1678,48 @@ commander_tree.Mammoth_Tank_Ion.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 231
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.zocom, ~!vehicles.talon, miss.gdi, ~commander_tree.mammoth_tank_ion
-		Description: Equips the Ion Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~filler.gdimammoth
+		Description: Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.gdimammoth
+		Prerequisite: filler.gdimammoth2
 
-commander_tree.Mammoth_Tank_GDI_PLD:
+commander_tree.Mammoth_Tank_GDI.PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Mammoth Tank Point Laser Defense
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 232
+		BuildPaletteOrder: 231
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, miss.gdi, commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_nr
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~filler.gdimammoth
 		Description: Upgrades the Mammoth Tank with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.gdimammoth
+		Prerequisite: filler.gdimammoth2
 
-commander_tree.Mammoth_Tank_GDI_PLD.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mammoth Tank Reflector Armor
+hack.cameo_filler.216:
+	Inherits: ^default.cameo_filler
 	Buildable:
-		Queue: Commander_Tree
 		BuildPaletteOrder: 232
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, miss.gdi, ~commander_tree.mammoth_tank_gdi_pld, disabled
-		Description: Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.gdimammoth
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!filler.gdimammoth, disabled
 
-commander_tree.Mammoth_Tank_NR:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mammoth Nanite Repair
+hack.cameo_filler.217:
+	Inherits: ^default.cameo_filler
 	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 233
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.zocom, miss.gdi, commander_tree.mammoth_tank_gdi, ~!commander_tree.mammoth_tank_ion, ~!commander_tree.mammoth_tank_gdi_pld
-		Description: The Mammoth Tank is upgraded with a Nanite Repair System. \n  This makes it more durable and vastly increases its self repair capabilites.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.gdimammoth
+		BuildPaletteOrder: 232
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~filler.gdimammoth2, disabled
 
-commander_tree.Mammoth_Tank_NR.Reflector:
+commander_tree.Battle_Titan:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Nanite Mammoth Tank Reflector Armor
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 233
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.zocom, miss.gdi, ~commander_tree.mammoth_tank_nr
-		Description: Equips the Nanite Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.gdimammoth
-
-commander_tree.Titan_PLD:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Titan Point Laser Defense System
+		Name: Battle Titan
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
 		BuildPaletteOrder: 235
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~!commander_tree.titan_railgun
-		Description: Upgrades the Titan with a Point Laser Defense System to shoot down incoming projectiles.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.titan
-
-commander_tree.Titan_PLD.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Titan Reflector Armor
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 235
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~commander_tree.titan_pld, disabled
-		Description: Equips the Titan with Reflector Armor. \n Very resistent vs. Energy Weapons.
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, gtek, ~!commander_tree.titan_railgun
+		Description: Upgrades the Titan with concussive shells. \n  Concussive Shells slow the targets on impact.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan
 
@@ -1796,31 +1730,51 @@ commander_tree.Titan_Railgun:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 236
+		BuildPaletteOrder: 235
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~!commander_tree.titan_pld
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, gtek, ~!commander_tree.battle_titan
 		Description: Upgrades the Titan with a Railgun. \n  The Railgun is strong vs. tanks and is an energy based weapon.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan
 
-commander_tree.Titan_Railgun.Reflector:
+commander_tree.Titan.PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Titan Railgun Reflector Armor
+		Name: Titan Point Laser Defense System
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 236
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~filler.titan, ~!commander_tree.titan.reflector
+		Description: Upgrades the Titan with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.titan2
+
+commander_tree.Titan.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Titan Reflector Armor
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 236
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~commander_tree.titan_railgun
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~filler.titan, ~!commander_tree.titan.pld
 		Description: Equips the Titan with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.titan
+		Prerequisite: filler.titan2
 
 hack.cameo_filler.218:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 238
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~!filler.titan, disabled
+
+hack.cameo_filler.218a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 238
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~filler.titan2, disabled
 
 commander_tree.Stealth_Fighter:
 	Inherits: ^default.commander_tree_item
