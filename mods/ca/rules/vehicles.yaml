@@ -2608,7 +2608,7 @@ STNK:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank, ~!commander_tree.stealth_tank.pld,, ~!commander_tree.stealth_tank_scrin, ~!commander_tree.stealth_tank_explosive_rockets, ~techlevel.high
+		Prerequisites: hq, ~vehicles.nod, ~!commander_tree.stealth_tank.ap,, ~!commander_tree.stealth_tank_scrin, ~!commander_tree.stealth_tank_explosive_rockets
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Medium-range missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry.
@@ -2663,28 +2663,50 @@ STNK.Scrin:
 	Inherits: STNK
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank_scrin, ~techlevel.high
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank.scrin, ~!filler.stealthtank2
 		Queue: Vehicle
 		IconPalette: chrometd
-		Description: Cloaked tank that fires Scrin torpedoes.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Aircraft.
+		Description: Cloaked tank that fires Scrin torpedoes.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Reflector Armor.
 	Valued:
-		Cost: 1500
+		Cost: 1400
 	Tooltip:
 		Name: Stealth Scrin Tank
 	Armament@PRIMARY:
 		Weapon: STNKScrinTorp
 	-Armament@SECONDARY:
 
+STNK.Scrin.PLD:
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: STNK.Scrin
+	Buildable:
+		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.stealth_tank.scrin, ~commander_tree.stealth_tank.pld
+		Description: Cloaked tank that fires Scrin torpedoes.\n  Has point laser defense.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Projectiles \n  Weak vs Aircraft, Energy Weapons
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Stealth Scrin Tank
+
+STNK.Scrin.Reflector:
+	Inherits: STNK.Scrin
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.stealth_tank.scrin, ~commander_tree.stealth_tank.reflector
+		Description: Cloaked tank that fires Scrin torpedoes.\n  Has weak reflector armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Energy Weapons\n  Weak vs Aircraft, Reflector Armor.
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Stealth Scrin Tank (Reflector)
+
 STNK.HE:
 	Inherits: STNK
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank_explosive_rockets, ~techlevel.high
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank_explosive_rockets, ~!filler.stealthtank2
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Medium-range high explosive missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Aircraft\n  Weak vs Heavy Tanks.
 	Valued:
-		Cost: 1500
+		Cost: 1400
 	Tooltip:
 		Name: Stealth HE Tank
 	Armament@PRIMARY:
@@ -2692,17 +2714,63 @@ STNK.HE:
 	Armament@SECONDARY:
 		Weapon: StnkMissile.AA.HE
 
-STNK.PLD:
-	Inherits: STNK
+STNK.HE.PLD:
 	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: STNK.HE
 	Buildable:
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank.pld, ~techlevel.high
-		-IconPalette:
-		Description: Medium-range missile tank that can cloak.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Aircraft\n  Weak vs Energy Weapons.
+		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.stealth_tank.explosive_rockets, ~commander_tree.stealth_tank.pld
+		Description: Medium-range high explosive missile tank that can cloak.\n  Can attack Aircraft.\n  Has point laser defense.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Aircraft, Projectiles \n  Weak vs Heavy Tanks, Energy Weapons
 	Valued:
-		Cost: 1800
+		Cost: 2000
 	Tooltip:
-		Name: Stealth Tank (PLD)
+		Name: Stealth HE Tank
+
+STNK.HE.Reflector:
+	Inherits: STNK.HE
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.stealth_tank.explosive_rockets, ~commander_tree.stealth_tank.reflector
+		Description: Medium-range high explosive missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak reflector armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Heavy Vehicles, Aircraft, Energy Weapons\n  Weak vs Infantry, Projectiles.
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Stealth HE Tank (Reflector)
+
+STNK.AP:
+	Inherits: STNK
+	Buildable:
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank.ap, ~!filler.stealthtank2
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Medium-range armor piercing missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Heavy Vehicles, Aircraft\n  Weak vs Infantry.
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Stealth AP Tank
+	Armament@PRIMARY:
+		Weapon: StnkMissile.AP
+
+STNK.AP.PLD:
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: STNK.AP
+	Buildable:
+		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.stealth_tank.ap, ~commander_tree.stealth_tank.pld
+		Description: Medium-range armor piercing missile tank that can cloak.\n  Can attack Aircraft.\n  Has point laser defense.\n  Can be spotted by infantry and defense structures.\n  Strong vs Heavy Vehicles, Aircraft, Projectiles \n  Weak vs Infantry, Energy Weapons
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Stealth AP Tank
+
+STNK.AP.Reflector:
+	Inherits: STNK.AP
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.stealth_tank.ap, ~commander_tree.stealth_tank.reflector
+		Description: Medium-range armor piercing missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak reflector armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Heavy Vehicles, Aircraft, Energy Weapons\n  Weak vs Infantry, Projectiles.
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Stealth AP Tank (Reflector)
 
 BIKE:
 	Inherits: ^VehicleTD
@@ -2755,7 +2823,7 @@ BIKE.Scrin:
 	Inherits: BIKE
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_scrin.reflector, ~!commander_tree.recon_bike_pld.reflector
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.scrin.reflector, ~!commander_tree.recon_bike.scrin.pld
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with energy balls.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry, Aircraft
@@ -2774,7 +2842,7 @@ BIKE.Scrin.PLD:
 	Inherits: BIKE.Scrin
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin.pld
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.scrin.pld
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry
@@ -2788,7 +2856,7 @@ BIKE.Scrin.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette:
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_scrin.reflector
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.scrin.reflector
 		Description: Fast scout vehicle, armed with energy balls.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 800
@@ -2799,7 +2867,7 @@ BIKE.RocketHail:
 	Inherits: BIKE
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_rocket_hail.reflector, ~!commander_tree.recon_bike_rocket_hail.pld
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.rocket_hail, ~!commander_tree.recon_bike.rocket_hail.reflector, ~!commander_tree.recon_bike.rocket_hail.pld
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast artillery vehicle, armed with\n many rockets.\n   Strong vs Vehicles, Tanks\n  Weak vs Infantry, Aircraft
@@ -2816,7 +2884,7 @@ BIKE.RocketHail.PLD:
 	Inherits: BIKE.RocketHail
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail.pld
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.rocket_hail.pld
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with explosive rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Vehicles, Projectiles\n  Weak vs Infantry, Aircraft, Energy Weapons
@@ -2830,7 +2898,7 @@ BIKE.RocketHail.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette:
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_rocket_hail.reflector
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.rocket_hail.reflector
 		Description: Fast artillery vehicle, armed with\n many rockets.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1000
@@ -2841,7 +2909,7 @@ BIKE.Explosive:
 	Inherits: BIKE
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_explosive, ~!commander_tree.recon_bike_explosive.pld, ~!commander_tree.recon_bike_explosive.reflector
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.explosive, ~!commander_tree.recon_bike.explosive.pld, ~!commander_tree.recon_bike.explosive.reflector
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with\n explosive rockets.\n  Can attack Aircraft.\n  Strong vs Light Vehicles, Aircraft, Infantry\n  Weak vs Heavy Vehicles, PLD
@@ -2858,7 +2926,7 @@ BIKE.Explosive.PLD:
 	Inherits: BIKE.Explosive
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_explosive.pld
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.explosive.pld
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with explosive rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Light Vehicles, Aircraft, Infantry\n  Weak vs Heavy Vehicles, Energy Weapons
@@ -2872,7 +2940,7 @@ BIKE.Explosive.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette:
-		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike_explosive.reflector
+		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.explosive.reflector
 		Description: Fast scout vehicle, armed with\n explosive rockets.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Light Vehicles, Aircraft, Infantry, Energy Weapons\n  Weak vs Heavy Vehicles, PLD
 	Valued:
 		Cost: 700
@@ -2894,7 +2962,7 @@ FTNK:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 65
-		Prerequisites: hq, ~vehicles.nod, ~!commander_tree.chem_tank, ~!commander_tree.flame_tank_pld, ~!commander_tree.fireball_tank, ~techlevel.low
+		Prerequisites: hq, ~vehicles.nod, ~!commander_tree.flame_tank.pld, ~!commander_tree.flame_tank.reflector
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Heavily armored flame-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft
@@ -2929,42 +2997,22 @@ FTNK:
 		Multiplier: 90
 		Prerequisites: vehicles.blackh
 
-FTNK.Chem:
+FTNK.Reflector:
 	Inherits: FTNK
-	Buildable:
-		BuildPaletteOrder: 65
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.chem_tank, ~!commander_tree.chem_tank.reflector, ~techlevel.low
-		Queue: Vehicle
-		IconPalette: chrometd
-		Description: Heavily armored chemical-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft
-	Valued:
-		Cost: 1000
-	Tooltip:
-		Name: Chem Tank
-	Health:
-		HP: 60000
-	Armament@PRIMARYFRONTAL:
-		Weapon: BigChemspray
-		-MuzzleSequence:
-		-MuzzlePalette:
-		LocalOffset: 512,128,42, 512,-128,42
-
-FTNK.Chem.Reflector:
-	Inherits: FTNK.Chem
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette:
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.chem_tank.reflector, ~techlevel.low
-		Description: Heavily armored chemical-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.flame_tank.reflector, ~!commander_tree.chem_tank, ~!commander_tree.fireball_tank
+		Description: Heavily armored flame-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
-		Name: Chem Tank (Reflector)
+		Name: Flame Tank (Reflector)
 
 FTNK.PLD:
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Inherits: FTNK
 	Buildable:
 		BuildPaletteOrder: 65
-		Prerequisites: hq, ~vehicles.nod, tmpl, ~commander_tree.flame_tank_pld, ~!commander_tree.flame_tank_pld.reflector, ~techlevel.low
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.flame_tank.pld, ~!commander_tree.chem_tank, ~!commander_tree.fireball_tank
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Heavily armored flame-throwing vehicle.\nHas Point Laser Defense\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft, Energy Weapons
@@ -2975,21 +3023,41 @@ FTNK.PLD:
 	Health:
 		HP: 50000
 
-FTNK.PLD.Reflector:
+FTNK.PLD.Chem:
 	Inherits: FTNK.PLD
+	Buildable:
+		BuildPaletteOrder: 65
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.chem_tank, ~commander_tree.flame_tank.pld
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Heavily armored chemical-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Chem Tank
+	Health:
+		HP: 60000
+	Armament@PRIMARYFRONTAL:
+		Weapon: BigChemspray
+		-MuzzleSequence:
+		-MuzzlePalette:
+		LocalOffset: 512,128,42, 512,-128,42
+
+FTNK.Reflector.Chem:
+	Inherits: FTNK.Chem
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette:
-		Prerequisites: hq, ~vehicles.nod, tmpl, ~commander_tree.flame_tank_pld.reflector, ~techlevel.low
-		Description: Heavily armored flame-throwing vehicle.\n  Has Reflector Armor and Point Laser Defense.\n  Strong vs Energy Weapons, Projectile Weapons, Weak vs. Chemicals, Flame, Bullet and many Projectiles
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.chem_tank, ~commander_tree.flame_tank.reflector
+		Description: Heavily armored chemical-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
-		Name: Flame Tank (PLD, Reflector)
+		Name: Chem Tank (Reflector)
 
-FTNK.Fireball:
+FTNK.PLD.Fireball:
 	Inherits: FTNK
 	Buildable:
 		BuildPaletteOrder: 65
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.fireball_tank, ~!commander_tree.fireball_tank.reflector, ~techlevel.low
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.fireball_tank, ~commander_tree.flame_tank.pld
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Heavily armored fireball-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Heavy Tanks, Aircraft
@@ -3002,12 +3070,12 @@ FTNK.Fireball:
 		-MuzzleSequence:
 		-MuzzlePalette:
 
-FTNK.Fireball.Reflector:
+FTNK.Reflector.Fireball:
 	Inherits: FTNK.Fireball
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette:
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.fireball_tank.reflector, ~techlevel.low
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.fireball_tank, ~commander_tree.flame_tank.reflector
 		Description: Heavily armored fireball-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
 		Name: Fireball Tank (Reflector)

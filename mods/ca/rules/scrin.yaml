@@ -1170,7 +1170,7 @@ TPOD:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
-		Prerequisites: techcenter, ~vehicles.tpod, ~!commander_tree.tripod.chainer, ~!commander_tree.tripod.acid, ~!commander_tree.tripod.pld
+		Prerequisites: techcenter, ~vehicles.tpod, ~!commander_tree.tripod.chainer, ~!commander_tree.tripod.acid
 		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Voiced:
@@ -1236,7 +1236,7 @@ TPOD:
 TPOD.chain:
 	Inherits: TPOD
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.chainer, ~!commander_tree.tripod.chainer.reflector
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.chainer, ~!filler.tripod2
 		Description: Heavy assault walker with beam weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
@@ -1248,16 +1248,28 @@ TPOD.chain.reflector:
 	Inherits: TPOD.chain
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.chainer.reflector
-		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.reflector, ~commander_tree.tripod.chainer
+		Description: Heavy assault walker with beam weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles, Energy Weapons.\n  Weak vs Aircraft, Projectiles
 		IconPalette: chrome
 	Tooltip:
 		Name: Chainer Tripod (Reflector)
 
+TPOD.chain.PLD:
+	Inherits: TPOD.chain
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.pld, ~commander_tree.tripod.chainer,
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles, Projectiles.\n  Weak vs Aircraft, Energy Weapons
+		IconPalette: chrome
+	Tooltip:
+		Name: Chainer Tripod (PLD)
+	Armament@pointdefense:
+		LocalOffset: 450,0,500
+
 TPOD.acid:
 	Inherits: TPOD
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.acid, ~!commander_tree.tripod.acid.reflector
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.acid, ~!filler.tripod2
 		Description: Heavy assault walker with corrosive acid weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
@@ -1270,38 +1282,16 @@ TPOD.acid.reflector:
 	Inherits: TPOD.acid
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.acid.reflector
-		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.acid, ~commander_tree.tripod.reflector
+		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Energy Weapons.\n  Weak vs Aircraft, Projectiles
 		IconPalette: chrome
 	Tooltip:
 		Name: Acid Tripod (Reflector)
 
-TPOD.PLD:
-	Inherits: TPOD
-	Inherits@PLD: ^PointLaserDefenseSystem
-	Buildable:
-		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.pld, ~!commander_tree.tripod.pld.reflector
-		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
-		IconPalette: chrome
-	Tooltip:
-		Name: Annihilator Tripod (PLD)
-	Armament@pointdefense:
-		LocalOffset: 450,0,500
-
-TPOD.PLD.reflector:
-	Inherits: TPOD.PLD
-	Inherits: ^ReflectorArmor
-	Buildable:
-		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.pld.reflector
-		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
-		IconPalette: chrome
-	Tooltip:
-		Name: Annihilator Tripod (PLD, Reflector)
-
 RPTP:
 	Inherits: TPOD
 	Buildable:
-		Prerequisites: scrt, ~vehicles.reaper, ~!commander_tree.reaper.range, ~!commander_tree.reaper.acid, ~!commander_tree.reaper.pld
+		Prerequisites: scrt, ~vehicles.reaper, ~!commander_tree.reaper.range, ~!commander_tree.reaper.acid
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -1339,6 +1329,18 @@ RPTP.range.reflector:
 	Tooltip:
 		Name: Range Reaper Tripod (Reflector)
 
+RPTP.range.PLD:
+	Inherits: RPTP.range
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.pld, ~commander_tree.reaper.range
+		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Tooltip:
+		Name: Range Reaper Tripod (PLD)
+	Armament@pointdefense:
+		LocalOffset: 450,0,500
+
 RPTP.acid:
 	Inherits: RPTP
 	Buildable:
@@ -1355,7 +1357,7 @@ RPTP.acid.reflector:
 	Inherits: RPTP.acid
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.acid.reflector
+		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.acid, ~commander_tree.reaper.reflector
 		Description: Heavy assault walker with corrosive acid weapons.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
@@ -1363,27 +1365,17 @@ RPTP.acid.reflector:
 	Armament@PRIMARY:
 		Weapon: Reaper.Acid
 
-RPTP.PLD:
-	Inherits: RPTP
+RPTP.acid.PLD:
+	Inherits: RPTP.acid
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.pld, ~!commander_tree.reaper.pld.reflector
+		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.pld, ~commander_tree.reaper.acid
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
 	Tooltip:
-		Name: Reaper Tripod (PLD)
+		Name: Acid Reaper Tripod (PLD)
 	Armament@pointdefense:
 		LocalOffset: 450,0,500
-
-RPTP.PLD.reflector:
-	Inherits: RPTP.PLD
-	Inherits: ^ReflectorArmor
-	Buildable:
-		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.pld.reflector
-		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Has Reflector Armor.\n  Strong vs Vehicles.\n  Weak vs Aircraft
-		IconPalette: chrome
-	Tooltip:
-		Name: Reaper Tripod (PLD, Reflector)
 
 SMCV:
 	Inherits: ^Vehicle

@@ -2146,28 +2146,8 @@ commander_tree.Stealth_Tank.AP:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, tmpl, ~!commander_tree.stealth_tank.explosive_rockets,  ~!commander_tree.stealth_tank.scrin
 		Description: Upgrades the Stealth Tank with a Armor Piercing Missiles. \n  This makes it much more effective vs. heavy tanks and heavy aircraft.
-
-commander_tree.Stealth_Tank.Scrin.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Stealth Tank Reflector Armor
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 327
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, commander_tree.stealth_tank.scrin, ~!commander_tree.stealth_tank.scrin.pld
-		Description: Equips the Stealth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
-
-commander_tree.Stealth_Tank.Scrin.PLD:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Stealth Tank Point Laser Defense
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 327
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, commander_tree.stealth_tank.scrin, ~!commander_tree.stealth_tank.scrin.reflector
-		Description: Upgrades the Stealth Tank with a Point Laser Defense System.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.stealthtank
 
 commander_tree.Stealth_Tank.Scrin:
 	Inherits: ^default.commander_tree_item
@@ -2180,28 +2160,8 @@ commander_tree.Stealth_Tank.Scrin:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~!commander_tree.stealth_tank.explosive_rockets, ~!commander_tree.stealth_tank.ap
 		Description: Upgrades the Stealth Tank with a Scrin Weapon. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
-
-commander_tree.Stealth_Tank.Scrin.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Stealth Tank Reflector Armor
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 327
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, commander_tree.stealth_tank.scrin, ~!commander_tree.stealth_tank.scrin.pld
-		Description: Equips the Stealth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
-
-commander_tree.Stealth_Tank.Scrin.PLD:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Stealth Tank Point Laser Defense
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 327
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, commander_tree.stealth_tank.scrin, ~!commander_tree.stealth_tank.scrin.reflector
-		Description: Upgrades the Stealth Tank with a Point Laser Defense System.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.stealthtank
 
 commander_tree.Stealth_Tank.Explosive_Rockets:
 	Inherits: ^default.commander_tree_item
@@ -2214,8 +2174,10 @@ commander_tree.Stealth_Tank.Explosive_Rockets:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~!commander_tree.stealth_tank.ap, ~!commander_tree.stealth_tank.scrin
 		Description: Upgrades the Stealth Tank's missiles with a high explosive load.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.stealthtank
 
-commander_tree.Stealth_Tank.Explosive_Rockets.Reflector:
+commander_tree.Stealth_Tank.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Stealth Tank Reflector Armor
@@ -2223,19 +2185,24 @@ commander_tree.Stealth_Tank.Explosive_Rockets.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 327
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, commander_tree.stealth_tank.explosive_rockets, ~!commander_tree.stealth_tank.explosive_rockets.pld
-		Description: Upgrades the Stealth Tank with a Point Laser Defense System.
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, tmpl, ~filler.stealthtank, ~!commander_tree.stealth_tank.pld
+		Description: Equips the Stealth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.stealthtank2
 
-commander_tree.Stealth_Tank.Explosive_Rockets.PLD:
+commander_tree.Stealth_Tank.PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Stealth Tank Point Laser Defense
+		Name: Stealth Tank Point Laser Defense System
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 327
+		IconPalette: chrometd
+		BuildPaletteOrder: 319
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, commander_tree.stealth_tank.explosive_rockets, ~!commander_tree.stealth_tank.explosive_rockets.reflector
-		Description: Upgrades the Stealth Tank with a Point Laser Defense System.
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, tmpl, ~filler.stealthtank, ~!commander_tree.stealth_tank.reflector
+		Description: Upgrades the Stealth Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.stealthtank2
 
 hack.cameo_filler.313:
 	Inherits: ^default.cameo_filler
@@ -2243,7 +2210,7 @@ hack.cameo_filler.313:
 		BuildPaletteOrder: 328
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
 
-commander_tree.Recon_Bike_Scrin:
+commander_tree.Recon_Bike.Scrin:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Recon Bike Scrin Weapon
@@ -2257,7 +2224,7 @@ commander_tree.Recon_Bike_Scrin:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike
 
-commander_tree.Recon_Bike_Scrin.PLD:
+commander_tree.Recon_Bike.Scrin.PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Scrin Bike Point Laser Defense System
@@ -2271,7 +2238,7 @@ commander_tree.Recon_Bike_Scrin.PLD:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike
 
-commander_tree.Recon_Bike_Scrin.Reflector:
+commander_tree.Recon_Bike.Scrin.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Scrin Bike Reflector Armor
@@ -2284,7 +2251,7 @@ commander_tree.Recon_Bike_Scrin.Reflector:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
 
-commander_tree.Recon_Bike_Rocket_Hail:
+commander_tree.Recon_Bike.Rocket_Hail:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Recon Bike Rocket Hail
@@ -2298,7 +2265,7 @@ commander_tree.Recon_Bike_Rocket_Hail:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
 
-commander_tree.Recon_Bike_Rocket_Hail.Reflector:
+commander_tree.Recon_Bike.Rocket_Hail.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Rocket Hail Bike Reflector Armor
@@ -2311,7 +2278,7 @@ commander_tree.Recon_Bike_Rocket_Hail.Reflector:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
 
-commander_tree.Recon_Bike_Rocket_Hail.PLD:
+commander_tree.Recon_Bike.Rocket_Hail.PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Rocket Hail Bike Point Laser Defense System
@@ -2325,7 +2292,7 @@ commander_tree.Recon_Bike_Rocket_Hail.PLD:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
 
-commander_tree.Recon_Bike_Explosive:
+commander_tree.Recon_Bike.Explosive:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Explosive Rocket Bike
@@ -2339,7 +2306,7 @@ commander_tree.Recon_Bike_Explosive:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike
 
-commander_tree.Recon_Bike_Explosive.PLD:
+commander_tree.Recon_Bike.Explosive.PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Explosive Rocket Bike Point Laser Defense System
@@ -2353,7 +2320,7 @@ commander_tree.Recon_Bike_Explosive.PLD:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
 
-commander_tree.Recon_Bike_Explosive.Reflector:
+commander_tree.Recon_Bike.Explosive.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Explosive Rocket Bike Reflector Armor
@@ -2864,21 +2831,10 @@ commander_tree.Tripod.Chainer:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 433
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~!commander_tree.tripod.acid, ~!commander_tree.tripod.pld
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~!commander_tree.tripod.acid
 		Description: Upgrades the Tripod with imporoved laser chaining to a second and third target.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tripod
-
-commander_tree.Tripod.Chainer.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Chainer Reflector Upgrade
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 434
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~commander_tree.tripod.chainer
-		Description: Upgrades the Chainer Tripod with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 
 commander_tree.Tripod.Acid:
 	Inherits: ^default.commander_tree_item
@@ -2888,21 +2844,10 @@ commander_tree.Tripod.Acid:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 435
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~!commander_tree.tripod.chainer, ~!commander_tree.tripod.pld
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~!commander_tree.tripod.chainer
 		Description: Upgrades the Tripod with Acid Spray. \nAcid Spray is efficient vs Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tripod
-
-commander_tree.Tripod.Acid.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Acid Tripod Reflector Upgrade
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 436
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~commander_tree.tripod.acid
-		Description: Upgrades the Acid Tripod with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 
 commander_tree.Tripod.PLD:
 	Inherits: ^default.commander_tree_item
@@ -2915,9 +2860,9 @@ commander_tree.Tripod.PLD:
 		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~!commander_tree.tripod.acid, ~!commander_tree.tripod.chainer
 		Description: Upgrades the Tripod with a Point Laser Defense system. \nPLD intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.tripod
+		Prerequisite: filler.tripod2
 
-commander_tree.Tripod.PLD.Reflector:
+commander_tree.Tripod.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Tripod Reflector Upgrade
@@ -2926,7 +2871,9 @@ commander_tree.Tripod.PLD.Reflector:
 		BuildPaletteOrder: 438
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~commander_tree.tripod.pld, disabled
-		Description: Upgrades the Tripod (PLD) with Reflector armor. \nReflector armor is very efficient vs energy weapons.
+		Description: Upgrades the Tripod with Reflector armor. \nReflector armor is very efficient vs energy weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.tripod2
 
 hack.cameo_filler.416:
 	Inherits: ^default.cameo_filler
