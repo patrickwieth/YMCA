@@ -1641,6 +1641,8 @@ commander_tree.Mammoth_Tank_GDI.Hover:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, gtek, ~!vehicles.talon, ~!commander_tree.mammoth_tank_gdi.ion, ~!commander_tree.mammoth_tank_gdi.nr
 		Description: The Mammoth is upgraded with Hover technology. \n  This gives the Mammoth much more maneuverability.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth
 
 commander_tree.Mammoth_Tank_GDI.Ion:
 	Inherits: ^default.commander_tree_item
@@ -1709,7 +1711,7 @@ hack.cameo_filler.217:
 		BuildPaletteOrder: 232
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~filler.gdimammoth2, disabled
 
-commander_tree.Battle_Titan:
+commander_tree.Titan.Battle:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Battle Titan
@@ -1723,7 +1725,7 @@ commander_tree.Battle_Titan:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan
 
-commander_tree.Titan_Railgun:
+commander_tree.Titan.Railgun:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Titan Railgun
@@ -2122,18 +2124,6 @@ hack.cameo_filler.311:
 	Buildable:
 		BuildPaletteOrder: 321
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
-
-commander_tree.Stealth_Tank:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Stealth Tank
-	Buildable:
-		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 325
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~disabled
-		Description: Enables to build the Stealth Tank. \n It is a cloaked tank with strong missiles vs. vehicles and aircraft.
 
 commander_tree.Stealth_Tank.AP:
 	Inherits: ^default.commander_tree_item
@@ -2857,7 +2847,7 @@ commander_tree.Tripod.PLD:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 437
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~!commander_tree.tripod.acid, ~!commander_tree.tripod.chainer
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~filler.tripod, ~!commander_tree.tripod.reflector
 		Description: Upgrades the Tripod with a Point Laser Defense system. \nPLD intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tripod2
@@ -2870,7 +2860,7 @@ commander_tree.Tripod.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 438
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~commander_tree.tripod.pld, disabled
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.tpod, ~filler.tripod, ~!commander_tree.tripod.pld
 		Description: Upgrades the Tripod with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tripod2
@@ -2881,53 +2871,18 @@ hack.cameo_filler.416:
 		BuildPaletteOrder: 439
 		Prerequisites: prerequisite.has_points, ~filler.tripod, disabled
 
-commander_tree.Reaper.PLD:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Reaper PLD Upgrade
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 440
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~!commander_tree.reaper.acid, ~!commander_tree.reaper.range
-		Description: Upgrades the Reaper with a Point Laser Defense system. \nPLD intercepts incoming missiles and projectiles.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.reaper
-
-commander_tree.Reaper.PLD.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Reaper Reflector Upgrade
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 441
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~commander_tree.reaper.pld, disabled
-		Description: Upgrades the Reaper (PLD) with Reflector armor. \nReflector armor is very efficient vs energy weapons.
-
 commander_tree.Reaper.Acid:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Reaper Acid Upgrade
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 442
+		BuildPaletteOrder: 440
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~!commander_tree.reaper.pld, ~!commander_tree.reaper.range
+		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~!commander_tree.reaper.range
 		Description: Upgrades the Reaper with Acid Spray. \nAcid Spray is efficient vs Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.reaper
-
-commander_tree.Reaper.Acid.Reflector:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Reaper Reflector Upgrade
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 443
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~commander_tree.reaper.acid
-		Description: Upgrades the Acid Reaper with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 
 commander_tree.Reaper.Range:
 	Inherits: ^default.commander_tree_item
@@ -2935,29 +2890,50 @@ commander_tree.Reaper.Range:
 		Name: Reaper Range Upgrade
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 444
+		BuildPaletteOrder: 440
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~!commander_tree.reaper.acid, ~!commander_tree.reaper.pld
+		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~!commander_tree.reaper.acid
 		Description: Upgrades the Reaper with higher range.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.reaper
 
-commander_tree.Reaper.Range.Reflector:
+commander_tree.Reaper.PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Reaper Tripod PLD Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 441
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~filler.reaper, ~!commander_tree.reaper.reflector
+		Description: Upgrades the Reaper Tripod with a Point Laser Defense system. \nPLD intercepts incoming missiles and projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.reaper2
+
+commander_tree.Reaper.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Reaper Reflector Upgrade
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 445
+		BuildPaletteOrder: 441
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~commander_tree.reaper.range
-		Description: Upgrades the Range Reaper with Reflector armor. \nReflector armor is very efficient vs energy weapons.
+		Prerequisites: prerequisite.has_points, scrt, ~vehicles.reaper, ~filler.reaper, ~commander_tree.reaper.pld
+		Description: Upgrades the Reaper Tripod with Reflector armor. \nReflector armor is very efficient vs energy weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.reaper2
 
 hack.cameo_filler.417:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 446
-		Prerequisites: prerequisite.has_points, ~filler.reaper, disabled
+		BuildPaletteOrder: 442
+		Prerequisites: prerequisite.has_points, ~!filler.reaper, disabled
+
+hack.cameo_filler.417a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 442
+		Prerequisites: prerequisite.has_points, ~filler.reaper2, disabled
 
 commander_tree.Stormcrawler.PLD:
 	Inherits: ^default.commander_tree_item
