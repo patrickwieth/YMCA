@@ -791,29 +791,57 @@ InvaderSuicide:
 
 InvaderExplosion:
 	ValidTargets: Ground, Trees, Water, Underwater, Air
+	Report: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
 	Warhead@1Dam_impact: SpreadDamage
 		Spread: 1c0
-		Damage: 10000
+		Damage: 1000
 		Falloff: 100, 37, 13, 5
 		ValidTargets: Ground, Trees, Water, Air
 		Versus:
 			Wood: 25
 			Concrete: 25
-		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall
 		Size: 2
 	Warhead@Flames: FireCluster
-		Weapon: BurnFx
-		RandomClusterCount: 6
-		Dimensions: 3,3
-		Footprint: xxx xxx xxx
+		Weapon: SuicideAcid
+		RandomClusterCount: 25
+		Dimensions: 5,5
+		Footprint: =xxx= xxxxx xxxxx xxxxx =xxx=
+	Warhead@3Eff: CreateEffect
+		Explosions: muzzle
+		Image: devo
+		ExplosionPalette: scrin
+		ValidTargets: Ground, Ship, Trees
 	Warhead@3Eff: CreateEffect
 		Explosions: b2bexp, b2bexp2
 		ExplosionPalette: tseffect
 		ImpactSounds: expnew06.aud
+
+SuicideAcid:
+	Inherits: ^Chemical
+	ValidTargets: Ground, Water
+	Range: 6c0
+	ReloadDelay: 60
+	Projectile: Bullet
+		Speed: 204
+		Blockable: True
+		LaunchAngle: 56
+		Inaccuracy: 512
+		ContrailLength: 30
+		ContrailColor: 5dff00
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1600
+	Warhead@3Eff: CreateEffect
+		Explosions: muzzle
+		Image: devo
+		ExplosionPalette: scrin
+		ValidTargets: Ground, Ship, Trees
+
+
 
 PlasmaTurretGun:
 	Inherits: ^EnergyLight
