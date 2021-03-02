@@ -496,7 +496,7 @@ V2RL:
 		Queue: Vehicle
 		IconPalette: chrometd
 		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank_pt, ~!filler.sovietmammoth2
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank.pt, ~!filler.sovietmammoth2
 		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
 	Tooltip:
 		Name: Propaganda Mammoth Tank
@@ -517,7 +517,6 @@ V2RL:
 	Inherits: 4TNK.Speaker
 	Inherits: ^ReflectorArmor
 	Buildable:
-		-IconPalette: chrometd
 		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.mammoth_tank.pt, ~commander_tree.mammoth_tank.reflector
 		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
 	Tooltip:
@@ -650,7 +649,7 @@ V2RL:
 		RequiresCondition: iraqtank
 
 4TNK.Tesla.PLD:
-	Inherits: 4TNK.Nuke
+	Inherits: 4TNK.Tesla
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
@@ -2342,7 +2341,7 @@ HTNK.Ion:
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank.ion, ~!filler.gdimammoth2
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.ion, ~!filler.gdimammoth2
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Ion Mammoth Tank
@@ -2358,8 +2357,7 @@ HTNK.Ion.Reflector:
 	Inherits: HTNK.Ion
 	Inherits: ^ReflectorArmor
 	Buildable:
-		-IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank.ion, ~commander_tree.mammoth_tank.reflector
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.ion, ~commander_tree.mammoth_tank_gdi.reflector
 		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Ion Mammoth Tank (Reflector)
@@ -2369,21 +2367,19 @@ HTNK.Ion.PLD:
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pld, ~commander_tree.mammoth_tank.ion
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pld, ~commander_tree.mammoth_tank_gdi.ion
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
-		Name: Mammoth Tank (PLD)
+		Name: Ion Mammoth Tank (PLD)
 	Valued:
 		Cost: 2500
-	Health:
-		HP: 78000
 
 HTNK.Nanite:
 	Inherits: HTNK
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank.nr, ~!filler.gdimammoth2
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.nr, ~!filler.gdimammoth2
 		Description: Big and slow tank with anti-air capability.\n  Is very tough and repairs itself with Nanite Repair System.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Point Laser Defense
 	Tooltip:
 		Name: Nanite Mammoth Tank
@@ -2422,7 +2418,7 @@ HTNK.Nanite.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank.nr, ~commander_tree.mammoth_tank.reflector
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.nr, ~commander_tree.mammoth_tank_gdi.reflector
 		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft, Energy Weapons \n  Weak vs Conventional Weapons
 	Tooltip:
 		Name: Nanite Mammoth Tank (Reflector)
@@ -2432,14 +2428,71 @@ HTNK.Nanite.PLD:
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pld, ~commander_tree.mammoth_tank.nr,
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pld, ~commander_tree.mammoth_tank_gdi.nr,
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Nanite Mammoth Tank (PLD)
 	Valued:
 		Cost: 3000
-	Health:
-		HP: 78000
+
+HTNK.Hover:
+	Inherits: HTNK
+	Buildable:
+		BuildPaletteOrder: 190
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.hover, ~!filler.gdimammoth2
+		Description: Big tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
+	Tooltip:
+		Name: Hover Mammoth Tank
+	Valued:
+		Cost: 1800
+	Mobile:
+		Speed: 92
+		TurnSpeed: 14
+		Locomotor: hover
+	LeavesTrails:
+		Image: twake
+		Palette: effect
+		TerrainTypes: Water
+		TrailWhileStationary: true
+		StationaryInterval: 18
+		MovingInterval: 6
+	Hovers:
+		BobDistance: -35
+		RequiresCondition: !empdisable && !being-warped && !driver-dead
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	KillsSelf@SINK:
+		RequiresCondition: onwater && (empdisable || driver-dead)
+	WithShadow:
+		Offset: 43, 128, 0
+		ZOffset: -129
+	SpawnActorOnDeath:
+		Actor: HTNK.Hover.Husk
+		RequiresCondition: !being-warped && !onwater
+
+HTNK.Hover.Reflector:
+	Inherits: HTNK.Hover
+	Inherits: ^ReflectorArmor
+	Buildable:
+		-IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.hover, ~commander_tree.mammoth_tank_gdi.reflector
+		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
+	Tooltip:
+		Name: Hover Mammoth Tank (Reflector)
+
+HTNK.Hover.PLD:
+	Inherits: HTNK.Hover
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pld, ~commander_tree.mammoth_tank_gdi.hover
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Tooltip:
+		Name: Hover Mammoth Tank (PLD)
+	Valued:
+		Cost: 2300
 
 MSAM:
 	Inherits: ^TankTD
@@ -2631,7 +2684,7 @@ STNK:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: hq, ~vehicles.nod, ~!commander_tree.stealth_tank.ap,, ~!commander_tree.stealth_tank_scrin, ~!commander_tree.stealth_tank_explosive_rockets
+		Prerequisites: hq, ~vehicles.nod, ~!commander_tree.stealth_tank.ap, ~!commander_tree.stealth_tank.scrin, ~!commander_tree.stealth_tank.explosive_rockets
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Medium-range missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry.
@@ -2724,7 +2777,7 @@ STNK.HE:
 	Inherits: STNK
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank_explosive_rockets, ~!filler.stealthtank2
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank.explosive_rockets, ~!filler.stealthtank2
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Medium-range high explosive missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Aircraft\n  Weak vs Heavy Tanks.
@@ -2809,7 +2862,7 @@ BIKE:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: ~vehicles.nod, ~!commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_explosive
+		Prerequisites: ~vehicles.nod, ~!commander_tree.recon_bike.rocket_hail, ~!commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.explosive
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast scout vehicle, armed with\nrockets.\n  Can attack Aircraft.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry
@@ -3102,7 +3155,7 @@ FTNK.Reflector.Fireball:
 	Inherits: FTNK
 	Inherits: ^ReflectorArmor
 	Buildable:
-		-IconPalette:
+		IconPalette: chrometd
 		Prerequisites: hq, ~vehicles.nod, ~commander_tree.fireball_tank, ~commander_tree.flame_tank.reflector
 		Description: Heavily armored fireball-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
@@ -3779,7 +3832,7 @@ TITN.Battle.PLD:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan.pld, ~commander_tree.titan.railgun
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan.pld, ~commander_tree.titan.battle
 		Description: Tough combat battle-mech with very heavy shells.\n  Causes consussions on units in the proximity of an impact.\n  Has Point Laser Defense System.\n  Can attack Aircraft.\n  Strong vs Tanks, Aircraft, Projectiles\n Weak vs Energy Weapons
 	Valued:
 		Cost: 2800
@@ -3790,8 +3843,7 @@ TITN.Battle.Reflector:
 	Inherits: TITN.Battle
 	Inherits: ^ReflectorArmor
 	Buildable:
-		-IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan.reflector, ~commander_tree.titan.railgun
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan.reflector, ~commander_tree.titan.battle
 		Description: Tough combat battle-mech with railgun.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Tanks, Energy Weapons\n Weak vs Point Laser Defense
 	Tooltip:
 		Name: Battle Titan (Reflector)
@@ -3802,7 +3854,7 @@ TITN.Railgun:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan_railgun, ~!filler.titan2
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan.railgun, ~!filler.titan2
 		Description: Tough combat battle-mech with railgun.\n  Cannot be intercepted by Point Laser Defense.\n  Strong vs Tanks, Weak vs Aircraft, Infantry
 	Valued:
 		Cost: 3000
@@ -3830,7 +3882,6 @@ TITN.Railgun.Reflector:
 	Inherits: TITN.Railgun
 	Inherits: ^ReflectorArmor
 	Buildable:
-		-IconPalette: chrometd
 		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.titan.reflector, ~commander_tree.titan.railgun
 		Description: Tough combat battle-mech with railgun.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Tanks, Energy Weapons, Weak vs Aircraft, Infantry
 	Tooltip:
@@ -5912,7 +5963,7 @@ MAMMOTHMK2:
 	Buildable:
 		BuildPaletteOrder: 220
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.gdi, commander_tree.mammoth_mkii, miss.gdi
+		Prerequisites: ~vehicles.gdi, ~commander_tree.mammoth_mkii, miss.gdi
 		Queue: Vehicle
 		Description: Slow heavy walker.\nArmed with dual railguns and rocket launchers.\n  Strong vs Infantry, Vehicles and Buildings\n  Weak vs Artillery, Masses of Aircraft
 	Mobile:

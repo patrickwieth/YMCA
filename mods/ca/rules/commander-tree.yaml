@@ -1077,6 +1077,7 @@ commander_tree.Mammoth_Tank.Reflector:
 		Name: Mammoth PLD Reflector Armor
 	Buildable:
 		Queue: Commander_Tree
+		IconPalette: chrometd
 		BuildPaletteOrder: 121
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, stek, ~filler.sovietmammoth, ~!commander_tree.mammoth_tank.pld
@@ -1675,12 +1676,13 @@ commander_tree.Mammoth_Tank_GDI.NR:
 commander_tree.Mammoth_Tank_GDI.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Ion Mammoth Reflector Armor
+		Name: Mammoth Reflector Armor
 	Buildable:
 		Queue: Commander_Tree
+		IconPalette: chrometd
 		BuildPaletteOrder: 231
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~filler.gdimammoth
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~filler.gdimammoth, ~!commander_tree.mammoth_tank_gdi.pld
 		Description: Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.gdimammoth2
@@ -1694,7 +1696,7 @@ commander_tree.Mammoth_Tank_GDI.PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 231
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~filler.gdimammoth
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~filler.gdimammoth, ~!commander_tree.mammoth_tank_gdi.reflector
 		Description: Upgrades the Mammoth Tank with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.gdimammoth2
@@ -1703,7 +1705,7 @@ hack.cameo_filler.216:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 232
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!filler.gdimammoth, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, ~!filler.gdimammoth, disabled
 
 hack.cameo_filler.217:
 	Inherits: ^default.cameo_filler
@@ -1720,7 +1722,7 @@ commander_tree.Titan.Battle:
 		IconPalette: chrometd
 		BuildPaletteOrder: 235
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, gtek, ~!commander_tree.titan_railgun
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, gtek, ~!commander_tree.titan.railgun
 		Description: Upgrades the Titan with concussive shells. \n  Concussive Shells slow the targets on impact.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan
@@ -1734,7 +1736,7 @@ commander_tree.Titan.Railgun:
 		IconPalette: chrometd
 		BuildPaletteOrder: 235
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, gtek, ~!commander_tree.battle_titan
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, gtek, ~!commander_tree.titan.battle
 		Description: Upgrades the Titan with a Railgun. \n  The Railgun is strong vs. tanks and is an energy based weapon.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan
@@ -1769,13 +1771,13 @@ commander_tree.Titan.Reflector:
 hack.cameo_filler.218:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 238
+		BuildPaletteOrder: 237
 		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~!filler.titan, disabled
 
 hack.cameo_filler.218a:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 238
+		BuildPaletteOrder: 237
 		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~filler.titan2, disabled
 
 commander_tree.Stealth_Fighter:
@@ -2125,6 +2127,12 @@ hack.cameo_filler.311:
 		BuildPaletteOrder: 321
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, disabled
 
+hack.cameo_filler.312:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 321
+		Prerequisites: prerequisite.has_points, ~vehicles.marked, disabled
+
 commander_tree.Stealth_Tank.AP:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -2173,7 +2181,8 @@ commander_tree.Stealth_Tank.Reflector:
 		Name: Stealth Tank Reflector Armor
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 327
+		IconPalette: chrometd
+		BuildPaletteOrder: 326
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, tmpl, ~filler.stealthtank, ~!commander_tree.stealth_tank.pld
 		Description: Equips the Stealth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
@@ -2186,8 +2195,7 @@ commander_tree.Stealth_Tank.PLD:
 		Name: Stealth Tank Point Laser Defense System
 	Buildable:
 		Queue: Commander_Tree
-		IconPalette: chrometd
-		BuildPaletteOrder: 319
+		BuildPaletteOrder: 326
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, tmpl, ~filler.stealthtank, ~!commander_tree.stealth_tank.reflector
 		Description: Upgrades the Stealth Tank with a Point Laser Defense System to shoot down incoming projectiles.
@@ -2209,7 +2217,7 @@ commander_tree.Recon_Bike.Scrin:
 		IconPalette: chrometd
 		BuildPaletteOrder: 331
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, hq, ~!commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_explosive
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, hq, ~!commander_tree.recon_bike.rocket_hail, ~!commander_tree.recon_bike.explosive
 		Description: Upgrades the Recon Bike with a Scrin Weapon.\n  Energy based weapons cannot be intercepted by Point Laser Defense.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike
@@ -2223,10 +2231,10 @@ commander_tree.Recon_Bike.Scrin.PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 332
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, tmpl, ~commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_scrin.reflector
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, tmpl, ~commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.scrin.reflector
 		Description: Upgrades the Scrin Bike with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike
+		Prerequisite: filler.bike2
 
 commander_tree.Recon_Bike.Scrin.Reflector:
 	Inherits: ^default.commander_tree_item
@@ -2236,7 +2244,7 @@ commander_tree.Recon_Bike.Scrin.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 332
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, tmpl, ~commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_scrin.pld
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.marked, tmpl, ~commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.scrin.pld
 		Description: Equips the Scrin Bike with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
@@ -2250,10 +2258,10 @@ commander_tree.Recon_Bike.Rocket_Hail:
 		IconPalette: chrometd
 		BuildPaletteOrder: 331
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, hq, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_explosive
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, hq, ~!commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.explosive
 		Description: Upgrades the Recon Bike to shoot more missiles at high range. \n  This makes the recon bike a hit and run artillery unit. \n  The recon bike loses its ability to fight flying targets.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike2
+		Prerequisite: filler.bike
 
 commander_tree.Recon_Bike.Rocket_Hail.Reflector:
 	Inherits: ^default.commander_tree_item
@@ -2263,7 +2271,7 @@ commander_tree.Recon_Bike.Rocket_Hail.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 332
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_rocket_hail.pld
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~commander_tree.recon_bike.rocket_hail, ~!commander_tree.recon_bike.rocket_hail.pld
 		Description: Equips the Rocket Hail Bike with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
@@ -2277,7 +2285,7 @@ commander_tree.Recon_Bike.Rocket_Hail.PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 332
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~commander_tree.recon_bike_rocket_hail, ~!commander_tree.recon_bike_rocket_hail.reflector
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.legion, tmpl, ~commander_tree.recon_bike.rocket_hail, ~!commander_tree.recon_bike.rocket_hail.reflector
 		Description: Upgrades the Rocket Hail Bike with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
@@ -2291,7 +2299,7 @@ commander_tree.Recon_Bike.Explosive:
 		IconPalette: chrometd
 		BuildPaletteOrder: 331
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, hq, ~!commander_tree.recon_bike_scrin, ~!commander_tree.recon_bike_rocket_hail
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, hq, ~!commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.rocket_hail
 		Description: Upgrades the Recon Bike to shoot explosive missiles. \n  This is very strong vs. weakly armored units. \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike
@@ -2305,7 +2313,7 @@ commander_tree.Recon_Bike.Explosive.PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 332
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~commander_tree.recon_bike_explosive, ~!commander_tree.recon_bike_explosive.reflector
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~commander_tree.recon_bike.explosive, ~!commander_tree.recon_bike.explosive.reflector
 		Description: Upgrades the Explosive Rocket Bike with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
@@ -2318,7 +2326,7 @@ commander_tree.Recon_Bike.Explosive.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 332
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~commander_tree.recon_bike_explosive, ~!commander_tree.recon_bike_explosive.pld
+		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!vehicles.blackh, tmpl, ~commander_tree.recon_bike.explosive, ~!commander_tree.recon_bike.explosive.pld
 		Description: Equips the Explosive Rocket Bike with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.bike2
@@ -2329,7 +2337,7 @@ hack.cameo_filler.315:
 		BuildPaletteOrder: 333
 		Prerequisites: prerequisite.has_points, ~vehicles.nod, ~!filler.bike, disabled
 
-hack.cameo_filler.315:
+hack.cameo_filler.316:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 333
