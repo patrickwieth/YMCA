@@ -1544,7 +1544,7 @@ STMR.bomber:
 	Valued:
 		Cost: 1650
 	Health:
-		HP: 28000
+		HP: 22000
 	Tooltip:
 		Name: Stormbomber
 	Armament@PRIMARY:
@@ -1553,12 +1553,12 @@ STMR.bomber:
 		PauseOnCondition: !ammo
 	-Armament@SECONDARY:
 	AmmoPoolCA:
-		Ammo: 21
-		PipCount: 3
+		Ammo: 16
+		PipCount: 2
 		AmmoCondition: ammo
 	ReloadAmmoPoolCA:
-		Delay: 750
-		Count: 21
+		Delay: 375
+		Count: 8
 		DelayOnFire: 120
 		DelayAfterReset: 50
 		ShowSelectionBar: true
@@ -1775,7 +1775,7 @@ PAC.suicide:
 	Armament@PRIMARY:
 		Weapon: InvaderLauncher.Suicide
 	CarrierMaster@carr1:
-		RespawnTicks: 250
+		RespawnTicks: 200
 		Actors: inva.suicide, inva.suicide, inva.suicide, inva.suicide
 
 PAC.support:
@@ -1783,7 +1783,6 @@ PAC.support:
 	-AutoTarget:
 	-AutoTargetPriority@DEFAULT:
 	-AutoTargetPriority@ATTACKANYTHING:
-	-AttackMove:
 	Buildable:
 		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.support
 		Description: Massive Carrier with repair drones.\n	Repair drones have point laser defense.\n  Can teleport infantry directly into the field.\n  Strong vs Projectile based attacks.\n  Weak without army.
@@ -1794,17 +1793,24 @@ PAC.support:
 		Cost: 5000
 	Tooltip:
 		Name: Support Carrier
+	CarrierMaster@carr1:
+		Actors: inva.support, inva.support, inva.support, inva.support
 	Armament@PRIMARY:
 		Weapon: InvaderLauncher.Support
 	AutoTarget:
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Vehicle, Ship
+	Armament@SECONDARY:
+		Weapon: Repair.Dummy
+		Name: primary
+		Cursor: repair
+		OutsideRangeCursor: repair
+		TargetStances: Ally
+		ForceTargetStances: None
 	AutoTargetPriority@REPAIR:
-		ValidTargets: Repair
+		ValidTargets: Repair, C4Attached
 		ValidStances: Ally
 		Priority: 2
-	CarrierMaster@carr1:
-		Actors: inva.support, inva.support, inva.support
 
 PAC.laser:
 	Inherits: PAC
@@ -1931,15 +1937,78 @@ INVA:
 	Interactable:
 
 INVA.support:
-	Inherits: INVA
+	Inherits: ^Plane
+	Valued:
+		Cost: 50
+	Tooltip:
+		Name: Invader
+	Health:
+		HP: 5000
+	RevealsShroud:
+		Range: 2c0
+		MinRange: 1c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 1c0
+		Type: GroundPosition
+	AttackAircraft:
+		FacingTolerance: 128
+		PersistentTargeting: true
+		OpportunityFire: true
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		CruiseAltitude: 2c0
+		InitialFacing: 192
+		TurnSpeed: 8
+		Speed: 220
+		MaximumPitch: 56
+		CanHover: False
+		CanSlide: False
+		RepulsionSpeed: 40
+		Repulsable: False
+		IdealSeparation: 0c256
+		VTOL: true
+		TakeoffSounds: invader-launch1.aud, invader-launch2.aud
+		LandingSounds: invader-dock.aud
+	Rearmable:
+		RearmActors: pac
+	RejectsOrders:
+	SpawnActorOnDeath:
+		Actor: INVA.Husk
+		RequiresCondition: ammo && !empdisable
+	SpawnActorOnDeath@Empty:
+		Actor: INVA.Husk.empty
+		RequiresCondition: !ammo && !empdisable
+	SpawnActorOnDeath@EMP:
+		Actor: INVA.Husk.EMP
+		RequiresCondition: ammo && empdisable
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: INVA.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable
+	-EjectOnDeath:
+	-Selectable:
+	-ActorLostNotification:
+	SmokeTrailWhenDamaged:
+		Offset: -253,0,171
+		Interval: 2
+	CarrierSlave:
+		LandingDistance: 8c0
+	Contrail@1:
+		Offset: -432,0,0
+		UsePlayerColor: true
+		TrailLength: 10
+	-Contrail@2:
+	Interactable:
 	Armament@PRIMARY:
-		Weapon: Repair
-		Name: primary
-		Cursor: repair
-		OutsideRangeCursor: repair
-		TargetStances: Ally
-		ForceTargetStances: None
-	-Armament@SECONDARY:
+		Weapon: InvaderZap.Repair
+	AutoTarget:
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Vehicle, Ship
+	AutoTargetPriority@REPAIR:
+		ValidTargets: Repair, C4Attached
+		ValidStances: Ally
+		Priority: 2
 
 INVA.suicide:
 	Inherits: INVA

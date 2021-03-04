@@ -711,7 +711,7 @@ InvaderLauncher:
 	ReloadDelay: 10
 	Burst: 4
 	BurstDelays: 5
-	Range: 12c0
+	Range: 14c0
 	ValidTargets: Air, Ground, Water
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
@@ -719,12 +719,37 @@ InvaderLauncher:
 
 InvaderLauncher.Support:
 	Inherits: InvaderLauncher
+	Range: 12c0
 	ValidTargets: Repair
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Repair
 
+InvaderZap.Repair:
+	Inherits: ^EnergyAP
+	Range: 5c0
+	ReloadDelay: 2
+	Projectile: LaserZap
+		Duration: 4
+		DamageInterval: 2
+		Width: 80
+		Shape: Flat
+		ZOffset: 4096
+		BeyondTargetRange: 0c256
+		TrackTarget: true
+		Color: BA9FE7
+	ValidTargets: Repair
+	Warhead@1Dam: SpreadDamage
+		Damage: -500
+		ValidTargets: Repair
+	Warhead@highlight: GrantExternalCondition
+		Range: 0c511
+		Duration: 4
+		Condition: highlight
+		ValidTargets: Ground, Vehicle
+
 InvaderLauncher.Suicide:
 	Inherits: InvaderLauncher
+	Range: 16c0
 	Burst: 4
 
 InvaderZap:
