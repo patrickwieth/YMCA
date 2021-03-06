@@ -720,14 +720,14 @@ InvaderLauncher:
 InvaderLauncher.Support:
 	Inherits: InvaderLauncher
 	Range: 12c0
-	ValidTargets: Repair
+	ValidTargets: Repair, RepairInAir
 	Warhead@1Dam: TargetDamage
-		ValidTargets: Repair
+		ValidTargets: Repair, RepairInAir
 
 InvaderZap.Repair:
-	Inherits: ^EnergyAP
 	Range: 5c0
 	ReloadDelay: 2
+	ValidTargets: Repair, RepairInAir
 	Projectile: LaserZap
 		Duration: 4
 		DamageInterval: 2
@@ -737,15 +737,17 @@ InvaderZap.Repair:
 		BeyondTargetRange: 0c256
 		TrackTarget: true
 		Color: BA9FE7
-	ValidTargets: Repair
 	Warhead@1Dam: SpreadDamage
 		Damage: -500
-		ValidTargets: Repair
+		ValidTargets: Repair, RepairInAir
+		ValidStances: Ally
+		ValidRelationships: Ally
 	Warhead@highlight: GrantExternalCondition
 		Range: 0c511
 		Duration: 4
 		Condition: highlight
-		ValidTargets: Ground, Vehicle
+		ValidTargets: Ground, Vehicle, Air
+		ValidStances: Ally
 
 InvaderLauncher.Suicide:
 	Inherits: InvaderLauncher
