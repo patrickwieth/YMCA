@@ -378,7 +378,7 @@ RiftCannon.chain:
 		AimChance: 100
 		Amount: 1
 		AllowDirectHit: true
-		ThrowWithoutTarget: false
+		ThrowWithoutTarget: true
 	Warhead@Spawn: SpawnActor
 		Actors: camera.minirift
 		Range: 1
@@ -410,32 +410,20 @@ MiniRift:
 	ValidTargets: Ground, Water
 	Projectile: InstantHit
 	Warhead@1Dam: SpreadDamage
-		Spread: 1c0
+		Spread: 300
 		Damage: 1000
 		Falloff: 100, 70, 0
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
-		ValidStances: Enemy, Neutral
-	Warhead@2Dam: SpreadDamage
-		Spread: 1c0
-		Damage: 600
-		Falloff: 100, 70, 0
-		ValidTargets: Ground, Trees
-		InvalidTargets: Air, Creep
-		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
-		ValidStances: Ally
+		ValidStances: Ally, Enemy, Neutral
 
 MediumRift:
 	Inherits: MiniRift
 	Warhead@1Dam: SpreadDamage
-		Spread: 1c0
+		Spread: 512
 		Damage: 2400
-		Falloff: 100, 70, 50
-	Warhead@2Dam: SpreadDamage
-		Spread: 1c0
-		Damage: 2400
-		Falloff: 100, 70, 50
+		Falloff: 100, 70, 0
 
 RuinerCannon:
 	Inherits: 155mm
