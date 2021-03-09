@@ -591,7 +591,7 @@ MECH:
 		ForceTargetStances: None
 		Name: secondary
 	AutoTargetPriority@defuse:
-		ValidTargets: C4Attached
+		ValidTargets: C4Attached, TNTAttached
 		InvalidTargets: NoAutoTarget
 		ValidStances: Ally
 		Priority: 3
@@ -1278,13 +1278,28 @@ N6:
 		BuildPaletteOrder: 60
 		Prerequisites: infantry.any, ~infantry.td, ~techlevel.infonly
 		IconPalette: chrometd
-		Description: Infiltrates and captures\nenemy structures.\n  Can repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
+		Description: Infiltrates and captures\nenemy structures.\n  Can repair friendly structures & bridges and defuse bombs.\n  Special Ability: Repair, Defuse\n  Unarmed
 	Valued:
 		Cost: 500
 	Tooltip:
 		Name: Engineer
 	Passenger:
 		PipType: Yellow
+	Armament@defuse:
+		Weapon: DefuseKit
+		Cursor: goldwrench
+		OutsideRangeCursor: goldwrench
+		TargetStances: Ally
+		ForceTargetStances: None
+		Name: secondary
+	AutoTarget:
+	AutoTargetPriority@defuse:
+		ValidTargets: C4Attached, TNTAttached
+		InvalidTargets: NoAutoTarget
+		ValidStances: Ally
+	AttackFrontal:
+		Armaments: primary, secondary
+		PauseOnCondition: being-warped
 	EngineerRepair:
 	RepairsBridges:
 	CaptureManager:
@@ -2405,66 +2420,6 @@ Railgunner.noCrush:
 		Name: Railgunner (Crushproof)
 	-Crushable:
 
-jarmen_kell:
-	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: Jarmen Kell
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 7
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~!infantry.gdi, ~techlevel.infonly
-		Description: Elite sniper infantry.\n\nCan kill enemy vehicle drivers, allowing other infantry to capture them.\n\nCamouflaged.
-		ReadyAudio: JarmenCreated
-		BuildLimit: 1
-	Health:
-		HP: 10000
-	Mobile:
-		Voice: Move
-		Speed: 61
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: ReturnFire
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry
-		InvalidTargets: NoAutoTarget
-	Armament@PRIMARY:
-		Weapon: sniper
-	Armament@DRIVER_SNIPE:
-		Name: driver_snipe
-		Weapon: SNIPER.vehicle
-		PauseOnCondition: !ammo
-	AttackFrontal:
-		Armaments: primary, driver_snipe
-	WithInfantryBody:
-		DefaultAttackSequence: shoot
-	Cloak:
-		InitialDelay: 250
-		CloakDelay: 120
-		UncloakOn: Attack, Unload, Infiltrate, Demolish
-		CloakTypes: Cloak
-		IsPlayerPalette: true
-		RequiresCondition: !cloak-force-disabled
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
-	AmmoPool:
-		Ammo: 1
-		Armaments: driver_snipe
-		Name: driver_snipe
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		AmmoPool: driver_snipe
-		Delay: 750
-	Voiced:
-		VoiceSet: JarmenVoice
-	RenderSprites:
-		Image: jarmen_kell
-
 LEADER:
 	Inherits@1: ^CivInfantry
 	Inherits@2: ^ArmedCivilian
@@ -2518,3 +2473,56 @@ LEADER:
 		ReferencePoint: Top
 		ZOffset: 256
 		RequiresCondition: primary
+
+IVAN:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 40
+		Prerequisites: ~infantry.ukraine, weap, ~commander_tree.advanced_infantry_training
+		Description: Specialist demolition infantry armed with explosives.\n  Strong vs Buildings\n  Weak vs Aircraft
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Crazy Ivan
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	Mobile:
+		Speed: 56
+		Voice: Move
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Armament@PRIMARY:
+		Weapon: Ivanbomb
+		LocalOffset: 0,0,555
+		FireDelay: 15
+	Armament@Garrison:
+		Name: mounted
+		Weapon: Ivanbomb
+		FireDelay: 15
+	TakeCover:
+		ProneOffset: 256,64,-331
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+	WithInfantryBody:
+		DefaultAttackSequence: throw
+	Explodes:
+		Weapon: ArtilleryExplode
+		EmptyWeapon: ArtilleryExplode
+		Chance: 100
+		DamageSource: Killer
+		RequiresCondition: !being-warped
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	Voiced:
+		VoiceSet: CrazyIvanVoice
