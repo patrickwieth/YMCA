@@ -1308,7 +1308,7 @@ TTNK:
 		Prerequisites: ~vehicles.soviet, dome, ~!commander_tree.tesla_tank_arc, ~techlevel.medium
 		Description: Tank with mounted Tesla coil.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
 	Valued:
-		Cost: 1350
+		Cost: 1250
 	Tooltip:
 		Name: Tesla Tank
 		GenericName: Tank
@@ -1361,11 +1361,78 @@ TTNK.Arc:
 		Prerequisites: ~vehicles.soviet, dome, ~commander_tree.tesla_tank_arc, ~techlevel.medium
 		Description: Tank with mounted Tesla coil.\n  Tesla Zaps have improved Arcing.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
 	Valued:
-		Cost: 1650
+		Cost: 1350
 	Tooltip:
 		Name: Tesla Tank (Arc)
 	Armament:
 		Weapon: TTankZap.Arc
+
+TTNK.RA2:
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 200
+		Prerequisites: dome, ~vehicles.russia, ~!commander_tree.tesla_tank_arc
+		Description: Tank with twin mounted Tesla coils.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Heavy Tesla Tank
+		GenericName: Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 45000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Speed: 100
+		Voice: Move
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	Armament@PRIMARY:
+		Weapon: TTankZapMK2
+		LocalOffset: 511,200,113, 511,-200,113
+		RequiresCondition: !tarc-upgrade
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	Turreted:
+		TurnSpeed: 28
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Selectable:
+		DecorationBounds: 30,30
+	Passenger:
+		Voice: Move
+	Voiced:
+		VoiceSet: TeslaTankRA2Voice
+	SpawnActorOnDeath:
+		Actor: TTNK.RA2.Husk
+		RequiresCondition: !being-warped
+
+TTNK.RA2.Arc:
+	Inherits: TTNK.RA2
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: ~vehicles.russia, dome, ~commander_tree.tesla_tank_arc
+		Description: Tank with mounted Tesla coil.\n  Tesla Zaps have improved Arcing.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n
+	Valued:
+		Cost: 1450
+	Tooltip:
+		Name: Heavy Tesla Tank (Arc)
+	Armament:
+		Weapon: TTankZapMK2.Arc
 
 DTRK:
 	Inherits: ^Vehicle
@@ -3361,7 +3428,7 @@ NonaSVK:
 		Prerequisites: ~vehicles.soviet, ~commander_tree.nona_svk, ~techlevel.low
 		Description: Light Artillery.\n  Highly mobile artillery unit.\n  Strong vs Light Armor, Infantry, Buildings \n  Weak vs Tanks, Aircraft
 	Valued:
-		Cost: 1000
+		Cost: 800
 	Tooltip:
 		Name: Nona SVK
 	Health:
