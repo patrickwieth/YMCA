@@ -985,9 +985,13 @@ RadBomb:
 		LayerName: radioactivity.strong
 
 ScrinBomb:
-	Inherits: ScrinTorp
+	Inherits: ^EnergyAP
+	ValidTargets: Ground, Water, Trees
+	ReloadDelay: 50
+	MinRange: 0c512
 	Burst: 3
-	BurstDelays: 2
+	BurstDelays: 3
+	Report: scrin5b.aud
 	Range: 1c512
 	TargetActorCenter: true
 	Projectile: GravityBomb
@@ -995,8 +999,25 @@ ScrinBomb:
 		Velocity: 125, 0, -220
 		Acceleration: 0, 0, 0
 		Shadow: true
+		Inaccuracy: 0c128
+		Image: scrintorp
+		Palette: tseffect-ignore-lighting-alpha90
 	Warhead@1Dam: SpreadDamage
-		Damage: 1200
+		Damage: 1800
+		Spread: 192
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		ValidTargets: Ground, Water
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: expnew16.aud, expnew17.aud
+	Warhead@green: GrantExternalCondition
+		Range: 0c511
+		Duration: 2
+		Condition: greenhighlight
+		ValidTargets: Ground, Vehicle
 
 SonicZap:
 	Inherits: ^EnergyArtillery
