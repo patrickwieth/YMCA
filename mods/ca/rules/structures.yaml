@@ -66,7 +66,7 @@ MSLO:
 		Amount: -150
 	MustBeDestroyed:
 		RequiredForShortGame: false
-	WithNukeLaunchAnimation:
+	WithSupportPowerActivationAnimation:
 		RequiresCondition: !build-incomplete
 	ProvidesPrerequisite@buildingname:
 	InfiltrateForSupportPowerReset:
@@ -469,8 +469,9 @@ IRON:
 		Weapon: IronCurtain
 		Description: Iron Curtain
 		Condition: invulnerability
-		Range: 1
-		ValidStances: Ally, Neutral, Enemy
+		Dimensions: 3, 3
+		Footprint: xxx xxx xxx
+		ValidRelationships: Ally, Neutral, Enemy
 		Duration: 600
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
@@ -542,7 +543,7 @@ PDOX:
 		WarpInSequence: warpin
 		WarpOutSequence: warpout
 		Palette: ra2effect-ignore-lighting-alpha75
-	ChronoshiftPowerCA@chronoshift:
+	ChronoshiftPower@chronoshift:
 		OrderName: Chronoshift
 		Prerequisites: !botplayer
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -558,7 +559,8 @@ PDOX:
 		LaunchSound: chrono2.aud
 		KillCargo: true
 		DisplayRadarPing: True
-		Range: 2
+		Dimensions: 5, 5
+		Footprint: __x__ _xxx_ xxxxx _xxx_ __x__
 		DisplayTimerStances: Ally, Neutral, Enemy
 	DetonateWeaponPower@ChronoAI:
 		OrderName: Chronoshiftai
@@ -698,7 +700,7 @@ TSLA:
 		Sequence: offline
 		Palette: chrome
 		ReferencePoint: Bottom, Left
-		ValidStances: Ally
+		ValidRelationships: Ally
 		RequiresCondition: charged
 		ZOffset: 256
 		BlinkInterval: 64
@@ -1168,7 +1170,8 @@ ATEK:
 		Icon: forceshieldicon
 		ChargeInterval: 7500
 		Condition: forceshield
-		Range: 2
+		Dimensions: 7, 7
+		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
 		Duration: 250
 		Prerequisites: forceshield.enabled, techlevel.high
 		Weapon: ForceShield
@@ -2176,7 +2179,8 @@ STEK:
 		Icon: forceshieldicon
 		ChargeInterval: 7500
 		Condition: forceshield
-		Range: 2
+		Dimensions: 7, 7
+		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
 		Duration: 250
 		Prerequisites: forceshield.enabled, techlevel.high
 		Weapon: ForceShield
@@ -3845,7 +3849,7 @@ ATWR:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 	ProximityExternalCondition@RELAYABLE:
 		Range: 13c0
-		ValidStances: Ally
+		ValidRelationships: Ally
 		Condition: relayable
 		RequiresCondition: !fired || relayfired
 	ExternalCondition@RELAYABLE:
@@ -4093,12 +4097,13 @@ HQ:
 		SelectTargetSpeechNotification: SelectTarget
 		DisplayRadarPing: True
 		ChargeInterval: 4500
-		DropPodType: pod2
-		DropPodType2: pod1
-		DropItems: N3R1,N1R1,N1R1,N2R1,N2R1,N3R1,N3R1
+		Weapon: DropPodArrive
+		Drops: 5, 8
+		UnitTypes: POD, POD2, POD3
 		PodScatter: 3
-		SpawnSounds: meteor1.aud, meteor2.aud
-		AllowImpassableCells: false
+		EntryEffect: explosion
+		EntryEffectSequence: shock_wave
+		EntryEffectPalette: tseffect-ignore-lighting-alpha75
 	CashHackPower@Legion:
 		OrderName: cashhack
 		Icon: chack
@@ -4898,7 +4903,8 @@ GTEK:
 		Icon: forceshieldicon
 		ChargeInterval: 7500
 		Condition: forceshield
-		Range: 2
+		Dimensions: 7, 7
+		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
 		Duration: 250
 		Prerequisites: forceshield.enabled, techlevel.high
 		Weapon: ForceShield
@@ -5040,7 +5046,8 @@ TMPL:
 		Icon: forceshieldicon
 		ChargeInterval: 7500
 		Condition: forceshield
-		Range: 2
+		Dimensions: 7, 7
+		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
 		Duration: 250
 		Prerequisites: forceshield.enabled, techlevel.high
 		Weapon: ForceShield
@@ -5066,8 +5073,9 @@ TMPL:
 		Weapon: Frenzy
 		Description: Frenzy
 		Condition: frenzy
-		Range: 2
-		ValidStances: Ally
+		Dimensions: 5, 5
+		Footprint: _xxx_ xxxxx xxxxx xxxxx _xxx_
+		ValidRelationships: Ally
 		Duration: 500
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
@@ -5087,7 +5095,7 @@ TMPL:
 		RequiresCondition: !being-warped
 	MustBeDestroyed:
 		RequiredForShortGame: false
-	WithNukeLaunchAnimation:
+	WithSupportPowerActivationAnimation:
 		RequiresCondition: !build-incomplete
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
@@ -5196,7 +5204,7 @@ PRIS:
 		Condition: aiming
 	GrantConditionWhileAiming:
 		Condition: aiming
-	AmmoPoolCA:
+	AmmoPool:
 		Name: primary
 		Ammo: 5
 		PipCount: 0
@@ -5644,8 +5652,9 @@ SGEN:
 		Weapon: StealthBubble
 		Description: Tiberium Stealth
 		Condition: invisibility
-		ValidStances: Ally, Neutral, Enemy
-		Range: 3
+		ValidRelationships: Ally, Neutral, Enemy
+		Dimensions: 11, 11
+		Footprint: _____x_____ ___xxxxx___ __xxxxxxx__ _xxxxxxxxx_ _xxxxxxxxx_ xxxxxxxxxxx _xxxxxxxxx_ _xxxxxxxxx_ __xxxxxxx__ ___xxxxx___ _____x_____
 		Duration: 0
 		ActivationDelay: 0
 		AirburstAltitude: 0c0
@@ -5874,7 +5883,7 @@ PATR:
 		PauseOnCondition: disabled || empdisable || being-warped
 		LocalOffset: 1000,0,500
 		ReloadingCondition: reloading
-	AttackOrderPowerCA@EMPMISSILE:
+	AttackOrderPower@EMPMISSILE:
 		OrderName: empmissile
 		PauseOnCondition: empdisable || disabled || being-warped
 		Cursor: empmissile
@@ -6238,7 +6247,7 @@ MSLO.Nod:
 		RequiresCondition: !being-warped
 	MustBeDestroyed:
 		RequiredForShortGame: false
-	WithNukeLaunchAnimation:
+	WithSupportPowerActivationAnimation:
 		RequiresCondition: !build-incomplete
 	ProvidesPrerequisite@buildingname:
 	InfiltrateForSupportPowerReset:

@@ -1,154 +1,0 @@
-[1mdiff --git a/mods/ca/rules/infantry.yaml b/mods/ca/rules/infantry.yaml[m
-[1mindex c7d9028..a5917cf 100644[m
-[1m--- a/mods/ca/rules/infantry.yaml[m
-[1m+++ b/mods/ca/rules/infantry.yaml[m
-[36m@@ -224,7 +224,7 @@[m [mE3:[m
- 		ProneOffset: 384,0,-395[m
- 	AttackFrontal:[m
- 		Armaments: primary, secondary[m
-[31m-		PauseOnCondition: being-warped[m
-[32m+[m		[32mPauseOnCondition: being-warped || relayTarget[m[41m[m
- 	AttackFollow:[m
- 		Armaments: tertiary[m
- 		PauseOnCondition: being-warped || !relayTarget[m
-[1mdiff --git a/mods/ca/rules/structures.yaml b/mods/ca/rules/structures.yaml[m
-[1mindex c428da2..1c741c5 100644[m
-[1m--- a/mods/ca/rules/structures.yaml[m
-[1m+++ b/mods/ca/rules/structures.yaml[m
-[36m@@ -6338,3 +6338,37 @@[m [mPLDT:[m
- 	Power:[m
- 		Amount: -50[m
- 		RequiresCondition: !being-warped[m
-[32m+[m[41m[m
-[32m+[m[32mOILP:[m[41m[m
-[32m+[m	[32mInherits: ^BuildingTD[m[41m[m
-[32m+[m	[32mInherits@IDISABLE: ^DisableOnLowPower[m[41m[m
-[32m+[m	[32mInherits@shape: ^1x1Shape[m[41m[m
-[32m+[m	[32mSelectable:[m[41m[m
-[32m+[m		[32mBounds: 24,24[m[41m[m
-[32m+[m	[32mRenderSprites:[m[41m[m
-[32m+[m		[32mPalette: player[m[41m[m
-[32m+[m	[32mBuildable:[m[41m[m
-[32m+[m		[32mQueue: Building[m[41m[m
-[32m+[m		[32mBuildPaletteOrder: 200[m[41m[m
-[32m+[m		[32mIconPalette: chrometd[m[41m[m
-[32m+[m		[32mPrerequisites: ~anypower, ~techlevel.high[m[41m[m
-[32m+[m		[32mDescription: Gives a steady income from oil drilling.[m[41m[m
-[32m+[m	[32mValued:[m[41m[m
-[32m+[m		[32mCost: 500[m[41m[m
-[32m+[m	[32mHealth:[m[41m[m
-[32m+[m		[32mHP: 25000[m[41m[m
-[32m+[m	[32mBuilding:[m[41m[m
-[32m+[m		[32mFootprint: x[m[41m[m
-[32m+[m		[32mDimensions: 1,1[m[41m[m
-[32m+[m	[32mTooltip:[m[41m[m
-[32m+[m		[32mName: Oil Pump[m[41m[m
-[32m+[m		[32mShowOwnerRow: True[m[41m[m
-[32m+[m	[32mPower:[m[41m[m
-[32m+[m		[32mAmount: -25[m[41m[m
-[32m+[m		[32mRequiresCondition: !being-warped[m[41m[m
-[32m+[m	[32mCashTrickler:[m[41m[m
-[32m+[m		[32mInterval: 125[m[41m[m
-[32m+[m		[32mAmount: 10[m[41m[m
-[32m+[m		[32mPauseOnCondition: disabled[m[41m[m
-[32m+[m	[32mExplodes:[m[41m[m
-[32m+[m		[32mWeapon: BarrelExplode[m[41m[m
-[1mdiff --git a/mods/ca/sequences/decorations.yaml b/mods/ca/sequences/decorations.yaml[m
-[1mindex 8558198..8a6a2ef 100644[m
-[1m--- a/mods/ca/sequences/decorations.yaml[m
-[1m+++ b/mods/ca/sequences/decorations.yaml[m
-[36m@@ -100,7 +100,7 @@[m [mtc01.husk:[m
- 		Start: 2[m
- 		Length: 8[m
- 		Tick: 80[m
-[31m-		[m
-[32m+[m
- t18:[m
- 	Defaults:[m
- 		UseTilesetExtension: true[m
-[36m@@ -297,7 +297,7 @@[m [mt10.husk:[m
- 		Start: 2[m
- 		Length: 8[m
- 		Tick: 80[m
-[31m-		[m
-[32m+[m
- t09:[m
- 	Defaults:[m
- 		UseTilesetExtension: true[m
-[36m@@ -702,7 +702,7 @@[m [mv18:[m
- 	damaged-idle:[m
- 		Start: 1[m
- 		ZOffset: -512[m
-[31m-		[m
-[32m+[m
- v19:[m
- 	idle: v19[m
- 		Length: 14[m
-[36m@@ -719,7 +719,7 @@[m [mv19.husk:[m
- 		Length: *[m
- 		Offset: 7,-15[m
- 		ZOffset: 1[m
-[31m-		[m
-[32m+[m
- v20:[m
- 	Defaults:[m
- 		AddExtension: false[m
-[36m@@ -904,17 +904,17 @@[m [mrushouse:[m
- 	idle: rushouse[m
- 	damaged-idle: rushouse[m
- 		Start: 1[m
-[31m-		[m
-[32m+[m
- rushouse2:[m
- 	idle: rushouse2[m
- 	damaged-idle: rushouse[m
- 		Start: 1[m
-[31m-		[m
-[32m+[m
- rushouse3:[m
- 	idle: rushouse3[m
- 	damaged-idle: rushouse[m
- 		Start: 1[m
-[31m-		[m
-[32m+[m
- rushouse4:[m
- 	idle: rushouse4[m
- 	damaged-idle: rushouse[m
-[36m@@ -1257,4 +1257,4 @@[m [marco:[m
- [m
- arco.husk:[m
- 	idle: arco[m
-[31m-		Start: 1[m
-\ No newline at end of file[m
-[32m+[m		[32mStart: 1[m
-[1mdiff --git a/mods/ca/sequences/structures.yaml b/mods/ca/sequences/structures.yaml[m
-[1mindex 9c97cc0..e3d0d93 100644[m
-[1m--- a/mods/ca/sequences/structures.yaml[m
-[1m+++ b/mods/ca/sequences/structures.yaml[m
-[36m@@ -2040,3 +2040,26 @@[m [mpldt:[m
- 	muzzle: gunfire2[m
- 		Length: *[m
- 	icon: pldticon[m
-[32m+[m
-[32m+[m[32moilp:[m
-[32m+[m	[32mInherits: ^StructureOverlays[m
-[32m+[m	[32midle: v19[m
-[32m+[m		[32mLength: 14[m
-[32m+[m	[32mmake: flmspt[m
-[32m+[m		[32mLength: *[m
-[32m+[m		[32mOffset: 7,-15[m
-[32m+[m		[32mZOffset: 1[m
-[32m+[m	[32micon: pldticon[m
-[32m+[m
-[32m+[m[32moilp.husk:[m
-[32m+[m	[32midle: v19[m
-[32m+[m		[32mStart: 28[m
-[32m+[m	[32mfire-start: flmspt[m
-[32m+[m		[32mLength: *[m
-[32m+[m		[32mOffset: 7,-15[m
-[32m+[m		[32mZOffset: 1[m
-[32m+[m	[32mfire-loop: flmspt[m
-[32m+[m		[32mStart: 50[m
-[32m+[m		[32mLength: *[m
-[32m+[m		[32mOffset: 7,-15[m
-[32m+[m		[32mZOffset: 1[m

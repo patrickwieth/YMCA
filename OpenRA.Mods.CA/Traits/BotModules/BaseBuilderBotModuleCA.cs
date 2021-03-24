@@ -1,4 +1,4 @@
-﻿#region Copyright & License Information
+#region Copyright & License Information
 /*
  * Copyright 2007-2020 The OpenRA Developers (see AUTHORS)
  * This file is part of OpenRA, which is free software. It is made
@@ -218,7 +218,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (e.Attacker == null || e.Attacker.Disposed)
 				return;
 
-			if (e.Attacker.Owner.Stances[self.Owner] != Stance.Enemy)
+			if (e.Attacker.Owner.RelationshipWith(self.Owner) != PlayerRelationship.Enemy)
 				return;
 
 			if (!e.Attacker.Info.HasTraitInfo<ITargetableInfo>())

@@ -67,15 +67,13 @@ namespace OpenRA.Mods.CA.Traits
 
 		public override void SelectTarget(Actor self, string order, SupportPowerManager manager)
 		{
-			Game.Sound.PlayToPlayer(SoundType.UI, manager.Self.Owner, Info.SelectTargetSound);
-			Game.Sound.PlayNotification(self.World.Map.Rules, self.Owner, "Speech",
-				Info.SelectTargetSpeechNotification, self.Owner.Faction.InternalName);
 			self.World.OrderGenerator = new SelectHackTarget(Self.World, order, manager, this);
 		}
 
 		public override void Activate(Actor self, Order order, SupportPowerManager manager)
 		{
 			base.Activate(self, order, manager);
+			PlayLaunchSounds();
 
 			var ownResources = self.Owner.PlayerActor.Trait<PlayerResources>();
 
@@ -154,10 +152,9 @@ namespace OpenRA.Mods.CA.Traits
 				var xy = wr.Viewport.ViewToWorld(Viewport.LastMousePos);
 				foreach (var unit in power.UnitsInRange(xy))
 				{
-					var bounds = unit.TraitsImplementing<IDecorationBounds>()
-						.Select(b => b.DecorationBounds(unit, wr))
-						.FirstOrDefault(b => !b.IsEmpty);
-					yield return new SelectionBoxAnnotationRenderable(unit, bounds, Color.Red);
+					var decorations = unit.TraitsImplementing<ISelectionDecorations>().FirstEnabledTraitOrDefault();
+					foreach (var d in decorations.RenderSelectionAnnotations(unit, wr, Color.Red))
+						yield return d;
 				}
 			}
 

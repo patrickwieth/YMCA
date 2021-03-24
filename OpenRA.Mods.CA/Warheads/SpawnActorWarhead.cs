@@ -8,7 +8,6 @@
  */
 #endregion
 
-using System.Collections.Generic;
 using System.Linq;
 using OpenRA.GameRules;
 using OpenRA.Mods.CA.Activities;
@@ -20,6 +19,8 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Warheads
 {
+	public enum ASOwnerType { Attacker, InternalName }
+
 	[Desc("Spawn actors upon explosion. Don't use this with buildings.")]
 	public class SpawnActorWarhead : WarheadAS, IRulesetLoaded<WeaponInfo>
 	{
@@ -48,7 +49,7 @@ namespace OpenRA.Mods.CA.Warheads
 		[Desc("Defines the image of an optional animation played at the spawning location.")]
 		public readonly string Image = null;
 
-		[SequenceReference("Image")]
+		[SequenceReference(nameof(Image), allowNullImage: true)]
 		[Desc("Defines the sequence of an optional animation played at the spawning location.")]
 		public readonly string Sequence = "idle";
 
@@ -73,7 +74,7 @@ namespace OpenRA.Mods.CA.Warheads
 			}
 		}
 
-		public override void DoImpact(Target target, WarheadArgs args)
+		public override void DoImpact(in Target target, WarheadArgs args)
 		{
 			var firedBy = args.SourceActor;
 			if (!target.IsValidFor(firedBy))
@@ -99,40 +100,10 @@ namespace OpenRA.Mods.CA.Warheads
 				else
 					td.Add(new OwnerInit(firedBy.World.Players.First(p => p.InternalName == InternalOwner)));
 
-				// HACK HACK HACK
-				// Immobile does not offer a check directly if the actor can exist in a position.
-				// It also crashes the game if it's actor's created without a LocationInit.
-				// See AS/Engine#84.
-				if (!ai.HasTraitInfo<MobileInfo>())
-				{
-					while (cell.MoveNext())
-					{
-							td.Add(new LocationInit(cell.Current));
-							var immobileunit = firedBy.World.CreateActor(false, a.ToLowerInvariant(), td);
+				td.Add(new LocationInit(targetCell));
 
-							firedBy.World.AddFrameEndTask(w =>
-							{
-								w.Add(immobileunit);
-
-								var palette = Palette;
-								if (UsePlayerPalette)
-									palette += immobileunit.Owner.InternalName;
-
-								var immobilespawnpos = firedBy.World.Map.CenterOfCell(cell.Current);
-
-								if (Image != null)
-									w.Add(new SpriteEffect(immobilespawnpos, w, Image, Sequence, palette));
-
-								var sound = Sounds.RandomOrDefault(Game.CosmeticRandom);
-								if (sound != null)
-									Game.Sound.Play(SoundType.World, sound, immobilespawnpos);
-							});
-
-							break;
-					}
-
-					continue;
-				}
+				// Lambdas can't use 'in' variables, so capture a copy for later
+				var delayedTarget = target;
 
 				firedBy.World.AddFrameEndTask(w =>
 				{
@@ -140,43 +111,55 @@ namespace OpenRA.Mods.CA.Warheads
 					var positionable = unit.TraitOrDefault<IPositionable>();
 					cell = targetCells.GetEnumerator();
 
-					while (cell.MoveNext() && !placed)
+					if (positionable == null)
 					{
-						var subCell = positionable.GetAvailableSubCell(cell.Current);
-
-						if (subCell != SubCell.Invalid)
-						{
-							positionable.SetPosition(unit, cell.Current, subCell);
-
-							var pos = unit.CenterPosition;
-							if (!ForceGround)
-								pos += new WVec(WDist.Zero, WDist.Zero, firedBy.World.Map.DistanceAboveTerrain(target.CenterPosition));
-
-							positionable.SetVisualPosition(unit, pos);
-							w.Add(unit);
-
-							if (Paradrop)
-								unit.QueueActivity(new Parachute(unit));
-							else
-								unit.QueueActivity(new FallDown(unit, pos, FallRate));
-
-							var palette = Palette;
-							if (UsePlayerPalette)
-								palette += unit.Owner.InternalName;
-
-							if (Image != null)
-								w.Add(new SpriteEffect(pos, w, Image, Sequence, palette));
-
-							var sound = Sounds.RandomOrDefault(Game.CosmeticRandom);
-							if (sound != null)
-								Game.Sound.Play(SoundType.World, sound, pos);
-
-							placed = true;
-						}
-					}
-
-					if (!placed)
 						unit.Dispose();
+						firedBy.World.CreateActor(a, td);
+					}
+					else
+					{
+						while (cell.MoveNext() && !placed)
+						{
+							var subCell = positionable.GetAvailableSubCell(cell.Current);
+
+							if (ai.HasTraitInfo<AircraftInfo>()
+								&& ai.TraitInfo<AircraftInfo>().CanEnterCell(firedBy.World, unit, cell.Current, SubCell.FullCell, null, BlockedByActor.None))
+								subCell = SubCell.FullCell;
+
+							if (subCell != SubCell.Invalid)
+							{
+								positionable.SetPosition(unit, cell.Current, subCell);
+
+								var pos = unit.CenterPosition;
+								if (!ForceGround)
+									pos += new WVec(WDist.Zero, WDist.Zero, firedBy.World.Map.DistanceAboveTerrain(delayedTarget.CenterPosition));
+
+								positionable.SetVisualPosition(unit, pos);
+								w.Add(unit);
+
+								if (Paradrop)
+									unit.QueueActivity(new Parachute(unit));
+								else
+									unit.QueueActivity(new FallDown(unit, pos, FallRate));
+
+								var palette = Palette;
+								if (UsePlayerPalette)
+									palette += unit.Owner.InternalName;
+
+								if (Image != null)
+									w.Add(new SpriteEffect(pos, w, Image, Sequence, palette));
+
+								var sound = Sounds.RandomOrDefault(firedBy.World.LocalRandom);
+								if (sound != null)
+									Game.Sound.Play(SoundType.World, sound, pos);
+
+								placed = true;
+							}
+						}
+
+						if (!placed)
+							unit.Dispose();
+					}
 				});
 			}
 		}

@@ -37,6 +37,8 @@ namespace OpenRA.Mods.CA.Traits
 		WeaponInfo Weapon { get; }
 
 		int TurnRate { get; }
+
+		int RandomRate { get; }
 	}
 
 	public interface INotifyActivate { void Launching(Actor self); }
@@ -57,4 +59,6 @@ namespace OpenRA.Mods.CA.Traits
 	public interface INotifyChronosphere { void Teleporting(WPos from, WPos to); }
 
 	public interface ILoadsOverlayPlayerPalettes { void LoadOverlayPlayerPalettes(WorldRenderer wr, string playerName, Color playerColor, bool replaceExisting); }
+
+	public interface INotifyPrismCharging { void Charging(Actor self, in Target target); }
 }

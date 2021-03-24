@@ -20,7 +20,7 @@ namespace OpenRA.Mods.CA.Traits
 {
 	public enum ActivityType { FlyAttack, Fly, ReturnToBase }
 
-	public class GrantConditionOnActivityInfo : ITraitInfo
+	public class GrantConditionOnActivityInfo : TraitInfo
 	{
 		[Desc("Activity to grant condition on",
 			"Currently valid activities are `Fly`, `FlyAttack` and `ReturnToBase`.")]
@@ -33,35 +33,26 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Sound to play when Active.")]
 		public readonly string ActiveSound = null;
 
-		public object Create(ActorInitializer init) { return new GrantConditionOnActivity(init, this); }
+		public override object Create(ActorInitializer init) { return new GrantConditionOnActivity(init, this); }
 	}
 
-	public class GrantConditionOnActivity : INotifyCreated, ITick
+	public class GrantConditionOnActivity : ITick
 	{
 		readonly GrantConditionOnActivityInfo info;
 
-		ConditionManager manager;
-		int token = ConditionManager.InvalidConditionToken;
+		int token = Actor.InvalidConditionToken;
 
 		public GrantConditionOnActivity(ActorInitializer init, GrantConditionOnActivityInfo info)
 		{
 			this.info = info;
 		}
 
-		void INotifyCreated.Created(Actor self)
-		{
-			manager = self.Trait<ConditionManager>();
-		}
-
 		void GrantCondition(Actor self, string cond)
 		{
-			if (manager == null)
-				return;
-
 			if (string.IsNullOrEmpty(cond))
 				return;
 
-			token = manager.GrantCondition(self, cond);
+			token = self.GrantCondition(info.Condition);
 
 			if (!string.IsNullOrEmpty(info.ActiveSound))
 				Game.Sound.Play(SoundType.World, info.ActiveSound, self.CenterPosition);
@@ -69,13 +60,10 @@ namespace OpenRA.Mods.CA.Traits
 
 		void RevokeCondition(Actor self)
 		{
-			if (manager == null)
+			if (token == Actor.InvalidConditionToken)
 				return;
 
-			if (token == ConditionManager.InvalidConditionToken)
-				return;
-
-			token = manager.RevokeCondition(self, token);
+			token = self.RevokeCondition(token);
 		}
 
 		bool IsValidActivity(Actor self)
@@ -96,12 +84,12 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			if (IsValidActivity(self))
 			{
-				if (token == ConditionManager.InvalidConditionToken)
+				if (token == Actor.InvalidConditionToken)
 					GrantCondition(self, info.Condition);
 			}
 			else
 			{
-				if (token != ConditionManager.InvalidConditionToken)
+				if (token != Actor.InvalidConditionToken)
 					RevokeCondition(self);
 			}
 		}

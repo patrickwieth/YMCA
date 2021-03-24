@@ -1,6 +1,6 @@
 #region Copyright & License Information
 /*
- * Copyright 2007-2019 The OpenRA Developers (see AUTHORS)
+ * Copyright 2007-2020 The OpenRA Developers (see AUTHORS)
  * This file is part of OpenRA, which is free software. It is made
  * available to you under the terms of the GNU General Public License
  * as published by the Free Software Foundation, either version 3 of
@@ -96,7 +96,7 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 				if (u.Owner == squad.Bot.Player && u.Info.HasTraitInfo<BuildingInfo>())
 					return false;
 
-			var enemyAroundUnit = units.Where(unit => squad.SquadManager.IsEnemyUnit(unit) && unit.Info.HasTraitInfo<AttackBaseInfo>());
+			var enemyAroundUnit = units.Where(unit => squad.SquadManager.IsPreferredEnemyUnit(unit) && unit.Info.HasTraitInfo<AttackBaseInfo>());
 			if (!enemyAroundUnit.Any())
 				return false;
 
@@ -148,21 +148,20 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 			foreach (var ap in ammoPools)
 				if (!rearmable.Info.AmmoPools.Contains(ap.Info.Name))
 					return false;
+
 			return true;
 		}
 
 		// Retreat units from combat, or for supply only in idle
 		protected void Retreat(SquadCA squad, bool flee, bool rearm, bool repair)
 		{
-			var loc = new CPos(0, 0, 0);
-
-			// HACK: "alreadyRepair" is to solve repairpad performance
-			// if repairpad logic is better we will only need
-			// this function for all flee states.
+			// HACK: "alreadyRepair" is to solve AI repair orders performance,
+			// which is only allow one goes to repairpad at the same time to avoid queueing too many orders.
+			// if repairpad logic is better we can just drop it.
 			var alreadyRepair = false;
 
-			if (flee)
-				loc = RandomBuildingLocation(squad);
+			List<Actor> rearmingUnits = new List<Actor>();
+			List<Actor> fleeingUnits = new List<Actor>();
 
 			foreach (var a in squad.Units)
 			{
@@ -171,18 +170,19 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 
 				var orderQueued = false;
 
-				// Try rearm units.
+				// Units need to rearm will be added to rearming group.
 				if (rearm)
 				{
 					var ammoPools = a.TraitsImplementing<AmmoPool>().ToArray();
 					if (!ReloadsAutomatically(ammoPools, a.TraitOrDefault<Rearmable>()) && !FullAmmo(ammoPools))
 					{
-						squad.Bot.QueueOrder(new Order("ReturnToBase", a, orderQueued));
+						rearmingUnits.Add(a);
 						orderQueued = true;
 					}
 				}
 
 				// Try repair units.
+				// Don't use grounp order here becuase we have 2 kinds of repaid orders and we need to find repair building for both traits.
 				if (repair && !alreadyRepair)
 				{
 					Actor repairBuilding = null;
@@ -196,7 +196,7 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 							repairBuilding = repairable.FindRepairBuilding(a);
 						else
 						{
-							var repairableNear = a.TraitOrDefault<RepairableNearCA>();
+							var repairableNear = a.TraitOrDefault<RepairableNear>();
 							if (repairableNear != null)
 							{
 								orderId = "RepairNear";
@@ -213,10 +213,16 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 					}
 				}
 
-				// If there is no order in queue and units should flee, try flee.
+				// If there is no order in queue and units should flee, add unit to fleeing group.
 				if (flee && !orderQueued)
-					squad.Bot.QueueOrder(new Order("Move", a, Target.FromCell(squad.World, loc), false));
+					fleeingUnits.Add(a);
 			}
+
+			if (rearmingUnits.Count > 0)
+				squad.Bot.QueueOrder(new Order("ReturnToBase", null, true, groupedActors: rearmingUnits.ToArray()));
+
+			if (fleeingUnits.Count > 0)
+				squad.Bot.QueueOrder(new Order("Move", null, Target.FromCell(squad.World, RandomBuildingLocation(squad)), false, groupedActors: fleeingUnits.ToArray()));
 		}
 	}
 }

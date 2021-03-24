@@ -87,16 +87,9 @@ namespace OpenRA.Mods.CA.Traits
 	{
 		readonly MadTankCAInfo info;
 
-		ConditionManager conditionManager;
-
 		public MadTankCA(Actor self, MadTankCAInfo info) : base(info)
 		{
 			this.info = info;
-		}
-
-		void INotifyCreated.Created(Actor self)
-		{
-			conditionManager = self.TraitOrDefault<ConditionManager>();
 		}
 
 		public bool CanDeploy()
@@ -118,7 +111,7 @@ namespace OpenRA.Mods.CA.Traits
 			}
 		}
 
-		Order IIssueOrder.IssueOrder(Actor self, IOrderTargeter order, Target target, bool queued)
+		Order IIssueOrder.IssueOrder(Actor self, IOrderTargeter order, in Target target, bool queued)
 		{
 			if (order.OrderID != "DetonateAttack" && order.OrderID != "Detonate")
 				return null;
@@ -208,8 +201,7 @@ namespace OpenRA.Mods.CA.Traits
 					if (target.Type == TargetType.Invalid)
 						return true;
 
-					if (mad.conditionManager != null && !string.IsNullOrEmpty(mad.info.DeployedCondition))
-						mad.conditionManager.GrantCondition(self, mad.info.DeployedCondition);
+					self.GrantCondition(mad.info.DeployedCondition);
 
 					self.World.AddFrameEndTask(w => EjectDriver());
 					if (mad.info.ThumpSequence != null)

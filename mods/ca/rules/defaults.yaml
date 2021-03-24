@@ -4,7 +4,6 @@
 	GivesExperience:
 		PlayerExperienceModifier: 1
 	ScriptTriggers:
-	ConditionManager:
 	RenderDebugState:
 
 ^SpriteActor:
@@ -237,7 +236,7 @@
 	ReloadDelayMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
 		Modifier: 80
-	SelfHealing@ELITE:
+	ChangesHealth@ELITE:
 		PercentageStep: 5
 		Delay: 100
 		HealIfBelow: 100
@@ -248,7 +247,7 @@
 		Sequence: rank-veteran-1
 		Palette: effect
 		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Enemy
+		ValidRelationships: Ally, Enemy
 		RequiresCondition: rank-veteran == 1
 		ZOffset: 256
 	WithDecoration@RANK-2:
@@ -256,7 +255,7 @@
 		Sequence: rank-veteran-2
 		Palette: effect
 		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Enemy
+		ValidRelationships: Ally, Enemy
 		RequiresCondition: rank-veteran == 2
 		ZOffset: 256
 	WithDecoration@RANK-ELITE:
@@ -264,7 +263,7 @@
 		Sequence: rank-elite
 		Palette: effect
 		ReferencePoint: Bottom, Right
-		ValidStances: Ally, Enemy
+		ValidRelationships: Ally, Enemy
 		RequiresCondition: rank-elite
 		ZOffset: 256
 
@@ -366,7 +365,7 @@
 		Palette: chrome
 		RequiresCondition: powerdrain
 		ReferencePoint: Center
-		ValidStances: Ally, Enemy, Neutral
+		ValidRelationships: Ally, Enemy, Neutral
 	DamagedByTerrain@POWERDRAIN:
 		Damage: 750
 		DamageInterval: 15
@@ -390,7 +389,7 @@
 		Sequence: pip-armor
 		Palette: effect
 		ReferencePoint: Bottom, Left
-		ValidStances: Ally
+		ValidRelationships: Ally
 		RequiresCondition: gdiupg1
 		ZOffset: 256
 		BlinkInterval: 64
@@ -527,7 +526,7 @@
 		Palette: tseffect
 
 ^NaniteRepair:
-	SelfHealing@NREPAIR:
+	ChangesHealth@NREPAIR:
 		PercentageStep: 3
 		Delay: 30
 		HealIfBelow: 100
@@ -552,7 +551,7 @@
 		RequiresCondition: nrepair
 		BlinkInterval: 64
 		RequiresSelection: True
-		ValidStances: Ally, Neutral
+		ValidRelationships: Ally, Neutral
 	ExternalCondition@NREPAIR-AI:
 		Condition: nrepair
 	GrantConditionOnDamageState@NREPAIR:
@@ -565,9 +564,9 @@
 	Capturable@DRIVER_DEAD:
 		Types: driverless_vehicle
 		RequiresCondition: driver-dead
-		ValidStances: Neutral
+		ValidRelationships: Neutral
 		CancelActivity: true
-	SelfHealing@DRIVER_DEAD:
+	ChangesHealth@DRIVER_DEAD:
 		PercentageStep: -1
 		Delay: 30
 		HealIfBelow: 101
@@ -705,7 +704,7 @@
 		BlinkPatterns:
 			concussion: On, On, Off
 		RequiresSelection: False
-		ValidStances: Ally, Neutral, Enemy
+		ValidRelationships: Ally, Neutral, Enemy
 
 ^GpsScramble:
 	RangeMultiplier@GPSSCRAMBLE:
@@ -729,7 +728,7 @@
 		ZOffset: 2047
 		RequiresCondition: c4
 		RequiresSelection: False
-		ValidStances: Ally, Neutral, Enemy
+		ValidRelationships: Ally, Neutral, Enemy
 	ExternalCondition@detachable:
 		Condition: detach
 	WithColoredOverlay@detach:
@@ -996,7 +995,7 @@
 		TargetTypes: relayTarget
 	ProximityExternalCondition@RELAYABLE:
 		Range: 20c0
-		ValidStances: Enemy
+		ValidRelationships: Enemy
 		Condition: relayTarget
 		RequiresCondition: relayMarked
 
@@ -1132,7 +1131,7 @@
 	Guardable:
 	Tooltip:
 		GenericName: Soldier
-	SelfHealing@HOSPITAL:
+	ChangesHealth@HOSPITAL:
 		Step: 500
 		Delay: 100
 		HealIfBelow: 100
@@ -1455,7 +1454,7 @@
 		TargetTypes: relayTarget
 	ProximityExternalCondition@RELAYABLE:
 		Range: 20c0
-		ValidStances: Enemy, Neutral, Ally
+		ValidRelationships: Enemy, Neutral, Ally
 		Condition: relayTarget
 		RequiresCondition: relayMarked
 
@@ -1737,7 +1736,7 @@
 		TargetTypes: relayTarget
 	ProximityExternalCondition@RELAYABLE:
 		Range: 20c0
-		ValidStances: Enemy
+		ValidRelationships: Enemy
 		Condition: relayTarget
 		RequiresCondition: relayMarked
 
@@ -2166,14 +2165,16 @@
 	Inherits: ^BasicHusk
 	Husk:
 		AllowedTerrain: Clear, Rough, Road, Ore, Gems, Beach, Tiberium, BlueTiberium
-	Burns:
-		Damage: 200
+	ChangesHealth:
+		Step: -200
+		StartIfBelow: 101
+		Delay: 8
 	OwnerLostAction:
 		Action: ChangeOwner
 	CaptureManager:
 	Capturable:
 		Types: husk
-		ValidStances: Enemy, Neutral
+		ValidRelationships: Enemy, Neutral
 	TransformOnCapture:
 		ForceHealthPercentage: 25
 	InfiltrateForTransform:
@@ -2204,8 +2205,9 @@
 
 ^HuskTD:
 	Inherits: ^Husk
-	Burns:
-		Anim: 5
+	WithIdleOverlay@Burns:
+		Image: fire
+		Sequence: 5
 
 ^PlaneHusk:
 	Inherits: ^BasicHusk
@@ -2267,12 +2269,14 @@
 	Inherits@1: ^BasicBuilding
 	Health:
 		HP: 2800000
-	Burns:
-		Damage: 1000
+	ChangesHealth:
+		Step: -1000
+		StartIfBelow: 101
+		Delay: 8
 	CaptureManager:
 	Capturable:
 		Types: building
-		ValidStances: Enemy, Neutral, Ally
+		ValidRelationships: Enemy, Neutral, Ally
 	CapturableProgressBar:
 	CapturableProgressBlink:
 	TransformOnCapture:
@@ -2372,7 +2376,6 @@
 		ShadowImage: parach-shadow
 		ShadowSequence: idle
 		RequiresCondition: parachute
-	ConditionManager:
 	MapEditorData:
 		Categories: System
 
@@ -2381,7 +2384,6 @@
 	Interactable:
 		Bounds: 24,24
 	WithSpriteBody:
-	ConditionManager:
 	HiddenUnderFog:
 	Mine:
 		CrushClasses: mine
@@ -2633,7 +2635,7 @@
 	Inherits@4: ^SpriteActor
 	Armor:
 		Type: Light
-	ShootableBallisticMissile:
+	BallisticMissile:
 		LaunchAngle: 128
 		Speed: 165
 		AirborneCondition: airborne
@@ -2681,7 +2683,7 @@
 	PointDefense:
 		Armament: pointdefense
 		PointDefenseTypes: Missile, Bullet
-		ValidStances: Enemy
+		ValidRelationships: Enemy
 	AmmoPool@pld:
 		Ammo: 12
 		PipCount: 6
@@ -2849,7 +2851,7 @@
 		ZOffset: 2047
 		RequiresCondition: tnt
 		RequiresSelection: False
-		ValidStances: Ally, Neutral, Enemy
+		ValidRelationships: Ally, Neutral, Enemy
 	ExternalCondition@detachable:
 		Condition: detach
 	WithColoredOverlay@detach:

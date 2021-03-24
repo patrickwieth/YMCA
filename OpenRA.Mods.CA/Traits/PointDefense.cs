@@ -27,7 +27,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly BitSet<string> PointDefenseTypes = default(BitSet<string>);
 
 		[Desc("What diplomatic stances are affected.")]
-		public readonly Stance ValidStances = Stance.Neutral | Stance.Enemy;
+		public readonly PlayerRelationship ValidRelationships = PlayerRelationship.Neutral | PlayerRelationship.Enemy;
 
 		public override object Create(ActorInitializer init) { return new PointDefense(init.Self, this); }
 	}
@@ -48,22 +48,17 @@ namespace OpenRA.Mods.CA.Traits
 			armament = self.TraitsImplementing<Armament>().First(a => a.Info.Name == info.Armament);
 		}
 
-		protected virtual void Tick(Actor self)
-		{
-			hasFiredThisTick = false;
-		}
 		void ITick.Tick(Actor self)
 		{
-			// Split into a protected method to allow subclassing
-			Tick(self);
+			hasFiredThisTick = false;
 		}
 
 		bool IPointDefense.Destroy(WPos position, Player attacker, string type)
 		{
-			if (IsTraitDisabled || armament.IsTraitDisabled || armament.IsTraitPaused)
+			if (IsTraitDisabled || armament.IsTraitDisabled || armament.IsTraitPaused || hasFiredThisTick)
 				return false;
 
-			if (!info.ValidStances.HasStance(self.Owner.Stances[attacker]))
+			if (!info.ValidRelationships.HasStance(self.Owner.RelationshipWith(attacker)))
 				return false;
 
 			if (armament.IsReloading)
@@ -75,11 +70,7 @@ namespace OpenRA.Mods.CA.Traits
 			if ((self.CenterPosition - position).HorizontalLengthSquared > armament.MaxRange().LengthSquared)
 				return false;
 
-			if (hasFiredThisTick)
-				return false;
-
 			hasFiredThisTick = true;
-
 			self.World.AddFrameEndTask(w =>
 			{
 				if (!self.IsDead)

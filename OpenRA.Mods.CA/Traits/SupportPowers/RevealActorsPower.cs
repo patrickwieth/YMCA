@@ -40,7 +40,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		public readonly string EffectImage = null;
 
-		[SequenceReference("EffectImage")]
+		[SequenceReference(nameof(EffectImage))]
 		public readonly string EffectSequence = "idle";
 
 		[PaletteReference]
@@ -67,6 +67,7 @@ namespace OpenRA.Mods.CA.Traits
 		public override void Activate(Actor self, Order order, SupportPowerManager manager)
 		{
 			base.Activate(self, order, manager);
+			PlayLaunchSounds();
 
 			var info = Info as RevealActorsPowerInfo;
 

@@ -89,8 +89,7 @@ namespace OpenRA.Mods.CA.Traits
 		[Sync]
 		int ticks;
 
-		int activeToken = ConditionManager.InvalidConditionToken;
-		ConditionManager conditionManager;
+		int activeToken = Actor.InvalidConditionToken;
 
 		public DetonateWeaponPower(Actor self, DetonateWeaponPowerInfo info)
 			: base(self, info)
@@ -101,22 +100,17 @@ namespace OpenRA.Mods.CA.Traits
 		public override void Activate(Actor self, Order order, SupportPowerManager manager)
 		{
 			base.Activate(self, order, manager);
-			conditionManager = self.Trait<ConditionManager>();
+			PlayLaunchSounds();
 
-			if (conditionManager != null && !string.IsNullOrEmpty(Info.ActiveCondition) && activeToken == ConditionManager.InvalidConditionToken)
-				activeToken = conditionManager.GrantCondition(self, Info.ActiveCondition);
+			if (!string.IsNullOrEmpty(Info.ActiveCondition) && activeToken == Actor.InvalidConditionToken)
+				activeToken = self.GrantCondition(Info.ActiveCondition);
 
 			var wsb = self.TraitOrDefault<WithSpriteBody>();
 			if (wsb != null && wsb.DefaultAnimation.HasSequence(Info.Sequence))
 				wsb.PlayCustomAnimation(self, Info.Sequence);
 
-			if (self.Owner.IsAlliedWith(self.World.RenderPlayer))
-				Game.Sound.Play(SoundType.World, Info.LaunchSound);
-			else
-				Game.Sound.Play(SoundType.World, Info.IncomingSound);
-
-			foreach (var launchpad in self.TraitsImplementing<INotifyActivate>())
-				launchpad.Launching(self);
+			foreach (var launchpad in self.TraitsImplementing<INotifySupportPower>())
+				launchpad.Activated(self);
 
 			ticks = Info.Duration;
 
@@ -181,8 +175,8 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			if (--ticks < 0)
 			{
-				if (activeToken != ConditionManager.InvalidConditionToken)
-					activeToken = conditionManager.RevokeCondition(self, activeToken);
+				if (activeToken != Actor.InvalidConditionToken)
+					activeToken = self.RevokeCondition(activeToken);
 			}
 		}
 
@@ -246,8 +240,8 @@ namespace OpenRA.Mods.CA.Traits
 					world.Map.CenterOfCell(xy),
 					power.Info.TargetCircleRange,
 					0,
-					power.Info.TargetCircleUsePlayerColor ? power.Self.Owner.Color : power.Info.TargetCircleColor,
-					Color.FromArgb(96, Color.Black));
+					power.Info.TargetCircleUsePlayerColor ? power.Self.Owner.Color : power.Info.TargetCircleColor, 1,
+					Color.FromArgb(96, Color.Black), 3);
 			}
 		}
 

@@ -665,7 +665,7 @@ INTL:
 	Armament:
 		Weapon: InterloperLaser
 		LocalOffset: 400,110,30, 400,-110,30
-	AttackFrontal:
+	AttackOmni:
 		PauseOnCondition: empdisable || being-warped
 	AutoTarget:
 	ProducibleWithLevel:
@@ -871,7 +871,7 @@ STCR:
 	WithShadow:
 		Offset: 80, 80, 0
 		ZOffset: -81
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 1
 		Delay: 10
 		HealIfBelow: 100
@@ -1468,7 +1468,7 @@ STMR:
 		Weapon: StormriderZapAA
 		LocalOffset: 350,213,-85, 350,-213,-85
 	AttackAircraft:
-		FacingTolerance: 90
+		FacingTolerance: 128
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
@@ -1552,7 +1552,7 @@ STMR.bomber:
 		LocalOffset: 350,213,-85, 350,-213,-85
 		PauseOnCondition: !ammo
 	-Armament@SECONDARY:
-	AmmoPoolCA:
+	AmmoPool:
 		Ammo: 14
 		PipCount: 2
 		AmmoCondition: ammo
@@ -1627,7 +1627,7 @@ DEVA:
 	ProductionCostMultiplier@VANQBONUS:
 		Multiplier: 90
 		Prerequisites: vehicles.harbinger
-	SelfHealing@REGEN:
+	ChangesHealth@REGEN:
 		PercentageStep: 3
 		Delay: 25
 		HealIfBelow: 75
@@ -1752,7 +1752,7 @@ PAC:
 	DeathSounds:
 		Voice: Die
 	-EjectOnDeath:
-	SelfHealing@REGEN:
+	ChangesHealth@REGEN:
 		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 75
@@ -1807,7 +1807,7 @@ PAC.support:
 		TargetStances: Ally
 	AutoTargetPriority@REPAIR:
 		ValidTargets: Repair, RepairInAir
-		ValidStances: Ally
+		ValidRelationships: Ally
 		Priority: 2
 
 PAC.laser:
@@ -2008,7 +2008,7 @@ INVA.support:
 	AutoTarget:
 	AutoTargetPriority@REPAIR:
 		ValidTargets: Repair, RepairInAir
-		ValidStances: Ally
+		ValidRelationships: Ally
 		Priority: 2
 
 INVA.suicide:
@@ -2293,7 +2293,7 @@ SWAL:
 		DestroyedSounds: kaboom30.aud
 	Health:
 		HP: 36000
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 1
 		Delay: 10
 		HealIfBelow: 100
@@ -3070,6 +3070,8 @@ SCRT:
 		Icon: forceshieldicon
 		ChargeInterval: 7500
 		Condition: forceshield
+		Dimensions: 7, 7
+		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
 		Range: 3
 		Duration: 250
 		Prerequisites: forceshield.enabled, techlevel.high
@@ -3848,7 +3850,7 @@ ion.surge:
 	ProximityExternalCondition@POWERDRAIN:
 		Range: 10c0
 		Condition: powerdrain
-		ValidStances: Ally, Enemy, Neutral
+		ValidRelationships: Ally, Enemy, Neutral
 	KillsSelf:
 		Delay: 375
 	AmbientSound:

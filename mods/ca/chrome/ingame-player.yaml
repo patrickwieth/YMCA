@@ -275,6 +275,26 @@ Container@PLAYER_WIDGETS:
 							Y: 5
 							ImageCollection: stance-icons
 							ImageName: hold-fire
+		Container@MUTE_INDICATOR:
+			Logic: MuteIndicatorLogic
+			X: WINDOW_RIGHT - WIDTH - 260
+			Y: 10
+			Width: 200
+			Height: 25
+			Children:
+				Image@ICON:
+					X: PARENT_RIGHT - WIDTH
+					Y: 1
+					Width: 24
+					Height: 24
+					ImageCollection: sidebar-bits
+					ImageName: indicator-muted
+				Label@LABEL:
+					Width: PARENT_RIGHT - 30
+					Height: 25
+					Align: Right
+					Text: Audio Muted
+					Contrast: true
 		Image@SIDEBAR_BACKGROUND_TOP:
 			Logic: AddFactionSuffixLogic
 			X: WINDOW_RIGHT - 250
@@ -397,7 +417,7 @@ Container@PLAYER_WIDGETS:
 			X: WINDOW_RIGHT - 250
 			Y: 300
 			Width: 238
-			Height: 273
+			Height: 250
 			Children:
 				Container@PALETTE_BACKGROUND:
 					Children:
@@ -412,7 +432,7 @@ Container@PLAYER_WIDGETS:
 						Image@BOTTOM_CAP:
 							Logic: AddFactionSuffixLogic
 							Width: 238
-							Height: 31
+							Height: 8
 							ClickThrough: false
 							ImageCollection: sidebar
 							ImageName: background-bottom
@@ -539,17 +559,17 @@ Container@PLAYER_WIDGETS:
 									X: 6
 									Y: 6
 									ImageCollection: production-icons
-						ProductionTypeButton@Commander_Tree:
+						ProductionTypeButton@UPGRADE:
 							Logic: AddFactionSuffixLogic
 							Y: 162
 							Width: 28
 							Height: 28
 							VisualHeight: 0
 							Background: sidebar-button
-							TooltipText: Commander Specialization
+							TooltipText: Upgrades
 							TooltipContainer: TOOLTIP_CONTAINER
-							ProductionGroup: Commander_Tree
-							Key: ProductionTypeCommanderTree
+							ProductionGroup: Upgrade
+							Key: ProductionTypeUpgrade
 							Children:
 								Image@ICON:
 									X: 6
@@ -568,8 +588,8 @@ Container@PLAYER_WIDGETS:
 								Image@ICON:
 									X: 6
 									Y: 3
-									ImageCollection: scrollbar
-									ImageName: up_arrow
+									ImageCollection: scrollpanel-decorations
+									ImageName: up
 						Button@SCROLL_DOWN_BUTTON:
 							Logic: AddFactionSuffixLogic
 							Y: 214
@@ -583,8 +603,8 @@ Container@PLAYER_WIDGETS:
 								Image@ICON:
 									X: 6
 									Y: 3
-									ImageCollection: scrollbar
-									ImageName: down_arrow
+									ImageCollection: scrollpanel-decorations
+									ImageName: down
 		Image@SIDEBAR_MONEYBIN:
 			Logic: AddFactionSuffixLogic
 			X: WINDOW_RIGHT - 250

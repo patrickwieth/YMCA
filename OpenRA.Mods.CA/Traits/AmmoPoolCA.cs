@@ -19,7 +19,7 @@ using OpenRA.Primitives;
 namespace OpenRA.Mods.CA.Traits
 {
 	[Desc("Actor has a limited amount of ammo, after using it all the actor must reload in some way.")]
-	public class AmmoPoolCAInfo : ITraitInfo
+	public class AmmoPoolCAInfo : TraitInfo
 	{
 		[Desc("Name of this ammo pool, used to link reload traits to this pool.")]
 		public readonly string Name = "primary";
@@ -36,12 +36,6 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Defaults to value in Ammo. 0 means no visible pips.")]
 		public readonly int PipCount = -1;
 
-		[Desc("PipType to use for loaded ammo.")]
-		public readonly PipType PipType = PipType.Green;
-
-		[Desc("PipType to use for empty ammo.")]
-		public readonly PipType PipTypeEmpty = PipType.Transparent;
-
 		[Desc("How much ammo is reloaded after a certain period.")]
 		public readonly int ReloadCount = 1;
 
@@ -56,14 +50,13 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("The condition to grant to self for each ammo point in this pool.")]
 		public readonly string AmmoCondition = null;
 
-		public object Create(ActorInitializer init) { return new AmmoPoolCA(init.Self, this); }
+		public override object Create(ActorInitializer init) { return new AmmoPoolCA(init.Self, this); }
 	}
 
-	public class AmmoPoolCA : INotifyCreated, INotifyAttack, IPips, ISync
+	public class AmmoPoolCA : INotifyCreated, INotifyAttack, ISync
 	{
 		public readonly AmmoPoolCAInfo Info;
 		readonly Stack<int> tokens = new Stack<int>();
-		ConditionManager conditionManager;
 
 		// HACK: Temporarily needed until Rearm activity is gone for good
 		[Sync]
@@ -103,40 +96,30 @@ namespace OpenRA.Mods.CA.Traits
 
 		void INotifyCreated.Created(Actor self)
 		{
-			conditionManager = self.TraitOrDefault<ConditionManager>();
 			UpdateCondition(self);
 
 			// HACK: Temporarily needed until Rearm activity is gone for good
 			RemainingTicks = Info.ReloadDelay;
 		}
 
-		void INotifyAttack.Attacking(Actor self, Target target, Armament a, Barrel barrel)
+		void INotifyAttack.Attacking(Actor self, in Target target, Armament a, Barrel barrel)
 		{
 			if (a != null && Info.Armaments.Contains(a.Info.Name))
 				TakeAmmo(self, 1);
 		}
 
-		void INotifyAttack.PreparingAttack(Actor self, Target target, Armament a, Barrel barrel) { }
+		void INotifyAttack.PreparingAttack(Actor self, in Target target, Armament a, Barrel barrel) { }
 
 		void UpdateCondition(Actor self)
 		{
-			if (conditionManager == null || string.IsNullOrEmpty(Info.AmmoCondition))
+			if (string.IsNullOrEmpty(Info.AmmoCondition))
 				return;
 
 			while (CurrentAmmoCount > tokens.Count && tokens.Count < Info.Ammo)
-				tokens.Push(conditionManager.GrantCondition(self, Info.AmmoCondition));
+				tokens.Push(self.GrantCondition(Info.AmmoCondition));
 
 			while (CurrentAmmoCount < tokens.Count && tokens.Count > 0)
-				conditionManager.RevokeCondition(self, tokens.Pop());
-		}
-
-		public IEnumerable<PipType> GetPips(Actor self)
-		{
-			var pips = Info.PipCount >= 0 ? Info.PipCount : Info.Ammo;
-
-			return Enumerable.Range(0, pips).Select(i =>
-				(CurrentAmmoCount * pips) / Info.Ammo > i ?
-				Info.PipType : Info.PipTypeEmpty);
+				self.RevokeCondition(tokens.Pop());
 		}
 	}
 }

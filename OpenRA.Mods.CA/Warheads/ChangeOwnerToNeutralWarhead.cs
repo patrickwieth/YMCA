@@ -11,9 +11,7 @@
 
 using System.Linq;
 using OpenRA.GameRules;
-using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Warheads;
-using OpenRA.Primitives;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Warheads
@@ -26,7 +24,7 @@ namespace OpenRA.Mods.CA.Warheads
 
 		public readonly WDist Range = WDist.FromCells(1);
 
-		public override void DoImpact(Target target, WarheadArgs args)
+		public override void DoImpact(in Target target, WarheadArgs args)
 		{
 			var firedBy = args.SourceActor;
 			var actors = target.Type == TargetType.Actor ? new[] { target.Actor } :
@@ -40,6 +38,9 @@ namespace OpenRA.Mods.CA.Warheads
 
 				if (!target.IsValidFor(firedBy))
 					return;
+
+				if (!IsValidAgainst(a, firedBy))
+					continue;
 
 				a.ChangeOwner(a.World.Players.First(p => p.InternalName == Owner)); // Permanent
 

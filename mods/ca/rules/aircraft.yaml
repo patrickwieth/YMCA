@@ -2344,7 +2344,7 @@ KIRO:
 		LocalOffset: -20,0,0
 		PauseOnCondition: !ammo
 		RequiresCondition: iraqbombs
-	AmmoPoolCA:
+	AmmoPool:
 		Ammo: 16
 		PipCount: 8
 		AmmoCondition: ammo
@@ -2401,7 +2401,7 @@ KIRO:
 	Selectable:
 		Bounds: 36,28,0,2
 		DecorationBounds: 40,40,0,1
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 100
@@ -2478,7 +2478,7 @@ BLIMP:
 	Selectable:
 		Bounds: 50,30,0,-10
 		DecorationBounds: 54,33,0,-11
-	SelfHealing:
+	ChangesHealth:
 		Step: 100
 		Delay: 3
 		HealIfBelow: 100
@@ -3081,8 +3081,11 @@ YF23.Bomber:
 	GivesExperience:
 		Experience: 1000
 
-POD2:
+POD:
 	Inherits@2: ^ExistsInWorld
+	RenderSprites:
+		Image: pod2
+		PlayerPalette: overlayplayertd
 	Valued:
 		Cost: 10
 	Tooltip:
@@ -3092,48 +3095,43 @@ POD2:
 	Armor:
 		Type: Light
 	Aircraft:
-		TurnSpeed: 5
+		TurnSpeed: 20
 		Speed: 300
 		CruiseAltitude: 8000
 		MaximumPitch: 110
 		VTOL: true
 		Repulsable: False
-		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,Water,Tree,River
 	HiddenUnderFog:
 		Type: CenterPosition
-	BodyOrientation:
-		UseClassicPerspectiveFudge: False
-	RenderSprites:
-		Image: pod
-		PlayerPalette: overlayplayertd
+	ClassicFacingBodyOrientation:
 	WithFacingSpriteBody:
 	QuantizeFacingsFromSequence:
 	SelectionDecorations:
 	HitShape:
-	Cargo:
-		Types: Infantry
-		MaxWeight: 1
-		PipCount: 1
-		UnloadVoice: Move
-		EjectOnDeath: true
 	Interactable:
 	WithShadow:
 	SmokeTrailWhenDamaged:
 		MinDamage: Undamaged
 		Sprite: smokey2
 		Palette: tseffect-ignore-lighting-alpha75
-	CrashLanding:
-		Spins: False
+	FallsToEarth:
+		MaximumSpinSpeed: 0
 		Moves: True
 		Velocity: 113
 		Explosion: DropPodVisual
+	SpawnActorOnDeath:
+		Actor: n1r1
 
-POD1:
-	Inherits: POD2
-	RenderSprites:
-		Image: pod2
-	CrashLanding:
-		Explosion: DropPodVisual2
+POD2:
+	Inherits: POD
+	SpawnActorOnDeath:
+		Actor: n2r1
+
+POD3:
+	Inherits: POD
+	SpawnActorOnDeath:
+		Actor: n3r1
 
 VENM:
 	Inherits: ^HelicopterTD

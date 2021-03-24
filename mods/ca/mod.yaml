@@ -1,22 +1,23 @@
 Metadata:
 	Title: Combined Arms
-	Version: prep-CA
+	Version: bcc1245
 	Website: https://www.moddb.com/mods/command-conquer-combined-arms
 	WebIcon32: https://www.openra.net/images/icons/ra_32x32.png
 
 PackageFormats: Mix
 
 Packages:
-	~^Content/ca/v2/
-	~^Content/ca/v2/expand
-	~^Content/ca/v2/cnc
-	~^Content/ca/v2/ts
-	~^Content/ca/v2/firestorm
-	~^Content/ca/v2/movies
-	~^Content/ca/
-	.
+	~^SupportDir|Content/ca
+	~^SupportDir|Content/ca/expand
+	~^SupportDir|Content/ca/ra
+	~^SupportDir|Content/ca/cnc
+	~^SupportDir|Content/ca/ts
+	~^SupportDir|Content/ca/firestorm
+	~^SupportDir|Content/ca/ra2
+	~^SupportDir|Content/ca/movies
+	^EngineDir
+	^EngineDir|mods/common: common
 	$ca: ca
-	./mods/common: common
 	~main.mix
 	~conquer.mix
 	~lores.mix: lores
@@ -53,7 +54,7 @@ Packages:
 
 MapFolders:
 	ca|maps: System
-	~^maps/ca/prep-CA: User
+	~^maps/ca/bcc1245: User
 
 Rules:
 	ca|rules/misc.yaml
@@ -105,9 +106,9 @@ Chrome:
 	ca|chrome.yaml
 
 Assemblies:
-	common|OpenRA.Mods.Common.dll
-	common|OpenRA.Mods.Cnc.dll
-	ca|OpenRA.Mods.CA.dll
+	^BinDir|OpenRA.Mods.Common.dll
+	^BinDir|OpenRA.Mods.Cnc.dll
+	^BinDir|OpenRA.Mods.CA.dll
 
 ChromeLayout:
 	common|chrome/ingame.yaml
@@ -248,7 +249,7 @@ SoundFormats: Aud, Wav
 
 SpriteFormats: ShpD2, R8, ShpTD, TmpRA, TmpTD, ShpTS
 
-SpriteSequenceFormat: TilesetSpecificSpriteSequence
+SpriteSequenceFormat: ClassicTilesetSpecificSpriteSequence
 	TilesetExtensions:
 		TEMPERAT: .tem
 		SNOW: .sno

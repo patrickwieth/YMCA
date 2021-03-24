@@ -41,6 +41,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Play this sound each time ammo is reloaded.")]
 		public readonly string Sound = null;
 
+		[Desc("Only begin reloading when ammo is equal to or less than this number. -1 means reload whenever below full ammo.")]
+		public readonly int ReloadWhenAmmoReaches = -1;
+
 		public readonly bool ShowSelectionBar = true;
 		public readonly Color SelectionBarColor = Color.FromArgb(128, 200, 255);
 
@@ -48,9 +51,8 @@ namespace OpenRA.Mods.CA.Traits
 
 		public override void RulesetLoaded(Ruleset rules, ActorInfo ai)
 		{
-			if (ai.TraitInfos<AmmoPoolCAInfo>().Count(ap => ap.Name == AmmoPool) != 1)
-
-			throw new YamlException("ReloadsAmmoPool.AmmoPool requires exactly one AmmoPool with matching Name! Name: " + AmmoPool);
+			if (ai.TraitInfos<AmmoPoolInfo>().Count(ap => ap.Name == AmmoPool) != 1)
+				throw new YamlException("ReloadsAmmoPool.AmmoPool requires exactly one AmmoPool with matching Name!");
 
 			base.RulesetLoaded(rules, ai);
 		}
@@ -58,7 +60,7 @@ namespace OpenRA.Mods.CA.Traits
 
 	public class ReloadAmmoPoolCA : PausableConditionalTrait<ReloadAmmoPoolCAInfo>, ITick, INotifyAttack, ISync, ISelectionBar
 	{
-		AmmoPoolCA ammoPool;
+		AmmoPool ammoPool;
 		IReloadAmmoModifier[] modifiers;
 
 		[Sync]
@@ -70,7 +72,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		protected override void Created(Actor self)
 		{
-			ammoPool = self.TraitsImplementing<AmmoPoolCA>().Single(ap => ap.Info.Name == Info.AmmoPool);
+			ammoPool = self.TraitsImplementing<AmmoPool>().Single(ap => ap.Info.Name == Info.AmmoPool);
 			modifiers = self.TraitsImplementing<IReloadAmmoModifier>().ToArray();
 			base.Created(self);
 
@@ -81,7 +83,7 @@ namespace OpenRA.Mods.CA.Traits
 			});
 		}
 
-		void INotifyAttack.Attacking(Actor self, Target target, Armament a, Barrel barrel)
+		void INotifyAttack.Attacking(Actor self, in Target target, Armament a, Barrel barrel)
 		{
 			var maxTicks = Util.ApplyPercentageModifiers(Info.Delay, modifiers.Select(m => m.GetReloadAmmoModifier()));
 			if (Info.ResetOnFire)
@@ -101,7 +103,7 @@ namespace OpenRA.Mods.CA.Traits
 			}
 		}
 
-		void INotifyAttack.PreparingAttack(Actor self, Target target, Armament a, Barrel barrel) { }
+		void INotifyAttack.PreparingAttack(Actor self, in Target target, Armament a, Barrel barrel) { }
 
 		void ITick.Tick(Actor self)
 		{
@@ -113,10 +115,13 @@ namespace OpenRA.Mods.CA.Traits
 
 		protected virtual void Reload(Actor self, int reloadDelay, int reloadCount, string sound)
 		{
-			if (--remainingDelay > 0 && ammoPool.HasAmmo)
+			if (--remainingDelay > 0)
 				return;
 
-			if ((!ammoPool.HasFullAmmo || reloadCount < 0) && --remainingTicks == 0)
+			if (Info.ReloadWhenAmmoReaches > -1 && ammoPool.CurrentAmmoCount > Info.ReloadWhenAmmoReaches)
+				return;
+
+			if (!ammoPool.HasFullAmmo && --remainingTicks == 0)
 			{
 				remainingTicks = Util.ApplyPercentageModifiers(reloadDelay, modifiers.Select(m => m.GetReloadAmmoModifier()));
 				if (!string.IsNullOrEmpty(sound))

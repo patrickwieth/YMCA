@@ -475,7 +475,7 @@ V2RL:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
 		RequiresCondition: iraqtank && !being-warped
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 50
@@ -907,7 +907,7 @@ HARV:
 	SpawnActorOnDeath:
 		Actor: HARV.EmptyHusk
 		RequiresCondition: !being-warped && !orep-upgrade
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 50
@@ -1283,7 +1283,7 @@ MRJ:
 		PauseOnCondition: empdisable || being-warped
 	ProximityExternalCondition@Relay:
 		Range: 18c0
-		ValidStances: Enemy, Neutral
+		ValidRelationships: Enemy, Neutral
 		Condition: jammed
 	WithRangeCircle@JAMMER:
 		Type: jammer
@@ -1338,7 +1338,7 @@ TTNK:
 		Sequence: spinner
 	ProximityExternalCondition@JAMMER:
 		Range: 8c0
-		ValidStances: Enemy, Neutral
+		ValidRelationships: Enemy, Neutral
 		Condition: jammed
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -1462,7 +1462,7 @@ DTRK:
 		Weapon: MiniNuke
 		EmptyWeapon: MiniNuke
 		DamageSource: Killer
-		RequiresCondition: !unloaded
+		RequiresCondition: !unloaded && !being-warped
 	Explodes@UNARMED:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
@@ -2303,7 +2303,7 @@ MTNK.Drone:
 	-CaptureNotification:
 	-Capturable@DRIVER_DEAD:
 	-GrantConditionIfOwnerIsNeutral:
-	-SelfHealing@DRIVER_DEAD:
+	-ChangesHealth@DRIVER_DEAD:
 	-Targetable@DRIVERKILL:
 	-Targetable@AICAPTURE:
 
@@ -2388,7 +2388,7 @@ HTNK:
 	SpawnActorOnDeath:
 		Actor: HTNK.Husk
 		RequiresCondition: !being-warped
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 50
@@ -2452,7 +2452,7 @@ HTNK.Nanite:
 		Cost: 2500
 	Health:
 		HP: 125000
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 4
 		Delay: 25
 		HealIfBelow: 100
@@ -2473,7 +2473,7 @@ HTNK.Nanite:
 		ZOffset: 256
 		BlinkInterval: 64
 		RequiresSelection: True
-		ValidStances: Ally, Neutral
+		ValidRelationships: Ally, Neutral
 	GrantConditionOnDamageState@NREPAIR:
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
@@ -3273,7 +3273,7 @@ HAR2:
 		RequiresCondition: !being-warped
 	WithHarvestAnimation:
 	WithDockingAnimation:
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 50
@@ -3398,7 +3398,7 @@ BTR.Surveillance:
 		PauseOnCondition: empdisable || being-warped
 	ProximityExternalCondition@Relay:
 		Range: 18c0
-		ValidStances: Enemy, Neutral
+		ValidRelationships: Enemy, Neutral
 		Condition: jammed
 	WithRangeCircle@JAMMER:
 		Type: jammer
@@ -3571,7 +3571,7 @@ IFV:
 	AutoTargetPriority@defuse:
 		ValidTargets: C4Attached
 		InvalidTargets: NoAutoTarget
-		ValidStances: Ally
+		ValidRelationships: Ally
 	Armament@Acol:
 		Weapon: LaserTur
 		LocalOffset: 385,0,300
@@ -3864,7 +3864,7 @@ TITN:
 		LoadedChance: 100
 	Voiced:
 		VoiceSet: GhostVoice
-	SelfHealing@DEFAULT:
+	ChangesHealth@DEFAULT:
 		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 50
@@ -4002,7 +4002,7 @@ JUGG:
 		ResetOnFire: True
 		PauseOnCondition: moving
 	-Armament@SECONDARY:
-	-SelfHealing@DEFAULT:
+	-ChangesHealth@DEFAULT:
 	Health:
 		HP: 50000
 	Voiced:
@@ -4387,7 +4387,7 @@ V3:
 		Name: V3 Rocket
 	Health:
 		HP: 5000
-	ShootableBallisticMissile:
+	BallisticMissile:
 		LaunchAngle: 95
 		Speed: 145
 	LeavesTrails:
@@ -5247,7 +5247,7 @@ MEMP:
 	-CaptureNotification:
 	-Capturable@DRIVER_DEAD:
 	-GrantConditionIfOwnerIsNeutral:
-	-SelfHealing@DRIVER_DEAD:
+	-ChangesHealth@DRIVER_DEAD:
 	-Targetable@DRIVERKILL:
 	-Targetable@AICAPTURE:
 
@@ -5286,7 +5286,7 @@ MEMP.Stable:
 	Tooltip:
 		Name: Mobile E.M.P (Stable)
 	-ChargingSelfDestruct:
-	AmmoPoolCA:
+	AmmoPool:
 		Name: explosion
 		Armaments: explosion
 		ReloadDelay: 0
@@ -5390,7 +5390,7 @@ CDRN:
 	-CaptureNotification:
 	-Capturable@DRIVER_DEAD:
 	-GrantConditionIfOwnerIsNeutral:
-	-SelfHealing@DRIVER_DEAD:
+	-ChangesHealth@DRIVER_DEAD:
 	-Targetable@DRIVERKILL:
 	-Targetable@AICAPTURE:
 
@@ -5903,7 +5903,7 @@ Beam_Cannon:
 		Prerequisites: tmpl, ~vehicles.nod, ~commander_tree.beam_cannon, ~techlevel.high
 		Description: Prototype energy beam weapon.\n  Up to 5 Beam Cannons can charge another Beam Cannon up.\n  Up to 3 Beam Cannons can help an Obelisk to charge up faster \n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
-		Cost: 1450
+		Cost: 1350
 	Tooltip:
 		Name: Beam Cannon
 		GenericName: Tank
@@ -6038,7 +6038,7 @@ MAMMOTHMK2:
 		Speed: 35
 	Health:
 		HP: 270000
-	SelfHealing:
+	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
 		HealIfBelow: 100
