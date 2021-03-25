@@ -384,7 +384,7 @@ GUNW:
 		MuzzlePalette: scrin
 	WithMuzzleOverlay:
 	AttackFrontal:
-		FacingTolerance: 10
+		FacingTolerance: 40
 		PauseOnCondition: empdisable || being-warped
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -461,7 +461,7 @@ SEEK:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 48
 		Offset: -280,0,0
 	Hovers:
 		BobDistance: -25
@@ -540,7 +540,7 @@ LACE:
 		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 	Mobile:
-		TurnSpeed: 10
+		TurnSpeed: 48
 		Speed: 157
 		Locomotor: hover
 	LeavesTrails:
@@ -561,7 +561,7 @@ LACE:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	Turreted:
-		TurnSpeed: 10
+		TurnSpeed: 48
 		Offset: -50,0,0
 	Hovers:
 		BobDistance: -25
@@ -650,7 +650,7 @@ INTL:
 	Mobile:
 		Speed: 135
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
-		TurnSpeed: 4
+		TurnSpeed: 16
 		Locomotor: hover
 	Health:
 		HP: 30000
@@ -749,7 +749,7 @@ CORR:
 		IconPalette: chrome
 	Mobile:
 		Speed: 82
-		TurnSpeed: 4
+		TurnSpeed: 16
 	Health:
 		HP: 45000
 	Armor:
@@ -845,7 +845,7 @@ STCR:
 		IconPalette: scrin
 	Mobile:
 		Speed: 71
-		TurnSpeed: 3
+		TurnSpeed: 12
 		Locomotor: hover
 	Hovers:
 		BobDistance: -35
@@ -864,7 +864,7 @@ STCR:
 		Weapon: StormcrawlerZap
 		LocalOffset: 0,0,350, -250,0,350, 250,0,350
 	AttackFrontal:
-		FacingTolerance: 50
+		FacingTolerance: 80
 		PauseOnCondition: empdisable || being-warped
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -926,7 +926,7 @@ DEVO:
 	Armor:
 		Type: Light
 	Mobile:
-		TurnSpeed: 255
+		TurnSpeed: 1000
 		Speed: 100
 		Locomotor: hover
 	Hovers:
@@ -943,8 +943,8 @@ DEVO:
 		LocalOffset: 850,0,208
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Turreted:
-		TurnSpeed: 4
+	TurretedFloating:
+		TurnSpeed: 64
 		Offset: 0,0,0
 	AttackTurreted:
 		TargetFrozenActors: True
@@ -1018,7 +1018,7 @@ DARK:
 	Armor:
 		Type: Heavy
 	Mobile:
-		TurnSpeed: 4
+		TurnSpeed: 16
 		Speed: 71
 		Locomotor: hover
 	RevealsShroud:
@@ -1036,7 +1036,7 @@ DARK:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Turreted:
-		TurnSpeed: 4
+		TurnSpeed: 16
 		Offset: 0,0,0
 	AttackTurreted:
 		TargetFrozenActors: True
@@ -1104,7 +1104,7 @@ RUIN:
 	Mobile:
 		Speed: 100
 		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead
-		TurnSpeed: 255
+		TurnSpeed: 1000
 		Locomotor: hover
 	Health:
 		HP: 15000
@@ -1133,8 +1133,8 @@ RUIN:
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
-	Turreted:
-		TurnSpeed: 4
+	TurretedFloating:
+		TurnSpeed: 64
 		Offset: 0,0,0
 	AttackTurreted:
 		ForceFireIgnoresActors: True
@@ -1190,7 +1190,7 @@ TPOD:
 	Mobile:
 		Locomotor: heavytracked
 		Speed: 56
-		TurnSpeed: 255
+		TurnSpeed: 1000
 	Passenger:
 		Weight: 3
 	RevealsShroud:
@@ -1209,8 +1209,8 @@ TPOD:
 		LocalOffset: 0,0,700
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Turreted:
-		TurnSpeed: 3
+	TurretedFloating:
+		TurnSpeed: 48
 		Offset: 0,0,0
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
@@ -1402,13 +1402,13 @@ SMCV:
 	Mobile:
 		Speed: 56
 		Locomotor: hover
-		TurnSpeed: 255
+		TurnSpeed: 1000
 	RevealsShroud:
 		Range: 4c0
 	Transforms:
 		IntoActor: sfac
 		Offset: -1, 0
-		Facing: 96
+		Facing: 384
 		TransformSounds: placbldg.aud, build5.aud
 		NoTransformNotification: BuildingCannotPlaceAudio
 		PauseOnCondition: empdisable || being-warped
@@ -1468,13 +1468,13 @@ STMR:
 		Weapon: StormriderZapAA
 		LocalOffset: 350,213,-85, 350,-213,-85
 	AttackAircraft:
-		FacingTolerance: 128
+		FacingTolerance: 512
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
 	Aircraft:
 		CruiseAltitude: 2560
-		TurnSpeed: 5
+		TurnSpeed: 20
 		Speed: 170
 		RepulsionSpeed: 40
 		MaximumPitch: 56
@@ -1528,7 +1528,7 @@ STMR.hunter:
 		Name: Stormhunter
 	-Armament@PRIMARY:
 	Aircraft:
-		TurnSpeed: 6
+		TurnSpeed: 24
 		Speed: 195
 
 STMR.bomber:
@@ -1599,14 +1599,14 @@ DEVA:
 		Weapon: DevastatorDiscs
 		LocalOffset: 500,0,0
 	AttackAircraft:
-		FacingTolerance: 10
+		FacingTolerance: 40
 		ForceFireIgnoresActors: True
 		AttackType: Hover
 		PauseOnCondition: empdisable || being-warped
 	Aircraft:
 		CruiseAltitude: 2c0
 		InitialFacing: 192
-		TurnSpeed: 3
+		TurnSpeed: 12
 		Speed: 56
 		AltitudeVelocity: 0c50
 		CanForceLand: False
@@ -1701,7 +1701,7 @@ PAC:
 	Aircraft:
 		CruiseAltitude: 2c0
 		InitialFacing: 192
-		TurnSpeed: 3
+		TurnSpeed: 12
 		Speed: 49
 		AltitudeVelocity: 0c50
 		CanForceLand: False
@@ -1726,7 +1726,7 @@ PAC:
 		Sequence: half-deployed
 		Name: half-deployed
 	AttackFrontal:
-		FacingTolerance: 96
+		FacingTolerance: 384
 		PauseOnCondition: empdisable || being-warped
 	CarrierMaster@carr1:
 		Actors: inva, inva, inva, inva
@@ -1882,7 +1882,7 @@ INVA:
 		Weapon: InvaderZapAA
 		PauseOnCondition: !ammo
 	AttackAircraft:
-		FacingTolerance: 20
+		FacingTolerance: 80
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
@@ -1951,7 +1951,7 @@ INVA.support:
 		Range: 1c0
 		Type: GroundPosition
 	AttackAircraft:
-		FacingTolerance: 128
+		FacingTolerance: 512
 		PersistentTargeting: true
 		OpportunityFire: true
 		PauseOnCondition: empdisable || being-warped
@@ -2170,7 +2170,7 @@ STMR.Husk:
 	Tooltip:
 		Name: Stormrider
 	Aircraft:
-		TurnSpeed: 4
+		TurnSpeed: 16
 		Speed: 170
 	SmokeTrailWhenDamaged:
 		Offset: -427,0,0
@@ -2199,7 +2199,7 @@ DEVA.Husk:
 	Tooltip:
 		Name: Devastator Warship
 	Aircraft:
-		TurnSpeed: 2
+		TurnSpeed: 8
 		Speed: 30
 	FallsToEarth:
 		MaximumSpinSpeed: 0
@@ -2220,7 +2220,7 @@ PAC.Husk:
 	Tooltip:
 		Name: Planetary Assault Carrier
 	Aircraft:
-		TurnSpeed: 2
+		TurnSpeed: 8
 		Speed: 30
 	FallsToEarth:
 		MaximumSpinSpeed: 0
@@ -2241,7 +2241,7 @@ INVA.Husk:
 	Tooltip:
 		Name: Invader
 	Aircraft:
-		TurnSpeed: 4
+		TurnSpeed: 16
 		Speed: 149
 	RevealsShroud:
 		Range: 12c0
@@ -2348,7 +2348,7 @@ SFAC:
 		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
 		IntoActor: smcv
 		Offset: 1,0
-		Facing: 96
+		Facing: 384
 	TransformsIntoMobile:
 		RequiresCondition: factundeploy
 		Locomotor: heavywheeled
@@ -2535,7 +2535,7 @@ PROC.SCRIN:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
 	Refinery:
-		DockAngle: 112
+		DockAngle: 448
 		DockOffset: 0,2
 		IsDragRequired: True
 		DragOffset: -554,512,0
@@ -3521,7 +3521,7 @@ PTUR:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 12
+		TurnSpeed: 48
 		InitialFacing: 48
 		PauseOnCondition: empdisable || being-warped
 	-WithSpriteBody:
@@ -3540,7 +3540,7 @@ PTUR:
 		Amount: -25
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 	SpawnActorOnDeath:
 		Actor: s1
 	-SpawnRandomActorOnDeath:
@@ -3576,7 +3576,7 @@ SHAR:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 15
+		TurnSpeed: 60
 		InitialFacing: 48
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
@@ -3593,7 +3593,7 @@ SHAR:
 		Amount: -50
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 	DetectCloaked:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 	SpawnActorOnDeath:

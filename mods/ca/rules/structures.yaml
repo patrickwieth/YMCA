@@ -161,7 +161,7 @@ SPEN:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,-213,0
-		Facing: 96
+		Facing: 384
 		ExitCell: -1,2
 		ProductionTypes: Submarine
 	Exit@2:
@@ -197,7 +197,7 @@ SPEN:
 	Exit@b3:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,-1024,0
-		Facing: 96
+		Facing: 384
 		ExitCell: 0,0
 		ProductionTypes: Ship
 	Exit@b4:
@@ -337,7 +337,7 @@ SYRD:
 	Exit@3:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,-1024,0
-		Facing: 96
+		Facing: 384
 		ExitCell: 0,0
 		ProductionTypes: Ship, Boat
 	Exit@4:
@@ -737,7 +737,7 @@ AGUN:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 15
+		TurnSpeed: 60
 		InitialFacing: 224
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
@@ -756,7 +756,7 @@ AGUN:
 		Amount: -50
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 	DetectCloaked:
 		Range: 8c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
@@ -893,7 +893,7 @@ PBOX:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 255
+		TurnSpeed: 1000
 	-QuantizeFacingsFromSequence:
 	BodyOrientation:
 		QuantizedFacings: 8
@@ -946,7 +946,7 @@ HBOX:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
 	Turreted:
-		TurnSpeed: 255
+		TurnSpeed: 1000
 	-QuantizeFacingsFromSequence:
 	BodyOrientation:
 		QuantizedFacings: 8
@@ -991,7 +991,7 @@ GUN:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 12
+		TurnSpeed: 48
 		InitialFacing: 56
 		PauseOnCondition: empdisable || being-warped
 	-WithSpriteBody:
@@ -1009,7 +1009,7 @@ GUN:
 		Amount: -40
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 
 FTUR:
 	Inherits: ^Defense
@@ -1037,7 +1037,7 @@ FTUR:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 255
+		TurnSpeed: 1000
 		Offset: 0,0,112
 	Armament:
 		Weapon: FireballLauncher
@@ -1092,7 +1092,7 @@ SAM:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 30
+		TurnSpeed: 120
 		InitialFacing: 0
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
@@ -1111,7 +1111,7 @@ SAM:
 		Amount: -40
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 	DetectCloaked:
 		Range: 8c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
@@ -1468,7 +1468,7 @@ FACT:
 		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
 		IntoActor: mcv
 		Offset: 1,1
-		Facing: 96
+		Facing: 384
 	TransformsIntoMobile:
 		RequiresCondition: factundeploy
 		Locomotor: heavywheeled
@@ -1553,7 +1553,7 @@ PROC:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	Refinery:
-		DockAngle: 64
+		DockAngle: 256
 		DockOffset: 1,2
 	StoresResources:
 		PipCount: 17
@@ -3583,7 +3583,7 @@ AFAC:
 		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
 		IntoActor: amcv
 		Offset: 1,1
-		Facing: 96
+		Facing: 384
 	TransformsIntoMobile:
 		RequiresCondition: factundeploy
 		Locomotor: heavywheeled
@@ -3697,7 +3697,7 @@ NSAM:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 	Turreted:
-		TurnSpeed: 30
+		TurnSpeed: 120
 		InitialFacing: 0
 		RealignDelay: -1
 	-WithSpriteBody:
@@ -3714,7 +3714,7 @@ NSAM:
 		Amount: -40
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 	-ActorPreviewPlaceBuildingPreview:
 	SequencePlaceBuildingPreview:
 		Sequence: place
@@ -3761,7 +3761,7 @@ GTWR:
 		QuantizedFacings: 8
 	WithMuzzleOverlay:
 	Turreted:
-		TurnSpeed: 255
+		TurnSpeed: 1000
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -3794,7 +3794,7 @@ ATWR:
 		HasMinibib: true
 	RenderRangeCircle:
 	Turreted:
-		TurnSpeed: 255
+		TurnSpeed: 1000
 		Offset: 0,0,0
 	Armament@primary:
 		Weapon: StingerGTWR
@@ -3889,7 +3889,7 @@ STWR:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 20
 		InitialFacing: 48
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
@@ -3905,7 +3905,7 @@ STWR:
 		Amount: -80
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
@@ -4529,7 +4529,7 @@ PROC.TD:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
 	Refinery:
-		DockAngle: 112
+		DockAngle: 448
 		DockOffset: 0,2
 		IsDragRequired: True
 		DragOffset: -554,512,0
@@ -5164,7 +5164,7 @@ PRIS:
 		Armaments: primary, secondary, tertiary
 		PauseOnCondition: disabled || empdisable || being-warped
 	Turreted:
-		TurnSpeed: 255
+		TurnSpeed: 1000
 		Offset: 0,0,112
 	Targetable@PrismTower:
 		TargetTypes: PrismTower
@@ -5275,7 +5275,7 @@ SPEN.nod:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,-213,0
-		Facing: 96
+		Facing: 384
 		ExitCell: -1,2
 		ProductionTypes: Submarine, Ship
 	Exit@2:
@@ -5397,7 +5397,7 @@ SYRD.gdi:
 	Exit@3:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,-1024,0
-		Facing: 96
+		Facing: 384
 		ExitCell: 0,0
 		ProductionTypes: Ship, Boat
 	Exit@4:
@@ -5489,7 +5489,7 @@ HTUR:
 	RevealsShroud@GAPGEN:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 2
+		TurnSpeed: 8
 		InitialFacing: 0
 		RealignDelay: -1
 	-WithSpriteBody:
@@ -5506,7 +5506,7 @@ HTUR:
 		Amount: -100
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 	Explodes:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
@@ -5544,7 +5544,7 @@ LTUR:
 		Prerequisites: hand, ~structures.nod, ~techlevel.low
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Turreted:
-		InitialFacing: 34
+		InitialFacing: 136
 	GrantConditionOnFaction@marked:
 		Condition: marked
 		Factions: marked
@@ -5590,7 +5590,7 @@ TTUR:
 	WithBuildingBib:
 		HasMinibib: true
 	Turreted:
-		TurnSpeed: 255
+		TurnSpeed: 1000
 		Offset: 0,0,112
 	Armament:
 		Weapon: ChemballLauncher
@@ -5866,7 +5866,7 @@ PATR:
 		Range: 5c0
 		RequiresCondition: !disabled
 	Turreted:
-		TurnSpeed: 2
+		TurnSpeed: 8
 		InitialFacing: 0
 		RealignDelay: -1
 	-WithSpriteBody:
@@ -5901,7 +5901,7 @@ PATR:
 		Amount: -150
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacingFudge: True
+		UseClassicFacings: True
 	Explodes:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
