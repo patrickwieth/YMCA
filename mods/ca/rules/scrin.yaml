@@ -1564,6 +1564,109 @@ STMR.bomber:
 		ShowSelectionBar: true
 		SelectionBarColor: ff00ff
 
+ENRV:
+	Inherits: ^Helicopter
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 170
+		Prerequisites: scrt, ~aircraft.traveler, ~techlevel.high
+		Description: Fast attack craft that creates a focused suppression field.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft, Infantry
+		IconPalette: chromes
+	Valued:
+		Cost: 1750
+	Voiced:
+		VoiceSet: VehicleVoice
+	Tooltip:
+		Name: Enervator
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 20000
+	RevealsShroud:
+		Range: 12c0
+		MinRange: 10c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 12c0
+		Type: GroundPosition
+	Armament@PRIMARY:
+		Weapon: EnervatorBolts
+		LocalOffset: -300,0,-250
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 40
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		TurnSpeed: 18
+		Speed: 180
+		InitialFacing: 768
+		TakeoffSounds: dropup1.aud
+		LandingSounds: dropdwn1.aud
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		IdealSeparation: 1c256
+		CanSlide: False
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: AttackAnything
+	Contrail@1:
+		Offset: -750,-200,300
+		UsePlayerColor: true
+		ZOffset: -512
+	Contrail@2:
+		Offset: -750,200,300
+		UsePlayerColor: true
+		ZOffset: -512
+	SpawnActorOnDeath:
+		Actor: ENRV.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: ENRV.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+	SmokeTrailWhenDamaged:
+		Offset: -427,0,0
+	Selectable:
+		DecorationBounds: 36,36
+	ProducibleWithLevel:
+		Prerequisites: aircraft.upgraded
+	-EjectOnDeath:
+	AmmoPool:
+		Ammo: 4
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		PipCount: 4
+	ReloadAmmoPoolCA:
+		Delay: 750
+		Count: 4
+		DelayOnFire: 750
+		DelayAfterReset: 60
+		ShowSelectionBar: true
+		SelectionBarColor: ff00ff
+	GrantConditionOnPrerequisite@REGEN:
+		Condition: regen-upgrade
+		Prerequisites: regen.upgrade
+	ChangesHealth@REGEN1:
+		Step: 500
+		Delay: 25
+		StartIfBelow: 66
+		DamageCooldown: 200
+		RequiresCondition: regen-upgrade
+	ChangesHealth@REGEN2:
+		Step: 250
+		Delay: 25
+		StartIfBelow: 100
+		DamageCooldown: 200
+		RequiresCondition: regen-upgrade
+
 DEVA:
 	Inherits: ^Helicopter
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -2991,7 +3094,7 @@ NERV:
 		OrderName: stormspike
 		Icon: stormspikepower
 		IconPalette: scrin
-		Prerequisites: structures.reaper
+		Prerequisites: structures.traveler
 		Cursor: ability
 		ChargeInterval: 4500
 		Description: Storm Spike
@@ -3009,7 +3112,7 @@ NERV:
 		Actor: ion.surge
 		OrderName: ionsurge
 		Icon: ionsurgepower
-		Prerequisites: structures.traveler
+		Prerequisites: structures.reaper
 		ChargeInterval: 4500
 		LifeTime: -1
 		Description: Ion Surge
