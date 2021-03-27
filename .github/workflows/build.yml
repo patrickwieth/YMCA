@@ -1,0 +1,24 @@
+name: Build
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags-ignore:
+      - "v*" # Don't build on releases. This will be done by another workflow.
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
+      - name: Build CA
+        run: docker run -e RELEASE_VERSION=${{ steps.branch_name.outputs.SOURCE_TAG }} -v $GITHUB_WORKSPACE:/workdir --rm miob/openra-build ./build-docker.sh
