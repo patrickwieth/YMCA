@@ -1662,6 +1662,7 @@ SILO:
 HPAD:
 	Inherits: ^Building
 	Inherits@shape: ^2x2Shape
+	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	Selectable:
 		Bounds: 48,48
 	HitShape:
@@ -1761,10 +1762,27 @@ HPAD:
 		ReferencePoint: Top
 		ZOffset: 256
 		RequiresCondition: primary
+	SpawnActorPower@GDIEagleDropzone:
+		Actor: FLARE.dropzone
+		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, anyradar, ~techlevel.low
+		LifeTime: 280
+		OrderName: dropzoneeagle
+		Icon: orcaca
+		IconPalette: chrometd
+		ChargeInterval: 6000
+		Description: Reinforcements
+		LongDesc: An Orca Carryall drops reinforcements\nat the target location.
+		EndChargeSpeechNotification: Reinforce
+		LaunchSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		EffectImage: empty
+		EffectSequence: idle
+		EffectPalette: tseffect-ignore-lighting-alpha75
 
 AFLD:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
@@ -4340,6 +4358,7 @@ REP:
 HPAD.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
+	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: hpad2
@@ -4614,6 +4633,7 @@ SILO.TD:
 AFLD.GDI:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: afldgdi
@@ -4769,6 +4789,7 @@ AFLD.GDI:
 AFLD.allies:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	RenderSprites:
 		Image: afld.allies
 	HitShape:

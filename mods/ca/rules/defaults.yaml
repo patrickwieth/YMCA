@@ -706,6 +706,17 @@
 		RequiresSelection: False
 		ValidRelationships: Ally, Neutral, Enemy
 
+^HarvesterBalancer:
+	GrantConditionOnPrerequisite@HARVBALANCE:
+		Condition: global-balancedharvesting
+		Prerequisites: global.balancedharvesting
+	SpeedMultiplier@HARVBALANCE:
+		RequiresCondition: harv-balance
+		Modifier: 138
+	HarvesterBalancer:
+		Condition: harv-balance
+		RequiresCondition: global-balancedharvesting
+
 ^GpsScramble:
 	RangeMultiplier@GPSSCRAMBLE:
 		Modifier: 60
@@ -2657,6 +2668,19 @@
 	WithFacingSpriteBody:
 	WithShadow:
 
+^ThrowsShrapnel:
+	ThrowsShrapnel@small:
+		Weapons: SmallDebris
+		Pieces: 3, 7
+		Range: 1c511, 3c0
+
+^ThrowsShrapnelBig:
+	Inherits: ^ThrowsShrapnel
+	ThrowsShrapnel@fire:
+		Weapons: FireDebris
+		Pieces: 3, 7
+		Range: 1c511, 3c0
+
 ^SlowsWhenDamaged:
 	SpeedMultiplier@DAMAGED:
 		RequiresCondition: damaged
@@ -2867,3 +2891,25 @@
 		Delay: 0
 		Interval: 160
 		RequiresCondition: tnt
+
+^RepairsAircraftWithRepairBay:
+	ExternalCondition@AIRCRAFTREPAIR:
+		Condition: aircraft-repair
+	RepairsUnits:
+		ValuePercentage: 0
+		HpPerStep: 1000
+		Interval: 7
+		StartRepairingNotification: Repairing
+		FinishRepairingNotification: UnitRepaired
+		PlayerExperience: 15
+		RequiresCondition: aircraft-repair && !forceshield && !invulnerability && !being-warped
+	WithDecoration@AIRCRAFTREPAIR:
+		Image: select
+		Palette: chrome
+		Sequence: repair-small
+		Position: Bottom
+		BlinkInterval: 15
+		BlinkPattern: on, off
+		RequiresCondition: aircraft-repair
+		RequiresSelection: True
+		ValidRelationships: Ally, Neutral
