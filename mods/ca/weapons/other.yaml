@@ -929,6 +929,21 @@ KirovCluster:
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure, Bridge
 
+MigTeslaBomb:
+	Inherits: KirovBomb
+	Warhead@1Dam: SpreadDamage
+		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: tsla_bomb
+		ExplosionPalette: ra2effect
+		ImpactSounds: kirbo1.aud, kirbo2.aud
+	Warhead@5Tesla: FireShrapnel
+		Weapon: TTankZap.Arc
+		Amount: 3
+		AimChance: 100
+		AllowDirectHit: true
+		ThrowWithoutTarget: false
+
 FrogBomb:
 	Inherits: ^Bomb
 	ValidTargets: Ground, Water
@@ -1291,7 +1306,7 @@ MicrowaveZap:
 	InvalidTargets: Air, empdisabled
 	TargetActorCenter: true
 	ReloadDelay: 120
-	Range: 8c0
+	Range: 9c0
 	Report: corefir1.aud
 	Projectile: Railgun
 		Duration: 5
@@ -1331,7 +1346,7 @@ MicrowaveZap:
 
 MicrowaveArc:
 	Inherits: MicrowaveZap
-	Range: 1c512
+	Range: 2c512
 	Projectile: Bullet
 		Image: mwarc
 		Sequences: idle, idle2, idle3
@@ -2075,3 +2090,41 @@ TNT:
 		RandomClusterCount: 3
 		Dimensions: 3,3
 		Footprint: xxx xxx xxx
+
+^Debris:
+	ValidTargets: Ground, Water, Trees, Air
+	Range: 5c0
+	Projectile: Bullet
+		Speed: 55, 108
+		LaunchAngle: 90, 192
+		Image: dbrissm
+		Palette: tseffect
+		Sequences: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+		Shadow: true
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 200
+		Falloff: 100, 100, 0
+		Damage: 1000
+		Versus:
+			None: 100
+			Wood: 85
+			Light: 70
+			Heavy: 35
+			Concrete: 28
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: small_explosion_alt1, small_explosion_alt2, small_explosion_alt3
+		ValidTargets: Ground, Air
+		ImpactSounds: kaboom25.aud, kaboom12.aud, xplos.aud
+	Warhead@3EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water
+		InvalidTargets: Vehicle
+	Warhead@4Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Structure, Wall, Trees
+
+SmallDebris:
+	Inherits: ^Debris
