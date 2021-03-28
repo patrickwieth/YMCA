@@ -160,12 +160,14 @@ chmod 0755 "${APPDIR}/usr/bin/openra-${MOD_ID}-server"
 
 sed "s/{MODID}/${MOD_ID}/g" "${TEMPLATE_ROOT}/${ENGINE_DIRECTORY}/packaging/linux/openra-utility.appimage.in" > "${APPDIR}/usr/bin/openra-${MOD_ID}-utility"
 chmod 0755 "${APPDIR}/usr/bin/openra-${MOD_ID}-utility"
-
 install -m 0755 "${TEMPLATE_ROOT}/${ENGINE_DIRECTORY}/packaging/linux/gtk-dialog.py" "${APPDIR}/usr/bin/gtk-dialog.py"
 install -m 0755 "${TEMPLATE_ROOT}/${ENGINE_DIRECTORY}/packaging/linux/restore-environment.sh" "${APPDIR}/usr/bin/restore-environment.sh"
 
+# Extract the app image instead of mounting it.
+# This resolves issues when using appimagetool within docker build, sice the fuse module it not enabled within docker.
 chmod a+x appimagetool-x86_64.AppImage
-ARCH=x86_64 ./appimagetool-x86_64.AppImage "${APPDIR}" "${OUTPUTDIR}/${PACKAGING_INSTALLER_NAME}-${TAG}-x86_64.AppImage"
+./appimagetool-x86_64.AppImage --appimage-extract
+ARCH=x86_64 ./squashfs-root/AppRun "${APPDIR}" "${OUTPUTDIR}/${PACKAGING_INSTALLER_NAME}-${TAG}-x86_64.AppImage"
 
 # Clean up
-rm -rf appimagetool-x86_64.AppImage "${PACKAGING_APPIMAGE_DEPENDENCIES_TEMP_ARCHIVE_NAME}" "${APPDIR}"
+rm -rf ./squashfs-root/ appimagetool-x86_64.AppImage "${PACKAGING_APPIMAGE_DEPENDENCIES_TEMP_ARCHIVE_NAME}" "${APPDIR}"
