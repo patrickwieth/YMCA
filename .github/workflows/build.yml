@@ -28,4 +28,4 @@ jobs:
         run: docker build -t openra-build .
 
       - name: Build CA
-        run: docker run -e RELEASE_VERSION=${{ steps.branch_name.outputs.SOURCE_TAG }} -v $GITHUB_WORKSPACE:/workdir --rm openra-build ./build-docker.sh
+        run: docker run -e RELEASE_VERSION=${GITHUB_SHA} -v $GITHUB_WORKSPACE:/workdir --rm openra-build ./build-docker.sh
