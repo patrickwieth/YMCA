@@ -1513,6 +1513,23 @@ ChaosDroneTargeting:
 	InvalidTargets: ChaosImmune
 	Warhead@1Dam: TargetDamage
 
+IrradiatedUnit:
+	Inherits: Cloud
+	Warhead@18Radio: CreateTintedCells
+		Level: 50
+		Falloff: 100, 40, 10
+		LayerName: radioactivity.medium
+		MaxLevel: 1000
+	Warhead@1Dam: SpreadDamage
+		Damage: 2200
+		Spread: 341
+		Falloff: 100, 37, 14, 5, 0
+		Versus:
+			Light: 80
+			Wood: 10
+			Concrete: 10
+			Brick: 0
+
 RadBeamWeapon:
 	Inherits: ^Radiation
 	ValidTargets: Ground, Water
@@ -1527,6 +1544,11 @@ RadBeamWeapon:
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
 		Damage: 16000
+	Warhead@2irrad: GrantExternalCondition
+		Range: 0c256
+		Duration: 250
+		Condition: irradiated
+		ValidTargets: Vehicle, Ship
 
 RadBeamWeaponE:
 	Inherits: RadBeamWeapon
