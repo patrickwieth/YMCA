@@ -256,12 +256,49 @@ camera.sathack:
 		Scale: 0.5
 	EditorOnlyTooltip:
 		Name: (support power proxy camera)
-	RevealsShroud:
-		Range: 10c0
-		Type: CenterPosition
 	DetectCloaked:
 		Range: 10c0
 		CloakTypes: Cloak
+
+camera.satscan:
+	Inherits: CAMERA
+	-RevealsShroud:
+	Buildable:
+		Queue: SpySatellite
+	Tooltip:
+		Name: Satellite Scan
+	RevealsMapCA:
+		RevealGeneratedShroud: false
+		RequiresCondition: uplinkavailable
+		ValidRelationships: Ally
+	KillsSelf:
+		RemoveInstead: true
+		Delay: 1000
+		GrantsCondition: killsself
+	GrantConditionOnPrerequisite@UPLINK:
+		Condition: uplinkavailable
+		Prerequisites: atek
+	VoiceAnnouncement:
+		Voice: Build
+	VoiceAnnouncement@Die:
+		Voice: Die
+		RequiresCondition: killsself
+	Voiced:
+		VoiceSet: SatelliteScanVoice
+
+camera.satscan.oneshot:
+	Inherits: camera.satscan
+	-VoiceAnnouncement@Die:
+	-KillsSelf:
+	KillsSelf:
+		RemoveInstead: true
+		Delay: 1000
+
+gps.satellite:
+	Buildable:
+		Queue: SpySatellite
+	AlwaysVisible:
+	ProvidesPrerequisite:
 
 camera.cloud:
 	Interactable:

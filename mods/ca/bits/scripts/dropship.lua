@@ -19,7 +19,7 @@ TickDropship = function()
 			then
 				Transports[tostring(c)]='unloading'
 				local start=c.Location
-				local angle=c.Facing/255*2*math.pi
+				local angle=1/255*2*math.pi
 				local dist=5
 				local vector=CVec.New(-math.floor(math.sin(angle)*dist),-math.floor(math.cos(angle)*dist))
 				c.Paradrop(start+vector)
