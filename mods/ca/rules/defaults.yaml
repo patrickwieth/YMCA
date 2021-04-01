@@ -1633,7 +1633,7 @@
 		CloakDelay: 90
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal
 	Repairable:
-		RepairActors: fix, rep, srep
+		RepairActors: fix, rep, srep, afld, afld.gdi, afld.allies
 	Aircraft:
 		CruisingCondition: cruising
 		PauseOnCondition: empdisable && !airborne || being-warped
@@ -1682,6 +1682,8 @@
 		InitialFacing: 224
 		CanSlide: True
 		Crushes: crate, mine, infantry
+	Repairable:
+		RepairActors: fix, rep, srep, hpad, hpad.td
 	GpsDot:
 		String: Helicopter
 	Hovers@CRUISING:
@@ -2914,6 +2916,9 @@
 		RequiresCondition: tnt
 
 ^RepairsAircraftWithRepairBay:
+	WithColoredOverlay@GHIGH:
+		RequiresCondition: greenhighlight
+		Palette: aircraft-repair
 	ExternalCondition@AIRCRAFTREPAIR:
 		Condition: aircraft-repair
 	RepairsUnits:

@@ -2552,7 +2552,7 @@ FIX:
 		Queue: Building
 		BuildPaletteOrder: 100
 		Prerequisites: weap, ~structures.ra, ~techlevel.medium
-		Description: Repairs vehicles for credits.
+		Description: Repairs vehicles.
 		BuildDurationModifier: 25
 	Valued:
 		Cost: 1200
@@ -2598,6 +2598,12 @@ FIX:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
 		Type: Polygon
 			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
+	ProximityExternalCondition@AIRCRAFTREPAIR:
+		Condition: aircraft-repair
+		Range: 10c0
+	WithRangeCircle@AIRCRAFTREPAIR:
+		Color: 888899AA
+		Range: 10c0
 
 SBAG:
 	Inherits: ^Wall
@@ -4357,7 +4363,7 @@ REP:
 		BuildPaletteOrder: 100
 		Prerequisites: vehicles.td, ~structures.td, ~techlevel.medium
 		IconPalette: chrometd
-		Description: Repairs vehicles for credits.
+		Description: Repairs vehicles.
 		BuildDurationModifier: 25
 	Valued:
 		Cost: 1200
@@ -4399,6 +4405,12 @@ REP:
 	ProvidesPrerequisite@buildingname:
 	ProvidesPrerequisite@repair:
 		Prerequisite: repair
+	ProximityExternalCondition@AIRCRAFTREPAIR:
+		Condition: aircraft-repair
+		Range: 10c0
+	WithRangeCircle@AIRCRAFTREPAIR:
+		Color: 888899AA
+		Range: 10c0
 
 HPAD.TD:
 	Inherits: ^BuildingTD
@@ -4519,19 +4531,6 @@ HPAD.TD:
 	InfiltrateForSupportPower:
 		Types: SpyInfiltrate
 		Proxy: powerproxy.paratroopers2
-	SpawnActorPower@GDIDropzone:
-		Actor: FLARE.dropzone
-		Prerequisites: ~radar.gdi, ~structures.gdi, ~!structures.eagle, ~techlevel.low
-		LifeTime: 280
-		OrderName: dropzone
-		Icon: orcaca
-		IconPalette: chrometd
-		ChargeInterval: 9000
-		Description: Reinforcements
-		LongDesc: An Orca Carryall drops reinforcements\nat the target location.
-		EndChargeSpeechNotification: Reinforce
-		LaunchSpeechNotification: ReinforcementsArrived
-		SelectTargetSpeechNotification: SelectTarget
 	SpawnActorPower@GDIEagleDropzone:
 		Actor: FLARE.dropzone
 		Prerequisites: ~radar.gdi, ~structures.eagle, ~techlevel.low
