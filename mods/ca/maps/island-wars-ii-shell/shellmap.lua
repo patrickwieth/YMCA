@@ -9,7 +9,7 @@
 
 UnitTypes = { "3tnk", "ttnk" }
 GDIUnitTypes = { "mtnk", "mtnk" }
-GDIMLRSTypes = { "hsam", "hsam" }
+GDIMLRSTypes = { "msam", "msam" }
 BeachUnitTypes = { "e1", "e2", "e3", "e4", "e1", "e2", "e3", "e4", "e1", "e2", "e3", "e4", "e1", "e2", "e3", "shok" }
 GDIBeachUnitTypes = { "n1", "n2", "n3", "n2", "n1", "n2", "n3", "n1", "n1", "n2", "n3", "n1", "n1", "n1", "n1", "n1" }
 ProducedUnitTypes =
@@ -39,7 +39,7 @@ BindActorTriggers = function(a)
 			end)
 		end
 	end
-	
+
 	if a.HasProperty("HasPassengers") then
 		Trigger.OnDamaged(a, function()
 			if a.HasPassengers then
@@ -109,7 +109,7 @@ WorldLoaded = function()
 	SetupAlliedUnits()
 	SetupFactories()
 	Utils.Do(ProducedUnitTypes, ProduceUnits)
-	
+
 	SendSovietUnits(Entry2.Location, UnitTypes, 50)
 	SendSovietUnits(Entry3.Location, UnitTypes, 50)
 	SendGDIUnits(Entry1.Location, GDIUnitTypes, 50)
