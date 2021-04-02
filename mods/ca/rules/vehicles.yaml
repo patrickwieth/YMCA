@@ -3314,16 +3314,16 @@ BTR:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
-		Prerequisites: barr, ~vehicles.soviet, ~!vehicles.soviet, ~techlevel.low
+		Prerequisites: barr, ~vehicles.soviet, ~commander_tree.btr
 		Description: Tough infantry transport.\n  Can attack Aircraft.\n  Strong vs Light Armor, Aircraft\n  Weak vs Tanks
 	Valued:
-		Cost: 750
+		Cost: 850
 	Tooltip:
 		Name: Armored Personnel Carrier (BTR)
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 28000
+		HP: 33000
 	Armor:
 		Type: Light
 	Mobile:
@@ -3337,16 +3337,16 @@ BTR:
 		Range: 4c0
 	Turreted:
 		TurnSpeed: 80
-		Offset: 5,0,70
+		Offset: 5,0,0
 	Armament@1:
-		Weapon: FLAK-23-AG
-		LocalOffset: 392,0,276
-		MuzzleSequence: muzzle
+		Weapon: IFVRockets
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: !full
 	Armament@2AA:
 		Name: secondary
-		Weapon: FLAK-23-AA
-		LocalOffset: 392,0,276
-		MuzzleSequence: muzzle
+		Weapon: IFVRocketsAA
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: !full
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
@@ -3373,7 +3373,7 @@ BTR.Surveillance:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
-		Prerequisites: barr, ~vehicles.soviet, ~commander_tree.surveillance_btr, ~techlevel.low
+		Prerequisites: barr, ~vehicles.soviet, ~commander_tree.surveillance_btr
 		Description: Tough infantry transport.\n  Can detect stealth units.\n  Is unarmed. \n  Special Ability: Radar Jamming.
 	Valued:
 		Cost: 750
@@ -3431,7 +3431,7 @@ NonaSVK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
-		Prerequisites: ~vehicles.soviet, ~commander_tree.nona_svk, ~techlevel.low
+		Prerequisites: ~vehicles.soviet, ~commander_tree.nona_svk
 		Description: Light Artillery.\n  Highly mobile artillery unit.\n  Strong vs Light Armor, Infantry, Buildings \n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 800
@@ -5738,7 +5738,7 @@ FTRK:
 		Prerequisites: ~vehicles.soviet, ~!commander_tree.flak_track.barrage, ~techlevel.low
 		Description: Mobile unit with mounted Flak cannon.\n  Strong vs Infantry, Light armor, Aircraft\n  Weak vs Tanks
 	Valued:
-		Cost: 600
+		Cost: 500
 	Tooltip:
 		Name: Mobile Flak
 	UpdatesPlayerStatistics:
@@ -5787,7 +5787,7 @@ FTRK.Barrage:
 		Prerequisites: ~vehicles.soviet, ~commander_tree.flak_track.barrage, ~techlevel.low
 		Description: Mobile unit with mounted Flak cannon.\n  Strong vs Infantry, Light armor, Aircraft\n  Weak vs Tanks
 	Valued:
-		Cost: 900
+		Cost: 800
 	Tooltip:
 		Name: Mobile Flak (Barrage)
 	Armament@AA:

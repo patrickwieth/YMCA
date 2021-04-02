@@ -967,6 +967,19 @@ hack.cameo_filler.109:
 		BuildPaletteOrder: 116
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
 
+commander_tree.BTR:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: BTR
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 117
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.nona_svk, ~!commander_tree.surveillance_btr, ~vehicles.soviet
+		Description: Enables to build the BTR.\n  It is a missile based anti-air troop transporter. \nOptimal for taking out heavy air units.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.btr
+
 commander_tree.Surveillance_BTR:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -975,7 +988,7 @@ commander_tree.Surveillance_BTR:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 117
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.nona_svk, ~vehicles.soviet
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.nona_svk, ~!commander_tree.btr, ~vehicles.soviet
 		Description: Enables to build the Surveillance BTR.\n  It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.btr
@@ -988,7 +1001,7 @@ commander_tree.Nona_SVK:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 117
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.surveillance_btr, ~vehicles.soviet
+		Prerequisites: prerequisite.has_points, stek, ~!commander_tree.surveillance_btr, ~!commander_tree.btr, ~vehicles.soviet
 		Description: Enables to build the Nona SVK.\n  It is a highly mobile artillery unit, excelling at hit and run tactics.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.btr
@@ -997,7 +1010,7 @@ hack.cameo_filler.109a:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 118
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled,
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~filler.btr
 
 hack.cameo_filler.109b:
 	Inherits: ^default.cameo_filler
