@@ -6099,31 +6099,33 @@ MAMMOTHMK2:
 	RenderVoxels:
 		Scale: 10
 
-
 APOC:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Inherits@SHRAPNEL: ^ThrowsShrapnel
+	RenderSprites:
+		FactionImages:
+			iraq: apoci
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
-		Prerequisites: indp, ~vehicles.soviet, ~!iraqtank.upgrade, ~techlevel.high
-		Description: Enormous slow tank with uranium shells and anti-air capability.\n  Can crush small vehicles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Nothing
+		Prerequisites: indp, ~vehicles.soviet, ~commander_tree.apocalypse
+		Description: Enormous slow tank with uranium shells and Drozd countermeasure system .\n  The Drozd system fires Chaff, which is good at depleting PLD systems.\n  Can crush small vehicles.???\n  Strong vs Vehicles, PLD\n  Weak vs Aircraft
 	Valued:
-		Cost: 2600
+		Cost: 5000
 	Tooltip:
 		Name: Apocalypse Tank
 		GenericName: Tank
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 110000
+		HP: 130000
 	Armor:
 		Type: Heavy
 	Mobile:
-		Speed: 50
+		Speed: 40
 		TurnSpeed: 8
 		Locomotor: sheavytracked
 		Voice: Move
@@ -6146,7 +6148,7 @@ APOC:
 		MuzzleSequence: muzzle
 	Armament@SECONDARY:
 		Name: secondary
-		Weapon: ApocalypseTusk
+		Weapon: DrozdChaff
 		LocalOffset: -85,384,340, -85,-384,340
 		LocalYaw: -100,100
 		Recoil: 43
@@ -6155,20 +6157,20 @@ APOC:
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
 	WithFacingSpriteBody:
-		RequiresCondition: !iraqtank-upgrade
+		RequiresCondition: !iraqtank
 	WithFacingSpriteBody@IRAQ:
 		Name: iraqbody
 		Sequence: idle2
-		RequiresCondition: iraqtank-upgrade
+		RequiresCondition: iraqtank
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: APOC.Husk
-		RequiresCondition: !being-warped && iraqtank-upgrade
+		RequiresCondition: !being-warped && iraqtank
 	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
-		StartIfBelow: 50
+		StartIfBelow: 100
 		DamageCooldown: 150
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -6181,32 +6183,13 @@ APOC:
 		VoiceSet: ApocalypseVoice
 	AttackMove:
 		Voice: Attack
-	GrantConditionOnPrerequisite@IRAQ:
-		Condition: iraqtank-upgrade
-		Prerequisites: iraqtank.upgrade
 	SpeedMultiplier@IRAQTANK:
 		Modifier: 125
-		RequiresCondition: iraqtank-upgrade
+		RequiresCondition: iraqtank
 	Explodes@IRAQTANK:
 		Weapon: UnitExplodeIraqTank
 		EmptyWeapon: UnitExplodeIraqTank
-		RequiresCondition: !being-warped && iraqtank-upgrade
-	-ProductionCostMultiplier@IndustrialPlantLevel1:
-
-APOC.IRAQ:
-	Inherits: APOC
-	RenderSprites:
-		Image: apoci
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 301
-		Prerequisites: indp, ~vehicles.soviet, ~iraqtank.upgrade, ~techlevel.high
-	WithFacingSpriteBody:
-		-RequiresCondition:
-	-WithFacingSpriteBody@IRAQ:
-	-SpawnActorOnDeath:
-	-GrantConditionOnPrerequisite@IRAQ:
-	SpeedMultiplier@IRAQTANK:
-		-RequiresCondition:
-	Explodes@IRAQTANK:
-		RequiresCondition: !being-warped
+		RequiresCondition: !being-warped && iraqtank
+	GrantConditionOnFaction@IRAQTANK:
+		Condition: iraqtank
+		Factions: iraq

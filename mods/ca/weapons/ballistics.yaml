@@ -96,9 +96,9 @@
 		Explosions: nuke3
 		ImpactSounds: kaboom1.aud
 	Warhead@4Radiation: CreateTintedCells
-		Level: 300
-		Falloff: 100, 25, 12
-		LayerName: radioactivity.weak
+		Level: 100
+		Falloff: 100, 55, 32, 5
+		LayerName: radioactivity.medium
 
 130mmTD:
 	Inherits: 130mm
@@ -284,21 +284,20 @@ TitanGun.Concussion:
 
 ApocShells:
 	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
 	ReloadDelay: 135
 	Report: vapoat1a.aud
-	Range: 5c0
 	Burst: 2
 	BurstDelays: 8
 	InvalidTargets: Air
 	Warhead@1Dam: SpreadDamage
 		Damage: 4750
 		Falloff: 368, 184, 80, 18, 0
-		Versus:
-			None: 40
-			Tree: 200
-			Heavy: 115
-			Wood: 45
+		Delay: 5
+		ValidTargets: Ground, Trees, Water, Underwater, Air
 		InvalidTargets: Air
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@3Eff_impact: CreateEffect
 		Explosions: nuke3
 		ImpactSounds: kaboom1.aud, kaboom22.aud
