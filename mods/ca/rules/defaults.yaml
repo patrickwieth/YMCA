@@ -374,28 +374,207 @@
 		Terrain: Clear, Rough, Road, Beach
 
 ^GDIUpgrade:
-	DamageMultiplier@GDIUPG1:
-		RequiresCondition: gdiupg1
-		Modifier: 90
-	FirepowerMultiplier@GDIUPG2:
-		RequiresCondition: gdiupg2
-		Modifier: 110
-	ExternalCondition@GDIUPG1:
-		Condition: gdiupg1
-	ExternalCondition@GDIUPG2:
-		Condition: gdiupg2
-	WithDecoration@GDIUPG:
+	GrantConditionOnPrerequisite@HOLD:
+		Condition: hold
+		Prerequisites: hold.strat
+	GrantConditionOnPrerequisite@HOLD2:
+		Condition: hold2
+		Prerequisites: hold2.strat
+	GrantConditionOnPrerequisite@HOLD3:
+		Condition: hold3
+		Prerequisites: hold3.strat
+	GrantConditionOnPrerequisite@BOMBARD:
+		Condition: bombard
+		Prerequisites: bombard.strat
+	GrantConditionOnPrerequisite@BOMBARD2:
+		Condition: bombard2
+		Prerequisites: bombard2.strat
+	GrantConditionOnPrerequisite@BOMBARD3:
+		Condition: bombard3
+		Prerequisites: bombard3.strat
+	GrantConditionOnPrerequisite@SEEK:
+		Condition: seek
+		Prerequisites: seek.strat
+	GrantConditionOnPrerequisite@SEEK2:
+		Condition: seek2
+		Prerequisites: seek2.strat
+	GrantConditionOnPrerequisite@SEEK3:
+		Condition: seek3
+		Prerequisites: seek3.strat
+	DamageMultiplier@HOLD:
+		RequiresCondition: hold
+		Modifier: 95
+	DamageMultiplier@HOLD2:
+		RequiresCondition: hold2
+		Modifier: 95
+	DamageMultiplier@HOLD3:
+		RequiresCondition: hold3
+		Modifier: 95
+	FirepowerMultiplier@BOMBARD:
+		RequiresCondition: bombard
+		Modifier: 105
+	FirepowerMultiplier@BOMBARD2:
+		RequiresCondition: bombard2
+		Modifier: 105
+	FirepowerMultiplier@BOMBARD3:
+		RequiresCondition: bombard3
+		Modifier: 105
+	RangeMultiplier@SEEK:
+		RequiresCondition: seek
+		Modifier: 105
+	SpeedMultiplier@SEEK:
+		RequiresCondition: seek
+		Modifier: 105
+	RangeMultiplier@SEEK2:
+		RequiresCondition: seek2
+		Modifier: 105
+	SpeedMultiplier@SEEK2:
+		RequiresCondition: seek2
+		Modifier: 105
+	RangeMultiplier@SEEK3:
+		RequiresCondition: seek3
+		Modifier: 105
+	SpeedMultiplier@SEEK3:
+		RequiresCondition: seek3
+		Modifier: 105
+	WithDecoration@HOLD:
 		Image: pips
 		Sequence: pip-armor
 		Palette: effect
-		ReferencePoint: Bottom, Left
+		Position: BottomLeft
 		ValidRelationships: Ally
-		RequiresCondition: gdiupg1
-		ZOffset: 256
+		RequiresCondition: hold && !(hold2 || hold3)
 		BlinkInterval: 64
 		BlinkPatterns:
-			gdiupg1 && bino: Off, On
+			hold && bino: Off, On
 		RequiresSelection: True
+	WithDecoration@HOLD2:
+		Image: pips
+		Sequence: pip-armor2
+		Palette: effect
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: hold2 && !hold3
+		BlinkInterval: 64
+		BlinkPatterns:
+			hold2 && bino: Off, On
+		RequiresSelection: True
+	WithDecoration@HOLD3:
+		Image: pips
+		Sequence: pip-armor3
+		Palette: effect
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: hold3
+		BlinkInterval: 64
+		BlinkPatterns:
+			hold3 && bino: Off, On
+		RequiresSelection: True
+	WithDecoration@BOMBARD:
+		Image: pips
+		Sequence: pip-bombard
+		Palette: effect
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: bombard && !(bombard2 || bombard3)
+		BlinkInterval: 64
+		BlinkPatterns:
+			bombard && bino: Off, On
+		RequiresSelection: True
+	WithDecoration@BOMBARD2:
+		Image: pips
+		Sequence: pip-bombard2
+		Palette: effect
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: bombard2 && !bombard3
+		BlinkInterval: 64
+		BlinkPatterns:
+			bombard2 && bino: Off, On
+		RequiresSelection: True
+	WithDecoration@BOMBARD3:
+		Image: pips
+		Sequence: pip-bombard3
+		Palette: effect
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: bombard3
+		BlinkInterval: 64
+		BlinkPatterns:
+			bombard3 && bino: Off, On
+		RequiresSelection: True
+	WithDecoration@SEEK:
+		Image: pips
+		Sequence: pip-seek
+		Palette: effect
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: seek && !(seek2 || seek3)
+		BlinkInterval: 64
+		BlinkPatterns:
+			seek && bino: Off, On
+		RequiresSelection: True
+	WithDecoration@SEEK2:
+		Image: pips
+		Sequence: pip-seek2
+		Palette: effect
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: seek2 && !seek3
+		BlinkInterval: 64
+		BlinkPatterns:
+			seek2 && bino: Off, On
+		RequiresSelection: True
+	WithDecoration@SEEK3:
+		Image: pips
+		Sequence: pip-seek3
+		Palette: effect
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: seek3
+		BlinkInterval: 64
+		BlinkPatterns:
+			seek3 && bino: Off, On
+		RequiresSelection: True
+
+^GDIUpgradeAircraft:
+	Inherits: ^GDIUpgrade
+	WithDecoration@HOLD:
+		-BlinkPatterns:
+		BlinkPatterns:
+			hold: Off, On
+	WithDecoration@HOLD2:
+		-BlinkPatterns:
+		BlinkPatterns:
+			hold2: Off, On
+	WithDecoration@HOLD3:
+		-BlinkPatterns:
+		BlinkPatterns:
+			hold3: Off, On
+	WithDecoration@BOMBARD:
+		-BlinkPatterns:
+		BlinkPatterns:
+			bombard: Off, On
+	WithDecoration@BOMBARD2:
+		-BlinkPatterns:
+		BlinkPatterns:
+			bombard2: Off, On
+	WithDecoration@BOMBARD3:
+		-BlinkPatterns:
+		BlinkPatterns:
+			bombard3: Off, On
+	WithDecoration@SEEK:
+		-BlinkPatterns:
+		BlinkPatterns:
+			seek : Off, On
+	WithDecoration@SEEK2:
+		-BlinkPatterns:
+		BlinkPatterns:
+			seek2 : Off, On
+	WithDecoration@SEEK3:
+		-BlinkPatterns:
+		BlinkPatterns:
+			seek3 : Off, On
 
 ^GDIUpgradeProducer:
 	GrantExternalConditionToProduced@GDIUPG1:
@@ -537,6 +716,39 @@
 	WithIdleOverlay@EMPDISABLE:
 		Sequence: emp-overlay
 		Palette: tseffect
+
+^NaniteShieldable:
+	WithColoredOverlay@NSHIELD:
+		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility)
+		Palette: nrepair
+	TimedConditionBar@NSHIELD:
+		Condition: nshield
+		Color: 25cde999
+	ExternalCondition@NSHIELD:
+		Condition: nshield
+	WithIdleOverlay@NSHIELD:
+		Sequence: emp-overlay
+		Palette: tseffect
+		RequiresCondition: nshield && damaged
+	ChangesHealth@NSHIELD:
+		PercentageStep: 6
+		Delay: 30
+		StartIfBelow: 100
+		DamageCooldown: 0
+		RequiresCondition: nshield
+	WithDecoration@NSHIELD:
+		Image: select
+		Palette: chrome
+		Sequence: repair
+		Position: Center
+		RequiresCondition: nshield
+		BlinkInterval: 15
+		BlinkPattern: on, off
+		RequiresSelection: False
+		ValidRelationships: Ally, Neutral
+	DamageMultiplier@NSHIELD:
+		RequiresCondition: nshield
+		Modifier: 66
 
 ^NaniteRepair:
 	ChangesHealth@NREPAIR:
@@ -1616,7 +1828,7 @@
 	Inherits@2: ^GainsExperience
 	Inherits@3: ^Cloakable
 	Inherits@4: ^EmpDisable
-	Inherits@5: ^GDIUpgrade
+	Inherits@5: ^GDIUpgradeAircraft
 	Inherits@6: ^BinoUpgrade
 	Inherits@8: ^Warpable
 	Inherits@8a:^WarpableAir
@@ -2951,3 +3163,17 @@
 		RequiresSelection: true
 		Image: pips
 		Sequence: tag-primary
+
+^BuildingPlug:
+	Interactable:
+	AlwaysVisible:
+	Building:
+		BuildSounds: placbldg.aud
+		UndeploySounds: cashturn.aud
+	SequencePlaceBuildingPreview:
+		Sequence: place
+		SequencePalette: placebuildingtd
+		Palette: terrain
+	KillsSelf:
+		RemoveInstead: true
+	RenderSprites:

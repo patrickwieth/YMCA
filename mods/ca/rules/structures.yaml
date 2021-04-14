@@ -122,6 +122,7 @@ GAP:
 
 SPEN:
 	Inherits: ^Building
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 72,48
 	RenderSprites:
@@ -209,9 +210,6 @@ SPEN:
 	Production:
 		Produces: Ship, Submarine
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	-SpawnActorsOnSell:
 	RepairsUnits:
 		ValuePercentage: 0
@@ -265,13 +263,6 @@ SPEN:
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	HitShape:
 		Type: Rectangle
 			TopLeft: -1536, -598
@@ -286,6 +277,7 @@ SPEN:
 
 SYRD:
 	Inherits: ^Building
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 72,48
 	RenderSprites:
@@ -349,9 +341,6 @@ SYRD:
 	Production:
 		Produces: Ship, Boat
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	-SpawnActorsOnSell:
 	RepairsUnits:
 		ValuePercentage: 0
@@ -405,13 +394,6 @@ SYRD:
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	HitShape:
 		TargetableOffsets: 768,0,0, 768,-1024,0, 768,1024,0
 		Type: Rectangle
@@ -817,6 +799,9 @@ DOME:
 	ProvidesPrerequisite@gdirad:
 		Factions: gdi, zocom, talon, eagle
 		Prerequisite: radar.gdi
+	ProvidesPrerequisite@radar-active:
+		Prerequisite: radar-active
+		RequiresCondition: !jammed && !disabled && !being-warped
 	ProvidesPrerequisite@buildingname:
 	ExternalCondition@JAMMED:
 		Condition: jammed
@@ -1241,6 +1226,7 @@ ATEK:
 WEAP:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 72,48
 	Buildable:
@@ -1411,9 +1397,6 @@ WEAP:
 	ProvidesPrerequisite@v3rl:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: vehicles.v3rl
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Vehicle
 	Power:
@@ -1428,13 +1411,6 @@ WEAP:
 	InfiltrateForSupportPower@veh:
 		Types: SabInfiltrate
 		Proxy: veh.soviet.stolen
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	-ActorPreviewPlaceBuildingPreview:
 	SequencePlaceBuildingPreview:
 		Sequence: place
@@ -1707,6 +1683,7 @@ SILO:
 HPAD:
 	Inherits: ^Building
 	Inherits@shape: ^2x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	Selectable:
 		Bounds: 48,48
@@ -1752,9 +1729,6 @@ HPAD:
 	Reservable:
 	ProductionBar:
 		ProductionType: Aircraft
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
@@ -1800,13 +1774,6 @@ HPAD:
 	InfiltrateForSupportPower:
 		Types: SpyInfiltrate
 		Proxy: powerproxy.paratroopers2
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	SpawnActorPower@GDIEagleDropzone:
 		Actor: FLARE.dropzone
 		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, anyradar, ~techlevel.low
@@ -1827,6 +1794,7 @@ HPAD:
 AFLD:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	HitShape:
 		UseTargetableCellsOffsets: false
@@ -2027,9 +1995,6 @@ AFLD:
 	ProductionBar:
 		ProductionType: Aircraft
 	SupportPowerChargeBar:
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -2040,13 +2005,6 @@ AFLD:
 	InfiltrateForSupportPower:
 		Proxy: powerproxy.airstrike
 		Types: SpyInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 
@@ -2269,6 +2227,7 @@ STEK:
 BARR:
 	Inherits: ^Building
 	Inherits@shape: ^2x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 48,48
 	HitShape:
@@ -2315,9 +2274,6 @@ BARR:
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	GrantExternalConditionToProduced:
 		Condition: produced
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
 	ProvidesPrerequisite@infantryany:
@@ -2369,16 +2325,10 @@ BARR:
 		Proxy: inf.soviet.stolen
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 
 KENN:
 	Inherits: ^Building
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 24,24
 	Buildable:
@@ -2414,9 +2364,6 @@ KENN:
 	Production:
 		Produces: Infantry, Dog
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
 	-SpawnActorsOnSell:
@@ -2424,17 +2371,11 @@ KENN:
 		Amount: -10
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 
 TENT:
 	Inherits: ^Building
 	Inherits@shape: ^2x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 48,48
 	HitShape:
@@ -2481,9 +2422,6 @@ TENT:
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	GrantExternalConditionToProduced:
 		Condition: produced
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
 	ProvidesPrerequisite@infantryra:
@@ -2538,13 +2476,6 @@ TENT:
 		Proxy: inf.allies.stolen
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, SabInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 
 FIX:
 	Inherits: ^Building
@@ -2854,6 +2785,7 @@ STRUCTURES.TSLA:
 PYLE:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 48,48
 	HitShape:
@@ -2902,9 +2834,6 @@ PYLE:
 	Production:
 		Produces: Infantry, Soldier
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
 	ProvidesPrerequisite@infantryany:
@@ -2953,13 +2882,6 @@ PYLE:
 	InfiltrateForSupportPower@inf:
 		Types: SabInfiltrate
 		Proxy: inf.gdi.stolen
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	InfiltrateForSupportPower@spy:
 		Proxy: barracks.upgraded
 		Types: SpyInfiltrate
@@ -2967,6 +2889,7 @@ PYLE:
 HAND:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
@@ -3004,9 +2927,6 @@ HAND:
 	Production:
 		Produces: Infantry, Soldier
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
 	Targetable:
@@ -3054,13 +2974,6 @@ HAND:
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	ProvidesPrerequisite@buildingname:
 	InfiltrateForSupportPower@spy:
 		Proxy: barracks.upgraded
@@ -3069,6 +2982,7 @@ HAND:
 WEAP.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: awep
@@ -3248,9 +3162,6 @@ WEAP.TD:
 	Production:
 		Produces: Vehicle
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 	ProductionBar:
@@ -3258,13 +3169,6 @@ WEAP.TD:
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	ProvidesPrerequisite@buildingname:
 	InfiltrateForSupportPower@spy:
 		Proxy: vehicles.upgraded
@@ -3282,6 +3186,7 @@ WEAP.TD:
 
 AIRS:
 	Inherits: ^BuildingTD
+	Inherits@PRIMARY: ^PrimaryBuilding
 	RenderSprites:
 		Image: astrip
 	HitShape:
@@ -3477,9 +3382,6 @@ AIRS:
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
 	WithDeliveryAnimation:
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 	ProductionBar:
@@ -3490,13 +3392,6 @@ AIRS:
 	InfiltrateForSupportPower@veh:
 		Types: SabInfiltrate
 		Proxy: veh.nod.stolen
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	ProvidesPrerequisite@buildingname:
 	InfiltrateForSupportPower@spy:
 		Proxy: vehicles.upgraded
@@ -4233,6 +4128,9 @@ HQ:
 		Factions: gdi, zocom, talon, eagle
 		Prerequisite: radar.gdi
 	ProvidesPrerequisite@buildingname:
+	ProvidesPrerequisite@radar-active:
+		Prerequisite: radar-active
+		RequiresCondition: !jammed && !disabled && !being-warped
 	ExternalCondition@JAMMED:
 		Condition: jammed
 	InfiltrateForSupportPower@tec:
@@ -4415,6 +4313,7 @@ REP:
 HPAD.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
@@ -4459,9 +4358,6 @@ HPAD.TD:
 	ProductionBar:
 		ProductionType: Aircraft
 	WithBuildingBib:
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
@@ -4519,13 +4415,6 @@ HPAD.TD:
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	InfiltrateForSupportPower:
@@ -4677,6 +4566,7 @@ SILO.TD:
 AFLD.GDI:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
@@ -4808,22 +4698,12 @@ AFLD.GDI:
 	ProductionBar:
 		ProductionType: Aircraft
 	SupportPowerChargeBar:
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	InfiltrateForSupportPower:
@@ -4833,6 +4713,7 @@ AFLD.GDI:
 AFLD.allies:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	RenderSprites:
 		Image: afld.allies
@@ -4870,8 +4751,6 @@ AFLD.allies:
 	ProductionBar:
 		ProductionType: Aircraft
 	SupportPowerChargeBar:
-	PrimaryBuilding:
-		PrimaryCondition: primary
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -4905,13 +4784,6 @@ AFLD.allies:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
 		RequiresCondition: !being-warped
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	InfiltrateForSupportPower:
@@ -5301,6 +5173,7 @@ PRIS:
 
 SPEN.nod:
 	Inherits: ^Building
+	Inherits@PRIMARY: ^PrimaryBuilding
 	RenderSprites:
 		Image: SPENNOD
 		PlayerPalette: playernavy
@@ -5358,9 +5231,6 @@ SPEN.nod:
 	Production:
 		Produces: Ship, Submarine
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	RepairsUnits:
 		ValuePercentage: 0
 		Interval: 12
@@ -5384,13 +5254,6 @@ SPEN.nod:
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
@@ -5412,6 +5275,7 @@ SPEN.nod:
 SYRD.gdi:
 	Inherits: ^Building
 	Inherits@gdiupg: ^GDIUpgradeProducer
+	Inherits@PRIMARY: ^PrimaryBuilding
 	RenderSprites:
 		Image: GSYRD
 		PlayerPalette: playernavy
@@ -5474,9 +5338,6 @@ SYRD.gdi:
 	Production:
 		Produces: Ship, Boat
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	RepairsUnits:
 		ValuePercentage: 0
 		Interval: 12
@@ -5500,13 +5361,6 @@ SYRD.gdi:
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
@@ -5937,6 +5791,10 @@ PATR:
 	-WithSpriteBody:
 	WithEmbeddedTurretSpriteBody:
 		PauseOnCondition: disabled || empdisable || being-warped
+	WithIdleAnimation:
+		Sequences: empty
+		Interval: 0
+		RequiresCondition: !loaded-rocket
 	AttackTurreted:
 		PauseOnCondition: disabled || empdisable || being-warped
 		RequiresCondition: !build-incomplete && !reloading
@@ -5961,6 +5819,14 @@ PATR:
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		IncomingSpeechNotification: MissileLaunchDetected
+		DisplayTimerRelationships: Ally, Neutral, Enemy
+	AmmoPool:
+		Ammo: 1
+		ReloadCount: 1
+		AmmoCondition: loaded-rocket
+	ReloadAmmoPool:
+		Delay: 100
+		Count: 1
 	SupportPowerChargeBar:
 	Power:
 		Amount: -150
@@ -6108,12 +5974,10 @@ OREP:
 		Delay: 3
 		RequiresCondition: !disabled && !empdisable && !being-warped
 
-MISS.GDI:
-	Inherits: ^ScienceBuilding
+UPGC:
+	Inherits: ^BuildingTD
 	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^3x2Shape
-	RenderSprites:
-		Image: miss
+	Inherits@SHAPE: ^3x2Shape
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Selectable:
@@ -6121,7 +5985,7 @@ MISS.GDI:
 	Building:
 		Footprint: xxx xxx ===
 		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
+		LocalCenterOffset: 0,-1024,0
 	Health:
 		HP: 80000
 	Armor:
@@ -6133,12 +5997,15 @@ MISS.GDI:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
+	WithSpriteBody:
+		PauseOnCondition: disabled || being-warped
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 200
 		Prerequisites: ~structures.gdi, gtek, ~techlevel.high
-		Description: Allows the construction of advanced weaponry &\nimproves all vehicles, aircraft & naval units with with composite armor,\nreducing damage taken by 10%.\nImproved unit ammunition will also become available after a short research time,\nincreasing unit damage dealt by 10%\n  Maximum 1 can be built.\n  Cannot be captured.
+		Description: Allows the construction of advanced weaponry and upgrades.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
+		IconPalette: chrometd
 	-Capturable:
 	-CaptureNotification:
 	-CapturableProgressBar:
@@ -6147,23 +6014,24 @@ MISS.GDI:
 	Valued:
 		Cost: 2500
 	Tooltip:
-		Name: Research Center
+		Name: Upgrade Center
+	ValidFactions:
+		Factions: talon, zocom, eagle
+	ProvidesPrerequisiteValidatedFaction@talonupgc:
+		Factions: talon
+		Prerequisite: upgc.talon
+	ProvidesPrerequisiteValidatedFaction@zocomupgc:
+		Factions: zocom
+		Prerequisite: upgc.zocom
+	ProvidesPrerequisiteValidatedFaction@eagleupgc:
+		Factions: eagle
+		Prerequisite: upgc.eagle
+	ProvidesPrerequisite@Name:
 	ProvidesDelayedPrerequisite@UPGRADE1:
 		Prerequisite: miss.gdi
 		Delay: 3
 		Notification: UnitArmorUpgraded
 		RequiresCondition: !disabled && !empdisable && !being-warped
-	ProvidesDelayedPrerequisite@UPGRADE2:
-		Prerequisite: miss.gdi2
-		Delay: 4
-		Notification: UnitFirepowerUpgraded
-		RequiresCondition: !disabled && !empdisable && !being-warped
-	ProvidesPrerequisite@HMLRS:
-		Factions: gdi, zocom, eagle
-		Prerequisite: hmlrs.buildable
-	RevealsShroud:
-		Range: 4c0
-		MinRange: 3c0
 	Power:
 		Amount: -150
 		RequiresCondition: !being-warped
@@ -6172,8 +6040,290 @@ MISS.GDI:
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
+		DeathSequencePalette: overlayplayertd
 	Sellable:
 		RequiresCondition: !build-incomplete && !c4 && !being-warped
+	ProductionAirdropCA:
+		Produces: Money
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: ocar.pod
+		BaselineSpawn: true
+		IncomingAudio: SuppliesInbound
+	WithDeliveryOverlay:
+		Sequence: flare
+		Palette: effect
+		IsPlayerPalette: false
+		Offset: -1024,768,0
+	PeriodicProducerCA@DROP:
+		Type: Money
+		ChargeDuration: 1500
+		Actors: truk.drop
+		ShowSelectionBar: true
+		RequiresCondition: tower.drop && !(empdisable || disabled || being-warped)
+	Exit:
+		SpawnOffset: 511,511,0
+		ExitCell: 1,1
+	Turreted:
+		TurnSpeed: 12
+		InitialFacing: 384
+		RealignDelay: -1
+		Offset: -768,468,0
+	AttackTurreted:
+		RequiresCondition: !build-incomplete && tower.rocket && loaded-rocket > 0
+		PauseOnCondition: disabled || empdisable || being-warped
+	Armament@ROCKET:
+		RequiresCondition: tower.rocket
+		Weapon: FirestormBarrage
+		LocalOffset: 768,64,368, 768,-64,368, 768,64,255, 768,-64,255
+	SupportPowerChargeBar:
+	AttackOrderPower@ROCKET:
+		OrderName: rocketbarrage
+		PauseOnCondition: empdisable || disabled || being-warped
+		Cursor: ability
+		Icon: fstorm
+		IconPalette: chrometd
+		ChargeInterval: 7500
+		Description: Firestorm
+		LongDesc: Barrage target area with rockets.
+		BeginChargeSpeechNotification: FireStormOffline
+		EndChargeSpeechNotification: FireStormReady
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayTimerRelationships: Ally
+		RequiresCondition: tower.rocket
+		Prerequisites: ~techlevel.unrestricted
+	RejectsOrders:
+		Except: Sell, PowerDown
+	AmmoPool:
+		Ammo: 3
+		ReloadCount: 3
+		AmmoCondition: loaded-rocket
+	ReloadAmmoPool:
+		Delay: 100
+		Count: 3
+	WithSpriteTurret@ROCKET:
+		RequiresCondition: !build-incomplete && tower.rocket
+		Recoils: false
+		Sequence: turret-rocket
+	WithIdleOverlay@RADAR:
+		RequiresCondition: !build-incomplete && tower.radar
+		Sequence: turret-radar
+		PauseOnCondition: !scan-active || disabled || being-warped
+	WithIdleOverlay@SHIELD:
+		RequiresCondition: !build-incomplete && tower.shield && !nshield-active
+		Sequence: turret-shield
+		PauseOnCondition: disabled || being-warped
+	WithIdleOverlay@SHIELD-ACTIVE:
+		RequiresCondition: !build-incomplete && tower.shield && nshield-active
+		Sequence: turret-shield-active
+		PauseOnCondition: disabled || being-warped
+	WithIdleOverlay@SHIELD-ACTIVE-EFFECT:
+		RequiresCondition: !build-incomplete && tower.shield && nshield-active
+		Sequence: emp-overlay
+		Palette: tseffect
+		PauseOnCondition: disabled || being-warped
+		Offset: -1284,384,0
+	WithIdleOverlay@DZONE:
+		RequiresCondition: !build-incomplete && tower.drop
+		Sequence: turret-drop
+		PauseOnCondition: disabled || being-warped
+	GrantPrerequisiteChargeDrainPower@RADAR:
+		OrderName: advradarorder
+		DischargeModifier: 600
+		Prerequisite: scan-active
+		ChargeInterval: 4500
+		Icon: arscan
+		IconPalette: chrometd
+		Description: Advanced Radar Scan
+		LongDesc: Provides information on enemy structures & units positions.
+		RequiresCondition: !build-incomplete && tower.radar
+		PauseOnCondition: !radar-active || disabled || being-warped
+		LaunchSound: gradarup.aud
+		BeginChargeSound: gradardn.aud
+		DisplayTimerRelationships: Ally
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		Prerequisites: ~techlevel.unrestricted
+	DrainPrerequisitePowerOnDamage@RADAR:
+		OrderName: advradarorder
+	GrantConditionOnPrerequisite@SCAN:
+		Prerequisites: scan-active
+		Condition: scan-active
+	GrantConditionOnBotOwner@RADAR:
+		Condition: scan-active
+		Bots: brutal, vhard, hard, normal, easy, naval
+	GrantConditionOnPrerequisite@RADAR:
+		Prerequisites: radar-active
+		Condition: radar-active
+	GpsRadarProvider:
+		RequiresCondition: tower.radar && scan-active && !(disabled || being-warped)
+	ExternalCondition@NSACTIVE:
+		Condition: nshield-active
+	ExternalCondition@NSAUDIO:
+		Condition: nshield-audio
+	GrantExternalConditionPowerCA@NSHIELD:
+		OrderName: nshieldorder
+		Icon: nshield
+		ChargeInterval: 6000
+		Condition: nshield
+		Dimensions: 5, 5
+		Footprint: _xxx_ xxxxx xxxxx xxxxx _xxx_
+		Duration: 375
+		Prerequisites: ~techlevel.unrestricted
+		Weapon: ShieldFlash
+		ActivationDelay: 5
+		AirburstAltitude: 0c0
+		AllowMultiple: false
+		Description: Nanite Shield
+		LongDesc: Repairs selected damaged structures & reduces damage taken.
+		OnFireSound: srepaira.aud
+		DisplayTimerRelationships: Ally
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		ActiveCondition: nshield-active
+		Cursor: repair
+		RequiresCondition: tower.shield
+		PauseOnCondition: disabled || empdisable ||  being-warped
+	ProximityExternalCondition@NSHIELD-AUDIO:
+		Condition: nshield-audio
+		RequiresCondition: nshield-active
+		AffectsParent: true
+		EnableSound: uscolo1.aud
+	AmbientSound@NSHIELD-AUDIO:
+		SoundFiles: uscolo2a.aud, uscolo2b.aud, uscolo2c.aud
+		Delay: 3
+		Interval: 0
+		RequiresCondition: nshield-audio || nshield-active
+	Pluggable:
+		Conditions:
+			tower.rocket: tower.rocket
+			tower.radar: tower.radar
+			tower.shield: tower.shield
+			tower.drop: tower.drop
+		Requirements:
+			tower.rocket: !build-incomplete && !tower.radar && !tower.rocket && !tower.shield && !tower.drop
+			tower.radar: !build-incomplete && !tower.radar && !tower.rocket && !tower.shield && !tower.drop
+			tower.shield: !build-incomplete && !tower.radar && !tower.rocket && !tower.shield && !tower.drop
+			tower.drop: !build-incomplete && !tower.radar && !tower.rocket && !tower.shield && !tower.drop
+	ProvidesPrerequisite@pluggable:
+		RequiresCondition: !build-incomplete && (tower.rocket || tower.radar || tower.shield || tower.drop)
+		Prerequisite: upgc.plugged
+	ProvidesPrerequisite@AMPSEEK:
+		RequiresCondition: !build-incomplete && tower.radar
+		Prerequisite: seek3.strat
+		RequiresPrerequisites: seek.strat
+	ProvidesPrerequisite@AMPBOMB:
+		RequiresCondition: !build-incomplete && tower.rocket
+		Prerequisite: bombard3.strat
+		RequiresPrerequisites: bombard.strat
+	ProvidesPrerequisite@AMPHOLD:
+		RequiresCondition: !build-incomplete && tower.shield
+		Prerequisite: hold3.strat
+		RequiresPrerequisites: hold.strat
+	ProvidesPrerequisite@upgb:
+		Prerequisite: bombard.strat
+		RequiresCondition: tower.rocket
+	ProvidesPrerequisite@upgb2:
+		Prerequisite: bombard2.strat
+		RequiresCondition: tower.rocket
+	ProvidesPrerequisite@upgb3:
+		Prerequisite: bombard3.strat
+		RequiresCondition: tower.rocket
+	ProvidesPrerequisite@upgs:
+		Prerequisite: seek.strat
+		RequiresCondition: tower.radar
+	ProvidesPrerequisite@upgs2:
+		Prerequisite: seek2.strat
+		RequiresCondition: tower.radar
+	ProvidesPrerequisite@upgs3:
+		Prerequisite: seek3.strat
+		RequiresCondition: tower.radar
+	ProvidesPrerequisite@upgh:
+		Prerequisite: hold.strat
+		RequiresCondition: tower.shield
+	ProvidesDelayedPrerequisite@upgh2:
+		Delay: 300
+		Prerequisite: hold2.strat
+		RequiresCondition: tower.shield
+	ProvidesDelayedPrerequisite@upgh3:
+		Delay: 600
+		Prerequisite: hold3.strat
+		RequiresCondition: tower.shield
+
+UPGC.SOCK:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		Name: Component Platform
+
+UPGC.BOMB:
+	Inherits: ^BuildingPlug
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Upgrade: Firestorm Missile System
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 1
+		Prerequisites: ~upgc, !upgc.plugged
+		Description: Provides an napalm rocket barrage.\n\n  + Increases the Strategy: Bombardment unit bonus by a further 5%.
+		IconPalette: chrometd
+	Plug:
+		Type: tower.rocket
+	Power:
+		Amount: -100
+
+UPGC.SEEK:
+	Inherits: ^BuildingPlug
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Upgrade: Advanced Radar System
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 2
+		Prerequisites: ~upgc, !upgc.plugged
+		Description: Provides detailed information on enemy locations.\n\n  + Increases the Strategy: Seek & Destroy unit bonus by a further 5%.
+		IconPalette: chrometd
+	Plug:
+		Type: tower.radar
+	Power:
+		Amount: -100
+
+UPGC.HOLD:
+	Inherits: ^BuildingPlug
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Upgrade: Nanoshield Generator
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 3
+		Prerequisites: ~upgc, !upgc.plugged
+		Description: Provides the ability to rapidly repair friendly structures.\n\n  + Increases the Strategy: Hold the Line unit bonus by a further 5%.
+		IconPalette: chrometd
+	Plug:
+		Type: tower.shield
+	Power:
+		Amount: -100
+
+UPGC.DROP:
+	Inherits: ^BuildingPlug
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Upgrade: Supply Drop Zone
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 4
+		Prerequisites: ~upgc, ~!upgc.plugged
+		Description: Provides a dropzone\nfor emergency supplies.
+		IconPalette: chrometd
+	Plug:
+		Type: tower.drop
+	Power:
+		Amount: -50
 
 BIO.Nod:
 	Inherits: ^BuildingTD

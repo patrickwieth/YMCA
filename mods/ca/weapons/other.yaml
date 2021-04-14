@@ -368,6 +368,28 @@ Repair.Dummy:
 		Damage: 0
 		ValidTargets: Repair, RepairInAir
 
+RepairFlash:
+	Inherits: Heal
+	Range: 1c0
+	Report: fixit1.aud
+	ValidTargets: Repair
+	Warhead@1Dam: SpreadDamage
+		Damage: -1
+		ValidTargets: Repair
+	Warhead@highlight: GrantExternalCondition
+		Range: 2c511
+		Duration: 2
+		Condition: highlight
+		ValidTargets: Vehicle
+
+ShieldFlash:
+	Inherits: RepairFlash
+	Warhead@highlight: GrantExternalCondition
+		Range: 2c511
+		Duration: 2
+		Condition: highlight
+		ValidTargets: Structure
+
 RepairNanite:
 	Report: srepaira.aud
 	Warhead@highlight: GrantExternalCondition
@@ -2150,3 +2172,74 @@ TNT:
 
 SmallDebris:
 	Inherits: ^Debris
+
+FireDebris:
+	Inherits: ^Debris
+	Range: 3c0
+	Projectile: Bullet
+		Speed: 55, 108
+		LaunchAngle: 90, 192
+		Image: firetrail
+		TrailImage: smokey
+		TrailDelay: 1
+		Palette: effect
+		TrailPalette: effect
+		-Sequences:
+		Shadow: true
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 200
+		Falloff: 100, 100, 0
+		Damage: 1000
+		Versus:
+			None: 100
+			Wood: 85
+			Light: 70
+			Heavy: 35
+			Concrete: 28
+		DamageTypes: Prone100Percent, TriggerProne, PoisonDeath
+	Warhead@2Eff: CreateEffect
+		ValidTargets: Ground, Air, Water
+		Explosions: small_napalm
+		ExplosionPalette: effect
+		ImpactSounds: firebl3.aud
+	-Warhead@3EffWater:
+	Warhead@4Smu: LeaveSmudge
+		SmudgeType: Scorch
+
+ChemDebris:
+	Inherits: ^Debris
+	Range: 3c0
+	Projectile: Bullet
+		Speed: 55, 108
+		LaunchAngle: 90, 192
+		Image: tibglob
+		Palette: scrin-ignore-lighting-alpha85
+		TrailImage: tibspew1
+		TrailPalette: scrin-ignore-lighting-alpha85
+		-Sequences:
+		Shadow: true
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 200
+		Falloff: 100, 100, 0
+		Damage: 1000
+		Versus:
+			None: 100
+			Wood: 85
+			Light: 70
+			Heavy: 35
+			Concrete: 28
+		DamageTypes: Prone100Percent, TriggerProne, PoisonDeath
+	Warhead@2Eff: CreateEffect
+		ValidTargets: Ground, Air, Water
+		Explosions: small_chem
+		ExplosionPalette: tdeffect
+		ImpactSounds: vtoxcona.aud, vtoxconb.aud, vtoxconc.aud
+	-Warhead@3EffWater:
+	Warhead@4Smu: LeaveSmudge
+		SmudgeType: Scorch-NoFlame
+	Warhead@5Radio: CreateTintedCells
+		Level: 300
+		Falloff: 32, 5
+		LayerName: radioactivity.weak

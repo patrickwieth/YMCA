@@ -2704,6 +2704,7 @@ PROC.SCRIN:
 PORT:
 	Inherits: ^ScrinBuilding
 	Inherits@shape: ^2x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Selectable:
 		Bounds: 48,48
 	HitShape:
@@ -2746,9 +2747,6 @@ PORT:
 	Production:
 		Produces: Infantry, Soldier
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	ProductionBar:
 		ProductionType: Infantry
 	ProvidesPrerequisite@infantryany:
@@ -2786,13 +2784,6 @@ PORT:
 	InfiltrateForSupportPower@inf:
 		Types: SabInfiltrate
 		Proxy: inf.scrin.stolen
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	InfiltrateForSupportPower@spy:
 		Proxy: barracks.upgraded
 		Types: SpyInfiltrate
@@ -2801,6 +2792,7 @@ PORT:
 
 WSPH:
 	Inherits: ^ScrinBuilding
+	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@shape: ^3x2Shape
 	Selectable:
 		Bounds: 72,48
@@ -2992,9 +2984,6 @@ WSPH:
 	Production:
 		Produces: Vehicle
 		PauseOnCondition: forceshield || invulnerability || being-warped
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 	ProductionBar:
@@ -3002,13 +2991,6 @@ WSPH:
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	ProvidesPrerequisite@buildingname:
 	InfiltrateForSupportPower@spy:
 		Proxy: vehicles.upgraded
@@ -3233,6 +3215,7 @@ SCRT:
 GRAV:
 	Inherits: ^ScrinBuilding
 	Inherits@shape: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Buildable:
@@ -3299,22 +3282,12 @@ GRAV:
 	ProductionBar:
 		ProductionType: Aircraft
 	SupportPowerChargeBar:
-	PrimaryBuilding:
-		PrimaryCondition: primary
-		SelectionNotification: PrimaryBuildingSelected
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-	WithDecoration@primary:
-		RequiresSelection: true
-		Image: pips
-		Sequence: tag-primary
-		ReferencePoint: Top
-		ZOffset: 256
-		RequiresCondition: primary
 	WithBuildingBib:
 	WithIdleOverlay@orb:
 		RequiresCondition: !build-incomplete

@@ -849,6 +849,82 @@ miss:
 			INTERIOR: TEMPERAT
 	icon: missicon
 
+upgc:
+	Inherits: ^StructureOverlays
+	idle: upgc
+		Length: 10
+		Tick: 120
+	active: upgc
+		Length: 10
+		Tick: 120
+	damaged-idle: upgc
+		Start: 10
+		Length: 10
+		Tick: 120
+	damaged-active: upgc
+		Start: 10
+		Length: 10
+		Tick: 120
+	dead: upgc
+		Start: 10
+		Length: 1
+		Tick: 800
+	make: upgcmake
+		Length: *
+	flare: smokland
+		Length: 92
+		Tick: 120
+		ZOffset: 1023
+	turret-rocket: upgc-fstorm
+		Facings: 32
+		UseTilesetCode: false
+	turret-radar: upgc-aradar
+		Start: 0
+		Length: *
+		UseTilesetCode: false
+	turret-shield: upgc-nshieldoff
+		Length: *
+		UseTilesetCode: false
+	turret-shield-active: upgc-nshield
+		Length: *
+		UseTilesetCode: false
+	turret-drop: upgc-dzone
+		Length: *
+		UseTilesetCode: false
+		Tick: 300
+	bib: bib2
+		Length: *
+		UseTilesetExtension: true
+		TilesetOverrides:
+			INTERIOR: TEMPERAT
+	icon: upgcicnh
+
+upgc.bomb:
+	place: upgc-fstorm
+		Offset: 0, -12, 12
+		UseTilesetCode: true
+		Start: 12
+	icon: upgc-fstormicnh
+
+upgc.seek:
+	place: upgc-aradar
+		Offset: 0, -12, 12
+		UseTilesetCode: true
+		Start: 28
+	icon: upgc-aradaricnh
+
+upgc.hold:
+	place: upgc-nshieldoff
+		Offset: 0, -12, 12
+		UseTilesetCode: true
+	icon: upgc-nshieldicnh
+
+upgc.drop:
+	place: upgc-dzone
+		Offset: 0, -12, 12
+		UseTilesetCode: true
+	icon: upgc-dzoneicnh
+
 gtek:
 	Inherits: ^StructureOverlays
 	idle: gtek
@@ -1968,7 +2044,16 @@ patr:
 		Facings: 32
 		UseClassicFacings: True
 		Offset: 0,0
+	empty: patr-empty
+		Facings: 32
+		UseClassicFacings: True
+		Offset: 0,0
 	damaged-idle: patr
+		Start: 32
+		Facings: 32
+		UseClassicFacings: True
+		Offset: 0,0
+	damaged-empty: patr-empty
 		Start: 32
 		Facings: 32
 		UseClassicFacings: True
@@ -1977,10 +2062,6 @@ patr:
 		Length: *
 		Offset: 0,0
 		Tick: 75
-	muzzle: smokeygun
-		Length: 12
-		Tick: 30
-		Offset: 0,0
 	bib: mbSAM
 		Length: *
 		Offset: 0,5
