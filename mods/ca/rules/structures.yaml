@@ -1167,7 +1167,7 @@ ATEK:
 		Icon: gps
 		Actors: camera.satscan
 		Type: SpySatellite
-		ChargeInterval: 4500
+		ChargeInterval: 3000
 		OrderName: SatelliteScanPower
 		AutoFire: True
 		DisplayTimerRelationships: Ally, Neutral, Enemy
@@ -1179,7 +1179,7 @@ ATEK:
 		Icon: gps
 		Actors: camera.satscan.oneshot
 		Type: SpySatellite
-		ChargeInterval: 7500
+		ChargeInterval: 4500
 		OneShot: True
 		OrderName: SatelliteScanNoFogPower
 		AutoFire: True
@@ -6129,9 +6129,9 @@ UPGC:
 		PauseOnCondition: disabled || being-warped
 	GrantPrerequisiteChargeDrainPower@RADAR:
 		OrderName: advradarorder
-		DischargeModifier: 600
+		DischargeModifier: 1200
 		Prerequisite: scan-active
-		ChargeInterval: 4500
+		ChargeInterval: 3000
 		Icon: arscan
 		IconPalette: chrometd
 		Description: Advanced Radar Scan
@@ -6224,31 +6224,11 @@ UPGC:
 	ProvidesPrerequisite@upgb:
 		Prerequisite: bombard.strat
 		RequiresCondition: tower.rocket
-	ProvidesPrerequisite@upgb2:
-		Prerequisite: bombard2.strat
-		RequiresCondition: tower.rocket
-	ProvidesPrerequisite@upgb3:
-		Prerequisite: bombard3.strat
-		RequiresCondition: tower.rocket
 	ProvidesPrerequisite@upgs:
 		Prerequisite: seek.strat
 		RequiresCondition: tower.radar
-	ProvidesPrerequisite@upgs2:
-		Prerequisite: seek2.strat
-		RequiresCondition: tower.radar
-	ProvidesPrerequisite@upgs3:
-		Prerequisite: seek3.strat
-		RequiresCondition: tower.radar
 	ProvidesPrerequisite@upgh:
 		Prerequisite: hold.strat
-		RequiresCondition: tower.shield
-	ProvidesDelayedPrerequisite@upgh2:
-		Delay: 300
-		Prerequisite: hold2.strat
-		RequiresCondition: tower.shield
-	ProvidesDelayedPrerequisite@upgh3:
-		Delay: 600
-		Prerequisite: hold3.strat
 		RequiresCondition: tower.shield
 
 UPGC.SOCK:
@@ -6267,7 +6247,7 @@ UPGC.BOMB:
 		Queue: Defense
 		BuildPaletteOrder: 1
 		Prerequisites: ~upgc, !upgc.plugged
-		Description: Provides an napalm rocket barrage.\n\n  + Increases the Strategy: Bombardment unit bonus by a further 5%.
+		Description: Provides an napalm rocket barrage power.\n\nUnits get a firepower bonus of 15%.
 		IconPalette: chrometd
 	Plug:
 		Type: tower.rocket
@@ -6284,7 +6264,7 @@ UPGC.SEEK:
 		Queue: Defense
 		BuildPaletteOrder: 2
 		Prerequisites: ~upgc, !upgc.plugged
-		Description: Provides detailed information on enemy locations.\n\n  + Increases the Strategy: Seek & Destroy unit bonus by a further 5%.
+		Description: Provides detailed information on enemy locations.\n\nUnits get a range and speed bonus of 15%.
 		IconPalette: chrometd
 	Plug:
 		Type: tower.radar
@@ -6301,7 +6281,7 @@ UPGC.HOLD:
 		Queue: Defense
 		BuildPaletteOrder: 3
 		Prerequisites: ~upgc, !upgc.plugged
-		Description: Provides the ability to rapidly repair friendly structures.\n\n  + Increases the Strategy: Hold the Line unit bonus by a further 5%.
+		Description: Provides the ability to rapidly repair friendly structures.\n\nUnits get an armor bonus of 15%.
 		IconPalette: chrometd
 	Plug:
 		Type: tower.shield
@@ -6318,7 +6298,7 @@ UPGC.DROP:
 		Queue: Defense
 		BuildPaletteOrder: 4
 		Prerequisites: ~upgc, ~!upgc.plugged
-		Description: Provides a dropzone\nfor emergency supplies.
+		Description: Provides a dropzone for emergency supplies\nYou will receive an universal basic income.
 		IconPalette: chrometd
 	Plug:
 		Type: tower.drop

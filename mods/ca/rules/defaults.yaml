@@ -379,31 +379,31 @@
 		Prerequisites: hold.strat
 	GrantConditionOnPrerequisite@HOLD2:
 		Condition: hold2
-		Prerequisites: hold2.strat
+		Prerequisites: hold2.strat && disabled
 	GrantConditionOnPrerequisite@HOLD3:
 		Condition: hold3
-		Prerequisites: hold3.strat
+		Prerequisites: hold3.strat && disabled
 	GrantConditionOnPrerequisite@BOMBARD:
 		Condition: bombard
 		Prerequisites: bombard.strat
 	GrantConditionOnPrerequisite@BOMBARD2:
 		Condition: bombard2
-		Prerequisites: bombard2.strat
+		Prerequisites: bombard2.strat && disabled
 	GrantConditionOnPrerequisite@BOMBARD3:
 		Condition: bombard3
-		Prerequisites: bombard3.strat
+		Prerequisites: bombard3.strat && disabled
 	GrantConditionOnPrerequisite@SEEK:
 		Condition: seek
 		Prerequisites: seek.strat
 	GrantConditionOnPrerequisite@SEEK2:
 		Condition: seek2
-		Prerequisites: seek2.strat
+		Prerequisites: seek2.strat && disabled
 	GrantConditionOnPrerequisite@SEEK3:
 		Condition: seek3
-		Prerequisites: seek3.strat
+		Prerequisites: seek3.strat && disabled
 	DamageMultiplier@HOLD:
 		RequiresCondition: hold
-		Modifier: 95
+		Modifier: 85
 	DamageMultiplier@HOLD2:
 		RequiresCondition: hold2
 		Modifier: 95
@@ -412,7 +412,7 @@
 		Modifier: 95
 	FirepowerMultiplier@BOMBARD:
 		RequiresCondition: bombard
-		Modifier: 105
+		Modifier: 115
 	FirepowerMultiplier@BOMBARD2:
 		RequiresCondition: bombard2
 		Modifier: 105
@@ -421,10 +421,10 @@
 		Modifier: 105
 	RangeMultiplier@SEEK:
 		RequiresCondition: seek
-		Modifier: 105
+		Modifier: 115
 	SpeedMultiplier@SEEK:
 		RequiresCondition: seek
-		Modifier: 105
+		Modifier: 115
 	RangeMultiplier@SEEK2:
 		RequiresCondition: seek2
 		Modifier: 105
@@ -1157,8 +1157,8 @@
 	ActorLostNotification:
 	ProximityCaptor:
 		Types: Vehicle
-	GpsDot:
-		String: Vehicle
+	GpsRadarDot:
+		Sequence: Vehicle
 	WithDamageOverlay:
 	Guard:
 	Guardable:
@@ -1360,8 +1360,8 @@
 		RequiresCondition: disable-experience
 	HiddenUnderFog:
 	ActorLostNotification:
-	GpsDot:
-		String: Infantry
+	GpsRadarDot:
+		Sequence: Infantry
 	Crushable:
 		CrushSound: squishy2.aud
 	Guard:
@@ -1621,8 +1621,8 @@
 	#For AI
 	RepairableNearCA:
 		RepairActors: syrd, spen, syrd.gdi, spen.nod
-	GpsDot:
-		String: Ship
+	GpsRadarDot:
+		Sequence: Ship
 	WithDamageOverlay:
 	Explodes:
 		Weapon: UnitExplodeShip
@@ -1786,8 +1786,8 @@
 		EjectInAir: true
 		AllowUnsuitableCell: true
 		ChuteSound: chute1.aud
-	GpsDot:
-		String: Plane
+	GpsRadarDot:
+		Sequence: Plane
 	Tooltip:
 		GenericName: Plane
 	WithShadow:
@@ -1896,8 +1896,8 @@
 		Crushes: crate, mine, infantry
 	Repairable:
 		RepairActors: fix, rep, srep, hpad, hpad.td
-	GpsDot:
-		String: Helicopter
+	GpsRadarDot:
+		Sequence: Helicopter
 	Hovers@CRUISING:
 		RequiresCondition: cruising
 	BodyOrientation:
@@ -1955,7 +1955,7 @@
 	Guardable:
 		Range: 3c0
 	FrozenUnderFog:
-	FrozenUnderFogUpdatedByGps:
+	FrozenUnderFogUpdatedByGpsRadar:
 	Tooltip:
 		GenericName: Structure
 	MapEditorData:
@@ -1988,6 +1988,7 @@
 	Inherits@6: ^Warpable
 	Inherits@7: ^BotBuilding
 	Inherits@8: ^Chillable
+	Inherits@9: ^NaniteShieldable
 	Inherits@wflash: ^WhiteFlash
 	WithColoredOverlay@IRONCURTAIN:
 		RequiresCondition: invulnerability && !forceshield
@@ -2025,8 +2026,8 @@
 		RequiresCondition: !being-warped
 	MustBeDestroyed:
 		RequiredForShortGame: true
-	GpsDot:
-		String: Structure
+	GpsRadarDot:
+		Sequence: Structure
 	Sellable:
 		RequiresCondition: !build-incomplete && !(c4 || tnt) && !being-captured && !being-warped
 		SellSounds: cashturn.aud
@@ -2043,6 +2044,9 @@
 	Explodes@temporal:
 		Weapon: TemporalExplodeLarge
 		EmptyWeapon: TemporalExplodeLarge
+	GrantConditionOnDamageState@DAMAGED:
+		Condition: damaged
+		ValidDamageStates: Light, Medium, Heavy, Critical
 
 ^BuildingTD:
 	Inherits@1: ^Building
@@ -2173,7 +2177,6 @@
 		SellSounds: cashturn.aud
 	Guardable:
 	FrozenUnderFog:
-	FrozenUnderFogUpdatedByGps:
 	Health:
 		HP: 10000
 	AppearsOnMapPreview:
