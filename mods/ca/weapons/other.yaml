@@ -65,11 +65,37 @@ Napalmtd:
 
 Napalm.Comanche:
 	Inherits: Napalmtd
-	BurstDelays: 4
+	Burst: 7
+	BurstDelays: 6
 	Range: 3c512
 	Projectile: GravityBomb
 		Image: BOMBLET
 		Velocity: 45, 0, -74
+	Warhead@Cluster: FireCluster
+		Weapon: ClusterBomb.Comanche
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
+ClusterBomb.Comanche:
+	Inherits: ^NapalmBomb
+	ValidTargets: Ground, Water, Trees
+	InvalidTargets: Air
+	ReloadDelay: 50
+	Burst: 1
+	Range: 4c256
+	TargetActorCenter: true
+	Projectile: BulletCA
+		Speed: 96
+		LaunchAngle: 0, 32
+		Inaccuracy: 1c0
+		BounceCount: 0
+		Image: BOMB
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		Falloff: 1000, 255, 128, 50, 18, 7, 0
+		ValidTargets: Ground, Water
 
 BigFlamer:
 	Inherits: ^Fire
