@@ -145,5 +145,11 @@ namespace OpenRA.Mods.CA.Traits
 		bool ISelectionBar.DisplayWhenEmpty { get { return false; } }
 
 		Color ISelectionBar.GetColor() { return Info.SelectionBarColor; }
+
+		protected override void TraitDisabled(Actor self)
+		{
+			remainingTicks = Util.ApplyPercentageModifiers(Info.Delay, modifiers.Select(m => m.GetReloadAmmoModifier()));
+			remainingDelay = Info.DelayAfterReset;
+		}
 	}
 }
