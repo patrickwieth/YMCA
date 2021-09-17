@@ -3933,9 +3933,13 @@ OBLI:
 		Count: 1
 		RequiresCondition: charged == 1
 	ReloadAmmoPool@3:
-		Delay: 10
+		Delay: 20
 		Count: 1
 		RequiresCondition: charged == 2
+	ReloadAmmoPool@3:
+		Delay: 10
+		Count: 1
+		RequiresCondition: charged > 2
 	AttackCharges@1:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -3958,6 +3962,9 @@ OBLI:
 		TargetTypes: BeamCannonBoost
 	Targetable@BeamCannon:
 		TargetTypes: BeamCannon
+	Targetable@BoostMe:
+		RequiresCondition: !ammo
+		TargetTypes: BoostMe
 
 HQ:
 	Inherits: ^BuildingTD
@@ -5051,7 +5058,7 @@ PRIS:
 		InvalidTargets: NoAutoTarget, WaterStructure, PrismTower
 	AutoTargetPriority@ATTACKANYTHING:
 		InvalidTargets: NoAutoTarget, PrismTower
-	AutoTargetPriority@TESLANORMAL:
+	AutoTargetPriority@PRISMNORMAL:
 		RequiresCondition: !assault-move && !attack-move
 		ValidTargets: PrismTower
 	Buildable:

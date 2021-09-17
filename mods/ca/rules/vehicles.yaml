@@ -5908,9 +5908,11 @@ Beam_Cannon:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
 	AutoTargetPriority@DEFAULT:
-		InvalidTargets: NoAutoTarget, WaterStructure, BeamCannonBoost
+		InvalidTargets: NoAutoTarget, WaterStructure
+		ValidTargets: BoostMe
 	AutoTargetPriority@ATTACKANYTHING:
-		InvalidTargets: NoAutoTarget, BeamCannonBoost
+		InvalidTargets: NoAutoTarget
+		ValidTargets: BoostMe
 	AttackMove:
 		AttackMoveCondition: attack-move
 	Buildable:
@@ -5942,12 +5944,14 @@ Beam_Cannon:
 	Turreted:
 		TurnSpeed: 8
 		Offset: 0,0,0
+	GrantConditionWhileAiming:
+		Condition: aiming
 	Armament@PRIMARY:
 		Weapon: BeamCannon
 		Name: primary0
 		LocalOffset: 100,0,200
 		RequiresCondition: !charged && !attacking1 && !attacking2 && !attacking3 && !attacking4 && !attacking5
-	GrantConditionOnAttack:
+	GrantConditionOnAttack@attacking0:
 		ArmamentNames: primary0
 		RevokeDelay: 21
 		Condition: attacking0
@@ -5956,7 +5960,7 @@ Beam_Cannon:
 		Weapon: BeamCannonBoosted1
 		LocalOffset: 100,0,200
 		RequiresCondition: charged == 1 && !attacking0 && !attacking2 && !attacking3 && !attacking4 && !attacking5
-	GrantConditionOnAttack:
+	GrantConditionOnAttack@attacking1:
 		ArmamentNames: primary1
 		RevokeDelay: 21
 		Condition: attacking1
@@ -5965,7 +5969,7 @@ Beam_Cannon:
 		Weapon: BeamCannonBoosted2
 		LocalOffset: 100,0,200
 		RequiresCondition: charged == 2 && !attacking0 && !attacking1 && !attacking3 && !attacking4 && !attacking5
-	GrantConditionOnAttack:
+	GrantConditionOnAttack@attacking2:
 		ArmamentNames: primary2
 		RevokeDelay: 21
 		Condition: attacking2
@@ -5974,7 +5978,7 @@ Beam_Cannon:
 		Weapon: BeamCannonBoosted3
 		LocalOffset: 100,0,200
 		RequiresCondition: charged == 3 && !attacking0 && !attacking1 && !attacking2 && !attacking4 && !attacking5
-	GrantConditionOnAttack:
+	GrantConditionOnAttack@attacking3:
 		ArmamentNames: primary3
 		RevokeDelay: 21
 		Condition: attacking3
@@ -5983,7 +5987,7 @@ Beam_Cannon:
 		Weapon: BeamCannonBoosted4
 		LocalOffset: 100,0,200
 		RequiresCondition: charged == 4 && !attacking0 && !attacking1 && !attacking2 && !attacking3 && !attacking5
-	GrantConditionOnAttack:
+	GrantConditionOnAttack@attacking4:
 		ArmamentNames: primary4
 		RevokeDelay: 21
 		Condition: attacking4
@@ -5992,7 +5996,7 @@ Beam_Cannon:
 		Weapon: BeamCannonBoosted5
 		LocalOffset: 100,0,200
 		RequiresCondition: charged >= 5 && !attacking0 && !attacking1 && !attacking2 && !attacking3 && !attacking4
-	GrantConditionOnAttack:
+	GrantConditionOnAttack@attacking5:
 		ArmamentNames: primary5
 		RevokeDelay: 21
 		Condition: attacking5
@@ -6009,6 +6013,10 @@ Beam_Cannon:
 		Cursor: ability
 		OutsideRangeCursor: ability
 		RequiresCondition: !charged
+	GrantConditionOnAttack@charge:
+		ArmamentNames: secondary
+		RevokeDelay: 61
+		Condition: boosting
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 		Armaments: primary0, primary1, primary2, primary3, primary4, primary5, secondary, tertiary
@@ -6019,6 +6027,13 @@ Beam_Cannon:
 		Condition: charged
 	Targetable@BeamCannonBoost:
 		TargetTypes: BeamCannonBoost
+		RequiresCondition: (aiming || attacking0 || attacking1 || attacking2 || attacking3 || attacking4 || attacking5) && !boosting
+	Targetable@BoostMe:
+		RequiresCondition: (aiming || attacking0 || attacking1 || attacking2 || attacking3 || attacking4 ) && !boosting && charged < 5
+		TargetTypes: BoostMe
+	#WithColoredOverlay@HIGH:
+	#	RequiresCondition: (aiming || attacking0 || attacking1 || attacking2 || attacking3 || attacking4 || attacking5) && !boosting
+	#	Palette: highlight
 	Targetable:
 		RequiresCondition: !being-warped
 		TargetTypes: Ground, Vehicle, C4, BeamCannon
