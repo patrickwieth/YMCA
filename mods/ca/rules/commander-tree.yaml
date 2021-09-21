@@ -1471,7 +1471,7 @@ commander_tree.Hover_MLRS:
 		BuildPaletteOrder: 211
 		IconPalette: chrometd
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, miss.gdi, ~!commander_tree.hailstorm_mlrs
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, radar, ~!commander_tree.hailstorm_mlrs
 		Description: Enables to build the Hover MLRS. \n  The Hover MLRS improves the MLRS' agility and gives it high explosive rockets.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.hmlrs
@@ -1484,8 +1484,19 @@ commander_tree.Hover_MLRS.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 211
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, miss.gdi, commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, gtek, commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs, ~!commander_tree.hover_mlrs.pld
 		Description: Equips the Hover MLRS with Reflector Armor. \n Very resistent vs. Energy Weapons.
+
+commander_tree.Hover_MLRS.PLD:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hover MLRS PLD
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 211
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, gtek, commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs, ~!commander_tree.hover_mlrs.reflector
+		Description: Upgrades the Hover MLRS with a Point Laser Defense System. \n Very resistent vs. Projectile Weapons.
 
 commander_tree.Hailstorm_MLRS:
 	Inherits: ^default.commander_tree_item
@@ -1496,7 +1507,7 @@ commander_tree.Hailstorm_MLRS:
 		BuildPaletteOrder: 212
 		IconPalette: chrometd
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~!commander_tree.hover_mlrs
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, gtek, ~!commander_tree.hover_mlrs
 		Description: Enables to build the Hailstorm MLRS. \n  The Hailstorm MLRS fires a lot of rockets over long distances. \n This upgrade removes the anti-air capabilities.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.mlrs
@@ -1722,7 +1733,7 @@ commander_tree.Mammoth_Tank_GDI.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 231
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~filler.gdimammoth, ~!commander_tree.mammoth_tank_gdi.pld
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, gtek, ~filler.gdimammoth, ~!commander_tree.mammoth_tank_gdi.pld
 		Description: Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.gdimammoth2
@@ -1736,7 +1747,7 @@ commander_tree.Mammoth_Tank_GDI.PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 231
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, miss.gdi, ~filler.gdimammoth, ~!commander_tree.mammoth_tank_gdi.reflector
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, gtek, ~filler.gdimammoth, ~!commander_tree.mammoth_tank_gdi.reflector
 		Description: Upgrades the Mammoth Tank with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.gdimammoth2
@@ -1790,7 +1801,7 @@ commander_tree.Titan.PLD:
 		IconPalette: chrometd
 		BuildPaletteOrder: 236
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~filler.titan, ~!commander_tree.titan.reflector
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, gtek, ~filler.titan, ~!commander_tree.titan.reflector
 		Description: Upgrades the Titan with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan2
@@ -1803,7 +1814,7 @@ commander_tree.Titan.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 236
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.talon, miss.gdi, ~filler.titan, ~!commander_tree.titan.pld
+		Prerequisites: prerequisite.has_points, ~vehicles.talon, gtek, ~filler.titan, ~!commander_tree.titan.pld
 		Description: Equips the Titan with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.titan2
