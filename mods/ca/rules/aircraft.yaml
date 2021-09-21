@@ -3355,10 +3355,14 @@ VENM:
 		RequiresCondition: charged >= 4
 	ExternalCondition@CHARGED:
 		Condition: charged
-	Targetable@BeamCannonBoost:
-		TargetTypes: BeamCannonBoost
 	Targetable@BeamCannon:
 		TargetTypes: BeamCannon
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+		RequiresCondition: ammo < 6
+	Targetable@BoostMe:
+		RequiresCondition: ammo < 6
+		TargetTypes: BoostMe
 
 VENM.Payload:
 	Inherits: VENM
@@ -3378,6 +3382,12 @@ VENM.Payload:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+		RequiresCondition: ammo < 10
+	Targetable@BoostMe:
+		RequiresCondition: ammo < 10
+		TargetTypes: BoostMe
 
 VENM.HeavyLaser:
 	Inherits: VENM
@@ -3393,8 +3403,8 @@ VENM.HeavyLaser:
 		IconPalette: chrome
 		Description: VTOL gunship armed\nwith a heavy laser.\n  Strong vs Tanks\n  Weak vs Infantry, Buildings
 	AmmoPool:
-		Ammo: 4
-		PipCount: 4
+		Ammo: 2
+		PipCount: 2
 		ReloadDelay: 50
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
@@ -3419,6 +3429,12 @@ VENM.HeavyLaser:
 		Delay: 33
 	ReloadAmmoPool@4:
 		Delay: 25
+	Targetable@BoostMe:
+		RequiresCondition: ammo < 2
+		TargetTypes: BoostMe
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+		RequiresCondition: ammo < 2
 
 Dropship:
 	Inherits: ^Plane
