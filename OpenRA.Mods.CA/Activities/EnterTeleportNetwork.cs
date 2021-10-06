@@ -64,6 +64,10 @@ namespace OpenRA.Mods.CA.Activities
 			if (primary == null || manager.RandomExit)
 			{
 				var nodes = self.World.ActorsWithTrait<TeleportNetwork>().Where(p => p.Trait.Info.Type == type && p.Actor.Owner == self.Owner && p.Actor != target).ToList();
+
+				if (nodes.Count == 0)
+					return;
+
 				var node = nodes.ElementAt(self.World.SharedRandom.Next(0, nodes.Count - 1));
 				primary = node.Actor;
 			}
@@ -110,8 +114,13 @@ namespace OpenRA.Mods.CA.Activities
 				if (self.IsDead)
 					return;
 
+				var positionable = self.Trait<IPositionable>();
+
+				if (!positionable.CanEnterCell(primary.Location, null, BlockedByActor.None))
+					return;
+
 				// Teleport myself to primary actor.
-				self.Trait<IPositionable>().SetPosition(self, exit);
+				positionable.SetPosition(self, exit);
 
 				foreach (var notify in self.TraitsImplementing<INotifyExitTeleporter>())
 					notify.Arrived(self);
