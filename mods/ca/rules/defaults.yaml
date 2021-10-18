@@ -2049,6 +2049,23 @@
 	GrantConditionOnDamageState@DAMAGED:
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
+	#EarlyGameBuildBoost
+	ProximityExternalCondition@BuildUpBoost:
+		Range: 20c0
+		ValidRelationships: Ally
+		Condition: BuildingsOwned
+	ExternalCondition@BuildingsOwned:
+		Condition: BuildingsOwned
+	GrantCondition@BuildUpBoost:
+		Condition: BuildUpBoostEnded
+		RequiresCondition: BuildingsOwned >= 5
+	ProvidesPrerequisite@BuildUpBoost:
+		Prerequisite: BuildUpBoostEnded
+		RequiresCondition: BuildUpBoostEnded
+	ProductionTimeMultiplier:
+		Multiplier: 1
+		Prerequisites: !BuildUpBoostEnded
+		Queue: Building
 
 ^BuildingTD:
 	Inherits@1: ^Building
