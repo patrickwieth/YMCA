@@ -403,6 +403,62 @@ V2RL:
 		Name: Atomic Heavy Tank (Reflector)
 		RequiresCondition: iraqtank
 
+3TNK.YURI:
+	Inherits: 3TNK
+	RenderSprites:
+		Image: 3tnky
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 91
+		Prerequisites: ~lasher.upgrade, ~vehicles.3tnk, ~techlevel.low
+		Description: Heavy tank with infantry crushing improvements.\n  Strong vs Vehicles\n  Weak vs Defenses, Aircraft
+	Tooltip:
+		Name: Lasher Tank
+		-RequiresCondition:
+	Health:
+		HP: 57000
+	Selectable:
+		Class: 3tnk
+	Armament@LASHER:
+		-RequiresCondition:
+	SpeedMultiplier@LASHER:
+		-RequiresCondition:
+	GrantConditionOnMovement@LASHER:
+		-RequiresCondition:
+	WithFacingSpriteBody:
+		-RequiresCondition:
+	WithSpriteTurret:
+		-RequiresCondition:
+	PeriodicExplosion@LASHER:
+		RequiresCondition: lasher-move
+	SpawnActorOnDeath@LASHER:
+		RequiresCondition: !being-warped
+	AttackTurreted:
+		Voice: Attack
+	Mobile:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	-Tooltip@IRAQ:
+	-Tooltip@LASHER:
+	-Armament:
+	-SpawnActorOnDeath:
+	-SpeedMultiplier@CRUSHATTEMPTSLOW:
+	-SpeedMultiplier@CRUSHSLOW:
+	-ExternalCondition@CRUSHATTEMPTSLOW:
+	-ExternalCondition@CRUSHSLOW:
+	-SpeedMultiplier@IRAQTANK:
+	-WithFacingSpriteBody@IRAQ:
+	-WithFacingSpriteBody@LASHER:
+	-WithSpriteTurret@LASHER:
+	-DamageMultiplier@LASHER:
+	-Explodes@IRAQTANK:
+	-GrantConditionOnPrerequisite@IRAQ:
+	-GrantConditionOnPrerequisite@LASHER:
+	-ThrowsShrapnel@small:
+	Voiced:
+		VoiceSet: LasherTankVoice
+
 4TNK:
 	Inherits: ^Tank
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -1514,7 +1570,7 @@ TTRK:
 		PlayerPalette: overlayplayertd
 	Buildable:
 		BuildPaletteOrder: 255
-		Prerequisites: ~vehicles.ttrk, ~tmpl, ~vehicles.nod, ~techlevel.high
+		Prerequisites: ~vehicles.legion, ~tmpl, ~vehicles.nod
 		Description: Truck actively armed with\n a Tiberium bomb. Has very weak armor.
 	Tooltip:
 		Name: Toxin Truck
@@ -6234,6 +6290,11 @@ XO:
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
 	RenderSprites:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 0
+		Prerequisites: indp, ~vehicles.soviet, ~commander_tree.apocalypse
+		Description: yes
 	Valued:
 		Cost: 650
 	Tooltip:
@@ -6282,3 +6343,389 @@ XO:
 		Interval: 3
 		Sequences: descend
 	-WithParachute:
+
+HFTK:
+	Inherits: ^TankTD
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Inherits@SLOWCRUSH: ^SlightlySlowedByCrushing
+	RenderSprites:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 131
+		IconPalette: chrometd
+		Prerequisites: anyradar, ~vehicles.blackh, ~techlevel.low
+		Description: Heavy tank armed with dual short-range flamethrowers.\n  Strong vs Infantry, Buildings, Light Armor\n  Weak vs Tanks, Defenses, Aircraft
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Heavy Flame Tank
+		GenericName: Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 46000
+	Armor:
+		Type: Heavy
+	Mobile:
+		Locomotor: heavytracked
+		Speed: 56
+		Voice: Move
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		TurnSpeed: 20
+	Armament@PRIMARY:
+		Weapon: HeavyFlameTankFlamer
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 750,200,150, 750,-200,150
+	Armament@FF:
+		Weapon: HeavyFlameTankFlamerFF
+		LocalOffset: 750,200,150, 750,-200,150
+	AttackTurreted:
+		Voice: Attack
+		RangeMargin: 0
+		PauseOnCondition: empdisable || being-warped
+	WithSpriteTurret:
+	WithMuzzleOverlay:
+	Voiced:
+		VoiceSet: FlameTankVoice
+	Explodes:
+		Weapon: BarrelExplode
+		EmptyWeapon: BarrelExplode
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	AmbientSoundCA:
+		SoundFiles: bigflamer-loop1.aud
+		InitialSound: bigflamer-start1.aud
+		FinalSound: bigflamer-end1.aud
+		RequiresCondition: attacking
+		InitialSoundLength: 24
+	GrantConditionOnAttackCA:
+		Condition: attacking
+
+MDRN:
+	Inherits: ^Vehicle
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@HACKABLE: ^Hackable
+	Tooltip:
+		Name: Mini Drone
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 105
+		Prerequisites: anyradar, ~vehicles.arc, ~techlevel.low
+		Description: Hovering drone with machine gun.\n  Attaches to certain vehicles to provide support and repairs.\n  Strong vs Infantry\n  Weak vs Vehicles, Buildings, Aircraft
+	Valued:
+		Cost: 300
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Selectable:
+		DecorationBounds: 16, 16, 0, -8
+	Health:
+		HP: 15000
+	Armor:
+		Type: Light
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Mobile:
+		Speed: 80
+		TurnSpeed: 255
+		Locomotor: seal
+		Voice: Move
+		PauseOnCondition: empdisable || being-warped || notmobile
+	Voiced:
+		VoiceSet: RobotTankVoice
+	Armament@PRIMARY:
+		Weapon: M60mgMD
+		LocalOffset: 72,0,72
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	Hovers:
+		BobDistance: -35
+		RequiresCondition: !empdisable && !being-warped
+	WithShadow:
+		Offset: 43, 128, -250
+		ZOffset: -129
+	TurretedFloating:
+		TurnSpeed: 18
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 0,0,72
+		TurnSpeed: 512
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Turrets: primary, secondary
+		Voice: Attack
+	WithSpriteTurret:
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune, MindControlImmune
+	-WithDamageOverlay:
+	-CaptureManager:
+	-Capturable:
+	-CaptureNotification:
+	-Capturable@DRIVER_DEAD:
+	-GrantConditionIfOwnerIsNeutral:
+	-ChangesHealth@DRIVER_DEAD:
+	-Targetable@DRIVERKILL:
+	-Targetable@DRIVERKILLLOWHP:
+	-GrantConditionOnDamageState@DRIVERKILLLOWHP:
+	-Targetable@AICAPTURE:
+	-InfiltrateToAttach@MINIDRONE:
+	-Targetable@MINIDRONE:
+	-ChangesHealth@MINIDRONE:
+	-ExternalCondition@MINIDRONE:
+	AttachableTo:
+		-Limits:
+		-LimitConditions:
+	Attachable:
+		AttachableType: mdrn
+	Infiltrates:
+		Types: MiniDroneAttachable
+		ValidRelationships: Ally
+
+MDRN.Attached:
+	Inherits: MDRN
+	-Buildable:
+	-Infiltrates:
+	-Selectable:
+	-Tooltip:
+	Interactable:
+	RenderSprites:
+		Image: mdrn
+	Mobile:
+		Speed: 0
+		Locomotor: cloud
+		ImmovableCondition: attached
+		PauseOnCondition: attached || empdisable || being-warped || notmobile
+	WithSpriteTurret:
+		Sequence: turret-attached
+	TurnOnIdleCA:
+		MinDelay: 25
+		MaxDelay: 75
+		TurnWhileMobilePaused: true
+	Armament@PRIMARY:
+		Weapon: M60mgTD
+		LocalOffset: -500,0,72
+	DamageMultiplier@ATTACHED:
+		Modifier: 50
+	Attachable:
+		AttachedCondition: attached
+
+GDRN:
+	Inherits: ^Vehicle
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@BERSERK: ^Berserk
+	Inherits@HACKABLE: ^Hackable
+	RenderSprites:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 22
+		IconPalette: chrome
+		Prerequisites: ~vehicles.arc, ~techlevel.low
+		Description: Fast scout & anti-tank vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Vehicles\n  Weak vs Infantry, Buildings, Defenses, Aircraft
+	Valued:
+		Cost: 400
+	Tooltip:
+		Name: Guardian Drone
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 17000
+	Armor:
+		Type: Light
+	Mobile:
+		TurnSpeed: 40
+		Speed: 108
+		Voice: Move
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 7c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		TurnSpeed: 40
+		Offset: 0,0,0
+	Armament:
+		Weapon: GuardianDroneGun
+		LocalOffset: 500,0,200
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	Voiced:
+		VoiceSet: RobotTankVoice
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune, MindControlImmune
+	IgnoresDisguise:
+	DetectCloaked:
+		Range: 6c0
+		CloakTypes: Cloak, Thief, AirCloak
+		RequiresCondition: !(empdisable || being-warped)
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+
+MSG:
+	Inherits: ^Vehicle
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 385
+		Prerequisites: anyradar, ~vehicles.shadow, ~techlevel.high
+		Description: Cloaks nearby units and buildings.\n  Unarmed
+	Valued:
+		Cost: 1250
+	Tooltip:
+		Name:
+	Tooltip:
+		Name: Mobile Stealth Generator
+		RequiresCondition: !deployed
+	Tooltip@DEPLOYED:
+		Name: Mobile Stealth Generator (deployed)
+		RequiresCondition: deployed
+	Selectable:
+		DecorationBounds: 38,36,0,-1
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 25000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 56
+		RequireForceMoveCondition: !undeployed
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	SpawnActorOnDeath:
+		Actor: MSG.Husk
+		RequiresCondition: !being-warped
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	GrantCondition@PREVIEWWORKAROUND:
+		Condition: real-actor
+	WithMakeAnimation:
+		BodyNames: deployedbody
+	Carryable:
+		LocalOffset: 0,0,150
+	WithSpriteBody@deployed:
+		Sequence: idle-deployed
+		RequiresCondition: !undeployed && real-actor
+		Name: deployedbody
+	WithFacingSpriteBody:
+		RequiresCondition: undeployed || !real-actor
+	GrantConditionOnDeploy:
+		PauseOnCondition: empdisable || being-warped || being-captured
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		Facing: 368
+		AllowedTerrainTypes: Clear, Road, Rough
+		DeploySounds: placbldg.aud
+		UndeploySounds: clicky1.aud
+		UndeployOnMove: true
+		UndeployOnPickup: true
+	ProximityExternalCondition@MSG:
+		Condition: invisibility
+	WithRangeCircle@MSG:
+		RequiresCondition: deployed
+		Range: 4c512
+		Color: 00aa00
+	ProximityExternalCondition@MSG:
+		Range: 4c512
+		Condition: invisibility
+		RequiresCondition: deployed
+		MaximumVerticalOffset: 512
+		AffectsParent: true
+
+SAPC:
+	Inherits: ^Vehicle
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Inherits@TRANSPORT: ^Transport
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 255
+		Prerequisites: tmpl, infantry.any, ~vehicles.nod, ~techlevel.high
+		Description: Stealth infantry transport.\n  Strong vs Infantry\n  Weak vs Tanks, Buildings, Defenses, Aircraft
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Stealth APC
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 20000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 108
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Armament:
+		Weapon: StealthAPCLaser
+		LocalOffset: 85,0,171
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		LoadingCondition: notmobile
+		LoadedCondition: cargo
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
+	Cloak@NORMAL:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		CloakedCondition: hidden
+		UncloakSound: appear1.aud
+		Palette: cloak
+		IsPlayerPalette: false
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+	Cloak@CRATE-CLOAK:
+		RequiresCondition: crate-cloak && !(cloak-force-disabled || invisibility || hidden || driver-dead)
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: ReturnFire
+
+SAPC.AI:
+	Inherits: SAPC
+	Inherits: ^AIUNLOAD
+	RenderSprites:
+		Image: sapc
+	Buildable:
+		Prerequisites: ~botplayer, tmpl, infantry.any, ~vehicles.nod, ~techlevel.high
+	Cargo:
+		InitialUnits: N1,N1,N4,N3,N3

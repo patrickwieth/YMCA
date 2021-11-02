@@ -120,6 +120,22 @@ BigFlamer:
 		Dimensions: 1,1
 		Footprint: x
 
+BigFlamerTDFF:
+	Inherits: BigFlamer
+	Burst: 2
+	BurstDelays: 5
+	Projectile: LinearPulse
+		Speed: 96
+		ImpactInterval: 3
+		Image: flameallfast
+		Inaccuracy: 484
+		Palette: tseffect-ignore-lighting-alpha90
+		MinimumImpactDistance: 1440
+		MaximumImpactDistance: 2304
+	Warhead@1Dam: SpreadDamage
+		Falloff: 100, 50, 0
+		ValidRelationships: Ally
+
 BigChemspray:
 	Inherits: BigFlamer
 	Inherits: ^Chemical
@@ -168,7 +184,7 @@ ChemsprayE:
 	Range: 5c0
 
 HeavyFlameTankFlamer:
-	Inherits: BigFlamer
+	Inherits: BigFlamerTDFF
 	ReloadDelay: 80
 	Burst: 30
 	BurstDelays: 2
