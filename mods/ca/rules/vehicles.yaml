@@ -1748,7 +1748,7 @@ BGGY:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.nod, ~!commander_tree.buggy_pld, ~!commander_tree.buggy_aa, ~techlevel.low
+		Prerequisites: ~vehicles.nod, ~!commander_tree.buggy_pld, ~!commander_tree.buggy_aa
 		Description: Fast scout & anti-infantry vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 350
@@ -1795,7 +1795,7 @@ BGGY.PLD:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
 		IconPalette: chrometd
-		Prerequisites: ~bio.nod, ~vehicles.nod, ~commander_tree.buggy_pld, ~techlevel.high
+		Prerequisites: bio.nod, ~vehicles.nod, ~commander_tree.buggy_pld
 		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units and has Point Laser Defense.\n  Strong vs Infantry\n  Weak vs Energy Weapons
 	Valued:
 		Cost: 900
@@ -1811,7 +1811,7 @@ BGGY.AA:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
 		IconPalette: chrometd
-		Prerequisites: ~bio.nod, ~vehicles.nod, ~commander_tree.buggy_aa, ~techlevel.high
+		Prerequisites: bio.nod, ~vehicles.nod, ~commander_tree.buggy_aa
 		Description: Fast scout and anti-aircraft vehicle.\nCan detect cloaked units.\n  Strong vs Infantry, Aircraft\n  Weak vs Vehicles
 	Valued:
 		Cost: 500
@@ -6227,3 +6227,58 @@ APOC:
 	GrantConditionOnFaction@IRAQTANK:
 		Condition: iraqtank
 		Factions: iraq
+
+XO:
+	Inherits: ^VehicleTD
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@BERSERK: ^Berserk
+	RenderSprites:
+	Valued:
+		Cost: 650
+	Tooltip:
+		Name: X-O Powersuit
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 22000
+	Armor:
+		Type: Light
+	Mobile:
+		TurnSpeed: 40
+		Speed: 49
+		Voice: Move
+	Passenger:
+		CustomPipType: red
+		Weight: 2
+		Voice: Move
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Voiced:
+		VoiceSet: GhostVoice
+	WithMoveAnimation:
+	WithAttackAnimation:
+		Sequence: shoot
+	Armament@PRIMARY:
+		Weapon: M60mgXO
+		LocalOffset: 400,-220,180
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: XOLaser
+		LocalOffset: 400,220,180
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		Voice: Attack
+	WithMuzzleOverlay:
+	Parachutable:
+		FallRate: 130
+	WithIdleAnimation@DESCENDING:
+		RequiresCondition: parachute
+		Interval: 3
+		Sequences: descend
+	-WithParachute:

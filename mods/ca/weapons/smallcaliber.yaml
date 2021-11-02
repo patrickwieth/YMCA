@@ -403,6 +403,15 @@ M60mgTD:
 	Inherits: M60mg
 	Report: m60.aud
 
+M60mgXO:
+	Inherits: M60mgTD
+	Range: 5c0
+	Burst: 2
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+	-Report:
+	StartBurstReport: XOgun1.aud, XOgun2.aud
+
 M60mgJJ:
 	Inherits: M60mg
 	Projectile: Bullet
@@ -540,6 +549,28 @@ AKME:
 	Inherits: AKM
 	Range: 9c0
 
+MP5:
+	Inherits: ^SnipeWeapon
+	Report: iseaatta.aud, iseaattb.aud
+	ReloadDelay: 12
+	Range: 6c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 128
+		Damage: 4700
+		ValidTargets: Infantry
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: piffs
+		ValidTargets: Ground, Ship, Air, AirSmall, Trees
+	Warhead@3EffWater: CreateEffect
+		Explosions: water_piffs
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+MP5E:
+	Inherits: MP5
+	Range: 5c511
+
 SNIPER:
 	Inherits: ^SnipeWeapon
 	ReloadDelay: 110
@@ -608,3 +639,25 @@ SlingshotAA:
 	Warhead@2Eff: CreateEffect
 		Explosions: piffs
 		ValidTargets: Air
+
+ShadowOperativeGun:
+	Inherits: ^HeavyMG
+	Range: 6c0
+	ReloadDelay: 30
+	Burst: 2
+	BurstDelays: 3
+	Report: shad-fire1.aud, shad-fire2.aud, shad-fire3.aud
+	Projectile: InstantHit
+	InvalidTargets: Structure, Vehicle, Ship
+	Warhead@1Dam: SpreadDamage
+		InvalidTargets: Structure, Vehicle, Ship
+		Spread: 42
+		Damage: 2800
+		Versus:
+			None: 100
+			Wood: 40
+			Concrete: 20
+			Light: 60
+			Heavy: 20
+	Warhead@2Eff: CreateEffect
+		Explosions: piff

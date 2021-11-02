@@ -427,6 +427,27 @@ EMPGrenade:
 		ExplosionPalette: tseffect-ignore-lighting-alpha75
 		ImpactSounds: expnew16.aud
 
+ShadowOperativeGrenade:
+	Inherits: Grenade
+	ReloadDelay: 50
+	ValidTargets: Structure, Vehicle, Ship
+	Projectile: Bullet
+		Image: shadgren
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+	Warhead@2Dam: SpreadDamage
+		Damage: 3500
+		Versus:
+			Light: 100
+			Heavy: 100
+
+ShadowGliderGrenade:
+	Range: 1c0
+	Inherits: ShadowOperativeGrenade
+	-ValidTargets:
+	Projectile:
+		LaunchAngle: 0
+
 Grenade.Huey:
 	Inherits: Grenade
 	Report: cannon2.aud
