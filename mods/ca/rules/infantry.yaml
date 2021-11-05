@@ -2966,3 +2966,89 @@ SEAL:
 		Palette: effect
 		Position: TopLeft
 		ValidRelationships: Ally, Enemy, Neutral
+
+HACK:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Hacker
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	Mobile:
+		Speed: 56
+		Voice: Move
+		PauseOnCondition: !undeployed && being-warped
+		RequireForceMoveCondition: !undeployed
+	RevealsShroud:
+		Range: 5c0
+	Passenger:
+		CustomPipType: blue
+		Voice: Move
+	Armament@PRIMARY:
+		Weapon: PrepareHack
+		PauseOnCondition: deployed
+	Armament@PRIMARYDEPLOYED:
+		Weapon: Hack
+		RequiresCondition: deployed
+		LocalOffset: 0,0,50
+	AttackFrontal:
+		Voice: Action
+		FacingTolerance: 512
+		TargetFrozenActors: true
+		PauseOnCondition: being-warped
+	WithInfantryBody:
+		IdleSequences: idle
+		StandSequences: stand
+		RequiresCondition: undeployed
+	WithSpriteBody@DEPLOYED:
+		Name: deployed
+		Sequence: hack
+		RequiresCondition: !undeployed
+	WithMakeAnimation:
+		BodyNames: deployed
+	Voiced:
+		VoiceSet: HackerVoice
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+	GrantConditionOnDeploy@HACK:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: true
+		UndeployOnPickup: true
+		SmartDeploy: True
+	DeployOnAttack:
+		RequiresCondition: undeployed
+	MindController:
+		ArmamentNames: primary
+		Capacity: -1
+		TicksToControl: 300
+		TicksToRevoke: 25
+		InitSounds: hacker-init.aud
+		InitSoundControllerOnly: true
+		ControlSounds: hacker-hacked.aud
+		ControllingCondition: hacked-in
+		UndeployOnControl: true
+	WithDecoration@HACKEDIN:
+		Image: hacking
+		Sequence: hacking
+		RequiresCondition: hacked-in
+		Position: BottomRight
+		Palette: effect
+		ValidRelationships: Ally, Neutral, Enemy
+	WithMindControlArc@HACK:
+		Color: 1ce312
+		Transparency: 65
+		Angle: 60
+		Width: 86
+		Offset: 0,0,50
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: AttackAnything
+	RenderRangeCircle:
+		Color: 00cc00

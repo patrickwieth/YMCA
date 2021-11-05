@@ -378,6 +378,55 @@
 		DamageTypes: DefaultDeath
 		Terrain: Clear, Rough, Road, Beach
 
+^Atomizable:
+	ExternalCondition@ATOMIZED:
+		Condition: atomized
+	TimedConditionBar@ATOMIZED:
+		Condition: atomized
+		Color: ff0000
+	WithIdleOverlay@ATOMIZED:
+		Sequence: idle
+		Image: atomize-overlay
+		Palette: scrin
+		RequiresCondition: atomized
+	ReloadDelayMultiplier@ATOMIZED:
+		RequiresCondition: atomized
+		Modifier: 125
+	ChangesHealthVersus@ATOMIZED1:
+		RequiresCondition: atomized == 1
+		Step: -1300
+		Delay: 25
+		Versus:
+			None: 0
+			Wood: 0
+			Concrete: 85
+			Light: 85
+			Heavy: 100
+	ChangesHealthVersus@ATOMIZED2:
+		RequiresCondition: atomized == 2
+		Step: -2600
+		Delay: 25
+		Versus:
+			None: 0
+			Wood: 0
+			Concrete: 85
+			Light: 85
+			Heavy: 100
+	ChangesHealthVersus@ATOMIZED3:
+		RequiresCondition: atomized >= 3
+		Step: -3900
+		Delay: 25
+		Versus:
+			None: 0
+			Wood: 0
+			Concrete: 85
+			Light: 85
+			Heavy: 100
+	Explodes@ATOMIZED:
+		Weapon: AtomizeSpreadInit
+		EmptyWeapon: AtomizeSpreadInit
+		RequiresCondition: atomized
+
 ^GDIUpgrade:
 	GrantConditionOnPrerequisite@HOLD:
 		Condition: hold
@@ -981,26 +1030,102 @@
 		Interval: 5
 		RequiresCondition: c4
 
-^MindControllable:
-	ExternalCondition@prevent-mindcontrol:
-		Condition: prevent-mindcontrol
+^MindControllableBase:
 	MindControllable:
-		Condition: controlled
-		PauseOnCondition: prevent-mindcontrol
-	WithMindControlArc:
-		Color: c71585
-		Transparency: 55
-		Offset: 0,0,511
-		Angle: 32
-		Width: 116
-	Targetable@MC:
-		TargetTypes: MindControl
-		RequiresCondition: !controlled && !prevent-mindcontrol
-	WithIdleOverlay@mindcontrol:
+		ControlledConditions:
+			mast: mindcontrolled
+			yuri: mindcontrolled
+			hack: hacked
+		RevokingConditions:
+			hack: restoring
+
+^MindControllable:
+	Inherits: ^MindControllableBase
+	Targetable@MINDCONTROL:
+		TargetTypes: MindControllable
+		RequiresCondition: !mindcontrolled && !hacked && !restoring
+	WithIdleOverlay@MINDCONTROL:
 		Sequence: mind-overlay
 		Palette: scrin
-		RequiresCondition: controlled
+		RequiresCondition: mindcontrolled
 		Offset: 0,0,300
+
+^Hackable:
+	Inherits: ^MindControllableBase
+	Targetable@HACKABLE:
+		TargetTypes: Hackable
+		RequiresCondition: !mindcontrolled && !hacked
+	MindControllableProgressBar@HACKABLE:
+		Color: 1ce312
+		RequiresCondition: !hacked
+	WithDecoration@HACKED:
+		Image: hacked
+		Sequence: hacked
+		RequiresCondition: hacked && !restoring
+		Position: Center
+		Palette: effect
+		ValidRelationships: Ally, Neutral, Enemy
+	WithDecoration@RESTORING:
+		Image: hacked
+		Sequence: restoring
+		RequiresCondition: restoring
+		Position: Center
+		Palette: effect
+		ValidRelationships: Ally, Neutral, Enemy
+
+^HackableOverloadable:
+	Inherits: ^Hackable
+	WithDecoration@HACKED:
+		Sequence: overloading
+	ChangesHealth@HACKED:
+		Step: -2000
+		StartIfBelow: 101
+		Delay: 20
+		RequiresCondition: hacked && !restoring
+
+^GeneticallyMutatable:
+	ExternalCondition@GMUT:
+		Condition: geneticmutation
+	SpawnActorOnDeath@GMUT:
+		Actor: brut.mutating
+		OwnerType: Killer
+		DeathType: MutatedDeath
+		SpawnAfterDefeat: false
+		SkipMakeAnimations: false
+		RequiresCondition: geneticmutation
+	Targetable@GMUT:
+		TargetTypes: GeneticallyMutatable
+		RequiresCondition: geneticmutation
+
+^MiniDroneAttachable:
+	InfiltrateToAttach@MINIDRONE:
+		Actor: mdrn.attached
+		Types: MiniDroneAttachable
+	Targetable@MINIDRONE:
+		TargetTypes: MiniDroneAttachable
+		RequiresCondition: !mdrn-attached
+	ChangesHealth@MINIDRONE:
+		PercentageStep: 1
+		Delay: 25
+		StartIfBelow: 100
+		DamageCooldown: 75
+		RequiresCondition: mdrn-attached
+	ExternalCondition@MINIDRONE:
+		Condition: mdrn-attached
+	AttachableTo:
+		Limits:
+			mdrn: 1
+		LimitConditions:
+			mdrn: mdrn-attached
+
+^HoverTrail:
+	LeavesTrails:
+		Image: twake
+		Palette: effect
+		TerrainTypes: Water
+		TrailWhileStationary: true
+		StationaryInterval: 18
+		MovingInterval: 6
 
 ^AutoTargetGround:
 	AutoTarget:
@@ -1125,6 +1250,8 @@
 	Inherits@mind: ^MindControllable
 	Inherits@handicaps: ^PlayerHandicaps
 	Inherits@irrad: ^Irradiatable
+	Inherits@atomize: ^Atomizable
+	Inherits@minidrone: ^MiniDroneAttachable
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -1592,6 +1719,9 @@
 	Inherits@mind: ^MindControllable
 	Inherits@handicaps: ^PlayerHandicaps
 	Inherits@production: ^ProductionEfficiencyBoost
+	Inherits@atomize: ^Atomizable
+	Inherits@C4: ^C4Plantable
+	Inherits@minidrone: ^MiniDroneAttachable
 	Huntable:
 	RenderSprites:
 		PlayerPalette: playernavy
@@ -3208,3 +3338,11 @@
 	KillsSelf:
 		RemoveInstead: true
 	RenderSprites:
+
+^AIUNLOAD:
+	GrantConditionWhileAiming@AIUNLOAD:
+		Condition: aiming
+	GrantConditionOnDamageState@AIUNLOAD:
+		Condition: damage
+	UnloadOnCondition@AIUNLOAD:
+		RequiresCondition: damage || aiming

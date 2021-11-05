@@ -37,6 +37,19 @@
 	RenderSprites:
 		Image: 3tnk.destroyed
 
+3TNK.YURI.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (Lasher Tank)
+	ThrowsParticle@turret:
+		Anim: turret
+	TransformOnCapture:
+		IntoActor: 3tnk.yuri
+	InfiltrateForTransform:
+		IntoActor: 3tnk.yuri
+	RenderSprites:
+		Image: 3tnky.destroyed
+
 4TNK.Husk:
 	Inherits: ^Husk
 	Tooltip:
@@ -107,6 +120,17 @@ MGG.Husk:
 		IntoActor: mgg
 	RenderSprites:
 		Image: mgg.destroyed
+
+MSG.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (Mobile Stealth Generator)
+	TransformOnCapture:
+		IntoActor: msg
+	InfiltrateForTransform:
+		IntoActor: msg
+	RenderSprites:
+		Image: msg.destroyed
 
 TRAN.Husk:
 	Inherits: ^HelicopterHusk
@@ -713,6 +737,19 @@ FTNK.Husk:
 	RenderSprites:
 		Image: ftnk.destroyed
 		PlayerPalette: overlayplayertd
+
+HFTK.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (Heavy Flame Tank)
+	ThrowsParticle@turret:
+		Anim: turret
+	TransformOnCapture:
+		IntoActor: hftk
+	InfiltrateForTransform:
+		IntoActor: hftk
+	RenderSprites:
+		Image: hftk.destroyed
 
 BIKE.Husk:
 	Inherits: ^HuskTD
@@ -1714,3 +1751,108 @@ APOC.Husk:
 		IntoActor: apoc
 	RenderSprites:
 		Image: apoc.destroyed
+
+NHAW.Husk:
+	Inherits: ^HelicopterHusk
+	Tooltip:
+		Name: Nighthawk
+	Aircraft:
+		TurnSpeed: 4
+		Speed: 149
+	WithIdleOverlay@PRIMARY:
+		Offset: 237,0,263
+		Sequence: rotor
+	WithIdleOverlay@SECONDARY:
+		Offset: -997,0,341
+		Sequence: rotor2
+	RevealsShroud:
+		Range: 8c0
+		MinRange: 6c0
+		Type: GroundPosition
+		RevealGeneratedShroud: false
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+		Type: GroundPosition
+	RenderSprites:
+		Image: nhaw
+
+NHAW.UPG.Husk:
+	Inherits: NHAW.Husk
+	WithFacingSpriteBody:
+		Sequence: idle-upg
+
+NHAW.Husk.EMP:
+	Inherits: NHAW.Husk
+	Inherits: ^EmpVisualEffect
+
+NHAW.UPG.Husk.EMP:
+	Inherits: NHAW.UPG.Husk
+	Inherits: ^EmpVisualEffect
+
+GTNK.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (Grizzly Tank)
+	ThrowsParticle@turret:
+		Anim: turret
+	TransformOnCapture:
+		IntoActor: gtnk
+	InfiltrateForTransform:
+		IntoActor: gtnk
+	RenderSprites:
+		Image: gtnk.destroyed
+
+GALX.Husk:
+	Inherits: ^PlaneHusk
+	Tooltip:
+		Name: Transport Aircraft
+	Aircraft:
+		TurnSpeed: 5
+		Speed: 149
+	SmokeTrailWhenDamaged@0:
+		Offset: -432,560,0
+		Interval: 2
+		MinDamage: Undamaged
+	SmokeTrailWhenDamaged@1:
+		Offset: -432,-560,0
+		Interval: 2
+		MinDamage: Undamaged
+	RenderSprites:
+		Image: galx
+		PlayerPalette: overlayplayertd
+
+GALX.Husk.EMP:
+	Inherits: GALX.Husk
+	Inherits: ^EmpVisualEffect
+
+P51.Husk:
+	Inherits: ^PlaneHusk
+	Tooltip:
+		Name: P51 Attack Plane
+	Aircraft:
+		TurnSpeed: 5
+		Speed: 149
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,0
+		Interval: 2
+		MinDamage: Undamaged
+	Contrail@1:
+		Offset: -98,-683,-10
+	Contrail@2:
+		Offset: -98,683,-10
+	RevealsShroud:
+		Range: 11c0
+		MinRange: 9c0
+		Type: GroundPosition
+		RevealGeneratedShroud: false
+	RevealsShroud@GAPGEN:
+		Range: 9c0
+		Type: GroundPosition
+	RenderSprites:
+		Image: p51
+	FallsToEarth:
+		Explosion: UnitExplodePlaneLight
+
+P51.Husk.EMP:
+	Inherits: P51.Husk
+	Inherits: ^EmpVisualEffect
