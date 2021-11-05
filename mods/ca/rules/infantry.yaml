@@ -2495,3 +2495,474 @@ IVAN:
 		Prerequisites: barracks.upgraded
 	Voiced:
 		VoiceSet: CrazyIvanVoice
+
+SHAD:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@BERSERK: ^Berserk
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Shadow Operative
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	RevealsShroud:
+		Range: 6c0
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: ShadowOperativeVoice
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+		StandSequences: stand, stand2
+		IdleSequences: idle1, idle2
+		AttackSequences:
+			primary: shoot
+			secondary: throw
+		MinIdleDelay: 80
+		MaxIdleDelay: 250
+	Health:
+		HP: 5000
+	Mobile:
+		Speed: 56
+		Voice: Move
+	Armament@PRIMARY:
+		Weapon: ShadowOperativeGun
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: ShadowOperativeGrenade
+		LocalOffset: 0,0,555
+		FireDelay: 15
+	Armament@Garrison:
+		Name: mounted
+		Weapon: ShadowOperativeGun
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: ReturnFire
+	Cloak:
+		InitialDelay: 1
+		CloakDelay: 90
+		CloakedCondition: hidden
+		Palette: cloaktd
+		IsPlayerPalette: true
+		CloakTypes: Cloak
+		UncloakOn: Unload, Demolish, Dock, Attack, Damage
+		CloakSound: gstealon.aud
+		UncloakSound: gstealof.aud
+	Cloak@CRATE-CLOAK:
+		RequiresCondition: crate-cloak && !(cloak-force-disabled || invisibility || hidden)
+	GrantConditionOnDamageState@UNCLOAK:
+		ValidDamageStates: Critical
+		Condition: cloak-force-disabled
+	IgnoresDisguise:
+	DetectCloaked:
+		CloakTypes: Cloak, Thief
+		Range: 4c0
+	-WithParachute:
+	AmmoPool:
+		Ammo: 1
+		Armaments: none
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	Minelayer:
+		Mine: SHAB
+		TileUnknownName: build-valid
+	Rearmable:
+		RearmActors: shad.rearm
+
+# ---- dummy actor because RearmableActors is required
+SHAD.REARM:
+	AlwaysVisible:
+
+SGLI:
+	Inherits: ^Plane
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Shadow Glider
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 9000
+	RevealsShroud:
+		Range: 10c0
+		MinRange: 8c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 8c0
+		Type: GroundPosition
+	Voiced:
+		VoiceSet: ShadowOperativeVoice
+	Aircraft:
+		CruiseAltitude: 1c512
+		InitialFacing: 192
+		TurnSpeed: 16
+		Speed: 115
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		Voice: Move
+	Armament:
+		Weapon: ShadowGliderGrenade
+		LocalOffset: 0,0,-85
+	AttackAircraft:
+		FacingTolerance: 128
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: being-warped
+	SpawnActorOnDeath:
+		Actor: sgli.crashing
+		RequiresCondition: !being-warped
+	Selectable:
+		DecorationBounds: 30,28,0,2
+	TransformOnCondition:
+		IntoActor: sgli.deployed
+		RequiresCondition: deployed
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+	Targetable@AIRBORNE:
+		RequiresCondition: airborne && !being-warped
+		TargetTypes: AirSmall
+	GrantTimedCondition@GLIDING:
+		Condition: gliding
+		Duration: 750
+	TimedConditionBar@GLIDING:
+		Condition: gliding
+		Color: 8A8A8A
+	GrantCondition@AUTODEPLOY:
+		Condition: deployed
+		RequiresCondition: !gliding
+	RejectsOrders:
+		RequiresCondition: !gliding
+	-EjectOnDeath:
+	-Explodes:
+	-Contrail@1:
+	-Contrail@2:
+	-ActorLostNotification:
+
+SGLI.crashing:
+	Inherits: SGLI
+	FallsToEarth:
+		Moves: true
+		MaximumSpinSpeed: 0
+		Explosion:
+		Velocity: 60
+	RenderSprites:
+		Image: sgli
+	Aircraft:
+		Speed: 80
+	ActorLostNotification:
+		Notification: AirUnitLost
+	-SpawnActorOnDeath:
+	-GrantConditionOnDeploy:
+	-TransformOnCondition:
+	-GrantTimedCondition@GLIDING:
+	-TimedConditionBar@GLIDING:
+	-GrantCondition@AUTODEPLOY:
+	AmbientSoundCA:
+		SoundFiles: chute1.aud
+		Interval: 6000
+	SpawnActorOnDeath@gliderdiscarded:
+		Actor: sgli.discarded
+		RequiresCondition: !being-warped
+	RejectsOrders:
+		-RequiresCondition:
+
+SGLI.deployed:
+	Inherits: SGLI
+	FallsToEarth:
+		Moves: true
+		MaximumSpinSpeed: 0
+		Explosion:
+		Velocity: 90
+	RenderSprites:
+		Image: sgli
+	SpawnActorOnDeath:
+		Actor: shad
+		RequiresCondition: !being-warped
+	SpawnActorOnDeath@gliderdiscarded:
+		Actor: sgli.discarded
+		RequiresCondition: !being-warped
+	Aircraft:
+		Speed: 45
+	AmbientSoundCA:
+		SoundFiles: chute1.aud
+		Interval: 6000
+	-GrantConditionOnDeploy:
+	-TransformOnCondition:
+	-GrantTimedCondition@GLIDING:
+	-TimedConditionBar@GLIDING:
+	-GrantCondition@AUTODEPLOY:
+	RejectsOrders:
+		-RequiresCondition:
+
+SGLI.discarded:
+	Inherits@1: ^SpriteActor
+	RenderSprites:
+		Image: sgli.destroyed
+	ImmobileWithFacing:
+		OccupiesSpace: false
+	HiddenUnderFog:
+		Type: CenterPosition
+		AlwaysVisibleRelationships: None
+	WithFacingSpriteBody:
+	HitShape:
+	MapEditorData:
+		Categories: Husk
+	WithColoredOverlay@IDISABLE:
+		Palette: disabled
+	ChangesHealth:
+		Step: -100
+		StartIfBelow: 101
+		Delay: 25
+	Health:
+		HP: 1000
+	Armor:
+		Type: None
+
+BH:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 150
+		Prerequisites: anyradar, ~infantry.blackh, ~techlevel.infonly
+		Description: Elite precision flamethrower unit.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Black Hand Trooper
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 13000
+	Mobile:
+		Speed: 49
+		Voice: Move
+	RevealsShroud:
+		Range: 5c0
+	Armament:
+		Weapon: BlackHandFlamer
+		LocalOffset: 300,0,180
+	Armament@Garrison:
+		Name: mounted
+		Weapon: BlackHandFlamer
+	TakeCover:
+		ProneOffset: 160,0,-256
+		SpeedModifier: 70
+	WithMuzzleOverlay:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		Voice: Attack
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	Explodes:
+		Weapon: UnitExplodeFlameSmall
+		EmptyWeapon: UnitExplodeFlameSmall
+		Chance: 33
+		DamageSource: Killer
+		RequiresCondition: !being-warped
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	AmbientSoundCA:
+		SoundFiles: flamer-loop1.aud
+		InitialSound: flamer-start1.aud
+		FinalSound: flamer-end1.aud
+		RequiresCondition: attacking
+		InitialSoundLength: 20
+	GrantConditionOnAttackCA:
+		Condition: attacking
+	Voiced:
+		VoiceSet: BlackHandVoice
+
+YURI:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Inherits@BOTHELPER: ^BotCaptureHelper
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 190
+		Prerequisites: ~barr, stek, ~infantry.yuri, ~techlevel.infonly
+		BuildLimit: 1
+		Description: Elite specialist infantry.\n  Can mind-control enemy units and defenses.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Vehicles, Defenses\n  Weak vs Aircraft\n  Special Ability: Mind Blast
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Yuri
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 11000
+	Mobile:
+		Speed: 56
+		Voice: Move
+	Armament@PRIMARY:
+		Weapon: EnslaveInfantry
+		LocalOffset: 150,0,400
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: EnslaveVehicle
+		LocalOffset: 150,0,400
+	Armament@AIDummyAiming: ## Hack: Make AI deploy to attack structures
+		PauseOnCondition: being-warped
+		Name: aidummy
+		RequiresCondition: botowner && !deployed
+		Weapon: YuriDummyAim
+	MindController:
+		ArmamentNames: primary, secondary
+		Capacity: 3
+		ControlSounds: iyurat1a.aud
+		ControllingCondition: mindcontrolling
+	WithMindControlArc@MC:
+		Color: c71585
+		Transparency: 55
+		Offset: 0,0,511
+		Angle: 32
+		Width: 116
+	WithIdleOverlay@mindcontrolling:
+		Sequence: mc
+		Palette: scrin
+		RequiresCondition: mindcontrolling
+		Offset: 0,0,400
+	PeriodicExplosion:
+		Weapon: Mindblast
+		LocalOffset: 0,0,128
+		InitialDelay: 18
+		RequiresCondition: deployed && !being-warped
+	GrantTimedConditionOnDeploy:
+		DeployedTicks: 35
+		CooldownTicks: 100
+		Facing: 96
+		DeployedCondition: deployed
+		DeployingCondition: deploying
+		DeployAnimation: deployed
+		ShowSelectionBar: true
+		Voice: Demolish
+		PauseOnCondition: being-warped
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		Armaments: primary, secondary, aidummy
+	RevealsShroud:
+		Range: 6c0
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Voiced:
+		VoiceSet: YuriVoice
+	-Crushable:
+	WithInfantryBody:
+		IdleSequences: idle
+		StandSequences: stand
+		DefaultAttackSequence: shoot
+		RequiresCondition: !deployed && !deploying && !being-warped
+	WithSpriteBody@DEPLOYED:
+		Sequence: deployed
+		RequiresCondition: (deployed || deploying) && !being-warped
+	ExternalCondition@PRODUCED:
+		Condition: produced
+	VoiceAnnouncement:
+		RequiresCondition: produced
+		Voice: Build
+	AnnounceOnKill:
+	IgnoresDisguise:
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
+	GrantConditionOnAttack@AI:
+		Condition: aiattack
+		RequiresCondition: botowner
+		ArmamentNames: aidummy
+		RevokeDelay: 60
+	AutoDeployer@AI:
+		RequiresCondition: aiattack && botowner && !deployed && !parachute
+		DeployChance: 100
+		DeployTrigger: Attack
+		DeployTicks: 100
+
+SEAL:
+	Inherits: RMBO
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Navy SEAL
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 185
+		Prerequisites: ~infantry.usa, techcenter, ~techlevel.high
+		Queue: Infantry
+		IconPalette: chrome
+		BuildLimit: -1
+		Description: Elite infantry unit. Armed with\na SMG and C4.\n  Can detect cloaked units.\n  Strong vs Infantry, Buildings\n  Weak vs Aircraft\n  Special Ability: C4 Explosives
+	Voiced:
+		VoiceSet: SealVoice
+	Mobile:
+		Speed: 49
+		Locomotor: seal
+	Armament:
+		Weapon: mp5
+		PauseOnCondition: onwater
+	Armament@garrison:
+		Name: mounted
+		Weapon: mp5e
+		MuzzleSequence: garrison-muzzle
+		PauseOnCondition: onwater
+	Armament@sapper:
+		Weapon: PlaceC4seal
+		Cursor: c4
+		OutsideRangeCursor: c4
+		Name: secondary
+		PauseOnCondition: !ammo
+	-VoiceAnnouncement:
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+		RequiresCondition: !being-warped && !onwater
+	WithInfantryBody@Swim:
+		-IdleSequences:
+		StandSequences: swimidle
+		-AttackSequences:
+		DefaultAttackSequence: swim
+		MoveSequence: swim
+		RequiresCondition: !being-warped && onwater
+	WithDeathAnimation:
+		RequiresCondition: !onwater
+	WithDeathAnimation@Water:
+		RequiresCondition: onwater
+		UseDeathTypeSuffix: False
+		FallbackSequence: splash
+		CrushedSequence: die-crushed
+		DeathSequence: splash
+	AmmoPool:
+		Armaments: secondary
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 50
+		Count: 1
+		ShowSelectionBar: true
+		SelectionBarColor: dd0000
+		Image: pips
+		Sequence: pip-seal
+		Palette: effect
+		Position: TopLeft
+		ValidRelationships: Ally, Enemy, Neutral

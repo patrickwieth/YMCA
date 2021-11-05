@@ -120,6 +120,22 @@ BigFlamer:
 		Dimensions: 1,1
 		Footprint: x
 
+BigFlamerTDFF:
+	Inherits: BigFlamer
+	Burst: 2
+	BurstDelays: 5
+	Projectile: LinearPulse
+		Speed: 96
+		ImpactInterval: 3
+		Image: flameallfast
+		Inaccuracy: 484
+		Palette: tseffect-ignore-lighting-alpha90
+		MinimumImpactDistance: 1440
+		MaximumImpactDistance: 2304
+	Warhead@1Dam: SpreadDamage
+		Falloff: 100, 50, 0
+		ValidRelationships: Ally
+
 BigChemspray:
 	Inherits: BigFlamer
 	Inherits: ^Chemical
@@ -166,6 +182,58 @@ Chemspray:
 ChemsprayE:
 	Inherits: Chemspray
 	Range: 5c0
+
+HeavyFlameTankFlamer:
+	Inherits: BigFlamerTDFF
+	ReloadDelay: 80
+	Burst: 30
+	BurstDelays: 2
+	Warhead@1Dam: SpreadDamage
+		Damage: 155
+		Versus:
+			None: 230
+	Warhead@2Smu: LeaveSmudge
+		AirThreshold: 256
+		Chance: 10
+
+HeavyFlameTankFlamerFF:
+	Inherits: HeavyFlameTankFlamer
+	Projectile: LinearPulse
+		-Image:
+		-Palette:
+		MinimumImpactDistance: 1440
+	Warhead@1Dam: SpreadDamage
+		Falloff: 100, 50, 0
+		ValidRelationships: Ally
+
+BlackHandFlamer:
+	Inherits: HeavyFlameTankFlamer
+	ReloadDelay: 110
+	BurstDelays: 2
+	Burst: 28
+	Range: 3c512
+	Projectile: LinearPulse
+		Speed: 220
+		ImpactInterval: 2
+		Inaccuracy: 160
+		Image: thinblueflame
+		Palette: effect-ignore-lighting-alpha85
+		MinimumImpactDistance: 440
+		MaximumImpactDistance: 3c512
+		RepeatAnimation: false
+	Warhead@1Dam: SpreadDamage
+		Range: 0, 256, 512
+		Falloff: 100, 100, 0
+		Damage: 200
+		Versus:
+			None: 100
+			Wood: 15
+			Light: 75
+			Heavy: 100
+			Concrete: 45
+			Brick: 2
+	Warhead@2Smu: LeaveSmudge
+		Chance: 5
 
 Napalm:
 	Inherits: ^FireWeapon
@@ -468,6 +536,12 @@ PlaceC4:
 		Condition: highlight
 		ValidTargets: Ground, Structure, Vehicle
 
+PlaceC4Seal:
+	Inherits: PlaceC4
+	ReloadDelay: 50
+	ValidTargets: C4, Vehicle, Ship, Submarine, Structure
+	Range: 1c255
+
 C4:
 	Projectile: InstantHit
 	Warhead@1Dam: HealthPercentageDamage
@@ -647,6 +721,39 @@ LaserTur.Adv:
 	ReloadDelay: 30
 	Projectile: LaserZap
 		SecondaryBeamColor: FF00FF30
+
+StealthAPCLaser:
+	Inherits: LaserTur
+	ReloadDelay: 30
+	Report: sapc-fire1.aud, sapc-fire2.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 3400
+		Versus:
+			None: 100
+			Wood: 20
+			Light: 45
+			Heavy: 20
+			Concrete: 20
+
+XOLaser:
+	Inherits: Laser
+	Report: xo-laser.aud
+	ReloadDelay: 120
+	Projectile: LaserZap
+		Width: 56
+		HitAnim: laserfire
+		Color: 9eff1480
+		ZOffset: 2047
+		SecondaryBeam: true
+		SecondaryBeamWidth: 90
+		SecondaryBeamZOffset: 2047
+		SecondaryBeamColor: 79cd0040
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 10000
+		Versus:
+			Wood: 45
+			Concrete: 80
 
 PortaLaser:
 	Inherits: LaserPrototype
@@ -2275,3 +2382,11 @@ ChemDebris:
 		Level: 300
 		Falloff: 32, 5
 		LayerName: radioactivity.weak
+
+YuriDummyAim:
+	Range: 3c0
+	ReloadDelay: 20
+	ValidTargets: Structure
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Structure
