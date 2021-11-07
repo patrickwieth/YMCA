@@ -2496,6 +2496,116 @@ IVAN:
 	Voiced:
 		VoiceSet: CrazyIvanVoice
 
+BRUT:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	AutoTarget:
+		ScanRadius: 4
+		InitialStance: AttackAnything
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 85
+		Prerequisites: anyradar, ~infantry.yuri, ~techlevel.infonly
+		Description: Genetically engineered hulk.\n  Strong vs Vehicles\n  Weak vs Aircraft, Defenses
+	RenderSprites:
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Brute
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 50000
+	Mobile:
+		Speed: 56
+		Voice: Move
+	Passenger:
+		CargoType: Vehicle
+	RevealsShroud:
+		Range: 4c0
+	Selectable:
+		DecorationBounds: 14,19,-1,-8
+	Targetable:
+		RequiresCondition: !being-warped
+		TargetTypes: Ground, Infantry, ChaosImmune, MindControlImmune, DogImmune
+	Voiced:
+		VoiceSet: BruteVoice
+	WithInfantryBody:
+		MoveSequence: run
+		StandSequences: stand
+		DefaultAttackSequence: bash
+		IdleSequences: idle1, idle2
+	AttackSounds:
+		Sounds: ibruatta.aud, ibruattb.aud
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayertd
+		DeathSequence: die
+		UseDeathTypeSuffix: true
+		DeathTypes:
+			DefaultDeath: 1
+			BulletDeath: 1
+			SmallExplosionDeath: 2
+			ExplosionDeath: 2
+			FireDeath: 5
+			ElectricityDeath: 6
+			PoisonDeath: 1
+			ChronoDeath: 8
+			ToxinDeath: 10
+			RadiationDeath: 10
+			FrozenDeath: 1
+			AtomizedDeath: 2
+		-CrushedSequence:
+	Armament@PRIMARY:
+		Weapon: BruteAttack
+		FireDelay: 10
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: BruteBuildingAttack
+		FireDelay: 10
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		Voice: Attack
+	-TakeCover:
+	-Captures@DRIVER_KILL:
+	-CaptureManager:
+	-WithIdleOverlay@MINDCONTROL:
+	-Crushable:
+	-ExternalCondition@GMUT:
+	-SpawnActorOnDeath@GMUT:
+	-Targetable@GMUT:
+
+BRUT.Mutating:
+	Inherits: BRUT
+	RenderSprites:
+		Image: brut
+	RejectsOrders:
+	Interactable:
+	WithFacingSpriteBody:
+		Sequence: stand
+	WithMakeAnimation:
+		Condition: mutating
+	KillsSelf:
+		RequiresCondition: !mutating
+		Delay: 10
+	SpawnActorOnDeath@GMUT:
+		Actor: brut
+		OwnerType: Victim
+		SpawnAfterDefeat: false
+	-UpdatesPlayerStatistics:
+	-AutoTarget:
+	-AutoTargetPriority@DEFAULT:
+	-AutoTargetPriority@ATTACKANYTHING:
+	-AttackMove:
+	-Buildable:
+	-Selectable:
+	-Armament@PRIMARY:
+	-Armament@SECONDARY:
+	-AttackFrontal:
+	-AttackSounds:
+	-WithInfantryBody:
+	-WithDeathAnimation:
+
 SHAD:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove

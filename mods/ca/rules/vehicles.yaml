@@ -6632,13 +6632,13 @@ SAPC:
 	Valued:
 		Cost: 1100
 	Tooltip:
-		Name: Stealth APC
+		Name: Toxin Emitter
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
 		HP: 20000
 	Armor:
-		Type: Light
+		Type: Heavy
 	Mobile:
 		Speed: 108
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
@@ -6648,11 +6648,41 @@ SAPC:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Armament:
-		Weapon: StealthAPCLaser
-		LocalOffset: 85,0,171
+	Explodes:
+		Weapon: ChaosDroneExplode
+		EmptyWeapon: VisualExplodeHusk
 	AttackFrontal:
+		FacingTolerance: 512
 		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	Armament@PRIMARY:
+		Weapon: ChaosDroneTargeting
+	GrantConditionOnAttack:
+		Condition: triggered
+	AmmoPool:
+		Name: explosion
+		Armaments: explosion
+		ReloadDelay: 0
+		InitialAmmo: 0
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		FullSequence: pip-red
+	ReloadAmmoPool:
+		AmmoPool: explosion
+		Delay: 100
+		Count: 1
+	GrantTimedConditionOnDeploy:
+		DeployedCondition: triggered
+		CooldownTicks: 100
+		DeployedTicks: 10
+		RequiresCondition: empdisable || being-warped
+	PeriodicExplosion:
+		Weapon: ChaosGas
+		RequiresCondition: triggered && ammo
+		AmmoPoolName: explosion
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5

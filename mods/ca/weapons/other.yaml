@@ -409,6 +409,33 @@ DogJaw:
 		InvalidTargets: Ant
 		DamageTypes: DefaultDeath
 
+BruteAttack:
+	ReloadDelay: 60
+	Range: 1c512
+	Report: brutehit.aud
+	Projectile: InstantHit
+	InvalidTargets: Structure
+	Warhead@1Dam: SpreadDamage
+		Spread: 128
+		Damage: 10000
+		DamageTypes: DefaultDeath
+		InvalidTargets: Structure
+		Versus:
+			None: 100
+			Light: 60
+			Heavy: 70
+			Concrete: 25
+			Wood: 20
+
+BruteBuildingAttack:
+	Inherits: BruteAttack
+	Range: 1c768
+	ValidTargets: Structure
+	-InvalidTargets:
+	Warhead@1Dam: SpreadDamage
+		-InvalidTargets:
+		ValidTargets: Structure
+
 Commandeer:
 	ReloadDelay: 5
 	Range: 1c0
