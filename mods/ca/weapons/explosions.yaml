@@ -654,6 +654,41 @@ ChaosDroneExplode:
 	Inherits: ChaosGas
 	Report: vchadiea.aud
 
+ToxinEmit:
+	ReloadDelay: 20
+	ValidTargets: Ground, Water, Underwater
+	Warhead@3Eff_impact: CreateEffect
+		ImpactSounds: vchaatta.aud
+	Warhead@4Spawn: SpawnActor
+		Actors: camera.cloud
+		Range: 5
+		ForceGround: false
+		Image: Cloud1d
+		Palette: tseffect-ignore-lighting-alpha75
+		ValidTargets: Ground, Water
+
+NapalmEmit:
+	ReloadDelay: 20
+	ValidTargets: Ground, Water, Underwater
+	Warhead@3Eff_impact: CreateEffect
+		ImpactSounds: vchaatta.aud
+	Warhead@Cluster: FireCluster
+		Weapon: FireDebris.ExtraDamage
+		RandomClusterCount: 7
+		Dimensions: 5,5
+		Footprint: _xxx_ xx_xx x___x xx_xx _xxx_
+
+LaserEmit:
+	ReloadDelay: 20
+	ValidTargets: Ground, Water, Underwater
+	Warhead@3Eff_impact: CreateEffect
+		ImpactSounds: lastur1.aud
+	Warhead@Burst: FireCluster
+		Weapon: LaserTur.Shrapnel
+		RandomClusterCount: 5
+		Dimensions: 7,7
+		Footprint: _xxxxx_ xxxxxxx xxxxxxx xxx_xxx xxxxxxx xxxxxxx _xxxxx_
+
 CryoExplosion:
 	Warhead@2Eff: CreateEffect
 		Explosions: cryoblast
