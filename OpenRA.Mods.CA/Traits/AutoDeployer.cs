@@ -41,9 +41,6 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Delay to wait for the actor to undeploy (if capable to) after a successful deploy.")]
 		public readonly int UndeployTicks = 450;
 
-		[Desc("OrderName, GrantConditionOnDeploy or GrantTimedConditionOnDeploy")]
-		public readonly string OrderName = "GrantConditionOnDeploy";
-
 		public override object Create(ActorInitializer init) { return new AutoDeployer(this); }
 	}
 
@@ -86,7 +83,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (autoDeployManager.IsTraitDisabled)
 				return;
 
-			autoDeployManager.AddUndeployOrders(new Order(Info.OrderName, self, false));
+			autoDeployManager.AddUndeployOrders(new Order("GrantConditionOnDeploy", self, false));
 		}
 
 		void INotifyAttack.Attacking(Actor self, in Target target, Armament a, Barrel barrel)
