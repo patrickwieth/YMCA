@@ -21,7 +21,7 @@ namespace OpenRA.Mods.CA.Traits
 {
 	public enum RangeCircleVisibility { Always, WhenSelected }
 
-	public class RenderShroudCircleCAInfo : TraitInfo
+	public class RenderShroudCircleCAInfo : ConditionalTraitInfo
 	{
 		[Desc("Color of the circle.")]
 		public readonly Color Color = Color.FromArgb(128, Color.Cyan);
@@ -41,18 +41,21 @@ namespace OpenRA.Mods.CA.Traits
 		public override object Create(ActorInitializer init) { return new RenderShroudCircleCA(init.Self, this); }
 	}
 
-	public class RenderShroudCircleCA : INotifyCreated, IRenderAnnotationsWhenSelected, IRenderAnnotations
+	public class RenderShroudCircleCA : ConditionalTrait<RenderShroudCircleCAInfo>, INotifyCreated, IRenderAnnotationsWhenSelected, IRenderAnnotations
 	{
 		readonly RenderShroudCircleCAInfo info;
 		WDist range;
 
 		public RenderShroudCircleCA(Actor self, RenderShroudCircleCAInfo info)
+			: base(info)
 		{
 			this.info = info;
 		}
 
-		void INotifyCreated.Created(Actor self)
+		protected override void Created(Actor self)
 		{
+			base.Created(self);
+
 			range = self.TraitsImplementing<CreatesShroud>()
 				.Select(cs => cs.Info.Range)
 				.DefaultIfEmpty(WDist.Zero)
@@ -62,6 +65,9 @@ namespace OpenRA.Mods.CA.Traits
 		public IEnumerable<IRenderable> RangeCircleRenderables(Actor self, WorldRenderer wr, RangeCircleVisibility visibility)
 		{
 			if (!self.Owner.IsAlliedWith(self.World.RenderPlayer))
+				yield break;
+
+			if (IsTraitDisabled)
 				yield break;
 
 			if (info.Visible == visibility)

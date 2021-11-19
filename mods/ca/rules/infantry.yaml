@@ -173,7 +173,7 @@ E3:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 30
-		Prerequisites: ~infantry.ra, ~!(infantry.allies && commander_tree.advanced_infantry_training)
+		Prerequisites: ~infantry.allies, ~!commander_tree.advanced_infantry_training
 		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Selectable:
 		Class: E3
@@ -231,10 +231,15 @@ E3:
 	ExternalCondition@relayTarget:
 		Condition: relayTarget
 
+E3.soviet:
+	Inherits: E3
+	Buildable:
+		Prerequisites: ~infantry.soviet
+
 E3.cryo:
 	Inherits: E3
 	Buildable:
-		Prerequisites: ~infantry.allies, ~commander_tree.advanced_infantry_training
+		Prerequisites: ~infantry.allies, ~!infantry.germany, ~commander_tree.advanced_infantry_training
 		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Tooltip:
 		Name: Cryo Rocket Soldier
@@ -287,6 +292,191 @@ E3.cryo:
 			RadiationDeath: 10
 			FrozenDeath: 11
 		CrushedSequence: die-crushed
+
+U3:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
+	Inherits@BERSERK: ^Berserk
+	Inherits@BOTHELPER: ^BotCaptureHelper
+	Valued:
+		Cost: 350
+	Tooltip:
+		Name: Guardian G.I
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 30
+		Prerequisites: ~infantry.germany, ~commander_tree.advanced_infantry_training
+		Description: Anti-tank/anti-aircraft infantry.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor, Aircraft, Buildings, Defenses
+		Weaknesses: • Weak vs Infantry, Light Armor\n• Weak anti-infantry weapon when not deployed
+		Attributes: • Deploys for personal anti-tank fortification\n• Uncrushable when deployed
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 6500
+	Mobile:
+		Speed: 38
+		Voice: Move
+		PauseOnCondition: !undeployed
+	Armament@PRIMARY:
+		Weapon: M14
+		LocalOffset: 0,0,400
+		RequiresCondition: !deployed
+	Armament@PRIMARYDEP:
+		Weapon: RedEyeGI
+		Name: deployed
+		Turret: deploy
+		LocalOffset: 0,0,400
+		PauseOnCondition: !ammo
+		RequiresCondition: !cryr-upgrade && deployed
+	Armament@PRIMARYDEPUPG:
+		Weapon: RedEyeGI.CRYO
+		Name: deployed
+		Turret: deploy
+		LocalOffset: 0,0,400
+		PauseOnCondition: !ammo
+		RequiresCondition: cryr-upgrade && deployed
+	Armament@SECONDARYDEP:
+		Name: deployed
+		Weapon: DragonGI
+		Turret: deploy
+		LocalOffset: 0,0,400
+		PauseOnCondition: !ammo
+		RequiresCondition: !cryr-upgrade && deployed
+	Armament@SECONDARYDEPUPG:
+		Weapon: DragonGI.CRYO
+		Name: deployed
+		Turret: deploy
+		LocalOffset: 0,0,400
+		PauseOnCondition: !ammo
+		RequiresCondition: cryr-upgrade && deployed
+	Armament@GarrisonAA:
+		Name: mountedaa
+		Weapon: RedEyeGI
+		PauseOnCondition: !ammo
+		RequiresCondition: !cryr-upgrade
+	Armament@GarrisonAAUPG:
+		Name: mountedaa
+		Weapon: RedEyeGI.CRYO
+		PauseOnCondition: !ammo
+		RequiresCondition: cryr-upgrade
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DragonGI
+		PauseOnCondition: !ammo
+		RequiresCondition: !cryr-upgrade
+	Armament@GarrisonUPG:
+		Name: mounted
+		Weapon: DragonGI.CRYO
+		PauseOnCondition: !ammo
+		RequiresCondition: cryr-upgrade
+	Armament@AIDummyAiming: ## Hack: Make AI deploy to attack air
+		PauseOnCondition: being-warped
+		RequiresCondition: botowner && !deployed
+		Weapon: AirDummyAim
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 25
+		Count: 1
+	TakeCover:
+		ProneOffset: 384,0,-395
+		RequiresCondition: !deployed
+	DamageMultiplier:
+		Modifier: 50
+		RequiresCondition: deployed
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	AutoTarget:
+		ScanRadius: 8
+	GrantConditionOnPrerequisite@CRYO:
+		Condition: cryr-upgrade
+		Prerequisites: cryr.upgrade
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: True
+		Voice: Action
+		DeploySounds: igidepa.aud, igidepb.aud
+		UndeploySounds: igidepa.aud, igidepb.aud
+		PauseOnCondition: being-warped
+		SmartDeploy: True
+		RequiresCondition: !parachute
+		Facing: 332
+	GrantCondition:
+		Condition: editorhack
+	WithInfantryBody@Editor: # HACK: negative conditions don't count in EnabledByDefault, we can use this duplicate WIB to render it on map editor
+		DefaultAttackSequence: shoot
+		RequiresCondition: !editorhack
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+		RequiresCondition: undeployed
+	WithMakeAnimation:
+		Sequence: deploy
+		BodyNames: dot
+	Turreted:
+		Turret: deploy
+		RealignDelay: -1
+		TurnSpeed: 1023
+		InitialFacing: 332
+	WithSpriteTurret@idle:
+		Turret: deploy
+		Sequence: deployed
+		RequiresCondition: deployed && !cryr-upgrade && !animate-turret && !parachute
+	WithSpriteTurret@animated:
+		Turret: deploy
+		Sequence: deploy-shoot
+		RequiresCondition: deployed && !cryr-upgrade && animate-turret && !parachute
+	WithSpriteTurret@idleupg:
+		Turret: deploy
+		Sequence: deployedcr
+		RequiresCondition: deployed && cryr-upgrade && !animate-turret && !parachute
+	WithSpriteTurret@animatedupg:
+		Turret: deploy
+		Sequence: deploy-shootcr
+		RequiresCondition: deployed && cryr-upgrade && animate-turret && !parachute
+	WithSpriteBody:
+		Sequence: empty
+		Name: dot
+		RequiresCondition: !undeployed
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		RequiresCondition: undeployed
+		Voice: Attack
+	AttackTurreted@deployed:
+		Armaments: deployed
+		Turrets: deploy
+		Voice: Attack
+		RequiresCondition: deployed
+		OutsideRangeRequiresForceFire: True
+	GrantConditionOnAttack:
+		Condition: animate-turret
+		RevokeDelay: 5
+		ArmamentNames: deployed
+	RejectsOrders@deployment:
+		Reject: AttackMove, AssaultMove
+		RequiresCondition: !botowner && deployed && !berserk
+	Convertible:
+		SpawnActors: N3C
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: GGIVoice
+	Crushable:
+		RequiresCondition: undeployed
+	AutoDeployer@AI:
+		RequiresCondition: botowner && !deployed && !parachute
+		DeployChance: 100
+		DeployTrigger: Attack
+		DeployTicks: 5
+		UndeployTicks: 50
 
 E4:
 	Inherits: ^Soldier
@@ -2321,7 +2511,7 @@ CRYOT:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 50
-		Prerequisites: ~infantry.allies, dome, ~tent, ~commander_tree.advanced_infantry_training, ~techlevel.medium
+		Prerequisites: ~infantry.allies, dome, ~tent, ~commander_tree.advanced_infantry_training
 		Description: Support infantry that slows enemies and makes them take more damage. Can intercept incoming bullets and rockets.
 		IconPalette: chrometd
 	Valued:
@@ -2495,6 +2685,116 @@ IVAN:
 		Prerequisites: barracks.upgraded
 	Voiced:
 		VoiceSet: CrazyIvanVoice
+
+BRUT:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	AutoTarget:
+		ScanRadius: 4
+		InitialStance: AttackAnything
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 85
+		Prerequisites: anyradar, ~infantry.yuri, ~techlevel.infonly
+		Description: Genetically engineered hulk.\n  Strong vs Vehicles\n  Weak vs Aircraft, Defenses
+	RenderSprites:
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Brute
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 50000
+	Mobile:
+		Speed: 56
+		Voice: Move
+	Passenger:
+		CargoType: Vehicle
+	RevealsShroud:
+		Range: 4c0
+	Selectable:
+		DecorationBounds: 14,19,-1,-8
+	Targetable:
+		RequiresCondition: !being-warped
+		TargetTypes: Ground, Infantry, ChaosImmune, MindControlImmune, DogImmune
+	Voiced:
+		VoiceSet: BruteVoice
+	WithInfantryBody:
+		MoveSequence: run
+		StandSequences: stand
+		DefaultAttackSequence: bash
+		IdleSequences: idle1, idle2
+	AttackSounds:
+		Sounds: ibruatta.aud, ibruattb.aud
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayertd
+		DeathSequence: die
+		UseDeathTypeSuffix: true
+		DeathTypes:
+			DefaultDeath: 1
+			BulletDeath: 1
+			SmallExplosionDeath: 2
+			ExplosionDeath: 2
+			FireDeath: 5
+			ElectricityDeath: 6
+			PoisonDeath: 1
+			ChronoDeath: 8
+			ToxinDeath: 10
+			RadiationDeath: 10
+			FrozenDeath: 1
+			AtomizedDeath: 2
+		-CrushedSequence:
+	Armament@PRIMARY:
+		Weapon: BruteAttack
+		FireDelay: 10
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: BruteBuildingAttack
+		FireDelay: 10
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		Voice: Attack
+	-TakeCover:
+	-Captures@DRIVER_KILL:
+	-CaptureManager:
+	-WithIdleOverlay@MINDCONTROL:
+	-Crushable:
+	-ExternalCondition@GMUT:
+	-SpawnActorOnDeath@GMUT:
+	-Targetable@GMUT:
+
+BRUT.Mutating:
+	Inherits: BRUT
+	RenderSprites:
+		Image: brut
+	RejectsOrders:
+	Interactable:
+	WithFacingSpriteBody:
+		Sequence: stand
+	WithMakeAnimation:
+		Condition: mutating
+	KillsSelf:
+		RequiresCondition: !mutating
+		Delay: 10
+	SpawnActorOnDeath@GMUT:
+		Actor: brut
+		OwnerType: Victim
+		SpawnAfterDefeat: false
+	-UpdatesPlayerStatistics:
+	-AutoTarget:
+	-AutoTargetPriority@DEFAULT:
+	-AutoTargetPriority@ATTACKANYTHING:
+	-AttackMove:
+	-Buildable:
+	-Selectable:
+	-Armament@PRIMARY:
+	-Armament@SECONDARY:
+	-AttackFrontal:
+	-AttackSounds:
+	-WithInfantryBody:
+	-WithDeathAnimation:
 
 SHAD:
 	Inherits: ^Soldier

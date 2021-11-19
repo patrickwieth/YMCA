@@ -239,6 +239,160 @@ S6:
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
+FEED:
+	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Valued:
+		Cost: 200
+	Tooltip:
+		Name: Feeder
+	Health:
+		HP: 7500
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Mobile:
+		Speed: 49
+	RevealsShroud:
+		Range: 5c0
+	Harvester:
+		Capacity: 10
+		Resources: Tiberium, BlueTiberium, Ore, Gems
+		HarvestFacings: 8
+		BaleLoadDelay: 18
+		DeliveryBuildings: none
+		FullyLoadedSpeed: 100
+		SearchFromProcRadius: 5
+		SearchFromHarvesterRadius: 5
+	WithHarvestAnimation:
+	WithMoveAnimation:
+	WithFacingSpriteBody:
+	QuantizeFacingsFromSequence:
+		-Sequence:
+	-WithInfantryBody:
+	-WithInfantryBody@Warped:
+	GrantConditionOnFullHarvester@FULL:
+		Condition: full
+	WithIdleOverlay@FULL:
+		Sequence: idle
+		Image: feederfull-overlay
+		Palette: scrin-ignore-lighting-alpha30
+		RequiresCondition: full
+	WithAttackAnimation:
+		Sequence: harvest
+		Armament: secondary
+	Explodes:
+		Weapon: FeederExplode
+		EmptyWeapon: FeederExplode
+		DamageSource: Killer
+		RequiresCondition: full
+	AttackFrontal:
+		FacingTolerance: 64
+	Armament@PRIMARY:
+		Weapon: FeederTargeting
+		RequiresCondition: full
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: FeederBeam
+		LocalOffset: 150,0,200
+		RequiresCondition: !full
+	GrantConditionOnAttack:
+		Condition: triggered
+		RequiresCondition: full
+	GrantConditionOnDeploy:
+		DeployedCondition: triggered
+		RequiresCondition: full
+	KillsSelf:
+		RequiresCondition: full && (triggered || berserk)
+	SpeedMultiplier@FULL:
+		RequiresCondition: full
+		Modifier: 150
+	WithHarvesterCapacityBar:
+		SelectionBarColor: cc0000
+		DisplayWhenFull: false
+	ConvertsDamageToHealth:
+		DamagePercentConverted: 20
+	HarvestsByDealingDamage:
+		DivideDamageBy: 2000
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move && !full
+	Targetable@FEEDER:
+		TargetTypes: Feeder
+		RequiresCondition: full
+
+SMEDI:
+	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 240
+		Prerequisites: ~infantry.scrin, ~infantry.smedi, ~techlevel.infonly
+		Description: Heals nearby life forms.\n  Unarmed
+		IconPalette: chrome
+	Valued:
+		Cost: 200
+	Tooltip:
+		Name: Rejuvenator
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 5000
+	Armament:
+		Weapon: Heal
+		Cursor: heal
+		OutsideRangeCursor: heal
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
+	AttackFrontal:
+		PauseOnCondition: being-warped
+	WithInfantryBody:
+		DefaultAttackSequence: heal
+	Passenger:
+		CustomPipType: blue
+		Voice: Move
+	Guard:
+		Voice: Move
+	AutoTarget:
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry
+		ValidRelationships: Ally
+	Voiced:
+		VoiceSet: AssimilatorVoice
+	Targetable:
+		TargetTypes: Ground, Infantry, ChaosImmune
+	GuardsSelection:
+		ValidTargets: Infantry
+
+GSCR:
+	Inherits: BRUT
+	RenderSprites:
+		Image: gscr
+		PlayerPalette: overlayplayerscrin
+	Voiced:
+		VoiceSet: GiantScrinVoice
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayerscrin
+	-Buildable:
+	Tooltip:
+		Name: Brutalizer
+	WithInfantryBody:
+		MoveSequence: run
+		StandSequences: stand
+		DefaultAttackSequence: bash
+		IdleSequences: idle1, idle2, idle3, idle4
+	AttackSounds:
+		Sounds: gscr-attack1.aud, gscr-attack2.aud
+
+GSCR.Mutating:
+	Inherits: BRUT.Mutating
+	SpawnActorOnDeath@GMUT:
+		Actor: gscr
+	RenderSprites:
+		Image: gscr
+		PlayerPalette: overlayplayerscrin
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayerscrin
+
 MAST:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -266,7 +420,7 @@ MAST:
 	RevealsShroud:
 		Range: 8c0
 	Mobile:
-		Speed: 49
+		Speed: 73
 	Armament@PRIMARY:
 		Weapon: EnslaveInfantry
 		LocalOffset: 150,0,400
@@ -444,7 +598,7 @@ SEEK:
 		IconPalette: chrome
 	Mobile:
 		Speed: 135
-		Locomotor: hover
+		Locomotor: lighthover
 	LeavesTrails:
 		Image: twake
 		Palette: effect
@@ -544,7 +698,7 @@ LACE:
 	Mobile:
 		TurnSpeed: 48
 		Speed: 157
-		Locomotor: hover
+		Locomotor: lighthover
 	LeavesTrails:
 		Image: twake
 		Palette: effect
@@ -653,7 +807,7 @@ INTL:
 		Speed: 135
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
 		TurnSpeed: 16
-		Locomotor: hover
+		Locomotor: lighthover
 	Health:
 		HP: 40000
 	Armor:
@@ -829,6 +983,56 @@ CORR.Range:
 	Armament@PRIMARY:
 		Weapon: CorrupterSpew.range
 
+LCHR:
+	Inherits: ^Tank
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Inherits@SLOWCRUSH: ^SlowedByCrushing
+	RenderSprites:
+		PlayerPalette: overlayplayerscrin
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Leecher
+	Selectable:
+		DecorationBounds: 36,36,0,-3
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 141
+		Prerequisites: anyradar, ~vehicles.collector, ~techlevel.medium
+		Queue: Vehicle
+		Description: Medium-ranged anti-infantry/structure unit.\n  Regenerates health while dealing damage\n  Disables power plants and radars\n  Slows vehicles & cyborgs\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
+		IconPalette: chrome
+	Mobile:
+		Speed: 80
+		TurnSpeed: 24
+	Health:
+		HP: 24000
+	Armor:
+		Type: Light
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Armament@PRIMARY:
+		Weapon: LeecherBeam
+		LocalOffset: 700,0,300, 700,-500,100, 700,500,100
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
+	WithMoveAnimation:
+		ValidMovementTypes: Horizontal, Vertical, Turn
+	ConvertsDamageToHealth:
+		DamagePercentConverted: 20
+	Explodes:
+		Weapon: LeecherExplode
+		EmptyWeapon: LeecherExplode
+
 STCR:
 	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -935,7 +1139,7 @@ DEVO:
 	Mobile:
 		TurnSpeed: 1000
 		Speed: 100
-		Locomotor: hover
+		Locomotor: lighthover
 	Hovers:
 		BobDistance: -25
 		RequiresCondition: !empdisable && !being-warped && !driver-dead
@@ -1114,7 +1318,7 @@ RUIN:
 		Speed: 100
 		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead
 		TurnSpeed: 1000
-		Locomotor: hover
+		Locomotor: lighthover
 	Health:
 		HP: 15000
 	Armor:
@@ -1170,6 +1374,62 @@ RUIN.barrage:
 		IconPalette: chrome
 	Armament:
 		Weapon: RuinerCannon.barrage
+
+ATMZ:
+	Inherits: ^Vehicle
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
+	Inherits@BERSERK: ^Berserk
+	Inherits@HOVERTRAIL: ^HoverTrail
+	RenderSprites:
+		PlayerPalette: overlayplayerscrin
+	Valued:
+		Cost: 1250
+	Tooltip:
+		Name: Atomizer
+	Selectable:
+		DecorationBounds: 28,28
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 285
+		Prerequisites: scrt, ~vehicles.collector, ~techlevel.medium
+		Description: Lightly armored long-range support unit.\n  Targets take damage over time\n  Targets have reduced rate of fire\n  Effect spreads when affected targets die\n  Strong vs Vehicles, Aircraft, Defenses\n  Weak vs Infantry, Buildings
+		IconPalette: chrome
+	Mobile:
+		Speed: 66
+		Locomotor: lighthover
+	Health:
+		HP: 20000
+	Armor:
+		Type: Light
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Turreted:
+		TurnSpeed: 32
+	Hovers:
+		BobDistance: -25
+		RequiresCondition: !empdisable && !being-warped && !driver-dead
+	WithShadow:
+		Offset: 43, 128, 0
+		ZOffset: -129
+	Armament:
+		Weapon: AtomizerBolts
+		LocalOffset: 350,0,450
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: AtomizerBoltsAA
+		LocalOffset: 350,0,450
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithSpriteTurret:
+	ProducibleWithLevel:
+		Prerequisites: vehicles.upgraded
 
 TPOD:
 	Inherits: ^Tank
@@ -1932,6 +2192,9 @@ PAC.support:
 
 PAC.laser:
 	Inherits: PAC
+	-AutoTarget:
+	-AutoTargetPriority@DEFAULT:
+	-AutoTargetPriority@ATTACKANYTHING:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.warship
@@ -1944,7 +2207,7 @@ PAC.laser:
 	Tooltip:
 		Name: Planetary Assault Warship
 	Health:
-		HP: 100000
+		HP: 110000
 	Armament@PRIMARY:
 		Name: primary
 		Weapon: WarshipLaser
@@ -2133,7 +2396,7 @@ INVA.support:
 
 INVA.suicide:
 	Inherits: INVA
-	Explodes@NUKE:
+	Explodes@Acid:
 		Weapon: InvaderExplosion
 		RequiresCondition: triggered
 	KillsSelf:

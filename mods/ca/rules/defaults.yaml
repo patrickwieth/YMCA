@@ -1252,6 +1252,7 @@
 	Inherits@irrad: ^Irradiatable
 	Inherits@atomize: ^Atomizable
 	Inherits@minidrone: ^MiniDroneAttachable
+	Inherits@SLOWCRUSH: ^SlowedByCrushing
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -1379,6 +1380,7 @@
 
 ^Tank:
 	Inherits: ^Vehicle
+	Inherits@SLOWCRUSH: ^SlightlySlowedByCrushing
 	Passenger:
 		Weight: 4
 	Mobile:
@@ -1390,6 +1392,25 @@
 		PlayerPalette: overlayplayertd
 	WithDamageOverlay:
 		Image: smoke_mtd
+
+^SlowedByCrushing:
+	ExternalCondition@CRUSHATTEMPTSLOW:
+		Condition: crush-attempt-slow
+	SpeedMultiplier@CRUSHATTEMPTSLOW:
+		RequiresCondition: crush-attempt-slow && !crush-slow
+		Modifier: 60
+	ExternalCondition@CRUSHSLOW:
+		Condition: crush-slow
+	SpeedMultiplier@CRUSHSLOW:
+		RequiresCondition: crush-slow
+		Modifier: 35
+
+^SlightlySlowedByCrushing:
+	Inherits@CRUSHSLOW:	^SlowedByCrushing
+	SpeedMultiplier@CRUSHATTEMPTSLOW:
+		Modifier: 80
+	SpeedMultiplier@CRUSHSLOW:
+		Modifier: 50
 
 ^Infantry:
 	Inherits@1: ^ExistsInWorld
@@ -1410,6 +1431,7 @@
 	Inherits@bounty: ^GlobalBounty
 	Inherits@selection: ^SelectableCombatUnit
 	Inherits@mind: ^MindControllable
+	Inherits@GMUT: ^GeneticallyMutatable
 	Inherits@handicaps: ^PlayerHandicaps
 	RenderSprites:
 		PlayerPalette: overlayplayertd

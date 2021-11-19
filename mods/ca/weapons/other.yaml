@@ -409,6 +409,33 @@ DogJaw:
 		InvalidTargets: Ant
 		DamageTypes: DefaultDeath
 
+BruteAttack:
+	ReloadDelay: 60
+	Range: 1c512
+	Report: brutehit.aud
+	Projectile: InstantHit
+	InvalidTargets: Structure
+	Warhead@1Dam: SpreadDamage
+		Spread: 128
+		Damage: 10000
+		DamageTypes: DefaultDeath
+		InvalidTargets: Structure
+		Versus:
+			None: 100
+			Light: 60
+			Heavy: 70
+			Concrete: 25
+			Wood: 20
+
+BruteBuildingAttack:
+	Inherits: BruteAttack
+	Range: 1c768
+	ValidTargets: Structure
+	-InvalidTargets:
+	Warhead@1Dam: SpreadDamage
+		-InvalidTargets:
+		ValidTargets: Structure
+
 Commandeer:
 	ReloadDelay: 5
 	Range: 1c0
@@ -751,6 +778,15 @@ LaserTur:
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
 		Damage: 7500
+
+LaserTur.Shrapnel:
+	Inherits: LaserTur
+	-Report:
+	Range: 3c0
+	Projectile: LaserZap
+		-HitAnim:
+	Warhead@3Eff: CreateEffect
+		Explosions: small_explosion
 
 LaserTur.Adv:
 	Inherits: LaserTur
@@ -1684,7 +1720,7 @@ Cloud:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 5
 		ValidTargets: Ground, Trees
-		InvalidTargets: Air, Creep
+		InvalidTargets: Air, Creep, ToxinEmitter
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
 Cloud.noTint:
@@ -2350,6 +2386,7 @@ SmallDebris:
 
 FireDebris:
 	Inherits: ^Debris
+	Inherits: ^Fire
 	Range: 3c0
 	Projectile: Bullet
 		Speed: 55, 108
@@ -2381,6 +2418,14 @@ FireDebris:
 	-Warhead@3EffWater:
 	Warhead@4Smu: LeaveSmudge
 		SmudgeType: Scorch
+
+FireDebris.ExtraDamage:
+	Inherits: FireDebris
+	Inherits: ^Napalm
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Falloff: 100, 50, 20
+		Damage: 10000
 
 ChemDebris:
 	Inherits: ^Debris
@@ -2426,3 +2471,11 @@ YuriDummyAim:
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Structure
+
+AirDummyAim:
+	Range: 7c0
+	ReloadDelay: 20
+	ValidTargets: Air
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Air

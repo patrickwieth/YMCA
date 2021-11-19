@@ -216,6 +216,50 @@ InfernoBomb:
 		Dimensions: 3,3
 		Footprint: xxx xxx xxx
 
+GeneticMutationBomb:
+	ReloadDelay: 25
+	Range: 1c0
+	Report: bwhis.aud
+	Projectile: GravityBomb
+		Image: B2BOMB
+		Velocity: 15, 0, -35
+		Acceleration: 0, 0, 0
+		Shadow: true
+	Warhead@COND: GrantExternalCondition
+		Range: 3c0
+		Duration: 16
+		Condition: geneticmutation
+		ValidTargets: Infantry
+		InvalidTargets: MindControlImmune
+	Warhead@MUT: FireShrapnel
+		Weapon: GeneticMutation
+		AimChance: 100
+		Amount: 6
+		Delay: 8
+	Warhead@3Eff: CreateEffect
+		Explosions: mutablast
+		ExplosionPalette: mutablast
+		ImpactSounds: gmutation.aud
+
+GeneticMutation:
+	Range: 3c0
+	ValidTargets: GeneticallyMutatable
+	Projectile: PlasmaBeam
+		Duration: 7
+		Colors: ff509a08
+		InnerLightness: 200
+		OuterLightness: 100
+		Radius: 2
+		Distortion: 150
+		DistortionAnimation: 150
+		SegmentLength: 350
+		ZOffset: 1027
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 50000
+		DamageTypes: MutatedDeath
+		ValidTargets: GeneticallyMutatable
+
 Atomic:
 	ValidTargets: Ground, Trees, Water, Underwater, Air
 	Warhead@1Dam_impact: SpreadDamage
