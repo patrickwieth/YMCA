@@ -150,7 +150,7 @@ V2RL:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 70
-		Prerequisites: vehicles.any, ~vehicles.allies, ~!vehicles.england, ~techlevel.low
+		Prerequisites: vehicles.any, ~vehicles.allies, ~!vehicles.england
 		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 800
@@ -191,6 +191,45 @@ V2RL:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
+
+GTNK:
+	Inherits: 2TNK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: vehicles.any, ~vehicles.england
+		Description: England's main battle tank.\nEquipped with AP Shells.
+	Valued:
+		Cost: 875
+	Tooltip:
+		Name: Grizzly Tank
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor, Light Armor
+		Weaknesses: • Weak vs Infantry, Defenses\n• Cannot attack Aircraft
+	Mobile:
+		Speed: 90
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Health:
+		HP: 41250
+	Armament:
+		Weapon: 105mm
+		LocalOffset: 720,0,80
+	Turreted:
+		TurnSpeed: 20
+		Offset: 80,0,0
+	AttackTurreted:
+		Voice: Attack
+		PauseOnCondition: parachute
+	AttackMove:
+		Voice: Attack
+	SpawnActorOnDeath:
+		Actor: GTNK.Husk
+	Voiced:
+		VoiceSet: GrizzlyVoice
+	WithShadow:
+		RequiresCondition: parachute
 
 2TNK.Chrono:
 	Inherits: 2TNK
@@ -5469,7 +5508,7 @@ CHPR:
 		Queue: Vehicle
 		BuildPaletteOrder: 225
 		IconPalette: chrometd
-		Prerequisites: atek, ~commander_tree.chrono_prison, ~!commander_tree.chrono_prison_range, ~!commander_tree.chrono_prison_aa, ~techlevel.high
+		Prerequisites: atek, ~commander_tree.chrono_prison, ~!commander_tree.chrono_prison_range, ~!commander_tree.chrono_prison_aa
 		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
 		Cost: 1700

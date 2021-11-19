@@ -173,7 +173,7 @@ E3:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 30
-		Prerequisites: ~infantry.ra, ~!(infantry.allies && commander_tree.advanced_infantry_training)
+		Prerequisites: ~infantry.allies, ~!commander_tree.advanced_infantry_training
 		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Selectable:
 		Class: E3
@@ -230,6 +230,11 @@ E3:
 	AutoTarget:
 	ExternalCondition@relayTarget:
 		Condition: relayTarget
+
+E3.soviet:
+	Inherits: E3
+	Buildable:
+		Prerequisites: ~infantry.soviet
 
 E3.cryo:
 	Inherits: E3
@@ -2321,7 +2326,7 @@ CRYOT:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 50
-		Prerequisites: ~infantry.allies, dome, ~tent, ~commander_tree.advanced_infantry_training, ~techlevel.medium
+		Prerequisites: ~infantry.allies, dome, ~tent, ~commander_tree.advanced_infantry_training
 		Description: Support infantry that slows enemies and makes them take more damage. Can intercept incoming bullets and rockets.
 		IconPalette: chrometd
 	Valued:
