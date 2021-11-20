@@ -1761,7 +1761,7 @@ HMMV:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
 		IconPalette: chrometd
-		Prerequisites: weap.td, ~vehicles.gdi, ~techlevel.low
+		Prerequisites: weap.td, ~vehicles.eagle
 		Description: Fast scout & anti-infantry vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 400
@@ -1945,6 +1945,12 @@ APC2:
 		RequiresCondition: driver-dead && !cargo
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
 
 APC2.Reinforce:
 	Inherits: APC2
@@ -2077,6 +2083,12 @@ VULC:
 		RequiresCondition: driver-dead && !cargo
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
 
 LTNK:
 	Inherits: ^TankTD
@@ -2235,7 +2247,7 @@ MTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
-		Prerequisites: ~vehicles.td, ~vehicles.mtnk, vehicles.any, ~!commander_tree.medium_tank_pld, ~techlevel.low
+		Prerequisites: ~vehicles.td, ~vehicles.mtnk, vehicles.any, ~!commander_tree.medium_tank_pld, ~!commander_tree.medium_tank.reflector
 		IconPalette: chrometd
 		Description: Main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -2302,7 +2314,7 @@ MTNK.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.td, ~vehicles.mtnk, vehicles.any, ~commander_tree.medium_tank.reflector, ~techlevel.low
+		Prerequisites: ~vehicles.td, ~vehicles.mtnk, vehicles.any, ~commander_tree.medium_tank.reflector
 		Description: Main battle tank with Reflector Armor.\n  Strong vs Energy Weapons\n  Weak vs Infantry, Aircraft
 	Tooltip:
 		Name: Battle Tank (Reflector)
@@ -2310,12 +2322,12 @@ MTNK.Reflector:
 MTNK.Drone:
 	Inherits: ^TankTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@IDISABLE: ^DisabledByRadarLoss
+	Inherits@HACKABLE: ^Hackable
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
-		Prerequisites: ~vehicles.talon, weap.td, ~!commander_tree.medium_tank_pld, ~techlevel.low
+		Prerequisites: ~vehicles.zocom, weap.td, radar, ~!commander_tree.medium_tank_pld
 		IconPalette: chrometd
 		Description: Drone battle tank.\n  Requires power to operate.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -2331,7 +2343,7 @@ MTNK.Drone:
 		Type: Heavy
 	Mobile:
 		Speed: 82
-		PauseOnCondition: disabled || empdisable || being-warped
+		PauseOnCondition: !radarenabled || disabled || empdisable || being-warped
 		Voice: Move
 	RevealsShroud:
 		MinRange: 4c0
@@ -2350,15 +2362,13 @@ MTNK.Drone:
 		MuzzleSequence: muzzle
 	AttackTurreted:
 		Turrets: primary
-		PauseOnCondition: disabled || empdisable || being-warped
+		PauseOnCondition: !radarenabled || disabled || empdisable || being-warped
 		Voice: Attack
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: MTNK.Drone.Husk
 		RequiresCondition: !being-warped
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
 	Voiced:
@@ -2389,6 +2399,12 @@ MTNK.Drone:
 	-ChangesHealth@DRIVER_DEAD:
 	-Targetable@DRIVERKILL:
 	-Targetable@AICAPTURE:
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
 
 MTNK.Drone.PLD:
 	Inherits: MTNK.Drone
@@ -2396,7 +2412,7 @@ MTNK.Drone.PLD:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
-		Prerequisites: ~vehicles.talon, weap.td, ~commander_tree.medium_tank_pld, ~techlevel.low
+		Prerequisites: ~vehicles.zocom, weap.td, ~commander_tree.medium_tank_pld
 		IconPalette: chrometd
 		Description: Drone battle tank with Point Laser Defense.\n  Requires power to operate.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -2409,7 +2425,7 @@ MTNK.Drone.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette: chrometd
-		Prerequisites: ~vehicles.talon, weap.td, ~commander_tree.medium_tank.reflector, ~techlevel.low
+		Prerequisites: ~vehicles.zocom, weap.td, ~commander_tree.medium_tank.reflector
 		Description: Drone battle tank with Reflector Armor.\n It is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Battle Drone (Reflector)
@@ -2483,6 +2499,12 @@ HTNK:
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
 
 HTNK.Ion:
 	Inherits: HTNK
@@ -4167,6 +4189,12 @@ DISR:
 	SpawnActorOnDeath:
 		Actor: DISR.Husk
 		RequiresCondition: !being-warped
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
 
 HMLRS:
 	Inherits: ^VehicleTD
@@ -5268,7 +5296,8 @@ BATF.AI:
 
 MEMP:
 	Inherits: ^TankTD
-	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@IDISABLE: ^DisabledByRadarLoss
+	Inherits@HACKABLE: ^Hackable
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
@@ -5287,7 +5316,7 @@ MEMP:
 	Armor:
 		Type: Heavy
 	Mobile:
-		PauseOnCondition: deployed || disabled || empdisable || being-warped
+		PauseOnCondition: !radarenabled || deployed || disabled || empdisable || being-warped
 		Voice: Move
 		Speed: 135
 	ChargingSelfDestruct:
@@ -5299,6 +5328,7 @@ MEMP:
 		DetonationWeapon: MEMP
 		ChargeSound: mobempcharge1.aud
 		Voice: Attack
+		PauseOnCondition: !radarenabled || empdisable || being-warped
 	ChronoshiftableWithSpriteEffect:
 		RequiresCondition: !being-warped && !deployed
 	RevealsShroud:
@@ -5348,6 +5378,12 @@ MEMP:
 	-ChangesHealth@DRIVER_DEAD:
 	-Targetable@DRIVERKILL:
 	-Targetable@AICAPTURE:
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
 
 MEMP.Volatile:
 	Inherits: MEMP
@@ -5413,7 +5449,7 @@ MEMP.Stable:
 		UndeployOnMove: True
 		DeploySounds: mobempcharge1.aud
 		Voice: Attack
-		PauseOnCondition: being-warped
+		PauseOnCondition: !radarenabled || empdisable || being-warped
 
 CDRN:
 	Inherits: ^VehicleTD
@@ -6196,6 +6232,12 @@ MAMMOTHMK2:
 		TickRate: 1
 	RenderVoxels:
 		Scale: 10
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
 
 APOC:
 	Inherits: ^Tank
@@ -6219,7 +6261,7 @@ APOC:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 130000
+		HP: 145000
 	Armor:
 		Type: Heavy
 	Mobile:
@@ -6300,11 +6342,14 @@ XO:
 	RenderSprites:
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 0
-		Prerequisites: indp, ~vehicles.soviet, ~commander_tree.apocalypse
-		Description: yes
+		BuildPaletteOrder: 15
+		Prerequisites: weap.td, ~vehicles.talon
+		Description: Light scout-mech with a short-range laser\n  and a machine gun.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Armor
+		Weaknesses: • Cannot attack Aircraft
 	Valued:
-		Cost: 650
+		Cost: 800
 	Tooltip:
 		Name: X-O Powersuit
 	UpdatesPlayerStatistics:
@@ -6315,7 +6360,7 @@ XO:
 		Type: Light
 	Mobile:
 		TurnSpeed: 40
-		Speed: 49
+		Speed: 95
 		Voice: Move
 	Passenger:
 		CustomPipType: red
@@ -6323,7 +6368,7 @@ XO:
 		Voice: Move
 	RevealsShroud:
 		MinRange: 4c0
-		Range: 6c0
+		Range: 14c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
@@ -6362,7 +6407,7 @@ HFTK:
 		Queue: Vehicle
 		BuildPaletteOrder: 131
 		IconPalette: chrometd
-		Prerequisites: anyradar, ~vehicles.blackh, ~techlevel.low
+		Prerequisites: radar, ~vehicles.blackh, ~techlevel.low
 		Description: Heavy tank armed with dual short-range flamethrowers.\n  Strong vs Infantry, Buildings, Light Armor\n  Weak vs Tanks, Defenses, Aircraft
 	Valued:
 		Cost: 1100
@@ -6372,7 +6417,7 @@ HFTK:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 46000
+		HP: 75000
 	Armor:
 		Type: Heavy
 	Mobile:
@@ -6426,7 +6471,7 @@ MDRN:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 105
-		Prerequisites: anyradar, ~vehicles.arc, ~techlevel.low
+		Prerequisites: radar, ~vehicles.zocom, ~techlevel.low
 		Description: Hovering drone with machine gun.\n  Attaches to certain vehicles to provide support and repairs.\n  Strong vs Infantry\n  Weak vs Vehicles, Buildings, Aircraft
 	Valued:
 		Cost: 300
@@ -6538,7 +6583,7 @@ GDRN:
 		Queue: Vehicle
 		BuildPaletteOrder: 22
 		IconPalette: chrome
-		Prerequisites: ~vehicles.arc, ~techlevel.low
+		Prerequisites: ~vehicles.zocom
 		Description: Fast scout & anti-tank vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Vehicles\n  Weak vs Infantry, Buildings, Defenses, Aircraft
 	Valued:
 		Cost: 400
@@ -6552,11 +6597,11 @@ GDRN:
 		Type: Light
 	Mobile:
 		TurnSpeed: 40
-		Speed: 108
+		Speed: 134
 		Voice: Move
 	RevealsShroud:
-		MinRange: 4c0
-		Range: 7c0
+		MinRange: 6c0
+		Range: 14c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
@@ -6589,7 +6634,7 @@ MSG:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 385
-		Prerequisites: anyradar, ~vehicles.shadow, ~techlevel.high
+		Prerequisites: radar, ~vehicles.blackh
 		Description: Cloaks nearby units and buildings.\n  Unarmed
 	Valued:
 		Cost: 1250

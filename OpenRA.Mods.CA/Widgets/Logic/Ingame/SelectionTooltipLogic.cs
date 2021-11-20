@@ -194,8 +194,12 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					armorTypeLabel.TextColor = Color.Firebrick;
 					break;
 
+				case "Reflector":
+					armorTypeLabel.TextColor = Color.Teal;
+					break;
+
 				case "Concrete":
-					armorTypeLabel.Text = "Defense";
+					armorTypeLabel.Text = "Concrete";
 					armorTypeLabel.TextColor = Color.RoyalBlue;
 					break;
 

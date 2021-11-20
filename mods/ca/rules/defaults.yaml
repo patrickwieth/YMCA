@@ -2961,6 +2961,22 @@
 	Power:
 		RequiresCondition: !disabled
 
+^DisabledByRadarLoss:
+	ExternalCondition@DRONECONTROL:
+		Condition: radarenabled
+	GrantConditionOnPrerequisite@DRONECONTROL:
+		Condition: radarenabled
+		Prerequisites: radar-active
+	WithColoredOverlay@DRONEDISABLE:
+		RequiresCondition: !radarenabled || empdisable
+		Palette: disabled
+	WithDecoration@DRONEDISABLE:
+		Image: nosignal
+		Sequence: offline
+		Palette: chrome
+		RequiresCondition: !radarenabled || empdisable
+		Position: Center
+
 ^Selectable:
 	Selectable:
 	SelectionDecorations:

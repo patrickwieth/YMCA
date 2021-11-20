@@ -83,7 +83,7 @@ commander_tree.advanced_logistics:
 		IconPalette: chrometd
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~anypower, commander_tree.basic_logistics, ~!structures.scrin
-		Description: Enables to build Carryalls, Dropships and Minelayer vehicles.
+		Description: Enables to build Carryalls and Minelayer vehicles.
 
 commander_tree.expert_logistics:
 	Inherits: ^default.commander_tree_item
@@ -1830,6 +1830,31 @@ hack.cameo_filler.218a:
 	Buildable:
 		BuildPaletteOrder: 237
 		Prerequisites: prerequisite.has_points, ~vehicles.talon, ~filler.titan2, disabled
+
+commander_tree.DronePair:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Drone Pairing
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 238
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.zocom, gtek
+		Description: All heavy tanks are produced with a mini drone attached.
+	ProvidesPrerequisite@dronepair:
+		Prerequisite: dronepair.upgrade
+
+hack.cameo_filler.218c:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 238
+		Prerequisites: prerequisite.has_points, ~vehicles.zocom, gtek, disabled
+
+hack.cameo_filler.218d:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 238
+		Prerequisites: prerequisite.has_points, ~vehicles.zocom, gtek, disabled
 
 commander_tree.Stealth_Fighter:
 	Inherits: ^default.commander_tree_item
