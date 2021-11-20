@@ -1467,3 +1467,56 @@ AuroraRocket:
 		RandomClusterCount: 3
 		Dimensions: 3,3
 		Footprint: xxx xxx xxx
+
+Rocket.P51.R:
+	Inherits: ^MissileAP
+	ReloadDelay: 200
+	Range: 8c0
+	MinRange: 0c768
+	Report: vintatta.aud
+	Burst: 4
+	BurstDelays: 4
+	FirstBurstTargetOffset: -758,-613,0
+	FollowingBurstTargetOffset: 758,0,0
+	ValidTargets: Ground, Water
+	InvalidTargets: Air
+	TargetActorCenter: true
+	Projectile: Bullet
+		Blockable: false
+		Shadow: true
+		Inaccuracy: 0c256
+		Image: dragon
+		TrailImage: smokey
+		TrailDelay: 3
+		Speed: 250
+		LaunchAngle: 15, 30
+		ContrailLength: 8
+		ContrailWidth: 48
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 400
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		Versus:
+			None: 100
+			Wood: 40
+			Concrete: 60
+			Light: 60
+			Heavy: 100
+			Brick: 75
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion
+		ImpactSounds: kaboom25.aud
+		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: med_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+Rocket.P51.L:
+	Inherits: Rocket.P51.R
+	FirstBurstTargetOffset: -758,613,0
