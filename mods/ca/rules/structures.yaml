@@ -849,6 +849,39 @@ DOME:
 		DisplayTimerStances: Ally
 		Cursor: ability
 		AllowMultiple: false
+	ClassicAirstrikePower@Strafe:
+		OrderName: strafe
+		Squad:
+			p51:
+				SpawnDelay: 20
+				SpawnOffset: -1536,1024,0
+				TargetOffset: -536,0,0
+			p51:
+				SpawnDelay: 0
+				SpawnOffset: 0,0,0
+				TargetOffset: 0,0,0
+			p51:
+				SpawnDelay: 20
+				SpawnOffset: -1536,-1024,0
+				TargetOffset: 536,0,0
+		Prerequisites: ~aircraft.usa, ~techlevel.unrestricted
+		Icon: strafe
+		ChargeInterval: 7500
+		Description: Strafing Run
+		LongDesc: P51 ground attack planes strafe\nyour target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: strafe
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		Strikes: 3
+		CircleDelay: 40
 
 PBOX:
 	Inherits: ^Defense
@@ -6436,7 +6469,7 @@ MSLO.Nod:
 		IconPalette: chrometd
 		Prerequisites: techlevel.superw
 		Cursor: chemmissile
-		ChargeInterval: 13500
+		ChargeInterval: 11500
 		Description: Chemical Missile
 		LongDesc: Launches an deadly Chemical Missile,\nCauses a large blast and a large toxic cloud.\nExtremely toxic to infantry.
 		EndChargeSpeechNotification: CMissileReady
