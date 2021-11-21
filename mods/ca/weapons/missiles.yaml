@@ -102,6 +102,7 @@ Dragon.Inf.Cryo:
 		DamageTypes: Prone50Percent, TriggerProne, FrozenDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: cryohit
+		ExplosionPalette: ra2effect-ignore-lighting-alpha75
 		ImpactSounds: cryohit.aud
 	Warhead@chill: GrantExternalCondition
 		Condition: chilled
@@ -116,6 +117,7 @@ Dragon.Relay.Cryo:
 		DamageTypes: Prone50Percent, TriggerProne, FrozenDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: cryohit
+		ExplosionPalette: ra2effect-ignore-lighting-alpha75
 		ImpactSounds: cryohit.aud
 	Warhead@chill: GrantExternalCondition
 		Condition: chilled
@@ -425,7 +427,8 @@ RedEye.CRYO:
 		Image: cryomiss
 	Warhead@3Eff: CreateEffect
 		Explosions: cryohit
-		ImpactSounds: cryoblast.aud
+		ExplosionPalette: ra2effect-ignore-lighting-alpha75
+		ImpactSounds: cryohit.aud
 	Warhead@chill: GrantExternalCondition
 		Condition: chilled
 		Duration: 65
@@ -1421,6 +1424,19 @@ CryoGun:
 		Level: 100
 		Falloff: 100, 52, 15, 2
 		MaxLevel: 600
+
+CryoMissileNHAW:
+	Inherits: CryoMissile
+	ReloadDelay: 250
+	Report: vrocweaa.aud, vrocweab.aud
+	BurstDelays: 50
+	Range: 7c0
+	Projectile: Bullet
+		Image: cmiss
+		Speed: 230
+		LaunchAngle: 3
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
 
 BATFRockets:
 	Inherits: Dragon

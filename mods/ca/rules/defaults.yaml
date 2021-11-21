@@ -308,6 +308,11 @@
 		Palette: frenzy
 	TimedConditionBar@FRENZY:
 		Condition: frenzy
+	WithIdleOverlay@FRENZY:
+		Sequence: vehicle
+		Image: frenzy-overlay
+		Palette: frenzyoverlay
+		RequiresCondition: frenzy
 
 ^Warpable:
 	Warpable:
@@ -836,6 +841,16 @@
 	GrantConditionOnDamageState@NREPAIR:
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
+	WithIdleOverlay@NSHIELD:
+		Sequence: idle
+		Image: nshield-overlay
+		Palette: effect
+		RequiresCondition: nshield && !(empdisable || invulnerability || invisibility)
+	ExternalCondition@NSHIELD:
+		Condition: nshield
+	DamageMultiplier@NSHIELD:
+		RequiresCondition: nshield
+		Modifier: 50
 
 ^AffectedByDriverKill:
 	GrantConditionIfOwnerIsNeutral:
@@ -3353,6 +3368,18 @@
 		RequiresCondition: aircraft-repair
 		RequiresSelection: True
 		ValidRelationships: Ally, Neutral
+
+^Transport:
+	Cargo:
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		CustomPipSequences:
+			gray: pip-gray
+			yellow: pip-yellow
+			red: pip-red
+			blue: pip-blue
 
 ^PrimaryBuilding:
 	PrimaryBuilding:

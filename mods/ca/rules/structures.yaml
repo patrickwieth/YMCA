@@ -4093,9 +4093,21 @@ HQ:
 		LaunchSound: hacksat.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || being-warped
-	ParatroopersPower@Legionparatroopers:
+	ProduceActorPower@hackercell:
+		OrderName: hackercell
+		Prerequisites: infantry.any, ~radar.legion
+		Icon: hackercell
+		Type: Infantry
+		ChargeInterval: 7500
+		Description: Hacker Cell
+		LongDesc: Deploy a squad of hackers that can remotely\ncapture buildings and take control of defenses.
+		Actors: hack, hack, hack
+		LaunchSpeechNotification: ReinforcementsArrived
+		EndChargeSpeechNotification: Reinforce
+		PauseOnCondition: disabled || being-warped
+	ParatroopersPower@paratroopers:
 		OrderName: LegionParatroopers
-		Prerequisites: structures.legion, hand, techlevel.medium
+		Prerequisites: structures.blackh, hand, techlevel.medium
 		Icon: paratroopers
 		UnitType: c17
 		ChargeInterval: 7500
@@ -4103,7 +4115,7 @@ HQ:
 		LongDesc: A Cargo Plane drops a squad of infantry\nanywhere on the map.
 		SquadSize: 1
 		SquadOffset: 0,1792,0
-		DropItems: N1,N1,N4,N3,N3,N1,N1,N4
+		DropItems: N1,N1,BH,N3,N3,BH,BH
 		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
@@ -4179,6 +4191,24 @@ HQ:
 		UseDirectionalTarget: False
 		DirectionArrowAnimation: paradirection
 		PauseOnCondition: disabled || being-warped
+	AirReinforcementsPower@ShadowTeam:
+		OrderName: shadowteam
+		Prerequisites: ~radar.shadow, techlevel.unrestricted
+		Icon: shadteam
+		ChargeInterval: 6750
+		Description: Shadow Team
+		LongDesc: Calls for a Shadow Team; three stealth infantry that arrive via glider.
+		SelectTargetSpeechNotification: SelectTarget
+		UnitType: sgli
+		QuantizedFacings: 8
+		DisplayBeacon: false
+		SquadSize: 3
+		SquadOffset: -1024,1024,0
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+		LaunchSpeechNotification: ReinforcementsArrived
+		EndChargeSpeechNotification: Reinforce
 	Power:
 		Amount: -40
 		RequiresCondition: !being-warped

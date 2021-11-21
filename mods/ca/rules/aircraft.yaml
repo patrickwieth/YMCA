@@ -894,7 +894,7 @@ TRAN:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
-		Prerequisites: ~aircraft.all, ~!aircraft.eagle, ~techlevel.infonly, ~commander_tree.basic_logistics
+		Prerequisites: ~aircraft.all, ~!aircraft.eagle, ~!aircraft.england, ~commander_tree.basic_logistics
 		Description: Fast infantry transport helicopter.\n  Unarmed
 	Valued:
 		Cost: 900
@@ -1027,6 +1027,174 @@ TRAN.paradrop:
 		Types: Infantry
 		MaxWeight: 8
 		PipCount: 8
+	-Selectable:
+	-Voiced:
+	RejectsOrders:
+	RenderSprites:
+		Image: tran3
+	SpawnActorOnDeath:
+		Actor: TRAN.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: TRAN.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+	Interactable:
+	GivesExperience:
+		Experience: 1000
+
+NHAW:
+	Inherits: ^Helicopter
+	Inherits@TRANSPORT: ^Transport
+	RenderSprites:
+		Image: nhaw
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 10
+		Prerequisites: ~aircraft.england, ~commander_tree.basic_logistics
+		Description: Fast infantry transport helicopter armed with\n  a light machine gun.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Heavy Armor, Defenses, Buildings\n• Cannot attack Aircraft
+	Valued:
+		Cost: 1150
+	Tooltip:
+		Name: Nighthawk
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 44000
+	RevealsShroud:
+		Range: 8c0
+		MinRange: 6c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+		Type: GroundPosition
+	Aircraft:
+		TurnSpeed: 20
+		Speed: 155
+		AltitudeVelocity: 0c58
+		TakeoffSounds: htoff1.aud
+		LandingSounds: hland1.aud
+		Voice: Move
+	WithIdleOverlay@ROTOR1AIR:
+		Offset: 237,0,263
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR1GROUND:
+		Offset: 237,0,263
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithIdleOverlay@ROTOR2AIR:
+		Offset: -997,0,341
+		Sequence: rotor2
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR2GROUND:
+		Offset: -997,0,341
+		Sequence: slow-rotor2
+		RequiresCondition: !airborne
+	Cargo:
+		Types: Infantry
+		MaxWeight: 8
+	SpawnActorOnDeath:
+		Actor: NHAW.Husk
+		RequiresCondition: !upg-crym && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: NHAW.Husk.EMP
+		RequiresCondition: !upg-crym && empdisable && !being-warped
+	SpawnActorOnDeath@UPG:
+		Actor: NHAW.UPG.Husk
+		RequiresCondition: upg-crym && !empdisable && !being-warped
+	SpawnActorOnDeath@UPGEMP:
+		Actor: NHAW.UPG.Husk.EMP
+		RequiresCondition: upg-crym && empdisable && !being-warped
+	Selectable:
+		DecorationBounds: 40,36
+	Voiced:
+		VoiceSet: CarryAllVoice
+	AppearsOnRadar:
+		ValidRelationships: Ally
+	WithFacingSpriteBody:
+		RequiresCondition: !upg-crym
+	WithFacingSpriteBody@UPG:
+		Name: body-upg
+		RequiresCondition: upg-crym && ammo > 1
+		Sequence: idle-upg
+	WithFacingSpriteBody@oneshot:
+		Name: body-oneshot
+		RequiresCondition: upg-crym && ammo == 1
+		Sequence: oneshot
+	WithFacingSpriteBody@empty:
+		Name: body-empty
+		RequiresCondition: upg-crym && !ammo
+		Sequence: empty
+	Armament@PRIMARY:
+		Weapon: M60mgJJ
+		LocalOffset: 1000,0,-100
+		MuzzleSequence: muzzle
+	Armament@CRYOMISSILE:
+		Name: cryo
+		Weapon: cryomissilenhaw
+		LocalOffset: 200,300,0, 200,-300,0
+		RequiresCondition: upg-crym
+	AmmoPool@CRYOMISSILE:
+		Name: cryo
+		Armaments: cryo
+		Ammo: 2
+		AmmoCondition: ammo
+	ReloadAmmoPool@CRYOMISSILE:
+		AmmoPool: cryo
+		Delay: 550
+		Count: 2
+		RequiresCondition: upg-crym
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: AttackAnything
+	AttackAircraft:
+		Armaments: primary, cryo
+		FacingTolerance: 20
+		AttackType: Hover
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	GrantConditionOnPrerequisite@CRYM:
+		Condition: upg-crym
+		Prerequisites: crym.upgrade
+
+NHAW.paradrop:
+	Inherits: ^Helicopter
+	Tooltip:
+		Name: Nighthawk
+	ParaDrop:
+		DropRange: 4c0
+	Health:
+		HP: 46000
+	Aircraft:
+		TurnSpeed: 20
+		Speed: 155
+		AltitudeVelocity: 0c100
+	WithIdleOverlay@ROTOR1AIR:
+		Offset: 597,0,85
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR1GROUND:
+		Offset: 597,0,85
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithIdleOverlay@ROTOR2AIR:
+		Offset: -597,0,171
+		Sequence: rotor2
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR2GROUND:
+		Offset: -597,0,171
+		Sequence: slow-rotor2
+		RequiresCondition: !airborne
+	Cargo:
+		Types: Infantry
+		MaxWeight: 8
 	-Selectable:
 	-Voiced:
 	RejectsOrders:
