@@ -934,6 +934,35 @@ StormColumnZap:
 		Explosions: 1, 3
 		Image: fire
 
+StormColumnCloudZap:
+	Inherits: StormColumnZap
+	ReloadDelay: 150
+	Burst: 1
+	ValidTargets: Ground, Water
+	InvalidTargets: StormBoost
+	Warhead@1Dam: SpreadDamage
+		Damage: 9900
+
+StormColumnCloudCharge:
+	Inherits: StormColumnZap
+	ValidTargets: StormBoost
+	Burst: 1
+	ReloadDelay: 250
+	Range: 3c768
+	-StartBurstReport:
+	-Warhead@1Dam:
+	-Warhead@3Eff:
+	Warhead@highlight: GrantExternalCondition
+		Range: 0c511
+		Duration: 2
+		Condition: highlight
+		ValidTargets: StormBoost
+	Warhead@Charged: GrantExternalCondition
+		Range: 0c511
+		Duration: 100
+		Condition: charged
+		ValidTargets: StormBoost
+
 StormcrawlerZap:
 	Inherits: StormColumnZap
 	Inherits: ^EnergyLight
@@ -1228,6 +1257,7 @@ Scrinbombs:
 		ImpactSounds: seeker-hit1.aud, seeker-hit2.aud
 
 LeecherBeam:
+	Inherits: ^Energy
 	ValidTargets: Ground, Water
 	StartBurstReport: leecher-fire1.aud
 	Range: 6c0
@@ -1249,12 +1279,6 @@ LeecherBeam:
 		Spread: 256
 		Damage: 1700
 		DamageTypes: Prone50Percent, TriggerProne, AtomizedDeath
-		Versus:
-			None: 100
-			Light: 45
-			Wood: 100
-			Heavy: 15
-			Concrete: 25
 	Warhead@ARC: FireShrapnel
 		Weapon: LeecherArc
 		AimChance: 100
@@ -1301,16 +1325,14 @@ FeederBeam:
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
 		Spread: 128
-		Versus:
-			Light: 40
-			Wood: 40
 	-Warhead@DRAIN:
 	-Warhead@ARC:
 
 AtomizerBolts:
+	Inherits: ^EnergyAP
 	Report: atomizer-fire1.aud
 	ReloadDelay: 150
-	Range: 7c0
+	Range: 12c0
 	TargetActorCenter: true
 	MinRange: 1c512
 	Projectile: Missile
@@ -1330,12 +1352,6 @@ AtomizerBolts:
 		Spread: 128
 		Damage: 4200
 		ValidTargets: Ground, Water
-		Versus:
-			None: 70
-			Wood: 70
-			Light: 85
-			Heavy: 100
-			Concrete: 85
 		DamageTypes: Prone50Percent, TriggerProne, AtomizedDeath
 	Warhead@2Sup: GrantExternalCondition
 		Range: 0c768
@@ -1355,17 +1371,12 @@ AtomizerBolts:
 
 AtomizerBoltsAA:
 	Inherits: AtomizerBolts
+	Range: 10c0
 	ValidTargets: Air, AirSmall
 	Projectile: Missile
 		Speed: 225
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Air, AirSmall
-		Versus:
-			None: 100
-			Wood: 100
-			Light: 100
-			Concrete: 100
-			Brick: 100
 	Warhead@2Sup: GrantExternalCondition
 		ValidTargets: Air, AirSmall
 		Range: 1c512
@@ -1408,10 +1419,6 @@ FeederExplode:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Water
 		InvalidTargets: Air, Creep, Feeder
-		Versus:
-			None: 90
-			Heavy: 90
-			Brick: 10
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@2Smu: LeaveSmudge

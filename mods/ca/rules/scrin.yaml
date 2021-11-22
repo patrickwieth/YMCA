@@ -58,6 +58,13 @@ VEHICLES.SCRIN:
 		CrushedSequencePalette: scrin
 	-DamagedByTerrain:
 	-TakeCover:
+	TransformOnCondition@FEEDER:
+		RequiresCondition: feedermutation
+		IntoActor: feed
+	ExternalCondition@FEEDER:
+		Condition: feedermutation
+	SpawnActorOnDeath@GMUT:
+		Actor: gscr.mutating
 
 S1:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
@@ -1001,7 +1008,7 @@ LCHR:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 141
-		Prerequisites: anyradar, ~vehicles.collector, ~techlevel.medium
+		Prerequisites: radar, ~vehicles.harbinger
 		Queue: Vehicle
 		Description: Medium-ranged anti-infantry/structure unit.\n  Regenerates health while dealing damage\n  Disables power plants and radars\n  Slows vehicles & cyborgs\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
@@ -1394,7 +1401,7 @@ ATMZ:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 285
-		Prerequisites: scrt, ~vehicles.collector, ~techlevel.medium
+		Prerequisites: scrt, ~vehicles.traveler, ~techlevel.medium
 		Description: Lightly armored long-range support unit.\n  Targets take damage over time\n  Targets have reduced rate of fire\n  Effect spreads when affected targets die\n  Strong vs Vehicles, Aircraft, Defenses\n  Weak vs Infantry, Buildings
 		IconPalette: chrome
 	Mobile:
@@ -3675,6 +3682,26 @@ SCRT:
 		DisplayRadarPing: True
 		Cursor: ability
 		PauseOnCondition: disabled || empdisable ||  being-warped
+	GrantExternalConditionPower@FEEDERMUTATION:
+		OrderName: feedermutation
+		Icon: feedermutation
+		Prerequisites: structures.reaper
+		ChargeInterval: 6750
+		Description: Feeder Mutation
+		Condition: feedermutation
+		Dimensions: 3, 3
+		Footprint: _x_ xxx _x_
+		ValidRelationships: Ally
+		Duration: 25
+		AllowMultiple: false
+		LongDesc: Transforms Scrin infantry into Feeders which consume resources\nuntil becoming volatile enough to explode.
+		OnFireSound: feedermutation.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayTimerRelationships: Ally
 	Exit:
 
 GRAV:
@@ -4229,6 +4256,183 @@ SCOL:
 	SpawnActorOnDeath:
 		Actor: s1
 	-SpawnRandomActorOnDeath:
+	Targetable@StormBoost:
+		TargetTypes: StormBoost
+		RequiresCondition: !(powerdown || charged)
+	AmbientSoundCA@IONSTORM:
+		SoundFiles: ionstorm.aud
+		Delay: 0
+		Interval: 850
+		VolumeMultiplier: 0.4
+		RequiresCondition: storm-active
+	LaysMinefield@IONSTORM:
+		Mines: strm
+		Locations: 0,1, 1,0, -1,0
+		RecreationInterval: 150
+		KillOnRemove: true
+		RequiresCondition: storm-active
+	GrantConditionOnAttackCA@IONSTORM:
+		RequiresActorTarget: true
+		Condition: storm-active
+		RevokeDelay: 75
+		RevokeAll: true
+		MaximumInstances: 70
+	RangeMultiplier@IONSTORM1:
+		Modifier: 105
+		RequiresCondition: storm-active >= 14
+	FirepowerMultiplier@IONSTORM1:
+		Modifier: 105
+		RequiresCondition: storm-active >= 14
+	DamageMultiplier@IONSTORM1:
+		Modifier: 95
+		RequiresCondition: storm-active >= 14
+	RangeMultiplier@IONSTORM2:
+		Modifier: 105
+		RequiresCondition: storm-active >= 28
+	FirepowerMultiplier@IONSTORM2:
+		Modifier: 105
+		RequiresCondition: storm-active >= 28
+	DamageMultiplier@IONSTORM2:
+		Modifier: 95
+		RequiresCondition: storm-active >= 28
+	RangeMultiplier@IONSTORM3:
+		Modifier: 105
+		RequiresCondition: storm-active >= 42
+	FirepowerMultiplier@IONSTORM3:
+		Modifier: 105
+		RequiresCondition: storm-active >= 42
+	DamageMultiplier@IONSTORM3:
+		Modifier: 95
+		RequiresCondition: storm-active >= 42
+	RangeMultiplier@IONSTORM4:
+		Modifier: 105
+		RequiresCondition: storm-active >= 56
+	FirepowerMultiplier@IONSTORM4:
+		Modifier: 105
+		RequiresCondition: storm-active >= 56
+	DamageMultiplier@IONSTORM4:
+		Modifier: 95
+		RequiresCondition: storm-active >= 56
+
+STRM:
+	Inherits@1: ^ExistsInWorld
+	Inherits@2: ^SpriteActor
+	Inherits@AUTOTARGET: ^AutoTargetAll
+	RenderSprites:
+		Palette: ioncloud-ignore-lighting-alpha50
+	HiddenUnderFog:
+		Type: CenterPosition
+	Tooltip:
+		Name: Ion Storm
+	Health:
+		HP: 1
+	HitShape:
+	KillsSelf:
+		RemoveInstead: False
+		Delay: 350, 450
+	Wanders:
+		WanderMoveRadius: 1
+		ReduceMoveRadiusDelay: 3
+	WithSpriteBody:
+		RequiresCondition: strm1
+		StartSequence: make
+	WithDeathAnimation:
+		RequiresCondition: strm1
+		DeathPaletteIsPlayerPalette: False
+		UseDeathTypeSuffix: False
+		CrushedSequence: die
+		FallbackSequence: die
+		DeathSequencePalette: ioncloud-ignore-lighting-alpha50
+	WithSpriteBody@Cloud2:
+		RequiresCondition: strm2
+		StartSequence: make2
+		Sequence: idle2
+		Name: body2
+	WithDeathAnimation@Cloud2:
+		DeathSequence: die2
+		RequiresCondition: strm2
+		DeathPaletteIsPlayerPalette: False
+		UseDeathTypeSuffix: False
+		CrushedSequence: die2
+		FallbackSequence: die2
+		DeathSequencePalette: ioncloud-ignore-lighting-alpha50
+	WithSpriteBody@Cloud3:
+		RequiresCondition: strm3
+		StartSequence: make3
+		Sequence: idle3
+		Name: body3
+	WithDeathAnimation@Cloud3:
+		DeathSequence: die3
+		DeathPaletteIsPlayerPalette: False
+		UseDeathTypeSuffix: False
+		CrushedSequence: die3
+		FallbackSequence: die3
+		RequiresCondition: strm3
+		DeathSequencePalette: ioncloud-ignore-lighting-alpha50
+	WithSpriteBody@Cloud4:
+		RequiresCondition: strm4
+		StartSequence: make4
+		Sequence: idle4
+		Name: body4
+	WithDeathAnimation@Cloud4:
+		DeathSequence: die4
+		DeathPaletteIsPlayerPalette: False
+		UseDeathTypeSuffix: False
+		CrushedSequence: die4
+		FallbackSequence: die4
+		RequiresCondition: strm4
+		DeathSequencePalette: ioncloud-ignore-lighting-alpha50
+	Mobile:
+		Locomotor: cloud
+		Speed: 3
+	Hovers:
+		Ticks: 12
+	Interactable:
+	GrantRandomCondition@CloudShape:
+		Conditions: strm1, strm2, strm3, strm4
+	GrantRandomCondition@LiveCloud:
+		Conditions: live, dead, dead, dead, dead, dead, dead, dead
+	AutoTargetPriority@STORM:
+		ValidTargets: StormBoost
+		Priority: 1
+	AutoTargetPriority@ATTACKANYTHING:
+		Priority: 10
+	AutoTarget:
+		InitialStance: AttackAnything
+	AmbientSoundCA@AMBIENCE:
+		SoundFiles: thunder1.aud, thunder2.aud, thunder3.aud, thunder4.aud, thunder5.aud, thunder.ambient.aud
+		Delay: 20, 200
+		Interval: 250, 1250
+		VolumeMultiplier: 0.3
+		RequiresCondition: live && !dead
+	Armament:
+		Weapon: StormColumnCloudZap
+		LocalOffset: 0,0,0
+	Armament@charge:
+		FireDelay: 15
+		Name: secondary
+		Weapon: StormColumnCloudCharge
+		LocalOffset: 0,0,0
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
+	GrantConditionOnAttack@CHARGESFX:
+		ArmamentNames: secondary
+		Condition: charge-fire
+		RevokeDelay: 200
+	AmbientSoundCA@CHARGESFX:
+		SoundFiles: stormcolumn-fire1.aud, stormcolumn-fire2.aud
+		Delay: 0
+		Interval: 250
+		VolumeMultiplier: 0.4
+		RequiresCondition: charge-fire
+	AttackTurreted:
+		RequiresCondition: live
+	Turreted:
+		Offset: 0,0, 3072
+	JamsMissiles@IONSTORM:
+		RequiresCondition: live
+		Chance: 10
+		Range: 5c0
 
 SCOL.Temp:
 	RenderSprites:
