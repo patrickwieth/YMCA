@@ -888,13 +888,14 @@ P51:
 
 TRAN:
 	Inherits: ^Helicopter
+	Inherits@TRANSPORT: ^Transport
 	RenderSprites:
 		Image: tran3
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
-		Prerequisites: ~aircraft.all, ~!aircraft.eagle, ~!aircraft.england, ~commander_tree.basic_logistics
+		Prerequisites: ~aircraft.all, ~!aircraft.england, ~commander_tree.basic_logistics
 		Description: Fast infantry transport helicopter.\n  Unarmed
 	Valued:
 		Cost: 900
@@ -949,7 +950,6 @@ TRAN:
 		DecorationBounds: 40,36
 	WithCargoHatchAnimation:
 
-#to replace
 TRAN.Eagle:
 	Inherits: TRAN
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -976,7 +976,7 @@ TRAN.Eagle:
 	Armor:
 		Type: Light
 	Cargo:
-		InitialUnits: e3, e3, e3
+		InitialUnits: e3, e3, e3, e3
 	AutoTarget:
 		InitialStance: Defend
 		InitialStanceAI: Defend
@@ -1076,6 +1076,7 @@ NHAW:
 		TurnSpeed: 20
 		Speed: 155
 		AltitudeVelocity: 0c58
+		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
 		Voice: Move
@@ -1602,6 +1603,7 @@ HUEY:
 
 HUEY.recon:
 	Inherits: HUEY
+	Inherits@TRANSPORT: ^Transport
 	Buildable:
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.recon, ~techlevel.medium
 		Description: Helicopter equipped with sensor equipment.\n Can detect stealth units.\n Sniper can shoot from the Huey.\n Spec Ops can use their marker from the Huey.\n  Strong as Support\n  Weak vs Aircraft
@@ -3660,6 +3662,7 @@ VENM.HeavyLaser:
 
 Dropship:
 	Inherits: ^Plane
+	Inherits@TRANSPORT: ^Transport
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane

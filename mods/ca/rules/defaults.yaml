@@ -2172,6 +2172,8 @@
 	Inherits@8: ^Chillable
 	Inherits@9: ^NaniteShieldable
 	Inherits@wflash: ^WhiteFlash
+	Inherits@gflash: ^GreenFlash
+	Inherits@HACKABLE: ^Hackable
 	WithColoredOverlay@IRONCURTAIN:
 		RequiresCondition: invulnerability && !forceshield
 	Huntable:
@@ -2211,7 +2213,7 @@
 	GpsRadarDot:
 		Sequence: Structure
 	Sellable:
-		RequiresCondition: !build-incomplete && !(c4 || tnt) && !being-captured && !being-warped
+		RequiresCondition: !build-incomplete && !c4 && !being-captured && !being-warped && !hacked
 		SellSounds: cashturn.aud
 	WithBuildingRepairDecoration:
 		Image: allyrepair
@@ -2291,7 +2293,7 @@
 	-CapturableProgressBlink:
 	-SpawnActorsOnSell:
 	Sellable:
-		RequiresCondition: !build-incomplete && !(c4 || tnt) && !being-warped
+		RequiresCondition: !build-incomplete && !(c4 || tnt) && !being-warped && !hacked
 	DrawLineToTarget:
 	RenderRangeCircle:
 		Color: C12900
