@@ -5243,6 +5243,59 @@ BATF:
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
 
+BATF.Prism:
+	Inherits: BATF
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 0
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~!commander_tree.battle_fortress_pld, ~!commander_tree.battle_fortress_bunker, ~!commander_tree.battle_fortress_arty, ~techlevel.low
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Prism Fortress
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: PrisTLaser
+		LocalOffset: 300,0,150
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: PrisTLaser
+		FireDelay: 8
+		LocalOffset: 300,0,150
+		MuzzleSequence: muzzle
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: PrisTLaser
+		LocalOffset: 100,0,250
+		MuzzleSequence: muzzle
+		RequiresCondition: cargo
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 220,-250,300
+		TurnSpeed: 24
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 220,250,300
+		TurnSpeed: 24
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -330,0,358
+		TurnSpeed: 24
+		PauseOnCondition: !cargo
+	-WithMuzzleOverlay:
+	WithSpriteTurret@PRIMARY:
+		Turret: primary
+	WithSpriteTurret@SECONDARY:
+		Turret: secondary
+	WithSpriteTurret@TERTIARY:
+		Turret: tertiary
+		Sequence: turret2
+
 BATF.PLD:
 	Inherits: BATF
 	Inherits@PLD: ^PointLaserDefenseSystemBig
