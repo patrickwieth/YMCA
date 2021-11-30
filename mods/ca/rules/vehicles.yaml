@@ -5145,19 +5145,19 @@ BATF:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
-		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~!commander_tree.battle_fortress_pld, ~!commander_tree.battle_fortress_bunker, ~!commander_tree.battle_fortress_arty, ~techlevel.low
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.missile, ~!filler.batf2
 		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 2000
 	Tooltip:
-		Name: Battle Fortress
+		Name: Missile Fortress
 	Health:
 		HP: 100000
 	Armor:
 		Type: Heavy
 	Mobile:
 		Locomotor: sheavytracked
-		Speed: 56
+		Speed: 48
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
 		Voice: Move
 	Passenger:
@@ -5245,22 +5245,185 @@ BATF:
 
 BATF.PLD:
 	Inherits: BATF
-	Inherits@PLD: ^PointLaserDefenseSystemBig
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
-		IconPalette: chrometd
 		BuildPaletteOrder: 230
-		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress_pld, ~techlevel.low
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.missile, ~commander_tree.battle_fortress.pld
 		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Tooltip:
-		Name: Battle Fortress (PLD)
+		Name: Missile Fortress (PLD)
 	Valued:
 		Cost: 3000
+
+BATF.Reflector:
+	Inherits: BATF
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.missile, ~commander_tree.battle_fortress.reflector
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Missile Fortress (Reflector)
+
+BATF.Prism:
+	Inherits: BATF
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.prism, ~!filler.batf2
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Prism Fortress
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: BattlePrisLaser.Mini
+		FireDelay: 4
+		LocalOffset: 300,0,150
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: BattlePrisLaser.Mini
+		FireDelay: 8
+		LocalOffset: 300,0,150
+		MuzzleSequence: muzzle
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: BattlePrisLaser
+		LocalOffset: 100,0,250
+		MuzzleSequence: muzzle
+		RequiresCondition: cargo
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 220,-250,300
+		TurnSpeed: 24
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 220,250,300
+		TurnSpeed: 24
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -330,0,358
+		TurnSpeed: 24
+		PauseOnCondition: !cargo
+	-WithMuzzleOverlay:
+	WithSpriteTurret@PRIMARY:
+		Turret: primary
+	WithSpriteTurret@SECONDARY:
+		Turret: secondary
+	WithSpriteTurret@TERTIARY:
+		Turret: tertiary
+		Sequence: turret2
+
+BATF.Prism.PLD:
+	Inherits: BATF
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.prism, ~commander_tree.battle_fortress.pld
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Prism Fortress (PLD)
+	Valued:
+		Cost: 3000
+
+BATF.Prism.Reflector:
+	Inherits: BATF
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.prism, ~commander_tree.battle_fortress.reflector
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Prism Fortress (Reflector)
+
+BATF.Artillery:
+	Inherits: BATF
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.arty, ~!filler.batf2
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Artillery Fortress
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: BATFGun
+		LocalOffset: 300,0,350
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: BATFGun
+		FireDelay: 8
+		LocalOffset: 300,0,350
+		MuzzleSequence: muzzle
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: 155mm
+		LocalOffset: 550,0,300
+		MuzzleSequence: muzzle
+		RequiresCondition: cargo
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 200,-300,0
+		TurnSpeed: 24
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 200,300,0
+		TurnSpeed: 24
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -300,0,458
+		TurnSpeed: 24
+		PauseOnCondition: !cargo
+	WithSpriteTurret@PRIMARY:
+		Turret: primary
+	WithSpriteTurret@SECONDARY:
+		Turret: secondary
+	WithSpriteTurret@TERTIARY:
+		Turret: tertiary
+		Sequence: turret2
+
+BATF.Artillery.PLD:
+	Inherits: BATF.Artillery
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.arty, ~commander_tree.battle_fortress.pld
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Artillery Fortress (PLD)
+	Valued:
+		Cost: 3000
+
+BATF.Artillery.Reflector:
+	Inherits: BATF.Artillery
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress.arty, ~commander_tree.battle_fortress.reflector
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Artillery Fortress (Reflector)
 
 BATF.Bunker:
 	Inherits: ^Tank
 	Inherits@TRANSPORT: ^Transport
-	Inherits: ^ReflectorArmor
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -5268,24 +5431,24 @@ BATF.Bunker:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
-		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress_bunker, ~techlevel.low
-		Description: Tough infantry transport\nwith weapon ports for infantry.\n Has Reflector Armor, very good vs. Energy Weapons. \n  Special Ability: Can crush enemy vehicles.
+		Prerequisites: ~vehicles.france, tent, radar, ~weap, ~!filler.batf
+		Description: Tough infantry transport\nwith weapon ports for infantry. \n  Special Ability: Can crush enemy vehicles.
 	Valued:
-		Cost: 2500
+		Cost: 2200
 	Tooltip:
 		Name: Battle Fortress (Bunker)
 	Health:
-		HP: 110000
+		HP: 100000
 	Mobile:
 		Locomotor: sheavytracked
-		Speed: 56
+		Speed: 48
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
 		Voice: Move
 	Passenger:
 		Weight: 5
 		Voice: Move
 	Cargo:
-		InitialUnits: e3, e3, e3, e3, e3
+		InitialUnits: e3, e3, e3, e3
 	RevealsShroud:
 		Range: 8c0
 	Armament:
@@ -5330,7 +5493,7 @@ BATF.Arty:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
-		Prerequisites: tent, radar, ~weap, ~commander_tree.battle_fortress_arty, ~techlevel.low
+		Prerequisites: ~disabled, tent, radar, ~weap, ~commander_tree.battle_fortress.artillery
 		Description: Tough artillery tank.\n  Special Ability: Can crush enemy vehicles.
 	Valued:
 		Cost: 2500

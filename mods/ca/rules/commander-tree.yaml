@@ -366,57 +366,77 @@ hack.cameo_filler.13:
 		BuildPaletteOrder: 23
 		Prerequisites: prerequisite.has_points, ~vehicles.allies, atek, disabled
 
-commander_tree.Battle_Fortress_PLD:
+commander_tree.Battle_Fortress.Arty:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battle Fortress Artillery Armament
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 24
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~!commander_tree.battle_fortress.prism, ~!commander_tree.battle_fortress.missile
+		Description: Rearms the Battle Fortress with an Artillery.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.batf
+
+commander_tree.Battle_Fortress.Missile:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battle Fortress Missile Armament
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 24
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~!commander_tree.battle_fortress.arty, ~!commander_tree.battle_fortress.prism
+		Description: Rearms the Battle Fortress with a Missile Launcher.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.batf
+
+commander_tree.Battle_Fortress.Prism:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battle Fortress Prism Armament
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 24
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~!commander_tree.battle_fortress.arty, ~!commander_tree.battle_fortress.missile
+		Description: Rearms the Battle Fortress with Prism turrets.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.batf
+
+commander_tree.Battle_Fortress.PLD:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Battle Fortress Point Laser Defense
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrometd
-		BuildPaletteOrder: 24
+		BuildPaletteOrder: 26
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~!commander_tree.battle_fortress_bunker, ~!commander_tree.battle_fortress_arty
+		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~filler.batf, ~!commander_tree.battle_fortress.reflector
 		Description: Upgrades the Battle Fortress with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.batf
+		Prerequisite: filler.batf2
 
-commander_tree.Battle_Fortress_Arty:
+commander_tree.Battle_Fortress.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Battle Fortress Artillery Armament
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 25
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~!commander_tree.battle_fortress_bunker, ~!commander_tree.battle_fortress_pld
-		Description: Rearms the Battle Fortress as a Heavy Artillery.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.batf
-
-commander_tree.Battle_Fortress_Bunker:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Battle Fortress Bunker
+		Name: Battle Fortress Reflector Armor
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 26
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~!commander_tree.battle_fortress_arty, ~!commander_tree.battle_fortress_pld
-		Description: Rearms the Battle Fortress with a Bunker from which Infantry can shoot. \nEquips the Battle Fortress with Reflector Armor, which is very resistent vs. Energy Weapons.
+		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, ~filler.batf, ~!commander_tree.battle_fortress.pld
+		Description: Equips the Battle Fortress with Reflector Armor, which is very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.batf
+		Prerequisite: filler.batf2
 
-hack.cameo_filler.14:
+hack.cameo_filler.15b:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 27
-		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, disabled, ~filler.batf
-
-hack.cameo_filler.15:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 28
-		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, disabled, ~filler.batf
+		Prerequisites: prerequisite.has_points, ~vehicles.france, atek, disabled, ~filler.batf2
 
 commander_tree.Mirage_PLD:
 	Inherits: ^default.commander_tree_item
