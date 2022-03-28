@@ -1444,6 +1444,7 @@ Player:
 		RequiresCondition: enable-brutal-ai || enable-vhard-ai
 		SquadSize: 30
 		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		ExcludeFromAirSquadsTypes: deva, pac, jjet, bjet
 		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub,sb,seas
 		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod
 		ConstructionYardTypes: fact,afac,sfac
@@ -1453,7 +1454,28 @@ Player:
 		RushAttackScanRadius: 25
 		ProtectUnitScanRadius: 28
 		ProtectionScanRadius: 16
-		DangerScanRadius: 8
+		AirToAirPriority: 85
+		BigAirThreats: pac, deva, kiro, mshp
+		AirSquadTargetTypes:
+			heli: Aircraft, Vehicle
+			nhaw: Infantry
+			hind: Infantry, Building, Aircraft
+			yak: Building, Infantry
+			mig: Aircraft, Vehicle, Defense
+			suk: Vehicle, Defense
+			suk.upg: Building
+			kiro: Building
+			orca: Aircraft, Vehicle
+			orcb: Vehicle, Defense
+			a10: Infantry, Building, Aircraft
+			apch: Infantry, Building
+			venm: Infantry, Aircraft
+			rah: Infantry, Building, Aircraft
+			harr: Infantry, Building, Aircraft
+			scrn: Aircraft, Vehicle, Defense
+			stmr: Aircraft, Infantry, Building
+			enrv: Aircraft, Vehicle, Defense
+			mshp: Building
 	UnitBuilderBotModuleCA@brutal-vhard:
 		RequiresCondition: enable-brutal-ai || enable-vhard-ai
 		IdleBaseUnitsMaximum: 50
@@ -1616,12 +1638,40 @@ Player:
 			harv.chrono: 8
 	SquadManagerBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
-		SquadSize: 25
-		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		MinimumAttackForceDelay: 25
+		SquadValue: 6000
+		SquadValueRandomBonus: 2500
+		SquadSize: 22
+		SquadSizeRandomBonus: 9
+		ExcludeFromSquadsTypes: harv, harv.td, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		ExcludeFromAirSquadsTypes: deva, pac, jjet, bjet
 		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub,sb,seas
 		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod
 		ConstructionYardTypes: fact,afac,sfac
+		StaticAntiAirTypes: agun, sam, nsam, cram, shar
 		ProtectionScanRadius: 12
+		AirToAirPriority: 65
+		BigAirThreats: pac, deva, kiro, mshp
+		AirSquadTargetTypes:
+			heli: Aircraft, Vehicle
+			nhaw: Infantry
+			hind: Infantry, Building, Aircraft
+			yak: Building, Infantry
+			mig: Aircraft, Vehicle, Defense
+			suk: Vehicle, Defense
+			suk.upg: Building
+			kiro: Building
+			orca: Aircraft, Vehicle
+			orcb: Vehicle, Defense
+			a10: Infantry, Building, Aircraft
+			apch: Infantry, Building
+			venm: Infantry, Aircraft
+			rah: Infantry, Building, Aircraft
+			harr: Infantry, Building, Aircraft
+			scrn: Aircraft, Vehicle, Defense
+			stmr: Aircraft, Infantry, Building
+			enrv: Aircraft, Vehicle, Defense
+			mshp: Building
 	UnitBuilderBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
 		IdleBaseUnitsMaximum: 50
