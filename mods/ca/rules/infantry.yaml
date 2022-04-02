@@ -296,6 +296,8 @@ E3.cryo:
 U3:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: relayTarget
 	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
 	Valued:
@@ -352,6 +354,11 @@ U3:
 		LocalOffset: 0,0,400
 		PauseOnCondition: !ammo
 		RequiresCondition: cryr-upgrade && deployed
+	Armament@tertiary:
+		Name: tertiary
+		Weapon: Dragon.Relay
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
 	Armament@GarrisonAA:
 		Name: mountedaa
 		Weapon: RedEyeGI
@@ -477,6 +484,8 @@ U3:
 		DeployTrigger: Attack
 		DeployTicks: 5
 		UndeployTicks: 50
+	ExternalCondition@relayTarget:
+		Condition: relayTarget
 
 E4:
 	Inherits: ^Soldier
