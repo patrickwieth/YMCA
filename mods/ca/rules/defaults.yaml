@@ -40,6 +40,27 @@
 			TopLeft: -1536, -1024
 			BottomRight: 1536, 1024
 
+^3x3Shape:
+	HitShape:
+		UseTargetableCellsOffsets: true
+		Type: Rectangle
+			TopLeft: -1536, -1536
+			BottomRight: 1536, 1536
+
+^4x2Shape:
+	HitShape:
+		UseTargetableCellsOffsets: true
+		Type: Rectangle
+			TopLeft: -2048, -1024
+			BottomRight: 2048, 1024
+
+^4x3Shape:
+	HitShape:
+		UseTargetableCellsOffsets: true
+		Type: Rectangle
+			TopLeft: -2048, -1536
+			BottomRight: 2048, 1536
+
 ^BotBuilding:
 	GrantConditionOnBotOwner@BrutalAI:
 		Condition: owned-by-brutal-ai
@@ -172,6 +193,17 @@
 	RefineryResourceMultiplier@normalincome:
 		Modifier: 120
 		RequiresCondition: owned-by-normal-ai
+
+^Refinery:
+	CashHackable:
+	Buildable:
+		BuildDurationModifier: 25
+	Targetable@infiltrate:
+		TargetTypes: SpyInfiltrate, ThiefInfiltrate
+		RequiresCondition: !untargetable
+	InfiltrateForCash:
+		Percentage: 50
+		Types: SpyInfiltrate, ThiefInfiltrate
 
 #Hacky but helps Bots deal with abandoned vehicles due to snipers
 ^BotCaptureHelper:
@@ -1271,6 +1303,8 @@
 	Inherits@atomize: ^Atomizable
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@SLOWCRUSH: ^SlowedByCrushing
+	Buildable:
+		Queue: Vehicle
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -2176,6 +2210,8 @@
 	Inherits@HACKABLE: ^Hackable
 	WithColoredOverlay@IRONCURTAIN:
 		RequiresCondition: invulnerability && !forceshield
+	Buildable:
+		Queue: Building
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -2241,6 +2277,8 @@
 
 ^BuildingTD:
 	Inherits@1: ^Building
+	Buildable:
+		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	SpawnActorOnDeath:
@@ -2644,6 +2682,11 @@
 		CrushClasses: wall
 		CrushSound: destw.aud
 		CrushedByFriendlies: true
+
+^LightHusk:
+	Inherits: ^Husk
+	Health:
+		HP: 2000
 
 ^HuskTD:
 	Inherits: ^Husk
@@ -3416,3 +3459,42 @@
 		Condition: damage
 	UnloadOnCondition@AIUNLOAD:
 		RequiresCondition: damage || aiming
+
+^ScoutEquipment:
+	RevealsShroud:
+		RevealGeneratedShroud: False
+		Range: 12c0
+
+^SensorEquipment:
+	RevealsShroud:
+		Range: 12c0
+		RevealGeneratedShroud: False
+		RequiresCondition: undeployed
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	DetectCloaked@Deployed:
+		Range: 6c0
+		CloakTypes: Cloak, Thief, Stealth
+		RequiresCondition: !(empdisable || being-warped)
+	RenderDetectionCircle:
+		TrailCount: 3
+
+^MobileDeployableRadar:
+	RevealsShroud@deployed:
+		Range: 14c0
+		RevealGeneratedShroud: False
+		RequiresCondition: deployed
+	RevealsShroud@GAPGEN:
+		Range: 10c0
+	DetectCloaked@Deployed:
+		Range: 10c0
+		CloakTypes: Cloak, Thief, stealth
+		RequiresCondition: deployed && !(empdisable || being-warped)
+	RenderDetectionCircle:
+		TrailCount: 3
+	ProvidesRadar:
+		RequiresCondition: deployed
+
+^RearmableAircraft:
+	Rearmable:
+		RearmActors: afld, afld.gdi, afld.allies, chairport

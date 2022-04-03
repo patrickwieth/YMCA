@@ -1,0 +1,1040 @@
+#####################################################
+# Ranger Weapons
+#####################################################
+
+USARangerMG:
+	Inherits: ^LightMG
+	ReloadDelay: 18
+	Range: 4c0
+	Burst: 3
+	BurstDelays: 3
+	Report: iranweaa.wav, iranweab.wav, iranweac.wav, iranwead.wav, iranweae.wav, iranweaf.wav, iranweag.waw
+	Warhead@1Dam: SpreadDamage
+		Damage: 750
+
+USARangerMGGarrison:
+	Inherits: USARangerMG
+	Range: 6c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+
+USARangerFlashbang:
+	Inherits: Grenade
+	Range: 7c384
+	MinRange: 0c512
+    ReloadDelay: 125
+    -Report
+	ValidTargets: Infantry, Garrisoned
+	Projectile: Bullet
+		Speed: 128
+		Inaccuracy: 768
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c256
+		Damage: 1000
+		InvalidTargets: Vehicle, Tank, Structure, Wall
+	Warhead@2Dam: OpenToppedDamage
+		Spread: 0c512
+		Damage: 2000
+		ValidTargets: Garrisoned
+		Amount: 3
+		DamageTypes: Prone80Percent, TriggerProne, ExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: susaflashbang
+        ImpactSounds: susaflashbang.wav
+	Warhead@2: GrantExternalCondition
+		Range: 1c256
+		Duration: 100
+		Condition: leaflet
+		ValidTargets: Vehicle, Infantry
+
+USAMissileDefenderAG:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 25
+	Projectile: MissileCA
+		RangeLimit: 9c0
+	Report: imisweaa.wav, imisweab.wav, imisweac.wav
+	ValidTargets: Vehicle, Ship
+
+USAMissileDefenderStructure:
+	Inherits: USAMissileDefenderAG
+	ReloadDelay: 75
+	ValidTargets: Structure, Infantry
+
+USAMissileDefenderAA:
+	Inherits: ^AntiAirMissile
+	Range: 6c512
+	ReloadDelay: 25
+	Projectile: MissileCA
+		Speed: 480
+		RangeLimit: 9c0
+	Report: imisweaa.wav, imisweab.wav, imisweac.wav
+
+USAMissileDefenderGarrisoned:
+	Inherits: USAMissileDefenderAA
+	ValidTargets: Ground, Water, Air
+	Range: 7c0
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Ground, Water, Air
+    ReloadDelay: 75
+
+USAMissileDefenderLaser:
+	ValidTargets: Vehicle, Air
+	InvalidTargets: Structure
+	Range: 6c512
+	ReloadDelay: 45
+	Burst: 6
+	BurstDelays: 5
+	TargetActorCenter: true
+	Projectile: LaserZap
+		Width: 36
+		Duration: 30
+		SecondaryBeamWidth: 96
+		SecondaryBeamColor: FF000030
+	Warhead@1: TargetDamage
+		ValidTargets: Vehicle, Air
+
+USAPatriotMissAG:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 50
+	Burst: 4
+	BurstDelays: 6
+	Range: 7c640
+	Report: bpatweaa.wav, bpatweab.wav, bpatweac.wav
+	Projectile: MissileCA
+		Arm: 3
+		Inaccuracy: 0
+		Image: MISSILE
+		HorizontalRateOfTurn: 25
+		RangeLimit: 40c0
+		Speed: 341
+		MinimumLaunchAngle: 62
+		MaximumLaunchAngle: 62
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+
+USAPatriotMissAA:
+	Inherits: ^AntiAirMissile
+	ReloadDelay: 50
+	Burst: 4
+	BurstDelays: 6
+	Range: 8c768
+	Report: bpatweaa.wav, bpatweab.wav, bpatweac.wav
+	Projectile: MissileCA
+		Arm: 3
+		Inaccuracy: 0
+		Image: MISSILE
+		HorizontalRateOfTurn: 25
+		RangeLimit: 40c0
+		MinimumLaunchAngle: 62
+		MaximumLaunchAngle: 62
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+		ValidTargets: Air
+		Versus:
+			Light: 110
+            Medium: 80
+			Heavy: 50
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion_air
+		ImpactSounds: kaboom25.aud
+
+USAEMPPatriotMissAG:
+	Inherits: USAPatriotMissAG
+	Burst: 4
+	Projectile: MissileCA
+		Image: bhreddragonemp
+        HorizontalRateOfTurn: 15
+		MinimumLaunchAngle: 62
+		MaximumLaunchAngle: 62
+        Inaccuracy: 32
+        LockOnProbability: 80
+        InaccuracyType: PerCellIncrement
+    Warhead@1Dam: SpreadDamage
+		Damage: 1500
+	Warhead@2Con: GrantExternalCondition
+		Condition: empdisable
+		ValidTargets: Vehicle
+		Duration: 60
+		Range: 0c768
+		AffectsParent: true
+	Warhead@3Eff: CreateEffect
+		Explosions: pulse_explosion_small
+		ExplosionPalette: tseffect
+		ImpactSounds: ptesto00.aud
+		ImpactActors: false
+
+USAEMPPatriotMissAA:
+	Inherits: USAPatriotMissAA
+	Burst: 4
+	Projectile: MissileCA
+		Image: bhreddragonemp
+        LockOnProbability: 80
+        Inaccuracy: 32
+        InaccuracyType: PerCellIncrement
+	Warhead@1Dam: SpreadDamage
+		Spread: 64
+		Damage: 1500
+	Warhead@2Con: GrantExternalCondition
+		Condition: empdisable
+		ValidTargets: Air
+		InvalidTargets: OrganicAircraft
+		Duration: 60
+		Range: 0c768
+	Warhead@3Eff: CreateEffect
+		Explosions: pulse_explosion_small
+		ExplosionPalette: tseffect
+		ImpactSounds: ptesto00.aud
+		ImpactActors: false
+
+USABurtonMG:
+	Inherits: ^LightMG
+	ReloadDelay: 10
+	Range: 7c128
+	Report: icolweaa.wav, icolweab.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 10000
+		Versus:
+			Light: 50
+            Medium: 35
+			Heavy: 25
+			Wood: 50
+			Concrete: 6
+
+USABurtonMG_AI:
+    Inherits: USABurtonMG
+    ValidTargets: Ground
+    InvalidTargets: Structure
+
+USABurtonKnife:
+	Range: 2c0
+	ReloadDelay: 25
+	TargetActorCenter: true
+	ValidTargets: Infantry
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		Damage: 40000
+		ValidTargets: Infantry
+		DamageTypes: DefaultDeath
+
+USABurtonAttach:
+	Inherits: GenericC4
+	Warhead@1: AttachDelayedWeapon
+		TriggerTime: 100
+
+#####################################################
+# Jeep Weapons
+#####################################################
+
+USAHumveeMissile:
+	Inherits: ^MissileWeapon
+	ReloadDelay: 50
+	Range: 4c0
+	Report: vhumwe2a.wav, vhumwe2b.wav, vhumwe2c.wav, vhumwe2d.wav
+	Projectile: MissileCA
+		Speed: 298
+		TrailImage: smokey
+		HorizontalRateOfTurn: 10
+		RangeLimit: 5c204
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+
+USAHumveeMG:
+	Inherits: ^LightMG
+	ReloadDelay: 5
+	Range: 4c0
+	Report: vhumweaa.wav, vhumweab.wav, vhumweac.wav, vhumwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 900
+		Versus:
+			Light: 50
+            Medium: 35
+			Heavy: 25
+			Wood: 50
+			Concrete: 6
+
+USABattleDroneMG:
+	Inherits: USAHumveeMG
+	ReloadDelay: 3
+	Report: vcomwe2a.wav, vcomwe2b.wav, vcomwe2c.wav, vcomwe2d.wav
+
+USAHellfireMissile:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 25
+	Range: 4c0
+	Projectile: MissileCA
+		TrailImage: smokey
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
+
+
+USASentryDroneMG:
+	ReloadDelay: 25
+	Inherits: USAHumveeMG
+	Report: vsenweaa.wav, vsenweab.wav, vsenweac.wav, vsenwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 800
+
+USAAvengerLaser:
+	Inherits: APCGun.AA
+	ReloadDelay: 9
+	Range: 7c512
+	Report: vpalwe2d.aud
+	Projectile: LaserZap
+		Width: 60
+		HitAnim: laserfire
+		ZOffset: 2047
+	Warhead@1Dam: SpreadDamage
+		Damage: 4500
+		Versus:
+			None: 100
+			Wood: 100
+			Light: 100
+			Heavy: 100
+
+USAAvengerBlueLaser:
+	Inherits: CommandoGun
+	ReloadDelay: 8
+	Range: 7c512
+	TargetActorCenter: true
+	ValidTargets: Ground, Water, Structure, Wall
+	Projectile: LaserZap
+		Duration: 20
+		Width: 0c64
+		Color: 4FE2FF
+	Warhead@2Con: GrantExternalCondition
+		Condition: CommandoDebuff
+		Duration: 20
+		Range: 0c172
+		ValidTargets: Ground, Water, Structure, Wall
+
+USAAvengerPDLaser:
+	Inherits: PDLaser
+	Range: 7c512
+	Report: vpalwe2d.aud
+
+#####################################################
+# Crusader Weapons
+#####################################################
+USACrusaderCannon:
+	Inherits: CHBattlemasterCannon
+	Report: vcruweaa.wav, vcruweab.wav
+
+USAPaladinCannon:
+	Inherits: CHBattlemasterCannon
+	Report: vpalweaa.wav, vpalweab.wav
+	Range: 5c0
+
+USAPaladinLaser:
+	ReloadDelay: 25
+	Range: 3c0
+	Report: vpalwe2d.aud
+	InvalidTargets: Vehicle, Tank, Structure, Wall
+	Projectile: LaserZap
+		Width: 60
+		HitAnim: laserfire
+		ZOffset: 2047
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 10000
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+		InvalidTargets: Vehicle, Tank, Structure, Wall
+
+USAFirebaseObus:
+	ReloadDelay: 50
+	Range: 8c0
+	MinRange: 1c256
+	Report: turret1.aud
+	Projectile: Bullet
+		Speed: 200
+		Image: 120MM
+		Shadow: True
+		LaunchAngle: 62
+		Inaccuracy: 0c384
+		ContrailLength: 30
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c256
+		Damage: 7500
+		Versus:
+			Wood: 80
+		DamageTypes: TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Tank, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+		InvalidTargets: Water
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water
+
+#####################################################
+# Laser Weapons
+#####################################################
+USALaserCrusaderCannon:
+	Inherits: USACrusaderCannon
+	ReloadDelay: 58
+	Report: vpalwe2d.aud
+	-Projectile:
+	Projectile: LaserZap
+		Width: 100
+		ZOffset: 2047
+		Color: FF0000
+	Warhead@1Dam: SpreadDamage
+		Damage: 8000
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+		Versus:
+			None: 90
+			Wood: 35
+			Light: 100
+            Medium: 90
+			Heavy: 80
+            Concrete: 20
+
+USALaserCrusaderCannonUp:
+    Inherits: USALaserCrusaderCannon
+    Projectile: LaserZap
+		Color: 66FFFF
+
+USALaserCannonAG:
+	Inherits: ^AntiGroundMissile
+	Burst: 3
+	BurstDelays: 6
+	ReloadDelay: 50
+	Range: 7c0
+	MinRange: 0c0
+	Report: vpalwe2d.aud
+	-Projectile:
+	Projectile: LaserZap
+		Width: 60
+		ZOffset: 2047
+		Color: FF0000
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
+		Spread: 0c77
+		Falloff: 100, 100
+		Versus:
+			None: 100
+			Light: 100
+            Medium: 100
+			Heavy: 100
+			Wood: 50
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+
+USALaserCannonAA:
+	Inherits: ^AntiAirMissile
+	Burst: 4
+	BurstDelays: 6
+	ReloadDelay: 50
+	Range: 8c0
+	MinRange: 0c0
+	Report: vpalwe2d.aud
+	-Projectile:
+	Projectile: LaserZap
+		Width: 60
+		ZOffset: 2047
+		Color: FF0000
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+		Spread: 64
+		Falloff: 100, 100
+		Versus:
+			Light: 110
+            Medium: 80
+			Heavy: 50
+			Wood: 80
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+
+#####################################################
+# Microwave Weapons
+#####################################################
+
+USAMicrowaveFlame:
+	ReloadDelay: 30
+	Burst: 5
+	Range: 2c512
+	Report: iiniatta.wav
+	ValidTargets: Infantry
+	Projectile: InstantExplode
+	Warhead@1Dam: SpreadDamage
+		Spread: 2c512
+		Falloff: 100, 100
+		Damage: 5000
+		ValidTargets: Infantry
+		ValidStances: Enemy, Neutral
+		Versus:
+			None: 100
+			Light: 50
+            Medium: 35
+			Heavy: 25
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+
+USAMicrowaveClear:
+	ReloadDelay: 30
+	Range: 2c512
+	Report: iiniatta.wav
+	ValidTargets: Garrisoned
+	Projectile: InstantHit
+	Warhead@1Dam: OpenToppedDamage
+		Spread: 0c512
+		Damage: 6000
+		ValidTargets: Garrisoned
+		ValidStances: Enemy
+		Amount: 5
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+
+USAMicrowaveDisable:
+	ReloadDelay: 2
+	Report: vmiclo2a.aud
+	Range: 7c0
+	TargetActorCenter: true
+	ValidTargets: Structure
+	InvalidTargets: Mine
+	Projectile: LaserZap
+		Width: 0c43
+		UsePlayerColor: True
+	Warhead@1Dam: TargetDamage
+		Damage: 0
+	Warhead@2Con: GrantExternalCondition
+		Condition: empdisable
+		Duration: 200
+		Range: 0c128
+		ValidTargets: Defense
+	Warhead@3Con: GrantExternalCondition
+		Condition: disabled
+		Duration: 200
+		Range: 0c128
+		ValidTargets: Structure, Building
+  	Warhead@4Con: GrantExternalCondition
+		Condition: lowpower
+		ValidTargets: Structure, Building
+		Duration: 200
+		Range: 1c128
+#####################################################
+# Raptor Weapons
+#####################################################
+USARaptorMissileAG:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 4
+	Range: 8c0
+	MinRange: 2c512
+	Report: vmigweaa.wav, vmigweab.wav
+	Projectile: MissileCA
+		Speed: 256
+		Inaccuracy: 128
+		CruiseAltitude: 2c0
+		RangeLimit: 12c410
+	Warhead@1Dam: SpreadDamage
+		Damage: 16000
+		Versus:
+			Light: 100
+            Medium: 125
+			Heavy: 150
+			Wood: 25
+
+USARaptorMissileAA:
+	Inherits: ^AntiAirMissile
+	ReloadDelay: 4
+	Range: 8c0
+	MinRange: 2c512
+	Report: vmigweaa.wav, vmigweab.wav
+	Projectile: MissileCA
+		Speed: 384
+		CruiseAltitude: 2c0
+		RangeLimit: 12c410
+	Warhead@1Dam: SpreadDamage
+		Damage: 11000
+		ValidTargets: Air
+		Versus:
+			Light: 100
+            Medium: 100
+			Wood: 30
+			Heavy: 100
+
+USAGunshipMG:
+	Inherits: USAHumveeMG
+	ReloadDelay: 30
+	Burst: 9
+	BurstDelays: 2
+	FirstBurstTargetOffset: -2984,0,0
+	FollowingBurstTargetOffset: 746,0,0
+	Range: 6c512
+	Report: vsenweaa.wav, vsenweab.wav, vsenweac.wav, vsenwead.wav
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c512
+		Damage: 2500
+	Projectile: Bullet
+		Speed: 204
+		Blockable: false
+		Inaccuracy: 1024
+		ContrailLength: 30
+		ContrailColor: FFD537
+
+USAGunshipArty:
+	Inherits: USACrusaderCannon
+	ReloadDelay: 40
+	Burst: 4
+	BurstDelays: 10
+	FirstBurstTargetOffset: -2984,0,0
+	FollowingBurstTargetOffset: 746,0,0
+	Report: turret1.aud
+	TargetActorCenter: true
+	Projectile: Bullet
+		Speed: 1024
+		Inaccuracy: 3c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c256
+		Damage: 10500
+		Versus:
+			Heavy: 80
+			Wood: 70
+
+USAMissileAurora:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 5
+	Range: 7c512
+	Report: vmigweaa.wav, vmigweab.wav
+	-Projectile:
+	Projectile: Bullet
+		Speed: 256
+		Inaccuracy: 512
+		TrailImage: smokey
+		TrailInterval: 1
+		Blockable: false
+		Image: DRAGON
+		Shadow: True
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c512
+		Damage: 30000
+		Versus:
+			None: 140
+			Wood: 110
+			Light: 100
+            Medium: 100
+			Heavy: 100
+            Concrete: 110
+		ValidTargets: Ground, Water
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+
+USAMissileAurora2:
+	Inherits: USAMissileAurora
+	Warhead@1Dam: SpreadDamage
+		Damage: 45000
+	Warhead@2ClustF: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: USAThermobaricCluster
+		Amount: 1
+
+USAMissileStealth:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 5
+	Range: 6c512
+	MinRange: 1c512
+	Report: vmigweaa.wav, vmigweab.wav
+	Projectile: MissileCA
+		Speed: 256
+		Inaccuracy: 128
+		CruiseAltitude: 2c0
+		RangeLimit: 12c410
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c512
+		Damage: 15000
+		Versus:
+			Light: 100
+            Medium: 100
+			Heavy: 100
+			Wood: 50
+
+USABunkerBuster:
+	Inherits: USAMissileStealth
+	Warhead@2Dam: OpenToppedDamage
+		Spread: 0c512
+		Damage: 20000
+		ValidTargets: Garrisoned, GarrisonedNBC, LoadedTankBunker, LoadedVehicle
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+
+#####################################################
+# Bomber Weapons
+#####################################################
+GECarpetBomb:
+	Inherits@Rad: CHFlameRadiation
+	ReloadDelay: 3
+	Range: 4c0
+	Report: vkiratta.wav
+	Projectile: GravityBomb
+		Image: usabomberbomb
+		Velocity: 0, 0, -88
+		Acceleration: 0, 0, 0
+		Shadow: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 768
+		Damage: 17500
+		Versus:
+			None: 100
+			Wood: 50
+			Light: 100
+            Medium: 100
+			Concrete: 75
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure
+
+GECarpetNuke:
+	ReloadDelay: 3
+	Range: 4c0
+	Report: vkiratta.wav
+	Projectile: GravityBomb
+		Image: usabomberbomb
+		Velocity: 0, 0, -88
+		Acceleration: 0, 0, 0
+		Shadow: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 18000
+		Versus:
+			None: 100
+			Wood: 50
+			Light: 100
+            Medium: 100
+			Concrete: 75
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@2Eff: CreateEffect
+		Explosions: nuke_small
+		ImpactSounds: kaboom22.aud
+		ImpactActors: false
+		ValidTargets: Ground, Air, Water
+	Warhead@1Radiation: CreateTintedCells
+		Spread: 1c512
+		Falloff: 100, 66, 33
+		Level: 250
+		LayerName: genradiation
+
+USAFuelBomb:
+	ReloadDelay: 800
+	Range: 1c0
+	Report: chute1.aud
+	Projectile: GravityBomb
+		Image: PARABOMB
+		OpenSequence: open
+		Velocity: 0, 0, -86
+		Acceleration: 0, 0, 0
+		Shadow: False
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c512
+		Damage: 70000
+		Versus:
+			None: 100
+			Wood: 50
+			Light: 100
+            Medium: 125
+			Heavy: 150
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+		ValidTargets: Ground, Water, Air
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@2ClustF: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: USAThermobaricCluster
+		Amount: 12
+
+USAMotherBomb:
+	Inherits: USAFuelBomb
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c512
+		Damage: 95000
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2ClustF: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: USAThermobaricCluster2
+		Amount: 24
+
+USAThermobaricCluster:
+	Inherits: CHFlameRadiation
+	Range: 4c0
+	Projectile: Bullet
+		Speed: 255
+		Blockable: false
+		Inaccuracy: 2c512
+	Warhead@1Cloud: SpawnSmokeParticle
+		Count: 3
+		Duration: 264
+		Weapon: ThermobaricFlame
+
+USAThermobaricCluster2:
+	Inherits: USAThermobaricCluster
+	Range: 6c0
+
+
+USALeaflet:
+	ReloadDelay: 3
+	Range: 1c0
+	Report: chute1.aud
+	Projectile: GravityBomb
+		Image: usaleaflet
+		Velocity: 0, 0, -88
+		Acceleration: 0, 0, 0
+		Shadow: False
+	Warhead@1Dam: TargetDamage
+	Warhead@2: GrantExternalCondition
+		Range: 6c0
+		Duration: 180
+		Condition: leaflet
+		ValidTargets: Vehicle, Infantry
+
+USAA10Miss:
+	Inherits: USARaptorMissileAG
+	ReloadDelay: 100
+	Burst: 6
+	BurstDelays: 5
+	FirstBurstTargetOffset: -2400,0,0
+	FollowingBurstTargetOffset: 746,0,0
+	Range: 8c0
+	MinRange: 1c768
+	Report: vmigweaa.wav, vmigweab.wav
+	Projectile: Bullet
+		Speed: 853
+		Image: MISSILE
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c768
+		Damage: 16000
+		Versus:
+			None: 20
+			Wood: 45
+			Light: 120
+            Medium: 110
+			Heavy: 100
+            Concrete: 30
+	Warhead@3Eff: CreateEffect
+		Explosions: poof
+		ImpactSounds: xplosml2.aud
+
+USAA10MG:
+	Inherits: ^HeavyMG
+	ReloadDelay: 100
+	Burst: 9
+	BurstDelays: 3
+	FirstBurstTargetOffset: -2984,0,0
+	FollowingBurstTargetOffset: 746,0,0
+	Range: 8c0
+	MinRange: 0c768
+	Report: vcomwe2a.wav, vcomwe2b.wav, vcomwe2c.wav, vcomwe2d.wav
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c426
+		Damage: 8000
+		Versus:
+            None: 200
+			Light: 110
+            Medium: 75
+			Heavy: 50
+			Wood: 45
+			Concrete: 6
+
+USABattleshipCannon:
+	Inherits: 8Inch
+	ReloadDelay: 250
+	Burst: 5
+	Range: 40c0
+	MinRange: 5c0
+	Report: turret1.aud
+	Projectile: Bullet
+		Inaccuracy: 3c0
+		ContrailColor: F2E8C0
+
+#####################################################
+# Comanche Weapons
+#####################################################
+USAComancheMG:
+	Inherits: ^HeavyMG
+	ReloadDelay: 3
+	Range: 5c0
+	MinRange: 0c768
+	Report: vcomwe2a.wav, vcomwe2b.wav, vcomwe2c.wav, vcomwe2d.wav
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Damage: 600
+		Versus:
+			Light: 50
+            Medium: 35
+			Heavy: 25
+			Wood: 50
+			Concrete: 6
+
+USAComancheMissile:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 5
+	Range: 5c0
+	Report: vcomweaa.wav, vcomweab.wav, vcomweac.wav
+	Projectile: MissileCA
+		Speed: 256
+		HorizontalRateOfTurn: 10
+		RangeLimit: 8c512
+		Inaccuracy: 1c256
+	Warhead@1Dam: SpreadDamage
+		Damage: 1500
+		ValidTargets: Ground, Water
+		Versus:
+			Wood: 80
+	Warhead@2Dam: SpreadDamage
+		Spread: 1c0
+		Falloff: 100, 100
+		Damage: 1000
+		ValidTargets: Ground, Water
+		Versus:
+			Wood: 80
+		DamageTypes: TriggerProne, ExplosionDeath
+
+USAComancheRockets:
+    Inherits: USAComancheMissile
+    ReloadDelay: 200
+    Range: 5c0
+    Burst: 4
+    BurstDelays: 3
+    Projectile: MissileCA
+        Speed: 176
+		HorizontalRateOfTurn: 5
+        Inaccuracy: 1c768
+        RangeLimit: 5c0
+        LockOnProbability: 0
+    Warhead@1Dam: SpreadDamage
+        Spread: 0c446
+        Damage: 4800
+        Versus:
+            None: 30
+			Light: 110
+            Medium: 100
+			Heavy: 80
+			Wood: 40
+			Concrete: 4
+    -Warhead@2Dam: SpreadDamage
+
+USATomahawk:
+	Inherits: ^AntiGroundMissile
+	MinRange: 4c0
+	ReloadDelay: 250
+	Range: 10c0
+	Report: vtomweaa.wav
+	TargetActorCenter: true
+	Projectile: MissileCA
+		Arm: 0
+		Blockable: false
+		Shadow: true
+		HorizontalRateOfTurn: 15
+		Image: V2
+		TrailImage: laserfire
+		ContrailLength: 0
+		Speed: 180
+		RangeLimit: 36c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c640
+		Falloff: 100, 100
+		Damage: 15000
+		Versus:
+			None: 40
+			Wood: 50
+			Light: 125
+            Medium: 135
+			Heavy: 150
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: ex_terr_flash
+
+USAThomahawk:
+	ReloadDelay: 150
+	Report: vtomweaa.wav
+	Range: 18c0
+	MinRange: 4c0
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+
+USASuperWeaponThomahawk:
+	ReloadDelay: 500
+	Burst: 9
+	BurstDelays: 10
+	Report: vtomweaa.wav
+	Range: 128c0
+	MinRange: 4c0
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+
+USAParticleCannonDamage:
+	ReloadDelay: 10
+	ValidTargets: Ground, Air, Water
+	Projectile: InstantExplode
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 5000
+		Falloff: 100, 100, 75, 50
+		ValidTargets: Ground, Air, Water
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		Size: 2
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
+
+USAParticleCannonDamage2:
+	Inherits: USAParticleCannonDamage
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 7500
+
+USAAmbulanceHeal:
+	ReloadDelay: 120
+	Range: 2c512
+	Report: heal2.aud
+	ValidTargets: Healing
+	Projectile: InstantExplode
+	Warhead@1Bio: SpreadDamage
+		Spread: 2c0
+		Falloff: 100, 100
+		Damage: -3000
+		ValidStances: Ally
+		ValidTargets: Heal
+		DebugOverlayColor: 00FF00
+	Warhead@1Defuse: DetachDelayedWeapon
+		Types: ivanbomb
+		ValidTargets: ivanattached
+		ValidStances: Ally
+	Warhead@2Defuse: DetachDelayedWeapon
+		Types: lockdown
+		ValidTargets: lockdowned
+		ValidStances: Ally
+	Warhead@3Defuse: DetachDelayedWeapon
+		Types: defilerplague
+		ValidTargets: plagued
+		ValidStances: Ally
+
+USAAmbulanceRepair:
+	ReloadDelay: 120
+	Range: 2c512
+	Report: heal2.aud
+	ValidTargets: Healing
+	Projectile: InstantExplode
+	Warhead@2Mech: SpreadDamage
+		Spread: 2c0
+		Falloff: 100, 100
+		Damage: -4000
+		ValidStances: Ally
+		ValidTargets: Repair
+		DebugOverlayColor: 00FF00

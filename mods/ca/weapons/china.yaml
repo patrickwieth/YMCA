@@ -1,0 +1,919 @@
+^DamagingExplosion:
+	Warhead@1Dam: SpreadDamage
+		Spread: 426
+		Damage: 4000
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: poof
+		ImpactSounds: xplos.aud
+		ImpactActors: false
+	Warhead@3Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees, Creep
+
+EmergencyRepair1:
+	Inherits: ^DamagingExplosion
+	Warhead@1Dam: SpreadDamage
+		Spread: 2c0
+		Falloff: 100, 100
+		Damage: -11500
+		DamageTypes: Repairing
+		ValidTargets: Repair
+
+EmergencyRepair2:
+	Inherits: ^DamagingExplosion
+	Warhead@1Dam: SpreadDamage
+		Spread: 3c0
+		Falloff: 100, 100
+		Damage: -21500
+		DamageTypes: Repairing
+		ValidTargets: Repair
+
+EmergencyRepair3:
+	Inherits: ^DamagingExplosion
+	Warhead@1Dam: SpreadDamage
+		Spread: 4c0
+		Falloff: 100, 100
+		Damage: -41500
+		DamageTypes: Repairing
+		ValidTargets: Repair
+
+HookNullWeapon:
+	ReloadDelay: 100
+	Range: 1c0
+	ValidTargets: None
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+
+
+CHRadiationYellow:
+	Warhead@1Eff: CreateEffect
+		Explosions: yellow_toxins
+	Warhead@2Radiation: CreateTintedCells
+		Spread: 1c0
+		Falloff: 100, 90, 80, 60, 30, 15
+		Level: 400
+		LayerName: genradiation
+
+CHFlameRadiation:
+	Warhead@1Cloud: SpawnSmokeParticle
+		Count: 1, 3
+		Duration: 132
+		Speed: 8, 24
+		TurnRate: 4
+		Image: burn-l
+		Sequences: idle
+		Palette: alpha25
+		Weapon: CHFlame
+		InvalidTargets: Water
+
+CHFlame:
+	Projectile: InstantExplode
+	ReloadDelay: 20
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c341
+		Falloff: 100, 75, 50, 25
+		Damage: 800
+		ValidTargets: Ground, Water
+		ValidStances: Neutral, Enemy
+		InvalidTargets: Mine
+		AffectsParent: True
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+
+CHFlameRadiationB:
+	Inherits: CHFlameRadiation
+	Warhead@1Cloud: SpawnSmokeParticle
+		Duration: 180
+		Speed: 8, 32
+		Image: explosion
+		Sequences: blue_small_napalm
+		Weapon: CHFlameBlue
+
+CHFlameBlue:
+	Inherits: CHFlame
+	Warhead@1Dam: SpreadDamage
+		Damage: 1200
+ThermobaricFlame:
+	Inherits: CHFlameBlue
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
+
+CHMineExplosive:
+	ReloadDelay: 350
+	Projectile: InstantExplode
+	Range: 1c512
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 30000
+		InvalidTargets: Infantry
+		ValidStances: Neutral, Enemy
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@2Dam: SpreadDamage
+		Spread: 0c512
+		Damage: 10000
+		ValidTargets: Infantry
+		ValidStances: Neutral, Enemy
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: gexpmina.wav, gexpminb.wav
+
+CHNeutronMineExplosive:
+	ReloadDelay: 350
+	Projectile: InstantExplode
+	Range: 1c512
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c256
+		Falloff: 100, 100
+		Damage: 10000
+		ValidTargets: Infantry
+		ValidStances: Neutral, Enemy
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@2Clear: OpenToppedDamage
+		Spread: 1c0
+		Damage: 15000
+		ValidTargets: LoadedVehicle
+		ValidStances: Enemy
+		Amount: 6
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Driver: ChangeOwnerToNeutral
+		Range: 1c0
+		ValidTargets: DriverKill
+		ValidStances: Enemy
+		InvalidTargets: LoadedVehicle, DriverKillImmune
+	Warhead@4Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: gexpmina.wav, gexpminb.wav
+
+#####################################################
+# Red Guard Weapons
+#####################################################
+
+CHGuardRifle:
+	Inherits: ^LightMG
+	ReloadDelay: 25
+	Range: 4c0
+	Report: iredweaa.wav, iredweab.wav, iredweac.wav, iredwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 1500
+
+CHGuardRifleGarrison:
+	Inherits: CHGuardRifle
+	Range: 6c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 1900
+
+CHTankHunterMissile:
+	Inherits: ^AntiGroundMissile
+	Report: itanweaa.wav, itanweab.wav, itanweac.wav, itanwead.wav
+
+CHTankHunterMissileG:
+	Inherits: CHTankHunterMissile
+	Range: 7c0
+	ReloadDelay: 75
+
+CHMinigunnerGatling:
+	Inherits: CHGattlingTank
+	ReloadDelay: 12
+	Range: 4c0
+	Report: iremweaa.wav, iremweab.wav, iremweac.wav, iremwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 900
+
+CHMinigunnerGatlingAA:
+	Inherits: CHMinigunnerGatling
+	ValidTargets: Air
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+		ValidTargets: Air
+
+#####################################################
+# Overlord Weapons
+#####################################################
+
+OverlordCannon:
+	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
+	ReloadDelay: 90
+	Burst: 2
+	BurstDelays: 6
+	Report: voveweaa.wav, voveweab.wav, voveweac.wav, vovewead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+
+OverlordCannonNuclear:
+	Inherits: OverlordCannon
+	Warhead@Radiation: CreateTintedCells
+		Spread: 0c512
+		Falloff: 100, 75, 50
+		Level: 125
+		LayerName: genradiation
+
+CHGuardRifleOverlord:
+	Inherits: CHGuardRifleGarrison
+	Burst: 2
+
+CHTankHunterOverlord:
+	Inherits: CHTankHunterMissile
+	Range: 7c0
+	Burst: 2
+
+CHHelixMG:
+	Inherits: ^HeavyMG
+	ReloadDelay: 5
+	Range: 5c0
+	MinRange: 0c768
+	Report: gun8.aud, gun5.aud, mgun2.aud, gun13.aud, pillbox1.aud
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Damage: 700
+
+CHHelixNuke:
+	Inherits: KirovBomb
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff: CreateEffect
+		Explosions: nuke_small
+		ImpactSounds: kaboom22.aud
+		ImpactActors: false
+	Warhead@4EffWater: CreateEffect
+		Explosions: nuke_small
+		ImpactSounds: kaboom22.aud
+	Warhead@3Radiation: CreateTintedCells
+		Spread: 1c512
+		Falloff: 100, 66, 33
+		Level: 400
+		LayerName: genradiation
+
+#####################################################
+# Battlemaster Weapons
+#####################################################
+
+CHBigAtomicWeapon:
+	Inherits: Atomic
+	Report: bneutlau.wav
+	Warhead@2Eff_impact: CreateEffect
+		ImpactSounds: sneutexp.wav
+	Warhead@14Radiation: CreateTintedCells
+		Spread: 2c512
+		Falloff: 100, 90, 80, 60, 30, 15
+		Level: 400
+		LayerName: genradiation
+
+CHAtomicWeapon:
+	Projectile: InstantExplode
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 4000
+		AffectsParent: true
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@2Eff: CreateEffect
+		Explosions: nuke_small
+		ImpactSounds: kaboom22.aud
+		ImpactActors: false
+	Warhead@3Radiation: CreateTintedCells
+		Spread: 1c512
+		Falloff: 100, 66, 33
+		Level: 400
+		LayerName: genradiation
+
+CHAtomicTankExplode:
+	Inherits: CHAtomicWeapon
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 3000
+	Warhead@3Radiation: CreateTintedCells
+		Spread: 1c0
+		Falloff: 100, 100
+		Level: 200
+
+CHAtomicTankExplode2:
+	Inherits: CHAtomicTankExplode
+	Warhead@1Dam: SpreadDamage
+		ValidStances: Enemy, Neutral
+	-Warhead@3Radiation:
+
+CHNukeCannon:
+	Inherits: ^ShellArtillery
+	Inherits@Explosion: CHAtomicWeapon
+	ReloadDelay: 330
+	Range: 18c0
+	MinRange: 5c0
+	Report: vnukweaa.wav
+	TargetActorCenter: true
+	Projectile: Bullet
+		ContrailLength: 30
+		Speed: 180
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 25000
+	Warhead@3Eff: CreateEffect
+		Explosions: schnukeexplosion
+CHNukeCannonNeutron:
+	Inherits: CHNukeCannon
+	ValidTargets: Infantry, DriverKill, LoadedVehicle, Garrisoned, GarrisonedNBC
+	#Warhead@3Eff: CreateEffect
+	#	Explosions: pulse_explosion
+	#	ExplosionPalette: tseffect
+	#	ImpactSounds: ptesto00.aud
+	#Warhead@2Con: GrantExternalCondition
+	#	Condition: empdisable
+	#	Duration: 250
+	#	Range: 6c0
+	-Warhead@3Radiation:
+	Warhead@1Dam: SpreadDamage
+		Spread: 4c0
+		Falloff: 100, 100
+		Damage: 25000
+		ValidTargets: Infantry, NeutronImmune
+	Warhead@3Clear: OpenToppedDamage
+		Spread: 3c0
+		Damage: 15000
+		ValidTargets: Garrisoned, GarrisonedNBC, LoadedVehicle
+		ValidStances: Enemy
+		Amount: 6
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@4Driver: ChangeOwnerToNeutral
+		Range: 3c0
+		ValidTargets: DriverKill
+		ValidStances: Enemy
+		InvalidTargets: LoadedVehicle, NeutronImmune
+		Delay: 8
+
+CHAtomicTorpTube:
+	Inherits: TorpTube
+	Inherits@Explosion: CHAtomicWeapon
+	MinRange: 3c0
+	ReloadDelay: 300
+	Range: 15c0
+	Report: missile1.aud
+	ValidTargets: Water, Underwater, Bridge, Air
+	BurstDelays: 30
+	Projectile: Missile
+		RangeLimit: 20c819
+
+CHSubMortarShell:
+	Inherits: ^ShellArtillery
+	ReloadDelay: 100
+	Range: 12c0
+	MinRange: 3c0
+	Burst: 12
+	BurstDelays: 20
+
+CHBattlemasterCannon:
+	Inherits: ^Cannon
+	ReloadDelay: 50
+	Range: 4c0
+	Report: vbatweaa.wav, vbatweab.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+
+CHBattlemasterCannonNuclear:
+	Inherits: CHBattlemasterCannon
+	Warhead@Radiation: CreateTintedCells
+		Spread: 0c512
+		Falloff: 100, 75, 50
+		Level: 75
+		LayerName: genradiation
+
+CHBattlemasterCannonAuto:
+    Inherits: CHBattlemasterCannon
+    Burst: 3
+    BurstDelays: 6
+
+CHBattlemasterCannonNuclearAuto:
+    Inherits: CHBattlemasterCannonNuclear
+    Burst: 3
+    BurstDelays: 6
+
+SCHBattlemasterCannonAuto:
+    Inherits: CHBattlemasterCannon
+    Burst: 2
+    BurstDelays: 6
+
+SCHBattlemasterCannonNuclearAuto:
+    Inherits: CHBattlemasterCannonNuclear
+    Burst: 2
+    BurstDelays: 6
+
+CHDragonFlamer:
+	Inherits: Flamer
+	Burst: 8
+	ReloadDelay: 45
+	BurstDelays: 4
+	Range: 5c0
+	Projectile: Bullet
+		Speed: 200
+		TrailImage: fb2
+		Image: FB1
+		Inaccuracy: 512
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+	Warhead@2Clear: OpenToppedDamage
+		Spread: 0c512
+		Damage: 500
+		ValidTargets: Garrisoned
+		Amount: 4
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+
+CHDragonFlamerBlue:
+	Inherits: Flamer
+	Burst: 8
+	ReloadDelay: 20
+	BurstDelays: 4
+	Range: 5c0
+	Projectile: Bullet
+		Speed: 200
+		TrailImage: citywatherthrower
+		Image: blue_fb1
+		Inaccuracy: 512
+	Warhead@1Dam: SpreadDamage
+		Damage: 3750
+	Warhead@2Clear: OpenToppedDamage
+		Spread: 0c512
+		Damage: 700
+		ValidTargets: Garrisoned
+		Amount: 4
+		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff: CreateEffect
+		Explosions: citywatersplash
+
+CHDragonFirestorm:
+	Inherits: CHDragonFlamer
+	Inherits@Rad: CHFlameRadiation
+	FirstBurstTargetOffset: -1000,-1800,0
+	FollowingBurstTargetOffset: 100,180,0
+	Burst: 10
+	BurstDelays: 5
+	ReloadDelay: 10
+	Range: 4c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 1500
+	Warhead@1Cloud: SpawnSmokeParticle
+		Count: 1
+
+CHDragonFirestorm2:
+	Inherits: CHDragonFirestorm
+	FirstBurstTargetOffset: 1000,1800,0
+	FollowingBurstTargetOffset: -100,-180,0
+
+CHDragonFirestormB:
+	Inherits: CHDragonFirestorm
+	Inherits@2: CHDragonFlamerBlue
+	Inherits@Rad: CHFlameRadiationB
+	Warhead@1Dam: SpreadDamage
+		Damage: 3300
+
+CHDragonFirestormB2:
+	Inherits: CHDragonFirestormB
+	FirstBurstTargetOffset: 1000,1800,0
+	FollowingBurstTargetOffset: -100,-180,0
+
+CHBoatFlamer:
+	Inherits: CHDragonFlamer
+	Range: 5c896
+	Projectile: Bullet
+		Inaccuracy: 512
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+
+CHBoatFlamerBlue:
+	Inherits: CHDragonFlamerBlue
+	Range: 5c896
+	Projectile: Bullet
+		Inaccuracy: 512
+	Warhead@1Dam: SpreadDamage
+		Damage: 4500
+
+CHMIGWeapon:
+	Inherits: ^AntiGroundMissile
+	Burst: 2
+	ReloadDelay: 30
+	Projectile: Bullet
+		Speed: 300
+		TrailImage: fb2
+		Image: DRAGON
+		Inaccuracy: 1024
+	Warhead@1Dam: SpreadDamage
+		Damage: 2400
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, FireDeath, Incendiary
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall
+	Warhead@3Eff: CreateEffect
+		Explosions: china_fball
+		ImpactSounds: flamer2.aud
+		ImpactActors: false
+	Warhead@Shrapnel: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: CHInfernoCannonC
+		Amount: 1
+
+CHMIGWeaponBlue:
+	Inherits: CHMIGWeapon
+	Inherits@Rad: CHFlameRadiationB
+	Projectile: Bullet
+		Speed: 300
+		TrailImage: citywatherthrower
+		Image: DRAGON
+		Inaccuracy: 1024
+	Warhead@1Dam: SpreadDamage
+		Damage: 2600
+	Warhead@3Eff: CreateEffect
+		Explosions: citywatersplash
+	Warhead@Shrapnel: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: CHInfernoCannonCBlue
+
+CHMIGWeapon2:
+	Inherits: CHMIGWeapon
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+	Warhead@3Eff: CreateEffect
+		Explosions: small_frag
+		ImpactSounds: kaboom25.aud
+	-Warhead@Shrapnel:
+
+CHMIGNuke:
+	Inherits@1: CHAtomicWeapon
+	Inherits@2: ^AntiGroundMissile
+	ReloadDelay: 30
+	Range: 10c0
+	TargetActorCenter: true
+	Projectile: MissileCA
+		RangeLimit: 12c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 15000
+		AffectsParent: True
+		ValidTargets: Ground, Air, Water
+	Warhead@2Eff: CreateEffect
+		ValidTargets: Ground, Air, Water
+	Warhead@1Radiation: CreateTintedCells
+		Spread: 1c512
+		Falloff: 100, 66, 33
+		Level: 250
+		LayerName: genradiation
+
+CHGattlingTurret:
+	Inherits: ^LightMG
+	ReloadDelay: 6
+	Range: 7c0
+	Report: bgatweaa.wav, bgatweab.wav, bgatweac.wav, bgatwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+
+CHGattlingTurretAA:
+	Inherits: CHGattlingTurret
+	ValidTargets: Air
+	Range: 8c0
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Damage: 500
+		ValidTargets: Air
+
+CHGattlingTank:
+	Inherits: ^LightMG
+	ReloadDelay: 10
+	Range: 4c384
+	Report: bgatweaa.wav, bgatweab.wav, bgatweac.wav, bgatwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 1500
+
+CHGattlingTankAA:
+	Inherits: CHGattlingTank
+	ValidTargets: Air
+	Range: 8c768
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Damage: 1200
+		ValidTargets: Air
+
+CHHackerCharge:
+	ReloadDelay: 60
+	Burst: 10
+	BurstDelays: 5
+	Range: 6c0
+	TargetActorCenter: true
+	ValidTargets: Defense
+	InvalidTargets: Mine
+	Projectile: LaserZap
+		Width: 0c43
+		UsePlayerColor: True
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Structure
+
+CHSuperHackerCharge:
+	Inherits: CHHackerCharge
+	ValidTargets: Defense, Vehicle
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Structure, Vehicle
+
+CHHackerDisable:
+	ReloadDelay: 200
+	Report: ucapture.aud
+	Range: 6c0
+	TargetActorCenter: true
+	ValidTargets: Defense
+	InvalidTargets: Mine
+	Projectile: LaserZap
+		Width: 0c43
+		UsePlayerColor: True
+	Warhead@1Dam: TargetDamage
+		Damage: 0
+	Warhead@2Con: GrantExternalCondition
+		Condition: empdisable
+		Duration: 200
+		Range: 1c0
+		ValidTargets: Building, Structure
+
+CHLotusDisable:
+	Inherits: CHHackerDisable
+	ReloadDelay: 200
+	ValidTargets: Vehicle
+	Warhead@2Con: GrantExternalCondition
+		Duration: 400
+		Range: 0c768
+		ValidTargets: Vehicle
+
+CHSuperLotusDisable:
+	Inherits: CHHackerDisable
+	ReloadDelay: 200
+	Warhead@2Con: GrantExternalCondition
+		Duration: 400
+
+CHLotusCharge:
+	Inherits: CHSuperHackerCharge
+	ValidTargets: Structure, Vehicle
+	InvalidTargets: Defense, Mine
+
+CHSuperLotusCharge:
+	Inherits: CHLotusCharge
+	ValidTargets: Structure, Vehicle
+	InvalidTargets: Mine
+
+CHLotusControl:
+	Inherits: EnslaveStructure
+	ReloadDelay: 120
+	Report: ucapture.aud
+	ValidTargets: MindControlStructure
+	InvalidTargets: Defense
+
+CHECMCharge:
+	ReloadDelay: 200
+	Range: 8c0
+	Burst: 6
+	BurstDelays: 5
+	TargetActorCenter: true
+	ValidTargets: Vehicle
+	Projectile: LaserZap
+		Width: 80
+		UsePlayerColor: True
+		SecondaryBeam: true
+		SecondaryBeamWidth: 100
+		SecondaryBeamColor: FF000035
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Vehicle
+
+CHECMDisable:
+	Inherits: CHECMCharge
+	Burst: 1
+	Report: vfrelo2a.aud
+	Warhead@2Ext: GrantExternalCondition
+		Condition: empdisable
+		Duration: 200
+		Range: 0c768
+		ValidTargets: Vehicle
+
+CHInfernoCannon:
+	Inherits: ^ShellArtillery
+	ReloadDelay: 125
+	MinRange: 1c256
+	Range: 12c0
+	Report: vinfweaa.wav, vinfweab.wav, vinfweac.wav
+	TargetActorCenter: true
+	Projectile: Bullet
+		Speed: 350
+		TrailImage: fb2
+		Image: FB1
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c341
+		Damage: 4000
+	Warhead@3Eff: CreateEffect
+		Explosions: napalm
+		ImpactSounds: firebl3.aud
+	Warhead@Shr: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: CHInfernoCannonC
+		Amount: 1
+
+CHInfernoCannonC:
+	Inherits: Flamer
+	Inherits@Rad: CHFlameRadiation
+	Burst: 1
+	Range: 1c512
+	Warhead@1Dam: TargetDamage
+	Projectile: InstantHit
+		Inaccuracy: 512
+
+CHInfernoCannonBlue:
+	Inherits: CHInfernoCannon
+	Inherits@Rad: CHFlameRadiation
+	Projectile: Bullet
+		Speed: 384
+		TrailImage: blue_fb2
+		Image: blue_fb1
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+	Warhead@3Eff: CreateEffect
+		Explosions: blue_building
+	Warhead@Shr: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: CHInfernoCannonCBlue
+		Amount: 2
+
+CHInfernoCannonCBlue:
+	Inherits: Flamer
+	Inherits@Rad: CHFlameRadiationB
+	Burst: 1
+	Range: 1c512
+	Projectile: InstantHit
+		Inaccuracy: 512
+	Warhead@1Dam: TargetDamage
+	Warhead@3Eff: CreateEffect
+		Explosions: citywatersplash
+
+CHBarrageSpawner:
+	ValidTargets: Ground, Water, Air
+	Projectile: InstantExplode
+	Warhead@Dam: TargetDamage
+	Warhead@1Eff: CreateEffect
+		ImpactSounds: sartweaa.wav
+	Warhead@1: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: BarrageCloud
+		Amount: 12
+		Delay: 40
+
+CHBarrageSpawner2:
+	Inherits: CHBarrageSpawner
+	Warhead@2: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: BarrageCloud
+		Amount: 12
+		Delay: 60
+
+CHBarrageSpawner3:
+	Inherits: CHBarrageSpawner2
+	Warhead@3: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: BarrageCloud
+		Amount: 12
+		Delay: 80
+
+BarrageCloud:
+	Range: 5c0
+	ReloadDelay: 8
+	ValidTargets: Ground, Water, Air
+	Projectile: AthenaProjectile
+		Altitude: 5c0
+	Warhead@1: FireFragment
+		UseZOffsetAsAbsoluteHeight: true
+		Weapon: CHArtilleryBarrage1
+		ValidTargets: Air, Ground, Water
+		Delay: 20
+
+CHArtilleryBarrage1:
+	Inherits: ^ShellArtillery
+	ReloadDelay: 100
+	-MinRange:
+	-Report:
+	Projectile: Bullet
+		Speed: 512
+		ContrailColor: F2E8C0
+		ContrailLength: 30
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c768
+		Damage: 10000
+
+CHTankHunterAttach1:
+	Projectile: InstantHit
+	TargetActorCenter: true
+	Report: icraatta.wav
+	ReloadDelay: 20
+	Range: 2c0
+	ValidTargets: demolishable
+	InvalidTargets: ivanattached
+	Warhead@1: AttachDelayedWeapon
+		Weapon: CHTankHunterBomb
+		Type: ivanbomb
+		TriggerTime: 120
+		Range: 1
+		ValidTargets: demolishable
+	Warhead@2: TargetDamage
+
+CHTankHunterAttach2:
+	Inherits: CHTankHunterAttach1
+	ValidTargets: Vehicle
+	Range: 2c0
+	InvalidTargets: ivanattached
+	Warhead@1: AttachDelayedWeapon
+		Weapon: CHTankHunterBomb
+		TriggerTime: 120
+		ValidTargets: Vehicle
+
+CHTankHunterBomb:
+	Inherits: CHTankHunterAttach1
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Ground, Air, Water, Underwater
+		Spread: 64
+		Falloff: 100, 100
+		Damage: 50000
+	Warhead@3Eff: CreateEffect
+		Explosions: self_destruct
+		ExplosionPalette: effect
+
+CHEMPBomb:
+	ReloadDelay: 800
+	Range: 1c0
+	Report: chute1.aud
+	Projectile: GravityBomb
+		Image: PARABOMB
+		OpenSequence: open
+		Velocity: 0, 0, -86
+		Acceleration: 0, 0, 0
+		Shadow: False
+	Warhead@1KillAircraft: SpreadDamage
+		Spread: 6c0
+		Falloff: 100, 100
+		Damage: 50000
+		ValidTargets: Air
+		DamageTypes: SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: pulse_explosion
+		ExplosionPalette: tseffect
+		ImpactSounds: ptesto00.aud
+		ImpactActors: false
+	Warhead@2Con: GrantExternalCondition
+		Condition: empdisable
+		Duration: 250
+		Range: 6c0
+		ValidTargets: Ground, Air, Water
+
+CHMineBomb:
+	ReloadDelay: 100
+	Range: 1c0
+	Report: chute1.aud
+	Projectile: InstantExplode
+	Warhead@1: FireCluster
+		Weapon: CHMineSpawner
+		Dimensions: 5,5
+		Footprint: __X__ _XXX_ XXXXX _XXX_ __X__
+		ValidTargets: Ground, Air, Water
+
+CHMineSpawner:
+	Range: 4c0
+	ReloadDelay: 30
+	Projectile: Bullet
+		Image: chminv
+		Sequences: idle
+		Blockable: false
+		Speed: 250
+	Warhead@1: SpawnActor
+		Actors: chminv
+		Range: 0
+		ValidTargets: Ground, Water, Air
+
+
+SCHDesertFlyBomb:
+	Inherits@Rad: CHFlameRadiation
+	ReloadDelay: 10
+	Range: 4c0
+	Report: vkiratta.wav
+	Projectile: GravityBomb
+		Image: usabomberbomb
+		Velocity: 0, 0, -88
+		Acceleration: 0, 0, 0
+		Shadow: false
+	Warhead@1Dam: SpreadDamage
+		Spread: 768
+		Damage: 8000
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: small_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure

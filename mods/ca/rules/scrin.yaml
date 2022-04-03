@@ -68,6 +68,7 @@ VEHICLES.SCRIN:
 
 S1:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits@scout: ^ScoutEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
@@ -84,8 +85,6 @@ S1:
 		Name: Warrior
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	RevealsShroud:
-		Range: 12c0
 	Health:
 		HP: 6500
 	Armament@PRIMARY:
@@ -402,6 +401,7 @@ GSCR.Mutating:
 
 MAST:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
 	AutoTargetPriority@DEFAULT:
@@ -424,8 +424,6 @@ MAST:
 		AddToArmyValue: true
 	Health:
 		HP: 7500
-	RevealsShroud:
-		Range: 8c0
 	Mobile:
 		Speed: 73
 	Armament@PRIMARY:
@@ -562,6 +560,7 @@ GUNW:
 
 GUNW.sensor:
 	Inherits: GUNW
+	Inherits@detect: ^SensorEquipment
 	Buildable:
 		Queue: Vehicle
 		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.gunwalker.sensor
@@ -571,16 +570,6 @@ GUNW.sensor:
 		Cost: 800
 	Tooltip:
 		Name: Gun Walker (Sensors)
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-	DetectCloaked:
-		Range: 6c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 
 SEEK:
 	Inherits: ^Vehicle
@@ -601,7 +590,7 @@ SEEK:
 		BuildPaletteOrder: 30
 		Prerequisites: vehicles.any, ~vehicles.seek, ~!commander_tree.seeker.pld, ~!commander_tree.seeker.reflector
 		Queue: Vehicle
-		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		Description: Light hover tank.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 	Mobile:
 		Speed: 135
@@ -647,10 +636,6 @@ SEEK:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	IgnoresDisguise:
-	DetectCloaked:
-		Range: 5c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	SpawnActorOnDeath:
@@ -666,7 +651,7 @@ SEEK.PLD:
 		Name: Seeker (PLD)
 	Buildable:
 		Prerequisites: vehicles.any, ~vehicles.seek, ~commander_tree.seeker.pld
-		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		Description: Light hover tank.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 
 SEEK.Reflector:
@@ -678,7 +663,7 @@ SEEK.Reflector:
 		Name: Seeker (Reflector)
 	Buildable:
 		Prerequisites: vehicles.any, ~vehicles.seek, ~commander_tree.seeker.reflector
-		Description: Light hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		Description: Light hover tank.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 
 LACE:
@@ -700,7 +685,7 @@ LACE:
 		BuildPaletteOrder: 30
 		Prerequisites: vehicles.any, ~vehicles.traveler, ~!commander_tree.lacerator.pld, ~!commander_tree.lacerator.reflector, ~!commander_tree.lacerator.ap
 		Queue: Vehicle
-		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		Description: Fast hover tank.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 	Mobile:
 		TurnSpeed: 48
@@ -747,10 +732,6 @@ LACE:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	IgnoresDisguise:
-	DetectCloaked:
-		Range: 6c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -763,7 +744,7 @@ LACE.PLD:
 		Name: Lacerator (PLD)
 	Buildable:
 		Prerequisites: vehicles.any, ~vehicles.traveler, ~commander_tree.lacerator.pld
-		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		Description: Fast hover tank.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 
 LACE.Reflector:
@@ -775,7 +756,7 @@ LACE.Reflector:
 		Name: Lacerator (Reflector)
 	Buildable:
 		Prerequisites: vehicles.any, ~vehicles.traveler, ~commander_tree.lacerator.reflector
-		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		Description: Fast hover tank.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 
 LACE.AP:
@@ -786,7 +767,7 @@ LACE.AP:
 		Name: Lacerator (AP)
 	Buildable:
 		Prerequisites: vehicles.any, ~vehicles.traveler, ~commander_tree.lacerator.ap
-		Description: Fast hover tank.\n  Can detect cloaked units.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
+		Description: Fast hover tank.\n  Strong vs Vehicles, Buildings\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 	Armament@PRIMARY:
 		Weapon: LaceratorShards.AP

@@ -1,0 +1,54 @@
+#####################################################
+# Special Effects
+#####################################################
+
+^GeneralsLightHusks:
+	Inherits: ^DamagingExplosion
+	ReloadDelay: 60
+	Range: 5c0
+	ValidTargets: Ground, Air
+	Projectile: Bullet
+		Speed: 96
+		Blockable: false
+		LaunchAngle: 160
+		Palette: player
+		IsPlayerPalette: true
+		Shadow: true
+		AirburstAltitude: 768
+		Inaccuracy: 2048
+	Warhead@2Eff: CreateEffect
+		Explosions: building
+		ImpactSounds: xplos.aud
+		ValidTargets: Ground, Air
+	Warhead@3EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splash9.aud
+		ValidTargets: Water, Underwater
+
+
+
+EnslaveStructure:
+	Range: 7c0
+	ReloadDelay: 100
+	Projectile: InstantHit
+	ValidTargets: Building, Defense
+	InvalidTargets: MindControlImmune
+	Warhead@1Dam: TargetDamage
+	Warhead@2Eff: CreateEffect
+		Explosions: idle
+		ExplosionPalette: scrin
+		Image: mindcontrol
+		ValidTargets: Ground
+		ValidRelationships: Neutral, Enemy
+
+FlametankExplode:
+	Inherits: ^DamagingExplosion
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 11500
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: big_napalm
+		ImpactSounds: xplobig6.aud
+	Warhead@3Smu: LeaveSmudge
+		SmudgeType: Scorch

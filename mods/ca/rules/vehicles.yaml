@@ -1127,7 +1127,7 @@ MCV:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
-		Prerequisites: fix, ~vehicles.ra, ~techlevel.medium
+		Prerequisites: fix, ~vehicles.ra
 		Description: Deploys into another Construction Yard.\n  Unarmed
 	Valued:
 		Cost: 3000
@@ -1166,6 +1166,7 @@ MCV:
 
 JEEP:
 	Inherits: ^Vehicle
+	Inherits: ^SensorEquipment
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1187,12 +1188,6 @@ JEEP:
 	Mobile:
 		TurnSpeed: 80
 		Speed: 157
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
 	Turreted:
 		TurnSpeed: 48
 		Offset: 0,0,128
@@ -1207,10 +1202,6 @@ JEEP:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	IgnoresDisguise:
-	DetectCloaked:
-		Range: 6c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 
 APC:
 	Inherits: ^Tank
@@ -1826,6 +1817,7 @@ AMCV:
 
 HMMV:
 	Inherits: ^VehicleTD
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
@@ -1849,12 +1841,6 @@ HMMV:
 	Mobile:
 		TurnSpeed: 80
 		Speed: 157
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
 	Turreted:
 		TurnSpeed: 80
 		Offset: -85,0,128
@@ -1876,7 +1862,8 @@ HMMV:
 		Prerequisites: vehicles.upgraded
 
 BGGY:
-	Inherits: ^VehicleTD
+	Inherits: ^VehicleTD#
+	Inherits@detect: ^SensorEquipment
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1899,12 +1886,6 @@ BGGY:
 		Type: Light
 	Mobile:
 		Speed: 157
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
 	Turreted@PRIMARY:
 		TurnSpeed: 80
 		Offset: -43,0,128
@@ -3544,6 +3525,8 @@ BTR:
 
 BTR.Surveillance:
 	Inherits: ^Tank
+	Inherits@detect: ^SensorEquipment
+	Inherits@detect: ^MobileDeployableRadar
 	Inherits@TRANSPORT: ^Transport
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -3564,16 +3547,6 @@ BTR.Surveillance:
 	Mobile:
 		Speed: 100
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-	DetectCloaked:
-		Range: 6c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
 		Offset: 0,0,256
@@ -4829,6 +4802,8 @@ TNKD2.Reflector:
 
 MSAR:
 	Inherits: ^VehicleTD
+	Inherits@detect: ^SensorEquipment
+	Inherits@radar: ^MobileDeployableRadar
 	Tooltip:
 		Name: Mobile Sensor Array
 		RequiresCondition: !deployed
@@ -4853,17 +4828,6 @@ MSAR:
 	Mobile:
 		Speed: 82
 		RequireForceMoveCondition: !undeployed
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-		RequiresCondition: undeployed
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-		RequiresCondition: undeployed
-	RevealsShroud@DEPLOYED:
-		RequiresCondition: !undeployed
-		Range: 14c0
 	Repairable:
 		RequireForceMoveCondition: !undeployed
 	Passenger:
@@ -4891,14 +4855,6 @@ MSAR:
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
 		UndeployOnPickup: true
-	DetectCloaked@Deployed:
-		Range: 10c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: deployed && !(empdisable || being-warped)
-	RenderDetectionCircle:
-		TrailCount: 3
-	ProvidesRadar:
-		RequiresCondition: deployed
 	Selectable:
 		DecorationBounds: 30,30
 	ProximityExternalCondition@Bino:
@@ -6495,7 +6451,7 @@ APOC:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
 		Prerequisites: indp, ~vehicles.soviet, ~commander_tree.apocalypse
-		Description: Enormous slow tank with uranium shells and Drozd countermeasure system .\n  The Drozd system fires Chaff, which is good at depleting PLD systems.\n  Can crush small vehicles.???\n  Strong vs Vehicles, PLD\n  Weak vs Aircraft
+		Description: Enormous slow tank with uranium shells and Drozd countermeasure system .\n  The Drozd system fires chaff, which is good at depleting PLD systems.\n  Can crush small vehicles.???\n  Strong vs Vehicles, PLD\n  Weak vs Aircraft
 	Valued:
 		Cost: 4000
 	Tooltip:
@@ -6579,6 +6535,7 @@ APOC:
 
 XO:
 	Inherits: ^VehicleTD
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
@@ -6609,12 +6566,6 @@ XO:
 		CustomPipType: red
 		Weight: 2
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Voiced:
 		VoiceSet: GhostVoice
 	WithMoveAnimation:
@@ -6817,6 +6768,7 @@ MDRN.Attached:
 
 GDRN:
 	Inherits: ^Vehicle
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
@@ -6842,12 +6794,6 @@ GDRN:
 		TurnSpeed: 40
 		Speed: 134
 		Voice: Move
-	RevealsShroud:
-		MinRange: 6c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 40
 		Offset: 0,0,0

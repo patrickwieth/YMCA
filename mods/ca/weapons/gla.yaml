@@ -1,0 +1,1211 @@
+
+GLAnthraxGreen:
+	InvalidTargets: Water
+	Warhead@1Cloud: SpawnSmokeParticle
+		Count: 1
+		Duration: 240
+		Speed: 4, 16
+		TurnRate: 4
+		Image: explosion
+		Sequences: green_toxins_small
+		Palette: alpha25
+		Weapon: AnthraxCloud
+		InvalidTargets: Water, Structure
+
+AnthraxCloud:
+	Projectile: InstantExplode
+	ReloadDelay: 30
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c512
+		Falloff: 100, 100
+		Damage: 750
+		ValidTargets: Ground, Water
+		InvalidTargets: Mine, ToxinImmune
+		ValidStances: Enemy, Neutral
+		AffectsParent: True
+		Versus:
+			None: 60
+			Light: 20
+            Medium: 13
+			Heavy: 10
+			Wood: 6
+			Concrete: 2
+		DamageTypes: Prone100Percent, DefaultDeath
+
+AnthraxCloudLarge:
+	Inherits: AnthraxCloud
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 2500
+
+AnthraxCloudBlue:
+	Inherits: AnthraxCloud
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+		Versus:
+			Light: 44
+            Medium: 33
+			Heavy: 22
+			Wood: 11
+            Concrete: 4
+AnthraxCloudBlueLarge:
+	Inherits: AnthraxCloudBlue
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 3000
+
+AnthraxCloudPurple:
+	Inherits: AnthraxCloud
+	Warhead@1Dam: SpreadDamage
+		Damage: 1500
+		Versus:
+			Light: 55
+            Medium: 44
+			Heavy: 33
+			Wood: 5
+            Concrete: 3
+AnthraxCloudPurpleLarge:
+	Inherits: AnthraxCloudPurple
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 5000
+
+GLAnthraxBlue:
+	Inherits: GLAnthraxGreen
+	Warhead@1Cloud: SpawnSmokeParticle
+		Sequences: blue_toxins_small
+		Weapon: AnthraxCloudBlue
+
+GLAnthraxPurple:
+	Inherits: GLAnthraxGreen
+	Warhead@1Cloud: SpawnSmokeParticle
+		Sequences: purple_toxins_small
+		Weapon: AnthraxCloudPurple
+
+GLAnthraxLarge:
+	Inherits: GLAnthraxGreen
+	Warhead@1Cloud: SpawnSmokeParticle
+		Duration: 960
+		Sequences: green_toxins
+		Weapon: AnthraxCloudLarge
+
+GLAnthraxBlueLarge:
+	Inherits: GLAnthraxLarge
+	Warhead@1Cloud: SpawnSmokeParticle
+		Sequences: blue_toxins
+		Weapon: AnthraxCloudBlueLarge
+
+GLAnthraxPurpleLarge:
+	Inherits: GLAnthraxLarge
+	Warhead@1Cloud: SpawnSmokeParticle
+		Sequences: purple_toxins
+		Weapon: AnthraxCloudPurpleLarge
+
+TractorGLAnthraxGreen:
+	Inherits: GLAnthraxGreen
+	Warhead@1Cloud: SpawnSmokeParticle
+		Count: 3
+
+TractorGLAnthraxBlue:
+	Inherits: GLAnthraxBlue
+	Warhead@1Cloud: SpawnSmokeParticle
+		Count: 3
+
+TractorGLAnthraxPurple:
+	Inherits: GLAnthraxPurple
+	Warhead@1Cloud: SpawnSmokeParticle
+		Count: 3
+
+#####################################################
+# Scorpion Tank Weapons
+#####################################################
+
+
+GLScorpionShell:
+	Inherits: 25mm
+	ReloadDelay: 25
+	Report: vscoweaa.wav, vscoweab.wav, vscoweac.wav, vscowead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+		Versus:
+			None: 10
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, MakeScrapbox
+
+GLScorpionShellToxin:
+	Inherits: GLScorpionShell
+	Inherits@Contaminated: GLAnthraxGreen
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+		Versus:
+			None: 20
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, MakeScrapbox
+	Warhead@3Eff: CreateEffect
+		Explosions: chemball
+
+GLScorpionShellToxinBeta:
+	Inherits: GLScorpionShellToxin
+	Inherits@Contaminated: GLAnthraxBlue
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+		Versus:
+			None: 75
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, MakeScrapbox
+	Warhead@3Eff: CreateEffect
+		Explosions: blue_small_napalm
+
+GLScorpionShellToxinGamma:
+	Inherits: GLScorpionShellToxin
+	Inherits@Contaminated: GLAnthraxPurple
+	Warhead@1Dam: SpreadDamage
+		Damage: 4500
+		Versus:
+			None: 100
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, MakeScrapbox
+	Warhead@3Eff: CreateEffect
+		Explosions: purplesplash
+
+GlScorpionMissile:
+	Inherits: TankKiller
+	Burst: 1
+	ReloadDelay: 300
+	Range: 6c0
+	MinRange: 1c0
+	Report: vscowe2a.wav, vscowe2b.wav
+    Projectile: MissileCA
+		Image: scorpionrocket
+	Warhead@1Dam: SpreadDamage
+		Damage: 10000
+        Versus:
+			None: 90
+			Wood: 80
+			Light: 80
+            Medium: 60
+			Heavy: 50
+
+GlScorpionMissileToxin:
+	Inherits: GlScorpionMissile
+	Inherits@Toxin: GLAnthraxBlue
+
+GlScorpionMissileTwin:
+	Inherits: GlScorpionMissile
+	Burst: 2
+	Warhead@1Dam: SpreadDamage
+
+GlScorpionMissileToxinTwin:
+	Inherits: GlScorpionMissileTwin
+	Inherits@Toxin: GLAnthraxBlue
+#####################################################
+# Marauder Tank Weapons
+#####################################################
+
+GLMarauderShell:
+	Inherits: 90mm
+	ReloadDelay: 50
+	Report: vmarweaa.wav, vmarweab.wav, vmarweac.wav, vmarwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+		Versus:
+			None: 10
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, MakeScrapbox
+
+GLMarauderShellToxin:
+	Inherits: GLMarauderShell
+	Inherits@Contaminated: GLAnthraxGreen
+	Warhead@1Dam: SpreadDamage
+		Damage: 6100
+		Versus:
+			None: 50
+	Warhead@3Eff: CreateEffect
+		Explosions: chemball
+
+GLMarauderShellToxinBeta:
+	Inherits: GLMarauderShellToxin
+	Inherits@Contaminated: GLAnthraxBlue
+	Warhead@1Dam: SpreadDamage
+		Damage: 6200
+		Versus:
+			None: 75
+	Warhead@3Eff: CreateEffect
+		Explosions: blue_small_napalm
+
+GLMarauderShellToxinGamma:
+	Inherits: GLMarauderShellToxin
+	Inherits@Contaminated: GLAnthraxPurple
+	Warhead@1Dam: SpreadDamage
+		Damage: 6300
+		Versus:
+			None: 100
+	Warhead@3Eff: CreateEffect
+		Explosions: purplesplash
+
+GLTwinMarauderShell:
+	Inherits: GLMarauderShell
+	Burst: 2
+    ReloadDelay: 40
+
+GLTwinMarauderShellToxin:
+	Inherits: GLMarauderShellToxin
+	Burst: 2
+    ReloadDelay: 40
+
+GLTwinMarauderShellToxinBeta:
+	Inherits: GLMarauderShellToxinBeta
+	Burst: 2
+    ReloadDelay: 40
+
+GLTwinMarauderShellToxinGamma:
+	Inherits: GLMarauderShellToxinGamma
+	Burst: 2
+    ReloadDelay: 40
+
+#####################################################
+# Angry Mob Weapons
+#####################################################
+
+AngryMobTargeting:
+	ReloadDelay: 50
+	Range: 6c0
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+
+GLAngryMobPistol:
+	Inherits: Pistol
+	ReloadDelay: 75
+	Burst: 8
+	BurstDelays: 6
+	Range: 3c0
+	Report: gun27.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+
+GLAngryMobPistol2:
+	Inherits: Pistol
+	ReloadDelay: 70
+	Burst: 8
+	BurstDelays: 5
+	Range: 3c0
+	Report: gun27.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath, MakeScrapbox
+
+GLAngryMobAk47:
+	Inherits: M16
+	ReloadDelay: 6
+	Range: 4c0
+	Report: gun11.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 1800
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath, MakeScrapbox
+
+GLAngryMobMolotov:
+	Inherits: Grenade
+	ReloadDelay: 40
+	Projectile: Bullet
+		Image: 120MM
+		Speed: 682
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 5000
+		Versus:
+			None: 70
+			Wood: 80
+			Light: 40
+            Medium: 30
+			Heavy: 20
+			Concrete: 10
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath, MakeScrapbox
+	Warhead@3Eff: CreateEffect
+		Explosions: small_napalm
+
+GLWorkerHealBuilding:
+	ReloadDelay: 20
+	Range: 1c512
+	ValidTargets: Repairing, ivanattached
+	Projectile: Bullet
+		Image: 120MM
+		Speed: 999
+	Warhead@1Dam: SpreadDamage
+		Spread: 213
+		Damage: -2500
+		ValidStances: Ally
+		ValidTargets: Repairing
+		DebugOverlayColor: 00FF00
+	Warhead@2Defuse: DetachDelayedWeapon
+		Types: ivanbomb
+		ValidTargets: ivanattached
+		ValidStances: Ally
+
+#####################################################
+# Toxin Tractor Weapons
+#####################################################
+
+GLTractorToxin:
+	Inherits@Contaminated: TractorGLAnthraxGreen
+	InvalidTargets: Structure, Water, ToxinImmune
+	ReloadDelay: 80
+	Range: 3c0
+	Report: flamer2.aud, firebl3.aud, flmthrow.aud, DSSLOP.wav
+	Projectile: RadBeam
+		Amplitude: 120
+		WaveLength: 360
+		Color: 8FFF00
+	Warhead@1Dam: SpreadDamage
+		Spread: 384
+		Damage: 1000
+		InvalidTargets: Structure, Wall, Husk, ToxinImmune
+		Versus:
+			None: 100
+			Light: 55
+            Medium: 35
+			Heavy: 15
+			Wood: 5
+			Concrete: 0
+		DamageTypes: Prone100Percent, TriggerProne, DefaultDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: chemball
+	Warhead@Clear: OpenToppedDamage
+		Spread: 0c512
+		Damage: 5000
+		Amount: 1
+		ValidTargets: Garrisoned, GarrisonedNBC, LoadedTankBunker, LoadedVehicle
+		InvalidTargets: ToxinImmune
+		DamageTypes: Prone100Percent, TriggerProne, DefaultDeath
+
+GLTractorToxinBeta:
+	Inherits: GLTractorToxin
+	Inherits@Contaminated: TractorGLAnthraxBlue
+	Projectile: RadBeam
+		Color: 0068FF
+	Warhead@1Dam: SpreadDamage
+		Spread: 800
+		Damage: 1750
+		InvalidTargets: Water, Structure, Wall, Husk
+		Versus:
+			None: 160
+	Warhead@Clear: OpenToppedDamage
+		Damage: 7500
+	Warhead@3Eff: CreateEffect
+		Explosions: blue_small_napalm
+
+GLTractorToxinGamma:
+	Inherits: GLTractorToxin
+	Inherits@Contaminated: TractorGLAnthraxPurple
+	Projectile: RadBeam
+		Color: 7400FF
+	Warhead@1Dam: SpreadDamage
+		Spread: 900
+		Damage: 2500
+		InvalidTargets: Water, Structure, Wall, Husk
+		Versus:
+			None: 190
+	Warhead@Clear: OpenToppedDamage
+		Damage: 10000
+	Warhead@3Eff: CreateEffect
+		Explosions: purplesplash
+
+GLTractorContaminate:
+	Inherits: TractorGLAnthraxGreen
+	ReloadDelay: 40
+	Projectile: InstantExplode
+	Warhead@1Cloud: SpawnSmokeParticle
+		Duration: 600
+		Speed: 20, 40
+		TurnRate: 5
+
+
+GLTractorContaminateBeta:
+	Inherits: TractorGLAnthraxBlue
+	ReloadDelay: 40
+	Projectile: InstantExplode
+	Warhead@1Cloud: SpawnSmokeParticle
+		Duration: 600
+		Speed: 20, 40
+		TurnRate: 5
+
+GLTractorContaminateGamma:
+	Inherits: TractorGLAnthraxPurple
+	ReloadDelay: 40
+	Projectile: InstantExplode
+	Warhead@1Cloud: SpawnSmokeParticle
+		Duration: 600
+		Speed: 20, 40
+		TurnRate: 5
+
+GLRebelToxin:
+	Inherits@Contaminated: GLAnthraxPurple
+	InvalidTargets: Water, ToxinImmune, Structure
+	ReloadDelay: 30
+	Burst: 2
+	BurstDelays: 5
+	Range: 3c256
+	Report: flamer2.aud, firebl3.aud, flmthrow.aud, DSSLOP.wav
+	Projectile: RadBeam
+		Amplitude: 120
+		WaveLength: 360
+		Color: 8300FF
+	Warhead@1Dam: SpreadDamage
+		Spread: 200
+		Damage: 600
+		InvalidTargets: Structure, Wall, Husk, ToxinImmune
+		Versus:
+			None: 130
+			Light: 55
+            Medium: 40
+			Heavy: 20
+			Wood: 10
+			Concrete: 0
+		DamageTypes: Prone100Percent, TriggerProne, DefaultDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: purplesplash
+	Warhead@Clear: OpenToppedDamage
+		Spread: 0c512
+		Damage: 500
+		Amount: 2
+		ValidTargets: Garrisoned
+		DamageTypes: Prone100Percent, TriggerProne, DefaultDeath
+
+GLRebelToxinGarrison:
+	Inherits: GLRebelToxin
+	Range: 6c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 800
+
+GLTunnelToxinWeapon:
+	Inherits: GLRebelToxinGarrison
+	Range: 8c0
+
+#####################################################
+# Suicide Weapons
+#####################################################
+GLDemolitionExplode:
+	ReloadDelay: 350
+	Range: 1c512
+	Projectile: InstantExplode
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c768
+		Falloff: 100, 100
+		Damage: 9000
+		Versus:
+			None: 100
+			Wood: 200
+			Light: 100
+            Medium: 125
+			Heavy: 150
+		ValidStances: Neutral, Enemy
+		DamageTypes: TriggerProne, Prone50Percent, ExplosionDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: ex_terr_flash
+		ImpactSounds: gexpmina.wav, gexpminb.wav
+	Warhead@3Smu: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Trees
+
+GLTerroristExplosive:
+	Inherits: GLDemolitionExplode
+	Warhead@1Dam: SpreadDamage
+		Spread: 2c0
+		Falloff: 100, 100
+		Damage: 8000
+		Versus:
+			None: 125
+			Wood: 25
+			Light: 100
+            Medium: 140
+			Heavy: 180
+            Concrete: 15
+		-ValidStances:
+		DamageTypes: TriggerProne, Prone100Percent, ExplosionDeath
+	Warhead@3Smu: LeaveSmudge
+		SmudgeType: Scorch
+		Size: 2
+
+GLTerroristExplosive2:
+	Inherits: GLTerroristExplosive
+	Warhead@1Dam: SpreadDamage
+		Spread: 2c256
+		Damage: 10500
+		Versus:
+			None: 150
+GLBombTruckExplosive:
+	Inherits: GLTerroristExplosive
+	Warhead@1Dam: SpreadDamage
+		Spread: 3c0
+		Damage: 20000
+		Versus:
+			None: 150
+			Wood: 50
+			Light: 100
+            Medium: 150
+			Heavy: 200
+	Warhead@2Eff: CreateEffect
+		Explosions: ex_terr_flash
+		ImpactSounds: gexpmina.wav, gexpminb.wav
+
+GLBombTruckSuperExplosive:
+	Inherits: GLBombTruckExplosive
+	Warhead@1Dam: SpreadDamage
+		Spread: 4c0
+		Damage: 40000
+	Warhead@2Eff: CreateEffect
+		Explosions: ex_big_flash
+	Warhead@3Smu: LeaveSmudge
+		Size: 3
+
+GLBombTruckToxExplosive:
+	Inherits: GLTerroristExplosive
+	Warhead@toxin: FireFragment
+		Weapon: GLToxinExplodeClust1
+
+GLBombTruckToxExplosive2:
+	Inherits: GLTerroristExplosive
+	Warhead@toxin: FireFragment
+		Weapon: GLToxinExplodeClust2
+
+GLBarrelExplode:
+	Inherits: GLTerroristExplosive
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c512
+		Falloff: 100, 80, 60, 30, 15
+		Damage: 14000
+		Versus:
+			None: 100
+			Wood: 20
+			Light: 100
+            Medium: 140
+			Heavy: 180
+            Concrete: 10
+		ValidStances: Enemy, Neutral
+	Warhead@2Eff: CreateEffect
+		Explosions: ex_terr_flash
+		ImpactSounds: gexpdema.wav, gexpdemb.wav, gexpdemc.wav
+
+#####################################################
+# Rebel Weapons
+#####################################################
+
+GLRebelAK47:
+	Inherits: ^LightMG
+	ReloadDelay: 18
+	Range: 4c0
+	Burst: 3
+	BurstDelays: 3
+	Report: irebweaa.wav, irebweab.wav, irebweac.wav, irebwead.wav, irebweae.wav, irebweaf.wav, irebweag.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 750
+
+GLRebelAK47Garrison:
+	Inherits: GLRebelAK47
+	Range: 6c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 900
+
+GLRebelAttach:
+	Inherits: CHTankHunterAttach1
+	Range: 1c512
+	Warhead@1: AttachDelayedWeapon
+		Weapon: GLBarrelExplode
+		TriggerTime: 240
+
+GLRebelTrap:
+	Range: 1c512
+	ReloadDelay: 40
+	TargetActorCenter: true
+	ValidTargets: trappable
+	InvalidTargets: trapped
+	Projectile: InstantHit
+	Warhead@1: GrantExternalCondition
+		Condition: trapped
+		ValidStances: Ally, Neutral
+		ValidTargets: trappable
+		Range: 0c768
+
+GLKellSniper:
+	Inherits: CHGuardRifle
+	ValidTargets: Infantry, LoadedVehicle
+	Report: ijarwe1a.wav
+	Range: 12c0
+	Projectile: InstantHit
+		Blockable: true
+	Warhead@1Dam: SpreadDamage
+		Damage: 10000
+		ValidTargets: Infantry
+	Warhead@2Clear: OpenToppedDamage
+		ValidTargets: LoadedVehicle
+		Spread: 0c512
+		Damage: 12500
+		Amount: 1
+		DamageTypes: BulletDeath
+
+GLKellSniperVehicle:
+	Inherits: GLKellSniper
+	ValidTargets: DriverKill
+	InvalidTargets: DriverKillImmune, LoadedVehicle
+	Report: ijarwe2a.wav
+	ReloadDelay: 675
+	Warhead@1Dam: SpreadDamage
+		Damage: 7500
+	Warhead@3Driver: ChangeOwnerToNeutral
+		ValidTargets: DriverKill
+		InvalidTargets: Infantry, Ship, Structure, Wall, Husk, Air, DriverKillImmune, LoadedVehicle, MCImmune
+		ValidStances: Enemy
+		Range: 0c256
+
+GLKellAttach:
+	Inherits: GenericC4
+
+GENAWP:
+    Inherits: RA2AWP
+    ReloadDelay: 100
+    Range: 10c0
+
+GENAWPG:
+	Inherits: RA2AWPG
+    ReloadDelay: 80
+    Range: 12c0
+
+#####################################################
+# RPG Weapons
+#####################################################
+GLTrooperRPGMissile:
+	Inherits: ^MissileWeapon
+	Report: irpgweaa.wav, irpgweab.wav, irpgweac.wav, irpgwead.wav, irpgweae.wav
+
+GLTrooperRPGMissileG:
+	Inherits: GLTrooperRPGMissile
+	Range: 7c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 1750
+GLTrooperRPGMissileToxin:
+	Inherits: GLTrooperRPGMissile
+	Inherits@Toxin: GLAnthraxBlue
+
+GLTrooperRPGMissileGToxin:
+	Inherits: GLTrooperRPGMissileG
+	Inherits@Toxin: GLAnthraxBlue
+#####################################################
+# Stinger Weapons
+#####################################################
+
+GLStingerTargeting:
+	ReloadDelay: 60
+	Range: 8c0
+	Projectile: InstantHit
+	ValidTargets: Ground, Water, Air
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Water, Air
+
+GLStingerSiteMissile:
+	Inherits: ^MissileWeapon
+	ReloadDelay: 50
+	Range: 8c0
+	Burst: 2
+	Report: missile6.aud
+	Projectile: MissileCA
+		RangeLimit: 9c204
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+		Versus:
+			None: 10
+			Wood: 75
+			Light: 35
+            Medium: 70
+			Heavy: 100
+			Concrete: 50
+
+GLStingerSiteMissileToxin:
+	Inherits: GLStingerSiteMissile
+	Inherits@Toxin: GLAnthraxBlue
+
+#####################################################
+# Buggy Weapons
+#####################################################
+
+GLRocketBuggyMissiles:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 150
+	Range: 10c0
+	MinRange: 1c256
+	Burst: 6
+	BurstDelays: 10
+	Report: vrocweaa.wav, vrocweab.wav, vrocweac.wav, vrocwead.wav, vrocweae.wav, vrocweaf.wav
+	ValidTargets: Ground
+	TargetActorCenter: true
+	Projectile: MissileCA
+		MinimumLaunchAngle: 62
+		MaximumLaunchAngle: 62
+		RangeLimit: 12c512
+		Speed: 341
+	Warhead@1Dam: SpreadDamage
+		Spread: 384
+		Damage: 2500
+		ValidTargets: Ground
+		DamageTypes: Prone50Percent, TriggerProne, MakeScrapbox, ExplosionDeath
+
+GLRocketBuggyMissilesToxin:
+	Inherits: GLRocketBuggyMissiles
+	Inherits@Toxin: GLAnthraxBlue
+#####################################################
+# Technical Weapons
+#####################################################
+
+GLTechnicalMG:
+	Inherits: MachineGun
+	Burst: 5
+	Range: 3c0
+	Report: vtecweaa.wav, vtecweab.wav, vtecweac.wav, vtecwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 1500
+		Versus:
+			None: 100
+			Wood: 50
+			Light: 50
+            Medium: 35
+			Heavy: 25
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath, MakeScrapbox
+
+GLTechnicalShell:
+	Inherits: 25mm
+	ReloadDelay: 20
+	Report: vscoweaa.wav, vscoweab.wav, vscoweac.wav, vscowead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+		Versus:
+			None: 100
+			Wood: 50
+			Light: 50
+            Medium: 45
+			Heavy: 40
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, MakeScrapbox
+
+GLTechnicalMissile:
+	Inherits: BikeRockets
+	ReloadDelay: 20
+	Report: irpgweaa.wav, irpgweab.wav, irpgweac.wav, irpgwead.wav, irpgweae.wav
+    ValidTargets: Ground, Air
+	Warhead@1Dam: SpreadDamage
+        ValidTargets: Ground, Air
+		Damage: 4000
+		Versus:
+			None: 125
+			Wood: 50
+			Light: 80
+            Medium: 65
+			Heavy: 55
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath, MakeScrapbox
+
+GLTunnelWeap:
+	Inherits: MachineGun
+	Burst: 9
+	Range: 8c0
+	Report: vtecweaa.wav, vtecweab.wav, vtecweac.wav, vtecwead.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 900
+		Versus:
+			None: 100
+			Wood: 50
+			Light: 50
+            Medium: 35
+			Heavy: 25
+            Concrete: 20
+
+#####################################################
+# Gunboat Weapons
+#####################################################
+GLGunboatMG:
+	Inherits: GLTechnicalMG
+	Burst: 8
+	Range: 6c0
+	ValidTargets: Infantry, Air
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Infantry, Air
+
+GLGunboatShell:
+	Inherits: GLTechnicalShell
+	ValidTargets: Vehicle, Underwater, Structure, Wall, Ship
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Vehicle, Underwater, Structure, Wall, Ship
+
+#####################################################
+# Quad Cannon Weapons
+#####################################################
+
+GLQuadCannonGround:
+	Inherits: APCGun
+	ReloadDelay: 3
+	Range: 3c768
+	Report: vquaweaa.wav, vquaweab.wav, vquaweac.wav, vquawead.wav, vquaweae.wav, vquaweaf.wav, vquaweag.wav
+	Warhead@1Dam: SpreadDamage
+		Damage: 1200
+		Versus:
+			None: 50
+			Wood: 40
+			Light: 50
+            Medium: 25
+			Heavy: 10
+            Concrete: 20
+		DamageTypes: Prone50Percent, TriggerProne, BulletDeath, MakeScrapbox
+	Warhead@2Eff: CreateEffect
+		Explosions: piffs
+		ValidTargets: Ground, Water, Air
+
+GLQuadCannonAir:
+	Inherits: GLQuadCannonGround
+	ReloadDelay: 3
+	Range: 8c768
+	ValidTargets: Air
+	Projectile: InstantHit
+		Blockable: false
+	Warhead@1Dam: SpreadDamage
+		Damage: 500
+		ValidTargets: Air
+		Versus:
+			None: 100
+			Wood: 25
+			Light: 75
+            Medium: 60
+			Heavy: 50
+            Concrete: 20
+#####################################################
+# Scud Weapons
+#####################################################
+
+GLAScudLaunch:
+	ReloadDelay: 100
+	MinRange: 4c0
+	Range: 17c0
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+
+GLASCUD:
+	Inherits: SCUD
+	MinRange: 4c0
+	ReloadDelay: 250
+	Range: 17c0
+	Report: vscuweaa.wav
+	-Projectile:
+	Projectile: Missile
+		Arm: 0
+		Blockable: false
+		Inaccuracy: 128
+		Shadow: true
+		HorizontalRateOfTurn: 15
+		Image: glscudmiss
+		TrailImage: laserfire
+		ContrailLength: 0
+		Speed: 150
+		RangeLimit: 19c0
+		MinimumLaunchAngle: 255
+		MaximumLaunchAngle: 255
+		MaximumLaunchSpeed: 384
+		MinimumLaunchSpeed: 384
+		CruiseAltitude: 8800
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c768
+		Damage: 5000
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash
+
+GLASCUDTOXIN:
+	Inherits: GLASCUD
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c512
+		Damage: 3000
+	Warhead@Cluster: FireFragment
+		Weapon: GLToxinExplodeClust1
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash_green
+
+GLASCUDPOWER:
+	Inherits: GLASCUD
+	Burst: 9
+	BurstDelays: 10
+	ReloadDelay: 500
+	Range: 1000c0
+	-Projectile:
+	Projectile: Bullet
+		Speed: 256
+		Blockable: false
+		LaunchAngle: 45
+		Inaccuracy: 12c0
+		TrailImage: laserfire
+		Image: glscudmiss
+		Shadow: true
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 8000
+		ValidTargets: Ground, Air, Water
+	Warhead@Cluster: FireFragment
+		Weapon: GLToxinExplodeClust1
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash_green
+		ImpactSounds: xplobig6.aud, kaboom22.aud
+	Warhead@4EffWater: CreateEffect
+		Explosions: ex_big_flash_green
+		ImpactSounds: xplobig6.aud, kaboom22.aud
+	Warhead@13Shake: ShakeScreen
+		Duration: 10
+		Intensity: 5
+		Multiplier: 1,1
+	Warhead@Cam: RevealShroud
+		Radius: 5c0
+		RevealGeneratedShroud: true
+		Duration: 240
+
+GLASCUDPOWER2:
+	Inherits: GLASCUDPOWER
+	Warhead@Cluster: FireFragment
+		Weapon: GLToxinExplodeClust2
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash_blue
+	Warhead@4EffWater: CreateEffect
+		Explosions: ex_big_flash_blue
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c768
+		Damage: 5000
+
+GLASCUDPOWER3:
+	Inherits: GLASCUDPOWER
+	Warhead@Cluster: FireFragment
+		Weapon: GLToxinExplodeClust3
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash_purple
+	Warhead@4EffWater: CreateEffect
+		Explosions: ex_big_flash_purple
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c768
+		Damage: 6000
+
+GLToxinCluster:
+	Inherits@Contaminated: TractorGLAnthraxGreen
+	Burst: 1
+	Range: 3c0
+	Projectile: Bullet
+		Speed: 50
+		Blockable: false
+		Inaccuracy: 1c512
+	Warhead@1Dam: TargetDamage
+
+GLToxinClusterSmall:
+	Inherits: GLAnthraxLarge
+	Burst: 1
+	Range: 4c512
+	Projectile: Bullet
+		Speed: 100
+		Blockable: false
+		Inaccuracy: 2c512
+	Warhead@1Dam: TargetDamage
+
+GLToxinClusterBlue:
+	Inherits: GLToxinCluster
+	Inherits@Contaminated: TractorGLAnthraxBlue
+
+GLToxinClusterSmallBlue:
+	Inherits@1: GLToxinClusterSmall
+	Inherits@2: GLAnthraxBlueLarge
+
+GLToxinClusterPurple:
+	Inherits: GLToxinCluster
+	Inherits@Contaminated: TractorGLAnthraxPurple
+
+GLToxinClusterSmallPurple:
+	Inherits@1: GLToxinClusterSmall
+	Inherits@2: GLAnthraxPurpleLarge
+
+GLToxinExplode:
+	Inherits: ^DamagingExplosion
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 11500
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: green_building
+		ImpactSounds: xplobig6.aud
+	Warhead@3Smu: LeaveSmudge
+		SmudgeType: Scorch
+
+GLToxinExplodeBlue:
+	Inherits: ^DamagingExplosion
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 11500
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: blue_building
+		ImpactSounds: xplobig6.aud
+	Warhead@3Smu: LeaveSmudge
+		SmudgeType: Scorch
+
+GLToxinExplodeClust1:
+	Projectile: InstantExplode
+	ReloadDelay: 40
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1000
+	Warhead@3Clu: FireShrapnel
+		InvalidTargets: ToxinImmune
+		Weapon: GLToxinClusterSmall
+		Amount: 3
+	Warhead@2Eff: CreateEffect
+		Explosions: green_building
+
+GLToxinExplodeClust2:
+	Inherits: GLToxinExplodeClust1
+	Warhead@1Dam: SpreadDamage
+		Damage: 1250
+	Warhead@3Clu: FireShrapnel
+		InvalidTargets: ToxinImmune
+		Weapon: GLToxinClusterSmallBlue
+	Warhead@2Eff: CreateEffect
+		Explosions: blue_building
+
+GLToxinExplodeClust3:
+	Inherits: GLToxinExplodeClust2
+	Warhead@1Dam: SpreadDamage
+		Damage: 1500
+	Warhead@3Clu: FireShrapnel
+		InvalidTargets: ToxinImmune
+		Weapon: GLToxinClusterSmallPurple
+	Warhead@2Eff: CreateEffect
+		Explosions: purple_building
+
+GLToxinBomb:
+	Inherits: ParaBomb
+	ReloadDelay: 100
+	Range: 1c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c512
+		Damage: 50000
+		Versus:
+			None: 100
+			Wood: 50
+			Light: 100
+            Medium: 125
+			Heavy: 150
+            Concrete: 20
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+		ValidTargets: Ground, Water, Air
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash_green
+	Warhead@4EffWater: CreateEffect
+		Explosions: ex_big_flash_green
+	Warhead@Cluster: FireShrapnel
+		InvalidTargets: ToxinImmune
+		Weapon: GLToxinClusterSmall
+		Amount: 9
+
+GLToxinBombBlue:
+	Inherits: GLToxinBomb
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash_blue
+	Warhead@4EffWater: CreateEffect
+		Explosions: ex_big_flash_blue
+	Warhead@Cluster: FireShrapnel
+		InvalidTargets: ToxinImmune
+		Weapon: GLToxinClusterSmallBlue
+
+GLToxinBombPurple:
+	Inherits: GLToxinBombBlue
+	Warhead@3Eff: CreateEffect
+		Explosions: ex_big_flash_purple
+	Warhead@4EffWater: CreateEffect
+		Explosions: ex_big_flash_purple
+	Warhead@Cluster: FireShrapnel
+		InvalidTargets: ToxinImmune
+		Weapon: GLToxinClusterSmallPurple
+
+GLSneakAttack:
+	Range: 3c0
+	Projectile: InstantHit
+	Warhead@1: CreateEffect
+		Image: tsdig
+		Explosions: idle
+		ExplosionPalette: tseffect
+		ImpactSounds: subdril1.aud
+		ImpactActors: false
+	Warhead@2: SpawnActor
+		Actors: gle1,gle1,gle1,gle3,gle3,glquad,glquad,glquad,glquad,glscorpion,glscorpion
+		Delay: 5
+
+GLAmbush1:
+	Range: 3c0
+	Projectile: InstantHit
+	Warhead@2: SpawnActor
+		Actors: gle1,gle1,gle1,gle1
+		Delay: 5
+GLAmbush2:
+	Range: 3c0
+	Projectile: InstantHit
+	Warhead@2: SpawnActor
+		Actors: gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1
+		Delay: 5
+GLAmbush3:
+	Range: 3c0
+	Projectile: InstantHit
+	Warhead@2: SpawnActor
+		Actors: gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1,gle1
+		Delay: 5
+
+GLAmbush3Toxin:
+	Inherits: GLAmbush3
+	Warhead@2: SpawnActor
+		Actors: GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin, GLE1toxin
+
+
+
+GLBikeHusk:
+	Inherits: ^GeneralsLightHusks
+	Projectile: Bullet
+		Image: glbiker
+
+GLBikeHuskCluster:
+	Inherits: ^GeneralsHuskClusterExplode
+	Warhead@Shrapnel: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: GLBikeHusk
+
+GLTechnicalHusk:
+	Inherits: ^GeneralsLightHusks
+	Projectile: Bullet
+		Image: glpickup
+
+GLTechnicalHuskCluster:
+	Inherits: ^GeneralsHuskClusterExplode
+	Warhead@Shrapnel: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: GLTechnicalHusk
+
+GLTechnicalHusk2:
+	Inherits: ^GeneralsLightHusks
+	Projectile: Bullet
+		Image: glvan
+
+GLTechnicalHusk2Cluster:
+	Inherits: ^GeneralsHuskClusterExplode
+	Warhead@Shrapnel: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: GLTechnicalHusk2
+
+GLBuggyHusk:
+	Inherits: ^GeneralsLightHusks
+	Projectile: Bullet
+		Image: glbggy
+
+GLBuggyHuskCluster:
+	Inherits: ^GeneralsHuskClusterExplode
+	Warhead@Shrapnel: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: GLBuggyHusk
+
+GLRadarvanHusk:
+	Inherits: ^GeneralsLightHusks
+	Projectile: Bullet
+		Image: glradar
+
+GLRadarvanHuskCluster:
+	Inherits: ^GeneralsHuskClusterExplode
+	Warhead@Shrapnel: FireShrapnel
+		InvalidTargets: FireImmune
+		Weapon: GLRadarvanHusk
