@@ -1425,6 +1425,8 @@
 
 ^VehicleTD:
 	Inherits@1: ^Vehicle
+	Buildable:
+		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	WithDamageOverlay:
@@ -1440,6 +1442,8 @@
 
 ^TankTD:
 	Inherits: ^Tank
+	Buildable:
+		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	WithDamageOverlay:
@@ -2091,6 +2095,8 @@
 
 ^PlaneTD:
 	Inherits@1: ^Plane
+	Buildable:
+		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	EjectOnDeath:
@@ -2122,6 +2128,8 @@
 
 ^HelicopterTD:
 	Inherits@1: ^Helicopter
+	Buildable:
+		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	EjectOnDeath:
@@ -2208,7 +2216,7 @@
 	Inherits@wflash: ^WhiteFlash
 	Inherits@gflash: ^GreenFlash
 	Inherits@HACKABLE: ^Hackable
-	WithColoredOverlay@IRONCURTAIN:
+	Inherits@EarlyGame: ^EarlyGameBuildBoost
 		RequiresCondition: invulnerability && !forceshield
 	Buildable:
 		Queue: Building
@@ -2267,7 +2275,8 @@
 	GrantConditionOnDamageState@DAMAGED:
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
-	#EarlyGameBuildBoost
+
+^EarlyGameBuildBoost:
 	GrantExternalConditionToOwner@BuildingsOwned:
 		Condition: BuildingsOwned
 	ProductionTimeMultiplier@BuildUpBoost:
@@ -2361,6 +2370,8 @@
 
 ^DefenseTD:
 	Inherits@1: ^Defense
+	Buildable:
+		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	ActorPreviewPlaceBuildingPreview:
@@ -3498,3 +3509,58 @@
 ^RearmableAircraft:
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies, chairport
+
+^InfantryProduction:
+	RallyPoint:
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: -170,810,0
+		ExitCell: 1,2
+		ProductionTypes: Soldier, Infantry
+	Production:
+		Produces: Infantry, Soldier
+		PauseOnCondition: forceshield || invulnerability || being-warped
+	GrantExternalConditionToProduced:
+		Condition: produced
+	ProductionBar:
+		ProductionType: Infantry
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+
+^VehicleProduction:
+	RallyPoint:
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: 213,-128,0
+		ExitCell: 1,2
+	Production:
+		Produces: Vehicle
+		PauseOnCondition: forceshield || invulnerability || being-warped
+	GrantExternalConditionToProduced:
+		Condition: produced
+	ProductionBar:
+		ProductionType: Vehicle
+	ProvidesPrerequisite@any:
+		Prerequisite: vehicles.any
+
+^AircraftProduction:
+	Exit@1:
+		ExitCell: 1,1
+		Facing: 192
+	RallyPoint:
+	Production:
+		Produces: Aircraft, Plane
+		PauseOnCondition: forceshield || invulnerability || being-warped
+
+^StructureProduction:
+	ProductionBar@Building:
+		ProductionType: Building
+	ProductionBar@Defense:
+		ProductionType: Defense
+		Color: 8A8A8A
+	Production:
+		Produces: Building, Defense
+		PauseOnCondition: forceshield || invulnerability || being-warped
+	BaseProvider:
+		PauseOnCondition: being-captured
+		Range: 16c0

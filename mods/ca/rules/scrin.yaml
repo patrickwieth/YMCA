@@ -2906,6 +2906,7 @@ SFAC:
 	Inherits: ^ScrinBuilding
 	Inherits@shape: ^3x2Shape
 	Inherits@BOTI: ^BotFallbackInsurance
+	Inherits@StructureProduction: ^StructureProduction
 	Building:
 		Footprint: xxx xxx ===
 		Dimensions: 3,3
@@ -2927,9 +2928,6 @@ SFAC:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	Production:
-		Produces: Building, Defense
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -2972,20 +2970,11 @@ SFAC:
 	ProvidesPrerequisite@harbinger:
 		Factions: harbinger
 		Prerequisite: structures.harbinger
-	ProductionBar@Building:
-		ProductionType: Building
-	ProductionBar@Defense:
-		ProductionType: Defense
-		Color: 8A8A8A
-	BaseProvider:
-		PauseOnCondition: being-captured
-		Range: 16c0
 	WithBuildingPlacedAnimation:
 		RequiresCondition: !build-incomplete && !chrono-vortex
 	Power:
 		Amount: 0
 		RequiresCondition: !being-warped
-	ProvidesPrerequisite@buildingname:
 	ConyardChronoReturn:
 		ReturnOriginalActorOnCondition: build-incomplete
 		Condition: chrono-vortex
@@ -3158,6 +3147,7 @@ PORT:
 	Inherits: ^ScrinBuilding
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@InfantryProduction: ^InfantryProduction
 	Selectable:
 		Bounds: 48,48
 	HitShape:
@@ -3192,18 +3182,10 @@ PORT:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,512,0
 		ExitCell: 1,2
-	Production:
-		Produces: Infantry, Soldier
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	ProductionBar:
-		ProductionType: Infantry
-	ProvidesPrerequisite@infantryany:
-		Prerequisite: infantry.any
 	ProvidesPrerequisite@scrin:
 		Factions: scrin, reaper, traveler, harbinger
 		Prerequisite: infantry.scrin
@@ -3305,9 +3287,6 @@ WSPH:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: vehicles.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: vehicles.sovietvanilla
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: vehicles.russia
@@ -3371,9 +3350,6 @@ WSPH:
 	ProvidesPrerequisite@sovietstructure:
 		RequiresPrerequisites: structures.soviet
 		Prerequisite: vehicles.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: vehicles.sovietvanilla
 	ProvidesPrerequisite@russianstructure:
 		RequiresPrerequisites: structures.russia
 		Prerequisite: vehicles.russia

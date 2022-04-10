@@ -137,7 +137,7 @@ SPEN:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 50
-		Prerequisites: anypower, ~structures.soviet, ~techlevel.low
+		Prerequisites: anypower, ~structures.soviet
 		Description: Produces and repairs\nsubmarines and transports.
 		BuildDurationModifier: 25
 	Targetable:
@@ -233,9 +233,6 @@ SPEN:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: ships.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: ships.sovietvanilla
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: ships.russia
@@ -248,9 +245,6 @@ SPEN:
 	ProvidesPrerequisite@sovietstructure:
 		RequiresPrerequisites: structures.soviet
 		Prerequisite: ships.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: ships.sovietvanilla
 	ProvidesPrerequisite@russianstructure:
 		RequiresPrerequisites: structures.russia
 		Prerequisite: ships.russia
@@ -1260,12 +1254,13 @@ WEAP:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@VehicleProduction: ^VehicleProduction
 	Selectable:
 		Bounds: 72,48
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
-		Prerequisites: proc, ~structures.ra, ~techlevel.low
+		Prerequisites: proc, ~structures.ra
 		Description: Produces vehicles.
 		BuildDurationModifier: 25
 	Valued:
@@ -1290,17 +1285,6 @@ WEAP:
 	WithProductionDoorOverlay:
 		RequiresCondition: !build-incomplete
 		Sequence: build-top
-	RallyPoint:
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: 213,-128,0
-		ExitCell: 1,2
-	Production:
-		Produces: Vehicle
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	ProvidesPrerequisite@any:
-		Factions: gdi, talon, zocom, eagle, nod, marked, blackh, legion, allies, england, france, germany, soviet, russia, ukraine, iraq
-		Prerequisite: vehicles.any
 	ProvidesPrerequisite@allies:
 		Factions: allies, england, france, germany
 		Prerequisite: vehicles.allies
@@ -1325,9 +1309,6 @@ WEAP:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: vehicles.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: vehicles.sovietvanilla
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: vehicles.russia
@@ -1379,9 +1360,6 @@ WEAP:
 	ProvidesPrerequisite@sovietstructure:
 		RequiresPrerequisites: structures.soviet
 		Prerequisite: vehicles.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: vehicles.sovietvanilla
 	ProvidesPrerequisite@russianstructure:
 		RequiresPrerequisites: structures.russia
 		Prerequisite: vehicles.russia
@@ -1430,8 +1408,6 @@ WEAP:
 	ProvidesPrerequisite@v3rl:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: vehicles.v3rl
-	ProductionBar:
-		ProductionType: Vehicle
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
@@ -1484,9 +1460,6 @@ FACT:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: structures.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: structures.sovietvanilla
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: structures.russia
@@ -1834,6 +1807,7 @@ AFLD:
 	Inherits: ^Building
 	Inherits@shape: ^3x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@AircraftProduction: ^AircraftProduction
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	HitShape:
 		UseTargetableCellsOffsets: false
@@ -1868,17 +1842,10 @@ AFLD:
 		RequiresCondition: !being-captured
 		ExitCell: 1,1
 		Facing: 192
-	RallyPoint:
-	Production:
-		Produces: Aircraft, Plane
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Reservable:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: aircraft.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: aircraft.sovietvanilla
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: aircraft.russia
@@ -1891,9 +1858,6 @@ AFLD:
 	ProvidesPrerequisite@sovietstructure:
 		RequiresPrerequisites: structures.soviet
 		Prerequisite: aircraft.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: aircraft.sovietvanilla
 	ProvidesPrerequisite@russianstructure:
 		RequiresPrerequisites: structures.russia
 		Prerequisite: aircraft.russia
@@ -1903,8 +1867,8 @@ AFLD:
 	ProvidesPrerequisite@iraqistructure:
 		RequiresPrerequisites: structures.iraq
 		Prerequisite: aircraft.iraq
-	ProvidesPrerequisite@afld.generic:
-		Prerequisite: afld.generic
+	ProvidesPrerequisite@aircraft.any:
+		Prerequisite: aircraft.any
 	AirstrikePower@spyplane:
 		OrderName: spyplane
 		Prerequisites: aircraft.soviet
@@ -2290,6 +2254,7 @@ BARR:
 	Inherits: ^Building
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@InfantryProduction: ^InfantryProduction
 	Selectable:
 		Bounds: 48,48
 	HitShape:
@@ -2298,7 +2263,7 @@ BARR:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 30
-		Prerequisites: anypower, ~structures.soviet, ~techlevel.infonly
+		Prerequisites: anypower, ~structures.soviet
 		Description: Trains infantry.
 		BuildDurationModifier: 25
 	Valued:
@@ -2331,13 +2296,6 @@ BARR:
 		SpawnOffset: -725,640,0
 		ExitCell: 0,2
 		ProductionTypes: Soldier, Infantry
-	Production:
-		Produces: Infantry, Soldier
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	GrantExternalConditionToProduced:
-		Condition: produced
-	ProductionBar:
-		ProductionType: Infantry
 	ProvidesPrerequisite@infantryany:
 		Prerequisite: infantry.any
 	ProvidesPrerequisite@infantryra:
@@ -2345,9 +2303,6 @@ BARR:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: infantry.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: infantry.sovietvanilla
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: infantry.russia
@@ -2360,9 +2315,6 @@ BARR:
 	ProvidesPrerequisite@sovietstructure:
 		RequiresPrerequisites: structures.soviet
 		Prerequisite: infantry.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: infantry.sovietvanilla
 	ProvidesPrerequisite@russianstructure:
 		RequiresPrerequisites: structures.russia
 		Prerequisite: infantry.russia
@@ -3046,6 +2998,7 @@ WEAP.TD:
 	Inherits@shape: ^3x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@gdiupg: ^GDIUpgradeProducer
+	Inherits@VehicleProduction: ^VehicleProduction
 	RenderSprites:
 		Image: awep
 	Selectable:
@@ -3080,9 +3033,6 @@ WEAP.TD:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	ProvidesPrerequisite@any:
-		Factions: gdi, talon, zocom, eagle, nod, marked, blackh, legion, allies, england, france, germany, soviet, russia, ukraine, iraq
-		Prerequisite: vehicles.any
 	ProvidesPrerequisite@allies:
 		Factions: allies, england, france, germany
 		Prerequisite: vehicles.allies
@@ -3092,9 +3042,6 @@ WEAP.TD:
 	ProvidesPrerequisite@ra:
 		Factions: allies, england, france, germany, soviet, russia, ukraine, iraq
 		Prerequisite: vehicles.ra
-	ProvidesPrerequisite@alliesvanilla:
-		Factions: allies
-		Prerequisite: vehicles.alliesvanilla
 	ProvidesPrerequisite@england:
 		Factions: england
 		Prerequisite: vehicles.england
@@ -3107,9 +3054,6 @@ WEAP.TD:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: vehicles.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: vehicles.sovietvanilla
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: vehicles.russia
@@ -3146,9 +3090,6 @@ WEAP.TD:
 	ProvidesPrerequisite@alliedstructure:
 		RequiresPrerequisites: structures.allies
 		Prerequisite: vehicles.allies
-	ProvidesPrerequisite@alliedvanillastructure:
-		RequiresPrerequisites: structures.alliesvanilla
-		Prerequisite: vehicles.alliesvanilla
 	ProvidesPrerequisite@englishstructure:
 		RequiresPrerequisites: structures.england
 		Prerequisite: vehicles.england
@@ -3161,9 +3102,6 @@ WEAP.TD:
 	ProvidesPrerequisite@sovietstructure:
 		RequiresPrerequisites: structures.soviet
 		Prerequisite: vehicles.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: vehicles.sovietvanilla
 	ProvidesPrerequisite@russianstructure:
 		RequiresPrerequisites: structures.russia
 		Prerequisite: vehicles.russia
@@ -3216,18 +3154,12 @@ WEAP.TD:
 	WithProductionDoorOverlay:
 		RequiresCondition: !build-incomplete
 		Sequence: build-top
-	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -341,-341,0
 		ExitCell: 0,2
-	Production:
-		Produces: Vehicle
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	ProductionBar:
-		ProductionType: Vehicle
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
@@ -3324,9 +3256,6 @@ AIRS:
 	ProvidesPrerequisite@soviet:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: vehicles.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: vehicles.sovietvanilla
 	ProvidesPrerequisite@russia:
 		Factions: russia
 		Prerequisite: vehicles.russia
@@ -3378,9 +3307,6 @@ AIRS:
 	ProvidesPrerequisite@sovietstructure:
 		RequiresPrerequisites: structures.soviet
 		Prerequisite: vehicles.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: vehicles.sovietvanilla
 	ProvidesPrerequisite@russianstructure:
 		RequiresPrerequisites: structures.russia
 		Prerequisite: vehicles.russia
@@ -4731,8 +4657,8 @@ AFLD.GDI:
 	ProvidesPrerequisite@eaglestructure:
 		RequiresPrerequisites: structures.eagle
 		Prerequisite: aircraft.eagle
-	ProvidesPrerequisite@afld.generic:
-		Prerequisite: afld.generic
+	ProvidesPrerequisite@aircraft.any:
+		Prerequisite: aircraft.any
 	AirstrikePower@uav:
 		OrderName: gdiuav
 		Prerequisites: aircraft.gdi, !aircraft.talon
@@ -4824,7 +4750,7 @@ AFLD.allies:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 130
-		Prerequisites: dome, ~structures.allies, ~techlevel.high
+		Prerequisites: dome, ~structures.allies
 		Description: Produces and reloads aircraft.\n
 		BuildDurationModifier: 25
 	Valued:
@@ -4879,8 +4805,8 @@ AFLD.allies:
 	ProvidesPrerequisite@germanstructure:
 		RequiresPrerequisites: structures.germany
 		Prerequisite: aircraft.germany
-	ProvidesPrerequisite@afld.generic:
-		Prerequisite: afld.generic
+	ProvidesPrerequisite@aircraft.any:
+		Prerequisite: aircraft.any
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
