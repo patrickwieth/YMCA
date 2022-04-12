@@ -3415,3 +3415,26 @@
 		Condition: damage
 	UnloadOnCondition@AIUNLOAD:
 		RequiresCondition: damage || aiming
+
+^CloakedAttacker:
+	Cloak@NORMAL:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakedCondition: hidden
+		Palette: cloaktd
+		CloakSound: gstealon.aud
+		UncloakSound: gstealof.aud
+		IsPlayerPalette: true
+		CloakTypes: Cloak
+		RequiresCondition: !cloak-force-disabled
+		UncloakOn: Unload, Infiltrate, Demolish, Dock
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Heavy, Critical
+	WithDecoration@hidden:
+		Image: pips
+		Sequence: pip-hidden
+		Palette: temptd
+		ReferencePoint: Top, Right
+		ZOffset: 256
+		RequiresCondition: hidden

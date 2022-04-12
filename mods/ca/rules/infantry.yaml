@@ -1534,6 +1534,7 @@ SNIP:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
+	Inherits@CloakedAttacker: ^CloakedAttacker
 	RenderSprites:
 		Image: sniper
 	Buildable:
@@ -1580,27 +1581,6 @@ SNIP:
 	Mobile:
 		speed: 73
 		Voice: Move
-	Cloak@NORMAL:
-		InitialDelay: 90
-		CloakDelay: 90
-		CloakedCondition: hidden
-		Palette: cloaktd
-		CloakSound: gstealon.aud
-		UncloakSound: gstealof.aud
-		IsPlayerPalette: true
-		CloakTypes: Cloak
-		RequiresCondition: !cloak-force-disabled
-		UncloakOn: Unload, Infiltrate, Demolish, Dock, Attack
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Heavy, Critical
-	WithDecoration@hidden:
-		Image: pips
-		Sequence: pip-hidden
-		Palette: temptd
-		ReferencePoint: Top, Right
-		ZOffset: 256
-		RequiresCondition: hidden
 	AttackFrontal:
 		Voice: Attack
 		Armaments: primary, driver_snipe, laser
