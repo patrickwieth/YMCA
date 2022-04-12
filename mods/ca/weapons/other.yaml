@@ -2504,3 +2504,18 @@ AirDummyAim:
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Air
+
+AttachShadowBeacon:
+	Warhead@AttachCamera: AttachActor
+		Range: 341
+		Actor: shadow.beacon.camera
+		AttachSounds: shad-beacontrigger1.aud
+		MissSounds: dud1.aud
+		ValidTargets: ShadowBeacon
+	Warhead@TargetValidator: SpreadDamage
+		ValidTargets: ShadowBeacon
+	Warhead@highlight: GrantExternalCondition
+		Range: 341
+		Duration: 2
+		Condition: redhighlight
+		ValidTargets: ShadowBeacon

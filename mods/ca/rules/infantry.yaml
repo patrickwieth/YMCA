@@ -617,6 +617,7 @@ SPY:
 E7:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -631,14 +632,14 @@ E7:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 11000
+		HP: 16000
 	Mobile:
-		speed: 73
+		speed: 85
 		Voice: Move
 	Guard:
 		Voice: Move
 	RevealsShroud:
-		Range: 6c0
+		Range: 10c0
 	Passenger:
 		PipType: Red
 		Voice: Move
@@ -1405,6 +1406,7 @@ RMBO:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -1413,28 +1415,35 @@ RMBO:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: ~infantry.td, techcenter, ~commander_tree.advanced_infantry_training, ~techlevel.high
+		Prerequisites: ~infantry.td, techcenter, ~commander_tree.advanced_infantry_training
 		Queue: Infantry
 		IconPalette: chrometd
 		BuildLimit: 1
-		Description: Elite infantry unit. Armed with\na SMG and C4.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Buildings\n  Weak vs Aircraft\n  Special Ability: C4 Explosives
+		Description: Elite infantry unit. Armed with\na Grenadelauncher and C4.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Buildings\n  Weak vs Aircraft\n  Special Ability: C4 Explosives
 	Mobile:
 		speed: 73
 		Voice: Move
 	Guard:
 		Voice: Move
 	Health:
-		HP: 11000
+		HP: 16000
+	ChangesHealth:
+		PercentageStep: 4
+		Delay: 25
+		HealIfBelow: 100
+		DamageCooldown: 10
 	Passenger:
 		PipType: Red
 		Voice: Move
 	RevealsShroud:
-		Range: 6c0
-	Armament:
-		Weapon: smg
-	Armament@garrison:
+		Range: 10c0
+	Armament@PRIMARY:
+		Weapon: GrenadeLauncher
+		LocalOffset: 0,0,155
+	Armament@Garrison:
 		Name: mounted
-		Weapon: smgE
+		Weapon: GrenadeLauncher
+		LocalOffset: 0,0,155
 	Armament@sapper:
 		Weapon: PlaceC4
 		Cursor: c4
@@ -1601,6 +1610,7 @@ BORI:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	RenderSprites:
 		Image: boris
 	Buildable:
@@ -1617,7 +1627,7 @@ BORI:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 11000
+		HP: 16000
 	Mobile:
 		speed: 73
 		Voice: Move
@@ -1625,7 +1635,7 @@ BORI:
 	Guard:
 		Voice: Move
 	RevealsShroud:
-		Range: 6c0
+		Range: 10c0
 	Passenger:
 		PipType: Red
 		Voice: Move
@@ -1771,6 +1781,7 @@ SAB:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
+	Inherits@CloakedInfiltrator: ^CloakedInfiltrator
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1815,20 +1826,6 @@ SAB:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
-	Cloak:
-		InitialDelay: 100
-		CloakDelay: 200
-		CloakedCondition: hidden
-		Palette: cloaktd
-		IsPlayerPalette: true
-		CloakTypes: Cloak
-		RequiresCondition: !cloak-force-disabled
-		UncloakOn: Unload, Infiltrate, Demolish, Dock, Attack
-		CloakSound: gstealon.aud
-		UncloakSound: gstealof.aud
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Heavy, Critical
 	IgnoresDisguise:
 	DetectCloaked:
 		CloakTypes: Cloak, Thief
@@ -1841,6 +1838,7 @@ SAB:
 
 SpecOps:
 	Inherits: SAB
+	Inherits@CloakedAttacker: ^CloakedAttacker
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1860,8 +1858,6 @@ SpecOps:
 	Armament@Garrison:
 		Name: mounted
 		Weapon: relayMarker
-	Cloak:
-		UncloakOn: Unload, Infiltrate, Demolish, Dock
 	-Infiltrates@tec:
 	-Infiltrates@pwr:
 	-ProductionCostMultiplier@LegionBonus:
@@ -2870,6 +2866,34 @@ SHAD:
 	Rearmable:
 		RearmActors: shad.rearm
 
+SHAD.Commando:
+	Inherits: SHAD
+	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Tooltip:
+		Name: Shadow Commando
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 85
+		Prerequisites: ~infantry.nod, techcenter, ~commander_tree.advanced_infantry_training
+		Description: Commando unit with emp grenades, cloaked and with heavy anti-tank mines.\n  Strong vs Infantry\n  Weak vs Aircraft, Defenses
+	Valued:
+		Cost: 1200
+	RevealsShroud:
+		Range: 10c0
+	Health:
+		HP: 12000
+	Mobile:
+		Speed: 73
+	Armament@PRIMARY:
+		Weapon: ShadowOperativeGun.Commando
+	ReloadAmmoPool:
+		Delay: 500
+		Count: 1
+	Minelayer:
+		Mine: SHAB.commando
+		TileUnknownName: build-valid
+
 # ---- dummy actor because RearmableActors is required
 SHAD.REARM:
 	AlwaysVisible:
@@ -3029,7 +3053,7 @@ BH:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 150
-		Prerequisites: anyradar, ~infantry.blackh, ~techlevel.infonly
+		Prerequisites: radar, ~infantry.blackh, ~techlevel.infonly
 		Description: Elite precision flamethrower unit.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 500
@@ -3040,7 +3064,7 @@ BH:
 	Health:
 		HP: 13000
 	Mobile:
-		Speed: 49
+		Speed: 73
 		Voice: Move
 	RevealsShroud:
 		Range: 5c0
@@ -3089,7 +3113,7 @@ YURI:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 190
-		Prerequisites: ~barr, stek, ~commander_tree.yuri, ~techlevel.infonly
+		Prerequisites: ~barr, stek, ~commander_tree.yuri
 		BuildLimit: 1
 		Description: Elite specialist infantry.\n  Can mind-control enemy units and defenses.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Vehicles, Defenses\n  Weak vs Aircraft\n  Special Ability: Mind Blast
 	Valued:
@@ -3099,9 +3123,9 @@ YURI:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 11000
+		HP: 16000
 	Mobile:
-		Speed: 56
+		Speed: 73
 		Voice: Move
 	Armament@PRIMARY:
 		Weapon: EnslaveInfantry
@@ -3150,7 +3174,7 @@ YURI:
 		PauseOnCondition: being-warped
 		Armaments: primary, secondary, aidummy
 	RevealsShroud:
-		Range: 6c0
+		Range: 10c0
 	Passenger:
 		CustomPipType: red
 		Voice: Move
@@ -3207,10 +3231,10 @@ SEAL:
 	Mobile:
 		Speed: 60
 		Locomotor: seal
-	Armament:
+	Armament@PRIMARY:
 		Weapon: mp5
 		PauseOnCondition: onwater
-	Armament@garrison:
+	Armament@Garrison:
 		Name: mounted
 		Weapon: mp5e
 		MuzzleSequence: garrison-muzzle

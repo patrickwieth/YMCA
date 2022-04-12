@@ -333,7 +333,7 @@ SMEDI:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 240
-		Prerequisites: ~infantry.scrin, ~infantry.smedi, ~techlevel.infonly
+		Prerequisites: ~infantry.scrin, ~infantry.traveler, ~techlevel.infonly
 		Description: Heals nearby life forms.\n  Unarmed
 		IconPalette: chrome
 	Valued:
@@ -404,6 +404,7 @@ MAST:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
 	Buildable:
@@ -423,11 +424,11 @@ MAST:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 7500
+		HP: 16000
 	RevealsShroud:
-		Range: 8c0
+		Range: 12c0
 	Mobile:
-		Speed: 73
+		Speed: 80
 	Armament@PRIMARY:
 		Weapon: EnslaveInfantry
 		LocalOffset: 150,0,400
@@ -1539,6 +1540,8 @@ TPOD.chain.PLD:
 		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.pld, ~commander_tree.tripod.chainer,
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles, Projectiles.\n  Weak vs Aircraft, Energy Weapons
 		IconPalette: chrome
+	Valued:
+		Cost: 2300
 	Tooltip:
 		Name: Chainer Tripod (PLD)
 	Armament@pointdefense:
@@ -1565,6 +1568,20 @@ TPOD.acid.reflector:
 		IconPalette: chrome
 	Tooltip:
 		Name: Acid Tripod (Reflector)
+
+TPOD.acid.pld:
+	Inherits: TPOD.acid
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.acid, ~commander_tree.tripod.pld
+		Description: Heavy assault walker with corrosive acid weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Valued:
+		Cost: 2300
+	Tooltip:
+		Name: Acid Tripod (PLD)
+	Armament@pointdefense:
+		LocalOffset: 450,0,500
 
 RPTP:
 	Inherits: TPOD
@@ -1614,6 +1631,8 @@ RPTP.range.PLD:
 		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.pld, ~commander_tree.reaper.range
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
+	Valued:
+		Cost: 3000
 	Tooltip:
 		Name: Range Reaper Tripod (PLD)
 	Armament@pointdefense:
@@ -1650,6 +1669,8 @@ RPTP.acid.PLD:
 		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.pld, ~commander_tree.reaper.acid
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
+	Valued:
+		Cost: 2300
 	Tooltip:
 		Name: Acid Reaper Tripod (PLD)
 	Armament@pointdefense:
