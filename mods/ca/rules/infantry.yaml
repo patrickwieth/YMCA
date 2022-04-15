@@ -3130,15 +3130,24 @@ YURI:
 	Armament@PRIMARY:
 		Weapon: EnslaveInfantry
 		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: EnslaveVehicle
 		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
 	Armament@AIDummyAiming: ## Hack: Make AI deploy to attack structures
-		PauseOnCondition: being-warped
+		PauseOnCondition: !ammo || being-warped
 		Name: aidummy
 		RequiresCondition: botowner && !deployed
 		Weapon: YuriDummyAim
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 200
+		Count: 1
+		DelayAfterReset: 60
 	MindController:
 		ArmamentNames: primary, secondary
 		Capacity: 3
