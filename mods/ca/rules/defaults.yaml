@@ -248,22 +248,22 @@
 		Condition: rank-elite
 	DamageMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
-		Modifier: 95
+		Modifier: 90
 	DamageMultiplier@RANK-2:
 		RequiresCondition: rank-veteran == 2
-		Modifier: 90
+		Modifier: 80
 	DamageMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
-		Modifier: 85
+		Modifier: 70
 	FirepowerMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
-		Modifier: 105
+		Modifier: 110
 	FirepowerMultiplier@RANK-2:
 		RequiresCondition: rank-veteran == 2
-		Modifier: 110
+		Modifier: 120
 	FirepowerMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
-		Modifier: 125
+		Modifier: 130
 	ReloadDelayMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
 		Modifier: 95
@@ -680,25 +680,6 @@
 	GrantConditionOnPrerequisite@GDIUPG2:
 		Condition: gdiupglevel2
 		Prerequisites: miss.gdi2
-
-^NodHazmatUpgrade:
-	GrantConditionOnPrerequisite@NODUPG1:
-		Condition: nodupg1
-		Prerequisites: bio.nod
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
-		RequiresCondition: nodupg1
-
-^NodCyborgUpgrade:
-	SpeedMultiplier@NODUPG2:
-		RequiresCondition: nodupg2
-		Modifier: 115
-	DamageMultiplier@NODUPG2:
-		RequiresCondition: nodupg2
-		Modifier: 85
-	GrantConditionOnPrerequisite@NODUPG2:
-		Condition: nodupg2
-		Prerequisites: bio.nod2
 
 ^BinoUpgrade:
 	ExternalCondition@BINO:
@@ -1303,6 +1284,7 @@
 	Inherits@atomize: ^Atomizable
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@SLOWCRUSH: ^SlowedByCrushing
+	Inherits@ToxinRad: ^DriverBiologicalDamage
 	Buildable:
 		Queue: Vehicle
 	Huntable:
@@ -1398,16 +1380,6 @@
 	Crushable:
 		CrushClasses: tank
 		WarnProbability: 10
-	DamagedByTintedCells@RADSTRONG:
-		Damage: 100
-		DamageInterval: 8
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.strong
-	DamagedByTintedCells@RADMED:
-		Damage: 95
-		DamageInterval: 8
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.medium
 	DetectCloaked@UNDERBRIDGE:
 		CloakTypes: Underbridge
 		Range: 5c0
@@ -1473,7 +1445,6 @@
 	Inherits@2: ^GainsExperience
 	Inherits@3: ^InfantryExperienceHospitalOverrides
 	Inherits@4: ^SpriteActor
-	Inherits@5: ^NodHazmatUpgrade
 	Inherits@7: ^Warpable
 	Inherits@9: ^IronCurtainable-Kills
 	Inherits@10: ^Frenzy
@@ -1489,6 +1460,7 @@
 	Inherits@mind: ^MindControllable
 	Inherits@GMUT: ^GeneticallyMutatable
 	Inherits@handicaps: ^PlayerHandicaps
+	Inherits@biodamage: ^BiologicalDamage
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	Huntable:
@@ -1506,21 +1478,6 @@
 		Speed: 61
 		Locomotor: foot
 		PauseOnCondition: being-warped
-	DamagedByTerrain:
-		Terrain: Tiberium, BlueTiberium
-		Damage: 100
-		DamageInterval: 16
-		DamageTypes: ToxinDeath
-		RequiresCondition: !(hazmatsuits || being-warped)
-	GrantConditionOnPrerequisite@BIO:
-		Condition: hazmatsuits
-		Prerequisites: bio
-	WithDecoration@HAZMAT:
-		Image: pips
-		Sequence: pip-hazmat
-		Palette: chrometd
-		ReferencePoint: Bottom, Left
-		RequiresCondition: hazmatsuits
 	SpawnActorOnDeath:
 		Probability: 35
 		Actor: vice
@@ -1655,48 +1612,6 @@
 	DetectCloaked:
 		CloakTypes: Cloak
 		Range: 1c0
-	DamagedByTintedCells@RADSTRONG:
-		Damage: 500
-		DamageInterval: 8
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.strong
-		RequiresCondition: !(hazmatsuits || being-warped)
-	DamagedByTintedCells@RADMED:
-		Damage: 250
-		DamageInterval: 8
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.medium
-		RequiresCondition: !(hazmatsuits || being-warped)
-	DamagedByTintedCells@RADWEAK:
-		Damage: 125
-		DamageInterval: 8
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.weak
-		RequiresCondition: !(hazmatsuits || being-warped)
-	DamagedByTintedCells@RADSTRONGHAZMAT:
-		Damage: 50
-		DamageInterval: 8
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.strong
-		RequiresCondition: hazmatsuits
-	DamagedByTintedCells@RADMEDHAZMAT:
-		Damage: 25
-		DamageInterval: 8
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.medium
-		RequiresCondition: hazmatsuits
-	DamagedByTintedCells@RADWEAKHAZMAT:
-		Damage: 12
-		DamageInterval: 8
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.weak
-		RequiresCondition: hazmatsuits
-	DamagedByTintedCells@FROZEN:
-		Damage: 100
-		DamageInterval: 16
-		DamageTypes: FrozenDeath
-		LayerName: cryoresidue
-		RequiresCondition: !being-warped
 	ExternalCondition@CLOAKGENERATOR:
 		Condition: invisibility
 	TeleportNetworkTransportable:
@@ -1800,6 +1715,7 @@
 	Inherits@atomize: ^Atomizable
 	Inherits@C4: ^C4Plantable
 	Inherits@minidrone: ^MiniDroneAttachable
+	Inherits@biodamage: ^DriverBiologicalDamage
 	Huntable:
 	RenderSprites:
 		PlayerPalette: playernavy
@@ -1867,16 +1783,6 @@
 	RevealOnDeath:
 		Duration: 100
 		Radius: 2c512
-	DamagedByTintedCells@RADSTRONG:
-		Damage: 100
-		DamageInterval: 16
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.strong
-	DamagedByTintedCells@RADMED:
-		Damage: 95
-		DamageInterval: 16
-		DamageTypes: RadiationDeath
-		LayerName: radioactivity.medium
 	GrantConditionOnTerrain@UNDERBRIDGE:
 		Condition: under-bridge
 		TerrainTypes: Bridge, Tunnel
@@ -3256,24 +3162,28 @@
 ^Propaganda:
 	SpeedMultiplier@Propaganda:
 		RequiresCondition: propaganda
-		Modifier: 125
+		Modifier: 120
 	DamageMultiplier@Propaganda:
 		RequiresCondition: propaganda
-		Modifier: 75
+		Modifier: 90
 	RangeMultiplier@Propaganda:
 		RequiresCondition: propaganda
 		Modifier: 125
 	ReloadDelayMultiplier@Propaganda:
 		RequiresCondition: propaganda
-		Modifier: 75
+		Modifier: 90
 	ReloadAmmoDelayMultiplier@Propaganda:
 		RequiresCondition: propaganda
-		Modifier: 75
+		Modifier: 90
 	ExternalCondition@Propaganda:
 		Condition: propaganda
-	WithColoredOverlay@Propaganda:
+	WithDecoration@Propaganda:
+		Image: chhorde1
+		Palette: chrometd
+		Position: TopLeft
+		RequiresSelection: True
+		Sequence: idle
 		RequiresCondition: propaganda
-		Palette: frenzy
 
 ^UnloadCondition:
 	Passenger:
@@ -3564,3 +3474,84 @@
 	BaseProvider:
 		PauseOnCondition: being-captured
 		Range: 16c0
+
+^BiologicalDamage:
+	DamagedByTerrain@TIB:
+		Terrain: Tiberium, BlueTiberium
+		Damage: 100
+		DamageInterval: 16
+		DamageTypes: ToxinDeath
+		RequiresCondition: !(hazmatsuits || being-warped)
+	DamagedByTintedCells@RAD:
+		Damage: 500
+		DamageInterval: 8
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity
+		RequiresCondition: !(hazmatsuits || being-warped)
+	DamagedByTintedCells@TOXIN:
+		Damage: 500
+		DamageInterval: 8
+		DamageTypes: ToxinDeath
+		LayerName: toxin
+		RequiresCondition: !(hazmatsuits || being-warped)
+	DamagedByTintedCells@RADHAZMAT:
+		Damage: 50
+		DamageInterval: 8
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity
+		RequiresCondition: hazmatsuits && !being-warped
+	DamagedByTintedCells@TOXINHAZMAT:
+		Damage: 25
+		DamageInterval: 8
+		DamageTypes: ToxinDeath
+		LayerName: toxin
+		RequiresCondition: hazmatsuits && !being-warped
+	DamagedByTintedCells@FROZEN:
+		Damage: 100
+		DamageInterval: 16
+		DamageTypes: FrozenDeath
+		LayerName: cryoresidue
+		RequiresCondition: !being-warped
+
+^BioDamageImmune:
+	DamagedByTerrain@TIB:
+		Damage: 0
+	DamagedByTintedCells@RAD:
+		Damage: 0
+	DamagedByTintedCells@RADHAZMAT:
+		Damage: 0
+	DamagedByTintedCells@TOXIN:
+		Damage: 0
+	DamagedByTintedCells@TOXINHAZMAT:
+		Damage: 0
+	DamagedByTintedCells@FROZEN:
+		Damage: 0
+
+^DriverBiologicalDamage:
+	DamagedByTintedCells@RAD:
+		Damage: 100
+		DamageInterval: 8
+		DamageTypes: RadiationDeath
+		LayerName: radioactivity
+	DamagedByTintedCells@TOXIN:
+		Damage: 100
+		DamageInterval: 8
+		DamageTypes: RadiationDeath
+		LayerName: toxin
+	DamagedByTintedCells@FROZEN:
+		Damage: 50
+		DamageInterval: 16
+		DamageTypes: FrozenDeath
+		LayerName: cryoresidue
+		RequiresCondition: !being-warped
+
+^HazmatSuits:
+	GrantConditionOnPrerequisite@BIO:
+		Condition: hazmatsuits
+		Prerequisites: bio
+	WithDecoration@HAZMAT:
+		Image: pips
+		Sequence: pip-hazmat
+		Palette: chrometd
+		ReferencePoint: Bottom, Left
+		RequiresCondition: hazmatsuits

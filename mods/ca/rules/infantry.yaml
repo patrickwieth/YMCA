@@ -1290,6 +1290,7 @@ N5:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@BioDamageImmune: ^BioDamageImmune
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1321,7 +1322,7 @@ N5:
 	TakeCover:
 		ProneOffset: 160,0,-254
 	Mobile:
-		Speed: 49
+		Speed: 73
 		Voice: Move
 	AttackFrontal:
 		Voice: Attack
@@ -1335,29 +1336,15 @@ N5:
 	Voiced:
 		VoiceSet: CyborgVoice
 	-Crushable:
-	-DamagedByTerrain:
-	DamagedByTerrain:
-		Terrain: Tiberium, BlueTiberium
-		Damage: -100
-		DamageInterval: 16
-		DamageTypes: ToxinDeath
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RADSTRONG:
-	-DamagedByTintedCells@RADWEAK:
 	WithDecoration@THEAL:
 		Image: pips
 		Sequence: medic
 		Palette: temptd
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
 	WithMuzzleOverlay:
 	Explodes:
 		Weapon: UnitExplodeChemSmall
@@ -1367,15 +1354,6 @@ N5:
 		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
-	-GrantCondition@HAZMAT:
-	-WithDecoration@HAZMAT:
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
-	GrantConditionOnPrerequisite@BIO:
-		Condition: biofirepower
-	FirepowerMultiplier@BIOLAB:
-		RequiresCondition: nodupg || biofirepower
-		Modifier: 110
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -1767,12 +1745,6 @@ Mortar.Chemical:
 		DeathSequencePalette: playertd
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
 
 SAB:
 	Inherits: ^Soldier
@@ -1906,7 +1878,7 @@ ACOL:
 		LocalOffset: 427,0,341
 	TakeCover:
 		ProneOffset: 227,0,-245
-		PauseOnCondition: being-warped || nodupg
+		PauseOnCondition: being-warped
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
@@ -1922,33 +1894,15 @@ ACOL:
 		VoiceSet: CyborgVoice
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
-	-GrantConditionOnPrerequisite@BIO:
-	-WithDecoration@HAZMAT:
-	-DamagedByTerrain:
-	DamagedByTerrain:
-		Terrain: Tiberium, BlueTiberium
-		Damage: -100
-		DamageInterval: 16
-		DamageTypes: ToxinDeath
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RADSTRONG:
-	-DamagedByTintedCells@RADMED:
-	-DamagedByTintedCells@RADWEAK:
-	-GrantCondition@HAZMAT:
 	WithDecoration@THEAL:
 		Image: pips
 		Sequence: medic
 		Palette: temptd
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -2053,7 +2007,6 @@ JJET:
 		PauseOnCondition: being-warped
 	UpdatesPlayerStatistics:
 	MustBeDestroyed:
-	-DamagedByTerrain:
 	-SpawnActorOnDeath:
 	-Crushable:
 	SpeedMultiplier:
@@ -2206,16 +2159,8 @@ E8:
 	WithMakeAnimation:
 		Sequence: deploy
 		BodyNames: deployed
-	GrantConditionOnPrerequisite@BIO:
-		Condition: biofirepower
-	FirepowerMultiplier@BIOLAB:
-		RequiresCondition: nodupg || biofirepower
-		Modifier: 110
-	-DamagedByTintedCells@RADSTRONG:
-	-DamagedByTintedCells@RADMED:
-	-DamagedByTintedCells@RADWEAK:
-	WithDecoration@HAZMAT:
-		RequiresCondition: biofirepower
+	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADHAZMAT:
 	AutoDeployer:
 		DeployChance: 20
 
@@ -2225,6 +2170,7 @@ N1C:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BOTHELPER: ^BotCaptureHelper
+	Inherits@BioDamageImmune: ^BioDamageImmune
 	RenderSprites:
 	Buildable:
 		Queue: Infantry
@@ -2257,35 +2203,6 @@ N1C:
 		VoiceSet: CyborgVoice
 	Armament:
 		Weapon: Vulcan3
-	-GrantConditionOnPrerequisite@BIO:
-	-GrantCondition@HAZMAT:
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
-	-WithDecoration@HAZMAT:
-	-DamagedByTerrain:
-	DamagedByTerrain:
-		Terrain: Tiberium, BlueTiberium
-		Damage: -100
-		DamageInterval: 16
-		DamageTypes: ToxinDeath
-	GrantConditionOnTerrain@THEAL:
-		Condition: tibheal
-		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RADSTRONG:
-	-DamagedByTintedCells@RADMED:
-	-DamagedByTintedCells@RADWEAK:
-	WithDecoration@THEAL:
-		Image: pips
-		Sequence: medic
-		Palette: temptd
-		ReferencePoint: Bottom, Left
-		RequiresCondition: tibheal
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -2293,6 +2210,7 @@ N3C:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@BioDamageImmune: ^BioDamageImmune
 	RenderSprites:
 	Buildable:
 		Queue: Infantry
@@ -2352,35 +2270,15 @@ N3C:
 		Count: 1
 	AutoTarget:
 		ScanRadius: 5
-	-GrantConditionOnPrerequisite@BIO:
-	-GrantCondition@HAZMAT:
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
-	-WithDecoration@HAZMAT:
-	-DamagedByTerrain:
-	DamagedByTerrain:
-		Terrain: Tiberium, BlueTiberium
-		Damage: -100
-		DamageInterval: 16
-		DamageTypes: ToxinDeath
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RADSTRONG:
-	-DamagedByTintedCells@RADMED:
-	-DamagedByTintedCells@RADWEAK:
 	WithDecoration@THEAL:
 		Image: pips
 		Sequence: medic
 		Palette: temptd
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
-	SpeedMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 120
-	DamageMultiplier@NODUPG:
-		RequiresCondition: nodupg
-		Modifier: 50
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -2389,6 +2287,7 @@ RMBC:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@EMP: ^EmpDisable
+	Inherits@BioDamageImmune: ^BioDamageImmune
 	RenderSprites:
 		PlayerPalette: playerd2k
 		Scale: 1
@@ -2447,23 +2346,9 @@ RMBC:
 		DecorationBounds: 12,20,0,-4
 	-Crushable:
 	-KillsSelf@Immolate:
-	-GrantConditionOnPrerequisite@BIO:
-	-WithDecoration@HAZMAT:
-	-GrantCondition@HAZMAT:
-	GrantCondition@HAZMAT:
-		Condition: hazmatsuits
-	-DamagedByTerrain:
-	DamagedByTerrain:
-		Terrain: Tiberium, BlueTiberium
-		Damage: -100
-		DamageInterval: 16
-		DamageTypes: ToxinDeath
 	GrantConditionOnTerrain@THEAL:
 		Condition: tibheal
 		TerrainTypes: Tiberium, BlueTiberium
-	-DamagedByTintedCells@RADSTRONG:
-	-DamagedByTintedCells@RADMED:
-	-DamagedByTintedCells@RADWEAK:
 	WithDecoration@THEAL:
 		Image: pips
 		Sequence: medic
