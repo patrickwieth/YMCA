@@ -1428,16 +1428,17 @@ RMBO:
 	Health:
 		HP: 16000
 	ChangesHealth:
-		PercentageStep: 4
-		Delay: 25
+		PercentageStep: 10
+		Delay: 5
 		HealIfBelow: 100
-		DamageCooldown: 10
+		DamageCooldown: 5
 	Passenger:
 		PipType: Red
 		Voice: Move
 	RevealsShroud:
 		Range: 10c0
 	Armament@PRIMARY:
+		Name: primary
 		Weapon: GrenadeLauncher
 		LocalOffset: 0,0,155
 	Armament@Garrison:
@@ -1445,13 +1446,16 @@ RMBO:
 		Weapon: GrenadeLauncher
 		LocalOffset: 0,0,155
 	Armament@sapper:
-		Weapon: PlaceC4
+		Weapon: PlaceC4OnlyBuilding
 		Cursor: c4
 		OutsideRangeCursor: c4
 		Name: secondary
 	AttackFrontal:
 		Voice: Attack
 		Armaments: primary, secondary
+		AttackSequences:
+			primary: shoot
+			secondary: stand
 		PauseOnCondition: being-warped
 	WithInfantryBody:
 		IdleSequences: idle1,idle2,idle3
