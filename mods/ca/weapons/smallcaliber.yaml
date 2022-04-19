@@ -599,7 +599,7 @@ MP5E:
 SNIPER:
 	Inherits: ^SnipeWeapon
 	ReloadDelay: 110
-	Range: 9c0
+	Range: 10c0
 	Report: snipe.aud
 	ValidTargets: Ground, Infantry
 	InvalidTargets: Vehicle, Water, Structure, Wall, Husk, Chrono
@@ -620,11 +620,11 @@ SNIPER:
 
 SNIPERE:
 	Inherits: SNIPER
-	Range: 9c0
+	Range: 11c0
 
 SNIPER.vehicle:
 	ReloadDelay: 600
-	Range: 6c0
+	Range: 8c0
 	Report: ijarwe2a.aud
 	ValidTargets: DriverKill
 	InvalidTargets: Infantry, Ship, Structure, Wall, Husk, Air, DriverKillImmune
@@ -678,11 +678,13 @@ ShadowOperativeGun:
 		InvalidTargets: Structure, Vehicle, Ship
 		Spread: 42
 		Damage: 2800
-		Versus:
-			None: 100
-			Wood: 40
-			Concrete: 20
-			Light: 60
-			Heavy: 20
 	Warhead@2Eff: CreateEffect
 		Explosions: piff
+
+ShadowOperativeGun.Commando:
+	Inherits: ShadowOperativeGun
+	ReloadDelay: 20
+	Warhead@1Dam: SpreadDamage
+		InvalidTargets: Structure, Vehicle, Ship
+		Spread: 42
+		Damage: 5000

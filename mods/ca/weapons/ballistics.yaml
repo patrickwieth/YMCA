@@ -447,7 +447,7 @@ EMPGrenade:
 		ImpactSounds: expnew16.aud
 
 ShadowOperativeGrenade:
-	Inherits: Grenade
+	Inherits: EMPGrenade
 	ReloadDelay: 50
 	ValidTargets: Structure, Vehicle, Ship
 	Projectile: Bullet
@@ -495,7 +495,7 @@ MortarPrototype:
 		Image: BOMB
 	Warhead@1Dam: SpreadDamage
 		Damage: 5500
-		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
@@ -539,6 +539,26 @@ MortarE.Chemical:
 	Inherits: Mortar
 	Range: 12c768
 
+GrenadeLauncher:
+	Inherits: ^ShellHE
+	ReloadDelay: 40
+	Range: 8c0
+	Burst: 2
+	BurstDelays: 5
+	InvalidTargets: Structure
+	ValidTargets: Ground, Infantry, Vehicle, Ship, Submarine
+	Projectile: Bullet
+		Speed: 266
+		LaunchAngle: 62
+		Inaccuracy: 768
+		Image: BOMB
+		Shadow: True
+	Report: nade.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 5500
+		Spread: 1c0
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+
 DepthCharge:
 	Inherits: ^Artillery
 	-Report:
@@ -574,7 +594,7 @@ DepthCharge.destroyer:
 	Inherits: ^ShellArtillery
 	ReloadDelay: 100
 	InvalidTargets: Air
-	Range: 14c0
+	Range: 15c0
 	Burst: 3
 	BurstDelays: 10
 	MinRange: 2c0
@@ -589,7 +609,7 @@ DepthCharge.destroyer:
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
 		Spread: 626
-		Damage: 15000
+		Damage: 20000
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater

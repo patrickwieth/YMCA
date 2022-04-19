@@ -565,6 +565,12 @@ PlaceC4Seal:
 	ValidTargets: C4, Vehicle, Ship, Submarine, Structure
 	Range: 1c255
 
+PlaceC4OnlyBuilding:
+	Inherits: PlaceC4
+	ReloadDelay: 50
+	ValidTargets: C4, Structure
+	InvalidTargets: C4Attached, Vehicle, TNTAttached, C4Immune
+
 C4:
 	Projectile: InstantHit
 	Warhead@1Dam: HealthPercentageDamage
@@ -2504,3 +2510,18 @@ AirDummyAim:
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Air
+
+AttachShadowBeacon:
+	Warhead@AttachCamera: AttachActor
+		Range: 341
+		Actor: shadow.beacon.camera
+		AttachSounds: shad-beacontrigger1.aud
+		MissSounds: dud1.aud
+		ValidTargets: ShadowBeacon
+	Warhead@TargetValidator: SpreadDamage
+		ValidTargets: ShadowBeacon
+	Warhead@highlight: GrantExternalCondition
+		Range: 341
+		Duration: 2
+		Condition: redhighlight
+		ValidTargets: ShadowBeacon

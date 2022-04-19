@@ -1442,18 +1442,40 @@ Player:
 			shields.upgrade: 1
 	SquadManagerBotModuleCA@brutal-vhard:
 		RequiresCondition: enable-brutal-ai || enable-vhard-ai
-		SquadSize: 30
+		MinimumAttackForceDelay: 25
+		SquadValue: 6000
+		SquadValueRandomBonus: 2500
+		SquadSize: 22
+		SquadSizeRandomBonus: 9
 		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		ExcludeFromAirSquadsTypes: deva, pac, jjet, bjet
 		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub,sb,seas
 		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod
 		ConstructionYardTypes: fact,afac,sfac
-		IdleScanRadius: 18
-		AttackScanRadius: 9
-		MaxBaseRadius: 16
-		RushAttackScanRadius: 25
-		ProtectUnitScanRadius: 28
-		ProtectionScanRadius: 16
-		DangerScanRadius: 8
+		StaticAntiAirTypes: agun, sam, nsam, cram, shar
+		ProtectionScanRadius: 12
+		AirToAirPriority: 65
+		BigAirThreats: pac, deva, kiro, mshp
+		AirSquadTargetTypes:
+			heli: Aircraft, Vehicle
+			nhaw: Infantry
+			hind: Infantry, Building, Aircraft
+			yak: Building, Infantry
+			mig: Aircraft, Vehicle, Defense
+			suk: Vehicle, Defense
+			suk.upg: Building
+			kiro: Building
+			orca: Aircraft, Vehicle
+			orcb: Vehicle, Defense
+			a10: Infantry, Building, Aircraft
+			apch: Infantry, Building
+			venm: Infantry, Aircraft
+			rah: Infantry, Building, Aircraft
+			harr: Infantry, Building, Aircraft
+			scrn: Aircraft, Vehicle, Defense
+			stmr: Aircraft, Infantry, Building
+			enrv: Aircraft, Vehicle, Defense
+			mshp: Building
 	UnitBuilderBotModuleCA@brutal-vhard:
 		RequiresCondition: enable-brutal-ai || enable-vhard-ai
 		IdleBaseUnitsMaximum: 50
@@ -1616,16 +1638,48 @@ Player:
 			harv.chrono: 8
 	SquadManagerBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
-		SquadSize: 25
-		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		MinimumAttackForceDelay: 25
+		SquadValue: 6000
+		SquadValueRandomBonus: 2500
+		SquadSize: 22
+		SquadSizeRandomBonus: 9
+		ExcludeFromSquadsTypes: harv, harv.td, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		ExcludeFromAirSquadsTypes: deva, pac, jjet, bjet
 		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub,sb,seas
 		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod
 		ConstructionYardTypes: fact,afac,sfac
+		StaticAntiAirTypes: agun, sam, nsam, cram, shar
 		ProtectionScanRadius: 12
+		AirToAirPriority: 65
+		BigAirThreats: pac, deva, kiro, mshp
+		AirSquadTargetTypes:
+			heli: Aircraft, Vehicle
+			nhaw: Infantry
+			hind: Infantry, Building, Aircraft
+			yak: Building, Infantry
+			mig: Aircraft, Vehicle, Defense
+			suk: Vehicle, Defense
+			suk.upg: Building
+			kiro: Building
+			orca: Aircraft, Vehicle
+			orcb: Vehicle, Defense
+			a10: Infantry, Building, Aircraft
+			apch: Infantry, Building
+			venm: Infantry, Aircraft
+			rah: Infantry, Building, Aircraft
+			harr: Infantry, Building, Aircraft
+			scrn: Aircraft, Vehicle, Defense
+			stmr: Aircraft, Infantry, Building
+			enrv: Aircraft, Vehicle, Defense
+			mshp: Building
 	UnitBuilderBotModuleCA@hard:
 		RequiresCondition: enable-hard-ai
 		IdleBaseUnitsMaximum: 50
 		MaxAircraft: 6
+		MaintainAirSuperiority: true
+		MaxAirSuperiority: 8
+		AirToAirUnits: heli, mig, orca, scrn, venm, stmr, enrv, a10, harr, rah, hind
+		AirThreatUnits: heli, mig, orca, scrn, venm, stmr, enrv, a10, harr, rah, hind, pac, deva, kiro, mshp
 		UnitDelays:
 			mcv: 6750
 			amcv: 6750
@@ -1783,11 +1837,20 @@ Player:
 			harv.chrono: 8
 	SquadManagerBotModuleCA@normal:
 		RequiresCondition: enable-normal-ai
-		SquadSize: 20
+		MinimumAttackForceDelay: 25
+		SquadValue: 5000
+		SquadValueRandomBonus: 2100
+		SquadSize: 18
+		SquadSizeRandomBonus: 8
 		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		ExcludeFromAirSquadsTypes: deva, pac, jjet, bjet
 		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
 		ConstructionYardTypes: fact,afac,sfac
+		StaticAntiAirTypes: agun, sam, nsam, cram, shar
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
+		AirToAirPriority: 55
+		AirSquadTargetTypes:
+			mshp: Building
 	UnitBuilderBotModuleCA@normal:
 		RequiresCondition: enable-normal-ai
 		IdleBaseUnitsMaximum: 50
@@ -1949,11 +2012,20 @@ Player:
 			harv.chrono: 8
 	SquadManagerBotModuleCA@easy:
 		RequiresCondition: enable-easy-ai
-		SquadSize: 15
+		SquadValue: 4000
+		SquadValueRandomBonus: 1500
+		MinimumAttackForceDelay: 25
+		SquadSize: 14
+		SquadSizeRandomBonus: 5
 		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		ExcludeFromAirSquadsTypes: deva, pac, jjet, bjet
 		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
 		ConstructionYardTypes: fact,afac,sfac
+		StaticAntiAirTypes: agun, sam, nsam, cram, shar
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
+		AirToAirPriority: 45
+		AirSquadTargetTypes:
+			mshp: Building
 	UnitBuilderBotModuleCA@easy:
 		RequiresCondition: enable-easy-ai
 		MaxAircraft: 2
@@ -2116,9 +2188,13 @@ Player:
 		RequiresCondition: enable-naval-ai
 		SquadSize: 1
 		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, mcv, amcv, smcv, dog, e6, n6, s6
+		ExcludeFromAirSquadsTypes: deva, pac, jjet, bjet
 		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,dd2,ss2,isub,sb,seas
 		ConstructionYardTypes: fact,afac,sfac
+		StaticAntiAirTypes: agun, sam, nsam, cram, shar
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi
+		AirSquadTargetTypes:
+			mshp: Building
 	UnitBuilderBotModuleCA@naval:
 		RequiresCondition: enable-naval-ai
 		MaxAircraft: 4

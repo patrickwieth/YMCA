@@ -332,9 +332,8 @@ SMEDI:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 240
-		Prerequisites: ~infantry.scrin, ~infantry.smedi, ~techlevel.infonly
+		Prerequisites: ~infantry.scrin, ~infantry.traveler, ~techlevel.infonly
 		Description: Heals nearby life forms.\n  Unarmed
-		IconPalette: chrome
 	Valued:
 		Cost: 200
 	Tooltip:
@@ -404,6 +403,7 @@ MAST:
 	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
 	Buildable:
@@ -423,9 +423,11 @@ MAST:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 7500
+		HP: 16000
+	RevealsShroud:
+		Range: 12c0
 	Mobile:
-		Speed: 73
+		Speed: 80
 	Armament@PRIMARY:
 		Weapon: EnslaveInfantry
 		LocalOffset: 150,0,400
@@ -435,7 +437,7 @@ MAST:
 		LocalOffset: 150,0,400
 	MindController:
 		ArmamentNames: primary, secondary
-		Capacity: 3
+		Capacity: 1
 		Sounds: mastermind-fire.aud
 		ControllingCondition: mindcontrolling
 	WithInfantryBody:
@@ -847,6 +849,8 @@ INTL:
 INTL.AA:
 	Inherits: INTL
 	-AttackMove:
+	-AutoTargetPriority@DEFAULT:
+	-AutoTargetPriority@ATTACKANYTHING:
 	Inherits@AUTOTARGET: ^AutoTargetAir
 	Buildable:
 		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.interloper.aa
@@ -1518,6 +1522,8 @@ TPOD.chain.PLD:
 		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.pld, ~commander_tree.tripod.chainer,
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles, Projectiles.\n  Weak vs Aircraft, Energy Weapons
 		IconPalette: chrome
+	Valued:
+		Cost: 2300
 	Tooltip:
 		Name: Chainer Tripod (PLD)
 	Armament@pointdefense:
@@ -1544,6 +1550,20 @@ TPOD.acid.reflector:
 		IconPalette: chrome
 	Tooltip:
 		Name: Acid Tripod (Reflector)
+
+TPOD.acid.pld:
+	Inherits: TPOD.acid
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.acid, ~commander_tree.tripod.pld
+		Description: Heavy assault walker with corrosive acid weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
+		IconPalette: chrome
+	Valued:
+		Cost: 2300
+	Tooltip:
+		Name: Acid Tripod (PLD)
+	Armament@pointdefense:
+		LocalOffset: 450,0,500
 
 RPTP:
 	Inherits: TPOD
@@ -1593,6 +1613,8 @@ RPTP.range.PLD:
 		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.pld, ~commander_tree.reaper.range
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
+	Valued:
+		Cost: 3000
 	Tooltip:
 		Name: Range Reaper Tripod (PLD)
 	Armament@pointdefense:
@@ -1629,6 +1651,8 @@ RPTP.acid.PLD:
 		Prerequisites: techcenter, ~vehicles.reaper, ~commander_tree.reaper.pld, ~commander_tree.reaper.acid
 		Description: Heavy assault walker with beam weapons.\n  Has Point Laser Defense System.\n  Strong vs Vehicles.\n  Weak vs Aircraft
 		IconPalette: chrome
+	Valued:
+		Cost: 2300
 	Tooltip:
 		Name: Acid Reaper Tripod (PLD)
 	Armament@pointdefense:
@@ -1700,7 +1724,7 @@ STMR:
 		Description: Durable patrol craft.\n  Strong vs Infantry, Light Armor, Aircraft\n  Weak vs Tanks, Buildings
 		IconPalette: chrome
 	Valued:
-		Cost: 1650
+		Cost: 1250
 	Voiced:
 		VoiceSet: VehicleVoice
 	Tooltip:
@@ -1780,7 +1804,7 @@ STMR.hunter:
 	Valued:
 		Cost: 850
 	Health:
-		HP: 22000
+		HP: 25000
 	ReloadDelayMultiplier:
 		Modifier: 50
 	Tooltip:
@@ -1803,7 +1827,7 @@ STMR.bomber:
 		Description: Dedicated bomber.\n  Strong vs Clusters of Vehicles\n  Weak vs Aircraft
 		IconPalette: chrome
 	Valued:
-		Cost: 1650
+		Cost: 1500
 	Health:
 		HP: 18000
 	Tooltip:
@@ -1841,7 +1865,7 @@ ENRV:
 		Description: Fast attack craft that creates a focused suppression field.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 	Valued:
-		Cost: 1550
+		Cost: 1500
 	Voiced:
 		VoiceSet: VehicleVoice
 	Tooltip:
@@ -2099,7 +2123,7 @@ PAC:
 	CarrierMaster@carr1:
 		Actors: inva, inva, inva, inva
 		RearmTicks: 0
-		RespawnTicks: 500
+		RespawnTicks: 200
 		InstaRepair: true
 		SlaveDisposalOnKill: KillSlaves
 		SpawnAllAtOnce: false
@@ -2143,7 +2167,7 @@ PAC.suicide:
 	Armament@PRIMARY:
 		Weapon: InvaderLauncher.Suicide
 	CarrierMaster@carr1:
-		RespawnTicks: 150
+		RespawnTicks: 100
 		Actors: inva.suicide, inva.suicide, inva.suicide, inva.suicide
 
 PAC.support:
@@ -2180,7 +2204,6 @@ PAC.support:
 
 PAC.laser:
 	Inherits: PAC
-	-AutoTarget:
 	-AutoTargetPriority@DEFAULT:
 	-AutoTargetPriority@ATTACKANYTHING:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -2191,11 +2214,14 @@ PAC.laser:
 	RenderSprites:
 		Scale: 1.1
 	Valued:
-		Cost: 3000
+		Cost: 3500
 	Tooltip:
 		Name: Planetary Assault Warship
 	Health:
-		HP: 110000
+		HP: 100000
+	Aircraft:
+		TurnSpeed: 8
+		Speed: 40
 	Armament@PRIMARY:
 		Name: primary
 		Weapon: WarshipLaser

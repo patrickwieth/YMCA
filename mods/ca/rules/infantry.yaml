@@ -295,6 +295,8 @@ E3.cryo:
 U3:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: relayTarget
 	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
 	Valued:
@@ -351,6 +353,11 @@ U3:
 		LocalOffset: 0,0,400
 		PauseOnCondition: !ammo
 		RequiresCondition: cryr-upgrade && deployed
+	Armament@tertiary:
+		Name: tertiary
+		Weapon: Dragon.Relay
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
 	Armament@GarrisonAA:
 		Name: mountedaa
 		Weapon: RedEyeGI
@@ -476,6 +483,8 @@ U3:
 		DeployTrigger: Attack
 		DeployTicks: 5
 		UndeployTicks: 50
+	ExternalCondition@relayTarget:
+		Condition: relayTarget
 
 E4:
 	Inherits: ^Soldier
@@ -607,6 +616,7 @@ SPY:
 E7:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -621,14 +631,14 @@ E7:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 11000
+		HP: 16000
 	Mobile:
-		speed: 73
+		speed: 85
 		Voice: Move
 	Guard:
 		Voice: Move
 	RevealsShroud:
-		Range: 6c0
+		Range: 10c0
 	Passenger:
 		PipType: Red
 		Voice: Move
@@ -1372,6 +1382,7 @@ RMBO:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -1380,36 +1391,47 @@ RMBO:
 		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: ~infantry.td, techcenter, ~commander_tree.advanced_infantry_training, ~techlevel.high
+		Prerequisites: ~infantry.gdi, techcenter, ~commander_tree.advanced_infantry_training
 		Queue: Infantry
 		IconPalette: chrometd
 		BuildLimit: 1
-		Description: Elite infantry unit. Armed with\na SMG and C4.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Buildings\n  Weak vs Aircraft\n  Special Ability: C4 Explosives
+		Description: Elite infantry unit. Armed with\na Grenadelauncher and C4.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Buildings\n  Weak vs Aircraft\n  Special Ability: C4 Explosives
 	Mobile:
 		speed: 73
 		Voice: Move
 	Guard:
 		Voice: Move
 	Health:
-		HP: 11000
+		HP: 16000
+	ChangesHealth:
+		PercentageStep: 10
+		Delay: 5
+		HealIfBelow: 100
+		DamageCooldown: 5
 	Passenger:
 		PipType: Red
 		Voice: Move
 	RevealsShroud:
-		Range: 6c0
-	Armament:
-		Weapon: smg
-	Armament@garrison:
+		Range: 10c0
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: GrenadeLauncher
+		LocalOffset: 0,0,155
+	Armament@Garrison:
 		Name: mounted
-		Weapon: smgE
+		Weapon: GrenadeLauncher
+		LocalOffset: 0,0,155
 	Armament@sapper:
-		Weapon: PlaceC4
+		Weapon: PlaceC4OnlyBuilding
 		Cursor: c4
 		OutsideRangeCursor: c4
 		Name: secondary
 	AttackFrontal:
 		Voice: Attack
 		Armaments: primary, secondary
+		AttackSequences:
+			primary: shoot
+			secondary: stand
 		PauseOnCondition: being-warped
 	WithInfantryBody:
 		IdleSequences: idle1,idle2,idle3
@@ -1502,6 +1524,7 @@ SNIP:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
+	Inherits@CloakedAttacker: ^CloakedAttacker
 	RenderSprites:
 		Image: sniper
 	Buildable:
@@ -1546,27 +1569,6 @@ SNIP:
 	Mobile:
 		speed: 73
 		Voice: Move
-	Cloak@NORMAL:
-		InitialDelay: 90
-		CloakDelay: 90
-		CloakedCondition: hidden
-		Palette: cloaktd
-		CloakSound: gstealon.aud
-		UncloakSound: gstealof.aud
-		IsPlayerPalette: true
-		CloakTypes: Cloak
-		RequiresCondition: !cloak-force-disabled
-		UncloakOn: Unload, Infiltrate, Demolish, Dock, Attack
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Heavy, Critical
-	WithDecoration@hidden:
-		Image: pips
-		Sequence: pip-hidden
-		Palette: temptd
-		ReferencePoint: Top, Right
-		ZOffset: 256
-		RequiresCondition: hidden
 	AttackFrontal:
 		Voice: Attack
 		Armaments: primary, driver_snipe, laser
@@ -1587,6 +1589,7 @@ BORI:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	RenderSprites:
 		Image: boris
 	Buildable:
@@ -1603,7 +1606,7 @@ BORI:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 11000
+		HP: 16000
 	Mobile:
 		speed: 73
 		Voice: Move
@@ -1611,7 +1614,7 @@ BORI:
 	Guard:
 		Voice: Move
 	RevealsShroud:
-		Range: 6c0
+		Range: 10c0
 	Passenger:
 		PipType: Red
 		Voice: Move
@@ -1751,6 +1754,7 @@ SAB:
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
+	Inherits@CloakedInfiltrator: ^CloakedInfiltrator
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1795,20 +1799,6 @@ SAB:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
-	Cloak:
-		InitialDelay: 100
-		CloakDelay: 200
-		CloakedCondition: hidden
-		Palette: cloaktd
-		IsPlayerPalette: true
-		CloakTypes: Cloak
-		RequiresCondition: !cloak-force-disabled
-		UncloakOn: Unload, Infiltrate, Demolish, Dock, Attack
-		CloakSound: gstealon.aud
-		UncloakSound: gstealof.aud
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Heavy, Critical
 	IgnoresDisguise:
 	DetectCloaked:
 		CloakTypes: Cloak, Thief
@@ -1821,6 +1811,7 @@ SAB:
 
 SpecOps:
 	Inherits: SAB
+	Inherits@CloakedAttacker: ^CloakedAttacker
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1840,8 +1831,6 @@ SpecOps:
 	Armament@Garrison:
 		Name: mounted
 		Weapon: relayMarker
-	Cloak:
-		UncloakOn: Unload, Infiltrate, Demolish, Dock
 	-Infiltrates@tec:
 	-Infiltrates@pwr:
 	-ProductionCostMultiplier@LegionBonus:
@@ -1925,7 +1914,7 @@ JJET:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 10000
+		HP: 12000
 	Armor:
 		Type: Light
 	Armament@AIR:
@@ -1987,7 +1976,7 @@ JJET:
 		TargetTypes: Temporal
 		RequiresCondition: deployed
 	Mobile:
-		Speed: 102
+		Speed: 112
 		Locomotor: jumpjet
 		PauseOnCondition: being-warped
 	Hovers:
@@ -2762,6 +2751,35 @@ SHAD:
 	Rearmable:
 		RearmActors: shad.rearm
 
+SHAD.Commando:
+	Inherits: SHAD
+	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Tooltip:
+		Name: Shadow Commando
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 85
+		BuildLimit: 1
+		Prerequisites: ~infantry.nod, techcenter, ~commander_tree.advanced_infantry_training
+		Description: Commando unit with emp grenades, cloaked and with heavy anti-tank mines.\n  Strong vs Infantry\n  Weak vs Aircraft, Defenses
+	Valued:
+		Cost: 1200
+	RevealsShroud:
+		Range: 10c0
+	Health:
+		HP: 12000
+	Mobile:
+		Speed: 73
+	Armament@PRIMARY:
+		Weapon: ShadowOperativeGun.Commando
+	ReloadAmmoPool:
+		Delay: 500
+		Count: 1
+	Minelayer:
+		Mine: SHAB.commando
+		TileUnknownName: build-valid
+
 # ---- dummy actor because RearmableActors is required
 SHAD.REARM:
 	AlwaysVisible:
@@ -2921,7 +2939,7 @@ BH:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 150
-		Prerequisites: anyradar, ~infantry.blackh, ~techlevel.infonly
+		Prerequisites: radar, ~infantry.blackh, ~techlevel.infonly
 		Description: Elite precision flamethrower unit.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 500
@@ -2932,7 +2950,7 @@ BH:
 	Health:
 		HP: 13000
 	Mobile:
-		Speed: 49
+		Speed: 73
 		Voice: Move
 	RevealsShroud:
 		Range: 5c0
@@ -2981,7 +2999,7 @@ YURI:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 190
-		Prerequisites: ~barr, stek, ~commander_tree.yuri, ~techlevel.infonly
+		Prerequisites: ~barr, stek, ~commander_tree.yuri
 		BuildLimit: 1
 		Description: Elite specialist infantry.\n  Can mind-control enemy units and defenses.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Vehicles, Defenses\n  Weak vs Aircraft\n  Special Ability: Mind Blast
 	Valued:
@@ -2991,22 +3009,31 @@ YURI:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 11000
+		HP: 16000
 	Mobile:
-		Speed: 56
+		Speed: 73
 		Voice: Move
 	Armament@PRIMARY:
 		Weapon: EnslaveInfantry
 		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: EnslaveVehicle
 		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
 	Armament@AIDummyAiming: ## Hack: Make AI deploy to attack structures
-		PauseOnCondition: being-warped
+		PauseOnCondition: !ammo || being-warped
 		Name: aidummy
 		RequiresCondition: botowner && !deployed
 		Weapon: YuriDummyAim
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 200
+		Count: 1
+		DelayAfterReset: 60
 	MindController:
 		ArmamentNames: primary, secondary
 		Capacity: 3
@@ -3042,7 +3069,7 @@ YURI:
 		PauseOnCondition: being-warped
 		Armaments: primary, secondary, aidummy
 	RevealsShroud:
-		Range: 6c0
+		Range: 10c0
 	Passenger:
 		CustomPipType: red
 		Voice: Move
@@ -3099,10 +3126,10 @@ SEAL:
 	Mobile:
 		Speed: 60
 		Locomotor: seal
-	Armament:
+	Armament@PRIMARY:
 		Weapon: mp5
 		PauseOnCondition: onwater
-	Armament@garrison:
+	Armament@Garrison:
 		Name: mounted
 		Weapon: mp5e
 		MuzzleSequence: garrison-muzzle

@@ -2961,6 +2961,9 @@ STNK:
 
 STNK.Scrin:
 	Inherits: STNK
+	-AutoTargetPriority@DEFAULT:
+	-AutoTargetPriority@ATTACKANYTHING:
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		BuildPaletteOrder: 130
 		Prerequisites: hq, ~vehicles.nod, ~commander_tree.stealth_tank.scrin, ~!filler.stealthtank2
@@ -3125,6 +3128,9 @@ BIKE:
 
 BIKE.Scrin:
 	Inherits: BIKE
+	-AutoTargetPriority@DEFAULT:
+	-AutoTargetPriority@ATTACKANYTHING:
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.scrin.reflector, ~!commander_tree.recon_bike.scrin.pld
@@ -3168,6 +3174,7 @@ BIKE.Scrin.Reflector:
 
 BIKE.RocketHail:
 	Inherits: BIKE
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.rocket_hail, ~!commander_tree.recon_bike.rocket_hail.reflector, ~!commander_tree.recon_bike.rocket_hail.pld
@@ -3221,7 +3228,8 @@ BIKE.Explosive:
 		Name: Explosive Rocket Bike
 	Armament@PRIMARYFRONTAL:
 		Weapon: BikeRocketExplosive
-	-Armament@SECONDARYFRONTAL:
+	Armament@SECONDARYFRONTAL:
+		Weapon: BikeRocketsAAExplosive
 
 BIKE.Explosive.PLD:
 	Inherits@PLD: ^PointLaserDefenseSystem
@@ -6781,7 +6789,7 @@ GDRN:
 		Prerequisites: ~vehicles.zocom
 		Description: Fast scout & anti-tank vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Vehicles\n  Weak vs Infantry, Buildings, Defenses, Aircraft
 	Valued:
-		Cost: 400
+		Cost: 300
 	Tooltip:
 		Name: Guardian Drone
 	UpdatesPlayerStatistics:
@@ -6794,6 +6802,11 @@ GDRN:
 		TurnSpeed: 40
 		Speed: 134
 		Voice: Move
+	RevealsShroud:
+		Range: 14c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Turreted:
 		TurnSpeed: 40
 		Offset: 0,0,0

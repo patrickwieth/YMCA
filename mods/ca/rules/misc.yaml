@@ -904,3 +904,55 @@ gps.scrambler:
 		Range: 9c512
 		Condition: gpsscramble
 		ValidRelationships: Enemy, Neutral
+
+shadow.beacon.camera:
+	Inherits@1: CAMERA
+	-Immobile:
+	Mobile:
+		Locomotor: cloud
+		ImmovableCondition: attached
+	GrantCondition:
+		Condition: attached
+	Attachable:
+		AttachableType: shab
+	RevealsShroud:
+		Range: 7c0
+	GrantTimedCondition@active:
+		Condition: active
+		Duration: 6000
+	KillsSelf:
+		RequiresCondition: !active
+
+SHAB:
+	Inherits: ^Mine
+	Tooltip:
+		Name: Shadow Beacon
+	Mine:
+		CrushClasses: beacon, mine
+		DetonateClasses: beacon
+		AvoidFriendly: true
+		BlockFriendly: false
+	Cloak:
+		CloakTypes: Mine
+		InitialDelay: 1
+		CloakSound: shad-beaconplace1.aud
+	RevealsShroud:
+		Range: 7c0
+	WithIdleAnimation:
+		Sequences: idle
+		Interval: 25
+	Explodes:
+		Weapon: AttachShadowBeacon
+	GrantTimedCondition@active:
+		Condition: active
+		Duration: 4500
+	KillsSelf:
+		RequiresCondition: !active
+
+SHAB.commando:
+	Inherits: SHAB
+	Inherits: ^Mine
+	Tooltip:
+		Name: Shadow Mine
+	Explodes:
+		Weapon: ATMine.Heavy
