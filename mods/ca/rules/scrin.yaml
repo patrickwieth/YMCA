@@ -431,10 +431,19 @@ MAST:
 	Armament@PRIMARY:
 		Weapon: EnslaveInfantry
 		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: EnslaveVehicle
 		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 100
+		Count: 1
+		DelayAfterReset: 60
 	MindController:
 		ArmamentNames: primary, secondary
 		Capacity: 1
@@ -500,6 +509,8 @@ HARV.Scrin:
 	-WithHarvestAnimation:
 	WithDamageOverlay:
 		Palette: chrometd
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
 
 GUNW:
 	Inherits: ^Vehicle
@@ -2263,7 +2274,7 @@ PAC.laser:
 		RevokeOnNewTarget: False
 		RevokeAll: True
 	-AttackFrontal:
-	AttackOmni:
+	AttackTurreted:
 		Armaments: primary, secondary, tertiary
 		PauseOnCondition: empdisable || being-warped
 	-CarrierMaster@carr1:
