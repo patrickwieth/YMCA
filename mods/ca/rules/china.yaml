@@ -2723,30 +2723,40 @@ chnukecann:
 		ValidTypes: vehicle								##########
 	WithFacingSpriteBody@Skin1:
 		Sequence: idle2
-		RequiresCondition: !immobile
+		RequiresCondition: undeployed
 		Name: body1
+	WithFacingSpriteBody@Skin2:
+		Sequence: deploy
+		RequiresCondition: deployed
+		Name: body2
+	WithSpriteTurret@Skin2:
+		RequiresCondition: deployed
+		Sequence: turret
 	Voiced:
 		VoiceSet: CHNukeCannonVoice
 	AmmoPool:
 		Ammo: 1
+		InitialAmmo: 0
 		PipCount: 1
 		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 200
+	ReloadAmmoPoolCA@deployed:
+		Delay: 100
 		Count: 1
-	GrantConditionOnAttack@DEPLOY:
+		ShowSelectionBar: true
+		SelectionBarColor: ff0000
+		RequiresCondition: deployed
+	ReloadAmmoPoolCA@undeployed:
+		Delay: 10
+		Count: -1
+		ShowSelectionBar: false
+		RequiresCondition: undeployed
+	GrantTimedCondition@undeploy:
+		Duration: 50
 		Condition: immobile
-		RevokeDelay: 100
+		RequiresCondition: undeployed
 	SpeedMultiplier@DEPLOY:
 		Modifier: 0
 		RequiresCondition: immobile
-	WithFacingSpriteBody@Skin2:
-		Sequence: deploy
-		RequiresCondition: immobile
-		Name: body2
-	WithSpriteTurret@Skin2:
-		RequiresCondition: immobile
-		Sequence: turret
 	ProducibleWithLevel:
 		Prerequisites: upcharty
 		InitialLevels: 1
