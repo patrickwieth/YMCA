@@ -1,4 +1,4 @@
-﻿#region Copyright & License Information
+#region Copyright & License Information
 /*
  * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
  * This file is a part of a third-party plugin for OpenRA, which is
@@ -11,11 +11,12 @@
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Primitives;
 using OpenRA.Traits;
+using System.Linq;
 
 namespace OpenRA.Mods.CA.Traits
 {
 	[Desc("This actor can be affected by temporal warheads.")]
-	public class PoisonInfo : TraitInfo, Requires<IHealthInfo>
+	public class DriverPoisonableInfo : PausableConditionalTraitInfo, Requires<IHealthInfo>
 	{
 		[GrantedConditionReference]
 		[Desc("The condition type to grant when the actor is affected.")]
@@ -26,7 +27,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		[Desc("Amount of warp damage revoked each tick after RevokeDelay has passed. Use -1 for all damage to be revoked.",
 			"Zero means damage will never be revoked.")]
-		public readonly int RevokeRate = -1;
+		public readonly int RevokeRate = 100;
 
 		[Desc("Amount required to be taken for the unit to be killed.",
 			"Use -1 to be calculated from the actor health.")]
@@ -39,15 +40,15 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly bool ScaleWithCurrentHealthPercentage = false;
 
 		public readonly bool ShowSelectionBar = true;
-		public readonly Color SelectionBarColor = Color.FromArgb(128, 200, 255);
+		public readonly Color SelectionBarColor = Color.FromArgb(0, 255, 0);
 
-		public override object Create(ActorInitializer init) { return new Poison(init, this); }
+		public override object Create(ActorInitializer init) { return new DriverPoisonable(init, this); }
 	}
 
-	public class Poison : ISync, ITick, ISelectionBar
+	public class DriverPoisonable : PausableConditionalTrait<DriverPoisonableInfo>, ISync, ITick, ISelectionBar
 	{
 		readonly Actor self;
-		readonly PoisonInfo info;
+		readonly DriverPoisonableInfo info;
 		readonly Health health;
 		readonly int requiredDamage;
 
@@ -59,7 +60,8 @@ namespace OpenRA.Mods.CA.Traits
 		[Sync]
 		int tick;
 
-		public Poison(ActorInitializer init, PoisonInfo info)
+		public DriverPoisonable(ActorInitializer init, DriverPoisonableInfo info)
+			: base(info)
 		{
 			this.info = info;
 			self = init.Self;
@@ -69,19 +71,33 @@ namespace OpenRA.Mods.CA.Traits
 
 		public void AddDamage(int damage, Actor damager)
 		{
+			if (IsTraitPaused || IsTraitDisabled)
+				return;
+
 			recievedDamage = recievedDamage + damage;
 			tick = info.RevokeDelay;
 
+			var death = false;
 			if (info.ScaleWithCurrentHealthPercentage)
 			{
 				var currentRequiredDamage = 100 * health.HP / health.MaxHP * requiredDamage / 100;
 
 				if (recievedDamage >= currentRequiredDamage)
-					self.Kill(damager, info.DamageTypes);
+					death = true;
 			}
-			else
-				if (recievedDamage >= requiredDamage)
-				self.Kill(damager, info.DamageTypes);
+			else if (recievedDamage >= requiredDamage)
+				death = true;
+
+			if (death) {
+				// CARGO MUST DIE
+				var validTraits = self.TraitsImplementing<INotifyPassengersDamage>();
+				foreach (var trait in validTraits)
+				{
+					trait.KillPassengers(self);
+				}
+				self.ChangeOwner(self.World.Players.First(p => p.InternalName == "Neutral")); // Permanent
+				self.CancelActivity();
+			}
 
 			if (!string.IsNullOrEmpty(info.Condition) &&
 				token == Actor.InvalidConditionToken)
@@ -90,6 +106,10 @@ namespace OpenRA.Mods.CA.Traits
 
 		void ITick.Tick(Actor self)
 		{
+			if(IsTraitDisabled && token != Actor.InvalidConditionToken) {
+				token = self.RevokeCondition(token);
+			}
+
 			if (recievedDamage > 0 && --tick < 0)
 			{
 				if (info.RevokeRate == -1)
@@ -107,7 +127,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		float ISelectionBar.GetValue()
 		{
-			if (!info.ShowSelectionBar)
+			if (!info.ShowSelectionBar || IsTraitDisabled)
 				return 0;
 
 			return (float)recievedDamage / requiredDamage;

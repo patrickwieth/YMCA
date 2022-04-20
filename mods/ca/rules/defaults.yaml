@@ -875,7 +875,7 @@
 		CancelActivity: true
 	ChangesHealth@DRIVER_DEAD:
 		PercentageStep: -1
-		Delay: 30
+		Delay: 60
 		HealIfBelow: 101
 		DamageCooldown: 0
 		RequiresCondition: driver-dead
@@ -3277,6 +3277,25 @@
 			railgunner: loaded
 			railgunner.nocrush: loaded
 			cryot: loaded
+			che1: loaded
+			che2: loaded-air
+			che3: loaded-air
+	AutoTarget:
+		InitialStance: Defend
+		InitialStanceAI: Defend
+		RequiresCondition: loaded || loaded-air
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: (stance-attackanything || assault-move) && !loaded-air
+	AutoTargetPriority@DEFAULT_AIR:
+		RequiresCondition: !stance-attackanything && !assault-move && loaded-air
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+		InvalidTargets: NoAutoTarget, WaterStructure
+	AutoTargetPriority@ATTACKANYTHING_AIR:
+		RequiresCondition: (stance-attackanything || assault-move) && loaded-air
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		InvalidTargets: NoAutoTarget
 
 ^TNTPlantable:
 	DelayedWeaponAttachable@TNT:
@@ -3566,18 +3585,28 @@
 		Damage: 0
 
 ^DriverBiologicalDamage:
-	DamagedByTintedCells@RAD:
-		Damage: 100
+	DriverPoisonable:
+		Condition: being-poisoned
+		RevokeDelay: 10
+		ScaleWithCurrentHealthPercentage: false
+		ShowSelectionBar: true
+		SelectionBarColor: 44FF00
+		RequiresCondition: !driver-dead
+	WithColoredOverlay@IRRADIATABLE:
+		Palette: irrad-weak
+		RequiresCondition: being-poisoned
+	DriverPoisonedByTintedCells@RAD:
+		Damage: 300
 		DamageInterval: 8
 		DamageTypes: RadiationDeath
 		LayerName: radioactivity
 	DamagedByTintedCells@TOXIN:
-		Damage: 100
+		Damage: 300
 		DamageInterval: 8
 		DamageTypes: RadiationDeath
 		LayerName: toxin
 	DamagedByTintedCells@FROZEN:
-		Damage: 50
+		Damage: 100
 		DamageInterval: 16
 		DamageTypes: FrozenDeath
 		LayerName: cryoresidue
