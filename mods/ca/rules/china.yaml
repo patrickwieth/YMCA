@@ -2463,7 +2463,7 @@ choutpost:
 		InitialDelay: 45
 		CloakDelay: 45
 		UncloakOn: Attack, Unload, Move
-		PauseOnCondition: cloak-force-disabled || base-reveal || disabled
+		PauseOnCondition: cloak-force-disabled || base-reveal || disabled || driver-dead
 		IsPlayerPalette: true
 	RenderSprites:
 		Scale: 0.89
@@ -2675,12 +2675,12 @@ chnukecann:
 	Inherits@announce: ^AnnounceGlobal
 	Inherits@vo: ^AttackTurretedVoice
 	Valued:
-		Cost: 1800
+		Cost: 2400
 	Tooltip:
 		Name: Nuke Cannon
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chpropaganda, upnukecann, ~vehicles.chinaatom
+		Prerequisites: chpropaganda, ~vehicles.chinaatom
 		Queue: Vehicle
 		Description: Slow heavy artillery.\n Strong vs ground targets\n Weak vs Aircraft
 	Mobile:
@@ -2708,6 +2708,7 @@ chnukecann:
 		RequiresCondition: neutronmode
 		PauseOnCondition: !ammo
 	GrantConditionOnDeploy:
+		DeploySounds: placbldg.aud
 		DeployedCondition: deployed
 		UndeployedCondition: undeployed
 		UndeployOnMove: true

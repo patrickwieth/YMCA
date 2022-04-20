@@ -1578,47 +1578,15 @@ MicrowaveZap:
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 		Versus:
 			None: 100
-			Wood: 10
-			Concrete: 10
-			Light: 10
-			Heavy: 10
-	Warhead@emp: GrantExternalCondition
-		Range: 0c256
-		Duration: 90
-		Condition: empdisable
-		ValidTargets: Ground, Structure, Vehicle
-	Warhead@Arc: FireShrapnel
-		Weapon: MicrowaveArc
-		Amount: 1
-		AimChance: 100
-		ValidTargets: Vehicle, Ship
-		ThrowWithoutTarget: false
-
-MicrowaveArc:
-	Inherits: MicrowaveZap
-	Range: 2c512
-	Projectile: Bullet
-		Image: mwarc
-		Sequences: idle, idle2, idle3
-		Palette: tseffect-ignore-lighting-alpha75
-		Speed: 260
-	Warhead@1Dam: SpreadDamage
-		Damage: 1250
-		ValidRelationships: Enemy, Neutral
-	-Report:
-	Warhead@emp: GrantExternalCondition
-		Duration: 30
-	Warhead@Arc: FireShrapnel
-		Weapon: MicrowaveArc2
-		Amount: 2
-		AimChance: 80
-
-MicrowaveArc2:
-	Inherits: MicrowaveArc
-	-Warhead@Arc:
-	-Warhead@1Dam:
-	Warhead@emp: GrantExternalCondition
-		Duration: 15
+			Wood: 5
+			Concrete: 5
+			Light: 5
+			Reflector: 5
+			Heavy: 5
+	Warhead@Damage: DriverPoisonDamage
+		Damage: 8000
+		Spread: 128
+		ValidTargets: Vehicle
 
 MicrowaveZapSound:
 	Inherits: MicrowaveZap
@@ -1633,8 +1601,6 @@ MicrowaveZapSound:
 			Light: 0
 			Heavy: 0
 			Brick: 0
-	-Warhead@emp:
-	-Warhead@Arc:
 
 HornetLauncher:
 	ReloadDelay: 175
