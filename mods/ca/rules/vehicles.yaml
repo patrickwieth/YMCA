@@ -1166,6 +1166,7 @@ MCV:
 
 JEEP:
 	Inherits: ^Vehicle
+	Inherits@detect: ^SensorEquipment
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1187,12 +1188,6 @@ JEEP:
 	Mobile:
 		TurnSpeed: 80
 		Speed: 157
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
 	Turreted:
 		TurnSpeed: 48
 		Offset: 0,0,128
@@ -1826,6 +1821,7 @@ AMCV:
 
 HMMV:
 	Inherits: ^VehicleTD
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
@@ -1849,12 +1845,6 @@ HMMV:
 	Mobile:
 		TurnSpeed: 80
 		Speed: 157
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
 	Turreted:
 		TurnSpeed: 80
 		Offset: -85,0,128
@@ -1877,6 +1867,7 @@ HMMV:
 
 BGGY:
 	Inherits: ^VehicleTD
+	Inherits@detect: ^SensorEquipment
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1899,12 +1890,6 @@ BGGY:
 		Type: Light
 	Mobile:
 		Speed: 157
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
 	Turreted@PRIMARY:
 		TurnSpeed: 80
 		Offset: -43,0,128
@@ -1918,10 +1903,6 @@ BGGY:
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	IgnoresDisguise:
-	DetectCloaked:
-		Range: 6c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -3552,6 +3533,7 @@ BTR:
 
 BTR.Surveillance:
 	Inherits: ^Tank
+	Inherits@detect: ^SensorEquipment
 	Inherits@TRANSPORT: ^Transport
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -3572,16 +3554,6 @@ BTR.Surveillance:
 	Mobile:
 		Speed: 100
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-	DetectCloaked:
-		Range: 6c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
 		Offset: 0,0,256
@@ -6587,6 +6559,7 @@ APOC:
 
 XO:
 	Inherits: ^VehicleTD
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
@@ -6617,12 +6590,6 @@ XO:
 		CustomPipType: red
 		Weight: 2
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Voiced:
 		VoiceSet: GhostVoice
 	WithMoveAnimation:
@@ -6825,6 +6792,7 @@ MDRN.Attached:
 
 GDRN:
 	Inherits: ^Vehicle
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
@@ -6850,11 +6818,6 @@ GDRN:
 		TurnSpeed: 40
 		Speed: 134
 		Voice: Move
-	RevealsShroud:
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 40
 		Offset: 0,0,0

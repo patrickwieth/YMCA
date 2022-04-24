@@ -403,6 +403,7 @@ MAST:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	Inherits@detect: ^SensorEquipment
 	Inherits@COMMANDOSKULL: ^CommandoSkull
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
@@ -573,6 +574,7 @@ GUNW:
 
 GUNW.sensor:
 	Inherits: GUNW
+	Inherits@detect: ^SensorEquipment
 	Buildable:
 		Queue: Vehicle
 		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.gunwalker.sensor
@@ -582,16 +584,6 @@ GUNW.sensor:
 		Cost: 800
 	Tooltip:
 		Name: Gun Walker (Sensors)
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-	DetectCloaked:
-		Range: 6c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 
 SEEK:
 	Inherits: ^Vehicle

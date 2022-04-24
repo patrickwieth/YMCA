@@ -3454,3 +3454,38 @@
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
+
+^ScoutEquipment:
+	RevealsShroud:
+		RevealGeneratedShroud: False
+		Range: 12c0
+
+^SensorEquipment:
+	RevealsShroud:
+		Range: 12c0
+		RevealGeneratedShroud: False
+		RequiresCondition: undeployed
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	DetectCloaked@Deployed:
+		Range: 6c0
+		CloakTypes: Cloak, Thief, Stealth
+		RequiresCondition: !(empdisable || being-warped)
+	RenderDetectionCircle:
+		TrailCount: 6
+
+^MobileDeployableRadar:
+	RevealsShroud@deployed:
+		Range: 14c0
+		RevealGeneratedShroud: False
+		RequiresCondition: deployed
+	RevealsShroud@GAPGEN:
+		Range: 10c0
+	DetectCloaked@Deployed:
+		Range: 10c0
+		CloakTypes: Cloak, Thief, stealth
+		RequiresCondition: deployed && !(empdisable || being-warped)
+	RenderDetectionCircle:
+		TrailCount: 3
+	ProvidesRadar:
+		RequiresCondition: deployed
