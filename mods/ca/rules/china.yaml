@@ -1806,12 +1806,12 @@ charty:
 		Weapon: CHInfernoCannon
 		LocalOffset: 624,0,208
 		MuzzleSequence: muzzle
-		RequiresCondition: !flameupgrade
+		RequiresCondition: flameupgrade
 	Armament@Blue:
 		Weapon: CHInfernoCannonBlue
 		LocalOffset: 624,0,208
 		MuzzleSequence: muzzle
-		RequiresCondition: flameupgrade
+		RequiresCondition: !flameupgrade
 	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
@@ -2694,19 +2694,23 @@ chnukecann:
 	Armor:
 		Type: Heavy
 	RevealsShroud:
-		Range: 9c0
+		Range: 6c0
 	Turreted:
 		TurnSpeed: 8	#3
+	AttackTurreted:
+		RequiresCondition: !fired
+	SelectionDecorations:
+	Selectable:
+	Armament@AIM:
+		Weapon: NukeCannonDummyAim
+		PauseOnCondition: deployed
 	Armament@PRIMARY:
+		Name: primary
 		Weapon: CHNukeCannon
 		LocalOffset: 407,0,362
-		RequiresCondition: !neutronmode
-		PauseOnCondition: !ammo
-	Armament@NEUTRON:
-		Weapon: CHNukeCannonNeutron
-		LocalOffset: 407,0,362
-		RequiresCondition: neutronmode
-		PauseOnCondition: !ammo
+		PauseOnCondition: !ammo || fired
+	DeployOnAttack:
+		RequiresCondition: undeployed
 	GrantConditionOnDeploy:
 		DeploySounds: placbldg.aud
 		DeployedCondition: deployed
@@ -2714,49 +2718,47 @@ chnukecann:
 		UndeployOnMove: true
 		UndeployOnPickup: true
 		SmartDeploy: True
-	DeployOnAttack:
-		RequiresCondition: undeployed
-	AttackTurreted:
-	SelectionDecorations:
-	Selectable:
-	AcceptsDeliveredExperience:							##########
-		ValidTypes: vehicle								##########
-	WithFacingSpriteBody@Skin1:
-		Sequence: idle2
-		RequiresCondition: undeployed
-		Name: body1
-	WithFacingSpriteBody@Skin2:
-		Sequence: deploy
-		RequiresCondition: deployed
-		Name: body2
-	WithSpriteTurret@Skin2:
-		RequiresCondition: deployed
-		Sequence: turret
-	Voiced:
-		VoiceSet: CHNukeCannonVoice
 	AmmoPool:
 		Ammo: 1
 		InitialAmmo: 0
 		PipCount: 1
 		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
 	ReloadAmmoPoolCA@deployed:
 		Delay: 100
 		Count: 1
 		ShowSelectionBar: true
 		SelectionBarColor: ff0000
 		RequiresCondition: deployed
+	GrantConditionOnAttack@fired:
+		Condition: fired
+		RevokeDelay: 100
+		ArmamentNames: primary
 	ReloadAmmoPoolCA@undeployed:
 		Delay: 10
 		Count: -1
-		ShowSelectionBar: false
+		ShowSelectionBar: true
+		SelectionBarColor: 00ff00
 		RequiresCondition: undeployed
-	GrantTimedCondition@undeploy:
-		Duration: 50
-		Condition: immobile
-		RequiresCondition: undeployed
-	SpeedMultiplier@DEPLOY:
+	SpeedMultiplier@UNDEPLOY:
 		Modifier: 0
-		RequiresCondition: immobile
+		RequiresCondition: fired
+	WithFacingSpriteBody@Skin1:
+		Sequence: idle2
+		RequiresCondition: !ammo && !deployed
+		Name: body1
+	WithFacingSpriteBody@Skin2:
+		Sequence: deploy
+		RequiresCondition: ammo || deployed
+		Name: body2
+	WithSpriteTurret@Skin2:
+		RequiresCondition: ammo || deployed
+		Sequence: turret
+	Voiced:
+		VoiceSet: CHNukeCannonVoice
 	ProducibleWithLevel:
 		Prerequisites: upcharty
 		InitialLevels: 1

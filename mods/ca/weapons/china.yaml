@@ -300,16 +300,24 @@ CHAtomicTankExplode2:
 		ValidStances: Enemy, Neutral
 	-Warhead@3Radiation:
 
+NukeCannonDummyAim:
+	Range: 22c0
+	ReloadDelay: 20
+	ValidTargets: Ground, Trees, Water, Underwater
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+
 CHNukeCannon:
 	Inherits: ^ShellArtillery
 	Inherits@Explosion: CHAtomicWeapon
-	ReloadDelay: 50
+	ReloadDelay: 330
 	Range: 22c0
 	MinRange: 6c0
 	Report: vnukweaa.wav
 	TargetActorCenter: true
 	Projectile: Bullet
 		ContrailLength: 30
+		LaunchAngle: 135
 		Speed: 180
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
@@ -697,6 +705,7 @@ CHECMDisable:
 
 CHInfernoCannon:
 	Inherits: ^ShellArtillery
+	Inherits: ^Napalm
 	ReloadDelay: 125
 	MinRange: 1c256
 	Range: 12c0
@@ -706,6 +715,7 @@ CHInfernoCannon:
 		Speed: 350
 		TrailImage: fb2
 		Image: FB1
+		LaunchAngle: 90
 	Warhead@1Dam: SpreadDamage
 		Spread: 0c341
 		Damage: 4000
