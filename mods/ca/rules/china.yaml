@@ -1686,7 +1686,7 @@ chbattle:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 5
+		TurnSpeed: 12
 		Offset: 150,0,150
 	Armament@Normal:
 		Weapon: CHBattlemasterCannon
@@ -1804,14 +1804,8 @@ charty:
 		Range: 5c0
 	Armament@Normal:
 		Weapon: CHInfernoCannon
-		LocalOffset: 624,0,208
+		LocalOffset: 624,0,608
 		MuzzleSequence: muzzle
-		RequiresCondition: flameupgrade
-	Armament@Blue:
-		Weapon: CHInfernoCannonBlue
-		LocalOffset: 624,0,208
-		MuzzleSequence: muzzle
-		RequiresCondition: !flameupgrade
 	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
@@ -1885,6 +1879,7 @@ choverlord:
 		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
 	Mobile:
 		Locomotor: sheavytracked
+		TurnSpeed: 8
 		Speed: 56
 	Passenger:
 		Weight: 6
@@ -1905,10 +1900,10 @@ choverlord:
 		Range: 6c0
 	Turreted:
 		TurnSpeed: 3
-		Offset: -298,0,128
+		Offset: -298,0,150
 	Armament@Normal:
 		Weapon: OverlordCannon
-		LocalOffset: 900,200,340, 900,-200,340
+		LocalOffset: 950,250,340, 950,-250,340
 		Recoil: 170
 		RecoilRecovery: 42
 		MuzzleSequence: muzzle
@@ -2183,13 +2178,6 @@ chdragon:
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
 		RequiresCondition: !flameupgrade && !deployed
-	Armament@Blue:
-		Weapon: CHDragonFlamerBlue
-		Recoil: 85
-		RecoilRecovery: 17
-		LocalOffset: 720,0,90
-		MuzzleSequence: muzzle
-		RequiresCondition: flameupgrade && !deployed
 	Armament@Firewall1:
 		Name: firewall1
 		Weapon: CHDragonFirestorm
@@ -2205,21 +2193,6 @@ chdragon:
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
 		RequiresCondition: !flameupgrade && deployed && firewallcycle >= 1
-	Armament@FirewallB1:
-		Name: firewall1
-		Weapon: CHDragonFirestormB
-		Recoil: 85
-		RecoilRecovery: 17
-		LocalOffset: 720,0,90
-		MuzzleSequence: muzzle
-		RequiresCondition: flameupgrade && deployed && firewallcycle < 1
-	Armament@FirewallB2:
-		Weapon: CHDragonFirestormB2
-		Recoil: 85
-		RecoilRecovery: 17
-		LocalOffset: 720,0,90
-		MuzzleSequence: muzzle
-		RequiresCondition: flameupgrade && deployed && firewallcycle >= 1
 	GrantConditionOnDeploy:
 		DeployedCondition: deployed
 		SkipMakeAnimation: true
@@ -2254,12 +2227,9 @@ chdragon:
 	ProducibleWithLevel:
 		Prerequisites: selectchtanks
 		InitialLevels: 1
-	ProductionCostMultiplier@selectchtanks:
-		Multiplier: 90
-		Prerequisites: selectchtanks
-		Queue: Vehicle.CHINA, RAVehicle.CHINA
     RenderSprites:
         Scale: 1.1
+
 chdragon.Husk:
 	Inherits: ^LightHusk
 	Tooltip:
@@ -3223,18 +3193,6 @@ CHMIG:
 		LocalYaw: -40, 24
 		PauseOnCondition: !ammo
 		RequiresCondition: !flameupgrade
-	Armament@1b:
-		Weapon: CHMIGWeaponBlue
-		LocalOffset: 0,-640,0, 0,640,0
-		LocalYaw: -40, 24
-		PauseOnCondition: !ammo
-		RequiresCondition: flameupgrade
-	Armament@2b:
-		Weapon: HellfireAA
-		LocalOffset: 0,640,0, 0,-640,0
-		LocalYaw: -40, 24
-		PauseOnCondition: !ammo
-		RequiresCondition: flameupgrade
 	AttackAircraft:
 		FacingTolerance: 20
 		PersistentTargeting: false
@@ -3270,9 +3228,6 @@ CHMIG:
 		Prerequisites: aircraft.upgraded
 	Voiced:
 		VoiceSet: CHMiGVoice
-	GrantConditionOnPrerequisite@upbluefire:
-		Condition: flameupgrade
-		Prerequisites: upbluefire
 	GrantConditionOnPrerequisite@upmigarmor:
 		Condition: upmigarmor
 		Prerequisites: upmigarmor
@@ -3329,10 +3284,11 @@ CHMIG2:
 	Aircraft:
 		CruiseAltitude: 2560
 		InitialFacing: 192
-		TurnSpeed: 4
-		Speed: 223
+		TurnSpeed: 16
+		Speed: 225
 		RepulsionSpeed: 40
 		MaximumPitch: 56
+		TakeoffSounds: migtoff1.aud
 	AutoTarget:
 		InitialStance: HoldFire
 	AmmoPool:
@@ -3717,13 +3673,6 @@ chflameboat:
 		Recoil: 85
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
-		RequiresCondition: !flameupgrade
-	Armament@Blue:
-		Weapon: CHBoatFlamerBlue
-		Recoil: 85
-		RecoilRecovery: 17
-		LocalOffset: 720,0,90
-		RequiresCondition: flameupgrade
 	AttackFrontal:
 	DetectCloaked:
 		Range: 4c0

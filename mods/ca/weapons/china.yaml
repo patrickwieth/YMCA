@@ -80,15 +80,6 @@ CHFlame:
 		AffectsParent: True
 		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
 
-CHFlameRadiationB:
-	Inherits: CHFlameRadiation
-	Warhead@1Cloud: SpawnSmokeParticle
-		Duration: 180
-		Speed: 8, 32
-		Image: explosion
-		Sequences: blue_small_napalm
-		Weapon: CHFlameBlue
-
 CHFlameBlue:
 	Inherits: CHFlame
 	Warhead@1Dam: SpreadDamage
@@ -413,46 +404,34 @@ SCHBattlemasterCannonNuclearAuto:
     BurstDelays: 6
 
 CHDragonFlamer:
-	Inherits: Flamer
+	Inherits: ^Fire
 	Burst: 8
 	ReloadDelay: 45
 	BurstDelays: 4
 	Range: 5c0
+	StartBurstReport: flamer3.aud
 	Projectile: Bullet
 		Speed: 200
 		TrailImage: fb2
 		Image: FB1
 		Inaccuracy: 512
+		Palette: tseffect-ignore-lighting-alpha90
+		LaunchAngle: 5
 	Warhead@1Dam: SpreadDamage
+		Spread: 288
+		Falloff: 100, 50, 25, 12, 6, 3, 0
 		Damage: 2500
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 1
+		Dimensions: 1,1
+		Footprint: x
 	Warhead@2Clear: OpenToppedDamage
 		Spread: 0c512
 		Damage: 500
 		ValidTargets: Garrisoned
 		Amount: 4
 		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
-
-CHDragonFlamerBlue:
-	Inherits: Flamer
-	Burst: 8
-	ReloadDelay: 20
-	BurstDelays: 4
-	Range: 5c0
-	Projectile: Bullet
-		Speed: 200
-		TrailImage: citywatherthrower
-		Image: blue_fb1
-		Inaccuracy: 512
-	Warhead@1Dam: SpreadDamage
-		Damage: 3750
-	Warhead@2Clear: OpenToppedDamage
-		Spread: 0c512
-		Damage: 700
-		ValidTargets: Garrisoned
-		Amount: 4
-		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
-	Warhead@3Eff: CreateEffect
-		Explosions: citywatersplash
 
 CHDragonFirestorm:
 	Inherits: CHDragonFlamer
@@ -473,18 +452,6 @@ CHDragonFirestorm2:
 	FirstBurstTargetOffset: 1000,1800,0
 	FollowingBurstTargetOffset: -100,-180,0
 
-CHDragonFirestormB:
-	Inherits: CHDragonFirestorm
-	Inherits@2: CHDragonFlamerBlue
-	Inherits@Rad: CHFlameRadiationB
-	Warhead@1Dam: SpreadDamage
-		Damage: 3300
-
-CHDragonFirestormB2:
-	Inherits: CHDragonFirestormB
-	FirstBurstTargetOffset: 1000,1800,0
-	FollowingBurstTargetOffset: -100,-180,0
-
 CHBoatFlamer:
 	Inherits: CHDragonFlamer
 	Range: 5c896
@@ -492,14 +459,6 @@ CHBoatFlamer:
 		Inaccuracy: 512
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
-
-CHBoatFlamerBlue:
-	Inherits: CHDragonFlamerBlue
-	Range: 5c896
-	Projectile: Bullet
-		Inaccuracy: 512
-	Warhead@1Dam: SpreadDamage
-		Damage: 4500
 
 CHMIGWeapon:
 	Inherits: ^AntiGroundMissile
@@ -524,22 +483,6 @@ CHMIGWeapon:
 		InvalidTargets: FireImmune
 		Weapon: CHInfernoCannonC
 		Amount: 1
-
-CHMIGWeaponBlue:
-	Inherits: CHMIGWeapon
-	Inherits@Rad: CHFlameRadiationB
-	Projectile: Bullet
-		Speed: 300
-		TrailImage: citywatherthrower
-		Image: DRAGON
-		Inaccuracy: 1024
-	Warhead@1Dam: SpreadDamage
-		Damage: 2600
-	Warhead@3Eff: CreateEffect
-		Explosions: citywatersplash
-	Warhead@Shrapnel: FireShrapnel
-		InvalidTargets: FireImmune
-		Weapon: CHInfernoCannonCBlue
 
 CHMIGWeapon2:
 	Inherits: CHMIGWeapon
@@ -735,33 +678,6 @@ CHInfernoCannonC:
 	Warhead@1Dam: TargetDamage
 	Projectile: InstantHit
 		Inaccuracy: 512
-
-CHInfernoCannonBlue:
-	Inherits: CHInfernoCannon
-	Inherits@Rad: CHFlameRadiation
-	Projectile: Bullet
-		Speed: 384
-		TrailImage: blue_fb2
-		Image: blue_fb1
-	Warhead@1Dam: SpreadDamage
-		Damage: 6000
-	Warhead@3Eff: CreateEffect
-		Explosions: blue_building
-	Warhead@Shr: FireShrapnel
-		InvalidTargets: FireImmune
-		Weapon: CHInfernoCannonCBlue
-		Amount: 2
-
-CHInfernoCannonCBlue:
-	Inherits: Flamer
-	Inherits@Rad: CHFlameRadiationB
-	Burst: 1
-	Range: 1c512
-	Projectile: InstantHit
-		Inaccuracy: 512
-	Warhead@1Dam: TargetDamage
-	Warhead@3Eff: CreateEffect
-		Explosions: citywatersplash
 
 CHBarrageSpawner:
 	ValidTargets: Ground, Water, Air
