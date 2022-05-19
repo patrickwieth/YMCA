@@ -194,11 +194,7 @@ V2RL:
 
 GTNK:
 	Inherits: 2TNK
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 70
-		Prerequisites: vehicles.any, ~vehicles.england
-		Description: England's main battle tank.\nEquipped with AP Shells.
+	-Buildable:
 	Valued:
 		Cost: 875
 	Tooltip:
@@ -230,6 +226,35 @@ GTNK:
 		VoiceSet: GrizzlyVoice
 	WithShadow:
 		RequiresCondition: parachute
+
+GTNK.squad:
+	AlwaysVisible:
+	Interactable:
+	ScriptTriggers:
+	ProvidesPrerequisite@squadname:
+	Tooltip:
+		Name: Airdrop: Grizzly Tanks
+	Buildable:
+		Queue: Vehicle
+		BuildAtProductionType: Paradrop
+		BuildPaletteOrder: 0
+		Prerequisites: dome, ~vehicles.england
+		Description: Prepare a quad of Grizzly Tanks for airdrop.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor, Light Armor
+		Weaknesses: • Weak vs Infantry, Defenses\n• Cannot attack Aircraft
+	Valued:
+		Cost: 3500
+	RenderSprites:
+		Image: squad.airborne.tank
+	ProduceActorPowerCA:
+		Actors: powerproxy.airborne.tank
+		Type: Paradrop
+		OneShot: true
+		AutoFire: true
+		AllowMultiple: true
+	Armor:
+		Type: Heavy
 
 2TNK.Chrono:
 	Inherits: 2TNK
