@@ -50,6 +50,29 @@ commander_tree.oil_pumps:
 		Prerequisites: prerequisite.has_points, ~anypower, ~global.oilpumps
 		Description: Enables to build Oil Pumps.\n  Generates slow trickling endless income.
 
+commander_tree.stealth_miners:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stealth Miners
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 1
+		IconPalette: chrome
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~structures.nod, ~anypower
+		Description: Equips Miners with stealth technology.
+
+commander_tree.shielded_miners:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Shielded Miners
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 1
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~structures.gdi, ~anypower
+		Description: Equips Miners with shield technology.
+
 hack.cameo_filler.1:
 	Inherits: ^default.cameo_filler
 	Buildable:
@@ -60,7 +83,7 @@ hack.cameo_filler.2:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 2
-		Prerequisites: prerequisite.has_points, ~anypower, disabled
+		Prerequisites: prerequisite.has_points, ~anypower, ~!structures.nod, ~!structures.gdi, disabled
 
 commander_tree.basic_logistics:
 	Inherits: ^default.commander_tree_item
@@ -1527,7 +1550,7 @@ commander_tree.Hover_MLRS.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 211
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, gtek, commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs, ~!commander_tree.hover_mlrs.pld
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, gtek, ~commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs, ~!commander_tree.hover_mlrs.pld
 		Description: Equips the Hover MLRS with Reflector Armor. \n Very resistent vs. Energy Weapons.
 
 commander_tree.Hover_MLRS.PLD:
@@ -1538,7 +1561,7 @@ commander_tree.Hover_MLRS.PLD:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 211
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, gtek, commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs, ~!commander_tree.hover_mlrs.reflector
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, gtek, ~commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs, ~!commander_tree.hover_mlrs.reflector
 		Description: Upgrades the Hover MLRS with a Point Laser Defense System. \n Very resistent vs. Projectile Weapons.
 
 commander_tree.Hailstorm_MLRS:

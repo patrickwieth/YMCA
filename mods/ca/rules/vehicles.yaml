@@ -238,7 +238,7 @@ GTNK.squad:
 		Queue: Vehicle
 		BuildAtProductionType: Paradrop
 		BuildPaletteOrder: 0
-		Prerequisites: dome, ~vehicles.england
+		Prerequisites: dome, ~vehicles.england, orep
 		Description: Prepare a quad of Grizzly Tanks for airdrop.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Armor, Light Armor
@@ -3493,6 +3493,38 @@ HAR2:
 		CarriedCondition: notmobile
 		ReservedCondition: carryall-reserved
 		LockedCondition: notmobile
+	GrantConditionOnPrerequisite@stealthed:
+		Condition: stealth-miner
+		Prerequisites: commander_tree.stealth_miners
+	Cloak@NORMAL:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		CloakedCondition: hidden
+		UncloakSound: appear1.aud
+		Palette: cloak
+		IsPlayerPalette: false
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead && stealth-miner
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	GrantConditionOnPrerequisite@shielded:
+		Condition: shielded-miner
+		Prerequisites: commander_tree.shielded_miners
+	Shielded:
+		MaxStrength: 75000
+		RegenDelay: 150
+		RegenAmount: 250
+		RegenInterval: 5
+		ShieldsUpCondition: shields-up
+		RequiresCondition: shielded-miner && !empdisable
+		SelectionBarColor: 4488ff
+	WithColoredOverlay@shieldhit:
+		RequiresCondition: weaponhit && shields-up
+		Palette: shieldhit
+	ExternalCondition@weaponhit:
+		Condition: weaponhit
 
 BTR:
 	Inherits: ^Tank
