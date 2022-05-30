@@ -577,7 +577,7 @@ commander_tree.Huey.Cryo:
 		IconPalette: chrometd
 		BuildPaletteOrder: 37
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.grenade
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.grenade, ~!commander_tree.huey.recon
 		Description: Upgrades the attack of the Huey with cryo missiles, slowing down enemies.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.huey
@@ -590,7 +590,7 @@ commander_tree.Huey.Recon:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 37
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.grenade
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.grenade, ~!commander_tree.huey.cryo
 		Description: Upgrades the sensors of the Huey and removes the armament. \nThe Huey can transport an infantry unit, sniper can shoot from it.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.huey
@@ -603,28 +603,28 @@ commander_tree.Huey.Grenade:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 38
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, ~!commander_tree.huey.cryo
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, ~!commander_tree.huey.cryo, ~!commander_tree.huey.recon
 		Description: Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.huey
-
-hack.cameo_filler.20:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 39
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, disabled
 
 hack.cameo_filler.20a:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 39
-		Prerequisites: prerequisite.has_points, ~aircraft.england, atek, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.england, ~!filler.huey, atek, disabled
 
-hack.cameo_filler.21:
+hack.cameo_filler.20b:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 40
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, atek, disabled, ~filler.huey
+		BuildPaletteOrder: 39
+		Prerequisites: prerequisite.has_points, ~filler.huey, atek, disabled
+
+hack.cameo_filler.20c:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 39
+		Prerequisites: prerequisite.has_points, ~filler.huey, atek, disabled
 
 commander_tree.Aurora:
 	Inherits: ^default.commander_tree_item
@@ -1541,6 +1541,12 @@ commander_tree.Hover_MLRS:
 		Description: Enables to build the Hover MLRS. \n  The Hover MLRS improves the MLRS' agility and gives it high explosive rockets.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.hmlrs
+
+hack.cameo_filler.204a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 213
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!filler.mlrs, ~!filler.hmlrs, disabled
 
 commander_tree.Hover_MLRS.Reflector:
 	Inherits: ^default.commander_tree_item
