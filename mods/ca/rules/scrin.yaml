@@ -403,6 +403,7 @@ MAST:
 	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	Inherits@detect: ^SensorEquipment
 	Inherits@COMMANDOSKULL: ^CommandoSkull
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
@@ -431,10 +432,19 @@ MAST:
 	Armament@PRIMARY:
 		Weapon: EnslaveInfantry
 		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: EnslaveVehicle
 		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 100
+		Count: 1
+		DelayAfterReset: 60
 	MindController:
 		ArmamentNames: primary, secondary
 		Capacity: 1
@@ -500,6 +510,8 @@ HARV.Scrin:
 	-WithHarvestAnimation:
 	WithDamageOverlay:
 		Palette: chrometd
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
 
 GUNW:
 	Inherits: ^Vehicle
@@ -1838,7 +1850,7 @@ STMR.bomber:
 		PauseOnCondition: !ammo
 	-Armament@SECONDARY:
 	AmmoPool:
-		Ammo: 14
+		Ammo: 16
 		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 2
@@ -2246,7 +2258,7 @@ PAC.laser:
 		RevokeOnNewTarget: False
 		RevokeAll: True
 	-AttackFrontal:
-	AttackOmni:
+	AttackTurreted:
 		Armaments: primary, secondary, tertiary
 		PauseOnCondition: empdisable || being-warped
 	-CarrierMaster@carr1:
@@ -3168,6 +3180,8 @@ PROC.SCRIN:
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
 	CashHackable:
+	SpawnActorsOnSell:
+		ActorTypes: proc.dummy, s1, s1, s1, s1, s1, s1, s1, s1
 
 PORT:
 	Inherits: ^ScrinBuilding

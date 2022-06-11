@@ -1055,7 +1055,7 @@ HARV:
 	WithFacingSpriteBody:
 	-Crushable:
 	Targetable:
-		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
 	GrantConditionOnPrerequisite@OREPUPGRADE:
 		Prerequisites: orep
 		Condition: orep-upgrade
@@ -1166,7 +1166,7 @@ MCV:
 
 JEEP:
 	Inherits: ^Vehicle
-	Inherits: ^SensorEquipment
+	Inherits@detect: ^SensorEquipment
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1862,7 +1862,7 @@ HMMV:
 		Prerequisites: vehicles.upgraded
 
 BGGY:
-	Inherits: ^VehicleTD#
+	Inherits: ^VehicleTD
 	Inherits@detect: ^SensorEquipment
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1899,10 +1899,6 @@ BGGY:
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	IgnoresDisguise:
-	DetectCloaked:
-		Range: 6c0
-		CloakTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -3461,7 +3457,7 @@ HAR2:
 		Weapon: TibExplosion
 	-Crushable:
 	Targetable:
-		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
 	-Carryable:
 	CarryableHarvester:
 	AutoCarryable:
@@ -3534,7 +3530,7 @@ BTR:
 BTR.Surveillance:
 	Inherits: ^Tank
 	Inherits@detect: ^SensorEquipment
-	Inherits@detect: ^MobileDeployableRadar
+	Inherits@radar: ^MobileDeployableRadar
 	Inherits@TRANSPORT: ^Transport
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -6392,7 +6388,7 @@ MAMMOTHMK2:
 		TurnSpeed: 8
 		Speed: 35
 	Health:
-		HP: 270000
+		HP: 275000
 	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
@@ -6425,8 +6421,10 @@ MAMMOTHMK2:
 		MuzzleSequence: muzzle2
 	AttackFrontal:
 		Armaments: railgun
+		PauseOnCondition: empdisable || being-warped
 	AttackFollow:
 		Armaments: missiles, aamissiles
+		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	SelectionDecorations:
 	Selectable:
@@ -6802,11 +6800,6 @@ GDRN:
 		TurnSpeed: 40
 		Speed: 134
 		Voice: Move
-	RevealsShroud:
-		Range: 14c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 40
 		Offset: 0,0,0

@@ -127,7 +127,8 @@ BigFlamerTDFF:
 	Projectile: LinearPulse
 		Speed: 96
 		ImpactInterval: 3
-		Image: flameallfast
+		-Image:
+		-Palette:
 		Inaccuracy: 484
 		Palette: tseffect-ignore-lighting-alpha90
 		MinimumImpactDistance: 1440
@@ -184,12 +185,14 @@ ChemsprayE:
 	Range: 5c0
 
 HeavyFlameTankFlamer:
-	Inherits: BigFlamerTDFF
+	Inherits: BigFlamer
 	ReloadDelay: 80
 	Burst: 30
 	BurstDelays: 2
 	Warhead@1Dam: SpreadDamage
-		Damage: 155
+		Damage: 300
+		Versus:
+			None: 230
 	Warhead@2Smu: LeaveSmudge
 		AirThreshold: 256
 		Chance: 10
@@ -222,7 +225,7 @@ BlackHandFlamer:
 	Warhead@1Dam: SpreadDamage
 		Range: 0, 256, 512
 		Falloff: 100, 100, 0
-		Damage: 200
+		Damage: 400
 	Warhead@2Smu: LeaveSmudge
 		Chance: 5
 
@@ -799,7 +802,7 @@ XOLaser:
 		SecondaryBeamColor: 79cd0040
 	Warhead@1Dam: SpreadDamage
 		Spread: 42
-		Damage: 6000
+		Damage: 5000
 
 PortaLaser:
 	Inherits: LaserPrototype
@@ -1421,6 +1424,7 @@ Railgun.Titan:
 
 Railgun.MKII:
 	Inherits: Railgun.Titan
+	Range: 7c512
 	Burst: 2
 	BurstDelays: 5
 	ReloadDelay: 45

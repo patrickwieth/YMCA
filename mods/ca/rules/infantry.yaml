@@ -615,6 +615,7 @@ SPY:
 
 E7:
 	Inherits: ^Soldier
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Buildable:
@@ -675,15 +676,12 @@ E7:
 		Voice: Build
 	AnnounceOnKill:
 	IgnoresDisguise:
-	DetectCloaked:
-		CloakTypes: Cloak, Thief
-		Range: 5c0
 	Voiced:
 		VoiceSet: TanyaVoice
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
 	-Crushable:
 	TakeCover:
 		SpeedModifier: 70
@@ -1453,7 +1451,7 @@ RMBO:
 		CloakTypes: Cloak, Thief
 		Range: 5c0
 	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
 	-Crushable:
 	TakeCover:
 		SpeedModifier: 70
@@ -1520,7 +1518,11 @@ VICE:
 
 SNIP:
 	Inherits: ^Soldier
+<<<<<<< HEAD
 	Inherits: ^SensorEquipment
+=======
+	Inherits: ^ScoutEquipment
+>>>>>>> master
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
@@ -1587,6 +1589,7 @@ SNIP:
 
 BORI:
 	Inherits: ^Soldier
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@COMMANDOSKULL: ^CommandoSkull
@@ -1613,8 +1616,6 @@ BORI:
 	-Crushable:
 	Guard:
 		Voice: Move
-	RevealsShroud:
-		Range: 10c0
 	Passenger:
 		PipType: Red
 		Voice: Move
@@ -1653,15 +1654,12 @@ BORI:
 		Voice: Build
 	AnnounceOnKill:
 	IgnoresDisguise:
-	DetectCloaked:
-		CloakTypes: Cloak, Thief
-		Range: 5c0
 	Voiced:
 		VoiceSet: BorisVoice
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
 	TakeCover:
 		SpeedModifier: 70
 
@@ -2345,7 +2343,7 @@ RMBC:
 		ReferencePoint: Bottom, Left
 		RequiresCondition: tibheal
 	Targetable:
-		TargetTypes: Ground, Vehicle, Tank, ChaosImmune, DriverKillImmune
+		TargetTypes: Ground, Vehicle, Tank, ChaosImmune, DriverKillImmune, MindControlImmune
 	Targetable@REPAIR:
 		RequiresCondition: !parachute && damaged && !being-warped
 		TargetTypes: Repair
@@ -2753,6 +2751,7 @@ SHAD:
 
 SHAD.Commando:
 	Inherits: SHAD
+	Inherits@detect: ^SensorEquipment
 	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Tooltip:
 		Name: Shadow Commando
@@ -2779,6 +2778,8 @@ SHAD.Commando:
 	Minelayer:
 		Mine: SHAB.commando
 		TileUnknownName: build-valid
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
 
 # ---- dummy actor because RearmableActors is required
 SHAD.REARM:
@@ -2990,6 +2991,7 @@ BH:
 
 YURI:
 	Inherits: ^Soldier
+	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Inherits@BOTHELPER: ^BotCaptureHelper
@@ -3068,8 +3070,6 @@ YURI:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Armaments: primary, secondary, aidummy
-	RevealsShroud:
-		Range: 10c0
 	Passenger:
 		CustomPipType: red
 		Voice: Move
