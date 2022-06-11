@@ -1,3 +1,14 @@
+^Dummy:
+	Warhead@1Dam: SpreadDamage
+		Damage: 1
+		Versus:
+			None: 0
+			Wood: 0
+			Concrete: 0
+			Light: 0
+			Heavy: 0
+			Brick: 0
+
 ^Fire:
 	Warhead@1Dam: SpreadDamage
 		Versus:
@@ -46,7 +57,7 @@
 ^NapalmBomb:
 	Warhead@1Dam: SpreadDamage
 		Versus:
-			None: 90
+			None: 100
 			Light: 85
 			Reflector: 85
 			Heavy: 55
@@ -62,6 +73,72 @@
 	Warhead@Flames: FireCluster
 		Weapon: BurnFx
 		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+
+^NapalmMissile:
+	Warhead@1Dam: SpreadDamage
+		Spread: 128
+		Damage: 500
+		Falloff: 500, 368, 135, 50, 18, 7, 0
+		Versus:
+			None: 10
+			Light: 75
+			Reflector: 75
+			Heavy: 100
+			Wood: 75
+			Concrete: 75
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		Falloff: 500, 368, 135, 50, 18, 7, 0
+		Delay: 3
+		Versus:
+			None: 180
+			Light: 100
+			Reflector: 80
+			Heavy: 25
+			Wood: 100
+			Concrete: 35
+			Brick: 20
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@3Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		Falloff: 500, 368, 135, 50, 18, 7, 0
+		Delay: 6
+		Versus:
+			None: 180
+			Light: 100
+			Reflector: 80
+			Heavy: 25
+			Wood: 100
+			Concrete: 35
+			Brick: 20
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@4Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		Falloff: 500, 368, 135, 50, 18, 7, 0
+		Delay: 9
+		Versus:
+			None: 180
+			Light: 100
+			Reflector: 80
+			Heavy: 25
+			Wood: 100
+			Concrete: 35
+			Brick: 20
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Scorch
+	Warhead@3Eff: CreateEffect
+		Explosions: large_napalm
+		ImpactSounds: firebl3.aud
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 5
 		Dimensions: 3,3
 		Footprint: xxx xxx xxx
 
@@ -86,19 +163,60 @@
 			Wood: 75
 			Concrete: 30
 			Brick: 20
-		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+		DamageTypes: Prone50Percent, TriggerProne, PoisonDeath
+
+^Cryo:
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 550
+		Falloff: 100, 25, 12, 0
+		Versus:
+			None: 100
+			Wood: 15
+			Light: 35
+			Heavy: 5
+			Concrete: 5
+			Brick: 1
+		DamageTypes: SmallExplosionDeath
+	Warhead@2Eff: CreateEffect
+		Explosions: cryohit
+		ImpactSounds: cryozap.aud
+	Warhead@chill: GrantExternalCondition
+		Condition: chilled
+		Duration: 120
+		Range: 0c448
+	Warhead@cryoresidue: CreateTintedCells
+		LayerName: cryoresidue
+		Spread: 1c0
+		Level: 100
+		Falloff: 100, 52, 15, 2
+		MaxLevel: 600
 
 ^Radiation:
 	Warhead@1Dam: SpreadDamage
-		Versus:
-			None: 250
-			Light: 45
-			Reflector: 20
-			Heavy: 30
-			Wood: 12
-			Concrete: 12
-			Brick: 0
+		InvalidTargets: Air
+		Spread: 512
+		Damage: 2500
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+		ValidTargets: Infantry
+		Versus:
+			None: 100
+			Wood: 0
+			Concrete: 0
+			Light: 0
+			Reflector: 0
+			Heavy: 0
+	Warhead@2DriverDam: DriverPoisonDamage
+		Damage: 8000
+		Spread: 128
+		ValidTargets: Vehicle
+		Versus:
+			None: 100
+			Wood: 0
+			Concrete: 0
+			Light: 100
+			Reflector: 20
+			Heavy: 50
 
 ^Bullet:
 	Warhead@1Dam: SpreadDamage
@@ -241,7 +359,7 @@
 
 ^ShellArtillery:
 	Report: tank5.aud
-	MinRange: 4c0  
+	MinRange: 4c0
 	Range: 14c0
 	Projectile: BulletCA
 		Speed: 204
@@ -484,7 +602,7 @@
 			Light: 125
 			Reflector: 25
 			Heavy: 100
-			Wood: 100
+			Wood: 60
 			Concrete: 25
 			Brick: 45
 
@@ -496,7 +614,7 @@
 			Light: 100
 			Reflector: 25
 			Heavy: 50
-			Wood: 75
+			Wood: 50
 			Concrete: 15
 			Brick: 45
 	Warhead@2Dam: SpreadDamage
@@ -505,7 +623,7 @@
 			Light: 100
 			Reflector: 25
 			Heavy: 50
-			Wood: 75
+			Wood: 50
 			Concrete: 15
 			Brick: 45
 

@@ -500,12 +500,6 @@ StingerAA:
 		Range: 0, 0c64, 0c256, 3c0
 		Falloff: 100, 100, 20, 10
 		ValidTargets: Air
-		Versus:
-			None: 100
-			Wood: 100
-			Light: 100
-			Concrete: 100
-			Brick: 100
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 		ImpactActors: false
@@ -629,16 +623,10 @@ HonestJohnSub:
 	Projectile: BulletCA
 		Inaccuracy: 1c0
 	Warhead@1Dam: SpreadDamage
-		Spread: 512
-		Damage: 10000
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-	Warhead@1Dam_impact: SpreadDamage
 		Spread: 1c0
 		Damage: 3250
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Trees, Water, Air
-		Versus:
-			Brick: 25
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Res_impact: DestroyResource
@@ -736,6 +724,7 @@ KatyushaRockets:
 
 HonestJohn:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^NapalmMissile
 	ReloadDelay: 110
 	Burst: 2
 	BurstDelays: 50
@@ -752,74 +741,10 @@ HonestJohn:
 		Speed: 210
 		LaunchAngle: 37
 		PointDefenseType: Missile
-	Warhead@1Dam: SpreadDamage
-		Spread: 512
-		Damage: 500
-		Falloff: 500, 368, 135, 50, 18, 7, 0
-		Versus:
-			None: 120
-			Wood: 95
-			Concrete: 60
-			Light: 65
-			Reflector: 65
-			Heavy: 40
-			Brick: 15
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-	Warhead@2Dam: SpreadDamage
-		Spread: 512
-		Damage: 500
-		Falloff: 500, 368, 135, 50, 18, 7, 0
-		Delay: 3
-		Versus:
-			None: 120
-			Wood: 95
-			Concrete: 60
-			Light: 65
-			Reflector: 65
-			Heavy: 40
-			Brick: 15
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-	Warhead@3Dam: SpreadDamage
-		Spread: 512
-		Damage: 500
-		Falloff: 500, 368, 135, 50, 18, 7, 0
-		Delay: 6
-		Versus:
-			None: 120
-			Wood: 95
-			Concrete: 60
-			Light: 65
-			Reflector: 65
-			Heavy: 40
-			Brick: 15
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-	Warhead@4Dam: SpreadDamage
-		Spread: 512
-		Damage: 500
-		Falloff: 500, 368, 135, 50, 18, 7, 0
-		Delay: 9
-		Versus:
-			None: 120
-			Wood: 95
-			Concrete: 60
-			Light: 65
-			Reflector: 65
-			Heavy: 40
-			Brick: 15
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-	Warhead@2Smu: LeaveSmudge
-		SmudgeType: Scorch
-	Warhead@3Eff: CreateEffect
-		Explosions: large_napalm
-		ImpactSounds: firebl3.aud
-	Warhead@Flames: FireCluster
-		Weapon: BurnFx
-		RandomClusterCount: 5
-		Dimensions: 3,3
-		Footprint: xxx xxx xxx
 
 HonestJohn.toxin:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^Chemical
 	ReloadDelay: 110
 	Burst: 2
 	BurstDelays: 50
@@ -838,30 +763,8 @@ HonestJohn.toxin:
 		PointDefenseType: Missile
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
-		Damage: 500
+		Damage: 750
 		Falloff: 500, 368, 135, 50, 18, 7, 0
-		Versus:
-			None: 100
-			Wood: 95
-			Concrete: 60
-			Light: 65
-			Reflector: 65
-			Heavy: 40
-			Brick: 15
-		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
-	Warhead@2Dam: SpreadDamage
-		Spread: 512
-		Damage: 500
-		Falloff: 500, 368, 135, 50, 18, 7, 0
-		Delay: 3
-		Versus:
-			None: 100
-			Wood: 95
-			Concrete: 60
-			Light: 65
-			Reflector: 65
-			Heavy: 40
-			Brick: 15
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -898,18 +801,6 @@ HonestJohn.multi:
 		Amount: 12
 		ThrowWithoutTarget: True
 		AirThreshold: 1c0
-	Warhead@1Dam: SpreadDamage
-		Spread: 512
-		Damage: 500
-		Falloff: 500, 368, 135, 50, 18, 7, 0
-		Versus:
-			None: 100
-			Wood: 95
-			Concrete: 60
-			Light: 65
-			Reflector: 65
-			Heavy: 40
-			Brick: 15
 
 Dragon.multi:
 	Inherits: ^AntiGroundMissile
@@ -997,10 +888,6 @@ IFVRockets:
 	BurstDelays: 5
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
-		Versus:
-			Wood: 55
-			Concrete: 60
-			Light: 50
 
 IFVRocketsAA:
 	Inherits: RedEye
@@ -1035,10 +922,6 @@ BTRRockets:
 	BurstDelays: 5
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
-		Versus:
-			None: 50
-			Concrete: 60
-			Light: 50
 
 BTRRocketsAA:
 	Inherits: RedEye
@@ -1392,6 +1275,7 @@ CryoMissile:
 		Damage: 5000
 
 CryoGun:
+	Inherits: ^Cryo
 	ReloadDelay: 90
 	Range: 5c512
 	ValidTargets: Ground, Water
@@ -1405,31 +1289,6 @@ CryoGun:
 		SecondaryBeamZOffset: 2047
 		SecondaryBeamColor: 57BEFFBB
 		Blockable: true
-	Warhead@1Dam: SpreadDamage
-		Spread: 341
-		Damage: 550
-		Falloff: 100, 25, 12, 0
-		Versus:
-			None: 100
-			Wood: 15
-			Light: 35
-			Heavy: 5
-			Concrete: 5
-			Brick: 1
-		DamageTypes: SmallExplosionDeath
-	Warhead@2Eff: CreateEffect
-		Explosions: cryohit
-		ImpactSounds: cryozap.aud
-	Warhead@chill: GrantExternalCondition
-		Condition: chilled
-		Duration: 120
-		Range: 0c448
-	Warhead@cryoresidue: CreateTintedCells
-		LayerName: cryoresidue
-		Spread: 1c0
-		Level: 100
-		Falloff: 100, 52, 15, 2
-		MaxLevel: 600
 
 CryoMissileNHAW:
 	Inherits: CryoMissile
@@ -1458,6 +1317,7 @@ BATFRockets:
 
 AuroraRocket:
 	Inherits: ^MissileHE
+	Inherits: ^Bomb
 	ValidTargets: Ground, Water, Trees
 	InvalidTargets: Air
 	ReloadDelay: 50
@@ -1471,16 +1331,9 @@ AuroraRocket:
 		Shadow: true
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 6000
+		Damage: 6600
 		Falloff: 1000, 512, 256, 128, 0
 		ValidTargets: Ground, Water
-		Versus:
-			None: 80
-			Wood: 80
-			Light: 100
-			Heavy: 65
-			Concrete: 50
-			Brick: 65
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -1494,7 +1347,7 @@ AuroraRocket:
 		Footprint: xxx xxx xxx
 
 Rocket.P51.R:
-	Inherits: ^MissileAP
+	Inherits: ^MissileArtillery
 	ReloadDelay: 200
 	Range: 8c0
 	MinRange: 0c768
@@ -1521,13 +1374,6 @@ Rocket.P51.R:
 		Spread: 512
 		Damage: 400
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
-		Versus:
-			None: 100
-			Wood: 40
-			Concrete: 60
-			Light: 60
-			Heavy: 100
-			Brick: 75
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater

@@ -190,8 +190,6 @@ HeavyFlameTankFlamer:
 	BurstDelays: 2
 	Warhead@1Dam: SpreadDamage
 		Damage: 155
-		Versus:
-			None: 230
 	Warhead@2Smu: LeaveSmudge
 		AirThreshold: 256
 		Chance: 10
@@ -225,13 +223,6 @@ BlackHandFlamer:
 		Range: 0, 256, 512
 		Falloff: 100, 100, 0
 		Damage: 200
-		Versus:
-			None: 100
-			Wood: 15
-			Light: 75
-			Heavy: 100
-			Concrete: 45
-			Brick: 2
 	Warhead@2Smu: LeaveSmudge
 		Chance: 5
 
@@ -265,8 +256,6 @@ Napalm:
 TeslaZap:
 	Inherits: ^TeslaWeapon
 	Warhead@1Dam: SpreadDamage
-		Versus:
-			Wood: 60
 
 TeslaZapBoost1:
 	Inherits: TeslaZap
@@ -406,6 +395,7 @@ DogJaw:
 		DamageTypes: DefaultDeath
 
 BruteAttack:
+	Inherits: ^Bomb
 	ReloadDelay: 60
 	Range: 1c512
 	Report: brutehit.aud
@@ -416,12 +406,6 @@ BruteAttack:
 		Damage: 10000
 		DamageTypes: DefaultDeath
 		InvalidTargets: Structure
-		Versus:
-			None: 100
-			Light: 60
-			Heavy: 70
-			Concrete: 25
-			Wood: 20
 
 BruteBuildingAttack:
 	Inherits: BruteAttack
@@ -578,9 +562,6 @@ C4:
 		Spread: 64
 		Damage: 100
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
-		Versus:
-			Light: 150
-			Heavy: 150
 	Warhead@2Eff: CreateEffect
 		Explosions: large_explosion
 		ImpactSounds: icolexpa.aud
@@ -802,12 +783,6 @@ StealthAPCLaser:
 	Report: sapc-fire1.aud, sapc-fire2.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 3400
-		Versus:
-			None: 100
-			Wood: 20
-			Light: 45
-			Heavy: 20
-			Concrete: 20
 
 XOLaser:
 	Inherits: Laser
@@ -1020,10 +995,9 @@ PrisBurst:
 
 PrisTBurst:
 	Inherits: PrisBurst
+	Inherits: ^EnergyLight
 	Warhead@1Dam: SpreadDamage
 		Damage: 2100
-		Versus:
-			Wood: 35
 
 PrisCLaser:
 	Inherits: PrisLaserPrototype
@@ -1088,7 +1062,7 @@ KirovBomb:
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
 		Falloff: 100, 40, 5, 0
-		Damage: 10500
+		Damage: 12500
 		InvalidTargets: Air
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
@@ -1122,8 +1096,6 @@ KirovTeslaBomb:
 KirovClusterBomb:
 	Inherits: KirovBomb
 	Warhead@1Dam: SpreadDamage
-		Versus:
-			Concrete: 60
 	Warhead@6Cluster: FireCluster
 		Weapon: KirovCluster
 		RandomClusterCount: 3
@@ -1552,6 +1524,7 @@ OrcaBomb:
 		ValidTargets: Ground, Structure, Vehicle
 
 MicrowaveZap:
+	Inherits: ^Radiation
 	ValidTargets: Ground, Water
 	InvalidTargets: Air, empdisabled
 	TargetActorCenter: true
@@ -1572,35 +1545,15 @@ MicrowaveZap:
 		HitAnimPalette: tseffect-ignore-lighting-alpha75
 		ZOffset: 2046
 	Warhead@1Dam: SpreadDamage
-		InvalidTargets: Air
-		Spread: 512
-		Damage: 2500
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 100
-			Wood: 5
-			Concrete: 5
-			Light: 5
-			Reflector: 5
-			Heavy: 5
-	Warhead@Damage: DriverPoisonDamage
+		Damage: 5000
+	Warhead@2DriverDam: DriverPoisonDamage
 		Damage: 8000
-		Spread: 128
-		ValidTargets: Vehicle
 
 MicrowaveZapSound:
 	Inherits: MicrowaveZap
+	Inherits: ^Dummy
 	Report: coreup1.aud
 	Projectile: InstantHit
-	Warhead@1Dam: SpreadDamage
-		Damage: 1
-		Versus:
-			None: 0
-			Wood: 0
-			Concrete: 0
-			Light: 0
-			Heavy: 0
-			Brick: 0
 
 HornetLauncher:
 	ReloadDelay: 175
@@ -1744,6 +1697,7 @@ ChaosDroneTargeting:
 
 IrradiatedUnit:
 	Inherits: Cloud
+	Inherits: ^Radiation
 	Warhead@18Radio: CreateTintedCells
 		Level: 50
 		Falloff: 100, 40, 10
@@ -1753,11 +1707,6 @@ IrradiatedUnit:
 		Damage: 2200
 		Spread: 341
 		Falloff: 100, 37, 14, 5, 0
-		Versus:
-			Light: 80
-			Wood: 10
-			Concrete: 10
-			Brick: 0
 
 RadBeamWeapon:
 	Inherits: ^Radiation
@@ -2344,6 +2293,7 @@ TNT:
 		Footprint: xxx xxx xxx
 
 ^Debris:
+	Inherits: ^Bomb
 	ValidTargets: Ground, Water, Trees, Air
 	Range: 5c0
 	Projectile: Bullet
@@ -2358,12 +2308,6 @@ TNT:
 		Spread: 200
 		Falloff: 100, 100, 0
 		Damage: 1000
-		Versus:
-			None: 100
-			Wood: 85
-			Light: 70
-			Heavy: 35
-			Concrete: 28
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: small_explosion_alt1, small_explosion_alt2, small_explosion_alt3
@@ -2383,7 +2327,7 @@ SmallDebris:
 
 FireDebris:
 	Inherits: ^Debris
-	Inherits: ^Fire
+	Inherits: ^NapalmBomb
 	Range: 3c0
 	Projectile: Bullet
 		Speed: 55, 108
@@ -2400,12 +2344,6 @@ FireDebris:
 		Spread: 200
 		Falloff: 100, 100, 0
 		Damage: 1000
-		Versus:
-			None: 100
-			Wood: 85
-			Light: 70
-			Heavy: 35
-			Concrete: 28
 		DamageTypes: Prone100Percent, TriggerProne, PoisonDeath
 	Warhead@2Eff: CreateEffect
 		ValidTargets: Ground, Air, Water
@@ -2426,6 +2364,7 @@ FireDebris.ExtraDamage:
 
 ChemDebris:
 	Inherits: ^Debris
+	Inherits: ^Chemical
 	Range: 3c0
 	Projectile: Bullet
 		Speed: 55, 108
@@ -2441,12 +2380,6 @@ ChemDebris:
 		Spread: 200
 		Falloff: 100, 100, 0
 		Damage: 1000
-		Versus:
-			None: 100
-			Wood: 85
-			Light: 70
-			Heavy: 35
-			Concrete: 28
 		DamageTypes: Prone100Percent, TriggerProne, PoisonDeath
 	Warhead@2Eff: CreateEffect
 		ValidTargets: Ground, Air, Water
