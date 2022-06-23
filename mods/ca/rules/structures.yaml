@@ -123,6 +123,7 @@ GAP:
 SPEN:
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Shipyard: ^ShipPrerequisites
 	Selectable:
 		Bounds: 72,48
 	RenderSprites:
@@ -230,36 +231,6 @@ SPEN:
 		Range: 10c0
 		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
-	ProvidesPrerequisite@soviet:
-		Factions: soviet, russia, ukraine, iraq
-		Prerequisite: ships.soviet
-	ProvidesPrerequisite@sovietvanilla:
-		Factions: soviet
-		Prerequisite: ships.sovietvanilla
-	ProvidesPrerequisite@russia:
-		Factions: russia
-		Prerequisite: ships.russia
-	ProvidesPrerequisite@ukraine:
-		Factions: ukraine
-		Prerequisite: ships.ukraine
-	ProvidesPrerequisite@iraq:
-		Factions: iraq
-		Prerequisite: ships.iraq
-	ProvidesPrerequisite@sovietstructure:
-		RequiresPrerequisites: structures.soviet
-		Prerequisite: ships.soviet
-	ProvidesPrerequisite@sovietvanillastructure:
-		RequiresPrerequisites: structures.sovietvanilla
-		Prerequisite: ships.sovietvanilla
-	ProvidesPrerequisite@russianstructure:
-		RequiresPrerequisites: structures.russia
-		Prerequisite: ships.russia
-	ProvidesPrerequisite@ukrainianstructure:
-		RequiresPrerequisites: structures.ukraine
-		Prerequisite: ships.ukraine
-	ProvidesPrerequisite@iraqistructure:
-		RequiresPrerequisites: structures.iraq
-		Prerequisite: ships.iraq
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
@@ -278,6 +249,7 @@ SPEN:
 SYRD:
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Shipyard: ^ShipPrerequisites
 	Selectable:
 		Bounds: 72,48
 	RenderSprites:
@@ -361,36 +333,6 @@ SYRD:
 		Range: 10c0
 		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
-	ProvidesPrerequisite@allies:
-		Factions: allies, england, france, germany
-		Prerequisite: ships.allies
-	ProvidesPrerequisite@alliesvanilla:
-		Factions: allies
-		Prerequisite: ships.alliesvanilla
-	ProvidesPrerequisite@england:
-		Factions: england
-		Prerequisite: ships.england
-	ProvidesPrerequisite@france:
-		Factions: france
-		Prerequisite: ships.france
-	ProvidesPrerequisite@germany:
-		Factions: germany
-		Prerequisite: ships.germany
-	ProvidesPrerequisite@alliedstructure:
-		RequiresPrerequisites: structures.allies
-		Prerequisite: ships.allies
-	ProvidesPrerequisite@alliedvanillastructure:
-		RequiresPrerequisites: structures.alliesvanilla
-		Prerequisite: ships.alliesvanilla
-	ProvidesPrerequisite@englishstructure:
-		RequiresPrerequisites: structures.england
-		Prerequisite: ships.england
-	ProvidesPrerequisite@frenchstructure:
-		RequiresPrerequisites: structures.france
-		Prerequisite: ships.france
-	ProvidesPrerequisite@germanstructure:
-		RequiresPrerequisites: structures.germany
-		Prerequisite: ships.germany
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
@@ -1816,7 +1758,7 @@ HPAD:
 		Proxy: powerproxy.paratroopers2
 	SpawnActorPower@GDIEagleDropzone:
 		Actor: FLARE.dropzone
-		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, anyradar, ~techlevel.low
+		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, radar, ~techlevel.low
 		LifeTime: 280
 		OrderName: dropzoneeagle
 		Icon: orcaca
@@ -2235,8 +2177,6 @@ STEK:
 		Cost: 1500
 	Tooltip:
 		Name: Soviet Tech Center
-	ProvidesPrerequisite:
-		Prerequisite: techcenter
 	Building:
 		Footprint: XxX XxX ===
 		Dimensions: 3,3
@@ -5281,6 +5221,7 @@ PRIS:
 SPEN.nod:
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Shipyard: ^ShipPrerequisites
 	RenderSprites:
 		Image: SPENNOD
 		PlayerPalette: playernavy
@@ -5352,12 +5293,6 @@ SPEN.nod:
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
-	ProvidesPrerequisite@nod:
-		Factions: nod, marked, blackh, legion
-		Prerequisite: ships.nod
-	ProvidesPrerequisite@nodstructure:
-		RequiresPrerequisites: structures.nod
-		Prerequisite: ships.nod
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
@@ -5383,6 +5318,7 @@ SYRD.gdi:
 	Inherits: ^Building
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Shipyard: ^ShipPrerequisites
 	RenderSprites:
 		Image: GSYRD
 		PlayerPalette: playernavy
@@ -5459,12 +5395,6 @@ SYRD.gdi:
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
-	ProvidesPrerequisite@gdi:
-		Factions: gdi, zocom, talon, eagle
-		Prerequisite: ships.gdi
-	ProvidesPrerequisite@gdistructure:
-		RequiresPrerequisites: structures.gdi
-		Prerequisite: ships.gdi
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR

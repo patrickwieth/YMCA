@@ -245,7 +245,7 @@ HellfireAG.Harrier:
 		Spread: 448
 		Damage: 1000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
-		ValidTargets: Ground, Water, Trees
+		ValidTargets: Ground, Water, Trees, Underwater
 
 HellfireAG.Harrier.Avionics:
 	Inherits: HellfireAG.Harrier
@@ -256,17 +256,19 @@ HellfireAG.Harrier.Avionics:
 HellfireAG.Horn:
 	Inherits: HellfireAG.Harrier
 	Inherits: ^MissileArtillery
-	Range: 5c0
-	MinRange: 1c0
-	Burst: 2
+	Range: 2c0
+	MinRange: 0c512
+	Burst: 3
+	BurstDelays: 2
 	Projectile: MissileCA
 		RangeLimit: 7c512
-		ContrailLength: 5
-		Inaccuracy: 1c512
-		-ContrailLength:
+		ContrailLength: 4
+		Inaccuracy: 0c512
+		MinimumLaunchAngle: -300
+		MaximumLaunchAngle: -300
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
-		Damage: 850
+		Damage: 1500
 
 HellfireAA:
 	Inherits: ^AntiAirMissile
@@ -483,7 +485,7 @@ Stinger:
 		LockOnInaccuracy: 512
 	Warhead@1Dam: SpreadDamage
 		Spread: 368
-		Damage: 7000
+		Damage: 5000
 
 StingerAA:
 	Inherits: Stinger
@@ -535,6 +537,51 @@ StingerGTWR.Relay:
 	Projectile: MissileCA
 		RangeLimit: 21c0
 
+Aegis_Missile:
+	Inherits: ^AntiGroundMissile
+	ReloadDelay: 100
+	Range: 7c0
+	Burst: 8
+	BurstDelays: 3
+	InvalidTargets: Underwater
+	Projectile: MissileCA
+		Arm: 3
+		Inaccuracy: 0
+		HorizontalRateOfTurn: 20
+		Speed: 450
+		Image: DRAGON
+		-TrailImage:
+		ContrailLength: 8
+		RangeLimit: 8c0
+		PointDefenseType: Missile
+		LockOnProbability: 50
+		LockOnInaccuracy: 128
+		MinimumLaunchAngle: 200
+		MaximumLaunchAngle: 200
+		MinimumLaunchSpeed: 50
+		MaximumLaunchSpeed: 50
+		Acceleration: 0c40
+	Warhead@1Dam: SpreadDamage
+		Spread: 368
+		Damage: 2000
+
+Aegis_Missile.AA:
+	Inherits: Aegis_Missile
+	ValidTargets: Air
+	Range: 13c0
+	Projectile: MissileCA
+		RangeLimit: 17c0
+		LockOnProbability: 95
+		LockOnInaccuracy: 256
+	Warhead@1Dam: SpreadDamage
+		Range: 0, 0c64, 0c256, 3c0
+		Falloff: 100, 100, 20, 10
+		ValidTargets: Air
+		Damage: 3000
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion_air
+		ImpactActors: false
+
 APTusk:
 	Inherits: ^AntiGroundMissile
 	Inherits: ^MissileAP
@@ -551,10 +598,10 @@ APTusk:
 
 TorpTube:
 	Inherits: ^Missile
-	ReloadDelay: 100
-	Range: 9c0
+	ReloadDelay: 80
+	Range: 10c0
 	Report: torpedo1.aud
-	ValidTargets: Water, Underwater, Bridge
+	ValidTargets: Water, Underwater, Bridge, Ground
 	Burst: 2
 	BurstDelays: 20
 	Projectile: MissileCA
@@ -573,7 +620,7 @@ TorpTube:
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
 		Damage: 12000
-		ValidTargets: Water, Underwater, Bridge
+		ValidTargets: Water, Underwater, Bridge, Ground
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: artillery_explosion
@@ -585,8 +632,17 @@ TorpTube:
 		ValidTargets: Water
 		InvalidTargets: Ship, Structure, Underwater, Bridge
 
+TorpTube.Hunter:
+	Inherits: TorpTube
+	Range: 6c0
+	ReloadDelay: 120
+	Warhead@1Dam: SpreadDamage
+		Spread: 426
+		Damage: 16000
+
 ^SubMissileDefault:
 	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
 	ReloadDelay: 180
 	Range: 8c0
 	Burst: 2
@@ -596,10 +652,10 @@ TorpTube:
 		HorizontalRateOfTurn: 60
 		Image: MISSILE
 		LockOnProbability: 80
-		LockOnInaccuracy: 1024
+		LockOnInaccuracy: 1c0
 	Warhead@1Dam: SpreadDamage
 		Spread: 511
-		Damage: 2500
+		Damage: 1000
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@3Eff: CreateEffect
@@ -610,12 +666,13 @@ TorpTube:
 SubMissile:
 	Inherits: ^SubMissileDefault
 	Range: 25c0
+	Burst: 12
 	TargetActorCenter: true
 	Projectile: BulletCA
 		Speed: 192
 		Blockable: false
 		LaunchAngle: 120
-		Inaccuracy: 0c614
+		Inaccuracy: 1c0
 		Image: MISSILE
 		Shadow: True
 		TrailImage: smokey
@@ -634,8 +691,8 @@ HonestJohnSub:
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 	Warhead@1Dam_impact: SpreadDamage
 		Spread: 1c0
-		Damage: 3250
-		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		Damage: 4250
+		Falloff: 1000, 666, 333, 150, 50, 10, 5
 		ValidTargets: Ground, Trees, Water, Air
 		Versus:
 			Brick: 25

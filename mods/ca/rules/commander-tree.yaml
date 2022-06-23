@@ -823,7 +823,7 @@ commander_tree.Yuri:
 		BuildPaletteOrder: 99
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~infantry.soviet
-		Description: Form Unholy Alliance with Yuri and his forces. \n This replaces multiple units and support powers: \n  Lasher Tank replaces Heavy Tank. \n  Yuri replaces Boris. \n  Chaos Drone replaces MAD Tank \n  Brutes replace Shock Troopers. \n  Genetic Mutation Bomb replaces Parabombs. \n
+		Description: Form Unholy Alliance with Yuri and his forces. \n This replaces multiple units and support powers: \n  Lasher Tank replaces Heavy Tank. \n  Yuri replaces Boris. \n  Chaos Drone replaces MAD Tank \n  Genetic Mutation Bomb replaces Parabombs. \n
 
 hack.cameo_filler.99a:
 	Inherits: ^default.cameo_filler
@@ -1546,7 +1546,7 @@ hack.cameo_filler.204a:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 213
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!filler.mlrs, ~!filler.hmlrs, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~vehicles.eagle, ~!filler.mlrs, ~!filler.hmlrs, disabled
 
 commander_tree.Hover_MLRS.Reflector:
 	Inherits: ^default.commander_tree_item
@@ -3272,6 +3272,245 @@ hack.cameo_filler.425:
 	Buildable:
 		BuildPaletteOrder: 463
 		Prerequisites: prerequisite.has_points, ~filler.carrier, disabled
+
+#Naval
+
+commander_tree.Subchaser:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Subchaser
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 2000
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, ~subchaser, ~!commander_tree.hunter_submarine, ~!commander_tree.patrol_boat, ~!commander_tree.recon_boat, ~!commander_tree.sea_scorpion
+		Description: The Subchaser is a small naval vessel specialized in hunting submarines.
+	TooltipExtras:
+		Strengths: • Strong vs Submarines
+		Weaknesses: • Ships, Aircraft
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.basic_naval
+
+commander_tree.Hunter_Submarine:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hunter Submarine
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 2000
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, ~hunter_sub, ~!commander_tree.subchaser, ~!commander_tree.patrol_boat, ~!commander_tree.recon_boat, ~!commander_tree.sea_scorpion
+		Description: The Hunter Submarine is a fast and destructive submerged vessel. \nIt lacks armor, but can take out unprotected ships very efficiently.
+	TooltipExtras:
+		Strengths: • Strong vs Ships
+		Weaknesses: • Aircraft, Anti-Sub Ships
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.basic_naval
+
+commander_tree.Patrol_Boat:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Patrol Boat
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 2000
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, ~patrol_boat, ~!commander_tree.subchaser, ~!commander_tree.hunter_submarine, ~!commander_tree.recon_boat, ~!commander_tree.sea_scorpion
+		Description: The Patrol Boat is a versatile rocket vessel. \nIt comes with Point-Defense-Laser to stop incoming projectiles.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Submarines
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.basic_naval
+
+commander_tree.Recon_Boat:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Recon Boat
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 2000
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, ~recon_boat, ~!commander_tree.subchaser, ~!commander_tree.hunter_submarine, ~!commander_tree.patrol_boat, ~!commander_tree.sea_scorpion
+		Description: The Recon Boat is a fast vessel armed with missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Ships, Aircraft
+		Weaknesses: • Point Defense Laser, Submarines
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.basic_naval
+
+commander_tree.Sea_Scorpion:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Sea Scorpion
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 2000
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, ~sea_scorpion, ~!commander_tree.subchaser, ~!commander_tree.hunter_submarine, ~!commander_tree.patrol_boat, ~!commander_tree.recon_boat
+		Description: The Sea Scorpion is a flak boat specialized in fighting aircraft. \nIt comes with Point-Defense-Laser to stop incoming projectiles.
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft, Projectiles
+		Weaknesses: • Ships, Submarines
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.basic_naval
+
+hack.cameo_filler.2000:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 2001
+		Prerequisites: prerequisite.has_points, ~filler.basic_naval, disabled
+
+hack.cameo_filler.2001:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 2001
+		Prerequisites: prerequisite.has_points, ~filler.basic_naval, disabled
+
+commander_tree.Attack_Submarine:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Attack Submarine
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 2010
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, radar, ~attack_submarine, ~!commander_tree.destroyer, ~!commander_tree.frigate, ~!commander_tree.aegis_cruiser
+		Description: The Attack Submarine is specialized in fighting other ships. \nIt is submerged and cannot be detected by all ships.
+	TooltipExtras:
+		Strengths: • Strong vs Ships
+		Weaknesses: • Anti-Sub Ships, Aircraft
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.adv_naval
+
+commander_tree.Destroyer:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Destroyer
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 2010
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, radar, ~destroyer, ~!commander_tree.attack_submarine, ~!commander_tree.frigate, ~!commander_tree.aegis_cruiser
+		Description: The Destroyer is capable of fighting against all threats, \nbut is mostly specialized against submarines.
+	TooltipExtras:
+		Strengths: • Strong vs Submarines
+		Weaknesses: • Point Defense Laser
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.adv_naval
+
+commander_tree.Frigate:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Frigate
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 2010
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, radar, ~frigate, ~!commander_tree.attack_submarine, ~!commander_tree.destroyer, ~!commander_tree.aegis_cruiser
+		Description: The Frigate brings a heavy energy weapon to the seas. \nThis makes it suited best against Point Defense Laser systems.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Slow Fleets
+		Weaknesses: • Point Defense Laser, Aircraft, Submarines
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.adv_naval
+
+commander_tree.Aegis_Cruiser:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Aegis Cruiser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 2010
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, radar, ~aegis_cruiser, ~!commander_tree.attack_submarine, ~!commander_tree.destroyer, ~!commander_tree.frigate
+		Description: The Aegis Cruiser fires a barrage of missiles. \nThe missiles are best suited against aircraft.\nHas Point Defense Laser system.
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft, Projectiles
+		Weaknesses: • Submarines, Ships
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.adv_naval
+
+hack.cameo_filler.2010:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 2011
+		Prerequisites: prerequisite.has_points, ~filler.adv_naval, disabled
+
+hack.cameo_filler.2011:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 2011
+		Prerequisites: prerequisite.has_points, ~filler.adv_naval, disabled
+
+commander_tree.Battlecruiser:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battlecruiser
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 2020
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, techcenter, ~battlecruiser, ~!commander_tree.carrier, ~!commander_tree.icbm_submarine, ~!commander_tree.missile_submarine
+		Description: The Battlecruiser is the ultimate artillery ship. \n Dual 8-inch cannons provide constant barrage, \n while a Point Defense Laser fends of incoming enemy artillery.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Slow Fleets
+		Weaknesses: • Point Defense Laser, Aircraft, Submarines
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.siege_naval
+
+commander_tree.Carrier:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Carrier
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 2020
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, techcenter, ~carrier, ~!commander_tree.battlecruiser, ~!commander_tree.icbm_submarine, ~!commander_tree.missile_submarine
+		Description: The Carrier launches small strike aircraft. \nThe aircraft are able to fight submarines as well as all ground targets.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Submarines
+		Weaknesses: • Anti-Aircraft, Aircraft
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.siege_naval
+
+commander_tree.ICBM_Submarine:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: ICBM Submarine
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 2020
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, techcenter, ~icbm_sub, ~!commander_tree.battlecruiser, ~!commander_tree.carrier, ~!commander_tree.missile_submarine
+		Description: The ICBM Submarine can fire Nukes over a long distance.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Slow Fleets
+		Weaknesses: • Anti-Aircraft, Aircraft, Submarines
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.siege_naval
+
+commander_tree.Missile_Submarine:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Missile_Submarine
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 2020
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~ships.any, techcenter, ~missile_sub, ~!commander_tree.battlecruiser, ~!commander_tree.carrier, ~!commander_tree.icbm_submarine
+		Description: The Missile Submarine launches a barrage of missiles with very high range.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Slow Fleets
+		Weaknesses: • Point Defense Laser, Submarines
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.siege_naval
 
 #misc
 hack.has_points:

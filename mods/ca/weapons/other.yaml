@@ -1359,31 +1359,6 @@ SonicZapVisual.UPG:
 	Projectile: AreaBeam
 		Color: 00ffc435
 
-Railgun:
-	Inherits: ^Energy
-	ReloadDelay: 70
-	Range: 8c0
-	Report: railuse5.aud
-	InvalidTargets: Air
-	Projectile: Railgun
-		Duration: 10
-		Blockable: true
-		DamageActorsInLine: false
-		BeamColor: 00FFFFC8
-		BeamWidth: 40
-		HelixThickness: 16
-		HelixRadius: 32
-		HitAnim: explosion
-		HitAnimSequence: small_explosion
-		ZOffset: 2046
-	Warhead@1Dam: SpreadDamage
-		Spread: 0c64
-		Falloff: 100, 37, 14, 5, 0
-		Damage: 9000
-		ValidRelationships: Ally, Neutral, Enemy
-		InvalidTargets: Air
-		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
-
 RailgunPrototype:
 	Inherits: ^EnergyAP
 	ReloadDelay: 75
@@ -1417,6 +1392,15 @@ RailgunPrototype:
 		InvalidTargets: Air
 		AffectsParent: false
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+
+Railgun.Ship:
+	Inherits: RailgunPrototype
+	Range: 7c512
+	ReloadDelay: 90
+	Warhead@1Dam: SpreadDamage
+		Damage: 2400
+	Warhead@2Dam: SpreadDamage
+		Damage: 1000
 
 Railgun.Infantry:
 	Inherits: RailgunPrototype
@@ -1635,11 +1619,11 @@ HornetLauncher:
 	ReloadDelay: 175
 	Burst: 5
 	BurstDelays: 15
-	Range: 25c0
+	Range: 30c0
 	ValidTargets: Ground, Water
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
-		ValidTargets: Ground, Water
+		ValidTargets: Ground, Water, Underwater
 
 V3Launcher:
 	ReloadDelay: 250
