@@ -54,6 +54,7 @@ Subchaser:
 	TooltipExtras:
 		Strengths: • Strong vs Submarines
 		Weaknesses: • Ships, Aircraft
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -66,7 +67,7 @@ Subchaser:
 		Type: Heavy
 	Mobile:
 		TurnSpeed: 28
-		Speed: 82
+		Speed: 90
 	RevealsShroud:
 		MinRange: 5c0
 		Range: 7c0
@@ -110,6 +111,7 @@ SS2:
 	TooltipExtras:
 		Strengths: • Strong vs Ships
 		Weaknesses: • Aircraft, Anti-Sub Ships
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -122,7 +124,7 @@ SS2:
 		Type: Light
 	Mobile:
 		TurnSpeed: 20
-		Speed: 75
+		Speed: 80
 	RevealsShroud:
 		MinRange: 5c0
 		Range: 8c0
@@ -178,6 +180,7 @@ PT2:
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles
 		Weaknesses: • Submarines
+		Attributes: • Point Defense Laser
 	Valued:
 		Cost: 900
 	Tooltip:
@@ -291,6 +294,7 @@ SEAS:
 	TooltipExtras:
 		Strengths: • Strong vs Aircraft, Projectiles
 		Weaknesses: • Ships, Submarines
+		Attributes: • Point Defense Laser
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -341,6 +345,7 @@ SS:
 	TooltipExtras:
 		Strengths: • Strong vs Ships
 		Weaknesses: • Anti-Sub Ships, Aircraft
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -407,6 +412,7 @@ DD:
 	TooltipExtras:
 		Strengths: • Strong vs Submarines
 		Weaknesses: • Point Defense Laser
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -474,7 +480,7 @@ DD2:
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
 		Prerequisites: ~ships.any, radar, ~commander_tree.frigate
-		Description: Advanced warship armed with\na powerful railgun.\n  Can detect submarines.
+		Description: Advanced warship armed with\na powerful railgun.
 	TooltipExtras:
 		Strengths: • Strong vs Point Defense Laser
 		Weaknesses: • Submarines, Aircraft
@@ -545,6 +551,7 @@ Aegis_Cruiser:
 	TooltipExtras:
 		Strengths: • Strong vs Aircraft, Projectiles
 		Weaknesses: • Submarines, Ships
+		Attributes: • Point Defense Laser
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	Valued:
@@ -598,10 +605,11 @@ CA:
 		BuildAtProductionType: Boat
 		BuildPaletteOrder: 50
 		Prerequisites: ~ships.any, techcenter, ~commander_tree.battlecruiser
-		Description: Very slow long-range bombardment ship.
+		Description: Very slow long-range bombardment ship.\n  Has Point Defense Laser.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Slow Fleets
 		Weaknesses: • Point Defense Laser, Aircraft, Submarines
+		Attributes: • Point Defense Laser
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -673,6 +681,7 @@ ISUB:
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Slow Fleets
 		Weaknesses: • Anti-Aircraft, Aircraft, Submarines
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -708,6 +717,9 @@ ISUB:
 		InitialStance: HoldFire
 	Selectable:
 		DecorationBounds: 44,44
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 6c0
 
 ICBM:
 	Inherits: ^ShootableMissile
@@ -756,6 +768,7 @@ CARR:
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Submarines
 		Weaknesses: • Anti-Aircraft, Aircraft
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 4000
 	Tooltip:
@@ -780,8 +793,8 @@ CARR:
 		PauseOnCondition: empdisable || being-warped
 	CarrierMaster:
 		Actors: horn, horn, horn, horn, horn
-		RearmTicks: 150
-		RespawnTicks: 500
+		RearmTicks: 50
+		RespawnTicks: 250
 		InstaRepair: true
 		SlaveDisposalOnKill: KillSlaves
 		SpawnAllAtOnce: false
@@ -804,7 +817,7 @@ CARR:
 		VoiceSet: DroneCarrVoice
 	WithRangeCircle@Attack:
 		Type: jammer
-		Range: 30c0
+		Range: 18c0
 		Color: 0000FF80
 	DetectCloaked:
 		CloakTypes: Underwater
@@ -823,6 +836,7 @@ MSUB:
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Slow Fleets
 		Weaknesses: • Anti-Sub Ships, Aircraft
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 2500
 	Tooltip:

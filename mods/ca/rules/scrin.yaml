@@ -717,7 +717,7 @@ LACE:
 		StationaryInterval: 18
 		MovingInterval: 6
 	Health:
-		HP: 20000
+		HP: 22000
 	Armor:
 		Type: Light
 	RevealsShroud:
@@ -1741,8 +1741,12 @@ STMR:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
 		Prerequisites: nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter, ~!commander_tree.stormbomber
-		Description: Durable patrol craft.\n  Strong vs Infantry, Light Armor, Aircraft\n  Weak vs Tanks, Buildings
+		Description: Durable patrol craft.\n  Can detect submerged vessels.
 		IconPalette: chrome
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Armor
+		Weaknesses: • Weak vs Tanks, Buildings
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 1250
 	Voiced:
@@ -1809,6 +1813,10 @@ STMR:
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	-EjectOnDeath:
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 6c0
+
 
 STMR.hunter:
 	Inherits: STMR
@@ -1819,8 +1827,12 @@ STMR.hunter:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
 		Prerequisites: nerv, grav, ~aircraft.scrin, ~commander_tree.stormhunter
-		Description: Small hunter anti-air craft.\n  Strong vs Aircraft\n  Weak vs Vehicles, Infantry, Buildings
+		Description: Small hunter anti-air craft.\n  Can detect submerged vessels.
 		IconPalette: chrome
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft
+		Weaknesses: • Surface Anti-Air
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 850
 	Health:
@@ -1844,8 +1856,12 @@ STMR.bomber:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
 		Prerequisites: nerv, grav, ~aircraft.scrin, ~commander_tree.stormbomber
-		Description: Dedicated bomber.\n  Strong vs Clusters of Vehicles\n  Weak vs Aircraft
+		Description: Dedicated bomber.\n  Strong vs Clusters of Vehicles\n  Can detect submerged vessels.
 		IconPalette: chrome
+	TooltipExtras:
+		Strengths: • Strong vs Tanks, Buildings
+		Weaknesses: • Surface Anti-Air
+		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 1500
 	Health:
