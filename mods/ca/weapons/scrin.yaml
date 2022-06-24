@@ -4,6 +4,7 @@ WarriorGun:
 
 DisintegratorBeam:
 	Inherits: Laser
+	Inherits: ^EnergyAP
 	ReloadDelay: 30
 	Range: 5c0
 	Report: disintegrator-fire1.aud, disintegrator-fire2.aud, disintegrator-fire3.aud
@@ -16,12 +17,6 @@ DisintegratorBeam:
 		Blockable: true
 	Warhead@1Dam: SpreadDamage
 		Damage: 2800
-		Versus:
-			None: 15
-			Wood: 74
-			Heavy: 100
-			Light: 34
-			Concrete: 75
 
 DisintegratorBeamAA:
 	Inherits: DisintegratorBeam
@@ -31,15 +26,9 @@ DisintegratorBeamAA:
 		Blockable: false
 	Warhead@1Dam: SpreadDamage
 		ValidTargets: Air
-		Range: 0, 0c64, 0c256, 3c0
-		Falloff: 100, 100, 30, 15
+		Range: 0, 0c64, 0c256
+		Falloff: 100, 100, 30
 		Damage: 2050
-		Versus:
-			None: 100
-			Wood: 100
-			Concrete: 100
-			Light: 100
-			Heavy: 100
 
 IntruderDiscs:
 	Inherits: PlasmaDiscs
@@ -357,8 +346,6 @@ RiftCannon:
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 11000
-		Versus:
-			None: 50
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 	Warhead@Spawn: SpawnActor
 		Actors: camera.minirift
@@ -434,6 +421,7 @@ MediumRift:
 
 RuinerCannon:
 	Inherits: 155mm
+	Inherits: ^ShellArtillery
 	Report: ruiner-fire1.aud
 	ReloadDelay: 160
 	Burst: 4
@@ -444,13 +432,6 @@ RuinerCannon:
 		Palette: scrin
 	Warhead@1Dam: SpreadDamage
 		Damage: 6000
-		Versus:
-			None: 120
-			Wood: 95
-			Concrete: 60
-			Brick: 100
-			Light: 65
-			Heavy: 45
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 	Warhead@3Eff: CreateEffect
 		ImpactSounds: ruiner-hit1.aud
@@ -1070,6 +1051,7 @@ RiftInit:
 		ValidTargets: Ground, Water
 
 Rift:
+	Inherits: ^EnergyArtillery
 	ReloadDelay: 5
 	Range: 1c0
 	ValidTargets: Ground, Water
@@ -1080,13 +1062,6 @@ Rift:
 		Falloff: 100, 100, 75, 60, 45, 35, 25, 15, 5
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 30
-			Wood: 100
-			Light: 100
-			Heavy: 90
-			Concrete: 70
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 
 SuppressionField:
@@ -1103,6 +1078,7 @@ SuppressionField:
 		ValidTargets: Ground, Air, Ship
 
 BuzzerVortex:
+	Inherits: ^EnergyLight
 	ReloadDelay: 5
 	Range: 1c0
 	ValidTargets: Ground, Water
@@ -1110,16 +1086,9 @@ BuzzerVortex:
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
 		Falloff: 100, 66, 33, 0
-		Damage: 1200
+		Damage: 1000
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 100
-			Wood: 10
-			Light: 80
-			Heavy: 30
-			Concrete: 40
-			Brick: 0
 		DamageTypes: Prone50Percent, TriggerProne, BulletDeath
 		ValidRelationships: Enemy, Neutral
 

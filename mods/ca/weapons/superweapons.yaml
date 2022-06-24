@@ -12,14 +12,6 @@ ParaBomb:
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
 		Damage: 40000
-		Versus:
-			None: 30
-			Wood: 30
-			Light: 65
-			Reflector: 65
-			Heavy: 80
-			Concrete: 50
-			Brick: 50
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Crater
@@ -56,8 +48,6 @@ AtomBomb:
 		Damage: 6250
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Trees, Water, Air
-		Versus:
-			Brick: 25
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Res_impact: DestroyResource
@@ -71,8 +61,6 @@ AtomBomb:
 		Falloff: 1000, 600, 400, 250, 150, 100, 0
 		Delay: 5
 		ValidTargets: Ground, Water, Air
-		Versus:
-			Brick: 25
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@5Res_areanuke1: DestroyResource
@@ -122,9 +110,6 @@ AtomBomb.Mig:
 		Damage: 3250
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Trees, Water, Air
-		Versus:
-			Brick: 25
-			Concrete: 35
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@3Eff_impact: CreateEffect
@@ -137,9 +122,6 @@ AtomBomb.Mig:
 		Falloff: 1000, 500, 250, 125, 50, 0
 		Delay: 5
 		ValidTargets: Ground, Water, Air
-		Versus:
-			Brick: 25
-			Concrete: 35
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@6Eff_areanuke1: CreateEffect
@@ -172,16 +154,10 @@ AtomBomb.Mig:
 
 InfernoBomb:
 	Inherits: CarpetBomb
+	Inherits: ^NapalmBomb
 	Projectile: GravityBomb
 		Image: B2BOMB
 	Warhead@1Dam: SpreadDamage
-		Versus:
-			None: 80
-			Wood: 60
-			Light: 85
-			Heavy: 70
-			Concrete: 35
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -197,10 +173,6 @@ InfernoBomb:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 5
 		ValidTargets: Ground, Trees, Water, Underwater, Air
-		Versus:
-			Wood: 50
-			Concrete: 25
-			Brick: 25
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@8Dam_areanuke2: SpreadDamage
@@ -267,9 +239,6 @@ Atomic:
 		Damage: 12200
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		ValidTargets: Ground, Trees, Water, Underwater, Air
-		Versus:
-			Wood: 25
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Res_impact: DestroyResource
 		Size: 1
@@ -288,9 +257,6 @@ Atomic:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 5
 		ValidTargets: Ground, Trees, Water, Underwater, Air
-		Versus:
-			Wood: 25
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@6Res_areanuke1: DestroyResource
 		Size: 2
@@ -310,9 +276,6 @@ Atomic:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 10
 		ValidTargets: Ground, Water, Underwater, Air
-		Versus:
-			Wood: 50
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@10Dam_areanuke2: SpreadDamage
 		Spread: 3c0
@@ -335,8 +298,6 @@ Atomic:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 15
 		ValidTargets: Ground, Water, Underwater, Air
-		Versus:
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@14Dam_areanuke3: SpreadDamage
 		Spread: 4c0
@@ -359,8 +320,6 @@ Atomic:
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 20
 		ValidTargets: Ground, Water, Underwater, Air
-		Versus:
-			Brick: 25
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@18Dam_areanuke4: SpreadDamage
 		Spread: 5c0
@@ -495,77 +454,33 @@ THLauncher:
 		Delay: 6
 
 IronCurtain:
+	Inherits: ^InfOnly
 	Projectile: InstantExplode
 	ReloadDelay: 1
 	ValidTargets: Ground, Infantry, Water
-	Warhead@1Dam_impact: SpreadDamage
+	Warhead@1Dam: SpreadDamage
 		Range: 0, 1c1, 2c1, 2c512
-		Damage: 500
+		Damage: 2000
 		Delay: 5
 		Falloff: 1000, 1000, 250, 100
 		ValidTargets: Ground, Infantry, Water
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 100
-			Wood: 0
-			Light: 0
-			Reflector: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
-	Warhead@2Dam_impact: SpreadDamage
-		Range: 0, 1c1, 2c1, 2c512
-		Damage: 500
-		Delay: 10
-		Falloff: 1000, 1000, 250, 100
-		ValidTargets: Ground, Infantry, Water
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 100
-			Wood: 0
-			Light: 0
-			Reflector: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
-	Warhead@3Dam_impact: SpreadDamage
-		Range: 0, 1c1, 2c1, 2c512
-		Damage: 500
-		Delay: 15
-		Falloff: 1000, 1000, 250, 100
-		ValidTargets: Ground, Infantry, Water
-		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 100
-			Wood: 0
-			Light: 0
-			Reflector: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
 	Warhead@4Eff: CreateEffect
 		ExplosionPalette: effect-ignore-lighting-alpha85
 		Explosions: ironcurtain_effect
 
 ForceShield:
+	Inherits: ^Dummy
 	Projectile: InstantExplode
 	ReloadDelay: 1
 	ValidTargets: Ground, Structure
-	Warhead@1Dam_impact: SpreadDamage
+	Warhead@1Dam: SpreadDamage
 		Range: 0, 1c1, 2c1, 2c512
 		Damage: 1
 		Delay: 5
 		Falloff: 1000, 1000, 250, 100
 		ValidTargets: Ground, Structure
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
-		Versus:
-			None: 0
-			Wood: 0
-			Light: 0
-			Reflector: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
 	Warhead@4Eff: CreateEffect
 		ExplosionPalette: effect-ignore-lighting-alpha85
 		Explosions: forceshield_effect
@@ -577,62 +492,24 @@ ForceShield:
 		ValidRelationships: Ally
 
 StealthBubble:
+	Inherits: ^InfOnly
 	Projectile: InstantExplode
 	ReloadDelay: 1
 	ValidTargets: Ground, Infantry, Water
-	Warhead@1Dam_impact: SpreadDamage
+	Warhead@1Dam: SpreadDamage
 		Range: 0, 1c1, 2c1, 3c512
-		Damage: 1000
+		Damage: 3000
 		Delay: 5
 		Falloff: 1000, 1000, 250, 100
 		ValidTargets: Ground, Infantry, Water
 		InvalidTargets: Air, Creep
 		DamageTypes: Prone50Percent, TriggerProne, ToxinDeath
-		Versus:
-			None: 100
-			Wood: 0
-			Light: 0
-			Reflector: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
-	Warhead@2Dam_impact: SpreadDamage
-		Range: 0, 1c1, 2c1, 3c512
-		Damage: 1000
-		Delay: 10
-		Falloff: 1000, 1000, 250, 100
-		ValidTargets: Ground, Infantry, Water
-		InvalidTargets: Air, Creep
-		DamageTypes: Prone50Percent, TriggerProne, ToxinDeath
-		Versus:
-			None: 100
-			Wood: 0
-			Light: 0
-			Reflector: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
-	Warhead@3Dam_impact: SpreadDamage
-		Range: 0, 1c1, 2c1, 3c512
-		Damage: 1000
-		Delay: 15
-		Falloff: 1000, 1000, 250, 100
-		ValidTargets: Ground, Infantry, Water
-		InvalidTargets: Air, Creep
-		DamageTypes: Prone50Percent, TriggerProne, ToxinDeath
-		Versus:
-			None: 100
-			Wood: 0
-			Light: 0
-			Reflector: 0
-			Heavy: 0
-			Concrete: 0
-			Brick: 0
 	Warhead@4Eff: CreateEffect
 		ExplosionPalette: tseffect
 		Explosions: stealthbub
 
 Chemicbm:
+	Inherits: ^MissileChemical
 	ValidTargets: Ground, Water
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
@@ -640,68 +517,36 @@ Chemicbm:
 		Falloff: 1000, 368, 135, 50, 18
 		ValidTargets: Ground, Water
 		InvalidTargets: Air
-		Versus:
-			None: 90
-			Wood: 50
-			Concrete: 30
-			Light: 60
-			Reflector: 60
-			Heavy: 30
-			Brick: 30
 		DamageTypes: Prone50Percent, TriggerProne, ToxinDeath
 	Warhead@3Eff_impact: CreateEffect
 		Explosions: chem_miss
 		ExplosionPalette: tseffect-ignore-lighting-alpha75
 		ImpactSounds: chembomb.aud
-	Warhead@2Dam_chem: SpreadDamage
+	Warhead@2Dam: SpreadDamage
 		Spread: 3c0
 		Damage: 2200
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 20
 		ValidTargets: Ground, Water
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 90
-			Wood: 50
-			Concrete: 30
-			Light: 60
-			Reflector: 60
-			Heavy: 30
-			Brick: 30
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, ToxinDeath
-	Warhead@3Dam_chem2: SpreadDamage
+	Warhead@3Dam: SpreadDamage
 		Spread: 3c0
 		Damage: 1100
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 40
 		ValidTargets: Ground, Water
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 90
-			Wood: 50
-			Concrete: 30
-			Light: 60
-			Reflector: 60
-			Heavy: 30
-			Brick: 30
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, ToxinDeath
-	Warhead@4Dam_chem2: SpreadDamage
+	Warhead@4Dam: SpreadDamage
 		Spread: 3c0
 		Damage: 1100
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 80
 		ValidTargets: Ground, Water
 		InvalidTargets: Air, Creep
-		Versus:
-			None: 90
-			Wood: 50
-			Concrete: 30
-			Light: 60
-			Reflector: 60
-			Heavy: 30
-			Brick: 30
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, ToxinDeath
 	Warhead@11Smu_areanuke3: LeaveSmudge
@@ -710,11 +555,8 @@ Chemicbm:
 		Size: 3
 		Delay: 5
 	Warhead@18Radio: CreateTintedCells
-		Spread: 1c0
 		Level: 750
 		Falloff: 100, 75, 52, 37, 24, 15, 2
-		MaxLevel: 750
-		LayerName: toxin
 	Warhead@13Spawn: SpawnActor
 		Actors: camera.cloud
 		Range: 5
