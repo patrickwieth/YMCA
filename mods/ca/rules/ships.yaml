@@ -788,17 +788,20 @@ CARR:
 		Speed: 25
 		Voice: Move
 		PauseOnCondition: empdisable || being-warped || (hornet-loaded <= 3 && botowner)
-	AttackOmni:
+	AttackFrontal:
 		Voice: Attack
+		FacingTolerance: 384
 		PauseOnCondition: empdisable || being-warped
 	CarrierMaster:
 		Actors: horn, horn, horn, horn, horn
+		MaxSlaveDistance: 30c0
 		RearmTicks: 50
 		RespawnTicks: 250
 		InstaRepair: true
 		SlaveDisposalOnKill: KillSlaves
 		SpawnAllAtOnce: false
 		LoadedCondition: hornet-loaded
+		RequiresCondition: !empdisable && !being-warped
 	Exit@0:
 		SpawnOffset: 0,0,0
 		Facing: 0
@@ -815,10 +818,6 @@ CARR:
 		DecorationBounds: 44,44
 	Voiced:
 		VoiceSet: DroneCarrVoice
-	WithRangeCircle@Attack:
-		Type: jammer
-		Range: 18c0
-		Color: 0000FF80
 	DetectCloaked:
 		CloakTypes: Underwater
 		Range: 10c0
