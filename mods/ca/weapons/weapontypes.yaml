@@ -21,7 +21,21 @@
 			Heavy: 0
 			Brick: 0
 
+^AllWeapons:
+	Warhead@anyhit: GrantExternalCondition
+		Range: 0c128
+		Duration: 8
+		Condition: weaponhit
+		ValidTargets: Ground, Structure, Vehicle, Air, Ship
+
+^ABCPrototype:
+	Inherits: ^AllWeapons
+
+^BombPrototype:
+	Inherits: ^AllWeapons
+
 ^Fire:
+	Inherits: ^ABCPrototype
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 180
@@ -45,6 +59,7 @@
 		Footprint: xxx xxx xxx
 
 ^Napalm:
+	Inherits: ^ABCPrototype
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 180
@@ -67,6 +82,7 @@
 		Footprint: X
 
 ^NapalmBomb:
+	Inherits: ^BombPrototype
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 100
@@ -155,6 +171,7 @@
 		Footprint: xxx xxx xxx
 
 ^Bomb:
+	Inherits: ^BombPrototype
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 70
@@ -166,6 +183,7 @@
 			Brick: 25
 
 ^Chemical:
+	Inherits: ^ABCPrototype
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 130
@@ -205,6 +223,7 @@
 		MaxLevel: 600
 
 ^Radiation:
+	Inherits: ^ABCPrototype
 	Warhead@1Dam: SpreadDamage
 		InvalidTargets: Air
 		Spread: 512
@@ -230,7 +249,11 @@
 			Reflector: 20
 			Heavy: 50
 
+^BulletPrototype:
+	Inherits: ^AllWeapons
+
 ^Bullet:
+	Inherits: ^BulletPrototype
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 140
@@ -242,6 +265,7 @@
 			Brick: 5
 
 ^BulletHeavy:
+	Inherits: ^BulletPrototype
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 110
@@ -368,7 +392,11 @@
 		InvalidTargets: Ship, Structure, Bridge
 		Delay: 10
 
+^ShellPrototype:
+	Inherits: ^AllWeapons
+
 ^Shell:
+	Inherits: ^ShellPrototype
 	Report: cannon2.aud
 	Projectile: BulletCA
 		Speed: 682
@@ -398,6 +426,7 @@
 		InvalidTargets: Ship, Structure, Bridge
 
 ^ShellHeavy:
+	Inherits: ^ShellPrototype
 	Report: cannon1.aud
 	Projectile: BulletCA
 		Speed: 682
@@ -427,6 +456,7 @@
 		InvalidTargets: Ship, Structure, Bridge
 
 ^ShellHE:
+	Inherits: ^ShellPrototype
 	Report: tnkfire3.aud
 	Projectile: BulletCA
 		Speed: 582
@@ -457,6 +487,7 @@
 		InvalidTargets: Ship, Structure, Bridge
 
 ^ShellAP:
+	Inherits: ^ShellPrototype
 	Report: tnkd2_fire.aud
 	Projectile: BulletCA
 		Speed: 768
@@ -486,6 +517,7 @@
 		InvalidTargets: Ship, Structure, Bridge
 
 ^ShellArtillery:
+	Inherits: ^ShellPrototype
 	Report: tank5.aud
 	MinRange: 4c0
 	Range: 14c0
@@ -513,7 +545,11 @@
 	Warhead@4EffWater: CreateEffect
 		Explosions: med_splash
 
+^MissilePrototype:
+	Inherits: ^AllWeapons
+
 ^Missile:
+	Inherits: ^MissilePrototype
 	Report: missile6.aud
 	Projectile: MissileCA
 		Speed: 213
@@ -551,6 +587,7 @@
 		InvalidTargets: Ship, Structure, Bridge
 
 ^MissileAP:
+	Inherits: ^MissilePrototype
 	Report: missile6.aud
 	Projectile: MissileCA
 		Speed: 320
@@ -588,6 +625,7 @@
 		InvalidTargets: Ship, Structure, Bridge
 
 ^MissileHE:
+	Inherits: ^MissilePrototype
 	Report: rocket.aud
 	Projectile: MissileCA
 		Speed: 280
@@ -629,6 +667,7 @@
 		ValidTargets: Air
 
 ^MissileArtillery:
+	Inherits: ^MissilePrototype
 	Projectile: BulletCA
 		Blockable: false
 		Shadow: true
@@ -662,6 +701,7 @@
 		InvalidTargets: Ship, Structure, Bridge
 
 ^MissileCryo:
+	Inherits: ^MissilePrototype
 	Report: cryomissile.aud
 	Projectile: BulletCA
 		Blockable: false
@@ -749,6 +789,7 @@
 		LayerName: toxin
 
 ^EnergyPrototype:
+	Inherits: ^AllWeapons
 	Warhead@energy: GrantExternalCondition
 		Range: 0c128
 		Duration: 8

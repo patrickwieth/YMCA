@@ -14,6 +14,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.Common.Traits;
+using OpenRA.Primitives;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
@@ -39,6 +40,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Tells the AI what building types are considered anti-air defenses.")]
 		public readonly HashSet<string> AntiAirTypes = new HashSet<string>();
 
+		[Desc("Tells the AI what building types are considered defenses.")]
+		public readonly HashSet<string> DefenseTypes = new HashSet<string>();
+
 		[Desc("Tells the AI what building types are considered production facilities.")]
 		public readonly HashSet<string> ProductionTypes = new HashSet<string>();
 
@@ -60,8 +64,8 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Radius in cells around the center of the base to expand.")]
 		public readonly int MaxBaseRadius = 20;
 
-		[Desc("Maximum number of refineries to build.")]
-		public readonly int MaxRefineries = 4;
+		[Desc("Maximum number of extra refineries to build (in addition to 1 per construction yard).")]
+		public readonly int MaxExtraRefineries = 2;
 
 		[Desc("Minimum excess power the AI should try to maintain.")]
 		public readonly int MinimumExcessPower = 0;
@@ -131,6 +135,15 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("When should the AI start building specific buildings.")]
 		public readonly Dictionary<string, int> BuildingDelays = null;
 
+		[Desc("Enemy building target types I can ignore construction distance from.")]
+		public readonly BitSet<TargetableType> IgnoredEnemyBuildingTargetTypes = default(BitSet<TargetableType>);
+
+		[Desc("Unit target types I should not count when scanning for sell condition .")]
+		public readonly BitSet<TargetableType> IgnoredUnitTargetTypes = default(BitSet<TargetableType>);
+
+		[Desc("Radius in cells around building being considered for sale to scan for units")]
+		public readonly int SellScanRadius = 8;
+
 		public override object Create(ActorInitializer init) { return new BaseBuilderBotModuleCA(init.Self, this); }
 	}
 
@@ -164,6 +177,25 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			world = self.World;
 			player = self.Owner;
+		}
+
+		// Use for proactive targeting.
+		public bool IsEnemyGroundUnit(Actor a)
+		{
+			if (a == null || a.IsDead || player.RelationshipWith(a.Owner) != PlayerRelationship.Enemy || a.Info.HasTraitInfo<HuskInfo>() || a.Info.HasTraitInfo<AircraftInfo>() || a.Info.HasTraitInfo<CarrierSlaveInfo>())
+				return false;
+
+			var targetTypes = a.GetEnabledTargetTypes();
+			return !targetTypes.IsEmpty && !targetTypes.Overlaps(Info.IgnoredUnitTargetTypes);
+		}
+
+		public bool IsAllyGroundUnit(Actor a)
+		{
+			if (a == null || a.IsDead || player.RelationshipWith(a.Owner) != PlayerRelationship.Ally || a.Info.HasTraitInfo<HuskInfo>() || a.Info.HasTraitInfo<AircraftInfo>() || a.Info.HasTraitInfo<CarrierSlaveInfo>())
+				return false;
+
+			var targetTypes = a.GetEnabledTargetTypes();
+			return !targetTypes.IsEmpty && !targetTypes.Overlaps(Info.IgnoredUnitTargetTypes);
 		}
 
 		protected override void Created(Actor self)
@@ -224,10 +256,61 @@ namespace OpenRA.Mods.CA.Traits
 			if (!e.Attacker.Info.HasTraitInfo<ITargetableInfo>())
 				return;
 
-			// Protect buildings
-			if (self.Info.HasTraitInfo<BuildingInfo>())
-				foreach (var n in positionsUpdatedModules)
-					n.UpdatedDefenseCenter(e.Attacker.Location);
+			if (!self.Info.HasTraitInfo<BuildingInfo>())
+				return;
+
+			if (ShouldSell(self, e))
+			{
+				bot.QueueOrder(new Order("Sell", self, Target.FromActor(self), false)
+				{
+					SuppressVisualFeedback = true
+				});
+				AIUtils.BotDebug("AI ({0}): Decided to sell {1}", player.ClientIndex, self);
+				return;
+			}
+
+			// Protect buildings not suitable for selling
+			foreach (var n in positionsUpdatedModules)
+				n.UpdatedDefenseCenter(e.Attacker.Location);
+		}
+
+		bool ShouldSell(Actor self, AttackInfo e)
+		{
+			if (!self.Info.HasTraitInfo<SellableInfo>())
+				return false;
+
+			if (Info.DefenseTypes.Contains(self.Info.Name))
+				return false;
+
+			if (e.DamageState == DamageState.Dead || e.DamageState < DamageState.Medium || e.DamageState == e.PreviousDamageState)
+				return false;
+
+			var inMainBase = (self.CenterPosition - self.World.Map.CenterOfCell(initialBaseCenter)).Length < WDist.FromCells(28).Length;
+			var chanceThreshold = inMainBase ? 95 : 70;
+
+			if (self.World.LocalRandom.Next(100) < chanceThreshold)
+				return false;
+
+			if (Info.ConstructionYardTypes.Contains(self.Info.Name) && AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player) <= 1)
+				return false;
+
+			if (Info.BarracksTypes.Contains(self.Info.Name) && AIUtils.CountBuildingByCommonName(Info.BarracksTypes, player) <= 1)
+				return false;
+
+			if (Info.VehiclesFactoryTypes.Contains(self.Info.Name) && AIUtils.CountBuildingByCommonName(Info.VehiclesFactoryTypes, player) <= 1)
+				return false;
+
+			var enemyUnits = self.World.FindActorsInCircle(self.CenterPosition, WDist.FromCells(Info.SellScanRadius)).Where(IsEnemyGroundUnit).ToList();
+
+			if (enemyUnits.Count > 5)
+			{
+				var allyUnits = self.World.FindActorsInCircle(self.CenterPosition, WDist.FromCells(Info.SellScanRadius)).Where(IsAllyGroundUnit).ToList();
+
+				if (enemyUnits.Count >= allyUnits.Count * 2)
+					return true;
+			}
+
+			return false;
 		}
 
 		void SetRallyPointsForNewProductionBuildings(IBot bot)
@@ -271,7 +354,7 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			get
 			{
-				return AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) >= Info.MaxRefineries;
+				return AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) >= AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player) + Info.MaxExtraRefineries;
 			}
 		}
 

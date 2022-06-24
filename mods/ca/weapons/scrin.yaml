@@ -20,7 +20,7 @@ DisintegratorBeam:
 
 DisintegratorBeamAA:
 	Inherits: DisintegratorBeam
-	Range: 6c0
+	Range: 9c0
 	ValidTargets: Air
 	Projectile: LaserZap
 		Blockable: false
@@ -283,8 +283,8 @@ DevourerAcid:
 WarshipLaser:
 	Inherits: ^ScrinLaser
 	Inherits: ^EnergyAP
-	Range: 7c512
-	ReloadDelay: 50
+	Range: 7c0
+	ReloadDelay: 75
 	Report: interloper-fire1.aud, interloper-fire2.aud
 	FirstBurstTargetOffset: 0,-1300,0
 	FollowingBurstTargetOffset: 0,200,0
@@ -300,7 +300,7 @@ WarshipLaser:
 
 WarshipLaser.2:
 	Inherits: WarshipLaser
-	Inherits: ^Energy
+	Inherits: ^EnergyAP
 	FirstBurstTargetOffset: -600, -300, 0
 	FollowingBurstTargetOffset: 100, 60, 0
 	Projectile: LaserZap
@@ -309,7 +309,7 @@ WarshipLaser.2:
 
 WarshipLaser.3:
 	Inherits: WarshipLaser
-	Inherits: ^Energy
+	Inherits: ^EnergyAP
 	FirstBurstTargetOffset: -600, 300, 0
 	FollowingBurstTargetOffset: 100, -60, 0
 	Projectile: LaserZap
@@ -335,7 +335,7 @@ DarkDiscCannon:
 RiftCannon:
 	Inherits: ^ScrinLaser
 	Inherits: ^EnergyAP
-	Range: 6c0
+	Range: 7c0
 	Report: darkener-fire1.aud, darkener-fire2.aud
 	ReloadDelay: 120
 	Projectile: LaserZap
@@ -357,7 +357,7 @@ RiftCannon.chain:
 	Inherits: ^EnergyAP
 	Report: darkener-fire1.aud, darkener-fire2.aud
 	ReloadDelay: 110
-	Range: 6c0
+	Range: 7c0
 	Projectile: LaserZap
 		Color: 000000FF
 		Width: 70
@@ -830,7 +830,7 @@ InvaderExplosion:
 	Report: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
 	Warhead@1Dam_impact: SpreadDamage
 		Spread: 1c0
-		Damage: 1000
+		Damage: 1500
 		Falloff: 100, 37, 13, 5
 		ValidTargets: Ground, Trees, Water, Air
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
@@ -1198,7 +1198,7 @@ MothershipBeam:
 
 Scrinbombs:
 	Inherits: ^EnergyAP
-	ValidTargets: Ground, Water, Trees
+	ValidTargets: Ground, Water, Trees, Underwater
 	InvalidTargets: Air
 	ReloadDelay: 50
 	Report: chute1.aud
@@ -1215,7 +1215,7 @@ Scrinbombs:
 		Spread: 256
 		Damage: 1300
 		Falloff: 1000, 255, 128, 50, 18, 7, 0
-		ValidTargets: Ground, Water
+		ValidTargets: Ground, Water, Underwater
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 	Warhead@3Eff: CreateEffect

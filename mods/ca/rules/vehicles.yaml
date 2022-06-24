@@ -194,11 +194,7 @@ V2RL:
 
 GTNK:
 	Inherits: 2TNK
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 70
-		Prerequisites: vehicles.any, ~vehicles.england
-		Description: England's main battle tank.\nEquipped with AP Shells.
+	-Buildable:
 	Valued:
 		Cost: 875
 	Tooltip:
@@ -230,6 +226,35 @@ GTNK:
 		VoiceSet: GrizzlyVoice
 	WithShadow:
 		RequiresCondition: parachute
+
+GTNK.squad:
+	AlwaysVisible:
+	Interactable:
+	ScriptTriggers:
+	ProvidesPrerequisite@squadname:
+	Tooltip:
+		Name: Airdrop: Grizzly Tanks
+	Buildable:
+		Queue: Vehicle
+		BuildAtProductionType: Paradrop
+		BuildPaletteOrder: 0
+		Prerequisites: dome, ~vehicles.england, orep
+		Description: Prepare a quad of Grizzly Tanks for airdrop.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor, Light Armor
+		Weaknesses: • Weak vs Infantry, Defenses\n• Cannot attack Aircraft
+	Valued:
+		Cost: 3500
+	RenderSprites:
+		Image: squad.airborne.tank
+	ProduceActorPowerCA:
+		Actors: powerproxy.airborne.tank
+		Type: Paradrop
+		OneShot: true
+		AutoFire: true
+		AllowMultiple: true
+	Armor:
+		Type: Heavy
 
 2TNK.Chrono:
 	Inherits: 2TNK
@@ -3464,6 +3489,43 @@ HAR2:
 		CarriedCondition: notmobile
 		ReservedCondition: carryall-reserved
 		LockedCondition: notmobile
+	GrantConditionOnPrerequisite@stealthed:
+		Condition: stealth-miner
+		Prerequisites: commander_tree.stealth_miners
+	Cloak@NORMAL:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		CloakedCondition: hidden
+		UncloakSound: appear1.aud
+		Palette: cloak
+		IsPlayerPalette: false
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal, SelfHeal
+		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead && stealth-miner
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	GrantConditionOnPrerequisite@shielded:
+		Condition: shielded-miner
+		Prerequisites: commander_tree.shielded_miners
+	Shielded:
+		MaxStrength: 75000
+		RegenDelay: 150
+		RegenAmount: 250
+		RegenInterval: 5
+		ShieldsUpCondition: shields-up
+		RequiresCondition: shielded-miner && !empdisable
+		SelectionBarColor: 4488ff
+	WithColoredOverlay@shieldhit:
+		RequiresCondition: weaponhit && shields-up
+		Palette: shieldhit
+	ExternalCondition@weaponhit:
+		Condition: weaponhit
+	WithIdleOverlay@NSHIELD:
+		Sequence: idle
+		Image: nshield-overlay
+		Palette: effect
+		RequiresCondition: weaponhit && shields-up
 
 BTR:
 	Inherits: ^Tank

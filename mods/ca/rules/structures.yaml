@@ -123,6 +123,7 @@ GAP:
 SPEN:
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Shipyard: ^ShipPrerequisites
 	Selectable:
 		Bounds: 72,48
 	RenderSprites:
@@ -164,51 +165,51 @@ SPEN:
 		SpawnOffset: 0,-213,0
 		Facing: 384
 		ExitCell: -1,2
-		ProductionTypes: Submarine
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,-213,0
 		Facing: 160
 		ExitCell: 3,2
-		ProductionTypes: Submarine
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@3:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,0,0
 		Facing: 32
 		ExitCell: 0,0
-		ProductionTypes: Submarine
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@4:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,0,0
 		Facing: 224
 		ExitCell: 2,0
-		ProductionTypes: Submarine
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@b1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,1024,0
 		Facing: 160
 		ExitCell: 0,2
-		ProductionTypes: Ship
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@b2:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,1024,0
 		Facing: 224
 		ExitCell: 2,2
-		ProductionTypes: Ship
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@b3:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,-1024,0
 		Facing: 384
 		ExitCell: 0,0
-		ProductionTypes: Ship
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@b4:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,-1024,0
 		Facing: 32
 		ExitCell: 2,0
-		ProductionTypes: Ship
+		ProductionTypes: Submarine, Ship, Boat
 	Production:
-		Produces: Ship, Submarine
+		Produces: Ship, Submarine, Boat
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	-SpawnActorsOnSell:
 	RepairsUnits:
@@ -230,30 +231,6 @@ SPEN:
 		Range: 10c0
 		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
-	ProvidesPrerequisite@soviet:
-		Factions: soviet, russia, ukraine, iraq
-		Prerequisite: ships.soviet
-	ProvidesPrerequisite@russia:
-		Factions: russia
-		Prerequisite: ships.russia
-	ProvidesPrerequisite@ukraine:
-		Factions: ukraine
-		Prerequisite: ships.ukraine
-	ProvidesPrerequisite@iraq:
-		Factions: iraq
-		Prerequisite: ships.iraq
-	ProvidesPrerequisite@sovietstructure:
-		RequiresPrerequisites: structures.soviet
-		Prerequisite: ships.soviet
-	ProvidesPrerequisite@russianstructure:
-		RequiresPrerequisites: structures.russia
-		Prerequisite: ships.russia
-	ProvidesPrerequisite@ukrainianstructure:
-		RequiresPrerequisites: structures.ukraine
-		Prerequisite: ships.ukraine
-	ProvidesPrerequisite@iraqistructure:
-		RequiresPrerequisites: structures.iraq
-		Prerequisite: ships.iraq
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
@@ -272,6 +249,7 @@ SPEN:
 SYRD:
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Shipyard: ^ShipPrerequisites
 	Selectable:
 		Bounds: 72,48
 	RenderSprites:
@@ -313,27 +291,27 @@ SYRD:
 		SpawnOffset: -1024,1024,0
 		Facing: 160
 		ExitCell: 0,2
-		ProductionTypes: Ship, Boat
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,1024,0
 		Facing: 224
 		ExitCell: 2,2
-		ProductionTypes: Ship, Boat
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@3:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,-1024,0
 		Facing: 384
 		ExitCell: 0,0
-		ProductionTypes: Ship, Boat
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@4:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,-1024,0
 		Facing: 32
 		ExitCell: 2,0
-		ProductionTypes: Ship, Boat
+		ProductionTypes: Submarine, Ship, Boat
 	Production:
-		Produces: Ship, Boat
+		Produces: Ship, Submarine, Boat
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	-SpawnActorsOnSell:
 	RepairsUnits:
@@ -355,36 +333,6 @@ SYRD:
 		Range: 10c0
 		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
-	ProvidesPrerequisite@allies:
-		Factions: allies, england, france, germany
-		Prerequisite: ships.allies
-	ProvidesPrerequisite@alliesvanilla:
-		Factions: allies
-		Prerequisite: ships.alliesvanilla
-	ProvidesPrerequisite@england:
-		Factions: england
-		Prerequisite: ships.england
-	ProvidesPrerequisite@france:
-		Factions: france
-		Prerequisite: ships.france
-	ProvidesPrerequisite@germany:
-		Factions: germany
-		Prerequisite: ships.germany
-	ProvidesPrerequisite@alliedstructure:
-		RequiresPrerequisites: structures.allies
-		Prerequisite: ships.allies
-	ProvidesPrerequisite@alliedvanillastructure:
-		RequiresPrerequisites: structures.alliesvanilla
-		Prerequisite: ships.alliesvanilla
-	ProvidesPrerequisite@englishstructure:
-		RequiresPrerequisites: structures.england
-		Prerequisite: ships.england
-	ProvidesPrerequisite@frenchstructure:
-		RequiresPrerequisites: structures.france
-		Prerequisite: ships.france
-	ProvidesPrerequisite@germanstructure:
-		RequiresPrerequisites: structures.germany
-		Prerequisite: ships.germany
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
@@ -1280,7 +1228,7 @@ WEAP:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	WithProductionDoorOverlay:
+	WithProductionDoorOverlayCA:
 		RequiresCondition: !build-incomplete
 		Sequence: build-top
 	ProvidesPrerequisite@allies:
@@ -1775,6 +1723,9 @@ HPAD:
 	ProvidesPrerequisite@soviets:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: aircraft.soviet
+	ProvidesPrerequisite@russia:
+		Factions: russia
+		Prerequisite: aircraft.russia
 	ProvidesPrerequisite@all:
 		Factions: allies, england, france, germany, soviet, russia, ukraine, iraq, gdi, talon, zocom, nod, blackh, marked
 		Prerequisite: aircraft.all
@@ -1786,7 +1737,7 @@ HPAD:
 		Proxy: powerproxy.paratroopers2
 	SpawnActorPower@GDIEagleDropzone:
 		Actor: FLARE.dropzone
-		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, anyradar, ~techlevel.low
+		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, radar, ~techlevel.low
 		LifeTime: 280
 		OrderName: dropzoneeagle
 		Icon: orcaca
@@ -2196,8 +2147,6 @@ STEK:
 		Cost: 1500
 	Tooltip:
 		Name: Soviet Tech Center
-	ProvidesPrerequisite:
-		Prerequisite: techcenter
 	Building:
 		Footprint: XxX XxX ===
 		Dimensions: 3,3
@@ -3149,13 +3098,16 @@ WEAP.TD:
 		Factions: gdi, zocom, eagle
 		Prerequisite: vehicles.htnk
 	WithBuildingBib:
-	WithProductionDoorOverlay:
+	WithProductionDoorOverlayCA:
 		RequiresCondition: !build-incomplete
 		Sequence: build-top
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -341,-341,0
 		ExitCell: 0,2
+	Production:
+		Produces: Vehicle, Paradrop
+		PauseOnCondition: forceshield || invulnerability || being-warped
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 	Power:
@@ -5204,6 +5156,7 @@ PRIS:
 SPEN.nod:
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Shipyard: ^ShipPrerequisites
 	RenderSprites:
 		Image: SPENNOD
 		PlayerPalette: playernavy
@@ -5245,21 +5198,21 @@ SPEN.nod:
 		SpawnOffset: 0,-213,0
 		Facing: 384
 		ExitCell: -1,2
-		ProductionTypes: Submarine, Ship
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,-213,0
 		Facing: 160
 		ExitCell: 3,2
-		ProductionTypes: Submarine, Ship
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@3:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,0,0
 		Facing: 0
 		ExitCell: 1,0
-		ProductionTypes: Submarine, Ship
+		ProductionTypes: Submarine, Ship, Boat
 	Production:
-		Produces: Ship, Submarine
+		Produces: Ship, Submarine, Boat
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	RepairsUnits:
 		ValuePercentage: 0
@@ -5275,12 +5228,6 @@ SPEN.nod:
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
-	ProvidesPrerequisite@nod:
-		Factions: nod, marked, blackh, legion
-		Prerequisite: ships.nod
-	ProvidesPrerequisite@nodstructure:
-		RequiresPrerequisites: structures.nod
-		Prerequisite: ships.nod
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
@@ -5306,6 +5253,7 @@ SYRD.gdi:
 	Inherits: ^Building
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Shipyard: ^ShipPrerequisites
 	RenderSprites:
 		Image: GSYRD
 		PlayerPalette: playernavy
@@ -5346,27 +5294,27 @@ SYRD.gdi:
 		SpawnOffset: -1024,1024,0
 		Facing: 160
 		ExitCell: 0,2
-		ProductionTypes: Ship, Boat
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,1024,0
 		Facing: 224
 		ExitCell: 2,2
-		ProductionTypes: Ship, Boat
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@3:
 		RequiresCondition: !being-captured
 		SpawnOffset: -1024,-1024,0
 		Facing: 384
 		ExitCell: 0,0
-		ProductionTypes: Ship, Boat
+		ProductionTypes: Submarine, Ship, Boat
 	Exit@4:
 		RequiresCondition: !being-captured
 		SpawnOffset: 1024,-1024,0
 		Facing: 32
 		ExitCell: 2,0
-		ProductionTypes: Ship, Boat
+		ProductionTypes: Submarine, Ship, Boat
 	Production:
-		Produces: Ship, Boat
+		Produces: Ship, Submarine, Boat
 		PauseOnCondition: forceshield || invulnerability || being-warped
 	RepairsUnits:
 		ValuePercentage: 0
@@ -5382,12 +5330,6 @@ SYRD.gdi:
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
-	ProvidesPrerequisite@gdi:
-		Factions: gdi, zocom, talon, eagle
-		Prerequisite: ships.gdi
-	ProvidesPrerequisite@gdistructure:
-		RequiresPrerequisites: structures.gdi
-		Prerequisite: ships.gdi
 	ProvidesPrerequisite@buildingname:
 	MapEditorData:
 		ExcludeTilesets: INTERIOR

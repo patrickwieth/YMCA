@@ -9,6 +9,7 @@
  */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.Common;
@@ -38,19 +39,36 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("When should the AI start train specific units.")]
 		public readonly Dictionary<string, int> UnitDelays = null;
 
+		[Desc("Minimum duration between building a specific unit.")]
+		public readonly Dictionary<string, int> UnitIntervals = null;
+
 		[Desc("How often should the unit builder check to build more units")]
 		public readonly int UnitBuilderInterval = 0;
 
 		[Desc("Mininum amount of credits in reserve for the Unit Builder to be active.")]
 		public readonly int UnitBuilderMinCredits = 2000;
 
-		[Desc("Maximum number of aircraft AI can build.")]
+		[Desc("Maximum number of aircraft AI can build.",
+			"If MaintainAirSuperiority is true this only applies to units not listed in AirToAirUnits.")]
 		public readonly int MaxAircraft = 4;
+
+		[Desc("If true, will always attempt to match the number of enemy air threats.")]
+		public readonly bool MaintainAirSuperiority = false;
+
+		[Desc("If MaintainAirSuperiority is true and this is non-zero,",
+			"sets an upper limit for the number of air superiority aircraft.")]
+		public readonly int MaxAirSuperiority = 0;
+
+		[Desc("List of actor types to be used for air superiority.")]
+		public readonly HashSet<string> AirToAirUnits = new HashSet<string>();
+
+		[Desc("List of actor types to measure against for air superiority.")]
+		public readonly HashSet<string> AirThreatUnits = new HashSet<string>();
 
 		public override object Create(ActorInitializer init) { return new UnitBuilderBotModuleCA(init.Self, this); }
 	}
 
-	public class UnitBuilderBotModuleCA : ConditionalTrait<UnitBuilderBotModuleCAInfo>, IBotTick, IBotNotifyIdleBaseUnits, IBotRequestUnitProduction, IGameSaveTraitData
+	public class UnitBuilderBotModuleCA : ConditionalTrait<UnitBuilderBotModuleCAInfo>, IBotTick, IBotNotifyIdleBaseUnits, IBotRequestUnitProduction, IGameSaveTraitData, IBotAircraftBuilder
 	{
 		public const int FeedbackTime = 30; // ticks; = a bit over 1s. must be >= netlag.
 
@@ -58,6 +76,7 @@ namespace OpenRA.Mods.CA.Traits
 		readonly Player player;
 
 		readonly List<string> queuedBuildRequests = new List<string>();
+		readonly Dictionary<string, int> activeUnitIntervals = new Dictionary<string, int>();
 
 		IBotRequestPauseUnitProduction[] requestPause;
 		int idleUnitCount;
@@ -89,6 +108,13 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			if (requestPause.Any(rp => rp.PauseUnitProduction))
 				return;
+
+			foreach (KeyValuePair<string, int> i in activeUnitIntervals.ToList())
+			{
+				activeUnitIntervals[i.Key]--;
+				if (activeUnitIntervals[i.Key] <= 0)
+					activeUnitIntervals.Remove(i.Key);
+			}
 
 			ticks++;
 
@@ -133,19 +159,10 @@ namespace OpenRA.Mods.CA.Traits
 
 			var name = unit.Name;
 
-			if (Info.UnitsToBuild != null && !Info.UnitsToBuild.ContainsKey(name))
+			if (!ShouldBuild(name, false))
 				return;
 
-			if (Info.UnitDelays != null &&
-				Info.UnitDelays.ContainsKey(name) &&
-				Info.UnitDelays[name] > world.WorldTick)
-				return;
-
-			if (Info.UnitLimits != null &&
-				Info.UnitLimits.ContainsKey(name) &&
-				world.Actors.Count(a => a.Owner == player && a.Info.Name == name) >= Info.UnitLimits[name])
-				return;
-
+			SetUnitInterval(name);
 			bot.QueueOrder(Order.StartProduction(queue.Actor, name, 1));
 		}
 
@@ -160,6 +177,9 @@ namespace OpenRA.Mods.CA.Traits
 			if (buildableInfo == null)
 				return;
 
+			if (!ShouldBuild(name, true))
+				return;
+
 			ProductionQueue queue = null;
 			foreach (var pq in buildableInfo.Queue)
 			{
@@ -170,9 +190,41 @@ namespace OpenRA.Mods.CA.Traits
 
 			if (queue != null)
 			{
+				SetUnitInterval(name);
 				bot.QueueOrder(Order.StartProduction(queue.Actor, name, 1));
 				AIUtils.BotDebug("AI: {0} decided to build {1} (external request)", queue.Actor.Owner, name);
 			}
+		}
+
+		void SetUnitInterval(string name)
+		{
+			if (!Info.UnitIntervals.ContainsKey(name))
+				return;
+
+			activeUnitIntervals[name] = Info.UnitIntervals[name];
+		}
+
+		bool ShouldBuild(string name, bool ignoreUnitsToBuild)
+		{
+			if (!ignoreUnitsToBuild && Info.UnitsToBuild != null && !Info.UnitsToBuild.ContainsKey(name))
+				return false;
+
+			if (Info.UnitDelays != null &&
+				Info.UnitDelays.ContainsKey(name) &&
+				Info.UnitDelays[name] > world.WorldTick)
+				return false;
+
+			if (Info.UnitIntervals != null &&
+				Info.UnitIntervals.ContainsKey(name) &&
+				activeUnitIntervals.ContainsKey(name))
+				return false;
+
+			if (Info.UnitLimits != null &&
+				Info.UnitLimits.ContainsKey(name) &&
+				world.Actors.Count(a => !a.IsDead && a.Owner == player && a.Info.Name == name) >= Info.UnitLimits[name])
+				return false;
+
+			return true;
 		}
 
 		ActorInfo ChooseRandomUnitToBuild(ProductionQueue queue)
@@ -205,13 +257,41 @@ namespace OpenRA.Mods.CA.Traits
 			return null;
 		}
 
+		bool IBotAircraftBuilder.CanBuildMoreOfAircraft(ActorInfo actorInfo)
+		{
+			return CanBuildMoreOfAircraft(actorInfo);
+		}
+
 		bool CanBuildMoreOfAircraft(ActorInfo actorInfo)
 		{
-			var attackAircraftInfo = actorInfo.TraitInfoOrDefault<AttackAircraftInfo>();
+			var attackAircraftInfo = actorInfo.TraitInfoOrDefault<AircraftInfo>();
 			if (attackAircraftInfo == null)
 				return true;
-			var numAirUnits = AIUtils.GetActorsWithTrait<AttackAircraft>(player.World).Count(a => a.Owner == player);
-			return numAirUnits < Info.MaxAircraft;
+
+			var limit = Info.MaxAircraft;
+			var currentCount = 0;
+
+			if (Info.MaintainAirSuperiority)
+			{
+				var numAirToAirUnits = AIUtils.GetActorsWithTrait<Aircraft>(player.World).Count(a => a.Owner == player && Info.AirToAirUnits.Contains(a.Info.Name));
+
+				if (Info.AirToAirUnits.Contains(actorInfo.Name))
+				{
+					currentCount = numAirToAirUnits;
+					var numFriendlyAirToAirUnits = player.World.Actors.Count(a => a.Owner.RelationshipWith(player) == PlayerRelationship.Ally && Info.AirToAirUnits.Contains(a.Info.Name));
+					var numEnemyAirThreatUnits = player.World.Actors.Count(a => a.Owner.RelationshipWith(player) == PlayerRelationship.Enemy && Info.AirThreatUnits.Contains(a.Info.Name));
+					limit = Math.Max(numEnemyAirThreatUnits - numFriendlyAirToAirUnits + 1, limit);
+
+					if (Info.MaxAirSuperiority > 0)
+						limit = Math.Min(Info.MaxAirSuperiority, limit);
+				}
+				else
+					currentCount = AIUtils.GetActorsWithTrait<Aircraft>(player.World).Count(a => a.Owner == player && a.Info.HasTraitInfo<BuildableInfo>()) - numAirToAirUnits;
+			}
+			else
+				currentCount = AIUtils.GetActorsWithTrait<Aircraft>(player.World).Count(a => a.Owner == player && a.Info.HasTraitInfo<BuildableInfo>());
+
+			return currentCount < limit;
 		}
 
 		List<MiniYamlNode> IGameSaveTraitData.IssueTraitData(Actor self)
