@@ -9,16 +9,14 @@
  */
 #endregion
 
-using OpenRA.Mods.Common.Traits;
+using System.Collections.Generic;
+using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
 	[Desc("Extra tooltip items.")]
-	public class TooltipExtrasInfo : ConditionalTraitInfo
+	public class TooltipExtrasInfo : TraitInfo
 	{
-		[Desc("Description.")]
-		public readonly string Description = "";
-
 		[Desc("Strengths.")]
 		public readonly string Strengths = "";
 
@@ -28,19 +26,14 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Attributes.")]
 		public readonly string Attributes = "";
 
-		[Desc("If true these tooltip extras are standard (used for the production tooltip).",
-			"False implies conditional (only used for selection tooltip).")]
-		public readonly bool IsStandard = true;
-
 		public override object Create(ActorInitializer init) { return new TooltipExtras(init, this); }
 	}
 
-	public class TooltipExtras : ConditionalTrait<TooltipExtrasInfo>
+	public class TooltipExtras
 	{
-		public new readonly TooltipExtrasInfo Info;
+		public readonly TooltipExtrasInfo Info;
 
 		public TooltipExtras(ActorInitializer init, TooltipExtrasInfo info)
-			: base(info)
 		{
 			Info = info;
 		}

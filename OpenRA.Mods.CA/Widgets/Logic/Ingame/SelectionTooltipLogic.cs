@@ -46,24 +46,12 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			selectionHash = world.Selection.Hash;
 		}
 
-		void HideTooltip()
-		{
-			widget.Bounds.X = Game.Renderer.Resolution.Width;
-			widget.Bounds.Y = Game.Renderer.Resolution.Height;
-		}
-
 		void UpdateTooltip()
 		{
 			if (world.Selection.Actors.Count() != 1)
 			{
-				HideTooltip();
-				return;
-			}
-
-			var actor = world.Selection.Actors.First();
-			if (actor == null || actor.Info == null || actor.IsDead || !actor.IsInWorld || actor.Disposed)
-			{
-				HideTooltip();
+				widget.Bounds.X = Game.Renderer.Resolution.Width;
+				widget.Bounds.Y = Game.Renderer.Resolution.Height;
 				return;
 			}
 
@@ -89,30 +77,36 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			var descLabelPadding = descLabel.Bounds.Height;
 
-			var tooltip = actor.TraitsImplementing<Tooltip>().FirstOrDefault(Exts.IsTraitEnabled);
-			var name = tooltip != null ? tooltip.Info.Name : actor.Info.Name;
+			var actor = world.Selection.Actors.First().Info;
+			if (actor == null)
+				return;
+
+			var tooltip = actor.TraitInfos<TooltipInfo>().FirstOrDefault(info => info.EnabledByDefault);
+			var name = tooltip != null ? tooltip.Name : actor.Name;
+
+			var cost = 0;
+			var valued = actor.TraitInfoOrDefault<ValuedInfo>();
+			if (valued != null)
+				cost = valued.Cost;
 
 			nameLabel.Text = name;
 
 			var nameSize = font.Measure(name);
 
-			armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, actor.Info);
-			var tooltipExtras = actor.TraitsImplementing<TooltipExtras>().FirstOrDefault(Exts.IsTraitEnabled);
+			armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, actor);
 
+			var tooltipExtras = actor.TraitInfoOrDefault<TooltipExtrasInfo>();
 			if (tooltipExtras != null)
 			{
-				var tooltipExtrasInfo = tooltipExtras.Info;
-				strengthsLabel.Text = tooltipExtrasInfo.Strengths.Replace("\\n", "\n");
-				weaknessesLabel.Text = tooltipExtrasInfo.Weaknesses.Replace("\\n", "\n");
-				attributesLabel.Text = tooltipExtrasInfo.Attributes.Replace("\\n", "\n");
-				descLabel.Text = tooltipExtrasInfo.Description.Replace("\\n", "\n");
+				strengthsLabel.Text = tooltipExtras.Strengths.Replace("\\n", "\n");
+				weaknessesLabel.Text = tooltipExtras.Weaknesses.Replace("\\n", "\n");
+				attributesLabel.Text = tooltipExtras.Attributes.Replace("\\n", "\n");
 			}
 			else
 			{
 				strengthsLabel.Text = "";
 				weaknessesLabel.Text = "";
 				attributesLabel.Text = "";
-				descLabel.Text = "";
 			}
 
 			var armorTypeSize = armorTypeLabel.Text != "" ? font.Measure(armorTypeLabel.Text) : new int2(0, 0);
@@ -121,17 +115,18 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			var extrasSpacing = descLabel.Bounds.X / 2;
 
-			if (descLabel.Text == "")
+			var buildable = actor.TraitInfoOrDefault<BuildableInfo>();
+			var descSize = new int2(0, 0);
+
+			if (buildable != null)
 			{
-				var buildable = actor.Info.TraitInfoOrDefault<BuildableInfo>();
-
-				if (buildable != null)
-				{
-					descLabel.Text = buildable.Description.Replace("\\n", "\n");
-				}
+				descLabel.Text = buildable.Description.Replace("\\n", "\n");
+				descSize = descFont.Measure(descLabel.Text);
 			}
-
-			var descSize = descLabel.Text != "" ? descFont.Measure(descLabel.Text) : new int2(0, 0);
+			else
+			{
+				descLabel.Text = "";
+			}
 
 			descLabel.Bounds.Width = descSize.X;
 			descLabel.Bounds.Height = descSize.Y;
@@ -163,6 +158,18 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			widget.Bounds.Y = Game.Renderer.Resolution.Height - widget.Bounds.Height - 12;
 		}
 
+		static string ActorName(Ruleset rules, string a)
+		{
+			if (rules.Actors.TryGetValue(a.ToLowerInvariant(), out var ai))
+			{
+				var actorTooltip = ai.TraitInfos<TooltipInfo>().FirstOrDefault(info => info.EnabledByDefault);
+				if (actorTooltip != null)
+					return actorTooltip.Name;
+			}
+
+			return a;
+		}
+
 		LabelWidget GetArmorTypeLabel(LabelWidget armorTypeLabel, ActorInfo actor)
 		{
 			var armor = actor.TraitInfos<ArmorInfo>().FirstOrDefault();
@@ -187,8 +194,12 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					armorTypeLabel.TextColor = Color.Firebrick;
 					break;
 
+				case "Reflector":
+					armorTypeLabel.TextColor = Color.Teal;
+					break;
+
 				case "Concrete":
-					armorTypeLabel.Text = "Defense";
+					armorTypeLabel.Text = "Concrete";
 					armorTypeLabel.TextColor = Color.RoyalBlue;
 					break;
 

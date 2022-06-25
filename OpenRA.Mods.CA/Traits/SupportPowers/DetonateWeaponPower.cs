@@ -47,7 +47,6 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Amount of time after detonation to remove the camera")]
 		public readonly int CameraRemoveDelay = 5;
 
-		[GrantedConditionReference]
 		[Desc("A condition to apply while active.")]
 		public readonly string ActiveCondition = null;
 

@@ -35,7 +35,7 @@ namespace OpenRA.Mods.CA.Traits
 		public DelayedWeaponTrigger(AttachDelayedWeaponWarhead warhead, WarheadArgs args)
 		{
 			this.args = args;
-			TriggerTime = warhead.CalculatedTriggerTime;
+			TriggerTime = warhead.TriggerTime;
 			RemainingTime = TriggerTime;
 			DeathTypes = warhead.DeathTypes;
 			weaponInfo = warhead.WeaponInfo;
