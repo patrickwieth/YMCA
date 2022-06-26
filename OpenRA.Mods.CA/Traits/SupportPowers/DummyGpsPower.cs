@@ -17,12 +17,10 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	public class DummyGpsPowerInfo : PausableConditionalTraitInfo
+	class DummyGpsPowerInfo : SupportPowerInfo
 	{
-		[Desc("Delay before launching.")]
-		public readonly int Delay = 0;
-
-		public readonly int AnimationDuration = 0;
+		[Desc("Delay in ticks between launching and revealing the map.")]
+		public readonly int RevealDelay = 0;
 
 		public readonly string DoorImage = "atek";
 
@@ -48,49 +46,49 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Custom palette is a player palette BaseName")]
 		public readonly bool SatellitePaletteIsPlayerPalette = true;
 
+		[Desc("Requires an actor with an online `ProvidesRadar` to show GPS dots.")]
+		public readonly bool RequiresActiveRadar = true;
+
 		[FieldLoader.Require]
 		[Desc("The condition to apply. Must be included in the target actor's ExternalConditions list.")]
 		public readonly string Condition = null;
 
-		public readonly string LaunchSound = null;
-
-		[NotificationReference("Speech")]
-		public readonly string LaunchSpeechNotification = null;
-
-		public readonly string IncomingSound = null;
-
-		[NotificationReference("Speech")]
-		public readonly string IncomingSpeechNotification = null;
-
 		public override object Create(ActorInitializer init) { return new DummyGpsPower(init.Self, this); }
 	}
 
-	public class DummyGpsPower : PausableConditionalTrait<DummyGpsPowerInfo>, ITick
+	class DummyGpsPower : SupportPower, INotifyKilled, INotifySold, INotifyOwnerChanged
 	{
 		Actor self;
 		readonly DummyGpsPowerInfo info;
 		int conditionToken = Actor.InvalidConditionToken;
-		int ticksRemaining;
+
+		protected override void Created(Actor self)
+		{
+			// Special case handling is required for the Player actor.
+			// Created is called before Player.PlayerActor is assigned,
+			// so we must query other player traits from self, knowing that
+			// it refers to the same actor as self.Owner.PlayerActor
+			var playerActor = self.Info.Name == "player" ? self : self.Owner.PlayerActor;
+
+			base.Created(self);
+		}
 
 		public DummyGpsPower(Actor self, DummyGpsPowerInfo info)
-			: base(info)
+			: base(self, info)
 		{
 			this.self = self;
 			this.info = info;
-			ticksRemaining = info.Delay;
 		}
 
-		void ITick.Tick(Actor self)
+		public override void Charged(Actor self, string key)
 		{
-			if (IsTraitDisabled || IsTraitPaused)
-				return;
-
-			if (--ticksRemaining == 0)
-				Activate(self);
+			self.Owner.PlayerActor.Trait<SupportPowerManager>().Powers[key].Activate(new Order());
 		}
 
-		void Activate(Actor self)
+		public override void Activate(Actor self, Order order, SupportPowerManager manager)
 		{
+			base.Activate(self, order, manager);
+
 			self.World.AddFrameEndTask(w =>
 			{
 				PlayLaunchSounds();
@@ -102,16 +100,16 @@ namespace OpenRA.Mods.CA.Traits
 			});
 		}
 
-		void PlayLaunchSounds()
-		{
-			var renderPlayer = self.World.RenderPlayer;
-			var isAllied = self.Owner.IsAlliedWith(renderPlayer);
-			Game.Sound.Play(SoundType.UI, isAllied ? info.LaunchSound : info.IncomingSound);
+		void INotifyKilled.Killed(Actor self, AttackInfo e) { RemoveGps(self); }
+		void INotifySold.Selling(Actor self) { }
+		void INotifySold.Sold(Actor self) { RemoveGps(self); }
 
-			// IsAlliedWith returns true if renderPlayer is null, so we are safe here.
-			var toPlayer = isAllied ? renderPlayer ?? self.Owner : renderPlayer;
-			var speech = isAllied ? info.LaunchSpeechNotification : info.IncomingSpeechNotification;
-			Game.Sound.PlayNotification(self.World.Map.Rules, toPlayer, "Speech", speech, toPlayer.Faction.InternalName);
+		void RemoveGps(Actor self)
+		{
+		}
+
+		void INotifyOwnerChanged.OnOwnerChanged(Actor self, Player oldOwner, Player newOwner)
+		{
 		}
 	}
 }

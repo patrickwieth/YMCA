@@ -17,9 +17,6 @@ namespace OpenRA.Mods.CA.Traits
 	[Desc("This actor provides Radar GPS.")]
 	public class RangedGpsRadarProviderInfo : ConditionalTraitInfo
 	{
-		[Desc("Target types that can be detected. Leave empty to accept all types.")]
-		public readonly BitSet<TargetableType> TargetTypes = default(BitSet<TargetableType>);
-
 		[Desc("Reveals within this range. Use zero for whole map.")]
 		public readonly WDist Range = WDist.Zero;
 
@@ -30,8 +27,7 @@ namespace OpenRA.Mods.CA.Traits
 		public override object Create(ActorInitializer init) { return new RangedGpsRadarProvider(init, this); }
 	}
 
-	public class RangedGpsRadarProvider : ConditionalTrait<RangedGpsRadarProviderInfo>, INotifyVisualPositionChanged,
-		INotifyAddedToWorld, INotifyRemovedFromWorld, INotifyOtherProduction
+	public class RangedGpsRadarProvider : ConditionalTrait<RangedGpsRadarProviderInfo>, INotifyVisualPositionChanged, INotifyAddedToWorld, INotifyRemovedFromWorld, INotifyOtherProduction
 	{
 		readonly Actor self;
 
@@ -48,14 +44,12 @@ namespace OpenRA.Mods.CA.Traits
 			self = init.Self;
 			cachedRange = WDist.Zero;
 			cachedVRange = WDist.Zero;
-			proximityTrigger = -1;
 		}
 
 		void INotifyAddedToWorld.AddedToWorld(Actor self)
 		{
 			cachedPosition = self.CenterPosition;
 			proximityTrigger = self.World.ActorMap.AddProximityTrigger(cachedPosition, cachedRange, cachedVRange, ActorEntered, ActorExited);
-			Update();
 		}
 
 		void INotifyRemovedFromWorld.RemovedFromWorld(Actor self)
@@ -79,7 +73,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		void INotifyVisualPositionChanged.VisualPositionChanged(Actor self, byte oldLayer, byte newLayer)
 		{
-			if (!self.IsInWorld || IsTraitDisabled)
+			if (!self.IsInWorld && !IsTraitDisabled)
 				return;
 
 			if (self.CenterPosition != cachedPosition)
@@ -88,9 +82,6 @@ namespace OpenRA.Mods.CA.Traits
 
 		void Update()
 		{
-			if (proximityTrigger == -1)
-				return;
-
 			cachedPosition = self.CenterPosition;
 			cachedRange = desiredRange;
 			cachedVRange = desiredVRange;
@@ -99,7 +90,15 @@ namespace OpenRA.Mods.CA.Traits
 
 		void ActorEntered(Actor a)
 		{
-			AddRangedObserver(a);
+			if (a.Disposed || self.Disposed)
+				return;
+
+			if (self.Owner.IsAlliedWith(a.Owner))
+				return;
+
+			var dotTrait = a.TraitOrDefault<GpsRadarDot>();
+			if (dotTrait != null)
+				dotTrait.AddRangedObserver(self);
 		}
 
 		public void UnitProducedByOther(Actor self, Actor producer, Actor produced, string productionType, TypeDictionary init)
@@ -110,28 +109,17 @@ namespace OpenRA.Mods.CA.Traits
 
 			// Work around for actors produced within the region not triggering until the second tick
 			if ((produced.CenterPosition - self.CenterPosition).HorizontalLengthSquared <= Info.Range.LengthSquared)
-				AddRangedObserver(produced);
+			{
+				if (self.Owner.IsAlliedWith(produced.Owner))
+					return;
+
+				var dotTrait = produced.TraitOrDefault<GpsRadarDot>();
+				if (dotTrait != null)
+					dotTrait.AddRangedObserver(self);
+			}
 		}
 
 		void ActorExited(Actor a)
-		{
-			RemoveRangedObserver(a);
-		}
-
-		void AddRangedObserver(Actor a)
-		{
-			if (IsTraitDisabled || a.Disposed || self.Disposed)
-				return;
-
-			if (self.Owner.IsAlliedWith(a.Owner))
-				return;
-
-			var dotTrait = a.TraitOrDefault<GpsRadarDot>();
-			if (dotTrait != null && (Info.TargetTypes.IsEmpty || a.GetEnabledTargetTypes().Overlaps(Info.TargetTypes)))
-				dotTrait.AddRangedObserver(self);
-		}
-
-		void RemoveRangedObserver(Actor a)
 		{
 			if (a.Disposed)
 				return;

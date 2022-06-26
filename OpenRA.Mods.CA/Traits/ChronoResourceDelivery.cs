@@ -52,7 +52,6 @@ namespace OpenRA.Mods.CA.Traits
 
 	public class ChronoResourceDelivery : ConditionalTrait<ChronoResourceDeliveryInfo>, INotifyHarvesterAction, ITick
 	{
-		Actor destRefinery = null;
 		CPos? destination = null;
 		CPos harvestedField;
 		int ticksTillCheck = 0;
@@ -90,7 +89,6 @@ namespace OpenRA.Mods.CA.Traits
 			harvestedField = self.World.Map.CellContaining(self.CenterPosition);
 
 			destination = deliverypos;
-			destRefinery = refineryActor;
 		}
 
 		public void MovementCancelled(Actor self)
@@ -114,7 +112,7 @@ namespace OpenRA.Mods.CA.Traits
 			var pos = self.Trait<IPositionable>();
 			if (pos.CanEnterCell(destination.Value))
 			{
-				self.QueueActivity(false, new ChronoResourceTeleport(destination.Value, Info, harvestedField, destRefinery));
+				self.QueueActivity(false, new ChronoResourceTeleport(destination.Value, Info, harvestedField));
 				Reset();
 			}
 		}
@@ -123,7 +121,6 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			ticksTillCheck = 0;
 			destination = null;
-			destRefinery = null;
 		}
 	}
 }

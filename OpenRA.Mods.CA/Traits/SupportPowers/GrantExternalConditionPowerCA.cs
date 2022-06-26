@@ -64,7 +64,6 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Altitude above terrain below which to explode. Zero effectively deactivates airburst.")]
 		public readonly WDist AirburstAltitude = WDist.Zero;
 
-		[GrantedConditionReference]
 		[Desc("A condition to apply while active.")]
 		public readonly string ActiveCondition = null;
 
