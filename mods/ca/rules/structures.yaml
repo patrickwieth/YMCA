@@ -1112,28 +1112,17 @@ ATEK:
 	ProvidesPrerequisite@buildingname:
 	ProvidesPrerequisite:
 		Prerequisite: techcenter
-	DummyGpsPower:
-		PauseOnCondition: disabled || being-warped
-		Icon: gps
-		OneShot: true
-		ChargeInterval: 4500
-		Description: Satellite Launch
-		LongDesc: Launches GPS Satellite.
-		RevealDelay: 375
-		LaunchSpeechNotification: SatelliteLaunched
-		DisplayTimerRelationships: Ally
-		Condition: sat-launch
 	ProduceActorPowerCA@SatelliteLaunched:
 		Actors: gps.satellite
 		Type: SpySatellite
-		ChargeInterval: 0
+		ChargeInterval: 3000
 		OneShot: true
 		OrderName: ProduceActorSat
 		AutoFire: True
 		RequiresCondition: sat-launch
 	SupportPowerChargeBar:
 	ProduceActorPowerCA@SatelliteScan:
-		PauseOnCondition: disabled || being-warped
+		PauseOnCondition: disabled || empdisable || being-warped
 		Prerequisites: radar, ~gps.satellite, ~fogenabled
 		Description: Spy Satellite
 		LongDesc: Periodically reveals the entire map for a short time.\nActivated automatically.
@@ -1145,7 +1134,7 @@ ATEK:
 		AutoFire: True
 		DisplayTimerRelationships: Ally, Neutral, Enemy
 	ProduceActorPowerCA@SatelliteScanNoFog:
-		PauseOnCondition: disabled || being-warped
+		PauseOnCondition: disabled || empdisable || being-warped
 		Prerequisites: radar, ~gps.satellite, ~!fogenabled
 		Description: Spy Satellite
 		LongDesc: Permanently reveals the entire map.\nActivated automatically.

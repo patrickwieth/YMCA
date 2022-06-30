@@ -672,29 +672,6 @@ hack.cameo_filler.25:
 		BuildPaletteOrder: 46
 		Prerequisites: prerequisite.has_points, ~aircraft.allies, disabled
 
-commander_tree.Longbow:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Longbow
-	Buildable:
-		Queue: Commander_Tree
-		BuildPaletteOrder: 47
-		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies
-		Description: Enables to build the Longbow Helicopter. \n  It is strong vs. tanks and aircraft.
-
-hack.cameo_filler.26:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 48
-		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~!filler.longbow, disabled
-
-hack.cameo_filler.27:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 48
-		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~!filler.longbow, disabled
-
 commander_tree.Longbow.Artillery:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -703,7 +680,7 @@ commander_tree.Longbow.Artillery:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 48
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, commander_tree.longbow, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.cryo, ~aircraft.allies, ~!aircraft.england
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.cryo, ~aircraft.allies, ~!aircraft.england
 		Description: Upgrades the missiles of Longbow Helicopter for high range use. \n  This allows the Longbow to be used against defensive structures efficiently.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.longbow
@@ -716,7 +693,7 @@ commander_tree.Longbow.Payload:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 48
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, commander_tree.longbow, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.artillery, ~aircraft.germany
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.artillery, ~aircraft.germany
 		Description: Doubles the payload of the Longbow Helicopter. \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.longbow
@@ -729,8 +706,21 @@ commander_tree.Longbow.Cryo:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 48
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, commander_tree.longbow, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies, ~!aircraft.france
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies, ~!aircraft.france
 		Description: Upgrades the missiles of the Longbow with Cryo explosives. \n  In addition to the damage targets are also slowed.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.longbow
+
+commander_tree.Longbow.Torp:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Longbow Torpedos
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 48
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies
+		Description: Equips the Longbow with Torpedos. \nAlso allows the Longbow to detect submerged vessels.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.longbow
 
@@ -1966,8 +1956,11 @@ commander_tree.Orca.Payload:
 		IconPalette: chrome
 		BuildPaletteOrder: 243
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.he, ~!commander_tree.orca.ap, ~aircraft.gdi, ~!aircraft.zocom
+		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.torp, ~!commander_tree.orca.he, ~!commander_tree.orca.ap, ~aircraft.gdi, ~!aircraft.zocom
 		Description: Increases the Payload of the Orca.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Point Defense Laser, Anti-Air
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.orca
 
@@ -1980,8 +1973,11 @@ commander_tree.Orca.AP:
 		IconPalette: chrome
 		BuildPaletteOrder: 243
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.he, ~!commander_tree.orca.payload, ~aircraft.gdi, ~!aircraft.eagle
+		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.torp, ~!commander_tree.orca.he, ~!commander_tree.orca.payload, ~aircraft.gdi, ~!aircraft.eagle
 		Description: Equips the Orca with armor-piercing missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor
+		Weaknesses: • Weak vs Point Defense Laser, Anti-Air
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.orca
 
@@ -1994,8 +1990,29 @@ commander_tree.Orca.HE:
 		IconPalette: chrome
 		BuildPaletteOrder: 243
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.payload, ~!commander_tree.orca.ap, ~aircraft.gdi, ~!aircraft.talon
+		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.torp, ~!commander_tree.orca.payload, ~!commander_tree.orca.ap, ~aircraft.gdi, ~!aircraft.talon
 		Description: Equips the Orca with high-explosive missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Light Armor, Infantry
+		Weaknesses: • Weak vs Point Defense Laser, Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.Orca.Torp:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Torpedo Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.he, ~!commander_tree.orca.payload, ~!commander_tree.orca.ap, ~aircraft.gdi
+		Description: Equips the Orca with torpedo bombs. \nGives the Orca the ability to detect submarines.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.orca
 
@@ -2003,7 +2020,7 @@ hack.cameo_filler.220:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 244
-		Prerequisites: prerequisite.has_points, ~aircraft.gdi, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, ~filler.orca, disabled
 
 hack.cameo_filler.221:
 	Inherits: ^default.cameo_filler
