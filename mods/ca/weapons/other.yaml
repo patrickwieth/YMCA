@@ -1188,6 +1188,44 @@ MigTeslaBomb:
 		AllowDirectHit: true
 		ThrowWithoutTarget: false
 
+TorpBomb:
+	Inherits: ^ShellHE
+	ReloadDelay: 35
+	ValidTargets: Water, Underwater, Bridge
+	InvalidTargets: Air
+	Report: bwhis.aud
+	Range: 6c0
+	TargetActorCenter: true
+	Projectile: GravityBomb
+		Image: TBOMB
+		OpenSequence: open
+		Velocity: 5, 0, -66
+		Acceleration: 0, 0, 0
+		Shadow: True
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 500
+		InvalidTargets: Air
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@2Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: artillery_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+	Warhead@5Tesla: FireShrapnel
+		Weapon: TorpTube.Hunter
+		Amount: 1
+		AimChance: 100
+		AllowDirectHit: true
+		ThrowWithoutTarget: true
+
 FrogBomb:
 	Inherits: ^Bomb
 	ValidTargets: Ground, Water

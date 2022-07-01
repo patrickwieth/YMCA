@@ -3171,7 +3171,7 @@ commander_tree.Stormhunter:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 451
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, nerv, grav, ~aircraft.scrin, ~!commander_tree.stormbomber
+		Prerequisites: prerequisite.has_points, nerv, grav, ~aircraft.scrin, ~!commander_tree.stormbomber, ~!commander_tree.stormbomber.torp
 		Description: Removes the anti-ground weaponry from the Stormrider. \nThe Stormhunter is cheaper, smaller, faster and specialized to hunt air units.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.stormrider
@@ -3184,7 +3184,20 @@ commander_tree.Stormbomber:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 452
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter
+		Prerequisites: prerequisite.has_points, nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter, ~!commander_tree.stormbomber.torp
+		Description: Upgrades the Stormrider with plasmabombs \nStrong vs vehicles but cannot target air anymore.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.stormrider
+
+commander_tree.Stormbomber.Torp:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Stormbomber Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 452
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter, ~!commander_tree.stormbomber
 		Description: Upgrades the Stormrider with plasmabombs \nStrong vs vehicles but cannot target air anymore.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.stormrider
