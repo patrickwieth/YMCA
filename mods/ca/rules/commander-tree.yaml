@@ -641,13 +641,13 @@ hack.cameo_filler.22:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 42
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, ~!aircraft.france, disabled
 
 hack.cameo_filler.23:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 43
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, atek, ~!aircraft.france, disabled
 
 commander_tree.Raptor:
 	Inherits: ^default.commander_tree_item
@@ -680,7 +680,7 @@ commander_tree.Longbow.Artillery:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 48
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.cryo, ~aircraft.allies, ~!aircraft.england
+		Prerequisites: prerequisite.has_points, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.cryo, ~aircraft.allies, ~!aircraft.england
 		Description: Upgrades the missiles of Longbow Helicopter for high range use. \n  This allows the Longbow to be used against defensive structures efficiently.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.longbow
@@ -693,7 +693,7 @@ commander_tree.Longbow.Payload:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 48
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.artillery, ~aircraft.germany
+		Prerequisites: prerequisite.has_points, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.artillery, ~aircraft.allies, ~!aircraft.germany
 		Description: Doubles the payload of the Longbow Helicopter. \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.longbow
@@ -706,7 +706,7 @@ commander_tree.Longbow.Cryo:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 48
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies, ~!aircraft.france
+		Prerequisites: prerequisite.has_points, ~!commander_tree.longbow.torp, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies, ~!aircraft.france
 		Description: Upgrades the missiles of the Longbow with Cryo explosives. \n  In addition to the damage targets are also slowed.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.longbow
@@ -719,8 +719,12 @@ commander_tree.Longbow.Torp:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 48
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies
-		Description: Equips the Longbow with Torpedos. \nAlso allows the Longbow to detect submerged vessels.
+		Prerequisites: prerequisite.has_points, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.payload, ~aircraft.allies
+		Description: Equips the Longbow with Torpedos.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.longbow
 
@@ -728,19 +732,13 @@ hack.cameo_filler.26:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 49
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.germany, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~filler.longbow, disabled
 
 hack.cameo_filler.27:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 49
-		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~filler.longbow, disabled
-
-hack.cameo_filler.27:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 49
-		Prerequisites: prerequisite.has_points, ~aircraft.germany, ~filler.longbow, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~filler.longbow, disabled
 
 commander_tree.Harrier:
 	Inherits: ^default.commander_tree_item
@@ -1192,7 +1190,7 @@ hack.cameo_filler.112a:
 		BuildPaletteOrder: 124
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
 
-commander_tree.Tesla_Hind:
+commander_tree.Hind.Tesla:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Tesla Hind
@@ -1200,20 +1198,74 @@ commander_tree.Tesla_Hind:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 127
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~aircraft.russia
+		Prerequisites: prerequisite.has_points, ~aircraft.russia, ~!commander_tree.hind.torp, ~!commander_tree.hind.missile, ~!commander_tree.hind.radcannon
 		Description: Upgrades the Hind with Tesla Coils making it stronger vs vehicles.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry
+		Weaknesses: • Weak vs Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hind
+
+commander_tree.Hind.Radcannon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hind (Radcannon)
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 127
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.iraq, ~!commander_tree.hind.torp, ~!commander_tree.hind.missile, ~!commander_tree.hind.tesla
+		Description: Upgrades the Hind with radiation cannons.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hind
+
+commander_tree.Hind.Missile:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hind (Missiles)
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 127
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.ukraine, ~!commander_tree.hind.torp, ~!commander_tree.hind.tesla, ~!commander_tree.hind.radcannon
+		Description: Upgrades the Hind with unguided missiles giving it more range and area damage.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, big armies
+		Weaknesses: • Weak vs Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hind
+
+commander_tree.Hind.Torp:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hind Torpedo Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 127
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!commander_tree.hind.missile, ~!commander_tree.hind.tesla, ~!commander_tree.hind.radcannon
+		Description: Upgrades the Hind with torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hind
 
 hack.cameo_filler.113:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 128
-		Prerequisites: prerequisite.has_points, ~aircraft.russia, disabled
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
 
 hack.cameo_filler.114:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 129
-		Prerequisites: prerequisite.has_points, ~aircraft.russia, disabled
+		Prerequisites: prerequisite.has_points, ~filler.hind, disabled
 
 commander_tree.Frogfoot:
 	Inherits: ^default.commander_tree_item
@@ -1289,7 +1341,7 @@ commander_tree.Sukhoi:
 		BuildPaletteOrder: 137
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, stek, ~aircraft.ukraine
-		Description: Allows to build the Sukhoi. \n  It is a attack fighter to take down small groups of vehicles.
+		Description: Allows to build the Sukhoi. \n  It is a attack fighter to take down groups of vehicles.
 
 commander_tree.Sukhoi_Concussion:
 	Inherits: ^default.commander_tree_item
@@ -1535,8 +1587,8 @@ commander_tree.Hover_MLRS:
 hack.cameo_filler.204a:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 213
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~vehicles.eagle, ~!filler.mlrs, ~!filler.hmlrs, disabled
+		BuildPaletteOrder: 211
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, ~!filler.mlrs, ~!filler.hmlrs, disabled
 
 commander_tree.Hover_MLRS.Reflector:
 	Inherits: ^default.commander_tree_item
@@ -1573,12 +1625,6 @@ commander_tree.Hailstorm_MLRS:
 		Description: Enables to build the Hailstorm MLRS. \n  The Hailstorm MLRS fires a lot of rockets over long distances. \n This upgrade removes the anti-air capabilities.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.mlrs
-
-hack.cameo_filler.205:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 213
-		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, ~filler.hmlrs, disabled
 
 hack.cameo_filler.205a:
 	Inherits: ^default.cameo_filler
@@ -2008,7 +2054,7 @@ commander_tree.Orca.Torp:
 		BuildPaletteOrder: 243
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, gtek, ~!commander_tree.orca.he, ~!commander_tree.orca.payload, ~!commander_tree.orca.ap, ~aircraft.gdi
-		Description: Equips the Orca with torpedo bombs. \nGives the Orca the ability to detect submarines.
+		Description: Equips the Orca with torpedo bombs.
 	TooltipExtras:
 		Strengths: • Strong vs Ships, Submarines
 		Weaknesses: • Weak vs Anti-Air
@@ -2624,22 +2670,41 @@ commander_tree.Apache.Flyby:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 344
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion
+		Prerequisites: prerequisite.has_points, ~aircraft.legion, tmpl, ~!commander_tree.apache.torp
 		Description: Upgrades the Apache to be able to fire on the move.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.flyby
+		Prerequisite: filler.apache
+
+commander_tree.Apache.Torp:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Apache Torpedo Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 344
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~aircraft.nod, tmpl, ~!commander_tree.apache.flyby
+		Description: Upgrades the Apache with torpedo bombs.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.apache
 
 hack.cameo_filler.322a:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 344
-		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion, disabled
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.nod, ~!aircraft.legion, disabled
 
 hack.cameo_filler.322b:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 344
-		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion, disabled
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.legion, ~filler.apache, disabled
+
+hack.cameo_filler.322b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 344
+		Prerequisites: prerequisite.has_points, tmpl, ~aircraft.nod, disabled
 
 commander_tree.Comanche.Bomber:
 	Inherits: ^default.commander_tree_item

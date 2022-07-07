@@ -1223,7 +1223,7 @@ HELI:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.artillery
+		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.torp
 		Description: Helicopter gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 1200
@@ -1357,7 +1357,7 @@ HELI.Payload:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow.payload, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow.payload
 	Valued:
 		Cost: 1300
 	Tooltip:
@@ -1400,8 +1400,11 @@ HIND:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.soviet, ~!commander_tree.tesla_hind
+		Prerequisites: ~hpad, ~aircraft.soviet, ~!commander_tree.hind.tesla, ~!commander_tree.hind.torp, ~!commander_tree.hind.radcannon, ~!commander_tree.hind.missile
 		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
 	Valued:
 		Cost: 1150
 	Tooltip:
@@ -1474,8 +1477,11 @@ HIND:
 HIND.Tesla:
 	Inherits: HIND
 	Buildable:
-		Prerequisites: ~hpad, ~commander_tree.tesla_hind
+		Prerequisites: ~hpad, ~commander_tree.hind.tesla
 		Description: Helicopter gunship armed\nwith tesla coils.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
 	Valued:
 		Cost: 1400
 	Tooltip:
@@ -1490,6 +1496,54 @@ HIND.Tesla:
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: PortaTesla
+		LocalOffset: 85,213,-185, 85,-213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	-WithMuzzleOverlay:
+
+HIND.Missile:
+	Inherits: HIND
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.missile
+		Description: Helicopter gunship with unguided missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, big armies
+		Weaknesses: • Weak vs Anti-Air
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Hind (Missiles)
+	Health:
+		HP: 24000
+	-Armament@PRIMARY:
+	Armament@SECONDARY:
+		Weapon: HellfireAG.Arty
+	AmmoPool:
+		Ammo: 16
+	-WithMuzzleOverlay:
+
+HIND.Radcannon:
+	Inherits: HIND
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.radcannon
+		Description: Helicopter gunship armed\nwith radiation cannon.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Hind (Radcannon)
+	Health:
+		HP: 24000
+	Armament@PRIMARY:
+		Weapon: RadBeamWeaponE
+		LocalOffset: 85,-213,-185, 85,213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: RadBeamWeaponE
 		LocalOffset: 85,213,-185, 85,-213,-185
 		MuzzleSequence: muzzle
 		PauseOnCondition: !ammo
@@ -2081,7 +2135,7 @@ APCH:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~!commander_tree.apache.flyby
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~!commander_tree.apache.flyby, ~!commander_tree.apache.torp
 		IconPalette: chrometd
 		Description: Helicopter gunship with a chaingun.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Aircraft:
@@ -2183,7 +2237,7 @@ APCH.Torp:
 	Tooltip:
 		Name: Apache (Torpedo)
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.legion, ~commander_tree.apache.torp
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~commander_tree.apache.torp
 		IconPalette: chrome
 		Description: Helicopter gunship with torpedo bombs.
 	TooltipExtras:
