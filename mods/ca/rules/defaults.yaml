@@ -2109,7 +2109,6 @@
 		Condition: relayTarget
 		RequiresCondition: relayMarked
 
-
 ^Building:
 	Inherits@1: ^BasicBuilding
 	Inherits@2: ^Cloakable
@@ -2126,6 +2125,7 @@
 		RequiresCondition: invulnerability && !forceshield
 	Buildable:
 		Queue: Building
+		BuildDurationModifier: 25
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -2190,6 +2190,22 @@
 		Prerequisites: !BuildUpBoostEnded
 		Queue: Building
 
+^TechLevelBuilding:
+	Buildable:
+		BuildDurationModifier: 100
+	ProductionTimeMultiplier@BuildUpBoost:
+		Multiplier: 100
+		Prerequisites: !BuildUpBoostEnded
+		Queue: Building
+	GrantExternalConditionToOwner@BuildingsOwned:
+		Condition: TechBuildingsOwned
+
+^DefenseBalancing:
+	Buildable:
+		BuildDurationModifier: 100
+	DamageMultiplier@Defense:
+		Modifier: 90
+
 ^BuildingTD:
 	Inherits@1: ^Building
 	Buildable:
@@ -2220,6 +2236,7 @@
 	Inherits@selection: ^SelectableCombatBuilding
 	Inherits@mind: ^MindControllable
 	Inherits@gpsscramble: ^GpsScramble
+	Inherits: ^DefenseBalancing
 	-SpeedMultiplier@concussion:
 	WithColoredOverlay@IRONCURTAIN:
 		RequiresCondition: invulnerability
@@ -3164,10 +3181,7 @@
 		Modifier: 120
 	DamageMultiplier@Propaganda:
 		RequiresCondition: propaganda
-		Modifier: 90
-	RangeMultiplier@Propaganda:
-		RequiresCondition: propaganda
-		Modifier: 125
+		Modifier: 75
 	ReloadDelayMultiplier@Propaganda:
 		RequiresCondition: propaganda
 		Modifier: 90
@@ -3444,16 +3458,16 @@
 
 ^SensorEquipment:
 	RevealsShroud@GAPGEN:
-		Range: 6c0
+		Range: 8c0
 	RevealsShroud:
 		Range: 12c0
 		RevealGeneratedShroud: False
 	DetectCloaked@Uncloak:
-		Range: 6c0
+		Range: 8c0
 		CloakTypes: Cloak, Thief, Stealth, Underwater
 		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
-		TrailCount: 6
+		TrailCount: 8
 
 ^MobileDeployableRadar:
 	RevealsShroud@deployed:
@@ -3471,9 +3485,17 @@
 	ProvidesRadar:
 		RequiresCondition: deployed
 
-^RearmableAircraft:
+^AircraftWithAmmo:
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies, chairport
+	AmmoPool:
+		Ammo: 8
+		ReloadDelay: 10
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
 
 ^InfantryProduction:
 	RallyPoint:

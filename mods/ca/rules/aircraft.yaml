@@ -898,7 +898,7 @@ TRAN:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
-		Prerequisites: ~aircraft.all, ~!aircraft.england, ~commander_tree.basic_logistics
+		Prerequisites: ~aircraft.all, ~!aircraft.england, ~commander_tree.air_logistics
 		Description: Fast infantry transport helicopter.\n  Unarmed
 	Valued:
 		Cost: 900
@@ -1054,7 +1054,7 @@ NHAW:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
-		Prerequisites: ~aircraft.england, ~commander_tree.basic_logistics
+		Prerequisites: ~aircraft.england, ~commander_tree.air_logistics
 		Description: Fast infantry transport helicopter armed with\n  a light machine gun.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry
@@ -1222,7 +1222,7 @@ HELI:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.artillery, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.longbow.cryo, ~!commander_tree.longbow.payload, ~!commander_tree.longbow.artillery, ~!commander_tree.longbow.torp
 		Description: Helicopter gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 1200
@@ -1356,7 +1356,7 @@ HELI.Payload:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow.payload, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow.payload
 	Valued:
 		Cost: 1300
 	Tooltip:
@@ -1369,6 +1369,29 @@ HELI.Payload:
 		Margin: 4, 3
 		RequiresSelection: true
 
+HELI.Torp:
+	Inherits: HELI
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.longbow.torp
+		Description: Helicopter gunship armed\nwith torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	Tooltip:
+		Name: Longbow (Torpedo)
+	-Armament@PRIMARY
+	Armament@SECONDARY:
+		Weapon: TorpBomb
+	AmmoPool:
+		Ammo: 8
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 6c0
+
 HIND:
 	Inherits: ^Helicopter
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -1376,8 +1399,11 @@ HIND:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.soviet, ~!commander_tree.tesla_hind, ~techlevel.medium
+		Prerequisites: ~hpad, ~aircraft.soviet, ~!commander_tree.hind.tesla, ~!commander_tree.hind.torp, ~!commander_tree.hind.radcannon, ~!commander_tree.hind.missile
 		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
 	Valued:
 		Cost: 1150
 	Tooltip:
@@ -1447,27 +1473,20 @@ HIND:
 	Rearmable:
 		RearmActors: hpad, hpad.td
 
-TSLAHIND:
-	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+HIND.Tesla:
+	Inherits: HIND
 	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~commander_tree.tesla_hind, ~techlevel.medium
+		Prerequisites: ~hpad, ~commander_tree.hind.tesla
 		Description: Helicopter gunship armed\nwith tesla coils.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
 	Valued:
 		Cost: 1400
 	Tooltip:
 		Name: Tesla Hind
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 24000
-	RevealsShroud:
-		Range: 10c0
-		Type: GroundPosition
-		MoveRecalculationThreshold: 0
 	Armament@PRIMARY:
 		Weapon: PortaTesla
 		LocalOffset: 85,-213,-185, 85,213,-185
@@ -1479,46 +1498,77 @@ TSLAHIND:
 		LocalOffset: 85,213,-185, 85,-213,-185
 		MuzzleSequence: muzzle
 		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 80
-		AttackType: Hover
-	Aircraft:
-		TurnSpeed: 16
-		Speed: 135
-		TakeoffSounds: htoff1.aud
-		LandingSounds: hland1.aud
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
-	WithIdleOverlay@ROTORAIR:
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTORGROUND:
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
+	-WithMuzzleOverlay:
+
+HIND.Missile:
+	Inherits: HIND
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.missile
+		Description: Helicopter gunship with unguided missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, big armies
+		Weaknesses: • Weak vs Anti-Air
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Hind (Missiles)
+	Health:
+		HP: 24000
+	-Armament@PRIMARY:
+	Armament@SECONDARY:
+		Weapon: HellfireAG.Arty
 	AmmoPool:
-		Ammo: 30
-		ReloadDelay: 8
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		PipCount: 6
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
-	SpawnActorOnDeath:
-		Actor: HIND.Husk
-		RequiresCondition: ammo && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: HIND.Husk.Empty
-		RequiresCondition: !ammo && !being-warped
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 38,32
-	Rearmable:
-		RearmActors: hpad, hpad.td
+		Ammo: 16
+	-WithMuzzleOverlay:
+
+HIND.Radcannon:
+	Inherits: HIND
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.radcannon
+		Description: Helicopter gunship armed\nwith radiation cannon.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Hind (Radcannon)
+	Health:
+		HP: 24000
+	Armament@PRIMARY:
+		Weapon: RadBeamWeaponE
+		LocalOffset: 85,-213,-185, 85,213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: RadBeamWeaponE
+		LocalOffset: 85,213,-185, 85,-213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	-WithMuzzleOverlay:
+
+HIND.Torp:
+	Inherits: HIND
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.torp
+		Description: Helicopter gunship armed\nwith torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	Tooltip:
+		Name: Hind (Torpedo)
+	Armament@PRIMARY:
+		Weapon: TorpBomb
+		LocalOffset: 85,-213,-185, 85,213,-185
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+	AmmoPool:
+		Ammo: 8
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 6c0
 
 HUEY:
 	Inherits: ^Helicopter
@@ -1623,7 +1673,7 @@ HUEY.recon:
 		Range: 10c0
 		Type: GroundPosition
 	DetectCloaked:
-		CloakTypes: Cloak, Thief
+		CloakTypes: Cloak, Thief, Underwater
 		Range: 8c0
 	Aircraft:
 		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
@@ -2084,7 +2134,7 @@ APCH:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~!commander_tree.apache.flyby, ~techlevel.medium
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~!commander_tree.apache.flyby, ~!commander_tree.apache.torp
 		IconPalette: chrometd
 		Description: Helicopter gunship with a chaingun.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Aircraft:
@@ -2153,6 +2203,9 @@ APCH:
 		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad.td
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 6c0
 
 APCH.Flyby:
 	Inherits: APCH
@@ -2177,6 +2230,28 @@ APCH.Flyby:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
+
+APCH.Torp:
+	Inherits: APCH
+	Tooltip:
+		Name: Apache (Torpedo)
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~commander_tree.apache.torp
+		IconPalette: chrome
+		Description: Helicopter gunship with torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	Armament@PRIMARY:
+		Weapon: TorpBomb
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 8
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 8c0
 
 ORCA:
 	Inherits: ^HelicopterTD
@@ -2263,10 +2338,8 @@ ORCA.AP:
 	Inherits: ORCA
 	Tooltip:
 		Name: Orca (AP)
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.ap, ~techlevel.high
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.ap
 		IconPalette: chrome
 		Description: VTOL gunship armed\nwith armor-piercing missiles.\n  Strong vs Tanks\n  Weak vs Infantry
 	Armament@PRIMARY:
@@ -2285,7 +2358,7 @@ ORCA.HE:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.he, ~techlevel.high
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.he
 		IconPalette: chrome
 		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
 	Armament@PRIMARY:
@@ -2306,7 +2379,7 @@ ORCA.Payload:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.payload, ~techlevel.high
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.payload
 		IconPalette: chrome
 	AmmoPool:
 		Ammo: 20
@@ -2317,6 +2390,29 @@ ORCA.Payload:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
+
+ORCA.Torp:
+	Inherits: ORCA
+	Tooltip:
+		Name: Orca (Torpedo)
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.torp
+		IconPalette: chrome
+		Description: VTOL gunship armed\nwith torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	Armament@PRIMARY:
+		Weapon: TorpBomb
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+	AmmoPool:
+		Ammo: 8
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 8c0
 
 ORCB:
 	Inherits: ^HelicopterTD
@@ -2861,7 +2957,7 @@ OCAR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 45
-		Prerequisites: ~disabled, aircraft.all, ~!aircraft.eagle, ~commander_tree.advanced_logistics
+		Prerequisites: ~disabled, aircraft.all, ~!aircraft.eagle, ~commander_tree.air_logistics
 		IconPalette: chrometd
 		Description: Fast VTOL Vehicle Transporter.\n  Unarmed
 	Aircraft:
@@ -2915,7 +3011,7 @@ OCAR.Eagle:
 	Inherits: OCAR
 	Buildable:
 		Queue: Aircraft
-		Prerequisites: aircraft.all, ~commander_tree.advanced_logistics
+		Prerequisites: aircraft.all, ~commander_tree.air_logistics
 	Tooltip:
 		Name: Carryall (Auto)
 	Selectable:
@@ -3308,7 +3404,7 @@ HORN:
 	Tooltip:
 		Name: Hornet
 	Health:
-		HP: 7200
+		HP: 12500
 	RevealsShroud:
 		Range: 2c0
 		MinRange: 1c0
@@ -3689,7 +3785,7 @@ Dropship:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~aircraft.any, ~commander_tree.advanced_logistics
+		Prerequisites: ~aircraft.any, ~commander_tree.air_logistics
 		Description: Superheavy cargo lifter plane.\nMaximum 1 can be built.\n Special Ability: Supertransport\nTransports up to 15 Infantry or Vehicles.\nDeploys those with a parachute (force fire to parachute)\n  Unarmed
 	Valued:
 		Cost: 1200
@@ -3708,11 +3804,19 @@ Dropship:
 		Count: 1
 	AttackAircraft:
 		FacingTolerance: 20
-	Armament:
+	Armament@DROP:
 		Weapon: DropDummy
+		Cursor: ability
+		OutsideRangeCursor: ability
+		RequiresCondition: cargo && stance-holdfire
 	ParaDrop:
 		DropRange: 5c0
 		ChuteSound: chute1.aud
+	ParachuteCargoOnCondition:
+		RequiresCondition: dropcargo
+		ReturnToBase: false
+	GrantConditionOnAttack:
+		Condition: dropcargo
 	Aircraft:
 		CruiseAltitude: 2560
 		InitialFacing: 192

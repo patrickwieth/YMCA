@@ -319,15 +319,15 @@ WarshipLaser.3:
 DarkDiscCannon:
 	Inherits: PlasmaDiscs
 	Inherits: ^ShellAP
-	Range: 6c0
-	Burst: 1
+	Range: 7c0
+	Burst: 3
 	ReloadDelay: 120
 	Report: devastator-fire1.aud, devastator-fire2.aud, devastator-fire3.aud
 	Projectile: BulletCA
 		Image: plasdisclg
 		Speed: 180
 	Warhead@1Dam: SpreadDamage
-		Damage: 12000
+		Damage: 10000
 		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: large_explosion
@@ -1223,10 +1223,10 @@ Scrinbombs:
 		ImpactSounds: seeker-hit1.aud, seeker-hit2.aud
 
 LeecherBeam:
-	Inherits: ^Energy
+	Inherits: ^EnergyLight
 	ValidTargets: Ground, Water
 	StartBurstReport: leecher-fire1.aud
-	Range: 6c0
+	Range: 8c0
 	ReloadDelay: 40
 	Burst: 6
 	BurstDelays: 5
@@ -1243,7 +1243,7 @@ LeecherBeam:
 		Inaccuracy: 128
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
-		Damage: 1700
+		Damage: 2500
 		DamageTypes: Prone50Percent, TriggerProne, AtomizedDeath
 	Warhead@ARC: FireShrapnel
 		Weapon: LeecherArc
@@ -1406,3 +1406,13 @@ FeederExplode:
 		AimChance: 0
 		ValidTargets: Ground, Water, Infantry, Vehicle
 		ThrowWithoutTarget: true
+
+DepthCharge.Scrin:
+	Inherits: DepthCharge
+	ValidTargets: Water, Underwater
+	Projectile: Bullet
+		Image: enrvbolt
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Ship, Submarine
+	Warhead@3Eff: CreateEffect
+		ValidTargets: Submarine, Ship

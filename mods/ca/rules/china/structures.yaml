@@ -1,0 +1,1025 @@
+
+chcommand:
+	Inherits: ^BuildingTD
+	Inherits@shape: ^3x3Shape
+	Inherits@mines: ^MinefieldUpgrade
+	Inherits: ^BotFallbackInsurance
+	Inherits@StructureProduction: ^StructureProduction
+	ProvidesPrerequisite@buildingname:
+	-BaseProvider:
+	Buildable:
+		BuildPaletteOrder: 55
+		Prerequisites: ~structures.china, chweap
+		Description: Produces Structures, can be upgraded with radar.
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Headquarter (China)
+	Building:
+		Footprint: xxx xxx xxx
+		Dimensions: 3,3
+	Health:
+		HP: 150000
+	Armor:
+		Type: Concrete
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	WithBuildingBib:
+	ProvidesRadar:
+		RequiresCondition: !jammed && !disabled && !being-warped && radar
+	Power:
+		Amount: 0
+	RallyPoint:							##########
+		Path: 0,2
+	Exit@1:
+		SpawnOffset: -1024,1024,0		#-1323,1280,0
+		ExitCell: 0,2
+		Facing: 135
+	LaysMinefield@minefield:
+		Locations: 0,-1, 1,-1, 2,-1, -1,0, -1,1, -1,2, 0,3, 1,3, 2,3, 3,2, 3,1, 3,0
+	Voiced:
+		VoiceSet: PRCCommandCenterVoice
+	Turreted:
+	SupportPowerChargeBar:
+	Pluggable:
+		Conditions:
+			radar: radar
+		Requirements:
+			radar: !build-incomplete && !radar
+	ProvidesPrerequisite@pluggable:
+		RequiresCondition: !build-incomplete && radar
+		Prerequisite: radar
+	WithIdleOverlay@radar:
+		RequiresCondition: !build-incomplete && radar
+		Sequence: radar
+	GrantConditionOnPowerState@LOWPOWER:
+		Condition: lowpower
+		ValidPowerStates: Low, Critical
+	DetonateWeaponPower@ArtilleryBarrage:
+		OrderName: CHArtilleryBarrage
+		PauseOnCondition: disabled || empdisable || being-warped || lowpower
+		Prerequisites: structures.china
+		Icon: chartybarr3
+		IconPalette: chrometd
+		Cursor: attackmove
+		ChargeInterval: 6000
+		ActivationDelay: 50
+		Description: Artillery Barrage
+		LongDesc: Off-map guns fire at the target.\nApplies heavy damage over a large area.
+		Weapon: CHBarrageSpawner3
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		CameraActor: camera
+		CameraRemoveDelay: 300
+
+chcommand.radar:
+	Inherits: ^BuildingPlug
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Radar Upgrade
+	Buildable:
+		Queue: Building
+		IconPalette: chrometd
+		BuildPaletteOrder: 6
+		Prerequisites: ~structures.china, chsupply
+		Description: Upgrades the Command Center with a radar.
+	Plug:
+		Type: radar
+	Power:
+		Amount: -30
+
+chpower:
+	Inherits: ^BuildingTD
+	Inherits@shape: ^3x2Shape
+	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
+	Inherits@mines: ^MinefieldUpgrade
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 1
+		Prerequisites: chnmcv, ~structures.china, ~!chinaatom
+		Description: Provides power.\nCan be deployed to overcharge at expense of damage to self.\nExplodes violently when destroyed
+	Valued:
+		Cost: 300			#500
+	Tooltip:
+		Name: Nuclear Reactor
+	Building:
+		Footprint: xx xx ==
+		Dimensions: 2,3
+		LocalCenterOffset: 0,-512,0
+	Selectable:
+		Bounds: 72,48
+		DecorationBounds: 72,68,0,-10
+	SelectionDecorations:
+	Health:
+		HP: 70000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 4c0
+	WithBuildingBib:
+	Power:
+		Amount: 100
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+	Explodes:
+		Weapon: CHAtomicWeapon
+		EmptyWeapon: CHAtomicWeapon
+	LaysMinefield@minefield:
+		Locations: 0,-1, 1,-1, -1,0, -1,1, 2,0, 2,1, 0,2, 1,2
+	Voiced:
+		VoiceSet: CHNuclearReactorVoice
+	WithIdleOverlay@SMOKE:
+		RequiresCondition: !build-incomplete
+		Sequence: idle-anim2
+		Palette: placelinesegment2
+	GrantTimedConditionOnDeploy:
+		CooldownTicks: 500
+		DeployedTicks: 1000
+		StartsFullyCharged: true
+		DeployedCondition: overcharge
+		Voice: Select
+		PauseOnCondition: critical
+	PowerMultiplier@overcharge:
+		Modifier: 200
+		RequiresCondition: overcharge
+	ChangesHealth@overcharge:
+		Step: -1000
+		Delay: 50
+		HealIfBelow: 150
+		RequiresCondition: overcharge
+	GrantConditionOnDamageState@nocharge:
+		Condition: critical
+		ValidDamageStates: Critical
+	ProvidesPrerequisite:
+		Prerequisite: anypower
+
+chpower2:
+	Inherits: chpower
+	Buildable:
+		Queue: Building
+		Prerequisites: chnmcv, ~structures.chinaatom
+		Icon: iconadv
+	Tooltip:
+		Name: Advanced Nuclear Plant
+	Valued:
+		Cost: 500			#500
+	Power:
+		Amount: 200
+	RenderSprites:
+		Image: chpower
+
+chbarracks:
+	Inherits: ^BuildingTD
+	Inherits@shape: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@InfantryProduction: ^InfantryProduction
+	Inherits@mines: ^MinefieldUpgrade
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: China Barracks
+	ProvidesPrerequisite:
+		Prerequisite: barracks
+	Buildable:
+		BuildPaletteOrder: 2
+		Prerequisites: anypower, ~structures.china
+		Queue: Building
+		Description: Trains infantry.
+	Building:
+		Footprint: xxx xxx ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,-512,0
+	Health:
+		HP: 60000
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	WithBuildingBib:
+	LaysMinefield@minefield:
+		Locations: 0,-1, 1,-1, 2,-1, -1,0, -1,1, 3,0, 3,1, 0,2, 1,2, 2,2
+	Exit@1:
+		SpawnOffset: -426,85,0
+		ExitCell: 0,1
+	Exit@2:
+		SpawnOffset: 298,298,0
+		ExitCell: 1,1
+	Power:
+		Amount: -20
+	ProvidesPrerequisite@china:
+		Factions: china, chinainf, chinatnk, chinaatom
+		Prerequisite: infantry.china
+	ProvidesPrerequisite@chinainf:
+		Factions: chinainf
+		Prerequisite: infantry.chinainf
+	ProvidesPrerequisite@chinatnk:
+		Factions: chinatnk
+		Prerequisite: infantry.chinatnk
+	ProvidesPrerequisite@chinaatom:
+		Factions: chinaatom
+		Prerequisite: infantry.chinaatom
+	ProvidesPrerequisite@chinastructure:
+		RequiresPrerequisites: structures.china
+		Prerequisite: infantry.china
+	ProvidesPrerequisite@chinainfstructure:
+		RequiresPrerequisites: structures.chinainf
+		Prerequisite: infantry.chinainf
+	ProvidesPrerequisite@chinatnkstructure:
+		RequiresPrerequisites: structures.chinatnk
+		Prerequisite: infantry.chinatnk
+	ProvidesPrerequisite@chinaatomstructure:
+		RequiresPrerequisites: structures.chinaatom
+		Prerequisite: infantry.chinaatom
+	Voiced:
+		VoiceSet: PRCBarracksVoice
+
+chgatling:
+	Inherits: ^DefenseTD
+	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits@AUTOTARGET: ^AutoTargetAll
+	Inherits@mines: ^MinefieldUpgrade
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: gatling Cannon
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: infantry.china, ~structures.china
+		Queue: Defense
+		Description: All-purpose defensive structure.\n  Strong vs Aircraft, Infantry\n  Weak vs Vehicles
+	Selectable:
+		Bounds: 24,24
+	SelectionDecorations:
+	Health:
+		HP: 58000
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 8c0
+	LaysMinefield@minefield:
+		Locations: 0,-1, 0,1, -1,0, 1,0
+	Turreted:
+		TurnSpeed: 12
+		Offset: 0,0,120
+	WithSpriteBody:
+	WithSpriteTurret:
+	Armament@NORMAL:
+		Weapon: CHgatlingTurret
+		LocalOffset: -85,120,340, -85,-120,340
+		LocalYaw: -100, 100
+		Recoil: 10
+		MuzzleSequence: muzzle
+	Armament@AA:
+		Weapon: CHgatlingTurretAA
+		LocalOffset: -85,120,340, -85,-120,340
+		LocalYaw: -100, 100
+		Recoil: 10
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: lowpower || disabled
+	WithMuzzleOverlay:
+	BodyOrientation:
+		QuantizedFacings: 8
+	DetectCloaked:
+		Range: 5c0
+	AmmoPool:
+		Ammo: 8
+		PipCount: 0
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 50
+		Count: 1
+	ReloadDelayMultiplier@gatlingSpeed:
+		RequiresCondition: !ammo
+		Modifier: 75
+	Power:
+		Amount: -10
+	Voiced:
+		VoiceSet: CHGatlingCannonVoice
+
+chbunker:
+	Inherits: ^DefenseTD
+	Inherits@shape: ^2x2Shape
+	Inherits@AUTOTARGET: ^AutoTargetAll
+	Inherits@sRT: ^Transport
+	Inherits@CARGO: ^AttackingCargo
+	Inherits@mines: ^MinefieldUpgrade
+	Tooltip:
+		Name: Bunker
+	Building:
+		Footprint: xx xx
+		Dimensions: 2, 2
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: infantry.china, ~structures.china, ~!commander_tree.fortified_bunker
+		Queue: Defense
+		Description: Garrisonable defensive structure.\n  Strong vs ground targets\n  Weak vs Aircraft
+	Valued:
+		Cost: 600
+	CustomSellValue:
+		Value: 500
+	Health:
+		HP: 61000
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+	LaysMinefield@minefield:
+		Locations: 0,-1, 1,-1, -1,0, -1,1, 2,0, 2,1, 0,2, 1,2
+	Turreted:
+		TurnSpeed: 255
+	-QuantizeFacingsFromSequence:
+	BodyOrientation:
+		QuantizedFacings: 8
+	Cargo:
+		Types: Infantry, Hacker, Fremen
+		MaxWeight: 5
+		PipCount: 5
+		InitialUnits: che1
+	WithSpriteBody:
+	AttackOpenTopped:
+		Armaments: garrisoned
+		PortOffsets: 768,0,128, 448,-682,128, -448,-682,128, -768,0,128, -448,682,128, 448,682,128
+		PortYaws: 0, 176, 341, 512, 682, 853
+		PortCones: 88, 88, 88, 88, 88, 88
+	RenderRangeCircle:
+		FallbackRange: 6c0
+	Power:
+		Amount: -20
+	DetectCloaked:
+		Range: 6c0
+	Voiced:
+		VoiceSet: CHBunkerVoice
+	RenderSprites:
+		Image: chbunker
+	Selectable:
+		Class: chbunker
+
+chbunker.e1:
+	Inherits: chbunker
+	Buildable:
+		Prerequisites: infantry.china, ~botplayer
+	Valued:
+		Cost: 800
+	Cargo:
+		InitialUnits: che1, che1, che1, che1, che1
+
+chbunker.e2:
+	Inherits: chbunker
+	Buildable:
+		Prerequisites: infantry.china, ~botplayer
+	Valued:
+		Cost: 800
+	Cargo:
+		InitialUnits: che1, che1, che1, che3, che3
+
+chbunker.e3:
+	Inherits: chbunker
+	Buildable:
+		Prerequisites: infantry.china, ~botplayer
+	Valued:
+		Cost: 800
+	Cargo:
+		InitialUnits: che3, che3, che3, che3, che3
+
+chbunker2:
+	Inherits: chbunker
+	Tooltip:
+		Name: Fortified Bunker
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: infantry.china, ~structures.china, ~commander_tree.fortified_bunker
+		Queue: Defense
+		Description: All-purpose defensive structure.\n  Strong vs Aircraft, Tanks\n  Weak vs Infantry
+	Valued:
+		Cost: 700
+	Health:
+		HP: 100000
+	Cargo:
+		Types: Infantry, Hacker, Fremen
+		MaxWeight: 8
+		PipCount: 8
+		InitialUnits: che2
+	LaysMinefield@minefield:
+		-RequiresCondition:
+	Selectable:
+		Class: chbunker2
+	#FreeActor@1:
+	#	Actor: chmnly
+	#	SpawnOffset: 1,1
+	#	Facing: 64
+	#	AllowRespawn: True
+
+chbunker2.e2:
+	Inherits: chbunker2
+	Buildable:
+		Prerequisites: infantry.china, ~botplayer
+	Valued:
+		Cost: 700
+	Cargo:
+		InitialUnits: che2, che2, che2, che3, che3, che3, che3
+
+chsupply:
+	Inherits: ^BuildingTD
+	Inherits@shape: ^2x2Shape
+	Inherits@2: ^BotIncome
+	Inherits@ref: ^Refinery
+	Inherits@mines: ^MinefieldUpgrade
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Supply Center
+	Buildable:
+		BuildPaletteOrder: 4
+		Prerequisites: anypower, ~structures.china
+		Description: Processes raw Tiberium\ninto useable resources
+	Building:
+		Footprint: xxx ===
+		Dimensions: 3,2
+	Health:
+		HP: 65000
+	RevealsShroud:
+		Range: 6c0
+	LaysMinefield@minefield:
+		Locations: 0,-1, 1,-1, 2,-1, -1,0, -1,1, 3,0, 3,1, 0,2, 1,2, 2,2
+	Refinery:
+		DockAngle: 128
+		DockOffset: 1,1
+	StoresResources:
+		PipCount: 17
+		Capacity: 2500		#2000
+	DrawLineToTarget:
+	CustomSellValue:
+		Value: 500
+	FreeActor@1:
+		Actor: chharv
+		SpawnOffset: 1,1
+		Facing: 64
+		AllowRespawn: True
+	Power:
+		Amount: -30
+	ProvidesPrerequisite@buildingname:
+	SelectionDecorations:
+	GivesBuildableArea:					##########
+		AreaTypes: building, cityi
+	Targetable@Steal:
+		TargetTypes: ThiefInfiltrate, SpyInfiltrate
+	Voiced:
+		VoiceSet: PRCSupplyVoice
+
+chweap:
+	Inherits: ^BuildingTD
+	Inherits@shape: ^4x3Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@VehicleProduction: ^VehicleProduction
+	Inherits@mines: ^MinefieldUpgrade
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Weapons Factory
+	ProvidesPrerequisite:
+		Prerequisite: chweap
+	Buildable:
+		BuildPaletteOrder: 5
+		Prerequisites: chsupply, ~structures.china
+		Description: Produces vehicles
+	Building:
+		Footprint: x++x =++= ====
+		Dimensions: 4,3
+	SelectionDecorations:
+	Health:
+		HP: 110000
+	RevealsShroud:
+		Range: 5c0
+	WithBuildingBib:
+	LaysMinefield@minefield:
+		Locations: 0,-1, 1,-1, 2,-1, 3,-1, -1,0, -1,1, 4,0, 4,1, 0,2, 1,2, 2,2, 3,2
+	Exit@1:
+		SpawnOffset: 128,256,0
+		ExitCell: 1,1
+		ExitDelay: 3
+	Exit@2:
+		ExitCell: 2,1
+		ExitDelay: 3
+	ProvidesPrerequisite@buildingname:
+	Power:
+		Amount: -40
+	Voiced:
+		VoiceSet: PRCWarFactoryVoice
+	WithIdleOverlay@BOXES:
+		RequiresCondition: !build-incomplete
+		Sequence: idle-anim1
+	Reservable:
+	RepairsUnits:
+		HpPerStep: 1000
+		Interval: 15
+		PlayerExperience: 25
+		StartRepairingNotification: Repairing
+	ProvidesPrerequisite@china:
+		Factions: china, chinainf, chinatnk, chinaatom
+		Prerequisite: vehicles.china
+	ProvidesPrerequisite@chinainf:
+		Factions: chinainf
+		Prerequisite: vehicles.chinainf
+	ProvidesPrerequisite@chinatnk:
+		Factions: chinatnk
+		Prerequisite: vehicles.chinatnk
+	ProvidesPrerequisite@chinaatom:
+		Factions: chinaatom
+		Prerequisite: vehicles.chinaatom
+
+chpropaganda:
+	Inherits: ^ScienceBuildingTD
+	Inherits: ^TechLevelBuilding
+	Inherits@shape: ^4x2Shape
+	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@mines: ^MinefieldUpgrade
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Propaganda Center
+	Buildable:
+		BuildPaletteOrder: 8
+		Prerequisites: chweap, radar, ~structures.china
+		Description: Provides access to advanced Chinese technologies.
+	Building:
+		Footprint: xxxx xxxx
+		Dimensions: 4,2
+	SelectionDecorations:
+	Health:
+		HP: 110000
+	RevealsShroud:
+		Range: 5c0
+	WithBuildingBib:
+	LaysMinefield@minefield:
+		Locations: 0,-1, 1,-1, 2,-1, 3,-1, -1,0, -1,1, 4,0, 4,1, 0,2, 1,2, 2,2, 3,2
+	ProvidesPrerequisite:
+		Prerequisite: techcenter
+	Production@Upgrades:
+		Produces: PropagandaUpgrades.CHINA
+	Power:
+		Amount: -40
+	Voiced:
+		VoiceSet: CHPropagandaCenterVoice
+	ProximityExternalCondition@PROPAGANDA:
+		Range: 6c0
+		Condition: propaganda
+		RequiresCondition: !disabled
+	WithRangeCircle:
+		Range: 6c0
+		Type: propaganda
+		RequiresCondition: !disabled
+	AirstrikePower@carpet:
+		OrderName: CHCarpetBombing
+		Icon: chcarpet
+		IconPalette: chrometd
+		ChargeInterval: 6000
+		Description: Carpet Bombing
+		LongDesc: A bomber strikes targets along a line.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: usabomber.carpet
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: airstrike
+		SquadSize: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: false
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		PauseOnCondition: disabled || empdisable || being-warped || lowpower
+		Prerequisites: structures.chinatnk, radar
+	AirstrikePower@nuke:
+		OrderName: CHNukeBombing
+		Icon: abombair
+		ChargeInterval: 10500
+		Description: Nuke Bomb
+		LongDesc: A bomber drops a tactical nuke.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: usabomber.nuke
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: nukeicon
+		SquadSize: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: false
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		PauseOnCondition: disabled || empdisable || being-warped || lowpower
+		Prerequisites: structures.chinaatom, radar
+	GrantExternalConditionPowerCA@Frenzy:
+		OrderName: frenzy
+		Icon: frenzy
+		Prerequisites: structures.chinainf, radar
+		ChargeInterval: 4500
+		Weapon: Frenzy
+		Description: Frenzy
+		Condition: frenzy
+		Dimensions: 5, 5
+		Footprint: _xxx_ xxxxx xxxxx xxxxx _xxx_
+		ValidRelationships: Ally
+		Duration: 500
+		ActivationDelay: 0
+		AirburstAltitude: 0c0
+		Sequence: false-active
+		AllowMultiple: false
+		LongDesc: Temporarily increases ground unit movement and attack speed.
+		OnFireSound: nodfrenzy.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable || being-warped || lowpower
+		DisplayTimerStances: Ally
+
+chpropagandatower:
+	Inherits: ^BuildingTD
+	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Speaker Tower
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 20
+		Prerequisites: chpropaganda, ~structures.china
+		Description: Allows nearby units to self-heal.
+	Health:
+		HP: 50000
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 6c0
+	Power:
+		Amount: -20
+	MustBeDestroyed:
+		RequiredForShortGame: false
+	WithBuildingBib:
+		HasMinibib: true
+	Selectable:
+		Bounds: 24,24
+		DecorationBounds: 24,48,0,-12
+	ProximityExternalCondition@PROPAGANDA:
+		Range: 6c0
+		Condition: propaganda
+		RequiresCondition: !disabled && !lowpower
+	WithRangeCircle:
+		Range: 6c0
+		Type: propaganda
+		RequiresCondition: !disabled
+	Voiced:
+		VoiceSet: CHSpeakerTowerVoice
+
+chpropagandatower.pdl:
+	Inherits: chpropagandatower
+	Inherits@PLD: ^PointLaserDefenseSystemBig
+	Inherits@AUTOTARGET: ^AutoTargetGround
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Speaker Tower (PDL)
+	Buildable:
+		BuildPaletteOrder: 20
+		Prerequisites: chpropaganda, ~structures.china, ~commander_tree.speakertower.pdl
+		Description: Allows nearby units to self-heal.\n Has Point Defense Laser.
+	Health:
+		HP: 60000
+	Armor:
+		Type: Concrete
+
+chinternetcenter:
+	Inherits: ^BuildingTD
+	Inherits: ^TechLevelBuilding
+	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@shape: ^4x2Shape
+	Inherits@mines: ^MinefieldUpgrade
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Internet Center
+	Buildable:
+		BuildPaletteOrder: 10
+		Prerequisites: techcenter, ~structures.china
+		Description: Can shelter Hackers.\nCan be upgraded with surveillance powers.
+	Building:
+		Footprint: ==== xxxx xxxx
+		Dimensions: 4,3
+	Health:
+		HP: 100000
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 6c0
+	WithBuildingBib:
+	LaysMinefield@minefield:
+		Locations: 0,0, 1,0, 2,0, 3,0, -1,1, -1,2, 4,1, 4,2, 0,3, 1,3, 2,3, 3,3
+	ProvidesPrerequisite@buildingname:
+	Production@Upgrades:
+		Produces: InternetUpgrades.CHINA
+	Power:
+		Amount: -80
+	Cargo:
+		MaxWeight: 8
+		PipCount: 8
+		Types: Hacker
+		AfterLoadDelay: 0
+		BeforeUnloadDelay: 0
+		AfterUnloadDelay: 0
+	RevealActorsPower@SATHACK:
+		CameraActor: camera.sathack
+		TargetActors: fact, afac, sfac, glcommand, chcommand, usacommand
+		LifeTime: 500
+		OrderName: satellitehack1
+		Icon: sathack1
+		IconPalette: chrometd
+		ChargeInterval: 3000
+		Description: Satellite Hack
+		LongDesc: Reveals command centers.
+		LaunchSound: bintsela.wav
+		PauseOnCondition: disabled || empdisable || being-warped
+	CashHackPower:
+		OrderName: cashhack
+		Icon: cashhack
+		ChargeInterval: 4500
+		Minimum: 500
+		Maximum: 2000
+		Description: Cash Hack
+		LongDesc: Steal up to $2000 credits from a selected enemy refinery.
+		OnFireSound: scashhac.aud
+		Notification: CreditsStolen
+		DisplayTimerStances: Ally
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: lowpower
+	Voiced:
+		VoiceSet: CHInternetCenterVoice
+
+chsilo:
+	Inherits: ^ScienceBuildingTD
+	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@shape: ^3x2Shape
+	Inherits@mines: ^MinefieldUpgrade
+	Valued:
+		Cost: 4000
+	Tooltip:
+		Name: Nuclear Silo
+	ProvidesPrerequisite:
+		Prerequisite: anyhq
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 135
+		BuildLimit: 1
+		Prerequisites: techcenter, ~structures.china
+		Description: Provides Nuclear Strike support power.\nRequires power to operate.
+	Building:
+		Footprint: xxx xxx
+		Dimensions: 3,2
+	SelectionDecorations:
+	Health:
+		HP: 150000
+	RevealsShroud:
+		Range: 6c0
+	LaysMinefield@minefield:
+		Locations: 0,-1, 1,-1, 2,-1, -1,0, -1,1, 3,0, 3,1, 0,2, 1,2, 2,2
+	RenderDetectionCircle:
+	DetectCloaked:
+		Range: 5c0
+		RequiresCondition: !lowpower
+	NukePower@unlimited:
+		PauseOnCondition: lowpower
+		Icon: chnuclear
+		IconPalette: chrometd
+		Cursor: nuke
+		ChargeInterval: 13500
+		Description: Nuclear Strike
+		LongDesc: Launch a tactical nuclear warhead.\nApplies heavy damage over a large area.
+		EndChargeSpeechNotification: NuclearWeaponAvailable
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		LaunchSpeechNotification: NuclearWeaponLaunched
+		IncomingSpeechNotification: NuclearWarheadApproaching
+		MissileWeapon: CHBigAtomicWeapon
+		MissileDelay: 11
+		SpawnOffset: 3c0,0,-1c512
+		DisplayBeacon: True
+		BeaconPoster: raatomicon
+		DisplayTimerStances: Ally, Neutral, Enemy
+		DisplayRadarPing: True
+		CameraRange: 10c0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		SupportPowerPaletteOrder: 30
+	AirstrikePower@EMP:
+		OrderName: CHEMPBomb
+		Icon: chemp
+		ChargeInterval: 4500
+		Description: EM Pulse
+		LongDesc: A bomber drops a EMP bomb on the target.\nDisables vehicles and defenses.\nInstant-kills most aircraft.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: usabomber.emp
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: airstrike
+		SquadSize: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: false
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		Prerequisites: chsilo
+	WithBuildingBib:
+	WithSupportPowerActivationAnimation:
+		RequiresCondition: !build-incomplete
+	WithSupportPowerActivationOverlay:
+		RequiresCondition: !build-incomplete
+		Sequence: smoke
+	SupportPowerChargeBar:
+	Power:
+		Amount: -200
+	ProvidesPrerequisite@buildingname:
+	Voiced:
+		VoiceSet: CHMissileSiloVoice
+	Explodes:
+		Weapon: CHAtomicWeapon
+		EmptyWeapon: CHAtomicWeapon
+
+chairport:
+	Inherits: ^BuildingTD
+	Inherits@shape: ^4x3Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
+	Inherits@mines: ^MinefieldUpgrade
+	Inherits@AircraftProduction: ^AircraftProduction
+	Buildable:
+		BuildPaletteOrder: 7
+		Prerequisites: radar, ~structures.china
+		Description: Produces and reloads aircraft
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Airfield
+	Building:
+		Footprint: ____ xxxx xx== xx==
+		Dimensions: 4,4
+	Health:
+		HP: 150000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 7c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	LaysMinefield@minefield:
+		Locations: 0,0, 1,0, 2,0, 3,0, -1,1, -1,2, -1,3, 4,1, 4,2, 4,3, 0,4, 1,4, 2,4, 3,4
+	Reservable:
+	Exit@1:
+		ExitCell: 1,1
+		Facing: 192
+	Power:
+		Amount: -20
+	ProvidesPrerequisite@buildingname:
+	Voiced:
+		VoiceSet: PRCAirfieldVoice
+	ProvidesPrerequisite@china:
+		Factions: china, chinainf, chinatnk, chinaatom
+		Prerequisite: aircraft.china
+	ProvidesPrerequisite@alliedstructure:
+		RequiresPrerequisites: structures.china
+		Prerequisite: aircraft.china
+	ProvidesPrerequisite@chinainf:
+		Factions: chinainf
+		Prerequisite: aircraft.chinainf
+	ProvidesPrerequisite@chinainfstructure:
+		RequiresPrerequisites: structures.chinainf
+		Prerequisite: aircraft.chinainf
+	ProvidesPrerequisite@chinatnk:
+		Factions: chinatnk
+		Prerequisite: aircraft.chinatnk
+	ProvidesPrerequisite@chinatnkstructure:
+		RequiresPrerequisites: structures.chinatnk
+		Prerequisite: aircraft.chinatnk
+	ProvidesPrerequisite@chinaatom:
+		Factions: chinaatom
+		Prerequisite: aircraft.chinaatom
+	ProvidesPrerequisite@chinaatomstructure:
+		RequiresPrerequisites: structures.chinaatom
+		Prerequisite: aircraft.chinaatom
+	ProvidesPrerequisite@aircraft.any:
+		Prerequisite: aircraft.any
+	GrantConditionOnPowerState@LOWPOWER:
+		Condition: lowpower
+		ValidPowerStates: Low, Critical
+	ParatroopersPower@tankdrop:
+		PauseOnCondition: lowpower
+		Prerequisites: vehicles.chinatnk
+		OrderName: TankDrop
+		Icon: airdropicon
+		ChargeInterval: 5000
+		Description: Tank Drop
+		LongDesc: Cargo planes drop Battlemaster tanks\nanywhere on the map.
+		DropItems: chbattle, chbattle, chbattle
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPoster: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		UnitType: usabomber
+		SquadSize: 1
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+	ParatroopersPower@minigunnerdrop:
+		PauseOnCondition: lowpower
+		Prerequisites: infantry.chinainf
+		OrderName: MinigunnerDrop
+		Icon: paradropicon
+		ChargeInterval: 5000
+		Description: Infantry Paradrop
+		LongDesc: Cargo planes drop 15 minigunners\nanywhere on the map.
+		DropItems: CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2,CHE2
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPoster: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		UnitType: usabomber
+		SquadSize: 3
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+	AirstrikePower@cluster:
+		OrderName: CHClusterBomb
+		Icon: chclustermines
+		IconPalette: chrometd
+		ChargeInterval: 6000
+		Description: Cluster Mines
+		LongDesc: A bomber deploys cluster mines at the target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: usabomber.minebomb
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: airstrike
+		SquadSize: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		Prerequisites: structures.chinaatom, chairport
+
+CHSYRD:
+	Inherits: SYRD
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 9
+		Prerequisites: chsupply, ~structures.china
+	ProvidesPrerequisite@buildingname:
+	GivesBuildableArea:					##########
+		AreaTypes: building, cityi
+	RenderSprites:
+		Image: ra1syrd
+	Power:
+		Amount: -20

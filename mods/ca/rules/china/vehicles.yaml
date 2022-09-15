@@ -1,0 +1,1084 @@
+
+CHNMCV:
+	Inherits: ^VehicleTD
+	Inherits@EarlyGame: ^EarlyGameBuildBoost
+	BaseProvider:
+		PauseOnCondition: being-captured
+		Range: 5c0
+	GivesBuildableArea:
+		AreaTypes: building, fake
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Bulldozer (China)
+	Buildable:
+		BuildPaletteOrder: 3
+		Prerequisites: ~chcommand
+		IconPalette: chrometd
+		Queue: Building
+		Description: Builds structures and provides radar.
+	Selectable:
+		Priority: 4
+		DecorationBounds: 42,42
+	SelectionDecorations:
+	Health:
+		HP: 60000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 56
+		Locomotor: heavywheeled
+	RevealsShroud:
+		Range: 4c0
+	Voiced:
+		VoiceSet: PRCMCCVoice
+	RenderSprites:
+		Image: chmcv
+	ProvidesPrerequisite@faction:
+		Prerequisite: chnmcv
+	MustBeDestroyed:
+		RequiredForShortGame: true
+	ProvidesPrerequisite@china:
+		Factions: china, chinainf, chinatnk, chinaatom
+		Prerequisite: structures.china
+	ProvidesPrerequisite@chinainf:
+		Factions: chinainf
+		Prerequisite: structures.chinainf
+	ProvidesPrerequisite@chinatnk:
+		Factions: chinatnk
+		Prerequisite: structures.chinatnk
+	ProvidesPrerequisite@chinaatom:
+		Factions: chinaatom
+		Prerequisite: structures.chinaatom
+
+chbattle:
+	Inherits: ^TankTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@horde: ^HordeBonus
+	Inherits@atom: ^AtomicTank
+	Inherits@uran: ^UranShells
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackTurretedVoice
+	Valued:
+		Cost: 950
+	Tooltip:
+		Name: Battlemaster
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: chweap, ~vehicles.china, ~!vehicles.chinainf, ~!filler.battlemaster
+		Queue: Vehicle
+		Description: Chinese main battle tank.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Horde Bonus upgradeable
+	Mobile:
+		Speed: 80
+	Health:
+		HP: 40000
+	Repairable:
+		HpPerStep: 2557
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 6c0
+	Turreted:
+		TurnSpeed: 12
+		Offset: 150,0,150
+	Armament:
+		Weapon: CHBattlemasterCannon
+		Recoil: 128
+		RecoilRecovery: 26
+		LocalOffset: 768,0,90
+		MuzzleSequence: muzzle
+	AttackTurreted:
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SelectionDecorations:
+	Selectable:
+		DecorationBounds: 28,28
+		ValidTypes: vehicle								##########
+	Voiced:
+		VoiceSet: BattlemasterTankVoice
+
+chbattle.Autoloader:
+	Inherits: chbattle
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~!filler.battlemaster2
+		Description: Chinese main battle tank.\nFires a burst of 3 shells.
+	Armament:
+		Weapon: CHBattlemasterCannon.Autoloader
+		Recoil: 128
+	Tooltip:
+		Name: Battlemaster (Autoloader)
+
+chbattle.Autoloader.PDL:
+	Inherits: chbattle.Autoloader
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~commander_tree.battlemaster.pdl
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Point Defense Laser
+	Tooltip:
+		Name: Battlemaster (Autoloader, PDL)
+	Valued:
+		Cost: 1600
+
+chbattle.Autoloader.Reflector:
+	Inherits: chbattle.Autoloader
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~commander_tree.battlemaster.reflector
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Reflector Armor
+	Tooltip:
+		Name: Battlemaster (Autoloader, Reflector)
+
+chbattle.Nuclear_Shells:
+	Inherits: chbattle
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.nuclear_shells, ~!filler.battlemaster2
+		Description: Chinese main battle tank.\nFires nuclear shells.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Vehicles
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Horde Bonus upgradeable
+	Tooltip:
+		Name: Battlemaster (Nuclear Shells)
+	Armament:
+		Weapon: CHBattlemasterCannon.Nuclear_Shells
+		Recoil: 256
+
+chbattle.Nuclear_Shells.PDL:
+	Inherits: chbattle.Nuclear_Shells
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.nuclear_shells, ~commander_tree.battlemaster.pdl
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Point Defense Laser
+	Tooltip:
+		Name: Battlemaster (Nuke, PDL)
+	Valued:
+		Cost: 1600
+
+chbattle.Nuclear_Shells.Reflector:
+	Inherits: chbattle.Nuclear_Shells
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.nuclear_shells, ~commander_tree.battlemaster.reflector
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Reflector Armor
+	Tooltip:
+		Name: Battlemaster (Nuke, Reflector)
+
+chbattle.Mass_Production:
+	Inherits: chbattle
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.mass_production, ~!filler.battlemaster2
+		Description: Chinese main battle tank.
+	Tooltip:
+		Name: Battlemaster (Mass Production)
+	Valued:
+		Cost: 600
+
+chbattle.Mass_Production.PDL:
+	Inherits: chbattle.Mass_Production
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.mass_production, ~commander_tree.battlemaster.pdl
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Point Defense Laser
+	Tooltip:
+		Name: Battlemaster (PDL)
+	Valued:
+		Cost: 1000
+
+chbattle.Mass_Production.Reflector:
+	Inherits: chbattle.Mass_Production
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.mass_production, ~commander_tree.battlemaster.reflector
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Reflector Armor
+	Tooltip:
+		Name: Battlemaster (Reflector)
+
+charty:
+	Inherits: ^TankTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackFrontalVoice
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Inferno Cannon
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: chweap, radar, ~vehicles.china, ~!vehicles.chinainf
+		Queue: Vehicle
+		Description: Long-range artillery.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
+	Mobile:
+		Speed: 75
+	Health:
+		HP: 12000
+	Repairable:
+		HpPerStep: 569
+	Armor:
+		Type: Light
+	RevealsShroud:
+		Range: 5c0
+	Armament@Normal:
+		Weapon: CHInfernoCannon
+		LocalOffset: 624,0,608
+		MuzzleSequence: muzzle
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+	WithMuzzleOverlay:
+	AutoTarget:
+		InitialStanceAI: Defend
+	Explodes:
+		Weapon: ArtilleryShell
+		EmptyWeapon: UnitExplode
+		LoadedChance: 75
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: vehicle								##########
+	GrantConditionOnPrerequisite@upbluefire:
+		Condition: flameupgrade
+		Prerequisites: upbluefire
+	ProducibleWithLevel:
+		Prerequisites: upcharty
+		InitialLevels: 1
+	Voiced:
+		VoiceSet: CHInfernoCannonVoice
+	Explodes:
+		Weapon: FlametankExplode
+		EmptyWeapon: FlametankExplode
+
+charty.Husk:
+	Inherits: ^LightHusk
+	Tooltip:
+		Name: Inferno Cannon (Destroyed)
+	TransformOnCapture:
+		IntoActor: charty
+	InfiltrateForTransform:
+		IntoActor: charty
+	RenderSprites:
+		Image: charty
+
+choverlord:
+	Inherits: ^TankTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@atom: ^AtomicTank
+	Inherits@uran: ^UranShells
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackTurretedVoice
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Overlord Tank
+		RequiresCondition: !vehicles.chinatnk
+	Tooltip@Emperor:
+		Name: Emperor Overlord
+		RequiresCondition: vehicles.chinatnk
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: techcenter, ~vehicles.china, ~!vehicles.chinainf,  ~!vehicles.chinatnk
+		Queue: Vehicle
+		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+	Mobile:
+		Locomotor: sheavytracked
+		TurnSpeed: 8
+		Speed: 56
+	Passenger:
+		Weight: 6
+	Health:
+		HP: 95000
+	Repairable:
+		HpPerStep: 2637
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 6c0
+	Turreted:
+		TurnSpeed: 3
+		Offset: -298,0,150
+	Armament:
+		Weapon: OverlordCannon
+		LocalOffset: 950,250,340, 950,-250,340
+		Recoil: 170
+		RecoilRecovery: 42
+		MuzzleSequence: muzzle
+	AttackTurreted:
+	WithMuzzleOverlay:
+	SelectionDecorations:
+	Selectable:
+		DecorationBounds: 34,34,0,-3
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: vehicle								##########
+	Voiced:
+		VoiceSet: OverlordTankVoice
+	Armament@BUNKER:
+		Name: secondary
+		Weapon: CHGuardRifleOverlord
+		LocalOffset: -85,384,340, -85,-384,340
+		MuzzleSequence: muzzle2
+		RequiresCondition: addonbunker
+
+	Armament@BUNKERMISS:
+		Name: secondary
+		Weapon: CHTankHunterOverlord
+		LocalOffset: -85,120,340, -85,-120,340
+		MuzzleSequence: muzzle
+		RequiresCondition: addonbunker
+
+	WithSpriteTurret:
+		RequiresCondition: !addonpropaganda && !addonbunker && !addongatling
+
+	WithSpriteTurret@BUNKER:
+		RequiresCondition: addonbunker
+		Sequence: turretbun
+	WithSpriteTurret@PROPAGANDA:
+		RequiresCondition: addonpropaganda
+		Sequence: turretpro
+	DetectCloaked:
+		RequiresCondition: !disabled && addongatling
+	ProducibleWithLevel:
+		Prerequisites: selectchtanks
+		InitialLevels: 1
+	RenderSprites:
+		Scale: 1.12
+
+choverlord.Gatling:
+	Inherits: choverlord
+	Inherits: ^ChinaGatling
+	Buildable:
+		Prerequisites: techcenter, ~commander_tree.overlord.gatling
+		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+	Tooltip:
+		Name: Gatling Overlord
+		RequiresCondition: !vehicles.chinatnk
+	Tooltip@Emperor:
+		Name: Gatling Emperor
+		RequiresCondition: vehicles.chinatnk
+	Armament@gatling:
+		Name: secondary
+		Weapon: CHgatlingTurret
+		LocalOffset: -85,120,340, -85,-120,340
+		LocalYaw: -100, 100
+		Recoil: 10
+		MuzzleSequence: muzzle2
+	Armament@gatlingAA:
+		Name: secondary
+		Weapon: CHgatlingTurretAA
+		LocalOffset: -85,120,340, -85,-120,340
+		LocalYaw: -100, 100
+		Recoil: 10
+		MuzzleSequence: muzzle2
+	WithSpriteTurret@gatling:
+		Sequence: turretgat
+
+choverlord.Bunker:
+	Inherits: choverlord
+	Inherits@CARGO: ^AttackingCargo
+	Buildable:
+		Prerequisites: techcenter, ~commander_tree.overlord.bunker
+		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+	Tooltip:
+		Name: Bunker Overlord
+		RequiresCondition: !vehicles.chinatnk
+	Tooltip@Emperor:
+		Name: Bunker Emperor
+		RequiresCondition: vehicles.chinatnk
+	AttackOpenTopped:
+		Armaments: mounted, mountedaa
+		MuzzlePalette: tdeffect
+		PortOffsets: -85,384,340, -85,-384,340
+		PortYaws: 0, 176, 341, 512, 682, 853
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: !ammo
+	AttackFrontal:
+		RequiresCondition: ammo
+	AmmoPool:
+		Ammo: 2
+		PipCount: 0
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 80
+		Count: 2
+
+choverlord.Propaganda:
+	Inherits: choverlord
+	Buildable:
+		Prerequisites: techcenter, ~commander_tree.overlord.propaganda
+		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+	Tooltip:
+		Name: Propaganda Overlord
+		RequiresCondition: !vehicles.chinatnk
+	Tooltip@Emperor:
+		Name: Propaganda Emperor
+		RequiresCondition: vehicles.chinatnk
+
+choverlord.Nuke_Shells:
+	Inherits: choverlord
+	Buildable:
+		Prerequisites: techcenter, ~commander_tree.overlord.nuclear_shells
+		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+	Tooltip:
+		Name: Nuke Overlord
+		RequiresCondition: !vehicles.chinatnk
+	Tooltip@Emperor:
+		Name: Nuke Emperor
+		RequiresCondition: vehicles.chinatnk
+
+choverlord.Plasma:
+	Inherits: choverlord
+	Buildable:
+		Prerequisites: techcenter, ~commander_tree.overlord.plasma
+		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+	Tooltip:
+		Name: Plasma Overlord
+		RequiresCondition: !vehicles.chinatnk
+	Tooltip@Emperor:
+		Name: Plasma Emperor
+		RequiresCondition: vehicles.chinatnk
+
+choverlord.Husk:
+	Inherits: ^LightHusk
+	Tooltip:
+		Name: Overlord Tank (Destroyed)
+	TransformOnCapture:
+		IntoActor: choverlord
+	InfiltrateForTransform:
+		IntoActor: choverlord
+	RenderSprites:
+		Image: choverlord
+
+chdragon:
+	Inherits: ^TankTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackTurretedVoice
+	Valued:
+		Cost: 880
+	Tooltip:
+		Name: Dragon Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: ~vehicles.china
+		Queue: Vehicle
+		Description: Flame tank.\nCan deploy to create a fire wall.\n  Strong vs Infantry\n  Weak vs Tanks
+	Mobile:
+		Speed: 103
+		RequireForceMoveCondition: deployed
+	Passenger:
+		RequireForceMoveCondition: deployed
+	Health:
+		HP: 28000
+	Repairable:
+		HpPerStep: 2273
+	Armor:
+		Type: Light
+	RevealsShroud:
+		Range: 6c0
+	Turreted:
+		TurnSpeed: 9
+		Offset: 150,0,150
+	Armament@Normal:
+		Weapon: CHDragonFlamer
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,0,90
+		MuzzleSequence: muzzle
+		RequiresCondition: !flameupgrade && !deployed
+	Armament@Firewall1:
+		Name: firewall1
+		Weapon: CHDragonFirestorm
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,0,90
+		MuzzleSequence: muzzle
+		RequiresCondition: !flameupgrade && deployed && firewallcycle < 1
+	Armament@Firewall2:
+		Weapon: CHDragonFirestorm2
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,0,90
+		MuzzleSequence: muzzle
+		RequiresCondition: !flameupgrade && deployed && firewallcycle >= 1
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		SkipMakeAnimation: true
+		UndeployOnMove: true
+		UndeployOnPickup: true
+		Voice: Attack
+		PauseOnCondition: disabled
+	WithRangeCircle@Firewall:
+		Range: 4c0
+		RequiresCondition: deployed
+	GrantConditionOnAttack@Firewall:
+		Condition: firewallcycle
+		ArmamentNames: firewall1
+		RequiredShotsPerInstance: 10
+		MaximumInstances: 1
+		RevokeDelay: 100
+		RevokeAll: true
+	AttackTurreted:
+		Armaments: primary, secondary, firewall1
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: vehicle								##########
+	Voiced:
+		VoiceSet: CHDragonTankVoice
+	GrantConditionOnPrerequisite@upbluefire:
+		Condition: flameupgrade
+		Prerequisites: upbluefire
+	Explodes:
+		Weapon: FlametankExplode
+		EmptyWeapon: FlametankExplode
+	ProducibleWithLevel:
+		Prerequisites: selectchtanks
+		InitialLevels: 1
+    RenderSprites:
+        Scale: 1.1
+
+chdragon.Husk:
+	Inherits: ^LightHusk
+	Tooltip:
+		Name: Dragon Tank (Destroyed)
+	TransformOnCapture:
+		IntoActor: chdragon
+	InfiltrateForTransform:
+		IntoActor: chdragon
+	RenderSprites:
+		Image: chdragon
+
+chgtnk:
+	Inherits: ^TankTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackTurretedVoice
+	Valued:
+		Cost: 825
+	Tooltip:
+		Name: Gatling Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: ~vehicles.china
+		Queue: Vehicle
+		Description: Tank armed with gatling guns.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
+	Mobile:
+		Speed: 108
+	Health:
+		HP: 30000
+	Repairable:
+		HpPerStep: 2273
+	Armor:
+		Type: Light
+	RevealsShroud:
+		Range: 6c0
+	Turreted:
+		TurnSpeed: 8
+		Offset: -275,0,150
+	Armament@1:
+		Weapon: CHgatlingTank
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,50,90, 720,-50,90, 720,50,140, 720,-50,140
+		MuzzleSequence: muzzle
+	Armament@AA:
+		Weapon: CHgatlingTankAA
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,50,90, 720,-50,90, 720,50,140, 720,-50,140
+		MuzzleSequence: muzzle
+	AttackTurreted:
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: vehicle								##########
+	Voiced:
+		VoiceSet: CHGatlingTankVoice
+	AmmoPool:
+		Ammo: 8
+		PipCount: 0
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 50
+		Count: 1
+	ReloadDelayMultiplier@gatlingSpeed:
+		RequiresCondition: !ammo
+		Modifier: 75
+
+chgtnk.Husk:
+	Inherits: ^LightHusk
+	Tooltip:
+		Name: Gatling Tank (Destroyed)
+	TransformOnCapture:
+		IntoActor: chgtnk
+	InfiltrateForTransform:
+		IntoActor: chgtnk
+	RenderSprites:
+		Image: chgtnk
+
+chharv:
+	Inherits: ^VehicleTD
+	Inherits@HARVBALANCE: ^HarvesterBalancer
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 10
+		Prerequisites: chsupply, ~vehicles.china
+		Description: Collects Ore and Gems for processing.\n  Unarmed
+	Valued:
+		Cost: 600			#1100
+	Tooltip:
+		Name: Supply Truck
+	Harvester:
+		Capacity: 16
+		PipCount: 6
+		Resources: Tiberium, BlueTiberium, Ore, Gems
+		BaleUnloadDelay: 1
+		SearchFromProcRadius: 30
+		SearchFromHarvesterRadius: 11
+		EmptyCondition: no-ore
+	Health:
+		HP: 30000
+	Armor:
+		Type: Light
+	Mobile:
+		Speed: 66
+		Locomotor: wheeled
+	RevealsShroud:
+		Range: 4c0
+	-WithFacingSpriteBody:
+	WithHarvesterSpriteBody:
+		ImageByFullness: chharv, chharvfull, chharvfull
+	WithDockingAnimation:
+		DockSequence: idle
+		DockLoopSequence: idle
+	Voiced:
+		VoiceSet: CHSupplyTruckVoice
+chharv.Husk:
+	Inherits: ^LightHusk
+	Tooltip:
+		Name: Supply Truck (Destroyed)
+	TransformOnCapture:
+		IntoActor: chharv
+	InfiltrateForTransform:
+		IntoActor: chharv
+	RenderSprites:
+		Image: chharv
+
+choutpost:
+	Inherits: ^VehicleTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@TRANSPORT: ^Transport
+	Inherits@detect: ^SensorEquipment
+	Inherits@radar: ^MobileDeployableRadar
+	Inherits@CARGO: ^AttackingCargo
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Listening Outpost
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: chweap, techcenter, ~vehicles.china
+		Queue: Vehicle
+		Description: Detects cloaked units and buildings.\nGarrisoned by 2 Tank Hunters.
+	Mobile:
+		Speed: 85
+	Health:
+		HP: 24000
+	Repairable:
+		HpPerStep: 1819
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 8c0
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: vehicle								##########
+	Cargo:
+		Types: Infantry, Hacker, Fremen
+		MaxWeight: 2
+		PipCount: 2
+		EjectOnDeath: false #desync
+		InitialUnits: che3, che3
+	#AttackOpenTopped:
+	#	#Armaments: primary
+	#	#PortOffsets: 384,0,128, 224,-341,128, -224,-341,128, -384,0,128, -224,341,128, 224,341,128
+	#	#PortYaws: 0, 176, 341, 512, 682, 853
+	#	#PortCones: 88, 88, 88, 88, 88, 88
+	#	#Voice: Attack
+	#	#PauseOnCondition: chronobeamed
+	RenderRangeCircle:
+		FallbackRange: 6c0
+	SelectionDecorations:
+	AutoTarget:
+		AllowMovement: true
+	Turreted:
+		TurnSpeed: 10
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: -256,0,256
+	Voiced:
+		VoiceSet: ListeningOutpostVoice
+	Cloak:
+		InitialDelay: 45
+		CloakDelay: 45
+		UncloakOn: Attack, Unload, Move
+		PauseOnCondition: cloak-force-disabled || base-reveal || disabled || driver-dead
+		IsPlayerPalette: true
+	RenderSprites:
+		Scale: 0.89
+
+choutpost2:
+	Inherits: choutpost
+	Inherits@CARGO: ^AttackingCargo
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Attack Outpost
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: chweap, techcenter, ~vehicles.chinainf
+		Queue: Vehicle
+		Description: Detects cloaked units and buildings.\nMounted with a propaganda speaker.\nHas space for up to 8 garrisoned infantry.\nGarrisoned by 3 Tank Hunters.
+	Health:
+		HP: 35000
+	Cargo:
+		Types: Infantry, Hacker
+		MaxWeight: 8
+		PipCount: 8
+		EjectOnDeath: false #desync
+		InitialUnits: che3, che3, che3
+	ProximityExternalCondition@PROPAGANDA:
+		Range: 6c0
+		Condition: propaganda
+		RequiresCondition: !disabled
+	WithRangeCircle:
+		Range: 6c0
+		Type: propaganda
+		RequiresCondition: !disabled
+	RenderSprites:
+		Image: choutpost
+
+checm:
+	Inherits: ^TankTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackTurretedVoice
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: ECM Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: chweap, techcenter, ~vehicles.china
+		Queue: Vehicle
+		Description: Disables vehicles and jams incoming missiles.
+	Mobile:
+		Speed: 90
+	Health:
+		HP: 24000
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 8c0
+	JamsMissiles:
+		Range: 5c0
+		DeflectionStances: Neutral, Enemy
+		RequiresCondition: !disabled && !attacking
+	RenderJammerCircle:
+	Armament:
+		Weapon: CHECMDisable
+		LocalOffset: -256,0,256
+		PauseOnCondition: !charged
+	Armament@charge:
+		Name: secondary
+		Weapon: CHECMCharge
+		LocalOffset: -256,0,256
+	Turreted:
+	AttackTurreted:
+		Armaments: primary, secondary
+	GrantConditionOnAttack@lockon:
+		Condition: charged
+		ArmamentNames: secondary
+		RequiredShotsPerInstance: 6
+		MaximumInstances: 1
+		RevokeDelay: 60
+		RevokeAll: true
+		RevokeOnNewTarget: true
+	GrantConditionOnAttack:
+		Condition: attacking
+		ArmamentNames: primary, secondary
+		RevokeDelay: 60
+	Turreted:
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: -256,0,256
+		PauseOnCondition: disabled
+	Voiced:
+		VoiceSet: ECMTankVoice
+
+CHTRUK:
+	Inherits: TRUK
+	Buildable:
+		Queue: Vehicle
+	RenderSprites:
+		Image: truk
+	Voiced:
+		VoiceSet: CHSupplyTruckVoice
+
+chcrawl:
+	Inherits: ^VehicleTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@TRANSPORT: ^Transport
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Troop Crawler
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: chweap, ~vehicles.chinainf
+		Queue: Vehicle
+		Description: Heavy infantry transport.\n Unarmed
+	Mobile:
+		Speed: 110
+		PauseOnCondition: notmobile || disabled
+	Health:
+		HP: 27500
+	Repairable:
+		HpPerStep: 1440
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 6c0
+	Turreted:
+		TurnSpeed: 10
+	Cargo:
+		Types: Infantry, Hacker, Fremen
+		MaxWeight: 5
+		PipCount: 5
+		LoadingCondition: notmobile
+		EjectOnDeath: false
+		InitialUnits: che1,che1,che1,che1,che1
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: vehicle								##########
+	Voiced:
+		VoiceSet: TroopCrawlerVoice
+	RenderSprites:
+		Scale: 0.89
+
+chcrawl2:
+	Inherits: chcrawl
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@CARGO: ^AttackingCargo
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Assault Troop Crawler
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: chweap, ~vehicles.chinainf
+		Queue: Vehicle
+		Description: Heavy infantry transport.\n Passengers can fire from within
+	Mobile:
+		Speed: 125
+	Passenger:
+		Weight: 6
+	Health:
+		HP: 45000
+	Repairable:
+		HpPerStep: 1819
+	RevealsShroud:
+		Range: 8c0
+	Cargo:
+		MaxWeight: 6
+		PipCount: 6
+		EjectOnDeath: false
+		InitialUnits: che2, che2, che2, che2, che2, che2
+	AttackOpenTopped:
+		Armaments: garrisoned
+		PortOffsets: 384,0,128, 224,-341,128, -224,-341,128, -384,0,128, -224,341,128, 224,341,128
+		Voice: Attack
+		PauseOnCondition: chronobeamed
+	RevealOnFire:
+		ArmamentNames: primary, garrisoned
+	AutoTarget:
+		AllowMovement: true
+	Turreted:
+		TurnSpeed: 10
+	Voiced:
+		VoiceSet: AssaultTroopCrawlerVoice
+
+chcrawl.Husk:
+	Inherits: ^LightHusk
+	Tooltip:
+		Name: Troop Crawler (Destroyed)
+	TransformOnCapture:
+		IntoActor: chcrawl
+	InfiltrateForTransform:
+		IntoActor: chcrawl
+	RenderSprites:
+		Image: chcrawl
+
+chnukecann:
+	Inherits: ^TankTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits@announce: ^AnnounceGlobal
+	Inherits@vo: ^AttackTurretedVoice
+	Valued:
+		Cost: 2400
+	Tooltip:
+		Name: Nuke Cannon
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: techcenter, ~vehicles.chinaatom
+		Queue: Vehicle
+		Description: Slow heavy artillery.\n Strong vs ground targets\n Weak vs Aircraft
+	Mobile:
+		Locomotor: tracked
+		TurnSpeed: 8
+		Speed: 55
+	Health:
+		HP: 24000
+	Repairable:
+		HpPerStep: 2637
+	Armor:
+		Type: Heavy
+	RevealsShroud:
+		Range: 6c0
+	Turreted:
+		TurnSpeed: 8	#3
+	AttackTurreted:
+		RequiresCondition: !fired
+	SelectionDecorations:
+	Selectable:
+	Armament@AIM:
+		Weapon: NukeCannonDummyAim
+		PauseOnCondition: deployed
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: CHNukeCannon
+		LocalOffset: 407,0,362
+		PauseOnCondition: !ammo || fired
+	DeployOnAttack:
+		RequiresCondition: undeployed
+	GrantConditionOnDeploy:
+		DeploySounds: placbldg.aud
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: true
+		UndeployOnPickup: true
+		SmartDeploy: True
+	AmmoPool:
+		Ammo: 1
+		InitialAmmo: 0
+		PipCount: 1
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	ReloadAmmoPoolCA@deployed:
+		Delay: 100
+		Count: 1
+		ShowSelectionBar: true
+		SelectionBarColor: ff0000
+		RequiresCondition: deployed
+	GrantConditionOnAttack@fired:
+		Condition: fired
+		RevokeDelay: 100
+		ArmamentNames: primary
+	ReloadAmmoPoolCA@undeployed:
+		Delay: 10
+		Count: -1
+		ShowSelectionBar: true
+		SelectionBarColor: 00ff00
+		RequiresCondition: undeployed
+	SpeedMultiplier@UNDEPLOY:
+		Modifier: 0
+		RequiresCondition: fired
+	WithFacingSpriteBody@Skin1:
+		Sequence: idle2
+		RequiresCondition: !ammo && !deployed
+		Name: body1
+	WithFacingSpriteBody@Skin2:
+		Sequence: deploy
+		RequiresCondition: ammo || deployed
+		Name: body2
+	WithSpriteTurret@Skin2:
+		RequiresCondition: ammo || deployed
+		Sequence: turret
+	Voiced:
+		VoiceSet: CHNukeCannonVoice
+	ProducibleWithLevel:
+		Prerequisites: upcharty
+		InitialLevels: 1
+	Explodes:
+		Weapon: CHAtomicTankExplode
+		EmptyWeapon: CHAtomicTankExplode
+		RequiresCondition: !chronobeamed
+	GrantConditionOnPrerequisite@upneutronshell:
+		Condition: upneutronshell
+		Prerequisites: upneutronshell
+
+chnukecann.Husk:
+	Inherits: ^LightHusk
+	Tooltip:
+		Name: Nuke Cannon (Destroyed)
+	TransformOnCapture:
+		IntoActor: chnukecann
+	InfiltrateForTransform:
+		IntoActor: chnukecann
+	RenderSprites:
+		Image: chnukecann

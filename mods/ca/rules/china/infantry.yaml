@@ -1,0 +1,388 @@
+
+CHE1:
+	Inherits: ^Soldier
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@BERSERK: ^Berserk
+	Inherits@BOTHELPER: ^BotCaptureHelper
+	Inherits@horde: ^HordeBonus
+	#Inherits@cap: ^BuildingCaptureUpgrade
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackFrontalVoice
+	Buildable:
+		BuildPaletteOrder: 20
+		Queue: Infantry
+		IconPalette: chrometd
+		Description: General-purpose infantry armed with a rifle.\n  Strong vs Infantry\n  Weak vs Vehicles
+		Prerequisites: barracks, ~infantry.china, ~!infantry.chinainf
+	Valued:
+		Cost: 150
+	Tooltip:
+		Name: Red Guard
+	Mobile:
+		Speed: 56
+	Health:
+		HP: 8000
+	AutoTarget:
+		ScanRadius: 4
+	Armament@PRIMARY:							##########
+		Weapon: CHGuardRifle
+	Armament@GARRISONED:						##########
+		Name: garrisoned
+		Weapon: CHGuardRifleGarrison
+		MuzzleSequence: muzzle
+	AttackFrontal:
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: infantry							##########
+	Voiced:
+		VoiceSet: RedGuardVoice
+	RenderSprites:
+		Scale: 0.85
+	ProducibleWithLevel:
+		Prerequisites: upredguard
+		InitialLevels: 1
+	ProductionCostMultiplier@selectchtanks:
+		Multiplier: 110
+		Prerequisites: chinatnk
+		Queue: Infantry
+	ProductionCostMultiplier@selectchatomic:
+		Multiplier: 130
+		Prerequisites: chinaatom
+		Queue: Infantry
+
+CHE2:
+	Inherits: CHE1
+	Buildable:
+		BuildPaletteOrder: 20
+		IconPalette: chrometd
+		Description: General-purpose infantry armed with a minigun.\nCan attack aircraft.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Tanks
+		Prerequisites: barracks, ~infantry.chinainf
+	Valued:
+		Cost: 350
+	Tooltip:
+		Name: Minigunner
+	Armament@PRIMARY:							##########
+		Weapon: CHMinigunnerGatling
+	Armament@PRIMARYAA:							##########
+		Weapon: CHMinigunnerGatlingAA
+	Armament@GARRISONED:						##########
+		Name: garrisoned
+		Weapon: CHMinigunnerGatling
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	ProducibleWithLevel:
+		InitialLevels: 4
+	Health:
+		HP: 10000
+	AmmoPool:
+		Ammo: 8
+		PipCount: 0
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 50
+		Count: 1
+	ReloadDelayMultiplier@gatlingSpeed:
+		RequiresCondition: !ammo
+		Modifier: 75
+
+CHE3:
+	Inherits: E3
+	Inherits@horde: ^HordeBonus
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackFrontalVoice
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Tank Hunter
+	Buildable:
+		BuildPaletteOrder: 20
+		IconPalette: chrometd
+		Prerequisites: barracks, ~infantry.china
+		Queue: Infantry
+		Description: Anti-tank/Anti-aircraft infantry. \n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
+	Armament@PRIMARY:							##########
+		Weapon: CHTankHunterMissile
+		LocalOffset: 256,43,341
+		FireDelay: 5
+	Armament@GARRISONED:						##########
+		Name: garrisoned
+		Weapon: CHTankHunterMissileG
+	Voiced:
+		VoiceSet: TankHunterVoice
+	ProductionCostMultiplier@selectchtanks:
+		Multiplier: 110
+		Prerequisites: chinatnk
+		Queue: Infantry
+	ProductionCostMultiplier@selectchatomic:
+		Multiplier: 130
+		Prerequisites: chinaatom
+		Queue: Infantry
+	ProducibleWithLevel:
+		Prerequisites: selectchinf
+		InitialLevels: 1
+	RenderSprites:
+		Image: che3
+
+CHHACKER:
+	Inherits: ^Soldier
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@vo: ^AttackFrontalVoice
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Hacker
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: barracks, chpropaganda, ~infantry.china, ~!infantry.chinainf
+		Queue: Infantry
+		IconPalette: chrometd
+		Description: Computer specialist.\n Can deploy to provide money\n Can disable buildings
+	Mobile:
+		Speed: 65
+		PauseOnCondition: disabled || hacking
+		RequireForceMoveCondition: !undeployed
+		ImmovableCondition: !undeployed
+	Passenger:
+		CargoType: Hacker
+		PipType: Blue
+		RequireForceMoveCondition: !undeployed
+		CargoConditions:
+			chinternetcenter: indoors
+            schinternetcenter: indoors
+            schhackvan: indoors
+	Health:
+		HP: 8000
+	Armament@PRIMARY:
+		Weapon: CHHackerDisable
+		RequiresCondition: undeployed
+		PauseOnCondition: !hack-complete
+	Armament@PRIMARYCHARGE:
+		Name: secondary
+		Weapon: CHHackerCharge
+		RequiresCondition: undeployed
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: CHHackerDisable
+	AttackFrontal:
+		Armaments: primary, secondary
+		RequiresCondition: undeployed
+	WithSpriteBody:
+		Sequence: deployed
+		Name: deployed
+		RequiresCondition: !undeployed || hacking
+	WithInfantryBody:
+		-IdleSequences:
+		StandSequences: stand
+		RequiresCondition: undeployed && !hacking
+	RejectsOrders@deployment:
+		Reject: AttackMove, AssaultMove
+		RequiresCondition: deployed
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: infantry							##########
+	GrantConditionOnAttack@hackcomplete:
+		Condition: hack-complete
+		RevokeDelay: 60
+		ArmamentNames: secondary
+		RequiredShotsPerInstance: 10
+		MaximumInstances: 1
+		RevokeAll: true
+		RevokeOnNewTarget: true
+	GrantConditionOnAttack@hacking:
+		ArmamentNames: secondary
+		Condition: hacking
+		RevokeDelay: 50
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: true
+		SkipMakeAnimation: true
+		RequiresCondition: !parachute
+		PauseOnCondition: disabled
+		Voice: Attack
+	-TakeCover:
+	Voiced:
+		VoiceSet: CHHackerVoice
+	DeliversCash:
+		Payload: 250
+	ExperienceTrickler:
+		Interval: 60
+		Amount: 300
+		RequiresCondition: deployed || indoors
+		PauseOnCondition: disabled
+	CashTrickler@Rank0:
+		Interval: 60
+		Amount: 6
+		PauseOnCondition: disabled
+		RequiresCondition: (deployed || indoors) && rank-veteran == 0
+	CashTrickler@Rank1:
+		Interval: 60
+		Amount: 7
+		PauseOnCondition: disabled
+		RequiresCondition: (deployed || indoors) && rank-veteran == 1
+	CashTrickler@Rank2:
+		Interval: 60
+		Amount: 8
+		PauseOnCondition: disabled
+		RequiresCondition: (deployed || indoors) && rank-veteran == 2
+	CashTrickler@Rank3:
+		Interval: 60
+		Amount: 10
+		PauseOnCondition: disabled
+		RequiresCondition: (deployed || indoors) && rank-veteran == 3
+	CashTrickler@Rank4:
+		Interval: 60
+		Amount: 12
+		PauseOnCondition: disabled
+		RequiresCondition: (deployed || indoors) && rank-elite
+	CashTricklerMultiplier@indoors:
+		Modifier: 150
+		RequiresCondition: indoors
+	ProductionCostMultiplier@selectchtanks:
+		Multiplier: 110
+		Prerequisites: selectchtanks
+		Queue: Infantry.CHINA, RAInfantry.CHINA
+
+CHHACKER2:
+	Inherits: CHHACKER
+	Tooltip:
+		Name: Super Hacker
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: barracks, chpropaganda, ~infantry.chinainf
+		Queue: Infantry
+		IconPalette: chrometd
+		Description: Computer specialist.\n Can deploy to provide money\n Can disable buildings and vehicles
+	Armament@PRIMARYSUPER:							##########
+		Weapon: CHLotusDisable
+		RequiresCondition: undeployed
+		PauseOnCondition: !hack-complete
+	Armament@PRIMARYCHARGE:
+		Name: secondary
+		Weapon: CHSuperHackerCharge
+	Armament@GARRISONEDSUPER:
+		Name: garrisoned
+		Weapon: CHLotusDisable
+	ProducibleWithLevel:
+		Prerequisites: selectchinf
+		InitialLevels: 1
+	Cloak:
+		InitialDelay: 60
+		CloakDelay: 60
+		PauseOnCondition: disabled || base-reveal
+		IsPlayerPalette: true
+	RenderSprites:
+		Image: chhacker
+	Voiced:
+		VoiceSet: SuperHackerVoice
+
+chlotus:
+	Inherits: ^Soldier
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@announce: ^AnnounceGlobal
+	Inherits@vo: ^AttackFrontalVoice
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Black Lotus
+		RequiresCondition: ~!infantry.chinainf
+	Tooltip@2:
+		Name: Super Lotus
+		RequiresCondition: ~infantry.chinainf
+	Buildable:
+		BuildLimit: 1
+		BuildPaletteOrder: 70
+		IconPalette: chrometd
+		Prerequisites: barracks, chpropaganda, ~infantry.china
+		Queue: Infantry
+		Description: Elite hacker.\n Can take control of buildings\n Can disable vehicles
+	Mobile:
+		Speed: 71
+	Health:
+		HP: 20000
+	Passenger:
+		PipType: Red
+	AutoTarget:
+		ScanRadius: 4
+	Armament@PRIMARY:
+		Weapon: CHLotusDisable
+		PauseOnCondition: !hack-complete
+	Armament@SUPER:
+		Weapon: CHSuperLotusDisable
+		PauseOnCondition: !hack-complete
+		RequiresCondition: selectchinf
+	Armament@CONTROL:
+		Weapon: CHLotusControl
+		Name: control
+		PauseOnCondition: !hack-complete
+	Armament@CHARGE:
+		Name: secondary
+		Weapon: CHLotusCharge
+		RequiresCondition: !selectchinf
+	Armament@SUPERCHARGE:
+		Name: secondary
+		Weapon: CHSuperLotusCharge
+		RequiresCondition: selectchinf
+	MindController:
+		ArmamentNames: control
+		Capacity: 1
+	ReloadArmamentsBar:
+		Armaments: control
+	Armament@GARRISONED:
+		Name: garrisoned
+		Weapon: CHLotusDisable
+	Armament@GARRISONEDSUPER:
+		Name: garrisoned
+		Weapon: CHSuperLotusDisable
+		RequiresCondition: selectchinf
+	GrantConditionOnAttack@hackcomplete:
+		Condition: hack-complete
+		RevokeDelay: 60
+		ArmamentNames: secondary
+		RequiredShotsPerInstance: 15
+		MaximumInstances: 1
+		RevokeAll: true
+		RevokeOnNewTarget: true
+		RequiresCondition: !selectchinf
+	GrantConditionOnAttack@superhackcomplete:
+		Condition: hack-complete
+		RevokeDelay: 60
+		ArmamentNames: secondary
+		RequiredShotsPerInstance: 7
+		MaximumInstances: 1
+		RevokeAll: true
+		RevokeOnNewTarget: true
+		RequiresCondition: selectchinf
+	AttackFrontal:
+		Armaments: primary, secondary, control
+	RevealOnFire:
+		ArmamentNames: primary, secondary, control
+	AcceptsDeliveredExperience:							##########
+		ValidTypes: infantry							##########
+	-TakeCover:
+	WithInfantryBody:
+		-IdleSequences:
+		StandSequences: stand
+		DefaultAttackSequence: shoot
+	Voiced:
+		VoiceSet: CHLotusVoice
+	ReloadDelayMultiplier@superlotus:
+		Modifier: 75
+		RequiresCondition: selectchinf
+	RangeMultiplier@superlotus:
+		Modifier: 150
+		RequiresCondition: selectchinf
+	GrantConditionOnPrerequisite@selectchinf:
+		Condition: selectchinf
+		Prerequisites: selectchinf
+	ProductionCostMultiplier@selectchtanks:
+		Multiplier: 110
+		Prerequisites: selectchtanks
+		Queue: Infantry.CHINA, RAInfantry.CHINA
+	Cloak:
+		InitialDelay: 30
+		CloakDelay: 30
+		PauseOnCondition: disabled || base-reveal
+		IsPlayerPalette: true

@@ -1280,64 +1280,12 @@ APC:
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
 
-MNLY:
-	Inherits: ^Tank
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 275
-		Prerequisites: repair, ~commander_tree.advanced_logistics, ~techlevel.medium
-		Description: Lays mines to destroy unwary enemy units.\n  Can detect mines.\n  Unarmed
-	Valued:
-		Cost: 800
-	Tooltip:
-		Name: Minelayer
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Selectable:
-		Priority: 5
-	Health:
-		HP: 30000
-	Armor:
-		Type: Heavy
-	Mobile:
-		Speed: 135
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Minelayer:
-		Mine: MINV
-		TileUnknownName: build-valid
-	MineImmune:
-	AmmoPool:
-		Ammo: 5
-		RearmSound: minelay1.aud
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
-	DetectCloaked:
-		Range: 5c0
-		CloakTypes: Mine
-		RequiresCondition: !(empdisable || being-warped)
-	RenderDetectionCircle:
-	Explodes:
-		Weapon: ATMine
-	RenderSprites:
-		Image: MNLY
-	Rearmable:
-		RearmActors: fix, rep
-	Targetable:
-		TargetTypes: Ground, Vehicle, C4, ChaosImmune
-
 TRUK:
 	Inherits: ^Vehicle
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 280
-		Prerequisites: ~commander_tree.basic_logistics, ~techlevel.low
+		Prerequisites: ~commander_tree.oil_pumps
 		Description: Transports cash to other players.\n  Unarmed
 	Valued:
 		Cost: 500
@@ -2071,28 +2019,28 @@ VULC:
 		Weapon: MGatt.0
 		LocalOffset: 220,0,350
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 0
+		RequiresCondition: gatling == 0
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT1:
 		Weapon: MGatt.1
 		LocalOffset: 220,0,350
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 1
+		RequiresCondition: gatling == 1
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT2:
 		Weapon: MGatt.2
 		LocalOffset: 220,0,350
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 2
+		RequiresCondition: gatling == 2
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT3:
 		Weapon: MGatt.3
 		LocalOffset: 220,0,350
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 3
+		RequiresCondition: gatling == 3
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT0G:
@@ -2100,7 +2048,7 @@ VULC:
 		Weapon: MGatt.0G
 		LocalOffset: 321,0,85
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling-ground == 0
+		RequiresCondition: gatling-ground == 0
 		PauseOnCondition: engage-air
 		ReloadingCondition: engage-ground
 	Armament@GAT1G:
@@ -2108,7 +2056,7 @@ VULC:
 		Weapon: MGatt.1G
 		LocalOffset: 321,0,85
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling-ground == 1
+		RequiresCondition: gatling-ground == 1
 		PauseOnCondition: engage-air
 		ReloadingCondition: engage-ground
 	Armament@GAT2G:
@@ -2116,11 +2064,11 @@ VULC:
 		Weapon: MGatt.2G
 		LocalOffset: 321,0,85
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling-ground == 2
+		RequiresCondition: gatling-ground == 2
 		ReloadingCondition: engage-ground
 		PauseOnCondition: engage-air
 	GrantConditionOnAttack:
-		Condition: gattling
+		Condition: gatling
 		RequiredShotsPerInstance: 1,6,12
 		MaximumInstances: 3
 		RevokeDelay: 40
@@ -2128,7 +2076,7 @@ VULC:
 		RevokeAll: True
 	GrantConditionOnAttack@GROUND:
 		ArmamentNames: secondary
-		Condition: gattling-ground
+		Condition: gatling-ground
 		RequiredShotsPerInstance: 1,6
 		MaximumInstances: 2
 		RevokeDelay: 40
@@ -2142,10 +2090,10 @@ VULC:
 		Offset: 0,0,150
 	WithMuzzleOverlay:
 	WithSpriteTurret:
-		RequiresCondition: !gattling-ground
+		RequiresCondition: !gatling-ground
 	WithSpriteTurret@GROUND:
 		Sequence: turret-ground
-		RequiresCondition: gattling-ground
+		RequiresCondition: gatling-ground
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5

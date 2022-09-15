@@ -105,6 +105,10 @@ namespace OpenRA.Mods.CA.Traits
 
 			// Program the trajectory.
 			var bm = se.Actor.Trait<BallisticMissile>();
+
+			if (target.CenterPosition == WPos.Zero)
+				return;
+
 			bm.Target = Target.FromPos(target.CenterPosition);
 
 			SpawnIntoWorld(self, se.Actor, self.CenterPosition);

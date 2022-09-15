@@ -22,7 +22,8 @@ chcommand:
 	Inherits: ^StructureOverlays
 	Defaults:
 		Offset: 0,-5
-	idle:
+	idle: chcommandnoradar
+	radar: chcommandradar
 	damaged-idle:
 		Start: 1
 	make: chbuildingmakebig
@@ -31,8 +32,14 @@ chcommand:
 		UseTilesetExtension: true
 		Length: *
 		Offset: 0,24
-	icon: glcommandicon
+	icon: chcommandicon
 		Offset: 0,0
+
+chcommand.radar:
+	place: chpropagandatower
+		Offset: 0, -12, 12
+		UseTilesetCode: true
+	icon: chradarupgradeicon
 
 chpower:
 	Inherits: ^StructureOverlays
@@ -146,6 +153,10 @@ chpropagandatower:
 	icon: chpropagandatowericon
 		Offset: 0, 0
 
+chpropagandatower.pdl:
+	Inherits: chpropagandatower
+	icon: chpropagandatowerpdlicon
+
 chinternetcenter:
 	Inherits: ^StructureOverlays
 	Defaults:
@@ -198,19 +209,19 @@ chairport:
 	icon: chairporticon
 		Offset: 0,0
 
-chgattling:
+chgatling:
 	Inherits: ^StructureOverlays
-	idle: chgattling
-	dead: chgattling
+	idle: chgatling
+	dead: chgatling
 	make: chbuildingmake1x1
 		Length: *
 		Tick: 80
-	turret: chgattlingt
+	turret: chgatlingt
 		Facings: 32
 	muzzle: minigun
 		Length: 6
 		Facings: 8
-	icon: chgattlingicon
+	icon: chgatlingicon
 
 chbunker:
 	Inherits: ^StructureOverlays
@@ -240,6 +251,59 @@ che2:
 	Inherits: gle1
 	Defaults:
 		UseTilesetExtension: false
+	stand:
+		Facings: 8
+	stand2:
+		Start: 8
+		Facings: 8
+	stand3:
+		Start: 8
+		Length: 8
+	run:
+		Start: 16
+		Length: 6
+		Facings: 8
+		Tick: 100
+	shoot:
+		Start: 64
+		Length: 16
+		Facings: 8
+	standup-0:
+		Start: 240
+		Length: 2
+		Facings: 8
+	prone-stand:
+		Start: 208
+		Stride: 4
+		Facings: 8
+	prone-stand2:
+		Start: 208
+		Stride: 4
+		Facings: 8
+	prone-run:
+		Start: 208
+		Length: 16
+		Facings: 8
+		Tick: 100
+	prone-shoot:
+		Start: 256
+		Length: 8
+		Facings: 8
+	die1:
+		Start: 416
+		Length: 8
+	die2:
+		Start: 424
+		Length: 8
+	die3:
+		Start: 432
+		Length: 8
+	die4:
+		Start: 440
+		Length: 12
+	die5:
+		Start: 452
+		Length: 18
 	icon: che2icon
 	redstar: chhorde1
 	muzzle: minigun
@@ -334,13 +398,61 @@ chbattle:
 	icon: chbattleicon
 	redstar: chhorde1
 
+chbattle.autoloader:
+	Inherits: chbattle
+	icon: chbattleautoloadericon
+
+chbattle.autoloader.pdl:
+	Inherits: chbattle
+	icon: chbattlepldicon
+
+chbattle.autoloader.reflector:
+	Inherits: chbattle
+	icon: chbattlereflectoricon
+
+chbattle.nuclear_shells:
+	Inherits: chbattle
+	icon: chbattlenukeicon
+
+chbattle.nuclear_shells.pdl:
+	Inherits: chbattle
+	icon: chbattlepldicon
+
+chbattle.nuclear_shells.reflector:
+	Inherits: chbattle
+	icon: chbattlereflectoricon
+
+chbattle.mass_production:
+	Inherits: chbattle
+	icon: chbattlemassicon
+
+chbattle.mass_production.pdl:
+	Inherits: chbattle
+	icon: chbattlepldicon
+
+chbattle.mass_production.reflector:
+	Inherits: chbattle
+	icon: chbattlereflectoricon
+
+
 chmig:
 	Inherits: ^VehicleOverlays
-	idle:
+	idle: chmig
 		Facings: 32
 		UseClassicFacingFudge: True
 	icon: chmigicon
-    icon_nuke: chnuclearmigicon
+
+chmig.nuke:
+	Inherits: chmig
+	icon: chmignukeicon
+
+chmig.aa:
+	Inherits: chmig
+	icon: chmigaaicon
+
+chmig.napalm:
+	Inherits: chmig
+	icon: chmignapalmicon
 
 charty:
 	Inherits: ^VehicleOverlays
@@ -356,7 +468,7 @@ charty:
 
 choverlord:
 	Inherits: ^VehicleOverlays
-	idle:
+	idle: choverlord
 		Facings: 32
 		UseClassicFacingFudge: True
 	turret: choverlordtur
@@ -364,6 +476,9 @@ choverlord:
 		Offset: 1, 0
 		UseClassicFacingFudge: True
 	turretgat: choverlordtur2
+		Facings: 32
+		UseClassicFacingFudge: True
+	turretgat2: chgatlingt
 		Facings: 32
 		UseClassicFacingFudge: True
 	turretbun: choverlordtur3
@@ -378,27 +493,39 @@ choverlord:
 		Length: 6
 		Facings: 8
 	icon: choverlordicon
+	icon2: choverlord2icon
 
-choverlord2:
-	Inherits: ^VehicleOverlays
-	idle: choverlord
-		Facings: 32
-		UseClassicFacingFudge: True
-	turret: choverlordtur4
-		Facings: 32
-		UseClassicFacingFudge: True
-	turretgat: chgattlingt
-		Facings: 32
-		UseClassicFacingFudge: True
-	muzzle: gunfire2
-		Length: 5
-	muzzle2: minigun
-		Length: 6
-		Facings: 8
-	icon: choverlord2icon
+choverlord.gatling:
+	Inherits: choverlord
+	icon: choverlordgatlingicon
+
+choverlord.nuke_shells:
+	Inherits: choverlord
+	icon: choverlordnukeicon
+
+choverlord.bunker:
+	Inherits: choverlord
+	icon: choverlordbunkericon
+
+choverlord.propaganda:
+	Inherits: choverlord
+	icon: choverlordpropaicon
+
+choverlord.plasma:
+	Inherits: choverlord
+	icon: choverlordplasmaicon
+
+choverlord.pld:
+	Inherits: choverlord
+	icon: choverlordpldicon
+
+choverlord.reflector:
+	Inherits: choverlord
+	icon: choverlordreflectoricon
+
 
 choverlordaddon1:
-	icon: choverlordgattlingicon
+	icon: choverlordgatlingicon
 
 choverlordaddon2:
 	icon: choverlordbunkericon
@@ -589,7 +716,7 @@ chasub:
 
 chhelix:
 	Inherits: ^VehicleOverlays
-	idle:
+	idle: chhelix
 		Facings: 32
 		UseClassicFacingFudge: True
 	rotor: yrotorlg
@@ -601,10 +728,29 @@ chhelix:
 		Length: 6
 		Facings: 8
 	icon: chhelixicon
-	bunkericon: helixbunkericon
-	gatlingicon: helixgatlingicon
-	napalmicon: helixbombicon
-	speakericon: helixspeakericon
+	armoricon: charmoricon
+	reconicon: chradarupgradeicon
+	speakericon: chsubliminalicon
+
+chhelix.gatling:
+	Inherits: chhelix
+	icon: chhelixgatlingicon
+
+chhelix.bunker:
+	Inherits: chhelix
+	icon: chhelixbunkericon
+
+chhelix.napalm:
+	Inherits: chhelix
+	icon: chhelixnapalmicon
+
+chhelix.nuke:
+	Inherits: chhelix
+	icon: chhelixnukeicon
+
+chhelix.torpedo:
+	Inherits: chhelix
+	icon: chhelixtorpedoicon
 
 chminv:
 	idle:
@@ -657,3 +803,17 @@ ra1syrd:
 	dead:
 		Start: 1
 	icon: ra1syrdicon
+
+
+usabomber:
+	Inherits: ^VehicleOverlays
+	idle:
+		Facings: 32
+	stealth: usastealth
+		Facings: 32
+
+usabomberbomb:
+	idle:
+		Facings: 4
+usaleaflet:
+	idle:

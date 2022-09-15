@@ -8,9 +8,11 @@
  * information, see COPYING.
  */
 #endregion
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.Common;
+using OpenRA.Mods.Common.Orders;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Primitives;
 using OpenRA.Traits;
@@ -40,14 +42,17 @@ namespace OpenRA.Mods.CA.Traits.UnitConverter
 			"The filename of the audio is defined per faction in notifications.yaml.")]
 		public readonly string BlockedAudio = null;
 
-		[Desc("Ticks between producing actors.")]
-		public readonly int ProductionInterval = 100;
+		[Desc("Ticks between producing actors. Use zero to calculate based on cost.")]
+		public readonly int BuildTime = 0;
+
+		[Desc("Percentage of conversion cost to use as duration in ticks to convert (if actor has none defined in Buildable).")]
+		public readonly int DefaultBuildDurationModifier = 60;
 
 		[Desc("Whether the player has to pay any difference in cost between the unit being converted and the unit it converts into.")]
 		public readonly bool CostDifferenceRequired = false;
 
-		[Desc("Whether to eject a unit that can't be converted due to insufficient funds.")]
-		public readonly bool EjectOnInsufficientFunds = false;
+		[Desc("Whether to eject all units on deploy command.")]
+		public readonly bool EjectOnDeploy = false;
 
 		[Desc("Whether to show a progress bar.")]
 		public readonly bool ShowSelectionBar = true;
@@ -55,21 +60,26 @@ namespace OpenRA.Mods.CA.Traits.UnitConverter
 		[Desc("Color of the progress bar.")]
 		public readonly Color SelectionBarColor = Color.Red;
 
+		[GrantedConditionReference]
+		[Desc("Converting condition.")]
+		public readonly string ConvertingCondition = null;
+
 		public override object Create(ActorInitializer init) { return new UnitConverter(init, this); }
 	}
 
-	public class UnitConverter : ConditionalTrait<UnitConverterInfo>, ITick, INotifyOwnerChanged, INotifyKilled, INotifySold, ISelectionBar
+	public class UnitConverter : ConditionalTrait<UnitConverterInfo>, ITick, INotifyOwnerChanged, INotifyKilled, INotifySold, ISelectionBar, IIssueOrder, IResolveOrder
 	{
+		const string OrderID = "EjectUnitConverter";
 		readonly UnitConverterInfo info;
-		int produceIntervalTicks;
 		Queue<UnitConverterQueueItem> queue;
 		protected PlayerResources playerResources;
+		int conditionToken = Actor.InvalidConditionToken;
+		bool eject = false;
 
 		public UnitConverter(ActorInitializer init, UnitConverterInfo info)
 			: base(info)
 		{
 			this.info = info;
-			produceIntervalTicks = Info.ProductionInterval;
 			queue = new Queue<UnitConverterQueueItem>();
 		}
 
@@ -82,26 +92,24 @@ namespace OpenRA.Mods.CA.Traits.UnitConverter
 		public void Enter(Actor converting, Actor self)
 		{
 			var player = self.World.LocalPlayer ?? self.World.RenderPlayer;
-			if (converting.Owner == player && player != null)
-			{
+			if (Info.Voice != null && converting.Owner == player && player != null)
 				converting.PlayVoice(Info.Voice);
-			}
 
 			var sa = converting.Trait<Convertible>();
 			var spawnActors = sa.Info.SpawnActors;
 
 			var sp = self.TraitsImplementing<Production>()
-			.FirstOrDefault(p => !p.IsTraitDisabled && !p.IsTraitPaused);
+				.FirstOrDefault(p => !p.IsTraitDisabled && !p.IsTraitPaused);
 
 			if (sp != null && !IsTraitDisabled)
 			{
 				foreach (var name in spawnActors)
 				{
 					var inits = new TypeDictionary
-						{
-							new OwnerInit(self.Owner),
-							new FactionInit(sp.Faction)
-						};
+					{
+						new OwnerInit(self.Owner),
+						new FactionInit(sp.Faction)
+					};
 
 					var queueItem = new UnitConverterQueueItem();
 					queueItem.Producer = sp;
@@ -111,7 +119,16 @@ namespace OpenRA.Mods.CA.Traits.UnitConverter
 					queueItem.ProductionType = info.Type;
 					queueItem.Inits = inits;
 					queueItem.ConversionCost = GetConversionCost(converting.Info, queueItem.OutputActor);
+					queueItem.ConversionCostRemaining = queueItem.ConversionCost;
+
+					var buildable = queueItem.OutputActor.TraitInfoOrDefault<BuildableInfo>();
+					queueItem.BuildDurationModifier = buildable != null ? buildable.BuildDurationModifier : Info.DefaultBuildDurationModifier;
+
+					queueItem.BuildDuration = Info.BuildTime > 0 ? Info.BuildTime : Util.ApplyPercentageModifiers(queueItem.ConversionCost, new int[] { queueItem.BuildDurationModifier });
+					queueItem.BuildDurationRemaining = queueItem.BuildDuration;
+
 					queue.Enqueue(queueItem);
+					GrantCondition(self);
 				}
 			}
 		}
@@ -121,33 +138,42 @@ namespace OpenRA.Mods.CA.Traits.UnitConverter
 			if (IsTraitDisabled || !queue.Any())
 				return;
 
-			if (produceIntervalTicks > 0)
-			{
-				produceIntervalTicks--;
-				return;
-			}
-
-			produceIntervalTicks = Info.ProductionInterval;
 			var nextItem = queue.Peek();
-			var outputActor = nextItem.OutputActor;
+			var outputActor = eject ? nextItem.InputActor : nextItem.OutputActor;
 			var exitSound = info.ReadyAudio;
 
-			if (playerResources.Cash < nextItem.ConversionCost)
+			if (!eject)
 			{
-				if (!Info.EjectOnInsufficientFunds)
+				var expectedRemainingCost = nextItem.BuildDurationRemaining == 1 ? 0 : nextItem.ConversionCost * nextItem.BuildDurationRemaining / Math.Max(1, nextItem.BuildDuration);
+				var costThisFrame = nextItem.ConversionCostRemaining - expectedRemainingCost;
+
+				if (costThisFrame != 0 && !playerResources.TakeCash(costThisFrame, true))
 					return;
 
-				outputActor = nextItem.InputActor;
-				exitSound = info.NoCashAudio;
+				nextItem.ConversionCostRemaining -= costThisFrame;
+				nextItem.BuildDurationRemaining -= 1;
+				if (nextItem.BuildDurationRemaining > 0)
+					return;
+			}
+			else
+			{
+				playerResources.GiveCash(nextItem.ConversionCost - nextItem.ConversionCostRemaining);
 			}
 
 			if (nextItem.Producer.Produce(nextItem.Actor, outputActor, nextItem.ProductionType, nextItem.Inits, 0))
 			{
-				playerResources.TakeCash(nextItem.ConversionCost);
-				Game.Sound.PlayNotification(self.World.Map.Rules, self.Owner, "Speech", exitSound, self.Owner.Faction.InternalName);
+				if (!eject)
+					Game.Sound.PlayNotification(self.World.Map.Rules, self.Owner, "Speech", exitSound, self.Owner.Faction.InternalName);
+
 				queue.Dequeue();
+
+				if (!queue.Any())
+				{
+					eject = false;
+					RevokeCondition(self);
+				}
 			}
-			else
+			else if (!eject)
 			{
 				Game.Sound.PlayNotification(self.World.Map.Rules, self.Owner, "Speech", Info.BlockedAudio, self.Owner.Faction.InternalName);
 			}
@@ -155,17 +181,19 @@ namespace OpenRA.Mods.CA.Traits.UnitConverter
 
 		void INotifyOwnerChanged.OnOwnerChanged(Actor self, Player oldOwner, Player newOwner)
 		{
-			ClearQueue();
+			ClearQueue(self);
 			playerResources = newOwner.PlayerActor.Trait<PlayerResources>();
 		}
 
-		void INotifyKilled.Killed(Actor self, AttackInfo e) { ClearQueue(); }
-		void INotifySold.Selling(Actor self) { ClearQueue(); }
+		void INotifyKilled.Killed(Actor self, AttackInfo e) { ClearQueue(self); }
+		void INotifySold.Selling(Actor self) { ClearQueue(self); }
 		void INotifySold.Sold(Actor self) { }
 
-		protected void ClearQueue()
+		protected void ClearQueue(Actor self)
 		{
 			queue.Clear();
+			eject = false;
+			RevokeCondition(self);
 		}
 
 		public virtual int GetConversionCost(ActorInfo inputUnit, ActorInfo outputUnit)
@@ -193,15 +221,57 @@ namespace OpenRA.Mods.CA.Traits.UnitConverter
 			return valued.Cost;
 		}
 
+		void GrantCondition(Actor self)
+		{
+			if (string.IsNullOrEmpty(Info.ConvertingCondition) || conditionToken != Actor.InvalidConditionToken)
+				return;
+
+			conditionToken = self.GrantCondition(Info.ConvertingCondition);
+		}
+
+		void RevokeCondition(Actor self)
+		{
+			if (conditionToken == Actor.InvalidConditionToken)
+				return;
+
+			conditionToken = self.RevokeCondition(conditionToken);
+		}
+
+		IEnumerable<IOrderTargeter> IIssueOrder.Orders
+		{
+			get
+			{
+				if (IsTraitDisabled || !Info.EjectOnDeploy || !queue.Any())
+					yield break;
+
+				yield return new DeployOrderTargeter(OrderID, 1);
+			}
+		}
+
+		Order IIssueOrder.IssueOrder(Actor self, IOrderTargeter order, in Target target, bool queued)
+		{
+			if (order.OrderID == OrderID)
+				return new Order(order.OrderID, self, false);
+
+			return null;
+		}
+
+		void IResolveOrder.ResolveOrder(Actor self, Order order)
+		{
+			if (order.OrderString != OrderID)
+				return;
+
+			eject = true;
+		}
+
 		float ISelectionBar.GetValue()
 		{
 			if (!Info.ShowSelectionBar || !queue.Any())
 				return 0;
-			var maxTicks = Info.ProductionInterval;
-			if (produceIntervalTicks == maxTicks)
-				return 0;
 
-			return (float)(maxTicks - produceIntervalTicks) / maxTicks;
+			var nextItem = queue.Peek();
+			var buildDurationElapsed = nextItem.BuildDuration - nextItem.BuildDurationRemaining;
+			return (float)buildDurationElapsed / nextItem.BuildDuration;
 		}
 
 		bool ISelectionBar.DisplayWhenEmpty { get { return false; } }
@@ -218,5 +288,9 @@ namespace OpenRA.Mods.CA.Traits.UnitConverter
 		public string ProductionType;
 		public TypeDictionary Inits;
 		public int ConversionCost;
+		public int ConversionCostRemaining;
+		public int BuildDurationModifier;
+		public int BuildDuration;
+		public int BuildDurationRemaining;
 	}
 }

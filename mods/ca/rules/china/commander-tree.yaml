@@ -1,0 +1,889 @@
+commander_tree.Speakertower.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Speaker Tower PDL Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 1
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~anypower, ~china
+		Description: Upgrades the Speaker Tower with a Point Defense Laser system.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Intercepts incoming projectiles.
+
+commander_tree.Battlemaster.Autoloader:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battlemaster Autoloader
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 501
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinainf, ~!commander_tree.battlemaster.nuclear_shells, ~!commander_tree.battlemaster.mass_production
+		Description: Upgrades the Battlemaster with an Autoloader, \nallowing it to shoot 3 projectiles before reloading.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Aircraft, Infantry
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.battlemaster
+
+commander_tree.Battlemaster.Nuclear_Shells:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battlemaster Nuclear Shells
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 501
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinaatom, ~!commander_tree.battlemaster.autoloader, ~!commander_tree.battlemaster.mass_production
+		Description: Upgrades the Battlemaster with nuclear shells, \ngiving it a lot of damage per shot.\nNuclear Tanks explode on destruction.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.battlemaster
+
+commander_tree.Battlemaster.Mass_Production:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battlemaster Mass Production
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 501
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinatnk, ~!commander_tree.battlemaster.autoloader, ~!commander_tree.battlemaster.nuclear_shells
+		Description: The Battlemaster is mass produced, lowering its cost and production time.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.battlemaster
+
+hack.cameo_filler.battlemaster.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 502
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinainf, ~!filler.battlemaster, disabled
+
+commander_tree.Battlemaster.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battlemaster Point Defense Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 502
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~!chinainf, ~filler.battlemaster, ~!commander_tree.battlemaster.reflector
+		Description: Upgrades the Battlemaster with a point defense laser.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Intercepts incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.battlemaster2
+
+commander_tree.Battlemaster.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Battlemaster Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 502
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~!chinainf, ~filler.battlemaster, ~!commander_tree.battlemaster.pdl
+		Description: Upgrades the Battlemaster with reflector armor.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Projectiles, Chemicals
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.battlemaster2
+
+hack.cameo_filler.battlemaster.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 503
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinainf, ~filler.battlemaster2, disabled
+
+
+commander_tree.Dragon_Tank.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Dragon Tank Point Defense Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 510
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~!commander_tree.dragon_tank.reflector
+		Description: Upgrades the Dragon Tank with a point defense laser.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Intercepts incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.dragon_tank
+
+commander_tree.Dragon_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Dragon Tank Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 510
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~!commander_tree.dragon_tank.pdl
+		Description: Upgrades the Dragon Tank with reflector armor.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Projectiles, Chemicals
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.dragon_tank
+
+hack.cameo_filler.dragon_tank.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 511
+		Prerequisites: prerequisite.has_points, ~vehicles.china, disabled
+
+hack.cameo_filler.dragon_tank.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 511
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~filler.dragon_tank, disabled
+
+
+commander_tree.Overlord.Gatling:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Overlord Gatling Turret
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 520
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinatnk, ~!commander_tree.overlord.bunker, ~!commander_tree.overlord.propaganda, ~!commander_tree.overlord.nuclear_shells, ~!commander_tree.overlord.plasma
+		Description: Upgrades the Overlord with a Gatling Turret.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Vehicles, Air
+		Weaknesses: • Weak vs Anti-Tank Weapons
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.overlord
+
+commander_tree.Overlord.Bunker:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Overlord Bunker
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 520
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinaatom, ~!commander_tree.overlord.gatling, ~!commander_tree.overlord.propaganda, ~!commander_tree.overlord.nuclear_shells, ~!commander_tree.overlord.plasma
+		Description: Upgrades the Overlord with a Bunker.\nThe Bunker is filled with Tank-Hunter Infantry, that shoots from the Bunker.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Vehicles, Air
+		Weaknesses: • Weak vs Anti-Tank Weapons
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.overlord
+
+commander_tree.Overlord.Propaganda:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Overlord Propaganda Speaker
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 520
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinatnk, ~!commander_tree.overlord.gatling, ~!commander_tree.overlord.bunker, ~!commander_tree.overlord.nuclear_shells, ~!commander_tree.overlord.plasma
+		Description: Upgrades the Overlord with a Propaganda speaker.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Anti-Tank Weapons
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.overlord
+
+commander_tree.Overlord.Nuclear_Shells:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Overlord Nuclear Shells
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 520
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinaatom, ~!commander_tree.overlord.gatling, ~!commander_tree.overlord.bunker, ~!commander_tree.overlord.propaganda, ~!commander_tree.overlord.plasma
+		Description: Upgrades the Overlord with Nuclear Shells. Insane damage.\nNuclear Tanks explode on destruction.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Vehicles, Buildings
+		Weaknesses: • Weak vs Point Defense Laser
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.overlord
+
+commander_tree.Overlord.Plasma:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Overlord Plasma Beam
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 520
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinainf, ~!commander_tree.overlord.gatling, ~!commander_tree.overlord.bunker, ~!commander_tree.overlord.propaganda, ~!commander_tree.overlord.nuclear_shells
+		Description: Upgrades the Overlord with a Plasma Beam.
+	TooltipExtras:
+		Strengths: • Strong vs Point Defense Laser
+		Weaknesses: • Weak vs Reflector Armor
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.overlord
+
+commander_tree.Overlord.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Overlord Point Defense Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 521
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~filler.overlord, ~!commander_tree.overlord.reflector
+		Description: Upgrades the Overlord with a Point Defense Laser System.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.overlord2
+
+commander_tree.Overlord.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Overlord Point Defense Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 521
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~filler.overlord, ~!commander_tree.overlord.pdl
+		Description: Upgrades the Overlord with Reflector armor.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Projectiles
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.overlord2
+
+hack.cameo_filler.overlord.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 522
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinainf, ~filler.overlord2, disabled
+
+
+commander_tree.Nuke_Cannon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Cannon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 530
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinatnk
+		Description: Unlocks the Nuke Cannon.
+	TooltipExtras:
+		Strengths: • Strong vs any ground target
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+
+hack.cameo_filler.Nuke_Cannon.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 531
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinatnk, ~!commander_tree.nuke_cannon, disabled
+
+hack.cameo_filler.Nuke_Cannon.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 531
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinatnk, ~!commander_tree.nuke_cannon, disabled
+
+commander_tree.Nuke_Cannon.Range:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Cannon Range Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 532
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinatnk, ~commander_tree.nuke_cannon, ~!commander_tree.nuke_cannon.neutron
+		Description: Increases the range of the Nuke Cannon.
+	TooltipExtras:
+		Strengths: • Strong vs any ground target
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.nuke_cannon
+
+commander_tree.Nuke_Cannon.Neutron:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Cannon Range Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 532
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinaatom, ~commander_tree.nuke_cannon, ~!commander_tree.nuke_cannon.range
+		Description: Nuke Cannon's warhead is upgraded to a Neutron Bomb. \nThis deals damage to drivers and infantry.
+	TooltipExtras:
+		Strengths: • Strong vs Drivers, Infantry
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.nuke_cannon
+
+hack.cameo_filler.Nuke_Cannon.3:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 533
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~!chinatnk, ~filler.nuke_cannon, disabled
+
+hack.cameo_filler.Nuke_Cannon.4:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 533
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~commander_tree.nuke_cannon, disabled
+
+
+commander_tree.Crawler.Assault:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Assault Crawler
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 535
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~!commander_tree.crawler.hunter
+		Description: Upgrades the Troop Crawler to Assault Crawler. \nInfantry can shoot from the Assault Crawler.\nComes filled with 5 Minigunners.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Aircraft
+		Weaknesses: • Weak vs Heavy Tanks
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.crawler
+
+commander_tree.Crawler.Hunter:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Hunter Crawler
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 535
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~!commander_tree.crawler.assault
+		Description: Upgrades the Troop Crawler to Hunter Crawler. \nInfantry can shoot from the Assault Crawler.\nComes filled with 5 Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft
+		Weaknesses: • Weak vs Infantry, Point Defense Laser
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.crawler
+
+hack.cameo_filler.Crawler.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 535
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~!filler.crawler, disabled
+
+commander_tree.Crawler.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Crawler Point Defense Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 536
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~chinainf, ~filler.crawler, ~!commander_tree.crawler.reflector
+		Description: Upgrades the Crawler with a Point Defense Laser System.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.crawler2
+
+commander_tree.Crawler.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Crawler Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 536
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~chinainf, ~filler.crawler, ~!commander_tree.crawler.pdl
+		Description: Upgrades the Crawler with Reflector Armor.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Projectiles
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.crawler2
+
+hack.cameo_filler.Crawler.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 536
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~filler.crawler2, disabled
+
+
+commander_tree.Outpost.Propaganda:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Propaganda Outpost
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 540
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~!commander_tree.outpost.bunker
+		Description: Upgrades the Listening Outpost with Propaganda Speakers.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Aircraft
+		Weaknesses: • Weak vs Anti-Vehicle
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.outpost
+
+commander_tree.Outpost.Bunker:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Attack Outpost
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 540
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~!commander_tree.outpost.propaganda
+		Description: Upgrades the Listening Outpost to Attack Outpost. \nInfantry can shoot from inside.\nComes filled with 5 Tank Hunter.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft
+		Weaknesses: • Weak vs Infantry, Point Defense Laser
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.outpost
+
+hack.cameo_filler.Outpost.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 541
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~!filler.outpost, disabled
+
+commander_tree.Outpost.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Outpost Point Defense Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 541
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~chinainf, ~filler.outpost, ~!commander_tree.outpost.reflector
+		Description: Upgrades the Outpost with a Point Defense Laser System.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.outpost2
+
+commander_tree.Outpost.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Outpost Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 541
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~chinainf, ~filler.outpost, ~!commander_tree.outpost.pdl
+		Description: Upgrades the Outpost with Reflector Armor.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Projectiles
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.outpost2
+
+hack.cameo_filler.Outpost.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 543
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinainf, ~filler.outpost2, disabled
+
+
+commander_tree.gatling.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: gatling Point Defense Laser
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 541
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~chinatnk, ~!commander_tree.gatling.reflector
+		Description: Upgrades the gatling with a Point Defense Laser System.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gatling2
+
+commander_tree.gatling.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: gatling Reflector Armor
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 541
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~chinatnk, ~!commander_tree.gatling.pdl
+		Description: Upgrades the gatling with Reflector Armor.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Projectiles
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gatling2
+
+hack.cameo_filler.gatling.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 543
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinatnk, disabled
+
+hack.cameo_filler.gatling.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 543
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~chinatnk, ~filler.gatling2, disabled
+
+
+commander_tree.ECM.Pulse:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: ECM Tank Pulse Mode
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 550
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~!chinatnk, ~!commander_tree.ecm.chain, ~!commander_tree.ecm.focus
+		Description: Upgrades the ECM Tank with Pulse Mode.\nIt will also deal damage to disabled tanks.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Infantry, Aircraft, Reflector Armor
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.ecm
+
+commander_tree.ECM.Focus:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: ECM Tank Focused Beam
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 550
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~!chinainf, ~!commander_tree.ecm.chain, ~!commander_tree.ecm.pulse
+		Description: Equips the ECM Tank with a focused Plasma Beam.\nIt deals high damage to Tanks.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Point Defense Laser
+		Weaknesses: • Weak vs Infantry, Aircraft, Reflector Armor
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.ecm
+
+commander_tree.ECM.Chain:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: ECM Tank Chained Beam
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 550
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.china, ~!chinaatom, ~!commander_tree.ecm.pulse, ~!commander_tree.ecm.focus
+		Description: Equips the ECM Tank with a modulated Plasma Beam.\nIt jumps to multiple targets.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Vehicles, Point Defense Laser
+		Weaknesses: • Weak vs Aircraft, Reflector Armor
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.ecm
+
+hack.cameo_filler.ECM.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 551
+		Prerequisites: prerequisite.has_points, ~vehicles.china, disabled
+
+hack.cameo_filler.ECM.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 551
+		Prerequisites: prerequisite.has_points, ~vehicles.china, ~filler.ecm, disabled
+
+
+commander_tree.Helix.gatling:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Helix gatling
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 560
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.china, ~!chinainf, ~!commander_tree.Helix.Bunker, ~!commander_tree.Helix.Nuke, ~!commander_tree.Helix.Napalm, ~!commander_tree.Helix.Torpedo
+		Description: Equips the Helix wih a gatling.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Aircraft
+		Weaknesses: • Weak vs Tanks
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.helix
+
+commander_tree.Helix.Bunker:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Helix Bunker
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 560
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.china, ~chinainf, ~!commander_tree.helix.gatling, ~!commander_tree.helix.nuke, ~!commander_tree.helix.napalm, ~!commander_tree.helix.torpedo
+		Description: Equips the Helix with a Bunker.\nInfantry can shoot from the Helix.\nComes filled with Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft
+		Weaknesses: • Weak vs Infantry
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.helix
+
+commander_tree.Helix.Napalm:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Helix Napalm Bombs
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 560
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.china, ~!chinaatom, ~!commander_tree.helix.gatling, ~!commander_tree.helix.bunker, ~!commander_tree.helix.nuke, ~!commander_tree.helix.torpedo
+		Description: Equips the Helix with Napalm Bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Buildings
+		Weaknesses: • Weak vs Heavy Tanks, Aircraft
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.helix
+
+commander_tree.Helix.Nuke:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Helix Nuclear Bomb
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 560
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.china, ~chinaatom, ~!commander_tree.helix.gatling, ~!commander_tree.helix.bunker, ~!commander_tree.helix.napalm, ~!commander_tree.helix.torpedo
+		Description: Equips the Helix with a Bunker.\nInfantry can shoot from the Helix.\nComes filled with Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Aircraft
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.helix
+
+commander_tree.Helix.Torpedo:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Helix Torpedo Bomb
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 560
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.china, ~!commander_tree.helix.gatling, ~!commander_tree.helix.bunker, ~!commander_tree.helix.nuke, ~!commander_tree.helix.napalm
+		Description: Equips the Helix with Torpedo Bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Aircraft, Vehicles, Infantry
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.helix
+
+hack.cameo_filler.Helix.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 561
+		Prerequisites: prerequisite.has_points, ~aircraft.china, ~filler.helix, disabled
+
+hack.cameo_filler.Helix.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 561
+		Prerequisites: prerequisite.has_points, ~aircraft.china, ~filler.helix, disabled
+
+
+commander_tree.ChinaMig.AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mig Anti-Air Missiles
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 570
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.china, ~!commander_tree.chinamig.nuke, ~!commander_tree.chinamig.napalm
+		Description: Equips the Mig with dedicated anti-air missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft
+		Weaknesses: • Weak vs Infantry, Vehicles
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.chinamig
+
+commander_tree.ChinaMig.Nuke:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mig Nuke Bomb
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 570
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.china, ~chinaatom, ~!commander_tree.chinamig.aa, ~!commander_tree.chinamig.napalm
+		Description: Equips the Mig with a nuclear bomb.
+	TooltipExtras:
+		Strengths: • Strong vs many ground units
+		Weaknesses: • Weak vs Aircraft
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.chinamig
+
+commander_tree.ChinaMig.Napalm:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mig Napalm Bombs
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 570
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.china, ~!chinaatom, ~!commander_tree.chinamig.aa, ~!commander_tree.chinamig.nuke
+		Description: Equips the Mig with napalm bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Aircraft
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.chinamig
+
+hack.cameo_filler.chmig.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 571
+		Prerequisites: prerequisite.has_points, ~aircraft.china, disabled
+
+hack.cameo_filler.chmig.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 571
+		Prerequisites: prerequisite.has_points, ~aircraft.china, ~filler.chinamig, disabled
+
+
+commander_tree.Black_Napalm:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Black Napalm
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 580
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, china, !chinaatom
+		Description: Increases the power of napalm weapons. \nNapalm weapons can create a firestorm on the ground.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Aircraft
+
+commander_tree.Nationalism:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nationalism
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 581
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, china
+		Description: Unlocks the Horde Bonus for Battlemaster and Infantry.\n This bonus increases the fire rate of units.\nThe bonus is activated when 10 units are close to each other.
+		Attributes: • Horde Bonus available
+
+commander_tree.Subliminal_Messages:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Subliminal Messages
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 582
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, china
+		Description: Increases the range of Propaganda Speakers.
+		Attributes: • Propaganda Speakers have more range.
+
+commander_tree.Fortified_Bunker:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Fortified Bunker
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 583
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~chinainf
+		Description: The bunker is fortified and can soak up more damage.
+		Attributes: • Bunkers are replaced by fortified Bunkers.
+
+commander_tree.Uranium_Shells:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Uranium Shells
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 584
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~chinatnk
+		Description: Tanks shoot Uranium Shells, dealing more damage.
+		Attributes: • Firepower of tank shells is increased.
+
+commander_tree.Nuclear_Tanks:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuclear Tanks
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 585
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~chinaatom
+		Description: Tanks have a nuclear engine, increasing their movement speed.\nNuclear Tanks explode on destruction.
+		Attributes: • Tanks are faster.
+
+commander_tree.Isotope_Stability:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Isotope Stability
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 586
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~chinaatom
+		Description: Tanks with nuclear ammo or nuclear engines no longer explode on destruction.\nDamage dealt to close units is prevented.
+		Attributes: • Nuclear Tanks no longer explode on destruction.

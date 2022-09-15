@@ -22,7 +22,11 @@ PointActorExists =
 	Multi8 = false,
 	Multi9 = false,
 	Multi10 = false,
-	Multi11 = false
+	Multi11 = false,
+  Multi12 = false,
+  Multi13 = false,
+  Multi14 = false,
+  Multi15 = false,
 }
 
 Points =
@@ -38,7 +42,11 @@ Points =
 	Multi8 = PointsPerRank[1],
 	Multi9 = PointsPerRank[1],
 	Multi10 = PointsPerRank[1],
-	Multi11 = PointsPerRank[1]
+	Multi11 = PointsPerRank[1],
+  Multi12 = PointsPerRank[1],
+  Multi13 = PointsPerRank[1],
+  Multi14 = PointsPerRank[1],
+  Multi15 = PointsPerRank[1]
 }
 
 HasPointsActors =
@@ -54,7 +62,11 @@ HasPointsActors =
 	Multi8 = nil,
 	Multi9 = nil,
 	Multi10 = nil,
-	Multi11 = nil
+	Multi11 = nil,
+  Multi12 = nil,
+  Multi13 = nil,
+  Multi14 = nil,
+  Multi15 = nil
 }
 
 Levels =
@@ -70,7 +82,11 @@ Levels =
 	Multi8 = 0,
 	Multi9 = 0,
 	Multi10 = 0,
-	Multi11 = 0
+	Multi11 = 0,
+  Multi12 = 0,
+  Multi13 = 0,
+  Multi14 = 0,
+  Multi15 = 0
 }
 
 Ranks = { "1 Star General", "2 Stars General", "3 Stars General", "4 Stars General", "5 Stars General" }
@@ -152,8 +168,12 @@ WorldLoadedCommanderTree = function()
 	mp9 = Player.GetPlayer("Multi9")
 	mp10 = Player.GetPlayer("Multi10")
 	mp11 = Player.GetPlayer("Multi11")
+  mp12 = Player.GetPlayer("Multi12")
+  mp13 = Player.GetPlayer("Multi13")
+  mp14 = Player.GetPlayer("Multi14")
+  mp15 = Player.GetPlayer("Multi15")
 
-	players = { mp0, mp1, mp2, mp3, mp4, mp5, mp6, mp7, mp8, mp9, mp10, mp11 }
+	players = { mp0, mp1, mp2, mp3, mp4, mp5, mp6, mp7, mp8, mp9, mp10, mp11, mp12, mp13, mp14, mp15 }
 
 	for _,player in pairs(players) do
 		ReducePoints(player)

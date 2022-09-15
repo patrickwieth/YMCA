@@ -1,0 +1,642 @@
+CHMIG:
+	Inherits: ^PlaneTD
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@announce: ^AnnounceOnBuild
+	Inherits@rearm: ^AircraftWithAmmo
+	Buildable:
+		Queue: Aircraft
+		BuildPaletteOrder: 50
+		Prerequisites: ~aircraft.china, techcenter, ~!filler.chinamig
+		Description: Bomber armed with guided air-to-surface missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can not attack Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: MiG
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 16000
+	RevealsShroud:
+		Range: 13c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 11c0
+		Type: GroundPosition
+	Armament:
+		Weapon: Maverick
+		LocalOffset: 0,-640,-50, 0,640,-50
+		LocalYaw: -40, 24
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 20
+		PersistentTargeting: false
+		Voice: Attack
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 16
+		Speed: 215
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeoffSounds: migtoff1.aud
+	AutoTarget:
+	AmmoPool:
+		Ammo: 8
+	Selectable:
+		Bounds: 36,28,0,2
+		DecorationBounds: 40,29,0,1
+	SelectionDecorations:
+	Contrail@1:
+		Offset: -598,-683,0
+	Contrail@2:
+		Offset: -598,683,0
+	SpawnActorOnDeath:
+		Actor: chmig.husk
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,171
+		Interval: 2
+	ProducibleWithLevel:
+		Prerequisites: aircraft.upgraded
+	Voiced:
+		VoiceSet: CHMiGVoice
+
+CHMIG.AA:
+	Inherits: CHMIG
+	Inherits@AUTOTARGET: ^AutoTargetAir
+	Buildable:
+		Queue: Aircraft
+		BuildPaletteOrder: 50
+		Prerequisites: ~aircraft.china, techcenter, ~commander_tree.chinamig.aa
+		Description: Fighter armed with guided air-to-air missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft
+		Weaknesses: • Weak vs Ground Anti-Air
+		Attributes: • Can only attack Aircraft
+	Valued:
+		Cost: 1800
+	Aircraft:
+		Speed: 225
+	Tooltip:
+		Name: MiG Fighter
+	Armament:
+		Weapon: WidowAA.Mig
+
+CHMIG.Napalm:
+	Inherits: CHMIG
+	Buildable:
+		Prerequisites: ~aircraft.china, techcenter, ~commander_tree.chinamig.napalm
+		Description: Napalm bomber.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can not attack Aircraft
+	Valued:
+		Cost: 2200
+	Tooltip:
+		Name: MiG Napalm Bomber
+	Aircraft:
+		Speed: 205
+	AttackAircraft:
+		FacingTolerance: 80
+		AttackType: Strafe
+	AmmoPool:
+		Ammo: 24
+	WithAmmoPipsDecoration:
+		PipCount: 4
+	Armament:
+		Weapon: NapalmThrow
+		RequiresCondition: !blacknapalm
+	Armament@upgraded:
+		Weapon: NapalmThrow.Black
+		RequiresCondition: blacknapalm
+		LocalOffset: 0,-640,-50, 0,640,-50
+		LocalYaw: -40, 24
+		PauseOnCondition: !ammo
+	GrantConditionOnPrerequisite@blacknapalm:
+		Condition: blacknapalm
+		Prerequisites: commander_tree.black_napalm
+
+CHMIG.Nuke:
+	Inherits: CHMIG
+	Buildable:
+		Prerequisites: ~aircraft.china, techcenter, ~commander_tree.chinamig.nuke
+		Description: Nuclear bomber aircraft.
+	TooltipExtras:
+		Strengths: • Strong vs Ground
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can not attack Aircraft
+	Valued:
+		Cost: 2800
+	Tooltip:
+		Name: MiG Tactical Nuclear Bomber
+	Aircraft:
+		Speed: 205
+	AmmoPool:
+		Ammo: 1
+	Armament:
+		Weapon: AtomBomb.Paradrop
+
+chmig.husk:
+	Inherits: ^PlaneHusk
+	Tooltip:
+		Name: MiG
+	Contrail@1:
+		Offset: -598,-683,0
+	Contrail@2:
+		Offset: -598,683,0
+	Aircraft:
+		TurnSpeed: 4
+		Speed: 223
+	SmokeTrailWhenDamaged:
+		Offset: -853,0,171
+		Interval: 2
+		MinDamage: Undamaged
+	RevealsShroud:
+		Range: 13c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 11c0
+		Type: GroundPosition
+	RenderSprites:
+		Image: chmig
+		PlayerPalette: overlayplayertd
+
+chhelix:
+	Inherits: ^HelicopterTD
+	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@announce: ^AnnounceOnBuild
+	#Inherits@heliarmorupgrade: ^HeliArmorUpgrade
+	Buildable:
+		BuildPaletteOrder: 20
+		Prerequisites: ~aircraft.china, radar, ~!filler.helix
+		Queue: Aircraft
+		Description: Helicopter gunship upgradeable with addons.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can not attack Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Helix
+		RequiresCondition: !speakeraddon && !reconaddon && !armoraddon
+	Tooltip@2:
+		Name: Helix (Speaker)
+		RequiresCondition: speakeraddon
+	Tooltip@3:
+		Name: Helix (Recon)
+		RequiresCondition: reconaddon
+	Tooltip@4:
+		Name: Helix (Armor)
+		RequiresCondition: armoraddon
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 30000
+	RevealsShroud:
+		Range: 8c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		Type: GroundPosition
+	Armament@PRIMARY:
+		Weapon: CHHelixMG
+		LocalOffset: 85,-213,-85, 85,213,-85
+		MuzzleSequence: muzzle
+	AttackAircraft:
+		FacingTolerance: 20
+		PersistentTargeting: false
+		AttackType: Hover
+		Voice: Attack
+	Aircraft:
+		TurnSpeed: 4
+		Speed: 112
+	AutoTarget:
+	WithIdleOverlay@ROTORAIR:
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTORGROUND:
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	Cargo:
+		Types: Infantry, Hacker, Vehicle
+		MaxWeight: 5
+		PipCount: 5
+		AfterLoadDelay: 0
+		BeforeUnloadDelay: 0
+		AfterUnloadDelay: 0
+		LoadedCondition: loaded
+	SelectionDecorations:
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: chhelix.husk
+	SmokeTrailWhenDamaged:
+		Offset: -427,0,0
+	ProducibleWithLevel:
+		Prerequisites: aircraft.upgraded
+	Selectable:
+		DecorationBounds: 38,32
+	Voiced:
+		VoiceSet: CHHelixVoice
+	Production:
+		Produces: Helix.CHINA
+		RequiresCondition: !armoraddon && !reconaddon && !speakeraddon
+	ProductionQueue:
+		Type: Helix.CHINA
+		Group: Unit
+		QueueLimit: 1
+		ItemLimit: 1
+		DisplayOrder: 0
+	GrantConditionOnProduction@armor:
+		Condition: armoraddon
+		Actors: helix.armorupgrade
+	DamageMultiplier@uparmor:
+		RequiresCondition: armoraddon
+		Modifier: 50
+	GrantConditionOnProduction@recon:
+		Condition: reconaddon
+		Actors: helix.reconupgrade
+	RevealsShroudMultiplier
+		RequiresCondition: reconaddon
+		Modifier: 150
+	DetectCloaked@Uncloak:
+		Range: 8c0
+		CloakTypes: Cloak, Thief, Stealth, Underwater
+		RequiresCondition: reconaddon && !(empdisable || being-warped)
+	RenderDetectionCircle:
+		TrailCount: 8
+		RequiresCondition: reconaddon && !(empdisable || being-warped)
+	GrantConditionOnProduction@speaker:
+		Condition: speakeraddon
+		Actors: helix.speakerupgrade
+	ProximityExternalCondition@PROPAGANDA:
+		Range: 6c0
+		Condition: propaganda
+		RequiresCondition: speakeraddon && !subliminal && !disabled
+	GrantConditionOnPrerequisite@SUBLIMINALPROPAGANDA:
+		Prerequisites: commander_tree.subliminal_messages
+		Condition: subliminal
+	ProximityExternalCondition@SUBLIMINALPROPAGANDA:
+		Range: 9c0
+		Condition: propaganda
+		RequiresCondition: speakeraddon && subliminal && !disabled
+
+chhelix.Gatling:
+	Inherits: chhelix
+	Inherits: ^ChinaGatling
+	Buildable:
+		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.gatling
+		Description: Helicopter gatling gunship upgradeable with addons.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles, Aircraft
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can attack Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Gatling Helix
+		RequiresCondition: !speakeraddon && !reconaddon && !armoraddon
+	Tooltip@2:
+		Name: Gatling Helix (Speaker)
+		RequiresCondition: speakeraddon
+	Tooltip@3:
+		Name: Gatling Helix (Recon)
+		RequiresCondition: reconaddon
+	Tooltip@4:
+		Name: Gatling Helix (Armor)
+		RequiresCondition: armoraddon
+	-AttackAircraft:
+	Turreted@PRIMARY:
+		TurnSpeed: 90
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+
+chhelix.Napalm:
+	Inherits: chhelix
+	Inherits@rearm: ^AircraftWithAmmo
+	Buildable:
+		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.napalm
+		Description: Helicopter throwing napalm, upgradeable with addons.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can not attack Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Napalm Helix
+		RequiresCondition: !speakeraddon && !reconaddon && !armoraddon
+	Tooltip@2:
+		Name: Napalm Helix (Speaker)
+		RequiresCondition: speakeraddon
+	Tooltip@3:
+		Name: Napalm Helix (Recon)
+		RequiresCondition: reconaddon
+	Tooltip@4:
+		Name: Napalm Helix (Armor)
+		RequiresCondition: armoraddon
+	AttackAircraft:
+		FacingTolerance: 80
+		Voice: Attack
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Armament@PRIMARY:
+		Weapon: NapalmThrow
+		LocalOffset: 85,-213,-85, 85,213,-85
+		PauseOnCondition: !ammo
+		RequiresCondition: !blacknapalm
+	Armament@upgraded:
+		Weapon: NapalmThrow.Black
+		LocalOffset: 85,-213,-85, 85,213,-85
+		PauseOnCondition: !ammo
+		RequiresCondition: blacknapalm
+	GrantConditionOnPrerequisite@blacknapalm:
+		Condition: blacknapalm
+		Prerequisites: commander_tree.black_napalm
+	AmmoPool:
+		Ammo: 8
+	WithAmmoPipsDecoration:
+		PipCount: 4
+
+chhelix.Nuke:
+	Inherits: chhelix
+	Inherits@rearm: ^AircraftWithAmmo
+	Buildable:
+		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.nuke
+		Description: Helicopter napalm bomber upgradeable with addons.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can not attack Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Nuke Helix
+		RequiresCondition: !speakeraddon && !reconaddon && !armoraddon
+	Tooltip@2:
+		Name: Nuke Helix (Speaker)
+		RequiresCondition: speakeraddon
+	Tooltip@3:
+		Name: Nuke Helix (Recon)
+		RequiresCondition: reconaddon
+	Tooltip@4:
+		Name: Nuke Helix (Armor)
+		RequiresCondition: armoraddon
+	AttackAircraft:
+		FacingTolerance: 80
+		AttackType: Strafe
+		Voice: Attack
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Armament@PRIMARY:
+		Weapon: AtomBomb.Paradrop
+		LocalOffset: 85,-213,-85, 85,213,-85
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 1
+
+chhelix.Bunker:
+	Inherits: chhelix
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@CARGO: ^AttackingCargo
+	Buildable:
+		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.bunker
+		Description: Helicopter napalm bomber upgradeable with addons.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can not attack Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Bunker Helix
+		RequiresCondition: !speakeraddon && !reconaddon && !armoraddon
+	Tooltip@2:
+		Name: Bunker Helix (Speaker)
+		RequiresCondition: speakeraddon
+	Tooltip@3:
+		Name: Bunker Helix (Recon)
+		RequiresCondition: reconaddon
+	Tooltip@4:
+		Name: Bunker Helix (Armor)
+		RequiresCondition: armoraddon
+	-AttackAircraft:
+	Cargo:
+		InitialUnits: che3, che3, che3, che3
+	AutoTarget:
+		InitialStance: Defend
+		InitialStanceAI: Defend
+		RequiresCondition: loaded || loaded-air
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: (stance-attackanything || assault-move) && !loaded-air
+	AutoTargetPriority@DEFAULT_AIR:
+		RequiresCondition: !stance-attackanything && !assault-move && loaded-air
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+		InvalidTargets: NoAutoTarget, WaterStructure
+	AutoTargetPriority@ATTACKANYTHING_AIR:
+		RequiresCondition: (stance-attackanything || assault-move) && loaded-air
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		InvalidTargets: NoAutoTarget
+
+chhelix.Torpedo:
+	Inherits: chhelix
+	Inherits@rearm: ^AircraftWithAmmo
+	Buildable:
+		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.torpedo
+		Description: Helicopter napalm bomber upgradeable with addons.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can not attack Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Torpedo Helix
+		RequiresCondition: !speakeraddon && !reconaddon && !armoraddon
+	Tooltip@2:
+		Name: Torpedo Helix (Speaker)
+		RequiresCondition: speakeraddon
+	Tooltip@3:
+		Name: Torpedo Helix (Recon)
+		RequiresCondition: reconaddon
+	Tooltip@4:
+		Name: Torpedo Helix (Armor)
+		RequiresCondition: armoraddon
+	AttackAircraft:
+		FacingTolerance: 80
+		Voice: Attack
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Armament@PRIMARY:
+		Weapon: TorpBomb
+		LocalOffset: 85,-213,-85, 85,213,-85
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 8
+
+helix.armorupgrade:
+	Tooltip:
+		Name: Armor Upgrade
+	Buildable:
+		BuildPaletteOrder: 10
+		Icon: armoricon
+		IconPalette: chrometd
+		Queue: Helix.CHINA
+		Description: Upgrades the armor significantly.
+	Valued:
+		Cost: 500
+	RenderSprites:
+		Image: chhelix
+	Interactable:
+	AlwaysVisible:
+	KillsSelf:
+		RemoveInstead: true
+
+helix.reconupgrade:
+	Tooltip:
+		Name: Sensor Upgrade
+	Buildable:
+		BuildPaletteOrder: 10
+		Queue: Helix.CHINA
+		Icon: reconicon
+		IconPalette: chrometd
+		Description: Installs advanced sensors to increase visual range and spot hidden units.
+	Valued:
+		Cost: 500
+	RenderSprites:
+		Image: chhelix
+	Interactable:
+	AlwaysVisible:
+	KillsSelf:
+		RemoveInstead: true
+
+helix.speakerupgrade:
+	Tooltip:
+		Name: Propaganda Speaker
+	Buildable:
+		BuildPaletteOrder: 10
+		Icon: speakericon
+		IconPalette: chrometd
+		Queue: Helix.CHINA
+		Description: Buffs nearby friendly infantry with propaganda.
+	Valued:
+		Cost: 1000
+	RenderSprites:
+		Image: chhelix
+	Interactable:
+	AlwaysVisible:
+	KillsSelf:
+		RemoveInstead: true
+
+chhelix.husk:
+	Inherits: ^HelicopterHusk
+	Tooltip:
+		Name: Helix
+	Aircraft:
+		TurnSpeed: 4
+		Speed: 112
+	WithIdleOverlay:
+		Sequence: rotor
+	SmokeTrailWhenDamaged:
+		Offset: -427,0,0
+		MinDamage: Undamaged
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 8c0
+		Type: GroundPosition
+	RenderSprites:
+		Image: chhelix
+		PlayerPalette: overlayplayertd
+
+usabomber:
+	Inherits: BADR
+	Tooltip:
+		Name: Cargo Plane
+	SpawnActorOnDeath:
+		Actor: usabomber.husk
+	RenderSprites:
+		Image: usabomber
+		PlayerPalette: overlayplayertd
+
+usabomber.husk:
+	Inherits: ^PlaneHusk
+	Tooltip:
+		Name: Aircraft
+	Aircraft:
+		TurnSpeed: 5
+		Speed: 149
+	SmokeTrailWhenDamaged@0:
+		Offset: -432,560,0
+		Interval: 2
+		MinDamage: Undamaged
+	SmokeTrailWhenDamaged@1:
+		Offset: -432,-560,0
+		Interval: 2
+		MinDamage: Undamaged
+	RenderSprites:
+		Image: usabomber
+	-RevealOnDeath:
+
+usabomber.carpet:
+	Inherits: usabomber
+	AttackBomber:
+		PauseOnCondition: !ammo
+	Armament:
+		Weapon: CarpetBomb
+		LocalOffset: 300,300,340, 300,-300,340, -300,900,340, -300,-400,340, 300,0,340, -300,0,340
+		RequiresCondition: !selectchatomic
+	AmmoPool:
+		Ammo: 12
+	Tooltip:
+		Name: H-6 Bomber
+
+usabomber.nuke:
+	Inherits: usabomber
+	AttackBomber:
+		PauseOnCondition: !ammo
+	Armament@nuclear:
+		Weapon: AtomBomb
+		LocalOffset: 300,0,340
+	AmmoPool:
+		Ammo: 1
+	Tooltip:
+		Name: H-6 Bomber
+
+usabomber.emp:
+	Inherits: usabomber
+	AttackBomber:
+		PauseOnCondition: !ammo
+	Armament:
+		Weapon: CHEMPBomb
+	AmmoPool:
+		Ammo: 1
+	Tooltip:
+		Name: H-6 Bomber
+
+usabomber.minebomb:
+	Inherits: usabomber
+	AttackBomber:
+		PauseOnCondition: !ammo
+	Armament:
+		Weapon: ClusterMineSpawner
+	AmmoPool:
+		Ammo: 1
+	Tooltip:
+		Name: H-6 Bomber

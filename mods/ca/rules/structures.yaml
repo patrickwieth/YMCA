@@ -140,7 +140,6 @@ SPEN:
 		BuildPaletteOrder: 50
 		Prerequisites: anypower, ~structures.soviet
 		Description: Produces and repairs\nsubmarines and transports.
-		BuildDurationModifier: 25
 	Targetable:
 		TargetTypes: Ground, Water, Structure, WaterStructure, C4, DetonateAttack, SpyInfiltrate
 	Building:
@@ -262,7 +261,6 @@ SYRD:
 		BuildPaletteOrder: 40
 		Prerequisites: anypower, ~structures.allies, ~techlevel.low
 		Description: Produces and repairs\nships and transports.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -687,6 +685,7 @@ AGUN:
 
 DOME:
 	Inherits: ^Building
+	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
 	Selectable:
@@ -699,7 +698,6 @@ DOME:
 		BuildPaletteOrder: 90
 		Prerequisites: proc, ~structures.ra, ~techlevel.medium
 		Description: Provides an overview\nof the battlefield.\n  Requires power to operate.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 1800
 	Tooltip:
@@ -750,6 +748,25 @@ DOME:
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: rad.soviet.stolen
+	AirstrikePower@spyplane:
+		OrderName: spyplane
+		Prerequisites: structures.soviet
+		Icon: spyplane
+		ChargeInterval: 3750
+		Description: Spy Plane
+		LongDesc: Reveals an area of the map.
+		SelectTargetSpeechNotification: SelectTarget
+		EndChargeSpeechNotification: SpyPlaneReady
+		LaunchSound: spyplane.aud
+		CameraActor: camera.spyplane
+		CameraRemoveDelay: 150
+		UnitType: u2
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: camicon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
 	AirstrikePower@clustermines:
 		ChargeInterval: 6000
 		Prerequisites: structures.france, techlevel.superw
@@ -1078,6 +1095,7 @@ SAM:
 
 ATEK:
 	Inherits: ^ScienceBuilding
+	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^2x2Shape
 	Selectable:
@@ -1106,23 +1124,20 @@ ATEK:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	Power:
-		Amount: -200
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@buildingname:
-	ProvidesPrerequisite:
-		Prerequisite: techcenter
-	DummyGpsPower:
+	DummyGpsPower@NOFOG:
 		PauseOnCondition: disabled || being-warped
-		Icon: gps
-		OneShot: true
-		ChargeInterval: 4500
-		Description: Satellite Launch
-		LongDesc: Launches GPS Satellite.
-		RevealDelay: 375
+		RequiresCondition: !gps-launched && !fogenabled
+		Delay: 12000
+		AnimationDuration: 375
 		LaunchSpeechNotification: SatelliteLaunched
-		DisplayTimerRelationships: Ally
-		Condition: sat-launch
+		Condition: gps-launched
+	DummyGpsPower@FOG:
+		PauseOnCondition: disabled || being-warped
+		RequiresCondition: !gps-launched && fogenabled
+		Delay: 3000
+		AnimationDuration: 375
+		LaunchSpeechNotification: SatelliteLaunched
+		Condition: gps-launched
 	ProduceActorPowerCA@SatelliteLaunched:
 		Actors: gps.satellite
 		Type: SpySatellite
@@ -1130,29 +1145,47 @@ ATEK:
 		OneShot: true
 		OrderName: ProduceActorSat
 		AutoFire: True
-		RequiresCondition: sat-launch
+		RequiresCondition: gps-launched && fogenabled
 	SupportPowerChargeBar:
-	ProduceActorPowerCA@SatelliteScan:
-		PauseOnCondition: disabled || being-warped
-		Prerequisites: radar, ~gps.satellite, ~fogenabled
+	Power:
+		Amount: -200
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	ProvidesPrerequisite:
+		Prerequisite: techcenter
+	ProduceActorPowerCA@InitialSatelliteScan:
+		PauseOnCondition: disabled || empdisable || being-warped
+		Prerequisites: radar, ~!gps.satellite.firstscan, ~fogenabled
 		Description: Spy Satellite
-		LongDesc: Periodically reveals the entire map for a short time.\nActivated automatically.
+		LongDesc: \nPeriodically reveals the entire map\n    for a short time (activated automatically).
+		Icon: gps
+		Actors: camera.satscan, gps.satellite.firstscan
+		Type: SpySatellite
+		ChargeInterval: 3200
+		OrderName: InitialSatelliteScanPower
+		AutoFire: True
+		DisplayTimerRelationships: Ally
+	ProduceActorPowerCA@SatelliteScan:
+		PauseOnCondition: disabled || empdisable || being-warped
+		Prerequisites: radar, ~gps.satellite, ~gps.satellite.firstscan, ~fogenabled
+		Description: Spy Satellite
+		LongDesc: \nPeriodically reveals the entire map\n    for a short time (activated automatically).
 		Icon: gps
 		Actors: camera.satscan
 		Type: SpySatellite
-		ChargeInterval: 3000
+		ChargeInterval: 5250
 		OrderName: SatelliteScanPower
 		AutoFire: True
 		DisplayTimerRelationships: Ally, Neutral, Enemy
 	ProduceActorPowerCA@SatelliteScanNoFog:
-		PauseOnCondition: disabled || being-warped
-		Prerequisites: radar, ~gps.satellite, ~!fogenabled
+		PauseOnCondition: disabled || empdisable || being-warped
+		Prerequisites: radar, ~!fogenabled
 		Description: Spy Satellite
-		LongDesc: Permanently reveals the entire map.\nActivated automatically.
+		LongDesc: \nPermanently reveals the entire map (activated automatically).
 		Icon: gps
 		Actors: camera.satscan.oneshot
 		Type: SpySatellite
-		ChargeInterval: 3000
+		ChargeInterval: 12000
 		OneShot: True
 		OrderName: SatelliteScanNoFogPower
 		AutoFire: True
@@ -1160,7 +1193,20 @@ ATEK:
 	GrantConditionOnFogEnabled@FOGENABLED:
 		Condition: fogenabled
 	ExternalCondition@DUMMY:
-		Condition: sat-launch
+		Condition: gps-launched
+	GrantConditionOnPrerequisite@PREVGPS:
+		Condition: gps-launched
+		Prerequisites: gps.satellite
+	GrantConditionOnPrerequisite@PREVGPSSCAN:
+		Condition: gps-firstscan
+		Prerequisites: gps.satellite.firstscan
+	SpawnActorOnDeath@GPS:
+		Actor: gps.satellite.firstscan
+		SpawnAfterDefeat: false
+		RequiresCondition: gps-launched && !gps-firstscan && fogenabled
+	SpawnActorOnSell@GPS:
+		Actor: gps.satellite.firstscan
+		RequiresCondition: gps-launched && !gps-firstscan && fogenabled
 	ProvidesPrerequisite@FOGENABLED:
 		Prerequisite: fogenabled
 		RequiresCondition: fogenabled
@@ -1208,7 +1254,6 @@ WEAP:
 		BuildPaletteOrder: 80
 		Prerequisites: proc, ~structures.ra
 		Description: Produces vehicles.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -1501,7 +1546,6 @@ PROC:
 		BuildPaletteOrder: 60
 		Prerequisites: anypower, ~structures.ra, ~techlevel.infonly
 		Description: Processes raw Tiberium, Ore and Gems\ninto credits.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -1653,7 +1697,6 @@ HPAD:
 		BuildPaletteOrder: 120
 		Prerequisites: dome, ~structures.ra, ~techlevel.infonly
 		Description: Produces and reloads\nhelicopters.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -1708,9 +1751,6 @@ HPAD:
 	ProvidesPrerequisite@alliedstructure:
 		RequiresPrerequisites: structures.allies
 		Prerequisite: aircraft.allies
-	ProvidesPrerequisite@alliedvanillastructure:
-		RequiresPrerequisites: structures.alliesvanilla
-		Prerequisite: aircraft.alliesvanilla
 	ProvidesPrerequisite@englishstructure:
 		RequiresPrerequisites: structures.england
 		Prerequisite: aircraft.england
@@ -1723,9 +1763,15 @@ HPAD:
 	ProvidesPrerequisite@soviets:
 		Factions: soviet, russia, ukraine, iraq
 		Prerequisite: aircraft.soviet
-	ProvidesPrerequisite@russia:
-		Factions: russia
+	ProvidesPrerequisite@russianstructure:
+		RequiresPrerequisites: structures.russia
 		Prerequisite: aircraft.russia
+	ProvidesPrerequisite@ukrainianstructure:
+		RequiresPrerequisites: structures.ukraine
+		Prerequisite: aircraft.ukraine
+	ProvidesPrerequisite@iraqistructure:
+		RequiresPrerequisites: structures.iraq
+		Prerequisite: aircraft.iraq
 	ProvidesPrerequisite@all:
 		Factions: allies, england, france, germany, soviet, russia, ukraine, iraq, gdi, talon, zocom, nod, blackh, marked
 		Prerequisite: aircraft.all
@@ -1766,7 +1812,6 @@ AFLD:
 		BuildPaletteOrder: 130
 		Prerequisites: dome, ~structures.soviet, ~techlevel.low
 		Description: Produces and reloads aircraft.\n  Special Ability: Spy Plane\n  Special Ability: Paratroopers
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -1818,28 +1863,9 @@ AFLD:
 		Prerequisite: aircraft.iraq
 	ProvidesPrerequisite@aircraft.any:
 		Prerequisite: aircraft.any
-	AirstrikePower@spyplane:
-		OrderName: spyplane
-		Prerequisites: aircraft.soviet
-		Icon: spyplane
-		ChargeInterval: 3750
-		Description: Spy Plane
-		LongDesc: Reveals an area of the map.
-		SelectTargetSpeechNotification: SelectTarget
-		EndChargeSpeechNotification: SpyPlaneReady
-		LaunchSound: spyplane.aud
-		CameraActor: camera.spyplane
-		CameraRemoveDelay: 150
-		UnitType: u2
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: camicon
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
 	ParatroopersPower@paratroopers:
 		OrderName: paratroopers
-		Prerequisites: aircraft.soviet, !aircraft.russia, ~techlevel.low
+		Prerequisites: aircraft.soviet, !aircraft.russia
 		Icon: paratroopers
 		ChargeInterval: 7500
 		Description: Paratroopers
@@ -1881,92 +1907,6 @@ AFLD:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
-	AirstrikePower@CarpetBomb:
-		OrderName: carpetbomb
-		Prerequisites: aircraft.ukraine, ~!commander_tree.yuri, techlevel.superw
-		Icon: carpetbomb
-		ChargeInterval: 10500
-		Description: Carpet Bomb
-		LongDesc: A squad of Badgers drop\nbombs on your target.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitType: badr.cbomber
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: a10airstrike
-		BeaconPosterPalette: temptd
-		SquadSize: 3
-		ArrowSequence: arrow
-		ClockSequence: clockTD
-		CircleSequence: circles
-		UseDirectionalTarget: False
-		DirectionArrowAnimation: paradirection
-	AirstrikePower@Russianparabombs:
-		OrderName: parabombs
-		Prerequisites: aircraft.russia, ~!commander_tree.yuri, techlevel.superw
-		Icon: parabombs
-		ChargeInterval: 7500
-		Description: Parabombs
-		LongDesc: A Badger bomber drops parachuted\nbombs on your target.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitType: badr.bomber
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: pbmbicon
-		SquadSize: 1
-		SquadOffset: 0,1792,0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		UseDirectionalTarget: False
-		DirectionArrowAnimation: paradirection
-	AirstrikePower@Iraqiparabombs:
-		OrderName: atombomb
-		Prerequisites: aircraft.iraq, ~!commander_tree.yuri, techlevel.superw
-		Icon: abombair
-		ChargeInterval: 10500
-		Description: Atomic Bomb
-		LongDesc: A Badger bomber drops an \natom bomb on your target.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitType: badr.nbomber
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: nukeicon
-		SquadSize: 1
-		SquadOffset: 0,1792,0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		UseDirectionalTarget: False
-		DirectionArrowAnimation: paradirection
-	AirstrikePower@MutaBomb:
-		OrderName: mutabomb
-		Prerequisites: ~commander_tree.yuri, techlevel.superw
-		Icon: mutabomb
-		IconPalette: scrin
-		ChargeInterval: 10500
-		Description: Genetic Mutation Bomb
-		LongDesc: A Badger bomber drops a genetic mutation bomb\non your target which transforms infantry\ninto Brutes.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitType: badr.mbomber
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: gmutation
-		BeaconPosterPalette: chrome
-		SquadSize: 1
-		SquadOffset: 0,1792,0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		UseDirectionalTarget: True
-		DirectionArrowAnimation: paradirection
 	ProductionBar:
 		ProductionType: Aircraft
 	SupportPowerChargeBar:
@@ -1997,7 +1937,6 @@ POWR:
 		BuildPaletteOrder: 10
 		Prerequisites: ~techlevel.infonly, ~structures.ra
 		Description: Provides power for other structures.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 300
 	Tooltip:
@@ -2038,7 +1977,6 @@ APWR:
 		BuildPaletteOrder: 110
 		Prerequisites: dome, ~techlevel.medium, ~structures.ra, ~!structures.russia
 		Description: Provides double the power of\na standard Power Plant.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2132,6 +2070,7 @@ TPWR:
 
 STEK:
 	Inherits: ^ScienceBuilding
+	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^3x2Shape
 	Selectable:
@@ -2191,6 +2130,92 @@ STEK:
 		DisplayRadarPing: True
 		Cursor: ability
 		PauseOnCondition: disabled || empdisable ||  being-warped
+	AirstrikePower@CarpetBomb:
+		OrderName: carpetbomb
+		Prerequisites: structures.ukraine, ~!commander_tree.yuri
+		Icon: carpetbomb
+		ChargeInterval: 10500
+		Description: Carpet Bomb
+		LongDesc: A squad of Badgers drop\nbombs on your target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: badr.cbomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: a10airstrike
+		BeaconPosterPalette: temptd
+		SquadSize: 3
+		ArrowSequence: arrow
+		ClockSequence: clockTD
+		CircleSequence: circles
+		UseDirectionalTarget: False
+		DirectionArrowAnimation: paradirection
+	AirstrikePower@Russianparabombs:
+		OrderName: parabombs
+		Prerequisites: structures.russia, ~!commander_tree.yuri
+		Icon: parabombs
+		ChargeInterval: 7500
+		Description: Parabombs
+		LongDesc: A Badger bomber drops parachuted\nbombs on your target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: badr.bomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: pbmbicon
+		SquadSize: 1
+		SquadOffset: 0,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: False
+		DirectionArrowAnimation: paradirection
+	AirstrikePower@Iraqiparabombs:
+		OrderName: atombomb
+		Prerequisites: structures.iraq, ~!commander_tree.yuri
+		Icon: abombair
+		ChargeInterval: 10500
+		Description: Atomic Bomb
+		LongDesc: A Badger bomber drops an \natom bomb on your target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: badr.nbomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: nukeicon
+		SquadSize: 1
+		SquadOffset: 0,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: False
+		DirectionArrowAnimation: paradirection
+	AirstrikePower@MutaBomb:
+		OrderName: mutabomb
+		Prerequisites: ~commander_tree.yuri
+		Icon: mutabomb
+		IconPalette: scrin
+		ChargeInterval: 10500
+		Description: Genetic Mutation Bomb
+		LongDesc: A Badger bomber drops a genetic mutation bomb\non your target which transforms infantry\ninto Brutes.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: badr.mbomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPoster: gmutation
+		BeaconPosterPalette: chrome
+		SquadSize: 1
+		SquadOffset: 0,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: tec.soviet.stolen
@@ -2212,7 +2237,6 @@ BARR:
 		BuildPaletteOrder: 30
 		Prerequisites: anypower, ~structures.soviet
 		Description: Trains infantry.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2297,7 +2321,6 @@ KENN:
 		BuildPaletteOrder: 175
 		Prerequisites: anypower, ~structures.soviet, ~techlevel.infonly
 		Description: Trains Attack Dogs.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 200
 	Tooltip:
@@ -2347,7 +2370,6 @@ TENT:
 		BuildPaletteOrder: 20
 		Prerequisites: anypower, ~structures.allies, ~techlevel.infonly
 		Description: Trains infantry.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2445,7 +2467,6 @@ FIX:
 		BuildPaletteOrder: 100
 		Prerequisites: weap, ~structures.ra, ~techlevel.medium
 		Description: Repairs vehicles.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -2761,7 +2782,6 @@ PYLE:
 		Prerequisites: anypower, ~structures.gdi, ~techlevel.low
 		IconPalette: chrometd
 		Description: Trains infantry.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2860,7 +2880,6 @@ HAND:
 		Prerequisites: anypower, ~structures.nod, ~techlevel.low
 		IconPalette: chrometd
 		Description: Trains infantry.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -2961,7 +2980,6 @@ WEAP.TD:
 		Prerequisites: proc.td, ~structures.weap.td, ~structures.td, ~techlevel.low
 		IconPalette: chrometd
 		Description: Produces vehicles.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -3144,7 +3162,6 @@ AIRS:
 		Prerequisites: proc.td, ~structures.nod, ~!structures.legion, ~techlevel.low
 		IconPalette: chrometd
 		Description: Provides a dropzone\nfor vehicle reinforcements
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -3355,7 +3372,6 @@ NUKE:
 		Prerequisites: ~structures.td, ~techlevel.low
 		IconPalette: chrometd
 		Description: Provides power for other structures.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 300
 	Tooltip:
@@ -3409,7 +3425,6 @@ NUK2:
 		Prerequisites: hq, ~structures.td, ~techlevel.low
 		IconPalette: chrometd
 		Description: Provides double the power of\na standard Nuclear Power Plant.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -3906,6 +3921,7 @@ OBLI:
 
 HQ:
 	Inherits: ^BuildingTD
+	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,512,0, 420,-598,256
@@ -3924,7 +3940,6 @@ HQ:
 		Prerequisites: proc.td, ~structures.td, ~techlevel.medium
 		IconPalette: chrometd
 		Description: Provides an overview of the battlefield.\n  Requires power to operate.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 1800
 	Tooltip:
@@ -4237,7 +4252,6 @@ REP:
 		Prerequisites: vehicles.td, ~structures.td, ~techlevel.medium
 		IconPalette: chrometd
 		Description: Repairs vehicles.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -4302,7 +4316,6 @@ HPAD.TD:
 		Prerequisites: radar, ~structures.td, ~techlevel.infonly
 		IconPalette: chrometd
 		Description: Produces and reloads\nhelicopters.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -4437,7 +4450,6 @@ PROC.TD:
 		Queue: Building
 		IconPalette: chrometd
 		Description: Processes raw Tiberium, Ore and Gems\ninto useable resources
-		BuildDurationModifier: 25
 	Building:
 		Footprint: _x_ xxx === ===
 		Dimensions: 3,4
@@ -4556,7 +4568,6 @@ AFLD.GDI:
 		BuildPaletteOrder: 130
 		Prerequisites: radar, ~structures.gdi, ~techlevel.high
 		Description: Produces and reloads aircraft.\n  Special Ability: Recon Drone
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -4702,7 +4713,6 @@ AFLD.allies:
 		BuildPaletteOrder: 130
 		Prerequisites: dome, ~structures.allies
 		Description: Produces and reloads aircraft.\n
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -4769,6 +4779,7 @@ AFLD.allies:
 
 GTEK:
 	Inherits: ^ScienceBuilding
+	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^3x2Shape
 	Buildable:
@@ -4865,6 +4876,7 @@ GTEK:
 
 TMPL:
 	Inherits: ^ScienceBuildingTD
+	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^3x2Shape
 	HitShape:
@@ -5173,7 +5185,6 @@ SPEN.nod:
 		IconPalette: chrometd
 		Prerequisites: anypower, ~structures.nod, ~techlevel.low
 		Description: Produces and repairs\nsubmarines and transports.
-		BuildDurationModifier: 25
 	Targetable:
 		TargetTypes: Ground, Water, WaterStructure, Structure, C4, DetonateAttack, SpyInfiltrate
 	Building:
@@ -5265,7 +5276,6 @@ SYRD.gdi:
 		BuildPaletteOrder: 40
 		Prerequisites: anypower, ~structures.gdi, ~techlevel.low
 		Description: Produces and repairs ships\nand transports.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -5587,24 +5597,24 @@ CRAM:
 		Weapon: Gatt.0
 		LocalOffset: 520,0,450
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 0
+		RequiresCondition: gatling == 0
 	Armament@GAT1:
 		Weapon: Gatt.1
 		LocalOffset: 520,0,450
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 1
+		RequiresCondition: gatling == 1
 	Armament@GAT2:
 		Weapon: Gatt.2
 		LocalOffset: 520,0,450
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 2
+		RequiresCondition: gatling == 2
 	Armament@GAT3:
 		Weapon: Gatt.3
 		LocalOffset: 520,0,450
 		MuzzleSequence: muzzle
-		RequiresCondition: gattling == 3
+		RequiresCondition: gatling == 3
 	GrantConditionOnAttack:
-		Condition: gattling
+		Condition: gatling
 		RequiredShotsPerInstance: 1,6,12
 		MaximumInstances: 3
 		RevokeDelay: 40
@@ -5821,6 +5831,7 @@ PATR:
 
 INDP:
 	Inherits: ^ScienceBuilding
+	Inherits: ^TechLevelBuilding
 	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^3x2Shape
 	Selectable:
@@ -5882,6 +5893,7 @@ INDP:
 
 OREP:
 	Inherits: ^ScienceBuilding
+	Inherits: ^TechLevelBuilding
 	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^3x2Shape
 	HitShape:
@@ -5948,6 +5960,7 @@ OREP:
 
 UPGC:
 	Inherits: ^BuildingTD
+	Inherits: ^TechLevelBuilding
 	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@SHAPE: ^3x2Shape
 	HitShape:
@@ -6279,6 +6292,7 @@ UPGC.DROP:
 
 BIO.Nod:
 	Inherits: ^BuildingTD
+	Inherits: ^TechLevelBuilding
 	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@SHAPE: ^3x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding

@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Activities;
 using OpenRA.GameRules;
-using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Activities;
 using OpenRA.Mods.Common.Orders;
 using OpenRA.Mods.Common.Traits;
@@ -26,17 +25,20 @@ namespace OpenRA.Mods.CA.Traits
 	class MadTankCAInfo : PausableConditionalTraitInfo, IRulesetLoaded, Requires<ExplodesInfo>, Requires<WithFacingSpriteBodyInfo>
 	{
 		[SequenceReference]
-		public readonly string ThumpSequence = "piston";
+		public readonly string ThumpSequence = null;
 
 		public readonly int ThumpInterval = 8;
 
 		[WeaponReference]
-		public readonly string ThumpDamageWeapon = "MADTankThump";
+		public readonly string ThumpDamageWeapon = null;
 
 		[Desc("Measured in ticks.")]
 		public readonly int ChargeDelay = 96;
 
 		public readonly string ChargeSound = "madchrg2.aud";
+
+		[SequenceReference]
+		public readonly string DetonationSequence = null;
 
 		[Desc("Measured in ticks.")]
 		public readonly int DetonationDelay = 42;
@@ -44,13 +46,15 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly string DetonationSound = "madexplo.aud";
 
 		[WeaponReference]
-		public readonly string DetonationWeapon = "MADTankDetonate";
+		public readonly string DetonationWeapon = null;
 
 		[ActorReference]
-		public readonly string DriverActor = "e1";
+		public readonly string DriverActor = null;
 
 		[VoiceReference]
 		public readonly string Voice = "Action";
+
+		public readonly bool FirstDetonationImmediate = false;
 
 		[GrantedConditionReference]
 		[Desc("The condition to grant to self while deployed.")]
@@ -60,6 +64,8 @@ namespace OpenRA.Mods.CA.Traits
 
 		public WeaponInfo DetonationWeaponInfo { get; private set; }
 
+		public readonly bool KillsSelf = true;
+
 		[Desc("Types of damage that this trait causes to self while self-destructing. Leave empty for no damage types.")]
 		public readonly BitSet<DamageType> DamageTypes = default(BitSet<DamageType>);
 
@@ -67,47 +73,44 @@ namespace OpenRA.Mods.CA.Traits
 
 		public override void RulesetLoaded(Ruleset rules, ActorInfo ai)
 		{
-			WeaponInfo thumpDamageWeapon;
-			WeaponInfo detonationWeapon;
-			var thumpDamageWeaponToLower = (ThumpDamageWeapon ?? string.Empty).ToLowerInvariant();
-			var detonationWeaponToLower = (DetonationWeapon ?? string.Empty).ToLowerInvariant();
+			if (ThumpDamageWeapon != null)
+			{
+				var thumpDamageWeaponToLower = ThumpDamageWeapon.ToLowerInvariant();
+				if (!rules.Weapons.TryGetValue(thumpDamageWeaponToLower, out var thumpDamageWeapon))
+					throw new YamlException("Weapons Ruleset does not contain an entry '{0}'".F(thumpDamageWeaponToLower));
 
-			if (!rules.Weapons.TryGetValue(thumpDamageWeaponToLower, out thumpDamageWeapon))
-				throw new YamlException("Weapons Ruleset does not contain an entry '{0}'".F(thumpDamageWeaponToLower));
+				ThumpDamageWeaponInfo = thumpDamageWeapon;
+			}
 
-			if (!rules.Weapons.TryGetValue(detonationWeaponToLower, out detonationWeapon))
-				throw new YamlException("Weapons Ruleset does not contain an entry '{0}'".F(detonationWeaponToLower));
+			if (DetonationWeapon != null)
+			{
+				var detonationWeaponToLower = DetonationWeapon.ToLowerInvariant();
+				if (!rules.Weapons.TryGetValue(detonationWeaponToLower, out var detonationWeapon))
+					throw new YamlException("Weapons Ruleset does not contain an entry '{0}'".F(detonationWeaponToLower));
 
-			ThumpDamageWeaponInfo = thumpDamageWeapon;
-			DetonationWeaponInfo = detonationWeapon;
+				DetonationWeaponInfo = detonationWeapon;
+			}
 		}
 	}
 
-	class MadTankCA : PausableConditionalTrait<MadTankCAInfo>, INotifyCreated, IIssueOrder, IResolveOrder, IOrderVoice, IIssueDeployOrder
+	class MadTankCA : PausableConditionalTrait<MadTankCAInfo>, IIssueOrder, IResolveOrder, IOrderVoice, IIssueDeployOrder
 	{
 		readonly MadTankCAInfo info;
+		public bool FirstDetonationComplete { get; set; }
 
-		public MadTankCA(Actor self, MadTankCAInfo info) : base(info)
+		public MadTankCA(Actor self, MadTankCAInfo info)
+			: base(info)
 		{
 			this.info = info;
-		}
-
-		public bool CanDeploy()
-		{
-			if (IsTraitPaused || IsTraitDisabled)
-				return false;
-
-			return true;
+			FirstDetonationComplete = false;
 		}
 
 		public IEnumerable<IOrderTargeter> Orders
 		{
 			get
 			{
-				if (!IsTraitDisabled) {
-					yield return new TargetTypeOrderTargeter(new BitSet<TargetableType>("DetonateAttack"), "DetonateAttack", 5, "attack", true, false) { ForceAttack = false };
-					yield return new DeployOrderTargeter("Detonate", 5);
-				}
+				yield return new TargetTypeOrderTargeter(new BitSet<TargetableType>("DetonateAttack"), "DetonateAttack", 5, "attack", true, false) { ForceAttack = false };
+				yield return new DeployOrderTargeter("Detonate", 5);
 			}
 		}
 
@@ -124,7 +127,7 @@ namespace OpenRA.Mods.CA.Traits
 			return new Order("Detonate", self, queued);
 		}
 
-		bool IIssueDeployOrder.CanIssueDeployOrder(Actor self, bool queued) { return !IsTraitPaused && !IsTraitDisabled; }
+		bool IIssueDeployOrder.CanIssueDeployOrder(Actor self, bool queued) { return !(self.CurrentActivity is DetonationSequence); }
 
 		string IOrderVoice.VoicePhraseForOrder(Actor self, Order order)
 		{
@@ -136,10 +139,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		void IResolveOrder.ResolveOrder(Actor self, Order order)
 		{
-			if (!order.Queued && !CanDeploy())
-				return;
-
-			if (order.OrderString == "DetonateAttack" && !IsTraitPaused && !IsTraitDisabled)
+			if (order.OrderString == "DetonateAttack")
 			{
 				self.QueueActivity(order.Queued, new DetonationSequence(self, this, order.Target));
 				self.ShowTargetLines();
@@ -167,7 +167,7 @@ namespace OpenRA.Mods.CA.Traits
 				assignTargetOnFirstRun = true;
 			}
 
-			public DetonationSequence(Actor self, MadTankCA mad, Target target)
+			public DetonationSequence(Actor self, MadTankCA mad, in Target target)
 			{
 				this.self = self;
 				this.mad = mad;
@@ -189,6 +189,9 @@ namespace OpenRA.Mods.CA.Traits
 				if (IsCanceling)
 					return true;
 
+				if (mad.IsTraitPaused)
+					return false;
+
 				if (target.Type != TargetType.Invalid && !move.CanEnterTargetNow(self, target))
 				{
 					QueueChild(new MoveAdjacentTo(self, target, targetLineColor: Color.Red));
@@ -203,9 +206,14 @@ namespace OpenRA.Mods.CA.Traits
 
 					self.GrantCondition(mad.info.DeployedCondition);
 
-					self.World.AddFrameEndTask(w => EjectDriver());
-					if (mad.info.ThumpSequence != null)
-						wfsb.PlayCustomAnimationRepeating(self, mad.info.ThumpSequence);
+					if (!mad.FirstDetonationComplete)
+					{
+						if (mad.info.FirstDetonationImmediate)
+							ticks = mad.info.ChargeDelay - 1;
+
+						self.World.AddFrameEndTask(w => EjectDriver());
+						mad.FirstDetonationComplete = true;
+					}
 
 					IsInterruptible = false;
 					initiated = true;
@@ -218,6 +226,9 @@ namespace OpenRA.Mods.CA.Traits
 						// Use .FromPos since this weapon needs to affect more than just the MadTank actor
 						mad.info.ThumpDamageWeaponInfo.Impact(Target.FromPos(self.CenterPosition), self);
 					}
+
+					if (mad.info.ThumpSequence != null)
+						wfsb.PlayCustomAnimation(self, mad.info.ThumpSequence);
 				}
 
 				if (ticks == mad.info.ChargeDelay)
@@ -237,11 +248,26 @@ namespace OpenRA.Mods.CA.Traits
 				{
 					if (mad.info.DetonationWeapon != null)
 					{
+						var args = new WarheadArgs
+						{
+							Weapon = mad.info.DetonationWeaponInfo,
+							SourceActor = self,
+							WeaponTarget = target,
+							DamageModifiers = self.TraitsImplementing<IFirepowerModifier>()
+								.Select(a => a.GetFirepowerModifier()).ToArray()
+						};
+
 						// Use .FromPos since this actor is killed. Cannot use Target.FromActor
-						mad.info.DetonationWeaponInfo.Impact(Target.FromPos(self.CenterPosition), self);
+						mad.info.DetonationWeaponInfo.Impact(Target.FromPos(self.CenterPosition), args);
 					}
 
-					self.Kill(self, mad.info.DamageTypes);
+					if (mad.info.DetonationSequence != null)
+						wfsb.PlayCustomAnimation(self, mad.info.DetonationSequence);
+
+					if (mad.info.KillsSelf)
+						self.Kill(self, mad.info.DamageTypes);
+					else
+						self.QueueActivity(false, new DetonationSequence(self, mad));
 				});
 			}
 
@@ -252,14 +278,15 @@ namespace OpenRA.Mods.CA.Traits
 
 			void EjectDriver()
 			{
+				if (mad.info.DriverActor == null)
+					return;
+
 				var driver = self.World.CreateActor(mad.info.DriverActor.ToLowerInvariant(), new TypeDictionary
 				{
 					new LocationInit(self.Location),
 					new OwnerInit(self.Owner)
 				});
-				var driverMobile = driver.TraitOrDefault<Mobile>();
-				if (driverMobile != null)
-					driverMobile.Nudge(driver);
+				driver.TraitOrDefault<Mobile>()?.Nudge(driver);
 			}
 		}
 	}

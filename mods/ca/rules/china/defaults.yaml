@@ -1,0 +1,267 @@
+World:
+	Faction@china-inf:
+		Name: Shin Fai
+		InternalName: chinainf
+		Side: China
+		Description: Shin Fai: Infantry \nShin Fai is a general of China. China is best at defense, base expanding and massive armies. \nMany units get a horde bonus, when many other units are close. This can be further improved with propaganda speakers. \nShin Fai is specialized in infantry. Missing the conventional tanks of other chinese generals, \nShin Fai has the strongest infantry in the game and many vehicles supporting infantry directly.  \n \n Faction Units: Minigunner, Assault Crawler, Attack Outpost\n Special Ability: Infantry Paradrop\n Faction Bonus: Super Lotus, Fortified Bunker\n Key Commander Tree Options:\n  ECM Pulse vs. ECM Chain\n  Outpost Propaganda vs. Bunker\n  No Battlemaster and no Overlord  \n\n Infantry: ++++ \n Artillery: +++ \n Aircraft: ++ \n Defense: ++++ \n Heavy Tanks: + \n Recon&Stealth: ++
+	Faction@china-tnk:
+		Name: Ta Hun Kwai
+		InternalName: chinatnk
+		Side: China
+		Description: Ta Hun Kwai: Tanks \nTa Hun Kwai is a general of China. China is best at defense, base expanding and massive armies. \nMany units get a horde bonus, when many other units are close. This can be further improved with propaganda speakers. \nTa Hun Kwai is specialized in tanks. In order to mitigate China's biggest weakness, it's slowness, \nTa Hun Kwai has many tank upgrades and options to strike fast attacks with tank armies. His biggest weakness is the lack of heavy artillery.  \n \n Faction Units: Emperor Overlord\n Special Ability: Tank Paradrop\n Faction Bonus: Uranium Shells\n Key Commander Tree Options:\n  ECM Focus vs. ECM Chain\n  gatling Tank PDL vs. Reflector\n  No Nuke Cannon  \n\n Infantry: ++ \n Artillery: + \n Aircraft: ++ \n Defense: +++ \n Heavy Tanks: ++++ \n Recon&Stealth: ++
+	Faction@china-atom:
+		Name: Tsing Shi Tao
+		InternalName: chinaatom
+		Side: China
+		Description: Tsing Shi Tao: Nuclear \nTsing Shi Tao is a general of China. China is best at defense, base expanding and massive armies. \nMany units get a horde bonus, when many other units are close. This can be further improved with propaganda speakers. \nTsing Shi Tao is specialized in nuclear technology. This gives him a lot of improvements on nuclear weapons for increased power or mitigated weaknesses. \nTsing Shi Tao has many upgrades, which give nuclear weapons to units and therefore is very good at dealing massive damage on the battlefield. \nHis biggest weakness are point defense systems which prevent nuclear weapons to reach their targets.  \n \n Faction Units: Nuke Mig, Overlord, Battlemaster, Helix. \n Special Ability: Nuke Parabomb\n Faction Bonus: Nuclear Tanks, Isotope Stability\n Key Commander Tree Options:\n  ECM Pulse vs. ECM Focus\n  Nuke Cannon Neutron vs. Range\n  No Inferno Cannon  \n\n Infantry: ++ \n Artillery: ++++ \n Aircraft: ++ \n Defense: +++ \n Heavy Tanks: +++ \n Recon&Stealth: ++
+	Faction@randomchina:
+		Name: China
+		InternalName: RandomChina
+		RandomFactionMembers: chinainf, chinatnk, chinaatom
+		Side: Random
+		Description: Random China Faction\nA random China faction will be chosen when the game starts.
+
+	####################################################################################################
+
+	MPStartUnits@mcvonlychina:
+		Class: none
+		ClassName: MCV Only
+		Factions: chinainf, chinatnk, chinaatom
+		BaseActor: chcommand
+
+	MPStartUnits@defaultchina:
+		Class: light
+		ClassName: Light Support
+		Factions: chinainf, chinatnk, chinaatom
+		BaseActor: chcommand
+		SupportActors: che1,che1,che1,chgtnk,chdragon
+
+	MPStartUnits@heavychina:
+		Class: heavy
+		ClassName: Heavy Support
+		Factions: chinainf, chinatnk, chinaatom
+		BaseActor: chcommand
+		SupportActors: che1,che1,che1,chgtnk,chgtnk,chbattle,chbattle,chdragon
+
+
+	####################################################################################################
+
+Player:
+	ProvidesPrerequisite@regular-china:
+		Prerequisite: china
+		Factions: chinainf, chinatnk, chinaatom
+	ProvidesPrerequisite@tank-china:
+		Prerequisite: chinatnk
+		Factions: chinatnk
+	ProvidesPrerequisite@inf-china:
+		Prerequisite: chinainf
+		Factions: chinainf
+	ProvidesPrerequisite@nuke-china:
+		Prerequisite: chinaatom
+		Factions: chinaatom
+
+	####################################################################################################
+
+^GeneralsVehicle:
+	GrantConditionOnDamageState@DamagedSlow:
+		Condition: damagedslow
+		ValidDamageStates: Critical
+	SpeedMultiplier@DamagedSlow:
+		RequiresCondition: damagedslow
+		Modifier: 80
+	GrantConditionOnMovement@Pursuit:
+		ValidMovementTypes: Horizontal, Vertical
+		Condition: PursuitMove
+		RequiresCondition: AttackSlow
+	GrantConditionOnAttack@Slowdown:
+		Condition: AttackSlow
+		RequiresCondition: !PursuitMove
+	SpeedMultiplier@Pursuit:
+		RequiresCondition: PursuitMove
+		Modifier: 150
+	SpeedMultiplier@AttackSlow:
+		RequiresCondition: AttackSlow
+		Modifier: 85
+	ReloadDelayMultiplier@AttackSlow:
+		RequiresCondition: AttackSlow
+		Modifier: 95
+	InaccuracyMultiplier@AttackSlow:
+		RequiresCondition: AttackSlow
+		Modifier: 95
+	InaccuracyMultiplier@PursuitMove:
+		RequiresCondition: PursuitMove
+		Modifier: 110
+	DamageMultiplier@PursuitMove:
+		RequiresCondition: PursuitMove
+		Modifier: 90
+
+^GeneralsDamageBuilding:
+	SoundOnDamageTransition:
+		DamagedSounds: bgendama.wav, bgendamb.wav, bgendamc.wav
+		DestroyedSounds: bcoll01a.wav, bcoll01b.wav, bcoll02a.wav, bcoll03a.wav, bgendiea.wav, bgendieb.wav, bgendiec.wav, bgendied.wav, bgendiee.wav, bgendief.wav
+
+^MinefieldUpgrade:
+	Inherits@gensound: ^GeneralsDamageBuilding
+	GrantConditionOnPrerequisite@minefield:
+		Condition: minefield
+		Prerequisites: uplandmines
+	LaysMinefield@minefield:
+		Mines: chminv.minefield
+		RecreationInterval: 1600
+		RequiresCondition: minefield
+
+^HordeBonus:
+	ExternalCondition@HordeEffect:
+		Condition: hordeeffect
+		TotalCap: 10
+	ProximityExternalCondition@HordeEffect:
+		Range: 5c0
+		Condition: hordeeffect
+		RequiresCondition: hordeupgrade
+	WithDecoration@HordeEffect1:
+		Image: chhorde1
+		Palette: chrometd
+		Position: TopLeft
+		RequiresSelection: True
+		Sequence: idle
+		RequiresCondition: !propaganda && hordeeffect >= 10
+	WithDecoration@HordeEffect2:
+		Image: chhorde2
+		Palette: chrometd
+		Position: TopLeft
+		RequiresSelection: True
+		Sequence: idle
+		RequiresCondition: propaganda && hordeeffect >= 10
+	GrantConditionOnPrerequisite@hordeupgrade:
+		Condition: hordeupgrade
+		Prerequisites: commander_tree.nationalism
+	ReloadDelayMultiplier@HordeEffect:
+		RequiresCondition: hordeeffect >= 10
+		Modifier: 75
+
+^AnnounceOnBuild:
+	ExternalCondition@PRODUCED:
+		Condition: produced
+	VoiceAnnouncement:
+		RequiresCondition: produced
+		Voice: Build
+		ValidStances: None
+
+^AnnounceGlobal:
+	Inherits: ^AnnounceOnBuild
+	VoiceAnnouncement:
+		ValidStances: Enemy, Neutral, Ally
+
+^AttackVoice:
+	Mobile:
+		Voice: Move
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	DeliversCash:
+		Voice: Move
+
+^AttackFrontalVoice:
+	Inherits: ^AttackVoice
+	AttackFrontal:
+		Voice: Attack
+
+^AttackTurretedVoice:
+	Inherits: ^AttackVoice
+	AttackTurreted:
+		Voice: Attack
+
+^ChinaGatling:
+	Armament@GAT0:
+		Weapon: ChinaMGatt.0
+		LocalOffset: 85,-213,-85, 85,213,-85
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling == 0
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@GAT1:
+		Weapon: ChinaMGatt.1
+		LocalOffset: 85,-213,-85, 85,213,-85
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling == 1
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@GAT2:
+		Weapon: ChinaMGatt.2
+		LocalOffset: 85,-213,-85, 85,213,-85
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling == 2
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@GAT3:
+		Weapon: ChinaMGatt.3
+		LocalOffset:  85,-213,-85, 85,213,-85
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling == 3
+		PauseOnCondition: engage-ground
+		ReloadingCondition: engage-air
+	Armament@GAT0G:
+		Name: secondary
+		Weapon: ChinaMGatt.0
+		LocalOffset: 85,-213,-85, 85,213,-85
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling-ground == 0
+		PauseOnCondition: engage-air
+		ReloadingCondition: engage-ground
+	Armament@GAT1G:
+		Name: secondary
+		Weapon: ChinaMGatt.1
+		LocalOffset: 85,-213,-85, 85,213,-85
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling-ground == 1
+		PauseOnCondition: engage-air
+		ReloadingCondition: engage-ground
+	Armament@GAT2G:
+		Name: secondary
+		Weapon: ChinaMGatt.2
+		LocalOffset: 85,-213,-85, 85,213,-85
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling-ground == 2
+		ReloadingCondition: engage-ground
+		PauseOnCondition: engage-air
+	GrantConditionOnAttack:
+		Condition: gatling
+		RequiredShotsPerInstance: 1,6,12
+		MaximumInstances: 3
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
+	GrantConditionOnAttack@GROUND:
+		ArmamentNames: secondary
+		Condition: gatling-ground
+		RequiredShotsPerInstance: 1,6
+		MaximumInstances: 2
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
+
+^AtomicTank:
+	GrantConditionOnPrerequisite@upatomictank:
+		Condition: nucleartank
+		Prerequisites: commander_tree.nuclear_tanks
+	GrantConditionOnPrerequisite@upisotopestability:
+		Condition: isotopestability
+		Prerequisites: commander_tree.isotope_stability
+	SpeedMultiplier@atomictank:
+		RequiresCondition: nucleartank
+		Modifier: 125
+	Explodes@atomictank:
+		Weapon: CHAtomicTankExplode
+		EmptyWeapon: CHAtomicTankExplode
+		RequiresCondition: nucleartank && !being-warped && !isotopestability
+
+^UranShells:
+	GrantConditionOnPrerequisite@upuraniumshell:
+		Condition: urshellupgrade
+		Prerequisites: commander_tree.uranium_shells
+	FirepowerMultiplier@upuraniumshell:
+		Modifier: 125
+		RequiresCondition: urshellupgrade

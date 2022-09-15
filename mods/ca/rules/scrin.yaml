@@ -1731,7 +1731,7 @@ STMR:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter, ~!commander_tree.stormbomber
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter, ~!commander_tree.stormbomber, ~!commander_tree.stormbomber.torp
 		Description: Durable patrol craft.\n  Can detect submerged vessels.
 		IconPalette: chrome
 	TooltipExtras:
@@ -1804,10 +1804,6 @@ STMR:
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	-EjectOnDeath:
-	DetectCloaked:
-		CloakTypes: Underwater
-		Range: 6c0
-
 
 STMR.hunter:
 	Inherits: STMR
@@ -1865,7 +1861,48 @@ STMR.bomber:
 		PauseOnCondition: !ammo
 	-Armament@SECONDARY:
 	AmmoPool:
-		Ammo: 16
+		Ammo: 14
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		PipCount: 2
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	ReloadAmmoPoolCA:
+		Delay: 475
+		Count: 7
+		DelayOnFire: 120
+		DelayAfterReset: 50
+		ShowSelectionBar: true
+		SelectionBarColor: ff00ff
+
+STMR.torp:
+	Inherits: STMR
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 40
+		Prerequisites: nerv, grav, ~aircraft.scrin, ~commander_tree.stormbomber.torp
+		Description: Dedicated torpedo launcher.
+		IconPalette: chrome
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	Valued:
+		Cost: 1500
+	Health:
+		HP: 18000
+	Tooltip:
+		Name: Stormbomber (Torpedo)
+	Armament@PRIMARY:
+		Weapon: DepthCharge.Scrin
+		LocalOffset: 350,213,-85, 350,-213,-85
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+	AmmoPool:
+		Ammo: 8
 		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 2
@@ -1874,11 +1911,14 @@ STMR.bomber:
 		RequiresSelection: true
 	ReloadAmmoPoolCA:
 		Delay: 375
-		Count: 7
+		Count: 4
 		DelayOnFire: 120
 		DelayAfterReset: 50
 		ShowSelectionBar: true
 		SelectionBarColor: ff00ff
+	DetectCloaked:
+		CloakTypes: Underwater
+		Range: 8c0
 
 ENRV:
 	Inherits: ^Helicopter
@@ -3056,7 +3096,6 @@ REAC:
 		Prerequisites: ~structures.scrin, ~techlevel.low
 		IconPalette: scrin
 		Description: Provides power for other structures.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 300
 	Tooltip:
@@ -3101,7 +3140,6 @@ REA2:
 		Prerequisites: nerv, ~structures.scrin, ~techlevel.low
 		IconPalette: chrome
 		Description: Provides double the power of\na standard Reactor.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -3152,7 +3190,6 @@ PROC.SCRIN:
 		Queue: Building
 		IconPalette: scrin
 		Description: Processes raw Tiberium, Ore and Gems\ninto credits.
-		BuildDurationModifier: 25
 	Building:
 		Footprint: _x_ xxx === ===
 		Dimensions: 3,4
@@ -3219,7 +3256,6 @@ PORT:
 		Prerequisites: anypower, ~structures.scrin, ~techlevel.low
 		IconPalette: scrin
 		Description: Produces infantry.
-		BuildDurationModifier: 25
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -3298,8 +3334,7 @@ WSPH:
 		BuildPaletteOrder: 80
 		Prerequisites: proc.scrin, ~structures.scrin, ~techlevel.low
 		IconPalette: scrin
-		Description: Produces vehicles.
-		BuildDurationModifier: 25
+		Description: Produces vehicles.s
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -3489,6 +3524,7 @@ WSPH:
 
 NERV:
 	Inherits: ^ScrinBuilding
+	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	HitShape:
 		UseTargetableCellsOffsets: false
@@ -3498,7 +3534,6 @@ NERV:
 		BuildPaletteOrder: 90
 		Prerequisites: proc.scrin, ~structures.scrin, ~techlevel.medium
 		Description: Provides an overview of the battlefield.\n  Requires power to operate.
-		BuildDurationModifier: 25
 		IconPalette: scrin
 	Valued:
 		Cost: 1800
@@ -3629,6 +3664,7 @@ NERV:
 
 SCRT:
 	Inherits: ^ScrinBuilding
+	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^2x2Shape
 	Buildable:
@@ -3729,7 +3765,6 @@ GRAV:
 		BuildPaletteOrder: 130
 		Prerequisites: nerv, ~structures.scrin, ~techlevel.medium
 		Description: Produces Scrin aircraft.
-		BuildDurationModifier: 25
 		IconPalette: scrin
 	Valued:
 		Cost: 500
@@ -3806,6 +3841,7 @@ GRAV:
 
 SIGN:
 	Inherits: ^ScrinBuilding
+	Inherits: ^TechLevelBuilding
 	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^3x2Shape
 	HitShape:
@@ -3868,7 +3904,6 @@ SREP:
 		BuildPaletteOrder: 100
 		Prerequisites: vehicles.scrin, ~structures.scrin, ~techlevel.medium
 		Description: Repairs vehicles for credits.
-		BuildDurationModifier: 25
 		IconPalette: scrin
 	Valued:
 		Cost: 1200
