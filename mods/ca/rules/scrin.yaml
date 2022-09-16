@@ -481,6 +481,7 @@ MAST:
 
 HARV.Scrin:
 	Inherits: HAR2
+	Inherits@Hover: ^HoverVehicle
 	Selectable:
 		DecorationBounds: 42,42
 	RenderSprites:
@@ -495,15 +496,12 @@ HARV.Scrin:
 	Mobile:
 		Speed: 56
 		Locomotor: hover
-	Hovers:
-		BobDistance: -35
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	Buildable:
 		Prerequisites: ~proc.scrin, ~vehicles.scrin, ~techlevel.infonly
 		IconPalette: chrome
 	SpawnActorOnDeath:
 		Actor: HARV.Scrin.Husk
-		RequiresCondition: !being-warped
+		RequiresCondition: !being-warped && !onwater
 	WithDockingAnimation:
 		DockSequence: idle
 		DockLoopSequence: idle
@@ -587,6 +585,7 @@ GUNW.sensor:
 
 SEEK:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -631,12 +630,6 @@ SEEK:
 		Offset: -280,0,0
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	KillsSelf@SINK:
-		RequiresCondition: onwater && (empdisable || driver-dead)
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -658,7 +651,7 @@ SEEK:
 		Prerequisites: vehicles.upgraded
 	SpawnActorOnDeath:
 		Actor: SEEK.Husk
-		RequiresCondition: !being-warped
+		RequiresCondition: !being-warped && !onwater
 
 SEEK.PLD:
 	Inherits: SEEK
@@ -686,6 +679,7 @@ SEEK.Reflector:
 
 LACE:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -731,12 +725,6 @@ LACE:
 		Offset: -50,0,0
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	KillsSelf@SINK:
-		RequiresCondition: onwater && (empdisable || driver-dead)
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -796,6 +784,7 @@ LACE.AP:
 
 INTL:
 	Inherits: ^Tank
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -851,7 +840,6 @@ INTL:
 		LoadedCondition: cargo
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1047,6 +1035,7 @@ LCHR:
 
 STCR:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1072,7 +1061,6 @@ STCR:
 		Locomotor: hover
 	Hovers:
 		BobDistance: -35
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	Health:
 		HP: 60000
 	Armor:
@@ -1127,6 +1115,7 @@ STCR.Reflector:
 
 DEVO:
 	Inherits: ^Tank
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1154,7 +1143,6 @@ DEVO:
 		Locomotor: lighthover
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 6c0
@@ -1219,6 +1207,7 @@ DEVO.heavy:
 
 DARK:
 	Inherits: ^Tank
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1274,7 +1263,6 @@ DARK:
 		Sequence: idle
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1307,6 +1295,7 @@ DARK.disc:
 
 RUIN:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1361,7 +1350,6 @@ RUIN:
 		Prerequisites: vehicles.upgraded
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1396,10 +1384,10 @@ RUIN.barrage:
 
 ATMZ:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
 	Inherits@BERSERK: ^Berserk
-	Inherits@HOVERTRAIL: ^HoverTrail
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -1433,7 +1421,6 @@ ATMZ:
 		TurnSpeed: 32
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1687,6 +1674,7 @@ RPTP.acid.PLD:
 
 SMCV:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@SELECTION: ^SelectableSupportUnit
 	Buildable:
 		Queue: Vehicle
@@ -1725,7 +1713,7 @@ SMCV:
 	BaseBuilding:
 	SpawnActorOnDeath:
 		Actor: SMCV.Husk
-		RequiresCondition: !being-warped
+		RequiresCondition: !being-warped && !onwater
 	TransferTimedExternalConditionOnTransform:
 		Condition: invulnerability
 	-Crushable:
@@ -1733,7 +1721,6 @@ SMCV:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 
 #
 # ---- Aircraft

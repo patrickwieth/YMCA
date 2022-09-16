@@ -2687,6 +2687,7 @@ HTNK.Nanite.PLD:
 
 HTNK.Hover:
 	Inherits: HTNK
+	Inherits@Hover: ^HoverVehicle
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
@@ -2707,14 +2708,6 @@ HTNK.Hover:
 		TrailWhileStationary: true
 		StationaryInterval: 18
 		MovingInterval: 6
-	Hovers:
-		BobDistance: -35
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	KillsSelf@SINK:
-		RequiresCondition: onwater && (empdisable || driver-dead)
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -4319,6 +4312,7 @@ DISR:
 
 HMLRS:
 	Inherits: ^VehicleTD
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -4337,13 +4331,6 @@ HMLRS:
 	Mobile:
 		Speed: 113
 		Locomotor: hover
-	LeavesTrails:
-		Image: twake
-		Palette: effect
-		TerrainTypes: Water
-		TrailWhileStationary: true
-		StationaryInterval: 18
-		MovingInterval: 6
 	Health:
 		HP: 18000
 	Armor:
@@ -4357,14 +4344,6 @@ HMLRS:
 	Turreted:
 		TurnSpeed: 80
 		Offset: -200,0,0
-	Hovers:
-		BobDistance: -35
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	KillsSelf@SINK:
-		RequiresCondition: onwater && (empdisable || driver-dead)
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -4400,8 +4379,6 @@ HMLRS:
 	Explodes:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 
 HMLRS.Reflector:
 	Inherits: HMLRS
@@ -6077,6 +6054,7 @@ CRYO:
 
 SLNG:
 	Inherits: ^VehicleTD
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAir
 	Inherits@BERSERK: ^Berserk
@@ -6110,14 +6088,6 @@ SLNG:
 		Range: 5c0
 	Turreted:
 		TurnSpeed: 80
-	Hovers:
-		BobDistance: -35
-		RequiresCondition: !empdisable && !being-warped
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	KillsSelf@SINK:
-		RequiresCondition: onwater && empdisable
 	Armament@PRIMARY:
 		Recoil: 10
 		Weapon: SlingshotAA
@@ -6138,8 +6108,6 @@ SLNG:
 		Weapon: ArtilleryExplode
 		EmptyWeapon: UnitExplodeSmall
 		LoadedChance: 75
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 
 FTRK:
 	Inherits: ^Vehicle
@@ -6746,6 +6714,7 @@ HFTK:
 
 MDRN:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@HACKABLE: ^Hackable
 	Tooltip:
@@ -6785,9 +6754,6 @@ MDRN:
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
-	Hovers:
-		BobDistance: -35
-		RequiresCondition: !empdisable && !being-warped
 	WithShadow:
 		Offset: 43, 128, -250
 		ZOffset: -129
