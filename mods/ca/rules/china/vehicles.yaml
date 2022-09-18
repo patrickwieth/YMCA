@@ -338,17 +338,15 @@ choverlord:
 	SelectionDecorations:
 	Selectable:
 		DecorationBounds: 34,34,0,-3
-	AcceptsDeliveredExperience:							##########
-		ValidTypes: vehicle								##########
 	Voiced:
 		VoiceSet: OverlordTankVoice
+
 	Armament@BUNKER:
 		Name: secondary
 		Weapon: CHGuardRifleOverlord
 		LocalOffset: -85,384,340, -85,-384,340
 		MuzzleSequence: muzzle2
 		RequiresCondition: addonbunker
-
 	Armament@BUNKERMISS:
 		Name: secondary
 		Weapon: CHTankHunterOverlord
@@ -358,18 +356,6 @@ choverlord:
 
 	WithSpriteTurret:
 		RequiresCondition: !addonpropaganda && !addonbunker && !addongatling
-
-	WithSpriteTurret@BUNKER:
-		RequiresCondition: addonbunker
-		Sequence: turretbun
-	WithSpriteTurret@PROPAGANDA:
-		RequiresCondition: addonpropaganda
-		Sequence: turretpro
-	DetectCloaked:
-		RequiresCondition: !disabled && addongatling
-	ProducibleWithLevel:
-		Prerequisites: selectchtanks
-		InitialLevels: 1
 	RenderSprites:
 		Scale: 1.12
 
@@ -414,22 +400,18 @@ choverlord.Bunker:
 	Tooltip@Emperor:
 		Name: Bunker Emperor
 		RequiresCondition: vehicles.chinatnk
-	AttackOpenTopped:
-		Armaments: mounted, mountedaa
+	WithSpriteTurret@BUNKER:
+		Sequence: turretbun
+	Cargo:
+		InitialUnits: che3, che3, che3, che3
+	-AttackTurreted:
+	-AttackOpenTopped:
+	AttackTurretedOpenTopped:
+		Armaments: primary, mounted, mountedaa
 		MuzzlePalette: tdeffect
 		PortOffsets: -85,384,340, -85,-384,340
 		PortYaws: 0, 176, 341, 512, 682, 853
 		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: !ammo
-	AttackFrontal:
-		RequiresCondition: ammo
-	AmmoPool:
-		Ammo: 2
-		PipCount: 0
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 80
-		Count: 2
 
 choverlord.Propaganda:
 	Inherits: choverlord
@@ -442,6 +424,9 @@ choverlord.Propaganda:
 	Tooltip@Emperor:
 		Name: Propaganda Emperor
 		RequiresCondition: vehicles.chinatnk
+	WithSpriteTurret@PROPAGANDA:
+		Sequence: turretpro
+
 
 choverlord.Nuke_Shells:
 	Inherits: choverlord
