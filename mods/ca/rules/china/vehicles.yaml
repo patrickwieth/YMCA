@@ -325,6 +325,7 @@ choverlord:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
+		Turret: primary
 		TurnSpeed: 3
 		Offset: -298,0,150
 	Armament:
@@ -341,21 +342,19 @@ choverlord:
 	Voiced:
 		VoiceSet: OverlordTankVoice
 
-	Armament@BUNKER:
-		Name: secondary
-		Weapon: CHGuardRifleOverlord
-		LocalOffset: -85,384,340, -85,-384,340
-		MuzzleSequence: muzzle2
-		RequiresCondition: addonbunker
-	Armament@BUNKERMISS:
-		Name: secondary
-		Weapon: CHTankHunterOverlord
-		LocalOffset: -85,120,340, -85,-120,340
-		MuzzleSequence: muzzle
-		RequiresCondition: addonbunker
-
+	# Armament@BUNKER:
+	# 	Name: secondary
+	# 	Weapon: CHGuardRifleOverlord
+	# 	LocalOffset: -85,384,340, -85,-384,340
+	# 	MuzzleSequence: muzzle2
+	# 	RequiresCondition: addonbunker
+	# Armament@BUNKERMISS:
+	# 	Name: secondary
+	# 	Weapon: CHTankHunterOverlord
+	# 	LocalOffset: -85,120,340, -85,-120,340
+	# 	MuzzleSequence: muzzle
+	# 	RequiresCondition: addonbunker
 	WithSpriteTurret:
-		RequiresCondition: !addonpropaganda && !addonbunker && !addongatling
 	RenderSprites:
 		Scale: 1.12
 
@@ -364,15 +363,20 @@ choverlord.Gatling:
 	Inherits: ^ChinaGatling
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.gatling
-		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+		Description: Heavy Chinese tank.\n
 	Tooltip:
 		Name: Gatling Overlord
 		RequiresCondition: !vehicles.chinatnk
 	Tooltip@Emperor:
 		Name: Gatling Emperor
 		RequiresCondition: vehicles.chinatnk
+	Turreted@gatling:
+		Turret: secondary
+		TurnSpeed: 12
+		Offset: -298,0,150
 	Armament@gatling:
 		Name: secondary
+		Turret: secondary
 		Weapon: CHgatlingTurret
 		LocalOffset: -85,120,340, -85,-120,340
 		LocalYaw: -100, 100
@@ -380,38 +384,37 @@ choverlord.Gatling:
 		MuzzleSequence: muzzle2
 	Armament@gatlingAA:
 		Name: secondary
+		Turret: secondary
 		Weapon: CHgatlingTurretAA
 		LocalOffset: -85,120,340, -85,-120,340
 		LocalYaw: -100, 100
 		Recoil: 10
 		MuzzleSequence: muzzle2
 	WithSpriteTurret@gatling:
+		Turret: secondary
 		Sequence: turretgat
 
 choverlord.Bunker:
 	Inherits: choverlord
-	Inherits@CARGO: ^AttackingCargo
+	-WithSpriteTurret:
+	-AttackTurreted:
+	-Turreted:
+	Inherits@CARGO: ^AttackingCargoAndTurret
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.bunker
-		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+		Description: Heavy Chinese tank.
 	Tooltip:
 		Name: Bunker Overlord
 		RequiresCondition: !vehicles.chinatnk
 	Tooltip@Emperor:
 		Name: Bunker Emperor
 		RequiresCondition: vehicles.chinatnk
-	WithSpriteTurret@BUNKER:
-		Sequence: turretbun
 	Cargo:
 		InitialUnits: che3, che3, che3, che3
-	-AttackTurreted:
-	-AttackOpenTopped:
-	AttackTurretedOpenTopped:
-		Armaments: primary, mounted, mountedaa
-		MuzzlePalette: tdeffect
-		PortOffsets: -85,384,340, -85,-384,340
-		PortYaws: 0, 176, 341, 512, 682, 853
-		PauseOnCondition: empdisable || being-warped
+		EjectOnDeath: true
+	TurretedOpenTop:
+		TurnSpeed: 3
+		Offset: -298,0,150
 
 choverlord.Propaganda:
 	Inherits: choverlord
