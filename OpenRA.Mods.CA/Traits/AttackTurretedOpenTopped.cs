@@ -30,6 +30,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Turret names")]
 		public readonly string[] Turrets = { "primary" };
 
+		[Desc("Passenger Armaments shooting from Open Top")]
+		public readonly string[] PassengerArmaments = { "primary" };
+
 		public override object Create(ActorInitializer init) { return new AttackTurretedOpenTopped(init.Self, this); }
 		public override void RulesetLoaded(Ruleset rules, ActorInfo ai)
 		{
@@ -45,12 +48,12 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly new AttackTurretedOpenToppedInfo Info;
 		readonly Lazy<BodyOrientation> coords;
 		readonly List<Actor> actors;
-		readonly List<Armament> armaments;
+		readonly List<Armament> passengerArmaments;
 		readonly HashSet<(AnimationWithOffset MuzzleFlash, string Palette)> muzzles;
 		readonly Dictionary<Actor, IFacing> paxFacing;
 		readonly Dictionary<Actor, IPositionable> paxPos;
 		readonly Dictionary<Actor, RenderSprites> paxRender;
-		protected Turreted[] turrets;
+		protected TurretedOpenTop[] turrets;
 
 		public AttackTurretedOpenTopped(Actor self, AttackTurretedOpenToppedInfo info)
 			: base(self, info)
@@ -58,17 +61,25 @@ namespace OpenRA.Mods.CA.Traits
 			Info = info;
 			coords = Exts.Lazy(() => self.Trait<BodyOrientation>());
 			actors = new List<Actor>();
-			armaments = new List<Armament>();
+			passengerArmaments = new List<Armament>();
 			muzzles = new HashSet<(AnimationWithOffset, string)>();
 			paxFacing = new Dictionary<Actor, IFacing>();
 			paxPos = new Dictionary<Actor, IPositionable>();
 			paxRender = new Dictionary<Actor, RenderSprites>();
-			turrets = self.TraitsImplementing<Turreted>().Where(t => info.Turrets.Contains(t.Info.Turret)).ToArray();
+		}
+
+		protected override void Created(Actor self)
+		{
+			turrets = self.TraitsImplementing<TurretedOpenTop>().Where(t => Info.Turrets.Contains(t.Info.Turret)).ToArray();
+			base.Created(self);
 		}
 
 		protected override Func<IEnumerable<Armament>> InitializeGetArmaments(Actor self)
 		{
-			return () => armaments;
+			var armaments = self.TraitsImplementing<Armament>()
+				.Where(a => Info.Armaments.Contains(a.Info.Name)).ToArray();
+
+			return () => armaments.Concat(passengerArmaments);
 		}
 
 		void OnActorEntered(Actor enterer)
@@ -77,9 +88,9 @@ namespace OpenRA.Mods.CA.Traits
 			paxFacing.Add(enterer, enterer.Trait<IFacing>());
 			paxPos.Add(enterer, enterer.Trait<IPositionable>());
 			paxRender.Add(enterer, enterer.Trait<RenderSprites>());
-			armaments.AddRange(
+			passengerArmaments.AddRange(
 				enterer.TraitsImplementing<Armament>()
-				.Where(a => Info.Armaments.Contains(a.Info.Name)));
+				.Where(a => Info.PassengerArmaments.Contains(a.Info.Name)));
 		}
 
 		void OnActorExited(Actor exiter)
@@ -88,7 +99,7 @@ namespace OpenRA.Mods.CA.Traits
 			paxFacing.Remove(exiter);
 			paxPos.Remove(exiter);
 			paxRender.Remove(exiter);
-			armaments.RemoveAll(a => a.Actor == exiter);
+			passengerArmaments.RemoveAll(a => a.Actor == exiter);
 		}
 
 		void INotifyPassengerEntered.OnPassengerEntered(Actor self, Actor passenger)
@@ -117,32 +128,69 @@ namespace OpenRA.Mods.CA.Traits
 			var bodyOrientation = coords.Value.QuantizeOrientation(self, self.Orientation);
 			return coords.Value.LocalToWorld(offset.Rotate(bodyOrientation));
 		}
-		/*
-		protected override bool CanAttack(Actor self, in Target target)
+
+		protected bool TurretCanAttack(Actor self, in Target target)
 		{
 			if (target.Type == TargetType.Invalid)
 				return false;
 
 			// Don't break early from this loop - we want to bring all turrets to bear!
 			var turretReady = false;
+
+			// TODO WHY ?
+			//turrets = self.TraitsImplementing<TurretedOpenTop>().Where(t => Info.Turrets.Contains(t.Info.Turret)).ToArray();
+
 			foreach (var t in turrets)
+			{
 				if (t.FaceTarget(self, target))
 					turretReady = true;
+			}
 
 			return turretReady && base.CanAttack(self, target);
-		}*/
+		}
+
+		protected bool PassengerCanAttack(Actor self, in Target target)
+		{
+			if (!self.IsInWorld || IsTraitDisabled || IsTraitPaused)
+				return false;
+
+			if (!target.IsValidFor(self))
+				return false;
+
+			if (!HasAnyValidWeapons(target))
+				return false;
+
+			var mobile = self.TraitOrDefault<Mobile>();
+			if (mobile != null && !mobile.CanInteractWithGroundLayer(self))
+				return false;
+
+			if (passengerArmaments.All(a => a.IsReloading))
+				return false;
+
+			return true;
+		}
 
 		public override void DoAttack(Actor self, in Target target)
 		{
-			if (!CanAttack(self, target))
+			if (TurretCanAttack(self, target))
+			{
+				foreach (var a in Armaments)
+				{
+					a.CheckFire(self, facing, target);
+				}
+			}
+
+			if (!PassengerCanAttack(self, target))
 				return;
 
 			var pos = self.CenterPosition;
 			var targetedPosition = GetTargetPosition(pos, target);
 			var targetYaw = (targetedPosition - pos).Yaw;
 
-			foreach (var a in Armaments)
+			foreach (var a in passengerArmaments)
 			{
+				//Game.Debug(a.Info.Name.ToString());
+
 				if (a.IsTraitDisabled)
 					continue;
 
