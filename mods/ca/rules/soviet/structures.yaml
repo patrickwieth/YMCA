@@ -1,0 +1,52 @@
+Cloning_Vats:
+	Inherits: ^BuildingTD
+	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@shape: ^2x2Shape
+	Selectable:
+		Bounds: 48,48
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 640,-384,0, 640,512,0, -710,-512,0, -710,512,0
+	Buildable:
+		Queue: Building
+		IconPalette: chrometd
+		BuildPaletteOrder: 200
+		BuildLimit: 1
+		Prerequisites: techcenter, ~structures.iraq
+		Description: Clones produced infantry.
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Cloning Vats
+	Building:
+		Footprint: xx xx ==
+		Dimensions: 2,3
+		LocalCenterOffset: 0,-512,0
+	Health:
+		HP: 50000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		Range: 4c0
+	WithBuildingBib:
+	Power:
+		Amount: -100
+		RequiresCondition: !being-warped
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+	Production:
+		Produces: Clone.Soviets
+	ClonesProducedUnits:
+		CloneableTypes: Infantry
+		ProductionType: Clone.Soviets
+		RequiresCondition: !being-warped && !disabled && !empdisable
+	Exit:
+		SpawnOffset: -725,640,0
+		ExitCell: 0,2
+	Exit@2:
+		ExitCell: 1, 0
+	RallyPoint:
+		Path: 3,3
