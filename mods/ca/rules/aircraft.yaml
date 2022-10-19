@@ -347,14 +347,15 @@ MIG:
 
 MIG.AA:
 	Inherits: MIG
+	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
 		Prerequisites: ~afld, stek, ~commander_tree.mig.aa
-		Description: Precision strike aircraft.\n  Can attack aircraft. \n  Strong vs Vehicles, Defenses, Aircraft \n  Weak vs Infantry
+		Description: Air Superiority fighter aircraft.\n  Can attack aircraft. \n  Strong vs Aircraft \n  Weak vs Infantry
 	Valued:
 		Cost: 1750
 	Tooltip:
-		Name: MiG Fighter Plane
+		Name: SU-47 Fighter
 	Armament@primary:
 		Weapon: Maverick
 	Armament@secondary:
@@ -397,7 +398,7 @@ MIG.Tesla:
 		Weapon: MigTeslaBomb
 
 SUK:
-	Inherits: ^Plane
+	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -505,7 +506,7 @@ SUK.Conc:
 		Weapon: MaverickSU.Concussion
 
 FROG:
-	Inherits: ^Plane
+	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -1047,7 +1048,8 @@ TRAN.paradrop:
 		Experience: 1000
 
 NHAW:
-	Inherits: ^Helicopter
+	Inherits: ^HelicopterTD
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@TRANSPORT: ^Transport
 	RenderSprites:
 		Image: nhaw
@@ -1060,6 +1062,7 @@ NHAW:
 	TooltipExtras:
 		Strengths: • Strong vs Infantry
 		Weaknesses: • Weak vs Heavy Armor, Defenses, Buildings\n• Cannot attack Aircraft
+		Attributes: • Can carry infantry\n• Can Paradrop Infantry (HoldFire Stance + Force Fire)
 	Valued:
 		Cost: 1150
 	Tooltip:
@@ -1092,29 +1095,15 @@ NHAW:
 		Offset: 237,0,263
 		Sequence: slow-rotor
 		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -997,0,341
-		Sequence: rotor2
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -997,0,341
-		Sequence: slow-rotor2
-		RequiresCondition: !airborne
 	Cargo:
 		Types: Infantry
 		MaxWeight: 8
 	SpawnActorOnDeath:
 		Actor: NHAW.Husk
-		RequiresCondition: !upg-crym && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: NHAW.Husk.EMP
-		RequiresCondition: !upg-crym && empdisable && !being-warped
-	SpawnActorOnDeath@UPG:
-		Actor: NHAW.UPG.Husk
-		RequiresCondition: upg-crym && !empdisable && !being-warped
-	SpawnActorOnDeath@UPGEMP:
-		Actor: NHAW.UPG.Husk.EMP
-		RequiresCondition: upg-crym && empdisable && !being-warped
+		RequiresCondition: empdisable && !being-warped
 	Selectable:
 		DecorationBounds: 40,36
 	Voiced:
@@ -1122,19 +1111,6 @@ NHAW:
 	AppearsOnRadar:
 		ValidRelationships: Ally
 	WithFacingSpriteBody:
-		RequiresCondition: !upg-crym
-	WithFacingSpriteBody@UPG:
-		Name: body-upg
-		RequiresCondition: upg-crym && ammo > 1
-		Sequence: idle-upg
-	WithFacingSpriteBody@oneshot:
-		Name: body-oneshot
-		RequiresCondition: upg-crym && ammo == 1
-		Sequence: oneshot
-	WithFacingSpriteBody@empty:
-		Name: body-empty
-		RequiresCondition: upg-crym && !ammo
-		Sequence: empty
 	Armament@PRIMARY:
 		Weapon: M60mgJJ
 		LocalOffset: 1000,0,-100
@@ -1155,19 +1131,31 @@ NHAW:
 		Count: 2
 		RequiresCondition: upg-crym
 	AutoTarget:
-		InitialStance: HoldFire
+		InitialStance: ReturnFire
 		InitialStanceAI: AttackAnything
+		HoldFireCondition: stance-holdfire
 	AttackAircraft:
-		Armaments: primary, cryo
+		Armaments: primary, cryo, drop
 		FacingTolerance: 20
 		AttackType: Hover
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
-	GrantConditionOnPrerequisite@CRYM:
-		Condition: upg-crym
-		Prerequisites: crym.upgrade
+	ParaDrop:
+		ChuteSound: chute1.aud
+	Armament@DROP:
+		Name: drop
+		Weapon: DropDummy
+		Cursor: ability
+		OutsideRangeCursor: ability
+		RequiresCondition: cargo && stance-holdfire
+	ParachuteCargoOnCondition:
+		RequiresCondition: dropcargo
+		ReturnToBase: false
+	GrantConditionOnAttack:
+		Condition: dropcargo
+		ArmamentNames: drop
 
 NHAW.paradrop:
 	Inherits: ^Helicopter
@@ -1188,14 +1176,6 @@ NHAW.paradrop:
 	WithIdleOverlay@ROTOR1GROUND:
 		Offset: 597,0,85
 		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -597,0,171
-		Sequence: rotor2
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -597,0,171
-		Sequence: slow-rotor2
 		RequiresCondition: !airborne
 	Cargo:
 		Types: Infantry
@@ -3183,7 +3163,7 @@ HARR.payload:
 		RequiresSelection: true
 
 Raptor:
-	Inherits: ^Plane
+	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetAir
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
