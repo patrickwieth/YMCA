@@ -12,20 +12,12 @@ V2RL:
 		Cost: 900
 	Tooltip:
 		Name: V2 Rocket Launcher
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 15000
 	Armor:
 		Type: Light
 	Mobile:
 		Speed: 68
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: SCUD
 		ReloadingCondition: reloading
@@ -54,6 +46,7 @@ V2RL:
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	Inherits@vision: ^ImprovedVision
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 50
@@ -64,8 +57,6 @@ V2RL:
 	Tooltip:
 		Name: Scout Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 33000
 	Armor:
@@ -88,12 +79,6 @@ V2RL:
 		Sequence: idle-water
 		Name: body-water
 		RequiresCondition: onwater
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 8c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted@PRIMARY:
 		TurnSpeed: 56
 	Armament@PRIMARY:
@@ -157,20 +142,12 @@ V2RL:
 	Tooltip:
 		Name: Medium Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 45000
 	Armor:
 		Type: Heavy
 	Mobile:
 		Speed: 82
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 48
 		Offset: 0,0,20
@@ -363,20 +340,12 @@ GTNK.squad:
 	Tooltip@Iraq:
 		Name: Atomic Heavy Tank
 		RequiresCondition: iraqtank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 60000
 	Armor:
 		Type: Heavy
 	Mobile:
 		Speed: 68
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 48
 		Offset: 0,0,20
@@ -580,8 +549,6 @@ GTNK.squad:
 		Name: Atomic Mammoth Tank
 		GenericName: Tank
 		RequiresCondition: iraqtank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 78000
 	Armor:
@@ -591,12 +558,6 @@ GTNK.squad:
 		Locomotor: heavytracked
 	Passenger:
 		Weight: 5
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 16
 	GrantConditionOnFaction@IRAQTANK:
@@ -833,8 +794,6 @@ ARTY:
 		Cost: 550
 	Tooltip:
 		Name: Artillery
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 10000
 	Armor:
@@ -843,12 +802,6 @@ ARTY:
 		TurnSpeed: 16
 		Speed: 56
 		Locomotor: lighttracked
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: 155mm
 		LocalOffset: 624,0,208
@@ -932,8 +885,6 @@ ISU:
 		Cost: 1650
 	Tooltip:
 		Name: ISU Bombard Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 65000
 	Armor:
@@ -943,12 +894,6 @@ ISU:
 		Speed: 56
 		Locomotor: heavytracked
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: 152mm
 		LocalOffset: 824,0,208
@@ -1024,7 +969,9 @@ SPEC:
 
 HARV:
 	Inherits: ^Vehicle
-	Inherits@HARVBALANCE: ^HarvesterBalancer
+	Inherits@HARV: ^Harvester
+	-Crushable:
+	-Carryable:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 10
@@ -1038,14 +985,6 @@ HARV:
 	Selectable:
 		Priority: 7
 		DecorationBounds: 42,42
-	Harvester:
-		Capacity: 30
-		PipCount: 6
-		Resources: Tiberium, BlueTiberium, Ore, Gems
-		BaleUnloadDelay: 1
-		SearchFromProcRadius: 30
-		SearchFromHarvesterRadius: 11
-		EmptyCondition: no-ore
 	Health:
 		HP: 75000
 	Armor:
@@ -1053,34 +992,10 @@ HARV:
 	Mobile:
 		Speed: 56
 		Locomotor: heavywheeled
-	RevealsShroud:
-		Range: 4c0
-	WithHarvestAnimation:
-	WithDockingAnimation:
 	SpawnActorOnDeath:
 		Actor: HARV.EmptyHusk
 		RequiresCondition: !being-warped && !orep-upgrade
-	ChangesHealth:
-		PercentageStep: 1
-		Delay: 25
-		HealIfBelow: 50
-		DamageCooldown: 500
-	GrantConditionOnTerrain@Tiberium:
-		Condition: ontib
-		TerrainTypes: Tiberium
-	GrantConditionOnTerrain@Ore:
-		Condition: onore
-		TerrainTypes: Ore
-	Explodes@Ore:
-		RequiresCondition: !no-ore && onore && !being-warped
-		Weapon: OreExplosion
-	Explodes@Tib:
-		RequiresCondition: !no-ore && ontib && !being-warped
-		Weapon: TibExplosion
 	WithFacingSpriteBody:
-	-Crushable:
-	Targetable:
-		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
 	GrantConditionOnPrerequisite@OREPUPGRADE:
 		Prerequisites: orep
 		Condition: orep-upgrade
@@ -1094,12 +1009,6 @@ HARV:
 	PeriodicExplosion@WARPOUT:
 		Weapon: HarvSwap
 		RequiresCondition: orep-upgrade
-	-Carryable:
-	CarryableHarvester:
-	AutoCarryable:
-		CarriedCondition: notmobile
-		ReservedCondition: carryall-reserved
-		LockedCondition: notmobile
 
 HARV.Chrono:
 	Inherits: HARV
@@ -1168,8 +1077,6 @@ MCV:
 	Mobile:
 		Speed: 56
 		Locomotor: heavywheeled
-	RevealsShroud:
-		Range: 4c0
 	Transforms:
 		IntoActor: fact
 		Offset: -1,-1
@@ -1204,8 +1111,6 @@ JEEP:
 		Cost: 400
 	Tooltip:
 		Name: Ranger
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 15000
 	Armor:
@@ -1243,8 +1148,6 @@ APC:
 		Cost: 600
 	Tooltip:
 		Name: Armored Personnel Carrier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 30000
 	Armor:
@@ -1252,12 +1155,6 @@ APC:
 	Mobile:
 		Speed: 135
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 7c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: M60mg
 		LocalOffset: 85,0,171
@@ -1299,8 +1196,6 @@ TRUK:
 		Type: Light
 	Mobile:
 		Speed: 135
-	RevealsShroud:
-		Range: 4c0
 	DeliversCash:
 		Payload: 500
 		PlayerExperience: 50
@@ -1339,8 +1234,6 @@ MGG:
 		Cost: 1000
 	Tooltip:
 		Name: Mobile Gap Generator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 22000
 	Armor:
@@ -1354,12 +1247,6 @@ MGG:
 		Sequence: spinner
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !pickedup
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	CreatesShroud:
 		Range: 5c0
 	RenderShroudCircle:
@@ -1375,8 +1262,6 @@ MRJ:
 		Cost: 1000
 	Tooltip:
 		Name: Mobile Radar Jammer
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 235
@@ -1388,8 +1273,6 @@ MRJ:
 		Type: Heavy
 	Mobile:
 		Speed: 82
-	RevealsShroud:
-		Range: 7c0
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
 		Offset: -256,0,256
@@ -1425,8 +1308,6 @@ TTNK:
 	Tooltip:
 		Name: Tesla Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 38000
 	Armor:
@@ -1434,12 +1315,6 @@ TTNK:
 	Mobile:
 		Speed: 113
 		Voice: Move
-	RevealsShroud:
-		MinRange: 6c0
-		Range: 7c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 6c0
 	Armament:
 		Weapon: TTankZap
 		LocalOffset: 0,0,213
@@ -1495,8 +1370,6 @@ TTNK.RA2:
 	Tooltip:
 		Name: Heavy Tesla Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 48000
 	Armor:
@@ -1504,12 +1377,6 @@ TTNK.RA2:
 	Mobile:
 		Speed: 100
 		Voice: Move
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 6c0
 	Armament@PRIMARY:
 		Weapon: TTankZapMK2
 		LocalOffset: 511,200,113, 511,-200,113
@@ -1560,8 +1427,6 @@ DTRK:
 		Cost: 2500
 	Tooltip:
 		Name: Demolition Truck
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 5000
 	Armor:
@@ -1569,8 +1434,6 @@ DTRK:
 	Mobile:
 		Speed: 82
 		Voice: Move
-	RevealsShroud:
-		Range: 4c0
 	Explodes@NUKE:
 		Weapon: MiniNuke
 		EmptyWeapon: MiniNuke
@@ -1638,8 +1501,6 @@ CTNK:
 	Tooltip:
 		Name: Chrono Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 50000
 	Armor:
@@ -1647,12 +1508,6 @@ CTNK:
 	Mobile:
 		Speed: 113
 		Locomotor: heavywheeled
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament@PRIMARYFRONTAL:
 		Name: primaryfrontal
 		Weapon: APTusk
@@ -1713,8 +1568,6 @@ QTNK:
 	Tooltip:
 		Name: MAD Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 90000
 	Armor:
@@ -1724,12 +1577,6 @@ QTNK:
 		Speed: 56
 	ChronoshiftableWithSpriteEffect:
 		RequiresCondition: !deployed && !being-captured && !being-warped
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	MadTankCA:
 		DeployedCondition: deployed
 		RequiresCondition: !invulnerability && !unloaded
@@ -1767,8 +1614,6 @@ AMCV:
 	Mobile:
 		Speed: 56
 		Locomotor: heavywheeled
-	RevealsShroud:
-		Range: 4c0
 	Transforms:
 		IntoActor: afac
 		Offset: -1,-1
@@ -1805,8 +1650,6 @@ HMMV:
 		Cost: 400
 	Tooltip:
 		Name: Hum-Vee
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 15000
 	Armor:
@@ -1851,8 +1694,6 @@ BGGY:
 		Cost: 350
 	Tooltip:
 		Name: Buggy
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 14000
 	Armor:
@@ -1933,8 +1774,6 @@ APC2:
 		Cost: 600
 	Tooltip:
 		Name: Armored Personnel Carrier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 30000
 	Armor:
@@ -1942,12 +1781,6 @@ APC2:
 	Mobile:
 		Speed: 135
 		PauseOnCondition: being-captured || empdisable || being-warped || notmobile || driver-dead
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 7c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: M60mgTD
 		LocalOffset: 85,0,171
@@ -1993,15 +1826,13 @@ VULC:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.gdi, ~gtek, ~commander_tree.apc_vulcan, ~infantry.any, ~techlevel.high
+		Prerequisites: ~vehicles.gdi, ~gtek, ~commander_tree.apc_vulcan, ~infantry.any
 		IconPalette: chrometd
 		Description: Tough infantry transport, armed with a powerful chain gun.\n  Strong vs Aircraft, Light Armor, Infantry\n  Weak vs Tanks
 	Valued:
 		Cost: 800
 	Tooltip:
 		Name: Vulcan
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 50000
 	Armor:
@@ -2009,12 +1840,6 @@ VULC:
 	Mobile:
 		Speed: 100
 		PauseOnCondition: being-captured || empdisable || being-warped || notmobile
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament@GAT0:
 		Weapon: MGatt.0
 		LocalOffset: 220,0,350
@@ -2100,8 +1925,6 @@ VULC:
 		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Capturable:
 		RequiresCondition: !being-warped && !cargo
 	Capturable@DRIVER_DEAD:
@@ -2131,8 +1954,6 @@ LTNK:
 		Cost: 625
 	Tooltip:
 		Name: Light Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 41250
 	Armor:
@@ -2155,12 +1976,6 @@ LTNK:
 		Sequence: idle-water
 		Name: body-water
 		RequiresCondition: onwater && !parachute
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 56
 	Armament:
@@ -2204,8 +2019,6 @@ LTNK.Laser:
 		Cost: 650
 	Tooltip:
 		Name: Laser Light Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 41250
 	Armor:
@@ -2228,8 +2041,6 @@ LTNK.Laser:
 		Sequence: idle-water
 		Name: body-water
 		RequiresCondition: onwater && !parachute
-	RevealsShroud:
-		Range: 5c0
 	Turreted:
 		TurnSpeed: 56
 	Armament:
@@ -2280,20 +2091,12 @@ MTNK:
 	Tooltip:
 		Name: Battle Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 52000
 	Armor:
 		Type: Heavy
 	Mobile:
 		Speed: 82
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted@PRIMARY:
 		TurnSpeed: 48
 		Offset: 0,0,30
@@ -2360,8 +2163,6 @@ MTNK.Drone:
 	Tooltip:
 		Name: Battle Drone
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 52000
 	Armor:
@@ -2370,12 +2171,6 @@ MTNK.Drone:
 		Speed: 82
 		PauseOnCondition: !radarenabled || disabled || empdisable || being-warped
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 48
 		Offset: 0,0,20
@@ -2471,8 +2266,6 @@ HTNK:
 	Tooltip:
 		Name: Mammoth Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 78000
 	Armor:
@@ -2482,12 +2275,6 @@ HTNK:
 		Locomotor: heavytracked
 	Passenger:
 		Weight: 5
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted@PRIMARY:
 		TurnSpeed: 16
 	Armament@PRIMARY:
@@ -2702,8 +2489,6 @@ MSAM:
 		Cost: 850
 	Tooltip:
 		Name: MLRS
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 120
 		Prerequisites: hq, ~vehicles.msam, ~vehicles.td, ~!commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs
@@ -2716,12 +2501,6 @@ MSAM:
 		HP: 16000
 	Armor:
 		Type: Light
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 80
 		Offset: -256,0,128
@@ -2773,8 +2552,6 @@ MLRS:
 		Cost: 1050
 	Tooltip:
 		Name: SSM Launcher
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 150
 		Prerequisites: tmpl, ~vehicles.nod, ~!vehicles.blackh, ~!commander_tree.ssm_toxin_launcher, ~!commander_tree.ssm_multi_launcher, ~techlevel.high
@@ -2788,12 +2565,6 @@ MLRS:
 		HP: 15000
 	Armor:
 		Type: Light
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 16
 		Offset: -128,0,128
@@ -2873,8 +2644,6 @@ STNK:
 	Tooltip:
 		Name: Stealth Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 130
 		Prerequisites: hq, ~vehicles.nod, ~!commander_tree.stealth_tank.ap, ~!commander_tree.stealth_tank.scrin, ~!commander_tree.stealth_tank.explosive_rockets
@@ -2887,12 +2656,6 @@ STNK:
 		HP: 20000
 	Armor:
 		Type: Light
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Cloak@NORMAL:
 		InitialDelay: 90
 		CloakDelay: 90
@@ -3058,8 +2821,6 @@ BIKE:
 		Cost: 500
 	Tooltip:
 		Name: Recon Bike
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: ~vehicles.nod, ~!commander_tree.recon_bike.rocket_hail, ~!commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.explosive
@@ -3073,12 +2834,6 @@ BIKE:
 		HP: 11000
 	Armor:
 		Type: Light
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament@PRIMARYFRONTAL:
 		Name: primaryfrontal
 		Weapon: BikeRockets
@@ -3236,8 +2991,6 @@ FTNK:
 	Tooltip:
 		Name: Flame Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 65
 		Prerequisites: hq, ~vehicles.nod, ~!commander_tree.flame_tank.pld, ~!commander_tree.flame_tank.reflector
@@ -3250,12 +3003,6 @@ FTNK:
 		HP: 45000
 	Armor:
 		Type: Heavy
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament@PRIMARYFRONTAL:
 		Name: primaryfrontal
 		Weapon: BigFlamer
@@ -3372,7 +3119,9 @@ FTNK.Reflector.Fireball:
 
 HAR2:
 	Inherits: ^VehicleTD
-	Inherits@HARVBALANCE: ^HarvesterBalancer
+	Inherits@HARV: ^Harvester
+	-Crushable:
+	-Carryable:
 	RenderSprites:
 		Image: harv2
 	Valued:
@@ -3382,21 +3131,10 @@ HAR2:
 		GenericName: Harvester
 	Buildable:
 		BuildPaletteOrder: 10
-		Prerequisites: ~proc.td, ~vehicles.td, ~techlevel.infonly
+		Prerequisites: ~proc.td, ~vehicles.td
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Collects Tiberium, Ore and Gems for processing.\n  Unarmed
-	Selectable:
-		Priority: 7
-		DecorationBounds: 36,36
-	Harvester:
-		Capacity: 30
-		PipCount: 6
-		Resources: Tiberium, BlueTiberium, Ore, Gems
-		BaleUnloadDelay: 1
-		SearchFromProcRadius: 30
-		SearchFromHarvesterRadius: 15
-		EmptyCondition: no-ore
 	Mobile:
 		Speed: 56
 		Locomotor: heavywheeled
@@ -3404,39 +3142,9 @@ HAR2:
 		HP: 75000
 	Armor:
 		Type: Heavy
-	RevealsShroud:
-		Range: 4c0
 	SpawnActorOnDeath:
 		Actor: HAR2.Husk
 		RequiresCondition: !being-warped
-	WithHarvestAnimation:
-	WithDockingAnimation:
-	ChangesHealth:
-		PercentageStep: 1
-		Delay: 25
-		HealIfBelow: 50
-		DamageCooldown: 500
-	GrantConditionOnTerrain@Tiberium:
-		Condition: ontib
-		TerrainTypes: Tiberium
-	GrantConditionOnTerrain@Ore:
-		Condition: onore
-		TerrainTypes: Ore
-	Explodes@Ore:
-		RequiresCondition: !no-ore && onore && !being-warped
-		Weapon: OreExplosion
-	Explodes@Tib:
-		RequiresCondition: !no-ore && ontib && !being-warped
-		Weapon: TibExplosion
-	-Crushable:
-	Targetable:
-		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
-	-Carryable:
-	CarryableHarvester:
-	AutoCarryable:
-		CarriedCondition: notmobile
-		ReservedCondition: carryall-reserved
-		LockedCondition: notmobile
 	GrantConditionOnPrerequisite@stealthed:
 		Condition: stealth-miner
 		Prerequisites: commander_tree.stealth_miners
@@ -3490,8 +3198,6 @@ BTR:
 		Cost: 850
 	Tooltip:
 		Name: Armored Personnel Carrier (BTR)
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 33000
 	Armor:
@@ -3499,12 +3205,6 @@ BTR:
 	Mobile:
 		Speed: 100
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 7c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 80
 		Offset: 5,0,0
@@ -3552,8 +3252,6 @@ BTR.Surveillance:
 		Cost: 750
 	Tooltip:
 		Name: Surveillance BTR
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 28000
 	Armor:
@@ -3640,8 +3338,6 @@ IFV:
 		Cost: 750
 	Tooltip:
 		Name: Infantry Fighting Vehicle
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 30000
 	Armor:
@@ -3650,12 +3346,8 @@ IFV:
 		Speed: 113
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
 	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
 		RequiresCondition: !spyturr
 	RevealsShroud@GAPGEN:
-		Range: 4c0
 		RequiresCondition: !spyturr
 	RevealsShroud@SPY:
 		Range: 14c0
@@ -3904,20 +3596,12 @@ IFV.AI:
 		Cost: 650
 	Tooltip:
 		Name: Infantry Fighting Vehicle
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 27000
 	Armor:
 		Type: Light
 	Mobile:
 		Speed: 113
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 80
 		Offset: 20,0,0
@@ -3981,8 +3665,6 @@ TITN:
 		Bounds: 30,40,0,0
 	Tooltip:
 		Name: Titan
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 100000
 	Armor:
@@ -4002,12 +3684,6 @@ TITN:
 	WithMoveAnimation:
 		MoveSequence: run
 	WithSpriteTurret:
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament@PRIMARY:
 		Weapon: TitanGun
 		Turret: primary
@@ -4189,8 +3865,6 @@ DISR:
 		Cost: 1500
 	Tooltip:
 		Name: Disruptor
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 220
@@ -4208,12 +3882,6 @@ DISR:
 	Passenger:
 		Weight: 5
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 7c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament@PRIMARY:
 		Weapon: SonicZap
 		LocalOffset: 0,0,200
@@ -4271,8 +3939,6 @@ HMLRS:
 		Cost: 1150
 	Tooltip:
 		Name: Hover MLRS
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 165
 		Prerequisites: ~vehicles.gdi, gtek, ~commander_tree.hover_mlrs, ~!commander_tree.hover_mlrs.reflector, ~!commander_tree.hover_mlrs.pld
@@ -4293,12 +3959,6 @@ HMLRS:
 		HP: 18000
 	Armor:
 		Type: Light
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 80
 		Offset: -200,0,0
@@ -4400,8 +4060,6 @@ RTNK:
 	WithMirageSpriteBody:
 		RequiresCondition: tree
 		Name: tree
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 43000
 	Armor:
@@ -4411,12 +4069,6 @@ RTNK:
 		Voice: Move
 	Passenger:
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted@PRIMARY:
 		TurnSpeed: 48
 	Armament@PRIMARY:
@@ -4512,8 +4164,6 @@ V3RL:
 		Cost: 1200
 	Tooltip:
 		Name: V3 Launcher
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 16000
 	Armor:
@@ -4525,12 +4175,6 @@ V3RL:
 		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
 	Passenger:
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: V3Launcher
 		ReloadingCondition: reloading
@@ -4611,8 +4255,6 @@ KATY:
 		Cost: 1200
 	Tooltip:
 		Name: Katyusha
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 15000
 	Armor:
@@ -4621,8 +4263,6 @@ KATY:
 		Speed: 68
 		TurnSpeed: 8
 		PauseOnCondition: being-captured || empdisable || being-warped
-	RevealsShroud:
-		Range: 5c0
 	Armament:
 		Weapon: KatyushaRockets
 		PauseOnCondition: empdisable || being-warped
@@ -4653,8 +4293,6 @@ TNKD:
 	Tooltip:
 		Name: Tank Destroyer
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 55000
 	Armor:
@@ -4665,12 +4303,6 @@ TNKD:
 		Voice: Move
 	Passenger:
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 16
 		Offset: -80,0,20
@@ -4724,8 +4356,6 @@ TNKD2:
 	Tooltip:
 		Name: Tank Destroyer
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 55000
 	Armor:
@@ -4736,12 +4366,6 @@ TNKD2:
 		Voice: Move
 	Passenger:
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament@primaryfrontal:
 		Name: primaryfrontal
 		Weapon: 183mm
@@ -4824,8 +4448,6 @@ MSAR:
 	Tooltip@DEPLOYED:
 		Name: Mobile Sensor Array (deployed)
 		RequiresCondition: deployed
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 240
@@ -4936,8 +4558,6 @@ PTNK:
 	Tooltip:
 		Name: Prism Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 22000
 	Armor:
@@ -4947,12 +4567,6 @@ PTNK:
 		Voice: Move
 	Passenger:
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 48
 		Offset: 100,0,0
@@ -5006,8 +4620,6 @@ PCAN:
 	Tooltip:
 		Name: Prism Cannon
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 22000
 	Armor:
@@ -5015,8 +4627,6 @@ PCAN:
 	Mobile:
 		Speed: 82
 		Voice: Move
-	RevealsShroud:
-		Range: 6c0
 	Armament:
 		Weapon: PrisCLaser
 		FireDelay: 10
@@ -5071,12 +4681,6 @@ WTNK:
 		Voice: Move
 	Passenger:
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 8c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 8
 		Offset: 0,0,0
@@ -5104,8 +4708,6 @@ WTNK:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 
 #adjust offsets
 BATF:
@@ -5134,12 +4736,6 @@ BATF:
 	Passenger:
 		Weight: 5
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	AttackTurreted:
 		Turrets: primary, secondary, tertiary
 		Armaments: primary, secondary, tertiary
@@ -5195,8 +4791,6 @@ BATF:
 	-Crushable:
 	Voiced:
 		VoiceSet: BattleFortressVoice
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	WithSpriteTurret@PRIMARY:
 		Turret: primary
 	WithSpriteTurret@SECONDARY:
@@ -5420,8 +5014,6 @@ BATF.Bunker:
 		Voice: Move
 	Cargo:
 		InitialUnits: e3, e3, e3, e3
-	RevealsShroud:
-		Range: 8c0
 	Armament:
 		Weapon: ZSU-23
 		LocalOffset: 624,0,208
@@ -5453,8 +5045,6 @@ BATF.Bunker:
 		InvalidTargets: NoAutoTarget
 	Voiced:
 		VoiceSet: BattleFortressVoice
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 
 BATF.Arty:
 	Inherits: ^Tank
@@ -5479,8 +5069,6 @@ BATF.Arty:
 		Speed: 50
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
 		Voice: Move
-	RevealsShroud:
-		Range: 8c0
 	Armament:
 		Weapon: 155mm.BATF
 		LocalOffset: 624,0,208
@@ -5522,8 +5110,6 @@ MEMP:
 	Tooltip:
 		Name: Mobile E.M.P
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 65000
 	Armor:
@@ -5544,12 +5130,6 @@ MEMP:
 		PauseOnCondition: !radarenabled || empdisable || being-warped
 	ChronoshiftableWithSpriteEffect:
 		RequiresCondition: !being-warped && !deployed
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	WithIdleOverlay@charging:
 		RequiresCondition: deployed
 		Palette: tseffect
@@ -5685,8 +5265,6 @@ CDRN:
 		Cost: 700
 	Tooltip:
 		Name: Chaos Drone
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 18000
 	Armor:
@@ -5695,12 +5273,6 @@ CDRN:
 		Speed: 135
 		Voice: Move
 		PauseOnCondition: empdisable || being-warped
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Explodes:
 		Weapon: ChaosDroneExplode
 		EmptyWeapon: VisualExplodeHusk
@@ -5764,8 +5336,6 @@ CHPR:
 	Tooltip:
 		Name: Chrono Prison
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 75000
 	Armor:
@@ -5777,12 +5347,6 @@ CHPR:
 	Passenger:
 		Weight: 5
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 16
 		Offset: -156,0,0
@@ -5923,16 +5487,12 @@ CHPR.AA:
 		Cost: 1350
 	Tooltip:
 		Name: Akatsiya
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 38000
 	Armor:
 		Type: Heavy
 	Mobile:
 		Speed: 68
-	RevealsShroud:
-		Range: 5c0
 	Turreted:
 		TurnSpeed: 24
 		Offset: -200, 0, 0
@@ -5969,8 +5529,6 @@ CRYO:
 		Cost: 1150
 	Tooltip:
 		Name: Cryo Launcher
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 170
 		Prerequisites: radar, ~vehicles.allies, ~commander_tree.cryo_launcher, ~techlevel.high
@@ -5985,12 +5543,6 @@ CRYO:
 		HP: 32000
 	Armor:
 		Type: Light
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: CryoMissile
 		LocalOffset: 150,100,0, 150,-100,0
@@ -6012,8 +5564,6 @@ SLNG:
 		Cost: 550
 	Tooltip:
 		Name: Slingshot
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 130
 		Prerequisites: gtek, ~commander_tree.slingshot, ~techlevel.high
@@ -6034,8 +5584,6 @@ SLNG:
 		HP: 13500
 	Armor:
 		Type: Light
-	RevealsShroud:
-		Range: 5c0
 	Turreted:
 		TurnSpeed: 80
 	Hovers:
@@ -6082,8 +5630,6 @@ FTRK:
 		Cost: 500
 	Tooltip:
 		Name: Mobile Flak
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 15000
 	Armor:
@@ -6091,12 +5637,6 @@ FTRK:
 	Mobile:
 		TurnSpeed: 48
 		Speed: 118
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 48
 		Offset: -298,0,298
@@ -6145,12 +5685,11 @@ FTRK.Barrage:
 COORDINATOR:
 	Inherits: ^Vehicle
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@Vision: ^ImprovedVision
 	Valued:
 		Cost: 1000
 	Tooltip:
 		Name: Reinforcements Coordinator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 235
@@ -6166,8 +5705,6 @@ COORDINATOR:
 	Mobile:
 		Speed: 82
 		RequiresCondition: !primary
-	RevealsShroud:
-		Range: 7c0
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
 		Offset: 0,0,256
@@ -6264,12 +5801,6 @@ Beam_Cannon:
 		Voice: Move
 	Passenger:
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 8c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 16
 		Offset: 0,0,0
@@ -6375,8 +5906,6 @@ Beam_Cannon:
 		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 
 MAMMOTHMK2:
 	Inherits: ^Tank
@@ -6410,8 +5939,6 @@ MAMMOTHMK2:
 		Type: Heavy
 	Passenger:
 		Weight: 10
-	RevealsShroud:
-		Range: 8c0
 	Armament@MISSILES:
 		Name: missiles
 		Weapon: Dragon.MKII
@@ -6473,8 +6000,6 @@ APOC:
 	Tooltip:
 		Name: Apocalypse Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 145000
 	Armor:
@@ -6487,12 +6012,6 @@ APOC:
 	Passenger:
 		Weight: 2
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 8
 	Armament@PRIMARY:
@@ -6568,8 +6087,6 @@ XO:
 		Cost: 800
 	Tooltip:
 		Name: X-O Powersuit
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 22000
 	Armor:
@@ -6624,8 +6141,6 @@ HFTK:
 	Tooltip:
 		Name: Heavy Flame Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 75000
 	Armor:
@@ -6634,12 +6149,6 @@ HFTK:
 		Locomotor: heavytracked
 		Speed: 56
 		Voice: Move
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 20
 	Armament@PRIMARY:
@@ -6685,20 +6194,12 @@ MDRN:
 		Description: Hovering drone with machine gun.\n  Attaches to certain vehicles to provide support and repairs.\n  Strong vs Infantry\n  Weak vs Vehicles, Buildings, Aircraft
 	Valued:
 		Cost: 300
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Selectable:
 		DecorationBounds: 16, 16, 0, -8
 	Health:
 		HP: 15000
 	Armor:
 		Type: Light
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Mobile:
 		Speed: 80
 		TurnSpeed: 255
@@ -6800,8 +6301,6 @@ GDRN:
 		Cost: 300
 	Tooltip:
 		Name: Guardian Drone
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 17000
 	Armor:
@@ -6853,8 +6352,6 @@ MSG:
 		RequiresCondition: deployed
 	Selectable:
 		DecorationBounds: 38,36,0,-1
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 25000
 	Armor:
@@ -6862,12 +6359,6 @@ MSG:
 	Mobile:
 		Speed: 56
 		RequireForceMoveCondition: !undeployed
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	SpawnActorOnDeath:
 		Actor: MSG.Husk
 		RequiresCondition: !being-warped
@@ -6923,8 +6414,6 @@ SAPC:
 		Cost: 1100
 	Tooltip:
 		Name: Chemical Emitter
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 50000
 	Armor:
@@ -6932,12 +6421,6 @@ SAPC:
 	Mobile:
 		Speed: 108
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Explodes:
 		Weapon: ToxinEmit
 		EmptyWeapon: ToxinEmit

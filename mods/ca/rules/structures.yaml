@@ -1541,6 +1541,7 @@ FACT:
 PROC:
 	Inherits: ^Building
 	Inherits@2: ^BotIncome
+	Inherits@Refinery: ^Refinery
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 60
@@ -1569,15 +1570,7 @@ PROC:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Refinery:
-		DockAngle: 256
-		DockOffset: 1,2
-	StoresResources:
-		PipCount: 17
-		Capacity: 2000
 	DrawLineToTarget:
-	CustomSellValue:
-		Value: 300
 	GrantConditionOnPrerequisite@OREP:
 		Prerequisites: orep
 		Condition: orep-built
@@ -1602,10 +1595,6 @@ PROC:
 		SpawnOffset: 1,2
 		Facing: 64
 		RequiresCondition: spawn-charv && !spawn-harv && !build-incomplete
-	InfiltrateForCash:
-		Percentage: 50
-		Types: ThiefInfiltrate
-		Notification: CreditsStolen
 	WithBuildingBib:
 	WithIdleOverlay@TOP:
 		RequiresCondition: !build-incomplete
@@ -1635,7 +1624,6 @@ PROC:
 	SequencePlaceBuildingPreview:
 		Sequence: idle
 		SequencePalette: placebuilding
-	CashHackable:
 	SpawnActorsOnSell:
 		ActorTypes: proc.dummy,e1,e1,e1,e1,e1,e1,e1,e1,e1,e1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
 
@@ -4425,6 +4413,7 @@ HPAD.TD:
 PROC.TD:
 	Inherits: ^BuildingTD
 	Inherits@2: ^BotIncome
+	Inherits@Refinery: ^Refinery
 	HitShape:
 		Type: Rectangle
 			TopLeft: -1536, -512
@@ -4474,18 +4463,10 @@ PROC.TD:
 		DragOffset: -554,512,0
 		DragLength: 12
 		TickRate: 15
-	StoresResources:
-		PipColor: Green
-		PipCount: 17
-		Capacity: 2000
 	DrawLineToTarget:
 	Selectable:
 		Bounds: 72,56,0,12
 		DecorationBounds: 73,72
-	InfiltrateForCash:
-		Types: ThiefInfiltrate
-		Percentage: 50
-		Notification: CreditsStolen
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
@@ -4500,7 +4481,6 @@ PROC.TD:
 		Amount: -30
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	CashHackable:
 	SpawnActorsOnSell:
 		ActorTypes: proc.dummy,n1,n1,n1,n1,n1,n1,n1,n1,n1,n1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
 

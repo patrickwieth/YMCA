@@ -173,7 +173,8 @@ chhelix:
 	Inherits@EXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@announce: ^AnnounceOnBuild
-	#Inherits@heliarmorupgrade: ^HeliArmorUpgrade
+	Inherits@speaker: ^PropagandaSpeaker
+	Inherits@recon: ^SensorEquipment
 	Buildable:
 		BuildPaletteOrder: 20
 		Prerequisites: ~aircraft.china, radar, ~!filler.helix
@@ -201,7 +202,7 @@ chhelix:
 		AddToArmyValue: true
 	Health:
 		HP: 30000
-	RevealsShroud:
+	RevealsShroud@default:
 		Range: 8c0
 		Type: GroundPosition
 		RevealGeneratedShroud: False
@@ -265,30 +266,21 @@ chhelix:
 	GrantConditionOnProduction@recon:
 		Condition: reconaddon
 		Actors: helix.reconupgrade
-	RevealsShroudMultiplier
-		RequiresCondition: reconaddon
-		Modifier: 150
 	DetectCloaked@Uncloak:
-		Range: 8c0
-		CloakTypes: Cloak, Thief, Stealth, Underwater
 		RequiresCondition: reconaddon && !(empdisable || being-warped)
 	RenderDetectionCircle:
-		TrailCount: 8
+		RequiresCondition: reconaddon && !(empdisable || being-warped)
+	RevealsShroud@GAPGEN:
+		RequiresCondition: reconaddon && !(empdisable || being-warped)
+	RevealsShroud:
 		RequiresCondition: reconaddon && !(empdisable || being-warped)
 	GrantConditionOnProduction@speaker:
 		Condition: speakeraddon
 		Actors: helix.speakerupgrade
-	ProximityExternalCondition@PROPAGANDA:
-		Range: 6c0
-		Condition: propaganda
-		RequiresCondition: speakeraddon && !subliminal && !disabled
-	GrantConditionOnPrerequisite@SUBLIMINALPROPAGANDA:
-		Prerequisites: commander_tree.subliminal_messages
-		Condition: subliminal
 	ProximityExternalCondition@SUBLIMINALPROPAGANDA:
-		Range: 9c0
-		Condition: propaganda
 		RequiresCondition: speakeraddon && subliminal && !disabled
+	ProximityExternalCondition@PROPAGANDA:
+		RequiresCondition: speakeraddon && !subliminal && !disabled
 
 chhelix.Gatling:
 	Inherits: chhelix

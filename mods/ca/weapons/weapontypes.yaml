@@ -237,7 +237,7 @@
 			Light: 0
 			Reflector: 0
 			Heavy: 0
-	Warhead@2DriverDam: DriverPoisonDamage
+	Warhead@DriverDam: DriverPoisonDamage
 		Damage: 8000
 		Spread: 128
 		ValidTargets: Vehicle
@@ -248,6 +248,33 @@
 			Light: 100
 			Reflector: 20
 			Heavy: 50
+
+^Toxin:
+	Inherits: ^ABCPrototype
+	Warhead@1Dam: SpreadDamage
+		InvalidTargets: Air
+		Spread: 512
+		Damage: 2500
+		DamageTypes: Prone50Percent, TriggerProne, PoisonDeath
+		ValidTargets: Infantry
+		Versus:
+			None: 100
+			Wood: 0
+			Concrete: 0
+			Light: 0
+			Reflector: 0
+			Heavy: 0
+	Warhead@DriverDam: DriverPoisonDamage
+		Damage: 2500
+		Spread: 128
+		ValidTargets: Vehicle
+		Versus:
+			None: 100
+			Wood: 0
+			Concrete: 0
+			Light: 100
+			Reflector: 100
+			Heavy: 100
 
 ^BulletPrototype:
 	Inherits: ^AllWeapons
@@ -276,7 +303,7 @@
 			Concrete: 10
 			Brick: 5
 
-^gatling:
+^Gatling:
 	Warhead@1Dam: SpreadDamage
 		Versus:
 			None: 110
@@ -544,6 +571,8 @@
 		ImpactSounds: kaboom25.aud
 	Warhead@4EffWater: CreateEffect
 		Explosions: med_splash
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
 
 ^MissilePrototype:
 	Inherits: ^AllWeapons
@@ -816,6 +845,16 @@
 			Wood: 60
 			Concrete: 25
 			Brick: 45
+	Warhead@DriverDam: DriverPoisonDamage
+		ValidTargets: Vehicle
+		Versus:
+			None: 70
+			Light: 125
+			Reflector: 25
+			Heavy: 100
+			Wood: 0
+			Concrete: 0
+			Brick: 0
 
 ^EnergyLight:
 	Inherits: ^EnergyPrototype
@@ -837,6 +876,16 @@
 			Wood: 50
 			Concrete: 15
 			Brick: 45
+	Warhead@DriverDam: DriverPoisonDamage
+		ValidTargets: Vehicle
+		Versus:
+			None: 140
+			Light: 100
+			Reflector: 25
+			Heavy: 50
+			Wood: 0
+			Concrete: 0
+			Brick: 0
 
 ^EnergyArtillery:
 	Inherits: ^EnergyPrototype
@@ -858,6 +907,16 @@
 			Wood: 100
 			Concrete: 100
 			Brick: 45
+	Warhead@DriverDam: DriverPoisonDamage
+		ValidTargets: Vehicle
+		Versus:
+			None: 75
+			Light: 150
+			Reflector: 25
+			Heavy: 75
+			Wood: 0
+			Concrete: 0
+			Brick: 0
 
 ^EnergyAP:
 	Inherits: ^EnergyPrototype
@@ -879,3 +938,13 @@
 			Wood: 75
 			Concrete: 35
 			Brick: 45
+	Warhead@DriverDam: DriverPoisonDamage
+		ValidTargets: Vehicle
+		Versus:
+			None: 15
+			Light: 75
+			Reflector: 25
+			Heavy: 150
+			Wood: 0
+			Concrete: 0
+			Brick: 0

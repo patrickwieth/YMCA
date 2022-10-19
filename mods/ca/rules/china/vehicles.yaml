@@ -16,7 +16,7 @@ CHNMCV:
 		Prerequisites: ~chcommand
 		IconPalette: chrometd
 		Queue: Building
-		Description: Builds structures and provides radar.
+		Description: Builds structures.
 	Selectable:
 		Priority: 4
 		DecorationBounds: 42,42
@@ -65,8 +65,6 @@ chbattle:
 		Cost: 950
 	Tooltip:
 		Name: Battlemaster
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 40
 		Prerequisites: chweap, ~vehicles.china, ~!vehicles.chinainf, ~!filler.battlemaster
@@ -80,8 +78,6 @@ chbattle:
 		Speed: 80
 	Health:
 		HP: 40000
-	Repairable:
-		HpPerStep: 2557
 	Armor:
 		Type: Heavy
 	RevealsShroud:
@@ -93,7 +89,7 @@ chbattle:
 		Weapon: CHBattlemasterCannon
 		Recoil: 128
 		RecoilRecovery: 26
-		LocalOffset: 768,0,90
+		LocalOffset: 850,0,50
 		MuzzleSequence: muzzle
 	AttackTurreted:
 	WithMuzzleOverlay:
@@ -230,30 +226,37 @@ charty:
 		Cost: 900
 	Tooltip:
 		Name: Inferno Cannon
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, radar, ~vehicles.china, ~!vehicles.chinainf
 		Queue: Vehicle
-		Description: Long-range artillery.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
+		Description: Long-range napalm artillery.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Tanks, Air
+		Attributes: • Can not attack Aircraft
 	Mobile:
 		Speed: 75
 	Health:
 		HP: 12000
-	Repairable:
-		HpPerStep: 569
 	Armor:
 		Type: Light
 	RevealsShroud:
 		Range: 5c0
-	Armament@Normal:
+	Armament:
 		Weapon: CHInfernoCannon
 		LocalOffset: 624,0,608
 		MuzzleSequence: muzzle
+		RequiresCondition: blacknapalm
+	Armament@Upgraded:
+		Weapon: CHInfernoCannon.Black_Napalm
+		LocalOffset: 624,0,608
+		MuzzleSequence: muzzle
+		RequiresCondition: !blacknapalm
 	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	AutoTarget:
 		InitialStanceAI: Defend
@@ -261,14 +264,9 @@ charty:
 		Weapon: ArtilleryShell
 		EmptyWeapon: UnitExplode
 		LoadedChance: 75
-	AcceptsDeliveredExperience:							##########
-		ValidTypes: vehicle								##########
-	GrantConditionOnPrerequisite@upbluefire:
-		Condition: flameupgrade
-		Prerequisites: upbluefire
-	ProducibleWithLevel:
-		Prerequisites: upcharty
-		InitialLevels: 1
+	GrantConditionOnPrerequisite@blacknapalm:
+		Condition: blacknapalm
+		Prerequisites: commander_tree.black_napalm
 	Voiced:
 		VoiceSet: CHInfernoCannonVoice
 	Explodes:
@@ -303,13 +301,18 @@ choverlord:
 	Tooltip@Emperor:
 		Name: Emperor Overlord
 		RequiresCondition: vehicles.chinatnk
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
+	DamageMultiplier@uparmor:
+		RequiresCondition: vehicles.chinatnk
+		Modifier: 90
 	Buildable:
 		BuildPaletteOrder: 60
 		Prerequisites: techcenter, ~vehicles.china, ~!vehicles.chinainf,  ~!vehicles.chinatnk
 		Queue: Vehicle
-		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+		Description: Heavy Chinese tank.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Infantry, Point Defense Laser
+		Attributes: • Can not attack Aircraft
 	Mobile:
 		Locomotor: sheavytracked
 		TurnSpeed: 8
@@ -318,8 +321,6 @@ choverlord:
 		Weight: 6
 	Health:
 		HP: 95000
-	Repairable:
-		HpPerStep: 2637
 	Armor:
 		Type: Heavy
 	RevealsShroud:
@@ -330,7 +331,7 @@ choverlord:
 		Offset: -298,0,150
 	Armament:
 		Weapon: OverlordCannon
-		LocalOffset: 950,250,340, 950,-250,340
+		LocalOffset: 1250,250,50, 1250,-250,50
 		Recoil: 170
 		RecoilRecovery: 42
 		MuzzleSequence: muzzle
@@ -341,22 +342,9 @@ choverlord:
 		DecorationBounds: 34,34,0,-3
 	Voiced:
 		VoiceSet: OverlordTankVoice
-
-	# Armament@BUNKER:
-	# 	Name: secondary
-	# 	Weapon: CHGuardRifleOverlord
-	# 	LocalOffset: -85,384,340, -85,-384,340
-	# 	MuzzleSequence: muzzle2
-	# 	RequiresCondition: addonbunker
-	# Armament@BUNKERMISS:
-	# 	Name: secondary
-	# 	Weapon: CHTankHunterOverlord
-	# 	LocalOffset: -85,120,340, -85,-120,340
-	# 	MuzzleSequence: muzzle
-	# 	RequiresCondition: addonbunker
 	WithSpriteTurret:
 	RenderSprites:
-		Scale: 1.12
+		Scale: 1.0
 
 choverlord.Gatling:
 	Inherits: choverlord
@@ -364,21 +352,30 @@ choverlord.Gatling:
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.gatling
 		Description: Heavy Chinese tank.\n
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Point Defense Laser
+		Attributes: • Can attack Aircraft
 	Tooltip:
 		Name: Gatling Overlord
 		RequiresCondition: !vehicles.chinatnk
 	Tooltip@Emperor:
 		Name: Gatling Emperor
 		RequiresCondition: vehicles.chinatnk
+	Valued:
+		Cost: 2200
 	Turreted@gatling:
 		Turret: secondary
 		TurnSpeed: 12
-		Offset: -298,0,150
+		Offset: -298,0,400
+	AttackTurreted:
+		Turrets: primary, secondary
+		Armaments: primary, secondary
 	Armament@gatling:
 		Name: secondary
 		Turret: secondary
 		Weapon: CHgatlingTurret
-		LocalOffset: -85,120,340, -85,-120,340
+		LocalOffset: 0,120,240, 0,-120,240
 		LocalYaw: -100, 100
 		Recoil: 10
 		MuzzleSequence: muzzle2
@@ -386,7 +383,7 @@ choverlord.Gatling:
 		Name: secondary
 		Turret: secondary
 		Weapon: CHgatlingTurretAA
-		LocalOffset: -85,120,340, -85,-120,340
+		LocalOffset: 0,120,240, 0,-120,240
 		LocalYaw: -100, 100
 		Recoil: 10
 		MuzzleSequence: muzzle2
@@ -403,14 +400,19 @@ choverlord.Bunker:
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.bunker
 		Description: Heavy Chinese tank.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft
+		Weaknesses: • Weak vs Infantry, Toxin, Radiation
 	Tooltip:
 		Name: Bunker Overlord
 		RequiresCondition: !vehicles.chinatnk
 	Tooltip@Emperor:
 		Name: Bunker Emperor
 		RequiresCondition: vehicles.chinatnk
+	Valued:
+		Cost: 3000
 	Cargo:
-		InitialUnits: che3, che3, che3, che3
+		InitialUnits: che3, che3, che3, che3, che3
 		EjectOnDeath: true
 	TurretedOpenTop:
 		TurnSpeed: 3
@@ -418,41 +420,101 @@ choverlord.Bunker:
 
 choverlord.Propaganda:
 	Inherits: choverlord
+	Inherits@speaker: ^PropagandaSpeaker
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.propaganda
-		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+		Description: Heavy Chinese tank with propaganda speakers.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Point Defense Laser, Infantry
+		Attributes: • Propaganda Speaker increase strength of infantry
 	Tooltip:
 		Name: Propaganda Overlord
 		RequiresCondition: !vehicles.chinatnk
 	Tooltip@Emperor:
 		Name: Propaganda Emperor
 		RequiresCondition: vehicles.chinatnk
+	Valued:
+		Cost: 2200
 	WithSpriteTurret@PROPAGANDA:
 		Sequence: turretpro
-
 
 choverlord.Nuke_Shells:
 	Inherits: choverlord
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.nuclear_shells
-		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+		Description: Heavy Chinese tank armed with nuclear shells.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infanty
+		Weaknesses: • Weak vs Point Defense Laser, Aircraft
+		Attributes: • Can attack Aircraft
 	Tooltip:
 		Name: Nuke Overlord
 		RequiresCondition: !vehicles.chinatnk
 	Tooltip@Emperor:
 		Name: Nuke Emperor
 		RequiresCondition: vehicles.chinatnk
+	Valued:
+		Cost: 2500
+	Armament:
+		Weapon: OverlordCannonNuclear
 
 choverlord.Plasma:
 	Inherits: choverlord
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.plasma
-		Description: Heavy Chinese tank.\nCan be upgraded with addon towers.\n  Strong vs Vehicles
+		Description: Heavy Chinese tank shooting ionized plasma.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Reflector Armor, Aircraft
+		Attributes: • Can not attack Aircraft
 	Tooltip:
 		Name: Plasma Overlord
 		RequiresCondition: !vehicles.chinatnk
 	Tooltip@Emperor:
 		Name: Plasma Emperor
+		RequiresCondition: vehicles.chinatnk
+	Armament:
+		Weapon: CHECMBeam
+		Recoil: 0
+		LocalOffset: 1250,250,50
+		-MuzzleSequence:
+	Armament@secondary:
+		Weapon: CHECMBeam
+		LocalOffset: 1250,-250,50
+
+choverlord.Plasma.PDL:
+	Inherits: choverlord.Plasma
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.plasma, ~commander_tree.overlord.pdl
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles
+		Weaknesses: • Weak vs Energy Weapons, Aircraft
+		Attributes: • Point Defense Laser
+	Tooltip:
+		Name: Plasma Overlord (PDL)
+		RequiresCondition: !vehicles.chinatnk
+	Tooltip@Emperor:
+		Name: Plasma Emperor (PDL)
+		RequiresCondition: vehicles.chinatnk
+	Valued:
+		Cost: 2500
+
+choverlord.Plasma.Reflector:
+	Inherits: choverlord.Plasma
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.plasma, ~commander_tree.overlord.reflector
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Reflector Armor
+	Tooltip:
+		Name: Plasma Overlord (Reflector)
+		RequiresCondition: !vehicles.chinatnk
+	Tooltip@Emperor:
+		Name: Plasma Emperor (Reflector)
 		RequiresCondition: vehicles.chinatnk
 
 choverlord.Husk:
@@ -477,13 +539,15 @@ chdragon:
 		Cost: 880
 	Tooltip:
 		Name: Dragon Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 40
 		Prerequisites: ~vehicles.china
 		Queue: Vehicle
 		Description: Flame tank.\nCan deploy to create a fire wall.\n  Strong vs Infantry\n  Weak vs Tanks
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Reflector Armor
 	Mobile:
 		Speed: 103
 		RequireForceMoveCondition: deployed
@@ -491,8 +555,6 @@ chdragon:
 		RequireForceMoveCondition: deployed
 	Health:
 		HP: 28000
-	Repairable:
-		HpPerStep: 2273
 	Armor:
 		Type: Light
 	RevealsShroud:
@@ -543,8 +605,6 @@ chdragon:
 		Armaments: primary, secondary, firewall1
 	WithMuzzleOverlay:
 	WithSpriteTurret:
-	AcceptsDeliveredExperience:							##########
-		ValidTypes: vehicle								##########
 	Voiced:
 		VoiceSet: CHDragonTankVoice
 	GrantConditionOnPrerequisite@upbluefire:
@@ -553,11 +613,8 @@ chdragon:
 	Explodes:
 		Weapon: FlametankExplode
 		EmptyWeapon: FlametankExplode
-	ProducibleWithLevel:
-		Prerequisites: selectchtanks
-		InitialLevels: 1
     RenderSprites:
-        Scale: 1.1
+        Scale: 1.0
 
 chdragon.Husk:
 	Inherits: ^LightHusk
@@ -577,59 +634,60 @@ chgtnk:
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^ChinaGatling
 	Valued:
-		Cost: 825
+		Cost: 800
 	Tooltip:
 		Name: Gatling Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.china
+		Prerequisites: ~vehicles.china, ~!commander_tree.gatling.pdl, ~!commander_tree.gatling.reflector
 		Queue: Vehicle
 		Description: Tank armed with gatling guns.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
 	Mobile:
 		Speed: 108
 	Health:
 		HP: 30000
-	Repairable:
-		HpPerStep: 2273
 	Armor:
-		Type: Light
+		Type: Heavy
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
 		TurnSpeed: 8
 		Offset: -275,0,150
-	Armament@1:
-		Weapon: CHgatlingTank
-		Recoil: 85
-		RecoilRecovery: 17
-		LocalOffset: 720,50,90, 720,-50,90, 720,50,140, 720,-50,140
-		MuzzleSequence: muzzle
-	Armament@AA:
-		Weapon: CHgatlingTankAA
-		Recoil: 85
-		RecoilRecovery: 17
-		LocalOffset: 720,50,90, 720,-50,90, 720,50,140, 720,-50,140
-		MuzzleSequence: muzzle
 	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Armaments: primary, secondary
 	WithMuzzleOverlay:
 	WithSpriteTurret:
-	AcceptsDeliveredExperience:							##########
-		ValidTypes: vehicle								##########
 	Voiced:
 		VoiceSet: CHGatlingTankVoice
-	AmmoPool:
-		Ammo: 8
-		PipCount: 0
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 50
-		Count: 1
-	ReloadDelayMultiplier@gatlingSpeed:
-		RequiresCondition: !ammo
-		Modifier: 75
+
+chgtnk.PDL:
+	Inherits: chgtnk
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.gatling.pdl
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Aircraft
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Point Defense Laser
+	Tooltip:
+		Name: Gatling Tank (PDL)
+	Valued:
+		Cost: 1400
+
+chgtnk.Reflector:
+	Inherits: chgtnk
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.gatling.reflector
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Aircraft
+		Weaknesses: • Weak vs Tanks, Projectiles
+		Attributes: • Reflector Armor
+	Tooltip:
+		Name: Gatling Tank (Reflector)
 
 chgtnk.Husk:
 	Inherits: ^LightHusk
@@ -644,7 +702,9 @@ chgtnk.Husk:
 
 chharv:
 	Inherits: ^VehicleTD
-	Inherits@HARVBALANCE: ^HarvesterBalancer
+	Inherits@HARV: ^Harvester
+	-Crushable:
+	-Carryable:
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Buildable:
 		Queue: Vehicle
@@ -652,17 +712,12 @@ chharv:
 		Prerequisites: chsupply, ~vehicles.china
 		Description: Collects Ore and Gems for processing.\n  Unarmed
 	Valued:
-		Cost: 600			#1100
+		Cost: 700
 	Tooltip:
 		Name: Supply Truck
 	Harvester:
-		Capacity: 16
+		Capacity: 15
 		PipCount: 6
-		Resources: Tiberium, BlueTiberium, Ore, Gems
-		BaleUnloadDelay: 1
-		SearchFromProcRadius: 30
-		SearchFromHarvesterRadius: 11
-		EmptyCondition: no-ore
 	Health:
 		HP: 30000
 	Armor:
@@ -680,6 +735,7 @@ chharv:
 		DockLoopSequence: idle
 	Voiced:
 		VoiceSet: CHSupplyTruckVoice
+
 chharv.Husk:
 	Inherits: ^LightHusk
 	Tooltip:
@@ -705,8 +761,6 @@ choutpost:
 		Cost: 800
 	Tooltip:
 		Name: Listening Outpost
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, techcenter, ~vehicles.china
@@ -716,14 +770,10 @@ choutpost:
 		Speed: 85
 	Health:
 		HP: 24000
-	Repairable:
-		HpPerStep: 1819
 	Armor:
 		Type: Heavy
 	RevealsShroud:
 		Range: 8c0
-	AcceptsDeliveredExperience:							##########
-		ValidTypes: vehicle								##########
 	Cargo:
 		Types: Infantry, Hacker, Fremen
 		MaxWeight: 2
@@ -800,8 +850,6 @@ checm:
 		Cost: 800
 	Tooltip:
 		Name: ECM Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, techcenter, ~vehicles.china
@@ -822,32 +870,27 @@ checm:
 	RenderJammerCircle:
 	Armament:
 		Weapon: CHECMDisable
-		LocalOffset: -256,0,256
+		LocalOffset: 250,0,100
 		PauseOnCondition: !charged
 	Armament@charge:
 		Name: secondary
-		Weapon: CHECMCharge
-		LocalOffset: -256,0,256
-	Turreted:
+		Weapon: CHECMBeam
+		LocalOffset: 250,0,100
 	AttackTurreted:
 		Armaments: primary, secondary
-	GrantConditionOnAttack@lockon:
-		Condition: charged
-		ArmamentNames: secondary
-		RequiredShotsPerInstance: 6
-		MaximumInstances: 1
-		RevokeDelay: 60
-		RevokeAll: true
-		RevokeOnNewTarget: true
 	GrantConditionOnAttack:
 		Condition: attacking
 		ArmamentNames: primary, secondary
 		RevokeDelay: 60
 	Turreted:
+		Offset: -256,0,256
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
 		Offset: -256,0,256
 		PauseOnCondition: disabled
+		RequiresCondition: !attacking
+	WithSpriteTurret:
+		RequiresCondition: attacking
 	Voiced:
 		VoiceSet: ECMTankVoice
 
@@ -870,8 +913,6 @@ chcrawl:
 		Cost: 1350
 	Tooltip:
 		Name: Troop Crawler
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: chweap, ~vehicles.chinainf
@@ -882,8 +923,6 @@ chcrawl:
 		PauseOnCondition: notmobile || disabled
 	Health:
 		HP: 27500
-	Repairable:
-		HpPerStep: 1440
 	Armor:
 		Type: Heavy
 	RevealsShroud:
@@ -897,8 +936,6 @@ chcrawl:
 		LoadingCondition: notmobile
 		EjectOnDeath: false
 		InitialUnits: che1,che1,che1,che1,che1
-	AcceptsDeliveredExperience:							##########
-		ValidTypes: vehicle								##########
 	Voiced:
 		VoiceSet: TroopCrawlerVoice
 	RenderSprites:
@@ -923,8 +960,6 @@ chcrawl2:
 		Weight: 6
 	Health:
 		HP: 45000
-	Repairable:
-		HpPerStep: 1819
 	RevealsShroud:
 		Range: 8c0
 	Cargo:
@@ -979,8 +1014,6 @@ chnukecann:
 		Speed: 55
 	Health:
 		HP: 24000
-	Repairable:
-		HpPerStep: 2637
 	Armor:
 		Type: Heavy
 	RevealsShroud:
@@ -1049,9 +1082,6 @@ chnukecann:
 		Sequence: turret
 	Voiced:
 		VoiceSet: CHNukeCannonVoice
-	ProducibleWithLevel:
-		Prerequisites: upcharty
-		InitialLevels: 1
 	Explodes:
 		Weapon: CHAtomicTankExplode
 		EmptyWeapon: CHAtomicTankExplode

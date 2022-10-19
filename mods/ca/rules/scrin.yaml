@@ -3170,6 +3170,7 @@ REA2:
 PROC.SCRIN:
 	Inherits: ^ScrinBuilding
 	Inherits@2: ^BotIncome
+	Inherits@Refinery: ^Refinery
 	HitShape:
 		Type: Rectangle
 			TopLeft: -1536, -512
@@ -3180,13 +3181,11 @@ PROC.SCRIN:
 			BottomRight: 896, -512
 	Valued:
 		Cost: 2000
-	CustomSellValue:
-		Value: 300
 	Tooltip:
 		Name: Refinery
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: anypower, ~structures.scrin, ~techlevel.low
+		Prerequisites: anypower, ~structures.scrin
 		Queue: Building
 		IconPalette: scrin
 		Description: Processes raw Tiberium, Ore and Gems\ninto credits.
@@ -3214,17 +3213,9 @@ PROC.SCRIN:
 		DragOffset: -554,512,0
 		DragLength: 12
 		TickRate: 15
-	StoresResources:
-		PipColor: Green
-		PipCount: 17
-		Capacity: 2000
 	Selectable:
 		Bounds: 72,56,0,12
 		DecorationBounds: 73,72
-	InfiltrateForCash:
-		Types: ThiefInfiltrate
-		Percentage: 50
-		Notification: CreditsStolen
 	FreeActor:
 		Actor: HARV.Scrin
 		SpawnOffset: 1,2
@@ -3233,7 +3224,6 @@ PROC.SCRIN:
 		Amount: -30
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	CashHackable:
 	SpawnActorsOnSell:
 		ActorTypes: proc.dummy, s1, s1, s1, s1, s1, s1, s1, s1
 

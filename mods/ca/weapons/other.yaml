@@ -1664,29 +1664,8 @@ RelayMarker:
 		Duration: 8
 		Condition: relayMarked
 
-Cloud:
-	Inherits: ^Chemical
-	ReloadDelay: 20
-	Range: 1c0
-	ValidTargets: Ground, Water
-	Projectile: InstantHit
-	Warhead@18Radio: CreateTintedCells
-		Spread: 1c0
-		Level: 50
-		Falloff: 100, 75, 52, 15, 2
-		MaxLevel: 750
-		LayerName: toxin
-	Warhead@1Dam: SpreadDamage
-		Spread: 426
-		Damage: 400
-		Falloff: 1000, 368, 135, 50, 18, 7, 0
-		Delay: 5
-		ValidTargets: Ground, Trees
-		InvalidTargets: Air, Creep, ToxinEmitter
-		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
-
-Cloud.noTint:
-	Inherits: ^Chemical
+ToxinCloud.noTint:
+	Inherits: ^Toxin
 	ReloadDelay: 20
 	Range: 1c0
 	ValidTargets: Ground, Water
@@ -1699,6 +1678,15 @@ Cloud.noTint:
 		ValidTargets: Ground, Trees
 		InvalidTargets: Air, Creep
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
+
+ToxinCloud:
+	Inherits: ToxinCloud.noTint
+	Warhead@18Radio: CreateTintedCells
+		Spread: 1c0
+		Level: 50
+		Falloff: 100, 75, 52, 15, 2
+		MaxLevel: 750
+		LayerName: toxin
 
 Lasher:
 	ReloadDelay: 5
@@ -1721,7 +1709,7 @@ ChaosDroneTargeting:
 	Warhead@1Dam: TargetDamage
 
 IrradiatedUnit:
-	Inherits: Cloud
+	Inherits: ToxinCloud
 	Inherits: ^Radiation
 	Warhead@18Radio: CreateTintedCells
 		Level: 50

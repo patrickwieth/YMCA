@@ -195,15 +195,75 @@
 		RequiresCondition: owned-by-normal-ai
 
 ^Refinery:
+	Refinery:
+		DockAngle: 256
+		DockOffset: 1,2
+	StoresResources:
+		PipCount: 17
+		Capacity: 2000
+	CustomSellValue:
+		Value: 600
 	CashHackable:
 	Buildable:
-		BuildDurationModifier: 25
+		BuildDurationModifier: 20
 	Targetable@infiltrate:
 		TargetTypes: SpyInfiltrate, ThiefInfiltrate
 		RequiresCondition: !untargetable
 	InfiltrateForCash:
 		Percentage: 50
 		Types: SpyInfiltrate, ThiefInfiltrate
+		Notification: CreditsStolen
+
+^Harvester:
+	Inherits@balance: ^HarvesterBalancer
+	Harvester:
+		Capacity: 30
+		PipCount: 6
+		Resources: Tiberium, BlueTiberium, Ore, Gems
+		BaleUnloadDelay: 1
+		SearchFromProcRadius: 30
+		SearchFromHarvesterRadius: 15
+		EmptyCondition: no-ore
+	Selectable:
+		Priority: 7
+		DecorationBounds: 36,36
+	WithHarvestAnimation:
+	WithDockingAnimation:
+	ChangesHealth:
+		PercentageStep: 1
+		Delay: 25
+		HealIfBelow: 50
+		DamageCooldown: 500
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
+	CarryableHarvester:
+	AutoCarryable:
+		CarriedCondition: notmobile
+		ReservedCondition: carryall-reserved
+		LockedCondition: notmobile
+	GrantConditionOnTerrain@Tiberium:
+		Condition: ontib
+		TerrainTypes: Tiberium
+	GrantConditionOnTerrain@Ore:
+		Condition: onore
+		TerrainTypes: Ore
+	Explodes@Ore:
+		RequiresCondition: !no-ore && onore && !being-warped
+		Weapon: OreExplosion
+	Explodes@Tib:
+		RequiresCondition: !no-ore && ontib && !being-warped
+		Weapon: TibExplosion
+
+^HarvesterBalancer:
+	GrantConditionOnPrerequisite@HARVBALANCE:
+		Condition: global-balancedharvesting
+		Prerequisites: global.balancedharvesting
+	SpeedMultiplier@HARVBALANCE:
+		RequiresCondition: harv-balance
+		Modifier: 138
+	HarvesterBalancer:
+		Condition: harv-balance
+		RequiresCondition: global-balancedharvesting
 
 #Hacky but helps Bots deal with abandoned vehicles due to snipers
 ^BotCaptureHelper:
@@ -240,30 +300,30 @@
 	GainsExperience:
 		LevelUpNotification: LevelUp
 		Conditions:
+			100: rank-veteran
 			200: rank-veteran
 			400: rank-veteran
-			800: rank-veteran
 	GrantCondition@RANK-ELITE:
 		RequiresCondition: rank-veteran >= 3
 		Condition: rank-elite
 	DamageMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
-		Modifier: 90
+		Modifier: 80
 	DamageMultiplier@RANK-2:
 		RequiresCondition: rank-veteran == 2
-		Modifier: 80
+		Modifier: 65
 	DamageMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
-		Modifier: 70
+		Modifier: 50
 	FirepowerMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
-		Modifier: 110
+		Modifier: 120
 	FirepowerMultiplier@RANK-2:
 		RequiresCondition: rank-veteran == 2
-		Modifier: 120
+		Modifier: 140
 	FirepowerMultiplier@RANK-ELITE:
 		RequiresCondition: rank-elite
-		Modifier: 130
+		Modifier: 160
 	ReloadDelayMultiplier@RANK-1:
 		RequiresCondition: rank-veteran == 1
 		Modifier: 95
@@ -1013,17 +1073,6 @@
 		RequiresSelection: False
 		ValidRelationships: Ally, Neutral, Enemy
 
-^HarvesterBalancer:
-	GrantConditionOnPrerequisite@HARVBALANCE:
-		Condition: global-balancedharvesting
-		Prerequisites: global.balancedharvesting
-	SpeedMultiplier@HARVBALANCE:
-		RequiresCondition: harv-balance
-		Modifier: 138
-	HarvesterBalancer:
-		Condition: harv-balance
-		RequiresCondition: global-balancedharvesting
-
 ^GpsScramble:
 	RangeMultiplier@GPSSCRAMBLE:
 		Modifier: 60
@@ -1285,8 +1334,11 @@
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@SLOWCRUSH: ^SlowedByCrushing
 	Inherits@ToxinRad: ^DriverBiologicalDamage
+	Inherits@VehicleVision: ^VehicleVision
 	Buildable:
 		Queue: Vehicle
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -1296,6 +1348,8 @@
 		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead || notmobile
 		Locomotor: wheeled
 		TurnSpeed: 48
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
 	SelectionDecorations:
 	WithSpriteControlGroupDecoration:
 	Selectable:
@@ -1310,6 +1364,7 @@
 		Condition: damaged
 		ValidDamageStates: Light, Medium, Heavy, Critical
 	Repairable:
+		HpPerStep: 5000
 		RepairActors: fix, rep, srep
 	ChronoshiftableWithSpriteEffect:
 		Image: chrono
@@ -1420,6 +1475,14 @@
 		PlayerPalette: overlayplayertd
 	WithDamageOverlay:
 		Image: smoke_mtd
+
+^VehicleVision:
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 
 ^SlowedByCrushing:
 	ExternalCondition@CRUSHATTEMPTSLOW:
@@ -1716,6 +1779,7 @@
 	Inherits@C4: ^C4Plantable
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@biodamage: ^DriverBiologicalDamage
+	Inherits@VehicleVision: ^VehicleVision
 	Huntable:
 	RenderSprites:
 		PlayerPalette: playernavy
@@ -3464,6 +3528,14 @@
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
+
+^ImprovedVision:
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
 
 ^ScoutEquipment:
 	RevealsShroud:

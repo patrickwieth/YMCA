@@ -1,0 +1,69 @@
+flame.spawner:
+	Health:
+		HP: 1
+	HitShape:
+	BodyOrientation:
+		QuantizedFacings: 1
+	Mobile:
+		Locomotor: cloud
+		Speed: 135
+	DamagedByTerrain:
+		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
+		Damage: 1
+		DamageInterval: 1
+		DamageTypes: ToxinDeath
+	SpawnActorOnDeath:
+		Actor: camera.flame
+
+camera.flame:
+	Interactable:
+	EditorOnlyTooltip:
+		Name: (support power)
+	RenderSprites:
+		Image: burn-l
+		Palette: effect-ignore-lighting-alpha85
+	WithSpriteBody:
+	BodyOrientation:
+		QuantizedFacings: 1
+	Aircraft:
+		CruiseAltitude: 0
+		TurnSpeed: 20
+		Speed: 12
+		Repulsable: False
+		MaximumPitch: 56
+	Wanders:
+		WanderMoveRadius: 5
+		ReduceMoveRadiusDelay: 3
+	AlwaysVisible:
+	HitShape:
+	Health:
+		HP: 20000
+	ExternalCondition@fire:
+		Condition: flameSupport
+	ProximityExternalCondition@fire:
+		Range: 2c0
+		ValidRelationships: Ally, Neutral
+		Condition: flameSupport
+	ChangesHealth:
+		PercentageStep: -50
+		Delay: 25
+		HealIfBelow: 110
+		DamageCooldown: 150
+	DamagedByTerrain:
+		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
+		Damage: 5000
+		DamageInterval: 5
+		DamageTypes: ToxinDeath
+	DamagedByTerrain:
+		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
+		Damage: 50
+		DamageInterval: 5
+		DamageTypes: ToxinDeath
+		RequiresCondition: flameSupport < 6
+	DamagedByTerrain:
+		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
+		Damage: 10
+		DamageInterval: 5
+		DamageTypes: ToxinDeath
+	PeriodicExplosion:
+		Weapon: Flame.Damage

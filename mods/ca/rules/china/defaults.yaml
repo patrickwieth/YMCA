@@ -139,6 +139,27 @@ Player:
 		RequiresCondition: hordeeffect >= 10
 		Modifier: 75
 
+^PropagandaSpeaker:
+	ProximityExternalCondition@PROPAGANDA:
+		Range: 5c0
+		Condition: propaganda
+		RequiresCondition: !subliminal && !disabled
+	WithRangeCircle:
+		Range: 5c0
+		Type: propaganda
+		RequiresCondition: !subliminal && !disabled
+	GrantConditionOnPrerequisite@SUBLIMINALPROPAGANDA:
+		Prerequisites: commander_tree.subliminal_messages
+		Condition: subliminal
+	ProximityExternalCondition@SUBLIMINALPROPAGANDA:
+		Range: 7c0
+		Condition: propaganda
+		RequiresCondition: subliminal && !disabled
+	WithRangeCircle:
+		Range: 7c0
+		Type: propaganda
+		RequiresCondition: subliminal && !disabled
+
 ^AnnounceOnBuild:
 	ExternalCondition@PRODUCED:
 		Condition: produced
@@ -175,61 +196,72 @@ Player:
 		Voice: Attack
 
 ^ChinaGatling:
+	AttackTurreted:
+		Armaments: primary, secondary
+		PauseOnCondition: empdisable || being-warped
 	Armament@GAT0:
 		Weapon: ChinaMGatt.0
-		LocalOffset: 85,-213,-85, 85,213,-85
+		LocalOffset: 300,-100,50, 300,100,50
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling == 0
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT1:
 		Weapon: ChinaMGatt.1
-		LocalOffset: 85,-213,-85, 85,213,-85
+		LocalOffset: 300,-100,50, 300,100,50
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling == 1
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT2:
 		Weapon: ChinaMGatt.2
-		LocalOffset: 85,-213,-85, 85,213,-85
+		LocalOffset: 300,-100,50, 300,100,50
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling == 2
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT3:
 		Weapon: ChinaMGatt.3
-		LocalOffset:  85,-213,-85, 85,213,-85
+		LocalOffset: 300,-100,50, 300,100,50
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling == 3
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT0G:
 		Name: secondary
-		Weapon: ChinaMGatt.0
-		LocalOffset: 85,-213,-85, 85,213,-85
+		Weapon: ChinaMGatt.0G
+		LocalOffset: 300,-100,50, 300,100,50
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling-ground == 0
 		PauseOnCondition: engage-air
 		ReloadingCondition: engage-ground
 	Armament@GAT1G:
 		Name: secondary
-		Weapon: ChinaMGatt.1
-		LocalOffset: 85,-213,-85, 85,213,-85
+		Weapon: ChinaMGatt.1G
+		LocalOffset: 300,-100,50, 300,100,50
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling-ground == 1
 		PauseOnCondition: engage-air
 		ReloadingCondition: engage-ground
 	Armament@GAT2G:
 		Name: secondary
-		Weapon: ChinaMGatt.2
-		LocalOffset: 85,-213,-85, 85,213,-85
+		Weapon: ChinaMGatt.2G
+		LocalOffset: 300,-100,50, 300,100,50
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling-ground == 2
 		ReloadingCondition: engage-ground
 		PauseOnCondition: engage-air
+	Armament@GAT3G:
+		Name: secondary
+		Weapon: ChinaMGatt.3G
+		LocalOffset: 300,-100,50, 300,100,50
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling-ground == 3
+		ReloadingCondition: engage-ground
+		PauseOnCondition: engage-air
 	GrantConditionOnAttack:
 		Condition: gatling
-		RequiredShotsPerInstance: 1,6,12
+		RequiredShotsPerInstance: 1,3,5
 		MaximumInstances: 3
 		RevokeDelay: 40
 		RevokeOnNewTarget: False
@@ -237,8 +269,8 @@ Player:
 	GrantConditionOnAttack@GROUND:
 		ArmamentNames: secondary
 		Condition: gatling-ground
-		RequiredShotsPerInstance: 1,6
-		MaximumInstances: 2
+		RequiredShotsPerInstance: 1,3,5
+		MaximumInstances: 3
 		RevokeDelay: 40
 		RevokeOnNewTarget: False
 		RevokeAll: True
