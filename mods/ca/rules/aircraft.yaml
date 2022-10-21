@@ -356,10 +356,11 @@ MIG.AA:
 		Cost: 1750
 	Tooltip:
 		Name: SU-47 Fighter
-	Armament@primary:
+	Armament:
 		Weapon: Maverick
 	Armament@secondary:
 		Weapon: WidowAA.Mig
+		PauseOnCondition: !ammo
 
 MIG.Nuke:
 	Inherits: MIG
@@ -388,8 +389,6 @@ MIG.Tesla:
 		Cost: 2200
 	AmmoPool:
 		Ammo: 6
-		ReloadDelay: 60
-		AmmoCondition: ammo
 	Tooltip:
 		Name: MiG Tesla Bomber
 	Aircraft:
@@ -562,49 +561,25 @@ FROG:
 		Interval: 2
 	Selectable:
 		DecorationBounds: 30,28,0,2
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 
 FROGDIRTY:
-	Inherits: ^Plane
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: FROG
 	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
-		IconPalette: chrometd
-		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot, ~techlevel.high
+		IconPalette: chrome
+		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot
 		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
 		Cost: 1550
 	Tooltip:
 		Name: Frogfoot Dirty Bomber
-	Health:
-		HP: 16000
-	RevealsShroud:
-		Range: 10c0
-		Type: GroundPosition
-		MoveRecalculationThreshold: 0
 	Armament@PRIMARY:
 		Weapon: RadBomb
 		LocalOffset: 256,-213,0
 		PauseOnCondition: !ammo
 	AttackAircraft:
 		FacingTolerance: 512
-	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
-		TurnSpeed: 16
-		Speed: 225
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-		TakeoffSounds: migtoff1.aud
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
 	AmmoPool:
 		Ammo: 8
 		ReloadDelay: 30
@@ -614,44 +589,6 @@ FROGDIRTY:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	SelectionDecorations:
-	Contrail@1:
-		Offset: -598,-683,-40
-	Contrail@2:
-		Offset: -598,683,-40
-	Contrail@AB1:
-		Offset: -400,-70,-20
-		UsePlayerColor: false
-		ZOffset: -512
-		Color: cc550080
-		TrailLength: 10
-	Contrail@AB2:
-		Offset: -400,70,-20
-		UsePlayerColor: false
-		ZOffset: -512
-		Color: cc550080
-		TrailLength: 10
-	SpawnActorOnDeath:
-		Actor: FROG.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: FROG.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@EMP:
-		Actor: FROG.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: FROG.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
-	SmokeTrailWhenDamaged:
-		Offset: -853,0,0
-		Interval: 2
-	Selectable:
-		DecorationBounds: 30,28,0,2
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
 
 YAK:
 	Inherits: ^Plane
@@ -1066,7 +1003,7 @@ NHAW:
 	Valued:
 		Cost: 1150
 	Tooltip:
-		Name: Nighthawk
+		Name: Black Hawk
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -1088,11 +1025,11 @@ NHAW:
 		LandingSounds: hland1.aud
 		Voice: Move
 	WithIdleOverlay@ROTOR1AIR:
-		Offset: 237,0,263
+		Offset: 237,0,300
 		Sequence: rotor
 		RequiresCondition: airborne
 	WithIdleOverlay@ROTOR1GROUND:
-		Offset: 237,0,263
+		Offset: 237,0,300
 		Sequence: slow-rotor
 		RequiresCondition: !airborne
 	Cargo:
@@ -1637,6 +1574,7 @@ HUEY:
 
 HUEY.recon:
 	Inherits: HUEY
+	Inherits: ^HelicopterTD
 	Inherits@TRANSPORT: ^Transport
 	Buildable:
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.recon, ~techlevel.medium
@@ -1695,6 +1633,14 @@ HUEY.recon:
 			bori: commturr
 			snip: snipeturr
 			specops: relayturr
+	WithIdleOverlay@ROTORAIR:
+		Sequence: rotor
+		Offset: 100,0,120
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTORGROUND:
+		Sequence: slow-rotor
+		Offset: 100,0,120
+		RequiresCondition: !airborne
 
 HUEY.cryo:
 	Inherits: HUEY
