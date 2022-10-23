@@ -29,30 +29,36 @@ QTNK:
 		Range: 4c0
 	WithSpriteBody@deployed:
 		Sequence: piston
-		RequiresCondition: !undeployed && real-actor
+		RequiresCondition: !undeployed && !cooldown
 		Name: deployedbody
 	WithFacingSpriteBody:
-		RequiresCondition: undeployed || !real-actor
+		RequiresCondition: undeployed || cooldown
 	GrantConditionOnDeploy:
 		PauseOnCondition: empdisable || being-warped || being-captured
 		DeployedCondition: deployed
 		UndeployedCondition: undeployed
-		Facing: 368
 		AllowedTerrainTypes: Clear, Road, Rough
-		DeploySounds: placbldg.aud
+		Facing: 0
+		DeploySounds: madchrg2.aud
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
 		UndeployOnPickup: true
+	GrantTimedCondition@Piston:
+		Condition: piston
+		Duration: 8
+		RequiresCondition: deployed && !cooldown
+	GrantTimedCondition@Cooldown:
+		Condition: cooldown
+		Duration: 44
+		RequiresCondition: !piston
 	PeriodicExplosion:
-		Weapon: ChaosGas
-		RequiresCondition: triggered
-		AmmoPoolName: explosion
-
+		Weapon: MAD_Eruption
+		RequiresCondition: deployed
 	Selectable:
 		DecorationBounds: 44,38,0,-4
 	WithRangeCircle:
 		Color: FFFF0080
-		Range: 9c0
+		Range: 15c0
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, MADTank, Vehicle, C4, ChaosImmune
