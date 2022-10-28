@@ -345,7 +345,7 @@ MIG:
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 
-MIG.AA:
+SU47:
 	Inherits: MIG
 	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
@@ -361,6 +361,18 @@ MIG.AA:
 	Armament@secondary:
 		Weapon: WidowAA.Mig
 		PauseOnCondition: !ammo
+	SpawnActorOnDeath:
+		Actor: SU47.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: SU47.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: SU47.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: SU47.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
 
 MIG.Nuke:
 	Inherits: MIG
@@ -567,7 +579,7 @@ FROG:
 FROGDIRTY:
 	Inherits: FROG
 	Buildable:
-		IconPalette: chrome
+		IconPalette: chrometd
 		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot
 		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
