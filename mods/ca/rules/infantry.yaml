@@ -297,7 +297,10 @@ U3:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
 	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, relayTarget
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+	AutoTargetPriority@HighPrio:
+		ValidTargets: relayTarget
+		Priority: 10
 	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
 	Valued:
@@ -355,7 +358,7 @@ U3:
 		PauseOnCondition: !ammo
 		RequiresCondition: cryr-upgrade && deployed
 	Armament@tertiary:
-		Name: tertiary
+		Name: deployed
 		Weapon: Dragon.Relay
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
