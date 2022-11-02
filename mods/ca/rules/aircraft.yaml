@@ -1623,7 +1623,6 @@ HUEY.recon:
 		LocalOffset: 250,0,150
 		RequiresCondition: relayturr
 	Armament@snipe:
-		Name: yes
 		Weapon: sniperE
 		LocalOffset: 250,0,150
 		RequiresCondition: snipeturr
@@ -2047,7 +2046,7 @@ APCH:
 	Valued:
 		Cost: 1250
 	Tooltip:
-		Name: Apache
+		Name: Harpy
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -2075,7 +2074,7 @@ APCH:
 		Type: GroundPosition
 	Armament@PRIMARY:
 		Weapon: HeliGunAG
-		LocalOffset: 228,0,-85
+		LocalOffset: 528,0,-185
 		MuzzleSequence: muzzle
 		PauseOnCondition: !ammo
 	AttackAircraft:
@@ -2094,11 +2093,11 @@ APCH:
 		Margin: 4, 3
 		RequiresSelection: true
 	WithIdleOverlay@ROTORAIR:
-		Offset: 0,0,85
+		Offset: 100,0,285
 		Sequence: rotor
 		RequiresCondition: airborne
 	WithIdleOverlay@ROTORGROUND:
-		Offset: 0,0,85
+		Offset: 100,0,285
 		Sequence: slow-rotor
 		RequiresCondition: !airborne
 	WithMuzzleOverlay:
@@ -2137,7 +2136,7 @@ APCH.Flyby:
 		IconPalette: chrome
 		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Tooltip:
-		Name: Apache Flyby
+		Name: Harpy Flyby
 	-AttackAircraft:
 	Turreted:
 		TurnSpeed: 1000
@@ -2154,7 +2153,7 @@ APCH.Flyby:
 APCH.Torp:
 	Inherits: APCH
 	Tooltip:
-		Name: Apache (Torpedo)
+		Name: Harpy (Torpedo)
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.nod, ~commander_tree.apache.torp
 		IconPalette: chrome
@@ -2346,7 +2345,7 @@ ORCB:
 		BuildPaletteOrder: 40
 		Prerequisites: ~hpad.td, ~aircraft.eagle, gtek, ~techlevel.high
 		IconPalette: chrometd
-		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft
+		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft, Infantry
 	Valued:
 		Cost: 1600
 	Tooltip:
@@ -2354,7 +2353,7 @@ ORCB:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 26000
+		HP: 36000
 	RevealsShroud:
 		Range: 10c0
 		MinRange: 8c0
@@ -2389,7 +2388,7 @@ ORCB:
 		InitialStance: HoldFire
 		InitialStanceAI: HoldFire
 	AmmoPool:
-		Ammo: 6
+		Ammo: 8
 		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 4
@@ -2532,12 +2531,12 @@ RAH66:
 		InitialStance: HoldFire
 		InitialStanceAI: HoldFire
 	WithIdleOverlay@ROTORAIR:
-		Offset: 10,0,80
+		Offset: 200,0,80
 		Sequence: rotor
 		RequiresCondition: airborne
 		Palette: player
 	WithIdleOverlay@ROTORGROUND:
-		Offset: 10,0,80
+		Offset: 200,0,80
 		Sequence: slow-rotor
 		RequiresCondition: !airborne
 		Palette: player
@@ -2672,7 +2671,7 @@ RAH66.Bomber:
 
 
 KIRO:
-	Inherits: ^Helicopter
+	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	RenderSprites:
@@ -2741,22 +2740,6 @@ KIRO:
 	SpawnActorOnDeath@EMP:
 		Actor: KIRO.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	WithIdleOverlay@ROTOR1AIR:
-		Offset: -180,597,250
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR1GROUND:
-		Offset: -180,597,250
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -180,-597,250
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -180,-597,250
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
 	SmokeTrailWhenDamaged@1:
 		Offset: -100,500,100
 	SmokeTrailWhenDamaged@2:
@@ -2793,6 +2776,24 @@ KIRO:
 	SpeedMultiplier@EMPDISABLE:
 		Modifier: 0
 		RequiresCondition: empdisable
+
+^KIRO.Carrier:
+	WithIdleOverlay@ROTOR1AIR:
+		Offset: -180,597,250
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR1GROUND:
+		Offset: -180,597,250
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithIdleOverlay@ROTOR2AIR:
+		Offset: -180,-597,250
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR2GROUND:
+		Offset: -180,-597,250
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
 
 BLIMP:
 	Inherits: ^Helicopter
@@ -2971,7 +2972,7 @@ OCAR.Reinforce:
 	Interactable:
 
 HARR:
-	Inherits: ^Helicopter
+	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -3063,6 +3064,8 @@ HARR:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: hpad, hpad.td
+	RenderSprites:
+		Scale: 0.5
 
 HARR.avionics:
 	Inherits: HARR
@@ -3167,8 +3170,6 @@ Raptor:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
-	RenderSprites:
-		Scale: 0.9
 
 SCRN:
 	Inherits: ^HelicopterTD
