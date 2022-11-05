@@ -26,13 +26,13 @@ camera.flame:
 	BodyOrientation:
 		QuantizedFacings: 1
 	Aircraft:
-		CruiseAltitude: 0
+		CruiseAltitude: 10
 		TurnSpeed: 20
-		Speed: 12
+		Speed: 15
 		Repulsable: False
 		MaximumPitch: 56
 	Wanders:
-		WanderMoveRadius: 5
+		WanderMoveRadius: 10
 		ReduceMoveRadiusDelay: 3
 	AlwaysVisible:
 	HitShape:
@@ -44,26 +44,16 @@ camera.flame:
 		Range: 2c0
 		ValidRelationships: Ally, Neutral
 		Condition: flameSupport
-	ChangesHealth:
-		PercentageStep: -50
+	ChangesHealthVersus@1:
+		Step: -4000
 		Delay: 25
-		HealIfBelow: 110
-		DamageCooldown: 150
-	DamagedByTerrain:
-		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
-		Damage: 5000
-		DamageInterval: 5
-		DamageTypes: ToxinDeath
-	DamagedByTerrain:
-		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
-		Damage: 50
-		DamageInterval: 5
-		DamageTypes: ToxinDeath
-		RequiresCondition: flameSupport < 6
-	DamagedByTerrain:
-		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
-		Damage: 10
-		DamageInterval: 5
-		DamageTypes: ToxinDeath
+		RequiresCondition: flameSupport < 2
+	ChangesHealthVersus@2:
+		Step: -400
+		Delay: 25
+		RequiresCondition: flameSupport < 5
+	ChangesHealthVersus@3:
+		Step: -50
+		Delay: 25
 	PeriodicExplosion:
 		Weapon: Flame.Damage

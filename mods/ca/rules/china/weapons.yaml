@@ -296,7 +296,7 @@ CHNukeCannon:
 	Inherits: ^ShellArtillery
 	Inherits@Explosion: CHAtomicWeapon
 	ReloadDelay: 330
-	Range: 22c0
+	Range: 18c0
 	MinRange: 6c0
 	Report: vnukweaa.wav
 	TargetActorCenter: true
@@ -310,36 +310,19 @@ CHNukeCannon:
 	Warhead@3Eff: CreateEffect
 		Explosions: schnukeexplosion
 
-CHNukeCannonNeutron:
+CHNukeCannon.Range:
 	Inherits: CHNukeCannon
-	ValidTargets: Infantry, DriverKill, LoadedVehicle, Garrisoned, GarrisonedNBC
-	#Warhead@3Eff: CreateEffect
-	#	Explosions: pulse_explosion
-	#	ExplosionPalette: tseffect
-	#	ImpactSounds: ptesto00.aud
-	#Warhead@2Con: GrantExternalCondition
-	#	Condition: empdisable
-	#	Duration: 250
-	#	Range: 6c0
-	-Warhead@3Radiation:
-	Warhead@1Dam: SpreadDamage
-		Spread: 4c0
-		Falloff: 100, 100
+	Range: 25c0
+
+CHNukeCannon.Neutron:
+	Inherits: CHNukeCannon
+	Inherits: ^Radiation
+	Warhead@DriverDam: DriverPoisonDamage
 		Damage: 25000
-		ValidTargets: Infantry, NeutronImmune
-	Warhead@3Clear: OpenToppedDamage
-		Spread: 3c0
-		Damage: 15000
-		ValidTargets: Garrisoned, GarrisonedNBC, LoadedVehicle
-		ValidStances: Enemy
-		Amount: 6
-		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
-	Warhead@4Driver: ChangeOwnerToNeutral
-		Range: 3c0
-		ValidTargets: DriverKill
-		ValidStances: Enemy
-		InvalidTargets: LoadedVehicle, NeutronImmune
-		Delay: 8
+	Warhead@1Dam: SpreadDamage
+		Damage: 25000
+	Warhead@3Eff: CreateEffect
+		Explosions: plasmaball
 
 CHAtomicTorpTube:
 	Inherits: TorpTube
@@ -604,15 +587,6 @@ CHECMBeam:
 		Range: 0, 32
 		Falloff: 1000, 1000
 		Damage: 200
-		ValidRelationships: Neutral, Enemy
-		InvalidTargets: Air
-		AffectsParent: false
-		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
-	Warhead@2Dam: SpreadDamage
-		Range: 0, 32
-		Falloff: 1000, 1000
-		Damage: 100
-		ValidRelationships: Ally
 		InvalidTargets: Air
 		AffectsParent: false
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
@@ -620,6 +594,33 @@ CHECMBeam:
 CHECMBeam.Double:
 	Inherits: CHECMBeam
 	Burst: 2
+
+CHECMBeam.Focus:
+	Inherits: CHECMBeam
+	Inherits: ^EnergyAP
+
+CHECMBeam.Pulse:
+	Inherits: CHECMBeam
+
+CHECMBeam.Chain:
+	Inherits: CHECMBeam
+	Range: 7c512
+	Warhead@Arc: FireShrapnel
+		Weapon: CHECMBeam.Chain.Arc1
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
+
+CHECMBeam.Chain.Arc1:
+	Inherits: CHECMBeam.Chain
+	Range: 1c512
+	Warhead@Arc: FireShrapnel
+		Weapon: CHECMBeam.Chain.Arc2
+
+
+CHECMBeam.Chain.Arc2:
+	Inherits: CHECMBeam.Chain.Arc1
+	-Warhead@Arc: FireShrapnel
 
 CHECMDisable:
 	Inherits: CHECMBeam

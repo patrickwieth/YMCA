@@ -23,8 +23,6 @@ CHNMCV:
 	SelectionDecorations:
 	Health:
 		HP: 60000
-	Armor:
-		Type: Light
 	Mobile:
 		Speed: 56
 		Locomotor: heavywheeled
@@ -55,6 +53,7 @@ chbattle:
 	Inherits: ^TankTD
 	Inherits@EXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET2: ^AutoTargetAntiHeavy
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@horde: ^HordeBonus
 	Inherits@atom: ^AtomicTank
@@ -78,8 +77,6 @@ chbattle:
 		Speed: 80
 	Health:
 		HP: 40000
-	Armor:
-		Type: Heavy
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
@@ -140,6 +137,7 @@ chbattle.Autoloader.Reflector:
 
 chbattle.Nuclear_Shells:
 	Inherits: chbattle
+	Inherits@AUTOTARGET2: ^AutoTargetAntiLight
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.nuclear_shells, ~!filler.battlemaster2
 		Description: Chinese main battle tank.\nFires nuclear shells.
@@ -216,9 +214,10 @@ chbattle.Mass_Production.Reflector:
 		Name: Battlemaster (Reflector)
 
 charty:
-	Inherits: ^TankTD
+	Inherits: ^VehicleTD
 	Inherits@EXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET2: ^AutoTargetAntiLight
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@vo: ^AttackFrontalVoice
@@ -239,20 +238,18 @@ charty:
 		Speed: 75
 	Health:
 		HP: 12000
-	Armor:
-		Type: Light
 	RevealsShroud:
 		Range: 5c0
 	Armament:
 		Weapon: CHInfernoCannon
 		LocalOffset: 624,0,608
 		MuzzleSequence: muzzle
-		RequiresCondition: blacknapalm
+		RequiresCondition: !blacknapalm
 	Armament@Upgraded:
 		Weapon: CHInfernoCannon.Black_Napalm
 		LocalOffset: 624,0,608
 		MuzzleSequence: muzzle
-		RequiresCondition: !blacknapalm
+		RequiresCondition: blacknapalm
 	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
@@ -288,6 +285,7 @@ choverlord:
 	Inherits: ^TankTD
 	Inherits@EXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET2: ^AutoTargetAntiHeavy
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@atom: ^AtomicTank
 	Inherits@uran: ^UranShells
@@ -321,8 +319,6 @@ choverlord:
 		Weight: 6
 	Health:
 		HP: 95000
-	Armor:
-		Type: Heavy
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
@@ -413,7 +409,6 @@ choverlord.Bunker:
 		Cost: 3000
 	Cargo:
 		InitialUnits: che3, che3, che3, che3, che3
-		EjectOnDeath: true
 	TurretedOpenTop:
 		TurnSpeed: 3
 		Offset: -298,0,150
@@ -441,11 +436,12 @@ choverlord.Propaganda:
 
 choverlord.Nuke_Shells:
 	Inherits: choverlord
+	Inherits@AUTOTARGET2: ^AutoTargetAntiLight
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.nuclear_shells
 		Description: Heavy Chinese tank armed with nuclear shells.
 	TooltipExtras:
-		Strengths: • Strong vs Vehicles, Infanty
+		Strengths: • Strong vs Vehicles, Infantry
 		Weaknesses: • Weak vs Point Defense Laser, Aircraft
 		Attributes: • Can attack Aircraft
 	Tooltip:
@@ -461,6 +457,7 @@ choverlord.Nuke_Shells:
 
 choverlord.Plasma:
 	Inherits: choverlord
+	Inherits@AUTOTARGET2: ^AutoTargetEnergyWeapon
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.plasma
 		Description: Heavy Chinese tank shooting ionized plasma.
@@ -529,25 +526,26 @@ choverlord.Husk:
 		Image: choverlord
 
 chdragon:
-	Inherits: ^TankTD
+	Inherits: ^VehicleTD
 	Inherits@EXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET2: ^AutoTargetAntiInfantry
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@vo: ^AttackTurretedVoice
 	Valued:
-		Cost: 880
+		Cost: 600
 	Tooltip:
 		Name: Dragon Tank
 	Buildable:
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.china
+		Prerequisites: ~vehicles.china, ~commander_tree.dragon_tank.pdl, ~commander_tree.dragon_tank.reflector
 		Queue: Vehicle
 		Description: Flame tank.\nCan deploy to create a fire wall.\n  Strong vs Infantry\n  Weak vs Tanks
 	TooltipExtras:
-		Strengths: • Strong vs Energy Weapons
-		Weaknesses: • Weak vs Aircraft
-		Attributes: • Reflector Armor
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Aircraft, Tanks
+		Attributes: • Deploy for Firewall
 	Mobile:
 		Speed: 103
 		RequireForceMoveCondition: deployed
@@ -555,8 +553,6 @@ chdragon:
 		RequireForceMoveCondition: deployed
 	Health:
 		HP: 28000
-	Armor:
-		Type: Light
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
@@ -616,6 +612,32 @@ chdragon:
     RenderSprites:
         Scale: 1.0
 
+chdragon.PDL:
+	Inherits: chdragon
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: ~vehicles.china, ~commander_tree.dragon_tank.pdl
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Aircraft
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Point Defense Laser
+	Tooltip:
+		Name: Dragon Tank (PDL)
+	Valued:
+		Cost: 1200
+
+chdragon.Reflector:
+	Inherits: chdragon
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: ~vehicles.china, ~commander_tree.dragon_tank.reflector
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Aircraft
+		Weaknesses: • Weak vs Tanks, Projectiles
+		Attributes: • Reflector Armor
+	Tooltip:
+		Name: Dragon Tank (Reflector)
+
 chdragon.Husk:
 	Inherits: ^LightHusk
 	Tooltip:
@@ -630,7 +652,8 @@ chdragon.Husk:
 chgtnk:
 	Inherits: ^TankTD
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
+	Inherits@AUTOTARGET2: ^AutoTargetAntiLight
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@vo: ^AttackTurretedVoice
@@ -644,12 +667,14 @@ chgtnk:
 		Prerequisites: ~vehicles.china, ~!commander_tree.gatling.pdl, ~!commander_tree.gatling.reflector
 		Queue: Vehicle
 		Description: Tank armed with gatling guns.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Aircraft
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Point Defense Laser
 	Mobile:
 		Speed: 108
 	Health:
 		HP: 30000
-	Armor:
-		Type: Heavy
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
@@ -701,7 +726,7 @@ chgtnk.Husk:
 		Image: chgtnk
 
 chharv:
-	Inherits: ^VehicleTD
+	Inherits: ^TankTD
 	Inherits@HARV: ^Harvester
 	-Crushable:
 	-Carryable:
@@ -720,8 +745,6 @@ chharv:
 		PipCount: 6
 	Health:
 		HP: 30000
-	Armor:
-		Type: Light
 	Mobile:
 		Speed: 66
 		Locomotor: wheeled
@@ -750,48 +773,28 @@ chharv.Husk:
 choutpost:
 	Inherits: ^VehicleTD
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@TRANSPORT: ^Transport
 	Inherits@detect: ^SensorEquipment
 	Inherits@radar: ^MobileDeployableRadar
-	Inherits@CARGO: ^AttackingCargo
 	Valued:
-		Cost: 800
+		Cost: 600
 	Tooltip:
 		Name: Listening Outpost
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chweap, techcenter, ~vehicles.china
+		Prerequisites: chweap, techcenter, ~vehicles.china, ~!filler.outpost
 		Queue: Vehicle
-		Description: Detects cloaked units and buildings.\nGarrisoned by 2 Tank Hunters.
+		Description: Detects cloaked units and buildings.
+	TooltipExtras:
+		Weaknesses: • Unarmed
+		Attributes: • Sensor Equipment, deployable
 	Mobile:
 		Speed: 85
 	Health:
 		HP: 24000
-	Armor:
-		Type: Heavy
-	RevealsShroud:
-		Range: 8c0
-	Cargo:
-		Types: Infantry, Hacker, Fremen
-		MaxWeight: 2
-		PipCount: 2
-		EjectOnDeath: false #desync
-		InitialUnits: che3, che3
-	#AttackOpenTopped:
-	#	#Armaments: primary
-	#	#PortOffsets: 384,0,128, 224,-341,128, -224,-341,128, -384,0,128, -224,341,128, 224,341,128
-	#	#PortYaws: 0, 176, 341, 512, 682, 853
-	#	#PortCones: 88, 88, 88, 88, 88, 88
-	#	#Voice: Attack
-	#	#PauseOnCondition: chronobeamed
-	RenderRangeCircle:
-		FallbackRange: 6c0
 	SelectionDecorations:
-	AutoTarget:
-		AllowMovement: true
 	Turreted:
 		TurnSpeed: 10
 	WithIdleOverlay@SPINNER:
@@ -808,36 +811,100 @@ choutpost:
 	RenderSprites:
 		Scale: 0.89
 
-choutpost2:
+choutpost.Propaganda:
 	Inherits: choutpost
-	Inherits@CARGO: ^AttackingCargo
+	Inherits@speaker: ^PropagandaSpeaker
+	Tooltip:
+		Name: Propaganda Outpost
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.propaganda
+		Queue: Vehicle
+		Description: Detects cloaked units and buildings.\nMounted with a propaganda speaker.
+	TooltipExtras:
+		Strengths: • Strong with Infantry
+		Weaknesses: • Unarmed
+		Attributes: • Sensor Equipment, Propaganda Speakers
+	Health:
+		HP: 35000
 	Valued:
 		Cost: 1000
+
+choutpost.Propaganda.PDL:
+	Inherits: choutpost.Propaganda
+	Inherits: ^PointLaserDefenseSystemBig
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.outpost.propaganda, ~commander_tree.outpost.pdl
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Aircraft
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Point Defense Laser
+	Tooltip:
+		Name: Propaganda Outpost (PDL)
+	Valued:
+		Cost: 1600
+
+choutpost.Propaganda.Reflector:
+	Inherits: choutpost.Propaganda
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.outpost.propaganda, ~commander_tree.outpost.reflector
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Aircraft
+		Weaknesses: • Weak vs Tanks, Projectiles
+		Attributes: • Reflector Armor
+	Tooltip:
+		Name: Propaganda Outpost (Reflector)
+
+choutpost.Bunker:
+	Inherits: choutpost
+	Inherits@CARGO: ^AttackingCargo
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@AUTOTARGET2: ^AutoTargetAntiAirHeavy
+	Valued:
+		Cost: 1800
 	Tooltip:
 		Name: Attack Outpost
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chweap, techcenter, ~vehicles.chinainf
+		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.bunker
 		Queue: Vehicle
-		Description: Detects cloaked units and buildings.\nMounted with a propaganda speaker.\nHas space for up to 8 garrisoned infantry.\nGarrisoned by 3 Tank Hunters.
+		Description: Detects cloaked units and buildings.\nGarrisoned with 5 Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Tanks, Aircraft
+		Weaknesses: • Infantry
+		Attributes: • Sensor Equipment, Infantry can shoot from inside
 	Health:
 		HP: 35000
 	Cargo:
-		Types: Infantry, Hacker
-		MaxWeight: 8
-		PipCount: 8
-		EjectOnDeath: false #desync
-		InitialUnits: che3, che3, che3
-	ProximityExternalCondition@PROPAGANDA:
-		Range: 6c0
-		Condition: propaganda
-		RequiresCondition: !disabled
-	WithRangeCircle:
-		Range: 6c0
-		Type: propaganda
-		RequiresCondition: !disabled
-	RenderSprites:
-		Image: choutpost
+		InitialUnits: che3, che3, che3, che3, che3
+		EjectOnDeath: true
+
+choutpost.Bunker.PDL:
+	Inherits: choutpost.Bunker
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.outpost.bunker, ~commander_tree.outpost.pdl
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Aircraft
+		Weaknesses: • Weak vs Energy Weapons
+		Attributes: • Point Defense Laser
+	Tooltip:
+		Name: Bunker Outpost (PDL)
+	Valued:
+		Cost: 1600
+
+chgtnk.Bunker.Reflector:
+	Inherits: choutpost.Bunker
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: chweap, ~vehicles.china, ~commander_tree.outpost.bunker, ~commander_tree.outpost.reflector
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Aircraft
+		Weaknesses: • Weak vs Tanks, Projectiles
+		Attributes: • Reflector Armor
+	Tooltip:
+		Name: Bunker Outpost (Reflector)
 
 checm:
 	Inherits: ^TankTD
@@ -852,15 +919,17 @@ checm:
 		Name: ECM Tank
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chweap, techcenter, ~vehicles.china
+		Prerequisites: chweap, radar, ~vehicles.china
 		Queue: Vehicle
-		Description: Disables vehicles and jams incoming missiles.
+		Description: Disables vehicles with a modulated plasma beam.
+	TooltipExtras:
+		Strengths: • Strong vs Slow Heavy Vehicles
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Disables Vehicles
 	Mobile:
 		Speed: 90
 	Health:
 		HP: 24000
-	Armor:
-		Type: Heavy
 	RevealsShroud:
 		Range: 8c0
 	JamsMissiles:
@@ -870,11 +939,6 @@ checm:
 	RenderJammerCircle:
 	Armament:
 		Weapon: CHECMDisable
-		LocalOffset: 250,0,100
-		PauseOnCondition: !charged
-	Armament@charge:
-		Name: secondary
-		Weapon: CHECMBeam
 		LocalOffset: 250,0,100
 	AttackTurreted:
 		Armaments: primary, secondary
@@ -893,6 +957,50 @@ checm:
 		RequiresCondition: attacking
 	Voiced:
 		VoiceSet: ECMTankVoice
+
+checm.pulse:
+	Inherits: checm
+	Tooltip:
+		Name: Plasma Pulse Tank
+	Buildable:
+		Prerequisites: chweap, radar, ~vehicles.china, ~commander_tree.ecm.pulse
+		Description: Disables and damages vehicles with a pulsating plasma beam.
+	TooltipExtras:
+		Strengths: • Strong vs low-range Tanks
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Disables Vehicles
+	Armament:
+		Weapon: CHECMBeam.Pulse
+		Recoil: 128
+
+checm.focus:
+	Inherits: checm
+	Tooltip:
+		Name: Plasma Focus Tank
+	Buildable:
+		Prerequisites: chweap, radar, ~vehicles.china, ~commander_tree.ecm.focus
+		Description: Tank with a focused plasma beam,\nbreaking through massive hulls fast.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Tanks
+		Weaknesses: • Weak vs Infantry, Aircraft
+	Armament:
+		Weapon: CHECMBeam.Focus
+		Recoil: 128
+
+checm.chain:
+	Inherits: checm
+	Tooltip:
+		Name: Plasma Chain Tank
+	Buildable:
+		Prerequisites: chweap, radar, ~vehicles.china, ~commander_tree.ecm.focus
+		Description: Tank with a highly modulated plasma beam,\njumping over to many targets.
+	TooltipExtras:
+		Strengths: • Strong vs groups of light units
+		Weaknesses: • Weak vs Aircraft
+	Armament:
+		Weapon: CHECMBeam.Chain
+		Recoil: 128
+
 
 CHTRUK:
 	Inherits: TRUK
@@ -915,20 +1023,13 @@ chcrawl:
 		Name: Troop Crawler
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: chweap, ~vehicles.chinainf
+		Prerequisites: chweap, ~!vehicles.chinainf
 		Queue: Vehicle
 		Description: Heavy infantry transport.\n Unarmed
 	Mobile:
 		Speed: 110
-		PauseOnCondition: notmobile || disabled
 	Health:
 		HP: 27500
-	Armor:
-		Type: Heavy
-	RevealsShroud:
-		Range: 6c0
-	Turreted:
-		TurnSpeed: 10
 	Cargo:
 		Types: Infantry, Hacker, Fremen
 		MaxWeight: 5
@@ -943,17 +1044,22 @@ chcrawl:
 
 chcrawl2:
 	Inherits: chcrawl
+	Inherits: ^TankTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@CARGO: ^AttackingCargo
 	Valued:
-		Cost: 3000
+		Cost: 1000
 	Tooltip:
-		Name: Assault Troop Crawler
+		Name: Heavy Troop Crawler
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chweap, ~vehicles.chinainf
+		Prerequisites: chweap, ~vehicles.chinainf, ~!filler.crawler
 		Queue: Vehicle
 		Description: Heavy infantry transport.\n Passengers can fire from within
+	TooltipExtras:
+		Strengths: • Strong vs Masses
+		Weaknesses: • Weak vs PDL, Aircraft
+		Attributes: • Unarmed
 	Mobile:
 		Speed: 125
 	Passenger:
@@ -966,20 +1072,109 @@ chcrawl2:
 		MaxWeight: 6
 		PipCount: 6
 		EjectOnDeath: false
-		InitialUnits: che2, che2, che2, che2, che2, che2
 	AttackOpenTopped:
-		Armaments: garrisoned
 		PortOffsets: 384,0,128, 224,-341,128, -224,-341,128, -384,0,128, -224,341,128, 224,341,128
 		Voice: Attack
-		PauseOnCondition: chronobeamed
-	RevealOnFire:
-		ArmamentNames: primary, garrisoned
 	AutoTarget:
 		AllowMovement: true
 	Turreted:
 		TurnSpeed: 10
 	Voiced:
 		VoiceSet: AssaultTroopCrawlerVoice
+
+chcrawl2.Hunter:
+	Inherits: chcrawl2
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Hunter Troop Crawler
+	Buildable:
+		Prerequisites: chweap, ~commander_tree.crawler.hunter, ~!filler.crawler2
+		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft
+		Weaknesses: • Weak vs PDL
+	Cargo:
+		InitialUnits: che3,che3,che3,che3,che3
+
+chcrawl2.Hunter.PDL:
+	Inherits: chcrawl2
+	Inherits: ^PointLaserDefenseSystem
+	Inherits@CARGO: ^AttackingCargoAndTurret
+	-WithSpriteTurretOpenTop:
+	Valued:
+		Cost: 3200
+	Tooltip:
+		Name: Hunter Troop Crawler (PDL)
+	Buildable:
+		Prerequisites: chweap, techcenter, ~commander_tree.crawler.hunter, ~commander_tree.crawler.pdl
+		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Aircraft
+		Weaknesses: • Weak vs Infantry, Energy Weapons
+		Attributes: • Point Defense Laser
+
+chcrawl2.Hunter.Reflector:
+	Inherits: chcrawl2
+	Inherits: ^ReflectorArmor
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Hunter Troop Crawler (Reflector)
+	Buildable:
+		Prerequisites: chweap, techcenter, ~commander_tree.crawler.hunter, ~commander_tree.crawler.reflector
+		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Aircraft
+		Weaknesses: • Weak vs Infantry, Projectiles
+		Attributes: • Reflector Armor
+
+chcrawl2.Assault:
+	Inherits: chcrawl2
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Assault Troop Crawler
+	Buildable:
+		Prerequisites: chweap, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
+		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Aircraft
+		Weaknesses: • Weak vs Tanks
+	Cargo:
+		InitialUnits: che2,che2,che2,che2,che2
+
+chcrawl2.Assault.PDL:
+	Inherits: chcrawl2
+	Inherits: ^PointLaserDefenseSystem
+	Inherits@CARGO: ^AttackingCargoAndTurret
+	-WithSpriteTurretOpenTop:
+	Valued:
+		Cost: 2600
+	Tooltip:
+		Name: Assault Troop Crawler (PDL)
+	Buildable:
+		Prerequisites: chweap, techcenter, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
+		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Aircraft
+		Weaknesses: • Weak vs Tanks, Energy Weapons
+		Attributes: • Point Defense Laser
+
+chcrawl2.Assault.Reflector:
+	Inherits: chcrawl2
+	Inherits: ^ReflectorArmor
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Assault Troop Crawler (Reflector)
+	Buildable:
+		Prerequisites: chweap, techcenter, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
+		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Aircraft
+		Weaknesses: • Weak vs Tanks, Projectiles
+		Attributes: • Reflector Armor
 
 chcrawl.Husk:
 	Inherits: ^LightHusk
@@ -1005,23 +1200,23 @@ chnukecann:
 		Name: Nuke Cannon
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: techcenter, ~vehicles.chinaatom
+		Prerequisites: techcenter, ~weap, ~commander_tree.nuke_cannon, ~!filler.nuke_cannon
 		Queue: Vehicle
-		Description: Slow heavy artillery.\n Strong vs ground targets\n Weak vs Aircraft
+		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
+	TooltipExtras:
+		Strengths: • Strong vs Masses
+		Weaknesses: • Weak vs PDL, Aircraft
 	Mobile:
 		Locomotor: tracked
 		TurnSpeed: 8
 		Speed: 55
 	Health:
 		HP: 24000
-	Armor:
-		Type: Heavy
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
 		TurnSpeed: 8	#3
 	AttackTurreted:
-		RequiresCondition: !fired
 	SelectionDecorations:
 	Selectable:
 	Armament@AIM:
@@ -1089,6 +1284,37 @@ chnukecann:
 	GrantConditionOnPrerequisite@upneutronshell:
 		Condition: upneutronshell
 		Prerequisites: upneutronshell
+
+chnukecann.Range:
+	Inherits: chnukecann
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Nuke Cannon (Range)
+	Buildable:
+		Prerequisites: chweap, techcenter, ~commander_tree.nuke_cannon.range
+		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
+	TooltipExtras:
+		Strengths: • Strong vs Masses
+		Weaknesses: • Weak vs PDL, Aircraft
+	Armament@PRIMARY:
+		Weapon: CHNukeCannon.Range
+
+chnukecann.Neutron:
+	Inherits: chnukecann
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Neutron Cannon (Neutron)
+	Buildable:
+		Prerequisites: chweap, techcenter, ~commander_tree.nuke_cannon.neutron
+		Description: Slow heavy artillery.\n Must be deployed to fire neutron shells.
+	TooltipExtras:
+		Strengths: • Strong vs Masses
+		Weaknesses: • Weak vs PDL, Aircraft, Buildings
+		Attributes: • Kills Drivers
+	Armament@PRIMARY:
+		Weapon: CHNukeCannon.Neutron
 
 chnukecann.Husk:
 	Inherits: ^LightHusk

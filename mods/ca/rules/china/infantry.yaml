@@ -3,6 +3,8 @@ CHE1:
 	Inherits: ^Soldier
 	Inherits@EXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET2: ^AutoTargetAntiInfantry
+	Inherits: ^ScoutEquipment
 	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
 	Inherits@horde: ^HordeBonus
@@ -13,60 +15,56 @@ CHE1:
 		BuildPaletteOrder: 20
 		Queue: Infantry
 		IconPalette: chrometd
-		Description: General-purpose infantry armed with a rifle.\n  Strong vs Infantry\n  Weak vs Vehicles
+		Description: General-purpose infantry armed with a rifle.
 		Prerequisites: barracks, ~infantry.china, ~!infantry.chinainf
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Tanks, Air
+		Attributes: • Scout Equipment
 	Valued:
-		Cost: 150
+		Cost: 100
 	Tooltip:
 		Name: Red Guard
 	Mobile:
 		Speed: 56
 	Health:
-		HP: 8000
+		HP: 5000
 	AutoTarget:
 		ScanRadius: 4
-	Armament@PRIMARY:							##########
+	Armament@PRIMARY:
 		Weapon: CHGuardRifle
-	Armament@GARRISONED:						##########
-		Name: garrisoned
+	Armament@GARRISONED:
+		Name: mounted
 		Weapon: CHGuardRifleGarrison
 		MuzzleSequence: muzzle
 	AttackFrontal:
-	AcceptsDeliveredExperience:							##########
-		ValidTypes: infantry							##########
 	Voiced:
 		VoiceSet: RedGuardVoice
 	RenderSprites:
 		Scale: 0.85
-	ProducibleWithLevel:
-		Prerequisites: upredguard
-		InitialLevels: 1
-	ProductionCostMultiplier@selectchtanks:
-		Multiplier: 110
-		Prerequisites: chinatnk
-		Queue: Infantry
-	ProductionCostMultiplier@selectchatomic:
-		Multiplier: 130
-		Prerequisites: chinaatom
-		Queue: Infantry
 
 CHE2:
 	Inherits: CHE1
+	Inherits@AUTOTARGET2: ^AutoTargetAntiAirLight
 	Buildable:
 		BuildPaletteOrder: 20
 		IconPalette: chrometd
-		Description: General-purpose infantry armed with a minigun.\nCan attack aircraft.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Tanks
+		Description: General-purpose infantry armed with a minigun.
 		Prerequisites: barracks, ~infantry.chinainf
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Tanks, Air
+		Attributes: • Can attack aircraft
 	Valued:
 		Cost: 350
 	Tooltip:
 		Name: Minigunner
-	Armament@PRIMARY:							##########
+	Armament@PRIMARY:
 		Weapon: CHMinigunnerGatling
-	Armament@PRIMARYAA:							##########
+	Armament@PRIMARYAA:
 		Weapon: CHMinigunnerGatlingAA
-	Armament@GARRISONED:						##########
-		Name: garrisoned
+	Armament@GARRISONED:
+		Name: mounted
 		Weapon: CHMinigunnerGatling
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
@@ -87,6 +85,7 @@ CHE2:
 
 CHE3:
 	Inherits: E3
+	Inherits@AUTOTARGET2: ^AutoTargetAntiAirHeavy
 	Inherits@horde: ^HordeBonus
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@vo: ^AttackFrontalVoice
@@ -99,27 +98,20 @@ CHE3:
 		IconPalette: chrometd
 		Prerequisites: barracks, ~infantry.china
 		Queue: Infantry
-		Description: Anti-tank/Anti-aircraft infantry. \n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
-	Armament@PRIMARY:							##########
+		Description: Rocket launcher infantry.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft
+		Weaknesses: • Weak vs Infantry
+		Attributes: • Can attack aircraft
+	Armament@PRIMARY:
 		Weapon: CHTankHunterMissile
 		LocalOffset: 256,43,341
 		FireDelay: 5
-	Armament@GARRISONED:						##########
+	Armament@GARRISONED:
 		Name: garrisoned
 		Weapon: CHTankHunterMissileG
 	Voiced:
 		VoiceSet: TankHunterVoice
-	ProductionCostMultiplier@selectchtanks:
-		Multiplier: 110
-		Prerequisites: chinatnk
-		Queue: Infantry
-	ProductionCostMultiplier@selectchatomic:
-		Multiplier: 130
-		Prerequisites: chinaatom
-		Queue: Infantry
-	ProducibleWithLevel:
-		Prerequisites: selectchinf
-		InitialLevels: 1
 	RenderSprites:
 		Image: che3
 
@@ -239,10 +231,6 @@ CHHACKER:
 	CashTricklerMultiplier@indoors:
 		Modifier: 150
 		RequiresCondition: indoors
-	ProductionCostMultiplier@selectchtanks:
-		Multiplier: 110
-		Prerequisites: selectchtanks
-		Queue: Infantry.CHINA, RAInfantry.CHINA
 
 CHHACKER2:
 	Inherits: CHHACKER

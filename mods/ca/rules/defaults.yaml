@@ -11,6 +11,7 @@
 	QuantizeFacingsFromSequence:
 	RenderSprites:
 		PlayerPalette: overlayplayer
+#		Scale: 2.0
 
 ^1x1Shape:
 	HitShape:
@@ -1285,6 +1286,24 @@
 		InvalidTargets: NoAutoTarget
 		Priority: 10
 
+^AutoTargetAntiInfantry:
+
+^AutoTargetAntiHeavy:
+
+^AutoTargetAntiLight:
+
+^AutoTargetAntiVehicle:
+
+^AutoTargetAntiAirLight:
+
+^AutoTargetAntiAirHeavy:
+
+^AutoTargetEnergyWeapon:
+
+^AutoTargetEnergyAntiHeavy:
+
+^AutoTargetEnergyAntiLight:
+
 ^GlobalBounty:
 	GrantConditionOnPrerequisite@GLOBALBOUNTY:
 		Condition: global-bounty
@@ -1307,6 +1326,7 @@
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^IronCurtainable
 	Inherits@3: ^SpriteActor
+	Inherits@Armor: ^LightArmor
 	Inherits@4: ^Cloakable
 	Inherits@5: ^EmpDisable
 	Inherits@6: ^GDIUpgrade
@@ -1461,6 +1481,7 @@
 
 ^Tank:
 	Inherits: ^Vehicle
+	Inherits@Armor: ^HeavyArmor
 	Inherits@SLOWCRUSH: ^SlightlySlowedByCrushing
 	Passenger:
 		Weight: 4
@@ -3717,6 +3738,34 @@
 		DamageTypes: FrozenDeath
 		LayerName: cryoresidue
 		RequiresCondition: !being-warped
+
+^InfantryArmor:
+	Armor:
+		Type: None
+
+^LightArmor:
+	Armor:
+		Type: Light
+
+^HeavyArmor:
+	Armor:
+		Type: Heavy
+
+^ReflectorArmor:
+	Armor:
+		Type: Reflector
+
+^WoodArmor:
+	Armor:
+		Type: Wood
+
+^ConcreteArmor:
+	Armor:
+		Type: Concrete
+
+^BrickArmor:
+	Armor:
+		Type: Brick
 
 ^HazmatSuits:
 	GrantConditionOnPrerequisite@BIO:
