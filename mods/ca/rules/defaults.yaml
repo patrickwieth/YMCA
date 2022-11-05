@@ -1208,6 +1208,22 @@
 		StationaryInterval: 18
 		MovingInterval: 6
 
+^HoverVehicle:
+	Inherits: ^HoverTrail
+	Mobile:
+		Locomotor: hover
+	Hovers:
+		BobDistance: -35
+		RequiresCondition: !empdisable && !being-warped && !driver-dead
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	KillsSelf@SINK:
+		RequiresCondition: onwater && (empdisable || driver-dead)
+	Targetable@WATER:
+		TargetTypes: Ground, Vehicle, Water, Ship
+		RequiresCondition: onwater && (!parachute && !being-warped)
+
 ^AutoTargetGround:
 	AutoTarget:
 		AttackAnythingCondition: stance-attackanything

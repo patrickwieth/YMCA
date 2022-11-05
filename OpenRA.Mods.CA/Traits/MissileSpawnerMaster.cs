@@ -86,6 +86,10 @@ namespace OpenRA.Mods.CA.Traits
 			if (!Info.ArmamentNames.Contains(a.Info.Name))
 				return;
 
+			if (target.Type == TargetType.Invalid) {
+				return;
+			}
+
 			// Issue retarget order for already launched ones
 			foreach (var slave in SlaveEntries)
 				if (slave.IsValid)

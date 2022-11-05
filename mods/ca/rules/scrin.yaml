@@ -480,6 +480,7 @@ MAST:
 
 HARV.Scrin:
 	Inherits: HAR2
+	Inherits@Hover: ^HoverVehicle
 	Selectable:
 		DecorationBounds: 42,42
 	RenderSprites:
@@ -494,15 +495,12 @@ HARV.Scrin:
 	Mobile:
 		Speed: 56
 		Locomotor: hover
-	Hovers:
-		BobDistance: -35
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	Buildable:
 		Prerequisites: ~proc.scrin, ~vehicles.scrin, ~techlevel.infonly
 		IconPalette: chrome
 	SpawnActorOnDeath:
 		Actor: HARV.Scrin.Husk
-		RequiresCondition: !being-warped
+		RequiresCondition: !being-warped && !onwater
 	WithDockingAnimation:
 		DockSequence: idle
 		DockLoopSequence: idle
@@ -586,6 +584,7 @@ GUNW.sensor:
 
 SEEK:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -630,12 +629,6 @@ SEEK:
 		Offset: -280,0,0
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	KillsSelf@SINK:
-		RequiresCondition: onwater && (empdisable || driver-dead)
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -653,7 +646,7 @@ SEEK:
 		Prerequisites: vehicles.upgraded
 	SpawnActorOnDeath:
 		Actor: SEEK.Husk
-		RequiresCondition: !being-warped
+		RequiresCondition: !being-warped && !onwater
 
 SEEK.PLD:
 	Inherits: SEEK
@@ -681,6 +674,7 @@ SEEK.Reflector:
 
 LACE:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -726,12 +720,6 @@ LACE:
 		Offset: -50,0,0
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	KillsSelf@SINK:
-		RequiresCondition: onwater && (empdisable || driver-dead)
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -787,6 +775,7 @@ LACE.AP:
 
 INTL:
 	Inherits: ^Tank
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -842,7 +831,6 @@ INTL:
 		LoadedCondition: cargo
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1038,6 +1026,7 @@ LCHR:
 
 STCR:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1063,7 +1052,6 @@ STCR:
 		Locomotor: hover
 	Hovers:
 		BobDistance: -35
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	Health:
 		HP: 60000
 	Armor:
@@ -1118,6 +1106,7 @@ STCR.Reflector:
 
 DEVO:
 	Inherits: ^Tank
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1145,7 +1134,6 @@ DEVO:
 		Locomotor: lighthover
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 6c0
@@ -1210,6 +1198,7 @@ DEVO.heavy:
 
 DARK:
 	Inherits: ^Tank
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1265,7 +1254,6 @@ DARK:
 		Sequence: idle
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1298,6 +1286,7 @@ DARK.disc:
 
 RUIN:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -1318,7 +1307,7 @@ RUIN:
 		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
 	Mobile:
-		Speed: 100
+		Speed: 80
 		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead
 		TurnSpeed: 1000
 		Locomotor: lighthover
@@ -1337,6 +1326,13 @@ RUIN:
 		LocalOffset: 650,0,600
 		MuzzleSequence: muzzle
 		MuzzlePalette: scrin
+	GrantConditionOnAttack:
+		Condition: attacking
+		RevokeDelay: 160
+		RevokeAll: false
+	SpeedMultiplier@IRAQTANK:
+		Modifier: 50
+		RequiresCondition: attacking
 	WithMuzzleOverlay:
 	AutoTarget:
 	Explodes:
@@ -1345,7 +1341,6 @@ RUIN:
 		Prerequisites: vehicles.upgraded
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1366,7 +1361,7 @@ RUIN:
 RUIN.barrage:
 	Inherits: RUIN
 	Valued:
-		Cost: 1200
+		Cost: 1400
 	Tooltip:
 		Name: Barrage Ruiner
 	Buildable:
@@ -1380,10 +1375,10 @@ RUIN.barrage:
 
 ATMZ:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
 	Inherits@BERSERK: ^Berserk
-	Inherits@HOVERTRAIL: ^HoverTrail
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -1417,7 +1412,6 @@ ATMZ:
 		TurnSpeed: 32
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1671,6 +1665,7 @@ RPTP.acid.PLD:
 
 SMCV:
 	Inherits: ^Vehicle
+	Inherits@Hover: ^HoverVehicle
 	Inherits@SELECTION: ^SelectableSupportUnit
 	Buildable:
 		Queue: Vehicle
@@ -1709,7 +1704,7 @@ SMCV:
 	BaseBuilding:
 	SpawnActorOnDeath:
 		Actor: SMCV.Husk
-		RequiresCondition: !being-warped
+		RequiresCondition: !being-warped && !onwater
 	TransferTimedExternalConditionOnTransform:
 		Condition: invulnerability
 	-Crushable:
@@ -1717,7 +1712,6 @@ SMCV:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
 	Hovers:
 		BobDistance: -25
-		RequiresCondition: !empdisable && !being-warped && !driver-dead
 
 #
 # ---- Aircraft
@@ -3611,7 +3605,7 @@ NERV:
 		OrderName: buzzerswarmai
 		Icon: buzzpower
 		Prerequisites: structures.harbinger, botplayer
-		ChargeInterval: 4500
+		ChargeInterval: 6000
 		LifeTime: -1
 		Description: Buzzer Swarm (AI)
 		LongDesc: Spawns controllable buzzer swarm which damages anything nearby.
@@ -3625,7 +3619,7 @@ NERV:
 		IconPalette: scrin
 		Prerequisites: structures.traveler
 		Cursor: ability
-		ChargeInterval: 4500
+		ChargeInterval: 6000
 		Description: Storm Spike
 		ActivationDelay: 1
 		LongDesc: Creates a temporary storm column.
