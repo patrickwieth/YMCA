@@ -1,0 +1,68 @@
+QTNK:
+	Inherits: ^Tank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 250
+		Prerequisites: stek, ~vehicles.soviet, ~!commander_tree.yuri, ~techlevel.high
+		Description: Erupts the ground sending out seismic waves slowing vehicles and infantry.\nThe effect stacks for up to 3 MAD Tanks.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Vehicles
+		Weaknesses: • Weak vs Aircraft, Artillery
+		Attributes: • Slows all units on deployment.
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: MAD Tank
+		GenericName: Tank
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 90000
+	Armor:
+		Type: Heavy
+	Mobile:
+		PauseOnCondition: deployed || being-captured || empdisable || being-warped || driver-dead
+		Speed: 56
+	ChronoshiftableWithSpriteEffect:
+		RequiresCondition: !deployed && !being-captured && !being-warped
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	WithSpriteBody@deployed:
+		Sequence: piston
+		RequiresCondition: !undeployed && !cooldown
+		Name: deployedbody
+	WithFacingSpriteBody:
+		RequiresCondition: undeployed || cooldown
+	GrantConditionOnDeploy:
+		PauseOnCondition: empdisable || being-warped || being-captured
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		AllowedTerrainTypes: Clear, Rough, Road, Ore, Gems, Beach, Tiberium, BlueTiberium
+		Facing: 0
+		DeploySounds: madchrg2.aud
+		UndeploySounds: clicky1.aud
+		UndeployOnMove: true
+		UndeployOnPickup: true
+	GrantTimedCondition@Piston:
+		Condition: piston
+		Duration: 8
+		RequiresCondition: deployed && !cooldown
+	GrantTimedCondition@Cooldown:
+		Condition: cooldown
+		Duration: 44
+		RequiresCondition: !piston
+	PeriodicExplosion:
+		Weapon: MAD_Eruption
+		RequiresCondition: deployed
+	Selectable:
+		DecorationBounds: 44,38,0,-4
+	WithRangeCircle:
+		Color: FFFF0080
+		Range: 15c0
+	-Crushable:
+	Targetable:
+		TargetTypes: Ground, MADTank, Vehicle, C4, ChaosImmune

@@ -344,20 +344,34 @@ MIG:
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 
-MIG.AA:
+SU47:
 	Inherits: MIG
+	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
 		Prerequisites: ~afld, stek, ~commander_tree.mig.aa
-		Description: Precision strike aircraft.\n  Can attack aircraft. \n  Strong vs Vehicles, Defenses, Aircraft \n  Weak vs Infantry
+		Description: Air Superiority fighter aircraft.\n  Can attack aircraft. \n  Strong vs Aircraft \n  Weak vs Infantry
 	Valued:
 		Cost: 1750
 	Tooltip:
-		Name: MiG Fighter Plane
-	Armament@primary:
+		Name: SU-47 Fighter
+	Armament:
 		Weapon: Maverick
 	Armament@secondary:
 		Weapon: WidowAA.Mig
+		PauseOnCondition: !ammo
+	SpawnActorOnDeath:
+		Actor: SU47.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: SU47.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: SU47.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: SU47.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
 
 MIG.Nuke:
 	Inherits: MIG
@@ -386,8 +400,6 @@ MIG.Tesla:
 		Cost: 2200
 	AmmoPool:
 		Ammo: 6
-		ReloadDelay: 60
-		AmmoCondition: ammo
 	Tooltip:
 		Name: MiG Tesla Bomber
 	Aircraft:
@@ -396,7 +408,7 @@ MIG.Tesla:
 		Weapon: MigTeslaBomb
 
 SUK:
-	Inherits: ^Plane
+	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -504,7 +516,7 @@ SUK.Conc:
 		Weapon: MaverickSU.Concussion
 
 FROG:
-	Inherits: ^Plane
+	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -560,49 +572,25 @@ FROG:
 		Interval: 2
 	Selectable:
 		DecorationBounds: 30,28,0,2
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 
 FROGDIRTY:
-	Inherits: ^Plane
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: FROG
 	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
 		IconPalette: chrometd
-		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot, ~techlevel.high
+		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot
 		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:
 		Cost: 1550
 	Tooltip:
 		Name: Frogfoot Dirty Bomber
-	Health:
-		HP: 16000
-	RevealsShroud:
-		Range: 10c0
-		Type: GroundPosition
-		MoveRecalculationThreshold: 0
 	Armament@PRIMARY:
 		Weapon: RadBomb
 		LocalOffset: 256,-213,0
 		PauseOnCondition: !ammo
 	AttackAircraft:
 		FacingTolerance: 512
-	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
-		TurnSpeed: 16
-		Speed: 225
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-		TakeoffSounds: migtoff1.aud
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
 	AmmoPool:
 		Ammo: 8
 		ReloadDelay: 30
@@ -612,44 +600,6 @@ FROGDIRTY:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	SelectionDecorations:
-	Contrail@1:
-		Offset: -598,-683,-40
-	Contrail@2:
-		Offset: -598,683,-40
-	Contrail@AB1:
-		Offset: -400,-70,-20
-		UsePlayerColor: false
-		ZOffset: -512
-		Color: cc550080
-		TrailLength: 10
-	Contrail@AB2:
-		Offset: -400,70,-20
-		UsePlayerColor: false
-		ZOffset: -512
-		Color: cc550080
-		TrailLength: 10
-	SpawnActorOnDeath:
-		Actor: FROG.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: FROG.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@EMP:
-		Actor: FROG.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: FROG.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
-	SmokeTrailWhenDamaged:
-		Offset: -853,0,0
-		Interval: 2
-	Selectable:
-		DecorationBounds: 30,28,0,2
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
 
 YAK:
 	Inherits: ^Plane
@@ -1046,7 +996,8 @@ TRAN.paradrop:
 		Experience: 1000
 
 NHAW:
-	Inherits: ^Helicopter
+	Inherits: ^HelicopterTD
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@TRANSPORT: ^Transport
 	RenderSprites:
 		Image: nhaw
@@ -1059,10 +1010,11 @@ NHAW:
 	TooltipExtras:
 		Strengths: • Strong vs Infantry
 		Weaknesses: • Weak vs Heavy Armor, Defenses, Buildings\n• Cannot attack Aircraft
+		Attributes: • Can carry infantry\n• Can Paradrop Infantry (HoldFire Stance + Force Fire)
 	Valued:
 		Cost: 1150
 	Tooltip:
-		Name: Nighthawk
+		Name: Black Hawk
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -1084,36 +1036,22 @@ NHAW:
 		LandingSounds: hland1.aud
 		Voice: Move
 	WithIdleOverlay@ROTOR1AIR:
-		Offset: 237,0,263
+		Offset: 350,0,250
 		Sequence: rotor
 		RequiresCondition: airborne
 	WithIdleOverlay@ROTOR1GROUND:
-		Offset: 237,0,263
+		Offset: 350,0,250
 		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -997,0,341
-		Sequence: rotor2
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -997,0,341
-		Sequence: slow-rotor2
 		RequiresCondition: !airborne
 	Cargo:
 		Types: Infantry
 		MaxWeight: 8
 	SpawnActorOnDeath:
 		Actor: NHAW.Husk
-		RequiresCondition: !upg-crym && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: NHAW.Husk.EMP
-		RequiresCondition: !upg-crym && empdisable && !being-warped
-	SpawnActorOnDeath@UPG:
-		Actor: NHAW.UPG.Husk
-		RequiresCondition: upg-crym && !empdisable && !being-warped
-	SpawnActorOnDeath@UPGEMP:
-		Actor: NHAW.UPG.Husk.EMP
-		RequiresCondition: upg-crym && empdisable && !being-warped
+		RequiresCondition: empdisable && !being-warped
 	Selectable:
 		DecorationBounds: 40,36
 	Voiced:
@@ -1121,19 +1059,6 @@ NHAW:
 	AppearsOnRadar:
 		ValidRelationships: Ally
 	WithFacingSpriteBody:
-		RequiresCondition: !upg-crym
-	WithFacingSpriteBody@UPG:
-		Name: body-upg
-		RequiresCondition: upg-crym && ammo > 1
-		Sequence: idle-upg
-	WithFacingSpriteBody@oneshot:
-		Name: body-oneshot
-		RequiresCondition: upg-crym && ammo == 1
-		Sequence: oneshot
-	WithFacingSpriteBody@empty:
-		Name: body-empty
-		RequiresCondition: upg-crym && !ammo
-		Sequence: empty
 	Armament@PRIMARY:
 		Weapon: M60mgJJ
 		LocalOffset: 1000,0,-100
@@ -1154,19 +1079,31 @@ NHAW:
 		Count: 2
 		RequiresCondition: upg-crym
 	AutoTarget:
-		InitialStance: HoldFire
+		InitialStance: ReturnFire
 		InitialStanceAI: AttackAnything
+		HoldFireCondition: stance-holdfire
 	AttackAircraft:
-		Armaments: primary, cryo
+		Armaments: primary, cryo, drop
 		FacingTolerance: 20
 		AttackType: Hover
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
-	GrantConditionOnPrerequisite@CRYM:
-		Condition: upg-crym
-		Prerequisites: crym.upgrade
+	ParaDrop:
+		ChuteSound: chute1.aud
+	Armament@DROP:
+		Name: drop
+		Weapon: DropDummy
+		Cursor: ability
+		OutsideRangeCursor: ability
+		RequiresCondition: cargo && stance-holdfire
+	ParachuteCargoOnCondition:
+		RequiresCondition: dropcargo
+		ReturnToBase: false
+	GrantConditionOnAttack:
+		Condition: dropcargo
+		ArmamentNames: drop
 
 NHAW.paradrop:
 	Inherits: ^Helicopter
@@ -1187,14 +1124,6 @@ NHAW.paradrop:
 	WithIdleOverlay@ROTOR1GROUND:
 		Offset: 597,0,85
 		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -597,0,171
-		Sequence: rotor2
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -597,0,171
-		Sequence: slow-rotor2
 		RequiresCondition: !airborne
 	Cargo:
 		Types: Infantry
@@ -1656,6 +1585,7 @@ HUEY:
 
 HUEY.recon:
 	Inherits: HUEY
+	Inherits: ^HelicopterTD
 	Inherits@TRANSPORT: ^Transport
 	Buildable:
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.recon, ~techlevel.medium
@@ -1692,7 +1622,6 @@ HUEY.recon:
 		LocalOffset: 250,0,150
 		RequiresCondition: relayturr
 	Armament@snipe:
-		Name: yes
 		Weapon: sniperE
 		LocalOffset: 250,0,150
 		RequiresCondition: snipeturr
@@ -1714,6 +1643,14 @@ HUEY.recon:
 			bori: commturr
 			snip: snipeturr
 			specops: relayturr
+	WithIdleOverlay@ROTORAIR:
+		Sequence: rotor
+		Offset: 200,0,300
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTORGROUND:
+		Sequence: slow-rotor
+		Offset: 200,0,300
+		RequiresCondition: !airborne
 
 HUEY.cryo:
 	Inherits: HUEY
@@ -2101,25 +2038,6 @@ C17.Clustermines:
 		Image: c17
 	-ParaDrop:
 
-GALX:
-	Inherits: C17
-	RenderSprites:
-		Image: galx
-	Tooltip:
-		Name: Heavy Transport Aircraft
-	Health:
-		HP: 90000
-	Aircraft:
-		Speed: 266
-		TurnSpeed: 26
-	DynamicSpeedMultiplier:
-	SpawnActorOnDeath:
-		Actor: GALX.Husk
-		RequiresCondition: !empdisable
-	SpawnActorOnDeath@EMP:
-		Actor: GALX.Husk.EMP
-		RequiresCondition: empdisable
-
 APCH:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
@@ -2127,7 +2045,7 @@ APCH:
 	Valued:
 		Cost: 1250
 	Tooltip:
-		Name: Apache
+		Name: Harpy
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -2155,7 +2073,7 @@ APCH:
 		Type: GroundPosition
 	Armament@PRIMARY:
 		Weapon: HeliGunAG
-		LocalOffset: 228,0,-85
+		LocalOffset: 528,0,-185
 		MuzzleSequence: muzzle
 		PauseOnCondition: !ammo
 	AttackAircraft:
@@ -2174,11 +2092,11 @@ APCH:
 		Margin: 4, 3
 		RequiresSelection: true
 	WithIdleOverlay@ROTORAIR:
-		Offset: 0,0,85
+		Offset: 100,0,285
 		Sequence: rotor
 		RequiresCondition: airborne
 	WithIdleOverlay@ROTORGROUND:
-		Offset: 0,0,85
+		Offset: 100,0,285
 		Sequence: slow-rotor
 		RequiresCondition: !airborne
 	WithMuzzleOverlay:
@@ -2217,7 +2135,7 @@ APCH.Flyby:
 		IconPalette: chrome
 		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Tooltip:
-		Name: Apache Flyby
+		Name: Harpy Flyby
 	-AttackAircraft:
 	Turreted:
 		TurnSpeed: 1000
@@ -2234,7 +2152,7 @@ APCH.Flyby:
 APCH.Torp:
 	Inherits: APCH
 	Tooltip:
-		Name: Apache (Torpedo)
+		Name: Harpy (Torpedo)
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.nod, ~commander_tree.apache.torp
 		IconPalette: chrome
@@ -2426,7 +2344,7 @@ ORCB:
 		BuildPaletteOrder: 40
 		Prerequisites: ~hpad.td, ~aircraft.eagle, gtek, ~techlevel.high
 		IconPalette: chrometd
-		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft
+		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft, Infantry
 	Valued:
 		Cost: 1600
 	Tooltip:
@@ -2434,7 +2352,7 @@ ORCB:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
-		HP: 26000
+		HP: 36000
 	RevealsShroud:
 		Range: 10c0
 		MinRange: 8c0
@@ -2469,7 +2387,7 @@ ORCB:
 		InitialStance: HoldFire
 		InitialStanceAI: HoldFire
 	AmmoPool:
-		Ammo: 6
+		Ammo: 8
 		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 4
@@ -2612,12 +2530,12 @@ RAH66:
 		InitialStance: HoldFire
 		InitialStanceAI: HoldFire
 	WithIdleOverlay@ROTORAIR:
-		Offset: 10,0,80
+		Offset: 200,0,80
 		Sequence: rotor
 		RequiresCondition: airborne
 		Palette: player
 	WithIdleOverlay@ROTORGROUND:
-		Offset: 10,0,80
+		Offset: 200,0,80
 		Sequence: slow-rotor
 		RequiresCondition: !airborne
 		Palette: player
@@ -2821,22 +2739,6 @@ KIRO:
 	SpawnActorOnDeath@EMP:
 		Actor: KIRO.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	WithIdleOverlay@ROTOR1AIR:
-		Offset: -180,597,250
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR1GROUND:
-		Offset: -180,597,250
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -180,-597,250
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -180,-597,250
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
 	SmokeTrailWhenDamaged@1:
 		Offset: -100,500,100
 	SmokeTrailWhenDamaged@2:
@@ -2873,6 +2775,24 @@ KIRO:
 	SpeedMultiplier@EMPDISABLE:
 		Modifier: 0
 		RequiresCondition: empdisable
+
+^KIRO.Carrier:
+	WithIdleOverlay@ROTOR1AIR:
+		Offset: -180,597,250
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR1GROUND:
+		Offset: -180,597,250
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithIdleOverlay@ROTOR2AIR:
+		Offset: -180,-597,250
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR2GROUND:
+		Offset: -180,-597,250
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
 
 BLIMP:
 	Inherits: ^Helicopter
@@ -3051,7 +2971,7 @@ OCAR.Reinforce:
 	Interactable:
 
 HARR:
-	Inherits: ^Helicopter
+	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -3143,6 +3063,8 @@ HARR:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: hpad, hpad.td
+	RenderSprites:
+		Scale: 0.5
 
 HARR.avionics:
 	Inherits: HARR
@@ -3182,7 +3104,7 @@ HARR.payload:
 		RequiresSelection: true
 
 Raptor:
-	Inherits: ^Plane
+	Inherits: ^PlaneTD
 	Inherits@AUTOTARGET: ^AutoTargetAir
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -3247,8 +3169,6 @@ Raptor:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
-	RenderSprites:
-		Scale: 0.9
 
 SCRN:
 	Inherits: ^HelicopterTD

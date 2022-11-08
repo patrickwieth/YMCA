@@ -1055,12 +1055,15 @@
 		Color: ffffff
 	ExternalCondition@concussion:
 		Condition: concussion
-	SpeedMultiplier@concussion:
-		Modifier: 66
-		RequiresCondition: concussion
-	ReloadDelayMultiplier@concussion:
-		Modifier: 150
-		RequiresCondition: concussion
+	SpeedMultiplier@concussion1:
+		Modifier: 77
+		RequiresCondition: concussion == 1
+	SpeedMultiplier@concussion2:
+		Modifier: 55
+		RequiresCondition: concussion == 2
+	SpeedMultiplier@concussion3:
+		Modifier: 33
+		RequiresCondition: concussion >= 3
 	WithDecoration@Concussion:
 		Image: pips
 		Sequence: pip-conc
@@ -1373,6 +1376,7 @@
 	Inherits@VehicleVision: ^VehicleVision
 	Buildable:
 		Queue: Vehicle
+	TooltipExtras:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Huntable:
@@ -1563,6 +1567,7 @@
 	Inherits@biodamage: ^BiologicalDamage
 	RenderSprites:
 		PlayerPalette: overlayplayertd
+	TooltipExtras:
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -1817,6 +1822,7 @@
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@biodamage: ^DriverBiologicalDamage
 	Inherits@VehicleVision: ^VehicleVision
+	TooltipExtras:
 	Huntable:
 	RenderSprites:
 		PlayerPalette: playernavy
@@ -2066,6 +2072,7 @@
 	Inherits@production: ^ProductionEfficiencyBoost
 	Inherits@C4: ^C4Plantable
 	Inherits@TNT: ^TNTPlantable
+	TooltipExtras:
 	Cloak@EXTERNALCLOAK:
 		RequiresCondition: invisibility || crate-cloak && (!cloak-force-disabled && !airborne && !being-warped)
 		CloakDelay: 90
@@ -2227,6 +2234,7 @@
 	Buildable:
 		Queue: Building
 		BuildDurationModifier: 25
+	TooltipExtras:
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -2333,12 +2341,10 @@
 ^Defense:
 	Inherits: ^Building
 	Inherits@botbonus: ^BotDefenseProductionBonus
-	Inherits@Concussion: ^Concussion
 	Inherits@selection: ^SelectableCombatBuilding
 	Inherits@mind: ^MindControllable
 	Inherits@gpsscramble: ^GpsScramble
 	Inherits: ^DefenseBalancing
-	-SpeedMultiplier@concussion:
 	WithColoredOverlay@IRONCURTAIN:
 		RequiresCondition: invulnerability
 	Selectable:
@@ -3414,16 +3420,14 @@
 ^AttackingCargoAndTurret:
 	Inherits: ^AttackingCargo
 	-AttackOpenTopped
-	WithSpriteTurretOpenTop:
-	TurretedOpenTop:
 	AttackTurretedOpenTopped:
-		Armaments: primary
+		Armaments: primary, secondary, tertiary, pointdefense
+		Turrets: primary, secondary, tertiary, pointdefense
 		PassengerArmaments: mounted, mountedaa
 		MuzzlePalette: tdeffect
 		PortOffsets: -85,384,340, -85,-384,340
 		PortYaws: 0, 176, 341, 512, 682, 853
 		PauseOnCondition: empdisable || being-warped
-
 
 ^TNTPlantable:
 	DelayedWeaponAttachable@TNT:
@@ -3607,6 +3611,17 @@
 		TrailCount: 3
 	ProvidesRadar:
 		RequiresCondition: deployed
+	JamsMissiles:
+		Range: 5c0
+		DeflectionStances: Neutral, Enemy
+		RequiresCondition: deployed && !(empdisable || being-warped)
+	RenderJammerCircle:
+
+^RadarStation:
+	ProvidesRadar:
+		RequiresCondition: !jammed && !disabled && !being-warped
+	ExternalCondition@JAMMED:
+		Condition: jammed
 
 ^AircraftWithAmmo:
 	Rearmable:

@@ -7,7 +7,23 @@
    information, see COPYING.
 ]]
 
-PointsPerRank = { 6, 1, 1, 1, 2 }
+StartingPoints = Map.LobbyOption("commanderpoints")
+
+Media.Debug(StartingPoints)
+
+if StartingPoints == "noinit" then
+	PointsPerRank = { 0, 1, 1, 1, 2 }
+elseif StartingPoints == "fewer" then
+	PointsPerRank = { 3, 1, 1, 1, 1 }
+elseif StartingPoints == "normal" then
+	PointsPerRank = { 6, 1, 1, 1, 2 }
+elseif StartingPoints == "later" then
+	PointsPerRank = { 3, 2, 2, 2, 3 }
+elseif StartingPoints == "toomany" then
+	PointsPerRank = { 12, 1, 1, 1, 2 }
+elseif StartingPoints == "all" then
+	PointsPerRank = { 100, 1, 1, 1, 2 }
+end
 
 PointActorExists =
 {
@@ -104,9 +120,9 @@ TickGeneralsPowers = function()
 	for _,player in pairs(players) do
 		if player.IsLocalPlayer then
 			if Levels[player.InternalName] < 4 then
-				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nCommander Specialization Points: " .. Points[player.InternalName] .. "\nProgress to Next Rank: " .. player.Experience - RankXPs[Levels[player.InternalName] + 1] .. "/" .. RankXPs[Levels[player.InternalName] + 2] - RankXPs[Levels[player.InternalName] + 1] .. "", player.Color)
+				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nCommander Specialization Points: " .. Points[player.InternalName] .. "\nProgress to Next Rank: " .. player.Experience - RankXPs[Levels[player.InternalName] + 1] .. "/" .. RankXPs[Levels[player.InternalName] + 2] - RankXPs[Levels[player.InternalName] + 1] .. "", HSLColor.White)
 			else
-				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nCommander Specialization Points: " .. Points[player.InternalName] .. "", player.Color)
+				UserInterface.SetMissionText("Current Rank: " .. Ranks[Levels[player.InternalName] + 1] .. "\nCommander Specialization Points: " .. Points[player.InternalName] .. "", HSLColor.White)
 			end
 		end
 

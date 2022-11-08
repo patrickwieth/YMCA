@@ -9,11 +9,13 @@ Cloning_Vats:
 		TargetableOffsets: 0,0,0, 640,-384,0, 640,512,0, -710,-512,0, -710,512,0
 	Buildable:
 		Queue: Building
-		BuildPaletteOrder: 20
+		IconPalette: chrometd
+		BuildPaletteOrder: 200
+		BuildLimit: 1
 		Prerequisites: techcenter, ~structures.iraq
 		Description: Clones produced infantry.
 	Valued:
-		Cost: 2000
+		Cost: 2500
 	Tooltip:
 		Name: Cloning Vats
 	Building:
@@ -40,8 +42,10 @@ Cloning_Vats:
 	ClonesProducedUnits:
 		CloneableTypes: Infantry
 		ProductionType: Clone.Soviets
+		RequiresCondition: !being-warped && !disabled && !empdisable
 	Exit:
-		ExitCell: -1, 0
+		SpawnOffset: -725,640,0
+		ExitCell: 0,2
 	Exit@2:
 		ExitCell: 1, 0
 	RallyPoint:

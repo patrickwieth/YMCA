@@ -1247,14 +1247,6 @@ MRJ:
 		Sequence: spinner
 		Offset: -256,0,256
 		PauseOnCondition: empdisable || being-warped
-	ProximityExternalCondition@Relay:
-		Range: 18c0
-		ValidRelationships: Enemy, Neutral
-		Condition: jammed
-	WithRangeCircle@JAMMER:
-		Type: jammer
-		Range: 18c0
-		Color: 0000FF80
 	JamsMissiles:
 		Range: 5c0
 		DeflectionStances: Neutral, Enemy
@@ -1292,10 +1284,6 @@ TTNK:
 	Turreted:
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
-	ProximityExternalCondition@JAMMER:
-		Range: 8c0
-		ValidRelationships: Enemy, Neutral
-		Condition: jammed
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	Selectable:
@@ -1470,18 +1458,18 @@ CTNK:
 	Mobile:
 		Speed: 113
 		Locomotor: heavywheeled
-	Armament@PRIMARYFRONTAL:
-		Name: primaryfrontal
+	Armament@PRIMARY:
+		Name: primary
 		Weapon: APTusk
 		LocalOffset: -160,-276,232
 		LocalYaw: 60
 	Armament@SECONDARYFRONTAL:
-		Name: primaryfrontal
+		Name: secondary
 		Weapon: APTusk
 		LocalOffset: -160,276,232
 		LocalYaw: -60
 	AttackFrontal:
-		Armaments: primaryfrontal, secondaryfrontal
+		Armaments: primary, secondary
 		PauseOnCondition: empdisable || being-warped
 	PortableChrono:
 		ChargeDelay: 250
@@ -1516,41 +1504,6 @@ CTNK.Reflector:
 		Description: Advanced tank armed with anti-ground missiles.\nHas Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft\n  Special Ability: Teleport
 	Tooltip:
 		Name: Chrono Tank (Reflector)
-
-QTNK:
-	Inherits: ^Tank
-	Inherits@UNLOAD: ^UnloadCondition
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 250
-		Prerequisites: stek, ~vehicles.soviet, ~!commander_tree.yuri, ~techlevel.high
-		Description: Deals seismic damage to nearby vehicles and structures.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: MAD Tank
-		GenericName: Tank
-	Health:
-		HP: 90000
-	Mobile:
-		PauseOnCondition: deployed || being-captured || empdisable || being-warped || driver-dead
-		Speed: 56
-	ChronoshiftableWithSpriteEffect:
-		RequiresCondition: !deployed && !being-captured && !being-warped
-	MadTankCA:
-		DeployedCondition: deployed
-		RequiresCondition: !invulnerability && !unloaded
-	Selectable:
-		DecorationBounds: 44,38,0,-4
-	WithRangeCircle:
-		Color: FFFF0080
-		Range: 9c0
-	-Crushable:
-	Targetable:
-		TargetTypes: Ground, MADTank, Vehicle, C4, ChaosImmune
-	ProductionCostMultiplier@UkraineBonus:
-		Multiplier: 90
-		Prerequisites: vehicles.ukraine
 
 AMCV:
 	Inherits: ^TankTD
@@ -1786,7 +1739,7 @@ VULC:
 	Tooltip:
 		Name: Vulcan
 	Health:
-		HP: 50000
+		HP: 60000
 	Mobile:
 		Speed: 100
 		PauseOnCondition: being-captured || empdisable || being-warped || notmobile
@@ -2099,7 +2052,7 @@ MTNK.Drone:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
-		Prerequisites: ~vehicles.zocom, weap.td, radar, ~!commander_tree.medium_tank_pld
+		Prerequisites: ~vehicles.zocom, weap.td, radar, ~!commander_tree.medium_tank_pld, ~!commander_tree.medium_tank.reflector
 		IconPalette: chrometd
 		Description: Drone battle tank.\n  Requires power to operate.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -2310,7 +2263,7 @@ HTNK.Nanite:
 	Health:
 		HP: 125000
 	ChangesHealth:
-		PercentageStep: 4
+		PercentageStep: 5
 		Delay: 25
 		HealIfBelow: 100
 		DamageCooldown: 10
@@ -2367,7 +2320,7 @@ HTNK.Hover:
 	Tooltip:
 		Name: Hover Mammoth Tank
 	Valued:
-		Cost: 1700
+		Cost: 1600
 	Mobile:
 		Speed: 92
 		TurnSpeed: 56
@@ -2405,7 +2358,7 @@ HTNK.Hover.PLD:
 	Tooltip:
 		Name: Hover Mammoth Tank (PLD)
 	Valued:
-		Cost: 2300
+		Cost: 2200
 
 MSAM:
 	Inherits: ^VehicleTD
@@ -2460,7 +2413,7 @@ MSAM.Hailstorm:
 	RenderSprites:
 		-FactionImages:
 	Valued:
-		Cost: 1300
+		Cost: 1200
 	Tooltip:
 		Name: Hailstorm MLRS
 	Buildable:
@@ -2759,18 +2712,18 @@ BIKE:
 		Speed: 180
 	Health:
 		HP: 11000
-	Armament@PRIMARYFRONTAL:
-		Name: primaryfrontal
+	Armament@PRIMARY:
+		Name: primary
 		Weapon: BikeRockets
 		LocalOffset: -128, -170, 170, -128, 170, 170
 		LocalYaw: 100, -100
-	Armament@SECONDARYFRONTAL:
-		Name: secondaryfrontal
+	Armament@SECONDARY:
+		Name: secondary
 		Weapon: BikeRocketsAA
 		LocalOffset: -128, -170, 170, -128, 170, 170
 		LocalYaw: 100, -100
 	AttackFrontal:
-		Armaments: primaryfrontal, secondaryfrontal
+		Armaments: primary, secondary
 		PauseOnCondition: empdisable || being-warped
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -2792,9 +2745,9 @@ BIKE.Scrin:
 		Name: Scrin Bike
 	Health:
 		HP: 18000
-	Armament@PRIMARYFRONTAL:
+	Armament@PRIMARY:
 		Weapon: BikeScrinTorp
-	-Armament@SECONDARYFRONTAL:
+	-Armament@SECONDARY:
 
 BIKE.Scrin.PLD:
 	Inherits@PLD: ^PointLaserDefenseSystem
@@ -2836,9 +2789,9 @@ BIKE.RocketHail:
 		Cost: 900
 	Tooltip:
 		Name: Rocket Hail Bike
-	Armament@PRIMARYFRONTAL:
+	Armament@PRIMARY:
 		Weapon: BikeRocketHail
-	-Armament@SECONDARYFRONTAL:
+	-Armament@SECONDARY:
 
 BIKE.RocketHail.PLD:
 	Inherits@PLD: ^PointLaserDefenseSystem
@@ -2877,9 +2830,9 @@ BIKE.Explosive:
 		Cost: 500
 	Tooltip:
 		Name: Explosive Rocket Bike
-	Armament@PRIMARYFRONTAL:
+	Armament@PRIMARY:
 		Weapon: BikeRocketExplosive
-	Armament@SECONDARYFRONTAL:
+	Armament@SECONDARY:
 		Weapon: BikeRocketsAAExplosive
 
 BIKE.Explosive.PLD:
@@ -2928,21 +2881,19 @@ FTNK:
 		Speed: 82
 	Health:
 		HP: 45000
-	Armament@PRIMARYFRONTAL:
-		Name: primaryfrontal
+	Armament@PRIMARY:
+		Name: primary
 		Weapon: BigFlamer
 		MuzzleSequence: muzzle
 		MuzzlePalette: tdeffect
 		LocalOffset: 512,128,42, 512,-128,42
 	WithMuzzleOverlay:
 	AttackFrontal:
-		Armaments: primaryfrontal, secondaryfrontal
+		Armaments: primary, secondary
 		PauseOnCondition: empdisable || being-warped
 	Explodes:
 		Weapon: BarrelExplode
 		EmptyWeapon: BarrelExplode
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	ProductionCostMultiplier@BlackhBonus:
 		Multiplier: 90
 		Prerequisites: vehicles.blackh
@@ -2987,7 +2938,7 @@ FTNK.PLD.Chem:
 		Name: Chem Tank (PLD)
 	Health:
 		HP: 65000
-	Armament@PRIMARYFRONTAL:
+	Armament@PRIMARY:
 		Weapon: BigChemspray
 		-MuzzleSequence:
 		-MuzzlePalette:
@@ -3005,7 +2956,7 @@ FTNK.Reflector.Chem:
 		Name: Chem Tank (Reflector)
 	Health:
 		HP: 65000
-	Armament@PRIMARYFRONTAL:
+	Armament@PRIMARY:
 		Weapon: BigChemspray
 		-MuzzleSequence:
 		-MuzzlePalette:
@@ -3023,7 +2974,7 @@ FTNK.PLD.Fireball:
 		Cost: 1100
 	Tooltip:
 		Name: Fireball Tank (PLD)
-	Armament@PRIMARYFRONTAL:
+	Armament@PRIMARY:
 		Weapon: FireballLauncher.Tank
 		-MuzzleSequence:
 		-MuzzlePalette:
@@ -3037,7 +2988,7 @@ FTNK.Reflector.Fireball:
 		Description: Heavily armored fireball-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
 		Name: Fireball Tank (Reflector)
-	Armament@PRIMARYFRONTAL:
+	Armament@PRIMARY:
 		Weapon: FireballLauncher.Tank
 		-MuzzleSequence:
 		-MuzzlePalette:
@@ -3149,8 +3100,6 @@ BTR:
 		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Capturable:
 		RequiresCondition: !being-warped && !cargo
 	Capturable@DRIVER_DEAD:
@@ -3182,23 +3131,12 @@ BTR.Surveillance:
 		Sequence: spinner
 		Offset: 0,0,256
 		PauseOnCondition: empdisable || being-warped
-	ProximityExternalCondition@Relay:
-		Range: 18c0
-		ValidRelationships: Enemy, Neutral
-		Condition: jammed
-	WithRangeCircle@JAMMER:
-		Type: jammer
-		Range: 18c0
-		Color: 0000FF80
-	RenderJammerCircle:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
 		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Capturable:
 		RequiresCondition: !being-warped && !cargo
 	Capturable@DRIVER_DEAD:
@@ -3460,8 +3398,6 @@ IFV:
 			railgunner.nocrush: railgunturr
 			cryot: cryoturr
 			specops: relayturr
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	WithIdleOverlay@MEDIC:
 		Sequence: medic
 		PauseOnCondition: empdisable || being-warped
@@ -3632,8 +3568,6 @@ TITN:
 		DamageCooldown: 150
 	Carryable:
 		LocalOffset: 0,0,700
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 
 TITN.Battle:
 	Inherits: TITN
@@ -3823,8 +3757,6 @@ DISR:
 		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Targetable:
 		RequiresCondition: !being-warped
 		TargetTypes: Ground, Vehicle, C4, Disruptor
@@ -3996,8 +3928,6 @@ RTNK:
 		ValidDamageStates: Critical, Heavy
 	Selectable:
 		DecorationBounds: 28,28
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Voiced:
 		VoiceSet: MirageVoice
 
@@ -4088,8 +4018,6 @@ V3RL:
 		RespawnTicks: 250
 	Explodes:
 		Weapon: BarrelExplode
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
 	Voiced:
@@ -4160,8 +4088,6 @@ KATY:
 	SelectionDecorations:
 	Explodes:
 		Weapon: BarrelExplode
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
 
@@ -4207,8 +4133,6 @@ TNKD:
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: TnkdVoice
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
 	AutoTargetPriority@DEFAULT:
@@ -4249,13 +4173,13 @@ TNKD2:
 		Voice: Move
 	Passenger:
 		Voice: Move
-	Armament@primaryfrontal:
-		Name: primaryfrontal
+	Armament@primary:
+		Name: primary
 		Weapon: 183mm
 		LocalOffset: 868,0,0
 		MuzzleSequence: muzzle
 	AttackFrontal:
-		Armaments: primaryfrontal
+		Armaments: primary
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
 	WithMuzzleOverlay:
@@ -4264,8 +4188,6 @@ TNKD2:
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: TnkdVoice
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
 	AutoTargetPriority@TANKDEFAULT:
@@ -4305,8 +4227,8 @@ TNKD2.Burstfire:
 		Cost: 1150
 	Tooltip:
 		Name: Tank Destroyer (Burst)
-	Armament@primaryfrontal:
-		Name: primaryfrontal
+	Armament@primary:
+		Name: primary
 		Weapon: 183mm.Burst
 
 TNKD2.Reflector:
@@ -4339,7 +4261,7 @@ MSAR:
 		BuildDurationModifier: 50
 		Description: When deployed, provides radar and increases nearby vehicle weapon range.\n  Detects cloaked units.\n  Unarmed
 	Valued:
-		Cost: 800
+		Cost: 700
 	Health:
 		HP: 22000
 	Mobile:
@@ -4367,7 +4289,7 @@ MSAR:
 		DeployedCondition: deployed
 		UndeployedCondition: undeployed
 		Facing: 165
-		AllowedTerrainTypes: Clear, Road, Rough
+		AllowedTerrainTypes: Clear, Rough, Road, Ore, Gems, Beach, Tiberium, BlueTiberium
 		DeploySounds: placbldg.aud
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
@@ -4394,7 +4316,7 @@ MSAR.Nod:
 		BuildDurationModifier: 50
 		Description: When deployed, provides radar and detects cloaked units.\n  Unarmed
 	Valued:
-		Cost: 600
+		Cost: 500
 	-ProximityExternalCondition@Bino:
 
 MSAR.PLD:
@@ -4408,7 +4330,7 @@ MSAR.PLD:
 		BuildDurationModifier: 50
 		Description: When deployed, provides radar and increases nearby vehicle weapon range.\n Has Point Laser Defense System.\n Detects cloaked units.\n  Unarmed
 	Valued:
-		Cost: 1500
+		Cost: 1200
 
 MSAR.PLD.Nod:
 	Inherits: MSAR
@@ -4421,7 +4343,7 @@ MSAR.PLD.Nod:
 		BuildDurationModifier: 50
 		Description: When deployed, provides radar and Point Laser Defense.\n Detects cloaked units.\n  Unarmed
 	Valued:
-		Cost: 1200
+		Cost: 1100
 	-ProximityExternalCondition@Bino:
 
 PTNK:
@@ -4463,8 +4385,6 @@ PTNK:
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: PrismVoice
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
 
@@ -4485,7 +4405,7 @@ PBLASTER:
 		LocalOffset: 100,0,140
 
 PCAN:
-	Inherits: ^VehicleTD
+	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -4520,15 +4440,8 @@ PCAN:
 	SelectionDecorations:
 	Voiced:
 		VoiceSet: PrismVoice
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
-	RenderSprites:
-		Scale: 0.5
-	WithShadow:
-		Offset: 43, 255, 0
-		ZOffset: -128
 
 WTNK:
 	Inherits: ^VehicleTD
@@ -4584,8 +4497,6 @@ WTNK:
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: MWTnkVoice
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
 
@@ -4660,8 +4571,6 @@ BATF:
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
 		InitialUnits: tecn
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 44,38,0,-4
 	Carryable:
@@ -4902,8 +4811,6 @@ BATF.Bunker:
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 44,38,0,-4
 	Carryable:
@@ -4987,7 +4894,7 @@ MEMP:
 		Name: Mobile E.M.P
 		GenericName: Tank
 	Health:
-		HP: 65000
+		HP: 75000
 	Mobile:
 		PauseOnCondition: !radarenabled || deployed || disabled || empdisable || being-warped
 		Voice: Move
@@ -5063,7 +4970,7 @@ MEMP.Volatile:
 	Valued:
 		Cost: 1150
 	Health:
-		HP: 45000
+		HP: 55000
 	Tooltip:
 		Name: Mobile E.M.P (Volatile)
 	Mobile:
@@ -5245,8 +5152,6 @@ CHPR:
 	SpawnActorOnDeath:
 		Actor: CHPR.Husk
 		RequiresCondition: !being-warped
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 44,38,0,-4
 	Carryable:
@@ -5382,8 +5287,6 @@ CHPR.AA:
 		MovementType: Horizontal, Vertical, Turn
 		Condition: moving
 	SelectionDecorations:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Selectable:
 		DecorationBounds: 28,28
 
@@ -5776,7 +5679,7 @@ MAMMOTHMK2:
 		TurnSpeed: 8
 		Speed: 35
 	Health:
-		HP: 275000
+		HP: 350000
 	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
@@ -6214,7 +6117,7 @@ MSG:
 		DeployedCondition: deployed
 		UndeployedCondition: undeployed
 		Facing: 368
-		AllowedTerrainTypes: Clear, Road, Rough
+		AllowedTerrainTypes: Clear, Rough, Road, Ore, Gems, Beach, Tiberium, BlueTiberium
 		DeploySounds: placbldg.aud
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
