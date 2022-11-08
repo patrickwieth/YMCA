@@ -317,9 +317,9 @@ CHNukeCannon.Range:
 CHNukeCannon.Neutron:
 	Inherits: CHNukeCannon
 	Inherits: ^Radiation
-	Warhead@DriverDam: DriverPoisonDamage
-		Damage: 25000
 	Warhead@1Dam: SpreadDamage
+		Damage: 25000
+	Warhead@DriverDam: DriverPoisonDamage
 		Damage: 25000
 	Warhead@3Eff: CreateEffect
 		Explosions: plasmaball
@@ -606,21 +606,34 @@ CHECMBeam.Chain:
 	Inherits: CHECMBeam
 	Range: 7c512
 	Warhead@Arc: FireShrapnel
-		Weapon: CHECMBeam.Chain.Arc1
+		Weapon: CHECMBeam.Arc
 		Amount: 1
 		AimChance: 100
-		ThrowWithoutTarget: false
+		ValidTargets: Ground, Water, Infantry, Vehicle
+		ThrowWithoutTarget: true
 
-CHECMBeam.Chain.Arc1:
-	Inherits: CHECMBeam.Chain
+CHECMBeam.Arc:
+	Inherits: CHECMBeam
 	Range: 1c512
+	Projectile: TeslaZap
+		Palette: greenhighlight
+		BrightZaps: 1
+		DimZaps: 0
 	Warhead@Arc: FireShrapnel
-		Weapon: CHECMBeam.Chain.Arc2
+		Weapon: CHECMBeam.Arc2
+		Amount: 1
+		AimChance: 100
+		ValidTargets: Ground, Water, Infantry, Vehicle
+		ThrowWithoutTarget: true
 
+CHECMBeam.Arc2:
+	Inherits: CHECMBeam
+	Range: 1c512
+	Projectile: TeslaZap
+		Palette: greenhighlight
+		BrightZaps: 0
+		DimZaps: 1
 
-CHECMBeam.Chain.Arc2:
-	Inherits: CHECMBeam.Chain.Arc1
-	-Warhead@Arc: FireShrapnel
 
 CHECMDisable:
 	Inherits: CHECMBeam
@@ -631,6 +644,7 @@ CHECMDisable:
 		Duration: 200
 		Range: 0c768
 		ValidTargets: Vehicle
+
 
 CHInfernoCannon:
 	Inherits: ^ShellArtillery

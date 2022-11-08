@@ -688,6 +688,7 @@ DOME:
 	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
+	Inherits: ^RadarStation
 	Selectable:
 		Bounds: 48,48
 	HitShape:
@@ -724,8 +725,6 @@ DOME:
 		Range: 6c0
 		RequiresCondition: !disabled
 	WithBuildingBib:
-	ProvidesRadar:
-		RequiresCondition: !jammed && !disabled && !being-warped
 	InfiltrateForExploration:
 		Types: SpyInfiltrate, SabInfiltrate
 	Power:
@@ -743,8 +742,6 @@ DOME:
 		Prerequisite: radar-active
 		RequiresCondition: !jammed && !disabled && !being-warped
 	ProvidesPrerequisite@buildingname:
-	ExternalCondition@JAMMED:
-		Condition: jammed
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: rad.soviet.stolen
@@ -3911,6 +3908,7 @@ HQ:
 	Inherits: ^BuildingTD
 	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^RadarStation
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,512,0, 420,-598,256
 		Type: Rectangle
@@ -3955,8 +3953,6 @@ HQ:
 	RevealsShroud@GAPGEN:
 		Range: 6c0
 		RequiresCondition: !disabled
-	ProvidesRadar:
-		RequiresCondition: !jammed && !disabled && !being-warped
 	WithBuildingBib:
 	InfiltrateForExploration:
 		Types: SpyInfiltrate, SabInfiltrate
@@ -4109,8 +4105,6 @@ HQ:
 	ProvidesPrerequisite@radar-active:
 		Prerequisite: radar-active
 		RequiresCondition: !jammed && !disabled && !being-warped
-	ExternalCondition@JAMMED:
-		Condition: jammed
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: rad.gdi.stolen
@@ -4118,6 +4112,7 @@ HQ:
 EYE:
 	Inherits: ^ScienceBuildingTD
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^RadarStation
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,512,128, 420,-598,213
 		Type: Rectangle
@@ -4158,8 +4153,6 @@ EYE:
 		Range: 6c0
 		RequiresCondition: !disabled
 	WithBuildingBib:
-	ProvidesRadar:
-		RequiresCondition: !jammed && !disabled && !being-warped
 	InfiltrateForExploration:
 		Types: SpyInfiltrate, SabInfiltrate
 	DetonateWeaponPower@IonStorm:
@@ -4220,13 +4213,8 @@ EYE:
 		Amount: -200
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	ExternalCondition@JAMMED:
-		Condition: jammed
 	MustBeDestroyed:
 		RequiredForShortGame: false
-	ProductionCostMultiplier@ZocomBonus:
-		Multiplier: 90
-		Prerequisites: structures.zocom
 
 REP:
 	Inherits: ^BuildingTD
