@@ -142,7 +142,7 @@ namespace OpenRA.Mods.CA.Projectiles
 		public readonly int ContrailDelay = 1;
 
 		[Desc("Should missile targeting be thrown off by nearby actors with JamsMissiles.")]
-		public readonly bool Jammable = true;
+		public readonly bool Jammable = false;
 
 		[Desc("Range of facings by which jammed missiles can stray from current path.")]
 		public readonly int JammedDiversionRange = 20;
