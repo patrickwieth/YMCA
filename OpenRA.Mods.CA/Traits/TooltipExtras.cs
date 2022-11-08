@@ -28,6 +28,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Attributes.")]
 		public readonly string Attributes = "";
 
+		[Desc("Versus.")]
+		public readonly string Versus = "";
+
 		[Desc("If true these tooltip extras are standard (used for the production tooltip).",
 			"False implies conditional (only used for selection tooltip).")]
 		public readonly bool IsStandard = true;

@@ -14,6 +14,7 @@ using System.Linq;
 using OpenRA.Mods.CA.Traits;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
+using OpenRA.Mods.Common.Warheads;
 using OpenRA.Primitives;
 using OpenRA.Widgets;
 
@@ -45,6 +46,19 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var strengthsLabel = widget.Get<LabelWidget>("STRENGTHS");
 			var weaknessesLabel = widget.Get<LabelWidget>("WEAKNESSES");
 			var attributesLabel = widget.Get<LabelWidget>("ATTRIBUTES");
+			var versusLabel = widget.Get<LabelWidget>("VERSUS");
+			var versusNoneLabel = widget.Get<LabelWidget>("VSNONE");
+			var effectVersusNoneLabel = widget.Get<LabelWidget>("EFFECTVSNONE");
+			var versusLightLabel = widget.Get<LabelWidget>("VSLIGHT");
+			var effectVersusLightLabel = widget.Get<LabelWidget>("EFFECTVSLIGHT");
+			var versusHeavyLabel = widget.Get<LabelWidget>("VSHEAVY");
+			var effectVersusHeavyLabel = widget.Get<LabelWidget>("EFFECTVSHEAVY");
+			var versusReflectorLabel = widget.Get<LabelWidget>("VSREFLECTOR");
+			var effectVersusReflectorLabel = widget.Get<LabelWidget>("EFFECTVSREFLECTOR");
+			var versusWoodLabel = widget.Get<LabelWidget>("VSWOOD");
+			var effectVersusWoodLabel = widget.Get<LabelWidget>("EFFECTVSWOOD");
+			var versusConcreteLabel = widget.Get<LabelWidget>("VSCONCRETE");
+			var effectVersusConcreteLabel = widget.Get<LabelWidget>("EFFECTVSCONCRETE");
 
 			var iconMargin = timeIcon.Bounds.X;
 
@@ -102,12 +116,84 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					strengthsLabel.Text = tooltipExtras.Strengths.Replace("\\n", "\n");
 					weaknessesLabel.Text = tooltipExtras.Weaknesses.Replace("\\n", "\n");
 					attributesLabel.Text = tooltipExtras.Attributes.Replace("\\n", "\n");
+
+					versusLabel.Text = "";
+					versusNoneLabel.Text = "";
+					versusLightLabel.Text = "";
+					versusHeavyLabel.Text = "";
+					versusReflectorLabel.Text = "";
+					versusWoodLabel.Text = "";
+					versusConcreteLabel.Text = "";
+					effectVersusNoneLabel.Text = "";
+					effectVersusLightLabel.Text = "";
+					effectVersusHeavyLabel.Text = "";
+					effectVersusReflectorLabel.Text = "";
+					effectVersusWoodLabel.Text = "";
+					effectVersusConcreteLabel.Text = "";
+
+					var armament = actor.TraitInfos<ArmamentInfo>().FirstOrDefault(a => a.Name == "primary");
+					if (armament != null)
+					{
+						var weapon = armament.WeaponInfo;
+						if (weapon != null)
+						{
+							var warheads = weapon.Warheads;
+							if(warheads.Count > 0)
+							{
+								var dmgWarhead = warheads.OfType<DamageWarhead>().FirstOrDefault();
+								if (dmgWarhead != null && dmgWarhead.Versus.Count() >= 6)
+								{
+									versusLabel.Text += "\\nEffective versus:";
+									versusNoneLabel.Text += "Infantry: ";
+									versusNoneLabel.TextColor = Color.LightSalmon;
+									effectVersusNoneLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["None"], 70);
+									effectVersusNoneLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["None"], 70);
+									versusLightLabel.Text += "Light: ";
+									versusLightLabel.TextColor = Color.Khaki;
+									effectVersusLightLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Light"], 70);
+									effectVersusLightLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Light"], 70);
+									versusHeavyLabel.Text += "Heavy: ";
+									versusHeavyLabel.TextColor = Color.Crimson;
+									effectVersusHeavyLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Heavy"], 60);
+									effectVersusHeavyLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Heavy"], 60);
+									versusReflectorLabel.Text += "Reflector: ";
+									versusReflectorLabel.TextColor = Color.SkyBlue;
+									effectVersusReflectorLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Reflector"], 70);
+									effectVersusReflectorLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Reflector"], 70);
+									versusWoodLabel.Text += "Building: ";
+									versusWoodLabel.TextColor = Color.IndianRed;
+									effectVersusWoodLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Wood"], 60);
+									effectVersusWoodLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Wood"], 60);
+									versusConcreteLabel.Text += "Fortified: ";
+									versusConcreteLabel.TextColor = Color.Gray;
+									effectVersusConcreteLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Concrete"], 40);
+									effectVersusConcreteLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Concrete"], 40);
+
+									versusLabel.Text = versusLabel.Text.Replace("\\n", "\n");
+								}
+							}
+
+						}
+					}
 				}
 				else
 				{
 					strengthsLabel.Text = "";
 					weaknessesLabel.Text = "";
 					attributesLabel.Text = "";
+					versusLabel.Text = "";
+					versusNoneLabel.Text = "";
+					versusLightLabel.Text = "";
+					versusHeavyLabel.Text = "";
+					versusReflectorLabel.Text = "";
+					versusWoodLabel.Text = "";
+					versusConcreteLabel.Text = "";
+					effectVersusNoneLabel.Text = "";
+					effectVersusLightLabel.Text = "";
+					effectVersusHeavyLabel.Text = "";
+					effectVersusReflectorLabel.Text = "";
+					effectVersusWoodLabel.Text = "";
+					effectVersusConcreteLabel.Text = "";
 				}
 
 				if (hotkeyLabel.Visible)
@@ -182,8 +268,44 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				strengthsLabel.Bounds.Y = descLabel.Bounds.Bottom + extrasSpacing;
 				weaknessesLabel.Bounds.Y = descLabel.Bounds.Bottom + strengthsSize.Y + extrasSpacing;
 				attributesLabel.Bounds.Y = descLabel.Bounds.Bottom + strengthsSize.Y + weaknessesSize.Y + extrasSpacing;
+				var versusSize = versusLabel.Text != "" ? descFont.Measure(versusLabel.Text) : new int2(0, 0);
+				var versusNoneSize = versusNoneLabel.Text != "" ? descFont.Measure(versusNoneLabel.Text) : new int2(0, 0);
+				var versusLightSize = versusLightLabel.Text != "" ? descFont.Measure(versusLightLabel.Text) : new int2(0, 0);
+				var versusHeavySize = versusHeavyLabel.Text != "" ? descFont.Measure(versusHeavyLabel.Text) : new int2(0, 0);
+				var versusReflectorSize = versusReflectorLabel.Text != "" ? descFont.Measure(versusReflectorLabel.Text) : new int2(0, 0);
+				var versusWoodSize = versusWoodLabel.Text != "" ? descFont.Measure(versusWoodLabel.Text) : new int2(0, 0);
+				var versusConcreteSize = versusConcreteLabel.Text != "" ? descFont.Measure(versusConcreteLabel.Text) : new int2(0, 0);
 
-				descLabel.Bounds.Height += strengthsSize.Y + weaknessesSize.Y + attributesSize.Y + descLabelPadding + extrasSpacing;
+				var textSpacing = descLabel.Bounds.Bottom + extrasSpacing;
+				strengthsLabel.Bounds.Y = textSpacing;
+				textSpacing += strengthsSize.Y;
+				weaknessesLabel.Bounds.Y = textSpacing;
+				textSpacing += weaknessesSize.Y;
+				attributesLabel.Bounds.Y = textSpacing;
+				textSpacing += attributesSize.Y;
+				versusLabel.Bounds.Y = textSpacing;
+				textSpacing += versusSize.Y;
+
+				versusNoneLabel.Bounds.Y = textSpacing;
+				effectVersusNoneLabel.Bounds.Y = textSpacing;
+				textSpacing += versusNoneSize.Y;
+				versusLightLabel.Bounds.Y = textSpacing;
+				effectVersusLightLabel.Bounds.Y = textSpacing;
+				textSpacing += versusLightSize.Y;
+				versusHeavyLabel.Bounds.Y = textSpacing;
+				effectVersusHeavyLabel.Bounds.Y = textSpacing;
+				textSpacing += versusHeavySize.Y;
+				versusReflectorLabel.Bounds.Y = textSpacing;
+				effectVersusReflectorLabel.Bounds.Y = textSpacing;
+				textSpacing += versusReflectorSize.Y;
+				versusWoodLabel.Bounds.Y = textSpacing;
+				effectVersusWoodLabel.Bounds.Y = textSpacing;
+				textSpacing += versusWoodSize.Y;
+				versusConcreteLabel.Bounds.Y = textSpacing;
+				effectVersusConcreteLabel.Bounds.Y = textSpacing;
+				textSpacing += versusConcreteSize.Y;
+
+				descLabel.Bounds.Height += textSpacing + descLabelPadding;
 
 				var leftWidth = new[] { nameSize.X + hotkeyWidth, requiresSize.X, descSize.X, strengthsSize.X, weaknessesSize.X, attributesSize.X }.Aggregate(Math.Max);
 				var rightWidth = new[] { powerSize.X, timeSize.X, costSize.X, armorTypeSize.X }.Aggregate(Math.Max);
@@ -219,6 +341,32 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			return a;
 		}
 
+		Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
+			if (effectValue >= neutralValue * 2)
+				return Color.Green;
+			else if (effectValue >= neutralValue * 1.33)
+				return Color.Aquamarine;
+			else if (effectValue <= neutralValue * 0.5)
+				return Color.Red;
+			else if (effectValue <= neutralValue * 0.75)
+				return Color.OrangeRed;
+			else
+				return Color.LightGray;
+		}
+
+		String GetEffectiveLabelText(int effectValue, int neutralValue) {
+			if (effectValue >= neutralValue * 2)
+				return "It's super effective!";
+			else if (effectValue >= neutralValue * 1.33)
+				return "effective";
+			else if (effectValue <= neutralValue * 0.5)
+				return "very low effectivenss.";
+			else if (effectValue <= neutralValue * 0.75)
+				return "not effective";
+			else
+				return "ok";
+		}
+
 		LabelWidget GetArmorTypeLabel(LabelWidget armorTypeLabel, ActorInfo actor)
 		{
 			var armor = actor.TraitInfos<ArmorInfo>().FirstOrDefault();
@@ -229,34 +377,34 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				case "None":
 					armorTypeLabel.Text = "Infantry";
-					armorTypeLabel.TextColor = Color.ForestGreen;
+					armorTypeLabel.TextColor = Color.LightSalmon;
 					break;
 
 				case "Light":
-					armorTypeLabel.TextColor = Color.MediumPurple;
+					armorTypeLabel.TextColor = Color.Khaki;
+					break;
+
+				case "Reflector":
+					armorTypeLabel.TextColor = Color.SkyBlue;
 					break;
 
 				case "Heavy":
-					armorTypeLabel.TextColor = Color.Firebrick;
+					armorTypeLabel.TextColor = Color.Crimson;
 					break;
 
 				case "Concrete":
-					armorTypeLabel.Text = "Defense";
-					armorTypeLabel.TextColor = Color.RoyalBlue;
+					armorTypeLabel.Text = "Fortified";
+					armorTypeLabel.TextColor = Color.Gray;
 					break;
 
 				case "Wood":
 					armorTypeLabel.Text = "Building";
-					armorTypeLabel.TextColor = Color.Peru;
+					armorTypeLabel.TextColor = Color.IndianRed;
 					break;
 
 				case "Brick":
 					armorTypeLabel.Text = "Wall";
 					armorTypeLabel.TextColor = Color.RosyBrown;
-					break;
-
-				case "Reflector":
-					armorTypeLabel.TextColor = Color.SkyBlue;
 					break;
 
 				default:
