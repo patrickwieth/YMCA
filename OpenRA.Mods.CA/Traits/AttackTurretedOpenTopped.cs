@@ -21,14 +21,11 @@ namespace OpenRA.Mods.CA.Traits
 {
 	[Desc("Implements the YR OpenTopped logic where transported actors used separate firing offsets, ignoring facing."
 		+ "Compatible with both `Cargo`/`Passengers` or `Garrionable`/`Garrisoners` logic.")]
-	public class AttackTurretedOpenToppedInfo : AttackFollowInfo, IRulesetLoaded
+	public class AttackTurretedOpenToppedInfo : AttackTurretedInfo, IRulesetLoaded
 	{
 		[FieldLoader.Require]
 		[Desc("Fire port offsets in local coordinates.")]
 		public readonly WVec[] PortOffsets = null;
-
-		[Desc("Turret names")]
-		public readonly string[] Turrets = { "primary" };
 
 		[Desc("Passenger Armaments shooting from Open Top")]
 		public readonly string[] PassengerArmaments = { "primary" };
@@ -43,7 +40,7 @@ namespace OpenRA.Mods.CA.Traits
 		}
 	}
 
-	public class AttackTurretedOpenTopped : AttackFollow, IRender, INotifyPassengerEntered, INotifyPassengerExited
+	public class AttackTurretedOpenTopped : AttackTurreted, IRender, INotifyPassengerEntered, INotifyPassengerExited
 	{
 		public readonly new AttackTurretedOpenToppedInfo Info;
 		readonly Lazy<BodyOrientation> coords;
@@ -53,7 +50,6 @@ namespace OpenRA.Mods.CA.Traits
 		readonly Dictionary<Actor, IFacing> paxFacing;
 		readonly Dictionary<Actor, IPositionable> paxPos;
 		readonly Dictionary<Actor, RenderSprites> paxRender;
-		protected TurretedOpenTop[] turrets;
 
 		public AttackTurretedOpenTopped(Actor self, AttackTurretedOpenToppedInfo info)
 			: base(self, info)
@@ -70,7 +66,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		protected override void Created(Actor self)
 		{
-			turrets = self.TraitsImplementing<TurretedOpenTop>().Where(t => Info.Turrets.Contains(t.Info.Turret)).ToArray();
+			turrets = self.TraitsImplementing<Turreted>().Where(t => Info.Turrets.Contains(t.Info.Turret)).ToArray();
 			base.Created(self);
 		}
 
@@ -138,7 +134,7 @@ namespace OpenRA.Mods.CA.Traits
 			var turretReady = false;
 
 			// TODO WHY ?
-			//turrets = self.TraitsImplementing<TurretedOpenTop>().Where(t => Info.Turrets.Contains(t.Info.Turret)).ToArray();
+			//turrets = self.TraitsImplementing<Turreted>().Where(t => Info.Turrets.Contains(t.Info.Turret)).ToArray();
 
 			foreach (var t in turrets)
 			{
@@ -173,12 +169,8 @@ namespace OpenRA.Mods.CA.Traits
 		public override void DoAttack(Actor self, in Target target)
 		{
 			if (TurretCanAttack(self, target))
-			{
 				foreach (var a in Armaments)
-				{
 					a.CheckFire(self, facing, target);
-				}
-			}
 
 			if (!PassengerCanAttack(self, target))
 				return;
