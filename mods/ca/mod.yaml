@@ -3,6 +3,7 @@ Metadata:
 	Version: prep-CA
 	Website: https://www.moddb.com/mods/command-conquer-combined-arms
 	WebIcon32: https://www.openra.net/images/icons/ra_32x32.png
+	WindowTitle: OpenRA Combined Arms
 
 PackageFormats: Mix
 
@@ -212,8 +213,12 @@ Hotkeys:
 	common|hotkeys/game.yaml
 	common|hotkeys/observer.yaml
 	common|hotkeys/production-common.yaml
+	common|hotkeys/production-peractor.yaml
 	common|hotkeys/supportpowers.yaml
 	common|hotkeys/viewport.yaml
+	common|hotkeys/chat.yaml
+	common|hotkeys/editor.yaml
+	common|hotkeys/control-groups.yaml
 	ca|hotkeys.yaml
 
 LoadScreen: LogoStripeLoadScreen
@@ -273,9 +278,11 @@ MapGrid:
 	TileSize: 24,24
 	Type: Rectangular
 
+DefaultOrderGenerator: UnitOrderGenerator
+
 SupportsMapsFrom: ca, ra
 
-SoundFormats: Aud, Wav
+SoundFormats: Aud, Wav, Mp3
 
 SpriteFormats: ShpD2, R8, ShpTD, TmpRA, TmpTD, ShpTS
 
@@ -291,10 +298,14 @@ SpriteSequenceFormat: ClassicTilesetSpecificSpriteSequence
 
 ModelSequenceFormat: VoxelModelSequence
 
+VideoFormats: Vqa, Wsa
+
 TerrainFormat: DefaultTerrain
 
 AssetBrowser:
-	SupportedExtensions: .r8, .shp, .tmp, .tem, .des, .sno, .int, .vqa
+	SpriteExtensions: .shp, .tmp, .tem, .win, .sno, .des, .int, .jun, .r8
+	AudioExtensions: .aud, .wav, .v00, .v01, .v02, .v03, .var
+	VideoExtensions: .vqa, .wsa
 
 GameSpeeds:
 	DefaultSpeed: default
@@ -352,6 +363,12 @@ ModContent:
 			TestFiles: ^SupportDir|Content/ca/cnc/scores.mix
 			Download: cncmusic
 			Sources: origin-cnc, tfd, cnc95
+		music-counterstrike: Counterstrike Music
+			TestFiles: ^SupportDir|Content/ca/expand/araziod.aud, ^SupportDir|Content/ca/expand/backstab.aud, ^SupportDir|Content/ca/expand/chaos2.aud, ^SupportDir|Content/ca/expand/shut_it.aud, ^SupportDir|Content/ca/expand/2nd_hand.aud, ^SupportDir|Content/ca/expand/twinmix1.aud, ^SupportDir|Content/ca/expand/under3.aud, ^SupportDir|Content/ca/expand/vr2.aud,
+			Sources: counterstrike, counterstrike-linux, origin-ra
+		music-aftermath: Aftermath Music
+			TestFiles: ^SupportDir|Content/ca/expand/await.aud, ^SupportDir|Content/ca/expand/bog.aud, ^SupportDir|Content/ca/expand/float_v2.aud, ^SupportDir|Content/ca/expand/gloom_ra.aud, ^SupportDir|Content/ca/expand/grndwire.aud, ^SupportDir|Content/ca/expand/rpt.aud, ^SupportDir|Content/ca/expand/search.aud, ^SupportDir|Content/ca/expand/traction.aud, ^SupportDir|Content/ca/expand/wastelnd.aud
+			Sources: aftermath, aftermath-linux, origin-ra
 		tsmusic: TibSun Music
 			TestFiles: ^SupportDir|Content/ca/ts/scores.mix
 			Download: tsmusic
