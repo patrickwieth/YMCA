@@ -536,7 +536,7 @@ GUNW:
 	Mobile:
 		Speed: 113
 		TurnSpeed: 8
-		PauseOnCondition:  being-captured || empdisable || being-warped || driver-dead
+		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 5c0
@@ -875,7 +875,7 @@ INTL.Teleport:
 		Name: Interloper (Teleport)
 	PortableChrono:
 		ChargeDelay: 500
-		MaxDistance:	6
+		MaxDistance: 6
 		KillCargo: false
 
 CORR:
@@ -1791,13 +1791,22 @@ STMR:
 	SpawnActorOnDeath@EMP:
 		Actor: STMR.Husk.EMP
 		RequiresCondition: empdisable
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
 	Selectable:
 		DecorationBounds: 36,28
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	-EjectOnDeath:
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
 
 STMR.hunter:
 	Inherits: STMR
@@ -1977,8 +1986,15 @@ ENRV:
 	SpawnActorOnDeath@EMP:
 		Actor: ENRV.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
 	Selectable:
 		DecorationBounds: 36,36
 	ProducibleWithLevel:
@@ -2014,6 +2030,8 @@ ENRV:
 		StartIfBelow: 100
 		DamageCooldown: 200
 		RequiresCondition: regen-upgrade
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
 
 DEVA:
 	Inherits: ^Helicopter
@@ -2380,9 +2398,15 @@ INVA:
 	-EjectOnDeath:
 	-Selectable:
 	-ActorLostNotification:
-	SmokeTrailWhenDamaged:
-		Offset: -253,0,171
-		Interval: 2
+	LeavesTrails:
+		Offsets: -253,0,171
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
 	CarrierSlave:
 		LandingDistance: 8c0
 	Contrail@1:
@@ -2391,6 +2415,8 @@ INVA:
 		TrailLength: 10
 	-Contrail@2:
 	Interactable:
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
 
 INVA.support:
 	Inherits: ^Plane
@@ -2449,9 +2475,15 @@ INVA.support:
 	-EjectOnDeath:
 	-Selectable:
 	-ActorLostNotification:
-	SmokeTrailWhenDamaged:
-		Offset: -253,0,171
-		Interval: 2
+	LeavesTrails:
+		Offsets: -253,0,171
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
 	CarrierSlave:
 		LandingDistance: 8c0
 	Contrail@1:
@@ -2468,6 +2500,8 @@ INVA.support:
 		ValidTargets: Repair, RepairInAir
 		ValidRelationships: Ally
 		Priority: 2
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
 
 INVA.suicide:
 	Inherits: INVA
@@ -2767,9 +2801,14 @@ STMR.Husk:
 	Aircraft:
 		TurnSpeed: 16
 		Speed: 170
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
-		MinDamage: Undamaged
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
 	Contrail@1:
 		Offset: -300,-143,0
 		UsePlayerColor: true
@@ -2796,9 +2835,14 @@ ENRV.Husk:
 	Aircraft:
 		TurnSpeed: 14
 		Speed: 170
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
-		MinDamage: Undamaged
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
 	Contrail@1:
 		Offset: -750,-200,300
 		UsePlayerColor: true

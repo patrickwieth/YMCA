@@ -59,13 +59,21 @@ CHMIG:
 		Offset: -598,683,0
 	SpawnActorOnDeath:
 		Actor: chmig.husk
-	SmokeTrailWhenDamaged:
-		Offset: -853,0,171
-		Interval: 2
+	LeavesTrails:
+		Offsets: -853,0,171
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	Voiced:
 		VoiceSet: CHMiGVoice
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
 
 CHMIG.AA:
 	Inherits: CHMIG
@@ -156,10 +164,14 @@ chmig.husk:
 	Aircraft:
 		TurnSpeed: 4
 		Speed: 223
-	SmokeTrailWhenDamaged:
-		Offset: -853,0,171
-		Interval: 2
-		MinDamage: Undamaged
+	LeavesTrails:
+		Offsets: -853,0,171
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
 	RevealsShroud:
 		Range: 13c0
 		Type: GroundPosition
@@ -244,8 +256,15 @@ chhelix:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: chhelix.husk
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	Selectable:
@@ -285,6 +304,8 @@ chhelix:
 		RequiresCondition: speakeraddon && subliminal && !disabled
 	ProximityExternalCondition@PROPAGANDA:
 		RequiresCondition: speakeraddon && !subliminal && !disabled
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
 
 chhelix.Gatling:
 	Inherits: chhelix
@@ -548,9 +569,14 @@ chhelix.husk:
 		Speed: 112
 	WithIdleOverlay:
 		Sequence: rotor
-	SmokeTrailWhenDamaged:
-		Offset: -427,0,0
-		MinDamage: Undamaged
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
 	RevealsShroud:
 		Range: 10c0
 		Type: GroundPosition
@@ -581,14 +607,22 @@ usabomber.husk:
 	Aircraft:
 		TurnSpeed: 5
 		Speed: 149
-	SmokeTrailWhenDamaged@0:
-		Offset: -432,560,0
-		Interval: 2
-		MinDamage: Undamaged
-	SmokeTrailWhenDamaged@1:
-		Offset: -432,-560,0
-		Interval: 2
-		MinDamage: Undamaged
+	LeavesTrails@0:
+		Offsets: -432,560,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	LeavesTrails@1:
+		Offsets: -432,-560,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
 	RenderSprites:
 		Image: usabomber
 	-RevealOnDeath:
