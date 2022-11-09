@@ -34,6 +34,10 @@ namespace OpenRA.Mods.CA.Traits
 		[GrantedConditionReference]
 		public readonly string ControllingCondition;
 
+		[Desc("Condition to grant to self when mind control is in progress (revoked when complete).")]
+		[GrantedConditionReference]
+		public readonly string ProgressCondition;
+
 		[Desc("The sound played when target is mind controlled.")]
 		public readonly string[] ControlSounds = { };
 
@@ -75,6 +79,7 @@ namespace OpenRA.Mods.CA.Traits
 		Target lastTarget = Target.Invalid;
 		Target currentTarget = Target.Invalid;
 		int controlTicks;
+		int progressToken = Actor.InvalidConditionToken;
 
 		public MindController(Actor self, MindControllerInfo info)
 			: base(info)
@@ -118,7 +123,9 @@ namespace OpenRA.Mods.CA.Traits
 			if (controlTicks < Info.TicksToControl)
 				controlTicks++;
 
-			if (controlTicks == 1 && Info.InitSounds.Any())
+			GrantProgressCondition(self);
+
+			if (controlTicks == 1 && Info.InitSounds.Length > 0)
 			{
 				if (Info.InitSoundControllerOnly)
 					Game.Sound.PlayToPlayer(SoundType.World, self.Owner, Info.InitSounds.Random(self.World.SharedRandom), self.CenterPosition);
@@ -130,6 +137,24 @@ namespace OpenRA.Mods.CA.Traits
 
 			if (controlTicks == Info.TicksToControl)
 				AddSlave(self);
+		}
+
+		public void GrantProgressCondition(Actor self)
+		{
+			if (string.IsNullOrEmpty(Info.ProgressCondition))
+				return;
+
+			if (progressToken == Actor.InvalidConditionToken)
+				progressToken = self.GrantCondition(Info.ProgressCondition);
+		}
+
+		public void RevokeProgressCondition(Actor self)
+		{
+			if (string.IsNullOrEmpty(Info.ProgressCondition))
+				return;
+
+			if (progressToken != Actor.InvalidConditionToken)
+				progressToken = self.RevokeCondition(progressToken);
 		}
 
 		public void ResolveOrder(Actor self, Order order)
@@ -148,6 +173,7 @@ namespace OpenRA.Mods.CA.Traits
 				return;
 
 			controlTicks = 0;
+			RevokeProgressCondition(self);
 			UpdateProgressBar(self, lastTarget);
 			UpdateProgressBar(self, currentTarget);
 		}
@@ -236,7 +262,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		void ControlComplete(Actor self)
 		{
-			if (Info.ControlSounds.Any())
+			if (Info.ControlSounds.Length > 0)
 			{
 				if (Info.ControlSoundControllerOnly)
 					Game.Sound.PlayToPlayer(SoundType.World, self.Owner, Info.ControlSounds.Random(self.World.SharedRandom), self.CenterPosition);
@@ -251,7 +277,7 @@ namespace OpenRA.Mods.CA.Traits
 					deployTrait.Undeploy();
 			}
 
-			UpdateProgressBar(self, currentTarget);
+			ResetProgress(self);
 			currentTarget = Target.Invalid;
 		}
 
@@ -266,7 +292,7 @@ namespace OpenRA.Mods.CA.Traits
 			}
 
 			slaves.Clear();
-			while (controllingTokens.Any())
+			while (controllingTokens.Count > 0)
 				UnstackControllingCondition(self, Info.ControllingCondition);
 		}
 

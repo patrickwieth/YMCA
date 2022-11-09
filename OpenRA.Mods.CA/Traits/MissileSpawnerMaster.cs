@@ -86,10 +86,6 @@ namespace OpenRA.Mods.CA.Traits
 			if (!Info.ArmamentNames.Contains(a.Info.Name))
 				return;
 
-			if (target.Type == TargetType.Invalid) {
-				return;
-			}
-
 			// Issue retarget order for already launched ones
 			foreach (var slave in SlaveEntries)
 				if (slave.IsValid)
@@ -109,19 +105,15 @@ namespace OpenRA.Mods.CA.Traits
 
 			// Program the trajectory.
 			var bm = se.Actor.Trait<BallisticMissile>();
-
-			if (target.CenterPosition == WPos.Zero)
-				return;
-
 			bm.Target = Target.FromPos(target.CenterPosition);
 
 			SpawnIntoWorld(self, se.Actor, self.CenterPosition);
 
 			Stack<int> spawnContainToken;
-			if (spawnContainTokens.TryGetValue(a.Info.Name, out spawnContainToken) && spawnContainToken.Any())
+			if (spawnContainTokens.TryGetValue(a.Info.Name, out spawnContainToken) && spawnContainToken.Count > 0)
 				self.RevokeCondition(spawnContainToken.Pop());
 
-			if (loadedTokens.Any())
+			if (loadedTokens.Count > 0)
 				self.RevokeCondition(loadedTokens.Pop());
 
 			// Queue attack order, too.
@@ -189,7 +181,7 @@ namespace OpenRA.Mods.CA.Traits
 					return;
 
 				var spawnOffset = exit == null ? WVec.Zero : exit.Info.SpawnOffset;
-				slave.Trait<IPositionable>().SetVisualPosition(slave, centerPosition + spawnOffset);
+				slave.Trait<IPositionable>().SetCenterPosition(slave, centerPosition + spawnOffset);
 
 				var location = self.World.Map.CellContaining(centerPosition + spawnOffset);
 

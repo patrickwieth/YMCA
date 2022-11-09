@@ -221,7 +221,7 @@ namespace OpenRA.Mods.CA.Projectiles
 			}
 
 			// Check for blocking actors
-			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, tailPos, headPos, info.Width, out var blockedPos))
+			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, args.SourceActor.Owner, tailPos, headPos, info.Width, out var blockedPos))
 			{
 				headPos = blockedPos;
 				target = headPos;
@@ -259,7 +259,12 @@ namespace OpenRA.Mods.CA.Projectiles
 		{
 			if (!IsBeamComplete && info.RenderBeam && !(wr.World.FogObscures(tailPos) && wr.World.FogObscures(headPos)))
 			{
-				var beamRender = new BeamRenderable(headPos, info.ZOffset, tailPos - headPos, info.Shape, info.Width, color);
+				var zOffset = info.ZOffset;
+				var verticalDiff = target.Y - args.Source.Y;
+				if (verticalDiff > 0)
+					zOffset += verticalDiff;
+
+				var beamRender = new BeamRenderable(headPos, zOffset, tailPos - headPos, info.Shape, info.Width, color);
 				return new[] { (IRenderable)beamRender };
 			}
 

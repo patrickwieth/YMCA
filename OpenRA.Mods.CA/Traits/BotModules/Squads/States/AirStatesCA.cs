@@ -62,7 +62,7 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 			{
 				var pos = leader.CenterPosition;
 
-				if (owner.SquadManager.Info.BigAirThreats.Any())
+				if (owner.SquadManager.Info.BigAirThreats.Count > 0)
 				{
 					var regularTargetPriority = owner.World.LocalRandom.Next(0, 100);
 
@@ -90,9 +90,7 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 
 		protected static Actor FindDefenselessTarget(SquadCA owner)
 		{
-			Actor target = null;
-
-			target = FindAirTarget(owner);
+			var target = FindAirTarget(owner);
 			if (target != null)
 				return target;
 
@@ -146,7 +144,7 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 
 			if (CountStaticAntiAir(possibleAntiAir, owner) < owner.Units.Count)
 			{
-				if (possibleTargets.Any())
+				if (possibleTargets.Count > 0)
 					detectedEnemyTarget = possibleTargets.Random(owner.Random);
 
 				return true;
@@ -305,7 +303,7 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 					owner.WaitingUnits.Add(a);
 			}
 
-			if ((!canBuildMoreOfAircraft || noPatience) && owner.WaitingUnits.Any() && owner.WaitingUnits.Count() >= owner.RearmingUnits.Count())
+			if ((!canBuildMoreOfAircraft || noPatience) && owner.WaitingUnits.Count > 0 && owner.WaitingUnits.Count >= owner.RearmingUnits.Count)
 			{
 				foreach (var a in owner.WaitingUnits)
 					if (CanAttackTarget(a, owner.TargetActor))

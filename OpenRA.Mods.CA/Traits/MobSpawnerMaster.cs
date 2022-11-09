@@ -306,7 +306,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (aircraft == null)
 				position.SetPosition(self, newPos); // breaks arrival detection of the aircraft if we set position.
 
-			position.SetVisualPosition(self, newPos);
+			position.SetCenterPosition(self, newPos);
 		}
 
 		int aggregateHealthUpdateTicks = 0;

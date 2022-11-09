@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenRA.GameRules;
 using OpenRA.Graphics;
 using OpenRA.Mods.CA.Graphics;
@@ -53,6 +54,9 @@ namespace OpenRA.Mods.AS.Projectiles
 
 		[Desc("Additional zaps colored with the player's color.")]
 		public readonly int PlayerColorZaps = 0;
+
+		[Desc("Alpha to apply to player colored zaps. If two values are specified randomly select a value between the two values.")]
+		public readonly int[] PlayerColorZapAlpha = { 255 };
 
 		[Desc("Initial distortion offset.")]
 		public readonly int Distortion = 0;
@@ -108,10 +112,11 @@ namespace OpenRA.Mods.AS.Projectiles
 			this.args = args;
 			this.info = info;
 
-			var playerColors = args.SourceActor.Owner.Color;
-			var colors = info.Colors;
+			var playerColor = args.SourceActor.Owner.Color;
+			var colors = info.Colors.ToList();
+
 			for (int i = 0; i < info.PlayerColorZaps; i++)
-				colors.Append(playerColors);
+				colors.Add(Color.FromArgb(info.PlayerColorZapAlpha.Length != 2 ? info.PlayerColorZapAlpha[0] : OpenRA.Mods.Common.Util.RandomInRange(args.SourceActor.World.SharedRandom, info.PlayerColorZapAlpha), playerColor.R, playerColor.G, playerColor.B));
 
 			source = lastSource = args.Source;
 			target = lastTarget = args.PassiveTarget;
@@ -167,7 +172,7 @@ namespace OpenRA.Mods.AS.Projectiles
 
 		void CheckBlocked()
 		{
-			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(args.SourceActor.World, source, target, info.Width, out var blockedPos))
+			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(args.SourceActor.World, args.SourceActor.Owner, source, target, info.Width, out var blockedPos))
 				target = blockedPos;
 		}
 
@@ -260,10 +265,15 @@ namespace OpenRA.Mods.AS.Projectiles
 
 			if (ticks < info.Duration)
 			{
+				var zOffset = info.ZOffset;
+				var verticalDiff = target.Y - args.Source.Y;
+				if (verticalDiff > 0)
+					zOffset += verticalDiff;
+
 				foreach (var zap in zaps)
 				{
 					var offsets = zap.Positions;
-					yield return new ElectricBoltRenderable(offsets, info.ZOffset, info.Width, zap.Color);
+					yield return new ElectricBoltRenderable(offsets, zOffset, info.Width, zap.Color);
 				}
 			}
 		}

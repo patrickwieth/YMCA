@@ -9,7 +9,10 @@
  */
 #endregion
 
+using System.Collections.Generic;
+using System.Linq;
 using OpenRA.Graphics;
+using OpenRA.Mods.Common.Traits;
 using OpenRA.Primitives;
 using OpenRA.Traits;
 
@@ -33,7 +36,10 @@ namespace OpenRA.Mods.CA.Traits.Render
 		public readonly bool AllowModifiers = true;
 
 		[Desc("Lowers brightness range.")]
-		public readonly float Ramp = 0;
+		public readonly float Ramp = 0.125f;
+
+		[Desc("If player name is set here, remap to these colours instead.")]
+		public readonly Dictionary<string, Color> PlayerColors;
 
 		public override object Create(ActorInitializer init) { return new OverlayPlayerColorPalette(this); }
 	}
@@ -49,7 +55,12 @@ namespace OpenRA.Mods.CA.Traits.Render
 
 		public void LoadPlayerPalettes(WorldRenderer wr, string playerName, Color c, bool replaceExisting)
 		{
-			var pal = new MutablePalette(wr.Palette(info.BasePalette).Palette);
+			var basePalette = wr.Palette(info.BasePalette).Palette;
+
+			if (info.PlayerColors != null && info.PlayerColors.TryGetValue(playerName, out var overrideColor))
+				c = overrideColor;
+
+			var pal = new MutablePalette(basePalette);
 			var r = info.Ramp;
 
 			foreach (var i in info.RemapIndex)
@@ -57,7 +68,7 @@ namespace OpenRA.Mods.CA.Traits.Render
 				var bw = (float)(((pal[i] & 0xff) + ((pal[i] >> 8) & 0xff) + ((pal[i] >> 16) & 0xff)) / 3) / 0xff - r;
 				if (bw < 0)
 				{
-						bw = 0;
+					bw = 0;
 				}
 
 				var dstR = bw > .5 ? 1 - (1 - 2 * (bw - .5)) * (1 - (float)c.R / 0xff) : 2 * bw * ((float)c.R / 0xff);

@@ -98,7 +98,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		public Dictionary<CPos, TintedCell> GetTiles()
 		{
-			return tiles;
+		       return tiles;
 		}
 
 		void ITick.Tick(Actor self)

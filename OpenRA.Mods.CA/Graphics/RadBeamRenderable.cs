@@ -54,7 +54,7 @@ namespace OpenRA.Mods.CA.Graphics
 
 		public IRenderable WithZOffset(int newOffset) { return new RadBeamRenderable(pos, zOffset, sourceToTarget, width, color, amplitude, wavelength, quantizationCount); }
 
-		public IRenderable OffsetBy(WVec vec) { return new RadBeamRenderable(pos + vec, zOffset, sourceToTarget, width, color, amplitude, wavelength, quantizationCount); }
+		public IRenderable OffsetBy(in WVec offset) { return new RadBeamRenderable(pos + offset, zOffset, sourceToTarget, width, color, amplitude, wavelength, quantizationCount); }
 
 		public IRenderable AsDecoration() { return this; }
 
@@ -63,6 +63,11 @@ namespace OpenRA.Mods.CA.Graphics
 		{
 			if (sourceToTarget == WVec.Zero)
 				return;
+
+			var roll90 = false;
+			var facing = sourceToTarget.Yaw.Facing;
+			if (facing < 16 || (facing > 112 && facing < 144) || facing > 240)
+				roll90 = true;
 
 			// WAngle.Sin(x) = 1024 * Math.Sin(2pi/1024 * x)
 
@@ -84,7 +89,8 @@ namespace OpenRA.Mods.CA.Graphics
 			var last = wr.Screen3DPosition(pos); // we start from the shooter
 			for (var i = 0; i < cycleCnt * quantizationCount; i++)
 			{
-				var y = new WVec(0, 0, amplitude.Length * angle.Sin() / 1024);
+				var y = new WVec(roll90 ? amplitude.Length * angle.Sin() / 1024 : 0, 0, roll90 ? 0 : amplitude.Length * angle.Sin() / 1024);
+
 				var end = wr.Screen3DPosition(pos + y);
 				Game.Renderer.WorldRgbaColorRenderer.DrawLine(last, end, screenWidth, color);
 

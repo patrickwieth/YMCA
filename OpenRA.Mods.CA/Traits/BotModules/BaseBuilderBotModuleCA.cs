@@ -1,6 +1,6 @@
 #region Copyright & License Information
 /*
- * Copyright 2007-2020 The OpenRA Developers (see AUTHORS)
+ * Copyright 2007-2021 The OpenRA Developers (see AUTHORS)
  * This file is part of OpenRA, which is free software. It is made
  * available to you under the terms of the GNU General Public License
  * as published by the Free Software Foundation, either version 3 of
@@ -64,8 +64,8 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Radius in cells around the center of the base to expand.")]
 		public readonly int MaxBaseRadius = 20;
 
-		[Desc("Maximum number of extra refineries to build (in addition to 1 per construction yard).")]
-		public readonly int MaxExtraRefineries = 2;
+		[Desc("Maximum number of extra refineries to build (in addition to 2 per construction yard).")]
+		public readonly int MaxExtraRefineries = 1;
 
 		[Desc("Minimum excess power the AI should try to maintain.")]
 		public readonly int MinimumExcessPower = 0;
@@ -79,13 +79,19 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Increase maintained excess power by ExcessPowerIncrement for every N base buildings.")]
 		public readonly int ExcessPowerIncreaseThreshold = 1;
 
+		[Desc("Minimum number of refineries to build before building a barracks and a factory.")]
+		public readonly int InitialMinimumRefineryCount = 1;
+
+		[Desc("Minimum number of refineries to build after building a barracks and a factory.")]
+		public readonly int NormalMinimumRefineryCount = 2;
+
 		[Desc("Additional delay (in ticks) between structure production checks when there is no active production.",
 			"StructureProductionRandomBonusDelay is added to this.")]
 		public readonly int StructureProductionInactiveDelay = 125;
 
 		[Desc("Additional delay (in ticks) added between structure production checks when actively building things.",
-			"Note: The total delay is gamespeed OrderLatency x 4 + this + StructureProductionRandomBonusDelay.")]
-		public readonly int StructureProductionActiveDelay = 0;
+			"Note: this should be at least as large as the typical order latency to avoid duplicated build choices.")]
+		public readonly int StructureProductionActiveDelay = 25;
 
 		[Desc("A random delay (in ticks) of up to this is added to active/inactive production delays.")]
 		public readonly int StructureProductionRandomBonusDelay = 10;
@@ -113,7 +119,10 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly int MaximumDefenseRadius = 20;
 
 		[Desc("Try to build another production building if there is too much cash.")]
-		public readonly int NewProductionCashThreshold = 5000;
+		public readonly int NewProductionCashThreshold = 10000;
+
+		[Desc("Only queue construction of a new structure when above this requirement.")]
+		public readonly int ProductionMinCashRequirement = 500;
 
 		[Desc("Radius in cells around a factory scanned for rally points by the AI.")]
 		public readonly int RallyPointScanRadius = 8;
@@ -135,6 +144,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("When should the AI start building specific buildings.")]
 		public readonly Dictionary<string, int> BuildingDelays = null;
 
+		[Desc("Minimum duration between building specific buildings.")]
+		public readonly Dictionary<string, int> BuildingIntervals = null;
+
 		[Desc("Enemy building target types I can ignore construction distance from.")]
 		public readonly BitSet<TargetableType> IgnoredEnemyBuildingTargetTypes = default(BitSet<TargetableType>);
 
@@ -148,7 +160,7 @@ namespace OpenRA.Mods.CA.Traits
 	}
 
 	public class BaseBuilderBotModuleCA : ConditionalTrait<BaseBuilderBotModuleCAInfo>, IGameSaveTraitData,
-		IBotTick, IBotPositionsUpdated, IBotRespondToAttack, IBotRequestPauseUnitProduction
+		IBotTick, IBotPositionsUpdated, IBotRespondToAttack
 	{
 		public CPos GetRandomBaseCenter()
 		{
@@ -156,27 +168,32 @@ namespace OpenRA.Mods.CA.Traits
 				Info.ConstructionYardTypes.Contains(a.Info.Name))
 				.RandomOrDefault(world.LocalRandom);
 
-			return randomConstructionYard != null ? randomConstructionYard.Location : initialBaseCenter;
+			return randomConstructionYard?.Location ?? initialBaseCenter;
 		}
 
-		public CPos DefenseCenter { get { return defenseCenter; } }
+		public CPos DefenseCenter => defenseCenter;
+
+		/// <Summary> Actor, ActorCount </Summary>
+		public Dictionary<string, int> BuildingsBeingProduced = null;
 
 		readonly World world;
 		readonly Player player;
 		PowerManager playerPower;
 		PlayerResources playerResources;
+		IResourceLayer resourceLayer;
 		IBotPositionsUpdated[] positionsUpdatedModules;
-		BitArray resourceTypeIndices;
 		CPos initialBaseCenter;
 		CPos defenseCenter;
 
-		List<BaseBuilderQueueManagerCA> builders = new List<BaseBuilderQueueManagerCA>();
+		readonly BaseBuilderQueueManagerCA[] builders;
+		int currentBuilderIndex = 0;
 
 		public BaseBuilderBotModuleCA(Actor self, BaseBuilderBotModuleCAInfo info)
 			: base(info)
 		{
 			world = self.World;
 			player = self.Owner;
+			builders = new BaseBuilderQueueManagerCA[info.BuildingQueues.Count + info.DefenseQueues.Count];
 		}
 
 		// Use for proactive targeting.
@@ -200,26 +217,27 @@ namespace OpenRA.Mods.CA.Traits
 
 		protected override void Created(Actor self)
 		{
-			// Special case handling is required for the Player actor.
-			// Created is called before Player.PlayerActor is assigned,
-			// so we must query player traits from self, which refers
-			// for bot modules always to the Player actor.
-			playerPower = self.TraitOrDefault<PowerManager>();
-			playerResources = self.Trait<PlayerResources>();
-			positionsUpdatedModules = self.TraitsImplementing<IBotPositionsUpdated>().ToArray();
+			playerPower = self.Owner.PlayerActor.TraitOrDefault<PowerManager>();
+			playerResources = self.Owner.PlayerActor.Trait<PlayerResources>();
+			resourceLayer = self.World.WorldActor.TraitOrDefault<IResourceLayer>();
+			positionsUpdatedModules = self.Owner.PlayerActor.TraitsImplementing<IBotPositionsUpdated>().ToArray();
 		}
 
 		protected override void TraitEnabled(Actor self)
 		{
-			var tileset = world.Map.Rules.TileSet;
-			resourceTypeIndices = new BitArray(tileset.TerrainInfo.Length); // Big enough
-			foreach (var t in world.Map.Rules.Actors["world"].TraitInfos<ResourceTypeInfo>())
-				resourceTypeIndices.Set(tileset.GetTerrainIndex(t.TerrainType), true);
+			var i = 0;
 
 			foreach (var building in Info.BuildingQueues)
-				builders.Add(new BaseBuilderQueueManagerCA(this, building, player, playerPower, playerResources, resourceTypeIndices));
+			{
+				builders[i] = new BaseBuilderQueueManagerCA(this, building, player, playerPower, playerResources, resourceLayer);
+				i++;
+			}
+
 			foreach (var defense in Info.DefenseQueues)
-				builders.Add(new BaseBuilderQueueManagerCA(this, defense, player, playerPower, playerResources, resourceTypeIndices));
+			{
+				builders[i] = new BaseBuilderQueueManagerCA(this, defense, player, playerPower, playerResources, resourceLayer);
+				i++;
+			}
 		}
 
 		void IBotPositionsUpdated.UpdatedBaseCenter(CPos newLocation)
@@ -232,17 +250,51 @@ namespace OpenRA.Mods.CA.Traits
 			defenseCenter = newLocation;
 		}
 
-		bool IBotRequestPauseUnitProduction.PauseUnitProduction
-		{
-			get { return !IsTraitDisabled && !HasAdequateRefineryCount; }
-		}
-
 		void IBotTick.BotTick(IBot bot)
 		{
+			// TODO: this causes pathfinding lag when AI's gets blocked in
 			SetRallyPointsForNewProductionBuildings(bot);
 
-			foreach (var b in builders)
-				b.Tick(bot);
+			BuildingsBeingProduced = new Dictionary<string, int>();
+
+			// PERF: We tick only one type of valid queue at a time
+			// if AI gets enough cash, it can fill all of its queues with enough ticks
+			var findQueue = false;
+			for (int i = 0, builderIndex = currentBuilderIndex; i < builders.Length; i++)
+			{
+				if (++builderIndex >= builders.Length)
+					builderIndex = 0;
+
+				--builders[builderIndex].WaitTicks;
+
+				var queues = AIUtils.FindQueues(player, builders[builderIndex].Category).ToArray();
+				if (queues.Length != 0)
+				{
+					if (!findQueue)
+					{
+						currentBuilderIndex = builderIndex;
+						findQueue = true;
+					}
+
+					// Refresh "BuildingsBeingProduced" only when AI can produce
+					if (playerResources.Cash >= Info.ProductionMinCashRequirement)
+					{
+						foreach (var queue in queues)
+						{
+							var producing = queue.AllQueued().FirstOrDefault();
+							if (producing == null)
+								continue;
+
+							if (BuildingsBeingProduced.ContainsKey(producing.Item))
+								BuildingsBeingProduced[producing.Item] = BuildingsBeingProduced[producing.Item] + 1;
+							else
+								BuildingsBeingProduced.Add(producing.Item, 1);
+						}
+					}
+				}
+			}
+
+			builders[currentBuilderIndex].Tick(bot);
 		}
 
 		void IBotRespondToAttack.RespondToAttack(IBot bot, Actor self, AttackInfo e)
@@ -338,7 +390,7 @@ namespace OpenRA.Mods.CA.Traits
 
 			if (!possibleRallyPoints.Any())
 			{
-				AIUtils.BotDebug("Bot Bug: No possible rallypoint near {0}", producer.Location);
+				AIUtils.BotDebug("{0} has no possible rallypoint near {1}", producer.Owner, producer.Location);
 				return producer.Location;
 			}
 
@@ -354,7 +406,16 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			get
 			{
-				return AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) >= AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player) + Info.MaxExtraRefineries;
+				var currentRefineryCount = AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player);
+
+				foreach (var r in Info.RefineryTypes)
+				{
+					if (BuildingsBeingProduced != null && BuildingsBeingProduced.ContainsKey(r))
+						currentRefineryCount += BuildingsBeingProduced[r];
+				}
+
+				var currentConstructionYardCount = AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player);
+				return currentRefineryCount >= currentConstructionYardCount * 2 + Info.MaxExtraRefineries;
 			}
 		}
 
@@ -362,8 +423,10 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			get
 			{
+				var desiredAmount = HasAdequateBarracksCount && HasAdequateFactoryCount ? Info.NormalMinimumRefineryCount : Info.InitialMinimumRefineryCount;
+
 				// Require at least one refinery, unless we can't build it.
-				return AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) >= 1 ||
+				return AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) >= desiredAmount ||
 					AIUtils.CountBuildingByCommonName(Info.PowerTypes, player) == 0 ||
 					AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player) == 0;
 			}

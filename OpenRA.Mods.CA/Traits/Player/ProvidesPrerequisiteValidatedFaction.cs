@@ -84,10 +84,15 @@ namespace OpenRA.Mods.CA.Traits
 			// if ValidFactions trait is present and the current faction is not listed in it, switch the faction to a valid one if a player of that faction exists in the game
 			if (
 				validFactions != null
-				&& Info.Factions.Any()
+				&& Info.Factions.Count > 0
 				&& !validFactions.Info.Factions.Contains(faction))
 			{
-				var players = self.World.Players.Where(p => !p.NonCombatant && p.Playable);
+				var capturedFactionManager = playerActor.TraitOrDefault<CapturedFactionsManager>();
+				var capturedFactions = capturedFactionManager != null ? capturedFactionManager.Factions : new HashSet<string>();
+				var players = self.World.Players
+					.Where(p => !p.NonCombatant && p.Playable)
+					.OrderByDescending(p => p.Faction.InternalName == playerActor.Owner.Faction.InternalName)
+					.ThenByDescending(p => capturedFactions.Contains(p.Faction.InternalName));
 
 				foreach (var p in players)
 				{
@@ -120,10 +125,10 @@ namespace OpenRA.Mods.CA.Traits
 			if (IsTraitDisabled)
 				return;
 
-			if (Info.Factions.Any())
+			if (Info.Factions.Count > 0)
 				enabled = Info.Factions.Contains(faction);
 
-			if (Info.RequiresPrerequisites.Any() && enabled)
+			if (Info.RequiresPrerequisites.Length > 0 && enabled)
 				enabled = techTree.HasPrerequisites(Info.RequiresPrerequisites);
 		}
 

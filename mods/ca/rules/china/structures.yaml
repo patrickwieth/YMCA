@@ -1,13 +1,11 @@
-
 chcommand:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^3x3Shape
+	Inherits@shape: ^3x2Shape
 	Inherits@mines: ^MinefieldUpgrade
 	Inherits: ^BotFallbackInsurance
 	Inherits@StructureProduction: ^StructureProduction
 	Inherits: ^RadarStation
 	ProvidesPrerequisite@buildingname:
-	-BaseProvider:
 	Buildable:
 		BuildPaletteOrder: 55
 		Prerequisites: ~structures.china, chweap
@@ -21,6 +19,10 @@ chcommand:
 		Dimensions: 3,3
 	Health:
 		HP: 150000
+	BaseProvider:
+		PauseOnCondition: being-captured
+		Range: 16c0
+		RequiresCondition: bot-owner
 	Armor:
 		Type: Concrete
 	RevealsShroud:
@@ -368,32 +370,14 @@ chbunker:
 	Selectable:
 		Class: chbunker
 
-chbunker.e1:
+chbunker.ai:
 	Inherits: chbunker
 	Buildable:
 		Prerequisites: infantry.china, ~botplayer
 	Valued:
-		Cost: 800
+		Cost: 1500
 	Cargo:
-		InitialUnits: che1, che1, che1, che1, che1
-
-chbunker.e2:
-	Inherits: chbunker
-	Buildable:
-		Prerequisites: infantry.china, ~botplayer
-	Valued:
-		Cost: 800
-	Cargo:
-		InitialUnits: che1, che1, che1, che3, che3
-
-chbunker.e3:
-	Inherits: chbunker
-	Buildable:
-		Prerequisites: infantry.china, ~botplayer
-	Valued:
-		Cost: 800
-	Cargo:
-		InitialUnits: che3, che3, che3, che3, che3
+		InitialUnits: che1, che3, che3, che3, che3
 
 chbunker2:
 	Inherits: chbunker
