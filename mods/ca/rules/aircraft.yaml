@@ -106,7 +106,8 @@ BADR.MBomber:
 		Weapon: GeneticMutationBomb
 
 B2B:
-	Inherits: ^NeutralPlane
+	Inherits: ^NeutralPlaneTD
+	Inherits: ^HighResAir
 	Inherits@EMP: ^EmpDisable
 	AttackBomber:
 	Armament:
@@ -155,7 +156,7 @@ B2B:
 		UncloakSound: appear1.aud
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
 		IsPlayerPalette: true
-		Palette: cloakra
+		Palette: cloaktd
 		RequiresCondition: !cloak-force-disabled && airborne
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
@@ -2975,6 +2976,7 @@ HARR:
 	Inherits: ^HelicopterTD
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^HighResAir
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -3064,8 +3066,6 @@ HARR:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: hpad, hpad.td
-	RenderSprites:
-		Scale: 0.5
 
 HARR.avionics:
 	Inherits: HARR
@@ -3521,6 +3521,7 @@ POD3:
 
 VENM:
 	Inherits: ^HelicopterTD
+	Inherits: ^HighResAir
 	Inherits@AUTOTARGET: ^AutoTargetAll
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Valued:
@@ -3628,8 +3629,6 @@ VENM:
 	Targetable@BoostMe:
 		RequiresCondition: ammo < 6
 		TargetTypes: BoostMe
-	RenderSprites:
-		Scale: 0.5
 
 VENM.Payload:
 	Inherits: VENM
