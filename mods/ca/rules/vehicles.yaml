@@ -2655,7 +2655,6 @@ HTNK.Hover:
 	Mobile:
 		Speed: 92
 		TurnSpeed: 56
-		Locomotor: hover
 	LeavesTrails:
 		Image: twake
 		Palette: effect
@@ -2862,6 +2861,8 @@ MLRS.Multi:
 		Description: Long-range multiple rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
 	Tooltip:
 		Name: SSM Multi Launcher
+	Valued:
+		Cost: 1200
 	Armament:
 		Weapon: honestjohn.multi
 		LocalOffset: 0,171,0, 0,-171,0
@@ -3986,8 +3987,6 @@ TITN:
 		Bounds: 30,40,0,0
 	Tooltip:
 		Name: Titan
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 100000
 	Armor:
@@ -4048,8 +4047,6 @@ TITN:
 		DamageCooldown: 150
 	Carryable:
 		LocalOffset: 0,0,700
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 
 TITN.Battle:
 	Inherits: TITN
@@ -4131,7 +4128,11 @@ TITN.Railgun.Reflector:
 		Name: Railgun Titan (Reflector)
 
 JUGG:
-	Inherits: TITN
+	Inherits: ^TankTD
+	Inherits: ^HighRes
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		Image: jugg
 	Tooltip:
@@ -4144,23 +4145,50 @@ JUGG:
 		Description: Tough artillery battle-mech.\n  Strong vs Infantry, Structures\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
+	Armor:
+		Type: Heavy
+	Selectable:
+		Bounds: 30,40,0,0
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 7c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Mobile:
 		Locomotor: sheavytracked
 		Speed: 50
 		Voice: Move
+	QuantizeFacingsFromSequence:
+		Sequence: stand
+	WithFacingSpriteBody:
+		Sequence: stand
+	WithMoveAnimation:
+		MoveSequence: run
+	WithAttackAnimation:
+		Sequence: shoot
+		RequiresCondition: aiming && !attacking
+	WithDeathAnimation:
+		Sequence: die
+		UseDeathTypeSuffix: false
 	SpeedMultiplier
 		Modifier: 0
 		RequiresCondition: attacking
 	Armament@PRIMARY:
 		Weapon: JuggernautGun
-		LocalOffset: 830,0,500, 830,100,500, 830,-100,500
+		LocalOffset: 830,-200,500, 830,200,500, 830,00,500
+		MuzzleSequence: muzzle
+		FireDelay: 33
 		PauseOnCondition: !ammo || moving
-	AttackTurreted:
+	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
-	Turreted:
-		TurnSpeed: 12
-		Offset: -20,0,20
+	GrantConditionWhileAiming:
+		Condition: aiming
+	GrantTimedCondition@1:
+		Condition: attackAnimation2
+		Duration: 1
+		RequiresCondition: aiming
 	GrantConditionOnAttack:
 		Condition: attacking
 		RevokeDelay: 50
@@ -4178,12 +4206,11 @@ JUGG:
 		Count: 3
 		ResetOnFire: True
 		PauseOnCondition: moving
-	-Armament@SECONDARY:
-	-ChangesHealth@DEFAULT:
 	Health:
-		HP: 50000
+		HP: 60000
 	Voiced:
 		VoiceSet: DisrVoice
+	WithMuzzleOverlay:
 
 DISR:
 	Inherits: ^TankTD
@@ -4287,7 +4314,6 @@ HMLRS:
 		Description: Prototype Hover Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Infantry, Vehicles, Buildings
 	Mobile:
 		Speed: 113
-		Locomotor: hover
 	Health:
 		HP: 18000
 	Armor:
@@ -6031,7 +6057,6 @@ SLNG:
 		Description: Fast, lightly armoured anti-air unit.\n  Strong vs Aircraft\n Weak vs Infantry, Vehicles, Buildings
 	Mobile:
 		Speed: 133
-		Locomotor: hover
 	LeavesTrails:
 		Image: twake
 		Palette: effect
@@ -6551,7 +6576,7 @@ APOC:
 XO:
 	Inherits: ^VehicleTD
 	Inherits@detect: ^SensorEquipment
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
 	RenderSprites:
