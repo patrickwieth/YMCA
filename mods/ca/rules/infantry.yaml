@@ -7,7 +7,6 @@ DOG:
 		Prerequisites: ~kenn, ~techlevel.infonly
 		Description: Anti-infantry unit.\n  Can detect spies and cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	RenderSprites:
-		Scale: 0.7
 		PlayerPalette: player
 	WithDeathAnimation:
 		DeathSequencePalette: player
@@ -18,9 +17,6 @@ DOG:
 		GenericName: Dog
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	Selectable:
-		Bounds: 12,17,-1,-4
-		DecorationBounds: 12,17,-1,-4
 	Health:
 		HP: 7000
 	Mobile:
@@ -66,7 +62,7 @@ DOG:
 		RequiresCondition: run
 	IgnoresDisguise:
 	DetectCloaked:
-		CloakTypes: Cloak, Thief
+		DetectionTypes: Cloak, Thief
 		Range: 4c0
 	Voiced:
 		VoiceSet: DogVoice
@@ -105,6 +101,7 @@ E1:
 		IdleSequences: idle1,idle2,idle3,idle4
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 
 E1R1:
 	Inherits: E1
@@ -145,6 +142,7 @@ E2:
 		ProneOffset: 256,64,-331
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		DefaultAttackSequence: throw
 	Explodes:
@@ -207,7 +205,6 @@ E3:
 	AmmoPool:
 		Armaments: primary, secondary, tertiary
 		Ammo: 1
-		PipCount: 0
 		AmmoCondition: ammo
 	ReloadAmmoPool:
 		Delay: 50
@@ -217,9 +214,13 @@ E3:
 	AttackFrontal:
 		Armaments: primary, secondary, tertiary
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AutoTarget:
 	ExternalCondition@relayTarget:
 		Condition: relayTarget
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 E3.soviet:
 	Inherits: E3
@@ -441,6 +442,7 @@ U3:
 		PauseOnCondition: being-warped
 		RequiresCondition: undeployed
 		Voice: Attack
+		FacingTolerance: 0
 	AttackTurreted@deployed:
 		Armaments: deployed
 		Turrets: deploy
@@ -474,6 +476,12 @@ U3:
 		UndeployTicks: 50
 	ExternalCondition@relayTarget:
 		Condition: relayTarget
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 E4:
 	Inherits: ^Soldier
@@ -511,6 +519,7 @@ E4:
 	WithMuzzleOverlay:
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	Explodes:
 		Weapon: UnitExplodeFlameSmall
 		EmptyWeapon: UnitExplodeFlameSmall
@@ -534,7 +543,7 @@ E6:
 		AddToArmyValue: true
 	WithInfantryBody:
 	Passenger:
-		PipType: Yellow
+		CustomPipType: yellow
 	EngineerRepair:
 	RepairsBridges:
 	CaptureManager:
@@ -572,7 +581,7 @@ SPY:
 	RevealsShroud:
 		Range: 10c0
 	Passenger:
-		PipType: Blue
+		CustomPipType: blue
 		Voice: Move
 	Disguise:
 		DisguisedCondition: disguise
@@ -589,8 +598,7 @@ SPY:
 		Image: pips
 		Sequence: pip-disguise
 		Palette: effect
-		ReferencePoint: Top, Right
-		ZOffset: 256
+		Position: TopRight
 		RequiresCondition: disguise
 	IgnoresDisguise:
 	AttackMove:
@@ -628,7 +636,7 @@ E7:
 	RevealsShroud:
 		Range: 10c0
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 		Voice: Move
 	Armament@PRIMARY:
 		Weapon: Colt45
@@ -648,6 +656,7 @@ E7:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Armaments: primary, secondary
+		FacingTolerance: 0
 	WithInfantryBody:
 		StandSequences: stand
 		AttackSequences:
@@ -690,7 +699,7 @@ MEDI:
 	RevealsShroud:
 		Range: 3c0
 	Passenger:
-		PipType: Blue
+		CustomPipType: blue
 	Armament:
 		Weapon: Heal
 		Name: primary
@@ -708,6 +717,7 @@ MEDI:
 		RevokeDelay: 30
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AutoTargetPriority@HEAL:
 		ValidTargets: Infantry
 		ValidRelationships: Ally
@@ -750,7 +760,7 @@ MECH:
 	RevealsShroud:
 		Range: 3c0
 	Passenger:
-		PipType: Blue
+		CustomPipType: blue
 		Voice: Move
 	Armament:
 		Weapon: Repair
@@ -791,6 +801,7 @@ MECH:
 		Armaments: primary, secondary, tertiary
 		Voice: Action
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	CaptureManager:
 	Captures:
 		CaptureTypes: husk
@@ -880,6 +891,7 @@ GNRL:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -914,7 +926,7 @@ THF:
 	RevealsShroud:
 		Range: 5c0
 	Passenger:
-		PipType: Blue
+		CustomPipType: blue
 	CaptureManager:
 	Captures:
 		CaptureTypes: vehicle
@@ -935,7 +947,7 @@ THF:
 		InitialDelay: 250
 		CloakDelay: 120
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Move
-		CloakTypes: Cloak
+		DetectionTypes: Cloak
 		IsPlayerPalette: false
 		RequiresCondition: !cloak-force-disabled
 	GrantConditionOnDamageState@UNCLOAK:
@@ -1001,6 +1013,7 @@ SHOK:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -1042,6 +1055,7 @@ N1:
 		Weapon: M16CarbineE
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		IdleSequences: idle1,idle2,idle3,idle4
 	WithDeathAnimation:
@@ -1089,6 +1103,7 @@ N2:
 		FireDelay: 15
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		StandSequences: stand
 		DefaultAttackSequence: throw
@@ -1178,7 +1193,6 @@ N3:
 	AmmoPool:
 		Armaments: primary, secondary, tertiary
 		Ammo: 1
-		PipCount: 0
 		AmmoCondition: ammo
 	ReloadAmmoPool:
 		Delay: 50
@@ -1188,6 +1202,7 @@ N3:
 	AttackFrontal:
 		Armaments: primary, secondary, tertiary
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AutoTarget:
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
@@ -1195,6 +1210,9 @@ N3:
 		Class: E3
 	ExternalCondition@relayTarget:
 		Condition: relayTarget
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 
 N3R1:
@@ -1242,6 +1260,7 @@ N4:
 		ProneOffset: 160,0,-254
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 	WithMuzzleOverlay:
@@ -1295,6 +1314,7 @@ N5:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -1311,7 +1331,7 @@ N5:
 		Image: pips
 		Sequence: medic
 		Palette: temptd
-		ReferencePoint: Bottom, Left
+		Position: BottomLeft
 		RequiresCondition: tibheal
 	WithMuzzleOverlay:
 	Explodes:
@@ -1362,7 +1382,7 @@ RMBO:
 		HealIfBelow: 100
 		DamageCooldown: 5
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 		Voice: Move
 	RevealsShroud:
 		Range: 10c0
@@ -1386,6 +1406,7 @@ RMBO:
 			primary: shoot
 			secondary: stand
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		IdleSequences: idle1,idle2,idle3
 		AttackSequences:
@@ -1401,7 +1422,7 @@ RMBO:
 		VoiceSet: CommandoVoice
 	IgnoresDisguise:
 	DetectCloaked:
-		CloakTypes: Cloak, Thief
+		DetectionTypes: Cloak, Thief
 		Range: 5c0
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
@@ -1423,7 +1444,7 @@ N6:
 	Tooltip:
 		Name: Engineer
 	Passenger:
-		PipType: Yellow
+		CustomPipType: yellow
 	Armament@defuse:
 		Weapon: DefuseKit
 		Cursor: goldwrench
@@ -1439,6 +1460,7 @@ N6:
 	AttackFrontal:
 		Armaments: primary, secondary
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	EngineerRepair:
 	RepairsBridges:
 	CaptureManager:
@@ -1524,15 +1546,22 @@ SNIP:
 		Voice: Attack
 		Armaments: primary, driver_snipe, laser
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		StandSequences: stand, stand2
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 		Voice: Move
 	Guard:
 		Voice: Move
 	Voiced:
 		VoiceSet: SniperVoice
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 BORI:
 	Inherits: ^Soldier
@@ -1564,11 +1593,12 @@ BORI:
 	Guard:
 		Voice: Move
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 		Voice: Move
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	Armament@PRIMARY:
 		Name: secondary
 		Weapon: akm
@@ -1638,6 +1668,7 @@ Mortar:
 		FireDelay: 15
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		DefaultAttackSequence: throw
 	Explodes:
@@ -1678,6 +1709,7 @@ Mortar.Chemical:
 		FireDelay: 15
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		DefaultAttackSequence: throw
 	Explodes:
@@ -1709,7 +1741,7 @@ SAB:
 	RevealsShroud:
 		Range: 10c0
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 		Voice: Move
 	Guard:
 		Voice: Move
@@ -1738,9 +1770,10 @@ SAB:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	IgnoresDisguise:
 	DetectCloaked:
-		CloakTypes: Cloak, Thief
+		DetectionTypes: Cloak, Thief
 		Range: 4c0
 	ProductionCostMultiplier@LegionBonus:
 		Multiplier: 80
@@ -1808,6 +1841,7 @@ ACOL:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		IdleSequences: idle3
 	AttackMove:
@@ -1825,7 +1859,7 @@ ACOL:
 		Image: pips
 		Sequence: medic
 		Palette: temptd
-		ReferencePoint: Bottom, Left
+		Position: BottomLeft
 		RequiresCondition: tibheal
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
@@ -1861,6 +1895,7 @@ JJET:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Voice: Attack
+		FacingTolerance: 0
 	WithInfantryBody:
 		RequiresCondition: !being-warped && undeployed
 		StandSequences: hover
@@ -1948,12 +1983,9 @@ JJET:
 		TargetableOffsets: 0, 0, 768
 		UseTargetableCellsOffsets: true
 		RequiresCondition: undeployed
-	Selectable:
-		Bounds: 12,24,0,-10
-		DecorationBounds: 12,24,0,-10
 	DetectCloaked:
 		Range: 3c0
-		CloakTypes: Cloak, Thief
+		DetectionTypes: Cloak, Thief
 
 JJET.Rocket:
 	Inherits: JJET
@@ -2054,6 +2086,7 @@ E8:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped || !undeployed
+		FacingTolerance: 0
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -2117,6 +2150,7 @@ N1C:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -2158,6 +2192,7 @@ N3C:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -2187,7 +2222,6 @@ N3C:
 		PauseOnCondition: !ammo || being-warped
 	AmmoPool:
 		Ammo: 1
-		PipCount: 0
 		AmmoCondition: ammo
 	ReloadAmmoPool:
 		Delay: 50
@@ -2201,10 +2235,13 @@ N3C:
 		Image: pips
 		Sequence: medic
 		Palette: temptd
-		ReferencePoint: Bottom, Left
+		Position: BottomLeft
 		RequiresCondition: tibheal
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 RMBC:
 	Inherits: ^Soldier
@@ -2214,7 +2251,6 @@ RMBC:
 	Inherits@BioDamageImmune: ^BioDamageImmune
 	RenderSprites:
 		PlayerPalette: playerd2k
-		Scale: 1
 	Buildable:
 		Queue: Infantry
 		BuildPaletteOrder: 121
@@ -2238,6 +2274,7 @@ RMBC:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped || empdisable
+		FacingTolerance: 0
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -2265,9 +2302,6 @@ RMBC:
 		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequencePalette: playerd2k
-	Selectable:
-		Bounds: 24,24,0,-4
-		DecorationBounds: 12,20,0,-4
 	-Crushable:
 	-KillsSelf@Immolate:
 	GrantConditionOnTerrain@THEAL:
@@ -2277,7 +2311,7 @@ RMBC:
 		Image: pips
 		Sequence: medic
 		Palette: temptd
-		ReferencePoint: Bottom, Left
+		Position: BottomLeft
 		RequiresCondition: tibheal
 	Targetable:
 		TargetTypes: Ground, Vehicle, Tank, ChaosImmune, DriverKillImmune, MindControlImmune
@@ -2341,6 +2375,7 @@ CRYOT:
 		ProneOffset: 227,0,-245
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	Inherits: ^PointLaserDefenseSystemSmall
 
 Railgunner:
@@ -2379,6 +2414,7 @@ Railgunner:
 		ProneOffset: 227,0,-245
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithMuzzleOverlay:
 
 Railgunner.noCrush:
@@ -2419,6 +2455,7 @@ LEADER:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -2478,6 +2515,7 @@ IVAN:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		DefaultAttackSequence: throw
 	Explodes:
@@ -2519,8 +2557,6 @@ BRUT:
 		CargoType: Vehicle
 	RevealsShroud:
 		Range: 4c0
-	Selectable:
-		DecorationBounds: 14,19,-1,-8
 	Targetable:
 		RequiresCondition: !being-warped
 		TargetTypes: Ground, Infantry, ChaosImmune, MindControlImmune, DogImmune
@@ -2561,6 +2597,7 @@ BRUT:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Voice: Attack
+		FacingTolerance: 0
 	-TakeCover:
 	-Captures@DRIVER_KILL:
 	-CaptureManager:
@@ -2575,7 +2612,6 @@ BRUT.Mutating:
 	RenderSprites:
 		Image: brut
 	RejectsOrders:
-	Interactable:
 	WithFacingSpriteBody:
 		Sequence: stand
 	WithMakeAnimation:
@@ -2594,6 +2630,7 @@ BRUT.Mutating:
 	-AttackMove:
 	-Buildable:
 	-Selectable:
+	Interactable:
 	-Armament@PRIMARY:
 	-Armament@SECONDARY:
 	-AttackFrontal:
@@ -2648,6 +2685,7 @@ SHAD:
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	AutoTarget:
 		InitialStance: HoldFire
 		InitialStanceAI: ReturnFire
@@ -2657,7 +2695,7 @@ SHAD:
 		CloakedCondition: hidden
 		Palette: cloaktd
 		IsPlayerPalette: true
-		CloakTypes: Cloak
+		DetectionTypes: Cloak
 		UncloakOn: Unload, Demolish, Dock, Attack, Damage
 		CloakSound: gstealon.aud
 		UncloakSound: gstealof.aud
@@ -2668,7 +2706,7 @@ SHAD:
 		Condition: cloak-force-disabled
 	IgnoresDisguise:
 	DetectCloaked:
-		CloakTypes: Cloak, Thief
+		DetectionTypes: Cloak, Thief
 		Range: 4c0
 	-WithParachute:
 	AmmoPool:
@@ -2683,6 +2721,12 @@ SHAD:
 		TileUnknownName: build-valid
 	Rearmable:
 		RearmActors: shad.rearm
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 SHAD.Commando:
 	Inherits: SHAD
@@ -2760,8 +2804,6 @@ SGLI:
 	SpawnActorOnDeath:
 		Actor: sgli.crashing
 		RequiresCondition: !being-warped
-	Selectable:
-		DecorationBounds: 30,28,0,2
 	TransformOnCondition:
 		IntoActor: sgli.deployed
 		RequiresCondition: deployed
@@ -2857,7 +2899,6 @@ SGLI.discarded:
 	MapEditorData:
 		Categories: Husk
 	WithColoredOverlay@IDISABLE:
-		Palette: disabled
 	ChangesHealth:
 		Step: -100
 		StartIfBelow: 101
@@ -2903,6 +2944,7 @@ BH:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Voice: Attack
+		FacingTolerance: 0
 	WithInfantryBody:
 		DefaultAttackSequence: shoot
 	Explodes:
@@ -3003,6 +3045,7 @@ YURI:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Armaments: primary, secondary, aidummy
+		FacingTolerance: 0
 	Passenger:
 		CustomPipType: red
 		Voice: Move
@@ -3036,6 +3079,12 @@ YURI:
 		DeployChance: 100
 		DeployTrigger: Attack
 		DeployTicks: 100
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 SEAL:
 	Inherits: RMBO
@@ -3107,6 +3156,12 @@ SEAL:
 		Palette: effect
 		Position: TopLeft
 		ValidRelationships: Ally, Enemy, Neutral
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 HACK:
 	Inherits: ^Soldier

@@ -15,8 +15,8 @@ BADR:
 	Cargo:
 		MaxWeight: 10
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	-Voiced:
 	Tooltip:
 		Name: Badger
@@ -49,7 +49,6 @@ BADR:
 	RejectsOrders:
 	GivesExperience:
 		Experience: 1000
-	Interactable:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
@@ -57,6 +56,7 @@ BADR.Bomber:
 	Inherits: ^NeutralPlane
 	Inherits@EMP: ^EmpDisable
 	AttackBomber:
+		FacingTolerance: 8
 	Armament:
 		Weapon: ParaBomb
 	Health:
@@ -70,8 +70,8 @@ BADR.Bomber:
 	AmmoPool:
 		Ammo: 7
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	-Voiced:
 	Tooltip:
 		Name: Badger
@@ -110,9 +110,11 @@ BADR.Bomber:
 		Image: badr
 	GivesExperience:
 		Experience: 1000
-	Interactable:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 BADR.CBomber:
 	Inherits: BADR.Bomber
@@ -125,6 +127,9 @@ BADR.NBomber:
 		Ammo: 1
 	Armament:
 		Weapon: AtomBomb
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 BADR.MBomber:
 	Inherits: BADR.Bomber
@@ -132,11 +137,15 @@ BADR.MBomber:
 		Ammo: 1
 	Armament:
 		Weapon: GeneticMutationBomb
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 B2B:
 	Inherits: ^NeutralPlane
 	Inherits@EMP: ^EmpDisable
 	AttackBomber:
+		FacingTolerance: 8
 	Armament:
 		Weapon: InfernoBomb
 	Health:
@@ -150,8 +159,8 @@ B2B:
 	AmmoPool:
 		Ammo: 1
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	-Voiced:
 	Tooltip:
 		Name: B2 Stealth Bomber
@@ -188,7 +197,6 @@ B2B:
 	RejectsOrders:
 	GivesExperience:
 		Experience: 1000
-	Interactable:
 	Cloak@NORMAL:
 		InitialDelay: 0
 		CloakDelay: 200
@@ -202,6 +210,9 @@ B2B:
 		ValidDamageStates: Critical
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 Stealth_Fighter:
 	Inherits: ^Plane
@@ -251,9 +262,6 @@ Stealth_Fighter:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
 	SelectionDecorations:
 	Contrail@1:
 		Offset: -598,-683,0
@@ -275,7 +283,7 @@ Stealth_Fighter:
 		InitialDelay: 125
 		CloakDelay: 20
 		UncloakOn: Attack, Unload, Infiltrate, Demolish
-		CloakTypes: Cloak
+		DetectionTypes: Cloak
 		RequiresCondition: !cloak-force-disabled
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
@@ -285,7 +293,6 @@ Stealth_Fighter:
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 	RenderSprites:
-		Scale: 0.9
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
@@ -301,6 +308,9 @@ Stealth_Fighter.payload:
 		Name: Stealth Fighter (Double Payload)
 	AmmoPool:
 		Ammo: 6
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 MIG:
 	Inherits: ^Plane
@@ -355,24 +365,21 @@ MIG:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
 	Contrail@1:
 		Offset: -598,-683,0
 	Contrail@2:
 		Offset: -598,683,0
 	Contrail@AB1:
 		Offset: -400,-50,-20
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@AB2:
 		Offset: -400,50,-20
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: MIG.Husk
@@ -464,6 +471,9 @@ MIG.Tesla:
 		Speed: 205
 	Armament:
 		Weapon: MigTeslaBomb
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 SUK:
 	Inherits: ^PlaneTD
@@ -527,15 +537,15 @@ SUK:
 		Offset: -598,683,-40
 	Contrail@AB1:
 		Offset: -400,-70,-20
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@AB2:
 		Offset: -400,70,-20
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: SUK.Husk
@@ -558,8 +568,6 @@ SUK:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 30,28,0,2
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
@@ -642,8 +650,6 @@ FROG:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 30,28,0,2
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 	GrantConditionOnDamageState@SmokeTrail:
@@ -755,8 +761,6 @@ YAK:
 		RequiresCondition: enable-smoke
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 30,28,0,2
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 	Contrail@1:
@@ -841,8 +845,6 @@ CHEMYAK:
 		RequiresCondition: enable-smoke
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 30,28,0,2
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies
 	Contrail@1:
@@ -990,16 +992,16 @@ TRAN:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 8
-		PipCount: 8
 	SpawnActorOnDeath:
 		Actor: TRAN.Husk
 		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	Selectable:
-		DecorationBounds: 40,36
 	WithCargoHatchAnimation:
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 TRAN.Eagle:
 	Inherits: TRAN
@@ -1077,8 +1079,8 @@ TRAN.paradrop:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 8
-		PipCount: 8
 	-Selectable:
+	Interactable:
 	-Voiced:
 	RejectsOrders:
 	RenderSprites:
@@ -1089,9 +1091,11 @@ TRAN.paradrop:
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	Interactable:
 	GivesExperience:
 		Experience: 1000
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 NHAW:
 	Inherits: ^HelicopterTD
@@ -1150,8 +1154,6 @@ NHAW:
 	SpawnActorOnDeath@EMP:
 		Actor: NHAW.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	Selectable:
-		DecorationBounds: 40,36
 	Voiced:
 		VoiceSet: CarryAllVoice
 	AppearsOnRadar:
@@ -1202,6 +1204,9 @@ NHAW:
 	GrantConditionOnAttack:
 		Condition: dropcargo
 		ArmamentNames: drop
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 NHAW.paradrop:
 	Inherits: ^Helicopter
@@ -1227,6 +1232,7 @@ NHAW.paradrop:
 		Types: Infantry
 		MaxWeight: 8
 	-Selectable:
+	Interactable:
 	-Voiced:
 	RejectsOrders:
 	RenderSprites:
@@ -1237,7 +1243,6 @@ NHAW.paradrop:
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	Interactable:
 	GivesExperience:
 		Experience: 1000
 
@@ -1330,8 +1335,6 @@ HELI:
 		RequiresCondition: enable-smoke
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 36,28
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	GrantConditionOnDamageState@SmokeTrail:
@@ -1425,7 +1428,7 @@ HELI.Torp:
 	AmmoPool:
 		Ammo: 8
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 6c0
 
 HIND:
@@ -1511,8 +1514,6 @@ HIND:
 		RequiresCondition: enable-smoke
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 38,32
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	GrantConditionOnDamageState@SmokeTrail:
@@ -1612,7 +1613,7 @@ HIND.Torp:
 	AmmoPool:
 		Ammo: 8
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 6c0
 
 HUEY:
@@ -1701,8 +1702,6 @@ HUEY:
 		RequiresCondition: enable-smoke
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 38,32
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	GrantConditionOnDamageState@SmokeTrail:
@@ -1728,14 +1727,13 @@ HUEY.recon:
 		Range: 10c0
 		Type: GroundPosition
 	DetectCloaked:
-		CloakTypes: Cloak, Thief, Underwater
+		DetectionTypes: Cloak, Thief, Underwater
 		Range: 8c0
 	Aircraft:
 		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
 	-Armament@PRIMARY:
 	-Armament@SECONDARY:
 	-AmmoPool:
-	-WithAmmoPipsDecoration:
 	Armament@flare:
 		Name: primary
 		Weapon: Flare
@@ -1761,7 +1759,6 @@ HUEY.recon:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 1
-		PipCount: 1
 		LoadingCondition: notmobile
 		LoadedCondition: full
 		PassengerConditions:
@@ -1776,6 +1773,12 @@ HUEY.recon:
 		Sequence: slow-rotor
 		Offset: 200,0,300
 		RequiresCondition: !airborne
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 HUEY.cryo:
 	Inherits: HUEY
@@ -1834,9 +1837,10 @@ U2:
 		Repulsable: False
 		MaximumPitch: 56
 	AttackBomber:
+		FacingTolerance: 8
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	-Voiced:
 	-Targetable@AIRBORNE:
 	Contrail@1:
@@ -1845,15 +1849,15 @@ U2:
 		Offset: -725,-683,0
 	Contrail@AB1:
 		Offset: -400,-70,-20
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@AB2:
 		Offset: -400,70,-20
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: U2.Husk
@@ -1871,7 +1875,6 @@ U2:
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
 	RejectsOrders:
-	Interactable:
 	-MapEditorData:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
@@ -1894,6 +1897,7 @@ U2.Bomber:
 		Repulsable: True
 		MaximumPitch: 56
 	-Selectable:
+	Interactable:
 	-SelectionDecorations:
 	-Voiced:
 	Contrail@1:
@@ -1902,15 +1906,15 @@ U2.Bomber:
 		Offset: -725,-683,0
 	Contrail@AB1:
 		Offset: -400,-70,-20
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@AB2:
 		Offset: -400,70,-20
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	AttackAircraft:
 		FacingTolerance: 80
@@ -1920,7 +1924,6 @@ U2.Bomber:
 		Weapon: U2Bomb
 	AmmoPool:
 		Ammo: 1
-		PipCount: 1
 	AirstrikeSlave:
 		LandingDistance: 1c0
 	SpawnActorOnDeath:
@@ -1939,11 +1942,13 @@ U2.Bomber:
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
 	RejectsOrders:
-	Interactable:
 	Rearmable:
 		RearmActors: bori
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 A10:
 	Inherits: ^PlaneTD
@@ -2001,9 +2006,6 @@ A10:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
 	Contrail@1:
 		Offset: -258,-823,0
 	Contrail@2:
@@ -2064,8 +2066,8 @@ A10.bomber:
 		Margin: 4, 3
 		RequiresSelection: true
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	-Voiced:
 	RenderSprites:
 		Image: a10
@@ -2098,7 +2100,6 @@ A10.bomber:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Interactable:
 	GivesExperience:
 		Experience: 1000
 	GrantConditionOnDamageState@SmokeTrail:
@@ -2127,10 +2128,9 @@ C17:
 		IdleBehavior: LeaveMap
 	Cargo:
 		MaxWeight: 10
-		PipCount: 10
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	-Voiced:
 	Tooltip:
 		Name: Supply Aircraft
@@ -2143,13 +2143,13 @@ C17:
 	Contrail@3:
 		Offset: -85,384,0
 		TrailLength: 16
-		UsePlayerColor: false
-		Color: FFFFFF80
+		StartColorUsePlayerColor: false
+		StartColor: FFFFFF80
 	Contrail@4:
 		Offset: -261,650,0
 		TrailLength: 15
-		UsePlayerColor: false
-		Color: FFFFFF80
+		StartColorUsePlayerColor: false
+		StartColor: FFFFFF80
 	SpawnActorOnDeath:
 		Actor: C17.Husk
 		RequiresCondition: !empdisable && !being-warped
@@ -2175,12 +2175,14 @@ C17:
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
 	RejectsOrders:
-	Interactable:
 	GivesExperience:
 		Experience: 1000
 	-MapEditorData:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 C17.Cargo:
 	Inherits: C17
@@ -2201,6 +2203,7 @@ C17.No_Color:
 C17.Clustermines:
 	Inherits: C17
 	AttackBomber:
+		FacingTolerance: 8
 	Armament:
 		Weapon: ClusterMineSpawner
 	AmmoPool:
@@ -2208,6 +2211,9 @@ C17.Clustermines:
 	RenderSprites:
 		Image: c17
 	-ParaDrop:
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 APCH:
 	Inherits: ^HelicopterTD
@@ -2295,12 +2301,10 @@ APCH:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 6c0
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
@@ -2348,8 +2352,11 @@ APCH.Torp:
 	AmmoPool:
 		Ammo: 8
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 8c0
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 ORCA:
 	Inherits: ^HelicopterTD
@@ -2433,8 +2440,6 @@ ORCA:
 		RequiresCondition: enable-smoke
 	WithMoveAnimation:
 		MoveSequence: move
-	Selectable:
-		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	GrantConditionOnDamageState@SmokeTrail:
@@ -2517,8 +2522,11 @@ ORCA.Torp:
 	AmmoPool:
 		Ammo: 8
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 8c0
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 ORCB:
 	Inherits: ^HelicopterTD
@@ -2582,9 +2590,6 @@ ORCB:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
 	SpawnActorOnDeath:
 		Actor: ORCB.Husk
 		RequiresCondition: ammo && !empdisable && !being-warped
@@ -2634,11 +2639,12 @@ UAV:
 		Repulsable: False
 		MaximumPitch: 56
 	AttackBomber:
+		FacingTolerance: 8
 	-Voiced:
 	-Targetable@AIRBORNE:
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	SpawnActorOnDeath:
 		Actor: UAV.Husk
 		RequiresCondition: !empdisable && !being-warped
@@ -2656,7 +2662,7 @@ UAV:
 		RequiresCondition: enable-smoke
 	RejectsOrders:
 	DetectCloaked:
-		CloakTypes: Cloak, Thief
+		DetectionTypes: Cloak, Thief
 	RevealsShroud:
 		Range: 14c0
 		MinRange: 12c0
@@ -2665,7 +2671,6 @@ UAV:
 	RevealsShroud@GAPGEN:
 		Range: 12c0
 		Type: GroundPosition
-	Interactable:
 	GivesExperience:
 		Experience: 1000
 	RenderSprites:
@@ -2773,8 +2778,6 @@ RAH66:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 36,28
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	Voiced:
@@ -2881,8 +2884,6 @@ RAH66.Bomber:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 36,28
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	Voiced:
@@ -2979,9 +2980,6 @@ KIRO:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,40,0,1
 	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
@@ -3037,7 +3035,6 @@ BLIMP:
 	Inherits@PRIMARY: ^PrimaryBuilding
 	RenderSprites:
 		Image: Blimp
-		Scale: 1.2
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -3091,9 +3088,6 @@ BLIMP:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		Bounds: 50,30,0,-10
-		DecorationBounds: 54,33,0,-11
 	ChangesHealth:
 		Step: 100
 		Delay: 3
@@ -3177,8 +3171,6 @@ OCAR:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 30,24
 	Voiced:
 		VoiceSet: CarryAllVoice
 	WithMoveAnimation:
@@ -3226,11 +3218,10 @@ OCAR.Reinforce:
 	Aircraft:
 		IdealSeparation: 0c256
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	-Voiced:
 	RejectsOrders:
-	Interactable:
 
 HARR:
 	Inherits: ^HelicopterTD
@@ -3295,14 +3286,14 @@ HARR:
 		RequiresSelection: true
 	Contrail@1:
 		Offset: -400,-443,0
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: FFFFFF80
+		StartColor: FFFFFF80
 	Contrail@2:
 		Offset: -400,443,0
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: FFFFFF80
+		StartColor: FFFFFF80
 	SpawnActorOnDeath:
 		Actor: HARR.Husk
 		RequiresCondition: ammo && !empdisable && !being-warped
@@ -3324,8 +3315,6 @@ HARR:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 36,28
 	Voiced:
 		VoiceSet: HarrierVoice
 	ProducibleWithLevel:
@@ -3333,7 +3322,6 @@ HARR:
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	RenderSprites:
-		Scale: 0.5
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
@@ -3422,9 +3410,6 @@ Raptor:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
 	SelectionDecorations:
 	Contrail@1:
 		Offset: -598,-683,0
@@ -3517,13 +3502,13 @@ SCRN:
 		RequiresSelection: true
 	Contrail@1:
 		Offset: -300,-143,0
-		Color: 00FF0080
-		UsePlayerColor: false
+		StartColor: 00FF0080
+		StartColorUsePlayerColor: false
 		ZOffset: -512
 	Contrail@2:
 		Offset: -300,143,0
-		Color: 00FF0080
-		UsePlayerColor: false
+		StartColor: 00FF0080
+		StartColorUsePlayerColor: false
 		ZOffset: -512
 	SpawnActorOnDeath:
 		Actor: SCRN.Husk
@@ -3546,8 +3531,6 @@ SCRN:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 36,28
 	Voiced:
 		VoiceSet: ScrinVoice
 	ProducibleWithLevel:
@@ -3668,6 +3651,7 @@ HORN:
 		RequiresCondition: !ammo && empdisable && !being-warped
 	-EjectOnDeath:
 	-Selectable:
+	Interactable:
 	-ActorLostNotification:
 	LeavesTrails:
 		Offsets: -253,0,171
@@ -3682,12 +3666,11 @@ HORN:
 		LandingDistance: 8c0
 	Contrail@1:
 		Offset: -432,0,0
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	-Contrail@2:
-	Interactable:
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 6c0
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
@@ -3725,8 +3708,8 @@ YF23.Bomber:
 		Count: 2
 		ResetOnFire: true
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
-		RenderSelectionBars: False
 	-Voiced:
 	RenderSprites:
 		Image: yf23
@@ -3737,15 +3720,15 @@ YF23.Bomber:
 		Offset: -325,-483,0
 	Contrail@AB1:
 		Offset: -400,-80,-10
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@AB2:
 		Offset: -400,80,-10
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	SpawnActorOnDeath:
 		Actor: YF23.Husk
@@ -3762,11 +3745,13 @@ YF23.Bomber:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Interactable:
 	GivesExperience:
 		Experience: 1000
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 POD:
 	Inherits@2: ^ExistsInWorld
@@ -3909,8 +3894,6 @@ VENM:
 	WithMoveAnimation:
 		MoveSequence: move
 	WithMuzzleOverlay:
-	Selectable:
-		DecorationBounds: 30,24
 	Rearmable:
 		RearmActors: hpad, hpad.td
 	ReloadAmmoPool@1:
@@ -3982,7 +3965,6 @@ VENM.HeavyLaser:
 		Description: VTOL gunship armed\nwith a heavy laser.\n  Strong vs Tanks\n  Weak vs Infantry, Buildings
 	AmmoPool:
 		Ammo: 3
-		PipCount: 3
 		ReloadDelay: 50
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
@@ -4034,7 +4016,6 @@ Dropship:
 	AmmoPool:
 		Ammo: 1
 		Delay: 60
-		PipCount: 0
 	ReloadAmmoPool:
 		Delay: 60
 		Count: 1
@@ -4064,7 +4045,6 @@ Dropship:
 		TakeOffOnCreation: False
 	Cargo:
 		MaxWeight: 20
-		PipCount: 20
 		Types: Infantry, Vehicle
 	SpawnActorOnDeath:
 		Actor: dropship.Husk
@@ -4078,8 +4058,6 @@ Dropship:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Selectable:
-		DecorationBounds: 50,40,0,2
 	Contrail@1:
 		Offset: -400,-483,0
 	Contrail@2:
@@ -4098,6 +4076,12 @@ Dropship:
 		RearmActors: afld, afld.gdi, afld.allies
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 AURORA:
 	Inherits: ^PlaneTD
@@ -4160,21 +4144,18 @@ AURORA:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
 	SelectionDecorations:
 	Contrail@AB1:
 		Offset: -400,-70,-50
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@AB2:
 		Offset: -400,70,-50
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@1:
 		Offset: -300,-800,-50
@@ -4277,20 +4258,17 @@ AURO:
 	DamageMultiplier@AFTERBURNER:
 		Modifier: 80
 		RequiresCondition: afterburner && ammo
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
 	Contrail@AB1:
 		Offset: -400,-70,-50
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@AB2:
 		Offset: -400,70,-50
-		UsePlayerColor: false
+		StartColorUsePlayerColor: false
 		ZOffset: -512
-		Color: cc550080
+		StartColor: cc550080
 		TrailLength: 10
 	Contrail@1:
 		Offset: -300,-800,-50

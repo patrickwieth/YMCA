@@ -25,6 +25,7 @@ V2RL:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	WithFacingSpriteBody:
 		RequiresCondition: !reloading
 		Name: loaded
@@ -36,8 +37,6 @@ V2RL:
 		Weapon: BarrelExplode
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
 
 1TNK:
 	Inherits: ^Tank
@@ -160,8 +159,6 @@ V2RL:
 		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
 
 GTNK:
 	Inherits: 2TNK
@@ -364,8 +361,6 @@ GTNK.squad:
 		RequiresCondition: iraqtank && !being-warped
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
 
 3TNK.PLD:
 	Inherits: 3TNK
@@ -585,8 +580,6 @@ GTNK.squad:
 		DamageCooldown: 150
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
@@ -796,6 +789,7 @@ ARTY:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	WithMuzzleOverlay:
 	Explodes:
 		Weapon: ArtilleryExplode
@@ -887,6 +881,7 @@ ISU:
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
+		FacingTolerance: 0
 	WithMuzzleOverlay:
 	Explodes:
 		Weapon: ArtilleryExplode
@@ -968,7 +963,6 @@ HARV:
 		GenericName: Harvester
 	Selectable:
 		Priority: 7
-		DecorationBounds: 42,42
 	Health:
 		HP: 75000
 	Mobile:
@@ -1051,7 +1045,6 @@ MCV:
 		Name: Mobile Construction Vehicle
 	Selectable:
 		Priority: 4
-		DecorationBounds: 42,42
 	Health:
 		HP: 75000
 	Mobile:
@@ -1138,10 +1131,10 @@ APC:
 	WithMuzzleOverlay:
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
-		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
 	ProducibleWithLevel:
@@ -1152,6 +1145,9 @@ APC:
 		RequiresCondition: driver-dead && !cargo
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 TRUK:
 	Inherits: ^Vehicle
@@ -1194,6 +1190,7 @@ TRUK.DROP:
 		Delay: 50
 		RemoveInstead: true
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
 	RejectsOrders:
 
@@ -1286,8 +1283,6 @@ TTNK:
 		Sequence: spinner
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 30,30
 	Passenger:
 		Voice: Move
 	Voiced:
@@ -1345,8 +1340,6 @@ TTNK.RA2:
 		TurnSpeed: 28
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 30,30
 	Passenger:
 		Voice: Move
 	Voiced:
@@ -1412,7 +1405,7 @@ DTRK:
 	ChronoshiftableWithSpriteEffect:
 		ExplodeInstead: true
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 		Voice: Move
 	Voiced:
 		VoiceSet: TTruckVoice
@@ -1471,12 +1464,11 @@ CTNK:
 	AttackFrontal:
 		Armaments: primary, secondary
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	PortableChrono:
 		ChargeDelay: 250
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 30,30
 	ProductionCostMultiplier@GermanyBonus:
 		Multiplier: 90
 		Prerequisites: vehicles.germany
@@ -1519,7 +1511,6 @@ AMCV:
 		Name: Mobile Construction Vehicle
 	Selectable:
 		Priority: 4
-		Bounds: 42,42
 	Health:
 		HP: 75000
 	Mobile:
@@ -1581,7 +1572,7 @@ HMMV:
 	IgnoresDisguise:
 	DetectCloaked:
 		Range: 6c0
-		CloakTypes: Cloak, Thief
+		DetectionTypes: Cloak, Thief
 		RequiresCondition: !(empdisable || being-warped)
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -1692,11 +1683,11 @@ APC2:
 		MuzzleSequence: muzzle
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	WithMuzzleOverlay:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
-		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
 	ProducibleWithLevel:
@@ -1713,6 +1704,9 @@ APC2:
 	AttachOnCreation@DRONEPAIR:
 		Actor: mdrn.attached
 		RequiresCondition: dronepair
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 APC2.Reinforce:
 	Inherits: APC2
@@ -1825,7 +1819,6 @@ VULC:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
-		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
 	Capturable:
@@ -1840,6 +1833,9 @@ VULC:
 	AttachOnCreation@DRONEPAIR:
 		Actor: mdrn.attached
 		RequiresCondition: dronepair
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 LTNK:
 	Inherits: ^TankTD
@@ -2015,8 +2011,6 @@ MTNK:
 		RequiresCondition: !being-warped
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
 
 MTNK.PLD:
 	Inherits: MTNK
@@ -2084,8 +2078,6 @@ MTNK.Drone:
 	SpawnActorOnDeath:
 		Actor: MTNK.Drone.Husk
 		RequiresCondition: !being-warped
-	Selectable:
-		DecorationBounds: 28,28
 	Voiced:
 		VoiceSet: RobotTankVoice
 	Power:
@@ -2096,7 +2088,7 @@ MTNK.Drone:
 		Sequence: offline
 		Palette: chrome
 		RequiresCondition: disabled
-		ReferencePoint: Center
+		Position: Center
 	ProximityExternalCondition@POWERSOUND:
 		Condition: disablesound
 		RequiresCondition: disabled || empdisable
@@ -2199,8 +2191,6 @@ HTNK:
 		DamageCooldown: 150
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
@@ -2270,7 +2260,6 @@ HTNK.Nanite:
 		RequiresCondition: !(empdisable || driver-dead)
 	WithColoredOverlay@NREPAIR:
 		RequiresCondition: damaged && !(empdisable || invulnerability || invisibility)
-		Palette: nrepair
 	WithIdleOverlay@NREPAIR:
 		Sequence: emp-overlay
 		Palette: tseffect
@@ -2279,8 +2268,6 @@ HTNK.Nanite:
 		Image: pips
 		Palette: chrometd
 		Sequence: pip-repair
-		ReferencePoint: Bottom, Center
-		ZOffset: 256
 		BlinkInterval: 64
 		RequiresSelection: True
 		ValidRelationships: Ally, Neutral
@@ -2405,8 +2392,6 @@ MSAM:
 		Weapon: ArtilleryExplode
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
 
 MSAM.Hailstorm:
 	Inherits: MSAM
@@ -2456,7 +2441,6 @@ MLRS:
 		LocalOffset: 0,171,0, 0,-171,0
 	AmmoPool:
 		Ammo: 2
-		PipCount: 0
 		AmmoCondition: ammo
 	AttackTurreted:
 		TargetFrozenActors: True
@@ -2483,8 +2467,9 @@ MLRS:
 		Count: 2
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 MLRS.Toxin:
 	Inherits: MLRS
@@ -2725,6 +2710,7 @@ BIKE:
 	AttackFrontal:
 		Armaments: primary, secondary
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 
@@ -2891,6 +2877,7 @@ FTNK:
 	AttackFrontal:
 		Armaments: primary, secondary
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	Explodes:
 		Weapon: BarrelExplode
 		EmptyWeapon: BarrelExplode
@@ -3046,9 +3033,8 @@ HAR2:
 		ShieldsUpCondition: shields-up
 		RequiresCondition: shielded-miner && !empdisable
 		SelectionBarColor: 4488ff
-	WithColoredOverlay@shieldhit:
+	WithModifiedPalette@shieldhit:
 		RequiresCondition: weaponhit && shields-up
-		Palette: shieldhit
 	ExternalCondition@weaponhit:
 		Condition: weaponhit
 	WithIdleOverlay@NSHIELD:
@@ -3097,7 +3083,6 @@ BTR:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
-		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
 	Capturable:
@@ -3106,6 +3091,9 @@ BTR:
 		RequiresCondition: driver-dead && !cargo
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 BTR.Surveillance:
 	Inherits: ^Vehicle
@@ -3134,7 +3122,6 @@ BTR.Surveillance:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
-		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
 	Capturable:
@@ -3143,6 +3130,9 @@ BTR.Surveillance:
 		RequiresCondition: driver-dead && !cargo
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 NonaSVK:
 	Inherits: BTR
@@ -3181,7 +3171,6 @@ IFV:
 	Armament@pointdefense:
 		RequiresCondition: cryoturr
 	AmmoPool@pld:
-		PipCount: 0
 		RequiresCondition: cryoturr
 	ReloadAmmoPool@pld:
 		RequiresCondition: cryoturr
@@ -3357,7 +3346,6 @@ IFV:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 1
-		PipCount: 1
 		LoadingCondition: notmobile
 		LoadedCondition: full
 		PassengerConditions:
@@ -3434,6 +3422,12 @@ IFV:
 		RequiresCondition: driver-dead && !full
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !full
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 IFV.AI:
 	Inherits: ^Vehicle
@@ -3512,8 +3506,6 @@ TITN:
 		Description: Tough combat battle-mech.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks\n Weak vs Point Laser Defense
 	Valued:
 		Cost: 2000
-	Selectable:
-		Bounds: 30,40,0,0
 	Tooltip:
 		Name: Titan
 	Health:
@@ -3523,7 +3515,7 @@ TITN:
 		Speed: 50
 		Voice: Move
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 		Weight: 5
 		Voice: Move
 	QuantizeFacingsFromSequence:
@@ -3688,7 +3680,6 @@ JUGG:
 		ValidMovementTypes: Horizontal, Vertical, Turn
 	AmmoPool:
 		Ammo: 3
-		PipCount: 0
 		Armaments: primary
 		AmmoCondition: ammo
 	ReloadAmmoPool:
@@ -3702,6 +3693,9 @@ JUGG:
 		HP: 50000
 	Voiced:
 		VoiceSet: DisrVoice
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 DISR:
 	Inherits: ^TankTD
@@ -3753,8 +3747,6 @@ DISR:
 		OpportunityFire: False
 		Voice: Attack
 	WithSpriteTurret:
-	Selectable:
-		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
 	Targetable:
@@ -3926,8 +3918,6 @@ RTNK:
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical, Heavy
-	Selectable:
-		DecorationBounds: 28,28
 	Voiced:
 		VoiceSet: MirageVoice
 
@@ -4002,6 +3992,7 @@ V3RL:
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
+		FacingTolerance: 0
 	WithFacingSpriteBody:
 		RequiresCondition: !reloading
 		Name: loaded
@@ -4018,15 +4009,10 @@ V3RL:
 		RespawnTicks: 250
 	Explodes:
 		Weapon: BarrelExplode
-	Selectable:
-		DecorationBounds: 28,28
 	Voiced:
 		VoiceSet: V3Voice
 	Exit:
 		SpawnOffset: 0,-128,0
-	ProductionCostMultiplier@UkraineBonus:
-		Multiplier: 90
-		Prerequisites: vehicles.ukraine
 
 V3:
 	Inherits: ^ShootableMissile
@@ -4085,11 +4071,10 @@ KATY:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	SelectionDecorations:
 	Explodes:
 		Weapon: BarrelExplode
-	Selectable:
-		DecorationBounds: 28,28
 
 TNKD:
 	Inherits: ^Tank
@@ -4133,8 +4118,6 @@ TNKD:
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: TnkdVoice
-	Selectable:
-		DecorationBounds: 28,28
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Infantry, Water, Underwater, Defense
 	AutoTargetPriority@ATTACKANYTHING:
@@ -4182,14 +4165,13 @@ TNKD2:
 		Armaments: primary
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
+		FacingTolerance: 0
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: TNKD2.Husk
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: TnkdVoice
-	Selectable:
-		DecorationBounds: 28,28
 	AutoTargetPriority@TANKDEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move
 		ValidTargets: Tank
@@ -4294,8 +4276,6 @@ MSAR:
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
 		UndeployOnPickup: true
-	Selectable:
-		DecorationBounds: 30,30
 	ProximityExternalCondition@Bino:
 		Condition: bino
 		Range: 10c0
@@ -4385,8 +4365,6 @@ PTNK:
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: PrismVoice
-	Selectable:
-		DecorationBounds: 28,28
 
 PBLASTER:
 	Inherits: PTNK
@@ -4434,14 +4412,13 @@ PCAN:
 		OpportunityFire: False
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
+		FacingTolerance: 0
 	SpawnActorOnDeath:
 		Actor: PTNK.Husk
 		RequiresCondition: !being-warped
 	SelectionDecorations:
 	Voiced:
 		VoiceSet: PrismVoice
-	Selectable:
-		DecorationBounds: 28,28
 
 WTNK:
 	Inherits: ^VehicleTD
@@ -4497,8 +4474,6 @@ WTNK:
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: MWTnkVoice
-	Selectable:
-		DecorationBounds: 28,28
 
 #adjust offsets
 BATF:
@@ -4567,12 +4542,9 @@ BATF:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
-		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
 		InitialUnits: tecn
-	Selectable:
-		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
@@ -4594,6 +4566,9 @@ BATF:
 		RequiresCondition: driver-dead && !cargo
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 BATF.PLD:
 	Inherits: BATF
@@ -4810,9 +4785,8 @@ BATF.Bunker:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	WithMuzzleOverlay:
-	Selectable:
-		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
@@ -4861,6 +4835,7 @@ BATF.Arty:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	Voiced:
 		VoiceSet: BattleFortressVoice
 
@@ -4874,7 +4849,6 @@ BATF.AI:
 		-RequiresCondition:
 	Turreted@TERTIARY:
 		-PauseOnCondition:
-	-Cargo:
 	Mobile:
 		PauseOnCondition: being-captured || empdisable || being-warped
 
@@ -4936,7 +4910,7 @@ MEMP:
 		Sequence: offline
 		Palette: chrome
 		RequiresCondition: disabled
-		ReferencePoint: Center
+		Position: Center
 	ProximityExternalCondition@POWERSOUND:
 		Condition: disablesound
 		RequiresCondition: disabled || empdisable
@@ -5024,6 +4998,12 @@ MEMP.Stable:
 		DeploySounds: mobempcharge1.aud
 		Voice: Attack
 		PauseOnCondition: !radarenabled || empdisable || being-warped
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 CDRN:
 	Inherits: ^VehicleTD
@@ -5099,6 +5079,12 @@ CDRN:
 	-ChangesHealth@DRIVER_DEAD:
 	-Targetable@DRIVERKILL:
 	-Targetable@AICAPTURE:
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 CHPR:
 	Inherits: ^Tank
@@ -5152,8 +5138,6 @@ CHPR:
 	SpawnActorOnDeath:
 		Actor: CHPR.Husk
 		RequiresCondition: !being-warped
-	Selectable:
-		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
@@ -5287,8 +5271,6 @@ CHPR.AA:
 		MovementType: Horizontal, Vertical, Turn
 		Condition: moving
 	SelectionDecorations:
-	Selectable:
-		DecorationBounds: 28,28
 
 CRYO:
 	Inherits: ^VehicleTD
@@ -5319,10 +5301,9 @@ CRYO:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	Explodes:
 		Weapon: CryoExplosion
-	Selectable:
-		DecorationBounds: 28,28
 
 SLNG:
 	Inherits: ^VehicleTD
@@ -5411,8 +5392,6 @@ FTRK:
 	WithSpriteTurret:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
 
 FTRK.Barrage:
 	Inherits: FTRK
@@ -5466,7 +5445,7 @@ COORDINATOR:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
 	RallyPoint:
-		Offset: 5,5
+		Path: 5,5
 		RequiresCondition: primary
 	ProductionParadrop:
 		Produces: Vehicle
@@ -5643,9 +5622,6 @@ Beam_Cannon:
 	Targetable@BoostMe:
 		RequiresCondition: (aiming || attacking0 || attacking1 || attacking2 || attacking3 || attacking4 ) && !boosting && charged < 5
 		TargetTypes: BoostMe
-	#WithColoredOverlay@HIGH:
-	#	RequiresCondition: (aiming || attacking0 || attacking1 || attacking2 || attacking3 || attacking4 || attacking5) && !boosting
-	#	Palette: highlight
 	Targetable:
 		RequiresCondition: !being-warped
 		TargetTypes: Ground, Vehicle, C4, BeamCannon
@@ -5656,8 +5632,6 @@ Beam_Cannon:
 		VoiceSet: MWTnkVoice
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
 
 MAMMOTHMK2:
 	Inherits: ^Tank
@@ -5709,14 +5683,12 @@ MAMMOTHMK2:
 	AttackFrontal:
 		Armaments: railgun
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	AttackFollow:
 		Armaments: missiles, aamissiles
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	SelectionDecorations:
-	Selectable:
-		Bounds: 40,35,0,-10
-		DecorationBounds: 44,38,0,-11
 	AcceptsDeliveredExperience: ##########
 		ValidTypes: vehicle ##########
 	-WithVoxelBody:
@@ -5796,8 +5768,6 @@ APOC:
 		DamageCooldown: 150
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 44,38,0,-4
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
@@ -5861,6 +5831,7 @@ XO:
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Voice: Attack
+		FacingTolerance: 0
 	WithMuzzleOverlay:
 	Parachutable:
 		FallRate: 130
@@ -5939,8 +5910,6 @@ MDRN:
 		Description: Hovering drone with machine gun.\n  Attaches to certain vehicles to provide support and repairs.\n  Strong vs Infantry\n  Weak vs Vehicles, Buildings, Aircraft
 	Valued:
 		Cost: 300
-	Selectable:
-		DecorationBounds: 16, 16, 0, -8
 	Health:
 		HP: 15000
 	Mobile:
@@ -6000,6 +5969,7 @@ MDRN.Attached:
 	-Buildable:
 	-Infiltrates:
 	-Selectable:
+	Interactable:
 	-Tooltip:
 	Interactable:
 	RenderSprites:
@@ -6066,7 +6036,7 @@ GDRN:
 	IgnoresDisguise:
 	DetectCloaked:
 		Range: 6c0
-		CloakTypes: Cloak, Thief, AirCloak
+		DetectionTypes: Cloak, Thief, AirCloak
 		RequiresCondition: !(empdisable || being-warped)
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
@@ -6088,8 +6058,6 @@ MSG:
 	Tooltip@DEPLOYED:
 		Name: Mobile Stealth Generator (deployed)
 		RequiresCondition: deployed
-	Selectable:
-		DecorationBounds: 38,36,0,-1
 	Health:
 		HP: 25000
 	Mobile:
@@ -6218,6 +6186,12 @@ SAPC:
 	AutoTarget:
 		InitialStance: HoldFire
 		InitialStanceAI: ReturnFire
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 SAPC.Napalm:
 	Inherits: SAPC

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "OpenRA.Mods.CA": {
+      "commandName": "Project",
+      "commandLineArgs": "@echo off\r\nsetlocal EnableDelayedExpansion\r\ntitle OpenRA\r\n\r\nFOR /F \"tokens=1,2 delims==\" %%A IN (mod.config) DO (set %%A=%%B)\r\nif exist user.config (FOR /F \"tokens=1,2 delims==\" %%A IN (user.config) DO (set %%A=%%B))\r\nset TEMPLATE_LAUNCHER=%0\r\nset MOD_SEARCH_PATHS=%~dp0mods,./mods\r\n\r\nif \"!MOD_ID!\" == \"\" goto badconfig\r\nif \"!ENGINE_VERSION!\" == \"\" goto badconfig\r\nif \"!ENGINE_DIRECTORY!\" == \"\" goto badconfig\r\n\r\nset TEMPLATE_DIR=%CD%\r\nif not exist %ENGINE_DIRECTORY%\\bin\\OpenRA.exe goto noengine\r\n>nul find %ENGINE_VERSION% %ENGINE_DIRECTORY%\\VERSION || goto noengine\r\ncd %ENGINE_DIRECTORY%\r\n\r\nbin\\OpenRA.exe Game.Mod=%MOD_ID% Engine.EngineDir=\"..\" Engine.LaunchPath=\"%TEMPLATE_LAUNCHER%\" \"Engine.ModSearchPaths=%MOD_SEARCH_PATHS%\"  \"%*\"\r\nset ERROR=%errorlevel%\r\ncd %TEMPLATE_DIR%\r\n\r\nif %ERROR% neq 0 goto crashdialog\r\nexit /b\r\n\r\n:noengine\r\necho Required engine files not found.\r\necho Run `make all` in the mod directory to fetch and build the required files, then try again.\r\npause\r\nexit /b\r\n\r\n:badconfig\r\necho Required mod.config variables are missing.\r\necho Ensure that MOD_ID ENGINE_VERSION and ENGINE_DIRECTORY are\r\necho defined in your mod.config (or user.config) and try again.\r\npause\r\nexit /b\r\n\r\n:crashdialog\r\necho ----------------------------------------\r\necho OpenRA has encountered a fatal error.\r\necho   * Log Files are available in Documents\\OpenRA\\Logs\r\necho   * FAQ is available at https://github.com/OpenRA/OpenRA/wiki/FAQ\r\necho ----------------------------------------\r\npause\r\n",
+      "workingDirectory": "C:\\src\\CAmod\\engine\\bin"
+    }
+  }
+}

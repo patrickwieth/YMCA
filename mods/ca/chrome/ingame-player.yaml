@@ -1,7 +1,16 @@
 Container@PLAYER_WIDGETS:
+	Logic: LoadIngameChatLogic
 	Children:
-		LogicKeyListener@CONTROLGROUP_KEYHANDLER:
-			Logic: ControlGroupLogic
+		Container@CHAT_ROOT:
+		LogicKeyListener@PLAYER_KEYHANDLER:
+			Logic: RemoveFromControlGroupHotkeyLogic
+				RemoveFromControlGroupKey: RemoveFromControlGroup
+		ControlGroups@CONTROLGROUPS:
+			SelectGroupKeyPrefix: ControlGroupSelect
+			CreateGroupKeyPrefix: ControlGroupCreate
+			AddToGroupKeyPrefix: ControlGroupAddTo
+			CombineWithGroupKeyPrefix: ControlGroupCombineWith
+			JumpToGroupKeyPrefix: ControlGroupJumpTo
 		LogicTicker@SIDEBAR_TICKER:
 		Container@SUPPORT_POWERS:
 			Logic: SupportPowerBinLogic
@@ -535,7 +544,7 @@ Container@PLAYER_WIDGETS:
 							SoundUp: RadarUp
 							SoundDown: RadarDown
 							Children:
-						VqaPlayer@PLAYER:
+						VideoPlayer@PLAYER:
 							X: 1
 							Y: 1
 							Width: 220
@@ -785,3 +794,22 @@ Container@PLAYER_WIDGETS:
 							Y: 4
 							ImageCollection: power-icons
 							ImageName: power-normal
+		Container@HPF_OVERLAY:
+			Logic: HierarchicalPathFinderOverlayLogic
+			X: WINDOW_RIGHT - WIDTH - 260
+			Y: 40
+			Width: 175
+			Height: 60
+			Children:
+				DropDownButton@HPF_OVERLAY_LOCOMOTOR:
+					Y: PARENT_TOP
+					Width: PARENT_RIGHT
+					Height: 25
+					Text: Select Locomotor
+					Font: Regular
+				DropDownButton@HPF_OVERLAY_CHECK:
+					Y: PARENT_TOP + 35
+					Width: PARENT_RIGHT
+					Height: 25
+					Text: Select BlockedByActor
+					Font: Regular

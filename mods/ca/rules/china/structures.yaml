@@ -36,10 +36,10 @@ chcommand:
 		RequiresCondition: !jammed && !disabled && !being-warped && radar
 	Power:
 		Amount: 0
-	RallyPoint: ##########
+	RallyPoint:							##########
 		Path: 0,2
 	Exit@1:
-		SpawnOffset: -1024,1024,0 #-1323,1280,0
+		SpawnOffset: -1024,1024,0		#-1323,1280,0
 		ExitCell: 0,2
 		Facing: 135
 	LaysMinefield@minefield:
@@ -99,7 +99,7 @@ chcommand.radar:
 
 chpower:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^3x2Shape
+	Inherits@shape: ^2x2Shape
 	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
 	Inherits@mines: ^MinefieldUpgrade
 	Buildable:
@@ -108,16 +108,13 @@ chpower:
 		Prerequisites: chnmcv, ~structures.china, ~!chinaatom
 		Description: Provides power.\nCan be deployed to overcharge at expense of damage to self.\nExplodes violently when destroyed
 	Valued:
-		Cost: 300 #500
+		Cost: 300			#500
 	Tooltip:
 		Name: Nuclear Reactor
 	Building:
 		Footprint: xx xx ==
 		Dimensions: 2,3
 		LocalCenterOffset: 0,-512,0
-	Selectable:
-		Bounds: 72,48
-		DecorationBounds: 72,68,0,-10
 	SelectionDecorations:
 	Health:
 		HP: 70000
@@ -172,7 +169,7 @@ chpower2:
 	Tooltip:
 		Name: Advanced Nuclear Plant
 	Valued:
-		Cost: 500 #500
+		Cost: 500			#500
 	Power:
 		Amount: 200
 	RenderSprites:
@@ -259,8 +256,6 @@ chgatling:
 		Prerequisites: infantry.china, ~structures.china
 		Queue: Defense
 		Description: All-purpose defensive structure.\n  Strong vs Aircraft, Infantry\n  Weak vs Vehicles
-	Selectable:
-		Bounds: 24,24
 	SelectionDecorations:
 	Health:
 		HP: 58000
@@ -418,7 +413,7 @@ chbunker2.e2:
 
 chsupply:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^2x2Shape
+	Inherits@shape: ^3x2Shape
 	Inherits@2: ^BotIncome
 	Inherits@Refinery: ^Refinery
 	Inherits@mines: ^MinefieldUpgrade
@@ -474,7 +469,7 @@ chweap:
 		Prerequisites: chsupply, ~structures.china
 		Description: Produces vehicles
 	Building:
-		Footprint: x++x =++= ====
+		Footprint: xxxx xxxx ====
 		Dimensions: 4,3
 	SelectionDecorations:
 	Health:
@@ -521,6 +516,7 @@ chweap:
 chpropaganda:
 	Inherits: ^ScienceBuildingTD
 	Inherits: ^TechLevelBuilding
+	Inherits: ^Tier3Tech
 	Inherits@shape: ^4x2Shape
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@mines: ^MinefieldUpgrade
@@ -648,9 +644,6 @@ chpropagandatower:
 		RequiredForShortGame: false
 	WithBuildingBib:
 		HasMinibib: true
-	Selectable:
-		Bounds: 24,24
-		DecorationBounds: 24,48,0,-12
 	ProximityExternalCondition@PROPAGANDA:
 		Range: 6c0
 		Condition: propaganda
@@ -683,7 +676,7 @@ chinternetcenter:
 	Inherits: ^BuildingTD
 	Inherits: ^TechLevelBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^4x2Shape
+	Inherits@shape: ^4x3Shape
 	Inherits@mines: ^MinefieldUpgrade
 	Valued:
 		Cost: 2500

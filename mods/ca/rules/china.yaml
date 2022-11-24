@@ -39,8 +39,8 @@
 		PauseOnCondition: lowpower
 		Icon: chfrenzy3
 		ChargeInterval: 3000
-		Description: Frenzy
-		LongDesc: Increases the firepower of selected vehicles.
+		Name: Frenzy
+		Description: Increases the firepower of selected vehicles.
 		Range: 3
 		Duration: 750
 		SelectTargetSpeechNotification: SelectTarget
@@ -151,12 +151,11 @@ chflameboat:
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 	AttackFrontal:
+		FacingTolerance: 0
 	DetectCloaked:
 		Range: 4c0
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 	RenderDetectionCircle:
-	Selectable:
-		DecorationBounds: 36,36
 	AcceptsDeliveredExperience: ##########
 		ValidTypes: vehicle ##########
 	DeliversCash:
@@ -208,22 +207,21 @@ chasub:
 		TargetTypes: Ground, Water, Ship, Submarine, Repair
 		RequiresCondition: !underwater
 	AttackFrontal:
+		FacingTolerance: 0
 	RenderDetectionCircle:
-	Selectable:
-		DecorationBounds: 36,36
 	AcceptsDeliveredExperience: ##########
 		ValidTypes: vehicle ##########
 	DeliversCash:
 		Payload: 475
 	Cloak@underwater:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		InitialDelay: 0
 		CloakDelay: 50
 		CloakedCondition: underwater
 		PauseOnCondition: disabled
 		RequiresCondition: !cloak-force-disabled
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 4c0
 	Targetable@Underwater:
 		TargetTypes: Submarine, Underwater
@@ -231,7 +229,6 @@ chasub:
 	Voiced:
 		VoiceSet: CHNukeCannonVoice
 	RenderSprites:
-		Scale: 0.80
 		PlayerPalette: overlayplayertd
 
 chminv:
@@ -265,7 +262,6 @@ chminv.minefield:
 		Weapon: CHNeutronMineExplosive
 		RequiresCondition: neutronmines
 	WithColoredOverlay@FORCESHIELD: #TODO
-		Palette: forceshield
 		RequiresCondition: neutronmines
 
 uplandmines:

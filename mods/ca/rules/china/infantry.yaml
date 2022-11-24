@@ -37,10 +37,10 @@ CHE1:
 		Weapon: CHGuardRifleGarrison
 		MuzzleSequence: muzzle
 	AttackFrontal:
+		FacingTolerance: 0
 	Voiced:
 		VoiceSet: RedGuardVoice
 	RenderSprites:
-		Scale: 0.85
 
 CHE2:
 	Inherits: CHE1
@@ -73,7 +73,6 @@ CHE2:
 		HP: 10000
 	AmmoPool:
 		Ammo: 8
-		PipCount: 0
 		AmmoCondition: ammo
 	ReloadAmmoPool:
 		Delay: 50
@@ -81,6 +80,9 @@ CHE2:
 	ReloadDelayMultiplier@gatlingSpeed:
 		RequiresCondition: !ammo
 		Modifier: 75
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 CHE3:
 	Inherits: E3
@@ -137,7 +139,7 @@ CHHACKER:
 		ImmovableCondition: !undeployed
 	Passenger:
 		CargoType: Hacker
-		PipType: Blue
+		CustomPipType: blue
 		RequireForceMoveCondition: !undeployed
 		CargoConditions:
 			chinternetcenter: indoors
@@ -159,6 +161,7 @@ CHHACKER:
 	AttackFrontal:
 		Armaments: primary, secondary
 		RequiresCondition: undeployed
+		FacingTolerance: 0
 	WithSpriteBody:
 		Sequence: deployed
 		Name: deployed
@@ -290,7 +293,7 @@ chlotus:
 	Health:
 		HP: 20000
 	Passenger:
-		PipType: Red
+		CustomPipType: red
 	AutoTarget:
 		ScanRadius: 4
 	Armament@PRIMARY:
@@ -344,6 +347,7 @@ chlotus:
 		RequiresCondition: selectchinf
 	AttackFrontal:
 		Armaments: primary, secondary, control
+		FacingTolerance: 0
 	RevealOnFire:
 		ArmamentNames: primary, secondary, control
 	AcceptsDeliveredExperience: ##########

@@ -34,12 +34,12 @@ LST:
 	Cargo:
 		Types: Infantry, Vehicle
 		MaxWeight: 10
-		PipCount: 10
 		PassengerFacing: 0
 		LoadingCondition: notmobile
 	-ChronoshiftableWithSpriteEffect:
-	Selectable:
-		DecorationBounds: 36,36
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 Subchaser:
 	Inherits: ^Ship
@@ -92,11 +92,9 @@ Subchaser:
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 6c0
 	RenderDetectionCircle:
-	Selectable:
-		DecorationBounds: 36,36
 
 SS2:
 	Inherits: ^Submarine
@@ -139,14 +137,13 @@ SS2:
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !crossing-ford
+		FacingTolerance: 0
 	AutoTarget:
 		InitialStance: HoldFire
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Water, Underwater
 	AutoTargetPriority@ATTACKANYTHING:
 		ValidTargets: Water, Underwater
-	Selectable:
-		DecorationBounds: 38,38
 	Cloak:
 		CloakDelay: 25
 		UncloakOn: Unload, Infiltrate, Demolish, Dock, Heal
@@ -228,8 +225,6 @@ PT2:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !under-bridge
 	RenderDetectionCircle:
-	Selectable:
-		DecorationBounds: 36,36
 
 SB:
 	Inherits: ^Ship
@@ -276,13 +271,12 @@ SB:
 		PauseOnCondition: under-bridge
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	WithMuzzleOverlay:
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 2c0
 	RenderDetectionCircle:
-	Selectable:
-		DecorationBounds: 36,36
 
 SEAS:
 	Inherits: ^Ship
@@ -330,10 +324,9 @@ SEAS:
 		PauseOnCondition: under-bridge
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	WithMuzzleOverlay:
 	RenderDetectionCircle:
-	Selectable:
-		DecorationBounds: 36,36
 
 SS:
 	Inherits: ^Submarine
@@ -376,14 +369,13 @@ SS:
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !crossing-ford
+		FacingTolerance: 0
 	AutoTarget:
 		InitialStance: HoldFire
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Water, Underwater, Ground
 	AutoTargetPriority@ATTACKANYTHING:
 		ValidTargets: Water, Underwater, Ground
-	Selectable:
-		DecorationBounds: 38,38
 	Cloak:
 		CloakDelay: 25
 	GrantConditionOnAttack@STOPSHOOTINGROCKS:
@@ -469,11 +461,9 @@ DD:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 8c0
 	RenderDetectionCircle:
-	Selectable:
-		DecorationBounds: 38,38
 
 DD2:
 	Inherits: ^Ship
@@ -538,8 +528,6 @@ DD2:
 	WithSpriteTurret@PRIMARY:
 		Turret: primary
 	WithMuzzleOverlay:
-	Selectable:
-		DecorationBounds: 38,38
 
 Aegis_Cruiser:
 	Inherits: ^Ship
@@ -597,8 +585,6 @@ Aegis_Cruiser:
 	WithSpriteTurret:
 		Palette: chrome
 	RenderDetectionCircle:
-	Selectable:
-		DecorationBounds: 38,38
 
 CA:
 	Inherits: ^Ship
@@ -670,8 +656,6 @@ CA:
 		Turret: primary
 	WithSpriteTurret@SECONDARY:
 		Turret: secondary
-	Selectable:
-		DecorationBounds: 44,44
 
 ISUB:
 	Inherits: ^Submarine
@@ -718,12 +702,11 @@ ISUB:
 	AttackFrontal:
 		TargetFrozenActors: True
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	AutoTarget:
 		InitialStance: HoldFire
-	Selectable:
-		DecorationBounds: 44,44
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 6c0
 
 ICBM:
@@ -819,12 +802,10 @@ CARR:
 	Armament:
 		Weapon: HornetLauncher
 		PauseOnCondition: under-bridge
-	Selectable:
-		DecorationBounds: 44,44
 	Voiced:
 		VoiceSet: DroneCarrVoice
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 10c0
 
 MSUB:
@@ -869,10 +850,8 @@ MSUB:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	AutoTarget:
 		InitialStance: HoldFire
-	Selectable:
-		DecorationBounds: 44,44
 	RenderSprites:
-		Scale: 0.80
 		PlayerPalette: overlayplayertd

@@ -49,9 +49,6 @@ CHMIG:
 	AutoTarget:
 	AmmoPool:
 		Ammo: 8
-	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,29,0,1
 	SelectionDecorations:
 	Contrail@1:
 		Offset: -598,-683,0
@@ -74,6 +71,9 @@ CHMIG:
 		VoiceSet: CHMiGVoice
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 CHMIG.AA:
 	Inherits: CHMIG
@@ -247,7 +247,6 @@ chhelix:
 	Cargo:
 		Types: Infantry, Hacker, Vehicle
 		MaxWeight: 5
-		PipCount: 5
 		AfterLoadDelay: 0
 		BeforeUnloadDelay: 0
 		AfterUnloadDelay: 0
@@ -267,8 +266,6 @@ chhelix:
 		RequiresCondition: enable-smoke
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
-	Selectable:
-		DecorationBounds: 38,32
 	Voiced:
 		VoiceSet: CHHelixVoice
 	Production:
@@ -306,6 +303,9 @@ chhelix:
 		RequiresCondition: speakeraddon && !subliminal && !disabled
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 chhelix.Gatling:
 	Inherits: chhelix
@@ -631,6 +631,7 @@ usabomber.carpet:
 	Inherits: usabomber
 	AttackBomber:
 		PauseOnCondition: !ammo
+		FacingTolerance: 8
 	Armament:
 		Weapon: CarpetBomb
 		LocalOffset: 300,300,340, 300,-300,340, -300,900,340, -300,-400,340, 300,0,340, -300,0,340
@@ -644,6 +645,7 @@ usabomber.nuke:
 	Inherits: usabomber
 	AttackBomber:
 		PauseOnCondition: !ammo
+		FacingTolerance: 8
 	Armament@nuclear:
 		Weapon: AtomBomb
 		LocalOffset: 300,0,340
@@ -656,6 +658,7 @@ usabomber.emp:
 	Inherits: usabomber
 	AttackBomber:
 		PauseOnCondition: !ammo
+		FacingTolerance: 8
 	Armament:
 		Weapon: CHEMPBomb
 	AmmoPool:
@@ -667,6 +670,7 @@ usabomber.minebomb:
 	Inherits: usabomber
 	AttackBomber:
 		PauseOnCondition: !ammo
+		FacingTolerance: 8
 	Armament:
 		Weapon: ClusterMineSpawner
 	AmmoPool:

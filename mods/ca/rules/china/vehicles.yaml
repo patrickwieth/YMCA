@@ -19,7 +19,6 @@ CHNMCV:
 		Description: Builds structures.
 	Selectable:
 		Priority: 4
-		DecorationBounds: 42,42
 	SelectionDecorations:
 	Health:
 		HP: 60000
@@ -77,8 +76,6 @@ chbattle:
 		Speed: 80
 	Health:
 		HP: 40000
-	RevealsShroud:
-		Range: 6c0
 	Turreted:
 		TurnSpeed: 12
 		Offset: 150,0,150
@@ -92,9 +89,6 @@ chbattle:
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SelectionDecorations:
-	Selectable:
-		DecorationBounds: 28,28
-		ValidTypes: vehicle ##########
 	Voiced:
 		VoiceSet: BattlemasterTankVoice
 
@@ -238,8 +232,6 @@ charty:
 		Speed: 75
 	Health:
 		HP: 12000
-	RevealsShroud:
-		Range: 5c0
 	Armament:
 		Weapon: CHInfernoCannon
 		LocalOffset: 624,0,608
@@ -257,18 +249,11 @@ charty:
 	WithMuzzleOverlay:
 	AutoTarget:
 		InitialStanceAI: Defend
-	Explodes:
-		Weapon: ArtilleryShell
-		EmptyWeapon: UnitExplode
-		LoadedChance: 75
 	GrantConditionOnPrerequisite@blacknapalm:
 		Condition: blacknapalm
 		Prerequisites: commander_tree.black_napalm
 	Voiced:
 		VoiceSet: CHInfernoCannonVoice
-	Explodes:
-		Weapon: FlametankExplode
-		EmptyWeapon: FlametankExplode
 
 charty.Husk:
 	Inherits: ^LightHusk
@@ -319,8 +304,6 @@ choverlord:
 		Weight: 6
 	Health:
 		HP: 95000
-	RevealsShroud:
-		Range: 6c0
 	Turreted:
 		Turret: primary
 		TurnSpeed: 3
@@ -334,8 +317,6 @@ choverlord:
 	AttackTurreted:
 	WithMuzzleOverlay:
 	SelectionDecorations:
-	Selectable:
-		DecorationBounds: 34,34,0,-3
 	Voiced:
 		VoiceSet: OverlordTankVoice
 	WithSpriteTurret:
@@ -685,8 +666,6 @@ chdragon:
 		RequireForceMoveCondition: deployed
 	Health:
 		HP: 28000
-	RevealsShroud:
-		Range: 6c0
 	Turreted:
 		TurnSpeed: 9
 		Offset: 150,0,150
@@ -696,7 +675,14 @@ chdragon:
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
-		RequiresCondition: !flameupgrade && !deployed
+		RequiresCondition: !blacknapalm && !deployed
+	Armament@Normal:
+		Weapon: CHDragonFlamer.Black_Napalm
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,0,90
+		MuzzleSequence: muzzle
+		RequiresCondition: blacknapalm && !deployed
 	Armament@Firewall1:
 		Name: firewall1
 		Weapon: CHDragonFirestorm
@@ -719,9 +705,6 @@ chdragon:
 		UndeployOnPickup: true
 		Voice: Attack
 		PauseOnCondition: disabled
-	WithRangeCircle@Firewall:
-		Range: 4c0
-		RequiresCondition: deployed
 	GrantConditionOnAttack@Firewall:
 		Condition: firewallcycle
 		ArmamentNames: firewall1
@@ -735,9 +718,9 @@ chdragon:
 	WithSpriteTurret:
 	Voiced:
 		VoiceSet: CHDragonTankVoice
-	GrantConditionOnPrerequisite@upbluefire:
-		Condition: flameupgrade
-		Prerequisites: upbluefire
+	GrantConditionOnPrerequisite@blacknapalm:
+		Condition: blacknapalm
+		Prerequisites: commander_tree.black_napalm
 	Explodes:
 		Weapon: FlametankExplode
 		EmptyWeapon: FlametankExplode
@@ -1352,7 +1335,7 @@ chnukecann:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 8 #3
+		TurnSpeed: 8	#3
 	AttackTurreted:
 	SelectionDecorations:
 	Selectable:

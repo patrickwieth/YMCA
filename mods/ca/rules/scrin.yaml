@@ -8,7 +8,6 @@
 	SpawnActorsOnSell:
 		ActorTypes: s1
 	ActorPreviewPlaceBuildingPreview:
-		OverridePalette: placebuilding
 	Building:
 		BuildSounds: scrinbuild.aud
 
@@ -100,6 +99,7 @@ S1:
 	WithInfantryBody:
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 
@@ -133,6 +133,7 @@ S2:
 	WithInfantryBody:
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 
@@ -170,6 +171,7 @@ S3:
 	WithInfantryBody:
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	AutoTarget:
@@ -205,6 +207,7 @@ S4:
 	WithInfantryBody:
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	-Crushable:
@@ -232,7 +235,7 @@ S6:
 		HP: 3000
 	WithInfantryBody:
 	Passenger:
-		PipType: Yellow
+		CustomPipType: yellow
 	EngineerRepair:
 	RepairsBridges:
 	CaptureManager:
@@ -325,6 +328,14 @@ FEED:
 	Targetable@FEEDER:
 		TargetTypes: Feeder
 		RequiresCondition: full
+	WithHarvesterPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+		PipCount: 7
+	WithHarvesterPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+		PipCount: 7
 
 SMEDI:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
@@ -350,6 +361,7 @@ SMEDI:
 		ForceTargetRelationships: None
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	WithInfantryBody:
 		DefaultAttackSequence: heal
 	Passenger:
@@ -452,6 +464,7 @@ MAST:
 	WithInfantryBody:
 	AttackFrontal:
 		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	ProducibleWithLevel:
 		Prerequisites: barracks.upgraded
 	-Crushable:
@@ -473,6 +486,12 @@ MAST:
 		Palette: scrin
 		RequiresCondition: mindcontrolling
 		Offset: 0,0,400
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 #
 # ---- Vehicles
@@ -481,8 +500,6 @@ MAST:
 HARV.Scrin:
 	Inherits: HAR2
 	Inherits@Hover: ^HoverVehicle
-	Selectable:
-		DecorationBounds: 42,42
 	RenderSprites:
 		Image: harv.scrin
 		PlayerPalette: overlayplayer
@@ -525,8 +542,6 @@ GUNW:
 		Cost: 650
 	Tooltip:
 		Name: Gun Walker
-	Selectable:
-		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -594,8 +609,6 @@ SEEK:
 		Cost: 800
 	Tooltip:
 		Name: Seeker
-	Selectable:
-		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -684,8 +697,6 @@ LACE:
 		Cost: 500
 	Tooltip:
 		Name: Lacerator
-	Selectable:
-		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -821,12 +832,9 @@ INTL:
 	AutoTarget:
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	Selectable:
-		DecorationBounds: 28,28
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
-		PipCount: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
 	Hovers:
@@ -842,8 +850,11 @@ INTL:
 		RequiresCondition: !driver-dead && !cargo
 	DetectCloaked:
 		Range: 5c0
-		CloakTypes: Mine
+		DetectionTypes: Mine
 		RequiresCondition: !(empdisable || being-warped)
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 INTL.AA:
 	Inherits: INTL
@@ -889,8 +900,6 @@ CORR:
 		Cost: 700
 	Tooltip:
 		Name: Corrupter
-	Selectable:
-		DecorationBounds: 36,36,0,-3
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -917,6 +926,7 @@ CORR:
 		LocalOffset: 750,0,0
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	Explodes:
 		Weapon: BarrelExplode
 		EmptyWeapon: BarrelExplode
@@ -986,8 +996,6 @@ LCHR:
 		Cost: 900
 	Tooltip:
 		Name: Leecher
-	Selectable:
-		DecorationBounds: 36,36,0,-3
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -1014,6 +1022,7 @@ LCHR:
 		LocalOffset: 700,0,300, 700,-500,100, 700,500,100
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
 	WithMoveAnimation:
@@ -1036,8 +1045,6 @@ STCR:
 		Cost: 1000
 	Tooltip:
 		Name: Stormcrawler
-	Selectable:
-		DecorationBounds: 36,36,0,-3
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -1120,8 +1127,6 @@ DEVO:
 		Cost: 1250
 	Tooltip:
 		Name: Devourer Tank
-	Selectable:
-		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -1214,8 +1219,6 @@ DARK:
 		Cost: 1350
 	Tooltip:
 		Name: Darkener Tank
-	Selectable:
-		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -1296,8 +1299,6 @@ RUIN:
 		Cost: 800
 	Tooltip:
 		Name: Ruiner
-	Selectable:
-		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -1385,8 +1386,6 @@ ATMZ:
 		Cost: 1250
 	Tooltip:
 		Name: Atomizer
-	Selectable:
-		DecorationBounds: 28,28
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Buildable:
@@ -1443,8 +1442,6 @@ TPOD:
 		VoiceSet: TripodVoice
 	Valued:
 		Cost: 1800
-	Selectable:
-		Bounds: 30,52,0,-10
 	Tooltip:
 		Name: Annihilator Tripod
 	UpdatesPlayerStatistics:
@@ -1681,7 +1678,6 @@ SMCV:
 		Name: Colony Ship
 	Selectable:
 		Priority: 4
-		Bounds: 42,42
 	Health:
 		HP: 75000
 	Armor:
@@ -1779,11 +1775,11 @@ STMR:
 		InitialStanceAI: AttackAnything
 	Contrail@1:
 		Offset: -250,-250,100
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 		ZOffset: -512
 	Contrail@2:
 		Offset: -250,250,100
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 		ZOffset: -512
 	SpawnActorOnDeath:
 		Actor: STMR.Husk
@@ -1801,7 +1797,6 @@ STMR:
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
 	Selectable:
-		DecorationBounds: 36,28
 	ProducibleWithLevel:
 		Prerequisites: aircraft.upgraded
 	-EjectOnDeath:
@@ -1835,7 +1830,6 @@ STMR.hunter:
 		TurnSpeed: 35
 		Speed: 210
 	RenderSprites:
-		Scale: 0.8
 
 STMR.bomber:
 	Inherits: STMR
@@ -1876,6 +1870,12 @@ STMR.bomber:
 		DelayAfterReset: 50
 		ShowSelectionBar: true
 		SelectionBarColor: ff00ff
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 STMR.torp:
 	Inherits: STMR
@@ -1918,8 +1918,14 @@ STMR.torp:
 		ShowSelectionBar: true
 		SelectionBarColor: ff00ff
 	DetectCloaked:
-		CloakTypes: Underwater
+		DetectionTypes: Underwater
 		Range: 8c0
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 ENRV:
 	Inherits: ^Helicopter
@@ -1974,11 +1980,11 @@ ENRV:
 		InitialStanceAI: AttackAnything
 	Contrail@1:
 		Offset: -750,-200,300
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 		ZOffset: -512
 	Contrail@2:
 		Offset: -750,200,300
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 		ZOffset: -512
 	SpawnActorOnDeath:
 		Actor: ENRV.Husk
@@ -1996,9 +2002,6 @@ ENRV:
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
 	Selectable:
-		DecorationBounds: 36,36
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
 	-EjectOnDeath:
 	AmmoPool:
 		Ammo: 4
@@ -2032,6 +2035,12 @@ ENRV:
 		RequiresCondition: regen-upgrade
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 DEVA:
 	Inherits: ^Helicopter
@@ -2080,8 +2089,6 @@ DEVA:
 		AltitudeVelocity: 0c50
 		CanForceLand: False
 	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,40,0,1
 	Explodes:
 		Weapon: KirovExplode
 		RequiresCondition: !airborne
@@ -2175,8 +2182,6 @@ PAC:
 		AltitudeVelocity: 0c50
 		CanForceLand: False
 	Selectable:
-		Bounds: 36,28,0,2
-		DecorationBounds: 40,40,0,1
 	Explodes:
 		Weapon: KirovExplode
 		RequiresCondition: !airborne
@@ -2257,7 +2262,6 @@ PAC.support:
 		Description: Massive Carrier with repair drones.\n	Repair drones have point laser defense.\n  Can teleport infantry directly into the field.\n  Strong vs Projectile based attacks.\n  Weak without army.
 		IconPalette: chrome
 	RenderSprites:
-		Scale: 1.2
 	Valued:
 		Cost: 5000
 	Tooltip:
@@ -2289,7 +2293,6 @@ PAC.laser:
 		Description: Massive Warship with multiple armor piercing laser systems.\n	Strong vs Vehicles\n  Weak vs Aircraft, Reflector
 		IconPalette: chrome
 	RenderSprites:
-		Scale: 1.1
 	Valued:
 		Cost: 3600
 	Tooltip:
@@ -2397,6 +2400,7 @@ INVA:
 		RequiresCondition: !ammo && empdisable
 	-EjectOnDeath:
 	-Selectable:
+	Interactable:
 	-ActorLostNotification:
 	LeavesTrails:
 		Offsets: -253,0,171
@@ -2411,12 +2415,18 @@ INVA:
 		LandingDistance: 8c0
 	Contrail@1:
 		Offset: -432,0,0
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 		TrailLength: 10
 	-Contrail@2:
 	Interactable:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 INVA.support:
 	Inherits: ^Plane
@@ -2474,6 +2484,7 @@ INVA.support:
 		RequiresCondition: !ammo && empdisable
 	-EjectOnDeath:
 	-Selectable:
+	Interactable:
 	-ActorLostNotification:
 	LeavesTrails:
 		Offsets: -253,0,171
@@ -2488,7 +2499,7 @@ INVA.support:
 		LandingDistance: 8c0
 	Contrail@1:
 		Offset: -432,0,0
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 		TrailLength: 10
 	-Contrail@2:
 	Interactable:
@@ -2502,6 +2513,12 @@ INVA.support:
 		Priority: 2
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 INVA.suicide:
 	Inherits: INVA
@@ -2516,7 +2533,6 @@ INVA.suicide:
 		Condition: triggered
 	WithColoredOverlay@GHIGH:
 		RequiresCondition: triggered
-		Palette: greenhighlight
 	-SpawnActorOnDeath:
 	-SpawnActorOnDeath@Empty:
 	-SpawnActorOnDeath@EMP:
@@ -2573,9 +2589,6 @@ MSHP:
 		AltitudeVelocity: 0c50
 		CanForceLand: False
 		Voice: Move
-	Selectable:
-		Bounds: 42,42,0,2
-		DecorationBounds: 48,52,0,1
 	Explodes:
 		Weapon: KirovExplode
 		RequiresCondition: !airborne
@@ -2658,6 +2671,12 @@ MSHP:
 		Delay: 25
 		StartIfBelow: 100
 		DamageCooldown: 250
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 #
 # ---- Husks
@@ -2811,11 +2830,11 @@ STMR.Husk:
 		Type: CenterPosition
 	Contrail@1:
 		Offset: -300,-143,0
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 		ZOffset: -512
 	Contrail@2:
 		Offset: -300,143,0
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 		ZOffset: -512
 	RevealsShroud:
 		Range: 12c0
@@ -2845,10 +2864,10 @@ ENRV.Husk:
 		Type: CenterPosition
 	Contrail@1:
 		Offset: -750,-200,300
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 	Contrail@2:
 		Offset: -750,200,300
-		UsePlayerColor: true
+		StartColorUsePlayerColor: true
 	RevealsShroud:
 		Range: 12c0
 		MinRange: 10c0
@@ -3205,6 +3224,7 @@ REA2:
 
 PROC.SCRIN:
 	Inherits: ^ScrinBuilding
+	Inherits@shape: ^3x3Shape
 	Inherits@2: ^BotIncome
 	Inherits@Refinery: ^Refinery
 	HitShape:
@@ -3249,9 +3269,6 @@ PROC.SCRIN:
 		DragOffset: -554,512,0
 		DragLength: 12
 		TickRate: 15
-	Selectable:
-		Bounds: 72,56,0,12
-		DecorationBounds: 73,72
 	FreeActor:
 		Actor: HARV.Scrin
 		SpawnOffset: 1,2
@@ -3268,8 +3285,6 @@ PORT:
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@InfantryProduction: ^InfantryProduction
-	Selectable:
-		Bounds: 48,48
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 840,-256,0, 840,512,0, 210,-512,0, -71,512,0
@@ -3348,8 +3363,6 @@ WSPH:
 	Inherits: ^ScrinBuilding
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@shape: ^3x2Shape
-	Selectable:
-		Bounds: 72,48
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,1024,0, 0,-1024,0
 		Type: Rectangle
@@ -3551,6 +3564,7 @@ WSPH:
 NERV:
 	Inherits: ^ScrinBuilding
 	Inherits: ^TechLevelBuilding
+	Inherits@shape: ^2x2Shape
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^RadarStation
 	HitShape:
@@ -3609,8 +3623,8 @@ NERV:
 		OrderName: resourcescan
 		Icon: rescanpower
 		ChargeInterval: 7500
-		Description: Resource Scan
-		LongDesc: Reveals map resources.
+		Name: Resource Scan
+		Description: Reveals map resources.
 		LaunchSound: tibscan.aud
 		PauseOnCondition: disabled || empdisable || being-warped
 	SpawnActorPower@ICHORSEED:
@@ -3618,14 +3632,15 @@ NERV:
 		Icon: ichorpower
 		Actor: ichor.seeder
 		ChargeInterval: 6000
-		Description: Ichor Seed
+		Name: Ichor Seed
 		LifeTime: -1
 		AllowMultiple: false
-		LongDesc: Seeds tiberium at selected location.
+		Description: Seeds tiberium at selected location.
 		LaunchSound: ichorseed.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		PauseOnCondition: disabled || empdisable || being-warped
+		EffectSequence: idle
 	SpawnActorPower@BUZZERSWARM:
 		Actor: BUZZ
 		OrderName: buzzerswarm
@@ -3633,12 +3648,13 @@ NERV:
 		Prerequisites: structures.harbinger, !botplayer
 		ChargeInterval: 4500
 		LifeTime: -1
-		Description: Buzzer Swarm
-		LongDesc: Spawns controllable buzzer swarm which damages anything nearby.
+		Name: Buzzer Swarm
+		Description: Spawns controllable buzzer swarm which damages anything nearby.
 		LaunchSound: buzzers-create.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || empdisable || being-warped
 		DisplayRadarPing: True
+		EffectSequence: idle
 	SpawnActorPower@BUZZERSWARMAI:
 		Actor: BUZZ.AI
 		OrderName: buzzerswarmai
@@ -3646,12 +3662,13 @@ NERV:
 		Prerequisites: structures.harbinger, botplayer
 		ChargeInterval: 6000
 		LifeTime: -1
-		Description: Buzzer Swarm (AI)
-		LongDesc: Spawns controllable buzzer swarm which damages anything nearby.
+		Name: Buzzer Swarm (AI)
+		Description: Spawns controllable buzzer swarm which damages anything nearby.
 		LaunchSound: buzzers-create.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || empdisable || being-warped
 		DisplayRadarPing: True
+		EffectSequence: idle
 	DetonateWeaponPower@STORMSPIKE:
 		OrderName: stormspike
 		Icon: stormspikepower
@@ -3659,9 +3676,9 @@ NERV:
 		Prerequisites: structures.traveler
 		Cursor: ability
 		ChargeInterval: 6000
-		Description: Storm Spike
+		Name: Storm Spike
 		ActivationDelay: 1
-		LongDesc: Creates a temporary storm column.
+		Description: Creates a temporary storm column.
 		LaunchSound: scrinbuild.aud
 		Weapon: StormSpikeSpawner
 		AirburstAltitude: 0c0
@@ -3677,17 +3694,19 @@ NERV:
 		Prerequisites: structures.reaper
 		ChargeInterval: 4500
 		LifeTime: -1
-		Description: Ion Surge
-		LongDesc: Reduces power output of power plants and disables radar within affected area.
+		Name: Ion Surge
+		Description: Reduces power output of power plants and disables radar within affected area.
 		LaunchSound: ionsurge.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || empdisable || being-warped
 		DisplayRadarPing: True
+		EffectSequence: idle
 	Exit:
 
 SCRT:
 	Inherits: ^ScrinBuilding
 	Inherits: ^TechLevelBuilding
+	Inherits: ^Tier3Tech
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^2x2Shape
 	Buildable:
@@ -3731,43 +3750,19 @@ SCRT:
 	ProvidesPrerequisite:
 		Prerequisite: techcenter
 	ProvidesPrerequisite@buildingname:
-	GrantExternalConditionPowerCA@FSHIELD:
-		OrderName: fshield
-		Icon: forceshieldicon
-		ChargeInterval: 7500
-		Condition: forceshield
-		Dimensions: 7, 7
-		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
-		Range: 3
-		Duration: 250
-		Prerequisites: forceshield.enabled, techlevel.high
-		Weapon: ForceShield
-		ActivationDelay: 5
-		AirburstAltitude: 0c0
-		AllowMultiple: false
-		Description: Force Shield
-		LongDesc: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
-		OnFireSound: forceon.aud
-		DisplayTimerStances: Ally
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		EndChargeSpeechNotification: ForceShieldReady
-		DisplayRadarPing: True
-		Cursor: ability
-		PauseOnCondition: disabled || empdisable ||  being-warped
 	GrantExternalConditionPower@FEEDERMUTATION:
 		OrderName: feedermutation
 		Icon: feedermutation
 		Prerequisites: structures.reaper
 		ChargeInterval: 6750
-		Description: Feeder Mutation
+		Name: Feeder Mutation
 		Condition: feedermutation
 		Dimensions: 3, 3
 		Footprint: _x_ xxx _x_
 		ValidRelationships: Ally
 		Duration: 25
 		AllowMultiple: false
-		LongDesc: Transforms Scrin infantry into Feeders which consume resources\nuntil becoming volatile enough to explode.
+		Description: Transforms Scrin infantry into Feeders which consume resources\nuntil becoming volatile enough to explode.
 		OnFireSound: feedermutation.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -3793,8 +3788,6 @@ GRAV:
 		Cost: 500
 	Tooltip:
 		Name: Gravity Stabilizer
-	Selectable:
-		Bounds: 72,48
 	Building:
 		Footprint: xxx xxx ===
 		Dimensions: 3,3
@@ -3869,8 +3862,6 @@ SIGN:
 	Inherits@shape: ^3x2Shape
 	HitShape:
 		TargetableOffsets: -355,-1024,0
-	Selectable:
-		Bounds: 72,48
 	Building:
 		Footprint: xxx xxx ===
 		Dimensions: 3,3
@@ -3918,6 +3909,7 @@ SIGN:
 
 SREP:
 	Inherits: ^ScrinBuilding
+	Inherits@shape: ^3x3Shape
 	HitShape:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
 		Type: Polygon
@@ -3935,9 +3927,6 @@ SREP:
 	Building:
 		Footprint: _+_ +++ _+_
 		Dimensions: 3,3
-	Selectable:
-		Bounds: 68,34,0,3
-		DecorationBounds: 72,48
 	Health:
 		HP: 80000
 	Armor:
@@ -4001,20 +3990,20 @@ SILO.SCRIN:
 	WithResourceLevelSpriteBody:
 		Sequence: stages
 	StoresResources:
-		PipCount: 5
 		Capacity: 3000
-		PipColor: Green
 	-MustBeDestroyed:
 	SpawnActorsOnSell:
 		ActorTypes: c1,c7
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
-	Selectable:
-		Bounds: 24,24
 	Explodes:
 		Weapon: SmallBuildingExplode
 		EmptyWeapon: SmallBuildingExplode
+	WithResourceStoragePipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+		PipCount: 5
 
 MANI:
 	Inherits: ^ScrinBuilding
@@ -4071,8 +4060,8 @@ MANI:
 		OrderName: suppression
 		Icon: spresspower
 		ChargeInterval: 4500
-		Description: Suppression Field
-		LongDesc: Applies a suppression field to the target area, slowing units.
+		Name: Suppression Field
+		Description: Applies a suppression field to the target area, slowing units.
 		Duration: 600
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
@@ -4127,9 +4116,9 @@ RIFT:
 		Icon: riftpower
 		Cursor: ability
 		ChargeInterval: 13500
-		Description: Rift
+		Name: Rift
 		ActivationDelay: 50
-		LongDesc: Initiate a Lightning Storm.\nApplies heavy damage over a large area.
+		Description: Initiate a Lightning Storm.\nApplies heavy damage over a large area.
 		Weapon: RiftInit
 		AllowMultiple: false
 		CameraActor: camera
@@ -4187,8 +4176,6 @@ PTUR:
 		Cost: 600
 	Tooltip:
 		Name: Plasma Cannon
-	Selectable:
-		DecorationBounds: 24,28,0,-6
 	Building:
 	Health:
 		HP: 40000
@@ -4243,8 +4230,6 @@ SHAR:
 		Cost: 800
 	Tooltip:
 		Name: Shard Launcher
-	Selectable:
-		DecorationBounds: 24,44,0,-11
 	Health:
 		HP: 50000
 	Armor:
@@ -4299,8 +4284,6 @@ SCOL:
 		Cost: 1500
 	Tooltip:
 		Name: Storm Column
-	Selectable:
-		DecorationBounds: 24,48,0,-14
 	Health:
 		HP: 45000
 	Armor:
@@ -4585,6 +4568,7 @@ BUZZ:
 	Armament@PRIMARY:
 		Weapon: BuzzerDummyWeapon
 	AttackFrontal:
+		FacingTolerance: 0
 
 BUZZ.AI:
 	Inherits: BUZZ
@@ -4634,7 +4618,6 @@ camera.mediumrift:
 	Inherits: camera.rift
 	RenderSprites:
 		Image: miniriftanim
-		Scale: 1.2
 	PeriodicExplosion:
 		Weapon: MediumRift
 	KillsSelf:
@@ -4648,7 +4631,6 @@ camera.minirift:
 	Inherits: camera.rift
 	RenderSprites:
 		Image: miniriftanim
-		Scale: 0.8
 	PeriodicExplosion:
 		Weapon: MiniRift
 	KillsSelf:
@@ -4729,8 +4711,6 @@ WORMHOLE:
 	WithSpriteBody:
 	ClassicFacingBodyOrientation:
 		QuantizedFacings: 1
-	Selectable:
-		Bounds: 32,32
 	HiddenUnderFog:
 		Type: CenterPosition
 	HitShape:

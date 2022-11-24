@@ -19,6 +19,8 @@
 		Type: Rectangle
 			TopLeft: -512, -512
 			BottomRight: 512, 512
+	Selectable:
+		Bounds: 1024, 1024
 
 ^2x1Shape:
 	HitShape:
@@ -26,6 +28,8 @@
 		Type: Rectangle
 			TopLeft: -1024, -512
 			BottomRight: 1024, 512
+	Selectable:
+		Bounds: 2048, 1024
 
 ^2x2Shape:
 	HitShape:
@@ -33,6 +37,8 @@
 		Type: Rectangle
 			TopLeft: -1024, -1024
 			BottomRight: 1024, 1024
+	Selectable:
+		Bounds: 2048, 2048
 
 ^3x2Shape:
 	HitShape:
@@ -40,6 +46,8 @@
 		Type: Rectangle
 			TopLeft: -1536, -1024
 			BottomRight: 1536, 1024
+	Selectable:
+		Bounds: 3072, 2048
 
 ^3x3Shape:
 	HitShape:
@@ -47,6 +55,8 @@
 		Type: Rectangle
 			TopLeft: -1536, -1536
 			BottomRight: 1536, 1536
+	Selectable:
+		Bounds: 3072, 3072
 
 ^4x2Shape:
 	HitShape:
@@ -54,6 +64,8 @@
 		Type: Rectangle
 			TopLeft: -2048, -1024
 			BottomRight: 2048, 1024
+	Selectable:
+		Bounds: 4096, 2048
 
 ^4x3Shape:
 	HitShape:
@@ -61,6 +73,8 @@
 		Type: Rectangle
 			TopLeft: -2048, -1536
 			BottomRight: 2048, 1536
+	Selectable:
+		Bounds: 4096, 3072
 
 ^BotBuilding:
 	GrantConditionOnBotOwner@BrutalAI:
@@ -227,7 +241,7 @@
 		EmptyCondition: no-ore
 	Selectable:
 		Priority: 7
-		DecorationBounds: 36,36
+		DecorationBounds: 1536, 1536
 	WithHarvestAnimation:
 	WithDockingAnimation:
 	ChangesHealth:
@@ -376,7 +390,7 @@
 		Condition: berserk
 	Berserkable@BERSERK:
 		RequiresCondition: berserkactive
-	WithColoredOverlay@BERSERK:
+	WithModifiedPalette@BERSERK:
 		RequiresCondition: berserkactive
 		Palette: berserk
 	TimedConditionBar@BERSERK:
@@ -396,7 +410,7 @@
 		Modifier: 75
 	ExternalCondition@FRENZY:
 		Condition: frenzy
-	WithColoredOverlay@FRENZY:
+	WithModifiedPalette@FRENZY:
 		RequiresCondition: frenzy
 		Palette: frenzy
 	TimedConditionBar@FRENZY:
@@ -417,12 +431,12 @@
 		SelectionBarColor: 40FFFF
 	Targetable@Temporal:
 		TargetTypes: Temporal
-	WithColoredOverlay@temporal:
+	WithModifiedPalette@temporal:
 		RequiresCondition: being-warped
 		Palette: temporal
 	WithColoredOverlay@temporal2:
 		RequiresCondition: being-warped
-		Palette: lowpower
+		Color: b4000000
 	TimedConditionBar@temporal:
 		Condition: being-warped
 		Color: 2f74e2
@@ -449,7 +463,7 @@
 		Modifier: 125
 	ExternalCondition@SUPPRESSION:
 		Condition: suppression
-	WithColoredOverlay@SUPPRESSION:
+	WithModifiedPalette@SUPPRESSION:
 		RequiresCondition: suppression
 		Palette: suppression
 	TimedConditionBar@SUPPRESSION:
@@ -778,8 +792,9 @@
 			hospitalheal: On, Off
 
 ^IronCurtainable:
-	WithColoredOverlay@IRONCURTAIN:
+	WithModifiedPalette@IRONCURTAIN:
 		RequiresCondition: invulnerability
+		Palette: invuln
 	DamageMultiplier@IRONCURTAIN:
 		RequiresCondition: invulnerability
 		Modifier: 0
@@ -795,7 +810,7 @@
 		RequiresCondition: invulnerability
 
 ^Irradiatable:
-	WithColoredOverlay@IRRADIATABLE:
+	WithModifiedPalette@IRRADIATABLE:
 		Palette: irrad
 		RequiresCondition: irradiated
 	TimedConditionBar@IRRADIATABLE:
@@ -808,7 +823,7 @@
 		RequiresCondition: irradiated
 
 ^ForceShieldable:
-	WithColoredOverlay@FS:
+	WithModifiedPalette@FS:
 		Palette: forces
 		RequiresCondition: forceshield && !invulnerability
 	DamageMultiplier@FS:
@@ -826,7 +841,7 @@
 ^EmpDisable:
 	WithColoredOverlay@EMPDISABLE:
 		RequiresCondition: empdisable
-		Palette: disabled
+		Color: 000000b4
 	TimedConditionBar@EMPDISABLE:
 		Condition: empdisable
 		Color: FFFFFF
@@ -845,13 +860,13 @@
 
 ^EmpVisualEffect:
 	WithColoredOverlay@EMPDISABLE:
-		Palette: disabled
+		Color: b4000000
 	WithIdleOverlay@EMPDISABLE:
 		Sequence: emp-overlay
 		Palette: tseffect
 
 ^NaniteShieldable:
-	WithColoredOverlay@NSHIELD:
+	WithModifiedPalette@NSHIELD:
 		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility)
 		Palette: nrepair
 	TimedConditionBar@NSHIELD:
@@ -890,7 +905,7 @@
 		HealIfBelow: 100
 		DamageCooldown: 0
 		RequiresCondition: nrepair
-	WithColoredOverlay@NREPAIR:
+	WithModifiedPalette@NREPAIR:
 		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && !nrepair ## currently disabled
 		Palette: nrepair
 	TimedConditionBar@NREPAIR:
@@ -957,17 +972,28 @@
 	ExternalCondition@GHIGH:
 		Condition: greenhighlight
 	WithColoredOverlay@GHIGH:
+		Color: 8080ff80
 		RequiresCondition: greenhighlight
-		Palette: greenhighlight
+
+^RedFlash:
+	ExternalCondition@RHIGH:
+		Condition: redhighlight
+	WithColoredOverlay@RHIGH:
+		Color: 80ff4040
+		RequiresCondition: redhighlight
 
 ^WhiteFlash:
 	ExternalCondition@HIGH:
 		Condition: highlight
 	WithColoredOverlay@HIGH:
 		RequiresCondition: highlight
-		Palette: highlight
+		Color: 80ffffff
 
 ^Cloakable:
+	ExternalCondition@CLOAKGENERATOR:
+		Condition: invisibility
+	ExternalCondition@CRATE-CLOAK:
+		Condition: crate-cloak
 	Cloak@EXTERNALCLOAK:
 		RequiresCondition: invisibility && !cloak-force-disabled
 		InitialDelay: 0
@@ -976,18 +1002,14 @@
 		Palette: cloakgreen
 		CloakSound: cloak5.aud
 		UncloakSound: appear1.aud
-		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal, SelfHeal
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage
 	TimedConditionBar@STEALTHGEN:
 		Condition: invisibility
 		Color: 33ff33
-	ExternalCondition@CLOAKGENERATOR:
-		Condition: invisibility
-	ExternalCondition@CRATE-CLOAK:
-		Condition: crate-cloak
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
-	WithColoredOverlay@STEALTHGEN:
+	WithModifiedPalette@STEALTHGEN:
 		RequiresCondition: invisibility
 		Palette: cloakgreen
 
@@ -1010,7 +1032,7 @@
 		Modifier: 116
 		RequiresCondition: chilled == 1
 	WithColoredOverlay@chilled1:
-		Palette: cold1
+		Color: 51aeda1c
 		RequiresCondition: chilled == 1
 	SpeedMultiplier@chilled2:
 		Modifier: 58
@@ -1019,7 +1041,7 @@
 		Modifier: 132
 		RequiresCondition: chilled == 2
 	WithColoredOverlay@chilled2:
-		Palette: cold2
+		Color: 51aeda38
 		RequiresCondition: chilled == 2
 	SpeedMultiplier@chilled3:
 		Modifier: 47
@@ -1028,7 +1050,7 @@
 		Modifier: 148
 		RequiresCondition: chilled == 3
 	WithColoredOverlay@chilled3:
-		Palette: cold3
+		Color: 51aeda54
 		RequiresCondition: chilled == 3
 	SpeedMultiplier@chilled4:
 		Modifier: 40
@@ -1037,17 +1059,26 @@
 		Modifier: 164
 		RequiresCondition: chilled == 4
 	WithColoredOverlay@chilled4:
-		Palette: cold4
+		Color: 51aeda70
 		RequiresCondition: chilled == 4
 	SpeedMultiplier@chilled5:
 		Modifier: 35
-		RequiresCondition: chilled > 4
+		RequiresCondition: chilled == 5
 	DamageMultiplier@chilled5:
-		Modifier: 180
-		RequiresCondition: chilled > 4
+		Modifier: 175
+		RequiresCondition: chilled == 5
 	WithColoredOverlay@chilled5:
-		Palette: cold5
-		RequiresCondition: chilled > 4
+		Color: 51aeda8c
+		RequiresCondition: chilled == 5
+	SpeedMultiplier@chilled6:
+		Modifier: 30
+		RequiresCondition: chilled > 5
+	DamageMultiplier@chilled6:
+		Modifier: 200
+		RequiresCondition: chilled > 5
+	WithColoredOverlay@chilled6:
+		Color: 51aedaa8
+		RequiresCondition: chilled > 5
 
 ^Concussion:
 	TimedConditionBar@concussion:
@@ -1105,7 +1136,7 @@
 		ValidRelationships: Ally, Neutral, Enemy
 	ExternalCondition@detachable:
 		Condition: detach
-	WithColoredOverlay@detach:
+	WithModifiedPalette@detach:
 		Palette: moveflash
 		RequiresCondition: detach
 	AmbientSound@c4:
@@ -1393,7 +1424,7 @@
 	SelectionDecorations:
 	WithSpriteControlGroupDecoration:
 	Selectable:
-		Bounds: 24, 24
+		Bounds: 1024, 1024
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Vehicle, C4, TNT
@@ -1593,8 +1624,8 @@
 	SelectionDecorations:
 	WithSpriteControlGroupDecoration:
 	Selectable:
-		Bounds: 18,18,0,-6
-		DecorationBounds: 12,17,0,-6
+		Bounds: 768, 768, 0, -256
+		DecorationBounds: 512, 725, 0, -256
 	Targetable:
 		RequiresCondition: !parachute && !being-warped
 		TargetTypes: Ground, Infantry, Disguise, TNT
@@ -1836,7 +1867,7 @@
 	SelectionDecorations:
 	WithSpriteControlGroupDecoration:
 	Selectable:
-		Bounds: 24,24
+		Bounds: 1024, 1024
 	Targetable:
 		TargetTypes: Ground, Water, Ship
 		RequiresCondition: !being-warped
@@ -1983,7 +2014,8 @@
 	SelectionDecorations:
 	WithSpriteControlGroupDecoration:
 	Selectable:
-		Bounds: 24,24
+		Bounds: 1536, 1194, 0, 85
+		DecorationBounds: 1706, 1237, 0, 42
 	Aircraft:
 		AirborneCondition: airborne
 		TakeOffOnResupply: true
@@ -2199,7 +2231,7 @@
 	MapEditorData:
 		Categories: Building
 	CommandBarBlacklist:
-	WithColoredOverlay@FLARE:
+	WithModifiedPalette@FLARE:
 		Palette: flare
 		RequiresCondition: flare
 	ExternalCondition@FLARE:
@@ -2309,6 +2341,38 @@
 	GrantExternalConditionToOwner@BuildingsOwned:
 		Condition: TechBuildingsOwned
 
+^Tier2Tech:
+
+^Tier3Tech:
+	Inherits: ^ForceShieldSupportPower
+
+^Tier4Tech:
+
+^ForceShieldSupportPower:
+	GrantExternalConditionPowerCA@FSHIELD:
+		OrderName: fshield
+		Icon: forceshieldicon
+		ChargeInterval: 7500
+		Condition: forceshield
+		Dimensions: 7, 7
+		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
+		Duration: 250
+		Prerequisites: forceshield.enabled, techlevel.high
+		Weapon: ForceShield
+		ActivationDelay: 5
+		AirburstAltitude: 0c0
+		AllowMultiple: false
+		Name: Force Shield
+		Description: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
+		OnFireSound: forceon.aud
+		DisplayTimerStances: Ally
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		EndChargeSpeechNotification: ForceShieldReady
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable ||  being-warped
+
 ^DefenseBalancing:
 	Buildable:
 		BuildDurationModifier: 100
@@ -2345,10 +2409,10 @@
 	Inherits@mind: ^MindControllable
 	Inherits@gpsscramble: ^GpsScramble
 	Inherits: ^DefenseBalancing
-	WithColoredOverlay@IRONCURTAIN:
+	WithModifiedPalette@IRONCURTAIN:
 		RequiresCondition: invulnerability
 	Selectable:
-		Bounds: 24,24
+		Bounds: 1024, 1024
 	Targetable:
 		TargetTypes: Ground, C4, TNT, DetonateAttack, Structure, Defense
 	DetectCloaked:
@@ -2358,7 +2422,7 @@
 		RequiredForShortGame: false
 	-GivesBuildableArea:
 	-AcceptsDeliveredCash:
-	-WithColoredOverlay@FS:
+	-WithModifiedPalette@FS:
 	-DamageMultiplier@FS:
 	-TimedConditionBar@FS:
 	-ExternalCondition@FS:
@@ -2412,8 +2476,6 @@
 	Inherits@shape: ^1x1Shape
 	Inherits@3: ^Cloakable
 	Inherits@handicaps: ^PlayerHandicaps
-	Interactable:
-		Bounds: 24,24
 	OwnerLostAction:
 		Action: ChangeOwner
 	Building:
@@ -2520,6 +2582,7 @@
 ^AmmoBox:
 	Inherits: ^TechBuilding
 	-Selectable:
+	Interactable:
 	SelectionDecorations:
 		RenderSelectionBars: False
 	Health:
@@ -2534,8 +2597,6 @@
 		Type: Light
 	MapEditorData:
 		Categories: Decoration
-	Interactable:
-		Bounds: 24,24
 
 ^CivBuilding:
 	Inherits: ^TechBuilding
@@ -2565,11 +2626,11 @@
 	-Explodes:
 	-Explodes@CIVPANIC:
 	-Selectable:
+	Interactable:
 	-SelectionDecorations:
 	Tooltip:
 		Name: Field
 	-Targetable:
-	Interactable:
 
 ^TibTree:
 	Inherits@1: ^SpriteActor
@@ -2594,7 +2655,6 @@
 ^Tree:
 	Inherits@1: ^SpriteActor
 	Inherits@shape: ^1x1Shape
-	Interactable:
 	Tooltip:
 		Name: Tree
 		ShowOwnerRow: false
@@ -2643,7 +2703,8 @@
 
 ^TreeHusk:
 	Inherits@1: ^SpriteActor
-	Interactable:
+	Interactable
+		Bounds: 1024, 1024
 	RenderSprites:
 		Palette: terrain
 	AppearsOnRadar:
@@ -2701,7 +2762,7 @@
 		Types: Husk
 		ForceHealthPercentage: 25
 	WithColoredOverlay@IDISABLE:
-		Palette: disabled
+		Color: 000000b4
 	Targetable:
 		TargetTypes: Ground, Husk, NoAutoTarget
 		RequiresForceFire: true
@@ -2832,8 +2893,9 @@
 	ScriptTriggers:
 	BodyOrientation:
 		QuantizedFacings: 1
+	-Selectable
 	Interactable:
-		Bounds: 96,48
+		Bounds: 4096, 2048
 	ShakeOnDeath:
 		Duration: 15
 		Intensity: 6
@@ -2873,7 +2935,7 @@
 ^Crate:
 	Inherits@1: ^SpriteActor
 	Interactable:
-		Bounds: 24,24
+		Bounds: 1024, 1024
 	HiddenUnderFog:
 	Tooltip:
 		Name: Crate
@@ -2907,7 +2969,7 @@
 ^Mine:
 	Inherits: ^SpriteActor
 	Interactable:
-		Bounds: 24,24
+		Bounds: 1024, 1024
 	WithSpriteBody:
 	HiddenUnderFog:
 	Mine:
@@ -2939,7 +3001,7 @@
 ^DisableOnLowPower:
 	WithColoredOverlay@IDISABLE:
 		RequiresCondition: disabled && !(invulnerability || empdisable || being-warped)
-		Palette: disabled
+		Color: 000000b4
 	GrantConditionOnPowerState@LOWPOWER:
 		Condition: lowpower
 		ValidPowerStates: Low, Critical
@@ -2950,7 +3012,7 @@
 ^DisableOnLowPowerOrForceDisabled:
 	WithColoredOverlay@IDISABLE:
 		RequiresCondition: disabled && !(invulnerability || empdisable || forceshield || being-warped)
-		Palette: disabled
+		Color: 000000b4
 	GrantConditionOnPowerState@LOWPOWER:
 		Condition: lowpower
 		ValidPowerStates: Low, Critical
@@ -3036,7 +3098,7 @@
 ^DisabledByPowerOutage:
 	WithColoredOverlay@IDISABLE:
 		RequiresCondition: disabled && !forceshield && !invulnerability && !empdisable
-		Palette: disabled
+		Color: b4000000
 	ExternalCondition:
 		Condition: forcedisabled
 	TimedConditionBar@FSDISABLE:
@@ -3069,7 +3131,7 @@
 		Prerequisites: radar-active
 	WithColoredOverlay@DRONEDISABLE:
 		RequiresCondition: !radarenabled || empdisable
-		Palette: disabled
+		Color: b4000000
 	WithDecoration@DRONEDISABLE:
 		Image: nosignal
 		Sequence: offline
@@ -3131,7 +3193,7 @@
 	SelectionDecorations:
 	WithSpriteControlGroupDecoration:
 	Selectable:
-		Bounds: 24,24
+		Bounds: 1024, 1024
 	Targetable:
 		TargetTypes: Ground, Infantry, Creep
 	AutoTarget:
@@ -3319,7 +3381,7 @@
 		Color: FF0000
 
 ^ReflectorArmor:
-	WithColoredOverlay@energized:
+	WithModifiedPalette@energized:
 		RequiresCondition: energized
 		Palette: nrepair
 	Armor:
@@ -3447,7 +3509,7 @@
 		ValidRelationships: Ally, Neutral, Enemy
 	ExternalCondition@detachable:
 		Condition: detach
-	WithColoredOverlay@detach:
+	WithModifiedPalette@detach:
 		Palette: moveflash
 		RequiresCondition: detach
 	AmbientSound@tnt:
@@ -3750,7 +3812,7 @@
 		ShowSelectionBar: true
 		SelectionBarColor: 44FF00
 		RequiresCondition: !driver-dead
-	WithColoredOverlay@IRRADIATABLE:
+	WithModifiedPalette@IRRADIATABLE:
 		Palette: irrad-weak
 		RequiresCondition: being-poisoned
 	DriverPoisonedByTintedCells@RAD:

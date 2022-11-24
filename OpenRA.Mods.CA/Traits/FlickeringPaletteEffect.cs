@@ -34,7 +34,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly int AmplitudeBlue = 0;
 
 		public readonly int QuantizationCount = 16;
-
+		
 		public readonly int? ShadowIndex = 4;
 
 		public override object Create(ActorInitializer init) { return new FlickeringPaletteEffect(this); }
