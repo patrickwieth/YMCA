@@ -652,7 +652,7 @@ chdragon:
 		Name: Dragon Tank
 	Buildable:
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.china, ~commander_tree.dragon_tank.pdl, ~commander_tree.dragon_tank.reflector
+		Prerequisites: ~vehicles.china, ~!commander_tree.dragon_tank.pdl, ~!commander_tree.dragon_tank.reflector
 		Queue: Vehicle
 		Description: Flame tank.\nCan deploy to create a fire wall.\n  Strong vs Infantry\n  Weak vs Tanks
 	TooltipExtras:
@@ -669,20 +669,20 @@ chdragon:
 	Turreted:
 		TurnSpeed: 9
 		Offset: 150,0,150
-	Armament@Normal:
+	Armament:
 		Weapon: CHDragonFlamer
 		Recoil: 85
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
-		RequiresCondition: !blacknapalm && !deployed
-	Armament@Normal:
+		RequiresCondition: blacknapalm && !deployed
+	Armament@Black_Napalm:
 		Weapon: CHDragonFlamer.Black_Napalm
 		Recoil: 85
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
-		RequiresCondition: blacknapalm && !deployed
+		RequiresCondition: !blacknapalm && !deployed
 	Armament@Firewall1:
 		Name: firewall1
 		Weapon: CHDragonFirestorm
@@ -690,14 +690,14 @@ chdragon:
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
-		RequiresCondition: !flameupgrade && deployed && firewallcycle < 1
+		RequiresCondition: deployed && firewallcycle < 1
 	Armament@Firewall2:
 		Weapon: CHDragonFirestorm2
 		Recoil: 85
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
-		RequiresCondition: !flameupgrade && deployed && firewallcycle >= 1
+		RequiresCondition: deployed && firewallcycle >= 1
 	GrantConditionOnDeploy:
 		DeployedCondition: deployed
 		SkipMakeAnimation: true
@@ -924,7 +924,7 @@ choutpost:
 		PauseOnCondition: cloak-force-disabled || base-reveal || disabled || driver-dead
 		IsPlayerPalette: true
 	RenderSprites:
-		Scale: 0.89
+		Scale: 0.3
 
 choutpost.Propaganda:
 	Inherits: choutpost
@@ -1075,6 +1075,8 @@ checm:
 		RequiresCondition: attacking
 	Voiced:
 		VoiceSet: ECMTankVoice
+	RenderSprites:
+		Scale: 0.75
 
 checm.pulse:
 	Inherits: checm
@@ -1119,7 +1121,6 @@ checm.chain:
 		Weapon: CHECMBeam.Chain
 		Recoil: 64
 
-
 CHTRUK:
 	Inherits: TRUK
 	Buildable:
@@ -1158,7 +1159,7 @@ chcrawl:
 	Voiced:
 		VoiceSet: TroopCrawlerVoice
 	RenderSprites:
-		Scale: 0.89
+		Scale: 0.75
 
 chcrawl2:
 	Inherits: chcrawl
