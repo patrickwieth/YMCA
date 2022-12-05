@@ -415,6 +415,7 @@ SU47:
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
 		Prerequisites: ~afld, stek, ~commander_tree.mig.aa
+		IconPalette: chrome
 		Description: Air Superiority fighter aircraft.\n  Can attack aircraft. \n  Strong vs Aircraft \n  Weak vs Infantry
 	Valued:
 		Cost: 1750
@@ -483,6 +484,7 @@ SUK:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
+		IconPalette: chrome
 		Prerequisites: ~afld, stek, ~commander_tree.sukhoi, ~!commander_tree.sukhoi_concussion
 		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
 	Valued:
@@ -597,6 +599,7 @@ FROG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
+		IconPalette: chrome
 		Prerequisites: ~afld, ~aircraft.soviet, ~commander_tree.frogfoot, ~techlevel.high
 		Description: Bomber armed with explosive bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
@@ -1107,6 +1110,7 @@ NHAW:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
+		IconPalette: chrome
 		Prerequisites: ~aircraft.england, ~commander_tree.air_logistics
 		Description: Fast infantry transport helicopter armed with\n  a light machine gun.
 	TooltipExtras:
@@ -1710,30 +1714,20 @@ HUEY:
 HUEY.recon:
 	Inherits: HUEY
 	Inherits: ^HelicopterTD
+	Inherits@recon: ^SensorEquipment
 	Inherits@TRANSPORT: ^Transport
 	Buildable:
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.recon, ~techlevel.medium
+		IconPalette: chrome
 		Description: Helicopter equipped with sensor equipment.\n Can detect stealth units.\n Sniper can shoot from the Huey.\n Spec Ops can use their marker from the Huey.\n  Strong as Support\n  Weak vs Aircraft
 	Valued:
 		Cost: 1000
 	Tooltip:
 		Name: Recon Huey
-	RevealsShroud:
-		Range: 14c0
-		MinRange: 8c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 10c0
-		Type: GroundPosition
-	DetectCloaked:
-		DetectionTypes: Cloak, Thief, Underwater
-		Range: 8c0
 	Aircraft:
 		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
 	-Armament@PRIMARY:
 	-Armament@SECONDARY:
-	-AmmoPool:
 	Armament@flare:
 		Name: primary
 		Weapon: Flare
@@ -1773,10 +1767,8 @@ HUEY.recon:
 		Sequence: slow-rotor
 		Offset: 200,0,300
 		RequiresCondition: !airborne
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 	WithCargoPipsDecoration:
+		Pips: 1
 		Position: BottomLeft
 		RequiresSelection: true
 
@@ -2902,6 +2894,7 @@ KIRO:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
+		IconPalette: chrome
 		BuildDurationModifier: 115
 		Prerequisites: ~afld, stek, ~aircraft.soviet, ~commander_tree.kirov, ~techlevel.high
 		Description: Heavily armoured airship equipped with specialised bombs.\n  Vulnerable when dropping bombs.\n  Strong vs Buildings, Infantry, Slow Vehicles\n  Weak vs Aircraft
@@ -3231,6 +3224,7 @@ HARR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
+		IconPalette: chrome
 		Prerequisites: atek, ~hpad, ~aircraft.allies, ~commander_tree.harrier, ~!commander_tree.harrier.avionics, ~!commander_tree.harrier.payload, ~techlevel.high
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n  Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
@@ -3370,6 +3364,7 @@ Raptor:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
+		IconPalette: chrome
 		Prerequisites: ~afld.allies, ~aircraft.allies, ~commander_tree.raptor, ~techlevel.high
 		Description: Fast Fighter Jet armed\nwith powerful Air-to-Air missiles.\n  Strong vs Aircraft\n  Weak vs Ground
 	Valued:
@@ -4092,6 +4087,7 @@ AURORA:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
+		IconPalette: chrome
 		Prerequisites: atek, ~afld.allies, ~aircraft.allies, ~commander_tree.aurora, ~techlevel.high
 		Description: Supersonic bomber armed with the Mother of all Bombs.\n  Strong vs Buildings, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
