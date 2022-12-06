@@ -288,7 +288,10 @@ U3:
 	Inherits: ^Soldier
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
 	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, relayTarget
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+	AutoTargetPriority@HighPrio:
+		ValidTargets: relayTarget
+		Priority: 10
 	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
 	Valued:
@@ -346,7 +349,7 @@ U3:
 		PauseOnCondition: !ammo
 		RequiresCondition: cryr-upgrade && deployed
 	Armament@tertiary:
-		Name: primary
+		Name: deployed
 		Weapon: Dragon.Relay
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
@@ -2737,6 +2740,7 @@ SHAD.Commando:
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
+		IconPalette: chrome
 		BuildPaletteOrder: 85
 		BuildLimit: 1
 		Prerequisites: ~infantry.nod, techcenter, ~commander_tree.advanced_infantry_training
