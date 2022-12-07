@@ -2315,7 +2315,6 @@ HTNK.Hover:
 	Mobile:
 		Speed: 92
 		TurnSpeed: 56
-		Locomotor: hover
 	LeavesTrails:
 		Image: twake
 		Palette: effect
@@ -2500,6 +2499,8 @@ MLRS.Multi:
 		Description: Long-range multiple rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
 	Tooltip:
 		Name: SSM Multi Launcher
+	Valued:
+		Cost: 1200
 	Armament:
 		Weapon: honestjohn.multi
 		LocalOffset: 0,171,0, 0,-171,0
@@ -3646,10 +3647,12 @@ TITN.Railgun.Reflector:
 		Name: Railgun Titan (Reflector)
 
 JUGG:
-	Inherits: TITN
+	Inherits: ^TankTD
 	Inherits: ^BigVehicle
-	RenderSprites:
-		Image: jugg
+	Inherits: ^HighResShadow
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@BERSERK: ^Berserk
 	Tooltip:
 		Name: Juggernaut
 	Buildable:
@@ -3660,23 +3663,47 @@ JUGG:
 		Description: Tough artillery battle-mech.\n  Strong vs Infantry, Structures\n  Weak vs Aircraft
 	Valued:
 		Cost: 2000
+	Armor:
+		Type: Heavy
+	Selectable:
+		Bounds: 30,40,0,0
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 7c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
 	Mobile:
 		Locomotor: sheavytracked
 		Speed: 50
 		Voice: Move
-	SpeedMultiplier:
+	QuantizeFacingsFromSequence:
+		Sequence: stand
+	WithFacingSpriteBody:
+		Sequence: stand
+	WithMoveAnimation:
+		MoveSequence: run
+	WithAttackAnimation:
+		Sequence: shoot
+		RequiresCondition: aiming && !attacking
+	WithDeathAnimation:
+		Sequence: die
+		UseDeathTypeSuffix: false
+		RequiresCondition: disabled && !disabled
+	SpeedMultiplier
 		Modifier: 0
 		RequiresCondition: attacking
 	Armament@PRIMARY:
 		Weapon: JuggernautGun
-		LocalOffset: 830,0,500, 830,100,500, 830,-100,500
+		LocalOffset: 830,-200,500, 830,200,500, 830,00,500
+		MuzzleSequence: muzzle
+		FireDelay: 33
 		PauseOnCondition: !ammo || moving
-	AttackTurreted:
+	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
-	Turreted:
-		TurnSpeed: 12
-		Offset: -20,0,20
+	GrantConditionWhileAiming:
+		Condition: aiming
 	GrantConditionOnAttack:
 		Condition: attacking
 		RevokeDelay: 50
@@ -3693,19 +3720,16 @@ JUGG:
 		Count: 3
 		ResetOnFire: True
 		PauseOnCondition: moving
-	-Armament@SECONDARY:
-	-ChangesHealth@DEFAULT:
 	Health:
-		HP: 50000
+		HP: 60000
 	Voiced:
 		VoiceSet: DisrVoice
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
+	WithMuzzleOverlay:
 
 DISR:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
+	Inherits: ^HighResShadow
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -3790,7 +3814,6 @@ HMLRS:
 		Description: Prototype Hover Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Infantry, Vehicles, Buildings
 	Mobile:
 		Speed: 113
-		Locomotor: hover
 	Health:
 		HP: 18000
 	Turreted:
@@ -4308,7 +4331,7 @@ MSAR.Nod:
 
 MSAR.PLD:
 	Inherits: MSAR
-	Inherits@PLD: ^PointLaserDefenseSystemBig
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 240
@@ -4321,7 +4344,7 @@ MSAR.PLD:
 
 MSAR.PLD.Nod:
 	Inherits: MSAR
-	Inherits@PLD: ^PointLaserDefenseSystemBig
+	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 240
@@ -4334,7 +4357,8 @@ MSAR.PLD.Nod:
 	-ProximityExternalCondition@Bino:
 
 PTNK:
-	Inherits: ^Vehicle
+	Inherits: ^TankTD
+	Inherits: ^HighResShadow
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
@@ -4357,10 +4381,10 @@ PTNK:
 		Voice: Move
 	Turreted:
 		TurnSpeed: 48
-		Offset: 100,0,0
+		Offset: 0,0,0
 	Armament:
 		Weapon: PrisTLaser
-		LocalOffset: 100,0,140
+		LocalOffset: 100,0,350
 	AttackTurreted:
 		TargetFrozenActors: True
 		OpportunityFire: False
@@ -4390,10 +4414,11 @@ PBLASTER:
 		LocalOffset: 100,0,140
 
 PCAN:
-	Inherits: ^Vehicle
+	Inherits: ^TankTD
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	Inherits: ^HighResShadow
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 130
@@ -4412,7 +4437,7 @@ PCAN:
 	Armament:
 		Weapon: PrisCLaser
 		FireDelay: 10
-		LocalOffset: 400,0,180
+		LocalOffset: 900,0,300
 		PauseOnCondition: empdisable || being-warped
 	AttackFrontal:
 		TargetFrozenActors: True
@@ -5332,7 +5357,6 @@ SLNG:
 		Description: Fast, lightly armoured anti-air unit.\n  Strong vs Aircraft\n Weak vs Infantry, Vehicles, Buildings
 	Mobile:
 		Speed: 133
-		Locomotor: hover
 	LeavesTrails:
 		Image: twake
 		Palette: effect
@@ -5800,7 +5824,7 @@ APOC:
 XO:
 	Inherits: ^VehicleTD
 	Inherits@detect: ^SensorEquipment
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
 	RenderSprites:
