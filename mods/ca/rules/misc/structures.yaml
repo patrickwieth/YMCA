@@ -1,0 +1,109 @@
+OILP:
+	Inherits: ^BuildingTD
+	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@shape: ^1x1Shape
+	RenderSprites:
+		Palette: player
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 200
+		IconPalette: chrometd
+		Prerequisites: ~anypower, ~commander_tree.oil_pumps
+		Description: Gives a steady income from oil drilling.
+	Valued:
+		Cost: 500
+	Health:
+		HP: 25000
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+	Tooltip:
+		Name: Oil Pump
+		ShowOwnerRow: True
+	Power:
+		Amount: -25
+		RequiresCondition: !being-warped
+	WithSpriteBody:
+		PauseOnCondition: disabled || being-warped
+	CashTrickler:
+		Interval: 125
+		Amount: 10
+		PauseOnCondition: disabled
+	Explodes:
+		Weapon: BarrelExplode
+
+Oil_Platform:
+	Inherits: ^BuildingTD
+	Inherits@shape: ^4x4Shape
+	WithShadow:
+		Offset: 100, 256, 0
+		ZOffset: -256
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 40
+		Prerequisites: ~anypower, ~commander_tree.oil_pumps, ~!global.nonaval
+		Description: Generates income through oil exploitation. \nPlacing many within range circle decreases efficiency.
+	Valued:
+		Cost: 4000
+	Tooltip:
+		Name: Oil Platform
+	Targetable:
+		TargetTypes: Ground, Water, Structure, WaterStructure, C4, DetonateAttack, SpyInfiltrate
+	Building:
+		Footprint: XXXX XXXX XXXX XXXX
+		Dimensions: 4,4
+		TerrainTypes: Water
+	RequiresBuildableArea:
+		Adjacent: 8
+	-GivesBuildableArea:
+	Health:
+		HP: 75000
+	Armor:
+		Type: Wood
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Power:
+		Amount: -50
+		RequiresCondition: !being-warped
+	WithIdleOverlay@crane:
+		Sequence: crane
+		Interval: 0
+	WithIdleOverlay@waves:
+		Sequence: waves
+		Interval: 0
+	-SpawnActorsOnSell:
+	-SpawnActorOnDeath:
+	-SpawnRandomActorOnDeath:
+	ProximityExternalCondition@oilextraction:
+		Range: 7c0
+		ValidRelationships: Ally, Neutral, Enemy
+		Condition: oilextraction
+	WithRangeCircle@oilextraction:
+		Color: 888899AA
+		Range: 7c0
+	ExternalCondition@oilextraction:
+		Condition: oilextraction
+	CashTrickler@1:
+		Interval: 125
+		Amount: 120
+		PauseOnCondition: disabled
+		RequiresCondition: !oilextraction
+	CashTrickler@2:
+		Interval: 125
+		Amount: 80
+		PauseOnCondition: disabled
+		RequiresCondition: oilextraction == 1
+	CashTrickler@3:
+		Interval: 125
+		Amount: 60
+		PauseOnCondition: disabled
+		RequiresCondition: oilextraction == 2
+	CashTrickler@4:
+		Interval: 125
+		Amount: 40
+		PauseOnCondition: disabled
+		RequiresCondition: oilextraction > 2
