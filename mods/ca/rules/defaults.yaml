@@ -222,8 +222,13 @@
 		DockAngle: 256
 		DockOffset: 1,2
 	StoresResources:
-		PipCount: 17
 		Capacity: 2000
+	WithResourceStoragePipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		PipCount: 17
+		FullSequence: pip-yellow
 	CustomSellValue:
 		Value: 600
 	CashHackable:
@@ -241,16 +246,27 @@
 	Inherits@balance: ^HarvesterBalancer
 	Harvester:
 		Capacity: 30
-		PipCount: 6
 		Resources: Tiberium, BlueTiberium, Ore, Gems
 		BaleUnloadDelay: 1
+		BaleLoadDelay: 4
 		SearchFromProcRadius: 30
 		SearchFromHarvesterRadius: 15
+		HarvestFacings: 8
 		EmptyCondition: no-ore
+	WithHarvesterPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		PipCount: 5
+		ResourceSequences:
+			Ore: pip-yellow
+			Gems: pip-red
+			Tiberium: pip-green
+			BlueTiberium: pip-blue
 	Selectable:
 		Priority: 7
 		DecorationBounds: 1536, 1536
-	WithHarvestAnimation:
+	WithHarvestAnimationCA:
 	WithDockingAnimation:
 	ChangesHealth:
 		PercentageStep: 1
