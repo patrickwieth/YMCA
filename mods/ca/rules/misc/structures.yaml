@@ -107,3 +107,34 @@ Oil_Platform:
 		Amount: 40
 		PauseOnCondition: disabled
 		RequiresCondition: oilextraction > 2
+
+Swiss_Bank:
+	Inherits: ^Building
+	Inherits@IDISABLE: ^DisableOnLowPower
+	Inherits@shape: ^2x2Shape
+	RenderSprites:
+		Palette: player
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 200
+		IconPalette: chrometd
+		Prerequisites: ~anypower, ~global.swiss_banks
+		Description: Transfers Money to your allies. \nAvoids taxes.
+	Valued:
+		Cost: 500
+	Health:
+		HP: 25000
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+	Tooltip:
+		Name: Swiss Bank
+		ShowOwnerRow: True
+	CashTransferToAllies:
+	Power:
+		Amount: -25
+		RequiresCondition: !being-warped
+	WithSpriteBody:
+		PauseOnCondition: disabled || being-warped
+	Explodes:
+		Weapon: BarrelExplode
