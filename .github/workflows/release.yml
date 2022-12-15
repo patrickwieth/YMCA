@@ -7,74 +7,100 @@ on:
       - "v*" # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  build:
-    runs-on: ubuntu-18.04
+  linux:
+    name: Linux AppImages
+    runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Clone Repository
+        uses: actions/checkout@v2
 
-      - name: Branch name
-        id: branch_name
+      - name: Install .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Prepare Environment
+        run: echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_ENV}
+
+      - name: Package AppImage
         run: |
-          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
-          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
-          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
-
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        # Ignore the failure of a step and avoid terminating the job.
-        continue-on-error: true
-
-      - name: Build docker
-        run: docker build -t openra-build .
-
-      - name: Build CA
-        run: docker run -e RELEASE_VERSION=${{ steps.branch_name.outputs.SOURCE_TAG }} -v $GITHUB_WORKSPACE:/workdir --rm openra-build ./build-docker.sh
-
-      #    - uses: actions/upload-artifact@v2
-      #      with:
-      #        name: release-${{ steps.branch_name.outputs.SOURCE_TAG }}
-      #        path: ./build/
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          make engine
+          mkdir -p build/linux
+          ./packaging/linux/buildpackage.sh "${GIT_TAG}" "${PWD}/build/linux"
+      - name: Upload Packages
+        uses: svenstaro/upload-release-action@v2
         with:
-          tag_name: ${{ steps.branch_name.outputs.SOURCE_TAG }}
-          release_name: Release ${{ steps.branch_name.outputs.SOURCE_TAG }}
-          draft: true
-          prerelease: false
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+          file: build/linux/*
 
-      - name: Upload Release Asset (Linux AppImage)
-        id: upload-release-asset-linux-appimage
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x86_64.AppImage
-          asset_name: CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x86_64.AppImage
-          asset_content_type: application/octet-stream
+  macos:
+    name: macOS Disk Images
+    runs-on: macos-11
 
-      - name: Upload Release Asset (Windows Portable)
-        id: upload-release-asset-windows-portable
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x64-winportable.zip
-          asset_name: CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x64-winportable.zip
-          asset_content_type: application/zip
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v2
 
-      - name: Upload Release Asset (Windows Setup)
-        id: upload-release-asset-windows-setup
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install .NET 6
+        uses: actions/setup-dotnet@v1
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x64.exe
-          asset_name: CombinedArms-${{ steps.branch_name.outputs.SOURCE_TAG }}-x64.exe
-          asset_content_type: application/octet-stream
+          dotnet-version: '6.0.x'
+
+      - name: Prepare Environment
+        run: echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_ENV}
+
+      - name: Package Disk Images
+        env:
+          MACOS_DEVELOPER_IDENTITY: ${{ secrets.MACOS_DEVELOPER_IDENTITY }}
+          MACOS_DEVELOPER_CERTIFICATE_BASE64: ${{ secrets.MACOS_DEVELOPER_CERTIFICATE_BASE64 }}
+          MACOS_DEVELOPER_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_DEVELOPER_CERTIFICATE_PASSWORD }}
+          MACOS_DEVELOPER_USERNAME: ${{ secrets.MACOS_DEVELOPER_USERNAME }}
+          MACOS_DEVELOPER_PASSWORD: ${{ secrets.MACOS_DEVELOPER_PASSWORD }}
+        run: |
+          make engine
+          mkdir -p build/macos
+          ./packaging/macos/buildpackage.sh "${GIT_TAG}" "${PWD}/build/macos"
+      - name: Upload Packages
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+          file: build/macos/*
+
+  windows:
+    name: Windows Installers
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v2
+
+      - name: Install .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Prepare Environment
+        run: |
+          echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_ENV}
+          sudo apt-get update
+          sudo apt-get install nsis wine64
+      - name: Package Installers
+        run: |
+          make engine
+          mkdir -p build/windows
+          ./packaging/windows/buildpackage.sh "${GIT_TAG}" "${PWD}/build/windows"
+      - name: Upload Packages
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          overwrite: true
+          file_glob: true
+          file: build/windows/*
