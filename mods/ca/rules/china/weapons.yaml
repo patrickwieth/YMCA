@@ -47,13 +47,13 @@ CHMineExplosive:
 		Spread: 512
 		Damage: 30000
 		InvalidTargets: Infantry
-		ValidStances: Neutral, Enemy
+		ValidRelationships: Neutral, Enemy
 		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Dam: SpreadDamage
 		Spread: 0c512
 		Damage: 10000
 		ValidTargets: Infantry
-		ValidStances: Neutral, Enemy
+		ValidRelationships: Neutral, Enemy
 		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@3Eff: CreateEffect
 		Explosions: artillery_explosion
@@ -68,19 +68,19 @@ CHNeutronMineExplosive:
 		Falloff: 100, 100
 		Damage: 10000
 		ValidTargets: Infantry
-		ValidStances: Neutral, Enemy
+		ValidRelationships: Neutral, Enemy
 		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Clear: OpenToppedDamage
 		Spread: 1c0
 		Damage: 15000
 		ValidTargets: LoadedVehicle
-		ValidStances: Enemy
+		ValidRelationships: Enemy
 		Amount: 6
 		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@3Driver: ChangeOwnerToNeutral
 		Range: 1c0
 		ValidTargets: DriverKill
-		ValidStances: Enemy
+		ValidRelationships: Enemy
 		InvalidTargets: LoadedVehicle, DriverKillImmune
 	Warhead@4Eff: CreateEffect
 		Explosions: artillery_explosion
@@ -282,7 +282,7 @@ CHAtomicTankExplode:
 CHAtomicTankExplode2:
 	Inherits: CHAtomicTankExplode
 	Warhead@1Dam: SpreadDamage
-		ValidStances: Enemy, Neutral
+		ValidRelationships: Enemy, Neutral
 	-Warhead@3Radiation:
 
 NukeCannonDummyAim:
@@ -523,55 +523,26 @@ CHSuperHackerCharge:
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Structure, Vehicle
 
-CHHackerDisable:
-	ReloadDelay: 200
+CHLotusDisable:
+	ReloadDelay: 100
 	Report: ucapture.aud
-	Range: 6c0
+	Range: 12c0
 	TargetActorCenter: true
-	ValidTargets: Defense
+	ValidTargets: Building, Structure, Defense, Vehicle
 	InvalidTargets: Mine
-	Projectile: LaserZap
-		Width: 0c43
-		UsePlayerColor: True
+	Projectile: ArcLaserZap
+		Color: 1ce31270
+		Angle: 60
+		Width: 86
+		Duration: 20
+		HitAnim: empty
 	Warhead@1Dam: TargetDamage
 		Damage: 0
 	Warhead@2Con: GrantExternalCondition
 		Condition: empdisable
-		Duration: 200
+		Duration: 500
 		Range: 1c0
-		ValidTargets: Building, Structure
-
-CHLotusDisable:
-	Inherits: CHHackerDisable
-	ReloadDelay: 200
-	ValidTargets: Vehicle
-	Warhead@2Con: GrantExternalCondition
-		Duration: 400
-		Range: 0c768
-		ValidTargets: Vehicle
-
-CHSuperLotusDisable:
-	Inherits: CHHackerDisable
-	ReloadDelay: 200
-	Warhead@2Con: GrantExternalCondition
-		Duration: 400
-
-CHLotusCharge:
-	Inherits: CHSuperHackerCharge
-	ValidTargets: Structure, Vehicle
-	InvalidTargets: Defense, Mine
-
-CHSuperLotusCharge:
-	Inherits: CHLotusCharge
-	ValidTargets: Structure, Vehicle
-	InvalidTargets: Mine
-
-CHLotusControl:
-	Inherits: EnslaveStructure
-	ReloadDelay: 120
-	Report: ucapture.aud
-	ValidTargets: MindControlStructure
-	InvalidTargets: Defense
+		ValidTargets: Building, Structure, Defense, Vehicle
 
 CHECMBeam:
 	Inherits: ^Energy
@@ -642,9 +613,9 @@ CHECMBeam.Arc2:
 		BrightZaps: 0
 		DimZaps: 1
 
-
 CHECMDisable:
 	Inherits: CHECMBeam
+	ValidTargets: Vehicle
 	Burst: 1
 	Report: vfrelo2a.aud
 	Warhead@2Ext: GrantExternalCondition
@@ -652,7 +623,8 @@ CHECMDisable:
 		Duration: 200
 		Range: 0c768
 		ValidTargets: Vehicle
-
+	Warhead@1Dam: SpreadDamage
+		Damage: 0
 
 CHInfernoCannon:
 	Inherits: ^ShellArtillery
@@ -732,7 +704,7 @@ CHFlame:
 		Falloff: 100, 75, 50, 25
 		Damage: 800
 		ValidTargets: Ground, Water
-		ValidStances: Neutral, Enemy
+		ValidRelationships: Neutral, Enemy
 		InvalidTargets: Mine
 		AffectsParent: True
 		DamageTypes: Prone100Percent, TriggerProne, FireDeath, Incendiary

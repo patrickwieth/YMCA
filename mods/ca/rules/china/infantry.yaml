@@ -121,10 +121,10 @@ CHHACKER:
 		Name: Hacker
 	Buildable:
 		BuildPaletteOrder: 40
-		Prerequisites: barracks, chpropaganda, ~infantry.china, ~!infantry.chinainf
+		Prerequisites: barracks, chpropaganda, ~infantry.china
 		Queue: Infantry
 		IconPalette: chrometd
-		Description: Computer specialist.\n Can deploy to provide money\n Can disable buildings
+		Description: Computer specialist.\n Can deploy to provide money\n
 	Mobile:
 		Speed: 65
 		PauseOnCondition: disabled || hacking
@@ -136,25 +136,8 @@ CHHACKER:
 		RequireForceMoveCondition: !undeployed
 		CargoConditions:
 			chinternetcenter: indoors
-			schinternetcenter: indoors
-			schhackvan: indoors
 	Health:
 		HP: 8000
-	Armament@PRIMARY:
-		Weapon: CHHackerDisable
-		RequiresCondition: undeployed
-		PauseOnCondition: !hack-complete
-	Armament@PRIMARYCHARGE:
-		Name: secondary
-		Weapon: CHHackerCharge
-		RequiresCondition: undeployed
-	Armament@GARRISONED:
-		Name: garrisoned
-		Weapon: CHHackerDisable
-	AttackFrontal:
-		Armaments: primary, secondary
-		RequiresCondition: undeployed
-		FacingTolerance: 0
 	WithSpriteBody:
 		Sequence: deployed
 		Name: deployed
@@ -166,8 +149,6 @@ CHHACKER:
 	RejectsOrders@deployment:
 		Reject: AttackMove, AssaultMove
 		RequiresCondition: deployed
-	AcceptsDeliveredExperience: ##########
-		ValidTypes: infantry ##########
 	GrantConditionOnAttack@hackcomplete:
 		Condition: hack-complete
 		RevokeDelay: 60
@@ -200,69 +181,32 @@ CHHACKER:
 		PauseOnCondition: disabled
 	CashTrickler@Rank0:
 		Interval: 60
-		Amount: 6
+		Amount: 4
 		PauseOnCondition: disabled
 		RequiresCondition: (deployed || indoors) && rank-veteran == 0
 	CashTrickler@Rank1:
-		Interval: 60
-		Amount: 7
+		Interval: 55
+		Amount: 4
 		PauseOnCondition: disabled
 		RequiresCondition: (deployed || indoors) && rank-veteran == 1
 	CashTrickler@Rank2:
-		Interval: 60
-		Amount: 8
+		Interval: 50
+		Amount: 4
 		PauseOnCondition: disabled
 		RequiresCondition: (deployed || indoors) && rank-veteran == 2
 	CashTrickler@Rank3:
 		Interval: 60
-		Amount: 10
+		Amount: 5
 		PauseOnCondition: disabled
 		RequiresCondition: (deployed || indoors) && rank-veteran == 3
-	CashTrickler@Rank4:
-		Interval: 60
-		Amount: 12
-		PauseOnCondition: disabled
-		RequiresCondition: (deployed || indoors) && rank-elite
 	CashTricklerMultiplier@indoors:
 		Modifier: 150
 		RequiresCondition: indoors
 
-CHHACKER2:
-	Inherits: CHHACKER
-	Tooltip:
-		Name: Super Hacker
-	Buildable:
-		BuildPaletteOrder: 40
-		Prerequisites: barracks, chpropaganda, ~infantry.chinainf
-		Queue: Infantry
-		IconPalette: chrometd
-		Description: Computer specialist.\n Can deploy to provide money\n Can disable buildings and vehicles
-	Armament@PRIMARYSUPER: ##########
-		Weapon: CHLotusDisable
-		RequiresCondition: undeployed
-		PauseOnCondition: !hack-complete
-	Armament@PRIMARYCHARGE:
-		Name: secondary
-		Weapon: CHSuperHackerCharge
-	Armament@GARRISONEDSUPER:
-		Name: garrisoned
-		Weapon: CHLotusDisable
-	ProducibleWithLevel:
-		Prerequisites: selectchinf
-		InitialLevels: 1
-	Cloak:
-		InitialDelay: 60
-		CloakDelay: 60
-		PauseOnCondition: disabled || base-reveal
-		IsPlayerPalette: true
-	RenderSprites:
-		Image: chhacker
-	Voiced:
-		VoiceSet: SuperHackerVoice
-
 chlotus:
 	Inherits: ^Soldier
 	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits@Cloak: ^CloakedInfiltrator
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@announce: ^AnnounceGlobal
 	Inherits@vo: ^AttackFrontalVoice
@@ -280,71 +224,13 @@ chlotus:
 		IconPalette: chrometd
 		Prerequisites: barracks, chpropaganda, ~infantry.china
 		Queue: Infantry
-		Description: Elite hacker.\n Can take control of buildings\n Can disable vehicles
+		Description: Elite hacker.\n Can disable vehicles and buildings from long distance
 	Mobile:
 		Speed: 71
 	Health:
 		HP: 20000
 	Passenger:
 		CustomPipType: red
-	AutoTarget:
-		ScanRadius: 4
-	Armament@PRIMARY:
-		Weapon: CHLotusDisable
-		PauseOnCondition: !hack-complete
-	Armament@SUPER:
-		Weapon: CHSuperLotusDisable
-		PauseOnCondition: !hack-complete
-		RequiresCondition: selectchinf
-	Armament@CONTROL:
-		Weapon: CHLotusControl
-		Name: control
-		PauseOnCondition: !hack-complete
-	Armament@CHARGE:
-		Name: secondary
-		Weapon: CHLotusCharge
-		RequiresCondition: !selectchinf
-	Armament@SUPERCHARGE:
-		Name: secondary
-		Weapon: CHSuperLotusCharge
-		RequiresCondition: selectchinf
-	MindController:
-		ArmamentNames: control
-		Capacity: 1
-	ReloadArmamentsBar:
-		Armaments: control
-	Armament@GARRISONED:
-		Name: garrisoned
-		Weapon: CHLotusDisable
-	Armament@GARRISONEDSUPER:
-		Name: garrisoned
-		Weapon: CHSuperLotusDisable
-		RequiresCondition: selectchinf
-	GrantConditionOnAttack@hackcomplete:
-		Condition: hack-complete
-		RevokeDelay: 60
-		ArmamentNames: secondary
-		RequiredShotsPerInstance: 15
-		MaximumInstances: 1
-		RevokeAll: true
-		RevokeOnNewTarget: true
-		RequiresCondition: !selectchinf
-	GrantConditionOnAttack@superhackcomplete:
-		Condition: hack-complete
-		RevokeDelay: 60
-		ArmamentNames: secondary
-		RequiredShotsPerInstance: 7
-		MaximumInstances: 1
-		RevokeAll: true
-		RevokeOnNewTarget: true
-		RequiresCondition: selectchinf
-	AttackFrontal:
-		Armaments: primary, secondary, control
-		FacingTolerance: 0
-	RevealOnFire:
-		ArmamentNames: primary, secondary, control
-	AcceptsDeliveredExperience: ##########
-		ValidTypes: infantry ##########
 	-TakeCover:
 	WithInfantryBody:
 		-IdleSequences:
@@ -352,21 +238,15 @@ chlotus:
 		DefaultAttackSequence: shoot
 	Voiced:
 		VoiceSet: CHLotusVoice
-	ReloadDelayMultiplier@superlotus:
-		Modifier: 75
-		RequiresCondition: selectchinf
-	RangeMultiplier@superlotus:
-		Modifier: 150
-		RequiresCondition: selectchinf
-	GrantConditionOnPrerequisite@selectchinf:
-		Condition: selectchinf
-		Prerequisites: selectchinf
-	ProductionCostMultiplier@selectchtanks:
-		Multiplier: 110
-		Prerequisites: selectchtanks
-		Queue: Infantry.CHINA, RAInfantry.CHINA
-	Cloak:
-		InitialDelay: 30
-		CloakDelay: 30
-		PauseOnCondition: disabled || base-reveal
-		IsPlayerPalette: true
+	Armament@PRIMARY:
+		Weapon: CHLotusDisable
+	AttackFrontal:
+		Voice: Action
+		FacingTolerance: 512
+		TargetFrozenActors: true
+		PauseOnCondition: being-warped
+	RenderRangeCircle:
+		Color: 00cc00
+	RangeMultiplier@chinainf:
+		Modifier: 120
+		RequiresCondition: ~infantry.chinainf

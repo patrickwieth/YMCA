@@ -63,7 +63,7 @@ chcommand:
 		Condition: lowpower
 		ValidPowerStates: Low, Critical
 	DetonateWeaponPower@ArtilleryBarrage:
-		OrderName: CHArtilleryBarrage
+		OrderName: chartillerybarrage
 		PauseOnCondition: disabled || empdisable || being-warped || lowpower
 		Prerequisites: structures.china
 		Icon: chartybarr3
@@ -269,7 +269,7 @@ chgatling:
 	Health:
 		HP: 58000
 	Armor:
-		Type: Heavy
+		Type: Concrete
 	RevealsShroud:
 		Range: 8c0
 	LaysMinefield@minefield:
@@ -337,7 +337,7 @@ chbunker:
 	Health:
 		HP: 61000
 	Armor:
-		Type: Heavy
+		Type: Concrete
 	RevealsShroud:
 		Range: 6c0
 		RevealGeneratedShroud: False
@@ -559,7 +559,7 @@ chpropaganda:
 	Voiced:
 		VoiceSet: CHPropagandaCenterVoice
 	AirstrikePower@carpet:
-		OrderName: CHCarpetBombing
+		OrderName: chcarpetbombing
 		Icon: chcarpet
 		IconPalette: chrometd
 		ChargeInterval: 6000
@@ -583,7 +583,7 @@ chpropaganda:
 		PauseOnCondition: disabled || empdisable || being-warped || lowpower
 		Prerequisites: structures.chinatnk, radar
 	AirstrikePower@nuke:
-		OrderName: CHNukeBombing
+		OrderName: chnukebombing
 		Icon: abombair
 		ChargeInterval: 10500
 		Description: Nuke Bomb
@@ -645,7 +645,7 @@ chpropagandatower:
 	Health:
 		HP: 50000
 	Armor:
-		Type: Heavy
+		Type: Concrete
 	RevealsShroud:
 		Range: 6c0
 	Power:
@@ -685,6 +685,7 @@ chpropagandatower.pdl:
 chinternetcenter:
 	Inherits: ^BuildingTD
 	Inherits: ^TechLevelBuilding
+	Inherits: ^Transport
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Inherits@shape: ^4x3Shape
 	Inherits@mines: ^MinefieldUpgrade
@@ -694,15 +695,16 @@ chinternetcenter:
 		Name: Internet Center
 	Buildable:
 		BuildPaletteOrder: 10
+		BuildLimit: 1
 		Prerequisites: techcenter, ~structures.china
-		Description: Can shelter Hackers.\nCan be upgraded with surveillance powers.
+		Description: Can shelter Hackers.\nHas surveillance powers.
 	Building:
 		Footprint: ==== xxxx xxxx
 		Dimensions: 4,3
 	Health:
 		HP: 100000
 	Armor:
-		Type: Heavy
+		Type: Concrete
 	RevealsShroud:
 		Range: 6c0
 	WithBuildingBib:
@@ -714,8 +716,7 @@ chinternetcenter:
 	Power:
 		Amount: -80
 	Cargo:
-		MaxWeight: 8
-		PipCount: 8
+		MaxWeight: 10
 		Types: Hacker
 		AfterLoadDelay: 0
 		BeforeUnloadDelay: 0
@@ -808,7 +809,7 @@ chsilo:
 		CircleSequence: circles
 		SupportPowerPaletteOrder: 30
 	AirstrikePower@EMP:
-		OrderName: CHEMPBomb
+		OrderName: chempbomb
 		Icon: chemp
 		ChargeInterval: 4500
 		Description: EM Pulse
@@ -915,7 +916,7 @@ chairport:
 	ParatroopersPower@tankdrop:
 		PauseOnCondition: lowpower
 		Prerequisites: vehicles.chinatnk
-		OrderName: TankDrop
+		OrderName: tankdrop
 		Icon: airdropicon
 		ChargeInterval: 5000
 		Description: Tank Drop
@@ -939,7 +940,7 @@ chairport:
 	ParatroopersPower@minigunnerdrop:
 		PauseOnCondition: lowpower
 		Prerequisites: infantry.chinainf
-		OrderName: MinigunnerDrop
+		OrderName: minigunnerdrop
 		Icon: paradropicon
 		ChargeInterval: 5000
 		Description: Infantry Paradrop
@@ -961,7 +962,7 @@ chairport:
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
 	AirstrikePower@cluster:
-		OrderName: CHClusterBomb
+		OrderName: chclusterbomb
 		Icon: chclustermines
 		IconPalette: chrometd
 		ChargeInterval: 6000
@@ -987,12 +988,9 @@ chairport:
 CHSYRD:
 	Inherits: SYRD
 	Buildable:
-		IconPalette: chrometd
+		IconPalette: chrome
 		BuildPaletteOrder: 9
 		Prerequisites: chsupply, ~structures.china
 	ProvidesPrerequisite@buildingname:
-	RenderSprites:
-		Image: ra1syrd
-		PlayerPalette: playernavy
 	Power:
 		Amount: -20
