@@ -632,6 +632,7 @@ chpropaganda:
 
 chpropagandatower:
 	Inherits: ^BuildingTD
+	Inherits@speaker: ^PropagandaSpeaker
 	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
 	Valued:
 		Cost: 500
@@ -641,7 +642,7 @@ chpropagandatower:
 		Queue: Defense
 		BuildPaletteOrder: 20
 		Prerequisites: chpropaganda, ~structures.china, ~!commander_tree.speakertower.pdl
-		Description: Allows nearby units to self-heal.
+		Description: Allows nearby units to self-heal.\n Infuses China units with propaganda.
 	Health:
 		HP: 50000
 	Armor:
@@ -654,16 +655,22 @@ chpropagandatower:
 		RequiredForShortGame: false
 	WithBuildingBib:
 		HasMinibib: true
-	ProximityExternalCondition@PROPAGANDA:
-		Range: 6c0
-		Condition: propaganda
-		RequiresCondition: !disabled && !lowpower
-	WithRangeCircle:
-		Range: 6c0
-		Type: propaganda
-		RequiresCondition: !disabled
 	Voiced:
 		VoiceSet: CHSpeakerTowerVoice
+	AttackOmni:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+	Armament@PRIMARY:
+		Weapon: Speakertower.Repair
+		OutsideRangeCursor: repair
+		TargetRelationships: Ally
+		Cursor: repair
+		LocalOffset: 0,0,1000
+	AutoTarget:
+	AutoTargetPriority@REPAIR:
+		ValidTargets: Repair, RepairInAir
+		ValidRelationships: Ally
+		Priority: 2
 
 chpropagandatower.pdl:
 	Inherits: chpropagandatower
@@ -676,7 +683,7 @@ chpropagandatower.pdl:
 	Buildable:
 		BuildPaletteOrder: 20
 		Prerequisites: chpropaganda, ~structures.china, ~commander_tree.speakertower.pdl
-		Description: Allows nearby units to self-heal.\n Has Point Defense Laser.
+		Description: Allows nearby units to self-heal.\n Infuses China units with propaganda.\n Has Point Defense Laser.
 	Health:
 		HP: 60000
 	Armor:
