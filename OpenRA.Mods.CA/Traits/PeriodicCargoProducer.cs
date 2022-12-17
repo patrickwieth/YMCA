@@ -102,15 +102,15 @@ namespace OpenRA.Mods.AS.Traits
 						};
 
 						activated |= sp.Produce(self, passenger.Info, info.Type, inits, 0, unit => {
-							//Game.Debug(String.Join("; ", firedBy.TraitOrDefault<Production>() ));
+							//TextNotificationsManager.Debug(String.Join("; ", firedBy.TraitOrDefault<Production>() ));
 							GrantCondition(unit, info.Condition);
 
 							if( passenger.TraitOrDefault<Cargo>() != null )
 							{
 								foreach (var p in passenger.TraitOrDefault<Cargo>().Passengers)
 								{
-										//Game.Debug(String.Join("; ", passenger.TraitOrDefault<Cargo>().Passengers));
-										//Game.Debug(p.Info.Name);
+										//TextNotificationsManager.Debug(String.Join("; ", passenger.TraitOrDefault<Cargo>().Passengers));
+										//TextNotificationsManager.Debug(p.Info.Name);
 
 										var newPassenger = self.World.CreateActor(false, p.Info.Name, inits);
 										unit.TraitOrDefault<Cargo>().Load(unit, newPassenger);
