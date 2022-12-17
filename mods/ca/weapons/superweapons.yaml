@@ -716,6 +716,7 @@ DeathHand:
 		AirThreshold: 3c511
 
 DeathHandCluster:
+	Inherits: ^MissileHE
 	ReloadDelay: 60
 	Range: 7c0
 	ValidTargets: Ground, Ship, Air
@@ -733,14 +734,6 @@ DeathHandCluster:
 		Delay: 1
 		Damage: 3500
 		Falloff: 1000, 500, 250, 100
-		Versus:
-			None: 90
-			Concrete: 30
-			Brick: 20
-			Wood: 30
-			Light: 60
-			Reflector: 60
-			Heavy: 60
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
@@ -779,6 +772,7 @@ WeatherStormInit:
 		ValidTargets: Ground, Air, Water
 
 WeatherCloudDirectInit:
+	Inherits: ^EnergyLight
 	Projectile: InstantHit
 	ReloadDelay: 140
 	ValidTargets: Air
@@ -790,16 +784,12 @@ WeatherCloudDirectInit:
 		ValidTargets: Air
 		Delay: 28
 		DamageTypes: TriggerProne, ElectritcyDeath
-		Versus:
-			Wood: 85
-			Heavy: 75
-			Concrete: 30
-			Brick: 55
 	Warhead@barrage3: FireFragment
 		Weapon: WeatherCloud
 		ValidTargets: Air, Ground, Water
 
 WeatherCloudRandomInit:
+	Inherits: ^EnergyLight
 	Projectile: InstantHit
 	ReloadDelay: 8
 	Warhead@Dam1: SpreadDamage
@@ -810,11 +800,6 @@ WeatherCloudRandomInit:
 		ValidTargets: Air
 		Delay: 28
 		DamageTypes: TriggerProne, ElectricityDeath
-		Versus:
-			Wood: 85
-			Heavy: 75
-			Concrete: 15
-			Brick: 15
 	Warhead@barrage3: FireShrapnel
 		Weapon: WeatherCloud
 		Amount: 2
@@ -838,6 +823,7 @@ WeatherCloud:
 		ValidTargets: Ground, Air, Water
 
 WeatherBolt:
+	Inherits: ^EnergyLight
 	Projectile: InstantHit
 	Range: 512
 	ValidTargets: Ground, Water, Air
@@ -848,12 +834,6 @@ WeatherBolt:
 		AffectsParent: true
 		ValidTargets: Ground, Air, Water
 		DamageTypes: TriggerProne, ElectricityDeath
-		Versus:
-			Wood: 80
-			Heavy: 55
-			Concrete: 35
-			Reflector: 20
-			Brick: 55
 	Warhead@4: CreateEffect
 		Explosions: weatherbolt1, weatherbolt2, weatherbolt3, weatherbolt1f, weatherbolt2f, weatherbolt3f
 		ImpactSounds: sweastra.aud, sweastrb.aud, sweastrc.aud, sweastrd.aud
@@ -897,6 +877,7 @@ GpsScramble:
 		Explosions: stealth
 
 FirestormBarrage:
+	Inherits: ^MissileHE
 	ReloadDelay: 100
 	Range: 300c0
 	Burst: 3
@@ -920,21 +901,7 @@ FirestormBarrage:
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
 		Damage: 30000
-		Versus:
-			None: 70
-			Wood: 40
-			Light: 100
-			Heavy: 80
-			Concrete: 80
-			Brick: 5
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
-	Warhead@1Dam_cyborg: SpreadDamage
-		Spread: 1c0
-		Damage: 12000
-		ValidTargets: Cyborg
-		Versus:
-			Heavy: 0
-		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Eff: CreateEffect
 		Explosions: b2bexp, b2bexp2
 		ExplosionPalette: tseffect

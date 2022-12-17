@@ -141,38 +141,48 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 							if(warheads.Count > 0)
 							{
 								var dmgWarhead = warheads.OfType<DamageWarhead>().FirstOrDefault();
-								if (dmgWarhead != null && dmgWarhead.Versus.Count() >= 6)
+								if (dmgWarhead != null)
 								{
 									versusLabel.Text += "\\nEffective versus:";
-									versusNoneLabel.Text += "Infantry: ";
-									versusNoneLabel.TextColor = Color.LightSalmon;
-									effectVersusNoneLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["None"], 70);
-									effectVersusNoneLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["None"], 70);
-									versusLightLabel.Text += "Light: ";
-									versusLightLabel.TextColor = Color.Khaki;
-									effectVersusLightLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Light"], 70);
-									effectVersusLightLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Light"], 70);
-									versusHeavyLabel.Text += "Heavy: ";
-									versusHeavyLabel.TextColor = Color.Crimson;
-									effectVersusHeavyLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Heavy"], 60);
-									effectVersusHeavyLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Heavy"], 60);
-									versusReflectorLabel.Text += "Reflector: ";
-									versusReflectorLabel.TextColor = Color.SkyBlue;
-									effectVersusReflectorLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Reflector"], 70);
-									effectVersusReflectorLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Reflector"], 70);
-									versusWoodLabel.Text += "Building: ";
-									versusWoodLabel.TextColor = Color.IndianRed;
-									effectVersusWoodLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Wood"], 60);
-									effectVersusWoodLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Wood"], 60);
-									versusConcreteLabel.Text += "Fortified: ";
-									versusConcreteLabel.TextColor = Color.Gray;
-									effectVersusConcreteLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Concrete"], 40);
-									effectVersusConcreteLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Concrete"], 40);
-
+									if (dmgWarhead.Versus.ContainsKey("None")) {
+										versusNoneLabel.Text += "Infantry: ";
+										versusNoneLabel.TextColor = Color.LightSalmon;
+										effectVersusNoneLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["None"], 70);
+										effectVersusNoneLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["None"], 70);
+									}
+									if (dmgWarhead.Versus.ContainsKey("Light")) {
+										versusLightLabel.Text += "Light: ";
+										versusLightLabel.TextColor = Color.Khaki;
+										effectVersusLightLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Light"], 70);
+										effectVersusLightLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Light"], 70);
+									}
+									if (dmgWarhead.Versus.ContainsKey("Heavy")) {
+										versusHeavyLabel.Text += "Heavy: ";
+										versusHeavyLabel.TextColor = Color.Crimson;
+										effectVersusHeavyLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Heavy"], 60);
+										effectVersusHeavyLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Heavy"], 60);
+									}
+									if ( dmgWarhead.Versus.ContainsKey("Reflector")) {
+										versusReflectorLabel.Text += "Reflector: ";
+										versusReflectorLabel.TextColor = Color.SkyBlue;
+										effectVersusReflectorLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Reflector"], 70);
+										effectVersusReflectorLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Reflector"], 70);
+									}
+									if (dmgWarhead.Versus.ContainsKey("Wood")) {
+										versusWoodLabel.Text += "Building: ";
+										versusWoodLabel.TextColor = Color.IndianRed;
+										effectVersusWoodLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Wood"], 60);
+										effectVersusWoodLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Wood"], 60);
+									}
+									if (dmgWarhead.Versus.ContainsKey("Concrete")) {
+										versusConcreteLabel.Text += "Fortified: ";
+										versusConcreteLabel.TextColor = Color.Gray;
+										effectVersusConcreteLabel.Text += GetEffectiveLabelText(dmgWarhead.Versus["Concrete"], 40);
+										effectVersusConcreteLabel.TextColor = GetEffectiveLabelColor(dmgWarhead.Versus["Concrete"], 40);
+									}
 									versusLabel.Text = versusLabel.Text.Replace("\\n", "\n");
 								}
 							}
-
 						}
 					}
 				}
