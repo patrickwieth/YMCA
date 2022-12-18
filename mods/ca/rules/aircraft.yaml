@@ -3967,6 +3967,7 @@ VENM.HeavyLaser:
 Dropship:
 	Inherits: ^Helicopter
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@TRANSPORT: ^Transport
 	Inherits@PRODUCTION: ^VehicleProduction
 	Buildable:
 		Queue: Aircraft
@@ -4017,6 +4018,9 @@ Dropship:
 	GrantConditionOnAttack:
 		Condition: dropcargo
 		ArmamentNames: drop
+	Cargo:
+		MaxWeight: 20
+		Types: Infantry, Vehicle
 	SpawnActorOnDeath:
 		Actor: dropship.Husk
 		RequiresCondition: !being-warped
@@ -4043,6 +4047,9 @@ Dropship:
 		Offset: -500,883,-20
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 AURORA:
 	Inherits: ^PlaneTD
