@@ -3351,6 +3351,7 @@ PORT:
 WSPH:
 	Inherits: ^ScrinBuilding
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@VehicleProduction: ^VehicleProduction
 	Inherits@shape: ^3x2Shape
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,1024,0, 0,-1024,0
@@ -3525,18 +3526,11 @@ WSPH:
 		Factions: scrin, traveler, harbinger
 		Prerequisite: vehicles.tpod
 	WithBuildingBib:
-	RallyPoint:
 	Exit@1:
-		RequiresCondition: !being-captured
 		SpawnOffset: 0,0,0
 		ExitCell: 0,2
-	Production:
-		Produces: Vehicle
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	ProductionBar:
-		ProductionType: Vehicle
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped

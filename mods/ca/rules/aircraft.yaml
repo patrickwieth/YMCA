@@ -1125,14 +1125,6 @@ NHAW:
 		AddToArmyValue: true
 	Health:
 		HP: 44000
-	RevealsShroud:
-		Range: 8c0
-		MinRange: 6c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 6c0
-		Type: GroundPosition
 	Aircraft:
 		TurnSpeed: 20
 		Speed: 155
@@ -1167,27 +1159,12 @@ NHAW:
 		Weapon: M60mgJJ
 		LocalOffset: 1000,0,-100
 		MuzzleSequence: muzzle
-	Armament@CRYOMISSILE:
-		Name: cryo
-		Weapon: cryomissilenhaw
-		LocalOffset: 200,300,0, 200,-300,0
-		RequiresCondition: upg-crym
-	AmmoPool@CRYOMISSILE:
-		Name: cryo
-		Armaments: cryo
-		Ammo: 2
-		AmmoCondition: ammo
-	ReloadAmmoPool@CRYOMISSILE:
-		AmmoPool: cryo
-		Delay: 550
-		Count: 2
-		RequiresCondition: upg-crym
 	AutoTarget:
 		InitialStance: ReturnFire
 		InitialStanceAI: AttackAnything
 		HoldFireCondition: stance-holdfire
 	AttackAircraft:
-		Armaments: primary, cryo, drop
+		Armaments: primary, drop
 		FacingTolerance: 20
 		AttackType: Hover
 		PersistentTargeting: false
@@ -1208,9 +1185,6 @@ NHAW:
 	GrantConditionOnAttack:
 		Condition: dropcargo
 		ArmamentNames: drop
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 NHAW.paradrop:
 	Inherits: ^Helicopter
@@ -3039,8 +3013,6 @@ BLIMP:
 		Cost: 2000
 	Tooltip:
 		Name: Airship of the People
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 175000
 	Armor:
@@ -3993,55 +3965,58 @@ VENM.HeavyLaser:
 		RequiresCondition: ammo < 2
 
 Dropship:
-	Inherits: ^Plane
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^Helicopter
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@PRODUCTION: ^VehicleProduction
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
 		Prerequisites: ~aircraft.any, ~commander_tree.air_logistics
-		Description: Superheavy cargo lifter plane.\nMaximum 1 can be built.\n Special Ability: Supertransport\nTransports up to 15 Infantry or Vehicles.\nDeploys those with a parachute (force fire to parachute)\n  Unarmed
+		Description: Superheavy cargo lifter plane.\nSpecial Ability: Supertransport\nTransports up to 15 Infantry or Vehicles.\nDeploys those with a parachute (force fire to parachute)\n  Unarmed
+	TooltipExtras:
+		Attributes: • Can Paradrop Tanks
 	Valued:
-		Cost: 1200
+		Cost: 2000
 	Tooltip:
 		Name: Dropship Transport
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
-		HP: 30000
-	AmmoPool:
-		Ammo: 1
-		Delay: 60
-	ReloadAmmoPool:
-		Delay: 60
-		Count: 1
+		HP: 50000
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 12
+		Speed: 156
+		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
+		TakeOffOnResupply: false
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeOffOnCreation: True
+		CanForceLand: False
 	AttackAircraft:
+		Armaments: primary, drop
 		FacingTolerance: 20
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Production:
+		Produces: Vehicle
+		ProduceIntoCargo: True
+		PauseOnCondition: being-warped
 	Armament@DROP:
+		Name: drop
 		Weapon: DropDummy
 		Cursor: ability
 		OutsideRangeCursor: ability
-		RequiresCondition: cargo && stance-holdfire
+		RequiresCondition: cargo
 	ParaDrop:
-		DropRange: 5c0
 		ChuteSound: chute1.aud
 	ParachuteCargoOnCondition:
 		RequiresCondition: dropcargo
 		ReturnToBase: false
 	GrantConditionOnAttack:
 		Condition: dropcargo
-	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
-		TurnSpeed: 12
-		Speed: 156
-		TakeOffOnResupply: false
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-		TakeOffOnCreation: False
-	Cargo:
-		MaxWeight: 20
-		Types: Infantry, Vehicle
+		ArmamentNames: drop
 	SpawnActorOnDeath:
 		Actor: dropship.Husk
 		RequiresCondition: !being-warped
@@ -4066,18 +4041,8 @@ Dropship:
 		Offset: -450,683,-10
 	Contrail@6:
 		Offset: -500,883,-20
-	RenderSprites:
-		Image: dropship
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
-	WithCargoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 AURORA:
 	Inherits: ^PlaneTD
