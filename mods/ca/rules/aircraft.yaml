@@ -1047,7 +1047,6 @@ TRAN.Eagle:
 		RequiresCondition: (stance-attackanything || assault-move) && loaded-air
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
 		InvalidTargets: NoAutoTarget
-	-ProductionCostMultiplier@EagleBonus:
 
 TRAN.paradrop:
 	Inherits: ^Helicopter
@@ -2580,7 +2579,6 @@ ORCB:
 		RearmActors: hpad.td, hpad
 	Voiced:
 		VoiceSet: OrcaVoice
-	-ProductionCostMultiplier@EagleBonus:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
@@ -3493,9 +3491,6 @@ SCRN:
 		Prerequisites: aircraft.upgraded
 	Rearmable:
 		RearmActors: hpad, hpad.td
-	ProductionCostMultiplier@markedBonus:
-		Multiplier: 90
-		Prerequisites: structures.marked
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
@@ -3951,7 +3946,7 @@ VENM.HeavyLaser:
 		RequiresCondition: ammo < 2
 
 Dropship:
-	Inherits: ^Helicopter
+	Inherits: ^Plane
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@TRANSPORT: ^Transport
 	Inherits@PRODUCTION: ^VehicleProduction
@@ -3960,9 +3955,9 @@ Dropship:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
 		Prerequisites: ~aircraft.any, ~commander_tree.air_logistics
-		Description: Superheavy cargo lifter plane.\nSpecial Ability: Supertransport\nTransports up to 15 Infantry or Vehicles.\nDeploys those with a parachute (force fire to parachute)\n  Unarmed
+		Description: Superheavy cargo lifter plane.\nBrings vehicles to the battlefield.
 	TooltipExtras:
-		Attributes: • Can Paradrop Tanks
+		Attributes: • Transports up to 8 Vehicles\n• Can Paradrop Vehicles (use force fire for drops)\n• Vehicles can be produced into Dropships when fyling over factories
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -3979,7 +3974,7 @@ Dropship:
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeOffOnCreation: True
-		CanForceLand: False
+		CanForceLand: True
 	AttackAircraft:
 		Armaments: primary, drop
 		FacingTolerance: 20
@@ -3990,6 +3985,19 @@ Dropship:
 		Produces: Vehicle
 		ProduceIntoCargo: True
 		PauseOnCondition: being-warped
+		RequiresCondition: closeToFactory && !cargoFull
+	ExternalCondition@closeToFactory:
+		Condition: closeToFactory
+	WithDecoration@close:
+		Image: select
+		Palette: chrome
+		Sequence: repair-small
+		Position: TopLeft
+		RequiresCondition: closeToFactory
+		RequiresSelection: True
+		ValidRelationships: Ally, Neutral
+	PrimaryBuilding:
+		BasePriority: 11
 	Armament@DROP:
 		Name: drop
 		Weapon: DropDummy
@@ -4005,8 +4013,9 @@ Dropship:
 		Condition: dropcargo
 		ArmamentNames: drop
 	Cargo:
-		MaxWeight: 20
-		Types: Infantry, Vehicle
+		MaxWeight: 24
+		CargoFullCondition: cargoFull
+		Types: Vehicle
 	SpawnActorOnDeath:
 		Actor: dropship.Husk
 		RequiresCondition: !being-warped
@@ -4033,9 +4042,6 @@ Dropship:
 		Offset: -500,883,-20
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
-	WithCargoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 AURORA:
 	Inherits: ^PlaneTD
@@ -4256,6 +4262,5 @@ AURO:
 		RearmActors: afld, afld.gdi, afld.allies
 	Voiced:
 		VoiceSet: AuroraVoice
-	-ProductionCostMultiplier@EagleBonus:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke

@@ -1586,8 +1586,6 @@
 	Inherits: ^Vehicle
 	Inherits@Armor: ^HeavyArmor
 	Inherits@SLOWCRUSH: ^SlightlySlowedByCrushing
-	Passenger:
-		Weight: 4
 	Mobile:
 		Locomotor: tracked
 
@@ -1601,6 +1599,8 @@
 		Image: smoke_mtd
 
 ^BigVehicle:
+	Passenger:
+		Weight: 6
 	Selectable:
 		Bounds: 1536, 1536
 
@@ -1634,7 +1634,7 @@
 ^Infantry:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^GainsExperience
-	Inherits@Armor: ^InfantryArmor
+	Inherits@Armor: ^NoneArmor
 	Inherits@3: ^InfantryExperienceHospitalOverrides
 	Inherits@4: ^SpriteActor
 	Inherits@7: ^Warpable
@@ -2200,9 +2200,6 @@
 		RequiresCondition: c4 && !airborne
 	Targetable@tnt:
 		RequiresCondition: tnt && !airborne
-	ProductionCostMultiplier@EagleBonus:
-		Multiplier: 90
-		Prerequisites: structures.eagle
 	Explodes:
 		RequiresCondition: !airborne && !being-warped
 	SpeedMultiplier@SUPPRESSION:
@@ -2522,9 +2519,6 @@
 	RevealOnFire:
 		RevealGeneratedShroud: True
 		RequiresCondition: revealonfire
-	ProductionCostMultiplier@FranceBonus:
-		Multiplier: 90
-		Prerequisites: structures.france
 	Explodes@temporal:
 		Weapon: TemporalExplode
 		EmptyWeapon: TemporalExplode
@@ -2588,9 +2582,6 @@
 	MapEditorData:
 		Categories: Wall
 	-ExternalCondition@CRATE-CLOAK:
-	ProductionCostMultiplier@FranceBonus:
-		Multiplier: 90
-		Prerequisites: structures.france
 
 ^TechBuilding:
 	Inherits: ^BasicBuilding
@@ -3771,6 +3762,10 @@
 		ProductionType: Infantry
 	ProvidesPrerequisite@infantryany:
 		Prerequisite: infantry.any
+	ProximityExternalCondition@close:
+		Range: 6c0
+		ValidRelationships: Ally
+		Condition: closeToBarracks
 
 ^VehicleProduction:
 	RallyPoint:
@@ -3787,6 +3782,10 @@
 		ProductionType: Vehicle
 	ProvidesPrerequisite@any:
 		Prerequisite: vehicles.any
+	ProximityExternalCondition@close:
+		Range: 6c0
+		ValidRelationships: Ally
+		Condition: closeToFactory
 
 ^AircraftProduction:
 	Exit@1:
@@ -3890,7 +3889,7 @@
 		LayerName: cryoresidue
 		RequiresCondition: !being-warped
 
-^InfantryArmor:
+^NoneArmor:
 	Armor:
 		Type: None
 	Targetable@armorclass:
