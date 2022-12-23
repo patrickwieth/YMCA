@@ -1,23 +1,17 @@
 Player:
-	ModularBot@BrutalAI:
-		Name: Brutal AI
-		Type: brutal
-	ModularBot@VeryHardAI:
-		Name: Very Hard AI
-		Type: vhard
-	GrantConditionOnBotOwner@BrutalAI:
-		Condition: enable-brutal-ai
-		Bots: brutal
-	GrantConditionOnBotOwner@VeryHardAI:
-		Condition: enable-vhard-ai
-		Bots: vhard
-	BaseBuilderBotModuleCA@brutal-vhard:
-		RequiresCondition: enable-brutal-ai || enable-vhard-ai
+	ModularBot@NormalAI:
+		Name: Normal AI
+		Type: normal
+	GrantConditionOnBotOwner@NormalAI:
+		Condition: enable-normal-ai
+		Bots: normal
+	BaseBuilderBotModuleCA@normal:
+		RequiresCondition: enable-normal-ai
 		BuildingQueues: Building, Commander_Tree
 		MinimumExcessPower: 50
-		MaximumExcessPower: 350
-		ExcessPowerIncrement: 10
-		ExcessPowerIncreaseThreshold: 1
+		MaximumExcessPower: 200
+		ExcessPowerIncrement: 40
+		ExcessPowerIncreaseThreshold: 4
 		PlaceDefenseTowardsEnemyChance: 75
 		ConstructionYardTypes: fact,afac,sfac,chcommand
 		RefineryTypes: proc,proc.td,proc.scrin,chsupply
@@ -28,22 +22,17 @@ Player:
 		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
 		SiloTypes: silo,silo.td,silo.scrin
 		AntiAirTypes: sam, nsam, agun, cram, shar, chgatling
-		MaxBaseRadius: 26
 		BuildingDelays:
 			kenn: 2800
 			dome: 4500
 			hq: 4500
 			nerv: 4500
-			chcommand.radar: 4500
 			syrd: 6000
 			spen: 6000
 			syrd.gdi: 6000
 			spen.nod: 6000
-			chsyrd: 6000
 			afld: 6375
 			afld.gdi: 6375
-			afld.allies: 6375
-			chairport: 6375
 			grav: 6375
 			hpad: 6375
 			hpad.td: 6375
@@ -52,49 +41,40 @@ Player:
 			stek: 6375
 			tmpl: 6375
 			scrt: 6375
-			chpropaganda: 6375
 			bio.nod: 8000
 			miss.gdi: 8000
 			indp: 8000
 			orep: 8000
 			sign: 8000
-			chinternetcenter: 8000
 			mslo: 8000
 			mslo.nod: 8000
 			weat: 8000
 			eye: 8000
 			rift: 8000
-			chsilo: 8000
 		BuildingLimits:
-			barr: 20
-			tent: 20
-			pyle: 20
-			hand: 20
-			port: 20
-			chbarracks: 20
+			barr: 3
+			tent: 3
+			pyle: 3
+			hand: 3
+			port: 3
 			kenn: 1
 			dome: 1
 			hq: 1
 			nerv: 1
-			chcommand.radar: 1
-			weap: 20
-			weap.td: 20
-			chweap: 20
-			wsph: 20
-			airs: 20
-			hpad: 10
-			hpad.td: 10
-			afld: 10
-			afld.gdi: 10
-			afld.allies: 10
-			grav: 20
-			chairport: 20
+			weap: 3
+			weap.td: 3
+			airs: 3
+			wsph: 3
+			hpad: 2
+			hpad.td: 2
+			afld: 1
+			afld.gdi: 1
+			grav: 2
 			atek: 1
 			stek: 1
 			gtek: 1
 			tmpl: 1
 			scrt: 1
-			chpropaganda: 1
 			fix: 1
 			rep: 1
 			srep: 1
@@ -106,17 +86,14 @@ Player:
 			proc: 30
 			proc.td: 30
 			proc.scrin: 30
-			chsupply: 30
 			hand: 3
 			pyle: 3
 			barr: 3
 			tent: 3
 			port: 3
-			chbarracks: 3
 			kenn: 1
 			weap: 5
 			weap.td: 5
-			chweap: 5
 			airs: 5
 			wsph: 5
 			pbox: 7
@@ -124,34 +101,30 @@ Player:
 			gtwr: 7
 			gun: 7
 			gun.td: 7
-			chgatling: 7
-			chbunker.ai: 7
-			ptur: 7
-			scol: 9
-			tsla: 9
-			obli: 8
+			ptur: 5
+			scol: 5
+			tsla: 5
+			obli: 5
 			ltur: 10
 			ftur: 10
 			ttur: 10
-			htur: 7
-			atwr: 10
-			stwr: 8
-			pris: 8
-			agun: 9
-			cram: 9
-			sam: 9
-			nsam: 9
-			shar: 9
+			htur: 3
+			atwr: 7
+			stwr: 5
+			pris: 5
+			agun: 5
+			cram: 5
+			sam: 5
+			nsam: 5
+			shar: 5
 			gap: 1
 			atek: 1
 			stek: 1
-			chpropaganda: 1
 			silo: 1
 			silo.td: 1
 			silo.scrin: 1
 			fix: 1
 			dome: 10
-			chcommand.radar: 10
 			tmpl: 1
 			gtek: 1
 			scrt: 1
@@ -161,9 +134,7 @@ Player:
 			nerv: 10
 			afld: 2
 			afld.gdi: 2
-			afld.allies: 2
-			chairport: 2
-			grav: 2
+			grav: 1
 			mslo: 1
 			iron: 1
 			pdox: 1
@@ -172,7 +143,6 @@ Player:
 			eye: 1
 			weat: 1
 			mslo.nod: 1
-			chsilo: 1
 			rift: 1
 			indp: 1
 			bio.nod: 1
@@ -186,32 +156,47 @@ Player:
 			syrd: 1
 			spen.nod: 1
 			syrd.gdi: 1
-			chsyrd: 1
 			bombard.strat: 1
 			seek.strat: 1
 			hold.strat: 1
-	UnitBuilderBotModuleCA@brutal-vhard:
-		RequiresCondition: enable-brutal-ai || enable-vhard-ai
+			sonic.upgrade: 1
+			drone.upgrade: 1
+			pointlaser.upgrade: 1
+			hypersonic.upgrade: 1
+			walker.upgrade: 1
+			ionmam.upgrade: 1
+			vulcan.upgrade: 1
+			hazmat.upgrade: 1
+			howi.upgrade: 1
+			cyborg.upgrade: 1
+			cyborgspeed.upgrade: 1
+			cyborgarmor.upgrade: 1
+			cluster.upgrade: 1
+			indp.upgrade: 1
+			iraqtank.upgrade: 1
+			orep.upgrade: 1
+			charv.upgrade: 1
+			regen.upgrade: 1
+			shields.upgrade: 1
+	UnitBuilderBotModuleCA@normal:
+		RequiresCondition: enable-normal-ai
 		IdleBaseUnitsMaximum: 50
-		UnitBuilderMinCredits: 1800
-		MaxAircraft: 8
-		MaintainAirSuperiority: true
-		AirToAirUnits: heli, yak, mig, orca, apch, scrn, venm, stmr, enrv, a10.upg, harr, chmig.aa
-		AirThreatUnits: heli, yak, mig, orca, apch, scrn, venm, stmr, enrv, a10.upg, harr, pac, deva, kiro, mshp, chmig, chmig.aa
+		MaxAircraft: 4
+		UnitDelays:
+			arty: 5250
+			arty.nod: 5250
+			katy: 5250
 		UnitIntervals:
 			mshp: 7500
-			mcv: 3000
-			amcv: 3000
-			smcv: 3000
 			harv: 2250
 			harv.td: 2250
 			harv.scrin: 2250
 			harv.chrono: 2250
-			rmbo: 2250
-			e7: 2250
-			mast: 2250
-			yuri: 2250
-			bori: 2250
+			rmbo: 3750
+			e7: 3750
+			mast: 3750
+			yuri: 3750
+			bori: 3750
 		UnitsToBuild:
 			e1: 65
 			e2: 25
@@ -352,9 +337,9 @@ Player:
 			isub: 4
 			carr: 4
 			jjet: 8
-			kiro: 3
-			deva: 3
-			pac: 3
+			kiro: 2
+			deva: 2
+			pac: 2
 			ss: 10
 			ss2: 10
 			sb: 10
@@ -363,39 +348,19 @@ Player:
 			har2: 8
 			harv.scrin: 8
 			harv.chrono: 8
-	SquadManagerBotModuleCA@brutal-vhard:
-		RequiresCondition: enable-brutal-ai || enable-vhard-ai
+	SquadManagerBotModuleCA@normal:
+		RequiresCondition: enable-normal-ai
 		MinimumAttackForceDelay: 25
-		SquadValue: 6000
-		SquadValueRandomBonus: 2500
-		SquadSize: 22
-		SquadSizeRandomBonus: 9
-		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, chharv, chnmcv, mcv, amcv, smcv, dog, e6, n6, s6
+		SquadValue: 5000
+		SquadValueRandomBonus: 2100
+		SquadSize: 18
+		SquadSizeRandomBonus: 8
+		ExcludeFromSquadsTypes: harv, har2, harv.scrin, harv.chrono, chharv, chnmcv, amcv, smcv, dog, e6, n6, s6
 		ExcludeFromAirSquadsTypes: deva, pac, jjet, bjet
-		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub,sb,seas
-		NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod, chsyrd
+		NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
 		ConstructionYardTypes: fact,afac,sfac,chcommand
 		StaticAntiAirTypes: agun, sam, nsam, cram, shar, chgatling
-		ProtectionScanRadius: 12
-		AirToAirPriority: 65
-		BigAirThreats: pac, deva, kiro, mshp
+		NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+		AirToAirPriority: 55
 		AirSquadTargetTypes:
-			heli: Aircraft, Vehicle
-			nhaw: Infantry
-			hind: Infantry, Building, Aircraft
-			yak: Building, Infantry
-			mig: Aircraft, Vehicle, Defense
-			suk: Vehicle, Defense
-			suk.upg: Building
-			kiro: Building
-			orca: Aircraft, Vehicle
-			orcb: Vehicle, Defense
-			a10: Infantry, Building, Aircraft
-			apch: Infantry, Building
-			venm: Infantry, Aircraft
-			rah: Infantry, Building, Aircraft
-			harr: Infantry, Building, Aircraft
-			scrn: Aircraft, Vehicle, Defense
-			stmr: Aircraft, Infantry, Building
-			enrv: Aircraft, Vehicle, Defense
 			mshp: Building

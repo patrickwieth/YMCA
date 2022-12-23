@@ -117,6 +117,7 @@ SPEN:
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@shape: ^3x3Shape
 	Inherits@Shipyard: ^ShipPrerequisites
+	Inherits@ShipProd: ^ShipProduction
 	RenderSprites:
 		PlayerPalette: playernavy
 	InfiltrateForSupportPower:
@@ -148,69 +149,7 @@ SPEN:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: 0,-213,0
-		Facing: 384
-		ExitCell: -1,2
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@2:
-		RequiresCondition: !being-captured
-		SpawnOffset: 0,-213,0
-		Facing: 160
-		ExitCell: 3,2
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@3:
-		RequiresCondition: !being-captured
-		SpawnOffset: 0,0,0
-		Facing: 32
-		ExitCell: 0,0
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@4:
-		RequiresCondition: !being-captured
-		SpawnOffset: 0,0,0
-		Facing: 224
-		ExitCell: 2,0
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@b1:
-		RequiresCondition: !being-captured
-		SpawnOffset: -1024,1024,0
-		Facing: 160
-		ExitCell: 0,2
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@b2:
-		RequiresCondition: !being-captured
-		SpawnOffset: 1024,1024,0
-		Facing: 224
-		ExitCell: 2,2
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@b3:
-		RequiresCondition: !being-captured
-		SpawnOffset: -1024,-1024,0
-		Facing: 384
-		ExitCell: 0,0
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@b4:
-		RequiresCondition: !being-captured
-		SpawnOffset: 1024,-1024,0
-		Facing: 32
-		ExitCell: 2,0
-		ProductionTypes: Submarine, Ship, Boat
-	Production:
-		Produces: Ship, Submarine, Boat
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	-SpawnActorsOnSell:
-	RepairsUnits:
-		ValuePercentage: 0
-		Interval: 12
-		HpPerStep: 1000
-		StartRepairingNotification: Repairing
-		FinishRepairingNotification: UnitRepaired
-		PlayerExperience: 15
-		RequiresCondition: !forceshield && !invulnerability && !being-warped
-	RallyPoint:
-	ProductionBar:
-		ProductionType: Ship
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
@@ -239,6 +178,7 @@ SYRD:
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@shape: ^3x3Shape
 	Inherits@Shipyard: ^ShipPrerequisites
+	Inherits@ShipProd: ^ShipProduction
 	RenderSprites:
 		PlayerPalette: playernavy
 	InfiltrateForSupportPower:
@@ -270,45 +210,7 @@ SYRD:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: -1024,1024,0
-		Facing: 160
-		ExitCell: 0,2
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@2:
-		RequiresCondition: !being-captured
-		SpawnOffset: 1024,1024,0
-		Facing: 224
-		ExitCell: 2,2
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@3:
-		RequiresCondition: !being-captured
-		SpawnOffset: -1024,-1024,0
-		Facing: 384
-		ExitCell: 0,0
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@4:
-		RequiresCondition: !being-captured
-		SpawnOffset: 1024,-1024,0
-		Facing: 32
-		ExitCell: 2,0
-		ProductionTypes: Submarine, Ship, Boat
-	Production:
-		Produces: Ship, Submarine, Boat
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	-SpawnActorsOnSell:
-	RepairsUnits:
-		ValuePercentage: 0
-		Interval: 12
-		HpPerStep: 1000
-		StartRepairingNotification: Repairing
-		FinishRepairingNotification: UnitRepaired
-		PlayerExperience: 15
-		RequiresCondition: !forceshield && !invulnerability && !being-warped
-	RallyPoint:
-	ProductionBar:
-		ProductionType: Ship
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
@@ -1338,6 +1240,7 @@ FACT:
 	Inherits: ^Building
 	Inherits: ^3x3Shape
 	Inherits@Armor: ^ConcreteArmor
+	Inherits@BuildingProd: ^StructureProduction
 	Inherits: ^BotFallbackInsurance
 	Building:
 		Footprint: xxX xxx XxX ===
@@ -1389,14 +1292,10 @@ FACT:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Production:
-		Produces: Building, Defense
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Valued:
 		Cost: 2500
 	Tooltip:
 		Name: Construction Yard
-	BaseBuilding:
 	Transforms:
 		RequiresCondition: factundeploy
 		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
@@ -1422,14 +1321,7 @@ FACT:
 	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
 		Condition: factundeploy
 		Prerequisites: global-factundeploy
-	ProductionBar@Building:
-		ProductionType: Building
-	ProductionBar@Defense:
-		ProductionType: Defense
 		Color: 8A8A8A
-	BaseProvider:
-		PauseOnCondition: being-captured
-		Range: 16c0
 	WithBuildingBib:
 	WithBuildingPlacedAnimation:
 		RequiresCondition: !build-incomplete && !chrono-vortex
@@ -1580,6 +1472,7 @@ HPAD:
 	Inherits: ^Building
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@AirProd: ^AircraftProduction
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
 	HitShape:
 		UseTargetableCellsOffsets: false
@@ -1613,13 +1506,7 @@ HPAD:
 		SpawnOffset: 0,-256,0
 		ExitCell: 0,0
 		Facing: 224
-	RallyPoint:
-	Production:
-		Produces: Aircraft, Helicopter
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Reservable:
-	ProductionBar:
-		ProductionType: Aircraft
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
@@ -1794,8 +1681,6 @@ AFLD:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
-	ProductionBar:
-		ProductionType: Aircraft
 	SupportPowerChargeBar:
 	Power:
 		Amount: -20
@@ -2204,6 +2089,7 @@ TENT:
 	Inherits: ^Building
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@InfProd: ^InfantryProduction
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
@@ -2229,7 +2115,6 @@ TENT:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -42,810,0
@@ -2240,13 +2125,6 @@ TENT:
 		SpawnOffset: -725,640,0
 		ExitCell: 0,2
 		ProductionTypes: Soldier, Infantry
-	Production:
-		Produces: Infantry, Soldier
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	GrantExternalConditionToProduced:
-		Condition: produced
-	ProductionBar:
-		ProductionType: Infantry
 	ProvidesPrerequisite@infantryra:
 		Prerequisite: infantry.ra
 	ProvidesPrerequisite@infantryany:
@@ -2594,6 +2472,7 @@ PYLE:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@InfProd: ^InfantryProduction
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 840,-256,0, 840,512,0, 210,-512,0, -71,512,0
@@ -2623,22 +2502,11 @@ PYLE:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	RallyPoint:
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: -170,810,0
-		ExitCell: 1,2
-		ProductionTypes: Soldier, Infantry
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: -725,640,0
 		ExitCell: 0,2
 		ProductionTypes: Soldier, Infantry
-	Production:
-		Produces: Infantry, Soldier
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	ProductionBar:
-		ProductionType: Infantry
 	ProvidesPrerequisite@infantryany:
 		Prerequisite: infantry.any
 	ProvidesPrerequisite@infantrytd:
@@ -2693,6 +2561,7 @@ HAND:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@InfProd: ^InfantryProduction
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
@@ -2719,16 +2588,10 @@ HAND:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 512,1024,0
 		ExitCell: 1,2
-	Production:
-		Produces: Infantry, Soldier
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	ProductionBar:
-		ProductionType: Infantry
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 	ProvidesPrerequisite@infantryany:
@@ -2964,6 +2827,7 @@ WEAP.TD:
 AIRS:
 	Inherits: ^BuildingTD
 	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@VehicleProd: ^VehicleProduction
 	Inherits@shape: ^4x2Shape
 	RenderSprites:
 		Image: astrip
@@ -2998,10 +2862,10 @@ AIRS:
 	WithIdleOverlay@DISH:
 		Sequence: idle-dish
 		RequiresCondition: !build-incomplete
-	RallyPoint:
 	Exit@1:
 		SpawnOffset: -1024,0,0
 		ExitCell: 3,1
+	-Production:
 	ProductionAirdropCA:
 		Produces: Vehicle
 		PauseOnCondition: forceshield || invulnerability || being-warped
@@ -3153,8 +3017,6 @@ AIRS:
 	WithDeliveryAnimation:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	ProductionBar:
-		ProductionType: Vehicle
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
@@ -3270,6 +3132,7 @@ AFAC:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^3x3Shape
 	Inherits@Armor: ^ConcreteArmor
+	Inherits@BuildingProd: ^StructureProduction
 	Inherits: ^BotFallbackInsurance
 	RenderSprites:
 		FactionImages:
@@ -3296,14 +3159,10 @@ AFAC:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	Production:
-		Produces: Building, Defense
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Valued:
 		Cost: 2500
 	Tooltip:
 		Name: Construction Yard
-	BaseBuilding:
 	Transforms:
 		RequiresCondition: factundeploy
 		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
@@ -3362,18 +3221,10 @@ AFAC:
 	ProvidesPrerequisite@sandbag:
 		Factions: gdi, talon, zocom, eagle
 		Prerequisite: structures.sandbag
-	ProductionBar@Building:
-		ProductionType: Building
-	ProductionBar@Defense:
-		ProductionType: Defense
-		Color: 8A8A8A
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
 		DeathSequencePalette: overlayplayertd
-	BaseProvider:
-		PauseOnCondition: being-captured
-		Range: 16c0
 	WithBuildingPlacedAnimation:
 		RequiresCondition: !build-incomplete && !chrono-vortex
 	Power:
@@ -4084,6 +3935,7 @@ HPAD.TD:
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
+	Inherits@AirProd: ^AircraftProduction
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: hpad2
@@ -4116,13 +3968,7 @@ HPAD.TD:
 		SpawnOffset: 0,-256,0
 		ExitCell: 0,0
 		Facing: 224
-	RallyPoint:
-	Production:
-		Produces: Aircraft, Helicopter
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Reservable:
-	ProductionBar:
-		ProductionType: Aircraft
 	WithBuildingBib:
 	Power:
 		Amount: -10
@@ -4322,6 +4168,7 @@ AFLD.GDI:
 	Inherits@shape: ^3x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
+	Inherits@AirProd: ^AircraftProduction
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: afldgdi
@@ -4352,10 +4199,6 @@ AFLD.GDI:
 		RequiresCondition: !being-captured
 		ExitCell: 1,1
 		Facing: 192
-	RallyPoint:
-	Production:
-		Produces: Aircraft, Plane
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Reservable:
 	ProvidesPrerequisite@GDI:
 		Factions: gdi, eagle, zocom, talon
@@ -4446,8 +4289,6 @@ AFLD.GDI:
 		DirectionArrowAnimation: paradirection
 		GuardDuration: 500
 		Cordon: 5c0
-	ProductionBar:
-		ProductionType: Aircraft
 	SupportPowerChargeBar:
 	Power:
 		Amount: -20
@@ -4466,6 +4307,7 @@ AFLD.allies:
 	Inherits@shape: ^3x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
+	Inherits@AirProd: ^AircraftProduction
 	RenderSprites:
 		Image: afld.allies
 	HitShape:
@@ -4491,13 +4333,7 @@ AFLD.allies:
 		RequiresCondition: !being-captured
 		ExitCell: 1,1
 		Facing: 192
-	RallyPoint:
-	Production:
-		Produces: Aircraft, Plane
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Reservable:
-	ProductionBar:
-		ProductionType: Aircraft
 	SupportPowerChargeBar:
 	Power:
 		Amount: -20
@@ -4881,6 +4717,7 @@ SPEN.nod:
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@shape: ^3x3Shape
 	Inherits@Shipyard: ^ShipPrerequisites
+	Inherits@ShipProd: ^ShipProduction
 	RenderSprites:
 		Image: SPENNOD
 		PlayerPalette: playernavy
@@ -4932,20 +4769,6 @@ SPEN.nod:
 		Facing: 0
 		ExitCell: 1,0
 		ProductionTypes: Submarine, Ship, Boat
-	Production:
-		Produces: Ship, Submarine, Boat
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	RepairsUnits:
-		ValuePercentage: 0
-		Interval: 12
-		HpPerStep: 1000
-		StartRepairingNotification: Repairing
-		FinishRepairingNotification: UnitRepaired
-		PlayerExperience: 15
-		RequiresCondition: !forceshield && !invulnerability && !being-warped
-	RallyPoint:
-	ProductionBar:
-		ProductionType: Ship
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped
@@ -4976,6 +4799,7 @@ SYRD.gdi:
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@shape: ^3x3Shape
 	Inherits@Shipyard: ^ShipPrerequisites
+	Inherits@ShipProd: ^ShipProduction
 	RenderSprites:
 		Image: GSYRD
 		PlayerPalette: playernavy
@@ -5008,44 +4832,6 @@ SYRD.gdi:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: -1024,1024,0
-		Facing: 160
-		ExitCell: 0,2
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@2:
-		RequiresCondition: !being-captured
-		SpawnOffset: 1024,1024,0
-		Facing: 224
-		ExitCell: 2,2
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@3:
-		RequiresCondition: !being-captured
-		SpawnOffset: -1024,-1024,0
-		Facing: 384
-		ExitCell: 0,0
-		ProductionTypes: Submarine, Ship, Boat
-	Exit@4:
-		RequiresCondition: !being-captured
-		SpawnOffset: 1024,-1024,0
-		Facing: 32
-		ExitCell: 2,0
-		ProductionTypes: Submarine, Ship, Boat
-	Production:
-		Produces: Ship, Submarine, Boat
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	RepairsUnits:
-		ValuePercentage: 0
-		Interval: 12
-		HpPerStep: 1000
-		StartRepairingNotification: Repairing
-		FinishRepairingNotification: UnitRepaired
-		PlayerExperience: 15
-		RequiresCondition: !forceshield && !invulnerability && !being-warped
-	RallyPoint:
-	ProductionBar:
-		ProductionType: Ship
 	Power:
 		Amount: -30
 		RequiresCondition: !being-warped

@@ -23,7 +23,7 @@ chcommand:
 	BaseProvider:
 		PauseOnCondition: being-captured
 		Range: 16c0
-		RequiresCondition: bot-owner
+		RequiresCondition: botowner
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 5c0
@@ -87,6 +87,25 @@ chcommand:
 	GrantConditionOnBotOwner@BOTRADAR:
 		Condition: botowner
 		Bots: brutal, vhard, hard, normal, easy, naval
+	ProvidesPrerequisite@faction:
+		Prerequisite: chnmcv
+		RequiresCondition: botowner
+	ProvidesPrerequisite@china:
+		Factions: china, chinainf, chinatnk, chinaatom
+		Prerequisite: structures.china
+		RequiresCondition: botowner
+	ProvidesPrerequisite@chinainf:
+		Factions: chinainf
+		Prerequisite: structures.chinainf
+		RequiresCondition: botowner
+	ProvidesPrerequisite@chinatnk:
+		Factions: chinatnk
+		Prerequisite: structures.chinatnk
+		RequiresCondition: botowner
+	ProvidesPrerequisite@chinaatom:
+		Factions: chinaatom
+		Prerequisite: structures.chinaatom
+		RequiresCondition: botowner
 
 chcommand.radar:
 	Inherits: ^BuildingPlug
@@ -539,8 +558,6 @@ chpropaganda:
 	ProvidesPrerequisite:
 		Prerequisite: techcenter
 	ProvidesPrerequisite@buildingname:
-	Production@Upgrades:
-		Produces: PropagandaUpgrades.CHINA
 	Power:
 		Amount: -40
 	Voiced:
@@ -699,8 +716,6 @@ chinternetcenter:
 	LaysMinefield@minefield:
 		Locations: 0,0, 1,0, 2,0, 3,0, -1,1, -1,2, 4,1, 4,2, 0,3, 1,3, 2,3, 3,3
 	ProvidesPrerequisite@buildingname:
-	Production@Upgrades:
-		Produces: InternetUpgrades.CHINA
 	Power:
 		Amount: -80
 	Cargo:
