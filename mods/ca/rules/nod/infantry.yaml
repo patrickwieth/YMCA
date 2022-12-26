@@ -1,0 +1,78 @@
+Cyborg_Commando:
+	Inherits: ^Soldier
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits@Armor: ^HeavyArmor
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@EMP: ^EmpDisable
+	Inherits@BioDamageImmune: ^BioDamageImmune
+	RenderSprites:
+		PlayerPalette: playerd2k
+	Buildable:
+		Queue: Infantry
+		BuildPaletteOrder: 121
+		Prerequisites: bio.nod, ~hand, ~commander_tree.elite_cyborg, ~techlevel.high
+		IconPalette: chrometd
+		Description: Elite cyborg infantry unit armed with\na plasma cannon.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+	Valued:
+		Cost: 1250
+	Tooltip:
+		Name: Cyborg Elite
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 45000
+	Mobile:
+		speed: 73
+		Voice: Move
+		PauseOnCondition: being-warped || empdisable
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped || empdisable
+		FacingTolerance: 0
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: CyborgCommandoVoice
+	RevealsShroud:
+		Range: 4c768
+	-TakeCover:
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	Armament@PRIMARY:
+		Weapon: CyCannon
+		LocalOffset: 0,0,555
+	Armament@Garrison:
+		Name: mounted
+		Weapon: cycannon
+		LocalOffset: 0,0,555
+	Explodes:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		Chance: 100
+		RequiresCondition: !being-warped
+	WithDeathAnimation:
+		DeathSequencePalette: playerd2k
+	-Crushable:
+	-KillsSelf@Immolate:
+	GrantConditionOnTerrain@THEAL:
+		Condition: tibheal
+		TerrainTypes: Tiberium, BlueTiberium
+	WithDecoration@THEAL:
+		Image: pips
+		Sequence: medic
+		Palette: temptd
+		Position: BottomLeft
+		RequiresCondition: tibheal
+	Targetable:
+		TargetTypes: Ground, Vehicle, Tank, ChaosImmune, DriverKillImmune, MindControlImmune
+	Targetable@REPAIR:
+		RequiresCondition: !parachute && damaged && !being-warped
+		TargetTypes: Repair
+	WithInfantryBody:
+		RequiresCondition: !being-warped || !empdisable
+	WithInfantryBody@Warped:
+		RequiresCondition: being-warped || empdisable
