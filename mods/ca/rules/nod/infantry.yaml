@@ -1,78 +1,83 @@
 Cyborg_Commando:
 	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	-TakeCover:
+	-Crushable:
+	Inherits: ^HighResShadow
 	Inherits@Armor: ^HeavyArmor
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@EMP: ^EmpDisable
-	Inherits@BioDamageImmune: ^BioDamageImmune
-	RenderSprites:
-		PlayerPalette: playerd2k
+	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits@detect: ^SensorEquipment
+	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Buildable:
 		Queue: Infantry
-		BuildPaletteOrder: 121
-		Prerequisites: bio.nod, ~hand, ~commander_tree.elite_cyborg, ~techlevel.high
+		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Description: Elite cyborg infantry unit armed with\na plasma cannon.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+		Prerequisites: ~infantry.nod, techcenter, ~commander_tree.advanced_infantry_training, ~disabled
+		Description: Tough combat battle-mech.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks\n Weak vs Point Laser Defense
+		BuildLimit: 1
 	Valued:
-		Cost: 1250
+		Cost: 3000
 	Tooltip:
-		Name: Cyborg Elite
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
+		Name: Cyborg Commando
 	Health:
-		HP: 45000
+		HP: 60000
 	Mobile:
-		speed: 73
+		Locomotor: heavytracked
+		Speed: 50
 		Voice: Move
-		PauseOnCondition: being-warped || empdisable
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Selectable:
+		Bounds: 1024, 1024
+		DecorationBounds: 1024, 1024
+	WithInfantryBody:
+		IdleSequences: idle1,idle2
+		AttackSequences:
+			primary: shoot
+	WithDeathAnimation:
+		Sequence: die1
+		DeathSequencePalette: overlayplayertd
+		UseDeathTypeSuffix: false
 	AttackFrontal:
+		FacingTolerance: 0
 		Voice: Attack
 		PauseOnCondition: being-warped || empdisable
-		FacingTolerance: 0
+	Armament@PRIMARY:
+		Weapon: CommandoLaser
+		LocalOffset: 600,50,100
+	Armament@Garrison:
+		Name: mounted
+		Weapon: CommandoLaser
+		LocalOffset: 0,0,555
+	WithMuzzleOverlay:
+	Voiced:
+		VoiceSet: CyborgCommandoVoice
 	AttackMove:
 		Voice: Move
 	Passenger:
 		Voice: Move
 	Guard:
 		Voice: Move
-	Voiced:
-		VoiceSet: CyborgCommandoVoice
-	RevealsShroud:
-		Range: 4c768
-	-TakeCover:
+	SpawnActorOnDeath@crippled:
+		Actor: cyborg_commando.crippled
+		OwnerType: Victim
+		SpawnAfterDefeat: false
+
+Cyborg_Commando.crippled:
+	Inherits: Cyborg_Commando
+	-Buildable:
+	Health:
+		HP: 40000
+	Mobile:
+		Speed: 30
 	WithInfantryBody:
-		DefaultAttackSequence: shoot
+		IdleSequences: prone-stand
+		StandSequences: prone-stand
+		MoveSequence: prone-run
+		AttackSequences:
+			primary: prone-shoot
 	Armament@PRIMARY:
-		Weapon: CyCannon
-		LocalOffset: 0,0,555
-	Armament@Garrison:
-		Name: mounted
-		Weapon: cycannon
-		LocalOffset: 0,0,555
-	Explodes:
-		Weapon: UnitExplodeSmall
-		EmptyWeapon: UnitExplodeSmall
-		Chance: 100
-		RequiresCondition: !being-warped
-	WithDeathAnimation:
-		DeathSequencePalette: playerd2k
-	-Crushable:
-	-KillsSelf@Immolate:
-	GrantConditionOnTerrain@THEAL:
-		Condition: tibheal
-		TerrainTypes: Tiberium, BlueTiberium
-	WithDecoration@THEAL:
-		Image: pips
-		Sequence: medic
-		Palette: temptd
-		Position: BottomLeft
-		RequiresCondition: tibheal
-	Targetable:
-		TargetTypes: Ground, Vehicle, Tank, ChaosImmune, DriverKillImmune, MindControlImmune
-	Targetable@REPAIR:
-		RequiresCondition: !parachute && damaged && !being-warped
-		TargetTypes: Repair
-	WithInfantryBody:
-		RequiresCondition: !being-warped || !empdisable
-	WithInfantryBody@Warped:
-		RequiresCondition: being-warped || empdisable
+		FireDelay: 18
+		LocalOffset: 300,100,400
+	-SpawnActorOnDeath@crippled:
