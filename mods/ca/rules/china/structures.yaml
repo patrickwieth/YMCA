@@ -272,10 +272,11 @@ chgatling:
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetAll
 	Inherits@mines: ^MinefieldUpgrade
+	Inherits: ^ChinaGatling
 	Valued:
-		Cost: 1000
+		Cost: 800
 	Tooltip:
-		Name: gatling Cannon
+		Name: Gatling Cannon
 	Buildable:
 		BuildPaletteOrder: 40
 		Prerequisites: infantry.china, ~structures.china
@@ -289,29 +290,15 @@ chgatling:
 	LaysMinefield@minefield:
 		Locations: 0,-1, 0,1, -1,0, 1,0
 	Turreted:
-		TurnSpeed: 12
+		TurnSpeed: 16
 		Offset: 0,0,120
 	WithSpriteBody:
 	WithSpriteTurret:
-	Armament@NORMAL:
-		Weapon: CHgatlingTurret
-		LocalOffset: -85,120,340, -85,-120,340
-		LocalYaw: -100, 100
-		Recoil: 10
-		MuzzleSequence: muzzle
-	Armament@AA:
-		Weapon: CHgatlingTurretAA
-		LocalOffset: -85,120,340, -85,-120,340
-		LocalYaw: -100, 100
-		Recoil: 10
-		MuzzleSequence: muzzle
 	AttackTurreted:
 		PauseOnCondition: lowpower || disabled
 	WithMuzzleOverlay:
 	BodyOrientation:
 		QuantizedFacings: 8
-	DetectCloaked:
-		Range: 5c0
 	AmmoPool:
 		Ammo: 8
 		PipCount: 0
@@ -345,7 +332,7 @@ chbunker:
 		Queue: Defense
 		Description: Garrisonable defensive structure.\n  Strong vs ground targets\n  Weak vs Aircraft
 	Valued:
-		Cost: 600
+		Cost: 1200
 	CustomSellValue:
 		Value: 500
 	Health:
@@ -366,6 +353,7 @@ chbunker:
 		Types: Infantry, Hacker, Fremen
 		MaxWeight: 5
 		PipCount: 5
+		InitialUnits: che1, che3, che3
 	WithSpriteBody:
 	RenderRangeCircle:
 		FallbackRange: 6c0
@@ -399,14 +387,14 @@ chbunker2:
 		Queue: Defense
 		Description: All-purpose defensive structure.\n  Strong vs Aircraft, Tanks\n  Weak vs Infantry
 	Valued:
-		Cost: 700
+		Cost: 1400
 	Health:
 		HP: 100000
 	Cargo:
 		Types: Infantry, Hacker, Fremen
 		MaxWeight: 8
 		PipCount: 8
-		InitialUnits: che2
+		InitialUnits: che2, che3, che3
 	LaysMinefield@minefield:
 		-RequiresCondition:
 	Selectable:
@@ -725,7 +713,7 @@ chinternetcenter:
 		BeforeUnloadDelay: 0
 		AfterUnloadDelay: 0
 	RevealActorsPower@SATHACK:
-		CameraActor: camera.sathack
+		CameraActor: CAMERA
 		TargetActors: fact, afac, sfac, glcommand, chcommand, usacommand
 		LifeTime: 500
 		OrderName: satellitehack1
