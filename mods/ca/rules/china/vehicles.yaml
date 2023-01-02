@@ -291,7 +291,7 @@ choverlord:
 		Modifier: 80
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: techcenter, ~vehicles.china, ~!vehicles.chinainf,  ~!vehicles.chinatnk
+		Prerequisites: techcenter, ~vehicles.china, ~!vehicles.chinainf,  ~!vehicles.chinatnk, ~!filler.overlord
 		Queue: Vehicle
 		Description: Heavy Chinese tank.
 	TooltipExtras:
@@ -326,8 +326,9 @@ choverlord:
 choverlord.Gatling:
 	Inherits: choverlord
 	Inherits: ^ChinaGatling
+	Inherits@detect: ^SensorEquipment
 	Buildable:
-		Prerequisites: techcenter, ~commander_tree.overlord.gatling
+		Prerequisites: techcenter, ~commander_tree.overlord.gatling, ~!filler.overlord2
 		Description: Heavy Chinese tank.\n
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles
@@ -340,7 +341,7 @@ choverlord.Gatling:
 		Name: Gatling Emperor
 		RequiresCondition: vehicles.chinatnk
 	Valued:
-		Cost: 2200
+		Cost: 2000
 	Turreted@gatling:
 		Turret: secondary
 		TurnSpeed: 12
@@ -407,7 +408,8 @@ choverlord.Bunker:
 	-AttackTurreted:
 	Inherits@CARGO: ^AttackingCargoAndTurret
 	Buildable:
-		Prerequisites: techcenter, ~commander_tree.overlord.bunker
+		Prerequisites: techcenter, ~commander_tree.overlord.bunker, ~!filler.overlord2
+	TooltipExtras:
 		Description: Heavy Chinese tank.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Aircraft
@@ -462,7 +464,7 @@ choverlord.Propaganda:
 	Inherits: choverlord
 	Inherits@speaker: ^PropagandaSpeaker
 	Buildable:
-		Prerequisites: techcenter, ~commander_tree.overlord.propaganda
+		Prerequisites: techcenter, ~commander_tree.overlord.propaganda, ~!filler.overlord2
 		Description: Heavy Chinese tank with propaganda speakers.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles
@@ -517,7 +519,7 @@ choverlord.Nuke_Shells:
 	Inherits: choverlord
 	Inherits@AUTOTARGET2: ^PrioAntiLight
 	Buildable:
-		Prerequisites: techcenter, ~commander_tree.overlord.nuclear_shells
+		Prerequisites: techcenter, ~commander_tree.overlord.nuclear_shells, ~!filler.overlord
 		Description: Heavy Chinese tank armed with nuclear shells.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry
@@ -572,7 +574,7 @@ choverlord.Plasma:
 	Inherits: choverlord
 	Inherits@AUTOTARGET2: ^PrioEnergyWeapon
 	Buildable:
-		Prerequisites: techcenter, ~commander_tree.overlord.plasma
+		Prerequisites: techcenter, ~commander_tree.overlord.plasma, ~!filler.overlord2
 		Description: Heavy Chinese tank shooting ionized plasma.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles
@@ -788,7 +790,7 @@ chgtnk:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 8
+		TurnSpeed: 16
 		Offset: -275,0,150
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
@@ -849,7 +851,7 @@ chharv:
 	Valued:
 		Cost: 700
 	Tooltip:
-		Name: Supply Truck
+		Name: Harvester Truck
 	Harvester:
 		Capacity: 15
 		PipCount: 6

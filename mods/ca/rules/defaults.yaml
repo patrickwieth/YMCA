@@ -282,10 +282,10 @@
 		LockedCondition: notmobile
 	GrantConditionOnTerrain@Tiberium:
 		Condition: ontib
-		TerrainTypes: Tiberium
+		TerrainTypes: Tiberium, BlueTiberium
 	GrantConditionOnTerrain@Ore:
 		Condition: onore
-		TerrainTypes: Ore
+		TerrainTypes: Ore, Gems
 	Explodes@Ore:
 		RequiresCondition: !no-ore && onore && !being-warped
 		Weapon: OreExplosion
@@ -1678,7 +1678,7 @@
 		Speed: 61
 		Locomotor: foot
 		PauseOnCondition: being-warped
-	SpawnActorOnDeath:
+	SpawnActorOnDeath@viceroid:
 		Probability: 35
 		Actor: vice
 		OwnerType: InternalName
@@ -4082,6 +4082,21 @@
 		Palette: chrometd
 		ReferencePoint: Bottom, Left
 		RequiresCondition: hazmatsuits
+
+^HealOnTiberium:
+	GrantConditionOnTerrain@Tiberium:
+		Condition: on-tib
+		TerrainTypes: Tiberium, BlueTiberium
+	ExternalCondition@ONTIB:
+		Condition: on-tib
+	ChangesHealth@THEAL:
+		Step: 0
+		PercentageStep: 1
+		Delay: 15
+		StartIfBelow: 100
+		DamageCooldown: 150
+		RequiresCondition: on-tib
+		DamageTypes: ToxinDeath
 
 ^HighResShadow:
 	WithShadow:
