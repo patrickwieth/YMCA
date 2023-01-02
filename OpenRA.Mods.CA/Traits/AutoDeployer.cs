@@ -72,10 +72,22 @@ namespace OpenRA.Mods.CA.Traits
 			if (deployTicks > 0 || autoDeployManager.IsTraitDisabled)
 				return;
 
-			autoDeployManager.AddEntry(new TraitPair<AutoDeployer>(self, this));
+			if (!self.Owner.IsBot)
+			{
+				var trait = self.TraitOrDefault<GrantConditionOnDeploy>();
+				if (trait != null && trait.DeployState == DeployState.Undeployed)
+				{
+					trait.Deploy();
+					return;
+				}
+			}
+			else
+			{
+				autoDeployManager.AddEntry(new TraitPair<AutoDeployer>(self, this));
 
-			deployTicks = Info.DeployTicks;
-			undeployTicks = Info.UndeployTicks;
+				deployTicks = Info.DeployTicks;
+				undeployTicks = Info.UndeployTicks;
+			}
 		}
 
 		void Undeploy(Actor self)
@@ -150,7 +162,7 @@ namespace OpenRA.Mods.CA.Traits
 				return;
 
 			if (Info.DeployTrigger.HasFlag(DeployTriggers.BecomingIdle))
-				TryDeploy(self);
+					TryDeploy(self);
 		}
 	}
 }

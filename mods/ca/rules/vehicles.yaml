@@ -3107,7 +3107,7 @@ BTR.Surveillance:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
 		Prerequisites: barr, ~vehicles.soviet, ~commander_tree.surveillance_btr
-		Description: Tough infantry transport.\n  Can detect stealth units.\n  Is unarmed. \n  Special Ability: Radar Jamming.
+		Description: Tough infantry transport.\n  Can detect stealth units.\n  Is unarmed.
 	Valued:
 		Cost: 750
 	Tooltip:
@@ -4251,6 +4251,7 @@ MSAR:
 	Inherits: ^VehicleTD
 	Inherits@detect: ^SensorEquipment
 	Inherits@radar: ^MobileDeployableRadar
+	Inherits@autodeploy: ^AutoDeployIdler
 	Tooltip:
 		Name: Mobile Sensor Array
 		RequiresCondition: !deployed
@@ -4270,11 +4271,6 @@ MSAR:
 		HP: 22000
 	Mobile:
 		Speed: 82
-		RequireForceMoveCondition: !undeployed
-	Repairable:
-		RequireForceMoveCondition: !undeployed
-	Passenger:
-		RequireForceMoveCondition: !undeployed
 	GrantCondition@PREVIEWWORKAROUND:
 		Condition: real-actor
 	WithMakeAnimation:
@@ -6070,6 +6066,7 @@ GDRN:
 
 MSG:
 	Inherits: ^Vehicle
+	Inherits@autodeploy: ^AutoDeployIdler
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 385
@@ -6089,7 +6086,6 @@ MSG:
 		HP: 25000
 	Mobile:
 		Speed: 56
-		RequireForceMoveCondition: !undeployed
 	SpawnActorOnDeath:
 		Actor: MSG.Husk
 		RequiresCondition: !being-warped

@@ -324,7 +324,7 @@
 	AutoTargetPriority@AIHELPER:
 		ValidTargets: NoCrew
 		RequiresCondition: botowner
-		Priority: 1
+		Priority: 10
 	WithInfantryBody:
 		AttackSequences:
 			primary: shoot
@@ -1407,6 +1407,13 @@
 ^PrioEnergyAntiLight:
 
 ^PrioArtillery:
+
+^RelayTargeting:
+	AutoTargetPriority@Relay:
+		ValidTargets: relayTarget
+		Priority: 10
+	ExternalCondition@relayTarget:
+		Condition: relayTarget
 
 ^GlobalBounty:
 	GrantConditionOnPrerequisite@GLOBALBOUNTY:
@@ -3231,6 +3238,30 @@
 	Selectable:
 		Priority: 2
 
+^InfantrySupportUnit:
+	GuardsSelection:
+		ValidTargets: Infantry
+
+^TankSupportUnit:
+	GuardsSelection:
+		ValidTargets: Vehicle
+
+^AirSupportUnit:
+	GuardsSelection:
+		ValidTargets: Air
+
+^GroundSupportUnit:
+	GuardsSelection:
+		ValidTargets: Infantry, Vehicle
+
+^WaterSupportUnit:
+	GuardsSelection:
+		ValidTargets: Water, Underwater
+
+^GenericSupportUnit:
+	GuardsSelection:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air
+
 ^Viceroid:
 	Inherits@1: ^ExistsInWorld
 	Inherits@Armor: ^LightArmor
@@ -3729,6 +3760,22 @@
 		DeflectionStances: Neutral, Enemy
 		RequiresCondition: deployed && !(empdisable || being-warped)
 	RenderJammerCircle:
+
+^AutoDeployAttacker:
+	AutoDeployer:
+		RequiresCondition: !deployed && !parachute
+		DeployChance: 100
+		DeployTrigger: Attack
+		DeployTicks: 5
+		UndeployTicks: 50
+
+^AutoDeployIdler:
+	AutoDeployer:
+		RequiresCondition: undeployed && !parachute
+		DeployChance: 100
+		DeployTrigger: BecomingIdle
+		DeployTicks: 5
+		UndeployTicks: 50
 
 ^RadarStation:
 	ProvidesRadar:

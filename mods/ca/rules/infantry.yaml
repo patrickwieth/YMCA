@@ -155,10 +155,9 @@ E2:
 E3:
 	Inherits: ^Soldier
 	Inherits: ^WhiteFlash
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
+	Inherits@TargetPrio: ^PrioAntiHeavyAA
+	Inherits@TargetRelay: ^RelayTargeting
 	Inherits@BERSERK: ^Berserk
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: relayTarget
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -215,12 +214,6 @@ E3:
 		Armaments: primary, secondary, tertiary
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
-	AutoTarget:
-	ExternalCondition@relayTarget:
-		Condition: relayTarget
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 E3.soviet:
 	Inherits: E3
@@ -685,6 +678,7 @@ E7:
 
 MEDI:
 	Inherits: ^Soldier
+	Inherits: ^InfantrySupportUnit
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -710,17 +704,10 @@ MEDI:
 		OutsideRangeCursor: heal
 		TargetRelationships: Ally
 		ForceTargetRelationships: None
-	Armament@secondary:
-		Weapon: DummyWeapon
-		Name: secondary
-		PauseOnCondition: attacking
-	GrantConditionOnAttack:
-		ArmamentNames: secondary
-		Condition: attacking
-		RevokeDelay: 30
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
+	AutoTarget:
 	AutoTargetPriority@HEAL:
 		ValidTargets: Infantry
 		ValidRelationships: Ally
@@ -734,16 +721,12 @@ MEDI:
 			secondary: idle
 	Voiced:
 		VoiceSet: MedicVoice
-	AutoTarget:
-	AutoTargetPriority@ATTACKDUMMY:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
-		InvalidTargets: NoAutoTarget
-		ValidRelationships: Enemy
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
 MECH:
 	Inherits: ^Soldier
+	Inherits: ^TankSupportUnit
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -788,20 +771,8 @@ MECH:
 		InvalidTargets: NoAutoTarget
 		ValidRelationships: Ally
 		Priority: 3
-	Armament@tertiary:
-		Weapon: DummyWeapon
-		Name: tertiary
-		PauseOnCondition: attacking
-	GrantConditionOnAttack:
-		ArmamentNames: tertiary
-		Condition: attacking
-		RevokeDelay: 30
-	AutoTargetPriority@ATTACKDUMMY:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
-		InvalidTargets: NoAutoTarget
-		ValidRelationships: Enemy
 	AttackFrontal:
-		Armaments: primary, secondary, tertiary
+		Armaments: primary, secondary
 		Voice: Action
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
@@ -1146,11 +1117,10 @@ N2.Emp:
 
 N3:
 	Inherits: ^Soldier
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
+	Inherits@TargetPrio: ^PrioAntiHeavyAA
+	Inherits@TargetRelay: ^RelayTargeting
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@BERSERK: ^Berserk
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: relayTarget
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1206,17 +1176,13 @@ N3:
 		Armaments: primary, secondary, tertiary
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
-	AutoTarget:
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 	Selectable:
 		Class: E3
-	ExternalCondition@relayTarget:
-		Condition: relayTarget
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
-
 
 N3R1:
 	Inherits: N3
@@ -2121,8 +2087,9 @@ E8:
 		BodyNames: deployed
 	-DamagedByTintedCells@RAD:
 	-DamagedByTintedCells@RADHAZMAT:
-	AutoDeployer:
+	AutoDeployer@AI:
 		DeployChance: 20
+		RequiresCondition: botowner
 
 N1C:
 	Inherits: ^Soldier

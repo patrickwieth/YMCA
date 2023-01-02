@@ -47,6 +47,7 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			foreach (var entry in active)
 			{
+
 				if (entry.Actor.IsDead || !entry.Actor.IsInWorld)
 					continue;
 
