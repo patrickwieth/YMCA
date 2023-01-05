@@ -325,7 +325,7 @@ choverlord:
 
 choverlord.Gatling:
 	Inherits: choverlord
-	Inherits: ^ChinaGatling
+	Inherits: ^ChinaGatlingOverlord
 	Inherits@detect: ^SensorEquipment
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.gatling, ~!filler.overlord2
@@ -343,31 +343,24 @@ choverlord.Gatling:
 	Valued:
 		Cost: 2000
 	Turreted@gatling:
-		Turret: secondary
-		TurnSpeed: 12
+		Turret: primary
+		TurnSpeed: 16
 		Offset: -298,0,400
+	Turreted:
+		Turret: secondary
+		TurnSpeed: 3
+		Offset: -298,0,150
 	AttackTurreted:
-		Turrets: primary, secondary
-		Armaments: primary, secondary
-	Armament@gatling:
-		Name: secondary
-		Turret: secondary
-		Weapon: CHgatlingTurret
-		LocalOffset: 0,120,240, 0,-120,240
-		LocalYaw: -100, 100
-		Recoil: 10
-		MuzzleSequence: muzzle2
-	Armament@gatlingAA:
-		Name: secondary
-		Turret: secondary
-		Weapon: CHgatlingTurretAA
-		LocalOffset: 0,120,240, 0,-120,240
-		LocalYaw: -100, 100
-		Recoil: 10
-		MuzzleSequence: muzzle2
+		Turrets: primary, secondary, tertiary
+		Armaments: primary, secondary, tertiary
 	WithSpriteTurret@gatling:
-		Turret: secondary
+		Turret: primary
 		Sequence: turretgat
+	WithSpriteTurret:
+		Turret: secondary
+	Armament:
+		Name: tertiary
+		Turret: secondary
 
 choverlord.Gatling.PDL:
 	Inherits: choverlord.Gatling
