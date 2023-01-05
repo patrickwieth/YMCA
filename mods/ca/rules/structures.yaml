@@ -2,6 +2,7 @@ MSLO:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x1Shape
+	Inherits@sw: ^SuperWeapon
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -9,7 +10,7 @@ MSLO:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 140
-		Prerequisites: stek, ~techlevel.unrestricted, ~techlevel.superw, ~structures.soviet
+		Prerequisites: stek, ~techlevel.superw, ~structures.soviet
 		BuildLimit: 1
 		Description: Provides an atomic bomb.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Atom Bomb
 	Building:
@@ -81,7 +82,7 @@ GAP:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 110
-		Prerequisites: atek, ~structures.allies, ~techlevel.high
+		Prerequisites: atek, ~structures.allies
 		Description: Obscures the enemy's view with shroud.\n  Requires power to operate.
 	WithSpriteBody:
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -130,7 +131,7 @@ SPEN:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 50
-		Prerequisites: anypower, ~structures.soviet, ~techlevel.low, ~!global.nonaval
+		Prerequisites: anypower, ~structures.soviet, ~!global.nonaval
 		Description: Produces and repairs\nsubmarines and transports.
 	Targetable:
 		TargetTypes: Ground, Water, Structure, WaterStructure, C4, DetonateAttack, SpyInfiltrate
@@ -187,7 +188,7 @@ SYRD:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 40
-		Prerequisites: anypower, ~structures.allies, ~techlevel.low, ~!global.nonaval
+		Prerequisites: anypower, ~structures.allies, ~!global.nonaval
 		Description: Produces and repairs\nships and transports.
 	Valued:
 		Cost: 1000
@@ -239,6 +240,7 @@ IRON:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x1Shape
+	Inherits@sw: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -305,6 +307,7 @@ PDOX:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
+	Inherits@sw: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 120
@@ -436,7 +439,7 @@ TSLA:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
-		Prerequisites: weap, ~structures.soviet, ~techlevel.high
+		Prerequisites: weap, ~structures.soviet
 		Description: Advanced base defense.\n  Can be buffed or made work during low power by Shock Troopers.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
 	Valued:
 		Cost: 1200
@@ -512,7 +515,7 @@ AGUN:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
-		Prerequisites: dome, ~structures.allies, ~techlevel.medium
+		Prerequisites: dome, ~structures.allies
 		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Strong vs Aircraft\n  Weak vs Ground Units
 	Valued:
 		Cost: 800
@@ -565,7 +568,7 @@ DOME:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
-		Prerequisites: proc, ~structures.ra, ~techlevel.medium
+		Prerequisites: proc, ~structures.ra, ~!techlevel.low
 		Description: Provides an overview\nof the battlefield.\n  Requires power to operate.
 	Valued:
 		Cost: 1800
@@ -632,7 +635,7 @@ DOME:
 		CircleSequence: circles
 	AirstrikePower@clustermines:
 		ChargeInterval: 6000
-		Prerequisites: structures.france, techlevel.superw
+		Prerequisites: structures.france
 		Name: Cluster Mines
 		Description: Send a cargo plane\nto deploy a minefield.
 		OrderName: clustermine
@@ -658,7 +661,7 @@ DOME:
 		OrderName: gpsscramble
 		Icon: gpsscram
 		IconPalette: chrometd
-		Prerequisites: structures.germany, ~techlevel.superw
+		Prerequisites: structures.germany
 		ChargeInterval: 4500
 		LifeTime: 500
 		Name: GPS Scrambler
@@ -687,7 +690,7 @@ DOME:
 				SpawnDelay: 20
 				SpawnOffset: -1536,-1024,0
 				TargetOffset: 536,0,0
-		Prerequisites: ~aircraft.england, ~techlevel.superw
+		Prerequisites: ~aircraft.england
 		Icon: strafe
 		ChargeInterval: 7500
 		Name: Strafing Run
@@ -715,7 +718,7 @@ PBOX:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 40
-		Prerequisites: tent, ~structures.allies, ~!structures.england, ~techlevel.low
+		Prerequisites: tent, ~structures.allies, ~!structures.england
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 600
@@ -759,7 +762,7 @@ HBOX:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 50
-		Prerequisites: tent, ~structures.england, ~techlevel.low
+		Prerequisites: tent, ~structures.england
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 700
@@ -808,7 +811,7 @@ GUN:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 70
-		Prerequisites: tent, ~structures.allies, ~techlevel.medium
+		Prerequisites: tent, ~structures.allies
 		Description: Basic anti-tank base defense.\n  Can detect cloaked units.\n  Strong vs Tanks, Vehicles\n  Weak vs Infantry
 	Valued:
 		Cost: 800
@@ -852,7 +855,7 @@ FTUR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
-		Prerequisites: barr, ~!structures.iraq, ~structures.soviet, ~techlevel.low
+		Prerequisites: barr, ~!structures.iraq, ~structures.soviet
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 600
@@ -901,7 +904,7 @@ SAM:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 100
-		Prerequisites: dome, ~structures.soviet, ~techlevel.medium
+		Prerequisites: dome, ~structures.soviet
 		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
 	Valued:
 		Cost: 700
@@ -954,7 +957,7 @@ ATEK:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 140
-		Prerequisites: weap, dome, ~structures.allies, ~techlevel.high
+		Prerequisites: weap, dome, ~structures.allies, ~!techlevel.medium
 		Description: Provides Allied advanced technologies.\n  Special Ability: GPS Satellite
 	Valued:
 		Cost: 1500
@@ -1249,7 +1252,7 @@ FACT:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
-		Prerequisites: ~disabled
+		Prerequisites: ~conyardbuildable, ~structures.ra, fix
 		Description: Produces structures.
 	ProvidesPrerequisite@ra:
 		Factions: allies, england, france, germany, soviet, russia, ukraine, iraq
@@ -1349,7 +1352,7 @@ PROC:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 60
-		Prerequisites: anypower, ~structures.ra, ~techlevel.infonly
+		Prerequisites: anypower, ~structures.ra
 		Description: Processes raw Tiberium, Ore and Gems\ninto credits.
 	Valued:
 		Cost: 2000
@@ -1434,7 +1437,7 @@ SILO:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 35
-		Prerequisites: proc, ~structures.ra, ~techlevel.infonly
+		Prerequisites: proc, ~structures.ra
 		Description: Stores excess refined\nTiberium, Ore and Gems.
 	Valued:
 		Cost: 150
@@ -1480,7 +1483,7 @@ HPAD:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 120
-		Prerequisites: dome, ~structures.ra, ~techlevel.infonly
+		Prerequisites: dome, ~structures.ra
 		Description: Produces and reloads\nhelicopters.
 	Valued:
 		Cost: 500
@@ -1560,7 +1563,7 @@ HPAD:
 		Proxy: powerproxy.paratroopers2
 	SpawnActorPower@GDIEagleDropzone:
 		Actor: FLARE.dropzone
-		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, radar, ~techlevel.low
+		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, radar
 		LifeTime: 280
 		OrderName: dropzoneeagle
 		Icon: orcaca
@@ -1587,7 +1590,7 @@ AFLD:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 130
-		Prerequisites: dome, ~structures.soviet, ~techlevel.low
+		Prerequisites: dome, ~structures.soviet
 		Description: Produces and reloads aircraft.\n  Special Ability: Spy Plane\n  Special Ability: Paratroopers
 	Valued:
 		Cost: 500
@@ -1661,7 +1664,7 @@ AFLD:
 		DirectionArrowAnimation: paradirection
 	ParatroopersPower@Russianparatroopers:
 		OrderName: stormtroopers
-		Prerequisites: aircraft.russia, ~techlevel.high
+		Prerequisites: aircraft.russia
 		Icon: stormtroopers
 		ChargeInterval: 9000
 		Name: Storm-troopers
@@ -1705,7 +1708,7 @@ POWR:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 10
-		Prerequisites: ~techlevel.infonly, ~structures.ra
+		Prerequisites: ~structures.ra
 		Description: Provides power for other structures.
 	Valued:
 		Cost: 300
@@ -1743,7 +1746,7 @@ APWR:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 110
-		Prerequisites: dome, ~techlevel.medium, ~structures.ra, ~!structures.russia
+		Prerequisites: dome, ~structures.ra, ~!structures.russia
 		Description: Provides double the power of\na standard Power Plant.
 	Valued:
 		Cost: 500
@@ -1775,7 +1778,7 @@ APWR:
 TPWR:
 	Inherits: APWR
 	Buildable:
-		Prerequisites: dome, ~techlevel.medium, ~structures.russia
+		Prerequisites: dome, ~structures.russia
 		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload (Toggle)\n  Warning: Unstable when damaged and overloaded.
 	Valued:
 		Cost: 600
@@ -1842,7 +1845,7 @@ STEK:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 150
-		Prerequisites: weap, dome, ~structures.soviet, ~techlevel.high
+		Prerequisites: weap, dome, ~structures.soviet, ~!techlevel.medium
 		Description: Provides Soviet advanced technologies.
 	Valued:
 		Cost: 1500
@@ -2050,7 +2053,7 @@ KENN:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 175
-		Prerequisites: anypower, ~structures.soviet, ~techlevel.infonly
+		Prerequisites: anypower, ~structures.soviet
 		Description: Trains Attack Dogs.
 	Valued:
 		Cost: 200
@@ -2096,7 +2099,7 @@ TENT:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
-		Prerequisites: anypower, ~structures.allies, ~techlevel.infonly
+		Prerequisites: anypower, ~structures.allies
 		Description: Trains infantry.
 	Valued:
 		Cost: 500
@@ -2184,7 +2187,7 @@ FIX:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 100
-		Prerequisites: weap, ~structures.ra, ~techlevel.medium
+		Prerequisites: weap, ~structures.ra
 		Description: Repairs vehicles.
 	Valued:
 		Cost: 1200
@@ -2237,7 +2240,7 @@ SBAG:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 10
-		Prerequisites: ~structures.sandbag, ~techlevel.low
+		Prerequisites: ~structures.sandbag
 		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
@@ -2259,7 +2262,7 @@ FENC:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 20
-		Prerequisites: fact, ~structures.soviet, ~techlevel.low
+		Prerequisites: fact, ~structures.soviet
 		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
@@ -2281,7 +2284,7 @@ BRIK:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 30
-		Prerequisites: anypower, ~techlevel.medium
+		Prerequisites: anypower
 		Description: Stops units and blocks enemy fire.
 	Valued:
 		Cost: 200
@@ -2310,7 +2313,7 @@ CHAIN:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 20
-		Prerequisites: afac, ~structures.nod, ~techlevel.low
+		Prerequisites: afac, ~structures.nod
 		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
@@ -2482,7 +2485,7 @@ PYLE:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
-		Prerequisites: anypower, ~structures.gdi, ~techlevel.low
+		Prerequisites: anypower, ~structures.gdi
 		IconPalette: chrometd
 		Description: Trains infantry.
 	Valued:
@@ -2568,7 +2571,7 @@ HAND:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
-		Prerequisites: anypower, ~structures.nod, ~techlevel.low
+		Prerequisites: anypower, ~structures.nod
 		IconPalette: chrometd
 		Description: Trains infantry.
 	Valued:
@@ -2658,7 +2661,7 @@ WEAP.TD:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
-		Prerequisites: proc.td, ~structures.weap.td, ~structures.td, ~techlevel.low
+		Prerequisites: proc.td, ~structures.weap.td, ~structures.td
 		IconPalette: chrometd
 		Description: Produces vehicles.
 	Valued:
@@ -2802,9 +2805,6 @@ WEAP.TD:
 		RequiresCondition: !being-captured
 		SpawnOffset: -341,-341,0
 		ExitCell: 0,2
-	Production:
-		Produces: Vehicle, Paradrop
-		PauseOnCondition: forceshield || invulnerability || being-warped
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 	Power:
@@ -2839,7 +2839,7 @@ AIRS:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
-		Prerequisites: proc.td, ~structures.nod, ~!structures.legion, ~techlevel.low
+		Prerequisites: proc.td, ~structures.nod, ~!structures.legion
 		IconPalette: chrometd
 		Description: Provides a dropzone\nfor vehicle reinforcements
 	Valued:
@@ -3045,7 +3045,7 @@ NUKE:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 10
-		Prerequisites: ~structures.td, ~techlevel.low
+		Prerequisites: ~structures.td
 		IconPalette: chrometd
 		Description: Provides power for other structures.
 	Valued:
@@ -3096,7 +3096,7 @@ NUK2:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 110
-		Prerequisites: hq, ~structures.td, ~techlevel.low
+		Prerequisites: hq, ~structures.td
 		IconPalette: chrometd
 		Description: Provides double the power of\na standard Nuclear Power Plant.
 	Valued:
@@ -3147,7 +3147,7 @@ AFAC:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
-		Prerequisites: ~disabled
+		Prerequisites: ~conyardbuildable, ~structures.td, rep
 		IconPalette: chrometd
 		Description: Produces structures.
 	Health:
@@ -3253,7 +3253,7 @@ NSAM:
 		Queue: Defense
 		IconPalette: chrome
 		BuildPaletteOrder: 100
-		Prerequisites: hq, ~structures.nod, ~techlevel.medium
+		Prerequisites: hq, ~structures.nod
 		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Cannot target Ground Units.
 	Valued:
 		Cost: 700
@@ -3302,7 +3302,7 @@ GTWR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 50
-		Prerequisites: pyle, ~structures.gdi, ~techlevel.low
+		Prerequisites: pyle, ~structures.gdi
 		IconPalette: chrometd
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Valued:
@@ -3344,7 +3344,7 @@ ATWR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
-		Prerequisites: hq, ~structures.gdi, ~!structures.zocom, ~techlevel.high
+		Prerequisites: hq, ~structures.gdi, ~!structures.zocom
 		IconPalette: chrometd
 		Description: Advanced base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
@@ -3440,7 +3440,7 @@ STWR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
-		Prerequisites: hq, ~structures.zocom, ~techlevel.high
+		Prerequisites: hq, ~structures.zocom
 		Description: Advanced base defense that emits devastating sonic shockwaves.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1350
@@ -3486,7 +3486,7 @@ OBLI:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
-		Prerequisites: hq, ~structures.nod, ~techlevel.high
+		Prerequisites: hq, ~structures.nod
 		IconPalette: chrometd
 		Description: Advanced experimental base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
@@ -3586,7 +3586,7 @@ HQ:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
-		Prerequisites: proc.td, ~structures.td, ~techlevel.medium
+		Prerequisites: proc.td, ~structures.td, ~!techlevel.low
 		IconPalette: chrometd
 		Description: Provides an overview of the battlefield.\n  Requires power to operate.
 	Valued:
@@ -3644,7 +3644,7 @@ HQ:
 		PauseOnCondition: disabled || being-warped
 	ParatroopersPower@paratroopers:
 		OrderName: LegionParatroopers
-		Prerequisites: structures.blackh, hand, techlevel.medium
+		Prerequisites: structures.blackh, hand
 		Icon: paratroopers
 		UnitType: c17
 		ChargeInterval: 7500
@@ -3669,7 +3669,7 @@ HQ:
 	DropPodsPower@Zocom:
 		OrderName: droppods
 		Cursor: ability
-		Prerequisites: structures.zocom, techlevel.high
+		Prerequisites: structures.zocom
 		PauseOnCondition: disabled || being-warped
 		Icon: droppods
 		IconPalette: chrometd
@@ -3692,7 +3692,7 @@ HQ:
 		ChargeInterval: 6000
 		Minimum: 500
 		Maximum: 2000
-		Prerequisites: structures.legion, techlevel.high
+		Prerequisites: structures.legion
 		AllowMultiple: false
 		Name: Cash Hack
 		Description: Steal up to $2000 credits from the enemy.\n\nTarget their Refinery to do so.
@@ -3706,7 +3706,7 @@ HQ:
 		PauseOnCondition: disabled || empdisable || being-warped
 	AirstrikePower@BlackhandFirebomb:
 		OrderName: infernobomb
-		Prerequisites: radar.blackh, techlevel.superw
+		Prerequisites: radar.blackh
 		Icon: infbomb
 		IconPalette: chrometd
 		ChargeInterval: 9000
@@ -3730,7 +3730,7 @@ HQ:
 		PauseOnCondition: disabled || being-warped
 	AirReinforcementsPower@ShadowTeam:
 		OrderName: shadowteam
-		Prerequisites: ~radar.marked, techlevel.unrestricted
+		Prerequisites: ~radar.marked
 		Icon: shadteam
 		ChargeInterval: 6750
 		Name: Shadow Team
@@ -3775,6 +3775,7 @@ EYE:
 	Inherits: ^ScienceBuildingTD
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^RadarStation
+	Inherits@sw: ^SuperWeapon
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,512,128, 420,-598,213
 		Type: Rectangle
@@ -3846,7 +3847,7 @@ EYE:
 		TargetCircleColor: 4fff3390
 	IonCannonPower@surgicals:
 		OrderName: surgicalstrike
-		Prerequisites: structures.zocom, techlevel.superw
+		Prerequisites: structures.zocom
 		Icon: surgicalstrike
 		IconPalette: chrometd
 		ChargeInterval: 3500
@@ -3886,7 +3887,7 @@ REP:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 100
-		Prerequisites: vehicles.td, ~structures.td, ~techlevel.medium
+		Prerequisites: vehicles.td, ~structures.td
 		IconPalette: chrometd
 		Description: Repairs vehicles.
 	Valued:
@@ -3946,7 +3947,7 @@ HPAD.TD:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 120
-		Prerequisites: radar, ~structures.td, ~techlevel.infonly
+		Prerequisites: radar, ~structures.td
 		IconPalette: chrometd
 		Description: Produces and reloads\nhelicopters.
 	Valued:
@@ -4035,7 +4036,7 @@ HPAD.TD:
 		Proxy: powerproxy.paratroopers2
 	SpawnActorPower@GDIEagleDropzone:
 		Actor: FLARE.dropzone
-		Prerequisites: ~radar.gdi, ~structures.eagle, ~techlevel.low
+		Prerequisites: ~radar.gdi, ~structures.eagle
 		LifeTime: 280
 		OrderName: dropzoneeagle
 		Icon: orcaca
@@ -4074,7 +4075,7 @@ PROC.TD:
 		Name: Refinery
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: anypower, ~structures.td, ~techlevel.low
+		Prerequisites: anypower, ~structures.td
 		Queue: Building
 		IconPalette: chrometd
 		Description: Processes raw Tiberium, Ore and Gems\ninto useable resources
@@ -4129,7 +4130,7 @@ SILO.TD:
 		Name: Silo
 	Buildable:
 		BuildPaletteOrder: 35
-		Prerequisites: proc.td, ~structures.td, ~techlevel.infonly
+		Prerequisites: proc.td, ~structures.td
 		Queue: Defense
 		IconPalette: chrometd
 		Description: Stores processed Tiberium, Ore and Gems
@@ -4179,7 +4180,7 @@ AFLD.GDI:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 130
-		Prerequisites: radar, ~structures.gdi, ~techlevel.high
+		Prerequisites: radar, ~structures.gdi
 		Description: Produces and reloads aircraft.\n  Special Ability: Recon Drone
 	Valued:
 		Cost: 500
@@ -4269,7 +4270,7 @@ AFLD.GDI:
 		DirectionArrowAnimation: paradirection
 	InterceptorPower@EagleAirDef:
 		OrderName: interceptors
-		Prerequisites: aircraft.eagle, techlevel.superw
+		Prerequisites: aircraft.eagle
 		Icon: airsupport
 		ChargeInterval: 10500
 		Name: Interceptors
@@ -4385,7 +4386,7 @@ GTEK:
 		Queue: Building
 		BuildPaletteOrder: 150
 		IconPalette: chrometd
-		Prerequisites: weap.td, hq, ~structures.gdi, ~techlevel.high
+		Prerequisites: weap.td, hq, ~structures.gdi, ~!techlevel.medium
 		Description: Provides GDI advanced technologies.
 	Valued:
 		Cost: 1500
@@ -4464,7 +4465,7 @@ TMPL:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 140
-		Prerequisites: hq, ~vehicles.nod, ~structures.nod, ~techlevel.high
+		Prerequisites: hq, ~vehicles.nod, ~structures.nod, ~!techlevel.medium
 		IconPalette: chrometd
 		Description: Provides Nod advanced technologies.\n  Requires power to operate.\n  Special Ability: Cluster Missile
 	Building:
@@ -4488,7 +4489,7 @@ TMPL:
 		OrderName: clustermissile
 		Icon: clustermissile
 		IconPalette: chrometd
-		Prerequisites: ~structures.nod, techlevel.high, techlevel.superw
+		Prerequisites: ~structures.nod
 		Cursor: ability
 		ChargeInterval: 10500
 		Name: Cluster Missile
@@ -4549,7 +4550,7 @@ TMPL:
 	GrantExternalConditionPowerCA@Frenzy:
 		OrderName: frenzy
 		Icon: frenzy
-		Prerequisites: structures.marked, techlevel.high
+		Prerequisites: structures.marked
 		ChargeInterval: 4500
 		Weapon: Frenzy
 		Name: Frenzy
@@ -4601,7 +4602,7 @@ PRIS:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
-		Prerequisites: radar, ~structures.allies, ~techlevel.high
+		Prerequisites: radar, ~structures.allies
 		Description: Experimental base defense.\nRequires power to operate.\nCan detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1300
@@ -4733,7 +4734,7 @@ SPEN.nod:
 		Queue: Building
 		BuildPaletteOrder: 50
 		IconPalette: chrometd
-		Prerequisites: anypower, ~structures.nod, ~techlevel.low, ~!global.nonaval
+		Prerequisites: anypower, ~structures.nod, ~!global.nonaval
 		Description: Produces and repairs\nsubmarines and transports.
 	Targetable:
 		TargetTypes: Ground, Water, WaterStructure, Structure, C4, DetonateAttack, SpyInfiltrate
@@ -4810,7 +4811,7 @@ SYRD.gdi:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 40
-		Prerequisites: anypower, ~structures.gdi, ~techlevel.low, ~!global.nonaval
+		Prerequisites: anypower, ~structures.gdi, ~!global.nonaval
 		Description: Produces and repairs ships\nand transports.
 	Valued:
 		Cost: 1000
@@ -4866,7 +4867,7 @@ HTUR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 100
-		Prerequisites: radar, ~structures.france, ~techlevel.high
+		Prerequisites: radar, ~structures.france
 		Description: Artillery base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Ground Units\n  Weak vs Aircraft
 	Valued:
 		Cost: 1650
@@ -4917,7 +4918,7 @@ GUN.Nod:
 		PlayerPalette: overlayplayertd
 	ActorPreviewPlaceBuildingPreview:
 	Buildable:
-		Prerequisites: hand, ~structures.nod, ~techlevel.medium
+		Prerequisites: hand, ~structures.nod
 		IconPalette: chrometd
 	Armament:
 		Weapon: TurretGunTD
@@ -4932,7 +4933,7 @@ LTUR:
 		Name: Laser Turret
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: hand, ~structures.nod, ~techlevel.low
+		Prerequisites: hand, ~structures.nod
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Turreted:
 		InitialFacing: 136
@@ -4960,7 +4961,7 @@ TTUR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
-		Prerequisites: barr, ~structures.iraq, ~techlevel.low
+		Prerequisites: barr, ~structures.iraq
 		IconPalette: chrometd
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
@@ -5002,6 +5003,7 @@ SGEN:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^3x2Shape
+	Inherits@sw: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -5076,7 +5078,7 @@ SGEN:
 CRAM:
 	Inherits: AGUN
 	Buildable:
-		Prerequisites: hq, ~structures.gdi, ~techlevel.medium
+		Prerequisites: hq, ~structures.gdi
 		IconPalette: chrometd
 		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
 	-Armament:
@@ -5118,7 +5120,7 @@ LASP:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 30
-		Prerequisites: ~structures.nod, nuk2, ~techlevel.medium
+		Prerequisites: ~structures.nod, nuk2
 		IconPalette: chrometd
 		Description: Stops infantry and blocks enemy fire.\n   Cannot be crushed by tanks.
 	Valued:
@@ -5221,6 +5223,7 @@ PATR:
 	Inherits: ^DefenseTD
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
+	Inherits@sw: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -5395,7 +5398,7 @@ OREP:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 200
-		Prerequisites: ~structures.allies, atek, ~techlevel.high
+		Prerequisites: ~structures.allies, atek
 		Description: Refines income from ore, gems & tiberium by 5-10%.\nProvides access to advanced chrono harvester technology.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 	-Capturable:
@@ -5460,7 +5463,7 @@ UPGC:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 200
-		Prerequisites: ~structures.gdi, gtek, ~techlevel.high
+		Prerequisites: ~structures.gdi, gtek
 		Description: Allows the construction of advanced weaponry and upgrades.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 		IconPalette: chrometd
@@ -5549,7 +5552,6 @@ UPGC:
 		InsufficientPowerSpeechNotification: InsufficientPower
 		DisplayTimerRelationships: Ally
 		RequiresCondition: tower.rocket
-		Prerequisites: ~techlevel.unrestricted
 	RejectsOrders:
 		Except: Sell, PowerDown
 	AmmoPool:
@@ -5850,6 +5852,7 @@ MSLO.Nod:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x1Shape
+	Inherits@sw: ^SuperWeapon
 	RenderSprites:
 		Image: nmslo
 	Valued:
@@ -5860,7 +5863,7 @@ MSLO.Nod:
 		Queue: Defense
 		BuildPaletteOrder: 140
 		IconPalette: chrometd
-		Prerequisites: tmpl, ~techlevel.unrestricted, ~techlevel.superw, ~structures.nod
+		Prerequisites: tmpl, ~techlevel.superw, ~structures.nod
 		BuildLimit: 1
 		Description: Provides a chemical missile.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Chemical Missile
 	Building:
@@ -5931,6 +5934,7 @@ WEAT:
 	Inherits: ^ScienceBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
+	Inherits@sw: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -6019,7 +6023,7 @@ PDLT:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
-		Prerequisites: anypower, ~commander_tree.point_defense_turret, ~techlevel.high
+		Prerequisites: anypower, ~commander_tree.point_defense_turret
 		IconPalette: chrometd
 		Description: Shoots down bullets and missiles with lazers. PEW PEW
 	Valued:

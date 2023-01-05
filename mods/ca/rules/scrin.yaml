@@ -76,7 +76,7 @@ S1:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 10
-		Prerequisites: ~infantry.scrin, ~techlevel.infonly
+		Prerequisites: ~infantry.scrin
 		Description: General-purpose scouting infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 		IconPalette: chrome
 	Valued:
@@ -112,7 +112,7 @@ S2:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 35
-		Prerequisites: nerv, ~infantry.traveler, ~techlevel.infonly
+		Prerequisites: nerv, ~infantry.traveler
 		Description: Fast assault infantry.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 		IconPalette: scrin
 	Valued:
@@ -146,7 +146,7 @@ S3:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 30
-		Prerequisites: ~infantry.scrin, ~techlevel.infonly
+		Prerequisites: ~infantry.scrin
 		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 		IconPalette: chrome
 	Valued:
@@ -223,7 +223,7 @@ S6:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
-		Prerequisites: ~infantry.scrin, ~techlevel.infonly
+		Prerequisites: ~infantry.scrin
 		Description: Infiltrates and captures\nenemy structures.\n  Can repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
 		IconPalette: chrome
 	Valued:
@@ -345,7 +345,7 @@ SMEDI:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 240
-		Prerequisites: ~infantry.scrin, ~infantry.traveler, ~techlevel.infonly
+		Prerequisites: ~infantry.scrin, ~infantry.traveler
 		Description: Heals nearby life forms.\n  Unarmed
 	Valued:
 		Cost: 200
@@ -514,7 +514,7 @@ HARV.Scrin:
 	Mobile:
 		Speed: 56
 	Buildable:
-		Prerequisites: ~proc.scrin, ~vehicles.scrin, ~techlevel.infonly
+		Prerequisites: ~proc.scrin, ~vehicles.scrin
 		IconPalette: chrome
 	SpawnActorOnDeath:
 		Actor: HARV.Scrin.Husk
@@ -1370,7 +1370,7 @@ ATMZ:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 285
-		Prerequisites: scrt, ~vehicles.traveler, ~techlevel.medium
+		Prerequisites: scrt, ~vehicles.traveler
 		Description: Lightly armored long-range support unit.\n  Targets take damage over time\n  Targets have reduced rate of fire\n  Effect spreads when affected targets die\n  Strong vs Vehicles, Aircraft, Defenses\n  Weak vs Infantry, Buildings
 		IconPalette: chrome
 	Mobile:
@@ -1910,7 +1910,7 @@ ENRV:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 170
-		Prerequisites: scrt, ~aircraft.traveler, ~techlevel.high
+		Prerequisites: scrt, ~aircraft.traveler
 		Description: Fast attack craft that creates a focused suppression field.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft, Infantry
 		IconPalette: chrome
 	Valued:
@@ -2517,7 +2517,7 @@ MSHP:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 190
-		Prerequisites: sign, scrt, ~aircraft.scrin, ~techlevel.high
+		Prerequisites: sign, scrt, ~aircraft.scrin
 		Description: Huge craft with powerful beam weapon.\n  Can create wormholes.\n  Maximum 1 can be built.\n  Strong vs Buildings, Defenses\n  Weak vs Aircraft
 		IconPalette: scrin
 		BuildLimit: 1
@@ -2984,7 +2984,7 @@ SWAL:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 30
-		Prerequisites: anypower, ~structures.scrin, ~techlevel.medium
+		Prerequisites: anypower, ~structures.scrin
 		Description: Stops units and blocks enemy fire. Regenerates over time.
 		IconPalette: scrin
 	Valued:
@@ -3026,7 +3026,7 @@ SFAC:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
-		Prerequisites: ~disabled
+		Prerequisites: ~conyardbuildable, ~structures.scrin, srep
 		IconPalette: chrometd
 		Description: Produces structures.
 	Health:
@@ -3108,7 +3108,7 @@ REAC:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 10
-		Prerequisites: ~structures.scrin, ~techlevel.low
+		Prerequisites: ~structures.scrin
 		IconPalette: scrin
 		Description: Provides power for other structures.
 	Valued:
@@ -3150,7 +3150,7 @@ REA2:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 110
-		Prerequisites: nerv, ~structures.scrin, ~techlevel.low
+		Prerequisites: nerv, ~structures.scrin
 		IconPalette: chrome
 		Description: Provides double the power of\na standard Reactor.
 	Valued:
@@ -3248,7 +3248,7 @@ PORT:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
-		Prerequisites: anypower, ~structures.scrin, ~techlevel.low
+		Prerequisites: anypower, ~structures.scrin
 		IconPalette: scrin
 		Description: Produces infantry.
 	Valued:
@@ -3324,9 +3324,9 @@ WSPH:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
-		Prerequisites: proc.scrin, ~structures.scrin, ~techlevel.low
+		Prerequisites: proc.scrin, ~structures.scrin
 		IconPalette: scrin
-		Description: Produces vehicles.s
+		Description: Produces vehicles.
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -3517,7 +3517,7 @@ NERV:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
-		Prerequisites: proc.scrin, ~structures.scrin, ~techlevel.medium
+		Prerequisites: proc.scrin, ~structures.scrin, ~!techlevel.low
 		Description: Provides an overview of the battlefield.\n  Requires power to operate.
 		IconPalette: scrin
 	Valued:
@@ -3654,7 +3654,7 @@ SCRT:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 150
-		Prerequisites: wsph, nerv, ~structures.scrin, ~techlevel.high
+		Prerequisites: wsph, nerv, ~structures.scrin, ~!techlevel.medium
 		Description: Provides Scrin advanced technologies.
 		IconPalette: scrin
 	Valued:
@@ -3721,7 +3721,7 @@ GRAV:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 130
-		Prerequisites: nerv, ~structures.scrin, ~techlevel.medium
+		Prerequisites: nerv, ~structures.scrin
 		Description: Produces Scrin aircraft.
 		IconPalette: scrin
 	Valued:
@@ -3816,7 +3816,7 @@ SIGN:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 200
-		Prerequisites: ~structures.scrin, scrt, ~techlevel.high
+		Prerequisites: ~structures.scrin, scrt
 		Description: Provides Scrin tier 4 technologies.\n  Maximum 1 can be built.\n  Cannot be captured.
 		BuildLimit: 1
 		IconPalette: scrin
@@ -3853,7 +3853,7 @@ SREP:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 100
-		Prerequisites: vehicles.scrin, ~structures.scrin, ~techlevel.medium
+		Prerequisites: vehicles.scrin, ~structures.scrin
 		Description: Repairs vehicles for credits.
 		IconPalette: scrin
 	Valued:
@@ -3905,7 +3905,7 @@ SILO.SCRIN:
 		Name: Silo
 	Buildable:
 		BuildPaletteOrder: 35
-		Prerequisites: proc.scrin, ~structures.scrin, ~techlevel.infonly
+		Prerequisites: proc.scrin, ~structures.scrin
 		Queue: Defense
 		IconPalette: scrin
 		Description: Stores processed Tiberium, Ore and Gems
@@ -3941,6 +3941,7 @@ MANI:
 	Inherits: ^ScrinBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
+	Inherits@sw: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -4010,6 +4011,7 @@ RIFT:
 	Inherits: ^ScrinBuilding
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
+	Inherits@sw: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -4097,7 +4099,7 @@ PTUR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
-		Prerequisites: port, ~structures.scrin, ~techlevel.low
+		Prerequisites: port, ~structures.scrin
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
 	Valued:
@@ -4149,7 +4151,7 @@ SHAR:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
-		Prerequisites: nerv, ~structures.scrin, ~techlevel.medium
+		Prerequisites: nerv, ~structures.scrin
 		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Strong vs Aircraft\n  Weak vs Ground Units
 		IconPalette: chrome
 	Valued:
@@ -4201,7 +4203,7 @@ SCOL:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
-		Prerequisites: nerv, ~structures.scrin, ~techlevel.high
+		Prerequisites: nerv, ~structures.scrin
 		Description: Advanced base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
 		IconPalette: chrome
 	Valued:

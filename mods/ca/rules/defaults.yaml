@@ -2424,6 +2424,8 @@
 
 ^Tier4Tech:
 
+^SuperWeapon:
+
 ^ForceShieldSupportPower:
 	GrantExternalConditionPowerCA@FSHIELD:
 		OrderName: fshield
@@ -2433,7 +2435,7 @@
 		Dimensions: 7, 7
 		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
 		Duration: 250
-		Prerequisites: forceshield.enabled, techlevel.high
+		Prerequisites: forceshield.enabled
 		Weapon: ForceShield
 		ActivationDelay: 5
 		AirburstAltitude: 0c0
@@ -3805,6 +3807,13 @@
 	Production:
 		Produces: Infantry, Soldier
 		PauseOnCondition: forceshield || invulnerability || being-warped
+		RequiresCondition: !infdisabled
+	GrantConditionOnPrerequisite@vehiclesonly:
+		Condition: infdisabled
+		Prerequisites: techlevel.vehiclesonly
+	GrantConditionOnPrerequisite@aircraftonly:
+		Condition: infdisabled
+		Prerequisites: techlevel.aircraftonly
 	GrantExternalConditionToProduced:
 		Condition: produced
 	ProductionBar:
@@ -3823,8 +3832,15 @@
 		SpawnOffset: 213,-128,0
 		ExitCell: 1,2
 	Production:
-		Produces: Vehicle
+		Produces: Vehicle, Paradrop
 		PauseOnCondition: forceshield || invulnerability || being-warped
+		RequiresCondition: !vehiclesdisabled
+	GrantConditionOnPrerequisite@infonly:
+		Condition: vehiclesdisabled
+		Prerequisites: techlevel.infonly
+	GrantConditionOnPrerequisite@aircraftonly:
+		Condition: vehiclesdisabled
+		Prerequisites: techlevel.aircraftonly
 	GrantExternalConditionToProduced:
 		Condition: produced
 	ProductionBar:
@@ -3846,6 +3862,15 @@
 	Production:
 		Produces: Aircraft, Helicopter, Plane
 		PauseOnCondition: forceshield || invulnerability || being-warped
+		RequiresCondition: !aircraftdisabled
+	GrantConditionOnPrerequisite@infonly:
+		Condition: aircraftdisabled
+		Prerequisites: techlevel.infonly
+	GrantConditionOnPrerequisite@vehiclesonly:
+		Condition: aircraftdisabled
+		Prerequisites: techlevel.vehiclesonly
+	GrantExternalConditionToProduced:
+		Condition: produced
 
 ^StructureProduction:
 	ProductionBar@Building:
@@ -3856,6 +3881,12 @@
 	Production:
 		Produces: Building, Defense
 		PauseOnCondition: forceshield || invulnerability || being-warped
+	ProvidesPrerequisite@conyardbuildable:
+		Prerequisite: conyardbuildable
+		RequiresPrerequisites: techlevel.aircraftonly
+	ProvidesPrerequisite@conyardbuildable:
+		Prerequisite: conyardbuildable
+		RequiresPrerequisites: techlevel.infonly
 	BaseBuilding:
 	BaseProvider:
 		PauseOnCondition: being-captured
