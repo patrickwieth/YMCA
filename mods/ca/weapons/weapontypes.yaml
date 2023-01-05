@@ -867,6 +867,30 @@
 		MaxLevel: 750
 		LayerName: radioactivity
 
+^TinyNuke:
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 10000
+		Falloff: 100, 50, 30, 15, 0
+		Versus:
+			None: 50
+			Light: 100
+			Reflector: 100
+			Heavy: 100
+			Wood: 60
+			Concrete: 40
+			Brick: 45
+		Delay: 5
+		ValidTargets: Ground, Trees, Water, Underwater, Air
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff_impact: CreateEffect
+		Explosions: nuke3
+		ImpactSounds: kaboom1.aud
+	Warhead@4Radiation: CreateTintedCells
+		Level: 100
+		Falloff: 100, 55, 32, 5
+		LayerName: radioactivity
 
 ^EnergyPrototype:
 	Inherits: ^AllWeapons
