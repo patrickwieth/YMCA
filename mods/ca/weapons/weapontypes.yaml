@@ -818,8 +818,13 @@
 		MaxLevel: 750
 		LayerName: toxin
 
-^Nuke:
+^TacticalNuke:
 	Warhead@1Dam: SpreadDamage
+	ValidTargets: Ground, Trees, Water, Air
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 3250
+		Falloff: 1000, 368, 135, 50, 18, 0
 		Versus:
 			None: 100
 			Light: 100
@@ -827,7 +832,41 @@
 			Heavy: 100
 			Wood: 100
 			Concrete: 100
+		ValidTargets: Ground, Trees, Water, Air
+		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff_impact: CreateEffect
+		Explosions: nuke
+		ImpactSounds: kaboom1.aud
+		ImpactActors: false
+	Warhead@6Eff_areanuke1: CreateEffect
+		ImpactSounds: kaboom22.aud
+		Delay: 5
+		ImpactActors: false
+	Warhead@6Smu_areanuke1: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Trees
+		Size: 4
+		Delay: 5
+	Warhead@TREEKILL: SpreadDamage
+		Spread: 1c0
+		Damage: 6000
+		Falloff: 1000, 600, 400, 250, 150, 100, 0
+		Delay: 5
+		ValidTargets: Trees
+		DamageTypes: Incendiary
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 5
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+	Warhead@18Radio: CreateTintedCells
+		Spread: 1c0
+		Level: 350
+		Falloff: 100, 75, 52, 37, 24, 15, 2
+		MaxLevel: 750
+		LayerName: radioactivity
+
 
 ^EnergyPrototype:
 	Inherits: ^AllWeapons

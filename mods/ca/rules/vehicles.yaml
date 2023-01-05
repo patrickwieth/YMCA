@@ -1314,10 +1314,11 @@ TTNK.Arc:
 		Weapon: TTankZap.Arc
 
 TTNK.RA2:
-	Inherits: ^Tank
+	Inherits: ^TankTD
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@BERSERK: ^Berserk
+	Inherits: ^HighResShadow
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 200
@@ -1333,20 +1334,20 @@ TTNK.RA2:
 	Mobile:
 		Speed: 100
 		Voice: Move
-	Armament@PRIMARY:
+	Armament:
 		Weapon: TTankZapMK2
-		LocalOffset: 511,200,113, 511,-200,113
-		RequiresCondition: !tarc-upgrade
+		FireDelay: 13
+		LocalOffset: 800,200,200, 800,-200,200
 		MuzzleSequence: muzzle
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
 	WithMuzzleOverlay:
+	WithTurretAttackAnimation:
+		Sequence: shoot
 	WithSpriteTurret:
 	Turreted:
 		TurnSpeed: 28
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Passenger:
 		Voice: Move
 	Voiced:
@@ -2474,9 +2475,6 @@ MLRS:
 		Count: 2
 	ProducibleWithLevel:
 		Prerequisites: vehicles.upgraded
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 MLRS.Toxin:
 	Inherits: MLRS
