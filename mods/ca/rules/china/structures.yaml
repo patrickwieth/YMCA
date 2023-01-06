@@ -330,7 +330,7 @@ chbunker:
 		Dimensions: 2, 2
 	Buildable:
 		BuildPaletteOrder: 40
-		Prerequisites: infantry.china, ~structures.china, ~!commander_tree.fortified_bunker
+		Prerequisites: infantry.china, ~structures.china, ~!commander_tree.fortified_bunker, ~!commander_tree.advanced_infantry_training
 		Queue: Defense
 		Description: Garrisonable defensive structure.\n  Strong vs ground targets\n  Weak vs Aircraft
 	Valued:
@@ -370,6 +370,15 @@ chbunker:
 	Selectable:
 		Class: chbunker
 
+chbunker.advinf:
+	Inherits: chbunker
+	Buildable:
+		Prerequisites: infantry.china, ~structures.china, ~!commander_tree.fortified_bunker, ~commander_tree.advanced_infantry_training
+	Valued:
+		Cost: 1500
+	Cargo:
+		InitialUnits: che3, che3, che3, mortar.china
+
 chbunker.ai:
 	Inherits: chbunker
 	Buildable:
@@ -377,7 +386,7 @@ chbunker.ai:
 	Valued:
 		Cost: 1500
 	Cargo:
-		InitialUnits: che1, che3, che3, che3, che3
+		InitialUnits: che1, che3, che3, che3, mortar.china
 
 chbunker2:
 	Inherits: chbunker
@@ -385,36 +394,31 @@ chbunker2:
 		Name: Fortified Bunker
 	Buildable:
 		BuildPaletteOrder: 40
-		Prerequisites: infantry.china, ~structures.china, ~commander_tree.fortified_bunker
+		Prerequisites: infantry.china, ~structures.china, ~commander_tree.fortified_bunker, ~!commander_tree.advanced_infantry_training
 		Queue: Defense
 		Description: All-purpose defensive structure.\n  Strong vs Aircraft, Tanks\n  Weak vs Infantry
 	Valued:
-		Cost: 1400
+		Cost: 1500
 	Health:
 		HP: 100000
 	Cargo:
 		Types: Infantry, Hacker, Fremen
 		MaxWeight: 8
 		PipCount: 8
-		InitialUnits: che2, che3, che3
+		InitialUnits: che2, che3, che3, che3
 	LaysMinefield@minefield:
 		-RequiresCondition:
 	Selectable:
 		Class: chbunker2
-	#FreeActor@1:
-	#	Actor: chmnly
-	#	SpawnOffset: 1,1
-	#	Facing: 64
-	#	AllowRespawn: True
 
-chbunker2.e2:
+chbunker2.advinf:
 	Inherits: chbunker2
 	Buildable:
-		Prerequisites: infantry.china, ~botplayer
+		Prerequisites: infantry.china, ~structures.china, ~commander_tree.fortified_bunker, ~commander_tree.advanced_infantry_training
 	Valued:
-		Cost: 700
+		Cost: 1800
 	Cargo:
-		InitialUnits: che2, che2, che2, che3, che3, che3, che3
+		InitialUnits: che2, che3, che3, che3, mortar.china, mortar.china
 
 chsupply:
 	Inherits: ^BuildingChina

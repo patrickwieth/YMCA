@@ -564,8 +564,8 @@ CHECMBeam:
 		ZOffset: 1000
 	Warhead@1Dam: SpreadDamage
 		Range: 0, 32
-		Falloff: 1000, 1000
-		Damage: 50
+		Falloff: 100, 100
+		Damage: 400
 		InvalidTargets: Air
 		AffectsParent: false
 		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
@@ -580,6 +580,11 @@ CHECMBeam.Focus:
 
 CHECMBeam.Pulse:
 	Inherits: CHECMBeam
+	Warhead@2Ext: GrantExternalCondition
+		Condition: empdisable
+		Duration: 2
+		Range: 0c768
+		ValidTargets: Vehicle
 
 CHECMBeam.Chain:
 	Inherits: CHECMBeam
@@ -620,7 +625,7 @@ CHECMDisable:
 	Report: vfrelo2a.aud
 	Warhead@2Ext: GrantExternalCondition
 		Condition: empdisable
-		Duration: 200
+		Duration: 10
 		Range: 0c768
 		ValidTargets: Vehicle
 	Warhead@1Dam: SpreadDamage
