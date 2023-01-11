@@ -1443,12 +1443,10 @@
 	Inherits@6: ^GDIUpgrade
 	Inherits@7: ^BinoUpgrade
 	Inherits@9: ^Warpable
-	Inherits@10: ^Frenzy
 	Inherits@11: ^NaniteRepair
 	Inherits@12: ^GpsScramble
 	Inherits@13: ^BotGroundProductionBonus
 	Inherits@14: ^Chillable
-	Inherits@15: ^AffectedByDriverKill
 	Inherits@16: ^Concussion
 	Inherits@17: ^Suppressable
 	Inherits@C4: ^C4Plantable
@@ -1458,13 +1456,11 @@
 	Inherits@bounty: ^GlobalBounty
 	Inherits@production: ^ProductionEfficiencyBoost
 	Inherits@selection: ^SelectableCombatUnit
-	Inherits@mind: ^MindControllable
 	Inherits@handicaps: ^PlayerHandicaps
 	Inherits@irrad: ^Irradiatable
 	Inherits@atomize: ^Atomizable
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@SLOWCRUSH: ^SlowedByCrushing
-	Inherits@ToxinRad: ^DriverBiologicalDamage
 	Inherits@VehicleVision: ^VehicleVision
 	Buildable:
 		Queue: Vehicle
@@ -1519,15 +1515,6 @@
 	Guardable:
 	Tooltip:
 		GenericName: Vehicle
-	CaptureManager:
-		BeingCapturedCondition: being-captured
-	Capturable:
-		Types: vehicle
-		CancelActivity: True
-		RequiresCondition: !being-warped
-	CaptureNotification:
-		Notification: UnitStolen
-		LoseNotification: UnitLost
 	MustBeDestroyed:
 	Voiced:
 		VoiceSet: VehicleVoice
@@ -1620,6 +1607,40 @@
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
+
+^BiologicalDriver:
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits@BERSERK: ^Berserk
+	Inherits@10: ^Frenzy
+	Inherits@mind: ^MindControllable
+	Inherits@driverkill: ^AffectedByDriverKill
+	Inherits@ToxinRad: ^DriverBiologicalDamage
+	CaptureManager:
+		BeingCapturedCondition: being-captured
+	Capturable:
+		Types: vehicle
+		CancelActivity: True
+		RequiresCondition: !being-warped
+	CaptureNotification:
+		Notification: UnitStolen
+		LoseNotification: UnitLost
+
+^RobotDriver:
+	Inherits@IDISABLE: ^DisabledByRadarLoss
+	Inherits@HACKABLE: ^Hackable
+	WithDecoration@DISABLED:
+		Image: poweroff
+		Sequence: offline
+		Palette: chrome
+		RequiresCondition: disabled
+		Position: Center
+	ProximityExternalCondition@POWERSOUND:
+		Condition: disablesound
+		RequiresCondition: disabled || empdisable
+		AffectsParent: true
+		Range: 1c0
+		EnableSound: vrobon
+		DisableSound: vroboff
 
 ^SlowedByCrushing:
 	ExternalCondition@CRUSHATTEMPTSLOW:
@@ -3772,8 +3793,10 @@
 		UndeployTicks: 50
 
 ^AutoDeployIdler:
+	AutoTarget:
+		HoldFireCondition: stance-holdfire
 	AutoDeployer:
-		RequiresCondition: undeployed && !parachute
+		RequiresCondition: undeployed && !parachute && stance-holdfire
 		DeployChance: 100
 		DeployTrigger: BecomingIdle
 		DeployTicks: 5
