@@ -295,7 +295,7 @@ NukeCannonDummyAim:
 
 CHNukeCannon:
 	Inherits: ^ShellArtillery
-	Inherits@Explosion: ^TacticalNuke
+	Inherits@Explosion: ^MiniNuke
 	ReloadDelay: 250
 	Range: 18c0
 	MinRange: 8c0
@@ -306,8 +306,7 @@ CHNukeCannon:
 		LaunchAngle: 135
 		Speed: 180
 	Warhead@1Dam: SpreadDamage
-		Spread: 1c0
-		Damage: 25000
+		Damage: 2500
 	Warhead@3Eff: CreateEffect
 		Explosions: schnukeexplosion
 
@@ -319,9 +318,10 @@ CHNukeCannon.Neutron:
 	Inherits: CHNukeCannon
 	Inherits: ^Radiation
 	Warhead@1Dam: SpreadDamage
-		Damage: 25000
+		Damage: 250
 	Warhead@DriverDam: DriverPoisonDamage
-		Damage: 25000
+		Spread: 2c0
+		Damage: 75000
 	Warhead@3Eff: CreateEffect
 		Explosions: plasmaball
 
@@ -554,8 +554,8 @@ CHECMBeam:
 		Blockable: true
 		DamageActorsInLine: false
 		BeamColor: 44FF44AA
-		HelixColor: 00FF00CC
-		BeamWidth: 100
+		HelixColor: 00FF00FF
+		BeamWidth: 60
 		HelixThickness: 48
 		HelixRadius: 32
 		HitAnim: ecmimpact
@@ -577,6 +577,10 @@ CHECMBeam.Overlord:
 CHECMBeam.Focus:
 	Inherits: CHECMBeam
 	Inherits: ^EnergyAP
+	Projectile: Railgun
+		BeamColor: 44FF44AA
+		HelixColor: 00FF00CC
+		BeamWidth: 100
 
 CHECMBeam.Pulse:
 	Inherits: CHECMBeam
