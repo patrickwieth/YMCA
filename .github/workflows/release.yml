@@ -22,17 +22,29 @@ jobs:
 
       - name: Prepare Environment
         run: echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_ENV}
+  
+      - name: Draft Release
+      # Drafts your next Release notes as Pull Requests are merged into "master"
+      - uses: release-drafter/release-drafter@v5
+        # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
+        # with:
+        #   config-name: my-config.yml
+        #   disable-autolabeler: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Package AppImage
         run: |
           make engine
           mkdir -p build/linux
           ./packaging/linux/buildpackage.sh "${GIT_TAG}" "${PWD}/build/linux"
+          
       - name: Upload Packages
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
+          prerelease: true
           overwrite: true
           file_glob: true
           file: build/linux/*
@@ -69,6 +81,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
+          prerelease: true
           overwrite: true
           file_glob: true
           file: build/macos/*
@@ -101,6 +114,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
+          prerelease: true
           overwrite: true
           file_glob: true
           file: build/windows/*
