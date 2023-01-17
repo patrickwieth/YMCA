@@ -2213,7 +2213,7 @@
 	Aircraft:
 		CruisingCondition: cruising
 		PauseOnCondition: empdisable && !airborne || being-warped
-	KillsSelf:
+	KillsSelf@EMP:
 		RequiresCondition: empdisable && cruising
 	Targetable@GROUND:
 		RequiresCondition: !airborne && !being-warped
@@ -2270,6 +2270,42 @@
 
 ^HelicopterTD:
 	Inherits@1: ^Helicopter
+	Buildable:
+		IconPalette: chrometd
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	EjectOnDeath:
+		PilotActor: N1
+
+^Airship:
+	Inherits: ^Plane
+	Tooltip:
+		GenericName: Helicopter
+	Aircraft:
+		CanHover: True
+		VTOL: true
+		CanSlide: True
+		CruiseAltitude: 2c0
+		InitialFacing: 192
+		TurnSpeed: 12
+		Speed: 56
+		Voice: Move
+		AltitudeVelocity: 0c50
+		CanForceLand: False
+	GpsRadarDot:
+		Sequence: Helicopter
+	BodyOrientation:
+		UseClassicFacings: True
+	-Contrail@1:
+	-Contrail@2:
+	SpeedMultiplier@EMPDISABLE:
+		Modifier: 0
+		RequiresCondition: empdisable
+	-KillsSelf@EMP:
+		RequiresCondition: empdisable && cruising
+
+^AirshipTD:
+	Inherits@1: ^Airship
 	Buildable:
 		IconPalette: chrometd
 	RenderSprites:
@@ -3844,7 +3880,7 @@
 	ProvidesPrerequisite@infantryany:
 		Prerequisite: infantry.any
 	ProximityExternalCondition@close:
-		Range: 6c0
+		Range: 7c0
 		ValidRelationships: Ally
 		Condition: closeToBarracks
 
@@ -3871,7 +3907,7 @@
 	ProvidesPrerequisite@any:
 		Prerequisite: vehicles.any
 	ProximityExternalCondition@close:
-		Range: 6c0
+		Range: 7c0
 		ValidRelationships: Ally
 		Condition: closeToFactory
 
@@ -3962,40 +3998,40 @@
 	ProvidesPrerequisite@naval:
 		Prerequisite: ships.any
 	ProvidesPrerequisite@hunter_sub:
-		Factions: soviet, russia, ukraine, iraq, nod, marked, blackh, legion, china
+		Factions: soviet, russia, ukraine, iraq, nod, marked, blackh, legion, china, chinainf, chinatnk, chinaatom
 		Prerequisite: hunter_sub
 	ProvidesPrerequisite@subchaser:
 		Factions: allies, france, england, germany, soviet, russia, ukraine, iraq, gdi, zocom, talon, eagle
 		Prerequisite: subchaser
 	ProvidesPrerequisite@patrol_boat:
-		Factions: allies, france, england, germany, gdi, zocom, talon, eagle, china
+		Factions: allies, france, england, germany, gdi, zocom, talon, eagle, china, chinainf, chinatnk, chinaatom
 		Prerequisite: patrol_boat
 	ProvidesPrerequisite@recon_boat:
 		Factions: allies, france, england, germany, gdi, zocom, talon, eagle, nod, marked, blackh, legion
 		Prerequisite: recon_boat
 	ProvidesPrerequisite@sea_scorpion:
-		Factions: soviet, russia, ukraine, iraq, nod, marked, blackh, legion, china
+		Factions: soviet, russia, ukraine, iraq, nod, marked, blackh, legion, china, chinainf, chinatnk, chinaatom
 		Prerequisite: sea_scorpion
 	ProvidesPrerequisite@attack_submarine:
-		Factions: soviet, russia, ukraine, iraq, nod, marked, blackh, legion, china
+		Factions: soviet, russia, ukraine, iraq, nod, marked, blackh, legion, china, chinainf, chinatnk, chinaatom
 		Prerequisite: attack_submarine
 	ProvidesPrerequisite@destroyer:
-		Factions: allies, france, england, germany, gdi, zocom, talon, eagle, nod, marked, blackh, legion, china
+		Factions: allies, france, england, germany, gdi, zocom, talon, eagle, nod, marked, blackh, legion, china, chinainf, chinatnk, chinaatom
 		Prerequisite: destroyer
 	ProvidesPrerequisite@frigate:
-		Factions: allies, france, england, germany, soviet, russia, ukraine, iraq, gdi, zocom, talon, eagle, nod, marked, blackh, legion, china
+		Factions: allies, france, england, germany, soviet, russia, ukraine, iraq, gdi, zocom, talon, eagle, nod, marked, blackh, legion, china, chinainf, chinatnk, chinaatom
 		Prerequisite: frigate
 	ProvidesPrerequisite@aegis_cruiser:
 		Factions: allies, france, england, germany, soviet, russia, ukraine, iraq, gdi, zocom, talon, eagle
 		Prerequisite: aegis_cruiser
 	ProvidesPrerequisite@battlecruiser:
-		Factions: allies, france, england, germany, soviet, russia, ukraine, iraq, gdi, zocom, talon, eagle, china
+		Factions: allies, france, england, germany, soviet, russia, ukraine, iraq, gdi, zocom, talon, eagle, china, chinainf, chinatnk, chinaatom
 		Prerequisite: battlecruiser
 	ProvidesPrerequisite@carrier:
-		Factions: allies, france, england, germany, gdi, zocom, talon, eagle, nod, marked, blackh, legion, china
+		Factions: allies, france, england, germany, gdi, zocom, talon, eagle, nod, marked, blackh, legion, china, chinainf, chinatnk, chinaatom
 		Prerequisite: carrier
 	ProvidesPrerequisite@icbm_sub:
-		Factions: soviet, russia, ukraine, iraq, gdi, zocom, talon, eagle, nod, marked, blackh, legion, china
+		Factions: soviet, russia, ukraine, iraq, gdi, zocom, talon, eagle, nod, marked, blackh, legion, china, chinainf, chinatnk, chinaatom
 		Prerequisite: icbm_sub
 	ProvidesPrerequisite@missile_sub:
 		Factions: allies, france, england, germany, soviet, russia, ukraine, iraq, nod, marked, blackh, legion

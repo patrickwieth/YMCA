@@ -2010,7 +2010,7 @@ ENRV:
 		RequiresSelection: true
 
 DEVA:
-	Inherits: ^Helicopter
+	Inherits: ^Airship
 	Inherits@Armor: ^HeavyArmor
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2047,13 +2047,6 @@ DEVA:
 		ForceFireIgnoresActors: True
 		AttackType: Hover
 		PauseOnCondition: empdisable || being-warped
-	Aircraft:
-		CruiseAltitude: 2c0
-		InitialFacing: 192
-		TurnSpeed: 12
-		Speed: 56
-		AltitudeVelocity: 0c50
-		CanForceLand: False
 	Selectable:
 	Explodes:
 		Weapon: KirovExplode
@@ -2064,20 +2057,12 @@ DEVA:
 	SpawnActorOnDeath@EMP:
 		Actor: DEVA.Husk.EMP
 		RequiresCondition: empdisable
-	-Hovers@CRUISING:
 	-EjectOnDeath:
-	ProductionCostMultiplier@VANQBONUS:
-		Multiplier: 90
-		Prerequisites: vehicles.harbinger
 	ChangesHealth@REGEN:
 		PercentageStep: 3
 		Delay: 25
 		StartIfBelow: 75
 		DamageCooldown: 150
-	-KillsSelf:
-	SpeedMultiplier@EMPDISABLE:
-		Modifier: 0
-		RequiresCondition: empdisable
 
 DEVA.Shards:
 	Inherits: DEVA
@@ -2107,7 +2092,7 @@ DEVA.Rift:
 		LocalOffset: 500,0,0
 
 PAC:
-	Inherits: ^Helicopter
+	Inherits: ^Airship
 	Inherits@Armor: ^HeavyArmor
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2156,7 +2141,6 @@ PAC:
 	SpawnActorOnDeath@EMP:
 		Actor: PAC.Husk.EMP
 		RequiresCondition: empdisable
-	-Hovers@CRUISING:
 	WithFacingSpriteBody:
 		RequiresCondition: inva-loaded == 4
 		Name: idle
@@ -2196,10 +2180,6 @@ PAC:
 		Delay: 25
 		StartIfBelow: 75
 		DamageCooldown: 150
-	-KillsSelf:
-	SpeedMultiplier@EMPDISABLE:
-		Modifier: 0
-		RequiresCondition: empdisable
 
 PAC.suicide:
 	Inherits: PAC
@@ -2501,7 +2481,7 @@ INVA.suicide:
 	-SpawnActorOnDeath@EmptyEMP:
 
 MSHP:
-	Inherits: ^Helicopter
+	Inherits: ^Airship
 	Inherits@Armor: ^HeavyArmor
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2556,7 +2536,6 @@ MSHP:
 	SpawnActorOnDeath:
 		Actor: MSHP.Husk
 		RequiresCondition: !being-warped
-	-Hovers@CRUISING:
 	WithFacingSpriteBody:
 	AttackFrontal:
 		Armaments: primary, secondary, tertiary

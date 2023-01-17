@@ -1107,7 +1107,7 @@ NHAW:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
-		IconPalette: chrome
+		IconPalette: chrometd
 		Prerequisites: ~aircraft.england, ~commander_tree.air_logistics
 		Description: Fast infantry transport helicopter armed with\n  a light machine gun.
 	TooltipExtras:
@@ -2850,7 +2850,7 @@ RAH66.Bomber:
 
 
 KIRO:
-	Inherits: ^HelicopterTD
+	Inherits: ^AirshipTD
 	Inherits@Armor: ^HeavyArmor
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
@@ -2962,10 +2962,6 @@ KIRO:
 	GrantConditionOnFaction@iraq:
 		Condition: iraqbombs
 		Factions: iraq
-	-KillsSelf:
-	SpeedMultiplier@EMPDISABLE:
-		Modifier: 0
-		RequiresCondition: empdisable
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
@@ -2988,7 +2984,7 @@ KIRO:
 		RequiresCondition: !airborne
 
 BLIMP:
-	Inherits: ^Helicopter
+	Inherits: ^Airship
 	Inherits@Armor: ^HeavyArmor
 	Inherits@PRIMARY: ^PrimaryBuilding
 	RenderSprites:
@@ -3055,6 +3051,13 @@ BLIMP:
 	Production:
 		Produces: Infantry, Soldier
 		PauseOnCondition: forceshield || invulnerability || being-warped
+		RequiresCondition: !infdisabled
+	GrantConditionOnPrerequisite@vehiclesonly:
+		Condition: infdisabled
+		Prerequisites: techlevel.vehiclesonly
+	GrantConditionOnPrerequisite@aircraftonly:
+		Condition: infdisabled
+		Prerequisites: techlevel.aircraftonly
 	GrantExternalConditionToProduced:
 		Condition: produced, parachute
 	Exit@1:
@@ -3949,6 +3952,7 @@ Dropship:
 	Inherits: ^Plane
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@TRANSPORT: ^Transport
+	Inherits@PRODUCTION: ^InfantryProduction
 	Inherits@PRODUCTION: ^VehicleProduction
 	Buildable:
 		Queue: Aircraft
@@ -3981,23 +3985,40 @@ Dropship:
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
-	Production:
+	Production@1:
 		Produces: Vehicle
 		ProduceIntoCargo: True
 		PauseOnCondition: being-warped
-		RequiresCondition: closeToFactory && !cargoFull
+		RequiresCondition: closeToFactory && !cargoFull && !vehiclesdisabled
+	Production@2:
+		Produces: Infantry, Soldier
+		ProduceIntoCargo: True
+		PauseOnCondition: being-warped
+		RequiresCondition: closeToBarracks && !cargoFull && !infdisabled
 	ExternalCondition@closeToFactory:
 		Condition: closeToFactory
-	WithDecoration@close:
+	ExternalCondition@closeToBarracks:
+		Condition: closeToBarracks
+	-ProximityExternalCondition@close:
+	WithDecoration@closeToFactory:
 		Image: select
-		Palette: chrome
-		Sequence: repair-small
+		Palette: chrometd
+		Sequence: vehicle
 		Position: TopLeft
 		RequiresCondition: closeToFactory
 		RequiresSelection: True
 		ValidRelationships: Ally, Neutral
+	WithDecoration@closeToBarracks:
+		Image: select
+		Palette: chrometd
+		Sequence: infantry
+		Position: TopRight
+		RequiresCondition: closeToBarracks
+		RequiresSelection: True
+		ValidRelationships: Ally, Neutral
 	PrimaryBuilding:
 		BasePriority: 11
+	-Exit@1:
 	Armament@DROP:
 		Name: drop
 		Weapon: DropDummy
@@ -4015,7 +4036,7 @@ Dropship:
 	Cargo:
 		MaxWeight: 24
 		CargoFullCondition: cargoFull
-		Types: Vehicle
+		Types: Infantry, Vehicle
 	SpawnActorOnDeath:
 		Actor: dropship.Husk
 		RequiresCondition: !being-warped
