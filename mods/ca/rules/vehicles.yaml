@@ -1,8 +1,7 @@
 V2RL:
 	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 115
@@ -40,9 +39,8 @@ V2RL:
 
 1TNK:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Inherits@vision: ^ImprovedVision
 	Buildable:
 		Queue: Vehicle
@@ -124,9 +122,8 @@ V2RL:
 
 2TNK:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 70
@@ -310,9 +307,8 @@ GTNK.squad:
 
 3TNK:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		FactionImages:
 			iraq: 3tnki
@@ -514,9 +510,8 @@ GTNK.squad:
 4TNK:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		FactionImages:
 			iraq: 4tnki
@@ -762,9 +757,8 @@ GTNK.squad:
 
 ARTY:
 	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
@@ -851,15 +845,16 @@ ARTY.Chrono:
 
 ISU:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BigVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Inherits@PLD: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
 		Prerequisites: weap, radar, ~commander_tree.isu, ~!commander_tree.isu_concussion
-		Description: Powerful Medium-range artillery with PLD defense.\n  Strong vs Buildings, Infantry, Projectile Weapons \n  Weak vs Aircraft
+		Description: Powerful Medium-range artillery with PDL defense.\n  Strong vs Buildings, Infantry, Projectile Weapons \n  Weak vs Aircraft
 	Valued:
 		Cost: 1650
 	Tooltip:
@@ -876,11 +871,9 @@ ISU:
 		LocalOffset: 824,0,208
 		MuzzleSequence: muzzle
 	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
-		FacingTolerance: 0
+		FacingTolerance: 10
 	WithMuzzleOverlay:
 	Explodes:
 		Weapon: ArtilleryExplode
@@ -947,6 +940,7 @@ SPEC:
 
 HARV:
 	Inherits: ^Tank
+	Inherits: ^BiologicalDriver
 	Inherits@HARV: ^Harvester
 	-Crushable:
 	-Carryable:
@@ -1034,6 +1028,7 @@ HARV.Chrono:
 MCV:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
@@ -1071,10 +1066,9 @@ MCV:
 
 JEEP:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Inherits@detect: ^SensorEquipment
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
@@ -1106,10 +1100,9 @@ JEEP:
 
 APC:
 	Inherits: ^Tank
+	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
@@ -1151,6 +1144,7 @@ APC:
 
 TRUK:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 280
@@ -1203,6 +1197,7 @@ TRUK.DROP:
 
 MGG:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 245
@@ -1234,6 +1229,7 @@ MGG:
 
 MRJ:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -1261,9 +1257,8 @@ MRJ:
 
 TTNK:
 	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 125
@@ -1315,10 +1310,9 @@ TTNK.Arc:
 
 TTNK.RA2:
 	Inherits: ^TankTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 200
@@ -1371,7 +1365,7 @@ TTNK.RA2.Arc:
 
 DTRK:
 	Inherits: ^Vehicle
-	Inherits@BERSERK: ^Berserk
+	Inherits: ^HighResShadow
 	Inherits@UNLOAD: ^UnloadCondition
 	Buildable:
 		Queue: Vehicle
@@ -1442,9 +1436,8 @@ TTRK:
 
 CTNK:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
@@ -1509,6 +1502,7 @@ CTNK.Reflector:
 AMCV:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
@@ -1547,10 +1541,9 @@ AMCV:
 
 HMMV:
 	Inherits: ^VehicleTD
+	Inherits: ^BiologicalDriver
 	Inherits@detect: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Buildable:
 		Queue: Vehicle
@@ -1589,10 +1582,9 @@ HMMV:
 
 BGGY:
 	Inherits: ^VehicleTD
+	Inherits: ^BiologicalDriver
 	Inherits@detect: ^SensorEquipment
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Buildable:
 		Queue: Vehicle
@@ -1662,10 +1654,9 @@ BGGY.AA:
 
 APC2:
 	Inherits: ^TankTD
+	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		FactionImages:
 			nod: apc2.nod
@@ -1728,10 +1719,9 @@ APC2.Reinforce:
 
 VULC:
 	Inherits: ^TankTD
+	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
@@ -1849,9 +1839,8 @@ VULC:
 
 LTNK:
 	Inherits: ^TankTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Buildable:
 		Queue: Vehicle
@@ -1912,9 +1901,8 @@ LTNK:
 
 LTNK.Laser:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Buildable:
 		Queue: Vehicle
@@ -1976,9 +1964,8 @@ LTNK.Laser:
 
 MTNK:
 	Inherits: ^TankTD
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		FactionImages:
 			nod: mtnk.nod
@@ -2050,9 +2037,9 @@ MTNK.Reflector:
 
 MTNK.Drone:
 	Inherits: ^TankTD
+	Inherits: ^RobotDriver
+	Inherits: ^DronePairing
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@IDISABLE: ^DisabledByRadarLoss
-	Inherits@HACKABLE: ^Hackable
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
@@ -2093,35 +2080,8 @@ MTNK.Drone:
 	Power:
 		Amount: -1
 		RequiresCondition: !being-warped
-	WithDecoration@DISABLED:
-		Image: poweroff
-		Sequence: offline
-		Palette: chrome
-		RequiresCondition: disabled
-		Position: Center
-	ProximityExternalCondition@POWERSOUND:
-		Condition: disablesound
-		RequiresCondition: disabled || empdisable
-		AffectsParent: true
-		Range: 1c0
-		EnableSound: vrobon
-		DisableSound: vroboff
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune
-	-CaptureManager:
-	-Capturable:
-	-CaptureNotification:
-	-Capturable@DRIVER_DEAD:
-	-GrantConditionIfOwnerIsNeutral:
-	-ChangesHealth@DRIVER_DEAD:
-	-Targetable@DRIVERKILL:
-	-Targetable@AICAPTURE:
-	GrantConditionOnPrerequisite@DRONEPAIR:
-		Condition: dronepair
-		Prerequisites: dronepair.upgrade
-	AttachOnCreation@DRONEPAIR:
-		Actor: mdrn.attached
-		RequiresCondition: dronepair
 
 MTNK.Drone.PLD:
 	Inherits: MTNK.Drone
@@ -2150,9 +2110,9 @@ MTNK.Drone.Reflector:
 HTNK:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
+	Inherits: ^DronePairing
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 185
@@ -2357,9 +2317,8 @@ HTNK.Hover.PLD:
 
 MSAM:
 	Inherits: ^VehicleTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		FactionImages:
 			nod: msam.nod
@@ -2421,9 +2380,8 @@ MSAM.Hailstorm:
 
 MLRS:
 	Inherits: ^VehicleTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Valued:
 		Cost: 1050
@@ -2510,9 +2468,8 @@ MLRS.Multi:
 
 STNK:
 	Inherits: ^VehicleTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -2685,9 +2642,8 @@ STNK.AP.Reflector:
 
 BIKE:
 	Inherits: ^VehicleTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Valued:
 		Cost: 500
@@ -2855,9 +2811,8 @@ BIKE.Explosive.Reflector:
 
 FTNK:
 	Inherits: ^TankTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Valued:
 		Cost: 700
@@ -2989,6 +2944,7 @@ FTNK.Reflector.Fireball:
 
 HAR2:
 	Inherits: ^TankTD
+	Inherits: ^BiologicalDriver
 	Inherits@HARV: ^Harvester
 	-Crushable:
 	-Carryable:
@@ -3053,10 +3009,9 @@ HAR2:
 
 BTR:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
@@ -3105,10 +3060,10 @@ BTR:
 
 BTR.Surveillance:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Inherits@detect: ^SensorEquipment
 	Inherits@radar: ^MobileDeployableRadar
 	Inherits@TRANSPORT: ^Transport
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
@@ -3171,10 +3126,9 @@ NonaSVK:
 
 IFV:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	Inherits: ^PointLaserDefenseSystem
 	Armament@pointdefense:
 		RequiresCondition: cryoturr
@@ -3439,9 +3393,8 @@ IFV:
 
 IFV.AI:
 	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 60
@@ -3504,9 +3457,8 @@ IFV.AI:
 TITN:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
@@ -3652,9 +3604,8 @@ JUGG:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Tooltip:
 		Name: Juggernaut
 	Buildable:
@@ -3724,9 +3675,8 @@ DISR:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -3791,10 +3741,9 @@ DISR:
 
 HMLRS:
 	Inherits: ^VehicleTD
-	Inherits@Hover: ^HoverVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^HoverVehicle
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Valued:
 		Cost: 1150
 	Tooltip:
@@ -3872,9 +3821,8 @@ HMLRS.PLD:
 
 RTNK:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
@@ -3986,9 +3934,8 @@ RTNK.Reflector:
 
 V3RL:
 	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 160
@@ -4068,9 +4015,8 @@ V3:
 
 KATY:
 	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 150
@@ -4101,9 +4047,8 @@ KATY:
 
 TNKD:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
@@ -4158,9 +4103,8 @@ TNKD:
 
 TNKD2:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
@@ -4250,6 +4194,7 @@ TNKD2.Reflector:
 
 MSAR:
 	Inherits: ^VehicleTD
+	Inherits: ^BiologicalDriver
 	Inherits@detect: ^SensorEquipment
 	Inherits@radar: ^MobileDeployableRadar
 	Inherits@autodeploy: ^AutoDeployIdler
@@ -4346,11 +4291,10 @@ MSAR.PLD.Nod:
 	-ProximityExternalCondition@Bino:
 
 PTNK:
-	Inherits: ^TankTD
+	Inherits: ^VehicleTD
 	Inherits: ^HighResShadow
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
@@ -4392,9 +4336,7 @@ PBLASTER:
 	Tooltip:
 		Name: Prism Blaster
 	Buildable:
-		Queue: Vehicle
 		IconPalette: chrometd
-		BuildPaletteOrder: 135
 		Prerequisites: radar, ~commander_tree.prism_blaster
 		Description: Prism Tower derived weapon hitting many targets on impact.\n  Strong vs Buildings, Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Health:
@@ -4404,15 +4346,10 @@ PBLASTER:
 		LocalOffset: 100,0,140
 
 PCAN:
-	Inherits: ^TankTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
-	Inherits: ^HighResShadow
+	Inherits: PTNK
+	Inherits: ^Vehicle
 	Buildable:
-		Queue: Vehicle
 		IconPalette: chrome
-		BuildPaletteOrder: 130
 		Prerequisites: radar, ~commander_tree.prism_cannon
 		Description: A prototype long range artillery that fires highly focused beams of light.\n  Strong vs Buildings, Vehicles, Infantry\n  Weak vs Tanks, Aircraft
 	Valued:
@@ -4425,17 +4362,13 @@ PCAN:
 	Mobile:
 		Speed: 82
 		Voice: Move
+	Turreted:
+		TurnSpeed: 12
 	Armament:
 		Weapon: PrisCLaser
 		FireDelay: 10
 		LocalOffset: 900,0,300
 		PauseOnCondition: empdisable || being-warped
-	AttackFrontal:
-		TargetFrozenActors: True
-		OpportunityFire: False
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
-		FacingTolerance: 0
 	SpawnActorOnDeath:
 		Actor: PTNK.Husk
 		RequiresCondition: !being-warped
@@ -4445,7 +4378,7 @@ PCAN:
 
 WTNK:
 	Inherits: ^VehicleTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move
@@ -4453,7 +4386,6 @@ WTNK:
 	AutoTargetPriority@ATTACKANYTHING:
 		RequiresCondition: stance-attackanything || assault-move
 		InvalidTargets: NoAutoTarget, empdisabled
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		Image: mwtnk
 	Buildable:
@@ -4502,9 +4434,8 @@ WTNK:
 BATF:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
@@ -4774,10 +4705,9 @@ BATF.Artillery.Reflector:
 BATF.Bunker:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Inherits@CARGO: ^AttackingCargo
 	Buildable:
 		Queue: Vehicle
@@ -4831,9 +4761,8 @@ BATF.Bunker:
 BATF.Arty:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
@@ -4878,8 +4807,7 @@ BATF.AI:
 
 MEMP:
 	Inherits: ^TankTD
-	Inherits@IDISABLE: ^DisabledByRadarLoss
-	Inherits@HACKABLE: ^Hackable
+	Inherits: ^RobotDriver
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
@@ -4942,14 +4870,6 @@ MEMP:
 		Range: 1c0
 		EnableSound: vrobon
 		DisableSound: vroboff
-	-CaptureManager:
-	-Capturable:
-	-CaptureNotification:
-	-Capturable@DRIVER_DEAD:
-	-GrantConditionIfOwnerIsNeutral:
-	-ChangesHealth@DRIVER_DEAD:
-	-Targetable@DRIVERKILL:
-	-Targetable@AICAPTURE:
 	GrantConditionOnPrerequisite@DRONEPAIR:
 		Condition: dronepair
 		Prerequisites: dronepair.upgrade
@@ -5031,6 +4951,7 @@ MEMP.Stable:
 
 CDRN:
 	Inherits: ^VehicleTD
+	Inherits: ^RobotDriver
 	Inherits@AUTOTARGET: ^AutoTargetGround
 	RenderSprites:
 		Image: cdrone
@@ -5095,14 +5016,6 @@ CDRN:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune
 	Voiced:
 		VoiceSet: ChaosDroneVoice
-	-CaptureManager:
-	-Capturable:
-	-CaptureNotification:
-	-Capturable@DRIVER_DEAD:
-	-GrantConditionIfOwnerIsNeutral:
-	-ChangesHealth@DRIVER_DEAD:
-	-Targetable@DRIVERKILL:
-	-Targetable@AICAPTURE:
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
@@ -5113,8 +5026,7 @@ CDRN:
 CHPR:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
+	Inherits: ^BiologicalDriver
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 225
@@ -5258,9 +5170,8 @@ CHPR.AA:
 
 2S3:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 120
@@ -5298,9 +5209,8 @@ CHPR.AA:
 
 CRYO:
 	Inherits: ^VehicleTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Valued:
 		Cost: 1150
@@ -5331,10 +5241,9 @@ CRYO:
 
 SLNG:
 	Inherits: ^VehicleTD
-	Inherits@Hover: ^HoverVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^HoverVehicle
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAir
-	Inherits@BERSERK: ^Berserk
 	Valued:
 		Cost: 550
 	Tooltip:
@@ -5381,7 +5290,7 @@ SLNG:
 
 FTRK:
 	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
 		Queue: Vehicle
@@ -5418,7 +5327,7 @@ FTRK:
 
 FTRK.Barrage:
 	Inherits: FTRK
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Buildable:
 		Queue: Vehicle
@@ -5442,6 +5351,7 @@ FTRK.Barrage:
 
 COORDINATOR:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@Vision: ^ImprovedVision
 	Valued:
@@ -5527,9 +5437,8 @@ COORDINATOR:
 
 Beam_Cannon:
 	Inherits: ^Vehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	AutoTargetPriority@DEFAULT:
 		InvalidTargets: NoAutoTarget, WaterStructure
 		ValidTargets: BoostMe
@@ -5660,7 +5569,7 @@ Beam_Cannon:
 MAMMOTHMK2:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
-	Inherits@EXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@Voxel: ^TSRenderVoxel
 	Valued:
@@ -5731,9 +5640,8 @@ MAMMOTHMK2:
 APOC:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@BERSERK: ^Berserk
 	Inherits@SHRAPNEL: ^ThrowsShrapnel
 	RenderSprites:
 		FactionImages:
@@ -5813,10 +5721,9 @@ APOC:
 
 XO:
 	Inherits: ^VehicleTD
-	Inherits@detect: ^SensorEquipment
+	Inherits: ^SensorEquipment
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Buildable:
 		Queue: Vehicle
@@ -5868,9 +5775,8 @@ XO:
 
 HFTK:
 	Inherits: ^TankTD
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 	Buildable:
 		Queue: Vehicle
@@ -5923,9 +5829,9 @@ HFTK:
 
 MDRN:
 	Inherits: ^Vehicle
-	Inherits@Hover: ^HoverVehicle
+	Inherits: ^HoverVehicle
+	Inherits: ^RobotDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@HACKABLE: ^Hackable
 	Tooltip:
 		Name: Mini Drone
 	Buildable:
@@ -5968,14 +5874,6 @@ MDRN:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune, MindControlImmune
 	-WithDamageOverlay:
-	-CaptureManager:
-	-Capturable:
-	-CaptureNotification:
-	-Capturable@DRIVER_DEAD:
-	-GrantConditionIfOwnerIsNeutral:
-	-ChangesHealth@DRIVER_DEAD:
-	-Targetable@DRIVERKILL:
-	-Targetable@AICAPTURE:
 	-InfiltrateToAttach@MINIDRONE:
 	-Targetable@MINIDRONE:
 	-ChangesHealth@MINIDRONE:
@@ -6020,11 +5918,9 @@ MDRN.Attached:
 
 GDRN:
 	Inherits: ^Vehicle
-	Inherits@detect: ^SensorEquipment
+	Inherits: ^RobotDriver
+	Inherits: ^SensorEquipment
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
-	Inherits@HACKABLE: ^Hackable
 	RenderSprites:
 	Buildable:
 		Queue: Vehicle
@@ -6068,6 +5964,7 @@ GDRN:
 
 MSG:
 	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
 	Inherits@autodeploy: ^AutoDeployIdler
 	Buildable:
 		Queue: Vehicle
@@ -6130,9 +6027,8 @@ MSG:
 
 SAPC:
 	Inherits: ^Tank
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalDriver
 	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@BERSERK: ^Berserk
 	-DamagedByTintedCells@TOXIN:
 	Buildable:
 		Queue: Vehicle

@@ -827,11 +827,12 @@
 		Falloff: 1000, 368, 135, 50, 18, 0
 		Versus:
 			None: 100
-			Light: 100
-			Reflector: 100
-			Heavy: 100
-			Wood: 100
-			Concrete: 100
+			Light: 120
+			Reflector: 120
+			Heavy: 80
+			Wood: 60
+			Concrete: 40
+			Brick: 45
 		ValidTargets: Ground, Trees, Water, Air
 		AffectsParent: true
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
@@ -867,6 +868,55 @@
 		MaxLevel: 750
 		LayerName: radioactivity
 
+^MiniNuke:
+	Warhead@1Dam: SpreadDamage
+	ValidTargets: Ground, Trees, Water, Air
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c512
+		Damage: 1500
+		Falloff: 1000, 368, 135, 50, 18, 0
+		Versus:
+			None: 80
+			Light: 100
+			Reflector: 100
+			Heavy: 80
+			Wood: 60
+			Concrete: 40
+			Brick: 45
+		ValidTargets: Ground, Trees, Water, Air
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff_impact: CreateEffect
+		Explosions: nuke3
+		ImpactSounds: kaboom1.aud
+	Warhead@6Eff_areanuke1: CreateEffect
+		ImpactSounds: kaboom22.aud
+		Delay: 5
+		ImpactActors: false
+	Warhead@6Smu_areanuke1: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Trees
+		Size: 4
+		Delay: 5
+	Warhead@TREEKILL: SpreadDamage
+		Spread: 0c512
+		Damage: 3000
+		Falloff: 1000, 600, 400, 250, 150, 100, 0
+		Delay: 5
+		ValidTargets: Trees
+		DamageTypes: Incendiary
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 5
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+	Warhead@18Radio: CreateTintedCells
+		Spread: 0c512
+		Level: 350
+		Falloff: 100, 75, 52, 37, 24, 15, 2
+		MaxLevel: 750
+		LayerName: radioactivity
+
 ^TinyNuke:
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
@@ -876,7 +926,7 @@
 			None: 50
 			Light: 100
 			Reflector: 100
-			Heavy: 100
+			Heavy: 80
 			Wood: 60
 			Concrete: 40
 			Brick: 45
