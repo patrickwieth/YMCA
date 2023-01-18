@@ -1456,6 +1456,60 @@ hack.cameo_filler.123:
 		BuildPaletteOrder: 151
 		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~aircraft.!ukraine, ~filler.mig, disabled
 
+commander_tree.General_Armaggeddon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: General Armaggeddon
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 160
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.the_chef
+		Description: Pick General Armageddon to specialize in artillery. \n General Armageddon is not a buildable unit. \n Unlocks the MAD Tank. \n Artillery units fire 20% faster.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+commander_tree.TikTok_Warrior:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: TikTok Warrior
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 160
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.the_chef, ~!commander_tree.general_armaggeddon
+		Description: Pick TikTok Warrior to specialize in propaganda. \n TikTok Warrior is not a buildable unit. \n Unlocks the Chechen Paradrop. \n Range of Propaganda effect is increased.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+commander_tree.The_Chef:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: The Chef
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 160
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.general_armaggeddon
+		Description: Pick the Chef Cook to specialize in penal battalions.\n The Chef Cook is not a buildable unit. \n Unlocks the Prison Building (not yet implemented). \n Infantry is 10% cheaper.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+hack.cameo_filler.sovietgeneral.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 161
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.soviet, ~aircraft.!ukraine, ~filler.mig, disabled
+
+hack.cameo_filler.sovietgeneral.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 161
+		Prerequisites: prerequisite.has_points, radar, ~aircraft.soviet, ~aircraft.!ukraine, ~filler.mig, disabled
+
 #GDI
 commander_tree.Railgunner:
 	Inherits: ^default.commander_tree_item
@@ -2661,12 +2715,17 @@ commander_tree.Apache.Flyby:
 		Name: Harpy Flyby
 	Buildable:
 		Queue: Commander_Tree
+		IconPalette: chrometd
 		BuildPaletteOrder: 344
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~aircraft.legion, techcenter, ~!commander_tree.apache.torp
 		Description: Upgrades the Apache to be able to fire on the move.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apache
+	RenderSprites:
+		Image: apch
+	WithProductionIconOverlay:
+		Types: Air
 
 commander_tree.Apache.Torp:
 	Inherits: ^default.commander_tree_item
@@ -2674,12 +2733,17 @@ commander_tree.Apache.Torp:
 		Name: Harpy Torpedo Upgrade
 	Buildable:
 		Queue: Commander_Tree
+		IconPalette: chrometd
 		BuildPaletteOrder: 344
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~aircraft.nod, techcenter, ~!commander_tree.apache.flyby
 		Description: Upgrades the Apache with torpedo bombs.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apache
+	RenderSprites:
+		Image: apch
+	WithProductionIconOverlay:
+		Types: Torpedo
 
 hack.cameo_filler.322a:
 	Inherits: ^default.cameo_filler
