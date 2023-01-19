@@ -1642,7 +1642,7 @@ AFLD:
 		Prerequisite: aircraft.any
 	ParatroopersPower@paratroopers:
 		OrderName: paratroopers
-		Prerequisites: aircraft.soviet, !aircraft.russia
+		Prerequisites: aircraft.soviet, !aircraft.russia, ~!commander_tree.tiktok_warrior
 		Icon: paratroopers
 		ChargeInterval: 7500
 		Name: Paratroopers
@@ -1662,9 +1662,31 @@ AFLD:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
+	ParatroopersPower@Chechenparatroopers:
+		OrderName: chechentroopers
+		Prerequisites: aircraft.soviet, ~commander_tree.tiktok_warrior
+		Icon: paratroopers
+		ChargeInterval: 5000
+		Name: Chechen Paratoopers
+		Description: A Badger drops a squad of infantry heavily influenced by TikTok\nanywhere on the map.
+		SquadSize: 3
+		SquadOffset: 0,1792,0
+		DropItems: E1,E1,SHOK,E1,E2,E2,E2,E3,E3,E3,E3,E3,DOG,Mortar,Mortar,Mortar,Mortar,DOG,SHOK,SHOK,E1
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPoster: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
 	ParatroopersPower@Russianparatroopers:
 		OrderName: stormtroopers
-		Prerequisites: aircraft.russia
+		Prerequisites: aircraft.russia, ~!commander_tree.tiktok_warrior
 		Icon: stormtroopers
 		ChargeInterval: 9000
 		Name: Storm-troopers
