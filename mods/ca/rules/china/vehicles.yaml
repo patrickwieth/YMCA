@@ -52,8 +52,7 @@ CHNMCV:
 chbattle:
 	Inherits: ^TankTD
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@AUTOTARGET2: ^PrioAntiHeavy
+	Inherits: ^PrioAntiHeavy
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@horde: ^HordeBonus
 	Inherits@atom: ^AtomicTank
@@ -132,7 +131,7 @@ chbattle.Autoloader.Reflector:
 
 chbattle.Nuclear_Shells:
 	Inherits: chbattle
-	Inherits@AUTOTARGET2: ^PrioAntiLight
+	Inherits: ^PrioAntiLight
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.nuclear_shells, ~!filler.battlemaster2
 		Description: Chinese main battle tank.\nFires nuclear shells.
@@ -211,8 +210,7 @@ chbattle.Mass_Production.Reflector:
 charty:
 	Inherits: ^VehicleTD
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@AUTOTARGET2: ^PrioAntiLight
+	Inherits: ^PrioArtillery
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@vo: ^AttackFrontalVoice
@@ -271,8 +269,7 @@ choverlord:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@AUTOTARGET2: ^PrioAntiHeavy
+	Inherits: ^PrioAntiHeavy
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@atom: ^AtomicTank
 	Inherits@uran: ^UranShells
@@ -326,6 +323,7 @@ choverlord:
 choverlord.Gatling:
 	Inherits: choverlord
 	Inherits: ^ChinaGatlingOverlord
+	Inherits: ^PrioAntiHeavyAA
 	Inherits@detect: ^SensorEquipment
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.gatling, ~!filler.overlord2
@@ -398,6 +396,7 @@ choverlord.Gatling.Reflector:
 
 choverlord.Bunker:
 	Inherits: choverlord
+	Inherits: ^PrioAntiHeavyAA
 	-AttackTurreted:
 	Inherits@CARGO: ^AttackingCargoAndTurret
 	Buildable:
@@ -512,6 +511,7 @@ choverlord.Propaganda.Reflector:
 
 choverlord.Nuke_Shells:
 	Inherits: choverlord
+	Inherits: ^PrioAntiLight
 	Inherits@AUTOTARGET2: ^PrioAntiLight
 	Buildable:
 		Prerequisites: chweap, techcenter, ~commander_tree.overlord.nuclear_shells, ~!filler.overlord2
@@ -567,6 +567,7 @@ choverlord.Nuke_Shells.Reflector:
 
 choverlord.Plasma:
 	Inherits: choverlord
+	Inherits: ^PrioEnergyWeapon
 	Inherits@AUTOTARGET2: ^PrioEnergyWeapon
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.plasma, ~!filler.overlord2
@@ -638,7 +639,6 @@ choverlord.Husk:
 chdragon:
 	Inherits: ^VehicleTD
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
 	Inherits@AUTOTARGET2: ^PrioAntiInfantry
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
@@ -759,8 +759,7 @@ chdragon.Husk:
 chgtnk:
 	Inherits: ^TankTD
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
-	Inherits@AUTOTARGET2: ^PrioAntiLight
+	Inherits: ^PrioAntiLightAA
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@vo: ^AttackTurretedVoice
@@ -964,8 +963,7 @@ choutpost.Propaganda.Reflector:
 choutpost.Bunker:
 	Inherits: choutpost
 	Inherits@CARGO: ^AttackingCargo
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
-	Inherits@AUTOTARGET2: ^PrioAntiHeavyAA
+	Inherits: ^PrioAntiHeavyAA
 	Valued:
 		Cost: 1800
 	Tooltip:
@@ -1017,7 +1015,7 @@ choutpost.Bunker.Reflector:
 checm:
 	Inherits: ^TankTD
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits: ^PrioEnergyWeapon
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@vo: ^AttackTurretedVoice
@@ -1068,6 +1066,7 @@ checm:
 
 checm.pulse:
 	Inherits: checm
+	Inherits: ^PrioEnergyAntiHeavy
 	Tooltip:
 		Name: Plasma Pulse Tank
 	Buildable:
@@ -1083,6 +1082,7 @@ checm.pulse:
 
 checm.focus:
 	Inherits: checm
+	Inherits: ^PrioEnergyAntiHeavy
 	Tooltip:
 		Name: Plasma Focus Tank
 	Buildable:
@@ -1150,7 +1150,7 @@ chcrawl:
 chcrawl2:
 	Inherits: chcrawl
 	Inherits: ^TankTD
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits: ^PrioAntiLight
 	Inherits@CARGO: ^AttackingCargo
 	Valued:
 		Cost: 1000
@@ -1189,6 +1189,7 @@ chcrawl2:
 
 chcrawl2.Hunter:
 	Inherits: chcrawl2
+	Inherits: ^PrioAntiHeavyAA
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -1237,6 +1238,7 @@ chcrawl2.Hunter.Reflector:
 
 chcrawl2.Assault:
 	Inherits: chcrawl2
+	Inherits: ^PrioAntiLightAA
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -1298,7 +1300,7 @@ chnukecann:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits: ^PrioArtillery
 	Inherits@GeneralsVehicle: ^GeneralsVehicle
 	Inherits@announce: ^AnnounceGlobal
 	Inherits@vo: ^AttackTurretedVoice

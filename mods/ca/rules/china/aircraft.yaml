@@ -1,6 +1,6 @@
 CHMIG:
 	Inherits: ^PlaneTD
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Inherits@AUTOTARGET2: ^PrioAntiHeavy
 	Inherits@EXPERIENCE: ^GainsExperience
 	Inherits@announce: ^AnnounceOnBuild
@@ -77,7 +77,7 @@ CHMIG:
 
 CHMIG.AA:
 	Inherits: CHMIG
-	Inherits@AUTOTARGET: ^AutoTargetAir
+	Inherits: ^PrioAntiHeavyAA
 	Buildable:
 		Queue: Aircraft
 		BuildPaletteOrder: 50
@@ -186,8 +186,7 @@ chmig.husk:
 chhelix:
 	Inherits: ^HelicopterTD
 	Inherits@EXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	Inherits@AUTOTARGET2: ^PrioAntiLight
+	Inherits: ^PrioAntiInfantry
 	Inherits@announce: ^AnnounceOnBuild
 	Inherits@speaker: ^PropagandaSpeaker
 	Inherits@recon: ^SensorEquipment
@@ -311,6 +310,7 @@ chhelix:
 chhelix.Gatling:
 	Inherits: chhelix
 	Inherits: ^ChinaGatling
+	Inherits: ^PrioAntiLightAA
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.gatling
 		Description: Helicopter gatling gunship upgradeable with addons.
@@ -340,6 +340,7 @@ chhelix.Gatling:
 
 chhelix.Napalm:
 	Inherits: chhelix
+	Inherits: ^PrioAntiLight
 	Inherits@rearm: ^AircraftWithAmmo
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.napalm
@@ -388,6 +389,7 @@ chhelix.Napalm:
 
 chhelix.Nuke:
 	Inherits: chhelix
+	Inherits: ^PrioAntiLight
 	Inherits@rearm: ^AircraftWithAmmo
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.nuke
@@ -426,7 +428,6 @@ chhelix.Nuke:
 
 chhelix.Bunker:
 	Inherits: chhelix
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
 	Inherits@AUTOTARGET2: ^PrioAntiHeavyAA
 	Inherits@CARGO: ^AttackingCargo
 	Buildable:
@@ -471,6 +472,7 @@ chhelix.Bunker.advinf:
 
 chhelix.Torpedo:
 	Inherits: chhelix
+	Inherits: ^PrioAntiHeavy
 	Inherits@rearm: ^AircraftWithAmmo
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.torpedo

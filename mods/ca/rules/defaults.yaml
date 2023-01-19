@@ -1408,8 +1408,85 @@
 		Priority: 1
 
 ^PrioAntiHeavy:
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 5
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 5
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 3
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 1
 
 ^PrioAntiLight:
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 4
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 1
+
+^PrioAntiReflector:
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 9
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 9
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 4
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 1
 
 ^PrioAntiVehicle:
 
@@ -1438,8 +1515,7 @@
 		Priority: 2
 	AutoTargetPriority@PRIO:
 		ValidTargets: concrete
-		Priority: 5
-
+		Priority: 1
 
 ^PrioAntiHeavyAA:
 	AutoTarget:
@@ -1472,12 +1548,169 @@
 		Priority: 1
 
 ^PrioEnergyWeapon:
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 9
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 8
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 3
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 1
 
 ^PrioEnergyAntiHeavy:
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 5
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 4
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 3
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 1
+
+^PrioEnergyAntiHeavyAA:
+	AutoTarget:
+		AttackAnythingCondition: stance-attackanything
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+		InvalidTargets: NoAutoTarget, WaterStructure
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		InvalidTargets: NoAutoTarget
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 5
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 4
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 3
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 1
 
 ^PrioEnergyAntiLight:
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 4
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 1
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 1
+
+^PrioEnergyAntiLightAA:
+	Inherits: ^AutoTargetAll
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 4
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 3
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 1
 
 ^PrioArtillery:
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 9
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 8
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 7
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 6
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 1
 
 ^RelayTargeting:
 	AutoTargetPriority@Relay:

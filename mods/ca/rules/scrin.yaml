@@ -69,7 +69,7 @@ VEHICLES.SCRIN:
 S1:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
 	Inherits@scout: ^ScoutEquipment
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiInfantry
 	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
 	Buildable:
@@ -106,7 +106,7 @@ S1:
 
 S2:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
@@ -140,7 +140,7 @@ S2:
 
 S3:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits: ^PrioAntiHeavyAA
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
@@ -180,7 +180,7 @@ S3:
 
 S4:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
@@ -251,7 +251,7 @@ S6:
 
 FEED:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioEnergyAntiLight
 	Inherits@BERSERK: ^Berserk
 	Valued:
 		Cost: 200
@@ -415,7 +415,7 @@ GSCR.Mutating:
 MAST:
 	Inherits@SCRININFANTRY: ^ScrinInfantry
 	Inherits@detect: ^SensorEquipment
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Inherits@BERSERK: ^Berserk
 	Inherits@COMMANDOSKULL: ^CommandoSkull
 	AutoTargetPriority@DEFAULT:
@@ -531,7 +531,7 @@ HARV.Scrin:
 GUNW:
 	Inherits: ^Vehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits: ^PrioAntiLightAA
 	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Vehicle
@@ -600,7 +600,7 @@ SEEK:
 	Inherits: ^Vehicle
 	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
@@ -686,7 +686,7 @@ LACE:
 	Inherits: ^Vehicle
 	Inherits@Hover: ^HoverVehicle
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Inherits@BERSERK: ^Berserk
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
@@ -783,7 +783,7 @@ INTL:
 	Inherits: ^Tank
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiInfantry
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -850,10 +850,7 @@ INTL:
 
 INTL.AA:
 	Inherits: INTL
-	-AttackMove:
-	-AutoTargetPriority@DEFAULT:
-	-AutoTargetPriority@ATTACKANYTHING:
-	Inherits@AUTOTARGET: ^AutoTargetAir
+	Inherits: ^PrioAntiLightAA
 	Buildable:
 		Prerequisites: wsph, ~vehicles.scrin, ~commander_tree.interloper.aa
 		Description: Heavily armoured transport craft.\n  Can detect mines.\n  Strong vs Light Vehicles, Aircraft\n  Weak vs Tanks
@@ -884,7 +881,7 @@ INTL.Teleport:
 CORR:
 	Inherits: ^Vehicle
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiLight
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -977,7 +974,7 @@ LCHR:
 	Inherits: ^Tank
 	Inherits@Armor: ^LightArmor
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiLight
 	Inherits@SLOWCRUSH: ^SlowedByCrushing
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
@@ -1025,7 +1022,7 @@ STCR:
 	Inherits@Armor: ^HeavyArmor
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiLight
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -1100,7 +1097,7 @@ DEVO:
 	Inherits@Armor: ^LightArmor
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
@@ -1150,6 +1147,7 @@ DEVO:
 
 DEVO.acid:
 	Inherits: DEVO
+	Inherits: ^PrioAntiReflector
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
@@ -1184,7 +1182,7 @@ DARK:
 	Inherits: ^Tank
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Buildable:
@@ -1266,7 +1264,7 @@ RUIN:
 	Inherits: ^Vehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioArtillery
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -1350,7 +1348,7 @@ ATMZ:
 	Inherits: ^Vehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMoveAntiAir
+	Inherits: ^PrioArtillery
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
@@ -1400,7 +1398,7 @@ TPOD:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
@@ -1500,6 +1498,7 @@ TPOD.chain.PLD:
 
 TPOD.acid:
 	Inherits: TPOD
+	Inherits: ^PrioAntiReflector
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.tpod, ~commander_tree.tripod.acid, ~!filler.tripod2
 		Description: Heavy assault walker with corrosive acid weapons.\n  Strong vs Vehicles.\n  Weak vs Aircraft
@@ -1682,7 +1681,7 @@ SMCV:
 
 STMR:
 	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits: ^PrioAntiLightAA
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
@@ -1772,7 +1771,6 @@ STMR:
 
 STMR.hunter:
 	Inherits: STMR
-	Inherits@AUTOTARGET: ^AutoTargetAir
 	-AttackMove:
 	Buildable:
 		Queue: Aircraft
@@ -1800,7 +1798,7 @@ STMR.hunter:
 
 STMR.bomber:
 	Inherits: STMR
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -1846,7 +1844,7 @@ STMR.bomber:
 
 STMR.torp:
 	Inherits: STMR
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -1896,7 +1894,7 @@ STMR.torp:
 
 ENRV:
 	Inherits: ^Helicopter
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
@@ -2012,7 +2010,7 @@ ENRV:
 DEVA:
 	Inherits: ^Airship
 	Inherits@Armor: ^HeavyArmor
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioArtillery
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
@@ -2066,7 +2064,7 @@ DEVA:
 
 DEVA.Shards:
 	Inherits: DEVA
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Prerequisites: scrt, grav, ~aircraft.scrin, ~commander_tree.devastator.shard
 		Description: Long-range anti-tank warship.\n  Strong vs Tanks\n  Weak vs Aircraft
@@ -2080,6 +2078,7 @@ DEVA.Shards:
 
 DEVA.Rift:
 	Inherits: DEVA
+	Inherits: ^PrioEnergyAntiHeavy
 	Buildable:
 		Prerequisites: scrt, grav, ~aircraft.scrin, ~commander_tree.devastator.beam
 		Description: Long-range anti-tank warship.\n  Strong vs masses of units\n  Weak vs Aircraft
@@ -2094,7 +2093,7 @@ DEVA.Rift:
 PAC:
 	Inherits: ^Airship
 	Inherits@Armor: ^HeavyArmor
-	Inherits@AUTOTARGET: ^AutoTargetAllAssaultMove
+	Inherits: ^PrioAntiLightAA
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
@@ -2183,6 +2182,7 @@ PAC:
 
 PAC.suicide:
 	Inherits: PAC
+	Inherits: ^PrioAntiLight
 	Buildable:
 		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.suicide
 		Description: Carrier with suicide drones.\n	Strong vs Vehicles, Infantry\n  Weak vs Anti-Air
@@ -2230,9 +2230,7 @@ PAC.support:
 
 PAC.laser:
 	Inherits: PAC
-	-AutoTargetPriority@DEFAULT:
-	-AutoTargetPriority@ATTACKANYTHING:
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioEnergyAntiHeavy
 	Buildable:
 		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.warship
 		Description: Massive Warship with multiple armor piercing laser systems.\n	Strong vs Vehicles\n  Weak vs Aircraft, Reflector
@@ -2483,7 +2481,7 @@ INVA.suicide:
 MSHP:
 	Inherits: ^Airship
 	Inherits@Armor: ^HeavyArmor
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^PrioArtillery
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
