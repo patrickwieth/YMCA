@@ -2210,46 +2210,27 @@ HTNK.Ion.PLD:
 
 HTNK.Nanite:
 	Inherits: HTNK
+	Inherits: ^Shielded
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
 		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.nr, ~!filler.gdimammoth2
-		Description: Big and slow tank with anti-air capability.\n  Is very tough and repairs itself with Nanite Repair System.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Point Laser Defense
+		Description: Big and slow tank with anti-air capability.\n  Is very tough and has a nanite shield system.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Point Laser Defense
 	Tooltip:
 		Name: Nanite Mammoth Tank
 	Valued:
 		Cost: 2500
-	Health:
-		HP: 125000
-	ChangesHealth:
-		PercentageStep: 5
-		Delay: 25
-		StartIfBelow: 100
-		DamageCooldown: 10
+	Shielded:
+		MaxStrength: 60000
+		RegenAmount: 800
 		RequiresCondition: !(empdisable || driver-dead)
-	WithColoredOverlay@NREPAIR:
-		RequiresCondition: damaged && !(empdisable || invulnerability || invisibility)
-	WithIdleOverlay@NREPAIR:
-		Sequence: emp-overlay
-		Palette: tseffect
-		RequiresCondition: damaged && !damaged ##currently disabled
-	WithDecoration@NREPAIR:
-		Image: pips
-		Palette: chrometd
-		Sequence: pip-repair
-		BlinkInterval: 64
-		RequiresSelection: True
-		ValidRelationships: Ally, Neutral
-	GrantConditionOnDamageState@NREPAIR:
-		Condition: damaged
-		ValidDamageStates: Light, Medium, Heavy, Critical
 
 HTNK.Nanite.Reflector:
 	Inherits: HTNK.Nanite
 	Inherits: ^ReflectorArmor
 	Buildable:
 		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.nr, ~commander_tree.mammoth_tank_gdi.reflector
-		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft, Energy Weapons \n  Weak vs Conventional Weapons
+		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Is very tough and has a nanite shield system.\n  Strong vs Vehicles, Infantry, Aircraft, Energy Weapons \n  Weak vs Conventional Weapons
 	Tooltip:
 		Name: Nanite Mammoth Tank (Reflector)
 
@@ -2259,7 +2240,7 @@ HTNK.Nanite.PLD:
 	Buildable:
 		IconPalette: chrometd
 		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pld, ~commander_tree.mammoth_tank_gdi.nr,
-		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Is very tough and has a nanite shield system.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Nanite Mammoth Tank (PLD)
 	Valued:
@@ -2945,6 +2926,7 @@ FTNK.Reflector.Fireball:
 HAR2:
 	Inherits: ^TankTD
 	Inherits: ^BiologicalDriver
+	Inherits: ^Shielded
 	Inherits@HARV: ^Harvester
 	-Crushable:
 	-Carryable:
@@ -2986,26 +2968,8 @@ HAR2:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
 	GrantConditionOnPrerequisite@shielded:
-		Condition: shielded-miner
+		Condition: shielded
 		Prerequisites: commander_tree.shielded_miners
-	Shielded:
-		MaxStrength: 75000
-		RegenDelay: 150
-		RegenAmount: 250
-		RegenInterval: 5
-		ShieldsUpCondition: shields-up
-		RequiresCondition: shielded-miner && !empdisable
-		SelectionBarColor: 4488ff
-	WithModifiedPalette@shieldhit:
-		Palette: shieldhit
-		RequiresCondition: weaponhit && shields-up
-	ExternalCondition@weaponhit:
-		Condition: weaponhit
-	WithIdleOverlay@NSHIELD:
-		Sequence: idle
-		Image: nshield-overlay
-		Palette: effect
-		RequiresCondition: weaponhit && shields-up
 
 BTR:
 	Inherits: ^Vehicle
