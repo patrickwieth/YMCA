@@ -780,31 +780,37 @@ chsilo:
 	DetectCloaked:
 		Range: 5c0
 		RequiresCondition: !lowpower
-	NukePower@unlimited:
-		PauseOnCondition: lowpower
-		Icon: chnuclear
-		IconPalette: chrometd
+
+	NukePower:
+		PauseOnCondition: disabled || empdisable || being-warped
 		Cursor: nuke
+		Icon: abomb
 		ChargeInterval: 13500
-		Description: Nuclear Strike
-		LongDesc: Launch a tactical nuclear warhead.\nApplies heavy damage over a large area.
-		EndChargeSpeechNotification: NuclearWeaponAvailable
+		Name: Atom Bomb
+		Description: Launches a devastating atomic bomb\nat a target location.
+		BeginChargeSpeechNotification: AbombPrepping
+		EndChargeSpeechNotification: AbombReady
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
-		LaunchSpeechNotification: NuclearWeaponLaunched
-		IncomingSpeechNotification: NuclearWarheadApproaching
-		MissileWeapon: CHBigAtomicWeapon
-		MissileDelay: 11
-		SpawnOffset: 3c0,0,-1c512
-		DisplayBeacon: True
-		BeaconPoster: raatomicon
+		IncomingSound: nukelaunch.aud
+		IncomingSpeechNotification: AbombLaunchDetected
+		LaunchSound: nukelaunch.aud
+		MissileWeapon: atomic
+		MissileDelay: 5
+		SpawnOffset: 1c0,427,0
 		DisplayTimerStances: Ally, Neutral, Enemy
+		DisplayBeacon: True
 		DisplayRadarPing: True
+		BeaconPoster: atomicon
+		FlashType: Nuke
 		CameraRange: 10c0
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
-		SupportPowerPaletteOrder: 30
+		TrailImage: smokey2
+		TrailSequences: idle
+		TrailPalette: tseffect-ignore-lighting-alpha75
+		MissileImage: atomic
 	AirstrikePower@EMP:
 		OrderName: chempbomb
 		Icon: chemp
