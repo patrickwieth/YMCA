@@ -1263,12 +1263,6 @@
 	Targetable@MINIDRONE:
 		TargetTypes: MiniDroneAttachable
 		RequiresCondition: !mdrn-attached
-	ChangesHealth@MINIDRONE:
-		PercentageStep: 1
-		Delay: 25
-		StartIfBelow: 100
-		DamageCooldown: 75
-		RequiresCondition: mdrn-attached
 	ExternalCondition@MINIDRONE:
 		Condition: mdrn-attached
 	AttachableTo:
@@ -1932,6 +1926,7 @@
 ^RobotDriver:
 	Inherits@IDISABLE: ^DisabledByRadarLoss
 	Inherits@HACKABLE: ^Hackable
+	IgnoresDisguise:
 	WithDecoration@DISABLED:
 		Image: poweroff
 		Sequence: offline
@@ -4134,10 +4129,8 @@
 		UndeployTicks: 50
 
 ^AutoDeployIdler:
-	AutoTarget:
-		HoldFireCondition: stance-holdfire
 	AutoDeployer:
-		RequiresCondition: undeployed && !parachute && stance-holdfire
+		RequiresCondition: undeployed && !parachute
 		DeployChance: 100
 		DeployTrigger: BecomingIdle
 		DeployTicks: 5
@@ -4148,6 +4141,9 @@
 		RequiresCondition: !jammed && !disabled && !being-warped
 	ExternalCondition@JAMMED:
 		Condition: jammed
+	ProvidesPrerequisite@radar-active:
+		Prerequisite: radar-active
+		RequiresCondition: !jammed && !disabled && !being-warped
 
 ^AircraftWithAmmo:
 	Rearmable:
