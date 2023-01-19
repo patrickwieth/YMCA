@@ -862,6 +862,26 @@
 		RequiresCondition: forceshield && !invulnerability
 		Modifier: 0
 
+^Shielded:
+	Shielded:
+		MaxStrength: 75000
+		RegenDelay: 100
+		RegenAmount: 100
+		RegenInterval: 2
+		ShieldsUpCondition: shields-up
+		RequiresCondition: shielded && !empdisable
+		SelectionBarColor: 4488ff
+	WithModifiedPalette@shieldhit:
+		Palette: shieldhit
+		RequiresCondition: weaponhit && shields-up
+	ExternalCondition@weaponhit:
+		Condition: weaponhit
+	WithIdleOverlay@NSHIELD:
+		Sequence: idle
+		Image: nshield-overlay
+		Palette: effect
+		RequiresCondition: weaponhit && shields-up
+
 ^EmpDisable:
 	WithColoredOverlay@EMPDISABLE:
 		RequiresCondition: empdisable
@@ -3764,18 +3784,19 @@
 		Sequence: tag-primary
 
 ^BuildingPlug:
+	Inherits@3: ^SpriteActor
+	WithSpriteBody:
 	Interactable:
 	AlwaysVisible:
 	Building:
 		BuildSounds: placbldg.aud
 		UndeploySounds: cashturn.aud
-	SequencePlaceBuildingPreview:
-		Sequence: place
-		SequencePalette: placebuildingtd
-		Palette: terrain
+	ActorPreviewPlaceBuildingPreview:
+		OverridePalette: placebuildingtd
 	KillsSelf:
 		RemoveInstead: true
 	RenderSprites:
+		PlayerPalette: overlayplayertd
 
 ^AIUNLOAD:
 	GrantConditionWhileAiming@AIUNLOAD:
