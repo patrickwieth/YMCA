@@ -1876,61 +1876,42 @@ LTNK:
 
 LTNK.Laser:
 	Inherits: ^TankTD
+	Inherits: ^HighResShadow
+	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyAntiHeavy
-	RenderSprites:
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 40
-		IconPalette: chrometd
+		BuildPaletteOrder: 0
 		Prerequisites: ~vehicles.nod, tmpl, ~commander_tree.light_tank_laser
-		Description: Fast, light tank shooting laser.\n  Strong vs heavy Tanks\n  Weak vs Infantry\n  Special Ability: Amphibious
+		Description: Fast, light tank shooting laser.\n  Strong vs heavy Tanks\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 750
 	Tooltip:
-		Name: Laser Light Tank
+		Name: Scorpion Tank
 	Health:
 		HP: 41250
 	Mobile:
-		Locomotor: Amphibious
 		Speed: 100
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	Targetable:
-		TargetTypes: Ground, Vehicle
-		RequiresCondition: !onwater && !parachute && !being-warped
-	Targetable@WATER:
-		TargetTypes: Ground, Vehicle, Water, Ship
-		RequiresCondition: onwater && (!parachute && !being-warped)
-	WithFacingSpriteBody:
-		RequiresCondition: !onwater || parachute
-	WithFacingSpriteBody@WATER:
-		Sequence: idle-water
-		Name: body-water
-		RequiresCondition: onwater && !parachute
-	Turreted:
-		TurnSpeed: 56
 	Armament:
 		Weapon: Laser.Tank
 		Recoil: 85
+		FireDelay: 40
 		RecoilRecovery: 17
-		LocalOffset: 520,0,90
+		LocalOffset: 100,0,300
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped || parachute
-		RequiresCondition: !marked
-	Armament@Marked:
-		Weapon: Laser.Tank.Adv
-		Recoil: 85
-		RecoilRecovery: 17
-		LocalOffset: 520,0,90
-		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped || parachute
-		RequiresCondition: marked
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
+	QuantizeFacingsFromSequence:
+	WithAttackAnimation:
+		Sequence: shoot
+	AttackFrontal:
+		FacingTolerance: 0
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+	GrantConditionWhileAiming:
+		Condition: aiming
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: LTNK.Husk
 		RequiresCondition: !onwater && !being-warped
@@ -3752,6 +3733,7 @@ HMLRS.PLD:
 
 RTNK:
 	Inherits: ^Tank
+	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
 	Buildable:
@@ -3769,6 +3751,8 @@ RTNK:
 		GenericName: Civilian building
 		GenericVisibility: Enemy, Neutral
 		RequiresCondition: tree
+	WithShadow:
+		RequiresCondition: !tree
 	Mirage:
 		RequiresCondition: !empdisable && !being-warped && !driver-dead
 		RevealOn: Attack, Move
