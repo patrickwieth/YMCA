@@ -86,6 +86,7 @@ chbattle:
 		LocalOffset: 850,0,50
 		MuzzleSequence: muzzle
 	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SelectionDecorations:
@@ -244,7 +245,7 @@ charty:
 	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
 	AutoTarget:
 		InitialStanceAI: Defend
@@ -314,6 +315,7 @@ choverlord:
 		RecoilRecovery: 42
 		MuzzleSequence: muzzle
 	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
 	SelectionDecorations:
 	Voiced:
@@ -349,6 +351,7 @@ choverlord.Gatling:
 		TurnSpeed: 3
 		Offset: -298,0,150
 	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 		Turrets: primary, secondary, tertiary
 		Armaments: primary, secondary, tertiary
 	WithSpriteTurret@gatling:
@@ -708,6 +711,7 @@ chdragon:
 		RevokeDelay: 100
 		RevokeAll: true
 	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 		Armaments: primary, secondary, firewall1
 	WithMuzzleOverlay:
 	WithSpriteTurret:
@@ -785,7 +789,7 @@ chgtnk:
 		TurnSpeed: 16
 		Offset: -275,0,150
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
+		PauseOnCondition: empdisable || being-warped || parachute
 		Armaments: primary, secondary
 	WithMuzzleOverlay:
 	WithSpriteTurret:
@@ -920,7 +924,7 @@ choutpost.Propaganda:
 		Name: Propaganda Outpost
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.propaganda
+		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.propaganda, ~!filler.outpost2
 		Queue: Vehicle
 		Description: Detects cloaked units and buildings.\nMounted with a propaganda speaker.
 	TooltipExtras:
@@ -968,7 +972,7 @@ choutpost.Bunker:
 		Name: Attack Outpost
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.bunker
+		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.bunker, ~!filler.outpost2
 		Queue: Vehicle
 		Description: Detects cloaked units and buildings.\nGarrisoned with 5 Tank Hunters.
 	TooltipExtras:
@@ -1023,7 +1027,7 @@ checm:
 		Name: ECM Tank
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chweap, radar, ~vehicles.china, ~!commander_tree.ecm.pulse, ~!commander_tree.ecm.focus, ~!commander_tree.ecm.chain
+		Prerequisites: chweap, radar, ~vehicles.china, ~!filler.ecm
 		Queue: Vehicle
 		Description: Disables vehicles with a modulated plasma beam.
 	TooltipExtras:
@@ -1045,6 +1049,7 @@ checm:
 		Weapon: CHECMDisable
 		LocalOffset: 250,0,100
 	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 		Armaments: primary, secondary
 	GrantConditionOnAttack:
 		Condition: attacking
@@ -1325,6 +1330,7 @@ chnukecann:
 	Turreted:
 		TurnSpeed: 8	#3
 	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 	SelectionDecorations:
 	Selectable:
 	Armament@PRIMARY:
