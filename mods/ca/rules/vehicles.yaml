@@ -892,8 +892,11 @@ ISU.Concussion:
 
 SPEC:
 	Inherits: ARTY.nod
+	Inherits: ^HighResShadow
+	Inherits: ^AutoDeployAttacker
 	RenderSprites:
 		Image: spec
+		PlayerPalette: overlayplayer
 	Buildable:
 		BuildPaletteOrder: 155
 		Prerequisites: tmpl, ~vehicles.blackh
@@ -901,7 +904,7 @@ SPEC:
 	Valued:
 		Cost: 1100
 	Tooltip:
-		Name: Spectre
+		Name: Specter
 	Health:
 		HP: 11000
 	Mobile:
@@ -910,6 +913,35 @@ SPEC:
 	Armament:
 		Weapon: 155mmSpec
 		LocalOffset: 624,0,408
+	AttackTurreted:
+	Turreted:
+		TurnSpeed: 8
+		Offset: -320,0,250
+	WithSpriteTurret:
+		RequiresCondition: !undeployed
+	WithFacingSpriteBody@deployed:
+		Sequence: idle-static
+		RequiresCondition: !undeployed
+		Name: deployedbody
+	WithFacingSpriteBody:
+		RequiresCondition: undeployed || airborne
+	GrantConditionOnDeploy:
+		PauseOnCondition: empdisable || being-warped || being-captured
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		Facing: 165
+		AllowedTerrainTypes: Clear, Rough, Road, Ore, Gems, Beach, Tiberium, BlueTiberium
+		DeploySounds: placbldg.aud
+		UndeploySounds: clicky1.aud
+		UndeployOnMove: true
+		UndeployOnPickup: true
+	RevealsShroud@deployed:
+		Range: 12c0
+		MinRange: 8c0
+		RequiresCondition: deployed
+	RevealsShroud@deployedGAPGEN:
+		Range: 8c0
+		RequiresCondition: deployed
 	Cloak@NORMAL:
 		InitialDelay: 90
 		CloakDelay: 90
@@ -919,7 +951,7 @@ SPEC:
 		Palette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
-		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead && disabled
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
@@ -970,6 +1002,7 @@ HARV:
 
 HARV.Chrono:
 	Inherits: HARV
+	Inherits: ^HighResShadow
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 10
@@ -5165,6 +5198,7 @@ CRYO:
 
 SLNG:
 	Inherits: ^VehicleTD
+	Inherits: ^HighResShadow
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
@@ -5273,8 +5307,9 @@ FTRK.Barrage:
 COORDINATOR:
 	Inherits: ^Vehicle
 	Inherits: ^BiologicalDriver
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@Vision: ^ImprovedVision
+	Inherits: ^SelectableSupportUnit
+	Inherits: ^PrimaryBuilding
+	Inherits: ^ImprovedVision
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -5692,6 +5727,7 @@ XO:
 
 HFTK:
 	Inherits: ^TankTD
+	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
 	RenderSprites:
