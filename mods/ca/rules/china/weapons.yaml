@@ -846,27 +846,6 @@ CHTankHunterBomb:
 		Explosions: self_destruct
 		ExplosionPalette: effect
 
-CHEMPBomb:
-	ReloadDelay: 800
-	Range: 1c0
-	Report: chute1.aud
-	Projectile: GravityBomb
-		Image: PARABOMB
-		OpenSequence: open
-		Velocity: 0, 0, -86
-		Acceleration: 0, 0, 0
-		Shadow: False
-	Warhead@3Eff: CreateEffect
-		Explosions: pulse_explosion
-		ExplosionPalette: tseffect
-		ImpactSounds: ptesto00.aud
-		ImpactActors: false
-	Warhead@2Con: GrantExternalCondition
-		Condition: empdisable
-		Duration: 250
-		Range: 6c0
-		ValidTargets: Ground, Air, Water
-
 CHMineBomb:
 	ReloadDelay: 100
 	Range: 1c0
@@ -918,7 +897,6 @@ SCHDesertFlyBomb:
 		ImpactSounds: splash9.aud
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure
-
 
 AtomBomb.Paradrop:
 	Inherits: CarpetBomb
@@ -1088,11 +1066,6 @@ CHEMPBomb:
 		Velocity: 0, 0, -86
 		Acceleration: 0, 0, 0
 		Shadow: False
-	Warhead@1KillAircraft: SpreadDamage
-		Spread: 6c0
-		Falloff: 100, 100
-		Damage: 50000
-		ValidTargets: Air
 		DamageTypes: SmallExplosionDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: pulse_explosion
@@ -1101,7 +1074,7 @@ CHEMPBomb:
 		ImpactActors: false
 	Warhead@2Con: GrantExternalCondition
 		Condition: empdisable
-		Duration: 250
+		Duration: 400
 		Range: 6c0
 		ValidTargets: Ground, Air, Water
 
