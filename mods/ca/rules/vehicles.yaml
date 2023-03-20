@@ -3882,6 +3882,7 @@ RTNK.Reflector:
 
 V3RL:
 	Inherits: ^Vehicle
+	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	Inherits: ^SovietArtillery
@@ -3933,6 +3934,28 @@ V3RL:
 	Exit:
 		SpawnOffset: 0,-128,0
 
+V3BRL:
+	Inherits: V3RL
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.v3rl, ~commander_tree.v3_launcher, ~disabled
+		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
+	Tooltip:
+		Name: V3 Launcher
+	MissileSpawnerMaster:
+		Actors: V3B
+
+V4RL:
+	Inherits: V3RL
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.v3rl, ~commander_tree.v3_launcher, ~disabled
+		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
+	Tooltip:
+		Name: V4 Launcher
+	AttackFrontal:
+		ForceFireIgnoresActors: False
+	MissileSpawnerMaster:
+		Actors: V4
+
 V3:
 	Inherits: ^ShootableMissile
 	Valued:
@@ -3961,6 +3984,14 @@ V3:
 		Weapon: VisualExplodeAirborne
 		RequiresCondition: airborne
 	WithFacingSpriteBody:
+
+V3B:
+	Inherits: V3
+
+V4:
+	Inherits: V3
+	BallisticMissile:
+		Homing: true
 
 KATY:
 	Inherits: ^Vehicle
