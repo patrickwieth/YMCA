@@ -3400,6 +3400,7 @@ IFV.AI:
 TITN:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
+	Inherits: ^TurretedWalker
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
 	Buildable:
@@ -3421,13 +3422,6 @@ TITN:
 	Passenger:
 		CustomPipType: red
 		Voice: Move
-	QuantizeFacingsFromSequence:
-		Sequence: stand
-	WithFacingSpriteBody:
-		Sequence: stand
-	WithMoveAnimation:
-		MoveSequence: run
-	WithSpriteTurret:
 	Armament@PRIMARY:
 		Weapon: TitanGun
 		Turret: primary
@@ -3443,13 +3437,6 @@ TITN:
 		LocalYaw: -100,100
 		Recoil: 43
 		MuzzleSequence: muzzle
-	Turreted@PRIMARY:
-		TurnSpeed: 24
-		Offset: 0,0,0
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
-		Armaments: primary, secondary, tertiary
-		Voice: Attack
 	WithMuzzleOverlay:
 	Explodes:
 		Weapon: ArtilleryExplode
@@ -5703,11 +5690,12 @@ APOC:
 		Factions: iraq
 
 XO:
-	Inherits: ^VehicleTD
+	Inherits: ^Vehicle
+	Inherits: ^HighResShadow
+	Inherits: ^TurretedWalker
 	Inherits: ^SensorEquipment
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
-	RenderSprites:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
@@ -5732,29 +5720,15 @@ XO:
 		Voice: Move
 	Voiced:
 		VoiceSet: GhostVoice
-	WithMoveAnimation:
-	WithAttackAnimation:
-		Sequence: shoot
 	Armament@PRIMARY:
 		Weapon: M60mgXO
-		LocalOffset: 400,-220,180
+		LocalOffset: 450,220,400
 		MuzzleSequence: muzzle
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: XOLaser
-		LocalOffset: 400,220,180
-	AttackFrontal:
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
-		FacingTolerance: 0
+		LocalOffset: 450,220,400
 	WithMuzzleOverlay:
-	Parachutable:
-		FallRate: 130
-	WithIdleAnimation@DESCENDING:
-		RequiresCondition: parachute
-		Interval: 3
-		Sequences: descend
-	-WithParachute:
 
 HFTK:
 	Inherits: ^TankTD
