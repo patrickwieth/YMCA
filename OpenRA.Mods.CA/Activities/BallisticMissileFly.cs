@@ -21,7 +21,9 @@ namespace OpenRA.Mods.CA.Activities
 	{
 		readonly BallisticMissile sbm;
 		readonly WPos initPos;
-		readonly WPos targetPos;
+		readonly Target target;
+		WPos targetPos;
+
 		int length;
 		int ticks;
 		WAngle facing;
@@ -34,6 +36,7 @@ namespace OpenRA.Mods.CA.Activities
 				this.sbm = sbm;
 
 			initPos = self.CenterPosition;
+			target = t;
 			targetPos = t.CenterPosition; // fixed position == no homing
 			length = Math.Max((targetPos - initPos).Length / this.sbm.Info.Speed, 1);
 			facing = (targetPos - initPos).Yaw;
@@ -66,6 +69,14 @@ namespace OpenRA.Mods.CA.Activities
 
 		public override bool Tick(Actor self)
 		{
+			// do the homing, but only if activated and target is still alive
+			if (sbm.Info.Homing && target.Type != TargetType.Invalid)
+			{
+				targetPos = target.CenterPosition;
+				facing = (targetPos - initPos).Yaw;
+			}
+
+
 			var d = targetPos - self.CenterPosition;
 
 			// The next move would overshoot, so consider it close enough

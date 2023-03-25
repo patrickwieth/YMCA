@@ -41,6 +41,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Color to use for the target line.")]
 		public readonly Color TargetLineColor = Color.Crimson;
 
+		[Desc("Missile homing.")]
+		public readonly bool Homing = false;
+
 		public override object Create(ActorInitializer init) { return new BallisticMissile(init, this); }
 
 		public IReadOnlyDictionary<CPos, SubCell> OccupiedCells(ActorInfo info, CPos location, SubCell subCell = SubCell.Any) { return new Dictionary<CPos, SubCell>(); }

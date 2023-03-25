@@ -3400,6 +3400,7 @@ IFV.AI:
 TITN:
 	Inherits: ^TankTD
 	Inherits: ^BigVehicle
+	Inherits: ^TurretedWalker
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
 	Buildable:
@@ -3421,13 +3422,6 @@ TITN:
 	Passenger:
 		CustomPipType: red
 		Voice: Move
-	QuantizeFacingsFromSequence:
-		Sequence: stand
-	WithFacingSpriteBody:
-		Sequence: stand
-	WithMoveAnimation:
-		MoveSequence: run
-	WithSpriteTurret:
 	Armament@PRIMARY:
 		Weapon: TitanGun
 		Turret: primary
@@ -3443,13 +3437,6 @@ TITN:
 		LocalYaw: -100,100
 		Recoil: 43
 		MuzzleSequence: muzzle
-	Turreted@PRIMARY:
-		TurnSpeed: 24
-		Offset: 0,0,0
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
-		Armaments: primary, secondary, tertiary
-		Voice: Attack
 	WithMuzzleOverlay:
 	Explodes:
 		Weapon: ArtilleryExplode
@@ -3882,6 +3869,7 @@ RTNK.Reflector:
 
 V3RL:
 	Inherits: ^Vehicle
+	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	Inherits: ^SovietArtillery
@@ -3933,6 +3921,28 @@ V3RL:
 	Exit:
 		SpawnOffset: 0,-128,0
 
+V3BRL:
+	Inherits: V3RL
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.v3rl, ~commander_tree.v3_launcher, ~disabled
+		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
+	Tooltip:
+		Name: V3 Launcher
+	MissileSpawnerMaster:
+		Actors: V3B
+
+V4RL:
+	Inherits: V3RL
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.v3rl, ~commander_tree.v3_launcher, ~disabled
+		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
+	Tooltip:
+		Name: V4 Launcher
+	AttackFrontal:
+		ForceFireIgnoresActors: False
+	MissileSpawnerMaster:
+		Actors: V4
+
 V3:
 	Inherits: ^ShootableMissile
 	Valued:
@@ -3961,6 +3971,14 @@ V3:
 		Weapon: VisualExplodeAirborne
 		RequiresCondition: airborne
 	WithFacingSpriteBody:
+
+V3B:
+	Inherits: V3
+
+V4:
+	Inherits: V3
+	BallisticMissile:
+		Homing: true
 
 KATY:
 	Inherits: ^Vehicle
@@ -5672,11 +5690,12 @@ APOC:
 		Factions: iraq
 
 XO:
-	Inherits: ^VehicleTD
+	Inherits: ^Vehicle
+	Inherits: ^HighResShadow
+	Inherits: ^TurretedWalker
 	Inherits: ^SensorEquipment
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
-	RenderSprites:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
@@ -5701,29 +5720,15 @@ XO:
 		Voice: Move
 	Voiced:
 		VoiceSet: GhostVoice
-	WithMoveAnimation:
-	WithAttackAnimation:
-		Sequence: shoot
 	Armament@PRIMARY:
 		Weapon: M60mgXO
-		LocalOffset: 400,-220,180
+		LocalOffset: 450,220,400
 		MuzzleSequence: muzzle
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: XOLaser
-		LocalOffset: 400,220,180
-	AttackFrontal:
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
-		FacingTolerance: 0
+		LocalOffset: 450,220,400
 	WithMuzzleOverlay:
-	Parachutable:
-		FallRate: 130
-	WithIdleAnimation@DESCENDING:
-		RequiresCondition: parachute
-		Interval: 3
-		Sequences: descend
-	-WithParachute:
 
 HFTK:
 	Inherits: ^TankTD
