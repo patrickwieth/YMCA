@@ -227,8 +227,6 @@ Stealth_Fighter:
 		Cost: 2000
 	Tooltip:
 		Name: Stealth Fighter
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 20000
 	RevealsShroud:
@@ -325,8 +323,6 @@ MIG:
 		Cost: 1500
 	Tooltip:
 		Name: MiG Attack Plane
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 18000
 	RevealsShroud:
@@ -698,8 +694,6 @@ YAK:
 		Cost: 650
 	Tooltip:
 		Name: Yak Attack Plane
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 16500
 	RevealsShroud:
@@ -788,8 +782,6 @@ CHEMYAK:
 		Cost: 800
 	Tooltip:
 		Name: Yak Toxin Plane
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 11000
 	RevealsShroud:
@@ -879,8 +871,6 @@ P51:
 	Inherits@EMP: ^EmpDisable
 	Tooltip:
 		Name: P51 Attack Plane
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 28000
 	RevealsShroud@GAPGEN:
@@ -958,8 +948,6 @@ TRAN:
 		Cost: 900
 	Tooltip:
 		Name: Chinook
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 34000
 	RevealsShroud:
@@ -1119,8 +1107,6 @@ NHAW:
 		Cost: 1150
 	Tooltip:
 		Name: Black Hawk
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 44000
 	Aircraft:
@@ -1236,8 +1222,6 @@ HELI:
 		Cost: 1200
 	Tooltip:
 		Name: Longbow
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 24000
 	RevealsShroud:
@@ -1424,8 +1408,6 @@ HIND:
 		Cost: 1150
 	Tooltip:
 		Name: Hind
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 28000
 	RevealsShroud:
@@ -1610,8 +1592,6 @@ HUEY:
 		Cost: 600
 	Tooltip:
 		Name: Huey
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 14000
 	RevealsShroud:
@@ -1928,15 +1908,13 @@ A10:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld.gdi, ~aircraft.gdi, ~!aircraft.eagle,
+		Prerequisites: ~afld.gdi, ~aircraft.gdi
 		IconPalette: chrometd
 		Description: Ground attack aircraft with incendiary bombs.\n  Strong vs Buildings, Light Armor, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1600
 	Tooltip:
 		Name: Warthog
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 22000
 	RevealsShroud:
@@ -2193,8 +2171,6 @@ APCH:
 		Cost: 1250
 	Tooltip:
 		Name: Harpy
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -2337,11 +2313,20 @@ ORCA:
 	Inherits: ^PrioAntiHeavyAA
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Valued:
-		Cost: 1500
+		Cost: 1200
 	Tooltip:
 		Name: Orca
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
+		RequiresCondition: !orcav2
+	Tooltip@Eagle:
+		Name: Orca V2
+		RequiresCondition: orcav2
+	RenderSprites:
+		Image: orca
+		FactionImages:
+			eagle: orca.v2
+	GrantConditionOnFaction@OrcaV2:
+		Condition: orcav2
+		Factions: eagle
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -2418,15 +2403,26 @@ ORCA:
 		RearmActors: hpad, hpad.td
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+	DamageMultiplier@eagle:
+		RequiresCondition: aircraft.eagle
+		Modifier: 90
+	FirepowerMultiplier@eagle:
+		RequiresCondition: aircraft.eagle
+		Modifier: 120
 
 ORCA.AP:
 	Inherits: ORCA
 	Tooltip:
 		Name: Orca (AP)
+		RequiresCondition: !aircraft.eagle
+	Tooltip@Eagle:
+		Name: Orca V2 (AP)
+		RequiresCondition: aircraft.eagle
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.ap
-		IconPalette: chrome
 		Description: VTOL gunship armed\nwith armor-piercing missiles.\n  Strong vs Tanks\n  Weak vs Infantry
+	WithProductionIconOverlay@Shell:
+		Types: Shell
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca.AP
 		LocalOffset: 0,-213,-85, 0,213,-85
@@ -2441,12 +2437,15 @@ ORCA.HE:
 	Inherits: ^PrioAntiLightAA
 	Tooltip:
 		Name: Orca (HE)
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
+		RequiresCondition: !aircraft.eagle
+	Tooltip@Eagle:
+		Name: Orca V2 (Payload)
+		RequiresCondition: aircraft.eagle
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.he
-		IconPalette: chrome
 		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca.HE
 		LocalOffset: 0,-213,-85, 0,213,-85
@@ -2459,14 +2458,17 @@ ORCA.HE:
 ORCA.Payload:
 	Inherits: ORCA
 	Valued:
-		Cost: 1600
+		Cost: 1300
 	Tooltip:
 		Name: Orca (Payload)
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
+		RequiresCondition: !aircraft.eagle
+	Tooltip@Eagle:
+		Name: Orca V2 (Payload)
+		RequiresCondition: aircraft.eagle
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.payload
-		IconPalette: chrome
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
 	AmmoPool:
 		Ammo: 20
 		ReloadCount: 2
@@ -2481,10 +2483,15 @@ ORCA.Torp:
 	Inherits: ORCA
 	Tooltip:
 		Name: Orca (Torpedo)
+		RequiresCondition: !aircraft.eagle
+	Tooltip@Eagle:
+		Name: Orca V2 (Torpedo)
+		RequiresCondition: aircraft.eagle
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.torp
-		IconPalette: chrome
 		Description: VTOL gunship armed\nwith torpedo bombs.
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
 	TooltipExtras:
 		Strengths: • Strong vs Ships, Submarines
 		Weaknesses: • Weak vs Anti-Air
@@ -2520,8 +2527,6 @@ ORCB:
 		Cost: 1600
 	Tooltip:
 		Name: Orca Bomber
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 36000
 	RevealsShroud:
@@ -2666,8 +2671,6 @@ RAH66:
 		Cost: 1500
 	Tooltip:
 		Name: Comanche
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 18000
 	RevealsShroud:
@@ -2772,8 +2775,6 @@ RAH66.Bomber:
 		Cost: 1500
 	Tooltip:
 		Name: Comanche Bomber
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 22000
 	RevealsShroud:
@@ -2883,8 +2884,6 @@ KIRO:
 		Cost: 2000
 	Tooltip:
 		Name: Kirov Airship
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 175000
 	RevealsShroud:
@@ -3091,8 +3090,6 @@ OCAR:
 		Cost: 1200
 	Tooltip:
 		Name: Carryall
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -3208,8 +3205,6 @@ HARR:
 		Cost: 1500
 	Tooltip:
 		Name: Harrier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 30000
 	RevealsShroud:
@@ -3348,8 +3343,6 @@ Raptor:
 		Cost: 2000
 	Tooltip:
 		Name: Raptor Fighter
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 16000
 	RevealsShroud:
@@ -3421,8 +3414,6 @@ SCRN:
 		Cost: 2000
 	Tooltip:
 		Name: Banshee
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 24000
 	RevealsShroud:
@@ -3786,8 +3777,6 @@ VENM:
 		Cost: 1350
 	Tooltip:
 		Name: Venom
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -4098,8 +4087,6 @@ AURORA:
 		Cost: 2800
 	Tooltip:
 		Name: Aurora
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 16000
 	RevealsShroud:
@@ -4206,8 +4193,6 @@ AURO:
 		Cost: 2000
 	Tooltip:
 		Name: Aurora
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 16000
 	RevealsShroud:
