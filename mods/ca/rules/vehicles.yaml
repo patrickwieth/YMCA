@@ -1353,7 +1353,6 @@ TTNK.RA2:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
-	WithMuzzleOverlay:
 	WithTurretAttackAnimation:
 		Sequence: shoot
 	WithSpriteTurret:
@@ -1915,8 +1914,8 @@ LTNK.Laser:
 	Inherits: ^PrioEnergyAntiHeavy
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 0
-		Prerequisites: ~vehicles.nod, tmpl, ~commander_tree.light_tank_laser
+		BuildPaletteOrder: 56
+		Prerequisites: ~vehicles.nod, tmpl, ~commander_tree.scorpion_tank
 		Description: Fast, light tank shooting laser.\n  Strong vs heavy Tanks\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 750
@@ -2786,7 +2785,7 @@ FTNK:
 	Mobile:
 		Speed: 82
 	Health:
-		HP: 45000
+		HP: 40000
 	Armament@PRIMARY:
 		Name: primary
 		Weapon: BigFlamer
@@ -2829,7 +2828,7 @@ FTNK.PLD:
 	Tooltip:
 		Name: Flame Tank (PLD)
 	Health:
-		HP: 55000
+		HP: 50000
 
 FTNK.PLD.Chem:
 	Inherits: FTNK.PLD
@@ -2845,7 +2844,7 @@ FTNK.PLD.Chem:
 	Tooltip:
 		Name: Chem Tank (PLD)
 	Health:
-		HP: 65000
+		HP: 60000
 	Armament@PRIMARY:
 		Weapon: BigChemspray
 		-MuzzleSequence:
@@ -2863,7 +2862,7 @@ FTNK.Reflector.Chem:
 	Tooltip:
 		Name: Chem Tank (Reflector)
 	Health:
-		HP: 65000
+		HP: 60000
 	Armament@PRIMARY:
 		Weapon: BigChemspray
 		-MuzzleSequence:
@@ -3672,7 +3671,7 @@ DISR:
 		RequiresCondition: dronepair
 
 HMLRS:
-	Inherits: ^VehicleTD
+	Inherits: ^Vehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
@@ -5538,77 +5537,6 @@ Beam_Cannon:
 	Voiced:
 		VoiceSet: MWTnkVoice
 
-MAMMOTHMK2:
-	Inherits: ^Tank
-	Inherits: ^BigVehicle
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioEnergyAntiHeavyAA
-	Inherits@Voxel: ^TSRenderVoxel
-	Valued:
-		Cost: 10000
-	Tooltip:
-		Name: Mammoth Mk. II
-	Buildable:
-		BuildPaletteOrder: 220
-		IconPalette: chrometd
-		Prerequisites: ~vehicles.gdi, ~commander_tree.mammoth_mkii, miss.gdi
-		Queue: Vehicle
-		Description: Slow heavy walker.\nArmed with dual railguns and rocket launchers.\n  Strong vs Infantry, Vehicles and Buildings\n  Weak vs Artillery, Masses of Aircraft
-	Mobile:
-		Locomotor: heavytracked
-		TurnSpeed: 8
-		Speed: 35
-	Health:
-		HP: 350000
-	ChangesHealth:
-		PercentageStep: 1
-		Delay: 25
-		StartIfBelow: 100
-		DamageCooldown: 50
-	Repairable:
-		HpPerStep: 3500
-	Passenger:
-		Weight: 12
-	Armament@MISSILES:
-		Name: missiles
-		Weapon: Dragon.MKII
-		LocalOffset: -420,-300,600, -320,300,600
-		LocalYaw: -200,200
-		MuzzleSequence: muzzle1
-	Armament@AAMISSILES:
-		Name: aamissiles
-		Weapon: RedEye.MKII
-		LocalOffset: -420,-300,600, -320,300,600
-		LocalYaw: -100,100
-		MuzzleSequence: muzzle1
-	Armament@RAILGUN:
-		Name: railgun
-		Weapon: Railgun.MKII
-		LocalOffset: 550,-420,650, 550,420,650
-		MuzzleSequence: muzzle2
-	AttackFrontal:
-		Armaments: railgun
-		PauseOnCondition: empdisable || being-warped
-		FacingTolerance: 0
-	AttackFollow:
-		Armaments: missiles, aamissiles
-		PauseOnCondition: empdisable || being-warped
-	WithMuzzleOverlay:
-	SelectionDecorations:
-	AcceptsDeliveredExperience: ##########
-		ValidTypes: vehicle ##########
-	-WithVoxelBody:
-	WithVoxelWalkerBody:
-		TickRate: 1
-	RenderVoxels:
-		Scale: 10
-	GrantConditionOnPrerequisite@DRONEPAIR:
-		Condition: dronepair
-		Prerequisites: dronepair.upgrade
-	AttachOnCreation@DRONEPAIR:
-		Actor: mdrn.attached
-		RequiresCondition: dronepair
-
 APOC:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
@@ -5691,7 +5619,7 @@ APOC:
 
 XO:
 	Inherits: ^Vehicle
-	Inherits: ^HighResShadow
+	Inherits: ^HighResShadowBig
 	Inherits: ^TurretedWalker
 	Inherits: ^SensorEquipment
 	Inherits: ^BiologicalDriver
@@ -5743,7 +5671,7 @@ HFTK:
 		Prerequisites: radar, ~vehicles.blackh
 		Description: Heavy tank armed with dual short-range flamethrowers.\n  Strong vs Infantry, Buildings, Light Armor\n  Weak vs Tanks, Defenses, Aircraft
 	Valued:
-		Cost: 1100
+		Cost: 1000
 	Tooltip:
 		Name: Heavy Flame Tank
 		GenericName: Tank
@@ -5751,7 +5679,7 @@ HFTK:
 		HP: 75000
 	Mobile:
 		Locomotor: heavytracked
-		Speed: 56
+		Speed: 68
 		Voice: Move
 	Turreted:
 		TurnSpeed: 20

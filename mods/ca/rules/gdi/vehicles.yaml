@@ -1,0 +1,137 @@
+MARV:
+	Inherits: ^Tank
+	Inherits: ^HighResShadow
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Inherits@SHRAPNEL: ^ThrowsShrapnel
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 0
+		IconPalette: chrometd
+		Prerequisites: ~vehicles.gdi, ~commander_tree.mammoth_mkii, miss.gdi
+		Description: Enormous slow tank with triple ion blaster cannons.
+	Valued:
+		Cost: 8000
+	Tooltip:
+		Name: M.A.R.V.
+	Health:
+		HP: 200000
+	Mobile:
+		Speed: 40
+		TurnSpeed: 9
+		Locomotor: sheavytracked
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Turreted:
+		Offset: -200,0,0
+		TurnSpeed: 8
+	Armament@PRIMARY:
+		Weapon: IonZap.Marv
+		LocalOffset: 1450,100,500, 1450,-100,500, 1450,0,550
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	ChangesHealth:
+		PercentageStep: 1
+		Delay: 25
+		StartIfBelow: 100
+		DamageCooldown: 150
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	AttackMove:
+		Voice: Attack
+	Voiced:
+		VoiceSet: DisrVoice
+
+
+MARV.Husk:
+	Inherits: ^Husk
+	Tooltip:
+		Name: Husk (MARV)
+	ThrowsParticle@turret:
+		Anim: turret
+	TransformOnCapture:
+		IntoActor: MARV
+	InfiltrateForTransform:
+		IntoActor: MARV
+	RenderSprites:
+		Image: MARV.destroyed
+
+MAMMOTHMK2:
+	Inherits: ^Tank
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioEnergyAntiHeavyAA
+	Inherits@Voxel: ^TSRenderVoxel
+	Valued:
+		Cost: 10000
+	Tooltip:
+		Name: Mammoth Mk. II
+	Buildable:
+		BuildPaletteOrder: 220
+		IconPalette: chrometd
+		Prerequisites: ~vehicles.gdi, ~commander_tree.mammoth_mkii, miss.gdi
+		Queue: Vehicle
+		Description: Slow heavy walker.\nArmed with dual railguns and rocket launchers.\n  Strong vs Infantry, Vehicles and Buildings\n  Weak vs Artillery, Masses of Aircraft
+	Mobile:
+		Locomotor: heavytracked
+		TurnSpeed: 8
+		Speed: 35
+	Health:
+		HP: 350000
+	ChangesHealth:
+		PercentageStep: 1
+		Delay: 25
+		StartIfBelow: 100
+		DamageCooldown: 50
+	Repairable:
+		HpPerStep: 3500
+	Passenger:
+		Weight: 12
+	Armament@MISSILES:
+		Name: missiles
+		Weapon: Dragon.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -200,200
+		MuzzleSequence: muzzle1
+	Armament@AAMISSILES:
+		Name: aamissiles
+		Weapon: RedEye.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -100,100
+		MuzzleSequence: muzzle1
+	Armament@RAILGUN:
+		Name: railgun
+		Weapon: Railgun.MKII
+		LocalOffset: 550,-420,650, 550,420,650
+		MuzzleSequence: muzzle2
+	AttackFrontal:
+		Armaments: railgun
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	AttackFollow:
+		Armaments: missiles, aamissiles
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	SelectionDecorations:
+	AcceptsDeliveredExperience: ##########
+		ValidTypes: vehicle ##########
+	-WithVoxelBody:
+	WithVoxelWalkerBody:
+		TickRate: 1
+	RenderVoxels:
+		Scale: 10
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair

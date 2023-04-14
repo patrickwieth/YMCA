@@ -70,11 +70,12 @@ namespace OpenRA.Mods.CA.Activities
 		public override bool Tick(Actor self)
 		{
 			// do the homing, but only if activated and target is still alive
+			/* commented this out to see if crashes still occur
 			if (sbm.Info.Homing && target.Type != TargetType.Invalid)
 			{
 				targetPos = target.CenterPosition;
 				facing = (targetPos - initPos).Yaw;
-			}
+			}*/
 
 
 			var d = targetPos - self.CenterPosition;
