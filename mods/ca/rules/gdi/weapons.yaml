@@ -1,0 +1,96 @@
+IonZap:
+	Inherits: ^Energy
+	ReloadDelay: 70
+	Range: 6c768
+	Report: ion1.aud
+	InvalidTargets: Air
+	Projectile: RailgunCA
+		Duration: 7
+		Blockable: true
+		DamageActorsInLine: false
+		BeamColor: ffffff
+		BeamWidth: 40
+		BeamAlphaDeltaPerTick: -16
+		HelixThickness: 32
+		HelixRadius: 10
+		HelixPitch: 30
+		HelixRadiusDeltaPerTick: 16
+		HelixAlphaDeltaPerTick: -16
+		HelixAngleDeltaPerTick: 16
+		QuantizationCount: 4
+		HelixColor: D8FCfC
+		HitAnim: explosion
+		HitAnimSequence: ionexp
+		HitAnimPalette: temptd
+		Inaccuracy: 64
+		ZOffset: 2045
+		targetOffset: 0,0,-100
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 18000
+		ValidRelationships: Neutral, Enemy
+		InvalidTargets: Air
+		AffectsParent: false
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@2Dam: SpreadDamage
+		Spread: 512
+		Damage: 8000
+		ValidRelationships: Ally
+		InvalidTargets: Air
+		AffectsParent: false
+		DamageTypes: Prone100Percent, TriggerProne, ExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: shock_wave
+		ExplosionPalette: tseffect
+	Warhead@4Smu_impact: LeaveSmudge
+		SmudgeType: Scorch
+
+IonZap.Marv:
+	Inherits: IonZap
+	Range: 9c768
+	ReloadDelay: 30
+	Burst: 3
+	BurstDelays: 5
+	Projectile: RailgunCA
+		Inaccuracy: 1c0
+		targetOffset: 0,0,-500
+
+IonStrike.Orca:
+	Inherits: ^EnergyArtillery
+	Projectile: InstantHit
+	Range: 512
+	ValidTargets: Ground, Water, Air
+	Warhead@1Dam_impact: SpreadDamage
+		Range: 0, 1c1, 2c1, 2c512
+		Delay: 1
+		Damage: 3250
+		Falloff: 1000, 1000, 250, 100
+		ValidTargets: Ground, Water, Air
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@4Effect: CreateEffect
+		Explosions: ionbeamshort
+		ExplosionPalette: tdeffect-ignore-lighting-alpha85
+		ImpactSounds: ion1.aud
+		ImpactActors: false
+	Warhead@10Eff: CreateEffect
+		Image: ionsfx
+		Explosions: idle
+		ExplosionPalette: tdeffect-ignore-lighting-alpha85
+	Warhead@11Eff: CreateEffect
+		Explosions: ion_ring2
+		ImpactSounds: ion2.aud
+		ExplosionPalette: tseffect
+		Delay: 5
+	Warhead@3Smu_impact: LeaveSmudge
+		SmudgeType: Scorch
+	Warhead@4Smu_area: LeaveSmudge
+		SmudgeType: Scorch
+		Size: 1
+		Delay: 3
+	Warhead@5Res_area2: DestroyResource
+		Size: 2
+		Delay: 6
+	Warhead@6Smu_area2: LeaveSmudge
+		SmudgeType: Scorch
+		Size: 2,1
+		Delay: 6
