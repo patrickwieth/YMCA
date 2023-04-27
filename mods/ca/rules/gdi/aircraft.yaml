@@ -1,8 +1,26 @@
 Orca.Warship:
 	Inherits: ^Airship
-	Inherits@Armor: ^HeavyArmor
-	Inherits: ^PrioAntiLightAA
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^HeavyArmor
+	Inherits: ^DummyTurret
+	AutoTarget:
+		AttackAnythingCondition: stance-attackanything
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense, PrismTowerChargeable
+		InvalidTargets: NoAutoTarget, WaterStructure
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine, PrismTowerChargeable
+		InvalidTargets: NoAutoTarget
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: PrismTowerChargeable
+		InvalidTargets: NoAutoTarget, WaterStructure
+	AutoTargetPriority@ATTACKANYTHING:
+		ValidTargets: PrismTowerChargeable
+		InvalidTargets: NoAutoTarget
+	AutoTargetPriority@PRISMNORMAL:
+		RequiresCondition: !assault-move && !attack-move
+		ValidTargets: PrismTowerChargeable
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -26,11 +44,26 @@ Orca.Warship:
 	RevealsShroud@GAPGEN:
 		Range: 8c0
 		Type: GroundPosition
+	Turreted@PRIMARY:
+		Turret: primary
+		TurnSpeed: 1000
+	Turreted@SECONDARY:
+		Turret: secondary
+		TurnSpeed: 1000
 	Armament@PRIMARY:
 		Weapon: InvaderLauncher
+		Name: primary
+		Turret: primary
 		LocalOffset: 0,0,0
+	Armament@secondary:
+		Weapon: IonStrike.Orca.Charge
+		LocalOffset: 0,0,986
+		Name: secondary
+		Turret: secondary
+		TargetRelationships: Ally
+		ForceTargetRelationships: Ally
 	Aircraft:
-		CruiseAltitude: 2c0
+		CruiseAltitude: 2c256
 		InitialFacing: 192
 		TurnSpeed: 12
 		Speed: 49
@@ -46,11 +79,8 @@ Orca.Warship:
 	SpawnActorOnDeath@EMP:
 		Actor: Orca.Warship.Husk.EMP
 		RequiresCondition: empdisable
-	AttackFrontal:
-		FacingTolerance: 1024
-		PauseOnCondition: empdisable || being-warped
 	CarrierMaster@carr1:
-		Actors: Orca.Drone, Orca.Drone
+		Actors: Orca.Drone
 		RearmTicks: 0
 		RespawnTicks: 200
 		InstaRepair: true
@@ -70,10 +100,6 @@ Orca.Warship:
 	Exit@3:
 		SpawnOffset: 100,0,0
 		Facing: -60
-	Voiced:
-		VoiceSet: DroneCarrVoice
-	DeathSounds:
-		Voice: Die
 	-EjectOnDeath:
 	ChangesHealth@REGEN:
 		PercentageStep: 1
@@ -82,61 +108,76 @@ Orca.Warship:
 		DamageCooldown: 150
 
 Orca.Drone:
-	Inherits: ^Plane
+	Inherits: ^Helicopter
 	Valued:
 		Cost: 50
 	Tooltip:
 		Name: Ion Drone
 	Health:
-		HP: 5000
-	RevealsShroud:
-		Range: 2c0
-		MinRange: 1c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 1c0
-		Type: GroundPosition
+		HP: 10000
 	Armament@PRIMARY:
+		Weapon: IonStrike.Orca.Dummy
+		Name: primary
+	Armament@SECONDARY:
+		Name: secondary
 		Weapon: IonStrike.Orca
-		PauseOnCondition: !ammo
+		FireDelay: 3
+		RequiresCondition: ammo
+	ExternalCondition@aiming:
+		Condition: aiming
+	GrantConditionWhileAiming:
+		Condition: aiming
+	GrantConditionOnAttack@primary:
+		ArmamentNames: primary
+		Condition: aiming
+		MaximumInstances: 1
+		RevokeDelay: 40
+	WithColoredOverlay@HIGH:
+		RequiresCondition: aiming
+		Color: ffffff80
+	ReloadAmmoPoolCA@autocharge:
+		Delay: 1
+		Count: 1
+		ResetOnFire: False
+		RequiresCondition: ammo < 1 && powercharged
+		ShowSelectionBar: false
+		SelectionBarColor: 0000ff
 	AttackAircraft:
 		FacingTolerance: 80
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
+	Targetable@PrismTowerChargeable:
+		TargetTypes: PrismTowerChargeable
+		RequiresCondition: !powercharged && aiming
+	ExternalCondition@POWERCHARGED:
+		Condition: powercharged
 	Aircraft:
 		CruiseAltitude: 2c0
-		InitialFacing: 192
-		TurnSpeed: 8
-		Speed: 220
-		MaximumPitch: 56
-		CanHover: False
-		CanSlide: False
-		RepulsionSpeed: 40
-		Repulsable: False
-		IdealSeparation: 0c256
-		VTOL: true
-		TakeoffSounds: invader-launch1.aud, invader-launch2.aud
-		LandingSounds: invader-dock.aud
-	Rearmable:
-		RearmActors: orca.warship
+		AltitudeVelocity: 1c512
+		TurnSpeed: 20
+		TakeoffSounds: orcaup1.aud
+		LandingSounds: orcadwn1.aud
+		Speed: 181
 	AmmoPool:
-		Ammo: 12
+		Ammo: 1
+		InitialAmmo: 0
+		Armaments: secondary
 		AmmoCondition: ammo
 		ReloadDelay: 0
+	WithAmmoPipsDecoration:
 	RejectsOrders:
 	SpawnActorOnDeath:
-		Actor: INVA.Husk
+		Actor: Orca.Drone
 		RequiresCondition: ammo && !empdisable
 	SpawnActorOnDeath@Empty:
-		Actor: INVA.Husk.empty
+		Actor: Orca.Drone.empty
 		RequiresCondition: !ammo && !empdisable
 	SpawnActorOnDeath@EMP:
-		Actor: INVA.Husk.EMP
+		Actor: Orca.Drone.EMP
 		RequiresCondition: ammo && empdisable
 	SpawnActorOnDeath@EmptyEMP:
-		Actor: INVA.Husk.empty.EMP
+		Actor: Orca.Drone.empty.EMP
 		RequiresCondition: !ammo && empdisable
 	-EjectOnDeath:
 	-Selectable:
@@ -153,17 +194,5 @@ Orca.Drone:
 		RequiresCondition: enable-smoke
 	CarrierSlave:
 		LandingDistance: 8c0
-	Contrail@1:
-		Offset: -432,0,0
-		StartColorUsePlayerColor: true
-		TrailLength: 10
-	-Contrail@2:
-	Interactable:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true

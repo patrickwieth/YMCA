@@ -1894,6 +1894,7 @@
 		Weight: 6
 	Selectable:
 		Bounds: 1536, 1536
+	#Shrapnel?
 
 ^VehicleVision:
 	RevealsShroud:
@@ -3079,6 +3080,10 @@
 		Terrain: Tiberium
 	HiddenUnderShroud:
 	WithMakeAnimation:
+	TerrainLightSource:
+		Range: 8c0
+		Intensity: 0.3
+		GreenTint: 0.2
 
 ^Tree:
 	Inherits@1: ^SpriteActor
@@ -3944,6 +3949,13 @@
 		Armaments: primary, secondary, tertiary
 		Voice: Attack
 
+^DummyTurret:
+	Turreted:
+		TurnSpeed: 1000
+	AttackTurreted:
+		Armaments: primary, secondary, tertiary
+		PauseOnCondition: empdisable || being-warped
+
 ^TNTPlantable:
 	DelayedWeaponAttachable@TNT:
 		Type: tnt
@@ -4511,7 +4523,7 @@
 		Offset: 43, 128, 0
 		ZOffset: -256
 
-^HighResShadowBig:
+^HighResWalkerShadow:
 	WithShadow:
-		Offset: 80, 256, 0
+		Offset: 40, 64, 0
 		ZOffset: -256
