@@ -2,36 +2,18 @@ Orca.Warship:
 	Inherits: ^Airship
 	Inherits: ^HeavyArmor
 	Inherits: ^DummyTurret
-	AutoTarget:
-		AttackAnythingCondition: stance-attackanything
-	AutoTargetPriority@DEFAULT:
-		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense, PrismTowerChargeable
-		InvalidTargets: NoAutoTarget, WaterStructure
-	AutoTargetPriority@ATTACKANYTHING:
-		RequiresCondition: stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine, PrismTowerChargeable
-		InvalidTargets: NoAutoTarget
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: PrismTowerChargeable
-		InvalidTargets: NoAutoTarget, WaterStructure
-	AutoTargetPriority@ATTACKANYTHING:
-		ValidTargets: PrismTowerChargeable
-		InvalidTargets: NoAutoTarget
-	AutoTargetPriority@PRISMNORMAL:
-		RequiresCondition: !assault-move && !attack-move
-		ValidTargets: PrismTowerChargeable
+	Inherits: ^PrioAntiLightAA
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad.td, ~aircraft.eagle, gtek
+		Prerequisites: ~hpad.td, ~commander_tree.ion_warship, miss.gdi
 		IconPalette: chrometd
-		Description: A heavy orca warship with ion drones delivering ion strikes \nand missile based anti-air capabilites.\n
+		Description: A heavy orca warship with ion drones delivering ion strikes vs. ground \nand heavy missiles vs. air.\n
 	Voiced:
 		VoiceSet: OrcaVoice
 	Valued:
-		Cost: 5000
+		Cost: 8000
 	Tooltip:
 		Name: Orca Ion Warship
 	Health:
@@ -51,17 +33,17 @@ Orca.Warship:
 		Turret: secondary
 		TurnSpeed: 1000
 	Armament@PRIMARY:
-		Weapon: InvaderLauncher
+		Weapon: OrcaLauncher
 		Name: primary
 		Turret: primary
 		LocalOffset: 0,0,0
-	Armament@secondary:
-		Weapon: IonStrike.Orca.Charge
-		LocalOffset: 0,0,986
+	Armament@AAMISSILES:
 		Name: secondary
 		Turret: secondary
-		TargetRelationships: Ally
-		ForceTargetRelationships: Ally
+		Weapon: RedEye.MKII
+		LocalOffset: -420,-300,600, -320,300,600
+		LocalYaw: -100,100
+		MuzzleSequence: muzzle1
 	Aircraft:
 		CruiseAltitude: 2c256
 		InitialFacing: 192
@@ -106,6 +88,11 @@ Orca.Warship:
 		Delay: 25
 		StartIfBelow: 75
 		DamageCooldown: 150
+	ExternalCondition@powercharged:
+		Condition: powercharged
+	Targetable@PrismTowerChargeable:
+		TargetTypes: PrismTowerChargeable
+		RequiresCondition: !powercharged
 
 Orca.Drone:
 	Inherits: ^Helicopter
@@ -115,43 +102,14 @@ Orca.Drone:
 		Name: Ion Drone
 	Health:
 		HP: 10000
-	Armament@PRIMARY:
-		Weapon: IonStrike.Orca.Dummy
-		Name: primary
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: IonStrike.Orca
-		FireDelay: 3
-		RequiresCondition: ammo
-	ExternalCondition@aiming:
-		Condition: aiming
-	GrantConditionWhileAiming:
-		Condition: aiming
-	GrantConditionOnAttack@primary:
-		ArmamentNames: primary
-		Condition: aiming
-		MaximumInstances: 1
-		RevokeDelay: 40
-	WithColoredOverlay@HIGH:
-		RequiresCondition: aiming
-		Color: ffffff80
-	ReloadAmmoPoolCA@autocharge:
-		Delay: 1
-		Count: 1
-		ResetOnFire: False
-		RequiresCondition: ammo < 1 && powercharged
-		ShowSelectionBar: false
-		SelectionBarColor: 0000ff
+	Armament:
+		Weapon: IonStrike.Orca.init
+		PauseOnCondition: !ammo
 	AttackAircraft:
-		FacingTolerance: 80
+		FacingTolerance: 512
 		PersistentTargeting: false
 		OpportunityFire: false
 		PauseOnCondition: empdisable || being-warped
-	Targetable@PrismTowerChargeable:
-		TargetTypes: PrismTowerChargeable
-		RequiresCondition: !powercharged && aiming
-	ExternalCondition@POWERCHARGED:
-		Condition: powercharged
 	Aircraft:
 		CruiseAltitude: 2c0
 		AltitudeVelocity: 1c512
@@ -159,40 +117,53 @@ Orca.Drone:
 		TakeoffSounds: orcaup1.aud
 		LandingSounds: orcadwn1.aud
 		Speed: 181
+	Rearmable:
+		RearmActors: Orca.Warship
 	AmmoPool:
 		Ammo: 1
-		InitialAmmo: 0
-		Armaments: secondary
+		InitialAmmo: 1
 		AmmoCondition: ammo
 		ReloadDelay: 0
-	WithAmmoPipsDecoration:
 	RejectsOrders:
 	SpawnActorOnDeath:
 		Actor: Orca.Drone
-		RequiresCondition: ammo && !empdisable
-	SpawnActorOnDeath@Empty:
-		Actor: Orca.Drone.empty
-		RequiresCondition: !ammo && !empdisable
+		RequiresCondition: !empdisable
 	SpawnActorOnDeath@EMP:
 		Actor: Orca.Drone.EMP
-		RequiresCondition: ammo && empdisable
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: Orca.Drone.empty.EMP
-		RequiresCondition: !ammo && empdisable
+		RequiresCondition: empdisable
 	-EjectOnDeath:
 	-Selectable:
 	Interactable:
 	-ActorLostNotification:
-	LeavesTrails:
-		Offsets: -253,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
 	CarrierSlave:
 		LandingDistance: 8c0
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
+
+dummy.ionstrike:
+	Inherits: ^DummyTurret
+	AutoTarget:
+		InitialStance: AttackAnything
+	AutoTargetPriority:
+		ValidTargets: PrismTowerChargeable
+		Priority: 10
+	Armament:
+		Weapon: IonStrike.Orca.Charge
+		LocalOffset: 0,0,2500
+		TargetRelationships: Ally
+		ForceTargetRelationships: Ally
+	GrantConditionOnAttack:
+		Condition: powercharged
+		MaximumInstances: 1
+		RevokeDelay: 3
+	Immobile:
+		OccupiesSpace: false
+	Interactable:
+	EditorOnlyTooltip:
+		Name: (ion strike try impact)
+	BodyOrientation:
+		QuantizedFacings: 1
+	PeriodicExplosion:
+		Weapon: IonStrike.Orca
+		RequiresCondition: powercharged
+		InitialDelay: 1
+	KillsSelf:
+		Delay: 10
