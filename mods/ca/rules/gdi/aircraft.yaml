@@ -64,7 +64,7 @@ Orca.Warship:
 	CarrierMaster@carr1:
 		Actors: Orca.Drone
 		RearmTicks: 0
-		RespawnTicks: 200
+		RespawnTicks: 120
 		InstaRepair: true
 		SlaveDisposalOnKill: KillSlaves
 		SpawnAllAtOnce: false
@@ -101,7 +101,7 @@ Orca.Drone:
 	Tooltip:
 		Name: Ion Drone
 	Health:
-		HP: 10000
+		HP: 15000
 	Armament:
 		Weapon: IonStrike.Orca.init
 		PauseOnCondition: !ammo
@@ -116,7 +116,7 @@ Orca.Drone:
 		TurnSpeed: 20
 		TakeoffSounds: orcaup1.aud
 		LandingSounds: orcadwn1.aud
-		Speed: 181
+		Speed: 201
 	Rearmable:
 		RearmActors: Orca.Warship
 	AmmoPool:
@@ -125,12 +125,7 @@ Orca.Drone:
 		AmmoCondition: ammo
 		ReloadDelay: 0
 	RejectsOrders:
-	SpawnActorOnDeath:
-		Actor: Orca.Drone
-		RequiresCondition: !empdisable
-	SpawnActorOnDeath@EMP:
-		Actor: Orca.Drone.EMP
-		RequiresCondition: empdisable
+	-SpawnActorOnDeath:
 	-EjectOnDeath:
 	-Selectable:
 	Interactable:
