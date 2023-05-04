@@ -23,7 +23,6 @@ namespace OpenRA.Mods.CA.Activities
 		readonly WPos initPos;
 		readonly Target target;
 		WPos targetPos;
-
 		int length;
 		int ticks;
 		WAngle facing;
@@ -37,9 +36,16 @@ namespace OpenRA.Mods.CA.Activities
 
 			initPos = self.CenterPosition;
 			target = t;
-			targetPos = t.CenterPosition; // fixed position == no homing
-			length = Math.Max((targetPos - initPos).Length / this.sbm.Info.Speed, 1);
-			facing = (targetPos - initPos).Yaw;
+
+			if (target.Type != TargetType.Invalid)
+			{
+				targetPos = t.CenterPosition; // fixed position == no homing
+				length = Math.Max((targetPos - initPos).Length / this.sbm.Info.Speed, 1);
+				facing = (targetPos - initPos).Yaw;
+			}
+			else {
+				self.World.Remove(self);
+			}
 		}
 
 		WAngle GetEffectiveFacing()
@@ -70,13 +76,11 @@ namespace OpenRA.Mods.CA.Activities
 		public override bool Tick(Actor self)
 		{
 			// do the homing, but only if activated and target is still alive
-			/* commented this out to see if crashes still occur
 			if (sbm.Info.Homing && target.Type != TargetType.Invalid)
 			{
 				targetPos = target.CenterPosition;
 				facing = (targetPos - initPos).Yaw;
-			}*/
-
+			}
 
 			var d = targetPos - self.CenterPosition;
 
