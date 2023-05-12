@@ -38,7 +38,7 @@ namespace OpenRA.Mods.CA.Traits
 			"Standard: Spawn 1/2 map distance east, in line with the destination.",
 			"ClosestEdgeToHome: Spawn from direction of map edge closest to the player spawn at a distance proportional to map size.",
 			"ClosestEdgeToDestination: Spawn 1/2 map distance in the direction of closest map edge to the destination.")]
-		public readonly string SpawnType = "Standard";
+		public readonly string SpawnType = "ClosestEdgeToHome";
 
 		[Desc("Direction the aircraft should face to land.")]
 		public readonly WAngle Facing = new WAngle(256);
