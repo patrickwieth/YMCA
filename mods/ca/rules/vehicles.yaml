@@ -4017,62 +4017,7 @@ TNKD:
 	Inherits: ^Tank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 90
-		Prerequisites: ~vehicles.germany, ~!vehicles.germany, dome
-		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
-	Valued:
-		Cost: 1150
-	Tooltip:
-		Name: Tank Destroyer
-		GenericName: Tank
-	Health:
-		HP: 55000
-	Mobile:
-		Speed: 75
-		TurnSpeed: 10
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Turreted:
-		TurnSpeed: 16
-		Offset: -80,0,20
-	Armament:
-		Weapon: 183mm
-		Recoil: 85
-		RecoilRecovery: 25
-		LocalOffset: 868,0,0
-		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: TNKD.Husk
-		RequiresCondition: !being-warped
-	Voiced:
-		VoiceSet: TnkdVoice
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry, Water, Underwater, Defense
-	AutoTargetPriority@ATTACKANYTHING:
-		ValidTargets: Infantry, Water, Underwater, Structure, Defense, Mine
-	AutoTargetPriority@TANKDEFAULT:
-		RequiresCondition: !stance-attackanything && !assault-move
-		ValidTargets: Vehicle
-		InvalidTargets: NoAutoTarget, WaterStructure
-		Priority: 10
-	AutoTargetPriority@TANKATTACKANYTHING:
-		RequiresCondition: (stance-attackanything || assault-move)
-		ValidTargets: Vehicle
-		InvalidTargets: NoAutoTarget
-		Priority: 10
-
-TNKD2:
-	Inherits: ^Tank
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiHeavy
+	Inherits: ^HighResShadow
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
@@ -4087,14 +4032,14 @@ TNKD2:
 		HP: 55000
 	Mobile:
 		Speed: 68
-		TurnSpeed: 8
+		TurnSpeed: 12
 		Voice: Move
 	Passenger:
 		Voice: Move
 	Armament@primary:
 		Name: primary
 		Weapon: 183mm
-		LocalOffset: 868,0,0
+		LocalOffset: 1100,0,100
 		MuzzleSequence: muzzle
 	AttackFrontal:
 		Armaments: primary
@@ -4103,7 +4048,7 @@ TNKD2:
 		FacingTolerance: 0
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
-		Actor: TNKD2.Husk
+		Actor: TNKD.Husk
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: TnkdVoice
@@ -4118,9 +4063,9 @@ TNKD2:
 		InvalidTargets: NoAutoTarget
 		Priority: 10
 
-TNKD2.PLD:
+TNKD.PLD:
 	Inherits@PLD: ^PointLaserDefenseSystem
-	Inherits: TNKD2
+	Inherits: TNKD
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
@@ -4132,8 +4077,8 @@ TNKD2.PLD:
 	Tooltip:
 		Name: Tank Destroyer (PLD)
 
-TNKD2.Burstfire:
-	Inherits: TNKD2
+TNKD.Burstfire:
+	Inherits: TNKD
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
@@ -4148,8 +4093,8 @@ TNKD2.Burstfire:
 		Name: primary
 		Weapon: 183mm.Burst
 
-TNKD2.Reflector:
-	Inherits: TNKD2
+TNKD.Reflector:
+	Inherits: TNKD
 	Inherits: ^ReflectorArmor
 	Buildable:
 		Queue: Vehicle
