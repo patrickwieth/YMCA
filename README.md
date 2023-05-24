@@ -1,1 +1,1 @@
-This repository contains the Combined Arms mod, see [ModDB](https://www.moddb.com/mods/command-conquer-combined-arms) for further information, or visit the [Discord](https://discord.gg/CxFYWEJ)
+This repository contains the You Must Contruct Additional... mod, see [ModDB](https://www.moddb.com/mods/you-must-construct-additional) for further information, or visit the [Discord](https://discord.gg/2uKyCr4fg8)
