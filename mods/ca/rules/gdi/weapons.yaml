@@ -57,6 +57,7 @@ IonZap.Marv:
 
 IonStrike.Orca:
 	Inherits: ^EnergyArtillery
+	ReloadDelay: 10
 	Projectile: InstantHit
 	Range: 512
 	ValidTargets: Ground, Water
@@ -65,16 +66,15 @@ IonStrike.Orca:
 		Delay: 1
 		Damage: 3250
 		Falloff: 1000, 1000, 250, 100
-		ValidTargets: Ground, Water, Air
+		ValidTargets: Ground, Water
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@4Effect: CreateEffect
 		Explosions: ionbeamshort
 		ExplosionPalette: tdeffect-ignore-lighting-alpha85
 		ImpactSounds: ion1.aud
-		ImpactActors: false
 	Warhead@11Eff: CreateEffect
-		Explosions: ion_ring2
 		ImpactSounds: ion2.aud
+		Explosions: ion_ring2
 		ExplosionPalette: tseffect
 		Delay: 5
 	Warhead@3Smu_impact: LeaveSmudge
@@ -84,18 +84,29 @@ IonStrike.Orca:
 		Size: 1
 		Delay: 3
 
-IonStrike.Orca.Dummy:
+IonStrike.Orca.init:
 	ReloadDelay: 5
 	Range: 0c0
 	Projectile: InstantHit
 	ValidTargets: Ground, Vehicle, Infantry
 	Warhead@1Dam: SpreadDamage
 		Damage: 1
+	Warhead@CAMERA: SpawnActor
+		Actors: dummy.ionstrike
+		Range: 1
+		ForceGround: false
+		Image: Cloud1d
+		ValidTargets: Ground, Water
+		ImpactActors: false
+		AirThreshold: 1c0
+		ValidRelationships: Neutral, Enemy
+		ValidTargets: Ground, Water, Air
 
 IonStrike.Orca.Charge:
 	Inherits: ^Energy
 	ReloadDelay: 50
 	ValidTargets: PrismTowerChargeable
+	InvalidTargets: Ground, Water
 	Range: 20c0
 	Projectile: RailgunCA
 		Duration: 7
@@ -114,7 +125,25 @@ IonStrike.Orca.Charge:
 		HelixColor: D8FCfC
 	Warhead@charge: GrantExternalCondition
 		Range: 42
-		Duration: 10
+		Duration: 20
 		Condition: powercharged
 		ValidRelationships: Ally
-		ValidTargets: Ground, Vehicle, Air, PrismTower, PrismTowerChargeable
+		ValidTargets: PrismTowerChargeable
+
+OrcaLauncher:
+	ReloadDelay: 10
+	Range: 20c0
+	ValidTargets: Ground, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Water, Underwater
+
+MARVest:
+	ReloadDelay: 50
+	Warhead@2Res_impact: DestroyResource
+		Size: 0
+		ResourceAmount: 4
+		ResourceTypes: Tiberium, BlueTiberium, Ore, Gems
+	Warhead@11Eff: CreateEffect
+		Explosions: dust_ring2
+		ExplosionPalette: tseffect

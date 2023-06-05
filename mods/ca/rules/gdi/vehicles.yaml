@@ -9,8 +9,8 @@ MARV:
 		Queue: Vehicle
 		BuildPaletteOrder: 0
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.gdi, ~commander_tree.mammoth_mkii, miss.gdi
-		Description: Enormous slow tank with triple ion blaster cannons.
+		Prerequisites: ~vehicles.gdi, ~commander_tree.marv, miss.gdi
+		Description: Enormous slow tank with triple ion blaster cannons. \nMines Tiberium and Ores when driving over.
 	Valued:
 		Cost: 8000
 	Tooltip:
@@ -50,19 +50,20 @@ MARV:
 		Voice: Attack
 	Voiced:
 		VoiceSet: DisrVoice
-
-MARV.Husk:
-	Inherits: ^Husk
-	Tooltip:
-		Name: Husk (MARV)
-	ThrowsParticle@turret:
-		Anim: turret
-	TransformOnCapture:
-		IntoActor: MARV
-	InfiltrateForTransform:
-		IntoActor: MARV
-	RenderSprites:
-		Image: MARV.destroyed
+	CashTrickler:
+		Interval: 50
+		Amount: 200
+		RequiresCondition: ontib || onore
+	PeriodicExplosion:
+		Weapon: MARVest
+		RequiresCondition: ontib || onore
+		InitialDelay: 50
+	GrantConditionOnTerrain@Tiberium:
+		Condition: ontib
+		TerrainTypes: Tiberium, BlueTiberium
+	GrantConditionOnTerrain@Ore:
+		Condition: onore
+		TerrainTypes: Ore, Gems
 
 MAMMOTHMK2:
 	Inherits: ^Tank
