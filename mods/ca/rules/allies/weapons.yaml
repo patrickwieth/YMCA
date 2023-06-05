@@ -1,0 +1,29 @@
+BATF.Repair:
+	Inherits: Repair
+	Range: 6c0
+	ValidTargets: Repair, RepairInAir
+	ReloadDelay: 125
+	Burst: 10
+	BurstDelays: 30
+	Report: repair11.aud
+	Projectile: ArcLaserZap
+		Duration: 4
+		DamageInterval: 2
+		Width: 80
+		Shape: Flat
+		ZOffset: 4096
+		BeyondTargetRange: 0c256
+		TrackTarget: true
+		Color: BABABA
+	Warhead@3Eff: CreateEffect
+		Image: sparks_overlay
+		Explosions: idle
+		ExplosionPalette: tseffect-ignore-lighting-alpha75
+	Warhead@1Dam: SpreadDamage
+		Damage: -6000
+	Warhead@highlight: GrantExternalCondition
+		Range: 0c511
+		Duration: 4
+		Condition: highlight
+		ValidTargets: Ground, Vehicle, Air
+		ValidRelationships: Ally

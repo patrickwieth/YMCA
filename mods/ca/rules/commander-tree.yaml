@@ -382,71 +382,90 @@ hack.cameo_filler.13:
 		BuildPaletteOrder: 23
 		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter, disabled
 
-commander_tree.Battle_Fortress.Arty:
+commander_tree.Battle_Fortress.Support:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Battle Fortress Artillery Armament
+		Name: Support Fortress
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 24
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~!commander_tree.battle_fortress.prism, ~!commander_tree.battle_fortress.missile
-		Description: Rearms the Battle Fortress with an Artillery.
+		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~!commander_tree.battle_fortress.prism, ~!commander_tree.battle_fortress.bunker
+		Description: The Support Fortress is a touch tank that repairs allied vehicles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
+	RenderSprites:
+		Image: commander_tree.battle_fortress
+	WithProductionIconOverlay@Wrench:
+		Types: Wrench
 
-commander_tree.Battle_Fortress.Missile:
+commander_tree.Battle_Fortress.Bunker:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Battle Fortress Missile Armament
+		Name: Battle Fortress Missile Bunker
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 24
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~!commander_tree.battle_fortress.arty, ~!commander_tree.battle_fortress.prism
-		Description: Rearms the Battle Fortress with a Missile Launcher.
+		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~!commander_tree.battle_fortress.support, ~!commander_tree.battle_fortress.prism
+		Description: Battle Fortress is a tough tank with a bunker full of rocket infantry.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
+	RenderSprites:
+		Image: commander_tree.battle_fortress
+	WithProductionIconOverlay@Missile:
+		Types: Missile
 
 commander_tree.Battle_Fortress.Prism:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Battle Fortress Prism Armament
+		Name: Prism Fortress
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 24
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~!commander_tree.battle_fortress.arty, ~!commander_tree.battle_fortress.missile
-		Description: Rearms the Battle Fortress with Prism turrets.
+		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~!commander_tree.battle_fortress.support, ~!commander_tree.battle_fortress.bunker
+		Description: The Prism Fortress is a tough tank with a Prism blaster.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
+	RenderSprites:
+		Image: commander_tree.battle_fortress
+	WithProductionIconOverlay@Prism:
+		Types: Prism
 
-commander_tree.Battle_Fortress.PLD:
+commander_tree.Battle_Fortress.PDL:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Battle Fortress Point Laser Defense
+		Name: Fortress Point Laser Defense
 	Buildable:
 		Queue: Commander_Tree
-		IconPalette: chrometd
 		BuildPaletteOrder: 26
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~filler.batf, ~!commander_tree.battle_fortress.reflector
 		Description: Upgrades the Battle Fortress with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf2
+	RenderSprites:
+		Image: commander_tree.battle_fortress
+	WithProductionIconOverlay@PDL:
+		Types: PDL
 
 commander_tree.Battle_Fortress.Reflector:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Battle Fortress Reflector Armor
+		Name: Fortress Reflector Armor
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 26
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~filler.batf, ~!commander_tree.battle_fortress.pld
+		Prerequisites: prerequisite.has_points, ~vehicles.france, techcenter, ~filler.batf, ~!commander_tree.battle_fortress.pdl
 		Description: Equips the Battle Fortress with Reflector Armor, which is very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf2
+	RenderSprites:
+		Image: commander_tree.battle_fortress
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
 
 hack.cameo_filler.15b:
 	Inherits: ^default.cameo_filler
