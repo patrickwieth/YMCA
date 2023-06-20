@@ -57,7 +57,7 @@ QTNK:
 		TargetTypes: Ground, MADTank, Vehicle, C4, ChaosImmune
 
 Rice_Cooker:
-	Inherits: ^Tank
+	Inherits: ^TurretedTank
 	Inherits: ^HighResShadow
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
@@ -67,7 +67,7 @@ Rice_Cooker:
 		Queue: Vehicle
 		BuildPaletteOrder: 160
 		Prerequisites: techcenter, ~vehicles.v3rl, ~commander_tree.v3_launcher
-		Description: The great leader has engineered the best Rice Cooker in the world.\nThe engineering is supreme, so that the Rice Cooker is the best artillery in the world at the same time.\nOnce the great leader steered the Rice Cooker and fired a shot that travelled one time around the globe!
+		Description: The great leader has engineered the best Rice Cooker in the world.\nHis excellency's engineering is so supreme, the Rice Cooker can be used as an artillery\nand becomes then the best artillery in the world.\nOnce the great leader steered the Rice Cooker and fired a shot that flew around the globe and hit South Korea from the south!
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Defenses
 		Weaknesses: • Weak vs Anti-Air, Aircraft
@@ -77,28 +77,53 @@ Rice_Cooker:
 	Tooltip:
 		Name: Kim's Giant Rice Cooker
 	Health:
-		HP: 25000
+		HP: 35000
 	Mobile:
-		Speed: 56
-		TurnSpeed: 8
+		Speed: 40
+		TurnSpeed: 4
 		Voice: Move
-		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
 	Passenger:
 		Voice: Move
 	Armament:
-		Weapon: V3Launcher
-		ReloadingCondition: reloading
+		Weapon: RiceShellLauncher
 	Turreted:
-		TurnSpeed: 8	#3
+		TurnSpeed: 6
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 	WithSpriteTurret:
 	MissileSpawnerMaster:
-		Actors: V3
-		RespawnTicks: 250
+		Actors: Rice_Shell
+		RespawnTicks: 100
 	Explodes:
 		Weapon: BarrelExplode
 	Voiced:
 		VoiceSet: V3Voice
 	Exit:
-		SpawnOffset: 0,-128,0
+		SpawnOffset: 300,0,1c256
+
+Rice_Shell:
+	Inherits: ^ShootableMissile
+	Valued:
+		Cost: 50
+	Tooltip:
+		Name: Rice Cooker Shell
+	Health:
+		HP: 15000
+	BallisticMissile:
+		LaunchAngle: 120
+		Speed: 150
+	LeavesTrails:
+		Image: smokey2
+		Palette: tseffect-ignore-lighting-alpha75
+		MovingInterval: 3
+		Type: CenterPosition
+		Offsets: -200, 0, 0
+	MissileSpawnerSlave:
+	SpawnedExplodes:
+		Weapon: V3Weapon
+		EmptyWeapon: VisualExplodeHusk
+		RequiresCondition: !airborne
+	Explodes:
+		Weapon: VisualExplodeAirborne
+		RequiresCondition: airborne
+	WithFacingSpriteBody:
