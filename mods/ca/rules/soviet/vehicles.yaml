@@ -15,8 +15,6 @@ QTNK:
 	Tooltip:
 		Name: MAD Tank
 		GenericName: Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 90000
 	Mobile:
@@ -24,12 +22,6 @@ QTNK:
 		Speed: 56
 	ChronoshiftableWithSpriteEffect:
 		RequiresCondition: !deployed && !being-captured && !being-warped
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	WithSpriteBody@deployed:
 		Sequence: piston
 		RequiresCondition: !undeployed && !cooldown
@@ -63,3 +55,50 @@ QTNK:
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, MADTank, Vehicle, C4, ChaosImmune
+
+Rice_Cooker:
+	Inherits: ^Tank
+	Inherits: ^HighResShadow
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	Inherits: ^SovietArtillery
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 160
+		Prerequisites: techcenter, ~vehicles.v3rl, ~commander_tree.v3_launcher
+		Description: The great leader has engineered the best Rice Cooker in the world.\nThe engineering is supreme, so that the Rice Cooker is the best artillery in the world at the same time.\nOnce the great leader steered the Rice Cooker and fired a shot that travelled one time around the globe!
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Defenses
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Extreme range artillery
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Kim's Giant Rice Cooker
+	Health:
+		HP: 25000
+	Mobile:
+		Speed: 56
+		TurnSpeed: 8
+		Voice: Move
+		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
+	Passenger:
+		Voice: Move
+	Armament:
+		Weapon: V3Launcher
+		ReloadingCondition: reloading
+	Turreted:
+		TurnSpeed: 8	#3
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
+	WithSpriteTurret:
+	MissileSpawnerMaster:
+		Actors: V3
+		RespawnTicks: 250
+	Explodes:
+		Weapon: BarrelExplode
+	Voiced:
+		VoiceSet: V3Voice
+	Exit:
+		SpawnOffset: 0,-128,0
