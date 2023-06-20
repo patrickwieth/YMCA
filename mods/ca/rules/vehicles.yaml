@@ -4680,6 +4680,8 @@ BATF.Support.Reflector:
 BATF.Artillery:
 	Inherits: BATF
 	Inherits: ^PrioArtillery
+	RenderSprites:
+		Image: batf.artillery
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
@@ -5919,112 +5921,3 @@ MSG:
 		RequiresCondition: deployed
 		MaximumVerticalOffset: 512
 		AffectsParent: true
-
-SAPC:
-	Inherits: ^Tank
-	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
-	-DamagedByTintedCells@TOXIN:
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 255
-		Prerequisites: tmpl, infantry.any, ~vehicles.legion, ~disabled
-		Description: Stealth chemical emitting vehicle. Deploy to unleash toxic clouds.\n  Strong vs Massed Units\n  Weak vs Detection, Defenses, Aircraft
-	Valued:
-		Cost: 1100
-	Tooltip:
-		Name: Chemical Emitter
-	Health:
-		HP: 50000
-	Mobile:
-		Speed: 108
-		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
-	Explodes:
-		Weapon: ToxinEmit
-		EmptyWeapon: ToxinEmit
-	AttackFrontal:
-		FacingTolerance: 512
-		PauseOnCondition: empdisable || being-warped
-	Armament@PRIMARY:
-		Weapon: ChaosDroneTargeting
-	GrantConditionOnAttack:
-		Condition: triggered
-	AmmoPool:
-		Name: explosion
-		Armaments: explosion
-		Ammo: 10
-		ReloadDelay: 0
-		InitialAmmo: 10
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
-		FullSequence: pip-red
-	ReloadAmmoPool:
-		AmmoPool: explosion
-		Delay: 100
-		Count: 1
-	GrantTimedConditionOnDeploy:
-		DeployedCondition: triggered
-		CooldownTicks: 1
-		DeployedTicks: 240
-		RequiresCondition: !(empdisable || being-warped)
-	PeriodicExplosion:
-		Weapon: ToxinEmit
-		RequiresCondition: triggered && ammo
-		AmmoPoolName: explosion
-	Capturable:
-		RequiresCondition: !being-warped && !cargo
-	Capturable@DRIVER_DEAD:
-		RequiresCondition: driver-dead && !cargo
-	Targetable@DRIVERKILL:
-		RequiresCondition: !driver-dead && !cargo
-	Targetable@ToxinEmitter:
-		TargetTypes: ToxinEmitter
-	Cloak@NORMAL:
-		InitialDelay: 90
-		CloakDelay: 90
-		CloakSound: trans1.aud
-		CloakedCondition: hidden
-		UncloakSound: appear1.aud
-		Palette: cloak
-		IsPlayerPalette: false
-		UncloakOn: Damage
-		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
-	Cloak@CRATE-CLOAK:
-		RequiresCondition: crate-cloak && !(cloak-force-disabled || invisibility || hidden || driver-dead)
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: ReturnFire
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-
-SAPC.Napalm:
-	Inherits: SAPC
-	Buildable:
-		Prerequisites: tmpl, infantry.any, ~vehicles.blackh, ~disabled
-		Description: Stealth Napalm emitting vehicle. Deploy to unleash Napalm shrapnels.\n  Strong vs Massed Units\n  Weak vs Detection, Defenses, Aircraft
-	Tooltip:
-		Name: Napalm Emitter
-	PeriodicExplosion:
-		Weapon: NapalmEmit
-
-SAPC.Laser:
-	Inherits: SAPC
-	Buildable:
-		Prerequisites: tmpl, infantry.any, ~vehicles.marked, ~disabled
-		Description: Laser emitting vehicle. Deploy to unleash random laser beams.\n  Strong vs Massed Units\n  Weak vs Detection, Defenses, Aircraft
-	Tooltip:
-		Name: Laser Emitter
-	PeriodicExplosion:
-		Weapon: LaserEmit
-	Cloak@NORMAL:
-		UncloakOn: Attack, Damage
