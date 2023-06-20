@@ -11,3 +11,34 @@ MAD_Eruption:
 		Duration: 5
 		Intensity: 1
 		Multiplier: 0.5,0.5
+
+RiceShellLauncher:
+	Inherits: ^MissileArtillery
+	ReloadDelay: 100
+	Range: 22c511
+	MinRange: 6c0
+	Report: vv3latta.aud, vv3lattb.aud
+	ValidTargets: Ground, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Water
+	-Warhead@2Smu: LeaveSmudge
+	-Warhead@3Eff: CreateEffect
+	-Warhead@4EffWater: CreateEffect
+
+RiceShellImpact:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
+	-Report:
+	ValidTargets: Ground, Trees, Water
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 3400
+		Falloff: 1000, 256, 96, 24, 12
+		ValidTargets: Ground, Water, Trees
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: building, building2
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
