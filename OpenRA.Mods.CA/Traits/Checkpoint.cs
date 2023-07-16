@@ -16,7 +16,7 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	[Desc("When enabled, the actor will randomly try to attack nearby other actors.")]
+	[Desc("When enabled, the actor will send units with autobattler trait to other checkpoints.")]
 	public class CheckpointInfo : ProximityCapturableInfo, IEditorActorOptions
 	{
 		[Desc("Display order for the facing slider in the map editor")]
@@ -37,10 +37,11 @@ namespace OpenRA.Mods.CA.Traits
 		public override object Create(ActorInitializer init) { return new Checkpoint(init, init.Self, this); }
 	}
 
-	class Checkpoint : ProximityCapturable, INotifyIdle
+	class Checkpoint : ProximityCapturable, INotifyIdle, INotifyAddedToWorld
 	{
 		readonly CheckpointInfo info;
-		readonly int Hierarchy;
+		readonly public int Hierarchy;
+		public RallyPoint RallyPoint;
 
 		public Checkpoint(ActorInitializer init, Actor self, CheckpointInfo info)
 			: base(self, info)
@@ -52,28 +53,16 @@ namespace OpenRA.Mods.CA.Traits
 				 Hierarchy = hierarchyInit.Value;
 		}
 
+		protected void Created(Actor self)
+		{
+			RallyPoint = self.TraitOrDefault<RallyPoint>();
+		}
+
 		public override void ActorEntered(Actor other)
 		{
-			TextNotificationsManager.Debug("bla "+other.ToString());
-
 			var autobattler = other.TraitOrDefault<Autobattler>();
 			if (autobattler != null)
-			{
-				var nextCheckpoint = Self.World.ActorsHavingTrait<Checkpoint>()
-					.Where(a => a.TraitOrDefault<Checkpoint>().Hierarchy > Self.TraitOrDefault<Checkpoint>().Hierarchy)
-					.ClosestTo(Self);
-
-				foreach( var cp in Self.World.ActorsHavingTrait<Checkpoint>()
-					) //&& a.TraitOrDefault<Checkpoint>().info.Hierarchy > Self.TraitOrDefault<Checkpoint>().info.Hierarchy) )
-				{
-					TextNotificationsManager.Debug("cp hierarchy:"+cp.TraitOrDefault<Checkpoint>().Hierarchy);
-				}
-
-				TextNotificationsManager.Debug("nextcp:"+nextCheckpoint);
-
-				if (nextCheckpoint != null)
-					autobattler.setNextCheckpoint(nextCheckpoint);
-			}
+				autobattler.handleCheckpoint(other);
 
 			base.ActorEntered(other);
 		}
@@ -81,6 +70,12 @@ namespace OpenRA.Mods.CA.Traits
 		void INotifyIdle.TickIdle(Actor self)
 		{
 
+		}
+
+		void INotifyAddedToWorld.AddedToWorld(Actor self)
+		{
+			RallyPoint = self.TraitOrDefault<RallyPoint>();
+			base.AddToWorldShizzle(self);
 		}
 	}
 

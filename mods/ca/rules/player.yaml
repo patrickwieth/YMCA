@@ -13,6 +13,7 @@ EditorPlayer:
 
 Player:
 	Inherits: ^BasePlayer
+	CheckpointOrigin:
 	ClassicProductionQueue@Building:
 		Type: Building
 		DisplayOrder: 0
@@ -193,15 +194,22 @@ Player:
 		Label: Buildable Swiss Banks
 		Description: Players can build Swiss Banks to transfer cash to other players steadily.
 		Enabled: True
-		DisplayOrder: 16
+		DisplayOrder: 15
 		Prerequisites: global.swiss_banks
 	LobbyPrerequisiteCheckbox@BALANCEDHARVESTING:
 		ID: balancedharvesting
 		Label: Balanced Harvesting
 		Description: Enables dynamic harvester speed to account for the direction of resources relative to refineries
 		Enabled: True
-		DisplayOrder: 16
+		DisplayOrder: 15
 		Prerequisites: global.balancedharvesting
+	LobbyPrerequisiteCheckbox@Autobattle:
+		ID: autobattle
+		Label: Autobattle Mode
+		Description: Enables Autobattle Mode - Checkpoints must be captured to win the game and most units cannot be controlled\nTHIS IS HIGHLY EXPERIMENTAL
+		Enabled: True
+		DisplayOrder: 20
+		Prerequisites: global.autobattle
 	FrozenActorLayer:
 	BaseAttackNotifier:
 	PlayerStatistics:
