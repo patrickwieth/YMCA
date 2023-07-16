@@ -42,3 +42,78 @@ RiceShellImpact:
 	Warhead@4EffWater: CreateEffect
 		Explosions: large_splash
 		ImpactSounds: splashl1.aud, splashl2.aud
+
+GeneSpliceBeam:
+	Inherits: ^Radiation
+	ValidTargets: Ground, Water
+	Range: 9c512
+	ReloadDelay: 60
+	StartBurstReport: idesat1a.aud
+	FirstBurstTargetOffset: -500,0,0
+	FollowingBurstTargetOffset: 100,-100,0
+	Burst: 11
+	BurstDelays: 1
+	Projectile: Railgun
+		Duration: 14
+		DamageActorsInLine: false
+		BeamColor: 000000
+		BeamWidth: 0
+		BeamAlphaDeltaPerTick: -16
+		HelixThickness: 5
+		HelixRadius: 10
+		HelixPitch: 40
+		HelixRadiusDeltaPerTick: 16
+		HelixAlphaDeltaPerTick: -16
+		HelixAngleDeltaPerTick: 16
+		QuantizationCount: 4
+		HelixColor: 08DC0C
+		Inaccuracy: 0
+		ZOffset: 2045
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 2000
+	Warhead@2DriverDam: DriverPoisonDamage
+		Damage: 4000
+	Warhead@gsplice: GrantExternalCondition
+		Range: 0c256
+		Duration: 25
+		Condition: genespliced
+		ValidTargets: Infantry
+
+GeneSpliceBeam1:
+	Inherits: GeneSpliceBeam
+	FirstBurstTargetOffset: -1000,-1000,0
+	FollowingBurstTargetOffset: 0,200,0
+
+GeneSpliceBeam2:
+	Inherits: GeneSpliceBeam
+	FirstBurstTargetOffset: -1000,1000,0
+	FollowingBurstTargetOffset: 200,-200,0
+
+GeneSpliceBeam3:
+	Inherits: GeneSpliceBeam
+	FirstBurstTargetOffset: 1000,-1000,0
+	FollowingBurstTargetOffset: 0,200,0
+
+GeneSpliceBeam4:
+	Inherits: GeneSpliceBeam
+	FirstBurstTargetOffset: 1000,1000,0
+	FollowingBurstTargetOffset: -200,-200,0
+
+ZombieAttack:
+	Inherits: ^Bullet
+	ReloadDelay: 60
+	Range: 1c512
+	Report: brutehit.aud
+	Projectile: InstantHit
+	InvalidTargets: Structure
+	Warhead@1Dam: SpreadDamage
+		Spread: 128
+		Damage: 10000
+		DamageTypes: DefaultDeath
+		InvalidTargets: Structure
+	Warhead@gsplice: GrantExternalCondition
+		Range: 0c256
+		Duration: 10
+		Condition: genespliced
+		ValidTargets: Infantry

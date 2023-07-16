@@ -1255,6 +1255,16 @@
 	Targetable@GMUT:
 		TargetTypes: GeneticallyMutatable
 		RequiresCondition: geneticmutation
+	ExternalCondition@genespliced:
+		Condition: genespliced
+	SpawnActorOnDeath@Zombie:
+		Actor: zombie.mutating
+		OwnerType: Killer
+		SpawnAfterDefeat: false
+		SkipMakeAnimations: false
+		RequiresCondition: genespliced
+	WithDeathAnimation:
+		RequiresCondition: !genespliced
 
 ^MiniDroneAttachable:
 	InfiltrateToAttach@MINIDRONE:
@@ -1916,8 +1926,8 @@
 
 ^BiologicalDriver:
 	Inherits: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
-	Inherits@10: ^Frenzy
+	Inherits: ^Berserk
+	Inherits: ^Frenzy
 	Inherits@mind: ^MindControllable
 	Inherits@driverkill: ^AffectedByDriverKill
 	Inherits@ToxinRad: ^DriverBiologicalDamage
@@ -4687,6 +4697,10 @@
 		DamageCooldown: 150
 		RequiresCondition: on-tib
 		DamageTypes: ToxinDeath
+
+^Autobattler:
+	Autobattler:
+		RequiresCondition: global.autobattle
 
 ^HighResShadow:
 	WithShadow:
