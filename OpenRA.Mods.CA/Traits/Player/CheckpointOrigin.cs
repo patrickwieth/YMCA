@@ -7,7 +7,7 @@ namespace OpenRA.Mods.CA.Traits
         public override object Create(ActorInitializer init) { return new CheckpointOrigin(init, this); }
     }
 
-    public class CheckpointOrigin : INotifyAddedToWorld
+    public class CheckpointOrigin
     {
       public bool HierarchyAscending;
       public Actor HomeCheckpoint;
