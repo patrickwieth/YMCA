@@ -1731,7 +1731,7 @@ APC2.Reinforce:
 		InitialUnits: n1,n2.emp,n2.emp,railgunner,medi
 
 VULC:
-	Inherits: ^TankTD
+	Inherits: ^Tank
 	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
 	Inherits: ^PrioAntiLight
@@ -1752,28 +1752,28 @@ VULC:
 		PauseOnCondition: being-captured || empdisable || being-warped || notmobile
 	Armament@GAT0:
 		Weapon: MGatt.0
-		LocalOffset: 220,0,350
+		LocalOffset: 400,-300,550, 420,300,550
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling == 0
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT1:
 		Weapon: MGatt.1
-		LocalOffset: 220,0,350
+		LocalOffset: 400,-300,550, 420,300,550
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling == 1
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT2:
 		Weapon: MGatt.2
-		LocalOffset: 220,0,350
+		LocalOffset: 400,-300,550, 420,300,550
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling == 2
 		PauseOnCondition: engage-ground
 		ReloadingCondition: engage-air
 	Armament@GAT3:
 		Weapon: MGatt.3
-		LocalOffset: 220,0,350
+		LocalOffset: 400,-300,550, 420,300,550
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling == 3
 		PauseOnCondition: engage-ground
@@ -1781,7 +1781,7 @@ VULC:
 	Armament@GAT0G:
 		Name: secondary
 		Weapon: MGatt.0G
-		LocalOffset: 321,0,85
+		LocalOffset: 400,-300,550, 420,300,550
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling-ground == 0
 		PauseOnCondition: engage-air
@@ -1789,7 +1789,7 @@ VULC:
 	Armament@GAT1G:
 		Name: secondary
 		Weapon: MGatt.1G
-		LocalOffset: 321,0,85
+		LocalOffset: 400,-300,550, 420,300,550
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling-ground == 1
 		PauseOnCondition: engage-air
@@ -1797,7 +1797,7 @@ VULC:
 	Armament@GAT2G:
 		Name: secondary
 		Weapon: MGatt.2G
-		LocalOffset: 321,0,85
+		LocalOffset: 400,-300,550, 420,300,550
 		MuzzleSequence: muzzle
 		RequiresCondition: gatling-ground == 2
 		ReloadingCondition: engage-ground
@@ -1822,13 +1822,9 @@ VULC:
 		Armaments: primary, secondary
 	Turreted:
 		TurnSpeed: 28
-		Offset: 0,0,150
+		Offset: 0,0,-50
 	WithMuzzleOverlay:
 	WithSpriteTurret:
-		RequiresCondition: !gatling-ground
-	WithSpriteTurret@GROUND:
-		Sequence: turret-ground
-		RequiresCondition: gatling-ground
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
