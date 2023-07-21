@@ -1732,8 +1732,9 @@ APC2.Reinforce:
 
 VULC:
 	Inherits: ^Tank
+	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^Transport
 	Inherits: ^PrioAntiLight
 	Buildable:
 		Queue: Vehicle
@@ -5857,6 +5858,7 @@ GDRN:
 
 MSG:
 	Inherits: ^Vehicle
+	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits@autodeploy: ^AutoDeployIdler
 	Buildable:
@@ -5885,16 +5887,8 @@ MSG:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
 	GrantCondition@PREVIEWWORKAROUND:
 		Condition: real-actor
-	WithMakeAnimation:
-		BodyNames: deployedbody
 	Carryable:
 		LocalOffset: 0,0,150
-	WithSpriteBody@deployed:
-		Sequence: idle-deployed
-		RequiresCondition: !undeployed && real-actor
-		Name: deployedbody
-	WithFacingSpriteBody:
-		RequiresCondition: undeployed || !real-actor
 	GrantConditionOnDeploy:
 		PauseOnCondition: empdisable || being-warped || being-captured
 		DeployedCondition: deployed
