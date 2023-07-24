@@ -1,5 +1,5 @@
 V2RL:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	Inherits: ^SovietArtillery
@@ -749,7 +749,7 @@ GTNK.squad:
 		HP: 88000
 
 ARTY:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	Buildable:
@@ -795,9 +795,9 @@ ARTY.nod:
 		Weapon: 155mmTD
 
 HOWI:
-	Inherits: ^VehicleTD
-	Inherits: ^HighResShadow
 	Inherits: ARTY.nod
+	Inherits: ^TDVehicleSprite
+	Inherits: ^HighResShadow
 	RenderSprites:
 		Image: howi
 		PlayerPalette: overlayplayer
@@ -1091,7 +1091,7 @@ MCV:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
 
 JEEP:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits@detect: ^SensorEquipment
 	Inherits: ^PrioAntiInfantry
@@ -1278,7 +1278,7 @@ MRJ:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
 
 TTNK:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyWeapon
 	Buildable:
@@ -1329,7 +1329,8 @@ TTNK.Arc:
 		Weapon: TTankZap.Arc
 
 TTNK.RA2:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyWeapon
@@ -1384,7 +1385,7 @@ TTNK.RA2.Arc:
 		Weapon: TTankZapMK2.Arc
 
 DTRK:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^PrioAntiLight
 	Inherits@UNLOAD: ^UnloadCondition
@@ -1519,7 +1520,8 @@ CTNK.Reflector:
 		Name: Chrono Tank (Reflector)
 
 AMCV:
-	Inherits: ^TankTD
+	Inherits: ^ConstructionVehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
 	Buildable:
@@ -1559,7 +1561,8 @@ AMCV:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
 
 HMMV:
-	Inherits: ^VehicleTD
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^SensorEquipment
 	Inherits: ^PrioAntiInfantry
@@ -1598,7 +1601,8 @@ HMMV:
 		RequiresCondition: !(empdisable || being-warped)
 
 BGGY:
-	Inherits: ^VehicleTD
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits@detect: ^SensorEquipment
 	Inherits: ^PrioAntiInfantry
@@ -1668,7 +1672,8 @@ BGGY.AA:
 		MuzzleSequence: muzzle
 
 APC2:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
 	Inherits: ^PrioAntiInfantry
@@ -1848,7 +1853,8 @@ VULC:
 		RequiresSelection: true
 
 LTNK:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	RenderSprites:
@@ -1908,7 +1914,8 @@ LTNK:
 		RequiresCondition: !onwater && !being-warped
 
 LTNK.Laser:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^HighResShadow
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
@@ -1950,7 +1957,8 @@ LTNK.Laser:
 		RequiresCondition: !onwater && !being-warped
 
 MTNK:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	RenderSprites:
@@ -2021,7 +2029,8 @@ MTNK.Reflector:
 		Name: Battle Tank (Reflector)
 
 MTNK.Drone:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^RobotDriver
 	Inherits: ^DronePairing
 	Inherits: ^PrioAntiHeavy
@@ -2093,7 +2102,8 @@ MTNK.Drone.Reflector:
 		Name: Battle Drone (Reflector)
 
 HTNK:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^DronePairing
@@ -2281,7 +2291,8 @@ HTNK.Hover.PLD:
 		Cost: 2200
 
 MSAM:
-	Inherits: ^VehicleTD
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
 	RenderSprites:
@@ -2343,7 +2354,8 @@ MSAM.Hailstorm:
 	-Armament@SECONDARY:
 
 MLRS:
-	Inherits: ^VehicleTD
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	RenderSprites:
@@ -2430,7 +2442,8 @@ MLRS.Multi:
 		PauseOnCondition: empdisable || being-warped
 
 STNK:
-	Inherits: ^VehicleTD
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
 	Valued:
@@ -2602,7 +2615,8 @@ STNK.AP.Reflector:
 		Name: Stealth AP Tank (Reflector)
 
 BIKE:
-	Inherits: ^VehicleTD
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
 	RenderSprites:
@@ -2768,7 +2782,8 @@ BIKE.Explosive.Reflector:
 		Name: Explosive Rocket Bike (Reflector)
 
 FTNK:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
 	RenderSprites:
@@ -2902,7 +2917,8 @@ FTNK.Reflector.Fireball:
 		-MuzzlePalette:
 
 HAR2:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^Shielded
 	Inherits@HARV: ^Harvester
@@ -2950,7 +2966,7 @@ HAR2:
 		Prerequisites: commander_tree.shielded_miners
 
 BTR:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
@@ -3074,7 +3090,7 @@ NonaSVK:
 		Types: Shell
 
 IFV:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
 	Inherits: ^PrioAntiHeavyAA
@@ -3341,7 +3357,7 @@ IFV:
 		RequiresSelection: true
 
 IFV.AI:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
 	Buildable:
@@ -3539,7 +3555,8 @@ TITN.Railgun.Reflector:
 		Name: Railgun Titan (Reflector)
 
 JUGG:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
@@ -3610,7 +3627,8 @@ JUGG:
 	WithMuzzleOverlay:
 
 DISR:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
@@ -3679,7 +3697,7 @@ DISR:
 		RequiresCondition: dronepair
 
 HMLRS:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
@@ -3875,7 +3893,7 @@ RTNK.Reflector:
 		Name: Mirage Tank (Reflector)
 
 V3RL:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
@@ -3988,7 +4006,7 @@ V4:
 		Homing: true
 
 KATY:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
@@ -4114,7 +4132,8 @@ TNKD.Reflector:
 		Name: Tank Destroyer (Reflector)
 
 MSAR:
-	Inherits: ^VehicleTD
+	Inherits: ^Vehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^SensorEquipment
 	Inherits: ^BiologicalDriver
 	Inherits: ^MobileDeployableRadar
@@ -4212,7 +4231,8 @@ MSAR.PLD.Nod:
 	-ProximityExternalCondition@Bino:
 
 PTNK:
-	Inherits: ^VehicleTD
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
@@ -4269,7 +4289,7 @@ PBLASTER:
 PCAN:
 	Inherits: PTNK
 	Inherits: ^PrioAntiHeavy
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Buildable:
 		IconPalette: chrome
 		Prerequisites: radar, ~commander_tree.prism_cannon
@@ -4299,7 +4319,7 @@ PCAN:
 		VoiceSet: PrismVoice
 
 WTNK:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
@@ -4769,7 +4789,8 @@ BATF.AI:
 		PauseOnCondition: being-captured || empdisable || being-warped
 
 MEMP:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^RobotDriver
 	Buildable:
 		Queue: Vehicle
@@ -4913,7 +4934,8 @@ MEMP.Stable:
 		RequiresSelection: true
 
 CDRN:
-	Inherits: ^VehicleTD
+	Inherits: ^Vehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^RobotDriver
 	Inherits: ^PrioAntiLight
 	RenderSprites:
@@ -4928,7 +4950,7 @@ CDRN:
 		Queue: Vehicle
 		BuildPaletteOrder: 270
 		IconPalette: chrometd
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.yuri
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.yuri, ~disabled
 		Description: Drone armed with Chaos Gas which causes units\nto become frenzied and attack indiscriminately.\n  Has weak armor.
 	Valued:
 		Cost: 700
@@ -5175,7 +5197,8 @@ CHPR.AA:
 	SelectionDecorations:
 
 CRYO:
-	Inherits: ^VehicleTD
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	RenderSprites:
@@ -5195,19 +5218,19 @@ CRYO:
 		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead
 	Health:
 		HP: 32000
+	AttackTurreted:
+	Turreted:
+		TurnSpeed: 8
 	Armament:
 		Weapon: CryoMissile
-		LocalOffset: 150,100,0, 150,-100,0
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped
-		FacingTolerance: 0
+		LocalOffset: 300,100,300, 300,-100,300
+	WithSpriteTurret:
 	Explodes:
 		Weapon: CryoExplosion
 
 SLNG:
-	Inherits: ^VehicleTD
+	Inherits: ^Vehicle
+	Inherits: ^TDVehicleSprite
 	Inherits: ^HighResShadow
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
@@ -5257,7 +5280,7 @@ SLNG:
 		LoadedChance: 75
 
 FTRK:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
 	Buildable:
@@ -5402,7 +5425,7 @@ COORDINATOR:
 		ProductionTypes: Vehicle
 
 Beam_Cannon:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyAntiHeavy
 	AutoTargetPriority@DEFAULT:
@@ -5611,7 +5634,7 @@ APOC:
 		Factions: iraq
 
 XO:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HighResWalkerShadow
 	Inherits: ^TurretedWalker
 	Inherits: ^SensorEquipment
@@ -5652,7 +5675,8 @@ XO:
 	WithMuzzleOverlay:
 
 HFTK:
-	Inherits: ^TankTD
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
@@ -5705,7 +5729,7 @@ HFTK:
 		Condition: attacking
 
 MDRN:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^RobotDriver
 	Inherits: ^PrioAntiInfantry
@@ -5807,7 +5831,7 @@ MDRN.Attached:
 	-ChronoshiftableWithSpriteEffect:
 
 GDRN:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^RobotDriver
 	Inherits: ^SensorEquipment

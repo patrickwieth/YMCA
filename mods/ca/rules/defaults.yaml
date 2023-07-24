@@ -1748,6 +1748,18 @@
 		Multiplier: 75
 		Prerequisites: indp2, !indplowpower
 
+^RelayMarkable:
+	ExternalCondition@RELAYMARKED:
+		Condition: relayMarked
+	Targetable@relay:
+		RequiresCondition: relayMarked
+		TargetTypes: relayTarget
+	ProximityExternalCondition@RELAYABLE:
+		Range: 20c0
+		ValidRelationships: Enemy, Neutral, Ally
+		Condition: relayTarget
+		RequiresCondition: relayMarked
+
 ^Vehicle:
 	Inherits@1: ^ExistsInWorld
 	Inherits@2: ^IronCurtainable
@@ -1770,13 +1782,13 @@
 	Inherits@wflash: ^WhiteFlash
 	Inherits@bounty: ^GlobalBounty
 	Inherits@production: ^ProductionEfficiencyBoost
-	Inherits@selection: ^SelectableCombatUnit
 	Inherits@handicaps: ^PlayerHandicaps
 	Inherits@irrad: ^Irradiatable
 	Inherits@atomize: ^Atomizable
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@SLOWCRUSH: ^SlowedByCrushing
 	Inherits@VehicleVision: ^VehicleVision
+	Inherits: ^RelayMarkable
 	Buildable:
 		Queue: Vehicle
 	TooltipExtras:
@@ -1815,7 +1827,6 @@
 	Passenger:
 		CargoType: Vehicle
 		Weight: 3
-	AttackMove:
 	HiddenUnderFog:
 	ActorLostNotification:
 	ProximityCaptor:
@@ -1823,7 +1834,6 @@
 	GpsRadarDot:
 		Sequence: Vehicle
 	WithDamageOverlay:
-	Guard:
 	Guardable:
 	Tooltip:
 		GenericName: Vehicle
@@ -1869,26 +1879,25 @@
 	DetectCloaked@UNDERBRIDGE:
 		CloakTypes: Underbridge
 		Range: 5c0
-	ExternalCondition@RELAYMARKED:
-		Condition: relayMarked
-	Targetable@relay:
-		RequiresCondition: relayMarked
-		TargetTypes: relayTarget
-	ProximityExternalCondition@RELAYABLE:
-		Range: 20c0
-		ValidRelationships: Enemy
-		Condition: relayTarget
-		RequiresCondition: relayMarked
 	TeleportNetworkTransportable:
 
-^VehicleTD:
-	Inherits@1: ^Vehicle
+^TDVehicleSprite:
 	Buildable:
 		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	WithDamageOverlay:
 		Image: smoke_mtd
+
+^FightingVehicle:
+	Inherits: ^Vehicle
+	Inherits: ^SelectableCombatUnit
+	Inherits: ^Autobattler
+	AttackMove:
+	Guard:
+
+^FightingVehicleTurreted:
+	Inherits: ^Vehicle
 
 ^Tank:
 	Inherits: ^Vehicle
@@ -1897,16 +1906,16 @@
 	Mobile:
 		Locomotor: tracked
 
-^TankTD:
-	Inherits: ^Tank
-	Buildable:
-		IconPalette: chrometd
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	WithDamageOverlay:
-		Image: smoke_mtd
-
 ^TurretedTank:
+	Inherits: ^Tank
+
+^HarvesterVehicle:
+	Inherits: ^Tank
+	Inherits: ^Harvester
+	-Crushable:
+	-Carryable:
+
+^ConstructionVehicle:
 	Inherits: ^Tank
 
 ^BigVehicle:
@@ -2156,6 +2165,7 @@
 
 ^Soldier:
 	Inherits: ^Infantry
+	Inherits: ^Autobattler
 	Inherits@DRIVER: ^CanCaptureDriverlessVehicles
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
@@ -2257,6 +2267,7 @@
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@biodamage: ^DriverBiologicalDamage
 	Inherits@VehicleVision: ^VehicleVision
+	Inherits: ^RelayMarkable
 	TooltipExtras:
 	Huntable:
 	RenderSprites:
@@ -2351,16 +2362,6 @@
 	Wanders@NOIDLENAVY:
 		WanderMoveRadius: 3
 		RequiresCondition: (botowner && under-bridge)
-	ExternalCondition@RELAYMARKED:
-		Condition: relayMarked
-	Targetable@relay:
-		RequiresCondition: relayMarked
-		TargetTypes: relayTarget
-	ProximityExternalCondition@RELAYABLE:
-		Range: 20c0
-		ValidRelationships: Enemy, Neutral, Ally
-		Condition: relayTarget
-		RequiresCondition: relayMarked
 	KillsSelf@SINK:
 		RequiresCondition: onwater && driver-dead
 
@@ -2646,6 +2647,7 @@
 	Inherits@bounty: ^GlobalBounty
 	Inherits@selection: ^SelectableBuilding
 	Inherits@handicaps: ^PlayerHandicaps
+	Inherits: ^RelayMarkable
 	SelectionDecorations:
 	WithSpriteControlGroupDecoration:
 	Selectable:
@@ -2693,16 +2695,6 @@
 		Condition: flare
 	WithDecoration@tnt:
 		Sequence: tntbig
-	ExternalCondition@RELAYMARKED:
-		Condition: relayMarked
-	Targetable@relay:
-		RequiresCondition: relayMarked
-		TargetTypes: relayTarget
-	ProximityExternalCondition@RELAYABLE:
-		Range: 20c0
-		ValidRelationships: Enemy
-		Condition: relayTarget
-		RequiresCondition: relayMarked
 
 ^Building:
 	Inherits@1: ^BasicBuilding
@@ -4299,7 +4291,7 @@
 		Factions: iraq
 		Prerequisite: vehicles.iraq
 	ProvidesPrerequisite@gdi:
-		Factions: gdi, talon, zocom
+		Factions: gdi, talon, zocom, eagle
 		Prerequisite: vehicles.gdi
 	ProvidesPrerequisite@talon:
 		Factions: talon
@@ -4703,7 +4695,7 @@
 		Condition: autobattle
 		Prerequisites: global.autobattle
 	RejectsOrders:
-		RequiresCondition: autobattle
+		RequiresCondition: autobattle && false
 	Autobattler:
 		RequiresCondition: autobattle
 

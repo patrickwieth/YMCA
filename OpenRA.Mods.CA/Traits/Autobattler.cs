@@ -23,7 +23,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly int ScatterMoveRadius = 1;
 
 		[Desc("Display order for the facing slider in the map editor")]
-		public readonly int ScatterAttemps = 5;
+		public readonly int ScatterInterval = 30;
 
 		[Desc("Number of ticks to wait before decreasing the effective move radius.")]
 		public readonly int ReduceMoveRadiusDelay = 5;
@@ -52,7 +52,7 @@ namespace OpenRA.Mods.CA.Traits
 			this.self = self;
 			this.info = info;
 			effectiveMoveRadius = info.ScatterMoveRadius;
-			idleCountdown = info.ScatterAttemps;
+			idleCountdown = info.ScatterInterval;
 		}
 
 		protected override void Created(Actor self)
@@ -67,16 +67,15 @@ namespace OpenRA.Mods.CA.Traits
 			if (IsTraitDisabled)
 				return;
 
-			if (--idleCountdown > 0)
+			if (--idleCountdown == 0) // this is deactivated via false atm
 			{
 				var targetCell = PickScatterTargetLocation();
 					if (targetCell.HasValue)
 						DoScatter(self, targetCell.Value);
+
+				idleCountdown = info.ScatterInterval;
 				return;
 			}
-
-			idleCountdown = info.ScatterAttemps;
-			TextNotificationsManager.Debug("idle - find purpose in life");
 
 			nextCheckpoint = self.World.ActorsHavingTrait<Checkpoint>()
 				.Where(a => !a.IsDead).ClosestTo(self);
@@ -120,16 +119,13 @@ namespace OpenRA.Mods.CA.Traits
 					findNextCheckpoint(false);
 				}
 
-				TextNotificationsManager.Debug("new order "+nextCheckpoint);
 				attackMoveToNextCheckpoint(self);
 			}
 		}
 
 		public void findNextCheckpoint(bool ascending) {
-			TextNotificationsManager.Debug("own hierarchy "+Hierarchy);
 			if (nextCheckpoint != null)
 			{
-				TextNotificationsManager.Debug("old Checkpoint Hierarchy "+nextCheckpoint.TraitOrDefault<Checkpoint>().Hierarchy);
 
 				if (ascending)
 					potentialNextCheckpoint = self.World.ActorsHavingTrait<Checkpoint>()
@@ -143,9 +139,6 @@ namespace OpenRA.Mods.CA.Traits
 
 			//TextNotificationsManager.Debug("rallypoint"+nextCheckpoint.TraitOrDefault<Checkpoint>().RallyPoint.Path.FirstOrDefault());
 			if (potentialNextCheckpoint != null) {
-				TextNotificationsManager.Debug("new Checkpoint "+potentialNextCheckpoint);
-				TextNotificationsManager.Debug("new Checkpoint Hierarchy "+potentialNextCheckpoint.TraitOrDefault<Checkpoint>().Hierarchy);
-
 				nextCheckpoint = potentialNextCheckpoint;
 				Hierarchy = potentialNextCheckpoint.TraitOrDefault<Checkpoint>().Hierarchy;
 			}
@@ -158,7 +151,7 @@ namespace OpenRA.Mods.CA.Traits
 			{
 				//TextNotificationsManager.Debug("order:"+nextCheckpoint);
 				var location = self.World.Map.CellContaining(nextCheckpoint.CenterPosition);
-				self.QueueActivity(false, new AttackMoveActivity(self, () => move.MoveTo(location, 0)));
+				self.QueueActivity(true, new AttackMoveActivity(self, () => move.MoveTo(location, 0)));
 			}
 		}
 

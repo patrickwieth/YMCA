@@ -22,7 +22,7 @@ namespace OpenRA.Mods.CA.Traits
         HomeCheckpoint = initiator.World.ActorsHavingTrait<Checkpoint>()
           .ClosestTo(initiator.World.Map.CenterOfCell(initiator.Owner.HomeLocation));
 
-        TextNotificationsManager.Debug("HomeCheckpoint"+HomeCheckpoint);
+        //TextNotificationsManager.Debug("HomeCheckpoint"+HomeCheckpoint);
 
         if (HomeCheckpoint != null)
         {
@@ -31,7 +31,7 @@ namespace OpenRA.Mods.CA.Traits
           else
             HierarchyAscending = false;
         }
-        TextNotificationsManager.Debug("ascending set "+HierarchyAscending);
+        //TextNotificationsManager.Debug("ascending set "+HierarchyAscending);
       }
     }
 }
