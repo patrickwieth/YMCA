@@ -167,14 +167,34 @@ Player:
 ^AnnounceOnBuild:
 	ExternalCondition@PRODUCED:
 		Condition: produced
-	VoiceAnnouncement:
+	GrantTimedCondition@1:
+		Condition: spawned
+		Duration: 5
+	ProvidesPrerequisite@cooldown:
+		RequiresCondition: blockAnnounce && !reactivated && !spawned
+		Prerequisite: announcementsOff
+	GrantConditionOnPrerequisite@Announcement:
+		Prerequisites: announcementsOff
+		Condition: announcementsOff
+	GrantDelayedCondition@blockAnnounce:
+		Condition: reactivated
+		Delay: 150
 		RequiresCondition: produced
+	GrantCondition:
+		Condition: blockAnnounce
+		GrantPermanently: true
+		RequiresCondition: produced && !announcementsOff && spawned
+	VoiceAnnouncement:
+		RequiresCondition: produced && !announcementsOff && spawned
 		Voice: Build
 		ValidRelationships: Ally
 
 ^AnnounceGlobal:
-	Inherits: ^AnnounceOnBuild
+	ExternalCondition@PRODUCED:
+		Condition: produced
 	VoiceAnnouncement:
+		Voice: Build
+		RequiresCondition: produced && !cooldown
 		ValidRelationships: Enemy, Neutral, Ally
 
 ^AttackVoice:
