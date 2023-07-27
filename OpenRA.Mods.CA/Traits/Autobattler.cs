@@ -14,6 +14,7 @@ using OpenRA.Mods.Common.Activities;
 using OpenRA.Mods.CA.Activities;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Traits;
+using OpenRA.Primitives;
 
 namespace OpenRA.Mods.CA.Traits
 {
@@ -22,8 +23,8 @@ namespace OpenRA.Mods.CA.Traits
 	{
 		public readonly int ScatterMoveRadius = 1;
 
-		[Desc("Display order for the facing slider in the map editor")]
-		public readonly int ScatterInterval = 30;
+		[Desc("How long until scattering idle autobattle units")]
+		public readonly int ScatterInterval = 10;
 
 		[Desc("Number of ticks to wait before decreasing the effective move radius.")]
 		public readonly int ReduceMoveRadiusDelay = 5;
@@ -67,7 +68,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (IsTraitDisabled)
 				return;
 
-			if (--idleCountdown == 0) // this is deactivated via false atm
+			if (--idleCountdown == 0)
 			{
 				var targetCell = PickScatterTargetLocation();
 					if (targetCell.HasValue)
@@ -151,7 +152,9 @@ namespace OpenRA.Mods.CA.Traits
 			{
 				//TextNotificationsManager.Debug("order:"+nextCheckpoint);
 				var location = self.World.Map.CellContaining(nextCheckpoint.CenterPosition);
-				self.QueueActivity(true, new AttackMoveActivity(self, () => move.MoveTo(location, 0)));
+				self.QueueActivity(false, new AttackMoveActivity(self, () => move.MoveTo(location, 1, evaluateNearestMovableCell: true, targetLineColor: Color.OrangeRed)));
+				//move.ResolveOrder(self, new Order("AttackMove", null, Target.FromCell(self.World, location), false));
+
 			}
 		}
 
