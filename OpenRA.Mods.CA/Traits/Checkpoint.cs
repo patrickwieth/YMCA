@@ -75,7 +75,7 @@ namespace OpenRA.Mods.CA.Traits
 		void INotifyAddedToWorld.AddedToWorld(Actor self)
 		{
 			RallyPoint = self.TraitOrDefault<RallyPoint>();
-			base.AddToWorldShizzle(self);
+			base.AddedToWorldTasks(self);
 		}
 	}
 
