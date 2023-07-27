@@ -3091,6 +3091,8 @@ NonaSVK:
 
 IFV:
 	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits@TRANSPORT: ^Transport
 	Inherits: ^PrioAntiHeavyAA
@@ -3129,7 +3131,7 @@ IFV:
 		RequiresCondition: spyturr
 	Turreted:
 		TurnSpeed: 48
-		Offset: 20,0,0
+		Offset: -200,0,300
 	Armament@Default:
 		Weapon: IFVRockets
 		LocalOffset: 192,10,176, 192,-10,176
@@ -3145,7 +3147,7 @@ IFV:
 		LocalOffset: 250,0,150
 		RequiresCondition: gunturr || tecnturr
 	Armament@E2:
-		Weapon: 25mmFRAG
+		Weapon: Grenade.Huey
 		MuzzleSequence: muzzle
 		LocalOffset: 450,0,200
 		RequiresCondition: fragturr
@@ -3232,10 +3234,6 @@ IFV:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: spyturr
 		Offset: 0,0,200
-	WithIdleOverlay@TESLA:
-		Sequence: tesla
-		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: testurr
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: !spyturr
@@ -3244,32 +3242,38 @@ IFV:
 		RequiresCondition: !full
 		Sequence: turret
 	WithSpriteTurret@samturr2:
-		RequiresCondition: samturr
-		Sequence: turret2
+		RequiresCondition: samturr || fragturr
+		Sequence: turretmlrs
 	WithSpriteTurret@gun:
-		RequiresCondition: gunturr || tecnturr || snipeturr || relayturr
-		Sequence: turret3
-	WithSpriteTurret@frg:
-		Sequence: turret4
-		RequiresCondition: fragturr
-	WithSpriteTurret@fla:
-		Sequence: turret5
+		RequiresCondition: gunturr || tecnturr || relayturr
+		Sequence: turretmg
+	WithSpriteTurret@snipe:
+		Sequence: turretsnipe
+		RequiresCondition: snipeturr
+	WithSpriteTurret@flame:
+		Sequence: turretspray
 		RequiresCondition: flamturr
 	WithSpriteTurret@che:
-		Sequence: turret6
+		Sequence: turretspray
 		RequiresCondition: chemturr
-	WithSpriteTurret@las:
-		Sequence: turret7
-		RequiresCondition: acolturr
+	WithSpriteTurret@laser:
+		Sequence: turretenergy
+		RequiresCondition: acolturr || railgunturr || cryoturr
 	WithSpriteTurret@des:
-		Sequence: turret8
+		Sequence: turretradioactive
 		RequiresCondition: desoturr
 	WithSpriteTurret@com:
-		Sequence: turret9
-		RequiresCondition: commturr || railgunturr || cryoturr
+		Sequence: turretcommunications
+		RequiresCondition: commturr
 	WithSpriteTurret@rep:
-		Sequence: turret10
+		Sequence: turretrepair
 		RequiresCondition: engturr
+	WithSpriteTurret@medic:
+		Sequence: turretmedic
+		RequiresCondition: medturr
+	WithSpriteTurret@teslakaputt:
+		Sequence: turretradioactive
+		RequiresCondition: testurr
 	Cargo:
 		Types: Infantry
 		MaxWeight: 1
@@ -3313,11 +3317,6 @@ IFV:
 			railgunner.nocrush: railgunturr
 			cryot: cryoturr
 			specops: relayturr
-	WithIdleOverlay@MEDIC:
-		Sequence: medic
-		PauseOnCondition: empdisable || being-warped
-		RequiresCondition: medturr
-		Offset: 0,0,40
 	ProximityExternalCondition@MEDIC:
 		RequiresCondition: medturr
 		EnableSound: heal2.aud
