@@ -3112,7 +3112,7 @@ IFV:
 	Valued:
 		Cost: 750
 	Tooltip:
-		Name: Infantry Fighting Vehicle
+		Name: Multi-Purpose Drone
 	Health:
 		HP: 30000
 	Mobile:
@@ -3406,10 +3406,10 @@ IFV.AI:
 		RequiresCondition: defturr
 	WithSpriteTurret@gun:
 		RequiresCondition: gunturr
-		Sequence: turret3
+		Sequence: turretmg
 	WithSpriteTurret@samturr:
 		RequiresCondition: samturr
-		Sequence: turret2
+		Sequence: turretmlrs
 	RenderSprites:
 		Image: ifv
 	GrantRandomCondition:
@@ -5750,11 +5750,13 @@ MDRN:
 		Locomotor: seal
 		Voice: Move
 		PauseOnCondition: !radarenabled || empdisable || being-warped || notmobile
+	Hovers:
+		InitialHeight: 0c64
 	Voiced:
 		VoiceSet: RobotTankVoice
 	Armament@PRIMARY:
 		Weapon: M60mgMD
-		LocalOffset: 72,0,72
+		LocalOffset: 172,0,0
 		MuzzleSequence: muzzle
 		PauseOnCondition: !radarenabled || empdisable || being-warped
 	WithMuzzleOverlay:
@@ -5797,6 +5799,8 @@ MDRN.Attached:
 	RenderSprites:
 		Image: mdrn
 	-Mobile:
+	Hovers:
+		InitialHeight: 0c512
 	AttachedAircraft:
 		TurnSpeed: 18
 		Speed: 0
@@ -5818,7 +5822,7 @@ MDRN.Attached:
 		TurnWhileAircraftPaused: true
 	Armament@PRIMARY:
 		Weapon: M60mgMD
-		LocalOffset: -500,0,72
+		LocalOffset: -300,-100,100
 		PauseOnCondition: !radarenabled
 	DamageMultiplier@ATTACHED:
 		Modifier: 15
