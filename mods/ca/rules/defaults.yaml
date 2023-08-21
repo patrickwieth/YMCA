@@ -2510,7 +2510,6 @@
 
 ^Plane:
 	Inherits: ^NeutralPlane
-	Inherits@2: ^GainsExperience
 	Inherits@3: ^Cloakable
 	Inherits@4: ^EmpDisable
 	Inherits@5: ^GDIUpgradeAircraft
@@ -2559,17 +2558,6 @@
 	SpeedMultiplier@SUPPRESSION:
 		Modifier: 60
 
-^PlaneTD:
-	Inherits@1: ^Plane
-	Buildable:
-		IconPalette: chrometd
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	EjectOnDeath:
-		PilotActor: N1
-	Aircraft:
-		IdleBehavior: Land
-
 ^Helicopter:
 	Inherits: ^Plane
 	Tooltip:
@@ -2591,15 +2579,22 @@
 		UseClassicFacings: True
 	-Contrail@1:
 	-Contrail@2:
+	WithDamageOverlay:
+		Image: smoke_mtd
 
-^HelicopterTD:
-	Inherits@1: ^Helicopter
+^TDAircraftSprite:
 	Buildable:
 		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	EjectOnDeath:
 		PilotActor: N1
+
+^BiologicalPilot:
+	Inherits@2: ^GainsExperience
+
+^RobotPilot:
+
 
 ^Airship:
 	Inherits: ^Plane
