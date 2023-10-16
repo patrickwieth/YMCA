@@ -20,26 +20,16 @@ Packages:
 	^EngineDir|mods/common: common
 	$ca: ca
 	~main.mix
-	~conquer.mix
-	~lores.mix: lores
-	~hires.mix
-	~local.mix
 	~sounds.mix
 	~speech.mix
-	~allies.mix
 	~russian.mix
-	~temperat.mix
-	~snow.mix
-	~interior.mix
 	~./ra/scores.mix
 	~./cnc/scores.mix
 	~./ts/scores.mix
 	~./ts/scores01.mix
 	~./ra2/theme.mix
 	~./ra2/thememd.mix
-	~expand2.mix
 	~hires1.mix
-	~desert.mix
 	ca|bits
 	ca|bits/desert
 	ca|bits/jungle
@@ -48,6 +38,11 @@ Packages:
 	ca|bits/temp
 	ca|bits/int
 	ca|bits/snow
+	ca|bits/new
+	ca|bits/new/check
+	ca|bits/new/int
+	ca|bits/new/tem
+	ca|bits/new/sno
 	ca|bits/audio
 	ca|uibits
 	ca|bits/scrin
@@ -58,8 +53,9 @@ Packages:
 	ca|bits/allies
 	ca|bits/gdi
 	ca|bits/nod
-	ca|bits/china  
+	ca|bits/china
 	ca|bits/generals
+	ca|bits/palettes
 	ca|scripts
 
 Translations:
@@ -305,7 +301,7 @@ Missions:
 	ca|missions.yaml
 
 MapGrid:
-	TileSize: 24,24
+	TileSize: 48,48
 	Type: Rectangular
 
 DefaultOrderGenerator: UnitOrderGenerator
@@ -374,20 +370,10 @@ ModContent:
 	HeaderMessage: Game content may be extracted from the original game discs or an\nexisting digital install. OpenRA can also download the base game\nfiles from an online mirror of the 2008 freeware release of RA.
 	Packages:
 		base: Base Game Files
-			TestFiles: ^SupportDir|Content/ca/allies.mix, ^SupportDir|Content/ca/conquer.mix, ^SupportDir|Content/ca/interior.mix, ^SupportDir|Content/ca/hires.mix, ^SupportDir|Content/ca/lores.mix, ^SupportDir|Content/ca/local.mix, ^SupportDir|Content/ca/speech.mix, ^SupportDir|Content/ca/russian.mix, ^SupportDir|Content/ca/snow.mix, ^SupportDir|Content/ca/sounds.mix, ^SupportDir|Content/ca/temperat.mix
+			TestFiles: ^SupportDir|Content/ca/speech.mix, ^SupportDir|Content/ca/russian.mix, ^SupportDir|Content/ca/sounds.mix
 			Sources: allied, allied-linux, soviet, soviet-linux, tfd, origin-ra
 			Required: true
 			Download: basefiles
-		aftermathbase: Aftermath Expansion Files
-			TestFiles: ^SupportDir|Content/ca/expand/expand2.mix
-			Sources: aftermath, aftermath-linux, tfd, origin-ra
-			Required: true
-			Download: aftermath
-		cncdesert: C&C Desert Tileset
-			TestFiles: ^SupportDir|Content/ca/cnc/desert.mix
-			Sources: tfd, origin-cnc, cnc95, cnc95-linux
-			Required: true
-			Download: cncdesert
 		music: Red Alert Music
 			TestFiles: ^SupportDir|Content/ca/ra/scores.mix
 			Sources: allied, allied-linux, soviet, soviet-linux, tfd, origin-ra
