@@ -2166,7 +2166,8 @@
 ^Soldier:
 	Inherits: ^Infantry
 	Inherits: ^Autobattler
-	Inherits@DRIVER: ^CanCaptureDriverlessVehicles
+	Inherits: ^CanCaptureDriverlessVehicles
+	Inherits: ^Berserk
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	MustBeDestroyed:
@@ -2700,6 +2701,7 @@
 	Inherits@7: ^BotBuilding
 	Inherits@8: ^Chillable
 	Inherits@9: ^NaniteShieldable
+	Inherits: ^BuildingVision
 	Inherits@wflash: ^WhiteFlash
 	Inherits@gflash: ^GreenFlash
 	Inherits@HACKABLE: ^Hackable
@@ -2778,11 +2780,17 @@
 	Buildable:
 		BuildDurationModifier: 100
 	ProductionTimeMultiplier@BuildUpBoost:
-		Multiplier: 100
+		Multiplier: 1
 		Prerequisites: !BuildUpBoostEnded
 		Queue: Building
-	GrantExternalConditionToOwner@BuildingsOwned:
-		Condition: TechBuildingsOwned
+	GrantExternalConditionToOwner@BuildingsOwned1:
+		Condition: BuildingsOwned
+	GrantExternalConditionToOwner@BuildingsOwned2:
+		Condition: BuildingsOwned
+	GrantExternalConditionToOwner@BuildingsOwned3:
+		Condition: BuildingsOwned
+	GrantExternalConditionToOwner@BuildingsOwned4:
+		Condition: BuildingsOwned
 
 ^Tier2Tech:
 
@@ -4112,6 +4120,14 @@
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
 
+^BuildingVision:
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+
 ^ImprovedVision:
 	RevealsShroud:
 		MinRange: 6c0
@@ -4231,6 +4247,30 @@
 		Range: 7c0
 		ValidRelationships: Ally
 		Condition: closeToBarracks
+	ProvidesPrerequisite@scrin:
+		Factions: scrin, reaper, traveler, harbinger
+		Prerequisite: infantry.scrin
+	ProvidesPrerequisite@reaper:
+		Factions: reaper
+		Prerequisite: infantry.reaper
+	ProvidesPrerequisite@traveler:
+		Factions: traveler
+		Prerequisite: infantry.traveler
+	ProvidesPrerequisite@harbinger:
+		Factions: harbinger
+		Prerequisite: infantry.harbinger
+	ProvidesPrerequisite@scrinstructure:
+		RequiresPrerequisites: structures.scrin
+		Prerequisite: infantry.scrin
+	ProvidesPrerequisite@reaperstructure:
+		RequiresPrerequisites: structures.reaper
+		Prerequisite: infantry.reaper
+	ProvidesPrerequisite@travelerstructure:
+		RequiresPrerequisites: structures.traveler
+		Prerequisite: infantry.traveler
+	ProvidesPrerequisite@harbingerstructure:
+		RequiresPrerequisites: structures.harbinger
+		Prerequisite: infantry.harbinger
 
 ^VehicleProduction:
 	RallyPoint:
