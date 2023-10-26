@@ -1,6 +1,6 @@
 
 ^ScrinBuilding:
-	Inherits@1: ^Building
+	Inherits: ^Building
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	SpawnActorOnDeath:
@@ -10,6 +10,22 @@
 	ActorPreviewPlaceBuildingPreview:
 	Building:
 		BuildSounds: scrinbuild.aud
+
+^ScrinSprite:
+	RenderSprites:
+		PlayerPalette: playerra2
+	WithDeathAnimation:
+		DeathSequencePalette: playerra2
+
+^ScrinSpriteTD:
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayertd
+
+^ScrinSpriteTS:
+	RenderSprites:
+		PlayerPalette: playerts
 
 INFANTRY.SCRIN:
 	AlwaysVisible:
@@ -67,10 +83,10 @@ VEHICLES.SCRIN:
 		Actor: gscr.mutating
 
 S1:
-	Inherits@SCRININFANTRY: ^ScrinInfantry
-	Inherits@scout: ^ScoutEquipment
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^ScoutEquipment
 	Inherits: ^PrioAntiInfantry
-	Inherits@BERSERK: ^Berserk
 	Inherits@BOTHELPER: ^BotCaptureHelper
 	Buildable:
 		Queue: Infantry
@@ -83,8 +99,6 @@ S1:
 		Cost: 100
 	Tooltip:
 		Name: Warrior
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 6500
 	Armament@PRIMARY:
@@ -105,9 +119,9 @@ S1:
 		Prerequisites: barracks.upgraded
 
 S2:
-	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSprite
 	Inherits: ^PrioAntiHeavy
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -139,9 +153,9 @@ S2:
 		Prerequisites: barracks.upgraded
 
 S3:
-	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
 	Inherits: ^PrioAntiHeavyAA
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -179,9 +193,9 @@ S3:
 		ScanRadius: 5
 
 S4:
-	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
 	Inherits: ^PrioAntiHeavy
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -217,8 +231,9 @@ S4:
 		ChronoshiftSound: scrinport.aud
 
 S6:
-	Inherits@SCRININFANTRY: ^ScrinInfantry
-	Inherits@SELECTION: ^SelectableSupportUnit
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^SelectableSupportUnit
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -250,9 +265,9 @@ S6:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
 FEED:
-	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
 	Inherits: ^PrioEnergyAntiLight
-	Inherits@BERSERK: ^Berserk
 	Valued:
 		Cost: 200
 	Tooltip:
@@ -339,7 +354,7 @@ FEED:
 		PipCount: 7
 
 SMEDI:
-	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits: ^ScrinInfantry
 	Inherits: ^InfantrySupportUnit
 	Buildable:
 		Queue: Infantry
@@ -413,10 +428,9 @@ GSCR.Mutating:
 		DeathSequencePalette: overlayplayerscrin
 
 MAST:
-	Inherits@SCRININFANTRY: ^ScrinInfantry
+	Inherits: ^ScrinInfantry
 	Inherits@detect: ^SensorEquipment
 	Inherits: ^PrioAntiHeavy
-	Inherits@BERSERK: ^Berserk
 	Inherits@COMMANDOSKULL: ^CommandoSkull
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
@@ -494,6 +508,83 @@ MAST:
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
+
+
+S7:
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSprite
+	Inherits: ^PrioAntiInfantry
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 10
+		Prerequisites: ~infantry.scrin
+		Description: General-purpose scouting infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		IconPalette: chrome
+	Valued:
+		Cost: 80
+	Tooltip:
+		Name: Buzzers
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 6500
+	Armament@PRIMARY:
+		Weapon: BuzzerShards
+		MuzzleSequence: muzzle
+		MuzzlePalette: scrin
+		LocalOffset: 150,0,400
+	WithMuzzleOverlay:
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
+	-WithDeathAnimation:
+	WithDeathAnimation:
+	Mobile:
+		Speed: 110
+	Mobile:
+		Locomotor: seal
+
+S8:
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^ScoutEquipment
+	Inherits: ^PrioAntiHeavyAA
+	Inherits@BOTHELPER: ^BotCaptureHelper
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 10
+		Prerequisites: ~infantry.scrin
+		Description: General-purpose scouting infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		IconPalette: chrome
+	Valued:
+		Cost: 400
+	Tooltip:
+		Name: Trooper
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 6500
+	Armament@PRIMARY:
+		Weapon: ScrinDiskGrenade
+		MuzzleSequence: muzzle
+		MuzzlePalette: scrin
+		LocalOffset: 150,0,400
+	Armament@Garrison:
+		Name: mounted
+		Weapon: ScrinDiskGrenade
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	ProducibleWithLevel:
+		Prerequisites: barracks.upgraded
 
 #
 # ---- Vehicles
@@ -1394,6 +1485,7 @@ ATMZ:
 TPOD:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
+	Inherits: ^ScrinSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Buildable:
@@ -1426,7 +1518,7 @@ TPOD:
 		Range: 4c0
 	Armament@PRIMARY:
 		Weapon: TripodLaser
-		LocalOffset: 650,420,1000, 650,-420,1000
+		LocalOffset: 450,0,1000, 350,-600,1000, 350,320,1000
 		MuzzleSequence: muzzle
 		MuzzlePalette: scrin
 	WithMuzzleOverlay:
@@ -1678,6 +1770,7 @@ SMCV:
 
 STMR:
 	Inherits: ^Helicopter
+	Inherits: ^ScrinSprite
 	Inherits: ^PrioAntiLightAA
 	Inherits@GAINSEXPERIENCE: ^GainsExperience
 	Buildable:
@@ -2006,9 +2099,10 @@ ENRV:
 
 DEVA:
 	Inherits: ^Airship
-	Inherits@Armor: ^HeavyArmor
+	Inherits: ^ScrinSprite
+	Inherits: ^HeavyArmor
 	Inherits: ^PrioArtillery
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalPilot
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -2089,9 +2183,10 @@ DEVA.Rift:
 
 PAC:
 	Inherits: ^Airship
-	Inherits@Armor: ^HeavyArmor
+	Inherits: ^ScrinSprite
+	Inherits: ^HeavyArmor
 	Inherits: ^PrioAntiLightAA
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^BiologicalPilot
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -2279,6 +2374,7 @@ PAC.laser:
 
 INVA:
 	Inherits: ^Plane
+	Inherits: ^ScrinSprite
 	Valued:
 		Cost: 50
 	Tooltip:
@@ -3062,13 +3158,12 @@ SFAC:
 
 REAC:
 	Inherits: ^ScrinBuilding
-	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^2x2Shape
-	Inherits@POWERDRAIN: ^PowerDrainable
+	Inherits: ^ScrinSpriteTS
+	Inherits: ^DisabledByPowerOutage
+	Inherits: ^2x2Shape
+	Inherits: ^PowerDrainable
 	HitShape:
 		TargetableOffsets: 630,299,0
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	WithSpriteBody:
 		PauseOnCondition: disabled
 	Buildable:
@@ -3202,6 +3297,7 @@ PROC.SCRIN:
 
 PORT:
 	Inherits: ^ScrinBuilding
+	Inherits: ^ScrinSpriteTS
 	Inherits@shape: ^2x2Shape
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@InfantryProduction: ^InfantryProduction
@@ -3227,41 +3323,11 @@ PORT:
 		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 60000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	WithBuildingBib:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,512,0
 		ExitCell: 1,2
-	ProvidesPrerequisite@scrin:
-		Factions: scrin, reaper, traveler, harbinger
-		Prerequisite: infantry.scrin
-	ProvidesPrerequisite@reaper:
-		Factions: reaper
-		Prerequisite: infantry.reaper
-	ProvidesPrerequisite@traveler:
-		Factions: traveler
-		Prerequisite: infantry.traveler
-	ProvidesPrerequisite@harbinger:
-		Factions: harbinger
-		Prerequisite: infantry.harbinger
-	ProvidesPrerequisite@scrinstructure:
-		RequiresPrerequisites: structures.scrin
-		Prerequisite: infantry.scrin
-	ProvidesPrerequisite@reaperstructure:
-		RequiresPrerequisites: structures.reaper
-		Prerequisite: infantry.reaper
-	ProvidesPrerequisite@travelerstructure:
-		RequiresPrerequisites: structures.traveler
-		Prerequisite: infantry.traveler
-	ProvidesPrerequisite@harbingerstructure:
-		RequiresPrerequisites: structures.harbinger
-		Prerequisite: infantry.harbinger
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -3274,11 +3340,10 @@ PORT:
 	InfiltrateForSupportPower@spy:
 		Proxy: barracks.upgraded
 		Types: SpyInfiltrate
-	WithIdleOverlay:
-		RequiresCondition: !build-incomplete
 
 WSPH:
 	Inherits: ^ScrinBuilding
+	Inherits: ^ScrinSprite
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@VehicleProduction: ^VehicleProduction
 	Inherits@shape: ^3x2Shape

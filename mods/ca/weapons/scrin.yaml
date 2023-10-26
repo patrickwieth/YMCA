@@ -2,6 +2,12 @@ WarriorGun:
 	Inherits: M1Carbine
 	Report: warrior-fire1.aud
 
+BuzzerShards:
+	Inherits: M1Carbine
+	ReloadDelay: 15
+	Report: warrior-fire1.aud
+	Range: 2c0
+
 DisintegratorBeam:
 	Inherits: Laser
 	Inherits: ^EnergyAP
@@ -450,8 +456,8 @@ TripodLaser:
 	Inherits: Laser
 	Range: 6c0
 	Report: tripod-fire1.aud, tripod-fire2.aud, tripod-fire3.aud
-	ReloadDelay: 45
-	Burst: 2
+	ReloadDelay: 70
+	Burst: 3
 	BurstDelays: 15
 	Projectile: LaserZap
 		Duration: 20
@@ -493,8 +499,8 @@ TripodLaser.chain:
 	Range: 6c0
 	ValidTargets: Ground, Water
 	Report: tripod-fire1.aud, tripod-fire2.aud, tripod-fire3.aud
-	ReloadDelay: 45
-	Burst: 2
+	ReloadDelay: 70
+	Burst: 3
 	BurstDelays: 15
 	Projectile: LaserZap
 		Duration: 20
@@ -545,7 +551,7 @@ TripodLaser.Arc2:
 ReaperLaser:
 	Inherits: TripodLaser
 	Range: 5c0
-	ReloadDelay: 40
+	ReloadDelay: 60
 	BurstDelays: 10
 	Report: rtripod-fire1.aud, rtripod-fire2.aud, rtripod-fire3.aud
 	Projectile: LaserZap
@@ -1418,3 +1424,29 @@ DepthCharge.Scrin:
 		ValidTargets: Ship, Submarine
 	Warhead@3Eff: CreateEffect
 		ValidTargets: Submarine, Ship
+
+ScrinDiskGrenade:
+	Inherits: ^EnergyArtillery
+	ReloadDelay: 60
+	Range: 5c512
+	ValidTargets: Ground, Trees, Air
+	Projectile: Bullet
+		Speed: 555
+		Blockable: true
+		Shadow: true
+		LaunchAngle: 80
+		Inaccuracy: 0
+		Image: plasdiscsm
+		BounceCount: 2
+	Warhead@1Dam: SpreadDamage
+		Spread: 255
+		Damage: 4500
+		Versus:
+			Light: 70
+			Concrete: 28
+		DamageTypes: Prone70Percent, TriggerProne, ExplosionDeath
+		ValidTargets: Ground, Trees, Air
+	Warhead@2Eff: CreateEffect
+		Explosions: tssmall_grey_explosion
+		ImpactSounds: expnew13.aud
+		ValidTargets: Ground, Trees, Air
