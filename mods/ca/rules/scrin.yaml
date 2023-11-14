@@ -27,22 +27,6 @@
 	RenderSprites:
 		PlayerPalette: playerts
 
-INFANTRY.SCRIN:
-	AlwaysVisible:
-	Interactable:
-	Tooltip:
-		Name: Infantry Production
-	Buildable:
-		Description: Infantry Production
-
-VEHICLES.SCRIN:
-	AlwaysVisible:
-	Interactable:
-	Tooltip:
-		Name: Vehicle Production
-	Buildable:
-		Description: Vehicle Production
-
 #
 # ---- Infantry
 #
@@ -133,8 +117,6 @@ S2:
 		Cost: 300
 	Tooltip:
 		Name: Ravager
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 6000
 	Mobile:
@@ -167,8 +149,6 @@ S3:
 		Cost: 300
 	Tooltip:
 		Name: Disintegrator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 5500
 	Armament@PRIMARY:
@@ -209,8 +189,6 @@ S4:
 		Cost: 500
 	Tooltip:
 		Name: Intruder
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 12000
 	Armament@PRIMARY:
@@ -245,8 +223,6 @@ S6:
 		Cost: 500
 	Tooltip:
 		Name: Assimilator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 3000
 	WithInfantryBody:
@@ -274,8 +250,6 @@ FEED:
 		Name: Feeder
 	Health:
 		HP: 7500
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Mobile:
 		Speed: 49
 	RevealsShroud:
@@ -366,8 +340,6 @@ SMEDI:
 		Cost: 200
 	Tooltip:
 		Name: Rejuvenator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 5000
 	Armament:
@@ -429,9 +401,9 @@ GSCR.Mutating:
 
 MAST:
 	Inherits: ^ScrinInfantry
-	Inherits@detect: ^SensorEquipment
+	Inherits: ^SensorEquipment
 	Inherits: ^PrioAntiHeavy
-	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Inherits: ^CommandoSkull
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
 	Buildable:
@@ -448,8 +420,6 @@ MAST:
 		Cost: 1350
 	Tooltip:
 		Name: Mastermind
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 16000
 	RevealsShroud:
@@ -509,7 +479,6 @@ MAST:
 		Position: BottomLeft
 		RequiresSelection: true
 
-
 S7:
 	Inherits: ^ScrinInfantry
 	Inherits: ^ScrinSprite
@@ -525,8 +494,6 @@ S7:
 		Cost: 80
 	Tooltip:
 		Name: Buzzers
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 6500
 	Armament@PRIMARY:
@@ -565,8 +532,6 @@ S8:
 		Cost: 400
 	Tooltip:
 		Name: Trooper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 6500
 	Armament@PRIMARY:
@@ -589,11 +554,35 @@ S8:
 #
 # ---- Vehicles
 #
+^ScrinLightsMedium:
+	WithIdleOverlay@DecorationLights:
+		RequiresCondition: !damaged
+		Image: prop_light_effect_scrin
+		Sequence: light-medium
+		Palette: tseffect-ignore-lighting-alpha40
+	WithIdleOverlay@DamagedDecorationLights:
+		RequiresCondition: damaged
+		Image: prop_light_effect_scrin
+		Sequence: damaged-light-medium
+		Palette: tseffect-ignore-lighting-alpha30
+
+^ScrinLightsBig:
+	WithIdleOverlay@DecorationLights:
+		RequiresCondition: !damaged
+		Image: prop_light_effect_scrin
+		Sequence: light-big
+		Palette: tseffect-ignore-lighting-alpha40
+	WithIdleOverlay@DamagedDecorationLights:
+		RequiresCondition: damaged
+		Image: prop_light_effect_scrin
+		Sequence: damaged-light-big
+		Palette: tseffect-ignore-lighting-alpha30
 
 HARV.Scrin:
 	Inherits: HAR2
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
+	Inherits: ^ScrinLightsBig
 	RenderSprites:
 		Image: harv.scrin
 		PlayerPalette: overlayplayer
@@ -634,8 +623,6 @@ GUNW:
 		Cost: 650
 	Tooltip:
 		Name: Gun Walker
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 30000
 	Mobile:
@@ -689,17 +676,16 @@ GUNW.sensor:
 
 SEEK:
 	Inherits: ^FightingVehicle
-	Inherits@Hover: ^HoverVehicle
+	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
+	Inherits: ^ScrinLightsMedium
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 800
 	Tooltip:
 		Name: Seeker
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: vehicles.any, ~vehicles.seek, ~!commander_tree.seeker.pld, ~!commander_tree.seeker.reflector
@@ -774,8 +760,9 @@ SEEK.Reflector:
 
 LACE:
 	Inherits: ^FightingVehicle
-	Inherits@Hover: ^HoverVehicle
+	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
+	Inherits@Lights: ^ScrinLightsMedium
 	Inherits: ^PrioAntiHeavy
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
@@ -783,8 +770,6 @@ LACE:
 		Cost: 500
 	Tooltip:
 		Name: Lacerator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: vehicles.any, ~vehicles.traveler, ~!commander_tree.lacerator.pld, ~!commander_tree.lacerator.reflector, ~!commander_tree.lacerator.ap
@@ -872,6 +857,7 @@ INTL:
 	Inherits: ^Tank
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
+	Inherits: ^ScrinLightsMedium
 	Inherits: ^PrioAntiInfantry
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
@@ -879,8 +865,6 @@ INTL:
 		Cost: 700
 	Tooltip:
 		Name: Interloper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 40
 		Prerequisites: wsph, ~vehicles.scrin, ~!commander_tree.interloper.teleport, ~!commander_tree.interloper.aa
@@ -977,8 +961,6 @@ CORR:
 		Cost: 700
 	Tooltip:
 		Name: Corrupter
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 65
 		Prerequisites: nerv, ~vehicles.scrin, ~!commander_tree.corrupter.area, ~!commander_tree.corrupter.range
@@ -1009,6 +991,9 @@ CORR:
 		Prerequisites: vehicles.upgraded
 	WithMoveAnimation:
 		ValidMovementTypes: Horizontal, Vertical, Turn
+	WithAttackAnimation:
+		Sequence: shoot
+	#TODO
 	GrantConditionOnFaction@TRAVELERSPEED:
 		Condition: travelerspeed
 		Factions: traveler
@@ -1061,17 +1046,16 @@ CORR.Range:
 
 LCHR:
 	Inherits: ^Tank
-	Inherits@Armor: ^LightArmor
+	Inherits: ^LightArmor
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
+	Inherits: ^ScrinLightsMedium
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 900
 	Tooltip:
 		Name: Leecher
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 141
 		Prerequisites: radar, ~vehicles.harbinger
@@ -1107,9 +1091,11 @@ LCHR:
 
 STCR:
 	Inherits: ^FightingVehicle
-	Inherits@Armor: ^HeavyArmor
+	Inherits: ^HeavyArmor
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
+	Inherits: ^ScrinSprite
+	Inherits: ^ScrinLightsMedium
 	Inherits: ^PrioAntiLight
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
@@ -1117,8 +1103,6 @@ STCR:
 		Cost: 1000
 	Tooltip:
 		Name: Stormcrawler
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 65
 		Prerequisites: nerv, ~vehicles.reaper, ~!commander_tree.stormcrawler.pld, ~!commander_tree.stormcrawler.reflector
@@ -1182,9 +1166,10 @@ STCR.Reflector:
 
 DEVO:
 	Inherits: ^Tank
-	Inherits@Armor: ^LightArmor
+	Inherits: ^LightArmor
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
+	Inherits: ^ScrinLightsBig
 	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
@@ -1196,8 +1181,6 @@ DEVO:
 		Cost: 1250
 	Tooltip:
 		Name: Devourer Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 30000
 	Mobile:
@@ -1229,9 +1212,6 @@ DEVO:
 		Sequence: idle
 	WithFacingSpriteBody:
 		Sequence: idle
-	ProductionCostMultiplier@REAPBONUS:
-		Multiplier: 90
-		Prerequisites: vehicles.reaper
 
 DEVO.acid:
 	Inherits: DEVO
@@ -1270,6 +1250,7 @@ DARK:
 	Inherits: ^Tank
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
+	Inherits: ^ScrinLightsBig
 	Inherits: ^PrioAntiHeavy
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
@@ -1283,8 +1264,6 @@ DARK:
 		Cost: 1350
 	Tooltip:
 		Name: Darkener Tank
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 45000
 	Mobile:
@@ -1353,14 +1332,13 @@ RUIN:
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
+	Inherits: ^ScrinLightsMedium
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 800
 	Tooltip:
 		Name: Ruiner
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		BuildPaletteOrder: 150
 		Prerequisites: scrt, ~vehicles.harbinger, ~!commander_tree.ruiner.barrage
@@ -1443,8 +1421,6 @@ ATMZ:
 		Cost: 1250
 	Tooltip:
 		Name: Atomizer
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 285
@@ -1500,8 +1476,6 @@ TPOD:
 		Cost: 1800
 	Tooltip:
 		Name: Annihilator Tripod
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 80000
 	Mobile:
@@ -1790,8 +1764,6 @@ STMR:
 		VoiceSet: VehicleVoice
 	Tooltip:
 		Name: Stormrider
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 35000
 	RevealsShroud:
@@ -1999,8 +1971,6 @@ ENRV:
 		VoiceSet: VehicleVoice
 	Tooltip:
 		Name: Enervator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 20000
 	RevealsShroud:
@@ -2116,8 +2086,6 @@ DEVA:
 		Cost: 2200
 	Tooltip:
 		Name: Devastator Warship
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 35000
 	RevealsShroud:
@@ -2200,8 +2168,6 @@ PAC:
 		Cost: 2200
 	Tooltip:
 		Name: Planetary Assault Carrier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -2573,9 +2539,9 @@ INVA.suicide:
 
 MSHP:
 	Inherits: ^Airship
-	Inherits@Armor: ^HeavyArmor
+	Inherits: ^HeavyArmor
 	Inherits: ^PrioArtillery
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Inherits: ^GainsExperience
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -2592,8 +2558,6 @@ MSHP:
 		Cost: 10000
 	Tooltip:
 		Name: Mothership
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 500000
 	RevealsShroud:
@@ -2635,8 +2599,6 @@ MSHP:
 		PauseOnCondition: being-warped
 		ForceFireIgnoresActors: true
 	-EjectOnDeath:
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
 	WithIdleOverlay@RING:
 		Image: mshp
 		Sequence: ring
@@ -2697,6 +2659,74 @@ MSHP:
 		Delay: 1
 		RequiresCondition: !charging && !attacking
 		ShowSelectionBar: false
+	ChangesHealth@REGEN2:
+		Step: 1000
+		Delay: 25
+		StartIfBelow: 100
+		DamageCooldown: 250
+
+Bastion:
+	Inherits: ^Airship
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^HeavyArmor
+	Inherits: ^PrioArtillery
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 190
+		Prerequisites: sign, scrt, ~aircraft.scrin
+		Description: Defense platform for Scrin zapping incoming invaders.\n  Maximum 1 can be built.\n 
+		IconPalette: scrin
+		BuildLimit: 1
+	Voiced:
+		VoiceSet: MothershipVoice
+	Valued:
+		Cost: 5000
+	Tooltip:
+		Name: Bastion
+	Health:
+		HP: 200000
+	RevealsShroud:
+		Range: 10c0
+		MinRange: 8c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 8c0
+		Type: GroundPosition
+	Armament@PRIMARY:
+		Weapon: BastionZap
+		LocalOffset: 0,0,-940
+	Aircraft:
+		CruiseAltitude: 3c512
+		InitialFacing: 768
+		TurnSpeed: 16
+		Speed: 38
+		AltitudeVelocity: 0c50
+		CanForceLand: False
+		Voice: Move
+	Explodes:
+		Weapon: KirovExplode
+		RequiresCondition: !airborne
+	SpawnActorOnDeath:
+		Actor: Bastion.Husk
+		RequiresCondition: !being-warped
+	AttackFrontal:
+		Armaments: primary, secondary, tertiary
+		FacingTolerance: 512
+		Voice: Attack
+		PauseOnCondition: being-warped
+		ForceFireIgnoresActors: true
+	-EjectOnDeath:
+	WithIdleOverlay@RING:
+		Image: bastion
+		Sequence: ring
+		Offset: 0,0,0
+	DeathSounds:
+		Voice: Die
+	AnnounceOnCreation:
+		Notification: MothershipDeployed
+		Delay: 30
 	ChangesHealth@REGEN2:
 		Step: 1000
 		Delay: 25

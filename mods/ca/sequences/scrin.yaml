@@ -31,6 +31,10 @@
 		BlendMode: Alpha
 		Offset: 0, 0
 
+^OldScrin:
+	Defaults:
+		Scale: 2
+
 prop_light_effect_scrin:
 	light-medium: animated_light_scrin
 		Length: 8
@@ -815,7 +819,7 @@ mast:
 
 harv.scrin:
 	Inherits: ^VehicleOverlays
-	idle: harvscrin
+	idle: scrinharvester
 		Facings: 32
 		UseClassicFacings: True
 	harvest: scrinharvest
@@ -826,22 +830,29 @@ harv.scrin:
 
 harv.scrin.destroyed:
 	Inherits: ^VehicleOverlays
-	idle: harvscrin
+	idle: scrinharvester
 		Facings: 32
 		UseClassicFacings: True
 		ZOffset: -512
 
 gunw:
 	Inherits: ^VehicleOverlays
-	idle: gunw
-		Facings: 32
-		UseClassicFacings: True
-	move: gunw
-		Start: 32
-		Facings: 32
-		Length: 2
-		Tick: 80
-		UseClassicFacings: True
+	Defaults:
+		Scale: 0.6
+	idle: gunwalker
+		Facings: 8
+		Stride: 11
+		UseClassicFacings: False
+	move: gunwalker
+		Facings: 8
+		Length: 11
+		Tick: 40
+		UseClassicFacings: False
+	shoot: gunwalker
+		Start: 88
+		Facings: 8
+		Length: 11
+		Tick: 60
 	muzzle: scrinmuzz1
 		Length: 4
 		Facings: 8
@@ -854,17 +865,19 @@ gunw.sensor:
 
 gunw.destroyed:
 	Inherits: ^VehicleOverlays
-	idle: gunw
+	idle: gunwalker
 		Facings: 32
 		UseClassicFacings: True
 		ZOffset: -512
 
 seek:
 	Inherits: ^VehicleOverlays
-	idle: seek
+	Defaults:
+		Scale: 0.5
+	idle: seeker
 		Facings: 32
 		UseClassicFacings: True
-	turret: seek
+	turret: seeker
 		Start: 32
 		Facings: 32
 		UseClassicFacings: True
@@ -880,11 +893,11 @@ seek.reflector:
 
 seek.destroyed:
 	Inherits: ^VehicleOverlays
-	idle: seek
+	idle: seeker
 		Facings: 32
 		UseClassicFacings: True
 		ZOffset: -512
-	turret: seek
+	turret: seeker
 		Start: 32
 		Facings: 32
 		UseClassicFacings: True
@@ -892,10 +905,12 @@ seek.destroyed:
 
 lace:
 	Inherits: ^VehicleOverlays
-	idle: lace
+	Defaults:
+		Scale: 0.5
+	idle: lacerator
 		Facings: 32
 		UseClassicFacings: True
-	turret: lace
+	turret: lacerator
 		Start: 32
 		Facings: 32
 		UseClassicFacings: True
@@ -915,7 +930,9 @@ lace.ap:
 
 intl:
 	Inherits: ^VehicleOverlays
-	idle: intl
+	Defaults:
+		Scale: 0.5
+	idle: interloper
 		Facings: 32
 		UseClassicFacings: True
 	muzzle: scrinmuzz3
@@ -932,22 +949,30 @@ intl.teleport:
 
 intl.destroyed:
 	Inherits: ^VehicleOverlays
-	idle: intl
+	idle: interloper
 		Facings: 32
 		UseClassicFacings: True
 		ZOffset: -512
 
 corr:
 	Inherits: ^VehicleOverlays
-	idle: corr
-		Facings: 32
-		UseClassicFacings: True
-	move: corr
-		Start: 32
-		Facings: 32
-		Length: 2
-		Tick: 150
-		UseClassicFacings: True
+	Defaults:
+		Scale: 0.6
+	idle: corrupter
+		Facings: 8
+		Stride: 11
+		UseClassicFacings: False
+	move: corrupter
+		Facings: 8
+		Length: 11
+		Tick: 40
+		UseClassicFacings: False
+	shoot: corrupter
+		Start: 88
+		Facings: 8
+		Length: 11
+		Tick: 60
+		UseClassicFacings: False
 	icon: corricon
 
 corr.area:
@@ -960,34 +985,33 @@ corr.range:
 
 corr.destroyed:
 	Inherits: ^VehicleOverlays
-	idle: corr
-		Facings: 32
-		UseClassicFacings: True
+	idle: corrupter
+		Facings: 8
+		Stride: 11
+		UseClassicFacings: False
 		ZOffset: -512
 
 lchr:
 	Inherits: ^VehicleOverlays
-	idle: lchr
+	Defaults:
+		Scale: 0.6
+	idle: leecher
 		Facings: 32
-		UseClassicFacings: True
-	move: lchr
-		Start: 32
-		Facings: 32
-		Length: 2
-		Tick: 120
 		UseClassicFacings: True
 	icon: lchricon
 
 lchr.destroyed:
 	Inherits: ^VehicleOverlays
-	idle: lchr
+	idle: leecher
 		Facings: 32
 		UseClassicFacings: True
 		ZOffset: -512
 
 stcr:
 	Inherits: ^VehicleOverlays
-	idle: stcr
+	Defaults:
+		Scale: 0.5
+	idle: stormcrawler
 		Facings: 32
 		UseClassicFacings: True
 	muzzle: scrinmuzz2
@@ -1004,10 +1028,13 @@ stcr.reflector:
 
 devo:
 	Inherits: ^VehicleOverlays
-	idle: devo
-		Facings: 1
+	Defaults:
+		Scale: 0.68
+	idle: devourer
+		Facings: 32
+		UseClassicFacings: True
+	turret: devourer
 		Start: 32
-	turret: devo
 		Facings: 32
 		UseClassicFacings: True
 	muzzle: scrinmuzz3
@@ -1024,17 +1051,21 @@ devo.heavy:
 
 devo.destroyed:
 	Inherits: ^VehicleOverlays
-	idle: devo
+	Defaults:
+		Scale: 0.68
+	idle: devourer
 		Facings: 32
 		UseClassicFacings: True
 		ZOffset: -512
 
 dark:
 	Inherits: ^VehicleOverlays
-	idle: dark
+	Defaults:
+		Scale: 0.5
+	idle: darkener
 		Facings: 32
 		UseClassicFacings: True
-	turret: dark
+	turret: darkener
 		Facings: 32
 		Start: 32
 		UseClassicFacings: True
@@ -1053,10 +1084,12 @@ dark.disc:
 
 ruin:
 	Inherits: ^VehicleOverlays
-	idle: ruin
-		Facings: 1
-		Start: 32
-	turret: ruin
+	Defaults:
+		Scale: 0.5
+	idle: ruiner
+		Facings: 32
+		UseClassicFacings: True
+	turret: ruiner
 		Facings: 32
 		UseClassicFacings: True
 	muzzle: scrinmuzz3
@@ -1069,7 +1102,7 @@ ruin.barrage:
 
 ruin.destroyed:
 	Inherits: ^VehicleOverlays
-	idle: ruin
+	idle: ruiner
 		Facings: 32
 		UseClassicFacings: True
 		ZOffset: -512
@@ -1148,6 +1181,7 @@ tpod.destroyed:
 
 rptp:
 	Inherits: ^VehicleOverlays
+	Inherits: ^OldScrin
 	idle: tpod
 		Facings: 1
 		Start: 32
@@ -1322,6 +1356,18 @@ mshp:
 		Tick: 40
 		Offset: 0, 40, 0
 		BlendMode: Additive
+	icon: mshpicon
+
+bastion:
+	Inherits: ^VehicleOverlays
+	idle: mshp
+		Facings: 32
+		UseClassicFacings: True
+		ZOffset: 2049
+	ring: bastion
+		Length: *
+		Tick: 300
+		ZOffset: 2050
 	icon: mshpicon
 
 #
