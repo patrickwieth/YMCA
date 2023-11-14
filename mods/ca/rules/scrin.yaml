@@ -579,24 +579,30 @@ S8:
 		Palette: tseffect-ignore-lighting-alpha30
 
 HARV.Scrin:
-	Inherits: HAR2
-	Inherits: ^HoverVehicle
-	Inherits: ^BiologicalDriver
+	Inherits: ^LightHoverVehicle
+	Inherits: ^ScrinSprite
 	Inherits: ^ScrinLightsBig
-	RenderSprites:
-		Image: harv.scrin
-		PlayerPalette: overlayplayer
-	WithShadow:
-		Offset: 43, 255, 0
-		ZOffset: -256
+	Inherits: ^BiologicalDriver
+	-Carryable:
+	Inherits: ^Harvester
 	WithHarvestOverlay:
 		Palette: scrin
 		LocalOffset: 400, 0, 0
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Harvester
+		GenericName: Harvester
+	Health:
+		HP: 75000
 	Mobile:
 		Speed: 56
 	Buildable:
+		BuildPaletteOrder: 10
 		Prerequisites: ~proc.scrin, ~vehicles.scrin
-		IconPalette: chrome
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Collects Tiberium, Ore and Gems for processing.\n  Unarmed
 	SpawnActorOnDeath:
 		Actor: HARV.Scrin.Husk
 		RequiresCondition: !being-warped && !onwater
@@ -606,8 +612,6 @@ HARV.Scrin:
 	-WithHarvestAnimationCA:
 	WithDamageOverlay:
 		Palette: chrometd
-	Targetable:
-		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
 
 GUNW:
 	Inherits: ^FightingVehicle
@@ -676,7 +680,7 @@ GUNW.sensor:
 
 SEEK:
 	Inherits: ^FightingVehicle
-	Inherits: ^HoverVehicle
+	Inherits: ^LightHoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^ScrinLightsMedium
@@ -854,7 +858,6 @@ LACE.AP:
 		Weapon: LaceratorShards.AP
 
 INTL:
-	Inherits: ^Tank
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^ScrinLightsMedium
@@ -1079,10 +1082,6 @@ LCHR:
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
 		FacingTolerance: 0
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
-	WithMoveAnimation:
-		ValidMovementTypes: Horizontal, Vertical, Turn
 	ConvertsDamageToHealth:
 		DamagePercentConverted: 20
 	Explodes:
@@ -1091,7 +1090,6 @@ LCHR:
 
 STCR:
 	Inherits: ^FightingVehicle
-	Inherits: ^HeavyArmor
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^ScrinSprite
@@ -1128,8 +1126,6 @@ STCR:
 	AttackFrontal:
 		FacingTolerance: 80
 		PauseOnCondition: empdisable || being-warped
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	WithShadow:
 		Offset: 80, 80, 0
 		ZOffset: -81
@@ -1165,9 +1161,7 @@ STCR.Reflector:
 		IconPalette: scrin
 
 DEVO:
-	Inherits: ^Tank
-	Inherits: ^LightArmor
-	Inherits: ^HoverVehicle
+	Inherits: ^LightHoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^ScrinLightsBig
 	Inherits: ^PrioAntiHeavy
@@ -1198,8 +1192,6 @@ DEVO:
 	Armament:
 		Weapon: DevourerLaser
 		LocalOffset: 850,0,208
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	TurretedFloating:
 		TurnSpeed: 64
 		Offset: 0,0,0
@@ -1247,7 +1239,6 @@ DEVO.heavy:
 		Name: Heavy Devourer Tank
 
 DARK:
-	Inherits: ^Tank
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^ScrinLightsBig
@@ -1281,8 +1272,6 @@ DARK:
 		MuzzleSequence: muzzle
 		MuzzlePalette: scrin
 	WithMuzzleOverlay:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Turreted:
 		TurnSpeed: 16
 		Offset: 0,0,0
@@ -1374,8 +1363,6 @@ RUIN:
 	AutoTarget:
 	Explodes:
 		Weapon: BarrelExplode
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Hovers:
 		BobDistance: -25
 	WithShadow:
@@ -1455,8 +1442,6 @@ ATMZ:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 
 TPOD:
 	Inherits: ^Tank
@@ -1691,11 +1676,10 @@ RPTP.acid.PLD:
 
 SMCV:
 	Inherits: ^ConstructionVehicle
-	Inherits: ^BigVehicle
-	Inherits@Armor: ^HeavyArmor
 	Inherits: ^HoverVehicle
+	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@SELECTION: ^SelectableSupportUnit
+	Inherits: ^SelectableSupportUnit
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
@@ -2675,7 +2659,7 @@ Bastion:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 190
 		Prerequisites: sign, scrt, ~aircraft.scrin
-		Description: Defense platform for Scrin zapping incoming invaders.\n  Maximum 1 can be built.\n 
+		Description: Defense platform for Scrin zapping incoming invaders.\n  Maximum 1 can be built.\n
 		IconPalette: scrin
 		BuildLimit: 1
 	Voiced:
@@ -3107,10 +3091,10 @@ SWAL:
 
 SFAC:
 	Inherits: ^ScrinBuilding
-	Inherits@shape: ^3x2Shape
-	Inherits@Armor: ^ConcreteArmor
-	Inherits@BOTI: ^BotFallbackInsurance
-	Inherits@StructureProduction: ^StructureProduction
+	Inherits: ^3x2Shape
+	Inherits: ^ConcreteArmor
+	Inherits: ^BotFallbackInsurance
+	Inherits: ^StructureProduction
 	Building:
 		Footprint: xxx xxx ===
 		Dimensions: 3,3

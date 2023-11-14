@@ -1291,6 +1291,7 @@
 		MovingInterval: 6
 
 ^HoverVehicle:
+	Inherits: ^Tank
 	Inherits: ^HoverTrail
 	Mobile:
 		Locomotor: hover
@@ -1305,6 +1306,12 @@
 	Targetable@WATER:
 		TargetTypes: Ground, Vehicle, Water, Ship
 		RequiresCondition: onwater && (!parachute && !being-warped)
+
+^LightHoverVehicle:
+	Inherits: ^HoverVehicle
+	Inherits: ^LightArmor
+	Mobile:
+		Locomotor: lighthover
 
 ^AutoTargetGround:
 	AutoTarget:
@@ -1901,8 +1908,8 @@
 
 ^Tank:
 	Inherits: ^Vehicle
-	Inherits@Armor: ^HeavyArmor
-	Inherits@SLOWCRUSH: ^SlightlySlowedByCrushing
+	Inherits: ^HeavyArmor
+	Inherits: ^SlightlySlowedByCrushing
 	Mobile:
 		Locomotor: tracked
 
@@ -2240,7 +2247,7 @@
 
 ^Ship:
 	Inherits@1: ^ExistsInWorld
-	Inherits@Armor: ^HeavyArmor
+	Inherits: ^HeavyArmor
 	Inherits@2: ^GainsExperience
 	Inherits@3: ^IronCurtainable
 	Inherits@4: ^SpriteActor
@@ -2717,7 +2724,7 @@
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	GivesBuildableArea:
-		AreaTypes: building, fake
+		AreaTypes: building, outpost_building, fake
 	RepairableBuilding:
 		RepairStep: 700
 		PlayerExperience: 25
@@ -2857,12 +2864,14 @@
 
 ^Defense:
 	Inherits: ^Building
-	Inherits@Armor: ^ConcreteArmor
-	Inherits@botbonus: ^BotDefenseProductionBonus
-	Inherits@selection: ^SelectableCombatBuilding
-	Inherits@mind: ^MindControllable
-	Inherits@gpsscramble: ^GpsScramble
+	Inherits: ^ConcreteArmor
+	Inherits: ^BotDefenseProductionBonus
+	Inherits: ^SelectableCombatBuilding
+	Inherits: ^MindControllable
+	Inherits: ^GpsScramble
 	Inherits: ^DefenseBalancing
+	RequiresBuildableArea:
+		AreaTypes: outpost_building
 	WithModifiedPalette@IRONCURTAIN:
 		RequiresCondition: invulnerability
 	Selectable:
@@ -2939,7 +2948,7 @@
 	FootprintPlaceBuildingPreview:
 		LineBuildSegmentPalette: placelinesegment
 	RequiresBuildableArea:
-		AreaTypes: building
+		AreaTypes: outpost_building
 		Adjacent: 7
 	SoundOnDamageTransition:
 		DamagedSounds: sandbag2.aud
