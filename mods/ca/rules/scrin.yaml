@@ -1,71 +1,6 @@
-
-^ScrinBuilding:
-	Inherits: ^Building
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
-	SpawnActorOnDeath:
-		Actor: s1
-	SpawnActorsOnSell:
-		ActorTypes: s1
-	ActorPreviewPlaceBuildingPreview:
-	Building:
-		BuildSounds: scrinbuild.aud
-
-^ScrinSprite:
-	RenderSprites:
-		PlayerPalette: playerra2
-	WithDeathAnimation:
-		DeathSequencePalette: playerra2
-
-^ScrinSpriteTD:
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayertd
-
-^ScrinSpriteTS:
-	RenderSprites:
-		PlayerPalette: playerts
-
 #
 # ---- Infantry
 #
-
-^ScrinInfantry:
-	Inherits: ^Soldier
-	Inherits: ^HealOnTiberium
-	-DamagedByTerrain@TIB:
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
-	Voiced:
-		VoiceSet: ScrinInfantryVoice
-	Targetable:
-		TargetTypes: Ground, Infantry
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayerscrin
-		DeathTypes:
-			DefaultDeath: 1
-			BulletDeath: 2
-			SmallExplosionDeath: 3
-			ExplosionDeath: 4
-			FireDeath: 5
-			ElectricityDeath: 6
-			PoisonDeath: 7
-			ChronoDeath: 8
-			ToxinDeath: 9
-			RadiationDeath: 10
-			FrozenDeath: 11
-		CrushedSequence: die-crushed
-		CrushedSequencePalette: scrin
-	-TakeCover:
-	TransformOnCondition@FEEDER:
-		RequiresCondition: feedermutation
-		IntoActor: feed
-	ExternalCondition@FEEDER:
-		Condition: feedermutation
-	SpawnActorOnDeath@GMUT:
-		Actor: gscr.mutating
-
 S1:
 	Inherits: ^ScrinInfantry
 	Inherits: ^ScrinSpriteTD
@@ -554,30 +489,6 @@ S8:
 #
 # ---- Vehicles
 #
-^ScrinLightsMedium:
-	WithIdleOverlay@DecorationLights:
-		RequiresCondition: !damaged
-		Image: prop_light_effect_scrin
-		Sequence: light-medium
-		Palette: tseffect-ignore-lighting-alpha40
-	WithIdleOverlay@DamagedDecorationLights:
-		RequiresCondition: damaged
-		Image: prop_light_effect_scrin
-		Sequence: damaged-light-medium
-		Palette: tseffect-ignore-lighting-alpha30
-
-^ScrinLightsBig:
-	WithIdleOverlay@DecorationLights:
-		RequiresCondition: !damaged
-		Image: prop_light_effect_scrin
-		Sequence: light-big
-		Palette: tseffect-ignore-lighting-alpha40
-	WithIdleOverlay@DamagedDecorationLights:
-		RequiresCondition: damaged
-		Image: prop_light_effect_scrin
-		Sequence: damaged-light-big
-		Palette: tseffect-ignore-lighting-alpha30
-
 HARV.Scrin:
 	Inherits: ^LightHoverVehicle
 	Inherits: ^ScrinSprite
@@ -615,6 +526,7 @@ HARV.Scrin:
 
 GUNW:
 	Inherits: ^FightingVehicle
+	Inherits: ^ScrinSpriteTD
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
 	Buildable:
@@ -681,11 +593,10 @@ GUNW.sensor:
 SEEK:
 	Inherits: ^FightingVehicle
 	Inherits: ^LightHoverVehicle
+	Inherits: ^ScrinSprite
+	Inherits: ^ScrinLightsMedium
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
-	Inherits: ^ScrinLightsMedium
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -717,11 +628,6 @@ SEEK:
 	Turreted:
 		TurnSpeed: 48
 		Offset: -280,0,0
-	Hovers:
-		BobDistance: -25
-	WithShadow:
-		Offset: 43, 128, 0
-		ZOffset: -129
 	Armament@PRIMARY:
 		Weapon: PlasmaDiscs
 		LocalOffset: 320,0,320
@@ -732,8 +638,6 @@ SEEK:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	IgnoresDisguise:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	SpawnActorOnDeath:
 		Actor: SEEK.Husk
 		RequiresCondition: !being-warped && !onwater
@@ -764,12 +668,11 @@ SEEK.Reflector:
 
 LACE:
 	Inherits: ^FightingVehicle
-	Inherits: ^HoverVehicle
+	Inherits: ^ScrinSprite
+	Inherits: ^LightHoverVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@Lights: ^ScrinLightsMedium
+	Inherits: ^ScrinLightsMedium
 	Inherits: ^PrioAntiHeavy
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -783,30 +686,11 @@ LACE:
 	Mobile:
 		TurnSpeed: 48
 		Speed: 157
-		Locomotor: lighthover
-	LeavesTrails:
-		Image: twake
-		Palette: effect
-		TerrainTypes: Water
-		TrailWhileStationary: true
-		StationaryInterval: 18
-		MovingInterval: 6
 	Health:
 		HP: 22000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 8c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Turreted:
 		TurnSpeed: 48
 		Offset: -50,0,0
-	Hovers:
-		BobDistance: -25
-	WithShadow:
-		Offset: 43, 128, 0
-		ZOffset: -129
 	Armament@PRIMARY:
 		Weapon: LaceratorShards
 		LocalOffset: 0,50,320, 0,-50,320
@@ -817,8 +701,6 @@ LACE:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	IgnoresDisguise:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 
 LACE.PLD:
 	Inherits: LACE
@@ -858,12 +740,11 @@ LACE.AP:
 		Weapon: LaceratorShards.AP
 
 INTL:
-	Inherits: ^HoverVehicle
+	Inherits: ^LightHoverVehicle
+	Inherits: ^ScrinSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^ScrinLightsMedium
 	Inherits: ^PrioAntiInfantry
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -878,15 +759,8 @@ INTL:
 		Speed: 135
 		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
 		TurnSpeed: 16
-		Locomotor: lighthover
 	Health:
 		HP: 40000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: InterloperLaser
 		LocalOffset: 400,110,30, 400,-110,30
@@ -898,18 +772,11 @@ INTL:
 	Turreted:
 		TurnSpeed: 80
 	AutoTarget:
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5
 		LoadingCondition: notmobile
 		LoadedCondition: cargo
-	Hovers:
-		BobDistance: -25
-	WithShadow:
-		Offset: 43, 128, 0
-		ZOffset: -129
 	Capturable:
 		RequiresCondition: !being-warped && !cargo
 	Capturable@DRIVER_DEAD:
@@ -956,10 +823,12 @@ INTL.Teleport:
 
 CORR:
 	Inherits: ^FightingVehicle
+	Inherits: ^ScrinSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
+	WithSpriteBody@yes:
+		Sequence: yes
+		Name: yes
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -975,12 +844,6 @@ CORR:
 		TurnSpeed: 16
 	Health:
 		HP: 45000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament@PRIMARY:
 		Weapon: CorrupterSpew
 		LocalOffset: 750,0,0
@@ -990,19 +853,10 @@ CORR:
 	Explodes:
 		Weapon: BarrelExplode
 		EmptyWeapon: BarrelExplode
-	ProducibleWithLevel:
-		Prerequisites: vehicles.upgraded
 	WithMoveAnimation:
 		ValidMovementTypes: Horizontal, Vertical, Turn
 	WithAttackAnimation:
 		Sequence: shoot
-	#TODO
-	GrantConditionOnFaction@TRAVELERSPEED:
-		Condition: travelerspeed
-		Factions: traveler
-	SpeedMultiplier@TRAVELERSPEED:
-		RequiresCondition: travelerspeed
-		Modifier: 115
 
 CORR.Area:
 	Inherits: CORR
@@ -1049,19 +903,18 @@ CORR.Range:
 
 LCHR:
 	Inherits: ^Tank
+	Inherits: ^ScrinSprite
 	Inherits: ^LightArmor
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
 	Inherits: ^ScrinLightsMedium
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 900
 	Tooltip:
 		Name: Leecher
 	Buildable:
 		BuildPaletteOrder: 141
-		Prerequisites: radar, ~vehicles.harbinger
+		Prerequisites: radar, ~vehicles.harvester
 		Queue: Vehicle
 		Description: Medium-ranged anti-infantry/structure unit.\n  Regenerates health while dealing damage\n  Disables power plants and radars\n  Slows vehicles & cyborgs\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
@@ -1095,8 +948,6 @@ STCR:
 	Inherits: ^ScrinSprite
 	Inherits: ^ScrinLightsMedium
 	Inherits: ^PrioAntiLight
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -1110,8 +961,6 @@ STCR:
 	Mobile:
 		Speed: 71
 		TurnSpeed: 12
-	Hovers:
-		BobDistance: -35
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -1126,9 +975,6 @@ STCR:
 	AttackFrontal:
 		FacingTolerance: 80
 		PauseOnCondition: empdisable || being-warped
-	WithShadow:
-		Offset: 80, 80, 0
-		ZOffset: -81
 	ChangesHealth:
 		PercentageStep: 1
 		Delay: 10
@@ -1180,15 +1026,6 @@ DEVO:
 	Mobile:
 		TurnSpeed: 1000
 		Speed: 85
-		Locomotor: lighthover
-	Hovers:
-		BobDistance: -25
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: DevourerLaser
 		LocalOffset: 850,0,208
@@ -1240,15 +1077,14 @@ DEVO.heavy:
 
 DARK:
 	Inherits: ^HoverVehicle
+	Inherits: ^ScrinSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^ScrinLightsBig
 	Inherits: ^PrioAntiHeavy
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
-		Prerequisites: nerv, ~vehicles.harbinger, ~!commander_tree.darkener.chain, ~!commander_tree.darkener.disc
+		Prerequisites: nerv, ~vehicles.harvester, ~!commander_tree.darkener.chain, ~!commander_tree.darkener.disc
 		Description: Heavy hover tank with armed with rift cannon.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 		IconPalette: scrin
 	Valued:
@@ -1260,12 +1096,6 @@ DARK:
 	Mobile:
 		TurnSpeed: 16
 		Speed: 71
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: RiftCannon
 		LocalOffset: 835,0,350
@@ -1284,8 +1114,6 @@ DARK:
 		Sequence: idle
 	WithFacingSpriteBody:
 		Sequence: idle
-	Hovers:
-		BobDistance: -25
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1294,7 +1122,7 @@ DARK.chain:
 	Inherits: DARK
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: nerv, ~vehicles.harbinger, ~commander_tree.darkener.chain
+		Prerequisites: nerv, ~vehicles.harvester, ~commander_tree.darkener.chain
 		Description: Heavy hover tank with armed with rift cannon.\n  Rift beams chain to other targets.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 	Valued:
 		Cost: 1500
@@ -1306,7 +1134,7 @@ DARK.chain:
 DARK.disc:
 	Inherits: DARK
 	Buildable:
-		Prerequisites: nerv, ~vehicles.harbinger, ~commander_tree.darkener.disc
+		Prerequisites: nerv, ~vehicles.harvester, ~commander_tree.darkener.disc
 		Description: Heavy hover tank with armed with plasma disc cannon.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 		IconPalette: scrin
 	Valued:
@@ -1318,19 +1146,18 @@ DARK.disc:
 
 RUIN:
 	Inherits: ^FightingVehicle
-	Inherits: ^HoverVehicle
+	Inherits: ^LightHoverVehicle
+	Inherits: ^ScrinSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	Inherits: ^ScrinLightsMedium
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 800
 	Tooltip:
 		Name: Ruiner
 	Buildable:
 		BuildPaletteOrder: 150
-		Prerequisites: scrt, ~vehicles.harbinger, ~!commander_tree.ruiner.barrage
+		Prerequisites: scrt, ~vehicles.harvester, ~!commander_tree.ruiner.barrage
 		Queue: Vehicle
 		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
@@ -1363,8 +1190,6 @@ RUIN:
 	AutoTarget:
 	Explodes:
 		Weapon: BarrelExplode
-	Hovers:
-		BobDistance: -25
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
@@ -1390,7 +1215,7 @@ RUIN.barrage:
 		Name: Barrage Ruiner
 	Buildable:
 		BuildPaletteOrder: 150
-		Prerequisites: scrt, ~vehicles.harbinger, ~commander_tree.ruiner.barrage
+		Prerequisites: scrt, ~vehicles.harvester, ~commander_tree.ruiner.barrage
 		Queue: Vehicle
 		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
@@ -1674,6 +1499,49 @@ RPTP.acid.PLD:
 	Armament@pointdefense:
 		LocalOffset: 450,0,500
 
+Hexapod:
+	Inherits: ^Tank
+	Inherits: ^BigVehicle
+	Inherits: ^ScrinSpriteTS
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 195
+		Prerequisites: techcenter, ~vehicles.tpod, ~!commander_tree.tripod.chainer, ~!commander_tree.tripod.acid
+		Description: Heavy assault walker with long range disc attack.\n
+		IconPalette: chrome
+	Voiced:
+		VoiceSet: TripodVoice
+	Valued:
+		Cost: 5000
+	Tooltip:
+		Name: Hexapod Eradicator
+	Health:
+		HP: 150000
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 48
+		TurnSpeed: 1000
+	Voiced:
+		VoiceSet: DevastatorVoice
+	QuantizeFacingsFromSequence:
+		Sequence: stand
+	WithFacingSpriteBody:
+		Sequence: stand
+	WithMoveAnimation:
+		MoveSequence: run
+	WithAttackAnimation:
+		Sequence: shoot
+	AttackFrontal:
+		FacingTolerance: 64
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+	Armament@PRIMARY:
+		Weapon: HexapodDiscs
+		LocalOffset: 450,0,1000
+
 SMCV:
 	Inherits: ^ConstructionVehicle
 	Inherits: ^HoverVehicle
@@ -1719,8 +1587,6 @@ SMCV:
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
-	Hovers:
-		BobDistance: -25
 
 #
 # ---- Aircraft
@@ -3145,7 +3011,7 @@ SFAC:
 		Condition: factundeploy
 		Prerequisites: global-factundeploy
 	ProvidesPrerequisite@scrin:
-		Factions: scrin, reaper, traveler, harbinger
+		Factions: scrin, reaper, traveler, harvester
 		Prerequisite: structures.scrin
 	ProvidesPrerequisite@reaper:
 		Factions: reaper
@@ -3153,9 +3019,9 @@ SFAC:
 	ProvidesPrerequisite@traveler:
 		Factions: traveler
 		Prerequisite: structures.traveler
-	ProvidesPrerequisite@harbinger:
-		Factions: harbinger
-		Prerequisite: structures.harbinger
+	ProvidesPrerequisite@harvester:
+		Factions: harvester
+		Prerequisite: structures.harvester
 	WithBuildingPlacedAnimation:
 		RequiresCondition: !build-incomplete && !chrono-vortex
 	Power:
@@ -3454,7 +3320,7 @@ NERV:
 	ProvidesPrerequisite@radar:
 		Prerequisite: radar
 	ProvidesPrerequisite@scrinrad:
-		Factions: scrin, reaper, traveler, harbinger
+		Factions: scrin, reaper, traveler, harvester
 		Prerequisite: radar.scrin
 	ProvidesPrerequisite@buildingname:
 	InfiltrateForSupportPower@tec:
@@ -3489,7 +3355,7 @@ NERV:
 		Actor: BUZZ
 		OrderName: buzzerswarm
 		Icon: buzzpower
-		Prerequisites: structures.harbinger, !botplayer
+		Prerequisites: structures.harvester, !botplayer
 		ChargeInterval: 4500
 		LifeTime: -1
 		Name: Buzzer Swarm
@@ -3503,7 +3369,7 @@ NERV:
 		Actor: BUZZ.AI
 		OrderName: buzzerswarmai
 		Icon: buzzpower
-		Prerequisites: structures.harbinger, botplayer
+		Prerequisites: structures.harvester, botplayer
 		ChargeInterval: 6000
 		LifeTime: -1
 		Name: Buzzer Swarm (AI)
@@ -3650,7 +3516,7 @@ GRAV:
 	ProvidesPrerequisite@all:
 		Prerequisite: aircraft.all
 	ProvidesPrerequisite@scrin:
-		Factions: scrin, reaper, traveler, harbinger
+		Factions: scrin, reaper, traveler, harvester
 		Prerequisite: aircraft.scrin
 	ProvidesPrerequisite@reaper:
 		Factions: reaper
@@ -3658,9 +3524,9 @@ GRAV:
 	ProvidesPrerequisite@traveler:
 		Factions: traveler
 		Prerequisite: aircraft.traveler
-	ProvidesPrerequisite@harbinger:
-		Factions: harbinger
-		Prerequisite: aircraft.harbinger
+	ProvidesPrerequisite@harvester:
+		Factions: harvester
+		Prerequisite: aircraft.harvester
 	ProvidesPrerequisite@scrinstructure:
 		RequiresPrerequisites: structures.scrin
 		Prerequisite: aircraft.scrin
@@ -3671,8 +3537,8 @@ GRAV:
 		RequiresPrerequisites: structures.traveler
 		Prerequisite: aircraft.traveler
 	ProvidesPrerequisite@habringerstructure:
-		RequiresPrerequisites: structures.harbinger
-		Prerequisite: aircraft.harbinger
+		RequiresPrerequisites: structures.harvester
+		Prerequisite: aircraft.harvester
 	SupportPowerChargeBar:
 	Power:
 		Amount: -20
