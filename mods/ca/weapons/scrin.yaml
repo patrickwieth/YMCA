@@ -690,6 +690,25 @@ DevastatorRift:
 		ForceGround: false
 		ValidTargets: Ground, Water
 
+HexapodDiscs:
+	Inherits: PlasmaDiscs
+	Inherits: ^ShellArtillery
+	Range: 18c0
+	MinRange: 1c0
+	ReloadDelay: 90
+	Report: devastator-fire1.aud, devastator-fire2.aud, devastator-fire3.aud
+	Burst: 7
+	BurstDelays: 2
+	Projectile: BulletCA
+		Image: plasdisclg
+		Inaccuracy: 1c768
+		Speed: 200
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+
 EnervatorBolts:
 	Inherits: ^AntiGroundMissile
 	Inherits: ^EnergyAP
@@ -963,11 +982,14 @@ BastionZap:
 	Range: 9c0
 	StartBurstReport: stormcolumn-fire1.aud, stormcolumn-fire2.aud
 	Projectile: ElectricBolt
+	TrackTarget: True
+	Distortion: 10
+	DistortionAnimation: 10
 		Colors: 8A2BFFAA,B961FDAA,B5A3E8BB,6D4AD2AA,B289DCAA
 		Duration: 5
 		Angle: 90
 	Warhead@1Dam: SpreadDamage
-		Damage: 2000
+		Damage: 4000
 		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
 	Warhead@3Eff: CreateEffect
 		Explosions: 1, 3
@@ -980,11 +1002,18 @@ BastionZap:
 
 BastionZap.Arc1:
 	Inherits: BastionZap
+	Range: 5c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
 	Warhead@Arc: FireShrapnel
 		Weapon: BastionZap.Arc2
 
 BastionZap.Arc2:
 	Inherits: BastionZap
+	Range: 2c0
+	-Warhead@3Eff:
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
 	-Warhead@Arc:
 
 ShardLauncher:
