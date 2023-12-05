@@ -845,7 +845,7 @@ harv.scrin.destroyed:
 gunw:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.6
+		Scale: 0.5
 	idle: gunwalker
 		Facings: 8
 		Stride: 11
@@ -880,7 +880,7 @@ gunw.destroyed:
 seek:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.5
+		Scale: 0.4
 	idle: seeker
 		Facings: 32
 		UseClassicFacings: True
@@ -915,7 +915,7 @@ seek.destroyed:
 lace:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.5
+		Scale: 0.4
 	idle: lacerator
 		Facings: 32
 		UseClassicFacings: True
@@ -940,7 +940,12 @@ lace.ap:
 intl:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.5
+		Scale: 0.4
+	light-big: animated_light_scrin
+		Length: 8
+		Scale: 0.22
+		ZOffset: 0
+		Offset: 0,4
 	idle: interloper
 		Facings: 32
 		UseClassicFacings: True
@@ -966,11 +971,7 @@ intl.destroyed:
 corr:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.6
-	yes: qtnk
-		Start: 32
-		Facings: 8
-		Length: 8
+		Scale: 0.5
 	idle: corrupter
 		Facings: 8
 		Stride: 11
@@ -1009,7 +1010,7 @@ corr.destroyed:
 lchr:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.6
+		Scale: 0.5
 	idle: leecher
 		Facings: 32
 		UseClassicFacings: True
@@ -1027,7 +1028,7 @@ lchr.destroyed:
 stcr:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.5
+		Scale: 0.4
 	idle: stormcrawler
 		Facings: 32
 		UseClassicFacings: True
@@ -1078,7 +1079,7 @@ devo.destroyed:
 dark:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.5
+		Scale: 0.35
 	idle: darkener
 		Facings: 32
 		UseClassicFacings: True
@@ -1102,7 +1103,7 @@ dark.disc:
 ruin:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.5
+		Scale: 0.35
 	idle: ruiner
 		Facings: 32
 		UseClassicFacings: True
@@ -1266,7 +1267,7 @@ rptp.destroyed:
 hexapod:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 1
+		Scale: 0.5
 	stand: hexapod
 		Start: 72
 		Stride: 7
@@ -1279,8 +1280,8 @@ hexapod:
 		Start: 72
 		Length: 7
 		Facings: 8
-		Tick: 120
-	icon: smcvicon
+		Tick: 60
+	icon: hexapodicon
 
 smcv:
 	Inherits: ^VehicleOverlays
@@ -1334,14 +1335,6 @@ deva:
 		Facings: 32
 		UseClassicFacings: True
 	icon: devaicon
-
-deva.shards:
-	Inherits: deva
-	icon: devashardicon
-
-deva.rift:
-	Inherits: deva
-	icon: devabeamicon
 
 pac:
 	Inherits: ^VehicleOverlays
@@ -1405,7 +1398,7 @@ mshp:
 
 bastion:
 	Inherits: ^VehicleOverlays
-	idle: mshp
+	idle: bastion
 		Facings: 32
 		UseClassicFacings: True
 		ZOffset: 2049
@@ -1413,7 +1406,7 @@ bastion:
 		Length: *
 		Tick: 300
 		ZOffset: 2050
-	icon: mshpicon
+	icon: bastionicon
 
 #
 # ---- buildings
@@ -1466,6 +1459,7 @@ sfac:
 		Tick: 80
 		Offset: 0, -13
 	bib: bib2
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1474,20 +1468,21 @@ sfac:
 
 reac:
 	Inherits: ^StructureOverlays
-	idle: scrinreactor
+	idle: scrinpower
 		Start: 12
 		Length: 10
-		Tick: 240
+		Tick: 160
 		Scale: 1.0
-	damaged-idle: scrinreactor
+	damaged-idle: scrinpower
 		Start: 12
 		Length: 10
 		Tick: 90
 		Scale: 1.0
-	make: scrinreactor
+	make: scrinpower
 		Length: 10
 		Scale: 1.0
 	bib: bib3
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1496,17 +1491,20 @@ reac:
 
 proc.scrin:
 	Inherits: ^StructureOverlays
-	Inherits: ^OldScrin
-	idle: procscrin
-		Offset: -2,0
-	damaged-idle: procscrin
-		Start: 1
-		Offset: -2,0
-	make: procscrinmake
-		Length: *
-		Tick: 80
-		Offset: -2,0
+	Defaults:
+		Scale: 0.8
+	idle: scrinrefinery
+		Start: 12
+		Length: 10
+		Tick: 160
+	damaged-idle: scrinrefinery
+		Start: 12
+		Length: 10
+		Tick: 90
+	make: scrinrefinery
+		Length: 10
 	bib: bib2
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1515,20 +1513,20 @@ proc.scrin:
 
 port:
 	Inherits: ^StructureOverlays
+	Defaults:
+		Scale: 0.8
 	idle: portal
 		Start: 12
 		Length: 10
 		Tick: 160
-		Scale: 1.0
 	damaged-idle: portal
 		Start: 12
 		Length: 10
 		Tick: 90
-		Scale: 1.0
 	make: portal
 		Length: 10
-		Scale: 1.0
 	bib: bib3
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1537,20 +1535,21 @@ port:
 
 wsph:
 	Inherits: ^StructureOverlays
-	idle: wsph
+	Defaults:
+		Scale: 0.8
+	idle: scringate
+		Start: 12
+		Length: 10
+		Tick: 160
+	damaged-idle: scringate
+		Start: 12
+		Length: 10
+		Tick: 90
 		ZOffset: -512
-	idle-overlay: wsph
-		Start: 2
-		Length: 13
-		BlendMode: Additive
-		ZOffset: -256
-	damaged-idle: wsph
-		Start: 1
-		ZOffset: -512
-	make: wsphmake
-		Length: *
-		Tick: 80
+	make: scringate
+		Length: 10
 	bib: bib2
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1583,6 +1582,7 @@ grav:
 		Length: *
 		Tick: 80
 	bib: bib2
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1591,13 +1591,16 @@ grav:
 
 nerv:
 	Inherits: ^StructureOverlays
-	Inherits: ^OldScrin
 	idle: nerv
+		Start: 12
+		Length: 10
+		Tick: 160
 	damaged-idle: nerv
-		Start: 1
+		Start: 12
+		Length: 10
+		Tick: 90
 	make: nervmake
-		Length: *
-		Tick: 80
+		Length: 10
 	bib: bib3
 		Length: *
 		UseTilesetExtension: true
@@ -1607,30 +1610,33 @@ nerv:
 
 srep:
 	Inherits: ^StructureOverlays
-	Inherits: ^OldScrin
-	idle: srep
-		Offset: 0,4
-		ZOffset: -1c511
-	damaged-idle: srep
-		Start: 10
-		Offset: 0,4
-		ZOffset: -1c511
-	active: srep
+	Defaults:
+		Scale: 1.2
+	idle: scrinrepair
+		Start: 12
 		Length: 10
-		Offset: 0,4
-		Tick: 80
+		Tick: 160
 		ZOffset: -1c511
-	damaged-active: srep
+	damaged-idle: scrinrepair
+		Start: 12
 		Length: 10
-		Start: 10
-		Offset: 0,4
-		Tick: 80
+		Tick: 90
 		ZOffset: -1c511
-	make: srepmake
-		Length: *
-		Offset: 0,4
-		Tick: 80
+	active: scrinrepair
+		Start: 12
+		Length: 10
+		Tick: 50
+		ZOffset: -1c511
+	damaged-active: scrinrepair
+		Start: 12
+		Length: 10
+		Tick: 50
+		ZOffset: -1c511
+	make: scrinrepair
+		Length: 10
+		ZOffset: -1c511
 	bib: mbFIX
+		Scale: 1
 		Length: *
 		ZOffset: -1c511
 		Offset: 0,-4
@@ -1641,17 +1647,18 @@ srep:
 
 rea2:
 	Inherits: ^StructureOverlays
-	Inherits: ^OldScrin
-	idle: rea2
-		Offset: 2,0
-	damaged-idle: rea2
-		Start: 1
-		Offset: 2,0
-	make: rea2make
-		Length: *
-		Offset: 2,0
-		Tick: 80
+	idle: scrinpower2
+		Start: 12
+		Length: 10
+		Tick: 160
+	damaged-idle: scrinpower2
+		Start: 12
+		Length: 10
+		Tick: 90
+	make: scrinpower2
+		Length: 10
 	bib: bib2
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1671,6 +1678,7 @@ scrt:
 		Offset: 3,0
 		Tick: 80
 	bib: bib3
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1679,23 +1687,29 @@ scrt:
 
 silo.scrin:
 	Inherits: ^StructureOverlays
-	Inherits: ^OldScrin
-	idle: siloscrin
+	idle: scrinsilo
+		Start: 12
+		Length: 10
+		Tick: 160
+		Scale: 1.0
+	damaged-idle: scrinsilo
+		Start: 12
+		Length: 10
+		Tick: 90
+		Scale: 1.0
+	stages: scrinsilotop
+		Length: 22
 		Offset: 0,-1
-	damaged-idle: siloscrin
+		Scale: 1.0
+	damaged-stages: scrinsilotop
+		Length: 22
 		Offset: 0,-1
-		Start: 5
-	stages: siloscrin
-		Length: 5
-		Offset: 0,-1
-	damaged-stages: siloscrin
-		Start: 5
-		Length: 5
-		Offset: 0,-1
-	make: siloscrinmake
+		Scale: 1.0
+	make: scrinsilo
 		Length: *
 		Offset: 0,-1
 	bib: mbSILO
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1710,6 +1724,7 @@ sign:
 	damaged-idle: sign
 		Start: 1
 	bib: bib2
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1726,6 +1741,7 @@ mani:
 	damaged-idle: mani
 		Start: 1
 	bib: bib3
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1754,6 +1770,7 @@ rift:
 		ZOffset: 511
 		Offset: 0,-30
 	bib: mbIRON
+		Scale: 1
 		Length: *
 		Offset: 0,2
 		UseTilesetExtension: true
@@ -1764,24 +1781,30 @@ rift:
 
 ptur:
 	Inherits: ^StructureOverlays
-	Inherits: ^OldScrin
-	idle: ptur
+	Defaults:
+		Scale: 0.5
+	idle: scrinturret
+		Start: 15
+		Tick: 160
+	make: scrinturret
+		Length: 10
+	damaged-idle: scrinturret
+		Start: 12
+		Tick: 90
+	turret: scrinturrettop
 		Facings: 32
 		UseClassicFacings: True
-		Offset: 1,-6
-	make: pturmake
-		Length: *
-		Offset: 1,-6
-	damaged-idle: ptur
-		Start: 32
+		Scale: 0.4
+	damaged-turret: scrinturrettop
 		Facings: 32
 		UseClassicFacings: True
-		Offset: 1,-6
+		Scale: 0.4
 	muzzle: scrinmuzz1
 		Length: 4
 		Facings: 8
 		Tick: 80
 	bib: mbGUN
+		Scale: 1
 		Length: *
 		Offset: -1,-1
 		UseTilesetExtension: true
@@ -1791,20 +1814,26 @@ ptur:
 
 shar:
 	Inherits: ^StructureOverlays
-	Inherits: ^OldScrin
-	idle: shar
+	Defaults:
+		Scale: 0.5
+	idle: scrinturret2
+		Start: 15
+		Tick: 160
+	make: scrinturret2
+		Length: 10
+	damaged-idle: scrinturret2
+		Start: 12
+		Tick: 90
+	turret: scrinturret2top
 		Facings: 32
 		UseClassicFacings: True
-		Offset: 1,-11
-	make: sharmake
-		Length: *
-		Offset: 1,-11
-	damaged-idle: shar
-		Start: 32
+		Scale: 0.4
+	damaged-turret: scrinturret2top
 		Facings: 32
 		UseClassicFacings: True
-		Offset: 1,-11
+		Scale: 0.4
 	bib: mbTSLA
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -1825,6 +1854,7 @@ scol:
 		Length: *
 		Offset: 0,-12
 	bib: mbTSLA
+		Scale: 1
 		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:

@@ -512,7 +512,7 @@ HARV.Scrin:
 		BuildPaletteOrder: 10
 		Prerequisites: ~proc.scrin, ~vehicles.scrin
 		Queue: Vehicle
-		IconPalette: chrometd
+		IconPalette: chrome
 		Description: Collects Tiberium, Ore and Gems for processing.\n  Unarmed
 	SpawnActorOnDeath:
 		Actor: HARV.Scrin.Husk
@@ -668,8 +668,8 @@ SEEK.Reflector:
 
 LACE:
 	Inherits: ^FightingVehicle
-	Inherits: ^ScrinSprite
 	Inherits: ^LightHoverVehicle
+	Inherits: ^ScrinSpriteTS
 	Inherits: ^BiologicalDriver
 	Inherits: ^ScrinLightsMedium
 	Inherits: ^PrioAntiHeavy
@@ -742,8 +742,8 @@ LACE.AP:
 INTL:
 	Inherits: ^LightHoverVehicle
 	Inherits: ^ScrinSprite
-	Inherits: ^BiologicalDriver
 	Inherits: ^ScrinLightsMedium
+	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiInfantry
 	Valued:
 		Cost: 700
@@ -823,12 +823,9 @@ INTL.Teleport:
 
 CORR:
 	Inherits: ^FightingVehicle
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteTD
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
-	WithSpriteBody@yes:
-		Sequence: yes
-		Name: yes
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -1114,9 +1111,6 @@ DARK:
 		Sequence: idle
 	WithFacingSpriteBody:
 		Sequence: idle
-	WithShadow:
-		Offset: 43, 128, 0
-		ZOffset: -129
 
 DARK.chain:
 	Inherits: DARK
@@ -1190,9 +1184,6 @@ RUIN:
 	AutoTarget:
 	Explodes:
 		Weapon: BarrelExplode
-	WithShadow:
-		Offset: 43, 128, 0
-		ZOffset: -129
 	TurretedFloating:
 		TurnSpeed: 64
 		Offset: 0,0,0
@@ -1254,9 +1245,6 @@ ATMZ:
 		TurnSpeed: 32
 	Hovers:
 		BobDistance: -25
-	WithShadow:
-		Offset: 43, 128, 0
-		ZOffset: -129
 	Armament:
 		Weapon: AtomizerBolts
 		LocalOffset: 350,0,450
@@ -1503,14 +1491,15 @@ Hexapod:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
 	Inherits: ^ScrinSpriteTS
+	Inherits: ^HighResWalkerShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
-		Prerequisites: techcenter, ~vehicles.tpod, ~!commander_tree.tripod.chainer, ~!commander_tree.tripod.acid
+		Prerequisites: techcenter, ~commander_tree.hexapod
 		Description: Heavy assault walker with long range disc attack.\n
-		IconPalette: chrome
+		IconPalette: chrometd
 	Voiced:
 		VoiceSet: TripodVoice
 	Valued:
@@ -1521,7 +1510,7 @@ Hexapod:
 		HP: 150000
 	Mobile:
 		Locomotor: sheavytracked
-		Speed: 48
+		Speed: 42
 		TurnSpeed: 1000
 	Voiced:
 		VoiceSet: DevastatorVoice
@@ -1540,7 +1529,7 @@ Hexapod:
 		PauseOnCondition: empdisable || being-warped
 	Armament@PRIMARY:
 		Weapon: HexapodDiscs
-		LocalOffset: 450,0,1000
+		LocalOffset: 900,0,200
 
 SMCV:
 	Inherits: ^ConstructionVehicle
@@ -1923,6 +1912,8 @@ DEVA:
 	Inherits: ^HeavyArmor
 	Inherits: ^PrioArtillery
 	Inherits: ^BiologicalPilot
+	RenderSprites:
+		Image: deva
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -1974,6 +1965,8 @@ DEVA:
 DEVA.Shards:
 	Inherits: DEVA
 	Inherits: ^PrioAntiHeavy
+	WithProductionIconOverlay@Missile:
+		Types: Missile
 	Buildable:
 		Prerequisites: scrt, grav, ~aircraft.scrin, ~commander_tree.devastator.shard
 		Description: Long-range anti-tank warship.\n  Strong vs Tanks\n  Weak vs Aircraft
@@ -1988,6 +1981,8 @@ DEVA.Shards:
 DEVA.Rift:
 	Inherits: DEVA
 	Inherits: ^PrioEnergyAntiHeavy
+	WithProductionIconOverlay@Ion:
+		Types: Ion
 	Buildable:
 		Prerequisites: scrt, grav, ~aircraft.scrin, ~commander_tree.devastator.beam
 		Description: Long-range anti-tank warship.\n  Strong vs masses of units\n  Weak vs Aircraft
@@ -2396,10 +2391,9 @@ MSHP:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 190
-		Prerequisites: sign, scrt, ~aircraft.scrin
+		Prerequisites: sign, scrt, ~aircraft.scrin, ~commander_tree.mothership
 		Description: Huge craft with powerful beam weapon.\n  Can create wormholes.\n  Maximum 1 can be built.\n  Strong vs Buildings, Defenses\n  Weak vs Aircraft
 		IconPalette: scrin
-		BuildLimit: 1
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
 	Voiced:
@@ -2524,14 +2518,13 @@ Bastion:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 190
-		Prerequisites: sign, scrt, ~aircraft.scrin
+		Prerequisites: sign, scrt, ~aircraft.scrin, ~commander_tree.bastion
 		Description: Defense platform for Scrin zapping incoming invaders.\n  Maximum 1 can be built.\n
-		IconPalette: scrin
-		BuildLimit: 1
+		IconPalette: chrometd
 	Voiced:
 		VoiceSet: MothershipVoice
 	Valued:
-		Cost: 5000
+		Cost: 6000
 	Tooltip:
 		Name: Bastion
 	Health:
@@ -2568,6 +2561,7 @@ Bastion:
 		PauseOnCondition: being-warped
 		ForceFireIgnoresActors: true
 	-EjectOnDeath:
+	-WithFacingSpriteBody:
 	WithIdleOverlay@RING:
 		Image: bastion
 		Sequence: ring
@@ -2653,6 +2647,9 @@ INTL.Husk:
 	RenderSprites:
 		Image: intl.destroyed
 		PlayerPalette: overlayplayerscrin
+	WithShadow:
+		Offset: 43, 128, 0
+		ZOffset: -129
 
 CORR.Husk:
 	Inherits: ^Husk
@@ -3011,7 +3008,6 @@ SFAC:
 		Condition: factundeploy
 		Prerequisites: global-factundeploy
 	ProvidesPrerequisite@scrin:
-		Factions: scrin, reaper, traveler, harvester
 		Prerequisite: structures.scrin
 	ProvidesPrerequisite@reaper:
 		Factions: reaper
@@ -3081,9 +3077,10 @@ REAC:
 
 REA2:
 	Inherits: ^ScrinBuilding
-	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^3x2Shape
-	Inherits@POWERDRAIN: ^PowerDrainable
+	Inherits: ^ScrinSprite
+	Inherits: ^DisabledByPowerOutage
+	Inherits: ^3x2Shape
+	Inherits: ^PowerDrainable
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	WithSpriteBody:
@@ -3122,6 +3119,7 @@ REA2:
 PROC.SCRIN:
 	Inherits: ^ScrinBuilding
 	Inherits@shape: ^3x3Shape
+	Inherits: ^ScrinSprite
 	Inherits@2: ^BotIncome
 	Inherits@Refinery: ^Refinery
 	HitShape:
@@ -3270,11 +3268,10 @@ WSPH:
 	InfiltrateForSupportPower@veh:
 		Types: SabInfiltrate
 		Proxy: veh.scrin.stolen
-	WithIdleOverlay:
-		RequiresCondition: !build-incomplete
 
 NERV:
 	Inherits: ^ScrinBuilding
+	Inherits: ^ScrinSprite
 	Inherits: ^TechLevelBuilding
 	Inherits@shape: ^2x2Shape
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
@@ -3608,6 +3605,7 @@ SIGN:
 
 SREP:
 	Inherits: ^ScrinBuilding
+	Inherits: ^ScrinSprite
 	Inherits@shape: ^3x3Shape
 	HitShape:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
@@ -3662,6 +3660,7 @@ SREP:
 
 SILO.SCRIN:
 	Inherits: ^ScrinBuilding
+	Inherits: ^ScrinSprite
 	Valued:
 		Cost: 150
 	Tooltip:
@@ -3856,9 +3855,8 @@ RIFT:
 
 PTUR:
 	Inherits: ^Defense
-	Inherits@AUTOTARGET: ^AutoTargetGround
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
+	Inherits: ^ScrinSpriteTS
+	Inherits: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
@@ -3884,9 +3882,8 @@ PTUR:
 		TurnSpeed: 48
 		InitialFacing: 48
 		PauseOnCondition: empdisable || being-warped
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
-		PauseOnCondition: empdisable || being-warped
+	WithSpriteBody:
+	WithSpriteTurret:
 	Armament:
 		Weapon: PlasmaTurretGun
 		LocalOffset: 450,70,500, 450,-70,500
@@ -3907,10 +3904,9 @@ PTUR:
 
 SHAR:
 	Inherits: ^Defense
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
-	Inherits@AUTOTARGET: ^AutoTargetAir
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
+	Inherits: ^ScrinSpriteTS
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetAir
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
@@ -3934,8 +3930,8 @@ SHAR:
 	Turreted:
 		TurnSpeed: 60
 		InitialFacing: 48
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
+	WithSpriteBody:
+	WithSpriteTurret:
 		PauseOnCondition: disabled || empdisable || being-warped
 	Armament@PRIMARY:
 		Weapon: ShardLauncher
