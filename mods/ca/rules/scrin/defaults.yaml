@@ -116,11 +116,13 @@
 		Image: prop_light_effect_scrin
 		Sequence: light-medium
 		Palette: tseffect-ignore-lighting-alpha40
+		IgnoreHover: true
 	WithIdleOverlay@DamagedDecorationLights:
 		RequiresCondition: damaged
 		Image: prop_light_effect_scrin
 		Sequence: damaged-light-medium
 		Palette: tseffect-ignore-lighting-alpha30
+		IgnoreHover: true
 
 ^ScrinLightsBig:
 	WithIdleOverlay@DecorationLights:
@@ -128,8 +130,36 @@
 		Image: prop_light_effect_scrin
 		Sequence: light-big
 		Palette: tseffect-ignore-lighting-alpha40
+		IgnoreHover: true
 	WithIdleOverlay@DamagedDecorationLights:
 		RequiresCondition: damaged
 		Image: prop_light_effect_scrin
 		Sequence: damaged-light-big
 		Palette: tseffect-ignore-lighting-alpha30
+		IgnoreHover: true
+
+^ScrinShielded:
+	Shielded:
+		MaxStrength: 50000
+		RegenDelay: 100
+		RegenAmount: 100
+		RegenInterval: 4
+		ShieldsUpCondition: shields-up
+		RequiresCondition: shielded && !empdisable
+		SelectionBarColor: 4488ff
+	WithModifiedPalette@shieldhit:
+		Palette: shieldhit
+		RequiresCondition: weaponhit && shields-up
+	ExternalCondition@weaponhit:
+		Condition: weaponhit
+	WithIdleOverlay@NSHIELD:
+		Sequence: idle
+		Image: nshield-overlay
+		Palette: effect
+		RequiresCondition: weaponhit && shields-up
+
+^ScrinSmallShielded:
+	Inherits: ^ScrinShielded
+	Shielded:
+		MaxStrength: 25000
+		RegenAmount: 50

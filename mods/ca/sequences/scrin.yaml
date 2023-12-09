@@ -348,7 +348,7 @@ s4:
 s6:
 	Inherits: ^ScrinCommonDeaths
 	Defaults:
-		Scale: 0.6
+		Scale: 0.5
 	stand: assimilator
 		Stride: 9
 		Facings: 8
@@ -621,66 +621,6 @@ feed:
 		Tick: 80
 	icon: s2icon
 
-smedi:
-	Inherits: ^ScrinCommonDeaths
-	Inherits: ^OldScrin
-	stand: smedi
-		Facings: 8
-	stand2: smedi
-		Facings: 8
-	heal: smedi
-		Start: 40
-		Length: 4
-		Facings: 8
-	run: smedi
-		Start: 8
-		Length: 4
-		Facings: 8
-		Tick: 120
-	idle1: smedi
-		Length: 1
-		Tick: 120
-	idle2: smedi
-		Start: 2
-		Length: 1
-		Tick: 120
-	idle3: smedi
-		Start: 3
-		Length: 1
-		Tick: 120
-	idle4: smedi
-		Start: 4
-		Length: 1
-		Tick: 120
-	die1: smedi
-		Start: 72
-		Length: 8
-		Tick: 80
-	die2: smedi
-		Start: 80
-		Length: 8
-		Tick: 80
-	die3: smedi
-		Start: 88
-		Length: 8
-		Tick: 80
-	die4: smedi
-		Start: 88
-		Length: 8
-		Tick: 80
-	die7: smedi
-		Start: 72
-		Length: 8
-		Tick: 80
-	chrono-overlay: chronofade_small
-		Length: *
-		BlendMode: Additive
-		Offset: 0, 0
-		UseTilesetCode: false
-		ZOffset: 512
-		Tick: 80
-	icon: smediicon
-
 gscr:
 	Inherits: ^ScrinCommonDeaths
 	Inherits: ^OldScrin
@@ -870,10 +810,6 @@ gunw:
 		Tick: 80
 	icon: gunwicon
 
-gunw.sensor:
-	Inherits: gunw
-	icon: gunwsensoricon
-
 gunw.destroyed:
 	Inherits: ^VehicleOverlays
 	idle: gunwalker
@@ -893,14 +829,6 @@ seek:
 		Facings: 32
 		UseClassicFacings: True
 	icon: seekicon
-
-seek.pld:
-	Inherits: seek
-	icon: seekpldicon
-
-seek.reflector:
-	Inherits: seek
-	icon: seekreflectoricon
 
 seek.destroyed:
 	Inherits: ^VehicleOverlays
@@ -929,41 +857,16 @@ lace:
 		UseClassicFacings: True
 	icon: laceicon
 
-lace.reflector:
-	Inherits: lace
-	icon: lacereflectoricon
-
-lace.pld:
-	Inherits: lace
-	icon: lacepldicon
-
-lace.ap:
-	Inherits: lace
-	icon: laceapicon
-
 intl:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.4
-	light-big: animated_light_scrin
-		Length: 8
-		Scale: 0.22
-		ZOffset: 0
-		Offset: 0,4
+		Scale: 0.36
 	idle: interloper
 		Facings: 32
 		UseClassicFacings: True
 	muzzle: scrinmuzz3
 		Length: 2
 	icon: intlicon
-
-intl.aa:
-	Inherits: intl
-	icon: intlaaicon
-
-intl.teleport:
-	Inherits: intl
-	icon: intlteleporticon
 
 intl.destroyed:
 	Inherits: ^VehicleOverlays
@@ -992,14 +895,6 @@ corr:
 		Tick: 60
 		UseClassicFacings: False
 	icon: corricon
-
-corr.area:
-	Inherits: corr
-	icon: corrareaicon
-
-corr.range:
-	Inherits: corr
-	icon: corrrangeicon
 
 corr.destroyed:
 	Inherits: ^VehicleOverlays
@@ -1040,18 +935,10 @@ stcr:
 		Length: 2
 	icon: stcricon
 
-stcr.pld:
-	Inherits: stcr
-	icon: stcrpldicon
-
-stcr.reflector:
-	Inherits: stcr
-	icon: stcrreflectoricon
-
 devo:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.68
+		Scale: 0.36
 	idle: devourer
 		Facings: 32
 		UseClassicFacings: True
@@ -1063,18 +950,10 @@ devo:
 		Length: 5
 	icon: devoicon
 
-devo.acid:
-	Inherits: devo
-	icon: devoacidicon
-
-devo.heavy:
-	Inherits: devo
-	icon: devoheavyicon
-
 devo.destroyed:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.68
+		Scale: 0.5
 	idle: devourer
 		Facings: 32
 		UseClassicFacings: True
@@ -1096,14 +975,6 @@ dark:
 		BlendMode: Subtractive
 	icon: darkicon
 
-dark.chain:
-	Inherits: dark
-	icon: darkenerchainicon
-
-dark.disc:
-	Inherits: dark
-	icon: darkenerdiscicon
-
 ruin:
 	Inherits: ^VehicleOverlays
 	Defaults:
@@ -1117,10 +988,6 @@ ruin:
 	muzzle: scrinmuzz3
 		Length: 5
 	icon: ruinicon
-
-ruin.barrage:
-	Inherits: ruin
-	icon: ruinbarrageicon
 
 ruin.destroyed:
 	Inherits: ^VehicleOverlays
@@ -1146,52 +1013,33 @@ atmz:
 tpod:
 	Inherits: ^VehicleOverlays
 	Defaults:
-		Scale: 0.35
-	idle: tripodbase
-		Facings: 8
-		Stride: 19
-	turret: tripodtur
-		Facings: 32
-		UseClassicFacings: True
-	move: tripodbase
-		Facings: 8
-		Length: 19
+		Scale: 1.0
+	idle: lighttripod
+		Facings: -8
+		Start: 192
+		ShadowStart: 519
+		Offset: 0, 10
+	move: lighttripod
+		Facings: -8
+		Length: 24
+		Tick: 40
+		ShadowStart: 327
+		Offset: 0, 10
+	shoot: lighttripod
+		Start: 200
+		Facings: -8
+		Length: 5
 		Tick: 60
+		ShadowStart: 527
+		Offset: 0, 10
+	die: lighttripod
+		Start: 240
+		Length: 48
+		ShadowStart: 567
+		Offset: 0, 10
 	muzzle: scrinmuzz2
 		Length: 5
 	icon: tpodicon
-
-tpod.chain:
-	Inherits: tpod
-	icon: tpodchainericon
-
-tpod.chain.reflector:
-	Inherits: tpod
-	icon: tpodchainerreflectoricon
-
-tpod.chain.pld:
-	Inherits: tpod
-	icon: tpodchainerpldicon
-
-tpod.acid:
-	Inherits: tpod
-	icon: tpodacidicon
-
-tpod.acid.reflector:
-	Inherits: tpod
-	icon: tpodacidreflectoricon
-
-tpod.acid.pld:
-	Inherits: tpod
-	icon: tpodacidpldicon
-
-tpod.pld:
-	Inherits: tpod
-	icon: tpodpldicon
-
-tpod.pld.reflector:
-	Inherits: tpod
-	icon: tpodpldreflectoricon
 
 tpod.destroyed:
 	Inherits: ^VehicleOverlays
@@ -1208,54 +1056,21 @@ tpod.destroyed:
 
 rptp:
 	Inherits: ^VehicleOverlays
-	Inherits: ^OldScrin
-	idle: tpod
-		Facings: 1
-		Start: 32
-	turret: rptp
+	Defaults:
+		Scale: 0.35
+	idle: tripodbase
+		Facings: 8
+		Stride: 19
+	turret: tripodtur
 		Facings: 32
 		UseClassicFacings: True
-		Offset: 0,-25
-	move: tpod
-		Start: 33
+	move: tripodbase
 		Facings: 8
-		Length: 14
+		Length: 19
 		Tick: 60
 	muzzle: scrinmuzz3
 		Length: 5
 	icon: rptpicon
-
-rptp.range:
-	Inherits: rptp
-	icon: rptprangeicon
-
-rptp.range.reflector:
-	Inherits: rptp
-	icon: rptprangereflectoricon
-
-rptp.range.pld:
-	Inherits: rptp
-	icon: rptprangepldicon
-
-rptp.acid:
-	Inherits: rptp
-	icon: rptpacidicon
-
-rptp.acid.reflector:
-	Inherits: rptp
-	icon: rptpacidreflectoricon
-
-rptp.acid.pld:
-	Inherits: rptp
-	icon: rptpacidpldicon
-
-rptp.pld:
-	Inherits: rptp
-	icon: rptppldicon
-
-rptp.pld.reflector:
-	Inherits: rptp
-	icon: rptppldreflectoricon
 
 rptp.destroyed:
 	Inherits: ^VehicleOverlays
@@ -1276,15 +1091,18 @@ hexapod:
 		Start: 72
 		Stride: 7
 		Facings: 8
+		Offset: 0, -10
 	run: hexapod
 		Facings: 8
 		Length: 9
 		Tick: 120
+		Offset: 0, -10
 	shoot: hexapod
 		Start: 72
 		Length: 7
 		Facings: 8
 		Tick: 60
+		Offset: 0, -10
 	icon: hexapodicon
 
 smcv:
@@ -1310,18 +1128,6 @@ stmr:
 		Facings: 32
 		UseClassicFacings: True
 	icon: stmricon
-
-stmr.hunter:
-	Inherits: stmr
-	icon: stormhuntericon
-
-stmr.bomber:
-	Inherits: stmr
-	icon: stormbombericon
-
-stmr.torp:
-	Inherits: stmr
-	icon: stormridertorpicon
 
 enrv:
 	Inherits: ^VehicleOverlays
@@ -1355,18 +1161,6 @@ pac:
 		UseClassicFacings: True
 	icon: pacicon
 
-pac.laser:
-	Inherits: pac
-	icon: pacwarshipicon
-
-pac.support:
-	Inherits: pac
-	icon: pacsupporticon
-
-pac.suicide:
-	Inherits: pac
-	icon: pacsuicideicon
-
 inva:
 	Inherits: ^VehicleOverlays
 	Defaults:
@@ -1375,12 +1169,6 @@ inva:
 		Facings: 32
 		UseClassicFacings: True
 	icon: wipicon
-
-inva.suicide:
-	Inherits: inva
-
-inva.support:
-	Inherits: inva
 
 mshp:
 	Inherits: ^VehicleOverlays
@@ -1541,16 +1329,16 @@ wsph:
 	Inherits: ^StructureOverlays
 	Defaults:
 		Scale: 0.8
-	idle: scringate
+	idle: warpsphere
 		Start: 12
 		Length: 10
 		Tick: 160
-	damaged-idle: scringate
+	damaged-idle: warpsphere
 		Start: 12
 		Length: 10
 		Tick: 90
 		ZOffset: -512
-	make: scringate
+	make: warpsphere
 		Length: 10
 	bib: bib2
 		Scale: 1
@@ -1603,7 +1391,7 @@ nerv:
 		Start: 12
 		Length: 10
 		Tick: 90
-	make: nervmake
+	make: nerv
 		Length: 10
 	bib: bib3
 		Length: *
