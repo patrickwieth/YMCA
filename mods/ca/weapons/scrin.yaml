@@ -3,10 +3,17 @@ WarriorGun:
 	Report: warrior-fire1.aud
 
 BuzzerShards:
-	Inherits: M1Carbine
-	ReloadDelay: 15
-	Report: warrior-fire1.aud
-	Range: 2c0
+	Inherits: ^Bullet
+	ReloadDelay: 60
+	Report: squishy2.aud
+	Range: 1c512
+	Projectile: InstantHit
+	InvalidTargets: Structure
+	Warhead@1Dam: SpreadDamage
+		Spread: 128
+		Damage: 5000
+		DamageTypes: DefaultDeath
+		InvalidTargets: Structure
 
 DisintegratorBeam:
 	Inherits: Laser
@@ -1523,6 +1530,7 @@ ScrinDiskGrenade:
 		Inaccuracy: 0
 		Image: plasdiscsm
 		BounceCount: 2
+		BounceRangeModifier: 20
 	Warhead@1Dam: SpreadDamage
 		Spread: 255
 		Damage: 4500

@@ -43,7 +43,7 @@ S2:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 35
-		Prerequisites: nerv, ~infantry.traveler
+		Prerequisites: nerv, ~infantry.traveler, ~disabled
 		Description: Fast assault infantry.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
 		IconPalette: scrin
 	Valued:
@@ -408,7 +408,7 @@ S8:
 		BuildPaletteOrder: 10
 		Prerequisites: ~infantry.reaper
 		Description: General-purpose scouting infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
-		IconPalette: chrome
+		IconPalette: chrometd
 	Valued:
 		Cost: 400
 	Tooltip:
@@ -576,7 +576,7 @@ SEEK:
 		Range: 4c0
 	Turreted:
 		TurnSpeed: 48
-		Offset: -280,0,0
+		Offset: 0,0,0
 	Armament@PRIMARY:
 		Weapon: PlasmaDiscs
 		LocalOffset: 320,0,320
@@ -934,15 +934,9 @@ STCR:
 		TurnSpeed: 12
 	Health:
 		HP: 60000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 6c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: StormcrawlerZap
-		LocalOffset: 0,0,350, -250,0,350, 250,0,350
+		LocalOffset: 500,0,350, 500,-100,350, 500,100,350
 	AttackFrontal:
 		FacingTolerance: 80
 		PauseOnCondition: empdisable || being-warped
@@ -1150,43 +1144,20 @@ RUIN:
 		IconPalette: chrome
 	Mobile:
 		Speed: 80
-		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead
-		TurnSpeed: 1000
-		Locomotor: lighthover
 	Health:
 		HP: 15000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
 	Armament:
 		Weapon: RuinerCannon
 		LocalOffset: 650,0,600
 		MuzzleSequence: muzzle
 		MuzzlePalette: scrin
-	GrantConditionOnAttack:
-		Condition: attacking
-		RevokeDelay: 160
-		RevokeAll: false
-	SpeedMultiplier@IRAQTANK:
-		Modifier: 50
-		RequiresCondition: attacking
+	AttackFrontal:
+		FacingTolerance: 40
+		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	AutoTarget:
 	Explodes:
 		Weapon: BarrelExplode
-	TurretedFloating:
-		TurnSpeed: 64
-		Offset: 0,0,0
-	AttackTurreted:
-		ForceFireIgnoresActors: True
-		TargetFrozenActors: True
-		PauseOnCondition: empdisable || being-warped
-		Armaments: primary
-	WithSpriteTurret:
-	QuantizeFacingsFromSequence:
 		Sequence: idle
 	WithFacingSpriteBody:
 		Sequence: idle
@@ -2209,7 +2180,7 @@ INVA:
 	Tooltip:
 		Name: Invader
 	Health:
-		HP: 5000
+		HP: 4000
 	RevealsShroud:
 		Range: 2c0
 		MinRange: 1c0
@@ -2423,7 +2394,7 @@ MSHP:
 	Health:
 		HP: 500000
 	RevealsShroud:
-		Range: 20c0
+		Range: 16c0
 		MinRange: 12c0
 		Type: GroundPosition
 		RevealGeneratedShroud: False
@@ -2510,7 +2481,7 @@ MSHP:
 		AmmoCondition: ammo
 		Armaments: primary
 	ReloadAmmoPoolCA@CHARGE:
-		Delay: 150
+		Delay: 50
 		Count: 100
 		RequiresCondition: charging && !attacking
 		Sound: mshp-fire1.aud
@@ -2548,7 +2519,7 @@ Bastion:
 	Health:
 		HP: 200000
 	RevealsShroud:
-		Range: 10c0
+		Range: 12c0
 		MinRange: 8c0
 		Type: GroundPosition
 		RevealGeneratedShroud: False
@@ -2636,7 +2607,6 @@ GUNW.Husk:
 		IntoActor: gunw
 	RenderSprites:
 		Image: gunw.destroyed
-		PlayerPalette: overlayplayerscrin
 
 SEEK.Husk:
 	Inherits: ^Husk
@@ -2651,13 +2621,13 @@ SEEK.Husk:
 		IntoActor: seek
 	RenderSprites:
 		Image: seek.destroyed
-		PlayerPalette: overlayplayerscrin
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
 
 INTL.Husk:
 	Inherits: ^Husk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Husk (Interloper)
 	TransformOnCapture:
@@ -2673,6 +2643,7 @@ INTL.Husk:
 
 CORR.Husk:
 	Inherits: ^Husk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Husk (Corrupter)
 	TransformOnCapture:
@@ -2681,10 +2652,10 @@ CORR.Husk:
 		IntoActor: corr
 	RenderSprites:
 		Image: corr.destroyed
-		PlayerPalette: overlayplayerscrin
 
 DEVO.Husk:
 	Inherits: ^Husk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Husk (Devourer)
 	TransformOnCapture:
@@ -2693,10 +2664,10 @@ DEVO.Husk:
 		IntoActor: devo
 	RenderSprites:
 		Image: devo.destroyed
-		PlayerPalette: overlayplayerscrin
 
 RUIN.Husk:
 	Inherits: ^Husk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Husk (Ruiner)
 	TransformOnCapture:
@@ -2705,24 +2676,22 @@ RUIN.Husk:
 		IntoActor: ruin
 	RenderSprites:
 		Image: ruin.destroyed
-		PlayerPalette: overlayplayerscrin
 
 TPOD.Husk:
 	Inherits: ^Husk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Husk (Annihilator Tripod)
-	ThrowsParticle@turret:
-		Anim: turret
 	TransformOnCapture:
 		IntoActor: tpod
 	InfiltrateForTransform:
 		IntoActor: tpod
 	RenderSprites:
 		Image: tpod.destroyed
-		PlayerPalette: overlayplayerscrin
 
 RPTP.Husk:
 	Inherits: ^Husk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Husk (Heavy Tripod)
 	ThrowsParticle@turret:
@@ -2733,10 +2702,10 @@ RPTP.Husk:
 		IntoActor: rptp
 	RenderSprites:
 		Image: rptp.destroyed
-		PlayerPalette: overlayplayerscrin
 
 STMR.Husk:
 	Inherits: ^PlaneHusk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Stormrider
 	Aircraft:
@@ -2763,7 +2732,6 @@ STMR.Husk:
 		Type: CenterPosition
 	RenderSprites:
 		Image: stmr
-		PlayerPalette: overlayplayerscrin
 
 STMR.Husk.EMP:
 	Inherits: STMR.Husk
@@ -2808,6 +2776,7 @@ ENRV.Husk.EMP:
 
 DEVA.Husk:
 	Inherits: ^HelicopterHusk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Devastator Warship
 	Aircraft:
@@ -2829,6 +2798,7 @@ DEVA.Husk.EMP:
 
 PAC.Husk:
 	Inherits: ^HelicopterHusk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Planetary Assault Carrier
 	Aircraft:
@@ -2850,6 +2820,7 @@ PAC.Husk.EMP:
 
 INVA.Husk:
 	Inherits: ^PlaneHusk
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Invader
 	Aircraft:
@@ -2860,7 +2831,6 @@ INVA.Husk:
 		Type: CenterPosition
 	RenderSprites:
 		Image: inva
-		PlayerPalette: overlayplayerscrin
 	FallsToEarth:
 		Explosion: UnitExplodeTinyPlane
 
