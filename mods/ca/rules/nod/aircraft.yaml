@@ -1,0 +1,156 @@
+SCRN:
+	Inherits: ^Helicopter
+	Inherits: ^TDAircraftSprite
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioEnergyAntiHeavyAA
+	Inherits: ^TSRenderVoxel
+	RenderVoxels:
+		Scale: 1
+	-WithShadow:
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		IconPalette: chrometd
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee, ~!commander_tree.banshee.bomber, ~!commander_tree.banshee.payload,
+		Description: Fast VTOL attack craft armed\nwith powerful plasma cannons.\n  Strong vs Heavy Armor, Aircraft\n  Weak vs Infantry
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Banshee
+	Health:
+		HP: 24000
+	RevealsShroud:
+		Range: 12c0
+		MinRange: 10c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 10c0
+		Type: GroundPosition
+	Armament@PRIMARY:
+		Weapon: ScrinTorp
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Weapon: ScrinTorpAA
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 80
+		Voice: Attack
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		Roll: 16
+		IdleRoll: 8
+		RollSpeed: 8
+		CruiseAltitude: 2560
+		TurnSpeed: 20
+		Speed: 210
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		CanHover: False
+		TakeoffSounds: dropup1.aud
+		LandingSounds: dropdwn1.aud
+		IdealSeparation: 1c682
+		Voice: Move
+		CanSlide: False
+		AltitudeVelocity: 0c200
+	AutoTarget:
+		InitialStance: Defend
+		InitialStanceAI: Defend
+	AmmoPool:
+		Ammo: 12
+		ReloadDelay: 25
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		PipCount: 4
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	Contrail@1:
+		Offset: -300,-50,0
+		StartColor: 00FF0080
+		StartColorUsePlayerColor: false
+		ZOffset: -512
+	Contrail@2:
+		Offset: -300,50,0
+		StartColor: 00FF0080
+		StartColorUsePlayerColor: false
+		ZOffset: -512
+	SpawnActorOnDeath:
+		Actor: SCRN.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: SCRN.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: SCRN.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: SCRN.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	Voiced:
+		VoiceSet: ScrinVoice
+	Rearmable:
+		RearmActors: hpad, hpad.td
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
+
+
+SCRN.Bomber:
+	Inherits: SCRN
+	Inherits: ^PrioEnergyAntiHeavy
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		-IconPalette: chrometd
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee.bomber,
+		Description: Fast VTOL bomber craft armed\nwith powerful plasma bombs.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Banshee Bomber
+	Health:
+		HP: 30000
+	Armament@PRIMARY:
+		Weapon: ScrinBomb
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+
+SCRN.Payload:
+	Inherits: SCRN
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		-IconPalette: chrometd
+		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee.payload,
+	Tooltip:
+		Name: Banshee (Payload)
+	Valued:
+		Cost: 2500
+	Aircraft:
+		CruiseAltitude: 2560
+		TurnSpeed: 20
+		Speed: 190
+	AmmoPool:
+		Ammo: 16
+		ReloadDelay: 25
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		PipCount: 8
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true

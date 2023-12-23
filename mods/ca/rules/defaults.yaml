@@ -3524,10 +3524,10 @@
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Air
 
 ^Viceroid:
-	Inherits@1: ^ExistsInWorld
-	Inherits@Armor: ^LightArmor
-	Inherits@2: ^SpriteActor
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^ExistsInWorld
+	Inherits: ^LightArmor
+	Inherits: ^SpriteActor
+	Inherits: ^AutoTargetGroundAssaultMove
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	Huntable:
@@ -3544,7 +3544,7 @@
 	Selectable:
 		Bounds: 1024, 1024
 	Targetable:
-		TargetTypes: Ground, Infantry, Creep
+		TargetTypes: Ground, Infantry, Creep, MindControlImmune
 	AutoTarget:
 		ScanRadius: 5
 	AttackMove:
@@ -3746,6 +3746,30 @@
 
 ^TSRenderVoxel:
 	Inherits: ^RenderVoxel
+	RenderVoxels:
+		Scale: 6.8
+		NormalsPalette: ts-normals
+		PlayerPalette: playerra2
+		LightAmbientColor: 0.6, 0.6, 0.6
+		LightDiffuseColor: 0.4, 0.4, 0.4
+		LightPitch: 142
+		LightYaw: 682
+
+^RARenderVoxel:
+	Inherits: ^RenderVoxel
+	RenderVoxels:
+		Scale: 6.8
+		NormalsPalette: ra-normals
+		PlayerPalette: playerra2
+		LightAmbientColor: 0.6, 0.6, 0.6
+		LightDiffuseColor: 0.4, 0.4, 0.4
+		LightPitch: 142
+		LightYaw: 682
+
+^TSRenderVoxelWalker:
+	Inherits: ^RenderVoxel
+	WithVoxelWalkerBody:
+		TickRate: 1
 	RenderVoxels:
 		Scale: 6.8
 		NormalsPalette: ts-normals
