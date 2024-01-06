@@ -2458,7 +2458,7 @@
 	-Contrail@1:
 	-Contrail@2:
 	WithDamageOverlay:
-		Image: smoke_mtd
+		Image: smoke_m
 
 ^TDAircraftSprite:
 	Buildable:
@@ -2508,6 +2508,114 @@
 		PlayerPalette: overlayplayertd
 	EjectOnDeath:
 		PilotActor: N1
+
+^FightingPlane:
+	AttackAircraft:
+		FacingTolerance: 80
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+
+^BomberPlane:
+	AttackAircraft:
+		FacingTolerance: 512
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+
+^FightingHelicopter:
+	AttackAircraft:
+		FacingTolerance: 80
+		AttackType: Hover
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+
+^RearmableAircraft:
+	AmmoPool:
+		Ammo: 16
+		ReloadDelay: 10
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		PipCount: 4
+		Position: BottomLeft
+		RequiresSelection: true
+	Rearmable:
+		RearmActors: afld, afld.gdi, afld.allies, chairport
+
+^RearmableHelicopter:
+	AmmoPool:
+		Ammo: 16
+		ReloadDelay: 10
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		PipCount: 4
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	Rearmable:
+		RearmActors: hpad, hpad.td
+
+^Afterburner:
+	GrantConditionOnOrders@ACTIVE:
+		Condition: fullspeed
+		OrderNames: Attack, ForceAttack, AttackMove, Move, Enter
+	SpeedMultiplier:
+		Modifier: 50
+		RequiresCondition: !fullspeed
+	Contrail@AB1:
+		Offset: -550,-70,50
+		StartColorUsePlayerColor: false
+		ZOffset: -512
+		StartColor: cc550080
+		TrailLength: 10
+		RequiresCondition: fullspeed
+	Contrail@AB2:
+		Offset: -550,70,50
+		StartColorUsePlayerColor: false
+		ZOffset: -512
+		StartColor: cc550080
+		TrailLength: 10
+		RequiresCondition: fullspeed
+
+^SlowOnIdle:
+	GrantConditionOnOrders@ACTIVE:
+		Condition: fullspeed
+		OrderNames: Attack, ForceAttack, AttackMove, Move, Enter
+	SpeedMultiplier:
+		Modifier: 50
+		RequiresCondition: !fullspeed
+
+^WingContrails:
+	Contrail@1:
+		Offset: -150,-550,50
+		ZOffset: -1024
+		StartColor: FFFFFF40
+		StartColorUsePlayerColor: false
+		TrailLength: 5
+	Contrail@2:
+		Offset: -150,550,50
+		ZOffset: -1024
+		StartColor: FFFFFF40
+		StartColorUsePlayerColor: false
+		TrailLength: 5
+
+^WingletContrails:
+	Contrail@1:
+		Offset: -250,-550,100
+		ZOffset: -1024
+		StartColor: FFFFFF40
+		StartColorUsePlayerColor: false
+		TrailLength: 10
+	Contrail@2:
+		Offset: -250,550,100
+		ZOffset: -1024
+		StartColor: FFFFFF40
+		StartColorUsePlayerColor: false
+		TrailLength: 10
 
 ^BasicBuilding:
 	Inherits@1: ^ExistsInWorld
@@ -3136,18 +3244,12 @@
 		Moves: True
 		Velocity: 86
 		Explosion: UnitExplodePlane
+	SpeedMultiplier:
+		Modifier: 75
 	-MapEditorData:
 	RevealOnDeath:
 		Duration: 60
 		Radius: 4c0
-	Contrail@1:
-		UsePlayerColor: false
-		ZOffset: -512
-		Color: FFFFFF80
-	Contrail@2:
-		UsePlayerColor: false
-		ZOffset: -512
-		Color: FFFFFF80
 
 ^PlaneHuskEmpty:
 	Inherits: ^PlaneHusk
@@ -3730,9 +3832,9 @@
 
 ^RenderVoxel:
 	BodyOrientation:
-		QuantizedFacings: 32
+		QuantizedFacings: 64
 		CameraPitch: 130
-		UseClassicPerspectiveFudge: false
+		UseClassicPerspectiveFudge: true
 	RenderVoxels:
 		Scale: 5.5
 		NormalsPalette: normals
@@ -3747,7 +3849,7 @@
 ^TSRenderVoxel:
 	Inherits: ^RenderVoxel
 	RenderVoxels:
-		Scale: 6.8
+		Scale: 1
 		NormalsPalette: ts-normals
 		PlayerPalette: playerra2
 		LightAmbientColor: 0.6, 0.6, 0.6
@@ -3758,13 +3860,144 @@
 ^RARenderVoxel:
 	Inherits: ^RenderVoxel
 	RenderVoxels:
-		Scale: 6.8
+		Scale: 1
 		NormalsPalette: ra-normals
 		PlayerPalette: playerra2
 		LightAmbientColor: 0.6, 0.6, 0.6
 		LightDiffuseColor: 0.4, 0.4, 0.4
 		LightPitch: 142
 		LightYaw: 682
+
+^VoxelPlane:
+	Inherits: ^Plane
+	Inherits: ^WingContrails
+	Inherits: ^SlowOnIdle
+	Inherits: ^TSRenderVoxel
+	RenderVoxels:
+		Scale: 0.6
+	-WithShadow:
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 16
+		Speed: 225
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeoffSounds: migtoff1.aud
+	LeavesTrails:
+		Offsets: -853,0,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
+
+^VoxelJet:
+	Inherits: ^VoxelPlane
+	Inherits: ^Afterburner
+	Inherits: ^WingletContrails
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 20
+		Speed: 250
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		Roll: 16
+		IdleRoll: 8
+		RollSpeed: 8
+		TakeoffSounds: migtoff1.aud
+	LeavesTrails:
+		Offsets: -853,0,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
+
+^VoxelHelicopter:
+	Inherits: ^Helicopter
+	Inherits: ^TSRenderVoxel
+	RenderVoxels:
+		Scale: 1
+	-WithShadow:
+	-WithVoxelBody:
+	WithVoxelHelicopterBody:
+		TickRate: 1
+		SkipRate: 1
+	Aircraft:
+		AltitudeVelocity: 0c100
+		TurnSpeed: 16
+		Speed: 180
+		TakeoffSounds: htoff1.aud
+		LandingSounds: hland1.aud
+
+^VoxelPlaneHusk:
+	Inherits: ^PlaneHusk
+	Inherits: ^TSRenderVoxel
+	Inherits: ^WingContrails
+	LeavesTrails:
+		Offsets: -853,0,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	RevealsShroud:
+		Range: 10c0
+		Type: CenterPosition
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 16
+		Speed: 200
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+
+^VoxelJetHusk:
+	Inherits: ^VoxelPlaneHusk
+	Inherits: ^WingletContrails
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 16
+		Speed: 225
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+
+^VoxelHelicopterHusk:
+	Inherits: ^HelicopterHusk
+	Inherits: ^TSRenderVoxel
+	RenderVoxels:
+		Scale: 1
+	-WithShadow:
+	-WithVoxelBody:
+	WithVoxelHelicopterBody:
+		TickRate: 1
+		SkipRate: 1
+	Aircraft:
+		TurnSpeed: 16
+		Speed: 166
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	RevealsShroud:
+		Range: 10c0
+		Type: CenterPosition
 
 ^TSRenderVoxelWalker:
 	Inherits: ^RenderVoxel
@@ -4023,6 +4256,22 @@
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
 
+^CloakedAircraft:
+	Cloak@NORMAL:
+		InitialDelay: 100
+		CloakDelay: 200
+		CloakSound: trans1.aud
+		UncloakSound: appear1.aud
+		Palette: cloak
+		IsPlayerPalette: false
+		RequiresCondition: !cloak-force-disabled && airborne && !invisibility
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: HoldFire
+
 ^BuildingVision:
 	RevealsShroud:
 		MinRange: 4c0
@@ -4110,18 +4359,6 @@
 	ProvidesPrerequisite@radar-active:
 		Prerequisite: radar-active
 		RequiresCondition: !jammed && !disabled && !being-warped
-
-^AircraftWithAmmo:
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies, chairport
-	AmmoPool:
-		Ammo: 8
-		ReloadDelay: 10
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 
 ^InfantryProduction:
 	RallyPoint:

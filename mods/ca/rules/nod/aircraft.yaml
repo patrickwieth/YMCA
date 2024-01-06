@@ -1,12 +1,25 @@
 SCRN:
 	Inherits: ^Helicopter
-	Inherits: ^TDAircraftSprite
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioEnergyAntiHeavyAA
-	Inherits: ^TSRenderVoxel
+	Inherits: ^VoxelPlane
 	RenderVoxels:
 		Scale: 1
+	Contrail@1:
+		Offset: -400,-50,150
+		StartColor: AAAAFF88
+		EndColor: AAFFAA00
+	Contrail@2:
+		Offset: -400,50,150
+		StartColor: AAAAFF88
+		EndColor: AAFFAA00
 	-WithShadow:
+	Inherits: ^FightingHelicopter
+	Inherits: ^RearmableHelicopter
+	AmmoPool:
+		Ammo: 12
+	AttackAircraft:
+		Voice: Attack
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -20,14 +33,6 @@ SCRN:
 		Name: Banshee
 	Health:
 		HP: 24000
-	RevealsShroud:
-		Range: 12c0
-		MinRange: 10c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 10c0
-		Type: GroundPosition
 	Armament@PRIMARY:
 		Weapon: ScrinTorp
 		LocalOffset: 0,213,-85, 0,-213,-85
@@ -36,12 +41,6 @@ SCRN:
 		Weapon: ScrinTorpAA
 		LocalOffset: 0,213,-85, 0,-213,-85
 		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 80
-		Voice: Attack
-		PersistentTargeting: false
-		OpportunityFire: false
-		PauseOnCondition: empdisable || being-warped
 	Aircraft:
 		Roll: 16
 		IdleRoll: 8
@@ -58,28 +57,6 @@ SCRN:
 		Voice: Move
 		CanSlide: False
 		AltitudeVelocity: 0c200
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
-	AmmoPool:
-		Ammo: 12
-		ReloadDelay: 25
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		PipCount: 4
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
-	Contrail@1:
-		Offset: -300,-50,0
-		StartColor: 00FF0080
-		StartColorUsePlayerColor: false
-		ZOffset: -512
-	Contrail@2:
-		Offset: -300,50,0
-		StartColor: 00FF0080
-		StartColorUsePlayerColor: false
-		ZOffset: -512
 	SpawnActorOnDeath:
 		Actor: SCRN.Husk
 		RequiresCondition: ammo && !empdisable && !being-warped
@@ -92,22 +69,8 @@ SCRN:
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: SCRN.Husk.empty.EMP
 		RequiresCondition: !ammo && empdisable && !being-warped
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
 	Voiced:
 		VoiceSet: ScrinVoice
-	Rearmable:
-		RearmActors: hpad, hpad.td
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-
 
 SCRN.Bomber:
 	Inherits: SCRN
@@ -154,3 +117,106 @@ SCRN.Payload:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
+
+RAH66:
+	Inherits: ^VoxelHelicopter
+	RenderVoxels:
+		Scale: 0.7
+	Inherits: ^BiologicalPilot
+	Inherits: ^FightingHelicopter
+	Inherits: ^RearmableHelicopter
+	Inherits: ^PrioAntiLight
+	AttackAircraft:
+		Voice: Attack
+	AmmoPool:
+		Ammo: 10
+	WithAmmoPipsDecoration:
+		PipCount: 5
+	Inherits: ^CloakedAircraft
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		IconPalette: chrometd
+		Prerequisites: ~hpad.td, tmpl, ~aircraft.blackh, ~!commander_tree.comanche.bomber,
+		Description: Stealth helicopter armed\nwith napalm rockets.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Comanche
+	Health:
+		HP: 18000
+	Armament@PRIMARY:
+		Weapon: Rah66AG
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+		Voice: Move
+	SpawnActorOnDeath:
+		Actor: RAH.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: RAH.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: RAH.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: RAH.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+	Voiced:
+		VoiceSet: OxannaVoice
+
+RAH66.Bomber:
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^VoxelHelicopter
+	RenderVoxels:
+		Scale: 0.7
+	Inherits: ^BomberPlane
+	Inherits: ^RearmableHelicopter
+	AttackAircraft:
+		Voice: Attack
+	AmmoPool:
+		Ammo: 8
+	Inherits: ^CloakedAircraft
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 40
+		IconPalette: chrome
+		Prerequisites: ~hpad.td, tmpl, ~commander_tree.comanche.bomber,
+		Description: Stealth helicopter armed\nwith napalm bombs.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Comanche Bomber
+	Health:
+		HP: 22000
+	Armament@PRIMARY:
+		Weapon: Napalm.Comanche
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	Aircraft:
+		TurnSpeed: 16
+		Speed: 150
+		CanHover: False
+		TakeoffSounds: dropup1.aud
+		LandingSounds: dropdwn1.aud
+		Voice: Move
+		CanSlide: False
+	SpawnActorOnDeath:
+		Actor: RAH.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: RAH.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: RAH.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: RAH.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+	Rearmable:
+		RearmActors: hpad, hpad.td
+	Voiced:
+		VoiceSet: OxannaVoice

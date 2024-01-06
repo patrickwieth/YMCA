@@ -133,7 +133,9 @@ MSG.Husk:
 		Image: msg.destroyed
 
 TRAN.Husk:
-	Inherits: ^HelicopterHusk
+	Inherits: ^VoxelHelicopterHusk
+	RenderVoxels:
+		Scale: 0.65
 	Tooltip:
 		Name: Chinook
 	Aircraft:
@@ -284,12 +286,15 @@ MIG.Husk.Empty.EMP:
 
 SU47.Husk:
 	Inherits: MIG.Husk
+	Inherits: ^VoxelJetHusk
+	RenderVoxels:
+		Scale: 0.6
 	RenderSprites:
 		Image: su47
 		PlayerPalette: overlayplayertd
 
 SU47.Husk.EMP:
-	Inherits: MIG.Husk
+	Inherits: SU47.Husk
 	Inherits: ^EmpVisualEffect
 
 SU47.Husk.Empty:
@@ -900,25 +905,12 @@ ORCA.Husk.Empty.EMP:
 	Inherits: ORCA.Husk.Empty
 	Inherits: ^EmpVisualEffect
 
-
 OCAR.Husk:
-	Inherits: ^HelicopterHusk
+	Inherits: ^VoxelHelicopterHusk
+	RenderVoxels:
+		Scale: 0.5
 	Tooltip:
 		Name: Orca Carryall
-	Aircraft:
-		TurnSpeed: 16
-		Speed: 166
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	RevealsShroud:
-		Range: 10c0
-		Type: CenterPosition
 	RenderSprites:
 		Image: orcaca
 		PlayerPalette: overlayplayertd
@@ -1106,23 +1098,13 @@ BTR.Husk:
 		Image: BTR.destroyed
 
 RAH.Husk:
-	Inherits: ^HelicopterHusk
+	Inherits: ^VoxelHelicopterHusk
+	RenderVoxels:
+		Scale: 0.7
 	Tooltip:
 		Name: Comanche
 	Aircraft:
-		TurnSpeed: 16
 		Speed: 186
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	RevealsShroud:
-		Range: 10c0
-		Type: CenterPosition
 	RenderSprites:
 		Image: rah66
 		PlayerPalette: overlayplayertd
@@ -1140,7 +1122,11 @@ RAH.Husk.Empty.EMP:
 	Inherits: ^EmpVisualEffect
 
 KIRO.Husk:
-	Inherits: ^HelicopterHusk
+	Inherits: ^VoxelHelicopterHusk
+	WithVoxelHelicopterBody:
+		Offset: 0,0,-1500
+	RenderVoxels:
+		Scale: 5
 	Tooltip:
 		Name: Kirov
 	Aircraft:
@@ -1375,27 +1361,17 @@ OILB.Husk:
 		Weapon: BarrelExplode
 
 HARR.Husk:
-	Inherits: ^PlaneHusk
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 0.5
 	Tooltip:
 		Name: Harrier
 	Aircraft:
-		TurnSpeed: 16
-		Speed: 149
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
+		Speed: 210
 	Contrail@1:
-		Offset: -400,-483,0
+		Offset: -400,-443,0
 	Contrail@2:
-		Offset: -400,483,0
-	RevealsShroud:
-		Range: 12c0
-		Type: CenterPosition
+		Offset: -400,443,0
 	RenderSprites:
 		Image: harr
 		PlayerPalette: overlayplayertd
@@ -1451,27 +1427,16 @@ HORN.Husk.Empty.EMP:
 	Inherits: ^EmpVisualEffect
 
 SCRN.Husk:
-	Inherits: ^PlaneHusk
+	Inherits: ^VoxelPlaneHusk
 	Tooltip:
 		Name: Banshee
 	Aircraft:
 		TurnSpeed: 16
 		Speed: 200
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
 	Contrail@1:
 		Offset: -300,-183,0
 	Contrail@2:
 		Offset: -300,183,0
-	RevealsShroud:
-		Range: 12c0
-		Type: CenterPosition
 	RenderSprites:
 		Image: scrn
 		PlayerPalette: overlayplayertd
@@ -1525,25 +1490,11 @@ ORCB.Husk.Empty.EMP:
 	Inherits: ^EmpVisualEffect
 
 FROG.Husk:
-	Inherits: ^PlaneHusk
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 0.6
 	Tooltip:
 		Name: Frogfoot Attack Plane
-	Contrail:
-		Offset: -853,0,0
-	Aircraft:
-		TurnSpeed: 20
-		Speed: 149
-	LeavesTrails:
-		Offsets: -853,0,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	RevealsShroud:
-		Range: 10c0
-		Type: CenterPosition
 	RenderSprites:
 		Image: frog
 		PlayerPalette: overlayplayertd
@@ -1563,29 +1514,13 @@ FROG.Husk.Empty.EMP:
 	Inherits: ^EmpVisualEffect
 
 SUK.Husk:
-	Inherits: ^PlaneHusk
-	Tooltip:
-		Name: Sukhoi Attack Plane
-	Contrail@1:
-		Offset: -598,-683,-40
-	Contrail@2:
-		Offset: -598,683,-40
-	Aircraft:
-		TurnSpeed: 20
-		Speed: 149
-	LeavesTrails:
-		Offsets: -853,0,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	RevealsShroud:
-		Range: 10c0
-		Type: CenterPosition
+	Inherits: ^VoxelJetHusk
+	RenderVoxels:
+		Scale: 0.6
 	RenderSprites:
 		Image: suk
+	Tooltip:
+		Name: Sukhoi Attack Plane
 
 SUK.Husk.EMP:
 	Inherits: SUK.Husk
@@ -1729,26 +1664,17 @@ VENM.Husk.Empty.EMP:
 	Inherits: ^EmpVisualEffect
 
 raptor.Husk:
-	Inherits: ^PlaneHusk
+	Inherits: ^VoxelJetHusk
+	RenderVoxels:
+		Scale: 0.5
+	Contrail@1:
+		Offset: -350,-550,-50
+	Contrail@2:
+		Offset: -350,550,-50
 	Tooltip:
 		Name: Raptor
-	Contrail@1:
-		Offset: -598,-683,0
-	Contrail@2:
-		Offset: -598,683,0
-	RevealsShroud:
-		Type: CenterPosition
 	Aircraft:
-		TurnSpeed: 20
-		Speed: 175
-	LeavesTrails:
-		Offsets: -853,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
+		Speed: 260
 	RenderSprites:
 		Image: raptor
 		PlayerPalette: overlayplayertd
@@ -1845,29 +1771,14 @@ Dropship.Husk.Empty.EMP:
 	Inherits: ^EmpVisualEffect
 
 HUEY.Husk:
-	Inherits: ^HelicopterHusk
+	Inherits: ^VoxelHelicopterHusk
+	RenderVoxels:
+		Scale: 0.8
 	Tooltip:
 		Name: Huey
 	Aircraft:
 		TurnSpeed: 16
 		Speed: 112
-	WithIdleOverlay:
-		Sequence: rotor
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	RevealsShroud:
-		Range: 10c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-		Type: GroundPosition
 	RenderSprites:
 		Image: huey
 
@@ -1876,8 +1787,8 @@ HUEY.Husk.EMP:
 	Inherits: ^EmpVisualEffect
 
 HUEY.Husk.Empty:
-	Inherits: ^HelicopterHuskEmpty
 	Inherits: HUEY.Husk
+	Inherits: ^HelicopterHuskEmpty
 
 HUEY.Husk.Empty.EMP:
 	Inherits: HUEY.Husk.Empty
