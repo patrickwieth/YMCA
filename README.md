@@ -1,1 +1,1 @@
-This repository contains the You Must Contruct Additional... mod, see [ModDB](https://www.moddb.com/mods/you-must-construct-additional) for further information, or visit the [Discord](https://discord.gg/2uKyCr4fg8)
+This repository contains the You Must Contruct Additional... mod, see [ModDB](https://www.moddb.com/mods/you-must-construct-additional1) for further information, or visit the [Discord](https://discord.gg/maGHYC3cVk)
