@@ -165,51 +165,87 @@ hack.cameo_filler.407:
 		BuildPaletteOrder: 416
 		Prerequisites: prerequisite.has_points, ~filler.devourer, disabled
 
-commander_tree.Darkener.Chain:
+commander_tree.Channeler.Chain:
 	Inherits: ^default.commander_tree_item
 	RenderSprites:
-		Image: DARK
+		Image: channeler
 	WithProductionIconOverlay@Chainer:
 		Types: Chainer
 	Tooltip:
-		Name: Darkener Chain Upgrade
+		Name: Channeler Arc Upgrade
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 417
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.harvester, ~!commander_tree.darkener.disc
-		Description: Upgrades the Darkener with chained rift beam.
+		Prerequisites: prerequisite.has_points, nerv, ~vehicles.harvester, ~!commander_tree.channeler.disc
+		Description: Upgrades the Channeler with arcing rift beam.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.darkener
+		Prerequisite: filler.channeler
 
-commander_tree.Darkener.Disc:
+commander_tree.Channeler.Disc:
 	Inherits: ^default.commander_tree_item
 	RenderSprites:
-		Image: DARK
+		Image: channeler
 	WithProductionIconOverlay@Shell:
 		Types: Shell
 	Tooltip:
-		Name: Darkener Disc Upgrade
+		Name: Channeler Disc Upgrade
 	Buildable:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 418
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.harvester, ~!commander_tree.darkener.chain
-		Description: Equips the Darkener with armor piercing disks.
+		Prerequisites: prerequisite.has_points, nerv, ~vehicles.harvester, ~!commander_tree.channeler.chain
+		Description: Equips the Channeler with armor piercing disks.
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.darkener
+		Prerequisite: filler.channeler
+
+commander_tree.Channeler.PLD:
+	Inherits: ^default.commander_tree_item
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	RenderSprites:
+		Image: channeler
+	Tooltip:
+		Name: Channeler PDL Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 420
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.harvester, ~filler.channeler, ~!commander_tree.channeler.reflector
+		Description: Upgrades the Channeler with a Point Laser Defense system. \nPDL intercepts incoming missiles and projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.channeler2
+
+commander_tree.Channeler.Reflector:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: channeler
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Tooltip:
+		Name: Channeler Reflector Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 420
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.harvester, ~filler.channeler, ~!commander_tree.channeler.pdl
+		Description: Upgrades the Channeler with Reflector armor. \nReflector armor is very efficient vs energy weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.channeler2
 
 hack.cameo_filler.408:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 419
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.harvester
+		BuildPaletteOrder: 420
+		Prerequisites: prerequisite.has_points, ~vehicles.harvester, ~!filler.channeler, disabled
 
 hack.cameo_filler.409:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 420
-		Prerequisites: prerequisite.has_points, ~filler.darkener, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.harvester, ~filler.channeler2, disabled
+
+
 
 commander_tree.Seeker.PLD:
 	Inherits: ^default.commander_tree_item

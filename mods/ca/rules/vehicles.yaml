@@ -2912,10 +2912,13 @@ HAR2:
 	Inherits: ^Tank
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
-	Inherits: ^Shielded
-	Inherits@HARV: ^Harvester
+	Inherits: ^Harvester
 	-Crushable:
 	-Carryable:
+	Inherits: ^Shielded
+	GrantConditionOnPrerequisite@shielded:
+		Condition: shielded
+		Prerequisites: commander_tree.shielded_miners
 	RenderSprites:
 		Image: harv2
 	Valued:
@@ -2953,9 +2956,6 @@ HAR2:
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
-	GrantConditionOnPrerequisite@shielded:
-		Condition: shielded
-		Prerequisites: commander_tree.shielded_miners
 
 BTR:
 	Inherits: ^FightingVehicle
