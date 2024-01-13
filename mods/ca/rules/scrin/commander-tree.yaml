@@ -107,17 +107,51 @@ commander_tree.Corrupter.Range:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.corrupter
 
+commander_tree.Corrupter.PLD:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: CORR
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Tooltip:
+		Name: Corrupter PLD Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 411
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.scrin, ~filler.corrupter, ~!commander_tree.corrupter.reflector
+		Description: Upgrades the Corrupter with a Point Laser Defense system. \nPLD intercepts incoming missiles and projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.corrupter2
+
+commander_tree.Corrupter.Reflector:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: CORR
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Tooltip:
+		Name: Corrupter Reflector Upgrade
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 411
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.scrin, ~filler.corrupter, ~!commander_tree.corrupter.pld
+		Description: Upgrades the Corrupter with Reflector armor. \nReflector armor is very efficient vs energy weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.corrupter2
+
 hack.cameo_filler.404:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 411
-		Prerequisites: prerequisite.has_points, wsph, ~vehicles.scrin, disabled
+		Prerequisites: prerequisite.has_points, nerv, ~vehicles.scrin, ~!filler.corrupter, disabled
 
 hack.cameo_filler.405:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 412
-		Prerequisites: prerequisite.has_points, ~filler.corrupter, disabled
+		Prerequisites: prerequisite.has_points, ~filler.corrupter2, disabled
 
 commander_tree.Devourer.Acid:
 	Inherits: ^default.commander_tree_item
@@ -524,7 +558,6 @@ commander_tree.Reaper.Reflector:
 		Name: Reaper Reflector Upgrade
 	Buildable:
 		Queue: Commander_Tree
-		IconPalette: chrometd
 		BuildPaletteOrder: 441
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.reaper, ~filler.reaper, ~!commander_tree.reaper.pld

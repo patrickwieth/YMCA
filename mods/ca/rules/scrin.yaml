@@ -805,7 +805,7 @@ CORR:
 		IconPalette: chrome
 	Mobile:
 		Speed: 82
-		TurnSpeed: 20
+		TurnSpeed: 24
 	Health:
 		HP: 45000
 	Armament@PRIMARY:
@@ -856,6 +856,32 @@ CORR.Area:
 		RevokeOnNewTarget: False
 		RevokeAll: True
 
+CORR.Area.PLD:
+	Inherits: CORR.Area
+	Inherits@PLD: ^PointLaserDefenseSystem
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Area Corrupter (PDL)
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.scrin, ~commander_tree.corrupter.area, ~commander_tree.corrupter.pld
+		Description: Ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings, Projectiles\n  Weak vs Tanks, Defenses, Aircraft
+
+CORR.Area.Reflector:
+	Inherits: CORR.Area
+	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Area Corrupter (Reflector)
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.scrin, ~commander_tree.corrupter.area ~commander_tree.corrupter.reflector
+		Description: Ranged anti-infantry/structure unit.\n  Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
+
 CORR.Range:
 	Inherits: CORR
 	WithProductionIconOverlay@Crosshair:
@@ -870,6 +896,32 @@ CORR.Range:
 		IconPalette: chrome
 	Armament@PRIMARY:
 		Weapon: CorrupterSpew.range
+
+CORR.Range.PLD:
+	Inherits: CORR.Range
+	Inherits@PLD: ^PointLaserDefenseSystem
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Ranged Corrupter (PDL)
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.scrin, ~commander_tree.corrupter.range, ~commander_tree.corrupter.pld
+		Description: Ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings, Projectiles\n  Weak vs Tanks, Defenses, Aircraft
+
+CORR.Range.Reflector:
+	Inherits: CORR.Range
+	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Ranged Corrupter (Reflector)
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.scrin, ~commander_tree.corrupter.range, ~commander_tree.corrupter.reflector
+		Description: Ranged anti-infantry/structure unit.\n  Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
 
 LCHR:
 	Inherits: ^LightHoverVehicle
