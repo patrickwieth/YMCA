@@ -365,6 +365,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		}
 
 		String GetEffectiveLabelText(int effectValue, int neutralValue) {
+			return $"{effectValue}%";
+		/*
 			if (effectValue >= neutralValue * 2)
 				return "It's super effective!";
 			else if (effectValue >= neutralValue * 1.33)
@@ -375,6 +377,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				return "not effective";
 			else
 				return "ok";
+		*/
 		}
 
 		LabelWidget GetArmorTypeLabel(LabelWidget armorTypeLabel, ActorInfo actor)
@@ -382,38 +385,44 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var armor = actor.TraitInfos<ArmorInfo>().FirstOrDefault();
 			armorTypeLabel.Text = armor != null ? armor.Type : "";
 
+			var health = actor.TraitInfos<HealthInfo>().FirstOrDefault();
+			var healthText = health != null ? "("+health.HP/100+")" : "";
+
 			// hard coded, specific to CA - find a better way to set user-friendly names and colors for armor types
 			switch (armorTypeLabel.Text)
 			{
 				case "None":
-					armorTypeLabel.Text = "Infantry";
+					armorTypeLabel.Text = "Infantry"+healthText;
 					armorTypeLabel.TextColor = Color.LightSalmon;
 					break;
 
 				case "Light":
+					armorTypeLabel.Text += healthText;
 					armorTypeLabel.TextColor = Color.Khaki;
 					break;
 
 				case "Reflector":
+					armorTypeLabel.Text += healthText;
 					armorTypeLabel.TextColor = Color.SkyBlue;
 					break;
 
 				case "Heavy":
+					armorTypeLabel.Text += healthText;
 					armorTypeLabel.TextColor = Color.Crimson;
 					break;
 
 				case "Concrete":
-					armorTypeLabel.Text = "Fortified";
+					armorTypeLabel.Text = "Fortified"+healthText;
 					armorTypeLabel.TextColor = Color.Gray;
 					break;
 
 				case "Wood":
-					armorTypeLabel.Text = "Building";
+					armorTypeLabel.Text = "Building"+healthText;
 					armorTypeLabel.TextColor = Color.IndianRed;
 					break;
 
 				case "Brick":
-					armorTypeLabel.Text = "Wall";
+					armorTypeLabel.Text = "Wall"+healthText;
 					armorTypeLabel.TextColor = Color.RosyBrown;
 					break;
 
