@@ -4,6 +4,8 @@ FROG:
 	RenderVoxels:
 		Scale: 0.6
 		Image: frog
+	RenderSprites:
+		Image: frog
 	Inherits: ^BomberPlane
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiLight
@@ -12,7 +14,6 @@ FROG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
-		IconPalette: chrome
 		Prerequisites: ~afld, ~aircraft.soviet, ~commander_tree.frogfoot,
 		Description: Bomber armed with explosive bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
@@ -33,8 +34,9 @@ FROG:
 
 SU25.dirty:
 	Inherits: FROG
+	WithProductionIconOverlay@Hazard:
+		Types: Hazard
 	Buildable:
-		IconPalette: chrometd
 		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot
 		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
 	Valued:

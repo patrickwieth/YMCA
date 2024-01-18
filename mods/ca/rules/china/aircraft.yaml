@@ -1,12 +1,22 @@
 CHMIG:
-	Inherits: ^Plane
-	Inherits: ^TDAircraftSprite
+	Inherits: ^VoxelJet
+	RenderVoxels:
+		Scale: 1
+		Image: chmig
+	RenderSprites:
+		Image: chmig
+	Contrail@1:
+		Offset: -250,-450,50
+	Contrail@2:
+		Offset: -250,450,50
+	Inherits: ^FightingPlane
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^AnnounceOnBuild
 	Inherits: ^RearmableAircraft
 	Buildable:
 		Queue: Aircraft
+		IconPalette: chrometd
 		BuildPaletteOrder: 50
 		Prerequisites: ~aircraft.china, techcenter, ~!filler.chinamig
 		Description: Bomber armed with guided air-to-surface missiles.
@@ -50,10 +60,6 @@ CHMIG:
 	AmmoPool:
 		Ammo: 8
 	SelectionDecorations:
-	Contrail@1:
-		Offset: -598,-683,0
-	Contrail@2:
-		Offset: -598,683,0
 	SpawnActorOnDeath:
 		Actor: chmig.husk
 	LeavesTrails:
@@ -78,6 +84,8 @@ CHMIG:
 CHMIG.AA:
 	Inherits: CHMIG
 	Inherits: ^PrioAntiHeavyAA
+	WithProductionIconOverlay@Air:
+		Types: Air
 	Buildable:
 		Queue: Aircraft
 		BuildPaletteOrder: 50
@@ -98,7 +106,9 @@ CHMIG.AA:
 
 CHMIG.Napalm:
 	Inherits: CHMIG
-	Inherits@AUTOTARGET2: ^PrioAntiLight
+	Inherits: ^PrioAntiLight
+	WithProductionIconOverlay@Flame:
+		Types: Flame
 	Buildable:
 		Prerequisites: ~aircraft.china, techcenter, ~commander_tree.chinamig.napalm
 		Description: Napalm bomber.
@@ -134,7 +144,9 @@ CHMIG.Napalm:
 
 CHMIG.Nuke:
 	Inherits: CHMIG
-	Inherits@AUTOTARGET2: ^PrioAntiLight
+	Inherits: ^PrioAntiLight
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
 	Buildable:
 		Prerequisites: ~aircraft.china, techcenter, ~commander_tree.chinamig.nuke
 		Description: Nuclear bomber aircraft.
@@ -154,7 +166,10 @@ CHMIG.Nuke:
 		Weapon: AtomBomb.Paradrop
 
 chmig.husk:
-	Inherits: ^PlaneHusk
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 1
+		Image: chmig
 	Tooltip:
 		Name: MiG
 	Contrail@1:
