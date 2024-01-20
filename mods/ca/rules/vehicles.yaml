@@ -1457,6 +1457,14 @@ TTRK:
 
 CTNK:
 	Inherits: ^Tank
+	Inherits: ^VoxelTank
+	RenderVoxels:
+		Scale: 1
+		Image: ctnk
+	WithVoxelBody:
+		ShowShadow: true
+	RenderSprites:
+		Image: ctnk
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Buildable:
@@ -1495,8 +1503,10 @@ CTNK:
 		Prerequisites: vehicles.germany
 
 CTNK.PLD:
-	Inherits@PLD: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: CTNK
+	WithProductionIconOverlay@PDL:
+		Types: PDL
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
@@ -1510,6 +1520,8 @@ CTNK.PLD:
 CTNK.Reflector:
 	Inherits: CTNK
 	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
@@ -2347,7 +2359,6 @@ MSAM.Hailstorm:
 
 MLRS:
 	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	RenderSprites:
@@ -2775,7 +2786,6 @@ BIKE.Explosive.Reflector:
 
 FTNK:
 	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
 	RenderSprites:
