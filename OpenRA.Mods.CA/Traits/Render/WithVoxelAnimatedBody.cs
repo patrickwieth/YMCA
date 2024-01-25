@@ -22,19 +22,13 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	[Desc("Render an animated voxel based upon the voxel being inair.")]
-	public class WithVoxelHelicopterBodyInfo : ConditionalTraitInfo, IRenderActorPreviewVoxelsInfo, Requires<RenderVoxelsInfo>
+	[Desc("Render an animated voxel.")]
+	public class WithVoxelAnimatedBodyInfo : ConditionalTraitInfo, IRenderActorPreviewVoxelsInfo, Requires<RenderVoxelsInfo>
 	{
 		public readonly string Sequence = "idle";
 
 		[Desc("The rate of the voxel animation.")]
 		public readonly int TickRate = 5;
-
-    [Desc("The skip rate of the voxel animation. Use this if you want to go faster than TickRate = 1")]
-    public readonly uint SkipRate = 1;
-
-		[Desc("Position relative to body")]
-		public readonly WVec Offset = WVec.Zero;
 
 		[Desc("Defines if the Voxel should have a shadow.")]
 		public readonly bool ShowShadow = true;
@@ -42,12 +36,12 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Reset the frames to first frame when the trait is disabled.")]
 		public readonly bool ResetFramesWhenDisabled = false;
 
-		public override object Create(ActorInitializer init) { return new WithVoxelHelicopterBody(init.Self, this); }
+		public override object Create(ActorInitializer init) { return new WithVoxelAnimatedBody(init.Self, this); }
 
 		public IEnumerable<ModelAnimation> RenderPreviewVoxels(
 			ActorPreviewInitializer init, RenderVoxelsInfo rv, string image, Func<WRot> orientation, int facings, PaletteReference p)
 		{
-			var voxel =  init.World.ModelCache.GetModelSequence(image, Sequence);
+			var voxel = init.World.ModelCache.GetModelSequence(image, Sequence);
 			var body = init.Actor.TraitInfo<BodyOrientationInfo>();
 			var frame = init.GetValue<BodyAnimationFrameInit, uint>(this, 0);
 
@@ -57,15 +51,15 @@ namespace OpenRA.Mods.CA.Traits
 		}
 	}
 
-	public class WithVoxelHelicopterBody : ConditionalTrait<WithVoxelHelicopterBodyInfo>, IAutoMouseBounds, ITick, IActorPreviewInitModifier
+	public class WithVoxelAnimatedBody : ConditionalTrait<WithVoxelAnimatedBodyInfo>, ITick, IAutoMouseBounds, IActorPreviewInitModifier
 	{
-		readonly WithVoxelHelicopterBodyInfo info;
+		readonly WithVoxelAnimatedBodyInfo info;
 		readonly RenderVoxels rv;
 		readonly ModelAnimation modelAnimation;
 		uint tick, frame;
 		readonly uint frames;
 
-		public WithVoxelHelicopterBody(Actor self, WithVoxelHelicopterBodyInfo info)
+		public WithVoxelAnimatedBody(Actor self, WithVoxelAnimatedBodyInfo info)
 			: base(info)
 		{
 			this.info = info;
@@ -75,7 +69,7 @@ namespace OpenRA.Mods.CA.Traits
 
 			var voxel = self.World.ModelCache.GetModelSequence(rv.Image, info.Sequence);
 			frames = voxel.Frames;
-			modelAnimation = new ModelAnimation(voxel, () => info.Offset,
+			modelAnimation = new ModelAnimation(voxel, () => WVec.Zero,
 				() => body.QuantizeOrientation(self.Orientation),
 				() => IsTraitDisabled, () => frame, info.ShowShadow);
 
@@ -87,14 +81,14 @@ namespace OpenRA.Mods.CA.Traits
 			if (IsTraitDisabled)
 				return;
 
-			if (self.World.Map.DistanceAboveTerrain(self.CenterPosition) > WDist.Zero)
-				tick++;
+			tick++;
 
 			if (tick < info.TickRate)
 				return;
 
 			tick = 0;
-      frame = (frame + info.SkipRate) % frames;
+			if (++frame == frames)
+				frame = 0;
 		}
 
 		void IActorPreviewInitModifier.ModifyActorPreviewInit(Actor self, TypeDictionary inits)
