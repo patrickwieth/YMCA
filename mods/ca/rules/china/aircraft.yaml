@@ -9,11 +9,16 @@ CHMIG:
 		Offset: -250,-450,50
 	Contrail@2:
 		Offset: -250,450,50
-	Inherits: ^FightingPlane
 	Inherits: ^BiologicalPilot
-	Inherits: ^PrioAntiHeavy
 	Inherits: ^AnnounceOnBuild
+	Inherits: ^FightingPlane
 	Inherits: ^RearmableAircraft
+	Inherits: ^PrioAntiHeavy
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	AmmoPool:
+		Ammo: 8
 	Buildable:
 		Queue: Aircraft
 		IconPalette: chrometd
@@ -28,58 +33,22 @@ CHMIG:
 		Cost: 1500
 	Tooltip:
 		Name: MiG
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 16000
-	RevealsShroud:
-		Range: 13c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 11c0
-		Type: GroundPosition
 	Armament:
 		Weapon: Maverick
 		LocalOffset: 0,-640,-50, 0,640,-50
 		LocalYaw: -40, 24
 		PauseOnCondition: !ammo
 	AttackAircraft:
-		FacingTolerance: 20
-		PersistentTargeting: false
 		Voice: Attack
 	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
 		TurnSpeed: 16
 		Speed: 215
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-		TakeoffSounds: migtoff1.aud
-	AutoTarget:
-	AmmoPool:
-		Ammo: 8
-	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: chmig.husk
-	LeavesTrails:
-		Offsets: -853,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
 	Voiced:
 		VoiceSet: CHMiGVoice
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 CHMIG.AA:
 	Inherits: CHMIG
@@ -199,17 +168,26 @@ chmig.husk:
 		PlayerPalette: overlayplayertd
 
 chhelix:
-	Inherits: ^Helicopter
-	Inherits: ^TDAircraftSprite
+	Inherits: ^VoxelHelicopter
+	RenderVoxels:
+		Scale: 8
+		Image: chhelix
+	RenderSprites:
+		Image: chhelix
 	Inherits: ^BiologicalPilot
+	Inherits: ^FightingHelicopter
+	Inherits: ^RearmableAircraft
+	Inherits: ^RearmInAir
 	Inherits: ^PrioAntiInfantry
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@speaker: ^PropagandaSpeaker
-	Inherits@recon: ^SensorEquipment
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^PropagandaSpeaker
+	Inherits: ^SensorEquipment
+	Inherits: ^TransportWithAmmo
 	Buildable:
 		BuildPaletteOrder: 20
 		Prerequisites: ~aircraft.china, radar, ~!filler.helix
 		Queue: Aircraft
+		IconPalette: chrometd
 		Description: Helicopter gunship upgradeable with addons.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry
@@ -217,6 +195,27 @@ chhelix:
 		Attributes: • Can not attack Aircraft
 	Valued:
 		Cost: 1500
+	Health:
+		HP: 40000
+	Armament@PRIMARY:
+		Weapon: CHHelixMG
+		LocalOffset: 185,-213,-185, 185,213,-185
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		Voice: Attack
+	Aircraft:
+		TurnSpeed: 4
+		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
+		Speed: 112
+	Cargo:
+		Types: Infantry, Hacker, Vehicle
+		MaxWeight: 5
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: chhelix.husk
+	Voiced:
+		VoiceSet: CHHelixVoice
 	Tooltip:
 		Name: Helix
 		RequiresCondition: !speakeraddon && !reconaddon && !armoraddon
@@ -229,61 +228,6 @@ chhelix:
 	Tooltip@4:
 		Name: Helix (Armor)
 		RequiresCondition: armoraddon
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 30000
-	RevealsShroud@default:
-		Range: 8c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: CHHelixMG
-		LocalOffset: 85,-213,-85, 85,213,-85
-		MuzzleSequence: muzzle
-	AttackAircraft:
-		FacingTolerance: 20
-		PersistentTargeting: false
-		AttackType: Hover
-		Voice: Attack
-	Aircraft:
-		TurnSpeed: 4
-		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
-		Speed: 112
-	AutoTarget:
-	WithIdleOverlay@ROTORAIR:
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTORGROUND:
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	Cargo:
-		Types: Infantry, Hacker, Vehicle
-		MaxWeight: 5
-		AfterLoadDelay: 0
-		BeforeUnloadDelay: 0
-		AfterUnloadDelay: 0
-		LoadedCondition: loaded
-	SelectionDecorations:
-	WithMuzzleOverlay:
-	SpawnActorOnDeath:
-		Actor: chhelix.husk
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Voiced:
-		VoiceSet: CHHelixVoice
 	Production:
 		Produces: Helix.CHINA
 		RequiresCondition: !armoraddon && !reconaddon && !speakeraddon
@@ -317,16 +261,15 @@ chhelix:
 		RequiresCondition: speakeraddon && subliminal && !disabled
 	ProximityExternalCondition@PROPAGANDA:
 		RequiresCondition: speakeraddon && !subliminal && !disabled
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-	WithCargoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 chhelix.Gatling:
 	Inherits: chhelix
+	RenderVoxels:
+		Image: chhelix.gatling
 	Inherits: ^ChinaGatling
 	Inherits: ^PrioAntiLightAA
+	WithProductionIconOverlay@Minigun:
+		Types: Minigun
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.gatling
 		Description: Helicopter gatling gunship upgradeable with addons.
@@ -348,7 +291,9 @@ chhelix.Gatling:
 	Tooltip@4:
 		Name: Gatling Helix (Armor)
 		RequiresCondition: armoraddon
+	-Armament@PRIMARY:
 	-AttackAircraft:
+	-WithAmmoPipsDecoration:
 	Turreted@PRIMARY:
 		TurnSpeed: 90
 	AttackTurreted:
@@ -356,8 +301,11 @@ chhelix.Gatling:
 
 chhelix.Napalm:
 	Inherits: chhelix
+	RenderVoxels:
+		Image: chhelix.gatling
 	Inherits: ^PrioAntiLight
-	Inherits: ^RearmableAircraft
+	WithProductionIconOverlay@Flame:
+		Types: Flame
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.napalm
 		Description: Helicopter throwing napalm, upgradeable with addons.
@@ -405,11 +353,15 @@ chhelix.Napalm:
 
 chhelix.Nuke:
 	Inherits: chhelix
+	-ReloadAmmoPool:
+	RenderVoxels:
+		Image: chhelix.speaker
 	Inherits: ^PrioAntiLight
-	Inherits: ^RearmableAircraft
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.nuke
-		Description: Helicopter napalm bomber upgradeable with addons.
+		Description: Helicopter nuke bomber upgradeable with addons. \nMust reload at airfield.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Vehicles
 		Weaknesses: • Weak vs Anti-Air
@@ -444,8 +396,12 @@ chhelix.Nuke:
 
 chhelix.Bunker:
 	Inherits: chhelix
-	Inherits@AUTOTARGET2: ^PrioAntiHeavyAA
-	Inherits@CARGO: ^AttackingCargo
+	RenderVoxels:
+		Image: chhelix.bunker
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^AttackingCargo
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.bunker, ~!commander_tree.advanced_infantry_training
 		Description: Helicopter with bunker, upgradeable with addons.
@@ -490,6 +446,8 @@ chhelix.Torpedo:
 	Inherits: chhelix
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^RearmableAircraft
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
 	Buildable:
 		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.torpedo
 		Description: Helicopter napalm bomber upgradeable with addons.

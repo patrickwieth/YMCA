@@ -2542,23 +2542,21 @@
 		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 4
+		Margin: 5, 4
+		FullSequence: pip-red
 		Position: BottomLeft
 		RequiresSelection: true
 	Rearmable:
 		RearmActors: afld, afld.gdi, afld.allies, chairport
 
 ^RearmableHelicopter:
-	AmmoPool:
-		Ammo: 16
-		ReloadDelay: 10
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		PipCount: 4
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
+	Inherits: ^RearmableAircraft
 	Rearmable:
 		RearmActors: hpad, hpad.td
+
+^RearmInAir:
+	ReloadAmmoPool:
+		ResetOnFire: True
 
 ^Afterburner:
 	GrantConditionOnOrders@ACTIVE:
@@ -3947,19 +3945,22 @@
 		Speed: 180
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
-
-^VoxelPlaneHusk:
-	Inherits: ^PlaneHusk
-	Inherits: ^TSRenderVoxel
-	Inherits: ^WingContrails
 	LeavesTrails:
-		Offsets: -853,0,0
+		Offsets: -853,0,171
 		MovingInterval: 2
 		Image: smokey
 		StationaryInterval: 2
 		SpawnAtLastPosition: False
 		TrailWhileStationary: True
 		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
+
+^VoxelPlaneHusk:
+	Inherits: ^PlaneHusk
+	Inherits: ^TSRenderVoxel
+	Inherits: ^WingContrails
 	RevealsShroud:
 		Range: 10c0
 		Type: CenterPosition
@@ -3970,6 +3971,14 @@
 		Speed: 200
 		RepulsionSpeed: 40
 		MaximumPitch: 56
+	LeavesTrails:
+		Offsets: -853,0,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
 
 ^VoxelJetHusk:
 	Inherits: ^VoxelPlaneHusk
@@ -4179,16 +4188,23 @@
 		Types: Infantry
 		MaxWeight: 5
 		LoadingCondition: notmobile
-		LoadedCondition: cargo
+		LoadedCondition: loaded
 	WithCargoPipsDecoration:
 		Position: BottomLeft
-		Margin: 4, 3
+		PipCount: 5
+		Margin: 5, 0
 		RequiresSelection: true
 		CustomPipSequences:
 			gray: pip-gray
 			yellow: pip-yellow
 			red: pip-red
 			blue: pip-blue
+
+^TransportWithAmmo:
+	Inherits: ^Transport
+	WithCargoPipsDecoration:
+		Margin: 5, 12
+		Position: BottomLeft
 
 ^PrimaryBuilding:
 	PrimaryBuilding:
