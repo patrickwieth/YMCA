@@ -2539,9 +2539,6 @@ Bastion:
 		Offset: 0,0,0
 	DeathSounds:
 		Voice: Die
-	AnnounceOnCreation:
-		Notification: MothershipDeployed
-		Delay: 30
 	ChangesHealth@REGEN2:
 		Step: 1000
 		Delay: 25
@@ -2862,7 +2859,7 @@ MSHP.Husk:
 
 MSHP.Husk.Ground:
 	Inherits: ^Husk
-	Inherits@SHRAPNEL: ^ThrowsShrapnelBig
+	Inherits: ^ThrowsShrapnelBig
 	RenderSprites:
 		Image: mshp
 		PlayerPalette: overlayplayerscrin
@@ -2881,6 +2878,60 @@ MSHP.Husk.Ground:
 	-Capturable:
 	-TransformOnCapture:
 	-InfiltrateForTransform:
+
+Bastion.Husk:
+	Inherits: ^HelicopterHusk
+	Inherits: ^ScrinSpriteTD
+	RenderSprites:
+		Image: bastion
+	Tooltip:
+		Name: Bastion
+	Aircraft:
+		TurnSpeed: 8
+		Speed: 30
+	FallsToEarth:
+		MaximumSpinSpeed: 0
+		Velocity: 35
+	RevealsShroud:
+		Range: 10c0
+		MinRange: 8c0
+		Type: GroundPosition
+		RevealGeneratedShroud: false
+	RevealsShroud@GAPGEN:
+		Range: 8c0
+		Type: GroundPosition
+	FallsToEarth:
+		Explosion: KirovExplode
+	SpawnActorOnDeath:
+		Actor: Bastion.Husk.Ground
+	-WithFacingSpriteBody:
+	WithIdleOverlay@RING:
+		Image: bastion
+		Sequence: ring
+		Offset: 0,0,0
+
+Bastion.Husk.Ground:
+	Inherits: ^Husk
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^ThrowsShrapnelBig
+	RenderSprites:
+		Image: bastion
+	Tooltip:
+		Name: Husk (Bastion)
+	KillsSelf:
+		Delay: 1
+	Explodes:
+		Weapon: KirovExplode
+	-OwnerLostAction:
+	-CaptureManager:
+	-Capturable:
+	-TransformOnCapture:
+	-InfiltrateForTransform:
+	-WithFacingSpriteBody:
+	WithIdleOverlay@RING:
+		Image: bastion
+		Sequence: ring
+		Offset: 0,0,0
 
 #
 # ---- Buildings
