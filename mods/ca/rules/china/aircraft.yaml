@@ -180,8 +180,6 @@ chhelix:
 	Inherits: ^RearmInAir
 	Inherits: ^PrioAntiInfantry
 	Inherits: ^AnnounceOnBuild
-	Inherits: ^PropagandaSpeaker
-	Inherits: ^SensorEquipment
 	Inherits: ^TransportWithAmmo
 	Buildable:
 		BuildPaletteOrder: 20
@@ -246,14 +244,19 @@ chhelix:
 	GrantConditionOnProduction@recon:
 		Condition: reconaddon
 		Actors: helix.reconupgrade
+	RevealsShroud@aa:
+		Range: 6c0
+	RevealsShroud:
+		Range: 12c0
+		RequiresCondition: reconaddon && !(empdisable || being-warped)
 	DetectCloaked@Uncloak:
+		Range: 8c0
+		CloakTypes: Cloak, Thief, Stealth, Underwater
 		RequiresCondition: reconaddon && !(empdisable || being-warped)
 	RenderDetectionCircle:
+		TrailCount: 8
 		RequiresCondition: reconaddon && !(empdisable || being-warped)
-	RevealsShroud@GAPGEN:
-		RequiresCondition: reconaddon && !(empdisable || being-warped)
-	RevealsShroud:
-		RequiresCondition: reconaddon && !(empdisable || being-warped)
+	Inherits: ^PropagandaSpeaker
 	GrantConditionOnProduction@speaker:
 		Condition: speakeraddon
 		Actors: helix.speakerupgrade
