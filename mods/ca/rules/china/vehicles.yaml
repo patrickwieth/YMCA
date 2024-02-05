@@ -1,8 +1,14 @@
 CHNMCV:
 	Inherits: ^ConstructionVehicle
 	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.7
+		Image: bulldozer
+	RenderSprites:
+		Image: chmcv
 	Inherits: ^BigVehicle
-	Inherits@EarlyGame: ^EarlyGameBuildBoost
+	Inherits: ^EarlyGameBuildBoost
 	BaseProvider:
 		PauseOnCondition: being-captured
 		Range: 6c0
@@ -17,10 +23,9 @@ CHNMCV:
 		Prerequisites: ~chcommand
 		IconPalette: chrometd
 		Queue: Building
-		Description: Builds structures.
+		Description: Builds structures. Allows to expand to remote places via Headquarter.
 	Selectable:
 		Priority: 4
-	SelectionDecorations:
 	Health:
 		HP: 60000
 	Mobile:
@@ -30,8 +35,6 @@ CHNMCV:
 		Range: 4c0
 	Voiced:
 		VoiceSet: PRCMCCVoice
-	RenderSprites:
-		Image: chmcv
 	MustBeDestroyed:
 		RequiredForShortGame: true
 	ProvidesPrerequisite@faction:
@@ -51,13 +54,10 @@ CHNMCV:
 
 chbattle:
 	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
 	Inherits: ^VoxelTurretedTank
 	RenderVoxels:
 		Scale: 0.7
 		Image: chbattle
-	WithVoxelBody:
-		ShowShadow: true
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^GeneralsVehicle
@@ -97,7 +97,6 @@ chbattle:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
-	SelectionDecorations:
 	Voiced:
 		VoiceSet: BattlemasterTankVoice
 
