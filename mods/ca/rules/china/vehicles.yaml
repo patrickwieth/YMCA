@@ -1,7 +1,7 @@
 CHNMCV:
 	Inherits: ^ConstructionVehicle
 	Inherits: ^TDVehicleSprite
-	Inherits: ^VoxelVehicle
+	Inherits: ^VoxelTank
 	RenderVoxels:
 		Scale: 0.7
 		Image: bulldozer
@@ -58,6 +58,8 @@ chbattle:
 	RenderVoxels:
 		Scale: 0.7
 		Image: chbattle
+	RenderSprites:
+		Image: chbattle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^GeneralsVehicle
@@ -66,8 +68,6 @@ chbattle:
 	Inherits: ^UranShells
 	Inherits: ^AnnounceOnBuild
 	Inherits: ^AttackTurretedVoice
-	RenderSprites:
-		Image: chbattle
 	Valued:
 		Cost: 950
 	Tooltip:
@@ -667,11 +667,18 @@ choverlord.Husk:
 chdragon:
 	Inherits: ^FightingVehicle
 	Inherits: ^TDVehicleSprite
+	Inherits: ^Tank
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.7
+		Image: dragontank
+	RenderSprites:
+		Image: chdragon
 	Inherits: ^BiologicalDriver
-	Inherits@AUTOTARGET2: ^PrioAntiInfantry
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^PrioAntiInfantry
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackTurretedVoice
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -739,10 +746,8 @@ chdragon:
 		RevokeDelay: 100
 		RevokeAll: true
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
 		Armaments: primary, secondary, firewall1
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	Voiced:
 		VoiceSet: CHDragonTankVoice
 	GrantConditionOnPrerequisite@blacknapalm:
