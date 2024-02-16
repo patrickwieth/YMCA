@@ -257,6 +257,7 @@ chhelix:
 		TrailCount: 8
 		RequiresCondition: reconaddon && !(empdisable || being-warped)
 	Inherits: ^PropagandaSpeaker
+	-WithProductionIconOverlay@Speaker:
 	GrantConditionOnProduction@speaker:
 		Condition: speakeraddon
 		Actors: helix.speakerupgrade
@@ -403,13 +404,13 @@ chhelix.Bunker:
 		Image: chhelix.bunker
 	Inherits: ^PrioAntiHeavyAA
 	Inherits: ^AttackingCargo
-	WithProductionIconOverlay@Bullets:
-		Types: Bullets
+	WithProductionIconOverlay@Missile:
+		Types: Missile
 	Buildable:
-		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.bunker, ~!commander_tree.advanced_infantry_training
-		Description: Helicopter with bunker, upgradeable with addons.
+		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.hunterbunker
+		Description: Helicopter with bunker, upgradeable with addons. \nFilled with Tank Hunters.
 	TooltipExtras:
-		Strengths: • Strong vs Heavy Vehicles
+		Strengths: • Strong vs Tanks, Heavy Aircraft
 		Weaknesses: • Weak vs Anti-Air
 		Attributes: • Garrisoned Infantry can shoot from inside
 	Valued:
@@ -434,16 +435,20 @@ chhelix.Bunker:
 		InitialStanceAI: Defend
 		RequiresCondition: loaded || loaded-air
 
-chhelix.Bunker.advinf:
+chhelix.MortarBunker:
 	Inherits: chhelix.Bunker
+	Inherits: ^PrioArtillery
+	WithProductionIconOverlay@Shell:
+		Types: Shell
 	Buildable:
-		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.bunker, ~commander_tree.advanced_infantry_training
-	Valued:
-		Cost: 1600
+		Prerequisites: ~aircraft.china, radar, ~commander_tree.helix.mortarbunker
+		Description: Helicopter with bunker, upgradeable with addons.\nFilled with Mortars.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles, Defenses
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Garrisoned Infantry can shoot from inside
 	Cargo:
-		InitialUnits: che3, che3, che3, che3, mortar.china
-	RenderSprites:
-		Image: chhelix.Bunker
+		InitialUnits: mortar.china, mortar.china, mortar.china, mortar.china
 
 chhelix.Torpedo:
 	Inherits: chhelix

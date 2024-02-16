@@ -2703,7 +2703,7 @@ PROC.Dummy:
 	Inherits@wflash: ^WhiteFlash
 	Inherits@gflash: ^GreenFlash
 	Inherits@HACKABLE: ^Hackable
-	Inherits@EarlyGame: ^EarlyGameBuildBoost
+	Inherits: ^EarlyGameBuildBoost
 		RequiresCondition: invulnerability && !forceshield
 	Buildable:
 		Queue: Building
@@ -3744,6 +3744,8 @@ PROC.Dummy:
 		Condition: damaged
 
 ^PointLaserDefenseSystem:
+	WithProductionIconOverlay@PDL:
+		Types: PDL
 	Turreted@pointdefense:
 		Turret: pointdefense
 		TurnSpeed: 1000
@@ -3820,7 +3822,7 @@ PROC.Dummy:
 	ReloadAmmoDelayMultiplier@Propaganda:
 		RequiresCondition: propaganda
 		Modifier: 90
-	RangeMultiplier:
+	RangeMultiplier@Propaganda:
 		RequiresCondition: propaganda
 		Modifier: 110
 	ExternalCondition@Propaganda:
@@ -4237,6 +4239,7 @@ PROC.Dummy:
 
 ^BuildingPlug:
 	Inherits@3: ^SpriteActor
+	Inherits: ^EarlyGameBuildBoost
 	WithSpriteBody:
 	Interactable:
 	AlwaysVisible:
@@ -4870,6 +4873,8 @@ PROC.Dummy:
 		TargetTypes: heavy
 
 ^ReflectorArmor:
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
 	Armor:
 		Type: Reflector
 	Targetable@armorclass:

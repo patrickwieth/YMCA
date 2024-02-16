@@ -76,6 +76,7 @@ chbattle:
 		BuildPaletteOrder: 40
 		Prerequisites: chweap, ~vehicles.china, ~!vehicles.chinainf, ~!filler.battlemaster
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Chinese main battle tank.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles
@@ -116,6 +117,8 @@ chbattle.Autoloader:
 chbattle.Autoloader.PDL:
 	Inherits: chbattle.Autoloader
 	Inherits: ^PointLaserDefenseSystem
+	WithProductionIconOverlay@PDL:
+		Types: PDL
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~commander_tree.battlemaster.pdl
 	TooltipExtras:
@@ -126,12 +129,12 @@ chbattle.Autoloader.PDL:
 		Name: Battlemaster (Autoloader, PDL)
 	Valued:
 		Cost: 1600
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 
 chbattle.Autoloader.Reflector:
 	Inherits: chbattle.Autoloader
 	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~commander_tree.battlemaster.reflector
 	TooltipExtras:
@@ -140,8 +143,6 @@ chbattle.Autoloader.Reflector:
 		Attributes: • Reflector Armor
 	Tooltip:
 		Name: Battlemaster (Autoloader, Reflector)
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 
 chbattle.Nuclear_Shells:
 	Inherits: chbattle
@@ -299,6 +300,11 @@ choverlord:
 	RenderVoxels:
 		Scale: 0.8
 		Image: overlord
+	WithVoxelBody:
+		RequiresCondition: !vehicles.chinatnk
+	WithVoxelBody@Emperor:
+		Sequence: emperor
+		RequiresCondition: !vehicles.chinatnk
 	RenderSprites:
 		Image: choverlord
 	Inherits: ^BigVehicle
@@ -322,7 +328,7 @@ choverlord:
 		Modifier: 80
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: techcenter, ~vehicles.china, ~!vehicles.chinainf,  ~!vehicles.chinatnk, ~!filler.overlord
+		Prerequisites: techcenter, ~vehicles.china, ~!vehicles.chinainf, ~!filler.overlord
 		Queue: Vehicle
 		Description: Heavy Chinese tank.
 	TooltipExtras:
@@ -338,7 +344,7 @@ choverlord:
 	Turreted:
 		Turret: primary
 		TurnSpeed: 3
-		Offset: -298,0,150
+		Offset: 0,0,0
 	Armament:
 		Weapon: OverlordCannon
 		LocalOffset: 1250,250,50, 1250,-250,50
@@ -353,11 +359,13 @@ choverlord:
 
 choverlord.Gatling:
 	Inherits: choverlord
-	WithVoxelTurret:
-		Sequence: turretgatling
 	Inherits: ^ChinaGatlingOverlord
 	Inherits: ^PrioAntiHeavyAA
-	Inherits@detect: ^SensorEquipment
+	Inherits: ^SensorEquipment
+	WithVoxelTurret:
+		Turret: secondary
+	WithProductionIconOverlay@Minigun:
+		Types: Minigun
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.gatling, ~!filler.overlord2
 		Description: Heavy Chinese tank.\n
@@ -376,11 +384,11 @@ choverlord.Gatling:
 	Turreted@gatling:
 		Turret: primary
 		TurnSpeed: 16
-		Offset: -298,0,400
+		Offset: -200,0,200
 	Turreted:
 		Turret: secondary
 		TurnSpeed: 3
-		Offset: -298,0,150
+		Offset: 0,0,0
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 		Turrets: primary, secondary, tertiary
@@ -388,8 +396,6 @@ choverlord.Gatling:
 	WithSpriteTurret@gatling:
 		Turret: primary
 		Sequence: turretgat
-	WithSpriteTurret:
-		Turret: secondary
 	Armament:
 		Name: tertiary
 		Turret: secondary
@@ -397,6 +403,8 @@ choverlord.Gatling:
 choverlord.Gatling.PDL:
 	Inherits: choverlord.Gatling
 	Inherits: ^PointLaserDefenseSystem
+	WithProductionIconOverlay@PDL:
+		Types: PDL
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.gatling, ~commander_tree.overlord.pdl
 	TooltipExtras:
@@ -434,7 +442,9 @@ choverlord.Bunker:
 		Sequence: turretbunker
 	Inherits: ^PrioAntiHeavyAA
 	-AttackTurreted:
-	Inherits@CARGO: ^AttackingCargoAndTurret
+	Inherits: ^AttackingCargoAndTurret
+	WithProductionIconOverlay@Missile:
+		Types: Missile
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.bunker, ~!filler.overlord2
 	TooltipExtras:
@@ -494,6 +504,8 @@ choverlord.Propaganda:
 	Inherits: choverlord
 	WithVoxelTurret:
 		Sequence: turretpropaganda
+	Turreted:
+		Offset: -200,0,0
 	Inherits: ^PropagandaSpeaker
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.propaganda, ~!filler.overlord2
@@ -510,8 +522,6 @@ choverlord.Propaganda:
 		RequiresCondition: vehicles.chinatnk
 	Valued:
 		Cost: 2200
-	WithSpriteTurret@PROPAGANDA:
-		Sequence: turretpro
 
 choverlord.Propaganda.PDL:
 	Inherits: choverlord.Propaganda
@@ -552,6 +562,8 @@ choverlord.Nuke_Shells:
 	WithVoxelTurret:
 		Sequence: turretnuke
 	Inherits: ^PrioAntiLight
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
 	Buildable:
 		Prerequisites: chweap, techcenter, ~commander_tree.overlord.nuclear_shells, ~!filler.overlord2
 		Description: Heavy Chinese tank armed with nuclear shells.
@@ -608,7 +620,11 @@ choverlord.Plasma:
 	Inherits: choverlord
 	WithVoxelTurret:
 		Sequence: turretplasma
+	Turreted:
+		Offset: -100,0,0
 	Inherits: ^PrioEnergyWeapon
+	WithProductionIconOverlay@Plasma:
+		Types: Plasma
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.plasma, ~!filler.overlord2
 		Description: Heavy Chinese tank shooting ionized plasma.
@@ -625,11 +641,11 @@ choverlord.Plasma:
 	Armament:
 		Weapon: CHECMBeam.Overlord
 		Recoil: 0
-		LocalOffset: 1250,250,50
+		LocalOffset: 1200,250,400
 		-MuzzleSequence:
 	Armament@secondary:
 		Weapon: CHECMBeam.Overlord
-		LocalOffset: 1250,-250,50
+		LocalOffset: 1200,-250,400
 
 choverlord.Plasma.PDL:
 	Inherits: choverlord.Plasma
