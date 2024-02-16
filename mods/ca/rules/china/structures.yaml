@@ -1,10 +1,10 @@
 chcommand:
 	Inherits: ^BuildingChina
-	Inherits@shape: ^3x2Shape
-	Inherits@Armor: ^ConcreteArmor
-	Inherits@mines: ^MinefieldUpgrade
+	Inherits: ^3x2Shape
+	Inherits: ^ConcreteArmor
+	Inherits: ^MinefieldUpgrade
 	Inherits: ^BotFallbackInsurance
-	Inherits@StructureProduction: ^StructureProduction
+	Inherits: ^StructureProduction
 	Inherits: ^RadarStation
 	ProvidesPrerequisite@buildingname:
 	Buildable:
@@ -35,7 +35,7 @@ chcommand:
 		RequiresCondition: !jammed && !disabled && !being-warped && radar
 	Power:
 		Amount: 0
-	RallyPoint:							##########
+	RallyPoint:
 		Path: 0,2
 	Exit@1:
 		SpawnOffset: -1024,1024,0		#-1323,1280,0
@@ -78,9 +78,6 @@ chcommand:
 		DisplayRadarPing: True
 		CameraActor: camera
 		CameraRemoveDelay: 300
-	BaseProvider:
-		RequiresCondition: botowner
-		Range: 16c0
 	GrantConditionOnBotOwner@BOTRADAR:
 		Condition: radar
 		Bots: brutal, vhard, hard, normal, easy, naval

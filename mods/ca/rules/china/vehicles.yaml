@@ -58,6 +58,8 @@ chbattle:
 	RenderVoxels:
 		Scale: 0.7
 		Image: chbattle
+	RenderSprites:
+		Image: chbattle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^GeneralsVehicle
@@ -66,8 +68,6 @@ chbattle:
 	Inherits: ^UranShells
 	Inherits: ^AnnounceOnBuild
 	Inherits: ^AttackTurretedVoice
-	RenderSprites:
-		Image: chbattle
 	Valued:
 		Cost: 950
 	Tooltip:
@@ -295,14 +295,20 @@ charty.Husk:
 choverlord:
 	Inherits: ^Tank
 	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.8
+		Image: overlord
+	RenderSprites:
+		Image: choverlord
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@atom: ^AtomicTank
-	Inherits@uran: ^UranShells
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AtomicTank
+	Inherits: ^UranShells
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackTurretedVoice
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -327,8 +333,6 @@ choverlord:
 		Locomotor: sheavytracked
 		TurnSpeed: 8
 		Speed: 56
-	Passenger:
-		Weight: 6
 	Health:
 		HP: 95000
 	Turreted:
@@ -344,13 +348,13 @@ choverlord:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
-	SelectionDecorations:
 	Voiced:
 		VoiceSet: OverlordTankVoice
-	WithSpriteTurret:
 
 choverlord.Gatling:
 	Inherits: choverlord
+	WithVoxelTurret:
+		Sequence: turretgatling
 	Inherits: ^ChinaGatlingOverlord
 	Inherits: ^PrioAntiHeavyAA
 	Inherits@detect: ^SensorEquipment
@@ -426,6 +430,8 @@ choverlord.Gatling.Reflector:
 
 choverlord.Bunker:
 	Inherits: choverlord
+	WithVoxelTurret:
+		Sequence: turretbunker
 	Inherits: ^PrioAntiHeavyAA
 	-AttackTurreted:
 	Inherits@CARGO: ^AttackingCargoAndTurret
@@ -486,7 +492,9 @@ choverlord.Bunker.Reflector:
 
 choverlord.Propaganda:
 	Inherits: choverlord
-	Inherits@speaker: ^PropagandaSpeaker
+	WithVoxelTurret:
+		Sequence: turretpropaganda
+	Inherits: ^PropagandaSpeaker
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.propaganda, ~!filler.overlord2
 		Description: Heavy Chinese tank with propaganda speakers.
@@ -541,6 +549,8 @@ choverlord.Propaganda.Reflector:
 
 choverlord.Nuke_Shells:
 	Inherits: choverlord
+	WithVoxelTurret:
+		Sequence: turretnuke
 	Inherits: ^PrioAntiLight
 	Buildable:
 		Prerequisites: chweap, techcenter, ~commander_tree.overlord.nuclear_shells, ~!filler.overlord2
@@ -596,6 +606,8 @@ choverlord.Nuke_Shells.Reflector:
 
 choverlord.Plasma:
 	Inherits: choverlord
+	WithVoxelTurret:
+		Sequence: turretplasma
 	Inherits: ^PrioEnergyWeapon
 	Buildable:
 		Prerequisites: techcenter, ~commander_tree.overlord.plasma, ~!filler.overlord2
