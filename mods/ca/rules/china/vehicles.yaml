@@ -1084,12 +1084,17 @@ choutpost.Bunker.Reflector:
 
 checm:
 	Inherits: ^Vehicle
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.7
+		Image: ecm
+	RenderSprites:
+		Image: checm
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyWeapon
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackTurretedVoice
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -1107,32 +1112,11 @@ checm:
 		Speed: 90
 	Health:
 		HP: 24000
-	RevealsShroud:
-		Range: 8c0
-	JamsMissiles:
-		Range: 5c0
-		DeflectionStances: Neutral, Enemy
-		RequiresCondition: !disabled && !attacking
-	RenderJammerCircle:
 	Armament:
 		Weapon: CHECMDisable
-		LocalOffset: 250,0,100
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
-		Armaments: primary, secondary
-	GrantConditionOnAttack:
-		Condition: attacking
-		ArmamentNames: primary, secondary
-		RevokeDelay: 60
+		LocalOffset: 250,0,300
 	Turreted:
-		Offset: -256,0,256
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-		Offset: -256,0,256
-		PauseOnCondition: disabled
-		RequiresCondition: !attacking
-	WithSpriteTurret:
-		RequiresCondition: attacking
+		Offset: 0,0,0
 	Voiced:
 		VoiceSet: ECMTankVoice
 
