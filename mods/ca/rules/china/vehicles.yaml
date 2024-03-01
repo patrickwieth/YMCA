@@ -905,6 +905,7 @@ chharv:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 10
+		IconPalette: chrometd
 		Prerequisites: chsupply, ~vehicles.china
 		Description: Collects Ore and Gems for processing.\n  Unarmed
 	Valued:
@@ -1103,6 +1104,7 @@ checm:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, radar, ~vehicles.china, ~!filler.ecm
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Disables vehicles with a modulated plasma beam.
 	TooltipExtras:
 		Strengths: • Strong vs Slow Heavy Vehicles
@@ -1184,9 +1186,9 @@ chcrawl:
 	Inherits: ^FightingVehicle
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^Transport
 	Valued:
 		Cost: 1350
 	Tooltip:
@@ -1215,7 +1217,7 @@ chcrawl2:
 	Inherits: ^Tank
 	Inherits: ^TDVehicleSprite
 	Inherits: ^PrioAntiLight
-	Inherits@CARGO: ^AttackingCargo
+	Inherits: ^AttackingCargo
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -1362,12 +1364,26 @@ chcrawl.Husk:
 
 chnukecann:
 	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.8
+		Image: nukecannon
+	WithVoxelBody:
+		ShowShadow: true
+		RequiresCondition: !deployed
+	WithVoxelBody@deployed:
+		ShowShadow: true
+		Sequence: deployed
+		RequiresCondition: deployed
+	WithVoxelTurret:
+		RequiresCondition: deployed
+	RenderSprites:
+		Image: chnukecann
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AttackTurretedVoice
 	Valued:
 		Cost: 2400
 	Tooltip:
@@ -1376,6 +1392,7 @@ chnukecann:
 		BuildPaletteOrder: 60
 		Prerequisites: techcenter, ~chweap, ~commander_tree.nuke_cannon, ~!filler.nuke_cannon
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
 	TooltipExtras:
 		Strengths: • Strong vs Masses
@@ -1389,15 +1406,14 @@ chnukecann:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 8	#3
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
+		TurnSpeed: 8
+		Offset: -150,0,0
 	SelectionDecorations:
 	Selectable:
 	Armament@PRIMARY:
 		Name: primary
 		Weapon: CHNukeCannon
-		LocalOffset: 407,0,362
+		LocalOffset: 400,0,600
 		PauseOnCondition: !ammo || fired
 	Armament@AIM:
 		Weapon: NukeCannonDummyAim
@@ -1439,26 +1455,12 @@ chnukecann:
 	SpeedMultiplier@UNDEPLOY:
 		Modifier: 0
 		RequiresCondition: fired
-	WithFacingSpriteBody@Skin1:
-		Sequence: idle2
-		RequiresCondition: !ammo && !deployed
-		Name: body1
-	WithFacingSpriteBody@Skin2:
-		Sequence: deploy
-		RequiresCondition: ammo || deployed
-		Name: body2
-	WithSpriteTurret@Skin2:
-		RequiresCondition: ammo || deployed
-		Sequence: turret
 	Voiced:
 		VoiceSet: CHNukeCannonVoice
 	Explodes:
 		Weapon: CHAtomicTankExplode
 		EmptyWeapon: CHAtomicTankExplode
 		RequiresCondition: !chronobeamed
-	GrantConditionOnPrerequisite@upneutronshell:
-		Condition: upneutronshell
-		Prerequisites: upneutronshell
 
 chnukecann.Range:
 	Inherits: chnukecann
@@ -1466,6 +1468,8 @@ chnukecann.Range:
 		Cost: 3000
 	Tooltip:
 		Name: Nuke Cannon (Range)
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
 	Buildable:
 		Prerequisites: chweap, techcenter, ~commander_tree.nuke_cannon.range
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
@@ -1481,6 +1485,8 @@ chnukecann.Neutron:
 		Cost: 3000
 	Tooltip:
 		Name: Neutron Cannon (Neutron)
+	WithProductionIconOverlay@Neutron:
+		Types: Neutron
 	Buildable:
 		Prerequisites: chweap, techcenter, ~commander_tree.nuke_cannon.neutron
 		Description: Slow heavy artillery.\n Must be deployed to fire neutron shells.
