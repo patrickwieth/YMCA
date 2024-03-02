@@ -117,8 +117,6 @@ chbattle.Autoloader:
 chbattle.Autoloader.PDL:
 	Inherits: chbattle.Autoloader
 	Inherits: ^PointLaserDefenseSystem
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~commander_tree.battlemaster.pdl
 	TooltipExtras:
@@ -133,8 +131,6 @@ chbattle.Autoloader.PDL:
 chbattle.Autoloader.Reflector:
 	Inherits: chbattle.Autoloader
 	Inherits: ^ReflectorArmor
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~commander_tree.battlemaster.reflector
 	TooltipExtras:
@@ -147,6 +143,8 @@ chbattle.Autoloader.Reflector:
 chbattle.Nuclear_Shells:
 	Inherits: chbattle
 	Inherits: ^PrioAntiLight
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.nuclear_shells, ~!filler.battlemaster2
 		Description: Chinese main battle tank.\nFires nuclear shells.
@@ -159,8 +157,6 @@ chbattle.Nuclear_Shells:
 	Armament:
 		Weapon: CHBattlemasterCannon.Nuclear_Shells
 		Recoil: 256
-	WithProductionIconOverlay@Nuke:
-		Types: Nuke
 
 chbattle.Nuclear_Shells.PDL:
 	Inherits: chbattle.Nuclear_Shells
@@ -175,8 +171,6 @@ chbattle.Nuclear_Shells.PDL:
 		Name: Battlemaster (Nuke, PDL)
 	Valued:
 		Cost: 1600
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 
 chbattle.Nuclear_Shells.Reflector:
 	Inherits: chbattle.Nuclear_Shells
@@ -189,11 +183,11 @@ chbattle.Nuclear_Shells.Reflector:
 		Attributes: • Reflector Armor
 	Tooltip:
 		Name: Battlemaster (Nuke, Reflector)
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 
 chbattle.Mass_Production:
 	Inherits: chbattle
+	WithProductionIconOverlay@Wrench:
+		Types: Wrench
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.mass_production, ~!filler.battlemaster2
 		Description: Chinese main battle tank.
@@ -201,8 +195,6 @@ chbattle.Mass_Production:
 		Name: Battlemaster (Mass Production)
 	Valued:
 		Cost: 600
-	WithProductionIconOverlay@Wrench:
-		Types: Wrench
 
 chbattle.Mass_Production.PDL:
 	Inherits: chbattle.Mass_Production
@@ -217,8 +209,6 @@ chbattle.Mass_Production.PDL:
 		Name: Battlemaster (PDL)
 	Valued:
 		Cost: 1000
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 
 chbattle.Mass_Production.Reflector:
 	Inherits: chbattle.Mass_Production
@@ -231,17 +221,22 @@ chbattle.Mass_Production.Reflector:
 		Attributes: • Reflector Armor
 	Tooltip:
 		Name: Battlemaster (Reflector)
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 
 charty:
 	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.8
+		Image: infernocannon
+	WithVoxelBody@cannon:
+		Sequence: turret
+	RenderSprites:
+		Image: charty
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackFrontalVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackFrontalVoice
 	Valued:
 		Cost: 900
 	Tooltip:
@@ -250,6 +245,7 @@ charty:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, radar, ~vehicles.china, ~!vehicles.chinainf
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Long-range napalm artillery.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Vehicles
@@ -821,13 +817,34 @@ chdragon.Husk:
 
 chgtnk:
 	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.7
+		Image: gatlingtank
+	RenderSprites:
+		Image: chgtnk
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackTurretedVoice
 	Inherits: ^ChinaGatling
+	Armament@GAT0:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT1:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT2:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT3:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT0G:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT1G:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT2G:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT3G:
+		LocalOffset: 300,-100,400, 300,100,400
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -836,6 +853,7 @@ chgtnk:
 		BuildPaletteOrder: 40
 		Prerequisites: ~vehicles.china, ~!commander_tree.gatling.pdl, ~!commander_tree.gatling.reflector
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Tank armed with gatling guns.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
@@ -849,12 +867,10 @@ chgtnk:
 		Range: 6c0
 	Turreted:
 		TurnSpeed: 16
-		Offset: -275,0,150
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 		Armaments: primary, secondary
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	Voiced:
 		VoiceSet: CHGatlingTankVoice
 
@@ -944,13 +960,18 @@ chharv.Husk:
 
 choutpost:
 	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.7
+		Image: outpost
+	RenderSprites:
+		Image: choutpost
 	Inherits: ^BiologicalDriver
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@TRANSPORT: ^Transport
-	Inherits@detect: ^SensorEquipment
-	Inherits@radar: ^MobileDeployableRadar
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^Transport
+	Inherits: ^SensorEquipment
+	Inherits: ^MobileDeployableRadar
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -959,6 +980,7 @@ choutpost:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, techcenter, ~vehicles.china, ~!filler.outpost
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Detects cloaked units and buildings.
 	TooltipExtras:
 		Weaknesses: • Unarmed
@@ -970,9 +992,6 @@ choutpost:
 	SelectionDecorations:
 	Turreted:
 		TurnSpeed: 10
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-		Offset: -256,0,256
 	Voiced:
 		VoiceSet: ListeningOutpostVoice
 	Cloak:
@@ -981,6 +1000,7 @@ choutpost:
 		UncloakOn: Attack, Unload, Move
 		PauseOnCondition: cloak-force-disabled || base-reveal || disabled || driver-dead
 		IsPlayerPalette: true
+		Palette: cloakts
 
 choutpost.Propaganda:
 	Inherits: choutpost
@@ -988,9 +1008,7 @@ choutpost.Propaganda:
 	Tooltip:
 		Name: Propaganda Outpost
 	Buildable:
-		BuildPaletteOrder: 60
 		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.propaganda, ~!filler.outpost2
-		Queue: Vehicle
 		Description: Detects cloaked units and buildings.\nMounted with a propaganda speaker.
 	TooltipExtras:
 		Strengths: • Strong with Infantry
@@ -1038,9 +1056,7 @@ choutpost.Bunker:
 	Tooltip:
 		Name: Attack Outpost
 	Buildable:
-		BuildPaletteOrder: 60
 		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.bunker, ~!filler.outpost2
-		Queue: Vehicle
 		Description: Detects cloaked units and buildings.\nGarrisoned with 5 Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Tanks, Aircraft
@@ -1184,7 +1200,8 @@ CHTRUK:
 
 chcrawl:
 	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
+	RenderSprites:
+		Image: chcrawl
 	Inherits: ^BiologicalDriver
 	Inherits: ^GeneralsVehicle
 	Inherits: ^AnnounceOnBuild
@@ -1197,6 +1214,7 @@ chcrawl:
 		BuildPaletteOrder: 30
 		Prerequisites: chweap, ~vehicles.china, ~!vehicles.chinainf
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Heavy infantry transport.\n Unarmed
 	Mobile:
 		Speed: 110
@@ -1215,7 +1233,8 @@ chcrawl:
 chcrawl2:
 	Inherits: chcrawl
 	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
+	RenderSprites:
+		Image: chcrawl2
 	Inherits: ^PrioAntiLight
 	Inherits: ^AttackingCargo
 	Valued:
@@ -1223,9 +1242,7 @@ chcrawl2:
 	Tooltip:
 		Name: Heavy Troop Crawler
 	Buildable:
-		BuildPaletteOrder: 60
 		Prerequisites: chweap, ~vehicles.chinainf, ~!filler.crawler
-		Queue: Vehicle
 		Description: Heavy infantry transport.\n Passengers can fire from within
 	TooltipExtras:
 		Strengths: • Strong vs Masses
