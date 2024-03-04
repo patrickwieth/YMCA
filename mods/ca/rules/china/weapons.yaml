@@ -1113,3 +1113,35 @@ CHMineSpawner:
 		Actors: chminv
 		Range: 0
 		ValidTargets: Ground, Water, Air
+
+BixiLauncher:
+	Inherits: ^MissileArtillery
+	ReloadDelay: 5
+	Range: 19c511
+	MinRange: 5c0
+	Report: vv3latta.aud, vv3lattb.aud
+	ValidTargets: Ground, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Water
+	-Warhead@2Smu: LeaveSmudge
+	-Warhead@3Eff: CreateEffect
+	-Warhead@4EffWater: CreateEffect
+
+BixiWeapon:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^NapalmMissile
+	ValidTargets: Ground, Trees, Water
+	Warhead@1: FireFragment
+		UseZOffsetAsAbsoluteHeight: true
+		Weapon: CHInfernoCannonC
+		ValidTargets: Air, Ground, Water
+		Chance: 25
+
+BixiWeapon.Black_Napalm:
+	Inherits: BixiWeapon
+	Warhead@1: FireFragment
+		UseZOffsetAsAbsoluteHeight: true
+		Weapon: CHInfernoCannonC
+		ValidTargets: Air, Ground, Water
+		Chance: 25

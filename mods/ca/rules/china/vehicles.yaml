@@ -1524,3 +1524,92 @@ chnukecann.Husk:
 		IntoActor: chnukecann
 	RenderSprites:
 		Image: chnukecann
+
+Bixi:
+	Inherits: ^FightingVehicle
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.8
+		Image: bixi
+	WithVoxelBody:
+		RequiresCondition: !reloading
+	WithVoxelBody@deployed:
+		ShowShadow: true
+		Sequence: empty-idle
+		RequiresCondition: reloading
+	RenderSprites:
+		Image: bixi
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	Inherits: ^SovietArtillery
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 115
+		Prerequisites: techcenter, ~chweap, ~commander_tree.bixi_dragon
+		Description: Long-range rocket artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Bixi Dragon
+	Health:
+		HP: 16000
+	Mobile:
+		Speed: 56
+		TurnSpeed: 8
+		Voice: Move
+		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
+	Passenger:
+		Voice: Move
+	Armament:
+		Weapon: BixiLauncher
+		ReloadingCondition: reloading
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+		FacingTolerance: 0
+	GrantConditionOnAttack:
+		Condition: aiming
+		RevokeDelay: 50
+		RevokeAll: false
+	MissileSpawnerMaster:
+		Actors: bixi.missile,bixi.missile
+		SpawnAllAtOnce: True
+		RespawnTicks: 125
+	Explodes:
+		Weapon: BarrelExplode
+	Voiced:
+		VoiceSet: V3Voice
+	Exit@1:
+		SpawnOffset: 0,-150,350
+	Exit@2:
+		SpawnOffset: 0,150,350
+
+Bixi.Missile:
+	Inherits: ^VoxelShootableMissile
+	RenderVoxels:
+		Scale: 0.8
+		Image: bixi.missile
+	RenderSprites:
+		Image: bixi.missile
+	Tooltip:
+		Name: Bixi Missile
+	Tooltip@NoRow:
+		Name: Bixi Missile
+	Health:
+		HP: 2500
+	BallisticMissile:
+		LaunchAngle: 95
+		Speed: 145
+	SpawnedExplodes:
+		Weapon: BixiWeapon
+		EmptyWeapon: VisualExplodeHusk
+		RequiresCondition: !airborne && !blacknapalm
+	SpawnedExplodes@black_napalm:
+		Weapon: BixiWeapon.Black_Napalm
+		EmptyWeapon: VisualExplodeHusk
+		RequiresCondition: !airborne && blacknapalm
+	Explodes:
+		Weapon: VisualExplodeAirborne
+		RequiresCondition: airborne

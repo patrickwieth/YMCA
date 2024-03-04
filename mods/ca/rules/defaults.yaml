@@ -3980,6 +3980,40 @@ PROC.Dummy:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
+^VoxelShootableMissile:
+	Inherits: ^ExistsInWorld
+	Inherits: ^SpriteActor
+	Inherits: ^LightArmor
+	Inherits: ^TSRenderVoxel
+	Valued:
+		Cost: 0
+	BallisticMissile:
+		LaunchAngle: 128
+		Speed: 165
+		AirborneCondition: airborne
+	MissileSpawnerSlave:
+	LeavesTrails:
+		Image: smokey2
+		Palette: tseffect-ignore-lighting-alpha75
+		MovingInterval: 3
+		Type: CenterPosition
+		Offsets: -200, 0, 0
+	Targetable@GROUND:
+		TargetTypes: Ground, Vehicle
+		RequiresCondition: !airborne
+	Targetable@AIRBORNE:
+		TargetTypes: Air
+		RequiresCondition: airborne
+	HiddenUnderFog:
+		Type: GroundPosition
+	Tooltip:
+		Name: Missile
+		GenericName: Missile
+		ShowOwnerRow: false
+	HitShape:
+	RejectsOrders:
+	Interactable:
+
 ^VoxelPlaneHusk:
 	Inherits: ^PlaneHusk
 	Inherits: ^TSRenderVoxel
