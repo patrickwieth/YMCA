@@ -117,8 +117,6 @@ chbattle.Autoloader:
 chbattle.Autoloader.PDL:
 	Inherits: chbattle.Autoloader
 	Inherits: ^PointLaserDefenseSystem
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~commander_tree.battlemaster.pdl
 	TooltipExtras:
@@ -133,8 +131,6 @@ chbattle.Autoloader.PDL:
 chbattle.Autoloader.Reflector:
 	Inherits: chbattle.Autoloader
 	Inherits: ^ReflectorArmor
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.autoloader, ~commander_tree.battlemaster.reflector
 	TooltipExtras:
@@ -147,6 +143,8 @@ chbattle.Autoloader.Reflector:
 chbattle.Nuclear_Shells:
 	Inherits: chbattle
 	Inherits: ^PrioAntiLight
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.nuclear_shells, ~!filler.battlemaster2
 		Description: Chinese main battle tank.\nFires nuclear shells.
@@ -159,8 +157,6 @@ chbattle.Nuclear_Shells:
 	Armament:
 		Weapon: CHBattlemasterCannon.Nuclear_Shells
 		Recoil: 256
-	WithProductionIconOverlay@Nuke:
-		Types: Nuke
 
 chbattle.Nuclear_Shells.PDL:
 	Inherits: chbattle.Nuclear_Shells
@@ -175,8 +171,6 @@ chbattle.Nuclear_Shells.PDL:
 		Name: Battlemaster (Nuke, PDL)
 	Valued:
 		Cost: 1600
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 
 chbattle.Nuclear_Shells.Reflector:
 	Inherits: chbattle.Nuclear_Shells
@@ -189,11 +183,11 @@ chbattle.Nuclear_Shells.Reflector:
 		Attributes: • Reflector Armor
 	Tooltip:
 		Name: Battlemaster (Nuke, Reflector)
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 
 chbattle.Mass_Production:
 	Inherits: chbattle
+	WithProductionIconOverlay@Wrench:
+		Types: Wrench
 	Buildable:
 		Prerequisites: chweap, ~vehicles.china, ~commander_tree.battlemaster.mass_production, ~!filler.battlemaster2
 		Description: Chinese main battle tank.
@@ -201,8 +195,6 @@ chbattle.Mass_Production:
 		Name: Battlemaster (Mass Production)
 	Valued:
 		Cost: 600
-	WithProductionIconOverlay@Wrench:
-		Types: Wrench
 
 chbattle.Mass_Production.PDL:
 	Inherits: chbattle.Mass_Production
@@ -217,8 +209,6 @@ chbattle.Mass_Production.PDL:
 		Name: Battlemaster (PDL)
 	Valued:
 		Cost: 1000
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 
 chbattle.Mass_Production.Reflector:
 	Inherits: chbattle.Mass_Production
@@ -231,17 +221,22 @@ chbattle.Mass_Production.Reflector:
 		Attributes: • Reflector Armor
 	Tooltip:
 		Name: Battlemaster (Reflector)
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 
 charty:
 	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.8
+		Image: infernocannon
+	WithVoxelBody@cannon:
+		Sequence: turret
+	RenderSprites:
+		Image: charty
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackFrontalVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackFrontalVoice
 	Valued:
 		Cost: 900
 	Tooltip:
@@ -250,6 +245,7 @@ charty:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, radar, ~vehicles.china, ~!vehicles.chinainf
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Long-range napalm artillery.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Vehicles
@@ -821,13 +817,34 @@ chdragon.Husk:
 
 chgtnk:
 	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.7
+		Image: gatlingtank
+	RenderSprites:
+		Image: chgtnk
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackTurretedVoice
 	Inherits: ^ChinaGatling
+	Armament@GAT0:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT1:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT2:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT3:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT0G:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT1G:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT2G:
+		LocalOffset: 300,-100,400, 300,100,400
+	Armament@GAT3G:
+		LocalOffset: 300,-100,400, 300,100,400
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -836,6 +853,7 @@ chgtnk:
 		BuildPaletteOrder: 40
 		Prerequisites: ~vehicles.china, ~!commander_tree.gatling.pdl, ~!commander_tree.gatling.reflector
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Tank armed with gatling guns.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
@@ -849,12 +867,10 @@ chgtnk:
 		Range: 6c0
 	Turreted:
 		TurnSpeed: 16
-		Offset: -275,0,150
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 		Armaments: primary, secondary
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	Voiced:
 		VoiceSet: CHGatlingTankVoice
 
@@ -897,11 +913,19 @@ chgtnk.Husk:
 
 chharv:
 	Inherits: ^HarvesterVehicle
+<<<<<<< HEAD
 	Inherits: ^TDVehicleSprite
+=======
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.7
+		Image: supplytruck
+>>>>>>> dd52217a94f7531312aa3e858a67184f1d5f6370
 	Inherits: ^GeneralsVehicle
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 10
+		IconPalette: chrometd
 		Prerequisites: chsupply, ~vehicles.china
 		Description: Collects Ore and Gems for processing.\n  Unarmed
 	Valued:
@@ -940,13 +964,18 @@ chharv.Husk:
 
 choutpost:
 	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.7
+		Image: outpost
+	RenderSprites:
+		Image: choutpost
 	Inherits: ^BiologicalDriver
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@TRANSPORT: ^Transport
-	Inherits@detect: ^SensorEquipment
-	Inherits@radar: ^MobileDeployableRadar
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^Transport
+	Inherits: ^SensorEquipment
+	Inherits: ^MobileDeployableRadar
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -955,6 +984,7 @@ choutpost:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, techcenter, ~vehicles.china, ~!filler.outpost
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Detects cloaked units and buildings.
 	TooltipExtras:
 		Weaknesses: • Unarmed
@@ -966,9 +996,6 @@ choutpost:
 	SelectionDecorations:
 	Turreted:
 		TurnSpeed: 10
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-		Offset: -256,0,256
 	Voiced:
 		VoiceSet: ListeningOutpostVoice
 	Cloak:
@@ -977,6 +1004,7 @@ choutpost:
 		UncloakOn: Attack, Unload, Move
 		PauseOnCondition: cloak-force-disabled || base-reveal || disabled || driver-dead
 		IsPlayerPalette: true
+		Palette: cloakts
 
 choutpost.Propaganda:
 	Inherits: choutpost
@@ -984,9 +1012,7 @@ choutpost.Propaganda:
 	Tooltip:
 		Name: Propaganda Outpost
 	Buildable:
-		BuildPaletteOrder: 60
 		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.propaganda, ~!filler.outpost2
-		Queue: Vehicle
 		Description: Detects cloaked units and buildings.\nMounted with a propaganda speaker.
 	TooltipExtras:
 		Strengths: • Strong with Infantry
@@ -1034,9 +1060,7 @@ choutpost.Bunker:
 	Tooltip:
 		Name: Attack Outpost
 	Buildable:
-		BuildPaletteOrder: 60
 		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.bunker, ~!filler.outpost2
-		Queue: Vehicle
 		Description: Detects cloaked units and buildings.\nGarrisoned with 5 Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Tanks, Aircraft
@@ -1081,12 +1105,17 @@ choutpost.Bunker.Reflector:
 
 checm:
 	Inherits: ^Vehicle
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.7
+		Image: ecm
+	RenderSprites:
+		Image: checm
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyWeapon
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackTurretedVoice
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -1095,6 +1124,7 @@ checm:
 		BuildPaletteOrder: 60
 		Prerequisites: chweap, radar, ~vehicles.china, ~!filler.ecm
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Disables vehicles with a modulated plasma beam.
 	TooltipExtras:
 		Strengths: • Strong vs Slow Heavy Vehicles
@@ -1104,32 +1134,11 @@ checm:
 		Speed: 90
 	Health:
 		HP: 24000
-	RevealsShroud:
-		Range: 8c0
-	JamsMissiles:
-		Range: 5c0
-		DeflectionStances: Neutral, Enemy
-		RequiresCondition: !disabled && !attacking
-	RenderJammerCircle:
 	Armament:
 		Weapon: CHECMDisable
-		LocalOffset: 250,0,100
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
-		Armaments: primary, secondary
-	GrantConditionOnAttack:
-		Condition: attacking
-		ArmamentNames: primary, secondary
-		RevokeDelay: 60
+		LocalOffset: 250,0,300
 	Turreted:
-		Offset: -256,0,256
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-		Offset: -256,0,256
-		PauseOnCondition: disabled
-		RequiresCondition: !attacking
-	WithSpriteTurret:
-		RequiresCondition: attacking
+		Offset: 0,0,0
 	Voiced:
 		VoiceSet: ECMTankVoice
 
@@ -1195,10 +1204,13 @@ CHTRUK:
 
 chcrawl:
 	Inherits: ^FightingVehicle
+<<<<<<< HEAD
 	Inherits: ^VoxelVehicle
 	RenderVoxels:
 		Scale: 0.6
 		Image: troopcrawler
+=======
+>>>>>>> dd52217a94f7531312aa3e858a67184f1d5f6370
 	RenderSprites:
 		Image: chcrawl
 	Inherits: ^BiologicalDriver
@@ -1213,6 +1225,7 @@ chcrawl:
 		BuildPaletteOrder: 30
 		Prerequisites: chweap, ~vehicles.china, ~!vehicles.chinainf
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Heavy infantry transport.\n Unarmed
 	Mobile:
 		Speed: 110
@@ -1231,8 +1244,13 @@ chcrawl:
 chcrawl2:
 	Inherits: chcrawl
 	Inherits: ^Tank
+<<<<<<< HEAD
 	RenderVoxels:
 		Image: troopcrawlerheavy
+=======
+	RenderSprites:
+		Image: chcrawl2
+>>>>>>> dd52217a94f7531312aa3e858a67184f1d5f6370
 	Inherits: ^PrioAntiLight
 	Inherits: ^AttackingCargo
 	Valued:
@@ -1240,9 +1258,7 @@ chcrawl2:
 	Tooltip:
 		Name: Heavy Troop Crawler
 	Buildable:
-		BuildPaletteOrder: 60
 		Prerequisites: chweap, ~vehicles.chinainf, ~!filler.crawler
-		Queue: Vehicle
 		Description: Heavy infantry transport.\n Passengers can fire from within
 	TooltipExtras:
 		Strengths: • Strong vs Masses
@@ -1381,12 +1397,26 @@ chcrawl.Husk:
 
 chnukecann:
 	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.8
+		Image: nukecannon
+	WithVoxelBody:
+		ShowShadow: true
+		RequiresCondition: !deployed
+	WithVoxelBody@deployed:
+		ShowShadow: true
+		Sequence: deployed
+		RequiresCondition: deployed
+	WithVoxelTurret:
+		RequiresCondition: deployed
+	RenderSprites:
+		Image: chnukecann
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@vo: ^AttackTurretedVoice
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AttackTurretedVoice
 	Valued:
 		Cost: 2400
 	Tooltip:
@@ -1395,6 +1425,7 @@ chnukecann:
 		BuildPaletteOrder: 60
 		Prerequisites: techcenter, ~chweap, ~commander_tree.nuke_cannon, ~!filler.nuke_cannon
 		Queue: Vehicle
+		IconPalette: chrometd
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
 	TooltipExtras:
 		Strengths: • Strong vs Masses
@@ -1408,15 +1439,14 @@ chnukecann:
 	RevealsShroud:
 		Range: 6c0
 	Turreted:
-		TurnSpeed: 8	#3
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
+		TurnSpeed: 8
+		Offset: -150,0,0
 	SelectionDecorations:
 	Selectable:
 	Armament@PRIMARY:
 		Name: primary
 		Weapon: CHNukeCannon
-		LocalOffset: 407,0,362
+		LocalOffset: 400,0,600
 		PauseOnCondition: !ammo || fired
 	Armament@AIM:
 		Weapon: NukeCannonDummyAim
@@ -1458,26 +1488,12 @@ chnukecann:
 	SpeedMultiplier@UNDEPLOY:
 		Modifier: 0
 		RequiresCondition: fired
-	WithFacingSpriteBody@Skin1:
-		Sequence: idle2
-		RequiresCondition: !ammo && !deployed
-		Name: body1
-	WithFacingSpriteBody@Skin2:
-		Sequence: deploy
-		RequiresCondition: ammo || deployed
-		Name: body2
-	WithSpriteTurret@Skin2:
-		RequiresCondition: ammo || deployed
-		Sequence: turret
 	Voiced:
 		VoiceSet: CHNukeCannonVoice
 	Explodes:
 		Weapon: CHAtomicTankExplode
 		EmptyWeapon: CHAtomicTankExplode
 		RequiresCondition: !chronobeamed
-	GrantConditionOnPrerequisite@upneutronshell:
-		Condition: upneutronshell
-		Prerequisites: upneutronshell
 
 chnukecann.Range:
 	Inherits: chnukecann
@@ -1485,6 +1501,8 @@ chnukecann.Range:
 		Cost: 3000
 	Tooltip:
 		Name: Nuke Cannon (Range)
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
 	Buildable:
 		Prerequisites: chweap, techcenter, ~commander_tree.nuke_cannon.range
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
@@ -1500,6 +1518,8 @@ chnukecann.Neutron:
 		Cost: 3000
 	Tooltip:
 		Name: Neutron Cannon (Neutron)
+	WithProductionIconOverlay@Neutron:
+		Types: Neutron
 	Buildable:
 		Prerequisites: chweap, techcenter, ~commander_tree.nuke_cannon.neutron
 		Description: Slow heavy artillery.\n Must be deployed to fire neutron shells.
@@ -1520,3 +1540,95 @@ chnukecann.Husk:
 		IntoActor: chnukecann
 	RenderSprites:
 		Image: chnukecann
+
+Bixi:
+	Inherits: ^FightingVehicle
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.8
+		Image: bixi
+	WithVoxelBody:
+		RequiresCondition: !reloading
+	WithVoxelBody@deployed:
+		ShowShadow: true
+		Sequence: empty-idle
+		RequiresCondition: reloading
+	RenderSprites:
+		Image: bixi
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	Inherits: ^SovietArtillery
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 115
+		Prerequisites: techcenter, ~chweap, ~commander_tree.bixi_dragon
+		Description: Long-range rocket artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Bixi Dragon
+	Health:
+		HP: 16000
+	Mobile:
+		Speed: 56
+		TurnSpeed: 8
+		Voice: Move
+		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
+	Passenger:
+		Voice: Move
+	Armament:
+		Weapon: BixiLauncher
+		ReloadingCondition: reloading
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+		FacingTolerance: 0
+	GrantConditionOnAttack:
+		Condition: aiming
+		RevokeDelay: 50
+		RevokeAll: false
+	MissileSpawnerMaster:
+		Actors: bixi.missile,bixi.missile
+		SpawnAllAtOnce: True
+		RespawnTicks: 125
+	Explodes:
+		Weapon: BarrelExplode
+	Voiced:
+		VoiceSet: V3Voice
+	Exit@1:
+		SpawnOffset: 0,-150,350
+	Exit@2:
+		SpawnOffset: 0,150,350
+
+Bixi.Missile:
+	Inherits: ^VoxelShootableMissile
+	RenderVoxels:
+		Scale: 0.8
+		Image: bixi.missile
+	RenderSprites:
+		Image: bixi.missile
+	Tooltip:
+		Name: Bixi Missile
+	Tooltip@NoRow:
+		Name: Bixi Missile
+	Health:
+		HP: 2500
+	BallisticMissile:
+		LaunchAngle: 95
+		Speed: 145
+	SpawnedExplodes:
+		Weapon: BixiWeapon
+		EmptyWeapon: VisualExplodeHusk
+		RequiresCondition: !airborne && !blacknapalm
+	SpawnedExplodes@black_napalm:
+		Weapon: BixiWeapon.Black_Napalm
+		EmptyWeapon: VisualExplodeHusk
+		RequiresCondition: !airborne && blacknapalm
+	Explodes:
+		Weapon: VisualExplodeAirborne
+		RequiresCondition: airborne
+	GrantConditionOnPrerequisite@blacknapalm:
+		Condition: blacknapalm
+		Prerequisites: commander_tree.black_napalm

@@ -1,12 +1,17 @@
 CHE1:
 	Inherits: ^Soldier
+	RenderSprites:
+		PlayerPalette: playerra2
+	WithShadow:
+		Offset: 43, 128, 0
+		ZOffset: -129
 	Inherits: ^PrioAntiInfantry
 	Inherits: ^ScoutEquipment
-	Inherits@BOTHELPER: ^BotCaptureHelper
-	Inherits@horde: ^HordeBonus
+	Inherits: ^BotCaptureHelper
+	Inherits: ^HordeBonus
 	#Inherits@cap: ^BuildingCaptureUpgrade
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackFrontalVoice
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackFrontalVoice
 	Buildable:
 		BuildPaletteOrder: 20
 		Queue: Infantry
@@ -40,7 +45,9 @@ CHE1:
 
 CHE2:
 	Inherits: CHE1
-	Inherits@AUTOTARGET2: ^PrioAntiLightAA
+	RenderSprites:
+		PlayerPalette: overlayplayer
+	Inherits: ^PrioAntiLightAA
 	Buildable:
 		BuildPaletteOrder: 20
 		IconPalette: chrometd
@@ -56,36 +63,69 @@ CHE2:
 		Name: Minigunner
 	Armament@PRIMARY:
 		Weapon: CHMinigunnerGatling
+		PauseOnCondition: !ammo
 	Armament@PRIMARYAA:
 		Weapon: CHMinigunnerGatlingAA
+		PauseOnCondition: !ammo
 	Armament@GARRISONED:
 		Name: mounted
 		Weapon: CHMinigunnerGatling
 		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
 	Armament@GARRISONEDAA:
 		Name: mountedaa
 		Weapon: CHMinigunnerGatlingAA
 		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
 	WithMuzzleOverlay:
 	Health:
-		HP: 12000
+		HP: 10000
 	AmmoPool:
-		Ammo: 8
+		Ammo: 30
 		AmmoCondition: ammo
 	ReloadAmmoPool:
-		Delay: 50
-		Count: 1
-	ReloadDelayMultiplier@gatlingSpeed:
-		RequiresCondition: !ammo
-		Modifier: 75
+		Delay: 100
+		Count: 30
+		ResetOnFire: True
+	GrantConditionOnAttack:
+		ArmamentNames: primary,secondary,mounted,mountedaa
+		Condition: gatling
+		RequiredShotsPerInstance: 1
+		MaximumInstances: 7
+		RevokeDelay: 20
+		RevokeOnNewTarget: False
+		RevokeAll: True
+	ReloadDelayMultiplier@1:
+		Modifier: 90
+		RequiresCondition: gatling == 1
+	ReloadDelayMultiplier@2:
+		Modifier: 80
+		RequiresCondition: gatling == 2
+	ReloadDelayMultiplier@3:
+		Modifier: 70
+		RequiresCondition: gatling == 3
+	ReloadDelayMultiplier@4:
+		Modifier: 50
+		RequiresCondition: gatling == 4
+	ReloadDelayMultiplier@5:
+		Modifier: 35
+		RequiresCondition: gatling == 5
+	ReloadDelayMultiplier@6:
+		Modifier: 25
+		RequiresCondition: gatling == 6
+	ReloadDelayMultiplier@7:
+		Modifier: 20
+		RequiresCondition: gatling == 7
 
 CHE3:
 	Inherits: E3
-	Inherits@TargetPrio: ^PrioAntiHeavyAA
-	Inherits@TargetRelay: ^RelayTargeting
-	Inherits@horde: ^HordeBonus
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@vo: ^AttackFrontalVoice
+	RenderSprites:
+		PlayerPalette: playerra2
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^RelayTargeting
+	Inherits: ^HordeBonus
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackFrontalVoice
 	Valued:
 		Cost: 300
 	Tooltip:

@@ -119,7 +119,7 @@ CHMinigunnerGatling:
 	Range: 5c0
 	Report: iremweaa.wav, iremweab.wav, iremweac.wav, iremwead.wav
 	Warhead@1Dam: SpreadDamage
-		Damage: 900
+		Damage: 500
 
 CHMinigunnerGatlingAA:
 	Inherits: CHMinigunnerGatling
@@ -128,7 +128,7 @@ CHMinigunnerGatlingAA:
 	Projectile: InstantHit
 		Blockable: false
 	Warhead@1Dam: SpreadDamage
-		Damage: 1100
+		Damage: 500
 		ValidTargets: Air
 
 #####################################################
@@ -303,7 +303,7 @@ CHNukeCannon:
 	TargetActorCenter: true
 	Projectile: BulletCA
 		ContrailLength: 30
-		LaunchAngle: 135
+		LaunchAngle: 100
 		Speed: 180
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
@@ -1113,3 +1113,34 @@ CHMineSpawner:
 		Actors: chminv
 		Range: 0
 		ValidTargets: Ground, Water, Air
+
+BixiLauncher:
+	Inherits: ^MissileArtillery
+	ReloadDelay: 5
+	Range: 19c511
+	MinRange: 5c0
+	ValidTargets: Ground, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Water
+	-Warhead@2Smu: LeaveSmudge
+	-Warhead@3Eff: CreateEffect
+	-Warhead@4EffWater: CreateEffect
+
+BixiWeapon:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^NapalmMissile
+	ValidTargets: Ground, Trees, Water
+	Warhead@1: FireFragment
+		UseZOffsetAsAbsoluteHeight: true
+		Weapon: CHInfernoCannonC
+		ValidTargets: Air, Ground, Water
+		Chance: 25
+
+BixiWeapon.Black_Napalm:
+	Inherits: BixiWeapon
+	Warhead@1: FireFragment
+		UseZOffsetAsAbsoluteHeight: true
+		Weapon: CHInfernoCannonC
+		ValidTargets: Air, Ground, Water
+		Chance: 25
