@@ -898,7 +898,7 @@ chgtnk.Husk:
 chharv:
 	Inherits: ^HarvesterVehicle
 	Inherits: ^TDVehicleSprite
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
+	Inherits: ^GeneralsVehicle
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 10
@@ -1195,11 +1195,16 @@ CHTRUK:
 
 chcrawl:
 	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.6
+		Image: troopcrawler
+	RenderSprites:
+		Image: chcrawl
 	Inherits: ^BiologicalDriver
-	Inherits@GeneralsVehicle: ^GeneralsVehicle
-	Inherits@announce: ^AnnounceOnBuild
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^Transport
 	Valued:
 		Cost: 1350
 	Tooltip:
@@ -1226,9 +1231,10 @@ chcrawl:
 chcrawl2:
 	Inherits: chcrawl
 	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
+	RenderVoxels:
+		Image: troopcrawlerheavy
 	Inherits: ^PrioAntiLight
-	Inherits@CARGO: ^AttackingCargo
+	Inherits: ^AttackingCargo
 	Valued:
 		Cost: 1000
 	Tooltip:
