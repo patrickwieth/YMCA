@@ -296,12 +296,6 @@ choverlord:
 	RenderVoxels:
 		Scale: 0.8
 		Image: overlord
-	WithVoxelBody:
-		Sequence: idle
-		RequiresCondition: !chinatnk
-	WithVoxelBody@Emperor:
-		Sequence: emperor
-		RequiresCondition: chinatnk
 	RenderSprites:
 		Image: choverlord
 	Inherits: ^BigVehicle
@@ -314,6 +308,9 @@ choverlord:
 	Inherits: ^AttackTurretedVoice
 	Valued:
 		Cost: 2000
+	GrantConditionOnPrerequisite@chinatnk:
+		Condition: chinatnk
+		Prerequisites: chinatnk
 	Tooltip:
 		Name: Overlord Tank
 		RequiresCondition: !chinatnk
@@ -325,7 +322,7 @@ choverlord:
 		Modifier: 80
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: techcenter, ~vehicles.china, ~!vehicles.chinainf, ~!filler.overlord
+		Prerequisites: radar, ~vehicles.china, ~!vehicles.chinainf, ~!filler.overlord
 		Queue: Vehicle
 		Description: Heavy Chinese tank.
 	TooltipExtras:
@@ -403,7 +400,7 @@ choverlord.Gatling.PDL:
 	WithProductionIconOverlay@PDL:
 		Types: PDL
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.gatling, ~commander_tree.overlord.pdl
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.gatling, ~commander_tree.overlord.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles
 		Weaknesses: • Weak vs Energy Weapons, Aircraft
@@ -421,7 +418,7 @@ choverlord.Gatling.Reflector:
 	Inherits: choverlord.Gatling
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.gatling, ~commander_tree.overlord.reflector
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.gatling, ~commander_tree.overlord.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons
 		Weaknesses: • Weak vs Aircraft
@@ -467,7 +464,7 @@ choverlord.Bunker.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	-AttackTurreted:
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.bunker, ~commander_tree.overlord.pdl
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.bunker, ~commander_tree.overlord.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles
 		Weaknesses: • Weak vs Energy Weapons, Aircraft
@@ -485,7 +482,7 @@ choverlord.Bunker.Reflector:
 	Inherits: choverlord.Bunker
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.bunker, ~commander_tree.overlord.reflector
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.bunker, ~commander_tree.overlord.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons
 		Weaknesses: • Weak vs Aircraft
@@ -524,7 +521,7 @@ choverlord.Propaganda.PDL:
 	Inherits: choverlord.Propaganda
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.propaganda, ~commander_tree.overlord.pdl
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.propaganda, ~commander_tree.overlord.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles
 		Weaknesses: • Weak vs Energy Weapons, Aircraft
@@ -542,7 +539,7 @@ choverlord.Propaganda.Reflector:
 	Inherits: choverlord.Propaganda
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.propaganda, ~commander_tree.overlord.reflector
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.propaganda, ~commander_tree.overlord.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons
 		Weaknesses: • Weak vs Aircraft
@@ -562,7 +559,7 @@ choverlord.Nuke_Shells:
 	WithProductionIconOverlay@Nuke:
 		Types: Nuke
 	Buildable:
-		Prerequisites: chweap, techcenter, ~commander_tree.overlord.nuclear_shells, ~!filler.overlord2
+		Prerequisites: techcenter, ~commander_tree.overlord.nuclear_shells, ~!filler.overlord2
 		Description: Heavy Chinese tank armed with nuclear shells.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry
@@ -583,7 +580,7 @@ choverlord.Nuke_Shells.PDL:
 	Inherits: choverlord.Nuke_Shells
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
-		Prerequisites: chweap, techcenter, ~commander_tree.overlord.nuclear_shells, ~commander_tree.overlord.pdl
+		Prerequisites: techcenter, ~commander_tree.overlord.nuclear_shells, ~commander_tree.overlord.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles
 		Weaknesses: • Weak vs Energy Weapons, Aircraft
@@ -601,7 +598,7 @@ choverlord.Nuke_Shells.Reflector:
 	Inherits: choverlord.Nuke_Shells
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.nuclear_shells, ~commander_tree.overlord.reflector
+		Prerequisites: ~vehicles.china, ~commander_tree.overlord.nuclear_shells, ~commander_tree.overlord.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons
 		Weaknesses: • Weak vs Aircraft
@@ -648,7 +645,7 @@ choverlord.Plasma.PDL:
 	Inherits: choverlord.Plasma
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.plasma, ~commander_tree.overlord.pdl
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.plasma, ~commander_tree.overlord.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles
 		Weaknesses: • Weak vs Energy Weapons, Aircraft
@@ -666,7 +663,7 @@ choverlord.Plasma.Reflector:
 	Inherits: choverlord.Plasma
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.overlord.plasma, ~commander_tree.overlord.reflector
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.plasma, ~commander_tree.overlord.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons
 		Weaknesses: • Weak vs Aircraft
@@ -783,7 +780,7 @@ chdragon.PDL:
 	Inherits: chdragon
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
-		Prerequisites: ~vehicles.china, ~commander_tree.dragon_tank.pdl
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.dragon_tank.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
 		Weaknesses: • Weak vs Energy Weapons
@@ -797,7 +794,7 @@ chdragon.Reflector:
 	Inherits: chdragon
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: ~vehicles.china, ~commander_tree.dragon_tank.reflector
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.dragon_tank.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons, Aircraft
 		Weaknesses: • Weak vs Tanks, Projectiles
@@ -879,7 +876,7 @@ chgtnk.PDL:
 	Inherits: chgtnk
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.gatling.pdl
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.gatling.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
 		Weaknesses: • Weak vs Energy Weapons
@@ -893,7 +890,7 @@ chgtnk.Reflector:
 	Inherits: chgtnk
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.gatling.reflector
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.gatling.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons, Aircraft
 		Weaknesses: • Weak vs Tanks, Projectiles
@@ -979,7 +976,7 @@ choutpost:
 		Name: Listening Outpost
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: chweap, techcenter, ~vehicles.china, ~!filler.outpost
+		Prerequisites: radar, ~vehicles.china, ~!filler.outpost
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Detects cloaked units and buildings.
@@ -1009,7 +1006,7 @@ choutpost.Propaganda:
 	Tooltip:
 		Name: Propaganda Outpost
 	Buildable:
-		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.propaganda, ~!filler.outpost2
+		Prerequisites: techcenter, ~vehicles.chinainf, ~commander_tree.outpost.propaganda, ~!filler.outpost2
 		Description: Detects cloaked units and buildings.\nMounted with a propaganda speaker.
 	TooltipExtras:
 		Strengths: • Strong with Infantry
@@ -1024,7 +1021,7 @@ choutpost.Propaganda.PDL:
 	Inherits: choutpost.Propaganda
 	Inherits: ^PointLaserDefenseSystemBig
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.outpost.propaganda, ~commander_tree.outpost.pdl
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.outpost.propaganda, ~commander_tree.outpost.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
 		Weaknesses: • Weak vs Energy Weapons
@@ -1038,7 +1035,7 @@ choutpost.Propaganda.Reflector:
 	Inherits: choutpost.Propaganda
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.outpost.propaganda, ~commander_tree.outpost.reflector
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.outpost.propaganda, ~commander_tree.outpost.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons, Aircraft
 		Weaknesses: • Weak vs Tanks, Projectiles
@@ -1057,7 +1054,7 @@ choutpost.Bunker:
 	Tooltip:
 		Name: Attack Outpost
 	Buildable:
-		Prerequisites: chweap, techcenter, ~vehicles.chinainf, ~commander_tree.outpost.bunker, ~!filler.outpost2
+		Prerequisites: techcenter, ~vehicles.chinainf, ~commander_tree.outpost.bunker, ~!filler.outpost2
 		Description: Detects cloaked units and buildings.\nGarrisoned with 5 Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Tanks, Aircraft
@@ -1078,7 +1075,7 @@ choutpost.Bunker.PDL:
 	-AttackOpenTopped:
 	Inherits@CARGO: ^AttackingCargoAndTurret
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.outpost.bunker, ~commander_tree.outpost.pdl
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.outpost.bunker, ~commander_tree.outpost.pdl
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
 		Weaknesses: • Weak vs Energy Weapons
@@ -1092,7 +1089,7 @@ choutpost.Bunker.Reflector:
 	Inherits: choutpost.Bunker
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: chweap, ~vehicles.china, ~commander_tree.outpost.bunker, ~commander_tree.outpost.reflector
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.outpost.bunker, ~commander_tree.outpost.reflector
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons, Aircraft
 		Weaknesses: • Weak vs Tanks, Projectiles
@@ -1146,8 +1143,10 @@ checm.pulse:
 		Cost: 1000
 	Tooltip:
 		Name: Plasma Pulse Tank
+	WithProductionIconOverlay@Pulse:
+		Types: Pulse
 	Buildable:
-		Prerequisites: chweap, radar, ~vehicles.china, ~commander_tree.ecm.pulse
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.ecm.pulse
 		Description: Disables and damages vehicles with a pulsating plasma beam.
 	TooltipExtras:
 		Strengths: • Strong vs low-range Tanks
@@ -1164,8 +1163,10 @@ checm.focus:
 		Cost: 1000
 	Tooltip:
 		Name: Plasma Focus Tank
+	WithProductionIconOverlay@Beamfocus:
+		Types: Beamfocus
 	Buildable:
-		Prerequisites: chweap, radar, ~vehicles.china, ~commander_tree.ecm.focus
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.ecm.focus
 		Description: Tank with a focused plasma beam,\nbreaking through massive hulls fast.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Tanks
@@ -1180,8 +1181,10 @@ checm.chain:
 		Cost: 1000
 	Tooltip:
 		Name: Plasma Chain Tank
+	WithProductionIconOverlay@Chainer:
+		Types: Chainer
 	Buildable:
-		Prerequisites: chweap, radar, ~vehicles.china, ~commander_tree.ecm.chain
+		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.ecm.chain
 		Description: Tank with a highly modulated plasma beam,\njumping over to many targets.
 	TooltipExtras:
 		Strengths: • Strong vs groups of light units
@@ -1283,7 +1286,7 @@ chcrawl2.Hunter:
 	Tooltip:
 		Name: Hunter Troop Crawler
 	Buildable:
-		Prerequisites: chweap, ~commander_tree.crawler.hunter, ~!filler.crawler2
+		Prerequisites: radar, ~commander_tree.crawler.hunter, ~!filler.crawler2
 		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Aircraft
@@ -1302,7 +1305,7 @@ chcrawl2.Hunter.PDL:
 	Tooltip:
 		Name: Hunter Troop Crawler (PDL)
 	Buildable:
-		Prerequisites: chweap, techcenter, ~commander_tree.crawler.hunter, ~commander_tree.crawler.pdl
+		Prerequisites: techcenter, ~commander_tree.crawler.hunter, ~commander_tree.crawler.pdl
 		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
@@ -1317,7 +1320,7 @@ chcrawl2.Hunter.Reflector:
 	Tooltip:
 		Name: Hunter Troop Crawler (Reflector)
 	Buildable:
-		Prerequisites: chweap, techcenter, ~commander_tree.crawler.hunter, ~commander_tree.crawler.reflector
+		Prerequisites: techcenter, ~commander_tree.crawler.hunter, ~commander_tree.crawler.reflector
 		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons, Aircraft
@@ -1332,7 +1335,7 @@ chcrawl2.Assault:
 	Tooltip:
 		Name: Assault Troop Crawler
 	Buildable:
-		Prerequisites: chweap, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
+		Prerequisites: radar, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
 		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Aircraft
@@ -1351,7 +1354,7 @@ chcrawl2.Assault.PDL:
 	Tooltip:
 		Name: Assault Troop Crawler (PDL)
 	Buildable:
-		Prerequisites: chweap, techcenter, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
+		Prerequisites: techcenter, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
 		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
@@ -1366,7 +1369,7 @@ chcrawl2.Assault.Reflector:
 	Tooltip:
 		Name: Assault Troop Crawler (Reflector)
 	Buildable:
-		Prerequisites: chweap, techcenter, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
+		Prerequisites: techcenter, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
 		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons, Aircraft
