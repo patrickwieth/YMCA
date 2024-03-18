@@ -1,0 +1,60 @@
+commander_tree.orca_bomber.EMP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca EMP Bomber
+	RenderSprites:
+		Image: orcab
+	WithProductionIconOverlay@EMP:
+		Types: EMP
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca_bomber.ap, ~!commander_tree.orca_bomber.he, ~aircraft.eagle
+		Description: Orca Bomber equipped with EMP Bombs, which disable vehicles and structures.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.orca_bomber.AP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Bomber (AP)
+	RenderSprites:
+		Image: orcab
+	WithProductionIconOverlay@Shell:
+		Types: Shell
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca_bomber.emp, ~!commander_tree.orca_bomber.he, ~aircraft.eagle
+		Description: Orca Bomber equipped with armor piercing bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor
+		Weaknesses: • Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.orca_bomber.HE:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Bomber (HE)
+	RenderSprites:
+		Image: orcab
+	WithProductionIconOverlay@Dynamite:
+		Types: Dynamite
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca_bomber.emp, ~!commander_tree.orca_bomber.ap, ~aircraft.eagle
+		Description: Orca Bomber equipped with Cluster HE Bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Light Armor, Infantry
+		Weaknesses: • Weak vs Anti-Air

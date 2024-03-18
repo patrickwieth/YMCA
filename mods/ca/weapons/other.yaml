@@ -1465,6 +1465,7 @@ LaserFence:
 		DamageTypes: FireDeath
 
 OrcaBomb:
+	Inherits: ^Bomb
 	ValidTargets: Ground, Water
 	InvalidTargets: Air
 	ReloadDelay: 50
@@ -1473,11 +1474,6 @@ OrcaBomb:
 	BurstDelays: 5
 	Range: 2c0
 	TargetActorCenter: true
-	Projectile: GravityBomb
-		Image: EMPBOMBLET
-		Velocity: 25, 0, -74
-		Acceleration: 0, 0, 0
-		Shadow: true
 	Warhead@1Dam: SpreadDamage
 		Spread: 726
 		Damage: 200
@@ -1486,15 +1482,33 @@ OrcaBomb:
 		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
-	Warhead@3Eff: CreateEffect
-		Explosions: pulse_explosion_small
-		ExplosionPalette: tseffect-ignore-lighting-alpha75
-		ImpactSounds: expnew16.aud
+
+OrcaBomb.EMP:
+	Inherits: OrcaBomb
 	Warhead@emp: GrantExternalCondition
 		Range: 3c0
 		Duration: 400
 		Condition: empdisable
 		ValidTargets: Ground, Structure, Vehicle
+	Warhead@3Eff: CreateEffect
+		Explosions: pulse_explosion_small
+		ExplosionPalette: tseffect-ignore-lighting-alpha75
+		ImpactSounds: expnew16.aud
+
+OrcaBomb.AP:
+	Inherits: APBomb
+
+OrcaBomb.HE:
+	Inherits: OrcaBomb
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+	Warhead@3Eff: CreateEffect
+		ImpactSounds: kaboom15.aud
+	Warhead@Cluster: FireCluster
+		Weapon: ClusterBomb2S3
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
 
 MicrowaveZap:
 	Inherits: ^Radiation
@@ -1985,7 +1999,7 @@ SonicPulse:
 		ExplosionPalette: effect-ignore-lighting-alpha40
 		ValidTargets: Ground, Air, Ship, Trees
 
-StealthBomb:
+APBomb:
 	Inherits: ^AntiGroundMissile
 	Inherits: ^ShellAP
 	ReloadDelay: 50

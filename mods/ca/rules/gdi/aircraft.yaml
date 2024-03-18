@@ -1,35 +1,25 @@
-ORCB:
+Orca_Bomber:
 	Inherits: ^Helicopter
 	Inherits: ^TDAircraftSprite
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiHeavy
 	RenderSprites:
 		Image: orcab
-	WithProductionIconOverlay@EMP:
-		Types: EMP
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad.td, ~aircraft.eagle, gtek
+		Prerequisites: ~hpad.td, ~aircraft.eagle, techcenter, ~!disabled
 		IconPalette: chrome
 		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft, Infantry
 	Valued:
 		Cost: 1600
 	Tooltip:
-		Name: Orca Bomber
+		Name: Orca Bomber (EMP)
 	Health:
 		HP: 36000
-	RevealsShroud:
-		Range: 10c0
-		MinRange: 8c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-		Type: GroundPosition
 	Armament:
-		Weapon: OrcaBomb
+		Weapon: OrcaBomb.EMP
 		LocalOffset: 2,-256,-43, 2,256,-43
 		PauseOnCondition: !ammo
 	AttackAircraft:
@@ -62,16 +52,16 @@ ORCB:
 		Margin: 4, 3
 		RequiresSelection: true
 	SpawnActorOnDeath:
-		Actor: ORCB.Husk
+		Actor: orca_bomber.husk
 		RequiresCondition: ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@Empty:
-		Actor: ORCB.Husk.empty
+		Actor: orca_bomber.Husk.empty
 		RequiresCondition: !ammo && !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
-		Actor: ORCB.Husk.EMP
+		Actor: orca_bomber.Husk.EMP
 		RequiresCondition: ammo && empdisable && !being-warped
 	SpawnActorOnDeath@EmptyEMP:
-		Actor: ORCB.Husk.empty.EMP
+		Actor: orca_bomber.Husk.empty.EMP
 		RequiresCondition: !ammo && empdisable && !being-warped
 	LeavesTrails:
 		Offsets: -853,0,171
@@ -90,6 +80,54 @@ ORCB:
 		VoiceSet: OrcaVoice
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
+
+orca_bomber.EMP:
+	Inherits: Orca_Bomber
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Orca Bomber (EMP)
+	WithProductionIconOverlay@EMP:
+		Types: EMP
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.eagle, techcenter, ~commander_tree.orca_bomber.emp
+		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft, Infantry
+	Armament:
+		Weapon: OrcaBomb.EMP
+		LocalOffset: 2,-256,-43, 2,256,-43
+		PauseOnCondition: !ammo
+
+orca_bomber.HE:
+	Inherits: Orca_Bomber
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Orca Bomber (HE)
+	WithProductionIconOverlay@Dynamite:
+		Types: Dynamite
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.eagle, techcenter, ~commander_tree.orca_bomber.he
+		Description: VTOL bomber armed with high explosion cluster bombs.\n  Strong vs Buildings, Light Vehicles\n  Weak vs Aircraft
+	Armament:
+		Weapon: Orcabomb.HE
+	AmmoPool:
+		Ammo: 4
+
+orca_bomber.AP:
+	Inherits: Orca_Bomber
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Orca Bomber (AP)
+	WithProductionIconOverlay@Shell:
+		Types: Shell
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.eagle, techcenter, ~commander_tree.orca_bomber.ap
+		Description: VTOL bomber armed with AP bombs.\n  Strong vs Heavy Vehicles\n  Weak vs Aircraft, Infantry
+	Armament:
+		Weapon: APBomb
+	AmmoPool:
+		Ammo: 4
 
 Orca.Warship:
 	Inherits: ^Airship
