@@ -1,3 +1,48 @@
+Obelisk_Trooper:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioEnergyWeapon
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 115
+		IconPalette: chrome
+		Prerequisites: ~hand, hq, obli, ~infantry.marked, ~commander_tree.advanced_infantry_training
+		Description: Elite infantry with a laser weapon.\n  Strong vs Infantry, Light Armor\n  Weak vs Aircraft\n
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Obelisk Trooper
+		HP: 8000
+	Mobile:
+		speed: 73
+		Voice: Move
+	RevealsShroud:
+		Range: 5c0
+	Armament@PRIMARY:
+		Weapon: PortaLaser
+		FireDelay: 8
+		LocalOffset: 450,150,250
+	Armament@Garrison:
+		Name: mounted
+		Weapon: PortaLaserE
+		LocalOffset: 400,0,200
+	-TakeCover:
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: AcolVoice
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+
 Cyborg_Commando:
 	Inherits: ^Soldier
 	-TakeCover:
