@@ -1,3 +1,67 @@
+A10:
+	Inherits: ^VoxelPlane
+	Inherits: ^BomberPlane
+	RenderVoxels:
+		Scale: 9
+		Image: a10
+	RenderSprites:
+		Image: a10
+	Contrail@1:
+		Offset: -258,-823,100
+	Contrail@2:
+		Offset: -258,823,100
+	Inherits: ^RearmableAircraft
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioAntiLight
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 50
+		Prerequisites: ~afld.gdi, ~aircraft.gdi
+		IconPalette: chrometd
+		Description: Ground attack aircraft with incendiary bombs.\n  Strong vs Buildings, Light Armor, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: A-10 Warthog
+	Health:
+		HP: 22000
+	Armament:
+		Weapon: NapalmTD
+		LocalOffset: 2,-256,-43, 2,256,-43
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 11
+	SpawnActorOnDeath:
+		Actor: A10.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: A10.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: A10.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: A10.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+
+A10.bomber:
+	Inherits: A10
+	Tooltip:
+		Name: Warthog
+	Health:
+		HP: 36000
+	-GrantConditionOnOrders@ACTIVE:
+	-SpeedMultiplier@SlowOnIdle:
+	-AttackAircraft:
+	AttackBomberCA:
+	-Selectable:
+	Interactable:
+	SelectionDecorations:
+	-Voiced:
+	EjectOnDeath:
+		PilotActor: N1
+	RejectsOrders:
 
 ORCA:
 	Inherits: ^Helicopter
