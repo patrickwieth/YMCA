@@ -229,6 +229,20 @@ HellfireAG.Orca.AP:
 	Inherits: ^MissileAP
 	Report: orcamis1.aud
 
+HellfireAG.Orca.EMP:
+	Inherits: HellfireAG
+	Inherits: ^Missile
+	Report: orcamis1.aud
+	Warhead@emp: GrantExternalCondition
+		Range: 1c0
+		Duration: 400
+		Condition: empdisable
+		ValidTargets: Ground, Structure, Vehicle
+	Warhead@3Eff: CreateEffect
+		Explosions: pulse_explosion_small
+		ExplosionPalette: tseffect-ignore-lighting-alpha75
+		ImpactSounds: expnew16.aud
+
 HellfireAG.Harrier:
 	Inherits: HellfireAG
 	Inherits: ^MissileHE
@@ -302,6 +316,20 @@ HellfireAA.Orca.HE:
 HellfireAA.Orca.AP:
 	Inherits: HellfireAA
 	Inherits: ^MissileAP
+
+HellfireAA.Orca.EMP:
+	Inherits: HellfireAA
+	Inherits: ^Missile
+	Report: orcamis1.aud
+	Warhead@emp: GrantExternalCondition
+		Range: 1c0
+		Duration: 400
+		Condition: empdisable
+		ValidTargets: Air
+	Warhead@3Eff: CreateEffect
+		Explosions: pulse_explosion_small
+		ExplosionPalette: tseffect-ignore-lighting-alpha75
+		ImpactSounds: expnew16.aud
 
 WidowAA:
 	Inherits: ^AntiAirMissile

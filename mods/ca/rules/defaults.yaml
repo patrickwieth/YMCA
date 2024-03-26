@@ -2468,6 +2468,11 @@ PROC.Dummy:
 	Tooltip:
 		GenericName: Helicopter
 	Aircraft:
+		AltitudeVelocity: 0c100
+		TurnSpeed: 16
+		Speed: 180
+		TakeoffSounds: htoff1.aud
+		LandingSounds: hland1.aud
 		CanHover: True
 		WaitDistanceFromResupplyBase: 4c0
 		VTOL: true
@@ -2486,6 +2491,17 @@ PROC.Dummy:
 	-Contrail@2:
 	WithDamageOverlay:
 		Image: smoke_m
+	LeavesTrails:
+		Offsets: -853,0,171
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
 
 ^TDAircraftSprite:
 	Buildable:
@@ -3974,23 +3990,6 @@ PROC.Dummy:
 	WithVoxelHelicopterBody:
 		TickRate: 1
 		SkipRate: 1
-	Aircraft:
-		AltitudeVelocity: 0c100
-		TurnSpeed: 16
-		Speed: 180
-		TakeoffSounds: htoff1.aud
-		LandingSounds: hland1.aud
-	LeavesTrails:
-		Offsets: -853,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
 
 ^VoxelShootableMissile:
 	Inherits: ^ExistsInWorld
@@ -4072,7 +4071,7 @@ PROC.Dummy:
 		SkipRate: 1
 	Aircraft:
 		TurnSpeed: 16
-		Speed: 166
+		Speed: 16
 	LeavesTrails:
 		Offsets: -427,0,0
 		Image: smokey

@@ -49,6 +49,7 @@ A10.bomber:
 	Inherits: A10
 	Tooltip:
 		Name: Warthog
+	-Buildable:
 	Health:
 		HP: 36000
 	-GrantConditionOnOrders@ACTIVE:
@@ -64,49 +65,32 @@ A10.bomber:
 	RejectsOrders:
 
 ORCA:
-	Inherits: ^Helicopter
-	Inherits: ^TDAircraftSprite
+	Inherits: ^VoxelHelicopter
+	RenderVoxels:
+		Scale: 1
+		Image: orca
+	RenderSprites:
+		Image: orca
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiHeavyAA
-	Inherits: ^GainsExperience
+	Inherits: ^FightingHelicopter
+	Inherits: ^RearmableHelicopter
 	Valued:
 		Cost: 1200
 	Tooltip:
 		Name: Orca
-		RequiresCondition: !orcav2
-	Tooltip@Eagle:
-		Name: Orca V2
-		RequiresCondition: orcav2
-	RenderSprites:
-		Image: orca
-		FactionImages:
-			eagle: orca.v2
-	GrantConditionOnFaction@OrcaV2:
-		Condition: orcav2
-		Factions: eagle
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~!commander_tree.orca.ap, ~!commander_tree.orca.he, ~!commander_tree.orca.payload
-		IconPalette: chrometd
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~!aircraft.eagle, ~!filler.orca
 		Description: VTOL gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Aircraft:
-		AltitudeVelocity: 0c100
 		TurnSpeed: 20
 		TakeoffSounds: orcaup1.aud
 		LandingSounds: orcadwn1.aud
-		Speed: 181
 	Health:
 		HP: 22000
-	RevealsShroud:
-		Range: 12c0
-		MinRange: 10c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 10c0
-		Type: GroundPosition
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca
 		LocalOffset: 0,-213,-85, 0,213,-85
@@ -115,21 +99,8 @@ ORCA:
 		Weapon: HellfireAA.Orca
 		LocalOffset: 0,213,-85, 0,-213,-85
 		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 80
-		AttackType: Hover
-		PersistentTargeting: false
-		OpportunityFire: false
-		PauseOnCondition: empdisable || being-warped
 	AmmoPool:
 		Ammo: 12
-		ReloadCount: 2
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		PipCount: 4
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	SpawnActorOnDeath:
 		Actor: ORCA.Husk
 		RequiresCondition: ammo && !empdisable && !being-warped
@@ -142,44 +113,16 @@ ORCA:
 	SpawnActorOnDeath@EmptyEMP:
 		Actor: ORCA.Husk.empty.EMP
 		RequiresCondition: !ammo && empdisable && !being-warped
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
-	LeavesTrails:
-		Offsets: -427,0,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	WithMoveAnimation:
-		MoveSequence: move
-	Rearmable:
-		RearmActors: hpad, hpad.td
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-	DamageMultiplier@eagle:
-		RequiresCondition: aircraft.eagle
-		Modifier: 90
-	FirepowerMultiplier@eagle:
-		RequiresCondition: aircraft.eagle
-		Modifier: 120
 
 ORCA.AP:
 	Inherits: ORCA
 	Tooltip:
 		Name: Orca (AP)
-		RequiresCondition: !aircraft.eagle
-	Tooltip@Eagle:
-		Name: Orca V2 (AP)
-		RequiresCondition: aircraft.eagle
+	WithProductionIconOverlay@Shell:
+		Types: Shell
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.ap
 		Description: VTOL gunship armed\nwith armor-piercing missiles.\n  Strong vs Tanks\n  Weak vs Infantry
-	WithProductionIconOverlay@Shell:
-		Types: Shell
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca.AP
 		LocalOffset: 0,-213,-85, 0,213,-85
@@ -189,28 +132,22 @@ ORCA.AP:
 		LocalOffset: 0,213,-85, 0,-213,-85
 		PauseOnCondition: !ammo
 
-ORCA.HE:
+ORCA.Sonic:
 	Inherits: ORCA
-	Inherits: ^PrioAntiLightAA
+	Inherits: ^PrioAntiLight
 	Tooltip:
-		Name: Orca (HE)
-		RequiresCondition: !aircraft.eagle
-	Tooltip@Eagle:
-		Name: Orca V2 (Payload)
-		RequiresCondition: aircraft.eagle
+		Name: Orca (Sonic)
+	WithProductionIconOverlay@Sonic:
+		Types: Sonic
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.he
-		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
-	WithProductionIconOverlay@Grenade:
-		Types: Grenade
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.sonic
+		Description: VTOL gunship armed\nwith sonic pulsator.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Reflector Armor
 	Armament@PRIMARY:
-		Weapon: HellfireAG.Orca.HE
+		Weapon: SonicPulse
 		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
-	Armament@SECONDARY:
-		Weapon: HellfireAA.Orca.HE
-		LocalOffset: 0,213,-85, 0,-213,-85
-		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+	AmmoPool:
+		Ammo: 4
 
 ORCA.Payload:
 	Inherits: ORCA
@@ -218,14 +155,10 @@ ORCA.Payload:
 		Cost: 1300
 	Tooltip:
 		Name: Orca (Payload)
-		RequiresCondition: !aircraft.eagle
-	Tooltip@Eagle:
-		Name: Orca V2 (Payload)
-		RequiresCondition: aircraft.eagle
-	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.payload
 	WithProductionIconOverlay@Bullets:
 		Types: Bullets
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.payload
 	AmmoPool:
 		Ammo: 20
 		ReloadCount: 2
@@ -240,15 +173,11 @@ ORCA.Torp:
 	Inherits: ORCA
 	Tooltip:
 		Name: Orca (Torpedo)
-		RequiresCondition: !aircraft.eagle
-	Tooltip@Eagle:
-		Name: Orca V2 (Torpedo)
-		RequiresCondition: aircraft.eagle
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.torp
 		Description: VTOL gunship armed\nwith torpedo bombs.
-	WithProductionIconOverlay@Torpedo:
-		Types: Torpedo
 	TooltipExtras:
 		Strengths: • Strong vs Ships, Submarines
 		Weaknesses: • Weak vs Anti-Air
@@ -267,6 +196,123 @@ ORCA.Torp:
 		Position: BottomLeft
 		RequiresSelection: true
 
+OrcaV2:
+	Inherits: ^VoxelHelicopter
+	RenderVoxels:
+		Scale: 1
+		Image: orcav2
+	RenderSprites:
+		Image: orca.v2
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^FightingHelicopter
+	Inherits: ^RearmableHelicopter
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Orca V2
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.eagle, ~!filler.orca
+		Description: VTOL gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
+	Aircraft:
+		TurnSpeed: 20
+		TakeoffSounds: orcaup1.aud
+		LandingSounds: orcadwn1.aud
+	Health:
+		HP: 30000
+	Armament@PRIMARY:
+		Weapon: HellfireAG.Orca
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Weapon: HellfireAA.Orca
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 12
+	SpawnActorOnDeath:
+		Actor: ORCA.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: ORCA.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: ORCA.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: ORCA.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+
+OrcaV2.Swarm:
+	Inherits: OrcaV2
+	Inherits: ^PrioAntiLightAA
+	Tooltip:
+		Name: Orca V2 (Swarm)
+	Buildable:
+		Prerequisites: ~hpad.td, ~commander_tree.orcav2.swarm
+		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
+	WithProductionIconOverlay@Missile:
+		Types: Missile
+	AmmoPool:
+		Ammo: 24
+	Armament@PRIMARY:
+		Weapon: Dragon.MKII
+		LocalOffset:  0,-213,-85, 0,213,-85
+		LocalYaw: -200,200
+		MuzzleSequence: muzzle1
+	Armament@SECONDARY:
+		Weapon: RedEye.MKII
+		LocalOffset:  0,-213,-85, 0,213,-85
+		LocalYaw: -100,100
+		MuzzleSequence: muzzle1
+
+OrcaV2.EMP:
+	Inherits: OrcaV2
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Orca V2 (EMP)
+	Buildable:
+		Prerequisites: ~hpad.td, ~commander_tree.orcav2.emp
+	WithProductionIconOverlay@EMP:
+		Types: EMP
+	AmmoPool:
+		Ammo: 4
+	Armament@PRIMARY:
+		Weapon: HellfireAG.Orca.EMP
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Weapon: HellfireAA.Orca.EMP
+		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+
+OrcaV2.Torp:
+	Inherits: OrcaV2
+	Tooltip:
+		Name: Orca V2 (Torpedo)
+	Buildable:
+		Prerequisites: ~hpad.td, ~commander_tree.orcav2.torp
+		Description: VTOL gunship armed\nwith torpedo bombs.
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	Armament@PRIMARY:
+		Weapon: TorpBomb
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	-Armament@SECONDARY:
+	AmmoPool:
+		Ammo: 8
+	DetectCloaked:
+		DetectionTypes: Underwater
+		Range: 8c0
 
 Orca_Bomber:
 	Inherits: ^Helicopter
@@ -279,7 +325,7 @@ Orca_Bomber:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad.td, ~aircraft.eagle, techcenter, ~!disabled
+		Prerequisites: ~hpad.td, ~aircraft.eagle, techcenter, ~disabled
 		IconPalette: chrome
 		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft, Infantry
 	Valued:

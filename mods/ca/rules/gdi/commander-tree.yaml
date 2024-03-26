@@ -1,3 +1,166 @@
+
+commander_tree.Orca.Payload:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Payload Upgrade
+	RenderSprites:
+		Image: orca
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca.torp, ~!commander_tree.orca.sonic, ~!commander_tree.orca.ap, ~aircraft.talon
+		Description: Increases the Payload of the Orca.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Point Defense Laser, Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.Orca.AP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Armor-Piercing Upgrade
+	RenderSprites:
+		Image: orca
+	WithProductionIconOverlay@Shell:
+		Types: Shell
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca.torp, ~!commander_tree.orca.sonic, ~!commander_tree.orca.payload, ~aircraft.gdi, ~!aircraft.eagle
+		Description: Equips the Orca with armor-piercing missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor
+		Weaknesses: • Weak vs Point Defense Laser, Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.Orca.Sonic:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Sonic Upgrade
+	RenderSprites:
+		Image: orca
+	WithProductionIconOverlay@Sonic:
+		Types: Sonic
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca.torp, ~!commander_tree.orca.payload, ~!commander_tree.orca.ap, ~aircraft.zocom
+		Description: Equips the Orca with an experimental sonic pulsator.
+	TooltipExtras:
+		Strengths: • Strong vs Light Armor, Infantry
+		Weaknesses: • Weak vs Reflector Armor, Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.Orca.Torp:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca Torpedo Upgrade
+	RenderSprites:
+		Image: orca
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca.sonic, ~!commander_tree.orca.payload, ~!commander_tree.orca.ap, ~aircraft.gdi, ~!aircraft.eagle
+		Description: Equips the Orca with torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.OrcaV2.Swarm:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca V2 Swarm Missiles Upgrade
+	RenderSprites:
+		Image: orca.v2
+	WithProductionIconOverlay@Missile:
+		Types: Missile
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orcav2.torp, ~!commander_tree.orcav2.emp, ~aircraft.eagle
+		Description: Equips the Orca with swarming missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft
+		Weaknesses: • Weak vs Point Defense Laser, Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.OrcaV2.EMP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca V2 EMP Upgrade
+	RenderSprites:
+		Image: orca.v2
+	WithProductionIconOverlay@EMP:
+		Types: EMP
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orcav2.torp, ~!commander_tree.orcav2.swarm, ~aircraft.eagle
+		Description: Equips the Orca with EMP missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor, Aircraft
+		Weaknesses: • Weak vs Point Defense Laser, Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+commander_tree.OrcaV2.Torp:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Orca V2 Torpedo Upgrade
+	RenderSprites:
+		Image: orca.v2
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrome
+		BuildPaletteOrder: 243
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orcav2.emp, ~!commander_tree.orcav2.swarm, ~aircraft.eagle
+		Description: Equips the Orca with torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.orca
+
+hack.cameo_filler.220:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 244
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, ~filler.orca, disabled
+
+hack.cameo_filler.221:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 245
+		Prerequisites: prerequisite.has_points, ~aircraft.gdi, ~filler.orca, disabled
+
+
 commander_tree.orca_bomber.EMP:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -9,7 +172,7 @@ commander_tree.orca_bomber.EMP:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrome
-		BuildPaletteOrder: 243
+		BuildPaletteOrder: 245
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca_bomber.ap, ~!commander_tree.orca_bomber.he, ~aircraft.eagle
 		Description: Orca Bomber equipped with EMP Bombs, which disable vehicles and structures.
@@ -30,7 +193,7 @@ commander_tree.orca_bomber.AP:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrome
-		BuildPaletteOrder: 243
+		BuildPaletteOrder: 245
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca_bomber.emp, ~!commander_tree.orca_bomber.he, ~aircraft.eagle
 		Description: Orca Bomber equipped with armor piercing bombs.
@@ -51,7 +214,7 @@ commander_tree.orca_bomber.HE:
 	Buildable:
 		Queue: Commander_Tree
 		IconPalette: chrome
-		BuildPaletteOrder: 243
+		BuildPaletteOrder: 245
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.orca_bomber.emp, ~!commander_tree.orca_bomber.ap, ~aircraft.eagle
 		Description: Orca Bomber equipped with Cluster HE Bombs.
@@ -64,11 +227,11 @@ commander_tree.orca_bomber.HE:
 hack.cameo_filler.orca_bomber.1:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 244
+		BuildPaletteOrder: 245
 		Prerequisites: prerequisite.has_points, ~aircraft.eagle, ~filler.orca_bomber, disabled
 
 hack.cameo_filler.orca_bomber.2:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 244
+		BuildPaletteOrder: 245
 		Prerequisites: prerequisite.has_points, ~aircraft.eagle, ~filler.orca_bomber, disabled

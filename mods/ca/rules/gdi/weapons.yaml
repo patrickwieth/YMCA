@@ -1,3 +1,28 @@
+
+SonicPulse:
+	Inherits: ^Energy
+	ReloadDelay: 60
+	Range: 9c0
+	Report: sonicpulse1.aud, sonicpulse2.aud
+	Projectile: LinearPulse
+		ForceGround: True
+		Speed: 768
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c256
+		Falloff: 100, 50, 25, 0
+		Damage: 14000
+		ValidTargets: Ground, Water
+		ValidRelationships: Enemy, Neutral
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: sonicpulse1, sonicpulse2
+		ExplosionPalette: effect-ignore-lighting-alpha40
+		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@2Eff: CreateEffect
+		Explosions: sonicblast1, sonicblast2
+		ExplosionPalette: effect-ignore-lighting-alpha40
+		ValidTargets: Ground, Air, Ship, Trees
+
 IonZap:
 	Inherits: ^Energy
 	ReloadDelay: 70
