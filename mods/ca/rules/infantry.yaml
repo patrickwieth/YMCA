@@ -532,28 +532,18 @@ E4:
 E6:
 	Inherits: ^Soldier
 	Inherits: ^SovietInfantry
+	Inherits: ^Engineer
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
 		Prerequisites: ~infantry.ra
-		Description: Infiltrates and captures\nenemy structures.\n  Can repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
+		Description: Captures\nenemy structures.\n  Can repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
 	Valued:
 		Cost: 500
 	Tooltip:
 		Name: Engineer
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	WithInfantryBody:
-	Passenger:
-		CustomPipType: yellow
-	EngineerRepair:
-	RepairsBridges:
-	CaptureManager:
-	Captures:
-		CaptureTypes: building
-		PlayerExperience: 25
-		CaptureDelay: 100
 	Voiced:
 		VoiceSet: EngineerVoice
 	Selectable:
@@ -563,6 +553,7 @@ E6:
 
 SPY:
 	Inherits: ^Soldier
+	Inherits: ^Infiltrator
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -588,10 +579,6 @@ SPY:
 		Voice: Move
 	Disguise:
 		DisguisedCondition: disguise
-	Infiltrates:
-		Types: SpyInfiltrate
-		Notification: BuildingInfiltrated
-		PlayerExperience: 50
 	-WithInfantryBody:
 	WithDisguisingInfantryBody:
 		DefaultAttackSequence: shoot
@@ -735,7 +722,7 @@ MEDI:
 
 MECH:
 	Inherits: ^Soldier
-	Inherits: ^TankSupportUnit
+	Inherits: ^Mechanic
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -746,54 +733,10 @@ MECH:
 		Cost: 400
 	Tooltip:
 		Name: Mechanic
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 5000
 	Mobile:
 		Voice: Move
-	RevealsShroud:
-		Range: 3c0
-	Passenger:
-		CustomPipType: blue
-		Voice: Move
-	Armament:
-		Weapon: Repair
-		Name: primary
-		Cursor: repair
-		OutsideRangeCursor: repair
-		TargetRelationships: Ally
-		ForceTargetRelationships: None
-	AutoTargetPriority@REPAIR:
-		ValidTargets: Repair, C4Attached
-		ValidRelationships: Ally
-		Priority: 2
-	Armament@defuse:
-		Weapon: DefuseKit
-		Cursor: goldwrench
-		OutsideRangeCursor: goldwrench
-		TargetRelationships: Ally
-		ForceTargetRelationships: None
-		Name: secondary
-	AutoTargetPriority@defuse:
-		ValidTargets: C4Attached, TNTAttached
-		InvalidTargets: NoAutoTarget
-		ValidRelationships: Ally
-		Priority: 3
-	AttackFrontal:
-		Armaments: primary, secondary
-		Voice: Action
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	CaptureManager:
-	Captures:
-		CaptureTypes: husk
-		PlayerExperience: 25
-	Infiltrates:
-		Types: Husk
-		ValidRelationships: Ally
-		EnterCursor: goldwrench
-		PlayerExperience: 25
 	WithInfantryBody:
 		IdleSequences: idle
 		DefaultAttackSequence: repair
@@ -804,9 +747,6 @@ MECH:
 			tertiary: idle
 	Voiced:
 		VoiceSet: MechanicVoice
-	AutoTarget:
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: Vehicle, Ship
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -893,6 +833,8 @@ GNRL:
 THF:
 	Inherits: ^Soldier
 	Inherits: ^SovietInfantry
+	Inherits: ^Thief
+	Inherits: ^CloakedWhileResting
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -911,14 +853,6 @@ THF:
 		Range: 5c0
 	Passenger:
 		CustomPipType: blue
-	CaptureManager:
-	Captures:
-		CaptureTypes: vehicle
-		PlayerExperience: 50
-	Infiltrates:
-		Types: ThiefInfiltrate
-		Notification: BuildingInfiltrated
-		PlayerExperience: 50
 	Voiced:
 		VoiceSet: ThiefVoice
 	-TakeCover:
@@ -927,16 +861,6 @@ THF:
 		StandSequences: stand
 	Crushable:
 		WarnProbability: 95
-	Cloak@NORMAL:
-		InitialDelay: 250
-		CloakDelay: 120
-		UncloakOn: Attack, Unload, Infiltrate, Demolish, Move
-		DetectionTypes: Cloak
-		IsPlayerPalette: false
-		RequiresCondition: !cloak-force-disabled
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
 	Mobile:
 		speed: 73
 	Targetable:
@@ -1412,46 +1336,20 @@ RMBO:
 
 N6:
 	Inherits: ^Soldier
+	Inherits: ^Engineer
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
 		Prerequisites: infantry.any, ~infantry.td
 		IconPalette: chrometd
-		Description: Infiltrates and captures\nenemy structures.\n  Can repair friendly structures & bridges and defuse bombs.\n  Special Ability: Repair, Defuse\n  Unarmed
+		Description: Captures\nenemy structures.\n  Can repair friendly structures & bridges and defuse bombs.\n  Special Ability: Repair, Defuse\n  Unarmed
 	Valued:
 		Cost: 500
 	Tooltip:
 		Name: Engineer
-	Passenger:
-		CustomPipType: yellow
-	Armament@defuse:
-		Weapon: DefuseKit
-		Cursor: goldwrench
-		OutsideRangeCursor: goldwrench
-		TargetRelationships: Ally
-		ForceTargetRelationships: None
-		Name: secondary
-	AutoTarget:
-	AutoTargetPriority@defuse:
-		ValidTargets: C4Attached, TNTAttached
-		InvalidTargets: NoAutoTarget
-		ValidRelationships: Ally
-	AttackFrontal:
-		Armaments: primary, secondary
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	EngineerRepair:
-	RepairsBridges:
-	CaptureManager:
-	Captures:
-		CaptureTypes: building
-		PlayerExperience: 25
-		CaptureDelay: 100
 	Voiced:
 		VoiceSet: EngineerVoice
-	Selectable:
-		Priority: 5
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 	Targetable:
@@ -1701,65 +1599,6 @@ Mortar.Chemical:
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 
-SAB:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiInfantry
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
-	Inherits@CloakedInfiltrator: ^CloakedInfiltrator
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 90
-		Prerequisites: hq, ~infantry.nod, ~commander_tree.advanced_infantry_training
-		Description: Covert infantry. Infiltrates enemy structures and steals technology.\n  Can detect spies and cloaked units.\n  Special Ability: Infiltrate\n  Special Ability: Stealth
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Infiltrator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	RevealsShroud:
-		Range: 10c0
-	Passenger:
-		CustomPipType: red
-		Voice: Move
-	Guard:
-		Voice: Move
-	Infiltrates@tec:
-		Types: SabInfiltrate
-		PlayerExperience: 50
-		Notification: NewOptions
-	Infiltrates@pwr:
-		Types: PowerInfiltrate
-		PlayerExperience: 50
-	Voiced:
-		VoiceSet: InfilVoice
-	WithInfantryBody:
-		StandSequences: stand
-		IdleSequences: idle1
-	Health:
-		HP: 4000
-	Mobile:
-		speed: 73
-		Voice: Move
-	Armament:
-		Weapon: SilencedPPK
-	Armament@Garrison:
-		Name: mounted
-		Weapon: SilencedPPKE
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	IgnoresDisguise:
-	DetectCloaked:
-		DetectionTypes: Cloak, Thief
-		Range: 4c0
-	ProductionCostMultiplier@LegionBonus:
-		Multiplier: 80
-		Prerequisites: infantry.legion
-
 SpecOps:
 	Inherits: SAB
 	Inherits@CloakedAttacker: ^CloakedAttacker
@@ -1784,7 +1623,6 @@ SpecOps:
 		Weapon: relayMarker
 	-Infiltrates@tec:
 	-Infiltrates@pwr:
-	-ProductionCostMultiplier@LegionBonus:
 
 JJET:
 	Inherits: ^Infantry

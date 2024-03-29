@@ -1,3 +1,48 @@
+SAB:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioAntiInfantry
+	Inherits: ^SensorEquipment
+	Inherits: ^CloakedInfiltrator
+	Inherits: ^Infiltrator
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 90
+		Prerequisites: hq, ~infantry.nod, ~commander_tree.advanced_infantry_training
+		Description: Covert infantry. Infiltrates enemy structures and steals technology.\n  Can detect spies and cloaked units.\n  Special Ability: Infiltrate\n  Special Ability: Stealth
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Saboteur
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: InfilVoice
+	WithInfantryBody:
+		StandSequences: stand
+		IdleSequences: idle1
+	Health:
+		HP: 4000
+	Mobile:
+		speed: 73
+		Voice: Move
+	Armament:
+		Weapon: SilencedPPK
+	Armament@Garrison:
+		Name: mounted
+		Weapon: SilencedPPKE
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	IgnoresDisguise:
+	Cloak:
+		IsPlayerPalette: true
+		Palette: cloakts
+
 Obelisk_Trooper:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
