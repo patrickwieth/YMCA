@@ -2508,8 +2508,12 @@ PROC.Dummy:
 		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
-	EjectOnDeath:
-		PilotActor: N1
+	EjectOnDeath@GDI:
+		PilotActor: mercenary
+		RequiresCondition: structures.gdi
+	EjectOnDeath@default:
+		PilotActor: adept
+		RequiresCondition: !structures.gdi
 
 ^BiologicalPilot:
 	Inherits@2: ^GainsExperience
@@ -2549,8 +2553,12 @@ PROC.Dummy:
 		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
-	EjectOnDeath:
-		PilotActor: N1
+	EjectOnDeath@GDI:
+		PilotActor: mercenary
+		RequiresCondition: structures.gdi
+	EjectOnDeath@default:
+		PilotActor: adept
+		RequiresCondition: !structures.gdi
 
 ^FightingPlane:
 	AttackAircraft:
@@ -2864,10 +2872,18 @@ PROC.Dummy:
 		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
-	SpawnActorOnDeath:
-		Actor: n1
-	SpawnActorsOnSell:
-		ActorTypes: n1,n1,n1,n1,n1,n1,n1,n1,n1,n1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+	SpawnActorOnDeath@GDI:
+		Actor: mercenary
+		RequiresCondition: structures.gdi
+	SpawnActorOnDeath@default:
+		Actor: adept
+		RequiresCondition: !structures.gdi
+	SpawnActorsOnSell@GDI:
+		ActorTypes: mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+		RequiresCondition: structures.gdi
+	SpawnActorsOnSell@default:
+		ActorTypes: adept,adept,adept,adept,adept,adept,adept,adept,adept,adept,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+		RequiresCondition: !structures.gdi
 	ActorPreviewPlaceBuildingPreview:
 		OverridePalette: placebuildingtd
 
@@ -2878,8 +2894,6 @@ PROC.Dummy:
 
 ^ScienceBuildingTD:
 	Inherits@1: ^BuildingTD
-	SpawnActorsOnSell:
-		ActorTypes: n1,n1,n1,n1,n1,n1,n1,n1,n1,n1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
 
 ^Defense:
 	Inherits: ^Building
@@ -4118,7 +4132,8 @@ PROC.Dummy:
 			e4: loaded
 			e7: loaded
 			e8: loaded
-			n1: loaded
+			adept: loaded
+			mercenary: loaded
 			n2: loaded
 			n3: loaded-air
 			n4: loaded
@@ -4131,8 +4146,8 @@ PROC.Dummy:
 			shok: loaded
 			shok.nod: loaded
 			sab: loaded
-			n1c: loaded
-			n3c: loaded-air
+			stormtrooper: loaded
+			rocket_cyborg: loaded-air
 			rmbc: loaded
 			tecn: loaded
 			tecn2: loaded
@@ -4349,6 +4364,18 @@ PROC.Dummy:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
 
+^CloakedWhileResting:
+	Cloak@NORMAL:
+		InitialDelay: 250
+		CloakDelay: 120
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Move
+		DetectionTypes: Cloak
+		IsPlayerPalette: false
+		RequiresCondition: !cloak-force-disabled
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+
 ^CloakedAircraft:
 	Cloak@NORMAL:
 		InitialDelay: 100
@@ -4364,6 +4391,104 @@ PROC.Dummy:
 	AutoTarget:
 		InitialStance: HoldFire
 		InitialStanceAI: HoldFire
+
+^Infiltrator:
+	Infiltrates@tec:
+		Types: SabInfiltrate
+		PlayerExperience: 50
+		Notification: NewOptions
+	Infiltrates@pwr:
+		Types: PowerInfiltrate
+		PlayerExperience: 50
+	Infiltrates:
+		Types: SpyInfiltrate
+		Notification: BuildingInfiltrated
+		PlayerExperience: 50
+
+^Thief:
+	Infiltrates:
+		Types: ThiefInfiltrate
+		Notification: BuildingInfiltrated
+		PlayerExperience: 50
+	CaptureManager:
+	Captures:
+		CaptureTypes: vehicle
+		PlayerExperience: 50
+
+^Engineer:
+	Selectable:
+		Priority: 5
+	Passenger:
+		CustomPipType: yellow
+	Armament@defuse:
+		Weapon: DefuseKit
+		Cursor: goldwrench
+		OutsideRangeCursor: goldwrench
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
+		Name: secondary
+	AutoTarget:
+	AutoTargetPriority@defuse:
+		ValidTargets: C4Attached, TNTAttached
+		InvalidTargets: NoAutoTarget
+		ValidRelationships: Ally
+	AttackFrontal:
+		Armaments: primary, secondary
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	EngineerRepair:
+	RepairsBridges:
+	CaptureManager:
+	Captures:
+		CaptureTypes: building
+		PlayerExperience: 25
+		CaptureDelay: 100
+
+^Mechanic:
+	Inherits: ^TankSupportUnit
+	Passenger:
+		CustomPipType: blue
+		Voice: Move
+	AutoTarget:
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Vehicle, Ship
+	Armament:
+		Weapon: Repair
+		Name: primary
+		Cursor: repair
+		OutsideRangeCursor: repair
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
+	AutoTargetPriority@REPAIR:
+		ValidTargets: Repair, C4Attached
+		ValidRelationships: Ally
+		Priority: 2
+	Armament@defuse:
+		Weapon: DefuseKit
+		Cursor: goldwrench
+		OutsideRangeCursor: goldwrench
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
+		Name: secondary
+	AutoTargetPriority@defuse:
+		ValidTargets: C4Attached, TNTAttached
+		InvalidTargets: NoAutoTarget
+		ValidRelationships: Ally
+		Priority: 3
+	AttackFrontal:
+		Armaments: primary, secondary
+		Voice: Action
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	CaptureManager:
+	Captures:
+		CaptureTypes: husk
+		PlayerExperience: 25
+	Infiltrates:
+		Types: Husk
+		ValidRelationships: Ally
+		EnterCursor: goldwrench
+		PlayerExperience: 25
 
 ^BuildingVision:
 	RevealsShroud:

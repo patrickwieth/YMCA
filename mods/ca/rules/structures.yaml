@@ -2893,8 +2893,12 @@ AFAC:
 		Damage: 950
 	TransferTimedExternalConditionOnTransform:
 		Condition: invulnerability
-	SpawnActorsOnSell:
-		ActorTypes: n1,n1,n1,n1,n6
+	SpawnActorsOnSell@GDI:
+		ActorTypes: mercenary,mercenary,mercenary,mercenary,n6
+		RequiresCondition: structures.gdi
+	SpawnActorsOnSell@Default:
+		ActorTypes: adept,adept,adept,adept,n6
+		RequiresCondition: !structures.gdi
 
 NSAM:
 	Inherits: ^DefenseTD
@@ -3304,7 +3308,7 @@ HQ:
 		Description: A Cargo Plane drops a squad of infantry\nanywhere on the map.
 		SquadSize: 1
 		SquadOffset: 0,1792,0
-		DropItems: N1,N1,BH,N3,N3,BH,BH
+		DropItems: adept,adept,BH,rocket_trooper,rocket_trooper,BH,BH
 		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
@@ -3761,8 +3765,12 @@ PROC.TD:
 		Amount: -30
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	SpawnActorsOnSell:
-		ActorTypes: n1,n1,n1,n1,n1,n1,n1,n1,n1,n1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+	SpawnActorsOnSell@GDI:
+		ActorTypes: mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+		RequiresCondition: structures.gdi
+	SpawnActorsOnSell@Default:
+		ActorTypes: adept,adept,adept,adept,adept,adept,adept,adept,adept,adept,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+		RequiresCondition: !structures.gdi
 
 SILO.TD:
 	Inherits: ^BuildingTD

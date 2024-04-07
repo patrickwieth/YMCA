@@ -143,7 +143,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 								var dmgWarhead = warheads.OfType<DamageWarhead>().FirstOrDefault();
 								if (dmgWarhead != null)
 								{
-									versusLabel.Text += "\\nEffective versus:";
+									var fireRate = (weapon.Burst > 0 ? weapon.Burst : 1)*25.0 / weapon.ReloadDelay;
+									var damage = dmgWarhead.Damage / 100;
+									versusLabel.Text += "\\nDamage per Second: "+(int)(damage*fireRate)+"\\n\\nEffective versus:";
 									if (dmgWarhead.Versus.ContainsKey("None")) {
 										versusNoneLabel.Text += "Infantry: ";
 										versusNoneLabel.TextColor = Color.LightSalmon;
@@ -385,10 +387,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var armor = actor.TraitInfos<ArmorInfo>().FirstOrDefault();
 			armorTypeLabel.Text = armor != null ? armor.Type : "";
 
+			// We also display Health in addition
 			var health = actor.TraitInfos<HealthInfo>().FirstOrDefault();
-			var healthText = health != null ? "("+health.HP/100+")" : "";
+			var healthText = health != null ? " - HP: "+health.HP/100 : "";
 
-			// hard coded, specific to CA - find a better way to set user-friendly names and colors for armor types
 			switch (armorTypeLabel.Text)
 			{
 				case "None":

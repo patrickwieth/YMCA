@@ -457,7 +457,7 @@ U3:
 		Reject: AttackMove, AssaultMove
 		RequiresCondition: !botowner && deployed && !berserk
 	Convertible:
-		SpawnActors: N3C
+		SpawnActors: rocket_cyborg
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -531,28 +531,18 @@ E4:
 E6:
 	Inherits: ^Soldier
 	Inherits: ^SovietInfantry
+	Inherits: ^Engineer
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
 		Prerequisites: ~infantry.ra
-		Description: Infiltrates and captures\nenemy structures.\n  Can repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
+		Description: Captures\nenemy structures.\n  Can repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
 	Valued:
 		Cost: 500
 	Tooltip:
 		Name: Engineer
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	WithInfantryBody:
-	Passenger:
-		CustomPipType: yellow
-	EngineerRepair:
-	RepairsBridges:
-	CaptureManager:
-	Captures:
-		CaptureTypes: building
-		PlayerExperience: 25
-		CaptureDelay: 100
 	Voiced:
 		VoiceSet: EngineerVoice
 	Selectable:
@@ -562,6 +552,7 @@ E6:
 
 SPY:
 	Inherits: ^Soldier
+	Inherits: ^Infiltrator
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -587,10 +578,6 @@ SPY:
 		Voice: Move
 	Disguise:
 		DisguisedCondition: disguise
-	Infiltrates:
-		Types: SpyInfiltrate
-		Notification: BuildingInfiltrated
-		PlayerExperience: 50
 	-WithInfantryBody:
 	WithDisguisingInfantryBody:
 		DefaultAttackSequence: shoot
@@ -734,7 +721,7 @@ MEDI:
 
 MECH:
 	Inherits: ^Soldier
-	Inherits: ^TankSupportUnit
+	Inherits: ^Mechanic
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -745,54 +732,10 @@ MECH:
 		Cost: 400
 	Tooltip:
 		Name: Mechanic
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 5000
 	Mobile:
 		Voice: Move
-	RevealsShroud:
-		Range: 3c0
-	Passenger:
-		CustomPipType: blue
-		Voice: Move
-	Armament:
-		Weapon: Repair
-		Name: primary
-		Cursor: repair
-		OutsideRangeCursor: repair
-		TargetRelationships: Ally
-		ForceTargetRelationships: None
-	AutoTargetPriority@REPAIR:
-		ValidTargets: Repair, C4Attached
-		ValidRelationships: Ally
-		Priority: 2
-	Armament@defuse:
-		Weapon: DefuseKit
-		Cursor: goldwrench
-		OutsideRangeCursor: goldwrench
-		TargetRelationships: Ally
-		ForceTargetRelationships: None
-		Name: secondary
-	AutoTargetPriority@defuse:
-		ValidTargets: C4Attached, TNTAttached
-		InvalidTargets: NoAutoTarget
-		ValidRelationships: Ally
-		Priority: 3
-	AttackFrontal:
-		Armaments: primary, secondary
-		Voice: Action
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	CaptureManager:
-	Captures:
-		CaptureTypes: husk
-		PlayerExperience: 25
-	Infiltrates:
-		Types: Husk
-		ValidRelationships: Ally
-		EnterCursor: goldwrench
-		PlayerExperience: 25
 	WithInfantryBody:
 		IdleSequences: idle
 		DefaultAttackSequence: repair
@@ -803,9 +746,6 @@ MECH:
 			tertiary: idle
 	Voiced:
 		VoiceSet: MechanicVoice
-	AutoTarget:
-	AutoTargetPriority@DEFAULT:
-		ValidTargets: Vehicle, Ship
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
@@ -892,6 +832,8 @@ GNRL:
 THF:
 	Inherits: ^Soldier
 	Inherits: ^SovietInfantry
+	Inherits: ^Thief
+	Inherits: ^CloakedWhileResting
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -910,14 +852,6 @@ THF:
 		Range: 5c0
 	Passenger:
 		CustomPipType: blue
-	CaptureManager:
-	Captures:
-		CaptureTypes: vehicle
-		PlayerExperience: 50
-	Infiltrates:
-		Types: ThiefInfiltrate
-		Notification: BuildingInfiltrated
-		PlayerExperience: 50
 	Voiced:
 		VoiceSet: ThiefVoice
 	-TakeCover:
@@ -926,16 +860,6 @@ THF:
 		StandSequences: stand
 	Crushable:
 		WarnProbability: 95
-	Cloak@NORMAL:
-		InitialDelay: 250
-		CloakDelay: 120
-		UncloakOn: Attack, Unload, Infiltrate, Demolish, Move
-		DetectionTypes: Cloak
-		IsPlayerPalette: false
-		RequiresCondition: !cloak-force-disabled
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
 	Mobile:
 		speed: 73
 	Targetable:
@@ -1007,49 +931,6 @@ SHOK:
 		VoiceSet: ShokVoice
 	-Crushable:
 
-N1:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiInfantry
-	Inherits: ^ScoutEquipment
-	Inherits: ^Berserk
-	Inherits: ^BotCaptureHelper
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 10
-		Prerequisites: ~!bio.nod, infantry.any, ~infantry.td
-		IconPalette: chrometd
-		Description: General-purpose infantry with good scouting abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 100
-	Tooltip:
-		Name: Mini-Gunner
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 5000
-	Armament@PRIMARY:
-		Weapon: M16Carbine
-	Armament@Garrison:
-		Name: mounted
-		Weapon: M16CarbineE
-	AttackFrontal:
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	WithInfantryBody:
-		IdleSequences: idle1,idle2,idle3,idle4
-	WithDeathAnimation:
-		DeathSequencePalette: playertd
-	Selectable:
-		Class: E1
-
-N1R1:
-	Inherits: N1
-	RenderSprites:
-		Image: N1
-	-Buildable:
-	UpdatesPlayerStatistics:
-		OverrideActor: n1
 
 N2:
 	Inherits: ^Soldier
@@ -1098,14 +979,6 @@ N2:
 	Selectable:
 		Class: E2
 
-N2R1:
-	Inherits: N2
-	RenderSprites:
-		Image: N2
-	-Buildable:
-	UpdatesPlayerStatistics:
-		OverrideActor: n2
-
 N2.Emp:
 	Inherits: N2
 	Buildable:
@@ -1121,88 +994,9 @@ N2.Emp:
 		LocalOffset: 0,0,555
 		FireDelay: 15
 
-N3:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiHeavyAA
-	Inherits@TargetRelay: ^RelayTargeting
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 30
-		Prerequisites: ~!bio.nod, infantry.any, ~infantry.td
-		IconPalette: chrometd
-		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
-	Valued:
-		Cost: 250
-	Tooltip:
-		Name: Rocket Soldier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 3500
-	Mobile:
-		speed: 54
-	Armament@primary:
-		Name: primary
-		Weapon: RedEye
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@secondary:
-		Name: secondary
-		Weapon: Dragon.TD
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@tertiary:
-		Name: tertiary
-		Weapon: Dragon.Relay
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@Garrison:
-		Name: mounted
-		Weapon: DragonE
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@GarrisonAA:
-		Name: mountedaa
-		Weapon: RedEyeE
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	AmmoPool:
-		Armaments: primary, secondary, tertiary
-		Ammo: 1
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 50
-		Count: 1
-	TakeCover:
-		ProneOffset: 384,0,-395
-	AttackFrontal:
-		Armaments: primary, secondary, tertiary
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	WithDeathAnimation:
-		DeathSequencePalette: playertd
-	Selectable:
-		Class: E3
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-
-N3R1:
-	Inherits: N3
-	RenderSprites:
-		Image: N3
-	-Buildable:
-	UpdatesPlayerStatistics:
-		OverrideActor: n3
-
 N4:
 	Inherits: ^Soldier
 	Inherits: ^PrioAntiLight
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1407,46 +1201,20 @@ RMBO:
 
 N6:
 	Inherits: ^Soldier
+	Inherits: ^Engineer
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
 		Prerequisites: infantry.any, ~infantry.td
 		IconPalette: chrometd
-		Description: Infiltrates and captures\nenemy structures.\n  Can repair friendly structures & bridges and defuse bombs.\n  Special Ability: Repair, Defuse\n  Unarmed
+		Description: Captures\nenemy structures.\n  Can repair friendly structures & bridges and defuse bombs.\n  Special Ability: Repair, Defuse\n  Unarmed
 	Valued:
 		Cost: 500
 	Tooltip:
 		Name: Engineer
-	Passenger:
-		CustomPipType: yellow
-	Armament@defuse:
-		Weapon: DefuseKit
-		Cursor: goldwrench
-		OutsideRangeCursor: goldwrench
-		TargetRelationships: Ally
-		ForceTargetRelationships: None
-		Name: secondary
-	AutoTarget:
-	AutoTargetPriority@defuse:
-		ValidTargets: C4Attached, TNTAttached
-		InvalidTargets: NoAutoTarget
-		ValidRelationships: Ally
-	AttackFrontal:
-		Armaments: primary, secondary
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	EngineerRepair:
-	RepairsBridges:
-	CaptureManager:
-	Captures:
-		CaptureTypes: building
-		PlayerExperience: 25
-		CaptureDelay: 100
 	Voiced:
 		VoiceSet: EngineerVoice
-	Selectable:
-		Priority: 5
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 	Targetable:
@@ -1696,65 +1464,6 @@ Mortar.Chemical:
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
 
-SAB:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiInfantry
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
-	Inherits@CloakedInfiltrator: ^CloakedInfiltrator
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 90
-		Prerequisites: hq, ~infantry.nod, ~commander_tree.advanced_infantry_training
-		Description: Covert infantry. Infiltrates enemy structures and steals technology.\n  Can detect spies and cloaked units.\n  Special Ability: Infiltrate\n  Special Ability: Stealth
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Infiltrator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	RevealsShroud:
-		Range: 10c0
-	Passenger:
-		CustomPipType: red
-		Voice: Move
-	Guard:
-		Voice: Move
-	Infiltrates@tec:
-		Types: SabInfiltrate
-		PlayerExperience: 50
-		Notification: NewOptions
-	Infiltrates@pwr:
-		Types: PowerInfiltrate
-		PlayerExperience: 50
-	Voiced:
-		VoiceSet: InfilVoice
-	WithInfantryBody:
-		StandSequences: stand
-		IdleSequences: idle1
-	Health:
-		HP: 4000
-	Mobile:
-		speed: 73
-		Voice: Move
-	Armament:
-		Weapon: SilencedPPK
-	Armament@Garrison:
-		Name: mounted
-		Weapon: SilencedPPKE
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	IgnoresDisguise:
-	DetectCloaked:
-		DetectionTypes: Cloak, Thief
-		Range: 4c0
-	ProductionCostMultiplier@LegionBonus:
-		Multiplier: 80
-		Prerequisites: infantry.legion
-
 SpecOps:
 	Inherits: SAB
 	Inherits@CloakedAttacker: ^CloakedAttacker
@@ -1779,7 +1488,6 @@ SpecOps:
 		Weapon: relayMarker
 	-Infiltrates@tec:
 	-Infiltrates@pwr:
-	-ProductionCostMultiplier@LegionBonus:
 
 JJET:
 	Inherits: ^Infantry
@@ -2039,128 +1747,6 @@ E8:
 	AutoDeployer@AI:
 		DeployChance: 20
 		RequiresCondition: botowner
-
-N1C:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiInfantry
-	Inherits: ^ScoutEquipment
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BOTHELPER: ^BotCaptureHelper
-	Inherits@BioDamageImmune: ^BioDamageImmune
-	RenderSprites:
-	Buildable:
-		Queue: Infantry
-		BuildPaletteOrder: 10
-		Prerequisites: ~bio.nod, ~hand
-		IconPalette: chrometd
-		Description: General-purpose infantry with good scout abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Artillery
-	Valued:
-		Cost: 150
-	Tooltip:
-		Name: Cyborg
-	-TakeCover:
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 10000
-	Mobile:
-		speed: 73
-		Voice: Move
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	AttackMove:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Guard:
-		Voice: Move
-	Voiced:
-		VoiceSet: CyborgVoice
-	Armament:
-		Weapon: Vulcan3
-	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-
-N3C:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiHeavyAA
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BioDamageImmune: ^BioDamageImmune
-	RenderSprites:
-	Buildable:
-		Queue: Infantry
-		BuildPaletteOrder: 20
-		Prerequisites: ~bio.nod, ~hand
-		IconPalette: chrometd
-		Description: Anti-tank cyborg infantry\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry, Artillery
-	Valued:
-		Cost: 350
-	Tooltip:
-		Name: Cyborg Reaper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	-TakeCover:
-	Health:
-		HP: 9000
-	RevealsShroud:
-		Range: 4c768
-	Mobile:
-		Voice: Move
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	AttackMove:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Guard:
-		Voice: Move
-	Voiced:
-		VoiceSet: ReaperVoice
-	Armament@PRIMARY:
-		Weapon: RedEye.CYB
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: Dragon.CYB
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@Garrison:
-		Name: mounted
-		Weapon: RedEyeE.CYB
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@GarrisonAA:
-		Name: mounted
-		Weapon: DragonE.CYB
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	AmmoPool:
-		Ammo: 1
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 50
-		Count: 1
-	AutoTarget:
-		ScanRadius: 5
-	GrantConditionOnTerrain@THEAL:
-		Condition: tibheal
-		TerrainTypes: Tiberium, BlueTiberium
-	WithDecoration@THEAL:
-		Image: pips
-		Sequence: medic
-		Palette: temptd
-		Position: BottomLeft
-		RequiresCondition: tibheal
-	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 RMBC:
 	Inherits: ^Soldier

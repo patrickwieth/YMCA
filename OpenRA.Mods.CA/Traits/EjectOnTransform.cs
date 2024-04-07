@@ -21,7 +21,7 @@ namespace OpenRA.Mods.CA.Traits
 	{
 		[ActorReference]
 		[Desc("Name of the unit to eject. This actor type needs to have the Parachutable trait defined.")]
-		public readonly string PilotActor = "N1";
+		public readonly string PilotActor = "mercenary";
 
 		public override object Create(ActorInitializer init) { return new EjectOnTransform(init.Self, this); }
 	}
