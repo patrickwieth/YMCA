@@ -2508,8 +2508,12 @@ PROC.Dummy:
 		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
-	EjectOnDeath:
-		PilotActor: N1
+	EjectOnDeath@GDI:
+		PilotActor: mercenary
+		RequiresCondition: structures.gdi
+	EjectOnDeath@default:
+		PilotActor: adept
+		RequiresCondition: !structures.gdi
 
 ^BiologicalPilot:
 	Inherits@2: ^GainsExperience
@@ -2549,8 +2553,12 @@ PROC.Dummy:
 		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
-	EjectOnDeath:
-		PilotActor: N1
+	EjectOnDeath@GDI:
+		PilotActor: mercenary
+		RequiresCondition: structures.gdi
+	EjectOnDeath@default:
+		PilotActor: adept
+		RequiresCondition: !structures.gdi
 
 ^FightingPlane:
 	AttackAircraft:
@@ -2864,10 +2872,18 @@ PROC.Dummy:
 		IconPalette: chrometd
 	RenderSprites:
 		PlayerPalette: overlayplayertd
-	SpawnActorOnDeath:
-		Actor: n1
-	SpawnActorsOnSell:
-		ActorTypes: n1,n1,n1,n1,n1,n1,n1,n1,n1,n1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+	SpawnActorOnDeath@GDI:
+		Actor: mercenary
+		RequiresCondition: structures.gdi
+	SpawnActorOnDeath@default:
+		Actor: adept
+		RequiresCondition: !structures.gdi
+	SpawnActorsOnSell@GDI:
+		ActorTypes: mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+		RequiresCondition: structures.gdi
+	SpawnActorsOnSell@default:
+		ActorTypes: adept,adept,adept,adept,adept,adept,adept,adept,adept,adept,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+		RequiresCondition: !structures.gdi
 	ActorPreviewPlaceBuildingPreview:
 		OverridePalette: placebuildingtd
 
@@ -2878,8 +2894,6 @@ PROC.Dummy:
 
 ^ScienceBuildingTD:
 	Inherits@1: ^BuildingTD
-	SpawnActorsOnSell:
-		ActorTypes: n1,n1,n1,n1,n1,n1,n1,n1,n1,n1,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
 
 ^Defense:
 	Inherits: ^Building
@@ -4118,7 +4132,8 @@ PROC.Dummy:
 			e4: loaded
 			e7: loaded
 			e8: loaded
-			n1: loaded
+			adept: loaded
+			mercenary: loaded
 			n2: loaded
 			n3: loaded-air
 			n4: loaded
@@ -4131,8 +4146,8 @@ PROC.Dummy:
 			shok: loaded
 			shok.nod: loaded
 			sab: loaded
-			n1c: loaded
-			n3c: loaded-air
+			stormtrooper: loaded
+			rocket_cyborg: loaded-air
 			rmbc: loaded
 			tecn: loaded
 			tecn2: loaded

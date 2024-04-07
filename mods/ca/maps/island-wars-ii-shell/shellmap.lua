@@ -11,10 +11,10 @@ UnitTypes = { "3tnk", "ttnk" }
 GDIUnitTypes = { "mtnk", "mtnk" }
 GDIMLRSTypes = { "msam", "msam" }
 BeachUnitTypes = { "e1", "e2", "e3", "e4", "e1", "e2", "e3", "e4", "e1", "e2", "e3", "e4", "e1", "e2", "e3", "shok" }
-GDIBeachUnitTypes = { "n1", "n2", "n3", "n2", "n1", "n2", "n3", "n1", "n1", "n2", "n3", "n1", "n1", "n1", "n1", "n1" }
+GDIBeachUnitTypes = { "mercenary", "n2", "rocket_mercenary", "n2", "mercenary", "n2", "rocket_mercenary", "mercenary", "mercenary", "n2", "rocket_mercenary", "mercenary", "mercenary", "mercenary", "mercenary", "mercenary" }
 ProducedUnitTypes =
 {
-	{ factory = AlliedBarracks1, types = { "n1", "n3" } },
+	{ factory = AlliedBarracks1, types = { "e1", "e3" } },
 	{ factory = SovietBarracks1, types = { "e1", "e2", "e3" } },
 	{ factory = SKennel1, types = { "dog" } },
 	{ factory = ANavalYard1, types = { "pt2" } },

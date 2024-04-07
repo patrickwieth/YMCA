@@ -458,7 +458,7 @@ U3:
 		Reject: AttackMove, AssaultMove
 		RequiresCondition: !botowner && deployed && !berserk
 	Convertible:
-		SpawnActors: N3C
+		SpawnActors: rocket_cyborg
 	AttackMove:
 		Voice: Move
 	Passenger:
@@ -936,49 +936,6 @@ SHOK:
 		Multiplier: 90
 		Prerequisites: infantry.russia
 
-N1:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiInfantry
-	Inherits: ^ScoutEquipment
-	Inherits: ^Berserk
-	Inherits: ^BotCaptureHelper
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 10
-		Prerequisites: ~!bio.nod, infantry.any, ~infantry.td
-		IconPalette: chrometd
-		Description: General-purpose infantry with good scouting abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 100
-	Tooltip:
-		Name: Mini-Gunner
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 5000
-	Armament@PRIMARY:
-		Weapon: M16Carbine
-	Armament@Garrison:
-		Name: mounted
-		Weapon: M16CarbineE
-	AttackFrontal:
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	WithInfantryBody:
-		IdleSequences: idle1,idle2,idle3,idle4
-	WithDeathAnimation:
-		DeathSequencePalette: playertd
-	Selectable:
-		Class: E1
-
-N1R1:
-	Inherits: N1
-	RenderSprites:
-		Image: N1
-	-Buildable:
-	UpdatesPlayerStatistics:
-		OverrideActor: n1
 
 N2:
 	Inherits: ^Soldier
@@ -1027,14 +984,6 @@ N2:
 	Selectable:
 		Class: E2
 
-N2R1:
-	Inherits: N2
-	RenderSprites:
-		Image: N2
-	-Buildable:
-	UpdatesPlayerStatistics:
-		OverrideActor: n2
-
 N2.Emp:
 	Inherits: N2
 	Buildable:
@@ -1050,88 +999,9 @@ N2.Emp:
 		LocalOffset: 0,0,555
 		FireDelay: 15
 
-N3:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiHeavyAA
-	Inherits@TargetRelay: ^RelayTargeting
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 30
-		Prerequisites: ~!bio.nod, infantry.any, ~infantry.td
-		IconPalette: chrometd
-		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
-	Valued:
-		Cost: 250
-	Tooltip:
-		Name: Rocket Soldier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 3500
-	Mobile:
-		speed: 54
-	Armament@primary:
-		Name: primary
-		Weapon: RedEye
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@secondary:
-		Name: secondary
-		Weapon: Dragon.TD
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@tertiary:
-		Name: tertiary
-		Weapon: Dragon.Relay
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@Garrison:
-		Name: mounted
-		Weapon: DragonE
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@GarrisonAA:
-		Name: mountedaa
-		Weapon: RedEyeE
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	AmmoPool:
-		Armaments: primary, secondary, tertiary
-		Ammo: 1
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 50
-		Count: 1
-	TakeCover:
-		ProneOffset: 384,0,-395
-	AttackFrontal:
-		Armaments: primary, secondary, tertiary
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	WithDeathAnimation:
-		DeathSequencePalette: playertd
-	Selectable:
-		Class: E3
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-
-N3R1:
-	Inherits: N3
-	RenderSprites:
-		Image: N3
-	-Buildable:
-	UpdatesPlayerStatistics:
-		OverrideActor: n3
-
 N4:
 	Inherits: ^Soldier
 	Inherits: ^PrioAntiLight
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BERSERK: ^Berserk
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -1882,128 +1752,6 @@ E8:
 	AutoDeployer@AI:
 		DeployChance: 20
 		RequiresCondition: botowner
-
-N1C:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiInfantry
-	Inherits: ^ScoutEquipment
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BOTHELPER: ^BotCaptureHelper
-	Inherits@BioDamageImmune: ^BioDamageImmune
-	RenderSprites:
-	Buildable:
-		Queue: Infantry
-		BuildPaletteOrder: 10
-		Prerequisites: ~bio.nod, ~hand
-		IconPalette: chrometd
-		Description: General-purpose infantry with good scout abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Artillery
-	Valued:
-		Cost: 150
-	Tooltip:
-		Name: Cyborg
-	-TakeCover:
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 10000
-	Mobile:
-		speed: 73
-		Voice: Move
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	AttackMove:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Guard:
-		Voice: Move
-	Voiced:
-		VoiceSet: CyborgVoice
-	Armament:
-		Weapon: Vulcan3
-	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-
-N3C:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiHeavyAA
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BioDamageImmune: ^BioDamageImmune
-	RenderSprites:
-	Buildable:
-		Queue: Infantry
-		BuildPaletteOrder: 20
-		Prerequisites: ~bio.nod, ~hand
-		IconPalette: chrometd
-		Description: Anti-tank cyborg infantry\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry, Artillery
-	Valued:
-		Cost: 350
-	Tooltip:
-		Name: Cyborg Reaper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	-TakeCover:
-	Health:
-		HP: 9000
-	RevealsShroud:
-		Range: 4c768
-	Mobile:
-		Voice: Move
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	AttackMove:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Guard:
-		Voice: Move
-	Voiced:
-		VoiceSet: ReaperVoice
-	Armament@PRIMARY:
-		Weapon: RedEye.CYB
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: Dragon.CYB
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@Garrison:
-		Name: mounted
-		Weapon: RedEyeE.CYB
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	Armament@GarrisonAA:
-		Name: mounted
-		Weapon: DragonE.CYB
-		LocalOffset: 0,0,555
-		PauseOnCondition: !ammo || being-warped
-	AmmoPool:
-		Ammo: 1
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 50
-		Count: 1
-	AutoTarget:
-		ScanRadius: 5
-	GrantConditionOnTerrain@THEAL:
-		Condition: tibheal
-		TerrainTypes: Tiberium, BlueTiberium
-	WithDecoration@THEAL:
-		Image: pips
-		Sequence: medic
-		Palette: temptd
-		Position: BottomLeft
-		RequiresCondition: tibheal
-	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 RMBC:
 	Inherits: ^Soldier
