@@ -1,0 +1,78 @@
+CTNK:
+	Inherits: ^Tank
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 1
+		Image: ctnk
+	WithVoxelBody:
+		ShowShadow: true
+	RenderSprites:
+		Image: ctnk
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 175
+		Prerequisites: atek, ~vehicles.allies, ~commander_tree.chrono_tank, ~!commander_tree.chrono_tank_pld, ~!commander_tree.chrono_tank.reflector
+		Description: Advanced tank armed with armor-piercing missiles.\n
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Vehicles, Heavy Aircraft
+		Weaknesses: • Weak vs Infantry, PDL
+		Attributes: • Can teleport over short distances
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Chrono Tank
+		GenericName: Tank
+	Health:
+		HP: 50000
+	Mobile:
+		Speed: 113
+		Locomotor: heavywheeled
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: APTusk
+		LocalOffset: -160,-276,232, -160,276,232
+		LocalYaw: 60
+	Armament@SECONDARYFRONTAL:
+		Name: secondary
+		Weapon: APTusk.Air
+		LocalOffset: -160,-276,232, -160,276,232
+		LocalYaw: -60
+	AttackFrontal:
+		Armaments: primary, secondary
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	PortableChrono:
+		ChargeDelay: 250
+	ProductionCostMultiplier@GermanyBonus:
+		Multiplier: 90
+		Prerequisites: vehicles.germany
+
+CTNK.PLD:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: CTNK
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 175
+		Prerequisites: atek, ~vehicles.allies, ~commander_tree.chrono_tank_pld
+		Description: Advanced tank armed with anti-ground missiles.\nHas Point Laser Defense System\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft, Energy Weapons\n  Special Ability: Teleport
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Chrono Tank (PLD)
+
+CTNK.Reflector:
+	Inherits: CTNK
+	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 175
+		Prerequisites: atek, ~vehicles.allies, ~commander_tree.chrono_tank.reflector
+		Description: Advanced tank armed with anti-ground missiles.\nHas Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft\n  Special Ability: Teleport
+	Tooltip:
+		Name: Chrono Tank (Reflector)
