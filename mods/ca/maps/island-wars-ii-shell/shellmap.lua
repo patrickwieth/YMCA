@@ -10,7 +10,7 @@
 UnitTypes = { "3tnk", "ttnk" }
 GDIUnitTypes = { "mtnk", "mtnk" }
 GDIMLRSTypes = { "msam", "msam" }
-BeachUnitTypes = { "e1", "e2", "e3", "e4", "e1", "e2", "e3", "e4", "e1", "e2", "e3", "e4", "e1", "e2", "e3", "shok" }
+BeachUnitTypes = { "e1", "e2", "e3", "flamethrower", "e1", "e2", "e3", "flamethrower", "e1", "e2", "e3", "flamethrower", "e1", "e2", "e3", "shok" }
 GDIBeachUnitTypes = { "mercenary", "n2", "rocket_mercenary", "n2", "mercenary", "n2", "rocket_mercenary", "mercenary", "mercenary", "n2", "rocket_mercenary", "mercenary", "mercenary", "mercenary", "mercenary", "mercenary" }
 ProducedUnitTypes =
 {
