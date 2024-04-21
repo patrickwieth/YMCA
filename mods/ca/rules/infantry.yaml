@@ -1835,57 +1835,6 @@ CRYOT:
 		FacingTolerance: 0
 	Inherits: ^PointLaserDefenseSystemSmall
 
-Railgunner:
-	Inherits: ^Soldier
-	Inherits: ^PrioEnergyAntiHeavy
-	Inherits@BERSERK: ^Berserk
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 50
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.railgunner, ~!commander_tree.railgunner.no_crush
-		Description: Heavy Infantry with Railgun. Strong vs Heavy Tanks\n  Weak vs Infantry, Buildings
-		IconPalette: chrometd
-	Valued:
-		Cost: 600
-	Tooltip:
-		Name: Railgunner
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 7000
-	Mobile:
-		Speed: 51
-	Armament@PRIMARY:
-		Weapon: Railgun.Infantry
-		LocalOffset: 341,0,256
-		PauseOnCondition: being-warped
-		MuzzleSequence: muzzle
-	Armament@Garrison:
-		Name: mounted
-		Weapon: Railgun.Infantry
-		PauseOnCondition: being-warped
-		LocalOffset: 341,0,256
-		MuzzleSequence: muzzle
-	TakeCover:
-		ProneOffset: 227,0,-245
-	AttackFrontal:
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	WithMuzzleOverlay:
-
-Railgunner.noCrush:
-	Inherits: Railgunner
-	Buildable:
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.railgunner.no_crush
-		Description: Heavy Infantry with Railgun. \n  Cannot be crushed. \n  Strong vs Heavy Tanks\n  Weak vs Infantry, Buildings
-		IconPalette: chrometd
-	Valued:
-		Cost: 650
-	Tooltip:
-		Name: Railgunner (Crushproof)
-	-Crushable:
-
 LEADER:
 	Inherits@1: ^CivInfantry
 	Inherits@2: ^ArmedCivilian
@@ -2418,7 +2367,7 @@ BH:
 
 YURI:
 	Inherits: ^Soldier
-	Inherits@detect: ^SensorEquipment
+	Inherits: ^SensorEquipment
 	Inherits: ^PrioAntiHeavy
 	Inherits@COMMANDOSKULL: ^CommandoSkull
 	Inherits@BOTHELPER: ^BotCaptureHelper
