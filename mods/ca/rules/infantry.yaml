@@ -820,72 +820,6 @@ THF:
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-SHOK:
-	Inherits: ^Soldier
-	Inherits: ^PrioEnergyWeapon
-	Inherits: ^SovietInfantry
-	AutoTargetPriority@DEFAULT:
-		InvalidTargets: NoAutoTarget, WaterStructure, TeslaBoost
-	AutoTargetPriority@ATTACKANYTHING:
-		InvalidTargets: NoAutoTarget, TeslaBoost
-	AutoTargetPriority@TESLANORMAL:
-		RequiresCondition: !assault-move && !attack-move
-		ValidTargets: TeslaBoost
-	AutoTargetPriority@TESLAAMOVE:
-		RequiresCondition: assault-move || attack-move
-		ValidTargets: TeslaBoost
-		ValidRelationships: Enemy
-	AttackMove:
-		AttackMoveCondition: attack-move
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 115
-		Prerequisites: ~infantry.any, dome, ~infantry.shok, ~commander_tree.advanced_infantry_training
-		Description: Elite infantry with portable Tesla weapon.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft\n  Special Ability: Can over-charge Tesla Coil
-	Valued:
-		Cost: 350
-	Tooltip:
-		Name: Shock Trooper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 7000
-	Mobile:
-		Voice: Move
-	RevealsShroud:
-		Range: 5c0
-	Armament@PRIMARY:
-		Weapon: PortaTesla
-		LocalOffset: 427,0,341
-	Armament@Garrisoned:
-		Name: mounted
-		Weapon: PortaTeslaE
-		LocalOffset: 427,0,341
-	Armament@charge:
-		Name: secondary
-		Weapon: PortaTeslaCharge
-		LocalOffset: 427,0,341
-		TargetRelationships: Ally
-		ForceTargetRelationships: None
-		Cursor: ability
-		OutsideRangeCursor: ability
-	TakeCover:
-		ProneOffset: 227,0,-245
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	AttackMove:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Guard:
-		Voice: Move
-	Voiced:
-		VoiceSet: ShokVoice
-	-Crushable:
-
 
 N2:
 	Inherits: ^Soldier
@@ -949,6 +883,7 @@ N2.Emp:
 		LocalOffset: 0,0,555
 		FireDelay: 15
 
+#this has to go
 N4:
 	Inherits: ^Soldier
 	Inherits: ^PrioAntiLight
@@ -1797,43 +1732,6 @@ RMBC.range:
 		Name: mounted
 		Weapon: cycannon.Range
 		LocalOffset: 0,0,555
-
-CRYOT:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiHeavy
-	Inherits@BERSERK: ^Berserk
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 50
-		Prerequisites: ~infantry.allies, dome, ~tent, ~commander_tree.advanced_infantry_training
-		Description: Support infantry that slows enemies and makes them take more damage. Can intercept incoming shells and rockets.
-		IconPalette: chrometd
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Cryo Trooper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 7000
-	Mobile:
-		Speed: 61
-	Armament@PRIMARY:
-		Weapon: CryoGun
-		LocalOffset: 341,0,256
-		PauseOnCondition: being-warped
-	Armament@Garrison:
-		Name: mounted
-		Weapon: CryoGun
-		LocalOffset: 341,0,256
-		PauseOnCondition: being-warped
-	TakeCover:
-		ProneOffset: 227,0,-245
-	AttackFrontal:
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	Inherits: ^PointLaserDefenseSystemSmall
 
 LEADER:
 	Inherits@1: ^CivInfantry

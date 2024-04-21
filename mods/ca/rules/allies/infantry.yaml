@@ -1,0 +1,36 @@
+Cryotrooper:
+	Inherits: ^Soldier
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^InfantryRA2Sprite
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 50
+		Prerequisites: ~infantry.allies, dome, ~tent, ~commander_tree.advanced_infantry_training
+		Description: Support infantry that slows enemies and makes them take more damage. \nCan intercept incoming shells and rockets.
+		IconPalette: chrometd
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Cryo Trooper
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 7000
+	Mobile:
+		Speed: 61
+	Armament@PRIMARY:
+		Weapon: CryoGun
+		LocalOffset: 341,0,256
+		PauseOnCondition: being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: CryoGun
+		LocalOffset: 341,0,256
+		PauseOnCondition: being-warped
+	TakeCover:
+		ProneOffset: 227,0,-245
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	Inherits: ^PointLaserDefenseSystemSmall
