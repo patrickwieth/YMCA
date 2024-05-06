@@ -2141,6 +2141,30 @@ PROC.Dummy:
 	WithInfantryBody:
 		DefaultAttackSequence: shoot
 
+^InfantrySwimmer:
+	Mobile:
+		Locomotor: seal
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	WithInfantryBody:
+		RequiresCondition: !being-warped && !onwater
+	WithInfantryBody@Swim:
+		IdleSequences: swimidle1, swimidle2, swimcheer
+		StandSequences: swimidle1, swimidle2
+		-AttackSequences:
+		DefaultAttackSequence: swimattack
+		MoveSequence: swim
+		RequiresCondition: !being-warped && onwater
+	WithDeathAnimation:
+		RequiresCondition: !onwater
+	WithDeathAnimation@Water:
+		RequiresCondition: onwater
+		UseDeathTypeSuffix: False
+		FallbackSequence: splash
+		CrushedSequence: die-crushed
+		DeathSequence: swimdie1
+
 ^Ship:
 	Inherits@1: ^ExistsInWorld
 	Inherits: ^HeavyArmor
@@ -2168,6 +2192,7 @@ PROC.Dummy:
 	Inherits@production: ^ProductionEfficiencyBoost
 	Inherits@atomize: ^Atomizable
 	Inherits@C4: ^C4Plantable
+	Inherits@TNT: ^TNTPlantable
 	Inherits@minidrone: ^MiniDroneAttachable
 	Inherits@biodamage: ^DriverBiologicalDamage
 	Inherits@VehicleVision: ^VehicleVision
