@@ -1,3 +1,36 @@
+HARV.Soviet:
+	Inherits: ^Tank
+	Inherits: ^BiologicalDriver
+	Inherits: ^VoxelHarvester
+	RenderVoxels:
+		Scale: 0.7
+		Image: sovietminer
+	RenderSprites:
+		Image: sovietminer
+	Inherits: ^Harvester
+	-Crushable:
+	-Carryable:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 10
+		Prerequisites: ~proc, ~vehicles.soviet
+		Description: Collects Ore, Gems and Tiberium for processing.\n  Unarmed
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Soviet Miner
+	Selectable:
+		Priority: 7
+	Health:
+		HP: 75000
+	Mobile:
+		Speed: 56
+		Locomotor: heavywheeled
+	SpawnActorOnDeath:
+		Actor: HARV.EmptyHusk
+		RequiresCondition: !being-warped && !orep-upgrade
+	WithFacingSpriteBody:
+
 QTNK:
 	Inherits: ^Tank
 	Inherits: ^AutoDeployIdler
