@@ -1,0 +1,214 @@
+
+FTNK:
+	Inherits: ^Tank
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLight
+	RenderSprites:
+		Image: ftnk
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Flame Tank
+		GenericName: Tank
+	Buildable:
+		BuildPaletteOrder: 365
+		Prerequisites: hq, ~vehicles.nod, ~!vehicles.blackh, ~!commander_tree.flame_tank.pdl, ~!commander_tree.flame_tank.reflector
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Heavily armored flame-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft
+	Mobile:
+		Speed: 82
+	Health:
+		HP: 40000
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: BigFlamer
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 512,128,42, 512,-128,42
+	WithMuzzleOverlay:
+	AttackFrontal:
+		Armaments: primary, secondary
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	Explodes:
+		Weapon: BarrelExplode
+		EmptyWeapon: BarrelExplode
+	ProductionCostMultiplier@BlackhBonus:
+		Multiplier: 90
+		Prerequisites: vehicles.blackh
+
+FTNK.Reflector:
+	Inherits: FTNK
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.flame_tank.reflector, ~!commander_tree.chem_tank
+		Description: Heavily armored flame-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
+	Tooltip:
+		Name: Flame Tank (Reflector)
+
+FTNK.PDL:
+	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: FTNK
+	Buildable:
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.flame_tank.pdl, ~!commander_tree.chem_tank
+		Description: Heavily armored flame-throwing vehicle.\nHas Point Laser Defense\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft, Energy Weapons
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Flame Tank (PDL)
+	Health:
+		HP: 50000
+
+FTNK.PDL.Chem:
+	Inherits: FTNK.PDL
+	Inherits: ^PrioAntiReflector
+	RenderSprites:
+		Image: chemtank
+	WithProductionIconOverlay@Hazard:
+		Types: Hazard
+	Buildable:
+		IconPalette: chrome
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.chem_tank, ~commander_tree.flame_tank.pdl
+		Description: Heavily armored chemical-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Chem Tank (PDL)
+	Health:
+		HP: 60000
+	Armament@PRIMARY:
+		Weapon: BigChemspray
+		-MuzzleSequence:
+		-MuzzlePalette:
+		LocalOffset: 512,128,42, 512,-128,42
+
+FTNK.Reflector.Chem:
+	Inherits: FTNK.Reflector
+	RenderSprites:
+		Image: chemtank
+	WithProductionIconOverlay@Hazard:
+		Types: Hazard
+	Buildable:
+		IconPalette: chrome
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.chem_tank, ~commander_tree.flame_tank.reflector
+		Description: Heavily armored chemical-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Chem Tank (Reflector)
+	Health:
+		HP: 60000
+	Armament@PRIMARY:
+		Weapon: BigChemspray
+		-MuzzleSequence:
+		-MuzzlePalette:
+		LocalOffset: 512,128,42, 512,-128,42
+
+HFTK:
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLight
+	RenderSprites:
+		Image: hftk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 365
+		IconPalette: chrometd
+		Prerequisites: radar, ~vehicles.blackh, ~!filler.flametank
+		Description: Heavy tank armed with dual short-range flamethrowers.\n  Strong vs Infantry, Buildings, Light Armor\n  Weak vs Tanks, Defenses, Aircraft
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Heavy Flame Tank
+		GenericName: Tank
+	Health:
+		HP: 75000
+	Mobile:
+		Locomotor: heavytracked
+		Speed: 68
+		Voice: Move
+	Turreted:
+		TurnSpeed: 20
+	Armament@PRIMARY:
+		Weapon: HeavyFlameTankFlamer
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 750,200,150, 750,-200,150
+	Armament@FF:
+		Weapon: HeavyFlameTankFlamerFF
+		LocalOffset: 750,200,150, 750,-200,150
+	AttackTurreted:
+		Voice: Attack
+		RangeMargin: 0
+		PauseOnCondition: empdisable || being-warped
+	WithSpriteTurret:
+	WithMuzzleOverlay:
+	Voiced:
+		VoiceSet: FlameTankVoice
+	Explodes:
+		Weapon: BarrelExplode
+		EmptyWeapon: BarrelExplode
+	AmbientSoundCA:
+		SoundFiles: bigflamer-loop1.aud
+		InitialSound: bigflamer-start1.aud
+		FinalSound: bigflamer-end1.aud
+		RequiresCondition: attacking
+		InitialSoundLength: 24
+	GrantConditionOnAttackCA:
+		Condition: attacking
+
+HFTK.PDL:
+	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: HFTK
+	Buildable:
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.heavy_flame_tank.pdl, ~!commander_tree.fireball_tank
+		Description: Heavily armored flame-throwing vehicle.\nHas Point Laser Defense\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft, Energy Weapons
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Heavy Flame Tank (PDL)
+	Health:
+		HP: 50000
+
+HFTK.Reflector:
+	Inherits: HFTK
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.heavy_flame_tank.reflector, ~!commander_tree.fireball_tank
+		Description: Heavily armored flame-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
+	Tooltip:
+		Name: Heavy Flame Tank (Reflector)
+
+HFTK.PDL.Fireball:
+	Inherits: HFTK.PDL
+	WithProductionIconOverlay@Flame:
+		Types: Flame
+	Buildable:
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.fireball_tank, ~commander_tree.heavy_flame_tank.pdl
+		Description: Heavily armored fireball-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Heavy Tanks, Aircraft
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Fireball Tank (PDL)
+	Armament@PRIMARY:
+		Weapon: FireballLauncher.Tank
+		-MuzzleSequence:
+		-MuzzlePalette:
+
+HFTK.Reflector.Fireball:
+	Inherits: HFTK.Reflector
+	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Flame:
+		Types: Flame
+	Buildable:
+		Prerequisites: hq, ~vehicles.nod, ~commander_tree.fireball_tank, ~commander_tree.heavy_flame_tank.reflector
+		Description: Heavily armored fireball-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
+	Tooltip:
+		Name: Fireball Tank (Reflector)
+	Armament@PRIMARY:
+		Weapon: FireballLauncher.Tank
+		-MuzzleSequence:
+		-MuzzlePalette:
