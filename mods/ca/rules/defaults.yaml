@@ -3958,8 +3958,20 @@ PROC.Dummy:
 
 ^VoxelHarvester:
 	Inherits: ^VoxelVehicle
-	-WithVoxelBody:
+	GrantConditionOnDockingHarvester:
+		Condition: docking
+	GrantConditionOnHarvesting:
+		Condition: harvesting
+	WithVoxelBody:
+		RequiresCondition: !docking && !harvesting
+	WithVoxelBody@docking:
+		Sequence: unload
+		RequiresCondition: docking
 	WithVoxelAnimatedBody:
+		RequiresCondition: harvesting
+	Inherits: ^Harvester
+	-WithHarvestAnimationCA:
+	-WithDockingAnimation:
 
 ^VoxelTurretedTank:
 	Inherits: ^TSRenderVoxel
