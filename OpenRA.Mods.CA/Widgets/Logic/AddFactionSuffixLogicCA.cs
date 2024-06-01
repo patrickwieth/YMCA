@@ -10,9 +10,10 @@
 #endregion
 
 using System;
+using OpenRA.Mods.Common.Widgets;
 using OpenRA.Widgets;
 
-namespace OpenRA.Mods.Common.Widgets.Logic
+namespace OpenRA.Mods.CA.Widgets.Logic
 {
 	public class AddFactionSuffixLogicCA : ChromeLogic
 	{
