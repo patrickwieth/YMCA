@@ -203,10 +203,17 @@ Player:
 		Enabled: True
 		DisplayOrder: 15
 		Prerequisites: global.balancedharvesting
+	LobbyPrerequisiteCheckbox@NukularConyard:
+		ID: nukular
+		Label: Nukular MCV
+		Description: Enables Nukular MCV Mode - The first conyard of each player is nukular,\nthis means if you lose it, you lose the game and it will explode in a gigantic nuclear detonation. \nGreat for FFA.
+		Enabled: false
+		DisplayOrder: 19
+		Prerequisites: global.nukular
 	LobbyPrerequisiteCheckbox@Autobattle:
 		ID: autobattle
 		Label: Autobattle Mode
-		Description: Enables Autobattle Mode - Checkpoints must be captured to win the game and most units cannot be controlled\nTHIS IS HIGHLY EXPERIMENTAL
+		Description: Enables Autobattle Mode - Checkpoints must be captured to win the game and most units cannot be controlled\nTHIS IS HIGHLY EXPERIMENTAL \nonly works on special maps
 		Enabled: false
 		DisplayOrder: 20
 		Prerequisites: global.autobattle
@@ -260,3 +267,9 @@ Player:
 	#:
 	ProximityCaptor:
 		Types: Infantry, Vehicle
+	#NukularMode
+	ExternalCondition@NukularOwned:
+		Condition: NukularOwned
+	ProvidesPrerequisite@NukularOwned:
+		Prerequisite: nukular.owned
+		RequiresCondition: NukularOwned

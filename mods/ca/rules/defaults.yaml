@@ -2740,7 +2740,7 @@ PROC.Dummy:
 	Inherits@gflash: ^GreenFlash
 	Inherits@HACKABLE: ^Hackable
 	Inherits: ^EarlyGameBuildBoost
-		RequiresCondition: invulnerability && !forceshield
+	Inherits: ^MustBeDestroyed
 	Buildable:
 		Queue: Building
 		BuildDurationModifier: 25
@@ -2778,12 +2778,10 @@ PROC.Dummy:
 		Actors: c1,c7,c10
 		Probability: 10
 		RequiresCondition: !being-warped
-	MustBeDestroyed:
-		RequiredForShortGame: true
 	GpsRadarDot:
 		Sequence: Structure
 	Sellable:
-		RequiresCondition: !build-incomplete && !c4 && !being-captured && !being-warped && !hacked
+		RequiresCondition: !build-incomplete && !c4 && !being-captured && !being-warped && !hacked && !Nukular
 		SellSounds: cashturn.aud
 	WithBuildingRepairDecoration:
 		Image: allyrepair
@@ -2809,6 +2807,36 @@ PROC.Dummy:
 		Multiplier: 1
 		Prerequisites: !BuildUpBoostEnded
 		Queue: Building
+
+^NukularConyard:
+	WithModifiedPalette@nukular:
+		Palette: irrad-weak
+		RequiresCondition: Nukular
+	Explodes@NUKE:
+		Weapon: UltraNuke
+		EmptyWeapon: UltraNuke
+		RequiresCondition: Nukular
+	GrantConditionOnPrerequisite@Nukular:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned
+	GrantConditionOnPrerequisite@Global.Nukular:
+		Condition: GlobalNukular
+		Prerequisites: global.nukular
+	GrantCondition@Nukular:
+		Condition: Nukular
+		GrantPermanently: true
+		RequiresCondition: NukularOpen && GlobalNukular
+	GrantExternalConditionToOwner@NukularOwned:
+		Condition: NukularOwned
+		RequiresCondition: Nukular
+
+^MustBeDestroyed:
+	GrantConditionOnPrerequisite@NukularMode:
+		Condition: NukularMode
+		Prerequisites: global.nukular
+	MustBeDestroyed:
+		RequiredForShortGame: true
+		RequiresCondition: !NukularMode || Nukular
 
 ^TechLevelBuilding:
 	Buildable:
@@ -4844,6 +4872,7 @@ PROC.Dummy:
 		Condition: produced
 
 ^StructureProduction:
+	Inherits: ^NukularConyard
 	ProvidesRadar:
 		RequiresCondition: global.radarAlwaysOn
 	GrantConditionOnPrerequisite@infonly:
