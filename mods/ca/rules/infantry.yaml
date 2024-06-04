@@ -1780,57 +1780,6 @@ LEADER:
 		Produces: Infantry, Soldier
 		PauseOnCondition: loaded
 
-IVAN:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiLight
-	Inherits: ^SovietInfantry
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 40
-		Prerequisites: ~infantry.nkorea, weap, ~commander_tree.advanced_infantry_training
-		Description: Specialist demolition infantry armed with explosives.\n  Strong vs Buildings\n  Weak vs Aircraft
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Crazy Ivan
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 12000
-	Mobile:
-		Speed: 73
-		Voice: Move
-	AttackMove:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Guard:
-		Voice: Move
-	Armament@PRIMARY:
-		Weapon: Ivanbomb
-		LocalOffset: 0,0,555
-		FireDelay: 15
-	Armament@Garrison:
-		Name: mounted
-		Weapon: Ivanbomb
-		FireDelay: 15
-	TakeCover:
-		ProneOffset: 256,64,-331
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 30
-	WithInfantryBody:
-		DefaultAttackSequence: throw
-	Explodes:
-		Weapon: ArtilleryExplode
-		EmptyWeapon: ArtilleryExplode
-		Chance: 100
-		DamageSource: Killer
-		RequiresCondition: !being-warped
-	Voiced:
-		VoiceSet: CrazyIvanVoice
 
 BRUT:
 	Inherits: ^Soldier
@@ -2455,9 +2404,6 @@ SEAL:
 		Palette: effect
 		Position: TopLeft
 		ValidRelationships: Ally, Enemy, Neutral
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true

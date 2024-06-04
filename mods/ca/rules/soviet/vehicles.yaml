@@ -1,13 +1,13 @@
-HARV.Soviet:
+Soviet_Miner:
 	Inherits: ^Tank
 	Inherits: ^BiologicalDriver
 	Inherits: ^VoxelHarvester
+	Inherits: ^ChinaGatling
 	RenderVoxels:
-		Scale: 0.7
+		Scale: 1
 		Image: sovietminer
 	RenderSprites:
 		Image: sovietminer
-	Inherits: ^Harvester
 	-Crushable:
 	-Carryable:
 	Buildable:
@@ -29,7 +29,28 @@ HARV.Soviet:
 	SpawnActorOnDeath:
 		Actor: HARV.EmptyHusk
 		RequiresCondition: !being-warped && !orep-upgrade
-	WithFacingSpriteBody:
+	GrantConditionOnPrerequisite@Warminer:
+		Prerequisites: commander_tree.war_miners
+		Condition: warminer
+	WithVoxelTurret:
+		RequiresCondition: warminer && !docking
+	WithVoxelTurret@unload:
+		RequiresCondition: warminer && docking
+		Sequence: turret
+		Turret: unload
+	Turreted:
+		Turret: primary
+		Offset: -250,0,200
+		TurnSpeed: 6
+		RequiresCondition: docking && warminer
+	Turreted@unload:
+		Turret: unload
+		Offset: -400,0,350
+		TurnSpeed: 6
+		RequiresCondition: !docking && warminer
+	AttackTurreted:
+		RequiresCondition: warminer
+		PauseOnCondition: empdisable || being-warped || parachute
 
 QTNK:
 	Inherits: ^Tank
