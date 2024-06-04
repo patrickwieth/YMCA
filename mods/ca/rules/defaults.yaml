@@ -2854,14 +2854,20 @@ PROC.Dummy:
 	GrantExternalConditionToOwner@NukularOwned:
 		Condition: NukularOwned
 		RequiresCondition: Nukular
+	DamageMultiplier@Nukular:
+		Modifier: 50
+		RequiresCondition: Nukular
 
 ^MustBeDestroyed:
 	GrantConditionOnPrerequisite@NukularMode:
 		Condition: NukularMode
 		Prerequisites: global.nukular
+	GrantConditionOnPrerequisite@LoseGame:
+		Condition: LoseGame
+		Prerequisites: lose.game
 	MustBeDestroyed:
 		RequiredForShortGame: true
-		RequiresCondition: !NukularMode || Nukular
+		RequiresCondition: !NukularMode || !LoseGame
 
 ^TechLevelBuilding:
 	Buildable:
