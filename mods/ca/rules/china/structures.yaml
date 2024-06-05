@@ -6,7 +6,8 @@ chcommand:
 	Inherits: ^BotFallbackInsurance
 	Inherits: ^StructureProduction
 	Inherits: ^RadarStation
-	ProvidesPrerequisite@buildingname:
+	ProvidesPrerequisite:
+		Prerequisite: chcommand
 	Buildable:
 		BuildPaletteOrder: 55
 		Prerequisites: ~structures.china, chweap
@@ -104,6 +105,19 @@ chcommand:
 		RequiresCondition: botowner
 	RequiresBuildableArea:
 		AreaTypes: outpost_building
+	GrantConditionOnPrerequisite@NukularOpen:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned, global.nukular
+	TransformOnCondition:
+		IntoActor: chcommand.Nukular
+		RequiresCondition: NukularOpen
+
+chcommand.Nukular:
+	Inherits: chcommand
+	Inherits: ^NukularConyard
+	-Buildable:
+	RenderSprites:
+		Image: chcommand
 
 chcommand.radar:
 	Inherits: ^BuildingPlug

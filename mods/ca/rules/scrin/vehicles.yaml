@@ -1168,7 +1168,6 @@ Hexapod:
 
 SMCV:
 	Inherits: ^ConstructionVehicle
-	Inherits: ^NukularConyard
 	Inherits: ^HoverVehicle
 	Inherits: ^ScrinLightsTripod
 	Inherits: ^BigVehicle
@@ -1212,3 +1211,18 @@ SMCV:
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
+	GrantConditionOnPrerequisite@NukularOpen:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned, global.nukular
+	TransformOnCondition:
+		IntoActor: SMCV.Nukular
+		RequiresCondition: NukularOpen
+
+SMCV.Nukular:
+	Inherits: SMCV
+	Inherits: ^NukularConyard
+	-Buildable:
+	RenderSprites:
+		Image: SMCV
+	Transforms:
+		IntoActor: sfac.nukular

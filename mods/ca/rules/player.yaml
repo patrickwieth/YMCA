@@ -207,7 +207,7 @@ Player:
 		ID: nukular
 		Label: Nukular MCV
 		Description: Enables Nukular MCV Mode - The first conyard of each player is nukular,\nthis means if you lose it, you lose the game and it will explode in a gigantic nuclear detonation. \nGreat for FFA.
-		Enabled: false
+		Enabled: False
 		DisplayOrder: 19
 		Prerequisites: global.nukular
 	LobbyPrerequisiteCheckbox@Autobattle:
@@ -272,4 +272,8 @@ Player:
 		Condition: NukularOwned
 	ProvidesPrerequisite@NukularOwned:
 		Prerequisite: nukular.owned
+		RequiresCondition: NukularActivated
+	GrantCondition@NukularActivated:
+		Condition: NukularActivated
+		GrantPermanently: true
 		RequiresCondition: NukularOwned

@@ -2806,7 +2806,7 @@ PROC.Dummy:
 	GpsRadarDot:
 		Sequence: Structure
 	Sellable:
-		RequiresCondition: !build-incomplete && !c4 && !being-captured && !being-warped && !hacked && !Nukular
+		RequiresCondition: !build-incomplete && !c4 && !being-captured && !being-warped && !hacked
 		SellSounds: cashturn.aud
 	WithBuildingRepairDecoration:
 		Image: allyrepair
@@ -2834,40 +2834,33 @@ PROC.Dummy:
 		Queue: Building
 
 ^NukularConyard:
+	Inherits: ^MustBeDestroyed.Nukular
 	WithModifiedPalette@nukular:
 		Palette: irrad-weak
-		RequiresCondition: Nukular
+	GrantExternalConditionToOwner@NukularOwned:
+		Condition: NukularOwned
+	DamageMultiplier@Nukular:
+		Modifier: 50
 	Explodes@NUKE:
 		Weapon: UltraNuke
 		EmptyWeapon: UltraNuke
-		RequiresCondition: Nukular
-	GrantConditionOnPrerequisite@Nukular:
-		Condition: NukularOpen
-		Prerequisites: !nukular.owned
-	GrantConditionOnPrerequisite@Global.Nukular:
-		Condition: GlobalNukular
-		Prerequisites: global.nukular
-	GrantCondition@Nukular:
-		Condition: Nukular
-		GrantPermanently: true
-		RequiresCondition: NukularOpen && GlobalNukular
-	GrantExternalConditionToOwner@NukularOwned:
-		Condition: NukularOwned
-		RequiresCondition: Nukular
-	DamageMultiplier@Nukular:
-		Modifier: 50
-		RequiresCondition: Nukular
+
+^MustBeDestroyed.Nukular:
+	Inherits: ^MustBeDestroyed
+	MustBeDestroyed:
+		RequiredForShortGame: true
+		RequiresCondition: NukularMode
 
 ^MustBeDestroyed:
 	GrantConditionOnPrerequisite@NukularMode:
 		Condition: NukularMode
 		Prerequisites: global.nukular
-	GrantConditionOnPrerequisite@LoseGame:
-		Condition: LoseGame
-		Prerequisites: lose.game
+	GrantConditionOnPrerequisite@NukularOpen:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned, global.nukular
 	MustBeDestroyed:
 		RequiredForShortGame: true
-		RequiresCondition: !NukularMode || !LoseGame
+		RequiresCondition: !NukularMode || NukularOpen
 
 ^TechLevelBuilding:
 	Buildable:
@@ -4915,7 +4908,6 @@ PROC.Dummy:
 		Condition: produced
 
 ^StructureProduction:
-	Inherits: ^NukularConyard
 	ProvidesRadar:
 		RequiresCondition: global.radarAlwaysOn
 	GrantConditionOnPrerequisite@infonly:

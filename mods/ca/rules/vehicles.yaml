@@ -1052,7 +1052,6 @@ HARV.Chrono:
 
 MCV:
 	Inherits: ^Tank
-	Inherits: ^NukularConyard
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^MustBeDestroyed
@@ -1088,6 +1087,21 @@ MCV:
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	GrantConditionOnPrerequisite@NukularOpen:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned, global.nukular
+	TransformOnCondition:
+		IntoActor: AMCV.Nukular
+		RequiresCondition: NukularOpen
+
+MCV.Nukular:
+	Inherits: MCV
+	Inherits: ^NukularConyard
+	-Buildable:
+	RenderSprites:
+		Image: MCV
+	Transforms:
+		IntoActor: fact.nukular
 
 JEEP:
 	Inherits: ^FightingVehicle
@@ -1457,7 +1471,6 @@ TTRK:
 
 AMCV:
 	Inherits: ^ConstructionVehicle
-	Inherits: ^NukularConyard
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
@@ -1495,6 +1508,21 @@ AMCV:
 	-Crushable:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	GrantConditionOnPrerequisite@NukularOpen:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned, global.nukular
+	TransformOnCondition:
+		IntoActor: AMCV.Nukular
+		RequiresCondition: NukularOpen
+
+AMCV.Nukular:
+	Inherits: AMCV
+	Inherits: ^NukularConyard
+	-Buildable:
+	RenderSprites:
+		Image: AMCV
+	Transforms:
+		IntoActor: afac.nukular
 
 HMMV:
 	Inherits: ^FightingVehicle
