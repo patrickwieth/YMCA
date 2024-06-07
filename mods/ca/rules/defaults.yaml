@@ -2862,6 +2862,23 @@ PROC.Dummy:
 		RequiredForShortGame: true
 		RequiresCondition: !NukularMode || NukularOpen
 
+^NukularTransporter:
+	WithModifiedPalette@nukular:
+		Palette: irrad-weak
+		RequiresCondition: NukularCargo
+	Explodes@NUKE:
+		Weapon: UltraNuke
+		EmptyWeapon: UltraNuke
+		RequiresCondition: NukularCargo
+	SpeedMultiplier:
+		Modifier: 150
+		RequiresCondition: NukularCargo
+	Cargo:
+		PassengerConditions:
+			amcv.nukular: NukularCargo
+			mcv.nukular: NukularCargo
+			smcv.nukular: NukularCargo
+
 ^TechLevelBuilding:
 	Buildable:
 		BuildDurationModifier: 100
@@ -2888,15 +2905,38 @@ PROC.Dummy:
 ^SuperWeapon:
 
 ^ForceShieldSupportPower:
-	GrantExternalConditionPowerCA@FSHIELD:
+	GrantExternalConditionPowerCA@FSHIELDNukular:
 		OrderName: fshield
 		Icon: forceshieldicon
-		ChargeInterval: 7500
+		ChargeInterval: 2000
 		Condition: forceshield
 		Dimensions: 7, 7
 		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
 		Duration: 250
-		Prerequisites: forceshield.enabled
+		Prerequisites: forceshield.enabled, global.nukular
+		Weapon: ForceShield
+		ActivationDelay: 1
+		AirburstAltitude: 0c0
+		AllowMultiple: false
+		Name: Force Shield
+		Description: Makes selected friendly structures temporarily invulnerable.\n  Warning: Causes power failure.
+		OnFireSound: forceon.aud
+		DisplayTimerStances: Ally
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		EndChargeSpeechNotification: ForceShieldReady
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable ||  being-warped
+	GrantExternalConditionPowerCA@FSHIELD:
+		OrderName: fshield2
+		Icon: forceshieldicon
+		ChargeInterval: 4000
+		Condition: forceshield
+		Dimensions: 7, 7
+		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
+		Duration: 250
+		Prerequisites: forceshield.enabled, !global.nukular
 		Weapon: ForceShield
 		ActivationDelay: 5
 		AirburstAltitude: 0c0
