@@ -12,7 +12,7 @@ CHNMCV:
 	Inherits: ^EarlyGameBuildBoost
 	BaseProvider:
 		PauseOnCondition: being-captured
-		Range: 6c0
+		Range: 8c0
 	GivesBuildableArea:
 		AreaTypes: outpost_building
 	Valued:
@@ -50,6 +50,17 @@ CHNMCV:
 	ProvidesPrerequisite@chinaatom:
 		Factions: chinaatom
 		Prerequisite: structures.chinaatom
+	GrantConditionOnPrerequisite@NukularOpen:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned, global.nukular
+	TransformOnCondition:
+		IntoActor: CHNMCV.Nukular
+		RequiresCondition: NukularOpen
+
+CHNMCV.Nukular:
+	Inherits: CHNMCV
+	Inherits: ^NukularConyard
+	-Buildable:
 
 chbattle:
 	Inherits: ^Tank
