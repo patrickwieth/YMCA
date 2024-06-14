@@ -2029,6 +2029,7 @@ BLIMP:
 OCAR:
 	Inherits: ^VoxelHelicopter
 	Inherits: ^BiologicalPilot
+	Inherits: ^NukularTransporter
 	RenderVoxels:
 		Scale: 0.5
 		Image: ocar
@@ -2061,6 +2062,10 @@ OCAR:
 		LocalOffset: 0, 0, -256
 		Voice: Action
 		AllowDropOff: True
+		CarryableConditions:
+			amcv.nukular: NukularCargo
+			mcv.nukular: NukularCargo
+			smcv.nukular: NukularCargo
 	Health:
 		HP: 30000
 	RevealsShroud:
@@ -2555,10 +2560,11 @@ VENM.HeavyLaser:
 Dropship:
 	Inherits: ^Plane
 	Inherits: ^BiologicalPilot
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@TRANSPORT: ^Transport
-	Inherits@PRODUCTION: ^InfantryProduction
-	Inherits@PRODUCTION: ^VehicleProduction
+	Inherits: ^PrimaryBuilding
+	Inherits: ^Transport
+	Inherits: ^InfantryProduction
+	Inherits: ^VehicleProduction
+	Inherits: ^NukularTransporter
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
