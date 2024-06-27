@@ -3,6 +3,7 @@ Soviet_Miner:
 	Inherits: ^BiologicalDriver
 	Inherits: ^VoxelHarvester
 	Inherits: ^ChinaGatling
+	Inherits: ^PrioAntiLightAA
 	RenderVoxels:
 		Scale: 1
 		Image: sovietminer
@@ -42,12 +43,12 @@ Soviet_Miner:
 		Turret: primary
 		Offset: -250,0,200
 		TurnSpeed: 6
-		RequiresCondition: docking && warminer
+		RequiresCondition: !docking && warminer
 	Turreted@unload:
 		Turret: unload
 		Offset: -400,0,350
 		TurnSpeed: 6
-		RequiresCondition: !docking && warminer
+		RequiresCondition: docking && warminer
 	AttackTurreted:
 		RequiresCondition: warminer
 		PauseOnCondition: empdisable || being-warped || parachute
