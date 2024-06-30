@@ -1,3 +1,105 @@
+commander_tree.Mammoth_Tank_GDI.Hover:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tank
+	RenderSprites:
+		Image: mammoth
+	WithProductionIconOverlay@Air:
+		Types: Air
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 230
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, techcenter, ~!vehicles.talon, ~!commander_tree.mammoth_tank_gdi.ion, ~!commander_tree.mammoth_tank_gdi.nr
+		Description: The Mammoth is upgraded with Hover technology. \n  This gives the Mammoth much more maneuverability.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth
+
+commander_tree.Mammoth_Tank_GDI.Ion:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Ion Mammoth
+	RenderSprites:
+		Image: mammoth
+	WithProductionIconOverlay@Ion:
+		Types: Ion
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 230
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.zocom, ~!vehicles.talon, techcenter, ~!commander_tree.mammoth_tank_gdi.nr, ~!commander_tree.mammoth_tank_gdi.hover
+		Description: The Mammoth is upgraded with an Ion cannon. \n  Energy based weapon systems cannot be shot down by Point Laser Defense Systems.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth
+
+commander_tree.Mammoth_Tank_GDI.NR:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Nanite Shield
+	RenderSprites:
+		Image: mammoth
+	WithProductionIconOverlay@Wrench:
+		Types: Wrench
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 230
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.zocom, techcenter, ~!commander_tree.mammoth_tank_gdi.ion, ~!commander_tree.mammoth_tank_gdi.hover
+		Description: The Mammoth Tank is upgraded with a Nanite Shield System. \n  This makes it more durable and shield recovers fast when out of combat.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth
+
+commander_tree.Mammoth_Tank_GDI.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Reflector Armor
+	RenderSprites:
+		Image: mammoth
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 231
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, techcenter, ~filler.gdimammoth, ~!commander_tree.mammoth_tank_gdi.pdl
+		Description: Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth2
+
+commander_tree.Mammoth_Tank_GDI.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mammoth Tank Point Laser Defense
+	RenderSprites:
+		Image: mammoth
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Buildable:
+		Queue: Commander_Tree
+		IconPalette: chrometd
+		BuildPaletteOrder: 231
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, techcenter, ~filler.gdimammoth, ~!commander_tree.mammoth_tank_gdi.reflector
+		Description: Upgrades the Mammoth Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.gdimammoth2
+
+hack.cameo_filler.216:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 232
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.talon, ~!filler.gdimammoth, disabled
+
+hack.cameo_filler.217:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 232
+		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~filler.gdimammoth2, disabled
+
 
 commander_tree.Orca.Payload:
 	Inherits: ^default.commander_tree_item

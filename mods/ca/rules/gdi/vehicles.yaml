@@ -1,3 +1,209 @@
+Mammoth:
+	Inherits: ^Tank
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 1
+		Image: mammoth
+	RenderSprites:
+		Image: mammoth
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^DronePairing
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 185
+		IconPalette: chrometd
+		Prerequisites: techcenter, ~vehicles.gdi, ~!vehicles.talon, ~!filler.gdimammoth
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
+	Valued:
+		Cost: 1700
+	Tooltip:
+		Name: Mammoth Tank
+		GenericName: Tank
+	Health:
+		HP: 78000
+	Mobile:
+		Speed: 52
+		Locomotor: heavytracked
+	Turreted@PRIMARY:
+		TurnSpeed: 16
+	Armament@PRIMARY:
+		Turret: primary
+		Weapon: 130mmTD
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: primary
+		Weapon: MammothTusk
+		LocalOffset: -85,384,340, -85,-384,340
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: Mammoth.Husk
+		RequiresCondition: !being-warped
+	ChangesHealth:
+		PercentageStep: 1
+		Delay: 25
+		StartIfBelow: 50
+		DamageCooldown: 150
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
+
+Mammoth.Ion:
+	Inherits: Mammoth
+	Inherits: ^PrioEnergyWeapon
+	RenderVoxels:
+		Image: ionmammoth
+	Buildable:
+		BuildPaletteOrder: 190
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.ion, ~!filler.gdimammoth2
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry\n  Weak vs Anti-Tank Weapons
+	WithProductionIconOverlay@Ion:
+		Types: Ion
+	Tooltip:
+		Name: Ion Mammoth Tank
+	Valued:
+		Cost: 2000
+	Armament@PRIMARY:
+		Weapon: IonZap
+		LocalOffset: 870,0,360
+	-Armament@SECONDARY:
+	SpawnActorOnDeath:
+		Actor: Mammoth.Ion.Husk
+
+Mammoth.Ion.Reflector:
+	Inherits: Mammoth.Ion
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.ion, ~commander_tree.mammoth_tank_gdi.reflector
+		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
+	Tooltip:
+		Name: Ion Mammoth Tank (Reflector)
+
+Mammoth.Ion.PDL:
+	Inherits: Mammoth.Ion
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pdl, ~commander_tree.mammoth_tank_gdi.ion
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Tooltip:
+		Name: Ion Mammoth Tank (PDL)
+	Valued:
+		Cost: 2500
+
+Mammoth.Nanite:
+	Inherits: Mammoth
+	Inherits: ^Shielded
+	Buildable:
+		BuildPaletteOrder: 190
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.nr, ~!filler.gdimammoth2
+		Description: Big and slow tank with anti-air capability.\n  Is very tough and has a nanite shield system.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Point Laser Defense
+	WithProductionIconOverlay@Wrench:
+		Types: Wrench
+	Tooltip:
+		Name: Nanite Mammoth Tank
+	Valued:
+		Cost: 2500
+	Shielded:
+		MaxStrength: 60000
+		RegenAmount: 800
+		RequiresCondition: !(empdisable || driver-dead)
+
+Mammoth.Nanite.Reflector:
+	Inherits: Mammoth.Nanite
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.nr, ~commander_tree.mammoth_tank_gdi.reflector
+		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Is very tough and has a nanite shield system.\n  Strong vs Vehicles, Infantry, Aircraft, Energy Weapons \n  Weak vs Conventional Weapons
+	Tooltip:
+		Name: Nanite Mammoth Tank (Reflector)
+
+Mammoth.Nanite.PDL:
+	Inherits: Mammoth.Nanite
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pdl, ~commander_tree.mammoth_tank_gdi.nr,
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Is very tough and has a nanite shield system.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Tooltip:
+		Name: Nanite Mammoth Tank (PDL)
+	Valued:
+		Cost: 3000
+
+Mammoth.Hover:
+	Inherits: Mammoth
+	RenderVoxels:
+		Scale: 1.2
+		Image: hovermammoth
+	Inherits: ^HoverVehicle
+	Buildable:
+		BuildPaletteOrder: 190
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.hover, ~!filler.gdimammoth2
+		Description: Big tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
+	WithProductionIconOverlay@Air:
+		Types: Air
+	Tooltip:
+		Name: Hover Mammoth Tank
+	Valued:
+		Cost: 1600
+	Mobile:
+		Speed: 92
+		TurnSpeed: 56
+	LeavesTrails:
+		Image: twake
+		Palette: effect
+		TerrainTypes: Water
+		TrailWhileStationary: true
+		StationaryInterval: 18
+		MovingInterval: 6
+	WithShadow:
+		Offset: 43, 128, 0
+		ZOffset: -129
+	SpawnActorOnDeath:
+		Actor: Mammoth.Hover.Husk
+		RequiresCondition: !being-warped && !onwater
+
+Mammoth.Hover.Reflector:
+	Inherits: Mammoth.Hover
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.hover, ~commander_tree.mammoth_tank_gdi.reflector
+		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
+	Tooltip:
+		Name: Hover Mammoth Tank (Reflector)
+
+Mammoth.Hover.PDL:
+	Inherits: Mammoth.Hover
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: ~gtek, ~vehicles.gdi, ~commander_tree.mammoth_tank_gdi.pdl, ~commander_tree.mammoth_tank_gdi.hover
+		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Tooltip:
+		Name: Hover Mammoth Tank (PDL)
+	Valued:
+		Cost: 2200
+
+
 MARV:
 	Inherits: ^Tank
 	Inherits: ^HighResShadow
