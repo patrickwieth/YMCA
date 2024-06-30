@@ -1773,6 +1773,7 @@ PROC.Dummy:
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	WithDamageOverlay:
+		Palette: tdeffect
 		Image: smoke_mtd
 
 ^FightingVehicle:
@@ -2065,6 +2066,12 @@ PROC.Dummy:
 		PlayerPalette: overlayplayer
 	WithDeathAnimation:
 		DeathSequencePalette: overlayplayer
+
+^InfantryTDSprite:
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayertd
 
 ^Soldier:
 	Inherits: ^Infantry
@@ -3311,8 +3318,8 @@ PROC.Dummy:
 		ValidOwnerNames: Neutral
 
 ^BasicHusk:
-	Inherits@1: ^SpriteActor
-	Inherits@Armor: ^HeavyArmor
+	Inherits: ^SpriteActor
+	Inherits: ^HeavyArmor
 	Interactable:
 	Health:
 		HP: 28000
@@ -3998,30 +4005,38 @@ PROC.Dummy:
 	WithVoxelBody:
 		ShowShadow: true
 
-^TSRenderVoxel:
+^RA2RenderVoxel:
 	Inherits: ^RenderVoxel
 	RenderVoxels:
 		Scale: 5
-		NormalsPalette: ts-normals
+		NormalsPalette: normals
 		PlayerPalette: playerra2
 		LightAmbientColor: 0.6, 0.6, 0.6
 		LightDiffuseColor: 0.5, 0.5, 0.5
 		LightPitch: 142
 		LightYaw: 682
 
-^RARenderVoxel:
+^TSRenderVoxel:
 	Inherits: ^RenderVoxel
 	RenderVoxels:
 		Scale: 1
-		NormalsPalette: ra-normals
-		PlayerPalette: playerra2
-		LightAmbientColor: 0.6, 0.6, 0.6
-		LightDiffuseColor: 0.4, 0.4, 0.4
+		NormalsPalette: ts-normals
+		PlayerPalette: playerts
+		LightAmbientColor: 1.2, 1.2, 1.2
+		LightDiffuseColor: 0.2, 0.2, 0.2
 		LightPitch: 142
 		LightYaw: 682
 
 ^VoxelVehicle:
 	Inherits: ^TSRenderVoxel
+
+^VoxelVehicleHusk:
+	Inherits: ^Husk
+	Inherits: ^TSRenderVoxel
+	RenderSprites:
+		Image: vehiclehuskdummy
+	WithVoxelBody:
+		ShowShadow: False
 
 ^VoxelHarvester:
 	Inherits: ^VoxelVehicle
@@ -4238,7 +4253,8 @@ PROC.Dummy:
 			light_infantry: loaded
 			conscript: loaded
 			e2: loaded
-			e3: loaded-air
+			e3.soviet: loaded-air
+			rocket_infantry: loaded-air
 			flamethrower: loaded
 			e7: loaded
 			e8: loaded

@@ -299,206 +299,6 @@ GTNK.squad:
 		InvalidTargets: NoAutoTarget
 		Priority: 10
 
-3TNK:
-	Inherits: ^Tank
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiHeavy
-	RenderSprites:
-		FactionImages:
-			iraq: 3tnki
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector, ~!commander_tree.yuri
-		Description: Soviet main battle tank with dual cannons.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
-	Valued:
-		Cost: 1100
-	Tooltip:
-		Name: Heavy Tank
-		RequiresCondition: !iraqtank
-	Tooltip@Iraq:
-		Name: Atomic Heavy Tank
-		RequiresCondition: iraqtank
-	Health:
-		HP: 60000
-	Mobile:
-		Speed: 68
-	Turreted:
-		TurnSpeed: 48
-		Offset: 0,0,20
-	GrantConditionOnFaction@IRAQTANK:
-		Condition: iraqtank
-		Factions: iraq
-	Armament:
-		Weapon: 125mm
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 768,85,90, 768,-85,90
-		MuzzleSequence: muzzle
-	SpeedMultiplier@IRAQTANK:
-		RequiresCondition: iraqtank
-		Modifier: 125
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: 3TNK.Husk
-		RequiresCondition: !iraqtank && !being-warped
-	Explodes@IRAQTANK:
-		Weapon: UnitExplodeIraqTank
-		EmptyWeapon: UnitExplodeIraqTank
-		RequiresCondition: iraqtank && !being-warped
-
-3TNK.PLD:
-	Inherits: 3TNK
-	Inherits@PLD: ^PointLaserDefenseSystem
-	RenderSprites:
-		FactionImages:
-			iraq: 3tnki.pld
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector, ~!commander_tree.yuri
-		Description: Soviet main battle tank with dual cannons.\n  Has Point Laser Defense.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Energy Weapons
-	Valued:
-		Cost: 1650
-	Tooltip:
-		Name: Heavy Tank (PLD)
-		RequiresCondition: !iraqtank
-	Tooltip@Iraq:
-		Name: Atomic Heavy Tank (PLD)
-		RequiresCondition: iraqtank
-
-3TNK.AP:
-	Inherits: 3TNK
-	RenderSprites:
-		FactionImages:
-			iraq: 3tnki.ap
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.reflector, ~!commander_tree.yuri
-		Description: Soviet main battle tank with dual cannons.\n  Has armor piercing shells.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Point Laser Defense
-	Valued:
-		Cost: 1300
-	Tooltip:
-		Name: Heavy Tank (AP)
-		RequiresCondition: !iraqtank
-	Tooltip@Iraq:
-		Name: Atomic Heavy Tank (AP)
-		RequiresCondition: iraqtank
-	Armament:
-		Weapon: 125mm.AP
-
-3TNK.Reflector:
-	Inherits: 3TNK
-	Inherits: ^ReflectorArmor
-	RenderSprites:
-		FactionImages:
-			iraq: 3tnki.ap
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.reflector, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap, ~!commander_tree.yuri
-		Description: Soviet main battle tank with dual cannons.\n  Has Reflector Armor, which is very good vs. Energy Weapons. \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
-	Tooltip:
-		Name: Heavy Tank (Reflector)
-		RequiresCondition: !iraqtank
-	Tooltip@Iraq:
-		Name: Atomic Heavy Tank (Reflector)
-		RequiresCondition: iraqtank
-
-3TNK.YURI:
-	Inherits: 3TNK
-	RenderSprites:
-		-FactionImages:
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 91
-		Prerequisites: ~commander_tree.yuri, ~vehicles.soviet, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector
-		Description: Heavy tank with infantry crushing improvements.\n  Strong vs Vehicles\n  Weak vs Defenses, Aircraft
-	Tooltip:
-		Name: Lasher Tank
-	Tooltip@Iraq:
-		Name: Atomic Lasher Tank
-		RequiresCondition: iraqtank
-	Health:
-		HP: 57000
-	Selectable:
-		Class: 3tnk
-	AttackTurreted:
-		Voice: Attack
-	Mobile:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Voiced:
-		VoiceSet: LasherTankVoice
-	Armament:
-		Weapon: 125mmLasher
-		Recoil: 128
-		RecoilRecovery: 38
-		LocalOffset: 768,85,90, 768,-85,90
-		MuzzleSequence: muzzle
-	SpawnActorOnDeath:
-		Actor: 3TNK.YURI.Husk
-	-SpeedMultiplier@CRUSHATTEMPTSLOW:
-	-SpeedMultiplier@CRUSHSLOW:
-	PeriodicExplosion@LASHER:
-		LocalOffset: 896, 0, 0
-		Weapon: Lasher
-
-3TNK.YURI.PLD:
-	Inherits: 3TNK.YURI
-	Inherits@PLD: ^PointLaserDefenseSystem
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector, ~commander_tree.yuri
-		Description: Heavy tank with infantry crushing improvements.\n  Has Point Laser Defense.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Energy Weapons
-	Valued:
-		Cost: 1650
-	Tooltip:
-		Name: Lasher Tank (PLD)
-		RequiresCondition: !iraqtank
-	Tooltip@Iraq:
-		Name: Atomic Lasher Tank (PLD)
-		RequiresCondition: iraqtank
-
-3TNK.YURI.AP:
-	Inherits: 3TNK.YURI
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.reflector, ~commander_tree.yuri
-		Description: Heavy tank with infantry crushing improvements.\n  Has armor piercing shells.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Point Laser Defense
-	Valued:
-		Cost: 1300
-	Tooltip:
-		Name: Lasher Tank (AP)
-		RequiresCondition: !iraqtank
-	Tooltip@Iraq:
-		Name: Atomic Lasher Tank (AP)
-		RequiresCondition: iraqtank
-	Armament:
-		Weapon: 125mmLasher.AP
-
-3TNK.YURI.Reflector:
-	Inherits: 3TNK.YURI
-	Inherits: ^ReflectorArmor
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.reflector, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap, ~commander_tree.yuri
-		Description: Heavy tank with infantry crushing improvements.\n  Has Reflector Armor, which is very good vs. Energy Weapons. \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
-	Tooltip:
-		Name: Lasher Tank (Reflector)
-		RequiresCondition: !iraqtank
-	Tooltip@Iraq:
-		Name: Atomic Lasher Tank (Reflector)
-		RequiresCondition: iraqtank
-
 4TNK:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
@@ -2990,7 +2790,8 @@ IFV:
 			light_infantry: gunturr
 			conscript: gunturr
 			e2: fragturr
-			e3: samturr
+			e3.soviet: samturr
+			rocket_infantry: samturr
 			flamethrower: flamturr
 			adept: gunturr
 			mercenary: gunturr
@@ -4203,7 +4004,7 @@ BATF.Bunker:
 	Passenger:
 		Voice: Move
 	Cargo:
-		InitialUnits: e3, e3, e3, e3, e3
+		InitialUnits: rocket_infantry, rocket_infantry, rocket_infantry, rocket_infantry, rocket_infantry
 	Armament:
 		Weapon: ZSU-23
 		LocalOffset: 624,0,208

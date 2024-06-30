@@ -1,3 +1,82 @@
+
+3TNK:
+	Inherits: ^Tank
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.66
+		Image: heavytank
+	RenderSprites:
+		Image: 3tnk
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 100
+		Prerequisites: vehicles.any, ~vehicles.soviet, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector
+		Description: Soviet main battle tank with dual cannons.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Heavy Tank
+	Health:
+		HP: 65000
+	Mobile:
+		Speed: 68
+	Turreted:
+		TurnSpeed: 48
+		Offset: 0,0,20
+	Armament:
+		Weapon: 125mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 900,85,190, 900,-85,190
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: 3TNK.Husk
+		RequiresCondition: !being-warped
+
+3TNK.PLD:
+	Inherits: 3TNK
+	Inherits@PLD: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 100
+		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector
+		Description: Soviet main battle tank with dual cannons.\n  Has Point Laser Defense.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Energy Weapons
+	Valued:
+		Cost: 1650
+	Tooltip:
+		Name: Heavy Tank (PLD)
+
+3TNK.AP:
+	Inherits: 3TNK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 100
+		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.reflector
+		Description: Soviet main battle tank with dual cannons.\n  Has armor piercing shells.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Point Laser Defense
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Heavy Tank (AP)
+	Armament:
+		Weapon: 125mm.AP
+
+3TNK.Reflector:
+	Inherits: 3TNK
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 100
+		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.reflector, ~!commander_tree.heavy_tank.pld, ~!commander_tree.heavy_tank.ap
+		Description: Soviet main battle tank with dual cannons.\n  Has Reflector Armor, which is very good vs. Energy Weapons. \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Heavy Tank (Reflector)
+
+
 Soviet_Miner:
 	Inherits: ^Tank
 	Inherits: ^BiologicalDriver
