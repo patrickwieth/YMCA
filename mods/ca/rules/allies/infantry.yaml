@@ -31,6 +31,331 @@ Light_Infantry:
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
 
+Rocket_Infantry:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^WhiteFlash
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^RelayTargeting
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 30
+		Prerequisites: ~infantry.allies, ~!commander_tree.advanced_infantry_training
+		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
+	Valued:
+		Cost: 250
+	Tooltip:
+		Name: Rocket Soldier
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 3500
+	Mobile:
+		speed: 54
+	Armament@primary:
+		Name: primary
+		Weapon: Dragon.Relay
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@tertiary:
+		Name: tertiary
+		Weapon: RedEye
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@secondary:
+		Name: secondary
+		Weapon: Dragon.Inf
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DragonE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@GarrisonAA:
+		Name: mountedaa
+		Weapon: RedEyeE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	AmmoPool:
+		Armaments: primary, secondary, tertiary
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 50
+		Count: 1
+	TakeCover:
+		ProneOffset: 384,0,-395
+	AttackFrontal:
+		Armaments: primary, secondary, tertiary
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+
+E3.soviet:
+	Inherits: Rocket_Infantry
+	Inherits: ^InfantryTDSprite
+	Inherits: ^SovietInfantry
+	Buildable:
+		Prerequisites: ~infantry.soviet
+
+Rocket_Infantry.cryo:
+	Inherits: Rocket_Infantry
+	Buildable:
+		Prerequisites: ~infantry.allies, ~commander_tree.advanced_infantry_training
+		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
+	Tooltip:
+		Name: Cryo Rocket Soldier
+	Armament@primary:
+		Name: primary
+		Weapon: Dragon.Relay.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@tertiary:
+		Name: tertiary
+		Weapon: RedEye.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@secondary:
+		Name: secondary
+		Weapon: Dragon.Inf.Cryo
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DragonE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@GarrisonAA:
+		Name: mountedaa
+		Weapon: RedEyeE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	-WithInfantryBody:
+	WithInfantryBody:
+		IdleSequences: idle-cryo1, idle-cryo2
+		StandSequences: stand-cryo, stand-cryo2
+		AttackSequences: shoot-cryo
+		DefaultAttackSequence: shoot-cryo
+		MoveSequence: run-cryo
+	-WithDeathAnimation:
+	WithDeathAnimation:
+		DeathSequence: die-cryo
+		DeathSequencePalette: overlayplayertd
+		DeathTypes:
+			DefaultDeath: 1
+			BulletDeath: 2
+			SmallExplosionDeath: 3
+			ExplosionDeath: 4
+			FireDeath: 5
+			ElectricityDeath: 6
+			PoisonDeath: 7
+			ChronoDeath: 8
+			ToxinDeath: 9
+			RadiationDeath: 10
+			FrozenDeath: 11
+		CrushedSequence: die-crushed
+
+
+U3:
+	Inherits: ^Soldier
+	Inherits: ^PrioAntiHeavyAA
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+	AutoTargetPriority@HighPrio:
+		ValidTargets: relayTarget
+		Priority: 10
+	Inherits@BOTHELPER: ^BotCaptureHelper
+	Valued:
+		Cost: 350
+	Tooltip:
+		Name: Guardian G.I.
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 30
+		Prerequisites: ~infantry.germany, ~disabled
+		Description: Anti-tank/anti-aircraft infantry.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor, Aircraft, Buildings, Defenses
+		Weaknesses: • Weak vs Infantry, Light Armor\n• Weak anti-infantry weapon when not deployed
+		Attributes: • Deploys for personal anti-tank fortification\n• Uncrushable when deployed
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 6500
+	Mobile:
+		Speed: 54
+		Voice: Move
+		PauseOnCondition: !undeployed
+	Armament@PRIMARYDEP:
+		Weapon: RedEyeGI
+		Name: deployed
+		Turret: deploy
+		LocalOffset: 0,0,400
+		PauseOnCondition: !ammo
+		RequiresCondition: !cryr-upgrade && deployed
+	Armament@PRIMARY:
+		Weapon: M14
+		LocalOffset: 0,0,400
+		RequiresCondition: !deployed
+	Armament@PRIMARYDEPUPG:
+		Weapon: RedEyeGI.CRYO
+		Name: deployed
+		Turret: deploy
+		LocalOffset: 0,0,400
+		PauseOnCondition: !ammo
+		RequiresCondition: cryr-upgrade && deployed
+	Armament@SECONDARYDEP:
+		Name: deployed
+		Weapon: DragonGI
+		Turret: deploy
+		LocalOffset: 0,0,400
+		PauseOnCondition: !ammo
+		RequiresCondition: !cryr-upgrade && deployed
+	Armament@SECONDARYDEPUPG:
+		Weapon: DragonGI.CRYO
+		Name: deployed
+		Turret: deploy
+		LocalOffset: 0,0,400
+		PauseOnCondition: !ammo
+		RequiresCondition: cryr-upgrade && deployed
+	Armament@tertiary:
+		Name: deployed
+		Weapon: Dragon.Relay
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@GarrisonAA:
+		Name: mountedaa
+		Weapon: RedEyeGI
+		PauseOnCondition: !ammo
+		RequiresCondition: !cryr-upgrade
+	Armament@GarrisonAAUPG:
+		Name: mountedaa
+		Weapon: RedEyeGI.CRYO
+		PauseOnCondition: !ammo
+		RequiresCondition: cryr-upgrade
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DragonGI
+		PauseOnCondition: !ammo
+		RequiresCondition: !cryr-upgrade
+	Armament@GarrisonUPG:
+		Name: mounted
+		Weapon: DragonGI.CRYO
+		PauseOnCondition: !ammo
+		RequiresCondition: cryr-upgrade
+	Armament@AIDummyAiming: ## Hack: Make AI deploy to attack air
+		PauseOnCondition: being-warped
+		RequiresCondition: botowner && !deployed
+		Weapon: AirDummyAim
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 25
+		Count: 1
+	TakeCover:
+		ProneOffset: 384,0,-395
+		RequiresCondition: !deployed
+	DamageMultiplier:
+		Modifier: 50
+		RequiresCondition: deployed
+	AutoTarget:
+		ScanRadius: 8
+	GrantConditionOnPrerequisite@CRYO:
+		Condition: cryr-upgrade
+		Prerequisites: commander_tree.advanced_infantry_training
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: True
+		Voice: Action
+		DeploySounds: igidepa.aud, igidepb.aud
+		UndeploySounds: igidepa.aud, igidepb.aud
+		PauseOnCondition: being-warped
+		SmartDeploy: True
+		RequiresCondition: !parachute
+		Facing: 332
+	GrantCondition:
+		Condition: editorhack
+	WithInfantryBody@Editor: # HACK: negative conditions don't count in EnabledByDefault, we can use this duplicate WIB to render it on map editor
+		DefaultAttackSequence: shoot
+		RequiresCondition: !editorhack
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+		RequiresCondition: undeployed
+	WithMakeAnimation:
+		Sequence: deploy
+		BodyNames: dot
+	Turreted:
+		Turret: deploy
+		RealignDelay: -1
+		TurnSpeed: 1023
+		InitialFacing: 332
+	WithSpriteTurret@idle:
+		Turret: deploy
+		Sequence: deployed
+		RequiresCondition: deployed && !cryr-upgrade && !animate-turret && !parachute
+	WithSpriteTurret@animated:
+		Turret: deploy
+		Sequence: deploy-shoot
+		RequiresCondition: deployed && !cryr-upgrade && animate-turret && !parachute
+	WithSpriteTurret@idleupg:
+		Turret: deploy
+		Sequence: deployedcr
+		RequiresCondition: deployed && cryr-upgrade && !animate-turret && !parachute
+	WithSpriteTurret@animatedupg:
+		Turret: deploy
+		Sequence: deploy-shootcr
+		RequiresCondition: deployed && cryr-upgrade && animate-turret && !parachute
+	WithSpriteBody:
+		Sequence: empty
+		Name: dot
+		RequiresCondition: !undeployed
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		RequiresCondition: undeployed
+		Voice: Attack
+		FacingTolerance: 0
+	AttackTurreted@deployed:
+		Armaments: deployed
+		Turrets: deploy
+		Voice: Attack
+		RequiresCondition: deployed
+		OutsideRangeRequiresForceFire: True
+	GrantConditionOnAttack:
+		Condition: animate-turret
+		RevokeDelay: 5
+		ArmamentNames: deployed
+	RejectsOrders@deployment:
+		Reject: AttackMove, AssaultMove
+		RequiresCondition: !botowner && deployed && !berserk
+	Convertible:
+		SpawnActors: rocket_cyborg
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: GGIVoice
+	Crushable:
+		RequiresCondition: undeployed
+	AutoDeployer@AI:
+		RequiresCondition: botowner && !deployed && !parachute
+		DeployChance: 100
+		DeployTrigger: Attack
+		DeployTicks: 5
+		UndeployTicks: 50
+	ExternalCondition@relayTarget:
+		Condition: relayTarget
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+
 Cryotrooper:
 	Inherits: ^Soldier
 	Inherits: ^PrioAntiHeavy

@@ -10,12 +10,12 @@
 NodLightUnitTypes = { "bike", "bike", "bggy", "rmbc", "rmbc", "stormtrooper", "stormtrooper", "stormtrooper", "stormtrooper", "rocket_cyborg", "rocket_cyborg" }
 NodHeavyUnitTypes = { "mtnk", "mtnk", "ftnk", "ftnk", "wtnk", "wtnk", "cdrn" }
 NodAirUnitTypes = {"scrn", "scrn", "scrn"}
-AlliedUnitTypes = { "jeep", "1tnk", "ifv.ai", "1tnk", "rtnk", "ifv.ai", "ptnk", "light_infantry", "light_infantry", "light_infantry", "light_infantry", "e3", "e3", "e3", "e3" }
+AlliedUnitTypes = { "jeep", "1tnk", "ifv.ai", "1tnk", "rtnk", "ifv.ai", "ptnk", "light_infantry", "light_infantry", "light_infantry", "light_infantry", "rocket_infantry", "rocket_infantry", "rocket_infantry", "rocket_infantry" }
 ScrinUnitTypes = { "seek", "seek", "gunw", "devo", "tpod", "s1", "s1", "s1", "s1", "s3", "s3" }
 ScrinAirUnitTypes = {"deva", "stmr", "stmr"}
 ProducedUnitTypes =
 {
-	{ factory = AlliedBarracks1, types = { "light_infantry", "e3" } },
+	{ factory = AlliedBarracks1, types = { "light_infantry", "rocket_infantry" } },
 	{ factory = ScrinBarracks1, types = { "s1", "s3" } },
 	{ factory = NodBarracks1, types = { "adept", "rocket_trooper", "n4" } },
 	{ factory = AlliedWarFactory1, types = { "1tnk", "2tnk", "ptnk", "jeep", "ifv.ai", "cryo", "rtnk" } },
@@ -23,7 +23,7 @@ ProducedUnitTypes =
 	{ factory = NodWarFactory1, types = { "ltnk", "ftnk", "stnk", "arty.nod", "mlrs" } }
 }
 
-HelicopterUnitTypes = { "light_infantry", "light_infantry", "light_infantry", "light_infantry", "e3", "e3" };
+HelicopterUnitTypes = { "light_infantry", "light_infantry", "light_infantry", "light_infantry", "rocket_infantry", "rocket_infantry" };
 
 BindActorTriggers = function(a)
 	if a.HasProperty("Hunt") then
