@@ -28,6 +28,66 @@ Conscript:
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
 
+rpg_soldier:
+	Inherits: ^Soldier
+	Inherits: ^SovietInfantry
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^WhiteFlash
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^RelayTargeting
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 30
+		Prerequisites: ~infantry.soviet
+		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
+	Valued:
+		Cost: 250
+	Tooltip:
+		Name: RPG Soldier
+	Health:
+		HP: 3500
+	Mobile:
+		speed: 54
+	Armament@primary:
+		Name: primary
+		Weapon: Dragon.Relay
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@tertiary:
+		Name: tertiary
+		Weapon: RedEye
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@secondary:
+		Name: secondary
+		Weapon: Dragon.Inf
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DragonE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	Armament@GarrisonAA:
+		Name: mountedaa
+		Weapon: RedEyeE
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+	AmmoPool:
+		Armaments: primary, secondary, tertiary
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 50
+		Count: 1
+	TakeCover:
+		ProneOffset: 384,0,-395
+	AttackFrontal:
+		Armaments: primary, secondary, tertiary
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+
 Flamethrower:
 	Inherits: ^Soldier
 	Inherits: ^PrioAntiLight
