@@ -77,6 +77,201 @@
 	Tooltip:
 		Name: Heavy Tank (Reflector)
 
+apoc:
+	Inherits: ^Tank
+	Inherits: ^VoxelTurretedTank
+	WithVoxelBarrel:
+	RenderVoxels:
+		Scale: 1
+		Image: apocalypse
+	RenderSprites:
+		Image: apoc
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavyAA
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: stek, ~vehicles.soviet, ~!filler.apocalypse_tank
+		Description: Big and slow tank, with anti-air.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Valued:
+		Cost: 1700
+	Tooltip:
+		Name: Apocalypse Tank
+	Health:
+		HP: 78000
+	Mobile:
+		Speed: 52
+		TurnSpeed: 16
+		Locomotor: heavytracked
+	Turreted:
+		TurnSpeed: 16
+	Armament@PRIMARY:
+		Weapon: 130mm
+		LocalOffset: 1100,120,340, 1100,-120,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: MammothTusk
+		LocalOffset: -300,300,400, -300,-300,400
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: apoc.Husk
+		RequiresCondition: !iraqtank && !being-warped
+	ChangesHealth:
+		PercentageStep: 1
+		Delay: 25
+		StartIfBelow: 50
+		DamageCooldown: 150
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	Voiced:
+		VoiceSet: ApocalypseVoice
+	AttackMove:
+		Voice: Attack
+
+apoc.Speaker:
+	Inherits: apoc
+	Inherits: ^PropagandaSpeaker
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.propaganda, ~!filler.apocalypse_tank2
+		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
+	WithProductionIconOverlay@Speaker:
+		Types: Speaker
+	Tooltip:
+		Name: Apocalypse Tank (Propaganda)
+	Valued:
+		Cost: 2000
+	Health:
+		HP: 88000
+	GrantConditionOnPrerequisite@TikTok:
+		Prerequisites: commander_tree.tiktok_warrior
+		Condition: subliminal
+
+apoc.Speaker.Reflector:
+	Inherits: apoc.Speaker
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.propaganda, ~commander_tree.apocalypse_tank.reflector
+		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
+	Tooltip:
+		Name: Apocalypse Tank (Propaganda, Reflector)
+
+apoc.Speaker.PDL:
+	Inherits: apoc.Speaker
+	Inherits@PDL: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.propaganda
+		Description: Big and slow tank, with anti-air and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Tooltip:
+		Name: Apocalypse Tank (Propaganda, PDL)
+	Valued:
+		Cost: 2200
+
+apoc.Nuke:
+	Inherits: apoc
+	Inherits: ^PrioAntiLight
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.nuke_shells, ~!filler.apocalypse_tank2
+		Description: Big and slow tank, with nuke shells.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry\n  Weak vs Point Laser Defense, Aircraft
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
+	Tooltip:
+		Name: Apocalypse Tank (Nuke Shells)
+	Valued:
+		Cost: 2500
+	Health:
+		HP: 88000
+	Armament@PRIMARY:
+		Weapon: 130mm.Nuke
+		LocalOffset: 900,180,340, 900,-180,340
+		Recoil: 191
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	-Armament@SECONDARY:
+
+apoc.Nuke.Reflector:
+	Inherits: apoc.Nuke
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.nuke_shells, ~commander_tree.apocalypse_tank.reflector
+		Description: Big and slow tank, with nuke shells.\nHas Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Energy Weapons\n  Weak vs Point Laser Defense, Aircraft
+	Tooltip:
+		Name: Apocalypse Tank (Nuke Shells, Reflector)
+
+apoc.Nuke.PDL:
+	Inherits: apoc.Nuke
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.nuke_shells
+		Description: Big and slow tank, with nuke shells and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	Tooltip:
+		Name: Apocalypse Tank (Nuke Shells, PDL)
+	Valued:
+		Cost: 3000
+
+apoc.Drozd:
+	Inherits: apoc
+	Inherits: ^PrioEnergyWeapon
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.drozd, ~!filler.apocalypse_tank2
+		Description: Big and slow tank, with Drozd chaff.\nCan crush concrete walls.\n  Strong vs Vehicles, PDL\n  Weak vs Aircraft
+	WithProductionIconOverlay@Counter:
+		Types: Counter
+	Tooltip:
+		Name: Apocalypse Tank (Drozd)
+	Valued:
+		Cost: 2000
+	Health:
+		HP: 95000
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: DrozdChaff
+		LocalOffset: -300,300,400, -350,150,400, -350,-150,400, -300,-300,400
+		LocalYaw: -100,100
+		Recoil: 43
+		MuzzleSequence: muzzle
+
+apoc.Drozd.Reflector:
+	Inherits: apoc.Drozd
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.drozd,  ~commander_tree.apocalypse_tank.reflector
+		Description: Big and slow tank, with Drozd chaff.\n Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, PDL\n  Weak vs Aircraft
+	Tooltip:
+		Name: Apocalypse Tank (Drozd, Reflector)
+
+apoc.Drozd.PDL:
+	Inherits: apoc.Drozd
+	Inherits@PDL: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.drozd
+		Description: Big and slow tank, with Drozd chaff and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, PDL\n  Weak vs Energy Weapons
+	Tooltip:
+		Name: Apocalypse Tank (Drozd, PDL)
+	Valued:
+		Cost: 2500
+	Health:
+		HP: 88000
+
 
 Soviet_Miner:
 	Inherits: ^Tank

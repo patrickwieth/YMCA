@@ -1,3 +1,15 @@
+commander_tree.War_Miners:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: War Miners
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 5
+		IconPalette: chrome
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~structures.soviet, ~anypower
+		Description: Equips Miners with a gatling turret. \nWar Miners can attack ground and air.
+
 commander_tree.Heavy_Tank.AP:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -67,17 +79,117 @@ hack.cameo_filler.107a:
 		BuildPaletteOrder: 113
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.3tnk, disabled
 
-commander_tree.War_Miners:
+
+commander_tree.Apocalypse_Tank:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: War Miners
+		Name: Apocalypse Tank
+	RenderSprites:
+		Image: apoc
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 5
-		IconPalette: chrome
+		BuildPaletteOrder: 119
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~structures.soviet, ~anypower
-		Description: Equips Miners with a gatling turret. \nWar Miners can attack ground and air.
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.soviet, ~disabled
+		Description: Enables to build the Mammoth Tank.\n  The Mammoth is a slow and very heavy tank, which can be further specialized.
+
+commander_tree.Apocalypse_Tank.Drozd:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Apocalypse Tank Drozd Upgrade
+	RenderSprites:
+		Image: apoc
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 120
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.apocalypse_tank.nuke_shells, ~!commander_tree.apocalypse_tank.propaganda
+		Description: The Apocalypse Tank is upgraded with a Drozd Weapon System. \n  The Drozd system fires chaff, which is good at depleting PDL systems. \n  The Apocalypse Tank can no longer shoot on aircraft.
+	WithProductionIconOverlay@Counter:
+		Types: Counter
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.apocalypse_tank
+
+commander_tree.Apocalypse_Tank.Nuke_Shells:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Apocalypse Tank Nuclear Shells
+	RenderSprites:
+		Image: apoc
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 120
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.propaganda
+		Description: The Apocalypse Tank is upgraded with Nuclear Shells. \n  Nuclear Shells deal a lot of damage to the target and its surroundings. \n  Nuclear Shells are weak vs. Point Laser Defense Systems.
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.apocalypse_tank
+
+commander_tree.Apocalypse_Tank.Propaganda:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Apocalypse Tank Propaganda Tower
+	RenderSprites:
+		Image: apoc
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 120
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.nuke_shells
+		Description: The Apocalypse Tank is upgraded with a Propaganda Speaker.\n  This gives infantry in its proximity a boost in combat.
+	WithProductionIconOverlay@Speaker:
+		Types: Speaker
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.apocalypse_tank
+
+commander_tree.Apocalypse_Tank.PDL:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Apocalypse Tank Point Laser Defense
+	RenderSprites:
+		Image: apoc
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 121
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.reflector
+		Description: Upgrades the Apocalypse Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.apocalypse_tank2
+
+commander_tree.Apocalypse_Tank.Reflector:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Apocalypse Tank Reflector Armor
+	RenderSprites:
+		Image: apoc
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 121
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.pdl
+		Description: Equips the Apocalypse Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.apocalypse_tank2
+
+hack.cameo_filler.110:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 122
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+
+hack.cameo_filler.111:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 122
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~filler.apocalypse_tank2
+
 
 commander_tree.Rice_Cooker:
 	Inherits: ^default.commander_tree_item

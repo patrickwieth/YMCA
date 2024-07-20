@@ -20,7 +20,7 @@ ProducedUnitTypes =
 	{ factory = ANavalYard1, types = { "pt2" } },
 	{ factory = SSubPen1, types = { "ss" } },
 	{ factory = AlliedWarFactory1, types = { "mtnk", "Mammoth", "msam" } },
-	{ factory = SovietWarFactory1, types = { "3tnk", "4tnk", "ttnk" } }
+	{ factory = SovietWarFactory1, types = { "3tnk", "apoc", "ttnk" } }
 }
 
 BindActorTriggers = function(a)
