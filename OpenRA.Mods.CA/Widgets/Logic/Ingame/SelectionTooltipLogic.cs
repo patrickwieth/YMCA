@@ -27,6 +27,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		readonly Widget widget;
 		int originalDescLabelHeight;
 		int iconMargin;
+		int X;
+		int Y;
 
 		[ObjectCreator.UseCtor]
 		public SelectionTooltipLogic(Widget widget, World world)
@@ -36,6 +38,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			widget.IsVisible = () => Game.Settings.Game.SelectionTooltip && !Game.Settings.Debug.PerfText;
 			originalDescLabelHeight = -1;
 			iconMargin = -1;
+
+			X = widget.Bounds.X;
+			Y = widget.Bounds.Y;
 		}
 
 		public override void Tick()
@@ -285,8 +290,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			// Set the bottom margin to match the top margin
 			var rightHeight = armorTypeIcon.Bounds.Bottom;
 			widget.Bounds.Height = Math.Max(leftHeight, rightHeight);
-			widget.Bounds.X = Game.Renderer.Resolution.Width - widget.Bounds.Width - 12;
-			widget.Bounds.Y = Game.Renderer.Resolution.Height - widget.Bounds.Height - 12;
+			widget.Bounds.X = X;
+			widget.Bounds.Y = Y - widget.Bounds.Height;
 		}
 
 		Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
