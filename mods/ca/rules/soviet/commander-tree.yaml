@@ -20,8 +20,12 @@ commander_tree.Heavy_Tank.AP:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 109
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!vehicles.iraq, ~!commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.reflector
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.reflector
 		Description: Upgrades the Heavy Tank with Armor Piercing Shells. \n  This makes it much stronger vs. Heavy Tanks.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Point Defense Laser, Infantry, Aircraft
+		Attributes: • Main Battle Tank
 	WithProductionIconOverlay@Shell:
 		Types: Shell
 	ProvidesPrerequisite@filler:
@@ -29,6 +33,7 @@ commander_tree.Heavy_Tank.AP:
 
 commander_tree.Heavy_Tank.PDL:
 	Inherits: ^default.commander_tree_item
+	Inherits: ^PDLInfo
 	Tooltip:
 		Name: Heavy Tank Point Laser Defense
 	RenderSprites:
@@ -39,13 +44,12 @@ commander_tree.Heavy_Tank.PDL:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector
 		Description: Upgrades the Heavy Tank with a Point Laser Defense System. \n  This makes it more effective vs. projectile based weapons.
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.3tnk
 
 commander_tree.Heavy_Tank.Reflector:
 	Inherits: ^default.commander_tree_item
+	Inherits: ^ReflectorInfo
 	Tooltip:
 		Name: Heavy Tank Reflector Armor
 	RenderSprites:
@@ -56,22 +60,14 @@ commander_tree.Heavy_Tank.Reflector:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.pdl
 		Description: Equips the Heavy Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.3tnk
-
-hack.cameo_filler.106:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 112
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~vehicles.iraq, disabled
 
 hack.cameo_filler.107:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 113
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, ~filler.3tnk, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.3tnk, disabled
 
 hack.cameo_filler.107a:
 	Inherits: ^default.cameo_filler
@@ -80,18 +76,107 @@ hack.cameo_filler.107a:
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.3tnk, disabled
 
 
-commander_tree.Apocalypse_Tank:
+commander_tree.ISU.Concussion:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: Apocalypse Tank
+		Name: ISU Bombard Tank Concussion Shells
 	RenderSprites:
-		Image: apoc
+		Image: ISU
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 119
+		BuildPaletteOrder: 100
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.soviet, ~disabled
-		Description: Enables to build the Mammoth Tank.\n  The Mammoth is a slow and very heavy tank, which can be further specialized.
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea, ~!commander_tree.isu.ap, ~!commander_tree.isu.cluster
+		Description: Upgrades the ISU Bombard Tank to cause concussion on units at the impact zone.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
+		Weaknesses: • Weak vs Point Defense Laser, Aircraft
+		Attributes: • Concussion shells slow infantry and vehicles
+	WithProductionIconOverlay@Dynamite:
+		Types: Dynamite
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.isu
+
+commander_tree.ISU.Cluster:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: ISU-152 Cluster Shells
+	RenderSprites:
+		Image: ISU
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 100
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.isu.ap, ~!commander_tree.isu.concussion
+		Description: The ISU-152 is upgraded with Cluster shells. \n Cluster shells deal damage over a larger area.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
+		Weaknesses: • Weak vs Point Defense Laser, Aircraft
+		Attributes: • Cluster shells deal area damage
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.isu
+
+commander_tree.ISU.AP:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: ISU-152 AP Shells
+	RenderSprites:
+		Image: ISU
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 100
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~!commander_tree.isu.cluster, ~!commander_tree.isu.concussion
+		Description: The ISU-152 is equipped with Armor Piercing (AP) shells.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Vehicles
+		Weaknesses: • Weak vs Infantry, Point Defense Laser, Aircraft
+		Attributes: • AP shells pierce heavy armor
+	WithProductionIconOverlay@Shell:
+		Types: Shell
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.isu
+
+commander_tree.ISU.PDL:
+	Inherits: ^default.commander_tree_item
+	Inherits: ^PDLInfo
+	Tooltip:
+		Name: ISU-152 Point Laser Defense
+	RenderSprites:
+		Image: ISU
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 100
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.isu, ~!commander_tree.isu.reflector
+		Description: Upgrades the ISU-152 with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.isu2
+
+commander_tree.ISU.Reflector:
+	Inherits: ^default.commander_tree_item
+	Inherits: ^ReflectorInfo
+	Tooltip:
+		Name: ISU-152 Reflector Armor
+	RenderSprites:
+		Image: ISU
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 100
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.isu, ~!commander_tree.isu.pdl
+		Description: Equips the ISU-152 with Reflector Armor.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.isu2
+
+hack.cameo_filler.100b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 102
+		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, disabled, ~filler.isu2
+
 
 commander_tree.Apocalypse_Tank.Drozd:
 	Inherits: ^default.commander_tree_item
@@ -105,6 +190,10 @@ commander_tree.Apocalypse_Tank.Drozd:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.apocalypse_tank.nuke_shells, ~!commander_tree.apocalypse_tank.propaganda
 		Description: The Apocalypse Tank is upgraded with a Drozd Weapon System. \n  The Drozd system fires chaff, which is good at depleting PDL systems. \n  The Apocalypse Tank can no longer shoot on aircraft.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Point Defense Laser
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Drozd chaff depletes PDL systems
 	WithProductionIconOverlay@Counter:
 		Types: Counter
 	ProvidesPrerequisite@filler:
@@ -120,8 +209,12 @@ commander_tree.Apocalypse_Tank.Nuke_Shells:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.propaganda
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.propaganda
 		Description: The Apocalypse Tank is upgraded with Nuclear Shells. \n  Nuclear Shells deal a lot of damage to the target and its surroundings. \n  Nuclear Shells are weak vs. Point Laser Defense Systems.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
+		Weaknesses: • Weak vs Point Defense Laser, Aircraft
+		Attributes: • Shells explode with nuclear warhead
 	WithProductionIconOverlay@Nuke:
 		Types: Nuke
 	ProvidesPrerequisite@filler:
@@ -137,8 +230,12 @@ commander_tree.Apocalypse_Tank.Propaganda:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.iraq, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.nuke_shells
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.nuke_shells
 		Description: The Apocalypse Tank is upgraded with a Propaganda Speaker.\n  This gives infantry in its proximity a boost in combat.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Point Defense Laser
+		Attributes: • Heavy Armor Artillery
 	WithProductionIconOverlay@Speaker:
 		Types: Speaker
 	ProvidesPrerequisite@filler:
@@ -146,6 +243,7 @@ commander_tree.Apocalypse_Tank.Propaganda:
 
 commander_tree.Apocalypse_Tank.PDL:
 	Inherits: ^default.commander_tree_item
+	Inherits: ^PDLInfo
 	Tooltip:
 		Name: Apocalypse Tank Point Laser Defense
 	RenderSprites:
@@ -156,13 +254,12 @@ commander_tree.Apocalypse_Tank.PDL:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.reflector
 		Description: Upgrades the Apocalypse Tank with a Point Laser Defense System to shoot down incoming projectiles.
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank2
 
 commander_tree.Apocalypse_Tank.Reflector:
 	Inherits: ^default.commander_tree_item
+	Inherits: ^ReflectorInfo
 	Tooltip:
 		Name: Apocalypse Tank Reflector Armor
 	RenderSprites:
@@ -173,16 +270,8 @@ commander_tree.Apocalypse_Tank.Reflector:
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.pdl
 		Description: Equips the Apocalypse Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank2
-
-hack.cameo_filler.110:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 122
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
 
 hack.cameo_filler.111:
 	Inherits: ^default.cameo_filler

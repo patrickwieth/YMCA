@@ -19,7 +19,7 @@ ProducedUnitTypes =
 	{ factory = SKennel1, types = { "dog" } },
 	{ factory = ANavalYard1, types = { "pt2" } },
 	{ factory = SSubPen1, types = { "ss" } },
-	{ factory = AlliedWarFactory1, types = { "mtnk", "Mammoth", "msam" } },
+	{ factory = AlliedWarFactory1, types = { "mtnk", "mammoth", "msam" } },
 	{ factory = SovietWarFactory1, types = { "3tnk", "apoc", "ttnk" } }
 }
 

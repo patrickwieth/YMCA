@@ -11,8 +11,12 @@
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 100
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~!commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector
-		Description: Soviet main battle tank with dual cannons.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Prerequisites: vehicles.any, ~vehicles.soviet, ~!filler.3tnk
+		Description: Soviet main battle tank with dual cannons.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Main Battle Tank
 	Valued:
 		Cost: 1100
 	Tooltip:
@@ -41,10 +45,10 @@
 	Inherits: 3TNK
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
 		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector
 		Description: Soviet main battle tank with dual cannons.\n  Has Point Laser Defense.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Energy Weapons
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor, Projectiles
 	Valued:
 		Cost: 1650
 	Tooltip:
@@ -53,8 +57,6 @@
 3TNK.AP:
 	Inherits: 3TNK
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
 		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.reflector
 		Description: Soviet main battle tank with dual cannons.\n  Has armor piercing shells.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Point Laser Defense
 	WithProductionIconOverlay@Shell:
@@ -70,12 +72,187 @@
 	Inherits: 3TNK
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 100
 		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.reflector, ~!commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.ap
 		Description: Soviet main battle tank with dual cannons.\n  Has Reflector Armor, which is very good vs. Energy Weapons. \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor, Energy Weapons
 	Tooltip:
 		Name: Heavy Tank (Reflector)
+
+
+ISU:
+	Inherits: ^Tank
+	Inherits: ^BigVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	RenderSprites:
+		Image: ISU
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 175
+		Prerequisites: weap, radar, ~vehicles.nkorea, ~!filler.isu
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Reflector Armor, Infantry
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+		Attributes: • Heavy Armor Artillery
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: ISU-152
+	Health:
+		HP: 65000
+	Mobile:
+		TurnSpeed: 16
+		Speed: 56
+		Locomotor: heavytracked
+		Voice: Move
+	Armament:
+		Weapon: 152mm
+		LocalOffset: 824,0,208
+		MuzzleSequence: muzzle
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+		FacingTolerance: 10
+	WithMuzzleOverlay:
+	Explodes:
+		Weapon: ArtilleryExplode
+		LoadedChance: 75
+	Passenger:
+		Voice: Move
+	Voiced:
+		VoiceSet: SiegeTankVoice
+	SpawnActorOnDeath:
+		Actor: ISU.Husk
+		RequiresCondition: !being-warped
+
+ISU.Concussion:
+	Inherits: ISU
+	Buildable:
+		Prerequisites: weap, radar, ~vehicles.nkorea, ~commander_tree.isu.concussion, ~!filler.isu2
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Concussion shells.
+	TooltipExtras:
+		Attributes: • Concussion shells slow down hit vehicles and infantry
+	WithProductionIconOverlay@Dynamite:
+		Types: Dynamite
+	Tooltip:
+		Name: ISU-152 (Concussion)
+	Armament:
+		Weapon: 152mm.Concussion
+
+ISU.Concussion.Reflector:
+	Inherits: ISU.Concussion
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.nkorea, ~commander_tree.isu.concussion, ~commander_tree.apocalypse_tank.reflector
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Concussion shells
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Energy Weapons
+		Attributes: • Reflector Armor absorbs Energy Weapons\n • Concussion shells slow down hit vehicles and infantry
+	Tooltip:
+		Name: ISU-152 (Concussion, Reflector)
+
+ISU.Concussion.PDL:
+	Inherits: ISU.Concussion
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: techcenter, ~vehicles.nkorea, ~commander_tree.isu.pdl, ~commander_tree.isu.concussion
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Concussion shells
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Projectiles
+		Attributes: • Point Defense Laser intercepts Projectiles\n • Concussion shells slow down hit vehicles and infantry
+	Tooltip:
+		Name: ISU-152 (Concussion, PDL)
+	Valued:
+		Cost: 2100
+
+ISU.Cluster:
+	Inherits: ISU
+	Buildable:
+		Prerequisites: weap, radar, ~vehicles.nkorea, ~commander_tree.isu.cluster, ~!filler.isu2
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Cluster shells.
+	TooltipExtras:
+		Attributes: • Cluster shells deal area damage
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
+	Tooltip:
+		Name: ISU-152 (Cluster)
+	Armament:
+		Weapon: 152mm.Cluster
+
+ISU.Cluster.Reflector:
+	Inherits: ISU.Cluster
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.nkorea, ~commander_tree.isu.reflector, ~commander_tree.isu.cluster
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Cluster shells and Reflector armor.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Energy Weapons
+		Attributes: • Reflector Armor absorbs Energy Weapons\n • Cluster shells deal area damage
+	Tooltip:
+		Name: ISU-152 (Cluster, Reflector)
+
+ISU.Cluster.PDL:
+	Inherits: ISU.Cluster
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: techcenter, ~vehicles.nkorea, ~commander_tree.isu.pdl, ~commander_tree.isu.cluster
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Concussion shells and Point Defense Laser system.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Projectiles
+		Attributes: • Point Defense Laser intercepts Projectiles\n • Cluster shells deal area damage
+	Tooltip:
+		Name: ISU-152 (Cluster, PDL)
+	Valued:
+		Cost: 2100
+
+ISU.AP:
+	Inherits: ISU
+	Buildable:
+		Prerequisites: weap, radar, ~vehicles.nkorea, ~commander_tree.isu.ap, ~!filler.isu2
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas AP shells.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Vehicles
+		Weaknesses: • Weak vs Infantry, Point Defense Laser, Aircraft
+		Attributes: • AP shells pierce heavy armor
+	WithProductionIconOverlay@Shell:
+		Types: Shell
+	Tooltip:
+		Name: ISU-152 (AP)
+	Armament:
+		Weapon: 152mm.AP
+
+ISU.AP.Reflector:
+	Inherits: ISU.AP
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.nkorea, ~commander_tree.isu.ap, ~commander_tree.isu.reflector
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas AP shells and Reflector armor.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Energy Weapons
+		Attributes: • Reflector Armor absorbs Energy Weapons\n • AP shells pierce heavy armor
+	Tooltip:
+		Name: ISU-152 (AP, Reflector)
+
+ISU.AP.PDL:
+	Inherits: ISU.AP
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: techcenter, ~vehicles.nkorea, ~commander_tree.isu.ap, ~commander_tree.isu.pdl
+		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas AP shells and Point Defense Laser system.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Projectiles
+		Attributes: • Point Defense Laser intercepts Projectiles\n • AP shells pierce heavy armor
+	Tooltip:
+		Name: ISU-152 (AP, PDL)
+	Valued:
+		Cost: 2100
+
 
 apoc:
 	Inherits: ^Tank
@@ -92,8 +269,12 @@ apoc:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~!filler.apocalypse_tank
-		Description: Big and slow tank, with anti-air.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+		Prerequisites: techcenter, ~vehicles.soviet, ~!filler.apocalypse_tank
+		Description: Big and slow tank, with anti-air.\nCan crush concrete walls.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Point Defense Laser
+		Attributes: • Heavy Armor Artillery
 	Valued:
 		Cost: 1700
 	Tooltip:
@@ -145,36 +326,37 @@ apoc.Speaker:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.propaganda, ~!filler.apocalypse_tank2
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.propaganda, ~!filler.apocalypse_tank2
 		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
-	WithProductionIconOverlay@Speaker:
-		Types: Speaker
 	Tooltip:
 		Name: Apocalypse Tank (Propaganda)
 	Valued:
 		Cost: 2000
 	Health:
 		HP: 88000
-	GrantConditionOnPrerequisite@TikTok:
-		Prerequisites: commander_tree.tiktok_warrior
-		Condition: subliminal
 
 apoc.Speaker.Reflector:
 	Inherits: apoc.Speaker
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.propaganda, ~commander_tree.apocalypse_tank.reflector
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.propaganda, ~commander_tree.apocalypse_tank.reflector
 		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Energy Weapons
+		Attributes: • Reflector Armor absorbs Energy Weapons\n  Propaganda Speaker supports nearby infantry
 	Tooltip:
 		Name: Apocalypse Tank (Propaganda, Reflector)
 
 apoc.Speaker.PDL:
 	Inherits: apoc.Speaker
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.propaganda
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.propaganda
 		Description: Big and slow tank, with anti-air and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Projectiles
+		Attributes: • Point Defense Laser intercepts Projectiles\n  Propaganda Speaker supports nearby infantry
 	Tooltip:
 		Name: Apocalypse Tank (Propaganda, PDL)
 	Valued:
@@ -186,8 +368,12 @@ apoc.Nuke:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.nuke_shells, ~!filler.apocalypse_tank2
-		Description: Big and slow tank, with nuke shells.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry\n  Weak vs Point Laser Defense, Aircraft
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.nuke_shells, ~!filler.apocalypse_tank2
+		Description: Big and slow tank, with nuke shells.\nCan crush concrete walls.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
+		Weaknesses: • Weak vs Point Defense Laser, Aircraft
+		Attributes: • Shells explode with nuclear warhead
 	WithProductionIconOverlay@Nuke:
 		Types: Nuke
 	Tooltip:
@@ -208,7 +394,7 @@ apoc.Nuke.Reflector:
 	Inherits: apoc.Nuke
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.nuke_shells, ~commander_tree.apocalypse_tank.reflector
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.nuke_shells, ~commander_tree.apocalypse_tank.reflector
 		Description: Big and slow tank, with nuke shells.\nHas Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Energy Weapons\n  Weak vs Point Laser Defense, Aircraft
 	Tooltip:
 		Name: Apocalypse Tank (Nuke Shells, Reflector)
@@ -218,7 +404,7 @@ apoc.Nuke.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.nuke_shells
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.nuke_shells
 		Description: Big and slow tank, with nuke shells and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Apocalypse Tank (Nuke Shells, PDL)
@@ -231,8 +417,12 @@ apoc.Drozd:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.drozd, ~!filler.apocalypse_tank2
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.drozd, ~!filler.apocalypse_tank2
 		Description: Big and slow tank, with Drozd chaff.\nCan crush concrete walls.\n  Strong vs Vehicles, PDL\n  Weak vs Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Point Defense Laser
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Drozd chaff depletes PDL systems
 	WithProductionIconOverlay@Counter:
 		Types: Counter
 	Tooltip:
@@ -253,8 +443,10 @@ apoc.Drozd.Reflector:
 	Inherits: apoc.Drozd
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.drozd,  ~commander_tree.apocalypse_tank.reflector
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.drozd,  ~commander_tree.apocalypse_tank.reflector
 		Description: Big and slow tank, with Drozd chaff.\n Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, PDL\n  Weak vs Aircraft
+	TooltipExtras:
+		Attributes: • Drozd chaff depletes PDL systems\n  Reflector Armor absorbs Energy Weapons
 	Tooltip:
 		Name: Apocalypse Tank (Drozd, Reflector)
 
@@ -263,8 +455,10 @@ apoc.Drozd.PDL:
 	Inherits@PDL: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.drozd
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.drozd
 		Description: Big and slow tank, with Drozd chaff and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, PDL\n  Weak vs Energy Weapons
+	TooltipExtras:
+		Attributes: • Drozd chaff depletes PDL systems\n  Point Defense Laser intercepts Projectiles
 	Tooltip:
 		Name: Apocalypse Tank (Drozd, PDL)
 	Valued:
@@ -334,7 +528,7 @@ QTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 250
-		Prerequisites: stek, ~vehicles.soviet, ~commander_tree.general_armaggeddon
+		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.general_armaggeddon
 		Description: Erupts the ground sending out seismic waves slowing vehicles and infantry.\n The effect stacks for up to 3 MAD Tanks.\n Hold-Fire stops automatic deployment.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Vehicles

@@ -389,62 +389,6 @@ ARTY.Chrono:
 		EmptyWeapon: UnitExplodeWarpOut
 		RequiresCondition: warpout
 
-ISU:
-	Inherits: ^Tank
-	Inherits: ^BigVehicle
-	Inherits: ^HighResShadow
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioArtillery
-	Inherits@PDL: ^PointLaserDefenseSystem
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 175
-		Prerequisites: weap, radar, ~commander_tree.isu, ~!commander_tree.isu_concussion
-		Description: Powerful Medium-range artillery with PDL defense.\n  Strong vs Buildings, Infantry, Projectile Weapons \n  Weak vs Aircraft
-	Valued:
-		Cost: 1650
-	Tooltip:
-		Name: ISU Bombard Tank
-	Health:
-		HP: 65000
-	Mobile:
-		TurnSpeed: 16
-		Speed: 56
-		Locomotor: heavytracked
-		Voice: Move
-	Armament:
-		Weapon: 152mm
-		LocalOffset: 824,0,208
-		MuzzleSequence: muzzle
-	AttackFrontal:
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
-		FacingTolerance: 10
-	WithMuzzleOverlay:
-	Explodes:
-		Weapon: ArtilleryExplode
-		LoadedChance: 75
-	Passenger:
-		Voice: Move
-	Voiced:
-		VoiceSet: SiegeTankVoice
-	SpawnActorOnDeath:
-		Actor: ISU.Husk
-		RequiresCondition: !being-warped
-
-ISU.Concussion:
-	Inherits: ISU
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 175
-		IconPalette: chrometd
-		Prerequisites: weap, radar, ~commander_tree.isu_concussion
-		Description: Powerful Medium-range artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Aircraft\n  Special Ability: Concussion Shells
-	Tooltip:
-		Name: ISU Bombard Tank (Concussion)
-	Armament:
-		Weapon: 152mm.Concussion
-
 SPEC:
 	Inherits: ARTY.nod
 	Inherits: ^HighResShadow

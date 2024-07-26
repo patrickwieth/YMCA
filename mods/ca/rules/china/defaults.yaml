@@ -34,7 +34,7 @@
 		Class: doubled
 		ClassName: Double MCV
 		Factions: chinainf, chinatnk, chinaatom
-		BaseActor: chcommand 
+		BaseActor: chcommand
 		SupportActors: chnmcv
 	StartingUnits@defaultchina:
 		Class: light
@@ -153,6 +153,8 @@ Player:
 		Modifier: 110
 
 ^PropagandaSpeaker:
+	TooltipExtras:
+		Attributes: • Propaganda Speaker supports nearby infantry
 	WithProductionIconOverlay@Speaker:
 		Types: Speaker
 	ProximityExternalCondition@PROPAGANDA:
@@ -165,6 +167,9 @@ Player:
 		RequiresCondition: !subliminal && !disabled
 	GrantConditionOnPrerequisite@SUBLIMINALPROPAGANDA:
 		Prerequisites: commander_tree.subliminal_messages
+		Condition: subliminal
+	GrantConditionOnPrerequisite@TikTok:
+		Prerequisites: commander_tree.tiktok_warrior
 		Condition: subliminal
 	ProximityExternalCondition@SUBLIMINALPROPAGANDA:
 		Range: 8c0
