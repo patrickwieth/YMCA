@@ -1,3 +1,185 @@
+Chem_Shell:
+	Inherits: ^Cannon
+	Inherits: ^Chemical
+	ReloadDelay: 90
+	Burst: 2
+	Range: 4c0
+	InvalidTargets: Air
+	Projectile: BulletCA
+		Speed: 200
+		Image: chemshell
+		Palette: temptd
+		LaunchAngle: 90
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c512
+		Damage: 3400
+		Falloff: 100, 24, 12
+		InvalidTargets: Air
+		DamageTypes: Prone50Percent, TriggerProne, PoisonDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: large_chem
+		ExplosionPalette: temptd
+
+Chem_Bomb:
+	Inherits: Chem_Shell
+	Projectile: BulletCA
+		Speed: 200
+		Image: cb1
+	Warhead@Cluster: FireCluster
+		Weapon: Chem_Bomb.Cluster
+		RandomClusterCount: 4
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+	Warhead@3Eff: CreateEffect
+		Explosions: med_chem
+
+Chem_Bomb.Cluster:
+	Inherits: Chem_Shell
+	Projectile: BulletCA
+		Speed: 100
+		LaunchAngle: 90
+		Image: chemshell.mini
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c512
+		Damage: 1400
+	Warhead@3Eff: CreateEffect
+		Explosions: small_chem
+
+Acid_Shell:
+	Inherits: Chem_Shell
+	Inherits: ^MetalAcid
+	Projectile: BulletCA
+		Image: acidshell
+	Warhead@1Dam: SpreadDamage
+		Spread: 0c256
+		Damage: 5000
+		Falloff: 100, 24, 12
+	Warhead@3Eff: CreateEffect
+		Explosions: acid_flame
+
+Chem_Spray:
+	Inherits: ^Chemical
+	ValidTargets: Ground, Water
+	Range: 4c512
+	ReloadDelay: 60
+	Projectile: Bullet
+		Speed: 204
+		Blockable: True
+		LaunchAngle: 56
+		Inaccuracy: 512
+		ContrailLength: 30
+		ContrailStartColor: 5dff00
+	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
+	FirstBurstTargetOffset: 0,-600,0
+	FollowingBurstTargetOffset: -0,100,0
+	Burst: 13
+	BurstDelays: 1
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1400
+	Warhead@3Eff: CreateEffect
+		Explosions: muzzle
+		Image: devo
+		ExplosionPalette: scrin
+		ValidTargets: Ground, Ship, Trees
+
+152mm:
+	Inherits: ^Artillery
+	Inherits: ^ShellArtillery
+	ReloadDelay: 150
+	Report: bgraatta.aud
+	MinRange: 2c0
+	Range: 10c768
+	TargetActorCenter: true
+	Projectile: BulletCA
+		Speed: 145
+		Image: 152mm
+		Inaccuracy: 1c138
+	Warhead@1Dam: SpreadDamage
+		Damage: 25000
+		Falloff: 100, 75, 50, 25
+	Warhead@3Eff: CreateEffect
+		Explosions: large_artillery_explosion
+		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
+
+152mm.Concussion:
+	Inherits: 152mm
+	Warhead@Concussion1: GrantExternalCondition
+		Range: 1c512
+		Duration: 240
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
+	Warhead@Concussion2: GrantExternalCondition
+		Range: 3c0
+		Duration: 120
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
+	Warhead@5Shake: ShakeScreen
+		Duration: 5
+		Intensity: 1
+		Multiplier: 0.5,0.5
+
+152mm.Cluster:
+	Inherits: 152mm
+	Warhead@Cluster: FireCluster
+		Weapon: ClusterBomb2S3
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
+152mm.AP:
+	Inherits: 152mm
+	Inherits: ^ShellAP
+	Projectile: BulletCA
+		Speed: 345
+		Image: 183MM
+
+152mm.Akatsiya:
+	Inherits: 155mm
+	ReloadDelay: 150
+	Range: 14c0
+	Burst: 2
+	Report: 2s3fire.aud
+	Projectile: BulletCA
+		Speed: 275
+	Warhead@1Dam: SpreadDamage
+	Warhead@3Eff: CreateEffect
+		ImpactSounds: kaboom15.aud
+	Warhead@Cluster: FireCluster
+		Weapon: ClusterBomb2S3
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
+ApocShells:
+	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
+	ReloadDelay: 135
+	Report: vapoat1a.aud
+	Burst: 2
+	BurstDelays: 8
+	InvalidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		Damage: 4750
+		Falloff: 368, 184, 80, 18, 0
+		Delay: 5
+		ValidTargets: Ground, Trees, Water, Underwater, Air
+		InvalidTargets: Air
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff_impact: CreateEffect
+		Explosions: nuke3
+		ImpactSounds: kaboom1.aud, kaboom22.aud
+		ImpactActors: false
+	Warhead@6Smu_areanuke1: LeaveSmudge
+		Size: 1
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Trees
+	Warhead@18Radio: CreateTintedCells
+		Level: 100
+		Falloff: 100, 55, 32, 5
+		LayerName: radioactivity
+
 MAD_Eruption:
 	ReloadDelay: 50
 	Report: cannon1.aud

@@ -80,6 +80,205 @@
 		Name: Heavy Tank (Reflector)
 
 
+Source_of_Pollution:
+	Inherits: ^Tank
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 1.2
+		Image: source_of_pollution
+	RenderSprites:
+		Image: Source_of_Pollution
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: radar, ~vehicles.iraq, ~!filler.source_of_pollution
+		Description: Big and slow tank, firing chemical rounds.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Light Vehicles, Reflector Armor, Infantry
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+		Attributes: • Heavy Frontline Armor
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Source of Pollution
+	Health:
+		HP: 88000
+	Mobile:
+		Speed: 52
+		TurnSpeed: 16
+		Locomotor: heavytracked
+	Turreted:
+		TurnSpeed: 16
+	Armament@PRIMARY:
+		Weapon: Chem_Shell
+		LocalOffset: 900,160,340, 900,-160,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	SpawnActorOnDeath:
+		Actor: Source_of_Pollution.Husk
+		RequiresCondition: !being-warped
+	ChangesHealth:
+		PercentageStep: 1
+		Delay: 25
+		StartIfBelow: 50
+		DamageCooldown: 150
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	Voiced:
+		VoiceSet: ApocalypseVoice
+	AttackMove:
+		Voice: Attack
+
+Source_of_Pollution.Metal_Acid:
+	Inherits: Source_of_Pollution
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: techcenter, ~vehicles.iraq, ~!filler.source_of_pollution2, ~commander_tree.source_of_pollution.metal_acid
+		Description: Big and slow tank, firing metal dissolving acid shells.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Aircraft, Infantry, Point Defense Laser
+		Attributes: • Metal acid eats through heavy armor
+	WithProductionIconOverlay@Metal_Acid:
+		Types: Metal_Acid
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Source of Pollution (Metal Acid)
+	Armament@PRIMARY:
+		Weapon: Acid_Shell
+
+Source_of_Pollution.Metal_Acid.Reflector:
+	Inherits: Source_of_Pollution.Metal_Acid
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.iraq, ~commander_tree.source_of_pollution.metal_acid, ~commander_tree.source_of_pollution.reflector
+		Description: Big and slow tank, firing metal dissolving acid shells.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Heavy Vehicles, Reflector Armor
+		Attributes: • Reflector Armor absorbs Energy Weapons\n • Metal acid eats through heavy armor
+	Tooltip:
+		Name: Source of Pollution (Metal Acid, Reflector)
+
+Source_of_Pollution.Metal_Acid.PDL:
+	Inherits: Source_of_Pollution.Metal_Acid
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: techcenter, ~vehicles.iraq, ~commander_tree.source_of_pollution.metal_acid, ~commander_tree.source_of_pollution.pdl
+		Description: Big and slow tank, firing metal dissolving acid shells.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Heavy Vehicles, Reflector Armor
+		Attributes: • Point Defense Laser intercepts Projectiles\n • Metal acid eats through heavy armor
+	Tooltip:
+		Name: Source of Pollution (Metal Acid, PDL)
+	Valued:
+		Cost: 2100
+
+Source_of_Pollution.Chem_Spray:
+	Inherits: Source_of_Pollution
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: techcenter, ~vehicles.iraq, ~!filler.source_of_pollution2, ~commander_tree.source_of_pollution.chem_spray
+		Description: Big and slow tank, spraying the good chemicals.
+	TooltipExtras:
+		Strengths: • Strong vs Building, Reflector Armor, Point Defense Laser
+		Weaknesses: • Weak vs Aircraft, Heavy Armor
+		Attributes: • Chemical spray cannot be stopped by PDL
+	WithProductionIconOverlay@Hazard:
+		Types: Hazard
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Source of Pollution (Chem Spray)
+	Armament@PRIMARY:
+		Weapon: Chem_Spray
+
+Source_of_Pollution.Chem_Spray.Reflector:
+	Inherits: Source_of_Pollution.Chem_Spray
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.iraq, ~commander_tree.source_of_pollution.chem_spray, ~commander_tree.source_of_pollution.reflector
+		Description: Big and slow tank, firing chemical exploding rounds.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Buildings, Vehicles, Reflector Armor, Infantry
+		Attributes: • Reflector Armor absorbs Energy Weapons\n • Chem Bomb shells explode on impact
+	Tooltip:
+		Name: Source of Pollution (Chem Spray, Reflector)
+
+Source_of_Pollution.Chem_Spray.PDL:
+	Inherits: Source_of_Pollution.Chem_Spray
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: techcenter, ~vehicles.iraq, ~commander_tree.source_of_pollution.chem_spray, ~commander_tree.source_of_pollution.pdl
+		Description: Big and slow tank, firing chemical exploding rounds.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Buildings, Vehicles, Reflector Armor, Infantry
+		Attributes: • Point Defense Laser intercepts Projectiles\n • Chem Bomb shells explode on impact
+	Tooltip:
+		Name: Source of Pollution (Chem Spray, PDL)
+	Valued:
+		Cost: 2100
+
+Source_of_Pollution.Chem_Bomb:
+	Inherits: Source_of_Pollution
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: techcenter, ~vehicles.iraq, ~!filler.source_of_pollution2, ~commander_tree.source_of_pollution.chem_bomb
+		Description: Big and slow tank, firing chemical exploding rounds.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Infantry
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+		Attributes: • Chem Bomb shells explode on impact
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
+	Valued:
+		Cost: 1600
+	Tooltip:
+		Name: Source of Pollution (Chem Bomb)
+	Armament@PRIMARY:
+		Weapon: Chem_Bomb
+
+Source_of_Pollution.Chem_Bomb.Reflector:
+	Inherits: Source_of_Pollution.Chem_Bomb
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: techcenter, ~vehicles.iraq, ~commander_tree.source_of_pollution.chem_bomb, ~commander_tree.source_of_pollution.reflector
+		Description: Big and slow tank, firing chemical exploding rounds.
+	TooltipExtras:
+		Strengths: • Strong vs Energy Weapons, Buildings, Vehicles, Reflector Armor, Infantry
+		Attributes: • Reflector Armor absorbs Energy Weapons\n • Chem Bomb shells explode on impact
+	Tooltip:
+		Name: Source of Pollution (Chem Bomb, Reflector)
+
+Source_of_Pollution.Chem_Bomb.PDL:
+	Inherits: Source_of_Pollution.Chem_Bomb
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: techcenter, ~vehicles.iraq, ~commander_tree.source_of_pollution.chem_bomb, ~commander_tree.source_of_pollution.pdl
+		Description: Big and slow tank, firing chemical exploding rounds.
+	TooltipExtras:
+		Strengths: • Strong vs Projectiles, Buildings, Vehicles, Reflector Armor, Infantry
+		Attributes: • Point Defense Laser intercepts Projectiles\n • Chem Bomb shells explode on impact
+	Tooltip:
+		Name: Source of Pollution (Chem Bomb, PDL)
+	Valued:
+		Cost: 2100
+
+
 ISU:
 	Inherits: ^Tank
 	Inherits: ^BigVehicle
@@ -91,7 +290,7 @@ ISU:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
-		Prerequisites: weap, radar, ~vehicles.nkorea, ~!filler.isu
+		Prerequisites: radar, ~vehicles.nkorea, ~!filler.isu
 		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Reflector Armor, Infantry
@@ -131,7 +330,7 @@ ISU:
 ISU.Concussion:
 	Inherits: ISU
 	Buildable:
-		Prerequisites: weap, radar, ~vehicles.nkorea, ~commander_tree.isu.concussion, ~!filler.isu2
+		Prerequisites: radar, ~vehicles.nkorea, ~commander_tree.isu.concussion, ~!filler.isu2
 		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Concussion shells.
 	TooltipExtras:
 		Attributes: • Concussion shells slow down hit vehicles and infantry
@@ -146,7 +345,7 @@ ISU.Concussion.Reflector:
 	Inherits: ISU.Concussion
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.nkorea, ~commander_tree.isu.concussion, ~commander_tree.apocalypse_tank.reflector
+		Prerequisites: techcenter, ~vehicles.nkorea, ~commander_tree.isu.concussion, ~commander_tree.isu.reflector
 		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Concussion shells
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Energy Weapons
@@ -172,7 +371,7 @@ ISU.Concussion.PDL:
 ISU.Cluster:
 	Inherits: ISU
 	Buildable:
-		Prerequisites: weap, radar, ~vehicles.nkorea, ~commander_tree.isu.cluster, ~!filler.isu2
+		Prerequisites: radar, ~vehicles.nkorea, ~commander_tree.isu.cluster, ~!filler.isu2
 		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas Cluster shells.
 	TooltipExtras:
 		Attributes: • Cluster shells deal area damage
@@ -213,7 +412,7 @@ ISU.Cluster.PDL:
 ISU.AP:
 	Inherits: ISU
 	Buildable:
-		Prerequisites: weap, radar, ~vehicles.nkorea, ~commander_tree.isu.ap, ~!filler.isu2
+		Prerequisites: radar, ~vehicles.nkorea, ~commander_tree.isu.ap, ~!filler.isu2
 		Description: Heavy Tank with more range than battle tanks, \nbut less range than dedicated artillery.\nHas AP shells.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Vehicles
@@ -269,12 +468,12 @@ apoc:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
-		Prerequisites: techcenter, ~vehicles.soviet, ~!filler.apocalypse_tank
+		Prerequisites: radar, ~vehicles.russia, ~!filler.apocalypse_tank
 		Description: Big and slow tank, with anti-air.\nCan crush concrete walls.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor
 		Weaknesses: • Weak vs Point Defense Laser
-		Attributes: • Heavy Armor Artillery
+		Attributes: • Heavy All-Purpose Tank
 	Valued:
 		Cost: 1700
 	Tooltip:
@@ -306,7 +505,7 @@ apoc:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: apoc.Husk
-		RequiresCondition: !iraqtank && !being-warped
+		RequiresCondition: !being-warped
 	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
@@ -326,7 +525,7 @@ apoc.Speaker:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.propaganda, ~!filler.apocalypse_tank2
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.propaganda, ~!filler.apocalypse_tank2
 		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
 	Tooltip:
 		Name: Apocalypse Tank (Propaganda)
@@ -339,7 +538,7 @@ apoc.Speaker.Reflector:
 	Inherits: apoc.Speaker
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.propaganda, ~commander_tree.apocalypse_tank.reflector
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.propaganda, ~commander_tree.apocalypse_tank.reflector
 		Description: Big and slow tank, with anti-air.\nHas a Propaganda Speaker to motivate infantry.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak without Infantry support.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Energy Weapons
@@ -352,7 +551,7 @@ apoc.Speaker.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.propaganda
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.propaganda
 		Description: Big and slow tank, with anti-air and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Projectiles
@@ -368,7 +567,7 @@ apoc.Nuke:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.nuke_shells, ~!filler.apocalypse_tank2
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.nuke_shells, ~!filler.apocalypse_tank2
 		Description: Big and slow tank, with nuke shells.\nCan crush concrete walls.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
@@ -394,7 +593,7 @@ apoc.Nuke.Reflector:
 	Inherits: apoc.Nuke
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.nuke_shells, ~commander_tree.apocalypse_tank.reflector
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.nuke_shells, ~commander_tree.apocalypse_tank.reflector
 		Description: Big and slow tank, with nuke shells.\nHas Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Energy Weapons\n  Weak vs Point Laser Defense, Aircraft
 	Tooltip:
 		Name: Apocalypse Tank (Nuke Shells, Reflector)
@@ -404,7 +603,7 @@ apoc.Nuke.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.nuke_shells
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.nuke_shells
 		Description: Big and slow tank, with nuke shells and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Apocalypse Tank (Nuke Shells, PDL)
@@ -417,7 +616,7 @@ apoc.Drozd:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 180
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.drozd, ~!filler.apocalypse_tank2
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.drozd, ~!filler.apocalypse_tank2
 		Description: Big and slow tank, with Drozd chaff.\nCan crush concrete walls.\n  Strong vs Vehicles, PDL\n  Weak vs Aircraft
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Point Defense Laser
@@ -443,7 +642,7 @@ apoc.Drozd.Reflector:
 	Inherits: apoc.Drozd
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.drozd,  ~commander_tree.apocalypse_tank.reflector
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.drozd,  ~commander_tree.apocalypse_tank.reflector
 		Description: Big and slow tank, with Drozd chaff.\n Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, PDL\n  Weak vs Aircraft
 	TooltipExtras:
 		Attributes: • Drozd chaff depletes PDL systems\n  Reflector Armor absorbs Energy Weapons
@@ -455,7 +654,7 @@ apoc.Drozd.PDL:
 	Inherits@PDL: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
-		Prerequisites: techcenter, ~vehicles.soviet, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.drozd
+		Prerequisites: techcenter, ~vehicles.russia, ~commander_tree.apocalypse_tank.pdl, ~commander_tree.apocalypse_tank.drozd
 		Description: Big and slow tank, with Drozd chaff and point laser defense capability.\nCan crush concrete walls.\n  Strong vs Vehicles, PDL\n  Weak vs Energy Weapons
 	TooltipExtras:
 		Attributes: • Drozd chaff depletes PDL systems\n  Point Defense Laser intercepts Projectiles

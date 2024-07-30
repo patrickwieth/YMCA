@@ -76,6 +76,108 @@ hack.cameo_filler.107a:
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.3tnk, disabled
 
 
+commander_tree.Source_of_Pollution.Chem_Bomb:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Source of Pollution Chem Bomb Upgrade
+	RenderSprites:
+		Image: source_of_pollution
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 120
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.source_of_pollution.chem_spray, ~!commander_tree.source_of_pollution.metal_acid
+		Description: The Source of Pollution's shells are upgraded to explode into smaller chemical bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Light Vehicles, Reflector Armor, Infantry
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+		Attributes: • Deals substantial area damage.
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.source_of_pollution
+
+commander_tree.Source_of_Pollution.Chem_Spray:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Source of Pollution Chem Spray Upgrade
+	RenderSprites:
+		Image: source_of_pollution
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 120
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.source_of_pollution.chem_bomb, ~!commander_tree.source_of_pollution.metal_acid
+		Description: The Source of Pollution's fires a chemical spray instead of shells.
+	TooltipExtras:
+		Strengths: • Strong vs Point Defense Laser
+		Weaknesses: • Weak vs Aircraft, Heavy Armor
+		Attributes: • Cannot be stopped by PDL
+	WithProductionIconOverlay@Hazard:
+		Types: Hazard
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.source_of_pollution
+
+commander_tree.Source_of_Pollution.Metal_Acid:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Source of Pollution Metal Acid Upgrade
+	RenderSprites:
+		Image: source_of_pollution
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 120
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.source_of_pollution.chem_spray, ~!commander_tree.source_of_pollution.chem_bomb
+		Description: The Source of Pollution's fires acid shells which eat through metal.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Aircraft, Point Defense Laser
+		Attributes: • Deals significant damage to heavy armor.
+	WithProductionIconOverlay@Metal_Acid:
+		Types: Metal_Acid
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.source_of_pollution
+
+commander_tree.Source_of_Pollution.PDL:
+	Inherits: ^default.commander_tree_item
+	Inherits: ^PDLInfo
+	Tooltip:
+		Name: Source of Pollution Point Laser Defense
+	RenderSprites:
+		Image: source_of_pollution
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 121
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~filler.source_of_pollution, ~!commander_tree.source_of_pollution.reflector
+		Description: Upgrades the Source of Pollution with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.source_of_pollution2
+
+commander_tree.Source_of_Pollution.Reflector:
+	Inherits: ^default.commander_tree_item
+	Inherits: ^ReflectorInfo
+	Tooltip:
+		Name: Source of Pollution Reflector Armor
+	RenderSprites:
+		Image: source_of_pollution
+	Buildable:
+		Queue: Commander_Tree
+		BuildPaletteOrder: 121
+		ForceIconLocation: true
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~filler.source_of_pollution, ~!commander_tree.source_of_pollution.pdl
+		Description: Equips the Source of Pollution with Reflector Armor.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.source_of_pollution2
+
+hack.cameo_filler.110b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 122
+		Prerequisites: prerequisite.has_points, ~vehicles.iraq, disabled, ~filler.source_of_pollution2
+
+
 commander_tree.ISU.Concussion:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -84,7 +186,7 @@ commander_tree.ISU.Concussion:
 		Image: ISU
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 100
+		BuildPaletteOrder: 120
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea, ~!commander_tree.isu.ap, ~!commander_tree.isu.cluster
 		Description: Upgrades the ISU Bombard Tank to cause concussion on units at the impact zone.
@@ -105,9 +207,9 @@ commander_tree.ISU.Cluster:
 		Image: ISU
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 100
+		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.isu.ap, ~!commander_tree.isu.concussion
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea, ~!commander_tree.isu.ap, ~!commander_tree.isu.concussion
 		Description: The ISU-152 is upgraded with Cluster shells. \n Cluster shells deal damage over a larger area.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
@@ -126,7 +228,7 @@ commander_tree.ISU.AP:
 		Image: ISU
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 100
+		BuildPaletteOrder: 120
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~!commander_tree.isu.cluster, ~!commander_tree.isu.concussion
 		Description: The ISU-152 is equipped with Armor Piercing (AP) shells.
@@ -148,7 +250,7 @@ commander_tree.ISU.PDL:
 		Image: ISU
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 100
+		BuildPaletteOrder: 121
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.isu, ~!commander_tree.isu.reflector
 		Description: Upgrades the ISU-152 with a Point Laser Defense System to shoot down incoming projectiles.
@@ -164,7 +266,7 @@ commander_tree.ISU.Reflector:
 		Image: ISU
 	Buildable:
 		Queue: Commander_Tree
-		BuildPaletteOrder: 100
+		BuildPaletteOrder: 121
 		ForceIconLocation: true
 		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.isu, ~!commander_tree.isu.pdl
 		Description: Equips the ISU-152 with Reflector Armor.
@@ -174,7 +276,7 @@ commander_tree.ISU.Reflector:
 hack.cameo_filler.100b:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 102
+		BuildPaletteOrder: 122
 		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, disabled, ~filler.isu2
 
 
@@ -188,7 +290,7 @@ commander_tree.Apocalypse_Tank.Drozd:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.apocalypse_tank.nuke_shells, ~!commander_tree.apocalypse_tank.propaganda
+		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~!commander_tree.apocalypse_tank.nuke_shells, ~!commander_tree.apocalypse_tank.propaganda
 		Description: The Apocalypse Tank is upgraded with a Drozd Weapon System. \n  The Drozd system fires chaff, which is good at depleting PDL systems. \n  The Apocalypse Tank can no longer shoot on aircraft.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Point Defense Laser
@@ -209,7 +311,7 @@ commander_tree.Apocalypse_Tank.Nuke_Shells:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.propaganda
+		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.propaganda
 		Description: The Apocalypse Tank is upgraded with Nuclear Shells. \n  Nuclear Shells deal a lot of damage to the target and its surroundings. \n  Nuclear Shells are weak vs. Point Laser Defense Systems.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
@@ -230,7 +332,7 @@ commander_tree.Apocalypse_Tank.Propaganda:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 120
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.nuke_shells
+		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.nuke_shells
 		Description: The Apocalypse Tank is upgraded with a Propaganda Speaker.\n  This gives infantry in its proximity a boost in combat.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor
@@ -252,7 +354,7 @@ commander_tree.Apocalypse_Tank.PDL:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 121
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.reflector
+		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.reflector
 		Description: Upgrades the Apocalypse Tank with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank2
@@ -268,7 +370,7 @@ commander_tree.Apocalypse_Tank.Reflector:
 		Queue: Commander_Tree
 		BuildPaletteOrder: 121
 		ForceIconLocation: true
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.pdl
+		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.pdl
 		Description: Equips the Apocalypse Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank2
@@ -277,7 +379,7 @@ hack.cameo_filler.111:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 122
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~filler.apocalypse_tank2
+		Prerequisites: prerequisite.has_points, ~vehicles.russia, disabled, ~filler.apocalypse_tank2
 
 
 commander_tree.Rice_Cooker:
