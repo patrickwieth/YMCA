@@ -1,3 +1,47 @@
+kims_wheel:
+	Inherits: ^FightingVehicle
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.6
+		Image: kimswheel
+	WithVoxelAnimatedBody:
+	RenderSprites:
+		Image: kimswheel
+	Inherits: ^BiologicalDriver
+	Inherits: ^SensorEquipment
+	Inherits: ^PrioAntiInfantry
+	Inherits: ^GeneralsVehicle
+	Inherits: ^AnnounceOnBuild
+	Inherits: ^AttackFrontalVoice
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Kim's Monowheel
+	Buildable:
+		BuildPaletteOrder: 100
+		Prerequisites: ~vehicles.nkorea
+		Queue: Vehicle
+		Description: Agile scout vehicle.\nWestern engineers have calculated that this can never drive.\nKim made a new design and it is faster than all Ferraris.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Tanks, Air, Defenses
+		Attributes: • Faster than Ferrari
+	Mobile:
+		Speed: 157
+	Health:
+		HP: 12000
+	Armament:
+		Weapon: M60mgTD
+		LocalOffset: 650,0,300
+		MuzzleSequence: muzzle
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped || parachute
+	WithMuzzleOverlay:
+	Voiced:
+		VoiceSet: RobotTankVoice
+
 3TNK:
 	Inherits: ^Tank
 	Inherits: ^VoxelTurretedTank
@@ -10,7 +54,7 @@
 	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
-		BuildPaletteOrder: 100
+		BuildPaletteOrder: 110
 		Prerequisites: vehicles.any, ~vehicles.soviet, ~!filler.3tnk
 		Description: Soviet main battle tank with dual cannons.
 	TooltipExtras:

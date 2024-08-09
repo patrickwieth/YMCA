@@ -191,6 +191,62 @@ Rocket_Cyborg:
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
+Black_Hand_Trooper:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioAntiLight
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 150
+		Prerequisites: radar, ~infantry.blackh
+		Description: Elite precision flamethrower unit.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Black Hand Trooper
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 13000
+	Mobile:
+		Speed: 73
+		Voice: Move
+	RevealsShroud:
+		Range: 5c0
+	Armament:
+		Weapon: BlackHandFlamer
+		LocalOffset: 300,0,180
+	Armament@Garrison:
+		Name: mounted
+		Weapon: BlackHandFlamer
+	TakeCover:
+		ProneOffset: 160,0,-256
+		SpeedModifier: 70
+	WithMuzzleOverlay:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		Voice: Attack
+		FacingTolerance: 0
+	WithInfantryBody:
+		DefaultAttackSequence: shoot
+	Explodes:
+		Weapon: UnitExplodeFlameSmall
+		EmptyWeapon: UnitExplodeFlameSmall
+		Chance: 33
+		DamageSource: Killer
+		RequiresCondition: !being-warped
+	AmbientSoundCA:
+		SoundFiles: flamer-loop1.aud
+		InitialSound: flamer-start1.aud
+		FinalSound: flamer-end1.aud
+		RequiresCondition: attacking
+		InitialSoundLength: 20
+	GrantConditionOnAttackCA:
+		Condition: attacking
+	Voiced:
+		VoiceSet: BlackHandVoice
+
 SAB:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite

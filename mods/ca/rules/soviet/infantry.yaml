@@ -97,14 +97,12 @@ Flamethrower:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 70
-		Prerequisites: ~barr, ~!infantry.iraq, ~commander_tree.advanced_infantry_training
+		Prerequisites: ~infantry.soviet, ~commander_tree.advanced_infantry_training
 		Description: Anti-infantry/anti-structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 150
 	Tooltip:
 		Name: Flamethrower
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 8000
 	Mobile:
@@ -155,14 +153,12 @@ SHOK:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 115
-		Prerequisites: ~infantry.any, dome, ~infantry.shok, ~commander_tree.advanced_infantry_training
+		Prerequisites: ~infantry.soviet, radar, ~commander_tree.advanced_infantry_training
 		Description: Elite infantry with portable Tesla weapon.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft\n  Special Ability: Can over-charge Tesla Coil
 	Valued:
 		Cost: 350
 	Tooltip:
 		Name: Shock Trooper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 7000
 	Mobile:
@@ -199,6 +195,127 @@ SHOK:
 	Voiced:
 		VoiceSet: ShokVoice
 	-Crushable:
+
+YURI:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^SensorEquipment
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^CommandoSkull
+	Inherits: ^BotCaptureHelper
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 190
+		Prerequisites: ~barr, stek, ~commander_tree.yuri
+		BuildLimit: 1
+		Description: Elite specialist infantry.\n  Can mind-control enemy units and defenses.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Vehicles, Defenses\n  Weak vs Aircraft\n  Special Ability: Mind Blast
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Yuri
+	Health:
+		HP: 16000
+	Mobile:
+		Speed: 73
+		Voice: Move
+	Armament@PRIMARY:
+		Weapon: EnslaveInfantry
+		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: EnslaveVehicle
+		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
+	Armament@AIDummyAiming: ## Hack: Make AI deploy to attack structures
+		PauseOnCondition: !ammo || being-warped
+		Name: aidummy
+		RequiresCondition: botowner && !deployed
+		Weapon: YuriDummyAim
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 200
+		Count: 1
+		DelayAfterReset: 60
+	MindController:
+		ArmamentNames: primary, secondary
+		Capacity: 3
+		ControlSounds: iyurat1a.aud
+		ControllingCondition: mindcontrolling
+	WithMindControlArc@MC:
+		Color: c71585
+		Transparency: 55
+		Offset: 0,0,511
+		Angle: 32
+		Width: 116
+	WithIdleOverlay@mindcontrolling:
+		Sequence: mc
+		Palette: scrin
+		RequiresCondition: mindcontrolling
+		Offset: 0,0,400
+	PeriodicExplosion:
+		Weapon: Mindblast
+		LocalOffset: 0,0,128
+		InitialDelay: 18
+		RequiresCondition: deployed && !being-warped
+	GrantTimedConditionOnDeploy:
+		DeployedTicks: 35
+		CooldownTicks: 100
+		Facing: 96
+		DeployedCondition: deployed
+		DeployingCondition: deploying
+		DeployAnimation: deployed
+		ShowSelectionBar: true
+		Voice: Demolish
+		PauseOnCondition: being-warped
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		Armaments: primary, secondary, aidummy
+		FacingTolerance: 0
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Voiced:
+		VoiceSet: YuriVoice
+	-Crushable:
+	WithInfantryBody:
+		IdleSequences: idle1, idle2
+		StandSequences: stand
+		DefaultAttackSequence: shoot
+		RequiresCondition: !deployed && !deploying && !being-warped
+	WithSpriteBody@DEPLOYED:
+		Sequence: deployed
+		RequiresCondition: (deployed || deploying) && !being-warped
+	ExternalCondition@PRODUCED:
+		Condition: produced
+	VoiceAnnouncement:
+		RequiresCondition: produced
+		Voice: Build
+	AnnounceOnKill:
+	IgnoresDisguise:
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
+	GrantConditionOnAttack@AI:
+		Condition: aiattack
+		RequiresCondition: botowner
+		ArmamentNames: aidummy
+		RevokeDelay: 60
+	AutoDeployer@AI:
+		RequiresCondition: aiattack && botowner && !deployed && !parachute
+		DeployChance: 100
+		DeployTrigger: Attack
+		DeployTicks: 100
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
 
 IVAN:
 	Inherits: ^Soldier
