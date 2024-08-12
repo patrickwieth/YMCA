@@ -13,4 +13,4 @@ Find more information on [ModDB](https://www.moddb.com/mods/you-must-construct-a
 **0.99** - Testing of Autobattle mode and testing of differentiated Factions, especially balance. \
 **1.0** - **Autobattle** mode working \
 **1.1** - GLA added \
-**1.2** - USA added \
+**1.2** - USA added 
