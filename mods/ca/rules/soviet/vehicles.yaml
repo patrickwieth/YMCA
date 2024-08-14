@@ -86,29 +86,29 @@ Devil_Tank:
 	Inherits: ^Tank
 	Inherits: ^VoxelTurretedTank
 	RenderVoxels:
-		Scale: 1
-		Image: thedevil
+		Scale: 0.9
+		Image: deviltank
 	RenderSprites:
-		Image: thedevil
+		Image: deviltank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
 		Prerequisites: ~vehicles.iraq
-		Description: Wasteful americans throw tanks away.\nResourceful Supreme Leader makes tanks work for 100 years.
+		Description: Light Iraqi tank.\n
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
 		Weaknesses: • Weak vs Infantry, Aircraft
 		Attributes: • Light Main Battle Tank
 	Valued:
-		Cost: 750
+		Cost: 700
 	Tooltip:
 		Name: Devil Tank
 	Health:
-		HP: 48000
+		HP: 45000
 	Mobile:
-		Speed: 90
+		Speed: 80
 	Turreted:
 		TurnSpeed: 56
 		Offset: 0,0,0
@@ -121,6 +121,85 @@ Devil_Tank:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
+
+Chem_Sprayer:
+	Inherits: ^FightingVehicle
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.7
+		Image: chemsprayer
+	RenderSprites:
+		Image: chemsprayer
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq
+		Description: Light Vehicle equipped with dual spray barrels.\n
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Light Main Battle Tank
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Chemical Sprayer
+	Health:
+		HP: 45000
+	Mobile:
+		Speed: 80
+	Armament:
+		Weapon: Chem_Spray
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 400,-50,400, 400,50,400
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 10
+
+Peoples_Tank:
+	Inherits: ^Tank
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.66
+		Image: peoplestank
+	RenderSprites:
+		Image: peoplestank
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: vehicles.any, ~vehicles.soviet, ~!filler.3tnk
+		Description: North Korea main battle tank\nThe Supreme Leader had the ingenious idea to put dual cannons on a tank.\nAll other nations are copying his ideas.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Main Battle Tank
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: The People's Tank
+	Health:
+		HP: 60000
+	Mobile:
+		Speed: 75
+	Turreted:
+		TurnSpeed: 32
+		Offset: 0,0,200
+	Armament:
+		Weapon: 125mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 900,85,190, 900,-85,190
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: Peoples_Tank.Husk
+		RequiresCondition: !being-warped
 
 3TNK:
 	Inherits: ^Tank
@@ -135,7 +214,7 @@ Devil_Tank:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~!filler.3tnk
+		Prerequisites: vehicles.any, ~vehicles.russia, ~!filler.3tnk
 		Description: Soviet main battle tank with dual cannons.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
@@ -326,7 +405,7 @@ Source_of_Pollution.Chem_Spray:
 	Tooltip:
 		Name: Source of Pollution (Chem Spray)
 	Armament@PRIMARY:
-		Weapon: Chem_Spray
+		Weapon: Chem_Spray_Big
 
 Source_of_Pollution.Chem_Spray.Reflector:
 	Inherits: Source_of_Pollution.Chem_Spray
