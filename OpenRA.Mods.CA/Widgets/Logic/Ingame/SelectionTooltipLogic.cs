@@ -74,6 +74,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 
 			var mapRules = world.Map.Rules;
+			var actorIcon = widget.Get<ActorIconWidget>("ACTOR_ICON");
+			actorIcon.setActor(actor);
 			var nameLabel = widget.Get<LabelWidget>("NAME");
 			var armorTypeLabel = widget.Get<LabelWidget>("ARMORTYPE");
 			var armorTypeIcon = widget.Get<ImageWidget>("ARMORTYPE_ICON");
@@ -107,8 +109,6 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			descLabel.Bounds.Height = originalDescLabelHeight;
 
-			var descLabelPadding = descLabel.Bounds.Height;
-
 			var tooltip = actor.TraitsImplementing<Tooltip>().FirstOrDefault(Exts.IsTraitEnabled);
 			var name = tooltip != null ? tooltip.Info.Name : actor.Info.Name;
 
@@ -116,7 +116,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			var nameSize = font.Measure(name);
 
-			armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, actor.Info);
+			armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, armorTypeIcon, actor.Info);
 			var tooltipExtras = actor.TraitsImplementing<TooltipExtras>().FirstOrDefault(Exts.IsTraitEnabled);
 
 			if (tooltipExtras != null)
@@ -218,7 +218,6 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			armorTypeIcon.Visible = armorTypeSize.Y > 0;
 			armorTypeLabel.Bounds.Y = armorTypeIcon.Bounds.Y;
 
-			var extrasSpacing = descLabel.Bounds.X / 2;
 
 			if (descLabel.Text == "")
 			{
@@ -246,16 +245,19 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var versusWoodSize = versusWoodLabel.Text != "" ? descFont.Measure(versusWoodLabel.Text) : new int2(0, 0);
 			var versusConcreteSize = versusConcreteLabel.Text != "" ? descFont.Measure(versusConcreteLabel.Text) : new int2(0, 0);
 
-			var textSpacing = descLabel.Bounds.Bottom + extrasSpacing;
+			// use textspacing for adjusting line positions of description and tooltipextras
+			var textSpacing = descLabel.Bounds.Height + descLabel.Bounds.Y + 5;
 			strengthsLabel.Bounds.Y = textSpacing;
 			textSpacing += strengthsSize.Y;
 			weaknessesLabel.Bounds.Y = textSpacing;
 			textSpacing += weaknessesSize.Y;
 			attributesLabel.Bounds.Y = textSpacing;
 			textSpacing += attributesSize.Y;
+
+			// reset textSpacing for effectivity table
+			textSpacing = versusLabel.Bounds.Y;
 			versusLabel.Bounds.Y = textSpacing;
 			textSpacing += versusSize.Y;
-
 			versusNoneLabel.Bounds.Y = textSpacing;
 			effectVersusNoneLabel.Bounds.Y = textSpacing;
 			textSpacing += versusNoneSize.Y;
@@ -275,8 +277,6 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			effectVersusConcreteLabel.Bounds.Y = textSpacing;
 			textSpacing += versusConcreteSize.Y;
 
-			descLabel.Bounds.Height += textSpacing + descLabelPadding;
-
 			var leftWidth = new[] { nameSize.X, descSize.X, strengthsSize.X, weaknessesSize.X, attributesSize.X, versusSize.X }.Aggregate(Math.Max);
 			var rightWidth = new[] { armorTypeSize.X }.Aggregate(Math.Max);
 
@@ -285,7 +285,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			widget.Bounds.Width = leftWidth + rightWidth + 3 * nameLabel.Bounds.X + armorTypeIcon.Bounds.Width + iconMargin;
 
 			// Set the bottom margin to match the left margin
-			var leftHeight = descLabel.Bounds.Bottom + descLabel.Bounds.X;
+			var leftHeight = attributesLabel.Bounds.Bottom + attributesSize.Y + 5;
 
 			// Set the bottom margin to match the top margin
 			var rightHeight = armorTypeIcon.Bounds.Bottom;
@@ -323,7 +323,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			*/
 		}
 
-		LabelWidget GetArmorTypeLabel(LabelWidget armorTypeLabel, ActorInfo actor)
+		LabelWidget GetArmorTypeLabel(LabelWidget armorTypeLabel, ImageWidget armorTypeIcon, ActorInfo actor)
 		{
 			var armor = actor.TraitInfos<ArmorInfo>().FirstOrDefault();
 			armorTypeLabel.Text = armor != null ? armor.Type : "";
@@ -337,31 +337,37 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				case "None":
 					armorTypeLabel.Text = "Infantry"+healthText;
 					armorTypeLabel.TextColor = Color.LightSalmon;
+					armorTypeIcon.ImageName = "armor-infantry";
 					break;
 
 				case "Light":
 					armorTypeLabel.Text += healthText;
 					armorTypeLabel.TextColor = Color.Khaki;
+					armorTypeIcon.ImageName = "armor-light";
 					break;
 
 				case "Reflector":
 					armorTypeLabel.Text += healthText;
 					armorTypeLabel.TextColor = Color.SkyBlue;
+					armorTypeIcon.ImageName = "armor-reflector";
 					break;
 
 				case "Heavy":
 					armorTypeLabel.Text += healthText;
 					armorTypeLabel.TextColor = Color.Crimson;
+					armorTypeIcon.ImageName = "armor-heavy";
 					break;
 
 				case "Concrete":
 					armorTypeLabel.Text = "Fortified"+healthText;
 					armorTypeLabel.TextColor = Color.Gray;
+					armorTypeIcon.ImageName = "armor-concrete";
 					break;
 
 				case "Wood":
 					armorTypeLabel.Text = "Building"+healthText;
 					armorTypeLabel.TextColor = Color.IndianRed;
+					armorTypeIcon.ImageName = "armor-wood";
 					break;
 
 				case "Brick":
