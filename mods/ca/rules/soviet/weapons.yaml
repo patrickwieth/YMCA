@@ -47,7 +47,7 @@ Chem_Bomb.Cluster:
 
 Acid_Shell:
 	Inherits: Chem_Shell
-	Inherits: ^MetalAcid
+	Inherits: ^Metal_Acid
 	Projectile: BulletCA
 		Image: acidshell
 	Warhead@1Dam: SpreadDamage
@@ -86,7 +86,7 @@ Chem_Spray_Big:
 Chem_Spray:
 	Inherits: ^Chemical
 	ValidTargets: Ground, Water
-	Range: 6c512
+	Range: 4c0
 	ReloadDelay: 60
 	Projectile: Bullet
 		Speed: 150
@@ -95,6 +95,8 @@ Chem_Spray:
 		Inaccuracy: 512
 		ContrailLength: 30
 		ContrailStartColor: 5dff00
+		ContrailStartWidth: 0c16
+		ContrailEndWidth: 0c64
 	Burst: 2
 	BurstDelays: 2
 	Warhead@1Dam: SpreadDamage
@@ -105,6 +107,146 @@ Chem_Spray:
 		Image: devo
 		ExplosionPalette: scrin
 		ValidTargets: Ground, Ship, Trees
+
+Chem_Spray.Range:
+	Inherits: Chem_Spray
+	Range: 7c0
+	Burst: 2
+
+Chem_Spray.Range.Spread:
+	Inherits: Chem_Spray.Range
+	Projectile: Bullet
+		Inaccuracy: 1c512
+	Burst: 4
+
+Chem_Spray.Range.Metal_Acid:
+	Inherits: Chem_Spray.Range
+	Inherits: ^Metal_Acid
+	Projectile: Bullet
+		ContrailStartColor: 007070
+	Warhead@3Eff: CreateEffect
+		Explosions: impact_acid
+		Image: chemsprayer
+		ExplosionPalette: tdeffect
+
+Chem_Spray.Cloud:
+	Inherits: Chem_Spray
+	Warhead@Spawn: FireFragment
+		UseZOffsetAsAbsoluteHeight: true
+		Weapon: Chem_Cloud_Spawner
+		ValidTargets: Air, Ground, Water
+		Chance: 25
+
+Chem_Cloud_Spawner:
+	Warhead@13Spawn: SpawnActor
+		Actors: Cloud.Chemical
+		Range: 1
+		ForceGround: false
+		Image: Cloud1d
+		Palette: tseffect-ignore-lighting-alpha50
+		ValidTargets: Ground, Water
+	Projectile: InstantHit
+
+Chem_Spray.Cloud.Spread:
+	Inherits: Chem_Spray.Cloud
+	Projectile: Bullet
+		Inaccuracy: 1c512
+	Burst: 4
+
+Chem_Spray.Cloud.Metal_Acid:
+	Inherits: Chem_Spray.Cloud
+	Inherits: ^Metal_Acid
+	Projectile: Bullet
+		ContrailStartColor: 007070
+	Warhead@Spawn: FireFragment
+		UseZOffsetAsAbsoluteHeight: true
+		Weapon: Metal_Acid_Cloud_Spawner
+		ValidTargets: Air, Ground, Water
+		Chance: 25
+	Warhead@3Eff: CreateEffect
+		Explosions: impact_acid
+		Image: chemsprayer
+		ExplosionPalette: tdeffect
+
+Metal_Acid_Cloud_Spawner:
+	Warhead@13Spawn: SpawnActor
+		Actors: Cloud.Metal_Acid
+		Range: 1
+		ForceGround: false
+		Image: metal_acid_cloud1d
+		Palette: tdeffect-ignore-lighting-alpha65
+		ValidTargets: Ground, Water
+	Projectile: InstantHit
+
+Chem_Spray.Splash:
+	Inherits: Chem_Spray
+	Warhead@Cluster: FireCluster
+		Weapon: Chem_Spray.SplashStream
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
+Chem_Spray.SplashStream:
+	Inherits: ^Chemical
+	ValidTargets: Ground, Water
+	Range: 1c512
+	ReloadDelay: 60
+	Projectile: Bullet
+		Speed: 70
+		Blockable: True
+		LaunchAngle: 160
+		Inaccuracy: 512
+		ContrailLength: 10
+		ContrailStartColor: 5dff00
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 1000
+	Warhead@3Eff: CreateEffect
+		Explosions: muzzle
+		Image: devo
+		ExplosionPalette: scrin
+		ValidTargets: Ground, Ship, Trees
+
+Chem_Spray.Splash.Spread:
+	Inherits: Chem_Spray.Splash
+	Projectile: Bullet
+		Inaccuracy: 1c512
+	Burst: 4
+
+Chem_Spray.Splash.Metal_Acid:
+	Inherits: Chem_Spray.Splash
+	Inherits: ^Metal_Acid
+	Projectile: Bullet
+		ContrailStartColor: 007070
+	Warhead@Cluster: FireCluster
+		Weapon: Chem_Spray.SplashStream.Metal_Acid
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+	Warhead@3Eff: CreateEffect
+		Explosions: impact_acid
+		Image: chemsprayer
+		ExplosionPalette: tdeffect
+
+Chem_Spray.SplashStream.Metal_Acid:
+	Inherits: ^Metal_Acid
+	ValidTargets: Ground, Water
+	Range: 1c512
+	ReloadDelay: 60
+	Projectile: Bullet
+		Speed: 60
+		Blockable: True
+		LaunchAngle: 150
+		Inaccuracy: 512
+		ContrailLength: 10
+		ContrailStartColor: 007070
+	Warhead@1Dam: SpreadDamage
+		Spread: 512
+		Damage: 1000
+	Warhead@3Eff: CreateEffect
+		Explosions: impact_acid
+		Image: chemsprayer
+		ExplosionPalette: tdeffect
 
 152mm:
 	Inherits: ^Artillery
@@ -322,3 +464,154 @@ ZombieAttack:
 		Duration: 10
 		Condition: genespliced
 		ValidTargets: Infantry
+
+
+^TeslaWeapon:
+	Inherits: ^Energy
+	ReloadDelay: 3
+	Range: 8c0
+	Report: tesla1.aud
+	Projectile: TeslaZap
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 10000
+		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: 1, 3
+		Image: fire
+
+TeslaZap:
+	Inherits: ^TeslaWeapon
+	Warhead@1Dam: SpreadDamage
+
+TeslaZapBoost1:
+	Inherits: TeslaZap
+	Range: 8c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 11000
+
+TeslaZapBoost2:
+	Inherits: TeslaZap
+	Range: 9c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 12000
+
+TeslaZapBoost3:
+	Inherits: TeslaZap
+	Range: 9c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 13000
+
+PortaTesla:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 70
+	Range: 6c0
+	Report: shktrop1.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 5500
+
+PortaTeslaE:
+	Inherits: PortaTesla
+	Range: 8c0
+
+PortaTeslaCharge:
+	Inherits: ^TeslaWeapon
+	ValidTargets: TeslaBoost
+	ReloadDelay: 70
+	Range: 1c768
+	Report: iteschaa.aud
+	-Warhead@1Dam:
+	-Warhead@3Eff:
+	Warhead@charge: GrantExternalCondition
+		Range: 42
+		Duration: 70
+		Condition: charged
+		ValidRelationships: Ally
+		ValidTargets: TeslaBoost
+	Warhead@highlight: GrantExternalCondition
+		Range: 0c511
+		Duration: 2
+		Condition: highlight
+		ValidTargets: Ground, Vehicle
+
+Tesla.Hind:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 70
+	Range: 6c0
+	Report: shktrop1.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 4500
+
+4TankZap:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 80
+	Warhead@1Dam: SpreadDamage
+		Spread: 42
+		Damage: 16000
+	Range: 6c0
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc1
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
+
+TTankZap:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 110
+	Range: 7c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 11000
+
+TTankZap.Arc:
+	Inherits: TTankZap
+	ReloadDelay: 130
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc1
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
+
+TTankArc1:
+	Inherits: TTankZap
+	Range: 1c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 8000
+		ValidTargets: Infantry, Vehicle, Ship
+		ValidRelationships: Enemy, Neutral
+	-Report:
+	-Warhead@3Eff:
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc2
+		AimChance: 100
+
+TTankArc2:
+	Inherits: TTankArc1
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
+	-Warhead@Arc:
+
+TTankZapMK2:
+	Inherits: TTankZap
+	Report: vtesatta.aud, vtesattb.aud
+	Range: 6c0
+	Burst: 2
+	BurstDelays: 1
+	Warhead@1Dam: SpreadDamage
+		Damage: 6500
+
+TTankZapMK2.Arc:
+	Inherits: TTankZapMK2
+	ReloadDelay: 130
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc1
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
+
+TeslaDefense:
+	Inherits: ^TeslaWeapon
+	ReloadDelay: 50
+	Range: 3c0
+	Report: shktrop1.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 5000

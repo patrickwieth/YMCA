@@ -113,9 +113,9 @@ CRATE:
 		Units: 2tnk
 		ValidFactions: allies, england, france, germany
 		Prerequisites: ~!techlevel.infonly, ~!techlevel.aircraft
-	GiveUnitCrateAction@3tnk:
+	GiveUnitCrateAction@heavy_tank:
 		SelectionShares: 4
-		Units: 3tnk
+		Units: heavy_tank
 		ValidFactions: soviet, russia, nkorea, iraq
 		Prerequisites: ~!techlevel.infonly, ~!techlevel.aircraft
 	GiveUnitCrateAction@apoc:
@@ -317,61 +317,13 @@ gps.satellite.firstscan:
 	AlwaysVisible:
 	ProvidesPrerequisite:
 
-camera.cloud:
+Cloud.Chemical:
 	Interactable:
 	EditorOnlyTooltip:
 		Name: (support power)
 	RenderSprites:
 		Image: cloud1
-		Palette: tseffect-ignore-lighting-alpha75
-	WithSpriteBody:
-	BodyOrientation:
-		QuantizedFacings: 1
-	AlwaysVisible:
-	HitShape:
-	Mobile:
-		Speed: 20
-		Locomotor: cloud
-	Wanders:
-		WanderMoveRadius: 5
-		ReduceMoveRadiusDelay: 3
-	RevealsShroud:
-		Range: 6c0
-	Health:
-		HP: 30000
-	DamagedByTerrain:
-		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
-		Damage: 500
-		DamageInterval: 5
-		DamageTypes: ToxinDeath
-	Hovers:
-	WithDeathAnimation:
-		DeathSequencePalette: tseffect
-		DeathPaletteIsPlayerPalette: False
-		UseDeathTypeSuffix: False
-		CrushedSequence: die
-		FallbackSequence: die
-	PeriodicExplosion:
-		Weapon: ToxinCloud
-
-camera.cloud2:
-	Inherits: camera.cloud
-	RenderSprites:
-		Image: cloud2
-		Palette: tseffect-ignore-lighting-alpha75
-	DamagedByTerrain:
-		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
-		Damage: 300
-		DamageInterval: 5
-		DamageTypes: ToxinDeath
-
-camera.cloud.noTint:
-	Interactable:
-	EditorOnlyTooltip:
-		Name: (support power)
-	RenderSprites:
-		Image: cloud1
-		Palette: tseffect-ignore-lighting-alpha75
+		Palette: tseffect-ignore-lighting-alpha65
 	WithSpriteBody:
 	BodyOrientation:
 		QuantizedFacings: 1
@@ -392,13 +344,34 @@ camera.cloud.noTint:
 		DamageTypes: ToxinDeath
 	Hovers:
 	WithDeathAnimation:
-		DeathSequencePalette: tseffect
+		DeathSequencePalette: tseffect-ignore-lighting-alpha65
 		DeathPaletteIsPlayerPalette: False
 		UseDeathTypeSuffix: False
 		CrushedSequence: die
 		FallbackSequence: die
 	PeriodicExplosion:
-		Weapon: ToxinCloud.noTint
+		Weapon: Cloud.Chemical
+
+Cloud.Metal_Acid:
+	Inherits: Cloud.Chemical
+	PeriodicExplosion:
+		Weapon: Metal_Acid_Cloud
+	RenderSprites:
+		Palette: tdeffect-ignore-lighting-alpha65
+		Image: metal_acid_cloud1
+	WithDeathAnimation:
+		DeathSequencePalette: tdeffect-ignore-lighting-alpha65
+
+Cloud.Toxin:
+	Inherits: Cloud.Chemical
+	RenderSprites:
+		Image: cloud2
+		Palette: tseffect-ignore-lighting-alpha75
+	DamagedByTerrain:
+		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
+		Damage: 300
+		DamageInterval: 5
+		DamageTypes: ToxinDeath
 
 SONAR:
 	Inherits: camera.spyplane
@@ -720,11 +693,11 @@ inf.soviet.stolen:
 		Prerequisite: structures.tsla
 		Factions: blackh, marked, legion
 
-#weap, 3tnk, even from allies (need to fix later)
+#weap, heavy_tank, even from allies (need to fix later)
 veh.soviet.stolen:
 	AlwaysVisible:
 	ProvidesPrerequisite:
-		Prerequisite: vehicles.3tnk
+		Prerequisite: vehicles.heavy_tank
 		Factions: blackh, marked, legion
 
 #dome, toxin truck

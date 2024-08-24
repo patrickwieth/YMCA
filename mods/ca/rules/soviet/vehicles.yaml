@@ -131,22 +131,22 @@ Chem_Sprayer:
 	RenderSprites:
 		Image: chemsprayer
 	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiHeavy
+	Inherits: ^PrioAntiLight
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
-		Prerequisites: ~vehicles.iraq
-		Description: Light Vehicle equipped with dual spray barrels.\n
+		Prerequisites: ~vehicles.iraq, radar, ~!filler.chem_sprayer
+		Description: Light Vehicle equipped with dual spray barrels.
 	TooltipExtras:
-		Strengths: • Strong vs Vehicles, Reflector Armor
-		Weaknesses: • Weak vs Infantry, Aircraft
-		Attributes: • Light Main Battle Tank
+		Strengths: • Strong vs Infantry, Light Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Heavy Armor, Aircraft
+		Attributes: • Light Vehicles spraying chemicals
 	Valued:
 		Cost: 700
 	Tooltip:
 		Name: Chemical Sprayer
 	Health:
-		HP: 45000
+		HP: 25000
 	Mobile:
 		Speed: 80
 	Armament:
@@ -157,6 +157,177 @@ Chem_Sprayer:
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
 		FacingTolerance: 10
+
+Chem_Sprayer.Range:
+	Inherits: Chem_Sprayer
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~!filler.chem_sprayer2, ~commander_tree.chem_sprayer.range
+		Description: Light Vehicle equipped with dual spray barrels.\nRange upgraded via highly aerodynamic particles.
+	TooltipExtras:
+		Attributes: • Increased range
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Chemical Sprayer (Range)
+	Armament:
+		Weapon: Chem_Spray.Range
+
+Chem_Sprayer.Range.Metal_Acid:
+	Inherits: Chem_Sprayer.Range
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~commander_tree.chem_sprayer.range, ~commander_tree.chem_sprayer.metal_acid
+		Description: Light Vehicle equipped with dual spray barrels.\nRange upgraded via highly aerodynamic particles.\nTanks filled with metal eating acid.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Increased range, Metal Acid eats through heavy armor
+	WithProductionIconOverlay@Metal_Acid_right:
+		Types: Metal_Acid_right
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Chemical Sprayer (Range, Metal Acid)
+	Armament:
+		Weapon: Chem_Spray.Range.Metal_Acid
+
+Chem_Sprayer.Range.Spread:
+	Inherits: Chem_Sprayer.Range
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~commander_tree.chem_sprayer.range, ~commander_tree.chem_sprayer.spread
+		Description: Light Vehicle equipped with dual spray barrels.\nRange upgraded via highly aerodynamic particles.\nBarrels are enhanced to shoot multiple liquid streams.
+	TooltipExtras:
+		Attributes: • Increased range and multiple liquid streams
+	WithProductionIconOverlay@Spread_right:
+		Types: Spread_right
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Chemical Sprayer (Range, Spread)
+	Armament:
+		Weapon: Chem_Spray.Range.Spread
+
+Chem_Sprayer.Splash:
+	Inherits: Chem_Sprayer
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~!filler.chem_sprayer2, ~commander_tree.chem_sprayer.splash
+		Description: Light Vehicle equipped with dual spray barrels.\nAdditional momentum particles lead to splashing of fluids on impact.
+	TooltipExtras:
+		Attributes: • Hits split up in multiple liquids.
+	WithProductionIconOverlay@splash:
+		Types: Splash
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Chemical Sprayer (Splash)
+	Armament:
+		Weapon: Chem_Spray.Splash
+
+Chem_Sprayer.Splash.Metal_Acid:
+	Inherits: Chem_Sprayer.Splash
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~commander_tree.chem_sprayer.splash, ~commander_tree.chem_sprayer.metal_acid
+		Description: Light Vehicle equipped with dual spray barrels.\nAdditional momentum particles lead to splashing of fluids on impact.\nTanks filled with metal eating acid.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Metal Acid splashs around, eating through heavy armor
+	WithProductionIconOverlay@Metal_Acid_right:
+		Types: Metal_Acid_right
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Chemical Sprayer (Splash, Metal Acid)
+	Armament:
+		Weapon: Chem_Spray.Splash.Metal_Acid
+
+Chem_Sprayer.Splash.Spread:
+	Inherits: Chem_Sprayer.Splash
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~commander_tree.chem_sprayer.splash, ~commander_tree.chem_sprayer.spread
+		Description: Light Vehicle equipped with dual spray barrels.\nAdditional momentum particles lead to splashing of fluids on impact.\nBarrels are enhanced to shoot multiple liquid streams.
+	TooltipExtras:
+		Attributes: • Multiple liquid streams splash into even more liquid
+	WithProductionIconOverlay@Spread_right:
+		Types: Spread_right
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Chemical Sprayer (Splash, Spread)
+	Armament:
+		Weapon: Chem_Spray.Splash.Spread
+
+Chem_Sprayer.Cloud:
+	Inherits: Chem_Sprayer
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~!filler.chem_sprayer2, ~commander_tree.chem_sprayer.cloud
+		Description: Light Vehicle equipped with dual spray barrels.\nAdditional volatile particles lead to occasional chemical cloud formation on impact.
+	TooltipExtras:
+		Attributes: • Clouds emerge from impacts poisoning the target area.
+	WithProductionIconOverlay@Hazard:
+		Types: Hazard
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Chemical Sprayer (Cloud)
+	Armament:
+		Weapon: Chem_Spray.Cloud
+
+Chem_Sprayer.Cloud.Metal_Acid:
+	Inherits: Chem_Sprayer.Cloud
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~commander_tree.chem_sprayer.cloud, ~commander_tree.chem_sprayer.metal_acid
+		Description: Light Vehicle equipped with dual spray barrels.\nAdditional momentum particles lead to splashing of fluids on impact.\nTanks filled with metal eating acid.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Metal Acid cloud formation, eating through heavy armor
+	WithProductionIconOverlay@Metal_Acid_right:
+		Types: Metal_Acid_right
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Chemical Sprayer (Cloud, Metal Acid)
+	Armament:
+		Weapon: Chem_Spray.Cloud.Metal_Acid
+
+Chem_Sprayer.Cloud.Spread:
+	Inherits: Chem_Sprayer.Cloud
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: ~vehicles.iraq, techcenter, ~commander_tree.chem_sprayer.cloud, ~commander_tree.chem_sprayer.spread
+		Description: Light Vehicle equipped with dual spray barrels.\nAdditional momentum particles lead to splashing of fluids on impact.\nBarrels are enhanced to shoot multiple liquid streams.
+	TooltipExtras:
+		Attributes: • Multiple liquid streams form toxic clouds.
+	WithProductionIconOverlay@Spread_right:
+		Types: Spread_right
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Chemical Sprayer (Cloud, Spread)
+	Armament:
+		Weapon: Chem_Spray.Cloud.Spread
 
 Peoples_Tank:
 	Inherits: ^Tank
@@ -171,7 +342,7 @@ Peoples_Tank:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~!filler.3tnk
+		Prerequisites: ~vehicles.nkorea, radar, ~!filler.peoples_tank
 		Description: North Korea main battle tank\nThe Supreme Leader had the ingenious idea to put dual cannons on a tank.\nAll other nations are copying his ideas.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
@@ -201,20 +372,109 @@ Peoples_Tank:
 		Actor: Peoples_Tank.Husk
 		RequiresCondition: !being-warped
 
-3TNK:
+Peoples_Tank.Speaker:
+	Inherits: Peoples_Tank
+	Inherits: ^PropagandaSpeaker
+	Buildable:
+		Prerequisites: ~vehicles.nkorea, radar, ~commander_tree.peoples_tank.speaker, ~!filler.peoples_tank2
+		Description: North Korea main battle tank\nThe Supreme Leader had the ingenious idea to put dual cannons on a tank.\nAll other nations are copying his ideas.\nHas a propaganda speaker making infantry even happier to fight for glorious People's Republic.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Propaganda Speaker supports nearby infantry
+	Tooltip:
+		Name: The People's Tank (Propaganda)
+	Valued:
+		Cost: 1400
+	Health:
+		HP: 66000
+
+Peoples_Tank.Speaker.Reflector:
+	Inherits: Peoples_Tank.Speaker
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: ~vehicles.nkorea, techcenter, ~commander_tree.peoples_tank.speaker, ~commander_tree.peoples_tank.reflector
+		Description: North Korea main battle tank\nThe Supreme Leader had the ingenious idea to put dual cannons on a tank.\nAll other nations are copying his ideas.\nHas a propaganda speaker making infantry even happier to fight for glorious People's Republic.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Energy Weapons
+		Attributes: • Reflector Armor absorbs Energy Weapons\n  Propaganda Speaker supports nearby infantry
+	Tooltip:
+		Name: The People's Tank (Propaganda, Reflector)
+
+Peoples_Tank.Speaker.PDL:
+	Inherits: Peoples_Tank.Speaker
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: ~vehicles.nkorea, techcenter, ~commander_tree.peoples_tank.speaker, ~commander_tree.peoples_tank.pdl
+		Description: North Korea main battle tank\nThe Supreme Leader had the ingenious idea to put dual cannons on a tank.\nAll other nations are copying his ideas.\nHas a propaganda speaker making infantry even happier to fight for glorious People's Republic.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Projectiles
+		Attributes: • Point Defense Laser intercepts Projectiles\n  Propaganda Speaker supports nearby infantry
+	Tooltip:
+		Name: The People's Tank (Propaganda, PDL)
+	Valued:
+		Cost: 2000
+
+Peoples_Tank.Mass_Production:
+	Inherits: Peoples_Tank
+	Buildable:
+		Prerequisites: ~vehicles.nkorea, radar, ~commander_tree.peoples_tank.mass_production, ~!filler.peoples_tank2
+		Description: North Korea main battle tank\nThe Supreme Leader had the ingenious idea to put dual cannons on a tank.\nAll other nations are copying his ideas.\nWorkers from reeducation camps make this tank cheaper to produce, while happily bettering themselves.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • "Efficient" Production
+	WithProductionIconOverlay@Wrench:
+		Types: Wrench
+	Tooltip:
+		Name: The People's Tank (Mass Production)
+	Valued:
+		Cost: 750
+	Health:
+		HP: 55000
+
+Peoples_Tank.Mass_Production.Reflector:
+	Inherits: Peoples_Tank.Mass_Production
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: ~vehicles.nkorea, techcenter, ~commander_tree.peoples_tank.mass_production, ~commander_tree.peoples_tank.reflector
+		Description: North Korea main battle tank\nThe Supreme Leader had the ingenious idea to put dual cannons on a tank.\nAll other nations are copying his ideas.\nWorkers from reeducation camps make this tank cheaper to produce, while happily becoming better persons.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Energy Weapons
+		Attributes: • Reflector Armor absorbs Energy Weapons\n  Propaganda Speaker supports nearby infantry
+	Tooltip:
+		Name: The People's Tank (Mass Production, Reflector)
+
+Peoples_Tank.Mass_Production.PDL:
+	Inherits: Peoples_Tank.Mass_Production
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: ~vehicles.nkorea, techcenter, ~commander_tree.peoples_tank.mass_production, ~commander_tree.peoples_tank.pdl
+		Description: North Korea main battle tank\nThe Supreme Leader had the ingenious idea to put dual cannons on a tank.\nAll other nations are copying his ideas.\nWorkers from reeducation camps make this tank cheaper to produce, while happily bettering themselves.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor, Projectiles
+		Attributes: • Point Defense Laser intercepts Projectiles\n  Propaganda Speaker supports nearby infantry
+	Tooltip:
+		Name: The People's Tank (Mass Production, PDL)
+	Valued:
+		Cost: 1000
+
+
+Heavy_Tank:
 	Inherits: ^Tank
 	Inherits: ^VoxelTurretedTank
+	WithVoxelBarrel:
 	RenderVoxels:
-		Scale: 0.66
+		Scale: 0.9
 		Image: heavytank
 	RenderSprites:
-		Image: 3tnk
+		Image: heavytank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
-		Prerequisites: vehicles.any, ~vehicles.russia, ~!filler.3tnk
+		Prerequisites: ~vehicles.russia, radar, ~!filler.heavy_tank
 		Description: Soviet main battle tank with dual cannons.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
@@ -237,32 +497,21 @@ Peoples_Tank:
 		RecoilRecovery: 38
 		LocalOffset: 900,85,190, 900,-85,190
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
-		Actor: 3TNK.Husk
+		Actor: Heavy_Tank.Husk
 		RequiresCondition: !being-warped
 
-3TNK.PDL:
-	Inherits: 3TNK
-	Inherits: ^PointLaserDefenseSystem
+Heavy_Tank.AP:
+	Inherits: Heavy_Tank
 	Buildable:
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.reflector
-		Description: Soviet main battle tank with dual cannons.\n  Has Point Laser Defense.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Energy Weapons
+		Prerequisites: ~vehicles.russia, radar, ~commander_tree.heavy_tank.ap, ~!filler.heavy_tank2
+		Description: Soviet main battle tank with dual cannons.
 	TooltipExtras:
-		Strengths: • Strong vs Vehicles, Reflector Armor, Projectiles
-	Valued:
-		Cost: 1650
-	Tooltip:
-		Name: Heavy Tank (PDL)
-
-3TNK.AP:
-	Inherits: 3TNK
-	Buildable:
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.ap, ~!commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.reflector
-		Description: Soviet main battle tank with dual cannons.\n  Has armor piercing shells.  \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft, Point Laser Defense
-	WithProductionIconOverlay@Shell:
+		Strengths: • Strong vs Vehicles, Reflector Armor
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Armor Piercing Shells (AP) penetrate heavy armor
+		WithProductionIconOverlay@Shell:
 		Types: Shell
 	Valued:
 		Cost: 1300
@@ -271,16 +520,70 @@ Peoples_Tank:
 	Armament:
 		Weapon: 125mm.AP
 
-3TNK.Reflector:
-	Inherits: 3TNK
+Heavy_Tank.AP.PDL:
+	Inherits: Heavy_Tank.AP
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: ~vehicles.russia, techcenter, ~commander_tree.heavy_tank.pdl, ~commander_tree.heavy_tank.ap
+		Description: Soviet main battle tank with dual cannons.\n  Has Point Laser Defense.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor, Projectiles
+	Valued:
+		Cost: 1650
+	Tooltip:
+		Name: Heavy Tank (AP, PDL)
+
+Heavy_Tank.AP.Reflector:
+	Inherits: Heavy_Tank.AP
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: vehicles.any, ~vehicles.soviet, ~commander_tree.heavy_tank.reflector, ~!commander_tree.heavy_tank.pdl, ~!commander_tree.heavy_tank.ap
-		Description: Soviet main battle tank with dual cannons.\n  Has Reflector Armor, which is very good vs. Energy Weapons. \n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Prerequisites: ~vehicles.russia, techcenter, ~commander_tree.heavy_tank.reflector, ~commander_tree.heavy_tank.ap
+		Description: Soviet main battle tank with dual cannons.\n  Has Reflector Armor, which is very good vs. Energy Weapons.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor, Energy Weapons
 	Tooltip:
-		Name: Heavy Tank (Reflector)
+		Name: Heavy Tank (AP, Reflector)
+
+Heavy_Tank.Tesla:
+	Inherits: Heavy_Tank
+	Inherits: ^TeslaDefense
+	Buildable:
+		Prerequisites: ~vehicles.russia, radar, ~commander_tree.heavy_tank.tesla, ~!filler.heavy_tank2
+		Description: Soviet main battle tank with dual cannons.\n Has Tesla Defense system, which unleashes electric bolts when hit.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • When hit Tesla Defense fires back
+	WithProductionIconOverlay@Tesla:
+		Types: Tesla
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Heavy Tank (Tesla Defense)
+
+Heavy_Tank.Tesla.PDL:
+	Inherits: Heavy_Tank.Tesla
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: ~vehicles.russia, techcenter, ~commander_tree.heavy_tank.tesla, ~commander_tree.heavy_tank.pdl
+		Description: Soviet main battle tank with dual cannons.\n Has Tesla Defense system, which unleashes electric bolts when hit.\n  Has Point Laser Defense.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry, Projectiles
+	Valued:
+		Cost: 1650
+	Tooltip:
+		Name: Heavy Tank (Tesla Defense, PDL)
+
+Heavy_Tank.Tesla.Reflector:
+	Inherits: Heavy_Tank.Tesla
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: ~vehicles.russia, techcenter, ~commander_tree.heavy_tank.tesla, ~commander_tree.heavy_tank.reflector
+		Description: Soviet main battle tank with dual cannons.\n Has Tesla Defense system, which unleashes electric bolts when hit.\n  Has Reflector Armor, which is very good vs. Energy Weapons.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry, Energy Weapons
+	Tooltip:
+		Name: Heavy Tank (Tesla Defense, Reflector)
 
 
 Source_of_Pollution:
@@ -398,8 +701,8 @@ Source_of_Pollution.Chem_Spray:
 		Strengths: • Strong vs Building, Reflector Armor, Point Defense Laser
 		Weaknesses: • Weak vs Aircraft, Heavy Armor
 		Attributes: • Chemical spray cannot be stopped by PDL
-	WithProductionIconOverlay@Hazard:
-		Types: Hazard
+	WithProductionIconOverlay@Spread:
+		Types: Spread
 	Valued:
 		Cost: 1600
 	Tooltip:

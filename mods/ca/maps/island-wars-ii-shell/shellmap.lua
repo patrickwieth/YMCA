@@ -7,7 +7,7 @@
    information, see COPYING.
 ]]
 
-UnitTypes = { "3tnk", "ttnk" }
+UnitTypes = { "heavy_tank", "ttnk" }
 GDIUnitTypes = { "mtnk", "mtnk" }
 GDIMLRSTypes = { "msam", "msam" }
 BeachUnitTypes = { "conscript", "e2", "rpg_soldier", "flamethrower", "conscript", "e2", "rpg_soldier", "flamethrower", "conscript", "e2", "rpg_soldier", "flamethrower", "conscript", "e2", "rpg_soldier", "shok" }
@@ -20,7 +20,7 @@ ProducedUnitTypes =
 	{ factory = ANavalYard1, types = { "pt2" } },
 	{ factory = SSubPen1, types = { "ss" } },
 	{ factory = AlliedWarFactory1, types = { "mtnk", "mammoth", "msam" } },
-	{ factory = SovietWarFactory1, types = { "3tnk", "apoc", "ttnk" } }
+	{ factory = SovietWarFactory1, types = { "heavy_tank", "apoc", "ttnk" } }
 }
 
 BindActorTriggers = function(a)

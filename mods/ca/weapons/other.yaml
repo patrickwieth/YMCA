@@ -240,148 +240,6 @@ Napalm:
 		Spread: 170
 		Damage: 10000
 
-^TeslaWeapon:
-	Inherits: ^Energy
-	ReloadDelay: 3
-	Range: 8c0
-	Report: tesla1.aud
-	Projectile: TeslaZap
-	Warhead@1Dam: SpreadDamage
-		Spread: 42
-		Damage: 10000
-		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: 1, 3
-		Image: fire
-
-TeslaZap:
-	Inherits: ^TeslaWeapon
-	Warhead@1Dam: SpreadDamage
-
-TeslaZapBoost1:
-	Inherits: TeslaZap
-	Range: 8c512
-	Warhead@1Dam: SpreadDamage
-		Damage: 11000
-
-TeslaZapBoost2:
-	Inherits: TeslaZap
-	Range: 9c0
-	Warhead@1Dam: SpreadDamage
-		Damage: 12000
-
-TeslaZapBoost3:
-	Inherits: TeslaZap
-	Range: 9c512
-	Warhead@1Dam: SpreadDamage
-		Damage: 13000
-
-PortaTesla:
-	Inherits: ^TeslaWeapon
-	ReloadDelay: 70
-	Range: 6c0
-	Report: shktrop1.aud
-	Warhead@1Dam: SpreadDamage
-		Damage: 5500
-
-PortaTeslaE:
-	Inherits: PortaTesla
-	Range: 8c0
-
-PortaTeslaCharge:
-	Inherits: ^TeslaWeapon
-	ValidTargets: TeslaBoost
-	ReloadDelay: 70
-	Range: 1c768
-	Report: iteschaa.aud
-	-Warhead@1Dam:
-	-Warhead@3Eff:
-	Warhead@charge: GrantExternalCondition
-		Range: 42
-		Duration: 70
-		Condition: charged
-		ValidRelationships: Ally
-		ValidTargets: TeslaBoost
-	Warhead@highlight: GrantExternalCondition
-		Range: 0c511
-		Duration: 2
-		Condition: highlight
-		ValidTargets: Ground, Vehicle
-
-Tesla.Hind:
-	Inherits: ^TeslaWeapon
-	ReloadDelay: 70
-	Range: 6c0
-	Report: shktrop1.aud
-	Warhead@1Dam: SpreadDamage
-		Damage: 4500
-
-4TankZap:
-	Inherits: ^TeslaWeapon
-	ReloadDelay: 80
-	Warhead@1Dam: SpreadDamage
-		Spread: 42
-		Damage: 16000
-	Range: 6c0
-	Warhead@Arc: FireShrapnel
-		Weapon: TTankArc1
-		Amount: 1
-		AimChance: 100
-		ThrowWithoutTarget: false
-
-TTankZap:
-	Inherits: ^TeslaWeapon
-	ReloadDelay: 110
-	Range: 7c0
-	Warhead@1Dam: SpreadDamage
-		Damage: 11000
-
-TTankZap.Arc:
-	Inherits: TTankZap
-	ReloadDelay: 130
-	Warhead@Arc: FireShrapnel
-		Weapon: TTankArc1
-		Amount: 1
-		AimChance: 100
-		ThrowWithoutTarget: false
-
-TTankArc1:
-	Inherits: TTankZap
-	Range: 1c0
-	Warhead@1Dam: SpreadDamage
-		Damage: 8000
-		ValidTargets: Infantry, Vehicle, Ship
-		ValidRelationships: Enemy, Neutral
-	-Report:
-	-Warhead@3Eff:
-	Warhead@Arc: FireShrapnel
-		Weapon: TTankArc2
-		AimChance: 100
-
-TTankArc2:
-	Inherits: TTankArc1
-	Warhead@1Dam: SpreadDamage
-		Damage: 4000
-	-Warhead@Arc:
-
-TTankZapMK2:
-	Inherits: TTankZap
-	Report: vtesatta.aud, vtesattb.aud
-	Range: 6c0
-	Burst: 2
-	BurstDelays: 1
-	Warhead@1Dam: SpreadDamage
-		Damage: 6500
-
-TTankZapMK2.Arc:
-	Inherits: TTankZapMK2
-	ReloadDelay: 130
-	Warhead@Arc: FireShrapnel
-		Weapon: TTankArc1
-		Amount: 1
-		AimChance: 100
-		ThrowWithoutTarget: false
-
 DogJaw:
 	ValidTargets: Infantry
 	ReloadDelay: 10
@@ -1642,8 +1500,8 @@ RelayMarker:
 		Duration: 8
 		Condition: relayMarked
 
-ToxinCloud.noTint:
-	Inherits: ^Toxin
+Cloud.Chemical:
+	Inherits: ^Chemical
 	ReloadDelay: 20
 	Range: 1c0
 	ValidTargets: Ground, Water
@@ -1658,13 +1516,18 @@ ToxinCloud.noTint:
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
 ToxinCloud:
-	Inherits: ToxinCloud.noTint
+	Inherits: Cloud.Chemical
+	Inherits: ^Toxin
 	Warhead@18Radio: CreateTintedCells
 		Spread: 1c0
 		Level: 50
 		Falloff: 100, 75, 52, 15, 2
 		MaxLevel: 750
 		LayerName: toxin
+
+Metal_Acid_Cloud:
+	Inherits: Cloud.Chemical
+	Inherits: ^Metal_Acid
 
 Lasher:
 	ReloadDelay: 5

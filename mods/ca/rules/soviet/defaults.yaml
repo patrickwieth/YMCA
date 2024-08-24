@@ -48,7 +48,7 @@
 		ClassName: Heavy Support
 		Factions: soviet, russia, nkorea, iraq
 		BaseActor: mcv
-		SupportActors: e1,e1,e1,rpg_soldier,rpg_soldier,3tnk,3tnk
+		SupportActors: e1,e1,e1,rpg_soldier,rpg_soldier,heavy_tank,heavy_tank
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
 
@@ -64,3 +64,24 @@
 	ProductionCostMultiplier@infantrybuff:
 		Multiplier: 90
 		Prerequisites: commander_tree.the_chef
+
+^TeslaDefense:
+	ExternalCondition@weaponhit:
+		Condition: weaponhit
+	Armament@pointdefense:
+		Name: tesladefense
+		Turret: tesladefense
+		Weapon: TeslaDefense
+		LocalOffset: 0,0,0
+		PauseOnCondition: !weaponhit
+	Turreted@tesladefense:
+		Turret: tesladefense
+		TurnSpeed: 1000
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		Turrets: primary, secondary, tertiary, pointdefense, tesladefense
+		Armaments: primary, secondary, tertiary, pointdefense, tesladefense
+		PauseOnCondition: empdisable || being-warped || parachute
+	WithRangeCircle@telsa:
+		Color: FFFC0080
+		Range: 3c0
