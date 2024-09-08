@@ -1,0 +1,221 @@
+Player:
+	SupportPowerBotModule:
+		Decisions:
+			spyplane:
+				OrderName: spyplane
+				MinimumAttractiveness: 1
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 5c0
+			paratroopers:
+				OrderName: paratroopers
+				MinimumAttractiveness: 5
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 8c0
+				Consideration@2:
+					Against: Enemy
+					Types: Water
+					Attractiveness: -5
+					TargetMetric: None
+					CheckRadius: 8c0
+			stormtroopers:
+				OrderName: stormtroopers
+				MinimumAttractiveness: 5
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 8c0
+				Consideration@2:
+					Against: Enemy
+					Types: Water
+					Attractiveness: -5
+					TargetMetric: None
+					CheckRadius: 8c0
+			carpetbomb:
+				OrderName: carpetbomb
+				MinimumAttractiveness: 1
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 5c0
+			parabombs:
+				OrderName: parabombs
+				MinimumAttractiveness: 1
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 5c0
+			iparabombs:
+				OrderName: atombomb
+				MinimumAttractiveness: 1
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 5c0
+			nukepower:
+				OrderName: NukePowerInfoOrder
+				MinimumAttractiveness: 3000
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: Value
+					CheckRadius: 5c0
+				Consideration@2:
+					Against: Ally
+					Types: Air, Ground, Water
+					Attractiveness: -10
+					TargetMetric: Value
+					CheckRadius: 7c0
+			ironcurtainpower:
+				OrderName: ironcurtain
+				MinimumAttractiveness: 1000
+				FineScanRadius: 2
+				Consideration@2:
+					Against: Enemy
+					Types: Infantry
+					Attractiveness: 2
+					TargetMetric: Value
+					CheckRadius: 2c0
+				Consideration@3:
+					Against: Ally
+					Types: Vehicle
+					Attractiveness: 5
+					TargetMetric: Value
+					CheckRadius: 3c0
+				Consideration@4:
+					Against: Ally
+					Types: Infantry
+					Attractiveness: -2
+					TargetMetric: Value
+					CheckRadius: 2c0
+	BaseBuilderBotModuleCA@brutal-vhard:
+		BuildingDelays:
+			kenn: 2800
+			dome: 4500
+			spen: 6000
+			afld: 6375
+			hpad: 6375
+			stek: 6375
+			indp: 8000
+			mslo: 8000
+		BuildingLimits:
+			barr: 20
+			kenn: 1
+			dome: 1
+			weap: 20
+			hpad: 10
+			afld: 10
+			stek: 1
+			fix: 1
+			spen: 2
+		BuildingFractions:
+			soviet_refinery: 30
+			barr: 3
+			kenn: 1
+			weap: 5
+			ftur: 10
+			ttur: 10
+			tsla: 9
+			sam: 9
+			stek: 1
+			fix: 1
+			silo: 1
+			dome: 10
+			afld: 2
+			mslo: 1
+			iron: 1
+			indp: 1
+			hpad: 2
+			spen: 1
+			#upgrades
+			commander_tree.heavy_tank.tesla: 10
+			commander_tree.heavy_tank.pdl: 10
+			commander_tree.chem_sprayer.cloud: 10
+			commander_tree.chem_sprayer.metal_acid: 10
+			commander_tree.source_of_pollution.chem_spray: 10
+			commander_tree.source_of_pollution.pdl: 10
+			commander_tree.peoples_tank.speaker: 10
+			commander_tree.peoples_tank.reflector: 10
+			commander_tree.isu.concussion: 10
+			commander_tree.isu.pdl: 10
+			commander_tree.apocalypse_tank.drozd: 10
+			commander_tree.apocalypse_tank.pdl: 10
+	UnitBuilderBotModuleCA@brutal-vhard:
+		UnitIntervals:
+			yuri: 2250
+			bori: 2250
+			mcv: 3000
+			soviet_miner: 2250
+		UnitsToBuild:
+			conscript: 65
+			e2: 25
+			rpg_soldier: 40
+			flamethrower: 15
+			e6: 5
+			bori: 15
+			mortar: 15
+			dog: 2
+			shok: 15
+			e8: 15
+			btr: 20
+			v3rl: 10
+			ttnk: 25
+			v2rl: 20
+			katy: 20
+			heavy_tank: 70
+			heavy_tank.tesla: 70
+			heavy_tank.pdl: 70
+			apoc: 40
+			apoc.drozd: 40
+			apoc.drozd.pdl: 40
+			kims_wheel: 70
+			t-34: 70
+			peoples_tank: 70
+			peoples_tank.speaker: 70
+			peoples_tank.speaker.reflector: 70
+			isu: 40
+			isu.concussion: 40
+			isu.concussion.pdl: 40
+			devil_tank: 70
+			chem_sprayer: 70
+			chem_sprayer.cloud: 70
+			chem_sprayer.cloud.metal_acid: 70
+			source_of_pollution: 40
+			source_of_pollution.chem_spray: 40
+			source_of_pollution.chem_spray.pdl: 40
+			hind: 5
+			mig: 3
+			suk: 3
+			yak: 2
+			kiro: 2
+		UnitLimits:
+			dog: 2
+			e6: 1
+	SquadManagerBotModuleCA@brutal-vhard:
+		AirSquadTargetTypes:
+			hind: Infantry, Building, Aircraft
+			yak: Building, Infantry
+			mig: Aircraft, Vehicle, Defense
+			suk: Vehicle, Defense
+			suk.conc: Building
+			kiro: Building
+
+### HARD
+#
+#	BaseBuilderBotModuleCA@hard:

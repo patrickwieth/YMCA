@@ -1,0 +1,226 @@
+Player:
+	SupportPowerBotModule:
+		Decisions:
+			sathack:
+				OrderName: sathack
+				MinimumAttractiveness: 1
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 5c0
+			cashhack:
+				OrderName: cashhack
+				MinimumAttractiveness: 5
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 8c0
+			nodairdrop:
+				OrderName: nodairdrop
+				MinimumAttractiveness: 5
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 8c0
+				Consideration@2:
+					Against: Enemy
+					Types: Water
+					Attractiveness: -5
+					TargetMetric: None
+					CheckRadius: 8c0
+			LegionParatroopers:
+				OrderName: LegionParatroopers
+				MinimumAttractiveness: 5
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 8c0
+				Consideration@2:
+					Against: Enemy
+					Types: Water
+					Attractiveness: -5
+					TargetMetric: None
+					CheckRadius: 8c0
+			LegionParatroopersUPG:
+				OrderName: LegionParatroopersUPG
+				MinimumAttractiveness: 5
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 8c0
+				Consideration@2:
+					Against: Enemy
+					Types: Water
+					Attractiveness: -5
+					TargetMetric: None
+					CheckRadius: 8c0
+				Consideration@3:
+					Against: Enemy
+					Types: Water
+					Attractiveness: -5
+					TargetMetric: None
+					CheckRadius: 5c0
+			hackercell:
+				OrderName: hackercell
+				Consideration@1:
+					Against: Ally
+			infernobombs:
+				OrderName: infernobomb
+				MinimumAttractiveness: 1
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: None
+					CheckRadius: 5c0
+			chemmissilepower:
+				OrderName: chemmissile
+				MinimumAttractiveness: 3000
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: Value
+					CheckRadius: 5c0
+				Consideration@2:
+					Against: Ally
+					Types: Air, Ground, Water
+					Attractiveness: -10
+					TargetMetric: Value
+					CheckRadius: 7c0
+			clustermissilepower:
+				OrderName: clustermissile
+				MinimumAttractiveness: 3000
+				Consideration@1:
+					Against: Enemy
+					Types: Structure
+					Attractiveness: 1
+					TargetMetric: Value
+					CheckRadius: 5c0
+				Consideration@2:
+					Against: Ally
+					Types: Air, Ground, Water
+					Attractiveness: -10
+					TargetMetric: Value
+					CheckRadius: 7c0
+			stealthgenpower:
+				OrderName: stealthgen
+				MinimumAttractiveness: 1000
+				FineScanRadius: 2
+				Consideration@1:
+					Against: Enemy
+					Types: Structure, Vehicle
+					Attractiveness: -10
+					TargetMetric: Value
+					CheckRadius: 3c0
+				Consideration@2:
+					Against: Enemy
+					Types: Infantry
+					Attractiveness: 2
+					TargetMetric: Value
+					CheckRadius: 2c0
+				Consideration@3:
+					Against: Ally
+					Types: Vehicle
+					Attractiveness: 3
+					TargetMetric: Value
+					CheckRadius: 3c0
+				Consideration@4:
+					Against: Ally
+					Types: Infantry
+					Attractiveness: -2
+					TargetMetric: Value
+					CheckRadius: 2c0
+			frenzypower:
+				OrderName: frenzy
+				MinimumAttractiveness: 1000
+				FineScanRadius: 2
+				Consideration@3:
+					Against: Ally
+					Types: Vehicle, Infantry
+					Attractiveness: 2
+					TargetMetric: Value
+					CheckRadius: 3c0
+	BaseBuilderBotModuleCA@brutal-vhard:
+		BuildingDelays:
+			hq: 4500
+			spen.nod: 6000
+			hpad.td: 6375
+			tmpl: 6375
+			mslo.nod: 8000
+			bio.nod: 8000
+		BuildingLimits:
+			hand: 20
+			hq: 1
+			airs: 20
+			hpad.td: 10
+			tmpl: 1
+			spen.nod: 2
+			rep: 1
+		BuildingFractions:
+			proc.td: 30
+			hand: 3
+			airs: 5
+			obli: 8
+			ltur: 10
+			nsam: 9
+			silo.td: 1
+			tmpl: 1
+			rep: 1
+			hq: 10
+			mslo.nod: 1
+			sgen: 1
+			bio.nod: 1
+			hpad.td: 2
+			spen.nod: 1
+	UnitBuilderBotModuleCA@brutal-vhard:
+		UnitIntervals:
+			amcv: 3000
+			harv.td: 2250
+
+		UnitsToBuild:
+			adept: 65
+			rocket_trooper: 40
+			n4: 15
+			n5: 15
+			n6: 5
+			stormtrooper: 65
+			rocket_cyborg: 40
+			obelisk_trooper: 15
+			rmbc: 15
+			mortar.chemical: 15
+			sab: 2
+			bggy: 30
+			arty: 20
+			howi: 20
+			ltnk: 40
+			spec: 20
+			mlrs: 20
+			bike: 30
+			wtnk: 3
+			stnk: 15
+			ftnk: 15
+			apch: 5
+			venm: 5
+			scrn: 5
+			rah: 3
+		UnitLimits:
+			n6: 1
+			sab: 2
+			apc2: 2
+			bggy: 2
+	SquadManagerBotModuleCA@brutal-vhard:
+		AirSquadTargetTypes:
+			apch: Infantry, Building
+			venm: Infantry, Aircraft
+			rah: Infantry, Building, Aircraft
