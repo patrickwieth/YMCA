@@ -978,8 +978,10 @@ Mortar.Chemical:
 		DeathSequencePalette: playertd
 
 SpecOps:
-	Inherits: SAB
-	Inherits@CloakedAttacker: ^CloakedAttacker
+	Inherits: ^Soldier
+	Inherits: ^PrioAntiInfantry
+	Inherits: ^SensorEquipment
+	Inherits: ^CloakedAttacker
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -988,8 +990,26 @@ SpecOps:
 		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
 	Valued:
 		Cost: 800
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: InfilVoice
+	WithInfantryBody:
+		StandSequences: stand
+		IdleSequences: idle1
+	Health:
+		HP: 4000
+	Mobile:
+		speed: 73
+		Voice: Move
 	Tooltip:
 		Name: Special Operations
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
 	Armament@PRIMARY:
 		LocalOffset: 150,0,300
 		Weapon: relayMarker
@@ -999,8 +1019,7 @@ SpecOps:
 	Armament@Garrison:
 		Name: mounted
 		Weapon: relayMarker
-	-Infiltrates@tec:
-	-Infiltrates@pwr:
+	IgnoresDisguise:
 
 JJET:
 	Inherits: ^Infantry
