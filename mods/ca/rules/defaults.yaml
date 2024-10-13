@@ -1602,6 +1602,33 @@ PROC.Dummy:
 		ValidTargets: heavy
 		Priority: 1
 
+^PrioAntiDefense:
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@PRIO:
+		ValidTargets: concrete
+		Priority: 10
+	AutoTargetPriority@PRIO:
+		ValidTargets: wood
+		Priority: 6
+	AutoTargetPriority@PRIO:
+		ValidTargets: heavy
+		Priority: 4
+	AutoTargetPriority@PRIO:
+		ValidTargets: reflector
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: light
+		Priority: 2
+	AutoTargetPriority@PRIO:
+		ValidTargets: none
+		Priority: 1
+
 ^PrioRepair:
 	AutoTarget:
 	AutoTargetPriority@REPAIR:
@@ -2501,10 +2528,18 @@ PROC.Dummy:
 	Inherits: ^Plane
 	Tooltip:
 		GenericName: Helicopter
+	RevealsShroud:
+		Range: 12c0
+		MinRange: 10c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 10c0
+		Type: GroundPosition
 	Aircraft:
 		AltitudeVelocity: 0c100
 		TurnSpeed: 16
-		Speed: 180
+		Speed: 120
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
 		CanHover: True

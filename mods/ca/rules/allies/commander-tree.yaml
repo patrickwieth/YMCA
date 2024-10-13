@@ -5,9 +5,7 @@ commander_tree.Eurofighter:
 	Tooltip:
 		Name: Eurofighter
 	Buildable:
-
 		BuildPaletteOrder: 44
-		
 		Prerequisites: prerequisite.has_points, ~aircraft.allies
 		Description: Enables to build the Eurofighter. It is a supersonic air superiority fighter. \n  Very effective vs. other air units.
 
@@ -18,9 +16,7 @@ commander_tree.Rafale:
 	Tooltip:
 		Name: Rafale
 	Buildable:
-
 		BuildPaletteOrder: 44
-		
 		Prerequisites: prerequisite.has_points, ~aircraft.france, ~disabled
 		Description: Enables to build the Rafale. It is a supersonic air superiority fighter. \n  Very effective vs. other air units.
 
@@ -43,9 +39,7 @@ commander_tree.Harrier:
 	Tooltip:
 		Name: Harrier
 	Buildable:
-
 		BuildPaletteOrder: 50
-		
 		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.allies, ~!aircraft.germany
 		Description: Enables to build the Harrier, a VTOL aircraft.  \n  Strong vs. groups of light armored ground units.
 
@@ -58,9 +52,7 @@ commander_tree.Harrier.Avionics:
 	Tooltip:
 		Name: Harrier Avionics Upgrade
 	Buildable:
-
 		BuildPaletteOrder: 51
-		
 		Prerequisites: prerequisite.has_points, techcenter, commander_tree.harrier, ~!commander_tree.harrier.payload, ~aircraft.england
 		Description: Upgrades the Avionics of the Harrier, allowing it to hover when shooting.  \n
 	ProvidesPrerequisite@filler:
@@ -75,9 +67,7 @@ commander_tree.Harrier.Payload:
 	Tooltip:
 		Name: Harrier Payload Upgrade
 	Buildable:
-
 		BuildPaletteOrder: 51
-		
 		Prerequisites: prerequisite.has_points, techcenter, commander_tree.harrier, ~!commander_tree.harrier.avionics, ~aircraft.allies, ~!aircraft.germany
 		Description: Increases the Payload of the Harrier. \n
 	ProvidesPrerequisite@filler:
@@ -94,3 +84,108 @@ hack.cameo_filler.29:
 	Buildable:
 		BuildPaletteOrder: 52
 		Prerequisites: prerequisite.has_points, ~aircraft.england, techcenter, ~filler.harrier, disabled
+
+
+commander_tree.Seahawk.Armed:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: seahawk
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	Tooltip:
+		Name: Seahawk Bunker Busters
+	Buildable:
+		BuildPaletteOrder: 53
+		Prerequisites: prerequisite.has_points, ~commander_tree.air_logistics, ~aircraft.england
+		Description: Attaches 2 Bunker Buster missiles to the Seahawk.\n  This allows taking out a defensive structure fast.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.seahawk
+
+hack.cameo_filler.seahawk:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 53
+		Prerequisites: prerequisite.has_points, ~commander_tree.air_logistics, ~aircraft.england, disabled
+
+hack.cameo_filler.seahawk:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 53
+		Prerequisites: prerequisite.has_points, ~commander_tree.air_logistics, ~aircraft.england, disabled
+
+
+commander_tree.Eurocopter.Artillery:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: heli
+	WithProductionIconOverlay@Shell:
+		Types: Shell
+	Tooltip:
+		Name: Eurocopter Artillery Missiles
+	Buildable:
+		BuildPaletteOrder: 48
+		Prerequisites: prerequisite.has_points, ~!commander_tree.eurocopter.torp, ~!commander_tree.eurocopter.fire_rate, ~!commander_tree.eurocopter.cryo, ~aircraft.allies, ~!aircraft.england
+		Description: Upgrades the missiles of Eurocopter Helicopter for high range use. \n  This allows the Eurocopter to be used against defensive structures efficiently.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.eurocopter
+
+commander_tree.Eurocopter.Fire_Rate:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: heli
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Tooltip:
+		Name: Eurocopter Fire Rate
+	Buildable:
+		BuildPaletteOrder: 48
+		Prerequisites: prerequisite.has_points, ~!commander_tree.eurocopter.torp, ~!commander_tree.eurocopter.cryo, ~!commander_tree.eurocopter.artillery, ~aircraft.allies, ~!aircraft.germany
+		Description: Increases the fire rate of the Eurocopter Helicopter. \n
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.eurocopter
+
+commander_tree.Eurocopter.Cryo:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: heli
+	WithProductionIconOverlay@Frost:
+		Types: Frost
+	Tooltip:
+		Name: Eurocopter Cryo Missiles
+	Buildable:
+		BuildPaletteOrder: 48
+		Prerequisites: prerequisite.has_points, ~!commander_tree.eurocopter.torp, ~!commander_tree.eurocopter.artillery, ~!commander_tree.eurocopter.fire_rate, ~aircraft.allies, ~!aircraft.france
+		Description: Upgrades the missiles of the Eurocopter with Cryo explosives. \n  In addition to the damage targets are also slowed.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.eurocopter
+
+commander_tree.Eurocopter.Torp:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: heli
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
+	Tooltip:
+		Name: Eurocopter Torpedos
+	Buildable:
+		BuildPaletteOrder: 48
+		Prerequisites: prerequisite.has_points, ~!commander_tree.eurocopter.cryo, ~!commander_tree.eurocopter.artillery, ~!commander_tree.eurocopter.fire_rate, ~aircraft.allies
+		Description: Equips the Eurocopter with Torpedos.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.eurocopter
+
+hack.cameo_filler.26:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 49
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~filler.eurocopter, disabled
+
+hack.cameo_filler.27:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 49
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~filler.eurocopter, disabled
