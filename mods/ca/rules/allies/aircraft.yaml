@@ -122,9 +122,13 @@ HARR:
 		Name: Harrier
 	Health:
 		HP: 30000
-	Armament:
+	Armament@PRIMARY:
 		Weapon: HellfireAG.Harrier
 		LocalOffset: 0,213,-85, 0,-213,-85
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Weapon: HellfireAA
+		LocalOffset: 0,-213,-85, 0,213,-85
 		PauseOnCondition: !ammo
 	SpawnActorOnDeath:
 		Actor: HARR.Husk
@@ -153,7 +157,7 @@ HARR.avionics:
 		Description: Fast VTOL Attack Plane armed\nwith many unguided missiles.\n Avionics upgrade allows it to attack without flying over. \n Strong vs Structures, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Tooltip:
 		Name: Harrier (Avionics)
-	Armament:
+	Armament@PRIMARY:
 		Weapon: HellfireAG.Harrier.Avionics
 	AttackAircraft:
 		AttackType: Hover
@@ -293,7 +297,8 @@ Seahawk.armed:
 	AmmoPool:
 		Ammo: 2
 	WithAmmoPipsDecoration:
-		PipCount: 1
+		PipCount: 2
+		Position: BottomRight
 
 HELI:
 	Inherits: ^VoxelHelicopter
@@ -335,16 +340,10 @@ HELI:
 		RequiresCondition: !airborne
 	SpawnActorOnDeath:
 		Actor: HELI.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: HELI.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: HELI.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: HELI.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
+		RequiresCondition: empdisable && !being-warped
 
 HELI.Cryo:
 	Inherits: HELI
@@ -430,3 +429,143 @@ HELI.Torp:
 	DetectCloaked:
 		DetectionTypes: Underwater
 		Range: 8c0
+
+HUEY:
+	Inherits: ^VoxelHelicopter
+	RenderVoxels:
+		Scale: 0.8
+		Image: huey
+	WithVoxelHelicopterBody:
+		SkipRate: 5
+	RenderSprites:
+		Image: huey
+	Inherits: ^BiologicalPilot
+	Inherits: ^FightingHelicopter
+	Inherits: ^PrioAntiInfantry
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.huey.cryo, ~!commander_tree.huey.grenade, ~!commander_tree.huey.recon
+		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Huey UH-1
+	Health:
+		HP: 14000
+	Armament@PRIMARY:
+		Weapon: ChainGun
+		LocalOffset: 85,50,-185
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: ChainGun
+		LocalOffset: 85,-50,-185
+		MuzzleSequence: muzzle
+	Aircraft:
+		TurnSpeed: 16
+		Speed: 135
+	WithMuzzleOverlay:
+	WithIdleOverlay@ROTORAIR:
+		Sequence: rotor
+		Offset: 80,0,200
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTORGROUND:
+		Sequence: slow-rotor
+		Offset: 70,0,200
+		RequiresCondition: !airborne
+	SpawnActorOnDeath:
+		Actor: HUEY.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: HUEY.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+
+HUEY.recon:
+	Inherits: HUEY
+	Inherits: ^SensorEquipment
+	Inherits: ^Transport
+	Buildable:
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.recon
+		IconPalette: chrome
+		Description: Helicopter equipped with sensor equipment.\n Can detect stealth units.\n Sniper can shoot from the Huey.\n Spec Ops can use their marker from the Huey.\n  Strong as Support\n  Weak vs Aircraft
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Recon Huey
+	Aircraft:
+		LandableTerrainTypes: Clear,Rough,Road,Ore,Beach,Gems,Tiberium,BlueTiberium
+	-Armament@PRIMARY:
+	-Armament@SECONDARY:
+	Armament@flare:
+		Name: primary
+		Weapon: Flare
+		LocalOffset: 30,0,250
+		RequiresCondition: commturr
+	Armament@Relay:
+		Name: secondary
+		Weapon: relayMarker
+		LocalOffset: 250,0,150
+		RequiresCondition: relayturr
+	Armament@snipe:
+		Weapon: sniperE
+		LocalOffset: 250,0,150
+		RequiresCondition: snipeturr
+	AirstrikeMaster:
+		Actors: U2.Bomber
+		SquadSize: 1
+		RespawnTicks: 150
+		InstaRepair: true
+		SlaveDisposalOnKill: KillSlaves
+		SpawnAllAtOnce: true
+		SpawnerArmamentName: primary
+	Cargo:
+		Types: Infantry
+		MaxWeight: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			bori: commturr
+			snip: snipeturr
+			specops: relayturr
+	WithCargoPipsDecoration:
+		PipCount: 1
+		Position: BottomLeft
+		RequiresSelection: true
+
+HUEY.cryo:
+	Inherits: HUEY
+	Inherits: ^PrioAntiLight
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.cryo
+		Description: Helicopter gunship armed\nwith cryo missiles slowing enemy units.\n  Strong as Support\n  Weak vs Aircraft
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Cryo Huey
+	Armament@PRIMARY:
+		Weapon: CryoMissile
+		LocalOffset: 85,-213,-185, 85,213,-185
+		MuzzleSequence: muzzle
+	-Armament@SECONDARY:
+
+HUEY.Grenade:
+	Inherits: HUEY
+	Inherits: ^PrioAntiLight
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.grenade
+		Description: Helicopter gunship armed\nwith grenade machine gun.\n  Strong vs. light Vehicles, Buildings \n  Weak vs Aircraft
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Grenade Huey
+	Armament@PRIMARY:
+		Weapon: Grenade.Huey
+		LocalOffset: 85,-213,-185
+		MuzzleSequence: muzzle
+	-Armament@SECONDARY:

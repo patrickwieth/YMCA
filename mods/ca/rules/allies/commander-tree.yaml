@@ -1,3 +1,5 @@
+# Aircraft
+
 commander_tree.Eurofighter:
 	Inherits: ^default.commander_tree_item
 	RenderSprites:
@@ -107,7 +109,7 @@ hack.cameo_filler.seahawk:
 		BuildPaletteOrder: 53
 		Prerequisites: prerequisite.has_points, ~commander_tree.air_logistics, ~aircraft.england, disabled
 
-hack.cameo_filler.seahawk:
+hack.cameo_filler.seahawk2:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 53
@@ -189,3 +191,67 @@ hack.cameo_filler.27:
 	Buildable:
 		BuildPaletteOrder: 49
 		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~filler.eurocopter, disabled
+
+commander_tree.Huey.Cryo:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: huey
+	WithProductionIconOverlay@Frost:
+		Types: Frost
+	Tooltip:
+		Name: Cryo Huey Upgrade
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 37
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.grenade, ~!commander_tree.huey.recon
+		Description: Upgrades the attack of the Huey with cryo missiles, slowing down enemies.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.huey
+
+commander_tree.Huey.Recon:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: huey
+	WithProductionIconOverlay@Eye:
+		Types: Eye
+	Tooltip:
+		Name: Huey Recon Upgrade
+	Buildable:
+		BuildPaletteOrder: 37
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.grenade, ~!commander_tree.huey.cryo
+		Description: Upgrades the sensors of the Huey and removes the armament. \nThe Huey can transport an infantry unit, sniper can shoot from it.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.huey
+
+commander_tree.Huey.Grenade:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: huey
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
+	Tooltip:
+		Name: Grenade Huey Upgrade
+	Buildable:
+		BuildPaletteOrder: 38
+		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, ~!commander_tree.huey.cryo, ~!commander_tree.huey.recon
+		Description: Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.huey
+
+hack.cameo_filler.20a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 39
+		Prerequisites: prerequisite.has_points, ~aircraft.england, ~!filler.huey, techcenter, disabled
+
+hack.cameo_filler.20b:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 39
+		Prerequisites: prerequisite.has_points, ~filler.huey, techcenter, disabled
+
+hack.cameo_filler.20c:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 39
+		Prerequisites: prerequisite.has_points, ~filler.huey, techcenter, disabled

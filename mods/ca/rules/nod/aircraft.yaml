@@ -220,3 +220,151 @@ RAH66.Bomber:
 		RearmActors: hpad, hpad.td
 	Voiced:
 		VoiceSet: OxannaVoice
+
+
+APCH:
+	Inherits: ^Helicopter
+	Inherits: ^TDAircraftSprite
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioAntiLight
+	Inherits@GAINSEXPERIENCE: ^GainsExperience
+	Valued:
+		Cost: 1250
+	Tooltip:
+		Name: Harpy
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~!commander_tree.apache.flyby, ~!commander_tree.apache.torp
+		IconPalette: chrometd
+		Description: Helicopter gunship with a chaingun.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
+	Aircraft:
+		AltitudeVelocity: 0c100
+		TurnSpeed: 16
+		Speed: 180
+		TakeoffSounds: htoff1.aud
+		LandingSounds: hland1.aud
+	Health:
+		HP: 24000
+	RevealsShroud:
+		Range: 8c0
+		MinRange: 6c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+		Type: GroundPosition
+	Armament@PRIMARY:
+		Weapon: HeliGunAG
+		LocalOffset: 300,0,-150
+		MuzzleSequence: muzzle
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 80
+		AttackType: Hover
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	AmmoPool:
+		Ammo: 18
+		ReloadDelay: 16
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		PipCount: 6
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	WithIdleOverlay@ROTORAIR:
+		Offset: 100,0,285
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTORGROUND:
+		Offset: 100,0,285
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithMuzzleOverlay:
+	AutoTarget:
+		InitialStance: Defend
+		InitialStanceAI: Defend
+	SpawnActorOnDeath:
+		Actor: APCH.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: APCH.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: APCH.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: APCH.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	Rearmable:
+		RearmActors: hpad, hpad.td
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
+
+APCH.Flyby:
+	Inherits: APCH
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.legion, ~commander_tree.apache.flyby
+		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
+	Tooltip:
+		Name: Harpy Flyby
+	-AttackAircraft:
+	Turreted:
+		TurnSpeed: 1000
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	AmmoPool:
+		Ammo: 18
+	WithAmmoPipsDecoration:
+		PipCount: 6
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	RenderSprites:
+		Image: apch
+	WithProductionIconOverlay:
+		Types: Air
+
+APCH.Torp:
+	Inherits: APCH
+	Inherits: ^PrioAntiHeavy
+	Tooltip:
+		Name: Harpy (Torpedo)
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~commander_tree.apache.torp
+		Description: Helicopter gunship with torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	Armament@PRIMARY:
+		Weapon: TorpBomb
+		LocalOffset: 0,-213,-85, 0,213,-85
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 8
+	DetectCloaked:
+		DetectionTypes: Underwater
+		Range: 8c0
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	RenderSprites:
+		Image: apch
+	WithProductionIconOverlay:
+		Types: Torpedo

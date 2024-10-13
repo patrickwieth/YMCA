@@ -577,3 +577,90 @@ hack.cameo_filler.soviet_epic2:
 	Buildable:
 		BuildPaletteOrder: 140
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+
+# Aircraft
+
+commander_tree.Hind.Tesla:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: hind
+	WithProductionIconOverlay@Tesla:
+		Types: Tesla
+	Tooltip:
+		Name: Tesla Hind
+	Buildable:
+		BuildPaletteOrder: 127
+		Prerequisites: prerequisite.has_points, ~aircraft.russia, ~!commander_tree.hind.torp, ~!commander_tree.hind.missile, ~!commander_tree.hind.radcannon
+		Description: Upgrades the Hind with Tesla Coils making it stronger vs vehicles.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry
+		Weaknesses: • Weak vs Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hind
+
+commander_tree.Hind.Radcannon:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: hind
+	WithProductionIconOverlay@Radiation:
+		Types: Radiation
+	Tooltip:
+		Name: Hind (Radcannon)
+	Buildable:
+		BuildPaletteOrder: 127
+		Prerequisites: prerequisite.has_points, ~aircraft.iraq, ~!commander_tree.hind.torp, ~!commander_tree.hind.missile, ~!commander_tree.hind.tesla
+		Description: Upgrades the Hind with radiation cannons.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hind
+
+commander_tree.Hind.Missile:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: hind
+	WithProductionIconOverlay@Missile:
+		Types: Missile
+	Tooltip:
+		Name: Hind (Missiles)
+	Buildable:
+		BuildPaletteOrder: 127
+		Prerequisites: prerequisite.has_points, ~aircraft.nkorea, ~!commander_tree.hind.torp, ~!commander_tree.hind.tesla, ~!commander_tree.hind.radcannon
+		Description: Upgrades the Hind with unguided missiles giving it more range and area damage.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, big armies
+		Weaknesses: • Weak vs Anti-Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hind
+
+commander_tree.Hind.Torp:
+	Inherits: ^default.commander_tree_item
+	RenderSprites:
+		Image: hind
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
+	Tooltip:
+		Name: Hind Torpedo Upgrade
+	Buildable:
+		BuildPaletteOrder: 127
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!commander_tree.hind.missile, ~!commander_tree.hind.tesla, ~!commander_tree.hind.radcannon
+		Description: Upgrades the Hind with torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hind
+
+hack.cameo_filler.113:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 128
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
+
+hack.cameo_filler.114:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 129
+		Prerequisites: prerequisite.has_points, ~filler.hind, disabled
