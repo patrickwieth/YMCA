@@ -302,8 +302,11 @@ Seahawk.armed:
 
 HELI:
 	Inherits: ^VoxelHelicopter
+	Inherits: ^FightingHelicopter
+	Inherits: ^PrioAntiHeavyAA
 	RenderVoxels:
 		Scale: 0.5
+		Image: heli
 	RenderSprites:
 		Image: heli
 	Inherits: ^BiologicalPilot
@@ -322,8 +325,6 @@ HELI:
 		Name: Eurocopter Tiger
 	Health:
 		HP: 24000
-	Inherits: ^FightingHelicopter
-	Inherits: ^PrioAntiHeavyAA
 	Armament@PRIMARY:
 		Weapon: HellfireAA
 		LocalOffset: 0,-213,-85, 0,213,-85
@@ -348,9 +349,6 @@ HELI:
 HELI.Cryo:
 	Inherits: HELI
 	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 40
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.eurocopter.cryo
 		Description: Helicopter gunship armed\nwith cryo-missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Reflector
 	TooltipExtras:
@@ -370,9 +368,6 @@ HELI.Artillery:
 	Inherits: HELI
 	Inherits: ^PrioArtillery
 	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 40
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.eurocopter.artillery
 		Description: Helicopter gunship armed\nwith artillery missiles.
 	TooltipExtras:
@@ -391,9 +386,6 @@ HELI.Artillery:
 HELI.Fire_Rate:
 	Inherits: HELI
 	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 40
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.eurocopter.fire_rate
 	TooltipExtras:
 		Attributes: • Higher fire rate
@@ -404,15 +396,12 @@ HELI.Fire_Rate:
 	Tooltip:
 		Name: Eurocopter (Fire Rate)
 	ReloadDelayMultiplier:
-		Modifier: 150
+		Modifier: 66
 
 HELI.Torp:
 	Inherits: HELI
 	Inherits: ^PrioAntiHeavy
 	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 40
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.eurocopter.torp
 		Description: Helicopter gunship armed\nwith torpedo bombs.
 	TooltipExtras:
@@ -435,8 +424,6 @@ HUEY:
 	RenderVoxels:
 		Scale: 0.8
 		Image: huey
-	WithVoxelHelicopterBody:
-		SkipRate: 5
 	RenderSprites:
 		Image: huey
 	Inherits: ^BiologicalPilot
@@ -447,7 +434,10 @@ HUEY:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
 		Prerequisites: ~hpad, ~aircraft.allies, ~!commander_tree.huey.cryo, ~!commander_tree.huey.grenade, ~!commander_tree.huey.recon
-		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+		Description: Helicopter gunship armed\nwith dual chainguns.
+	TooltipExtras:
+		Strengths: • Strong vs Infanty, Light Vehicles
+		Weaknesses: • Weak vs Aircraft
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -488,8 +478,13 @@ HUEY.recon:
 	Inherits: ^Transport
 	Buildable:
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.recon
-		IconPalette: chrome
-		Description: Helicopter equipped with sensor equipment.\n Can detect stealth units.\n Sniper can shoot from the Huey.\n Spec Ops can use their marker from the Huey.\n  Strong as Support\n  Weak vs Aircraft
+		Description: Helicopter equipped with sensor equipment.\n Can detect stealth units.\n Sniper can shoot from the Huey.\n Spec Ops can use their marker from the Huey.
+	TooltipExtras:
+		Strengths: • Strong vs Infanty, Light Vehicles
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Detects stealthed units \n• Sniper can shoot from inside \n• Spec Ops can mark targets from inside
+	WithProductionIconOverlay@Eye:
+		Types: Eye
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -538,9 +533,12 @@ HUEY.cryo:
 	Inherits: HUEY
 	Inherits: ^PrioAntiLight
 	Buildable:
-		IconPalette: chrometd
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.cryo
 		Description: Helicopter gunship armed\nwith cryo missiles slowing enemy units.\n  Strong as Support\n  Weak vs Aircraft
+	TooltipExtras:
+		Attributes: • Slows groups of enemies
+	WithProductionIconOverlay@Frost:
+		Types: Frost
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -555,11 +553,13 @@ HUEY.Grenade:
 	Inherits: HUEY
 	Inherits: ^PrioAntiLight
 	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Helicopter
-		BuildPaletteOrder: 20
 		Prerequisites: ~hpad, ~aircraft.allies, ~commander_tree.huey.grenade
-		Description: Helicopter gunship armed\nwith grenade machine gun.\n  Strong vs. light Vehicles, Buildings \n  Weak vs Aircraft
+		Description: Helicopter gunship armed\nwith grenade machine gun.
+	TooltipExtras:
+		Strengths: • Strong vs Masses, Buildings
+		Weaknesses: • Weak vs Aircraft
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
 	Valued:
 		Cost: 800
 	Tooltip:

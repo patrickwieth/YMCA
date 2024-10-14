@@ -578,10 +578,19 @@ Laser.Adv:
 Laser.Heavy:
 	Inherits: Laser
 	Inherits: ^EnergyAP
-	ReloadDelay: 120
+	ReloadDelay: 180
 	Range: 8c512
 	Warhead@1Dam: SpreadDamage
 		Damage: 40000
+
+Laser.Heavy.AA:
+	Inherits: Laser.Heavy
+	ValidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Air
+	-Warhead@2Smu:
+	Warhead@1Dam: SpreadDamage
+		Damage: 30000
 
 Laser.Tank:
 	Inherits: LaserPrototype
@@ -681,7 +690,7 @@ PortaLaserE:
 
 VenomLaser:
 	Inherits: ^EnergyLight
-	ReloadDelay: 25
+	ReloadDelay: 36
 	ValidTargets: Ground, Water
 	Range: 5c0
 	Report: venmfire1.aud, venmfire2.aud

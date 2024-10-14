@@ -122,6 +122,8 @@ RAH66:
 	Inherits: ^VoxelHelicopter
 	RenderVoxels:
 		Scale: 0.7
+	RenderSprites:
+		Image: rah66
 	Inherits: ^BiologicalPilot
 	Inherits: ^FightingHelicopter
 	Inherits: ^PrioAntiLight
@@ -161,6 +163,8 @@ RAH66.Bomber:
 	RenderVoxels:
 		Scale: 0.7
 	Inherits: ^BomberPlane
+	RenderSprites:
+		Image: rah66
 	AttackAircraft:
 		Voice: Attack
 	Inherits: ^CloakedAircraft
@@ -168,7 +172,7 @@ RAH66.Bomber:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		IconPalette: chrome
+		IconPalette: chrometd
 		Prerequisites: ~hpad.td, tmpl, ~commander_tree.comanche.bomber,
 		Description: Stealth helicopter armed\nwith napalm bombs.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
 	Valued:
@@ -275,3 +279,119 @@ APCH.Torp:
 		Range: 8c0
 	WithProductionIconOverlay:
 		Types: Torpedo
+
+
+VENM:
+	Inherits: ^Helicopter
+	Inherits: ^FightingHelicopter
+	Inherits: ^TDAircraftSprite
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioEnergyAntiLightAA
+	RenderSprites:
+		Image: venm
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Venom
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~!commander_tree.venom.payload, ~!commander_tree.venom.heavy_laser
+		IconPalette: chrometd
+		Description: VTOL gunship armed\nwith laser.\n Can be charged by Beam Cannons to increse fire rate.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can be charged by up to 5 Beam Cannons
+	Aircraft:
+		TurnSpeed: 20
+		TakeoffSounds: orcaup1.aud
+		LandingSounds: orcadwn1.aud
+		Speed: 150
+	Health:
+		HP: 15000
+	Armament@PRIMARY:
+		Weapon: VenomLaser
+		LocalOffset: 600,0,-270
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Weapon: VenomLaserAA
+		LocalOffset: 600,0,-270
+		MuzzleSequence: muzzle
+	SpawnActorOnDeath:
+		Actor: VENM.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: VENM.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	WithMoveAnimation:
+		MoveSequence: move
+	WithMuzzleOverlay:
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged == 1
+		Modifier: 66
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged == 2
+		Modifier: 50
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged == 3
+		Modifier: 33
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged == 4
+		Modifier: 25
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged >= 5
+		Modifier: 20
+	ExternalCondition@CHARGED:
+		Condition: charged
+	Targetable@BeamCannon:
+		TargetTypes: BeamCannon
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+		RequiresCondition: charged < 6
+	Targetable@BoostMe:
+		RequiresCondition: charged < 6
+		TargetTypes: BoostMe
+
+VENM.Payload:
+	Inherits: VENM
+	Tooltip:
+		Name: Venom (Focus)
+	Buildable:
+		Queue: Aircraft
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.payload
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	FirepowerMultiplier:
+		Modifier: 150
+
+VENM.HeavyLaser:
+	Inherits: VENM
+	Inherits: ^PrioEnergyAntiHeavy
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Venom (Heavy Laser)
+	Buildable:
+		Queue: Aircraft
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.heavy_laser
+		Description: VTOL gunship armed\nwith a heavy laser.\n  Strong vs Tanks\n  Weak vs Infantry, Buildings
+	WithProductionIconOverlay@Laser:
+		Types: Laser
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can be charged by up to 5 Beam Cannons
+	Aircraft:
+		Speed: 120
+	Armament@PRIMARY:
+		Weapon: Laser.Heavy
+		ReloadingCondition: charging
+	Armament@SECONDARY:
+		Weapon: Laser.Heavy.AA
+		ReloadingCondition: charging
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: obelpowr.aud
+		Interval: 30, 40
