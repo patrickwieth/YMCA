@@ -24,6 +24,7 @@ namespace OpenRA.Mods.CA.Traits
 		[PaletteReference]
 		[Desc("Palette to use when rendering the overlay")]
 		public readonly string Palette = "invuln";
+		public readonly bool IsPlayerPalette = false;
 
 		public override object Create(ActorInitializer init) { return new WithModifiedPalette(this); }
 	}
@@ -46,7 +47,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (IsTraitDisabled)
 				yield break;
 
-			var palette = string.IsNullOrEmpty(Info.Palette) ? null : wr.Palette(Info.Palette);
+			var palette = string.IsNullOrEmpty(Info.Palette) ? null : Info.IsPlayerPalette ? wr.Palette(Info.Palette + self.Owner.InternalName) : wr.Palette(Info.Palette);
 
 			foreach (var a in r)
 			{
