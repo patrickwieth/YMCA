@@ -28,7 +28,7 @@ SCRN:
 		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~commander_tree.banshee, ~!commander_tree.banshee.bomber, ~!commander_tree.banshee.payload,
 		Description: Fast VTOL attack craft armed\nwith powerful plasma cannons.\n  Strong vs Heavy Armor, Aircraft\n  Weak vs Infantry
 	Valued:
-		Cost: 2000
+		Cost: 1800
 	Tooltip:
 		Name: Banshee
 	Health:
@@ -103,7 +103,7 @@ SCRN.Payload:
 	Tooltip:
 		Name: Banshee (Payload)
 	Valued:
-		Cost: 2500
+		Cost: 2000
 	Aircraft:
 		CruiseAltitude: 2560
 		TurnSpeed: 20
@@ -122,16 +122,13 @@ RAH66:
 	Inherits: ^VoxelHelicopter
 	RenderVoxels:
 		Scale: 0.7
+	RenderSprites:
+		Image: rah66
 	Inherits: ^BiologicalPilot
 	Inherits: ^FightingHelicopter
-	Inherits: ^RearmableHelicopter
 	Inherits: ^PrioAntiLight
 	AttackAircraft:
 		Voice: Attack
-	AmmoPool:
-		Ammo: 10
-	WithAmmoPipsDecoration:
-		PipCount: 5
 	Inherits: ^CloakedAircraft
 	Buildable:
 		Queue: Aircraft
@@ -141,7 +138,7 @@ RAH66:
 		Prerequisites: ~hpad.td, tmpl, ~aircraft.blackh, ~!commander_tree.comanche.bomber,
 		Description: Stealth helicopter armed\nwith napalm rockets.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
 	Valued:
-		Cost: 1500
+		Cost: 1800
 	Tooltip:
 		Name: Comanche
 	Health:
@@ -149,20 +146,13 @@ RAH66:
 	Armament@PRIMARY:
 		Weapon: Rah66AG
 		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
 		Voice: Move
 	SpawnActorOnDeath:
 		Actor: RAH.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: RAH.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: RAH.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: RAH.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
+		RequiresCondition: empdisable && !being-warped
 	Voiced:
 		VoiceSet: OxannaVoice
 
@@ -173,21 +163,20 @@ RAH66.Bomber:
 	RenderVoxels:
 		Scale: 0.7
 	Inherits: ^BomberPlane
-	Inherits: ^RearmableHelicopter
+	RenderSprites:
+		Image: rah66
 	AttackAircraft:
 		Voice: Attack
-	AmmoPool:
-		Ammo: 8
 	Inherits: ^CloakedAircraft
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		IconPalette: chrome
+		IconPalette: chrometd
 		Prerequisites: ~hpad.td, tmpl, ~commander_tree.comanche.bomber,
 		Description: Stealth helicopter armed\nwith napalm bombs.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
 	Valued:
-		Cost: 1500
+		Cost: 1800
 	Tooltip:
 		Name: Comanche Bomber
 	Health:
@@ -195,28 +184,214 @@ RAH66.Bomber:
 	Armament@PRIMARY:
 		Weapon: Napalm.Comanche
 		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
 	Aircraft:
-		TurnSpeed: 16
-		Speed: 150
-		CanHover: False
-		TakeoffSounds: dropup1.aud
-		LandingSounds: dropdwn1.aud
+		Speed: 120
 		Voice: Move
 		CanSlide: False
 	SpawnActorOnDeath:
 		Actor: RAH.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: RAH.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: RAH.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: RAH.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
-	Rearmable:
-		RearmActors: hpad, hpad.td
+		RequiresCondition: empdisable && !being-warped
 	Voiced:
 		VoiceSet: OxannaVoice
+
+
+APCH:
+	Inherits: ^Helicopter
+	Inherits: ^TDAircraftSprite
+	Inherits: ^FightingHelicopter
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioAntiLight
+	RenderSprites:
+		Image: apch
+	Valued:
+		Cost: 1250
+	Tooltip:
+		Name: Harpy
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~!commander_tree.apache.flyby, ~!commander_tree.apache.torp
+		IconPalette: chrometd
+		Description: Helicopter gunship with a chaingun.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
+	Aircraft:
+		Speed: 150
+	Health:
+		HP: 24000
+	Armament@PRIMARY:
+		Weapon: HeliGunAG
+		LocalOffset: 300,0,-150
+		MuzzleSequence: muzzle
+	WithIdleOverlay@ROTORAIR:
+		Offset: 100,0,285
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTORGROUND:
+		Offset: 100,0,285
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: APCH.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: APCH.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+
+APCH.Flyby:
+	Inherits: APCH
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.legion, ~commander_tree.apache.flyby
+		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
+	WithProductionIconOverlay:
+		Types: Air
+	Tooltip:
+		Name: Harpy Flyby
+	-AttackAircraft:
+	Turreted:
+		TurnSpeed: 1000
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+
+APCH.Torp:
+	Inherits: APCH
+	Inherits: ^PrioAntiHeavy
+	Tooltip:
+		Name: Harpy (Torpedo)
+	Buildable:
+		Prerequisites: ~hpad.td, ~aircraft.nod, ~commander_tree.apache.torp
+		Description: Helicopter gunship with torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	WithProductionIconOverlay:
+		Types: Torpedo
+	Armament@PRIMARY:
+		Weapon: TorpBomb
+		LocalOffset: 0,-213,-85, 0,213,-85
+	DetectCloaked:
+		DetectionTypes: Underwater
+		Range: 8c0
+
+
+VENM:
+	Inherits: ^Helicopter
+	Inherits: ^FightingHelicopter
+	Inherits: ^TDAircraftSprite
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioEnergyAntiLightAA
+	RenderSprites:
+		Image: venm
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Venom
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~!commander_tree.venom.payload, ~!commander_tree.venom.heavy_laser
+		IconPalette: chrometd
+		Description: VTOL gunship armed\nwith laser.\n Can be charged by Beam Cannons to increse fire rate.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can be charged by up to 5 Beam Cannons
+	Aircraft:
+		TurnSpeed: 20
+		TakeoffSounds: orcaup1.aud
+		LandingSounds: orcadwn1.aud
+		Speed: 150
+	Health:
+		HP: 15000
+	Armament@PRIMARY:
+		Weapon: VenomLaser
+		LocalOffset: 600,0,-270
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Weapon: VenomLaserAA
+		LocalOffset: 600,0,-270
+		MuzzleSequence: muzzle
+	SpawnActorOnDeath:
+		Actor: VENM.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: VENM.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	WithMoveAnimation:
+		MoveSequence: move
+	WithMuzzleOverlay:
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged == 1
+		Modifier: 66
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged == 2
+		Modifier: 50
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged == 3
+		Modifier: 33
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged == 4
+		Modifier: 25
+	ReloadDelayMultiplier@1:
+		RequiresCondition: charged >= 5
+		Modifier: 20
+	ExternalCondition@CHARGED:
+		Condition: charged
+	Targetable@BeamCannon:
+		TargetTypes: BeamCannon
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+		RequiresCondition: charged < 6
+	Targetable@BoostMe:
+		RequiresCondition: charged < 6
+		TargetTypes: BoostMe
+
+VENM.Payload:
+	Inherits: VENM
+	Tooltip:
+		Name: Venom (Focus)
+	Buildable:
+		Queue: Aircraft
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.payload
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	FirepowerMultiplier:
+		Modifier: 150
+
+VENM.HeavyLaser:
+	Inherits: VENM
+	Inherits: ^PrioEnergyAntiHeavy
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Venom (Heavy Laser)
+	Buildable:
+		Queue: Aircraft
+		Prerequisites: ~hpad.td, ~aircraft.marked, ~commander_tree.venom.heavy_laser
+		Description: VTOL gunship armed\nwith a heavy laser.\n  Strong vs Tanks\n  Weak vs Infantry, Buildings
+	WithProductionIconOverlay@Laser:
+		Types: Laser
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Can be charged by up to 5 Beam Cannons
+	Aircraft:
+		Speed: 120
+	Armament@PRIMARY:
+		Weapon: Laser.Heavy
+		ReloadingCondition: charging
+	Armament@SECONDARY:
+		Weapon: Laser.Heavy.AA
+		ReloadingCondition: charging
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: obelpowr.aud
+		Interval: 30, 40

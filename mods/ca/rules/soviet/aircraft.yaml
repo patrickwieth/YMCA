@@ -1,3 +1,156 @@
+HIND:
+	Inherits: ^VoxelHelicopter
+	RenderVoxels:
+		Scale: 0.6
+		Image: hind
+	WithVoxelHelicopterBody:
+		SkipRate: 1
+	RenderSprites:
+		Image: hind
+	Inherits: ^FightingHelicopter
+	Inherits: ^PrioAntiInfantry
+	Inherits: ^BiologicalPilot
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Helicopter
+		BuildPaletteOrder: 20
+		Prerequisites: ~hpad, ~aircraft.soviet, ~!filler.hind
+		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
+	Valued:
+		Cost: 1150
+	Tooltip:
+		Name: Hind
+	Health:
+		HP: 28000
+	Armament@PRIMARY:
+		Weapon: ChainGun
+		LocalOffset: 0,-300,-185, 0,300,-185
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: ChainGun
+		LocalOffset: 0,300,-185, 0,-300,-185
+		MuzzleSequence: muzzle
+	AutoTarget:
+		InitialStance: Defend
+		InitialStanceAI: Defend
+	WithIdleOverlay@ROTORAIR:
+		Sequence: rotor
+		Offset: 70,0,200
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTORGROUND:
+		Sequence: slow-rotor
+		Offset: 70,0,200
+		RequiresCondition: !airborne
+	SelectionDecorations:
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: HIND.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: HIND.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+
+HIND.Tesla:
+	Inherits: HIND
+	Inherits: ^PrioEnergyWeapon
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.tesla
+		Description: Helicopter gunship armed\nwith tesla coils.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
+	Valued:
+		Cost: 1800
+	Tooltip:
+		Name: Tesla Hind
+	Health:
+		HP: 24000
+	Armament@PRIMARY:
+		Weapon: PortaTesla
+		LocalOffset: 85,-213,-185, 85,213,-185
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: PortaTesla
+		LocalOffset: 85,213,-185, 85,-213,-185
+		MuzzleSequence: muzzle
+	-WithMuzzleOverlay:
+
+HIND.Missile:
+	Inherits: HIND
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.missile
+		Description: Helicopter gunship with unguided missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, big armies
+		Weaknesses: • Weak vs Anti-Air
+	WithProductionIconOverlay@Missile:
+		Types: Missile
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Hind (Missiles)
+	Health:
+		HP: 24000
+	-Armament@PRIMARY:
+	Armament@SECONDARY:
+		Weapon: HellfireAG.Arty
+	-WithMuzzleOverlay:
+
+HIND.Radcannon:
+	Inherits: HIND
+	Inherits: ^PrioAntiInfantry
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.radcannon
+		Description: Helicopter gunship armed\nwith radiation cannon.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs Anti-Air
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Hind (Radcannon)
+	Health:
+		HP: 24000
+	Armament@PRIMARY:
+		Weapon: RadBeamWeaponE
+		LocalOffset: 85,-213,-185, 85,213,-185
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: RadBeamWeaponE
+		LocalOffset: 85,213,-185, 85,-213,-185
+		MuzzleSequence: muzzle
+	-WithMuzzleOverlay:
+
+HIND.Torp:
+	Inherits: HIND
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Prerequisites: ~hpad, ~commander_tree.hind.torp
+		Description: Helicopter gunship armed\nwith torpedo bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Ships, Submarines
+		Weaknesses: • Weak vs Anti-Air
+		Attributes: • Detects submerged vessels
+	WithProductionIconOverlay@Torpedo:
+		Types: Torpedo
+	Tooltip:
+		Name: Hind (Torpedo)
+	Armament@PRIMARY:
+		Weapon: TorpBomb
+		LocalOffset: 85,-213,-185, 85,213,-185
+	-Armament@SECONDARY:
+	DetectCloaked:
+		DetectionTypes: Underwater
+		Range: 8c0
+
+
 FROG:
 	Inherits: ^VoxelPlane
 	RenderVoxels:

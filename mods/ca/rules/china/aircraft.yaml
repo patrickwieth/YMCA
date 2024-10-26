@@ -179,11 +179,9 @@ chhelix:
 		Image: chhelix
 	Inherits: ^BiologicalPilot
 	Inherits: ^FightingHelicopter
-	Inherits: ^RearmableAircraft
-	Inherits: ^RearmInAir
 	Inherits: ^PrioAntiInfantry
 	Inherits: ^AnnounceOnBuild
-	Inherits: ^TransportWithAmmo
+	Inherits: ^Transport
 	Buildable:
 		BuildPaletteOrder: 20
 		Prerequisites: ~aircraft.china, radar, ~!filler.helix
@@ -202,7 +200,6 @@ chhelix:
 		Weapon: CHHelixMG
 		LocalOffset: 185,-213,-185, 185,213,-185
 		MuzzleSequence: muzzle
-		PauseOnCondition: !ammo
 	AttackAircraft:
 		Voice: Attack
 	Aircraft:
@@ -300,7 +297,6 @@ chhelix.Gatling:
 		RequiresCondition: armoraddon
 	-Armament@PRIMARY:
 	-AttackAircraft:
-	-WithAmmoPipsDecoration:
 	Turreted@PRIMARY:
 		TurnSpeed: 90
 	AttackTurreted:
@@ -343,24 +339,17 @@ chhelix.Napalm:
 	Armament@PRIMARY:
 		Weapon: NapalmThrow
 		LocalOffset: 85,-213,-85, 85,213,-85
-		PauseOnCondition: !ammo
 		RequiresCondition: !blacknapalm
 	Armament@upgraded:
 		Weapon: NapalmThrow.Black
 		LocalOffset: 85,-213,-85, 85,213,-85
-		PauseOnCondition: !ammo
 		RequiresCondition: blacknapalm
 	GrantConditionOnPrerequisite@blacknapalm:
 		Condition: blacknapalm
 		Prerequisites: commander_tree.black_napalm
-	AmmoPool:
-		Ammo: 8
-	WithAmmoPipsDecoration:
-		PipCount: 4
 
 chhelix.Nuke:
 	Inherits: chhelix
-	-ReloadAmmoPool:
 	RenderVoxels:
 		Image: chhelix.speaker
 	Inherits: ^PrioAntiLight
@@ -397,9 +386,6 @@ chhelix.Nuke:
 	Armament@PRIMARY:
 		Weapon: AtomBomb.Paradrop
 		LocalOffset: 85,-213,-85, 85,213,-85
-		PauseOnCondition: !ammo
-	AmmoPool:
-		Ammo: 1
 
 chhelix.Bunker:
 	Inherits: chhelix
@@ -456,7 +442,7 @@ chhelix.MortarBunker:
 chhelix.Torpedo:
 	Inherits: chhelix
 	Inherits: ^PrioAntiHeavy
-	Inherits: ^RearmableAircraft
+	Inherits: ^FightingHelicopter
 	WithProductionIconOverlay@Torpedo:
 		Types: Torpedo
 	Buildable:
@@ -480,18 +466,9 @@ chhelix.Torpedo:
 	Tooltip@4:
 		Name: Torpedo Helix (Armor)
 		RequiresCondition: armoraddon
-	AttackAircraft:
-		FacingTolerance: 80
-		Voice: Attack
-		PersistentTargeting: false
-		OpportunityFire: false
-		PauseOnCondition: empdisable || being-warped
 	Armament@PRIMARY:
 		Weapon: TorpBomb
 		LocalOffset: 85,-213,-85, 85,213,-85
-		PauseOnCondition: !ammo
-	AmmoPool:
-		Ammo: 8
 
 helix.armorupgrade:
 	Tooltip:

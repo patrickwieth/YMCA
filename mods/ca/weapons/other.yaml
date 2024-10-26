@@ -71,6 +71,8 @@ Napalm.Comanche:
 	Projectile: GravityBomb
 		Image: BOMBLET
 		Velocity: 45, 0, -74
+	Warhead@1Dam: SpreadDamage
+		Damage: 1000
 	Warhead@Cluster: FireCluster
 		Weapon: ClusterBomb.Comanche
 		RandomClusterCount: 3
@@ -93,7 +95,7 @@ ClusterBomb.Comanche:
 		Image: BOMB
 	Warhead@1Dam: SpreadDamage
 		Spread: 512
-		Damage: 500
+		Damage: 350
 		Falloff: 1000, 255, 128, 50, 18, 7, 0
 		ValidTargets: Ground, Water
 
@@ -576,10 +578,19 @@ Laser.Adv:
 Laser.Heavy:
 	Inherits: Laser
 	Inherits: ^EnergyAP
-	ReloadDelay: 120
+	ReloadDelay: 180
 	Range: 8c512
 	Warhead@1Dam: SpreadDamage
 		Damage: 40000
+
+Laser.Heavy.AA:
+	Inherits: Laser.Heavy
+	ValidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Air
+	-Warhead@2Smu:
+	Warhead@1Dam: SpreadDamage
+		Damage: 30000
 
 Laser.Tank:
 	Inherits: LaserPrototype
@@ -679,7 +690,7 @@ PortaLaserE:
 
 VenomLaser:
 	Inherits: ^EnergyLight
-	ReloadDelay: 25
+	ReloadDelay: 36
 	ValidTargets: Ground, Water
 	Range: 5c0
 	Report: venmfire1.aud, venmfire2.aud

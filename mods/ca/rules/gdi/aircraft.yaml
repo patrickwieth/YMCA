@@ -74,7 +74,6 @@ ORCA:
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiHeavyAA
 	Inherits: ^FightingHelicopter
-	Inherits: ^RearmableHelicopter
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -94,25 +93,15 @@ ORCA:
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca
 		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Weapon: HellfireAA.Orca
 		LocalOffset: 0,213,-85, 0,-213,-85
-		PauseOnCondition: !ammo
-	AmmoPool:
-		Ammo: 12
 	SpawnActorOnDeath:
 		Actor: ORCA.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: ORCA.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: ORCA.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: ORCA.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
+		RequiresCondition: empdisable && !being-warped
 
 ORCA.AP:
 	Inherits: ORCA
@@ -125,12 +114,8 @@ ORCA.AP:
 		Description: VTOL gunship armed\nwith armor-piercing missiles.\n  Strong vs Tanks\n  Weak vs Infantry
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca.AP
-		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Weapon: HellfireAA.Orca.AP
-		LocalOffset: 0,213,-85, 0,-213,-85
-		PauseOnCondition: !ammo
 
 ORCA.Sonic:
 	Inherits: ORCA
@@ -143,31 +128,21 @@ ORCA.Sonic:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.sonic
 		Description: VTOL gunship armed\nwith sonic pulsator.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Reflector Armor
 	Armament@PRIMARY:
-		Weapon: SonicPulse
-		LocalOffset: 0,-213,-85, 0,213,-85
+		Weapon: SonicPulse.Orca
 	-Armament@SECONDARY:
-	AmmoPool:
-		Ammo: 4
 
 ORCA.Payload:
 	Inherits: ORCA
 	Valued:
 		Cost: 1300
 	Tooltip:
-		Name: Orca (Payload)
+		Name: Orca (Fire Rate)
 	WithProductionIconOverlay@Bullets:
 		Types: Bullets
 	Buildable:
 		Prerequisites: ~hpad.td, ~aircraft.gdi, ~commander_tree.orca.payload
-	AmmoPool:
-		Ammo: 20
-		ReloadCount: 2
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		PipCount: 5
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
+	ReloadDelayMultiplier:
+		Modifier: 66
 
 ORCA.Torp:
 	Inherits: ORCA
@@ -184,17 +159,10 @@ ORCA.Torp:
 		Attributes: • Detects submerged vessels
 	Armament@PRIMARY:
 		Weapon: TorpBomb
-		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
 	-Armament@SECONDARY:
-	AmmoPool:
-		Ammo: 8
 	DetectCloaked:
 		DetectionTypes: Underwater
 		Range: 8c0
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 OrcaV2:
 	Inherits: ^VoxelHelicopter
@@ -226,25 +194,15 @@ OrcaV2:
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca
 		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Weapon: HellfireAA.Orca
 		LocalOffset: 0,213,-85, 0,-213,-85
-		PauseOnCondition: !ammo
-	AmmoPool:
-		Ammo: 12
 	SpawnActorOnDeath:
 		Actor: ORCA.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: ORCA.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: ORCA.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: ORCA.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
+		RequiresCondition: empdisable && !being-warped
 
 OrcaV2.Swarm:
 	Inherits: OrcaV2
@@ -256,8 +214,6 @@ OrcaV2.Swarm:
 		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
 	WithProductionIconOverlay@Missile:
 		Types: Missile
-	AmmoPool:
-		Ammo: 24
 	Armament@PRIMARY:
 		Weapon: Dragon.MKII
 		LocalOffset:  0,-213,-85, 0,213,-85
@@ -268,6 +224,8 @@ OrcaV2.Swarm:
 		LocalOffset:  0,-213,-85, 0,213,-85
 		LocalYaw: -100,100
 		MuzzleSequence: muzzle1
+	ReloadDelayMultiplier:
+		Modifier: 150
 
 OrcaV2.EMP:
 	Inherits: OrcaV2
@@ -279,16 +237,14 @@ OrcaV2.EMP:
 		Prerequisites: ~hpad.td, ~commander_tree.orcav2.emp
 	WithProductionIconOverlay@EMP:
 		Types: EMP
-	AmmoPool:
-		Ammo: 4
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca.EMP
 		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
 	Armament@SECONDARY:
 		Weapon: HellfireAA.Orca.EMP
 		LocalOffset: 0,213,-85, 0,-213,-85
-		PauseOnCondition: !ammo
+	ReloadDelayMultiplier:
+		Modifier: 200
 
 OrcaV2.Torp:
 	Inherits: OrcaV2
@@ -306,10 +262,7 @@ OrcaV2.Torp:
 	Armament@PRIMARY:
 		Weapon: TorpBomb
 		LocalOffset: 0,-213,-85, 0,213,-85
-		PauseOnCondition: !ammo
 	-Armament@SECONDARY:
-	AmmoPool:
-		Ammo: 8
 	DetectCloaked:
 		DetectionTypes: Underwater
 		Range: 8c0
@@ -317,6 +270,7 @@ OrcaV2.Torp:
 Orca_Bomber:
 	Inherits: ^Helicopter
 	Inherits: ^TDAircraftSprite
+	Inherits: ^BomberPlane
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiHeavy
 	RenderSprites:
@@ -337,18 +291,10 @@ Orca_Bomber:
 	Armament:
 		Weapon: OrcaBomb.EMP
 		LocalOffset: 2,-256,-43, 2,256,-43
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 80
-		Voice: Attack
-		PersistentTargeting: false
-		OpportunityFire: false
-		PauseOnCondition: empdisable || being-warped
 	Aircraft:
 		CruiseAltitude: 2560
 		AltitudeVelocity: 0c120
-		TurnSpeed: 16
-		Speed: 180
+		Speed: 150
 		RepulsionSpeed: 40
 		MaximumPitch: 56
 		TakeoffSounds: orcaup1.aud
@@ -359,43 +305,16 @@ Orca_Bomber:
 	AutoTarget:
 		InitialStance: HoldFire
 		InitialStanceAI: HoldFire
-	AmmoPool:
-		Ammo: 8
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		PipCount: 4
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	SpawnActorOnDeath:
 		Actor: orca_bomber.husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: orca_bomber.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: orca_bomber.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: orca_bomber.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
-	LeavesTrails:
-		Offsets: -853,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
+		RequiresCondition: empdisable && !being-warped
 	WithMoveAnimation:
 		MoveSequence: move
-	Rearmable:
-		RearmActors: hpad.td, hpad
 	Voiced:
 		VoiceSet: OrcaVoice
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
 
 orca_bomber.EMP:
 	Inherits: Orca_Bomber
@@ -411,7 +330,6 @@ orca_bomber.EMP:
 	Armament:
 		Weapon: OrcaBomb.EMP
 		LocalOffset: 2,-256,-43, 2,256,-43
-		PauseOnCondition: !ammo
 
 orca_bomber.HE:
 	Inherits: Orca_Bomber
@@ -426,8 +344,6 @@ orca_bomber.HE:
 		Description: VTOL bomber armed with high explosion cluster bombs.\n  Strong vs Buildings, Light Vehicles\n  Weak vs Aircraft
 	Armament:
 		Weapon: Orcabomb.HE
-	AmmoPool:
-		Ammo: 4
 
 orca_bomber.AP:
 	Inherits: Orca_Bomber
@@ -442,8 +358,6 @@ orca_bomber.AP:
 		Description: VTOL bomber armed with AP bombs.\n  Strong vs Heavy Vehicles\n  Weak vs Aircraft, Infantry
 	Armament:
 		Weapon: APBomb
-	AmmoPool:
-		Ammo: 4
 
 
 Orca.Warship:

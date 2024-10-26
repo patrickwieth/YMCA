@@ -57,3 +57,83 @@ CryoMissileNHAW:
 		LaunchAngle: 3
 	Warhead@1Dam: SpreadDamage
 		Damage: 1000
+
+HellfireAG:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileAP
+	ReloadDelay: 90
+	MinRange: 1c256
+	Burst: 4
+	BurstDelays: 14
+	Projectile: MissileCA
+		Speed: 256
+		HorizontalRateOfTurn: 40
+		RangeLimit: 9c512
+	Warhead@1Dam: SpreadDamage
+		Damage: 8000
+
+HellfireAG.Cryo:
+	Inherits: HellfireAG
+	Inherits: ^MissileCryo
+	Burst: 2
+
+HellfireAG.Arty:
+	Inherits: HellfireAG
+	Inherits: ^MissileArtillery
+	Projectile: BulletCA
+		Inaccuracy: 2c0
+	Range: 12c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 4500
+
+HellfireAG.Bunkerbuster:
+	Inherits: HellfireAG
+	Inherits: ^MissileBunkerBuster
+	Burst: 2
+	Projectile: BulletCA
+	Warhead@1Dam: SpreadDamage
+		Damage: 14000
+
+HellfireAG.Harrier:
+	Inherits: HellfireAG
+	Inherits: ^MissileHE
+	Range: 12c0
+	MinRange: 2c0
+	Report: migmis.aud, migmis2.aud
+	Burst: 8
+	BurstDelays: 4
+	Projectile: MissileCA
+		RangeLimit: 12c512
+		Inaccuracy: 2c512
+		LockOnProbability: 0
+	Warhead@1Dam: SpreadDamage
+		Spread: 448
+		Damage: 1000
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		ValidTargets: Ground, Water, Trees, Underwater
+
+HellfireAG.Harrier.Avionics:
+	Inherits: HellfireAG.Harrier
+	Range: 8c0
+	Projectile: MissileCA
+	Burst: 2
+
+HellfireAA:
+	Inherits: ^AntiAirMissile
+	ReloadDelay: 90
+	MinRange: 1c256
+	Burst: 2
+	BurstDelays: 10
+	Projectile: MissileCA
+		Speed: 384
+		HorizontalRateOfTurn: 40
+		RangeLimit: 7c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+		ValidTargets: Air
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion_air
+
+HellfireAA.Cryo:
+	Inherits: HellfireAA
+	Inherits: ^MissileCryo

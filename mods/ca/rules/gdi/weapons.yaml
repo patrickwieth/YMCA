@@ -23,6 +23,10 @@ SonicPulse:
 		ExplosionPalette: effect-ignore-lighting-alpha40
 		ValidTargets: Ground, Air, Ship, Trees
 
+SonicPulse.Orca:
+	Inherits: SonicPulse
+	ReloadDelay: 90
+
 IonZap:
 	Inherits: ^Energy
 	ReloadDelay: 70
@@ -87,10 +91,10 @@ IonStrike.Orca:
 	Range: 512
 	ValidTargets: Ground, Water
 	Warhead@1Dam_impact: SpreadDamage
-		Range: 0, 1c1, 2c1, 2c512
+		Range: 0, 1c1, 2c1, 2c512, 3c0
 		Delay: 1
-		Damage: 3250
-		Falloff: 1000, 1000, 250, 100
+		Damage: 4000
+		Falloff: 1000, 800, 400, 200, 100
 		ValidTargets: Ground, Water
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@4Effect: CreateEffect
@@ -172,3 +176,78 @@ MARVest:
 	Warhead@11Eff: CreateEffect
 		Explosions: dust_ring2
 		ExplosionPalette: tseffect
+
+
+
+HellfireAG.Orca:
+	Inherits: HellfireAG
+	Inherits: ^Missile
+	Report: orcamis1.aud
+
+HellfireAG.Orca.HE:
+	Inherits: HellfireAG
+	Inherits: ^MissileHE
+	Report: orcamis1.aud
+
+HellfireAG.Orca.AP:
+	Inherits: HellfireAG
+	Inherits: ^MissileAP
+	Report: orcamis1.aud
+
+HellfireAG.Orca.EMP:
+	Inherits: HellfireAG
+	Inherits: ^Missile
+	Report: orcamis1.aud
+	Warhead@emp: GrantExternalCondition
+		Range: 1c0
+		Duration: 400
+		Condition: empdisable
+		ValidTargets: Ground, Structure, Vehicle
+	Warhead@3Eff: CreateEffect
+		Explosions: pulse_explosion_small
+		ExplosionPalette: tseffect-ignore-lighting-alpha75
+		ImpactSounds: expnew16.aud
+
+HellfireAG.Horn:
+	Inherits: HellfireAG.Harrier
+	Inherits: ^MissileArtillery
+	ValidTargets: Ground, Water, Underwater
+	Range: 1c0
+	MinRange: 0c0
+	Burst: 3
+	BurstDelays: 2
+	Projectile: MissileCA
+		RangeLimit: 7c512
+		ContrailLength: 4
+		Inaccuracy: 0c512
+		MinimumLaunchAngle: -300
+		MaximumLaunchAngle: -300
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1500
+
+HellfireAA.Orca:
+	Inherits: HellfireAA
+	Report: orcamis1.aud
+
+HellfireAA.Orca.HE:
+	Inherits: HellfireAA
+	Inherits: ^MissileHE
+
+HellfireAA.Orca.AP:
+	Inherits: HellfireAA
+	Inherits: ^MissileAP
+
+HellfireAA.Orca.EMP:
+	Inherits: HellfireAA
+	Inherits: ^Missile
+	Report: orcamis1.aud
+	Warhead@emp: GrantExternalCondition
+		Range: 1c0
+		Duration: 400
+		Condition: empdisable
+		ValidTargets: Air
+	Warhead@3Eff: CreateEffect
+		Explosions: pulse_explosion_small
+		ExplosionPalette: tseffect-ignore-lighting-alpha75
+		ImpactSounds: expnew16.aud
