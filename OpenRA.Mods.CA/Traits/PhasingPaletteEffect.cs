@@ -30,11 +30,10 @@ namespace OpenRA.Mods.CA.Traits
   [Desc("Remap these indices to player colors.")]
   public readonly int[] RemapIndex = Array.Empty<int>();
 
-  [Desc("Start colour.")]
-  [FieldLoader.Require]
-  public readonly Color StartColor;
+  [Desc("Phasing start colour.")]
+  public readonly Color StartColor = Color.Transparent;
 
-  [Desc("End colour.")]
+  [Desc("Phasing end colour.")]
   [FieldLoader.Require]
   public readonly Color EndColor;
 
@@ -59,18 +58,13 @@ namespace OpenRA.Mods.CA.Traits
   int ticks;
   bool incrementing;
 
-  //int redDiffStart;
-  //int greenDiffStart;
-  //int blueDiffStart;
-
-  int redDiffEnd;
-  int greenDiffEnd;
-  int blueDiffEnd;
-  float alphaDiffEnd;
+  float redDiff;
+  float greenDiff;
+  float blueDiff;
+  float alpha;
 
   Dictionary<string, MutablePalette[]> MasterPalette = new Dictionary<string, MutablePalette[]>();
   List<string> playernames = new List<string>();
-  //PlayerColorRemap remap;
 
   void ILoadsPlayerPalettes.LoadPlayerPalettes(WorldRenderer wr, string playerName, Color color, bool replaceExisting)
   {
@@ -86,21 +80,32 @@ namespace OpenRA.Mods.CA.Traits
       {
         var origColor = Color.FromArgb((int)basePalette[j]);
 
-        alphaDiffEnd = info.EndColor.A / 255f;
-        redDiffEnd = (info.EndColor.R - origColor.R) / info.PulseDuration;
-        greenDiffEnd = (info.EndColor.G - origColor.G) / info.PulseDuration;
-        blueDiffEnd = (info.EndColor.B - origColor.B) / info.PulseDuration;
+        if (info.ShadowIndex != null && info.ShadowIndex == j)
+        {
+          MasterPalette[playerName][pulseTick].SetColor(j, origColor);
+          continue;
+        }
 
-        var red = (origColor.R + (redDiffEnd*alphaDiffEnd * pulseTick)).Clamp(0, 255);
-        var green = (origColor.G + (greenDiffEnd*alphaDiffEnd * pulseTick)).Clamp(0, 255);
-        var blue = (origColor.B + (blueDiffEnd*alphaDiffEnd * pulseTick)).Clamp(0, 255);
+        // mix in the start color
+        origColor = Color.FromArgb(
+          (int) ( (float) origColor.R * (1 - info.StartColor.A/255f) + (float) info.StartColor.R * info.StartColor.A/255f),
+          (int) ( (float) origColor.G * (1 - info.StartColor.A/255f) + (float) info.StartColor.G * info.StartColor.A/255f),
+          (int) ( (float) origColor.B * (1 - info.StartColor.A/255f) + (float) info.StartColor.B * info.StartColor.A/255f)
+        );
 
-        var colorA = Color.FromLinear((byte)255, red / 255f, green / 255f, blue / 255f);
+        // mix in the end color
+        alpha = info.EndColor.A/255f;
+        redDiff = (info.EndColor.R - origColor.R)*alpha / info.PulseDuration;
+        greenDiff = (info.EndColor.G - origColor.G)*alpha / info.PulseDuration;
+        blueDiff = (info.EndColor.B - origColor.B)*alpha / info.PulseDuration;
+
+        int R = (int)(origColor.R + (redDiff * pulseTick)).Clamp(0, 255);
+        int G = (int)(origColor.G + (greenDiff * pulseTick)).Clamp(0, 255);
+        int B = (int)(origColor.B + (blueDiff * pulseTick)).Clamp(0, 255);
+
+        var colorA = Color.FromArgb((byte)255, R, G, B);
 
         MasterPalette[playerName][pulseTick].SetColor(j, colorA);
-
-        if (info.ShadowIndex != null && info.ShadowIndex == j)
-        MasterPalette[playerName][pulseTick].SetColor(j, origColor);
       }
     }
     var finalPalette =  new ImmutablePalette(MasterPalette[playerName][0]);

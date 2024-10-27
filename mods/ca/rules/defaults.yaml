@@ -9,8 +9,100 @@
 ^SpriteActor:
 	BodyOrientation:
 	QuantizeFacingsFromSequence:
+	Inherits: ^RASprite
+
+^RASprite:
 	RenderSprites:
 		PlayerPalette: overlayplayer
+	GrantCondition@Model:
+		Condition: rasprite
+
+^TDSprite:
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	GrantCondition@Model:
+		Condition: tdsprite
+
+^InfantryRA2Sprite:
+	RenderSprites:
+		PlayerPalette: playerra2
+	WithDeathAnimation:
+		DeathSequencePalette: playerra2
+	GrantCondition@Model:
+		Condition: ra2sprite
+
+^InfantryRASprite:
+	RenderSprites:
+		PlayerPalette: overlayplayer
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayer
+	GrantCondition@Model:
+		Condition: rasprite
+
+^InfantryTDSprite:
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayertd
+		DeathTypes:
+			DefaultDeath: 1
+			BulletDeath: 2
+			SmallExplosionDeath: 3
+			ExplosionDeath: 4
+			FireDeath: 5
+			ElectricityDeath: 6
+			PoisonDeath: 7
+			ChronoDeath: 8
+			ToxinDeath: 9
+			RadiationDeath: 10
+			FrozenDeath: 11
+		CrushedSequence: die-crushed
+	GrantCondition@Model:
+		Condition: tdsprite
+
+^CivTDSprite:
+	RenderSprites:
+		Palette: temptd
+	WithDeathAnimation:
+		DeathPaletteIsPlayerPalette: false
+		DeathSequencePalette: temptd
+
+^CivSprite:
+	RenderSprites:
+		Palette: player
+
+^TerrainSprite:
+	RenderSprites:
+		Palette: terrain
+
+^TemperateSprite:
+	RenderSprites:
+		Palette: temptd
+
+^DesertSprite:
+	RenderSprites:
+		Palette: desert
+
+^NavySprite:
+	RenderSprites:
+		PlayerPalette: playernavy
+	GrantCondition@Model:
+		Condition: navysprite
+
+^TDVehicleSprite:
+	Buildable:
+		IconPalette: chrometd
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	WithDamageOverlay:
+		Palette: tdeffect
+		Image: smoke_mtd
+	GrantCondition@Model:
+		Condition: tdsprite
+
+^EffectSprite:
+	RenderSprites:
+		Palette: effect
 
 ^1x1Shape:
 	HitShape:
@@ -424,8 +516,17 @@ PROC.Dummy:
 	Berserkable@BERSERK:
 		RequiresCondition: berserkactive
 	WithModifiedPalette@BERSERK:
-		RequiresCondition: berserkactive
-		Palette: berserk
+		RequiresCondition: berserkactive && rasprite
+		Palette: berserk_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@BERSERK_TD:
+		RequiresCondition: berserkactive && tdsprite
+		Palette: berserk_td
+		IsPlayerPalette: true
+	WithModifiedPalette@BERSERK_VOXEL:
+		RequiresCondition: berserkactive && voxel
+		Palette: berserk_voxel
+		IsPlayerPalette: true
 	TimedConditionBar@BERSERK:
 		Condition: berserk
 	RejectsOrders@BERSERK:
@@ -444,8 +545,17 @@ PROC.Dummy:
 	ExternalCondition@FRENZY:
 		Condition: frenzy
 	WithModifiedPalette@FRENZY:
-		RequiresCondition: frenzy
-		Palette: frenzy
+		RequiresCondition: frenzy && rasprite
+		Palette: frenzy_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@FRENZY_TD:
+		RequiresCondition: frenzy && tdsprite
+		Palette: frenzy_td
+		IsPlayerPalette: true
+	WithModifiedPalette@FRENZY_VOXEL:
+		RequiresCondition: frenzy && voxel
+		Palette: frenzy_voxel
+		IsPlayerPalette: true
 	TimedConditionBar@FRENZY:
 		Condition: frenzy
 	WithIdleOverlay@FRENZY:
@@ -464,9 +574,20 @@ PROC.Dummy:
 		SelectionBarColor: 40FFFF
 	Targetable@Temporal:
 		TargetTypes: Temporal
+
 	WithModifiedPalette@temporal:
-		RequiresCondition: being-warped
-		Palette: temporal
+		RequiresCondition: being-warped && rasprite
+		Palette: temporal_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@temporal_TD:
+		RequiresCondition: being-warped && tdsprite
+		Palette: temporal_td
+		IsPlayerPalette: true
+	WithModifiedPalette@temporal_VOXEL:
+		RequiresCondition: being-warped && voxel
+		Palette: temporal_voxel
+		IsPlayerPalette: true
+
 	WithColoredOverlay@temporal2:
 		RequiresCondition: being-warped
 		Color: b4000000
@@ -497,8 +618,16 @@ PROC.Dummy:
 	ExternalCondition@SUPPRESSION:
 		Condition: suppression
 	WithModifiedPalette@SUPPRESSION:
-		RequiresCondition: suppression
-		Palette: suppression2
+		RequiresCondition: suppression && rasprite
+		Palette: suppression_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@SUPPRESSION_TD:
+		RequiresCondition: suppression && tdsprite
+		Palette: suppression_td
+		IsPlayerPalette: true
+	WithModifiedPalette@SUPPRESSION_VOXEL:
+		RequiresCondition: suppression && voxel
+		Palette: suppression_voxel
 		IsPlayerPalette: true
 	TimedConditionBar@SUPPRESSION:
 		Condition: suppression
@@ -695,8 +824,17 @@ PROC.Dummy:
 
 ^IronCurtainable:
 	WithModifiedPalette@IRONCURTAIN:
-		RequiresCondition: invulnerability
-		Palette: invuln
+		RequiresCondition: invulnerability && rasprite
+		Palette: invuln_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@IRONCURTAIN_TD:
+		RequiresCondition: invulnerability && tdsprite
+		Palette: invuln_td
+		IsPlayerPalette: true
+	WithModifiedPalette@IRONCURTAIN_VOXEL:
+		RequiresCondition: invulnerability && voxel
+		Palette: invuln_voxel
+		IsPlayerPalette: true
 	DamageMultiplier@IRONCURTAIN:
 		RequiresCondition: invulnerability
 		Modifier: 0
@@ -711,10 +849,22 @@ PROC.Dummy:
 		DamageTypes: FireDeath
 		RequiresCondition: invulnerability
 
-^Irradiatable:
+^IrradPalette:
 	WithModifiedPalette@IRRADIATABLE:
-		Palette: irrad
-		RequiresCondition: irradiated
+		RequiresCondition: irradiated && rasprite
+		Palette: irrad_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@IRRADIATABLE_TD:
+		RequiresCondition: irradiated && tdsprite
+		Palette: irrad_td
+		IsPlayerPalette: true
+	WithModifiedPalette@IRRADIATABLE_VOXEL:
+		RequiresCondition: irradiated && voxel
+		Palette: irrad_voxel
+		IsPlayerPalette: true
+
+^Irradiatable:
+	Inherits: ^IrradPalette
 	TimedConditionBar@IRRADIATABLE:
 		Condition: irradiated
 		Color: 88DD00
@@ -725,16 +875,25 @@ PROC.Dummy:
 		RequiresCondition: irradiated
 
 ^ForceShieldable:
-	WithModifiedPalette@FS:
-		Palette: forces
-		RequiresCondition: forceshield && !invulnerability
-	DamageMultiplier@FS:
+	WithModifiedPalette@FORCESHIELD:
+		RequiresCondition: forceshield && !invulnerability && rasprite
+		Palette: forces_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@FORCESHIELD_TD:
+		RequiresCondition: forceshield && !invulnerability && tdsprite
+		Palette: forces_td
+		IsPlayerPalette: true
+	WithModifiedPalette@FORCESHIELD_VOXEL:
+		RequiresCondition: forceshield && !invulnerability && voxel
+		Palette: forces_voxel
+		IsPlayerPalette: true
+	DamageMultiplier@FORCESHIELD:
 		RequiresCondition: forceshield
 		Modifier: 0
-	TimedConditionBar@FS:
+	TimedConditionBar@FORCESHIELD:
 		Condition: forceshield
 		Color: 2f74e2
-	ExternalCondition@FS:
+	ExternalCondition@FORCESHIELD:
 		Condition: forceshield
 	PowerMultiplier@FSPOWERDOWN:
 		RequiresCondition: forceshield && !invulnerability
@@ -750,8 +909,17 @@ PROC.Dummy:
 		RequiresCondition: shielded && !empdisable
 		SelectionBarColor: 4488ff
 	WithModifiedPalette@shieldhit:
-		Palette: shieldhit
-		RequiresCondition: weaponhit && shields-up
+		RequiresCondition: weaponhit && shields-up && rasprite
+		Palette: shieldhit_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@shieldhit_TD:
+		RequiresCondition: weaponhit && shields-up && tdsprite
+		Palette: shieldhit_td
+		IsPlayerPalette: true
+	WithModifiedPalette@shieldhit_VOXEL:
+		RequiresCondition: weaponhit && shields-up && voxel
+		Palette: shieldhit_voxel
+		IsPlayerPalette: true
 	ExternalCondition@weaponhit:
 		Condition: weaponhit
 	WithIdleOverlay@NSHIELD:
@@ -789,8 +957,18 @@ PROC.Dummy:
 
 ^NaniteShieldable:
 	WithModifiedPalette@NSHIELD:
-		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility)
-		Palette: nrepair
+		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && rasprite
+		Palette: nrepair_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@NSHIELD_TD:
+		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && tdsprite
+		Palette: nrepair_td
+		IsPlayerPalette: true
+	WithModifiedPalette@NSHIELD_VOXEL:
+		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && voxel
+		Palette: nrepair_voxel
+		IsPlayerPalette: true
+
 	TimedConditionBar@NSHIELD:
 		Condition: nshield
 		Color: 25cde999
@@ -830,6 +1008,20 @@ PROC.Dummy:
 	WithModifiedPalette@NREPAIR:
 		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && !nrepair ## currently disabled
 		Palette: nrepair
+
+	WithModifiedPalette@NREPAIR:
+		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && rasprite
+		Palette: berserk_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@NREPAIR_TD:
+		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && tdsprite
+		Palette: berserk_td
+		IsPlayerPalette: true
+	WithModifiedPalette@NREPAIR_VOXEL:
+		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && voxel
+		Palette: berserk_voxel
+		IsPlayerPalette: true
+
 	TimedConditionBar@NREPAIR:
 		Condition: nrepair
 		Color: 25cde999
@@ -1169,7 +1361,6 @@ PROC.Dummy:
 		MovingInterval: 6
 
 ^HoverVehicle:
-	Inherits: ^Tank
 	Inherits: ^HoverTrail
 	Mobile:
 		Locomotor: hover
@@ -1795,15 +1986,6 @@ PROC.Dummy:
 		Range: 5c0
 	TeleportNetworkTransportable:
 
-^TDVehicleSprite:
-	Buildable:
-		IconPalette: chrometd
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	WithDamageOverlay:
-		Palette: tdeffect
-		Image: smoke_mtd
-
 ^FightingVehicle:
 	Inherits: ^Vehicle
 	Inherits: ^SelectableCombatUnit
@@ -1931,8 +2113,7 @@ PROC.Dummy:
 	Inherits@GMUT: ^GeneticallyMutatable
 	Inherits@handicaps: ^PlayerHandicaps
 	Inherits@biodamage: ^BiologicalDamage
-	RenderSprites:
-		PlayerPalette: overlayplayertd
+	Inherits: ^InfantryTDSprite
 	TooltipExtras:
 	Huntable:
 	OwnerLostAction:
@@ -1975,21 +2156,6 @@ PROC.Dummy:
 	WithInfantryBody@Warped:
 		StandSequences: stand
 		RequiresCondition: being-warped
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayertd
-		DeathTypes:
-			DefaultDeath: 1
-			BulletDeath: 2
-			SmallExplosionDeath: 3
-			ExplosionDeath: 4
-			FireDeath: 5
-			ElectricityDeath: 6
-			PoisonDeath: 7
-			ChronoDeath: 8
-			ToxinDeath: 9
-			RadiationDeath: 10
-			FrozenDeath: 11
-		CrushedSequence: die-crushed
 	AttackMove:
 	Passenger:
 		CargoType: Infantry
@@ -2085,24 +2251,6 @@ PROC.Dummy:
 		Condition: invisibility
 	TeleportNetworkTransportable:
 
-^InfantryRA2Sprite:
-	RenderSprites:
-		PlayerPalette: playerra2
-	WithDeathAnimation:
-		DeathSequencePalette: playerra2
-
-^InfantryRASprite:
-	RenderSprites:
-		PlayerPalette: overlayplayer
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayer
-
-^InfantryTDSprite:
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayertd
-
 ^Soldier:
 	Inherits: ^Infantry
 	Inherits: ^Autobattler
@@ -2126,11 +2274,7 @@ PROC.Dummy:
 ^CivInfantry:
 	Inherits: ^Infantry
 	-RenderSprites:
-	RenderSprites:
-		Palette: temptd
-	WithDeathAnimation:
-		DeathPaletteIsPlayerPalette: false
-		DeathSequencePalette: temptd
+	Inherits: ^CivTDSprite
 	Selectable:
 		Class: CivInfantry
 	Valued:
@@ -2234,10 +2378,9 @@ PROC.Dummy:
 	Inherits@biodamage: ^DriverBiologicalDamage
 	Inherits@VehicleVision: ^VehicleVision
 	Inherits: ^RelayMarkable
+	Inherits: ^NavySprite
 	TooltipExtras:
 	Huntable:
-	RenderSprites:
-		PlayerPalette: playernavy
 	OwnerLostAction:
 		Action: Kill
 	DrawLineToTarget:
@@ -2470,9 +2613,8 @@ PROC.Dummy:
 		Color: FFFFFF80
 
 ^NeutralPlaneTD:
-	Inherits@1: ^NeutralPlane
-	RenderSprites:
-		PlayerPalette: overlayplayertd
+	Inherits: ^NeutralPlane
+	Inherits: ^TDSprite
 
 ^Plane:
 	Inherits: ^NeutralPlane
@@ -2573,11 +2715,10 @@ PROC.Dummy:
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
-^TDAircraftSprite:
+^TDAircraft:
+	Inherits: ^TDSprite
 	Buildable:
 		IconPalette: chrometd
-	RenderSprites:
-		PlayerPalette: overlayplayertd
 	EjectOnDeath@GDI:
 		PilotActor: mercenary
 		RequiresCondition: structures.gdi
@@ -2586,7 +2727,7 @@ PROC.Dummy:
 		RequiresCondition: !structures.gdi
 
 ^BiologicalPilot:
-	Inherits@2: ^GainsExperience
+	Inherits: ^GainsExperience
 
 ^RobotPilot:
 
@@ -2618,11 +2759,10 @@ PROC.Dummy:
 	-KillsSelf@EMP:
 
 ^AirshipTD:
-	Inherits@1: ^Airship
+	Inherits: ^Airship
+	Inherits: ^TDSprite
 	Buildable:
 		IconPalette: chrometd
-	RenderSprites:
-		PlayerPalette: overlayplayertd
 	EjectOnDeath@GDI:
 		PilotActor: mercenary
 		RequiresCondition: structures.gdi
@@ -2880,8 +3020,13 @@ PROC.Dummy:
 
 ^NukularConyard:
 	Inherits: ^MustBeDestroyed.Nukular
-	WithModifiedPalette@nukular:
-		Palette: irrad-weak
+	Inherits: ^IrradPalette
+	WithModifiedPalette@IRRADIATABLE:
+		RequiresCondition: rasprite
+	WithModifiedPalette@IRRADIATABLE_TD:
+		RequiresCondition: tdsprite
+	WithModifiedPalette@IRRADIATABLE_VOXEL:
+		RequiresCondition: voxel
 	GrantExternalConditionToOwner@NukularOwned:
 		Condition: NukularOwned
 	DamageMultiplier@Nukular:
@@ -2908,9 +3053,13 @@ PROC.Dummy:
 		RequiresCondition: !NukularMode || NukularOpen
 
 ^NukularTransporter:
-	WithModifiedPalette@nukular:
-		Palette: irrad-weak
-		RequiresCondition: NukularCargo
+	Inherits: ^IrradPalette
+	WithModifiedPalette@IRRADIATABLE:
+		RequiresCondition: rasprite && NukularCargo
+	WithModifiedPalette@IRRADIATABLE_TD:
+		RequiresCondition: tdsprite && NukularCargo
+	WithModifiedPalette@IRRADIATABLE_VOXEL:
+		RequiresCondition: voxel && NukularCargo
 	Explodes@NUKE:
 		Weapon: UltraNuke
 		EmptyWeapon: UltraNuke
@@ -3004,11 +3153,10 @@ PROC.Dummy:
 		Modifier: 90
 
 ^BuildingTD:
-	Inherits@1: ^Building
+	Inherits: ^Building
+	Inherits: ^TDSprite
 	Buildable:
 		IconPalette: chrometd
-	RenderSprites:
-		PlayerPalette: overlayplayertd
 	SpawnActorOnDeath@GDI:
 		Actor: mercenary
 		RequiresCondition: structures.gdi
@@ -3042,8 +3190,11 @@ PROC.Dummy:
 	Inherits: ^DefenseBalancing
 	RequiresBuildableArea:
 		AreaTypes: outpost_building
+
 	WithModifiedPalette@IRONCURTAIN:
 		RequiresCondition: invulnerability
+
+
 	Selectable:
 		Bounds: 1024, 1024
 	Targetable:
@@ -3055,10 +3206,10 @@ PROC.Dummy:
 		RequiredForShortGame: false
 	-GivesBuildableArea:
 	-AcceptsDeliveredCash:
-	-WithModifiedPalette@FS:
-	-DamageMultiplier@FS:
-	-TimedConditionBar@FS:
-	-ExternalCondition@FS:
+	-WithModifiedPalette@FORCESHIELD:
+	-DamageMultiplier@FORCESHIELD:
+	-TimedConditionBar@FORCESHIELD:
+	-ExternalCondition@FORCESHIELD:
 	-PowerMultiplier@FSPOWERDOWN:
 	-CaptureManager:
 	-Capturable:
@@ -3092,11 +3243,10 @@ PROC.Dummy:
 		Range: 6c0
 
 ^DefenseTD:
-	Inherits@1: ^Defense
+	Inherits: ^Defense
+	Inherits: ^TDSprite
 	Buildable:
 		IconPalette: chrometd
-	RenderSprites:
-		PlayerPalette: overlayplayertd
 	ActorPreviewPlaceBuildingPreview:
 		OverridePalette: placebuildingtd
 
@@ -3107,6 +3257,7 @@ PROC.Dummy:
 	Inherits@3: ^Cloakable
 	Inherits@Armor: ^BrickArmor
 	Inherits@handicaps: ^PlayerHandicaps
+	Inherits: ^EffectSprite
 	OwnerLostAction:
 		Action: ChangeOwner
 	Building:
@@ -3133,8 +3284,6 @@ PROC.Dummy:
 	Targetable:
 		TargetTypes: Ground, DetonateAttack, Wall, NoAutoTarget
 	-GivesExperience:
-	RenderSprites:
-		Palette: effect
 	WithWallSpriteBody:
 	Sellable:
 		SellSounds: cashturn.aud
@@ -3225,8 +3374,7 @@ PROC.Dummy:
 
 ^CivBuilding:
 	Inherits: ^TechBuilding
-	RenderSprites:
-		Palette: player
+	Inherits: ^CivSprite
 	MapEditorData:
 		ExcludeTilesets: INTERIOR
 		Categories: Civilian building
@@ -3258,13 +3406,12 @@ PROC.Dummy:
 	-Targetable:
 
 ^TibTree:
-	Inherits@1: ^SpriteActor
+	Inherits: ^SpriteActor
+	Inherits: ^TemperateSprite
 	Interactable:
 	Tooltip:
 		Name: Blossom Tree
 		ShowOwnerRow: false
-	RenderSprites:
-		Palette: temptd
 	WithSpriteBody:
 	WithIdleAnimation:
 		Interval: 155
@@ -3283,14 +3430,13 @@ PROC.Dummy:
 		BlueTint: 0.2
 
 ^Tree:
-	Inherits@1: ^SpriteActor
-	Inherits@shape: ^1x1Shape
-	Inherits@Armor: ^WoodArmor
+	Inherits: ^SpriteActor
+	Inherits: ^1x1Shape
+	Inherits: ^WoodArmor
+	Inherits: ^TerrainSprite
 	Tooltip:
 		Name: Tree
 		ShowOwnerRow: false
-	RenderSprites:
-		Palette: terrain
 	WithSpriteBody:
 	Building:
 		Footprint: x
@@ -3331,11 +3477,10 @@ PROC.Dummy:
 		ValidOwnerNames: Neutral
 
 ^TreeHusk:
-	Inherits@1: ^SpriteActor
+	Inherits: ^SpriteActor
+	Inherits: ^TerrainSprite
 	Interactable
 		Bounds: 1024, 1024
-	RenderSprites:
-		Palette: terrain
 	AppearsOnRadar:
 	RadarColorFromTerrain:
 		Terrain: Tree
@@ -3523,12 +3668,11 @@ PROC.Dummy:
 
 ^Rock:
 	Inherits@1: ^SpriteActor
+	Inherits: ^DesertSprite
 	Interactable:
 	Tooltip:
 		Name: Rock
 		ShowOwnerRow: false
-	RenderSprites:
-		Palette: desert
 	WithSpriteBody:
 	Building:
 		Footprint: __ x_
@@ -3548,13 +3692,13 @@ PROC.Dummy:
 
 ^DesertCivBuilding:
 	Inherits: ^CivBuilding
-	RenderSprites:
-		Palette: desert
+	Inherits: ^DesertSprite
 	MapEditorData:
 		RequireTilesets: DESERT
 
 ^Crate:
-	Inherits@1: ^SpriteActor
+	Inherits: ^SpriteActor
+	Inherits: ^EffectSprite
 	Interactable:
 		Bounds: 1024, 1024
 	HiddenUnderFog:
@@ -3566,7 +3710,6 @@ PROC.Dummy:
 		Lifetime: 180
 		TerrainTypes: Clear, Rough, Road, Ore, Beach, Tiberium, BlueTiberium, Water
 	RenderSprites:
-		Palette: effect
 		Image: scrate
 	WithCrateBody:
 		XmasImages: xcratea, xcrateb, xcratec, xcrated
@@ -3822,8 +3965,7 @@ PROC.Dummy:
 	Inherits: ^LightArmor
 	Inherits: ^SpriteActor
 	Inherits: ^AutoTargetGroundAssaultMove
-	RenderSprites:
-		PlayerPalette: overlayplayertd
+	Inherits: ^TDSprite
 	Huntable:
 	Health:
 		HP: 10000
@@ -4052,6 +4194,8 @@ PROC.Dummy:
 		LightDiffuseColor: 1.4,1.4,1.4
 	WithVoxelBody:
 		ShowShadow: true
+	GrantCondition@Model:
+		Condition: voxel
 
 ^RA2RenderVoxel:
 	Inherits: ^RenderVoxel
@@ -4477,7 +4621,8 @@ PROC.Dummy:
 		Sequence: tag-primary
 
 ^BuildingPlug:
-	Inherits@3: ^SpriteActor
+	Inherits: ^SpriteActor
+	Inherits: ^TDSprite
 	Inherits: ^EarlyGameBuildBoost
 	WithSpriteBody:
 	Interactable:
@@ -4489,8 +4634,6 @@ PROC.Dummy:
 		OverridePalette: placebuildingtd
 	KillsSelf:
 		RemoveInstead: true
-	RenderSprites:
-		PlayerPalette: overlayplayertd
 
 ^AIUNLOAD:
 	GrantConditionWhileAiming@AIUNLOAD:
@@ -4557,7 +4700,7 @@ PROC.Dummy:
 		CloakDelay: 200
 		CloakSound: trans1.aud
 		UncloakSound: appear1.aud
-		Palette: cloak
+		Palette: cloak_voxel
 		IsPlayerPalette: false
 		RequiresCondition: !cloak-force-disabled && airborne && !invisibility
 	GrantConditionOnDamageState@UNCLOAK:
@@ -5183,9 +5326,13 @@ PROC.Dummy:
 		ShowSelectionBar: true
 		SelectionBarColor: 44FF00
 		RequiresCondition: !driver-dead
+	Inherits: ^IrradPalette
 	WithModifiedPalette@IRRADIATABLE:
-		Palette: irrad-weak
-		RequiresCondition: being-poisoned
+		RequiresCondition: rasprite && being-poisoned
+	WithModifiedPalette@IRRADIATABLE_TD:
+		RequiresCondition: tdsprite && being-poisoned
+	WithModifiedPalette@IRRADIATABLE_VOXEL:
+		RequiresCondition: voxel && being-poisoned
 	DriverPoisonedByTintedCells@RAD:
 		Damage: 400
 		DamageInterval: 8
@@ -5230,9 +5377,18 @@ PROC.Dummy:
 		Type: Reflector
 	Targetable@armorclass:
 		TargetTypes: reflector
-	WithModifiedPalette@energized:
-		RequiresCondition: energized
-		Palette: nrepair
+	WithModifiedPalette@REFLECTOR:
+		RequiresCondition: energized && rasprite
+		Palette: nrepair_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@REFLECTOR_TD:
+		RequiresCondition: energized && tdsprite
+		Palette: nrepair_td
+		IsPlayerPalette: true
+	WithModifiedPalette@REFLECTOR_VOXEL:
+		RequiresCondition: energized && voxel
+		Palette: nrepair_voxel
+		IsPlayerPalette: true
 	ExternalCondition@energized:
 		Condition: energized
 
