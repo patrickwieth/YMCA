@@ -186,7 +186,6 @@ HARR.payload:
 		Margin: 4, 3
 		RequiresSelection: true
 
-
 Seahawk:
 	Inherits: ^VoxelHelicopter
 	RenderVoxels:
@@ -195,6 +194,7 @@ Seahawk:
 	Inherits: ^Transport
 	RenderSprites:
 		Image: seahawk
+		Palette: tsunit
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
@@ -219,14 +219,11 @@ Seahawk:
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
 		Voice: Move
-	WithIdleOverlay@ROTOR1AIR:
-		Offset: 50,0,250
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR1GROUND:
-		Offset: 50,0,250
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
+	Inherits: ^SingleRotor
+	WithIdleOverlay@ROTORAIR:
+		Offset: 100,0,185
+	WithIdleOverlay@ROTORGROUND:
+		Offset: 100,0,185
 	Cargo:
 		Types: Infantry
 		MaxWeight: 8
@@ -304,11 +301,13 @@ HELI:
 	Inherits: ^VoxelHelicopter
 	Inherits: ^FightingHelicopter
 	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^SingleRotor
 	RenderVoxels:
 		Scale: 0.5
 		Image: heli
 	RenderSprites:
 		Image: heli
+		Palette: tsunit
 	Inherits: ^BiologicalPilot
 	Buildable:
 		Queue: Aircraft
@@ -331,14 +330,6 @@ HELI:
 	Armament@SECONDARY:
 		Weapon: HellfireAG
 		LocalOffset: 0,213,-85, 0,-213,-85
-	WithIdleOverlay@ROTORAIR:
-		Offset: 100,0,185
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTORGROUND:
-		Offset: 100,0,185
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
 	SpawnActorOnDeath:
 		Actor: HELI.Husk
 		RequiresCondition: !empdisable && !being-warped
@@ -426,6 +417,7 @@ HUEY:
 		Image: huey
 	RenderSprites:
 		Image: huey
+		Palette: tsunit
 	Inherits: ^BiologicalPilot
 	Inherits: ^FightingHelicopter
 	Inherits: ^PrioAntiInfantry
@@ -457,14 +449,11 @@ HUEY:
 		TurnSpeed: 16
 		Speed: 135
 	WithMuzzleOverlay:
+	Inherits: ^SingleRotor
 	WithIdleOverlay@ROTORAIR:
-		Sequence: rotor
 		Offset: 80,0,200
-		RequiresCondition: airborne
 	WithIdleOverlay@ROTORGROUND:
-		Sequence: slow-rotor
 		Offset: 70,0,200
-		RequiresCondition: !airborne
 	SpawnActorOnDeath:
 		Actor: HUEY.Husk
 		RequiresCondition: !empdisable && !being-warped

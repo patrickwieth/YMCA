@@ -23,6 +23,57 @@
 	GrantCondition@Model:
 		Condition: tdsprite
 
+^ScrinSprite:
+	RenderSprites:
+		PlayerPalette: overlayplayerscrin
+	GrantCondition@Model:
+		Condition: scrinsprite
+
+^ScrinSpriteRA2:
+	RenderSprites:
+		PlayerPalette: playerra2
+	WithDeathAnimation:
+		DeathSequencePalette: playerra2
+	GrantCondition@Model:
+		Condition: ra2sprite
+
+^ScrinInfantrySprite:
+	RenderSprites:
+		PlayerPalette: overlayplayerscrin
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayerscrin
+		DeathTypes:
+			DefaultDeath: 1
+			BulletDeath: 2
+			SmallExplosionDeath: 3
+			ExplosionDeath: 4
+			FireDeath: 5
+			ElectricityDeath: 6
+			PoisonDeath: 7
+			ChronoDeath: 8
+			ToxinDeath: 9
+			RadiationDeath: 10
+			FrozenDeath: 11
+		CrushedSequence: die-crushed
+		CrushedSequencePalette: scrin
+	GrantCondition@Model:
+		Condition: scrinsprite
+
+^ScrinSpriteTD:
+	RenderSprites:
+		PlayerPalette: overlayplayertd
+	WithDeathAnimation:
+		DeathSequencePalette: overlayplayertd
+	GrantCondition@Model:
+		Condition: tdsprite
+
+^ScrinSpriteTS:
+	RenderSprites:
+		PlayerPalette: playerts
+	GrantCondition@Model:
+		Condition: voxel
+
+
 ^InfantryRA2Sprite:
 	RenderSprites:
 		PlayerPalette: playerra2
@@ -519,9 +570,17 @@ PROC.Dummy:
 		RequiresCondition: berserkactive && rasprite
 		Palette: berserk_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@BERSERK_RA2:
+		RequiresCondition: berserkactive && ra2sprite
+		Palette: berserk_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@BERSERK_TD:
 		RequiresCondition: berserkactive && tdsprite
 		Palette: berserk_td
+		IsPlayerPalette: true
+	WithModifiedPalette@BERSERK_SCRIN:
+		RequiresCondition: berserkactive && scrinsprite
+		Palette: berserk_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@BERSERK_VOXEL:
 		RequiresCondition: berserkactive && voxel
@@ -548,9 +607,17 @@ PROC.Dummy:
 		RequiresCondition: frenzy && rasprite
 		Palette: frenzy_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@FRENZY_RA2:
+		RequiresCondition: frenzy && ra2sprite
+		Palette: frenzy_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@FRENZY_TD:
 		RequiresCondition: frenzy && tdsprite
 		Palette: frenzy_td
+		IsPlayerPalette: true
+	WithModifiedPalette@FRENZY_SCRIN:
+		RequiresCondition: frenzy && scrinsprite
+		Palette: frenzy_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@FRENZY_VOXEL:
 		RequiresCondition: frenzy && voxel
@@ -561,6 +628,7 @@ PROC.Dummy:
 	WithIdleOverlay@FRENZY:
 		Sequence: vehicle
 		Image: frenzy-overlay
+		IsDecoration: true
 		Palette: frenzyoverlay
 		RequiresCondition: frenzy
 
@@ -579,9 +647,17 @@ PROC.Dummy:
 		RequiresCondition: being-warped && rasprite
 		Palette: temporal_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@temporal_RA2:
+		RequiresCondition: being-warped && ra2sprite
+		Palette: temporal_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@temporal_TD:
 		RequiresCondition: being-warped && tdsprite
 		Palette: temporal_td
+		IsPlayerPalette: true
+	WithModifiedPalette@temporal_SCRIN:
+		RequiresCondition: being-warped && scrinsprite
+		Palette: temporal_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@temporal_VOXEL:
 		RequiresCondition: being-warped && voxel
@@ -596,6 +672,7 @@ PROC.Dummy:
 		Color: 2f74e2
 	WithIdleOverlay@temporal:
 		Sequence: chrono-overlay
+		IsDecoration: true
 		RequiresCondition: being-warped
 	Explodes@temporal:
 		Weapon: TemporalExplode
@@ -621,9 +698,17 @@ PROC.Dummy:
 		RequiresCondition: suppression && rasprite
 		Palette: suppression_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@SUPPRESSION_RA2:
+		RequiresCondition: suppression && ra2sprite
+		Palette: suppression_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@SUPPRESSION_TD:
 		RequiresCondition: suppression && tdsprite
 		Palette: suppression_td
+		IsPlayerPalette: true
+	WithModifiedPalette@SUPPRESSION_SCRIN:
+		RequiresCondition: suppression && scrinsprite
+		Palette: suppression_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@SUPPRESSION_VOXEL:
 		RequiresCondition: suppression && voxel
@@ -662,6 +747,7 @@ PROC.Dummy:
 	WithIdleOverlay@ATOMIZED:
 		Sequence: idle
 		Image: atomize-overlay
+		IsDecoration: true
 		Palette: scrin
 		RequiresCondition: atomized
 	ReloadDelayMultiplier@ATOMIZED:
@@ -827,9 +913,17 @@ PROC.Dummy:
 		RequiresCondition: invulnerability && rasprite
 		Palette: invuln_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@IRONCURTAIN_RA2:
+		RequiresCondition: invulnerability && ra2sprite
+		Palette: invuln_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@IRONCURTAIN_TD:
 		RequiresCondition: invulnerability && tdsprite
 		Palette: invuln_td
+		IsPlayerPalette: true
+	WithModifiedPalette@IRONCURTAIN_SCRIN:
+		RequiresCondition: invulnerability && scrinsprite
+		Palette: invuln_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@IRONCURTAIN_VOXEL:
 		RequiresCondition: invulnerability && voxel
@@ -854,9 +948,17 @@ PROC.Dummy:
 		RequiresCondition: irradiated && rasprite
 		Palette: irrad_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@IRRADIATABLE_RA2:
+		RequiresCondition: irradiated && ra2sprite
+		Palette: irrad_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@IRRADIATABLE_TD:
 		RequiresCondition: irradiated && tdsprite
 		Palette: irrad_td
+		IsPlayerPalette: true
+	WithModifiedPalette@IRRADIATABLE_SCRIN:
+		RequiresCondition: irradiated && scrinsprite
+		Palette: irrad_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@IRRADIATABLE_VOXEL:
 		RequiresCondition: irradiated && voxel
@@ -879,9 +981,17 @@ PROC.Dummy:
 		RequiresCondition: forceshield && !invulnerability && rasprite
 		Palette: forces_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@FORCESHIELD_RA2:
+		RequiresCondition: forceshield && !invulnerability && ra2sprite
+		Palette: forces_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@FORCESHIELD_TD:
 		RequiresCondition: forceshield && !invulnerability && tdsprite
 		Palette: forces_td
+		IsPlayerPalette: true
+	WithModifiedPalette@FORCESHIELD_SCRIN:
+		RequiresCondition: forceshield && !invulnerability && scrinsprite
+		Palette: forces_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@FORCESHIELD_VOXEL:
 		RequiresCondition: forceshield && !invulnerability && voxel
@@ -912,9 +1022,17 @@ PROC.Dummy:
 		RequiresCondition: weaponhit && shields-up && rasprite
 		Palette: shieldhit_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@shieldhit_RA2:
+		RequiresCondition: weaponhit && shields-up && ra2sprite
+		Palette: shieldhit_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@shieldhit_TD:
 		RequiresCondition: weaponhit && shields-up && tdsprite
 		Palette: shieldhit_td
+		IsPlayerPalette: true
+	WithModifiedPalette@shieldhit_SCRIN:
+		RequiresCondition: weaponhit && shields-up && scrinsprite
+		Palette: shieldhit_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@shieldhit_VOXEL:
 		RequiresCondition: weaponhit && shields-up && voxel
@@ -925,6 +1043,7 @@ PROC.Dummy:
 	WithIdleOverlay@NSHIELD:
 		Sequence: idle
 		Image: nshield-overlay
+		IsDecoration: true
 		Palette: effect
 		RequiresCondition: weaponhit && shields-up
 
@@ -937,6 +1056,7 @@ PROC.Dummy:
 		Color: FFFFFF
 	WithIdleOverlay@EMPDISABLE:
 		Sequence: emp-overlay
+		IsDecoration: true
 		Palette: tseffect
 		RequiresCondition: empdisable
 	PowerMultiplier@EMPDISABLE:
@@ -953,6 +1073,7 @@ PROC.Dummy:
 		Color: b4000000
 	WithIdleOverlay@EMPDISABLE:
 		Sequence: emp-overlay
+		IsDecoration: true
 		Palette: tseffect
 
 ^NaniteShieldable:
@@ -960,9 +1081,17 @@ PROC.Dummy:
 		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && rasprite
 		Palette: nrepair_ra
 		IsPlayerPalette: true
+	WithModifiedPalette@NSHIELD_RA2:
+		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && ra2sprite
+		Palette: nrepair_ra2
+		IsPlayerPalette: true
 	WithModifiedPalette@NSHIELD_TD:
 		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && tdsprite
 		Palette: nrepair_td
+		IsPlayerPalette: true
+	WithModifiedPalette@NSHIELD_SCRIN:
+		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && scrinsprite
+		Palette: nrepair_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@NSHIELD_VOXEL:
 		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && voxel
@@ -976,6 +1105,7 @@ PROC.Dummy:
 		Condition: nshield
 	WithIdleOverlay@NSHIELD:
 		Sequence: emp-overlay
+		IsDecoration: true
 		Palette: tseffect
 		RequiresCondition: nshield && damaged
 	ChangesHealth@NSHIELD:
@@ -1006,28 +1136,32 @@ PROC.Dummy:
 		DamageCooldown: 0
 		RequiresCondition: nrepair
 	WithModifiedPalette@NREPAIR:
-		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && !nrepair ## currently disabled
-		Palette: nrepair
-
-	WithModifiedPalette@NREPAIR:
 		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && rasprite
-		Palette: berserk_ra
+		Palette: nrepair_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@NREPAIR_RA2:
+		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && ra2sprite
+		Palette: nrepair_ra2
 		IsPlayerPalette: true
 	WithModifiedPalette@NREPAIR_TD:
 		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && tdsprite
-		Palette: berserk_td
+		Palette: nrepair_td
+		IsPlayerPalette: true
+	WithModifiedPalette@NREPAIR_SCRIN:
+		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && scrinsprite
+		Palette: nrepair_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@NREPAIR_VOXEL:
 		RequiresCondition: nrepair && damaged && !(empdisable || invulnerability || invisibility) && voxel
-		Palette: berserk_voxel
+		Palette: nrepair_voxel
 		IsPlayerPalette: true
-
 	TimedConditionBar@NREPAIR:
 		Condition: nrepair
 		Color: 25cde999
 	WithIdleOverlay@NREPAIR:
 		Sequence: emp-overlay
 		Palette: tseffect
+		IsDecoration: true
 		RequiresCondition: nrepair && damaged
 	WithDecoration@NREPAIR:
 		Image: pips
@@ -1047,6 +1181,7 @@ PROC.Dummy:
 	WithIdleOverlay@NSHIELD:
 		Sequence: idle
 		Image: nshield-overlay
+		IsDecoration: true
 		Palette: effect
 		RequiresCondition: nshield && !(empdisable || invulnerability || invisibility)
 	ExternalCondition@NSHIELD:
@@ -1276,6 +1411,7 @@ PROC.Dummy:
 	WithIdleOverlay@MINDCONTROL:
 		Sequence: mind-overlay
 		Palette: scrin
+		IsDecoration: true
 		RequiresCondition: mindcontrolled
 		Offset: 0,0,300
 
@@ -3023,8 +3159,12 @@ PROC.Dummy:
 	Inherits: ^IrradPalette
 	WithModifiedPalette@IRRADIATABLE:
 		RequiresCondition: rasprite
+	WithModifiedPalette@IRRADIATABLE_RA2:
+		RequiresCondition: ra2sprite
 	WithModifiedPalette@IRRADIATABLE_TD:
 		RequiresCondition: tdsprite
+	WithModifiedPalette@IRRADIATABLE_SCRIN:
+		RequiresCondition: scrinsprite
 	WithModifiedPalette@IRRADIATABLE_VOXEL:
 		RequiresCondition: voxel
 	GrantExternalConditionToOwner@NukularOwned:
@@ -3056,8 +3196,12 @@ PROC.Dummy:
 	Inherits: ^IrradPalette
 	WithModifiedPalette@IRRADIATABLE:
 		RequiresCondition: rasprite && NukularCargo
+	WithModifiedPalette@IRRADIATABLE_RA2:
+		RequiresCondition: ra2sprite && NukularCargo
 	WithModifiedPalette@IRRADIATABLE_TD:
 		RequiresCondition: tdsprite && NukularCargo
+	WithModifiedPalette@IRRADIATABLE_SCRIN:
+		RequiresCondition: scrinsprite && NukularCargo
 	WithModifiedPalette@IRRADIATABLE_VOXEL:
 		RequiresCondition: voxel && NukularCargo
 	Explodes@NUKE:
@@ -3102,7 +3246,7 @@ PROC.Dummy:
 	GrantExternalConditionPowerCA@FSHIELDNukular:
 		OrderName: fshield
 		Icon: forceshieldicon
-		ChargeInterval: 2000
+		ChargeInterval: 1000
 		Condition: forceshield
 		Dimensions: 7, 7
 		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
@@ -3125,7 +3269,7 @@ PROC.Dummy:
 	GrantExternalConditionPowerCA@FSHIELD:
 		OrderName: fshield2
 		Icon: forceshieldicon
-		ChargeInterval: 4000
+		ChargeInterval: 2000
 		Condition: forceshield
 		Dimensions: 7, 7
 		Footprint: ___x___ __xxx__ _xxxxx_ xxxxxxx _xxxxx_ __xxx__ ___x___
@@ -3190,11 +3334,6 @@ PROC.Dummy:
 	Inherits: ^DefenseBalancing
 	RequiresBuildableArea:
 		AreaTypes: outpost_building
-
-	WithModifiedPalette@IRONCURTAIN:
-		RequiresCondition: invulnerability
-
-
 	Selectable:
 		Bounds: 1024, 1024
 	Targetable:
@@ -3206,10 +3345,6 @@ PROC.Dummy:
 		RequiredForShortGame: false
 	-GivesBuildableArea:
 	-AcceptsDeliveredCash:
-	-WithModifiedPalette@FORCESHIELD:
-	-DamageMultiplier@FORCESHIELD:
-	-TimedConditionBar@FORCESHIELD:
-	-ExternalCondition@FORCESHIELD:
 	-PowerMultiplier@FSPOWERDOWN:
 	-CaptureManager:
 	-Capturable:
@@ -3565,6 +3700,7 @@ PROC.Dummy:
 ^HuskTD:
 	Inherits: ^Husk
 	WithIdleOverlay@Burns:
+		IsDecoration: true
 		Image: fire
 		Sequence: 5
 
@@ -4315,6 +4451,8 @@ PROC.Dummy:
 	Inherits: ^TSRenderVoxel
 	RenderVoxels:
 		Scale: 1
+	RenderSprites:
+		Palette: tsunit
 	-WithShadow:
 	-WithVoxelBody:
 	WithVoxelHelicopterBody:
@@ -5329,8 +5467,12 @@ PROC.Dummy:
 	Inherits: ^IrradPalette
 	WithModifiedPalette@IRRADIATABLE:
 		RequiresCondition: rasprite && being-poisoned
+	WithModifiedPalette@IRRADIATABLE_RA2:
+		RequiresCondition: ra2sprite && being-poisoned
 	WithModifiedPalette@IRRADIATABLE_TD:
 		RequiresCondition: tdsprite && being-poisoned
+	WithModifiedPalette@IRRADIATABLE_SCRIN:
+		RequiresCondition: scrinsprite && being-poisoned
 	WithModifiedPalette@IRRADIATABLE_VOXEL:
 		RequiresCondition: voxel && being-poisoned
 	DriverPoisonedByTintedCells@RAD:
@@ -5379,15 +5521,23 @@ PROC.Dummy:
 		TargetTypes: reflector
 	WithModifiedPalette@REFLECTOR:
 		RequiresCondition: energized && rasprite
-		Palette: nrepair_ra
+		Palette: energized_ra
+		IsPlayerPalette: true
+	WithModifiedPalette@REFLECTOR_RA2:
+		RequiresCondition: energized && ra2sprite
+		Palette: energized_ra2
 		IsPlayerPalette: true
 	WithModifiedPalette@REFLECTOR_TD:
 		RequiresCondition: energized && tdsprite
-		Palette: nrepair_td
+		Palette: energized_td
+		IsPlayerPalette: true
+	WithModifiedPalette@REFLECTOR_SCRIN:
+		RequiresCondition: energized && scrinsprite
+		Palette: energized_scrin
 		IsPlayerPalette: true
 	WithModifiedPalette@REFLECTOR_VOXEL:
 		RequiresCondition: energized && voxel
-		Palette: nrepair_voxel
+		Palette: energized_voxel
 		IsPlayerPalette: true
 	ExternalCondition@energized:
 		Condition: energized
@@ -5469,3 +5619,31 @@ PROC.Dummy:
 	WithShadow:
 		Offset: 40, 64, 0
 		ZOffset: -256
+
+^SingleRotor:
+	WithIdleOverlay@ROTORAIR:
+		Offset: 100,0,185
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTORGROUND:
+		Offset: 100,0,185
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+
+^DualRotors:
+	WithIdleOverlay@ROTOR1AIR:
+		Offset: 490,0,150
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR1GROUND:
+		Offset: 490,0,150
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithIdleOverlay@ROTOR2AIR:
+		Offset: -580,0,180
+		Sequence: rotor2
+		RequiresCondition: airborne
+	WithIdleOverlay@ROTOR2GROUND:
+		Offset: -580,0,180
+		Sequence: slow-rotor2
+		RequiresCondition: !airborne

@@ -7,6 +7,7 @@ HIND:
 		SkipRate: 1
 	RenderSprites:
 		Image: hind
+		Palette: tsunit
 	Inherits: ^FightingHelicopter
 	Inherits: ^PrioAntiInfantry
 	Inherits: ^BiologicalPilot
@@ -37,14 +38,11 @@ HIND:
 	AutoTarget:
 		InitialStance: Defend
 		InitialStanceAI: Defend
+	Inherits: ^SingleRotor
 	WithIdleOverlay@ROTORAIR:
-		Sequence: rotor
 		Offset: 70,0,200
-		RequiresCondition: airborne
 	WithIdleOverlay@ROTORGROUND:
-		Sequence: slow-rotor
 		Offset: 70,0,200
-		RequiresCondition: !airborne
 	SelectionDecorations:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
@@ -417,19 +415,12 @@ KIRO:
 		Condition: enable-smoke
 
 ^KIRO.Carrier:
+	Inherits: ^DualRotors
 	WithIdleOverlay@ROTOR1AIR:
 		Offset: -180,597,250
-		Sequence: rotor
-		RequiresCondition: airborne
 	WithIdleOverlay@ROTOR1GROUND:
 		Offset: -180,597,250
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
 	WithIdleOverlay@ROTOR2AIR:
 		Offset: -180,-597,250
-		Sequence: rotor
-		RequiresCondition: airborne
 	WithIdleOverlay@ROTOR2GROUND:
 		Offset: -180,-597,250
-		Sequence: slow-rotor
-		RequiresCondition: !airborne

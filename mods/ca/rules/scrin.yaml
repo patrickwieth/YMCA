@@ -37,7 +37,7 @@ S1:
 
 S2:
 	Inherits: ^ScrinInfantry
-	Inherits: ^ScrinSprite
+	Inherits: ^InfantryRA2Sprite
 	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Infantry
@@ -248,13 +248,11 @@ FEED:
 
 GSCR:
 	Inherits: BRUT
+	Inherits: ^ScrinInfantrySprite
 	RenderSprites:
 		Image: gscr
-		PlayerPalette: overlayplayerscrin
 	Voiced:
 		VoiceSet: GiantScrinVoice
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayerscrin
 	-Buildable:
 	Tooltip:
 		Name: Brutalizer
@@ -268,13 +266,11 @@ GSCR:
 
 GSCR.Mutating:
 	Inherits: BRUT.Mutating
+	Inherits: ^ScrinInfantrySprite
 	SpawnActorOnDeath@GMUT:
 		Actor: gscr
 	RenderSprites:
 		Image: gscr
-		PlayerPalette: overlayplayerscrin
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayerscrin
 
 MAST:
 	Inherits: ^ScrinInfantry
@@ -356,7 +352,7 @@ MAST:
 
 S7:
 	Inherits: ^ScrinInfantry
-	Inherits: ^ScrinSprite
+	Inherits: ^InfantryRA2Sprite
 	Inherits: ^PrioAntiInfantry
 	Buildable:
 		Queue: Infantry
@@ -430,7 +426,7 @@ S8:
 
 STMR:
 	Inherits: ^Helicopter
-	Inherits: ^ScrinSprite
+	Inherits: ^InfantryRA2Sprite
 	Inherits: ^PrioAntiLightAA
 	Inherits: ^BiologicalPilot
 	RenderSprites:
@@ -760,7 +756,7 @@ ENRV:
 
 DEVA:
 	Inherits: ^Airship
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Inherits: ^HeavyArmor
 	Inherits: ^PrioArtillery
 	Inherits: ^BiologicalPilot
@@ -849,7 +845,7 @@ DEVA.Rift:
 
 PAC:
 	Inherits: ^Airship
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Inherits: ^HeavyArmor
 	Inherits: ^PrioAntiLightAA
 	Inherits: ^BiologicalPilot
@@ -1242,6 +1238,7 @@ INVA.suicide:
 
 MSHP:
 	Inherits: ^Airship
+	Inherits: ^ScrinSprite
 	Inherits: ^HeavyArmor
 	Inherits: ^PrioArtillery
 	Inherits: ^GainsExperience
@@ -1252,8 +1249,6 @@ MSHP:
 		Prerequisites: sign, scrt, ~aircraft.scrin, ~commander_tree.mothership
 		Description: Huge craft with powerful beam weapon.\n  Can create wormholes.\n  Maximum 1 can be built.\n  Strong vs Buildings, Defenses\n  Weak vs Aircraft
 		IconPalette: scrin
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Voiced:
 		VoiceSet: MothershipVoice
 	Valued:
@@ -1438,6 +1433,7 @@ Bastion:
 
 SMCV.Husk:
 	Inherits: ^Husk
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Colony Ship)
 	TransformOnCapture:
@@ -1445,12 +1441,11 @@ SMCV.Husk:
 	InfiltrateForTransform:
 		IntoActor: smcv
 	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 		Image: smcv.destroyed
 
 HARV.Scrin.Husk:
 	Inherits: ^Husk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Harvester)
 	TransformOnCapture:
@@ -1476,7 +1471,7 @@ GUNW.Husk:
 
 SEEK.Husk:
 	Inherits: ^Husk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Seeker)
 	ThrowsParticle@turret:
@@ -1493,7 +1488,7 @@ SEEK.Husk:
 
 INTL.Husk:
 	Inherits: ^Husk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Interloper)
 	TransformOnCapture:
@@ -1502,14 +1497,13 @@ INTL.Husk:
 		IntoActor: intl
 	RenderSprites:
 		Image: intl.destroyed
-		PlayerPalette: overlayplayerscrin
 	WithShadow:
 		Offset: 43, 128, 0
 		ZOffset: -129
 
 CORR.Husk:
 	Inherits: ^Husk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Corrupter)
 	TransformOnCapture:
@@ -1521,7 +1515,7 @@ CORR.Husk:
 
 DEVO.Husk:
 	Inherits: ^Husk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Devourer)
 	TransformOnCapture:
@@ -1533,7 +1527,7 @@ DEVO.Husk:
 
 RUIN.Husk:
 	Inherits: ^Husk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Ruiner)
 	TransformOnCapture:
@@ -1545,7 +1539,7 @@ RUIN.Husk:
 
 TPOD.Husk:
 	Inherits: ^Husk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Annihilator Tripod)
 	TransformOnCapture:
@@ -1557,7 +1551,7 @@ TPOD.Husk:
 
 RPTP.Husk:
 	Inherits: ^Husk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Husk (Heavy Tripod)
 	ThrowsParticle@turret:
@@ -1571,7 +1565,7 @@ RPTP.Husk:
 
 STMR.Husk:
 	Inherits: ^PlaneHusk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Stormrider
 	Aircraft:
@@ -1605,6 +1599,7 @@ STMR.Husk.EMP:
 
 ENRV.Husk:
 	Inherits: ^PlaneHusk
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Enervator
 	Aircraft:
@@ -1634,7 +1629,6 @@ ENRV.Husk:
 		Type: GroundPosition
 	RenderSprites:
 		Image: enrv
-		PlayerPalette: overlayplayerscrin
 
 ENRV.Husk.EMP:
 	Inherits: ENRV.Husk
@@ -1642,7 +1636,7 @@ ENRV.Husk.EMP:
 
 DEVA.Husk:
 	Inherits: ^HelicopterHusk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Devastator Warship
 	Aircraft:
@@ -1664,7 +1658,7 @@ DEVA.Husk.EMP:
 
 PAC.Husk:
 	Inherits: ^HelicopterHusk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Planetary Assault Carrier
 	Aircraft:
@@ -1686,7 +1680,7 @@ PAC.Husk.EMP:
 
 INVA.Husk:
 	Inherits: ^PlaneHusk
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Invader
 	Aircraft:
@@ -1716,6 +1710,7 @@ INVA.Husk.Empty.EMP:
 
 MSHP.Husk:
 	Inherits: ^HelicopterHusk
+	Inherits: ^ScrinSpriteRA2
 	Tooltip:
 		Name: Mothership
 	Aircraft:
@@ -1734,7 +1729,6 @@ MSHP.Husk:
 		Type: GroundPosition
 	RenderSprites:
 		Image: mshp
-		PlayerPalette: overlayplayerscrin
 	FallsToEarth:
 		Explosion: KirovExplode
 	SpawnActorOnDeath:
@@ -1746,10 +1740,10 @@ MSHP.Husk:
 
 MSHP.Husk.Ground:
 	Inherits: ^Husk
+	Inherits: ^ScrinInfantrySprite
 	Inherits: ^ThrowsShrapnelBig
 	RenderSprites:
 		Image: mshp
-		PlayerPalette: overlayplayerscrin
 	Tooltip:
 		Name: Husk (Mothership)
 	KillsSelf:
@@ -1995,7 +1989,7 @@ REAC:
 
 REA2:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Inherits: ^DisabledByPowerOutage
 	Inherits: ^3x2Shape
 	Inherits: ^PowerDrainable
@@ -2037,7 +2031,7 @@ REA2:
 PROC.SCRIN:
 	Inherits: ^ScrinBuilding
 	Inherits@shape: ^3x3Shape
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Inherits@2: ^BotIncome
 	Inherits@Refinery: ^Refinery
 	HitShape:
@@ -2139,7 +2133,7 @@ PORT:
 
 WSPH:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Inherits: ^PrimaryBuilding
 	Inherits: ^VehicleProduction
 	Inherits: ^3x2Shape
@@ -2183,7 +2177,7 @@ WSPH:
 
 NERV:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Inherits: ^TechLevelBuilding
 	Inherits@shape: ^2x2Shape
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
@@ -2491,7 +2485,7 @@ SIGN:
 
 SREP:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Inherits@shape: ^3x3Shape
 	HitShape:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
@@ -2540,7 +2534,7 @@ SREP:
 
 SILO.SCRIN:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSprite
+	Inherits: ^ScrinSpriteRA2
 	Valued:
 		Cost: 150
 	Tooltip:
@@ -2798,6 +2792,7 @@ SHAR:
 
 SCOL:
 	Inherits: ^Defense
+	Inherits: ^ScrinSpriteRA2
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetGround
 	Inherits@Flash: ^WhiteFlash

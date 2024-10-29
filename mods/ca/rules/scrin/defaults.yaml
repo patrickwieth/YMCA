@@ -65,48 +65,15 @@
 	Building:
 		BuildSounds: scrinbuild.aud
 
-^ScrinSprite:
-	RenderSprites:
-		PlayerPalette: playerra2
-	WithDeathAnimation:
-		DeathSequencePalette: playerra2
-
-^ScrinSpriteTD:
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayertd
-
-^ScrinSpriteTS:
-	RenderSprites:
-		PlayerPalette: playerts
-
 ^ScrinInfantry:
 	Inherits: ^Soldier
+	Inherits: ^ScrinInfantrySprite
 	Inherits: ^HealOnTiberium
 	-DamagedByTerrain@TIB:
-	RenderSprites:
-		PlayerPalette: overlayplayerscrin
 	Voiced:
 		VoiceSet: ScrinInfantryVoice
 	Targetable:
 		TargetTypes: Ground, Infantry
-	WithDeathAnimation:
-		DeathSequencePalette: overlayplayerscrin
-		DeathTypes:
-			DefaultDeath: 1
-			BulletDeath: 2
-			SmallExplosionDeath: 3
-			ExplosionDeath: 4
-			FireDeath: 5
-			ElectricityDeath: 6
-			PoisonDeath: 7
-			ChronoDeath: 8
-			ToxinDeath: 9
-			RadiationDeath: 10
-			FrozenDeath: 11
-		CrushedSequence: die-crushed
-		CrushedSequencePalette: scrin
 	-TakeCover:
 	TransformOnCondition@FEEDER:
 		RequiresCondition: feedermutation
@@ -123,6 +90,7 @@
 		Sequence: light-medium
 		Palette: player-alpha40
 		IsPlayerPalette: true
+		IsDecoration: true
 		IgnoreHover: true
 	WithIdleOverlay@DamagedDecorationLights:
 		RequiresCondition: damaged
@@ -130,6 +98,7 @@
 		Sequence: damaged-light-medium
 		Palette: player-alpha30
 		IsPlayerPalette: true
+		IsDecoration: true
 		IgnoreHover: true
 
 ^ScrinLightsBig:
@@ -147,6 +116,7 @@
 		Sequence: damaged-light-tripod
 
 ^ScrinShielded:
+	Inherits: ^Shielded
 	Shielded:
 		MaxStrength: 50000
 		RegenDelay: 100
@@ -155,15 +125,11 @@
 		ShieldsUpCondition: shields-up
 		RequiresCondition: !empdisable
 		SelectionBarColor: 4488ff
-	WithModifiedPalette@shieldhit:
-		Palette: shieldhit
-		RequiresCondition: weaponhit && shields-up
-	ExternalCondition@weaponhit:
-		Condition: weaponhit
 	WithIdleOverlay@SHIELD:
 		Sequence: idle
 		Image: nshield-overlay-big
 		Palette: effect
+		IsDecoration: true
 		RequiresCondition: weaponhit && shields-up
 
 ^ScrinSmallShielded:

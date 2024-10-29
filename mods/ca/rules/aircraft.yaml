@@ -698,9 +698,13 @@ TRAN:
 	Inherits: ^Helicopter
 	Inherits: ^BiologicalPilot
 	Inherits: ^Transport
+	Inherits: ^DualRotors
 	Inherits: ^TSRenderVoxel
 	RenderVoxels:
 		Scale: 0.65
+	RenderSprites:
+		Palette: tsunit
+		Image: tran
 	-WithShadow:
 	Buildable:
 		Queue: Aircraft
@@ -729,22 +733,6 @@ TRAN:
 		AltitudeVelocity: 0c58
 		TakeoffSounds: htoff1.aud
 		LandingSounds: hland1.aud
-	WithIdleOverlay@ROTOR1AIR:
-		Offset: 490,0,150
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR1GROUND:
-		Offset: 490,0,150
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -580,0,180
-		Sequence: rotor2
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -580,0,180
-		Sequence: slow-rotor2
-		RequiresCondition: !airborne
 	Cargo:
 		Types: Infantry
 		MaxWeight: 8
@@ -800,7 +788,7 @@ TRAN.Eagle:
 		InvalidTargets: NoAutoTarget
 
 TRAN.paradrop:
-	Inherits: ^Helicopter
+	Inherits: TRAN
 	Tooltip:
 		Name: Chinook
 	ParaDrop:
@@ -811,22 +799,6 @@ TRAN.paradrop:
 		TurnSpeed: 20
 		Speed: 135
 		AltitudeVelocity: 0c100
-	WithIdleOverlay@ROTOR1AIR:
-		Offset: 597,0,85
-		Sequence: rotor
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR1GROUND:
-		Offset: 597,0,85
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: -597,0,171
-		Sequence: rotor2
-		RequiresCondition: airborne
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -597,0,171
-		Sequence: slow-rotor2
-		RequiresCondition: !airborne
 	Cargo:
 		Types: Infantry
 		MaxWeight: 8
@@ -834,14 +806,6 @@ TRAN.paradrop:
 	Interactable:
 	-Voiced:
 	RejectsOrders:
-	RenderSprites:
-		Image: tran3
-	SpawnActorOnDeath:
-		Actor: TRAN.Husk
-		RequiresCondition: !empdisable && !being-warped
-	SpawnActorOnDeath@EMP:
-		Actor: TRAN.Husk.EMP
-		RequiresCondition: empdisable && !being-warped
 	GivesExperience:
 		Experience: 1000
 	WithCargoPipsDecoration:
@@ -1277,22 +1241,15 @@ OCAR:
 	SpawnActorOnDeath@EMP:
 		Actor: OCAR.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
+	Inherits: ^DualRotors
 	WithIdleOverlay@ROTOR1AIR:
 		Offset: 100,-575,100
-		Sequence: rotor
-		RequiresCondition: airborne
 	WithIdleOverlay@ROTOR1GROUND:
 		Offset: 100,-575,100
-		Sequence: slow-rotor
-		RequiresCondition: !airborne
 	WithIdleOverlay@ROTOR2AIR:
 		Offset: 100,575,100
-		Sequence: rotor2
-		RequiresCondition: airborne
 	WithIdleOverlay@ROTOR2GROUND:
 		Offset: 100,575,100
-		Sequence: slow-rotor2
-		RequiresCondition: !airborne
 	Voiced:
 		VoiceSet: CarryAllVoice
 	SpeedMultiplier@EagleBonus:
