@@ -158,3 +158,51 @@ Cryotrooper:
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
 	Inherits: ^PointLaserDefenseSystemSmall
+
+SpecOps:
+	Inherits: ^Soldier
+	Inherits: ^PrioAntiInfantry
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^SensorEquipment
+	Inherits: ^CloakedAttacker
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 100
+		Prerequisites: ~infantry.allies, atek, ~commander_tree.advanced_infantry_training, ~commander_tree.spec_ops
+		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
+	Valued:
+		Cost: 800
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: InfilVoice
+	WithInfantryBody:
+		StandSequences: stand
+		IdleSequences: idle1, idle2, idle3
+	Health:
+		HP: 4000
+	Mobile:
+		speed: 73
+		Voice: Move
+	Tooltip:
+		Name: Special Operations
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	Armament:
+		Weapon: SilencedPPK
+		FireDelay: 5
+	Armament@SECONADARY:
+		LocalOffset: 250,0,400
+		Weapon: relayMarker
+	Armament@Garrison:
+		Name: mounted
+		Weapon: relayMarker
+	IgnoresDisguise:
+	Cloak@NORMAL:
+		IsPlayerPalette: true
+		Palette: cloakts
