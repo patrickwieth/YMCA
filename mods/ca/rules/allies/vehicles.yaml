@@ -1,3 +1,102 @@
+Prismtank:
+	Inherits: ^FightingVehicle
+	Inherits: ^VoxelVehicle
+	Inherits: ^VoxelTurretedTank
+	RenderVoxels:
+		Scale: 0.7
+		Image: prismtank
+	RenderSprites:
+		Image: prismtank
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLight
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 135
+		IconPalette: chrome
+		Prerequisites: radar, ~commander_tree.prism_tank
+		Description: Long-range artillery with Prism Tower derived weapon.\n  Strong vs Buildings, Infantry, Light Armor\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Prism Tank
+		GenericName: Tank
+	Health:
+		HP: 22000
+	Mobile:
+		Speed: 82
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Turreted:
+		TurnSpeed: 48
+		Offset: 0,0,0
+	Armament:
+		Weapon: PrisTLaser
+		LocalOffset: 100,0,350
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		TargetFrozenActors: True
+		OpportunityFire: False
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	SpawnActorOnDeath:
+		Actor: Prismtank.Husk
+		RequiresCondition: !being-warped
+	Voiced:
+		VoiceSet: PrismVoice
+
+PBLASTER:
+	Inherits: Prismtank
+	RenderVoxels:
+		Scale: 0.7
+		Image: prismblaster
+	Tooltip:
+		Name: Prism Blaster
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: radar, ~commander_tree.prism_blaster
+		Description: Prism Tower derived weapon hitting many targets on impact.\n  Strong vs Buildings, Infantry, Light Armor\n  Weak vs Tanks, Aircraft
+	Health:
+		HP: 33000
+	Armament:
+		Weapon: PrisBlaster
+		LocalOffset: 400,0,300
+
+PCAN:
+	Inherits: Prismtank
+	RenderVoxels:
+		Scale: 0.7
+		Image: prismcannon
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^FightingVehicle
+	Buildable:
+		IconPalette: chrome
+		Prerequisites: radar, ~commander_tree.prism_cannon
+		Description: A prototype long range artillery that fires highly focused beams of light.\n  Strong vs Buildings, Vehicles, Infantry\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Prism Cannon
+		GenericName: Tank
+	Health:
+		HP: 22000
+	Mobile:
+		Speed: 82
+		Voice: Move
+	Turreted:
+		TurnSpeed: 12
+	Armament:
+		Weapon: PrisCLaser
+		FireDelay: 10
+		LocalOffset: 600,0,300
+		PauseOnCondition: empdisable || being-warped
+	SpawnActorOnDeath:
+		Actor: Prismtank.Husk
+		RequiresCondition: !being-warped
+	SelectionDecorations:
+	Voiced:
+		VoiceSet: PrismVoice
+
 CTNK:
 	Inherits: ^Tank
 	Inherits: ^VoxelVehicle
@@ -45,9 +144,6 @@ CTNK:
 		FacingTolerance: 0
 	PortableChrono:
 		ChargeDelay: 250
-	ProductionCostMultiplier@GermanyBonus:
-		Multiplier: 90
-		Prerequisites: vehicles.germany
 
 CTNK.PDL:
 	Inherits: ^PointLaserDefenseSystem
