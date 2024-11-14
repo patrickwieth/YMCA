@@ -1,5 +1,6 @@
-Grand_Cannon:
+Ion_Defense:
 	Inherits: ^Defense
+	Inherits: ^TSSprite
 	Inherits: ^HighResShadow
 	Inherits: ^AutoTargetGround
 	Inherits: ^DisableOnLowPowerOrPowerDown
@@ -7,49 +8,91 @@ Grand_Cannon:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 100
-		Prerequisites: radar, ~structures.france
-		Description: Artillery base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Ground Units\n  Weak vs Aircraft
+		Prerequisites: hq, ~structures.zocom
+		Description: Ion base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Aircraft, Artillery
+		Attributes: • Deals area of effect damage
 	Valued:
-		Cost: 1650
+		Cost: 2000
 	Tooltip:
-		Name: Grand Cannon
+		Name: Ion Defense
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
 	Health:
-		HP: 100000
-	RevealsShroud:
-		MinRange: 6c0
-		Range: 8c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 6c0
+		HP: 110000
 	Turreted:
 		TurnSpeed: 8
 		InitialFacing: 0
 		RealignDelay: -1
-	-WithSpriteBody:
+	WithSpriteBody:
+		Sequence: base
 	WithEmbeddedTurretSpriteBody:
 		PauseOnCondition: disabled || empdisable || being-warped
+	-WithMakeAnimation:
 	AttackTurreted:
 		PauseOnCondition: disabled || empdisable || being-warped
-	WithAttackAnimation:
-		Sequence: shoot
 	Armament:
-		Weapon: 203mm
+		Weapon: IonZap.Defense
 		FireDelay: 2
 		MuzzleSequence: muzzle
-		LocalOffset: 2100,0,80
+		LocalOffset: 1000,0,80
 	WithMuzzleOverlay:
 	Power:
-		Amount: -100
+		Amount: -150
 		RequiresCondition: !being-warped
-	BodyOrientation:
-		UseClassicFacings: True
 	Explodes:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
 	WithBuildingBib:
 		HasMinibib: true
 	DetectCloaked:
+		RequiresCondition: !(disabled || empdisable || being-warped)
+
+STWR:
+	Inherits: ^Defense
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetGround
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: hq, ~structures.zocom, ~disabled
+		Description: Advanced base defense that emits devastating sonic shockwaves.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Sonic Tower
+	Building:
+	Health:
+		HP: 55000
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	WithBuildingBib:
+		HasMinibib: true
+	Turreted:
+		TurnSpeed: 20
+		InitialFacing: 48
+	-WithSpriteBody:
+	WithEmbeddedTurretSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
+	Armament:
+		Weapon: SonicPulse
+		PauseOnCondition: empdisable && being-warped
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+	WithMuzzleOverlay:
+	Power:
+		Amount: -80
+		RequiresCondition: !being-warped
+	BodyOrientation:
+		UseClassicFacings: True
+	DetectCloaked:
+		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)

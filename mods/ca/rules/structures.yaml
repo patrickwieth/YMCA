@@ -3107,52 +3107,6 @@ ATWR:
 		Position: BottomLeft
 		RequiresSelection: true
 
-STWR:
-	Inherits: ^Defense
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetGround
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 80
-		Prerequisites: hq, ~structures.zocom
-		Description: Advanced base defense that emits devastating sonic shockwaves.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
-	Valued:
-		Cost: 1350
-	Tooltip:
-		Name: Sonic Tower
-	Building:
-	Health:
-		HP: 55000
-	RevealsShroud:
-		MinRange: 6c0
-		Range: 8c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 6c0
-	WithBuildingBib:
-		HasMinibib: true
-	Turreted:
-		TurnSpeed: 20
-		InitialFacing: 48
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
-		PauseOnCondition: disabled || empdisable || being-warped
-	Armament:
-		Weapon: SonicPulse
-		PauseOnCondition: empdisable && being-warped
-	AttackTurreted:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable || being-warped
-	WithMuzzleOverlay:
-	Power:
-		Amount: -80
-		RequiresCondition: !being-warped
-	BodyOrientation:
-		UseClassicFacings: True
-	DetectCloaked:
-		Range: 6c0
-		RequiresCondition: !(disabled || empdisable || being-warped)
-
 OBLI:
 	Inherits: ^DefenseTD
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
