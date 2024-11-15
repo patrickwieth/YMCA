@@ -1192,8 +1192,9 @@ LEADER:
 		PauseOnCondition: loaded
 
 
-BRUT:
+Brute:
 	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
 	Inherits@Armor: ^LightArmor
 	Inherits: ^PrioAntiHeavy
 	AutoTarget:
@@ -1232,7 +1233,6 @@ BRUT:
 	AttackSounds:
 		Sounds: ibruatta.aud, ibruattb.aud
 	WithDeathAnimation:
-		DeathSequencePalette: overlayplayertd
 		DeathSequence: die
 		UseDeathTypeSuffix: true
 		DeathTypes:
@@ -1269,10 +1269,10 @@ BRUT:
 	-SpawnActorOnDeath@GMUT:
 	-Targetable@GMUT:
 
-BRUT.Mutating:
-	Inherits: BRUT
+Brute.Mutating:
+	Inherits: Brute
 	RenderSprites:
-		Image: brut
+		Image: brute
 	RejectsOrders:
 	WithFacingSpriteBody:
 		Sequence: stand
@@ -1282,7 +1282,7 @@ BRUT.Mutating:
 		RequiresCondition: !mutating
 		Delay: 10
 	SpawnActorOnDeath@GMUT:
-		Actor: brut
+		Actor: brute
 		OwnerType: Victim
 		SpawnAfterDefeat: false
 	-UpdatesPlayerStatistics:
