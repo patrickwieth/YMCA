@@ -822,82 +822,6 @@ SNIP:
 		Position: BottomLeft
 		RequiresSelection: true
 
-BORI:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiInfantry
-	Inherits: ^SensorEquipment
-	Inherits: ^SovietInfantry
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@COMMANDOSKULL: ^CommandoSkull
-	RenderSprites:
-		Image: boris
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 120
-		Prerequisites: ~infantry.soviet, stek, ~commander_tree.advanced_infantry_training, ~!commander_tree.yuri
-		BuildLimit: 1
-		Description: Elite commando infantry. Armed with C4.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Buildings\n  Weak vs Aircraft\n  Special Ability: Can call an Airstrike on Structures
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: Boris
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 16000
-	Mobile:
-		speed: 73
-		Voice: Move
-	-Crushable:
-	Guard:
-		Voice: Move
-	Passenger:
-		CustomPipType: red
-		Voice: Move
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	Armament@PRIMARY:
-		Name: secondary
-		Weapon: akm
-	Armament@Garrison:
-		Name: mounted
-		Weapon: akmE
-	Armament@flare:
-		Name: primary
-		Weapon: Flare
-		LocalOffset: 30,0,250
-	AirstrikeMaster:
-		Actors: U2.Bomber
-		SquadSize: 1
-		RespawnTicks: 150
-		InstaRepair: true
-		SlaveDisposalOnKill: KillSlaves
-		SpawnAllAtOnce: true
-		SpawnerArmamentName: primary
-	Demolition:
-		DetonationDelay: 45
-		Voice: Demolish
-	AutoTarget:
-	-WithInfantryBody:
-	WithInfantryBody:
-		IdleSequences: idle1
-		AttackSequences:
-			primary: shoot-laser
-			secondary: shoot
-	VoiceAnnouncement:
-		Voice: Build
-	AnnounceOnKill:
-	IgnoresDisguise:
-	Voiced:
-		VoiceSet: BorisVoice
-	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
-	TakeCover:
-		SpeedModifier: 70
-
 Mortar:
 	Inherits: ^Soldier
 	Inherits: ^PrioArtillery
@@ -975,193 +899,6 @@ Mortar.Chemical:
 		RequiresCondition: !being-warped
 	WithDeathAnimation:
 		DeathSequencePalette: playertd
-
-JJET:
-	Inherits: ^Infantry
-	Inherits: ^PrioAntiLight
-	Inherits: ^LightArmor
-	Inherits: ^EmpDisable
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 59
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.jumpjet, ~!commander_tree.jumpjet_railgun, ~!commander_tree.jumpjet_rockets
-		IconPalette: chrometd
-		Description: Flying general-purpose infantry.\n  Can detect cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 250
-	Tooltip:
-		Name: Jump-Jet Trooper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 12000
-	Armament@AIR:
-		Weapon: M60mgJJ
-		RequiresCondition: undeployed
-	Armament@GROUND:
-		Weapon: M60mgJJ.Ground
-		RequiresCondition: deployed
-	AttackFrontal:
-		PauseOnCondition: being-warped
-		Voice: Attack
-		FacingTolerance: 0
-	WithInfantryBody:
-		RequiresCondition: !being-warped && undeployed
-		StandSequences: hover
-		DefaultAttackSequence: flying-attack
-		MoveSequence: flying
-	WithInfantryBody@Ground:
-		RequiresCondition: !being-warped && deployed
-		StandSequences: stand
-		DefaultAttackSequence: attack
-		IdleSequences: idle1, idle2
-	WithInfantryBody@Warped:
-		StandSequences: stand
-		RequiresCondition: being-warped
-	AttackMove:
-		Voice: Move
-	-Passenger:
-	-GainsExperienceMultiplier:
-	Guard:
-		Voice: Move
-	Voiced:
-		VoiceSet: JJVoice
-	KillsSelf@EMP:
-		RequiresCondition: (empdisable && undeployed)
-		DamageTypes: DefaultDeath
-	KillsSelf@BADTERRAIN:
-		RequiresCondition: (badterrain && deployed)
-		DamageTypes: DefaultDeath
-		Delay: 25
-	KillsSelf@SPLASH:
-		RequiresCondition: (badwater && deployed)
-		GrantsCondition: splash
-		Delay: 25
-	Explodes@SPLASH:
-		Weapon: UnitExplodeSubmarine
-		RequiresCondition: splash
-	Targetable:
-		RequiresCondition: deployed && !being-warped
-		TargetTypes: Ground, Infantry
-	Targetable@HEAL:
-		RequiresCondition: deployed && !being-warped && damaged
-		TargetTypes: Heal
-	Targetable@AIRBORNE:
-		RequiresCondition: !being-warped && undeployed
-		TargetTypes: Air
-	Targetable@Temporal:
-		TargetTypes: Temporal
-		RequiresCondition: deployed
-	Mobile:
-		Speed: 112
-		Locomotor: jumpjet
-		PauseOnCondition: being-warped
-	Hovers:
-		InitialHeight: 0c511
-		BobDistance: -48
-		MinHoveringAltitude: 0c3
-		RiseTicks: 150
-		RequiresCondition: undeployed
-	WithShadow:
-		RequiresCondition: undeployed
-		Offset: 0,0,-768
-	GrantConditionOnDeploy:
-		DeployedCondition: deployed
-		UndeployedCondition: undeployed
-		UndeployOnMove: False
-		Voice: Move
-		PauseOnCondition: being-warped
-	UpdatesPlayerStatistics:
-	MustBeDestroyed:
-	-SpawnActorOnDeath@viceroid:
-	-Crushable:
-	SpeedMultiplier:
-		Modifier: 55
-		RequiresCondition: deployed
-	GrantConditionOnTerrain@KILLJUMPJET:
-		Condition: badterrain
-		TerrainTypes: Cliff, Rock, Tree, Wall
-	GrantConditionOnTerrain@KILLJUMPJETWATER:
-		Condition: badwater
-		TerrainTypes: Water
-	HitShape:
-		RequiresCondition: deployed
-	HitShape@AIRBORNE:
-		Type: Circle
-			Radius: 768
-		TargetableOffsets: 0, 0, 768
-		UseTargetableCellsOffsets: true
-		RequiresCondition: undeployed
-	DetectCloaked:
-		Range: 3c0
-		DetectionTypes: Cloak, Thief
-
-JJET.Rocket:
-	Inherits: JJET
-	Inherits: ^PrioAntiHeavyAA
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 59
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.jumpjet_rockets
-		IconPalette: chrometd
-		Description: Flying general-purpose infantry.\n  Can detect cloaked units.\n  Strong vs Vehicles\n  Weak vs Infantry
-	Valued:
-		Cost: 500
-	Health:
-		HP: 20000
-	Tooltip:
-		Name: Jump-Jet Rocket Trooper
-	-Armament@AIR:
-	-Armament@GROUND:
-	Armament@AIRGROUND:
-		Weapon: BikeRockets
-		LocalOffset: 150, -50, 500, 150, 50, 500
-		LocalYaw: 100, -100
-		RequiresCondition: undeployed
-	Armament@AIRAIR:
-		Weapon: BikeRocketsAA
-		LocalOffset: 150, -50, 500, 150, 50, 500
-		LocalYaw: 100, -100
-		RequiresCondition: undeployed
-	Armament@GROUNDGROUND:
-		Weapon: BikeRockets
-		LocalOffset: 150, -50, 0, 150, 50, 0
-		LocalYaw: 100, -100
-		RequiresCondition: deployed
-	Armament@GROUNDAIR:
-		Weapon: BikeRocketsAA
-		LocalOffset: 150, -50, 0, 150, 50, 0
-		LocalYaw: 100, -100
-		RequiresCondition: deployed
-
-JJET.Railgun:
-	Inherits: JJET
-	Inherits: ^PrioEnergyAntiHeavy
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 59
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~commander_tree.jumpjet_railgun
-		IconPalette: chrometd
-		Description: Flying anti-tank infantry.\n  Can detect cloaked units.\n  Strong vs Tanks\n  Weak vs Aircraft
-	Valued:
-		Cost: 800
-	Health:
-		HP: 18000
-	Tooltip:
-		Name: Jump-Jet Railgunner
-	Armament@AIR:
-		Weapon: Railgun.Infantry
-		LocalOffset: 341,0,756
-		RequiresCondition: undeployed
-	Armament@GROUND:
-		Weapon: Railgun.Infantry
-		LocalOffset: 341,0,256
-		RequiresCondition: deployed
-		MuzzleSequence: muzzle
-	WithMuzzleOverlay:
 
 E8:
 	Inherits: ^Soldier
@@ -1378,8 +1115,9 @@ LEADER:
 		PauseOnCondition: loaded
 
 
-BRUT:
+Brute:
 	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
 	Inherits@Armor: ^LightArmor
 	Inherits: ^PrioAntiHeavy
 	AutoTarget:
@@ -1418,7 +1156,6 @@ BRUT:
 	AttackSounds:
 		Sounds: ibruatta.aud, ibruattb.aud
 	WithDeathAnimation:
-		DeathSequencePalette: overlayplayertd
 		DeathSequence: die
 		UseDeathTypeSuffix: true
 		DeathTypes:
@@ -1455,10 +1192,10 @@ BRUT:
 	-SpawnActorOnDeath@GMUT:
 	-Targetable@GMUT:
 
-BRUT.Mutating:
-	Inherits: BRUT
+Brute.Mutating:
+	Inherits: Brute
 	RenderSprites:
-		Image: brut
+		Image: brute
 	RejectsOrders:
 	WithFacingSpriteBody:
 		Sequence: stand
@@ -1468,7 +1205,7 @@ BRUT.Mutating:
 		RequiresCondition: !mutating
 		Delay: 10
 	SpawnActorOnDeath@GMUT:
-		Actor: brut
+		Actor: brute
 		OwnerType: Victim
 		SpawnAfterDefeat: false
 	-UpdatesPlayerStatistics:
