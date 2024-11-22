@@ -1,3 +1,57 @@
+# vehicles
+
+commander_tree.Prism_Tank:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Prism Tank
+	RenderSprites:
+		Image: prismtank
+	Buildable:
+		BuildPaletteOrder: 9
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, ~!commander_tree.prism_cannon, ~!commander_tree.prism_blaster, ~!vehicles.england
+		Description: Enables to build the Prism Tank, an energy based weapon with high range.\n  Srong versus light vehicles and infantry.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.prism
+
+commander_tree.Prism_Cannon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Prism Cannon
+	RenderSprites:
+		Image: prismcannon
+	Buildable:
+		BuildPaletteOrder: 10
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, ~!commander_tree.prism_blaster, ~!commander_tree.prism_tank, ~!vehicles.france
+		Description: Enables to build the Prism Cannon. \n  Has higher range and more damage than the Prism Tank, but does not split its beam. \n  It is stronger vs. base defenses and single units but less effective against large armies.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.prism
+
+commander_tree.Prism_Blaster:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Prism Blaster
+	RenderSprites:
+		Image: prismblaster
+	Buildable:
+		BuildPaletteOrder: 11
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, ~!commander_tree.prism_cannon, ~!commander_tree.prism_tank, ~!vehicles.germany
+		Description: Enables to build the Prism Blaster. \n  Has less range than the Prism Tank, but does split its beam to more targets. \n  It is stronger vs. large armies and less effective against base defenses and single targets.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.prism
+
+hack.cameo_filler.prism:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 12
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, disabled
+
+hack.cameo_filler.prism2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 12
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, disabled, ~filler.prism
+
+
 # Aircraft
 
 commander_tree.Eurofighter:
