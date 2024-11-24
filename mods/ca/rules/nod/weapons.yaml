@@ -15,3 +15,35 @@ CommandoLaser:
 	Warhead@1Dam: SpreadDamage
 		Spread: 341
 		Damage: 2000
+
+Hack:
+	Range: 18c0
+	ReloadDelay: 30
+	ValidTargets: Hackable
+	TargetActorCenter: true
+	Report: hacker-pulse.aud
+	Projectile: ArcLaserZap
+		Color: 1ce31270
+		Angle: 60
+		Width: 86
+		Duration: 20
+		HitAnim: empty
+	Warhead@1Dam: TargetDamage
+		ValidRelationships: Enemy, Neutral
+	Warhead@CAMERA: SpawnActor
+		Actors: camera.hacker
+		Range: 1
+		ValidRelationships: Neutral, Enemy
+	Warhead@green: GrantExternalCondition
+		Range: 0c511
+		Duration: 2
+		Condition: greenhighlight
+		ValidTargets: Structure, Vehicle
+		ValidRelationships: Neutral, Enemy
+
+PrepareHack:
+	Inherits: Hack
+	-Report:
+	-Projectile:
+	Projectile: InstantHit
+	-Warhead@green:

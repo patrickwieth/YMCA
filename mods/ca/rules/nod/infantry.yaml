@@ -9,7 +9,11 @@ Adept:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 10
 		Prerequisites: ~!bio.nod, infantry.any, ~infantry.nod
-		Description: General-purpose infantry with good scouting abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		Description: General-purpose infantry with good scouting abilities.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs. Vehicles, Aircraft
+		Attributes: • Equipped with scout equipment
 	Valued:
 		Cost: 100
 	Tooltip:
@@ -36,7 +40,11 @@ Stormtrooper:
 		Queue: Infantry
 		BuildPaletteOrder: 10
 		Prerequisites: ~bio.nod, ~hand
-		Description: General-purpose cyborg with good scout abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Artillery
+		Description: General-purpose cyborg with good scout abilities.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry
+		Weaknesses: • Weak vs. Vehicles, Aircraft
+		Attributes: • Equipped with scout equipment
 	Valued:
 		Cost: 150
 	Tooltip:
@@ -74,7 +82,10 @@ Rocket_Trooper:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 30
 		Prerequisites: ~!bio.nod, infantry.any, ~infantry.nod
-		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
+		Description: Anti-tank/anti-aircraft infantry.
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Vehicles, Aircraft
+		Weaknesses: • Weak vs. Infantry, Aircraft
 	Valued:
 		Cost: 250
 	Tooltip:
@@ -137,7 +148,10 @@ Rocket_Cyborg:
 		Queue: Infantry
 		BuildPaletteOrder: 20
 		Prerequisites: ~bio.nod, ~hand
-		Description: Anti-tank cyborg infantry\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry, Artillery
+		Description: Anti-tank cyborg infantry
+	TooltipExtras:
+		Strengths: • Strong vs Heavy Vehicles, Aircraft
+		Weaknesses: • Weak vs. Infantry, Aircraft
 	Valued:
 		Cost: 350
 	Tooltip:
@@ -200,7 +214,10 @@ Black_Hand_Trooper:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 150
 		Prerequisites: radar, ~infantry.blackh
-		Description: Elite precision flamethrower unit.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+		Description: Elite precision flamethrower unit.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles, Buildings
+		Weaknesses: • Weak vs. Heavy Armor, Aircraft
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -259,7 +276,11 @@ SAB:
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 90
 		Prerequisites: hq, ~infantry.nod, ~commander_tree.advanced_infantry_training
-		Description: Covert infantry. Infiltrates enemy structures and steals technology.\n  Can detect spies and cloaked units.\n  Special Ability: Infiltrate\n  Special Ability: Stealth
+		Description: Covert infantry. Infiltrates enemy structures and steals technology.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs. Reflector Armor, Aircraft
+		Attributes: • Cloaked \n• Infiltrates buildings\n•Detects cloaked units
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -292,6 +313,81 @@ SAB:
 		IsPlayerPalette: true
 		Palette: cloakts
 
+HACK:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^InfantrySwimmer
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^CommandoSkull
+	Buildable:
+		Queue: Infantry
+		BuildPaletteOrder: 195
+		Prerequisites: ~infantry.legion, techcenter, ~commander_tree.advanced_infantry_training
+		Description: The Hacker can take control of defenses and buildings.
+		BuildLimit: 1
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Defenses
+		Weaknesses: • Cannot attack Infantry, Aircraft, Vehicles
+		Attributes: • Can capture enemy structures from range\n• Control lost if the Hacker dies\n• Can swim
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Hacker
+	Health:
+		HP: 5000
+	RevealsShroud:
+		Range: 15c0
+	Passenger:
+		CustomPipType: blue
+		Voice: Move
+	Armament@PRIMARY:
+		Weapon: Hack
+		LocalOffset: 0,0,50
+	AttackFrontal:
+		Voice: Action
+		FacingTolerance: 512
+		TargetFrozenActors: true
+		PauseOnCondition: being-warped
+	WithInfantryBody:
+		IdleSequences: idle
+		DefaultAttackSequence: hacking
+	WithInfantryBody@Swim:
+		IdleSequences: swim-idle
+		StandSequences: swim-stand
+		DefaultAttackSequence: swim-action
+	Voiced:
+		VoiceSet: HackerVoice
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+	MindController:
+		ArmamentNames: primary
+		Capacity: -1
+		TicksToControl: 300
+		TicksToRevoke: 25
+		InitSounds: hacker-init.aud
+		InitSoundControllerOnly: true
+		ControlSounds: hacker-hacked.aud
+		ControllingCondition: hacked-in
+		UndeployOnControl: true
+	WithDecoration@HACKEDIN:
+		Image: hacking
+		Sequence: hacking
+		RequiresCondition: hacked-in
+		Position: BottomRight
+		Palette: effect
+		ValidRelationships: Ally, Neutral, Enemy
+	WithMindControlArc@HACK:
+		Color: 1ce312
+		Transparency: 65
+		Angle: 60
+		Width: 86
+		Offset: 0,0,50
+	AutoTarget:
+		InitialStance: HoldFire
+		InitialStanceAI: AttackAnything
+	RenderRangeCircle:
+		Color: 00cc00
+
 Obelisk_Trooper:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
@@ -303,6 +399,10 @@ Obelisk_Trooper:
 		IconPalette: chrome
 		Prerequisites: ~hand, hq, ~infantry.marked, ~commander_tree.advanced_infantry_training
 		Description: Elite infantry with a laser weapon.\n  Strong vs Infantry, Light Armor\n  Weak vs Aircraft\n
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs. Reflector Armor, Aircraft
+		Attributes: • Pew pew laser gunz!
 	Valued:
 		Cost: 300
 	Tooltip:
@@ -348,18 +448,22 @@ Cyborg_Commando:
 	-TakeCover:
 	-Crushable:
 	Inherits: ^HighResShadow
-	Inherits@Armor: ^HeavyArmor
+	Inherits: ^HeavyArmor
 	Inherits: ^PrioEnergyWeapon
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@detect: ^SensorEquipment
-	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Inherits: ^GainsExperience
+	Inherits: ^SensorEquipment
+	Inherits: ^CommandoSkull
 	Buildable:
 		Queue: Infantry
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~infantry.nod, techcenter, ~commander_tree.advanced_infantry_training
-		Description: Tough combat battle-mech.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks\n Weak vs Point Laser Defense
+		Prerequisites: ~infantry.marked, techcenter, ~commander_tree.advanced_infantry_training
+		Description: Tough combat battle-mech.
 		BuildLimit: 1
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Vehicles
+		Weaknesses: • Weak vs. Reflector Armor, Aircraft
+		Attributes: • Laser sweeps over area
 	Valued:
 		Cost: 3000
 	Tooltip:
