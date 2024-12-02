@@ -256,10 +256,9 @@ E7:
 	TakeCover:
 		SpeedModifier: 70
 
-MEDI:
+MEDIC:
 	Inherits: ^Soldier
-	RenderSprites:
-		PlayerPalette: overlayplayer
+	Inherits: ^InfantryRA2Sprite
 	Inherits: ^InfantrySupportUnit
 	Buildable:
 		Queue: Infantry
@@ -295,7 +294,7 @@ MEDI:
 		ValidRelationships: Ally
 		Priority: 2
 	WithInfantryBody:
-		IdleSequences: idle
+		IdleSequences: idle, idle2
 		StandSequences: stand
 		DefaultAttackSequence: heal
 		AttackSequences:
@@ -1501,7 +1500,11 @@ SEAL:
 		Queue: Infantry
 		IconPalette: chrome
 		BuildLimit: -1
-		Description: Elite infantry unit. Armed with\na SMG and C4.\n  Can detect cloaked units.\n  Strong vs Infantry, Buildings\n  Weak vs Aircraft\n  Special Ability: C4 Explosives
+		Description: Elite infantry unit. Armed with\na SMG and C4.\n  Can detect cloaked units.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Buildings
+		Weaknesses: • Weak vs Aircraft, Vehicles
+		Attributes: • Can swim \n• C4 Explosives
 	Voiced:
 		VoiceSet: SealVoice
 	Mobile:
@@ -1560,95 +1563,3 @@ SEAL:
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
-
-HACK:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiHeavy
-	Buildable:
-		Queue: Infantry
-		Prerequisites: ~disabled
-		BuildAtProductionType: Soldier
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Hacker
-	TooltipExtras:
-		Strengths: • Strong vs Buildings, Defenses, Drones
-		Weaknesses: • Cannot attack Infantry, Aircraft, Vehicles (other than Drones)
-		Attributes: • Can capture enemy structures from range\n• Control lost if the Hacker dies
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 5000
-	Mobile:
-		Speed: 56
-		Voice: Move
-		PauseOnCondition: !undeployed && being-warped
-		RequireForceMoveCondition: !undeployed
-	RevealsShroud:
-		Range: 5c0
-	Passenger:
-		CustomPipType: blue
-		Voice: Move
-	Armament@PRIMARY:
-		Weapon: PrepareHack
-		PauseOnCondition: deployed
-	Armament@PRIMARYDEPLOYED:
-		Weapon: Hack
-		RequiresCondition: deployed
-		LocalOffset: 0,0,50
-	AttackFrontal:
-		Voice: Action
-		FacingTolerance: 512
-		TargetFrozenActors: true
-		PauseOnCondition: being-warped
-	WithInfantryBody:
-		IdleSequences: idle
-		StandSequences: stand
-		RequiresCondition: undeployed
-	WithSpriteBody@DEPLOYED:
-		Name: deployed
-		Sequence: hack
-		RequiresCondition: !undeployed
-	WithMakeAnimation:
-		BodyNames: deployed
-	Voiced:
-		VoiceSet: HackerVoice
-	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-	GrantConditionOnDeploy@HACK:
-		DeployedCondition: deployed
-		UndeployedCondition: undeployed
-		UndeployOnMove: true
-		UndeployOnPickup: true
-		SmartDeploy: True
-	DeployOnAttack:
-		RequiresCondition: undeployed
-	MindController:
-		ArmamentNames: primary
-		Capacity: -1
-		TicksToControl: 300
-		TicksToRevoke: 25
-		InitSounds: hacker-init.aud
-		InitSoundControllerOnly: true
-		ControlSounds: hacker-hacked.aud
-		ControllingCondition: hacked-in
-		UndeployOnControl: true
-	WithDecoration@HACKEDIN:
-		Image: hacking
-		Sequence: hacking
-		RequiresCondition: hacked-in
-		Position: BottomRight
-		Palette: effect
-		ValidRelationships: Ally, Neutral, Enemy
-	WithMindControlArc@HACK:
-		Color: 1ce312
-		Transparency: 65
-		Angle: 60
-		Width: 86
-		Offset: 0,0,50
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: AttackAnything
-	RenderRangeCircle:
-		Color: 00cc00
