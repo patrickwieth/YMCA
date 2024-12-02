@@ -4078,27 +4078,37 @@ PROC.Dummy:
 	Selectable:
 		Priority: 2
 
+^SupportUnit:
+	AttackMove:
+	Guard:
+
 ^InfantrySupportUnit:
+	Inherits: ^SupportUnit
 	GuardsSelection:
 		ValidTargets: Infantry
 
 ^TankSupportUnit:
+	Inherits: ^SupportUnit
 	GuardsSelection:
 		ValidTargets: Vehicle
 
 ^AirSupportUnit:
+	Inherits: ^SupportUnit
 	GuardsSelection:
 		ValidTargets: Air
 
 ^GroundSupportUnit:
+	Inherits: ^SupportUnit
 	GuardsSelection:
 		ValidTargets: Infantry, Vehicle
 
 ^WaterSupportUnit:
+	Inherits: ^SupportUnit
 	GuardsSelection:
 		ValidTargets: Water, Underwater
 
 ^GenericSupportUnit:
+	Inherits: ^SupportUnit
 	GuardsSelection:
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Air
 
@@ -5000,6 +5010,20 @@ PROC.Dummy:
 		RequiresCondition: !(empdisable || being-warped)
 	RenderDetectionCircle:
 		TrailCount: 8
+
+^MobileRadar:
+	RevealsShroud:
+		Range: 14c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 10c0
+	DetectCloaked:
+		Range: 10c0
+		CloakTypes: Cloak, Thief, stealth
+		RequiresCondition: !(empdisable || being-warped)
+	RenderDetectionCircle:
+		TrailCount: 3
+	ProvidesRadar:
 
 ^MobileDeployableRadar:
 	RevealsShroud@deployed:

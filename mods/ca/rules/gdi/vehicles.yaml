@@ -204,6 +204,60 @@ Mammoth.Hover.PDL:
 	Valued:
 		Cost: 2200
 
+MSAR:
+	Inherits: ^Vehicle
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.6
+		Image: sensorarray
+	WithVoxelSpinningBody@radar:
+		Sequence: turret
+		Offset: 0,50,0
+		Ticks: 75
+	RenderSprites:
+		Image: msar
+	Inherits: ^SensorEquipment
+	Inherits: ^BiologicalDriver
+	Inherits: ^MobileRadar
+	Inherits: ^GroundSupportUnit
+	Tooltip:
+		Name: Mobile Sensor Array
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 240
+		Prerequisites: hq, ~vehicles.gdi, ~!commander_tree.mobile_sensor_pdl
+		BuildDurationModifier: 50
+		Description: Provides radar and increases nearby vehicle weapon range.
+	TooltipExtras:
+		Strengths: • Strong vs Stealth
+		Weaknesses: • Weak without protection
+		Attributes: • Unarmed \n• Detects cloaked units
+	Valued:
+		Cost: 1000
+	Health:
+		HP: 22000
+	Mobile:
+		Speed: 82
+	AttackMove:
+	Carryable:
+		LocalOffset: 0,0,400
+		CarriedCondition: airborne
+	ProximityExternalCondition@Bino:
+		Condition: bino
+		Range: 10c0
+		EnableSound: dsaping1.aud
+		AffectsParent: False
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+		RequiresCondition: !parachute && !being-warped
+
+MSAR.PDL:
+	Inherits: MSAR
+	Inherits@PDL: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: hq, ~vehicles.gdi, ~commander_tree.mobile_sensor_pdl
+	Valued:
+		Cost: 1500
 
 MARV:
 	Inherits: ^Tank
