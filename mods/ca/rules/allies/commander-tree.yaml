@@ -51,6 +51,80 @@ hack.cameo_filler.prism2:
 		BuildPaletteOrder: 12
 		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, disabled, ~filler.prism
 
+commander_tree.Chrono_Prison:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Prison
+	RenderSprites:
+		Image: chpr
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 17
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter
+		Description: Enables to build the Chrono Prison. \n  It traps other units in the Time Aether, \n  teleporting them out of existence shortly thereafter.
+	TooltipExtras:
+		Strengths: • Strong vs few targets
+		Weaknesses: • Weak vs masses, Aircraft
+		Attributes: • Chrono beamed units cannot move or attack
+
+commander_tree.Chrono_Prison_AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Prison Anti-Air Upgrade
+	RenderSprites:
+		Image: chpr
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 18
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.england, techcenter, ~!commander_tree.chrono_prison_range, commander_tree.chrono_prison
+		Description: Upgrades the Chrono Prison to be able to also trap air units in the Time Aether.
+	WithProductionIconOverlay@Air:
+		Types: Air
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.prison
+	TooltipExtras:
+		Strengths: • Strong vs few targets, Aircraft
+		Weaknesses: • Weak vs masses
+		Attributes: • Chrono beamed units cannot move or attack
+
+commander_tree.Chrono_Prison_Range:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chrono Prison Range Upgrade
+	RenderSprites:
+		Image: chpr
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 19
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter, ~!commander_tree.chrono_prison_aa, commander_tree.chrono_prison, ~vehicles.germany
+		Description: Increases the range of the Chrono Prison allowing it to stop more distant targets.
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.prison
+	TooltipExtras:
+		Strengths: • Strong vs few targets
+		Weaknesses: • Weak vs masses, Aircraft
+		Attributes: • Chrono beamed units cannot move or attack
+
+hack.cameo_filler.10:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 20
+		Prerequisites: prerequisite.has_points, ~vehicles.germany, techcenter, disabled, ~filler.prison
+
+hack.cameo_filler.10a:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 20
+		Prerequisites: prerequisite.has_points, ~vehicles.england, techcenter, disabled
+
+hack.cameo_filler.11:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 21
+		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter, disabled, ~!vehicles.germany
+
 
 # Aircraft
 
