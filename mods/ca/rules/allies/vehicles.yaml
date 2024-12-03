@@ -8,7 +8,7 @@ Prismtank:
 	RenderSprites:
 		Image: prismtank
 	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiLight
+	Inherits: ^PrioEnergyWeapon
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
@@ -48,6 +48,8 @@ PBLASTER:
 	RenderVoxels:
 		Scale: 0.7
 		Image: prismblaster
+	RenderSprites:
+		Image: prismblaster
 	Tooltip:
 		Name: Prism Blaster
 	Buildable:
@@ -63,6 +65,8 @@ PCAN:
 	Inherits: Prismtank
 	RenderVoxels:
 		Scale: 0.7
+		Image: prismcannon
+	RenderSprites:
 		Image: prismcannon
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^FightingVehicle
@@ -86,6 +90,8 @@ PCAN:
 		FireDelay: 10
 		LocalOffset: 600,0,300
 		PauseOnCondition: empdisable || being-warped
+	Voiced:
+		VoiceSet: PrismVoice
 
 CTNK:
 	Inherits: ^Tank
@@ -320,3 +326,404 @@ CHPR.AA:
 		RequiresCondition: stance-attackanything || assault-move
 		ValidTargets: TemporalAir, Temporal
 		InvalidTargets: NoAutoTarget
+
+# this is actually not used but is the prototype BATF
+BATF:
+	Inherits: ^Tank
+	Inherits: ^BigVehicle
+	Inherits: ^FightingVehicle
+	Inherits: ^BiologicalDriver
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~disabled, ~!filler.batf2
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Missile Fortress
+	Health:
+		HP: 100000
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 48
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
+		Voice: Move
+	Passenger:
+		Voice: Move
+	AttackTurreted:
+		Turrets: primary, secondary, tertiary
+		Armaments: primary, secondary, tertiary
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: BATFGun
+		LocalOffset: 200,0,300
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: BATFGun
+		FireDelay: 8
+		LocalOffset: 200,0,300
+		MuzzleSequence: muzzle
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: BATFRockets
+		LocalOffset: -200,0,300
+		MuzzleSequence: muzzle
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 200,-300,0
+		TurnSpeed: 24
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 200,300,0
+		TurnSpeed: 24
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -300,0,358
+		TurnSpeed: 24
+	WithMuzzleOverlay:
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	Voiced:
+		VoiceSet: BattleFortressVoice
+	WithSpriteTurret@PRIMARY:
+		Turret: primary
+	WithSpriteTurret@SECONDARY:
+		Turret: secondary
+	WithSpriteTurret@TERTIARY:
+		Turret: tertiary
+		Sequence: turret2
+	SpawnActorOnDeath:
+		Actor: BATF.Husk
+		RequiresCondition: !being-warped
+
+BATF.Bunker:
+	Inherits: ^Tank
+	Inherits: ^BigVehicle
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^Transport
+	Inherits: ^AttackingCargo
+	RenderSprites:
+		Image: batf.bunker
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.bunker, ~!filler.batf2
+		Description: Tough infantry transport\nwith weapon ports for infantry. \n  Special Ability: Can crush enemy vehicles.
+	WithProductionIconOverlay@Missile:
+		Types: Missile
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Battle Fortress (Bunker)
+	Health:
+		HP: 100000
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 48
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Cargo:
+		InitialUnits: rocket_infantry, rocket_infantry, rocket_infantry, rocket_infantry, rocket_infantry
+	Armament:
+		Weapon: ZSU-23
+		LocalOffset: 624,0,208
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	WithMuzzleOverlay:
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	Voiced:
+		VoiceSet: BattleFortressVoice
+	SpawnActorOnDeath:
+		Actor: BATF.Bunker.Husk
+		RequiresCondition: !being-warped
+
+BATF.Bunker.PDL:
+	Inherits: BATF.Bunker
+	Inherits@PDL: ^PointLaserDefenseSystem
+	-AttackTurreted:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.bunker, ~commander_tree.battle_fortress.pdl
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Battle Fortress (PDL)
+	Valued:
+		Cost: 3600
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+
+BATF.Bunker.Reflector:
+	Inherits: BATF.Bunker
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.bunker, ~commander_tree.battle_fortress.reflector
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Battle Fortress (Reflector)
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+
+BATF.Prism:
+	Inherits: ^FightingVehicle
+	Inherits: ^PrioEnergyWeapon
+	Inherits: ^BiologicalDriver
+	Inherits: ^HighResShadow
+	RenderSprites:
+		Image: batf.prism
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.prism, ~!filler.batf2
+		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Special Ability: Can crush enemy vehicles.\n Strong vs Point Defense Laser
+	WithProductionIconOverlay@Prism:
+		Types: Prism
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Prism Fortress
+	Health:
+		HP: 100000
+	Mobile:
+		Locomotor: sheavytracked
+		Speed: 48
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Voiced:
+		VoiceSet: BattleFortressVoice
+	SpawnActorOnDeath:
+		Actor: BATF.Prism.Husk
+		RequiresCondition: !being-warped
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	Armament@PRIMARY:
+		Weapon: BattlePrisLaser
+		LocalOffset: 350,0,450
+		MuzzleSequence: muzzle
+
+BATF.Prism.PDL:
+	Inherits: BATF.Prism
+	Inherits@PDL: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.prism, ~commander_tree.battle_fortress.pdl
+		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Point Defense Laser, Projectile Weapons
+	Tooltip:
+		Name: Prism Fortress (PDL)
+	Valued:
+		Cost: 3000
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+
+BATF.Prism.Reflector:
+	Inherits: BATF.Prism
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.prism, ~commander_tree.battle_fortress.reflector
+		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Point Defense Laser, Energy Weapons
+	Tooltip:
+		Name: Prism Fortress (Reflector)
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+
+BATF.Support:
+	Inherits: BATF
+	Inherits: ^PrioRepair
+	Inherits: ^GroundSupportUnit
+	Inherits: ^HighResShadow
+	RenderSprites:
+		Image: batf.support
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.support, ~!filler.batf2
+		Description: Tough support tank\nRepairs allied vehicles and aircraft.\n Special Ability: Can crush enemy vehicles.
+	WithProductionIconOverlay@Wrench:
+		Types: Wrench
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Support Fortress
+	Turreted@PRIMARY:
+		Offset: -400,0,200
+		TurnSpeed: 100
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		LoadingCondition: notmobile
+		LoadedCondition: cargo
+	-Turreted@SECONDARY:
+	-Turreted@TERTIARY:
+	-WithMuzzleOverlay:
+	-WithSpriteTurret@PRIMARY:
+	-WithSpriteTurret@SECONDARY:
+	-WithSpriteTurret@TERTIARY:
+	-Armament@SECONDARY:
+	-Armament@TERTIARY:
+	Armament@PRIMARY:
+		Weapon: BATF.Repair
+		LocalOffset: 0,0,-100
+		Cursor: repair
+		OutsideRangeCursor: repair
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
+		MuzzleSequence: emp-overlay
+		MuzzlePalette: tseffect-ignore-lighting-alpha75
+	AutoTargetPriority@DEFAULTREPAIR:
+		ValidTargets: Vehicle, Ship
+	SpawnActorOnDeath:
+		Actor: BATF.Support.Husk
+		RequiresCondition: !being-warped
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+BATF.Support.PDL:
+	Inherits: BATF.Support
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.support, ~commander_tree.battle_fortress.pdl
+		Description: Tough support tank\nRepairs allied vehicles and aircraft.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.
+	Tooltip:
+		Name: Support Fortress (PDL)
+	Valued:
+		Cost: 2000
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+
+BATF.Support.Reflector:
+	Inherits: BATF.Support
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.support, ~commander_tree.battle_fortress.reflector
+		Description: Tough support tank\nRepairs allied vehicles and aircraft.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.
+	Tooltip:
+		Name: Support Fortress (Reflector)
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+
+BATF.Artillery:
+	Inherits: BATF
+	Inherits: ^PrioArtillery
+	RenderSprites:
+		Image: batf.artillery
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.arty, ~!filler.batf2
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Artillery Fortress
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: BATFGun
+		LocalOffset: 300,0,350
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Turret: secondary
+		Weapon: BATFGun
+		FireDelay: 8
+		LocalOffset: 300,0,350
+		MuzzleSequence: muzzle
+	Armament@TERTIARY:
+		Name: tertiary
+		Turret: tertiary
+		Weapon: 155mm
+		LocalOffset: 550,0,300
+		MuzzleSequence: muzzle
+		RequiresCondition: cargo
+	Turreted@PRIMARY:
+		Turret: primary
+		Offset: 200,-300,0
+		TurnSpeed: 24
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 200,300,0
+		TurnSpeed: 24
+	Turreted@TERTIARY:
+		Turret: tertiary
+		Offset: -300,0,458
+		TurnSpeed: 24
+		PauseOnCondition: !cargo
+	WithSpriteTurret@PRIMARY:
+		Turret: primary
+	WithSpriteTurret@SECONDARY:
+		Turret: secondary
+	WithSpriteTurret@TERTIARY:
+		Turret: tertiary
+		Sequence: turret2
+
+BATF.Artillery.PDL:
+	Inherits: BATF.Artillery
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.arty, ~commander_tree.battle_fortress.pdl
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Artillery Fortress (PDL)
+	Valued:
+		Cost: 3000
+
+BATF.Artillery.Reflector:
+	Inherits: BATF.Artillery
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 230
+		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.arty, ~commander_tree.battle_fortress.reflector
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Artillery Fortress (Reflector)
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+
+BATF.AI:
+	Inherits: BATF
+	Buildable:
+		Prerequisites: tent, radar, ~weap, ~vehicles.france, ~botplayer
+	RenderSprites:
+		Image: batf
+	Armament@TERTIARY:
+	Turreted@TERTIARY:
+	Mobile:
+		PauseOnCondition: being-captured || empdisable || being-warped
