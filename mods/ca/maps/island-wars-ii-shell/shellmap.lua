@@ -10,12 +10,12 @@
 UnitTypes = { "heavy_tank", "ttnk" }
 GDIUnitTypes = { "mtnk", "mtnk" }
 GDIMLRSTypes = { "msam", "msam" }
-BeachUnitTypes = { "conscript", "e2", "rpg_soldier", "flamethrower", "conscript", "e2", "rpg_soldier", "flamethrower", "conscript", "e2", "rpg_soldier", "flamethrower", "conscript", "e2", "rpg_soldier", "shok" }
+BeachUnitTypes = { "conscript", "rpg_soldier", "rpg_soldier", "flamethrower", "conscript", "rpg_soldier", "rpg_soldier", "flamethrower", "conscript", "flamethrower", "rpg_soldier", "flamethrower", "conscript", "shok", "rpg_soldier", "shok" }
 GDIBeachUnitTypes = { "mercenary", "n2", "rocket_mercenary", "n2", "mercenary", "n2", "rocket_mercenary", "mercenary", "mercenary", "n2", "rocket_mercenary", "mercenary", "mercenary", "mercenary", "mercenary", "mercenary" }
 ProducedUnitTypes =
 {
 	{ factory = AlliedBarracks1, types = { "light_infantry", "rocket_infantry" } },
-	{ factory = SovietBarracks1, types = { "conscript", "e2", "rpg_soldier" } },
+	{ factory = SovietBarracks1, types = { "conscript", "flamethrower", "rpg_soldier" } },
 	{ factory = SKennel1, types = { "dog" } },
 	{ factory = ANavalYard1, types = { "pt2" } },
 	{ factory = SSubPen1, types = { "ss" } },

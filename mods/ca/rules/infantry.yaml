@@ -72,49 +72,6 @@ DOG:
 	-Captures@DRIVER_KILL:
 	-CaptureManager:
 
-E2:
-	Inherits: ^Soldier
-	Inherits: ^PrioArtillery
-	Inherits: ^SovietInfantry
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 40
-		Prerequisites: ~barr, ~commander_tree.advanced_infantry_training
-		Description: Infantry armed with grenades.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 160
-	Tooltip:
-		Name: Grenadier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 6000
-	Mobile:
-		speed: 73
-	Armament@PRIMARY:
-		Weapon: Grenade
-		LocalOffset: 0,0,555
-		FireDelay: 15
-	Armament@Garrison:
-		Name: mounted
-		Weapon: GrenadeE
-		LocalOffset: 0,0,555
-		FireDelay: 15
-	TakeCover:
-		ProneOffset: 256,64,-331
-	AttackFrontal:
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	WithInfantryBody:
-		DefaultAttackSequence: throw
-	Explodes:
-		Weapon: UnitExplodeSmall
-		EmptyWeapon: UnitExplodeSmall
-		Chance: 33
-		DamageSource: Killer
-		RequiresCondition: !being-warped
-
 E6:
 	Inherits: ^Soldier
 	Inherits: ^SovietInfantry
@@ -455,8 +412,8 @@ THF:
 N5:
 	Inherits: ^Soldier
 	Inherits: ^PrioAntiReflector
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@BioDamageImmune: ^BioDamageImmune
+	Inherits: ^GainsExperience
+	Inherits: ^BioDamageImmune
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -533,8 +490,8 @@ N5R1:
 RMBO:
 	Inherits: ^Soldier
 	Inherits: ^PrioAntiLight
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Inherits: ^GainsExperience
+	Inherits: ^CommandoSkull
 	Valued:
 		Cost: 1200
 	Tooltip:
