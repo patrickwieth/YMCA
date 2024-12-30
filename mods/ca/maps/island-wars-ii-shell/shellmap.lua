@@ -11,7 +11,7 @@ UnitTypes = { "heavy_tank", "ttnk" }
 GDIUnitTypes = { "mtnk", "mtnk" }
 GDIMLRSTypes = { "msam", "msam" }
 BeachUnitTypes = { "conscript", "rpg_soldier", "rpg_soldier", "flamethrower", "conscript", "rpg_soldier", "rpg_soldier", "flamethrower", "conscript", "flamethrower", "rpg_soldier", "flamethrower", "conscript", "shok", "rpg_soldier", "shok" }
-GDIBeachUnitTypes = { "mercenary", "n2", "rocket_mercenary", "n2", "mercenary", "n2", "rocket_mercenary", "mercenary", "mercenary", "n2", "rocket_mercenary", "mercenary", "mercenary", "mercenary", "mercenary", "mercenary" }
+GDIBeachUnitTypes = { "mercenary", "grenadier", "rocket_mercenary", "grenadier", "mercenary", "grenadier", "rocket_mercenary", "mercenary", "mercenary", "grenadier", "rocket_mercenary", "mercenary", "mercenary", "mercenary", "mercenary", "mercenary" }
 ProducedUnitTypes =
 {
 	{ factory = AlliedBarracks1, types = { "light_infantry", "rocket_infantry" } },

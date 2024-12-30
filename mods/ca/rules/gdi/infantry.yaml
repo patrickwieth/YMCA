@@ -12,35 +12,35 @@ Rocket_Mercenary:
 	Buildable:
 		Prerequisites: infantry.any, ~infantry.gdi
 
-N2:
+Grenadier:
 	Inherits: ^Soldier
 	Inherits: ^PrioArtillery
+	Inherits: ^InfantryRA2Sprite
+	RenderSprites:
+		Image: grenadier
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 40
 		Prerequisites: infantry.any, ~infantry.gdi, ~!commander_tree.advanced_infantry_training
-		IconPalette: chrometd
 		Description: Infantry armed with grenades.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 160
 	Tooltip:
 		Name: Grenadier
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 6000
 	Mobile:
 		speed: 73
 	Armament@PRIMARY:
 		Weapon: Grenade
-		LocalOffset: 0,0,555
-		FireDelay: 15
+		LocalOffset: 0,100,555
+		FireDelay: 8
 	Armament@Garrison:
 		Name: mounted
 		Weapon: GrenadeE
-		LocalOffset: 0,0,555
-		FireDelay: 15
+		LocalOffset: 0,100,555
+		FireDelay: 8
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
@@ -56,20 +56,21 @@ N2:
 		DamageSource: Killer
 		RequiresCondition: !being-warped
 
-N2.Emp:
-	Inherits: N2
+Grenadier.Emp:
+	Inherits: Grenadier
 	Buildable:
 		Prerequisites: infantry.any, ~infantry.gdi, ~commander_tree.advanced_infantry_training
-		IconPalette: chrometd
 		Description: Infantry armed with EMP grenades (disable vehicles).\n  Strong vs Buildings, Infantry\n  Weak vs Artillery, Aircraft
+	WithProductionIconOverlay@EMP:
+		Types: EMP
 	Valued:
 		Cost: 160
 	Tooltip:
 		Name: EMP Grenadier
 	Armament@PRIMARY:
 		Weapon: EMPGrenade
-		LocalOffset: 0,0,555
-		FireDelay: 15
+	Armament@Garrison:
+		Weapon: EMPGrenadeE
 
 Railgunner:
 	Inherits: ^Soldier
