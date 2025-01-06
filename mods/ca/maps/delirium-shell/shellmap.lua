@@ -7,7 +7,7 @@
    information, see COPYING.
 ]]
 
-NodLightUnitTypes = { "bike", "bike", "bggy", "rmbc", "rmbc", "stormtrooper", "stormtrooper", "stormtrooper", "stormtrooper", "rocket_cyborg", "rocket_cyborg" }
+NodLightUnitTypes = { "bike", "bike", "bggy", "cyborgelite", "cyborgelite", "stormtrooper", "stormtrooper", "stormtrooper", "stormtrooper", "rocket_cyborg", "rocket_cyborg" }
 NodHeavyUnitTypes = { "mtnk", "mtnk", "ftnk", "ftnk", "wtnk", "wtnk", "cdrn" }
 NodAirUnitTypes = {"scrn", "scrn", "scrn"}
 AlliedUnitTypes = { "jeep", "1tnk", "ifv.ai", "1tnk", "rtnk", "ifv.ai", "prismtank", "light_infantry", "light_infantry", "light_infantry", "light_infantry", "rocket_infantry", "rocket_infantry", "rocket_infantry", "rocket_infantry" }
