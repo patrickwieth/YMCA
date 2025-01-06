@@ -141,28 +141,31 @@ SPY:
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-E7:
+Thor:
 	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
 	Inherits: ^PrioAntiInfantry
-	Inherits@detect: ^SensorEquipment
-	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Inherits: ^SensorEquipment
+	Inherits: ^CommandoSkull
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 120
 		Prerequisites: ~tent, atek, ~commander_tree.advanced_infantry_training
 		BuildLimit: 1
-		Description: Elite commando infantry. Armed with\ndual pistols and C4.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Buildings\n  Weak vs Aircraft\n  Special Ability: C4 Explosives
+		Description: After the Allies developed the Weather Control Device, \nThor came back from the Viking Age, \where he fought the Lazer Raptors.
+	TooltipExtras:
+		Strengths: • Strong vs Ground Units
+		Weaknesses: • Weak vs Aircraft, Reflector Armor
+		Attributes: • Can detect cloaked units.\n• Maximum 1 can be trained.
 	Valued:
-		Cost: 1200
+		Cost: 2000
 	Tooltip:
-		Name: Tanya
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
+		Name: Thor
 	Health:
 		HP: 16000
 	Mobile:
-		speed: 85
+		speed: 75
 		Voice: Move
 	Guard:
 		Voice: Move
@@ -172,20 +175,19 @@ E7:
 		CustomPipType: red
 		Voice: Move
 	Armament@PRIMARY:
-		Weapon: Colt45
+		Weapon: ThorBlitz
+		LocalOffset: 350,0,500
+		FireDelay: 10
 	Armament@SECONDARY:
-		Weapon: Colt45
+		Weapon: WeatherCloud.Thor
 	Armament@mountedPRIMARY:
-		Weapon: Colt45E
+		Weapon: ThorBlitz
+		LocalOffset: 350,0,500
+		FireDelay: 10
 		Name: mounted
 	Armament@mountedSECONDARY:
-		Weapon: Colt45E
+		Weapon: WeatherCloud.Thor
 		Name: mounted
-	Armament@sapper:
-		Weapon: PlaceC4
-		Cursor: c4
-		OutsideRangeCursor: c4
-		Name: secondary
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Armaments: primary, secondary
@@ -195,23 +197,13 @@ E7:
 		AttackSequences:
 			primary: shoot
 			secondary: stand
-	Demolition:
-		DetonationDelay: 45
-		Voice: Demolish
-	ExternalCondition@PRODUCED:
-		Condition: produced
-	VoiceAnnouncement:
-		RequiresCondition: produced
-		Voice: Build
-	AnnounceOnKill:
+	-TakeCover:
 	IgnoresDisguise:
 	Voiced:
-		VoiceSet: TanyaVoice
+		VoiceSet: StavrosVoice
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
 	-Crushable:
-	TakeCover:
-		SpeedModifier: 70
 
 MEDIC:
 	Inherits: ^Soldier
