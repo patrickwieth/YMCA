@@ -206,3 +206,65 @@ SpecOps:
 	Cloak@NORMAL:
 		IsPlayerPalette: true
 		Palette: cloakts
+
+Thor:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioAntiInfantry
+	Inherits: ^SensorEquipment
+	Inherits: ^CommandoSkull
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 120
+		Prerequisites: ~tent, atek, ~commander_tree.advanced_infantry_training
+		BuildLimit: 1
+		Description: After the Allies developed the Weather Control Device, \nThor came back from the Viking Age, \where he fought the Lazer Raptors.
+	TooltipExtras:
+		Strengths: • Strong vs Ground Units
+		Weaknesses: • Weak vs Aircraft, Reflector Armor
+		Attributes: • Can detect cloaked units.\n• Maximum 1 can be trained.
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Thor
+	Health:
+		HP: 16000
+	Mobile:
+		speed: 75
+		Voice: Move
+	Guard:
+		Voice: Move
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Armament@PRIMARY:
+		Weapon: ThorBlitz
+		LocalOffset: 350,0,500
+		FireDelay: 10
+	Armament@SECONDARY:
+		Weapon: WeatherCloud.Thor
+	Armament@mountedPRIMARY:
+		Weapon: ThorBlitz
+		LocalOffset: 350,0,500
+		FireDelay: 10
+		Name: mounted
+	Armament@mountedSECONDARY:
+		Weapon: WeatherCloud.Thor
+		Name: mounted
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		Armaments: primary, secondary
+		FacingTolerance: 0
+	WithInfantryBody:
+		StandSequences: stand
+		AttackSequences:
+			primary: shoot
+			secondary: stand
+	-TakeCover:
+	IgnoresDisguise:
+	Voiced:
+		VoiceSet: StavrosVoice
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
+	-Crushable:

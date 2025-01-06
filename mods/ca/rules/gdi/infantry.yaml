@@ -333,3 +333,72 @@ Jumpjet.Railgun:
 		RequiresCondition: deployed
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
+
+RMBO:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioAntiLight
+	Inherits: ^GainsExperience
+	Inherits: ^CommandoSkull
+	Inherits: ^SensorEquipment
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Yo Brother
+	Buildable:
+		BuildPaletteOrder: 120
+		Prerequisites: ~infantry.gdi, techcenter, ~commander_tree.advanced_infantry_training
+		Queue: Infantry
+		IconPalette: chrometd
+		BuildLimit: 1
+		Description: The Yo Brother is armed with a Grenadelauncher.\nHe has a good time and keeps 'em coming.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles, Buildings
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Regenerates health quickly \n• Can detect cloaked units.\n• Maximum 1 can be trained.
+	Mobile:
+		speed: 73
+		Voice: Move
+	Guard:
+		Voice: Move
+	Health:
+		HP: 16000
+	ChangesHealth:
+		PercentageStep: 10
+		Delay: 5
+		StartIfBelow: 100
+		DamageCooldown: 5
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: GrenadeLauncher
+		LocalOffset: 0,0,155
+	Armament@Garrison:
+		Name: mounted
+		Weapon: GrenadeLauncher
+		LocalOffset: 0,0,155
+	AttackFrontal:
+		Voice: Attack
+		Armaments: primary, secondary
+		AttackSequences:
+			primary: shoot
+			secondary: stand
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	WithInfantryBody:
+		IdleSequences: idle1,idle2,idle3
+		AttackSequences:
+			primary: shoot
+			secondary: stand
+	VoiceAnnouncement:
+		Voice: Build
+	AnnounceOnKill:
+	Voiced:
+		VoiceSet: CommandoVoice
+	IgnoresDisguise:
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
+	-Crushable:
+	-TakeCover:
