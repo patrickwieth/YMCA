@@ -143,36 +143,6 @@ MEDIC:
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
 
-MECH:
-	Inherits: ^Soldier
-	Inherits: ^Mechanic
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 100
-		Prerequisites: repair, ~infantry.mech, ~commander_tree.advanced_infantry_training
-		Description: Repairs nearby vehicles and restores\nhusks to working condition by capturing them.\n  Unarmed
-	Valued:
-		Cost: 400
-	Tooltip:
-		Name: Mechanic
-	Health:
-		HP: 5000
-	Mobile:
-		Voice: Move
-	WithInfantryBody:
-		IdleSequences: idle
-		DefaultAttackSequence: repair
-		StandSequences: stand
-		AttackSequences:
-			primary: repair
-			secondary: repair
-			tertiary: idle
-	Voiced:
-		VoiceSet: MechanicVoice
-	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-
 EINSTEIN:
 	Inherits: ^CivInfantry
 	RenderSprites:
@@ -585,16 +555,16 @@ E8:
 		RequiresCondition: botowner
 
 LEADER:
-	Inherits@1: ^CivInfantry
-	Inherits@2: ^ArmedCivilian
+	Inherits: ^CivInfantry
+	Inherits: ^ArmedCivilian
 	Inherits: ^InfantrySupportUnit
-	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits: ^PrimaryBuilding
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
 		IconPalette: chrometd
-		Prerequisites: ~infantry.nod, ~commander_tree.rebel_leader, tmpl
+		Prerequisites: ~infantry.nod, ~commander_tree.rebel_leader, tmpl, ~disabled
 		Description: Nod Rebel Leader.\n\nNewly trained infantry enters the game from the closest map edge \n as long as no primary infantry building is set. \n Does not work with water.
 		BuildLimit: 1
 	Valued:

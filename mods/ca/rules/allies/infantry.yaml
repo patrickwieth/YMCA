@@ -159,6 +159,37 @@ Cryotrooper:
 		FacingTolerance: 0
 	Inherits: ^PointLaserDefenseSystemSmall
 
+MECH:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^Mechanic
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 100
+		Prerequisites: repair, ~infantry.mech, ~commander_tree.advanced_infantry_training
+		Description: Repairs nearby vehicles and restores\nhusks to working condition by capturing them.\n  Unarmed
+	Valued:
+		Cost: 400
+	Tooltip:
+		Name: Mechanic
+	Health:
+		HP: 5000
+	Mobile:
+		Voice: Move
+	WithInfantryBody:
+		IdleSequences: idle
+		DefaultAttackSequence: repair
+		StandSequences: stand
+		AttackSequences:
+			primary: repair
+			secondary: repair
+			tertiary: idle
+	Voiced:
+		VoiceSet: MechanicVoice
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+
 SPY:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
