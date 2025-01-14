@@ -72,28 +72,6 @@ DOG:
 	-Captures@DRIVER_KILL:
 	-CaptureManager:
 
-E6:
-	Inherits: ^Soldier
-	Inherits: ^SovietInfantry
-	Inherits: ^Engineer
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 60
-		Prerequisites: ~infantry.ra
-		Description: Captures\nenemy structures.\n  Can repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Engineer
-	WithInfantryBody:
-	Voiced:
-		VoiceSet: EngineerVoice
-	Selectable:
-		Priority: 5
-	Targetable:
-		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
-
 MEDIC:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
@@ -301,16 +279,19 @@ N5R1:
 	UpdatesPlayerStatistics:
 		OverrideActor: n5
 
-N6:
+Engineer:
 	Inherits: ^Soldier
 	Inherits: ^Engineer
+	Inherits: ^SovietInfantry
+	Inherits: ^InfantryRA2Sprite
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 60
-		Prerequisites: infantry.any, ~infantry.td
-		IconPalette: chrometd
-		Description: Captures\nenemy structures.\n  Can repair friendly structures & bridges and defuse bombs.\n  Special Ability: Repair, Defuse\n  Unarmed
+		Prerequisites: infantry.any, ~infantry.human
+		Description: Unarmed battle field engineer. \nThe most important tasks of the engineer are to take over enemy structures and do push ups.
+	TooltipExtras:
+		Attributes: • Captures enemy structures. \n• Can repair friendly structures & bridges and defuse bombs.\n• Unarmed
 	Valued:
 		Cost: 500
 	Tooltip:
