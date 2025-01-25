@@ -159,6 +159,72 @@ Cryotrooper:
 		FacingTolerance: 0
 	Inherits: ^PointLaserDefenseSystemSmall
 
+Sniper:
+	Inherits: ^Soldier
+	Inherits: ^PrioAntiInfantry
+	Inherits: ^ScoutEquipment
+	Inherits: ^CloakedAttacker
+	Inherits: ^InfantryRA2Sprite
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 55
+		Prerequisites: ~infantry.england, dome, ~commander_tree.advanced_infantry_training
+		Description: Elite marksman infantry.\n Armed with a powerful sniper rifle.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft, Structures\n  Special Ability: Camouflage\n  Special Ability: Kill Driver
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Sniper
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 4500
+	Armament@PRIMARY:
+		Weapon: sniper
+	Armament@Garrison:
+		Weapon: sniperE
+		Name: mounted
+	Armament@DRIVER_SNIPE:
+		Name: driver_snipe
+		Weapon: sniper.vehicle
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 1
+		Armaments: driver_snipe
+		Name: driver_snipe
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	RenderRangeCircle:
+		Color: 0A880A
+	ReloadArmamentsBar:
+		Armaments: driver_snipe
+	ReloadAmmoPool:
+		AmmoPool: driver_snipe
+		Delay: 500
+	Mobile:
+		speed: 73
+		Voice: Move
+	AttackFrontal:
+		Voice: Attack
+		Armaments: primary, driver_snipe, laser
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	WithInfantryBody:
+		StandSequences: stand, stand2
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: SniperVoice
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
 MECH:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
@@ -241,9 +307,9 @@ SPY:
 SpecOps:
 	Inherits: ^Soldier
 	Inherits: ^PrioAntiInfantry
-	Inherits: ^InfantryRA2Sprite
 	Inherits: ^SensorEquipment
 	Inherits: ^CloakedAttacker
+	Inherits: ^InfantryRA2Sprite
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -282,9 +348,6 @@ SpecOps:
 		Name: mounted
 		Weapon: relayMarker
 	IgnoresDisguise:
-	Cloak@NORMAL:
-		IsPlayerPalette: true
-		Palette: cloakts
 
 Thor:
 	Inherits: ^Soldier
