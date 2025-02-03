@@ -88,6 +88,7 @@
 	GrantCondition@Model:
 		Condition: ra2sprite
 	Cloak@NORMAL:
+		RequiresCondition: disabled
 		IsPlayerPalette: true
 		Palette: cloakts
 
@@ -98,6 +99,10 @@
 		DeathSequencePalette: overlayplayer
 	GrantCondition@Model:
 		Condition: rasprite
+	Cloak@NORMAL:
+		RequiresCondition: disabled
+		IsPlayerPalette: true
+		Palette: cloakts
 
 ^InfantryTDSprite:
 	RenderSprites:
@@ -173,6 +178,16 @@
 	Selectable:
 		Bounds: 1024, 1024
 
+^1x1Building:
+	Inherits: ^1x1Shape
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+		LocalCenterOffset: 0,-512,0
+	WithBuildingBib:
+		Sequence: bib0
+		HasMinibib: true
+
 ^2x1Shape:
 	HitShape:
 		UseTargetableCellsOffsets: true
@@ -191,6 +206,15 @@
 	Selectable:
 		Bounds: 2048, 2048
 
+^2x2Building+Bib:
+	Inherits: ^2x2Shape
+	Building:
+		Footprint: xx xx ==
+		Dimensions: 2,3
+		LocalCenterOffset: 0,-512,0
+	WithBuildingBib:
+		Sequence: bib3
+
 ^3x2Shape:
 	HitShape:
 		UseTargetableCellsOffsets: true
@@ -199,6 +223,21 @@
 			BottomRight: 1536, 1024
 	Selectable:
 		Bounds: 3072, 2048
+
+^3x2Building:
+	Inherits: ^3x2Shape
+	Building:
+		Footprint: xxx xxx
+		Dimensions: 3,2
+		LocalCenterOffset: 0,-512,0
+	WithBuildingBib:
+		Sequence: bib2
+
+^3x2Building+Bib:
+	Inherits: ^3x2Building
+	Building:
+		Footprint: xxx xxx ===
+		Dimensions: 3,3
 
 ^3x3Shape:
 	HitShape:
@@ -218,6 +257,21 @@
 	Selectable:
 		Bounds: 4096, 2048
 
+^4x2Building:
+	Inherits: ^4x2Shape
+	Building:
+		Footprint: xxxx xxxx
+		Dimensions: 4,2
+		LocalCenterOffset: 0,-512,0
+
+^4x2Building+Bib:
+	Inherits: ^4x2Building
+	Building:
+		Footprint: xxxx xxxx ====
+		Dimensions: 4,3
+	WithBuildingBib:
+		Sequence: bib1
+
 ^4x3Shape:
 	HitShape:
 		UseTargetableCellsOffsets: true
@@ -226,6 +280,21 @@
 			BottomRight: 2048, 1536
 	Selectable:
 		Bounds: 4096, 3072
+
+^4x3Building:
+	Inherits: ^4x3Shape
+	Building:
+		Footprint: xxxx xxxx xxxx
+		Dimensions: 4,3
+		LocalCenterOffset: 0,-512,0
+
+^4x3Building+Bib:
+	Inherits: ^4x3Building
+	Building:
+		Footprint: xxxx xxxx xxxx ====
+		Dimensions: 4,4
+	WithBuildingBib:
+		Sequence: bib1
 
 ^4x4Shape:
 	HitShape:
@@ -4778,7 +4847,7 @@ PROC.Dummy:
 
 ^BuildingPlug:
 	Inherits: ^SpriteActor
-	Inherits: ^TDSprite
+	Inherits: ^RASprite
 	Inherits: ^EarlyGameBuildBoost
 	WithSpriteBody:
 	Interactable:
@@ -4790,6 +4859,10 @@ PROC.Dummy:
 		OverridePalette: placebuildingtd
 	KillsSelf:
 		RemoveInstead: true
+
+^BuildingPlugTD:
+	Inherits: ^BuildingPlug
+	Inherits: ^TDSprite
 
 ^AIUNLOAD:
 	GrantConditionWhileAiming@AIUNLOAD:

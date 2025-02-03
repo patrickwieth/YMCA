@@ -6,44 +6,26 @@ chmcv:
 
 chcommand:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
 	Defaults:
-		Offset: 0,-5
-	idle: chcommandnoradar
-	radar: chcommandradar
-	damaged-idle:
-		Start: 1
+	idle: commandcenter
+	radar: radarantenna
+		Offset: -47,-25
 	make: chbuildingmakebig
 		Length: *
-	bib: bib2
-		UseTilesetExtension: true
-		Length: *
-		TilesetOverrides:
-			INTERIOR: TEMPERAT
-		Offset: 0,24
 	icon: chcommandicon
-		Offset: 0,0
 
 chcommand.radar:
-	idle: chpropagandatower
+	idle: radarantenna
 		Offset: 0, -12, 12
 		UseTilesetCode: true
-	Inherits: ^LowResBuilding
 	icon: chradarupgradeicon
 
 chpower:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
-	idle:
-		Offset: 0,-10
-	damaged-idle:
-		Start: 1
+	idle: chinapower
 		Offset: 0,-10
 	make: chbuildingmake2x2
 		Length: *
-	dead:
-		Tick: 800
-		Offset: 0,-10
 	bib: bib3
 		UseTilesetExtension: true
 		TilesetOverrides:
@@ -52,131 +34,63 @@ chpower:
 		Offset: 0,-14
 	icon: chpowericon
 	iconadv: chadvpowericon
-	idle-anim2: glstructuresmoke
-		Start: 49
-		Length: 42
+	idle-anim2: plantsmoke
+		Length: 15
 		Offset: 8, -38
-		Tick: 175
-	damaged-idle-anim2: glstructuresmoke
-		Start: 49
-		Length: 42
-		Offset: 8, -38
-		Tick: 175
+		Tick: 60
+
+chpower2:
+	Inherits: chpower
+	idle: chinaadvpower
 
 chbarracks:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
-	idle:
-	damaged-idle:
-		Start: 1
-	dead:
+	idle: chinabarracks
 	make: chbuildingmakebig
 		Length: *
-	bib: bib2
+	bib: bib3
+		Length: *
 		UseTilesetExtension: true
 		TilesetOverrides:
 			INTERIOR: TEMPERAT
-		Length: *
 	icon: chbarracksicon
 
 chsupply:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
-	Defaults:
-		Offset: 0,-2
-	idle:
-	damaged-idle:
-		Start: 1
+	idle: supplydepot
 	make: chbuildingmakebig
 		Length: *
-	dead:
 	icon: chsupplyicon
-		Offset: 0,0
 
 chweap:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
-	Defaults:
-		Offset: 0,-8
-	idle:
-	damaged-idle:
-		Start: 1
-	dead:
+	idle: chinaweap
 	make: chbuildingmakebig
 		Length: *
-	bib: bib1
-		UseTilesetExtension: true
-		Length: *
-		TilesetOverrides:
-			INTERIOR: TEMPERAT
-		Offset: 0,-6
-	idle-anim1: chweapanim1
-		Length: 6
-		Tick: 150
-	damaged-idle-anim1: chweapanim1
-		Length: 6
-		Tick: 160
 	icon: chweapicon
-		Offset: 0,0
 
 chpropaganda:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
-	Defaults:
-		Offset: 4,2
-	idle:
-	damaged-idle:
-		Start: 1
-	dead:
+	idle: propagandacenter
 	make: chbuildingmakebig
 		Length: *
-	bib: bib1
-		UseTilesetExtension: true
-		Length: *
-		TilesetOverrides:
-			INTERIOR: TEMPERAT
-		Offset: 0,8
 	icon: chpropagandaicon
 		Offset: 0,0
 
 chpropagandatower:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
-	idle: chpropagandatower
-		Offset: 0,-14
-	damaged-idle: chpropagandatower
-		Offset: 0,-14
-		Start: 1
-	dead: chpropagandatower
+	idle: propagandaspeaker
+		Offset: 0,-50
 	make: chbuildingmake1x1
 		Length: *
-	bib: mbGAP
-		Offset: 0,0
-		Length: *
-		UseTilesetExtension: true
-		TilesetOverrides:
-			JUNGLE: TEMPERAT
-			BARREN: TEMPERAT
 	icon: chpropagandatowericon
 
 chinternetcenter:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
-	Defaults:
-	idle:
-	damaged-idle:
-		Start: 1
-	dead:
+	idle: espionagecenter
 	make: chbuildingmakebig
 		Length: *
-	bib: bib1
-		UseTilesetExtension: true
-		Length: *
-		TilesetOverrides:
-			INTERIOR: TEMPERAT
-		Offset: 0,6
 	icon: chinternetcentericon
-		Offset: 0,0
 
 chsilo:
 	Inherits: ^StructureOverlays
@@ -203,18 +117,11 @@ chsilo:
 
 chairport:
 	Inherits: ^StructureOverlays
-	Inherits: ^LowResBuilding
-	idle: chairport
+	idle: chinaairfield
 		ZOffset: -1023
 		Offset: 0,-4
-	damaged-idle:
-		Start: 1
-		Offset: 0,-4
-	active: invisibleitem
-	damaged-active: invisibleitem
 	make: chbuildingmakebig
 		Length: *
-	dead:
 	icon: chairporticon
 		Offset: 0,0
 
