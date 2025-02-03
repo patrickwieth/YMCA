@@ -153,10 +153,6 @@ chpower:
 		HP: 70000
 	Power:
 		Amount: 100
-	WithDeathAnimation:
-		DeathSequence: dead
-		DeathSequencePalette: overlayplayertd
-		UseDeathTypeSuffix: false
 	LaysMinefield@minefield:
 		Locations: 0,-1, 1,-1, -1,0, -1,1, 2,0, 2,1, 0,2, 1,2
 	Voiced:
@@ -317,16 +313,14 @@ chgatling:
 
 chbunker:
 	Inherits: ^DefenseTD
-	Inherits@shape: ^2x2Shape
-	Inherits@AUTOTARGET: ^AutoTargetAll
-	Inherits@sRT: ^Transport
-	Inherits@CARGO: ^AttackingCargo
-	Inherits@mines: ^MinefieldUpgrade
+	Inherits: ^RA2Sprite
+	Inherits: ^2x2Building
+	Inherits: ^AutoTargetAll
+	Inherits: ^Transport
+	Inherits: ^AttackingCargo
+	Inherits: ^MinefieldUpgrade
 	Tooltip:
 		Name: Bunker
-	Building:
-		Footprint: xx xx
-		Dimensions: 2, 2
 	Buildable:
 		BuildPaletteOrder: 40
 		Prerequisites: infantry.china, ~structures.china, ~!commander_tree.fortified_bunker, ~!commander_tree.advanced_infantry_training
@@ -667,7 +661,7 @@ chpropagandatower.pdl:
 		HP: 60000
 
 chinternetcenter:
-	Inherits: ^BuildingChina
+	Inherits: ^BuildingChinaTD
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Transport
 	Inherits: ^DisableOnLowPowerOrForceDisabled
@@ -727,10 +721,10 @@ chinternetcenter:
 		VoiceSet: CHInternetCenterVoice
 
 chsilo:
-	Inherits: ^ScienceBuildingTD
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits@shape: ^3x2Shape
-	Inherits@mines: ^MinefieldUpgrade
+	Inherits: ^ScienceBuilding
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^3x2Building
+	Inherits: ^MinefieldUpgrade
 	Valued:
 		Cost: 4000
 	Tooltip:
@@ -809,12 +803,6 @@ chsilo:
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 40
 		Prerequisites: chsilo
-	WithBuildingBib:
-	WithSupportPowerActivationAnimation:
-		RequiresCondition: !build-incomplete
-	WithSupportPowerActivationOverlay:
-		RequiresCondition: !build-incomplete
-		Sequence: smoke
 	SupportPowerChargeBar:
 	Power:
 		Amount: -200

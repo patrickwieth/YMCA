@@ -29,6 +29,12 @@
 	GrantCondition@Model:
 		Condition: tssprite
 
+^RA2Sprite:
+	RenderSprites:
+		PlayerPalette: playerra2
+	GrantCondition@Model:
+		Condition: ra2sprite
+
 ^ScrinSprite:
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
@@ -78,7 +84,6 @@
 		PlayerPalette: playerts
 	GrantCondition@Model:
 		Condition: voxel
-
 
 ^InfantryRA2Sprite:
 	RenderSprites:
@@ -206,12 +211,20 @@
 	Selectable:
 		Bounds: 2048, 2048
 
-^2x2Building+Bib:
+^2x2Building:
 	Inherits: ^2x2Shape
+	Building:
+		Footprint: xx xx
+		Dimensions: 2,2
+		LocalCenterOffset: 0,-512,0
+	WithBuildingBib:
+		Sequence: bib3.1
+
+^2x2Building+Bib:
+	Inherits: ^2x2Building
 	Building:
 		Footprint: xx xx ==
 		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	WithBuildingBib:
 		Sequence: bib3
 
