@@ -146,12 +146,39 @@ CHE3:
 	RenderSprites:
 		Image: che3
 
-Mortar.China:
-	Inherits: Mortar
-	Inherits@horde: ^HordeBonus
+Mortar:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^HordeBonus
+	Inherits: ^PrioArtillery
 	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 21
 		Prerequisites: barracks, radar, ~infantry.china, ~commander_tree.advanced_infantry_training
+		Description: Artillery Infantry armed with a Mortar.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Infantry
+		Weaknesses: • Weak vs Tanks, Aircraft
+		Attributes: • Long range
+	Valued:
+		Cost: 150
+	Tooltip:
+		Name: Mortar
+	Health:
+		HP: 2500
+	Armament@PRIMARY:
+		Weapon: mortar
+		LocalOffset: 0,0,155
+		FireDelay: 15
+	Armament@Garrison:
+		Name: mounted
+		Weapon: mortarE
+		LocalOffset: 0,0,155
+		FireDelay: 15
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
 
 CHHACKER:
 	Inherits: ^Soldier

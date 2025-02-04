@@ -210,6 +210,79 @@ SHOK:
 		VoiceSet: ShokVoice
 	-Crushable:
 
+Desolator:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioAntiInfantry
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 70
+		Prerequisites: ~infantry.iraq, radar, ~commander_tree.advanced_infantry_training
+		Description: Anti-infantry unit.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft\n  Special Ability: Desolate Ground\n  Special Ability: Irradiates Vehicles
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Desolator
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 18000
+	Mobile:
+		Voice: Move
+		PauseOnCondition: !undeployed && being-warped
+	RevealsShroud:
+		Range: 5c0
+	Armament@PRIMARY:
+		Weapon: RadBeamWeapon
+		FireDelay: 5
+		LocalOffset: 427,0,600
+	Armament@Garrison:
+		Name: mounted
+		Weapon: RadBeamWeaponE
+		FireDelay: 5
+		LocalOffset: 427,0,600
+	TakeCover:
+		ProneOffset: 384,0,-395
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped || !undeployed
+		FacingTolerance: 0
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: DesVoice
+	-Crushable:
+	PeriodicExplosion:
+		Weapon: RadEruptionWeapon
+		RequiresCondition: deployed
+		InitialDelay: 20
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: True
+		Facing: 368
+		Voice: Attack
+		PauseOnCondition: being-warped
+	WithInfantryBody:
+		RequiresCondition: !being-warped && undeployed
+	WithSpriteBody@DEPLOYED:
+		Sequence: deployed
+		RequiresCondition: !undeployed
+		Name: deployed
+	WithMakeAnimation:
+		Sequence: deploy
+		BodyNames: deployed
+	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADHAZMAT:
+	AutoDeployer@AI:
+		DeployChance: 20
+		RequiresCondition: botowner
+
 THF:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
