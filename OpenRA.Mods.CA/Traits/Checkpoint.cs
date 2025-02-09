@@ -22,6 +22,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Display order for the facing slider in the map editor")]
 		public readonly int EditorHierarchyDisplayOrder = 3;
 
+		[Desc("The interval of game updates between autobattle units are sent forward")]
+		public readonly int waveInterval = 1000;
+
 		[Desc("The hierarchy of a checkpoint determines the possible next checkpoints, where a unit can go")]
 		IEnumerable<EditorActorOption> IEditorActorOptions.ActorOptions(ActorInfo ai, World world)
 		{
@@ -37,11 +40,12 @@ namespace OpenRA.Mods.CA.Traits
 		public override object Create(ActorInitializer init) { return new Checkpoint(init, init.Self, this); }
 	}
 
-	class Checkpoint : ProximityCapturable, INotifyIdle, INotifyAddedToWorld
+	class Checkpoint : ProximityCapturable, INotifyAddedToWorld, ITick
 	{
 		readonly CheckpointInfo info;
 		readonly public int Hierarchy;
 		public RallyPoint RallyPoint;
+		public int Ticks;
 
 		public Checkpoint(ActorInitializer init, Actor self, CheckpointInfo info)
 			: base(self, info)
@@ -51,6 +55,7 @@ namespace OpenRA.Mods.CA.Traits
 			 var hierarchyInit = init.GetOrDefault<HierarchyInit>();
 			 if (hierarchyInit != null)
 				 Hierarchy = hierarchyInit.Value;
+				 Ticks = Hierarchy;
 		}
 
 		protected void Created(Actor self)
@@ -67,9 +72,8 @@ namespace OpenRA.Mods.CA.Traits
 			base.ActorEntered(other);
 		}
 
-		void INotifyIdle.TickIdle(Actor self)
-		{
-
+		void ITick.Tick(Actor self) {
+			if (++Ticks >= info.waveInterval) Ticks = 0;
 		}
 
 		void INotifyAddedToWorld.AddedToWorld(Actor self)
