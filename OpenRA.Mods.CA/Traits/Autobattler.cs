@@ -21,19 +21,8 @@ namespace OpenRA.Mods.CA.Traits
 	[Desc("Actor moves from Checkpoint to Checkpoint and fights autonomously.")]
 	public class AutobattlerInfo : ConditionalTraitInfo
 	{
-		public readonly int ScatterMoveRadius = 1;
-
-		[Desc("How long until scattering idle autobattle units")]
-		public readonly int ScatterInterval = 10;
-
-		[Desc("Number of ticks to wait before decreasing the effective move radius.")]
-		public readonly int ReduceMoveRadiusDelay = 5;
-
 		[Desc("The interval of game updates between autobattle units are sent forward")]
 		public readonly int waveInterval = 1000;
-
-		[Desc("The terrain types that this actor should avoid wandering on to.")]
-		public readonly HashSet<string> AvoidTerrainTypes = new HashSet<string>();
 
 		public override object Create(ActorInitializer init) { return new Autobattler(init.Self, this); }
 	}
@@ -47,9 +36,6 @@ namespace OpenRA.Mods.CA.Traits
 		Actor potentialNextCheckpoint;
 		IEnumerable<Actor> potentialInitCheckpoints;
 		public int Hierarchy;
-		int idleCountdown;
-		int effectiveMoveRadius;
-		int ticksIdle;
 		int ticks;
 
 		public Autobattler(Actor self, AutobattlerInfo info)
@@ -57,16 +43,11 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			this.self = self;
 			this.info = info;
-			idleCountdown = info.ScatterInterval;
 		}
 
 		protected override void Created(Actor self)
 		{
-			if (IsTraitDisabled)
-				return;
-
 			move = self.Trait<IMove>() as IResolveOrder;
-
 			base.Created(self);
 
 			// here should be a check if the homeCheckpoint is set, if so skip setting
@@ -95,7 +76,8 @@ namespace OpenRA.Mods.CA.Traits
 							cpOrigin.initCheckpointOrigin(nextCheckpoint);
 						}
 					}
-					else TextNotificationsManager.Debug("No Checkpoint found, this map is not suited for Autobattle mode!");
+					else if(!IsTraitDisabled)
+						TextNotificationsManager.Debug("No Checkpoint found, this map is not suited for Autobattle mode!");
 				}
 				else
 				{
