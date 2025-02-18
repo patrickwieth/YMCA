@@ -94,7 +94,7 @@ PCAN:
 		VoiceSet: PrismVoice
 
 CTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelVehicle
 	RenderVoxels:
 		Scale: 1
@@ -170,7 +170,7 @@ CTNK.Reflector:
 		Name: Chrono Tank (Reflector)
 
 CHPR:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
 	RenderSprites:
@@ -216,7 +216,6 @@ CHPR:
 		Weapon: NeutronCannonSound
 		LocalOffset: 700,0,400
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
 	WithMuzzleOverlay:
 	WithSpriteTurret@inactiveturret:
@@ -329,9 +328,8 @@ CHPR.AA:
 
 # this is actually not used but is the prototype BATF
 BATF:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^BigVehicle
-	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Buildable:
 		Queue: Vehicle
@@ -405,9 +403,8 @@ BATF:
 		RequiresCondition: !being-warped
 
 BATF.Bunker:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^BigVehicle
-	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^Transport
@@ -464,7 +461,7 @@ BATF.Bunker:
 
 BATF.Bunker.PDL:
 	Inherits: BATF.Bunker
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	-AttackTurreted:
 	Buildable:
 		Queue: Vehicle
@@ -535,7 +532,7 @@ BATF.Prism:
 
 BATF.Prism.PDL:
 	Inherits: BATF.Prism
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230

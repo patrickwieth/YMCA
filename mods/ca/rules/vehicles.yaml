@@ -37,10 +37,10 @@ V2RL:
 		Weapon: BarrelExplode
 
 1TNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
-	Inherits@vision: ^ImprovedVision
+	Inherits: ^ImprovedVision
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 50
@@ -80,8 +80,6 @@ V2RL:
 		RecoilRecovery: 25
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
@@ -104,7 +102,6 @@ V2RL:
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		Armaments: pointdefense, primary
-		PauseOnCondition: empdisable || being-warped || parachute
 
 1TNK.Reflector:
 	Inherits: 1TNK
@@ -118,7 +115,7 @@ V2RL:
 		Name: Scout Tank (Reflector)
 
 2TNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Buildable:
@@ -144,8 +141,6 @@ V2RL:
 		RecoilRecovery: 38
 		LocalOffset: 720,0,80
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
@@ -398,7 +393,7 @@ SPEC:
 HARV:
 	Inherits: ^Tank
 	Inherits: ^BiologicalDriver
-	Inherits@HARV: ^Harvester
+	Inherits: ^Harvester
 	-Crushable:
 	-Carryable:
 	Buildable:
@@ -539,7 +534,7 @@ MCV.Nukular:
 JEEP:
 	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@detect: ^SensorEquipment
+	Inherits: ^SensorEquipment
 	Inherits: ^PrioAntiInfantry
 	Buildable:
 		Queue: Vehicle
@@ -571,7 +566,7 @@ JEEP:
 APC:
 	Inherits: ^Tank
 	Inherits: ^BiologicalDriver
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^Transport
 	Inherits: ^PrioAntiInfantry
 	Buildable:
 		Queue: Vehicle
@@ -731,7 +726,7 @@ TTNK:
 		Queue: Vehicle
 		BuildPaletteOrder: 125
 		Prerequisites: ~vehicles.soviet, dome, ~!commander_tree.tesla_tank_arc
-		Description: Tank with mounted Tesla coil.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
+		Description: Vehicle with mounted Tesla coil.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
 	Valued:
 		Cost: 1250
 	Tooltip:
@@ -775,7 +770,7 @@ TTNK.Arc:
 		Weapon: TTankZap.Arc
 
 TTNK.RA2:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
@@ -802,7 +797,6 @@ TTNK.RA2:
 		LocalOffset: 800,200,200, 800,-200,200
 		MuzzleSequence: muzzle
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
 	WithTurretAttackAnimation:
 		Sequence: shoot
@@ -958,7 +952,7 @@ AMCV.Nukular:
 		IntoActor: afac.nukular
 
 HMMV:
-	Inherits: ^FightingVehicle
+	Inherits: ^FightingVehicleTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^SensorEquipment
@@ -986,8 +980,6 @@ HMMV:
 		Weapon: M60mgTD
 		LocalOffset: 171,0,85
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	AutoTarget:
@@ -1072,7 +1064,7 @@ APC2:
 	Inherits: ^Tank
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^Transport
 	Inherits: ^PrioAntiInfantry
 	RenderSprites:
 		FactionImages:
@@ -1133,7 +1125,7 @@ APC2.Reinforce:
 		InitialUnits: mercenary,grenadier.emp,grenadier.emp,railgunner,medic
 
 LTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
@@ -1176,8 +1168,6 @@ LTNK:
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
 	AttackCharges:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable
@@ -1237,7 +1227,7 @@ LTNK.Laser:
 		RequiresCondition: !onwater && !being-warped
 
 MTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
@@ -1303,7 +1293,7 @@ MTNK.Reflector:
 		Name: Battle Tank (Reflector)
 
 MTNK.Drone:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^RobotDriver
 	Inherits: ^DronePairing
@@ -1756,7 +1746,7 @@ BIKE.Scrin:
 	-Armament@SECONDARY:
 
 BIKE.Scrin.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: BIKE.Scrin
 	Buildable:
 		BuildPaletteOrder: 30
@@ -1841,7 +1831,7 @@ BIKE.Explosive:
 		Weapon: BikeRocketsAAExplosive
 
 BIKE.Explosive.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: BIKE.Explosive
 	Buildable:
 		BuildPaletteOrder: 30
@@ -1918,7 +1908,7 @@ BTR:
 	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^Transport
 	Inherits: ^PrioAntiHeavyAA
 	Buildable:
 		Queue: Vehicle
@@ -1970,9 +1960,9 @@ BTR.Surveillance:
 	Inherits: ^Vehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
-	Inherits@detect: ^SensorEquipment
-	Inherits@radar: ^MobileDeployableRadar
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^SensorEquipment
+	Inherits: ^MobileDeployableRadar
+	Inherits: ^Transport
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
@@ -2039,7 +2029,6 @@ NonaSVK:
 		Types: Shell
 
 IFV:
-	Inherits: ^Tank
 	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^HoverVehicle
@@ -2372,7 +2361,7 @@ IFV.AI:
 	-Targetable@DRIVERKILL:
 
 TITN:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
 	Inherits: ^BigVehicle
 	Inherits: ^TurretedWalker
@@ -2445,7 +2434,7 @@ TITN.Battle:
 
 TITN.Battle.PDL:
 	Inherits: TITN.Battle
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
@@ -2485,7 +2474,7 @@ TITN.Railgun:
 
 TITN.Railgun.PDL:
 	Inherits: TITN.Railgun
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
@@ -2507,7 +2496,7 @@ TITN.Railgun.Reflector:
 		Name: Railgun Titan (Reflector)
 
 JUGG:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
@@ -2579,7 +2568,7 @@ JUGG:
 	WithMuzzleOverlay:
 
 DISR:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
@@ -2649,7 +2638,6 @@ DISR:
 		RequiresCondition: dronepair
 
 HMLRS:
-	Inherits: ^Tank
 	Inherits: ^FightingVehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
@@ -2718,7 +2706,7 @@ HMLRS.Reflector:
 		Name: Hover MLRS (Reflector)
 
 HMLRS.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: HMLRS
 	Buildable:
 		IconPalette: chrome
@@ -2730,7 +2718,7 @@ HMLRS.PDL:
 		Name: Hover MLRS (PDL)
 
 RTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
@@ -2806,7 +2794,7 @@ RTNK:
 		VoiceSet: MirageVoice
 
 RTNK.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: RTNK
 	Buildable:
 		Queue: Vehicle
@@ -2993,7 +2981,7 @@ KATY:
 		Weapon: BarrelExplode
 
 TNKD:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^HighResShadow
@@ -3360,7 +3348,7 @@ CDRN:
 		RequiresSelection: true
 
 2S3:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
@@ -3390,7 +3378,6 @@ CDRN:
 		PauseOnCondition: empdisable || being-warped || moving
 	AttackTurreted:
 		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped || moving
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
@@ -3433,7 +3420,7 @@ CRYO:
 		Weapon: CryoExplosion
 
 SLNG:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^LightHoverVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^TDVehicleSprite
@@ -3468,7 +3455,6 @@ SLNG:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: false
 		OpportunityFire: False
-		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	WithMuzzleOverlay:
 	Explodes:
@@ -3792,7 +3778,7 @@ XO:
 	WithMuzzleOverlay:
 
 MDRN:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^FightingVehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^RobotDriver
@@ -3834,7 +3820,6 @@ MDRN:
 		Offset: 0,0,72
 		TurnSpeed: 512
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 		Turrets: primary, secondary
 		Voice: Attack
 	WithSpriteTurret:

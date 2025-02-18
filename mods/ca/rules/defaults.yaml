@@ -2221,7 +2221,11 @@ PROC.Dummy:
 	Guard:
 
 ^FightingVehicleTurreted:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
+	Turreted:
+		TurnSpeed: 12
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 
 ^Tank:
 	Inherits: ^Vehicle
@@ -2230,6 +2234,13 @@ PROC.Dummy:
 	Mobile:
 		Locomotor: tracked
 
+^FightingTank:
+	Inherits: ^Tank
+	Inherits: ^SelectableCombatUnit
+	Inherits: ^Autobattler
+	AttackMove:
+	Guard:
+
 ^TurretedTank:
 	Inherits: ^Tank
 	Turreted:
@@ -2237,6 +2248,13 @@ PROC.Dummy:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 	WithSpriteTurret:
+
+^FightingTankTurreted:
+	Inherits: ^FightingTank
+	Turreted:
+		TurnSpeed: 6
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 
 ^HarvesterVehicle:
 	Inherits: ^Tank
