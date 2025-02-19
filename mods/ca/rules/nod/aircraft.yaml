@@ -18,6 +18,8 @@ SCRN:
 	Inherits: ^RearmableHelicopter
 	AmmoPool:
 		Ammo: 12
+	WithAmmoPipsDecoration:
+		PipCount: 4
 	AttackAircraft:
 		Voice: Attack
 	Buildable:
@@ -109,11 +111,11 @@ SCRN.Payload:
 		TurnSpeed: 20
 		Speed: 190
 	AmmoPool:
-		Ammo: 16
+		Ammo: 18
 		ReloadDelay: 25
 		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
-		PipCount: 8
+		PipCount: 6
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
@@ -318,10 +320,10 @@ VENM:
 		MuzzleSequence: muzzle
 	SpawnActorOnDeath:
 		Actor: VENM.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: VENM.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
+		RequiresCondition: empdisable && !being-warped
 	WithMoveAnimation:
 		MoveSequence: move
 	WithMuzzleOverlay:
