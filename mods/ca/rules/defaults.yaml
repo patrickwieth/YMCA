@@ -1642,6 +1642,7 @@ PROC.Dummy:
 
 ^AutoTargetAir:
 	AutoTarget:
+		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Air
 		InvalidTargets: NoAutoTarget
@@ -1827,6 +1828,7 @@ PROC.Dummy:
 		Priority: 1
 
 ^PrioAntiHeavyAA:
+	Inherits: ^AutoTargetAll
 	AutoTarget:
 		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
@@ -1911,6 +1913,7 @@ PROC.Dummy:
 		Priority: 1
 
 ^PrioEnergyAntiHeavyAA:
+	Inherits: ^AutoTargetAll
 	AutoTarget:
 		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
@@ -5782,3 +5785,28 @@ PROC.Dummy:
 		Offset: -580,0,180
 		Sequence: slow-rotor2
 		RequiresCondition: !airborne
+
+^StopMovingToAttack:
+	AutoTarget:
+		ScanRadius: 20
+	SpeedMultiplier:
+		Modifier: 0
+		RequiresCondition: attacking
+	GrantConditionWhileAiming:
+		Condition: aiming
+	GrantConditionOnAttack:
+		Condition: attacking
+		RevokeDelay: 50
+		RevokeAll: false
+	GrantConditionOnMovement:
+		Condition: moving
+		ValidMovementTypes: Horizontal, Vertical, Turn
+	AmmoPool:
+		Ammo: 3
+		Armaments: secondary
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 90
+		Count: 3
+		ResetOnFire: True
+		PauseOnCondition: moving
