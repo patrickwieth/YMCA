@@ -1419,6 +1419,7 @@ chnukecann:
 	Inherits: ^PrioArtillery
 	Inherits: ^GeneralsVehicle
 	Inherits: ^AttackTurretedVoice
+	Inherits: ^DeployToAttack
 	Valued:
 		Cost: 2400
 	Tooltip:
@@ -1450,6 +1451,19 @@ chnukecann:
 		Weapon: CHNukeCannon
 		LocalOffset: 400,0,600
 		PauseOnCondition: !ammo || fired
+	Voiced:
+		VoiceSet: CHNukeCannonVoice
+	Explodes:
+		Weapon: CHAtomicTankExplode
+		EmptyWeapon: CHAtomicTankExplode
+		RequiresCondition: !chronobeamed
+
+^DeployToAttack:
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: CHNukeCannon
+		LocalOffset: 400,0,600
+		PauseOnCondition: !ammo || fired
 	Armament@AIM:
 		Weapon: NukeCannonDummyAim
 		PauseOnCondition: deployed
@@ -1467,10 +1481,6 @@ chnukecann:
 		InitialAmmo: 0
 		PipCount: 1
 		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	ReloadAmmoPoolCA@deployed:
 		Delay: 100
 		Count: 1
@@ -1490,12 +1500,6 @@ chnukecann:
 	SpeedMultiplier@UNDEPLOY:
 		Modifier: 0
 		RequiresCondition: fired
-	Voiced:
-		VoiceSet: CHNukeCannonVoice
-	Explodes:
-		Weapon: CHAtomicTankExplode
-		EmptyWeapon: CHAtomicTankExplode
-		RequiresCondition: !chronobeamed
 
 chnukecann.Range:
 	Inherits: chnukecann

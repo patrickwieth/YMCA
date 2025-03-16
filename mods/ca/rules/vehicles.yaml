@@ -2507,6 +2507,7 @@ JUGG:
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
+	Inherits: ^StopMovingToAttack
 	Tooltip:
 		Name: Juggernaut
 	Buildable:
@@ -2527,45 +2528,30 @@ JUGG:
 		Sequence: stand
 	WithMoveAnimation:
 		MoveSequence: run
-	WithAttackAnimation:
-		Sequence: shoot
-		RequiresCondition: aiming && !attacking
 	WithDeathAnimation:
 		Sequence: die
 		DeathSequencePalette: overlayplayertd
 		UseDeathTypeSuffix: false
-	SpeedMultiplier:
-		Modifier: 0
-		RequiresCondition: attacking
+	WithAttackAnimation:
+		Sequence: shoot
+		RequiresCondition: aiming && !attacking
+	AutoTarget:
+		InitialStance: AttackAnything
+		InitialStanceAI: AttackAnything
 	Armament@PRIMARY:
+		Name: primary
+		Weapon: JuggernautDummyAim
+	Armament@SECONDARY:
+		Name: secondary
 		Weapon: JuggernautGun
 		LocalOffset: 830,-200,500, 830,200,500, 830,00,500
 		MuzzleSequence: muzzle
 		FireDelay: 33
-		PauseOnCondition: !ammo || moving
 	AttackFrontal:
-		FacingTolerance: 64
+		FacingTolerance: 0
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
-	GrantConditionWhileAiming:
-		Condition: aiming
-	GrantConditionOnAttack:
-		Condition: attacking
-		RevokeDelay: 50
-		RevokeAll: false
-	GrantConditionOnMovement:
-		Condition: moving
-		ValidMovementTypes: Horizontal, Vertical, Turn
-	AmmoPool:
-		Ammo: 3
-		Armaments: primary
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 90
-		Count: 3
-		ResetOnFire: True
-		PauseOnCondition: moving
 	Health:
 		HP: 60000
 	Voiced:
