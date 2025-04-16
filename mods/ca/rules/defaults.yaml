@@ -475,15 +475,6 @@
 		Percentage: 50
 		Types: SpyInfiltrate, ThiefInfiltrate
 		Notification: CreditsStolen
-	SpawnActorsOnSell@BoostAntiCheat:
-		ActorTypes: proc.dummy
-		GuaranteedActorTypes: proc.dummy
-
-PROC.Dummy:
-	Valued:
-		Cost: 200
-	GrantExternalConditionToOwner@BuildingsOwned:
-		Condition: BuildingsOwned
 
 ^Harvester:
 	Inherits: ^HarvesterBalancer
@@ -3259,12 +3250,33 @@ PROC.Dummy:
 		ValidDamageStates: Light, Medium, Heavy, Critical
 
 ^EarlyGameBuildBoost:
-	GrantExternalConditionToOwner@BuildingsOwned:
-		Condition: BuildingsOwned
+	FreeActor@BuildBoostLimit:
+		Actor: BuildBoost.Dummy
+		RequiresCondition: !noMoreDummies
+	GrantConditionOnPrerequisite@BuildBoostLimit:
+		Condition: noMoreDummies
+		Prerequisites: BuildUpBoostEnded
 	ProductionTimeMultiplier@BuildUpBoost:
 		Multiplier: 1
 		Prerequisites: !BuildUpBoostEnded
 		Queue: Building
+
+^BuildBoost4x:
+	FreeActor@BuildBoostLimit2:
+		Actor: BuildBoost.Dummy
+		RequiresCondition: !noMoreDummies
+	FreeActor@BuildBoostLimit3:
+		Actor: BuildBoost.Dummy
+		RequiresCondition: !noMoreDummies
+	FreeActor@BuildBoostLimit4:
+		Actor: BuildBoost.Dummy
+		RequiresCondition: !noMoreDummies
+
+BuildBoost.Dummy:
+	Valued:
+		Cost: 0
+	GrantExternalConditionToOwner@BuildingsOwned:
+		Condition: BuildingsOwned
 
 ^NukularConyard:
 	Inherits: ^MustBeDestroyed.Nukular
@@ -3330,20 +3342,13 @@ PROC.Dummy:
 			smcv.nukular: NukularCargo
 
 ^TechLevelBuilding:
+	Inherits: ^BuildBoost4x
 	Buildable:
 		BuildDurationModifier: 100
 	ProductionTimeMultiplier@BuildUpBoost:
 		Multiplier: 1
 		Prerequisites: !BuildUpBoostEnded
 		Queue: Building
-	GrantExternalConditionToOwner@BuildingsOwned1:
-		Condition: BuildingsOwned
-	GrantExternalConditionToOwner@BuildingsOwned2:
-		Condition: BuildingsOwned
-	GrantExternalConditionToOwner@BuildingsOwned3:
-		Condition: BuildingsOwned
-	GrantExternalConditionToOwner@BuildingsOwned4:
-		Condition: BuildingsOwned
 
 ^Tier2Tech:
 
