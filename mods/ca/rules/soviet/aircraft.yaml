@@ -1,7 +1,7 @@
 HIND:
 	Inherits: ^VoxelHelicopter
 	RenderVoxels:
-		Scale: 0.6
+		Scale: 0.5
 		Image: hind
 	WithVoxelHelicopterBody:
 		SkipRate: 1
@@ -80,12 +80,12 @@ HIND.Tesla:
 
 HIND.Missile:
 	Inherits: HIND
-	Inherits: ^PrioAntiHeavy
+	Inherits: ^PrioAntiHeavyAA
 	Buildable:
 		Prerequisites: ~hpad, ~commander_tree.hind.missile
-		Description: Helicopter gunship with unguided missiles.
+		Description: Helicopter gunship with guided missiles.
 	TooltipExtras:
-		Strengths: • Strong vs Buildings, big armies
+		Strengths: • Strong vs Vehicles, Aircraft
 		Weaknesses: • Weak vs Anti-Air
 	WithProductionIconOverlay@Missile:
 		Types: Missile
@@ -95,9 +95,12 @@ HIND.Missile:
 		Name: Hind (Missiles)
 	Health:
 		HP: 24000
-	-Armament@PRIMARY:
+	Armament@PRIMARY:
+		Weapon: HellfireAA
+		LocalOffset: 0,-213,-85, 0,213,-85
 	Armament@SECONDARY:
-		Weapon: HellfireAG.Arty
+		Weapon: HellfireAG
+		LocalOffset: 0,213,-85, 0,-213,-85
 	-WithMuzzleOverlay:
 
 HIND.Radcannon:
@@ -165,7 +168,10 @@ FROG:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
 		Prerequisites: ~afld, ~aircraft.soviet, ~commander_tree.frogfoot,
-		Description: Bomber armed with explosive bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft
+		Description: Bomber armed with explosive bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Light Vehicles, Infantry
+		Weaknesses: • Weak vs Anti-Air, Aircraft
 	Valued:
 		Cost: 1650
 	Tooltip:
@@ -190,7 +196,11 @@ SU25.dirty:
 		Types: Hazard
 	Buildable:
 		Prerequisites: ~afld, ~commander_tree.dirty_frogfoot
-		Description: Bomber armed with dirty bombs.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Aircraft, Buildings
+		Description: Bomber armed with dirty bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Light Vehicles, Infantry
+		Weaknesses: • Weak vs Anti-Air, Aircraft, Buildings
+		Attributes: • Leaves radiation on the ground
 	Valued:
 		Cost: 1550
 	Tooltip:
@@ -220,7 +230,10 @@ SUK:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
 		Prerequisites: ~afld, stek, ~commander_tree.sukhoi, ~!commander_tree.sukhoi_concussion
-		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
+		Description: Fast allround attack aircraft armed\nwith powerful explosive missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Tanks
+		Weaknesses: • Weak vs Infantry, Anti-Air
 	Valued:
 		Cost: 1600
 	Tooltip:
@@ -258,7 +271,7 @@ SUK.Conc:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
 		Prerequisites: ~afld, stek, ~commander_tree.sukhoi_concussion,
-		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Missiles cause concussion on units\n  Strong vs Tanks, Defenses\n  Weak vs Aircraft
+		Description: Fast ground attack aircraft armed\nwith powerful explosive missiles.\n  Missiles cause concussion on units.
 	WithProductionIconOverlay@Dynamite:
 		Types: Dynamite
 	Tooltip:
@@ -282,7 +295,10 @@ SU47:
 	Buildable:
 		Prerequisites: ~afld, stek, ~commander_tree.mig.aa
 		IconPalette: chrome
-		Description: Air Superiority fighter aircraft.\n  Can attack aircraft. \n  Strong vs Aircraft \n  Weak vs Infantry
+		Description: Air Superiority fighter aircraft.\n  Can only attack aircraft.
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft
+		Weaknesses: • Weak vs Anti-Air, Ground units
 	Valued:
 		Cost: 1750
 	Tooltip:
@@ -306,14 +322,12 @@ SU47:
 		Actor: SU47.Husk.empty.EMP
 		RequiresCondition: !ammo && empdisable && !being-warped
 
-KIRO:
+Kirov:
 	Inherits: ^Airship
 	Inherits: ^VoxelHelicopter
 	Inherits: ^BiologicalPilot
 	Inherits: ^HeavyArmor
 	Inherits: ^PrioArtillery
-	RenderSprites:
-		Image: kirov
 	RenderVoxels:
 		Scale: 5
 	WithVoxelHelicopterBody:
@@ -324,9 +338,12 @@ KIRO:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
 		IconPalette: chrome
-		BuildDurationModifier: 115
-		Prerequisites: ~afld, stek, ~aircraft.soviet, ~commander_tree.kirov,
-		Description: Heavily armoured airship equipped with specialised bombs.\n  Vulnerable when dropping bombs.\n  Strong vs Buildings, Infantry, Slow Vehicles\n  Weak vs Aircraft
+		Prerequisites: ~afld, stek, ~aircraft.soviet, ~!filler.kirov
+		Description: Heavily armoured airship equipped with specialised bombs.\n  Vulnerable when dropping bombs.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Slow units
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -367,10 +384,10 @@ KIRO:
 		InitialStanceAI: AttackAnything
 		ScanRadius: 10
 	SpawnActorOnDeath:
-		Actor: KIRO.Husk
+		Actor: Kirov.Husk
 		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
-		Actor: KIRO.Husk.EMP
+		Actor: Kirov.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
 	LeavesTrails@1:
 		Offsets: -100,500,100
@@ -397,15 +414,6 @@ KIRO:
 		DamageCooldown: 150
 	Voiced:
 		VoiceSet: KirovVoice
-	Explodes:
-		Weapon: KirovExplode
-		RequiresCondition: !airborne
-	DamageMultiplier@doorsopen:
-		RequiresCondition: doorsopen
-		Modifier: 200
-	GrantConditionOnAttack@doorsopen:
-		Condition: doorsopen
-		RevokeDelay: 50
 	GrantConditionOnFaction@russia:
 		Condition: russiabombs
 		Factions: russia
@@ -415,19 +423,386 @@ KIRO:
 	GrantConditionOnFaction@iraq:
 		Condition: iraqbombs
 		Factions: iraq
+
+BLIMP:
+	Inherits: ^Airship
+	Inherits: ^BiologicalPilot
+	Inherits: ^HeavyArmor
+	Inherits: ^PrimaryBuilding
+	RenderSprites:
+		Image: Blimp
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 55
+		Prerequisites: ~afld, stek, ~commander_tree.airship,
+		Description: Heavily Armoured Airship trains infantry directly onto the Battlefield.
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Airship of the People
+	Health:
+		HP: 175000
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	Aircraft:
+		CruiseAltitude: 2c0
+		InitialFacing: 192
+		TurnSpeed: 12
+		Speed: 56
+		Voice: Move
+		AltitudeVelocity: 0c50
+		CanForceLand: False
+	SelectionDecorations:
+	SpawnActorOnDeath:
+		Actor: BLIMP.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: BLIMP.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+	LeavesTrails@1:
+		Offsets: -100,500,100
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	LeavesTrails@2:
+		Offsets: -100,-500,100
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	ChangesHealth:
+		Step: 100
+		Delay: 3
+		StartIfBelow: 100
+		DamageCooldown: 150
+	Voiced:
+		VoiceSet: KirovVoice
+	Explodes:
+		Weapon: KirovExplode
+		RequiresCondition: !airborne
+	Production:
+		Produces: Infantry, Soldier
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		RequiresCondition: !infdisabled
+	GrantConditionOnPrerequisite@vehiclesonly:
+		Condition: infdisabled
+		Prerequisites: techlevel.vehiclesonly
+	GrantConditionOnPrerequisite@aircraftonly:
+		Condition: infdisabled
+		Prerequisites: techlevel.aircraftonly
+	GrantExternalConditionToProduced:
+		Condition: produced, parachute
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: -170,810,0
+		ExitCell: 1,2
+		ProductionTypes: Soldier, Infantry
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
-^KIRO.Carrier:
-	Inherits: ^DualRotors
+Kirov.V3:
+	Inherits: Kirov
+	RenderVoxels:
+		Image: kirov.v3
+		Scale: 5
+	Tooltip:
+		Name: Kirov V3 System
+	Buildable:
+		Prerequisites: ~afld, stek, ~aircraft.soviet, ~commander_tree.kirov.v3
+		Description: Heavily armoured airship equipped with V3 long range rockets.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Massed units
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	Valued:
+		Cost: 3000
+	Health:
+		HP: 100000
+	Aircraft:
+		Speed: 45
+	-AttackAircraft:
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+		FacingTolerance: 0
+	Armament@PRIMARY:
+		Weapon: V3Launcher
+		ReloadingCondition: reloading
+		LocalOffset: -20,0,-300
+		-RequiresCondition:
+	-Armament@PRIMARY-RUSSIA:
+	-Armament@PRIMARY-nkorea:
+	-Armament@PRIMARY-IRAQ:
+	MissileSpawnerMaster:
+		Actors: V3.Kirov
+		RespawnTicks: 50
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: 0,0,-800
+		ExitCell: 0,0
+	SpawnActorOnDeath:
+		Actor: Kirov.V3.Husk
+	SpawnActorOnDeath@EMP:
+		Actor: Kirov.V3.Husk.EMP
+
+V3.Kirov:
+	Inherits: V3
+	BallisticMissile:
+		LaunchAngle: 20
+		Speed: 135
+
+Kirov.Demo:
+	Inherits: Kirov
+	Inherits: ^PrioAntiLight
+	Inherits: ^SelfDestructingAttacker
+	RenderVoxels:
+		Image: kirov.demo
+		Scale: 5
+	WithVoxelHelicopterBody:
+		Offset: 0,0,-1500
+	Tooltip:
+		Name: Nuke Kirov
+	Buildable:
+		Prerequisites: ~afld, stek, ~aircraft.soviet, ~commander_tree.kirov.demo
+		Description: Heavily armoured airship equipped with an atomic bomb.
+	TooltipExtras:
+		Strengths: • Strong vs everything it can reach
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	Valued:
+		Cost: 10000
+	Health:
+		HP: 125000
+	Armament@PRIMARY:
+		Weapon: DemoTruckTargeting
+		-RequiresCondition:
+	-Armament@PRIMARY-RUSSIA:
+	-Armament@PRIMARY-nkorea:
+	-Armament@PRIMARY-IRAQ:
+	Explodes@NUKE:
+		Weapon: atomic
+		RequiresCondition: triggered && !being-warped
+	GrantConditionOnAttack:
+		Condition: triggered
+	SpawnActorOnDeath:
+		Actor: Kirov.Demo.Husk
+		RequiresCondition: !triggered && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: Kirov.Demo.Husk.EMP
+		RequiresCondition: !triggered && empdisable && !being-warped
+
+Kirov.Mecha:
+	Inherits: Kirov
+	Inherits: ^PrioAntiLight
+	RenderVoxels:
+		Image: kirov.mecha
+		Scale: 4
+	Tooltip:
+		Name: Mecha Kirov
+	Buildable:
+		Prerequisites: ~afld, stek, ~aircraft.iraq, ~commander_tree.kirov.mecha
+		Description: Heavily armoured airship equipped with a flamethrower.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Light Vehicles, Infantry
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	Valued:
+		Cost: 5000
+	Health:
+		HP: 125000
+	Aircraft:
+		Speed: 45
+	Armament@PRIMARY:
+		Weapon: FireballLauncher.Kirov
+		LocalOffset: 1250,0,100
+		-RequiresCondition:
+	-Armament@PRIMARY-RUSSIA:
+	-Armament@PRIMARY-nkorea:
+	-Armament@PRIMARY-IRAQ:
+	SpawnActorOnDeath:
+		Actor: Kirov.Mecha.Husk
+	SpawnActorOnDeath@EMP:
+		Actor: Kirov.Mecha.Husk.EMP
+
+Kirov.Mecha.Tesla:
+	Inherits: Kirov.Mecha
+	Inherits: ^PrioAntiHeavy
+	Tooltip:
+		Name: Mecha Kirov (Tesla)
+	Armament@PRIMARY:
+		Weapon: Tesla.Kirov
+	Buildable:
+		Prerequisites: ~afld, stek, ~aircraft.russia, ~commander_tree.kirov.mecha
+		Description: Heavily armoured airship equipped with a tesla gun.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+
+Kirov.Carrier:
+	Inherits: Kirov
+	Inherits: ^PrioAntiHeavyAA
+	RenderVoxels:
+		Image: kirov.carrier
+		Scale: 5
+	Tooltip:
+		Name: Kirov Carrier
+	Buildable:
+		Prerequisites: ~afld, stek, ~aircraft.soviet, ~commander_tree.kirov.carrier
+		Description: Heavily armoured airship carrier.\n  Sends out Yak-41 to fight opposing forces.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft, Buildings
+		Weaknesses: • Weak vs Point-Defense Lasers, Anti-Air
+		Attributes: • Very slow
+	Valued:
+		Cost: 5000
+	Health:
+		HP: 100000
+	Aircraft:
+		Speed: 40
+	-AttackAircraft:
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+		FacingTolerance: 1024
+	Armament@PRIMARY:
+		Weapon: InvaderLauncher
+		LocalOffset: 0,0,0
+		-RequiresCondition:
+	-Armament@PRIMARY-RUSSIA:
+	-Armament@PRIMARY-nkorea:
+	-Armament@PRIMARY-IRAQ:
+	CarrierMaster@carr1:
+		Actors: Yak41, Yak41, Yak41, Yak41
+		RearmTicks: 0
+		RespawnTicks: 200
+		InstaRepair: true
+		SlaveDisposalOnKill: KillSlaves
+		SpawnAllAtOnce: false
+		LoadedCondition: inva-loaded
+		RequiresCondition: !empdisable && !being-warped
+	Exit@0:
+		SpawnOffset: -100,0,0
+		Facing: 60
+	Exit@1:
+		SpawnOffset: -100,0,0
+		Facing: -60
+	Exit@2:
+		SpawnOffset: 100,0,0
+		Facing: 60
+	Exit@3:
+		SpawnOffset: 100,0,0
+		Facing: -60
 	WithIdleOverlay@ROTOR1AIR:
-		Offset: -180,597,250
-	WithIdleOverlay@ROTOR1GROUND:
-		Offset: -180,597,250
+		Offset: -400,-550,50
+		Sequence: rotor
 	WithIdleOverlay@ROTOR2AIR:
-		Offset: -180,-597,250
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: -180,-597,250
+		Offset: -400,550,50
+		Sequence: rotor
+	WithIdleOverlay@ROTOR3AIR:
+		Offset: -1000,-700,80
+		Sequence: rotor2
+	WithIdleOverlay@ROTOR4AIR:
+		Offset: -1000,700,80
+		Sequence: rotor2
+	SpawnActorOnDeath:
+		Actor: Kirov.Carrier.Husk
+	SpawnActorOnDeath@EMP:
+		Actor: Kirov.Carrier.Husk.EMP
+
+Yak41:
+	Inherits: ^VoxelPlane
+	RenderVoxels:
+		Scale: 0.6
+		Image: yak41
+	RenderSprites:
+		Image: yak41
+	Contrail@1:
+		Offset: -200,0,50
+	-Contrail@2:
+	Valued:
+		Cost: 50
+	Tooltip:
+		Name: Yak-41
+	Health:
+		HP: 6000
+	RevealsShroud:
+		Range: 2c0
+		MinRange: 1c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 1c0
+		Type: GroundPosition
+	Armament:
+		Weapon: HellfireAG.Yak41
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: HellfireAA.Yak41
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 80
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		CruiseAltitude: 2c0
+		InitialFacing: 192
+		TurnSpeed: 8
+		Speed: 220
+		MaximumPitch: 56
+		CanHover: False
+		CanSlide: False
+		RepulsionSpeed: 40
+		Repulsable: False
+		IdealSeparation: 0c256
+		VTOL: true
+		TakeoffSounds: mtoff1.aud, mtoff2.aud
+		LandingSounds: mland1.aud, mland2.aud
+	GrantConditionOnAttack:
+		ArmamentNames: secondary
+		Condition: airattack
+	SpeedMultiplier@SlowOnIdle:
+		RequiresCondition: airattack
+	Rearmable:
+		RearmActors: kirov.carrier
+	AmmoPool:
+		Ammo: 6
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		PipCount: 6
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	RejectsOrders:
+	SpawnActorOnDeath:
+		Actor: Yak41.Husk
+		RequiresCondition: !empdisable
+	SpawnActorOnDeath@EMP:
+		Actor: Yak41.Husk.EMP
+		RequiresCondition: empdisable
+	-EjectOnDeath:
+	-Selectable:
+	Interactable:
+	-ActorLostNotification:
+	LeavesTrails:
+		Offsets: -253,0,171
+	CarrierSlave:
+		LandingDistance: 8c0
+	Interactable:
 
 U2:
 	Inherits: ^VoxelPlane

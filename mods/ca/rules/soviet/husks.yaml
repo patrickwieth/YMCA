@@ -53,3 +53,116 @@ Source_of_Pollution.Husk:
 		IntoActor: source_of_pollution
 	InfiltrateForTransform:
 		IntoActor: source_of_pollution
+
+Kirov.Husk:
+	Inherits: ^VoxelHelicopterHusk
+	WithVoxelHelicopterBody:
+		Offset: 0,0,-1500
+	RenderVoxels:
+		Scale: 5
+		Image: kirov.husk
+	Tooltip:
+		Name: Kirov
+	Aircraft:
+		TurnSpeed: 8
+		Speed: 30
+	FallsToEarth:
+		MaximumSpinSpeed: 0
+	LeavesTrails@0:
+		Offsets: -432,560,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	LeavesTrails@1:
+		Offsets: -432,-560,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	RevealsShroud:
+		Range: 10c0
+		Type: CenterPosition
+	RenderSprites:
+		Image: kirov
+	FallsToEarth:
+		Explosion: KirovExplode
+
+Kirov.Husk.EMP:
+	Inherits: Kirov.Husk
+	Inherits: ^EmpVisualEffect
+
+Kirov.V3.Husk:
+	Inherits: Kirov.Husk
+	RenderVoxels:
+		Image: kirov.v3.husk
+
+Kirov.V3.Husk.EMP:
+	Inherits: Kirov.V3.Husk
+	Inherits: ^EmpVisualEffect
+
+Kirov.Demo.Husk:
+	Inherits: Kirov.Husk
+	RenderVoxels:
+		Image: kirov.demo.husk
+	Explodes@NUKE:
+		Weapon: atomic
+		RequiresCondition: !being-warped
+
+Kirov.Demo.Husk.EMP:
+	Inherits: Kirov.Demo.Husk
+	Inherits: ^EmpVisualEffect
+	-Explodes@NUKE:
+
+Kirov.Mecha.Husk:
+	Inherits: Kirov.Husk
+	RenderVoxels:
+		Scale: 4
+		Image: kirov.mecha.husk
+
+Kirov.Mecha.Husk.EMP:
+	Inherits: Kirov.Mecha.Husk
+	Inherits: ^EmpVisualEffect
+
+Kirov.Carrier.Husk:
+	Inherits: Kirov.Husk
+	RenderVoxels:
+		Image: kirov.carrier.husk
+
+Kirov.Carrier.Husk.EMP:
+	Inherits: Kirov.Carrier.Husk
+	Inherits: ^EmpVisualEffect
+
+Yak41.Husk:
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 0.6
+		Image: yak41
+	RenderSprites:
+		Image: yak41
+	Tooltip:
+		Name: Yak-41
+	Aircraft:
+		TurnSpeed: 16
+		Speed: 149
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	RevealsShroud:
+		Range: 12c0
+		Type: CenterPosition
+	FallsToEarth:
+		Explosion: UnitExplodeDrone
+
+Yak41.Husk.EMP:
+	Inherits: Yak41.Husk
+	Inherits: ^EmpVisualEffect

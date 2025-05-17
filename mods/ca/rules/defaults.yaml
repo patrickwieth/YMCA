@@ -4282,9 +4282,9 @@ BuildBoost.Dummy:
 		Categories: Critter
 
 ^ShootableMissile:
-	Inherits@1: ^ExistsInWorld
-	Inherits@4: ^SpriteActor
-	Inherits@Armor: ^LightArmor
+	Inherits: ^ExistsInWorld
+	Inherits: ^SpriteActor
+	Inherits: ^LightArmor
 	BallisticMissile:
 		LaunchAngle: 128
 		Speed: 165
@@ -4550,27 +4550,11 @@ BuildBoost.Dummy:
 	Inherits: ^Afterburner
 	Inherits: ^WingletContrails
 	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
 		TurnSpeed: 20
 		Speed: 250
-		RepulsionSpeed: 40
-		MaximumPitch: 56
 		Roll: 16
 		IdleRoll: 8
 		RollSpeed: 8
-		TakeoffSounds: migtoff1.aud
-	LeavesTrails:
-		Offsets: -853,0,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
 
 ^VoxelHelicopter:
 	Inherits: ^Helicopter
@@ -5817,3 +5801,28 @@ BuildBoost.Dummy:
 		Count: 3
 		ResetOnFire: True
 		PauseOnCondition: moving
+
+^SelfDestructingAttacker:
+	Explodes@NUKE:
+		Weapon: MiniNuke
+		EmptyWeapon: MiniNuke
+		DamageSource: Killer
+		RequiresCondition: !unloaded && !being-warped
+	Explodes@UNARMED:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		RequiresCondition: unloaded && !being-warped
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 512
+		Voice: Attack
+		RequiresCondition: !unloaded
+	Armament@PRIMARY:
+		Weapon: DemoTruckTargeting
+	GrantConditionOnAttack:
+		Condition: triggered
+	GrantConditionOnDeploy:
+		DeployedCondition: triggered
+		RequiresCondition: !unloaded
+	KillsSelf:
+		RequiresCondition: invulnerability || triggered || berserk

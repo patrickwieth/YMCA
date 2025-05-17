@@ -540,7 +540,7 @@ commander_tree.Rice_Cooker:
 	Tooltip:
 		Name: Kim's Giant Rice Cooker
 	Buildable:
-		BuildPaletteOrder: 140
+		BuildPaletteOrder: 139
 		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, indp
 		Description: Unlocks Kim's Giant Rice Cooker. \nThe great leader has engineered the best Rice Cooker in the world.\nHis excellency's engineering is so supreme, the Rice Cooker can be used as an artillery\nand unsurprisingly is the best artillery in the world.\nOnce the great leader steered the Rice Cooker and fired a shot that flew around the globe and hit South Korea from the south!
 
@@ -551,7 +551,7 @@ commander_tree.Gene_Splicer:
 	RenderSprites:
 		Image: gene_splicer
 	Buildable:
-		BuildPaletteOrder: 140
+		BuildPaletteOrder: 139
 		Prerequisites: prerequisite.has_points, ~vehicles.iraq, cloning_vats
 		Description: Unlocks the Gene Splicer. \nIt is a three legged Walker that shoots out specifically modulated radiation. \nThe radiation kills drivers of vehicles and turns infantry into Zombies.
 
@@ -562,9 +562,9 @@ commander_tree.Tsar:
 	RenderSprites:
 		Image: tsar
 	Buildable:
-		BuildPaletteOrder: 140
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, indp, ~disabled
-		Description: Unlocks the Tsar Tank. \nIt is a giant slow moving deployable tank.
+		BuildPaletteOrder: 139
+		Prerequisites: prerequisite.has_points, ~vehicles.russia, indp, disabled
+		Description: Unlocks the Tsar Tank. \nIt is a giant slow moving deployable tank. \n not yet implemented
 
 hack.cameo_filler.soviet_epic1:
 	Inherits: ^default.cameo_filler
@@ -664,3 +664,133 @@ hack.cameo_filler.114:
 	Buildable:
 		BuildPaletteOrder: 129
 		Prerequisites: prerequisite.has_points, ~filler.hind, disabled
+
+
+commander_tree.Frogfoot:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Frogfoot
+	Buildable:
+		BuildPaletteOrder: 132
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!aircraft.iraq
+		Description: Enables to build the Frogfoot. \n  A bomber optimized to take down large groups of ground units or buildings.
+
+commander_tree.Dirty_Frogfoot:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Dirty Frogfoot
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 132
+		Prerequisites: prerequisite.has_points, ~aircraft.iraq
+		Description: Enables to build the Dirty Frogfoot. \n  It is a bomber armed with dirty bombs leaving a lot of radiation at the strike site.
+
+hack.cameo_filler.115:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 133
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
+
+hack.cameo_filler.116:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 133
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
+
+
+commander_tree.Airship:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Airship of the People
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!commander_tree.kirov.carrier, ~!commander_tree.kirov.mecha, ~!commander_tree.kirov.demo, ~!commander_tree.kirov.v3
+		Description: Upgrades Kirov to the Airship of the People. \n  It greatly accelerates the Revolution by paradropping revolutionaries on the field.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+commander_tree.Kirov.V3:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Kirov V3 System
+	RenderSprites:
+		Image: kirov.v3
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.nkorea, ~!commander_tree.kirov.carrier, ~!commander_tree.airship
+		Description: Heavily armoured airship equipped with V3 long range rockets.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Massed units
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+commander_tree.Kirov.Demo:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Kirov
+	RenderSprites:
+		Image: kirov.demo
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.iraq, ~!commander_tree.kirov.mecha, ~!commander_tree.airship
+		Description: Heavily armoured airship equipped with an atomic bomb.
+	TooltipExtras:
+		Strengths: • Strong vs everything it can reach
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+commander_tree.Kirov.Mecha:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mecha Kirov
+	RenderSprites:
+		Image: kirov.mecha
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea, ~!commander_tree.kirov.demo, ~!commander_tree.airship
+		Description: Heavily armoured airship equipped with a flamethrower (iraq) or tesla coil (russia).
+	TooltipExtras:
+		Strengths: • Strong vs Ground Units
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+commander_tree.Kirov.Carrier:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Kirov Carrier
+	RenderSprites:
+		Image: kirov.carrier
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.nkorea, ~!commander_tree.kirov.v3, ~!commander_tree.airship
+		Description: Heavily armoured airship carrier.\n  Sends out Yak-41 to fight opposing forces.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft, Buildings
+		Weaknesses: • Weak vs Point-Defense Lasers, Anti-Air
+		Attributes: • Very slow
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+hack.cameo_filler.kirov1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 145
+		Prerequisites: prerequisite.has_points, ~aircraft.russia, disabled
+
+hack.cameo_filler.kirov2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 145
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!aircraft.russia, ~filler.kirov, disabled
+
+hack.cameo_filler.kirov3:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 145
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~filler.kirov, disabled
