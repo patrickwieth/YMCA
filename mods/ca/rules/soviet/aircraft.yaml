@@ -155,7 +155,7 @@ HIND.Torp:
 FROG:
 	Inherits: ^VoxelPlane
 	RenderVoxels:
-		Scale: 0.6
+		Scale: 0.7
 		Image: frog
 	RenderSprites:
 		Image: frog
@@ -167,8 +167,8 @@ FROG:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 51
-		Prerequisites: ~afld, ~aircraft.soviet, ~commander_tree.frogfoot,
-		Description: Bomber armed with explosive bombs.
+		Prerequisites: ~afld, ~aircraft.soviet, ~commander_tree.frogfoot
+		Description: Bomber armed with high explosive bombs.
 	TooltipExtras:
 		Strengths: • Strong vs Light Vehicles, Infantry
 		Weaknesses: • Weak vs Anti-Air, Aircraft
@@ -188,7 +188,10 @@ FROG:
 		PipCount: 2
 	SpawnActorOnDeath:
 		Actor: FROG.Husk
-		RequiresCondition: !being-warped
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: FROG.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
 
 SU25.dirty:
 	Inherits: FROG
@@ -217,21 +220,30 @@ SU25.dirty:
 Il11b:
 	Inherits: FROG
 	RenderVoxels:
-		Scale: 0.6
+		Scale: 0.8
 		Image: il11b
 	RenderSprites:
-		Image: frog
+		Image: il11b
 	Buildable:
-		Prerequisites: ~afld, ~aircraft.soviet
-		Description: Bomber armed with bombs.
+		Prerequisites: ~afld, ~aircraft.soviet, ~commander_tree.il11b
+		Description: Bomber armed with high explosive bombs.
 	TooltipExtras:
 		Strengths: • Strong vs Light Vehicles, Infantry
-		Weaknesses: • Weak vs Anti-Air, Aircraft, Buildings
-		Attributes: • Leaves radiation on the ground
+		Weaknesses: • Weak vs Anti-Air, Aircraft
 	Valued:
 		Cost: 1550
+	Aircraft:
+		Speed: 215
+	Health:
+		HP: 20000
 	Tooltip:
 		Name: Il-11B Bomber
+	SpawnActorOnDeath:
+		Actor: il11b.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: il11b.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
 
 SUK:
 	Inherits: ^VoxelJet
@@ -272,16 +284,11 @@ SUK:
 		PipCount: 4
 	SpawnActorOnDeath:
 		Actor: SUK.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: SUK.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
+		RequiresCondition: !empdisable && !being-warped
 	SpawnActorOnDeath@EMP:
 		Actor: SUK.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: SUK.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
+		RequiresCondition: empdisable && !being-warped
+
 
 SUK.Conc:
 	Inherits: SUK
