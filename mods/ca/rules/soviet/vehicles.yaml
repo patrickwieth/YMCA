@@ -1415,3 +1415,88 @@ Gene_Splicer:
 		DamageCooldown: 150
 	Carryable:
 		LocalOffset: 0,0,700
+
+Tsar_Tank:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^VoxelTurretedTank
+	#WithVoxelBarrel:
+	RenderVoxels:
+		Scale: 1
+		Image: tsar
+	RenderSprites:
+		Image: tsar
+	WithVoxelBody:
+		RequiresCondition: !deployed
+	WithVoxelBody@deployed:
+		Sequence: deployed
+		RequiresCondition: deployed
+	WithVoxelTurret:
+		RequiresCondition: !deployed
+		Sequence: turret
+	WithVoxelTurret@deployed:
+		RequiresCondition: deployed
+		Sequence: turretdeployed
+	Inherits: ^BiologicalDriver
+	Inherits: ^BigVehicle
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 180
+		Prerequisites: radar, ~vehicles.russia, ~commander_tree.tsar
+		Description: Strong and durable tank with triple barrel turret.\n Can deploy for artillery mode shooting tesla balls.\n Can crush concrete walls.
+	TooltipExtras:
+		Strengths: • Vehicles, Buildings
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Can deploy for artillery mode
+	Valued:
+		Cost: 6000
+	Tooltip:
+		Name: Tsar Tank
+	Health:
+		HP: 150000
+	Mobile:
+		Speed: 45
+		TurnSpeed: 16
+		Locomotor: sheavytracked
+	Turreted:
+		TurnSpeed: 16
+	Armament@PRIMARY:
+		Weapon: 150mm.Tsar
+		LocalOffset: 1500,220,340, 1500,-220,340, 1500,0,340
+		Recoil: 171
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		RequiresCondition: undeployed
+	Armament@Deployed:
+		Name: secondary
+		Weapon: TeslaBall.Tsar
+		LocalOffset: 1200,0,600
+		Recoil: 171
+		RecoilRecovery: 30
+		RequiresCondition: deployed
+	AttackTurreted:
+		Voice: Attack
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: tsar.Husk
+		RequiresCondition: !being-warped
+	ChangesHealth:
+		PercentageStep: 1
+		Delay: 25
+		StartIfBelow: 50
+		DamageCooldown: 150
+	Carryable:
+		LocalOffset: 0,0,500
+	-Crushable:
+	Voiced:
+		VoiceSet: ApocalypseVoice
+	AttackMove:
+		Voice: Attack
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		AllowedTerrainTypes: Clear, Rough, Road, Ore, Gems, Beach, Tiberium, BlueTiberium
+		DeploySounds: madchrg2.aud
+		UndeploySounds: clicky1.aud
+		UndeployOnMove: true
+		UndeployOnPickup: true

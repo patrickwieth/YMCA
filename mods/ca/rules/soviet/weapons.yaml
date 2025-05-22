@@ -350,7 +350,7 @@ MAD_Eruption:
 	Report: cannon1.aud
 	ValidTargets: Ground, Water, Underwater
 	Warhead@Concussion2: GrantExternalCondition
-		Range: 15c0
+		Range: 20c0
 		Duration: 50
 		Condition: concussion
 		ValidTargets: Ground, Infantry, Vehicle, Ship
@@ -358,6 +358,53 @@ MAD_Eruption:
 		Duration: 5
 		Intensity: 1
 		Multiplier: 0.5,0.5
+
+150mm.Tsar:
+	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
+	ReloadDelay: 60
+	Burst: 3
+	Report: hvygun10.aud
+	InvalidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		Damage: 10000
+		InvalidTargets: Air
+
+TeslaBall.Tsar:
+	Inherits: ^EnergyArtillery
+	ReloadDelay: 90
+	Range: 12c0
+	MinRange: 3c0
+	Report: mobemp1.aud
+	Projectile: Bullet
+		Speed: 150
+		LaunchAngle: 80
+		Inaccuracy: 768
+		Image: teslaball
+	Warhead@1Dam: SpreadDamage
+		Damage: 12000
+		Spread: 1c0
+		InvalidTargets: Air
+	Warhead@3Eff: CreateEffect
+		Explosions: tsla_bomb
+		ExplosionPalette: ra2effect
+		ImpactSounds: kirbo1.aud, kirbo2.aud
+	Warhead@5Tesla: FireShrapnel
+		Weapon: TeslaBallArc
+		Amount: 5
+		AimChance: 100
+		AllowDirectHit: true
+		ThrowWithoutTarget: true
+
+TeslaBallArc:
+	Inherits: TTankZap
+	Range: 4c512
+	Report: shktrop1.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
+		ValidTargets: Infantry, Vehicle, Ship
+		ValidRelationships: Enemy, Neutral
+	-Warhead@3Eff:
 
 RiceShellLauncher:
 	Inherits: ^MissileArtillery
@@ -423,7 +470,7 @@ GeneSpliceBeam:
 		Damage: 4000
 	Warhead@gsplice: GrantExternalCondition
 		Range: 0c256
-		Duration: 50
+		Duration: 100
 		Condition: genespliced
 		ValidTargets: Infantry
 
