@@ -60,7 +60,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 		void UpdateTooltip()
 		{
-			if (world.Selection.Actors.Count() != 1)
+			if (world.Selection.Actors.Count() == 0)
 			{
 				HideTooltip();
 				return;
