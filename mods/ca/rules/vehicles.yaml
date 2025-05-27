@@ -719,13 +719,20 @@ TTNK:
 	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyWeapon
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.9
+		Image: teslahalftrack
+	WithVoxelAnimatedBody:
+	RenderSprites:
+		Image: ttnk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 125
 		Prerequisites: ~vehicles.soviet, dome, ~!commander_tree.tesla_tank_arc
 		Description: Vehicle with mounted Tesla coil.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
 	Valued:
-		Cost: 1250
+		Cost: 1150
 	Tooltip:
 		Name: Tesla Tank
 		GenericName: Tank
@@ -743,6 +750,7 @@ TTNK:
 	Turreted:
 	WithIdleOverlay@SPINNER:
 		Sequence: spinner
+		Offset: -50,0,100
 	Passenger:
 		Voice: Move
 	Voiced:
@@ -760,7 +768,7 @@ TTNK.Arc:
 		Prerequisites: ~vehicles.soviet, dome, ~commander_tree.tesla_tank_arc
 		Description: Tank with mounted Tesla coil.\n  Tesla Zaps have improved Arcing.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
 	Valued:
-		Cost: 1350
+		Cost: 1250
 	Tooltip:
 		Name: Tesla Tank (Arc)
 	Armament:
