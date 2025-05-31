@@ -581,6 +581,137 @@ Heavy_Tank.Tesla.Reflector:
 	Tooltip:
 		Name: Heavy Tank (Tesla Defense, Reflector)
 
+TTNK:
+	Inherits: ^FightingVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^TeslaUnit
+	Inherits: ^PrioEnergyWeapon
+	Inherits: ^VoxelVehicle
+	RenderVoxels:
+		Scale: 0.9
+		Image: teslahalftrack
+	WithVoxelAnimatedBody:
+	RenderSprites:
+		Image: ttnk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 125
+		Prerequisites: ~vehicles.soviet, dome, ~!commander_tree.tesla_arc
+		Description: Vehicle with mounted Tesla coil.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Tesla can arc when upgraded
+	Valued:
+		Cost: 1150
+	Tooltip:
+		Name: Tesla Tank
+		GenericName: Tank
+	Health:
+		HP: 38000
+	Mobile:
+		Speed: 113
+		Voice: Move
+	Armament:
+		Weapon: TTankZap
+		LocalOffset: 0,0,213
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	Turreted:
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: -50,0,100
+	Passenger:
+		Voice: Move
+	Voiced:
+		VoiceSet: TeslaTankVoice
+	SpawnActorOnDeath:
+		Actor: TTNK.Husk
+		RequiresCondition: !being-warped
+
+TTNK.Arc:
+	Inherits: TTNK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 125
+		Prerequisites: ~vehicles.soviet, dome, ~commander_tree.tesla_arc
+		Description: Tank with mounted Tesla coil.\n  Tesla Zaps have improved Arcing.
+		TooltipExtras:
+			Strengths: • Strong vs Vehicles, Infantry
+			Weaknesses: • Weak vs Aircraft
+			Attributes: • Tesla arcs
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Tesla Tank (Arc)
+	Armament:
+		Weapon: TTankZap.Arc
+
+TTNK.RA2:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^TDVehicleSprite
+	Inherits: ^TeslaUnit
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioEnergyWeapon
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 200
+		IconPalette: chrome
+		Prerequisites: dome, ~vehicles.russia, ~!commander_tree.tesla_arc
+		Description: Tank with twin mounted Tesla coils.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Tesla can arc when upgraded
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Heavy Tesla Tank
+		GenericName: Tank
+	Health:
+		HP: 48000
+	Mobile:
+		Speed: 100
+		Voice: Move
+	Armament:
+		Weapon: TTankZapMK2
+		FireDelay: 13
+		LocalOffset: 800,200,200, 800,-200,200
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		Voice: Attack
+	WithTurretAttackAnimation:
+		Sequence: shoot
+	WithSpriteTurret:
+	Turreted:
+		TurnSpeed: 28
+	Passenger:
+		Voice: Move
+	Voiced:
+		VoiceSet: TeslaTankRA2Voice
+	SpawnActorOnDeath:
+		Actor: TTNK.RA2.Husk
+		RequiresCondition: !being-warped
+
+TTNK.RA2.Arc:
+	Inherits: TTNK.RA2
+	Buildable:
+		Queue: Vehicle
+		Prerequisites: ~vehicles.russia, dome, ~commander_tree.tesla_arc
+		Description: Tank with mounted Tesla coil.\n  Tesla Zaps have improved Arcing.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry
+		Weaknesses: • Weak vs Aircraft
+		Attributes: • Tesla arcs
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Heavy Tesla Tank (Arc)
+	Armament:
+		Weapon: TTankZapMK2.Arc
+
 
 Source_of_Pollution:
 	Inherits: ^FightingTankTurreted
@@ -1436,6 +1567,7 @@ Gene_Splicer:
 Tsar_Tank:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
+	Inherits: ^TeslaUnit
 	#WithVoxelBarrel:
 	RenderVoxels:
 		Scale: 1
@@ -1517,3 +1649,5 @@ Tsar_Tank:
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
 		UndeployOnPickup: true
+	FirepowerMultiplier@tesla_damage:
+		RequiresCondition: tesla_damage && deployed

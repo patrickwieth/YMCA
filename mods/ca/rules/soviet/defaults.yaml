@@ -66,14 +66,23 @@
 		Prerequisites: commander_tree.the_chef
 
 ^TeslaDefense:
+	Inherits: ^TeslaUnit
 	ExternalCondition@weaponhit:
 		Condition: weaponhit
-	Armament@pointdefense:
+	Armament@tesladefense:
 		Name: tesladefense
 		Turret: tesladefense
 		Weapon: TeslaDefense
 		LocalOffset: 0,0,0
 		PauseOnCondition: !weaponhit
+		RequiresCondition: !tesla_arc
+	Armament@tesladefense.arc:
+		Name: tesladefense
+		Turret: tesladefense
+		Weapon: TeslaDefense.Arc
+		LocalOffset: 0,0,0
+		PauseOnCondition: !weaponhit
+		RequiresCondition: tesla_arc
 	Turreted@tesladefense:
 		Turret: tesladefense
 		TurnSpeed: 1000
@@ -85,3 +94,14 @@
 	WithRangeCircle@telsa:
 		Color: FFFC0080
 		Range: 3c0
+
+^TeslaUnit:
+	GrantConditionOnPrerequisite@tesla_arc:
+		Prerequisites: commander_tree.tesla_arc
+		Condition: tesla_arc
+	GrantConditionOnPrerequisite@tesla_damage:
+		Prerequisites: commander_tree.tesla_damage
+		Condition: tesla_damage
+	FirepowerMultiplier@tesla_damage:
+		RequiresCondition: tesla_damage
+		Modifier: 120

@@ -144,6 +144,7 @@ Flamethrower:
 SHOK:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
+	Inherits: ^TeslaUnit
 	Inherits: ^PrioEnergyWeapon
 	Inherits: ^SovietInfantry
 	AutoTargetPriority@DEFAULT:
@@ -182,10 +183,21 @@ SHOK:
 	Armament@PRIMARY:
 		Weapon: PortaTesla
 		LocalOffset: 427,0,341
+		RequiresCondition: !tesla_arc
 	Armament@Garrisoned:
 		Name: mounted
 		Weapon: PortaTeslaE
 		LocalOffset: 427,0,341
+		RequiresCondition: !tesla_arc
+	Armament@PRIMARYARC:
+		Weapon: PortaTesla.Arc
+		LocalOffset: 427,0,341
+		RequiresCondition: tesla_arc
+	Armament@GarrisonedARC:
+		Name: mounted
+		Weapon: PortaTeslaE.Arc
+		LocalOffset: 427,0,341
+		RequiresCondition: tesla_arc
 	Armament@charge:
 		Name: secondary
 		Weapon: PortaTeslaCharge

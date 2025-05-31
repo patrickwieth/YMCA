@@ -55,6 +55,7 @@ HIND:
 HIND.Tesla:
 	Inherits: HIND
 	Inherits: ^PrioEnergyWeapon
+	Inherits: ^TeslaUnit
 	Buildable:
 		Prerequisites: ~hpad, ~commander_tree.hind.tesla
 		Description: Helicopter gunship armed\nwith tesla coils.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Aircraft
@@ -68,14 +69,23 @@ HIND.Tesla:
 	Health:
 		HP: 24000
 	Armament@PRIMARY:
-		Weapon: PortaTesla
+		Weapon: Tesla.Hind
 		LocalOffset: 85,-213,-185, 85,213,-185
-		MuzzleSequence: muzzle
+		RequiresCondition: !tesla_arc
 	Armament@SECONDARY:
 		Name: secondary
-		Weapon: PortaTesla
+		Weapon: Tesla.Hind
 		LocalOffset: 85,213,-185, 85,-213,-185
-		MuzzleSequence: muzzle
+		RequiresCondition: !tesla_arc
+	Armament@PRIMARY_ARC:
+		Weapon: Tesla.Hind.Arc
+		LocalOffset: 85,-213,-185, 85,213,-185
+		RequiresCondition: tesla_arc
+	Armament@SECONDARY_ARC:
+		Name: secondary
+		Weapon: Tesla.Hind.Arc
+		LocalOffset: 85,213,-185, 85,-213,-185
+		RequiresCondition: tesla_arc
 	-WithMuzzleOverlay:
 
 HIND.Missile:
@@ -664,10 +674,15 @@ Kirov.Mecha:
 Kirov.Mecha.Tesla:
 	Inherits: Kirov.Mecha
 	Inherits: ^PrioAntiHeavy
+	Inherits: ^TeslaUnit
 	Tooltip:
 		Name: Mecha Kirov (Tesla)
 	Armament@PRIMARY:
 		Weapon: Tesla.Kirov
+		RequiresCondition: !tesla_arc
+	Armament@PRIMARY_ARC:
+		Weapon: Tesla.Kirov.Arc
+		RequiresCondition: tesla_arc
 	Buildable:
 		Prerequisites: ~afld, stek, ~aircraft.russia, ~commander_tree.kirov.mecha
 		Description: Heavily armoured airship equipped with a tesla gun.
