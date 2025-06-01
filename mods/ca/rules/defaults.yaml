@@ -459,7 +459,7 @@
 		Capacity: 2000
 	WithResourceStoragePipsDecoration:
 		Position: BottomLeft
-		Margin: 4, 3
+		Margin: 5, 4
 		RequiresSelection: true
 		PipCount: 17
 		FullSequence: pip-yellow
@@ -490,7 +490,7 @@
 		EmptyCondition: no-ore
 	WithHarvesterPipsDecoration:
 		Position: BottomLeft
-		Margin: 4, 3
+		Margin: 5, 4
 		RequiresSelection: true
 		PipCount: 5
 		ResourceSequences:
@@ -548,7 +548,7 @@
 	GrantConditionOnBotOwner@AIHELPER:
 		Condition: botowner
 		Bots: brutal, vhard, hard, normal, easy, naval
-	GrantConditionOnAttack@AIHELPER:
+	GrantConditionOnAttackCA@AIHELPER:
 		Condition: removeunit
 		ArmamentNames: secondary
 		RequiresCondition: botowner
@@ -4356,10 +4356,10 @@ BuildBoost.Dummy:
 		PipType: Red
 		Armaments: pointdefense
 		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
+	WithAmmoPipsDecoration@pdl:
 		Position: BottomLeft
 		PipCount: 6
-		Margin: 4, 3
+		Margin: 5, 4
 		RequiresSelection: true
 		FullSequence: pip-red
 	ReloadAmmoPool@pdl:
@@ -4376,7 +4376,7 @@ BuildBoost.Dummy:
 	AmmoPool@pdl:
 		Ammo: 6
 		PipCount: 2
-	WithAmmoPipsDecoration:
+	WithAmmoPipsDecoration@pdl:
 		PipCount: 2
 	ReloadAmmoPool@pdl:
 		Count: 6
@@ -4679,7 +4679,7 @@ BuildBoost.Dummy:
 	AttackOpenTopped:
 		Armaments: mounted, mountedaa
 		MuzzlePalette: tdeffect
-		PortOffsets: 768,0,0, 448,-682,0, -448,-682,0, -768,0,0, -448,682,0, 448,682,0
+		PortOffsets: 768,0,0, 448,-582,0, -448,-582,0, -768,0,0, -448,582,0, 448,582,0
 		PortYaws: 0, 176, 341, 512, 682, 853
 		PortCones: 88, 88, 88, 88, 88, 88
 		PauseOnCondition: empdisable || being-warped
@@ -4725,6 +4725,16 @@ BuildBoost.Dummy:
 			che1: loaded
 			minigunner: loaded-air
 			che3: loaded-air
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		PipCount: 5
+		Margin: 5, 4
+		RequiresSelection: true
+		CustomPipSequences:
+			gray: pip-gray
+			yellow: pip-yellow
+			red: pip-red
+			blue: pip-blue
 	AutoTarget:
 		InitialStance: Defend
 		InitialStanceAI: Defend
@@ -4746,13 +4756,18 @@ BuildBoost.Dummy:
 	Inherits: ^AttackingCargo
 	-AttackOpenTopped:
 	AttackTurretedOpenTopped:
-		Armaments: primary, secondary, tertiary, pointdefense
-		Turrets: primary, secondary, tertiary, pointdefense
-		PassengerArmaments: mounted, mountedaa
+		Armaments: primary, secondary, pointdefense
+		Turrets: primary, secondary, pointdefense
+		PassengerArmaments: mounted, mountedaa, pointdefense
 		MuzzlePalette: tdeffect
 		PortOffsets: -85,384,340, -85,-384,340
 		PortYaws: 0, 176, 341, 512, 682, 853
 		PauseOnCondition: empdisable || being-warped
+
+^AttackingCargoAndPDL:
+	Inherits: ^AttackingCargoAndTurret
+	Inherits: ^PointLaserDefenseSystem
+	-AttackTurreted:
 
 ^TurretedWalker:
 	QuantizeFacingsFromSequence:
@@ -4842,7 +4857,7 @@ BuildBoost.Dummy:
 	WithCargoPipsDecoration:
 		Position: BottomLeft
 		PipCount: 5
-		Margin: 5, 0
+		Margin: 5, 4
 		RequiresSelection: true
 		CustomPipSequences:
 			gray: pip-gray
@@ -4863,7 +4878,7 @@ BuildBoost.Dummy:
 	WithDecoration@primary:
 		RequiresCondition: primary
 		Position: Top
-		Margin: 0, 4
+		Margin: 5, 4
 		RequiresSelection: true
 		Image: pips
 		Sequence: tag-primary
@@ -5785,7 +5800,7 @@ BuildBoost.Dummy:
 		RequiresCondition: attacking
 	GrantConditionWhileAiming:
 		Condition: aiming
-	GrantConditionOnAttack:
+	GrantConditionOnAttackCA:
 		Condition: attacking
 		RevokeDelay: 50
 		RevokeAll: false
@@ -5819,7 +5834,7 @@ BuildBoost.Dummy:
 		RequiresCondition: !unloaded
 	Armament@PRIMARY:
 		Weapon: DemoTruckTargeting
-	GrantConditionOnAttack:
+	GrantConditionOnAttackCA:
 		Condition: triggered
 	GrantConditionOnDeploy:
 		DeployedCondition: triggered

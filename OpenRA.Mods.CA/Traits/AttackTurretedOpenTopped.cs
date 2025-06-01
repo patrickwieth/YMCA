@@ -181,8 +181,6 @@ namespace OpenRA.Mods.CA.Traits
 
 			foreach (var a in passengerArmaments)
 			{
-				//Game.Debug TextNotificationsManager.Debug(a.Info.Name.ToString());
-
 				if (a.IsTraitDisabled)
 					continue;
 
@@ -213,8 +211,8 @@ namespace OpenRA.Mods.CA.Traits
 					muzzleAnim.PlayThen(sequence, () => muzzles.Remove(pair));
 				}
 
-				foreach (var npa in self.TraitsImplementing<INotifyAttack>())
-					npa.Attacking(self, target, a, barrel);
+				foreach (var na in self.TraitsImplementing<INotifyAttack>())
+					na.Attacking(self, target, a, barrel);
 			}
 		}
 
