@@ -751,7 +751,7 @@ PBOX:
 
 HBOX:
 	Inherits: ^Defense
-	Inherits@AUTOTARGET: ^AutoTargetAll
+	Inherits: ^AutoTargetAll
 	Tooltip:
 		Name: Camo Pillbox
 	Building:
@@ -1227,9 +1227,9 @@ FACT.Nukular:
 
 PROC:
 	Inherits: ^Building
-	Inherits@2: ^BotIncome
-	Inherits@shape: ^3x3Shape
-	Inherits@Refinery: ^Refinery
+	Inherits: ^BotIncome
+	Inherits: ^3x3Shape
+	Inherits: ^Refinery
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 60
@@ -2988,14 +2988,19 @@ GTWR:
 
 ATWR:
 	Inherits: ^DefenseTD
-	Inherits@IDISABLE: ^DisableOnLowPower
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^DisableOnLowPower
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^RelayTargeting
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
 		Prerequisites: hq, ~structures.gdi, ~!structures.zocom
 		IconPalette: chrometd
-		Description: Advanced base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+		Description: Advanced base defense.\n Requires power to operate.\n Can detect cloaked units.\n Relay targeting system marks targets so other Advanced Guard Towers can shoot from longer distances.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Slow Aircraft
+		Weaknesses: • Weak vs. Point Defense Laser, Infantry
+		Attributes: • Relay targeting laser system.\n•Detects cloaked units
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -3019,38 +3024,35 @@ ATWR:
 		Name: primary
 		LocalOffset: 256,128,0, 256,-128,0
 		LocalYaw: -100,100
-		PauseOnCondition: !ammo
-	GrantConditionOnAttack@primary:
-		ArmamentNames: primary
-		Condition: fired
-		MaximumInstances: 1
-		RevokeDelay: 50
+		PauseOnCondition: !ammo || being-warped
 	Armament@secondary:
 		Weapon: StingerGTWR.Relay
 		Name: secondary
 		LocalOffset: 256,128,0, 256,-128,0
 		LocalYaw: -100,100
-		PauseOnCondition: !ammo
-	GrantConditionOnAttack@secondary:
-		ArmamentNames: secondary
-		Condition: relayfired
-		MaximumInstances: 1
-		RevokeDelay: 15
-	GrantConditionOnAttack@secondary:
-		ArmamentNames: secondary
-		Condition: fired
-		MaximumInstances: 1
-		RevokeDelay: 50
+		PauseOnCondition: !ammo || being-warped
 	Armament@tertiary:
+		Weapon: StingerGTWR.AA
+		Name: tertiary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo || being-warped
+	Armament@quartary:
+		Weapon: StingerGTWR.AA.Relay
+		Name: quartary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo || being-warped
+	Armament@flare:
 		Weapon: Flare.AGT
+		Name: flare
 		LocalOffset: 0,0,800
-		RequiresCondition: relayable
 	AttackTurreted:
-		Armaments: primary, secondary, tertiary
+		Armaments: primary, secondary, tertiary, quartary, flare
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
 	AmmoPool:
-		Armaments: primary, secondary
+		Armaments: primary, secondary, tertiary, quartary
 		Ammo: 2
 		AmmoCondition: ammo
 	ReloadAmmoPool:
@@ -3064,23 +3066,11 @@ ATWR:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
-	ProximityExternalCondition@RELAYABLE:
-		Range: 13c0
-		ValidRelationships: Ally
-		Condition: relayable
-		RequiresCondition: !fired || relayfired
-	ExternalCondition@RELAYABLE:
-		Condition: relayable
 	-RenderRangeCircle:
 	WithRangeCircle@1:
 		Color: C12900
 		Range: 7c0
-	WithRangeCircle@2:
-		Color: 29C000
-		Range: 13c0
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
+
 
 OBLI:
 	Inherits: ^DefenseTD
@@ -3631,9 +3621,9 @@ HPAD.TD:
 
 PROC.TD:
 	Inherits: ^BuildingTD
-	Inherits@2: ^BotIncome
-	Inherits@shape: ^3x3Shape
-	Inherits@Refinery: ^Refinery
+	Inherits: ^BotIncome
+	Inherits: ^3x3Shape
+	Inherits: ^Refinery
 	HitShape:
 		Type: Rectangle
 			TopLeft: -1536, -512
@@ -4174,8 +4164,8 @@ TMPL:
 
 PRIS:
 	Inherits: ^Defense
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetGround
 	AutoTargetPriority@DEFAULT:
 		InvalidTargets: NoAutoTarget, WaterStructure, PrismTower
 	AutoTargetPriority@ATTACKANYTHING:

@@ -164,7 +164,7 @@ Dragon.MKII:
 	Inherits: DragonE
 	Inherits: ^MissileHE
 	ReloadDelay: 80
-	Range: 9c0
+	Range: 7c512
 	Burst: 6
 	BurstDelays: 5
 	Projectile: MissileCA
@@ -296,6 +296,17 @@ RedEye:
 		Damage: 5600
 		Range: 0, 0c64, 0c256, 3c0
 
+RedEye.NonRelay:
+	Inherits: RedEye
+	InvalidTargets: relayTarget
+
+RedEye.Relay:
+	Inherits: RedEye
+	ValidTargets: relayTarget
+	Range: 20c0
+	Projectile: MissileCA
+		RangeLimit: 21c0
+
 RedEye.CYB:
 	Inherits: RedEye
 	Report: rocket.aud
@@ -304,6 +315,7 @@ RedEye.CYB:
 
 RedEye.CRYO:
 	Inherits: RedEye
+	InvalidTargets: relayTarget
 	Projectile: MissileCA
 		Image: cryomiss
 	Warhead@3Eff: CreateEffect
@@ -315,6 +327,14 @@ RedEye.CRYO:
 		Duration: 65
 		Range: 0c341
 		ValidTargets: Air
+
+RedEye.CRYO.Relay:
+	Inherits: RedEye.CRYO
+	-InvalidTargets:
+	ValidTargets: relayTarget
+	Range: 20c0
+	Projectile: MissileCA
+		RangeLimit: 21c0
 
 RedEyeE:
 	Inherits: RedEye
@@ -387,15 +407,15 @@ StingerAA:
 
 StingerGTWR:
 	Inherits: Stinger
-	Inherits: ^MissileHE
-	ReloadDelay: 50
+	InvalidTargets: relayTarget
+	ReloadDelay: 40
 	Range: 7c0
 	Report: rocket2.aud
 	BurstDelays: 15
 	Projectile: MissileCA
 		HorizontalRateOfTurn: 40
 		RangeLimit: 12c0
-		Speed: 320
+		Speed: 255
 		LockOnProbability: 66
 		LockOnInaccuracy: 512
 	Warhead@1Dam: SpreadDamage
@@ -403,8 +423,33 @@ StingerGTWR:
 		Damage: 8000
 		ValidTargets: Ground, Water
 
+StingerGTWR.AA:
+	Inherits: ^AntiAirMissile
+	ReloadDelay: 40
+	ValidTargets: Air
+	Range: 7c0
+	InvalidTargets: relayTarget
+	Projectile: MissileCA
+		Arm: 3
+		Inaccuracy: 0
+		HorizontalRateOfTurn: 20
+		RangeLimit: 10c0
+		Speed: 255
+		CloseEnough: 149
+		LockOnProbability: 80
+		LockOnInaccuracy: 512
+
 StingerGTWR.Relay:
 	Inherits: StingerGTWR
+	-InvalidTargets:
+	ValidTargets: relayTarget
+	Range: 20c0
+	Projectile: MissileCA
+		RangeLimit: 21c0
+
+StingerGTWR.AA.Relay:
+	Inherits: StingerGTWR.AA
+	-InvalidTargets:
 	ValidTargets: relayTarget
 	Range: 20c0
 	Projectile: MissileCA
