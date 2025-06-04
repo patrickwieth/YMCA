@@ -25,6 +25,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("The interval of game updates between autobattle units are sent forward")]
 		public readonly int waveInterval = 1000;
 
+		[Desc("Actor to spawn as group leader at checkpoint.")]
+		public readonly string LeaderDummyActor = null;
+
 		[Desc("The hierarchy of a checkpoint determines the possible next checkpoints, where a unit can go")]
 		IEnumerable<EditorActorOption> IEditorActorOptions.ActorOptions(ActorInfo ai, World world)
 		{
@@ -73,13 +76,31 @@ namespace OpenRA.Mods.CA.Traits
 		}
 
 		void ITick.Tick(Actor self) {
-			if (++Ticks >= info.waveInterval) Ticks = 0;
+			if (++Ticks >= info.waveInterval)
+			{
+				Ticks = 0;
+				spawnGroupLeader(self);
+			}
 		}
 
 		void INotifyAddedToWorld.AddedToWorld(Actor self)
 		{
 			RallyPoint = self.TraitOrDefault<RallyPoint>();
 			base.AddedToWorldTasks(self);
+		}
+
+		public void spawnGroupLeader(Actor self) {
+
+			var td = new TypeDictionary
+			{
+				new ParentActorInit(self),
+				new LocationInit(self.Location + Info.Offset),
+				new CenterPositionInit(self.CenterPosition)
+			};
+
+			var newUnit = self.World.AddFrameEndTask(w => w.CreateActor(Info.LeaderDummyActor, td));
+			var move = newUnit.TraitOrDefault<IMove>();
+			newUnit.QueueActivity(new AttackMoveActivity(newUnit, () => move.MoveTo(cell, 1, evaluateNearestMovableCell: true, targetLineColor: Color.OrangeRed)));
 		}
 	}
 
@@ -88,5 +109,6 @@ namespace OpenRA.Mods.CA.Traits
 		public HierarchyInit(int value)
 			: base(value) { }
 	}
+
 
 }

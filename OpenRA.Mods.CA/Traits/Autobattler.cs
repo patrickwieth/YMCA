@@ -45,6 +45,12 @@ namespace OpenRA.Mods.CA.Traits
 			this.info = info;
 		}
 
+
+
+// follow the leader
+self.QueueActivity(queued, new AttackMoveActivity(self, () => move.MoveFollow(self, target, WDist.Zero, range, targetLineColor: info.TargetLineColor)));
+
+
 		protected override void Created(Actor self)
 		{
 			move = self.Trait<IMove>() as IResolveOrder;
@@ -95,6 +101,7 @@ namespace OpenRA.Mods.CA.Traits
 				attackMoveToNextCheckpoint(self);
 			}
 		}
+
 
 
 		public void handleCheckpoint(Actor self)

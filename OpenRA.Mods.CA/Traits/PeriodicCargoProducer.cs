@@ -16,7 +16,7 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.AS.Traits
 {
-	[Desc("Produces an actor without using the standard production queue.")]
+	[Desc("Produces an actor which is inside the cargo of a unit.")]
 	public class PeriodicCargoProducerInfo : PausableConditionalTraitInfo
 	{
 		[ActorReference]
