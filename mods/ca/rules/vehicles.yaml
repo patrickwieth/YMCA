@@ -1257,69 +1257,6 @@ MTNK.Drone.Reflector:
 	Tooltip:
 		Name: Battle Drone (Reflector)
 
-MSAM:
-	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiLightAA
-	RenderSprites:
-		FactionImages:
-			nod: msam.nod
-			blackh: msam.nod
-			legion: msam.nod
-			marked: msam.nod
-	Valued:
-		Cost: 950
-	Tooltip:
-		Name: MLRS
-	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, ~!commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs
-		Queue: Vehicle
-		IconPalette: chrometd
-		Description: Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles
-	Mobile:
-		Speed: 82
-	Health:
-		HP: 16000
-	Turreted:
-		TurnSpeed: 80
-		Offset: -256,0,128
-	Armament@PRIMARY:
-		Weapon: 227mm
-		LocalOffset: 213,128,0, 213,-128,0
-		LocalYaw: 100, -100
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: 227mmAA
-		LocalOffset: 213,-128,0, 213,128,0
-		LocalYaw: 100, -100
-	AttackTurreted:
-		TargetFrozenActors: True
-		PauseOnCondition: empdisable || being-warped
-	WithSpriteTurret:
-	Explodes:
-		Weapon: ArtilleryExplode
-
-MSAM.Hailstorm:
-	Inherits: MSAM
-	Inherits: ^PrioArtillery
-	RenderSprites:
-		-FactionImages:
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: Hailstorm MLRS
-	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, gtek, ~commander_tree.hailstorm_mlrs
-		Queue: Vehicle
-		IconPalette: chrometd
-		Description: Multiple Launch Rocket System.\nLong-range unguided multiple rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles\n  Weak vs. Aircraft, Heavy Tanks
-	Armament@PRIMARY:
-		Weapon: 227mm.Hailstorm
-	-Armament@SECONDARY:
-
 MLRS:
 	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
@@ -2802,7 +2739,7 @@ V3:
 	Tooltip@NoRow:
 		Name: V3 Rocket
 	Health:
-		HP: 5000
+		HP: 8000
 	BallisticMissile:
 		LaunchAngle: 95
 		Speed: 145

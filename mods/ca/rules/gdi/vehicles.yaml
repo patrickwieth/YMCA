@@ -258,6 +258,79 @@ MSAR.PDL:
 	Valued:
 		Cost: 1500
 
+MSAM:
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLightAA
+	Inherits: ^VoxelVehicle
+	Inherits: ^DronePairing
+	RenderVoxels:
+		Scale: 1
+		Image: mlrs
+	RenderSprites:
+		Image: msam
+	WithVoxelTurret@fire:
+		RequiresCondition: aiming
+		Sequence: turret-fire
+	WithVoxelTurret@tur:
+		RequiresCondition: !aiming
+		Sequence: turret
+	Valued:
+		Cost: 950
+	Tooltip:
+		Name: MLRS
+	Buildable:
+		BuildPaletteOrder: 120
+		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, ~!commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles
+	Mobile:
+		Speed: 82
+	Health:
+		HP: 16000
+	Turreted:
+		TurnSpeed: 80
+		Offset: -50,0,0
+	AttackFrontal:
+		Armaments: primary, secondary
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	GrantConditionOnAttack:
+		Condition: aiming
+		ArmamentNames: primary, secondary
+	Armament@PRIMARY:
+		Weapon: 227mm
+		FireDelay: 10
+		LocalOffset: 213,128,200, 213,-128,200
+		LocalYaw: 100, -100
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: 227mmAA
+		FireDelay: 10
+		LocalOffset: 213,-128,200, 213,128,200
+		LocalYaw: 100, -100
+	Explodes:
+		Weapon: ArtilleryExplode
+
+MSAM.Hailstorm:
+	Inherits: MSAM
+	Inherits: ^PrioArtillery
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Hailstorm MLRS
+	Buildable:
+		BuildPaletteOrder: 120
+		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, gtek, ~commander_tree.hailstorm_mlrs
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Multiple Launch Rocket System.\nLong-range unguided multiple rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles\n  Weak vs. Aircraft, Heavy Tanks
+	Armament@PRIMARY:
+		Weapon: 227mm.Hailstorm
+	-Armament@SECONDARY:
+
 MARV:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
