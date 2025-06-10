@@ -1483,26 +1483,29 @@ Cloud.Chemical:
 	Inherits: ^Chemical
 	ReloadDelay: 20
 	Range: 1c0
-	ValidTargets: Ground, Water
+	ValidTargets: Air, Ground, Water
 	Projectile: InstantHit
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
 		Damage: 200
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 5
-		ValidTargets: Ground, Trees
-		InvalidTargets: Air, Creep
+		ValidTargets: Air, Ground, Trees
+		InvalidTargets: Creep
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
 ToxinCloud:
 	Inherits: Cloud.Chemical
 	Inherits: ^Toxin
+	ValidTargets: Ground, Water
 	Warhead@18Radio: CreateTintedCells
 		Spread: 1c0
 		Level: 50
 		Falloff: 100, 75, 52, 15, 2
 		MaxLevel: 750
 		LayerName: toxin
+	Warhead@1Dam: SpreadDamage
+		InvalidTargets: Air, Creep
 
 Metal_Acid_Cloud:
 	Inherits: Cloud.Chemical
