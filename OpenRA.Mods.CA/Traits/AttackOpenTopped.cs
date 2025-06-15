@@ -133,6 +133,7 @@ namespace OpenRA.Mods.CA.Traits
 				paxFacing[a.Actor].Facing = muzzleFacing;
 				paxPos[a.Actor].SetCenterPosition(a.Actor, pos + PortOffset(self, port));
 
+					//TextNotificationsManager.Debug("fire "+a.Info.Name);
 				var barrel = a.CheckFire(a.Actor, facing, target);
 				if (barrel == null)
 					continue;
@@ -154,8 +155,10 @@ namespace OpenRA.Mods.CA.Traits
 					muzzleAnim.PlayThen(sequence, () => muzzles.Remove(pair));
 				}
 
-				foreach (var npa in self.TraitsImplementing<INotifyAttack>())
-					npa.Attacking(self, target, a, barrel);
+				foreach (var na in self.TraitsImplementing<INotifyAttack>())
+				{
+					na.Attacking(self, target, a, barrel);
+				}
 			}
 		}
 
