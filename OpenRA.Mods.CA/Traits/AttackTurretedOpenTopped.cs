@@ -215,12 +215,6 @@ namespace OpenRA.Mods.CA.Traits
 				{
 					na.Attacking(self, target, a, barrel);
 				}
-
-				foreach(var npa in a.notifyAttacks)
-				{
-					npa.Attacking(self, target, a, barrel);
-				}
-
 			}
 		}
 
