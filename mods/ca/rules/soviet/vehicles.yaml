@@ -325,6 +325,74 @@ Chem_Sprayer.Cloud.Spread:
 	Armament:
 		Weapon: Chem_Spray.Cloud.Spread
 
+FTRK:
+	Inherits: ^FightingVehicleTurreted
+	Inherits: ^VoxelTurretedTank
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLightAA
+	RenderVoxels:
+		Scale: 1.0
+		Image: sv
+	RenderSprites:
+		Image: ftrk
+	#WithVoxelBarrel:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 130
+		Prerequisites: ~vehicles.soviet, ~!commander_tree.flak_track.barrage
+		Description: Mobile unit with mounted Flak cannon.
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft, Light armored units
+		Weaknesses: • Weak vs Heavy Tanks, Artillery
+		Attributes: • Long range
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Mobile Flak
+	Health:
+		HP: 15000
+	Mobile:
+		TurnSpeed: 48
+		Speed: 118
+	Turreted:
+		TurnSpeed: 48
+		Offset: -200,0,300
+	Armament@AA:
+		Weapon: FLAK-23-AA
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+	Armament@AG:
+		Weapon: FLAK-23-AG
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+
+FTRK.Barrage:
+	Inherits: FTRK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 130
+		Prerequisites: ~vehicles.soviet, ~commander_tree.flak_track.barrage
+		Description: Mobile unit with mounted Flak cannon.
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Mobile Flak (Barrage)
+	Armament@AA:
+		Weapon: FLAK-23-AA.Barrage
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+	Armament@AG:
+		Weapon: FLAK-23-AG.Barrage
+		Recoil: 85
+		LocalOffset: 512,0,192
+		MuzzleSequence: muzzle
+
 HQ7:
 	Inherits: ^FightingVehicleTurreted
 	Inherits: ^VoxelTurretedTank
