@@ -325,6 +325,62 @@ Chem_Sprayer.Cloud.Spread:
 	Armament:
 		Weapon: Chem_Spray.Cloud.Spread
 
+DTRK:
+	Inherits: ^VoxelVehicle
+	Inherits: ^FightingVehicle
+	Inherits: ^PrioAntiLight
+	Inherits: ^UnloadCondition
+	Inherits: ^SelfDestructingAttacker
+	RenderVoxels:
+		Scale: 1.0
+		Image: demotruck
+	RenderSprites:
+		Image: dtrk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 265
+		Prerequisites: stek, ~vehicles.soviet
+		Description: Truck with actively armed nuclear\nexplosives. Has very weak armor.
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Demolition Truck
+	Health:
+		HP: 5000
+	Mobile:
+		Speed: 82
+		Voice: Move
+	Explodes@NUKE:
+		Weapon: MiniNuke
+		EmptyWeapon: MiniNuke
+		DamageSource: Killer
+		RequiresCondition: !unloaded && !being-warped
+	Explodes@UNARMED:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		RequiresCondition: unloaded && !being-warped
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 512
+		Voice: Attack
+		RequiresCondition: !unloaded
+	Armament@PRIMARY:
+		Weapon: DemoTruckTargeting
+	GrantConditionOnAttack:
+		Condition: triggered
+	GrantConditionOnDeploy:
+		DeployedCondition: triggered
+		RequiresCondition: !unloaded
+	KillsSelf:
+		RequiresCondition: invulnerability || triggered || berserk
+	ChronoshiftableWithSpriteEffect:
+		ExplodeInstead: true
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Voiced:
+		VoiceSet: TTruckVoice
+
 FTRK:
 	Inherits: ^FightingVehicleTurreted
 	Inherits: ^VoxelTurretedTank
