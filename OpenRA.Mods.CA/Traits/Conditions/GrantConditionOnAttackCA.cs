@@ -79,21 +79,23 @@ namespace OpenRA.Mods.CA.Traits
 			if (tokens.Count == 0)
 				return;
 
-			if (tokens.Count > 0)
+			if (!revokeAll)
 			{
 				var token = tokens.Pop();
-				if (!revokeAll && self.TokenValid(token))
-					self.RevokeCondition(token);
-				else
+				if (self.TokenValid(token))
 				{
-					while (tokens.Count > 0)
-					{
-						var nextToken = tokens.Pop();
-						if (self.TokenValid(nextToken))
-							self.RevokeCondition(nextToken);
-						else
-							return;
-					}
+					self.RevokeCondition(token);
+				}
+			}
+			else
+			{
+				while (tokens.Count > 0)
+				{
+					var nextToken = tokens.Pop();
+					if (self.TokenValid(nextToken))
+						self.RevokeCondition(nextToken);
+					else
+						return;
 				}
 			}
 		}
