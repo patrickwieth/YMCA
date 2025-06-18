@@ -145,7 +145,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 								{
 									var fireRate = (weapon.Burst > 0 ? weapon.Burst : 1)*25.0 / weapon.ReloadDelay;
 									var damage = dmgWarhead.Damage / 100;
-									versusLabel.Text += "\\nDamage per Second: "+(int)(damage*fireRate)+"\\n\\nEffective versus:";
+									var range = (float)weapon.Range.Length/1024;
+									versusLabel.Text += "\\nDamage/s: "+(int)(damage*fireRate)+" - ";
+									versusLabel.Text += "Range: "+range.ToString("#.##")+"\\n\\nEffective versus:";
 									if (dmgWarhead.Versus.ContainsKey("None")) {
 										versusNoneLabel.Text += "Infantry: ";
 										versusNoneLabel.TextColor = Color.LightSalmon;
