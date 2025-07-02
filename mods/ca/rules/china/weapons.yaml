@@ -296,7 +296,7 @@ NukeCannonDummyAim:
 
 CHNukeCannon:
 	Inherits: ^ShellArtillery
-	Inherits@Explosion: ^MiniNuke
+	Inherits: ^MiniNuke
 	ReloadDelay: 250
 	Range: 18c0
 	MinRange: 8c0
@@ -318,13 +318,17 @@ CHNukeCannon.Range:
 CHNukeCannon.Neutron:
 	Inherits: CHNukeCannon
 	Inherits: ^Radiation
+	Range: 20c0
 	Warhead@1Dam: SpreadDamage
-		Damage: 250
+		Damage: 25000
 	Warhead@DriverDam: DriverPoisonDamage
 		Spread: 2c0
-		Damage: 75000
+		Damage: 50000
 	Warhead@3Eff: CreateEffect
 		Explosions: plasmaball
+	Warhead@18Radio: CreateTintedCells
+		Level: 50
+	-Warhead@3Eff_impact: CreateEffect
 
 CHAtomicTorpTube:
 	Inherits: TorpTube
