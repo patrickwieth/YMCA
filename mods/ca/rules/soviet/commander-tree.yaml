@@ -1,4 +1,15 @@
 
+
+commander_tree.War_Miners:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: War Miners
+	Buildable:
+		BuildPaletteOrder: 5
+		IconPalette: chrome
+		Prerequisites: prerequisite.has_points, ~structures.soviet, ~anypower
+		Description: Equips Miners with a gatling turret. \nWar Miners can attack ground and air.
+
 commander_tree.Tesla_Arc:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -17,21 +28,103 @@ commander_tree.Tesla_Damage:
 		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.russia
 		Description: Upgrades the Tesla Coils to increase its damage by 20%.
 
-hack.cameo_filler.tesla:
+commander_tree.Chemical_Missiles:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Missiles
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.iraq
+		Description: RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.\nChemical missiles release a chemical cloud on impact.
+
+commander_tree.Metal_Acid_Missiles:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Metal Acid Missiles
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.iraq, commander_tree.chemical_missiles
+		Description: The Chemical Missiles are improved by releasing metal acid clouds.\nThose are efficient against heavy armored targets.
+
+commander_tree.Artillery_Upgrade:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Artillery_Upgrade
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea
+		Description: North Korean artillery systems deal 20% more damage.
+
+commander_tree.Cluster_Grenades:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Cluster Grenades
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea
+		Description: Akatsiya, T-34, ISU, People's Tank and Katyusha emit additional cluster grenades on impact.
+
+hack.cameo_filler.soviet_base_tech:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 104
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, disabled
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
 
-commander_tree.War_Miners:
+
+
+commander_tree.V3_Launcher:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
-		Name: War Miners
+		Name: V3 Launcher
+	RenderSprites:
+		Image: v3rl
 	Buildable:
-		BuildPaletteOrder: 5
-		IconPalette: chrome
-		Prerequisites: prerequisite.has_points, ~structures.soviet, ~anypower
-		Description: Equips Miners with a gatling turret. \nWar Miners can attack ground and air.
+		BuildPaletteOrder: 114
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.nkorea, ~!commander_tree.akatsiya, ~!commander_tree.katyusha
+		Description: Enables to build the V3 Launcher as Advanced Siege Vehicle. \n  The V3 has the longest range, but the Rocket can be shot down.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietarty
+
+commander_tree.Akatsiya:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Akatsiya
+	RenderSprites:
+		Image: 2s3
+	Buildable:
+		BuildPaletteOrder: 115
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.iraq, ~!commander_tree.v3_launcher, ~!commander_tree.katyusha
+		Description: Enables to build the Akatsiya as Advanced Siege Vehicle. \n  The Akatsiya has the best armor and can hit moving targets with its cluster bombs.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietarty
+
+commander_tree.Katyusha:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Katyusha
+	RenderSprites:
+		Image: katy
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 115
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.russia, ~!commander_tree.v3_launcher, ~!commander_tree.akatsiya
+		Description: Enables to build the Katyusha as Advanced Siege Vehicle. \n  The Katyusha fires the most projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietarty
+
+hack.cameo_filler.108:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 116
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+
+hack.cameo_filler.109:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 116
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
+
+
 
 commander_tree.Heavy_Tank.AP:
 	Inherits: ^default.commander_tree_item

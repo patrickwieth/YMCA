@@ -29,6 +29,9 @@ namespace OpenRA.Mods.CA.Warheads
 		[Desc("List of Random Actors to spawn.")]
 		public readonly string[] RandomActors = { };
 
+		[Desc("Probability that any of the random actors spawns.")]
+		public readonly int Probability = 100;
+
 		[Desc("Try to parachute the actors. When unset, actors will just fall down visually using FallRate."
 			+ " Requires the Parachutable trait on all actors if set.")]
 		public readonly bool Paradrop = false;
@@ -83,6 +86,9 @@ namespace OpenRA.Mods.CA.Warheads
 			var targetCell = map.CellContaining(target.CenterPosition);
 
 			if (!IsValidImpact(target.CenterPosition, firedBy))
+				return;
+
+			if (firedBy.World.SharedRandom.Next(100) > Probability)
 				return;
 
 			var targetCells = map.FindTilesInCircle(targetCell, Range);

@@ -700,37 +700,6 @@ SCUD:
 		Explosions: large_splash
 		ImpactSounds: splashl1.aud, splashl2.aud
 
-V3Weapon:
-	Inherits: ^AntiGroundMissile
-	Inherits: ^MissileArtillery
-	-Report:
-	ValidTargets: Ground, Trees, Water
-	Warhead@1Dam: SpreadDamage
-		Spread: 1c0
-		Damage: 3400
-		Falloff: 1000, 368, 135, 50, 18, 7, 0
-		ValidTargets: Ground, Water, Trees
-		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: building, building2
-	Warhead@4EffWater: CreateEffect
-		Explosions: large_splash
-		ImpactSounds: splashl1.aud, splashl2.aud
-
-KatyushaRockets:
-	Inherits: ^AntiGroundMissile
-	Inherits: ^MissileArtillery
-	ReloadDelay: 240
-	Range: 16c0
-	MinRange: 4c0
-	Report: missile6.aud
-	Burst: 8
-	BurstDelays: 6
-	ValidTargets: Ground, Trees, Water
-	Warhead@1Dam: SpreadDamage
-		Spread: 384
-		Damage: 5000
-
 HonestJohn:
 	Inherits: ^AntiGroundMissile
 	Inherits: ^NapalmMissile
@@ -778,7 +747,7 @@ HonestJohn.toxin:
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 	Warhead@13Spawn: SpawnActor
-		Actors: Cloud.Chemical
+		Actors: chemical_cloud.spawner
 		Range: 5
 		ForceGround: false
 		Image: Cloud1d

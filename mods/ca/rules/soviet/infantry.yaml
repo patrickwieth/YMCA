@@ -38,7 +38,7 @@ rpg_soldier:
 	Inherits: ^InfantryRA2Sprite
 	Inherits: ^WhiteFlash
 	Inherits: ^PrioAntiHeavyAA
-	Inherits: ^RelayTargeting
+	Inherits: ^ChemMissiles
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -58,29 +58,76 @@ rpg_soldier:
 		speed: 54
 	Armament@primary:
 		Name: primary
-		Weapon: Dragon.Relay
+		Weapon: Dragon
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
-	Armament@tertiary:
-		Name: tertiary
+		RequiresCondition: !chem_missile && !acid_missile
+	Armament@primary-chemmissile:
+		Name: primary
+		Weapon: Dragon.Chem_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: chem_missile && !acid_missile
+	Armament@primary-acidmissile:
+		Name: primary
+		Weapon: Dragon.Acid_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: acid_missile
+	Armament@secondary:
+		Name: secondary
 		Weapon: RedEye
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
-	Armament@secondary:
+		RequiresCondition: !chem_missile && !acid_missile
+	Armament@secondary-chemmissile:
 		Name: secondary
-		Weapon: Dragon.Inf
+		Weapon: RedEye.Chem_Missile
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: chem_missile && !acid_missile
+	Armament@secondary-acidmissile:
+		Name: secondary
+		Weapon: RedEye.Acid_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: acid_missile
 	Armament@Garrison:
 		Name: mounted
 		Weapon: DragonE
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: !chem_missile && !acid_missile
+	Armament@Garrison-chemmissile:
+		Name: mounted
+		Weapon: DragonE.Chem_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: chem_missile && !acid_missile
+	Armament@Garrison-acidmissile:
+		Name: mounted
+		Weapon: DragonE.Acid_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: acid_missile
 	Armament@GarrisonAA:
 		Name: mountedaa
 		Weapon: RedEyeE
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: !chem_missile && !acid_missile
+	Armament@GarrisonAA-chemmissile:
+		Name: mountedaa
+		Weapon: RedEyeE.Chem_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: chem_missile && !acid_missile
+	Armament@GarrisonAA-acidmissile:
+		Name: mountedaa
+		Weapon: RedEyeE.Acid_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: acid_missile
 	AmmoPool:
 		Armaments: primary, secondary, tertiary
 		Ammo: 1

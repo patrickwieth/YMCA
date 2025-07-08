@@ -1,3 +1,56 @@
+
+^Chemical_Cloud_Spawner:
+	Warhead@13Spawn: SpawnRandomActor
+		RandomActors: chemical_cloud.spawner
+		Probability: 10
+		Range: 1
+		Image: Cloud1d
+		Palette: tseffect-ignore-lighting-alpha75
+		ValidTargets: Ground, Water, Air
+		ImpactActors: false
+
+^Acid_Cloud_Spawner:
+	Warhead@13Spawn: SpawnRandomActor
+		RandomActors: acid_cloud.spawner
+		Probability: 10
+		Range: 1
+		Image: metal_acid_cloud1d
+		Palette: tdeffect-ignore-lighting-alpha65
+		ValidTargets: Ground, Water, Air
+		ImpactActors: false
+
+Dragon.Chem_Missile:
+	Inherits: Dragon
+	Inherits: ^Chemical_Cloud_Spawner
+
+Dragon.Acid_Missile:
+	Inherits: Dragon
+	Inherits: ^Acid_Cloud_Spawner
+
+RedEye.Chem_Missile:
+	Inherits: RedEye
+	Inherits: ^Chemical_Cloud_Spawner
+
+RedEye.Acid_Missile:
+	Inherits: RedEye
+	Inherits: ^Acid_Cloud_Spawner
+
+DragonE.Chem_Missile:
+	Inherits: DragonE
+	Inherits: ^Chemical_Cloud_Spawner
+
+DragonE.Acid_Missile:
+	Inherits: DragonE
+	Inherits: ^Acid_Cloud_Spawner
+
+RedEyeE.Chem_Missile:
+	Inherits: RedEyeE
+	Inherits: ^Chemical_Cloud_Spawner
+
+RedEyeE.Acid_Missile:
+	Inherits: RedEyeE
+	Inherits: ^Acid_Cloud_Spawner
+
 Chem_Shell:
 	Inherits: ^Cannon
 	Inherits: ^Chemical
@@ -19,6 +72,7 @@ Chem_Shell:
 	Warhead@3Eff: CreateEffect
 		Explosions: large_chem
 		ExplosionPalette: temptd
+
 
 Chem_Bomb:
 	Inherits: Chem_Shell
@@ -326,6 +380,18 @@ HyenaRockets:
 		Explosions: med_explosion
 		ImpactSounds: kaboom25.aud
 
+HyenaRockets.Chem_Missile:
+	Inherits: HyenaRockets
+	Inherits: ^Chemical_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 20
+
+HyenaRockets.Acid_Missile:
+	Inherits: HyenaRockets
+	Inherits: ^Acid_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 20
+
 HyenaRocketsAA:
 	Inherits: HQ7RocketsAA
 	ReloadDelay: 100
@@ -337,6 +403,73 @@ HyenaRocketsAA:
 		Image: hyenamissile
 	Warhead@1Dam: SpreadDamage
 		Damage: 3500
+
+HyenaRocketsAA.Chem_Missile:
+	Inherits: HyenaRocketsAA
+	Inherits: ^Chemical_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 20
+
+HyenaRocketsAA.Acid_Missile:
+	Inherits: HyenaRocketsAA
+	Inherits: ^Acid_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 20
+
+V3Weapon:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
+	-Report:
+	ValidTargets: Ground, Trees, Water
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 3400
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		ValidTargets: Ground, Water, Trees
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: building, building2
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+
+V3Weapon.Chem_Missile:
+	Inherits: V3Weapon
+	Inherits: ^Chemical_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 100
+
+V3Weapon.Acid_Missile:
+	Inherits: V3Weapon
+	Inherits: ^Acid_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 100
+
+KatyushaRockets:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
+	ReloadDelay: 240
+	Range: 16c0
+	MinRange: 4c0
+	Report: missile6.aud
+	Burst: 8
+	BurstDelays: 6
+	ValidTargets: Ground, Trees, Water
+	Warhead@1Dam: SpreadDamage
+		Spread: 384
+		Damage: 5000
+
+KatyushaRockets.Chem_Missile:
+	Inherits: KatyushaRockets
+	Inherits: ^Chemical_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 15
+
+KatyushaRockets.Acid_Missile:
+	Inherits: KatyushaRockets
+	Inherits: ^Acid_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 15
 
 152mm:
 	Inherits: ^Artillery
