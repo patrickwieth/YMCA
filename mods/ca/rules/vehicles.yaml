@@ -1,41 +1,3 @@
-V2RL:
-	Inherits: ^FightingVehicle
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioArtillery
-	Inherits: ^SovietArtillery
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 115
-		Prerequisites: dome, ~vehicles.soviet
-		Description: Long-range rocket artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 900
-	Tooltip:
-		Name: V2 Rocket Launcher
-	Health:
-		HP: 15000
-	Mobile:
-		Speed: 68
-	Armament:
-		Weapon: SCUD
-		ReloadingCondition: reloading
-	AutoTarget:
-		ScanRadius: 10
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped
-		FacingTolerance: 0
-	WithFacingSpriteBody:
-		RequiresCondition: !reloading
-		Name: loaded
-	WithFacingSpriteBody@EMPTY:
-		RequiresCondition: reloading
-		Sequence: empty-idle
-		Name: reloading
-	Explodes:
-		Weapon: BarrelExplode
-
 1TNK:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^BiologicalDriver
@@ -2949,46 +2911,6 @@ CDRN:
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
-
-2S3:
-	Inherits: ^FightingTankTurreted
-	Inherits: ^HighResShadow
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioArtillery
-	Inherits: ^SovietArtillery
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 120
-		Prerequisites: dome, ~commander_tree.akatsiya
-		Description: Heavy artillery that fires shells with cluster warheads.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 1350
-	Tooltip:
-		Name: Akatsiya
-	Health:
-		HP: 38000
-	Mobile:
-		Speed: 68
-	Turreted:
-		TurnSpeed: 24
-		Offset: -250, 0, 0
-	Armament@PRIMARY:
-		Weapon: 152mm.Akatsiya
-		LocalOffset: 1050,0,440
-		Recoil: 100
-		RecoilRecovery: 30
-		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped || moving
-	AttackTurreted:
-		ForceFireIgnoresActors: True
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: 2S3.Husk
-	GrantConditionOnMovement:
-		MovementType: Horizontal, Vertical, Turn
-		Condition: moving
-	SelectionDecorations:
 
 CRYO:
 	Inherits: ^FightingVehicle

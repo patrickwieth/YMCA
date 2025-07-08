@@ -1,4 +1,29 @@
 
+30mm:
+	Inherits: 25mm
+	ReloadDelay: 36
+	Report: tnkfire3.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+
+30mm.Cluster_Upgrade:
+	Inherits: 30mm
+	Inherits: ^Cluster_Upgrade
+	Warhead@Cluster_Upgrade: FireCluster
+		RandomClusterCount: 2
+
+125mm:
+	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
+	ReloadDelay: 70
+	Burst: 2
+
+125mm.Cluster_Upgrade:
+	Inherits: 125mm
+	Inherits: ^Cluster_Upgrade
+	Warhead@Cluster_Upgrade: FireCluster
+		RandomClusterCount: 2
+
 ^Chemical_Cloud_Spawner:
 	Warhead@13Spawn: SpawnRandomActor
 		RandomActors: chemical_cloud.spawner
@@ -193,7 +218,7 @@ Chem_Spray.Cloud:
 
 Chem_Cloud_Spawner:
 	Warhead@13Spawn: SpawnActor
-		Actors: Cloud.Chemical
+		Actors: chemical_cloud.spawner
 		Range: 1
 		ForceGround: false
 		Image: Cloud1d
@@ -224,7 +249,7 @@ Chem_Spray.Cloud.Metal_Acid:
 
 Metal_Acid_Cloud_Spawner:
 	Warhead@13Spawn: SpawnActor
-		Actors: Cloud.Metal_Acid
+		Actors: acid_cloud.spawner
 		Range: 1
 		ForceGround: false
 		Image: metal_acid_cloud1d
@@ -471,6 +496,19 @@ KatyushaRockets.Acid_Missile:
 	Warhead@13Spawn: SpawnRandomActor
 		Probability: 15
 
+^Cluster_Upgrade:
+	Warhead@Cluster_Upgrade: FireCluster
+		Weapon: ClusterBomb2S3
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
+KatyushaRockets.Cluster_Upgrade:
+	Inherits: KatyushaRockets
+	Inherits: ^Cluster_Upgrade
+	Warhead@Cluster_Upgrade: FireCluster
+		RandomClusterCount: 1
+
 152mm:
 	Inherits: ^Artillery
 	Inherits: ^ShellArtillery
@@ -490,6 +528,10 @@ KatyushaRockets.Acid_Missile:
 		Explosions: large_artillery_explosion
 		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
 
+152mm.Cluster_Upgrade:
+	Inherits: 152mm
+	Inherits: ^Cluster_Upgrade
+
 152mm.Concussion:
 	Inherits: 152mm
 	Warhead@Concussion1: GrantExternalCondition
@@ -507,6 +549,10 @@ KatyushaRockets.Acid_Missile:
 		Intensity: 1
 		Multiplier: 0.5,0.5
 
+152mm.Concussion.Cluster_Upgrade:
+	Inherits: 152mm.Concussion
+	Inherits: ^Cluster_Upgrade
+
 152mm.Cluster:
 	Inherits: 152mm
 	Warhead@Cluster: FireCluster
@@ -515,12 +561,20 @@ KatyushaRockets.Acid_Missile:
 		Dimensions: 3,3
 		Footprint: xxx x_x xxx
 
+152mm.Cluster.Cluster_Upgrade:
+	Inherits: 152mm.Cluster
+	Inherits: ^Cluster_Upgrade
+
 152mm.AP:
 	Inherits: 152mm
 	Inherits: ^ShellAP
 	Projectile: BulletCA
 		Speed: 345
 		Image: 183MM
+
+152mm.AP.Cluster_Upgrade:
+	Inherits: 152mm.AP
+	Inherits: ^Cluster_Upgrade
 
 152mm.Akatsiya:
 	Inherits: 155mm
@@ -538,6 +592,10 @@ KatyushaRockets.Acid_Missile:
 		RandomClusterCount: 3
 		Dimensions: 3,3
 		Footprint: xxx x_x xxx
+
+152mm.Akatsiya.Cluster_Upgrade:
+	Inherits: 152mm.Akatsiya
+	Inherits: ^Cluster_Upgrade
 
 ApocShells:
 	Inherits: ^Cannon
@@ -573,7 +631,7 @@ MAD_Eruption:
 	Report: cannon1.aud
 	ValidTargets: Ground, Water, Underwater
 	Warhead@Concussion2: GrantExternalCondition
-		Range: 20c0
+		Range: 25c0
 		Duration: 50
 		Condition: concussion
 		ValidTargets: Ground, Infantry, Vehicle, Ship

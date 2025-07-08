@@ -45,13 +45,14 @@ kims_wheel:
 T-34:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^ClusterWarheads
 	RenderVoxels:
 		Scale: 1
 		Image: t34
 	RenderSprites:
 		Image: t34
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
@@ -72,12 +73,20 @@ T-34:
 	Turreted:
 		TurnSpeed: 56
 		Offset: 0,0,0
-	Armament:
+	Armament@primary:
 		Weapon: 30mm
 		Recoil: 85
 		RecoilRecovery: 17
 		LocalOffset: 750,0,300
 		MuzzleSequence: muzzle
+		RequiresCondition: !cluster_upgrade
+	Armament@primary-cluster:
+		Weapon: 30mm.Cluster_Upgrade
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 750,0,300
+		MuzzleSequence: muzzle
+		RequiresCondition: cluster_upgrade
 	WithMuzzleOverlay:
 
 Devil_Tank:
@@ -94,7 +103,7 @@ Devil_Tank:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
 		Prerequisites: ~vehicles.iraq
-		Description: Light Iraqi tank.\n
+		Description: Light Iraqi tank.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
 		Weaknesses: • Weak vs Infantry, Aircraft
@@ -730,6 +739,7 @@ KATY:
 	Inherits: ^PrioArtillery
 	Inherits: ^SovietArtillery
 	Inherits: ^ChemMissiles
+	Inherits: ^ClusterWarheads
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 150
@@ -768,6 +778,12 @@ KATY:
 		LocalOffset: 500,85,500, 500,-85,500, 500,0,500
 		PauseOnCondition: empdisable || being-warped
 		RequiresCondition: acid_missile
+	Armament@primary-cluster:
+		Name: primary
+		Weapon: KatyushaRockets.Cluster_Upgrade
+		LocalOffset: 500,85,500, 500,-85,500, 500,0,500
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: cluster_upgrade
 	AttackFrontal:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
@@ -778,16 +794,72 @@ KATY:
 		Weapon: BarrelExplode
 
 
+2S3:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	Inherits: ^SovietArtillery
+	Inherits: ^ClusterWarheads
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 120
+		Prerequisites: dome, ~commander_tree.akatsiya
+		Description: Heavy artillery that fires 152mm shells with cluster warheads.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light armor, Buildings
+		Weaknesses: • Weak vs Tanks, Aircraft
+		Attributes: • Cluster warheads can be upgrades as North Korea.
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Akatsiya
+	Health:
+		HP: 38000
+	Mobile:
+		Speed: 68
+	Turreted:
+		TurnSpeed: 24
+		Offset: -250, 0, 0
+	Armament@PRIMARY:
+		Weapon: 152mm.Akatsiya
+		LocalOffset: 1050,0,440
+		Recoil: 100
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped || moving
+		RequiresCondition: !cluster_upgrade
+	Armament@PRIMARY-cluster:
+		Weapon: 152mm.Akatsiya.Cluster_Upgrade
+		LocalOffset: 1050,0,440
+		Recoil: 100
+		RecoilRecovery: 30
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped || moving
+		RequiresCondition: cluster_upgrade
+	AttackTurreted:
+		ForceFireIgnoresActors: True
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: 2S3.Husk
+	GrantConditionOnMovement:
+		MovementType: Horizontal, Vertical, Turn
+		Condition: moving
+	SelectionDecorations:
+
+
 Peoples_Tank:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^ClusterWarheads
 	RenderVoxels:
 		Scale: 0.66
 		Image: peoplestank
 	RenderSprites:
 		Image: peoplestank
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
@@ -808,12 +880,20 @@ Peoples_Tank:
 	Turreted:
 		TurnSpeed: 32
 		Offset: 0,0,200
-	Armament:
+	Armament@primary:
 		Weapon: 125mm
 		Recoil: 128
 		RecoilRecovery: 38
 		LocalOffset: 900,85,190, 900,-85,190
 		MuzzleSequence: muzzle
+		RequiresCondition: !cluster_upgrade
+	Armament@primary-cluster:
+		Weapon: 125mm.Cluster_Upgrade
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 900,85,190, 900,-85,190
+		MuzzleSequence: muzzle
+		RequiresCondition: cluster_upgrade
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: Peoples_Tank.Husk
@@ -1370,7 +1450,9 @@ ISU:
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
+	Inherits: ^SovietArtillery
 	Inherits: ^PrioArtillery
+	Inherits: ^ClusterWarheads
 	RenderSprites:
 		Image: ISU
 	Buildable:
@@ -1393,10 +1475,16 @@ ISU:
 		Speed: 56
 		Locomotor: heavytracked
 		Voice: Move
-	Armament:
+	Armament@primary:
 		Weapon: 152mm
 		LocalOffset: 824,0,208
 		MuzzleSequence: muzzle
+		RequiresCondition: !cluster_upgrade
+	Armament@primary-cluster:
+		Weapon: 152mm.Cluster_Upgrade
+		LocalOffset: 824,0,208
+		MuzzleSequence: muzzle
+		RequiresCondition: cluster_upgrade
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
@@ -1424,8 +1512,10 @@ ISU.Concussion:
 		Types: Dynamite
 	Tooltip:
 		Name: ISU-152 (Concussion)
-	Armament:
+	Armament@primary:
 		Weapon: 152mm.Concussion
+	Armament@primary-cluster:
+		Weapon: 152mm.Concussion.Cluster_Upgrade
 
 ISU.Concussion.Reflector:
 	Inherits: ISU.Concussion
@@ -1465,8 +1555,10 @@ ISU.Cluster:
 		Types: Grenade
 	Tooltip:
 		Name: ISU-152 (Cluster)
-	Armament:
+	Armament@primary:
 		Weapon: 152mm.Cluster
+	Armament@primary-cluster:
+		Weapon: 152mm.Cluster.Cluster_Upgrade
 
 ISU.Cluster.Reflector:
 	Inherits: ISU.Cluster
@@ -1508,8 +1600,10 @@ ISU.AP:
 		Types: Shell
 	Tooltip:
 		Name: ISU-152 (AP)
-	Armament:
+	Armament@primary:
 		Weapon: 152mm.AP
+	Armament@primary-cluster:
+		Weapon: 152mm.AP.Cluster_Upgrade
 
 ISU.AP.Reflector:
 	Inherits: ISU.AP
