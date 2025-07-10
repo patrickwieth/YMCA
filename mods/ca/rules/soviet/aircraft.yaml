@@ -161,6 +161,210 @@ HIND.Torp:
 		DetectionTypes: Underwater
 		Range: 8c0
 
+MIG:
+	Inherits: ^VoxelJet
+	Inherits: ^FightingPlane
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^RearmableAircraft
+	Inherits: ^PlaneScoutVision
+	RenderVoxels:
+		Scale: 0.6
+		Image: mig31
+	RenderSprites:
+		Image: mig31
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 50
+		Prerequisites: ~afld, stek, ~commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.tesla, ~!commander_tree.mig.nuke
+		Description: Precision strike aircraft firing armor-piercing missiles.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Defenses
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Detects submerged vessels
+	WithProductionIconOverlay@APMissile:
+		Types: APMissile
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: MiG-31
+	Health:
+		HP: 18000
+	Armament:
+		Weapon: MaverickAP
+		LocalOffset: 0,-640,0, 0,640,0
+		LocalYaw: -40, 24
+		PauseOnCondition: !ammo
+	Aircraft:
+		Speed: 235
+	AmmoPool:
+		Ammo: 8
+	WithAmmoPipsDecoration:
+		PipCount: 4
+	Contrail@1:
+		Offset: -598,-683,0
+	Contrail@2:
+		Offset: -598,683,0
+	Contrail@AB1:
+		Offset: -400,-50,-20
+		StartColorUsePlayerColor: false
+		ZOffset: -512
+		StartColor: cc550080
+		TrailLength: 10
+	Contrail@AB2:
+		Offset: -400,50,-20
+		StartColorUsePlayerColor: false
+		ZOffset: -512
+		StartColor: cc550080
+		TrailLength: 10
+	SpawnActorOnDeath:
+		Actor: MIG.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: MIG.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+	DetectCloaked:
+		DetectionTypes: Underwater
+		Range: 8c0
+
+HeavyBomber.Nuke:
+	Inherits: FROG
+	RenderVoxels:
+		Scale: 0.6
+		Image: heavybomber
+	RenderSprites:
+		Image: heavybomber
+	WithVoxelBody:
+		RequiresCondition: ammo
+	WithVoxelBody@empty:
+		Sequence: empty
+		RequiresCondition: !ammo
+	Inherits: ^PrioAntiLight
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig.nuke
+		Description: Nuclear attack bomber aircraft.
+	TooltipExtras:
+		Strengths: • Strong vs Everything
+		Weaknesses: • Weak vs Anti-Air
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
+	Health:
+		HP: 20000
+	Valued:
+		Cost: 2800
+	Tooltip:
+		Name: Nuclear Bomber
+	Aircraft:
+		Speed: 180
+	Armament@PRIMARY:
+		Weapon: AtomParabombLauncher
+		PauseOnCondition: !ammo
+	MissileSpawnerMaster:
+		Actors: AtomParabomb
+		RespawnTicks: 50
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: 0,0,0
+		ExitCell: 0,0
+	AmmoPool:
+		Ammo: 1
+	WithAmmoPipsDecoration:
+		PipCount: 1
+
+AtomParabomb:
+	Inherits: V3.Kirov
+	Inherits: ^VoxelVehicle
+	BallisticMissile:
+		LaunchAngle: 0
+		Speed: 150
+	RenderVoxels:
+		Scale: 0.6
+		Image: atomparabomb
+	RenderSprites:
+		Image: atomparabomb
+	Tooltip:
+		Name: Nuclear Parabomb
+	-WithFacingSpriteBody:
+	SpawnedExplodes:
+		Weapon: AtomParabomb.Impact
+		EmptyWeapon: AtomParabomb.Impact
+
+HeavyBomber.Tesla:
+	Inherits: HeavyBomber.Nuke
+	Inherits: ^TeslaUnit
+	RenderVoxels:
+		Scale: 0.6
+		Image: heavybomber
+	RenderSprites:
+		Image: heavybomber
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig.tesla,
+		Description: Heavy bomber armed with a Tesla glide bomb.\n  Bombs emit Tesla zaps on impact.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Infantry
+		Weaknesses: • Weak vs Aircraft
+	-WithProductionIconOverlay@Nuke:
+	WithProductionIconOverlay@Tesla:
+		Types: Tesla
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Heavy Tesla Bomber
+	Armament@PRIMARY:
+		Weapon: TeslaGlidebombLauncher
+		PauseOnCondition: !ammo
+	MissileSpawnerMaster:
+		Actors: TeslaParabomb
+
+TeslaParabomb:
+	Inherits: AtomParabomb
+	Tooltip:
+		Name: Nuclear Parabomb
+	SpawnedExplodes:
+		Weapon: TeslaBomb
+		EmptyWeapon: TeslaBomb
+
+SU47:
+	Inherits: MIG
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^RearmableAircraft
+	Inherits: ^PlaneScoutVision
+	Inherits: ^VoxelJet
+	RenderVoxels:
+		Scale: 0.6
+		Image: su47
+	RenderSprites:
+		Image: su47
+	Contrail@1:
+		Offset: -50,-500,50
+	Contrail@2:
+		Offset: -50,500,50
+	Buildable:
+		Prerequisites: ~afld, stek, ~commander_tree.mig.aa
+		IconPalette: chrome
+		Description: Air Superiority fighter aircraft.\n  Can only attack aircraft.
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft
+		Weaknesses: • Weak vs Anti-Air, Ground units
+	-WithProductionIconOverlay@APMissile:
+	Valued:
+		Cost: 1750
+	Tooltip:
+		Name: SU-47 Fighter
+	-Armament:
+	Armament@secondary:
+		Weapon: WidowAA.Mig
+		PauseOnCondition: !ammo
+	WithAmmoPipsDecoration:
+		PipCount: 4
+	SpawnActorOnDeath:
+		Actor: SU47.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: SU47.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+
 FROG:
 	Inherits: ^VoxelPlane
 	RenderVoxels:
@@ -312,49 +516,6 @@ SUK.Conc:
 		Name: SU-27 Flanker (Concussion)
 	Armament@primary:
 		Weapon: MaverickSU.Concussion
-
-SU47:
-	Inherits: MIG
-	Inherits: ^PrioAntiHeavyAA
-	Inherits: ^RearmableAircraft
-	Inherits: ^PlaneScoutVision
-	Inherits: ^VoxelJet
-	RenderVoxels:
-		Scale: 0.6
-	Contrail@1:
-		Offset: -50,-500,50
-	Contrail@2:
-		Offset: -50,500,50
-	-WithShadow:
-	Buildable:
-		Prerequisites: ~afld, stek, ~commander_tree.mig.aa
-		IconPalette: chrome
-		Description: Air Superiority fighter aircraft.\n  Can only attack aircraft.
-	TooltipExtras:
-		Strengths: • Strong vs Aircraft
-		Weaknesses: • Weak vs Anti-Air, Ground units
-	Valued:
-		Cost: 1750
-	Tooltip:
-		Name: SU-47 Fighter
-	-Armament:
-	Armament@secondary:
-		Weapon: WidowAA.Mig
-		PauseOnCondition: !ammo
-	WithAmmoPipsDecoration:
-		PipCount: 4
-	SpawnActorOnDeath:
-		Actor: SU47.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: SU47.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@EMP:
-		Actor: SU47.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: SU47.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
 
 Kirov:
 	Inherits: ^VoxelAirship

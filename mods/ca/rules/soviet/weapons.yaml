@@ -24,6 +24,159 @@
 	Warhead@Cluster_Upgrade: FireCluster
 		RandomClusterCount: 2
 
+MaverickAP:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileAP
+	Range: 9c0
+	MinRange: 2c0
+	Report: missile7.aud
+	Burst: 2
+	BurstDelays: 7
+	Projectile: MissileCA
+		Speed: 256
+		Inaccuracy: 316
+		CruiseAltitude: 2c0
+		RangeLimit: 14c410
+		LockOnInaccuracy: 316
+	Warhead@1Dam: SpreadDamage
+		Damage: 15000
+
+V3Launcher:
+	Inherits: ^MissileArtillery
+	ReloadDelay: 250
+	Range: 27c511
+	MinRange: 6c0
+	Report: vv3latta.aud, vv3lattb.aud
+	ValidTargets: Ground, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Water
+	-Warhead@2Smu: LeaveSmudge
+	-Warhead@3Eff: CreateEffect
+	-Warhead@4EffWater: CreateEffect
+
+V4Launcher:
+	Inherits: ^MissileArtillery
+	ReloadDelay: 250
+	Range: 25c511
+	MinRange: 6c0
+	Report: vv3latta.aud, vv3lattb.aud
+	ValidTargets: Ground, Vehicle, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Vehicle, Water
+
+AtomParabombLauncher:
+	Inherits: V3Launcher
+	Range: 2c511
+	-MinRange:
+
+AtomParabomb.Impact:
+	Inherits: CarpetBomb
+	Range: 0c768
+	Projectile: InstantHit
+	ValidTargets: Ground, Trees, Water, Air
+	Warhead@1Dam_impact: SpreadDamage
+		Spread: 1c0
+		Damage: 3250
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		ValidTargets: Ground, Trees, Water, Air
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff_impact: CreateEffect
+		Explosions: nuke
+		ImpactSounds: kaboom1.aud
+		ImpactActors: false
+	Warhead@4Dam_areanuke1: SpreadDamage
+		Spread: 1c0
+		Damage: 1500
+		Falloff: 1000, 500, 250, 125, 50, 0
+		Delay: 5
+		ValidTargets: Ground, Water, Air
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@6Eff_areanuke1: CreateEffect
+		ImpactSounds: kaboom22.aud
+		Delay: 5
+		ImpactActors: false
+	Warhead@6Smu_areanuke1: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Trees
+		Size: 4
+		Delay: 5
+	Warhead@TREEKILL: SpreadDamage
+		Spread: 1c0
+		Damage: 6000
+		Falloff: 1000, 600, 400, 250, 150, 100, 0
+		Delay: 5
+		ValidTargets: Trees
+		DamageTypes: Incendiary
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 5
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+	Warhead@18Radio: CreateTintedCells
+		Spread: 1c0
+		Level: 350
+		Falloff: 100, 75, 52, 37, 24, 15, 2
+		MaxLevel: 750
+		LayerName: radioactivity
+
+TeslaGlidebombLauncher:
+	Inherits: V3Launcher
+	Range: 5c511
+	-MinRange:
+
+TeslaBomb:
+	Inherits: KirovBomb
+	Warhead@1Dam: SpreadDamage
+		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: tsla_bomb
+		ExplosionPalette: ra2effect
+		ImpactSounds: kirbo1.aud, kirbo2.aud
+	Warhead@5Tesla: FireShrapnel
+		Weapon: TeslaBombZap
+		Amount: 6
+		AimChance: 100
+		AllowDirectHit: true
+		ThrowWithoutTarget: true
+
+TeslaBombZap:
+	Inherits: TTankZap
+	ReloadDelay: 130
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc1
+		Amount: 3
+		AimChance: 100
+		ThrowWithoutTarget: true
+
+MaverickSU:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileHE
+	Range: 10c0
+	Report: vbleatta.aud, vbleattb.aud
+	Burst: 4
+	BurstDelays: 7
+	Projectile: MissileCA
+		CruiseAltitude: 2c0
+		RangeLimit: 14c410
+		Inaccuracy: 1c0
+		Speed: 180
+		LockOnInaccuracy: 1024
+	Warhead@1Dam: SpreadDamage
+		Damage: 12000
+		Spread: 341
+
+MaverickSU.Concussion:
+	Inherits: MaverickSU
+	Warhead@Concussion1: GrantExternalCondition
+		Range: 1c512
+		Duration: 240
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
+
 ^Chemical_Cloud_Spawner:
 	Warhead@13Spawn: SpawnRandomActor
 		RandomActors: chemical_cloud.spawner

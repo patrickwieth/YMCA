@@ -1,4 +1,54 @@
 
+# General Upgrades
+
+commander_tree.General_Armaggeddon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: General Armaggeddon
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.the_chef
+		Description: Pick General Armageddon to specialize in artillery. \n General Armageddon is not a buildable unit. \n Unlocks the MAD Tank. \n Artillery units fire 20% faster.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+commander_tree.TikTok_Warrior:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: TikTok Warrior
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.the_chef, ~!commander_tree.general_armaggeddon
+		Description: Pick TikTok Warrior to specialize in propaganda. \n TikTok Warrior is not a buildable unit. \n Unlocks the Chechen Paradrop. \n Range of Propaganda effect is increased.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+commander_tree.The_Chef:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: The Chef
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.general_armaggeddon
+		Description: Pick the Chef Cook to specialize in penal battalions.\n The Chef Cook is not a buildable unit. \n Unlocks the Prison Building (not yet implemented). \n Infantry is 10% cheaper.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+hack.cameo_filler.sovietgeneral.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~filler.soviet_general
+
+hack.cameo_filler.sovietgeneral.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~filler.soviet_general
+
 
 commander_tree.War_Miners:
 	Inherits: ^default.commander_tree_item
@@ -9,6 +59,7 @@ commander_tree.War_Miners:
 		IconPalette: chrome
 		Prerequisites: prerequisite.has_points, ~structures.soviet, ~anypower
 		Description: Equips Miners with a gatling turret. \nWar Miners can attack ground and air.
+
 
 commander_tree.Tesla_Arc:
 	Inherits: ^default.commander_tree_item
@@ -70,6 +121,59 @@ hack.cameo_filler.soviet_base_tech:
 		BuildPaletteOrder: 104
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
 
+# Aircraft
+
+commander_tree.Mig:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mig-31
+	RenderSprites:
+		Image: mig31
+	WithProductionIconOverlay@APMissile:
+		Types: APMissile
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
+		Description: Enables to build the Mig. \n  It is an attack fighter best suited for taking out single heavy tanks.
+
+commander_tree.Heavy_Bomber.Nuke:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Heavy Bomber
+	RenderSprites:
+		Image: heavybomber
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.iraq
+		Description: Upgrades the Mig to a Nuke bomber. \n  It drops a single nuclear bomb with devastating damage.
+
+commander_tree.Mig.AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SU-47 Air Superiority
+	RenderSprites:
+		Image: su47
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
+		Description: Unlocks the SU-47 air superiority fighter.
+
+commander_tree.Heavy_Bomber.Tesla:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Heavy Tesla Bomber
+	RenderSprites:
+		Image: heavybomber
+	WithProductionIconOverlay@Tesla:
+		Types: Tesla
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.russia
+		Description: Unlocks the Heavy Tesla Bomber. \nIt has a single bomb that emits a lot of tesla zaps.
+
+# Vehicles
 
 commander_tree.V3_Launcher:
 	Inherits: ^default.commander_tree_item
@@ -122,8 +226,6 @@ hack.cameo_filler.109:
 	Buildable:
 		BuildPaletteOrder: 116
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
-
-
 
 commander_tree.Heavy_Tank.AP:
 	Inherits: ^default.commander_tree_item

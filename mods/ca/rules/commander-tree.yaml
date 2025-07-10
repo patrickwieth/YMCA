@@ -84,10 +84,8 @@ commander_tree.advanced_infantry_training:
 	Tooltip:
 		Name: Advanced Infantry Training
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 5
-
 		Prerequisites: prerequisite.has_points, ~infantry.any
 		Description: Enables to build specialized Infantry.
 
@@ -135,27 +133,15 @@ hack.cameo_filler.4:
 		Prerequisites: prerequisite.has_points, ~infantry.any, ~disabled
 
 
-
-
 #ALLIES
-commander_tree.Spec_Ops:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Spec Ops
-	Buildable:
-		BuildPaletteOrder: 7
-		Prerequisites: prerequisite.has_points, ~infantry.allies, commander_tree.advanced_infantry_training, techcenter
-		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
 
 commander_tree.Scout_Tank_PDL:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Scout Tank Point Laser Defense System
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 13
-
 		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter, ~!commander_tree.scout_tank.reflector
 		Description: Upgrades the Scout Tank with a Point Laser Defense to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
@@ -166,9 +152,7 @@ commander_tree.Scout_Tank.Reflector:
 	Tooltip:
 		Name: Scout Tank Reflector Armor
 	Buildable:
-
 		BuildPaletteOrder: 13
-
 		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.france, techcenter, ~!commander_tree.scout_tank_pdl
 		Description: Equips the Scout Tank with a Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
@@ -483,27 +467,6 @@ commander_tree.Yuri:
 		Prerequisites: prerequisite.has_points, ~infantry.soviet
 		Description: Form Unholy Alliance with Yuri and his forces. \n This replaces multiple units and support powers: \n  Lasher Tank replaces Heavy Tank. \n  Yuri replaces Boris. \n  Chaos Drone replaces MAD Tank \n  Genetic Mutation Bomb replaces Parabombs. \n
 
-hack.cameo_filler.99a:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 99
-		Prerequisites: prerequisite.has_points, ~infantry.soviet, disabled
-
-hack.cameo_filler.99b:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 99
-		Prerequisites: prerequisite.has_points, ~infantry.soviet, disabled
-
-commander_tree.Flak_Track:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Flak Track
-	Buildable:
-		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.soviet
-		Description: Upgrades the BTR with Flak cannons. \n  This makes it less efficient vs. vehicles and better vs. air units.
-
 commander_tree.Flak_Track.Barrage:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -626,104 +589,6 @@ hack.cameo_filler.118:
 	Buildable:
 		BuildPaletteOrder: 139
 		Prerequisites: prerequisite.has_points, ~aircraft.nkorea, disabled
-
-commander_tree.Mig:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mig
-	Buildable:
-		BuildPaletteOrder: 148
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
-		Description: Enables to build the Mig. \n  It is an attack fighter best suited for taking out single vehicles.
-
-commander_tree.Mig.Nuke:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Nuke Mig
-	Buildable:
-		BuildPaletteOrder: 148
-		Prerequisites: prerequisite.has_points, techcenter, commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.tesla, ~aircraft.iraq
-		Description: Upgrades the Mig to a Nuke bomber. \n  It drops a single nuclear bomb with devastating damage.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.mig
-
-commander_tree.Mig.AA:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: SU-47 Air Superiority
-	RenderSprites:
-		Image: su47
-	Buildable:
-		BuildPaletteOrder: 148
-		Prerequisites: prerequisite.has_points, techcenter, commander_tree.mig, ~!commander_tree.mig.tesla, ~!commander_tree.mig.nuke, ~aircraft.soviet, ~!aircraft.nkorea
-		Description: Upgrades the Mig to the SU-47 air superiority fighter.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.mig
-
-commander_tree.Mig.Tesla:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Tesla Mig
-	Buildable:
-		BuildPaletteOrder: 148
-		Prerequisites: prerequisite.has_points, techcenter, commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.nuke, ~aircraft.russia
-		Description: Equips the Mig with Tesla bombs. \n  It increases the damage of the mig vs. groups of enemies.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.mig
-
-hack.cameo_filler.123:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 151
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~aircraft.!nkorea, ~filler.mig, disabled
-
-commander_tree.General_Armaggeddon:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: General Armaggeddon
-	Buildable:
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.the_chef
-		Description: Pick General Armageddon to specialize in artillery. \n General Armageddon is not a buildable unit. \n Unlocks the MAD Tank. \n Artillery units fire 20% faster.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
-
-commander_tree.TikTok_Warrior:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: TikTok Warrior
-	Buildable:
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.the_chef, ~!commander_tree.general_armaggeddon
-		Description: Pick TikTok Warrior to specialize in propaganda. \n TikTok Warrior is not a buildable unit. \n Unlocks the Chechen Paradrop. \n Range of Propaganda effect is increased.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
-
-commander_tree.The_Chef:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: The Chef
-	Buildable:
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.general_armaggeddon
-		Description: Pick the Chef Cook to specialize in penal battalions.\n The Chef Cook is not a buildable unit. \n Unlocks the Prison Building (not yet implemented). \n Infantry is 10% cheaper.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
-
-hack.cameo_filler.sovietgeneral.1:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~filler.soviet_general
-
-hack.cameo_filler.sovietgeneral.2:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~filler.soviet_general
 
 #GDI
 commander_tree.Slingshot:
