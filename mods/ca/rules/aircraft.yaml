@@ -215,6 +215,7 @@ B2B:
 Stealth_Fighter:
 	Inherits: ^Plane
 	Inherits: ^BiologicalPilot
+	Inherits: ^RearmableAircraft
 	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Aircraft
@@ -237,8 +238,6 @@ Stealth_Fighter:
 		LocalOffset: 0,-640,0, 0,640,0
 		LocalYaw: -40, 24
 		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 80
 	Aircraft:
 		CruiseAltitude: 2560
 		InitialFacing: 192
@@ -248,17 +247,8 @@ Stealth_Fighter:
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
 		IdleBehavior: Land
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 4
-		ReloadDelay: 100
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	SelectionDecorations:
 	Contrail@1:
 		Offset: -598,-683,0
@@ -285,13 +275,6 @@ Stealth_Fighter:
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
-	RenderSprites:
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
 
 Stealth_Fighter.payload:
 	Inherits: Stealth_Fighter
@@ -312,6 +295,7 @@ Stealth_Fighter.payload:
 YAK:
 	Inherits: ^Plane
 	Inherits: ^BiologicalPilot
+	Inherits: ^RearmableAircraft
 	Inherits: ^PrioAntiLight
 	Buildable:
 		Queue: Aircraft
@@ -358,18 +342,11 @@ YAK:
 		Speed: 180
 		RepulsionSpeed: 40
 		MaximumPitch: 56
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 36
 		ReloadDelay: 7
-		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 6
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: YAK.Husk
@@ -386,10 +363,6 @@ YAK:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
 	Contrail@1:
 		Offset: -98,-683,-10
 	Contrail@2:
@@ -400,6 +373,7 @@ YAK:
 CHEMYAK:
 	Inherits: ^Plane
 	Inherits: ^BiologicalPilot
+	Inherits: ^RearmableAircraft
 	Inherits: ^PrioAntiLight
 	Buildable:
 		Queue: Aircraft
@@ -440,18 +414,10 @@ CHEMYAK:
 		Speed: 180
 		RepulsionSpeed: 40
 		MaximumPitch: 56
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 24
-		ReloadDelay: 11
-		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 4
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	SelectionDecorations:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
@@ -469,10 +435,6 @@ CHEMYAK:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
 	Contrail@1:
 		Offset: -98,-683,-10
 	Contrail@2:
@@ -640,8 +602,6 @@ TRAN.Eagle:
 	Cargo:
 		InitialUnits: rocket_infantry, rocket_infantry, rocket_infantry, rocket_infantry
 	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 		RequiresCondition: loaded || loaded-air
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air
@@ -1306,6 +1266,7 @@ AURORA:
 	Inherits: ^PrioAntiLight
 	Inherits: ^SlowsWhenDamaged
 	Inherits: ^RearmableAircraft
+	Inherits: ^BomberPlane
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -1350,9 +1311,6 @@ AURORA:
 		RequiresCondition: supersonic && ammo
 	SpeedMultiplier@DAMAGED:
 		Modifier: 67
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
 	AmmoPool:
 		Ammo: 1
 		ReloadDelay: 125

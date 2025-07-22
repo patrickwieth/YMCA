@@ -1603,10 +1603,11 @@
 
 ^AutoTargetGround:
 	AutoTarget:
+		InitialStance: AttackAnything
 		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense, Mine
 		InvalidTargets: NoAutoTarget, WaterStructure
 	AutoTargetPriority@ATTACKANYTHING:
 		RequiresCondition: stance-attackanything
@@ -1625,13 +1626,14 @@
 ^AutoTargetNavalAssaultMove:
 	Inherits: ^AutoTargetGroundAssaultMove
 	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense, Mine
 		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@ATTACKANYTHING:
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
 
 ^AutoTargetAir:
 	AutoTarget:
+		InitialStance: AttackAnything
 		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Air
@@ -1639,14 +1641,15 @@
 
 ^AutoTargetAll:
 	AutoTarget:
+		InitialStance: AttackAnything
 		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, Mine
 		InvalidTargets: NoAutoTarget, WaterStructure
 	AutoTargetPriority@ATTACKANYTHING:
 		RequiresCondition: stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense, Mine
 		InvalidTargets: NoAutoTarget
 
 ^AutoTargetAllAssaultMove:
@@ -1661,10 +1664,10 @@
 ^AutoTargetAllNavalAssaultMove:
 	Inherits: ^AutoTargetAllAssaultMove
 	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, Mine
 		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@ATTACKANYTHING:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense, Mine
 		InvalidTargets: NoAutoTarget
 
 ^AutoTargetAllAssaultMoveAntiAir:
@@ -1819,16 +1822,6 @@
 
 ^PrioAntiHeavyAA:
 	Inherits: ^AutoTargetAll
-	AutoTarget:
-		AttackAnythingCondition: stance-attackanything
-	AutoTargetPriority@DEFAULT:
-		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		InvalidTargets: NoAutoTarget
-	AutoTargetPriority@ATTACKANYTHING:
-		RequiresCondition: stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@PRIO:
 		ValidTargets: heavy
 		Priority: 10
@@ -1904,16 +1897,6 @@
 
 ^PrioEnergyAntiHeavyAA:
 	Inherits: ^AutoTargetAll
-	AutoTarget:
-		AttackAnythingCondition: stance-attackanything
-	AutoTargetPriority@DEFAULT:
-		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		InvalidTargets: NoAutoTarget
-	AutoTargetPriority@ATTACKANYTHING:
-		RequiresCondition: stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		InvalidTargets: NoAutoTarget
 	AttackMove:
 		AssaultMoveCondition: assault-move
 	AutoTargetPriority@PRIO:
@@ -2045,6 +2028,7 @@
 
 ^PrioRepair:
 	AutoTarget:
+		InitialStance: AttackAnything
 	AutoTargetPriority@REPAIR:
 		ValidTargets: Repair, RepairInAir
 		ValidRelationships: Ally
@@ -2545,7 +2529,7 @@
 		Categories: Civilian infantry
 
 ^ArmedCivilian:
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^AutoTargetGroundAssaultMove
 	GrantConditionOnFaction@RA:
 		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq
 		Condition: ra-faction
@@ -3027,7 +3011,6 @@
 		PauseOnCondition: empdisable || being-warped
 	AutoTarget:
 		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
 
 ^FightingHelicopter:
 	AttackAircraft:
@@ -4758,8 +4741,7 @@ BuildBoost.Dummy:
 			red: pip-red
 			blue: pip-blue
 	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
+		InitialStance: AttackAnything
 		RequiresCondition: loaded || loaded-air
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air

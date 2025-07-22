@@ -35,9 +35,6 @@ HIND:
 		Weapon: ChainGun
 		LocalOffset: 0,300,-185, 0,-300,-185
 		MuzzleSequence: muzzle
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 	Inherits: ^SingleRotor
 	WithIdleOverlay@ROTORAIR:
 		Offset: 70,0,200
@@ -230,6 +227,8 @@ MIG:
 
 HeavyBomber.Nuke:
 	Inherits: FROG
+	Inherits: ^PrioAntiLight
+	Inherits: ^BomberPlane
 	RenderVoxels:
 		Scale: 0.6
 		Image: heavybomber
@@ -240,7 +239,6 @@ HeavyBomber.Nuke:
 	WithVoxelBody@empty:
 		Sequence: empty
 		RequiresCondition: !ammo
-	Inherits: ^PrioAntiLight
 	Buildable:
 		Prerequisites: ~afld, stek, ~commander_tree.heavy_bomber.nuke
 		Description: Nuclear attack bomber aircraft.
@@ -382,10 +380,10 @@ FROG:
 		Image: frog
 	RenderSprites:
 		Image: frog
-	Inherits: ^BomberPlane
 	Inherits: ^RearmableAircraft
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiLight
+	Inherits: ^BomberPlane
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -583,8 +581,6 @@ Kirov:
 		AltitudeVelocity: 0c50
 		CanForceLand: False
 	AutoTarget:
-		InitialStance: AttackAnything
-		InitialStanceAI: AttackAnything
 		ScanRadius: 10
 	SpawnActorOnDeath:
 		Actor: Kirov.Husk
