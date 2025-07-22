@@ -242,7 +242,7 @@ HeavyBomber.Nuke:
 		RequiresCondition: !ammo
 	Inherits: ^PrioAntiLight
 	Buildable:
-		Prerequisites: ~afld, stek, ~commander_tree.mig.nuke
+		Prerequisites: ~afld, stek, ~commander_tree.heavy_bomber.nuke
 		Description: Nuclear attack bomber aircraft.
 	TooltipExtras:
 		Strengths: • Strong vs Everything
@@ -271,6 +271,10 @@ HeavyBomber.Nuke:
 		Ammo: 1
 	WithAmmoPipsDecoration:
 		PipCount: 1
+	Contrail@1:
+		Offset: 50,-950,50
+	Contrail@2:
+		Offset: 50,950,50
 
 AtomParabomb:
 	Inherits: V3.Kirov
@@ -289,6 +293,9 @@ AtomParabomb:
 	SpawnedExplodes:
 		Weapon: AtomParabomb.Impact
 		EmptyWeapon: AtomParabomb.Impact
+	Explodes:
+		Weapon: AtomParabomb.Impact
+		RequiresCondition: !being-warped
 
 HeavyBomber.Tesla:
 	Inherits: HeavyBomber.Nuke
@@ -299,7 +306,7 @@ HeavyBomber.Tesla:
 	RenderSprites:
 		Image: heavybomber
 	Buildable:
-		Prerequisites: ~afld, stek, ~commander_tree.mig.tesla,
+		Prerequisites: ~afld, stek, ~commander_tree.heavy_bomber.tesla
 		Description: Heavy bomber armed with a Tesla glide bomb.\n  Bombs emit Tesla zaps on impact.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry
@@ -324,6 +331,9 @@ TeslaParabomb:
 	SpawnedExplodes:
 		Weapon: TeslaBomb
 		EmptyWeapon: TeslaBomb
+	Explodes:
+		Weapon: TeslaBomb
+		RequiresCondition: !being-warped
 
 SU47:
 	Inherits: MIG
