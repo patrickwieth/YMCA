@@ -2279,8 +2279,8 @@
 		LoseNotification: UnitLost
 
 ^RobotDriver:
-	Inherits@IDISABLE: ^DisabledByRadarLoss
-	Inherits@HACKABLE: ^Hackable
+	Inherits: ^DisabledByRadarLoss
+	Inherits: ^Hackable
 	IgnoresDisguise:
 	WithDecoration@DISABLED:
 		Image: poweroff
@@ -3171,9 +3171,9 @@
 	Inherits@8: ^Chillable
 	Inherits@9: ^NaniteShieldable
 	Inherits: ^BuildingVision
-	Inherits@wflash: ^WhiteFlash
-	Inherits@gflash: ^GreenFlash
-	Inherits@HACKABLE: ^Hackable
+	Inherits: ^WhiteFlash
+	Inherits: ^GreenFlash
+	Inherits: ^Hackable
 	Inherits: ^EarlyGameBuildBoost
 	Inherits: ^MustBeDestroyed
 	Buildable:
@@ -5200,7 +5200,7 @@ BuildBoost.Dummy:
 		ProductionTypes: Soldier, Infantry
 	Production:
 		Produces: Infantry, Soldier
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 		RequiresCondition: !infdisabled
 	GrantConditionOnPrerequisite@vehiclesonly:
 		Condition: infdisabled
@@ -5251,7 +5251,7 @@ BuildBoost.Dummy:
 		ExitCell: 1,2
 	Production:
 		Produces: Vehicle, Paradrop
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 		RequiresCondition: !vehiclesdisabled
 	GrantConditionOnPrerequisite@infonly:
 		Condition: vehiclesdisabled
@@ -5431,7 +5431,7 @@ BuildBoost.Dummy:
 		ProductionType: Aircraft
 	Production:
 		Produces: Aircraft, Helicopter, Plane
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 		RequiresCondition: !aircraftdisabled
 	GrantConditionOnPrerequisite@infonly:
 		Condition: aircraftdisabled
@@ -5455,7 +5455,7 @@ BuildBoost.Dummy:
 		Color: 8A8A8A
 	Production:
 		Produces: Building, Defense
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 	ProvidesPrerequisite@conyardbuildable:
 		Prerequisite: conyardbuildable
 		RequiresPrerequisites: techlevel.aircraftonly
@@ -5474,7 +5474,7 @@ BuildBoost.Dummy:
 	RallyPoint:
 	Production:
 		Produces: Ship, Submarine, Boat
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 	ProductionBar:
 		ProductionType: Ship
 	RepairsUnits:
