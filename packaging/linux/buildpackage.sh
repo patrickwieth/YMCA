@@ -87,12 +87,12 @@ else
 fi
 
 # Add native libraries
-#echo "Downloading appimagetool"
-#if command -v curl >/dev/null 2>&1; then
-#	curl -s -L -O https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage || exit 3
-#else
-#	wget -cq https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage || exit 3
-#fi
+echo "Downloading appimagetool"
+if command -v curl >/dev/null 2>&1; then
+	curl -s -L -O https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage || { echo "Download failed with curl"; exit 1; }
+else
+	wget -cq https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage || { echo "Download failed with wget"; exit 1; }
+fi
 
 echo "Building AppImage"
 

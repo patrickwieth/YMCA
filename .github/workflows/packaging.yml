@@ -30,22 +30,7 @@ jobs:
           mkdir -p build/linux
           sudo apt-get update
           sudo apt-get install -y libfuse2
-          # Download und Debugging
-          echo "Downloading appimagetool..."
-          wget https://github.com/AppImage/appimagetool/releases/download/1.9.0/appimagetool-x86_64.AppImage
-          if [ $? -ne 0 ]; then
-            echo "Download failed!"
-            exit 1
-          fi
-          chmod +x appimagetool-x86_64.AppImage
-          # Überprüfe die Datei
-          ls -l appimagetool-x86_64.AppImage
-          file appimagetool-x86_64.AppImage
-          # Teste die Ausführung
-          ./appimagetool-x86_64.AppImage --version || { echo "AppImage execution failed!"; cat appimagetool-x86_64.AppImage; exit 1; }
-          # Führe buildpackage.sh aus
           ./packaging/linux/buildpackage.sh "${GIT_TAG}" "${PWD}/build/linux"
-
       - name: Upload Packages
         uses: svenstaro/upload-release-action@v2
         with:
