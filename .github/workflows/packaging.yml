@@ -30,8 +30,7 @@ jobs:
           mkdir -p build/linux
           sudo apt-get update
           sudo apt-get install -y libfuse2
-          # Download and make appimagetool executable
-          wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+          wget https://github.com/AppImage/AppImageKit/releases/download/v13/appimagetool-x86_64.AppImage
           chmod +x appimagetool-x86_64.AppImage
           ./packaging/linux/buildpackage.sh "${GIT_TAG}" "${PWD}/build/linux"
 
@@ -82,7 +81,7 @@ jobs:
 
   windows:
     name: Windows Installers
-    runs-on: windows-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Clone Repository
         uses: actions/checkout@v3
