@@ -130,5 +130,5 @@ function build_platform()
 	rm -rf "${BUILTDIR}"
 }
 
-build_platform "x86"
+#build_platform "x86"
 build_platform "x64"

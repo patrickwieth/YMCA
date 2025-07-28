@@ -28,9 +28,9 @@ jobs:
         run: |
           make engine
           mkdir -p build/linux
-          sudo apt install libfuse2
+          sudo apt-get update
+          sudo apt-get install -y libfuse2 desktop-file-utils
           ./packaging/linux/buildpackage.sh "${GIT_TAG}" "${PWD}/build/linux"
-
       - name: Upload Packages
         uses: svenstaro/upload-release-action@v2
         with:
@@ -92,14 +92,20 @@ jobs:
         run: |
           echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_ENV}
           sudo apt-get update
-          sudo apt-get install nsis wine64
+          sudo apt-get install -y wine64 nsis imagemagick python3
+          sudo apt-get install -y wine-development
 
-      - name: Package Installers
+      - name: Package Installers with Debugging
         run: |
           make engine
           mkdir -p build/windows
-          ./packaging/windows/buildpackage.sh "${GIT_TAG}" "${PWD}/build/windows"
-
+          echo "Checking wine version"
+          wine64 --version
+          ./packaging/windows/buildpackage.sh "${GIT_TAG}" "${PWD}/build/windows" || {
+            echo "Build failed, checking rcedit";
+            file rcedit-x64.exe;
+            exit 1;
+          }
       - name: Upload Packages
         uses: svenstaro/upload-release-action@v2
         with:
