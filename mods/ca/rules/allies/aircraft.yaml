@@ -189,6 +189,70 @@ HARR.payload:
 	WithAmmoPipsDecoration:
 		PipCount: 3
 
+
+Tarantula:
+	Inherits: ^VoxelPlane
+	-SpeedMultiplier@SlowOnIdle:
+	-GrantConditionOnOrders@ACTIVE:
+	RenderVoxels:
+		Scale: 1
+		Image: tarantula
+	RenderSprites:
+		Image: tarantula
+	Contrail@1:
+		Offset: -98,-500,130
+	Contrail@2:
+		Offset: -98,500,130
+	Tooltip:
+		Name: Tarantula Attack Plane
+	Health:
+		HP: 28000
+	RevealsShroud@GAPGEN:
+		Range: 9c0
+		Type: GroundPosition
+	Armament@PRIMARY:
+		Name: gunr
+		Weapon: ChainGun.Tarantula.R
+		LocalOffset: 256,-213,0
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: gunl
+		Weapon: ChainGun.Tarantula.L
+		LocalOffset: 256,213,0
+		MuzzleSequence: muzzle
+	Armament@TERTIARY:
+		Name: rocketr
+		Weapon: Rocket.Tarantula.R
+		LocalOffset: 0,-413,0
+	Armament@QUATERNARY:
+		Name: rocketl
+		FireDelay: 2
+		Weapon: Rocket.Tarantula.L
+		LocalOffset: 0,413,0
+	AttackBomberCA:
+		Armaments: gunr, gunl, rocketr, rocketl
+		FacingTolerance: 80
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 14
+		Speed: 190
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: Tarantula.Husk
+		RequiresCondition: !empdisable
+	SpawnActorOnDeath@EMP:
+		Actor: Tarantula.Husk.EMP
+		RequiresCondition: empdisable
+	RejectsOrders:
+	-Selectable:
+	Interactable:
+	GivesExperience:
+		Experience: 1000
+
+
 Seahawk:
 	Inherits: ^VoxelHelicopter
 	RenderVoxels:
