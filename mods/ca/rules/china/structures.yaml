@@ -61,15 +61,18 @@ chcommand:
 	DetonateWeaponPower@ArtilleryBarrage:
 		OrderName: chartillerybarrage
 		PauseOnCondition: disabled || empdisable || being-warped || lowpower
-		Prerequisites: structures.china
+		Prerequisites:
+			1: structures.china
 		Icon: chartybarr3
 		IconPalette: chrometd
 		Cursor: attackmove
 		ChargeInterval: 6000
 		ActivationDelay: 50
-		Description: Artillery Barrage
+		Descriptions:
+			1: Artillery Barrage
 		LongDesc: Off-map guns fire at the target.\nApplies heavy damage over a large area.
-		Weapon: CHBarrageSpawner3
+		Weapons:
+			1: CHBarrageSpawner3
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		DisplayRadarPing: True
@@ -528,15 +531,18 @@ chpropaganda:
 		VoiceSet: CHPropagandaCenterVoice
 	AirstrikePower@carpet:
 		OrderName: chcarpetbombing
-		Icon: chcarpet
+		Icons:
+			1: chcarpet
 		IconPalette: chrometd
 		ChargeInterval: 6000
-		Description: Carpet Bombing
+		Description:
+			1: Carpet Bombing
 		LongDesc: A bomber strikes targets along a line.
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
-		UnitType: usabomber.carpet
+		UnitTypes:
+			1: usabomber.carpet
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPoster: airstrike
@@ -549,17 +555,21 @@ chpropaganda:
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 40
 		PauseOnCondition: disabled || empdisable || being-warped || lowpower
-		Prerequisites: structures.chinatnk, radar
+		Prerequisites:
+			1: structures.chinatnk, radar
 	AirstrikePower@nuke:
 		OrderName: chnukebombing
-		Icon: abombair
+		Icon:
+			1: abombair
 		ChargeInterval: 10500
-		Description: Nuke Bomb
+		Descriptions:
+			1: Nuke Bomb
 		LongDesc: A bomber drops a tactical nuke.
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
-		UnitType: usabomber.nuke
+		UnitTypes:
+			1: usabomber.nuke
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPoster: nukeicon
@@ -751,13 +761,18 @@ chsilo:
 	DetectCloaked:
 		Range: 5c0
 		RequiresCondition: !lowpower
-	NukePower:
+	NukePowerCA:
 		PauseOnCondition: disabled || empdisable || being-warped
+		Prerequisites:
+			1: ~techlevel.superw
 		Cursor: nuke
-		Icon: abomb
+		Icons:
+			1: abomb
 		ChargeInterval: 13500
-		Name: Atom Bomb
-		Description: Launches a devastating atomic bomb\nat a target location.
+		Names:
+			1: Atom Bomb
+		Descriptions:
+			1: Launches a devastating atomic bomb\nat a target location.
 		BeginChargeSpeechNotification: AbombPrepping
 		EndChargeSpeechNotification: AbombReady
 		SelectTargetSpeechNotification: SelectTarget
@@ -765,18 +780,22 @@ chsilo:
 		IncomingSound: nukelaunch.aud
 		IncomingSpeechNotification: AbombLaunchDetected
 		LaunchSound: nukelaunch.aud
-		MissileWeapon: atomic
+		MissileWeapons:
+			1: atomic
 		MissileDelay: 5
 		SpawnOffset: 1c0,427,0
 		DisplayTimerStances: Ally, Neutral, Enemy
 		DisplayBeacon: True
 		DisplayRadarPing: True
-		BeaconPoster: atomicon
+		BeaconPosters:
+			1: atomicon
 		FlashType: Nuke
 		CameraRange: 10c0
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
+		CircleRanges:
+			1: 10000
 		TrailImage: smokey2
 		TrailSequences: idle
 		TrailPalette: tseffect-ignore-lighting-alpha75
@@ -809,7 +828,7 @@ chsilo:
 	ProvidesPrerequisite@buildingname:
 	Voiced:
 		VoiceSet: CHMissileSiloVoice
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: CHAtomicWeapon
 		EmptyWeapon: CHAtomicWeapon
 
@@ -880,11 +899,14 @@ chairport:
 		PauseOnCondition: lowpower
 		Prerequisites: vehicles.chinatnk
 		OrderName: tankdrop
-		Icon: airdropicon
+		Icons:
+			1: airdropicon
 		ChargeInterval: 5000
-		Description: Tank Drop
+		Descriptions:
+			1: Tank Drop
 		LongDesc: Cargo planes drop Battlemaster tanks\nanywhere on the map.
-		DropItems: chbattle, chbattle, chbattle
+		DropItems:
+			1: chbattle, chbattle, chbattle
 		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
 		IncomingSpeechNotification: EnemyUnitsApproaching
 		SelectTargetSpeechNotification: SelectTarget
@@ -895,8 +917,10 @@ chairport:
 		BeaconPoster: pinficon
 		ArrowSequence: arrow
 		ClockSequence: clock
-		UnitType: usabomber
-		SquadSize: 1
+		UnitTypes:
+			1: usabomber
+		SquadSizes:
+			1: 1
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
@@ -904,11 +928,14 @@ chairport:
 		PauseOnCondition: lowpower
 		Prerequisites: infantry.chinainf
 		OrderName: minigunnerdrop
-		Icon: paradropicon
+		Icons:
+			1: paradropicon
 		ChargeInterval: 5000
-		Description: Infantry Paradrop
+		Descriptions:
+			1: Infantry Paradrop
 		LongDesc: Cargo planes drop 15 minigunners\nanywhere on the map.
-		DropItems: minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner
+		DropItems:
+			1: minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner
 		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
 		IncomingSpeechNotification: EnemyUnitsApproaching
@@ -919,8 +946,10 @@ chairport:
 		BeaconPoster: pinficon
 		ArrowSequence: arrow
 		ClockSequence: clock
-		UnitType: usabomber
-		SquadSize: 3
+		UnitTypes:
+			1: usabomber
+		SquadSizes:
+			1: 3
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection

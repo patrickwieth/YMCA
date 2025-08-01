@@ -1,32 +1,40 @@
-#region Copyright & License Information
+﻿#region Copyright & License Information
 /*
- * Copyright 2007-2020 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+ * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
+ * This file is a part of a third-party plugin for OpenRA, which is
+ * free software. It is made available to you under the terms of the
+ * GNU General Public License as published by the Free Software
+ * Foundation. For more information, see COPYING.
  */
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
+	[TraitLocation(SystemActors.Player)]
 	[Desc("Manages AI capturing logic.")]
 	public class CaptureManagerBotModuleCAInfo : ConditionalTraitInfo
 	{
-		[Desc("Actor types that can capture other actors (via `Captures`).",
-			"Leave this empty to disable capturing.")]
-		public readonly HashSet<string> CapturingActorTypes = new HashSet<string>();
+		[FieldLoader.Require]
+		[Desc("Actor types that can capture other actors (via `Captures`).")]
+		public readonly HashSet<string> CapturingActorTypes = new();
+
+		[Desc("Percentage chance of trying a priority capture.")]
+		public readonly int PriorityCaptureChance = 75;
+
+		[Desc("Actor types that should be priorizited to be captured.",
+			"Leave this empty to include all actors.")]
+		public readonly HashSet<string> PriorityCapturableActorTypes = new();
 
 		[Desc("Actor types that can be targeted for capturing.",
 			"Leave this empty to include all actors.")]
-		public readonly HashSet<string> CapturableActorTypes = new HashSet<string>();
+		public readonly HashSet<string> CapturableActorTypes = new();
 
 		[Desc("Avoid enemy actors nearby when searching for capture opportunities. Should be somewhere near the max weapon range.")]
 		public readonly WDist EnemyAvoidanceRadius = WDist.FromCells(8);
@@ -42,23 +50,20 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly bool CheckCaptureTargetsForVisibility = true;
 
 		[Desc("Player stances that capturers should attempt to target.")]
-		public readonly PlayerRelationship CapturableStances = PlayerRelationship.Enemy | PlayerRelationship.Neutral;
+		public readonly PlayerRelationship CapturableRelationships = PlayerRelationship.Enemy | PlayerRelationship.Neutral;
 
 		public override object Create(ActorInitializer init) { return new CaptureManagerBotModuleCA(init.Self, this); }
 	}
 
-	public class CaptureManagerBotModuleCA : ConditionalTrait<CaptureManagerBotModuleCAInfo>, IBotTick
+	public class CaptureManagerBotModuleCA : ConditionalTrait<CaptureManagerBotModuleCAInfo>, IBotTick, IBotPositionsUpdated, IGameSaveTraitData
 	{
 		readonly World world;
 		readonly Player player;
-		readonly Predicate<Actor> unitCannotBeOrderedOrIsIdle;
+		readonly Func<Actor, bool> isEnemyUnit;
 		readonly int maximumCaptureTargetOptions;
 
-		// Units that the bot already knows about and has given a capture order. Any unit not on this list needs to be given a new order.
-		readonly List<Actor> activeCapturers = new List<Actor>();
-
 		int minCaptureDelayTicks;
-		IPathFinder pathfinder;
+		CPos initialBaseCenter;
 
 		public CaptureManagerBotModuleCA(Actor self, CaptureManagerBotModuleCAInfo info)
 			: base(info)
@@ -69,17 +74,25 @@ namespace OpenRA.Mods.CA.Traits
 			if (world.Type == WorldType.Editor)
 				return;
 
-			unitCannotBeOrderedOrIsIdle = a => a.Owner != player || a.IsDead || !a.IsInWorld || a.IsIdle;
+			isEnemyUnit = unit =>
+				player.RelationshipWith(unit.Owner) == PlayerRelationship.Enemy
+					&& !unit.Info.HasTraitInfo<HuskInfo>()
+					&& unit.Info.HasTraitInfo<ITargetableInfo>();
 
 			maximumCaptureTargetOptions = Math.Max(1, Info.MaximumCaptureTargetOptions);
 		}
 
+		void IBotPositionsUpdated.UpdatedBaseCenter(CPos newLocation)
+		{
+			initialBaseCenter = newLocation;
+		}
+
+		void IBotPositionsUpdated.UpdatedDefenseCenter(CPos newLocation) { }
+
 		protected override void TraitEnabled(Actor self)
 		{
 			// Avoid all AIs reevaluating assignments on the same tick, randomize their initial evaluation delay.
-			minCaptureDelayTicks = world.LocalRandom.Next(0, Info.MinimumCaptureDelay);
-
-			pathfinder = world.WorldActor.Trait<IPathFinder>();
+			minCaptureDelayTicks = world.LocalRandom.Next(Info.MinimumCaptureDelay);
 		}
 
 		void IBotTick.BotTick(IBot bot)
@@ -89,6 +102,11 @@ namespace OpenRA.Mods.CA.Traits
 				minCaptureDelayTicks = Info.MinimumCaptureDelay;
 				QueueCaptureOrders(bot);
 			}
+		}
+
+		internal Actor FindClosestEnemy(WPos pos)
+		{
+			return world.Actors.Where(isEnemyUnit).ClosestToIgnoringPath(pos);
 		}
 
 		IEnumerable<Actor> GetVisibleActorsBelongingToPlayer(Player owner)
@@ -107,29 +125,69 @@ namespace OpenRA.Mods.CA.Traits
 
 		void QueueCaptureOrders(IBot bot)
 		{
-			if (Info.CapturingActorTypes.Count == 0 || player.WinState != WinState.Undefined)
+			if (player.WinState != WinState.Undefined)
 				return;
 
-			activeCapturers.RemoveAll(unitCannotBeOrderedOrIsIdle);
+			var newUnits = world.ActorsHavingTrait<Captures>()
+				.Where(a => a.Owner == player && !a.IsDead && a.IsInWorld);
 
-			var newUnits = world.ActorsHavingTrait<IPositionable>()
-				.Where(a => a.Owner == player && !activeCapturers.Contains(a));
+			if (!newUnits.Any())
+				return;
 
 			var capturers = newUnits
-				.Where(a => a.IsIdle && Info.CapturingActorTypes.Contains(a.Info.Name) && a.Info.HasTraitInfo<CapturesInfo>())
+				.Where(a => a.IsIdle && Info.CapturingActorTypes.Contains(a.Info.Name))
 				.Select(a => new TraitPair<CaptureManager>(a, a.TraitOrDefault<CaptureManager>()))
-				.Where(tp => tp.Trait != null)
-				.ToArray();
+				.Where(tp => tp.Trait != null);
 
-			if (capturers.Length == 0)
+			if (!capturers.Any())
 				return;
 
-			var randomPlayer = world.Players.Where(p => !p.Spectating
-				&& Info.CapturableStances.HasRelationship(player.RelationshipWith(p))).Random(world.LocalRandom);
+			var baseCenter = world.Map.CenterOfCell(initialBaseCenter);
+
+			if (world.LocalRandom.Next(100) < Info.PriorityCaptureChance)
+			{
+				var priorityTargets = world.Actors.Where(a =>
+					!a.IsDead && a.IsInWorld && Info.CapturableRelationships.HasRelationship(player.RelationshipWith(a.Owner))
+					&& Info.PriorityCapturableActorTypes.Contains(a.Info.Name.ToLowerInvariant()));
+
+				if (Info.CheckCaptureTargetsForVisibility)
+					priorityTargets = priorityTargets.Where(a => a.CanBeViewedByPlayer(player));
+
+				if (priorityTargets.Any())
+				{
+					priorityTargets = priorityTargets.OrderBy(a => (a.CenterPosition - baseCenter).LengthSquared);
+
+					var priorityCaptures = Math.Min(capturers.Count(), priorityTargets.Count());
+
+					for (var i = 0; i < priorityCaptures; i++)
+					{
+						var capturer = capturers.First();
+						var priorityTarget = priorityTargets.First();
+
+						var captureManager = priorityTarget.TraitOrDefault<CaptureManager>();
+						if (captureManager != null && capturer.Trait.CanTarget(captureManager) && SafePath(capturer.Actor, priorityTarget).Type != TargetType.Invalid)
+						{
+							bot.QueueOrder(new Order("CaptureActor", capturer.Actor, Target.FromActor(priorityTarget), true));
+							AIUtils.BotDebug("AI ({0}): Ordered {1} {2} to capture {3} {4} in priority mode.",
+								player.ClientIndex, capturer.Actor, capturer.Actor.ActorID, priorityTarget, priorityTarget.ActorID);
+
+							capturers = capturers.Skip(1);
+						}
+
+						priorityTargets = priorityTargets.Skip(1);
+					}
+				}
+
+				if (!capturers.Any())
+					return;
+			}
+
+			var randPlayer = world.Players.Where(p => !p.Spectating
+				&& Info.CapturableRelationships.HasRelationship(player.RelationshipWith(p))).Random(world.LocalRandom);
 
 			var targetOptions = Info.CheckCaptureTargetsForVisibility
-				? GetVisibleActorsBelongingToPlayer(randomPlayer)
-				: GetActorsThatCanBeOrderedByPlayer(randomPlayer);
+				? GetVisibleActorsBelongingToPlayer(randPlayer)
+				: GetActorsThatCanBeOrderedByPlayer(randPlayer);
 
 			var capturableTargetOptions = targetOptions
 				.Where(target =>
@@ -138,7 +196,7 @@ namespace OpenRA.Mods.CA.Traits
 					if (captureManager == null)
 						return false;
 
-					return capturers.Any(tp => captureManager.CanBeTargetedBy(target, tp.Actor, tp.Trait));
+					return capturers.Any(tp => tp.Trait.CanTarget(captureManager));
 				})
 				.OrderByDescending(target => target.GetSellValue())
 				.Take(maximumCaptureTargetOptions);
@@ -151,20 +209,13 @@ namespace OpenRA.Mods.CA.Traits
 
 			foreach (var capturer in capturers)
 			{
-				var nearestTargetActors = capturableTargetOptions.OrderBy(target => (target.CenterPosition - capturer.Actor.CenterPosition).LengthSquared);
-				foreach (var nearestTargetActor in nearestTargetActors)
-				{
-					if (activeCapturers.Contains(capturer.Actor))
-						continue;
+				var targetActor = capturableTargetOptions.MinByOrDefault(target => (target.CenterPosition - capturer.Actor.CenterPosition).LengthSquared);
+				if (targetActor == null || SafePath(capturer.Actor, targetActor).Type == TargetType.Invalid)
+					continue;
 
-					var safeTarget = SafePath(capturer.Actor, nearestTargetActor);
-					if (safeTarget.Type == TargetType.Invalid)
-						continue;
-
-					bot.QueueOrder(new Order("CaptureActor", capturer.Actor, safeTarget, true));
-					AIUtils.BotDebug("AI ({0}): Ordered {1} to capture {2}", player.ClientIndex, capturer.Actor, nearestTargetActor);
-					activeCapturers.Add(capturer.Actor);
-				}
+				bot.QueueOrder(new Order("CaptureActor", capturer.Actor, Target.FromActor(targetActor), true));
+				AIUtils.BotDebug("AI ({0}): Ordered {1} {2} to capture {3} {4}.",
+					player.ClientIndex, capturer.Actor, capturer.Actor.ActorID, targetActor, targetActor.ActorID);
 			}
 		}
 
@@ -186,6 +237,28 @@ namespace OpenRA.Mods.CA.Traits
 				return Target.Invalid;
 
 			return Target.FromActor(target);
+		}
+
+		List<MiniYamlNode> IGameSaveTraitData.IssueTraitData(Actor self)
+		{
+			if (IsTraitDisabled)
+				return null;
+
+			return new List<MiniYamlNode>()
+			{
+				new("InitialBaseCenter", FieldSaver.FormatValue(initialBaseCenter))
+			};
+		}
+
+		void IGameSaveTraitData.ResolveTraitData(Actor self, MiniYaml data)
+		{
+			if (self.World.IsReplay)
+				return;
+
+			var nodes = data.ToDictionary();
+
+			if (nodes.TryGetValue("InitialBaseCenter", out var initialBaseCenterNode))
+				initialBaseCenter = FieldLoader.GetValue<CPos>("InitialBaseCenter", initialBaseCenterNode.Value);
 		}
 	}
 }

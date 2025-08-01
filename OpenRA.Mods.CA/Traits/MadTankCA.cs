@@ -1,11 +1,10 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2020 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -22,7 +21,7 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	class MadTankCAInfo : PausableConditionalTraitInfo, IRulesetLoaded, Requires<ExplodesInfo>, Requires<WithFacingSpriteBodyInfo>
+	class MadTankCAInfo : PausableConditionalTraitInfo, IRulesetLoaded, Requires<FireWarheadsOnDeathInfo>, Requires<WithFacingSpriteBodyInfo>
 	{
 		[SequenceReference]
 		public readonly string ThumpSequence = null;
@@ -60,6 +59,10 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("The condition to grant to self while deployed.")]
 		public readonly string DeployedCondition = null;
 
+		public readonly string DeployType = null;
+
+		public readonly bool ExclusiveDeploy = false;
+
 		public WeaponInfo ThumpDamageWeaponInfo { get; private set; }
 
 		public WeaponInfo DetonationWeaponInfo { get; private set; }
@@ -81,7 +84,7 @@ namespace OpenRA.Mods.CA.Traits
 			{
 				var thumpDamageWeaponToLower = ThumpDamageWeapon.ToLowerInvariant();
 				if (!rules.Weapons.TryGetValue(thumpDamageWeaponToLower, out var thumpDamageWeapon))
-					throw new YamlException("Weapons Ruleset does not contain an entry '{0}'".F(thumpDamageWeaponToLower));
+					throw new YamlException("Weapons Ruleset does not contain an entry '{thumpDamageWeaponToLower}'");
 
 				ThumpDamageWeaponInfo = thumpDamageWeapon;
 			}
@@ -90,7 +93,7 @@ namespace OpenRA.Mods.CA.Traits
 			{
 				var detonationWeaponToLower = DetonationWeapon.ToLowerInvariant();
 				if (!rules.Weapons.TryGetValue(detonationWeaponToLower, out var detonationWeapon))
-					throw new YamlException("Weapons Ruleset does not contain an entry '{0}'".F(detonationWeaponToLower));
+					throw new YamlException("Weapons Ruleset does not contain an entry '{detonationWeaponToLower}'");
 
 				DetonationWeaponInfo = detonationWeapon;
 			}
@@ -131,7 +134,26 @@ namespace OpenRA.Mods.CA.Traits
 			return new Order("Detonate", self, queued);
 		}
 
-		bool IIssueDeployOrder.CanIssueDeployOrder(Actor self, bool queued) { return !(self.CurrentActivity is DetonationSequence); }
+		bool IIssueDeployOrder.CanIssueDeployOrder(Actor self, bool queued) { return !(self.CurrentActivity is DetonationSequence) && IsGroupDeployNeeded(self); }
+
+		bool IsGroupDeployNeeded(Actor self)
+		{
+			if (!Info.ExclusiveDeploy)
+				return true;
+
+			var actors = self.World.Selection.Actors;
+
+			foreach (var a in actors)
+			{
+				MadTankCA madTank = null;
+				if (!a.IsDead && a.IsInWorld)
+					madTank = a.TraitOrDefault<MadTankCA>();
+
+				if (madTank == null || madTank.Info.DeployType != Info.DeployType) return false;
+			}
+
+			return true;
+		}
 
 		string IOrderVoice.VoicePhraseForOrder(Actor self, Order order)
 		{
@@ -152,7 +174,7 @@ namespace OpenRA.Mods.CA.Traits
 				self.QueueActivity(order.Queued, new DetonationSequence(self, this));
 		}
 
-		class DetonationSequence : Activity
+		public class DetonationSequence : Activity
 		{
 			readonly Actor self;
 			readonly MadTankCA mad;
@@ -258,7 +280,7 @@ namespace OpenRA.Mods.CA.Traits
 							SourceActor = self,
 							WeaponTarget = target,
 							DamageModifiers = self.TraitsImplementing<IFirepowerModifier>()
-								.Select(a => a.GetFirepowerModifier()).ToArray()
+								.Select(a => a.GetFirepowerModifier(null)).ToArray()
 						};
 
 						// Use .FromPos since this actor is killed. Cannot use Target.FromActor
@@ -290,7 +312,7 @@ namespace OpenRA.Mods.CA.Traits
 					new LocationInit(self.Location),
 					new OwnerInit(self.Owner)
 				});
-				driver.TraitOrDefault<Mobile>()?.Nudge(driver);
+				driver.QueueActivity(new Nudge(driver));
 			}
 		}
 	}

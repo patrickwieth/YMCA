@@ -1,11 +1,10 @@
 ﻿#region Copyright & License Information
-/*
- * Copyright 2007-2019 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -21,7 +20,7 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	class ChargingSelfDestructInfo : TraitInfo, IRulesetLoaded, Requires<ExplodesInfo>, Requires<WithFacingSpriteBodyInfo>
+	class ChargingSelfDestructInfo : TraitInfo, IRulesetLoaded, Requires<FireWarheadsOnDeathInfo>, Requires<WithFacingSpriteBodyInfo>
 	{
 		[SequenceReference]
 		public readonly string ChargingSequence = "charging";
@@ -69,10 +68,10 @@ namespace OpenRA.Mods.CA.Traits
 			var detonationWeaponToLower = (DetonationWeapon ?? string.Empty).ToLowerInvariant();
 
 			if (!rules.Weapons.TryGetValue(thumpDamageWeaponToLower, out var thumpDamageWeapon))
-				throw new YamlException("Weapons Ruleset does not contain an entry '{0}'".F(thumpDamageWeaponToLower));
+				throw new YamlException("Weapons Ruleset does not contain an entry '{thumpDamageWeaponToLower}'");
 
 			if (!rules.Weapons.TryGetValue(detonationWeaponToLower, out var detonationWeapon))
-				throw new YamlException("Weapons Ruleset does not contain an entry '{0}'".F(detonationWeaponToLower));
+				throw new YamlException("Weapons Ruleset does not contain an entry '{detonationWeaponToLower}'");
 
 			ThumpDamageWeaponInfo = thumpDamageWeapon;
 			DetonationWeaponInfo = detonationWeapon;

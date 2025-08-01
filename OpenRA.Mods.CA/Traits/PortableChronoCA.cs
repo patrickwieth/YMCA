@@ -1,11 +1,10 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2021 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -21,7 +20,7 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	[Desc("CA version makes trait conditional and allows for a condition applied upon teleporting.")]
+	[Desc("CA version makes trait conditional and allows for a condition applied upon teleporting, and allows use of ammo pool for multiple charges.")]
 	class PortableChronoCAInfo : PausableConditionalTraitInfo, Requires<IMoveInfo>
 	{
 		[Desc("Cooldown in ticks until the unit can teleport.")]
@@ -83,10 +82,31 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Color to use for the target line.")]
 		public readonly Color TargetLineColor = Color.LawnGreen;
 
+		[Desc("Number of charges.")]
+		public readonly int Charges = 1;
+
+		[Desc("If true, gain max charges after recharging.")]
+		public readonly bool RechargeToMax = false;
+
+		[Desc("If true recharge will reset any ongoing recharge on teleport.")]
+		public readonly bool ResetRechargeOnUse = true;
+
+		[Desc("Cooldown between jumps (irrespective of charge).")]
+		public readonly int Cooldown = 0;
+
+		[Desc("Should parasites be removed?")]
+		public readonly bool ExposeInfectors = true;
+
+		public readonly bool ShowSelectionBar = true;
+		public readonly bool ShowSelectionBarWhenFull = true;
+
+		[Desc("Selection bar color.")]
+		public readonly Color SelectionBarColor = Color.Magenta;
+
 		public override object Create(ActorInitializer init) { return new PortableChronoCA(init.Self, this); }
 	}
 
-	class PortableChronoCA : PausableConditionalTrait<PortableChronoCAInfo>, IIssueOrder, IResolveOrder, ITick, ISelectionBar, IOrderVoice, ISync
+	class PortableChronoCA : PausableConditionalTrait<PortableChronoCAInfo>, IIssueOrder, IResolveOrder, ITick, ISelectionBar, IOrderVoice, ISync, IIssueDeployOrder
 	{
 		public readonly new PortableChronoCAInfo Info;
 		readonly IMove move;
@@ -96,12 +116,15 @@ namespace OpenRA.Mods.CA.Traits
 
 		[Sync]
 		int conditionTicks = 0;
+		int cooldownTicks = 0;
 
 		int token = Actor.InvalidConditionToken;
 		IPortableChronoModifier[] modifiers;
 
 		public int ChargeDelay { get; private set; }
 		public int MaxDistance { get; private set; }
+		public int MaxCharges { get; private set; }
+		public int Charges { get; private set; }
 
 		public PortableChronoCA(Actor self, PortableChronoCAInfo info)
 			: base(info)
@@ -110,6 +133,8 @@ namespace OpenRA.Mods.CA.Traits
 			move = self.Trait<IMove>();
 			ChargeDelay = Info.ChargeDelay;
 			MaxDistance = Info.MaxDistance;
+			MaxCharges = Info.Charges;
+			Charges = Info.Charges;
 		}
 
 		protected override void Created(Actor self)
@@ -122,12 +147,45 @@ namespace OpenRA.Mods.CA.Traits
 			if (IsTraitDisabled || IsTraitPaused)
 				return;
 
+			if (cooldownTicks > 0)
+				cooldownTicks--;
+
 			if (chargeTick > 0)
+			{
 				chargeTick--;
+
+				if (chargeTick == 0)
+				{
+					if (Info.RechargeToMax)
+					{
+						Charges = MaxCharges;
+					}
+					else
+					{
+						if (Charges < MaxCharges)
+							Charges++;
+
+						if (Charges < MaxCharges)
+							ResetChargeTime();
+					}
+				}
+			}
 
 			if (--conditionTicks < 0 && token != Actor.InvalidConditionToken)
 				token = self.RevokeCondition(token);
 		}
+
+		Order IIssueDeployOrder.IssueDeployOrder(Actor self, bool queued)
+		{
+			// HACK: Switch the global order generator instead of actually issuing an order
+			if (CanTeleport)
+				self.World.OrderGenerator = new PortableChronoOrderGenerator(self, this);
+
+			// HACK: We need to issue a fake order to stop the game complaining about the bodge above
+			return new Order("PortableChronoDeploy", self, Target.Invalid, queued);
+		}
+
+		bool IIssueDeployOrder.CanIssueDeployOrder(Actor self, bool queued) { return !IsTraitPaused && !IsTraitDisabled; }
 
 		public IEnumerable<IOrderTargeter> Orders
 		{
@@ -172,6 +230,10 @@ namespace OpenRA.Mods.CA.Traits
 				if (maxDistance != null)
 					self.QueueActivity(move.MoveWithinRange(order.Target, WDist.FromCells(maxDistance.Value), targetLineColor: Info.TargetLineColor));
 
+				if (Info.ExposeInfectors)
+					foreach (var i in self.TraitsImplementing<IRemoveInfector>())
+						i.RemoveInfector(self, false);
+
 				self.QueueActivity(new TeleportCA(self, cell, maxDistance, Info.KillCargo, Info.FlashScreen, Info.ChronoshiftSound));
 				self.QueueActivity(move.MoveTo(cell, 5, targetLineColor: Info.TargetLineColor));
 				self.ShowTargetLines();
@@ -195,6 +257,16 @@ namespace OpenRA.Mods.CA.Traits
 			}
 		}
 
+		public void ConsumeCharge()
+		{
+			cooldownTicks = Info.Cooldown;
+
+			Charges--;
+
+			if (Info.ResetRechargeOnUse || chargeTick == 0)
+				ResetChargeTime();
+		}
+
 		public void ResetChargeTime()
 		{
 			chargeTick = ChargeDelay;
@@ -206,24 +278,40 @@ namespace OpenRA.Mods.CA.Traits
 			var chargePerc = Info.ChargeDelay > 0 ? (float)chargeTick / ChargeDelay : 1;
 			ChargeDelay = OpenRA.Mods.Common.Util.ApplyPercentageModifiers(Info.ChargeDelay, modifiers.Select(m => m.GetCooldownModifier()));
 			chargeTick = chargeTick > 0 ? (int)(ChargeDelay * chargePerc) : 0;
+			var prevMaxCharges = MaxCharges;
+			MaxCharges = Info.Charges + modifiers.Sum(m => m.GetExtraCharges());
+
+			if (prevMaxCharges < MaxCharges)
+				Charges += MaxCharges - prevMaxCharges;
+
+			if (Charges < MaxCharges && chargeTick == 0)
+				ResetChargeTime();
+			else if (Charges > MaxCharges)
+				Charges = MaxCharges;
 		}
 
-		public bool CanTeleport => !IsTraitDisabled && !IsTraitPaused && chargeTick <= 0;
+		public bool CanTeleport => !IsTraitDisabled && !IsTraitPaused && Charges > 0 && cooldownTicks == 0;
 
 		float ISelectionBar.GetValue()
 		{
-			if (IsTraitDisabled)
+			if (!Info.ShowSelectionBar || IsTraitDisabled || chargeTick == ChargeDelay)
+				return 0f;
+
+			if (!Info.ShowSelectionBarWhenFull && chargeTick == 0)
 				return 0f;
 
 			return (float)(ChargeDelay - chargeTick) / ChargeDelay;
 		}
 
-		Color ISelectionBar.GetColor() { return Color.Magenta; }
+		Color ISelectionBar.GetColor() { return Info.SelectionBarColor; }
 		bool ISelectionBar.DisplayWhenEmpty => false;
 
 		protected override void TraitDisabled(Actor self)
 		{
 			chargeTick = 0;
+
+			if (token != Actor.InvalidConditionToken)
+				token = self.RevokeCondition(token);
 		}
 	}
 
@@ -267,17 +355,22 @@ namespace OpenRA.Mods.CA.Traits
 		readonly Actor self;
 		readonly PortableChronoCA portableChrono;
 		readonly PortableChronoCAInfo info;
+		readonly IEnumerable<TraitPair<PortableChronoCA>> selectedWithAbility;
 
 		public PortableChronoOrderGenerator(Actor self, PortableChronoCA portableChrono)
 		{
 			this.self = self;
 			this.portableChrono = portableChrono;
 			info = portableChrono.Info;
+
+			selectedWithAbility = self.World.Selection.Actors
+				.Where(a => a.Info.HasTraitInfo<PortableChronoCAInfo>() && a != self && a.Owner == self.Owner && !a.IsDead)
+				.Select(a => new TraitPair<PortableChronoCA>(a, a.Trait<PortableChronoCA>()));
 		}
 
 		protected override IEnumerable<Order> OrderInner(World world, CPos cell, int2 worldPixel, MouseInput mi)
 		{
-			if (mi.Button == Game.Settings.Game.MouseButtonPreference.Cancel)
+			if (mi.Button == MouseButton.Right)
 			{
 				world.CancelInputMode();
 				yield break;
@@ -287,7 +380,16 @@ namespace OpenRA.Mods.CA.Traits
 				&& self.Trait<PortableChronoCA>().CanTeleport && self.Owner.Shroud.IsExplored(cell))
 			{
 				world.CancelInputMode();
-				yield return new Order("PortableChronoTeleport", self, Target.FromCell(world, cell), mi.Modifiers.HasModifier(Modifiers.Shift));
+				var targetCell = Target.FromCell(world, cell);
+				yield return new Order("PortableChronoTeleport", self, targetCell, mi.Modifiers.HasModifier(Modifiers.Shift));
+
+				foreach (var other in selectedWithAbility)
+				{
+					if (other.Actor.IsInWorld && other.Trait.CanTeleport && other.Actor.Owner == self.Owner)
+					{
+						yield return new Order("PortableChronoTeleport", other.Actor, targetCell, mi.Modifiers.HasModifier(Modifiers.Shift));
+					}
+				}
 			}
 		}
 
@@ -326,6 +428,21 @@ namespace OpenRA.Mods.CA.Traits
 				info.CircleWidth,
 				info.CircleBorderColor,
 				info.CircleBorderWidth);
+
+			foreach (var other in selectedWithAbility)
+			{
+				if (other.Actor.IsInWorld && other.Trait.Info.HasDistanceLimit && other.Trait.CanTeleport && self.Owner == self.World.LocalPlayer)
+				{
+					yield return new RangeCircleAnnotationRenderable(
+						other.Actor.CenterPosition + new WVec(0, other.Actor.CenterPosition.Z, 0),
+						WDist.FromCells(other.Trait.Info.MaxDistance),
+						0,
+						other.Trait.Info.CircleColor,
+						other.Trait.Info.CircleWidth,
+						other.Trait.Info.CircleBorderColor,
+						other.Trait.Info.CircleBorderWidth);
+				}
+			}
 		}
 
 		protected override string GetCursor(World world, CPos cell, int2 worldPixel, MouseInput mi)

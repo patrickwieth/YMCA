@@ -1,17 +1,17 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2020 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenRA.Activities;
 using OpenRA.Mods.Common.Activities;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Traits;
@@ -24,7 +24,7 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 		{
 			var loc = RandomBuildingLocation(squad);
 			foreach (var a in squad.Units)
-				squad.Bot.QueueOrder(new Order("Move", a, Target.FromCell(squad.World, loc), false));
+				squad.Bot.QueueOrder(new Order("Move", a.Actor, Target.FromCell(squad.World, loc), false));
 		}
 
 		protected static CPos RandomBuildingLocation(SquadCA squad)
@@ -59,9 +59,54 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 			return false;
 		}
 
+		protected static (bool IsFiring, bool TryAttacking) IsAttackingAndTryAttack(Actor a)
+		{
+			if (a.IsIdle)
+				return (false, false);
+
+			var isFiring = false;
+			var tryAttacking = false;
+			var activity = a.CurrentActivity;
+			var type = activity.ActivityType;
+
+			var arms = a.TraitsImplementing<Armament>();
+			var isValid = false;
+			foreach (var arm in arms)
+			{
+				if (arm.IsTraitDisabled)
+					continue;
+
+				if ((arm.Info.TargetRelationships & PlayerRelationship.Enemy) != 0)
+				{
+					isValid = true;
+					break;
+				}
+			}
+
+			if (!isValid)
+				return (false, false);
+
+			if (type == ActivityType.Attack)
+			{
+				tryAttacking = true;
+
+				var childActivity = activity.ChildActivity;
+				if (childActivity == null)
+					isFiring = true;
+				else
+				{
+					var childType = childActivity.ActivityType;
+					if (childType != ActivityType.Move)
+						isFiring = true;
+				}
+			}
+
+			return (isFiring, tryAttacking);
+		}
+
 		protected static bool CanAttackTarget(Actor a, Actor target)
 		{
-			if (!a.Info.HasTraitInfo<AttackBaseInfo>())
+			if (a.IsDead || !a.Info.HasTraitInfo<AttackBaseInfo>())
 				return false;
 
 			var targetTypes = target.GetEnabledTargetTypes();
@@ -88,7 +133,7 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 
 			var randomSquadUnit = squad.Units.Random(squad.Random);
 			var dangerRadius = squad.SquadManager.Info.DangerScanRadius;
-			var units = squad.World.FindActorsInCircle(randomSquadUnit.CenterPosition, WDist.FromCells(dangerRadius)).ToList();
+			var units = squad.World.FindActorsInCircle(randomSquadUnit.Actor.CenterPosition, WDist.FromCells(dangerRadius)).ToList();
 
 			// If there are any own buildings within the DangerRadius, don't flee
 			// PERF: Avoid LINQ
@@ -101,6 +146,33 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 				return false;
 
 			return flee(enemyAroundUnit);
+		}
+
+		protected virtual bool ShouldFleeSimple(SquadCA squad)
+		{
+			if (!squad.IsValid)
+				return false;
+
+			var squadUnit = squad.Units[0].Actor;
+			var dangerRadius = squad.SquadManager.Info.DangerScanRadius;
+			var units = squad.World.FindActorsInCircle(squadUnit.CenterPosition, WDist.FromCells(dangerRadius)).ToList();
+
+			var enemyAroundUnit = units.Where(unit => squad.SquadManager.IsPreferredEnemyUnit(unit) && unit.Info.HasTraitInfo<AttackBaseInfo>()).ToList();
+			if (enemyAroundUnit.Count == 0)
+				return false;
+
+			var panic = (enemyAroundUnit.Count + squad.Units.Count - units.Count) * (int)DamageState.Critical;
+			foreach (var u in squad.Units)
+			{
+				var health = u.Actor.TraitOrDefault<IHealth>();
+				if (health != null)
+					panic += (int)health.DamageState;
+			}
+
+			if (panic > squad.Units.Count * (int)DamageState.Medium)
+				return true;
+
+			return false;
 		}
 
 		protected static bool IsRearming(Actor a)
@@ -154,5 +226,122 @@ namespace OpenRA.Mods.CA.Traits.BotModules.Squads
 
 			return true;
 		}
+
+		protected static void Retreat(SquadCA squad, bool flee, bool rearm, bool repair)
+		{
+			// HACK: "alreadyRepair" is to solve AI repair orders performance,
+			// which is only allow one goes to repairpad at the same time to avoid queueing too many orders.
+			// if repairpad logic is better we can just drop it.
+			var alreadyRepair = false;
+
+			var rearmingUnits = new List<Actor>();
+			var fleeingUnits = new List<Actor>();
+
+			foreach (var u in squad.Units)
+			{
+				if (IsRearming(u.Actor) || IsAttackingAndTryAttack(u.Actor).IsFiring)
+					continue;
+
+				var orderQueued = false;
+
+				// Units need to rearm will be added to rearming group.
+				if (rearm)
+				{
+					var ammoPools = u.Actor.TraitsImplementing<AmmoPool>().ToArray();
+					if (!ReloadsAutomatically(ammoPools, u.Actor.TraitOrDefault<Rearmable>()) && !FullAmmo(ammoPools))
+					{
+						rearmingUnits.Add(u.Actor);
+						orderQueued = true;
+					}
+				}
+
+				// Try repair units.
+				// Don't use grounp order here becuase we have 2 kinds of repaid orders and we need to find repair building for both traits.
+				if (repair && !alreadyRepair)
+				{
+					Actor repairBuilding = null;
+					var orderId = "Repair";
+					var health = u.Actor.TraitOrDefault<IHealth>();
+
+					if (health != null && health.DamageState > DamageState.Undamaged)
+					{
+						var repairable = u.Actor.TraitOrDefault<Repairable>();
+						if (repairable != null)
+							repairBuilding = repairable.FindRepairBuilding(u.Actor);
+						else
+						{
+							var repairableNear = u.Actor.TraitOrDefault<RepairableNear>();
+							if (repairableNear != null)
+							{
+								orderId = "RepairNear";
+								repairBuilding = repairableNear.FindRepairBuilding(u.Actor);
+							}
+						}
+
+						if (repairBuilding != null)
+						{
+							squad.Bot.QueueOrder(new Order(orderId, u.Actor, Target.FromActor(repairBuilding), orderQueued));
+							orderQueued = true;
+							alreadyRepair = true;
+						}
+					}
+				}
+
+				// If there is no order in queue and units should flee, add unit to fleeing group.
+				if (flee && !orderQueued)
+					fleeingUnits.Add(u.Actor);
+			}
+
+			if (rearmingUnits.Count > 0)
+				squad.Bot.QueueOrder(new Order("ReturnToBase", null, true, groupedActors: rearmingUnits.ToArray()));
+
+			if (fleeingUnits.Count > 0)
+				squad.Bot.QueueOrder(new Order("Move", null, Target.FromCell(squad.World, RandomBuildingLocation(squad)), false, groupedActors: fleeingUnits.ToArray()));
+		}
+
+		protected static UnitWposWrapper GetPathfindLeader(SquadCA squad, HashSet<string> locomotorTypes)
+		{
+			if (!squad.IsValid)
+				return null;
+
+			// var nonAircraft = new UnitWposWrapper(null); // HACK: Becuase Mobile is always affected by terrain, so we always select a nonAircraft as leader
+			var squadUnits = new List<Actor>();
+			foreach (var u in squad.Units)
+			{
+				var mt = u.Actor.TraitsImplementing<Mobile>().FirstOrDefault(t => !t.IsTraitDisabled && !t.IsTraitPaused);
+				if (mt != null)
+				{
+					// nonAircraft = u;
+					if (locomotorTypes.Contains(mt.Info.Locomotor))
+						squadUnits.Add(u.Actor);
+				}
+			}
+
+			// if (nonAircraft.Actor != null)
+			//	return nonAircraft;
+
+			// TODO just identify closest unit within the locomotor search
+			if (squadUnits.Count > 0)
+			{
+				return squad.TargetActor != null
+					? new UnitWposWrapper(squadUnits.ClosestToIgnoringPath(squad.TargetActor))
+					: new UnitWposWrapper(squadUnits[0]);
+			}
+
+			return squad.Units[0];
+		}
+
+		protected static bool CheckReachability(Actor sourceActor, Actor targetActor)
+		{
+			var mobile = sourceActor.TraitOrDefault<Mobile>();
+			if (mobile == null)
+				return false;
+			else
+			{
+				var locomotor = mobile.Locomotor;
+				return mobile.PathFinder.PathExistsForLocomotor(locomotor, sourceActor.Location, targetActor.Location);
+			}
+		}
+
 	}
 }

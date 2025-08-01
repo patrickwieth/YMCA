@@ -10,27 +10,27 @@ MINV:
 	GrantConditionOnFaction@Soviets:
 		Factions: russia, nkorea, iraq
 		Condition: soviet
-	Explodes@Allies:
+	FireWarheadsOnDeathCA@Allies:
 		Weapon: ATMine
 		RequiresCondition: !soviet
-	Explodes@Soviet:
+	FireWarheadsOnDeathCA@Soviet:
 		Weapon: APMine
 		RequiresCondition: soviet
 
 # Only kept for backwards-compatibility with existing and imported maps, use MINV instead
 MINP:
 	Inherits: MINV
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: APMine
 
 MINVS:
 	Inherits: ^Mine
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ATMine
 
 MINS:
 	Inherits: ^Mine
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ATMine
 
 CRATE:
@@ -63,16 +63,26 @@ CRATE:
 		MaxAmount: 5
 		MinAmount: 1
 		MaxDuplicateValue: 1500
-	GiveMcvCrateAction@RA:
+	GiveBaseBuilderCrateAction@RA:
 		SelectionShares: 0
 		NoBaseSelectionShares: 100
 		ValidFactions: allies, england, france, germany, soviet, russia, nkorea, iraq
 		Units: mcv
-	GiveMcvCrateAction@TD:
+	GiveBaseBuilderCrateAction@TD:
 		SelectionShares: 0
 		NoBaseSelectionShares: 100
 		ValidFactions: gdi, talon, zocom, eagle, nod, blackh, marked, legion
 		Units: amcv
+	GiveBaseBuilderCrateAction@Scrin:
+		SelectionShares: 0
+		NoBaseSelectionShares: 100
+		ValidFactions: scrin, reaper, traveler, harvester
+		Units: smcv
+	GiveBaseBuilderCrateAction@China:
+		SelectionShares: 0
+		NoBaseSelectionShares: 100
+		ValidFactions: chinainf, chinatnk, chinaatom
+		Units: chnmcv
 	GiveUnitCrateAction@jeep:
 		SelectionShares: 7
 		Units: jeep
@@ -270,10 +280,10 @@ camera.satscan:
 		Queue: SpySatellite
 	Tooltip:
 		Name: Satellite Scan
-	RevealsMapCA:
+	RevealsMap:
 		RevealGeneratedShroud: false
 		RequiresCondition: uplinkavailable
-		ValidRelationships: Ally
+		IncludeAllies: true
 	KillsSelf:
 		RemoveInstead: true
 		Delay: 1500
@@ -525,12 +535,18 @@ LAR2:
 powerproxy.parabombs:
 	AlwaysVisible:
 	AirstrikePower:
-		Icon: parabombs
-		Name: Parabombs (Single Use)
-		Description: A Badger drops a load of parachuted bombs on your target.
+		Icons:
+			1: parabombs
+		Names:
+			1: Parabombs (Single Use)
+		Descriptions:
+			1: A Badger drops a load of parachuted bombs on your target.
 		OneShot: true
 		AllowMultiple: true
-		UnitType: badr.bomber
+		UnitTypes:
+			1: badr.bomber
+		SquadSizes:
+			1: 1
 		EndChargeSpeechNotification: Reinforce
 		SelectTargetSpeechNotification: SelectTarget
 		IncomingSpeechNotification: EnemyPlanesApproaching
@@ -547,13 +563,17 @@ powerproxy.parabombs:
 powerproxy.sonarpulse:
 	AlwaysVisible:
 	SpawnActorPower:
-		Icon: sonar
-		Name: Sonar Pulse
-		Description: Reveals all submarines in the vicinity for a \nshort time.
+		Icons:
+			1: sonar
+		Names:
+			1: Sonar Pulse
+		Descriptions:
+			1: Reveals all submarines in the vicinity for a \nshort time.
 		ChargeInterval: 750
 		EndChargeSpeechNotification: SonarPulseReady
 		SelectTargetSpeechNotification: SelectTarget
-		Actor: sonar
+		Actors:
+			1: sonar
 		LifeTime: 250
 		DeploySound: sonpulse.aud
 		EffectImage: moveflsh
@@ -563,13 +583,19 @@ powerproxy.sonarpulse:
 powerproxy.paratroopers:
 	AlwaysVisible:
 	ParatroopersPower:
-		Icon: paratroopers
-		SquadSize: 2
+		Icons:
+			1: paratroopers
+		SquadSizes:
+			1: 2
 		Name: Paratroopers (Single Use)
-		Description: A Badger drops a squad of infantry\nanywhere on the map.
+		Descriptions:
+			1: A Badger drops a squad of infantry\nanywhere on the map.
 		OneShot: true
 		AllowMultiple: true
-		DropItems: light_infantry,light_infantry,light_infantry,rocket_infantry,rocket_infantry,light_infantry,light_infantry,light_infantry,grenadier,grenadier
+		UnitTypes:
+			1: badr
+		DropItems:
+			1: light_infantry,light_infantry,light_infantry,rocket_infantry,rocket_infantry,light_infantry,light_infantry,light_infantry,grenadier,grenadier
 		SelectTargetSpeechNotification: SelectTarget
 		EndChargeSpeechNotification: Reinforce
 		LaunchSpeechNotification: ReinforcementsArrived
@@ -586,14 +612,19 @@ powerproxy.paratroopers:
 powerproxy.paratroopers2:
 	AlwaysVisible:
 	ParatroopersPower:
-		Icon: paratroopers
-		SquadSize: 1
-		UnitType: tran.paradrop
+		Icons:
+			1: paratroopers
+		SquadSizes:
+			1: 1
+		UnitTypes:
+			1: tran.paradrop
 		Name: Paratroopers (Single Use)
-		Description: A Chinook drops a squad of infantry\nanywhere on the map.
+		Descriptions:
+			1: A Chinook drops a squad of infantry\nanywhere on the map.
 		OneShot: true
 		AllowMultiple: true
-		DropItems: light_infantry,light_infantry,sniper,rocket_infantry,rocket_infantry
+		DropItems:
+			1: light_infantry,light_infantry,sniper,rocket_infantry,rocket_infantry
 		SelectTargetSpeechNotification: SelectTarget
 		EndChargeSpeechNotification: Reinforce
 		LaunchSpeechNotification: ReinforcementsArrived
@@ -618,13 +649,17 @@ powerproxy.airborne.tank:
 	ParatroopersPower:
 		OrderName: airbornetank
 		Icon: airdropicon
-		SquadSize: 1
-		UnitType: C17
+		SquadSizes:
+			1: 1
+		UnitTypes:
+			1: C17
 		Name: Airdrop: Scout Tanks (Single Use)
-		Description: A Heavy Transport Plane drops a quad of Scout Tanks\nanywhere on the map.
+		Descriptions:
+			1: A Heavy Transport Plane drops a quad of Scout Tanks\nanywhere on the map.
 		OneShot: true
 		AllowMultiple: true
-		DropItems: 1TNK,1TNK,1TNK,1TNK
+		DropItems:
+			1: 1TNK,1TNK,1TNK,1TNK
 		SelectTargetSpeechNotification: SelectTarget
 		EndChargeSpeechNotification: Reinforce
 		LaunchSpeechNotification: ReinforcementsArrived
@@ -642,19 +677,16 @@ powerproxy.airborne.tank:
 
 powerproxy.airstrike:
 	AlwaysVisible:
-	ClassicAirstrikePower:
-		Squad:
-			a10.bomber:
-				SpawnDelay: 20
-				SpawnOffset: -1536,1024,0
-				TargetOffset: -536,0,0
-			a10.bomber:
-				SpawnDelay: 0
-				SpawnOffset: 0,0,0
-				TargetOffset: 0,0,0
+	AirstrikePower:
+		SquadSizes:
+			1: 2
+		UnitTypes:
+			1: a10.bomber
 		Icon: airstrike
-		Name: Air Strike (Single Use)
-		Description: A10 strike planes drop napalm\nbombs on your target.
+		Names:
+			1: Air Strike (Single Use)
+		Descriptions:
+			1: A10 strike planes drop napalm\nbombs on your target.
 		OneShot: true
 		AllowMultiple: true
 		EndChargeSpeechNotification: Reinforce
@@ -662,7 +694,8 @@ powerproxy.airstrike:
 		IncomingSpeechNotification: EnemyPlanesApproaching
 		QuantizedFacings: 8
 		DisplayBeacon: True
-		BeaconPoster: a10airstrike
+		BeaconPosters:
+			1: a10airstrike
 		BeaconPosterPalette: temptd
 		CameraActor: camera
 		ArrowSequence: arrow
@@ -850,7 +883,7 @@ CTFLAG:
 		HasMinibib: true
 	-HitShape:
 	-Health:
-	-Explodes:
+	-FireWarheadsOnDeathCA:
 	-Selectable:
 	Interactable:
 	-SelectionDecorations:
@@ -959,7 +992,7 @@ SHAB:
 	WithIdleAnimation:
 		Sequences: idle
 		Interval: 25
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: AttachShadowBeacon
 	GrantTimedCondition@active:
 		Condition: active
@@ -972,5 +1005,5 @@ SHAB.commando:
 	Inherits: ^Mine
 	Tooltip:
 		Name: Shadow Mine
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ATMine.Heavy

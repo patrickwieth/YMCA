@@ -7,62 +7,61 @@ Metadata:
 
 PackageFormats: Mix
 
-Packages:
-	~^SupportDir|Content/ca
-	~^SupportDir|Content/ca/expand
-	~^SupportDir|Content/ca/ra
-	~^SupportDir|Content/ca/cnc
-	~^SupportDir|Content/ca/ts
-	~^SupportDir|Content/ca/firestorm
-	~^SupportDir|Content/ca/ra2
-	~^SupportDir|Content/ca/movies
-	^EngineDir
-	^EngineDir|mods/common: common
-	$ca: ca
-	~main.mix
-	~sounds.mix
-	~speech.mix
-	~russian.mix
-	~./ra/scores.mix
-	~./cnc/scores.mix
-	~./ts/scores.mix
-	~./ts/scores01.mix
-	~./ra2/theme.mix
-	~./ra2/thememd.mix
-	~hires1.mix
-	ca|bits
-	ca|bits/desert
-	ca|bits/jungle
-	ca|bits/winter
-	ca|bits/barren
-	ca|bits/temp
-	ca|bits/int
-	ca|bits/snow
-	ca|bits/new
-	ca|bits/new/check
-	ca|bits/new/int
-	ca|bits/new/tem
-	ca|bits/new/sno
-	ca|bits/new/des
-	ca|bits/audio
-	ca|uibits
-	ca|bits/scrin
-	ca|bits/yuri
-	ca|bits/scrin/audio
-	ca|bits/newscrin
-	ca|bits/misc
-	ca|bits/misc/overlays
-	ca|bits/soviet
-	ca|bits/allies
-	ca|bits/gdi
-	ca|bits/nod
-	ca|bits/china
-	ca|bits/generals
-	ca|bits/palettes
-	ca|scripts
+FileSystem: DefaultFileSystem
+	Packages:
+		~^SupportDir|Content/ca
+		~^SupportDir|Content/ca/expand
+		~^SupportDir|Content/ca/ra
+		~^SupportDir|Content/ca/cnc
+		~^SupportDir|Content/ca/ts
+		~^SupportDir|Content/ca/firestorm
+		~^SupportDir|Content/ca/ra2
+		~^SupportDir|Content/ca/movies
+		^EngineDir
+		^EngineDir|mods/common: common
+		$ca: ca
+		~main.mix
+		~sounds.mix
+		~speech.mix
+		~russian.mix
+		~./ra/scores.mix
+		~./cnc/scores.mix
+		~./ts/scores.mix
+		~./ts/scores01.mix
+		~./ra2/theme.mix
+		~./ra2/thememd.mix
+		~hires1.mix
+		ca|bits
+		ca|bits/desert
+		ca|bits/jungle
+		ca|bits/winter
+		ca|bits/barren
+		ca|bits/temp
+		ca|bits/int
+		ca|bits/snow
+		ca|bits/new
+		ca|bits/new/check
+		ca|bits/new/int
+		ca|bits/new/tem
+		ca|bits/new/sno
+		ca|bits/new/des
+		ca|bits/audio
+		ca|uibits
+		ca|bits/scrin
+		ca|bits/yuri
+		ca|bits/scrin/audio
+		ca|bits/newscrin
+		ca|bits/misc
+		ca|bits/misc/overlays
+		ca|bits/soviet
+		ca|bits/allies
+		ca|bits/gdi
+		ca|bits/nod
+		ca|bits/china
+		ca|bits/generals
+		ca|bits/palettes
+		ca|scripts
 
-Translations:
-	ca|languages/en.ftl
 
 MapFolders:
 	ca|maps: System
@@ -186,10 +185,7 @@ Cursors:
 Chrome:
 	ca|chrome.yaml
 
-Assemblies:
-	^BinDir|OpenRA.Mods.Common.dll
-	^BinDir|OpenRA.Mods.Cnc.dll
-	^BinDir|OpenRA.Mods.CA.dll
+Assemblies: OpenRA.Mods.AS.dll, OpenRA.Mods.CA.dll, OpenRA.Mods.Cameo.dll, OpenRA.Mods.Cnc.dll, OpenRA.Mods.D2k.dll, OpenRA.Mods.Common.dll
 
 ChromeLayout:
 	common|chrome/ingame.yaml
@@ -271,14 +267,10 @@ Notifications:
 Music:
 	ca|audio/music.yaml
 
-Translations:
-	ca|languages/english.yaml
-
 Hotkeys:
 	common|hotkeys/game.yaml
 	common|hotkeys/observer.yaml
 	common|hotkeys/production-common.yaml
-	common|hotkeys/production-peractor.yaml
 	common|hotkeys/supportpowers.yaml
 	common|hotkeys/viewport.yaml
 	common|hotkeys/chat.yaml
@@ -292,7 +284,9 @@ LoadScreen: FitImageLoadScreen
 
 ServerTraits:
 	LobbyCommands
-	PlayerPinger
+	SkirmishLogic
+	PlayerPinger:
+		ConnTimeout: 500000
 	MasterServerPinger
 	LobbySettingsNotification
 
@@ -359,8 +353,6 @@ SpriteSequenceFormat: ClassicTilesetSpecificSpriteSequence
 		WINTER: .win
 		BARREN: .bar
 
-ModelSequenceFormat: VoxelModelSequence
-
 VideoFormats: Vqa, Wsa
 
 TerrainFormat: DefaultTerrain
@@ -400,58 +392,6 @@ GameSpeeds:
 
 ModCredits:
 	ModCreditsFile: ca|../../AUTHORS
-
-ModContent:
-	InstallPromptMessage: You Must Contruct Additional... requires artwork and audio from the original games.\n\nQuick Install will automatically download this content (without music\nor videos) from a mirror of the 2008 Command & Conquer/Red Alert freeware release.\n\nAdvanced Install includes options for downloading the music and for\ncopying the videos and other content from an original game disc.
-	QuickDownload: quickinstall
-	HeaderMessage: Game content may be extracted from the original game discs or an\nexisting digital install. OpenRA can also download the base game\nfiles from an online mirror of the 2008 freeware release of RA.
-	Packages:
-		base: Base Game Files
-			TestFiles: ^SupportDir|Content/ca/speech.mix, ^SupportDir|Content/ca/russian.mix, ^SupportDir|Content/ca/sounds.mix
-			Sources: allied, allied-linux, soviet, soviet-linux, tfd, origin-ra
-			Required: true
-			Download: basefiles
-		music: Red Alert Music
-			TestFiles: ^SupportDir|Content/ca/ra/scores.mix
-			Sources: allied, allied-linux, soviet, soviet-linux, tfd, origin-ra
-			Download: music
-		cncmusic: C&C Music
-			TestFiles: ^SupportDir|Content/ca/cnc/scores.mix
-			Download: cncmusic
-			Sources: origin-cnc, tfd, cnc95
-		music-counterstrike: Counterstrike Music
-			TestFiles: ^SupportDir|Content/ca/expand/araziod.aud, ^SupportDir|Content/ca/expand/backstab.aud, ^SupportDir|Content/ca/expand/chaos2.aud, ^SupportDir|Content/ca/expand/shut_it.aud, ^SupportDir|Content/ca/expand/2nd_hand.aud, ^SupportDir|Content/ca/expand/twinmix1.aud, ^SupportDir|Content/ca/expand/under3.aud, ^SupportDir|Content/ca/expand/vr2.aud,
-			Sources: counterstrike, counterstrike-linux, origin-ra
-		music-aftermath: Aftermath Music
-			TestFiles: ^SupportDir|Content/ca/expand/await.aud, ^SupportDir|Content/ca/expand/bog.aud, ^SupportDir|Content/ca/expand/float_v2.aud, ^SupportDir|Content/ca/expand/gloom_ra.aud, ^SupportDir|Content/ca/expand/grndwire.aud, ^SupportDir|Content/ca/expand/rpt.aud, ^SupportDir|Content/ca/expand/search.aud, ^SupportDir|Content/ca/expand/traction.aud, ^SupportDir|Content/ca/expand/wastelnd.aud
-			Sources: aftermath, aftermath-linux, origin-ra
-		tsmusic: TibSun Music
-			TestFiles: ^SupportDir|Content/ca/ts/scores.mix
-			Download: tsmusic
-			Sources: origin-ts, tfd
-		fsmusic: Firestorm Music
-			TestFiles: ^SupportDir|Content/ca/firestorm/linkup.aud, ^SupportDir|Content/ca/firestorm/hacker.aud
-			Download: fsmusic
-			Sources: tfd, origin-ts, fstorm
-		ra2music: RA2 Music
-			TestFiles: ^SupportDir|Content/ca/ra2/theme.mix
-			Sources: ra2, origin-ra2, tfd
-		yrmusic: YR Music
-			TestFiles: ^SupportDir|Content/ca/ra2/thememd.mix
-			Sources: ra2yr, origin-yr, tfd
-	Downloads:
-		ca|installer/downloads.yaml
-	Sources:
-		ca|installer/aftermath.yaml
-		ca|installer/allies95.yaml
-		ca|installer/cnc95.yaml
-		ca|installer/counterstrike.yaml
-		ca|installer/firstdecade.yaml
-		ca|installer/origin.yaml
-		ca|installer/ra2.yaml
-		ca|installer/ra2yr.yaml
-		ca|installer/firestorm.yaml
-		ca|installer/soviet95.yaml
 
 DiscordService:
 	ApplicationId: 1229835626870870037

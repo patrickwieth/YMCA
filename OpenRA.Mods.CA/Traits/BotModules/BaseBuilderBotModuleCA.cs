@@ -1,21 +1,21 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2021 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Traits;
+using OpenRA.Mods.AS.Traits;
 using OpenRA.Primitives;
 using OpenRA.Traits;
+using System;
 
 namespace OpenRA.Mods.CA.Traits
 {
@@ -52,6 +52,9 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Tells the AI what building types are considered silos (resource storage).")]
 		public readonly HashSet<string> SiloTypes = new HashSet<string>();
 
+		[Desc("Tells the AI what building types are considered fragile.")]
+		public readonly HashSet<string> FragileTypes = new HashSet<string>();
+
 		[Desc("Production queues AI uses for buildings.")]
 		public readonly HashSet<string> BuildingQueues = new HashSet<string> { "Building" };
 
@@ -64,8 +67,11 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Radius in cells around the center of the base to expand.")]
 		public readonly int MaxBaseRadius = 20;
 
-		[Desc("Maximum number of extra refineries to build (in addition to 2 per construction yard).")]
+		[Desc("Maximum number of extra refineries to build (in addition to RefineriesPerBase per construction yard).")]
 		public readonly int MaxExtraRefineries = 1;
+
+		[Desc("Number of refineries per construction yard.")]
+		public readonly int RefineriesPerBase = 2;
 
 		[Desc("Minimum excess power the AI should try to maintain.")]
 		public readonly int MinimumExcessPower = 0;
@@ -112,17 +118,32 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Chance that the AI will place the defenses in the direction of the closest enemy building.")]
 		public readonly int PlaceDefenseTowardsEnemyChance = 100;
 
+		[Desc("Chance that the AI will place buildings to crawl toward resource patches.")]
+		public readonly int BaseCrawlChance = 50;
+
+		[Desc("Maximum range at which to basecrawl.")]
+		public readonly int BaseCrawlRadius = 50;
+
+		[Desc("Structures cheaper than this will be used to basecrawl.")]
+		public readonly int BaseCrawlCostThreshold = 1000;
+
 		[Desc("Minimum range at which to build defensive structures near a combat hotspot.")]
 		public readonly int MinimumDefenseRadius = 5;
 
 		[Desc("Maximum range at which to build defensive structures near a combat hotspot.")]
 		public readonly int MaximumDefenseRadius = 20;
 
+		[Desc("Maximum range at which to build refineries from a resource patch.")]
+		public readonly int MaximumRefineryRadius = 12;
+
 		[Desc("Try to build another production building if there is too much cash.")]
 		public readonly int NewProductionCashThreshold = 10000;
 
-		[Desc("Only queue construction of a new structure when above this requirement.")]
-		public readonly int ProductionMinCashRequirement = 500;
+		[Desc("Only queue construction of a new building when above this requirement.")]
+		public readonly int BuildingProductionMinCashRequirement = 1750;
+
+		[Desc("Only queue construction of a new defense when above this requirement.")]
+		public readonly int DefenseProductionMinCashRequirement = 2250;
 
 		[Desc("Radius in cells around a factory scanned for rally points by the AI.")]
 		public readonly int RallyPointScanRadius = 8;
@@ -160,12 +181,11 @@ namespace OpenRA.Mods.CA.Traits
 	}
 
 	public class BaseBuilderBotModuleCA : ConditionalTrait<BaseBuilderBotModuleCAInfo>, IGameSaveTraitData,
-		IBotTick, IBotPositionsUpdated, IBotRespondToAttack
+		IBotTick, IBotPositionsUpdated, IBotRespondToAttack, INotifyActorDisposing
 	{
 		public CPos GetRandomBaseCenter()
 		{
-			var randomConstructionYard = world.Actors.Where(a => a.Owner == player &&
-				Info.ConstructionYardTypes.Contains(a.Info.Name))
+			var randomConstructionYard = constructionYardBuildings.Actors
 				.RandomOrDefault(world.LocalRandom);
 
 			return randomConstructionYard?.Location ?? initialBaseCenter;
@@ -188,12 +208,26 @@ namespace OpenRA.Mods.CA.Traits
 		readonly BaseBuilderQueueManagerCA[] builders;
 		int currentBuilderIndex = 0;
 
+		readonly ActorIndex.OwnerAndNamesAndTrait<RefineryInfo> refineryBuildings;
+		readonly ActorIndex.OwnerAndNamesAndTrait<BuildingInfo> powerBuildings;
+		readonly ActorIndex.OwnerAndNamesAndTrait<BuildingInfo> constructionYardBuildings;
+		readonly ActorIndex.OwnerAndNamesAndTrait<BuildingInfo> barracksBuildings;
+		readonly ActorIndex.OwnerAndNamesAndTrait<BuildingInfo> factoryBuildings;
+
+		BotLimits botLimits;
+		int refineryLimit;
+
 		public BaseBuilderBotModuleCA(Actor self, BaseBuilderBotModuleCAInfo info)
 			: base(info)
 		{
 			world = self.World;
 			player = self.Owner;
 			builders = new BaseBuilderQueueManagerCA[info.BuildingQueues.Count + info.DefenseQueues.Count];
+			refineryBuildings = new ActorIndex.OwnerAndNamesAndTrait<RefineryInfo>(world, info.RefineryTypes, player);
+			powerBuildings = new ActorIndex.OwnerAndNamesAndTrait<BuildingInfo>(world, info.PowerTypes, player);
+			constructionYardBuildings = new ActorIndex.OwnerAndNamesAndTrait<BuildingInfo>(world, info.ConstructionYardTypes, player);
+			barracksBuildings = new ActorIndex.OwnerAndNamesAndTrait<BuildingInfo>(world, info.BarracksTypes, player);
+			factoryBuildings = new ActorIndex.OwnerAndNamesAndTrait<BuildingInfo>(world, info.VehiclesFactoryTypes, player);
 		}
 
 		// Use for proactive targeting.
@@ -226,6 +260,12 @@ namespace OpenRA.Mods.CA.Traits
 		protected override void TraitEnabled(Actor self)
 		{
 			var i = 0;
+
+			botLimits = self.Owner.PlayerActor.TraitsImplementing<BotLimits>().FirstEnabledTraitOrDefault();
+			if (botLimits != null)
+			{
+				refineryLimit = botLimits.Info.RefineryLimit;
+			}
 
 			foreach (var building in Info.BuildingQueues)
 			{
@@ -276,20 +316,16 @@ namespace OpenRA.Mods.CA.Traits
 						findQueue = true;
 					}
 
-					// Refresh "BuildingsBeingProduced" only when AI can produce
-					if (playerResources.Cash >= Info.ProductionMinCashRequirement)
+					foreach (var queue in queues)
 					{
-						foreach (var queue in queues)
-						{
-							var producing = queue.AllQueued().FirstOrDefault();
-							if (producing == null)
-								continue;
+						var producing = queue.AllQueued().FirstOrDefault();
+						if (producing == null)
+							continue;
 
-							if (BuildingsBeingProduced.ContainsKey(producing.Item))
-								BuildingsBeingProduced[producing.Item] = BuildingsBeingProduced[producing.Item] + 1;
-							else
-								BuildingsBeingProduced.Add(producing.Item, 1);
-						}
+						if (BuildingsBeingProduced.ContainsKey(producing.Item))
+							BuildingsBeingProduced[producing.Item] = BuildingsBeingProduced[producing.Item] + 1;
+						else
+							BuildingsBeingProduced.Add(producing.Item, 1);
 					}
 				}
 			}
@@ -343,13 +379,13 @@ namespace OpenRA.Mods.CA.Traits
 			if (self.World.LocalRandom.Next(100) < chanceThreshold)
 				return false;
 
-			if (Info.ConstructionYardTypes.Contains(self.Info.Name) && AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player) <= 1)
+			if (Info.ConstructionYardTypes.Contains(self.Info.Name) && AIUtils.CountActorByCommonName(constructionYardBuildings) <= 1)
 				return false;
 
-			if (Info.BarracksTypes.Contains(self.Info.Name) && AIUtils.CountBuildingByCommonName(Info.BarracksTypes, player) <= 1)
+			if (Info.BarracksTypes.Contains(self.Info.Name) && AIUtils.CountActorByCommonName(barracksBuildings) <= 1)
 				return false;
 
-			if (Info.VehiclesFactoryTypes.Contains(self.Info.Name) && AIUtils.CountBuildingByCommonName(Info.VehiclesFactoryTypes, player) <= 1)
+			if (Info.VehiclesFactoryTypes.Contains(self.Info.Name) && AIUtils.CountActorByCommonName(factoryBuildings) <= 1)
 				return false;
 
 			var enemyUnits = self.World.FindActorsInCircle(self.CenterPosition, WDist.FromCells(Info.SellScanRadius)).Where(IsEnemyGroundUnit).ToList();
@@ -399,14 +435,17 @@ namespace OpenRA.Mods.CA.Traits
 
 		bool IsRallyPointValid(CPos x, BuildingInfo info)
 		{
-			return info != null && world.IsCellBuildable(x, null, info);
+			return info != null && world.IsCellBuildable(x, x, null, info);
 		}
 
 		public bool HasMaxRefineries
 		{
 			get
 			{
-				var currentRefineryCount = AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player);
+				var currentRefineryCount = AIUtils.CountActorByCommonName(refineryBuildings);
+
+				if (refineryLimit != 0 && currentRefineryCount >= refineryLimit)
+					return true;
 
 				foreach (var r in Info.RefineryTypes)
 				{
@@ -414,8 +453,9 @@ namespace OpenRA.Mods.CA.Traits
 						currentRefineryCount += BuildingsBeingProduced[r];
 				}
 
-				var currentConstructionYardCount = AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player);
-				return currentRefineryCount >= currentConstructionYardCount * 2 + Info.MaxExtraRefineries;
+				var currentConstructionYardCount = AIUtils.CountActorByCommonName(constructionYardBuildings);
+
+				return currentRefineryCount >= currentConstructionYardCount * Info.RefineriesPerBase + Info.MaxExtraRefineries;
 			}
 		}
 
@@ -425,10 +465,13 @@ namespace OpenRA.Mods.CA.Traits
 			{
 				var desiredAmount = HasAdequateBarracksCount && HasAdequateFactoryCount ? Info.NormalMinimumRefineryCount : Info.InitialMinimumRefineryCount;
 
+				if (refineryLimit != 0 && refineryLimit < desiredAmount)
+					desiredAmount = refineryLimit;
+
 				// Require at least one refinery, unless we can't build it.
-				return AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) >= desiredAmount ||
-					AIUtils.CountBuildingByCommonName(Info.PowerTypes, player) == 0 ||
-					AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player) == 0;
+				return AIUtils.CountActorByCommonName(refineryBuildings) >= desiredAmount ||
+					AIUtils.CountActorByCommonName(powerBuildings) == 0 ||
+					AIUtils.CountActorByCommonName(constructionYardBuildings) == 0;
 			}
 		}
 
@@ -437,10 +480,10 @@ namespace OpenRA.Mods.CA.Traits
 			get
 			{
 				// Require at least one barracks, unless we can't build it.
-				return AIUtils.CountBuildingByCommonName(Info.BarracksTypes, player) >= 1 ||
-					AIUtils.CountBuildingByCommonName(Info.PowerTypes, player) == 0 ||
-					AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) == 0 ||
-					AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player) == 0;
+				return AIUtils.CountActorByCommonName(barracksBuildings) >= 1 ||
+					AIUtils.CountActorByCommonName(powerBuildings) == 0 ||
+					AIUtils.CountActorByCommonName(refineryBuildings) == 0 ||
+					AIUtils.CountActorByCommonName(constructionYardBuildings) == 0;
 			}
 		}
 
@@ -449,10 +492,10 @@ namespace OpenRA.Mods.CA.Traits
 			get
 			{
 				// Require at least one factory, unless we can't build it.
-				return AIUtils.CountBuildingByCommonName(Info.VehiclesFactoryTypes, player) >= 1 ||
-					AIUtils.CountBuildingByCommonName(Info.PowerTypes, player) == 0 ||
-					AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) == 0 ||
-					AIUtils.CountBuildingByCommonName(Info.ConstructionYardTypes, player) == 0;
+				return AIUtils.CountActorByCommonName(factoryBuildings) >= 1 ||
+					AIUtils.CountActorByCommonName(powerBuildings) == 0 ||
+					AIUtils.CountActorByCommonName(refineryBuildings) == 0 ||
+					AIUtils.CountActorByCommonName(constructionYardBuildings) == 0;
 			}
 		}
 
@@ -463,23 +506,31 @@ namespace OpenRA.Mods.CA.Traits
 
 			return new List<MiniYamlNode>()
 			{
-				new MiniYamlNode("InitialBaseCenter", FieldSaver.FormatValue(initialBaseCenter)),
-				new MiniYamlNode("DefenseCenter", FieldSaver.FormatValue(defenseCenter))
+				new("InitialBaseCenter", FieldSaver.FormatValue(initialBaseCenter)),
+				new("DefenseCenter", FieldSaver.FormatValue(DefenseCenter))
 			};
 		}
 
-		void IGameSaveTraitData.ResolveTraitData(Actor self, List<MiniYamlNode> data)
+		void IGameSaveTraitData.ResolveTraitData(Actor self, MiniYaml data)
 		{
 			if (self.World.IsReplay)
 				return;
 
-			var initialBaseCenterNode = data.FirstOrDefault(n => n.Key == "InitialBaseCenter");
+			var initialBaseCenterNode = data.NodeWithKeyOrDefault("InitialBaseCenter");
 			if (initialBaseCenterNode != null)
 				initialBaseCenter = FieldLoader.GetValue<CPos>("InitialBaseCenter", initialBaseCenterNode.Value.Value);
 
-			var defenseCenterNode = data.FirstOrDefault(n => n.Key == "DefenseCenter");
+			var defenseCenterNode = data.NodeWithKeyOrDefault("DefenseCenter");
 			if (defenseCenterNode != null)
 				defenseCenter = FieldLoader.GetValue<CPos>("DefenseCenter", defenseCenterNode.Value.Value);
+		}
+
+		void INotifyActorDisposing.Disposing(Actor self)
+		{
+			refineryBuildings.Dispose();
+			powerBuildings.Dispose();
+			constructionYardBuildings.Dispose();
+			barracksBuildings.Dispose();
 		}
 	}
 }

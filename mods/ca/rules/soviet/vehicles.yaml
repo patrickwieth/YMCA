@@ -824,7 +824,7 @@ ISU:
 		Voice: Attack
 		FacingTolerance: 10
 	WithMuzzleOverlay:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
 	Passenger:
@@ -1228,6 +1228,23 @@ Soviet_Miner:
 	AttackTurreted:
 		RequiresCondition: warminer
 		PauseOnCondition: empdisable || being-warped || parachute
+	WithMuzzleOverlay:
+	Armament@GAT0:
+		LocalOffset: 400,0,500
+	Armament@GAT1:
+		LocalOffset: 400,0,500
+	Armament@GAT2:
+		LocalOffset: 400,0,500
+	Armament@GAT3:
+		LocalOffset: 400,0,500
+	Armament@GAT0G:
+		LocalOffset: 400,0,500
+	Armament@GAT1G:
+		LocalOffset: 400,0,500
+	Armament@GAT2G:
+		LocalOffset: 400,0,500
+	Armament@GAT3G:
+		LocalOffset: 400,0,500
 
 QTNK:
 	Inherits: ^Tank
@@ -1320,7 +1337,7 @@ Rice_Cooker:
 	MissileSpawnerMaster:
 		Actors: Rice_Shell
 		RespawnTicks: 100
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: BarrelExplode
 	Voiced:
 		VoiceSet: V3Voice
@@ -1345,11 +1362,12 @@ Rice_Shell:
 		Type: CenterPosition
 		Offsets: -200, 0, 0
 	MissileSpawnerSlave:
-	SpawnedExplodes:
+	ExplodesForMaster:
 		Weapon: V3Weapon
+		MasterArmamentName: RiceShellLauncher
 		EmptyWeapon: VisualExplodeHusk
 		RequiresCondition: !airborne
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: VisualExplodeAirborne
 		RequiresCondition: airborne
 	WithFacingSpriteBody:
@@ -1409,7 +1427,7 @@ Gene_Splicer:
 		Turret: primary
 		FireDelay: 30
 		LocalOffset: 1100,0,700
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ArtilleryExplode
 		LoadedChance: 100
 	Voiced:

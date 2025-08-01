@@ -57,7 +57,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly bool AutoFire = false;
 
 		[Desc("Cursor to display when unable to Cash Hack.")]
-		public readonly string BlockedCursor = "move-blocked";
+		public new readonly string BlockedCursor = "move-blocked";
 
 		public override object Create(ActorInitializer init) { return new ProduceActorPowerCA(init, this); }
 	}

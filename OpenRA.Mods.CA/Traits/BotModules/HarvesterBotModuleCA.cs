@@ -1,19 +1,20 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2021 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Activities;
 using OpenRA.Mods.Common.Traits;
+using OpenRA.Mods.AS.Traits;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
@@ -40,13 +41,16 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Interval (in ticks) between checking whether to produce new harvesters.")]
 		public readonly int ProduceHarvestersInterval = 375;
 
+		[Desc("Additional harvesters to build.")]
+		public readonly int AdditionalHarvesters = 0;
+
 		[Desc("Avoid enemy actors nearby when searching for a new resource patch. Should be somewhere near the max weapon range.")]
 		public readonly WDist HarvesterEnemyAvoidanceRadius = WDist.FromCells(8);
 
 		public override object Create(ActorInitializer init) { return new HarvesterBotModuleCA(init.Self, this); }
 	}
 
-	public class HarvesterBotModuleCA : ConditionalTrait<HarvesterBotModuleCAInfo>, IBotTick
+	public class HarvesterBotModuleCA : ConditionalTrait<HarvesterBotModuleCAInfo>, IBotTick, INotifyActorDisposing
 	{
 		class HarvesterTraitWrapper
 		{
@@ -67,7 +71,10 @@ namespace OpenRA.Mods.CA.Traits
 		readonly World world;
 		readonly Player player;
 		readonly Func<Actor, bool> unitCannotBeOrdered;
-		readonly Dictionary<Actor, HarvesterTraitWrapper> harvesters = new Dictionary<Actor, HarvesterTraitWrapper>();
+		readonly Dictionary<Actor, HarvesterTraitWrapper> harvesters = new();
+
+		readonly ActorIndex.OwnerAndNamesAndTrait<BuildingInfo> refineries;
+		readonly ActorIndex.OwnerAndNamesAndTrait<HarvesterInfo> harvestersIndex;
 
 		IResourceLayer resourceLayer;
 		ResourceClaimLayer claimLayer;
@@ -75,12 +82,17 @@ namespace OpenRA.Mods.CA.Traits
 		int scanForIdleHarvestersTicks;
 		int scanForEnoughHarvestersTicks;
 
+		BotLimits botLimits;
+		int harvesterLimit;
+
 		public HarvesterBotModuleCA(Actor self, HarvesterBotModuleCAInfo info)
 			: base(info)
 		{
 			world = self.World;
 			player = self.Owner;
-			unitCannotBeOrdered = a => a.Owner != self.Owner || a.IsDead || !a.IsInWorld;
+			unitCannotBeOrdered = a => a.Owner != self.Owner || a.IsDead || !a.IsInWorld || a.Info.HasTraitInfo<BaseSpawnerSlaveInfo>();
+			refineries = new ActorIndex.OwnerAndNamesAndTrait<BuildingInfo>(world, info.RefineryTypes, player);
+			harvestersIndex = new ActorIndex.OwnerAndNamesAndTrait<HarvesterInfo>(world, info.HarvesterTypes, player);
 		}
 
 		protected override void Created(Actor self)
@@ -93,6 +105,12 @@ namespace OpenRA.Mods.CA.Traits
 			resourceLayer = world.WorldActor.TraitOrDefault<IResourceLayer>();
 			claimLayer = world.WorldActor.TraitOrDefault<ResourceClaimLayer>();
 
+			botLimits = self.TraitsImplementing<BotLimits>().FirstEnabledTraitOrDefault();
+			if (botLimits != null)
+			{
+				harvesterLimit = botLimits.Info.HarvesterLimit;
+			}
+
 			// Avoid all AIs scanning for idle harvesters on the same tick, randomize their initial scan delay.
 			scanForIdleHarvestersTicks = world.LocalRandom.Next(Info.ScanForIdleHarvestersInterval, Info.ScanForIdleHarvestersInterval * 2);
 
@@ -104,13 +122,13 @@ namespace OpenRA.Mods.CA.Traits
 			if (resourceLayer == null || resourceLayer.IsEmpty)
 				return;
 
-			if (--scanForIdleHarvestersTicks > 0)
+			if (--scanForIdleHarvestersTicks <= 0)
 			{
 				OrderHarvesters(bot);
 				scanForIdleHarvestersTicks = Info.ScanForIdleHarvestersInterval;
 			}
 
-			if (--scanForEnoughHarvestersTicks > 0)
+			if (--scanForEnoughHarvestersTicks <= 0)
 			{
 				ProduceHarvesters(bot);
 				scanForEnoughHarvestersTicks = Info.ProduceHarvestersInterval;
@@ -125,7 +143,7 @@ namespace OpenRA.Mods.CA.Traits
 
 			// Find new harvesters
 			// TODO: Look for a more performance-friendly way to update this list
-			var newHarvesters = world.ActorsHavingTrait<Harvester>().Where(a => a.Owner == player && !harvesters.ContainsKey(a));
+			var newHarvesters = world.ActorsHavingTrait<Harvester>().Where(a => !unitCannotBeOrdered(a) && !harvesters.ContainsKey(a));
 			foreach (var a in newHarvesters)
 				harvesters[a] = new HarvesterTraitWrapper(a);
 
@@ -158,12 +176,12 @@ namespace OpenRA.Mods.CA.Traits
 			if (unitBuilder != null && Info.HarvesterTypes.Count > 0)
 			{
 				var harvInfo = AIUtils.GetInfoByCommonName(Info.HarvesterTypes, player);
-				var numHarvesters = AIUtils.CountActorByCommonName(Info.HarvesterTypes, player);
+				var numHarvesters = AIUtils.CountActorByCommonName(harvestersIndex);
 
-				if (numHarvesters >= Info.MaxHarvesters)
+				if ((harvesterLimit > 0 && numHarvesters >= harvesterLimit) || numHarvesters >= Info.MaxHarvesters)
 					return;
 
-				var harvCountTooLow = numHarvesters < AIUtils.CountBuildingByCommonName(Info.RefineryTypes, player) * Info.HarvestersPerRefinery;
+				var harvCountTooLow = numHarvesters < AIUtils.CountActorByCommonName(refineries) * Info.HarvestersPerRefinery + Info.AdditionalHarvesters;
 				if (harvCountTooLow && unitBuilder.RequestedProductionCount(bot, harvInfo.Name) == 0)
 					unitBuilder.RequestUnitProduction(bot, harvInfo.Name);
 			}
@@ -185,6 +203,12 @@ namespace OpenRA.Mods.CA.Traits
 				return Target.Invalid;
 
 			return Target.FromCell(world, path[0]);
+		}
+
+		void INotifyActorDisposing.Disposing(Actor self)
+		{
+			refineries.Dispose();
+			harvestersIndex.Dispose();
 		}
 	}
 }

@@ -21,7 +21,7 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	public class AirReinforcementsPowerInfo : SupportPowerInfo
+	public class AirReinforcementsPowerInfo : DirectionalSupportPowerInfo
 	{
 		[ActorReference(typeof(AircraftInfo))]
 		[FieldLoader.Require]
@@ -40,13 +40,13 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly int CameraRemoveDelay = 25;
 
 		[Desc("Enables the player directional targeting")]
-		public readonly bool UseDirectionalTarget = false;
+		public new readonly bool UseDirectionalTarget = false;
 
 		[Desc("Animation used to render the direction arrows.")]
-		public readonly string DirectionArrowAnimation = null;
+		public new readonly string DirectionArrowAnimation = null;
 
 		[Desc("Palette for direction cursor animation.")]
-		public readonly string DirectionArrowPalette = "chrome";
+		public new readonly string DirectionArrowPalette = "chrome";
 
 		[Desc("Weapon range offset to apply during the beacon clock calculation")]
 		public readonly WDist BeaconDistanceOffset = WDist.FromCells(6);
@@ -54,7 +54,7 @@ namespace OpenRA.Mods.CA.Traits
 		public override object Create(ActorInitializer init) { return new AirReinforcementsPower(init.Self, this); }
 	}
 
-	public class AirReinforcementsPower : SupportPower
+	public class AirReinforcementsPower : DirectionalSupportPower
 	{
 		readonly AirReinforcementsPowerInfo info;
 
@@ -67,7 +67,7 @@ namespace OpenRA.Mods.CA.Traits
 		public override void SelectTarget(Actor self, string order, SupportPowerManager manager)
 		{
 			if (info.UseDirectionalTarget)
-				self.World.OrderGenerator = new SelectDirectionalTarget(self.World, order, manager, Info.Cursor, info.DirectionArrowAnimation, info.DirectionArrowPalette);
+				self.World.OrderGenerator = new SelectDirectionalTarget(self.World, order, manager, info);
 			else
 				base.SelectTarget(self, order, manager);
 		}
@@ -95,7 +95,6 @@ namespace OpenRA.Mods.CA.Traits
 			var finishEdge = target + (self.World.Map.DistanceToEdge(target, delta) + info.Cordon).Length * delta / 1024;
 
 			Actor camera = null;
-			Beacon beacon = null;
 			var aircraftInRange = new Dictionary<Actor, bool>();
 
 			Action<Actor> onEnterRange = a =>
@@ -112,8 +111,6 @@ namespace OpenRA.Mods.CA.Traits
 						});
 					});
 				}
-
-				RemoveBeacon(beacon);
 
 				aircraftInRange[a] = true;
 			};
@@ -137,7 +134,6 @@ namespace OpenRA.Mods.CA.Traits
 				if (aircraftInRange.All(kv => !kv.Key.IsInWorld))
 				{
 					RemoveCamera(camera);
-					RemoveBeacon(beacon);
 				}
 			};
 
@@ -183,28 +179,6 @@ namespace OpenRA.Mods.CA.Traits
 					a.QueueActivity(new AttackMoveActivity(a, () => new FlyIdle(a)));
 					distanceTestActor = a;
 				}
-
-				if (Info.DisplayBeacon)
-				{
-					var distance = (target - startEdge).HorizontalLength;
-
-					beacon = new Beacon(
-						self.Owner,
-						target - new WVec(0, 0, altitude),
-						Info.BeaconPaletteIsPlayerPalette,
-						Info.BeaconPalette,
-						Info.BeaconImage,
-						Info.BeaconPoster,
-						Info.BeaconPosterPalette,
-						Info.BeaconSequence,
-						Info.ArrowSequence,
-						Info.CircleSequence,
-						Info.ClockSequence,
-						() => 1 - ((distanceTestActor.CenterPosition - target).HorizontalLength - info.BeaconDistanceOffset.Length) * 1f / distance,
-						Info.BeaconDelay);
-
-					w.Add(beacon);
-				}
 			});
 
 			return aircraft.ToArray();
@@ -218,18 +192,6 @@ namespace OpenRA.Mods.CA.Traits
 			camera.QueueActivity(new Wait(info.CameraRemoveDelay));
 			camera.QueueActivity(new RemoveSelf());
 			camera = null;
-		}
-
-		void RemoveBeacon(Beacon beacon)
-		{
-			if (beacon == null)
-				return;
-
-			Self.World.AddFrameEndTask(w =>
-			{
-				w.Remove(beacon);
-				beacon = null;
-			});
 		}
 	}
 }

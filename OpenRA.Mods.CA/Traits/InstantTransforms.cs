@@ -1,11 +1,10 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2020 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -34,10 +33,10 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly WAngle Facing = new WAngle(384);
 
 		[Desc("Sounds to play when transforming.")]
-		public readonly string[] TransformSounds = { };
+		public readonly string[] TransformSounds = System.Array.Empty<string>();
 
 		[Desc("Sounds to play when the transformation is blocked.")]
-		public readonly string[] NoTransformSounds = { };
+		public readonly string[] NoTransformSounds = System.Array.Empty<string>();
 
 		[NotificationReference("Speech")]
 		[Desc("Notification to play when transforming.")]

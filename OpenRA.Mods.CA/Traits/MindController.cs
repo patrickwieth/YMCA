@@ -1,23 +1,26 @@
 ﻿#region Copyright & License Information
-/*
- * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
- * This file is a part of a third-party plugin for OpenRA, which is
- * free software. It is made available to you under the terms of the
- * GNU General Public License as published by the Free Software
- * Foundation. For more information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
+using OpenRA.Mods.CA.Orders;
+using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
 	[Desc("This actor can mind control other actors.")]
-	public class MindControllerInfo : PausableConditionalTraitInfo, Requires<ArmamentInfo>, Requires<HealthInfo>
+	public class MindControllerCAInfo : PausableConditionalTraitInfo, Requires<HealthInfo>
 	{
 		[Desc("Name of the armaments that grant this condition.")]
 		public readonly HashSet<string> ArmamentNames = new HashSet<string>() { "primary" };
@@ -38,14 +41,24 @@ namespace OpenRA.Mods.CA.Traits
 		[GrantedConditionReference]
 		public readonly string ProgressCondition;
 
+		[Desc("Condition to grant to self when at full capacity.")]
+		[GrantedConditionReference]
+		public readonly string MaxControlledCondition;
+
 		[Desc("The sound played when target is mind controlled.")]
-		public readonly string[] ControlSounds = { };
+		public readonly string[] ControlSounds = Array.Empty<string>();
+
+		[Desc("The sound played when slave is released.")]
+		public readonly string[] ReleaseSounds = Array.Empty<string>();
 
 		[Desc("If true, mind control start sound is only played to the controlling player.")]
 		public readonly bool ControlSoundControllerOnly = false;
 
+		[Desc("If true, release sound is only played to the controlling player.")]
+		public readonly bool ReleaseSoundControllerOnly = false;
+
 		[Desc("The sound played (to the controlling player only) when beginning mind control process.")]
-		public readonly string[] InitSounds = { };
+		public readonly string[] InitSounds = Array.Empty<string>();
 
 		[Desc("If true, mind control start sound is only played to the controlling player.")]
 		public readonly bool InitSoundControllerOnly = false;
@@ -62,18 +75,38 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("If true, undeploy when control is gained of target.")]
 		public readonly bool UndeployOnControl = false;
 
+		[Desc("If true and TicksToControl > 0, undeploy if interrupted (e.g. if target dies).")]
+		public readonly bool UndeployOnInterrupt = false;
+
 		[Desc("If true, slave will be released when attacking a new target.")]
 		public readonly bool ReleaseOnNewTarget = false;
 
-		public override object Create(ActorInitializer init) { return new MindController(init.Self, this); }
+		[Desc("Cursor to use for targeting slaves to release.")]
+		public readonly string ReleaseSlaveCursor = "pinkdeploy";
+
+		[Desc("If true, slaves can be targeted to release them.")]
+		public readonly bool ManualReleaseEnabled = false;
+
+		[Desc("Percentage of targets cost gained as XP when successfully mind controlled.")]
+		public readonly int ExperienceFromControl = 0;
+
+		public override object Create(ActorInitializer init) { return new MindControllerCA(init.Self, this); }
 	}
 
-	public class MindController : PausableConditionalTrait<MindControllerInfo>, INotifyAttack, INotifyKilled, INotifyActorDisposing, INotifyCreated, IResolveOrder, ITick
+	public class MindControllerCA : PausableConditionalTrait<MindControllerCAInfo>, INotifyAttack, INotifyKilled, INotifyActorDisposing, INotifyCreated, IIssueOrder, IResolveOrder, ITick
 	{
 		readonly List<Actor> slaves = new List<Actor>();
 		readonly Stack<int> controllingTokens = new Stack<int>();
 
 		public IEnumerable<Actor> Slaves { get { return slaves; } }
+
+		MindControllerCAInfo info;
+		int capacity;
+		IEnumerable<MindControllerCapacityModifier> capacityModifiers;
+		int ticksToControl;
+		IEnumerable<MindControllerDelayModifier> delayModifiers;
+		bool refreshCapacity;
+		int maxControlledToken = Actor.InvalidConditionToken;
 
 		// Only tracked when TicksToControl greater than zero
 		Target lastTarget = Target.Invalid;
@@ -81,10 +114,25 @@ namespace OpenRA.Mods.CA.Traits
 		int controlTicks;
 		int progressToken = Actor.InvalidConditionToken;
 
-		public MindController(Actor self, MindControllerInfo info)
+		GrantConditionOnDeploy deployTrait;
+		HashSet<Actor> slaveHistory;
+		GainsExperience gainsExperience;
+
+		public MindControllerCA(Actor self, MindControllerCAInfo info)
 			: base(info)
 		{
+			this.info = info;
+			slaveHistory = new HashSet<Actor>();
+			gainsExperience = self.TraitOrDefault<GainsExperience>();
 			ResetProgress(self);
+			capacityModifiers = self.TraitsImplementing<MindControllerCapacityModifier>();
+			delayModifiers = self.TraitsImplementing<MindControllerDelayModifier>();
+			UpdateCapacity(self);
+		}
+
+		protected override void Created(Actor self)
+		{
+			deployTrait = self.TraitOrDefault<GrantConditionOnDeploy>();
 		}
 
 		void StackControllingCondition(Actor self, string condition)
@@ -109,18 +157,30 @@ namespace OpenRA.Mods.CA.Traits
 			{
 				slaves.Remove(slave);
 				UnstackControllingCondition(self, Info.ControllingCondition);
+				MaxControlledCheck(self);
 			}
 		}
 
 		void ITick.Tick(Actor self)
 		{
-			if (Info.TicksToControl == 0)
+			if (refreshCapacity)
+				UpdateCapacity(self);
+
+			if (ticksToControl == 0)
 				return;
 
 			if (currentTarget.Type != TargetType.Actor)
-				return;
+			{
+				if (Info.UndeployOnInterrupt && deployTrait != null && deployTrait.DeployState == DeployState.Deployed)
+				{
+					ResetProgress(self);
+					deployTrait.Undeploy();
+				}
 
-			if (controlTicks < Info.TicksToControl)
+				return;
+			}
+
+			if (controlTicks < ticksToControl)
 				controlTicks++;
 
 			GrantProgressCondition(self);
@@ -135,8 +195,8 @@ namespace OpenRA.Mods.CA.Traits
 
 			UpdateProgressBar(self, currentTarget);
 
-			if (controlTicks == Info.TicksToControl)
-				AddSlave(self);
+			if (controlTicks == ticksToControl)
+				AddSlave(self, currentTarget.Actor);
 		}
 
 		public void GrantProgressCondition(Actor self)
@@ -157,8 +217,56 @@ namespace OpenRA.Mods.CA.Traits
 				progressToken = self.RevokeCondition(progressToken);
 		}
 
-		public void ResolveOrder(Actor self, Order order)
+		void MaxControlledCheck(Actor self)
 		{
+			if (capacity == 0)
+				return;
+
+			if (slaves.Count >= capacity)
+				GrantMaxControlledCondition(self);
+			else
+				RevokeMaxControlledCondition(self);
+		}
+
+		public void GrantMaxControlledCondition(Actor self)
+		{
+			if (string.IsNullOrEmpty(Info.MaxControlledCondition))
+				return;
+
+			if (maxControlledToken == Actor.InvalidConditionToken)
+				maxControlledToken = self.GrantCondition(Info.MaxControlledCondition);
+		}
+
+		public void RevokeMaxControlledCondition(Actor self)
+		{
+			if (string.IsNullOrEmpty(Info.MaxControlledCondition))
+				return;
+
+			if (maxControlledToken != Actor.InvalidConditionToken)
+				maxControlledToken = self.RevokeCondition(maxControlledToken);
+		}
+
+		void IResolveOrder.ResolveOrder(Actor self, Order order)
+		{
+			if (order.OrderString == "ReleaseSlave")
+			{
+				if (order.Target.Type != TargetType.Actor)
+					return;
+
+				order.Target.Actor.Trait<MindControllableCA>().RevokeMindControl(order.Target.Actor, 0);
+
+				if (Info.ReleaseSounds.Length > 0)
+				{
+					if (Info.ReleaseSoundControllerOnly)
+						Game.Sound.PlayToPlayer(SoundType.World, self.Owner, Info.ReleaseSounds.Random(self.World.SharedRandom), self.CenterPosition);
+					else
+						Game.Sound.Play(SoundType.World, Info.ReleaseSounds.Random(self.World.SharedRandom), self.CenterPosition);
+				}
+
+				return;
+			}
+
+			// For all other order, if target has changed, reset progress
 			if (order.Target.Actor != currentTarget.Actor)
 			{
 				ResetProgress(self);
@@ -169,7 +277,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		void ResetProgress(Actor self)
 		{
-			if (Info.TicksToControl == 0)
+			if (ticksToControl == 0)
 				return;
 
 			controlTicks = 0;
@@ -186,7 +294,7 @@ namespace OpenRA.Mods.CA.Traits
 			var targetWatchers = target.Actor.TraitsImplementing<IMindControlProgressWatcher>().ToArray();
 
 			foreach (var w in targetWatchers)
-				w.Update(target.Actor, self, target.Actor, controlTicks, Info.TicksToControl);
+				w.Update(target.Actor, self, target.Actor, controlTicks, ticksToControl);
 		}
 
 		void INotifyAttack.PreparingAttack(Actor self, in Target target, Armament a, Barrel barrel) { }
@@ -205,7 +313,7 @@ namespace OpenRA.Mods.CA.Traits
 			lastTarget = currentTarget;
 			currentTarget = target;
 
-			if (TargetChanged() && Info.TicksToControl > 0)
+			if (TargetChanged() && ticksToControl > 0)
 			{
 				ResetProgress(self);
 
@@ -215,33 +323,32 @@ namespace OpenRA.Mods.CA.Traits
 				return;
 			}
 
-			AddSlave(self);
+			AddSlave(self, currentTarget.Actor);
 		}
 
-		void AddSlave(Actor self)
+		public void AddSlave(Actor self, Actor target, bool requireControlTicks = true)
 		{
 			if (IsTraitDisabled || IsTraitPaused)
 				return;
 
-			if (controlTicks < Info.TicksToControl)
+			if (requireControlTicks && controlTicks < ticksToControl)
 				return;
 
-			if (self.Owner.RelationshipWith(currentTarget.Actor.Owner) == PlayerRelationship.Ally)
+			if (self.Owner.RelationshipWith(target.Owner) == PlayerRelationship.Ally)
 				return;
 
-			var mindControllable = currentTarget.Actor.TraitOrDefault<MindControllable>();
+			var mindControllable = target.TraitOrDefault<MindControllableCA>();
 
 			if (mindControllable == null)
 			{
 				throw new InvalidOperationException(
-					"`{0}` tried to mindcontrol `{1}`, but the latter does not have the necessary trait!"
-					.F(self.Info.Name, currentTarget.Actor.Info.Name));
+					"`{self.Info.Name}` tried to mindcontrol `{target.Info.Name}`, but the latter does not have the necessary trait!");
 			}
 
 			if (mindControllable.IsTraitDisabled || mindControllable.IsTraitPaused)
 				return;
 
-			if (Info.Capacity > 0 && !Info.DiscardOldest && slaves.Count() >= Info.Capacity)
+			if (capacity > 0 && !Info.DiscardOldest && slaves.Count >= capacity)
 				return;
 
 			if (mindControllable.Master != null)
@@ -250,14 +357,16 @@ namespace OpenRA.Mods.CA.Traits
 				return;
 			}
 
-			slaves.Add(currentTarget.Actor);
+			slaves.Add(target);
 			StackControllingCondition(self, Info.ControllingCondition);
-			mindControllable.LinkMaster(currentTarget.Actor, self);
+			mindControllable.LinkMaster(target, self);
 
-			if (Info.Capacity > 0 && Info.DiscardOldest && slaves.Count() > Info.Capacity)
-				slaves[0].Trait<MindControllable>().RevokeMindControl(slaves[0], 0);
+			if (capacity > 0 && Info.DiscardOldest && slaves.Count > capacity)
+				slaves[0].Trait<MindControllableCA>().RevokeMindControl(slaves[0], 0);
 
+			GiveExperience(target);
 			ControlComplete(self);
+			MaxControlledCheck(self);
 		}
 
 		void ControlComplete(Actor self)
@@ -272,7 +381,6 @@ namespace OpenRA.Mods.CA.Traits
 
 			if (Info.UndeployOnControl)
 			{
-				var deployTrait = self.TraitOrDefault<GrantConditionOnDeploy>();
 				if (deployTrait != null && deployTrait.DeployState == DeployState.Deployed)
 					deployTrait.Undeploy();
 			}
@@ -288,12 +396,14 @@ namespace OpenRA.Mods.CA.Traits
 				if (s.IsDead || s.Disposed)
 					continue;
 
-				s.Trait<MindControllable>().RevokeMindControl(s, ticks);
+				s.Trait<MindControllableCA>().RevokeMindControl(s, ticks);
 			}
 
 			slaves.Clear();
 			while (controllingTokens.Count > 0)
 				UnstackControllingCondition(self, Info.ControllingCondition);
+
+			RevokeMaxControlledCondition(self);
 		}
 
 		public void TransformSlave(Actor self, Actor oldSlave, Actor newSlave)
@@ -349,6 +459,84 @@ namespace OpenRA.Mods.CA.Traits
 					return true;
 
 			return false;
+		}
+
+		void UpdateCapacity(Actor self)
+		{
+			refreshCapacity = false;
+			var newDelayModifiers = delayModifiers.Select(m => m.Modifier);
+
+			ticksToControl = Util.ApplyPercentageModifiers(Info.TicksToControl, newDelayModifiers);
+
+			var newCapacity = info.Capacity;
+
+			// Modifiers have no effect if the base capacity is unlimited.
+			if (info.Capacity <= 0)
+				return;
+
+			foreach (var capacityModifier in capacityModifiers)
+				newCapacity += capacityModifier.Amount;
+
+			capacity = Math.Max(newCapacity, 1);
+
+			var currentSlaveCount = slaves.Count;
+			var numSlavesToRemove = currentSlaveCount - capacity;
+			for (var i = numSlavesToRemove; i > 0; i--)
+				slaves[i].Trait<MindControllableCA>().RevokeMindControl(slaves[i], 0);
+
+			MaxControlledCheck(self);
+		}
+
+		public void ModifierUpdated()
+		{
+			refreshCapacity = true;
+		}
+
+		void GiveExperience(Actor slave)
+		{
+			if (gainsExperience == null || info.ExperienceFromControl == 0 || slaveHistory.Contains(slave))
+				return;
+
+			var valued = slave.Info.TraitInfoOrDefault<ValuedInfo>();
+			if (valued == null)
+				return;
+
+			slaveHistory.Add(slave);
+			gainsExperience.GiveExperience(Util.ApplyPercentageModifiers(valued.Cost, new int[] { 10000, info.ExperienceFromControl }));
+		}
+
+		IEnumerable<IOrderTargeter> IIssueOrder.Orders
+		{
+			get
+			{
+				yield return new ReleaseSlaveOrderTargeter(
+					"ReleaseSlave",
+					6,
+					Info.ReleaseSlaveCursor,
+					(target, modifiers) => !modifiers.HasModifier(TargetModifiers.ForceMove) && IsManuallyReleasableSlave(target));
+
+				yield return new ReleaseSlaveOrderTargeter(
+					"ReleaseSlave",
+					5,
+					Info.ReleaseSlaveCursor,
+					(target, modifiers) => modifiers.HasModifier(TargetModifiers.ForceMove) && IsManuallyReleasableSlave(target));
+			}
+		}
+
+		Order IIssueOrder.IssueOrder(Actor self, IOrderTargeter order, in Target target, bool queued)
+		{
+			if (order.OrderID == "ReleaseSlave")
+				return new Order(order.OrderID, self, target, queued);
+
+			return null;
+		}
+
+		bool IsManuallyReleasableSlave(Actor a)
+		{
+			if (!Info.ManualReleaseEnabled)
+				return false;
+
+			return slaves.Contains(a);
 		}
 	}
 }

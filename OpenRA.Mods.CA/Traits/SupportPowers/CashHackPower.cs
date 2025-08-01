@@ -1,4 +1,4 @@
-﻿#region Copyright & License Information
+#region Copyright & License Information
 /*
  * Copyright 2007-2019 The OpenRA Developers (see AUTHORS)
  * This file is part of OpenRA, which is free software. It is made
@@ -43,7 +43,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly string OnFireSound = null;
 
 		[Desc("Cursor to display when unable to Cash Hack.")]
-		public readonly string BlockedCursor = "move-blocked";
+		public new readonly string BlockedCursor = "move-blocked";
 
 		[NotificationReference("Speech")]
 		[Desc("Sound the victim will hear when they get robbed.")]

@@ -199,7 +199,7 @@ FEED:
 	WithAttackAnimation:
 		Sequence: harvest
 		Armament: secondary
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: FeederExplode
 		EmptyWeapon: FeederExplode
 		DamageSource: Killer
@@ -237,11 +237,7 @@ FEED:
 	Targetable@FEEDER:
 		TargetTypes: Feeder
 		RequiresCondition: full
-	WithHarvesterPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-		PipCount: 7
-	WithHarvesterPipsDecoration:
+	WithStoresResourcesPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
 		PipCount: 7
@@ -795,9 +791,6 @@ DEVA:
 		AttackType: Hover
 		PauseOnCondition: empdisable || being-warped
 	Selectable:
-	Explodes:
-		Weapon: KirovExplode
-		RequiresCondition: !airborne
 	SpawnActorOnDeath:
 		Actor: DEVA.Husk
 		RequiresCondition: !empdisable
@@ -885,10 +878,6 @@ PAC:
 		Speed: 49
 		AltitudeVelocity: 0c50
 		CanForceLand: False
-	Selectable:
-	Explodes:
-		Weapon: KirovExplode
-		RequiresCondition: !airborne
 	SpawnActorOnDeath:
 		Actor: PAC.Husk
 		RequiresCondition: !empdisable
@@ -1220,7 +1209,7 @@ INVA.support:
 
 INVA.suicide:
 	Inherits: INVA
-	Explodes@Acid:
+	FireWarheadsOnDeathCA@Acid:
 		Weapon: InvaderExplosion
 		RequiresCondition: triggered
 	KillsSelf:
@@ -1282,9 +1271,6 @@ MSHP:
 		AltitudeVelocity: 0c50
 		CanForceLand: False
 		Voice: Move
-	Explodes:
-		Weapon: KirovExplode
-		RequiresCondition: !airborne
 	SpawnActorOnDeath:
 		Actor: MSHP.Husk
 		RequiresCondition: !being-warped
@@ -1401,9 +1387,6 @@ Bastion:
 		AltitudeVelocity: 0c50
 		CanForceLand: False
 		Voice: Move
-	Explodes:
-		Weapon: KirovExplode
-		RequiresCondition: !airborne
 	SpawnActorOnDeath:
 		Actor: Bastion.Husk
 		RequiresCondition: !being-warped
@@ -1748,7 +1731,7 @@ MSHP.Husk.Ground:
 		Name: Husk (Mothership)
 	KillsSelf:
 		Delay: 1
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: KirovExplode
 	WithIdleOverlay@RING:
 		Image: mshp
@@ -1801,7 +1784,7 @@ Bastion.Husk.Ground:
 		Name: Husk (Bastion)
 	KillsSelf:
 		Delay: 1
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: KirovExplode
 	-OwnerLostAction:
 	-CaptureManager:
@@ -2242,41 +2225,52 @@ NERV:
 		PauseOnCondition: disabled || empdisable || being-warped
 	SpawnActorPower@ICHORSEED:
 		OrderName: ichorseed
-		Icon: ichorpower
-		Actor: ichor.seeder
+		Icons:
+			1: ichorpower
+		Actors:
+			1: ichor.seeder
 		ChargeInterval: 6000
 		Name: Ichor Seed
 		LifeTime: -1
 		AllowMultiple: false
-		Description: Seeds tiberium at selected location.
+		Descriptions:
+			1: Seeds tiberium at selected location.
 		LaunchSound: ichorseed.aud
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		PauseOnCondition: disabled || empdisable || being-warped
 		EffectSequence: idle
 	SpawnActorPower@BUZZERSWARM:
-		Actor: BUZZ
+		Actors:
+			1: BUZZ
 		OrderName: buzzerswarm
-		Icon: buzzpower
+		Icons:
+			1: buzzpower
 		Prerequisites: structures.harvester, !botplayer
 		ChargeInterval: 4500
 		LifeTime: -1
-		Name: Buzzer Swarm
-		Description: Spawns controllable buzzer swarm which damages anything nearby.
+		Names:
+			1: Buzzer Swarm
+			Descriptions:
+				1: Spawns controllable buzzer swarm which damages anything nearby.
 		LaunchSound: buzzers-create.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || empdisable || being-warped
 		DisplayRadarPing: True
 		EffectSequence: idle
 	SpawnActorPower@BUZZERSWARMAI:
-		Actor: BUZZ.AI
+		Actors:
+			1: BUZZ.AI
 		OrderName: buzzerswarmai
-		Icon: buzzpower
+		Icons:
+			1: buzzpower
 		Prerequisites: structures.harvester, botplayer
 		ChargeInterval: 6000
 		LifeTime: -1
-		Name: Buzzer Swarm (AI)
-		Description: Spawns controllable buzzer swarm which damages anything nearby.
+		Names:
+			1: Buzzer Swarm (AI)
+		Descriptions:
+			1: Spawns controllable buzzer swarm which damages anything nearby.
 		LaunchSound: buzzers-create.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -2293,7 +2287,8 @@ NERV:
 		ActivationDelay: 1
 		Description: Creates a temporary storm column.
 		LaunchSound: scrinbuild.aud
-		Weapon: StormSpikeSpawner
+		Weapons:
+			1: StormSpikeSpawner
 		AirburstAltitude: 0c0
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -2301,14 +2296,18 @@ NERV:
 		CameraRemoveDelay: 1
 		DisplayRadarPing: True
 	SpawnActorPower@IONSURGE:
-		Actor: ion.surge
+		Actors:
+			1: ion.surge
 		OrderName: ionsurge
-		Icon: ionsurgepower
+		Icons:
+			1: ionsurgepower
 		Prerequisites: structures.reaper
 		ChargeInterval: 4500
 		LifeTime: -1
-		Name: Ion Surge
-		Description: Reduces power output of power plants and disables radar within affected area.
+		Names:
+			1: Ion Surge
+		Descriptions:
+			1: Reduces power output of power plants and disables radar within affected area.
 		LaunchSound: ionsurge.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -2555,7 +2554,7 @@ SILO.SCRIN:
 	-WithSpriteBody:
 	WithResourceLevelSpriteBody:
 		Sequence: stages
-	StoresResources:
+	StoresPlayerResources:
 		Capacity: 5000
 	-MustBeDestroyed:
 	SpawnActorsOnSell:
@@ -2563,7 +2562,7 @@ SILO.SCRIN:
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: SmallBuildingExplode
 		EmptyWeapon: SmallBuildingExplode
 	WithResourceStoragePipsDecoration:
@@ -2626,7 +2625,8 @@ MANI:
 		TargetCircleColor: ff55ffcc
 		LaunchSound: suppression.aud
 		DisplayTimerStances: Ally, Neutral, Enemy
-		Weapon: SuppressionField
+		Weapon:
+			1:  SuppressionField
 		CameraActor: camera.dummy
 		CameraRemoveDelay: 1
 
@@ -2661,7 +2661,8 @@ RIFT:
 		Name: Rift
 		ActivationDelay: 50
 		Description: Initiate a Lightning Storm.\nApplies heavy damage over a large area.
-		Weapon: RiftInit
+		Weapon:
+			1:  RiftInit
 		AllowMultiple: false
 		CameraActor: camera
 		CameraRemoveDelay: 375
@@ -3019,7 +3020,7 @@ SCOL.Temp:
 	-SpawnActorOnDeath:
 	-WithBuildingRepairDecoration:
 	-RepairableBuilding:
-	-EngineerRepairable:
+	-InstantlyRepairable:
 	-GrantConditionOnPowerState@LOWPOWER:
 	-WithColoredOverlay@IDISABLE:
 	-GrantCondition@IDISABLE:

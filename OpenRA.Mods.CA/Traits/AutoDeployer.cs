@@ -1,10 +1,10 @@
 ﻿#region Copyright & License Information
-/*
- * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
- * This file is a part of a third-party plugin for OpenRA, which is
- * free software. It is made available to you under the terms of the
- * GNU General Public License as published by the Free Software
- * Foundation. For more information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -72,22 +72,10 @@ namespace OpenRA.Mods.CA.Traits
 			if (deployTicks > 0 || autoDeployManager.IsTraitDisabled)
 				return;
 
-			if (!self.Owner.IsBot)
-			{
-				var trait = self.TraitOrDefault<GrantConditionOnDeploy>();
-				if (trait != null && trait.DeployState == DeployState.Undeployed)
-				{
-					trait.Deploy();
-					return;
-				}
-			}
-			else
-			{
-				autoDeployManager.AddEntry(new TraitPair<AutoDeployer>(self, this));
+			autoDeployManager.AddEntry(new TraitPair<AutoDeployer>(self, this));
 
-				deployTicks = Info.DeployTicks;
-				undeployTicks = Info.UndeployTicks;
-			}
+			deployTicks = Info.DeployTicks;
+			undeployTicks = Info.UndeployTicks;
 		}
 
 		void Undeploy(Actor self)
@@ -162,7 +150,7 @@ namespace OpenRA.Mods.CA.Traits
 				return;
 
 			if (Info.DeployTrigger.HasFlag(DeployTriggers.BecomingIdle))
-					TryDeploy(self);
+				TryDeploy(self);
 		}
 	}
 }

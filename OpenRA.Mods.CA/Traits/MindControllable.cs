@@ -1,10 +1,10 @@
 ﻿#region Copyright & License Information
-/*
- * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
- * This file is a part of a third-party plugin for OpenRA, which is
- * free software. It is made available to you under the terms of the
- * GNU General Public License as published by the Free Software
- * Foundation. For more information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -16,10 +16,10 @@ using OpenRA.Traits;
 namespace OpenRA.Mods.CA.Traits
 {
 	[Desc("This actor can be mind controlled by other actors.")]
-	public class MindControllableInfo : PausableConditionalTraitInfo
+	public class MindControllableCAInfo : PausableConditionalTraitInfo
 	{
 		[Desc("The sound played when the mindcontrol is revoked.")]
-		public readonly string[] RevokeControlSounds = { };
+		public readonly string[] RevokeControlSounds = System.Array.Empty<string>();
 
 		[Desc("Map player to transfer this actor to if the owner lost the game.")]
 		public readonly string FallbackOwner = "Creeps";
@@ -40,12 +40,12 @@ namespace OpenRA.Mods.CA.Traits
 		[GrantedConditionReference]
 		public IEnumerable<string> LinterRevokingConditions { get { return RevokingConditions.Values; } }
 
-		public override object Create(ActorInitializer init) { return new MindControllable(init.Self, this); }
+		public override object Create(ActorInitializer init) { return new MindControllableCA(init.Self, this); }
 	}
 
-	public class MindControllable : PausableConditionalTrait<MindControllableInfo>, INotifyKilled, INotifyActorDisposing, INotifyOwnerChanged, INotifyTransform, ITick
+	public class MindControllableCA : PausableConditionalTrait<MindControllableCAInfo>, INotifyKilled, INotifyActorDisposing, INotifyOwnerChanged, INotifyTransform, ITick
 	{
-		readonly MindControllableInfo info;
+		readonly MindControllableCAInfo info;
 		Player creatorOwner;
 		bool controlChanging;
 		Actor oldSelf = null;
@@ -57,7 +57,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		public Actor Master { get; private set; }
 
-		public MindControllable(Actor self, MindControllableInfo info)
+		public MindControllableCA(Actor self, MindControllableCAInfo info)
 			: base(info)
 		{
 			this.info = info;
@@ -78,7 +78,7 @@ namespace OpenRA.Mods.CA.Traits
 			UnlinkMaster(self, Master);
 			Master = master;
 
-			var mindController = Master.Trait<MindController>();
+			var mindController = Master.Trait<MindControllerCA>();
 
 			if (controlledToken == Actor.InvalidConditionToken && Info.ControlledConditions.ContainsKey(Master.Info.Name))
 				controlledToken = self.GrantCondition(Info.ControlledConditions[Master.Info.Name]);
@@ -103,7 +103,7 @@ namespace OpenRA.Mods.CA.Traits
 				if (master.IsDead || master.Disposed)
 					return;
 
-				master.Trait<MindController>().UnlinkSlave(master, self);
+				master.Trait<MindControllerCA>().UnlinkSlave(master, self);
 			});
 
 			Master = null;
@@ -135,10 +135,10 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			self.CancelActivity();
 
-			if (creatorOwner.WinState == WinState.Lost)
-				self.ChangeOwner(self.World.Players.First(p => p.InternalName == info.FallbackOwner));
-			else
+			if (creatorOwner.WinState != WinState.Lost && creatorOwner.PlayerActor.IsInWorld)
 				self.ChangeOwner(creatorOwner);
+			else
+				self.ChangeOwner(self.World.Players.First(p => p.InternalName == info.FallbackOwner));
 
 			if (controlledToken != Actor.InvalidConditionToken)
 				controlledToken = self.RevokeCondition(controlledToken);
@@ -193,7 +193,7 @@ namespace OpenRA.Mods.CA.Traits
 				RevokeMindControl(self, 0);
 		}
 
-		void TransferMindControl(MindControllable mc)
+		void TransferMindControl(MindControllableCA mc)
 		{
 			Master = mc.Master;
 			creatorOwner = mc.creatorOwner;
@@ -206,12 +206,12 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			if (Master != null)
 			{
-				var mc = self.TraitOrDefault<MindControllable>();
+				var mc = self.TraitOrDefault<MindControllableCA>();
 				if (mc != null)
 				{
 					mc.TransferMindControl(this);
 					if (oldSelf != null)
-						Master.Trait<MindController>().TransformSlave(Master, oldSelf, self);
+						Master.Trait<MindControllerCA>().TransformSlave(Master, oldSelf, self);
 				}
 				else
 					self.ChangeOwner(creatorOwner);

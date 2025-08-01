@@ -18,9 +18,8 @@ namespace OpenRA.Mods.CA.Traits
           this.info = info;
       }
 
-      public void initCheckpointOrigin (Actor initiator) {
-        HomeCheckpoint = initiator.World.ActorsHavingTrait<Checkpoint>()
-          .ClosestTo(initiator.World.Map.CenterOfCell(initiator.Owner.HomeLocation));
+      public void initCheckpointOrigin (Actor newHomeCP) {
+        HomeCheckpoint = newHomeCP;
 
         //TextNotificationsManager.Debug("HomeCheckpoint"+HomeCheckpoint);
 

@@ -28,7 +28,7 @@ namespace OpenRA.Mods.CA.Traits
 		public override object Create(ActorInitializer init) { return new GrantConditionOnHarvesting(init, this); }
 	}
 
-	public class GrantConditionOnHarvesting : PausableConditionalTrait<GrantConditionOnHarvestingInfo>, ITick, ISync, INotifyCreated, INotifyHarvesterAction
+	public class GrantConditionOnHarvesting : PausableConditionalTrait<GrantConditionOnHarvestingInfo>, ITick, ISync, INotifyCreated, INotifyHarvestAction, INotifyDockClientMoving
 	{
 		readonly GrantConditionOnHarvestingInfo info;
 		readonly Harvester harvester;
@@ -56,7 +56,7 @@ namespace OpenRA.Mods.CA.Traits
 			base.Created(self);
 		}
 
-		void INotifyHarvesterAction.Harvested(Actor self, string resourceType)
+		void INotifyHarvestAction.Harvested(Actor self, string resourceType)
 		{
 			if (token == Actor.InvalidConditionToken)
 			{
@@ -89,11 +89,10 @@ namespace OpenRA.Mods.CA.Traits
 				RevokeCondition(self);
 		}
 
-		void INotifyHarvesterAction.MovingToResources(Actor self, CPos targetCell) { }
-		void INotifyHarvesterAction.MovingToRefinery(Actor self, Actor refineryActor) { }
-		void INotifyHarvesterAction.MovementCancelled(Actor self) { }
-		void INotifyHarvesterAction.Docked() { }
-		void INotifyHarvesterAction.Undocked() { }
+		void INotifyHarvestAction.MovingToResources(Actor self, CPos targetCell) { }
+		void INotifyHarvestAction.MovementCancelled(Actor self) { }
+		void INotifyDockClientMoving.MovingToDock(Actor self, Actor refineryActor, IDockHost host, bool forceEnter) { }
+		void INotifyDockClientMoving.MovementCancelled(Actor self) { }
 
 		bool Notifies(IConditionTimerWatcher watcher) { return watcher.Condition == Info.Condition; }
 	}

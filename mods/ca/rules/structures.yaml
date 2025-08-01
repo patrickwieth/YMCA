@@ -29,13 +29,18 @@ MSLO:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 		RequiresCondition: !disabled
-	NukePower:
+	NukePowerCA:
 		PauseOnCondition: disabled || empdisable || being-warped
+		Prerequisites:
+			1: ~techlevel.superw
 		Cursor: nuke
-		Icon: abomb
+		Icons:
+			1: abomb
 		ChargeInterval: 13500
-		Name: Atom Bomb
-		Description: Launches a devastating atomic bomb\nat a target location.
+		Names:
+			1: Atom Bomb
+		Descriptions:
+			1: Launches a devastating atomic bomb\nat a target location.
 		BeginChargeSpeechNotification: AbombPrepping
 		EndChargeSpeechNotification: AbombReady
 		SelectTargetSpeechNotification: SelectTarget
@@ -43,18 +48,22 @@ MSLO:
 		IncomingSound: nukelaunch.aud
 		IncomingSpeechNotification: AbombLaunchDetected
 		LaunchSound: nukelaunch.aud
-		MissileWeapon: atomic
+		MissileWeapons:
+			1: atomic
 		MissileDelay: 5
 		SpawnOffset: 1c0,427,0
 		DisplayTimerStances: Ally, Neutral, Enemy
 		DisplayBeacon: True
 		DisplayRadarPing: True
-		BeaconPoster: atomicon
+		BeaconPosters:
+			1: atomicon
 		FlashType: Nuke
 		CameraRange: 10c0
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
+		CircleRanges:
+			1: 10000
 		TrailImage: smokey2
 		TrailSequences: idle
 		TrailPalette: tseffect-ignore-lighting-alpha75
@@ -105,7 +114,7 @@ GAP:
 	MustBeDestroyed:
 		RequiredForShortGame: false
 	-AcceptsDeliveredCash:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: SmallBuildingExplode
 		EmptyWeapon: SmallBuildingExplode
 	HitShape:
@@ -368,14 +377,19 @@ PDOX:
 		DisplayTimerStances: Ally, Neutral, Enemy
 	DetonateWeaponPower@ChronoAI:
 		OrderName: Chronoshiftai
-		Prerequisites: botplayer
-		Icon: chrono
+		Prerequisites:
+			1: botplayer
+		Icons:
+			1: chrono
 		Cursor: ability
 		ChargeInterval: 7000
-		Name: Chronoshift
+		Names:
+			1: Chronoshift
 		ActivationDelay: 25
-		Description: Teleports a group of units across the map.
-		Weapon: ChronoAI
+		Descriptions:
+			1: Teleports a group of units across the map.
+		Weapons:
+			1: ChronoAI
 		AirburstAltitude: 0c0
 		AllowMultiple: false
 		CameraActor: camera
@@ -392,13 +406,17 @@ PDOX:
 	DetonateWeaponPower@TimeWarp:
 		OrderName: TimeWarp
 		Icon: timewarp
-		Prerequisites: structures.germany
+		Prerequisites:
+			1: structures.germany
 		Cursor: ability
 		ChargeInterval: 4500
-		Name: Time Warp
+		Names:
+			1: Time Warp
 		ActivationDelay: 25
-		Description: Disrupts time and space at target area,\ncausing units & structures to be frozen in time.
-		Weapon: TimeWarp
+		Descriptions:
+			1: Disrupts time and space at target area,\ncausing units & structures to be frozen in time.
+		Weapons:
+			1: TimeWarp
 		AirburstAltitude: 0c0
 		AllowMultiple: false
 		CameraActor: camera
@@ -413,7 +431,8 @@ PDOX:
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
-		BeaconPoster: timewarpicon
+		BeaconPosters:
+			1: timewarpicon
 		DisplayRadarPing: True
 		TargetCircleRange: 1c512
 		TargetCircleColor: 0000FF90
@@ -613,20 +632,28 @@ DOME:
 		Proxy: rad.soviet.stolen
 	AirstrikePower@spyplane:
 		OrderName: spyplane
-		Prerequisites: structures.soviet
-		Icon: spyplane
+		Prerequisitess:
+			1: structures.soviet
+		Icons:
+			1: spyplane
 		ChargeInterval: 3750
-		Name: Spy Plane
-		Description: Reveals an area of the map.
+		Names:
+			1: Spy Plane
+		Descriptions:
+			1: Reveals an area of the map.
 		SelectTargetSpeechNotification: SelectTarget
 		EndChargeSpeechNotification: SpyPlaneReady
 		LaunchSound: spyplane.aud
 		CameraActor: camera.spyplane
 		CameraRemoveDelay: 150
-		UnitType: u2
+		UnitTypes:
+			1: u2
+		SquadSizes:
+			1: 1
 		QuantizedFacings: 8
 		DisplayBeacon: true
-		BeaconPoster: camicon
+		BeaconPosters:
+			1: camicon
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
@@ -634,19 +661,26 @@ DOME:
 		DirectionArrowAnimation: paradirection
 	AirstrikePower@clustermines:
 		ChargeInterval: 6000
-		Prerequisites: structures.france
-		Name: Cluster Mines
-		Description: Send a cargo plane\nto deploy a minefield.
+		Prerequisitess:
+			1: structures.france
+		Names:
+			1: Cluster Mines
+		Descriptions:
+			1: Send a cargo plane\nto deploy a minefield.
 		OrderName: clustermine
-		UnitType: c17.clustermines
+		UnitTypes:
+			1: c17.clustermines
 		CameraActor: camera
 		CameraRemoveDelay: 150
 		QuantizedFacings: 8
-		SquadSize: 1
+		SquadSizes:
+			1: 1
 		DisplayBeacon: true
-		BeaconPoster: cmineicon
+		BeaconPosters:
+			1: cmineicon
 		BeaconPosterPalette: chrome
-		Icon: cmines
+		Icons:
+			1: cmines
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
@@ -656,14 +690,17 @@ DOME:
 		PauseOnCondition: disabled || being-warped
 		RequiresCondition: !build-incomplete
 	SpawnActorPower@GpsScramble:
-		Actor: gps.scrambler
+		Actors:
+			1: gps.scrambler
 		OrderName: gpsscramble
-		Icon: gpsscram
+		Icons:
+			1: gpsscram
 		IconPalette: chrometd
 		Prerequisites: structures.germany
 		ChargeInterval: 4500
 		LifeTime: 500
-		Name: GPS Scrambler
+		Names:
+			1: GPS Scrambler
 		Description: Shrouds the target area. Reduces range of enemy units\nand defenses in area while active.
 		LaunchSound: sscrambl.aud
 		SelectTargetSpeechNotification: SelectTarget
@@ -674,26 +711,18 @@ DOME:
 		Cursor: ability
 		AllowMultiple: false
 		EffectSequence: idle
-	ClassicAirstrikePower@Strafe:
+	AirstrikePower@Strafe:
 		OrderName: strafe
-		Squad:
-			p51:
-				SpawnDelay: 20
-				SpawnOffset: -1536,1024,0
-				TargetOffset: -536,0,0
-			p51:
-				SpawnDelay: 0
-				SpawnOffset: 0,0,0
-				TargetOffset: 0,0,0
-			p51:
-				SpawnDelay: 20
-				SpawnOffset: -1536,-1024,0
-				TargetOffset: 536,0,0
+		SquadSizes:
+			1: 3
+		UnitTypes:
+			1: p51
 		Prerequisites: ~aircraft.england
 		Icon: strafe
 		ChargeInterval: 7500
 		Name: Strafing Run
-		Description: P51 ground attack planes strafe\nyour target.
+		Descriptions:
+			1: P51 ground attack planes strafe\nyour target.
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
@@ -887,7 +916,7 @@ FTUR:
 		Amount: -20
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
 
@@ -975,14 +1004,14 @@ ATEK:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
-	DummyGpsPower@NOFOG:
+	GpsPower@NOFOG:
 		PauseOnCondition: disabled || being-warped
 		RequiresCondition: !gps-launched && !fogenabled
 		Delay: 12000
 		AnimationDuration: 375
 		LaunchSpeechNotification: SatelliteLaunched
 		Condition: gps-launched
-	DummyGpsPower@FOG:
+	GpsPower@FOG:
 		PauseOnCondition: disabled || being-warped
 		RequiresCondition: !gps-launched && fogenabled
 		Delay: 3000
@@ -1335,14 +1364,14 @@ SILO:
 	-WithSpriteBody:
 	WithResourceLevelSpriteBody:
 		Sequence: stages
-	StoresResources:
+	StoresPlayerResources:
 		Capacity: 5000
 	-MustBeDestroyed:
 	-SpawnActorsOnSell:
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: SmallBuildingExplode
 		EmptyWeapon: SmallBuildingExplode
 	WithResourceStoragePipsDecoration:
@@ -1442,15 +1471,19 @@ HPAD:
 		Types: SpyInfiltrate
 		Proxy: powerproxy.paratroopers2
 	SpawnActorPower@GDIEagleDropzone:
-		Actor: FLARE.dropzone
+		Actors:
+			1: FLARE.dropzone
 		Prerequisites: ~aircraft.gdi, ~aircraft.eagle, radar
 		LifeTime: 280
 		OrderName: dropzoneeagle
-		Icon: orcaca
+		Icons:
+			1: orcaca
 		IconPalette: chrometd
 		ChargeInterval: 6000
-		Name: Reinforcements
-		Description: An Orca Carryall drops reinforcements\nat the target location.
+		Names:
+			1: Reinforcements
+		Descriptions:
+			1: An Orca Carryall drops reinforcements\nat the target location.
 		EndChargeSpeechNotification: Reinforce
 		LaunchSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
@@ -1460,10 +1493,10 @@ HPAD:
 
 AFLD:
 	Inherits: ^Building
-	Inherits@shape: ^3x2Shape
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@AircraftProduction: ^AircraftProduction
-	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
+	Inherits: ^3x2Shape
+	Inherits: ^PrimaryBuilding
+	Inherits: ^AircraftProduction
+	Inherits: ^RepairsAircraftWithRepairBay
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
@@ -1523,13 +1556,19 @@ AFLD:
 	ParatroopersPower@paratroopers:
 		OrderName: paratroopers
 		Prerequisites: aircraft.soviet, !aircraft.russia, ~!commander_tree.tiktok_warrior
-		Icon: paratroopers
+		Icons:
+			1: paratroopers
 		ChargeInterval: 7500
 		Name: Paratroopers
-		Description: A Badger drops a squad of infantry\nanywhere on the map.
-		SquadSize: 1
+		Descriptions:
+			1: A Badger drops a squad of infantry\nanywhere on the map.
+		SquadSizes:
+			1: 1
 		SquadOffset: 0,1792,0
-		DropItems: conscript,conscript,conscript,rpg_soldier,rpg_soldier,conscript,conscript,conscript,DOG
+		DropItems:
+			1: conscript,conscript,conscript,rpg_soldier,rpg_soldier,conscript,conscript,conscript,DOG
+		UnitTypes:
+			1: badr
 		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
@@ -1545,13 +1584,19 @@ AFLD:
 	ParatroopersPower@Chechenparatroopers:
 		OrderName: chechentroopers
 		Prerequisites: aircraft.soviet, ~commander_tree.tiktok_warrior
-		Icon: paratroopers
+		Icons:
+			1: paratroopers
 		ChargeInterval: 5000
 		Name: Chechen Paratoopers
-		Description: A Badger drops a squad of infantry heavily influenced by TikTok\nanywhere on the map.
-		SquadSize: 3
+		Descriptions:
+			1: A Badger drops a squad of infantry heavily influenced by TikTok\nanywhere on the map.
+		SquadSizes:
+			1: 3
 		SquadOffset: 0,1792,0
-		DropItems: conscript,conscript,SHOK,conscript,flamethrower,flamethrower,flamethrower,rpg_soldier,rpg_soldier,rpg_soldier,rpg_soldier,rpg_soldier,DOG,Mortar,Mortar,Mortar,Mortar,DOG,SHOK,SHOK,conscript
+		DropItems:
+			1: conscript,conscript,SHOK,conscript,flamethrower,flamethrower,flamethrower,rpg_soldier,rpg_soldier,rpg_soldier,rpg_soldier,rpg_soldier,DOG,Mortar,Mortar,Mortar,Mortar,DOG,SHOK,SHOK,conscript
+		UnitTypes:
+			1: badr
 		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
@@ -1567,13 +1612,19 @@ AFLD:
 	ParatroopersPower@Russianparatroopers:
 		OrderName: stormtroopers
 		Prerequisites: aircraft.russia, ~!commander_tree.tiktok_warrior
-		Icon: stormtroopers
+		Icons:
+			1: stormtroopers
 		ChargeInterval: 9000
 		Name: Storm-troopers
-		Description: A Badger drops a squad of shock troops\nanywhere on the map.
-		SquadSize: 1
+		Descriptions:
+			1: A Badger drops a squad of shock troops\nanywhere on the map.
+		SquadSizes:
+			1: 1
 		SquadOffset: 0,1792,0
-		DropItems: SHOK,SHOK,SHOK,SHOK,SHOK
+		DropItems:
+			1: SHOK,SHOK,SHOK,SHOK,SHOK
+		UnitTypes:
+			1: badr
 		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
@@ -1782,12 +1833,14 @@ STEK:
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
-		UnitType: badr.cbomber
+		UnitTypes:
+			1: badr.cbomber
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPoster: a10airstrike
 		BeaconPosterPalette: temptd
-		SquadSize: 3
+		SquadSizes:
+			1: 3
 		ArrowSequence: arrow
 		ClockSequence: clockTD
 		CircleSequence: circles
@@ -1803,11 +1856,13 @@ STEK:
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
-		UnitType: badr.bomber
+		UnitTypes:
+			1: badr.bomber
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPoster: pbmbicon
-		SquadSize: 1
+		SquadSizes:
+			1: 1
 		SquadOffset: 0,1792,0
 		ArrowSequence: arrow
 		ClockSequence: clock
@@ -1824,11 +1879,13 @@ STEK:
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
-		UnitType: badr.nbomber
+		UnitTypes:
+			1: badr.nbomber
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPoster: nukeicon
-		SquadSize: 1
+		SquadSizes:
+			1: 1
 		SquadOffset: 0,1792,0
 		ArrowSequence: arrow
 		ClockSequence: clock
@@ -1846,12 +1903,14 @@ STEK:
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
-		UnitType: badr.mbomber
+		UnitTypes:
+			1: badr.mbomber
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPoster: gmutation
 		BeaconPosterPalette: chrome
-		SquadSize: 1
+		SquadSizes:
+			1: 1
 		SquadOffset: 0,1792,0
 		ArrowSequence: arrow
 		ClockSequence: clock
@@ -2648,14 +2707,19 @@ AIRS:
 		RequiresCondition: !vehiclesdisabled
 	ParatroopersPower@airdrop:
 		OrderName: nodairdrop
-		SquadSize: 3
-		UnitType: c17
+		SquadSizes:
+			1: 3
+		UnitTypes:
+			1: c17
 		Prerequisites: airs
-		Icon: airdropicon
+		Icons:
+			1: airdropicon
 		ChargeInterval: 18000
 		Name: Air Drop
-		Description: Cargo Planes air drop tanks anywhere on the map.
-		DropItems: ltnk, ftnk, STNK
+		Descriptions:
+			1: Cargo Planes air drop tanks anywhere on the map.
+		DropItems:
+			1: ltnk, ftnk, STNK
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
 		EndChargeSpeechNotification: Reinforce
@@ -3236,14 +3300,18 @@ HQ:
 	InfiltrateForExploration:
 		Types: SpyInfiltrate, SabInfiltrate
 	SpawnActorPower@sathack:
-		Actor: camera.sathack
+		Actors:
+			1: camera.sathack
 		Prerequisites: ~radar.nod
 		LifeTime: 120
 		OrderName: sathack
-		Icon: hacksat
+		Icons:
+			1: hacksat
 		ChargeInterval: 3000
-		Name: Hack Satellite Uplink
-		Description: Reveals map terrain and provides tactical\ninformation.
+		Names:
+			1: Hack Satellite Uplink
+		Descriptions:
+			1: Reveals map terrain and provides tactical\ninformation.
 		LaunchSound: hacksat.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || being-warped
@@ -3251,14 +3319,19 @@ HQ:
 	ParatroopersPower@paratroopers:
 		OrderName: LegionParatroopers
 		Prerequisites: structures.blackh, hand
-		Icon: paratroopers
-		UnitType: c17
+		Icons:
+			1: paratroopers
+		UnitTypes:
+			1: c17
 		ChargeInterval: 7500
 		Name: Paratroopers
-		Description: A Cargo Plane drops a squad of infantry\nanywhere on the map.
-		SquadSize: 1
+		Descriptions:
+			1: A Cargo Plane drops a squad of infantry\nanywhere on the map.
+		SquadSizes:
+			1: 1
 		SquadOffset: 0,1792,0
-		DropItems: adept,adept,black_hand_trooper,rocket_trooper,rocket_trooper,black_hand_trooper,black_hand_trooper
+		DropItems:
+			1: adept,adept,black_hand_trooper,rocket_trooper,rocket_trooper,black_hand_trooper,black_hand_trooper
 		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
@@ -3321,12 +3394,14 @@ HQ:
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
-		UnitType: b2b
+		UnitTypes:
+			1: b2b
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPoster: a10airstrike
 		BeaconPosterPalette: temptd
-		SquadSize: 1
+		SquadSizes:
+			1: 1
 		SquadOffset: 0,1792,0
 		ArrowSequence: arrow
 		ClockSequence: clockTD
@@ -3345,7 +3420,8 @@ HQ:
 		UnitType: sgli
 		QuantizedFacings: 8
 		DisplayBeacon: false
-		SquadSize: 3
+		SquadSizes:
+			1: 3
 		SquadOffset: -1024,1024,0
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
@@ -3417,13 +3493,17 @@ EYE:
 		Types: SpyInfiltrate, SabInfiltrate
 	DetonateWeaponPower@IonStorm:
 		OrderName: ioncannon
-		Icon: ioncannon
+		Icons:
+			1: ioncannon
 		Cursor: ioncannon
 		ChargeInterval: 13500
-		Name: Ion Cannon
+		Names:
+			1: Ion Cannon
 		ActivationDelay: 50
-		Description: Initiate an Ion Cannon strike.\nApplies heavy damage over a large area.
-		Weapon: IonStormInit
+		Descriptions:
+			1: Initiate an Ion Cannon strike.\nApplies heavy damage over a large area.
+		Weapons:
+			1: IonStormInit
 		AirburstAltitude: 4c512
 		AllowMultiple: false
 		CameraActor: camera
@@ -3441,7 +3521,8 @@ EYE:
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
-		BeaconPoster: atomicon
+		BeaconPosters:
+			1: atomicon
 		TargetCircleRange: 5c0
 		TargetCircleColor: 4fff3390
 	IonCannonPower@surgicals:
@@ -3634,15 +3715,19 @@ HPAD.TD:
 		Types: SpyInfiltrate
 		Proxy: powerproxy.paratroopers2
 	SpawnActorPower@GDIEagleDropzone:
-		Actor: FLARE.dropzone
+		Actors:
+			1: FLARE.dropzone
 		Prerequisites: ~radar.gdi, ~structures.eagle
 		LifeTime: 280
 		OrderName: dropzoneeagle
-		Icon: orcaca
+		Icons:
+			1: orcaca
 		IconPalette: chrometd
 		ChargeInterval: 7200
-		Name: Reinforcements
-		Description: An Orca Carryall drops reinforcements\nat the target location.
+		Names:
+			1: Reinforcements
+		Descriptions:
+			1: An Orca Carryall drops reinforcements\nat the target location.
 		EndChargeSpeechNotification: Reinforce
 		LaunchSpeechNotification: ReinforcementsArrived
 		SelectTargetSpeechNotification: SelectTarget
@@ -3752,7 +3837,7 @@ SILO.TD:
 	-WithSpriteBody:
 	WithResourceLevelSpriteBody:
 		Sequence: stages
-	StoresResources:
+	StoresPlayerResources:
 		Capacity: 10000
 	-MustBeDestroyed:
 	SpawnActorsOnSell:
@@ -3760,7 +3845,7 @@ SILO.TD:
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: SmallBuildingExplode
 		EmptyWeapon: SmallBuildingExplode
 	WithResourceStoragePipsDecoration:
@@ -3842,7 +3927,10 @@ AFLD.GDI:
 		EndChargeSpeechNotification: SpyPlaneReady
 		CameraActor: camera.spyplane
 		CameraRemoveDelay: 0
-		UnitType: uav
+		UnitTypes:
+			1: uav
+		SquadSizes:
+			1: 1
 		QuantizedFacings: 32
 		DisplayBeacon: true
 		BeaconPoster: lruavicon
@@ -3862,7 +3950,10 @@ AFLD.GDI:
 		EndChargeSpeechNotification: SpyPlaneReady
 		CameraActor: camera.spyplane
 		CameraRemoveDelay: 0
-		UnitType: uav
+		UnitTypes:
+			1: uav
+		SquadSizes:
+			1: 1
 		QuantizedFacings: 32
 		DisplayBeacon: true
 		BeaconPoster: lruavicon
@@ -3881,12 +3972,14 @@ AFLD.GDI:
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
-		UnitType: yf23.bomber
+		UnitTypes:
+			1: yf23.bomber
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPoster: airsupport
 		BeaconPosterPalette: chrome
-		SquadSize: 3
+		SquadSizes:
+			1: 3
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
@@ -4033,7 +4126,8 @@ GTEK:
 		Name: Nanite Repair
 		ActivationDelay: 10
 		Description: Repairs selected damaged vehicles.
-		Weapon: RepairNanite
+		Weapons:
+			1: RepairNanite
 		AirburstAltitude: 0
 		AllowMultiple: false
 		CameraActor: camera
@@ -4088,20 +4182,25 @@ TMPL:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 		RequiresCondition: !disabled
-	NukePower@Cluster:
+	NukePowerCA@Cluster:
 		OrderName: clustermissile
-		Icon: clustermissile
+		Icons:
+			1: clustermissile
 		IconPalette: chrometd
-		Prerequisites: ~structures.nod
+		Prerequisites:
+			1: ~structures.nod
 		Cursor: ability
 		ChargeInterval: 10500
-		Name: Cluster Missile
-		Description: Launches an Cluster Missile,\nCauses damage over a large area.
+		Names:
+			1: Cluster Missile
+		Descriptions:
+			1: Launches an Cluster Missile,\nCauses damage over a large area.
 		EndChargeSpeechNotification: ClusMissileReady
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		IncomingSpeechNotification: MissileLaunchDetected
-		MissileWeapon: deathhand
+		MissileWeapons:
+			1: deathhand
 		MissilePalette: temptd
 		LaunchSound: icbm1.aud
 		IncomingSound: nukelaunch.aud
@@ -4120,22 +4219,29 @@ TMPL:
 		TrailSequences: idle
 		TrailPalette: tseffect-ignore-lighting-alpha75
 		DisplayBeacon: True
-		BeaconPoster: clustermissile
+		BeaconPosters:
+			1: clustermissile
 		BeaconPosterPalette: temptd
-		CircleRanges: 3c0
+		CircleRanges:
+			1: 3c0
 		CircleColor: BB0000AA
 		CircleBorderColor: 770000AA
 		MissileImage: deathhand
 	ParatroopersPower@trollcrate:
 		OrderName: trollcrateairdrop
-		SquadSize: 1
-		UnitType: c17.no_color
+		SquadSizes:
+			1: 1
+		UnitTypes:
+			1: c17.no_color
 		Prerequisites: airs
-		Icon: trollcrateicon
+		Icons:
+			1: trollcrateicon
 		ChargeInterval: 18000
 		Name: Troll Crate
-		Description: A Cargo Plane air drops a crate with a nice present inside.
-		DropItems: crate.troll
+		Descriptions:
+			1: A Cargo Plane air drops a crate with a nice present inside.
+		DropItems:
+			1: crate.troll
 		SelectTargetSpeechNotification: SelectTarget
 		AllowImpassableCells: false
 		EndChargeSpeechNotification: Reinforce
@@ -4547,7 +4653,7 @@ TTUR:
 		Amount: -20
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
 
@@ -4773,9 +4879,9 @@ LASF:
 
 PATR:
 	Inherits: ^DefenseTD
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits@shape: ^2x2Shape
-	Inherits@sw: ^SuperWeapon
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x2Shape
+	Inherits: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -4852,7 +4958,7 @@ PATR:
 		RequiresCondition: !being-warped
 	BodyOrientation:
 		UseClassicFacings: True
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
 	WithBuildingBib:
@@ -5435,20 +5541,25 @@ MSLO.Nod:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 		RequiresCondition: !disabled
-	NukePower@Chemmiss:
+	NukePowerCA@Chemmiss:
 		OrderName: chemmissile
-		Icon: chemmissile
+		Icons:
+			1: chemmissile
 		IconPalette: chrometd
-		Prerequisites: techlevel.superw
+		Prerequisites:
+			1: techlevel.superw
 		Cursor: chemmissile
 		ChargeInterval: 11500
-		Name: Chemical Missile
-		Description: Launches an deadly Chemical Missile,\nCauses a large blast and a large toxic cloud.\nExtremely toxic to infantry.
+		Names:
+			1: Chemical Missile
+		Descriptions:
+			1: Launches an deadly Chemical Missile,\nCauses a large blast and a large toxic cloud.\nExtremely toxic to infantry.
 		EndChargeSpeechNotification: CMissileReady
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		IncomingSpeechNotification: MissileLaunchDetected
-		MissileWeapon: Chemicbm
+		MissileWeapons:
+			1: Chemicbm
 		MissileDelay: 5
 		IncomingSound: nukelaunch.aud
 		LaunchSound: nukelaunch.aud
@@ -5456,7 +5567,8 @@ MSLO.Nod:
 		DisplayTimerStances: Ally, Neutral, Enemy
 		DisplayBeacon: True
 		DisplayRadarPing: True
-		BeaconPoster: cmissile
+		BeaconPoster:
+			1: cmissile
 		SpawnOffset: 1000, 0, 0
 		CameraRange: 10c0
 		ArrowSequence: arrow
@@ -5522,7 +5634,8 @@ WEAT:
 		Name: Lightning Storm
 		ActivationDelay: 50
 		Description: Initiate a Lightning Storm.\nApplies heavy damage over a large area.
-		Weapon: WeatherStormInit
+		Weapons:
+			1:  WeatherStormInit
 		AirburstAltitude: 4c512
 		AllowMultiple: false
 		CameraActor: camera

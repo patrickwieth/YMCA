@@ -1,11 +1,10 @@
-﻿#region Copyright & License Information
-/*
- * Copyright 2007-2021 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+#region Copyright & License Information
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -15,6 +14,7 @@ using System.Linq;
 using OpenRA.Effects;
 using OpenRA.GameRules;
 using OpenRA.Graphics;
+using OpenRA.Mods.Common.Graphics;
 using OpenRA.Mods.Common.Orders;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Traits.Render;
@@ -23,8 +23,6 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	[Desc("Grants a condition to actors in the target footprint.",
-		"CA version allows for a weapon detonation and a condition applied to the actor that activated the support power.")]
 	public class GrantExternalConditionPowerCAInfo : SupportPowerInfo
 	{
 		[FieldLoader.Require]
@@ -34,43 +32,51 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Duration of the condition (in ticks). Set to 0 for a permanent condition.")]
 		public readonly int Duration = 0;
 
-		[FieldLoader.Require]
-		[Desc("Size of the footprint of the affected area.")]
-		public readonly CVec Dimensions = CVec.Zero;
-
-		[FieldLoader.Require]
-		[Desc("Actual footprint. Cells marked as x will be affected.")]
-		public readonly string Footprint = string.Empty;
-
 		[Desc("Sound to instantly play at the targeted area.")]
 		public readonly string OnFireSound = null;
+
+		[Desc("Target types that condition can be applied to. Leave empty for all types.")]
+		public readonly BitSet<TargetableType> ValidTargets = default;
+
+		[Desc("Target types that condition can be applied to. Leave empty for all types.")]
+		public readonly BitSet<TargetableType> InvalidTargets = default;
 
 		[Desc("Player relationships which condition can be applied to.")]
 		public readonly PlayerRelationship ValidRelationships = PlayerRelationship.Ally;
 
-		[SequenceReference]
-		[Desc("Sequence to play for granting actor when activated.",
-			"This requires the actor to have the WithSpriteBody trait or one of its derivatives.")]
-		public readonly string Sequence = "active";
+		[Desc("If true, targets must be owned by the player using the support power (overrides ValidRelationships).")]
+		public readonly bool OwnedTargetsOnly = false;
 
 		[CursorReference]
 		[Desc("Cursor to display when there are no units to apply the condition in range.")]
-		public readonly string BlockedCursor = "move-blocked";
+		public new readonly string BlockedCursor = "move-blocked";
 
-		public readonly string FootprintImage = "overlay";
+		[Desc("If true, targets must not be under shroud/fog.")]
+		public readonly bool TargetMustBeVisible = true;
 
-		[SequenceReference(nameof(FootprintImage))]
-		public readonly string FootprintSequence = "target-select";
+		[Desc("Maximum number of targets. Zero for no limit.")]
+		public readonly int MaxTargets = 0;
+
+		[Desc("Minimum targets for power to activate.")]
+		public readonly int MinTargets = 1;
+
+		[Desc("If true, targets must not be under shroud/fog.")]
+		public readonly bool ShowTargetCount = false;
+
+		[Desc("Font to use for target count.")]
+		public readonly string TargetCountFont = "Medium";
 
 		[WeaponReference]
-		[FieldLoader.Require]
-		public readonly string Weapon = "";
+		[Desc("Weapon to detonate at target location.")]
+		public readonly string ExplosionWeapon = null;
 
 		[Desc("Delay between activation and explosion")]
-		public readonly int ActivationDelay = 10;
+		public readonly int ExplosionDelay = 0;
 
-		[Desc("Altitude above terrain below which to explode. Zero effectively deactivates airburst.")]
-		public readonly WDist AirburstAltitude = WDist.Zero;
+		[SequenceReference]
+		[Desc("Sequence to play for granting actor when activated.",
+			"This requires the actor to have the WithSpriteBody trait or one of its derivatives.")]
+		public readonly string ActiveSequence = "active";
 
 		[GrantedConditionReference]
 		[Desc("A condition to apply while active.")]
@@ -79,23 +85,64 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("Duration of the Active condition (in ticks). Set to 0 for a permanent condition.")]
 		public readonly int ActiveDuration = 50;
 
+		public readonly bool ShowSelectionBoxes = false;
+		public readonly Color SelectionBoxColor = Color.Red;
+
+		public readonly bool ShowTargetCircle = false;
+		public readonly Color TargetCircleColor = Color.Red;
+		public readonly bool TargetCircleUsePlayerColor = false;
+
+		[Desc("Target tint colour.")]
+		public readonly Color? TargetTintColor = null;
+
+		[Desc("Maximum altitude of targets.")]
+		public readonly WDist MaxAltitude = WDist.Zero;
+
 		public WeaponInfo WeaponInfo { get; private set; }
 
+		// Circle mode only
+
+		[Desc("Range in which to apply condition.")]
+		public readonly WDist Range = WDist.Zero;
+
+		// Footprint mode only
+
+		[Desc("Size of the footprint of the affected area.")]
+		public readonly CVec Dimensions = CVec.Zero;
+
+		[Desc("Actual footprint. Cells marked as x will be affected.")]
+		public readonly string Footprint = string.Empty;
+
+		public readonly string FootprintImage = "overlay";
+
+		[SequenceReference(nameof(FootprintImage))]
+		public readonly string FootprintSequence = "target-select";
+
+		[Desc("Prerequisites grouped together to be referenced by the Prerequisite based overrides.")]
+		public readonly Dictionary<string, string[]> PrerequisiteGroupings = new();
+
+		[Desc("Overrides Condition based on prerequsites being met. If multiple are met, the first is used.",
+			"Keys can either be a single prerequisite or be a key of PrerequisiteGroupings.")]
+		public readonly Dictionary<string, string> PrerequisiteConditions = new();
+
 		public override object Create(ActorInitializer init) { return new GrantExternalConditionPowerCA(init.Self, this); }
+
 		public override void RulesetLoaded(Ruleset rules, ActorInfo ai)
 		{
 			base.RulesetLoaded(rules, ai);
 
-			WeaponInfo = rules.Weapons[Weapon.ToLowerInvariant()];
+			if (ExplosionWeapon != null)
+				WeaponInfo = rules.Weapons[ExplosionWeapon.ToLowerInvariant()];
 		}
 	}
 
-	class GrantExternalConditionPowerCA : SupportPower, ITick, ISync, INotifyCreated
+	public class GrantExternalConditionPowerCA : SupportPower, ITick, INotifyCreated
 	{
 		readonly GrantExternalConditionPowerCAInfo info;
-		readonly char[] footprint;
 		int activeToken = Actor.InvalidConditionToken;
 		IConditionTimerWatcher[] watchers;
+		readonly char[] footprint;
+		TechTree techTree;
 
 		[Sync]
 		public int Ticks { get; private set; }
@@ -105,14 +152,13 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			this.info = info;
 			footprint = info.Footprint.Where(c => !char.IsWhiteSpace(c)).ToArray();
-			Ticks = info.ActiveDuration;
 		}
 
 		protected override void Created(Actor self)
 		{
-			watchers = self.TraitsImplementing<IConditionTimerWatcher>().Where(Notifies).ToArray();
-
 			base.Created(self);
+			watchers = self.TraitsImplementing<IConditionTimerWatcher>().Where(Notifies).ToArray();
+			techTree = self.Owner.PlayerActor.Trait<TechTree>();
 		}
 
 		public override void SelectTarget(Actor self, string order, SupportPowerManager manager)
@@ -132,27 +178,51 @@ namespace OpenRA.Mods.CA.Traits
 			}
 
 			var wsb = self.TraitOrDefault<WithSpriteBody>();
-			if (wsb != null && wsb.DefaultAnimation.HasSequence(info.Sequence))
-				wsb.PlayCustomAnimation(self, info.Sequence);
+			if (wsb != null && wsb.DefaultAnimation.HasSequence(info.ActiveSequence))
+				wsb.PlayCustomAnimation(self, info.ActiveSequence);
 
 			Game.Sound.Play(SoundType.World, info.OnFireSound, order.Target.CenterPosition);
 
-			foreach (var a in UnitsInRange(self.World.Map.CellContaining(order.Target.CenterPosition)))
+			foreach (var a in GetTargets(self.World.Map.CellContaining(order.Target.CenterPosition)))
 				a.TraitsImplementing<ExternalCondition>()
-					.FirstOrDefault(t => t.Info.Condition == info.Condition && t.CanGrantCondition(self))
+					.FirstOrDefault(t => t.Info.Condition == Condition && t.CanGrantCondition(self))
 					?.GrantCondition(a, self, info.Duration);
 
-			if (info.Weapon != null)
+			if (info.ExplosionWeapon != null)
 			{
-				var targetPosition = order.Target.CenterPosition + new WVec(WDist.Zero, WDist.Zero, info.AirburstAltitude);
+				var targetPosition = order.Target.CenterPosition;
 
 				Action detonateWeapon = () => self.World.AddFrameEndTask(w => info.WeaponInfo.Impact(Target.FromPos(targetPosition), self));
 
-				self.World.AddFrameEndTask(w => w.Add(new DelayedAction(info.ActivationDelay, detonateWeapon)));
+				self.World.AddFrameEndTask(w => w.Add(new DelayedAction(info.ExplosionDelay, detonateWeapon)));
 			}
 		}
 
-		public IEnumerable<Actor> UnitsInRange(CPos xy)
+		private IEnumerable<Actor> GetTargets(CPos xy)
+		{
+			if (info.Footprint.Length > 0)
+				return GetTargetsInFootprint(xy);
+
+			return GetTargetsInCircle(xy);
+		}
+
+		private IEnumerable<Actor> GetTargetsInCircle(CPos xy)
+		{
+			var centerPos = Self.World.Map.CenterOfCell(xy);
+
+			var actorsInRange = Self.World.FindActorsInCircle(centerPos, info.Range)
+				.Where(a => {
+					return IsValidTarget(a);
+				})
+				.OrderBy(a => (a.CenterPosition - centerPos).LengthSquared);
+
+			if (info.MaxTargets > 0)
+				return actorsInRange.Take(info.MaxTargets);
+
+			return actorsInRange;
+		}
+
+		private IEnumerable<Actor> GetTargetsInFootprint(CPos xy)
 		{
 			var tiles = CellsMatching(xy, footprint, info.Dimensions);
 			var units = new List<Actor>();
@@ -161,12 +231,42 @@ namespace OpenRA.Mods.CA.Traits
 
 			return units.Distinct().Where(a =>
 			{
-				if (!info.ValidRelationships.HasRelationship(Self.Owner.RelationshipWith(a.Owner)))
-					return false;
-
-				return a.TraitsImplementing<ExternalCondition>()
-					.Any(t => t.Info.Condition == info.Condition && t.CanGrantCondition(Self));
+				return IsValidTarget(a);
 			});
+		}
+
+		bool IsValidTarget(Actor a)
+		{
+			if (a.IsDead || !a.IsInWorld)
+				return false;
+
+			if (!info.ValidRelationships.HasRelationship(Self.Owner.RelationshipWith(a.Owner)))
+				return false;
+
+			if (info.OwnedTargetsOnly && a.Owner != Self.Owner)
+				return false;
+
+			var enabledTargetTypes = a.GetEnabledTargetTypes();
+
+			if (!info.ValidTargets.IsEmpty && !info.ValidTargets.Overlaps(enabledTargetTypes))
+				return false;
+
+			if (!info.InvalidTargets.IsEmpty && info.InvalidTargets.Overlaps(enabledTargetTypes))
+				return false;
+
+			if (!a.TraitsImplementing<ExternalCondition>().Any(t => t.Info.Condition == Condition && t.CanGrantCondition(Self)))
+				return false;
+
+			if (info.TargetMustBeVisible && !Self.Owner.Shroud.IsVisible(a.Location))
+				return false;
+
+			if (!a.CanBeViewedByPlayer(Self.Owner))
+				return false;
+
+			if (a.CenterPosition.Z > info.MaxAltitude.Length)
+				return false;
+
+			return true;
 		}
 
 		void RevokeCondition(Actor self)
@@ -195,6 +295,31 @@ namespace OpenRA.Mods.CA.Traits
 
 		bool Notifies(IConditionTimerWatcher watcher) { return watcher.Condition == info.ActiveCondition; }
 
+		string Condition
+		{
+			get
+			{
+				if (info.PrerequisiteConditions.Any())
+				{
+					foreach (var item in info.PrerequisiteConditions)
+					{
+						if (techTree.HasPrerequisites(GetPrerequisitesList(item.Key)))
+							return item.Value;
+					}
+				}
+
+				return info.Condition;
+			}
+		}
+
+		string[] GetPrerequisitesList(string key)
+		{
+			if (info.PrerequisiteGroupings.TryGetValue(key, out var prerequisites))
+				return prerequisites;
+
+			return new string[] { key };
+		}
+
 		class SelectConditionTarget : OrderGenerator
 		{
 			readonly GrantExternalConditionPowerCA power;
@@ -214,18 +339,22 @@ namespace OpenRA.Mods.CA.Traits
 				this.manager = manager;
 				this.order = order;
 				this.power = power;
-				footprint = power.info.Footprint.Where(c => !char.IsWhiteSpace(c)).ToArray();
-				dimensions = power.info.Dimensions;
 
-				var sequence = world.Map.Rules.Sequences.GetSequence(power.info.FootprintImage, power.info.FootprintSequence);
-				tile = sequence.GetSprite(0);
-				alpha = sequence.GetAlpha(0);
+				if (power.info.Footprint.Length > 0)
+				{
+					footprint = power.info.Footprint.Where(c => !char.IsWhiteSpace(c)).ToArray();
+					dimensions = power.info.Dimensions;
+					var sequence = world.Map.Sequences.GetSequence(power.info.FootprintImage, power.info.FootprintSequence);
+					tile = sequence.GetSprite(0);
+					alpha = sequence.GetAlpha(0);
+				}
 			}
 
 			protected override IEnumerable<Order> OrderInner(World world, CPos cell, int2 worldPixel, MouseInput mi)
 			{
 				world.CancelInputMode();
-				if (mi.Button == MouseButton.Left && power.UnitsInRange(cell).Any())
+				var targets = power.GetTargets(cell);
+				if (mi.Button == MouseButton.Left && targets.Count() >= power.info.MinTargets)
 					yield return new Order(order, manager.Self, Target.FromCell(world, cell), false) { SuppressVisualFeedback = true };
 			}
 
@@ -241,27 +370,84 @@ namespace OpenRA.Mods.CA.Traits
 			protected override IEnumerable<IRenderable> RenderAnnotations(WorldRenderer wr, World world)
 			{
 				var xy = wr.Viewport.ViewToWorld(Viewport.LastMousePos);
-				foreach (var unit in power.UnitsInRange(xy))
+				var targetUnits = power.GetTargets(xy);
+
+				if (power.info.ShowSelectionBoxes)
 				{
-					var decorations = unit.TraitsImplementing<ISelectionDecorations>().FirstEnabledTraitOrDefault();
-					if (decorations != null)
-						foreach (var d in decorations.RenderSelectionAnnotations(unit, wr, Color.Red))
-							yield return d;
+					foreach (var unit in targetUnits)
+					{
+						var decorations = unit.TraitsImplementing<ISelectionDecorations>().FirstEnabledTraitOrDefault();
+						if (decorations != null)
+						{
+							foreach (var d in decorations.RenderSelectionAnnotations(unit, wr, power.info.SelectionBoxColor))
+								yield return d;
+						}
+					}
+				}
+
+				if (power.info.ShowTargetCircle)
+				{
+					yield return new RangeCircleAnnotationRenderable(
+						world.Map.CenterOfCell(xy),
+						power.info.Range,
+						0,
+						power.info.TargetCircleUsePlayerColor ? power.Self.Owner.Color : power.info.TargetCircleColor,
+						1,
+						Color.FromArgb(96, Color.Black),
+						3);
+				}
+
+				if (power.info.ShowTargetCount)
+				{
+					var font = Game.Renderer.Fonts[power.info.TargetCountFont];
+					var color = power.info.TargetCircleColor;
+					var text = power.info.MaxTargets > 0 ? $"{targetUnits.Count()} / {power.info.MaxTargets}" : targetUnits.Count().ToString();
+					var size = font.Measure(text);
+					var textPos = new int2(Viewport.LastMousePos.X - (size.X / 2), Viewport.LastMousePos.Y + size.Y + (size.Y / 3));
+					yield return new UITextRenderable(font, WPos.Zero, textPos, 0, color, text);
 				}
 			}
 
 			protected override IEnumerable<IRenderable> Render(WorldRenderer wr, World world)
 			{
 				var xy = wr.Viewport.ViewToWorld(Viewport.LastMousePos);
-				var pal = wr.Palette(TileSet.TerrainPaletteInternalName);
 
-				foreach (var t in power.CellsMatching(xy, footprint, dimensions))
-					yield return new SpriteRenderable(tile, wr.World.Map.CenterOfCell(t), WVec.Zero, -511, pal, 1f, alpha, float3.Ones, TintModifiers.IgnoreWorldTint, true);
+				if (power.info.Footprint.Length > 0)
+				{
+					var pal = wr.Palette(TileSet.TerrainPaletteInternalName);
+
+					foreach (var t in power.CellsMatching(xy, footprint, dimensions))
+						yield return new SpriteRenderable(tile, wr.World.Map.CenterOfCell(t), WVec.Zero, -511, pal, 1f, alpha, float3.Ones, TintModifiers.IgnoreWorldTint, true);
+				}
+
+				if (power.info.TargetTintColor != null)
+				{
+					var targetUnits = power.GetTargets(xy);
+
+					foreach (var unit in targetUnits)
+					{
+						var renderables = unit.Render(wr)
+							.Where(r => !r.IsDecoration && r is IModifyableRenderable)
+							.Select(r =>
+							{
+								var mr = (IModifyableRenderable)r;
+								var tint = new float3(power.info.TargetTintColor.Value.R, power.info.TargetTintColor.Value.G, power.info.TargetTintColor.Value.B) / 255f;
+								mr = mr.WithTint(tint, mr.TintModifiers | TintModifiers.ReplaceColor).WithAlpha(power.info.TargetTintColor.Value.A / 255f);
+								return mr;
+							});
+
+						foreach (var r in renderables)
+						{
+							yield return r;
+						}
+					}
+				}
 			}
 
 			protected override string GetCursor(World world, CPos cell, int2 worldPixel, MouseInput mi)
 			{
-				return power.UnitsInRange(cell).Any() ? power.info.Cursor : power.info.BlockedCursor;
+				var targets = power.GetTargets(cell);
+				return targets.Count() >= power.info.MinTargets ? power.info.Cursor : power.info.BlockedCursor;
 			}
 		}
 	}

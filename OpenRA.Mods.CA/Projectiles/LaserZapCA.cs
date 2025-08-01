@@ -1,11 +1,10 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2022 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -33,9 +32,6 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		[Desc("Equivalent to sequence ZOffset. Controls Z sorting.")]
 		public readonly int ZOffset = 0;
-
-		[Desc("The offset on the impact target position.")]
-		public readonly WVec targetOffset = new WVec(0, 0, 0);
 
 		[Desc("The maximum duration (in ticks) of the beam's existence.")]
 		public readonly int Duration = 10;
@@ -160,7 +156,7 @@ namespace OpenRA.Mods.CA.Projectiles
 
 			// Beam tracks target
 			if (info.TrackTarget && args.GuidedTarget.IsValidFor(args.SourceActor))
-				target = args.Weapon.TargetActorCenter ? args.GuidedTarget.CenterPosition : args.GuidedTarget.Positions.PositionClosestTo(source);
+				target = args.Weapon.TargetActorCenter ? args.GuidedTarget.CenterPosition : args.GuidedTarget.Positions.ClosestToIgnoringPath(source);
 
 			// Check for blocking actors
 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, args.SourceActor.Owner, source, target, info.Width, out var blockedPos))
@@ -210,12 +206,12 @@ namespace OpenRA.Mods.CA.Projectiles
 				}
 
 				var rc = Color.FromArgb((info.Duration - ticks) * color.A / info.Duration, color);
-				yield return new BeamRenderable(source, zOffset, target - source + info.targetOffset, info.Shape, info.Width, rc);
+				yield return new BeamRenderable(source, zOffset, target - source, info.Shape, info.Width, rc);
 
 				if (info.SecondaryBeam)
 				{
 					var src = Color.FromArgb((info.Duration - ticks) * secondaryColor.A / info.Duration, secondaryColor);
-					yield return new BeamRenderable(source, secondaryBeamZOffset, target - source + info.targetOffset,
+					yield return new BeamRenderable(source, secondaryBeamZOffset, target - source,
 						info.SecondaryBeamShape, info.SecondaryBeamWidth, src);
 				}
 			}

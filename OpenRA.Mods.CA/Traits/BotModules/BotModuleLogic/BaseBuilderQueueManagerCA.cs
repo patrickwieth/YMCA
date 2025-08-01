@@ -1,17 +1,17 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2021 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Traits;
@@ -37,11 +37,18 @@ namespace OpenRA.Mods.CA.Traits
 		int cachedBases;
 		int cachedBuildings;
 		int minimumExcessPower;
+		int minCashRequirement;
 
 		bool itemQueuedThisTick = false;
+		bool limitBuildRadius = false;
 
 		WaterCheck waterState = WaterCheck.NotChecked;
 		readonly Dictionary<string, int> activeBuildingIntervals = new Dictionary<string, int>();
+
+		BotLimits botLimits;
+		int productionTypeLimit = 0;
+		int buildingDelayModifier = 100;
+		int buildingIntervalModifier = 100;
 
 		public BaseBuilderQueueManagerCA(BaseBuilderBotModuleCA baseBuilder, string category, Player p, PowerManager pm,
 			PlayerResources pr, IResourceLayer rl)
@@ -55,8 +62,17 @@ namespace OpenRA.Mods.CA.Traits
 			Category = category;
 			failRetryTicks = baseBuilder.Info.StructureProductionResumeDelay;
 			minimumExcessPower = baseBuilder.Info.MinimumExcessPower;
+			minCashRequirement = baseBuilder.Info.DefenseQueues.Contains(Category) ? baseBuilder.Info.DefenseProductionMinCashRequirement : baseBuilder.Info.BuildingProductionMinCashRequirement;
 			if (baseBuilder.Info.NavalProductionTypes.Count == 0)
 				waterState = WaterCheck.DontCheck;
+			limitBuildRadius = world.WorldActor.TraitOrDefault<MapBuildRadius>().BuildRadiusEnabled;
+			botLimits = p.PlayerActor.TraitsImplementing<BotLimits>().FirstEnabledTraitOrDefault();
+			if (botLimits != null)
+			{
+				productionTypeLimit = botLimits.Info.ProductionTypeLimit;
+				buildingDelayModifier = botLimits.Info.BuildingDelayModifier;
+				buildingIntervalModifier = botLimits.Info.BuildingIntervalModifier;
+			}
 		}
 
 		public void Tick(IBot bot)
@@ -137,12 +153,12 @@ namespace OpenRA.Mods.CA.Traits
 			// Waiting to build something
 			if (currentBuilding == null && failCount < baseBuilder.Info.MaximumFailedPlacementAttempts)
 			{
-				// PERF: We shouldn't be queueing new buildings when we're low on cash
-				if (playerResources.Cash < baseBuilder.Info.ProductionMinCashRequirement || itemQueuedThisTick)
-					return false;
-
 				var item = ChooseBuildingToBuild(queue);
 				if (item == null)
+					return false;
+
+				// We shouldn't be queueing new buildings (other than refineries) when we're low on cash
+				if ((playerResources.GetCashAndResources() < minCashRequirement && !baseBuilder.Info.RefineryTypes.Contains(item.Name)) || itemQueuedThisTick)
 					return false;
 
 				bot.QueueOrder(Order.StartProduction(queue.Actor, item.Name, 1));
@@ -175,6 +191,8 @@ namespace OpenRA.Mods.CA.Traits
 				// Check if Building is a plug for other Building
 				var actorInfo = world.Map.Rules.Actors[currentBuilding.Item];
 				var plugInfo = actorInfo.TraitInfoOrDefault<PlugInfo>();
+				var valueInfo = actorInfo.TraitInfoOrDefault<ValuedInfo>();
+				var distanceToBaseIsImportant = true;
 				if (plugInfo != null)
 				{
 					var possibleBuilding = world.ActorsWithTrait<Pluggable>().FirstOrDefault(a =>
@@ -189,7 +207,16 @@ namespace OpenRA.Mods.CA.Traits
 				else
 				{
 					// Check if Building is a defense and if we should place it towards the enemy or not.
-					if (world.Map.Rules.Actors[currentBuilding.Item].HasTraitInfo<AttackBaseInfo>())
+					if (baseBuilder.Info.RefineryTypes.Contains(world.Map.Rules.Actors[currentBuilding.Item].Name))
+					{
+						type = BuildingType.Refinery;
+					}
+					else if (baseBuilder.Info.FragileTypes.Contains(world.Map.Rules.Actors[currentBuilding.Item].Name))
+					{
+						type = BuildingType.Fragile;
+						// distanceToBaseIsImportant = false;
+					}
+					else if (world.Map.Rules.Actors[currentBuilding.Item].HasTraitInfo<AttackBaseInfo>())
 					{
 						if (baseBuilder.Info.AntiAirTypes.Contains(world.Map.Rules.Actors[currentBuilding.Item].Name))
 							placeDefenseTowardsEnemyChance = (int)Math.Ceiling(placeDefenseTowardsEnemyChance / 1.5);
@@ -197,13 +224,11 @@ namespace OpenRA.Mods.CA.Traits
 						if (world.LocalRandom.Next(100) < placeDefenseTowardsEnemyChance)
 							type = BuildingType.Defense;
 					}
-					else if (baseBuilder.Info.RefineryTypes.Contains(world.Map.Rules.Actors[currentBuilding.Item].Name))
-					{
-						type = BuildingType.Refinery;
-					}
+					else if (!limitBuildRadius && valueInfo.Cost < baseBuilder.Info.BaseCrawlCostThreshold && world.LocalRandom.Next(100) < baseBuilder.Info.BaseCrawlChance)
+						type = BuildingType.BaseCrawl;
 				}
 
-				if (orderString != "PlacePlug") { location = ChooseBuildLocation(currentBuilding.Item, true, type); }
+				if (orderString != "PlacePlug") { location = ChooseBuildLocation(currentBuilding.Item, distanceToBaseIsImportant, queue.Actor, type); }
 
 				if (location == null)
 				{
@@ -334,19 +359,23 @@ namespace OpenRA.Mods.CA.Traits
 			}
 
 			// Make sure that we can spend as fast as we are earning
-			if (baseBuilder.Info.NewProductionCashThreshold > 0 && playerResources.Resources > baseBuilder.Info.NewProductionCashThreshold)
+			if (baseBuilder.Info.NewProductionCashThreshold > 0 && playerResources.GetCashAndResources() > baseBuilder.Info.NewProductionCashThreshold)
 			{
 				var production = GetProducibleBuilding(baseBuilder.Info.ProductionTypes, buildableThings);
-				if (production != null && HasSufficientPowerForActor(production))
-				{
-					AIUtils.BotDebug("{0} decided to build {1}: Priority override (production)", queue.Actor.Owner, production.Name);
-					return production;
-				}
 
-				if (power != null && production != null && !HasSufficientPowerForActor(production))
+				if (production != null && (productionTypeLimit <= 0 || playerBuildings.Count(a => a.Info.Name == production.Name) > productionTypeLimit))
 				{
-					AIUtils.BotDebug("{0} decided to build {1}: Priority override (would be low power)", queue.Actor.Owner, power.Name);
-					return power;
+					if (HasSufficientPowerForActor(production))
+					{
+						AIUtils.BotDebug("{0} decided to build {1}: Priority override (production)", queue.Actor.Owner, production.Name);
+						return production;
+					}
+
+					if (power != null && !HasSufficientPowerForActor(production))
+					{
+						AIUtils.BotDebug("{0} decided to build {1}: Priority override (would be low power)", queue.Actor.Owner, power.Name);
+						return power;
+					}
 				}
 			}
 
@@ -394,7 +423,7 @@ namespace OpenRA.Mods.CA.Traits
 				// Does this building have initial delay, if so have we passed it?
 				if (baseBuilder.Info.BuildingDelays != null &&
 					baseBuilder.Info.BuildingDelays.ContainsKey(name) &&
-					baseBuilder.Info.BuildingDelays[name] > world.WorldTick)
+					baseBuilder.Info.BuildingDelays[name] * (buildingDelayModifier / 100) > world.WorldTick)
 					continue;
 
 				// Does this building have an interval which hasn't elapsed yet?
@@ -417,6 +446,12 @@ namespace OpenRA.Mods.CA.Traits
 				// Do we want to build this structure?
 				if (count * 100 > frac.Value * playerBuildings.Length)
 					continue;
+
+				if (botLimits != null && baseBuilder.Info.ProductionTypes.Contains(name) && count >= botLimits.Info.ProductionTypeLimit)
+				{
+					AIUtils.BotDebug("{0} decided to build {1} but limit of {2} already reached)", queue.Actor.Owner, name, botLimits.Info.ProductionTypeLimit);
+					continue;
+				}
 
 				if (baseBuilder.Info.BuildingLimits.ContainsKey(name) && count >= baseBuilder.Info.BuildingLimits[name])
 				{
@@ -462,38 +497,41 @@ namespace OpenRA.Mods.CA.Traits
 			return null;
 		}
 
-		CPos? ChooseBuildLocation(string actorType, bool distanceToBaseIsImportant, BuildingType type)
+		// Find the buildable cell that is closest to pos and centered around center
+		CPos? findPos(string actorType, bool distanceToBaseIsImportant, Actor producer, CPos center, CPos target, int minRange, int maxRange, int distanceRequirement = 0, bool sortMax = false)
 		{
 			var actorInfo = world.Map.Rules.Actors[actorType];
 			var bi = actorInfo.TraitInfoOrDefault<BuildingInfo>();
 			if (bi == null)
 				return null;
 
-			// Find the buildable cell that is closest to pos and centered around center
-			Func<CPos, CPos, int, int, CPos?> findPos = (center, target, minRange, maxRange) =>
+			var cells = world.Map.FindTilesInAnnulus(center, minRange, maxRange);
+
+			// Sort by distance to target if we have one
+			if (center != target)
+				cells = sortMax ? cells.OrderByDescending(c => (c - target).LengthSquared) : cells.OrderBy(c => (c - target).LengthSquared);
+			else
+				cells = cells.Shuffle(world.LocalRandom);
+
+			foreach (var cell in cells)
 			{
-				var cells = world.Map.FindTilesInAnnulus(center, minRange, maxRange);
+				if (!world.CanPlaceBuilding(cell, actorInfo, bi, null))
+					continue;
 
-				// Sort by distance to target if we have one
-				if (center != target)
-					cells = cells.OrderBy(c => (c - target).LengthSquared);
-				else
-					cells = cells.Shuffle(world.LocalRandom);
+				if (distanceToBaseIsImportant && !bi.IsCloseEnoughToBase(world, player, actorInfo, producer, cell))
+					continue;
 
-				foreach (var cell in cells)
-				{
-					if (!world.CanPlaceBuilding(cell, actorInfo, bi, null))
-						continue;
+				if (distanceRequirement > 0 && (cell - target).LengthSquared > distanceRequirement * distanceRequirement)
+					continue;
 
-					if (distanceToBaseIsImportant && !bi.IsCloseEnoughToBase(world, player, actorInfo, cell))
-						continue;
+				return cell;
+			}
 
-					return cell;
-				}
+			return null;
+		}
 
-				return null;
-			};
-
+		CPos? ChooseBuildLocation(string actorType, bool distanceToBaseIsImportant, Actor producer, BuildingType type)
+		{
 			var baseCenter = baseBuilder.GetRandomBaseCenter();
 
 			switch (type)
@@ -501,11 +539,17 @@ namespace OpenRA.Mods.CA.Traits
 				case BuildingType.Defense:
 
 					// Build near the closest enemy structure
-					var closestEnemy = world.ActorsHavingTrait<Building>().Where(a => !a.Disposed && player.RelationshipWith(a.Owner) == PlayerRelationship.Enemy)
-						.ClosestTo(world.Map.CenterOfCell(baseBuilder.DefenseCenter));
+					var closestEnemy = world.ActorsHavingTrait<Building>()
+						.Where(a => !a.Disposed && player.RelationshipWith(a.Owner) == PlayerRelationship.Enemy)
+						.ClosestToIgnoringPath(world.Map.CenterOfCell(baseBuilder.DefenseCenter));
 
 					var targetCell = closestEnemy != null ? closestEnemy.Location : baseCenter;
-					return findPos(baseBuilder.DefenseCenter, targetCell, baseBuilder.Info.MinimumDefenseRadius, baseBuilder.Info.MaximumDefenseRadius);
+					return findPos(actorType, distanceToBaseIsImportant, producer, baseBuilder.DefenseCenter, targetCell, baseBuilder.Info.MinimumDefenseRadius, baseBuilder.Info.MaximumDefenseRadius);
+
+				case BuildingType.Fragile:
+					// Build away from where enemy last attacked
+					return findPos(actorType, distanceToBaseIsImportant, producer, baseCenter, baseBuilder.DefenseCenter, baseBuilder.Info.MinBaseRadius,
+						distanceToBaseIsImportant ? baseBuilder.Info.MaxBaseRadius : world.Map.Grid.MaximumTileSearchRange, sortMax: true);
 
 				case BuildingType.Refinery:
 
@@ -518,17 +562,42 @@ namespace OpenRA.Mods.CA.Traits
 
 						foreach (var r in nearbyResources)
 						{
-							var found = findPos(baseCenter, r, baseBuilder.Info.MinBaseRadius, baseBuilder.Info.MaxBaseRadius);
+							var found = findPos(actorType, distanceToBaseIsImportant, producer, baseCenter, r, baseBuilder.Info.MinBaseRadius, baseBuilder.Info.MaxBaseRadius, baseBuilder.Info.MaximumRefineryRadius);
 							if (found != null)
 								return found;
 						}
 					}
 
 					// Try and find a free spot somewhere else in the base
-					return findPos(baseCenter, baseCenter, baseBuilder.Info.MinBaseRadius, baseBuilder.Info.MaxBaseRadius);
+					return findPos(actorType, distanceToBaseIsImportant, producer, baseCenter, baseCenter, baseBuilder.Info.MinBaseRadius, baseBuilder.Info.MaxBaseRadius);
+
+				case BuildingType.BaseCrawl:
+
+					// Try and place the refinery near a resource field
+					if (resourceLayer != null)
+					{
+						var nearbyResources = world.Map.FindTilesInAnnulus(baseCenter, baseBuilder.Info.MinBaseRadius, baseBuilder.Info.BaseCrawlRadius)
+							.Where(a => resourceLayer.GetResource(a).Type != null)
+							.Shuffle(world.LocalRandom).Take(baseBuilder.Info.MaxResourceCellsToCheck);
+
+						foreach (var r in nearbyResources)
+						{
+							var found = findPos(actorType, distanceToBaseIsImportant, producer, baseCenter, r, baseBuilder.Info.MinBaseRadius, baseBuilder.Info.MaxBaseRadius);
+							if (found != null)
+								return found;
+						}
+					}
+
+					// Try and find a free spot somewhere else in the base
+					closestEnemy = world.ActorsHavingTrait<Building>()
+						.Where(a => !a.Disposed && player.RelationshipWith(a.Owner) == PlayerRelationship.Enemy)
+						.ClosestToIgnoringPath(world.Map.CenterOfCell(baseBuilder.DefenseCenter));
+
+					targetCell = closestEnemy != null ? closestEnemy.Location : baseCenter;
+					return findPos(actorType, distanceToBaseIsImportant, producer, baseBuilder.DefenseCenter, targetCell, baseBuilder.Info.MinimumDefenseRadius, baseBuilder.Info.MaximumDefenseRadius);
 
 				case BuildingType.Building:
-					return findPos(baseCenter, baseCenter, baseBuilder.Info.MinBaseRadius,
+					return findPos(actorType, distanceToBaseIsImportant, producer, baseCenter, baseCenter, baseBuilder.Info.MinBaseRadius,
 						distanceToBaseIsImportant ? baseBuilder.Info.MaxBaseRadius : world.Map.Grid.MaximumTileSearchRange);
 			}
 
@@ -541,7 +610,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (baseBuilder.Info.BuildingIntervals == null || !baseBuilder.Info.BuildingIntervals.ContainsKey(name))
 				return;
 
-			activeBuildingIntervals[name] = baseBuilder.Info.BuildingIntervals[name];
+			activeBuildingIntervals[name] = baseBuilder.Info.BuildingIntervals[name] * buildingIntervalModifier / 100;
 		}
 	}
 }

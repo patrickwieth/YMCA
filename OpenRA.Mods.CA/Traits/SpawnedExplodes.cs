@@ -1,22 +1,23 @@
-﻿#region Copyright & License Information
-/*
- * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
- * This file is a part of a third-party plugin for OpenRA, which is
- * free software. It is made available to you under the terms of the
- * GNU General Public License as published by the Free Software
- * Foundation. For more information, see COPYING.
+#region Copyright & License Information
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
 using System.Linq;
 using OpenRA.GameRules;
 using OpenRA.Mods.Common.Traits;
+using OpenRA.Mods.AS.Traits;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
 	[Desc("This actor explodes when killed and the kill XP goes to the Spawner.")]
-	public class SpawnedExplodesInfo : ExplodesInfo
+	public class SpawnedExplodesInfo : FireWarheadsOnDeathInfo
 	{
 		public override object Create(ActorInitializer init) { return new SpawnedExplodes(this, init.Self); }
 	}
@@ -57,7 +58,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (weapon.Report != null && weapon.Report.Length > 0)
 				Game.Sound.Play(SoundType.World, weapon.Report.Random(self.World.SharedRandom), self.CenterPosition);
 
-			var spawner = self.Trait<BaseSpawnerSlave>().Master;
+			var spawner = self.Trait<BaseSpawnerSlave>().Master ?? self;
 
 			var args = new ProjectileArgs
 			{
@@ -66,7 +67,7 @@ namespace OpenRA.Mods.CA.Traits
 				CurrentMuzzleFacing = () => WAngle.Zero,
 
 				DamageModifiers = !spawner.IsDead ? spawner.TraitsImplementing<IFirepowerModifier>()
-						.Select(a => a.GetFirepowerModifier()).ToArray() : new int[0],
+						.Select(a => a.GetFirepowerModifier(null)).ToArray() : new int[0],
 
 				InaccuracyModifiers = new int[0],
 

@@ -1,11 +1,10 @@
 #region Copyright & License Information
-/*
- * Copyright 2007-2019 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -28,7 +27,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly int IdleBaseUnitsMaximum = 12;
 
 		[Desc("Production queues AI uses for producing units.")]
-		public readonly string[] UnitQueues = { "Vehicle", "Infantry", "Aircraft", "Ship"};
+		public readonly string[] UnitQueues = { "VehicleSQ", "InfantrySQ", "AircraftSQ", "ShipSQ", "VehicleMQ", "InfantryMQ", "AircraftMQ", "ShipMQ" };
 
 		[Desc("What units to the AI should build.", "What relative share of the total army must be this type of unit.")]
 		public readonly Dictionary<string, int> UnitsToBuild = null;
@@ -71,7 +70,7 @@ namespace OpenRA.Mods.CA.Traits
 		public override object Create(ActorInitializer init) { return new UnitBuilderBotModuleCA(init.Self, this); }
 	}
 
-	public class UnitBuilderBotModuleCA : ConditionalTrait<UnitBuilderBotModuleCAInfo>, IBotTick, IBotNotifyIdleBaseUnits, IBotRequestUnitProduction, IGameSaveTraitData, IBotAircraftBuilder
+	public class UnitBuilderBotModuleCA : ConditionalTrait<UnitBuilderBotModuleCAInfo>, IBotTick, IBotNotifyIdleBaseUnits, IBotRequestUnitProduction, IGameSaveTraitData, IBotAircraftBuilder, INotifyActorDisposing
 	{
 		public const int FeedbackTime = 30; // ticks; = a bit over 1s. must be >= netlag.
 
@@ -79,20 +78,25 @@ namespace OpenRA.Mods.CA.Traits
 		readonly Player player;
 
 		readonly List<string> queuedBuildRequests = new List<string>();
+		readonly ActorIndex.OwnerAndNames unitsToBuild;
 		readonly Dictionary<string, int> activeUnitIntervals = new Dictionary<string, int>();
 
 		IBotRequestPauseUnitProduction[] requestPause;
 		int idleUnitCount;
 		int currentQueueIndex = 0;
 		PlayerResources playerResources;
+		BotLimits botLimits;
 
 		int ticks;
+		int unitDelayModifier = 100;
+		int unitIntervalModifier = 100;
 
 		public UnitBuilderBotModuleCA(Actor self, UnitBuilderBotModuleCAInfo info)
 			: base(info)
 		{
 			world = self.World;
 			player = self.Owner;
+			unitsToBuild = new ActorIndex.OwnerAndNames(world, info.UnitsToBuild.Keys, player);
 		}
 
 		protected override void Created(Actor self)
@@ -103,19 +107,21 @@ namespace OpenRA.Mods.CA.Traits
 			// for bot modules always to the Player actor.
 			requestPause = self.TraitsImplementing<IBotRequestPauseUnitProduction>().ToArray();
 			playerResources = self.Owner.PlayerActor.Trait<PlayerResources>();
+			botLimits = self.TraitsImplementing<BotLimits>().FirstEnabledTraitOrDefault();
+			if (botLimits != null)
+			{
+				unitDelayModifier = botLimits.Info.UnitDelayModifier;
+				unitIntervalModifier = botLimits.Info.UnitIntervalModifier;
+			}
 		}
 
-		void IBotNotifyIdleBaseUnits.UpdatedIdleBaseUnits(List<Actor> idleUnits)
+		void IBotNotifyIdleBaseUnits.UpdatedIdleBaseUnits(List<UnitWposWrapper> idleUnits)
 		{
 			idleUnitCount = idleUnits.Count;
 		}
 
 		void IBotTick.BotTick(IBot bot)
 		{
-			// PERF: We shouldn't be queueing new units when we're low on cash
-			if (playerResources.Cash < Info.ProductionMinCashRequirement || requestPause.Any(rp => rp.PauseUnitProduction))
-				return;
-
 			// Decrement any active unit intervals, removing any that reach zero
 			foreach (KeyValuePair<string, int> i in activeUnitIntervals.ToList())
 			{
@@ -123,6 +129,9 @@ namespace OpenRA.Mods.CA.Traits
 				if (activeUnitIntervals[i.Key] <= 0)
 					activeUnitIntervals.Remove(i.Key);
 			}
+
+			if (requestPause.Any(rp => rp.PauseUnitProduction))
+				return;
 
 			ticks++;
 
@@ -135,6 +144,10 @@ namespace OpenRA.Mods.CA.Traits
 					queuedBuildRequests.Remove(buildRequest);
 				}
 
+				// Don't produce if we don't have enough cash
+				if (playerResources.Cash + playerResources.Resources < Info.ProductionMinCashRequirement)
+					return;
+
 				for (var i = 0; i < Info.UnitQueues.Length; i++)
 				{
 					if (++currentQueueIndex >= Info.UnitQueues.Length)
@@ -146,7 +159,7 @@ namespace OpenRA.Mods.CA.Traits
 						// if AI gets enough cash, it can fill all of its queues with enough ticks
 						BuildUnit(bot, Info.UnitQueues[currentQueueIndex], idleUnitCount < Info.IdleBaseUnitsMaximum, false);
 
-						if (playerResources.Cash < Info.MaximiseProductionCashRequirement)
+						if (playerResources.Cash + playerResources.Resources < Info.MaximiseProductionCashRequirement)
 							break;
 					}
 				}
@@ -226,7 +239,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (Info.UnitIntervals == null || !Info.UnitIntervals.ContainsKey(name))
 				return;
 
-			activeUnitIntervals[name] = Info.UnitIntervals[name];
+			activeUnitIntervals[name] = Info.UnitIntervals[name] * unitIntervalModifier / 100;
 		}
 
 		bool ShouldBuild(string name, bool ignoreUnitsToBuild)
@@ -236,7 +249,7 @@ namespace OpenRA.Mods.CA.Traits
 
 			if (Info.UnitDelays != null &&
 				Info.UnitDelays.ContainsKey(name) &&
-				Info.UnitDelays[name] > world.WorldTick)
+				Info.UnitDelays[name] * unitDelayModifier / 100 > world.WorldTick)
 				return false;
 
 			if (Info.UnitIntervals != null &&
@@ -327,26 +340,31 @@ namespace OpenRA.Mods.CA.Traits
 
 			return new List<MiniYamlNode>()
 			{
-				new MiniYamlNode("QueuedBuildRequests", FieldSaver.FormatValue(queuedBuildRequests.ToArray())),
-				new MiniYamlNode("IdleUnitCount", FieldSaver.FormatValue(idleUnitCount))
+				new("QueuedBuildRequests", FieldSaver.FormatValue(queuedBuildRequests.ToArray())),
+				new("IdleUnitCount", FieldSaver.FormatValue(idleUnitCount))
 			};
 		}
 
-		void IGameSaveTraitData.ResolveTraitData(Actor self, List<MiniYamlNode> data)
+		void IGameSaveTraitData.ResolveTraitData(Actor self, MiniYaml data)
 		{
 			if (self.World.IsReplay)
 				return;
 
-			var queuedBuildRequestsNode = data.FirstOrDefault(n => n.Key == "QueuedBuildRequests");
+			var queuedBuildRequestsNode = data.NodeWithKeyOrDefault("QueuedBuildRequests");
 			if (queuedBuildRequestsNode != null)
 			{
 				queuedBuildRequests.Clear();
 				queuedBuildRequests.AddRange(FieldLoader.GetValue<string[]>("QueuedBuildRequests", queuedBuildRequestsNode.Value.Value));
 			}
 
-			var idleUnitCountNode = data.FirstOrDefault(n => n.Key == "IdleUnitCount");
+			var idleUnitCountNode = data.NodeWithKeyOrDefault("IdleUnitCount");
 			if (idleUnitCountNode != null)
 				idleUnitCount = FieldLoader.GetValue<int>("IdleUnitCount", idleUnitCountNode.Value.Value);
+		}
+
+		void INotifyActorDisposing.Disposing(Actor self)
+		{
+			unitsToBuild.Dispose();
 		}
 	}
 }

@@ -13,6 +13,7 @@ using System.Linq;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Primitives;
 using OpenRA.Traits;
+using OpenRA.Mods.AS.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {

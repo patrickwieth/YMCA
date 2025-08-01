@@ -455,7 +455,7 @@
 	Refinery:
 		DockAngle: 256
 		DockOffset: 1,2
-	StoresResources:
+	StoresPlayerResources:
 		Capacity: 2000
 	WithResourceStoragePipsDecoration:
 		Position: BottomLeft
@@ -497,7 +497,7 @@ PROC.Dummy:
 		SearchFromHarvesterRadius: 15
 		HarvestFacings: 8
 		EmptyCondition: no-ore
-	WithHarvesterPipsDecoration:
+	WithStoresResourcesPipsDecoration:
 		Position: BottomLeft
 		Margin: 4, 3
 		RequiresSelection: true
@@ -509,7 +509,7 @@ PROC.Dummy:
 			BlueTiberium: pip-blue
 	Selectable:
 		DecorationBounds: 1536, 1536
-	WithHarvestAnimationCA:
+	WithHarvestAnimation:
 	WithDockingAnimation:
 	ChangesHealth:
 		PercentageStep: 1
@@ -529,10 +529,10 @@ PROC.Dummy:
 	GrantConditionOnTerrain@Ore:
 		Condition: onore
 		TerrainTypes: Ore, Gems
-	Explodes@Ore:
+	FireWarheadsOnDeathCA@Ore:
 		RequiresCondition: !no-ore && onore && !being-warped
 		Weapon: OreExplosion
-	Explodes@Tib:
+	FireWarheadsOnDeathCA@Tib:
 		RequiresCondition: !no-ore && ontib && !being-warped
 		Weapon: TibExplosion
 
@@ -733,7 +733,6 @@ PROC.Dummy:
 		SelectionBarColor: 40FFFF
 	Targetable@Temporal:
 		TargetTypes: Temporal
-
 	WithModifiedPalette@temporal:
 		RequiresCondition: being-warped && rasprite
 		Palette: temporal_ra
@@ -754,7 +753,6 @@ PROC.Dummy:
 		RequiresCondition: being-warped && voxel
 		Palette: temporal_voxel
 		IsPlayerPalette: true
-
 	WithColoredOverlay@temporal2:
 		RequiresCondition: being-warped
 		Color: b4000000
@@ -765,7 +763,7 @@ PROC.Dummy:
 		Sequence: chrono-overlay
 		IsDecoration: true
 		RequiresCondition: being-warped
-	Explodes@temporal:
+	FireWarheadsOnDeathCA@temporal:
 		Weapon: TemporalExplode
 		EmptyWeapon: TemporalExplode
 		DeathTypes: ChronoDeath
@@ -874,7 +872,7 @@ PROC.Dummy:
 			Concrete: 85
 			Light: 85
 			Heavy: 100
-	Explodes@ATOMIZED:
+	FireWarheadsOnDeathCA@ATOMIZED:
 		Weapon: AtomizeSpreadInit
 		EmptyWeapon: AtomizeSpreadInit
 		RequiresCondition: atomized
@@ -2176,7 +2174,7 @@ PROC.Dummy:
 		FallRate: 26
 		KilledOnImpassableTerrain: true
 		ParachutingCondition: parachute
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
 		RequiresCondition: !being-warped
@@ -2648,7 +2646,7 @@ PROC.Dummy:
 	GpsRadarDot:
 		Sequence: Ship
 	WithDamageOverlay:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: UnitExplodeShip
 		EmptyWeapon: UnitExplodeShip
 		RequiresCondition: !being-warped
@@ -2730,7 +2728,7 @@ PROC.Dummy:
 		CloakTypes: Underwater
 		Range: 4c0
 	RenderDetectionCircle:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: UnitExplodeSubmarine
 		EmptyWeapon: UnitExplodeSubmarine
 		RequiresCondition: !under-bridge && !being-warped
@@ -2818,7 +2816,7 @@ PROC.Dummy:
 		Categories: Aircraft
 	SpawnActorOnDeath:
 		RequiresCondition: airborne
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: UnitExplode
 		RequiresCondition: !airborne
 	GrantConditionOnPrerequisite@ROF:
@@ -2889,7 +2887,7 @@ PROC.Dummy:
 		RequiresCondition: c4 && !airborne
 	Targetable@tnt:
 		RequiresCondition: tnt && !airborne
-	Explodes:
+	FireWarheadsOnDeathCA:
 		RequiresCondition: !airborne && !being-warped
 	SpeedMultiplier@SUPPRESSION:
 		Modifier: 60
@@ -2984,6 +2982,9 @@ PROC.Dummy:
 		Modifier: 0
 		RequiresCondition: empdisable
 	-KillsSelf@EMP:
+	FireWarheadsOnDeathCA:
+		Weapon: KirovExplode
+		RequiresCondition: !airborne
 
 ^AirshipTD:
 	Inherits: ^Airship
@@ -3137,7 +3138,7 @@ PROC.Dummy:
 		DamagedSounds: kaboom1.aud
 		DestroyedSounds: kaboom22.aud
 	WithSpriteBody:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Type: Footprint
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
@@ -3149,7 +3150,6 @@ PROC.Dummy:
 	Guardable:
 		Range: 3c0
 	FrozenUnderFog:
-	FrozenUnderFogUpdatedByGpsRadar:
 	Tooltip:
 		GenericName: Structure
 	MapEditorData:
@@ -3194,7 +3194,7 @@ PROC.Dummy:
 		PlayerExperience: 25
 		RepairingNotification: Repairing
 		RequiresCondition: !being-warped
-	EngineerRepairable:
+	InstantlyRepairable:
 	AcceptsDeliveredCash:
 	WithMakeAnimation:
 		Condition: build-incomplete
@@ -3230,7 +3230,7 @@ PROC.Dummy:
 	Targetable:
 		RequiresCondition: !being-warped
 	-ExternalCondition@CRATE-CLOAK:
-	Explodes@temporal:
+	FireWarheadsOnDeathCA@temporal:
 		Weapon: TemporalExplodeLarge
 		EmptyWeapon: TemporalExplodeLarge
 	GrantConditionOnDamageState@DAMAGED:
@@ -3262,7 +3262,7 @@ PROC.Dummy:
 		Condition: NukularOwned
 	DamageMultiplier@Nukular:
 		Modifier: 50
-	Explodes@NUKE:
+	FireWarheadsOnDeathCA@NUKE:
 		Weapon: UltraNuke
 		EmptyWeapon: UltraNuke
 
@@ -3295,7 +3295,7 @@ PROC.Dummy:
 		RequiresCondition: scrinsprite && NukularCargo
 	WithModifiedPalette@IRRADIATABLE_VOXEL:
 		RequiresCondition: voxel && NukularCargo
-	Explodes@NUKE:
+	FireWarheadsOnDeathCA@NUKE:
 		Weapon: UltraNuke
 		EmptyWeapon: UltraNuke
 		RequiresCondition: NukularCargo
@@ -3447,7 +3447,7 @@ PROC.Dummy:
 	DrawLineToTarget:
 	RenderRangeCircle:
 		Color: C12900
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: SmallBuildingExplode
 		EmptyWeapon: SmallBuildingExplode
 	MapEditorData:
@@ -3461,7 +3461,7 @@ PROC.Dummy:
 	RevealOnFire:
 		RevealGeneratedShroud: True
 		RequiresCondition: revealonfire
-	Explodes@temporal:
+	FireWarheadsOnDeathCA@temporal:
 		Weapon: TemporalExplode
 		EmptyWeapon: TemporalExplode
 	DetectCloaked@UNDERBRIDGE:
@@ -3525,6 +3525,7 @@ PROC.Dummy:
 
 ^TechBuilding:
 	Inherits: ^BasicBuilding
+	InstantlyRepairable:
 	Huntable:
 	Health:
 		HP: 40000
@@ -3551,7 +3552,7 @@ PROC.Dummy:
 		AreaTypes: fake
 	Health:
 		HP: 10000
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: Demolish
 		DamageThreshold: 70
 	RevealsShroud:
@@ -3589,7 +3590,7 @@ PROC.Dummy:
 		RenderSelectionBars: False
 	Health:
 		HP: 1000
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: UnitExplode
 	Tooltip:
 		Name: Ammo Box
@@ -3613,17 +3614,17 @@ PROC.Dummy:
 	SpawnRandomActorOnDeath@3:
 		Actors: c5,c7,c8,c9
 		Probability: 15
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: SmallBuildingExplode
-	Explodes@CIVPANIC:
+	FireWarheadsOnDeathCA@CIVPANIC:
 		Weapon: CivPanicExplosion
 
 ^CivField:
 	Inherits: ^CivBuilding
 	-HitShape:
 	-Health:
-	-Explodes:
-	-Explodes@CIVPANIC:
+	-FireWarheadsOnDeathCA:
+	-FireWarheadsOnDeathCA@CIVPANIC:
 	-Selectable:
 	Interactable:
 	-SelectionDecorations:
@@ -3774,7 +3775,7 @@ PROC.Dummy:
 		GenericName: Destroyed Vehicle
 	BodyOrientation:
 		UseClassicFacings: True
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: VisualExplodeHusk
 		EmptyWeapon: VisualExplodeHusk
 		DamageSource: Killer
@@ -3863,7 +3864,7 @@ PROC.Dummy:
 		ForceHealthPercentage: 25
 	Tooltip:
 		GenericName: Destroyed Building
-	Explodes@NORMAL:
+	FireWarheadsOnDeathCA@NORMAL:
 		Type: Footprint
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
@@ -4282,14 +4283,14 @@ PROC.Dummy:
 	WithShadow:
 
 ^ThrowsShrapnel:
-	ThrowsShrapnel@small:
+	FireProjectilesOnDeath@small:
 		Weapons: SmallDebris
 		Pieces: 3, 7
 		Range: 1c511, 3c0
 
 ^ThrowsShrapnelBig:
 	Inherits: ^ThrowsShrapnel
-	ThrowsShrapnel@fire:
+	FireProjectilesOnDeath@fire:
 		Weapons: FireDebris
 		Pieces: 3, 7
 		Range: 1c511, 3c0
@@ -4480,7 +4481,7 @@ PROC.Dummy:
 	WithVoxelAnimatedBody:
 		RequiresCondition: harvesting
 	Inherits: ^Harvester
-	-WithHarvestAnimationCA:
+	-WithHarvestAnimation:
 	-WithDockingAnimation:
 
 ^VoxelTurretedTank:
@@ -4996,7 +4997,7 @@ PROC.Dummy:
 		Armaments: primary, secondary
 		PauseOnCondition: being-warped
 		FacingTolerance: 0
-	EngineerRepair:
+	InstantlyRepairs:
 	RepairsBridges:
 	CaptureManager:
 	Captures:

@@ -33,7 +33,7 @@ V2RL:
 		RequiresCondition: reloading
 		Sequence: empty-idle
 		Name: reloading
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: BarrelExplode
 
 1TNK:
@@ -218,7 +218,7 @@ V2RL:
 	KillsSelf@warpout:
 		GrantsCondition: warpout
 		RequiresCondition: !warpin
-	Explodes@warpout:
+	FireWarheadsOnDeathCA@warpout:
 		Weapon: UnitExplodeWarpOut
 		EmptyWeapon: UnitExplodeWarpOut
 		RequiresCondition: warpout
@@ -266,7 +266,7 @@ ARTY:
 		PauseOnCondition: empdisable || being-warped
 		FacingTolerance: 0
 	WithMuzzleOverlay:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
 
@@ -319,9 +319,9 @@ ARTY.Chrono:
 	KillsSelf@warpout:
 		GrantsCondition: warpout
 		RequiresCondition: !warpin
-	Explodes:
+	FireWarheadsOnDeathCA:
 		RequiresCondition: !warpout
-	Explodes@warpout:
+	FireWarheadsOnDeathCA@warpout:
 		Weapon: UnitExplodeWarpOut
 		EmptyWeapon: UnitExplodeWarpOut
 		RequiresCondition: warpout
@@ -849,12 +849,12 @@ DTRK:
 	Mobile:
 		Speed: 82
 		Voice: Move
-	Explodes@NUKE:
+	FireWarheadsOnDeathCA@NUKE:
 		Weapon: MiniNuke
 		EmptyWeapon: MiniNuke
 		DamageSource: Killer
 		RequiresCondition: !unloaded && !being-warped
-	Explodes@UNARMED:
+	FireWarheadsOnDeathCA@UNARMED:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
 		RequiresCondition: unloaded && !being-warped
@@ -898,7 +898,7 @@ TTRK:
 		Voice: Move
 	Valued:
 		Cost: 2000
-	Explodes@NUKE:
+	FireWarheadsOnDeathCA@NUKE:
 		Weapon: UnitExplodeToxinTruck
 		EmptyWeapon: UnitExplodeToxinTruck
 
@@ -1416,7 +1416,7 @@ MSAM:
 		TargetFrozenActors: True
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ArtilleryExplode
 
 MSAM.Hailstorm:
@@ -1486,7 +1486,7 @@ MLRS:
 		RevokeDelay: 50
 		RevokeAll: false
 	AutoTarget:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: BarrelExplode
 	ReloadAmmoPool@1:
 		Delay: 120
@@ -1841,7 +1841,7 @@ BIKE.Explosive:
 		Weapon: BikeRocketsAAExplosive
 
 BIKE.Explosive.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: BIKE.Explosive
 	Buildable:
 		BuildPaletteOrder: 30
@@ -2414,7 +2414,7 @@ TITN:
 		Recoil: 43
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ArtilleryExplode
 		LoadedChance: 100
 	Voiced:
@@ -2704,7 +2704,7 @@ HMLRS:
 		ForceFireIgnoresActors: false
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ArtilleryExplode
 		LoadedChance: 75
 
@@ -2893,7 +2893,7 @@ V3RL:
 	MissileSpawnerMaster:
 		Actors: V3
 		RespawnTicks: 250
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: BarrelExplode
 	Voiced:
 		VoiceSet: V3Voice
@@ -2942,11 +2942,12 @@ V3:
 		Type: CenterPosition
 		Offsets: -200, 0, 0
 	MissileSpawnerSlave:
-	SpawnedExplodes:
+	ExplodesForMaster:
 		Weapon: V3Weapon
+		MasterArmamentName: V3Launcher
 		EmptyWeapon: VisualExplodeHusk
 		RequiresCondition: !airborne
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: VisualExplodeAirborne
 		RequiresCondition: airborne
 	WithFacingSpriteBody:
@@ -2990,7 +2991,7 @@ KATY:
 		PauseOnCondition: empdisable || being-warped
 		FacingTolerance: 0
 	SelectionDecorations:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: BarrelExplode
 
 TNKD:
@@ -3231,7 +3232,7 @@ MEMP.Volatile:
 		PauseOnCondition: deployed || disabled || empdisable || being-warped
 		Voice: Move
 		Speed: 115
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: MEMP.smaller
 		EmptyWeapon: VisualExplodeHusk
 
@@ -3314,7 +3315,7 @@ CDRN:
 		Speed: 135
 		Voice: Move
 		PauseOnCondition: empdisable || being-warped
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ChaosDroneExplode
 		EmptyWeapon: VisualExplodeHusk
 	AttackFrontal:
@@ -3430,7 +3431,7 @@ CRYO:
 		Weapon: CryoMissile
 		LocalOffset: 300,100,300, 300,-100,300
 	WithSpriteTurret:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: CryoExplosion
 
 SLNG:
@@ -3472,7 +3473,7 @@ SLNG:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	WithMuzzleOverlay:
-	Explodes:
+	FireWarheadsOnDeathCA:
 		Weapon: ArtilleryExplode
 		EmptyWeapon: UnitExplodeSmall
 		LoadedChance: 75

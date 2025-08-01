@@ -1,10 +1,10 @@
 ﻿#region Copyright & License Information
-/*
- * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
- * This file is a part of a third-party plugin for OpenRA, which is
- * free software. It is made available to you under the terms of the
- * GNU General Public License as published by the Free Software
- * Foundation. For more information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenRA.GameRules;
 using OpenRA.Graphics;
-using OpenRA.Mods.CA.Graphics;
+using OpenRA.Mods.AS.Graphics;
 using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Effects;
 using OpenRA.Mods.Common.Graphics;
@@ -122,6 +122,9 @@ namespace OpenRA.Mods.CA.Projectiles
 		[Desc("If target direction angle changes this much then beam will shut off.")]
 		public readonly WAngle MaxFacingDeviation = new WAngle(512);
 
+		[Desc("To use the basic logic without a visual.")]
+		public readonly bool Invisible = false;
+
 		public IProjectile Create(ProjectileArgs args) { return new PlasmaBeam(args, this); }
 	}
 
@@ -214,6 +217,9 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		void CalculateColors(WVec direction)
 		{
+			if (info.Invisible)
+				return;
+
 			if (ticks > 0 && !info.RecalculateColors)
 				return;
 
@@ -273,7 +279,7 @@ namespace OpenRA.Mods.CA.Projectiles
 				return;
 			}
 
-			var guidedTargetPos = args.Weapon.TargetActorCenter ? args.GuidedTarget.CenterPosition : args.GuidedTarget.Positions.PositionClosestTo(args.Source);
+			var guidedTargetPos = args.Weapon.TargetActorCenter ? args.GuidedTarget.CenterPosition : args.GuidedTarget.Positions.ClosestToIgnoringPath(args.Source);
 			target = guidedTargetPos + inaccuracyOffset;
 		}
 
@@ -296,6 +302,9 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		void CalculateBeam(WVec direction)
 		{
+			if (info.Invisible)
+				return;
+
 			CalculateDistortion(direction);
 
 			var shouldDistort = (ticks == 0 && info.Distortion != 0) || (ticks > 0 && info.DistortionAnimation != 0);
@@ -360,7 +369,7 @@ namespace OpenRA.Mods.CA.Projectiles
 			CheckBlocked();
 			CalculateColors(direction);
 
-			if (++ticks >= info.Duration)
+			if (++ticks >= info.Duration || args.SourceActor.IsDead)
 			{
 				world.AddFrameEndTask(w => w.Remove(this));
 				return;
@@ -386,6 +395,9 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		public IEnumerable<IRenderable> Render(WorldRenderer worldRenderer)
 		{
+			if (info.Invisible)
+				yield break;
+
 			if (worldRenderer.World.FogObscures(target) &&
 				worldRenderer.World.FogObscures(source))
 				yield break;

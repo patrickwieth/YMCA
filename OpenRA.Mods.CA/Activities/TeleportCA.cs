@@ -1,11 +1,10 @@
 ﻿#region Copyright & License Information
-/*
- * Copyright 2007-2018 The OpenRA Developers (see AUTHORS)
- * This file is part of OpenRA, which is free software. It is made
- * available to you under the terms of the GNU General Public License
- * as published by the Free Software Foundation, either version 3 of
- * the License, or (at your option) any later version. For more
- * information, see COPYING.
+/**
+ * Copyright (c) The OpenRA Combined Arms Developers (see CREDITS).
+ * This file is part of OpenRA Combined Arms, which is free software.
+ * It is made available to you under the terms of the GNU General Public License
+ * as published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version. For more information, see COPYING.
  */
 #endregion
 
@@ -38,7 +37,7 @@ namespace OpenRA.Mods.CA.Activities
 		{
 			var max = teleporter.World.Map.Grid.MaximumTileSearchRange;
 			if (maximumDistance > max)
-				throw new InvalidOperationException("Teleport distance cannot exceed the value of MaximumTileSearchRange ({0}).".F(max));
+				throw new InvalidOperationException($"Teleport distance cannot exceed the value of MaximumTileSearchRange ({max}).");
 
 			this.teleporter = teleporter;
 			this.destination = destination;
@@ -78,7 +77,12 @@ namespace OpenRA.Mods.CA.Activities
 			Game.Sound.Play(SoundType.World, sound, self.CenterPosition);
 			Game.Sound.Play(SoundType.World, sound, self.World.Map.CenterOfCell(destination));
 
-			self.Trait<IPositionable>().SetPosition(self, destination);
+			var positionable = self.Trait<IPositionable>();
+
+			var subCell = positionable.GetAvailableSubCell(destination);
+			if (subCell != SubCell.Invalid)
+				positionable.SetPosition(self, destination, subCell);
+
 			self.Generation++;
 
 			if (killCargo)
@@ -100,13 +104,13 @@ namespace OpenRA.Mods.CA.Activities
 			// Consume teleport charges if this wasn't triggered via chronosphere
 			if (teleporter == self && pc != null)
 			{
-				pc.ResetChargeTime();
+				pc.ConsumeCharge();
 				pc.GrantCondition(self);
 			}
 
 			// Trigger screen desaturate effect
 			if (screenFlash)
-				foreach (var a in self.World.ActorsWithTrait<ChronoshiftPaletteEffect>())
+				foreach (var a in self.World.ActorsWithTrait<ChronoshiftPostProcessEffect>())
 					a.Trait.Enable();
 
 			if (teleporter != null && self != teleporter && !teleporter.Disposed)
