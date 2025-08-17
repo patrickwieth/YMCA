@@ -126,11 +126,12 @@ Railgunner.noCrush:
 	-Crushable:
 
 Jumpjet:
-	Inherits: ^Infantry
+	Inherits: ^Helicopter
 	Inherits: ^InfantryRA2Sprite
 	Inherits: ^PrioAntiLight
 	Inherits: ^LightArmor
 	Inherits: ^EmpDisable
+	-WithFacingSpriteBody:
 	RenderSprites:
 		Image: jumpjet
 	Selectable:
@@ -179,7 +180,6 @@ Jumpjet:
 		RequiresCondition: !being-warped
 	AttackMove:
 		Voice: Move
-	-Passenger:
 	Guard:
 		Voice: Move
 	Voiced:
@@ -210,12 +210,12 @@ Jumpjet:
 	Targetable@Temporal:
 		TargetTypes: Temporal
 		RequiresCondition: !airborne
-	-Mobile:
 	Aircraft:
 		CruiseAltitude: 0c511
 		IdealSeparation: 0c384
 		InitialFacing: 92
 		Speed: 118
+		TurnSpeed: 48
 		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,BlackTiberium,Beach,Bridge,Tunnel,Ford
 		AirborneCondition: airborne
 		CruisingCondition: cruising
@@ -228,10 +228,11 @@ Jumpjet:
 		MinHoveringAltitude: 0c3
 		RiseTicks: 150
 		RequiresCondition: cruising
+	-EjectOnDeath:
+	-WithDamageOverlay:
+	-LeavesTrails:
 	WithShadow:
 		Offset: 0,0,-768
-	-SpawnActorOnDeath@viceroid:
-	-Crushable:
 	GrantConditionOnTerrain@KILLJUMPJET:
 		Condition: badterrain
 		TerrainTypes: Cliff, Rock, Tree, Wall
