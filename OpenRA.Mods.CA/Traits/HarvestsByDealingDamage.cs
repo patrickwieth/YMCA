@@ -28,13 +28,13 @@ namespace OpenRA.Mods.CA.Traits
 	public class HarvestsByDealingDamage : ConditionalTrait<HarvestsByDealingDamageInfo>, INotifyAppliedDamage
 	{
 		readonly Harvester harv;
-		readonly INotifyHarvesterAction[] notifyHarvesterActions;
+		readonly INotifyHarvestAction[] notifyHarvesterActions;
 
 		public HarvestsByDealingDamage(ActorInitializer init, HarvestsByDealingDamageInfo info)
 			: base(info)
 		{
 			harv = init.Self.Trait<Harvester>();
-			notifyHarvesterActions = init.Self.TraitsImplementing<INotifyHarvesterAction>().ToArray();
+			notifyHarvesterActions = init.Self.TraitsImplementing<INotifyHarvestAction>().ToArray();
 		}
 
 		void INotifyAppliedDamage.AppliedDamage(Actor self, Actor damaged, AttackInfo e)
@@ -65,7 +65,7 @@ namespace OpenRA.Mods.CA.Traits
 			for (var i = 0; i < units; i++)
 			{
 				if (!harv.IsFull)
-					harv.AcceptResource(self, resource);
+					harv.AddResource(self, resource);
 			}
 
 			foreach (var t in notifyHarvesterActions)

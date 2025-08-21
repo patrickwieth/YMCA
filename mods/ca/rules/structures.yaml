@@ -1361,6 +1361,7 @@ SILO:
 		Range: 4c0
 	WithBuildingBib:
 		HasMinibib: true
+		Sequence: bibSilo
 	-WithSpriteBody:
 	WithResourceLevelSpriteBody:
 		Sequence: stages
@@ -2141,7 +2142,7 @@ TENT:
 
 FIX:
 	Inherits: ^Building
-	Inherits@shape: ^3x3Shape
+	Inherits: ^3x3Shape
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 100
@@ -2174,6 +2175,7 @@ FIX:
 		RequiresCondition: !forceshield && !invulnerability && !being-warped
 	WithBuildingBib:
 		HasMinibib: true
+		Sequence: bibFix
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	Power:
@@ -2658,7 +2660,7 @@ AIRS:
 	Inherits: ^BuildingTD
 	Inherits: ^PrimaryBuilding
 	Inherits: ^VehicleProduction
-	Inherits: ^4x2Shape
+	Inherits: ^4x2Building+Bib
 	RenderSprites:
 		Image: astrip
 	HitShape:
@@ -2678,8 +2680,7 @@ AIRS:
 		Name: Airstrip
 	Building:
 		Footprint: XXX+ xxx+ ++++
-		Dimensions: 4,3
-		LocalCenterOffset: 0,-512,0
+
 	Health:
 		HP: 220000
 	RevealsShroud:
@@ -2688,7 +2689,6 @@ AIRS:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 5c0
-	WithBuildingBib:
 	WithIdleOverlay@DISH:
 		Sequence: idle-dish
 		RequiresCondition: !build-incomplete
@@ -3051,6 +3051,7 @@ GTWR:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 	WithBuildingBib:
+		Sequence: bibFtur
 		HasMinibib: true
 	Armament:
 		Weapon: gtchaingun
@@ -3071,8 +3072,8 @@ GTWR:
 
 ATWR:
 	Inherits: ^DefenseTD
-	Inherits@IDISABLE: ^DisableOnLowPower
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^DisableOnLowPower
+	Inherits: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
@@ -3092,6 +3093,7 @@ ATWR:
 	RevealsShroud@GAPGEN:
 		Range: 6c0
 	WithBuildingBib:
+		Sequence: bibFtur3
 		HasMinibib: true
 	RenderRangeCircle:
 	Turreted:
@@ -3189,6 +3191,7 @@ OBLI:
 		Range: 6c0
 	WithBuildingBib:
 		HasMinibib: true
+		Sequence: bibFtur2
 	-WithSpriteBody:
 	WithChargeSpriteBody:
 		Sequence: active
@@ -3586,6 +3589,7 @@ REP:
 	RevealsShroud@GAPGEN:
 		Range: 4c0
 	WithBuildingBib:
+		Sequence: bibFix
 		HasMinibib: true
 	Reservable:
 	RallyPoint:
@@ -3831,6 +3835,7 @@ SILO.TD:
 	RevealsShroud:
 		Range: 4c0
 	WithBuildingBib:
+		Sequence: bibSilo
 		HasMinibib: true
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
@@ -4299,7 +4304,7 @@ TMPL:
 
 PRIS:
 	Inherits: ^Defense
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetGround
 	AutoTargetPriority@DEFAULT:
 		InvalidTargets: NoAutoTarget, WaterStructure, PrismTower
@@ -4331,6 +4336,7 @@ PRIS:
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
 	WithBuildingBib:
+		Sequence: bibFtur
 		HasMinibib: true
 	WithSpriteBody@charged:
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -4636,6 +4642,7 @@ TTUR:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 	WithBuildingBib:
+		Sequence: bibFtur
 		HasMinibib: true
 	Turreted:
 		TurnSpeed: 1000
@@ -4962,6 +4969,7 @@ PATR:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
 	WithBuildingBib:
+		Sequence: bibSam2
 		HasMinibib: true
 	RejectsOrders:
 		Except: Sell, PowerDown
@@ -5626,6 +5634,7 @@ WEAT:
 		Range: 5c0
 		RequiresCondition: !disabled
 	WithBuildingBib:
+		Sequence: bibIron
 	DetonateWeaponPower@LightningStorm:
 		OrderName: storm
 		Icon: storm

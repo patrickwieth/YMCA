@@ -174,7 +174,6 @@ FEED:
 	RevealsShroud:
 		Range: 5c0
 	Harvester:
-		Capacity: 10
 		Resources: Tiberium, BlueTiberium, Ore, Gems
 		HarvestFacings: 8
 		BaleLoadDelay: 18
@@ -182,6 +181,9 @@ FEED:
 		FullyLoadedSpeed: 100
 		SearchFromProcRadius: 5
 		SearchFromHarvesterRadius: 5
+	StoresResources:
+		Resources: Tiberium, BlueTiberium, Ore, Gems
+		Capacity: 10
 	WithHarvestAnimation:
 	WithMoveAnimation:
 	WithFacingSpriteBody:
@@ -2233,6 +2235,8 @@ NERV:
 		Name: Ichor Seed
 		LifeTime: -1
 		AllowMultiple: false
+		Names:
+			1: Ichor Seed
 		Descriptions:
 			1: Seeds tiberium at selected location.
 		LaunchSound: ichorseed.aud
@@ -2251,8 +2255,8 @@ NERV:
 		LifeTime: -1
 		Names:
 			1: Buzzer Swarm
-			Descriptions:
-				1: Spawns controllable buzzer swarm which damages anything nearby.
+		Descriptions:
+			1: Spawns controllable buzzer swarm which damages anything nearby.
 		LaunchSound: buzzers-create.aud
 		SelectTargetSpeechNotification: SelectTarget
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -2355,11 +2359,8 @@ SCRT:
 		Prerequisites: structures.reaper
 		ChargeInterval: 6750
 		Name: Feeder Mutation
-		Condition: feedermutation
 		Dimensions: 3, 3
-		Footprint: _x_ xxx _x_
 		ValidRelationships: Ally
-		Duration: 25
 		AllowMultiple: false
 		Description: Transforms Scrin infantry into Feeders which consume resources\nuntil becoming volatile enough to explode.
 		OnFireSound: feedermutation.aud
@@ -2369,6 +2370,12 @@ SCRT:
 		Cursor: ability
 		PauseOnCondition: disabled || empdisable || being-warped
 		DisplayTimerRelationships: Ally
+		Conditions:
+			1: feedermutation
+		Durations:
+			1: 25
+		Footprints:
+			1: _x_ xxx _x_
 	Exit:
 
 GRAV:
@@ -2485,7 +2492,7 @@ SIGN:
 SREP:
 	Inherits: ^ScrinBuilding
 	Inherits: ^ScrinSpriteRA2
-	Inherits@shape: ^3x3Shape
+	Inherits: ^3x3Shape
 	HitShape:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
 		Type: Polygon
@@ -2506,6 +2513,7 @@ SREP:
 	Health:
 		HP: 80000
 	WithBuildingBib:
+		Sequence: bibFix
 		HasMinibib: true
 	Reservable:
 	RallyPoint:
@@ -2548,6 +2556,7 @@ SILO.SCRIN:
 	Health:
 		HP: 30000
 	WithBuildingBib:
+		Sequence: bibSilo
 		HasMinibib: true
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack
@@ -2625,7 +2634,7 @@ MANI:
 		TargetCircleColor: ff55ffcc
 		LaunchSound: suppression.aud
 		DisplayTimerStances: Ally, Neutral, Enemy
-		Weapon:
+		Weapons:
 			1:  SuppressionField
 		CameraActor: camera.dummy
 		CameraRemoveDelay: 1
@@ -2653,6 +2662,7 @@ RIFT:
 	Health:
 		HP: 100000
 	WithBuildingBib:
+		Sequence: bibIron
 	DetonateWeaponPower@RiftGenerator:
 		OrderName: rift
 		Icon: riftpower
@@ -2661,7 +2671,7 @@ RIFT:
 		Name: Rift
 		ActivationDelay: 50
 		Description: Initiate a Lightning Storm.\nApplies heavy damage over a large area.
-		Weapon:
+		Weapons:
 			1:  RiftInit
 		AllowMultiple: false
 		CameraActor: camera
@@ -2722,6 +2732,7 @@ PTUR:
 	Health:
 		HP: 40000
 	WithBuildingBib:
+		Sequence: bibGun
 		HasMinibib: true
 	Turreted:
 		TurnSpeed: 48
@@ -2765,6 +2776,7 @@ SHAR:
 	Health:
 		HP: 50000
 	WithBuildingBib:
+		Sequence: bibTesla
 		HasMinibib: true
 	Turreted:
 		TurnSpeed: 60
@@ -2812,6 +2824,7 @@ SCOL:
 	Health:
 		HP: 45000
 	WithBuildingBib:
+		Sequence: bibTesla
 		HasMinibib: true
 	Armament:
 		Weapon: StormColumnZap
@@ -2837,8 +2850,8 @@ SCOL:
 		Interval: 850
 		VolumeMultiplier: 0.4
 		RequiresCondition: storm-active
-	LaysMinefield@IONSTORM:
-		Mines: strm
+	SpawnNeighboringActors@IONSTORM:
+		ActorTypes: strm
 		Locations: 0,1, 1,0, -1,0
 		RecreationInterval: 150
 		KillOnRemove: true

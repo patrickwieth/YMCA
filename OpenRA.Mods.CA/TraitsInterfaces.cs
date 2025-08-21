@@ -37,12 +37,6 @@ namespace OpenRA.Mods.CA.Traits
 
 	public interface INotifyActivate { void Launching(Actor self); }
 
-	[RequireExplicitImplementation]
-	public interface IPointDefense
-	{
-		bool Destroy(WPos position, Player attacker, string type);
-	}
-
 	public interface IBotCAInfo : ITraitInfoInterface { string Name { get; } }
 	public interface IBotCA
 	{

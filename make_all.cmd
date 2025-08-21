@@ -1,2 +1,4 @@
 call make.cmd all
-if errorlevel == 0 call launch-game.cmd
+@echo.
+@echo Build completed. Press any key to continue...
+@pause >nul
