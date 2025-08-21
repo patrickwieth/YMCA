@@ -1,4 +1,43 @@
 
+ClusterBomb:
+	Inherits: ^Artillery
+	-Report:
+	ReloadDelay: 60
+	Range: 4c0
+	Projectile: BulletCA
+		Speed: 96
+		LaunchAngle: 0, 32
+		Inaccuracy: 1c0
+		BounceCount: 0
+		Image: BOMB
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 10000
+	Warhead@Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Structure, Wall, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: med_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+ClusterBomb2S3:
+	Inherits: ClusterBomb
+	Warhead@1Dam: SpreadDamage
+		Damage: 5750
+
+^Cluster_Upgrade:
+	Warhead@Cluster_Upgrade: FireCluster
+		Weapon: ClusterBomb2S3
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
 30mm:
 	Inherits: 25mm
 	ReloadDelay: 36
@@ -627,10 +666,10 @@ KatyushaRockets:
 	Inherits: ^AntiGroundMissile
 	Inherits: ^MissileArtillery
 	ReloadDelay: 240
-	Range: 16c0
+	Range: 18c0
 	MinRange: 4c0
 	Report: missile6.aud
-	Burst: 8
+	Burst: 10
 	BurstDelays: 6
 	ValidTargets: Ground, Trees, Water
 	Warhead@1Dam: SpreadDamage
@@ -648,13 +687,6 @@ KatyushaRockets.Acid_Missile:
 	Inherits: ^Acid_Cloud_Spawner
 	Warhead@13Spawn: SpawnRandomActor
 		Probability: 15
-
-^Cluster_Upgrade:
-	Warhead@Cluster_Upgrade: FireCluster
-		Weapon: ClusterBomb2S3
-		RandomClusterCount: 3
-		Dimensions: 3,3
-		Footprint: xxx x_x xxx
 
 KatyushaRockets.Cluster_Upgrade:
 	Inherits: KatyushaRockets
@@ -731,7 +763,7 @@ KatyushaRockets.Cluster_Upgrade:
 
 152mm.Akatsiya:
 	Inherits: 155mm
-	ReloadDelay: 150
+	ReloadDelay: 180
 	Range: 14c0
 	Burst: 2
 	Report: 2s3fire.aud
@@ -742,13 +774,15 @@ KatyushaRockets.Cluster_Upgrade:
 		ImpactSounds: kaboom15.aud
 	Warhead@Cluster: FireCluster
 		Weapon: ClusterBomb2S3
-		RandomClusterCount: 3
+		RandomClusterCount: 2
 		Dimensions: 3,3
 		Footprint: xxx x_x xxx
 
 152mm.Akatsiya.Cluster_Upgrade:
 	Inherits: 152mm.Akatsiya
 	Inherits: ^Cluster_Upgrade
+	Warhead@Cluster_Upgrade: FireCluster
+		RandomClusterCount: 2
 
 ApocShells:
 	Inherits: ^Cannon
