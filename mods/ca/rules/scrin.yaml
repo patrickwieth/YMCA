@@ -1843,14 +1843,10 @@ SWAL:
 
 SFAC:
 	Inherits: ^ScrinBuilding
-	Inherits: ^3x2Shape
+	Inherits: ^3x2Building+Bib
 	Inherits: ^ConcreteArmor
 	Inherits: ^BotFallbackInsurance
 	Inherits: ^StructureProduction
-	Building:
-		Footprint: xxx xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
@@ -1865,7 +1861,6 @@ SFAC:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -1933,7 +1928,7 @@ REAC:
 	Inherits: ^ScrinBuilding
 	Inherits: ^ScrinSpriteTS
 	Inherits: ^DisabledByPowerOutage
-	Inherits: ^2x2Shape
+	Inherits: ^2x2Building+Bib
 	Inherits: ^PowerDrainable
 	HitShape:
 		TargetableOffsets: 630,299,0
@@ -1951,15 +1946,10 @@ REAC:
 		Name: Reactor
 	ProvidesPrerequisite:
 		Prerequisite: anypower
-	Building:
-		Footprint: xX xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 40000
 	RevealsShroud:
 		Range: 4c0
-	WithBuildingBib:
 	Power:
 		Amount: 100
 		RequiresCondition: !disabled && !forceshield && !being-warped
@@ -1976,7 +1966,7 @@ REA2:
 	Inherits: ^ScrinBuilding
 	Inherits: ^ScrinSpriteRA2
 	Inherits: ^DisabledByPowerOutage
-	Inherits: ^3x2Shape
+	Inherits: ^3x2Building+Bib
 	Inherits: ^PowerDrainable
 	HitShape:
 		TargetableOffsets: -355,-1024,0
@@ -1994,15 +1984,10 @@ REA2:
 		Name: Advanced Reactor
 	ProvidesPrerequisite:
 		Prerequisite: anypower
-	Building:
-		Footprint: xxx Xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 70000
 	RevealsShroud:
 		Range: 5c0
-	WithBuildingBib:
 	Power:
 		Amount: 200
 		RequiresCondition: !disabled && !forceshield && !being-warped
@@ -2015,10 +2000,10 @@ REA2:
 
 PROC.SCRIN:
 	Inherits: ^ScrinBuilding
-	Inherits@shape: ^3x3Shape
+	Inherits: ^3x3Building+Bib
 	Inherits: ^ScrinSpriteRA2
-	Inherits@2: ^BotIncome
-	Inherits@Refinery: ^Refinery
+	Inherits: ^BotIncome
+	Inherits: ^Refinery
 	HitShape:
 		Type: Rectangle
 			TopLeft: -1536, -512
@@ -2039,8 +2024,6 @@ PROC.SCRIN:
 		Description: Processes raw Tiberium, Ore and Gems\ninto credits.
 	Building:
 		Footprint: _x_ xxx === ===
-		Dimensions: 3,4
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 90000
 	RevealsShroud:
@@ -2049,7 +2032,6 @@ PROC.SCRIN:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
 	Refinery:
@@ -2073,9 +2055,9 @@ PROC.SCRIN:
 PORT:
 	Inherits: ^ScrinBuilding
 	Inherits: ^ScrinSpriteTS
-	Inherits@shape: ^2x2Shape
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@InfantryProduction: ^InfantryProduction
+	Inherits: ^2x2Building+Bib
+	Inherits: ^PrimaryBuilding
+	Inherits: ^InfantryProduction
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 840,-256,0, 840,512,0, 210,-512,0, -71,512,0
@@ -2092,13 +2074,8 @@ PORT:
 		Cost: 500
 	Tooltip:
 		Name: Portal
-	Building:
-		Footprint: xx xx ++
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 60000
-	WithBuildingBib:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 0,512,0
@@ -2121,7 +2098,7 @@ WSPH:
 	Inherits: ^ScrinSpriteRA2
 	Inherits: ^PrimaryBuilding
 	Inherits: ^VehicleProduction
-	Inherits: ^3x2Shape
+	Inherits: ^3x2Building+Bib
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,1024,0, 0,-1024,0
 		Type: Rectangle
@@ -2137,13 +2114,8 @@ WSPH:
 		Cost: 2000
 	Tooltip:
 		Name: Warp Sphere
-	Building:
-		Footprint: xxx xxx +++
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 150000
-	WithBuildingBib:
 	Exit@1:
 		SpawnOffset: 0,0,0
 		ExitCell: 0,2
@@ -2164,8 +2136,8 @@ NERV:
 	Inherits: ^ScrinBuilding
 	Inherits: ^ScrinSpriteRA2
 	Inherits: ^TechLevelBuilding
-	Inherits@shape: ^2x2Shape
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x2Building+Bib
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^RadarStation
 	HitShape:
 		UseTargetableCellsOffsets: false
@@ -2181,8 +2153,6 @@ NERV:
 	Tooltip:
 		Name: Nerve Center
 	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
 		LocalCenterOffset: 0,-768,0
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate,  SabInfiltrate
@@ -2199,7 +2169,6 @@ NERV:
 	RevealsShroud@GAPGEN:
 		Range: 6c0
 		RequiresCondition: !disabled
-	WithBuildingBib:
 	InfiltrateForExploration:
 		Types: SpyInfiltrate, SabInfiltrate
 	Power:
@@ -2323,8 +2292,8 @@ SCRT:
 	Inherits: ^ScrinBuilding
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier3Tech
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^2x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^2x2Building+Bib
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 150
@@ -2335,10 +2304,6 @@ SCRT:
 		Cost: 1500
 	Tooltip:
 		Name: Scrin Tech Center
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 100000
 	Targetable:
@@ -2346,7 +2311,6 @@ SCRT:
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: tec.scrin.stolen
-	WithBuildingBib:
 	Power:
 		Amount: -200
 		RequiresCondition: !being-warped
@@ -2380,9 +2344,9 @@ SCRT:
 
 GRAV:
 	Inherits: ^ScrinBuilding
-	Inherits@shape: ^3x2Shape
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@AirProd: ^AircraftProduction
+	Inherits: ^3x2Building+Bib
+	Inherits: ^PrimaryBuilding
+	Inherits: ^AircraftProduction
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Buildable:
@@ -2396,8 +2360,6 @@ GRAV:
 	Tooltip:
 		Name: Gravity Stabilizer
 	Building:
-		Footprint: xxx xxx ===
-		Dimensions: 3,3
 		LocalCenterOffset: 0,-768,0
 	Health:
 		HP: 100000
@@ -2438,7 +2400,6 @@ GRAV:
 	ProvidesPrerequisite@buildingname:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-	WithBuildingBib:
 	WithIdleOverlay@orb:
 		RequiresCondition: !build-incomplete
 	WithIdleOverlay@pylon:
@@ -2451,17 +2412,12 @@ GRAV:
 SIGN:
 	Inherits: ^ScrinBuilding
 	Inherits: ^TechLevelBuilding
-	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^3x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
 	HitShape:
 		TargetableOffsets: -355,-1024,0
-	Building:
-		Footprint: xxx xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 80000
-	WithBuildingBib:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 200
@@ -2581,9 +2537,9 @@ SILO.SCRIN:
 
 MANI:
 	Inherits: ^ScrinBuilding
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits@shape: ^2x2Shape
-	Inherits@sw: ^SuperWeapon
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x2Building+Bib
+	Inherits: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -2595,13 +2551,8 @@ MANI:
 		Cost: 1500
 	Tooltip:
 		Name: Field Manipulator
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 100000
-	WithBuildingBib:
 	SupportPowerChargeBar:
 	Power:
 		Amount: -200
@@ -2641,9 +2592,9 @@ MANI:
 
 RIFT:
 	Inherits: ^ScrinBuilding
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits@shape: ^2x2Shape
-	Inherits@sw: ^SuperWeapon
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x2Shape
+	Inherits: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -2662,6 +2613,7 @@ RIFT:
 	Health:
 		HP: 100000
 	WithBuildingBib:
+		HasMinibib: true
 		Sequence: bibIron
 	DetonateWeaponPower@RiftGenerator:
 		OrderName: rift
@@ -2711,8 +2663,6 @@ RIFT:
 		Types: SpyInfiltrate, SabInfiltrate
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-	WithBuildingBib:
-		HasMinibib: true
 
 PTUR:
 	Inherits: ^Defense

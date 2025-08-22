@@ -202,6 +202,16 @@
 	Selectable:
 		Bounds: 2048, 1024
 
+^2x1Building+Minibib:
+	Inherits: ^2x1Shape
+	Building:
+		Footprint: xx
+		Dimensions: 2,1
+		LocalCenterOffset: 0,-512,0
+	WithBuildingBib:
+		Sequence: bibSam
+		HasMinibib: true
+
 ^2x2Shape:
 	HitShape:
 		UseTargetableCellsOffsets: true
@@ -260,6 +270,21 @@
 			BottomRight: 1536, 1536
 	Selectable:
 		Bounds: 3072, 3072
+
+^3x3Building:
+	Inherits: ^3x3Shape
+	Building:
+		Footprint: xxx xxx xxx
+		Dimensions: 3,3
+		LocalCenterOffset: 0,-512,0
+
+^3x3Building+Bib:
+	Inherits: ^3x3Building
+	Building:
+		Footprint: xxx xxx xxx ===
+		Dimensions: 3,4
+	WithBuildingBib:
+		Sequence: bib2
 
 ^4x2Shape:
 	HitShape:
@@ -452,9 +477,12 @@
 		RequiresCondition: owned-by-normal-ai
 
 ^Refinery:
-	Refinery:
+	DockHost:
 		DockAngle: 256
-		DockOffset: 1,2
+		DockOffset: 1c0,2c0,0
+		Type: Unload
+		MaxQueueLength: 50
+	Refinery:
 	StoresPlayerResources:
 		Capacity: 2000
 	WithResourceStoragePipsDecoration:
@@ -488,6 +516,8 @@ PROC.Dummy:
 ^Harvester:
 	Inherits: ^HarvesterBalancer
 	Inherits: ^SelectableEconomicUnit
+	DockClientManager:
+		SearchAllyDocks: true
 	Harvester:
 		Resources: Tiberium, BlueTiberium, Ore, Gems
 		BaleUnloadDelay: 1
@@ -1486,7 +1516,7 @@ PROC.Dummy:
 		RequiresCondition: c4
 
 ^MindControllableBase:
-	MindControllable:
+	MindControllableCA:
 		ControlledConditions:
 			mast: mindcontrolled
 			yuri: mindcontrolled

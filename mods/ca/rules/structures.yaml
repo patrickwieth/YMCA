@@ -1,8 +1,8 @@
 MSLO:
 	Inherits: ^ScienceBuilding
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits@shape: ^2x1Shape
-	Inherits@sw: ^SuperWeapon
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x1Shape
+	Inherits: ^SuperWeapon
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -83,7 +83,8 @@ MSLO:
 
 GAP:
 	Inherits: ^ScienceBuilding
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^1x1Building
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -103,8 +104,6 @@ GAP:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
-		HasMinibib: true
 	CreatesShroud:
 		Range: 5c0
 		RequiresCondition: !disabled && !empdisable && !being-warped
@@ -124,10 +123,10 @@ GAP:
 
 SPEN:
 	Inherits: ^Building
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@shape: ^3x3Shape
-	Inherits@Shipyard: ^ShipPrerequisites
-	Inherits@ShipProd: ^ShipProduction
+	Inherits: ^PrimaryBuilding
+	Inherits: ^3x3Shape
+	Inherits: ^ShipPrerequisites
+	Inherits: ^ShipProduction
 	RenderSprites:
 		PlayerPalette: playernavy
 	InfiltrateForSupportPower:
@@ -247,9 +246,9 @@ SYRD:
 
 IRON:
 	Inherits: ^ScienceBuilding
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits@shape: ^2x1Shape
-	Inherits@sw: ^SuperWeapon
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x1Shape
+	Inherits: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -452,9 +451,10 @@ PDOX:
 
 TSLA:
 	Inherits: ^Defense
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
-	Inherits@AUTOTARGET: ^AutoTargetGround
-	Inherits@Flash: ^WhiteFlash
+	Inherits: ^1x1Building
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetGround
+	Inherits: ^WhiteFlash
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
@@ -475,8 +475,6 @@ TSLA:
 	Targetable@TeslaBoost:
 		TargetTypes: TeslaBoost
 		RequiresCondition: !powerdown
-	WithBuildingBib:
-		HasMinibib: true
 	WithTeslaChargeAnimation:
 	Armament:
 		Weapon: TeslaZap
@@ -550,6 +548,7 @@ AGUN:
 		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
+		Sequence: bibAGun
 	Turreted:
 		TurnSpeed: 60
 		InitialFacing: 224
@@ -579,11 +578,13 @@ DOME:
 	Inherits: ^Building
 	Inherits: ^TechLevelBuilding
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Shape
+	Inherits: ^2x2Building+Bib
 	Inherits: ^RadarStation
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-384,0, 630,384,0, -700,-512,0, -700,512,0
+	Building:
+		Footprint: xx xx ==
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
@@ -593,10 +594,6 @@ DOME:
 		Cost: 1800
 	Tooltip:
 		Name: Radar Dome
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 	Health:
@@ -612,7 +609,6 @@ DOME:
 	RevealsShroud@GAPGEN:
 		Range: 6c0
 		RequiresCondition: !disabled
-	WithBuildingBib:
 	InfiltrateForExploration:
 		Types: SpyInfiltrate, SabInfiltrate
 	Power:
@@ -762,6 +758,7 @@ PBOX:
 		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
+		Sequence: bibPbox
 	Turreted:
 		TurnSpeed: 1000
 	-QuantizeFacingsFromSequence:
@@ -856,6 +853,7 @@ GUN:
 		Range: 5c0
 	WithBuildingBib:
 		HasMinibib: true
+		Sequence: bibGun
 	Turreted:
 		TurnSpeed: 48
 		InitialFacing: 56
@@ -879,7 +877,8 @@ GUN:
 
 FTUR:
 	Inherits: ^Defense
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^1x1Building
+	Inherits: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
@@ -898,8 +897,6 @@ FTUR:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 5c0
-	WithBuildingBib:
-		HasMinibib: true
 	Turreted:
 		TurnSpeed: 1000
 		Offset: 0,0,112
@@ -922,9 +919,9 @@ FTUR:
 
 SAM:
 	Inherits: ^Defense
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
-	Inherits@AUTOTARGET: ^AutoTargetAir
-	Inherits@shape: ^2x1Shape
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetAir
+	Inherits: ^2x1Shape
 	HitShape:
 		Type: Rectangle
 			TopLeft: -768,-512
@@ -938,9 +935,6 @@ SAM:
 		Cost: 700
 	Tooltip:
 		Name: SAM Site
-	Building:
-		Footprint: xx
-		Dimensions: 2,1
 	Health:
 		HP: 40000
 	RevealsShroud:
@@ -949,8 +943,6 @@ SAM:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 5c0
-	WithBuildingBib:
-		HasMinibib: true
 	Turreted:
 		TurnSpeed: 120
 		InitialFacing: 0
@@ -980,8 +972,8 @@ ATEK:
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier3Tech
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^2x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^2x2Building+Bib
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 140
@@ -993,8 +985,6 @@ ATEK:
 		Name: Allied Tech Center
 	Building:
 		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -1003,7 +993,6 @@ ATEK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	GpsPower@NOFOG:
 		PauseOnCondition: disabled || being-warped
 		RequiresCondition: !gps-launched && !fogenabled
@@ -1100,7 +1089,7 @@ ATEK:
 
 WEAP:
 	Inherits: ^Building
-	Inherits@shape: ^3x2Shape
+	Inherits@shape: ^3x2Building+Bib
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@VehicleProduction: ^VehicleProduction
 	Buildable:
@@ -1112,10 +1101,6 @@ WEAP:
 		Cost: 2000
 	Tooltip:
 		Name: War Factory
-	Building:
-		Footprint: xxx xxx +++
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 150000
 	RevealsShroud:
@@ -1124,7 +1109,6 @@ WEAP:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	WithProductionDoorOverlayCA:
 		RequiresCondition: !build-incomplete
 		Sequence: build-top
@@ -1146,14 +1130,12 @@ WEAP:
 
 FACT:
 	Inherits: ^Building
-	Inherits: ^3x3Shape
-	Inherits@Armor: ^ConcreteArmor
+	Inherits: ^3x3Building+Bib
+	Inherits: ^ConcreteArmor
 	Inherits: ^StructureProduction
 	Inherits: ^BotFallbackInsurance
 	Building:
 		Footprint: xxX xxx XxX ===
-		Dimensions: 3,4
-		LocalCenterOffset: 0,-512,0
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
@@ -1230,7 +1212,6 @@ FACT:
 		Condition: factundeploy
 		Prerequisites: global-factundeploy
 		Color: 8A8A8A
-	WithBuildingBib:
 	WithBuildingPlacedAnimation:
 		RequiresCondition: !build-incomplete && !chrono-vortex
 	Power:
@@ -1259,9 +1240,11 @@ FACT.Nukular:
 
 PROC:
 	Inherits: ^Building
-	Inherits@2: ^BotIncome
-	Inherits@shape: ^3x3Shape
-	Inherits@Refinery: ^Refinery
+	Inherits: ^BotIncome
+	Inherits: ^3x3Building+Bib
+	Inherits: ^Refinery
+	Building:
+		Footprint: _X_ xxx X++ +++
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 60
@@ -1271,10 +1254,6 @@ PROC:
 		Cost: 2000
 	Tooltip:
 		Name: Ore Refinery
-	Building:
-		Footprint: _X_ xxx X++ +++
-		Dimensions: 3,4
-		LocalCenterOffset: 0,-512,0
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
 	Health:
@@ -1310,7 +1289,6 @@ PROC:
 		SpawnOffset: 1,2
 		Facing: 64
 		RequiresCondition: spawn-charv && !spawn-harv && !build-incomplete
-	WithBuildingBib:
 	WithIdleOverlay@TOP:
 		RequiresCondition: !build-incomplete
 		Sequence: idle-top
@@ -1383,7 +1361,7 @@ SILO:
 
 HPAD:
 	Inherits: ^Building
-	Inherits@shape: ^2x2Shape
+	Inherits@shape: ^2x2Building+Bib
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@AirProd: ^AircraftProduction
 	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
@@ -1399,10 +1377,6 @@ HPAD:
 		Cost: 500
 	Tooltip:
 		Name: Helipad
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 80000
 	RevealsShroud:
@@ -1411,7 +1385,6 @@ HPAD:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	Exit@1:
@@ -1655,7 +1628,7 @@ AFLD:
 POWR:
 	Inherits: ^Building
 	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^2x2Shape
+	Inherits@shape: ^2x2Building+Bib
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 640,-384,0, 640,512,0, -710,-512,0, -710,512,0
@@ -1670,15 +1643,10 @@ POWR:
 		Name: Power Plant
 	ProvidesPrerequisite:
 		Prerequisite: anypower
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 40000
 	RevealsShroud:
 		Range: 4c0
-	WithBuildingBib:
 	Power:
 		Amount: 100
 		RequiresCondition: !being-warped
@@ -1694,9 +1662,11 @@ POWR:
 APWR:
 	Inherits: ^Building
 	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^3x2Shape
+	Inherits@shape: ^3x2Building+Bib
 	HitShape:
 		TargetableOffsets: -355,-1024,0
+	Building:
+		Footprint: xxx Xxx ===
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 110
@@ -1708,15 +1678,10 @@ APWR:
 		Name: Advanced Power Plant
 	ProvidesPrerequisite:
 		Prerequisite: anypower
-	Building:
-		Footprint: xxx Xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 70000
 	RevealsShroud:
 		Range: 5c0
-	WithBuildingBib:
 	Power:
 		Amount: 200
 		RequiresCondition: !being-warped
@@ -1792,8 +1757,8 @@ STEK:
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier3Tech
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^3x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
 	HitShape:
 		TargetableOffsets: 420,-768,0, 420,768,0, -770,-768,0, -770,768,0
 	Buildable:
@@ -1807,8 +1772,6 @@ STEK:
 		Name: Soviet Tech Center
 	Building:
 		Footprint: XxX XxX ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 80000
 	RevealsShroud:
@@ -1817,7 +1780,6 @@ STEK:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Power:
 		Amount: -100
 		RequiresCondition: !being-warped
@@ -1926,12 +1888,14 @@ STEK:
 
 BARR:
 	Inherits: ^Building
-	Inherits@shape: ^2x2Shape
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@InfantryProduction: ^InfantryProduction
+	Inherits: ^2x2Building+Bib
+	Inherits: ^PrimaryBuilding
+	Inherits: ^InfantryProduction
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 490,-470,0, 355,512,0, -355,-512,0, -630,512,0
+	Building:
+		Footprint: xx xx ++
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 30
@@ -1941,10 +1905,6 @@ BARR:
 		Cost: 500
 	Tooltip:
 		Name: Soviet Barracks
-	Building:
-		Footprint: xx xx ++
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -1953,7 +1913,6 @@ BARR:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
@@ -2008,7 +1967,7 @@ BARR:
 
 KENN:
 	Inherits: ^Building
-	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits: ^PrimaryBuilding
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 175
@@ -2024,6 +1983,7 @@ KENN:
 	RevealsShroud:
 		Range: 4c0
 	WithBuildingBib:
+		Sequence: bibSilo
 		HasMinibib: True
 	RallyPoint:
 	Exit@1:
@@ -2049,12 +2009,14 @@ KENN:
 
 TENT:
 	Inherits: ^Building
-	Inherits@shape: ^2x2Shape
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@InfProd: ^InfantryProduction
+	Inherits: ^2x2Building+Bib
+	Inherits: ^PrimaryBuilding
+	Inherits: ^InfantryProduction
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
+	Building:
+		Footprint: xx xx ++
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
@@ -2064,10 +2026,6 @@ TENT:
 		Cost: 500
 	Tooltip:
 		Name: Allied Barracks
-	Building:
-		Footprint: xx xx ++
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -2076,7 +2034,6 @@ TENT:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -42,810,0
@@ -2425,7 +2382,7 @@ STRUCTURES.TSLA:
 
 PYLE:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^2x2Shape
+	Inherits@shape: ^2x2Building+Bib
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@InfProd: ^InfantryProduction
 	HitShape:
@@ -2434,6 +2391,8 @@ PYLE:
 		Type: Rectangle
 			TopLeft: -1024, -1024
 			BottomRight: 1024, 640
+	Building:
+		Footprint: xx xx ++
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
@@ -2444,10 +2403,6 @@ PYLE:
 		Cost: 500
 	Tooltip:
 		Name: GDI Barracks
-	Building:
-		Footprint: xx xx ++
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -2456,7 +2411,6 @@ PYLE:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: -725,640,0
@@ -2514,12 +2468,14 @@ PYLE:
 
 HAND:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^2x2Shape
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@InfProd: ^InfantryProduction
+	Inherits: ^2x2Building+Bib
+	Inherits: ^PrimaryBuilding
+	Inherits: ^InfantryProduction
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
+	Building:
+		Footprint: xx xx ++
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
@@ -2530,10 +2486,6 @@ HAND:
 		Cost: 500
 	Tooltip:
 		Name: Hand of Nod
-	Building:
-		Footprint: xx xx ++
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -2542,7 +2494,6 @@ HAND:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: 512,1024,0
@@ -2599,7 +2550,7 @@ HAND:
 
 WEAP.TD:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^3x2Shape
+	Inherits@shape: ^3x2Building+Bib
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@gdiupg: ^GDIUpgradeProducer
 	Inherits@VehicleProduction: ^VehicleProduction
@@ -2610,6 +2561,8 @@ WEAP.TD:
 		Type: Rectangle
 			TopLeft: -1536, -1024
 			BottomRight: 1536, 512
+	Building:
+		Footprint: xxx xxx +++
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
@@ -2620,10 +2573,6 @@ WEAP.TD:
 		Cost: 2000
 	Tooltip:
 		Name: Weapons Factory
-	Building:
-		Footprint: xxx xxx +++
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 150000
 	RevealsShroud:
@@ -2632,7 +2581,6 @@ WEAP.TD:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	WithProductionDoorOverlayCA:
 		RequiresCondition: !build-incomplete
 		Sequence: build-top
@@ -2749,8 +2697,8 @@ AIRS:
 
 NUKE:
 	Inherits: ^BuildingTD
-	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^2x2Shape
+	Inherits: ^DisabledByPowerOutage
+	Inherits: ^2x2Building+Bib
 	HitShape:
 		TargetableOffsets: 630,299,0
 	RenderSprites:
@@ -2775,13 +2723,10 @@ NUKE:
 		Prerequisite: anypower
 	Building:
 		Footprint: xX xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 40000
 	RevealsShroud:
 		Range: 4c0
-	WithBuildingBib:
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
@@ -2800,8 +2745,8 @@ NUKE:
 
 NUK2:
 	Inherits: ^BuildingTD
-	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^2x2Shape
+	Inherits: ^DisabledByPowerOutage
+	Inherits: ^2x2Building+Bib
 	HitShape:
 		TargetableOffsets: 630,299,0
 	RenderSprites:
@@ -2826,13 +2771,10 @@ NUK2:
 		Prerequisite: anypower
 	Building:
 		Footprint: xX xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 70000
 	RevealsShroud:
 		Range: 5c0
-	WithBuildingBib:
 	WithDeathAnimation:
 		DeathSequence: dead
 		UseDeathTypeSuffix: false
@@ -2849,7 +2791,7 @@ NUK2:
 
 AFAC:
 	Inherits: ^BuildingTD
-	Inherits: ^3x3Shape
+	Inherits: ^3x3Building+Bib
 	Inherits: ^ConcreteArmor
 	Inherits: ^StructureProduction
 	Inherits: ^BotFallbackInsurance
@@ -2859,10 +2801,6 @@ AFAC:
 			blackh: nodfact
 			marked: nodfact
 			legion: nodfact
-	Building:
-		Footprint: xxx xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
@@ -2877,7 +2815,6 @@ AFAC:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -3030,7 +2967,7 @@ NSAM:
 
 GTWR:
 	Inherits: ^DefenseTD
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 50
@@ -3169,8 +3106,8 @@ ATWR:
 
 OBLI:
 	Inherits: ^DefenseTD
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
@@ -3260,7 +3197,7 @@ HQ:
 	Inherits: ^BuildingTD
 	Inherits: ^TechLevelBuilding
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Shape
+	Inherits: ^2x2Building+Bib
 	Inherits: ^RadarStation
 	RenderSprites:
 		FactionImages:
@@ -3280,8 +3217,6 @@ HQ:
 		Name: Comm. Center
 	Building:
 		Footprint: X_ xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	WithSpriteBody:
 		PauseOnCondition: disabled || being-warped
 	Targetable:
@@ -3299,7 +3234,6 @@ HQ:
 	RevealsShroud@GAPGEN:
 		Range: 6c0
 		RequiresCondition: !disabled
-	WithBuildingBib:
 	InfiltrateForExploration:
 		Types: SpyInfiltrate, SabInfiltrate
 	SpawnActorPower@sathack:
@@ -3456,9 +3390,11 @@ HQ:
 EYE:
 	Inherits: ^ScienceBuildingTD
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Shape
+	Inherits: ^2x2Building+Bib
 	Inherits: ^RadarStation
-	Inherits@sw: ^SuperWeapon
+	Inherits: ^SuperWeapon
+	Building:
+		Footprint: xx xx ==
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -3470,10 +3406,6 @@ EYE:
 		Cost: 2500
 	Tooltip:
 		Name: Advanced Communications Center
-	Building:
-		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, SabInfiltrate
 	WithSpriteBody:
@@ -3491,7 +3423,6 @@ EYE:
 	RevealsShroud@GAPGEN:
 		Range: 6c0
 		RequiresCondition: !disabled
-	WithBuildingBib:
 	InfiltrateForExploration:
 		Types: SpyInfiltrate, SabInfiltrate
 	DetonateWeaponPower@IonStorm:
@@ -3562,7 +3493,7 @@ EYE:
 
 REP:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^3x3Shape
+	Inherits: ^3x3Building
 	HitShape:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
 		Type: Polygon
@@ -3618,11 +3549,11 @@ REP:
 
 HPAD.TD:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^2x2Shape
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@AIRCRAFTREPAIR: ^RepairsAircraftWithRepairBay
-	Inherits@AirProd: ^AircraftProduction
-	Inherits@gdiupg: ^GDIUpgradeProducer
+	Inherits: ^2x2Building+Bib
+	Inherits: ^PrimaryBuilding
+	Inherits: ^RepairsAircraftWithRepairBay
+	Inherits: ^AircraftProduction
+	Inherits: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: hpad2
 	HitShape:
@@ -3640,8 +3571,6 @@ HPAD.TD:
 		Name: Helipad
 	Building:
 		Footprint: xx xx ==
-		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 80000
 	RevealsShroud:
@@ -3655,7 +3584,6 @@ HPAD.TD:
 		ExitCell: 0,0
 		Facing: 224
 	Reservable:
-	WithBuildingBib:
 	Power:
 		Amount: -10
 		RequiresCondition: !being-warped
@@ -3739,9 +3667,9 @@ HPAD.TD:
 
 PROC.TD:
 	Inherits: ^BuildingTD
-	Inherits@2: ^BotIncome
-	Inherits@shape: ^3x3Shape
-	Inherits@Refinery: ^Refinery
+	Inherits: ^BotIncome
+	Inherits: ^3x3Building+Bib
+	Inherits: ^Refinery
 	HitShape:
 		Type: Rectangle
 			TopLeft: -1536, -512
@@ -3757,6 +3685,8 @@ PROC.TD:
 			blackh: nodproc
 			marked: nodproc
 			legion: nodproc
+	Building:
+		Footprint: _x_ xxx === ===
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -3767,10 +3697,6 @@ PROC.TD:
 		Queue: Building
 		IconPalette: chrometd
 		Description: Processes raw Tiberium, Ore and Gems\ninto useable resources
-	Building:
-		Footprint: _x_ xxx === ===
-		Dimensions: 3,4
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 90000
 	RevealsShroud:
@@ -3779,7 +3705,6 @@ PROC.TD:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
 	Refinery:
@@ -3813,7 +3738,7 @@ PROC.TD:
 
 SILO.TD:
 	Inherits: ^BuildingTD
-	Inherits@shape: ^2x1Shape
+	Inherits: ^2x1Shape
 	RenderSprites:
 		Image: silo2
 	Valued:
@@ -4081,8 +4006,8 @@ GTEK:
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier3Tech
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^3x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 150
@@ -4095,8 +4020,6 @@ GTEK:
 		Name: GDI Tech Center
 	Building:
 		Footprint: xxx =xx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 100000
 	Targetable:
@@ -4115,7 +4038,6 @@ GTEK:
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: tec.gdi.stolen
-	WithBuildingBib:
 	Power:
 		Amount: -200
 		RequiresCondition: !being-warped
@@ -4155,8 +4077,8 @@ TMPL:
 	Inherits: ^ScienceBuildingTD
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier3Tech
-	Inherits@IDISABLE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^3x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 0,-896,0, 0,896,0, 840,0,0, -706,0,0, -706,-768,0, -706,640,0
@@ -4172,8 +4094,6 @@ TMPL:
 		Description: Provides Nod advanced technologies.\n  Requires power to operate.\n  Special Ability: Cluster Missile
 	Building:
 		Footprint: xxx xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 70000
 	RevealsShroud:
@@ -4260,7 +4180,6 @@ TMPL:
 		CircleSequence: circles
 		UseDirectionalTarget: True
 		DirectionArrowAnimation: paradirection
-	WithBuildingBib:
 	GrantExternalConditionPowerCA@Frenzy:
 		OrderName: frenzy
 		Icon: frenzy
@@ -4621,7 +4540,7 @@ LTUR:
 
 TTUR:
 	Inherits: ^DefenseTD
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
@@ -4666,9 +4585,9 @@ TTUR:
 
 SGEN:
 	Inherits: ^ScienceBuilding
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits@shape: ^3x2Shape
-	Inherits@sw: ^SuperWeapon
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^3x2Building+Bib
+	Inherits: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -4697,7 +4616,6 @@ SGEN:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 		RequiresCondition: !disabled
-	WithBuildingBib:
 	GrantExternalConditionPowerCA@STEALTHGEN:
 		Prerequisites: techlevel.superw
 		OrderName: stealthgen
@@ -4780,8 +4698,8 @@ CRAM:
 
 LASP:
 	Inherits: ^Building
-	Inherits@Armor: ^BrickArmor
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^BrickArmor
+	Inherits: ^DisableOnLowPowerOrPowerDown
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 30
@@ -4987,8 +4905,8 @@ PATR:
 INDP:
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
-	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^3x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x3Building+Bib
 	WithSpriteBody:
 		PauseOnCondition: disabled || being-warped
 	HitShape:
@@ -5011,8 +4929,6 @@ INDP:
 		Name: Industrial Plant
 	Building:
 		Footprint: ___ xxx xxx ===
-		Dimensions: 3,4
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 80000
 	RevealsShroud:
@@ -5021,7 +4937,6 @@ INDP:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Power:
 		Amount: -150
 		RequiresCondition: !being-warped
@@ -5044,14 +4959,12 @@ INDP:
 OREP:
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
-	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@shape: ^3x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Building:
 		Footprint: xxx xxx ===
-		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 80000
 	RevealsShroud:
@@ -5060,7 +4973,6 @@ OREP:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 200
@@ -5107,13 +5019,12 @@ OREP:
 UPGC:
 	Inherits: ^BuildingTD
 	Inherits: ^TechLevelBuilding
-	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@SHAPE: ^3x2Shape
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Building:
 		Footprint: xxx xxx ===
-		Dimensions: 3,3
 		LocalCenterOffset: 0,-1024,0
 	Health:
 		HP: 80000
@@ -5123,7 +5034,6 @@ UPGC:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	WithSpriteBody:
 		PauseOnCondition: disabled || being-warped
 	Buildable:
@@ -5444,9 +5354,9 @@ UPGC.DROP:
 BIO.Nod:
 	Inherits: ^BuildingTD
 	Inherits: ^TechLevelBuilding
-	Inherits@POWER_OUTAGE: ^DisableOnLowPowerOrForceDisabled
-	Inherits@SHAPE: ^3x2Shape
-	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
+	Inherits: ^PrimaryBuilding
 	RenderSprites:
 		Image: tmpp
 		PlayerPalette: overlayplayertd
@@ -5458,7 +5368,6 @@ BIO.Nod:
 	Building:
 		Footprint: XxX xxx X+X
 		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
 	Health:
 		HP: 80000
 	RevealsShroud:
@@ -5467,7 +5376,6 @@ BIO.Nod:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
-	WithBuildingBib:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 200
@@ -5604,9 +5512,9 @@ MSLO.Nod:
 
 WEAT:
 	Inherits: ^ScienceBuilding
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits@shape: ^2x2Shape
-	Inherits@sw: ^SuperWeapon
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x2Shape
+	Inherits: ^SuperWeapon
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -5634,6 +5542,7 @@ WEAT:
 		Range: 5c0
 		RequiresCondition: !disabled
 	WithBuildingBib:
+		HasMinibib: true
 		Sequence: bibIron
 	DetonateWeaponPower@LightningStorm:
 		OrderName: storm
@@ -5685,14 +5594,13 @@ WEAT:
 		Types: SpyInfiltrate, SabInfiltrate
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-	WithBuildingBib:
-		HasMinibib: true
+
 
 PDLT:
 	Inherits: ^DefenseTD
-	Inherits@PDL: ^PointLaserDefenseSystemBig
-	Inherits@IDISABLE: ^DisableOnLowPower
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^PointLaserDefenseSystemBig
+	Inherits: ^DisableOnLowPower
+	Inherits: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
