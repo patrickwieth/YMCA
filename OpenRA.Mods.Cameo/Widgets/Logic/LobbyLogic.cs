@@ -656,7 +656,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 			map = modData.MapCache[uid];
 			if (map.Status == MapStatus.Available)
 				orderManager.IssueOrder(Order.Command($"state {Session.ClientState.NotReady}"));
-			
+
 			else if (map.Status != MapStatus.DownloadAvailable && Game.Settings.Game.AllowDownloading)
 				modData.MapCache.QueryRemoteMapDetails(services.MapRepository, new[] { uid });
 		}
