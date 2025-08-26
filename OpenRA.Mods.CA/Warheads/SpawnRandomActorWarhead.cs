@@ -1,4 +1,4 @@
-﻿#region Copyright & License Information
+#region Copyright & License Information
 /*
  * Copyright 2015- OpenRA.Mods.AS Developers (see AUTHORS)
  * This file is a part of a third-party plugin for OpenRA, which is
@@ -8,10 +8,10 @@
  */
 #endregion
 
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using OpenRA.GameRules;
-using OpenRA.Mods.CA.Activities;
+using OpenRA.Mods.AS.Activities;
 using OpenRA.Mods.Common.Activities;
 using OpenRA.Mods.Common.Effects;
 using OpenRA.Mods.Common.Traits;
@@ -21,17 +21,22 @@ using OpenRA.Mods.AS.Warheads;
 
 namespace OpenRA.Mods.CA.Warheads
 {
+	public enum ASOwnerType { Attacker, InternalName }
+
 	[Desc("Spawn actors upon explosion. Don't use this with buildings.")]
 	public class SpawnRandomActorWarhead : WarheadAS, IRulesetLoaded<WeaponInfo>
 	{
 		[Desc("The cell range to try placing the actors within.")]
 		public readonly int Range = 10;
 
-		[Desc("List of Random Actors to spawn.")]
-		public readonly string[] RandomActors = { };
+		[Desc("Actors to spawn.")]
+		public readonly string[] Actors = Array.Empty<string>();
 
 		[Desc("Probability that any of the random actors spawns.")]
 		public readonly int Probability = 100;
+
+		[Desc("Should this actor link to the actor who create them? This will pass firer as the Parent Actor to spawned.")]
+		public readonly bool LinkToParent = false;
 
 		[Desc("Try to parachute the actors. When unset, actors will just fall down visually using FallRate."
 			+ " Requires the Parachutable trait on all actors if set.")]
@@ -52,7 +57,7 @@ namespace OpenRA.Mods.CA.Warheads
 		[Desc("Defines the image of an optional animation played at the spawning location.")]
 		public readonly string Image = null;
 
-		[SequenceReference("Image")]
+		[SequenceReference(nameof(Image), allowNullImage: true)]
 		[Desc("Defines the sequence of an optional animation played at the spawning location.")]
 		public readonly string Sequence = "idle";
 
@@ -61,19 +66,19 @@ namespace OpenRA.Mods.CA.Warheads
 		public readonly string Palette = "effect";
 
 		[Desc("List of sounds that can be played at the spawning location.")]
-		public readonly string[] Sounds = new string[0];
+		public readonly string[] Sounds = Array.Empty<string>();
 
 		public readonly bool UsePlayerPalette = false;
 
 		public void RulesetLoaded(Ruleset rules, WeaponInfo info)
 		{
-			foreach (var a in RandomActors)
+			foreach (var a in Actors)
 			{
 				var actorInfo = rules.Actors[a.ToLowerInvariant()];
 				var buildingInfo = actorInfo.TraitInfoOrDefault<BuildingInfo>();
 
 				if (buildingInfo != null)
-					throw new YamlException("SpawnActorWarhead cannot be used to spawn building actor '{0}'!".F(a));
+					throw new YamlException($"SpawnActorWarhead cannot be used to spawn building actor '{a}'!");
 			}
 		}
 
@@ -83,41 +88,88 @@ namespace OpenRA.Mods.CA.Warheads
 			if (!target.IsValidFor(firedBy))
 				return;
 
+			if (firedBy.World.SharedRandom.Next(100) > Probability)
+				return;
+
 			var map = firedBy.World.Map;
 			var targetCell = map.CellContaining(target.CenterPosition);
 
 			if (!IsValidImpact(target.CenterPosition, firedBy))
 				return;
 
-			if (firedBy.World.SharedRandom.Next(100) > Probability)
-				return;
-
 			var targetCells = map.FindTilesInCircle(targetCell, Range);
 			var cell = targetCells.GetEnumerator();
 
-			var placed = false;
-			var world = firedBy.World;
-			var td = new TypeDictionary();
-			var ai = map.Rules.Actors;
-			var actor = RandomActors.Random(world.SharedRandom);
+			foreach (var a in Actors)
+			{
+				var placed = false;
+				var td = new TypeDictionary();
+				var ai = map.Rules.Actors[a.ToLowerInvariant()];
 
-			if (OwnerType == ASOwnerType.Attacker)
-				td.Add(new OwnerInit(firedBy.Owner));
-			else
-				td.Add(new OwnerInit(firedBy.World.Players.First(p => p.InternalName == InternalOwner)));
+				if (OwnerType == ASOwnerType.Attacker)
+					td.Add(new OwnerInit(firedBy.Owner));
+				else
+					td.Add(new OwnerInit(Array.Find(firedBy.World.Players, p => p.InternalName == InternalOwner)));
 
-			// Lambdas can't use 'in' variables, so capture a copy for later
-			var delayedTarget = target;
+				if (LinkToParent)
+					td.Add(new ParentActorInit(firedBy));
 
-			firedBy.World.AddFrameEndTask(w =>
+				// HACK HACK HACK
+				// Immobile does not offer a check directly if the actor can exist in a position.
+				// It also crashes the game if it's actor's created without a LocationInit.
+				// See AS/Engine#84.
+				if (ai.HasTraitInfo<ImmobileInfo>())
 				{
-					var unit = firedBy.World.CreateActor(false, actor.ToLowerInvariant(), td);
+					var immobileInfo = ai.TraitInfo<ImmobileInfo>();
+
+					while (cell.MoveNext())
+					{
+						if (!immobileInfo.OccupiesSpace || !firedBy.World.ActorMap.GetActorsAt(cell.Current).Any())
+						{
+							td.Add(new LocationInit(cell.Current));
+							var immobileunit = firedBy.World.CreateActor(false, a.ToLowerInvariant(), td);
+
+							firedBy.World.AddFrameEndTask(w =>
+							{
+								w.Add(immobileunit);
+
+								var palette = Palette;
+								if (UsePlayerPalette)
+									palette += immobileunit.Owner.InternalName;
+
+								var immobilespawnpos = firedBy.World.Map.CenterOfCell(cell.Current);
+
+								if (Image != null)
+									w.Add(new SpriteEffect(immobilespawnpos, w, Image, Sequence, palette));
+
+								var sound = Sounds.RandomOrDefault(firedBy.World.LocalRandom);
+								if (sound != null)
+									Game.Sound.Play(SoundType.World, sound, immobilespawnpos);
+							});
+
+							break;
+						}
+					}
+
+					continue;
+				}
+
+				// Lambdas can't use 'in' variables, so capture a copy for later
+				var delayedTarget = target;
+
+				firedBy.World.AddFrameEndTask(w =>
+				{
+					var unit = firedBy.World.CreateActor(false, a.ToLowerInvariant(), td);
 					var positionable = unit.TraitOrDefault<IPositionable>();
 					cell = targetCells.GetEnumerator();
 
 					while (cell.MoveNext() && !placed)
 					{
 						var subCell = positionable.GetAvailableSubCell(cell.Current);
+
+						if (ai.HasTraitInfo<AircraftInfo>()
+							&& ai.TraitInfo<AircraftInfo>().CanEnterCell(firedBy.World, unit, cell.Current))
+							subCell = SubCell.FullCell;
 
 						if (subCell != SubCell.Invalid)
 						{
@@ -152,7 +204,8 @@ namespace OpenRA.Mods.CA.Warheads
 
 					if (!placed)
 						unit.Dispose();
-			});
+				});
+			}
 		}
 	}
 }
