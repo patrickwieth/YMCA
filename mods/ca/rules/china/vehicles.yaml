@@ -1,5 +1,6 @@
 CHNMCV:
 	Inherits: ^ConstructionVehicle
+	Inherits: ^BiologicalDriver
 	Inherits: ^TDVehicleSprite
 	Inherits: ^VoxelVehicle
 	Inherits: ^MustBeDestroyed
@@ -63,7 +64,7 @@ CHNMCV.Nukular:
 	-Buildable:
 
 chbattle:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
 	RenderVoxels:
 		Scale: 0.7
@@ -105,8 +106,6 @@ chbattle:
 		RecoilRecovery: 26
 		LocalOffset: 850,0,50
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
 	Voiced:
 		VoiceSet: BattlemasterTankVoice
@@ -280,8 +279,6 @@ charty:
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
-	AutoTarget:
-		InitialStanceAI: Defend
 	GrantConditionOnPrerequisite@blacknapalm:
 		Condition: blacknapalm
 		Prerequisites: commander_tree.black_napalm
@@ -300,7 +297,7 @@ charty.Husk:
 		Image: charty
 
 choverlord:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
 	RenderVoxels:
 		Scale: 0.8
@@ -362,8 +359,6 @@ choverlord:
 		Recoil: 170
 		RecoilRecovery: 42
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
 	Voiced:
 		VoiceSet: OverlordTankVoice
@@ -414,8 +409,6 @@ choverlord.Gatling:
 choverlord.Gatling.PDL:
 	Inherits: choverlord.Gatling
 	Inherits: ^PointLaserDefenseSystem
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.gatling, ~commander_tree.overlord.pdl
 	TooltipExtras:
@@ -478,8 +471,7 @@ choverlord.Bunker:
 
 choverlord.Bunker.PDL:
 	Inherits: choverlord.Bunker
-	Inherits: ^PointLaserDefenseSystem
-	-AttackTurreted:
+	Inherits: ^AttackingCargoAndPDL
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.overlord.bunker, ~commander_tree.overlord.pdl
 	TooltipExtras:
@@ -704,9 +696,8 @@ choverlord.Husk:
 		Image: choverlord
 
 chdragon:
-	Inherits: ^FightingVehicle
 	Inherits: ^TDVehicleSprite
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
 	RenderVoxels:
 		Scale: 5
@@ -831,7 +822,7 @@ chdragon.Husk:
 		Image: chdragon
 
 chgtnk:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
 	RenderVoxels:
 		Scale: 0.7
@@ -869,11 +860,10 @@ chgtnk:
 		Prerequisites: ~vehicles.china, ~!commander_tree.gatling.pdl, ~!commander_tree.gatling.reflector
 		Queue: Vehicle
 		IconPalette: chrometd
-		Description: Tank armed with gatling guns.\n  Strong vs Infantry, Aircraft\n  Weak vs Tanks
+		Description: Tank armed with gatling guns.
 	TooltipExtras:
-		Strengths: • Strong vs Projectiles, Aircraft
-		Weaknesses: • Weak vs Energy Weapons
-		Attributes: • Point Defense Laser
+		Strengths: • Strong vs Infantry, Aircraft
+		Weaknesses: • Weak vs Tanks
 	Mobile:
 		Speed: 108
 	Health:
@@ -883,7 +873,6 @@ chgtnk:
 	Turreted:
 		TurnSpeed: 16
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
 		Armaments: primary, secondary
 	WithMuzzleOverlay:
 	Voiced:
@@ -1090,7 +1079,7 @@ choutpost.Bunker.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	-AttackTurreted:
 	-AttackOpenTopped:
-	Inherits@CARGO: ^AttackingCargoAndTurret
+	Inherits: ^AttackingCargoAndTurret
 	Buildable:
 		Prerequisites: techcenter, ~vehicles.china, ~commander_tree.outpost.bunker, ~commander_tree.outpost.pdl
 	TooltipExtras:
@@ -1115,7 +1104,7 @@ choutpost.Bunker.Reflector:
 		Name: Bunker Outpost (Reflector)
 
 checm:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
 	Inherits: ^VoxelTurretedTank
 	RenderVoxels:
 		Scale: 0.7
@@ -1313,10 +1302,8 @@ chcrawl2.Hunter:
 
 chcrawl2.Hunter.PDL:
 	Inherits: chcrawl2.Hunter
-	Inherits: ^PointLaserDefenseSystem
-	-AttackTurreted:
 	-AttackOpenTopped:
-	Inherits@CARGO: ^AttackingCargoAndTurret
+	Inherits: ^AttackingCargoAndPDL
 	Valued:
 		Cost: 3200
 	Tooltip:
@@ -1353,7 +1340,7 @@ chcrawl2.Assault:
 		Name: Assault Troop Crawler
 	Buildable:
 		Prerequisites: radar, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
-		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
+		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Minigunners.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Aircraft
 		Weaknesses: • Weak vs Tanks
@@ -1361,22 +1348,23 @@ chcrawl2.Assault:
 		InitialUnits: minigunner,minigunner,minigunner,minigunner,minigunner
 
 chcrawl2.Assault.PDL:
-	Inherits: chcrawl2.Assault
-	Inherits: ^PointLaserDefenseSystem
-	-AttackTurreted:
+	Inherits: chcrawl2
 	-AttackOpenTopped:
-	Inherits@CARGO: ^AttackingCargoAndTurret
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: ^ChinaGatling
 	Valued:
 		Cost: 2600
 	Tooltip:
 		Name: Assault Troop Crawler (PDL)
 	Buildable:
-		Prerequisites: techcenter, ~commander_tree.crawler.assault, ~commander_tree.crawler.reflector
-		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Tank Hunters.
+		Prerequisites: techcenter, ~commander_tree.crawler.assault, ~commander_tree.crawler.pdl
+		Description: Heavy infantry transport.\n Passengers can fire from within.\n Pre-filled with Minigunners.
 	TooltipExtras:
 		Strengths: • Strong vs Projectiles, Aircraft
 		Weaknesses: • Weak vs Tanks, Energy Weapons
 		Attributes: • Point Defense Laser
+	FirepowerMultiplier@gatfix:
+		Modifier: 225
 
 chcrawl2.Assault.Reflector:
 	Inherits: chcrawl2.Assault
@@ -1405,7 +1393,7 @@ chcrawl.Husk:
 		Image: chcrawl
 
 chnukecann:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
 	RenderVoxels:
 		Scale: 0.8
@@ -1426,6 +1414,7 @@ chnukecann:
 	Inherits: ^PrioArtillery
 	Inherits: ^GeneralsVehicle
 	Inherits: ^AttackTurretedVoice
+	Inherits: ^DeployToAttack
 	Valued:
 		Cost: 2400
 	Tooltip:
@@ -1457,6 +1446,19 @@ chnukecann:
 		Weapon: CHNukeCannon
 		LocalOffset: 400,0,600
 		PauseOnCondition: !ammo || fired
+	Voiced:
+		VoiceSet: CHNukeCannonVoice
+	FireWarheadsOnDeathCA:
+		Weapon: CHAtomicTankExplode
+		EmptyWeapon: CHAtomicTankExplode
+		RequiresCondition: !chronobeamed
+
+^DeployToAttack:
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: CHNukeCannon
+		LocalOffset: 400,0,600
+		PauseOnCondition: !ammo || fired
 	Armament@AIM:
 		Weapon: NukeCannonDummyAim
 		PauseOnCondition: deployed
@@ -1474,10 +1476,6 @@ chnukecann:
 		InitialAmmo: 0
 		PipCount: 1
 		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	ReloadAmmoPoolCA@deployed:
 		Delay: 100
 		Count: 1
@@ -1497,12 +1495,6 @@ chnukecann:
 	SpeedMultiplier@UNDEPLOY:
 		Modifier: 0
 		RequiresCondition: fired
-	Voiced:
-		VoiceSet: CHNukeCannonVoice
-	FireWarheadsOnDeathCA:
-		Weapon: CHAtomicTankExplode
-		EmptyWeapon: CHAtomicTankExplode
-		RequiresCondition: !chronobeamed
 
 chnukecann.Range:
 	Inherits: chnukecann
@@ -1601,7 +1593,7 @@ Bixi:
 	MissileSpawnerMaster:
 		Actors: bixi.missile,bixi.missile
 		SpawnAllAtOnce: True
-		RespawnTicks: 125
+		RespawnTicks: 100
 	FireWarheadsOnDeathCA:
 		Weapon: BarrelExplode
 	Voiced:
@@ -1623,10 +1615,10 @@ Bixi.Missile:
 	Tooltip@NoRow:
 		Name: Bixi Missile
 	Health:
-		HP: 2500
+		HP: 8000
 	BallisticMissile:
 		LaunchAngle: 95
-		Speed: 145
+		Speed: 155
 	ExplodesForMaster:
 		Weapon: BixiWeapon
 		MasterArmamentName: BixiLauncher

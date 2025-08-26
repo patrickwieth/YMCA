@@ -1,6 +1,6 @@
 
 FTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
 	RenderSprites:
@@ -48,7 +48,7 @@ FTNK.Reflector:
 		Name: Flame Tank (Reflector)
 
 FTNK.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: FTNK
 	Buildable:
 		Prerequisites: hq, ~vehicles.nod, ~commander_tree.flame_tank.pdl, ~!commander_tree.chem_tank
@@ -106,7 +106,7 @@ FTNK.Reflector.Chem:
 		LocalOffset: 512,128,42, 512,-128,42
 
 HFTK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
@@ -143,7 +143,6 @@ HFTK:
 	AttackTurreted:
 		Voice: Attack
 		RangeMargin: 0
-		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	WithMuzzleOverlay:
 	Voiced:
@@ -212,3 +211,27 @@ HFTK.Reflector.Fireball:
 		Weapon: FireballLauncher.Tank
 		-MuzzleSequence:
 		-MuzzlePalette:
+
+TTRK:
+	Inherits: DTRK
+	RenderVoxels:
+		Scale: 0.8
+		Image: toxintruck
+	RenderSprites:
+		Image: ttrk
+	Buildable:
+		BuildPaletteOrder: 255
+		Prerequisites: ~vehicles.legion, tmpl, ~vehicles.nod
+		Description: Truck actively armed with\n a Tiberium bomb. Has very weak armor.
+	Tooltip:
+		Name: Chemical Truck
+	Health:
+		HP: 10000
+	Mobile:
+		Speed: 92
+		Voice: Move
+	Valued:
+		Cost: 1200
+	FireWarheadsOnDeathCA@NUKE:
+		Weapon: UnitExplodeToxinTruck
+		EmptyWeapon: UnitExplodeToxinTruck

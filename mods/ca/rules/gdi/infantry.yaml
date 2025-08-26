@@ -125,15 +125,18 @@ Railgunner.noCrush:
 		Name: Railgunner (Crushproof)
 	-Crushable:
 
-
 Jumpjet:
-	Inherits: ^Infantry
+	Inherits: ^Helicopter
 	Inherits: ^InfantryRA2Sprite
 	Inherits: ^PrioAntiLight
 	Inherits: ^LightArmor
 	Inherits: ^EmpDisable
+	-WithFacingSpriteBody:
 	RenderSprites:
 		Image: jumpjet
+	Selectable:
+		Bounds: 512, 768, 0, -900
+		DecorationBounds: 512, 768, 0, -900
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -148,27 +151,21 @@ Jumpjet:
 		Cost: 250
 	Tooltip:
 		Name: Jump-Jet Trooper
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
 	Health:
 		HP: 12000
-	Armament@AIR:
+	Armament:
 		Weapon: M60mgJJ
-		RequiresCondition: undeployed
-	Armament@GROUND:
-		Weapon: M60mgJJ.Ground
-		RequiresCondition: deployed
 	AttackFrontal:
 		PauseOnCondition: being-warped
 		Voice: Attack
 		FacingTolerance: 0
 	WithInfantryBody:
-		RequiresCondition: !being-warped && undeployed
+		RequiresCondition: !being-warped
 		StandSequences: hover
 		DefaultAttackSequence: flying-attack
 		MoveSequence: flying
 	WithInfantryBody@Ground:
-		RequiresCondition: !being-warped && deployed
+		RequiresCondition: !being-warped && !airborne
 		StandSequences: stand
 		DefaultAttackSequence: attack
 		IdleSequences: idle1, idle2
@@ -176,21 +173,19 @@ Jumpjet:
 		StandSequences: stand
 		RequiresCondition: being-warped
 	WithDeathAnimation:
-		RequiresCondition: !being-warped && deployed
+		RequiresCondition: !being-warped && !airborne
 	SpawnActorOnDeath:
 		Actor: Jumpjet.Husk
 		SkipMakeAnimations: False
-		RequiresCondition: undeployed && !being-warped
+		RequiresCondition: !being-warped
 	AttackMove:
 		Voice: Move
-	-Passenger:
-	-GainsExperienceMultiplier:
 	Guard:
 		Voice: Move
 	Voiced:
 		VoiceSet: JJVoice
 	KillsSelf@EMP:
-		RequiresCondition: (empdisable && undeployed)
+		RequiresCondition: empdisable
 		DamageTypes: DefaultDeath
 	KillsSelf@BADTERRAIN:
 		RequiresCondition: (badterrain && deployed)
@@ -210,36 +205,34 @@ Jumpjet:
 		RequiresCondition: deployed && !being-warped && damaged
 		TargetTypes: Heal
 	Targetable@AIRBORNE:
-		RequiresCondition: !being-warped && undeployed
+		RequiresCondition: !being-warped
 		TargetTypes: Air
 	Targetable@Temporal:
 		TargetTypes: Temporal
-		RequiresCondition: deployed
-	Mobile:
-		Speed: 112
-		Locomotor: jumpjet
-		PauseOnCondition: being-warped
+		RequiresCondition: !airborne
+	Aircraft:
+		CruiseAltitude: 0c511
+		IdealSeparation: 0c384
+		InitialFacing: 92
+		Speed: 118
+		TurnSpeed: 48
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,BlackTiberium,Beach,Bridge,Tunnel,Ford
+		AirborneCondition: airborne
+		CruisingCondition: cruising
+		CanHover: true
+		CanSlide: true
+		VTOL: true
 	Hovers:
 		InitialHeight: 0c511
 		BobDistance: -48
 		MinHoveringAltitude: 0c3
 		RiseTicks: 150
-		RequiresCondition: undeployed
+		RequiresCondition: cruising
+	-EjectOnDeath:
+	-WithDamageOverlay:
+	-LeavesTrails:
 	WithShadow:
-		RequiresCondition: undeployed
 		Offset: 0,0,-768
-	GrantConditionOnDeploy:
-		DeployedCondition: deployed
-		UndeployedCondition: undeployed
-		UndeployOnMove: False
-		Voice: Move
-		PauseOnCondition: being-warped
-	MustBeDestroyed:
-	-SpawnActorOnDeath@viceroid:
-	-Crushable:
-	SpeedMultiplier:
-		Modifier: 55
-		RequiresCondition: deployed
 	GrantConditionOnTerrain@KILLJUMPJET:
 		Condition: badterrain
 		TerrainTypes: Cliff, Rock, Tree, Wall
@@ -247,13 +240,12 @@ Jumpjet:
 		Condition: badwater
 		TerrainTypes: Water
 	HitShape:
-		RequiresCondition: deployed
+		RequiresCondition: !airborne
 	HitShape@AIRBORNE:
 		Type: Circle
 			Radius: 768
 		TargetableOffsets: 0, 0, 768
 		UseTargetableCellsOffsets: true
-		RequiresCondition: undeployed
 	DetectCloaked:
 		Range: 3c0
 		DetectionTypes: Cloak, Thief
@@ -275,31 +267,17 @@ Jumpjet.Rocket:
 	Valued:
 		Cost: 500
 	Health:
-		HP: 20000
+		HP: 25000
 	Tooltip:
 		Name: Jump-Jet Rocket Trooper
-	-Armament@AIR:
-	-Armament@GROUND:
-	Armament@AIRGROUND:
+	Armament:
 		Weapon: BikeRockets
 		LocalOffset: 150, -50, 500, 150, 50, 500
 		LocalYaw: 100, -100
-		RequiresCondition: undeployed
-	Armament@AIRAIR:
+	Armament@AIR:
 		Weapon: BikeRocketsAA
 		LocalOffset: 150, -50, 500, 150, 50, 500
 		LocalYaw: 100, -100
-		RequiresCondition: undeployed
-	Armament@GROUNDGROUND:
-		Weapon: BikeRockets
-		LocalOffset: 150, -50, 0, 150, 50, 0
-		LocalYaw: 100, -100
-		RequiresCondition: deployed
-	Armament@GROUNDAIR:
-		Weapon: BikeRocketsAA
-		LocalOffset: 150, -50, 0, 150, 50, 0
-		LocalYaw: 100, -100
-		RequiresCondition: deployed
 
 Jumpjet.Railgun:
 	Inherits: Jumpjet
@@ -318,18 +296,12 @@ Jumpjet.Railgun:
 	Valued:
 		Cost: 800
 	Health:
-		HP: 18000
+		HP: 25000
 	Tooltip:
 		Name: Jump-Jet Railgunner
-	Armament@AIR:
+	Armament:
 		Weapon: Railgun.Infantry
 		LocalOffset: 341,0,756, 341,0,756
-		RequiresCondition: undeployed
-	Armament@GROUND:
-		Weapon: Railgun.Infantry
-		LocalOffset: 341,0,256, 341,0,756
-		RequiresCondition: deployed
-		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
 
 RMBO:

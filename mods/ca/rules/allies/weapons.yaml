@@ -1,10 +1,10 @@
 BATF.Repair:
 	Inherits: Repair
-	Range: 6c0
+	Range: 7c512
 	ValidTargets: Repair, RepairInAir
-	ReloadDelay: 125
-	Burst: 10
-	BurstDelays: 30
+	ReloadDelay: 100
+	Burst: 4
+	BurstDelays: 10
 	Report: repair11.aud
 	Projectile: ArcLaserZap
 		Duration: 4
@@ -21,10 +21,11 @@ BATF.Repair:
 		ExplosionPalette: tseffect-ignore-lighting-alpha75
 	Warhead@1Dam: SpreadDamage
 		Damage: -6000
+		ValidTargets: Ground, Vehicle, Air
 	Warhead@highlight: GrantExternalCondition
 		Range: 0c511
-		Duration: 4
-		Condition: highlight
+		Duration: 100
+		Condition: nshield
 		ValidTargets: Ground, Vehicle, Air
 		ValidRelationships: Ally
 
@@ -70,7 +71,7 @@ HellfireAG:
 		HorizontalRateOfTurn: 40
 		RangeLimit: 9c512
 	Warhead@1Dam: SpreadDamage
-		Damage: 8000
+		Damage: 6000
 
 HellfireAG.Cryo:
 	Inherits: HellfireAG

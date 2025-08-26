@@ -103,11 +103,6 @@ CRATE:
 		Units: arty
 		ValidFactions: allies, england, france, germany, nod, blackh, marked, legion
 		Prerequisites: ~!techlevel.infonly, ~!techlevel.aircraft, radar
-	GiveUnitCrateAction@v2rl:
-		SelectionShares: 6
-		Units: v2rl
-		ValidFactions: soviet, russia, nkorea, iraq
-		Prerequisites: ~!techlevel.infonly, ~!techlevel.aircraft, radar
 	GiveUnitCrateAction@msam:
 		SelectionShares: 6
 		Units: msam
@@ -326,62 +321,6 @@ gps.satellite.firstscan:
 		Queue: SpySatellite
 	AlwaysVisible:
 	ProvidesPrerequisite:
-
-Cloud.Chemical:
-	Interactable:
-	EditorOnlyTooltip:
-		Name: (support power)
-	RenderSprites:
-		Image: cloud1
-		Palette: tseffect-ignore-lighting-alpha65
-	WithSpriteBody:
-	BodyOrientation:
-		QuantizedFacings: 1
-	AlwaysVisible:
-	HitShape:
-	Mobile:
-		Speed: 12
-		Locomotor: cloud
-	Wanders:
-		WanderMoveRadius: 5
-		ReduceMoveRadiusDelay: 1
-	Health:
-		HP: 30000
-	DamagedByTerrain:
-		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
-		Damage: 500
-		DamageInterval: 5
-		DamageTypes: ToxinDeath
-	Hovers:
-	WithDeathAnimation:
-		DeathSequencePalette: tseffect-ignore-lighting-alpha65
-		DeathPaletteIsPlayerPalette: False
-		UseDeathTypeSuffix: False
-		CrushedSequence: die
-		FallbackSequence: die
-	PeriodicExplosion:
-		Weapon: Cloud.Chemical
-
-Cloud.Metal_Acid:
-	Inherits: Cloud.Chemical
-	PeriodicExplosion:
-		Weapon: Metal_Acid_Cloud
-	RenderSprites:
-		Palette: tdeffect-ignore-lighting-alpha65
-		Image: metal_acid_cloud1
-	WithDeathAnimation:
-		DeathSequencePalette: tdeffect-ignore-lighting-alpha65
-
-Cloud.Toxin:
-	Inherits: Cloud.Chemical
-	RenderSprites:
-		Image: cloud2
-		Palette: tseffect-ignore-lighting-alpha75
-	DamagedByTerrain:
-		Terrain: Clear, Rough, Road, Ore, Water, Gems, River, Tiberium, BlueTiberium
-		Damage: 300
-		DamageInterval: 5
-		DamageTypes: ToxinDeath
 
 SONAR:
 	Inherits: camera.spyplane

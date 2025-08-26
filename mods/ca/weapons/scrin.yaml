@@ -241,8 +241,8 @@ CorrupterSpew.range:
 	StartBurstReport: corrupter-fire1.aud
 	ReloadDelay: 110
 	Warhead@1Dam: SpreadDamage
-		Spread: 768
-		Damage: 10000
+		Spread: 256
+		Damage: 9000
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
 LeecherExplode:
@@ -886,7 +886,7 @@ InvaderExplosion:
 	Report: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
 	Warhead@1Dam_impact: SpreadDamage
 		Spread: 1c0
-		Damage: 1500
+		Damage: 6000
 		Falloff: 100, 37, 13, 5
 		ValidTargets: Ground, Trees, Water, Air
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
@@ -896,7 +896,7 @@ InvaderExplosion:
 		Size: 2
 	Warhead@Flames: FireCluster
 		Weapon: SuicideAcid
-		RandomClusterCount: 30
+		RandomClusterCount: 20
 		Dimensions: 5,5
 		Footprint: ===x=== ==xxx== =xxxxx= xxxxxxx =xxxxx= ==xxx== ===x===
 	Warhead@3Eff: CreateEffect
@@ -1295,14 +1295,14 @@ MothershipBeam:
 		Multiplier: 0.1,0.1
 
 Scrinbombs:
-	Inherits: ^EnergyAP
+	Inherits: ^EnergyLight
 	ValidTargets: Ground, Water, Trees, Underwater
 	InvalidTargets: Air
 	ReloadDelay: 50
 	Report: chute1.aud
 	Burst: 7
 	BurstDelays: 4
-	Range: 4c256
+	Range: 3c256
 	TargetActorCenter: true
 	Projectile: GravityBomb
 		Image: plasdiscsm
@@ -1507,14 +1507,15 @@ FeederExplode:
 
 DepthCharge.Scrin:
 	Inherits: DepthCharge
-	ValidTargets: Water, Underwater
+	ValidTargets: Water, Underwater, Bridge
 	Projectile: Missile
-		Speed: 125
+		Speed: 160
+		RangeLimit: 10c0
 		Image: enrvbolt
 	Warhead@1Dam: SpreadDamage
 		Spread: 256
 		Damage: 25000
-		ValidTargets: Ship, Submarine
+		ValidTargets: Ship, Submarine, Structure, Underwater, Ground, Bridge
 	Warhead@3Eff: CreateEffect
 		ValidTargets: Submarine, Ship
 

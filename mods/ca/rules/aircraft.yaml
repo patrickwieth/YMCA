@@ -215,6 +215,7 @@ B2B:
 Stealth_Fighter:
 	Inherits: ^Plane
 	Inherits: ^BiologicalPilot
+	Inherits: ^RearmableAircraft
 	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Aircraft
@@ -237,8 +238,6 @@ Stealth_Fighter:
 		LocalOffset: 0,-640,0, 0,640,0
 		LocalYaw: -40, 24
 		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 80
 	Aircraft:
 		CruiseAltitude: 2560
 		InitialFacing: 192
@@ -248,17 +247,8 @@ Stealth_Fighter:
 		MaximumPitch: 56
 		TakeoffSounds: migtoff1.aud
 		IdleBehavior: Land
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 4
-		ReloadDelay: 100
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	SelectionDecorations:
 	Contrail@1:
 		Offset: -598,-683,0
@@ -285,13 +275,6 @@ Stealth_Fighter:
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
-	RenderSprites:
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
 
 Stealth_Fighter.payload:
 	Inherits: Stealth_Fighter
@@ -309,141 +292,10 @@ Stealth_Fighter.payload:
 		Position: BottomLeft
 		RequiresSelection: true
 
-MIG:
-	Inherits: ^Plane
-	Inherits: ^BiologicalPilot
-	Inherits: ^PrioAntiHeavy
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
-		BuildPaletteOrder: 50
-		Prerequisites: ~afld, stek, ~commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.tesla, ~!commander_tree.mig.nuke
-		Description: Precision strike aircraft.\n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: MiG Attack Plane
-	Health:
-		HP: 18000
-	RevealsShroud:
-		Range: 13c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 11c0
-		Type: GroundPosition
-	Armament:
-		Weapon: Maverick
-		LocalOffset: 0,-640,0, 0,640,0
-		LocalYaw: -40, 24
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 80
-		PersistentTargeting: false
-		OpportunityFire: false
-		PauseOnCondition: empdisable || being-warped
-	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
-		TurnSpeed: 16
-		Speed: 225
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-		TakeoffSounds: migtoff1.aud
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
-	AmmoPool:
-		Ammo: 8
-		ReloadDelay: 60
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
-	Contrail@1:
-		Offset: -598,-683,0
-	Contrail@2:
-		Offset: -598,683,0
-	Contrail@AB1:
-		Offset: -400,-50,-20
-		StartColorUsePlayerColor: false
-		ZOffset: -512
-		StartColor: cc550080
-		TrailLength: 10
-	Contrail@AB2:
-		Offset: -400,50,-20
-		StartColorUsePlayerColor: false
-		ZOffset: -512
-		StartColor: cc550080
-		TrailLength: 10
-	SpawnActorOnDeath:
-		Actor: MIG.Husk
-		RequiresCondition: ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@Empty:
-		Actor: MIG.Husk.empty
-		RequiresCondition: !ammo && !empdisable && !being-warped
-	SpawnActorOnDeath@EMP:
-		Actor: MIG.Husk.EMP
-		RequiresCondition: ammo && empdisable && !being-warped
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: MIG.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable && !being-warped
-	LeavesTrails:
-		Offsets: -853,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-
-MIG.Nuke:
-	Inherits: MIG
-	Inherits: ^PrioAntiLight
-	Buildable:
-		Prerequisites: ~afld, stek, ~commander_tree.mig.nuke
-		Description: Nuclear attack bomber aircraft.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
-	Valued:
-		Cost: 2800
-	Tooltip:
-		Name: MiG Nuclear Attack Bomber
-	AmmoPool:
-		Ammo: 1
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
-	Armament:
-		Weapon: AtomBomb.Mig
-
-MIG.Tesla:
-	Inherits: MIG
-	Buildable:
-		Prerequisites: ~afld, stek, ~commander_tree.mig.tesla,
-		Description: Precision strike bomber.\n  Bombs emit Tesla zaps on impact. \n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
-	Valued:
-		Cost: 2200
-	AmmoPool:
-		Ammo: 6
-	Tooltip:
-		Name: MiG Tesla Bomber
-	Aircraft:
-		Speed: 205
-	Armament:
-		Weapon: MigTeslaBomb
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-
 YAK:
 	Inherits: ^Plane
 	Inherits: ^BiologicalPilot
+	Inherits: ^RearmableAircraft
 	Inherits: ^PrioAntiLight
 	Buildable:
 		Queue: Aircraft
@@ -490,18 +342,11 @@ YAK:
 		Speed: 180
 		RepulsionSpeed: 40
 		MaximumPitch: 56
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 36
 		ReloadDelay: 7
-		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 6
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: YAK.Husk
@@ -518,10 +363,6 @@ YAK:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
 	Contrail@1:
 		Offset: -98,-683,-10
 	Contrail@2:
@@ -532,6 +373,7 @@ YAK:
 CHEMYAK:
 	Inherits: ^Plane
 	Inherits: ^BiologicalPilot
+	Inherits: ^RearmableAircraft
 	Inherits: ^PrioAntiLight
 	Buildable:
 		Queue: Aircraft
@@ -572,18 +414,10 @@ CHEMYAK:
 		Speed: 180
 		RepulsionSpeed: 40
 		MaximumPitch: 56
-	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 	AmmoPool:
 		Ammo: 24
-		ReloadDelay: 11
-		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
 		PipCount: 4
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	SelectionDecorations:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
@@ -601,10 +435,6 @@ CHEMYAK:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	ProducibleWithLevel:
-		Prerequisites: aircraft.upgraded
-	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies
 	Contrail@1:
 		Offset: -98,-683,-10
 	Contrail@2:
@@ -627,72 +457,6 @@ CHEMYAK.Volatile:
 		Name: Yak Toxin Plane (Volatile)
 	SpawnActorOnDeath:
 		Actor: YAK.Volatile.Husk
-
-P51:
-	Inherits: ^NeutralPlane
-	Tooltip:
-		Name: P51 Attack Plane
-	Health:
-		HP: 28000
-	RevealsShroud@GAPGEN:
-		Range: 9c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Name: gunr
-		Weapon: ChainGun.P51.R
-		LocalOffset: 256,-213,0
-		MuzzleSequence: muzzle
-	Armament@SECONDARY:
-		Name: gunl
-		Weapon: ChainGun.P51.L
-		LocalOffset: 256,213,0
-		MuzzleSequence: muzzle
-	Armament@TERTIARY:
-		Name: rocketr
-		Weapon: Rocket.P51.R
-		LocalOffset: 0,-413,0
-	Armament@QUATERNARY:
-		Name: rocketl
-		FireDelay: 2
-		Weapon: Rocket.P51.L
-		LocalOffset: 0,413,0
-	AttackBomberCA:
-		Armaments: gunr, gunl, rocketr, rocketl
-		FacingTolerance: 80
-	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
-		TurnSpeed: 16
-		Speed: 180
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-	WithMuzzleOverlay:
-	SpawnActorOnDeath:
-		Actor: P51.Husk
-		RequiresCondition: !empdisable
-	SpawnActorOnDeath@EMP:
-		Actor: P51.Husk.EMP
-		RequiresCondition: empdisable
-	LeavesTrails:
-		Offsets: -853,0,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	RejectsOrders:
-	Contrail@1:
-		Offset: -98,-623,30
-	Contrail@2:
-		Offset: -98,623,30
-	-Selectable:
-	Interactable:
-	GivesExperience:
-		Experience: 1000
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
 
 TRAN:
 	Inherits: ^Helicopter
@@ -743,7 +507,6 @@ TRAN:
 	SpawnActorOnDeath@EMP:
 		Actor: TRAN.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	WithCargoHatchAnimation:
 	WithCargoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
@@ -773,8 +536,6 @@ TRAN.Eagle:
 	Cargo:
 		InitialUnits: rocket_infantry, rocket_infantry, rocket_infantry, rocket_infantry
 	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
 		RequiresCondition: loaded || loaded-air
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air
@@ -792,7 +553,8 @@ TRAN.Eagle:
 TRAN.paradrop:
 	Inherits: TRAN
 	Tooltip:
-		Name: Chinook
+		Name: Chinook (Paradrop)
+	-Buildable:
 	ParaDrop:
 		DropRange: 4c0
 	Health:
@@ -975,89 +737,6 @@ UAV:
 	RenderSprites:
 		PlayerPalette: overlayplayertd
 	-EjectOnDeath:
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-
-BLIMP:
-	Inherits: ^Airship
-	Inherits: ^BiologicalPilot
-	Inherits: ^HeavyArmor
-	Inherits: ^PrimaryBuilding
-	RenderSprites:
-		Image: Blimp
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
-		BuildPaletteOrder: 55
-		Prerequisites: ~afld, stek, ~commander_tree.airship,
-		Description: Heavily Armoured Airship trains infantry directly onto the Battlefield.
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: Airship of the People
-	Health:
-		HP: 175000
-	RevealsShroud:
-		Range: 10c0
-		Type: GroundPosition
-		MoveRecalculationThreshold: 0
-	Aircraft:
-		CruiseAltitude: 2c0
-		InitialFacing: 192
-		TurnSpeed: 12
-		Speed: 56
-		Voice: Move
-		AltitudeVelocity: 0c50
-		CanForceLand: False
-	SelectionDecorations:
-	SpawnActorOnDeath:
-		Actor: BLIMP.Husk
-		RequiresCondition: !empdisable && !being-warped
-	SpawnActorOnDeath@EMP:
-		Actor: BLIMP.Husk.EMP
-		RequiresCondition: empdisable && !being-warped
-	LeavesTrails@1:
-		Offsets: -100,500,100
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	LeavesTrails@2:
-		Offsets: -100,-500,100
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	ChangesHealth:
-		Step: 100
-		Delay: 3
-		StartIfBelow: 100
-		DamageCooldown: 150
-	Voiced:
-		VoiceSet: KirovVoice
-	Production:
-		Produces: Infantry, Soldier
-		PauseOnCondition: forceshield || invulnerability || being-warped
-		RequiresCondition: !infdisabled
-	GrantConditionOnPrerequisite@vehiclesonly:
-		Condition: infdisabled
-		Prerequisites: techlevel.vehiclesonly
-	GrantConditionOnPrerequisite@aircraftonly:
-		Condition: infdisabled
-		Prerequisites: techlevel.aircraftonly
-	GrantExternalConditionToProduced:
-		Condition: produced, parachute
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: -170,810,0
-		ExitCell: 1,2
-		ProductionTypes: Soldier, Infantry
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 
@@ -1519,7 +1198,9 @@ AURORA:
 	Inherits: ^Plane
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiLight
-	Inherits@SLOW: ^SlowsWhenDamaged
+	Inherits: ^SlowsWhenDamaged
+	Inherits: ^RearmableAircraft
+	Inherits: ^BomberPlane
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -1564,17 +1245,10 @@ AURORA:
 		RequiresCondition: supersonic && ammo
 	SpeedMultiplier@DAMAGED:
 		Modifier: 67
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
 	AmmoPool:
 		Ammo: 1
 		ReloadDelay: 125
 		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
 	SelectionDecorations:
 	Contrail@AB1:
 		Offset: -800,-70,-50

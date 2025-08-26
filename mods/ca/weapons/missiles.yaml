@@ -21,53 +21,6 @@
 		Explosions: med_explosion_air
 		ImpactActors: false
 
-Maverick:
-	Inherits: ^AntiGroundMissile
-	Inherits: ^MissileAP
-	Range: 9c0
-	MinRange: 2c0
-	Report: missile7.aud
-	Burst: 2
-	BurstDelays: 7
-	Projectile: MissileCA
-		Speed: 256
-		Inaccuracy: 316
-		CruiseAltitude: 2c0
-		RangeLimit: 14c410
-		LockOnInaccuracy: 316
-	Warhead@1Dam: SpreadDamage
-		Damage: 10000
-
-Maverick.Tesla:
-	Inherits: Maverick
-	Warhead@5Tesla: FireShrapnel
-		Weapon: KirovTeslaArc
-		Amount: 2
-		AimChance: 100
-		AllowDirectHit: true
-		ThrowWithoutTarget: false
-
-MaverickSU:
-	Inherits: Maverick
-	Inherits: ^MissileHE
-	Range: 10c0
-	Report: vbleatta.aud, vbleattb.aud
-	Burst: 4
-	Projectile: MissileCA
-		Inaccuracy: 1c0
-		Speed: 180
-		LockOnInaccuracy: 1024
-	Warhead@1Dam: SpreadDamage
-		Spread: 341
-
-MaverickSU.Concussion:
-	Inherits: MaverickSU
-	Warhead@Concussion1: GrantExternalCondition
-		Range: 1c512
-		Duration: 240
-		Condition: concussion
-		ValidTargets: Ground, Infantry, Vehicle, Ship
-
 Dragon:
 	Inherits: ^AntiGroundMissile
 	Projectile: MissileCA
@@ -164,7 +117,7 @@ Dragon.MKII:
 	Inherits: DragonE
 	Inherits: ^MissileHE
 	ReloadDelay: 80
-	Range: 9c0
+	Range: 7c512
 	Burst: 6
 	BurstDelays: 5
 	Projectile: MissileCA
@@ -172,7 +125,7 @@ Dragon.MKII:
 		Inaccuracy: 2c512
 		Image: DRAGON
 		TrailImage: smokey
-		RangeLimit: 8c0
+		RangeLimit: 10c0
 		PointDefenseType: Missile
 		LockOnProbability: 50
 		LockOnInaccuracy: 128
@@ -190,33 +143,28 @@ WidowAA:
 	Inherits: ^AntiAirMissile
 	ReloadDelay: 60
 	Report: vbleatta.aud, vbleattb.aud
-	Range: 8c0
-	MinRange: 1c256
+	Range: 12c0
+	MinRange: 2c256
 	Burst: 2
 	BurstDelays: 10
 	Projectile: MissileCA
-		Speed: 404
+		Speed: 505
 		HorizontalRateOfTurn: 40
-		RangeLimit: 12c0
+		RangeLimit: 14c0
 		ContrailLength: 6
 	Warhead@1Dam: SpreadDamage
 		Damage: 12000
+		ValidRelationships: Neutral, Enemy
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 
 WidowAA.Mig:
 	Inherits: WidowAA
-	Range: 9c0
-	Projectile: MissileCA
-		Speed: 505
 
 WidowAA.SU:
 	Inherits: WidowAA
-	Range: 9c0
 	Burst: 4
-	Projectile: MissileCA
-		Speed: 505
 	Warhead@1Dam: SpreadDamage
 		Damage: 6000
 
@@ -273,18 +221,20 @@ Nike:
 		Speed: 341
 	Warhead@1Dam: SpreadDamage
 		Damage: 10000
+		ValidRelationships: Neutral, Enemy
 		ValidTargets: Air
 	Warhead@3Eff: CreateEffect
 		Explosions: med_explosion_air
 
 Nike.Raptor:
 	Inherits: Nike
+	Range: 12c0
 	Projectile: MissileCA
-		Speed: 510
+		Speed: 550
 	ReloadDelay: 30
 	Report: vbleatta.aud, vbleattb.aud
 	Projectile: MissileCA
-		RangeLimit: 14c0
+		RangeLimit: 16c0
 	Warhead@1Dam: SpreadDamage
 		Damage: 16000
 		ValidTargets: Air
@@ -301,6 +251,17 @@ RedEye:
 		Damage: 5600
 		Range: 0, 0c64, 0c256, 3c0
 
+RedEye.NonRelay:
+	Inherits: RedEye
+	InvalidTargets: relayTarget
+
+RedEye.Relay:
+	Inherits: RedEye
+	ValidTargets: relayTarget
+	Range: 20c0
+	Projectile: MissileCA
+		RangeLimit: 21c0
+
 RedEye.CYB:
 	Inherits: RedEye
 	Report: rocket.aud
@@ -309,6 +270,7 @@ RedEye.CYB:
 
 RedEye.CRYO:
 	Inherits: RedEye
+	InvalidTargets: relayTarget
 	Projectile: MissileCA
 		Image: cryomiss
 	Warhead@3Eff: CreateEffect
@@ -320,6 +282,14 @@ RedEye.CRYO:
 		Duration: 65
 		Range: 0c341
 		ValidTargets: Air
+
+RedEye.CRYO.Relay:
+	Inherits: RedEye.CRYO
+	-InvalidTargets:
+	ValidTargets: relayTarget
+	Range: 20c0
+	Projectile: MissileCA
+		RangeLimit: 21c0
 
 RedEyeE:
 	Inherits: RedEye
@@ -392,15 +362,15 @@ StingerAA:
 
 StingerGTWR:
 	Inherits: Stinger
-	Inherits: ^MissileHE
-	ReloadDelay: 50
+	InvalidTargets: relayTarget
+	ReloadDelay: 40
 	Range: 7c0
 	Report: rocket2.aud
 	BurstDelays: 15
 	Projectile: MissileCA
 		HorizontalRateOfTurn: 40
 		RangeLimit: 12c0
-		Speed: 320
+		Speed: 255
 		LockOnProbability: 66
 		LockOnInaccuracy: 512
 	Warhead@1Dam: SpreadDamage
@@ -408,8 +378,33 @@ StingerGTWR:
 		Damage: 8000
 		ValidTargets: Ground, Water
 
+StingerGTWR.AA:
+	Inherits: ^AntiAirMissile
+	ReloadDelay: 40
+	ValidTargets: Air
+	Range: 7c0
+	InvalidTargets: relayTarget
+	Projectile: MissileCA
+		Arm: 3
+		Inaccuracy: 0
+		HorizontalRateOfTurn: 20
+		RangeLimit: 10c0
+		Speed: 255
+		CloseEnough: 149
+		LockOnProbability: 80
+		LockOnInaccuracy: 512
+
 StingerGTWR.Relay:
 	Inherits: StingerGTWR
+	-InvalidTargets:
+	ValidTargets: relayTarget
+	Range: 20c0
+	Projectile: MissileCA
+		RangeLimit: 21c0
+
+StingerGTWR.AA.Relay:
+	Inherits: StingerGTWR.AA
+	-InvalidTargets:
 	ValidTargets: relayTarget
 	Range: 20c0
 	Projectile: MissileCA
@@ -482,11 +477,11 @@ APTusk.Air:
 	ReloadDelay: 50
 	Burst: 2
 	BurstDelays: 1
-	Range: 7c0
+	Range: 8c0
 	Projectile: MissileCA
 		Speed: 298
 		HorizontalRateOfTurn: 40
-		RangeLimit: 7c204
+		RangeLimit: 9c204
 		LockOnProbability: 80
 		LockOnInaccuracy: 256
 	Warhead@1Dam: SpreadDamage
@@ -629,66 +624,6 @@ HonestJohnSub:
 		MaxLevel: 750
 		LayerName: radioactivity
 
-SCUD:
-	Inherits: ^AntiGroundMissile
-	Inherits: ^MissileArtillery
-	ReloadDelay: 240
-	Range: 11c0
-	MinRange: 4c0
-	Report: missile1.aud
-	-Projectile:
-	Projectile: BulletCA
-		Speed: 200
-		Blockable: false
-		TrailImage: smokey
-		TrailDelay: 5
-		Inaccuracy: 213
-		Image: V2
-		Shadow: True
-		LaunchAngle: 62
-	Warhead@1Dam: SpreadDamage
-		Spread: 341
-		Damage: 3400
-		Falloff: 1000, 368, 135, 50, 18, 7, 0
-		ValidTargets: Ground, Water, Trees
-		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: building, building2
-	Warhead@4EffWater: CreateEffect
-		Explosions: large_splash
-		ImpactSounds: splashl1.aud, splashl2.aud
-
-V3Weapon:
-	Inherits: ^AntiGroundMissile
-	Inherits: ^MissileArtillery
-	-Report:
-	ValidTargets: Ground, Trees, Water
-	Warhead@1Dam: SpreadDamage
-		Spread: 1c0
-		Damage: 3400
-		Falloff: 1000, 368, 135, 50, 18, 7, 0
-		ValidTargets: Ground, Water, Trees
-		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: building, building2
-	Warhead@4EffWater: CreateEffect
-		Explosions: large_splash
-		ImpactSounds: splashl1.aud, splashl2.aud
-
-KatyushaRockets:
-	Inherits: ^AntiGroundMissile
-	Inherits: ^MissileArtillery
-	ReloadDelay: 240
-	Range: 16c0
-	MinRange: 4c0
-	Report: missile6.aud
-	Burst: 8
-	BurstDelays: 6
-	ValidTargets: Ground, Trees, Water
-	Warhead@1Dam: SpreadDamage
-		Spread: 384
-		Damage: 5000
-
 HonestJohn:
 	Inherits: ^AntiGroundMissile
 	Inherits: ^NapalmMissile
@@ -712,10 +647,10 @@ HonestJohn:
 HonestJohn.toxin:
 	Inherits: ^AntiGroundMissile
 	Inherits: ^Chemical
-	ReloadDelay: 110
+	ReloadDelay: 100
 	Burst: 2
-	BurstDelays: 50
-	Range: 16c0
+	BurstDelays: 30
+	Range: 19c0
 	MinRange: 6c0
 	Report: rocket2.aud
 	Projectile: BulletCA
@@ -736,7 +671,7 @@ HonestJohn.toxin:
 	Warhead@2Smu: LeaveSmudge
 		SmudgeType: Scorch
 	Warhead@13Spawn: SpawnActor
-		Actors: Cloud.Chemical
+		Actors: chemical_cloud.spawner
 		Range: 5
 		ForceGround: false
 		Image: Cloud1d
@@ -885,25 +820,22 @@ IFVRocketsAA:
 	Range: 10c512
 	Burst: 2
 	BurstDelays: 5
-	Warhead@1Dam: SpreadDamage
-		Damage: 2700
 
 IFVRocketsE:
 	Inherits: IFVRockets
+	ReloadDelay: 30
 	Report: vifvatta.aud
-	Range: 5c0
+	Range: 5c512
 	Projectile: MissileCA
 		ContrailLength: 10
-	Warhead@1Dam: SpreadDamage
-		Damage: 3200
 
 IFVRocketsAAE:
 	Inherits: IFVRocketsAA
+	ReloadDelay: 30
+	Range: 11c512
 	Report: vifvatta.aud
 	Projectile: MissileCA
 		ContrailLength: 10
-	Warhead@1Dam: SpreadDamage
-		Damage: 3000
 
 BTRRockets:
 	Inherits: Dragon
@@ -1075,7 +1007,7 @@ StnkMissile.AP:
 StnkMissile.AA:
 	Inherits: ^AntiAirMissile
 	ReloadDelay: 70
-	Range: 6c0
+	Range: 8c0
 	Report: rocket1.aud
 	Burst: 2
 	BurstDelays: 4
@@ -1097,7 +1029,10 @@ StnkMissile.AA.HE:
 	Inherits: ^MissileHE
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
-		Damage: 2500
+
+StnkMissile.AP.AA:
+	Inherits: StnkMissile.AA
+	Inherits: ^MissileAP
 
 BoatMissile:
 	Inherits: Stinger
@@ -1308,14 +1243,14 @@ AuroraRocket:
 		Dimensions: 3,3
 		Footprint: xxx xxx xxx
 
-Rocket.P51.R:
+Rocket.Tarantula.R:
 	Inherits: ^MissileArtillery
 	ReloadDelay: 200
 	Range: 8c0
 	MinRange: 0c768
 	Report: vintatta.aud
-	Burst: 4
-	BurstDelays: 4
+	Burst: 8
+	BurstDelays: 3
 	FirstBurstTargetOffset: -758,-613,0
 	FollowingBurstTargetOffset: 758,0,0
 	ValidTargets: Ground, Water
@@ -1350,6 +1285,6 @@ Rocket.P51.R:
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure, Bridge
 
-Rocket.P51.L:
-	Inherits: Rocket.P51.R
+Rocket.Tarantula.L:
+	Inherits: Rocket.Tarantula.R
 	FirstBurstTargetOffset: -758,613,0

@@ -1,46 +1,8 @@
-V2RL:
-	Inherits: ^FightingVehicle
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioArtillery
-	Inherits: ^SovietArtillery
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 115
-		Prerequisites: dome, ~vehicles.soviet
-		Description: Long-range rocket artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 900
-	Tooltip:
-		Name: V2 Rocket Launcher
-	Health:
-		HP: 15000
-	Mobile:
-		Speed: 68
-	Armament:
-		Weapon: SCUD
-		ReloadingCondition: reloading
-	AutoTarget:
-		ScanRadius: 10
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped
-		FacingTolerance: 0
-	WithFacingSpriteBody:
-		RequiresCondition: !reloading
-		Name: loaded
-	WithFacingSpriteBody@EMPTY:
-		RequiresCondition: reloading
-		Sequence: empty-idle
-		Name: reloading
-	FireWarheadsOnDeathCA:
-		Weapon: BarrelExplode
-
 1TNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
-	Inherits@vision: ^ImprovedVision
+	Inherits: ^ImprovedVision
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 50
@@ -80,8 +42,6 @@ V2RL:
 		RecoilRecovery: 25
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
@@ -104,7 +64,6 @@ V2RL:
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		Armaments: pointdefense, primary
-		PauseOnCondition: empdisable || being-warped || parachute
 
 1TNK.Reflector:
 	Inherits: 1TNK
@@ -118,7 +77,7 @@ V2RL:
 		Name: Scout Tank (Reflector)
 
 2TNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Buildable:
@@ -144,8 +103,6 @@ V2RL:
 		RecoilRecovery: 38
 		LocalOffset: 720,0,80
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	SpawnActorOnDeath:
@@ -275,8 +232,6 @@ ARTY.nod:
 	RenderSprites:
 		Image: artynod
 		PlayerPalette: overlayplayertd
-	WithDamageOverlay:
-		Image: smoke_mtd
 	Buildable:
 		IconPalette: chrometd
 		Prerequisites: ~vehicles.nod, ~!vehicles.legion
@@ -391,14 +346,10 @@ SPEC:
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: ReturnFire
 
 HARV:
 	Inherits: ^Tank
-	Inherits: ^BiologicalDriver
-	Inherits@HARV: ^Harvester
+	Inherits: ^Harvester
 	-Crushable:
 	-Carryable:
 	Buildable:
@@ -539,7 +490,7 @@ MCV.Nukular:
 JEEP:
 	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
-	Inherits@detect: ^SensorEquipment
+	Inherits: ^SensorEquipment
 	Inherits: ^PrioAntiInfantry
 	Buildable:
 		Queue: Vehicle
@@ -571,7 +522,7 @@ JEEP:
 APC:
 	Inherits: ^Tank
 	Inherits: ^BiologicalDriver
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^Transport
 	Inherits: ^PrioAntiInfantry
 	Buildable:
 		Queue: Vehicle
@@ -723,185 +674,6 @@ MRJ:
 	Targetable:
 		TargetTypes: Ground, Vehicle, C4, ChaosImmune
 
-TTNK:
-	Inherits: ^FightingVehicle
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioEnergyWeapon
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 125
-		Prerequisites: ~vehicles.soviet, dome, ~!commander_tree.tesla_tank_arc
-		Description: Tank with mounted Tesla coil.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
-	Valued:
-		Cost: 1250
-	Tooltip:
-		Name: Tesla Tank
-		GenericName: Tank
-	Health:
-		HP: 38000
-	Mobile:
-		Speed: 113
-		Voice: Move
-	Armament:
-		Weapon: TTankZap
-		LocalOffset: 0,0,213
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
-	Turreted:
-	WithIdleOverlay@SPINNER:
-		Sequence: spinner
-	Passenger:
-		Voice: Move
-	Voiced:
-		VoiceSet: TeslaTankVoice
-	SpawnActorOnDeath:
-		Actor: TTNK.Husk
-		RequiresCondition: !being-warped
-
-TTNK.Arc:
-	Inherits: TTNK
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 125
-		IconPalette: chrometd
-		Prerequisites: ~vehicles.soviet, dome, ~commander_tree.tesla_tank_arc
-		Description: Tank with mounted Tesla coil.\n  Tesla Zaps have improved Arcing.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n  Special Ability: Jams Radar
-	Valued:
-		Cost: 1350
-	Tooltip:
-		Name: Tesla Tank (Arc)
-	Armament:
-		Weapon: TTankZap.Arc
-
-TTNK.RA2:
-	Inherits: ^Tank
-	Inherits: ^TDVehicleSprite
-	Inherits: ^HighResShadow
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioEnergyWeapon
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 200
-		IconPalette: chrome
-		Prerequisites: dome, ~vehicles.russia, ~!commander_tree.tesla_tank_arc
-		Description: Tank with twin mounted Tesla coils.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
-	Valued:
-		Cost: 1350
-	Tooltip:
-		Name: Heavy Tesla Tank
-		GenericName: Tank
-	Health:
-		HP: 48000
-	Mobile:
-		Speed: 100
-		Voice: Move
-	Armament:
-		Weapon: TTankZapMK2
-		FireDelay: 13
-		LocalOffset: 800,200,200, 800,-200,200
-		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
-	WithTurretAttackAnimation:
-		Sequence: shoot
-	WithSpriteTurret:
-	Turreted:
-		TurnSpeed: 28
-	Passenger:
-		Voice: Move
-	Voiced:
-		VoiceSet: TeslaTankRA2Voice
-	SpawnActorOnDeath:
-		Actor: TTNK.RA2.Husk
-		RequiresCondition: !being-warped
-
-TTNK.RA2.Arc:
-	Inherits: TTNK.RA2
-	Buildable:
-		Queue: Vehicle
-		Prerequisites: ~vehicles.russia, dome, ~commander_tree.tesla_tank_arc
-		Description: Tank with mounted Tesla coil.\n  Tesla Zaps have improved Arcing.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Aircraft\n
-	Valued:
-		Cost: 1450
-	Tooltip:
-		Name: Heavy Tesla Tank (Arc)
-	Armament:
-		Weapon: TTankZapMK2.Arc
-
-DTRK:
-	Inherits: ^FightingVehicle
-	Inherits: ^HighResShadow
-	Inherits: ^PrioAntiLight
-	Inherits: ^UnloadCondition
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 265
-		Prerequisites: stek, ~vehicles.soviet
-		Description: Truck with actively armed nuclear\nexplosives. Has very weak armor.
-	Valued:
-		Cost: 2500
-	Tooltip:
-		Name: Demolition Truck
-	Health:
-		HP: 5000
-	Mobile:
-		Speed: 82
-		Voice: Move
-	FireWarheadsOnDeathCA@NUKE:
-		Weapon: MiniNuke
-		EmptyWeapon: MiniNuke
-		DamageSource: Killer
-		RequiresCondition: !unloaded && !being-warped
-	FireWarheadsOnDeathCA@UNARMED:
-		Weapon: UnitExplodeSmall
-		EmptyWeapon: UnitExplodeSmall
-		RequiresCondition: unloaded && !being-warped
-	AttackFrontal:
-		PauseOnCondition: empdisable || being-warped
-		FacingTolerance: 512
-		Voice: Attack
-		RequiresCondition: !unloaded
-	Armament@PRIMARY:
-		Weapon: DemoTruckTargeting
-	GrantConditionOnAttack:
-		Condition: triggered
-	GrantConditionOnDeploy:
-		DeployedCondition: triggered
-		RequiresCondition: !unloaded
-	-DamageMultiplier@IRONCURTAIN:
-	KillsSelf:
-		RequiresCondition: invulnerability || triggered || berserk
-	ChronoshiftableWithSpriteEffect:
-		ExplodeInstead: true
-	Passenger:
-		CustomPipType: red
-		Voice: Move
-	Voiced:
-		VoiceSet: TTruckVoice
-
-TTRK:
-	Inherits: DTRK
-	RenderSprites:
-		PlayerPalette: overlayplayertd
-	Buildable:
-		BuildPaletteOrder: 255
-		Prerequisites: ~vehicles.legion, tmpl, ~vehicles.nod
-		Description: Truck actively armed with\n a Tiberium bomb. Has very weak armor.
-	Tooltip:
-		Name: Chemical Truck
-	Health:
-		HP: 10000
-	Mobile:
-		Speed: 92
-		Voice: Move
-	Valued:
-		Cost: 2000
-	FireWarheadsOnDeathCA@NUKE:
-		Weapon: UnitExplodeToxinTruck
-		EmptyWeapon: UnitExplodeToxinTruck
-
 AMCV:
 	Inherits: ^ConstructionVehicle
 	Inherits: ^TDVehicleSprite
@@ -958,7 +730,7 @@ AMCV.Nukular:
 		IntoActor: afac.nukular
 
 HMMV:
-	Inherits: ^FightingVehicle
+	Inherits: ^FightingVehicleTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^SensorEquipment
@@ -986,8 +758,6 @@ HMMV:
 		Weapon: M60mgTD
 		LocalOffset: 171,0,85
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	WithSpriteTurret:
 	AutoTarget:
@@ -1072,7 +842,7 @@ APC2:
 	Inherits: ^Tank
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^Transport
 	Inherits: ^PrioAntiInfantry
 	RenderSprites:
 		FactionImages:
@@ -1133,7 +903,7 @@ APC2.Reinforce:
 		InitialUnits: mercenary,grenadier.emp,grenadier.emp,railgunner,medic
 
 LTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
@@ -1176,8 +946,6 @@ LTNK:
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped || parachute
 	AttackCharges:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable
@@ -1194,7 +962,7 @@ LTNK:
 		RequiresCondition: !onwater && !being-warped
 
 LTNK.Laser:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^HoverVehicle
 	Inherits: ^TDVehicleSprite
 	Inherits: ^HighResShadow
@@ -1237,7 +1005,7 @@ LTNK.Laser:
 		RequiresCondition: !onwater && !being-warped
 
 MTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
@@ -1303,7 +1071,7 @@ MTNK.Reflector:
 		Name: Battle Tank (Reflector)
 
 MTNK.Drone:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^RobotDriver
 	Inherits: ^DronePairing
@@ -1374,69 +1142,6 @@ MTNK.Drone.Reflector:
 		Description: Drone battle tank with Reflector Armor.\n It is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Battle Drone (Reflector)
-
-MSAM:
-	Inherits: ^FightingVehicle
-	Inherits: ^TDVehicleSprite
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiLightAA
-	RenderSprites:
-		FactionImages:
-			nod: msam.nod
-			blackh: msam.nod
-			legion: msam.nod
-			marked: msam.nod
-	Valued:
-		Cost: 950
-	Tooltip:
-		Name: MLRS
-	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, ~!commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs
-		Queue: Vehicle
-		IconPalette: chrometd
-		Description: Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles
-	Mobile:
-		Speed: 82
-	Health:
-		HP: 16000
-	Turreted:
-		TurnSpeed: 80
-		Offset: -256,0,128
-	Armament@PRIMARY:
-		Weapon: 227mm
-		LocalOffset: 213,128,0, 213,-128,0
-		LocalYaw: 100, -100
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: 227mmAA
-		LocalOffset: 213,-128,0, 213,128,0
-		LocalYaw: 100, -100
-	AttackTurreted:
-		TargetFrozenActors: True
-		PauseOnCondition: empdisable || being-warped
-	WithSpriteTurret:
-	FireWarheadsOnDeathCA:
-		Weapon: ArtilleryExplode
-
-MSAM.Hailstorm:
-	Inherits: MSAM
-	Inherits: ^PrioArtillery
-	RenderSprites:
-		-FactionImages:
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: Hailstorm MLRS
-	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, gtek, ~commander_tree.hailstorm_mlrs
-		Queue: Vehicle
-		IconPalette: chrometd
-		Description: Multiple Launch Rocket System.\nLong-range unguided multiple rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles\n  Weak vs. Aircraft, Heavy Tanks
-	Armament@PRIMARY:
-		Weapon: 227mm.Hailstorm
-	-Armament@SECONDARY:
 
 MLRS:
 	Inherits: ^FightingVehicle
@@ -1571,12 +1276,6 @@ STNK:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: ReturnFire
-	ProductionCostMultiplier@BlackhBonus:
-		Multiplier: 90
-		Prerequisites: vehicles.blackh
 
 STNK.Scrin:
 	Inherits: STNK
@@ -1673,6 +1372,8 @@ STNK.AP:
 		Name: Stealth AP Tank
 	Armament@PRIMARY:
 		Weapon: StnkMissile.AP
+	Armament@SECONDARY:
+		Weapon: StnkMissile.AP.AA
 
 STNK.AP.PDL:
 	Inherits@PDL: ^PointLaserDefenseSystem
@@ -1704,6 +1405,7 @@ BIKE:
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
 	RenderSprites:
+		Image: bike
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -1739,6 +1441,8 @@ BIKE.Scrin:
 	-AutoTargetPriority@DEFAULT:
 	-AutoTargetPriority@ATTACKANYTHING:
 	Inherits: ^PrioEnergyWeapon
+	WithProductionIconOverlay@Scrin:
+		Types: Scrin
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.scrin, ~!commander_tree.recon_bike.scrin.reflector, ~!commander_tree.recon_bike.scrin.pdl
@@ -1756,7 +1460,7 @@ BIKE.Scrin:
 	-Armament@SECONDARY:
 
 BIKE.Scrin.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: BIKE.Scrin
 	Buildable:
 		BuildPaletteOrder: 30
@@ -1783,6 +1487,8 @@ BIKE.Scrin.Reflector:
 BIKE.RocketHail:
 	Inherits: BIKE
 	Inherits: ^PrioAntiHeavy
+	WithProductionIconOverlay@Missile:
+		Types: Missile
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.rocket_hail, ~!commander_tree.recon_bike.rocket_hail.reflector, ~!commander_tree.recon_bike.rocket_hail.pdl
@@ -1798,7 +1504,7 @@ BIKE.RocketHail:
 	-Armament@SECONDARY:
 
 BIKE.RocketHail.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: BIKE.RocketHail
 	Buildable:
 		BuildPaletteOrder: 30
@@ -1825,6 +1531,8 @@ BIKE.RocketHail.Reflector:
 BIKE.Explosive:
 	Inherits: BIKE
 	Inherits: ^PrioAntiLightAA
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
 	Buildable:
 		BuildPaletteOrder: 30
 		Prerequisites: ~vehicles.nod, ~commander_tree.recon_bike.explosive, ~!commander_tree.recon_bike.explosive.pdl, ~!commander_tree.recon_bike.explosive.reflector
@@ -1868,7 +1576,6 @@ BIKE.Explosive.Reflector:
 HAR2:
 	Inherits: ^Tank
 	Inherits: ^TDVehicleSprite
-	Inherits: ^BiologicalDriver
 	Inherits: ^Harvester
 	-Crushable:
 	-Carryable:
@@ -1918,7 +1625,7 @@ BTR:
 	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^Transport
 	Inherits: ^PrioAntiHeavyAA
 	Buildable:
 		Queue: Vehicle
@@ -1970,9 +1677,9 @@ BTR.Surveillance:
 	Inherits: ^Vehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
-	Inherits@detect: ^SensorEquipment
-	Inherits@radar: ^MobileDeployableRadar
-	Inherits@TRANSPORT: ^Transport
+	Inherits: ^SensorEquipment
+	Inherits: ^MobileDeployableRadar
+	Inherits: ^Transport
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 45
@@ -2039,7 +1746,6 @@ NonaSVK:
 		Types: Shell
 
 IFV:
-	Inherits: ^Tank
 	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^HoverVehicle
@@ -2233,7 +1939,6 @@ IFV:
 		PassengerConditions:
 			light_infantry: gunturr
 			conscript: gunturr
-			e2: fragturr
 			rpg_soldier: samturr
 			rocket_infantry: samturr
 			flamethrower: flamturr
@@ -2245,7 +1950,7 @@ IFV:
 			rocket_cyborg: samturr
 			black_hand_trooper: flamturr
 			n5: chemturr
-			e8: desoturr
+			desolator: desoturr
 			engineer: engturr
 			mech: engturr
 			mort: chemturr
@@ -2373,7 +2078,7 @@ IFV.AI:
 	-Targetable@DRIVERKILL:
 
 TITN:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
 	Inherits: ^BigVehicle
 	Inherits: ^TurretedWalker
@@ -2446,7 +2151,7 @@ TITN.Battle:
 
 TITN.Battle.PDL:
 	Inherits: TITN.Battle
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
@@ -2486,7 +2191,7 @@ TITN.Railgun:
 
 TITN.Railgun.PDL:
 	Inherits: TITN.Railgun
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
@@ -2508,12 +2213,13 @@ TITN.Railgun.Reflector:
 		Name: Railgun Titan (Reflector)
 
 JUGG:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
+	Inherits: ^StopMovingToAttack
 	Tooltip:
 		Name: Juggernaut
 	Buildable:
@@ -2534,45 +2240,27 @@ JUGG:
 		Sequence: stand
 	WithMoveAnimation:
 		MoveSequence: run
-	WithAttackAnimation:
-		Sequence: shoot
-		RequiresCondition: aiming && !attacking
 	WithDeathAnimation:
 		Sequence: die
 		DeathSequencePalette: overlayplayertd
 		UseDeathTypeSuffix: false
-	SpeedMultiplier:
-		Modifier: 0
-		RequiresCondition: attacking
+	WithAttackAnimation:
+		Sequence: shoot
+		RequiresCondition: aiming && !attacking
 	Armament@PRIMARY:
+		Name: primary
+		Weapon: JuggernautDummyAim
+	Armament@SECONDARY:
+		Name: secondary
 		Weapon: JuggernautGun
 		LocalOffset: 830,-200,500, 830,200,500, 830,00,500
 		MuzzleSequence: muzzle
 		FireDelay: 33
-		PauseOnCondition: !ammo || moving
 	AttackFrontal:
-		FacingTolerance: 64
+		FacingTolerance: 0
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
-	GrantConditionWhileAiming:
-		Condition: aiming
-	GrantConditionOnAttack:
-		Condition: attacking
-		RevokeDelay: 50
-		RevokeAll: false
-	GrantConditionOnMovement:
-		Condition: moving
-		ValidMovementTypes: Horizontal, Vertical, Turn
-	AmmoPool:
-		Ammo: 3
-		Armaments: primary
-		AmmoCondition: ammo
-	ReloadAmmoPool:
-		Delay: 90
-		Count: 3
-		ResetOnFire: True
-		PauseOnCondition: moving
 	Health:
 		HP: 60000
 	Voiced:
@@ -2580,7 +2268,7 @@ JUGG:
 	WithMuzzleOverlay:
 
 DISR:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
@@ -2650,7 +2338,6 @@ DISR:
 		RequiresCondition: dronepair
 
 HMLRS:
-	Inherits: ^Tank
 	Inherits: ^FightingVehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
@@ -2719,7 +2406,7 @@ HMLRS.Reflector:
 		Name: Hover MLRS (Reflector)
 
 HMLRS.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: HMLRS
 	Buildable:
 		IconPalette: chrome
@@ -2731,7 +2418,7 @@ HMLRS.PDL:
 		Name: Hover MLRS (PDL)
 
 RTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
@@ -2807,7 +2494,7 @@ RTNK:
 		VoiceSet: MirageVoice
 
 RTNK.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: RTNK
 	Buildable:
 		Queue: Vehicle
@@ -2846,156 +2533,8 @@ RTNK.Reflector:
 	Tooltip:
 		Name: Mirage Tank (Reflector)
 
-V3RL:
-	Inherits: ^FightingVehicle
-	Inherits: ^HighResShadow
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioArtillery
-	Inherits: ^SovietArtillery
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 160
-		Prerequisites: techcenter, ~vehicles.soviet, radar, ~!vehicles.iraq, ~commander_tree.v3_launcher
-		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: V3 Launcher
-	Health:
-		HP: 16000
-	Mobile:
-		Speed: 56
-		TurnSpeed: 8
-		Voice: Move
-		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
-	Passenger:
-		Voice: Move
-	Armament:
-		Weapon: V3Launcher
-		ReloadingCondition: reloading
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped
-		Voice: Attack
-		FacingTolerance: 0
-	WithFacingSpriteBody:
-		RequiresCondition: !reloading
-		Name: loaded
-	WithFacingSpriteBody@EMPTY:
-		RequiresCondition: reloading
-		Sequence: empty-idle
-		Name: reloading
-	GrantConditionOnAttack:
-		Condition: aiming
-		RevokeDelay: 50
-		RevokeAll: false
-	MissileSpawnerMaster:
-		Actors: V3
-		RespawnTicks: 250
-	FireWarheadsOnDeathCA:
-		Weapon: BarrelExplode
-	Voiced:
-		VoiceSet: V3Voice
-	Exit:
-		SpawnOffset: 0,-128,0
-
-V3BRL:
-	Inherits: V3RL
-	Buildable:
-		Prerequisites: techcenter, ~vehicles.soviet, radar, ~!vehicles.iraq, ~commander_tree.v3_launcher, ~disabled
-		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
-	Tooltip:
-		Name: V3 Launcher
-	MissileSpawnerMaster:
-		Actors: V3B
-
-V4RL:
-	Inherits: V3RL
-	Buildable:
-		Prerequisites: techcenter,  ~vehicles.soviet, radar, ~!vehicles.iraq, ~commander_tree.v3_launcher, ~disabled
-		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
-	Tooltip:
-		Name: V4 Launcher
-	AttackFrontal:
-		ForceFireIgnoresActors: False
-	MissileSpawnerMaster:
-		Actors: V4
-
-V3:
-	Inherits: ^ShootableMissile
-	Valued:
-		Cost: 50
-	Tooltip:
-		Name: V3 Rocket
-	Tooltip@NoRow:
-		Name: V3 Rocket
-	Health:
-		HP: 5000
-	BallisticMissile:
-		LaunchAngle: 95
-		Speed: 145
-	LeavesTrails:
-		Image: smokey2
-		Palette: tseffect-ignore-lighting-alpha75
-		MovingInterval: 3
-		Type: CenterPosition
-		Offsets: -200, 0, 0
-	MissileSpawnerSlave:
-	ExplodesForMaster:
-		Weapon: V3Weapon
-		MasterArmamentName: V3Launcher
-		EmptyWeapon: VisualExplodeHusk
-		RequiresCondition: !airborne
-	FireWarheadsOnDeathCA:
-		Weapon: VisualExplodeAirborne
-		RequiresCondition: airborne
-	WithFacingSpriteBody:
-
-V3B:
-	Inherits: V3
-
-V4:
-	Inherits: V3
-	BallisticMissile:
-		Homing: true
-
-KATY:
-	Inherits: ^FightingVehicle
-	Inherits: ^HighResShadow
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioArtillery
-	Inherits: ^SovietArtillery
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 150
-		IconPalette: chrometd
-		Prerequisites: dome, ~commander_tree.katyusha
-		Description: Long-range rocket artillery.\n  Strong vs Infantry, Light armor, Buildings\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: Katyusha
-	Health:
-		HP: 15000
-	Mobile:
-		Speed: 68
-		TurnSpeed: 12
-		PauseOnCondition: being-captured || empdisable || being-warped
-	Armament:
-		Weapon: KatyushaRockets
-		PauseOnCondition: empdisable || being-warped
-	AttackFrontal:
-		TargetFrozenActors: True
-		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped
-		FacingTolerance: 0
-	SelectionDecorations:
-	FireWarheadsOnDeathCA:
-		Weapon: BarrelExplode
-
 TNKD:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^HighResShadow
@@ -3361,47 +2900,6 @@ CDRN:
 		Position: BottomLeft
 		RequiresSelection: true
 
-2S3:
-	Inherits: ^Tank
-	Inherits: ^HighResShadow
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioArtillery
-	Inherits: ^SovietArtillery
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 120
-		Prerequisites: dome, ~commander_tree.akatsiya
-		Description: Heavy artillery that fires shells with cluster warheads.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 1350
-	Tooltip:
-		Name: Akatsiya
-	Health:
-		HP: 38000
-	Mobile:
-		Speed: 68
-	Turreted:
-		TurnSpeed: 24
-		Offset: -250, 0, 0
-	Armament@PRIMARY:
-		Weapon: 152mm.Akatsiya
-		LocalOffset: 1050,0,440
-		Recoil: 100
-		RecoilRecovery: 30
-		MuzzleSequence: muzzle
-		PauseOnCondition: empdisable || being-warped || moving
-	AttackTurreted:
-		ForceFireIgnoresActors: True
-		PauseOnCondition: empdisable || being-warped || moving
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: 2S3.Husk
-	GrantConditionOnMovement:
-		MovementType: Horizontal, Vertical, Turn
-		Condition: moving
-	SelectionDecorations:
-
 CRYO:
 	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
@@ -3435,7 +2933,7 @@ CRYO:
 		Weapon: CryoExplosion
 
 SLNG:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^LightHoverVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^TDVehicleSprite
@@ -3470,71 +2968,12 @@ SLNG:
 		TargetFrozenActors: True
 		ForceFireIgnoresActors: false
 		OpportunityFire: False
-		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
 	WithMuzzleOverlay:
 	FireWarheadsOnDeathCA:
 		Weapon: ArtilleryExplode
 		EmptyWeapon: UnitExplodeSmall
 		LoadedChance: 75
-
-FTRK:
-	Inherits: ^FightingVehicle
-	Inherits: ^BiologicalDriver
-	Inherits: ^PrioAntiLightAA
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 130
-		Prerequisites: ~vehicles.soviet, ~!commander_tree.flak_track.barrage
-		Description: Mobile unit with mounted Flak cannon.\n  Strong vs Infantry, Light armor, Aircraft\n  Weak vs Tanks
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Mobile Flak
-	Health:
-		HP: 15000
-	Mobile:
-		TurnSpeed: 48
-		Speed: 118
-	Turreted:
-		TurnSpeed: 48
-		Offset: -298,0,298
-	Armament@AA:
-		Weapon: FLAK-23-AA
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
-	Armament@AG:
-		Weapon: FLAK-23-AG
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
-	AttackTurreted:
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-
-FTRK.Barrage:
-	Inherits: FTRK
-	Inherits: ^BiologicalDriver
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 130
-		Prerequisites: ~vehicles.soviet, ~commander_tree.flak_track.barrage
-		Description: Mobile unit with mounted Flak cannon.\n  Strong vs Infantry, Light armor, Aircraft\n  Weak vs Tanks
-	Valued:
-		Cost: 800
-	Tooltip:
-		Name: Mobile Flak (Barrage)
-	Armament@AA:
-		Weapon: FLAK-23-AA.Barrage
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
-	Armament@AG:
-		Weapon: FLAK-23-AG.Barrage
-		Recoil: 85
-		LocalOffset: 512,0,192
-		MuzzleSequence: muzzle
 
 COORDINATOR:
 	Inherits: ^Vehicle
@@ -3794,7 +3233,7 @@ XO:
 	WithMuzzleOverlay:
 
 MDRN:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^FightingVehicle
 	Inherits: ^HoverVehicle
 	Inherits: ^RobotDriver
@@ -3836,7 +3275,6 @@ MDRN:
 		Offset: 0,0,72
 		TurnSpeed: 512
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 		Turrets: primary, secondary
 		Voice: Attack
 	WithSpriteTurret:

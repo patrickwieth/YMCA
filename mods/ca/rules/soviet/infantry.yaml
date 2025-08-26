@@ -38,7 +38,7 @@ rpg_soldier:
 	Inherits: ^InfantryRA2Sprite
 	Inherits: ^WhiteFlash
 	Inherits: ^PrioAntiHeavyAA
-	Inherits: ^RelayTargeting
+	Inherits: ^ChemMissiles
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -58,29 +58,76 @@ rpg_soldier:
 		speed: 54
 	Armament@primary:
 		Name: primary
-		Weapon: Dragon.Relay
+		Weapon: Dragon
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
-	Armament@tertiary:
-		Name: tertiary
+		RequiresCondition: !chem_missile && !acid_missile
+	Armament@primary-chemmissile:
+		Name: primary
+		Weapon: Dragon.Chem_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: chem_missile && !acid_missile
+	Armament@primary-acidmissile:
+		Name: primary
+		Weapon: Dragon.Acid_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: acid_missile
+	Armament@secondary:
+		Name: secondary
 		Weapon: RedEye
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
-	Armament@secondary:
+		RequiresCondition: !chem_missile && !acid_missile
+	Armament@secondary-chemmissile:
 		Name: secondary
-		Weapon: Dragon.Inf
+		Weapon: RedEye.Chem_Missile
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: chem_missile && !acid_missile
+	Armament@secondary-acidmissile:
+		Name: secondary
+		Weapon: RedEye.Acid_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: acid_missile
 	Armament@Garrison:
 		Name: mounted
 		Weapon: DragonE
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: !chem_missile && !acid_missile
+	Armament@Garrison-chemmissile:
+		Name: mounted
+		Weapon: DragonE.Chem_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: chem_missile && !acid_missile
+	Armament@Garrison-acidmissile:
+		Name: mounted
+		Weapon: DragonE.Acid_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: acid_missile
 	Armament@GarrisonAA:
 		Name: mountedaa
 		Weapon: RedEyeE
 		LocalOffset: 0,0,555
 		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: !chem_missile && !acid_missile
+	Armament@GarrisonAA-chemmissile:
+		Name: mountedaa
+		Weapon: RedEyeE.Chem_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: chem_missile && !acid_missile
+	Armament@GarrisonAA-acidmissile:
+		Name: mountedaa
+		Weapon: RedEyeE.Acid_Missile
+		LocalOffset: 0,0,555
+		PauseOnCondition: !ammo || being-warped
+		RequiresCondition: acid_missile
 	AmmoPool:
 		Armaments: primary, secondary, tertiary
 		Ammo: 1
@@ -144,6 +191,7 @@ Flamethrower:
 SHOK:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
+	Inherits: ^TeslaUnit
 	Inherits: ^PrioEnergyWeapon
 	Inherits: ^SovietInfantry
 	AutoTargetPriority@DEFAULT:
@@ -182,10 +230,21 @@ SHOK:
 	Armament@PRIMARY:
 		Weapon: PortaTesla
 		LocalOffset: 427,0,341
+		RequiresCondition: !tesla_arc
 	Armament@Garrisoned:
 		Name: mounted
 		Weapon: PortaTeslaE
 		LocalOffset: 427,0,341
+		RequiresCondition: !tesla_arc
+	Armament@PRIMARYARC:
+		Weapon: PortaTesla.Arc
+		LocalOffset: 427,0,341
+		RequiresCondition: tesla_arc
+	Armament@GarrisonedARC:
+		Name: mounted
+		Weapon: PortaTeslaE.Arc
+		LocalOffset: 427,0,341
+		RequiresCondition: tesla_arc
 	Armament@charge:
 		Name: secondary
 		Weapon: PortaTeslaCharge
@@ -209,6 +268,84 @@ SHOK:
 	Voiced:
 		VoiceSet: ShokVoice
 	-Crushable:
+
+Mortar.Nkorea:
+	Inherits: Mortar
+	Buildable:
+		Prerequisites: radar, ~infantry.nkorea, ~commander_tree.advanced_infantry_training
+
+Desolator:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioAntiInfantry
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 70
+		Prerequisites: ~infantry.iraq, radar, ~commander_tree.advanced_infantry_training
+		Description: Anti-infantry unit.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft\n  Special Ability: Desolate Ground\n  Special Ability: Irradiates Vehicles
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Desolator
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 18000
+	Mobile:
+		Voice: Move
+		PauseOnCondition: !undeployed && being-warped
+	RevealsShroud:
+		Range: 5c0
+	Armament@PRIMARY:
+		Weapon: RadBeamWeapon
+		FireDelay: 5
+		LocalOffset: 427,0,600
+	Armament@Garrison:
+		Name: mounted
+		Weapon: RadBeamWeaponE
+		FireDelay: 5
+		LocalOffset: 427,0,600
+	TakeCover:
+		ProneOffset: 384,0,-395
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped || !undeployed
+		FacingTolerance: 0
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: DesVoice
+	-Crushable:
+	PeriodicExplosion:
+		Weapon: RadEruptionWeapon
+		RequiresCondition: deployed
+		InitialDelay: 20
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: True
+		Facing: 368
+		Voice: Attack
+		PauseOnCondition: being-warped
+	WithInfantryBody:
+		RequiresCondition: !being-warped && undeployed
+	WithSpriteBody@DEPLOYED:
+		Sequence: deployed
+		RequiresCondition: !undeployed
+		Name: deployed
+	WithMakeAnimation:
+		Sequence: deploy
+		BodyNames: deployed
+	-DamagedByTintedCells@RAD:
+	-DamagedByTintedCells@RADHAZMAT:
+	AutoDeployer@AI:
+		DeployChance: 20
+		RequiresCondition: botowner
 
 THF:
 	Inherits: ^Soldier
@@ -355,7 +492,7 @@ YURI:
 	IgnoresDisguise:
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
-	GrantConditionOnAttack@AI:
+	GrantConditionOnAttackCA@AI:
 		Condition: aiattack
 		RequiresCondition: botowner
 		ArmamentNames: aidummy
@@ -456,14 +593,12 @@ Zombie.Mutating:
 
 Zombie:
 	Inherits: ^Soldier
-	Inherits@Armor: ^LightArmor
+	Inherits: ^LightArmor
 	Inherits: ^PrioAntiHeavy
 	RenderSprites:
 		PlayerPalette: overlayplayer
 	AutoTarget:
 		ScanRadius: 6
-		InitialStance: AttackAnything
-		InitialStanceAI: AttackAnything
 	Valued:
 		Cost: 10
 	Tooltip:

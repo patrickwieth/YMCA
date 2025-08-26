@@ -1,15 +1,15 @@
 Mammoth:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelTurretedTank
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^DronePairing
+	Inherits: ^PrioAntiHeavy
 	RenderVoxels:
 		Scale: 1
 		Image: mammoth
 	RenderSprites:
 		Image: mammoth
-	Inherits: ^BigVehicle
-	Inherits: ^BiologicalDriver
-	Inherits: ^DronePairing
-	Inherits: ^PrioAntiHeavy
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 185
@@ -226,7 +226,6 @@ MSAR:
 		Queue: Vehicle
 		BuildPaletteOrder: 240
 		Prerequisites: hq, ~vehicles.gdi, ~!commander_tree.mobile_sensor_pdl
-		BuildDurationModifier: 50
 		Description: Provides radar and increases nearby vehicle weapon range.
 	TooltipExtras:
 		Strengths: • Strong vs Stealth
@@ -259,8 +258,81 @@ MSAR.PDL:
 	Valued:
 		Cost: 1500
 
+MSAM:
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLightAA
+	Inherits: ^VoxelVehicle
+	Inherits: ^DronePairing
+	RenderVoxels:
+		Scale: 1
+		Image: mlrs
+	RenderSprites:
+		Image: msam
+	WithVoxelTurret@fire:
+		RequiresCondition: aiming
+		Sequence: turret-fire
+	WithVoxelTurret@tur:
+		RequiresCondition: !aiming
+		Sequence: turret
+	Valued:
+		Cost: 950
+	Tooltip:
+		Name: MLRS
+	Buildable:
+		BuildPaletteOrder: 120
+		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, ~!commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles
+	Mobile:
+		Speed: 82
+	Health:
+		HP: 16000
+	Turreted:
+		TurnSpeed: 80
+		Offset: -50,0,0
+	AttackFrontal:
+		Armaments: primary, secondary
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	GrantConditionOnAttack:
+		Condition: aiming
+		ArmamentNames: primary, secondary
+	Armament@PRIMARY:
+		Weapon: 227mm
+		FireDelay: 10
+		LocalOffset: 213,128,200, 213,-128,200
+		LocalYaw: 100, -100
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: 227mmAA
+		FireDelay: 10
+		LocalOffset: 213,-128,200, 213,128,200
+		LocalYaw: 100, -100
+	FireWarheadsOnDeathCA:
+		Weapon: ArtilleryExplode
+
+MSAM.Hailstorm:
+	Inherits: MSAM
+	Inherits: ^PrioArtillery
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Hailstorm MLRS
+	Buildable:
+		BuildPaletteOrder: 120
+		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, gtek, ~commander_tree.hailstorm_mlrs
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Multiple Launch Rocket System.\nLong-range unguided multiple rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles\n  Weak vs. Aircraft, Heavy Tanks
+	Armament@PRIMARY:
+		Weapon: 227mm.Hailstorm
+	-Armament@SECONDARY:
+
 MARV:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
@@ -295,7 +367,6 @@ MARV:
 		RecoilRecovery: 30
 		MuzzleSequence: muzzle
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
 	WithMuzzleOverlay:
 	WithSpriteTurret:
@@ -327,7 +398,7 @@ MARV:
 		TerrainTypes: Ore, Gems
 
 MAMMOTHMK2:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyAntiHeavyAA
@@ -360,28 +431,24 @@ MAMMOTHMK2:
 	Passenger:
 		Weight: 12
 	Armament@MISSILES:
-		Name: missiles
+		Name: secondary
 		Weapon: Dragon.MKII
 		LocalOffset: -420,-300,600, -320,300,600
 		LocalYaw: -200,200
 		MuzzleSequence: muzzle1
 	Armament@AAMISSILES:
-		Name: aamissiles
+		Name: tertiary
 		Weapon: RedEye.MKII
 		LocalOffset: -420,-300,600, -320,300,600
 		LocalYaw: -100,100
 		MuzzleSequence: muzzle1
 	Armament@RAILGUN:
-		Name: railgun
+		Name: primary
 		Weapon: Railgun.MKII
 		LocalOffset: 550,-420,650, 550,420,650
 		MuzzleSequence: muzzle2
-	AttackFrontal:
-		Armaments: railgun
-		PauseOnCondition: empdisable || being-warped
-		FacingTolerance: 0
 	AttackFollow:
-		Armaments: missiles, aamissiles
+		Armaments: primary, secondary, tertiary
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	SelectionDecorations:
@@ -393,7 +460,7 @@ MAMMOTHMK2:
 		RequiresCondition: dronepair
 
 VULC:
-	Inherits: ^TurretedTank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^Transport
@@ -465,14 +532,14 @@ VULC:
 		RequiresCondition: gatling-ground == 2
 		ReloadingCondition: engage-ground
 		PauseOnCondition: engage-air
-	GrantConditionOnAttack:
+	GrantConditionOnAttackCA:
 		Condition: gatling
 		RequiredShotsPerInstance: 1,6,12
 		MaximumInstances: 3
 		RevokeDelay: 40
 		RevokeOnNewTarget: False
 		RevokeAll: True
-	GrantConditionOnAttack@GROUND:
+	GrantConditionOnAttackCA@GROUND:
 		ArmamentNames: secondary
 		Condition: gatling-ground
 		RequiredShotsPerInstance: 1,6
@@ -486,6 +553,7 @@ VULC:
 		TurnSpeed: 28
 		Offset: 0,0,-50
 	WithMuzzleOverlay:
+	WithSpriteTurret:
 	Cargo:
 		Types: Infantry
 		MaxWeight: 5

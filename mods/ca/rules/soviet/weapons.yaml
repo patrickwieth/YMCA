@@ -1,3 +1,273 @@
+
+ClusterBomb:
+	Inherits: ^Artillery
+	-Report:
+	ReloadDelay: 60
+	Range: 4c0
+	Projectile: BulletCA
+		Speed: 96
+		LaunchAngle: 0, 32
+		Inaccuracy: 1c0
+		BounceCount: 0
+		Image: BOMB
+	Warhead@1Dam: SpreadDamage
+		Spread: 256
+		Damage: 10000
+	Warhead@Smu: LeaveSmudge
+		SmudgeType: Crater
+		InvalidTargets: Structure, Wall, Trees
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: kaboom15.aud
+		ValidTargets: Ground, Air, Ship, Trees
+	Warhead@4EffWater: CreateEffect
+		Explosions: med_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+		ValidTargets: Water, Underwater
+		InvalidTargets: Ship, Structure, Bridge
+
+ClusterBomb2S3:
+	Inherits: ClusterBomb
+	Warhead@1Dam: SpreadDamage
+		Damage: 5750
+
+^Cluster_Upgrade:
+	Warhead@Cluster_Upgrade: FireCluster
+		Weapon: ClusterBomb2S3
+		RandomClusterCount: 3
+		Dimensions: 3,3
+		Footprint: xxx x_x xxx
+
+30mm:
+	Inherits: 25mm
+	ReloadDelay: 36
+	Report: tnkfire3.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+
+30mm.Cluster_Upgrade:
+	Inherits: 30mm
+	Inherits: ^Cluster_Upgrade
+	Warhead@Cluster_Upgrade: FireCluster
+		RandomClusterCount: 2
+
+125mm:
+	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
+	ReloadDelay: 70
+	Burst: 2
+
+125mm.Cluster_Upgrade:
+	Inherits: 125mm
+	Inherits: ^Cluster_Upgrade
+	Warhead@Cluster_Upgrade: FireCluster
+		RandomClusterCount: 2
+
+MaverickAP:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileAP
+	Range: 9c0
+	MinRange: 2c0
+	Report: missile7.aud
+	Burst: 2
+	BurstDelays: 7
+	Projectile: MissileCA
+		Speed: 256
+		Inaccuracy: 316
+		CruiseAltitude: 2c0
+		RangeLimit: 14c410
+		LockOnInaccuracy: 316
+	Warhead@1Dam: SpreadDamage
+		Damage: 15000
+
+V3Launcher:
+	Inherits: ^MissileArtillery
+	ReloadDelay: 250
+	Range: 27c511
+	MinRange: 6c0
+	Report: vv3latta.aud, vv3lattb.aud
+	ValidTargets: Ground, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Water
+	-Warhead@2Smu: LeaveSmudge
+	-Warhead@3Eff: CreateEffect
+	-Warhead@4EffWater: CreateEffect
+
+V4Launcher:
+	Inherits: ^MissileArtillery
+	ReloadDelay: 250
+	Range: 25c511
+	MinRange: 6c0
+	Report: vv3latta.aud, vv3lattb.aud
+	ValidTargets: Ground, Vehicle, Water
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
+		ValidTargets: Ground, Vehicle, Water
+
+AtomParabombLauncher:
+	Inherits: V3Launcher
+	Range: 2c511
+	-MinRange:
+
+AtomParabomb.Impact:
+	Inherits: CarpetBomb
+	Range: 0c768
+	Projectile: InstantHit
+	ValidTargets: Ground, Trees, Water, Air
+	Warhead@1Dam_impact: SpreadDamage
+		Spread: 1c0
+		Damage: 3250
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		ValidTargets: Ground, Trees, Water, Air
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@3Eff_impact: CreateEffect
+		Explosions: nuke
+		ImpactSounds: kaboom1.aud
+		ImpactActors: false
+	Warhead@4Dam_areanuke1: SpreadDamage
+		Spread: 1c0
+		Damage: 1500
+		Falloff: 1000, 500, 250, 125, 50, 0
+		Delay: 5
+		ValidTargets: Ground, Water, Air
+		AffectsParent: true
+		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
+	Warhead@6Eff_areanuke1: CreateEffect
+		ImpactSounds: kaboom22.aud
+		Delay: 5
+		ImpactActors: false
+	Warhead@6Smu_areanuke1: LeaveSmudge
+		SmudgeType: Scorch
+		InvalidTargets: Vehicle, Structure, Wall, Trees
+		Size: 4
+		Delay: 5
+	Warhead@TREEKILL: SpreadDamage
+		Spread: 1c0
+		Damage: 6000
+		Falloff: 1000, 600, 400, 250, 150, 100, 0
+		Delay: 5
+		ValidTargets: Trees
+		DamageTypes: Incendiary
+	Warhead@Flames: FireCluster
+		Weapon: BurnFx
+		RandomClusterCount: 5
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+	Warhead@18Radio: CreateTintedCells
+		Spread: 1c0
+		Level: 350
+		Falloff: 100, 75, 52, 37, 24, 15, 2
+		MaxLevel: 750
+		LayerName: radioactivity
+
+TeslaGlidebombLauncher:
+	Inherits: V3Launcher
+	Range: 5c511
+	-MinRange:
+
+TeslaBomb:
+	Inherits: KirovBomb
+	Warhead@1Dam: SpreadDamage
+		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: tsla_bomb
+		ExplosionPalette: ra2effect
+		ImpactSounds: kirbo1.aud, kirbo2.aud
+	Warhead@5Tesla: FireShrapnel
+		Weapon: TeslaBombZap
+		Amount: 6
+		AimChance: 100
+		AllowDirectHit: true
+		ThrowWithoutTarget: true
+
+TeslaBombZap:
+	Inherits: TTankZap
+	ReloadDelay: 130
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc1
+		Amount: 3
+		AimChance: 100
+		ThrowWithoutTarget: true
+
+MaverickSU:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileHE
+	Range: 10c0
+	Report: vbleatta.aud, vbleattb.aud
+	Burst: 4
+	BurstDelays: 7
+	Projectile: MissileCA
+		CruiseAltitude: 2c0
+		RangeLimit: 14c410
+		Inaccuracy: 1c0
+		Speed: 180
+		LockOnInaccuracy: 1024
+	Warhead@1Dam: SpreadDamage
+		Damage: 12000
+		Spread: 341
+
+MaverickSU.Concussion:
+	Inherits: MaverickSU
+	Warhead@Concussion1: GrantExternalCondition
+		Range: 1c512
+		Duration: 240
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
+
+^Chemical_Cloud_Spawner:
+	Warhead@13Spawn: SpawnRandomActor
+		RandomActors: chemical_cloud.spawner
+		Probability: 10
+		Range: 1
+		Image: Cloud1d
+		Palette: tseffect-ignore-lighting-alpha75
+		ValidTargets: Ground, Water, Air
+		ImpactActors: false
+
+^Acid_Cloud_Spawner:
+	Warhead@13Spawn: SpawnRandomActor
+		RandomActors: acid_cloud.spawner
+		Probability: 10
+		Range: 1
+		Image: metal_acid_cloud1d
+		Palette: tdeffect-ignore-lighting-alpha65
+		ValidTargets: Ground, Water, Air
+		ImpactActors: false
+
+Dragon.Chem_Missile:
+	Inherits: Dragon
+	Inherits: ^Chemical_Cloud_Spawner
+
+Dragon.Acid_Missile:
+	Inherits: Dragon
+	Inherits: ^Acid_Cloud_Spawner
+
+RedEye.Chem_Missile:
+	Inherits: RedEye
+	Inherits: ^Chemical_Cloud_Spawner
+
+RedEye.Acid_Missile:
+	Inherits: RedEye
+	Inherits: ^Acid_Cloud_Spawner
+
+DragonE.Chem_Missile:
+	Inherits: DragonE
+	Inherits: ^Chemical_Cloud_Spawner
+
+DragonE.Acid_Missile:
+	Inherits: DragonE
+	Inherits: ^Acid_Cloud_Spawner
+
+RedEyeE.Chem_Missile:
+	Inherits: RedEyeE
+	Inherits: ^Chemical_Cloud_Spawner
+
+RedEyeE.Acid_Missile:
+	Inherits: RedEyeE
+	Inherits: ^Acid_Cloud_Spawner
+
 Chem_Shell:
 	Inherits: ^Cannon
 	Inherits: ^Chemical
@@ -19,6 +289,7 @@ Chem_Shell:
 	Warhead@3Eff: CreateEffect
 		Explosions: large_chem
 		ExplosionPalette: temptd
+
 
 Chem_Bomb:
 	Inherits: Chem_Shell
@@ -139,7 +410,7 @@ Chem_Spray.Cloud:
 
 Chem_Cloud_Spawner:
 	Warhead@13Spawn: SpawnActor
-		Actors: Cloud.Chemical
+		Actors: chemical_cloud.spawner
 		Range: 1
 		ForceGround: false
 		Image: Cloud1d
@@ -170,7 +441,7 @@ Chem_Spray.Cloud.Metal_Acid:
 
 Metal_Acid_Cloud_Spawner:
 	Warhead@13Spawn: SpawnActor
-		Actors: Cloud.Metal_Acid
+		Actors: acid_cloud.spawner
 		Range: 1
 		ForceGround: false
 		Image: metal_acid_cloud1d
@@ -248,6 +519,181 @@ Chem_Spray.SplashStream.Metal_Acid:
 		Image: chemsprayer
 		ExplosionPalette: tdeffect
 
+HQ7Rockets:
+	Inherits: Dragon
+	ReloadDelay: 40
+	Range: 8c512
+	Burst: 2
+	BurstDelays: 5
+	Projectile: MissileCA
+		Speed: 200
+		Arm: 2
+		LaunchAngle: 120
+		Blockable: false
+		RangeLimit: 8c512
+		Inaccuracy: 128
+		Image: hq7missile
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+
+HQ7RocketsAA:
+	Inherits: RedEye
+	ReloadDelay: 40
+	Range: 12c512
+	Burst: 2
+	BurstDelays: 5
+	Projectile: MissileCA
+		Speed: 200
+		Arm: 2
+		LaunchAngle: 120
+		Blockable: false
+		Inaccuracy: 128
+		RangeLimit: 13c0
+		Image: hq7missile
+		CruiseAltitude: 5c0
+		HorizontalRateOfTurn: 40
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+
+HTK5Rockets:
+	Inherits: HQ7Rockets
+	ReloadDelay: 90
+	Burst: 8
+	Range: 6c512
+	Projectile: MissileCA
+		Speed: 240
+		RangeLimit: 11c0
+		Image: dragon
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+
+HTK5RocketsAA:
+	Inherits: HQ7RocketsAA
+	ReloadDelay: 90
+	Burst: 8
+	Range: 11c512
+	Projectile: MissileCA
+		Speed: 240
+		RangeLimit: 12c0
+		Image: dragon
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion
+		ImpactSounds: kaboom25.aud
+
+HyenaRockets:
+	Inherits: HQ7Rockets
+	ReloadDelay: 100
+	Burst: 6
+	Range: 8c512
+	Projectile: MissileCA
+		Speed: 240
+		RangeLimit: 11c0
+		Image: hyenamissile
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion
+		ImpactSounds: kaboom25.aud
+
+HyenaRockets.Chem_Missile:
+	Inherits: HyenaRockets
+	Inherits: ^Chemical_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 20
+
+HyenaRockets.Acid_Missile:
+	Inherits: HyenaRockets
+	Inherits: ^Acid_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 20
+
+HyenaRocketsAA:
+	Inherits: HQ7RocketsAA
+	ReloadDelay: 100
+	Burst: 6
+	Range: 11c512
+	Projectile: MissileCA
+		Speed: 240
+		RangeLimit: 11c0
+		Image: hyenamissile
+	Warhead@1Dam: SpreadDamage
+		Damage: 3500
+
+HyenaRocketsAA.Chem_Missile:
+	Inherits: HyenaRocketsAA
+	Inherits: ^Chemical_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 20
+
+HyenaRocketsAA.Acid_Missile:
+	Inherits: HyenaRocketsAA
+	Inherits: ^Acid_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 20
+
+V3Weapon:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
+	-Report:
+	ValidTargets: Ground, Trees, Water
+	Warhead@1Dam: SpreadDamage
+		Spread: 1c0
+		Damage: 4400
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		ValidTargets: Ground, Water, Trees
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: building, building2
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+		ImpactSounds: splashl1.aud, splashl2.aud
+
+V3Weapon.Chem_Missile:
+	Inherits: V3Weapon
+	Inherits: ^Chemical_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 100
+
+V3Weapon.Acid_Missile:
+	Inherits: V3Weapon
+	Inherits: ^Acid_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 100
+
+KatyushaRockets:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
+	ReloadDelay: 240
+	Range: 18c0
+	MinRange: 4c0
+	Report: missile6.aud
+	Burst: 10
+	BurstDelays: 6
+	ValidTargets: Ground, Trees, Water
+	Warhead@1Dam: SpreadDamage
+		Spread: 384
+		Damage: 5000
+
+KatyushaRockets.Chem_Missile:
+	Inherits: KatyushaRockets
+	Inherits: ^Chemical_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 15
+
+KatyushaRockets.Acid_Missile:
+	Inherits: KatyushaRockets
+	Inherits: ^Acid_Cloud_Spawner
+	Warhead@13Spawn: SpawnRandomActor
+		Probability: 15
+
+KatyushaRockets.Cluster_Upgrade:
+	Inherits: KatyushaRockets
+	Inherits: ^Cluster_Upgrade
+	Warhead@Cluster_Upgrade: FireCluster
+		RandomClusterCount: 1
+
 152mm:
 	Inherits: ^Artillery
 	Inherits: ^ShellArtillery
@@ -267,6 +713,10 @@ Chem_Spray.SplashStream.Metal_Acid:
 		Explosions: large_artillery_explosion
 		ImpactSounds: artyhit.aud, artyhit2.aud, artyhit3.aud
 
+152mm.Cluster_Upgrade:
+	Inherits: 152mm
+	Inherits: ^Cluster_Upgrade
+
 152mm.Concussion:
 	Inherits: 152mm
 	Warhead@Concussion1: GrantExternalCondition
@@ -284,6 +734,10 @@ Chem_Spray.SplashStream.Metal_Acid:
 		Intensity: 1
 		Multiplier: 0.5,0.5
 
+152mm.Concussion.Cluster_Upgrade:
+	Inherits: 152mm.Concussion
+	Inherits: ^Cluster_Upgrade
+
 152mm.Cluster:
 	Inherits: 152mm
 	Warhead@Cluster: FireCluster
@@ -292,6 +746,10 @@ Chem_Spray.SplashStream.Metal_Acid:
 		Dimensions: 3,3
 		Footprint: xxx x_x xxx
 
+152mm.Cluster.Cluster_Upgrade:
+	Inherits: 152mm.Cluster
+	Inherits: ^Cluster_Upgrade
+
 152mm.AP:
 	Inherits: 152mm
 	Inherits: ^ShellAP
@@ -299,9 +757,13 @@ Chem_Spray.SplashStream.Metal_Acid:
 		Speed: 345
 		Image: 183MM
 
+152mm.AP.Cluster_Upgrade:
+	Inherits: 152mm.AP
+	Inherits: ^Cluster_Upgrade
+
 152mm.Akatsiya:
 	Inherits: 155mm
-	ReloadDelay: 150
+	ReloadDelay: 180
 	Range: 14c0
 	Burst: 2
 	Report: 2s3fire.aud
@@ -312,9 +774,15 @@ Chem_Spray.SplashStream.Metal_Acid:
 		ImpactSounds: kaboom15.aud
 	Warhead@Cluster: FireCluster
 		Weapon: ClusterBomb2S3
-		RandomClusterCount: 3
+		RandomClusterCount: 2
 		Dimensions: 3,3
 		Footprint: xxx x_x xxx
+
+152mm.Akatsiya.Cluster_Upgrade:
+	Inherits: 152mm.Akatsiya
+	Inherits: ^Cluster_Upgrade
+	Warhead@Cluster_Upgrade: FireCluster
+		RandomClusterCount: 2
 
 ApocShells:
 	Inherits: ^Cannon
@@ -350,7 +818,7 @@ MAD_Eruption:
 	Report: cannon1.aud
 	ValidTargets: Ground, Water, Underwater
 	Warhead@Concussion2: GrantExternalCondition
-		Range: 15c0
+		Range: 25c0
 		Duration: 50
 		Condition: concussion
 		ValidTargets: Ground, Infantry, Vehicle, Ship
@@ -358,6 +826,53 @@ MAD_Eruption:
 		Duration: 5
 		Intensity: 1
 		Multiplier: 0.5,0.5
+
+150mm.Tsar:
+	Inherits: ^Cannon
+	Inherits: ^ShellHeavy
+	ReloadDelay: 60
+	Burst: 3
+	Report: hvygun10.aud
+	InvalidTargets: Air
+	Warhead@1Dam: SpreadDamage
+		Damage: 10000
+		InvalidTargets: Air
+
+TeslaBall.Tsar:
+	Inherits: ^EnergyArtillery
+	ReloadDelay: 90
+	Range: 12c0
+	MinRange: 3c0
+	Report: mobemp1.aud
+	Projectile: Bullet
+		Speed: 150
+		LaunchAngle: 80
+		Inaccuracy: 768
+		Image: teslaball
+	Warhead@1Dam: SpreadDamage
+		Damage: 12000
+		Spread: 1c0
+		InvalidTargets: Air
+	Warhead@3Eff: CreateEffect
+		Explosions: tsla_bomb
+		ExplosionPalette: ra2effect
+		ImpactSounds: kirbo1.aud, kirbo2.aud
+	Warhead@5Tesla: FireShrapnel
+		Weapon: TeslaBallArc
+		Amount: 5
+		AimChance: 100
+		AllowDirectHit: true
+		ThrowWithoutTarget: true
+
+TeslaBallArc:
+	Inherits: TTankZap
+	Range: 4c512
+	Report: shktrop1.aud
+	Warhead@1Dam: SpreadDamage
+		Damage: 4000
+		ValidTargets: Infantry, Vehicle, Ship
+		ValidRelationships: Enemy, Neutral
+	-Warhead@3Eff:
 
 RiceShellLauncher:
 	Inherits: ^MissileArtillery
@@ -423,7 +938,7 @@ GeneSpliceBeam:
 		Damage: 4000
 	Warhead@gsplice: GrantExternalCondition
 		Range: 0c256
-		Duration: 50
+		Duration: 100
 		Condition: genespliced
 		ValidTargets: Infantry
 
@@ -510,9 +1025,25 @@ PortaTesla:
 	Warhead@1Dam: SpreadDamage
 		Damage: 5500
 
+PortaTesla.Arc:
+	Inherits: PortaTesla
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc2
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
+
 PortaTeslaE:
 	Inherits: PortaTesla
 	Range: 8c0
+
+PortaTeslaE.Arc:
+	Inherits: PortaTeslaE
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc2
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
 
 PortaTeslaCharge:
 	Inherits: ^TeslaWeapon
@@ -540,7 +1071,30 @@ Tesla.Hind:
 	Range: 6c0
 	Report: shktrop1.aud
 	Warhead@1Dam: SpreadDamage
-		Damage: 4500
+		Damage: 5500
+
+Tesla.Hind.Arc:
+	Inherits: Tesla.Hind
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc2
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
+
+Tesla.Kirov:
+	Inherits: Tesla.Hind
+	ReloadDelay: 70
+	Range: 7c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 10000
+
+Tesla.Kirov.Arc:
+	Inherits: Tesla.Kirov
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc1
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
 
 4TankZap:
 	Inherits: ^TeslaWeapon
@@ -555,9 +1109,14 @@ Tesla.Hind:
 		AimChance: 100
 		ThrowWithoutTarget: false
 
+4TankZap.Arc:
+	Inherits: 4TankZap
+	Warhead@Arc: FireShrapnel
+		Amount: 2
+
 TTankZap:
 	Inherits: ^TeslaWeapon
-	ReloadDelay: 110
+	ReloadDelay: 100
 	Range: 7c0
 	Warhead@1Dam: SpreadDamage
 		Damage: 11000
@@ -615,3 +1174,46 @@ TeslaDefense:
 	Report: shktrop1.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 5000
+
+TeslaDefense.Arc:
+	Inherits: TeslaDefense
+	Warhead@Arc: FireShrapnel
+		Weapon: TTankArc2
+		Amount: 1
+		AimChance: 100
+		ThrowWithoutTarget: false
+
+HellfireAA.Yak41:
+	Inherits: HellfireAA
+	Burst: 3
+	Warhead@1Dam: SpreadDamage
+		Damage: 8000
+
+HellfireAG.Yak41:
+	Inherits: HellfireAG.Harrier
+	Inherits: ^MissileArtillery
+	ValidTargets: Ground, Water, Underwater
+	Range: 1c0
+	MinRange: 0c0
+	Burst: 3
+	BurstDelays: 2
+	Projectile: MissileCA
+		RangeLimit: 7c512
+		ContrailLength: 4
+		Inaccuracy: 0c512
+		MinimumLaunchAngle: -300
+		MaximumLaunchAngle: -300
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1500
+
+FireballLauncher.Kirov:
+	Inherits: FireballLauncher
+	Range: 7c768
+	Burst: 5
+	Projectile: Bullet
+		Inaccuracy: 1c0
+		LaunchAngle: 90
+	Warhead@1Dam: SpreadDamage
+		Spread: 768
+		Damage: 14000

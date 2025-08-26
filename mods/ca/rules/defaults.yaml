@@ -487,7 +487,7 @@
 		Capacity: 2000
 	WithResourceStoragePipsDecoration:
 		Position: BottomLeft
-		Margin: 4, 3
+		Margin: 5, 4
 		RequiresSelection: true
 		PipCount: 17
 		FullSequence: pip-yellow
@@ -503,15 +503,6 @@
 		Percentage: 50
 		Types: SpyInfiltrate, ThiefInfiltrate
 		Notification: CreditsStolen
-	SpawnActorsOnSell@BoostAntiCheat:
-		ActorTypes: proc.dummy
-		GuaranteedActorTypes: proc.dummy
-
-PROC.Dummy:
-	Valued:
-		Cost: 200
-	GrantExternalConditionToOwner@BuildingsOwned:
-		Condition: BuildingsOwned
 
 ^Harvester:
 	Inherits: ^HarvesterBalancer
@@ -531,7 +522,7 @@ PROC.Dummy:
 		Capacity: 30
 	WithStoresResourcesPipsDecoration:
 		Position: BottomLeft
-		Margin: 4, 3
+		Margin: 5, 4
 		RequiresSelection: true
 		PipCount: 5
 		ResourceSequences:
@@ -589,7 +580,7 @@ PROC.Dummy:
 	GrantConditionOnBotOwner@AIHELPER:
 		Condition: botowner
 		Bots: brutal, vhard, hard, normal, easy, naval
-	GrantConditionOnAttack@AIHELPER:
+	GrantConditionOnAttackCA@AIHELPER:
 		Condition: removeunit
 		ArmamentNames: secondary
 		RequiresCondition: botowner
@@ -1161,7 +1152,7 @@ PROC.Dummy:
 		IsPlayerPalette: true
 	ExternalCondition@weaponhit:
 		Condition: weaponhit
-	WithIdleOverlay@NSHIELD:
+	WithIdleOverlay@SHIELD:
 		Sequence: idle
 		Image: nshield-overlay
 		IsDecoration: true
@@ -1218,7 +1209,6 @@ PROC.Dummy:
 		RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && voxel
 		Palette: nrepair_voxel
 		IsPlayerPalette: true
-
 	TimedConditionBar@NSHIELD:
 		Condition: nshield
 		Color: 25cde999
@@ -1643,10 +1633,11 @@ PROC.Dummy:
 
 ^AutoTargetGround:
 	AutoTarget:
+		InitialStance: AttackAnything
 		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense, Mine
 		InvalidTargets: NoAutoTarget, WaterStructure
 	AutoTargetPriority@ATTACKANYTHING:
 		RequiresCondition: stance-attackanything
@@ -1665,27 +1656,30 @@ PROC.Dummy:
 ^AutoTargetNavalAssaultMove:
 	Inherits: ^AutoTargetGroundAssaultMove
 	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense, Mine
 		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@ATTACKANYTHING:
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
 
 ^AutoTargetAir:
 	AutoTarget:
+		InitialStance: AttackAnything
+		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Air
 		InvalidTargets: NoAutoTarget
 
 ^AutoTargetAll:
 	AutoTarget:
+		InitialStance: AttackAnything
 		AttackAnythingCondition: stance-attackanything
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, Mine
 		InvalidTargets: NoAutoTarget, WaterStructure
 	AutoTargetPriority@ATTACKANYTHING:
 		RequiresCondition: stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense, Mine
 		InvalidTargets: NoAutoTarget
 
 ^AutoTargetAllAssaultMove:
@@ -1700,10 +1694,10 @@ PROC.Dummy:
 ^AutoTargetAllNavalAssaultMove:
 	Inherits: ^AutoTargetAllAssaultMove
 	AutoTargetPriority@DEFAULT:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, Mine
 		InvalidTargets: NoAutoTarget
 	AutoTargetPriority@ATTACKANYTHING:
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense, Mine
 		InvalidTargets: NoAutoTarget
 
 ^AutoTargetAllAssaultMoveAntiAir:
@@ -1857,16 +1851,7 @@ PROC.Dummy:
 		Priority: 1
 
 ^PrioAntiHeavyAA:
-	AutoTarget:
-		AttackAnythingCondition: stance-attackanything
-	AutoTargetPriority@DEFAULT:
-		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
-		InvalidTargets: NoAutoTarget, WaterStructure
-	AutoTargetPriority@ATTACKANYTHING:
-		RequiresCondition: stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		InvalidTargets: NoAutoTarget
+	Inherits: ^AutoTargetAll
 	AutoTargetPriority@PRIO:
 		ValidTargets: heavy
 		Priority: 10
@@ -1941,16 +1926,9 @@ PROC.Dummy:
 		Priority: 1
 
 ^PrioEnergyAntiHeavyAA:
-	AutoTarget:
-		AttackAnythingCondition: stance-attackanything
-	AutoTargetPriority@DEFAULT:
-		RequiresCondition: !stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
-		InvalidTargets: NoAutoTarget, WaterStructure
-	AutoTargetPriority@ATTACKANYTHING:
-		RequiresCondition: stance-attackanything
-		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
-		InvalidTargets: NoAutoTarget
+	Inherits: ^AutoTargetAll
+	AttackMove:
+		AssaultMoveCondition: assault-move
 	AutoTargetPriority@PRIO:
 		ValidTargets: heavy
 		Priority: 10
@@ -2080,6 +2058,7 @@ PROC.Dummy:
 
 ^PrioRepair:
 	AutoTarget:
+		InitialStance: AttackAnything
 	AutoTargetPriority@REPAIR:
 		ValidTargets: Repair, RepairInAir
 		ValidRelationships: Ally
@@ -2251,7 +2230,11 @@ PROC.Dummy:
 	Guard:
 
 ^FightingVehicleTurreted:
-	Inherits: ^Vehicle
+	Inherits: ^FightingVehicle
+	Turreted:
+		TurnSpeed: 12
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 
 ^Tank:
 	Inherits: ^Vehicle
@@ -2260,6 +2243,13 @@ PROC.Dummy:
 	Mobile:
 		Locomotor: tracked
 
+^FightingTank:
+	Inherits: ^Tank
+	Inherits: ^SelectableCombatUnit
+	Inherits: ^Autobattler
+	AttackMove:
+	Guard:
+
 ^TurretedTank:
 	Inherits: ^Tank
 	Turreted:
@@ -2267,6 +2257,13 @@ PROC.Dummy:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped || parachute
 	WithSpriteTurret:
+
+^FightingTankTurreted:
+	Inherits: ^FightingTank
+	Turreted:
+		TurnSpeed: 6
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
 
 ^HarvesterVehicle:
 	Inherits: ^Tank
@@ -2298,9 +2295,9 @@ PROC.Dummy:
 	Inherits: ^GainsExperience
 	Inherits: ^Berserk
 	Inherits: ^Frenzy
-	Inherits@mind: ^MindControllable
-	Inherits@driverkill: ^AffectedByDriverKill
-	Inherits@ToxinRad: ^DriverBiologicalDamage
+	Inherits: ^MindControllable
+	Inherits: ^AffectedByDriverKill
+	Inherits: ^DriverBiologicalDamage
 	CaptureManager:
 		BeingCapturedCondition: being-captured
 	Capturable:
@@ -2312,8 +2309,8 @@ PROC.Dummy:
 		LoseNotification: UnitLost
 
 ^RobotDriver:
-	Inherits@IDISABLE: ^DisabledByRadarLoss
-	Inherits@HACKABLE: ^Hackable
+	Inherits: ^DisabledByRadarLoss
+	Inherits: ^Hackable
 	IgnoresDisguise:
 	WithDecoration@DISABLED:
 		Image: poweroff
@@ -2562,7 +2559,7 @@ PROC.Dummy:
 		Categories: Civilian infantry
 
 ^ArmedCivilian:
-	Inherits@AUTOTARGET: ^AutoTargetGroundAssaultMove
+	Inherits: ^AutoTargetGroundAssaultMove
 	GrantConditionOnFaction@RA:
 		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq
 		Condition: ra-faction
@@ -2770,14 +2767,15 @@ PROC.Dummy:
 		RequiresCondition: (botowner && crossing-ford) ||  (botowner && under-bridge)
 
 ^NeutralPlane:
-	Inherits@1: ^ExistsInWorld
-	Inherits@Armor: ^LightArmor
-	Inherits@3: ^IronCurtainable
-	Inherits@4: ^SpriteActor
-	Inherits@bounty: ^GlobalBounty
-	Inherits@selection: ^SelectableCombatUnit
-	Inherits@mind: ^MindControllable
-	Inherits@handicaps: ^PlayerHandicaps
+	Inherits: ^ExistsInWorld
+	Inherits: ^LightArmor
+	Inherits: ^IronCurtainable
+	Inherits: ^SpriteActor
+	Inherits: ^GlobalBounty
+	Inherits: ^SelectableCombatUnit
+	Inherits: ^MindControllable
+	Inherits: ^PlayerHandicaps
+	Inherits: ^RelayMarkable
 	Huntable:
 	OwnerLostAction:
 		Action: Kill
@@ -2875,20 +2873,21 @@ PROC.Dummy:
 
 ^Plane:
 	Inherits: ^NeutralPlane
-	Inherits@3: ^Cloakable
-	Inherits@4: ^EmpDisable
-	Inherits@5: ^GDIUpgradeAircraft
-	Inherits@6: ^BinoUpgrade
-	Inherits@8: ^Warpable
-	Inherits@8a: ^WarpableAir
-	Inherits@9: ^BotAirProductionBonus
-	Inherits@10: ^Chillable
-	Inherits@11: ^Suppressable
-	Inherits@gflash: ^GreenFlash
-	Inherits@wflash: ^WhiteFlash
-	Inherits@production: ^ProductionEfficiencyBoost
-	Inherits@C4: ^C4Plantable
-	Inherits@TNT: ^TNTPlantable
+	Inherits: ^Cloakable
+	Inherits: ^EmpDisable
+	Inherits: ^GDIUpgradeAircraft
+	Inherits: ^BinoUpgrade
+	Inherits: ^Warpable
+	Inherits: ^WarpableAir
+	Inherits: ^BotAirProductionBonus
+	Inherits: ^Chillable
+	Inherits: ^Suppressable
+	Inherits: ^NaniteRepair
+	Inherits: ^GreenFlash
+	Inherits: ^WhiteFlash
+	Inherits: ^ProductionEfficiencyBoost
+	Inherits: ^C4Plantable
+	Inherits: ^TNTPlantable
 	Inherits: ^PlaneVision
 	TooltipExtras:
 	UpdatesPlayerStatistics:
@@ -3045,7 +3044,13 @@ PROC.Dummy:
 		PauseOnCondition: empdisable || being-warped
 	AutoTarget:
 		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
+
+^SupportPowerBomber:
+	AttackBomberCA:
+	AttackAircraft:
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
 
 ^FightingHelicopter:
 	AttackAircraft:
@@ -3061,7 +3066,7 @@ PROC.Dummy:
 		ReloadDelay: 10
 		AmmoCondition: ammo
 	WithAmmoPipsDecoration:
-		PipCount: 4
+		PipCount: -1
 		Margin: 5, 4
 		FullSequence: pip-red
 		Position: BottomLeft
@@ -3205,9 +3210,9 @@ PROC.Dummy:
 	Inherits@8: ^Chillable
 	Inherits@9: ^NaniteShieldable
 	Inherits: ^BuildingVision
-	Inherits@wflash: ^WhiteFlash
-	Inherits@gflash: ^GreenFlash
-	Inherits@HACKABLE: ^Hackable
+	Inherits: ^WhiteFlash
+	Inherits: ^GreenFlash
+	Inherits: ^Hackable
 	Inherits: ^EarlyGameBuildBoost
 	Inherits: ^MustBeDestroyed
 	Buildable:
@@ -3270,12 +3275,33 @@ PROC.Dummy:
 		ValidDamageStates: Light, Medium, Heavy, Critical
 
 ^EarlyGameBuildBoost:
-	GrantExternalConditionToOwner@BuildingsOwned:
-		Condition: BuildingsOwned
+	FreeActor@BuildBoostLimit:
+		Actor: BuildBoost.Dummy
+		RequiresCondition: !noMoreDummies
+	GrantConditionOnPrerequisite@BuildBoostLimit:
+		Condition: noMoreDummies
+		Prerequisites: BuildUpBoostEnded
 	ProductionTimeMultiplier@BuildUpBoost:
 		Multiplier: 1
 		Prerequisites: !BuildUpBoostEnded
 		Queue: Building
+
+^BuildBoost4x:
+	FreeActor@BuildBoostLimit2:
+		Actor: BuildBoost.Dummy
+		RequiresCondition: !noMoreDummies
+	FreeActor@BuildBoostLimit3:
+		Actor: BuildBoost.Dummy
+		RequiresCondition: !noMoreDummies
+	FreeActor@BuildBoostLimit4:
+		Actor: BuildBoost.Dummy
+		RequiresCondition: !noMoreDummies
+
+BuildBoost.Dummy:
+	Valued:
+		Cost: 0
+	GrantExternalConditionToOwner@BuildingsOwned:
+		Condition: BuildingsOwned
 
 ^NukularConyard:
 	Inherits: ^MustBeDestroyed.Nukular
@@ -3341,20 +3367,13 @@ PROC.Dummy:
 			smcv.nukular: NukularCargo
 
 ^TechLevelBuilding:
+	Inherits: ^BuildBoost4x
 	Buildable:
 		BuildDurationModifier: 100
 	ProductionTimeMultiplier@BuildUpBoost:
 		Multiplier: 1
 		Prerequisites: !BuildUpBoostEnded
 		Queue: Building
-	GrantExternalConditionToOwner@BuildingsOwned1:
-		Condition: BuildingsOwned
-	GrantExternalConditionToOwner@BuildingsOwned2:
-		Condition: BuildingsOwned
-	GrantExternalConditionToOwner@BuildingsOwned3:
-		Condition: BuildingsOwned
-	GrantExternalConditionToOwner@BuildingsOwned4:
-		Condition: BuildingsOwned
 
 ^Tier2Tech:
 
@@ -3415,7 +3434,7 @@ PROC.Dummy:
 
 ^DefenseBalancing:
 	Buildable:
-		BuildDurationModifier: 100
+		BuildDurationModifier: 50
 	DamageMultiplier@Defense:
 		Modifier: 90
 
@@ -3509,12 +3528,12 @@ PROC.Dummy:
 		OverridePalette: placebuildingtd
 
 ^Wall:
-	Inherits@1: ^ExistsInWorld
-	Inherits@2: ^SpriteActor
-	Inherits@shape: ^1x1Shape
-	Inherits@3: ^Cloakable
-	Inherits@Armor: ^BrickArmor
-	Inherits@handicaps: ^PlayerHandicaps
+	Inherits: ^ExistsInWorld
+	Inherits: ^SpriteActor
+	Inherits: ^1x1Shape
+	Inherits: ^Cloakable
+	Inherits: ^BrickArmor
+	Inherits: ^PlayerHandicaps
 	Inherits: ^EffectSprite
 	OwnerLostAction:
 		Action: ChangeOwner
@@ -3533,9 +3552,9 @@ PROC.Dummy:
 		DamagedSounds: sandbag2.aud
 		DestroyedSounds: sandbag2.aud
 	Crushable:
-		CrushClasses: wall
+		CrushClasses: wall, lightwall
 	LineBuild:
-		Range: 8
+		Range: 10
 		NodeTypes: wall
 	LineBuildNode:
 		Types: wall
@@ -4289,9 +4308,9 @@ PROC.Dummy:
 		Categories: Critter
 
 ^ShootableMissile:
-	Inherits@1: ^ExistsInWorld
-	Inherits@4: ^SpriteActor
-	Inherits@Armor: ^LightArmor
+	Inherits: ^ExistsInWorld
+	Inherits: ^SpriteActor
+	Inherits: ^LightArmor
 	BallisticMissile:
 		LaunchAngle: 128
 		Speed: 165
@@ -4363,10 +4382,10 @@ PROC.Dummy:
 		PipType: Red
 		Armaments: pointdefense
 		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
+	WithAmmoPipsDecoration@pdl:
 		Position: BottomLeft
 		PipCount: 6
-		Margin: 4, 3
+		Margin: 5, 4
 		RequiresSelection: true
 		FullSequence: pip-red
 	ReloadAmmoPool@pdl:
@@ -4383,7 +4402,7 @@ PROC.Dummy:
 	AmmoPool@pdl:
 		Ammo: 6
 		PipCount: 2
-	WithAmmoPipsDecoration:
+	WithAmmoPipsDecoration@pdl:
 		PipCount: 2
 	ReloadAmmoPool@pdl:
 		Count: 6
@@ -4425,7 +4444,13 @@ PROC.Dummy:
 		Modifier: 90
 	RangeMultiplier@Propaganda:
 		RequiresCondition: propaganda
-		Modifier: 110
+		Modifier: 115
+	ChangesHealth@Propaganda:
+		Step: 500
+		Delay: 100
+		StartIfBelow: 100
+		DamageCooldown: 50
+		RequiresCondition: propaganda
 	ExternalCondition@Propaganda:
 		Condition: propaganda
 	WithDecoration@Propaganda:
@@ -4557,30 +4582,27 @@ PROC.Dummy:
 	Inherits: ^Afterburner
 	Inherits: ^WingletContrails
 	Aircraft:
-		CruiseAltitude: 2560
-		InitialFacing: 192
 		TurnSpeed: 20
 		Speed: 250
-		RepulsionSpeed: 40
-		MaximumPitch: 56
 		Roll: 16
 		IdleRoll: 8
 		RollSpeed: 8
-		TakeoffSounds: migtoff1.aud
-	LeavesTrails:
-		Offsets: -853,0,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
 
 ^VoxelHelicopter:
 	Inherits: ^Helicopter
+	Inherits: ^TSRenderVoxel
+	RenderVoxels:
+		Scale: 1
+	RenderSprites:
+		Palette: tsunit
+	-WithShadow:
+	-WithVoxelBody:
+	WithVoxelHelicopterBody:
+		TickRate: 1
+		SkipRate: 1
+
+^VoxelAirship:
+	Inherits: ^Airship
 	Inherits: ^TSRenderVoxel
 	RenderVoxels:
 		Scale: 1
@@ -4702,7 +4724,7 @@ PROC.Dummy:
 	AttackOpenTopped:
 		Armaments: mounted, mountedaa
 		MuzzlePalette: tdeffect
-		PortOffsets: 768,0,0, 448,-682,0, -448,-682,0, -768,0,0, -448,682,0, 448,682,0
+		PortOffsets: 768,0,0, 448,-582,0, -448,-582,0, -768,0,0, -448,582,0, 448,582,0
 		PortYaws: 0, 176, 341, 512, 682, 853
 		PortCones: 88, 88, 88, 88, 88, 88
 		PauseOnCondition: empdisable || being-warped
@@ -4720,7 +4742,7 @@ PROC.Dummy:
 			rocket_infantry: loaded-air
 			flamethrower: loaded
 			thor: loaded
-			e8: loaded
+			desolator: loaded
 			adept: loaded
 			mercenary: loaded
 			grenadier: loaded
@@ -4748,9 +4770,18 @@ PROC.Dummy:
 			che1: loaded
 			minigunner: loaded-air
 			che3: loaded-air
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		PipCount: 5
+		Margin: 5, 4
+		RequiresSelection: true
+		CustomPipSequences:
+			gray: pip-gray
+			yellow: pip-yellow
+			red: pip-red
+			blue: pip-blue
 	AutoTarget:
-		InitialStance: Defend
-		InitialStanceAI: Defend
+		InitialStance: AttackAnything
 		RequiresCondition: loaded || loaded-air
 	AutoTargetPriority@DEFAULT:
 		RequiresCondition: !stance-attackanything && !assault-move && !loaded-air
@@ -4769,13 +4800,20 @@ PROC.Dummy:
 	Inherits: ^AttackingCargo
 	-AttackOpenTopped:
 	AttackTurretedOpenTopped:
-		Armaments: primary, secondary, tertiary, pointdefense
-		Turrets: primary, secondary, tertiary, pointdefense
-		PassengerArmaments: mounted, mountedaa
+		Armaments: primary, secondary, pointdefense
+		Turrets: primary, secondary, pointdefense
+		PassengerArmaments: mounted, mountedaa, pointdefense
 		MuzzlePalette: tdeffect
 		PortOffsets: -85,384,340, -85,-384,340
 		PortYaws: 0, 176, 341, 512, 682, 853
 		PauseOnCondition: empdisable || being-warped
+
+^AttackingCargoAndPDL:
+	Inherits: ^AttackingCargoAndTurret
+	Inherits: ^PointLaserDefenseSystem
+	-AttackTurreted:
+	WithCargoPipsDecoration:
+		Margin: 5, 12
 
 ^TurretedWalker:
 	QuantizeFacingsFromSequence:
@@ -4865,7 +4903,7 @@ PROC.Dummy:
 	WithCargoPipsDecoration:
 		Position: BottomLeft
 		PipCount: 5
-		Margin: 5, 0
+		Margin: 5, 4
 		RequiresSelection: true
 		CustomPipSequences:
 			gray: pip-gray
@@ -4886,7 +4924,7 @@ PROC.Dummy:
 	WithDecoration@primary:
 		RequiresCondition: primary
 		Position: Top
-		Margin: 0, 4
+		Margin: 5, 4
 		RequiresSelection: true
 		Image: pips
 		Sequence: tag-primary
@@ -4923,10 +4961,8 @@ PROC.Dummy:
 		InitialDelay: 90
 		CloakDelay: 90
 		CloakedCondition: hidden
-		Palette: cloaktd
 		CloakSound: gstealon.aud
 		UncloakSound: gstealof.aud
-		IsPlayerPalette: true
 		CloakTypes: Cloak
 		RequiresCondition: !cloak-force-disabled
 		UncloakOn: Unload, Infiltrate, Demolish, Dock
@@ -4961,9 +4997,11 @@ PROC.Dummy:
 	Cloak@NORMAL:
 		InitialDelay: 250
 		CloakDelay: 120
+		CloakedCondition: hidden
+		Palette: cloakts
+		IsPlayerPalette: true
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Move
 		DetectionTypes: Cloak
-		IsPlayerPalette: false
 		RequiresCondition: !cloak-force-disabled
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
@@ -5109,11 +5147,11 @@ PROC.Dummy:
 
 ^PlaneScoutVision:
 	RevealsShroud:
-		MinRange: 7c0
-		Range: 10c0
+		MinRange: 8c0
+		Range: 14c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
-		Range: 7c0
+		Range: 8c0
 
 ^ScoutEquipment:
 	RevealsShroud:
@@ -5202,7 +5240,7 @@ PROC.Dummy:
 		ProductionTypes: Soldier, Infantry
 	Production:
 		Produces: Infantry, Soldier
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 		RequiresCondition: !infdisabled
 	GrantConditionOnPrerequisite@vehiclesonly:
 		Condition: infdisabled
@@ -5253,7 +5291,7 @@ PROC.Dummy:
 		ExitCell: 1,2
 	Production:
 		Produces: Vehicle, Paradrop
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 		RequiresCondition: !vehiclesdisabled
 	GrantConditionOnPrerequisite@infonly:
 		Condition: vehiclesdisabled
@@ -5433,7 +5471,7 @@ PROC.Dummy:
 		ProductionType: Aircraft
 	Production:
 		Produces: Aircraft, Helicopter, Plane
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 		RequiresCondition: !aircraftdisabled
 	GrantConditionOnPrerequisite@infonly:
 		Condition: aircraftdisabled
@@ -5457,7 +5495,7 @@ PROC.Dummy:
 		Color: 8A8A8A
 	Production:
 		Produces: Building, Defense
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 	ProvidesPrerequisite@conyardbuildable:
 		Prerequisite: conyardbuildable
 		RequiresPrerequisites: techlevel.aircraftonly
@@ -5476,7 +5514,7 @@ PROC.Dummy:
 	RallyPoint:
 	Production:
 		Produces: Ship, Submarine, Boat
-		PauseOnCondition: forceshield || invulnerability || being-warped
+		PauseOnCondition: empdisable || disabled || forceshield || invulnerability || being-warped
 	ProductionBar:
 		ProductionType: Ship
 	RepairsUnits:
@@ -5748,12 +5786,13 @@ PROC.Dummy:
 		Condition: autobattle
 		Prerequisites: global.autobattle
 	RejectsOrders:
-		RequiresCondition: autobattle && false
+		RequiresCondition: autobattle
 	Autobattler:
 		RequiresCondition: autobattle
 
 ^Checkpoint:
 	Checkpoint:
+		Sticky: true
 	RallyPoint:
 		Path: 2,2
 	Targetable:
@@ -5798,3 +5837,53 @@ PROC.Dummy:
 		Offset: -580,0,180
 		Sequence: slow-rotor2
 		RequiresCondition: !airborne
+
+^StopMovingToAttack:
+	AutoTarget:
+		ScanRadius: 20
+	SpeedMultiplier:
+		Modifier: 0
+		RequiresCondition: attacking
+	GrantConditionWhileAiming:
+		Condition: aiming
+	GrantConditionOnAttackCA:
+		Condition: attacking
+		RevokeDelay: 50
+		RevokeAll: false
+	GrantConditionOnMovement:
+		Condition: moving
+		ValidMovementTypes: Horizontal, Vertical, Turn
+	AmmoPool:
+		Ammo: 3
+		Armaments: secondary
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 90
+		Count: 3
+		ResetOnFire: True
+		PauseOnCondition: moving
+
+^SelfDestructingAttacker:
+	FireWarheadsOnDeathCA@NUKE:
+		Weapon: MiniNuke
+		EmptyWeapon: MiniNuke
+		DamageSource: Killer
+		RequiresCondition: !unloaded && !being-warped
+	FireWarheadsOnDeathCA@UNARMED:
+		Weapon: UnitExplodeSmall
+		EmptyWeapon: UnitExplodeSmall
+		RequiresCondition: unloaded && !being-warped
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 512
+		Voice: Attack
+		RequiresCondition: !unloaded
+	Armament@PRIMARY:
+		Weapon: DemoTruckTargeting
+	GrantConditionOnAttackCA:
+		Condition: triggered
+	GrantConditionOnDeploy:
+		DeployedCondition: triggered
+		RequiresCondition: !unloaded
+	KillsSelf:
+		RequiresCondition: invulnerability || triggered || berserk

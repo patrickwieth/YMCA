@@ -78,10 +78,10 @@ minigunner:
 		Ammo: 30
 		AmmoCondition: ammo
 	ReloadAmmoPool:
-		Delay: 100
+		Delay: 90
 		Count: 30
 		ResetOnFire: True
-	GrantConditionOnAttack:
+	GrantConditionOnAttackCA:
 		ArmamentNames: primary,secondary,mounted,mountedaa
 		Condition: gatling
 		RequiredShotsPerInstance: 1
@@ -146,12 +146,41 @@ CHE3:
 	RenderSprites:
 		Image: che3
 
-Mortar.China:
-	Inherits: Mortar
-	Inherits@horde: ^HordeBonus
+Mortar:
+	Inherits: ^Soldier
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^HordeBonus
+	Inherits: ^PrioArtillery
+	RenderSprites:
+		Image: mortar
 	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 21
 		Prerequisites: barracks, radar, ~infantry.china, ~commander_tree.advanced_infantry_training
+		Description: Artillery Infantry armed with a Mortar.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Infantry
+		Weaknesses: • Weak vs Tanks, Aircraft
+		Attributes: • Long range
+	Valued:
+		Cost: 150
+	Tooltip:
+		Name: Mortar
+	Health:
+		HP: 2500
+	Armament@PRIMARY:
+		Weapon: mortar
+		LocalOffset: 0,0,155
+		FireDelay: 15
+	Armament@Garrison:
+		Name: mounted
+		Weapon: mortarE
+		LocalOffset: 0,0,155
+		FireDelay: 15
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
 
 CHHACKER:
 	Inherits: ^Soldier
@@ -194,7 +223,7 @@ CHHACKER:
 	RejectsOrders@deployment:
 		Reject: AttackMove, AssaultMove
 		RequiresCondition: deployed
-	GrantConditionOnAttack@hackcomplete:
+	GrantConditionOnAttackCA@hackcomplete:
 		Condition: hack-complete
 		RevokeDelay: 60
 		ArmamentNames: secondary
@@ -202,7 +231,7 @@ CHHACKER:
 		MaximumInstances: 1
 		RevokeAll: true
 		RevokeOnNewTarget: true
-	GrantConditionOnAttack@hacking:
+	GrantConditionOnAttackCA@hacking:
 		ArmamentNames: secondary
 		Condition: hacking
 		RevokeDelay: 50

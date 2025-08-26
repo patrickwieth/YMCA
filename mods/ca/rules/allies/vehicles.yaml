@@ -13,7 +13,11 @@ Prismtank:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
 		Prerequisites: radar, ~commander_tree.prism_tank
-		Description: Long-range artillery with Prism Tower derived weapon.\n  Strong vs Buildings, Infantry, Light Armor\n  Weak vs Tanks, Aircraft
+		Description: Long-range artillery with Prism weapon.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Infantry, Light Armor
+		Weaknesses: • Weak vs Tanks, Aircraft
+		Attributes: • Energy weapons cannot be stopped by PDL
 	Valued:
 		Cost: 1350
 	Tooltip:
@@ -54,7 +58,9 @@ PBLASTER:
 		Name: Prism Blaster
 	Buildable:
 		Prerequisites: radar, ~commander_tree.prism_blaster
-		Description: Prism Tower derived weapon hitting many targets on impact.\n  Strong vs Buildings, Infantry, Light Armor\n  Weak vs Tanks, Aircraft
+		Description: Prism Tower derived weapon hitting many targets on impact.
+	TooltipExtras:
+		Attributes: • Beam splits up into many smaller beams
 	Health:
 		HP: 33000
 	Armament:
@@ -72,7 +78,11 @@ PCAN:
 	Inherits: ^FightingVehicle
 	Buildable:
 		Prerequisites: radar, ~commander_tree.prism_cannon
-		Description: A prototype long range artillery that fires highly focused beams of light.\n  Strong vs Buildings, Vehicles, Infantry\n  Weak vs Tanks, Aircraft
+		Description: A prototype long range artillery that fires highly focused beams of light.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Tanks
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Energy weapons cannot be stopped by PDL
 	Valued:
 		Cost: 1350
 	Tooltip:
@@ -94,7 +104,7 @@ PCAN:
 		VoiceSet: PrismVoice
 
 CTNK:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelVehicle
 	RenderVoxels:
 		Scale: 1
@@ -114,6 +124,8 @@ CTNK:
 		Strengths: • Strong vs Heavy Vehicles, Heavy Aircraft
 		Weaknesses: • Weak vs Infantry, PDL
 		Attributes: • Can teleport over short distances
+	WithProductionIconOverlay@APMissile:
+		Types: APMissile
 	Valued:
 		Cost: 1350
 	Tooltip:
@@ -144,8 +156,6 @@ CTNK:
 CTNK.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Inherits: CTNK
-	WithProductionIconOverlay@PDL:
-		Types: PDL
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
@@ -170,7 +180,7 @@ CTNK.Reflector:
 		Name: Chrono Tank (Reflector)
 
 CHPR:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^BigVehicle
 	Inherits: ^HighResShadow
 	RenderSprites:
@@ -216,7 +226,6 @@ CHPR:
 		Weapon: NeutronCannonSound
 		LocalOffset: 700,0,400
 	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
 		Voice: Attack
 	WithMuzzleOverlay:
 	WithSpriteTurret@inactiveturret:
@@ -259,7 +268,7 @@ CHPR.Range:
 		BuildPaletteOrder: 225
 		IconPalette: chrometd
 		Prerequisites: atek, ~commander_tree.chrono_prison_range
-		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
+		Description: Advanced heavy tank that can erase targets from existence.
 	WithProductionIconOverlay@Crosshair:
 		Types: Crosshair
 	Valued:
@@ -287,7 +296,7 @@ CHPR.AA:
 		BuildPaletteOrder: 225
 		IconPalette: chrometd
 		Prerequisites: atek, ~commander_tree.chrono_prison_aa
-		Description: Advanced heavy tank that can erase targets from existence.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Buildings
+		Description: Advanced heavy tank that can erase targets from existence.
 	WithProductionIconOverlay@Air:
 		Types: Air
 	Valued:
@@ -329,15 +338,14 @@ CHPR.AA:
 
 # this is actually not used but is the prototype BATF
 BATF:
-	Inherits: ^Tank
+	Inherits: ^FightingTankTurreted
 	Inherits: ^BigVehicle
-	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~disabled, ~!filler.batf2
-		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -405,9 +413,8 @@ BATF:
 		RequiresCondition: !being-warped
 
 BATF.Bunker:
-	Inherits: ^Tank
+	Inherits: ^FightingTank
 	Inherits: ^BigVehicle
-	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^Transport
@@ -420,6 +427,9 @@ BATF.Bunker:
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.bunker, ~!filler.batf2
 		Description: Tough infantry transport\nwith weapon ports for infantry. \n  Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Strengths: • Strong vs Tanks, Aircraft
+		Weaknesses: • Weak vs Infantry, Artillery
 	WithProductionIconOverlay@Missile:
 		Types: Missile
 	Valued:
@@ -464,13 +474,16 @@ BATF.Bunker:
 
 BATF.Bunker.PDL:
 	Inherits: BATF.Bunker
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	-AttackTurreted:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.bunker, ~commander_tree.battle_fortress.pdl
-		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Strengths: • Strong vs Tanks, Aircraft, Projectile Weapons
+		Weaknesses: • Weak vs Infantry, Artillery, Energy Weapons
 	Tooltip:
 		Name: Battle Fortress (PDL)
 	Valued:
@@ -485,7 +498,10 @@ BATF.Bunker.Reflector:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.bunker, ~commander_tree.battle_fortress.reflector
-		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Strengths: • Strong vs Tanks, Aircraft, Energy Weapons
+		Weaknesses: • Weak vs Infantry, Artillery, Projectile Weapons
 	Tooltip:
 		Name: Battle Fortress (Reflector)
 	WithProductionIconOverlay@Reflector:
@@ -502,7 +518,10 @@ BATF.Prism:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.prism, ~!filler.batf2
-		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Special Ability: Can crush enemy vehicles.\n Strong vs Point Defense Laser
+		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Strengths: • Strong vs Ground Units, PDL
+		Weaknesses: • Weak vs Aircraft, Reflector Armor
 	WithProductionIconOverlay@Prism:
 		Types: Prism
 	Valued:
@@ -535,12 +554,14 @@ BATF.Prism:
 
 BATF.Prism.PDL:
 	Inherits: BATF.Prism
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.prism, ~commander_tree.battle_fortress.pdl
-		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Point Defense Laser, Projectile Weapons
+		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Weaknesses: • Weak vs Aircraft, Reflector Armor, Energy Weapons
 	Tooltip:
 		Name: Prism Fortress (PDL)
 	Valued:
@@ -555,7 +576,10 @@ BATF.Prism.Reflector:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.prism, ~commander_tree.battle_fortress.reflector
-		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Point Defense Laser, Energy Weapons
+		Description: Tough prism tank.\n Fires Prism beam splitting up on target.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Strengths: • Strong vs Ground Units
+		Weaknesses: • Weak vs Aircraft, Reflector Armor, Projectile Weapons
 	Tooltip:
 		Name: Prism Fortress (Reflector)
 	WithProductionIconOverlay@Reflector:
@@ -573,8 +597,14 @@ BATF.Support:
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.support, ~!filler.batf2
 		Description: Tough support tank\nRepairs allied vehicles and aircraft.\n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Strengths: • Strong with repairable army
+		Weaknesses: • Weak vs. anti tank units
+		Attributes: • Repairs and shields friendly units
 	WithProductionIconOverlay@Wrench:
 		Types: Wrench
+	Health:
+		HP: 125000
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -621,6 +651,8 @@ BATF.Support.PDL:
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.support, ~commander_tree.battle_fortress.pdl
 		Description: Tough support tank\nRepairs allied vehicles and aircraft.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Weaknesses: • Weak vs. Energy Weapons
 	Tooltip:
 		Name: Support Fortress (PDL)
 	Valued:
@@ -636,6 +668,8 @@ BATF.Support.Reflector:
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.support, ~commander_tree.battle_fortress.reflector
 		Description: Tough support tank\nRepairs allied vehicles and aircraft.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Weaknesses: • Weak vs. Projectile Weapons
 	Tooltip:
 		Name: Support Fortress (Reflector)
 	WithProductionIconOverlay@Reflector:
@@ -651,6 +685,9 @@ BATF.Artillery:
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.arty, ~!filler.batf2
 		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Armor
+		Weaknesses: • Weak vs. Tanks, Aircraft
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -703,7 +740,9 @@ BATF.Artillery.PDL:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.arty, ~commander_tree.battle_fortress.pdl
-		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Point Laser Defense System \n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Weaknesses: • Weak vs. Energy Weapons
 	Tooltip:
 		Name: Artillery Fortress (PDL)
 	Valued:
@@ -716,7 +755,9 @@ BATF.Artillery.Reflector:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
 		Prerequisites: radar, ~weap, ~commander_tree.battle_fortress.arty, ~commander_tree.battle_fortress.reflector
-		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.\n Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+		Description: Tough infantry transport\nneeds infantry to operate its turrets.\n Has Reflector Armor. \n Special Ability: Can crush enemy vehicles.
+	TooltipExtras:
+		Weaknesses: • Weak vs. Projectile Weapons
 	Tooltip:
 		Name: Artillery Fortress (Reflector)
 	WithProductionIconOverlay@Reflector:

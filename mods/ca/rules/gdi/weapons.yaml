@@ -102,7 +102,7 @@ IonStrike.Orca:
 	Warhead@1Dam_impact: SpreadDamage
 		Range: 0, 1c1, 2c1, 2c512, 3c0
 		Delay: 1
-		Damage: 4000
+		Damage: 5000
 		Falloff: 1000, 800, 400, 200, 100
 		ValidTargets: Ground, Water
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
@@ -124,7 +124,7 @@ IonStrike.Orca:
 
 IonStrike.Orca.init:
 	ReloadDelay: 5
-	Range: 0c0
+	Range: 512
 	Projectile: InstantHit
 	ValidTargets: Ground, Vehicle, Infantry
 	Warhead@1Dam: SpreadDamage
@@ -185,6 +185,30 @@ MARVest:
 		Explosions: dust_ring2
 		ExplosionPalette: tseffect
 
+JuggernautGun:
+	Inherits: ^Artillery
+	MinRange: 5c0
+	ReloadDelay: 100
+	Range: 15c0
+	Burst: 3
+	BurstDelays: 1
+	StartBurstReport: jugger1.aud
+	TargetActorCenter: true
+	Projectile: BulletCA
+		Inaccuracy: 2c138
+	Warhead@1Dam: SpreadDamage
+		Spread: 348
+		Damage: 1800
+		Falloff: 800, 368, 135, 50, 18, 7, 0
+	Warhead@4EffWater: CreateEffect
+		Explosions: large_splash
+
+JuggernautDummyAim:
+	Range: 15c0
+	ReloadDelay: 20
+	ValidTargets: Ground, Trees, Water, Underwater
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
 
 
 HellfireAG.Orca:

@@ -18,7 +18,6 @@ A10:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
 		Prerequisites: ~afld.gdi, ~aircraft.gdi
-		IconPalette: chrometd
 		Description: Ground attack aircraft with incendiary bombs.\n  Strong vs Buildings, Light Armor, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1600
@@ -32,6 +31,8 @@ A10:
 		PauseOnCondition: !ammo
 	AmmoPool:
 		Ammo: 11
+	WithAmmoPipsDecoration:
+		PipCount: 2
 	SpawnActorOnDeath:
 		Actor: A10.Husk
 		RequiresCondition: ammo && !empdisable && !being-warped
@@ -47,6 +48,7 @@ A10:
 
 A10.bomber:
 	Inherits: A10
+	Inherits: ^SupportPowerBomber
 	Tooltip:
 		Name: Warthog
 	-Buildable:
@@ -54,8 +56,6 @@ A10.bomber:
 		HP: 36000
 	-GrantConditionOnOrders@ACTIVE:
 	-SpeedMultiplier@SlowOnIdle:
-	-AttackAircraft:
-	AttackBomberCA:
 	-Selectable:
 	Interactable:
 	SelectionDecorations:
@@ -270,9 +270,9 @@ OrcaV2.Torp:
 Orca_Bomber:
 	Inherits: ^Helicopter
 	Inherits: ^TDAircraft
-	Inherits: ^BomberPlane
 	Inherits: ^BiologicalPilot
 	Inherits: ^PrioAntiHeavy
+	Inherits: ^BomberPlane
 	RenderSprites:
 		Image: orcab
 	Buildable:
@@ -302,9 +302,6 @@ Orca_Bomber:
 		CanHover: False
 		CanSlide: False
 		Voice: Move
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: HoldFire
 	SpawnActorOnDeath:
 		Actor: orca_bomber.husk
 		RequiresCondition: !empdisable && !being-warped
@@ -429,6 +426,7 @@ Orca.Warship:
 		RespawnTicks: 120
 		InstaRepair: true
 		SlaveDisposalOnKill: KillSlaves
+		MaxSlaveDistance: 25c0
 		SpawnAllAtOnce: false
 		LoadedCondition: inva-loaded
 		RequiresCondition: !empdisable && !being-warped
@@ -463,7 +461,7 @@ Orca.Drone:
 	Tooltip:
 		Name: Ion Drone
 	Health:
-		HP: 25000
+		HP: 30000
 	Armament:
 		Weapon: IonStrike.Orca.init
 		PauseOnCondition: !ammo

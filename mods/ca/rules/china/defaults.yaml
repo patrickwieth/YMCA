@@ -78,7 +78,7 @@ Player:
 		ValidMovementTypes: Horizontal, Vertical
 		Condition: PursuitMove
 		RequiresCondition: AttackSlow
-	GrantConditionOnAttack@Slowdown:
+	GrantConditionOnAttackCA@Slowdown:
 		Condition: AttackSlow
 		RequiresCondition: !PursuitMove
 	SpeedMultiplier@Pursuit:
@@ -155,9 +155,9 @@ Player:
 	ReloadDelayMultiplier@HordeEffect:
 		RequiresCondition: hordeeffect >= 10
 		Modifier: 70
-	SpeedMultiplier@Propaganda:
-		RequiresCondition: propaganda
-		Modifier: 110
+	SpeedMultiplier@HordeEffect:
+		RequiresCondition: hordeeffect
+		Modifier: 120
 
 ^PropagandaSpeaker:
 	TooltipExtras:
@@ -165,11 +165,11 @@ Player:
 	WithProductionIconOverlay@Speaker:
 		Types: Speaker
 	ProximityExternalCondition@PROPAGANDA:
-		Range: 5c0
+		Range: 6c0
 		Condition: propaganda
 		RequiresCondition: !subliminal && !disabled
 	WithRangeCircle@speaker:
-		Range: 5c0
+		Range: 6c0
 		Type: propaganda
 		RequiresCondition: !subliminal && !disabled
 	GrantConditionOnPrerequisite@SUBLIMINALPROPAGANDA:
@@ -179,11 +179,11 @@ Player:
 		Prerequisites: commander_tree.tiktok_warrior
 		Condition: subliminal
 	ProximityExternalCondition@SUBLIMINALPROPAGANDA:
-		Range: 8c0
+		Range: 9c0
 		Condition: propaganda
 		RequiresCondition: subliminal && !disabled
 	WithRangeCircle@subliminal:
-		Range: 8c0
+		Range: 9c0
 		Type: propaganda
 		RequiresCondition: subliminal && !disabled
 
@@ -305,14 +305,14 @@ Player:
 		RequiresCondition: gatling-ground == 3
 		ReloadingCondition: engage-ground
 		PauseOnCondition: engage-air
-	GrantConditionOnAttack:
+	GrantConditionOnAttackCA:
 		Condition: gatling
 		RequiredShotsPerInstance: 1,3,5
 		MaximumInstances: 3
 		RevokeDelay: 40
 		RevokeOnNewTarget: False
 		RevokeAll: True
-	GrantConditionOnAttack@GROUND:
+	GrantConditionOnAttackCA@GROUND:
 		ArmamentNames: secondary
 		Condition: gatling-ground
 		RequiredShotsPerInstance: 1,3,5

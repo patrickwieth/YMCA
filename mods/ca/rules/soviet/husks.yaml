@@ -1,3 +1,17 @@
+Soviet_Miner.EmptyHusk:
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 1
+		Image: sovietminer
+	RenderSprites:
+		Image: sovietminer
+	Tooltip:
+		Name: Husk (Soviet Miner)
+	TransformOnCapture:
+		IntoActor: soviet_miner
+	InfiltrateForTransform:
+		IntoActor: soviet_miner
+
 Peoples_Tank.Husk:
 	Inherits: ^VoxelVehicleHusk
 	RenderVoxels:
@@ -53,3 +67,197 @@ Source_of_Pollution.Husk:
 		IntoActor: source_of_pollution
 	InfiltrateForTransform:
 		IntoActor: source_of_pollution
+
+tsar.Husk:
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 1
+		Image: tsar
+	RenderSprites:
+		Image: tsar
+	Tooltip:
+		Name: Husk (Tsar Tank)
+	TransformOnCapture:
+		IntoActor: tsar_tank
+	InfiltrateForTransform:
+		IntoActor: tsar_tank
+
+# Aircraft
+
+MIG.Husk:
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 0.7
+		Image: mig31.husk
+	RenderSprites:
+		Image: mig31
+	Tooltip:
+		Name: MiG Attack Plane
+
+MIG.Husk.EMP:
+	Inherits: MIG.Husk
+	Inherits: ^EmpVisualEffect
+
+SU47.Husk:
+	Inherits: MIG.Husk
+	Inherits: ^VoxelJetHusk
+	RenderVoxels:
+		Scale: 0.6
+		Image: su47.husk
+	RenderSprites:
+		Image: su47
+		PlayerPalette: overlayplayertd
+
+SU47.Husk.EMP:
+	Inherits: SU47.Husk
+	Inherits: ^EmpVisualEffect
+
+FROG.Husk:
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 0.7
+		Image: frog
+	Tooltip:
+		Name: Frogfoot Attack Plane
+	RenderSprites:
+		Image: frog
+
+FROG.Husk.EMP:
+	Inherits: FROG.Husk
+
+Il11b.Husk:
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 0.8
+		Image: il11b
+	RenderSprites:
+		Image: il11b
+	Tooltip:
+		Name: Ilyushin-11b
+
+Il11b.Husk.EMP:
+	Inherits: Il11b.Husk
+
+HIND.Husk:
+	Inherits: ^VoxelHelicopterHusk
+	RenderVoxels:
+		Scale: 0.5
+		Image: hind
+	RenderSprites:
+		Image: hind
+		Palette: tsunit
+	Tooltip:
+		Name: Hind
+		Speed: 112
+	WithIdleOverlay:
+		Sequence: rotor
+
+HIND.Husk.EMP:
+	Inherits: HIND.Husk
+
+Kirov.Husk:
+	Inherits: ^VoxelHelicopterHusk
+	WithVoxelHelicopterBody:
+		Offset: 0,0,-1500
+	RenderVoxels:
+		Scale: 5
+		Image: kirov.husk
+	Tooltip:
+		Name: Kirov
+	Aircraft:
+		TurnSpeed: 8
+		Speed: 30
+	FallsToEarth:
+		MaximumSpinSpeed: 0
+	LeavesTrails@0:
+		Offsets: -432,560,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	LeavesTrails@1:
+		Offsets: -432,-560,0
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	RevealsShroud:
+		Range: 10c0
+		Type: CenterPosition
+	RenderSprites:
+		Image: kirov
+	FallsToEarth:
+		Explosion: KirovExplode
+
+Kirov.Husk.EMP:
+	Inherits: Kirov.Husk
+
+Kirov.V3.Husk:
+	Inherits: Kirov.Husk
+	RenderVoxels:
+		Image: kirov.v3.husk
+
+Kirov.V3.Husk.EMP:
+	Inherits: Kirov.V3.Husk
+
+Kirov.Demo.Husk:
+	Inherits: Kirov.Husk
+	RenderVoxels:
+		Image: kirov.demo.husk
+	FireWarheadsOnDeathCA@NUKE:
+		Weapon: atomic
+		RequiresCondition: !being-warped
+
+Kirov.Demo.Husk.EMP:
+	Inherits: Kirov.Demo.Husk
+	-FireWarheadsOnDeathCA@NUKE:
+
+Kirov.Mecha.Husk:
+	Inherits: Kirov.Husk
+	RenderVoxels:
+		Scale: 4
+		Image: kirov.mecha.husk
+
+Kirov.Mecha.Husk.EMP:
+	Inherits: Kirov.Mecha.Husk
+
+Kirov.Carrier.Husk:
+	Inherits: Kirov.Husk
+	RenderVoxels:
+		Image: kirov.carrier.husk
+
+Kirov.Carrier.Husk.EMP:
+	Inherits: Kirov.Carrier.Husk
+
+Yak41.Husk:
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 0.6
+		Image: yak41
+	RenderSprites:
+		Image: yak41
+	Tooltip:
+		Name: Yak-41
+	Aircraft:
+		TurnSpeed: 16
+		Speed: 149
+	LeavesTrails:
+		Offsets: -427,0,0
+		Image: smokey
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	RevealsShroud:
+		Range: 12c0
+		Type: CenterPosition
+	FallsToEarth:
+		Explosion: UnitExplodeDrone
+
+Yak41.Husk.EMP:
+	Inherits: Yak41.Husk

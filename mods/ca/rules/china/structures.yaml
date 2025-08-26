@@ -17,7 +17,7 @@ chcommand:
 	Tooltip:
 		Name: Headquarter (China)
 	Health:
-		HP: 150000
+		HP: 160000
 	BaseProvider:
 		PauseOnCondition: being-captured
 		Range: 16c0
@@ -154,7 +154,7 @@ chpower:
 		Name: Nuclear Reactor
 	SelectionDecorations:
 	Health:
-		HP: 70000
+		HP: 75000
 	Power:
 		Amount: 100
 	SpawnNeighboringActors@minefield:
@@ -197,7 +197,7 @@ chpower2:
 	Tooltip:
 		Name: Advanced Nuclear Plant
 	Valued:
-		Cost: 500			#500
+		Cost: 500
 	Power:
 		Amount: 200
 	WithIdleOverlay@SMOKE2:
@@ -224,7 +224,7 @@ chbarracks:
 		Queue: Building
 		Description: Trains infantry.
 	Health:
-		HP: 60000
+		HP: 70000
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 5c0
@@ -240,6 +240,12 @@ chbarracks:
 	Exit@2:
 		SpawnOffset: 298,298,0
 		ExitCell: 1,1
+	Exit@3:
+		SpawnOffset: 298,298,0
+		ExitCell: 1,2
+	Exit@4:
+		SpawnOffset: 298,298,0
+		ExitCell: 2,2
 	Power:
 		Amount: -20
 	ProvidesPrerequisite@china:
@@ -287,14 +293,14 @@ chgatling:
 		Description: All-purpose defensive structure.\n  Strong vs Aircraft, Infantry\n  Weak vs Vehicles
 	SelectionDecorations:
 	Health:
-		HP: 58000
+		HP: 68000
 	RevealsShroud:
 		Range: 8c0
 	SpawnNeighboringActors@minefield:
 		ActorTypes: mine
 		Locations: 0,-1, 0,1, -1,0, 1,0
 	Turreted:
-		TurnSpeed: 16
+		TurnSpeed: 32
 		Offset: 0,0,120
 	WithSpriteBody:
 	WithSpriteTurret:
@@ -338,7 +344,7 @@ chbunker:
 	CustomSellValue:
 		Value: 500
 	Health:
-		HP: 61000
+		HP: 81000
 	RevealsShroud:
 		Range: 6c0
 		RevealGeneratedShroud: False
@@ -378,7 +384,7 @@ chbunker.advinf:
 	Valued:
 		Cost: 1500
 	Cargo:
-		InitialUnits: che3, che3, che3, mortar.china
+		InitialUnits: che3, che3, che3, mortar
 
 chbunker.ai:
 	Inherits: chbunker
@@ -387,7 +393,7 @@ chbunker.ai:
 	Valued:
 		Cost: 1500
 	Cargo:
-		InitialUnits: che1, che3, che3, che3, mortar.china
+		InitialUnits: che1, che3, che3, che3, mortar
 
 chbunker2:
 	Inherits: chbunker
@@ -401,7 +407,7 @@ chbunker2:
 	Valued:
 		Cost: 1500
 	Health:
-		HP: 100000
+		HP: 120000
 	Cargo:
 		Types: Infantry, Hacker, Fremen
 		MaxWeight: 8
@@ -422,7 +428,7 @@ chbunker2.advinf:
 	Valued:
 		Cost: 1800
 	Cargo:
-		InitialUnits: minigunner, che3, che3, che3, mortar.china, mortar.china
+		InitialUnits: minigunner, che3, che3, che3, mortar, mortar
 
 chsupply:
 	Inherits: ^BuildingChina
@@ -430,6 +436,8 @@ chsupply:
 	Inherits: ^BotIncome
 	Inherits: ^Refinery
 	Inherits: ^MinefieldUpgrade
+	Building:
+		Footprint: =x= xx= ===
 	Valued:
 		Cost: 1300
 	Tooltip:
@@ -439,7 +447,7 @@ chsupply:
 		Prerequisites: anypower, ~structures.china
 		Description: Processes raw Tiberium\ninto useable resources
 	Health:
-		HP: 80000
+		HP: 90000
 	RevealsShroud:
 		Range: 6c0
 	SpawnNeighboringActors@minefield:
@@ -447,7 +455,7 @@ chsupply:
 		Locations: 0,-1, 1,-1, 2,-1, -1,0, -1,1, 3,0, 3,1, 0,2, 1,2, 2,2
 	Refinery:
 		DockAngle: 128
-		DockOffset: 1,1
+		DockOffset: 2,1
 	DrawLineToTarget:
 	CustomSellValue:
 		Value: 600
@@ -473,6 +481,9 @@ chweap:
 		Cost: 2000
 	Tooltip:
 		Name: Weapons Factory
+	Building:
+		Footprint: xxxx xxxx xxx= ====
+		Dimensions: 4,4
 	ProvidesPrerequisite:
 		Prerequisite: chweap
 	Buildable:
@@ -489,10 +500,19 @@ chweap:
 		Locations: 0,-1, 1,-1, 2,-1, 3,-1, -1,0, -1,1, 4,0, 4,1, 0,2, 1,2, 2,2, 3,2
 	Exit@1:
 		ExitCell: 4,4
-		ExitDelay: 3
+		SpawnOffset: 1000,1000,0
 	Exit@2:
-		ExitCell: 5,4
-		ExitDelay: 3
+		ExitCell: 4,5
+		SpawnOffset: 1000,1000,0
+	Exit@3:
+		ExitCell: 5,5
+		SpawnOffset: 1000,1000,0
+	Exit@4:
+		ExitCell: 3,3
+		SpawnOffset: 1000,1000,0
+	Exit@5:
+		ExitCell: 3,4
+		SpawnOffset: 1000,1000,0
 	Power:
 		Amount: -40
 	Voiced:
@@ -525,7 +545,7 @@ chpropaganda:
 		Description: Provides access to advanced Chinese technologies.
 	SelectionDecorations:
 	Health:
-		HP: 110000
+		HP: 120000
 	RevealsShroud:
 		Range: 5c0
 	SpawnNeighboringActors@minefield:
@@ -638,9 +658,13 @@ chpropagandatower:
 		Queue: Defense
 		BuildPaletteOrder: 20
 		Prerequisites: chpropaganda, ~structures.china, ~!commander_tree.speakertower.pdl
-		Description: Allows nearby units to self-heal.\n Infuses China units with propaganda.
+		Description: Repairs nearby vehicles.\n Infuses infantry units with propaganda.\n Propaganda increases toughness, range and speed of infantry units\n and gives self-heal to infantry.
+	TooltipExtras:
+		Strengths: • Repairs vehicles
+		Weaknesses: • Weak vs Artillery
+		Attributes: • Grants propaganda to infantry
 	Health:
-		HP: 50000
+		HP: 60000
 	RevealsShroud:
 		Range: 6c0
 	Power:
@@ -677,9 +701,10 @@ chpropagandatower.pdl:
 	Buildable:
 		BuildPaletteOrder: 20
 		Prerequisites: chpropaganda, ~structures.china, ~commander_tree.speakertower.pdl
-		Description: Allows nearby units to self-heal.\n Infuses China units with propaganda.\n Has Point Defense Laser.
+	TooltipExtras:
+		Attributes: • Grants propaganda to infantry\n Shoots down projectiles with point defense laser.
 	Health:
-		HP: 60000
+		HP: 70000
 
 chinternetcenter:
 	Inherits: ^BuildingChinaTD
@@ -757,6 +782,7 @@ chsilo:
 		Queue: Defense
 		BuildPaletteOrder: 135
 		BuildLimit: 1
+		IconPalette: chrometd
 		Prerequisites: techcenter, ~structures.china, ~techlevel.superw
 		Description: Provides Nuclear Strike support power.\nRequires power to operate.
 	Building:
@@ -863,7 +889,7 @@ chairport:
 	Tooltip:
 		Name: Airfield
 	Building:
-		Footprint: x=x= xxx= =x==
+		Footprint: x=x= xxx= ====
 	Health:
 		HP: 150000
 	RevealsShroud:

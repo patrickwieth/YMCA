@@ -79,10 +79,24 @@ namespace OpenRA.Mods.CA.Traits
 				return;
 
 			if (!revokeAll)
-				self.RevokeCondition(tokens.Pop());
+			{
+				var token = tokens.Pop();
+				if (self.TokenValid(token))
+				{
+					self.RevokeCondition(token);
+				}
+			}
 			else
+			{
 				while (tokens.Count > 0)
-					self.RevokeCondition(tokens.Pop());
+				{
+					var nextToken = tokens.Pop();
+					if (self.TokenValid(nextToken))
+						self.RevokeCondition(nextToken);
+					else
+						return;
+				}
+			}
 		}
 
 		void ITick.Tick(Actor self)
@@ -168,6 +182,7 @@ namespace OpenRA.Mods.CA.Traits
 
 		protected override void TraitDisabled(Actor self)
 		{
+			//TextNotificationsManager.Debug("disabled");
 			RevokeInstance(self, true);
 		}
 	}

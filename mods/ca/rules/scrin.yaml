@@ -218,7 +218,7 @@ FEED:
 		Weapon: FeederBeam
 		LocalOffset: 150,0,200
 		RequiresCondition: !full
-	GrantConditionOnAttack:
+	GrantConditionOnAttackCA:
 		Condition: triggered
 		RequiresCondition: full
 	GrantConditionOnDeploy:
@@ -482,9 +482,6 @@ STMR:
 		IdealSeparation: 1c682
 		CanSlide: False
 		AltitudeVelocity: 0c200
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: AttackAnything
 	Contrail@1:
 		Offset: -250,-250,100
 		StartColorUsePlayerColor: true
@@ -543,7 +540,7 @@ STMR.hunter:
 
 STMR.bomber:
 	Inherits: STMR
-	Inherits: ^PrioAntiHeavy
+	Inherits: ^PrioAntiLight
 	WithProductionIconOverlay@Grenade:
 		Types: Grenade
 	Buildable:
@@ -582,12 +579,6 @@ STMR.bomber:
 		DelayAfterReset: 50
 		ShowSelectionBar: true
 		SelectionBarColor: ff00ff
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
 STMR.torp:
 	Inherits: STMR
@@ -634,125 +625,8 @@ STMR.torp:
 	DetectCloaked:
 		DetectionTypes: Underwater
 		Range: 8c0
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 
-ENRV:
-	Inherits: ^Helicopter
-	Inherits: ^PrioAntiHeavy
-	Inherits@GAINSEXPERIENCE: ^GainsExperience
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
-		BuildPaletteOrder: 170
-		Prerequisites: scrt, ~aircraft.traveler
-		Description: Fast attack craft that creates a focused suppression field.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft, Infantry
-		IconPalette: chrome
-	Valued:
-		Cost: 1500
-	Voiced:
-		VoiceSet: VehicleVoice
-	Tooltip:
-		Name: Enervator
-	Health:
-		HP: 20000
-	RevealsShroud:
-		Range: 12c0
-		MinRange: 10c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 12c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: EnervatorBolts
-		LocalOffset: -300,0,-250
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 40
-		PersistentTargeting: false
-		OpportunityFire: false
-		PauseOnCondition: empdisable || being-warped
-	Aircraft:
-		TurnSpeed: 18
-		Speed: 195
-		InitialFacing: 768
-		TakeoffSounds: dropup1.aud
-		LandingSounds: dropdwn1.aud
-		RepulsionSpeed: 40
-		MaximumPitch: 56
-		IdealSeparation: 1c256
-		CanSlide: False
-	AutoTarget:
-		InitialStance: HoldFire
-		InitialStanceAI: AttackAnything
-	Contrail@1:
-		Offset: -750,-200,300
-		StartColorUsePlayerColor: true
-		ZOffset: -512
-	Contrail@2:
-		Offset: -750,200,300
-		StartColorUsePlayerColor: true
-		ZOffset: -512
-	SpawnActorOnDeath:
-		Actor: ENRV.Husk
-		RequiresCondition: !empdisable && !being-warped
-	SpawnActorOnDeath@EMP:
-		Actor: ENRV.Husk.EMP
-		RequiresCondition: empdisable && !being-warped
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	Selectable:
-	-EjectOnDeath:
-	AmmoPool:
-		Ammo: 4
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
-		PipCount: 4
-	ReloadAmmoPoolCA:
-		Delay: 750
-		Count: 4
-		DelayOnFire: 750
-		DelayAfterReset: 60
-		ShowSelectionBar: true
-		SelectionBarColor: ff00ff
-	GrantConditionOnPrerequisite@REGEN:
-		Condition: regen-upgrade
-		Prerequisites: regen.upgrade
-	ChangesHealth@REGEN1:
-		Step: 500
-		Delay: 25
-		StartIfBelow: 66
-		DamageCooldown: 200
-		RequiresCondition: regen-upgrade
-	ChangesHealth@REGEN2:
-		Step: 250
-		Delay: 25
-		StartIfBelow: 100
-		DamageCooldown: 200
-		RequiresCondition: regen-upgrade
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
+#enrv:
 
 DEVA:
 	Inherits: ^Airship
@@ -840,395 +714,6 @@ DEVA.Rift:
 		Weapon: DevastatorRift
 		LocalOffset: 500,0,0
 
-PAC:
-	Inherits: ^Airship
-	Inherits: ^ScrinSpriteRA2
-	Inherits: ^HeavyArmor
-	Inherits: ^PrioAntiLightAA
-	Inherits: ^BiologicalPilot
-	Inherits: ^ScrinShielded
-	RenderSprites:
-		Image: PAC
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
-		BuildPaletteOrder: 55
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~!commander_tree.carrier.warship, ~!commander_tree.carrier.suicide, ~!commander_tree.carrier.support
-		Description: Carrier that launches a squadron\nof assault craft.\n	Strong vs Vehicles, Aircraft\n  Weak vs Infantry, Buildings, Defenses
-		IconPalette: chrome
-	Voiced:
-		VoiceSet: PlanetaryAssaultCarrierVoice
-	Valued:
-		Cost: 2200
-	Tooltip:
-		Name: Planetary Assault Carrier
-	Health:
-		HP: 10000
-	RevealsShroud:
-		Range: 10c0
-		MinRange: 8c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 8c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: InvaderLauncher
-		LocalOffset: 0,0,0
-	Aircraft:
-		CruiseAltitude: 2c0
-		InitialFacing: 192
-		TurnSpeed: 12
-		Speed: 49
-		AltitudeVelocity: 0c50
-		CanForceLand: False
-	SpawnActorOnDeath:
-		Actor: PAC.Husk
-		RequiresCondition: !empdisable
-	SpawnActorOnDeath@EMP:
-		Actor: PAC.Husk.EMP
-		RequiresCondition: empdisable
-	WithFacingSpriteBody:
-		RequiresCondition: inva-loaded == 4
-		Name: idle
-	WithFacingSpriteBody@HALF:
-		RequiresCondition: inva-loaded < 4
-		Sequence: half-deployed
-		Name: half-deployed
-	AttackFrontal:
-		FacingTolerance: 1024
-		PauseOnCondition: empdisable || being-warped
-	CarrierMaster@carr1:
-		Actors: inva, inva, inva, inva
-		RearmTicks: 0
-		RespawnTicks: 200
-		InstaRepair: true
-		SlaveDisposalOnKill: KillSlaves
-		SpawnAllAtOnce: false
-		LoadedCondition: inva-loaded
-		RequiresCondition: !empdisable && !being-warped
-	Exit@0:
-		SpawnOffset: -100,0,0
-		Facing: 60
-	Exit@1:
-		SpawnOffset: -100,0,0
-		Facing: -60
-	Exit@2:
-		SpawnOffset: 100,0,0
-		Facing: 60
-	Exit@3:
-		SpawnOffset: 100,0,0
-		Facing: -60
-	DeathSounds:
-		Voice: Die
-	-EjectOnDeath:
-
-PAC.suicide:
-	Inherits: PAC
-	Inherits: ^PrioAntiLight
-	WithProductionIconOverlay@Skull:
-		Types: Skull
-	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.suicide
-		Description: Carrier with suicide drones.\n	Strong vs Vehicles, Infantry\n  Weak vs Anti-Air
-		IconPalette: chrome
-	Valued:
-		Cost: 3000
-	Tooltip:
-		Name: Suicide Drone Carrier
-	Armament@PRIMARY:
-		Weapon: InvaderLauncher.Suicide
-	CarrierMaster@carr1:
-		RespawnTicks: 100
-		Actors: inva.suicide, inva.suicide, inva.suicide, inva.suicide
-
-PAC.support:
-	Inherits: PAC
-	-AutoTarget:
-	-AutoTargetPriority@DEFAULT:
-	-AutoTargetPriority@ATTACKANYTHING:
-	WithProductionIconOverlay@Wrench:
-		Types: Wrench
-	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.support
-		Description: Massive Carrier with repair drones.\n	Repair drones have point laser defense.\n  Can teleport infantry directly into the field.\n  Strong vs Projectile based attacks.\n  Weak without army.
-		IconPalette: chrome
-	Valued:
-		Cost: 5000
-	Tooltip:
-		Name: Support Carrier
-	CarrierMaster@carr1:
-		Actors: inva.support, inva.support, inva.support, inva.support
-	Armament@PRIMARY:
-		Weapon: InvaderLauncher.Support
-		TargetRelationships: Ally
-	AutoTarget:
-	Armament@SECONDARY:
-		Weapon: Repair.Dummy
-		Name: primary
-		Cursor: repair
-		OutsideRangeCursor: repair
-		TargetRelationships: Ally
-	AutoTargetPriority@REPAIR:
-		ValidTargets: Repair, RepairInAir
-		ValidRelationships: Ally
-		Priority: 2
-
-PAC.laser:
-	Inherits: PAC
-	Inherits: ^PrioEnergyAntiHeavy
-	WithProductionIconOverlay@Laser:
-		Types: Laser
-	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~commander_tree.carrier.warship
-		Description: Massive Warship with multiple armor piercing laser systems.\n	Strong vs Vehicles\n  Weak vs Aircraft, Reflector
-		IconPalette: chrome
-	Valued:
-		Cost: 3600
-	Tooltip:
-		Name: Planetary Assault Warship
-	Health:
-		HP: 30000
-	Aircraft:
-		TurnSpeed: 8
-		Speed: 40
-	Armament@PRIMARY:
-		Name: primary
-		Weapon: WarshipLaser
-		LocalOffset: 500,0,0
-		PauseOnCondition: laser
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: WarshipLaser.2
-		LocalOffset: 0,550,0
-		PauseOnCondition: laser != 1
-	Armament@TERTIARY:
-		Name: tertiary
-		Weapon: WarshipLaser.3
-		LocalOffset: 0,-550,0
-		PauseOnCondition: laser != 2
-	GrantConditionOnAttack@GROUND:
-		ArmamentNames: primary, secondary, tertiary
-		Condition: laser
-		RequiredShotsPerInstance: 13
-		MaximumInstances: 3
-		RevokeDelay: 10
-		RevokeOnNewTarget: False
-		RevokeAll: True
-	-AttackFrontal:
-	AttackTurreted:
-		Armaments: primary, secondary, tertiary
-		PauseOnCondition: empdisable || being-warped
-	Turreted:
-		Offset: 0,0,0
-	-CarrierMaster@carr1:
-	-Exit@0:
-	-Exit@1:
-	-Exit@2:
-	-Exit@3:
-
-INVA:
-	Inherits: ^Plane
-	Inherits: ^ScrinSpriteTS
-	RenderSprites:
-		Image: INVA
-	Valued:
-		Cost: 50
-	Tooltip:
-		Name: Invader
-	Health:
-		HP: 4000
-	RevealsShroud:
-		Range: 2c0
-		MinRange: 1c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 1c0
-		Type: GroundPosition
-	Armament@PRIMARY:
-		Weapon: InvaderZap
-		PauseOnCondition: !ammo
-	Armament@SECONDARY:
-		Name: secondary
-		Weapon: InvaderZapAA
-		PauseOnCondition: !ammo
-	AttackAircraft:
-		FacingTolerance: 80
-		PersistentTargeting: false
-		OpportunityFire: false
-		PauseOnCondition: empdisable || being-warped
-	Aircraft:
-		CruiseAltitude: 2c0
-		InitialFacing: 192
-		TurnSpeed: 8
-		Speed: 220
-		MaximumPitch: 56
-		CanHover: False
-		CanSlide: False
-		RepulsionSpeed: 40
-		Repulsable: False
-		IdealSeparation: 0c256
-		VTOL: true
-		TakeoffSounds: invader-launch1.aud, invader-launch2.aud
-		LandingSounds: invader-dock.aud
-	Rearmable:
-		RearmActors: pac
-	AmmoPool:
-		Ammo: 12
-		AmmoCondition: ammo
-		ReloadDelay: 0
-	RejectsOrders:
-	SpawnActorOnDeath:
-		Actor: INVA.Husk
-		RequiresCondition: ammo && !empdisable
-	SpawnActorOnDeath@Empty:
-		Actor: INVA.Husk.empty
-		RequiresCondition: !ammo && !empdisable
-	SpawnActorOnDeath@EMP:
-		Actor: INVA.Husk.EMP
-		RequiresCondition: ammo && empdisable
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: INVA.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
-	-EjectOnDeath:
-	-Selectable:
-	Interactable:
-	-ActorLostNotification:
-	LeavesTrails:
-		Offsets: -253,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	CarrierSlave:
-		LandingDistance: 8c0
-	Contrail@1:
-		Offset: -432,0,0
-		StartColorUsePlayerColor: true
-		TrailLength: 10
-	-Contrail@2:
-	Interactable:
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-
-INVA.support:
-	Inherits: ^Plane
-	Inherits: ^ScrinSpriteTS
-	Valued:
-		Cost: 50
-	Tooltip:
-		Name: Invader
-	Health:
-		HP: 5000
-	RevealsShroud:
-		Range: 2c0
-		MinRange: 1c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 1c0
-		Type: GroundPosition
-	AttackAircraft:
-		FacingTolerance: 512
-		PersistentTargeting: true
-		OpportunityFire: true
-		PauseOnCondition: empdisable || being-warped
-	Aircraft:
-		CruiseAltitude: 2c0
-		InitialFacing: 192
-		TurnSpeed: 8
-		Speed: 220
-		MaximumPitch: 56
-		CanHover: False
-		CanSlide: False
-		RepulsionSpeed: 40
-		Repulsable: False
-		IdealSeparation: 0c256
-		VTOL: true
-		TakeoffSounds: invader-launch1.aud, invader-launch2.aud
-		LandingSounds: invader-dock.aud
-	AmmoPool:
-		Ammo: 20
-		AmmoCondition: ammo
-		ReloadDelay: 0
-	Rearmable:
-		RearmActors: pac
-	RejectsOrders:
-	SpawnActorOnDeath:
-		Actor: INVA.Husk
-		RequiresCondition: ammo && !empdisable
-	SpawnActorOnDeath@Empty:
-		Actor: INVA.Husk.empty
-		RequiresCondition: !ammo && !empdisable
-	SpawnActorOnDeath@EMP:
-		Actor: INVA.Husk.EMP
-		RequiresCondition: ammo && empdisable
-	SpawnActorOnDeath@EmptyEMP:
-		Actor: INVA.Husk.empty.EMP
-		RequiresCondition: !ammo && empdisable
-	-EjectOnDeath:
-	-Selectable:
-	Interactable:
-	-ActorLostNotification:
-	LeavesTrails:
-		Offsets: -253,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-		RequiresCondition: enable-smoke
-	CarrierSlave:
-		LandingDistance: 8c0
-	Contrail@1:
-		Offset: -432,0,0
-		StartColorUsePlayerColor: true
-		TrailLength: 10
-	-Contrail@2:
-	Interactable:
-	Armament@PRIMARY:
-		Weapon: InvaderZap.Repair
-		PauseOnCondition: !ammo
-	AutoTarget:
-	AutoTargetPriority@REPAIR:
-		ValidTargets: Repair, RepairInAir
-		ValidRelationships: Ally
-		Priority: 2
-	GrantConditionOnDamageState@SmokeTrail:
-		Condition: enable-smoke
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-
-INVA.suicide:
-	Inherits: INVA
-	FireWarheadsOnDeathCA@Acid:
-		Weapon: InvaderExplosion
-		RequiresCondition: triggered
-	KillsSelf:
-		RequiresCondition: triggered
-	Armament@PRIMARY:
-		Weapon: InvaderSuicide
-	GrantConditionOnAttack:
-		Condition: triggered
-	WithColoredOverlay@GHIGH:
-		RequiresCondition: triggered
-	-SpawnActorOnDeath:
-	-SpawnActorOnDeath@Empty:
-	-SpawnActorOnDeath@EMP:
-	-SpawnActorOnDeath@EmptyEMP:
-
 MSHP:
 	Inherits: ^Airship
 	Inherits: ^ScrinSprite
@@ -1240,7 +725,7 @@ MSHP:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 190
 		Prerequisites: sign, scrt, ~aircraft.scrin, ~commander_tree.mothership
-		Description: Huge craft with powerful beam weapon.\n  Can create wormholes.\n  Maximum 1 can be built.\n  Strong vs Buildings, Defenses\n  Weak vs Aircraft
+		Description: Huge craft with powerful beam weapon.\n  Can create wormholes.\n  Strong vs Buildings, Defenses\n  Weak vs Aircraft
 		IconPalette: scrin
 	Voiced:
 		VoiceSet: MothershipVoice
@@ -1584,43 +1069,6 @@ STMR.Husk.EMP:
 	Inherits: STMR.Husk
 	Inherits: ^EmpVisualEffect
 
-ENRV.Husk:
-	Inherits: ^PlaneHusk
-	Inherits: ^ScrinSpriteRA2
-	Tooltip:
-		Name: Enervator
-	Aircraft:
-		TurnSpeed: 14
-		Speed: 170
-	LeavesTrails:
-		Offsets: -427,0,0
-		Image: smokey
-		MovingInterval: 3
-		StationaryInterval: 3
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	Contrail@1:
-		Offset: -750,-200,300
-		StartColorUsePlayerColor: true
-	Contrail@2:
-		Offset: -750,200,300
-		StartColorUsePlayerColor: true
-	RevealsShroud:
-		Range: 12c0
-		MinRange: 10c0
-		Type: GroundPosition
-		RevealGeneratedShroud: false
-	RevealsShroud@GAPGEN:
-		Range: 10c0
-		Type: GroundPosition
-	RenderSprites:
-		Image: enrv
-
-ENRV.Husk.EMP:
-	Inherits: ENRV.Husk
-	Inherits@EMP: ^EmpVisualEffect
-
 DEVA.Husk:
 	Inherits: ^HelicopterHusk
 	Inherits: ^ScrinSpriteRA2
@@ -1697,7 +1145,7 @@ INVA.Husk.Empty.EMP:
 
 MSHP.Husk:
 	Inherits: ^HelicopterHusk
-	Inherits: ^ScrinSpriteRA2
+	Inherits: ^ScrinSprite
 	Tooltip:
 		Name: Mothership
 	Aircraft:
@@ -2852,9 +2300,9 @@ SCOL:
 		RequiresCondition: storm-active >= 56
 
 STRM:
-	Inherits@1: ^ExistsInWorld
-	Inherits@2: ^SpriteActor
-	Inherits@AUTOTARGET: ^AutoTargetAll
+	Inherits: ^ExistsInWorld
+	Inherits: ^SpriteActor
+	Inherits: ^AutoTargetAll
 	RenderSprites:
 		Palette: ioncloud-ignore-lighting-alpha50
 	HiddenUnderFog:

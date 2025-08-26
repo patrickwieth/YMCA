@@ -502,9 +502,6 @@ TSLA:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
-	ProductionCostMultiplier@RussiaBonus:
-		Multiplier: 90
-		Prerequisites: structures.russia
 	GrantConditionOnPowerState@LOWPOWER:
 		RequiresCondition: !charged
 	ExternalCondition@CHARGED:
@@ -524,8 +521,8 @@ TSLA:
 
 AGUN:
 	Inherits: ^Defense
-	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
-	Inherits@AUTOTARGET: ^AutoTargetAir
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetAir
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
@@ -709,13 +706,22 @@ DOME:
 		SquadSizes:
 			1: 3
 		UnitTypes:
-			1: p51
+			1: tarantula
+			#SpawnDelay: 20
+			#SpawnOffset: -1536,1024,0
+			#TargetOffset: -536,0,0
+			#SpawnDelay: 0
+			#SpawnOffset: 0,0,0
+			#TargetOffset: 0,0,0
+			#SpawnDelay: 20
+			#SpawnOffset: -1536,-1024,0
+			#TargetOffset: 536,0,0
 		Prerequisites: ~aircraft.england
 		Icon: strafe
 		ChargeInterval: 7500
 		Name: Strafing Run
 		Descriptions:
-			1: P51 ground attack planes strafe\nyour target.
+			1: Tarantula ground attack planes strafe\nyour target.
 		SelectTargetSpeechNotification: SelectTarget
 		CameraActor: camera
 		CameraRemoveDelay: 150
@@ -777,7 +783,7 @@ PBOX:
 
 HBOX:
 	Inherits: ^Defense
-	Inherits@AUTOTARGET: ^AutoTargetAll
+	Inherits: ^AutoTargetAll
 	Tooltip:
 		Name: Camo Pillbox
 	Building:
@@ -2075,9 +2081,9 @@ TENT:
 	ProvidesPrerequisite@germanstructure:
 		RequiresPrerequisites: structures.germany
 		Prerequisite: infantry.germany
-	ProvidesPrerequisite@mech:
+	ProvidesPrerequisite@mechanic:
 		Factions: allies, england, france, germany
-		Prerequisite: infantry.mech
+		Prerequisite: infantry.mechanic
 	ProvidesPrerequisite@medi:
 		Factions: allies, england, france, germany
 		Prerequisite: infantry.medi
@@ -2164,6 +2170,8 @@ SBAG:
 		Name: Sandbag Wall
 	Health:
 		HP: 15000
+	Crushable:
+		CrushClasses: wall, lightwall
 	LineBuild:
 		NodeTypes: sandbag
 	LineBuildNode:
@@ -2210,7 +2218,7 @@ BRIK:
 		DamagedSounds: crmble2.aud
 		DestroyedSounds: kaboom30.aud
 	Health:
-		HP: 40000
+		HP: 80000
 	Crushable:
 		CrushClasses: heavywall
 	BlocksProjectiles:
@@ -2223,7 +2231,7 @@ BRIK:
 
 CHAIN:
 	Inherits: ^Wall
-	Inherits@Armor: ^WoodArmor
+	Inherits: ^WoodArmor
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 20
@@ -2237,6 +2245,8 @@ CHAIN:
 		Name: Chain-link Fence
 	Health:
 		HP: 30000
+	Crushable:
+		CrushClasses: wall, lightwall
 	LineBuild:
 		NodeTypes: chain
 	LineBuildNode:
@@ -2246,7 +2256,7 @@ CHAIN:
 
 CYCL:
 	Inherits: ^Wall
-	Inherits@Armor: ^WoodArmor
+	Inherits: ^WoodArmor
 	Tooltip:
 		Name: Chain-Link Barrier
 	LineBuild:
@@ -2258,7 +2268,7 @@ CYCL:
 
 BARB:
 	Inherits: ^Wall
-	Inherits@Armor: ^WoodArmor
+	Inherits: ^WoodArmor
 	Tooltip:
 		Name: Barbed-Wire Fence
 	LineBuild:
@@ -2270,7 +2280,7 @@ BARB:
 
 WOOD:
 	Inherits: ^Wall
-	Inherits@Armor: ^WoodArmor
+	Inherits: ^WoodArmor
 	Tooltip:
 		Name: Wooden Fence
 	LineBuild:
@@ -2352,22 +2362,6 @@ REPAIR:
 	Buildable:
 		Description: Service Depot/Repair Facility
 
-INFANTRY.MEDI:
-	AlwaysVisible:
-	Interactable:
-	Tooltip:
-		Name: Barracks
-	Buildable:
-		Description: Medical Barracks
-
-INFANTRY.MECH:
-	AlwaysVisible:
-	Interactable:
-	Tooltip:
-		Name: Barracks
-	Buildable:
-		Description: Mechanical Barracks
-
 STRUCTURES.TSLA:
 	AlwaysVisible:
 	Interactable:
@@ -2448,8 +2442,11 @@ PYLE:
 		RequiresPrerequisites: structures.eagle
 		Prerequisite: infantry.eagle
 	ProvidesPrerequisite@medi:
-		Factions: gdi, talon, zocom, eagle
+		Factions: gdi, zocom, eagle
 		Prerequisite: infantry.medi
+	ProvidesPrerequisite@mechanic:
+		Factions: gdi, talon
+		Prerequisite: infantry.mechanic
 	Power:
 		Amount: -20
 		RequiresCondition: !being-warped
@@ -2531,9 +2528,6 @@ HAND:
 	ProvidesPrerequisite@legionstructure:
 		RequiresPrerequisites: structures.legion
 		Prerequisite: infantry.legion
-	ProvidesPrerequisite@mech:
-		Factions: nod, blackh, marked, legion
-		Prerequisite: infantry.mech
 	InfiltrateForSupportPower@inf:
 		Types: SabInfiltrate
 		Proxy: inf.nod.stolen
@@ -3008,12 +3002,18 @@ ATWR:
 	Inherits: ^DefenseTD
 	Inherits: ^DisableOnLowPower
 	Inherits: ^AutoTargetGround
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^RelayTargeting
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
 		Prerequisites: hq, ~structures.gdi, ~!structures.zocom
 		IconPalette: chrometd
-		Description: Advanced base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+		Description: Advanced base defense.\n Requires power to operate.\n Can detect cloaked units.\n Relay targeting system marks targets so other Advanced Guard Towers can shoot from longer distances.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Slow Aircraft
+		Weaknesses: • Weak vs. Point Defense Laser, Infantry
+		Attributes: • Relay targeting laser system.\n•Detects cloaked units
 	Valued:
 		Cost: 1000
 	Tooltip:
@@ -3038,38 +3038,35 @@ ATWR:
 		Name: primary
 		LocalOffset: 256,128,0, 256,-128,0
 		LocalYaw: -100,100
-		PauseOnCondition: !ammo
-	GrantConditionOnAttack@primary:
-		ArmamentNames: primary
-		Condition: fired
-		MaximumInstances: 1
-		RevokeDelay: 50
+		PauseOnCondition: !ammo || being-warped
 	Armament@secondary:
 		Weapon: StingerGTWR.Relay
 		Name: secondary
 		LocalOffset: 256,128,0, 256,-128,0
 		LocalYaw: -100,100
-		PauseOnCondition: !ammo
-	GrantConditionOnAttack@secondary:
-		ArmamentNames: secondary
-		Condition: relayfired
-		MaximumInstances: 1
-		RevokeDelay: 15
-	GrantConditionOnAttack@secondary:
-		ArmamentNames: secondary
-		Condition: fired
-		MaximumInstances: 1
-		RevokeDelay: 50
+		PauseOnCondition: !ammo || being-warped
 	Armament@tertiary:
+		Weapon: StingerGTWR.AA
+		Name: tertiary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo || being-warped
+	Armament@quartary:
+		Weapon: StingerGTWR.AA.Relay
+		Name: quartary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo || being-warped
+	Armament@flare:
 		Weapon: Flare.AGT
+		Name: flare
 		LocalOffset: 0,0,800
-		RequiresCondition: relayable
 	AttackTurreted:
-		Armaments: primary, secondary, tertiary
+		Armaments: primary, secondary, tertiary, quartary, flare
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
 	AmmoPool:
-		Armaments: primary, secondary
+		Armaments: primary, secondary, tertiary, quartary
 		Ammo: 2
 		AmmoCondition: ammo
 	ReloadAmmoPool:
@@ -3083,23 +3080,11 @@ ATWR:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
-	ProximityExternalCondition@RELAYABLE:
-		Range: 13c0
-		ValidRelationships: Ally
-		Condition: relayable
-		RequiresCondition: !fired || relayfired
-	ExternalCondition@RELAYABLE:
-		Condition: relayable
 	-RenderRangeCircle:
 	WithRangeCircle@1:
 		Color: C12900
 		Range: 7c0
-	WithRangeCircle@2:
-		Color: 29C000
-		Range: 13c0
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
+
 
 OBLI:
 	Inherits: ^DefenseTD
@@ -4221,7 +4206,7 @@ TMPL:
 PRIS:
 	Inherits: ^Defense
 	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits@AUTOTARGET: ^AutoTargetGround
+	Inherits: ^AutoTargetGround
 	AutoTargetPriority@DEFAULT:
 		InvalidTargets: NoAutoTarget, WaterStructure, PrismTower
 	AutoTargetPriority@ATTACKANYTHING:
@@ -4684,7 +4669,7 @@ CRAM:
 		RequiresCondition: gatling == 3
 	GrantConditionOnAttack:
 		Condition: gatling
-		RequiredShotsPerInstance: 1,6,12
+		RequiredShotsPerInstance: 1,4,7
 		MaximumInstances: 3
 		RevokeDelay: 40
 		RevokeOnNewTarget: False
@@ -4722,7 +4707,7 @@ LASP:
 		Name: body-offline
 		RequiresCondition: disabled
 	Health:
-		HP: 40000
+		HP: 100000
 	-Capturable:
 	-CaptureNotification:
 	-ProximityCaptor:
@@ -4730,8 +4715,6 @@ LASP:
 	-CapturableProgressBar:
 	-CapturableProgressBlink:
 	-MustBeDestroyed:
-	Sellable:
-		RequiresCondition: !build-incomplete && !c4 && !being-warped
 	Power:
 		Amount: -15
 		RequiresCondition: !being-warped
@@ -4745,7 +4728,7 @@ LASP:
 	LineBuildNode:
 		Types: laserfencenode
 	LineBuildSegmentExternalCondition:
-		RequiresCondition: !build-incomplete && !disabled
+		RequiresCondition: !disabled
 		Condition: active-posts
 
 LASF:
@@ -4767,6 +4750,7 @@ LASF:
 	EnergyWall:
 		ActiveCondition: active-posts == 2
 		Weapon: LaserFence
+		TerrainTypes: Clear, Rough, Road
 	GrantConditionOnLineBuildDirection@X:
 		Direction: X
 		Condition: laserfence-direction-x
@@ -4798,6 +4782,8 @@ LASF:
 		RequiresCondition: active-posts >= 2
 	DamageMultiplier: # Prevent all normal damage, but still allows direct kills from the post
 		Modifier: 0
+	Interactable:
+		Bounds: 2048, 1024
 
 PATR:
 	Inherits: ^DefenseTD
@@ -4892,9 +4878,6 @@ PATR:
 		Types: SpyInfiltrate, SabInfiltrate
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true

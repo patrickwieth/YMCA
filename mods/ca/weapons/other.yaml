@@ -209,9 +209,9 @@ HeavyFlameTankFlamerFF:
 
 BlackHandFlamer:
 	Inherits: HeavyFlameTankFlamer
-	ReloadDelay: 110
+	ReloadDelay: 120
 	BurstDelays: 2
-	Burst: 28
+	Burst: 20
 	Range: 3c512
 	Projectile: LinearPulse
 		Speed: 220
@@ -879,7 +879,7 @@ BattlePrisLaser.Mini:
 	-Warhead@Burst: FireCluster
 
 KirovBomb:
-	Inherits: ^ShellHE
+	Inherits: ^ShellArtillery
 	ReloadDelay: 35
 	ValidTargets: Ground, Water
 	InvalidTargets: Air
@@ -894,8 +894,8 @@ KirovBomb:
 		Shadow: True
 	Warhead@1Dam: SpreadDamage
 		Spread: 1c0
-		Falloff: 100, 40, 5, 0
-		Damage: 12500
+		Falloff: 100, 50, 25, 0
+		Damage: 15000
 		InvalidTargets: Air
 		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
 	Warhead@2Smu: LeaveSmudge
@@ -983,21 +983,6 @@ KirovCluster:
 		ImpactSounds: splashl1.aud, splashl2.aud
 		ValidTargets: Water, Underwater
 		InvalidTargets: Ship, Structure, Bridge
-
-MigTeslaBomb:
-	Inherits: KirovBomb
-	Warhead@1Dam: SpreadDamage
-		DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
-	Warhead@3Eff: CreateEffect
-		Explosions: tsla_bomb
-		ExplosionPalette: ra2effect
-		ImpactSounds: kirbo1.aud, kirbo2.aud
-	Warhead@5Tesla: FireShrapnel
-		Weapon: TTankZap.Arc
-		Amount: 3
-		AimChance: 100
-		AllowDirectHit: true
-		ThrowWithoutTarget: false
 
 TorpBomb:
 	Inherits: ^ShellHE
@@ -1089,8 +1074,8 @@ RadBomb:
 	Warhead@4Radiation: CreateTintedCells
 		Spread: 1c0
 		Falloff: 100, 75, 50, 25, 5, 0
-		Level: 500
-		MaxLevel: 10000
+		Level: 250
+		MaxLevel: 1000
 		LayerName: radioactivity
 
 ScrinBomb:
@@ -1389,31 +1374,6 @@ HornetLauncher:
 	Warhead@1Dam: TargetDamage
 		ValidTargets: Ground, Water, Underwater
 
-V3Launcher:
-	Inherits: ^MissileArtillery
-	ReloadDelay: 250
-	Range: 22c511
-	MinRange: 6c0
-	Report: vv3latta.aud, vv3lattb.aud
-	ValidTargets: Ground, Water
-	Projectile: InstantHit
-	Warhead@1Dam: TargetDamage
-		ValidTargets: Ground, Water
-	-Warhead@2Smu: LeaveSmudge
-	-Warhead@3Eff: CreateEffect
-	-Warhead@4EffWater: CreateEffect
-
-V4Launcher:
-	Inherits: ^MissileArtillery
-	ReloadDelay: 250
-	Range: 25c511
-	MinRange: 6c0
-	Report: vv3latta.aud, vv3lattb.aud
-	ValidTargets: Ground, Vehicle, Water
-	Projectile: InstantHit
-	Warhead@1Dam: TargetDamage
-		ValidTargets: Ground, Vehicle, Water
-
 ICBMLauncher:
 	ReloadDelay: 300
 	Range: 30c0
@@ -1447,16 +1407,16 @@ Flare:
 Flare.AGT:
 	Inherits: Flare
 	Range: 7c0
-	ValidTargets: Vehicle, Structure, Ship
+	ValidTargets: Vehicle, Structure, Ship, Air
 	Projectile: LaserZap
 		Width: 35
 		Color: FF600030
 		SecondaryBeamWidth: 45
 		SecondaryBeamColor: FF600030
 	Warhead@1Dam: TargetDamage
-		ValidTargets: Vehicle, Structure, Defense
+		ValidTargets: Vehicle, Structure, Defense, Ship, Air
 	Warhead@2Con: GrantExternalCondition
-		ValidTargets: Vehicle, Structure, Defense
+		ValidTargets: Vehicle, Structure, Defense, Ship, Air
 		Range: 0c32
 		Duration: 8
 		Condition: relayMarked
@@ -1464,16 +1424,16 @@ Flare.AGT:
 RelayMarker:
 	Inherits: Flare
 	-MinRange:
-	Range: 8c512
-	ValidTargets: Vehicle, Structure, Ship
+	Range: 10c512
+	ValidTargets: Vehicle, Structure, Ship, Air
 	Projectile: LaserZap
 		Width: 15
 		HitAnim: lightbluelasermuzzle
 		Color: 0060FF30
 	Warhead@1Dam: TargetDamage
-		ValidTargets: Vehicle, Structure, Defense
+		ValidTargets: Vehicle, Structure, Defense, Ship, Air
 	Warhead@2Con: GrantExternalCondition
-		ValidTargets: Vehicle, Structure, Defense
+		ValidTargets: Vehicle, Structure, Defense, Ship, Air
 		Range: 0c32
 		Duration: 8
 		Condition: relayMarked
@@ -1482,26 +1442,29 @@ Cloud.Chemical:
 	Inherits: ^Chemical
 	ReloadDelay: 20
 	Range: 1c0
-	ValidTargets: Ground, Water
+	ValidTargets: Air, Ground, Water
 	Projectile: InstantHit
 	Warhead@1Dam: SpreadDamage
 		Spread: 426
 		Damage: 200
 		Falloff: 1000, 368, 135, 50, 18, 7, 0
 		Delay: 5
-		ValidTargets: Ground, Trees
-		InvalidTargets: Air, Creep
+		ValidTargets: Air, Ground, Trees
+		InvalidTargets: Creep
 		DamageTypes: Prone50Percent, TriggerProne, RadiationDeath
 
 ToxinCloud:
 	Inherits: Cloud.Chemical
 	Inherits: ^Toxin
+	ValidTargets: Ground, Water
 	Warhead@18Radio: CreateTintedCells
 		Spread: 1c0
 		Level: 50
 		Falloff: 100, 75, 52, 15, 2
 		MaxLevel: 750
 		LayerName: toxin
+	Warhead@1Dam: SpreadDamage
+		InvalidTargets: Air, Creep
 
 Metal_Acid_Cloud:
 	Inherits: Cloud.Chemical
@@ -1912,14 +1875,6 @@ BeamCannon:
 		ValidRelationships: Neutral, Enemy
 		ValidTargets: Ground, Water
 		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
-	Warhead@2Dam: SpreadDamage
-		Range: 0, 32
-		Falloff: 50, 50
-		Damage: 250
-		InvalidTargets: BeamCannon, Air
-		AffectsParent: false
-		ValidRelationships: Ally
-		DamageTypes: Prone50Percent, TriggerProne, DefaultDeath
 
 BeamCannonBoosted1:
 	Inherits: BeamCannon
@@ -1929,8 +1884,6 @@ BeamCannonBoosted1:
 		Color: ff000035
 	Warhead@1Dam: SpreadDamage
 		Damage: 1000
-	Warhead@2Dam: SpreadDamage
-		Damage: 500
 
 BeamCannonBoosted2:
 	Inherits: BeamCannon
@@ -1940,8 +1893,6 @@ BeamCannonBoosted2:
 		Color: ff000045
 	Warhead@1Dam: SpreadDamage
 		Damage: 1500
-	Warhead@2Dam: SpreadDamage
-		Damage: 750
 
 BeamCannonBoosted3:
 	Inherits: BeamCannon
@@ -1951,8 +1902,6 @@ BeamCannonBoosted3:
 		Color: ff000055
 	Warhead@1Dam: SpreadDamage
 		Damage: 2000
-	Warhead@2Dam: SpreadDamage
-		Damage: 1000
 
 BeamCannonBoosted4:
 	Inherits: BeamCannon
@@ -1962,8 +1911,6 @@ BeamCannonBoosted4:
 		Color: ff000065
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
-	Warhead@2Dam: SpreadDamage
-		Damage: 1250
 
 BeamCannonBoosted5:
 	Inherits: BeamCannon
@@ -1973,8 +1920,6 @@ BeamCannonBoosted5:
 		Color: ff000075
 	Warhead@1Dam: SpreadDamage
 		Damage: 3000
-	Warhead@2Dam: SpreadDamage
-		Damage: 1500
 
 BeamCannonVisual:
 	ReloadDelay: 60

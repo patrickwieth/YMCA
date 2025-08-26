@@ -117,10 +117,10 @@ TRAN.Husk:
 		Type: GroundPosition
 	RenderSprites:
 		Image: tran
+		Palette: tsunit
 
 TRAN.Husk.EMP:
 	Inherits: TRAN.Husk
-	Inherits: ^EmpVisualEffect
 
 TRAN.Husk1:
 	Inherits: ^Husk
@@ -128,6 +128,7 @@ TRAN.Husk1:
 		Name: Husk (Chinook)
 	RenderSprites:
 		Image: tran1husk
+		Palette: tsunit
 	-Capturable:
 	-TransformOnCapture:
 	-InfiltrateForTransform:
@@ -202,69 +203,6 @@ B2B.Husk:
 
 B2B.Husk.EMP:
 	Inherits: B2B.Husk
-	Inherits: ^EmpVisualEffect
-
-MIG.Husk:
-	Inherits: ^PlaneHusk
-	Tooltip:
-		Name: MiG Attack Plane
-	Contrail@1:
-		Offset: -598,-683,0
-	Contrail@2:
-		Offset: -598,683,0
-	Aircraft:
-		TurnSpeed: 20
-		Speed: 186
-	LeavesTrails:
-		Offsets: -853,0,171
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	RevealsShroud:
-		Range: 13c0
-		Type: GroundPosition
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 11c0
-		Type: GroundPosition
-	RenderSprites:
-		Image: mig
-
-MIG.Husk.EMP:
-	Inherits: MIG.Husk
-	Inherits: ^EmpVisualEffect
-
-MIG.Husk.Empty:
-	Inherits: ^PlaneHuskEmpty
-	Inherits: MIG.Husk
-
-MIG.Husk.Empty.EMP:
-	Inherits: MIG.Husk.Empty
-	Inherits: ^EmpVisualEffect
-
-SU47.Husk:
-	Inherits: MIG.Husk
-	Inherits: ^VoxelJetHusk
-	RenderVoxels:
-		Scale: 0.6
-		Image: su47.husk
-	RenderSprites:
-		Image: su47
-		PlayerPalette: overlayplayertd
-
-SU47.Husk.EMP:
-	Inherits: SU47.Husk
-	Inherits: ^EmpVisualEffect
-
-SU47.Husk.Empty:
-	Inherits: ^PlaneHuskEmpty
-	Inherits: MIG.Husk
-
-SU47.Husk.Empty.EMP:
-	Inherits: MIG.Husk.Empty
 	Inherits: ^EmpVisualEffect
 
 YAK.Husk:
@@ -688,20 +626,6 @@ BIKE.Husk:
 		Image: bike.destroyed
 		PlayerPalette: overlayplayertd
 
-MSAM.Husk:
-	Inherits: ^HuskTD
-	Tooltip:
-		Name: Husk (MLRS)
-	ThrowsParticle@turret:
-		Anim: turret
-	TransformOnCapture:
-		IntoActor: msam
-	InfiltrateForTransform:
-		IntoActor: msam
-	RenderSprites:
-		Image: msam.destroyed
-		PlayerPalette: overlayplayertd
-
 STNK.Husk:
 	Inherits: ^HuskTD
 	Tooltip:
@@ -956,48 +880,6 @@ BTR.Husk:
 		IntoActor: btr
 	RenderSprites:
 		Image: BTR.destroyed
-
-KIRO.Husk:
-	Inherits: ^VoxelHelicopterHusk
-	WithVoxelHelicopterBody:
-		Offset: 0,0,-1500
-	RenderVoxels:
-		Scale: 5
-		Image: kiro.husk
-	Tooltip:
-		Name: Kirov
-	Aircraft:
-		TurnSpeed: 8
-		Speed: 30
-	FallsToEarth:
-		MaximumSpinSpeed: 0
-	LeavesTrails@0:
-		Offsets: -432,560,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	LeavesTrails@1:
-		Offsets: -432,-560,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	RevealsShroud:
-		Range: 10c0
-		Type: CenterPosition
-	RenderSprites:
-		Image: kirov
-	FallsToEarth:
-		Explosion: KirovExplode
-
-KIRO.Husk.EMP:
-	Inherits: KIRO.Husk
-	Inherits: ^EmpVisualEffect
 
 BLIMP.Husk:
 	Inherits: ^HelicopterHusk
@@ -1306,31 +1188,6 @@ orca_bomber.Husk.Empty.EMP:
 	Inherits: orca_bomber.Husk.Empty
 	Inherits: ^EmpVisualEffect
 
-FROG.Husk:
-	Inherits: ^VoxelPlaneHusk
-	RenderVoxels:
-		Scale: 0.6
-		Image: frog
-	Tooltip:
-		Name: Frogfoot Attack Plane
-	RenderSprites:
-		Image: frog
-		PlayerPalette: overlayplayertd
-
-FROG.Husk.EMP:
-	Inherits: FROG.Husk
-	Inherits: ^EmpVisualEffect
-
-FROG.Husk.Empty:
-	Inherits: ^PlaneHuskEmpty
-	Inherits: FROG.Husk
-	FallsToEarth:
-		Explosion: UnitExplodeDroneEmpty
-
-FROG.Husk.Empty.EMP:
-	Inherits: FROG.Husk.Empty
-	Inherits: ^EmpVisualEffect
-
 SUK.Husk:
 	Inherits: ^VoxelJetHusk
 	RenderVoxels:
@@ -1618,39 +1475,3 @@ TTNK.RA2.Husk:
 		IntoActor: ttnk.ra2
 	RenderSprites:
 		Image: ttnk.ra2.destroyed
-
-P51.Husk:
-	Inherits: ^PlaneHusk
-	Tooltip:
-		Name: P51 Attack Plane
-	Aircraft:
-		TurnSpeed: 5
-		Speed: 149
-	LeavesTrails:
-		Offsets: -853,0,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	Contrail@1:
-		Offset: -98,-683,-10
-	Contrail@2:
-		Offset: -98,683,-10
-	RevealsShroud:
-		Range: 11c0
-		MinRange: 9c0
-		Type: GroundPosition
-		RevealGeneratedShroud: false
-	RevealsShroud@GAPGEN:
-		Range: 9c0
-		Type: GroundPosition
-	RenderSprites:
-		Image: p51
-	FallsToEarth:
-		Explosion: UnitExplodePlaneLight
-
-P51.Husk.EMP:
-	Inherits: P51.Husk
-	Inherits: ^EmpVisualEffect

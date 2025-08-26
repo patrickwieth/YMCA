@@ -1,3 +1,55 @@
+
+# General Upgrades
+
+commander_tree.General_Armaggeddon:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: General Armaggeddon
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.the_chef
+		Description: Pick General Armageddon to specialize in artillery. \n General Armageddon is not a buildable unit. \n Unlocks the MAD Tank. \n Artillery units fire 20% faster.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+commander_tree.TikTok_Warrior:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: TikTok Warrior
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.the_chef, ~!commander_tree.general_armaggeddon
+		Description: Pick TikTok Warrior to specialize in propaganda. \n TikTok Warrior is not a buildable unit. \n Unlocks the Chechen Paradrop. \n Range of Propaganda effect is increased.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+commander_tree.The_Chef:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: The Chef
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.general_armaggeddon
+		Description: Pick the Chef Cook to specialize in penal battalions.\n The Chef Cook is not a buildable unit. \n Unlocks the Prison Building (not yet implemented). \n Infantry is 10% cheaper.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.soviet_general
+
+hack.cameo_filler.sovietgeneral.1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~filler.soviet_general
+
+hack.cameo_filler.sovietgeneral.2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 0
+		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~filler.soviet_general
+
+
 commander_tree.War_Miners:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
@@ -7,6 +59,173 @@ commander_tree.War_Miners:
 		IconPalette: chrome
 		Prerequisites: prerequisite.has_points, ~structures.soviet, ~anypower
 		Description: Equips Miners with a gatling turret. \nWar Miners can attack ground and air.
+
+
+commander_tree.Tesla_Arc:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tesla Arcing
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.russia
+		Description: Upgrades the Tesla Coils to allow its Zaps to arc over to more units. \n  This makes the Tesla Vehicles more effective against large groups.
+
+commander_tree.Tesla_Damage:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Tesla Damage
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.russia
+		Description: Upgrades the Tesla Coils to increase its damage by 20%.
+
+commander_tree.Chemical_Missiles:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Chemical Missiles
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.iraq
+		Description: RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.\nChemical missiles release a chemical cloud on impact.
+
+commander_tree.Metal_Acid_Missiles:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Metal Acid Missiles
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.iraq, commander_tree.chemical_missiles
+		Description: The Chemical Missiles are improved by releasing metal acid clouds.\nThose are efficient against heavy armored targets.
+
+commander_tree.Artillery_Upgrade:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Artillery Upgrade
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea
+		Description: North Korean artillery systems deal 20% more damage.
+
+commander_tree.Cluster_Grenades:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Cluster Grenades
+	Buildable:
+		BuildPaletteOrder: 103
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea
+		Description: Akatsiya, T-34, ISU, People's Tank and Katyusha emit additional cluster grenades on impact.
+
+hack.cameo_filler.soviet_base_tech:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 104
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+
+# Aircraft
+
+commander_tree.Mig:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mig-31
+	RenderSprites:
+		Image: mig31
+	WithProductionIconOverlay@APMissile:
+		Types: APMissile
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
+		Description: Enables to build the Mig. \n  It is an attack fighter best suited for taking out single heavy tanks.
+
+commander_tree.Heavy_Bomber.Nuke:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Heavy Bomber
+	RenderSprites:
+		Image: heavybomber
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.iraq
+		Description: Upgrades the Mig to a Nuke bomber. \n  It drops a single nuclear bomb with devastating damage.
+
+commander_tree.Mig.AA:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: SU-47 Air Superiority
+	RenderSprites:
+		Image: su47
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
+		Description: Unlocks the SU-47 air superiority fighter.
+
+commander_tree.Heavy_Bomber.Tesla:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Heavy Tesla Bomber
+	RenderSprites:
+		Image: heavybomber
+	WithProductionIconOverlay@Tesla:
+		Types: Tesla
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.russia
+		Description: Unlocks the Heavy Tesla Bomber. \nIt has a single bomb that emits a lot of tesla zaps.
+
+# Vehicles
+
+commander_tree.V3_Launcher:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: V3 Launcher
+	RenderSprites:
+		Image: v3rl
+	Buildable:
+		BuildPaletteOrder: 114
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.nkorea, ~!commander_tree.akatsiya, ~!commander_tree.katyusha
+		Description: Enables to build the V3 Launcher as Advanced Siege Vehicle. \n  The V3 has the longest range, but the Rocket can be shot down.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietarty
+
+commander_tree.Akatsiya:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Akatsiya
+	RenderSprites:
+		Image: 2s3
+	Buildable:
+		BuildPaletteOrder: 115
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.iraq, ~!commander_tree.v3_launcher, ~!commander_tree.katyusha
+		Description: Enables to build the Akatsiya as Advanced Siege Vehicle. \n  The Akatsiya has the best armor and can hit moving targets with its cluster bombs.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietarty
+
+commander_tree.Katyusha:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Katyusha
+	RenderSprites:
+		Image: katy
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 115
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.russia, ~!commander_tree.v3_launcher, ~!commander_tree.akatsiya
+		Description: Enables to build the Katyusha as Advanced Siege Vehicle. \n  The Katyusha fires the most projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.sovietarty
+
+hack.cameo_filler.108:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 116
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+
+hack.cameo_filler.109:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 116
+		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
 
 commander_tree.Heavy_Tank.AP:
 	Inherits: ^default.commander_tree_item
@@ -539,8 +758,10 @@ commander_tree.Rice_Cooker:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Kim's Giant Rice Cooker
+	RenderSprites:
+		Image: rice_cooker
 	Buildable:
-		BuildPaletteOrder: 140
+		BuildPaletteOrder: 139
 		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, indp
 		Description: Unlocks Kim's Giant Rice Cooker. \nThe great leader has engineered the best Rice Cooker in the world.\nHis excellency's engineering is so supreme, the Rice Cooker can be used as an artillery\nand unsurprisingly is the best artillery in the world.\nOnce the great leader steered the Rice Cooker and fired a shot that flew around the globe and hit South Korea from the south!
 
@@ -551,7 +772,7 @@ commander_tree.Gene_Splicer:
 	RenderSprites:
 		Image: gene_splicer
 	Buildable:
-		BuildPaletteOrder: 140
+		BuildPaletteOrder: 139
 		Prerequisites: prerequisite.has_points, ~vehicles.iraq, cloning_vats
 		Description: Unlocks the Gene Splicer. \nIt is a three legged Walker that shoots out specifically modulated radiation. \nThe radiation kills drivers of vehicles and turns infantry into Zombies.
 
@@ -562,9 +783,9 @@ commander_tree.Tsar:
 	RenderSprites:
 		Image: tsar
 	Buildable:
-		BuildPaletteOrder: 140
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, indp, ~disabled
-		Description: Unlocks the Tsar Tank. \nIt is a giant slow moving deployable tank.
+		BuildPaletteOrder: 139
+		Prerequisites: prerequisite.has_points, ~vehicles.russia, indp
+		Description: Unlocks the Tsar Tank. \nIt is a giant slow moving deployable tank. \n not yet implemented
 
 hack.cameo_filler.soviet_epic1:
 	Inherits: ^default.cameo_filler
@@ -656,7 +877,7 @@ commander_tree.Hind.Torp:
 hack.cameo_filler.113:
 	Inherits: ^default.cameo_filler
 	Buildable:
-		BuildPaletteOrder: 128
+		BuildPaletteOrder: 129
 		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
 
 hack.cameo_filler.114:
@@ -664,3 +885,151 @@ hack.cameo_filler.114:
 	Buildable:
 		BuildPaletteOrder: 129
 		Prerequisites: prerequisite.has_points, ~filler.hind, disabled
+
+
+commander_tree.Frogfoot:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Frogfoot SU-25
+	RenderSprites:
+		Image: frog
+	Buildable:
+		BuildPaletteOrder: 140
+		Prerequisites: prerequisite.has_points, ~aircraft.russia
+		Description: Enables to build the SU-25 Frogfoot. \n  A bomber optimized to take down large groups of ground units or buildings.
+
+commander_tree.Il11b:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Ilyushin-11b
+	RenderSprites:
+		Image: il11b
+	Buildable:
+		BuildPaletteOrder: 140
+		Prerequisites: prerequisite.has_points, ~aircraft.nkorea
+		Description: Enables to build the Ilyushin-11b. \n  A bomber optimized to take down large groups of ground units or buildings.
+
+commander_tree.Dirty_Frogfoot:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Dirty Frogfoot
+	RenderSprites:
+		Image: frog
+	WithProductionIconOverlay@Hazard:
+		Types: Hazard
+	Buildable:
+		BuildPaletteOrder: 140
+		Prerequisites: prerequisite.has_points, ~aircraft.iraq
+		Description: Enables to build the Dirty Frogfoot. \n  It is a bomber armed with dirty bombs leaving a lot of radiation at the strike site.
+
+hack.cameo_filler.115:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 141
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
+
+hack.cameo_filler.116:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 141
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
+
+
+commander_tree.Airship:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Airship of the People
+	RenderSprites:
+		Image: blimp
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!commander_tree.kirov.carrier, ~!commander_tree.kirov.mecha, ~!commander_tree.kirov.demo, ~!commander_tree.kirov.v3
+		Description: Upgrades Kirov to the Airship of the People. \n  It greatly accelerates the Revolution by paradropping revolutionaries on the field.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+commander_tree.Kirov.V3:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Kirov V3 System
+	RenderSprites:
+		Image: kirov.v3
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.nkorea, ~!commander_tree.kirov.carrier, ~!commander_tree.airship
+		Description: Heavily armoured airship equipped with V3 long range rockets.
+	TooltipExtras:
+		Strengths: • Strong vs Buildings, Massed units
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+commander_tree.Kirov.Demo:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Nuke Kirov
+	RenderSprites:
+		Image: kirov.demo
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.iraq, ~!commander_tree.kirov.mecha, ~!commander_tree.airship
+		Description: Heavily armoured airship equipped with an atomic bomb.
+	TooltipExtras:
+		Strengths: • Strong vs everything it can reach
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+commander_tree.Kirov.Mecha:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Mecha Kirov
+	RenderSprites:
+		Image: kirov.mecha
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea, ~!commander_tree.kirov.demo, ~!commander_tree.airship
+		Description: Heavily armoured airship equipped with a flamethrower (iraq) or tesla coil (russia).
+	TooltipExtras:
+		Strengths: • Strong vs Ground Units
+		Weaknesses: • Weak vs Anti-Air, Aircraft
+		Attributes: • Very slow
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+commander_tree.Kirov.Carrier:
+	Inherits: ^default.commander_tree_item
+	Tooltip:
+		Name: Kirov Carrier
+	RenderSprites:
+		Image: kirov.carrier
+	Buildable:
+		BuildPaletteOrder: 144
+		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.nkorea, ~!commander_tree.kirov.v3, ~!commander_tree.airship
+		Description: Heavily armoured airship carrier.\n  Sends out Yak-41 to fight opposing forces.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Aircraft, Buildings
+		Weaknesses: • Weak vs Point-Defense Lasers, Anti-Air
+		Attributes: • Very slow
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.kirov
+
+hack.cameo_filler.kirov1:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 145
+		Prerequisites: prerequisite.has_points, ~aircraft.russia, disabled
+
+hack.cameo_filler.kirov2:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 145
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!aircraft.russia, ~filler.kirov, disabled
+
+hack.cameo_filler.kirov3:
+	Inherits: ^default.cameo_filler
+	Buildable:
+		BuildPaletteOrder: 145
+		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~filler.kirov, disabled

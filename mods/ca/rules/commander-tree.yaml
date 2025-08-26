@@ -18,7 +18,6 @@
 	Interactable:
 	AlwaysVisible:
 	Buildable:
-		BuildDurationModifier: 100
 		Queue: Commander_Tree
 		BuildLimit: 1
 		ForceIconLocation: true
@@ -32,10 +31,8 @@ commander_tree.point_defense_turret:
 	Tooltip:
 		Name: Point Laser Defense Turret
 	Buildable:
-
 		BuildPaletteOrder: 1
 		IconPalette: chrometd
-
 		Prerequisites: prerequisite.has_points, ~anypower, ~!china
 		Description: Enables to build the Point Laser Defense Turret.\n  It shoots down incoming shells and missiles.
 
@@ -44,10 +41,8 @@ commander_tree.oil_pumps:
 	Tooltip:
 		Name: Oil Pump
 	Buildable:
-
 		BuildPaletteOrder: 2
 		IconPalette: chrometd
-
 		Prerequisites: prerequisite.has_points, ~anypower, ~global.oilpumps
 		Description: Enables to build Oil Pumps, Oil Platforms, and Supply Trucks.\n  Generates slow trickling endless income.
 
@@ -89,10 +84,8 @@ commander_tree.advanced_infantry_training:
 	Tooltip:
 		Name: Advanced Infantry Training
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 5
-
 		Prerequisites: prerequisite.has_points, ~infantry.any
 		Description: Enables to build specialized Infantry.
 
@@ -140,27 +133,15 @@ hack.cameo_filler.4:
 		Prerequisites: prerequisite.has_points, ~infantry.any, ~disabled
 
 
-
-
 #ALLIES
-commander_tree.Spec_Ops:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Spec Ops
-	Buildable:
-		BuildPaletteOrder: 7
-		Prerequisites: prerequisite.has_points, ~infantry.allies, commander_tree.advanced_infantry_training, techcenter
-		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
 
 commander_tree.Scout_Tank_PDL:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Scout Tank Point Laser Defense System
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 13
-
 		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter, ~!commander_tree.scout_tank.reflector
 		Description: Upgrades the Scout Tank with a Point Laser Defense to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
@@ -171,9 +152,7 @@ commander_tree.Scout_Tank.Reflector:
 	Tooltip:
 		Name: Scout Tank Reflector Armor
 	Buildable:
-
 		BuildPaletteOrder: 13
-
 		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.france, techcenter, ~!commander_tree.scout_tank_pdl
 		Description: Equips the Scout Tank with a Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
@@ -479,83 +458,21 @@ hack.cameo_filler.Aurora2:
 
 
 #Soviet
-commander_tree.Mortar:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mortar
-	Buildable:
-
-		BuildPaletteOrder: 6
-
-		Prerequisites: prerequisite.has_points, radar, ~infantry.soviet, commander_tree.advanced_infantry_training
-		Description: Enables to build the Mortar Infantry. \n  It fires mortar shells over a great distance, good vs light armored units and buildings.
-
 commander_tree.Yuri:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Yuri
 	Buildable:
-
 		BuildPaletteOrder: 99
-
 		Prerequisites: prerequisite.has_points, ~infantry.soviet
 		Description: Form Unholy Alliance with Yuri and his forces. \n This replaces multiple units and support powers: \n  Lasher Tank replaces Heavy Tank. \n  Yuri replaces Boris. \n  Chaos Drone replaces MAD Tank \n  Genetic Mutation Bomb replaces Parabombs. \n
-
-hack.cameo_filler.99a:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 99
-		Prerequisites: prerequisite.has_points, ~infantry.soviet, disabled
-
-hack.cameo_filler.99b:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 99
-		Prerequisites: prerequisite.has_points, ~infantry.soviet, disabled
-
-commander_tree.Tesla_Tank_Arc:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Tesla Tank Arcing
-	Buildable:
-
-		IconPalette: chrometd
-		BuildPaletteOrder: 103
-
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.russia
-		Description: Upgrades the Tesla Tanks Coils to allow its Zaps to arc over to more units. \n  This makes the Tesla Tank effective against large groups.
-
-hack.cameo_filler.101:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 104
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, disabled
-
-hack.cameo_filler.102:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 105
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, disabled
-
-commander_tree.Flak_Track:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Flak Track
-	Buildable:
-
-		BuildPaletteOrder: 0
-
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.soviet
-		Description: Upgrades the BTR with Flak cannons. \n  This makes it less efficient vs. vehicles and better vs. air units.
 
 commander_tree.Flak_Track.Barrage:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Mobile Barrage Flak
 	Buildable:
-
 		BuildPaletteOrder: 106
-
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.russia
 		Description: Upgrades the Flak Track with fast firing Flak cannons. \n  This makes it better vs. Point Laser Defense Systems and groups of units.
 
@@ -571,64 +488,12 @@ hack.cameo_filler.104:
 		BuildPaletteOrder: 108
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~!vehicles.russia, disabled
 
-commander_tree.V3_Launcher:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: V3 Launcher
-	Buildable:
-		BuildPaletteOrder: 114
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.iraq, ~!commander_tree.akatsiya, ~!commander_tree.katyusha
-		Description: Enables to build the V3 Launcher as Advanced Siege Vehicle. \n  The V3 has the longest range, but the Rocket can be shot down.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietarty
-
-commander_tree.Akatsiya:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Akatsiya
-	RenderSprites:
-		Image: 2s3
-	Buildable:
-		BuildPaletteOrder: 115
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.nkorea, ~!commander_tree.v3_launcher, ~!commander_tree.katyusha
-		Description: Enables to build the Akatsiya as Advanced Siege Vehicle. \n  The Akatsiya has the best armor and can hit moving targets with its cluster bombs.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietarty
-
-commander_tree.Katyusha:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Katyusha
-	Buildable:
-
-		IconPalette: chrometd
-		BuildPaletteOrder: 115
-
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.russia, ~!commander_tree.v3_launcher, ~!commander_tree.akatsiya
-		Description: Enables to build the Katyusha as Advanced Siege Vehicle. \n  The Katyusha fires the most projectiles.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietarty
-
-hack.cameo_filler.108:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 116
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
-
-hack.cameo_filler.109:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 116
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
-
 commander_tree.BTR:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: BTR
 	Buildable:
-
 		BuildPaletteOrder: 117
-
 		Prerequisites: prerequisite.has_points, techcenter, ~!commander_tree.nona_svk, ~!commander_tree.surveillance_btr, ~vehicles.soviet
 		Description: Enables to build the BTR.\n  It is a missile based anti-air troop transporter. \nOptimal for taking out heavy air units.
 	ProvidesPrerequisite@filler:
@@ -674,50 +539,13 @@ hack.cameo_filler.109b:
 		BuildPaletteOrder: 118
 		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled, ~filler.btr
 
-commander_tree.Frogfoot:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Frogfoot
-	Buildable:
-
-		BuildPaletteOrder: 130
-
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!aircraft.iraq
-		Description: Enables to build the Frogfoot. \n  A bomber optimized to take down large groups of ground units or buildings.
-
-commander_tree.Dirty_Frogfoot:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Dirty Frogfoot
-	Buildable:
-
-		IconPalette: chrometd
-		BuildPaletteOrder: 131
-
-		Prerequisites: prerequisite.has_points, ~aircraft.iraq
-		Description: Enables to build the Dirty Frogfoot. \n  It is a bomber armed with dirty bombs leaving a lot of radiation at the strike site.
-
-hack.cameo_filler.115:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 132
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
-
-hack.cameo_filler.116:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 133
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
-
 commander_tree.Chemyak:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Chemyak
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 134
-
 		Prerequisites: prerequisite.has_points, ~aircraft.iraq
 		Description: Equips the Yak Plane with chemical spray. \n  It is more efficient vs. heavy vehicles and buildings.
 
@@ -726,10 +554,8 @@ commander_tree.Chemyak_Volatile_Tanks:
 	Tooltip:
 		Name: Chemyak Volatile Tanks
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 135
-
 		Prerequisites: prerequisite.has_points, ~aircraft.iraq, techcenter, commander_tree.chemyak
 		Description: Modifies the chemical tanks of the Chemyak to release acid clouds on crash.
 
@@ -744,9 +570,7 @@ commander_tree.Sukhoi:
 	Tooltip:
 		Name: SU-27 Flanker
 	Buildable:
-
 		BuildPaletteOrder: 137
-
 		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.nkorea
 		Description: Allows to build the Sukhoi. \n  It is a attack fighter to take down groups of vehicles.
 
@@ -755,10 +579,8 @@ commander_tree.Sukhoi_Concussion:
 	Tooltip:
 		Name: SU-27 Concussion Bombs
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 138
-
 		Prerequisites: prerequisite.has_points, ~aircraft.nkorea, techcenter, commander_tree.sukhoi
 		Description: Upgrades the bombs of Sukhois to cause concussion near the strike site.
 
@@ -767,162 +589,6 @@ hack.cameo_filler.118:
 	Buildable:
 		BuildPaletteOrder: 139
 		Prerequisites: prerequisite.has_points, ~aircraft.nkorea, disabled
-
-commander_tree.Airship:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Airship of the People
-	Buildable:
-
-		BuildPaletteOrder: 141
-
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet
-		Description: Enables to build the Airship of the People. \n  It greatly accelerates the Revolution by paradropping revolutionaries on the field.
-
-hack.cameo_filler.119:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 142
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
-
-hack.cameo_filler.120:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 143
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
-
-commander_tree.Kirov:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Kirov
-	Buildable:
-
-		BuildPaletteOrder: 144
-
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet
-		Description: Enables to build the Kirov. \n  It is a slow moving blimp dropping devastating bombs.
-
-hack.cameo_filler.121:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 145
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
-
-hack.cameo_filler.122:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 146
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
-
-commander_tree.Mig:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mig
-	Buildable:
-
-		BuildPaletteOrder: 147
-
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
-		Description: Enables to build the Mig. \n  It is an attack fighter best suited for taking out single vehicles.
-
-commander_tree.Mig.Nuke:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Nuke Mig
-	Buildable:
-
-		BuildPaletteOrder: 148
-
-		Prerequisites: prerequisite.has_points, techcenter, commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.tesla, ~aircraft.iraq
-		Description: Upgrades the Mig to a Nuke bomber. \n  It drops a single nuclear bomb with devastating damage.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.mig
-
-commander_tree.Mig.AA:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Mig Anti-Aircraft
-	Buildable:
-
-		BuildPaletteOrder: 149
-
-		Prerequisites: prerequisite.has_points, techcenter, commander_tree.mig, ~!commander_tree.mig.tesla, ~!commander_tree.mig.nuke, ~aircraft.soviet, ~!aircraft.nkorea
-		Description: Upgrades the Mig to be able to attack aircraft.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.mig
-
-commander_tree.Mig.Tesla:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Tesla Mig
-	Buildable:
-
-		BuildPaletteOrder: 150
-
-		Prerequisites: prerequisite.has_points, techcenter, commander_tree.mig, ~!commander_tree.mig.aa, ~!commander_tree.mig.nuke, ~aircraft.russia
-		Description: Equips the Mig with Tesla bombs. \n  It increases the damage of the mig vs. groups of enemies.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.mig
-
-hack.cameo_filler.123:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 151
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~aircraft.!nkorea, ~filler.mig, disabled
-
-commander_tree.General_Armaggeddon:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: General Armaggeddon
-	Buildable:
-
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.the_chef
-		Description: Pick General Armageddon to specialize in artillery. \n General Armageddon is not a buildable unit. \n Unlocks the MAD Tank. \n Artillery units fire 20% faster.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
-
-commander_tree.TikTok_Warrior:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: TikTok Warrior
-	Buildable:
-
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.the_chef, ~!commander_tree.general_armaggeddon
-		Description: Pick TikTok Warrior to specialize in propaganda. \n TikTok Warrior is not a buildable unit. \n Unlocks the Chechen Paradrop. \n Range of Propaganda effect is increased.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
-
-commander_tree.The_Chef:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: The Chef
-	Buildable:
-
-		IconPalette: chrometd
-		BuildPaletteOrder: 0
-
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.general_armaggeddon
-		Description: Pick the Chef Cook to specialize in penal battalions.\n The Chef Cook is not a buildable unit. \n Unlocks the Prison Building (not yet implemented). \n Infantry is 10% cheaper.
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
-
-hack.cameo_filler.sovietgeneral.1:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~filler.soviet_general
-
-hack.cameo_filler.sovietgeneral.2:
-	Inherits: ^default.cameo_filler
-	Buildable:
-		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, radar, ~structures.soviet, ~filler.soviet_general
 
 #GDI
 commander_tree.Slingshot:
@@ -972,9 +638,7 @@ commander_tree.Hover_MLRS.Reflector:
 	Tooltip:
 		Name: Hover MLRS Reflector
 	Buildable:
-
 		BuildPaletteOrder: 211
-
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, techcenter, ~commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs, ~!commander_tree.hover_mlrs.pdl
 		Description: Equips the Hover MLRS with Reflector Armor. \n Very resistent vs. Energy Weapons.
 
@@ -983,9 +647,7 @@ commander_tree.Hover_MLRS.PDL:
 	Tooltip:
 		Name: Hover MLRS PDL
 	Buildable:
-
 		BuildPaletteOrder: 211
-
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, ~!vehicles.eagle, techcenter, ~commander_tree.hover_mlrs, ~!commander_tree.hailstorm_mlrs, ~!commander_tree.hover_mlrs.reflector
 		Description: Upgrades the Hover MLRS with a Point Laser Defense System. \n Very resistent vs. Projectile Weapons.
 
@@ -994,10 +656,8 @@ commander_tree.Hailstorm_MLRS:
 	Tooltip:
 		Name: Hailstorm MLRS
 	Buildable:
-
 		BuildPaletteOrder: 212
 		IconPalette: chrometd
-
 		Prerequisites: prerequisite.has_points, ~vehicles.gdi, techcenter, ~!commander_tree.hover_mlrs
 		Description: Enables to build the Hailstorm MLRS. \n  The Hailstorm MLRS fires a lot of rockets over long distances. \n This upgrade removes the anti-air capabilities.
 	ProvidesPrerequisite@filler:
@@ -1035,7 +695,7 @@ commander_tree.Mobile_Sensor_PDL:
 		Image: msar
 	Buildable:
 		BuildPaletteOrder: 216
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.td
+		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.gdi
 		Description: Upgrades the Mobile Sensor Array with a Point Laser Defense System.
 	WithProductionIconOverlay@PDL:
 		Types: PDL
@@ -1341,26 +1001,14 @@ hack.cameo_filler.223:
 
 
 #Nod
-commander_tree.Chemical_Mortar:
-	Inherits: ^default.commander_tree_item
-	Tooltip:
-		Name: Chemical Mortar Infantry
-	Buildable:
-
-		BuildPaletteOrder: 7
-
-		Prerequisites: prerequisite.has_points, ~infantry.nod, ~!infantry.marked, commander_tree.advanced_infantry_training
-		Description: Enables to build mortar infantry firing chemical shells
 
 commander_tree.Elite_Cyborg:
 	Inherits: ^default.commander_tree_item
 	Tooltip:
 		Name: Elite Cyborg
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 303
-
 		Prerequisites: prerequisite.has_points, ~infantry.nod, bio.nod, ~commander_tree.advanced_infantry_training
 		Description: Enables to build the Elite Cyborg. \n  A very tough cyborg infantry with scrin weaponry. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
 
@@ -1369,9 +1017,7 @@ commander_tree.Elite_Cyborg.Range:
 	Tooltip:
 		Name: Elite Cyborg (Range)
 	Buildable:
-
 		BuildPaletteOrder: 304
-
 		Prerequisites: prerequisite.has_points, ~infantry.nod, bio.nod, commander_tree.elite_cyborg, ~commander_tree.advanced_infantry_training
 		Description: Upgrades the range of the Elite Cyborg.
 
@@ -1386,24 +1032,22 @@ commander_tree.Rebel_Leader:
 	Tooltip:
 		Name: Nod Rebel Leader
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 306
-
-		Prerequisites: prerequisite.has_points, ~infantry.nod, techcenter, ~commander_tree.advanced_infantry_training
+		Prerequisites: prerequisite.has_points, ~infantry.nod, techcenter, ~commander_tree.advanced_infantry_training, ~disabled
 		Description: Enables to recruit the Rebel Leader who allows to train infantry from the map edges.
 
 hack.cameo_filler.303:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 307
-		Prerequisites: prerequisite.has_points, ~infantry.nod, disabled, ~commander_tree.advanced_infantry_training
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~disabled, ~commander_tree.advanced_infantry_training
 
 hack.cameo_filler.304:
 	Inherits: ^default.cameo_filler
 	Buildable:
 		BuildPaletteOrder: 308
-		Prerequisites: prerequisite.has_points, ~infantry.nod, disabled, ~commander_tree.advanced_infantry_training
+		Prerequisites: prerequisite.has_points, ~infantry.nod, ~disabled, ~commander_tree.advanced_infantry_training
 
 commander_tree.Reinforcements_Coordinator:
 	Inherits: ^default.commander_tree_item

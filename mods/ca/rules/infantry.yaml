@@ -39,13 +39,11 @@ DOG:
 		PauseOnCondition: attacking || attack-cooldown || being-warped
 	AttackMove:
 		Voice: Move
-	GrantConditionOnAttack:
+	GrantConditionOnAttackCA:
 		Condition: eating
 		RevokeDelay: 45
 	GrantConditionWhileAiming:
 		Condition: run
-	AutoTarget:
-		InitialStance: AttackAnything
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Infantry
 	Targetable:
@@ -315,154 +313,6 @@ VICE:
 	Targetable:
 		TargetTypes: Ground, Infantry, Creep, ChaosImmune, MindControlImmune
 
-Mortar:
-	Inherits: ^Soldier
-	Inherits: ^PrioArtillery
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 40
-		Prerequisites: ~commander_tree.mortar, ~infantry.soviet
-		Description: Artillery Infantry armed with a Mortar.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
-	Valued:
-		Cost: 150
-	Tooltip:
-		Name: Mortar
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 2500
-	Armament@PRIMARY:
-		Weapon: mortar
-		LocalOffset: 0,0,155
-		FireDelay: 15
-	Armament@Garrison:
-		Name: mounted
-		Weapon: mortarE
-		LocalOffset: 0,0,155
-		FireDelay: 15
-	AttackFrontal:
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	WithInfantryBody:
-		DefaultAttackSequence: throw
-	FireWarheadsOnDeathCA:
-		Weapon: UnitExplodeChemSmall
-		EmptyWeapon: UnitExplodeChemSmall
-		Chance: 33
-		RequiresCondition: !being-warped
-	WithDeathAnimation:
-		DeathSequencePalette: playertd
-
-Mortar.Chemical:
-	Inherits: ^Soldier
-	Inherits: ^PrioArtillery
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 40
-		Prerequisites: ~commander_tree.chemical_mortar, ~infantry.nod
-		Description: Artillery Infantry armed with a Chemical Mortar.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
-	Valued:
-		Cost: 150
-	Tooltip:
-		Name: Chemical Mortar
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 2500
-	Armament@PRIMARY:
-		Weapon: mortar.chemical
-		LocalOffset: 0,0,155
-		FireDelay: 15
-	Armament@Garrison:
-		Name: mounted
-		Weapon: mortarE.chemical
-		LocalOffset: 0,0,155
-		FireDelay: 15
-	AttackFrontal:
-		PauseOnCondition: being-warped
-		FacingTolerance: 0
-	WithInfantryBody:
-		DefaultAttackSequence: throw
-	FireWarheadsOnDeathCA:
-		Weapon: UnitExplodeChemSmall
-		EmptyWeapon: UnitExplodeChemSmall
-		Chance: 33
-		RequiresCondition: !being-warped
-	WithDeathAnimation:
-		DeathSequencePalette: playertd
-
-E8:
-	Inherits: ^Soldier
-	Inherits: ^PrioAntiInfantry
-	Buildable:
-		Queue: Infantry
-		BuildAtProductionType: Soldier
-		BuildPaletteOrder: 70
-		Prerequisites: ~infantry.iraq, radar, ~commander_tree.advanced_infantry_training
-		Description: Anti-infantry unit.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft\n  Special Ability: Desolate Ground\n  Special Ability: Irradiates Vehicles
-	Valued:
-		Cost: 800
-	Tooltip:
-		Name: Desolator
-	UpdatesPlayerStatistics:
-		AddToArmyValue: true
-	Health:
-		HP: 18000
-	Mobile:
-		Voice: Move
-		PauseOnCondition: !undeployed && being-warped
-	RevealsShroud:
-		Range: 5c0
-	Armament@PRIMARY:
-		Weapon: RadBeamWeapon
-		LocalOffset: 427,0,341
-	Armament@Garrison:
-		Name: mounted
-		Weapon: RadBeamWeaponE
-		LocalOffset: 427,0,341
-	TakeCover:
-		ProneOffset: 384,0,-395
-	AttackFrontal:
-		Voice: Attack
-		PauseOnCondition: being-warped || !undeployed
-		FacingTolerance: 0
-	AttackMove:
-		Voice: Move
-	Passenger:
-		Voice: Move
-	Guard:
-		Voice: Move
-	Voiced:
-		VoiceSet: DesVoice
-	-Crushable:
-	PeriodicExplosion:
-		Weapon: RadEruptionWeapon
-		RequiresCondition: deployed
-		InitialDelay: 20
-	GrantConditionOnDeploy:
-		DeployedCondition: deployed
-		UndeployedCondition: undeployed
-		UndeployOnMove: True
-		Facing: 368
-		Voice: Attack
-		PauseOnCondition: being-warped
-	WithInfantryBody:
-		RequiresCondition: !being-warped && undeployed
-	WithSpriteBody@DEPLOYED:
-		Sequence: deployed
-		RequiresCondition: !undeployed
-		Name: deployed
-	WithMakeAnimation:
-		Sequence: deploy
-		BodyNames: deployed
-	-DamagedByTintedCells@RAD:
-	-DamagedByTintedCells@RADHAZMAT:
-	AutoDeployer@AI:
-		DeployChance: 20
-		RequiresCondition: botowner
-
 LEADER:
 	Inherits: ^CivInfantry
 	Inherits: ^ArmedCivilian
@@ -514,11 +364,10 @@ LEADER:
 Brute:
 	Inherits: ^Soldier
 	Inherits: ^InfantryRA2Sprite
-	Inherits@Armor: ^LightArmor
+	Inherits: ^LightArmor
 	Inherits: ^PrioAntiHeavy
 	AutoTarget:
 		ScanRadius: 4
-		InitialStance: AttackAnything
 	Buildable:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
@@ -684,7 +533,7 @@ SHAD:
 		Range: 4c0
 	-WithParachute:
 	AmmoPool:
-		Ammo: 1
+		Ammo: 3
 		Armaments: none
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
@@ -704,8 +553,8 @@ SHAD:
 
 SHAD.Commando:
 	Inherits: SHAD
-	Inherits@detect: ^SensorEquipment
-	Inherits@COMMANDOSKULL: ^CommandoSkull
+	Inherits: ^SensorEquipment
+	Inherits: ^CommandoSkull
 	Tooltip:
 		Name: Shadow Commando
 	Buildable:
@@ -728,7 +577,7 @@ SHAD.Commando:
 		Weapon: ShadowOperativeGun.Commando
 	ReloadAmmoPool:
 		Delay: 500
-		Count: 1
+		Count: 3
 	Minelayer:
 		Mine: SHAB.commando
 		TileUnknownName: build-valid
@@ -884,6 +733,7 @@ SGLI.discarded:
 
 SEAL:
 	Inherits: RMBO
+	Inherits: ^InfantryTDSprite
 	Valued:
 		Cost: 1000
 	Tooltip:
