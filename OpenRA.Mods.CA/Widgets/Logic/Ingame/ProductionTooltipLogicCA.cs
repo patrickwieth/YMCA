@@ -22,6 +22,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 {
 	public class ProductionTooltipLogicCA : ChromeLogic
 	{
+		[FluentReference("prequisites")]
+		const string Requires = "label-requires";
+
 		[ObjectCreator.UseCtor]
 		public ProductionTooltipLogicCA(Widget widget, TooltipContainerWidget tooltipContainer, Player player, Func<ProductionIcon> getTooltipIcon)
 		{
@@ -212,7 +215,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 				if (hotkeyLabel.Visible)
 				{
-					var hotkeyText = "({0})".F(hotkey.DisplayString());
+					var hotkeyText = $"({hotkey.DisplayString()})";
 
 					hotkeyWidth = font.Measure(hotkeyText).X + 2 * nameLabel.Bounds.X;
 					hotkeyLabel.Text = hotkeyText;
@@ -225,7 +228,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				var requiresSize = int2.Zero;
 				if (prereqs.Any())
 				{
-					requiresLabel.Text = requiresFormat.F(prereqs.JoinWith(", "));
+					var requiresText = FluentProvider.GetMessage(Requires, "prerequisites", prereqs.JoinWith(", "));
+					requiresLabel.GetText = () => requiresText;
 					requiresSize = requiresFont.Measure(requiresLabel.Text);
 					requiresLabel.Visible = true;
 					descLabel.Bounds.Y = descLabelY + requiresLabel.Bounds.Height + (descLabel.Bounds.X / 2);
