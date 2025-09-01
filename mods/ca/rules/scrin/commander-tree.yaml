@@ -1,7 +1,7 @@
 #Scrin
 
-commander_tree.Gunwalker.Sensor:
-	Inherits: ^default.commander_tree_item
+promotion.Gunwalker.Sensor:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: GUNW
 	WithProductionIconOverlay@Eye:
@@ -12,23 +12,23 @@ commander_tree.Gunwalker.Sensor:
 
 		BuildPaletteOrder: 400
 		
-		Prerequisites: prerequisite.has_points, wsph, ~vehicles.scrin
+		Prerequisites: has_points, wsph, ~vehicles.scrin
 		Description: Upgrades the Gunwalker with improved sensor bionics. Gives stealth detection.
 
 hack.cameo_filler.400:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 401
-		Prerequisites: prerequisite.has_points, wsph, ~vehicles.scrin, disabled
+		Prerequisites: has_points, wsph, ~vehicles.scrin, disabled
 
 hack.cameo_filler.401:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 402
-		Prerequisites: prerequisite.has_points, wsph, ~vehicles.scrin, disabled
+		Prerequisites: has_points, wsph, ~vehicles.scrin, disabled
 
-commander_tree.Interloper.AA:
-	Inherits: ^default.commander_tree_item
+promotion.Interloper.AA:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: INTL
 	WithProductionIconOverlay@Air:
@@ -39,13 +39,13 @@ commander_tree.Interloper.AA:
 
 		BuildPaletteOrder: 403
 		
-		Prerequisites: prerequisite.has_points, wsph, ~vehicles.scrin, ~!commander_tree.interloper.teleport
+		Prerequisites: has_points, wsph, ~vehicles.scrin, ~!promotion.interloper.teleport
 		Description: Upgrades the Interloper with anti-air lasers.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.interloper
 
-commander_tree.Interloper.Teleport:
-	Inherits: ^default.commander_tree_item
+promotion.Interloper.Teleport:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: INTL
 	WithProductionIconOverlay@Wrench:
@@ -56,25 +56,25 @@ commander_tree.Interloper.Teleport:
 
 		BuildPaletteOrder: 404
 		
-		Prerequisites: prerequisite.has_points, wsph, ~vehicles.scrin, ~!commander_tree.interloper.aa
+		Prerequisites: has_points, wsph, ~vehicles.scrin, ~!promotion.interloper.aa
 		Description: Upgrades the Interloper with teleport system.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.interloper
 
 hack.cameo_filler.402:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 405
-		Prerequisites: prerequisite.has_points, ~filler.interloper, disabled
+		Prerequisites: has_points, ~filler.interloper, disabled
 
 hack.cameo_filler.403:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 406
-		Prerequisites: prerequisite.has_points, wsph, ~vehicles.scrin, disabled
+		Prerequisites: has_points, wsph, ~vehicles.scrin, disabled
 
-commander_tree.Corrupter.Area:
-	Inherits: ^default.commander_tree_item
+promotion.Corrupter.Area:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: CORR
 	WithProductionIconOverlay@Bullets:
@@ -85,13 +85,13 @@ commander_tree.Corrupter.Area:
 
 		BuildPaletteOrder: 409
 		
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.scrin, ~!commander_tree.corrupter.range
+		Prerequisites: has_points, nerv, ~vehicles.scrin, ~!promotion.corrupter.range
 		Description: Upgrades the Corrupter with an area attack.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.corrupter
 
-commander_tree.Corrupter.Range:
-	Inherits: ^default.commander_tree_item
+promotion.Corrupter.Range:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: CORR
 	WithProductionIconOverlay@Crosshair:
@@ -102,13 +102,13 @@ commander_tree.Corrupter.Range:
 
 		BuildPaletteOrder: 410
 		
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.scrin, ~!commander_tree.corrupter.area
+		Prerequisites: has_points, nerv, ~vehicles.scrin, ~!promotion.corrupter.area
 		Description: Upgrades the Corrupter with greater range.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.corrupter
 
-commander_tree.Corrupter.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Corrupter.PDL:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: CORR
 	WithProductionIconOverlay@PDL:
@@ -119,13 +119,13 @@ commander_tree.Corrupter.PDL:
 
 		BuildPaletteOrder: 411
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.scrin, ~filler.corrupter, ~!commander_tree.corrupter.reflector
+		Prerequisites: has_points, techcenter, ~vehicles.scrin, ~filler.corrupter, ~!promotion.corrupter.reflector
 		Description: Upgrades the Corrupter with a Point Laser Defense system. \nPDL intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.corrupter2
 
-commander_tree.Corrupter.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Corrupter.Reflector:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: CORR
 	WithProductionIconOverlay@Reflector:
@@ -136,25 +136,25 @@ commander_tree.Corrupter.Reflector:
 
 		BuildPaletteOrder: 411
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.scrin, ~filler.corrupter, ~!commander_tree.corrupter.pdl
+		Prerequisites: has_points, techcenter, ~vehicles.scrin, ~filler.corrupter, ~!promotion.corrupter.pdl
 		Description: Upgrades the Corrupter with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.corrupter2
 
 hack.cameo_filler.404:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 411
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.scrin, ~!filler.corrupter, disabled
+		Prerequisites: has_points, nerv, ~vehicles.scrin, ~!filler.corrupter, disabled
 
 hack.cameo_filler.405:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 412
-		Prerequisites: prerequisite.has_points, ~vehicles.scrin, ~filler.corrupter2, disabled
+		Prerequisites: has_points, ~vehicles.scrin, ~filler.corrupter2, disabled
 
-commander_tree.Devourer.Acid:
-	Inherits: ^default.commander_tree_item
+promotion.Devourer.Acid:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: DEVO
 	WithProductionIconOverlay@Hazard:
@@ -165,13 +165,13 @@ commander_tree.Devourer.Acid:
 
 		BuildPaletteOrder: 413
 		
-		Prerequisites: prerequisite.has_points, radar, ~vehicles.traveler, ~!commander_tree.devourer.heavy
+		Prerequisites: has_points, radar, ~vehicles.traveler, ~!promotion.devourer.heavy
 		Description: Upgrades the Devourer with an acid attack.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.devourer
 
-commander_tree.Devourer.Heavy:
-	Inherits: ^default.commander_tree_item
+promotion.Devourer.Heavy:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: DEVO
 	WithProductionIconOverlay@Shield:
@@ -182,25 +182,25 @@ commander_tree.Devourer.Heavy:
 
 		BuildPaletteOrder: 414
 		
-		Prerequisites: prerequisite.has_points, radar, ~vehicles.traveler, ~!commander_tree.devourer.acid
+		Prerequisites: has_points, radar, ~vehicles.traveler, ~!promotion.devourer.acid
 		Description: Upgrades the Devourer with heavy armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.devourer
 
 hack.cameo_filler.406:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 415
-		Prerequisites: prerequisite.has_points,  radar, ~vehicles.traveler, disabled
+		Prerequisites: has_points,  radar, ~vehicles.traveler, disabled
 
 hack.cameo_filler.407:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 416
-		Prerequisites: prerequisite.has_points, ~filler.devourer, disabled
+		Prerequisites: has_points, ~filler.devourer, disabled
 
-commander_tree.Channeler.Chain:
-	Inherits: ^default.commander_tree_item
+promotion.Channeler.Chain:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: channeler
 	WithProductionIconOverlay@Chainer:
@@ -211,13 +211,13 @@ commander_tree.Channeler.Chain:
 
 		BuildPaletteOrder: 417
 		
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.harvester, ~!commander_tree.channeler.disc
+		Prerequisites: has_points, nerv, ~vehicles.harvester, ~!promotion.channeler.disc
 		Description: Upgrades the Channeler with a chaining rift beam turning it into the Chainneler (:D).
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.channeler
 
-commander_tree.Channeler.Disc:
-	Inherits: ^default.commander_tree_item
+promotion.Channeler.Disc:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: channeler
 	WithProductionIconOverlay@Shell:
@@ -228,13 +228,13 @@ commander_tree.Channeler.Disc:
 
 		BuildPaletteOrder: 418
 		
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.harvester, ~!commander_tree.channeler.chain
+		Prerequisites: has_points, nerv, ~vehicles.harvester, ~!promotion.channeler.chain
 		Description: Equips the Channeler with armor piercing disks.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.channeler
 
-commander_tree.Channeler.pdl:
-	Inherits: ^default.commander_tree_item
+promotion.Channeler.pdl:
+	Inherits: ^promotion_item
 	WithProductionIconOverlay@PDL:
 		Types: PDL
 	RenderSprites:
@@ -245,13 +245,13 @@ commander_tree.Channeler.pdl:
 
 		BuildPaletteOrder: 420
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.harvester, ~filler.channeler, ~!commander_tree.channeler.reflector
+		Prerequisites: has_points, techcenter, ~vehicles.harvester, ~filler.channeler, ~!promotion.channeler.reflector
 		Description: Upgrades the Channeler with a Point Laser Defense system. \nPDL intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.channeler2
 
-commander_tree.Channeler.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Channeler.Reflector:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: channeler
 	WithProductionIconOverlay@Reflector:
@@ -262,26 +262,26 @@ commander_tree.Channeler.Reflector:
 
 		BuildPaletteOrder: 420
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.harvester, ~filler.channeler, ~!commander_tree.channeler.pdl
+		Prerequisites: has_points, techcenter, ~vehicles.harvester, ~filler.channeler, ~!promotion.channeler.pdl
 		Description: Upgrades the Channeler with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.channeler2
 
 hack.cameo_filler.408:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 420
-		Prerequisites: prerequisite.has_points, ~vehicles.harvester, ~!filler.channeler, disabled
+		Prerequisites: has_points, ~vehicles.harvester, ~!filler.channeler, disabled
 
 hack.cameo_filler.409:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 420
-		Prerequisites: prerequisite.has_points, ~vehicles.harvester, ~filler.channeler2, disabled
+		Prerequisites: has_points, ~vehicles.harvester, ~filler.channeler2, disabled
 
 
-commander_tree.Seeker.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Seeker.PDL:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: SEEK
 	WithProductionIconOverlay@PDL:
@@ -292,13 +292,13 @@ commander_tree.Seeker.PDL:
 
 		BuildPaletteOrder: 421
 		
-		Prerequisites: prerequisite.has_points, vehicles.any, techcenter, ~vehicles.seek, ~!commander_tree.seeker.reflector
+		Prerequisites: has_points, vehicles.any, techcenter, ~vehicles.seek, ~!promotion.seeker.reflector
 		Description: Upgrades the Seeker with a Point Laser Defense system. \nPDL intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.seeker
 
-commander_tree.Seeker.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Seeker.Reflector:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: SEEK
 	WithProductionIconOverlay@Reflector:
@@ -309,25 +309,25 @@ commander_tree.Seeker.Reflector:
 
 		BuildPaletteOrder: 422
 		
-		Prerequisites: prerequisite.has_points, vehicles.any, techcenter, ~vehicles.seek, ~!commander_tree.seeker.pdl
+		Prerequisites: has_points, vehicles.any, techcenter, ~vehicles.seek, ~!promotion.seeker.pdl
 		Description: Upgrades the Seeker with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.seeker
 
 hack.cameo_filler.410:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 423
-		Prerequisites: prerequisite.has_points, vehicles.any, ~vehicles.seek, disabled
+		Prerequisites: has_points, vehicles.any, ~vehicles.seek, disabled
 
 hack.cameo_filler.411:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 424
-		Prerequisites: prerequisite.has_points, ~filler.seeker, disabled
+		Prerequisites: has_points, ~filler.seeker, disabled
 
-commander_tree.Lacerator.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Lacerator.PDL:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: LACE
 	WithProductionIconOverlay@PDL:
@@ -338,13 +338,13 @@ commander_tree.Lacerator.PDL:
 
 		BuildPaletteOrder: 425
 		
-		Prerequisites: prerequisite.has_points, vehicles.any, techcenter, ~vehicles.traveler, ~!commander_tree.lacerator.ap, ~!commander_tree.lacerator.reflector
+		Prerequisites: has_points, vehicles.any, techcenter, ~vehicles.traveler, ~!promotion.lacerator.ap, ~!promotion.lacerator.reflector
 		Description: Upgrades the Lacerator with a Point Laser Defense system. \nPDL intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.lacerator
 
-commander_tree.Lacerator.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Lacerator.Reflector:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: LACE
 	WithProductionIconOverlay@Reflector:
@@ -355,13 +355,13 @@ commander_tree.Lacerator.Reflector:
 
 		BuildPaletteOrder: 426
 		
-		Prerequisites: prerequisite.has_points, vehicles.any, techcenter, ~vehicles.traveler, ~!commander_tree.lacerator.pdl, ~!commander_tree.lacerator.ap
+		Prerequisites: has_points, vehicles.any, techcenter, ~vehicles.traveler, ~!promotion.lacerator.pdl, ~!promotion.lacerator.ap
 		Description: Upgrades the Lacerator with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.lacerator
 
-commander_tree.Lacerator.AP:
-	Inherits: ^default.commander_tree_item
+promotion.Lacerator.AP:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: LACE
 	WithProductionIconOverlay@Shell:
@@ -372,25 +372,25 @@ commander_tree.Lacerator.AP:
 
 		BuildPaletteOrder: 427
 		
-		Prerequisites: prerequisite.has_points, vehicles.any, ~vehicles.traveler, ~!commander_tree.lacerator.pdl, ~!commander_tree.lacerator.reflector
+		Prerequisites: has_points, vehicles.any, ~vehicles.traveler, ~!promotion.lacerator.pdl, ~!promotion.lacerator.reflector
 		Description: Upgrades the Lacerator with Armor Piercing Discs.\n AP Discs are very efficient vs heavy armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.lacerator
 
 hack.cameo_filler.412:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 428
-		Prerequisites: prerequisite.has_points, ~filler.lacerator, disabled
+		Prerequisites: has_points, ~filler.lacerator, disabled
 
 hack.cameo_filler.413:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 429
-		Prerequisites: prerequisite.has_points, ~filler.lacerator, disabled
+		Prerequisites: has_points, ~filler.lacerator, disabled
 
-commander_tree.Ruiner.Barrage:
-	Inherits: ^default.commander_tree_item
+promotion.Ruiner.Barrage:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: RUIN
 	WithProductionIconOverlay@Bullets:
@@ -401,23 +401,23 @@ commander_tree.Ruiner.Barrage:
 
 		BuildPaletteOrder: 430
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.harvester
+		Prerequisites: has_points, techcenter, ~vehicles.harvester
 		Description: Upgrades the Ruiner with a barrage cannon, capable of firing much faster.
 
 hack.cameo_filler.414:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 431
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.harvester, disabled
+		Prerequisites: has_points, techcenter, ~vehicles.harvester, disabled
 
 hack.cameo_filler.415:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 432
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.harvester, disabled
+		Prerequisites: has_points, techcenter, ~vehicles.harvester, disabled
 
-commander_tree.Tripod.Chainer:
-	Inherits: ^default.commander_tree_item
+promotion.Tripod.Chainer:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: TPOD
 	WithProductionIconOverlay@Chainer:
@@ -428,13 +428,13 @@ commander_tree.Tripod.Chainer:
 
 		BuildPaletteOrder: 433
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.traveler, ~!commander_tree.tripod.acid
+		Prerequisites: has_points, techcenter, ~vehicles.traveler, ~!promotion.tripod.acid
 		Description: Upgrades the Tripod with imporoved laser chaining to a second and third target.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tripod
 
-commander_tree.Tripod.Acid:
-	Inherits: ^default.commander_tree_item
+promotion.Tripod.Acid:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: TPOD
 	WithProductionIconOverlay@Hazard:
@@ -445,13 +445,13 @@ commander_tree.Tripod.Acid:
 
 		BuildPaletteOrder: 435
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.traveler, ~!commander_tree.tripod.chainer
+		Prerequisites: has_points, techcenter, ~vehicles.traveler, ~!promotion.tripod.chainer
 		Description: Upgrades the Tripod with Acid Spray. \nAcid Spray is efficient vs Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tripod
 
-commander_tree.Tripod.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Tripod.PDL:
+	Inherits: ^promotion_item
 	WithProductionIconOverlay@PDL:
 		Types: PDL
 	RenderSprites:
@@ -462,13 +462,13 @@ commander_tree.Tripod.PDL:
 
 		BuildPaletteOrder: 437
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.traveler, ~filler.tripod, ~!commander_tree.tripod.reflector
+		Prerequisites: has_points, techcenter, ~vehicles.traveler, ~filler.tripod, ~!promotion.tripod.reflector
 		Description: Upgrades the Tripod with a Point Laser Defense system. \nPDL intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tripod2
 
-commander_tree.Tripod.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Tripod.Reflector:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: TPOD
 	WithProductionIconOverlay@Reflector:
@@ -479,25 +479,25 @@ commander_tree.Tripod.Reflector:
 
 		BuildPaletteOrder: 438
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.traveler, ~filler.tripod, ~!commander_tree.tripod.pdl
+		Prerequisites: has_points, techcenter, ~vehicles.traveler, ~filler.tripod, ~!promotion.tripod.pdl
 		Description: Upgrades the Tripod with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tripod2
 
 hack.cameo_filler.416:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 439
-		Prerequisites: prerequisite.has_points, ~vehicles.tpod, ~!filler.tripod, disabled
+		Prerequisites: has_points, ~vehicles.tpod, ~!filler.tripod, disabled
 
 hack.cameo_filler.416a:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 439
-		Prerequisites: prerequisite.has_points, ~vehicles.tpod, ~filler.tripod2, disabled
+		Prerequisites: has_points, ~vehicles.tpod, ~filler.tripod2, disabled
 
-commander_tree.Reaper.Acid:
-	Inherits: ^default.commander_tree_item
+promotion.Reaper.Acid:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: RPTP
 	WithProductionIconOverlay@Hazard:
@@ -508,13 +508,13 @@ commander_tree.Reaper.Acid:
 
 		BuildPaletteOrder: 440
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.reaper, ~!commander_tree.reaper.range
+		Prerequisites: has_points, techcenter, ~vehicles.reaper, ~!promotion.reaper.range
 		Description: Upgrades the Reaper with Acid Spray. \nAcid Spray is efficient vs Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.reaper
 
-commander_tree.Reaper.Range:
-	Inherits: ^default.commander_tree_item
+promotion.Reaper.Range:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: RPTP
 	WithProductionIconOverlay@Crosshair:
@@ -525,13 +525,13 @@ commander_tree.Reaper.Range:
 
 		BuildPaletteOrder: 440
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.reaper, ~!commander_tree.reaper.acid
+		Prerequisites: has_points, techcenter, ~vehicles.reaper, ~!promotion.reaper.acid
 		Description: Upgrades the Reaper with higher range.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.reaper
 
-commander_tree.Reaper.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Reaper.PDL:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: RPTP
 	WithProductionIconOverlay@PDL:
@@ -542,13 +542,13 @@ commander_tree.Reaper.PDL:
 
 		BuildPaletteOrder: 441
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.reaper, ~filler.reaper, ~!commander_tree.reaper.reflector
+		Prerequisites: has_points, techcenter, ~vehicles.reaper, ~filler.reaper, ~!promotion.reaper.reflector
 		Description: Upgrades the Reaper Tripod with a Point Laser Defense system. \nPDL intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.reaper2
 
-commander_tree.Reaper.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Reaper.Reflector:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: RPTP
 	WithProductionIconOverlay@Reflector:
@@ -559,25 +559,25 @@ commander_tree.Reaper.Reflector:
 
 		BuildPaletteOrder: 441
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.reaper, ~filler.reaper, ~!commander_tree.reaper.pdl
+		Prerequisites: has_points, techcenter, ~vehicles.reaper, ~filler.reaper, ~!promotion.reaper.pdl
 		Description: Upgrades the Reaper Tripod with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.reaper2
 
 hack.cameo_filler.417:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 442
-		Prerequisites: prerequisite.has_points, ~vehicles.reaper, ~!filler.reaper, disabled
+		Prerequisites: has_points, ~vehicles.reaper, ~!filler.reaper, disabled
 
 hack.cameo_filler.417a:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 442
-		Prerequisites: prerequisite.has_points, ~vehicles.reaper, ~filler.reaper2, disabled
+		Prerequisites: has_points, ~vehicles.reaper, ~filler.reaper2, disabled
 
-commander_tree.Stormcrawler.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Stormcrawler.PDL:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: STCR
 	WithProductionIconOverlay@PDL:
@@ -588,13 +588,13 @@ commander_tree.Stormcrawler.PDL:
 
 		BuildPaletteOrder: 447
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.reaper, ~!commander_tree.stormcrawler.reflector
+		Prerequisites: has_points, techcenter, ~vehicles.reaper, ~!promotion.stormcrawler.reflector
 		Description: Upgrades the Stormcrawler with a Point Laser Defense system. \nPDL intercepts incoming missiles and projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.stormcrawler
 
-commander_tree.Stormcrawler.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Stormcrawler.Reflector:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: STCR
 	WithProductionIconOverlay@Reflector:
@@ -605,25 +605,25 @@ commander_tree.Stormcrawler.Reflector:
 
 		BuildPaletteOrder: 448
 		
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.reaper, ~!commander_tree.stormcrawler.pdl
+		Prerequisites: has_points, techcenter, ~vehicles.reaper, ~!promotion.stormcrawler.pdl
 		Description: Upgrades the Stormcrawler with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.stormcrawler
 
 hack.cameo_filler.418:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 449
-		Prerequisites: prerequisite.has_points, nerv, ~vehicles.reaper, disabled
+		Prerequisites: has_points, nerv, ~vehicles.reaper, disabled
 
 hack.cameo_filler.419:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 450
-		Prerequisites: prerequisite.has_points, ~filler.stormcrawler, disabled
+		Prerequisites: has_points, ~filler.stormcrawler, disabled
 
-commander_tree.Stormhunter:
-	Inherits: ^default.commander_tree_item
+promotion.Stormhunter:
+	Inherits: ^promotion_item
 	WithProductionIconOverlay@Crosshair:
 		Types: Crosshair
 	RenderSprites:
@@ -634,13 +634,13 @@ commander_tree.Stormhunter:
 
 		BuildPaletteOrder: 451
 		
-		Prerequisites: prerequisite.has_points, nerv, grav, ~aircraft.scrin, ~!commander_tree.stormbomber, ~!commander_tree.stormbomber.torp
+		Prerequisites: has_points, nerv, grav, ~aircraft.scrin, ~!promotion.stormbomber, ~!promotion.stormbomber.torp
 		Description: Removes the anti-ground weaponry from the Stormrider. \nThe Stormhunter is cheaper, smaller, faster and specialized to hunt air units.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.stormrider
 
-commander_tree.Stormbomber:
-	Inherits: ^default.commander_tree_item
+promotion.Stormbomber:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: STMR
 	WithProductionIconOverlay@Grenade:
@@ -651,13 +651,13 @@ commander_tree.Stormbomber:
 
 		BuildPaletteOrder: 452
 		
-		Prerequisites: prerequisite.has_points, nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter, ~!commander_tree.stormbomber.torp
+		Prerequisites: has_points, nerv, grav, ~aircraft.scrin, ~!promotion.stormhunter, ~!promotion.stormbomber.torp
 		Description: Upgrades the Stormrider with plasmabombs \nStrong vs vehicles but cannot target air anymore.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.stormrider
 
-commander_tree.Stormbomber.Torp:
-	Inherits: ^default.commander_tree_item
+promotion.Stormbomber.Torp:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: STMR
 	WithProductionIconOverlay@Torpedo:
@@ -668,7 +668,7 @@ commander_tree.Stormbomber.Torp:
 
 		BuildPaletteOrder: 452
 		
-		Prerequisites: prerequisite.has_points, nerv, grav, ~aircraft.scrin, ~!commander_tree.stormhunter, ~!commander_tree.stormbomber
+		Prerequisites: has_points, nerv, grav, ~aircraft.scrin, ~!promotion.stormhunter, ~!promotion.stormbomber
 		Description: Upgrades the Stormrider with anti-water plasmabombs
 	TooltipExtras:
 		Strengths: • Strong vs Ships, Submarines
@@ -678,19 +678,19 @@ commander_tree.Stormbomber.Torp:
 		Prerequisite: filler.stormrider
 
 hack.cameo_filler.420:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 453
-		Prerequisites: prerequisite.has_points, ~filler.stormrider, disabled
+		Prerequisites: has_points, ~filler.stormrider, disabled
 
 hack.cameo_filler.421:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 454
-		Prerequisites: prerequisite.has_points, ~filler.stormrider, disabled
+		Prerequisites: has_points, ~filler.stormrider, disabled
 
-commander_tree.Devastator.Beam:
-	Inherits: ^default.commander_tree_item
+promotion.Devastator.Beam:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: deva
 	WithProductionIconOverlay@Ion:
@@ -705,13 +705,13 @@ commander_tree.Devastator.Beam:
 
 		BuildPaletteOrder: 455
 		
-		Prerequisites: prerequisite.has_points, techcenter, grav, ~aircraft.scrin, ~!commander_tree.devastator.shard
+		Prerequisites: has_points, techcenter, grav, ~aircraft.scrin, ~!promotion.devastator.shard
 		Description: Upgrades the Devastator with an energy beam. \nThe energy beam is strong but needs very long to recharge.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.devastator
 
-commander_tree.Devastator.Shard:
-	Inherits: ^default.commander_tree_item
+promotion.Devastator.Shard:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: deva
 	WithProductionIconOverlay@Missile:
@@ -726,25 +726,25 @@ commander_tree.Devastator.Shard:
 
 		BuildPaletteOrder: 456
 		
-		Prerequisites: prerequisite.has_points, techcenter, grav, ~aircraft.scrin, ~!commander_tree.devastator.beam
+		Prerequisites: has_points, techcenter, grav, ~aircraft.scrin, ~!promotion.devastator.beam
 		Description: Upgrades the Devastator with armor piercing Shards. \nVery efficient vs heavy armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.devastator
 
 hack.cameo_filler.422:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 457
-		Prerequisites: prerequisite.has_points, techcenter, grav, ~aircraft.scrin, disabled
+		Prerequisites: has_points, techcenter, grav, ~aircraft.scrin, disabled
 
 hack.cameo_filler.423:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 458
-		Prerequisites: prerequisite.has_points, ~filler.devastator, disabled
+		Prerequisites: has_points, ~filler.devastator, disabled
 
-commander_tree.Carrier.Warship:
-	Inherits: ^default.commander_tree_item
+promotion.Carrier.Warship:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: PAC
 	WithProductionIconOverlay@Laser:
@@ -755,13 +755,13 @@ commander_tree.Carrier.Warship:
 
 		BuildPaletteOrder: 459
 		
-		Prerequisites: prerequisite.has_points, sign, techcenter, grav, ~aircraft.scrin, ~!commander_tree.carrier.support, ~!commander_tree.carrier.suicide
+		Prerequisites: has_points, sign, techcenter, grav, ~aircraft.scrin, ~!promotion.carrier.support, ~!promotion.carrier.suicide
 		Description: Re-equips the Carrier as Warship with strong armor piercing lasers.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.carrier
 
-commander_tree.Carrier.Suicide:
-	Inherits: ^default.commander_tree_item
+promotion.Carrier.Suicide:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: PAC
 	WithProductionIconOverlay@Skull:
@@ -772,13 +772,13 @@ commander_tree.Carrier.Suicide:
 
 		BuildPaletteOrder: 460
 		
-		Prerequisites: prerequisite.has_points, sign, techcenter, grav, ~aircraft.scrin, ~!commander_tree.carrier.warship, ~!commander_tree.carrier.support
+		Prerequisites: has_points, sign, techcenter, grav, ~aircraft.scrin, ~!promotion.carrier.warship, ~!promotion.carrier.support
 		Description: Re-equips the Carrier Invaders with acid suicide modules.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.carrier
 
-commander_tree.Carrier.Support:
-	Inherits: ^default.commander_tree_item
+promotion.Carrier.Support:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: PAC
 	WithProductionIconOverlay@Wrench:
@@ -789,26 +789,26 @@ commander_tree.Carrier.Support:
 
 		BuildPaletteOrder: 461
 		
-		Prerequisites: prerequisite.has_points, sign, techcenter, grav, ~aircraft.scrin, ~!commander_tree.carrier.warship, ~!commander_tree.carrier.suicide
+		Prerequisites: has_points, sign, techcenter, grav, ~aircraft.scrin, ~!promotion.carrier.warship, ~!promotion.carrier.suicide
 		Description: Re-equips the Carrier Invaders with a repair beam to repair allied units.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.carrier
 
 hack.cameo_filler.424:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 462
-		Prerequisites: prerequisite.has_points, ~filler.carrier, disabled
+		Prerequisites: has_points, ~filler.carrier, disabled
 
 hack.cameo_filler.425:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 463
-		Prerequisites: prerequisite.has_points, ~filler.carrier, disabled
+		Prerequisites: has_points, ~filler.carrier, disabled
 
 #epic units
-commander_tree.Hexapod:
-	Inherits: ^default.commander_tree_item
+promotion.Hexapod:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Hexapod Eradicator
 	RenderSprites:
@@ -818,11 +818,11 @@ commander_tree.Hexapod:
 		BuildPaletteOrder: 490
 		IconPalette: chrometd
 		
-		Prerequisites: prerequisite.has_points, sign, techcenter, ~vehicles.reaper
+		Prerequisites: has_points, sign, techcenter, ~vehicles.reaper
 		Description: The Hexapod Eradicator is a heavy walker with long range artillery disks. Perfect for heavy sieges.
 
-commander_tree.Mothership:
-	Inherits: ^default.commander_tree_item
+promotion.Mothership:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Mothership
 	RenderSprites:
@@ -831,11 +831,11 @@ commander_tree.Mothership:
 
 		BuildPaletteOrder: 490
 		
-		Prerequisites: prerequisite.has_points, sign, techcenter, ~aircraft.traveler
+		Prerequisites: has_points, sign, techcenter, ~aircraft.traveler
 		Description: The Mothership is an insanely heavy armored aircraft, with high visual range and the ability to open wormholes.
 
-commander_tree.Bastion:
-	Inherits: ^default.commander_tree_item
+promotion.Bastion:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Bastion
 	RenderSprites:
@@ -845,17 +845,17 @@ commander_tree.Bastion:
 		BuildPaletteOrder: 490
 		IconPalette: chrometd
 		
-		Prerequisites: prerequisite.has_points, sign, techcenter, ~aircraft.harvester,
+		Prerequisites: has_points, sign, techcenter, ~aircraft.harvester,
 		Description: The Bastion is a heavy aircraft perfect for defending huge assaults or bruising weak defenses.
 
 hack.cameo_filler.426:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 491
-		Prerequisites: prerequisite.has_points, ~filler.carrier, disabled
+		Prerequisites: has_points, ~filler.carrier, disabled
 
 hack.cameo_filler.427:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 491
-		Prerequisites: prerequisite.has_points, ~filler.carrier, disabled
+		Prerequisites: has_points, ~filler.carrier, disabled

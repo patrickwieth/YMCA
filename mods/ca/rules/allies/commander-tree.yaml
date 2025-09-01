@@ -1,70 +1,175 @@
-commander_tree.Spec_Ops:
-	Inherits: ^default.commander_tree_item
+# Infantry
+
+promotion.Spec_Ops:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Spec Ops
 	RenderSprites:
 		Image: SpecOps
 	Buildable:
 		BuildPaletteOrder: 7
-		Prerequisites: prerequisite.has_points, ~infantry.allies, commander_tree.advanced_infantry_training, techcenter
+		Prerequisites: has_points, ~infantry.allies, promotion.advanced_infantry_training, techcenter
 		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
 
+# Vehicles
 
-# vehicles
-
-commander_tree.Prism_Tank:
-	Inherits: ^default.commander_tree_item
+promotion.Prism_Tank:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Prism Tank
 	RenderSprites:
 		Image: prismtank
 	Buildable:
 		BuildPaletteOrder: 9
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, ~!commander_tree.prism_cannon, ~!commander_tree.prism_blaster, ~!vehicles.england
+		Prerequisites: has_points, ~vehicles.allies, radar, ~!promotion.prism_cannon, ~!promotion.prism_blaster, ~!vehicles.england
 		Description: Enables to build the Prism Tank, an energy based weapon with high range.\n  Srong versus light vehicles and infantry.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.prism
 
-commander_tree.Prism_Cannon:
-	Inherits: ^default.commander_tree_item
+promotion.Prism_Cannon:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Prism Cannon
 	RenderSprites:
 		Image: prismcannon
 	Buildable:
 		BuildPaletteOrder: 10
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, ~!commander_tree.prism_blaster, ~!commander_tree.prism_tank, ~!vehicles.france
+		Prerequisites: has_points, ~vehicles.allies, radar, ~!promotion.prism_blaster, ~!promotion.prism_tank, ~!vehicles.france
 		Description: Enables to build the Prism Cannon. \n  Has higher range and more damage than the Prism Tank, but does not split its beam. \n  It is stronger vs. base defenses and single units but less effective against large armies.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.prism
 
-commander_tree.Prism_Blaster:
-	Inherits: ^default.commander_tree_item
+promotion.Prism_Blaster:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Prism Blaster
 	RenderSprites:
 		Image: prismblaster
 	Buildable:
 		BuildPaletteOrder: 11
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, ~!commander_tree.prism_cannon, ~!commander_tree.prism_tank, ~!vehicles.germany
+		Prerequisites: has_points, ~vehicles.allies, radar, ~!promotion.prism_cannon, ~!promotion.prism_tank, ~!vehicles.germany
 		Description: Enables to build the Prism Blaster. \n  Has less range than the Prism Tank, but does split its beam to more targets. \n  It is stronger vs. large armies and less effective against base defenses and single targets.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.prism
 
 hack.cameo_filler.prism:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 12
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, disabled
+		Prerequisites: has_points, ~vehicles.allies, radar, disabled
 
 hack.cameo_filler.prism2:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 12
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, radar, disabled, ~filler.prism
+		Prerequisites: has_points, ~vehicles.allies, radar, disabled, ~filler.prism
 
-commander_tree.Chrono_Prison:
-	Inherits: ^default.commander_tree_item
+promotion.Scout_Tank_PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Scout Tank Point Laser Defense System
+	RenderSprites:
+		Image: 1tnk
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 13
+		Prerequisites: has_points, ~vehicles.allies, techcenter, ~!promotion.scout_tank.reflector
+		Description: Upgrades the Scout Tank with a Point Laser Defense to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.scout_tank
+
+promotion.Scout_Tank.Reflector:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Scout Tank Reflector Armor
+	RenderSprites:
+		Image: 1tnk
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Buildable:
+		BuildPaletteOrder: 13
+		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.france, techcenter, ~!promotion.scout_tank_pdl
+		Description: Equips the Scout Tank with a Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.scout_tank
+
+hack.cameo_filler.7:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 14
+		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled, ~filler.scout_tank, ~!vehicles.france
+
+hack.cameo_filler.7a:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 14
+		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled, ~vehicles.france
+
+hack.cameo_filler.8:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 14
+		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled
+
+promotion.Chrono_Tank:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Chrono Tank
+	RenderSprites:
+		Image: ctnk
+	Buildable:
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, techcenter, ~vehicles.allies
+		Description: Enables to build the Chrono Tank. \n  It can teleport over short distances and has missiles vs. tanks.
+
+promotion.Chrono_Tank_PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Chrono Tank Point Laser Defense System
+	RenderSprites:
+		Image: ctnk
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Buildable:
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, ~vehicles.allies, techcenter, promotion.chrono_tank, ~!promotion.chrono_tank.reflector
+		Description: Upgrades the Chrono Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.chrono_tank
+
+promotion.Chrono_Tank.Reflector:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Chrono Tank Reflector Armor
+	RenderSprites:
+		Image: 1tnk
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Buildable:
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.germany, techcenter, promotion.chrono_tank, ~!promotion.chrono_tank_pdl
+		Description: Equips the Chrono Tank with a Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.chrono_tank
+
+hack.cameo_filler.9:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 16
+		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.germany, ~filler.chrono_tank, techcenter, disabled
+
+hack.cameo_filler.9a:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 16
+		Prerequisites: has_points, ~vehicles.germany, techcenter, disabled
+
+
+
+promotion.Chrono_Prison:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chrono Prison
 	RenderSprites:
@@ -72,15 +177,15 @@ commander_tree.Chrono_Prison:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 17
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter
+		Prerequisites: has_points, ~vehicles.allies, techcenter
 		Description: Enables to build the Chrono Prison. \n  It traps other units in the Time Aether, \n  teleporting them out of existence shortly thereafter.
 	TooltipExtras:
 		Strengths: • Strong vs few targets
 		Weaknesses: • Weak vs masses, Aircraft
 		Attributes: • Chrono beamed units cannot move or attack
 
-commander_tree.Chrono_Prison_AA:
-	Inherits: ^default.commander_tree_item
+promotion.Chrono_Prison_AA:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chrono Prison Anti-Air Upgrade
 	RenderSprites:
@@ -88,7 +193,7 @@ commander_tree.Chrono_Prison_AA:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 18
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, ~!vehicles.england, techcenter, ~!commander_tree.chrono_prison_range, commander_tree.chrono_prison
+		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.england, techcenter, ~!promotion.chrono_prison_range, promotion.chrono_prison
 		Description: Upgrades the Chrono Prison to be able to also trap air units in the Time Aether.
 	WithProductionIconOverlay@Air:
 		Types: Air
@@ -99,8 +204,8 @@ commander_tree.Chrono_Prison_AA:
 		Weaknesses: • Weak vs masses
 		Attributes: • Chrono beamed units cannot move or attack
 
-commander_tree.Chrono_Prison_Range:
-	Inherits: ^default.commander_tree_item
+promotion.Chrono_Prison_Range:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chrono Prison Range Upgrade
 	RenderSprites:
@@ -108,7 +213,7 @@ commander_tree.Chrono_Prison_Range:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 19
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter, ~!commander_tree.chrono_prison_aa, commander_tree.chrono_prison, ~vehicles.germany
+		Prerequisites: has_points, ~vehicles.allies, techcenter, ~!promotion.chrono_prison_aa, promotion.chrono_prison, ~vehicles.germany
 		Description: Increases the range of the Chrono Prison allowing it to stop more distant targets.
 	WithProductionIconOverlay@Crosshair:
 		Types: Crosshair
@@ -120,73 +225,304 @@ commander_tree.Chrono_Prison_Range:
 		Attributes: • Chrono beamed units cannot move or attack
 
 hack.cameo_filler.10:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 20
-		Prerequisites: prerequisite.has_points, ~vehicles.germany, techcenter, disabled, ~filler.prison
+		Prerequisites: has_points, ~vehicles.germany, techcenter, disabled, ~filler.prison
 
 hack.cameo_filler.10a:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 20
-		Prerequisites: prerequisite.has_points, ~vehicles.england, techcenter, disabled
+		Prerequisites: has_points, ~vehicles.england, techcenter, disabled
 
 hack.cameo_filler.11:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 21
-		Prerequisites: prerequisite.has_points, ~vehicles.allies, techcenter, disabled, ~!vehicles.germany
+		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled, ~!vehicles.germany
+
+
+
+
+
+promotion.Cryo_Launcher:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Cryo Launcher
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 22
+		Prerequisites: has_points, radar, ~vehicles.allies
+		Description: Allows to build Cryo Launcher. \n  An artillery support unit slowing enemy vehicles and making them more vulnerable.
+
+hack.cameo_filler.12:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 22
+		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled
+
+hack.cameo_filler.13:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 23
+		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled
+
+promotion.Battle_Fortress.Support:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Support Fortress
+	Buildable:
+		BuildPaletteOrder: 24
+		Prerequisites: has_points, ~vehicles.france, techcenter, ~!promotion.battle_fortress.prism, ~!promotion.battle_fortress.bunker
+		Description: The Support Fortress is a touch tank that repairs allied vehicles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.batf
+	RenderSprites:
+		Image: promotion.battle_fortress
+	WithProductionIconOverlay@Wrench:
+		Types: Wrench
+
+promotion.Battle_Fortress.Bunker:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Battle Fortress Missile Bunker
+	Buildable:
+		BuildPaletteOrder: 24
+		Prerequisites: has_points, ~vehicles.france, techcenter, ~!promotion.battle_fortress.support, ~!promotion.battle_fortress.prism
+		Description: Battle Fortress is a tough tank with a bunker full of rocket infantry.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.batf
+	RenderSprites:
+		Image: promotion.battle_fortress
+	WithProductionIconOverlay@Missile:
+		Types: Missile
+
+promotion.Battle_Fortress.Prism:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Prism Fortress
+	Buildable:
+		BuildPaletteOrder: 24
+		Prerequisites: has_points, ~vehicles.france, techcenter, ~!promotion.battle_fortress.support, ~!promotion.battle_fortress.bunker
+		Description: The Prism Fortress is a tough tank with a Prism blaster.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.batf
+	RenderSprites:
+		Image: promotion.battle_fortress
+	WithProductionIconOverlay@Prism:
+		Types: Prism
+
+promotion.Battle_Fortress.PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Fortress Point Laser Defense
+	Buildable:
+		BuildPaletteOrder: 26
+		Prerequisites: has_points, ~vehicles.france, techcenter, ~filler.batf, ~!promotion.battle_fortress.reflector
+		Description: Upgrades the Battle Fortress with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.batf2
+	RenderSprites:
+		Image: promotion.battle_fortress
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+
+promotion.Battle_Fortress.Reflector:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Fortress Reflector Armor
+	Buildable:
+		BuildPaletteOrder: 26
+		Prerequisites: has_points, ~vehicles.france, techcenter, ~filler.batf, ~!promotion.battle_fortress.pdl
+		Description: Equips the Battle Fortress with Reflector Armor, which is very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.batf2
+	RenderSprites:
+		Image: promotion.battle_fortress
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+
+hack.cameo_filler.15b:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 27
+		Prerequisites: has_points, ~vehicles.france, techcenter, disabled, ~filler.batf2
+
+promotion.Mirage_PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mirage Tank Point Laser Defense System
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 29
+		Prerequisites: has_points, ~vehicles.england, techcenter, ~!promotion.mirage_fire_rate, ~!promotion.mirage.reflector
+		Description: Upgrades the Mirage Tank with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mirage
+
+promotion.Mirage_Fire_Rate:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mirage Tank Fire Rate Upgrade
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 30
+		Prerequisites: has_points, ~vehicles.england, techcenter, ~!promotion.mirage_pdl, ~!promotion.mirage.reflector
+		Description: Upgrades the Mirage Tank with a higher fire rate.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mirage
+
+promotion.Mirage.Reflector:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mirage Tank Reflector Armor
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: has_points, ~vehicles.england, techcenter, ~!promotion.mirage_pdl, ~!promotion.mirage_fire_rate
+		Description: Equips the Mirage Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mirage
+
+hack.cameo_filler.16:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 31
+		Prerequisites: has_points, ~vehicles.england, techcenter, disabled, ~filler.mirage
+
+hack.cameo_filler.17:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 32
+		Prerequisites: has_points, ~vehicles.england, techcenter, disabled, ~filler.mirage
+
+promotion.Tank_Destroyer_PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Tank Destroyer Point Laser Defense System
+	Buildable:
+
+		IconPalette: chrometd
+		BuildPaletteOrder: 33
+
+		Prerequisites: has_points, ~vehicles.germany, techcenter, ~!promotion.tank_destroyer_burst, ~!promotion.tank_destroyer.reflector
+		Description: Upgrades the Tank Destroyer with a Point Laser Defense System to shoot down incoming projectiles.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.tnkd
+
+promotion.Tank_Destroyer_Burst:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Tank Destroyer Burst Fire Upgrade
+	Buildable:
+
+		IconPalette: chrometd
+		BuildPaletteOrder: 34
+
+		Prerequisites: has_points, ~vehicles.germany, techcenter, ~!promotion.tank_destroyer_pdl, ~!promotion.tank_destroyer.reflector
+		Description: Upgrades the Tank Destroyer with burst fire capabilities.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.tnkd
+
+promotion.Tank_Destroyer.Reflector:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Tank Destroyer Reflector Armor
+	Buildable:
+
+		IconPalette: chrometd
+		BuildPaletteOrder: 34
+
+		Prerequisites: has_points, ~vehicles.germany, techcenter, ~!promotion.tank_destroyer_pdl, ~!promotion.tank_destroyer_burst
+		Description: Equips the Tank Destroyer with Reflector Armor.
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.tnkd
+
+hack.cameo_filler.18:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 35
+		Prerequisites: has_points, ~vehicles.germany, techcenter, disabled, ~filler.tnkd
+
+hack.cameo_filler.19:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 36
+		Prerequisites: has_points, ~vehicles.germany, techcenter, disabled, ~filler.tnkd
+
+promotion.Aurora:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Aurora
+	Buildable:
+		BuildPaletteOrder: 41
+		Prerequisites: has_points, ~aircraft.allies, techcenter, ~!aircraft.france
+		Description: Enables to build the Aurora, a supersonic bomber. \n  It drops the Mother of all Bombs. \n  Very efficient versus groups of weakly armored units.
+
+hack.cameo_filler.Aurora:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 41
+		Prerequisites: has_points, ~aircraft.allies, ~!aircraft.france, disabled
+
+hack.cameo_filler.Aurora2:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 41
+		Prerequisites: has_points,~aircraft.allies, ~!aircraft.france, disabled
+
+
 
 
 # Aircraft
 
-commander_tree.Eurofighter:
-	Inherits: ^default.commander_tree_item
+promotion.Eurofighter:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: eurofighter
 	Tooltip:
 		Name: Eurofighter
 	Buildable:
 		BuildPaletteOrder: 44
-		Prerequisites: prerequisite.has_points, ~aircraft.allies
+		Prerequisites: has_points, ~aircraft.allies
 		Description: Enables to build the Eurofighter. It is a supersonic air superiority fighter. \n  Very effective vs. other air units.
 
-commander_tree.Rafale:
-	Inherits: ^default.commander_tree_item
+promotion.Rafale:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: rafale
 	Tooltip:
 		Name: Rafale
 	Buildable:
 		BuildPaletteOrder: 44
-		Prerequisites: prerequisite.has_points, ~aircraft.france, ~disabled
+		Prerequisites: has_points, ~aircraft.france, ~disabled
 		Description: Enables to build the Rafale. It is a supersonic air superiority fighter. \n  Very effective vs. other air units.
 
 hack.cameo_filler.24:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 45
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, disabled
+		Prerequisites: has_points, ~aircraft.allies, disabled
 
 hack.cameo_filler.25:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 46
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, disabled
+		Prerequisites: has_points, ~aircraft.allies, disabled
 
-commander_tree.Harrier:
-	Inherits: ^default.commander_tree_item
+promotion.Harrier:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: harr
 	Tooltip:
 		Name: Harrier
 	Buildable:
 		BuildPaletteOrder: 50
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.allies, ~!aircraft.germany
+		Prerequisites: has_points, techcenter, ~aircraft.allies, ~!aircraft.germany
 		Description: Enables to build the Harrier, a VTOL aircraft.  \n  Strong vs. groups of light armored ground units.
 
-commander_tree.Harrier.Avionics:
-	Inherits: ^default.commander_tree_item
+promotion.Harrier.Avionics:
+	Inherits: ^promotion_item
 	WithProductionIconOverlay@Air:
 		Types: Air
 	RenderSprites:
@@ -195,13 +531,13 @@ commander_tree.Harrier.Avionics:
 		Name: Harrier Avionics Upgrade
 	Buildable:
 		BuildPaletteOrder: 51
-		Prerequisites: prerequisite.has_points, techcenter, commander_tree.harrier, ~!commander_tree.harrier.payload, ~aircraft.england
+		Prerequisites: has_points, techcenter, promotion.harrier, ~!promotion.harrier.payload, ~aircraft.england
 		Description: Upgrades the Avionics of the Harrier, allowing it to hover when shooting.  \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.harrier
 
-commander_tree.Harrier.Payload:
-	Inherits: ^default.commander_tree_item
+promotion.Harrier.Payload:
+	Inherits: ^promotion_item
 	WithProductionIconOverlay@Bullets:
 		Types: Bullets
 	RenderSprites:
@@ -210,26 +546,26 @@ commander_tree.Harrier.Payload:
 		Name: Harrier Payload Upgrade
 	Buildable:
 		BuildPaletteOrder: 51
-		Prerequisites: prerequisite.has_points, techcenter, commander_tree.harrier, ~!commander_tree.harrier.avionics, ~aircraft.allies, ~!aircraft.germany
+		Prerequisites: has_points, techcenter, promotion.harrier, ~!promotion.harrier.avionics, ~aircraft.allies, ~!aircraft.germany
 		Description: Increases the Payload of the Harrier. \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.harrier
 
 hack.cameo_filler.28:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 51
-		Prerequisites: prerequisite.has_points, ~aircraft.france, techcenter, disabled
+		Prerequisites: has_points, ~aircraft.france, techcenter, disabled
 
 hack.cameo_filler.29:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 52
-		Prerequisites: prerequisite.has_points, ~aircraft.england, techcenter, ~filler.harrier, disabled
+		Prerequisites: has_points, ~aircraft.england, techcenter, ~filler.harrier, disabled
 
 
-commander_tree.Seahawk.Armed:
-	Inherits: ^default.commander_tree_item
+promotion.Seahawk.Armed:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: seahawk
 	WithProductionIconOverlay@Crosshair:
@@ -238,26 +574,26 @@ commander_tree.Seahawk.Armed:
 		Name: Seahawk Bunker Busters
 	Buildable:
 		BuildPaletteOrder: 53
-		Prerequisites: prerequisite.has_points, ~commander_tree.air_logistics, ~aircraft.england
+		Prerequisites: has_points, ~promotion.air_logistics, ~aircraft.england
 		Description: Attaches 2 Bunker Buster missiles to the Seahawk.\n  This allows taking out a defensive structure fast.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.seahawk
 
 hack.cameo_filler.seahawk:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 53
-		Prerequisites: prerequisite.has_points, ~commander_tree.air_logistics, ~aircraft.england, disabled
+		Prerequisites: has_points, ~promotion.air_logistics, ~aircraft.england, disabled
 
 hack.cameo_filler.seahawk2:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 53
-		Prerequisites: prerequisite.has_points, ~commander_tree.air_logistics, ~aircraft.england, disabled
+		Prerequisites: has_points, ~promotion.air_logistics, ~aircraft.england, disabled
 
 
-commander_tree.Eurocopter.Artillery:
-	Inherits: ^default.commander_tree_item
+promotion.Eurocopter.Artillery:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: heli
 	WithProductionIconOverlay@Shell:
@@ -266,13 +602,13 @@ commander_tree.Eurocopter.Artillery:
 		Name: Eurocopter Artillery Missiles
 	Buildable:
 		BuildPaletteOrder: 48
-		Prerequisites: prerequisite.has_points, ~!commander_tree.eurocopter.torp, ~!commander_tree.eurocopter.fire_rate, ~!commander_tree.eurocopter.cryo, ~aircraft.allies, ~!aircraft.england
+		Prerequisites: has_points, ~!promotion.eurocopter.torp, ~!promotion.eurocopter.fire_rate, ~!promotion.eurocopter.cryo, ~aircraft.allies, ~!aircraft.england
 		Description: Upgrades the missiles of Eurocopter Helicopter for high range use. \n  This allows the Eurocopter to be used against defensive structures efficiently.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.eurocopter
 
-commander_tree.Eurocopter.Fire_Rate:
-	Inherits: ^default.commander_tree_item
+promotion.Eurocopter.Fire_Rate:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: heli
 	WithProductionIconOverlay@Bullets:
@@ -281,13 +617,13 @@ commander_tree.Eurocopter.Fire_Rate:
 		Name: Eurocopter Fire Rate
 	Buildable:
 		BuildPaletteOrder: 48
-		Prerequisites: prerequisite.has_points, ~!commander_tree.eurocopter.torp, ~!commander_tree.eurocopter.cryo, ~!commander_tree.eurocopter.artillery, ~aircraft.allies, ~!aircraft.germany
+		Prerequisites: has_points, ~!promotion.eurocopter.torp, ~!promotion.eurocopter.cryo, ~!promotion.eurocopter.artillery, ~aircraft.allies, ~!aircraft.germany
 		Description: Increases the fire rate of the Eurocopter Helicopter. \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.eurocopter
 
-commander_tree.Eurocopter.Cryo:
-	Inherits: ^default.commander_tree_item
+promotion.Eurocopter.Cryo:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: heli
 	WithProductionIconOverlay@Frost:
@@ -296,13 +632,13 @@ commander_tree.Eurocopter.Cryo:
 		Name: Eurocopter Cryo Missiles
 	Buildable:
 		BuildPaletteOrder: 48
-		Prerequisites: prerequisite.has_points, ~!commander_tree.eurocopter.torp, ~!commander_tree.eurocopter.artillery, ~!commander_tree.eurocopter.fire_rate, ~aircraft.allies, ~!aircraft.france
+		Prerequisites: has_points, ~!promotion.eurocopter.torp, ~!promotion.eurocopter.artillery, ~!promotion.eurocopter.fire_rate, ~aircraft.allies, ~!aircraft.france
 		Description: Upgrades the missiles of the Eurocopter with Cryo explosives. \n  In addition to the damage targets are also slowed.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.eurocopter
 
-commander_tree.Eurocopter.Torp:
-	Inherits: ^default.commander_tree_item
+promotion.Eurocopter.Torp:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: heli
 	WithProductionIconOverlay@Torpedo:
@@ -311,7 +647,7 @@ commander_tree.Eurocopter.Torp:
 		Name: Eurocopter Torpedos
 	Buildable:
 		BuildPaletteOrder: 48
-		Prerequisites: prerequisite.has_points, ~!commander_tree.eurocopter.cryo, ~!commander_tree.eurocopter.artillery, ~!commander_tree.eurocopter.fire_rate, ~aircraft.allies
+		Prerequisites: has_points, ~!promotion.eurocopter.cryo, ~!promotion.eurocopter.artillery, ~!promotion.eurocopter.fire_rate, ~aircraft.allies
 		Description: Equips the Eurocopter with Torpedos.
 	TooltipExtras:
 		Strengths: • Strong vs Ships, Submarines
@@ -321,19 +657,19 @@ commander_tree.Eurocopter.Torp:
 		Prerequisite: filler.eurocopter
 
 hack.cameo_filler.26:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 49
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~filler.eurocopter, disabled
+		Prerequisites: has_points, ~aircraft.allies, ~filler.eurocopter, disabled
 
 hack.cameo_filler.27:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 49
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~filler.eurocopter, disabled
+		Prerequisites: has_points, ~aircraft.allies, ~filler.eurocopter, disabled
 
-commander_tree.Huey.Cryo:
-	Inherits: ^default.commander_tree_item
+promotion.Huey.Cryo:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: huey
 	WithProductionIconOverlay@Frost:
@@ -342,13 +678,13 @@ commander_tree.Huey.Cryo:
 		Name: Cryo Huey Upgrade
 	Buildable:
 		BuildPaletteOrder: 37
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.grenade, ~!commander_tree.huey.recon
+		Prerequisites: has_points, ~aircraft.allies, ~!promotion.huey.grenade, ~!promotion.huey.recon
 		Description: Upgrades the attack of the Huey with cryo missiles, slowing down enemies.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.huey
 
-commander_tree.Huey.Recon:
-	Inherits: ^default.commander_tree_item
+promotion.Huey.Recon:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: huey
 	WithProductionIconOverlay@Eye:
@@ -357,13 +693,13 @@ commander_tree.Huey.Recon:
 		Name: Huey Recon Upgrade
 	Buildable:
 		BuildPaletteOrder: 37
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!commander_tree.huey.grenade, ~!commander_tree.huey.cryo
+		Prerequisites: has_points, ~aircraft.allies, ~!promotion.huey.grenade, ~!promotion.huey.cryo
 		Description: Upgrades the sensors of the Huey and removes the armament. \nThe Huey can transport an infantry unit, sniper can shoot from it.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.huey
 
-commander_tree.Huey.Grenade:
-	Inherits: ^default.commander_tree_item
+promotion.Huey.Grenade:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: huey
 	WithProductionIconOverlay@Grenade:
@@ -372,25 +708,25 @@ commander_tree.Huey.Grenade:
 		Name: Grenade Huey Upgrade
 	Buildable:
 		BuildPaletteOrder: 38
-		Prerequisites: prerequisite.has_points, ~aircraft.allies, ~!aircraft.england, ~!commander_tree.huey.cryo, ~!commander_tree.huey.recon
+		Prerequisites: has_points, ~aircraft.allies, ~!aircraft.england, ~!promotion.huey.cryo, ~!promotion.huey.recon
 		Description: Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.huey
 
 hack.cameo_filler.20a:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 39
-		Prerequisites: prerequisite.has_points, ~aircraft.england, ~!filler.huey, techcenter, disabled
+		Prerequisites: has_points, ~aircraft.england, ~!filler.huey, techcenter, disabled
 
 hack.cameo_filler.20b:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 39
-		Prerequisites: prerequisite.has_points, ~filler.huey, techcenter, disabled
+		Prerequisites: has_points, ~filler.huey, techcenter, disabled
 
 hack.cameo_filler.20c:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 39
-		Prerequisites: prerequisite.has_points, ~filler.huey, techcenter, disabled
+		Prerequisites: has_points, ~filler.huey, techcenter, disabled

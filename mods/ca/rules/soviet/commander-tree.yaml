@@ -1,117 +1,129 @@
 # General Upgrades
 
-commander_tree.General_Armaggeddon:
-	Inherits: ^default.commander_tree_item
+promotion.General_Armaggeddon:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: General Armaggeddon
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
-		Prerequisites: prerequisite.has_points, soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.the_chef
+		Prerequisites: has_points, ~soviet, anypower, ~!promotion.tiktok_warrior, ~!promotion.the_chef
 		Description: Pick General Armageddon to specialize in artillery. \n General Armageddon is not a buildable unit. \n Unlocks the MAD Tank. \n Artillery units fire 20% faster.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.soviet_general
 
-commander_tree.TikTok_Warrior:
-	Inherits: ^default.commander_tree_item
+promotion.TikTok_Warrior:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: TikTok Warrior
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 1
-		Prerequisites: prerequisite.has_points, soviet, ~!commander_tree.the_chef, ~!commander_tree.general_armaggeddon
+		BuildPaletteOrder: 0
+		Prerequisites: has_points, ~soviet, anypower, ~!promotion.the_chef, ~!promotion.general_armaggeddon
 		Description: Pick TikTok Warrior to specialize in propaganda. \n TikTok Warrior is not a buildable unit. \n Unlocks the Chechen Paradrop. \n Range of Propaganda effect is increased.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.soviet_general
 
-commander_tree.The_Chef:
-	Inherits: ^default.commander_tree_item
+promotion.The_Chef:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: The Chef
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 2
-		Prerequisites: prerequisite.has_points, soviet, ~!commander_tree.tiktok_warrior, ~!commander_tree.general_armaggeddon
+		BuildPaletteOrder: 0
+		Prerequisites: has_points, ~soviet, anypower, ~!promotion.tiktok_warrior, ~!promotion.general_armaggeddon
 		Description: Pick the Chef Cook to specialize in penal battalions.\n The Chef Cook is not a buildable unit. \n Unlocks the Prison Building (not yet implemented). \n Infantry is 10% cheaper.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.soviet_general
 
+hack.cameo_filler.soviet_general:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 1
+		Prerequisites: has_points, ~filler.soviet_general, disabled
 
-commander_tree.War_Miners:
-	Inherits: ^default.commander_tree_item
+hack.cameo_filler.soviet_general2:
+	Inherits: ^cameo_filler
+	Buildable:
+		BuildPaletteOrder: 1
+		Prerequisites: has_points, ~filler.soviet_general, disabled
+
+
+promotion.War_Miners:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: War Miners
 	Buildable:
 		BuildPaletteOrder: 5
 		IconPalette: chrome
-		Prerequisites: prerequisite.has_points, ~structures.soviet, ~anypower
+		Prerequisites: has_points, soviet, ~anypower
 		Description: Equips Miners with a gatling turret. \nWar Miners can attack ground and air.
 
 
-commander_tree.Tesla_Arc:
-	Inherits: ^default.commander_tree_item
+promotion.Tesla_Arc:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Tesla Arcing
 	Buildable:
 		BuildPaletteOrder: 103
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.russia
+		Prerequisites: has_points, techcenter, ~vehicles.russia
 		Description: Upgrades the Tesla Coils to allow its Zaps to arc over to more units. \n  This makes the Tesla Vehicles more effective against large groups.
 
-commander_tree.Tesla_Damage:
-	Inherits: ^default.commander_tree_item
+promotion.Tesla_Damage:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Tesla Damage
 	Buildable:
 		BuildPaletteOrder: 103
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.russia
+		Prerequisites: has_points, techcenter, ~vehicles.russia
 		Description: Upgrades the Tesla Coils to increase its damage by 20%.
 
-commander_tree.Chemical_Missiles:
-	Inherits: ^default.commander_tree_item
+promotion.Chemical_Missiles:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chemical Missiles
 	Buildable:
 		BuildPaletteOrder: 103
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.iraq
+		Prerequisites: has_points, techcenter, ~vehicles.iraq
 		Description: RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.\nChemical missiles release a chemical cloud on impact.
 
-commander_tree.Metal_Acid_Missiles:
-	Inherits: ^default.commander_tree_item
+promotion.Metal_Acid_Missiles:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Metal Acid Missiles
 	Buildable:
 		BuildPaletteOrder: 103
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.iraq, commander_tree.chemical_missiles
+		Prerequisites: has_points, techcenter, ~vehicles.iraq, promotion.chemical_missiles
 		Description: The Chemical Missiles are improved by releasing metal acid clouds.\nThose are efficient against heavy armored targets.
 
-commander_tree.Artillery_Upgrade:
-	Inherits: ^default.commander_tree_item
+promotion.Artillery_Upgrade:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Artillery Upgrade
 	Buildable:
 		BuildPaletteOrder: 103
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea
+		Prerequisites: has_points, techcenter, ~vehicles.nkorea
 		Description: North Korean artillery systems deal 20% more damage.
 
-commander_tree.Cluster_Grenades:
-	Inherits: ^default.commander_tree_item
+promotion.Cluster_Grenades:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Cluster Grenades
 	Buildable:
 		BuildPaletteOrder: 103
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea
+		Prerequisites: has_points, techcenter, ~vehicles.nkorea
 		Description: Akatsiya, T-34, ISU, People's Tank and Katyusha emit additional cluster grenades on impact.
 
 hack.cameo_filler.soviet_base_tech:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 104
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+		Prerequisites: has_points, ~vehicles.soviet, disabled
 
 # Aircraft
 
-commander_tree.Mig:
-	Inherits: ^default.commander_tree_item
+promotion.Mig:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Mig-31
 	RenderSprites:
@@ -120,11 +132,11 @@ commander_tree.Mig:
 		Types: APMissile
 	Buildable:
 		BuildPaletteOrder: 148
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
+		Prerequisites: has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
 		Description: Enables to build the Mig. \n  It is an attack fighter best suited for taking out single heavy tanks.
 
-commander_tree.Heavy_Bomber.Nuke:
-	Inherits: ^default.commander_tree_item
+promotion.Heavy_Bomber.Nuke:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Nuke Heavy Bomber
 	RenderSprites:
@@ -133,22 +145,22 @@ commander_tree.Heavy_Bomber.Nuke:
 		Types: Nuke
 	Buildable:
 		BuildPaletteOrder: 148
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.iraq
+		Prerequisites: has_points, techcenter, ~aircraft.iraq
 		Description: Upgrades the Mig to a Nuke bomber. \n  It drops a single nuclear bomb with devastating damage.
 
-commander_tree.Mig.AA:
-	Inherits: ^default.commander_tree_item
+promotion.Mig.AA:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: SU-47 Air Superiority
 	RenderSprites:
 		Image: su47
 	Buildable:
 		BuildPaletteOrder: 148
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
+		Prerequisites: has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea
 		Description: Unlocks the SU-47 air superiority fighter.
 
-commander_tree.Heavy_Bomber.Tesla:
-	Inherits: ^default.commander_tree_item
+promotion.Heavy_Bomber.Tesla:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Heavy Tesla Bomber
 	RenderSprites:
@@ -157,39 +169,39 @@ commander_tree.Heavy_Bomber.Tesla:
 		Types: Tesla
 	Buildable:
 		BuildPaletteOrder: 148
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.russia
+		Prerequisites: has_points, techcenter, ~aircraft.russia
 		Description: Unlocks the Heavy Tesla Bomber. \nIt has a single bomb that emits a lot of tesla zaps.
 
 # Vehicles
 
-commander_tree.V3_Launcher:
-	Inherits: ^default.commander_tree_item
+promotion.V3_Launcher:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: V3 Launcher
 	RenderSprites:
 		Image: v3rl
 	Buildable:
 		BuildPaletteOrder: 114
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.nkorea, ~!commander_tree.akatsiya, ~!commander_tree.katyusha
+		Prerequisites: has_points, ~vehicles.soviet, radar, ~!vehicles.nkorea, ~!promotion.akatsiya, ~!promotion.katyusha
 		Description: Enables to build the V3 Launcher as Advanced Siege Vehicle. \n  The V3 has the longest range, but the Rocket can be shot down.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietarty
 
-commander_tree.Akatsiya:
-	Inherits: ^default.commander_tree_item
+promotion.Akatsiya:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Akatsiya
 	RenderSprites:
 		Image: 2s3
 	Buildable:
 		BuildPaletteOrder: 115
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.iraq, ~!commander_tree.v3_launcher, ~!commander_tree.katyusha
+		Prerequisites: has_points, ~vehicles.soviet, radar, ~!vehicles.iraq, ~!promotion.v3_launcher, ~!promotion.katyusha
 		Description: Enables to build the Akatsiya as Advanced Siege Vehicle. \n  The Akatsiya has the best armor and can hit moving targets with its cluster bombs.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietarty
 
-commander_tree.Katyusha:
-	Inherits: ^default.commander_tree_item
+promotion.Katyusha:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Katyusha
 	RenderSprites:
@@ -197,32 +209,32 @@ commander_tree.Katyusha:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 115
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, radar, ~!vehicles.russia, ~!commander_tree.v3_launcher, ~!commander_tree.akatsiya
+		Prerequisites: has_points, ~vehicles.soviet, radar, ~!vehicles.russia, ~!promotion.v3_launcher, ~!promotion.akatsiya
 		Description: Enables to build the Katyusha as Advanced Siege Vehicle. \n  The Katyusha fires the most projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.sovietarty
 
 hack.cameo_filler.108:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 116
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+		Prerequisites: has_points, ~vehicles.soviet, disabled
 
 hack.cameo_filler.109:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 116
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
+		Prerequisites: has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
 
-commander_tree.Heavy_Tank.AP:
-	Inherits: ^default.commander_tree_item
+promotion.Heavy_Tank.AP:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Heavy Tank Armor Piercing Shells
 	RenderSprites:
 		Image: heavytank
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, radar, ~!commander_tree.heavy_tank.tesla
+		Prerequisites: has_points, ~vehicles.russia, radar, ~!promotion.heavy_tank.tesla
 		Description: Upgrades the Heavy Tank with Armor Piercing Shells. \n  This makes it much stronger vs. Heavy Tanks.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
@@ -233,15 +245,15 @@ commander_tree.Heavy_Tank.AP:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.heavy_tank
 
-commander_tree.Heavy_Tank.Tesla:
-	Inherits: ^default.commander_tree_item
+promotion.Heavy_Tank.Tesla:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Heavy Tank Tesla Defense
 	RenderSprites:
 		Image: heavytank
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, radar, ~!commander_tree.heavy_tank.ap
+		Prerequisites: has_points, ~vehicles.russia, radar, ~!promotion.heavy_tank.ap
 		Description: Upgrades the Heavy Tank with Tesla Defense.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry
@@ -252,8 +264,8 @@ commander_tree.Heavy_Tank.Tesla:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.heavy_tank
 
-commander_tree.Heavy_Tank.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Heavy_Tank.PDL:
+	Inherits: ^promotion_item
 	Inherits: ^PDLInfo
 	Tooltip:
 		Name: Heavy Tank Point Laser Defense
@@ -261,13 +273,13 @@ commander_tree.Heavy_Tank.PDL:
 		Image: heavytank
 	Buildable:
 		BuildPaletteOrder: 121
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~filler.heavy_tank, ~!commander_tree.heavy_tank.reflector
+		Prerequisites: has_points, ~vehicles.russia, techcenter, ~filler.heavy_tank, ~!promotion.heavy_tank.reflector
 		Description: Upgrades the Heavy Tank with a Point Laser Defense System. \n  This makes it more effective vs. projectile based weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.heavy_tank2
 
-commander_tree.Heavy_Tank.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Heavy_Tank.Reflector:
+	Inherits: ^promotion_item
 	Inherits: ^ReflectorInfo
 	Tooltip:
 		Name: Heavy Tank Reflector Armor
@@ -275,33 +287,33 @@ commander_tree.Heavy_Tank.Reflector:
 		Image: heavytank
 	Buildable:
 		BuildPaletteOrder: 121
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~filler.heavy_tank, ~!commander_tree.heavy_tank.pdl
+		Prerequisites: has_points, ~vehicles.russia, techcenter, ~filler.heavy_tank, ~!promotion.heavy_tank.pdl
 		Description: Equips the Heavy Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.heavy_tank2
 
 hack.cameo_filler.Heavy_Tank1:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 122
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, ~!filler.heavy_tank, disabled
+		Prerequisites: has_points, ~vehicles.russia, ~!filler.heavy_tank, disabled
 
 hack.cameo_filler.Heavy_Tank2:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 122
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, ~filler.heavy_tank2, disabled
+		Prerequisites: has_points, ~vehicles.russia, ~filler.heavy_tank2, disabled
 
 
-commander_tree.Chem_Sprayer.Range:
-	Inherits: ^default.commander_tree_item
+promotion.Chem_Sprayer.Range:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chem Sprayer Range Upgrade
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.chem_sprayer.cloud, ~!commander_tree.chem_sprayer.splash
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~!promotion.chem_sprayer.cloud, ~!promotion.chem_sprayer.splash
 		Description: Additional highly aerodynamic particles increase the Chem Sprayer's range.
 	TooltipExtras:
 		Strengths: • Strong vs Light Vehicles, Reflector Armor, Infantry
@@ -312,15 +324,15 @@ commander_tree.Chem_Sprayer.Range:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.chem_sprayer
 
-commander_tree.Chem_Sprayer.Cloud:
-	Inherits: ^default.commander_tree_item
+promotion.Chem_Sprayer.Cloud:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chem Sprayer Cloud Upgrade
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.chem_sprayer.range, ~!commander_tree.chem_sprayer.splash
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~!promotion.chem_sprayer.range, ~!promotion.chem_sprayer.splash
 		Description: Additional volatile particles lead to occasional chemical cloud formation on impact.
 	TooltipExtras:
 		Strengths: • Strong vs Light Vehicles, Reflector Armor, Infantry
@@ -331,15 +343,15 @@ commander_tree.Chem_Sprayer.Cloud:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.chem_sprayer
 
-commander_tree.Chem_Sprayer.Splash:
-	Inherits: ^default.commander_tree_item
+promotion.Chem_Sprayer.Splash:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chem Sprayer Splash Upgrade
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.chem_sprayer.cloud, ~!commander_tree.chem_sprayer.range
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~!promotion.chem_sprayer.cloud, ~!promotion.chem_sprayer.range
 		Description: Additional momentum particles lead to splashing of fluids on impact.
 	TooltipExtras:
 		Strengths: • Strong vs Light Vehicles, Reflector Armor, Infantry
@@ -350,30 +362,30 @@ commander_tree.Chem_Sprayer.Splash:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.chem_sprayer
 
-commander_tree.Chem_Sprayer.Metal_Acid:
-	Inherits: ^default.commander_tree_item
+promotion.Chem_Sprayer.Metal_Acid:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chem Sprayer Metal Acid
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
 		BuildPaletteOrder: 121
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~filler.chem_sprayer, ~!commander_tree.chem_sprayer.spread
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~filler.chem_sprayer, ~!promotion.chem_sprayer.spread
 		Description: Equips the Chem Sprayer with metal eating acid.\nIt's super effective vs. heavy armor.
 	WithProductionIconOverlay@Metal_Acid_right:
 		Types: Metal_Acid_right
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.chem_sprayer2
 
-commander_tree.Chem_Sprayer.Spread:
-	Inherits: ^default.commander_tree_item
+promotion.Chem_Sprayer.Spread:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chem Sprayer Spread Ejectors
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
 		BuildPaletteOrder: 121
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~filler.chem_sprayer, ~!commander_tree.chem_sprayer.metal_acid
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~filler.chem_sprayer, ~!promotion.chem_sprayer.metal_acid
 		Description: Equips the Chem Sprayer with Reflector Armor.
 	WithProductionIconOverlay@Spread_right:
 		Types: Spread_right
@@ -381,21 +393,21 @@ commander_tree.Chem_Sprayer.Spread:
 		Prerequisite: filler.chem_sprayer2
 
 hack.cameo_filler.Chem_Sprayer:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 122
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, disabled, ~filler.chem_sprayer2
+		Prerequisites: has_points, ~vehicles.iraq, disabled, ~filler.chem_sprayer2
 
 
-commander_tree.Source_of_Pollution.Chem_Bomb:
-	Inherits: ^default.commander_tree_item
+promotion.Source_of_Pollution.Chem_Bomb:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Source of Pollution Chem Bomb Upgrade
 	RenderSprites:
 		Image: source_of_pollution
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.source_of_pollution.chem_spray, ~!commander_tree.source_of_pollution.metal_acid
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~!promotion.source_of_pollution.chem_spray, ~!promotion.source_of_pollution.metal_acid
 		Description: The Source of Pollution's shells are upgraded to explode into smaller chemical bombs.
 	TooltipExtras:
 		Strengths: • Strong vs Light Vehicles, Reflector Armor, Infantry
@@ -406,15 +418,15 @@ commander_tree.Source_of_Pollution.Chem_Bomb:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.source_of_pollution
 
-commander_tree.Source_of_Pollution.Chem_Spray:
-	Inherits: ^default.commander_tree_item
+promotion.Source_of_Pollution.Chem_Spray:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Source of Pollution Chem Spray Upgrade
 	RenderSprites:
 		Image: source_of_pollution
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.source_of_pollution.chem_bomb, ~!commander_tree.source_of_pollution.metal_acid
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~!promotion.source_of_pollution.chem_bomb, ~!promotion.source_of_pollution.metal_acid
 		Description: The Source of Pollution's fires a chemical spray instead of shells.
 	TooltipExtras:
 		Strengths: • Strong vs Point Defense Laser
@@ -425,15 +437,15 @@ commander_tree.Source_of_Pollution.Chem_Spray:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.source_of_pollution
 
-commander_tree.Source_of_Pollution.Metal_Acid:
-	Inherits: ^default.commander_tree_item
+promotion.Source_of_Pollution.Metal_Acid:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Source of Pollution Metal Acid Upgrade
 	RenderSprites:
 		Image: source_of_pollution
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~!commander_tree.source_of_pollution.chem_spray, ~!commander_tree.source_of_pollution.chem_bomb
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~!promotion.source_of_pollution.chem_spray, ~!promotion.source_of_pollution.chem_bomb
 		Description: The Source of Pollution's fires acid shells which eat through metal.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Vehicles, Reflector Armor
@@ -444,8 +456,8 @@ commander_tree.Source_of_Pollution.Metal_Acid:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.source_of_pollution
 
-commander_tree.Source_of_Pollution.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Source_of_Pollution.PDL:
+	Inherits: ^promotion_item
 	Inherits: ^PDLInfo
 	Tooltip:
 		Name: Source of Pollution Point Laser Defense
@@ -453,13 +465,13 @@ commander_tree.Source_of_Pollution.PDL:
 		Image: source_of_pollution
 	Buildable:
 		BuildPaletteOrder: 131
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~filler.source_of_pollution, ~!commander_tree.source_of_pollution.reflector
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~filler.source_of_pollution, ~!promotion.source_of_pollution.reflector
 		Description: Upgrades the Source of Pollution with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.source_of_pollution2
 
-commander_tree.Source_of_Pollution.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Source_of_Pollution.Reflector:
+	Inherits: ^promotion_item
 	Inherits: ^ReflectorInfo
 	Tooltip:
 		Name: Source of Pollution Reflector Armor
@@ -467,27 +479,27 @@ commander_tree.Source_of_Pollution.Reflector:
 		Image: source_of_pollution
 	Buildable:
 		BuildPaletteOrder: 131
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, techcenter, ~filler.source_of_pollution, ~!commander_tree.source_of_pollution.pdl
+		Prerequisites: has_points, ~vehicles.iraq, techcenter, ~filler.source_of_pollution, ~!promotion.source_of_pollution.pdl
 		Description: Equips the Source of Pollution with Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.source_of_pollution2
 
 hack.cameo_filler.Source_of_Pollution:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 132
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, disabled, ~filler.source_of_pollution2
+		Prerequisites: has_points, ~vehicles.iraq, disabled, ~filler.source_of_pollution2
 
 
-commander_tree.Peoples_Tank.Speaker:
-	Inherits: ^default.commander_tree_item
+promotion.Peoples_Tank.Speaker:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: People's Tank Propaganda Speaker
 	RenderSprites:
 		Image: peoplestank
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea, ~!commander_tree.peoples_tank.mass_production
+		Prerequisites: has_points, techcenter, ~vehicles.nkorea, ~!promotion.peoples_tank.mass_production
 		Description: Upgrades the People's Tank with a Propaganda Speaker.\n  This gives infantry in its proximity a boost in combat.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
@@ -498,15 +510,15 @@ commander_tree.Peoples_Tank.Speaker:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.peoples_tank
 
-commander_tree.Peoples_Tank.Mass_Production:
-	Inherits: ^default.commander_tree_item
+promotion.Peoples_Tank.Mass_Production:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: People's Tank Mass Production
 	RenderSprites:
 		Image: peoplestank
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea, ~!commander_tree.peoples_tank.speaker
+		Prerequisites: has_points, techcenter, ~vehicles.nkorea, ~!promotion.peoples_tank.speaker
 		Description: Workers from reeducation camps make this tank cheaper,\n while happily becoming better persons.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
@@ -517,8 +529,8 @@ commander_tree.Peoples_Tank.Mass_Production:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.peoples_tank
 
-commander_tree.Peoples_Tank.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Peoples_Tank.PDL:
+	Inherits: ^promotion_item
 	Inherits: ^PDLInfo
 	Tooltip:
 		Name: People's Tank Point Laser Defense
@@ -526,13 +538,13 @@ commander_tree.Peoples_Tank.PDL:
 		Image: peoplestank
 	Buildable:
 		BuildPaletteOrder: 121
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.peoples_tank, ~!commander_tree.peoples_tank.reflector
+		Prerequisites: has_points, ~vehicles.nkorea, techcenter, ~filler.peoples_tank, ~!promotion.peoples_tank.reflector
 		Description: Upgrades the People's Tank with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.peoples_tank2
 
-commander_tree.Peoples_Tank.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Peoples_Tank.Reflector:
+	Inherits: ^promotion_item
 	Inherits: ^ReflectorInfo
 	Tooltip:
 		Name: People's Tank Reflector Armor
@@ -540,32 +552,32 @@ commander_tree.Peoples_Tank.Reflector:
 		Image: peoplestank
 	Buildable:
 		BuildPaletteOrder: 121
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.peoples_tank, ~!commander_tree.peoples_tank.pdl
+		Prerequisites: has_points, ~vehicles.nkorea, techcenter, ~filler.peoples_tank, ~!promotion.peoples_tank.pdl
 		Description: Equips the People's Tank with Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.peoples_tank2
 
 hack.cameo_filler.Peoples_Tank:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 122
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~!filler.peoples_tank, disabled
+		Prerequisites: has_points, ~vehicles.nkorea, techcenter, ~!filler.peoples_tank, disabled
 
 hack.cameo_filler.Peoples_Tank2:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 122
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.peoples_tank2, disabled
+		Prerequisites: has_points, ~vehicles.nkorea, techcenter, ~filler.peoples_tank2, disabled
 
-commander_tree.ISU.Concussion:
-	Inherits: ^default.commander_tree_item
+promotion.ISU.Concussion:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: ISU Bombard Tank Concussion Shells
 	RenderSprites:
 		Image: ISU
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea, ~!commander_tree.isu.ap, ~!commander_tree.isu.cluster
+		Prerequisites: has_points, techcenter, ~vehicles.nkorea, ~!promotion.isu.ap, ~!promotion.isu.cluster
 		Description: Upgrades the ISU Bombard Tank to cause concussion on units at the impact zone.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
@@ -576,15 +588,15 @@ commander_tree.ISU.Concussion:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.isu
 
-commander_tree.ISU.Cluster:
-	Inherits: ^default.commander_tree_item
+promotion.ISU.Cluster:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: ISU-152 Cluster Shells
 	RenderSprites:
 		Image: ISU
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, techcenter, ~vehicles.nkorea, ~!commander_tree.isu.ap, ~!commander_tree.isu.concussion
+		Prerequisites: has_points, techcenter, ~vehicles.nkorea, ~!promotion.isu.ap, ~!promotion.isu.concussion
 		Description: The ISU-152 is upgraded with Cluster shells. \n Cluster shells deal damage over a larger area.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
@@ -595,15 +607,15 @@ commander_tree.ISU.Cluster:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.isu
 
-commander_tree.ISU.AP:
-	Inherits: ^default.commander_tree_item
+promotion.ISU.AP:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: ISU-152 AP Shells
 	RenderSprites:
 		Image: ISU
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~!commander_tree.isu.cluster, ~!commander_tree.isu.concussion
+		Prerequisites: has_points, ~vehicles.nkorea, techcenter, ~!promotion.isu.cluster, ~!promotion.isu.concussion
 		Description: The ISU-152 is equipped with Armor Piercing (AP) shells.
 	TooltipExtras:
 		Strengths: • Strong vs Heavy Vehicles
@@ -614,8 +626,8 @@ commander_tree.ISU.AP:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.isu
 
-commander_tree.ISU.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.ISU.PDL:
+	Inherits: ^promotion_item
 	Inherits: ^PDLInfo
 	Tooltip:
 		Name: ISU-152 Point Laser Defense
@@ -623,13 +635,13 @@ commander_tree.ISU.PDL:
 		Image: ISU
 	Buildable:
 		BuildPaletteOrder: 131
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.isu, ~!commander_tree.isu.reflector
+		Prerequisites: has_points, ~vehicles.nkorea, techcenter, ~filler.isu, ~!promotion.isu.reflector
 		Description: Upgrades the ISU-152 with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.isu2
 
-commander_tree.ISU.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.ISU.Reflector:
+	Inherits: ^promotion_item
 	Inherits: ^ReflectorInfo
 	Tooltip:
 		Name: ISU-152 Reflector Armor
@@ -637,27 +649,27 @@ commander_tree.ISU.Reflector:
 		Image: ISU
 	Buildable:
 		BuildPaletteOrder: 131
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, techcenter, ~filler.isu, ~!commander_tree.isu.pdl
+		Prerequisites: has_points, ~vehicles.nkorea, techcenter, ~filler.isu, ~!promotion.isu.pdl
 		Description: Equips the ISU-152 with Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.isu2
 
 hack.cameo_filler.ISU:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 132
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, disabled, ~filler.isu2
+		Prerequisites: has_points, ~vehicles.nkorea, disabled, ~filler.isu2
 
 
-commander_tree.Apocalypse_Tank.Drozd:
-	Inherits: ^default.commander_tree_item
+promotion.Apocalypse_Tank.Drozd:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Apocalypse Tank Drozd Upgrade
 	RenderSprites:
 		Image: apoc
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~!commander_tree.apocalypse_tank.nuke_shells, ~!commander_tree.apocalypse_tank.propaganda
+		Prerequisites: has_points, ~vehicles.russia, techcenter, ~!promotion.apocalypse_tank.nuke_shells, ~!promotion.apocalypse_tank.propaganda
 		Description: The Apocalypse Tank is upgraded with a Drozd Weapon System. \n  The Drozd system fires chaff, which is good at depleting PDL systems. \n  The Apocalypse Tank can no longer shoot on aircraft.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Point Defense Laser
@@ -668,15 +680,15 @@ commander_tree.Apocalypse_Tank.Drozd:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank
 
-commander_tree.Apocalypse_Tank.Nuke_Shells:
-	Inherits: ^default.commander_tree_item
+promotion.Apocalypse_Tank.Nuke_Shells:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Apocalypse Tank Nuclear Shells
 	RenderSprites:
 		Image: apoc
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.propaganda
+		Prerequisites: has_points, ~vehicles.russia, techcenter, ~!promotion.apocalypse_tank.drozd, ~!promotion.apocalypse_tank.propaganda
 		Description: The Apocalypse Tank is upgraded with Nuclear Shells. \n  Nuclear Shells deal a lot of damage to the target and its surroundings. \n  Nuclear Shells are weak vs. Point Laser Defense Systems.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry, Reflector Armor
@@ -687,15 +699,15 @@ commander_tree.Apocalypse_Tank.Nuke_Shells:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank
 
-commander_tree.Apocalypse_Tank.Propaganda:
-	Inherits: ^default.commander_tree_item
+promotion.Apocalypse_Tank.Propaganda:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Apocalypse Tank Propaganda Tower
 	RenderSprites:
 		Image: apoc
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~!commander_tree.apocalypse_tank.drozd, ~!commander_tree.apocalypse_tank.nuke_shells
+		Prerequisites: has_points, ~vehicles.russia, techcenter, ~!promotion.apocalypse_tank.drozd, ~!promotion.apocalypse_tank.nuke_shells
 		Description: The Apocalypse Tank is upgraded with a Propaganda Speaker.\n  This gives infantry in its proximity a boost in combat.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Vehicles, Reflector Armor
@@ -706,8 +718,8 @@ commander_tree.Apocalypse_Tank.Propaganda:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank
 
-commander_tree.Apocalypse_Tank.PDL:
-	Inherits: ^default.commander_tree_item
+promotion.Apocalypse_Tank.PDL:
+	Inherits: ^promotion_item
 	Inherits: ^PDLInfo
 	Tooltip:
 		Name: Apocalypse Tank Point Laser Defense
@@ -715,13 +727,13 @@ commander_tree.Apocalypse_Tank.PDL:
 		Image: apoc
 	Buildable:
 		BuildPaletteOrder: 131
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.reflector
+		Prerequisites: has_points, ~vehicles.russia, techcenter, ~filler.apocalypse_tank, ~!promotion.apocalypse_tank.reflector
 		Description: Upgrades the Apocalypse Tank with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank2
 
-commander_tree.Apocalypse_Tank.Reflector:
-	Inherits: ^default.commander_tree_item
+promotion.Apocalypse_Tank.Reflector:
+	Inherits: ^promotion_item
 	Inherits: ^ReflectorInfo
 	Tooltip:
 		Name: Apocalypse Tank Reflector Armor
@@ -729,67 +741,67 @@ commander_tree.Apocalypse_Tank.Reflector:
 		Image: apoc
 	Buildable:
 		BuildPaletteOrder: 131
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, techcenter, ~filler.apocalypse_tank, ~!commander_tree.apocalypse_tank.pdl
+		Prerequisites: has_points, ~vehicles.russia, techcenter, ~filler.apocalypse_tank, ~!promotion.apocalypse_tank.pdl
 		Description: Equips the Apocalypse Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.apocalypse_tank2
 
 hack.cameo_filler.apoc:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 132
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, disabled, ~filler.apocalypse_tank2
+		Prerequisites: has_points, ~vehicles.russia, disabled, ~filler.apocalypse_tank2
 
 
-commander_tree.Rice_Cooker:
-	Inherits: ^default.commander_tree_item
+promotion.Rice_Cooker:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Kim's Giant Rice Cooker
 	RenderSprites:
 		Image: rice_cooker
 	Buildable:
 		BuildPaletteOrder: 139
-		Prerequisites: prerequisite.has_points, ~vehicles.nkorea, indp
+		Prerequisites: has_points, ~vehicles.nkorea, indp
 		Description: Unlocks Kim's Giant Rice Cooker. \nThe great leader has engineered the best Rice Cooker in the world.\nHis excellency's engineering is so supreme, the Rice Cooker can be used as an artillery\nand unsurprisingly is the best artillery in the world.\nOnce the great leader steered the Rice Cooker and fired a shot that flew around the globe and hit South Korea from the south!
 
-commander_tree.Gene_Splicer:
-	Inherits: ^default.commander_tree_item
+promotion.Gene_Splicer:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Gene Splicer
 	RenderSprites:
 		Image: gene_splicer
 	Buildable:
 		BuildPaletteOrder: 139
-		Prerequisites: prerequisite.has_points, ~vehicles.iraq, cloning_vats
+		Prerequisites: has_points, ~vehicles.iraq, cloning_vats
 		Description: Unlocks the Gene Splicer. \nIt is a three legged Walker that shoots out specifically modulated radiation. \nThe radiation kills drivers of vehicles and turns infantry into Zombies.
 
-commander_tree.Tsar:
-	Inherits: ^default.commander_tree_item
+promotion.Tsar:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Tsar Tank
 	RenderSprites:
 		Image: tsar
 	Buildable:
 		BuildPaletteOrder: 139
-		Prerequisites: prerequisite.has_points, ~vehicles.russia, indp
+		Prerequisites: has_points, ~vehicles.russia, indp
 		Description: Unlocks the Tsar Tank. \nIt is a giant slow moving deployable tank. \n not yet implemented
 
 hack.cameo_filler.soviet_epic1:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 140
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+		Prerequisites: has_points, ~vehicles.soviet, disabled
 
 hack.cameo_filler.soviet_epic2:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 140
-		Prerequisites: prerequisite.has_points, ~vehicles.soviet, disabled
+		Prerequisites: has_points, ~vehicles.soviet, disabled
 
 # Aircraft
 
-commander_tree.Hind.Tesla:
-	Inherits: ^default.commander_tree_item
+promotion.Hind.Tesla:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: hind
 	WithProductionIconOverlay@Tesla:
@@ -798,7 +810,7 @@ commander_tree.Hind.Tesla:
 		Name: Tesla Hind
 	Buildable:
 		BuildPaletteOrder: 127
-		Prerequisites: prerequisite.has_points, ~aircraft.russia, ~!commander_tree.hind.torp, ~!commander_tree.hind.missile, ~!commander_tree.hind.radcannon
+		Prerequisites: has_points, ~aircraft.russia, ~!promotion.hind.torp, ~!promotion.hind.missile, ~!promotion.hind.radcannon
 		Description: Upgrades the Hind with Tesla Coils making it stronger vs vehicles.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Infantry
@@ -806,8 +818,8 @@ commander_tree.Hind.Tesla:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.hind
 
-commander_tree.Hind.Radcannon:
-	Inherits: ^default.commander_tree_item
+promotion.Hind.Radcannon:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: hind
 	WithProductionIconOverlay@Radiation:
@@ -816,7 +828,7 @@ commander_tree.Hind.Radcannon:
 		Name: Hind (Radcannon)
 	Buildable:
 		BuildPaletteOrder: 127
-		Prerequisites: prerequisite.has_points, ~aircraft.iraq, ~!commander_tree.hind.torp, ~!commander_tree.hind.missile, ~!commander_tree.hind.tesla
+		Prerequisites: has_points, ~aircraft.iraq, ~!promotion.hind.torp, ~!promotion.hind.missile, ~!promotion.hind.tesla
 		Description: Upgrades the Hind with radiation cannons.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry
@@ -824,8 +836,8 @@ commander_tree.Hind.Radcannon:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.hind
 
-commander_tree.Hind.Missile:
-	Inherits: ^default.commander_tree_item
+promotion.Hind.Missile:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: hind
 	WithProductionIconOverlay@Missile:
@@ -834,7 +846,7 @@ commander_tree.Hind.Missile:
 		Name: Hind (Missiles)
 	Buildable:
 		BuildPaletteOrder: 127
-		Prerequisites: prerequisite.has_points, ~aircraft.nkorea, ~!commander_tree.hind.torp, ~!commander_tree.hind.tesla, ~!commander_tree.hind.radcannon
+		Prerequisites: has_points, ~aircraft.nkorea, ~!promotion.hind.torp, ~!promotion.hind.tesla, ~!promotion.hind.radcannon
 		Description: Upgrades the Hind with unguided missiles giving it more range and area damage.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, big armies
@@ -842,8 +854,8 @@ commander_tree.Hind.Missile:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.hind
 
-commander_tree.Hind.Torp:
-	Inherits: ^default.commander_tree_item
+promotion.Hind.Torp:
+	Inherits: ^promotion_item
 	RenderSprites:
 		Image: hind
 	WithProductionIconOverlay@Torpedo:
@@ -852,7 +864,7 @@ commander_tree.Hind.Torp:
 		Name: Hind Torpedo Upgrade
 	Buildable:
 		BuildPaletteOrder: 127
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!commander_tree.hind.missile, ~!commander_tree.hind.tesla, ~!commander_tree.hind.radcannon
+		Prerequisites: has_points, ~aircraft.soviet, ~!promotion.hind.missile, ~!promotion.hind.tesla, ~!promotion.hind.radcannon
 		Description: Upgrades the Hind with torpedo bombs.
 	TooltipExtras:
 		Strengths: • Strong vs Ships, Submarines
@@ -862,42 +874,42 @@ commander_tree.Hind.Torp:
 		Prerequisite: filler.hind
 
 hack.cameo_filler.113:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 129
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
+		Prerequisites: has_points, ~aircraft.soviet, disabled
 
 hack.cameo_filler.114:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 129
-		Prerequisites: prerequisite.has_points, ~filler.hind, disabled
+		Prerequisites: has_points, ~filler.hind, disabled
 
 
-commander_tree.Frogfoot:
-	Inherits: ^default.commander_tree_item
+promotion.Frogfoot:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Frogfoot SU-25
 	RenderSprites:
 		Image: frog
 	Buildable:
 		BuildPaletteOrder: 140
-		Prerequisites: prerequisite.has_points, ~aircraft.russia
+		Prerequisites: has_points, ~aircraft.russia
 		Description: Enables to build the SU-25 Frogfoot. \n  A bomber optimized to take down large groups of ground units or buildings.
 
-commander_tree.Il11b:
-	Inherits: ^default.commander_tree_item
+promotion.Il11b:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Ilyushin-11b
 	RenderSprites:
 		Image: il11b
 	Buildable:
 		BuildPaletteOrder: 140
-		Prerequisites: prerequisite.has_points, ~aircraft.nkorea
+		Prerequisites: has_points, ~aircraft.nkorea
 		Description: Enables to build the Ilyushin-11b. \n  A bomber optimized to take down large groups of ground units or buildings.
 
-commander_tree.Dirty_Frogfoot:
-	Inherits: ^default.commander_tree_item
+promotion.Dirty_Frogfoot:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Dirty Frogfoot
 	RenderSprites:
@@ -906,44 +918,44 @@ commander_tree.Dirty_Frogfoot:
 		Types: Hazard
 	Buildable:
 		BuildPaletteOrder: 140
-		Prerequisites: prerequisite.has_points, ~aircraft.iraq
+		Prerequisites: has_points, ~aircraft.iraq
 		Description: Enables to build the Dirty Frogfoot. \n  It is a bomber armed with dirty bombs leaving a lot of radiation at the strike site.
 
 hack.cameo_filler.115:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 141
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
+		Prerequisites: has_points, ~aircraft.soviet, disabled
 
 hack.cameo_filler.116:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 141
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, disabled
+		Prerequisites: has_points, ~aircraft.soviet, disabled
 
 
-commander_tree.Airship:
-	Inherits: ^default.commander_tree_item
+promotion.Airship:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Airship of the People
 	RenderSprites:
 		Image: blimp
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!commander_tree.kirov.carrier, ~!commander_tree.kirov.mecha, ~!commander_tree.kirov.demo, ~!commander_tree.kirov.v3
+		Prerequisites: has_points, techcenter, ~aircraft.soviet, ~!promotion.kirov.carrier, ~!promotion.kirov.mecha, ~!promotion.kirov.demo, ~!promotion.kirov.v3
 		Description: Upgrades Kirov to the Airship of the People. \n  It greatly accelerates the Revolution by paradropping revolutionaries on the field.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.kirov
 
-commander_tree.Kirov.V3:
-	Inherits: ^default.commander_tree_item
+promotion.Kirov.V3:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Kirov V3 System
 	RenderSprites:
 		Image: kirov.v3
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.nkorea, ~!commander_tree.kirov.carrier, ~!commander_tree.airship
+		Prerequisites: has_points, techcenter, ~aircraft.nkorea, ~!promotion.kirov.carrier, ~!promotion.airship
 		Description: Heavily armoured airship equipped with V3 long range rockets.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Massed units
@@ -952,15 +964,15 @@ commander_tree.Kirov.V3:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.kirov
 
-commander_tree.Kirov.Demo:
-	Inherits: ^default.commander_tree_item
+promotion.Kirov.Demo:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Nuke Kirov
 	RenderSprites:
 		Image: kirov.demo
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.iraq, ~!commander_tree.kirov.mecha, ~!commander_tree.airship
+		Prerequisites: has_points, techcenter, ~aircraft.iraq, ~!promotion.kirov.mecha, ~!promotion.airship
 		Description: Heavily armoured airship equipped with an atomic bomb.
 	TooltipExtras:
 		Strengths: • Strong vs everything it can reach
@@ -969,15 +981,15 @@ commander_tree.Kirov.Demo:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.kirov
 
-commander_tree.Kirov.Mecha:
-	Inherits: ^default.commander_tree_item
+promotion.Kirov.Mecha:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Mecha Kirov
 	RenderSprites:
 		Image: kirov.mecha
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea, ~!commander_tree.kirov.demo, ~!commander_tree.airship
+		Prerequisites: has_points, techcenter, ~aircraft.soviet, ~!aircraft.nkorea, ~!promotion.kirov.demo, ~!promotion.airship
 		Description: Heavily armoured airship equipped with a flamethrower (iraq) or tesla coil (russia).
 	TooltipExtras:
 		Strengths: • Strong vs Ground Units
@@ -986,15 +998,15 @@ commander_tree.Kirov.Mecha:
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.kirov
 
-commander_tree.Kirov.Carrier:
-	Inherits: ^default.commander_tree_item
+promotion.Kirov.Carrier:
+	Inherits: ^promotion_item
 	Tooltip:
 		Name: Kirov Carrier
 	RenderSprites:
 		Image: kirov.carrier
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: prerequisite.has_points, techcenter, ~aircraft.nkorea, ~!commander_tree.kirov.v3, ~!commander_tree.airship
+		Prerequisites: has_points, techcenter, ~aircraft.nkorea, ~!promotion.kirov.v3, ~!promotion.airship
 		Description: Heavily armoured airship carrier.\n  Sends out Yak-41 to fight opposing forces.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Aircraft, Buildings
@@ -1004,19 +1016,19 @@ commander_tree.Kirov.Carrier:
 		Prerequisite: filler.kirov
 
 hack.cameo_filler.kirov1:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 145
-		Prerequisites: prerequisite.has_points, ~aircraft.russia, disabled
+		Prerequisites: has_points, ~aircraft.russia, disabled
 
 hack.cameo_filler.kirov2:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 145
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~!aircraft.russia, ~filler.kirov, disabled
+		Prerequisites: has_points, ~aircraft.soviet, ~!aircraft.russia, ~filler.kirov, disabled
 
 hack.cameo_filler.kirov3:
-	Inherits: ^default.cameo_filler
+	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 145
-		Prerequisites: prerequisite.has_points, ~aircraft.soviet, ~filler.kirov, disabled
+		Prerequisites: has_points, ~aircraft.soviet, ~filler.kirov, disabled

@@ -15,7 +15,6 @@ BADR:
 		MaxWeight: 10
 	-Selectable:
 	Interactable:
-	SelectionDecorations:
 	-Voiced:
 	Tooltip:
 		Name: Badger
@@ -69,7 +68,6 @@ BADR.Bomber:
 		Ammo: 7
 	-Selectable:
 	Interactable:
-	SelectionDecorations:
 	-Voiced:
 	Tooltip:
 		Name: Badger
@@ -158,7 +156,6 @@ B2B:
 		Ammo: 1
 	-Selectable:
 	Interactable:
-	SelectionDecorations:
 	-Voiced:
 	Tooltip:
 		Name: B2 Stealth Bomber
@@ -221,7 +218,7 @@ Stealth_Fighter:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~commander_tree.stealth_fighter, ~!commander_tree.stealth_fighter.payload,
+		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~promotion.stealth_fighter, ~!promotion.stealth_fighter.payload,
 		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 2000
@@ -249,7 +246,6 @@ Stealth_Fighter:
 		IdleBehavior: Land
 	AmmoPool:
 		Ammo: 4
-	SelectionDecorations:
 	Contrail@1:
 		Offset: -598,-683,0
 	Contrail@2:
@@ -280,7 +276,7 @@ Stealth_Fighter.payload:
 	Inherits: Stealth_Fighter
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~commander_tree.stealth_fighter.payload,
+		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~promotion.stealth_fighter.payload,
 		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. \n  Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 2500
@@ -301,7 +297,7 @@ YAK:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 30
-		Prerequisites: ~afld, ~!commander_tree.chemyak
+		Prerequisites: ~afld, ~!promotion.chemyak
 		Description: Attack Plane armed with\ndual machine guns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 650
@@ -380,7 +376,7 @@ CHEMYAK:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 30
 		IconPalette: chrometd
-		Prerequisites: ~afld, ~commander_tree.chemyak, ~!commander_tree.chemyak_volatile_tanks
+		Prerequisites: ~afld, ~promotion.chemyak, ~!promotion.chemyak_volatile_tanks
 		Description: Attack Plane armed with\ntoxin spray.\n  Strong vs Infantry, Light armor\n  Weak vs Aircraft
 	Valued:
 		Cost: 800
@@ -418,7 +414,6 @@ CHEMYAK:
 		Ammo: 24
 	WithAmmoPipsDecoration:
 		PipCount: 4
-	SelectionDecorations:
 	WithMuzzleOverlay:
 	SpawnActorOnDeath:
 		Actor: YAK.Husk
@@ -449,7 +444,7 @@ CHEMYAK.Volatile:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 30
 		IconPalette: chrometd
-		Prerequisites: ~afld, ~commander_tree.chemyak_volatile_tanks
+		Prerequisites: ~afld, ~promotion.chemyak_volatile_tanks
 		Description: Attack Plane armed with\ntoxin spray.\nReleases Toxin Clouds on crash.\n  Strong vs Infantry, Light armor\n  Weak vs Aircraft
 	Valued:
 		Cost: 850
@@ -475,7 +470,7 @@ TRAN:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 10
-		Prerequisites: ~aircraft.all, ~!aircraft.england, ~commander_tree.air_logistics
+		Prerequisites: ~aircraft.all, ~!aircraft.england, ~promotion.air_logistics
 		Description: Fast infantry transport helicopter.\n  Unarmed
 	Valued:
 		Cost: 900
@@ -599,7 +594,6 @@ C17:
 		MaxWeight: 10
 	-Selectable:
 	Interactable:
-	SelectionDecorations:
 	-Voiced:
 	Tooltip:
 		Name: Supply Aircraft
@@ -705,7 +699,6 @@ UAV:
 	-Targetable@AIRBORNE:
 	-Selectable:
 	Interactable:
-	SelectionDecorations:
 	SpawnActorOnDeath:
 		Actor: UAV.Husk
 		RequiresCondition: !empdisable && !being-warped
@@ -757,7 +750,7 @@ OCAR:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 45
-		Prerequisites: ~disabled, aircraft.all, ~!aircraft.eagle, ~commander_tree.air_logistics
+		Prerequisites: ~disabled, aircraft.all, ~!aircraft.eagle, ~promotion.air_logistics
 		IconPalette: chrometd
 		Description: Fast VTOL Vehicle Transporter.\n  Unarmed
 	Aircraft:
@@ -815,7 +808,7 @@ OCAR.Eagle:
 	Inherits: OCAR
 	Buildable:
 		Queue: Aircraft
-		Prerequisites: aircraft.all, ~commander_tree.air_logistics
+		Prerequisites: aircraft.all, ~promotion.air_logistics
 	Tooltip:
 		Name: Carryall (Auto)
 	Selectable:
@@ -849,7 +842,6 @@ OCAR.Reinforce:
 		IdealSeparation: 0c256
 	-Selectable:
 	Interactable:
-	SelectionDecorations:
 	-Voiced:
 	RejectsOrders:
 
@@ -979,7 +971,6 @@ YF23.Bomber:
 		ResetOnFire: true
 	-Selectable:
 	Interactable:
-	SelectionDecorations:
 	-Voiced:
 	RenderSprites:
 		Image: yf23
@@ -1047,7 +1038,6 @@ POD:
 	ClassicFacingBodyOrientation:
 	WithFacingSpriteBody:
 	QuantizeFacingsFromSequence:
-	SelectionDecorations:
 	HitShape:
 	Interactable:
 	WithShadow:
@@ -1089,7 +1079,7 @@ Dropship:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~aircraft.any, ~commander_tree.air_logistics
+		Prerequisites: ~aircraft.any, ~promotion.air_logistics
 		Description: Superheavy cargo lifter plane.\nBrings vehicles to the battlefield.
 	TooltipExtras:
 		Attributes: • Transports up to 8 Vehicles\n• Can Paradrop Vehicles (use force fire for drops)\n• Vehicles can be produced into Dropships when fyling over factories
@@ -1206,7 +1196,7 @@ AURORA:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
 		IconPalette: chrome
-		Prerequisites: atek, ~afld.allies, ~aircraft.allies, ~commander_tree.aurora
+		Prerequisites: atek, ~afld.allies, ~aircraft.allies, ~promotion.aurora
 		Description: Supersonic bomber armed with the Mother of all Bombs.\n  Strong vs Buildings, Light Vehicles, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 2800
@@ -1249,7 +1239,6 @@ AURORA:
 		Ammo: 1
 		ReloadDelay: 125
 		AmmoCondition: ammo
-	SelectionDecorations:
 	Contrail@AB1:
 		Offset: -800,-70,-50
 		StartColorUsePlayerColor: false
