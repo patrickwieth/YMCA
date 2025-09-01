@@ -1,0 +1,332 @@
+# China Support Powers
+
+^ChinaSupportPowers:
+	# Artillery Barrage - Available from Command Center
+	DetonateWeaponPower@ArtilleryBarrage:
+		OrderName: chartillerybarrage
+		PauseOnCondition: disabled || empdisable || being-warped || lowpower
+		Prerequisites:
+			1: structures.china
+		Icons:
+			1: chartybarr3
+		IconPalette: chrometd
+		Cursor: attackmove
+		ChargeInterval: 6000
+		ActivationDelay: 50
+		Names:
+			1: Artillery Barrage
+		Descriptions:
+			1: Off-map guns fire at the target.\nApplies heavy damage over a large area.
+		Weapons:
+			1: CHBarrageSpawner3
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		CameraActor: camera
+		CameraRemoveDelay: 300
+
+	# Carpet Bombing - Tank subfaction ability
+	AirstrikePower@carpet:
+		OrderName: chcarpetbombing
+		Icons:
+			1: chcarpet
+		IconPalette: chrometd
+		ChargeInterval: 6000
+		Names:
+			1: Carpet Bombing
+		Descriptions:
+			1: A bomber strikes targets along a line.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: usabomber.carpet
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: airstrike
+		SquadSizes:
+			1: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: false
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		PauseOnCondition: disabled || empdisable || being-warped || lowpower
+		Prerequisites:
+			1: structures.chinatnk, radar
+
+	# Nuke Bomb - Atom subfaction ability
+	AirstrikePower@nuke:
+		OrderName: chnukebombing
+		Icons:
+			1: abombair
+		ChargeInterval: 10500
+		Names:
+			1: Nuke Bomb
+		Descriptions:
+			1: A bomber drops a tactical nuke.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: usabomber.nuke
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: nukeicon
+		SquadSizes:
+			1: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: false
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		PauseOnCondition: disabled || empdisable || being-warped || lowpower
+		Prerequisites:
+			1: structures.chinaatom, radar
+
+	# Frenzy - Infantry subfaction ability
+	GrantExternalConditionPowerCA@Frenzy:
+		OrderName: frenzy
+		Icons:
+			1: frenzy
+		Prerequisites:
+			1: structures.chinainf, radar
+		ChargeInterval: 4500
+		Weapon: Frenzy
+		Names:
+			1: Frenzy
+		Descriptions:
+			1: Temporarily increases ground unit movement and attack speed.
+		Condition: frenzy
+		Dimensions: 5, 5
+		Footprint: _xxx_ xxxxx xxxxx xxxxx _xxx_
+		ValidRelationships: Ally
+		Duration: 500
+		ActivationDelay: 0
+		AirburstAltitude: 0c0
+		Sequence: false-active
+		AllowMultiple: false
+		OnFireSound: nodfrenzy.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable || being-warped || lowpower
+		DisplayTimerStances: Ally
+
+	# Satellite Hack - Available from Internet Center
+	RevealActorsPower@SATHACK:
+		CameraActor: CAMERA
+		TargetActors: fact, afac, sfac, glcommand, chcommand, usacommand
+		LifeTime: 500
+		OrderName: satellitehack1
+		Icons:
+			1: sathack1
+		IconPalette: chrometd
+		ChargeInterval: 3000
+		Names:
+			1: Satellite Hack
+		Descriptions:
+			1: Reveals command centers.
+		LaunchSound: bintsela.wav
+		PauseOnCondition: disabled || empdisable || being-warped
+
+	# Cash Hack - Available from Internet Center
+	CashHackPower:
+		OrderName: cashhack
+		Icons:
+			1: cashhack
+		ChargeInterval: 4500
+		Minimum: 500
+		Maximum: 2000
+		Names:
+			1: Cash Hack
+		Descriptions:
+			1: Steal up to $2000 credits from a selected enemy refinery.
+		OnFireSound: scashhac.aud
+		Notification: CreditsStolen
+		DisplayTimerStances: Ally
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: lowpower
+
+	# Tank Drop - Available from Airfield
+	ParatroopersPower@tankdrop:
+		PauseOnCondition: lowpower
+		Prerequisites:
+			1: vehicles.chinatnk
+		OrderName: tankdrop
+		Icons:
+			1: airdropicon
+		ChargeInterval: 5000
+		Names:
+			1: Tank Drop
+		Descriptions:
+			1: Cargo planes drop Battlemaster tanks\nanywhere on the map.
+		DropItems:
+			1: chbattle, chbattle, chbattle
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		UnitTypes:
+			1: usabomber
+		SquadSizes:
+			1: 1
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+
+	# Infantry Paradrop - Available from Airfield
+	ParatroopersPower@minigunnerdrop:
+		PauseOnCondition: lowpower
+		Prerequisites:
+			1: infantry.chinainf
+		OrderName: minigunnerdrop
+		Icons:
+			1: paradropicon
+		ChargeInterval: 5000
+		Names:
+			1: Infantry Paradrop
+		Descriptions:
+			1: Cargo planes drop 15 minigunners\nanywhere on the map.
+		DropItems:
+			1: minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		UnitTypes:
+			1: usabomber
+		SquadSizes:
+			1: 3
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+
+	# Cluster Mines - Available from Airfield
+	AirstrikePower@cluster:
+		OrderName: chclusterbomb
+		Icons:
+			1: chclustermines
+		IconPalette: chrometd
+		ChargeInterval: 6000
+		Names:
+			1: Cluster Mines
+		Descriptions:
+			1: A bomber deploys cluster mines at the target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: usabomber.minebomb
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: airstrike
+		SquadSizes:
+			1: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		Prerequisites:
+			1: structures.chinaatom, chairport
+
+^ChinaSuperweapons:
+	# EMP Bomb - Available from Nuclear Silo (normal support power)
+	AirstrikePower@EMP:
+		OrderName: chempbomb
+		Icons:
+			1: chemp
+		ChargeInterval: 4500
+		Names:
+			1: EM Pulse
+		Descriptions:
+			1: A bomber drops a EMP bomb on the target.\nDisables vehicles and defenses.\nInstant-kills most aircraft.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: usabomber.emp
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: airstrike
+		SquadSizes:
+			1: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: false
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		Prerequisites:
+			1: chsilo
+
+	# Nuclear Strike - Available from Nuclear Silo (techlevel.superw)
+	NukePowerCA:
+		PauseOnCondition: disabled || empdisable || being-warped
+		Prerequisites:
+			1: ~techlevel.superw
+		Cursor: nuke
+		Icons:
+			1: abomb
+		ChargeInterval: 13500
+		Names:
+			1: Atom Bomb
+		Descriptions:
+			1: Launches a devastating atomic bomb\nat a target location.
+		BeginChargeSpeechNotification: AbombPrepping
+		EndChargeSpeechNotification: AbombReady
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSound: nukelaunch.aud
+		IncomingSpeechNotification: AbombLaunchDetected
+		LaunchSound: nukelaunch.aud
+		MissileWeapons:
+			1: atomic
+		MissileDelay: 5
+		SpawnOffset: 1c0,427,0
+		DisplayTimerStances: Ally, Neutral, Enemy
+		DisplayBeacon: True
+		DisplayRadarPing: True
+		BeaconPosters:
+			1: atomicon
+		FlashType: Nuke
+		CameraRange: 10c0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		CircleRanges:
+			1: 10000
+		TrailImage: smokey2
+		TrailSequences: idle
+		TrailPalette: tseffect-ignore-lighting-alpha75
+		MissileImage: atomic

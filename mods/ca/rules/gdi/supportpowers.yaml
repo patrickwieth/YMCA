@@ -1,0 +1,138 @@
+# GDI Support Powers
+
+^GDISupportPowers:
+	# Reinforcements - Eagle subfaction ability
+	SpawnActorPower@GDIEagleDropzone:
+		Actors:
+			1: FLARE.dropzone
+		Prerequisites:
+			1: ~radar.gdi, ~structures.eagle, fact
+		LifeTime: 280
+		OrderName: dropzoneeagle
+		Icons:
+			1: orcaca
+		IconPalette: chrometd
+		ChargeInterval: 7200
+		Names:
+			1: Reinforcements
+		Descriptions:
+			1: An Orca Carryall drops reinforcements\nat the target location.
+		EndChargeSpeechNotification: Reinforce
+		LaunchSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		EffectSequence: idle
+		PauseOnCondition: disabled || being-warped
+		DisplayRadarPing: True
+
+	# Interceptors - Eagle subfaction ability
+	InterceptorPower@EagleAirDef:
+		OrderName: EagleAirDef
+		Prerequisites:
+			1: structures.eagle, techlevel.superw
+		Icons:
+			1: airsupport
+		ChargeInterval: 10500
+		Names:
+			1: Interceptors
+		Descriptions:
+			1: A squadron of Interceptors provides\nair cover on the selected target area.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitType: yf23.bomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: airsupport
+		BeaconPosterPalette: chrome
+		SquadSize: 3
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		Mission: Guard
+		GuardDuration: 500
+		Cordon: 5c0
+		PauseOnCondition: disabled || being-warped
+
+	# Drop Pods - Zocom subfaction ability
+	DropPodsPower@Zocom:
+		OrderName: droppods
+		Cursor: ability
+		Prerequisites:
+			1: structures.zocom, hq
+		PauseOnCondition: disabled || being-warped
+		Icons:
+			1: droppods
+		IconPalette: chrometd
+		Names:
+			1: Drop Pods
+		Descriptions:
+			1: Drop Pod reinforcements.\nSmall team of elite soldiers orbital drops\nto target location.
+		DropPodsAvailableNotification: DropPodsAvailable
+		SelectTargetSpeechNotification: SelectTarget
+		DisplayRadarPing: True
+		ChargeInterval: 4500
+		Weapon: DropPodArrive
+		Drops: 5, 8
+		UnitTypes: POD, POD2, POD3
+		PodScatter: 3
+		EntryEffect: explosion
+		EntryEffectSequence: shock_wave
+		EntryEffectPalette: tseffect-ignore-lighting-alpha75
+		SquadOffset: -1024,1024,0
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+
+^GDISuperweaponBig:
+	# Ion Cannon - Available from GDI Tech Center (techlevel.superw)
+	DetonateWeaponPower@IonStorm:
+		OrderName: ioncannon
+		Prerequisites:
+			1: ~techlevel.superw
+		Icons:
+			1: ioncannon
+		Cursor: ioncannon
+		ChargeInterval: 13500
+		Names:
+			1: Ion Cannon
+		ActivationDelay: 50
+		Descriptions:
+			1: Initiate an Ion Cannon strike.\nApplies heavy damage over a large area.
+		Weapons:
+			1: IonStormInit
+		AirburstAltitude: 4c512
+		AllowMultiple: false
+		CameraActor: camera
+		CameraRemoveDelay: 375
+		SelectTargetSpeechNotification: SelectTarget
+		BeginChargeSpeechNotification: IonCannonCharging
+		EndChargeSpeechNotification: IonCannonReady
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSpeechNotification: IonCannonApproach
+		IncomingSound: nukelaunch.aud
+		DisplayTimerStances: Ally, Neutral, Enemy
+		PauseOnCondition: disabled || empdisable || being-warped
+
+^GDISuperweaponSmall:
+	# E.M. Pulse - Available from Patreus System (techlevel.superw)
+	AttackOrderPower@EMPMISSILE:
+		Prerequisites:
+			1: ~techlevel.superw
+		OrderName: empmissile
+		PauseOnCondition: empdisable || disabled || being-warped
+		Cursor: empmissile
+		Icons:
+			1: empmissile
+		ChargeInterval: 4500
+		Names:
+			1: E.M. Missile
+		Descriptions:
+			1: Fires a Tomahawk missile which disables\nall mechanical units in the area.
+		BeginChargeSpeechNotification: EMMissilePrepping
+		EndChargeSpeechNotification: EMMissileReady
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSpeechNotification: MissileLaunchDetected
+		DisplayTimerRelationships: Ally, Neutral, Enemy

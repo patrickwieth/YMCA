@@ -1586,6 +1586,7 @@ NERV:
 	Inherits: ^ScrinBuilding
 	Inherits: ^ScrinSpriteRA2
 	Inherits: ^TechLevelBuilding
+	Inherits: ^Tier2Tech
 	Inherits: ^2x2Building+Bib
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^RadarStation
@@ -1633,109 +1634,6 @@ NERV:
 	InfiltrateForSupportPower@tec:
 		Types: SabInfiltrate
 		Proxy: rad.scrin.stolen
-	RevealActorsPower@RESOURCESCAN:
-		CameraActor: camera.resourcescan
-		TargetActors: mine, gmine, split2, split3, splitblue, proc, proc.td, proc.scrin
-		LifeTime: 250
-		OrderName: resourcescan
-		Icon: rescanpower
-		ChargeInterval: 7500
-		Name: Resource Scan
-		Description: Reveals map resources.
-		LaunchSound: tibscan.aud
-		PauseOnCondition: disabled || empdisable || being-warped
-	SpawnActorPower@ICHORSEED:
-		OrderName: ichorseed
-		Icons:
-			1: ichorpower
-		Actors:
-			1: ichor.seeder
-		ChargeInterval: 6000
-		Name: Ichor Seed
-		LifeTime: -1
-		AllowMultiple: false
-		Names:
-			1: Ichor Seed
-		Descriptions:
-			1: Seeds tiberium at selected location.
-		LaunchSound: ichorseed.aud
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		PauseOnCondition: disabled || empdisable || being-warped
-		EffectSequence: idle
-	SpawnActorPower@BUZZERSWARM:
-		Actors:
-			1: BUZZ
-		OrderName: buzzerswarm
-		Icons:
-			1: buzzpower
-		Prerequisites: structures.harvester, !botplayer
-		ChargeInterval: 4500
-		LifeTime: -1
-		Names:
-			1: Buzzer Swarm
-		Descriptions:
-			1: Spawns controllable buzzer swarm which damages anything nearby.
-		LaunchSound: buzzers-create.aud
-		SelectTargetSpeechNotification: SelectTarget
-		PauseOnCondition: disabled || empdisable || being-warped
-		DisplayRadarPing: True
-		EffectSequence: idle
-	SpawnActorPower@BUZZERSWARMAI:
-		Actors:
-			1: BUZZ.AI
-		OrderName: buzzerswarmai
-		Icons:
-			1: buzzpower
-		Prerequisites: structures.harvester, botplayer
-		ChargeInterval: 6000
-		LifeTime: -1
-		Names:
-			1: Buzzer Swarm (AI)
-		Descriptions:
-			1: Spawns controllable buzzer swarm which damages anything nearby.
-		LaunchSound: buzzers-create.aud
-		SelectTargetSpeechNotification: SelectTarget
-		PauseOnCondition: disabled || empdisable || being-warped
-		DisplayRadarPing: True
-		EffectSequence: idle
-	DetonateWeaponPower@STORMSPIKE:
-		OrderName: stormspike
-		Icon: stormspikepower
-		IconPalette: scrin
-		Prerequisites: structures.traveler
-		Cursor: ability
-		ChargeInterval: 6000
-		Name: Storm Spike
-		ActivationDelay: 1
-		Description: Creates a temporary storm column.
-		LaunchSound: scrinbuild.aud
-		Weapons:
-			1: StormSpikeSpawner
-		AirburstAltitude: 0c0
-		SelectTargetSpeechNotification: SelectTarget
-		PauseOnCondition: disabled || empdisable || being-warped
-		CameraActor: camera.paradrop
-		CameraRemoveDelay: 1
-		DisplayRadarPing: True
-	SpawnActorPower@IONSURGE:
-		Actors:
-			1: ion.surge
-		OrderName: ionsurge
-		Icons:
-			1: ionsurgepower
-		Prerequisites: structures.reaper
-		ChargeInterval: 4500
-		LifeTime: -1
-		Names:
-			1: Ion Surge
-		Descriptions:
-			1: Reduces power output of power plants and disables radar within affected area.
-		LaunchSound: ionsurge.aud
-		SelectTargetSpeechNotification: SelectTarget
-		PauseOnCondition: disabled || empdisable || being-warped
-		DisplayRadarPing: True
-		EffectSequence: idle
 	Exit:
 
 SCRT:
@@ -1767,29 +1665,6 @@ SCRT:
 	ProvidesPrerequisite:
 		Prerequisite: techcenter
 	ProvidesPrerequisite@buildingname:
-	GrantExternalConditionPower@FEEDERMUTATION:
-		OrderName: feedermutation
-		Icon: feedermutation
-		Prerequisites: structures.reaper
-		ChargeInterval: 6750
-		Name: Feeder Mutation
-		Dimensions: 3, 3
-		ValidRelationships: Ally
-		AllowMultiple: false
-		Description: Transforms Scrin infantry into Feeders which consume resources\nuntil becoming volatile enough to explode.
-		OnFireSound: feedermutation.aud
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		DisplayRadarPing: True
-		Cursor: ability
-		PauseOnCondition: disabled || empdisable || being-warped
-		DisplayTimerRelationships: Ally
-		Conditions:
-			1: feedermutation
-		Durations:
-			1: 25
-		Footprints:
-			1: _x_ xxx _x_
 	Exit:
 
 GRAV:
@@ -1862,6 +1737,7 @@ GRAV:
 SIGN:
 	Inherits: ^ScrinBuilding
 	Inherits: ^TechLevelBuilding
+	Inherits: ^Tier4Tech
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^3x2Building+Bib
 	HitShape:
@@ -1990,6 +1866,7 @@ MANI:
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^2x2Building+Bib
 	Inherits: ^SuperWeapon
+	Inherits: ^ScrinSuperweaponSmall
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -2018,33 +1895,13 @@ MANI:
 		Types: SpyInfiltrate, SabInfiltrate
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-	DetonateWeaponPower@SUPPRESSION:
-		PauseOnCondition: disabled || empdisable || being-warped
-		OrderName: suppression
-		Icon: spresspower
-		ChargeInterval: 4500
-		Name: Suppression Field
-		Description: Applies a suppression field to the target area, slowing units.
-		Duration: 600
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		DisplayRadarPing: True
-		ActivationDelay: 0
-		SupportPowerPaletteOrder: 10
-		TargetCircleRange: 3c512
-		TargetCircleColor: ff55ffcc
-		LaunchSound: suppression.aud
-		DisplayTimerStances: Ally, Neutral, Enemy
-		Weapons:
-			1:  SuppressionField
-		CameraActor: camera.dummy
-		CameraRemoveDelay: 1
 
 RIFT:
 	Inherits: ^ScrinBuilding
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^2x2Shape
 	Inherits: ^SuperWeapon
+	Inherits: ^ScrinSuperweaponBig
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -2065,37 +1922,6 @@ RIFT:
 	WithBuildingBib:
 		HasMinibib: true
 		Sequence: bibIron
-	DetonateWeaponPower@RiftGenerator:
-		OrderName: rift
-		Icon: riftpower
-		Cursor: ability
-		ChargeInterval: 13500
-		Name: Rift
-		ActivationDelay: 50
-		Description: Initiate a Lightning Storm.\nApplies heavy damage over a large area.
-		Weapons:
-			1:  RiftInit
-		AllowMultiple: false
-		CameraActor: camera
-		CameraRemoveDelay: 375
-		SelectTargetSpeechNotification: SelectTarget
-		EndChargeSpeechNotification: RiftReady
-		InsufficientPowerSpeechNotification: InsufficientPower
-		IncomingSpeechNotification: RiftApproach
-		IncomingSound: nukelaunch.aud
-		LaunchSound: nukelaunch.aud
-		DisplayTimerStances: Ally, Neutral, Enemy
-		PauseOnCondition: disabled || empdisable || being-warped
-		DisplayBeacon: True
-		DisplayRadarPing: True
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		BeaconPoster: riftpower
-		TargetCircleRange: 6c512
-		TargetCircleColor: 0000FF90
-		Duration: 425
-		ActiveCondition: active
 	WithIdleOverlay@ACTIVE:
 		Sequence: active-overlay
 		Palette: scrin

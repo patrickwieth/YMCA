@@ -29,18 +29,21 @@
 		ClassName: MCV Only
 		Factions: gdi, talon, zocom, eagle
 		BaseActor: amcv
+		SupportProxyActors: gdi.dummy
 	StartingUnits@amcvdoubledgdi:
 		Class: doubled
 		ClassName: Double MCV
 		Factions: gdi, talon, zocom, eagle
 		BaseActor: amcv
 		SupportActors: amcv
+		SupportProxyActors: gdi.dummy
 	StartingUnits@defaultgdi:
 		Class: light
 		ClassName: Light Support
 		Factions: gdi, talon, zocom, eagle
 		BaseActor: amcv
 		SupportActors: n1,n1,n1,rocket_mercenary,rocket_mercenary
+		SupportProxyActors: gdi.dummy
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
 	StartingUnits@heavygdi:
@@ -49,8 +52,28 @@
 		Factions: gdi, talon, zocom, eagle
 		BaseActor: amcv
 		SupportActors: n1,n1,n1,rocket_mercenary,rocket_mercenary,mtnk,mtnk
+		SupportProxyActors: gdi.dummy
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
+####################################################################################################
+
+Player:
+	ProvidesPrerequisite@regular-gdi:
+		Prerequisite: gdi
+		Factions: talon, zocom, eagle
+	ProvidesPrerequisite@talon-gdi:
+		Prerequisite: talon
+		Factions: talon
+	ProvidesPrerequisite@zocom-gdi:
+		Prerequisite: zocom
+		Factions: zocom
+	ProvidesPrerequisite@eagle-gdi:
+		Prerequisite: eagle
+		Factions: eagle
+
+gdi.dummy:
+	Inherits: ^GDISupportPowers
+####################################################################################################
 
 ^DronePairing:
 	GrantConditionOnPrerequisite@DRONEPAIR:

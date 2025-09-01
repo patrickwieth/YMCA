@@ -29,18 +29,21 @@
 		ClassName: MCV Only
 		Factions: soviet, russia, nkorea, iraq
 		BaseActor: mcv
+		SupportProxyActors: soviet.dummy
 	StartingUnits@mcvdoubledsoviet:
 		Class: doubled
 		ClassName: Double MCV
 		Factions: soviet, russia, nkorea, iraq
 		BaseActor: mcv
 		SupportActors: mcv
+		SupportProxyActors: soviet.dummy
 	StartingUnits@lightsoviet:
 		Class: light
 		ClassName: Light Support
 		Factions: soviet, russia, nkorea, iraq
 		BaseActor: mcv
 		SupportActors: e1,e1,e1,rpg_soldier,rpg_soldier
+		SupportProxyActors: soviet.dummy
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
 	StartingUnits@heavysoviet:
@@ -49,8 +52,28 @@
 		Factions: soviet, russia, nkorea, iraq
 		BaseActor: mcv
 		SupportActors: e1,e1,e1,rpg_soldier,rpg_soldier,heavy_tank,heavy_tank
+		SupportProxyActors: soviet.dummy
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
+####################################################################################################
+
+Player:
+	ProvidesPrerequisite@regular-soviet:
+		Prerequisite: soviet
+		Factions: russia, nkorea, iraq
+	ProvidesPrerequisite@russia-soviet:
+		Prerequisite: russia
+		Factions: russia
+	ProvidesPrerequisite@nkorea-soviet:
+		Prerequisite: nkorea
+		Factions: nkorea
+	ProvidesPrerequisite@iraq-soviet:
+		Prerequisite: iraq
+		Factions: iraq
+
+soviet.dummy:
+	Inherits: ^SovietSupportPowers
+####################################################################################################
 
 ^SovietArtillery:
 	GrantConditionOnPrerequisite:

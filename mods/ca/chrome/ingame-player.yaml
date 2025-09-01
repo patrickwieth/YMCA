@@ -161,7 +161,7 @@ Container@PLAYER_WIDGETS:
 					Height: 16
 					ImageCollection: armor-bits
 					ImageName: armor-light
-				ActorIcon@ACTOR_ICON:
+				ActorIconCA@ACTOR_ICON:
 					X: 72
 					Y: 75
 					Width: 64
@@ -182,7 +182,8 @@ Container@PLAYER_WIDGETS:
 			ImageCollection: commandbar
 			ImageName: background
 		Container@COMMAND_BAR:
-			Logic: CommandBarLogic
+			Logic: CustomFormationsCommandBarLogic
+				HighlightOnButtonPress: True
 			X: 14
 			Y: WINDOW_HEIGHT - HEIGHT - 14
 			Width: 275
@@ -438,6 +439,9 @@ Container@PLAYER_WIDGETS:
 					Align: Right
 					Text: Audio Muted
 					Contrast: true
+		IngamePromotionCounter@PROMOTIONS:
+			X: WINDOW_WIDTH - 260
+			Y: 12
 		Image@SIDEBAR_BACKGROUND_TOP:
 			Logic: AddFactionSuffixLogic
 			X: WINDOW_WIDTH - 250
@@ -702,17 +706,17 @@ Container@PLAYER_WIDGETS:
 									X: 6
 									Y: 6
 									ImageCollection: production-icons
-						ProductionTypeButton@Commander_Tree:
+						ProductionTypeButton@PROMOTIONS:
 							Logic: AddFactionSuffixLogic
 							Y: 162
 							Width: 28
 							Height: 28
 							VisualHeight: 0
 							Background: sidebar-button
-							TooltipText: Commander Specialization
+							TooltipText: button-production-types-promotion-tooltip
 							TooltipContainer: TOOLTIP_CONTAINER
-							ProductionGroup: Commander_Tree
-							Key: ProductionTypeCommanderTree
+							ProductionGroup: Promotion
+							Key: ProductionTypePromotion
 							Children:
 								Image@ICON:
 									X: 6
@@ -778,7 +782,7 @@ Container@PLAYER_WIDGETS:
 					TooltipTemplate: SIMPLE_TOOLTIP
 					Children:
 						Image@CASH_ICON:
-							X: 0-21
+							X: -21
 							Y: 4
 							ImageCollection: cash-icons
 							ImageName: cash-normal

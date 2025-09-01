@@ -1,0 +1,227 @@
+# Allies Support Powers
+
+^AlliesSupportPowers:
+
+	# Time Warp - Germany subfaction ability
+	DetonateWeaponPower@TimeWarp:
+		OrderName: TimeWarp
+		Icons:
+			1: timewarp
+		Prerequisites:
+			1: germany
+		Cursor: ability
+		ChargeInterval: 4500
+		Names:
+			1: Time Warp
+		ActivationDelay: 25
+		Descriptions:
+			1: Disrupts time and space at target area,\ncausing units & structures to be frozen in time.
+		Weapons:
+			1: TimeWarp
+		AirburstAltitude: 0c0
+		AllowMultiple: false
+		CameraActor: camera
+		CameraRemoveDelay: 375
+		SelectTargetSpeechNotification: SelectTarget
+		EndChargeSpeechNotification: ChronosphereReady
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSpeechNotification: ChronosphereCharging
+		DisplayTimerStances: Ally
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayBeacon: True
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		BeaconPosters:
+			1: timewarpicon
+		TargetCircleRanges:
+			1: 1c512
+		TargetCircleColors: 0000FF90
+		DisplayRadarPing: True
+		LaunchSound: chrono2.aud
+		IncomingSound: chrono2.aud
+		ActivationSequence:
+
+	# Cluster Mines - France subfaction ability
+	AirstrikePower@clustermines:
+		ChargeInterval: 6000
+		Prerequisites:
+			1: france, tier2
+		Names:
+			1: Cluster Mines
+		Descriptions:
+			1: Send a cargo plane\nto deploy a minefield.
+		OrderName: clustermine
+		UnitTypes:
+			1: c17.clustermines
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		QuantizedFacings: 8
+		SquadSizes:
+			1: 1
+		DisplayBeacon: true
+		BeaconPosters:
+			1: cmineicon
+		BeaconPosterPalette: chrome
+		Icons:
+			1: cmines
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		SelectTargetSpeechNotification: SelectTarget
+		PauseOnCondition: disabled || being-warped
+		RequiresCondition: !build-incomplete
+
+	# GPS Scrambler - Germany subfaction ability
+	SpawnActorPower@GpsScramble:
+		Actors:
+			1: gps.scrambler
+		OrderName: gpsscramble
+		Icons:
+			1: gpsscram
+		IconPalette: chrometd
+		Prerequisites:
+			1: tier2
+		ChargeInterval: 4500
+		LifeTime: 500
+		Names:
+			1: GPS Scrambler
+		Descriptions:
+			1: Shrouds the target area. Reduces range of enemy units\nand defenses in area while active.
+		LaunchSound: sscrambl.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayRadarPing: True
+		DisplayTimerStances: Ally
+		Cursor: ability
+		AllowMultiple: false
+		EffectSequence: idle
+
+	# Strafing Run - England subfaction ability
+	AirstrikePower@Strafe:
+		OrderName: strafe
+		SquadSizes:
+			1: 3
+		UnitTypes:
+			1: tarantula
+		Prerequisites:
+			1: england, tier2
+		Icons:
+			1: strafe
+		ChargeInterval: 7500
+		Names:
+			1: Strafing Run
+		Descriptions:
+			1: A squad of fighters strafe the target area.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: strafe
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+^AlliesSuperweaponBig:
+	# Lightning Storm - Available from Weather Control Device (techlevel.superw)
+	DetonateWeaponPower@LightningStorm:
+		OrderName: storm
+		Icons:
+			1: storm
+		Prerequisites:
+			1: techlevel.superw
+		Cursor: ability
+		ChargeInterval: 13500
+		Names:
+			1: Lightning Storm
+		Descriptions:
+			1: Creates a devastating lightning storm\nat the target location.
+		ActivationDelay: 50
+		Weapons:
+			1:  WeatherStormInit
+		AirburstAltitude: 4c512
+		AllowMultiple: false
+		CameraActor: camera
+		CameraRemoveDelay: 375
+		SelectTargetSpeechNotification: SelectTarget
+		EndChargeSpeechNotification: StormReady
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSpeechNotification: StormApproach
+		IncomingSound: sweaintr.aud
+		LaunchSound: sweaintr.aud
+		DisplayTimerStances: Ally, Neutral, Enemy
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayBeacon: True
+		DisplayRadarPing: True
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		BeaconPosters:
+			1: stormicon
+		TargetCircleRanges:
+			1: 6c512
+		TargetCircleColors: 0000FF90
+		Duration: 350
+		ActiveCondition: active
+
+^AlliesSuperweaponSmall:
+	# Chronoshift - Available from Chronosphere (techlevel.superw)
+	ChronoshiftPower@chronoshift:
+		OrderName: Chronoshift
+		Prerequisites:
+			1: techlevel.superw
+		PauseOnCondition: disabled || empdisable || being-warped
+		Duration: 600
+		Icons:
+			1: chrono
+		ChargeInterval: 4500
+		Names:
+			1: Chronoshift
+		Descriptions:
+			1: Teleports a group of units across the map.
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		BeginChargeSpeechNotification: ChronosphereCharging
+		EndChargeSpeechNotification: ChronosphereReady
+		LaunchSound: chrono2.aud
+		KillCargo: true
+		DisplayRadarPing: True
+		Dimensions: 5, 5
+		Footprint: __x__ _xxx_ xxxxx _xxx_ __x__
+		DisplayTimerStances: Ally, Neutral, Enemy
+	# Chronoshift AI - AI version
+	DetonateWeaponPower@chronoshiftai:
+		OrderName: Chronoshiftai
+		Prerequisites:
+			1: botplayer
+		Duration: 600
+		Icons:
+			1: chrono
+		ChargeInterval: 4500
+		Names:
+			1: Chronoshift (AI)
+		Descriptions:
+			1: Teleports a group of units across the map.
+		Weapons:
+			1: ChronoAI
+		AirburstAltitude: 0c0
+		AllowMultiple: false
+		CameraActor: camera
+		CameraRemoveDelay: 375
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		BeginChargeSpeechNotification: ChronosphereCharging
+		EndChargeSpeechNotification: ChronosphereReady
+		DisplayTimerStances: Ally, Neutral, Enemy
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayRadarPing: True
+		LaunchSound: chrono2.aud
+		IncomingSound: chrono2.aud

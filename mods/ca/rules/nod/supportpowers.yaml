@@ -1,0 +1,337 @@
+
+^NodSupportPowers:
+	# Hack Satellite Uplink - Available to all Nod factions with radar
+	SpawnActorPower@sathack:
+		Actors:
+			1: camera.sathack
+		Prerequisites:
+			1: radar, nod
+		LifeTime: 120
+		OrderName: sathack
+		Icons:
+			1: hacksat
+		ChargeInterval: 3000
+		Names:
+			1: Hack Satellite Uplink
+		Descriptions:
+			1: Reveals map terrain and provides tactical\ninformation.
+		LaunchSound: hacksat.aud
+		SelectTargetSpeechNotification: SelectTarget
+		PauseOnCondition: disabled || being-warped
+		EffectSequence: idle
+
+	# Frenzy - Marked of Kane subfaction ability
+	GrantExternalConditionPowerCA@Frenzy:
+		OrderName: frenzy
+		Icons:
+			1: frenzy
+		Prerequisites:
+			1: radar, marked
+		ChargeInterval: 4500
+		Weapon: Frenzy
+		Names:
+			1: Frenzy
+		Descriptions:
+			1: Causes selected units to become frenzied, increasing their attack speed and movement.
+		Condition: frenzy
+		Dimensions: 5, 5
+		Footprint: _xxx_ xxxxx xxxxx xxxxx _xxx_
+		ValidRelationships: Ally
+		Duration: 500
+		ActivationDelay: 0
+		AirburstAltitude: 0c0
+		Sequence: false-active
+		AllowMultiple: false
+		OnFireSound: nodfrenzy.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayTimerStances: Ally
+
+	# Paratroopers - Black Hand subfaction ability
+	ParatroopersPower@paratroopers:
+		OrderName: LegionParatroopers
+		Prerequisites:
+			1: radar, blackh
+		Icons:
+			1: paratroopers
+		UnitTypes:
+			1: c17
+		ChargeInterval: 7500
+		Names:
+			1: Paratroopers
+		Descriptions:
+			1: A Cargo Plane drops a squad of infantry\nanywhere on the map.
+		SquadSizes:
+			1: 1
+		DropItems:
+			1: light_infantry,light_infantry,light_infantry,light_infantry,rocket_trooper,rocket_trooper,rocket_trooper,flamethrower
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: True
+		BeaconPosters:
+			1: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+
+	# Cash Hack - Legion subfaction ability
+	CashHackPower@Legion:
+		OrderName: cashhack
+		Icons:
+			1: chack
+		ChargeInterval: 6000
+		Minimum: 500
+		Maximum: 2000
+		Prerequisites:
+			1: radar, legion
+		AllowMultiple: false
+		Names:
+			1: Cash Hack
+		Descriptions:
+			1: Steal up to $2000 credits from the enemy.\n\nTarget their Refinery to do so.
+		OnFireSound: scashhac.aud
+		Notification: CreditsStolen
+		DisplayTimerStances: Ally
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable || being-warped
+
+	# Inferno Bomb - Black Hand subfaction ability
+	AirstrikePower@BlackhandFirebomb:
+		OrderName: infernobomb
+		Prerequisites:
+			1: radar, blackh
+		Icons:
+			1: infbomb
+		IconPalette: chrometd
+		ChargeInterval: 9000
+		Names:
+			1: Inferno Bomb
+		Descriptions:
+			1: A B2 bomber drops\ninferno bombs on your target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: b2b
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: a10airstrike
+		BeaconPosterPalette: temptd
+		SquadSizes:
+			1: 1
+		SquadOffset: 0,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clockTD
+		CircleSequence: circles
+		UseDirectionalTarget: False
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+	# Shadow Team - Marked of Kane subfaction ability
+	AirReinforcementsPower@ShadowTeam:
+		OrderName: shadowteam
+		Prerequisites:
+			1: radar, marked
+		Icons:
+			1: shadteam
+		ChargeInterval: 6750
+		Names:
+			1: Shadow Team
+		Descriptions:
+			1: Calls for a Shadow Team; three stealth infantry that arrive via glider.
+		SelectTargetSpeechNotification: SelectTarget
+		UnitType: sgli
+		QuantizedFacings: 8
+		DisplayBeacon: false
+		SquadSizes:
+			1: 3
+		SquadOffset: -1024,1024,0
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+		LaunchSpeechNotification: ReinforcementsArrived
+		EndChargeSpeechNotification: Reinforce
+
+	# Air Drop - Available from Airstrip
+	ParatroopersPower@airdrop:
+		OrderName: nodairdrop
+		SquadSizes:
+			1: 3
+		UnitTypes:
+			1: c17
+		Prerequisites:
+			1: radar, legion
+		Icons:
+			1: airdropicon
+		ChargeInterval: 18000
+		Names:
+			1: Air Drop
+		Descriptions:
+			1: Cargo Planes air drop tanks anywhere on the map.
+		DropItems:
+			1: ltnk, ftnk, STNK
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		EndChargeSpeechNotification: Reinforce
+		LaunchSpeechNotification: ReinforcementsArrived
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: lrairdropicon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+
+	# Cluster Missile - Available from Temple Prime
+	NukePowerCA@Cluster:
+		OrderName: clustermissile
+		Icons:
+			1: clustermissile
+		IconPalette: chrometd
+		Prerequisites:
+			1: techcenter
+		Cursor: ability
+		ChargeInterval: 10500
+		Names:
+			1: Cluster Missile
+		Descriptions:
+			1: Launches an Cluster Missile,\nCauses damage over a large area.
+		EndChargeSpeechNotification: ClusMissileReady
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSpeechNotification: MissileLaunchDetected
+		MissileWeapons:
+			1: deathhand
+		MissilePalette: temptd
+		LaunchSound: icbm1.aud
+		IncomingSound: nukelaunch.aud
+		SpawnOffset: 1024,80,0
+		DetonationAltitude: 3c0
+		RemoveMissileOnDetonation: True
+		FlightDelay: 225
+		FlightVelocity: 0c624
+		DisplayRadarPing: True
+		CameraRange: 10c0
+		ArrowSequence: arrow
+		ClockSequence: clock
+
+	# Troll Crate Airdrop - Available from Temple Prime
+	ParatroopersPower@trollcrate:
+		OrderName: trollcrateairdrop
+		SquadSizes:
+			1: 1
+		UnitTypes:
+			1: c17.no_color
+		Prerequisites:
+			1: tier4
+		Icons:
+			1: trollcrateicon
+		ChargeInterval: 18000
+		Names:
+			1: Troll Crate
+		Descriptions:
+			1: A Cargo Plane air drops a crate with a nice present inside.
+		DropItems:
+			1: crate.troll
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		EndChargeSpeechNotification: Reinforce
+		LaunchSpeechNotification: ReinforcementsArrived
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: lrairdropicon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+
+
+^NodSuperweaponBig:
+	# Chemical Missile - Available from Missile Silo (techlevel.superw)
+	NukePower@Chemmiss:
+		OrderName: chemmissile
+		Icons:
+			1: chemmissile
+		IconPalette: chrometd
+		Prerequisites:
+			1: techlevel.superw
+		Cursor: chemmissile
+		ChargeInterval: 11500
+		Names:
+			1: Chemical Missile
+		Descriptions:
+			1: Launches an deadly Chemical Missile,\nCauses a large blast and a large toxic cloud.\nExtremely toxic to infantry.
+		EndChargeSpeechNotification: CMissileReady
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSpeechNotification: MissileLaunchDetected
+		MissileWeapons:
+			1: Chemicbm
+		MissileDelay: 5
+		IncomingSound: nukelaunch.aud
+		LaunchSound: nukelaunch.aud
+		MissilePalette: temptd
+		DisplayTimerStances: Ally, Neutral, Enemy
+		DisplayBeacon: True
+		DisplayRadarPing: True
+		BeaconPosters:
+			1: cmissile
+		SpawnOffset: 1000, 0, 0
+		CameraRange: 10c0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		PauseOnCondition: disabled || empdisable || being-warped
+		TrailImage: smokey2
+		TrailSequences: idle
+		TrailPalette: tseffect-ignore-lighting-alpha75
+		DetonationAltitude: 0
+		MissileImage: Chemicbm
+
+^NodSuperweaponSmall:
+	# Stealth Generator - Available from Stealth Generator building (techlevel.superw)
+	GrantExternalConditionPowerCA@STEALTHGEN:
+		Prerequisites:
+			1: techlevel.superw
+		OrderName: stealthgen
+		Icons:
+			1: invis
+		IconPalette: chrometd
+		ChargeInterval: 4500
+		Weapon: StealthBubble
+		Names:
+			1: Tiberium Stealth
+		Descriptions:
+			1: Makes selected units and structures temporarily invisible to enemy detection.
+		Condition: invisibility
+		ValidRelationships: Ally, Neutral, Enemy
+		Dimensions: 11, 11
+		Footprint: _____x_____ ___xxxxx___ __xxxxxxx__ _xxxxxxxxx_ _xxxxxxxxx_ xxxxxxxxxxx _xxxxxxxxx_ _xxxxxxxxx_ __xxxxxxx__ ___xxxxx___ _____x_____
+		Duration: 0
+		ActivationDelay: 0
+		AirburstAltitude: 0c0
+		AllowMultiple: false
+		Description: Makes vehicles and structures temporarily invisible.\n  Warning: Harmful to Infantry.
+		OnFireSound: cloak6.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		BeginChargeSpeechNotification: ChemStealthCharging
+		EndChargeSpeechNotification: ChemStealthReady

@@ -1,0 +1,236 @@
+# Scrin Support Powers
+
+^ScrinSupportPowers:
+	# Resource Scan - Available from Nerve Center
+	RevealActorsPower@ResourceScan:
+		CameraActor: camera.resourcescan
+		TargetActors: mine, gmine, split2, split3, splitblue, proc, proc.td, proc.scrin
+		LifeTime: 250
+		OrderName: resourcescan
+		Icons:
+			1: rescanpower
+		Prerequisites:
+			1: tier2
+		ChargeInterval: 7500
+		Names:
+			1: Resource Scan
+		Descriptions:
+			1: Reveals map resources.
+		LaunchSound: tibscan.aud
+		PauseOnCondition: disabled || empdisable || being-warped
+
+	# Ichor Seed - Available from Growth Accelerator
+	SpawnActorPower@IchorSeed:
+		Actors:
+			1: ichor.seeder
+		Prerequisites:
+			1: tier2
+		LifeTime: 900
+		OrderName: ichorseed
+		Icons:
+			1: ichorpower
+		ChargeInterval: 8000
+		Names:
+			1: Ichor Seed
+		Descriptions:
+			1: Plants a tiberium seed that grows\ninto a harvestable tiberium field.
+		LaunchSound: ichorseed.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		PauseOnCondition: disabled || empdisable || being-warped
+		EffectSequence: idle
+
+	# Ion Surge - Available from Nerve Center (Reaper faction)
+	SpawnActorPower@IONSURGE:
+		Actors:
+			1: ion.surge
+		OrderName: ionsurge
+		Icons:
+			1: ionsurgepower
+		Prerequisites:
+			1: reaper, tier2
+		ChargeInterval: 4500
+		LifeTime: -1
+		Names:
+			1: Ion Surge
+		Descriptions:
+			1: Reduces power output of power plants and disables radar within affected area.
+		LaunchSound: ionsurge.aud
+		SelectTargetSpeechNotification: SelectTarget
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayRadarPing: True
+		EffectSequence: idle
+
+	# Storm Spike - Available from Nerve Center (Traveler faction)
+	DetonateWeaponPower@StormSpike:
+		OrderName: stormspike
+		Icons:
+			1: stormspikepower
+		IconPalette: scrin
+		Prerequisites:
+			1: traveler, tier2
+		Cursor: ability
+		ChargeInterval: 6000
+		Names:
+			1: Storm Spike
+		Descriptions:
+			1: Launches a devastating storm spike at target location.
+		ActivationDelay: 1
+		LaunchSound: scrinbuild.aud
+		Weapons:
+			1: StormSpikeSpawner
+		AirburstAltitude: 0c0
+		AllowMultiple: false
+		SelectTargetSpeechNotification: SelectTarget
+		PauseOnCondition: disabled || empdisable || being-warped
+		CameraActor: camera.paradrop
+		CameraRemoveDelay: 1
+		DisplayRadarPing: True
+		ActivationSequence:
+
+	# Buzzer Swarm - Available from Nerve Center (Harvester faction)
+	SpawnActorPower@BUZZERSWARMAI:
+		Actors:
+			1: BUZZ.AI
+		OrderName: buzzerswarmai
+		Icons:
+			1: buzzpower
+		Prerequisites:
+			1: harvester, tier2, botplayer
+		ChargeInterval: 6000
+		LifeTime: -1
+		Names:
+			1: Buzzer Swarm (AI)
+		Descriptions:
+			1: Spawns controllable buzzer swarm which damages anything nearby.
+		LaunchSound: buzzers-create.aud
+		SelectTargetSpeechNotification: SelectTarget
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayRadarPing: True
+		EffectSequence: idle
+
+	# Buzzer Swarm - Available from Nerve Center (Harvester faction, Human player)
+	SpawnActorPower@BUZZERSWARM:
+		Actors:
+			1: BUZZ
+		OrderName: buzzerswarm
+		Icons:
+			1: buzzpower
+		Prerequisites:
+			1: harvester, tier2, ~!botplayer
+		ChargeInterval: 6000
+		LifeTime: -1
+		Names:
+			1: Buzzer Swarm
+		Descriptions:
+			1: Spawns controllable buzzer swarm which damages anything nearby.
+		LaunchSound: buzzers-create.aud
+		SelectTargetSpeechNotification: SelectTarget
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayRadarPing: True
+		EffectSequence: idle
+
+	# Feeder Mutation - Available from Reaper-17
+	GrantExternalConditionPowerCA@FeederMutation:
+		OrderName: feedermutation
+		Icons:
+			1: feedermutation
+		Prerequisites:
+			1: reaper, tier3
+		ChargeInterval: 6750
+		Names:
+			1: Feeder Mutation
+		Descriptions:
+			1: Transforms Scrin infantry into Feeders which consume resources\nuntil becoming volatile enough to explode.
+		Dimensions: 3, 3
+		ValidRelationships: Ally
+		AllowMultiple: false
+		OnFireSound: feedermutation.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayTimerStances: Ally
+		Condition: feedermutation
+		Duration: 25
+		Footprint: _x_ xxx _x_
+
+^ScrinSuperweaponSmall:
+	# Suppression Field - Available from Manipulator (techlevel.superw)
+	DetonateWeaponPower@SUPPRESSION:
+		Prerequisites:
+			1: techlevel.superw
+		PauseOnCondition: disabled || empdisable || being-warped
+		OrderName: suppression
+		Icons:
+			1: spresspower
+		ChargeInterval: 4500
+		Names:
+			1: Suppression Field
+		Descriptions:
+			1: Applies a suppression field to the target area, slowing units.
+		Duration: 600
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		DisplayRadarPing: True
+		ActivationDelay: 1
+		SupportPowerPaletteOrder: 10
+		TargetCircleRanges:
+			1: 3c512
+		TargetCircleColor: cc11cccc
+		LaunchSound: suppression.aud
+		DisplayTimerStances: Ally, Neutral, Enemy
+		Weapons:
+			1:  SuppressionField
+		CameraActor: camera.dummy
+		CameraRemoveDelay: 1
+		DisplayBeacon: True
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		BeaconPosters:
+			1: riftpower
+		ActiveCondition:
+		ActivationSequence:
+
+^ScrinSuperweaponBig:
+	# Rift - Available from Rift Generator (techlevel.superw)
+	DetonateWeaponPower@RiftGenerator:
+		Prerequisites:
+			1: techlevel.superw
+		OrderName: rift
+		Icons:
+			1: riftpower
+		Cursor: ability
+		ChargeInterval: 13500
+		Names:
+			1: Rift
+		Descriptions:
+			1: Opens a dimensional rift that pulls in\nand destroys nearby units and structures.
+		ActivationDelay: 50
+		Weapons:
+			1:  RiftInit
+		AllowMultiple: false
+		CameraActor: camera
+		CameraRemoveDelay: 375
+		SelectTargetSpeechNotification: SelectTarget
+		EndChargeSpeechNotification: RiftReady
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSpeechNotification: RiftApproach
+		IncomingSound: nukelaunch.aud
+		LaunchSound: nukelaunch.aud
+		DisplayTimerStances: Ally, Neutral, Enemy
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayBeacon: True
+		DisplayRadarPing: True
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		BeaconPosters:
+			1: riftpower
+		TargetCircleRanges:
+			1: 6c512
+		TargetCircleColor: 0000FF90
+		Duration: 425
+		ActiveCondition:

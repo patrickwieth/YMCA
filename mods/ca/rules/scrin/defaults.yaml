@@ -29,18 +29,21 @@
 		ClassName: MCV Only
 		Factions: scrin, reaper, traveler, harvester
 		BaseActor: smcv
+		SupportProxyActors: scrin.dummy
 	StartingUnits@mcvdoubledscrin:
 		Class: doubled
 		ClassName: Double MCV
 		Factions: scrin, reaper, traveler, harvester
 		BaseActor: smcv
 		SupportActors: smcv
+		SupportProxyActors: scrin.dummy
 	StartingUnits@lightscrin:
 		Class: light
 		ClassName: Light Support
 		Factions: scrin, reaper, traveler, harvester
 		BaseActor: smcv
 		SupportActors: s1,s1,s1,s3,s3
+		SupportProxyActors: scrin.dummy
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
 	StartingUnits@heavyscrin:
@@ -49,9 +52,28 @@
 		Factions: scrin, reaper, traveler, harvester
 		BaseActor: smcv
 		SupportActors: s1,s1,s1,s3,s3,seek,gunw
+		SupportProxyActors: scrin.dummy
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
+####################################################################################################
 
+Player:
+	ProvidesPrerequisite@regular-scrin:
+		Prerequisite: scrin
+		Factions: reaper, traveler, harvester
+	ProvidesPrerequisite@reaper-scrin:
+		Prerequisite: reaper
+		Factions: reaper
+	ProvidesPrerequisite@traveler-scrin:
+		Prerequisite: traveler
+		Factions: traveler
+	ProvidesPrerequisite@harvester-scrin:
+		Prerequisite: harvester
+		Factions: harvester
+
+scrin.dummy:
+	Inherits: ^ScrinSupportPowers
+####################################################################################################
 
 ^ScrinBuilding:
 	Inherits: ^Building

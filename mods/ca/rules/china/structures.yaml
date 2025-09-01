@@ -123,6 +123,7 @@ chcommand.Nukular:
 
 chcommand.radar:
 	Inherits: ^BuildingPlug
+	Inherits: ^Tier2Tech
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -709,6 +710,7 @@ chpropagandatower.pdl:
 chinternetcenter:
 	Inherits: ^BuildingChinaTD
 	Inherits: ^TechLevelBuilding
+	Inherits: ^Tier4Tech
 	Inherits: ^Transport
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^3x2Building+Bib
@@ -772,6 +774,7 @@ chsilo:
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^3x2Building
 	Inherits: ^MinefieldUpgrade
+	Inherits: ^ChinaSuperweapons
 	Valued:
 		Cost: 4000
 	Tooltip:
@@ -800,69 +803,6 @@ chsilo:
 	DetectCloaked:
 		Range: 5c0
 		RequiresCondition: !lowpower
-	NukePowerCA:
-		PauseOnCondition: disabled || empdisable || being-warped
-		Prerequisites:
-			1: ~techlevel.superw
-		Cursor: nuke
-		Icons:
-			1: abomb
-		ChargeInterval: 13500
-		Names:
-			1: Atom Bomb
-		Descriptions:
-			1: Launches a devastating atomic bomb\nat a target location.
-		BeginChargeSpeechNotification: AbombPrepping
-		EndChargeSpeechNotification: AbombReady
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		IncomingSound: nukelaunch.aud
-		IncomingSpeechNotification: AbombLaunchDetected
-		LaunchSound: nukelaunch.aud
-		MissileWeapons:
-			1: atomic
-		MissileDelay: 5
-		SpawnOffset: 1c0,427,0
-		DisplayTimerStances: Ally, Neutral, Enemy
-		DisplayBeacon: True
-		DisplayRadarPing: True
-		BeaconPosters:
-			1: atomicon
-		FlashType: Nuke
-		CameraRange: 10c0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		CircleRanges:
-			1: 10000
-		TrailImage: smokey2
-		TrailSequences: idle
-		TrailPalette: tseffect-ignore-lighting-alpha75
-		MissileImage: atomic
-	AirstrikePower@EMP:
-		OrderName: chempbomb
-		Icon: chemp
-		ChargeInterval: 4500
-		Description: EM Pulse
-		LongDesc: A bomber drops a EMP bomb on the target.\nDisables vehicles and defenses.\nInstant-kills most aircraft.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitTypes:
-			1: usabomber.emp
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: airstrike
-		SquadSizes:
-			1: 1
-		SquadOffset: 1792,1792,0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		UseDirectionalTarget: false
-		DirectionArrowAnimation: paradirection
-		SupportPowerPaletteOrder: 40
-		Prerequisites: chsilo
 	SupportPowerChargeBar:
 	Power:
 		Amount: -200

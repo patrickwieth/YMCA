@@ -20,7 +20,7 @@ using OpenRA.Mods.Common.Traits.Render;
 
 namespace OpenRA.Mods.CA.Widgets
 {
-	public class ActorIconWidget : Widget
+	public class ActorIconCAWidget : Widget
 	{
 		public Actor actor;
 		public readonly World World;
@@ -31,7 +31,7 @@ namespace OpenRA.Mods.CA.Widgets
 		public readonly int2 IconSize = new int2(64, 48);
 
 		[ObjectCreator.UseCtor]
-		public ActorIconWidget(World world, WorldRenderer worldRenderer)
+		public ActorIconCAWidget(World world, WorldRenderer worldRenderer)
 		{
 			actor = null;
 			World = world;

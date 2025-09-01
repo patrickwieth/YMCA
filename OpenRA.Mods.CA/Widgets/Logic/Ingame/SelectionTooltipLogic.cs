@@ -74,7 +74,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 
 			var mapRules = world.Map.Rules;
-			var actorIcon = widget.Get<ActorIconWidget>("ACTOR_ICON");
+			var actorIcon = widget.Get<ActorIconCAWidget>("ACTOR_ICON");
 			actorIcon.setActor(actor);
 			var nameLabel = widget.Get<LabelWidget>("NAME");
 			var armorTypeLabel = widget.Get<LabelWidget>("ARMORTYPE");

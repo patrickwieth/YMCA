@@ -29,18 +29,21 @@
 		ClassName: MCV Only
 		Factions: allies, england, france, germany
 		BaseActor: mcv
+		SupportProxyActors: allies.dummy
 	StartingUnits@mcvdoubledallies:
 		Class: doubled
 		ClassName: Double MCV
 		Factions: allies, england, france, germany
 		BaseActor: mcv
 		SupportActors: mcv
+		SupportProxyActors: allies.dummy
 	StartingUnits@lightallies:
 		Class: light
 		ClassName: Light Support
 		Factions: allies, england, france, germany
 		BaseActor: mcv
 		SupportActors: light_infantry,light_infantry,light_infantry,rocket_infantry,rocket_infantry
+		SupportProxyActors: allies.dummy
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
 	StartingUnits@heavyallies:
@@ -49,5 +52,24 @@
 		Factions: allies, england, france, germany
 		BaseActor: mcv
 		SupportActors: light_infantry,light_infantry,light_infantry,rocket_infantry,rocket_infantry,rocket_infantry,2tnk,2tnk
+		SupportProxyActors: allies.dummy
 		InnerSupportRadius: 3
 		OuterSupportRadius: 5
+		####################################################################################################
+
+Player:
+	ProvidesPrerequisite@regular-allies:
+		Prerequisite: allies
+		Factions: england, france, germany
+	ProvidesPrerequisite@england-allies:
+		Prerequisite: england
+		Factions: england
+	ProvidesPrerequisite@france-allies:
+		Prerequisite: france
+		Factions: france
+	ProvidesPrerequisite@germany-allies:
+		Prerequisite: germany
+		Factions: germany
+
+allies.dummy:
+	Inherits: ^AlliesSupportPowers

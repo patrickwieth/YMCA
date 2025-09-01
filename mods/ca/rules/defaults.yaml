@@ -253,14 +253,14 @@
 		Footprint: xxx xxx
 		Dimensions: 3,2
 		LocalCenterOffset: 0,-512,0
-	WithBuildingBib:
-		Sequence: bib2
 
 ^3x2Building+Bib:
 	Inherits: ^3x2Building
 	Building:
 		Footprint: xxx xxx ===
 		Dimensions: 3,3
+	WithBuildingBib:
+		Sequence: bib2
 
 ^3x3Shape:
 	HitShape:
@@ -1475,6 +1475,21 @@
 	RevealsShroudMultiplier@GPSSCRAMBLE:
 		Modifier: 50
 		RequiresCondition: gpsscramble
+	WithDecoration@Concussion:
+		Image: pips
+		Sequence: pip-conc
+		Palette: chrome
+		ReferencePoint: Top, Center
+		ZOffset: 256
+		RequiresCondition: gpsscramble
+		BlinkInterval: 16
+		BlinkPatterns:
+			concussion: On, On, Off
+		RequiresSelection: False
+		ValidRelationships: Ally, Neutral, Enemy
+	WithModifiedPalette@STEALTHGEN:
+		RequiresCondition: gpsscramble
+		Palette: scrambleyellow
 	ExternalCondition@GPSSCRAMBLE:
 		Condition: gpsscramble
 
@@ -3376,11 +3391,17 @@ BuildBoost.Dummy:
 		Queue: Building
 
 ^Tier2Tech:
+	ProvidesPrerequisite:
+		Prerequisite: tier2
 
 ^Tier3Tech:
 	Inherits: ^ForceShieldSupportPower
+	ProvidesPrerequisite:
+		Prerequisite: tier3
 
 ^Tier4Tech:
+	ProvidesPrerequisite:
+		Prerequisite: tier4
 
 ^SuperWeapon:
 

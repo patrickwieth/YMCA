@@ -1,3 +1,101 @@
+Player:
+	PlayerPromotions:
+		Conditions:
+			0:
+			100:
+			300:
+			1000:
+			3000:
+		HasPointsCondition: haspoints
+		PointsPerRank:
+			noinit: 0, 1, 1, 1, 2
+			fewer: 3, 1, 1, 1, 1
+			normal: 6, 1, 1, 1, 2
+			later: 3, 2, 2, 2, 3
+			toomany: 12, 1, 1, 1, 2
+			all: 100, 1, 1, 1, 2
+		PointsPerRankDefault: normal
+		Ranks:
+			default: promotions.rank1, promotions.rank2, promotions.rank3, promotions.rank4, promotions.rank5
+		RanksDefault: default
+		ID: promotions
+		Label: promotions.lobby-label
+		Description: promotions.lobby-description
+		NotificationType: Sounds
+		LevelUpNotification: World
+		LevelUpTextNotification: promotions.text-notification
+		FlavorTextNotifications: promotions-flavor.notification-01, promotions-flavor.notification-02, promotions-flavor.notification-03, promotions-flavor.notification-04, promotions-flavor.notification-05
+		FlavorTextPrefix: promotions-flavor.prefix
+	ProvidesPrerequisite@has_points:
+		Prerequisite: rank1
+		RequiresCondition: haspoints
+	ClassicProductionQueue@PROMOTIONS:
+		Type: Promotions
+		Group: Promotions
+		DisplayOrder: 6
+		InstantCashDrain: true
+		QueuedAudio:
+		ReadyAudio:
+		SpectatorUIOrder: 0
+	Production:
+		Produces: Promotions
+	UsePointsOnProduction:
+
+#misc
+hack.has_points:
+	AlwaysVisible:
+	Interactable:
+	ProvidesPrerequisite@has_points:
+		Prerequisite: rank1
+
+hack.rank_3:
+	AlwaysVisible:
+	Interactable:
+	ProvidesPrerequisite@rank_3:
+		Prerequisite: rank3
+	ProvidesPrerequisite@frenzy:
+		Prerequisite: canselectfrenzy
+	ProvidesPrerequisite@repair:
+		Prerequisite: canselectrepair
+
+hack.rank_5:
+	AlwaysVisible:
+	Interactable:
+	ProvidesPrerequisite@rank_5:
+		Prerequisite: rank5
+
+rank1:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		Name: 1 Promotion Point
+	Buildable:
+		Description: 1 Promotion Point
+
+rank3:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		Name: OF-3 or higher rank
+	Buildable:
+		Description: OF-3 or higher rank
+
+rank5:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		Name: OF-5 or higher rank
+	Buildable:
+		Description: OF-5 or higher rank
+
+^default.commander_tree_prerequisite:
+	AlwaysVisible:
+	Interactable:
+	Tooltip:
+		Name: Commander's Specialization
+	Buildable:
+		Description: Commander's Specialization
+
 ^default.cameo_filler:
 	Interactable:
 	AlwaysVisible:
@@ -22,7 +120,7 @@
 		BuildLimit: 1
 		ForceIconLocation: true
 	ProvidesPrerequisite@powername:
-		Prerequisite: prerequisite.point_defense_turret
+		Prerequisite: prerequisite.has_points
 	RenderSprites:
 	ProvidesPrerequisite@powername:
 
@@ -94,10 +192,8 @@ commander_tree.stealth_miners:
 	Tooltip:
 		Name: Stealth Miners
 	Buildable:
-
 		BuildPaletteOrder: 5
 		IconPalette: chrome
-
 		Prerequisites: prerequisite.has_points, ~structures.nod, ~anypower
 		Description: Equips Miners with stealth technology.
 
@@ -106,9 +202,7 @@ commander_tree.shielded_miners:
 	Tooltip:
 		Name: Shielded Miners
 	Buildable:
-
 		BuildPaletteOrder: 5
-
 		Prerequisites: prerequisite.has_points, ~structures.gdi, ~anypower
 		Description: Equips Miners with shield technology.
 
@@ -1615,9 +1709,7 @@ commander_tree.Battlecruiser:
 	Tooltip:
 		Name: Battlecruiser
 	Buildable:
-
 		BuildPaletteOrder: 2020
-
 		Prerequisites: prerequisite.has_points, ~ships.any, techcenter, ~battlecruiser, ~!commander_tree.carrier, ~!commander_tree.icbm_submarine, ~!commander_tree.missile_submarine
 		Description: The Battlecruiser is the ultimate artillery ship. \n Dual 8-inch cannons provide constant barrage, \n while a Point Defense Laser fends of incoming enemy artillery.
 	TooltipExtras:
@@ -1632,10 +1724,8 @@ commander_tree.Carrier:
 	Tooltip:
 		Name: Carrier
 	Buildable:
-
 		IconPalette: chrometd
 		BuildPaletteOrder: 2020
-
 		Prerequisites: prerequisite.has_points, ~ships.any, techcenter, ~carrier, ~!commander_tree.battlecruiser, ~!commander_tree.icbm_submarine, ~!commander_tree.missile_submarine
 		Description: The Carrier launches small strike aircraft. \nThe aircraft are able to fight submarines as well as all ground targets.
 	TooltipExtras:
@@ -1650,9 +1740,7 @@ commander_tree.ICBM_Submarine:
 	Tooltip:
 		Name: ICBM Submarine
 	Buildable:
-
 		BuildPaletteOrder: 2020
-
 		Prerequisites: prerequisite.has_points, ~ships.any, techcenter, ~icbm_sub, ~!commander_tree.battlecruiser, ~!commander_tree.carrier, ~!commander_tree.missile_submarine
 		Description: The ICBM Submarine can fire Nukes over a very long distance.
 	TooltipExtras:
@@ -1666,9 +1754,7 @@ commander_tree.Missile_Submarine:
 	Tooltip:
 		Name: Missile_Submarine
 	Buildable:
-
 		BuildPaletteOrder: 2020
-
 		Prerequisites: prerequisite.has_points, ~ships.any, techcenter, ~missile_sub, ~!commander_tree.battlecruiser, ~!commander_tree.carrier, ~!commander_tree.icbm_submarine
 		Description: The Missile Submarine launches a barrage of missiles with very high range.
 	TooltipExtras:
@@ -1676,54 +1762,3 @@ commander_tree.Missile_Submarine:
 		Weaknesses: • Weak vs Point Defense Laser, Submarines
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.siege_naval
-
-#misc
-hack.has_points:
-	AlwaysVisible:
-	Interactable:
-	ProvidesPrerequisite@has_points:
-		Prerequisite: prerequisite.has_points
-
-hack.rank_3:
-	AlwaysVisible:
-	Interactable:
-	ProvidesPrerequisite@rank_3:
-		Prerequisite: prerequisite.3_stars
-
-hack.rank_5:
-	AlwaysVisible:
-	Interactable:
-	ProvidesPrerequisite@rank_5:
-		Prerequisite: prerequisite.5_stars
-
-prerequisite.has_points:
-	AlwaysVisible:
-	Interactable:
-	Tooltip:
-		Name: 1 Commander Point
-	Buildable:
-		Description: 1 Commander's Point
-
-prerequisite.3_stars:
-	AlwaysVisible:
-	Interactable:
-	Tooltip:
-		Name: 3 Star of Higher Rank
-	Buildable:
-		Description: 3 Star of Higher Rank
-
-prerequisite.5_stars:
-	AlwaysVisible:
-	Interactable:
-	Tooltip:
-		Name: 5 Star Rank
-	Buildable:
-		Description: 5 Star Rank
-
-^default.commander_tree_prerequisite:
-	AlwaysVisible:
-	Interactable:
-	Tooltip:
-		Name: Commander's Specialization
-	Buildable:
-		Description: Commander's Specialization

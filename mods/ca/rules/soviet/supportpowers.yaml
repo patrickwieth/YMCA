@@ -1,0 +1,335 @@
+# Soviet Support Powers
+
+^SovietSupportPowers:
+	# Spy Plane - Available from Radar Dome
+	AirstrikePower@spyplane:
+		OrderName: spyplane
+		Prerequisites:
+			1: tier2
+		Icons:
+			1: spyplane
+		ChargeInterval: 3750
+		Names:
+			1: Spy Plane
+		Descriptions:
+			1: Reveals an area of the map.
+		SelectTargetSpeechNotification: SelectTarget
+		EndChargeSpeechNotification: SpyPlaneReady
+		LaunchSound: spyplane.aud
+		CameraActor: camera.spyplane
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: u2
+		SquadSizes:
+			1: 1
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: camicon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+	# Paratroopers - Soviet subfaction ability
+	ParatroopersPower@paratroopers:
+		OrderName: paratroopers
+		Prerequisites:
+			1: !russia, !commander_tree.tiktok_warrior, tier2
+		Icons:
+			1: paratroopers
+		ChargeInterval: 7500
+		Names:
+			1: Paratroopers
+		Descriptions:
+			1: A Badger drops a squad of infantry\nanywhere on the map.
+		SquadSizes:
+			1: 1
+		SquadOffset: 0,1792,0
+		DropItems:
+			1: conscript,conscript,conscript,rpg_soldier,rpg_soldier,conscript,conscript,conscript,DOG
+		UnitTypes:
+			1: badr
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+	# Chechen Paratroopers - TikTok special ability
+	ParatroopersPower@Chechenparatroopers:
+		OrderName: chechentroopers
+		Prerequisites:
+			1: commander_tree.tiktok_warrior, tier2
+		Icons:
+			1: paratroopers
+		ChargeInterval: 5000
+		Names:
+			1: Chechen Paratoopers
+		Descriptions:
+			1: A Badger drops a squad of infantry heavily influenced by TikTok\nanywhere on the map.
+		SquadSizes:
+			1: 3
+		SquadOffset: 0,1792,0
+		DropItems:
+			1: conscript,conscript,SHOK,conscript,flamethrower,flamethrower,flamethrower,rpg_soldier,rpg_soldier,rpg_soldier,rpg_soldier,rpg_soldier,DOG,Mortar,Mortar,Mortar,Mortar,DOG,SHOK,SHOK,conscript
+		UnitTypes:
+			1: badr
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+	# Storm Troopers - Russia subfaction ability
+	ParatroopersPower@Russianparatroopers:
+		OrderName: stormtroopers
+		Prerequisites:
+			1: russia, !commander_tree.tiktok_warrior, tier2
+		Icons:
+			1: stormtroopers
+		ChargeInterval: 9000
+		Names:
+			1: Storm-troopers
+		Descriptions:
+			1: A Badger drops a squad of shock troops\nanywhere on the map.
+		SquadSizes:
+			1: 1
+		SquadOffset: 0,1792,0
+		DropItems:
+			1: SHOK,SHOK,SHOK,SHOK,SHOK
+		UnitTypes:
+			1: badr
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+	# Carpet Bomb - North Korea subfaction ability
+	AirstrikePower@CarpetBomb:
+		OrderName: carpetbomb
+		Prerequisites:
+			1: nkorea, tier3
+		Icons:
+			1: carpetbomb
+		ChargeInterval: 10500
+		Names:
+			1: Carpet Bomb
+		Descriptions:
+			1: A squad of Badgers drop\nbombs on your target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: badr.cbomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: a10airstrike
+		BeaconPosterPalette: temptd
+		SquadSizes:
+			1: 3
+		ArrowSequence: arrow
+		ClockSequence: clockTD
+		CircleSequence: circles
+		UseDirectionalTarget: False
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+	# Parabombs - Russia subfaction ability
+	AirstrikePower@Russianparabombs:
+		OrderName: parabombs
+		Prerequisites:
+			1: russia, !commander_tree.yuri, tier3
+		Icons:
+			1: parabombs
+		ChargeInterval: 7500
+		Names:
+			1: Parabombs
+		Descriptions:
+			1: A Badger bomber drops parachuted\nbombs on your target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: badr.bomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: pbmbicon
+		SquadSizes:
+			1: 1
+		SquadOffset: 0,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: False
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+	# Atomic Bomb - Iraq subfaction ability
+	AirstrikePower@Iraqiparabombs:
+		OrderName: atombomb
+		Prerequisites:
+			1: iraq, !commander_tree.yuri, tier3
+		Icons:
+			1: abombair
+		ChargeInterval: 10500
+		Names:
+			1: Atomic Bomb
+		Descriptions:
+			1: A Badger bomber drops an \natom bomb on your target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: badr.nbomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: nukeicon
+		SquadSizes:
+			1: 1
+		SquadOffset: 0,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: False
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+	# Genetic Mutation Bomb - Yuri commander tree ability
+	AirstrikePower@MutaBomb:
+		OrderName: mutabomb
+		Prerequisites:
+			1: commander_tree.yuri, tier3
+		Icons:
+			1: mutabomb
+		IconPalette: scrin
+		ChargeInterval: 10500
+		Names:
+			1: Genetic Mutation Bomb
+		Descriptions:
+			1: A Badger bomber drops a genetic mutation bomb\non your target which transforms infantry\ninto Brutes.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: badr.mbomber
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: gmutation
+		BeaconPosterPalette: chrome
+		SquadSizes:
+			1: 1
+		SquadOffset: 0,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		PauseOnCondition: disabled || being-warped
+
+^SovietSuperweaponBig:
+	# Atom Bomb - Available from Missile Silo (techlevel.superw)
+	NukePower@AtomBomb:
+		PauseOnCondition: disabled || empdisable || being-warped
+		Prerequisites:
+			1: ~techlevel.superw
+		Cursor: nuke
+		Icons:
+			1: abomb
+		ChargeInterval: 13500
+		Names:
+			1: Atom Bomb
+		Descriptions:
+			1: Launches a devastating atomic bomb\nat a target location.
+		BeginChargeSpeechNotification: AbombPrepping
+		EndChargeSpeechNotification: AbombReady
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		IncomingSound: nukelaunch.aud
+		IncomingSpeechNotification: AbombLaunchDetected
+		LaunchSound: nukelaunch.aud
+		MissileWeapons:
+			1: atomic
+		MissileDelay: 5
+		SpawnOffset: 1c0,427,0
+		DisplayTimerStances: Ally, Neutral, Enemy
+		DisplayBeacon: True
+		DisplayRadarPing: True
+		BeaconPosters:
+			1: atomicon
+		FlashType: Nuke
+		CameraRange: 10c0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		CircleRanges:
+			1: 10000
+		TrailImage: smokey2
+		TrailSequences: idle
+		TrailPalette: tseffect-ignore-lighting-alpha75
+		MissileImage: atomic
+
+^SovietSuperweaponSmall:
+	# Iron Curtain - Available from Iron Curtain building (techlevel.superw)
+	GrantExternalConditionPowerCA@IRONCURTAIN:
+		Prerequisites:
+			1: ~techlevel.superw
+		OrderName: ironcurtain
+		Icons:
+			1: invuln
+		ChargeInterval: 4500
+		Weapon: IronCurtain
+		Names:
+			1: Iron Curtain
+		Descriptions:
+			1: Makes selected vehicles and structures temporarily invulnerable\n  Warning: Harmful to Infantry.
+		Condition: invulnerability
+		Dimensions: 3, 3
+		Footprint: xxx xxx xxx
+		ValidRelationships: Ally, Neutral, Enemy
+		Duration: 600
+		ActivationDelay: 0
+		AirburstAltitude: 0c0
+		AllowMultiple: false
+		OnFireSound: ironcur9.aud
+		SelectTargetSpeechNotification: SelectTarget
+		InsufficientPowerSpeechNotification: InsufficientPower
+		EndChargeSpeechNotification: ForceShieldReady
+		DisplayRadarPing: True
+		Cursor: ability
+		PauseOnCondition: disabled || empdisable || being-warped
+		DisplayTimerStances: Ally, Neutral, Enemy
