@@ -8,7 +8,7 @@ promotion.Spec_Ops:
 		Image: SpecOps
 	Buildable:
 		BuildPaletteOrder: 7
-		Prerequisites: has_points, ~infantry.allies, promotion.advanced_infantry_training, techcenter
+		Prerequisites: has_points, ~infantry.allies, promotion.advanced_infantry_training, tier3
 		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
 
 # Vehicles
@@ -75,7 +75,7 @@ promotion.Scout_Tank_PDL:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 13
-		Prerequisites: has_points, ~vehicles.allies, techcenter, ~!promotion.scout_tank.reflector
+		Prerequisites: has_points, ~vehicles.allies, tier3, ~!promotion.scout_tank.reflector
 		Description: Upgrades the Scout Tank with a Point Laser Defense to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.scout_tank
@@ -90,7 +90,7 @@ promotion.Scout_Tank.Reflector:
 		Types: Reflector
 	Buildable:
 		BuildPaletteOrder: 13
-		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.france, techcenter, ~!promotion.scout_tank_pdl
+		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.france, tier3, ~!promotion.scout_tank_pdl
 		Description: Equips the Scout Tank with a Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.scout_tank
@@ -99,19 +99,19 @@ hack.cameo_filler.7:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 14
-		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled, ~filler.scout_tank, ~!vehicles.france
+		Prerequisites: has_points, ~vehicles.allies, tier3, disabled, ~filler.scout_tank, ~!vehicles.france
 
 hack.cameo_filler.7a:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 14
-		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled, ~vehicles.france
+		Prerequisites: has_points, ~vehicles.allies, tier3, disabled, ~vehicles.france
 
 hack.cameo_filler.8:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 14
-		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled
+		Prerequisites: has_points, ~vehicles.allies, tier3, disabled
 
 promotion.Chrono_Tank:
 	Inherits: ^promotion_item
@@ -121,7 +121,7 @@ promotion.Chrono_Tank:
 		Image: ctnk
 	Buildable:
 		BuildPaletteOrder: 15
-		Prerequisites: has_points, techcenter, ~vehicles.allies
+		Prerequisites: has_points, tier3, ~vehicles.allies
 		Description: Enables to build the Chrono Tank. \n  It can teleport over short distances and has missiles vs. tanks.
 
 promotion.Chrono_Tank_PDL:
@@ -134,7 +134,7 @@ promotion.Chrono_Tank_PDL:
 		Types: PDL
 	Buildable:
 		BuildPaletteOrder: 15
-		Prerequisites: has_points, ~vehicles.allies, techcenter, promotion.chrono_tank, ~!promotion.chrono_tank.reflector
+		Prerequisites: has_points, ~vehicles.allies, tier3, promotion.chrono_tank, ~!promotion.chrono_tank.reflector
 		Description: Upgrades the Chrono Tank with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.chrono_tank
@@ -149,7 +149,7 @@ promotion.Chrono_Tank.Reflector:
 		Types: Reflector
 	Buildable:
 		BuildPaletteOrder: 15
-		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.germany, techcenter, promotion.chrono_tank, ~!promotion.chrono_tank_pdl
+		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.germany, tier3, promotion.chrono_tank, ~!promotion.chrono_tank_pdl
 		Description: Equips the Chrono Tank with a Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.chrono_tank
@@ -158,13 +158,13 @@ hack.cameo_filler.9:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 16
-		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.germany, ~filler.chrono_tank, techcenter, disabled
+		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.germany, ~filler.chrono_tank, tier3, disabled
 
 hack.cameo_filler.9a:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 16
-		Prerequisites: has_points, ~vehicles.germany, techcenter, disabled
+		Prerequisites: has_points, ~vehicles.germany, tier3, disabled
 
 
 
@@ -177,7 +177,7 @@ promotion.Chrono_Prison:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 17
-		Prerequisites: has_points, ~vehicles.allies, techcenter
+		Prerequisites: has_points, ~vehicles.allies, tier3
 		Description: Enables to build the Chrono Prison. \n  It traps other units in the Time Aether, \n  teleporting them out of existence shortly thereafter.
 	TooltipExtras:
 		Strengths: • Strong vs few targets
@@ -193,7 +193,7 @@ promotion.Chrono_Prison_AA:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 18
-		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.england, techcenter, ~!promotion.chrono_prison_range, promotion.chrono_prison
+		Prerequisites: has_points, ~vehicles.allies, ~!vehicles.england, tier3, ~!promotion.chrono_prison_range, promotion.chrono_prison
 		Description: Upgrades the Chrono Prison to be able to also trap air units in the Time Aether.
 	WithProductionIconOverlay@Air:
 		Types: Air
@@ -213,7 +213,7 @@ promotion.Chrono_Prison_Range:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 19
-		Prerequisites: has_points, ~vehicles.allies, techcenter, ~!promotion.chrono_prison_aa, promotion.chrono_prison, ~vehicles.germany
+		Prerequisites: has_points, ~vehicles.allies, tier3, ~!promotion.chrono_prison_aa, promotion.chrono_prison, ~vehicles.germany
 		Description: Increases the range of the Chrono Prison allowing it to stop more distant targets.
 	WithProductionIconOverlay@Crosshair:
 		Types: Crosshair
@@ -228,19 +228,19 @@ hack.cameo_filler.10:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 20
-		Prerequisites: has_points, ~vehicles.germany, techcenter, disabled, ~filler.prison
+		Prerequisites: has_points, ~vehicles.germany, tier3, disabled, ~filler.prison
 
 hack.cameo_filler.10a:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 20
-		Prerequisites: has_points, ~vehicles.england, techcenter, disabled
+		Prerequisites: has_points, ~vehicles.england, tier3, disabled
 
 hack.cameo_filler.11:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 21
-		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled, ~!vehicles.germany
+		Prerequisites: has_points, ~vehicles.allies, tier3, disabled, ~!vehicles.germany
 
 
 
@@ -260,13 +260,13 @@ hack.cameo_filler.12:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 22
-		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled
+		Prerequisites: has_points, ~vehicles.allies, tier3, disabled
 
 hack.cameo_filler.13:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 23
-		Prerequisites: has_points, ~vehicles.allies, techcenter, disabled
+		Prerequisites: has_points, ~vehicles.allies, tier3, disabled
 
 promotion.Battle_Fortress.Support:
 	Inherits: ^promotion_item
@@ -274,7 +274,7 @@ promotion.Battle_Fortress.Support:
 		Name: Support Fortress
 	Buildable:
 		BuildPaletteOrder: 24
-		Prerequisites: has_points, ~vehicles.france, techcenter, ~!promotion.battle_fortress.prism, ~!promotion.battle_fortress.bunker
+		Prerequisites: has_points, ~vehicles.france, tier3, ~!promotion.battle_fortress.prism, ~!promotion.battle_fortress.bunker
 		Description: The Support Fortress is a touch tank that repairs allied vehicles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
@@ -289,7 +289,7 @@ promotion.Battle_Fortress.Bunker:
 		Name: Battle Fortress Missile Bunker
 	Buildable:
 		BuildPaletteOrder: 24
-		Prerequisites: has_points, ~vehicles.france, techcenter, ~!promotion.battle_fortress.support, ~!promotion.battle_fortress.prism
+		Prerequisites: has_points, ~vehicles.france, tier3, ~!promotion.battle_fortress.support, ~!promotion.battle_fortress.prism
 		Description: Battle Fortress is a tough tank with a bunker full of rocket infantry.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
@@ -304,7 +304,7 @@ promotion.Battle_Fortress.Prism:
 		Name: Prism Fortress
 	Buildable:
 		BuildPaletteOrder: 24
-		Prerequisites: has_points, ~vehicles.france, techcenter, ~!promotion.battle_fortress.support, ~!promotion.battle_fortress.bunker
+		Prerequisites: has_points, ~vehicles.france, tier3, ~!promotion.battle_fortress.support, ~!promotion.battle_fortress.bunker
 		Description: The Prism Fortress is a tough tank with a Prism blaster.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf
@@ -319,7 +319,7 @@ promotion.Battle_Fortress.PDL:
 		Name: Fortress Point Laser Defense
 	Buildable:
 		BuildPaletteOrder: 26
-		Prerequisites: has_points, ~vehicles.france, techcenter, ~filler.batf, ~!promotion.battle_fortress.reflector
+		Prerequisites: has_points, ~vehicles.france, tier3, ~filler.batf, ~!promotion.battle_fortress.reflector
 		Description: Upgrades the Battle Fortress with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf2
@@ -334,7 +334,7 @@ promotion.Battle_Fortress.Reflector:
 		Name: Fortress Reflector Armor
 	Buildable:
 		BuildPaletteOrder: 26
-		Prerequisites: has_points, ~vehicles.france, techcenter, ~filler.batf, ~!promotion.battle_fortress.pdl
+		Prerequisites: has_points, ~vehicles.france, tier3, ~filler.batf, ~!promotion.battle_fortress.pdl
 		Description: Equips the Battle Fortress with Reflector Armor, which is very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.batf2
@@ -347,7 +347,7 @@ hack.cameo_filler.15b:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 27
-		Prerequisites: has_points, ~vehicles.france, techcenter, disabled, ~filler.batf2
+		Prerequisites: has_points, ~vehicles.france, tier3, disabled, ~filler.batf2
 
 promotion.Mirage_PDL:
 	Inherits: ^promotion_item
@@ -356,7 +356,7 @@ promotion.Mirage_PDL:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 29
-		Prerequisites: has_points, ~vehicles.england, techcenter, ~!promotion.mirage_fire_rate, ~!promotion.mirage.reflector
+		Prerequisites: has_points, ~vehicles.england, tier3, ~!promotion.mirage_fire_rate, ~!promotion.mirage.reflector
 		Description: Upgrades the Mirage Tank with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.mirage
@@ -368,7 +368,7 @@ promotion.Mirage_Fire_Rate:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 30
-		Prerequisites: has_points, ~vehicles.england, techcenter, ~!promotion.mirage_pdl, ~!promotion.mirage.reflector
+		Prerequisites: has_points, ~vehicles.england, tier3, ~!promotion.mirage_pdl, ~!promotion.mirage.reflector
 		Description: Upgrades the Mirage Tank with a higher fire rate.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.mirage
@@ -379,7 +379,7 @@ promotion.Mirage.Reflector:
 		Name: Mirage Tank Reflector Armor
 	Buildable:
 		BuildPaletteOrder: 30
-		Prerequisites: has_points, ~vehicles.england, techcenter, ~!promotion.mirage_pdl, ~!promotion.mirage_fire_rate
+		Prerequisites: has_points, ~vehicles.england, tier3, ~!promotion.mirage_pdl, ~!promotion.mirage_fire_rate
 		Description: Equips the Mirage Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.mirage
@@ -388,13 +388,13 @@ hack.cameo_filler.16:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 31
-		Prerequisites: has_points, ~vehicles.england, techcenter, disabled, ~filler.mirage
+		Prerequisites: has_points, ~vehicles.england, tier3, disabled, ~filler.mirage
 
 hack.cameo_filler.17:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 32
-		Prerequisites: has_points, ~vehicles.england, techcenter, disabled, ~filler.mirage
+		Prerequisites: has_points, ~vehicles.england, tier3, disabled, ~filler.mirage
 
 promotion.Tank_Destroyer_PDL:
 	Inherits: ^promotion_item
@@ -405,7 +405,7 @@ promotion.Tank_Destroyer_PDL:
 		IconPalette: chrometd
 		BuildPaletteOrder: 33
 
-		Prerequisites: has_points, ~vehicles.germany, techcenter, ~!promotion.tank_destroyer_burst, ~!promotion.tank_destroyer.reflector
+		Prerequisites: has_points, ~vehicles.germany, tier3, ~!promotion.tank_destroyer_burst, ~!promotion.tank_destroyer.reflector
 		Description: Upgrades the Tank Destroyer with a Point Laser Defense System to shoot down incoming projectiles.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tnkd
@@ -419,7 +419,7 @@ promotion.Tank_Destroyer_Burst:
 		IconPalette: chrometd
 		BuildPaletteOrder: 34
 
-		Prerequisites: has_points, ~vehicles.germany, techcenter, ~!promotion.tank_destroyer_pdl, ~!promotion.tank_destroyer.reflector
+		Prerequisites: has_points, ~vehicles.germany, tier3, ~!promotion.tank_destroyer_pdl, ~!promotion.tank_destroyer.reflector
 		Description: Upgrades the Tank Destroyer with burst fire capabilities.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tnkd
@@ -433,7 +433,7 @@ promotion.Tank_Destroyer.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 34
 
-		Prerequisites: has_points, ~vehicles.germany, techcenter, ~!promotion.tank_destroyer_pdl, ~!promotion.tank_destroyer_burst
+		Prerequisites: has_points, ~vehicles.germany, tier3, ~!promotion.tank_destroyer_pdl, ~!promotion.tank_destroyer_burst
 		Description: Equips the Tank Destroyer with Reflector Armor.
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.tnkd
@@ -442,13 +442,13 @@ hack.cameo_filler.18:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 35
-		Prerequisites: has_points, ~vehicles.germany, techcenter, disabled, ~filler.tnkd
+		Prerequisites: has_points, ~vehicles.germany, tier3, disabled, ~filler.tnkd
 
 hack.cameo_filler.19:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 36
-		Prerequisites: has_points, ~vehicles.germany, techcenter, disabled, ~filler.tnkd
+		Prerequisites: has_points, ~vehicles.germany, tier3, disabled, ~filler.tnkd
 
 promotion.Aurora:
 	Inherits: ^promotion_item
@@ -456,7 +456,7 @@ promotion.Aurora:
 		Name: Aurora
 	Buildable:
 		BuildPaletteOrder: 41
-		Prerequisites: has_points, ~aircraft.allies, techcenter, ~!aircraft.france
+		Prerequisites: has_points, ~aircraft.allies, tier3, ~!aircraft.france
 		Description: Enables to build the Aurora, a supersonic bomber. \n  It drops the Mother of all Bombs. \n  Very efficient versus groups of weakly armored units.
 
 hack.cameo_filler.Aurora:
@@ -518,7 +518,7 @@ promotion.Harrier:
 		Name: Harrier
 	Buildable:
 		BuildPaletteOrder: 50
-		Prerequisites: has_points, techcenter, ~aircraft.allies, ~!aircraft.germany
+		Prerequisites: has_points, tier3, ~aircraft.allies, ~!aircraft.germany
 		Description: Enables to build the Harrier, a VTOL aircraft.  \n  Strong vs. groups of light armored ground units.
 
 promotion.Harrier.Avionics:
@@ -531,7 +531,7 @@ promotion.Harrier.Avionics:
 		Name: Harrier Avionics Upgrade
 	Buildable:
 		BuildPaletteOrder: 51
-		Prerequisites: has_points, techcenter, promotion.harrier, ~!promotion.harrier.payload, ~aircraft.england
+		Prerequisites: has_points, tier3, promotion.harrier, ~!promotion.harrier.payload, ~aircraft.england
 		Description: Upgrades the Avionics of the Harrier, allowing it to hover when shooting.  \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.harrier
@@ -546,7 +546,7 @@ promotion.Harrier.Payload:
 		Name: Harrier Payload Upgrade
 	Buildable:
 		BuildPaletteOrder: 51
-		Prerequisites: has_points, techcenter, promotion.harrier, ~!promotion.harrier.avionics, ~aircraft.allies, ~!aircraft.germany
+		Prerequisites: has_points, tier3, promotion.harrier, ~!promotion.harrier.avionics, ~aircraft.allies, ~!aircraft.germany
 		Description: Increases the Payload of the Harrier. \n
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.harrier
@@ -555,13 +555,13 @@ hack.cameo_filler.28:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 51
-		Prerequisites: has_points, ~aircraft.france, techcenter, disabled
+		Prerequisites: has_points, ~aircraft.france, tier3, disabled
 
 hack.cameo_filler.29:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 52
-		Prerequisites: has_points, ~aircraft.england, techcenter, ~filler.harrier, disabled
+		Prerequisites: has_points, ~aircraft.england, tier3, ~filler.harrier, disabled
 
 
 promotion.Seahawk.Armed:
@@ -717,16 +717,16 @@ hack.cameo_filler.20a:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 39
-		Prerequisites: has_points, ~aircraft.england, ~!filler.huey, techcenter, disabled
+		Prerequisites: has_points, ~aircraft.england, ~!filler.huey, tier3, disabled
 
 hack.cameo_filler.20b:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 39
-		Prerequisites: has_points, ~filler.huey, techcenter, disabled
+		Prerequisites: has_points, ~filler.huey, tier3, disabled
 
 hack.cameo_filler.20c:
 	Inherits: ^cameo_filler
 	Buildable:
 		BuildPaletteOrder: 39
-		Prerequisites: has_points, ~filler.huey, techcenter, disabled
+		Prerequisites: has_points, ~filler.huey, tier3, disabled

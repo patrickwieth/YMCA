@@ -2117,34 +2117,35 @@
 		RequiresCondition: relayMarked
 
 ^Vehicle:
-	Inherits@1: ^ExistsInWorld
-	Inherits@2: ^IronCurtainable
-	Inherits@3: ^SpriteActor
-	Inherits@Armor: ^LightArmor
-	Inherits@4: ^Cloakable
-	Inherits@5: ^EmpDisable
-	Inherits@6: ^GDIUpgrade
-	Inherits@7: ^BinoUpgrade
-	Inherits@9: ^Warpable
-	Inherits@11: ^NaniteRepair
-	Inherits@12: ^GpsScramble
-	Inherits@13: ^BotGroundProductionBonus
-	Inherits@14: ^Chillable
-	Inherits@16: ^Concussion
-	Inherits@17: ^Suppressable
-	Inherits@C4: ^C4Plantable
-	Inherits@TNT: ^TNTPlantable
-	Inherits@gflash: ^GreenFlash
-	Inherits@wflash: ^WhiteFlash
-	Inherits@bounty: ^GlobalBounty
-	Inherits@production: ^ProductionEfficiencyBoost
-	Inherits@handicaps: ^PlayerHandicaps
-	Inherits@irrad: ^Irradiatable
-	Inherits@atomize: ^Atomizable
-	Inherits@minidrone: ^MiniDroneAttachable
-	Inherits@SLOWCRUSH: ^SlowedByCrushing
-	Inherits@VehicleVision: ^VehicleVision
+	Inherits: ^ExistsInWorld
+	Inherits: ^IronCurtainable
+	Inherits: ^SpriteActor
+	Inherits: ^LightArmor
+	Inherits: ^Cloakable
+	Inherits: ^EmpDisable
+	Inherits: ^GDIUpgrade
+	Inherits: ^BinoUpgrade
+	Inherits: ^Warpable
+	Inherits: ^NaniteRepair
+	Inherits: ^GpsScramble
+	Inherits: ^BotGroundProductionBonus
+	Inherits: ^Chillable
+	Inherits: ^Concussion
+	Inherits: ^Suppressable
+	Inherits: ^C4Plantable
+	Inherits: ^TNTPlantable
+	Inherits: ^GreenFlash
+	Inherits: ^WhiteFlash
+	Inherits: ^GlobalBounty
+	Inherits: ^ProductionEfficiencyBoost
+	Inherits: ^PlayerHandicaps
+	Inherits: ^Irradiatable
+	Inherits: ^Atomizable
+	Inherits: ^MiniDroneAttachable
+	Inherits: ^SlowedByCrushing
+	Inherits: ^VehicleVision
 	Inherits: ^RelayMarkable
+	Inherits: ^Parachute
 	Buildable:
 		Queue: Vehicle
 	TooltipExtras:
@@ -2196,23 +2197,11 @@
 	MustBeDestroyed:
 	Voiced:
 		VoiceSet: VehicleVoice
-	Parachutable:
-		FallRate: 26
-		KilledOnImpassableTerrain: true
-		ParachutingCondition: parachute
 	FireWarheadsOnDeathCA:
 		Weapon: UnitExplodeSmall
 		EmptyWeapon: UnitExplodeSmall
 		RequiresCondition: !being-warped
 	WithFacingSpriteBody:
-	WithParachute:
-		ShadowImage: parach-shadow
-		ShadowSequence: idle
-		Image: parach
-		Sequence: idle
-		OpeningSequence: open
-		Offset: 0,0,200
-		RequiresCondition: parachute
 	BodyOrientation:
 		UseClassicFacings: True
 	HitShape:
@@ -2360,29 +2349,64 @@
 	SpeedMultiplier@CRUSHSLOW:
 		Modifier: 50
 
+^Parachute:
+	Parachutable:
+		FallRate: 26
+		KilledOnImpassableTerrain: true
+		ParachutingCondition: parachute
+	Targetable@AIRBORNE:
+		RequiresCondition: parachute
+		TargetTypes: Air
+	WithParachute:
+		ShadowImage: parach-shadow
+		ShadowSequence: idle
+		Image: parachute
+		Sequence: idle
+		OpeningSequence: open
+		ClosingSEquence: close
+		Offset: 0,0,427
+		RequiresCondition: parachute
+	WithParachute@soviet:
+		ShadowImage: parach-shadow
+		ShadowSequence: idle
+		Image: sovietparachute
+		IsPlayerPalette: false
+		Palette: ra2unit
+		Sequence: idle
+		OpeningSequence: open
+		ClosingSEquence: close
+		Offset: 0,0,427
+		RequiresCondition: parachute && sovietparachute
+
 ^Infantry:
-	Inherits@1: ^ExistsInWorld
-	Inherits@2: ^GainsExperience
-	Inherits@Armor: ^NoneArmor
-	Inherits@3: ^InfantryExperienceHospitalOverrides
-	Inherits@4: ^SpriteActor
-	Inherits@7: ^Warpable
-	Inherits@9: ^IronCurtainable-Kills
-	Inherits@10: ^Frenzy
-	Inherits@11: ^GpsScramble
-	Inherits@12: ^BotGroundProductionBonus
-	Inherits@13: ^Chillable
-	Inherits@14: ^Concussion
-	Inherits@15: ^Propaganda
-	Inherits@16: ^Suppressable
-	Inherits@TNT: ^TNTPlantable
-	Inherits@bounty: ^GlobalBounty
-	Inherits@selection: ^SelectableCombatUnit
-	Inherits@mind: ^MindControllable
-	Inherits@GMUT: ^GeneticallyMutatable
-	Inherits@handicaps: ^PlayerHandicaps
-	Inherits@biodamage: ^BiologicalDamage
+	Inherits: ^ExistsInWorld
+	Inherits: ^GainsExperience
+	Inherits: ^NoneArmor
+	Inherits: ^InfantryExperienceHospitalOverrides
+	Inherits: ^SpriteActor
+	Inherits: ^Warpable
+	Inherits: ^IronCurtainable-Kills
+	Inherits: ^Frenzy
+	Inherits: ^GpsScramble
+	Inherits: ^BotGroundProductionBonus
+	Inherits: ^Chillable
+	Inherits: ^Concussion
+	Inherits: ^Propaganda
+	Inherits: ^Suppressable
+	Inherits: ^TNTPlantable
+	Inherits: ^GlobalBounty
+	Inherits: ^SelectableCombatUnit
+	Inherits: ^MindControllable
+	Inherits: ^GeneticallyMutatable
+	Inherits: ^PlayerHandicaps
+	Inherits: ^BiologicalDamage
+	Inherits: ^Parachute
 	Inherits: ^InfantryTDSprite
+	Parachutable:
+		GroundCorpseSequence: corpse
+		GroundImpactSound: squishy2.aud
+		WaterImpactSound: splash9.aud
+		WaterCorpseSequence: small_splash
 	TooltipExtras:
 	Huntable:
 	OwnerLostAction:
@@ -2479,26 +2503,10 @@
 	DeathSounds@POISONED:
 		Voice: Poisoned
 		DeathTypes: PoisonDeath, ToxinDeath, RadiationDeath
-	Parachutable:
-		FallRate: 26
-		KilledOnImpassableTerrain: true
-		GroundCorpseSequence: corpse
-		GroundImpactSound: squishy2.aud
-		WaterImpactSound: splash9.aud
-		WaterCorpseSequence: small_splash
-		ParachutingCondition: parachute
 	Cloneable:
 		Types: Infantry
 	Voiced:
 		VoiceSet: GenericVoice
-	WithParachute:
-		ShadowImage: parach-shadow
-		ShadowSequence: idle
-		Image: parach
-		Sequence: idle
-		OpeningSequence: open
-		Offset: 0,0,427
-		RequiresCondition: parachute
 	HitShape:
 		Type: Circle
 			Radius: 128
@@ -3391,16 +3399,16 @@ BuildBoost.Dummy:
 		Queue: Building
 
 ^Tier2Tech:
-	ProvidesPrerequisite:
+	ProvidesPrerequisite@tier2:
 		Prerequisite: tier2
 
 ^Tier3Tech:
 	Inherits: ^ForceShieldSupportPower
-	ProvidesPrerequisite:
+	ProvidesPrerequisite@tier3:
 		Prerequisite: tier3
 
 ^Tier4Tech:
-	ProvidesPrerequisite:
+	ProvidesPrerequisite@tier4:
 		Prerequisite: tier4
 
 ^SuperWeapon:
@@ -3999,6 +4007,9 @@ BuildBoost.Dummy:
 ^Crate:
 	Inherits: ^SpriteActor
 	Inherits: ^EffectSprite
+	Inherits: ^Parachute
+	Parachutable:
+		KilledOnImpassableTerrain: false
 	Interactable:
 		Bounds: 1024, 1024
 	HiddenUnderFog:
@@ -4015,24 +4026,13 @@ BuildBoost.Dummy:
 		XmasImages: xcratea, xcrateb, xcratec, xcrated
 		LandSequence: land
 		WaterSequence: water
-	Parachutable:
-		FallRate: 26
-		KilledOnImpassableTerrain: false
-		ParachutingCondition: parachute
 	Passenger:
-	WithParachute:
-		Image: parach
-		Sequence: idle
-		OpeningSequence: open
-		ShadowImage: parach-shadow
-		ShadowSequence: idle
-		RequiresCondition: parachute
 	MapEditorData:
 		Categories: System
 
 ^Mine:
 	Inherits: ^SpriteActor
-	Inherits@Armor: ^LightArmor
+	Inherits: ^LightArmor
 	Interactable:
 		Bounds: 1024, 1024
 	WithSpriteBody:

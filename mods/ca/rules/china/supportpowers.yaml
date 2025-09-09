@@ -1,12 +1,10 @@
-# China Support Powers
-
 ^ChinaSupportPowers:
 	# Artillery Barrage - Available from Command Center
 	DetonateWeaponPower@ArtilleryBarrage:
 		OrderName: chartillerybarrage
 		PauseOnCondition: disabled || empdisable || being-warped || lowpower
 		Prerequisites:
-			1: structures.china
+			1: china, tier2
 		Icons:
 			1: chartybarr3
 		IconPalette: chrometd
@@ -22,8 +20,13 @@
 		SelectTargetSpeechNotification: SelectTarget
 		InsufficientPowerSpeechNotification: InsufficientPower
 		DisplayRadarPing: True
+		TargetCircleRanges:
+			1: 4c512
+		TargetCircleColors:
+			1: FF111190
 		CameraActor: camera
 		CameraRemoveDelay: 300
+		ActivationSequence:
 
 	# Carpet Bombing - Tank subfaction ability
 	AirstrikePower@carpet:
@@ -40,7 +43,7 @@
 		CameraActor: camera
 		CameraRemoveDelay: 150
 		UnitTypes:
-			1: usabomber.carpet
+			1: xianh8.carpet
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPosters:
@@ -51,12 +54,78 @@
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
-		UseDirectionalTarget: false
+		UseDirectionalTarget: true
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 40
 		PauseOnCondition: disabled || empdisable || being-warped || lowpower
 		Prerequisites:
-			1: structures.chinatnk, radar
+			1: chinatnk, tier3
+
+	# Tank Drop - Available from Airfield
+	ParatroopersPower@tankdrop:
+		PauseOnCondition: lowpower
+		Prerequisites:
+			1: chinatnk, tier2
+		OrderName: tankdrop
+		Icons:
+			1: airdropicon
+		ChargeInterval: 5000
+		Names:
+			1: Tank Drop
+		Descriptions:
+			1: Cargo planes drop Battlemaster tanks\nanywhere on the map.
+		DropItems:
+			1: chbattle, chbattle, chbattle
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		SelectTargetSpeechNotification: SelectTarget
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		UnitTypes:
+			1: xianh8
+		SquadSizes:
+			1: 1
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+
+	# Cluster Mines - Available from Airfield
+	AirstrikePower@cluster:
+		OrderName: chclusterbomb
+		Icons:
+			1: chclustermines
+		IconPalette: chrometd
+		ChargeInterval: 6000
+		Names:
+			1: Cluster Mines
+		Descriptions:
+			1: A bomber deploys cluster mines at the target.
+		SelectTargetSpeechNotification: SelectTarget
+		CameraActor: camera
+		CameraRemoveDelay: 150
+		UnitTypes:
+			1: xianh8.minebomb
+		QuantizedFacings: 8
+		DisplayBeacon: true
+		BeaconPosters:
+			1: airstrike
+		SquadSizes:
+			1: 1
+		SquadOffset: 1792,1792,0
+		ArrowSequence: arrow
+		ClockSequence: clock
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
+		SupportPowerPaletteOrder: 40
+		Prerequisites:
+			1: chinaatom, tier2
 
 	# Nuke Bomb - Atom subfaction ability
 	AirstrikePower@nuke:
@@ -72,7 +141,7 @@
 		CameraActor: camera
 		CameraRemoveDelay: 150
 		UnitTypes:
-			1: usabomber.nuke
+			1: xianh8.nuke
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPosters:
@@ -83,12 +152,49 @@
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
-		UseDirectionalTarget: false
+		TargetCircleRanges:
+			1: 4c512
+		TargetCircleColors: FF111190
+		UseDirectionalTarget: true
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 40
 		PauseOnCondition: disabled || empdisable || being-warped || lowpower
 		Prerequisites:
-			1: structures.chinaatom, radar
+			1: chinaatom, tier3
+
+	# Infantry Paradrop - Available from Airfield
+	ParatroopersPower@minigunnerdrop:
+		PauseOnCondition: lowpower
+		Prerequisites:
+			1: chinainf, tier2
+		OrderName: minigunnerdrop
+		Icons:
+			1: paradropicon
+		ChargeInterval: 5000
+		Names:
+			1: Infantry Paradrop
+		Descriptions:
+			1: Cargo planes drop 15 minigunners\nanywhere on the map.
+		DropItems:
+			1: minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner
+		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
+		SelectTargetSpeechNotification: SelectTarget
+		IncomingSpeechNotification: EnemyUnitsApproaching
+		AllowImpassableCells: false
+		QuantizedFacings: 8
+		CameraActor: camera.paradrop
+		DisplayBeacon: true
+		BeaconPosters:
+			1: pinficon
+		ArrowSequence: arrow
+		ClockSequence: clock
+		UnitTypes:
+			1: xianh8
+		SquadSizes:
+			1: 3
+		CircleSequence: circles
+		UseDirectionalTarget: True
+		DirectionArrowAnimation: paradirection
 
 	# Frenzy - Infantry subfaction ability
 	GrantExternalConditionPowerCA@Frenzy:
@@ -96,7 +202,7 @@
 		Icons:
 			1: frenzy
 		Prerequisites:
-			1: structures.chinainf, radar
+			1: chinainf, tier3
 		ChargeInterval: 4500
 		Weapon: Frenzy
 		Names:
@@ -128,6 +234,8 @@
 		OrderName: satellitehack1
 		Icons:
 			1: sathack1
+		Prerequisites:
+			1: china, tier4
 		IconPalette: chrometd
 		ChargeInterval: 3000
 		Names:
@@ -142,6 +250,8 @@
 		OrderName: cashhack
 		Icons:
 			1: cashhack
+		Prerequisites:
+			1: china, tier4
 		ChargeInterval: 4500
 		Minimum: 500
 		Maximum: 2000
@@ -158,106 +268,6 @@
 		Cursor: ability
 		PauseOnCondition: lowpower
 
-	# Tank Drop - Available from Airfield
-	ParatroopersPower@tankdrop:
-		PauseOnCondition: lowpower
-		Prerequisites:
-			1: vehicles.chinatnk
-		OrderName: tankdrop
-		Icons:
-			1: airdropicon
-		ChargeInterval: 5000
-		Names:
-			1: Tank Drop
-		Descriptions:
-			1: Cargo planes drop Battlemaster tanks\nanywhere on the map.
-		DropItems:
-			1: chbattle, chbattle, chbattle
-		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
-		IncomingSpeechNotification: EnemyUnitsApproaching
-		SelectTargetSpeechNotification: SelectTarget
-		AllowImpassableCells: false
-		QuantizedFacings: 8
-		CameraActor: camera.paradrop
-		DisplayBeacon: true
-		BeaconPosters:
-			1: pinficon
-		ArrowSequence: arrow
-		ClockSequence: clock
-		UnitTypes:
-			1: usabomber
-		SquadSizes:
-			1: 1
-		CircleSequence: circles
-		UseDirectionalTarget: True
-		DirectionArrowAnimation: paradirection
-
-	# Infantry Paradrop - Available from Airfield
-	ParatroopersPower@minigunnerdrop:
-		PauseOnCondition: lowpower
-		Prerequisites:
-			1: infantry.chinainf
-		OrderName: minigunnerdrop
-		Icons:
-			1: paradropicon
-		ChargeInterval: 5000
-		Names:
-			1: Infantry Paradrop
-		Descriptions:
-			1: Cargo planes drop 15 minigunners\nanywhere on the map.
-		DropItems:
-			1: minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner
-		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
-		SelectTargetSpeechNotification: SelectTarget
-		IncomingSpeechNotification: EnemyUnitsApproaching
-		AllowImpassableCells: false
-		QuantizedFacings: 8
-		CameraActor: camera.paradrop
-		DisplayBeacon: true
-		BeaconPosters:
-			1: pinficon
-		ArrowSequence: arrow
-		ClockSequence: clock
-		UnitTypes:
-			1: usabomber
-		SquadSizes:
-			1: 3
-		CircleSequence: circles
-		UseDirectionalTarget: True
-		DirectionArrowAnimation: paradirection
-
-	# Cluster Mines - Available from Airfield
-	AirstrikePower@cluster:
-		OrderName: chclusterbomb
-		Icons:
-			1: chclustermines
-		IconPalette: chrometd
-		ChargeInterval: 6000
-		Names:
-			1: Cluster Mines
-		Descriptions:
-			1: A bomber deploys cluster mines at the target.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitTypes:
-			1: usabomber.minebomb
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPosters:
-			1: airstrike
-		SquadSizes:
-			1: 1
-		SquadOffset: 1792,1792,0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		UseDirectionalTarget: True
-		DirectionArrowAnimation: paradirection
-		SupportPowerPaletteOrder: 40
-		Prerequisites:
-			1: structures.chinaatom, chairport
-
 ^ChinaSuperweapons:
 	# EMP Bomb - Available from Nuclear Silo (normal support power)
 	AirstrikePower@EMP:
@@ -273,7 +283,7 @@
 		CameraActor: camera
 		CameraRemoveDelay: 150
 		UnitTypes:
-			1: usabomber.emp
+			1: xianh8.emp
 		QuantizedFacings: 8
 		DisplayBeacon: true
 		BeaconPosters:
@@ -284,17 +294,17 @@
 		ArrowSequence: arrow
 		ClockSequence: clock
 		CircleSequence: circles
-		UseDirectionalTarget: false
+		UseDirectionalTarget: true
 		DirectionArrowAnimation: paradirection
 		SupportPowerPaletteOrder: 40
 		Prerequisites:
-			1: chsilo
+			1: techlevel.superw
 
 	# Nuclear Strike - Available from Nuclear Silo (techlevel.superw)
-	NukePowerCA:
+	NukePower:
 		PauseOnCondition: disabled || empdisable || being-warped
 		Prerequisites:
-			1: ~techlevel.superw
+			1: techlevel.superw
 		Cursor: nuke
 		Icons:
 			1: abomb
@@ -325,7 +335,7 @@
 		ClockSequence: clock
 		CircleSequence: circles
 		CircleRanges:
-			1: 10000
+			1: 7c512
 		TrailImage: smokey2
 		TrailSequences: idle
 		TrailPalette: tseffect-ignore-lighting-alpha75

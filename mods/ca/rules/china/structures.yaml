@@ -6,6 +6,9 @@ chcommand:
 	Inherits: ^BotFallbackInsurance
 	Inherits: ^StructureProduction
 	Inherits: ^RadarStation
+	Inherits: ^Tier2Tech
+	ProvidesPrerequisite@tier2:
+		RequiresCondition: radar
 	ProvidesPrerequisite:
 		Prerequisite: chcommand
 	Buildable:
@@ -59,26 +62,6 @@ chcommand:
 	GrantConditionOnPowerState@LOWPOWER:
 		Condition: lowpower
 		ValidPowerStates: Low, Critical
-	DetonateWeaponPower@ArtilleryBarrage:
-		OrderName: chartillerybarrage
-		PauseOnCondition: disabled || empdisable || being-warped || lowpower
-		Prerequisites:
-			1: structures.china
-		Icon: chartybarr3
-		IconPalette: chrometd
-		Cursor: attackmove
-		ChargeInterval: 6000
-		ActivationDelay: 50
-		Descriptions:
-			1: Artillery Barrage
-		LongDesc: Off-map guns fire at the target.\nApplies heavy damage over a large area.
-		Weapons:
-			1: CHBarrageSpawner3
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		DisplayRadarPing: True
-		CameraActor: camera
-		CameraRemoveDelay: 300
 	GrantConditionOnBotOwner@BOTRADAR:
 		Condition: radar
 		Bots: brutal, vhard, hard, normal, easy, naval
@@ -123,7 +106,6 @@ chcommand.Nukular:
 
 chcommand.radar:
 	Inherits: ^BuildingPlug
-	Inherits: ^Tier2Tech
 	Valued:
 		Cost: 1500
 	Tooltip:
@@ -552,93 +534,11 @@ chpropaganda:
 	SpawnNeighboringActors@minefield:
 		ActorTypes: mine
 		Locations: 0,-1, 1,-1, 2,-1, 3,-1, -1,0, -1,1, 4,0, 4,1, 0,2, 1,2, 2,2, 3,2
-	ProvidesPrerequisite:
-		Prerequisite: techcenter
 	ProvidesPrerequisite@buildingname:
 	Power:
 		Amount: -40
 	Voiced:
 		VoiceSet: CHPropagandaCenterVoice
-	AirstrikePower@carpet:
-		OrderName: chcarpetbombing
-		Icons:
-			1: chcarpet
-		IconPalette: chrometd
-		ChargeInterval: 6000
-		Description:
-			1: Carpet Bombing
-		LongDesc: A bomber strikes targets along a line.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitTypes:
-			1: usabomber.carpet
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: airstrike
-		SquadSizes:
-			1: 1
-		SquadOffset: 1792,1792,0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		UseDirectionalTarget: false
-		DirectionArrowAnimation: paradirection
-		SupportPowerPaletteOrder: 40
-		PauseOnCondition: disabled || empdisable || being-warped || lowpower
-		Prerequisites:
-			1: structures.chinatnk, radar
-	AirstrikePower@nuke:
-		OrderName: chnukebombing
-		Icon:
-			1: abombair
-		ChargeInterval: 10500
-		Descriptions:
-			1: Nuke Bomb
-		LongDesc: A bomber drops a tactical nuke.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitTypes:
-			1: usabomber.nuke
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: nukeicon
-		SquadSizes:
-			1: 1
-		SquadOffset: 1792,1792,0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		UseDirectionalTarget: false
-		DirectionArrowAnimation: paradirection
-		SupportPowerPaletteOrder: 40
-		PauseOnCondition: disabled || empdisable || being-warped || lowpower
-		Prerequisites: structures.chinaatom, radar
-	GrantExternalConditionPowerCA@Frenzy:
-		OrderName: frenzy
-		Icon: frenzy
-		Prerequisites: structures.chinainf, radar
-		ChargeInterval: 4500
-		Weapon: Frenzy
-		Description: Frenzy
-		Condition: frenzy
-		Dimensions: 5, 5
-		Footprint: _xxx_ xxxxx xxxxx xxxxx _xxx_
-		ValidRelationships: Ally
-		Duration: 500
-		ActivationDelay: 0
-		AirburstAltitude: 0c0
-		Sequence: false-active
-		AllowMultiple: false
-		LongDesc: Temporarily increases ground unit movement and attack speed.
-		OnFireSound: nodfrenzy.aud
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		DisplayRadarPing: True
-		Cursor: ability
-		PauseOnCondition: disabled || empdisable || being-warped || lowpower
-		DisplayTimerStances: Ally
 
 chpropagandatower:
 	Inherits: ^BuildingChina
@@ -722,7 +622,7 @@ chinternetcenter:
 	Buildable:
 		BuildPaletteOrder: 10
 		BuildLimit: 1
-		Prerequisites: techcenter, ~structures.china
+		Prerequisites: tier3, ~structures.china
 		Description: Can shelter Hackers.\nHas surveillance powers.
 	Health:
 		HP: 100000
@@ -738,34 +638,6 @@ chinternetcenter:
 		AfterLoadDelay: 0
 		BeforeUnloadDelay: 0
 		AfterUnloadDelay: 0
-	RevealActorsPower@SATHACK:
-		CameraActor: CAMERA
-		TargetActors: fact, afac, sfac, glcommand, chcommand, usacommand
-		LifeTime: 500
-		OrderName: satellitehack1
-		Icon: sathack1
-		IconPalette: chrometd
-		ChargeInterval: 3000
-		Description: Satellite Hack
-		LongDesc: Reveals command centers.
-		LaunchSound: bintsela.wav
-		PauseOnCondition: disabled || empdisable || being-warped
-	CashHackPower:
-		OrderName: cashhack
-		Icon: cashhack
-		ChargeInterval: 4500
-		Minimum: 500
-		Maximum: 2000
-		Description: Cash Hack
-		LongDesc: Steal up to $2000 credits from a selected enemy refinery.
-		OnFireSound: scashhac.aud
-		Notification: CreditsStolen
-		DisplayTimerStances: Ally
-		SelectTargetSpeechNotification: SelectTarget
-		InsufficientPowerSpeechNotification: InsufficientPower
-		DisplayRadarPing: True
-		Cursor: ability
-		PauseOnCondition: lowpower
 	Voiced:
 		VoiceSet: CHInternetCenterVoice
 
@@ -786,7 +658,7 @@ chsilo:
 		BuildPaletteOrder: 135
 		BuildLimit: 1
 		IconPalette: chrometd
-		Prerequisites: techcenter, ~structures.china, ~techlevel.superw
+		Prerequisites: tier3, ~structures.china, ~techlevel.superw
 		Description: Provides Nuclear Strike support power.\nRequires power to operate.
 	Building:
 		Footprint: xxx xxx
@@ -877,89 +749,6 @@ chairport:
 	GrantConditionOnPowerState@LOWPOWER:
 		Condition: lowpower
 		ValidPowerStates: Low, Critical
-	ParatroopersPower@tankdrop:
-		PauseOnCondition: lowpower
-		Prerequisites: vehicles.chinatnk
-		OrderName: tankdrop
-		Icons:
-			1: airdropicon
-		ChargeInterval: 5000
-		Descriptions:
-			1: Tank Drop
-		LongDesc: Cargo planes drop Battlemaster tanks\nanywhere on the map.
-		DropItems:
-			1: chbattle, chbattle, chbattle
-		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
-		IncomingSpeechNotification: EnemyUnitsApproaching
-		SelectTargetSpeechNotification: SelectTarget
-		AllowImpassableCells: false
-		QuantizedFacings: 8
-		CameraActor: camera.paradrop
-		DisplayBeacon: true
-		BeaconPoster: pinficon
-		ArrowSequence: arrow
-		ClockSequence: clock
-		UnitTypes:
-			1: usabomber
-		SquadSizes:
-			1: 1
-		CircleSequence: circles
-		UseDirectionalTarget: True
-		DirectionArrowAnimation: paradirection
-	ParatroopersPower@minigunnerdrop:
-		PauseOnCondition: lowpower
-		Prerequisites: infantry.chinainf
-		OrderName: minigunnerdrop
-		Icons:
-			1: paradropicon
-		ChargeInterval: 5000
-		Descriptions:
-			1: Infantry Paradrop
-		LongDesc: Cargo planes drop 15 minigunners\nanywhere on the map.
-		DropItems:
-			1: minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner,minigunner
-		ReinforcementsArrivedSpeechNotification: ReinforcementsArrived
-		SelectTargetSpeechNotification: SelectTarget
-		IncomingSpeechNotification: EnemyUnitsApproaching
-		AllowImpassableCells: false
-		QuantizedFacings: 8
-		CameraActor: camera.paradrop
-		DisplayBeacon: true
-		BeaconPoster: pinficon
-		ArrowSequence: arrow
-		ClockSequence: clock
-		UnitTypes:
-			1: usabomber
-		SquadSizes:
-			1: 3
-		CircleSequence: circles
-		UseDirectionalTarget: True
-		DirectionArrowAnimation: paradirection
-	AirstrikePower@cluster:
-		OrderName: chclusterbomb
-		Icon: chclustermines
-		IconPalette: chrometd
-		ChargeInterval: 6000
-		Description: Cluster Mines
-		LongDesc: A bomber deploys cluster mines at the target.
-		SelectTargetSpeechNotification: SelectTarget
-		CameraActor: camera
-		CameraRemoveDelay: 150
-		UnitTypes:
-			1: usabomber.minebomb
-		QuantizedFacings: 8
-		DisplayBeacon: true
-		BeaconPoster: airstrike
-		SquadSizes:
-			1: 1
-		SquadOffset: 1792,1792,0
-		ArrowSequence: arrow
-		ClockSequence: clock
-		CircleSequence: circles
-		UseDirectionalTarget: True
-		DirectionArrowAnimation: paradirection
-		SupportPowerPaletteOrder: 40
-		Prerequisites: structures.chinaatom, chairport
 
 CHSYRD:
 	Inherits: SYRD

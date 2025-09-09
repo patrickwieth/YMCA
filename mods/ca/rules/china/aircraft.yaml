@@ -24,7 +24,7 @@ CHMIG:
 		Queue: Aircraft
 		IconPalette: chrometd
 		BuildPaletteOrder: 50
-		Prerequisites: ~aircraft.china, techcenter, ~!filler.chinamig
+		Prerequisites: ~aircraft.china, tier3, ~!filler.chinamig
 		Description: Bomber armed with guided air-to-surface armor-piercing missiles.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles
@@ -59,7 +59,7 @@ CHMIG.AA:
 	Buildable:
 		Queue: Aircraft
 		BuildPaletteOrder: 50
-		Prerequisites: ~aircraft.china, techcenter, ~promotion.chinamig.aa
+		Prerequisites: ~aircraft.china, tier3, ~promotion.chinamig.aa
 		Description: Fighter armed with guided air-to-air missiles.
 	TooltipExtras:
 		Strengths: • Strong vs Aircraft
@@ -80,7 +80,7 @@ CHMIG.Napalm:
 	WithProductionIconOverlay@Flame:
 		Types: Flame
 	Buildable:
-		Prerequisites: ~aircraft.china, techcenter, ~promotion.chinamig.napalm
+		Prerequisites: ~aircraft.china, tier3, ~promotion.chinamig.napalm
 		Description: Napalm bomber.
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Light Vehicles
@@ -118,7 +118,7 @@ CHMIG.Nuke:
 	WithProductionIconOverlay@Nuke:
 		Types: Nuke
 	Buildable:
-		Prerequisites: ~aircraft.china, techcenter, ~promotion.chinamig.nuke
+		Prerequisites: ~aircraft.china, tier3, ~promotion.chinamig.nuke
 		Description: Nuclear bomber aircraft.
 	TooltipExtras:
 		Strengths: • Strong vs Ground
@@ -551,47 +551,33 @@ chhelix.husk:
 		Image: chhelix
 		PlayerPalette: overlayplayertd
 
-
-
-usabomber:
+xianh8:
 	Inherits: BADR
-	Tooltip:
-		Name: Cargo Plane
-	SpawnActorOnDeath:
-		Actor: usabomber.husk
+	RenderVoxels:
+		Scale: 0.7
+		Image: xianh8
 	RenderSprites:
-		Image: usabomber
+		Image: xianh8
+	Tooltip:
+		Name: Xian H-8
+	SpawnActorOnDeath:
+		Actor: xianh8.husk
+	RenderSprites:
+		Image: xianh8
 		PlayerPalette: overlayplayertd
 
-usabomber.husk:
-	Inherits: ^PlaneHusk
-	Tooltip:
-		Name: Aircraft
-	Aircraft:
-		TurnSpeed: 5
-		Speed: 149
-	LeavesTrails@0:
-		Offsets: -432,560,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
-	LeavesTrails@1:
-		Offsets: -432,-560,0
-		MovingInterval: 2
-		Image: smokey
-		StationaryInterval: 2
-		SpawnAtLastPosition: False
-		TrailWhileStationary: True
-		Type: CenterPosition
+xianh8.husk:
+	Inherits: ^VoxelPlaneHusk
+	RenderVoxels:
+		Scale: 0.7
+		Image: xianh8.husk
 	RenderSprites:
-		Image: usabomber
-	-RevealOnDeath:
+		Image: xianh8
+	Tooltip:
+		Name: Xian H-8 Husk
 
-usabomber.carpet:
-	Inherits: usabomber
+xianh8.carpet:
+	Inherits: xianh8
 	AttackBomber:
 		PauseOnCondition: !ammo
 		FacingTolerance: 8
@@ -602,23 +588,23 @@ usabomber.carpet:
 	AmmoPool:
 		Ammo: 12
 	Tooltip:
-		Name: H-6 Bomber
+		Name: Xian H-8 Bomber
 
-usabomber.nuke:
-	Inherits: usabomber
+xianh8.nuke:
+	Inherits: xianh8
 	AttackBomber:
 		PauseOnCondition: !ammo
 		FacingTolerance: 8
 	Armament@nuclear:
 		Weapon: AtomBomb
-		LocalOffset: 300,0,340
+		LocalOffset: 300,0,-600
 	AmmoPool:
 		Ammo: 1
 	Tooltip:
-		Name: H-6 Bomber
+		Name: Xian H-8 Bomber
 
-usabomber.emp:
-	Inherits: usabomber
+xianh8.emp:
+	Inherits: xianh8
 	AttackBomber:
 		PauseOnCondition: !ammo
 		FacingTolerance: 8
@@ -627,10 +613,10 @@ usabomber.emp:
 	AmmoPool:
 		Ammo: 1
 	Tooltip:
-		Name: H-6 Bomber
+		Name: Xian H-8 Bomber
 
-usabomber.minebomb:
-	Inherits: usabomber
+xianh8.minebomb:
+	Inherits: xianh8
 	AttackBomber:
 		PauseOnCondition: !ammo
 		FacingTolerance: 8
@@ -639,4 +625,4 @@ usabomber.minebomb:
 	AmmoPool:
 		Ammo: 1
 	Tooltip:
-		Name: H-6 Bomber
+		Name: Xian H-8 Bomber
