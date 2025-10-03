@@ -540,7 +540,7 @@
 		StartIfBelow: 50
 		DamageCooldown: 500
 	Targetable:
-		TargetTypes: Ground, Vehicle, C4, ChaosImmune, MindControlImmune
+		TargetTypes: Ground, Vehicle, C4, MindControlImmune
 	CarryableHarvester:
 	AutoCarryable:
 		CarriedCondition: notmobile
@@ -2146,6 +2146,7 @@
 	Inherits: ^VehicleVision
 	Inherits: ^RelayMarkable
 	Inherits: ^Parachute
+	Inherits: ^MadnessSusceptible
 	Buildable:
 		Queue: Vehicle
 	TooltipExtras:
@@ -5909,3 +5910,51 @@ BuildBoost.Dummy:
 		RequiresCondition: !unloaded
 	KillsSelf:
 		RequiresCondition: invulnerability || triggered || berserk
+
+^MadnessSusceptible:
+	PhysicalState@Madness:
+		Name: Madness
+		MinValue: 0
+		MaxValue: 100
+		InitialValue: 0
+		RelaxedValue: 0
+		RelaxationLinear: 2
+		RelaxationDelay: 500
+		RelaxationInterval: 5
+	PhysicalStateBar@Madness:
+		PhysicalStateName: Madness
+		PositiveColor: FF00FF
+		NegativeColor: 333333
+		NeutralColor: 333333
+		DisplayWhenRelaxed: false
+		ShowAbsoluteValues: true
+	ChangeOwnerOnPhysicalState@Madness:
+		PhysicalStateName: Madness
+		Threshold: 100
+		TriggerWhenAbove: true
+		Permanent: false
+
+^CorrodibleArmor:
+	PhysicalState@CORROSION:
+		Name: ArmorCorrosion
+		MinValue: 0
+		MaxValue: 100
+		InitialValue: 0
+		RelaxedValue: 0
+		RelaxationLinear: 1
+		RelaxationDelay: 300
+		RelaxationInterval: 10
+	DamageMultiplierProportionalToPhysicalState@CORROSION:
+		PhysicalStateName: ArmorCorrosion
+		DamageMultiplierAtMinimum: 100
+		DamageMultiplierAtMaximum: 1000
+		UseDeviationFromRelaxed: true
+	PhysicalStateBar@CORROSION:
+		PhysicalStateName: ArmorCorrosion
+		PositiveColor: 6EE061FF
+		NegativeColor: 2E6E1FFF
+		NeutralColor: 4C4C4CFF
+		DisplayWhenRelaxed: false
+		DisplayWhenEmpty: false
+		ShowAbsoluteValues: true
+

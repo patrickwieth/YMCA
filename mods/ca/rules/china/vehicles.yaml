@@ -109,6 +109,66 @@ chbattle:
 	WithMuzzleOverlay:
 	Voiced:
 		VoiceSet: BattlemasterTankVoice
+	PhysicalState@BlueShield:
+		Name: BattlemasterBlueShield
+		MinValue: 0
+		MaxValue: 20000
+		InitialValue: 20000
+		RelaxedValue: 20000
+		RelaxationLinear: 200
+		RelaxationDelay: 60
+		RelaxationInterval: 5
+	PhysicalStateBar@BlueShield:
+		PhysicalStateName: BattlemasterBlueShield
+		PositiveColor: 2F74E2
+		NeutralColor: 222222
+		NegativeColor: 222222
+		DisplayWhenRelaxed: false
+		ShowAbsoluteValues: true
+	ProvidesShieldFromPhysicalState@BlueShield:
+		PhysicalStateName: BattlemasterBlueShield
+		ShareRange: 0c0
+		ProtectSelf: true
+	ReceivesShieldFromProvider@BlueShield:
+		PhysicalStateName: BattlemasterBlueShield
+		ShieldedCondition: battlemaster-blue-shielded
+		StatusCheckInterval: 4
+	WithIdleOverlay@BlueShield:
+		Sequence: idle
+		Image: nshield-overlay
+		Palette: effect
+		IsDecoration: true
+		RequiresCondition: battlemaster-blue-shielded && !empdisable
+	PhysicalState@GreyShield:
+		Name: BattlemasterGrayShield
+		MinValue: 0
+		MaxValue: 12000
+		InitialValue: 12000
+		RelaxedValue: 12000
+		RelaxationLinear: 120
+		RelaxationDelay: 60
+		RelaxationInterval: 5
+	PhysicalStateBar@GreyShield:
+		PhysicalStateName: BattlemasterGrayShield
+		PositiveColor: 909090
+		NeutralColor: 444444
+		NegativeColor: 444444
+		DisplayWhenRelaxed: false
+		ShowAbsoluteValues: true
+	ProvidesShieldFromPhysicalState@GreyShield:
+		PhysicalStateName: BattlemasterGrayShield
+		ShareRange: 0c0
+		ProtectSelf: true
+	ReceivesShieldFromProvider@GreyShield:
+		PhysicalStateName: BattlemasterGrayShield
+		ShieldedCondition: battlemaster-gray-shielded
+		StatusCheckInterval: 4
+	WithIdleOverlay@GreyShield:
+		Sequence: idle
+		Image: nshield-overlay
+		Palette: ra2effect-ignore-lighting-alpha50
+		IsDecoration: true
+		RequiresCondition: battlemaster-gray-shielded && !empdisable
 
 chbattle.Autoloader:
 	Inherits: chbattle
@@ -783,6 +843,71 @@ chdragon:
 	GrantConditionOnPrerequisite@blacknapalm:
 		Condition: blacknapalm
 		Prerequisites: promotion.black_napalm
+
+	PhysicalState@Temperature:
+		Name: Temperature
+		MinValue: -100
+		MaxValue: 100
+		RelaxedValue: 0
+		RelativeToHealth: true
+		RelaxationLinear: 1
+		RelaxationInterval: 10
+		RelaxationDelay: 25
+		InitialValue: 0
+	PhysicalStateBar@TemperatureBar:
+		PhysicalStateName: Temperature
+		PositiveColor: FF0000
+		NegativeColor: 0080FF
+		NeutralColor: 808080
+		DisplayWhenRelaxed: false
+		ShowAbsoluteValues: false
+	GrantConditionOnPhysicalState@Overheating:
+		PhysicalStateName: Temperature
+		Condition: overheating
+		LowerValue: 75
+		UpperValue: 100
+	GrantConditionOnPhysicalState@Frozen:
+		PhysicalStateName: Temperature
+		Condition: frozen
+		LowerValue: -100
+		UpperValue: -75
+	SlowsProportionalToPhysicalState@FrostSlowdown:
+		PhysicalStateName: Temperature
+		UseDeviationFromRelaxed: true
+		OnlyNegativeValues: true
+		SpeedModifierAtMinimum: 100
+		SpeedModifierAtMaximum: 0
+		TurnSpeedModifierAtMinimum: 100
+		TurnSpeedModifierAtMaximum: 0
+		TurretTurnSpeedModifierAtMinimum: 100
+		TurretTurnSpeedModifierAtMaximum: 0
+		ReloadDelayModifierAtMinimum: 100
+		ReloadDelayModifierAtMaximum: 0
+	ChangesHealthProportionalToPhysicalState@HeatDamage:
+		PhysicalStateName: Temperature
+		DamageAtMaximum: 500
+		DamageAtMinimum: 0
+		DamageThreshold: 0
+		DamageInterval: 25
+		DamageTypes: HeatDeath
+	# Conditions for demonstration
+	WithColoredOverlay@Overheating:
+		RequiresCondition: overheating
+		Color: FF000080
+	WithColoredOverlay@Frozen:
+		RequiresCondition: frozen
+		Color: 0080FF80
+	ReceivesShieldFromProvider:
+		PhysicalStateName: AlliedShield
+		ShieldedCondition: shielded
+		StatusCheckInterval: 5
+	WithIdleOverlay@Shield:
+		Sequence: idle
+		Image: nshield-overlay
+		Palette: effect
+		IsDecoration: true
+		RequiresCondition: shielded && !empdisable
+
 
 chdragon.PDL:
 	Inherits: chdragon
