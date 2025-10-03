@@ -27,7 +27,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly int IdleBaseUnitsMaximum = 12;
 
 		[Desc("Production queues AI uses for producing units.")]
-		public readonly string[] UnitQueues = { "VehicleSQ", "InfantrySQ", "AircraftSQ", "ShipSQ", "VehicleMQ", "InfantryMQ", "AircraftMQ", "ShipMQ" };
+		public readonly string[] UnitQueues = { "Vehicle", "Infantry", "Plane", "Aircraft", "Ship" };
 
 		[Desc("What units to the AI should build.", "What relative share of the total army must be this type of unit.")]
 		public readonly Dictionary<string, int> UnitsToBuild = null;
@@ -45,7 +45,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly int UnitBuilderInterval = 0;
 
 		[Desc("Only queue construction of a new unit when above this requirement.")]
-		public readonly int ProductionMinCashRequirement = 2000;
+		public readonly int ProductionMinCashRequirement = 500;
 
 		[Desc("Only queue construction of a new unit when above this requirement.")]
 		public readonly int MaximiseProductionCashRequirement = 10000;
