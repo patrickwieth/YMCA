@@ -337,11 +337,17 @@ SPEC:
 		InitialDelay: 90
 		CloakDelay: 90
 		CloakSound: trans1.aud
-		CloakedCondition: hidden
 		UncloakSound: appear1.aud
-		Palette: cloak
-		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		PauseOnCondition: cloak-force-disabled
+		CloakedCondition: hidden
+		IsPlayerPalette: false
+		Palette: TAStealthTankCloak
+		EffectImage: stltnkfade
+		EffectPalette: greenspark
+		CloakEffectSequence: idle
+		UncloakEffectSequence: idle
+		EffectTracksActor: False
 		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
@@ -1264,6 +1270,9 @@ STNK:
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
+	RenderSprites:
+		Image: n_stltank
+		PlayerPalette: TAStealthTankCloak
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -1283,11 +1292,17 @@ STNK:
 		InitialDelay: 90
 		CloakDelay: 90
 		CloakSound: trans1.aud
-		CloakedCondition: hidden
 		UncloakSound: appear1.aud
-		Palette: cloak
-		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		PauseOnCondition: cloak-force-disabled
+		CloakedCondition: hidden
+		IsPlayerPalette: false
+		Palette: TAStealthTankCloak
+		EffectImage: stltnkfade
+		EffectPalette: greenspark
+		CloakEffectSequence: idle
+		UncloakEffectSequence: idle
+		EffectTracksActor: False
 		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
@@ -1304,8 +1319,21 @@ STNK:
 		Offset: 0,0,10
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
+	WithFacingSpriteBody:
+		RequiresCondition: !hidden
+	WithFacingSpriteBody@cloak:
+		Name: cloak-body
+		Sequence: cloak-idle
+		Palette: TAStealthTankCloak
+		RequiresCondition: hidden
 	WithSpriteTurret:
-
+		Sequence: turret
+		Palette: TAStealthTankCloak
+		RequiresCondition: !hidden
+	WithSpriteTurret@cloak:
+		Sequence: cloak-turret
+		Palette: TAStealthTankCloak
+		RequiresCondition: hidden
 STNK.Scrin:
 	Inherits: STNK
 	Inherits: ^PrioEnergyAntiHeavy
@@ -1321,7 +1349,6 @@ STNK.Scrin:
 		Name: Stealth Scrin Tank
 	Armament@PRIMARY:
 		Weapon: STNKScrinTorp
-	-Armament@SECONDARY:
 
 STNK.Scrin.PDL:
 	Inherits@PDL: ^PointLaserDefenseSystem
@@ -1486,7 +1513,6 @@ BIKE.Scrin:
 		HP: 18000
 	Armament@PRIMARY:
 		Weapon: BikeScrinTorp
-	-Armament@SECONDARY:
 
 BIKE.Scrin.PDL:
 	Inherits: ^PointLaserDefenseSystem
@@ -1530,7 +1556,6 @@ BIKE.RocketHail:
 		Name: Rocket Hail Bike
 	Armament@PRIMARY:
 		Weapon: BikeRocketHail
-	-Armament@SECONDARY:
 
 BIKE.RocketHail.PDL:
 	Inherits: ^PointLaserDefenseSystem
@@ -2216,7 +2241,6 @@ TITN.Railgun:
 		Name: Railgun Titan
 	Armament@PRIMARY:
 		Weapon: Railgun.Titan
-	-Armament@SECONDARY:
 
 TITN.Railgun.PDL:
 	Inherits: TITN.Railgun

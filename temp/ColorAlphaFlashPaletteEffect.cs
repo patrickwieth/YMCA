@@ -1,4 +1,4 @@
-#region Copyright & License Information
+﻿#region Copyright & License Information
 /*
  * Copyright 2007-2022 The OpenRA Developers (see AUTHORS)
  * This file is part of OpenRA, which is free software. It is made
@@ -14,9 +14,9 @@ using OpenRA.Graphics;
 using OpenRA.Primitives;
 using OpenRA.Traits;
 
-namespace OpenRA.Mods.CA.Traits
+namespace OpenRA.Mods.TA.Traits
 {
-	[Desc("Palette flashing effect imported from TiberianAurora.")]
+	[Desc("The cloak palette effect used by TA.")]
 	public class ColorAlphaFlashPaletteEffectInfo : TraitInfo
 	{
 		[FieldLoader.Require]
@@ -41,7 +41,7 @@ namespace OpenRA.Mods.CA.Traits
 
 	public class ColorAlphaFlashPaletteEffect : ILoadsPlayerPalettes, IPaletteModifier, ITick
 	{
-		int t;
+		int t = 0;
 		readonly ColorAlphaFlashPaletteEffectInfo info;
 		readonly HashSet<string> palettes;
 
@@ -50,33 +50,32 @@ namespace OpenRA.Mods.CA.Traits
 			this.info = info;
 			palettes = new HashSet<string>();
 
-			if (!info.IsAffectedPalettePlayerColor && info.AffectedPalette != null)
+			if (!info.IsAffectedPalettePlayerColor)
 				palettes.Add(info.AffectedPalette);
 		}
 
 		public void LoadPlayerPalettes(WorldRenderer wr, string playerName, Color playerColor, bool replaceExisting)
 		{
-			if (!info.IsAffectedPalettePlayerColor || info.AffectedPalette == null)
+			if (!info.IsAffectedPalettePlayerColor)
 				return;
 
 			palettes.Add(info.AffectedPalette + playerName);
 		}
 
-		void IPaletteModifier.AdjustPalette(IReadOnlyDictionary<string, MutablePalette> palettesByName)
+		void IPaletteModifier.AdjustPalette(IReadOnlyDictionary<string, MutablePalette> b)
 		{
-			foreach (var paletteName in palettes)
+			foreach (var ap in palettes)
 			{
-				if (!palettesByName.TryGetValue(paletteName, out var palette))
-					continue;
+				var p = b[ap];
 
-				for (var i = 0; i < info.Alpha.Length; i++)
+				for (var j = 0; j < info.Alpha.Length; j++)
 				{
-					var k = (t + i) % 255 + 1;
-					for (var index = k; index < 256; index += 32)
+					var k = (t + j) % 255 + 1;
+					for (var l = k; l < 256; l += 32)
 					{
-						var color = palette.GetColor(index);
-						color = Color.FromArgb((int)(info.Alpha[i] * color.A), color.R, color.G, color.B);
-						palette.SetColor(index, color);
+						var color = p.GetColor(l);
+						color = Color.FromArgb((int)(info.Alpha[j] * color.A), color.R, color.G, color.B);
+						p.SetColor(l, color);
 					}
 				}
 			}
@@ -84,8 +83,8 @@ namespace OpenRA.Mods.CA.Traits
 
 		void ITick.Tick(Actor self)
 		{
-			if (++t >= info.EndIndex)
-				t = info.StartIndex;
+			t += 1;
+			if (t >= info.EndIndex) t = info.StartIndex;
 		}
 	}
 }

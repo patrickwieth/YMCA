@@ -16,36 +16,41 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	[Desc("Palette flashing effect imported from TiberianAurora.")]
-	public class ColorAlphaFlashPaletteEffectInfo : TraitInfo
+	[Desc("Color flashing effect imported from TiberianAurora.")]
+	public class ColorFlashPaletteEffectInfo : TraitInfo
 	{
 		[FieldLoader.Require]
 		[PaletteReference(true)]
-		[Desc("The name of the player palette to base off.")]
+		[Desc("The palette to apply the flash effect to.")]
 		public readonly string AffectedPalette = null;
 
-		[Desc("The name of the player palette to base off.")]
+		[Desc("Whether the affected palette should follow the player color.")]
 		public readonly bool IsAffectedPalettePlayerColor = false;
 
-		[Desc("Alpha multipliers of the colors.")]
-		public readonly float[] Alpha = { 0.3f, 0.6f, 0.9f };
+		[Desc("Colors used for the flash animation. Number of entries controls how many zaps are displayed.")]
+		public readonly Color[] Colors =
+		{
+			Color.FromArgb(0, 0, 0, 30),
+			Color.FromArgb(0, 0, 0, 50),
+			Color.FromArgb(0, 0, 0, 100),
+		};
 
-		[Desc("Start Index to apply the effect.")]
+		[Desc("Lower bound for the frame index stepping.")]
 		public readonly int StartIndex = 0;
 
-		[Desc("End Index to apply the effect.")]
+		[Desc("Upper bound for the frame index stepping.")]
 		public readonly int EndIndex = 32;
 
-		public override object Create(ActorInitializer init) { return new ColorAlphaFlashPaletteEffect(this); }
+		public override object Create(ActorInitializer init) { return new ColorFlashPaletteEffect(this); }
 	}
 
-	public class ColorAlphaFlashPaletteEffect : ILoadsPlayerPalettes, IPaletteModifier, ITick
+	public class ColorFlashPaletteEffect : ILoadsPlayerPalettes, IPaletteModifier, ITick
 	{
 		int t;
-		readonly ColorAlphaFlashPaletteEffectInfo info;
+		readonly ColorFlashPaletteEffectInfo info;
 		readonly HashSet<string> palettes;
 
-		public ColorAlphaFlashPaletteEffect(ColorAlphaFlashPaletteEffectInfo info)
+		public ColorFlashPaletteEffect(ColorFlashPaletteEffectInfo info)
 		{
 			this.info = info;
 			palettes = new HashSet<string>();
@@ -69,15 +74,11 @@ namespace OpenRA.Mods.CA.Traits
 				if (!palettesByName.TryGetValue(paletteName, out var palette))
 					continue;
 
-				for (var i = 0; i < info.Alpha.Length; i++)
+				for (var i = 0; i < info.Colors.Length; i++)
 				{
 					var k = (t + i) % 255 + 1;
 					for (var index = k; index < 256; index += 32)
-					{
-						var color = palette.GetColor(index);
-						color = Color.FromArgb((int)(info.Alpha[i] * color.A), color.R, color.G, color.B);
-						palette.SetColor(index, color);
-					}
+						palette.SetColor(index, info.Colors[i]);
 				}
 			}
 		}

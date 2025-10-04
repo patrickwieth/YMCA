@@ -14,10 +14,10 @@ using OpenRA.Graphics;
 using OpenRA.Primitives;
 using OpenRA.Traits;
 
-namespace OpenRA.Mods.CA.Traits
+namespace OpenRA.Mods.TA.Traits
 {
-	[Desc("Palette flashing effect imported from TiberianAurora.")]
-	public class ColorAlphaFlashPaletteEffectInfo : TraitInfo
+	[Desc("The cloak palette effect used by TA.")]
+	public class ColorFlashPaletteEffectInfo : TraitInfo
 	{
 		[FieldLoader.Require]
 		[PaletteReference(true)]
@@ -27,8 +27,13 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("The name of the player palette to base off.")]
 		public readonly bool IsAffectedPalettePlayerColor = false;
 
-		[Desc("Alpha multipliers of the colors.")]
-		public readonly float[] Alpha = { 0.3f, 0.6f, 0.9f };
+		[Desc("Colors of the zaps. The amount of zaps are the amount of colors listed here.")]
+		public readonly Color[] Colors =
+		{
+			Color.FromArgb(0, 0, 0, 30),
+			Color.FromArgb(0, 0, 0, 50),
+			Color.FromArgb(0, 0, 0, 100),
+		};
 
 		[Desc("Start Index to apply the effect.")]
 		public readonly int StartIndex = 0;
@@ -36,47 +41,44 @@ namespace OpenRA.Mods.CA.Traits
 		[Desc("End Index to apply the effect.")]
 		public readonly int EndIndex = 32;
 
-		public override object Create(ActorInitializer init) { return new ColorAlphaFlashPaletteEffect(this); }
+		public override object Create(ActorInitializer init) { return new ColorFlashPaletteEffect(this); }
 	}
 
-	public class ColorAlphaFlashPaletteEffect : ILoadsPlayerPalettes, IPaletteModifier, ITick
+	public class ColorFlashPaletteEffect : ILoadsPlayerPalettes, IPaletteModifier, ITick
 	{
-		int t;
-		readonly ColorAlphaFlashPaletteEffectInfo info;
+		int t = 0;
+		readonly ColorFlashPaletteEffectInfo info;
 		readonly HashSet<string> palettes;
 
-		public ColorAlphaFlashPaletteEffect(ColorAlphaFlashPaletteEffectInfo info)
+		public ColorFlashPaletteEffect(ColorFlashPaletteEffectInfo info)
 		{
 			this.info = info;
 			palettes = new HashSet<string>();
 
-			if (!info.IsAffectedPalettePlayerColor && info.AffectedPalette != null)
+			if (!info.IsAffectedPalettePlayerColor)
 				palettes.Add(info.AffectedPalette);
 		}
 
 		public void LoadPlayerPalettes(WorldRenderer wr, string playerName, Color playerColor, bool replaceExisting)
 		{
-			if (!info.IsAffectedPalettePlayerColor || info.AffectedPalette == null)
+			if (!info.IsAffectedPalettePlayerColor)
 				return;
 
 			palettes.Add(info.AffectedPalette + playerName);
 		}
 
-		void IPaletteModifier.AdjustPalette(IReadOnlyDictionary<string, MutablePalette> palettesByName)
+		void IPaletteModifier.AdjustPalette(IReadOnlyDictionary<string, MutablePalette> b)
 		{
-			foreach (var paletteName in palettes)
+			foreach (var ap in palettes)
 			{
-				if (!palettesByName.TryGetValue(paletteName, out var palette))
-					continue;
+				var p = b[ap];
 
-				for (var i = 0; i < info.Alpha.Length; i++)
+				for (var j = 0; j < info.Colors.Length; j++)
 				{
-					var k = (t + i) % 255 + 1;
-					for (var index = k; index < 256; index += 32)
+					var k = (t + j) % 255 + 1;
+					for (var l = k; l < 256; l += 32)
 					{
-						var color = palette.GetColor(index);
-						color = Color.FromArgb((int)(info.Alpha[i] * color.A), color.R, color.G, color.B);
-						palette.SetColor(index, color);
+						p.SetColor(l, info.Colors[j]);
 					}
 				}
 			}
@@ -84,8 +86,8 @@ namespace OpenRA.Mods.CA.Traits
 
 		void ITick.Tick(Actor self)
 		{
-			if (++t >= info.EndIndex)
-				t = info.StartIndex;
+			t += 1;
+			if (t >= info.EndIndex) t = info.StartIndex;
 		}
 	}
 }
