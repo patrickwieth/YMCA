@@ -22,6 +22,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 {
 	public class SelectionTooltipLogic : ChromeLogic
 	{
+		static readonly Color StrengthsTextColor = Color.FromArgb(0x33, 0xDD, 0x33);
+		static readonly Color WeaknessesTextColor = Color.FromArgb(0xEE, 0x55, 0x55);
+		static readonly Color AttributesTextColor = Color.FromArgb(0xFF, 0xFF, 0x00);
+
 		readonly World world;
 		int selectionHash;
 		readonly Widget widget;
@@ -122,9 +126,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			if (tooltipExtras != null)
 			{
 				var tooltipExtrasInfo = tooltipExtras.Info;
-				strengthsLabel.Text = tooltipExtrasInfo.Strengths.Replace("\\n", "\n");
-				weaknessesLabel.Text = tooltipExtrasInfo.Weaknesses.Replace("\\n", "\n");
-				attributesLabel.Text = tooltipExtrasInfo.Attributes.Replace("\\n", "\n");
+				SetExtrasLabel(strengthsLabel, tooltipExtrasInfo.Strengths, StrengthsTextColor);
+				SetExtrasLabel(weaknessesLabel, tooltipExtrasInfo.Weaknesses, WeaknessesTextColor);
+				SetExtrasLabel(attributesLabel, tooltipExtrasInfo.Attributes, AttributesTextColor);
 				descLabel.Text = tooltipExtrasInfo.Description.Replace("\\n", "\n");
 				versusLabel.Text = "";
 				versusNoneLabel.Text = "";
@@ -197,9 +201,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 			else
 			{
-				strengthsLabel.Text = "";
-				weaknessesLabel.Text = "";
-				attributesLabel.Text = "";
+				SetExtrasLabel(strengthsLabel, string.Empty, StrengthsTextColor);
+				SetExtrasLabel(weaknessesLabel, string.Empty, WeaknessesTextColor);
+				SetExtrasLabel(attributesLabel, string.Empty, AttributesTextColor);
 				descLabel.Text = "";
 				versusLabel.Text = "";
 				versusNoneLabel.Text = "";
@@ -294,6 +298,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			widget.Bounds.Height = Math.Max(leftHeight, rightHeight);
 			widget.Bounds.X = X;
 			widget.Bounds.Y = Y - widget.Bounds.Height;
+		}
+
+		static void SetExtrasLabel(LabelWidget label, string value, Color color)
+		{
+			var textValue = string.IsNullOrEmpty(value) ? string.Empty : value.Replace("\\n", "\n");
+			label.Text = textValue;
+			label.TextColor = color;
+			label.Visible = textValue.Length > 0;
 		}
 
 		Color GetEffectiveLabelColor(int effectValue, int neutralValue) {

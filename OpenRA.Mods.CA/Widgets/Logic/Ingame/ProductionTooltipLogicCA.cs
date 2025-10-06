@@ -22,6 +22,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 {
 	public class ProductionTooltipLogicCA : ChromeLogic
 	{
+		static readonly Color StrengthsTextColor = Color.FromArgb(0x33, 0xDD, 0x33);
+		static readonly Color WeaknessesTextColor = Color.FromArgb(0xEE, 0x55, 0x55);
+		static readonly Color AttributesTextColor = Color.FromArgb(0xFF, 0xFF, 0x00);
+
 		[FluentReference("prequisites")]
 		const string Requires = "label-requires";
 
@@ -116,9 +120,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 				if (tooltipExtras != null)
 				{
-					strengthsLabel.Text = tooltipExtras.Strengths.Replace("\\n", "\n");
-					weaknessesLabel.Text = tooltipExtras.Weaknesses.Replace("\\n", "\n");
-					attributesLabel.Text = tooltipExtras.Attributes.Replace("\\n", "\n");
+				SetExtrasLabel(strengthsLabel, tooltipExtras.Strengths, StrengthsTextColor);
+				SetExtrasLabel(weaknessesLabel, tooltipExtras.Weaknesses, WeaknessesTextColor);
+				SetExtrasLabel(attributesLabel, tooltipExtras.Attributes, AttributesTextColor);
 
 					versusLabel.Text = "";
 					versusNoneLabel.Text = "";
@@ -195,9 +199,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				}
 				else
 				{
-					strengthsLabel.Text = "";
-					weaknessesLabel.Text = "";
-					attributesLabel.Text = "";
+				SetExtrasLabel(strengthsLabel, string.Empty, StrengthsTextColor);
+				SetExtrasLabel(weaknessesLabel, string.Empty, WeaknessesTextColor);
+				SetExtrasLabel(attributesLabel, string.Empty, AttributesTextColor);
 					versusLabel.Text = "";
 					versusNoneLabel.Text = "";
 					versusLightLabel.Text = "";
@@ -357,6 +361,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 
 			return a;
+		}
+
+		static void SetExtrasLabel(LabelWidget label, string value, Color color)
+		{
+			var textValue = string.IsNullOrEmpty(value) ? string.Empty : value.Replace("\\n", "\n");
+			label.Text = textValue;
+			label.TextColor = color;
+			label.Visible = textValue.Length > 0;
 		}
 
 		Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
