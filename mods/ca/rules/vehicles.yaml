@@ -1,4 +1,4 @@
-﻿1TNK:
+1TNK:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
@@ -1271,8 +1271,7 @@ STNK:
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
 	RenderSprites:
-		Image: n_stltank
-		PlayerPalette: TAStealthTankCloak
+		Image: stnk
 	Valued:
 		Cost: 1200
 	Tooltip:
@@ -1297,7 +1296,6 @@ STNK:
 		PauseOnCondition: cloak-force-disabled
 		CloakedCondition: hidden
 		IsPlayerPalette: false
-		Palette: TAStealthTankCloak
 		EffectImage: stltnkfade
 		EffectPalette: greenspark
 		CloakEffectSequence: idle
@@ -1323,16 +1321,15 @@ STNK:
 		RequiresCondition: !hidden
 	WithFacingSpriteBody@cloak:
 		Name: cloak-body
-		Sequence: cloak-idle
-		Palette: TAStealthTankCloak
+		Sequence: idle
+		Palette: TAStealthTankCloakGrey
 		RequiresCondition: hidden
 	WithSpriteTurret:
 		Sequence: turret
-		Palette: TAStealthTankCloak
 		RequiresCondition: !hidden
 	WithSpriteTurret@cloak:
-		Sequence: cloak-turret
-		Palette: TAStealthTankCloak
+		Sequence: turret
+		Palette: TAStealthTankCloakGrey
 		RequiresCondition: hidden
 STNK.Scrin:
 	Inherits: STNK
@@ -3498,5 +3495,3 @@ MSG:
 		RequiresCondition: deployed
 		MaximumVerticalOffset: 512
 		AffectsParent: true
-
-

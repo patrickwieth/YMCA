@@ -9,6 +9,7 @@
  */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using OpenRA.Graphics;
 using OpenRA.Primitives;
@@ -46,17 +47,37 @@ namespace OpenRA.Mods.CA.Traits
 
 	public class ColorFlashPaletteEffect : ILoadsPlayerPalettes, IPaletteModifier, ITick
 	{
+		const int ColumnStride = 32;
+
 		int t;
 		readonly ColorFlashPaletteEffectInfo info;
 		readonly HashSet<string> palettes;
+		readonly Dictionary<string, Dictionary<int, Color>> highlightedIndices;
+		readonly int startIndex;
+		readonly int endIndex;
+		readonly int span;
 
 		public ColorFlashPaletteEffect(ColorFlashPaletteEffectInfo info)
 		{
 			this.info = info;
 			palettes = new HashSet<string>();
+			highlightedIndices = new Dictionary<string, Dictionary<int, Color>>();
 
 			if (!info.IsAffectedPalettePlayerColor && info.AffectedPalette != null)
 				palettes.Add(info.AffectedPalette);
+
+			startIndex = Math.Max(0, info.StartIndex);
+			if (startIndex >= Palette.Size)
+				startIndex = Palette.Size - 1;
+
+			var configuredEnd = info.EndIndex <= 0 ? Palette.Size - 1 : info.EndIndex;
+			if (configuredEnd >= Palette.Size)
+				configuredEnd = Palette.Size - 1;
+			if (configuredEnd < startIndex)
+				configuredEnd = startIndex;
+
+			endIndex = configuredEnd;
+			span = Math.Max(1, endIndex - startIndex + 1);
 		}
 
 		public void LoadPlayerPalettes(WorldRenderer wr, string playerName, Color playerColor, bool replaceExisting)
@@ -69,24 +90,55 @@ namespace OpenRA.Mods.CA.Traits
 
 		void IPaletteModifier.AdjustPalette(IReadOnlyDictionary<string, MutablePalette> palettesByName)
 		{
+			if (info.Colors.Length == 0)
+				return;
+
+			var bandLength = Math.Min(info.Colors.Length, span);
+			if (bandLength == 0)
+				return;
+
 			foreach (var paletteName in palettes)
 			{
 				if (!palettesByName.TryGetValue(paletteName, out var palette))
 					continue;
 
-				for (var i = 0; i < info.Colors.Length; i++)
+				if (!highlightedIndices.TryGetValue(paletteName, out var previousHighlights))
 				{
-					var k = (t + i) % 255 + 1;
-					for (var index = k; index < 256; index += 32)
-						palette.SetColor(index, info.Colors[i]);
+					previousHighlights = new Dictionary<int, Color>();
+					highlightedIndices.Add(paletteName, previousHighlights);
+				}
+				else
+				{
+					foreach (var entry in previousHighlights)
+						palette.SetColor(entry.Key, entry.Value);
+					previousHighlights.Clear();
+				}
+
+				for (var column = startIndex; column <= endIndex; column++)
+				{
+					var wavePosition = (column - startIndex + t) % span;
+					if (wavePosition >= bandLength)
+						continue;
+
+					var highlightColor = info.Colors[wavePosition];
+					for (var index = column; index < Palette.Size; index += ColumnStride)
+					{
+						if (!previousHighlights.ContainsKey(index))
+							previousHighlights[index] = palette.GetColor(index);
+
+						palette.SetColor(index, highlightColor);
+					}
 				}
 			}
 		}
 
 		void ITick.Tick(Actor self)
 		{
-			if (++t >= info.EndIndex)
-				t = info.StartIndex;
+			if (span <= 0)
+				return;
+
+			if (++t >= span)
+				t = 0;
 		}
 	}
 }
