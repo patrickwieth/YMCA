@@ -285,6 +285,7 @@ SPEC:
 	Inherits: ARTY.nod
 	Inherits: ^HighResShadow
 	Inherits: ^AutoDeployAttacker
+	Inherits: ^CloakStealth
 	RenderSprites:
 		Image: spec
 		PlayerPalette: overlayplayer
@@ -342,8 +343,7 @@ SPEC:
 		PauseOnCondition: cloak-force-disabled
 		CloakedCondition: hidden
 		IsPlayerPalette: false
-		Palette: TAStealthTankCloak
-		EffectImage: stltnkfade
+		EffectImage: stealthfade
 		EffectPalette: greenspark
 		CloakEffectSequence: idle
 		UncloakEffectSequence: idle
@@ -1270,6 +1270,7 @@ STNK:
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^CloakSpriteTurret
 	RenderSprites:
 		Image: stnk
 	Valued:
@@ -1287,24 +1288,6 @@ STNK:
 		Speed: 135
 	Health:
 		HP: 20000
-	Cloak@NORMAL:
-		InitialDelay: 90
-		CloakDelay: 90
-		CloakSound: trans1.aud
-		UncloakSound: appear1.aud
-		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
-		PauseOnCondition: cloak-force-disabled
-		CloakedCondition: hidden
-		IsPlayerPalette: false
-		EffectImage: stltnkfade
-		EffectPalette: greenspark
-		CloakEffectSequence: idle
-		UncloakEffectSequence: idle
-		EffectTracksActor: False
-		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
 	Armament@PRIMARY:
 		Weapon: StnkMissile
 		LocalOffset: 213,43,128, 213,-43,128
@@ -1317,20 +1300,7 @@ STNK:
 		Offset: 0,0,10
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
-	WithFacingSpriteBody:
-		RequiresCondition: !hidden
-	WithFacingSpriteBody@cloak:
-		Name: cloak-body
-		Sequence: idle
-		Palette: TAStealthTankCloakGrey
-		RequiresCondition: hidden
-	WithSpriteTurret:
-		Sequence: turret
-		RequiresCondition: !hidden
-	WithSpriteTurret@cloak:
-		Sequence: turret
-		Palette: TAStealthTankCloakGrey
-		RequiresCondition: hidden
+
 STNK.Scrin:
 	Inherits: STNK
 	Inherits: ^PrioEnergyAntiHeavy
@@ -1628,6 +1598,7 @@ HAR2:
 	Inherits: ^Tank
 	Inherits: ^TDVehicleSprite
 	Inherits: ^Harvester
+	Inherits: ^CloakStealth
 	-Crushable:
 	-Carryable:
 	Inherits: ^Shielded
@@ -1664,7 +1635,6 @@ HAR2:
 		CloakSound: trans1.aud
 		CloakedCondition: hidden
 		UncloakSound: appear1.aud
-		Palette: cloak
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal, SelfHeal
 		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead && stealth-miner
@@ -2472,6 +2442,7 @@ RTNK:
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
+	Inherits: ^CloakStealth
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
@@ -2534,7 +2505,6 @@ RTNK:
 		CloakedCondition: hidden
 		UncloakSound: appear1.aud
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Move, Damage, Heal, SelfHeal
-		Palette: player
 		IsPlayerPalette: false
 		RequiresCondition: !cloak-force-disabled && !invisibility && !driver-dead
 	GrantConditionOnDamageState@UNCLOAK:

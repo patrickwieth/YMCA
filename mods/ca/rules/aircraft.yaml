@@ -142,6 +142,7 @@ BADR.MBomber:
 B2B:
 	Inherits: ^NeutralPlane
 	Inherits: ^TDAircraft
+	Inherits: ^CloakedAircraft
 	AttackBomber:
 		FacingTolerance: 8
 	Armament:
@@ -194,17 +195,6 @@ B2B:
 	RejectsOrders:
 	GivesExperience:
 		Experience: 1000
-	Cloak@NORMAL:
-		InitialDelay: 0
-		CloakDelay: 200
-		UncloakSound: appear1.aud
-		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
-		IsPlayerPalette: true
-		Palette: cloaktd
-		RequiresCondition: !cloak-force-disabled && airborne
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
 	WithAmmoPipsDecoration:
@@ -213,9 +203,11 @@ B2B:
 
 Stealth_Fighter:
 	Inherits: ^Plane
+	Inherits: ^BomberPlane
 	Inherits: ^BiologicalPilot
 	Inherits: ^RearmableAircraft
 	Inherits: ^PrioAntiHeavy
+	Inherits: ^CloakSprite
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
@@ -264,15 +256,9 @@ Stealth_Fighter:
 		TrailWhileStationary: True
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
-	Cloak:
+	Cloak@NORMAL:
 		InitialDelay: 125
 		CloakDelay: 20
-		UncloakOn: Attack, Unload, Infiltrate, Demolish
-		DetectionTypes: Cloak
-		RequiresCondition: !cloak-force-disabled
-	GrantConditionOnDamageState@UNCLOAK:
-		Condition: cloak-force-disabled
-		ValidDamageStates: Critical
 
 Stealth_Fighter.payload:
 	Inherits: Stealth_Fighter
@@ -1288,5 +1274,3 @@ AURORA:
 		VoiceSet: AuroraVoice
 	GrantConditionOnDamageState@SmokeTrail:
 		Condition: enable-smoke
-
-

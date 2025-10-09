@@ -1349,7 +1349,58 @@
 		RequiresCondition: highlight
 		Color: ffffff80
 
+^CloakStealth:
+	Cloak@NORMAL:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		UncloakSound: appear1.aud
+		CloakedCondition: hidden
+		Palette: TAStealthTankCloakGrey
+		IsPlayerPalette: false
+		EffectImage: stealthfade
+		EffectPalette: greenspark
+		CloakEffectSequence: reversed
+		UncloakEffectSequence: idle
+		EffectTracksActor: True
+
+^CloakSprite:
+	Inherits: ^CloakStealth
+	Cloak@NORMAL:
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		PauseOnCondition: cloak-force-disabled
+		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+	WithFacingSpriteBody:
+		RequiresCondition: !hidden
+	WithFacingSpriteBody@cloak:
+		Name: cloak-body
+		Sequence: idle
+		Palette: TAStealthTankCloakGrey
+		RequiresCondition: hidden
+
+^CloakSpriteTurret:
+	Inherits: ^CloakSprite
+	WithSpriteTurret:
+		Sequence: turret
+		RequiresCondition: !hidden
+	WithSpriteTurret@cloak:
+		Sequence: turret
+		Palette: TAStealthTankCloakGrey
+		RequiresCondition: hidden
+
+^CloakVoxel
+
+^CloakedAircraft:
+	Inherits: ^CloakStealth
+	Cloak@NORMAL:
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
+		RequiresCondition: !cloak-force-disabled && airborne
+
 ^Cloakable:
+	Inherits: ^CloakStealth
 	ExternalCondition@CLOAKGENERATOR:
 		Condition: invisibility
 	ExternalCondition@CRATE-CLOAK:
@@ -1358,8 +1409,6 @@
 		RequiresCondition: invisibility && !cloak-force-disabled
 		InitialDelay: 0
 		CloakDelay: 150
-		IsPlayerPalette: true
-		Palette: cloakgreen
 		CloakSound: cloak5.aud
 		UncloakSound: appear1.aud
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage
@@ -1371,7 +1420,7 @@
 		ValidDamageStates: Heavy, Critical
 	WithModifiedPalette@STEALTHGEN:
 		RequiresCondition: invisibility
-		Palette: cloakgreen
+		Palette: TAStealthTankCloak
 
 ^Cloakable-Kills:
 	Inherits: ^Cloakable
@@ -4980,6 +5029,7 @@ BuildBoost.Dummy:
 		RequiresCondition: damage || aiming
 
 ^CloakedAttacker:
+	Inherits: ^CloakStealth
 	Cloak@NORMAL:
 		InitialDelay: 90
 		CloakDelay: 90
@@ -5001,12 +5051,11 @@ BuildBoost.Dummy:
 		RequiresCondition: hidden
 
 ^CloakedInfiltrator:
+	Inherits: ^CloakStealth
 	Cloak@NORMAL:
 		InitialDelay: 100
 		CloakDelay: 200
 		CloakedCondition: hidden
-		Palette: cloaktd
-		IsPlayerPalette: true
 		CloakTypes: Cloak
 		RequiresCondition: !cloak-force-disabled
 		UncloakOn: Unload, Infiltrate, Demolish, Dock, Attack
@@ -5017,12 +5066,11 @@ BuildBoost.Dummy:
 		ValidDamageStates: Heavy, Critical
 
 ^CloakedWhileResting:
+	Inherits: ^CloakStealth
 	Cloak@NORMAL:
 		InitialDelay: 250
 		CloakDelay: 120
 		CloakedCondition: hidden
-		Palette: cloakts
-		IsPlayerPalette: true
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Move
 		DetectionTypes: Cloak
 		RequiresCondition: !cloak-force-disabled
@@ -5031,13 +5079,12 @@ BuildBoost.Dummy:
 		ValidDamageStates: Critical
 
 ^CloakedAircraft:
+	Inherits: ^CloakStealth
 	Cloak@NORMAL:
 		InitialDelay: 100
 		CloakDelay: 200
 		CloakSound: trans1.aud
 		UncloakSound: appear1.aud
-		Palette: cloak_voxel
-		IsPlayerPalette: false
 		RequiresCondition: !cloak-force-disabled && airborne && !invisibility
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
@@ -5957,6 +6004,3 @@ BuildBoost.Dummy:
 		DisplayWhenRelaxed: false
 		DisplayWhenEmpty: false
 		ShowAbsoluteValues: true
-
-
-
