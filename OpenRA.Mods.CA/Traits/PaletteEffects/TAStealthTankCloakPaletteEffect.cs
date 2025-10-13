@@ -128,9 +128,35 @@ namespace OpenRA.Mods.CA.Traits
 
 		void IPaletteModifier.AdjustPalette(IReadOnlyDictionary<string, MutablePalette> palettes)
 		{
-			if (!palettes.TryGetValue(info.AffectedPalette, out var palette))
-				return;
+			foreach (var palette in GetMatchingPalettes(palettes))
+				ApplyPaletteEffect(palette);
+		}
 
+		IEnumerable<MutablePalette> GetMatchingPalettes(IReadOnlyDictionary<string, MutablePalette> palettes)
+		{
+			if (info.AffectedPalette == null)
+				yield break;
+
+			foreach (var kv in palettes)
+			{
+				if (PaletteMatches(kv.Key))
+					yield return kv.Value;
+			}
+		}
+
+		bool PaletteMatches(string paletteName)
+		{
+			if (paletteName == null)
+				return false;
+
+			if (paletteName.Equals(info.AffectedPalette, StringComparison.OrdinalIgnoreCase))
+				return true;
+
+			return paletteName.StartsWith(info.AffectedPalette, StringComparison.OrdinalIgnoreCase);
+		}
+
+		void ApplyPaletteEffect(MutablePalette palette)
+		{
 			if (info.UseBaseColors)
 			{
 				ApplyBasePaletteShimmer(palette);
