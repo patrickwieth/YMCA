@@ -55,6 +55,56 @@ jobs:
           mono --version
           make RUNTIME=mono
 
+  smoke-test:
+    name: Game Smoke Test
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v3
+
+      - name: Install .NET 6.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Prepare Environment
+        run: |
+          . mod.config;
+          awk '/\r$$/ { exit(1); }' mod.config || (printf "Invalid mod.config format. File must be saved using unix-style (LF, not CRLF or CR) line endings.\n"; exit 1);
+
+      - name: Build Mod
+        run: make
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb pulseaudio curl jq
+
+      - name: Run Smoke Test
+        timeout-minutes: 5
+        run: |
+          # Start virtual display for headless execution
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          export DISPLAY=:99
+
+          # Start pulseaudio for audio (prevents crashes)
+          pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 || true
+
+          # Make script executable
+          chmod +x test-game-smoke.sh
+
+          # Run smoke test
+          ./test-game-smoke.sh
+
+      - name: Upload Logs on Failure
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: smoke-test-logs
+          path: /tmp/openra-smoke-test.log
+          retention-days: 7
+
   windows:
     name: Windows (.NET 6.0)
     runs-on: windows-latest
