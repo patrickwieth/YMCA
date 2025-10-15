@@ -36,10 +36,9 @@ cleanup() {
 
 trap cleanup EXIT
 
-# Start game in background
-echo "Starting game on map '$MAP_UID'..."
+# Start game in background (main menu, with Agent API enabled)
+echo "Starting game..."
 ./launch-game.sh \
-    Launch.Map="$MAP_UID" \
     Graphics.Mode=Windowed \
     Server.AgentAPI=true \
     > "$GAME_LOG" 2>&1 &
@@ -75,8 +74,22 @@ if [ "$API_READY" = "false" ]; then
     exit 1
 fi
 
+# Start a game via API
+echo "Starting game on map '$MAP_UID' via API..."
+START_RESULT=$(curl -s -X POST "$API_URL/api/game/start" \
+    -H "Content-Type: application/json" \
+    -d "{\"mapUid\":\"$MAP_UID\",\"gameSpeed\":\"fastest\",\"bots\":{\"bot1\":{\"slot\":\"Multi0\",\"botType\":\"normal\"}}}")
+
+if ! echo "$START_RESULT" | grep -q '"success":true'; then
+    echo "✗ Failed to start game via API: $START_RESULT"
+    TEST_FAILED=true
+    exit 1
+fi
+
+echo "✓ Game start initiated via API"
+
 # Wait for game to fully load (units to spawn)
-echo "Waiting for game to load (max ${MAX_WAIT_SECONDS}s)..."
+echo "Waiting for game to load and units to spawn (max ${MAX_WAIT_SECONDS}s)..."
 START_TIME=$(date +%s)
 GAME_LOADED=false
 
