@@ -38,6 +38,10 @@ trap cleanup EXIT
 
 # Start game in background (main menu, with Agent API enabled)
 echo "Starting game..."
+echo "Command: ./launch-game.sh Graphics.Mode=Windowed Server.AgentAPI=true"
+echo "Log file: $GAME_LOG"
+echo ""
+
 ./launch-game.sh \
     Graphics.Mode=Windowed \
     Server.AgentAPI=true \
@@ -46,23 +50,55 @@ echo "Starting game..."
 GAME_PID=$!
 echo "Game started with PID: $GAME_PID"
 
+# Give game a moment to start up
+sleep 3
+
+# Check if game is still running after initial startup
+if ! kill -0 $GAME_PID 2>/dev/null; then
+    echo "✗ Game process died immediately after startup!"
+    echo ""
+    echo "=== Game log output ==="
+    cat "$GAME_LOG"
+    echo ""
+    TEST_FAILED=true
+    exit 1
+fi
+
+echo "Game process is running, waiting for mods to load..."
+
 # Wait for API to be ready
 echo "Waiting for API to be ready (max ${API_READY_WAIT}s)..."
 START_TIME=$(date +%s)
 API_READY=false
+LAST_CHECK=0
 
 while [ $(($(date +%s) - START_TIME)) -lt $API_READY_WAIT ]; do
+    ELAPSED=$(($(date +%s) - START_TIME))
+
+    # Show progress every 5 seconds
+    if [ $((ELAPSED % 5)) -eq 0 ] && [ "$ELAPSED" -ne "$LAST_CHECK" ]; then
+        LAST_CHECK=$ELAPSED
+        echo "  ${ELAPSED}s elapsed, checking game status..."
+
+        # Show last few lines of log
+        echo "  Last 3 lines of game log:"
+        tail -n 3 "$GAME_LOG" | sed 's/^/    /'
+
+        if ! kill -0 $GAME_PID 2>/dev/null; then
+            echo "✗ Game process died during startup (after ${ELAPSED}s)"
+            echo ""
+            echo "=== Full game log ==="
+            cat "$GAME_LOG"
+            echo ""
+            TEST_FAILED=true
+            exit 1
+        fi
+    fi
+
     if curl -s "$API_URL/api/ping" > /dev/null 2>&1; then
         API_READY=true
         echo "✓ API is ready!"
         break
-    fi
-
-    # Check if game process is still running
-    if ! kill -0 $GAME_PID 2>/dev/null; then
-        echo "✗ Game process died during startup"
-        TEST_FAILED=true
-        exit 1
     fi
 
     sleep 1
@@ -70,6 +106,10 @@ done
 
 if [ "$API_READY" = "false" ]; then
     echo "✗ API did not become ready within ${API_READY_WAIT}s"
+    echo ""
+    echo "=== Full game log ==="
+    cat "$GAME_LOG"
+    echo ""
     TEST_FAILED=true
     exit 1
 fi
