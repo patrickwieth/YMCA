@@ -91,10 +91,14 @@ jobs:
           # Start pulseaudio for audio (prevents crashes)
           pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 || true
 
-          # Create empty Content directory to prevent modcontent prompts
-          # The CA mod expects optional content packages that aren't available in CI
-          # Creating an empty directory prevents the content installer from blocking startup
+          # Create dummy content files to satisfy modcontent checks
+          # The CA mod has a "base" package marked as Required that checks for these files:
+          # - speech.mix, russian.mix, sounds.mix
+          # Creating empty placeholder files prevents the content installer from blocking
           mkdir -p ~/.config/openra/Content/ca
+          touch ~/.config/openra/Content/ca/speech.mix
+          touch ~/.config/openra/Content/ca/russian.mix
+          touch ~/.config/openra/Content/ca/sounds.mix
 
           # Make script executable
           chmod +x test-game-smoke.sh
