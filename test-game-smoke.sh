@@ -120,7 +120,7 @@ START_RESULT=$(curl -s -X POST "$API_URL/api/game/start" \
     -H "Content-Type: application/json" \
     -d "{\"mapUid\":\"$MAP_UID\",\"gameSpeed\":\"fastest\",\"bots\":{\"bot1\":{\"slot\":\"Multi0\",\"botType\":\"normal\"}}}")
 
-if ! echo "$START_RESULT" | grep -q '"success":true'; then
+if ! echo "$START_RESULT" | grep -q '"success"[[:space:]]*:[[:space:]]*true'; then
     echo "✗ Failed to start game via API: $START_RESULT"
     TEST_FAILED=true
     exit 1
