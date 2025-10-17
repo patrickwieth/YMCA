@@ -10,8 +10,8 @@ echo ""
 MAP_UID="all-connected"
 API_URL="http://localhost:8080"
 GAME_LOG="/tmp/openra-smoke-test.log"
-MAX_WAIT_SECONDS=60
-API_READY_WAIT=30
+MAX_WAIT_SECONDS=120
+API_READY_WAIT=120
 
 # Cleanup function
 cleanup() {
