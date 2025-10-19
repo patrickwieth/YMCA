@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.CA.Traits;
 using OpenRA.Mods.Common.Traits;
@@ -117,6 +118,49 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 				armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, actor);
 				var tooltipExtras = actor.TraitInfos<TooltipExtrasInfo>().FirstOrDefault(info => info.IsStandard);
+				Log.Write("debug", $"Production tooltip extras actor={actor.Name} hasStandard={tooltipExtras != null}");
+
+				if (tooltipExtras == null && tooltipIcon.ProductionQueue != null)
+				{
+					var queueActor = tooltipIcon.ProductionQueue.Actor;
+					var queueWorld = queueActor != null ? queueActor.World : null;
+					if (queueWorld != null)
+					{
+						var rulesActors = queueWorld.Map.Rules.Actors;
+						var candidates = new HashSet<string> { actor.Name, actor.Name.ToLowerInvariant(), actor.Name.ToUpperInvariant() };
+
+						if (actor.Name.StartsWith("promotion.", StringComparison.OrdinalIgnoreCase))
+						{
+							var baseName = actor.Name.Substring("promotion.".Length);
+							candidates.Add(baseName);
+							candidates.Add(baseName.ToLowerInvariant());
+							candidates.Add(baseName.ToUpperInvariant());
+
+							var compact = baseName.Replace("_", string.Empty);
+							if (compact.Length > 0)
+							{
+								candidates.Add(compact);
+								candidates.Add(compact.ToLowerInvariant());
+								candidates.Add(compact.ToUpperInvariant());
+							}
+
+							var hyphenated = baseName.Replace('_', '-');
+							candidates.Add(hyphenated);
+							candidates.Add(hyphenated.ToLowerInvariant());
+							candidates.Add(hyphenated.ToUpperInvariant());
+						}
+
+						foreach (var candidate in candidates)
+						{
+							if (!rulesActors.TryGetValue(candidate, out var canonicalActor))
+								continue;
+
+							tooltipExtras = canonicalActor.TraitInfos<TooltipExtrasInfo>().FirstOrDefault(info => info.IsStandard);
+							if (tooltipExtras != null)
+								break;
+						}
+					}
+				}
 
 				if (tooltipExtras != null)
 				{
@@ -365,13 +409,22 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 		static void SetExtrasLabel(LabelWidget label, string value, Color color)
 		{
-			var textValue = string.IsNullOrEmpty(value) ? string.Empty : value.Replace("\\n", "\n");
+			var textValue = string.Empty;
+
+			if (!string.IsNullOrEmpty(value))
+			{
+				textValue = value.Replace("\\n", "\n");
+				textValue = textValue.Replace("\\u0007", "\n\u2022 " );
+				textValue = textValue.Replace("\u0007", "\n\u2022 " );
+				textValue = textValue.Trim();
+			}
+
 			label.Text = textValue;
 			label.TextColor = color;
 			label.Visible = textValue.Length > 0;
 		}
 
-		Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
+Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
 			if (effectValue >= neutralValue * 2)
 				return Color.Green;
 			else if (effectValue >= neutralValue * 1.33)

@@ -54,5 +54,5 @@
     ```
 
 ## Workflow
-- After every change run `tools\test-behind-the-veil.cmd` (close the OpenRA window manually once the map loads).
+- After every change run `tools\\test-game.cmd` (close the OpenRA window manually once the map loads).
 - Check `C:\Users\<user>\AppData\Roaming\OpenRA\Logs` for crashes (`exception-*.log`).

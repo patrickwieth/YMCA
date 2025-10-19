@@ -1,0 +1,84 @@
+diff --git a/OpenRA.Mods.CA/Widgets/Logic/Ingame/ProductionTabsLogicCA.cs b/OpenRA.Mods.CA/Widgets/Logic/Ingame/ProductionTabsLogicCA.cs
+index 2ed4c5f2..00000000 100644
+--- a/OpenRA.Mods.CA/Widgets/Logic/Ingame/ProductionTabsLogicCA.cs
++++ b/OpenRA.Mods.CA/Widgets/Logic/Ingame/ProductionTabsLogicCA.cs
+@@ -10,6 +10,7 @@
+ 
+ using System;
+ using System.Linq;
++using OpenRA;
+ using OpenRA.Mods.Common.Widgets;
+ using OpenRA.Widgets;
+ 
+@@ -17,6 +18,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
+ {
+ 	public class ProductionTabsLogicCA : ChromeLogic
+ 	{
++		const string PromotionGroupName = "Promotion";
++		const string CommanderTreeOverlayId = "COMMANDER_TREE_OVERLAY";
++
+ 		readonly ProductionTabsCAWidget tabs;
+ 		readonly World world;
+ 
+@@ -25,6 +29,29 @@ namespace OpenRA.Mods.CA.Widgets.Logic
+ 		{
+ 			if (button == null)
+ 				return;
++
++			if (string.Equals(button.ProductionGroup, PromotionGroupName, StringComparison.OrdinalIgnoreCase))
++			{
++				button.IsDisabled = () => false;
++
++				button.OnMouseDown = mi =>
++				{
++					if (mi.Button == MouseButton.Left)
++						OpenCommanderTree();
++				};
++				button.OnMouseUp = _ => { };
++				button.OnClick = () => { };
++				button.OnKeyPress = e =>
++				{
++					if (e.Event != KeyInputEvent.Down)
++						return;
++
++					OpenCommanderTree();
++				};
++				button.IsHighlighted = () => Ui.CurrentWindow() != null && Ui.CurrentWindow().Id == CommanderTreeOverlayId;
++
++				var chromeName = button.ProductionGroup.ToLowerInvariant();
++				var icon = button.Get<ImageWidget>("ICON");
++				icon.GetImageName = () => tabs.Groups[button.ProductionGroup].Alert ? chromeName + "-alert" : chromeName;
++
++				return;
++			}
+ 
+ 			Action<bool> selectTab = reverse =>
+ 			{
+@@ -40,7 +67,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
+ 			button.IsHighlighted = () => tabs.QueueGroup == button.ProductionGroup;
+ 
+ 			var chromeName = button.ProductionGroup.ToLowerInvariant();
+-			var icon = button.Get<ImageWidget>("ICON");
+-			icon.GetImageName = () => button.IsDisabled() ? chromeName + "-disabled" :
+-				tabs.Groups[button.ProductionGroup].Alert ? chromeName + "-alert" : chromeName;
++			var icon = button.Get<ImageWidget>("ICON");
++			icon.GetImageName = () => button.IsDisabled() ? chromeName + "-disabled" :
++				tabs.Groups[button.ProductionGroup].Alert ? chromeName + "-alert" : chromeName;
+ 		}
+ 
++		void OpenCommanderTree()
++		{
++			var current = Ui.CurrentWindow();
++			if (current != null && current.Id == CommanderTreeOverlayId)
++			{
++				Ui.CloseWindow();
++				return;
++			}
++
++			Ui.OpenWindow(CommanderTreeOverlayId);
++			Ui.ResetTooltips();
++		}
++
+ 		[ObjectCreator.UseCtor]
+ 		public ProductionTabsLogicCA(Widget widget, World world)
+ 		{

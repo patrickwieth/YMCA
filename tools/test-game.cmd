@@ -1,8 +1,31 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-call make.cmd all
-if %ERRORLEVEL% NEQ 0 goto build_failed
+set "BUILD_LOG=%TEMP%\ymca-make-output.log"
+if exist "%BUILD_LOG%" del /f /q "%BUILD_LOG%"
+
+call make.cmd all > "%BUILD_LOG%" 2>&1
+set "BUILD_RC=%ERRORLEVEL%"
+type "%BUILD_LOG%"
+echo.
+if %BUILD_RC% NEQ 0 (
+	set "BUILD_FAILED_RC=%BUILD_RC%"
+	goto build_failed
+)
+
+findstr /C:"Build FAILED." "%BUILD_LOG%" >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+	set "BUILD_FAILED_RC=1"
+	goto build_failed
+)
+
+findstr /C:": error" "%BUILD_LOG%" >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+	set "BUILD_FAILED_RC=1"
+	goto build_failed
+)
+
+del /f /q "%BUILD_LOG%" >nul 2>&1
 
 FOR /F "tokens=1,2 delims==" %%A IN (mod.config) DO (set %%A=%%B)
 if exist user.config (FOR /F "tokens=1,2 delims==" %%A IN (user.config) DO (set %%A=%%B))
@@ -12,8 +35,8 @@ if "!ENGINE_VERSION!"=="" goto badconfig
 if "!ENGINE_DIRECTORY!"=="" goto badconfig
 
 set TEMPLATE_DIR=%CD%
-set MAP_FILE=%TEMPLATE_DIR%\mods\ca\maps\behind-the-veil.oramap
-set MAP_PACKAGE=behind-the-veil.oramap
+set MAP_FILE=C:\Users\lordesfairgenug\AppData\Roaming\OpenRA\maps\ca\61290389ccbcc5070d8029110887b62bdb1edb39\testmap.oramap
+set MAP_PACKAGE=testmap.oramap
 set MOD_SEARCH_PATHS=%TEMPLATE_DIR%\mods,%~dp0mods,./mods
 
 if not exist %ENGINE_DIRECTORY%\bin\OpenRA.exe goto noengine
@@ -22,7 +45,7 @@ if not exist "%MAP_FILE%" goto nomap
 
 cd %ENGINE_DIRECTORY%
 
-bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Launch.Map=%MAP_PACKAGE%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-behind-the-veil.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%"
+	bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Launch.Map=%MAP_PACKAGE%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%"
 set ERROR=%ERRORLEVEL%
 cd %TEMPLATE_DIR%
 
@@ -31,7 +54,11 @@ exit /b 0
 
 :build_failed
 echo Build failed.
-exit /b %ERRORLEVEL%
+if defined BUILD_FAILED_RC (
+	exit /b %BUILD_FAILED_RC%
+) else (
+	exit /b %ERRORLEVEL%
+)
 
 :noengine
 echo Required engine files not found.

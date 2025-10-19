@@ -1,0 +1,65 @@
+diff --git a/OpenRA.Mods.CA/Widgets/Logic/Ingame/ProductionTooltipLogicCA.cs b/OpenRA.Mods.CA/Widgets/Logic/Ingame/ProductionTooltipLogicCA.cs
+index 48454e0a..c164191f 100644
+--- a/OpenRA.Mods.CA/Widgets/Logic/Ingame/ProductionTooltipLogicCA.cs
++++ b/OpenRA.Mods.CA/Widgets/Logic/Ingame/ProductionTooltipLogicCA.cs
+@@
+-		[FluentReference("prequisites")]
++		[FluentReference("prerequisites")]
+ 		const string Requires = "label-requires";
+@@
+-				var tooltip = actor.TraitInfos<TooltipInfo>().FirstOrDefault(info => info.EnabledByDefault);
+-				var name = tooltip != null ? tooltip.Name : actor.Name;
++				var tooltip = actor.TraitInfos<TooltipInfo>().FirstOrDefault(info => info.EnabledByDefault);
++				var name = tooltip != null ? FluentProvider.GetMessage(tooltip.Name) : actor.Name;
+@@
+-					var requiresText = FluentProvider.GetMessage(Requires, "prerequisites", prereqs.JoinWith(", "));
+-					requiresLabel.GetText = () => requiresText;
+-					requiresSize = requiresFont.Measure(requiresLabel.Text);
++					var requiresText = FluentProvider.GetMessage(Requires, "prerequisites", prereqs.JoinWith(", "));
++					requiresLabel.Text = requiresText;
++					requiresLabel.GetText = () => requiresText;
++					requiresSize = requiresFont.Measure(requiresText);
+@@
+-				descLabel.Text = buildable.Description.Replace("\\n", "\n");
+-				var descSize = descFont.Measure(descLabel.Text);
++				var descText = string.IsNullOrEmpty(buildable.Description)
++					? string.Empty
++					: FluentProvider.GetMessage(buildable.Description);
++				descText = descText.Replace("\\n", "\n");
++				descLabel.Text = descText;
++				var descSize = descFont.Measure(descText);
+@@
+-		static string ActorName(Ruleset rules, string a)
++		static string ActorName(Ruleset rules, string a)
+ 		{
+ 			if (rules.Actors.TryGetValue(a.ToLowerInvariant(), out var ai))
+ 			{
+ 				var actorTooltip = ai.TraitInfos<TooltipInfo>().FirstOrDefault(info => info.EnabledByDefault);
+ 				if (actorTooltip != null)
+-					return actorTooltip.Name;
++					return FluentProvider.GetMessage(actorTooltip.Name);
+ 			}
+ 
+ 			return a;
+ 		}
+ 
+-		static void SetExtrasLabel(LabelWidget label, string value, Color color)
++		static void SetExtrasLabel(LabelWidget label, string value, Color color)
+ 		{
+-			var textValue = string.IsNullOrEmpty(value) ? string.Empty : value.Replace("\\n", "\n");
+-			label.Text = textValue;
+-			label.TextColor = color;
+-			label.Visible = textValue.Length > 0;
++			if (string.IsNullOrEmpty(value))
++			{
++				label.Text = string.Empty;
++				label.Visible = false;
++				return;
++			}
++
++			var textValue = FluentProvider.TryGetMessage(value, out var localized) ? localized : value;
++			textValue = textValue.Replace("\\n", "\n");
++			label.Text = textValue;
++			label.TextColor = color;
++			label.Visible = textValue.Length > 0;
+ 		}

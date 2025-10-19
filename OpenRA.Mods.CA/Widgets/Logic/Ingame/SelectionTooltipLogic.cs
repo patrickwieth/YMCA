@@ -122,6 +122,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, armorTypeIcon, actor.Info);
 			var tooltipExtras = actor.TraitsImplementing<TooltipExtras>().FirstOrDefault(Exts.IsTraitEnabled);
+			Log.Write("debug", $"Selection tooltip extras actor={actor.Info.Name} enabled={tooltipExtras != null}");
 
 			if (tooltipExtras != null)
 			{
@@ -302,13 +303,22 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 		static void SetExtrasLabel(LabelWidget label, string value, Color color)
 		{
-			var textValue = string.IsNullOrEmpty(value) ? string.Empty : value.Replace("\\n", "\n");
+			var textValue = string.Empty;
+
+			if (!string.IsNullOrEmpty(value))
+			{
+				textValue = value.Replace("\\n", "\n");
+				textValue = textValue.Replace("\\u0007", "\n\u2022 " );
+				textValue = textValue.Replace("\u0007", "\n\u2022 " );
+				textValue = textValue.Trim();
+			}
+
 			label.Text = textValue;
 			label.TextColor = color;
 			label.Visible = textValue.Length > 0;
 		}
 
-		Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
+Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
 			if (effectValue >= neutralValue * 2)
 				return Color.Green;
 			else if (effectValue >= neutralValue * 1.33)
