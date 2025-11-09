@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.CA.Traits;
+using OpenRA.Mods.CA.Tooltips;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
 using OpenRA.Mods.Common.Warheads;
@@ -21,7 +22,7 @@ using OpenRA.Widgets;
 
 namespace OpenRA.Mods.CA.Widgets.Logic
 {
-	public class ProductionTooltipLogicCA : ChromeLogic
+	public class CAProductionTooltipLogic : ChromeLogic
 	{
 		static readonly Color StrengthsTextColor = Color.FromArgb(0x33, 0xDD, 0x33);
 		static readonly Color WeaknessesTextColor = Color.FromArgb(0xEE, 0x55, 0x55);
@@ -29,9 +30,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 		[FluentReference("prequisites")]
 		const string Requires = "label-requires";
+		const bool LogTooltipExtras = false;
 
 		[ObjectCreator.UseCtor]
-		public ProductionTooltipLogicCA(Widget widget, TooltipContainerWidget tooltipContainer, Player player, Func<ProductionIcon> getTooltipIcon)
+		public CAProductionTooltipLogic(Widget widget, TooltipContainerWidget tooltipContainer, Player player, Func<ProductionIcon> getTooltipIcon)
 		{
 			var world = player.World;
 			var mapRules = world.Map.Rules;
@@ -117,56 +119,20 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				hotkeyLabel.Visible = hotkey.IsValid();
 
 				armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, actor);
-				var tooltipExtras = actor.TraitInfos<TooltipExtrasInfo>().FirstOrDefault(info => info.IsStandard);
-				Log.Write("debug", $"Production tooltip extras actor={actor.Name} hasStandard={tooltipExtras != null}");
+				var resolvedActor = TooltipExtrasResolver.ResolveActorWithExtras(mapRules, actor, requireStandard: false);
+				var tooltipExtrasInfos = resolvedActor.TraitInfos<TooltipExtrasInfo>().ToArray();
+				var displayExtras = tooltipExtrasInfos.Where(info => info.IsStandard).ToArray();
+				if (displayExtras.Length == 0)
+					displayExtras = tooltipExtrasInfos;
 
-				if (tooltipExtras == null && tooltipIcon.ProductionQueue != null)
+				if (LogTooltipExtras)
+					Log.Write("debug", $"CAProductionTooltipLogic actor={actor.Name} tooltipExtrasInfos={tooltipExtrasInfos.Length} displayExtras={displayExtras.Length} hotkey={hotkey.DisplayString()} queue={tooltipIcon?.ProductionQueue?.Info?.Type ?? "null"}");
+
+				if (displayExtras.Length > 0)
 				{
-					var queueActor = tooltipIcon.ProductionQueue.Actor;
-					var queueWorld = queueActor != null ? queueActor.World : null;
-					if (queueWorld != null)
-					{
-						var rulesActors = queueWorld.Map.Rules.Actors;
-						var candidates = new HashSet<string> { actor.Name, actor.Name.ToLowerInvariant(), actor.Name.ToUpperInvariant() };
-
-						if (actor.Name.StartsWith("promotion.", StringComparison.OrdinalIgnoreCase))
-						{
-							var baseName = actor.Name.Substring("promotion.".Length);
-							candidates.Add(baseName);
-							candidates.Add(baseName.ToLowerInvariant());
-							candidates.Add(baseName.ToUpperInvariant());
-
-							var compact = baseName.Replace("_", string.Empty);
-							if (compact.Length > 0)
-							{
-								candidates.Add(compact);
-								candidates.Add(compact.ToLowerInvariant());
-								candidates.Add(compact.ToUpperInvariant());
-							}
-
-							var hyphenated = baseName.Replace('_', '-');
-							candidates.Add(hyphenated);
-							candidates.Add(hyphenated.ToLowerInvariant());
-							candidates.Add(hyphenated.ToUpperInvariant());
-						}
-
-						foreach (var candidate in candidates)
-						{
-							if (!rulesActors.TryGetValue(candidate, out var canonicalActor))
-								continue;
-
-							tooltipExtras = canonicalActor.TraitInfos<TooltipExtrasInfo>().FirstOrDefault(info => info.IsStandard);
-							if (tooltipExtras != null)
-								break;
-						}
-					}
-				}
-
-				if (tooltipExtras != null)
-				{
-				SetExtrasLabel(strengthsLabel, tooltipExtras.Strengths, StrengthsTextColor);
-				SetExtrasLabel(weaknessesLabel, tooltipExtras.Weaknesses, WeaknessesTextColor);
-				SetExtrasLabel(attributesLabel, tooltipExtras.Attributes, AttributesTextColor);
+					SetExtrasLabel(strengthsLabel, displayExtras.Select(info => info.Strengths), StrengthsTextColor, treatAsBulletList: true);
+					SetExtrasLabel(weaknessesLabel, displayExtras.Select(info => info.Weaknesses), WeaknessesTextColor, treatAsBulletList: true);
+					SetExtrasLabel(attributesLabel, displayExtras.Select(info => info.Attributes), AttributesTextColor, treatAsBulletList: true);
 
 					versusLabel.Text = "";
 					versusNoneLabel.Text = "";
@@ -243,9 +209,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				}
 				else
 				{
-				SetExtrasLabel(strengthsLabel, string.Empty, StrengthsTextColor);
-				SetExtrasLabel(weaknessesLabel, string.Empty, WeaknessesTextColor);
-				SetExtrasLabel(attributesLabel, string.Empty, AttributesTextColor);
+						SetExtrasLabel(strengthsLabel, string.Empty, StrengthsTextColor);
+					SetExtrasLabel(weaknessesLabel, string.Empty, WeaknessesTextColor);
+					SetExtrasLabel(attributesLabel, string.Empty, AttributesTextColor);
 					versusLabel.Text = "";
 					versusNoneLabel.Text = "";
 					versusLightLabel.Text = "";
@@ -407,34 +373,48 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			return a;
 		}
 
-		static void SetExtrasLabel(LabelWidget label, string value, Color color)
+		static void SetExtrasLabel(LabelWidget label, IEnumerable<string> values, Color color, bool treatAsBulletList = false)
 		{
-			var textValue = string.Empty;
-
-			if (!string.IsNullOrEmpty(value))
+			var segments = new List<string>();
+			if (values != null)
 			{
-				textValue = value.Replace("\\n", "\n");
-				textValue = textValue.Replace("\\u0007", "\n\u2022 " );
-				textValue = textValue.Replace("\u0007", "\n\u2022 " );
-				textValue = textValue.Trim();
+				foreach (var value in values)
+				{
+					var textValue = ResolveTooltipText(value, treatAsBulletList);
+					if (textValue.Length > 0)
+						segments.Add(textValue);
+				}
 			}
 
-			label.Text = textValue;
+			var text = segments.Count == 0 ? string.Empty : string.Join("\n", segments);
+			label.Text = text;
 			label.TextColor = color;
-			label.Visible = textValue.Length > 0;
+			label.Visible = text.Length > 0;
 		}
 
-Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
-			if (effectValue >= neutralValue * 2)
-				return Color.Green;
-			else if (effectValue >= neutralValue * 1.33)
-				return Color.Aquamarine;
-			else if (effectValue <= neutralValue * 0.5)
-				return Color.Red;
-			else if (effectValue <= neutralValue * 0.75)
-				return Color.OrangeRed;
-			else
-				return Color.LightGray;
+		static void SetExtrasLabel(LabelWidget label, string value, Color color, bool treatAsBulletList = false)
+		{
+			if (string.IsNullOrEmpty(value))
+			{
+				SetExtrasLabel(label, Array.Empty<string>(), color, treatAsBulletList);
+				return;
+			}
+
+			SetExtrasLabel(label, new[] { value }, color, treatAsBulletList);
+		}
+
+		static string ResolveTooltipText(string value, bool treatAsBulletList)
+		{
+			if (string.IsNullOrWhiteSpace(value))
+				return string.Empty;
+
+			var localized = FluentProvider.TryGetMessage(value, out var message) ? message : value;
+			var normalized = localized.Replace("\\n", "\n").Trim();
+
+			if (!treatAsBulletList)
+				return normalized.Replace("\u0007", string.Empty).Replace("\u2022", string.Empty).Trim();
+
+			return TooltipExtrasFormatter.NormalizeBulletString(normalized);
 		}
 
 		String GetEffectiveLabelText(int effectValue, int neutralValue) {
@@ -451,6 +431,19 @@ Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
 			else
 				return "ok";
 		*/
+		}
+
+		Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
+			if (effectValue >= neutralValue * 2)
+				return Color.Green;
+			else if (effectValue >= neutralValue * 1.33)
+				return Color.Aquamarine;
+			else if (effectValue <= neutralValue * 0.5)
+				return Color.Red;
+			else if (effectValue <= neutralValue * 0.75)
+				return Color.OrangeRed;
+			else
+				return Color.LightGray;
 		}
 
 		LabelWidget GetArmorTypeLabel(LabelWidget armorTypeLabel, ActorInfo actor)

@@ -12,6 +12,7 @@
 using System;
 using System.Linq;
 using OpenRA.Mods.CA.Traits;
+using OpenRA.Mods.CA.Tooltips;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
 using OpenRA.Mods.Common.Warheads;
@@ -122,7 +123,6 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, armorTypeIcon, actor.Info);
 			var tooltipExtras = actor.TraitsImplementing<TooltipExtras>().FirstOrDefault(Exts.IsTraitEnabled);
-			Log.Write("debug", $"Selection tooltip extras actor={actor.Info.Name} enabled={tooltipExtras != null}");
 
 			if (tooltipExtras != null)
 			{
@@ -130,7 +130,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				SetExtrasLabel(strengthsLabel, tooltipExtrasInfo.Strengths, StrengthsTextColor);
 				SetExtrasLabel(weaknessesLabel, tooltipExtrasInfo.Weaknesses, WeaknessesTextColor);
 				SetExtrasLabel(attributesLabel, tooltipExtrasInfo.Attributes, AttributesTextColor);
-				descLabel.Text = tooltipExtrasInfo.Description.Replace("\\n", "\n");
+				descLabel.Text = tooltipExtrasInfo.Description.Replace("\\n", "\n").Trim();
 				versusLabel.Text = "";
 				versusNoneLabel.Text = "";
 				versusLightLabel.Text = "";
@@ -307,16 +307,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			if (!string.IsNullOrEmpty(value))
 			{
-				textValue = value.Replace("\\n", "\n");
-				textValue = textValue.Replace("\\u0007", "\n\u2022 " );
-				textValue = textValue.Replace("\u0007", "\n\u2022 " );
-				textValue = textValue.Trim();
+				var localized = FluentProvider.TryGetMessage(value, out var message) ? message : value;
+				textValue = TooltipExtrasFormatter.NormalizeBulletString(localized);
 			}
 
 			label.Text = textValue;
 			label.TextColor = color;
 			label.Visible = textValue.Length > 0;
-		}
+			}
 
 Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
 			if (effectValue >= neutralValue * 2)

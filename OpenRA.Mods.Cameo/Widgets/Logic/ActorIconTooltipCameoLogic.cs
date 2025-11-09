@@ -11,10 +11,13 @@
 
 using System;
 using System.Linq;
+using OpenRA;
 using OpenRA.Mods.AS.Widgets;
+using OpenRA.Mods.CA.Tooltips;
 using OpenRA.Mods.CA.Traits;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
+using OpenRA.Primitives;
 using OpenRA.Traits;
 using OpenRA.Widgets;
 
@@ -41,70 +44,73 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 			tooltipContainer.BeforeRender = () =>
 			{
 				var unit = getTooltipUnit();
-
 				if (unit == null || unit == lastUnit)
 					return;
 
-				var world = unit.Actor?.World;
-				var stance = world?.RenderPlayer == null ? PlayerRelationship.None : unit.Actor?.Owner.RelationshipWith(world.RenderPlayer);
+				var actor = unit.Actor;
+				var world = actor?.World;
+				var renderPlayer = world?.RenderPlayer ?? world?.LocalPlayer;
+				var stance = renderPlayer == null ? PlayerRelationship.None : actor?.Owner.RelationshipWith(renderPlayer);
 				var tooltip = unit.Tooltips?.FirstEnabledTraitOrDefault();
-				var name = tooltip?.TooltipInfo.TooltipForPlayerStance(stance.Value) ?? unit.ActorInfo.TraitInfos<TooltipInfo>().FirstOrDefault().Name;
-				name ??= unit.Actor?.Info.Name ?? unit.ActorInfo.Name;
-				var buildable = unit.BuildableInfo;
-				var tooltipDescs = unit.TooltipDescriptions?.Where(td => td.IsTooltipVisible(world.RenderPlayer ?? world.LocalPlayer));
+				var name = tooltip?.TooltipInfo.TooltipForPlayerStance(stance.Value) ?? actor?.Info.Name ?? unit.ActorInfo.Name;
 
 				nameLabel.Text = name;
-
 				var nameSize = font.Measure(name);
 
-				var extras = unit.ActorInfo.TraitInfos<TooltipExtrasInfo>();
+				var rules = world?.Map?.Rules ?? Game.ModData.DefaultRules;
+				var resolvedActor = TooltipExtrasResolver.ResolveActorWithExtras(rules, unit.ActorInfo, requireStandard: false);
+				var tooltipExtras = resolvedActor.TraitInfos<TooltipExtrasInfo>().ToArray();
+				Log.Write("debug", $"Cameo actor extras actor={unit.ActorInfo.Name} resolved={resolvedActor.Name} count={tooltipExtras.Length}");
+				var extrasText = TooltipExtrasFormatter.Format(tooltipExtras);
+				extrasLabel.Text = extrasText;
 
-				extrasLabel.Text = String.Join("\n", extras.Select(extra => FluentProvider.GetMessage(extra.Description)));
-				var extraSize = new int2(0, 0);
-
-				if (extrasLabel.Text != "")
+				var extraOffset = 0;
+				if (!string.IsNullOrEmpty(extrasText))
 				{
-					extraSize = extrasFont.Measure(extrasLabel.Text);
+					var extraSize = extrasFont.Measure(extrasText);
 					extrasLabel.Visible = true;
-					descLabel.Bounds.Y = descLabelY + extraSize.Y;
+					extrasLabel.Bounds.Height = extraSize.Y;
+					extraOffset = extraSize.Y;
+				}
+				else
+				{
+					extrasLabel.Visible = false;
+					extrasLabel.Bounds.Height = 0;
 				}
 
-				var descSize = new int2(0, 0);
-				if (tooltipDescs != null && tooltipDescs.Any())
-				{
-					var descText = "";
-					foreach (var tooltipDesc in tooltipDescs)
-					{
-						if (!string.IsNullOrEmpty(descText))
-							descText += "\n";
+				descLabel.Bounds.Y = descLabelY + extraOffset;
 
-						descText += FluentProvider.GetMessage(tooltipDesc.TooltipText);
-					}
+				var descSize = int2.Zero;
+				if (unit.TooltipDescriptions != null && unit.TooltipDescriptions.Any())
+				{
+					var descText = string.Join("\n",
+						unit.TooltipDescriptions
+							.Where(td => td.IsTooltipVisible(renderPlayer))
+							.Select(td => FluentProvider.GetMessage(td.TooltipText)));
 
 					descLabel.Text = descText;
-					descSize = descFont.Measure(descLabel.Text);
+					descSize = descFont.Measure(descText);
 					descLabel.Bounds.Width = descSize.X;
 					descLabel.Bounds.Height = descSize.Y + descLabelPadding;
 				}
-				else if (buildable != null && !string.IsNullOrEmpty(buildable.Description))
+				else if (unit.BuildableInfo != null && !string.IsNullOrEmpty(unit.BuildableInfo.Description))
 				{
-					descLabel.Text = FluentProvider.GetMessage(buildable.Description);
-					descSize = descFont.Measure(descLabel.Text);
+					var descText = FluentProvider.GetMessage(unit.BuildableInfo.Description);
+					descLabel.Text = descText;
+					descSize = descFont.Measure(descText);
 					descLabel.Bounds.Width = descSize.X;
 					descLabel.Bounds.Height = descSize.Y + descLabelPadding;
 				}
 				else
 				{
+					descLabel.Text = string.Empty;
 					descLabel.Bounds.Height = 0;
 				}
 
 				var leftWidth = Math.Max(nameSize.X, descSize.X);
-
 				widget.Bounds.Width = leftWidth + 2 * nameLabel.Bounds.X;
 
-				// Set the bottom margin to match the left margin
 				var leftHeight = descLabel.Bounds.Bottom + descLabel.Bounds.X;
-
 				widget.Bounds.Height = leftHeight;
 
 				lastUnit = unit;

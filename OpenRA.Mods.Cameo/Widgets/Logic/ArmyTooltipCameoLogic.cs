@@ -11,9 +11,12 @@
 
 using System;
 using System.Linq;
+using OpenRA;
+using OpenRA.Mods.CA.Tooltips;
 using OpenRA.Mods.CA.Traits;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
+using OpenRA.Primitives;
 using OpenRA.Widgets;
 
 namespace OpenRA.Mods.Cameo.Widgets.Logic
@@ -33,6 +36,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 			var descFont = Game.Renderer.Fonts[descLabel.Font];
 
 			ArmyUnit lastArmyUnit = null;
+				var descLabelY = descLabel.Bounds.Y;
 			var descLabelPadding = descLabel.Bounds.Height;
 
 			tooltipContainer.BeforeRender = () =>
@@ -49,17 +53,28 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 				nameLabel.GetText = () => name;
 				var nameSize = font.Measure(name);
 
-				var extras = armyUnit.ActorInfo.TraitInfos<TooltipExtrasInfo>();
-
-				extrasLabel.Text = String.Join("\n", extras.Select(extra => FluentProvider.GetMessage(extra.Description)));
+				var resolvedActor = TooltipExtrasResolver.ResolveActorWithExtras(Game.ModData.DefaultRules, armyUnit.ActorInfo, requireStandard: false);
+				var tooltipExtras = resolvedActor.TraitInfos<TooltipExtrasInfo>().ToArray();
+				Log.Write("debug", $"Cameo army extras actor={armyUnit.ActorInfo.Name} resolved={resolvedActor.Name} count={tooltipExtras.Length}");
+				var extrasText = TooltipExtrasFormatter.Format(tooltipExtras);
+				extrasLabel.Text = extrasText;
 				var extraSize = new int2(0, 0);
+				var extraOffset = 0;
 
-				if (extrasLabel.Text != "")
+				if (!string.IsNullOrEmpty(extrasText))
 				{
-					extraSize = extrasFont.Measure(extrasLabel.Text);
+					extraSize = extrasFont.Measure(extrasText);
 					extrasLabel.Visible = true;
-					descLabel.Bounds.Y += extraSize.Y;
+					extrasLabel.Bounds.Height = extraSize.Y;
+					extraOffset = extraSize.Y;
 				}
+				else
+				{
+					extrasLabel.Visible = false;
+					extrasLabel.Bounds.Height = 0;
+				}
+
+				descLabel.Bounds.Y = descLabelY + extraOffset;
 
 				var desc = string.IsNullOrEmpty(buildable.Description) ? "" : FluentProvider.GetMessage(buildable.Description);
 				descLabel.GetText = () => desc;

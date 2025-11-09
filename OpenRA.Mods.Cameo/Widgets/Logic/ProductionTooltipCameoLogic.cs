@@ -12,6 +12,8 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using OpenRA;
+using OpenRA.Mods.CA.Tooltips;
 using OpenRA.Mods.CA.Traits;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
@@ -68,6 +70,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 				var tooltipIcon = getTooltipIcon();
 
 				var actor = tooltipIcon?.Actor;
+				Log.Write("debug", $"Cameo beforeRender actor={tooltipIcon?.Actor?.Name ?? "null"} queue={tooltipIcon?.ProductionQueue?.Info?.Type ?? "null"}");
 				if (actor == null)
 					return;
 
@@ -116,14 +119,13 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 					requiresLabel.GetText = () => requiresText;
 					requiresSize = requiresFont.Measure(requiresText);
 					requiresLabel.Visible = true;
-					requiresLabel.Bounds.Y = requiresLabelY;
-					descLabel.Bounds.Y = descLabelY + requiresLabel.Bounds.Height;
 				}
 				else
 				{
 					requiresLabel.Visible = false;
-					descLabel.Bounds.Y = descLabelY;
 				}
+
+				var requiresYOffset = requiresLabel.Visible ? requiresLabel.Bounds.Height : 0;
 
 				var powerSize = new int2(0, 0);
 				if (pm != null)
@@ -156,16 +158,29 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 				costLabel.GetColor = () => pr.GetCashAndResources() >= cost ? Color.White : Color.Red;
 				var costSize = font.Measure(costText);
 
-				var tooltipExtras = actor.TraitInfos<TooltipExtrasInfo>();
-				extrasLabel.Text = String.Join("\n", tooltipExtras.Select(extra => FluentProvider.GetMessage(extra.Description)));
+				var resolvedActor = TooltipExtrasResolver.ResolveActorWithExtras(mapRules, actor, requireStandard: false);
+				var tooltipExtras = resolvedActor.TraitInfos<TooltipExtrasInfo>().ToArray();
+        Log.Write("debug", $"Cameo tooltip extras actor={actor.Name} resolved={resolvedActor.Name} count={tooltipExtras.Length}");
+				var extrasText = TooltipExtrasFormatter.Format(tooltipExtras);
+				extrasLabel.Text = extrasText;
 				var extraSize = new int2(0, 0);
+				var extraOffset = 0;
 
-				if (extrasLabel.Text != "") {
-					extraSize = extrasFont.Measure(extrasLabel.Text);
+				if (!string.IsNullOrEmpty(extrasText))
+				{
+					extraSize = extrasFont.Measure(extrasText);
 					extrasLabel.Visible = true;
-					descLabel.Bounds.Y += extraSize.Y;
-					requiresLabel.Bounds.Y += extraSize.Y;
+					extrasLabel.Bounds.Height = extraSize.Y;
+					extraOffset = extraSize.Y;
 				}
+				else
+				{
+					extrasLabel.Visible = false;
+					extrasLabel.Bounds.Height = 0;
+				}
+
+				requiresLabel.Bounds.Y = requiresLabelY + extraOffset;
+				descLabel.Bounds.Y = descLabelY + extraOffset + requiresYOffset;
 
 				var desc = string.IsNullOrEmpty(buildable.Description) ? "" : FluentProvider.GetMessage(buildable.Description);
 				descLabel.GetText = () => desc;

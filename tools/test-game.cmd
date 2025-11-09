@@ -35,7 +35,7 @@ if "!ENGINE_VERSION!"=="" goto badconfig
 if "!ENGINE_DIRECTORY!"=="" goto badconfig
 
 set TEMPLATE_DIR=%CD%
-set MAP_FILE=C:\Users\lordesfairgenug\AppData\Roaming\OpenRA\maps\ca\61290389ccbcc5070d8029110887b62bdb1edb39\testmap.oramap
+set MAP_FILE=C:\Users\Patrick\OneDrive\Dokumente\OpenRA\maps\ca\61290389ccbcc5070d8029110887b62bdb1edb39\testmap.oramap
 set MAP_PACKAGE=testmap.oramap
 set MOD_SEARCH_PATHS=%TEMPLATE_DIR%\mods,%~dp0mods,./mods
 

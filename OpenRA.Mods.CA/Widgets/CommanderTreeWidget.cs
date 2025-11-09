@@ -4,6 +4,7 @@ using System.Linq;
 using OpenRA;
 using OpenRA.Graphics;
 using OpenRA.Mods.CA.Traits;
+using OpenRA.Mods.CA.Widgets.Logic;
 using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Orders;
 using OpenRA.Mods.Common.Traits;
@@ -67,9 +68,17 @@ namespace OpenRA.Mods.CA.Widgets
 
 		CommanderNode hoverNode;
 		CommanderNode lastTooltipNode;
+		int currentTooltipToken;
+		bool commanderTooltipDirty;
+		CAProductionTooltipLogic commanderTooltipLogic;
+		Widget commanderTooltipWidget;
+		bool commanderTooltipBeforeRenderHooked;
+
+		Action commanderTooltipPreviousBeforeRender = () => { };
+		Action commanderTooltipBeforeRenderHandler;
 
 		public readonly string TooltipContainer;
-		public readonly string TooltipTemplate = "PRODUCTION_TOOLTIP";
+		public readonly string TooltipTemplate = "COMMANDER_PRODUCTION_TOOLTIP";
 
 		public int IconWidth = 62;
 		public int IconHeight = 46;
@@ -170,8 +179,13 @@ namespace OpenRA.Mods.CA.Widgets
 			if (TooltipContainer == null)
 				return;
 
-			tooltipContainer.Value.SetTooltip(TooltipTemplate,
+			currentTooltipToken = tooltipContainer.Value.SetTooltip(
+				TooltipTemplate,
 				new WidgetArgs { { "player", world.LocalPlayer }, { "getTooltipIcon", GetTooltipIcon }, { "world", world } });
+
+			commanderTooltipWidget = null;
+			commanderTooltipLogic = null;
+			MarkCommanderTooltipDirty();
 
 			if (EnsureQueue())
 				UpdateHover(Viewport.LastMousePos);
@@ -179,11 +193,8 @@ namespace OpenRA.Mods.CA.Widgets
 
 		public override void MouseExited()
 		{
-			if (TooltipContainer != null && tooltipContainer.IsValueCreated)
-			{
-				tooltipContainer.Value.RemoveTooltip();
-				tooltipIcon = null;
-			}
+			ClearCommanderTooltip();
+			tooltipIcon = null;
 
 			hoverNode = null;
 			lastTooltipNode = null;
@@ -254,6 +265,7 @@ namespace OpenRA.Mods.CA.Widgets
 			if (!EnsureQueue())
 				return;
 
+			EnsureCommanderTooltipInitialized();
 			UpdateNodes();
 		}
 
@@ -689,18 +701,270 @@ namespace OpenRA.Mods.CA.Widgets
 			{
 				if (hoverNode == null)
 				{
-					if (tooltipContainer.IsValueCreated)
-						tooltipContainer.Value.RemoveTooltip();
+					ClearCommanderTooltip();
 				}
 				else
 				{
-					tooltipContainer.Value.SetTooltip(TooltipTemplate,
+					currentTooltipToken = tooltipContainer.Value.SetTooltip(
+						TooltipTemplate,
 						new WidgetArgs { { "player", world.LocalPlayer }, { "getTooltipIcon", GetTooltipIcon }, { "world", world } });
+
+					commanderTooltipWidget = null;
+					commanderTooltipLogic = null;
+					MarkCommanderTooltipDirty();
 				}
 
 				lastTooltipNode = hoverNode;
 			}
 		}
+
+
+		void MarkCommanderTooltipDirty()
+
+		{
+
+			commanderTooltipDirty = true;
+
+
+
+			if (TooltipContainer == null || !tooltipContainer.IsValueCreated)
+
+			{
+
+				return;
+
+			}
+
+
+
+			var container = tooltipContainer.Value;
+
+			container.TooltipDelayMilliseconds = 0;
+
+
+
+			if (commanderTooltipBeforeRenderHooked)
+
+			{
+
+				return;
+
+			}
+
+
+
+			commanderTooltipBeforeRenderHooked = true;
+
+			commanderTooltipPreviousBeforeRender = container.BeforeRender ?? (() => { });
+
+			commanderTooltipBeforeRenderHandler = () =>
+
+			{
+
+				if (commanderTooltipDirty)
+
+				{
+
+					EnsureCommanderTooltipInitialized();
+
+				}
+
+
+
+				commanderTooltipPreviousBeforeRender();
+
+			};
+
+			container.BeforeRender = commanderTooltipBeforeRenderHandler;
+
+		}
+
+
+
+
+
+
+
+
+		void EnsureCommanderTooltipInitialized()
+
+		{
+
+			if (TooltipContainer == null || !tooltipContainer.IsValueCreated)
+
+				return;
+
+
+
+			var container = tooltipContainer.Value;
+
+			if (commanderTooltipWidget != null && !container.Children.Any(c => c == commanderTooltipWidget))
+
+			{
+
+				DisposeCommanderTooltipLogic();
+
+				commanderTooltipWidget = null;
+
+				commanderTooltipDirty = commanderTooltipDirty || hoverNode != null;
+
+			}
+
+
+
+			if (!commanderTooltipDirty || hoverNode == null)
+
+				return;
+
+
+
+			var tooltipWidget = container.Children.LastOrDefault();
+
+			if (tooltipWidget == null)
+
+			{
+
+				return;
+
+			}
+
+
+
+			if (tooltipWidget != commanderTooltipWidget)
+
+			{
+
+				DisposeCommanderTooltipLogic();
+
+				commanderTooltipWidget = tooltipWidget;
+
+				commanderTooltipLogic = tooltipWidget.LogicObjects?.OfType<CAProductionTooltipLogic>().FirstOrDefault();
+
+			}
+
+
+
+			if (commanderTooltipLogic == null)
+
+			{
+
+				var player = world.LocalPlayer;
+
+				if (player == null)
+
+					return;
+
+
+
+				commanderTooltipLogic = new CAProductionTooltipLogic(tooltipWidget, container, player, GetTooltipIcon);
+
+				Ui.Subscribe(commanderTooltipLogic);
+
+				commanderTooltipPreviousBeforeRender = container.BeforeRender;
+
+			}
+
+
+
+			commanderTooltipDirty = commanderTooltipLogic == null;
+
+			if (!commanderTooltipDirty && commanderTooltipBeforeRenderHooked)
+
+			{
+
+				container.BeforeRender = commanderTooltipPreviousBeforeRender;
+
+				commanderTooltipBeforeRenderHooked = false;
+
+				commanderTooltipBeforeRenderHandler = null;
+
+			}
+
+		}
+
+
+
+
+
+
+
+
+		void DisposeCommanderTooltipLogic()
+
+		{
+
+			if (commanderTooltipLogic == null)
+
+				return;
+
+			Ui.Unsubscribe(commanderTooltipLogic);
+
+			commanderTooltipLogic.Dispose();
+
+			commanderTooltipLogic = null;
+
+		}
+
+
+
+
+
+
+		void ClearCommanderTooltip()
+
+		{
+
+			if (TooltipContainer != null && tooltipContainer.IsValueCreated)
+
+			{
+
+				var container = tooltipContainer.Value;
+
+
+
+				if (currentTooltipToken != 0)
+
+					container.RemoveTooltip(currentTooltipToken);
+
+				else
+
+					container.RemoveTooltip();
+
+
+
+				if (commanderTooltipBeforeRenderHooked)
+
+				{
+
+					container.BeforeRender = commanderTooltipPreviousBeforeRender;
+
+					commanderTooltipBeforeRenderHooked = false;
+
+					commanderTooltipBeforeRenderHandler = null;
+
+				}
+
+			}
+
+
+
+			DisposeCommanderTooltipLogic();
+
+			commanderTooltipDirty = false;
+
+			commanderTooltipWidget = null;
+
+			currentTooltipToken = 0;
+
+			commanderTooltipPreviousBeforeRender = () => { };
+
+		}
+
+
+
+
+
+
 
 		public override void Draw()
 		{
@@ -844,6 +1108,12 @@ namespace OpenRA.Mods.CA.Widgets
 			Game.Renderer.RgbaColorRenderer.DrawRect(new float3(rectTopLeft, 0f), new float3(rectBottomRight, 0f), BorderWidth, borderColor);
 		}
 
+		public override void Removed()
+		{
+			ClearCommanderTooltip();
+			base.Removed();
+		}
+
 		sealed class CommanderNode
 		{
 			public CommanderNode(ActorInfo actor, BuildableInfo buildableInfo, ProductionIcon icon)
@@ -886,5 +1156,10 @@ namespace OpenRA.Mods.CA.Widgets
 		}
 	}
 }
+
+
+
+
+
 
 

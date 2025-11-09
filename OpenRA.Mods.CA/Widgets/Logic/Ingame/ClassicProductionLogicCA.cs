@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using OpenRA;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
@@ -107,6 +108,18 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		{
 			this.world = world;
 			palette = widget.Get<ProductionPaletteWidget>("PRODUCTION_PALETTE");
+			var tooltipField = typeof(ProductionPaletteWidget).GetField("TooltipTemplate", BindingFlags.Instance | BindingFlags.Public);
+			if (tooltipField != null)
+			{
+				try
+				{
+					tooltipField.SetValue(palette, "CA_PRODUCTION_TOOLTIP");
+					Log.Write("debug", $"ClassicProductionLogicCA palette template={palette.TooltipTemplate}");
+				}
+				catch (FieldAccessException)
+				{
+				}
+			}
 
 			var background = widget.GetOrNull("PALETTE_BACKGROUND");
 			var foreground = widget.GetOrNull("PALETTE_FOREGROUND");

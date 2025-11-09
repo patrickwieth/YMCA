@@ -99,8 +99,9 @@ promotions =
 productionpalette-sidebar-production-palette.ready = Ready
 productionpalette-sidebar-production-palette.hold = On Hold
 
-commander-tree-promotion-oil-pumps.description = Unlocks Oil Pumps and Oil Platforms for sustained income.
-commander-tree-promotion-oil_pumps.tooltipextras-strengths = Strengths: \u0007 Unlocks Oil Pump and Oil Platform economy structures.
-commander-tree-promotion-oil_pumps.tooltipextras-weaknesses = Weaknesses: \u0007 Requires additional power and protection for vulnerable economy structures.
-commander-tree-promotion-oil_pumps.tooltipextras-attributes = Attributes: \u0007 Grants Supply Truck cash deliveries to teammates.
+commander-tree-promotion-oil-pumps =
+    .description = Unlocks Oil Pumps and Oil Platforms for sustained income.
+    .tooltipextras-strengths = Strengths: \u0007 Unlocks Oil Pump and Oil Platform economy structures.
+    .tooltipextras-weaknesses = Weaknesses: \u0007 Requires additional power and protection for vulnerable economy structures.
+    .tooltipextras-attributes = Attributes: \u0007 Grants Supply Truck cash deliveries to teammates.
 
