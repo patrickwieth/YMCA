@@ -80,7 +80,7 @@ promotion.point_defense_turret:
 	Buildable:
 		BuildPaletteOrder: 2
 		IconPalette: chrometd
-		Prerequisites: has_points, ~anypower, ~!china
+		Prerequisites: has_points, anypower, ~!china
 		Description: commander-tree-promotion-point-defense-turret.description
 
 promotion.oil_pumps:
@@ -90,46 +90,22 @@ promotion.oil_pumps:
 	Buildable:
 		BuildPaletteOrder: 2
 		IconPalette: chrometd
-		Prerequisites: has_points, ~anypower, ~global.oilpumps
+		Prerequisites: has_points, anypower, ~global.oilpumps
 		Description: commander-tree-promotion-oil-pumps.description
-
 	TooltipExtras:
 		Strengths: commander-tree-promotion-oil_pumps.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-oil_pumps.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-oil_pumps.tooltipextras-attributes
-
-hack.cameo_filler.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 2
-		Prerequisites: has_points, ~anypower, ~!global.oilpumps, disabled
 
 promotion.air_logistics:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Air Logistics
 	Buildable:
-		BuildPaletteOrder: 3
-		Prerequisites: has_points, ~anypower, ~!structures.scrin
+		BuildPaletteOrder: 2
+		Prerequisites: has_points, anypower, ~!scrin
 		Description: commander-tree-promotion-air-logistics.description
 
-hack.cameo_filler.2a:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 3
-		Prerequisites: has_points, ~anypower, ~structures.scrin, disabled
-
-hack.cameo_filler.noinf.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 5
-		Prerequisites: has_points, ~!infantry.any, disabled
-
-hack.cameo_filler.noinf.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 5
-		Prerequisites: has_points, ~!infantry.any, disabled
 
 promotion.advanced_infantry_training:
 	Inherits: ^promotion_item
@@ -138,7 +114,7 @@ promotion.advanced_infantry_training:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 5
-		Prerequisites: has_points, ~infantry.any
+		Prerequisites: has_points, infantry.any
 		Description: commander-tree-promotion-advanced-infantry-training.description
 
 promotion.stealth_miners:
@@ -146,9 +122,9 @@ promotion.stealth_miners:
 	Tooltip:
 		Name: Stealth Miners
 	Buildable:
-		BuildPaletteOrder: 5
+		BuildPaletteOrder: 3
 		IconPalette: chrome
-		Prerequisites: has_points, ~structures.nod, ~anypower
+		Prerequisites: has_points, ~nod, anypower
 		Description: commander-tree-promotion-stealth-miners.description
 
 promotion.shielded_miners:
@@ -156,164 +132,12 @@ promotion.shielded_miners:
 	Tooltip:
 		Name: Shielded Miners
 	Buildable:
-		BuildPaletteOrder: 5
-		Prerequisites: has_points, ~structures.gdi, ~anypower
+		BuildPaletteOrder: 3
+		Prerequisites: has_points, ~gdi, anypower
 		Description: commander-tree-promotion-shielded-miners.description
 
-# filler for factions without miner upgrades
-hack.cameo_filler.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 5
-		Prerequisites: has_points, ~anypower, ~!structures.nod, ~!structures.gdi, ~!structures.soviet, disabled
-
-# fillers for infantry upgrades - should be moved?
-hack.cameo_filler.3:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 7
-		Prerequisites: has_points, ~infantry.any, ~!infantry.blackh, ~!infantry.legion, ~!infantry.soviet, ~!infantry.allies, disabled
-
-hack.cameo_filler.4:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 8
-		Prerequisites: has_points, ~infantry.any, ~disabled
 
 
-
-#Soviet
-promotion.Yuri:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Yuri
-	Buildable:
-		BuildPaletteOrder: 99
-		Prerequisites: has_points, ~infantry.soviet
-		Description: commander-tree-promotion-yuri.description
-
-promotion.Flak_Track.Barrage:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Mobile Barrage Flak
-	Buildable:
-		BuildPaletteOrder: 106
-		Prerequisites: has_points, ~vehicles.soviet, ~!vehicles.russia
-		Description: commander-tree-promotion-flak-track-barrage.description
-
-hack.cameo_filler.103:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 107
-		Prerequisites: has_points, ~vehicles.soviet, ~!vehicles.russia, disabled
-
-hack.cameo_filler.104:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 108
-		Prerequisites: has_points, ~vehicles.soviet, ~!vehicles.russia, disabled
-
-promotion.BTR:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: BTR
-	Buildable:
-		BuildPaletteOrder: 117
-		Prerequisites: has_points, tier3, ~!promotion.nona_svk, ~!promotion.surveillance_btr, ~vehicles.soviet
-		Description: commander-tree-promotion-btr.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.btr
-	WithProductionIconOverlay@Missile:
-		Types: Missile
-
-promotion.Surveillance_BTR:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Surveillance BTR
-	Buildable:
-		BuildPaletteOrder: 117
-		Prerequisites: has_points, tier3, ~!promotion.nona_svk, ~!promotion.btr, ~vehicles.soviet
-		Description: commander-tree-promotion-surveillance-btr.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.btr
-	WithProductionIconOverlay@Eye:
-		Types: Eye
-
-promotion.Nona_SVK:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Nona SVK
-	Buildable:
-		BuildPaletteOrder: 117
-		Prerequisites: has_points, tier3, ~!promotion.surveillance_btr, ~!promotion.btr, ~vehicles.soviet
-		Description: commander-tree-promotion-nona-svk.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.btr
-	WithProductionIconOverlay@Shell:
-		Types: Shell
-
-hack.cameo_filler.109a:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 118
-		Prerequisites: has_points, ~vehicles.soviet, disabled, ~filler.btr
-
-hack.cameo_filler.109b:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 118
-		Prerequisites: has_points, ~vehicles.soviet, disabled, ~filler.btr
-
-promotion.Chemyak:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Chemyak
-	Buildable:
-		IconPalette: chrometd
-		BuildPaletteOrder: 134
-		Prerequisites: has_points, ~aircraft.iraq
-		Description: commander-tree-promotion-chemyak.description
-
-promotion.Chemyak_Volatile_Tanks:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Chemyak Volatile Tanks
-	Buildable:
-		IconPalette: chrometd
-		BuildPaletteOrder: 135
-		Prerequisites: has_points, ~aircraft.iraq, tier3, promotion.chemyak
-		Description: commander-tree-promotion-chemyak-volatile-tanks.description
-
-hack.cameo_filler.117:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 136
-		Prerequisites: has_points, ~aircraft.iraq, disabled
-
-promotion.Sukhoi:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: SU-27 Flanker
-	Buildable:
-		BuildPaletteOrder: 137
-		Prerequisites: has_points, tier3, ~aircraft.nkorea
-		Description: commander-tree-promotion-sukhoi.description
-
-promotion.Sukhoi_Concussion:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: SU-27 Concussion Bombs
-	Buildable:
-		IconPalette: chrometd
-		BuildPaletteOrder: 138
-		Prerequisites: has_points, ~aircraft.nkorea, tier3, promotion.sukhoi
-		Description: commander-tree-promotion-sukhoi-concussion.description
-
-hack.cameo_filler.118:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 139
-		Prerequisites: has_points, ~aircraft.nkorea, disabled
 
 #GDI
 promotion.Slingshot:
@@ -1393,5 +1217,3 @@ promotion.Missile_Submarine:
 		Weaknesses: commander-tree-promotion-missile-submarine.tooltipextras-weaknesses
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.siege_naval
-
-

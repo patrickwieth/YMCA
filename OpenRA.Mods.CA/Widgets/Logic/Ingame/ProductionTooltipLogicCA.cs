@@ -286,10 +286,16 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				else
 					armorTypeIcon.Bounds.Y = armorTypeLabel.Bounds.Y = timeLabel.Bounds.Bottom;
 
-				var extrasSpacing = descLabel.Bounds.X / 2;
+				var baseExtrasSpacing = descLabel.Bounds.X / 2;
+				var lineSpacing = descFont.Measure("Ag").Y;
+				var extrasSpacing = Math.Max(baseExtrasSpacing, Math.Max(2, lineSpacing));
 
-				descLabel.Text = buildable.Description.Replace("\\n", "\n");
-				var descSize = descFont.Measure(descLabel.Text);
+				var descText = string.IsNullOrEmpty(buildable.Description)
+					? string.Empty
+					: FluentProvider.GetMessage(buildable.Description);
+				descText = descText.Replace("\\n", "\n");
+				descLabel.Text = descText;
+				var descSize = descLabel.Text != "" ? descFont.Measure(descLabel.Text) : new int2(0, 0);
 				descLabel.Bounds.Width = descSize.X;
 				descLabel.Bounds.Height = descSize.Y;
 

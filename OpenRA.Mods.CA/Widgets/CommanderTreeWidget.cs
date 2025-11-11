@@ -55,6 +55,8 @@ namespace OpenRA.Mods.CA.Widgets
 		readonly Dictionary<ActorInfo, CommanderNode> nodes = new();
 		readonly List<CommanderEdge> edges = new();
 
+		readonly List<CommanderGroup> promotionGroups = new();
+
 		ProductionQueue promotionsQueue;
 
 		readonly List<ProductionItem> sharedQueuedItems = new();
@@ -95,6 +97,9 @@ namespace OpenRA.Mods.CA.Widgets
 		public Color HoverBorderColor = Color.FromArgb(160, 220, 255, 255);
 		public Color BackgroundColor = Color.FromArgb(160, 20, 20, 20);
 		public Color EdgeColor = Color.FromArgb(96, 255, 255, 255);
+		public int GroupPadding = 12;
+		public float GroupBorderWidth = 2f;
+		public Color GroupBorderColor = Color.FromArgb(192, 180, 180, 180);
 
 		public Func<ProductionIcon> GetTooltipIcon;
 
@@ -374,6 +379,8 @@ namespace OpenRA.Mods.CA.Widgets
 				var actor = kv.Key;
 				var state = kv.Value;
 
+				if (!state.Visible)
+					continue;
 
 				if (!actor.Name.StartsWith("promotion.", StringComparison.OrdinalIgnoreCase))
 					continue;
@@ -429,7 +436,14 @@ namespace OpenRA.Mods.CA.Widgets
 				ProductionQueue = promotionsQueue
 			};
 
-			return new CommanderNode(actor, buildable, icon);
+			var palettePosition = actor.TraitInfos<PromotionPaletteInfo>().FirstOrDefault();
+			var node = new CommanderNode(actor, buildable, icon)
+			{
+				PaletteColumn = palettePosition?.Column ?? -1,
+				GroupKey = string.IsNullOrEmpty(palettePosition?.Group) ? null : palettePosition.Group
+			};
+
+			return node;
 		}
 
 		void UpdateNodeState(CommanderNode node, ProductionState state)
@@ -441,7 +455,10 @@ namespace OpenRA.Mods.CA.Widgets
 			node.Buildable = state.Buildable;
 			node.Owned = promotionsQueue.TechTree.HasPrerequisites(new[] { node.Actor.Name });
 			node.Revealed = state.Visible;
-			node.IsVisible = true;
+			var wasVisible = node.IsVisible;
+			node.IsVisible = state.Visible;
+			if (wasVisible != node.IsVisible)
+				layoutDirty = true;
 		}
 
 		void RebuildEdgesAndLayout()
@@ -646,6 +663,63 @@ namespace OpenRA.Mods.CA.Widgets
 			foreach (var node in nodes.Values)
 				AssignRange(node);
 
+			var visibleNodes = nodes.Values.Where(n => n.IsVisible).ToList();
+			var orderedRows = visibleNodes
+				.GroupBy(n => n.BuildableInfo?.BuildPaletteOrder ?? int.MaxValue)
+				.OrderBy(g => g.Key)
+				.ToList();
+
+			var remappedRowRanges = new Dictionary<CommanderNode, (int top, int bottom)>();
+			var rowColumns = new Dictionary<CommanderNode, (int slot, int count)>();
+			var buildOrderRowIndex = 0;
+			foreach (var group in orderedRows)
+			{
+				var orderedRowNodes = group
+					.OrderBy(n => depths[n])
+					.ThenBy(n => n.Actor.Name, StringComparer.OrdinalIgnoreCase)
+					.ToList();
+
+				var assignedSlots = new Dictionary<CommanderNode, int>();
+				var usedSlots = new HashSet<int>();
+
+				foreach (var node in orderedRowNodes.Where(n => n.PaletteColumn >= 0).OrderBy(n => n.PaletteColumn))
+				{
+					var desired = Math.Max(0, node.PaletteColumn);
+					var slot = desired;
+					while (usedSlots.Contains(slot))
+						slot++;
+
+					assignedSlots[node] = slot;
+					usedSlots.Add(slot);
+				}
+
+				var autoSlot = 0;
+				foreach (var node in orderedRowNodes.Where(n => n.PaletteColumn < 0))
+				{
+					while (usedSlots.Contains(autoSlot))
+						autoSlot++;
+
+					assignedSlots[node] = autoSlot;
+					usedSlots.Add(autoSlot);
+				}
+
+				var slotCount = usedSlots.Count == 0 ? orderedRowNodes.Count : usedSlots.Max() + 1;
+
+				foreach (var node in orderedRowNodes)
+				{
+					var slot = assignedSlots[node];
+					node.RowTop = node.RowBottom = buildOrderRowIndex;
+					node.LeafColumnSlot = slot;
+					node.LeafColumnCount = slotCount;
+					rowColumns[node] = (slot, slotCount);
+					remappedRowRanges[node] = (buildOrderRowIndex, buildOrderRowIndex);
+				}
+
+				buildOrderRowIndex++;
+			}
+
+			rowRanges = remappedRowRanges;
+
 			var rowSpacing = Math.Min(Math.Max(0, VerticalSpacing), IconHeight);
 			var rowStep = IconHeight + rowSpacing;
 			var leafColumnSpacing = IconWidth + Math.Min(HorizontalSpacing, IconWidth);
@@ -656,10 +730,9 @@ namespace OpenRA.Mods.CA.Widgets
 			foreach (var node in nodes.Values)
 			{
 				var range = rowRanges[node];
-				var depth = depths[node];
-				var x = ContentPadding + depth * (IconWidth + HorizontalSpacing);
-				if (node.LeafColumnCount > 1)
-					x += node.LeafColumnSlot * leafColumnSpacing;
+				var columnInfo = rowColumns.TryGetValue(node, out var info) ? info : (0, 1);
+				var columnSlot = columnInfo.Item1;
+				var x = ContentPadding + columnSlot * leafColumnSpacing;
 
 				var centerRow = (range.top + range.bottom) / 2f;
 				var y = ContentPadding + centerRow * rowStep;
@@ -667,11 +740,21 @@ namespace OpenRA.Mods.CA.Widgets
 				node.Position = new float2(x, y);
 				node.Bounds = new Rectangle((int)Math.Round((double)x, MidpointRounding.AwayFromZero), (int)Math.Round((double)y, MidpointRounding.AwayFromZero), IconWidth, IconHeight);
 				node.Center = node.Position + new float2(IconWidth / 2f, IconHeight / 2f);
-				node.RightAnchor = node.Position + new float2(IconWidth, IconHeight / 2f);
-				node.LeftAnchor = node.Position + new float2(0f, IconHeight / 2f);
+				node.TopAnchor = node.Position + new float2(IconWidth / 2f, 0f);
+			node.BottomAnchor = node.Position + new float2(IconWidth / 2f, IconHeight);
 
 				maxRight = Math.Max(maxRight, x + IconWidth);
 				maxBottom = Math.Max(maxBottom, y + IconHeight);
+			}
+
+			UpdateGroups();
+
+			foreach (var group in promotionGroups)
+			{
+				var groupRight = group.Bounds.X + group.Bounds.Width;
+				var groupBottom = group.Bounds.Y + group.Bounds.Height;
+				maxRight = Math.Max(maxRight, groupRight);
+				maxBottom = Math.Max(maxBottom, groupBottom);
 			}
 
 			contentWidth = (int)Math.Ceiling(maxRight + ContentPadding);
@@ -689,6 +772,68 @@ namespace OpenRA.Mods.CA.Widgets
 				scrollPanel.ContentHeight = contentHeight;
 
 			layoutDirty = false;
+		}
+
+		void UpdateGroups()
+		{
+			foreach (var node in nodes.Values)
+				node.Group = null;
+
+			promotionGroups.Clear();
+
+			if (nodes.Count == 0)
+				return;
+
+			var padding = Math.Max(0, GroupPadding);
+			var groupedNodes = nodes.Values
+				.Where(n => n.IsVisible && !string.IsNullOrEmpty(n.GroupKey))
+				.GroupBy(n => n.GroupKey, StringComparer.OrdinalIgnoreCase);
+
+			foreach (var grouping in groupedNodes)
+			{
+				var members = grouping.ToList();
+				if (members.Count == 0)
+					continue;
+
+				var left = members.Min(n => n.Position.X);
+				var top = members.Min(n => n.Position.Y);
+				var right = members.Max(n => n.Position.X + IconWidth);
+				var bottom = members.Max(n => n.Position.Y + IconHeight);
+
+				var rect = new Rectangle(
+					(int)Math.Floor(left) - padding,
+					(int)Math.Floor(top) - padding,
+					Math.Max(1, (int)Math.Ceiling(right - left) + padding * 2),
+					Math.Max(1, (int)Math.Ceiling(bottom - top) + padding * 2));
+
+				var group = new CommanderGroup(grouping.Key);
+				group.Bounds = rect;
+				var topLeft = new float2(rect.X, rect.Y);
+				var size = new float2(rect.Width, rect.Height);
+				var center = topLeft + size / 2f;
+				group.Center = center;
+				group.TopAnchor = new float2(center.X, rect.Y);
+				group.BottomAnchor = new float2(center.X, rect.Y + rect.Height);
+				group.Nodes.AddRange(members);
+
+				promotionGroups.Add(group);
+
+				foreach (var member in members)
+					member.Group = group;
+			}
+
+			promotionGroups.Sort((a, b) =>
+			{
+				var order = a.Bounds.Y.CompareTo(b.Bounds.Y);
+				if (order != 0)
+					return order;
+
+				order = a.Bounds.X.CompareTo(b.Bounds.X);
+				if (order != 0)
+					return order;
+
+				return string.Compare(a.Key, b.Key, StringComparison.OrdinalIgnoreCase);
+			});
 		}
 
 		void UpdateHover(int2 mouseLocation)
@@ -975,6 +1120,7 @@ namespace OpenRA.Mods.CA.Widgets
 				return;
 
 			Game.Renderer.EnableAntialiasingFilter();
+			DrawGroups();
 			DrawEdges();
 			Game.Renderer.DisableAntialiasingFilter();
 
@@ -984,8 +1130,29 @@ namespace OpenRA.Mods.CA.Widgets
 			Game.Renderer.DisableAntialiasingFilter();
 		}
 
+		void DrawGroups()
+		{
+			if (promotionGroups.Count == 0)
+				return;
+
+			if (GroupBorderColor.A == 0 || GroupBorderWidth <= 0f)
+				return;
+
+			foreach (var group in promotionGroups)
+			{
+				var topLeft = RenderOrigin.ToFloat2() + new float2(group.Bounds.X, group.Bounds.Y);
+				var bottomRight = topLeft + new float2(group.Bounds.Width, group.Bounds.Height);
+				Game.Renderer.RgbaColorRenderer.DrawRect(new float3(topLeft, 0f), new float3(bottomRight, 0f), GroupBorderWidth, GroupBorderColor);
+			}
+		}
+
 		void DrawEdges()
 		{
+			if (edges.Count == 0)
+				return;
+
+			var renderedKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
 			foreach (var edge in edges)
 			{
 				var from = edge.From;
@@ -993,9 +1160,15 @@ namespace OpenRA.Mods.CA.Widgets
 				if (!from.IsVisible || !to.IsVisible)
 					continue;
 
+				var fromKey = GetEdgeContainerKey(from);
+				var toKey = GetEdgeContainerKey(to);
+				var dedupKey = fromKey + "->" + toKey;
+				if (!renderedKeys.Add(dedupKey))
+					continue;
+
 				var edgeColor = (!from.Revealed || !to.Revealed) ? Color.FromArgb(EdgeColor.A / 2, EdgeColor.R, EdgeColor.G, EdgeColor.B) : EdgeColor;
-				var start = RenderOrigin.ToFloat2() + from.RightAnchor;
-				var end = RenderOrigin.ToFloat2() + to.LeftAnchor;
+				var start = RenderOrigin.ToFloat2() + GetEdgeStartAnchor(from);
+				var end = RenderOrigin.ToFloat2() + GetEdgeEndAnchor(to);
 				var dir = end - start;
 				if (dir.LengthSquared < 1f)
 					continue;
@@ -1010,6 +1183,21 @@ namespace OpenRA.Mods.CA.Widgets
 				Game.Renderer.RgbaColorRenderer.DrawLine(new float3(left, 0f), new float3(end, 0f), ArrowWidth, edgeColor);
 				Game.Renderer.RgbaColorRenderer.DrawLine(new float3(right, 0f), new float3(end, 0f), ArrowWidth, edgeColor);
 			}
+		}
+
+		string GetEdgeContainerKey(CommanderNode node)
+		{
+			return node.Group != null ? $"group:{node.Group.Key}" : $"node:{node.Actor.Name}";
+		}
+
+		float2 GetEdgeStartAnchor(CommanderNode node)
+		{
+			return node.Group != null ? node.Group.BottomAnchor : node.BottomAnchor;
+		}
+
+		float2 GetEdgeEndAnchor(CommanderNode node)
+		{
+			return node.Group != null ? node.Group.TopAnchor : node.TopAnchor;
 		}
 
 		void DrawNode(CommanderNode node)
@@ -1135,12 +1323,15 @@ namespace OpenRA.Mods.CA.Widgets
 			public float2 Position { get; set; }
 			public Rectangle Bounds { get; set; }
 			public float2 Center { get; set; }
-			public float2 RightAnchor { get; set; }
-			public float2 LeftAnchor { get; set; }
+			public float2 TopAnchor { get; set; }
+			public float2 BottomAnchor { get; set; }
 			public int RowTop { get; set; }
 			public int RowBottom { get; set; }
 			public int LeafColumnSlot { get; set; }
 			public int LeafColumnCount { get; set; } = 1;
+			public int PaletteColumn { get; set; } = -1;
+			public string GroupKey { get; set; }
+			public CommanderGroup Group { get; set; }
 		}
 
 		sealed class CommanderEdge
@@ -1154,8 +1345,25 @@ namespace OpenRA.Mods.CA.Widgets
 			public CommanderNode From { get; }
 			public CommanderNode To { get; }
 		}
+
+		sealed class CommanderGroup
+		{
+			public CommanderGroup(string key)
+			{
+				Key = key;
+			}
+
+			public string Key { get; }
+			public List<CommanderNode> Nodes { get; } = new();
+			public Rectangle Bounds { get; set; }
+			public float2 Center { get; set; }
+			public float2 TopAnchor { get; set; }
+			public float2 BottomAnchor { get; set; }
+		}
 	}
 }
+
+
 
 
 

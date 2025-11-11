@@ -7,10 +7,10 @@ promotion.General_Armaggeddon:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
-		Prerequisites: has_points, ~soviet, anypower, ~!promotion.tiktok_warrior, ~!promotion.the_chef
+		Prerequisites: has_points, ~soviet, anypower, !promotion.tiktok_warrior, !promotion.the_chef
 		Description: commander-tree-promotion-general-armaggeddon.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
+	PromotionPalette:
+		Group: SovietGeneral
 
 promotion.TikTok_Warrior:
 	Inherits: ^promotion_item
@@ -19,10 +19,10 @@ promotion.TikTok_Warrior:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
-		Prerequisites: has_points, ~soviet, anypower, ~!promotion.the_chef, ~!promotion.general_armaggeddon
+		Prerequisites: has_points, ~soviet, anypower, !promotion.the_chef, !promotion.general_armaggeddon
 		Description: commander-tree-promotion-tiktok-warrior.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
+	PromotionPalette:
+		Group: SovietGeneral
 
 promotion.The_Chef:
 	Inherits: ^promotion_item
@@ -31,23 +31,10 @@ promotion.The_Chef:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 0
-		Prerequisites: has_points, ~soviet, anypower, ~!promotion.tiktok_warrior, ~!promotion.general_armaggeddon
+		Prerequisites: has_points, ~soviet, anypower, !promotion.tiktok_warrior, !promotion.general_armaggeddon
 		Description: commander-tree-promotion-the-chef.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.soviet_general
-
-hack.cameo_filler.soviet_general:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 1
-		Prerequisites: has_points, ~filler.soviet_general, disabled
-
-hack.cameo_filler.soviet_general2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 1
-		Prerequisites: has_points, ~filler.soviet_general, disabled
-
+	PromotionPalette:
+		Group: SovietGeneral
 
 promotion.War_Miners:
 	Inherits: ^promotion_item
@@ -59,14 +46,13 @@ promotion.War_Miners:
 		Prerequisites: has_points, soviet, ~anypower
 		Description: commander-tree-promotion-war-miners.description
 
-
 promotion.Tesla_Arc:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Tesla Arcing
 	Buildable:
-		BuildPaletteOrder: 103
-		Prerequisites: has_points, tier3, ~vehicles.russia
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, tier3, vehicles, ~russia
 		Description: commander-tree-promotion-tesla-arc.description
 
 promotion.Tesla_Damage:
@@ -74,8 +60,8 @@ promotion.Tesla_Damage:
 	Tooltip:
 		Name: Tesla Damage
 	Buildable:
-		BuildPaletteOrder: 103
-		Prerequisites: has_points, tier3, ~vehicles.russia
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, tier3, vehicles, ~russia
 		Description: commander-tree-promotion-tesla-damage.description
 
 promotion.Chemical_Missiles:
@@ -83,8 +69,8 @@ promotion.Chemical_Missiles:
 	Tooltip:
 		Name: Chemical Missiles
 	Buildable:
-		BuildPaletteOrder: 103
-		Prerequisites: has_points, tier3, ~vehicles.iraq
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, tier3, vehicles, ~iraq
 		Description: commander-tree-promotion-chemical-missiles.description
 	ProvidesPrerequisite:
 		Prerequisite: promotion.chemical_missiles
@@ -94,8 +80,8 @@ promotion.Metal_Acid_Missiles:
 	Tooltip:
 		Name: Metal Acid Missiles
 	Buildable:
-		BuildPaletteOrder: 103
-		Prerequisites: has_points, tier3, ~vehicles.iraq, promotion.chemical_missiles
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, tier3, vehicles, ~iraq, promotion.chemical_missiles
 		Description: commander-tree-promotion-metal-acid-missiles.description
 	ProvidesPrerequisite:
 		Prerequisite: promotion.metal_acid_missiles
@@ -105,8 +91,8 @@ promotion.Artillery_Upgrade:
 	Tooltip:
 		Name: Artillery Upgrade
 	Buildable:
-		BuildPaletteOrder: 103
-		Prerequisites: has_points, tier3, ~vehicles.nkorea
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, tier3, vehicles, ~nkorea
 		Description: commander-tree-promotion-artillery-upgrade.description
 
 promotion.Cluster_Grenades:
@@ -114,67 +100,10 @@ promotion.Cluster_Grenades:
 	Tooltip:
 		Name: Cluster Grenades
 	Buildable:
-		BuildPaletteOrder: 103
-		Prerequisites: has_points, tier3, ~vehicles.nkorea
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, tier3, vehicles, ~nkorea
 		Description: commander-tree-promotion-cluster-grenades.description
 
-hack.cameo_filler.soviet_base_tech:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 104
-		Prerequisites: has_points, ~vehicles.soviet, disabled
-
-# Aircraft
-
-promotion.Mig:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Mig-31
-	RenderSprites:
-		Image: mig31
-	WithProductionIconOverlay@APMissile:
-		Types: APMissile
-	Buildable:
-		BuildPaletteOrder: 148
-		Prerequisites: has_points, tier3, ~aircraft.soviet, ~!aircraft.nkorea
-		Description: commander-tree-promotion-mig.description
-
-promotion.Heavy_Bomber.Nuke:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Nuke Heavy Bomber
-	RenderSprites:
-		Image: heavybomber
-	WithProductionIconOverlay@Nuke:
-		Types: Nuke
-	Buildable:
-		BuildPaletteOrder: 148
-		Prerequisites: has_points, tier3, ~aircraft.iraq
-		Description: commander-tree-promotion-heavy-bomber-nuke.description
-
-promotion.Mig.AA:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: SU-47 Air Superiority
-	RenderSprites:
-		Image: su47
-	Buildable:
-		BuildPaletteOrder: 148
-		Prerequisites: has_points, tier3, ~aircraft.soviet, ~!aircraft.nkorea
-		Description: commander-tree-promotion-mig-aa.description
-
-promotion.Heavy_Bomber.Tesla:
-	Inherits: ^promotion_item
-	Tooltip:
-		Name: Heavy Tesla Bomber
-	RenderSprites:
-		Image: heavybomber
-	WithProductionIconOverlay@Tesla:
-		Types: Tesla
-	Buildable:
-		BuildPaletteOrder: 148
-		Prerequisites: has_points, tier3, ~aircraft.russia
-		Description: commander-tree-promotion-heavy-bomber-tesla.description
 
 # Vehicles
 
@@ -185,11 +114,11 @@ promotion.V3_Launcher:
 	RenderSprites:
 		Image: v3rl
 	Buildable:
-		BuildPaletteOrder: 114
-		Prerequisites: has_points, ~vehicles.soviet, radar, ~!vehicles.nkorea, ~!promotion.akatsiya, ~!promotion.katyusha
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, ~soviet, radar, vehicles, ~!nkorea, !promotion.akatsiya, !promotion.katyusha
 		Description: commander-tree-promotion-v3-launcher.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietarty
+	PromotionPalette:
+		Group: SovietArtillery
 
 promotion.Akatsiya:
 	Inherits: ^promotion_item
@@ -198,11 +127,11 @@ promotion.Akatsiya:
 	RenderSprites:
 		Image: 2s3
 	Buildable:
-		BuildPaletteOrder: 115
-		Prerequisites: has_points, ~vehicles.soviet, radar, ~!vehicles.iraq, ~!promotion.v3_launcher, ~!promotion.katyusha
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, ~soviet, radar, vehicles, ~!iraq, !promotion.v3_launcher, !promotion.katyusha
 		Description: commander-tree-promotion-akatsiya.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietarty
+	PromotionPalette:
+		Group: SovietArtillery
 
 promotion.Katyusha:
 	Inherits: ^promotion_item
@@ -212,23 +141,11 @@ promotion.Katyusha:
 		Image: katy
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 115
-		Prerequisites: has_points, ~vehicles.soviet, radar, ~!vehicles.russia, ~!promotion.v3_launcher, ~!promotion.akatsiya
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, ~soviet, radar, vehicles, ~!russia, !promotion.v3_launcher, !promotion.akatsiya
 		Description: commander-tree-promotion-katyusha.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.sovietarty
-
-hack.cameo_filler.108:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 116
-		Prerequisites: has_points, ~vehicles.soviet, disabled
-
-hack.cameo_filler.109:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 116
-		Prerequisites: has_points, ~vehicles.soviet, ~filler.sovietarty, disabled
+	PromotionPalette:
+		Group: SovietArtillery
 
 promotion.Heavy_Tank.AP:
 	Inherits: ^promotion_item
@@ -237,8 +154,8 @@ promotion.Heavy_Tank.AP:
 	RenderSprites:
 		Image: heavytank
 	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: has_points, ~vehicles.russia, radar, ~!promotion.heavy_tank.tesla
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~russia, radar, !promotion.heavy_tank.tesla
 		Description: commander-tree-promotion-heavy-tank-ap.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-heavy-tank-ap.tooltipextras-strengths
@@ -248,6 +165,9 @@ promotion.Heavy_Tank.AP:
 		Types: Shell
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.heavy_tank
+	PromotionPalette:
+		Column: 4
+		Group: HeavyTankAttack
 
 promotion.Heavy_Tank.Tesla:
 	Inherits: ^promotion_item
@@ -256,8 +176,8 @@ promotion.Heavy_Tank.Tesla:
 	RenderSprites:
 		Image: heavytank
 	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: has_points, ~vehicles.russia, radar, ~!promotion.heavy_tank.ap
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~russia, radar, !promotion.heavy_tank.ap
 		Description: commander-tree-promotion-heavy-tank-tesla.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-heavy-tank-tesla.tooltipextras-strengths
@@ -267,6 +187,9 @@ promotion.Heavy_Tank.Tesla:
 		Types: Tesla
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.heavy_tank
+	PromotionPalette:
+		Column: 5
+		Group: HeavyTankAttack
 
 promotion.Heavy_Tank.PDL:
 	Inherits: ^promotion_item
@@ -276,11 +199,14 @@ promotion.Heavy_Tank.PDL:
 	RenderSprites:
 		Image: heavytank
 	Buildable:
-		BuildPaletteOrder: 121
-		Prerequisites: has_points, ~vehicles.russia, tier3, ~filler.heavy_tank, ~!promotion.heavy_tank.reflector
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~russia, tier3, filler.heavy_tank, !promotion.heavy_tank.reflector
 		Description: commander-tree-promotion-heavy-tank-pdl.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.heavy_tank2
+	PromotionPalette:
+		Column: 4
+		Group: HeavyTankDefense
 
 promotion.Heavy_Tank.Reflector:
 	Inherits: ^promotion_item
@@ -290,24 +216,14 @@ promotion.Heavy_Tank.Reflector:
 	RenderSprites:
 		Image: heavytank
 	Buildable:
-		BuildPaletteOrder: 121
-		Prerequisites: has_points, ~vehicles.russia, tier3, ~filler.heavy_tank, ~!promotion.heavy_tank.pdl
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~russia, tier3, filler.heavy_tank, !promotion.heavy_tank.pdl
 		Description: commander-tree-promotion-heavy-tank-reflector.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.heavy_tank2
-
-hack.cameo_filler.Heavy_Tank1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 122
-		Prerequisites: has_points, ~vehicles.russia, ~!filler.heavy_tank, disabled
-
-hack.cameo_filler.Heavy_Tank2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 122
-		Prerequisites: has_points, ~vehicles.russia, ~filler.heavy_tank2, disabled
-
+	PromotionPalette:
+		Column: 5
+		Group: HeavyTankDefense
 
 promotion.Chem_Sprayer.Range:
 	Inherits: ^promotion_item
@@ -316,8 +232,8 @@ promotion.Chem_Sprayer.Range:
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~!promotion.chem_sprayer.cloud, ~!promotion.chem_sprayer.splash
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~iraq, tier3, !promotion.chem_sprayer.cloud, !promotion.chem_sprayer.splash
 		Description: commander-tree-promotion-chem-sprayer-range.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-chem-sprayer-range.tooltipextras-strengths
@@ -335,8 +251,8 @@ promotion.Chem_Sprayer.Cloud:
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~!promotion.chem_sprayer.range, ~!promotion.chem_sprayer.splash
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~iraq, tier3, !promotion.chem_sprayer.range, !promotion.chem_sprayer.splash
 		Description: commander-tree-promotion-chem-sprayer-cloud.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-chem-sprayer-cloud.tooltipextras-strengths
@@ -354,8 +270,8 @@ promotion.Chem_Sprayer.Splash:
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~!promotion.chem_sprayer.cloud, ~!promotion.chem_sprayer.range
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~iraq, tier3, !promotion.chem_sprayer.cloud, !promotion.chem_sprayer.range
 		Description: commander-tree-promotion-chem-sprayer-splash.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-chem-sprayer-splash.tooltipextras-strengths
@@ -373,8 +289,8 @@ promotion.Chem_Sprayer.Metal_Acid:
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
-		BuildPaletteOrder: 121
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~filler.chem_sprayer, ~!promotion.chem_sprayer.spread
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~iraq, tier3, ~filler.chem_sprayer, !promotion.chem_sprayer.spread
 		Description: commander-tree-promotion-chem-sprayer-metal-acid.description
 	WithProductionIconOverlay@Metal_Acid_right:
 		Types: Metal_Acid_right
@@ -388,20 +304,13 @@ promotion.Chem_Sprayer.Spread:
 	RenderSprites:
 		Image: chemsprayer
 	Buildable:
-		BuildPaletteOrder: 121
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~filler.chem_sprayer, ~!promotion.chem_sprayer.metal_acid
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~iraq, tier3, ~filler.chem_sprayer, !promotion.chem_sprayer.metal_acid
 		Description: commander-tree-promotion-chem-sprayer-spread.description
 	WithProductionIconOverlay@Spread_right:
 		Types: Spread_right
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.chem_sprayer2
-
-hack.cameo_filler.Chem_Sprayer:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 122
-		Prerequisites: has_points, ~vehicles.iraq, disabled, ~filler.chem_sprayer2
-
 
 promotion.Source_of_Pollution.Chem_Bomb:
 	Inherits: ^promotion_item
@@ -410,8 +319,8 @@ promotion.Source_of_Pollution.Chem_Bomb:
 	RenderSprites:
 		Image: source_of_pollution
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~!promotion.source_of_pollution.chem_spray, ~!promotion.source_of_pollution.metal_acid
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~iraq, tier3, !promotion.source_of_pollution.chem_spray, !promotion.source_of_pollution.metal_acid
 		Description: commander-tree-promotion-source-of-pollution-chem-bomb.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-source-of-pollution-chem-bomb.tooltipextras-strengths
@@ -429,8 +338,8 @@ promotion.Source_of_Pollution.Chem_Spray:
 	RenderSprites:
 		Image: source_of_pollution
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~!promotion.source_of_pollution.chem_bomb, ~!promotion.source_of_pollution.metal_acid
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~iraq, tier3, !promotion.source_of_pollution.chem_bomb, !promotion.source_of_pollution.metal_acid
 		Description: commander-tree-promotion-source-of-pollution-chem-spray.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-source-of-pollution-chem-spray.tooltipextras-strengths
@@ -448,8 +357,8 @@ promotion.Source_of_Pollution.Metal_Acid:
 	RenderSprites:
 		Image: source_of_pollution
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~!promotion.source_of_pollution.chem_spray, ~!promotion.source_of_pollution.chem_bomb
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~iraq, tier3, !promotion.source_of_pollution.chem_spray, !promotion.source_of_pollution.chem_bomb
 		Description: commander-tree-promotion-source-of-pollution-metal-acid.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-source-of-pollution-metal-acid.tooltipextras-strengths
@@ -468,8 +377,8 @@ promotion.Source_of_Pollution.PDL:
 	RenderSprites:
 		Image: source_of_pollution
 	Buildable:
-		BuildPaletteOrder: 131
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~filler.source_of_pollution, ~!promotion.source_of_pollution.reflector
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~iraq, tier3, ~filler.source_of_pollution, !promotion.source_of_pollution.reflector
 		Description: commander-tree-promotion-source-of-pollution-pdl.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.source_of_pollution2
@@ -482,18 +391,11 @@ promotion.Source_of_Pollution.Reflector:
 	RenderSprites:
 		Image: source_of_pollution
 	Buildable:
-		BuildPaletteOrder: 131
-		Prerequisites: has_points, ~vehicles.iraq, tier3, ~filler.source_of_pollution, ~!promotion.source_of_pollution.pdl
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~iraq, tier3, ~filler.source_of_pollution, !promotion.source_of_pollution.pdl
 		Description: commander-tree-promotion-source-of-pollution-reflector.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.source_of_pollution2
-
-hack.cameo_filler.Source_of_Pollution:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 132
-		Prerequisites: has_points, ~vehicles.iraq, disabled, ~filler.source_of_pollution2
-
 
 promotion.Peoples_Tank.Speaker:
 	Inherits: ^promotion_item
@@ -502,8 +404,8 @@ promotion.Peoples_Tank.Speaker:
 	RenderSprites:
 		Image: peoplestank
 	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: has_points, tier3, ~vehicles.nkorea, ~!promotion.peoples_tank.mass_production
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, tier3, vehicles, ~nkorea, !promotion.peoples_tank.mass_production
 		Description: commander-tree-promotion-peoples-tank-speaker.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-peoples-tank-speaker.tooltipextras-strengths
@@ -521,8 +423,8 @@ promotion.Peoples_Tank.Mass_Production:
 	RenderSprites:
 		Image: peoplestank
 	Buildable:
-		BuildPaletteOrder: 120
-		Prerequisites: has_points, tier3, ~vehicles.nkorea, ~!promotion.peoples_tank.speaker
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, tier3, vehicles, ~nkorea, !promotion.peoples_tank.speaker
 		Description: commander-tree-promotion-peoples-tank-mass-production.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-peoples-tank-mass-production.tooltipextras-strengths
@@ -541,8 +443,8 @@ promotion.Peoples_Tank.PDL:
 	RenderSprites:
 		Image: peoplestank
 	Buildable:
-		BuildPaletteOrder: 121
-		Prerequisites: has_points, ~vehicles.nkorea, tier3, ~filler.peoples_tank, ~!promotion.peoples_tank.reflector
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~nkorea, tier3, ~filler.peoples_tank, !promotion.peoples_tank.reflector
 		Description: commander-tree-promotion-peoples-tank-pdl.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.peoples_tank2
@@ -555,23 +457,11 @@ promotion.Peoples_Tank.Reflector:
 	RenderSprites:
 		Image: peoplestank
 	Buildable:
-		BuildPaletteOrder: 121
-		Prerequisites: has_points, ~vehicles.nkorea, tier3, ~filler.peoples_tank, ~!promotion.peoples_tank.pdl
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~nkorea, tier3, ~filler.peoples_tank, !promotion.peoples_tank.pdl
 		Description: commander-tree-promotion-peoples-tank-reflector.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.peoples_tank2
-
-hack.cameo_filler.Peoples_Tank:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 122
-		Prerequisites: has_points, ~vehicles.nkorea, tier3, ~!filler.peoples_tank, disabled
-
-hack.cameo_filler.Peoples_Tank2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 122
-		Prerequisites: has_points, ~vehicles.nkorea, tier3, ~filler.peoples_tank2, disabled
 
 promotion.ISU.Concussion:
 	Inherits: ^promotion_item
@@ -580,8 +470,8 @@ promotion.ISU.Concussion:
 	RenderSprites:
 		Image: ISU
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, tier3, ~vehicles.nkorea, ~!promotion.isu.ap, ~!promotion.isu.cluster
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, tier3, vehicles, ~nkorea, !promotion.isu.ap, !promotion.isu.cluster
 		Description: commander-tree-promotion-isu-concussion.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-isu-concussion.tooltipextras-strengths
@@ -599,8 +489,8 @@ promotion.ISU.Cluster:
 	RenderSprites:
 		Image: ISU
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, tier3, ~vehicles.nkorea, ~!promotion.isu.ap, ~!promotion.isu.concussion
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, tier3, vehicles, ~nkorea, !promotion.isu.ap, !promotion.isu.concussion
 		Description: commander-tree-promotion-isu-cluster.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-isu-cluster.tooltipextras-strengths
@@ -618,8 +508,8 @@ promotion.ISU.AP:
 	RenderSprites:
 		Image: ISU
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, ~vehicles.nkorea, tier3, ~!promotion.isu.cluster, ~!promotion.isu.concussion
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~nkorea, tier3, !promotion.isu.cluster, !promotion.isu.concussion
 		Description: commander-tree-promotion-isu-ap.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-isu-ap.tooltipextras-strengths
@@ -638,8 +528,8 @@ promotion.ISU.PDL:
 	RenderSprites:
 		Image: ISU
 	Buildable:
-		BuildPaletteOrder: 131
-		Prerequisites: has_points, ~vehicles.nkorea, tier3, ~filler.isu, ~!promotion.isu.reflector
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~nkorea, tier3, ~filler.isu, !promotion.isu.reflector
 		Description: commander-tree-promotion-isu-pdl.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.isu2
@@ -652,18 +542,11 @@ promotion.ISU.Reflector:
 	RenderSprites:
 		Image: ISU
 	Buildable:
-		BuildPaletteOrder: 131
-		Prerequisites: has_points, ~vehicles.nkorea, tier3, ~filler.isu, ~!promotion.isu.pdl
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~nkorea, tier3, ~filler.isu, !promotion.isu.pdl
 		Description: commander-tree-promotion-isu-reflector.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.isu2
-
-hack.cameo_filler.ISU:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 132
-		Prerequisites: has_points, ~vehicles.nkorea, disabled, ~filler.isu2
-
 
 promotion.Apocalypse_Tank.Drozd:
 	Inherits: ^promotion_item
@@ -672,8 +555,8 @@ promotion.Apocalypse_Tank.Drozd:
 	RenderSprites:
 		Image: apoc
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, ~vehicles.russia, tier3, ~!promotion.apocalypse_tank.nuke_shells, ~!promotion.apocalypse_tank.propaganda
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~russia, tier3, !promotion.apocalypse_tank.nuke_shells, !promotion.apocalypse_tank.propaganda
 		Description: commander-tree-promotion-apocalypse-tank-drozd.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-apocalypse-tank-drozd.tooltipextras-strengths
@@ -682,7 +565,9 @@ promotion.Apocalypse_Tank.Drozd:
 	WithProductionIconOverlay@Counter:
 		Types: Counter
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.apocalypse_tank
+		Prerequisite: upg.apocalypse_tank
+	PromotionPalette:
+		Group: ApocalypseTankAttack
 
 promotion.Apocalypse_Tank.Nuke_Shells:
 	Inherits: ^promotion_item
@@ -691,8 +576,8 @@ promotion.Apocalypse_Tank.Nuke_Shells:
 	RenderSprites:
 		Image: apoc
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, ~vehicles.russia, tier3, ~!promotion.apocalypse_tank.drozd, ~!promotion.apocalypse_tank.propaganda
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~russia, tier3, !promotion.apocalypse_tank.drozd, !promotion.apocalypse_tank.propaganda
 		Description: commander-tree-promotion-apocalypse-tank-nuke-shells.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-apocalypse-tank-nuke-shells.tooltipextras-strengths
@@ -701,7 +586,9 @@ promotion.Apocalypse_Tank.Nuke_Shells:
 	WithProductionIconOverlay@Nuke:
 		Types: Nuke
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.apocalypse_tank
+		Prerequisite: upg.apocalypse_tank
+	PromotionPalette:
+		Group: ApocalypseTankAttack
 
 promotion.Apocalypse_Tank.Propaganda:
 	Inherits: ^promotion_item
@@ -710,8 +597,8 @@ promotion.Apocalypse_Tank.Propaganda:
 	RenderSprites:
 		Image: apoc
 	Buildable:
-		BuildPaletteOrder: 130
-		Prerequisites: has_points, ~vehicles.russia, tier3, ~!promotion.apocalypse_tank.drozd, ~!promotion.apocalypse_tank.nuke_shells
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~russia, tier3, !promotion.apocalypse_tank.drozd, !promotion.apocalypse_tank.nuke_shells
 		Description: commander-tree-promotion-apocalypse-tank-propaganda.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-apocalypse-tank-propaganda.tooltipextras-strengths
@@ -720,7 +607,9 @@ promotion.Apocalypse_Tank.Propaganda:
 	WithProductionIconOverlay@Speaker:
 		Types: Speaker
 	ProvidesPrerequisite@filler:
-		Prerequisite: filler.apocalypse_tank
+		Prerequisite: upg.apocalypse_tank
+	PromotionPalette:
+		Group: ApocalypseTankAttack
 
 promotion.Apocalypse_Tank.PDL:
 	Inherits: ^promotion_item
@@ -730,11 +619,11 @@ promotion.Apocalypse_Tank.PDL:
 	RenderSprites:
 		Image: apoc
 	Buildable:
-		BuildPaletteOrder: 131
-		Prerequisites: has_points, ~vehicles.russia, tier3, ~filler.apocalypse_tank, ~!promotion.apocalypse_tank.reflector
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~russia, tier3, upg.apocalypse_tank, !promotion.apocalypse_tank.reflector
 		Description: commander-tree-promotion-apocalypse-tank-pdl.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.apocalypse_tank2
+	PromotionPalette:
+		Group: ApocalypseTankDefense
 
 promotion.Apocalypse_Tank.Reflector:
 	Inherits: ^promotion_item
@@ -744,18 +633,12 @@ promotion.Apocalypse_Tank.Reflector:
 	RenderSprites:
 		Image: apoc
 	Buildable:
-		BuildPaletteOrder: 131
-		Prerequisites: has_points, ~vehicles.russia, tier3, ~filler.apocalypse_tank, ~!promotion.apocalypse_tank.pdl
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, vehicles, ~russia, tier3, upg.apocalypse_tank, !promotion.apocalypse_tank.pdl
 		Description: commander-tree-promotion-apocalypse-tank-reflector.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.apocalypse_tank2
-
-hack.cameo_filler.apoc:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 132
-		Prerequisites: has_points, ~vehicles.russia, disabled, ~filler.apocalypse_tank2
-
+	PromotionPalette:
+		Column: 2
+		Group: ApocalypseTankDefense
 
 promotion.Rice_Cooker:
 	Inherits: ^promotion_item
@@ -764,8 +647,8 @@ promotion.Rice_Cooker:
 	RenderSprites:
 		Image: rice_cooker
 	Buildable:
-		BuildPaletteOrder: 139
-		Prerequisites: has_points, ~vehicles.nkorea, indp
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, vehicles, ~nkorea, indp
 		Description: commander-tree-promotion-rice-cooker.description
 
 promotion.Gene_Splicer:
@@ -775,8 +658,8 @@ promotion.Gene_Splicer:
 	RenderSprites:
 		Image: gene_splicer
 	Buildable:
-		BuildPaletteOrder: 139
-		Prerequisites: has_points, ~vehicles.iraq, cloning_vats
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, vehicles, ~iraq, cloning_vats
 		Description: commander-tree-promotion-gene-splicer.description
 
 promotion.Tsar:
@@ -786,23 +669,62 @@ promotion.Tsar:
 	RenderSprites:
 		Image: tsar
 	Buildable:
-		BuildPaletteOrder: 139
-		Prerequisites: has_points, ~vehicles.russia, indp
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, vehicles, ~russia, indp
 		Description: commander-tree-promotion-tsar.description
 
-hack.cameo_filler.soviet_epic1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 140
-		Prerequisites: has_points, ~vehicles.soviet, disabled
-
-hack.cameo_filler.soviet_epic2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 140
-		Prerequisites: has_points, ~vehicles.soviet, disabled
 
 # Aircraft
+
+promotion.Mig:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mig-31
+	RenderSprites:
+		Image: mig31
+	WithProductionIconOverlay@APMissile:
+		Types: APMissile
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: has_points, tier3, ~soviet, aircraft, ~!nkorea
+		Description: commander-tree-promotion-mig.description
+
+promotion.Heavy_Bomber.Nuke:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Nuke Heavy Bomber
+	RenderSprites:
+		Image: heavybomber
+	WithProductionIconOverlay@Nuke:
+		Types: Nuke
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: has_points, tier3, aircraft, ~iraq
+		Description: commander-tree-promotion-heavy-bomber-nuke.description
+
+promotion.Mig.AA:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: SU-47 Air Superiority
+	RenderSprites:
+		Image: su47
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: has_points, tier3, ~soviet, aircraft, ~!nkorea
+		Description: commander-tree-promotion-mig-aa.description
+
+promotion.Heavy_Bomber.Tesla:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Heavy Tesla Bomber
+	RenderSprites:
+		Image: heavybomber
+	WithProductionIconOverlay@Tesla:
+		Types: Tesla
+	Buildable:
+		BuildPaletteOrder: 148
+		Prerequisites: has_points, tier3, aircraft, ~russia
+		Description: commander-tree-promotion-heavy-bomber-tesla.description
 
 promotion.Hind.Tesla:
 	Inherits: ^promotion_item
@@ -814,7 +736,7 @@ promotion.Hind.Tesla:
 		Name: Tesla Hind
 	Buildable:
 		BuildPaletteOrder: 127
-		Prerequisites: has_points, ~aircraft.russia, ~!promotion.hind.torp, ~!promotion.hind.missile, ~!promotion.hind.radcannon
+		Prerequisites: has_points, aircraft, ~russia, !promotion.hind.torp, !promotion.hind.missile, !promotion.hind.radcannon
 		Description: commander-tree-promotion-hind-tesla.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hind-tesla.tooltipextras-strengths
@@ -832,7 +754,7 @@ promotion.Hind.Radcannon:
 		Name: Hind (Radcannon)
 	Buildable:
 		BuildPaletteOrder: 127
-		Prerequisites: has_points, ~aircraft.iraq, ~!promotion.hind.torp, ~!promotion.hind.missile, ~!promotion.hind.tesla
+		Prerequisites: has_points, aircraft, ~iraq, !promotion.hind.torp, !promotion.hind.missile, !promotion.hind.tesla
 		Description: commander-tree-promotion-hind-radcannon.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hind-radcannon.tooltipextras-strengths
@@ -850,7 +772,7 @@ promotion.Hind.Missile:
 		Name: Hind (Missiles)
 	Buildable:
 		BuildPaletteOrder: 127
-		Prerequisites: has_points, ~aircraft.nkorea, ~!promotion.hind.torp, ~!promotion.hind.tesla, ~!promotion.hind.radcannon
+		Prerequisites: has_points, aircraft, ~nkorea, !promotion.hind.torp, !promotion.hind.tesla, !promotion.hind.radcannon
 		Description: commander-tree-promotion-hind-missile.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hind-missile.tooltipextras-strengths
@@ -868,7 +790,7 @@ promotion.Hind.Torp:
 		Name: Hind Torpedo Upgrade
 	Buildable:
 		BuildPaletteOrder: 127
-		Prerequisites: has_points, ~aircraft.soviet, ~!promotion.hind.missile, ~!promotion.hind.tesla, ~!promotion.hind.radcannon
+		Prerequisites: has_points, aircraft, ~soviet, !promotion.hind.missile, !promotion.hind.tesla, !promotion.hind.radcannon
 		Description: commander-tree-promotion-hind-torp.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hind-torp.tooltipextras-strengths
@@ -876,19 +798,6 @@ promotion.Hind.Torp:
 		Attributes: commander-tree-promotion-hind-torp.tooltipextras-attributes
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.hind
-
-hack.cameo_filler.113:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 129
-		Prerequisites: has_points, ~aircraft.soviet, disabled
-
-hack.cameo_filler.114:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 129
-		Prerequisites: has_points, ~filler.hind, disabled
-
 
 promotion.Frogfoot:
 	Inherits: ^promotion_item
@@ -898,7 +807,7 @@ promotion.Frogfoot:
 		Image: frog
 	Buildable:
 		BuildPaletteOrder: 140
-		Prerequisites: has_points, ~aircraft.russia
+		Prerequisites: has_points, aircraft, ~russia
 		Description: commander-tree-promotion-frogfoot.description
 
 promotion.Il11b:
@@ -909,7 +818,7 @@ promotion.Il11b:
 		Image: il11b
 	Buildable:
 		BuildPaletteOrder: 140
-		Prerequisites: has_points, ~aircraft.nkorea
+		Prerequisites: has_points, aircraft, ~nkorea
 		Description: commander-tree-promotion-il11b.description
 
 promotion.Dirty_Frogfoot:
@@ -922,21 +831,8 @@ promotion.Dirty_Frogfoot:
 		Types: Hazard
 	Buildable:
 		BuildPaletteOrder: 140
-		Prerequisites: has_points, ~aircraft.iraq
+		Prerequisites: has_points, aircraft, ~iraq
 		Description: commander-tree-promotion-dirty-frogfoot.description
-
-hack.cameo_filler.115:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 141
-		Prerequisites: has_points, ~aircraft.soviet, disabled
-
-hack.cameo_filler.116:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 141
-		Prerequisites: has_points, ~aircraft.soviet, disabled
-
 
 promotion.Airship:
 	Inherits: ^promotion_item
@@ -946,7 +842,7 @@ promotion.Airship:
 		Image: blimp
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: has_points, tier3, ~aircraft.soviet, ~!promotion.kirov.carrier, ~!promotion.kirov.mecha, ~!promotion.kirov.demo, ~!promotion.kirov.v3
+		Prerequisites: has_points, tier3, aircraft, ~soviet, !promotion.kirov.carrier, !promotion.kirov.mecha, !promotion.kirov.demo, !promotion.kirov.v3
 		Description: commander-tree-promotion-airship.description
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.kirov
@@ -959,7 +855,7 @@ promotion.Kirov.V3:
 		Image: kirov.v3
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: has_points, tier3, ~aircraft.nkorea, ~!promotion.kirov.carrier, ~!promotion.airship
+		Prerequisites: has_points, tier3, aircraft, ~nkorea, !promotion.kirov.carrier, !promotion.airship
 		Description: commander-tree-promotion-kirov-v3.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-kirov-v3.tooltipextras-strengths
@@ -976,7 +872,7 @@ promotion.Kirov.Demo:
 		Image: kirov.demo
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: has_points, tier3, ~aircraft.iraq, ~!promotion.kirov.mecha, ~!promotion.airship
+		Prerequisites: has_points, tier3, aircraft, ~iraq, !promotion.kirov.mecha, !promotion.airship
 		Description: commander-tree-promotion-kirov-demo.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-kirov-demo.tooltipextras-strengths
@@ -993,7 +889,7 @@ promotion.Kirov.Mecha:
 		Image: kirov.mecha
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: has_points, tier3, ~aircraft.soviet, ~!aircraft.nkorea, ~!promotion.kirov.demo, ~!promotion.airship
+		Prerequisites: has_points, tier3, aircraft, ~soviet, aircraft, ~!nkorea, !promotion.kirov.demo, !promotion.airship
 		Description: commander-tree-promotion-kirov-mecha.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-kirov-mecha.tooltipextras-strengths
@@ -1010,7 +906,7 @@ promotion.Kirov.Carrier:
 		Image: kirov.carrier
 	Buildable:
 		BuildPaletteOrder: 144
-		Prerequisites: has_points, tier3, ~aircraft.nkorea, ~!promotion.kirov.v3, ~!promotion.airship
+		Prerequisites: has_points, tier3, aircraft, ~nkorea, !promotion.kirov.v3, !promotion.airship
 		Description: commander-tree-promotion-kirov-carrier.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-kirov-carrier.tooltipextras-strengths
@@ -1018,23 +914,3 @@ promotion.Kirov.Carrier:
 		Attributes: commander-tree-promotion-kirov-carrier.tooltipextras-attributes
 	ProvidesPrerequisite@filler:
 		Prerequisite: filler.kirov
-
-hack.cameo_filler.kirov1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 145
-		Prerequisites: has_points, ~aircraft.russia, disabled
-
-hack.cameo_filler.kirov2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 145
-		Prerequisites: has_points, ~aircraft.soviet, ~!aircraft.russia, ~filler.kirov, disabled
-
-hack.cameo_filler.kirov3:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 145
-		Prerequisites: has_points, ~aircraft.soviet, ~filler.kirov, disabled
-
-
