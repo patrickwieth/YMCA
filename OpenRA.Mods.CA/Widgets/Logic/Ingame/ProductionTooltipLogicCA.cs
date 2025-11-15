@@ -286,9 +286,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				else
 					armorTypeIcon.Bounds.Y = armorTypeLabel.Bounds.Y = timeLabel.Bounds.Bottom;
 
-				var baseExtrasSpacing = descLabel.Bounds.X / 2;
-				var lineSpacing = descFont.Measure("Ag").Y;
-				var extrasSpacing = Math.Max(baseExtrasSpacing, Math.Max(2, lineSpacing));
+			var baseExtrasSpacing = descLabel.Bounds.X / 2;
+			var lineSpacing = descFont.Measure("Ag").Y;
+			var extrasSpacing = Math.Max(baseExtrasSpacing, Math.Max(2, lineSpacing));
+			var extrasLineGap = Math.Max(2, lineSpacing / 2);
 
 				var descText = string.IsNullOrEmpty(buildable.Description)
 					? string.Empty
@@ -317,10 +318,16 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				var textSpacing = descLabel.Bounds.Bottom + extrasSpacing;
 				strengthsLabel.Bounds.Y = textSpacing;
 				textSpacing += strengthsSize.Y;
+				if (strengthsLabel.Visible)
+					textSpacing += extrasLineGap;
 				weaknessesLabel.Bounds.Y = textSpacing;
 				textSpacing += weaknessesSize.Y;
+				if (weaknessesLabel.Visible)
+					textSpacing += extrasLineGap;
 				attributesLabel.Bounds.Y = textSpacing;
 				textSpacing += attributesSize.Y;
+				if (attributesLabel.Visible)
+					textSpacing += extrasLineGap;
 				versusLabel.Bounds.Y = textSpacing;
 				textSpacing += versusSize.Y;
 

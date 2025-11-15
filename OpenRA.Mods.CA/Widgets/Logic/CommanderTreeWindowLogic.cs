@@ -14,6 +14,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		readonly LabelWidget pointsValue;
 		readonly ButtonWidget closeButton;
 		readonly ColorBlockWidget dismissArea;
+		readonly LogicKeyListenerWidget hotkeys;
 
 		[ObjectCreator.UseCtor]
 		public CommanderTreeWindowLogic(Widget widget, World world)
@@ -23,15 +24,29 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			pointsValue = widget.GetOrNull<LabelWidget>("POINTS_VALUE");
 			closeButton = widget.GetOrNull<ButtonWidget>("CLOSE_BUTTON");
 			dismissArea = widget.GetOrNull<ColorBlockWidget>("DISMISS_AREA");
+			hotkeys = widget.GetOrNull<LogicKeyListenerWidget>("HOTKEYS");
 
 			if (closeButton != null)
 				closeButton.OnClick = Close;
 
 			if (dismissArea != null)
 			{
-				dismissArea.OnMouseDown = _ => { };
-				dismissArea.OnMouseUp = _ => Close();
+				dismissArea.OnMouseDown = mi =>
+				{
+					if (mi.Button != MouseButton.None)
+						Close();
+				};
+				dismissArea.OnMouseUp = _ => { };
 			}
+
+			if (hotkeys != null)
+				hotkeys.AddHandler(e =>
+				{
+					if (e.Event == KeyInputEvent.Down && !e.IsRepeat && e.Key == Keycode.ESCAPE)
+						Close();
+
+					return true;
+				});
 
 			if (pointsValue != null)
 				pointsValue.GetText = () => GetCommanderPoints().ToStringInvariant();

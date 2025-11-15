@@ -89,9 +89,10 @@ namespace OpenRA.Mods.CA.Widgets
 		public int VerticalSpacing = 110;
 		public int ContentPadding = 40;
 		public int BorderPadding = 4;
-		public float ArrowWidth = 3f;
-		public float ArrowHeadLength = 16f;
-		public float ArrowHeadWidth = 9f;
+		public float ArrowWidth = 2f;
+		public float ArrowHeadLength = 10f;
+		public float ArrowHeadWidth = 6f;
+		public float ArrowNodePadding = 8f;
 		public float BorderWidth = 2f;
 		public Color OwnedBorderColor = Color.FromArgb(255, 255, 215, 0);
 		public Color HoverBorderColor = Color.FromArgb(160, 220, 255, 255);
@@ -1170,10 +1171,27 @@ namespace OpenRA.Mods.CA.Widgets
 				var start = RenderOrigin.ToFloat2() + GetEdgeStartAnchor(from);
 				var end = RenderOrigin.ToFloat2() + GetEdgeEndAnchor(to);
 				var dir = end - start;
-				if (dir.LengthSquared < 1f)
+				var length = dir.Length;
+				if (length < 1f)
 					continue;
 
-				var norm = dir / dir.Length;
+				var norm = dir / length;
+				var inset = Math.Max(0f, ArrowNodePadding);
+				if (inset > 0f)
+				{
+					var maxInset = Math.Min(inset, Math.Max(0f, length / 2f - ArrowHeadLength));
+					if (maxInset > 0f)
+					{
+						start += norm * maxInset;
+						end -= norm * maxInset;
+						dir = end - start;
+						length = dir.Length;
+						if (length < ArrowHeadLength + 1f)
+							continue;
+						norm = dir / length;
+					}
+				}
+
 				var arrowStart = end - norm * ArrowHeadLength;
 				var perp = new float2(-norm.Y, norm.X);
 				var left = arrowStart + perp * ArrowHeadWidth;
@@ -1182,8 +1200,10 @@ namespace OpenRA.Mods.CA.Widgets
 				Game.Renderer.RgbaColorRenderer.DrawLine(new float3(start, 0f), new float3(arrowStart, 0f), ArrowWidth, edgeColor);
 				Game.Renderer.RgbaColorRenderer.DrawLine(new float3(left, 0f), new float3(end, 0f), ArrowWidth, edgeColor);
 				Game.Renderer.RgbaColorRenderer.DrawLine(new float3(right, 0f), new float3(end, 0f), ArrowWidth, edgeColor);
+				Game.Renderer.RgbaColorRenderer.FillTriangle(new float3(end, 0f), new float3(left, 0f), new float3(right, 0f), edgeColor);
 			}
 		}
+
 
 		string GetEdgeContainerKey(CommanderNode node)
 		{

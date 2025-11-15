@@ -1,3 +1,263 @@
+
+#GDI
+
+promotion.shielded_miners:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Shielded Miners
+	Buildable:
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, ~gdi, anypower
+		Description: commander-tree-promotion-shielded-miners.description
+
+
+promotion.Slingshot:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Slingshot
+	Buildable:
+		BuildPaletteOrder: 208
+		IconPalette: chrometd
+		Prerequisites: has_points, tier3, ~vehicles.gdi
+		Description: commander-tree-promotion-slingshot.description
+
+promotion.Hover_MLRS:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Hover MLRS
+	Buildable:
+		BuildPaletteOrder: 211
+		IconPalette: chrometd
+		Prerequisites: has_points, ~vehicles.gdi, ~!vehicles.eagle, tier3, ~!promotion.hailstorm_mlrs
+		Description: commander-tree-promotion-hover-mlrs.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.hmlrs
+
+promotion.Hover_MLRS.Reflector:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Hover MLRS Reflector
+	Buildable:
+		BuildPaletteOrder: 211
+		Prerequisites: has_points, ~vehicles.gdi, ~!vehicles.eagle, tier3, ~promotion.hover_mlrs, ~!promotion.hailstorm_mlrs, ~!promotion.hover_mlrs.pdl
+		Description: commander-tree-promotion-hover-mlrs-reflector.description
+
+promotion.Hover_MLRS.PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Hover MLRS PDL
+	Buildable:
+		BuildPaletteOrder: 211
+		Prerequisites: has_points, ~vehicles.gdi, ~!vehicles.eagle, tier3, ~promotion.hover_mlrs, ~!promotion.hailstorm_mlrs, ~!promotion.hover_mlrs.reflector
+		Description: commander-tree-promotion-hover-mlrs-pdl.description
+
+promotion.Hailstorm_MLRS:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Hailstorm MLRS
+	Buildable:
+		BuildPaletteOrder: 212
+		IconPalette: chrometd
+		Prerequisites: has_points, ~vehicles.gdi, tier3, ~!promotion.hover_mlrs
+		Description: commander-tree-promotion-hailstorm-mlrs.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mlrs
+
+promotion.Mobile_Sensor_PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mobile Sensor Point Defense Laser
+	RenderSprites:
+		Image: msar
+	Buildable:
+		BuildPaletteOrder: 216
+		Prerequisites: has_points, tier3, ~vehicles.gdi
+		Description: commander-tree-promotion-mobile-sensor-pdl.description
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+
+promotion.Medium_Tank_PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Medium Tank Point Laser Defense
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 219
+		Prerequisites: has_points, tier3, ~vehicles.gdi, ~!promotion.medium_tank.reflector
+		Description: commander-tree-promotion-medium-tank-pdl.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mtnk
+
+promotion.Medium_Tank.Reflector:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Medium Tank Reflector Armor
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 219
+		Prerequisites: has_points, tier3, ~vehicles.gdi, ~!promotion.medium_tank_pdl
+		Description: commander-tree-promotion-medium-tank-reflector.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.mtnk
+
+promotion.APC_Vulcan:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: APC_Vulcan
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 222
+		Prerequisites: has_points, ~vehicles.gdi, tier3, ~!vehicles.zocom
+		Description: commander-tree-promotion-apc-vulcan.description
+
+promotion.Mobile_EMP:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mobile EMP
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 225
+		Prerequisites: has_points, tier3, ~vehicles.gdi
+		Description: commander-tree-promotion-mobile-emp.description
+
+promotion.Mobile_EMP_Stable_Reactor:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mobile EMP Stable Reactor
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 226
+		Prerequisites: has_points, ~vehicles.gdi, ~!vehicles.talon, miss.gdi, promotion.mobile_emp, ~!promotion.mobile_emp_volatile_reactor
+		Description: commander-tree-promotion-mobile-emp-stable-reactor.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.emp
+
+promotion.Mobile_EMP_Volatile_Reactor:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mobile EMP Volatile Reactor
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 227
+		Prerequisites: has_points, ~vehicles.gdi, ~!vehicles.eagle, miss.gdi, promotion.mobile_emp, ~!promotion.mobile_emp_stable_reactor
+		Description: commander-tree-promotion-mobile-emp-volatile-reactor.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.emp
+
+promotion.Titan.Battle:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Battle Titan
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 235
+		Prerequisites: has_points, ~vehicles.talon, tier3, ~!promotion.titan.railgun
+		Description: commander-tree-promotion-titan-battle.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.titan
+
+promotion.Titan.Railgun:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Titan Railgun
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 235
+		Prerequisites: has_points, ~vehicles.talon, tier3, ~!promotion.titan.battle
+		Description: commander-tree-promotion-titan-railgun.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.titan
+
+promotion.Titan.PDL:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Titan Point Laser Defense System
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 236
+		Prerequisites: has_points, ~vehicles.talon, tier3, ~filler.titan, ~!promotion.titan.reflector
+		Description: commander-tree-promotion-titan-pdl.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.titan2
+
+promotion.Titan.Reflector:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Titan Reflector Armor
+	Buildable:
+		BuildPaletteOrder: 236
+		Prerequisites: has_points, ~vehicles.talon, tier3, ~filler.titan, ~!promotion.titan.pdl
+		Description: commander-tree-promotion-titan-reflector.description
+	ProvidesPrerequisite@filler:
+		Prerequisite: filler.titan2
+
+promotion.DronePair:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Drone Pairing
+	Buildable:
+		BuildPaletteOrder: 238
+		Prerequisites: has_points, ~vehicles.zocom, tier3
+		Description: commander-tree-promotion-dronepair.description
+	ProvidesPrerequisite@dronepair:
+		Prerequisite: dronepair.upgrade
+
+promotion.Stealth_Fighter:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Stealth Fighter
+	Buildable:
+		BuildPaletteOrder: 239
+		Prerequisites: has_points, tier3, ~aircraft.gdi
+		Description: commander-tree-promotion-stealth-fighter.description
+
+promotion.Stealth_Fighter.Payload:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Stealth Fighter Double Payload
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 240
+		Prerequisites: has_points, tier3, promotion.stealth_fighter, ~aircraft.gdi
+		Description: commander-tree-promotion-stealth-fighter-payload.description
+
+promotion.Mammoth_MKII:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mammoth MK.II
+	Buildable:
+		BuildPaletteOrder: 250
+		IconPalette: chrometd
+		Prerequisites: has_points, ~vehicles.talon, miss.gdi,
+		Description: commander-tree-promotion-mammoth-mkii.description
+
+promotion.Ion_Warship:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Orca Ion Warship
+	RenderSprites:
+		Image: orca.warship
+	Buildable:
+		BuildPaletteOrder: 250
+		IconPalette: chrometd
+		Prerequisites: has_points, ~aircraft.eagle, miss.gdi
+		Description: commander-tree-promotion-ion-warship.description
+
+promotion.MARV:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: M.A.R.V.
+	RenderSprites:
+		Image: marv
+	Buildable:
+		BuildPaletteOrder: 250
+		IconPalette: chrometd
+		Prerequisites: has_points, ~vehicles.zocom, miss.gdi,
+		Description: commander-tree-promotion-marv.description
+
+
+
+
 promotion.Mammoth_Tank_GDI.Hover:
 	Inherits: ^promotion_item
 	Tooltip:
@@ -394,5 +654,3 @@ hack.cameo_filler.202:
 	Buildable:
 		BuildPaletteOrder: 207
 		Prerequisites: has_points, ~infantry.gdi, ~infantry.eagle, ~filler.jumpjet, disabled, ~promotion.advanced_infantry_training
-
-

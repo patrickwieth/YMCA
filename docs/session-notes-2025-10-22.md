@@ -5,7 +5,7 @@
 - ProductionTooltipLogicCA still never instantiates (no ctor/BeforeRender logs, no DBG: prefixes), so the commander tooltip path bypasses the CA logic entirely.
 - Commander hover appears to route through the Cameo palette tooltip (ProductionTooltipCameoLogic) or a related cameo-specific widget; 	ooltipIcon is resolved, but the Cameo logic owns the rendering.
 - Direct attempts to hook ProductionTooltipLogicCA from CommanderTreeWidget (lazy instantiation + Game.RunAfterTick) did not trigger; tooltip container children are rebuilt each frame.
-- Commander tooltip extras therefore must be wired into the Cameo tooltip logic – that is where TooltipExtrasResolver should plug in so we can reuse shared formatting and localization.
+- Commander tooltip extras therefore must be wired into the Cameo tooltip logic â€¢ that is where TooltipExtrasResolver should plug in so we can reuse shared formatting and localization.
 
 ## Next Steps
 1. Trace the Commander tree palette icon creation to the exact cameo tooltip logic (ProductionTooltipCameoLogic/PaletteIconTooltipCameoLogic) and integrate TooltipExtrasResolver there.
