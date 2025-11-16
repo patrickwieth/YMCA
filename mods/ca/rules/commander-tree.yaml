@@ -82,6 +82,8 @@ promotion.point_defense_turret:
 		IconPalette: chrometd
 		Prerequisites: has_points, anypower, ~!china
 		Description: commander-tree-promotion-point-defense-turret.description
+	PromotionPalette:
+		Column: 3
 
 promotion.oil_pumps:
 	Inherits: ^promotion_item
@@ -96,6 +98,8 @@ promotion.oil_pumps:
 		Strengths: commander-tree-promotion-oil_pumps.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-oil_pumps.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-oil_pumps.tooltipextras-attributes
+	PromotionPalette:
+		Column: 0
 
 promotion.air_logistics:
 	Inherits: ^promotion_item
@@ -105,6 +109,8 @@ promotion.air_logistics:
 		BuildPaletteOrder: 3
 		Prerequisites: has_points, anypower, ~!scrin
 		Description: commander-tree-promotion-air-logistics.description
+	PromotionPalette:
+		Column: 1
 
 promotion.advanced_infantry_training:
 	Inherits: ^promotion_item
@@ -115,7 +121,8 @@ promotion.advanced_infantry_training:
 		BuildPaletteOrder: 3
 		Prerequisites: has_points, infantry.any
 		Description: commander-tree-promotion-advanced-infantry-training.description
-
+	PromotionPalette:
+		Column: 3
 
 #Naval
 
@@ -124,30 +131,32 @@ promotion.Subchaser:
 	Tooltip:
 		Name: Subchaser
 	Buildable:
-		BuildPaletteOrder: 2000
-		Prerequisites: has_points, ~ships.any, ~subchaser, ~!promotion.hunter_submarine, ~!promotion.patrol_boat, ~!promotion.recon_boat, ~!promotion.sea_scorpion
+		BuildPaletteOrder: 51
+		Prerequisites: has_points, ships, ~subchaser, !promotion.hunter_submarine, !promotion.patrol_boat, !promotion.recon_boat, !promotion.sea_scorpion
 		Description: commander-tree-promotion-subchaser.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-subchaser.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-subchaser.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-subchaser.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.basic_naval
+	PromotionPalette:
+		Column: 3
+		Group: BasicNavy
 
 promotion.Hunter_Submarine:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Hunter Submarine
 	Buildable:
-		BuildPaletteOrder: 2000
-		Prerequisites: has_points, ~ships.any, ~hunter_sub, ~!promotion.subchaser, ~!promotion.patrol_boat, ~!promotion.recon_boat, ~!promotion.sea_scorpion
+		BuildPaletteOrder: 51
+		Prerequisites: has_points, ships, ~hunter_sub, !promotion.subchaser, !promotion.patrol_boat, !promotion.recon_boat, !promotion.sea_scorpion
 		Description: commander-tree-promotion-hunter-submarine.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hunter-submarine.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-hunter-submarine.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-hunter-submarine.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.basic_naval
+	PromotionPalette:
+		Column: 3
+		Group: BasicNavy
 
 promotion.Patrol_Boat:
 	Inherits: ^promotion_item
@@ -155,15 +164,16 @@ promotion.Patrol_Boat:
 		Name: Patrol Boat
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 2000
-		Prerequisites: has_points, ~ships.any, ~patrol_boat, ~!promotion.subchaser, ~!promotion.hunter_submarine, ~!promotion.recon_boat, ~!promotion.sea_scorpion
+		BuildPaletteOrder: 51
+		Prerequisites: has_points, ships, ~patrol_boat, !promotion.subchaser, !promotion.hunter_submarine, !promotion.recon_boat, !promotion.sea_scorpion
 		Description: commander-tree-promotion-patrol-boat.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-patrol-boat.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-patrol-boat.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-patrol-boat.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.basic_naval
+	PromotionPalette:
+		Column: 3
+		Group: BasicNavy
 
 promotion.Recon_Boat:
 	Inherits: ^promotion_item
@@ -171,59 +181,63 @@ promotion.Recon_Boat:
 		Name: Recon Boat
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 2000
-		Prerequisites: has_points, ~ships.any, ~recon_boat, ~!promotion.subchaser, ~!promotion.hunter_submarine, ~!promotion.patrol_boat, ~!promotion.sea_scorpion
+		BuildPaletteOrder: 51
+		Prerequisites: has_points, ships, ~recon_boat, !promotion.subchaser, !promotion.hunter_submarine, !promotion.patrol_boat, !promotion.sea_scorpion
 		Description: commander-tree-promotion-recon-boat.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-recon-boat.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-recon-boat.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.basic_naval
+	PromotionPalette:
+		Column: 3
+		Group: BasicNavy
 
 promotion.Sea_Scorpion:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Sea Scorpion
 	Buildable:
-		BuildPaletteOrder: 2000
-		Prerequisites: has_points, ~ships.any, ~sea_scorpion, ~!promotion.subchaser, ~!promotion.hunter_submarine, ~!promotion.patrol_boat, ~!promotion.recon_boat
+		BuildPaletteOrder: 51
+		Prerequisites: has_points, ships, ~sea_scorpion, !promotion.subchaser, !promotion.hunter_submarine, !promotion.patrol_boat, !promotion.recon_boat
 		Description: commander-tree-promotion-sea-scorpion.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-sea-scorpion.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-sea-scorpion.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-sea-scorpion.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.basic_naval
+	PromotionPalette:
+		Column: 3
+		Group: BasicNavy
 
 promotion.Attack_Submarine:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Attack Submarine
 	Buildable:
-		BuildPaletteOrder: 2010
-		Prerequisites: has_points, ~ships.any, radar, ~attack_submarine, ~!promotion.destroyer, ~!promotion.frigate, ~!promotion.aegis_cruiser
+		BuildPaletteOrder: 53
+		Prerequisites: has_points, ships, radar, ~attack_submarine, !promotion.destroyer, !promotion.frigate, !promotion.aegis_cruiser
 		Description: commander-tree-promotion-attack-submarine.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-attack-submarine.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-attack-submarine.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-attack-submarine.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.adv_naval
+	PromotionPalette:
+		Column: 3
+		Group: AdvancedNavy
 
 promotion.Destroyer:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Destroyer
 	Buildable:
-		BuildPaletteOrder: 2010
-		Prerequisites: has_points, ~ships.any, radar, ~destroyer, ~!promotion.attack_submarine, ~!promotion.frigate, ~!promotion.aegis_cruiser
+		BuildPaletteOrder: 53
+		Prerequisites: has_points, ships, radar, ~destroyer, !promotion.attack_submarine, !promotion.frigate, !promotion.aegis_cruiser
 		Description: commander-tree-promotion-destroyer.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-destroyer.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-destroyer.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-destroyer.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.adv_naval
+	PromotionPalette:
+		Column: 3
+		Group: AdvancedNavy
 
 promotion.Frigate:
 	Inherits: ^promotion_item
@@ -231,14 +245,15 @@ promotion.Frigate:
 		Name: Frigate
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 2010
-		Prerequisites: has_points, ~ships.any, radar, ~frigate, ~!promotion.attack_submarine, ~!promotion.destroyer, ~!promotion.aegis_cruiser
+		BuildPaletteOrder: 53
+		Prerequisites: has_points, ships, radar, ~frigate, !promotion.attack_submarine, !promotion.destroyer, !promotion.aegis_cruiser
 		Description: commander-tree-promotion-frigate.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-frigate.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-frigate.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.adv_naval
+	PromotionPalette:
+		Column: 3
+		Group: AdvancedNavy
 
 promotion.Aegis_Cruiser:
 	Inherits: ^promotion_item
@@ -246,30 +261,32 @@ promotion.Aegis_Cruiser:
 		Name: Aegis Cruiser
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 2010
-		Prerequisites: has_points, ~ships.any, radar, ~aegis_cruiser, ~!promotion.attack_submarine, ~!promotion.destroyer, ~!promotion.frigate
+		BuildPaletteOrder: 53
+		Prerequisites: has_points, ships, radar, ~aegis_cruiser, !promotion.attack_submarine, !promotion.destroyer, !promotion.frigate
 		Description: commander-tree-promotion-aegis-cruiser.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-aegis-cruiser.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-aegis-cruiser.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-aegis-cruiser.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.adv_naval
+	PromotionPalette:
+		Column: 3
+		Group: AdvancedNavy
 
 promotion.Battlecruiser:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Battlecruiser
 	Buildable:
-		BuildPaletteOrder: 2020
-		Prerequisites: has_points, ~ships.any, tier3, ~battlecruiser, ~!promotion.carrier, ~!promotion.icbm_submarine, ~!promotion.missile_submarine
+		BuildPaletteOrder: 55
+		Prerequisites: has_points, ships, tier3, ~battlecruiser, !promotion.carrier, !promotion.icbm_submarine, !promotion.missile_submarine
 		Description: commander-tree-promotion-battlecruiser.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-battlecruiser.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-battlecruiser.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-battlecruiser.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.siege_naval
+	PromotionPalette:
+		Column: 3
+		Group: SiegeNavy
 
 promotion.Carrier:
 	Inherits: ^promotion_item
@@ -277,40 +294,43 @@ promotion.Carrier:
 		Name: Carrier
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 2020
-		Prerequisites: has_points, ~ships.any, tier3, ~carrier, ~!promotion.battlecruiser, ~!promotion.icbm_submarine, ~!promotion.missile_submarine
+		BuildPaletteOrder: 55
+		Prerequisites: has_points, ships, tier3, ~carrier, !promotion.battlecruiser, !promotion.icbm_submarine, !promotion.missile_submarine
 		Description: commander-tree-promotion-carrier.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-carrier.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-carrier.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-carrier.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.siege_naval
+	PromotionPalette:
+		Column: 3
+		Group: SiegeNavy
 
 promotion.ICBM_Submarine:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: ICBM Submarine
 	Buildable:
-		BuildPaletteOrder: 2020
-		Prerequisites: has_points, ~ships.any, tier3, ~icbm_sub, ~!promotion.battlecruiser, ~!promotion.carrier, ~!promotion.missile_submarine
+		BuildPaletteOrder: 55
+		Prerequisites: has_points, ships, tier3, ~icbm_sub, !promotion.battlecruiser, !promotion.carrier, !promotion.missile_submarine
 		Description: commander-tree-promotion-icbm-submarine.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-icbm-submarine.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-icbm-submarine.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.siege_naval
+	PromotionPalette:
+		Column: 3
+		Group: SiegeNavy
 
 promotion.Missile_Submarine:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Missile_Submarine
 	Buildable:
-		BuildPaletteOrder: 2020
-		Prerequisites: has_points, ~ships.any, tier3, ~missile_sub, ~!promotion.battlecruiser, ~!promotion.carrier, ~!promotion.icbm_submarine
+		BuildPaletteOrder: 55
+		Prerequisites: has_points, ships, tier3, ~missile_sub, !promotion.battlecruiser, !promotion.carrier, !promotion.icbm_submarine
 		Description: commander-tree-promotion-missile-submarine.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-missile-submarine.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-missile-submarine.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.siege_naval
+	PromotionPalette:
+		Column: 3
+		Group: SiegeNavy

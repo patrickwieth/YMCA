@@ -746,9 +746,9 @@ promotion-stormbomber =
     .description = Upgrades the Stormrider with plasmabombs \nStrong vs vehicles but cannot target air anymore.
 promotion-stormbomber-torp =
     .description = Upgrades the Stormrider with anti-water plasmabombs
-    .tooltipextras-strengths = Strengths: • Strong vs Ships, Submarines
-    .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
-    .tooltipextras-attributes = Attributes: • Detects submerged vessles.
+    .tooltipextras-strengths = Strengths: . Strong vs Ships, Submarines
+    .tooltipextras-weaknesses = Weaknesses: . Weak vs Anti-Air
+    .tooltipextras-attributes = Attributes: . Detects submerged vessles.
 promotion-devastator-beam =
     .description = Upgrades the Devastator with an energy beam. \nThe energy beam is strong but needs very long to recharge.
 promotion-devastator-shard =
@@ -767,126 +767,243 @@ promotion-bastion =
     .description = The Bastion is a heavy aircraft perfect for defending huge assaults or bruising weak defenses.
 commander-tree-promotion-gunwalker-sensor =
     .description = Upgrades the Gunwalker with improved sensor bionics. Gives stealth detection.
+    .tooltipextras-strengths = Strengths: Grants stealth detection to Gunwalkers.
+    .tooltipextras-weaknesses = Weaknesses: Does not increase weapon damage.
+    .tooltipextras-attributes = Attributes: Passive sensor suite upgrade.
 commander-tree-promotion-interloper-aa =
     .description = Upgrades the Interloper with anti-air lasers.
+    .tooltipextras-strengths = Strengths: Equips Interlopers to shred enemy aircraft.
+    .tooltipextras-weaknesses = Weaknesses: Ground damage output remains unchanged.
+    .tooltipextras-attributes = Attributes: Dedicated anti-air laser loadout.
 commander-tree-promotion-interloper-teleport =
     .description = Upgrades the Interloper with teleport system.
+    .tooltipextras-strengths = Strengths: Allows the Interloper to blink away from danger.
+    .tooltipextras-weaknesses = Weaknesses: Short jump range and cooldown punish careless use.
+    .tooltipextras-attributes = Attributes: Teleport activated manually for repositioning.
 commander-tree-promotion-corrupter-area =
     .description = Upgrades the Corrupter with an area attack.
+    .tooltipextras-strengths = Strengths: Acid splash now hits clustered targets.
+    .tooltipextras-weaknesses = Weaknesses: Less efficient when focus-firing a single threat.
+    .tooltipextras-attributes = Attributes: Converts beam into a small area burst.
 commander-tree-promotion-corrupter-range =
     .description = Upgrades the Corrupter with greater range.
+    .tooltipextras-strengths = Strengths: Fires safely from farther behind the lines.
+    .tooltipextras-weaknesses = Weaknesses: Still vulnerable if enemies break through.
+    .tooltipextras-attributes = Attributes: Extended weapon range upgrade.
 commander-tree-promotion-corrupter-pdl =
     .description =
         Upgrades the Corrupter with a Point Laser Defense system. 
         PDL intercepts incoming missiles and projectiles.
+    .tooltipextras-strengths = Strengths: Shoots down incoming missiles aimed at the Corrupter.
+    .tooltipextras-weaknesses = Weaknesses: Cannot stop laser or infantry attacks.
+    .tooltipextras-attributes = Attributes: Adds a point-defense laser turret.
 commander-tree-promotion-corrupter-reflector =
     .description =
         Upgrades the Corrupter with Reflector armor. 
         Reflector armor is very efficient vs energy weapons.
+    .tooltipextras-strengths = Strengths: Reflector armor shrugs off hostile energy fire.
+    .tooltipextras-weaknesses = Weaknesses: Kinetic cannons still tear through the hull.
+    .tooltipextras-attributes = Attributes: Permanent energy-resistant plating.
 commander-tree-promotion-devourer-acid =
     .description = Upgrades the Devourer with an acid attack.
+    .tooltipextras-strengths = Strengths: Acid projectiles melt heavy armor over time.
+    .tooltipextras-weaknesses = Weaknesses: Provides no benefit versus aircraft.
+    .tooltipextras-attributes = Attributes: Leaves a corrosive damage-over-time effect.
 commander-tree-promotion-devourer-heavy =
     .description = Upgrades the Devourer with heavy armor.
+    .tooltipextras-strengths = Strengths: Extra plating keeps Devourers alive longer.
+    .tooltipextras-weaknesses = Weaknesses: Added mass slows the vehicle down.
+    .tooltipextras-attributes = Attributes: Heavy armor package for the hull.
 commander-tree-promotion-channeler-chain =
     .description = Upgrades the Channeler with a chaining rift beam turning it into the Chainneler (:D).
+    .tooltipextras-strengths = Strengths: Beam chains off to secondary targets automatically.
+    .tooltipextras-weaknesses = Weaknesses: Single targets receive less burst focus.
+    .tooltipextras-attributes = Attributes: Arc lightning effect spreads the damage.
 commander-tree-promotion-channeler-disc =
     .description = Equips the Channeler with armor piercing disks.
+    .tooltipextras-strengths = Strengths: Armor-piercing discs punch through tanks.
+    .tooltipextras-weaknesses = Weaknesses: Little splash against infantry swarms.
+    .tooltipextras-attributes = Attributes: Swaps the beam for shard projectiles.
 commander-tree-promotion-channeler-pdl =
     .description =
         Upgrades the Channeler with a Point Laser Defense system. 
         PDL intercepts incoming missiles and projectiles.
+    .tooltipextras-strengths = Strengths: Intercepts missiles and shells before impact.
+    .tooltipextras-weaknesses = Weaknesses: Offers no protection versus beams.
+    .tooltipextras-attributes = Attributes: Built-in point-defense laser.
 commander-tree-promotion-channeler-reflector =
     .description =
         Upgrades the Channeler with Reflector armor. 
         Reflector armor is very efficient vs energy weapons.
+    .tooltipextras-strengths = Strengths: Reflector plating reflects Tesla and laser fire.
+    .tooltipextras-weaknesses = Weaknesses: Conventional cannons still deal full damage.
+    .tooltipextras-attributes = Attributes: Permanent energy mirror upgrade.
 commander-tree-promotion-seeker-pdl =
     .description =
         Upgrades the Seeker with a Point Laser Defense system. 
         PDL intercepts incoming missiles and projectiles.
+    .tooltipextras-strengths = Strengths: Shoots down projectiles targeting the Seeker.
+    .tooltipextras-weaknesses = Weaknesses: Cannot help against beam or infantry weapons.
+    .tooltipextras-attributes = Attributes: Point-defense laser pod.
 commander-tree-promotion-seeker-reflector =
     .description =
         Upgrades the Seeker with Reflector armor. 
         Reflector armor is very efficient vs energy weapons.
+    .tooltipextras-strengths = Strengths: Reflector armor resists most energy attacks.
+    .tooltipextras-weaknesses = Weaknesses: No extra protection from kinetic rounds.
+    .tooltipextras-attributes = Attributes: Energy-reflecting hull coating.
 commander-tree-promotion-lacerator-pdl =
     .description =
         Upgrades the Lacerator with a Point Laser Defense system. 
         PDL intercepts incoming missiles and projectiles.
+    .tooltipextras-strengths = Strengths: Intercepts missiles headed for the Lacerator.
+    .tooltipextras-weaknesses = Weaknesses: Still exposed to beam fire and rockets fired up close.
+    .tooltipextras-attributes = Attributes: Point-defense laser upgrade.
 commander-tree-promotion-lacerator-reflector =
     .description =
         Upgrades the Lacerator with Reflector armor. 
         Reflector armor is very efficient vs energy weapons.
+    .tooltipextras-strengths = Strengths: Reflector armor blunts Tesla and laser strikes.
+    .tooltipextras-weaknesses = Weaknesses: Minimal benefit versus artillery or shells.
+    .tooltipextras-attributes = Attributes: Reflective plating retrofit.
 commander-tree-promotion-lacerator-ap =
     .description =
         Upgrades the Lacerator with Armor Piercing Discs.
          AP Discs are very efficient vs heavy armor.
+    .tooltipextras-strengths = Strengths: Armor-piercing discs devastate heavy armor.
+    .tooltipextras-weaknesses = Weaknesses: Reduced effectiveness against infantry blobs.
+    .tooltipextras-attributes = Attributes: Enhanced penetrator payload.
 commander-tree-promotion-ruiner-barrage =
     .description = Upgrades the Ruiner with a barrage cannon, capable of firing much faster.
+    .tooltipextras-strengths = Strengths: Greatly increases Ruiner rate of fire.
+    .tooltipextras-weaknesses = Weaknesses: Still needs setup time and lining up.
+    .tooltipextras-attributes = Attributes: Barrage cannon upgrade.
 commander-tree-promotion-tripod-chainer =
     .description = Upgrades the Tripod with imporoved laser chaining to a second and third target.
+    .tooltipextras-strengths = Strengths: Main laser now chains to additional targets.
+    .tooltipextras-weaknesses = Weaknesses: Less burst on the initial victim.
+    .tooltipextras-attributes = Attributes: Automatic chaining beam.
 commander-tree-promotion-tripod-acid =
     .description =
         Upgrades the Tripod with Acid Spray. 
         Acid Spray is efficient vs Reflector Armor.
+    .tooltipextras-strengths = Strengths: Acid spray punishes reflector armor and buildings.
+    .tooltipextras-weaknesses = Weaknesses: Short range exposes the tripod to fire.
+    .tooltipextras-attributes = Attributes: Secondary acid sprayer mounted under the hull.
 commander-tree-promotion-tripod-pdl =
     .description =
         Upgrades the Tripod with a Point Laser Defense system. 
         PDL intercepts incoming missiles and projectiles.
+    .tooltipextras-strengths = Strengths: Shoots down incoming missiles and artillery shells.
+    .tooltipextras-weaknesses = Weaknesses: Does nothing against beams or infantry weapons.
+    .tooltipextras-attributes = Attributes: Point-defense laser node on each leg.
 commander-tree-promotion-tripod-reflector =
     .description =
         Upgrades the Tripod with Reflector armor. 
         Reflector armor is very efficient vs energy weapons.
+    .tooltipextras-strengths = Strengths: Reflector armor keeps Tesla and lasers at bay.
+    .tooltipextras-weaknesses = Weaknesses: Heavy cannons and rockets still penetrate.
+    .tooltipextras-attributes = Attributes: Energy-reflecting hull upgrade.
 commander-tree-promotion-reaper-acid =
     .description =
         Upgrades the Reaper with Acid Spray. 
         Acid Spray is efficient vs Reflector Armor.
+    .tooltipextras-strengths = Strengths: Acid spray devastates vehicles and reflector plating.
+    .tooltipextras-weaknesses = Weaknesses: Requires closing the distance to fire.
+    .tooltipextras-attributes = Attributes: Secondary acid hose mounted on the Reaper.
 commander-tree-promotion-reaper-range =
     .description = Upgrades the Reaper with higher range.
+    .tooltipextras-strengths = Strengths: Longer firing range for safer sieges.
+    .tooltipextras-weaknesses = Weaknesses: No additional durability or speed.
+    .tooltipextras-attributes = Attributes: Extended weapon emitter assembly.
 commander-tree-promotion-reaper-pdl =
     .description =
         Upgrades the Reaper Tripod with a Point Laser Defense system. 
         PDL intercepts incoming missiles and projectiles.
+    .tooltipextras-strengths = Strengths: Intercepts missiles before they hit the Reaper.
+    .tooltipextras-weaknesses = Weaknesses: Ineffective against beams or infantry weapons.
+    .tooltipextras-attributes = Attributes: Point-defense laser hard-kill system.
 commander-tree-promotion-reaper-reflector =
     .description =
         Upgrades the Reaper Tripod with Reflector armor. 
         Reflector armor is very efficient vs energy weapons.
+    .tooltipextras-strengths = Strengths: Reflector armor shrugs off most energy fire.
+    .tooltipextras-weaknesses = Weaknesses: Kinetic shells still land full damage.
+    .tooltipextras-attributes = Attributes: Reflective plating on the chassis.
 commander-tree-promotion-stormcrawler-pdl =
     .description =
         Upgrades the Stormcrawler with a Point Laser Defense system. 
         PDL intercepts incoming missiles and projectiles.
+    .tooltipextras-strengths = Strengths: Shoots down anti-air missiles targeting the Crawler.
+    .tooltipextras-weaknesses = Weaknesses: Cannot protect against beams or flak.
+    .tooltipextras-attributes = Attributes: Point-defense laser turret.
 commander-tree-promotion-stormcrawler-reflector =
     .description =
         Upgrades the Stormcrawler with Reflector armor. 
         Reflector armor is very efficient vs energy weapons.
+    .tooltipextras-strengths = Strengths: Reflector armor reduces damage from lasers.
+    .tooltipextras-weaknesses = Weaknesses: Flak and bullets still chew through.
+    .tooltipextras-attributes = Attributes: Energy mirror plating applied to the hull.
 commander-tree-promotion-stormhunter =
     .description =
         Removes the anti-ground weaponry from the Stormrider. 
         The Stormhunter is cheaper, smaller, faster and specialized to hunt air units.
+    .tooltipextras-strengths = Strengths: Optimized to hunt enemy aircraft exclusively.
+    .tooltipextras-weaknesses = Weaknesses: Loses all anti-ground capability.
+    .tooltipextras-attributes = Attributes: Cheaper air-superiority Stormrider refit.
 commander-tree-promotion-stormbomber =
     .description =
         Upgrades the Stormrider with plasmabombs 
         Strong vs vehicles but cannot target air anymore.
+    .tooltipextras-strengths = Strengths: Plasmabombs wreck vehicles and buildings.
+    .tooltipextras-weaknesses = Weaknesses: Cannot target aircraft anymore.
+    .tooltipextras-attributes = Attributes: Stormrider converted into an anti-ground bomber.
 commander-tree-promotion-stormbomber-torp =
     .description = Upgrades the Stormrider with anti-water plasmabombs
-    .tooltipextras-strengths = Strengths: • Strong vs Ships, Submarines
-    .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
-    .tooltipextras-attributes = Attributes: • Detects submerged vessles.
+    .tooltipextras-strengths = Strengths: Torpedo bombs obliterate naval targets.
+    .tooltipextras-weaknesses = Weaknesses: Still helpless against anti-air nets.
+    .tooltipextras-attributes = Attributes: Detects and hits submerged vessels.
 commander-tree-promotion-devastator-beam =
     .description =
         Upgrades the Devastator with an energy beam. 
         The energy beam is strong but needs very long to recharge.
+    .tooltipextras-strengths = Strengths: Energy beam deals massive burst damage.
+    .tooltipextras-weaknesses = Weaknesses: Very long recharge between shots.
+    .tooltipextras-attributes = Attributes: Focuses the Devastator into a single beam weapon.
 commander-tree-promotion-devastator-shard =
     .description =
         Upgrades the Devastator with armor piercing Shards. 
         Very efficient vs heavy armor.
+    .tooltipextras-strengths = Strengths: Armor-piercing shards rip through heavy armor.
+    .tooltipextras-weaknesses = Weaknesses: Smaller blast radius versus infantry.
+    .tooltipextras-attributes = Attributes: Shard-based payload replaces the beam.
 commander-tree-promotion-carrier-warship =
     .description = Re-equips the Carrier as Warship with strong armor piercing lasers.
+    .tooltipextras-strengths = Strengths: Warship lasers chew through armored targets.
+    .tooltipextras-weaknesses = Weaknesses: Loses the default invader versatility.
+    .tooltipextras-attributes = Attributes: Carrier invaders refitted as beam weapons.
 commander-tree-promotion-carrier-suicide =
     .description = Re-equips the Carrier Invaders with acid suicide modules.
+    .tooltipextras-strengths = Strengths: Invaders become devastating suicide drones.
+    .tooltipextras-weaknesses = Weaknesses: Single-use attacks reduce sustained firepower.
+    .tooltipextras-attributes = Attributes: Each invader explodes on impact.
 commander-tree-promotion-carrier-support =
     .description = Re-equips the Carrier Invaders with a repair beam to repair allied units.
+    .tooltipextras-strengths = Strengths: Support beams heal allied units mid-battle.
+    .tooltipextras-weaknesses = Weaknesses: Minimal direct damage output.
+    .tooltipextras-attributes = Attributes: Invaders switch to repair mode.
 commander-tree-promotion-hexapod =
     .description = The Hexapod Eradicator is a heavy walker with long range artillery disks. Perfect for heavy sieges.
+    .tooltipextras-strengths = Strengths: Siege disks flatten entrenched positions.
+    .tooltipextras-weaknesses = Weaknesses: Huge profile makes it an easy target.
+    .tooltipextras-attributes = Attributes: Ultra-heavy walker with artillery range.
 commander-tree-promotion-mothership =
     .description = The Mothership is an insanely heavy armored aircraft, with high visual range and the ability to open wormholes.
+    .tooltipextras-strengths = Strengths: Massive ship controls the battlefield and wormholes.
+    .tooltipextras-weaknesses = Weaknesses: Extremely slow and expensive to replace.
+    .tooltipextras-attributes = Attributes: Can open wormholes for rapid redeployment.
 commander-tree-promotion-bastion =
     .description = The Bastion is a heavy aircraft perfect for defending huge assaults or bruising weak defenses.
+    .tooltipextras-strengths = Strengths: Flying fortress ideal for holding defensive lines.
+    .tooltipextras-weaknesses = Weaknesses: Needs escorts to survive concentrated AA.
+    .tooltipextras-attributes = Attributes: Heavy aircraft with wide suppression field.
