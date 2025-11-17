@@ -9,7 +9,7 @@ promotion.Speakertower.PDL:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 1
-		Prerequisites: has_points, tier3, ~anypower, ~china
+		Prerequisites: has_points, tier3, anypower, ~china
 		Description: commander-tree-promotion-speakertower-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-speakertower-pdl.tooltipextras-strengths
@@ -27,13 +27,15 @@ promotion.Battlemaster.Autoloader:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 501
-		Prerequisites: has_points, ~vehicles.china, ~!chinainf, ~!promotion.battlemaster.nuclear_shells, ~!promotion.battlemaster.mass_production
+		Prerequisites: has_points, vehicles, ~china, ~!chinainf, !promotion.battlemaster.nuclear_shells, !promotion.battlemaster.mass_production
 		Description: commander-tree-promotion-battlemaster-autoloader.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-battlemaster-autoloader.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-battlemaster-autoloader.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.battlemaster
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.battlemaster
+	PromotionPalette:
+		Group: ChinaBattlemaster
 
 promotion.Battlemaster.Nuclear_Shells:
 	Inherits: ^promotion_item
@@ -48,13 +50,15 @@ promotion.Battlemaster.Nuclear_Shells:
 		IconPalette: chrometd
 		BuildPaletteOrder: 501
 
-		Prerequisites: has_points, ~vehicles.china, ~chinaatom, ~!promotion.battlemaster.autoloader, ~!promotion.battlemaster.mass_production
+		Prerequisites: has_points, vehicles, ~china, ~chinaatom, !promotion.battlemaster.autoloader, !promotion.battlemaster.mass_production
 		Description: commander-tree-promotion-battlemaster-nuclear-shells.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-battlemaster-nuclear-shells.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-battlemaster-nuclear-shells.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.battlemaster
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.battlemaster
+	PromotionPalette:
+		Group: ChinaBattlemaster
 
 promotion.Battlemaster.Mass_Production:
 	Inherits: ^promotion_item
@@ -69,19 +73,15 @@ promotion.Battlemaster.Mass_Production:
 		IconPalette: chrometd
 		BuildPaletteOrder: 501
 
-		Prerequisites: has_points, ~vehicles.china, ~chinatnk, ~!promotion.battlemaster.autoloader, ~!promotion.battlemaster.nuclear_shells
+		Prerequisites: has_points, vehicles, ~china, ~chinatnk, !promotion.battlemaster.autoloader, !promotion.battlemaster.nuclear_shells
 		Description: commander-tree-promotion-battlemaster-mass-production.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-battlemaster-mass-production.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-battlemaster-mass-production.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.battlemaster
-
-hack.cameo_filler.battlemaster.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 502
-		Prerequisites: has_points, ~vehicles.china, ~!chinainf, ~!filler.battlemaster, disabled
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.battlemaster
+	PromotionPalette:
+		Group: ChinaBattlemaster
 
 promotion.Battlemaster.PDL:
 	Inherits: ^promotion_item
@@ -96,14 +96,14 @@ promotion.Battlemaster.PDL:
 		IconPalette: chrometd
 		BuildPaletteOrder: 502
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~!chinainf, ~filler.battlemaster, ~!promotion.battlemaster.reflector
+		Prerequisites: has_points, tier3, vehicles, ~china, ~!chinainf, upg.battlemaster, !promotion.battlemaster.reflector
 		Description: commander-tree-promotion-battlemaster-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-battlemaster-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-battlemaster-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-battlemaster-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.battlemaster2
+	PromotionPalette:
+		Group: ChinaBattlemaster
 
 promotion.Battlemaster.Reflector:
 	Inherits: ^promotion_item
@@ -118,19 +118,13 @@ promotion.Battlemaster.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 502
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~!chinainf, ~filler.battlemaster, ~!promotion.battlemaster.pdl
+		Prerequisites: has_points, tier3, vehicles, ~china, ~!chinainf, upg.battlemaster, !promotion.battlemaster.pdl
 		Description: commander-tree-promotion-battlemaster-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-battlemaster-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-battlemaster-reflector.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.battlemaster2
-
-hack.cameo_filler.battlemaster.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 503
-		Prerequisites: has_points, ~vehicles.china, ~!chinainf, ~filler.battlemaster2, disabled
+	PromotionPalette:
+		Group: ChinaBattlemaster
 
 promotion.Dragon_Tank.PDL:
 	Inherits: ^promotion_item
@@ -145,14 +139,14 @@ promotion.Dragon_Tank.PDL:
 		IconPalette: chrometd
 		BuildPaletteOrder: 510
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~!promotion.dragon_tank.reflector
+		Prerequisites: has_points, tier3, vehicles, ~china, !promotion.dragon_tank.reflector
 		Description: commander-tree-promotion-dragon-tank-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-dragon-tank-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-dragon-tank-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-dragon-tank-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.dragon_tank
+	PromotionPalette:
+		Group: ChinaDragon_Tank
 
 promotion.Dragon_Tank.Reflector:
 	Inherits: ^promotion_item
@@ -167,25 +161,13 @@ promotion.Dragon_Tank.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 510
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~!promotion.dragon_tank.pdl
+		Prerequisites: has_points, tier3, vehicles, ~china, !promotion.dragon_tank.pdl
 		Description: commander-tree-promotion-dragon-tank-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-dragon-tank-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-dragon-tank-reflector.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.dragon_tank
-
-hack.cameo_filler.dragon_tank.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 511
-		Prerequisites: has_points, ~vehicles.china, disabled
-
-hack.cameo_filler.dragon_tank.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 511
-		Prerequisites: has_points, ~vehicles.china, ~filler.dragon_tank, disabled
+	PromotionPalette:
+		Group: ChinaDragon_Tank
 
 
 promotion.Overlord.Gatling:
@@ -201,13 +183,15 @@ promotion.Overlord.Gatling:
 		IconPalette: chrometd
 		BuildPaletteOrder: 520
 
-		Prerequisites: has_points, ~vehicles.china, ~chinaatom, ~!promotion.overlord.bunker, ~!promotion.overlord.propaganda, ~!promotion.overlord.nuclear_shells, ~!promotion.overlord.plasma
+		Prerequisites: has_points, vehicles, ~china, ~chinaatom, !promotion.overlord.bunker, !promotion.overlord.propaganda, !promotion.overlord.nuclear_shells, !promotion.overlord.plasma
 		Description: commander-tree-promotion-overlord-gatling.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-overlord-gatling.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-overlord-gatling.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.overlord
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.overlord
+	PromotionPalette:
+		Group: ChinaOverlord
 
 promotion.Overlord.Bunker:
 	Inherits: ^promotion_item
@@ -222,13 +206,15 @@ promotion.Overlord.Bunker:
 		IconPalette: chrometd
 		BuildPaletteOrder: 520
 
-		Prerequisites: has_points, ~vehicles.china, ~chinatnk, ~!promotion.overlord.gatling, ~!promotion.overlord.propaganda, ~!promotion.overlord.nuclear_shells, ~!promotion.overlord.plasma
+		Prerequisites: has_points, vehicles, ~china, ~chinatnk, !promotion.overlord.gatling, !promotion.overlord.propaganda, !promotion.overlord.nuclear_shells, !promotion.overlord.plasma
 		Description: commander-tree-promotion-overlord-bunker.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-overlord-bunker.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-overlord-bunker.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.overlord
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.overlord
+	PromotionPalette:
+		Group: ChinaOverlord
 
 promotion.Overlord.Propaganda:
 	Inherits: ^promotion_item
@@ -243,13 +229,15 @@ promotion.Overlord.Propaganda:
 		IconPalette: chrometd
 		BuildPaletteOrder: 520
 
-		Prerequisites: has_points, ~vehicles.china, ~chinatnk, ~!promotion.overlord.gatling, ~!promotion.overlord.bunker, ~!promotion.overlord.nuclear_shells, ~!promotion.overlord.plasma
+		Prerequisites: has_points, vehicles, ~china, ~chinatnk, !promotion.overlord.gatling, !promotion.overlord.bunker, !promotion.overlord.nuclear_shells, !promotion.overlord.plasma
 		Description: commander-tree-promotion-overlord-propaganda.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-overlord-propaganda.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-overlord-propaganda.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.overlord
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.overlord
+	PromotionPalette:
+		Group: ChinaOverlord
 
 promotion.Overlord.Nuclear_Shells:
 	Inherits: ^promotion_item
@@ -264,13 +252,15 @@ promotion.Overlord.Nuclear_Shells:
 		IconPalette: chrometd
 		BuildPaletteOrder: 520
 
-		Prerequisites: has_points, ~vehicles.china, ~chinaatom, ~!promotion.overlord.gatling, ~!promotion.overlord.bunker, ~!promotion.overlord.propaganda, ~!promotion.overlord.plasma
+		Prerequisites: has_points, vehicles, ~china, ~chinaatom, !promotion.overlord.gatling, !promotion.overlord.bunker, !promotion.overlord.propaganda, !promotion.overlord.plasma
 		Description: commander-tree-promotion-overlord-nuclear-shells.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-overlord-nuclear-shells.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-overlord-nuclear-shells.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.overlord
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.overlord
+	PromotionPalette:
+		Group: ChinaOverlord
 
 promotion.Overlord.Plasma:
 	Inherits: ^promotion_item
@@ -285,13 +275,15 @@ promotion.Overlord.Plasma:
 		IconPalette: chrometd
 		BuildPaletteOrder: 520
 
-		Prerequisites: has_points, ~vehicles.china, ~!chinainf, ~!promotion.overlord.gatling, ~!promotion.overlord.bunker, ~!promotion.overlord.propaganda, ~!promotion.overlord.nuclear_shells
+		Prerequisites: has_points, vehicles, ~china, ~!chinainf, !promotion.overlord.gatling, !promotion.overlord.bunker, !promotion.overlord.propaganda, !promotion.overlord.nuclear_shells
 		Description: commander-tree-promotion-overlord-plasma.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-overlord-plasma.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-overlord-plasma.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.overlord
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.overlord
+	PromotionPalette:
+		Group: ChinaOverlord
 
 promotion.Overlord.PDL:
 	Inherits: ^promotion_item
@@ -306,13 +298,13 @@ promotion.Overlord.PDL:
 		IconPalette: chrometd
 		BuildPaletteOrder: 521
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~filler.overlord, ~!promotion.overlord.reflector
+		Prerequisites: has_points, tier3, vehicles, ~china, upg.overlord, !promotion.overlord.reflector
 		Description: commander-tree-promotion-overlord-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-overlord-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-overlord-pdl.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.overlord2
+	PromotionPalette:
+		Group: ChinaOverlord
 
 promotion.Overlord.Reflector:
 	Inherits: ^promotion_item
@@ -327,19 +319,13 @@ promotion.Overlord.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 521
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~filler.overlord, ~!promotion.overlord.pdl
+		Prerequisites: has_points, tier3, vehicles, ~china, upg.overlord, !promotion.overlord.pdl
 		Description: commander-tree-promotion-overlord-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-overlord-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-overlord-reflector.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.overlord2
-
-hack.cameo_filler.overlord.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 522
-		Prerequisites: has_points, ~vehicles.china, ~!chinainf, ~filler.overlord2, disabled
+	PromotionPalette:
+		Group: ChinaOverlord
 
 
 promotion.Bixi_Dragon:
@@ -352,7 +338,7 @@ promotion.Bixi_Dragon:
 
 		BuildPaletteOrder: 530
 
-		Prerequisites: has_points, tier3, ~vehicles.chinainf
+		Prerequisites: has_points, tier3, vehicles, ~chinainf
 		Description: commander-tree-promotion-bixi-dragon.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-bixi-dragon.tooltipextras-strengths
@@ -369,23 +355,13 @@ promotion.Nuke_Cannon:
 		IconPalette: chrometd
 		BuildPaletteOrder: 530
 
-		Prerequisites: has_points, ~vehicles.chinaatom
+		Prerequisites: has_points, vehicles, ~chinaatom
 		Description: commander-tree-promotion-nuke-cannon.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-nuke-cannon.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-nuke-cannon.tooltipextras-weaknesses
-
-hack.cameo_filler.Nuke_Cannon.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 531
-		Prerequisites: has_points, ~vehicles.china, ~!chinatnk, ~!promotion.nuke_cannon, disabled
-
-hack.cameo_filler.Nuke_Cannon.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 531
-		Prerequisites: has_points, ~vehicles.china, ~!chinatnk, ~!promotion.nuke_cannon, disabled
+	PromotionPalette:
+		Group: ChinaNuke_Cannon
 
 promotion.Nuke_Cannon.Range:
 	Inherits: ^promotion_item
@@ -400,13 +376,13 @@ promotion.Nuke_Cannon.Range:
 		IconPalette: chrometd
 		BuildPaletteOrder: 532
 
-		Prerequisites: has_points, ~vehicles.china, ~promotion.nuke_cannon, ~!promotion.nuke_cannon.neutron
+		Prerequisites: has_points, vehicles, ~china, ~promotion.nuke_cannon, !promotion.nuke_cannon.neutron
 		Description: commander-tree-promotion-nuke-cannon-range.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-nuke-cannon-range.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-nuke-cannon-range.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.nuke_cannon
+	PromotionPalette:
+		Group: ChinaNuke_Cannon
 
 promotion.Nuke_Cannon.Neutron:
 	Inherits: ^promotion_item
@@ -421,25 +397,13 @@ promotion.Nuke_Cannon.Neutron:
 		IconPalette: chrometd
 		BuildPaletteOrder: 532
 
-		Prerequisites: has_points, ~vehicles.china, ~chinaatom, ~promotion.nuke_cannon, ~!promotion.nuke_cannon.range
+		Prerequisites: has_points, vehicles, ~china, ~chinaatom, ~promotion.nuke_cannon, !promotion.nuke_cannon.range
 		Description: commander-tree-promotion-nuke-cannon-neutron.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-nuke-cannon-neutron.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-nuke-cannon-neutron.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.nuke_cannon
-
-hack.cameo_filler.Nuke_Cannon.3:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 533
-		Prerequisites: has_points, ~vehicles.china, ~!chinatnk, ~filler.nuke_cannon, disabled
-
-hack.cameo_filler.Nuke_Cannon.4:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 533
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~promotion.nuke_cannon, disabled
+	PromotionPalette:
+		Group: ChinaNuke_Cannon
 
 promotion.Crawler.Assault:
 	Inherits: ^promotion_item
@@ -452,13 +416,15 @@ promotion.Crawler.Assault:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 535
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~!promotion.crawler.hunter
+		Prerequisites: has_points, vehicles, ~china, ~chinainf, !promotion.crawler.hunter
 		Description: commander-tree-promotion-crawler-assault.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-crawler-assault.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-crawler-assault.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.crawler
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.crawler
+	PromotionPalette:
+		Group: ChinaCrawler
 
 promotion.Crawler.Hunter:
 	Inherits: ^promotion_item
@@ -471,19 +437,15 @@ promotion.Crawler.Hunter:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 535
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~!promotion.crawler.assault
+		Prerequisites: has_points, vehicles, ~china, ~chinainf, !promotion.crawler.assault
 		Description: commander-tree-promotion-crawler-hunter.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-crawler-hunter.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-crawler-hunter.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.crawler
-
-hack.cameo_filler.Crawler.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 535
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~!filler.crawler, disabled
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.crawler
+	PromotionPalette:
+		Group: ChinaCrawler
 
 promotion.Crawler.PDL:
 	Inherits: ^promotion_item
@@ -498,13 +460,13 @@ promotion.Crawler.PDL:
 		IconPalette: chrometd
 		BuildPaletteOrder: 536
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~chinainf, ~filler.crawler, ~!promotion.crawler.reflector
+		Prerequisites: has_points, tier3, vehicles, ~china, ~chinainf, upg.crawler, !promotion.crawler.reflector
 		Description: commander-tree-promotion-crawler-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-crawler-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-crawler-pdl.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.crawler2
+	PromotionPalette:
+		Group: ChinaCrawler
 
 promotion.Crawler.Reflector:
 	Inherits: ^promotion_item
@@ -519,19 +481,13 @@ promotion.Crawler.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 536
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~chinainf, ~filler.crawler, ~!promotion.crawler.pdl
+		Prerequisites: has_points, tier3, vehicles, ~china, ~chinainf, upg.crawler, !promotion.crawler.pdl
 		Description: commander-tree-promotion-crawler-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-crawler-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-crawler-reflector.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.crawler2
-
-hack.cameo_filler.Crawler.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 536
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~filler.crawler2, disabled
+	PromotionPalette:
+		Group: ChinaCrawler
 
 
 promotion.Outpost.Propaganda:
@@ -547,13 +503,15 @@ promotion.Outpost.Propaganda:
 		IconPalette: chrometd
 		BuildPaletteOrder: 540
 
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~!promotion.outpost.bunker
+		Prerequisites: has_points, vehicles, ~china, ~chinainf, !promotion.outpost.bunker
 		Description: commander-tree-promotion-outpost-propaganda.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-outpost-propaganda.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-outpost-propaganda.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.outpost
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.outpost
+	PromotionPalette:
+		Group: ChinaOutpost
 
 promotion.Outpost.Bunker:
 	Inherits: ^promotion_item
@@ -568,19 +526,15 @@ promotion.Outpost.Bunker:
 		IconPalette: chrometd
 		BuildPaletteOrder: 540
 
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~!promotion.outpost.propaganda
+		Prerequisites: has_points, vehicles, ~china, ~chinainf, !promotion.outpost.propaganda
 		Description: commander-tree-promotion-outpost-bunker.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-outpost-bunker.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-outpost-bunker.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.outpost
-
-hack.cameo_filler.Outpost.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 541
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~!filler.outpost, disabled
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.outpost
+	PromotionPalette:
+		Group: ChinaOutpost
 
 promotion.Outpost.PDL:
 	Inherits: ^promotion_item
@@ -595,13 +549,13 @@ promotion.Outpost.PDL:
 		IconPalette: chrometd
 		BuildPaletteOrder: 541
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~chinainf, ~filler.outpost, ~!promotion.outpost.reflector
+		Prerequisites: has_points, tier3, vehicles, ~china, ~chinainf, upg.outpost, !promotion.outpost.reflector
 		Description: commander-tree-promotion-outpost-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-outpost-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-outpost-pdl.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.outpost2
+	PromotionPalette:
+		Group: ChinaOutpost
 
 promotion.Outpost.Reflector:
 	Inherits: ^promotion_item
@@ -616,19 +570,13 @@ promotion.Outpost.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 541
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~chinainf, ~filler.outpost, ~!promotion.outpost.pdl
+		Prerequisites: has_points, tier3, vehicles, ~china, ~chinainf, upg.outpost, !promotion.outpost.pdl
 		Description: commander-tree-promotion-outpost-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-outpost-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-outpost-reflector.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.outpost2
-
-hack.cameo_filler.Outpost.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 543
-		Prerequisites: has_points, ~vehicles.china, ~chinainf, ~filler.outpost2, disabled
+	PromotionPalette:
+		Group: ChinaOutpost
 
 
 promotion.Gatling.PDL:
@@ -644,13 +592,13 @@ promotion.Gatling.PDL:
 		IconPalette: chrometd
 		BuildPaletteOrder: 541
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~chinatnk, ~!promotion.gatling.reflector
+		Prerequisites: has_points, tier3, vehicles, ~china, ~chinatnk, !promotion.gatling.reflector
 		Description: commander-tree-promotion-gatling-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-gatling-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-gatling-pdl.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.gatling2
+	PromotionPalette:
+		Group: ChinaGatling
 
 promotion.Gatling.Reflector:
 	Inherits: ^promotion_item
@@ -665,25 +613,13 @@ promotion.Gatling.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 541
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~chinatnk, ~!promotion.gatling.pdl
+		Prerequisites: has_points, tier3, vehicles, ~china, ~chinatnk, !promotion.gatling.pdl
 		Description: commander-tree-promotion-gatling-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-gatling-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-gatling-reflector.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.gatling2
-
-hack.cameo_filler.gatling.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 543
-		Prerequisites: has_points, ~vehicles.china, ~chinatnk, disabled
-
-hack.cameo_filler.gatling.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 543
-		Prerequisites: has_points, ~vehicles.china, ~chinatnk, ~filler.gatling2, disabled
+	PromotionPalette:
+		Group: ChinaGatling
 
 
 promotion.ECM.Pulse:
@@ -699,13 +635,13 @@ promotion.ECM.Pulse:
 		IconPalette: chrometd
 		BuildPaletteOrder: 550
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~!chinatnk, ~!promotion.ecm.chain, ~!promotion.ecm.focus
+		Prerequisites: has_points, tier3, vehicles, ~china, ~!chinatnk, !promotion.ecm.chain, !promotion.ecm.focus
 		Description: commander-tree-promotion-ecm-pulse.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-ecm-pulse.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-ecm-pulse.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.ecm
+	PromotionPalette:
+		Group: ChinaECM
 
 promotion.ECM.Focus:
 	Inherits: ^promotion_item
@@ -720,13 +656,13 @@ promotion.ECM.Focus:
 		IconPalette: chrometd
 		BuildPaletteOrder: 550
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~!chinainf, ~!promotion.ecm.chain, ~!promotion.ecm.pulse
+		Prerequisites: has_points, tier3, vehicles, ~china, ~!chinainf, !promotion.ecm.chain, !promotion.ecm.pulse
 		Description: commander-tree-promotion-ecm-focus.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-ecm-focus.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-ecm-focus.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.ecm
+	PromotionPalette:
+		Group: ChinaECM
 
 promotion.ECM.Chain:
 	Inherits: ^promotion_item
@@ -741,25 +677,13 @@ promotion.ECM.Chain:
 		IconPalette: chrometd
 		BuildPaletteOrder: 550
 
-		Prerequisites: has_points, tier3, ~vehicles.china, ~!chinaatom, ~!promotion.ecm.pulse, ~!promotion.ecm.focus
+		Prerequisites: has_points, tier3, vehicles, ~china, ~!chinaatom, !promotion.ecm.pulse, !promotion.ecm.focus
 		Description: commander-tree-promotion-ecm-chain.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-ecm-chain.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-ecm-chain.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.ecm
-
-hack.cameo_filler.ECM.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 551
-		Prerequisites: has_points, ~vehicles.china, disabled
-
-hack.cameo_filler.ECM.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 551
-		Prerequisites: has_points, ~vehicles.china, ~filler.ecm, disabled
+	PromotionPalette:
+		Group: ChinaECM
 
 
 promotion.Helix.gatling:
@@ -775,13 +699,13 @@ promotion.Helix.gatling:
 		IconPalette: chrometd
 		BuildPaletteOrder: 560
 
-		Prerequisites: has_points, radar, ~aircraft.china, ~!chinainf, ~!promotion.helix.bunker, ~!promotion.helix.nuke, ~!promotion.helix.napalm, ~!promotion.helix.torpedo
+		Prerequisites: has_points, radar, aircraft, ~china, ~!chinainf, !promotion.helix.bunker, !promotion.helix.nuke, !promotion.helix.napalm, !promotion.helix.torpedo
 		Description: commander-tree-promotion-helix-gatling.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-helix-gatling.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-helix-gatling.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.helix
+	PromotionPalette:
+		Group: ChinaHelix
 
 promotion.Helix.HunterBunker:
 	Inherits: ^promotion_item
@@ -796,13 +720,13 @@ promotion.Helix.HunterBunker:
 		IconPalette: chrometd
 		BuildPaletteOrder: 560
 
-		Prerequisites: has_points, radar, ~aircraft.china, ~chinainf, promotion.advanced_infantry_training, ~!promotion.helix.mortarbunker, ~!promotion.helix.torpedo
+		Prerequisites: has_points, radar, aircraft, ~china, ~chinainf, promotion.advanced_infantry_training, !promotion.helix.mortarbunker, !promotion.helix.torpedo
 		Description: commander-tree-promotion-helix-hunterbunker.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-helix-hunterbunker.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-helix-hunterbunker.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.helix
+	PromotionPalette:
+		Group: ChinaHelix
 
 promotion.Helix.MortarBunker:
 	Inherits: ^promotion_item
@@ -817,13 +741,13 @@ promotion.Helix.MortarBunker:
 		IconPalette: chrometd
 		BuildPaletteOrder: 560
 
-		Prerequisites: has_points, radar, ~aircraft.china, ~chinainf, promotion.advanced_infantry_training, ~!promotion.helix.hunterbunker, ~!promotion.helix.torpedo
+		Prerequisites: has_points, radar, aircraft, ~china, ~chinainf, promotion.advanced_infantry_training, !promotion.helix.hunterbunker, !promotion.helix.torpedo
 		Description: commander-tree-promotion-helix-mortarbunker.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-helix-mortarbunker.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-helix-mortarbunker.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.helix
+	PromotionPalette:
+		Group: ChinaHelix
 
 promotion.Helix.Napalm:
 	Inherits: ^promotion_item
@@ -838,13 +762,13 @@ promotion.Helix.Napalm:
 		IconPalette: chrometd
 		BuildPaletteOrder: 560
 
-		Prerequisites: has_points, radar, ~aircraft.chinatnk, ~!promotion.helix.gatling, ~!promotion.helix.bunker, ~!promotion.helix.nuke, ~!promotion.helix.torpedo
+		Prerequisites: has_points, radar, aircraft, ~chinatnk, !promotion.helix.gatling, !promotion.helix.bunker, !promotion.helix.nuke, !promotion.helix.torpedo
 		Description: commander-tree-promotion-helix-napalm.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-helix-napalm.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-helix-napalm.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.helix
+	PromotionPalette:
+		Group: ChinaHelix
 
 promotion.Helix.Nuke:
 	Inherits: ^promotion_item
@@ -859,13 +783,13 @@ promotion.Helix.Nuke:
 		IconPalette: chrometd
 		BuildPaletteOrder: 560
 
-		Prerequisites: has_points, radar, ~aircraft.china, ~chinaatom, ~!promotion.helix.gatling, ~!promotion.helix.bunker, ~!promotion.helix.napalm, ~!promotion.helix.torpedo
+		Prerequisites: has_points, radar, aircraft, ~china, ~chinaatom, !promotion.helix.gatling, !promotion.helix.bunker, !promotion.helix.napalm, !promotion.helix.torpedo
 		Description: commander-tree-promotion-helix-nuke.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-helix-nuke.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-helix-nuke.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.helix
+	PromotionPalette:
+		Group: ChinaHelix
 
 promotion.Helix.Torpedo:
 	Inherits: ^promotion_item
@@ -880,25 +804,13 @@ promotion.Helix.Torpedo:
 		IconPalette: chrometd
 		BuildPaletteOrder: 560
 
-		Prerequisites: has_points, radar, ~aircraft.china, ~!promotion.helix.gatling, ~!promotion.helix.bunker, ~!promotion.helix.nuke, ~!promotion.helix.napalm
+		Prerequisites: has_points, radar, aircraft, ~china, !promotion.helix.gatling, !promotion.helix.bunker, !promotion.helix.nuke, !promotion.helix.napalm
 		Description: commander-tree-promotion-helix-torpedo.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-helix-torpedo.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-helix-torpedo.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.helix
-
-hack.cameo_filler.Helix.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 561
-		Prerequisites: has_points, ~aircraft.china, ~filler.helix, disabled
-
-hack.cameo_filler.Helix.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 561
-		Prerequisites: has_points, ~aircraft.china, ~filler.helix, disabled
+	PromotionPalette:
+		Group: ChinaHelix
 
 
 promotion.ChinaMig.AA:
@@ -914,13 +826,13 @@ promotion.ChinaMig.AA:
 		IconPalette: chrometd
 		BuildPaletteOrder: 570
 
-		Prerequisites: has_points, radar, ~aircraft.china, ~!promotion.chinamig.nuke, ~!promotion.chinamig.napalm
+		Prerequisites: has_points, radar, aircraft, ~china, !promotion.chinamig.nuke, !promotion.chinamig.napalm
 		Description: commander-tree-promotion-chinamig-aa.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-chinamig-aa.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-chinamig-aa.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.chinamig
+	PromotionPalette:
+		Group: ChinaChinaMig
 
 promotion.ChinaMig.Nuke:
 	Inherits: ^promotion_item
@@ -935,13 +847,13 @@ promotion.ChinaMig.Nuke:
 		IconPalette: chrometd
 		BuildPaletteOrder: 570
 
-		Prerequisites: has_points, radar, ~aircraft.china, ~chinaatom, ~!promotion.chinamig.aa, ~!promotion.chinamig.napalm
+		Prerequisites: has_points, radar, aircraft, ~china, ~chinaatom, !promotion.chinamig.aa, !promotion.chinamig.napalm
 		Description: commander-tree-promotion-chinamig-nuke.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-chinamig-nuke.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-chinamig-nuke.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.chinamig
+	PromotionPalette:
+		Group: ChinaChinaMig
 
 promotion.ChinaMig.Napalm:
 	Inherits: ^promotion_item
@@ -956,27 +868,15 @@ promotion.ChinaMig.Napalm:
 		IconPalette: chrometd
 		BuildPaletteOrder: 570
 
-		Prerequisites: has_points, radar, ~aircraft.china, ~!chinaatom, ~!promotion.chinamig.aa, ~!promotion.chinamig.nuke
+		Prerequisites: has_points, radar, aircraft, ~china, ~!chinaatom, !promotion.chinamig.aa, !promotion.chinamig.nuke
 		Description: commander-tree-promotion-chinamig-napalm.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-chinamig-napalm.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-chinamig-napalm.tooltipextras-weaknesses
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.chinamig
-
-hack.cameo_filler.chmig.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 571
-		Prerequisites: has_points, ~aircraft.china, disabled
-
-hack.cameo_filler.chmig.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 571
-		Prerequisites: has_points, ~aircraft.china, ~filler.chinamig, disabled
 
 # general upgrades
+	PromotionPalette:
+		Group: ChinaChinaMig
 
 promotion.Black_Napalm:
 	Inherits: ^promotion_item
@@ -1069,15 +969,3 @@ promotion.Isotope_Stability:
 		Prerequisites: has_points, radar, ~chinaatom
 		Description: commander-tree-promotion-isotope-stability.description
 		Attributes: commander-tree-promotion-isotope-stability.tooltipextras-attributes
-
-hack.cameo_filler.china.1:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 590
-		Prerequisites: has_points, radar, ~china
-
-hack.cameo_filler.china.2:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 590
-		Prerequisites: has_points, radar, ~china

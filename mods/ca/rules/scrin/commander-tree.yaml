@@ -1,4 +1,64 @@
-#Scrin
+promotion.Armor_Eating_Acid:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Armor Eating Acid
+	Buildable:
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, ~scrin
+		Description: commander-tree-promotion-armor-eating-acid.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-armor-eating-acid.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-armor-eating-acid.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-armor-eating-acid.tooltipextras-attributes
+	PromotionPalette:
+		Column: 0
+
+promotion.Shield_Generators:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Improved Shield Generators
+	Buildable:
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, ~scrin, ~!harvester
+		Description: commander-tree-promotion-shield-generators.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-shield-generators.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-shield-generators.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-shield-generators.tooltipextras-attributes
+	PromotionPalette:
+		Column: 7
+
+promotion.Harden_Skin:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Infantry Skin Hardening
+	Buildable:
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, ~scrin, ~!traveler
+		Description: commander-tree-promotion-harden-skin.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-harden-skin.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-harden-skin.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-harden-skin.tooltipextras-attributes
+	PromotionPalette:
+		Column: 7
+
+promotion.Bio-Mechanical_Thrusters:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Bio-Mechanical Thrusters
+	Buildable:
+		BuildPaletteOrder: 5
+		Prerequisites: has_points, ~scrin, ~!reaper
+		Description: commander-tree-promotion-bio-mechanical-thrusters.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-bio-mechanical-thrusters.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-bio-mechanical-thrusters.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-bio-mechanical-thrusters.tooltipextras-attributes
+	PromotionPalette:
+		Column: 7
+
+## Vehicles ##
 
 promotion.Gunwalker.Sensor:
 	Inherits: ^promotion_item
@@ -9,25 +69,15 @@ promotion.Gunwalker.Sensor:
 	Tooltip:
 		Name: Gunwalker Sensors Upgrade
 	Buildable:
-		BuildPaletteOrder: 400
+		BuildPaletteOrder: 10
 		Prerequisites: has_points, wsph, vehicles, ~scrin
 		Description: commander-tree-promotion-gunwalker-sensor.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-gunwalker-sensor.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-gunwalker-sensor.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-gunwalker-sensor.tooltipextras-attributes
-
-hack.cameo_filler.400:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 401
-		Prerequisites: has_points, wsph, vehicles, ~scrin, disabled
-
-hack.cameo_filler.401:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 402
-		Prerequisites: has_points, wsph, vehicles, ~scrin, disabled
+	PromotionPalette:
+		Column: 7
 
 promotion.Interloper.AA:
 	Inherits: ^promotion_item
@@ -38,17 +88,16 @@ promotion.Interloper.AA:
 	Tooltip:
 		Name: Interloper Anti-Air Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 403
-
-		Prerequisites: has_points, wsph, vehicles, ~scrin, ~!promotion.interloper.teleport
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, wsph, vehicles, ~scrin, !promotion.interloper.teleport
 		Description: commander-tree-promotion-interloper-aa.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-interloper-aa.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-interloper-aa.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-interloper-aa.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.interloper
+	PromotionPalette:
+		Group: ScrinInterloper
+		Column: 0
 
 promotion.Interloper.Teleport:
 	Inherits: ^promotion_item
@@ -59,29 +108,16 @@ promotion.Interloper.Teleport:
 	Tooltip:
 		Name: Interloper Teleport Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 404
-
-		Prerequisites: has_points, wsph, vehicles, ~scrin, ~!promotion.interloper.aa
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, wsph, vehicles, ~scrin, !promotion.interloper.aa
 		Description: commander-tree-promotion-interloper-teleport.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-interloper-teleport.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-interloper-teleport.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-interloper-teleport.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.interloper
-
-hack.cameo_filler.402:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 405
-		Prerequisites: has_points, ~filler.interloper, disabled
-
-hack.cameo_filler.403:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 406
-		Prerequisites: has_points, wsph, vehicles, ~scrin, disabled
+	PromotionPalette:
+		Group: ScrinInterloper
+		Column: 0
 
 promotion.Corrupter.Area:
 	Inherits: ^promotion_item
@@ -92,17 +128,17 @@ promotion.Corrupter.Area:
 	Tooltip:
 		Name: Corrupter Area Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 409
-
-		Prerequisites: has_points, nerv, vehicles, ~scrin, ~!promotion.corrupter.range
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, nerv, vehicles, ~scrin, !promotion.corrupter.range
 		Description: commander-tree-promotion-corrupter-area.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-corrupter-area.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-corrupter-area.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-corrupter-area.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.corrupter
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.corrupter
+	PromotionPalette:
+		Group: ScrinCorrupterCore
 
 promotion.Corrupter.Range:
 	Inherits: ^promotion_item
@@ -113,17 +149,17 @@ promotion.Corrupter.Range:
 	Tooltip:
 		Name: Corrupter Range Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 410
-
-		Prerequisites: has_points, nerv, vehicles, ~scrin, ~!promotion.corrupter.area
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, nerv, vehicles, ~scrin, !promotion.corrupter.area
 		Description: commander-tree-promotion-corrupter-range.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-corrupter-range.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-corrupter-range.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-corrupter-range.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.corrupter
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.corrupter
+	PromotionPalette:
+		Group: ScrinCorrupterCore
 
 promotion.Corrupter.PDL:
 	Inherits: ^promotion_item
@@ -134,17 +170,15 @@ promotion.Corrupter.PDL:
 	Tooltip:
 		Name: Corrupter PDL Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 411
-
-		Prerequisites: has_points, tier3, vehicles, ~scrin, ~filler.corrupter, ~!promotion.corrupter.reflector
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~scrin, upg.corrupter, !promotion.corrupter.reflector
 		Description: commander-tree-promotion-corrupter-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-corrupter-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-corrupter-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-corrupter-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.corrupter2
+	PromotionPalette:
+		Group: ScrinCorrupterDefense
 
 promotion.Corrupter.Reflector:
 	Inherits: ^promotion_item
@@ -155,29 +189,15 @@ promotion.Corrupter.Reflector:
 	Tooltip:
 		Name: Corrupter Reflector Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 411
-
-		Prerequisites: has_points, tier3, vehicles, ~scrin, ~filler.corrupter, ~!promotion.corrupter.pdl
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~scrin, upg.corrupter, !promotion.corrupter.pdl
 		Description: commander-tree-promotion-corrupter-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-corrupter-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-corrupter-reflector.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-corrupter-reflector.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.corrupter2
-
-hack.cameo_filler.404:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 411
-		Prerequisites: has_points, nerv, vehicles, ~scrin, ~!filler.corrupter, disabled
-
-hack.cameo_filler.405:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 412
-		Prerequisites: has_points, vehicles, ~scrin, ~filler.corrupter2, disabled
+	PromotionPalette:
+		Group: ScrinCorrupterDefense
 
 promotion.Devourer.Acid:
 	Inherits: ^promotion_item
@@ -188,17 +208,16 @@ promotion.Devourer.Acid:
 	Tooltip:
 		Name: Devourer Acid Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 413
-
-		Prerequisites: has_points, radar, vehicles, ~traveler, ~!promotion.devourer.heavy
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, radar, vehicles, ~traveler, !promotion.devourer.heavy
 		Description: commander-tree-promotion-devourer-acid.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-devourer-acid.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-devourer-acid.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-devourer-acid.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.devourer
+	PromotionPalette:
+		Group: ScrinDevourer
+		Column: 7
 
 promotion.Devourer.Heavy:
 	Inherits: ^promotion_item
@@ -209,29 +228,16 @@ promotion.Devourer.Heavy:
 	Tooltip:
 		Name: Devourer Heavy Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 414
-
-		Prerequisites: has_points, radar, vehicles, ~traveler, ~!promotion.devourer.acid
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, radar, vehicles, ~traveler, !promotion.devourer.acid
 		Description: commander-tree-promotion-devourer-heavy.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-devourer-heavy.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-devourer-heavy.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-devourer-heavy.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.devourer
-
-hack.cameo_filler.406:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 415
-		Prerequisites: has_points, radar, vehicles, ~traveler, disabled
-
-hack.cameo_filler.407:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 416
-		Prerequisites: has_points, ~filler.devourer, disabled
+	PromotionPalette:
+		Group: ScrinDevourer
+		Column: 7
 
 promotion.Channeler.Chain:
 	Inherits: ^promotion_item
@@ -242,17 +248,18 @@ promotion.Channeler.Chain:
 	Tooltip:
 		Name: Channeler Chain Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 417
-
-		Prerequisites: has_points, nerv, vehicles, ~harvester, ~!promotion.channeler.disc
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, nerv, vehicles, ~harvester, !promotion.channeler.disc
 		Description: commander-tree-promotion-channeler-chain.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-channeler-chain.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-channeler-chain.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-channeler-chain.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.channeler
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.channeler
+	PromotionPalette:
+		Group: ScrinChannelerCore
+		Column: 7
 
 promotion.Channeler.Disc:
 	Inherits: ^promotion_item
@@ -263,17 +270,18 @@ promotion.Channeler.Disc:
 	Tooltip:
 		Name: Channeler Disc Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 418
-
-		Prerequisites: has_points, nerv, vehicles, ~harvester, ~!promotion.channeler.chain
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, nerv, vehicles, ~harvester, !promotion.channeler.chain
 		Description: commander-tree-promotion-channeler-disc.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-channeler-disc.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-channeler-disc.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-channeler-disc.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.channeler
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.channeler
+	PromotionPalette:
+		Group: ScrinChannelerCore
+		Column: 7
 
 promotion.Channeler.pdl:
 	Inherits: ^promotion_item
@@ -284,17 +292,16 @@ promotion.Channeler.pdl:
 	Tooltip:
 		Name: Channeler PDL Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 420
-
-		Prerequisites: has_points, tier3, vehicles, ~harvester, ~filler.channeler, ~!promotion.channeler.reflector
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~harvester, upg.channeler, !promotion.channeler.reflector
 		Description: commander-tree-promotion-channeler-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-channeler-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-channeler-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-channeler-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.channeler2
+	PromotionPalette:
+		Group: ScrinChannelerDefense
+		Column: 7
 
 promotion.Channeler.Reflector:
 	Inherits: ^promotion_item
@@ -305,30 +312,16 @@ promotion.Channeler.Reflector:
 	Tooltip:
 		Name: Channeler Reflector Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 420
-
-		Prerequisites: has_points, tier3, vehicles, ~harvester, ~filler.channeler, ~!promotion.channeler.pdl
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~harvester, upg.channeler, !promotion.channeler.pdl
 		Description: commander-tree-promotion-channeler-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-channeler-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-channeler-reflector.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-channeler-reflector.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.channeler2
-
-hack.cameo_filler.408:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 420
-		Prerequisites: has_points, vehicles, ~harvester, ~!filler.channeler, disabled
-
-hack.cameo_filler.409:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 420
-		Prerequisites: has_points, vehicles, ~harvester, ~filler.channeler2, disabled
-
+	PromotionPalette:
+		Group: ScrinChannelerDefense
+		Column: 7
 
 promotion.Seeker.PDL:
 	Inherits: ^promotion_item
@@ -339,17 +332,15 @@ promotion.Seeker.PDL:
 	Tooltip:
 		Name: Seeker PDL Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 421
-
-		Prerequisites: has_points, vehicles.any, tier3, ~vehicles.seek, ~!promotion.seeker.reflector
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, tier3, ~seeker, !promotion.seeker.reflector
 		Description: commander-tree-promotion-seeker-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-seeker-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-seeker-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-seeker-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.seeker
+	PromotionPalette:
+		Group: ScrinSeeker
 
 promotion.Seeker.Reflector:
 	Inherits: ^promotion_item
@@ -360,29 +351,15 @@ promotion.Seeker.Reflector:
 	Tooltip:
 		Name: Seeker Reflector Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 422
-
-		Prerequisites: has_points, vehicles.any, tier3, ~vehicles.seek, ~!promotion.seeker.pdl
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, tier3, ~seeker, !promotion.seeker.pdl
 		Description: commander-tree-promotion-seeker-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-seeker-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-seeker-reflector.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-seeker-reflector.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.seeker
-
-hack.cameo_filler.410:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 423
-		Prerequisites: has_points, vehicles.any, ~vehicles.seek, disabled
-
-hack.cameo_filler.411:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 424
-		Prerequisites: has_points, ~filler.seeker, disabled
+	PromotionPalette:
+		Group: ScrinSeeker
 
 promotion.Lacerator.PDL:
 	Inherits: ^promotion_item
@@ -393,17 +370,16 @@ promotion.Lacerator.PDL:
 	Tooltip:
 		Name: Lacerator PDL Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 425
-
-		Prerequisites: has_points, vehicles.any, tier3, vehicles, ~traveler, ~!promotion.lacerator.ap, ~!promotion.lacerator.reflector
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, tier3, vehicles, ~traveler, !promotion.lacerator.ap, !promotion.lacerator.reflector
 		Description: commander-tree-promotion-lacerator-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-lacerator-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-lacerator-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-lacerator-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.lacerator
+	PromotionPalette:
+		Group: ScrinLacerator
+		Column: 3
 
 promotion.Lacerator.Reflector:
 	Inherits: ^promotion_item
@@ -414,17 +390,16 @@ promotion.Lacerator.Reflector:
 	Tooltip:
 		Name: Lacerator Reflector Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 426
-
-		Prerequisites: has_points, vehicles.any, tier3, vehicles, ~traveler, ~!promotion.lacerator.pdl, ~!promotion.lacerator.ap
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, tier3, vehicles, ~traveler, !promotion.lacerator.pdl, !promotion.lacerator.ap
 		Description: commander-tree-promotion-lacerator-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-lacerator-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-lacerator-reflector.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-lacerator-reflector.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.lacerator
+	PromotionPalette:
+		Group: ScrinLacerator
+		Column: 3
 
 promotion.Lacerator.AP:
 	Inherits: ^promotion_item
@@ -435,29 +410,16 @@ promotion.Lacerator.AP:
 	Tooltip:
 		Name: Lacerator AP Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 427
-
-		Prerequisites: has_points, vehicles.any, vehicles, ~traveler, ~!promotion.lacerator.pdl, ~!promotion.lacerator.reflector
+		BuildPaletteOrder: 10
+		Prerequisites: has_points, vehicles, ~traveler, !promotion.lacerator.pdl, !promotion.lacerator.reflector
 		Description: commander-tree-promotion-lacerator-ap.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-lacerator-ap.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-lacerator-ap.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-lacerator-ap.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.lacerator
-
-hack.cameo_filler.412:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 428
-		Prerequisites: has_points, ~filler.lacerator, disabled
-
-hack.cameo_filler.413:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 429
-		Prerequisites: has_points, ~filler.lacerator, disabled
+	PromotionPalette:
+		Group: ScrinLacerator
+		Column: 3
 
 promotion.Ruiner.Barrage:
 	Inherits: ^promotion_item
@@ -468,27 +430,13 @@ promotion.Ruiner.Barrage:
 	Tooltip:
 		Name: Ruiner Barrage Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 430
-
+		BuildPaletteOrder: 15
 		Prerequisites: has_points, tier3, vehicles, ~harvester
 		Description: commander-tree-promotion-ruiner-barrage.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-ruiner-barrage.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-ruiner-barrage.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-ruiner-barrage.tooltipextras-attributes
-
-hack.cameo_filler.414:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 431
-		Prerequisites: has_points, tier3, vehicles, ~harvester, disabled
-
-hack.cameo_filler.415:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 432
-		Prerequisites: has_points, tier3, vehicles, ~harvester, disabled
 
 promotion.Tripod.Chainer:
 	Inherits: ^promotion_item
@@ -499,17 +447,18 @@ promotion.Tripod.Chainer:
 	Tooltip:
 		Name: Tripod Chainer Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 433
-
-		Prerequisites: has_points, tier3, vehicles, ~traveler, ~!promotion.tripod.acid
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, tier3, vehicles, ~traveler, !promotion.tripod.acid
 		Description: commander-tree-promotion-tripod-chainer.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-tripod-chainer.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-tripod-chainer.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-tripod-chainer.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.tripod
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.tripod
+	PromotionPalette:
+		Group: ScrinTripodCore
+		Column: 3
 
 promotion.Tripod.Acid:
 	Inherits: ^promotion_item
@@ -520,17 +469,18 @@ promotion.Tripod.Acid:
 	Tooltip:
 		Name: Tripod Acid Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 435
-
-		Prerequisites: has_points, tier3, vehicles, ~traveler, ~!promotion.tripod.chainer
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, tier3, vehicles, ~traveler, !promotion.tripod.chainer
 		Description: commander-tree-promotion-tripod-acid.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-tripod-acid.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-tripod-acid.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-tripod-acid.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.tripod
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.tripod
+	PromotionPalette:
+		Group: ScrinTripodCore
+		Column: 3
 
 promotion.Tripod.PDL:
 	Inherits: ^promotion_item
@@ -541,17 +491,16 @@ promotion.Tripod.PDL:
 	Tooltip:
 		Name: Tripod PDL Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 437
-
-		Prerequisites: has_points, tier3, vehicles, ~traveler, ~filler.tripod, ~!promotion.tripod.reflector
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~traveler, upg.tripod, !promotion.tripod.reflector
 		Description: commander-tree-promotion-tripod-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-tripod-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-tripod-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-tripod-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.tripod2
+	PromotionPalette:
+		Group: ScrinTripodDefense
+		Column: 3
 
 promotion.Tripod.Reflector:
 	Inherits: ^promotion_item
@@ -562,29 +511,16 @@ promotion.Tripod.Reflector:
 	Tooltip:
 		Name: Tripod Reflector Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 438
-
-		Prerequisites: has_points, tier3, vehicles, ~traveler, ~filler.tripod, ~!promotion.tripod.pdl
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~traveler, upg.tripod, !promotion.tripod.pdl
 		Description: commander-tree-promotion-tripod-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-tripod-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-tripod-reflector.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-tripod-reflector.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.tripod2
-
-hack.cameo_filler.416:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 439
-		Prerequisites: has_points, ~vehicles.tpod, ~!filler.tripod, disabled
-
-hack.cameo_filler.416a:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 439
-		Prerequisites: has_points, ~vehicles.tpod, ~filler.tripod2, disabled
+	PromotionPalette:
+		Group: ScrinTripodDefense
+		Column: 3
 
 promotion.Reaper.Acid:
 	Inherits: ^promotion_item
@@ -595,17 +531,18 @@ promotion.Reaper.Acid:
 	Tooltip:
 		Name: Reaper Acid Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 440
-
-		Prerequisites: has_points, tier3, vehicles, ~reaper, ~!promotion.reaper.range
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.reaper.range
 		Description: commander-tree-promotion-reaper-acid.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-reaper-acid.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-reaper-acid.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-reaper-acid.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.reaper
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.reaper
+	PromotionPalette:
+		Group: ScrinReaperCore
+		Column: 3
 
 promotion.Reaper.Range:
 	Inherits: ^promotion_item
@@ -616,17 +553,18 @@ promotion.Reaper.Range:
 	Tooltip:
 		Name: Reaper Range Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 440
-
-		Prerequisites: has_points, tier3, vehicles, ~reaper, ~!promotion.reaper.acid
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.reaper.acid
 		Description: commander-tree-promotion-reaper-range.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-reaper-range.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-reaper-range.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-reaper-range.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.reaper
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.reaper
+	PromotionPalette:
+		Group: ScrinReaperCore
+		Column: 3
 
 promotion.Reaper.PDL:
 	Inherits: ^promotion_item
@@ -637,17 +575,16 @@ promotion.Reaper.PDL:
 	Tooltip:
 		Name: Reaper Tripod PDL Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 441
-
-		Prerequisites: has_points, tier3, vehicles, ~reaper, ~filler.reaper, ~!promotion.reaper.reflector
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~reaper, upg.reaper, !promotion.reaper.reflector
 		Description: commander-tree-promotion-reaper-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-reaper-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-reaper-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-reaper-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.reaper2
+	PromotionPalette:
+		Group: ScrinReaperDefense
+		Column: 3
 
 promotion.Reaper.Reflector:
 	Inherits: ^promotion_item
@@ -658,29 +595,16 @@ promotion.Reaper.Reflector:
 	Tooltip:
 		Name: Reaper Reflector Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 441
-
-		Prerequisites: has_points, tier3, vehicles, ~reaper, ~filler.reaper, ~!promotion.reaper.pdl
+		BuildPaletteOrder: 16
+		Prerequisites: has_points, tier3, vehicles, ~reaper, upg.reaper, !promotion.reaper.pdl
 		Description: commander-tree-promotion-reaper-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-reaper-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-reaper-reflector.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-reaper-reflector.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.reaper2
-
-hack.cameo_filler.417:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 442
-		Prerequisites: has_points, vehicles, ~reaper, ~!filler.reaper, disabled
-
-hack.cameo_filler.417a:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 442
-		Prerequisites: has_points, vehicles, ~reaper, ~filler.reaper2, disabled
+	PromotionPalette:
+		Group: ScrinReaperDefense
+		Column: 3
 
 promotion.Stormcrawler.PDL:
 	Inherits: ^promotion_item
@@ -691,17 +615,15 @@ promotion.Stormcrawler.PDL:
 	Tooltip:
 		Name: Stormcrawler PDL Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 447
-
-		Prerequisites: has_points, tier3, vehicles, ~reaper, ~!promotion.stormcrawler.reflector
+		BuildPaletteOrder: 16
+		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.stormcrawler.reflector
 		Description: commander-tree-promotion-stormcrawler-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormcrawler-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-stormcrawler-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-stormcrawler-pdl.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stormcrawler
+	PromotionPalette:
+		Group: ScrinStormcrawler
 
 promotion.Stormcrawler.Reflector:
 	Inherits: ^promotion_item
@@ -712,29 +634,17 @@ promotion.Stormcrawler.Reflector:
 	Tooltip:
 		Name: Stormcrawler Reflector Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 448
-
-		Prerequisites: has_points, tier3, vehicles, ~reaper, ~!promotion.stormcrawler.pdl
+		BuildPaletteOrder: 16
+		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.stormcrawler.pdl
 		Description: commander-tree-promotion-stormcrawler-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormcrawler-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-stormcrawler-reflector.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-stormcrawler-reflector.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stormcrawler
+	PromotionPalette:
+		Group: ScrinStormcrawler
 
-hack.cameo_filler.418:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 449
-		Prerequisites: has_points, nerv, vehicles, ~reaper, disabled
-
-hack.cameo_filler.419:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 450
-		Prerequisites: has_points, ~filler.stormcrawler, disabled
+## Aircraft ##
 
 promotion.Stormhunter:
 	Inherits: ^promotion_item
@@ -745,17 +655,16 @@ promotion.Stormhunter:
 	Tooltip:
 		Name: Stormhunter Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 451
-
-		Prerequisites: has_points, nerv, grav, ~aircraft, ~scrin, ~!promotion.stormbomber, ~!promotion.stormbomber.torp
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, nerv, grav, aircraft, ~scrin, !promotion.stormbomber, !promotion.stormbomber.torp
 		Description: commander-tree-promotion-stormhunter.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormhunter.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-stormhunter.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-stormhunter.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stormrider
+	PromotionPalette:
+		Group: ScrinStormrider
+		Column: 3
 
 promotion.Stormbomber:
 	Inherits: ^promotion_item
@@ -766,17 +675,16 @@ promotion.Stormbomber:
 	Tooltip:
 		Name: Stormbomber Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 452
-
-		Prerequisites: has_points, nerv, grav, ~aircraft, ~scrin, ~!promotion.stormhunter, ~!promotion.stormbomber.torp
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, nerv, grav, aircraft, ~scrin, !promotion.stormhunter, !promotion.stormbomber.torp
 		Description: commander-tree-promotion-stormbomber.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormbomber.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-stormbomber.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-stormbomber.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stormrider
+	PromotionPalette:
+		Group: ScrinStormrider
+		Column: 3
 
 promotion.Stormbomber.Torp:
 	Inherits: ^promotion_item
@@ -787,29 +695,16 @@ promotion.Stormbomber.Torp:
 	Tooltip:
 		Name: Stormbomber Torpedo Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 452
-
-		Prerequisites: has_points, nerv, grav, ~aircraft, ~scrin, ~!promotion.stormhunter, ~!promotion.stormbomber
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, nerv, grav, aircraft, ~scrin, !promotion.stormhunter, !promotion.stormbomber
 		Description: commander-tree-promotion-stormbomber-torp.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormbomber-torp.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-stormbomber-torp.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-stormbomber-torp.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stormrider
-
-hack.cameo_filler.420:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 453
-		Prerequisites: has_points, ~filler.stormrider, disabled
-
-hack.cameo_filler.421:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 454
-		Prerequisites: has_points, ~filler.stormrider, disabled
+	PromotionPalette:
+		Group: ScrinStormrider
+		Column: 3
 
 promotion.Devastator.Beam:
 	Inherits: ^promotion_item
@@ -824,17 +719,15 @@ promotion.Devastator.Beam:
 	WithProductionIconOverlay@Ion:
 		Types: Ion
 	Buildable:
-
-		BuildPaletteOrder: 455
-
-		Prerequisites: has_points, tier3, grav, ~aircraft, ~scrin, ~!promotion.devastator.shard
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, tier3, grav, aircraft, ~scrin, !promotion.devastator.shard
 		Description: commander-tree-promotion-devastator-beam.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-devastator-beam.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-devastator-beam.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-devastator-beam.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.devastator
+	PromotionPalette:
+		Group: ScrinDevastator
 
 promotion.Devastator.Shard:
 	Inherits: ^promotion_item
@@ -849,29 +742,15 @@ promotion.Devastator.Shard:
 	WithProductionIconOverlay@Missile:
 		Types: Missile
 	Buildable:
-
-		BuildPaletteOrder: 456
-
-		Prerequisites: has_points, tier3, grav, ~aircraft, ~scrin, ~!promotion.devastator.beam
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, tier3, grav, aircraft, ~scrin, !promotion.devastator.beam
 		Description: commander-tree-promotion-devastator-shard.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-devastator-shard.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-devastator-shard.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-devastator-shard.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.devastator
-
-hack.cameo_filler.422:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 457
-		Prerequisites: has_points, tier3, grav, ~aircraft, ~scrin, disabled
-
-hack.cameo_filler.423:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 458
-		Prerequisites: has_points, ~filler.devastator, disabled
+	PromotionPalette:
+		Group: ScrinDevastator
 
 promotion.Carrier.Warship:
 	Inherits: ^promotion_item
@@ -882,17 +761,16 @@ promotion.Carrier.Warship:
 	Tooltip:
 		Name: Warship Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 459
-
-		Prerequisites: has_points, sign, tier3, grav, ~aircraft, ~scrin, ~!promotion.carrier.support, ~!promotion.carrier.suicide
+		BuildPaletteOrder: 21
+		Prerequisites: has_points, sign, tier3, grav, aircraft, ~scrin, !promotion.carrier.support, !promotion.carrier.suicide
 		Description: commander-tree-promotion-carrier-warship.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-carrier-warship.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-carrier-warship.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-carrier-warship.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.carrier
+	PromotionPalette:
+		Group: ScrinCarrier
+		Column: 3
 
 promotion.Carrier.Suicide:
 	Inherits: ^promotion_item
@@ -903,17 +781,16 @@ promotion.Carrier.Suicide:
 	Tooltip:
 		Name: Suicide Drone Carrier Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 460
-
-		Prerequisites: has_points, sign, tier3, grav, ~aircraft, ~scrin, ~!promotion.carrier.warship, ~!promotion.carrier.support
+		BuildPaletteOrder: 21
+		Prerequisites: has_points, sign, tier3, grav, aircraft, ~scrin, !promotion.carrier.warship, !promotion.carrier.support
 		Description: commander-tree-promotion-carrier-suicide.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-carrier-suicide.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-carrier-suicide.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-carrier-suicide.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.carrier
+	PromotionPalette:
+		Group: ScrinCarrier
+		Column: 3
 
 promotion.Carrier.Support:
 	Inherits: ^promotion_item
@@ -924,31 +801,19 @@ promotion.Carrier.Support:
 	Tooltip:
 		Name: Support Carrier Upgrade
 	Buildable:
-
-		BuildPaletteOrder: 461
-
-		Prerequisites: has_points, sign, tier3, grav, ~aircraft, ~scrin, ~!promotion.carrier.warship, ~!promotion.carrier.suicide
+		BuildPaletteOrder: 21
+		Prerequisites: has_points, sign, tier3, grav, aircraft, ~scrin, !promotion.carrier.warship, !promotion.carrier.suicide
 		Description: commander-tree-promotion-carrier-support.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-carrier-support.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-carrier-support.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-carrier-support.tooltipextras-attributes
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.carrier
-
-hack.cameo_filler.424:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 462
-		Prerequisites: has_points, ~filler.carrier, disabled
-
-hack.cameo_filler.425:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 463
-		Prerequisites: has_points, ~filler.carrier, disabled
+	PromotionPalette:
+		Group: ScrinCarrier
+		Column: 3
 
 #epic units
+
 promotion.Hexapod:
 	Inherits: ^promotion_item
 	Tooltip:
@@ -956,16 +821,16 @@ promotion.Hexapod:
 	RenderSprites:
 		Image: hexapod
 	Buildable:
-
-		BuildPaletteOrder: 490
+		BuildPaletteOrder: 15
 		IconPalette: chrometd
-
 		Prerequisites: has_points, sign, tier3, vehicles, ~reaper
 		Description: commander-tree-promotion-hexapod.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hexapod.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-hexapod.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-hexapod.tooltipextras-attributes
+	PromotionPalette:
+		Column: 7
 
 promotion.Mothership:
 	Inherits: ^promotion_item
@@ -974,15 +839,15 @@ promotion.Mothership:
 	RenderSprites:
 		Image: mshp
 	Buildable:
-
-		BuildPaletteOrder: 490
-
-		Prerequisites: has_points, sign, tier3, ~aircraft, ~traveler
+		BuildPaletteOrder: 20
+		Prerequisites: has_points, sign, tier3, aircraft, ~traveler
 		Description: commander-tree-promotion-mothership.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-mothership.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-mothership.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-mothership.tooltipextras-attributes
+	PromotionPalette:
+		Column: 7
 
 promotion.Bastion:
 	Inherits: ^promotion_item
@@ -991,27 +856,13 @@ promotion.Bastion:
 	RenderSprites:
 		Image: bastion
 	Buildable:
-
-		BuildPaletteOrder: 490
+		BuildPaletteOrder: 20
 		IconPalette: chrometd
-
-		Prerequisites: has_points, sign, tier3, ~aircraft, ~harvester
+		Prerequisites: has_points, sign, tier3, aircraft, ~harvester
 		Description: commander-tree-promotion-bastion.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-bastion.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-bastion.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-bastion.tooltipextras-attributes
-
-hack.cameo_filler.426:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 491
-		Prerequisites: has_points, ~filler.carrier, disabled
-
-hack.cameo_filler.427:
-	Inherits: ^cameo_filler
-	Buildable:
-		BuildPaletteOrder: 491
-		Prerequisites: has_points, ~filler.carrier, disabled
-
-
+	PromotionPalette:
+		Column: 7
