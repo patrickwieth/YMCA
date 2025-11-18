@@ -75,9 +75,9 @@ Player:
 		Factions: scrin, reaper, harvester
 		Prerequisite: seeker
 
-
 scrin.dummy:
 	Inherits: ^ScrinSupportPowers
+
 ####################################################################################################
 
 ^ScrinBuilding:
@@ -102,6 +102,12 @@ scrin.dummy:
 	Targetable:
 		TargetTypes: Ground, Infantry
 	-TakeCover:
+	GrantConditionOnPrerequisite@SCRIN_HARDEN_SKIN:
+		Prerequisites: promotion.harden_skin
+		Condition: scrin_harden_skin
+	DamageMultiplier@HARDEN_SKIN:
+		RequiresCondition: scrin_harden_skin
+		Modifier: 85
 	TransformOnCondition@FEEDER:
 		RequiresCondition: feedermutation
 		IntoActor: feed
@@ -142,8 +148,24 @@ scrin.dummy:
 	WithIdleOverlay@DamagedDecorationLights:
 		Sequence: damaged-light-tripod
 
+^ScrinAcidUnit:
+	GrantConditionOnPrerequisite@SCRIN_CORROSION:
+		Prerequisites: promotion.armor_eating_acid
+		Condition: scrin_corrosion
+
+^ScrinAircraft:
+	GrantConditionOnPrerequisite@SCRIN_THRUSTERS:
+		Prerequisites: promotion.bio-mechanical_thrusters
+		Condition: scrin_thrusters
+	SpeedMultiplier@SCRIN_THRUSTERS:
+		RequiresCondition: scrin_thrusters
+		Modifier: 110
+
 ^ScrinShielded:
 	Inherits: ^Shielded
+	GrantConditionOnPrerequisite@SCRIN_SHIELD_GENERATORS:
+		Prerequisites: promotion.shield_generators
+		Condition: scrin_shield_generators
 	Shielded:
 		MaxStrength: 50000
 		RegenDelay: 100
@@ -151,6 +173,14 @@ scrin.dummy:
 		RegenInterval: 4
 		ShieldsUpCondition: shields-up
 		RequiresCondition: !empdisable
+		SelectionBarColor: 4488ff
+	Shielded@UPGRADE:
+		MaxStrength: 50000
+		RegenDelay: 100
+		RegenAmount: 150
+		RegenInterval: 4
+		ShieldsUpCondition: shields-up
+		RequiresCondition: !empdisable && scrin_shield_generators
 		SelectionBarColor: 4488ff
 	WithIdleOverlay@SHIELD:
 		Sequence: idle
@@ -164,11 +194,3 @@ scrin.dummy:
 	Shielded:
 		MaxStrength: 25000
 		RegenAmount: 50
-
-^TravelerSpeed:
-	GrantConditionOnFaction@TRAVELERSPEED:
-		Condition: travelerspeed
-		Factions: traveler
-	SpeedMultiplier@TRAVELERSPEED:
-		RequiresCondition: travelerspeed
-		Modifier: 115

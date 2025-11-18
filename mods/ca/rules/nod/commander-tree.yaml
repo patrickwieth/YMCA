@@ -8,6 +8,8 @@ promotion.stealth_miners:
 		IconPalette: chrome
 		Prerequisites: has_points, ~nod, anypower
 		Description: commander-tree-promotion-stealth-miners.description
+	PromotionPalette:
+		Group: NodStealthMiners
 
 
 
@@ -18,7 +20,9 @@ promotion.Elite_Cyborg:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 303
-		Prerequisites: has_points, ~infantry.nod, bio.nod, ~promotion.advanced_infantry_training
+		Prerequisites: has_points, infantry, bio, ~nod, ~promotion.advanced_infantry_training
+	PromotionPalette:
+		Group: NodEliteCyborg
 		Description: commander-tree-promotion-elite-cyborg.description
 
 promotion.Elite_Cyborg.Range:
@@ -27,8 +31,10 @@ promotion.Elite_Cyborg.Range:
 		Name: Elite Cyborg (Range)
 	Buildable:
 		BuildPaletteOrder: 304
-		Prerequisites: has_points, ~infantry.nod, bio.nod, promotion.elite_cyborg, ~promotion.advanced_infantry_training
+		Prerequisites: has_points, infantry, bio, ~nod, promotion.elite_cyborg, ~promotion.advanced_infantry_training
 		Description: commander-tree-promotion-elite-cyborg-range.description
+	PromotionPalette:
+		Group: NodEliteCyborg
 
 promotion.Rebel_Leader:
 	Inherits: ^promotion_item
@@ -36,8 +42,10 @@ promotion.Rebel_Leader:
 		Name: Nod Rebel Leader
 	Buildable:
 		IconPalette: chrometd
+	PromotionPalette:
+		Group: NodRebelLeader
 		BuildPaletteOrder: 306
-		Prerequisites: has_points, ~infantry.nod, tier3, ~promotion.advanced_infantry_training, ~disabled
+		Prerequisites: has_points, infantry, ~nod, tier3, ~promotion.advanced_infantry_training, ~disabled
 		Description: commander-tree-promotion-rebel-leader.description
 
 promotion.Reinforcements_Coordinator:
@@ -47,10 +55,10 @@ promotion.Reinforcements_Coordinator:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 5
-		Prerequisites: has_points, ~vehicles.nod
+		Prerequisites: has_points, vehicles, ~nod
+	PromotionPalette:
+		Group: NodReinforcements
 		Description: commander-tree-promotion-reinforcements-coordinator.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.coordinator
 
 promotion.Buggy_PDL:
 	Inherits: ^promotion_item
@@ -59,10 +67,10 @@ promotion.Buggy_PDL:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 309
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.blackh, tier3, ~!promotion.buggy_aa
+		Prerequisites: has_points, vehicles, ~nod, ~blackh, tier3, !promotion.buggy_aa
 		Description: commander-tree-promotion-buggy-pdl.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.buggy
+	PromotionPalette:
+		Group: NodBuggy
 
 promotion.Buggy_AA:
 	Inherits: ^promotion_item
@@ -70,69 +78,75 @@ promotion.Buggy_AA:
 		Name: Buggy Anti-Air Laser
 	Buildable:
 		IconPalette: chrometd
+	PromotionPalette:
+		Group: NodBuggy
 		BuildPaletteOrder: 310
-		Prerequisites: has_points, ~vehicles.nod, tier3, ~!promotion.buggy_pdl
+		Prerequisites: has_points, vehicles, ~nod, tier3, !promotion.buggy_pdl
 		Description: commander-tree-promotion-buggy-aa.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.buggy
 
 promotion.SSM_Launcher:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: SSM Launcher
+	PromotionPalette:
+		Group: NodSSM
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 314
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.nod, ~!promotion.ssm_toxin_launcher,  ~!promotion.ssm_multi_launcher
+		Prerequisites: has_points, vehicles, ~nod, ~nod, !promotion.ssm_toxin_launcher,  !promotion.ssm_multi_launcher
 		Description: commander-tree-promotion-ssm-launcher.description
 
 promotion.SSM_Toxin_Launcher:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: SSM Chemical Launcher
+	PromotionPalette:
+		Group: NodSSM
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 315
-		Prerequisites: has_points, ~vehicles.legion, tier3, ~!promotion.ssm_launcher, ~!promotion.ssm_multi_launcher
+		Prerequisites: has_points, vehicles, ~legion, tier3, !promotion.ssm_launcher, !promotion.ssm_multi_launcher
 		Description: commander-tree-promotion-ssm-toxin-launcher.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.ssm
 
 promotion.SSM_Multi_Launcher:
 	Inherits: ^promotion_item
+	PromotionPalette:
+		Group: NodSSM
 	Tooltip:
 		Name: SSM Multi Launcher
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 316
-		Prerequisites: has_points, ~vehicles.marked, tier3, ~!promotion.ssm_launcher, ~!promotion.ssm_toxin_launcher
+		Prerequisites: has_points, vehicles, ~marked, tier3, !promotion.ssm_launcher, !promotion.ssm_toxin_launcher
 		Description: commander-tree-promotion-ssm-multi-launcher.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.ssm
 
 promotion.Stealth_Tank.AP:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Stealth Tank AP Missiles
+	PromotionPalette:
+		Group: NodStealthTank
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 325
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.marked, tier3, ~!promotion.stealth_tank.explosive_rockets,  ~!promotion.stealth_tank.scrin
+		Prerequisites: has_points, vehicles, ~nod, ~marked, tier3, !promotion.stealth_tank.explosive_rockets,  !promotion.stealth_tank.scrin
 		Description: commander-tree-promotion-stealth-tank-ap.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stealthtank
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.stealthtank
 
 promotion.Stealth_Tank.Scrin:
 	Inherits: ^promotion_item
+	PromotionPalette:
+		Group: NodStealthTank
 	Tooltip:
 		Name: Stealth Tank Scrin Weapon
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 325
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.legion, tier3, ~!promotion.stealth_tank.explosive_rockets, ~!promotion.stealth_tank.ap
+		Prerequisites: has_points, vehicles, ~nod, ~legion, tier3, !promotion.stealth_tank.explosive_rockets, !promotion.stealth_tank.ap
 		Description: commander-tree-promotion-stealth-tank-scrin.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stealthtank
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.stealthtank
 
 promotion.Stealth_Tank.Explosive_Rockets:
 	Inherits: ^promotion_item
@@ -141,10 +155,12 @@ promotion.Stealth_Tank.Explosive_Rockets:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 325
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.blackh, tier3, ~!promotion.stealth_tank.ap, ~!promotion.stealth_tank.scrin
+		Prerequisites: has_points, vehicles, ~nod, ~blackh, tier3, !promotion.stealth_tank.ap, !promotion.stealth_tank.scrin
 		Description: commander-tree-promotion-stealth-tank-explosive-rockets.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stealthtank
+	ProvidesPrerequisite@upg:
+	PromotionPalette:
+		Group: NodStealthTank
+		Prerequisite: upg.stealthtank
 
 promotion.Stealth_Tank.Reflector:
 	Inherits: ^promotion_item
@@ -153,21 +169,21 @@ promotion.Stealth_Tank.Reflector:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 326
-		Prerequisites: has_points, ~vehicles.nod, tier3, ~filler.stealthtank, ~!promotion.stealth_tank.pdl
+		Prerequisites: has_points, vehicles, ~nod, tier3, upg.stealthtank, !promotion.stealth_tank.pdl
 		Description: commander-tree-promotion-stealth-tank-reflector.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stealthtank2
+	PromotionPalette:
+		Group: NodStealthTank
 
 promotion.Stealth_Tank.PDL:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Stealth Tank Point Laser Defense System
 	Buildable:
+	PromotionPalette:
+		Group: NodReconBike
 		BuildPaletteOrder: 326
-		Prerequisites: has_points, ~vehicles.nod, tier3, ~filler.stealthtank, ~!promotion.stealth_tank.reflector
+		Prerequisites: has_points, vehicles, ~nod, tier3, upg.stealthtank, !promotion.stealth_tank.reflector
 		Description: commander-tree-promotion-stealth-tank-pdl.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.stealthtank2
 
 promotion.Recon_Bike.Scrin:
 	Inherits: ^promotion_item
@@ -176,22 +192,22 @@ promotion.Recon_Bike.Scrin:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 331
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.marked, hq, ~!promotion.recon_bike.rocket_hail, ~!promotion.recon_bike.explosive
+		Prerequisites: has_points, vehicles, ~nod, ~marked, hq, !promotion.recon_bike.rocket_hail, !promotion.recon_bike.explosive
 		Description: commander-tree-promotion-recon-bike-scrin.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike
+	PromotionPalette:
+		Group: NodReconBike
 
 promotion.Recon_Bike.Scrin.PDL:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Scrin Bike Point Laser Defense System
+	PromotionPalette:
+		Group: NodReconBike
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 332
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.marked, tier3, ~promotion.recon_bike.scrin, ~!promotion.recon_bike.scrin.reflector
+		Prerequisites: has_points, vehicles, ~nod, ~marked, tier3, ~promotion.recon_bike.scrin, !promotion.recon_bike.scrin.reflector
 		Description: commander-tree-promotion-recon-bike-scrin-pdl.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike2
 
 promotion.Recon_Bike.Scrin.Reflector:
 	Inherits: ^promotion_item
@@ -200,22 +216,22 @@ promotion.Recon_Bike.Scrin.Reflector:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 332
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.marked, tier3, ~promotion.recon_bike.scrin, ~!promotion.recon_bike.scrin.pdl
+		Prerequisites: has_points, vehicles, ~nod, ~marked, tier3, ~promotion.recon_bike.scrin, !promotion.recon_bike.scrin.pdl
 		Description: commander-tree-promotion-recon-bike-scrin-reflector.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike2
+	PromotionPalette:
+		Group: NodReconBike
 
 promotion.Recon_Bike.Rocket_Hail:
 	Inherits: ^promotion_item
+	PromotionPalette:
+		Group: NodReconBike
 	Tooltip:
 		Name: Recon Bike Rocket Hail
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 331
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.legion, hq, ~!promotion.recon_bike.scrin, ~!promotion.recon_bike.explosive
+		Prerequisites: has_points, vehicles, ~nod, ~legion, hq, !promotion.recon_bike.scrin, !promotion.recon_bike.explosive
 		Description: commander-tree-promotion-recon-bike-rocket-hail.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike
 
 promotion.Recon_Bike.Rocket_Hail.Reflector:
 	Inherits: ^promotion_item
@@ -224,10 +240,10 @@ promotion.Recon_Bike.Rocket_Hail.Reflector:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 332
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.legion, tier3, ~promotion.recon_bike.rocket_hail, ~!promotion.recon_bike.rocket_hail.pdl
+		Prerequisites: has_points, vehicles, ~nod, ~legion, tier3, ~promotion.recon_bike.rocket_hail, !promotion.recon_bike.rocket_hail.pdl
 		Description: commander-tree-promotion-recon-bike-rocket-hail-reflector.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike2
+	PromotionPalette:
+		Group: NodReconBike
 
 promotion.Recon_Bike.Rocket_Hail.PDL:
 	Inherits: ^promotion_item
@@ -236,10 +252,10 @@ promotion.Recon_Bike.Rocket_Hail.PDL:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 332
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.legion, tier3, ~promotion.recon_bike.rocket_hail, ~!promotion.recon_bike.rocket_hail.reflector
+		Prerequisites: has_points, vehicles, ~nod, ~legion, tier3, ~promotion.recon_bike.rocket_hail, !promotion.recon_bike.rocket_hail.reflector
+	PromotionPalette:
+		Group: NodReconBike
 		Description: commander-tree-promotion-recon-bike-rocket-hail-pdl.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike2
 
 promotion.Recon_Bike.Explosive:
 	Inherits: ^promotion_item
@@ -248,10 +264,10 @@ promotion.Recon_Bike.Explosive:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 331
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.blackh, hq, ~!promotion.recon_bike.scrin, ~!promotion.recon_bike.rocket_hail
+		Prerequisites: has_points, vehicles, ~nod, ~blackh, hq, !promotion.recon_bike.scrin, !promotion.recon_bike.rocket_hail
 		Description: commander-tree-promotion-recon-bike-explosive.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike
+	PromotionPalette:
+		Group: NodReconBike
 
 promotion.Recon_Bike.Explosive.PDL:
 	Inherits: ^promotion_item
@@ -259,11 +275,11 @@ promotion.Recon_Bike.Explosive.PDL:
 		Name: Explosive Rocket Bike Point Laser Defense System
 	Buildable:
 		IconPalette: chrometd
+	PromotionPalette:
+		Group: NodScorpionTank
 		BuildPaletteOrder: 332
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.blackh, tier3, ~promotion.recon_bike.explosive, ~!promotion.recon_bike.explosive.reflector
+		Prerequisites: has_points, vehicles, ~nod, ~blackh, tier3, ~promotion.recon_bike.explosive, !promotion.recon_bike.explosive.reflector
 		Description: commander-tree-promotion-recon-bike-explosive-pdl.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike2
 
 promotion.Recon_Bike.Explosive.Reflector:
 	Inherits: ^promotion_item
@@ -272,10 +288,10 @@ promotion.Recon_Bike.Explosive.Reflector:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 332
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.blackh, tier3, ~promotion.recon_bike.explosive, ~!promotion.recon_bike.explosive.pdl
+		Prerequisites: has_points, vehicles, ~nod, ~blackh, tier3, ~promotion.recon_bike.explosive, !promotion.recon_bike.explosive.pdl
 		Description: commander-tree-promotion-recon-bike-explosive-reflector.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.bike2
+	PromotionPalette:
+		Group: NodScorpionTank
 
 promotion.Scorpion_Tank:
 	Inherits: ^promotion_item
@@ -284,17 +300,21 @@ promotion.Scorpion_Tank:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 335
-		Prerequisites: has_points, ~vehicles.nod, tier3
+		Prerequisites: has_points, vehicles, ~nod, tier3
 		Description: commander-tree-promotion-scorpion-tank.description
+	PromotionPalette:
+		Group: NodScorpionTank
 
 promotion.Beam_Cannon:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Beam Cannon
+	PromotionPalette:
+		Group: NodFlameTank
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 338
-		Prerequisites: has_points, ~vehicles.nod, tier3
+		Prerequisites: has_points, vehicles, ~nod, tier3
 		Description: commander-tree-promotion-beam-cannon.description
 
 
@@ -307,11 +327,12 @@ promotion.Flame_Tank.Reflector:
 
 		IconPalette: chrometd
 		BuildPaletteOrder: 319
-
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.blackh, tier3, ~!promotion.flame_tank.pdl
+		Prerequisites: has_points, vehicles, ~nod, ~blackh, tier3, !promotion.flame_tank.pdl
 		Description: commander-tree-promotion-flame-tank-reflector.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.flametank
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.flametank
+	PromotionPalette:
+		Group: NodFlameTank
 	RenderSprites:
 		Image: ftnk
 	WithProductionIconOverlay@Reflector:
@@ -321,13 +342,15 @@ promotion.Flame_Tank.PDL:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Flame Tank Point Laser Defense System
+	PromotionPalette:
+		Group: NodChemTank
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 319
-		Prerequisites: has_points, ~vehicles.nod, ~!vehicles.blackh, tier3, ~!promotion.flame_tank.reflector
+		Prerequisites: has_points, vehicles, ~nod, ~blackh, tier3, !promotion.flame_tank.reflector
 		Description: commander-tree-promotion-flame-tank-pdl.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.flametank
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.flametank
 	RenderSprites:
 		Image: ftnk
 	WithProductionIconOverlay@PDL:
@@ -337,15 +360,15 @@ promotion.Chem_Tank:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Chemical Tank
+	PromotionPalette:
+		Group: NodChemTank
 	Buildable:
 
 		IconPalette: chrome
 		BuildPaletteOrder: 320
 
-		Prerequisites: has_points, ~vehicles.legion, tier3, ~filler.flametank
+		Prerequisites: has_points, vehicles, ~legion, tier3, upg.flametank
 		Description: commander-tree-promotion-chem-tank.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.flametank2
 	RenderSprites:
 		Image: chemtank
 	WithProductionIconOverlay@Hazard:
@@ -355,15 +378,15 @@ promotion.Fireball_Tank:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Fireball Tank
+	PromotionPalette:
+		Group: NodHeavyFlameTank
 	Buildable:
 
 		IconPalette: chrometd
 		BuildPaletteOrder: 320
 
-		Prerequisites: has_points, ~vehicles.blackh, tier3, ~filler.flametank
+		Prerequisites: has_points, vehicles, ~blackh, tier3, upg.flametank
 		Description: commander-tree-promotion-fireball-tank.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.flametank2
 	RenderSprites:
 		Image: hftk
 	WithProductionIconOverlay@Flame:
@@ -378,11 +401,13 @@ promotion.Heavy_Flame_Tank.Reflector:
 		IconPalette: chrometd
 		BuildPaletteOrder: 319
 
-		Prerequisites: has_points, ~vehicles.blackh, tier3, ~!promotion.heavy_flame_tank.pdl
+		Prerequisites: has_points, vehicles, ~blackh, tier3, !promotion.heavy_flame_tank.pdl
 		Description: commander-tree-promotion-heavy-flame-tank-reflector.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.flametank
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.flametank
 	RenderSprites:
+	PromotionPalette:
+		Group: NodBanshee
 		Image: hftk
 	WithProductionIconOverlay@Reflector:
 		Types: Reflector
@@ -394,11 +419,13 @@ promotion.Heavy_Flame_Tank.PDL:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 319
-		Prerequisites: has_points, ~vehicles.blackh, tier3, ~!promotion.heavy_flame_tank.reflector
+		Prerequisites: has_points, vehicles, ~blackh, tier3, !promotion.heavy_flame_tank.reflector
 		Description: commander-tree-promotion-heavy-flame-tank-pdl.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.flametank
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.flametank
 	RenderSprites:
+	PromotionPalette:
+		Group: NodBanshee
 		Image: hftk
 	WithProductionIconOverlay@PDL:
 		Types: PDL
@@ -410,12 +437,14 @@ promotion.Banshee:
 	Tooltip:
 		Name: Banshee
 	Buildable:
+	PromotionPalette:
+		Group: NodBanshee
 		IconPalette: chrometd
 		BuildPaletteOrder: 341
-		Prerequisites: has_points, tier3, ~!promotion.banshee.bomber, ~!promotion.banshee.payload, ~aircraft.nod
+		Prerequisites: has_points, tier3, !promotion.banshee.bomber, !promotion.banshee.payload, aircraft, ~nod
 		Description: commander-tree-promotion-banshee.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.banshee
+	PromotionPalette:
+		Group: NodBanshee
 
 promotion.Banshee.Bomber:
 	Inherits: ^promotion_item
@@ -423,21 +452,21 @@ promotion.Banshee.Bomber:
 		Name: Banshee Bomber
 	Buildable:
 		BuildPaletteOrder: 341
-		Prerequisites: has_points, tier3, ~!promotion.banshee, ~!promotion.banshee.payload, ~aircraft.nod
+		Prerequisites: has_points, tier3, !promotion.banshee, !promotion.banshee.payload, aircraft, ~nod
 		Description: commander-tree-promotion-banshee-bomber.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.banshee
+	PromotionPalette:
+		Group: NodBanshee
 
 promotion.Banshee.Payload:
+	PromotionPalette:
+		Group: NodApache
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Banshee Payload Upgraded
 	Buildable:
 		BuildPaletteOrder: 341
-		Prerequisites: has_points, tier3, ~!promotion.banshee, ~!promotion.banshee.bomber, ~aircraft.nod
+		Prerequisites: has_points, tier3, !promotion.banshee, !promotion.banshee.bomber, aircraft, ~nod
 		Description: commander-tree-promotion-banshee-payload.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.banshee
 
 promotion.Apache.Flyby:
 	Inherits: ^promotion_item
@@ -446,10 +475,10 @@ promotion.Apache.Flyby:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 344
-		Prerequisites: has_points, ~aircraft.legion, tier3, ~!promotion.apache.torp
+		Prerequisites: has_points, aircraft, ~legion, tier3, !promotion.apache.torp
 		Description: commander-tree-promotion-apache-flyby.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.apache
+	PromotionPalette:
+		Group: NodApache
 	RenderSprites:
 		Image: apch
 	WithProductionIconOverlay:
@@ -459,13 +488,13 @@ promotion.Apache.Torp:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Harpy Torpedo Upgrade
+	PromotionPalette:
+		Group: NodVenom
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 344
-		Prerequisites: has_points, ~aircraft.nod, tier3, ~!promotion.apache.flyby
+		Prerequisites: has_points, aircraft, ~nod, tier3, !promotion.apache.flyby
 		Description: commander-tree-promotion-apache-torp.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.apache
 	RenderSprites:
 		Image: apch
 	WithProductionIconOverlay:
@@ -482,10 +511,10 @@ promotion.Comanche.Bomber:
 	Buildable:
 		BuildPaletteOrder: 345
 		IconPalette: chrometd
-		Prerequisites: has_points, tier3, ~aircraft.blackh
+		Prerequisites: has_points, tier3, aircraft, ~blackh
+	PromotionPalette:
+		Group: NodVenom
 		Description: commander-tree-promotion-comanche-bomber.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.comanche
 
 promotion.Venom.Heavy_Laser:
 	Inherits: ^promotion_item
@@ -498,10 +527,10 @@ promotion.Venom.Heavy_Laser:
 	Buildable:
 		BuildPaletteOrder: 346
 		IconPalette: chrometd
-		Prerequisites: has_points, tier3, ~aircraft.marked, ~!promotion.venom.payload
+		Prerequisites: has_points, tier3, aircraft, ~marked, !promotion.venom.payload
 		Description: commander-tree-promotion-venom-heavy-laser.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.venom
+	PromotionPalette:
+		Group: NodVenom
 
 promotion.Venom.Payload:
 	Inherits: ^promotion_item
@@ -514,7 +543,7 @@ promotion.Venom.Payload:
 	Buildable:
 		BuildPaletteOrder: 346
 		IconPalette: chrometd
-		Prerequisites: has_points, tier3, ~aircraft.marked, ~!promotion.venom.heavy_laser
+		Prerequisites: has_points, tier3, aircraft, ~marked, !promotion.venom.heavy_laser
 		Description: commander-tree-promotion-venom-payload.description
-	ProvidesPrerequisite@filler:
-		Prerequisite: filler.venom
+	PromotionPalette:
+		Group: NodVenom

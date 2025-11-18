@@ -1,0 +1,415 @@
+
+S1:
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^ScoutEquipment
+	Inherits: ^PrioAntiInfantry
+	Inherits@BOTHELPER: ^BotCaptureHelper
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 10
+		Prerequisites: ~infantry.harvester
+		Description: General-purpose scouting infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		IconPalette: chrome
+	Valued:
+		Cost: 100
+	Tooltip:
+		Name: Warrior
+	Health:
+		HP: 6500
+	Armament@PRIMARY:
+		Weapon: WarriorGun
+		MuzzleSequence: muzzle
+		MuzzlePalette: scrin
+		LocalOffset: 150,0,400
+	Armament@Garrison:
+		Name: mounted
+		Weapon: WarriorGun
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+
+S2:
+	Inherits: ^ScrinInfantry
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 35
+		Prerequisites: nerv, ~infantry.traveler, ~disabled
+		Description: Fast assault infantry.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+		IconPalette: scrin
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Ravager
+	Health:
+		HP: 6000
+	Mobile:
+		Speed: 71
+	Armament@PRIMARY:
+		Weapon: RavagerShards
+		LocalOffset: 0,-100,250, 0,100,250
+	Armament@Garrison:
+		Name: mounted
+		Weapon: RavagerShards
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+
+S3:
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^PrioAntiHeavyAA
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 30
+		Prerequisites: ~infantry.scrin
+		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
+		IconPalette: chrome
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Disintegrator
+	Health:
+		HP: 5500
+	Armament@PRIMARY:
+		Weapon: DisintegratorBeamAA
+		LocalOffset: 150,0,400
+		PauseOnCondition: being-warped
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: DisintegratorBeam
+		LocalOffset: 150,0,400
+		PauseOnCondition: being-warped
+	Armament@Garrison:
+		Name: mounted
+		Weapon: DisintegratorBeam
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	AutoTarget:
+		ScanRadius: 5
+
+S4:
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 115
+		Prerequisites: nerv, ~infantry.harvester, ~promotion.advanced_infantry_training
+		Description: Heavy assault infantry.\n  Can teleport short distances.\n  Strong vs Buildings, Defenses, Light Vehicles\n  Weak vs Infantry, Aircraft
+		IconPalette: chrome
+	Mobile:
+		Speed: 49
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Intruder
+	Health:
+		HP: 12000
+	Armament@PRIMARY:
+		Weapon: IntruderDiscs
+		LocalOffset: 150,0,400
+	Armament@Garrison:
+		Name: mounted
+		Weapon: IntruderDiscs
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	-Crushable:
+	PortableChrono:
+		ChargeDelay: 250
+		ChronoshiftSound: scrinport.aud
+
+S6:
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^Engineer
+	Inherits: ^SelectableSupportUnit
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 60
+		Prerequisites: ~infantry.scrin
+		Description: Captures\nenemy structures.\n  Can repair friendly structures & bridges.\n  Special Ability: Repair\n  Unarmed
+		IconPalette: chrome
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Assimilator
+	Health:
+		HP: 3000
+	WithInfantryBody:
+	Voiced:
+		VoiceSet: AssimilatorVoice
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+
+FEED:
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^PrioEnergyAntiLight
+	Valued:
+		Cost: 200
+	Tooltip:
+		Name: Feeder
+	Health:
+		HP: 7500
+	Mobile:
+		Speed: 49
+	RevealsShroud:
+		Range: 5c0
+	DockClientManager:
+		SearchAllyDocks: true
+	Harvester:
+		Resources: Tiberium, BlueTiberium, Ore, Gems
+		HarvestFacings: 8
+		BaleLoadDelay: 18
+		DeliveryBuildings: none
+		FullyLoadedSpeed: 100
+		SearchFromProcRadius: 5
+		SearchFromHarvesterRadius: 5
+	StoresResources:
+		Resources: Tiberium, BlueTiberium, Ore, Gems
+		Capacity: 10
+	WithHarvestAnimation:
+	WithMoveAnimation:
+	WithFacingSpriteBody:
+	QuantizeFacingsFromSequence:
+		-Sequence:
+	-WithInfantryBody:
+	-WithInfantryBody@Warped:
+	GrantConditionOnFullHarvester@FULL:
+		Condition: full
+	WithIdleOverlay@FULL:
+		Sequence: idle
+		Image: feederfull-overlay
+		Palette: scrin-ignore-lighting-alpha30
+		RequiresCondition: full
+	WithAttackAnimation:
+		Sequence: harvest
+		Armament: secondary
+	FireWarheadsOnDeathCA:
+		Weapon: FeederExplode
+		EmptyWeapon: FeederExplode
+		DamageSource: Killer
+		RequiresCondition: full
+	AttackFrontal:
+		FacingTolerance: 64
+	Armament@PRIMARY:
+		Weapon: FeederTargeting
+		RequiresCondition: full
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: FeederBeam
+		LocalOffset: 150,0,200
+		RequiresCondition: !full
+	GrantConditionOnAttackCA:
+		Condition: triggered
+		RequiresCondition: full
+	GrantConditionOnDeploy:
+		DeployedCondition: triggered
+		RequiresCondition: full
+	KillsSelf:
+		RequiresCondition: full && (triggered || berserk)
+	SpeedMultiplier@FULL:
+		RequiresCondition: full
+		Modifier: 150
+	WithHarvesterCapacityBar:
+		SelectionBarColor: cc0000
+		DisplayWhenFull: false
+	ConvertsDamageToHealth:
+		DamagePercentConverted: 20
+	HarvestsByDealingDamage:
+		DivideDamageBy: 2000
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move && !full
+	Targetable@FEEDER:
+		TargetTypes: Feeder
+		RequiresCondition: full
+	WithStoresResourcesPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+		PipCount: 7
+
+GSCR:
+	Inherits: Brute
+	Inherits: ^ScrinInfantrySprite
+	RenderSprites:
+		Image: gscr
+	Voiced:
+		VoiceSet: GiantScrinVoice
+	-Buildable:
+	Tooltip:
+		Name: Brutalizer
+	WithInfantryBody:
+		MoveSequence: run
+		StandSequences: stand
+		DefaultAttackSequence: bash
+		IdleSequences: idle1, idle2, idle3, idle4
+	AttackSounds:
+		Sounds: gscr-attack1.aud, gscr-attack2.aud
+
+GSCR.Mutating:
+	Inherits: Brute.Mutating
+	Inherits: ^ScrinInfantrySprite
+	SpawnActorOnDeath@GMUT:
+		Actor: gscr
+	RenderSprites:
+		Image: gscr
+
+MAST:
+	Inherits: ^ScrinInfantry
+	Inherits: ^SensorEquipment
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^CommandoSkull
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: mindcontrolling < 3 && !stance-attackanything && !assault-move
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 120
+		Prerequisites: scrt, ~infantry.scrin, ~promotion.advanced_infantry_training
+		BuildLimit: 1
+		Description: Elite specialist infantry.\n  Can mind-control enemy units and defenses.\n  Can detect cloaked units.\n  Maximum 1 can be trained.\n  Strong vs Infantry, Vehicles, Defenses\n  Weak vs Aircraft
+		IconPalette: chrome
+	Voiced:
+		VoiceSet: MastermindVoice
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Mastermind
+	Health:
+		HP: 16000
+	RevealsShroud:
+		Range: 12c0
+	Mobile:
+		Speed: 80
+	Armament@PRIMARY:
+		Weapon: EnslaveInfantry
+		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: EnslaveVehicle
+		LocalOffset: 150,0,400
+		PauseOnCondition: !ammo
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA:
+		Delay: 100
+		Count: 1
+		DelayAfterReset: 60
+	MindController:
+		ArmamentNames: primary, secondary
+		Capacity: 1
+		Sounds: mastermind-fire.aud
+		ControllingCondition: mindcontrolling
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	-Crushable:
+	ExternalCondition@PRODUCED:
+		Condition: produced
+	VoiceAnnouncement:
+		RequiresCondition: produced
+		Voice: Build
+	CaptureManager:
+	Captures:
+		CaptureTypes: building
+		PlayerExperience: 25
+		CaptureDelay: 100
+		ConsumedByCapture: false
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, MindControlImmune
+	WithIdleOverlay@mindcontrolling:
+		Sequence: mc
+		Palette: scrin
+		RequiresCondition: mindcontrolling
+		Offset: 0,0,400
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+S7:
+	Inherits: ^ScrinInfantry
+	Inherits: ^InfantryRA2Sprite
+	Inherits: ^PrioAntiInfantry
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 10
+		Prerequisites: ~infantry.traveler
+		Description: General-purpose scouting infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		IconPalette: chrometd
+	Valued:
+		Cost: 80
+	Tooltip:
+		Name: Buzzers
+	Health:
+		HP: 4500
+	Armament@PRIMARY:
+		Weapon: BuzzerShards
+		MuzzleSequence: muzzle
+		MuzzlePalette: scrin
+		LocalOffset: 150,0,400
+	WithMuzzleOverlay:
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	Mobile:
+		Speed: 110
+	Mobile:
+		Locomotor: seal
+
+S8:
+	Inherits: ^ScrinInfantry
+	Inherits: ^ScrinSpriteTD
+	Inherits: ^ScoutEquipment
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^BotCaptureHelper
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 10
+		Prerequisites: ~infantry.reaper
+		Description: General-purpose scouting infantry.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		IconPalette: chrometd
+	Valued:
+		Cost: 400
+	Tooltip:
+		Name: Trooper
+	Health:
+		HP: 6500
+	Armament@PRIMARY:
+		Weapon: ScrinDiskGrenade
+		MuzzleSequence: muzzle
+		MuzzlePalette: scrin
+		LocalOffset: 150,0,400
+	Armament@Garrison:
+		Name: mounted
+		Weapon: ScrinDiskGrenade
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	WithInfantryBody:
+	AttackFrontal:
+		PauseOnCondition: being-warped
+		FacingTolerance: 0

@@ -168,7 +168,6 @@ GUNW:
 	Inherits: ^ScrinLightsMedium
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
-	Inherits: ^TravelerSpeed
 	RenderSprites:
 		Image: GUNW
 	Buildable:
@@ -750,6 +749,7 @@ DEVO:
 DEVO.acid:
 	Inherits: DEVO
 	Inherits: ^PrioAntiReflector
+	Inherits: ^ScrinAcidUnit
 	WithProductionIconOverlay@Hazard:
 		Types: Hazard
 	Buildable:
@@ -760,9 +760,14 @@ DEVO.acid:
 		IconPalette: chrome
 	Tooltip:
 		Name: Acid Devourer Tank
-	Armament:
+	Armament@ACID:
 		Weapon: DevourerAcid
 		LocalOffset: 750,0,208
+		RequiresCondition: !scrin_corrosion
+	Armament@ACID_UPGRADED:
+		Weapon: DevourerAcid.Corrosive
+		LocalOffset: 750,0,208
+		RequiresCondition: scrin_corrosion
 
 DEVO.heavy:
 	Inherits: DEVO
@@ -976,6 +981,7 @@ TPOD.chain.PDL:
 TPOD.acid:
 	Inherits: TPOD
 	Inherits: ^PrioAntiReflector
+	Inherits: ^ScrinAcidUnit
 	WithProductionIconOverlay@Hazard:
 		Types: Hazard
 	Buildable:
@@ -987,6 +993,10 @@ TPOD.acid:
 	Armament@PRIMARY:
 		Weapon: Tripod.acid
 		-MuzzleSequence: muzzle
+		RequiresCondition: !scrin_corrosion
+	Armament@PRIMARY_CORROSIVE:
+		Weapon: Tripod.acid.Corrosive
+		RequiresCondition: scrin_corrosion
 
 TPOD.acid.reflector:
 	Inherits: TPOD.acid
@@ -1087,6 +1097,7 @@ RPTP.range.PDL:
 
 RPTP.acid:
 	Inherits: RPTP
+	Inherits: ^ScrinAcidUnit
 	WithProductionIconOverlay@Hazard:
 		Types: Hazard
 	Buildable:
@@ -1131,6 +1142,7 @@ RPTP.acid.PDL:
 
 Hexapod:
 	Inherits: ^FightingTankTurreted
+	Inherits: ^ScrinAcidUnit
 	Inherits: ^BigVehicle
 	Inherits: ^ScrinSpriteTS
 	Inherits: ^ScrinLightsMedium
@@ -1141,7 +1153,7 @@ Hexapod:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		Prerequisites: tier3, ~promotion.hexapod
-		Description: Heavy assault walker with long range acid attack.\n
+		Description: Heavy assault walker with long range acid attack.
 		IconPalette: chrometd
 	Voiced:
 		VoiceSet: TripodVoice
@@ -1174,6 +1186,13 @@ Hexapod:
 		Weapon: HexapodAcid
 		FireDelay: 16
 		LocalOffset: 900,0,200
+		RequiresCondition: !scrin_corrosion
+	Armament@CORROSIVE:
+		Name: secondary
+		Weapon: HexapodAcid.Corrosive
+		FireDelay: 16
+		LocalOffset: 900,0,200
+		RequiresCondition: scrin_corrosion
 
 SMCV:
 	Inherits: ^ConstructionVehicle

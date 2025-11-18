@@ -40,11 +40,11 @@ commander-tree-commander-tree =
     .description-102 = Upgrades the Corrupter with greater range.
     .description-103 =
         Upgrades the Corrupter with a Point Laser Defense system.
-        
+
         PDL intercepts incoming missiles and projectiles.
     .description-104 =
         Upgrades the Corrupter with Reflector armor.
-        
+
         Reflector armor is very efficient vs energy weapons.
     .description-105 = Upgrades the Devourer with an acid attack.
     .description-106 = Upgrades the Devourer with heavy armor.
@@ -52,83 +52,83 @@ commander-tree-commander-tree =
     .description-108 = Equips the Channeler with armor piercing disks.
     .description-109 =
         Upgrades the Channeler with a Point Laser Defense system.
-        
+
         PDL intercepts incoming missiles and projectiles.
     .description-110 =
         Upgrades the Channeler with Reflector armor.
-        
+
         Reflector armor is very efficient vs energy weapons.
     .description-111 =
         Upgrades the Seeker with a Point Laser Defense system.
-        
+
         PDL intercepts incoming missiles and projectiles.
     .description-112 =
         Upgrades the Seeker with Reflector armor.
-        
+
         Reflector armor is very efficient vs energy weapons.
     .description-113 =
         Upgrades the Lacerator with a Point Laser Defense system.
-        
+
         PDL intercepts incoming missiles and projectiles.
     .description-114 =
         Upgrades the Lacerator with Reflector armor.
-        
+
         Reflector armor is very efficient vs energy weapons.
     .description-115 =
         Upgrades the Lacerator with Armor Piercing Discs.
-        
+
         AP Discs are very efficient vs heavy armor.
     .description-116 = Upgrades the Ruiner with a barrage cannon, capable of firing much faster.
     .description-117 = Upgrades the Tripod with imporoved laser chaining to a second and third target.
     .description-118 =
         Upgrades the Tripod with Acid Spray.
-        
+
         Acid Spray is efficient vs Reflector Armor.
     .description-119 =
         Upgrades the Tripod with a Point Laser Defense system.
-        
+
         PDL intercepts incoming missiles and projectiles.
     .description-120 =
         Upgrades the Tripod with Reflector armor.
-        
+
         Reflector armor is very efficient vs energy weapons.
     .description-121 =
         Upgrades the Reaper with Acid Spray.
-        
+
         Acid Spray is efficient vs Reflector Armor.
     .description-122 = Upgrades the Reaper with higher range.
     .description-123 =
         Upgrades the Reaper Tripod with a Point Laser Defense system.
-        
+
         PDL intercepts incoming missiles and projectiles.
     .description-124 =
         Upgrades the Reaper Tripod with Reflector armor.
-        
+
         Reflector armor is very efficient vs energy weapons.
     .description-125 =
         Upgrades the Stormcrawler with a Point Laser Defense system.
-        
+
         PDL intercepts incoming missiles and projectiles.
     .description-126 =
         Upgrades the Stormcrawler with Reflector armor.
-        
+
         Reflector armor is very efficient vs energy weapons.
     .description-127 =
         Removes the anti-ground weaponry from the Stormrider.
-        
+
         The Stormhunter is cheaper, smaller, faster and specialized to hunt air units.
     .description-128 =
         Upgrades the Stormrider with plasmabombs
-        
+
         Strong vs vehicles but cannot target air anymore.
     .description-129 = Upgrades the Stormrider with anti-water plasmabombs
     .description-130 =
         Upgrades the Devastator with an energy beam.
-        
+
         The energy beam is strong but needs very long to recharge.
     .description-131 =
         Upgrades the Devastator with armor piercing Shards.
-        
+
         Very efficient vs heavy armor.
     .description-132 = Re-equips the Carrier as Warship with strong armor piercing lasers.
     .description-133 = Re-equips the Carrier Invaders with acid suicide modules.
@@ -141,111 +141,111 @@ commander-tree-commander-tree =
 defaults-baseworld =
     .factionca-at-17-description =
         Reaper-17: Ground Assault
-        
-        Reaper is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth. 
-        
+
+        Reaper is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth.
+
         Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks.
-        
-        The Reapers have the heaviest arsenal of Scrin specialized for ground invasion. This results in the Stormcrawler and the Heavy Tripod. 
-        
-        The Stormcrawler soaks up a lot of damage and the Tripod is a heavy assault walker. 
-        
-        Their epic unit is the Hexapod Eradicator, a walker with long range attack, great for breaking defenses. 
-        
-         Faction Unit: Stormcrawler, Heavy Tripod, Hexapod 
-        
+
+        The Reapers have the heaviest arsenal of Scrin specialized for ground invasion. This results in the Stormcrawler and the Heavy Tripod.
+
+        The Stormcrawler soaks up a lot of damage and the Tripod is a heavy assault walker.
+
+        Their epic unit is the Hexapod Eradicator, a walker with long range attack, great for breaking defenses.
+
+         Faction Unit: Stormcrawler, Heavy Tripod, Hexapod
+
          Special Ability: Ion Surge
-        
+
          Key Commander Tree Options:
-        
-          Stormcrawler: PDL vs. Reflector 
-        
-          Heavy Tripod: Acid vs. Range   
-        
-         Infantry: + 
-        
-         Artillery: ++ 
-        
-         Aircraft: +++ 
-        
-         Defense: ++ 
-        
-         Heavy Tanks: ++++ 
-        
+
+          Stormcrawler: PDL vs. Reflector
+
+          Heavy Tripod: Acid vs. Range
+
+         Infantry: +
+
+         Artillery: ++
+
+         Aircraft: +++
+
+         Defense: ++
+
+         Heavy Tanks: ++++
+
          Recon&Stealth: ++
     .factionca-at-18-description =
         Traveler-59: Fast Attack
-        
-        Traveler is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth. 
-        
-        Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks. 
-        
-        The Travelers are different, because they are the forefront of Scrin invasions. They have the fast and agile units. 
-        
-        The Devourer is a fast anti-tank hover unit and the Strider Tripod is a versatile assault walker. 
-        
-        Their epic unit is the Mothership, able to open Wormholes for teleporting units to the battle. 
-        
+
+        Traveler is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth.
+
+        Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks.
+
+        The Travelers are different, because they are the forefront of Scrin invasions. They have the fast and agile units.
+
+        The Devourer is a fast anti-tank hover unit and the Strider Tripod is a versatile assault walker.
+
+        Their epic unit is the Mothership, able to open Wormholes for teleporting units to the battle.
+
          Faction Unit: Devourer, Strider Tripod, Mothership
-        
+
          Special Ability: Storm Spike
-        
+
          Key Commander Tree Options:
-        
-          Tripod: Acid vs. Chainer  
-        
-         Infantry: ++ 
-        
-         Artillery: + 
-        
-         Aircraft: ++++ 
-        
-         Defense: ++ 
-        
-         Heavy Tanks: +++ 
-        
+
+          Tripod: Acid vs. Chainer
+
+         Infantry: ++
+
+         Artillery: +
+
+         Aircraft: ++++
+
+         Defense: ++
+
+         Heavy Tanks: +++
+
          Recon&Stealth: ++
     .factionca-at-19-description =
         Harvester-11: Area Damage
-        
-        Harvester-11 is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth. 
-        
-        Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks. 
-        
-        The Harvesters have good area of effect weapons as an addition to the usual Scrin arsenal. The Ruiner is an agile artillery, 
-        
-        the Channeler is a heavy tank that opens multiple rifts and their epic unit is the Bastion, a heavy flying base, firing energy bolts splitting up against multiple units. 
-        
+
+        Harvester-11 is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth.
+
+        Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks.
+
+        The Harvesters have good area of effect weapons as an addition to the usual Scrin arsenal. The Ruiner is an agile artillery,
+
+        the Channeler is a heavy tank that opens multiple rifts and their epic unit is the Bastion, a heavy flying base, firing energy bolts splitting up against multiple units.
+
          Faction Unit: Ruiner, Channeler, Bastion
-        
+
          Special Ability: Buzzer Swarm
-        
+
          Key Commander Tree Options:
-        
+
           Ruiner Barrage
-        
+
           Tripod: Acid vs. Range
-        
-          Area Corrupter   
-        
-         Infantry: + 
-        
-         Artillery: ++++ 
-        
-         Aircraft: +++ 
-        
-         Defense: ++ 
-        
-         Heavy Tanks: +++ 
-        
+
+          Area Corrupter
+
+         Infantry: +
+
+         Artillery: ++++
+
+         Aircraft: +++
+
+         Defense: ++
+
+         Heavy Tanks: +++
+
          Recon&Stealth: ++
     .factionca-at-randomscrin-description =
         Random Scrin Faction
-        
+
         A random Scrin faction will be chosen when the game starts.
-        
-        Scrin is the alien race which brought Tiberium on earth. 
-        
+
+        Scrin is the alien race which brought Tiberium on earth.
+
         Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks.
 
 ### vehicles-atmz
@@ -792,14 +792,14 @@ commander-tree-promotion-corrupter-range =
     .tooltipextras-attributes = Attributes: Extended weapon range upgrade.
 commander-tree-promotion-corrupter-pdl =
     .description =
-        Upgrades the Corrupter with a Point Laser Defense system. 
+        Upgrades the Corrupter with a Point Laser Defense system.
         PDL intercepts incoming missiles and projectiles.
     .tooltipextras-strengths = Strengths: Shoots down incoming missiles aimed at the Corrupter.
     .tooltipextras-weaknesses = Weaknesses: Cannot stop laser or infantry attacks.
     .tooltipextras-attributes = Attributes: Adds a point-defense laser turret.
 commander-tree-promotion-corrupter-reflector =
     .description =
-        Upgrades the Corrupter with Reflector armor. 
+        Upgrades the Corrupter with Reflector armor.
         Reflector armor is very efficient vs energy weapons.
     .tooltipextras-strengths = Strengths: Reflector armor shrugs off hostile energy fire.
     .tooltipextras-weaknesses = Weaknesses: Kinetic cannons still tear through the hull.
@@ -826,42 +826,42 @@ commander-tree-promotion-channeler-disc =
     .tooltipextras-attributes = Attributes: Swaps the beam for shard projectiles.
 commander-tree-promotion-channeler-pdl =
     .description =
-        Upgrades the Channeler with a Point Laser Defense system. 
+        Upgrades the Channeler with a Point Laser Defense system.
         PDL intercepts incoming missiles and projectiles.
     .tooltipextras-strengths = Strengths: Intercepts missiles and shells before impact.
     .tooltipextras-weaknesses = Weaknesses: Offers no protection versus beams.
     .tooltipextras-attributes = Attributes: Built-in point-defense laser.
 commander-tree-promotion-channeler-reflector =
     .description =
-        Upgrades the Channeler with Reflector armor. 
+        Upgrades the Channeler with Reflector armor.
         Reflector armor is very efficient vs energy weapons.
     .tooltipextras-strengths = Strengths: Reflector plating reflects Tesla and laser fire.
     .tooltipextras-weaknesses = Weaknesses: Conventional cannons still deal full damage.
     .tooltipextras-attributes = Attributes: Permanent energy mirror upgrade.
 commander-tree-promotion-seeker-pdl =
     .description =
-        Upgrades the Seeker with a Point Laser Defense system. 
+        Upgrades the Seeker with a Point Laser Defense system.
         PDL intercepts incoming missiles and projectiles.
     .tooltipextras-strengths = Strengths: Shoots down projectiles targeting the Seeker.
     .tooltipextras-weaknesses = Weaknesses: Cannot help against beam or infantry weapons.
     .tooltipextras-attributes = Attributes: Point-defense laser pod.
 commander-tree-promotion-seeker-reflector =
     .description =
-        Upgrades the Seeker with Reflector armor. 
+        Upgrades the Seeker with Reflector armor.
         Reflector armor is very efficient vs energy weapons.
     .tooltipextras-strengths = Strengths: Reflector armor resists most energy attacks.
     .tooltipextras-weaknesses = Weaknesses: No extra protection from kinetic rounds.
     .tooltipextras-attributes = Attributes: Energy-reflecting hull coating.
 commander-tree-promotion-lacerator-pdl =
     .description =
-        Upgrades the Lacerator with a Point Laser Defense system. 
+        Upgrades the Lacerator with a Point Laser Defense system.
         PDL intercepts incoming missiles and projectiles.
     .tooltipextras-strengths = Strengths: Intercepts missiles headed for the Lacerator.
     .tooltipextras-weaknesses = Weaknesses: Still exposed to beam fire and rockets fired up close.
     .tooltipextras-attributes = Attributes: Point-defense laser upgrade.
 commander-tree-promotion-lacerator-reflector =
     .description =
-        Upgrades the Lacerator with Reflector armor. 
+        Upgrades the Lacerator with Reflector armor.
         Reflector armor is very efficient vs energy weapons.
     .tooltipextras-strengths = Strengths: Reflector armor blunts Tesla and laser strikes.
     .tooltipextras-weaknesses = Weaknesses: Minimal benefit versus artillery or shells.
@@ -885,28 +885,28 @@ commander-tree-promotion-tripod-chainer =
     .tooltipextras-attributes = Attributes: Automatic chaining beam.
 commander-tree-promotion-tripod-acid =
     .description =
-        Upgrades the Tripod with Acid Spray. 
+        Upgrades the Tripod with Acid Spray.
         Acid Spray is efficient vs Reflector Armor.
     .tooltipextras-strengths = Strengths: Acid spray punishes reflector armor and buildings.
     .tooltipextras-weaknesses = Weaknesses: Short range exposes the tripod to fire.
     .tooltipextras-attributes = Attributes: Secondary acid sprayer mounted under the hull.
 commander-tree-promotion-tripod-pdl =
     .description =
-        Upgrades the Tripod with a Point Laser Defense system. 
+        Upgrades the Tripod with a Point Laser Defense system.
         PDL intercepts incoming missiles and projectiles.
     .tooltipextras-strengths = Strengths: Shoots down incoming missiles and artillery shells.
     .tooltipextras-weaknesses = Weaknesses: Does nothing against beams or infantry weapons.
     .tooltipextras-attributes = Attributes: Point-defense laser node on each leg.
 commander-tree-promotion-tripod-reflector =
     .description =
-        Upgrades the Tripod with Reflector armor. 
+        Upgrades the Tripod with Reflector armor.
         Reflector armor is very efficient vs energy weapons.
     .tooltipextras-strengths = Strengths: Reflector armor keeps Tesla and lasers at bay.
     .tooltipextras-weaknesses = Weaknesses: Heavy cannons and rockets still penetrate.
     .tooltipextras-attributes = Attributes: Energy-reflecting hull upgrade.
 commander-tree-promotion-reaper-acid =
     .description =
-        Upgrades the Reaper with Acid Spray. 
+        Upgrades the Reaper with Acid Spray.
         Acid Spray is efficient vs Reflector Armor.
     .tooltipextras-strengths = Strengths: Acid spray devastates vehicles and reflector plating.
     .tooltipextras-weaknesses = Weaknesses: Requires closing the distance to fire.
@@ -918,42 +918,42 @@ commander-tree-promotion-reaper-range =
     .tooltipextras-attributes = Attributes: Extended weapon emitter assembly.
 commander-tree-promotion-reaper-pdl =
     .description =
-        Upgrades the Reaper Tripod with a Point Laser Defense system. 
+        Upgrades the Reaper Tripod with a Point Laser Defense system.
         PDL intercepts incoming missiles and projectiles.
     .tooltipextras-strengths = Strengths: Intercepts missiles before they hit the Reaper.
     .tooltipextras-weaknesses = Weaknesses: Ineffective against beams or infantry weapons.
     .tooltipextras-attributes = Attributes: Point-defense laser hard-kill system.
 commander-tree-promotion-reaper-reflector =
     .description =
-        Upgrades the Reaper Tripod with Reflector armor. 
+        Upgrades the Reaper Tripod with Reflector armor.
         Reflector armor is very efficient vs energy weapons.
     .tooltipextras-strengths = Strengths: Reflector armor shrugs off most energy fire.
     .tooltipextras-weaknesses = Weaknesses: Kinetic shells still land full damage.
     .tooltipextras-attributes = Attributes: Reflective plating on the chassis.
 commander-tree-promotion-stormcrawler-pdl =
     .description =
-        Upgrades the Stormcrawler with a Point Laser Defense system. 
+        Upgrades the Stormcrawler with a Point Laser Defense system.
         PDL intercepts incoming missiles and projectiles.
     .tooltipextras-strengths = Strengths: Shoots down anti-air missiles targeting the Crawler.
     .tooltipextras-weaknesses = Weaknesses: Cannot protect against beams or flak.
     .tooltipextras-attributes = Attributes: Point-defense laser turret.
 commander-tree-promotion-stormcrawler-reflector =
     .description =
-        Upgrades the Stormcrawler with Reflector armor. 
+        Upgrades the Stormcrawler with Reflector armor.
         Reflector armor is very efficient vs energy weapons.
     .tooltipextras-strengths = Strengths: Reflector armor reduces damage from lasers.
     .tooltipextras-weaknesses = Weaknesses: Flak and bullets still chew through.
     .tooltipextras-attributes = Attributes: Energy mirror plating applied to the hull.
 commander-tree-promotion-stormhunter =
     .description =
-        Removes the anti-ground weaponry from the Stormrider. 
+        Removes the anti-ground weaponry from the Stormrider.
         The Stormhunter is cheaper, smaller, faster and specialized to hunt air units.
     .tooltipextras-strengths = Strengths: Optimized to hunt enemy aircraft exclusively.
     .tooltipextras-weaknesses = Weaknesses: Loses all anti-ground capability.
     .tooltipextras-attributes = Attributes: Cheaper air-superiority Stormrider refit.
 commander-tree-promotion-stormbomber =
     .description =
-        Upgrades the Stormrider with plasmabombs 
+        Upgrades the Stormrider with plasmabombs
         Strong vs vehicles but cannot target air anymore.
     .tooltipextras-strengths = Strengths: Plasmabombs wreck vehicles and buildings.
     .tooltipextras-weaknesses = Weaknesses: Cannot target aircraft anymore.
@@ -965,14 +965,14 @@ commander-tree-promotion-stormbomber-torp =
     .tooltipextras-attributes = Attributes: Detects and hits submerged vessels.
 commander-tree-promotion-devastator-beam =
     .description =
-        Upgrades the Devastator with an energy beam. 
+        Upgrades the Devastator with an energy beam.
         The energy beam is strong but needs very long to recharge.
     .tooltipextras-strengths = Strengths: Energy beam deals massive burst damage.
     .tooltipextras-weaknesses = Weaknesses: Very long recharge between shots.
     .tooltipextras-attributes = Attributes: Focuses the Devastator into a single beam weapon.
 commander-tree-promotion-devastator-shard =
     .description =
-        Upgrades the Devastator with armor piercing Shards. 
+        Upgrades the Devastator with armor piercing Shards.
         Very efficient vs heavy armor.
     .tooltipextras-strengths = Strengths: Armor-piercing shards rip through heavy armor.
     .tooltipextras-weaknesses = Weaknesses: Smaller blast radius versus infantry.
@@ -1007,3 +1007,27 @@ commander-tree-promotion-bastion =
     .tooltipextras-strengths = Strengths: Flying fortress ideal for holding defensive lines.
     .tooltipextras-weaknesses = Weaknesses: Needs escorts to survive concentrated AA.
     .tooltipextras-attributes = Attributes: Heavy aircraft with wide suppression field.
+
+commander-tree-promotion-armor-eating-acid =
+    .description = Corrosive strains enhance all Scrin acid weaponry.
+    .tooltipextras-strengths = Strengths: Strong vs. high HP units.
+    .tooltipextras-weaknesses = Weaknesses: Weak vs. many small units.
+    .tooltipextras-attributes = Attributes: Acid reduces armor of targets being hit.
+
+commander-tree-promotion-shield-generators =
+    .description = Boosts the regeneration output of Scrin shield cores.
+    .tooltipextras-strengths = Strengths: Strong with big Scrin air vessels.
+    .tooltipextras-weaknesses = Weaknesses: Weak vs. EMP.
+    .tooltipextras-attributes = Attributes: 50% Faster shield regeneration.
+
+commander-tree-promotion-harden-skin =
+    .description = Reinforces Scrin infantry hide against conventional fire.
+    .tooltipextras-strengths = Strengths: Reduces incoming damage to Scrin infantry.
+    .tooltipextras-weaknesses = Weaknesses: No benefit to vehicles or aircraft.
+    .tooltipextras-attributes = Attributes: 15% increase to infantry health.
+
+commander-tree-promotion-bio-mechanical-thrusters =
+    .description = Bio-mechanical upgrades push Scrin aircraft to higher speeds.
+    .tooltipextras-strengths = Strengths: Faster flight speed for Scrin air units.
+    .tooltipextras-weaknesses = Weaknesses: Some ships still might be slow.
+    .tooltipextras-attributes = Attributes: 10% increase to aircraft speed.
