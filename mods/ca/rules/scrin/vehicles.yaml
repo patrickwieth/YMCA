@@ -608,6 +608,8 @@ LCHR:
 	Inherits: ^ScrinLightsMedium
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
+	RenderSprites:
+		Image: LCHR
 	Valued:
 		Cost: 900
 	Tooltip:
@@ -622,7 +624,7 @@ LCHR:
 		Speed: 80
 		TurnSpeed: 24
 	Health:
-		HP: 24000
+		HP: 44000
 	RevealsShroud:
 		MinRange: 4c0
 		Range: 6c0
@@ -656,7 +658,7 @@ STCR:
 		Name: Stormcrawler
 	Buildable:
 		BuildPaletteOrder: 65
-		Prerequisites: nerv, ~vehicles.reaper, ~!promotion.stormcrawler.pdl, ~!promotion.stormcrawler.reflector
+		Prerequisites: nerv, ~vehicles.reaper, ~!upg.stormcrawler
 		Queue: Vehicle
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
 		IconPalette: scrin
@@ -678,31 +680,89 @@ STCR:
 		DamageCooldown: 0
 		RequiresCondition: !empdisable && !being-warped
 
-STCR.PDL:
+STCR.Range:
 	Inherits: STCR
-	Inherits@PDL: ^PointLaserDefenseSystem
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Ranged Stormcrawler
+	Buildable:
+		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.range, ~!upg.stormcrawler2
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
+		IconPalette: scrin
+	Armament@PRIMARY:
+		Weapon: StormcrawlerZap.range
+
+STCR.Range.PDL:
+	Inherits: STCR.Range
+	Inherits: ^PointLaserDefenseSystem
 	WithProductionIconOverlay@PDL:
 		Types: PDL
 	Valued:
 		Cost: 1800
 	Tooltip:
-		Name: Stormcrawler (PDL)
+		Name: Ranged Stormcrawler (PDL)
 	Buildable:
-		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.pdl
+		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.range, ~promotion.stormcrawler.pdl
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
 		IconPalette: scrin
 
-STCR.Reflector:
-	Inherits: STCR
+STCR.Range.Reflector:
+	Inherits: STCR.Range
 	Inherits: ^ReflectorArmor
 	WithProductionIconOverlay@Reflector:
 		Types: Reflector
 	Valued:
-		Cost: 1000
+		Cost: 1100
 	Tooltip:
-		Name: Stormcrawler (Reflector)
+		Name: Ranged Stormcrawler (Reflector)
 	Buildable:
-		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.reflector
+		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.range, ~promotion.stormcrawler.reflector
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
+		IconPalette: scrin
+
+STCR.Arc:
+	Inherits: STCR
+	WithProductionIconOverlay@Chainer:
+		Types: Chainer
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Arcing Stormcrawler
+	Buildable:
+		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~!upg.stormcrawler2
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
+		IconPalette: scrin
+	Armament@PRIMARY:
+		Weapon: StormcrawlerZap.Chain
+
+STCR.Arc.PDL:
+	Inherits: STCR.Arc
+	Inherits: ^PointLaserDefenseSystem
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Valued:
+		Cost: 1800
+	Tooltip:
+		Name: Ranged Stormcrawler (PDL)
+	Buildable:
+		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~promotion.stormcrawler.pdl
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
+		IconPalette: scrin
+
+STCR.Arc.Reflector:
+	Inherits: STCR.Arc
+	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Ranged Stormcrawler (Reflector)
+	Buildable:
+		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~promotion.stormcrawler.reflector
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
 		IconPalette: scrin
 

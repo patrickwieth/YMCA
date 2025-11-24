@@ -1,5 +1,7 @@
 promotion.Armor_Eating_Acid:
 	Inherits: ^promotion_item
+	RenderSprites:
+		Image: promotion.armor_eating_acid
 	Tooltip:
 		Name: Armor Eating Acid
 	Buildable:
@@ -15,6 +17,8 @@ promotion.Armor_Eating_Acid:
 
 promotion.Shield_Generators:
 	Inherits: ^promotion_item
+	RenderSprites:
+		Image: promotion.shield_generators
 	Tooltip:
 		Name: Improved Shield Generators
 	Buildable:
@@ -30,6 +34,8 @@ promotion.Shield_Generators:
 
 promotion.Harden_Skin:
 	Inherits: ^promotion_item
+	RenderSprites:
+		Image: promotion.harden_skin
 	Tooltip:
 		Name: Infantry Skin Hardening
 	Buildable:
@@ -45,6 +51,8 @@ promotion.Harden_Skin:
 
 promotion.Bio-Mechanical_Thrusters:
 	Inherits: ^promotion_item
+	RenderSprites:
+		Image: promotion.bio-mechanical_thrusters
 	Tooltip:
 		Name: Bio-Mechanical Thrusters
 	Buildable:
@@ -129,7 +137,7 @@ promotion.Corrupter.Area:
 		Name: Corrupter Area Upgrade
 	Buildable:
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, nerv, vehicles, ~scrin, !promotion.corrupter.range
+		Prerequisites: has_points, nerv, vehicles, ~traveler, !promotion.corrupter.range
 		Description: commander-tree-promotion-corrupter-area.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-corrupter-area.tooltipextras-strengths
@@ -150,7 +158,7 @@ promotion.Corrupter.Range:
 		Name: Corrupter Range Upgrade
 	Buildable:
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, nerv, vehicles, ~scrin, !promotion.corrupter.area
+		Prerequisites: has_points, nerv, vehicles, ~traveler, !promotion.corrupter.area
 		Description: commander-tree-promotion-corrupter-range.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-corrupter-range.tooltipextras-strengths
@@ -171,12 +179,14 @@ promotion.Corrupter.PDL:
 		Name: Corrupter PDL Upgrade
 	Buildable:
 		BuildPaletteOrder: 15
-		Prerequisites: has_points, tier3, vehicles, ~scrin, upg.corrupter, !promotion.corrupter.reflector
+		Prerequisites: has_points, tier3, vehicles, ~traveler, upg.corrupter, !promotion.corrupter.reflector
 		Description: commander-tree-promotion-corrupter-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-corrupter-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-corrupter-pdl.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-corrupter-pdl.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.corrupter2
 	PromotionPalette:
 		Group: ScrinCorrupterDefense
 
@@ -190,14 +200,144 @@ promotion.Corrupter.Reflector:
 		Name: Corrupter Reflector Upgrade
 	Buildable:
 		BuildPaletteOrder: 15
-		Prerequisites: has_points, tier3, vehicles, ~scrin, upg.corrupter, !promotion.corrupter.pdl
+		Prerequisites: has_points, tier3, vehicles, ~traveler, upg.corrupter, !promotion.corrupter.pdl
 		Description: commander-tree-promotion-corrupter-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-corrupter-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-corrupter-reflector.tooltipextras-weaknesses
 		Attributes: commander-tree-promotion-corrupter-reflector.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.corrupter2
 	PromotionPalette:
 		Group: ScrinCorrupterDefense
+
+
+promotion.Leecher.Area:
+	Inherits: ^promotion_item
+	RenderSprites:
+		Image: LCHR
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Tooltip:
+		Name: Leecher Area Upgrade
+	Buildable:
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, nerv, vehicles, ~traveler, !promotion.corrupter.range
+		Description: commander-tree-promotion-corrupter-area.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-corrupter-area.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-corrupter-area.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-corrupter-area.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.corrupter
+	PromotionPalette:
+		Group: ScrinCorrupterCore
+
+promotion.Leecher.Range:
+	Inherits: ^promotion_item
+	RenderSprites:
+		Image: LCHR
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	Tooltip:
+		Name: Leecher Range Upgrade
+	Buildable:
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, nerv, vehicles, ~traveler, !promotion.corrupter.area
+		Description: commander-tree-promotion-corrupter-range.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-corrupter-range.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-corrupter-range.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-corrupter-range.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.corrupter
+	PromotionPalette:
+		Group: ScrinCorrupterCore
+
+
+promotion.Stormcrawler.Arc:
+	Inherits: ^promotion_item
+	RenderSprites:
+		Image: STCR
+	WithProductionIconOverlay@Chainer:
+		Types: Chainer
+	Tooltip:
+		Name: Stormcrawler Arc Upgrade
+	Buildable:
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, nerv, vehicles, ~reaper, !promotion.stormcrawler.range
+		Description: commander-tree-promotion-stormcrawler-arc.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-stormcrawler-arc.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-stormcrawler-arc.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-stormcrawler-arc.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.stormcrawler
+	PromotionPalette:
+		Group: StormcrawlerCore
+
+promotion.Stormcrawler.Range:
+	Inherits: ^promotion_item
+	RenderSprites:
+		Image: STCR
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	Tooltip:
+		Name: Stormcrawler Range Upgrade
+	Buildable:
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, nerv, vehicles, ~reaper, !promotion.stormcrawler.arc
+		Description: commander-tree-promotion-stormcrawler-range.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-stormcrawler-range.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-stormcrawler-range.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-stormcrawler-range.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.stormcrawler
+	PromotionPalette:
+		Group: StormcrawlerCore
+
+promotion.Stormcrawler.PDL:
+	Inherits: ^promotion_item
+	RenderSprites:
+		Image: STCR
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Tooltip:
+		Name: Stormcrawler PDL Upgrade
+	Buildable:
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.stormcrawler.reflector
+		Description: commander-tree-promotion-stormcrawler-pdl.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-stormcrawler-pdl.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-stormcrawler-pdl.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-stormcrawler-pdl.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.stormcrawler2
+	PromotionPalette:
+		Group: StormcrawlerDef
+
+promotion.Stormcrawler.Reflector:
+	Inherits: ^promotion_item
+	RenderSprites:
+		Image: STCR
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Tooltip:
+		Name: Stormcrawler Reflector Upgrade
+	Buildable:
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.stormcrawler.pdl
+		Description: commander-tree-promotion-stormcrawler-reflector.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-stormcrawler-reflector.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-stormcrawler-reflector.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-stormcrawler-reflector.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.stormcrawler2
+	PromotionPalette:
+		Group: StormcrawlerDef
 
 promotion.Devourer.Acid:
 	Inherits: ^promotion_item
@@ -341,7 +481,7 @@ promotion.Seeker.PDL:
 		Attributes: commander-tree-promotion-seeker-pdl.tooltipextras-attributes
 	PromotionPalette:
 		Group: ScrinSeeker
-		Column: 7
+		Column: 3
 
 promotion.Seeker.Reflector:
 	Inherits: ^promotion_item
@@ -361,7 +501,7 @@ promotion.Seeker.Reflector:
 		Attributes: commander-tree-promotion-seeker-reflector.tooltipextras-attributes
 	PromotionPalette:
 		Group: ScrinSeeker
-		Column: 7
+		Column: 3
 
 promotion.Lacerator.PDL:
 	Inherits: ^promotion_item
@@ -535,7 +675,7 @@ promotion.Reaper.Acid:
 	Tooltip:
 		Name: Reaper Acid Upgrade
 	Buildable:
-		BuildPaletteOrder: 15
+		BuildPaletteOrder: 11
 		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.reaper.range
 		Description: commander-tree-promotion-reaper-acid.description
 	TooltipExtras:
@@ -557,7 +697,7 @@ promotion.Reaper.Range:
 	Tooltip:
 		Name: Reaper Range Upgrade
 	Buildable:
-		BuildPaletteOrder: 15
+		BuildPaletteOrder: 11
 		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.reaper.acid
 		Description: commander-tree-promotion-reaper-range.description
 	TooltipExtras:
@@ -599,7 +739,7 @@ promotion.Reaper.Reflector:
 	Tooltip:
 		Name: Reaper Reflector Upgrade
 	Buildable:
-		BuildPaletteOrder: 16
+		BuildPaletteOrder: 15
 		Prerequisites: has_points, tier3, vehicles, ~reaper, upg.reaper, !promotion.reaper.pdl
 		Description: commander-tree-promotion-reaper-reflector.description
 	TooltipExtras:
@@ -609,44 +749,6 @@ promotion.Reaper.Reflector:
 	PromotionPalette:
 		Group: ScrinReaperDefense
 		Column: 3
-
-promotion.Stormcrawler.PDL:
-	Inherits: ^promotion_item
-	RenderSprites:
-		Image: STCR
-	WithProductionIconOverlay@PDL:
-		Types: PDL
-	Tooltip:
-		Name: Stormcrawler PDL Upgrade
-	Buildable:
-		BuildPaletteOrder: 16
-		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.stormcrawler.reflector
-		Description: commander-tree-promotion-stormcrawler-pdl.description
-	TooltipExtras:
-		Strengths: commander-tree-promotion-stormcrawler-pdl.tooltipextras-strengths
-		Weaknesses: commander-tree-promotion-stormcrawler-pdl.tooltipextras-weaknesses
-		Attributes: commander-tree-promotion-stormcrawler-pdl.tooltipextras-attributes
-	PromotionPalette:
-		Group: ScrinStormcrawler
-
-promotion.Stormcrawler.Reflector:
-	Inherits: ^promotion_item
-	RenderSprites:
-		Image: STCR
-	WithProductionIconOverlay@Reflector:
-		Types: Reflector
-	Tooltip:
-		Name: Stormcrawler Reflector Upgrade
-	Buildable:
-		BuildPaletteOrder: 16
-		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.stormcrawler.pdl
-		Description: commander-tree-promotion-stormcrawler-reflector.description
-	TooltipExtras:
-		Strengths: commander-tree-promotion-stormcrawler-reflector.tooltipextras-strengths
-		Weaknesses: commander-tree-promotion-stormcrawler-reflector.tooltipextras-weaknesses
-		Attributes: commander-tree-promotion-stormcrawler-reflector.tooltipextras-attributes
-	PromotionPalette:
-		Group: ScrinStormcrawler
 
 ## Aircraft ##
 

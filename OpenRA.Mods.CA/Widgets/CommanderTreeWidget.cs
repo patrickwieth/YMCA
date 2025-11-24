@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using OpenRA;
 using OpenRA.Graphics;
@@ -9,6 +10,7 @@ using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Orders;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Traits.Render;
+using OpenRA.Mods.Common.Graphics;
 using OpenRA.Mods.Common.Widgets;
 using OpenRA.Primitives;
 using OpenRA.Support;
@@ -19,8 +21,26 @@ namespace OpenRA.Mods.CA.Widgets
 {
 	public class CommanderTreeWidget : Widget
 	{
+		static CommanderTreeWidget()
+		{
+			Log.AddChannel("CommanderTree", "commander-tree.log");
+		}
+
+		static void LogDebug(string message)
+		{
+			Log.Write("CommanderTree", message);
+			try
+			{
+				File.AppendAllText("commander-tree-debug.log", message + Environment.NewLine);
+			}
+			catch
+			{
+			}
+		}
+
 		const string PromotionQueueType = "Promotions";
 		const string PromotionGroup = "Promotion";
+		const string ButtonizerFallbackFont = "TinyBold";
 
 		readonly World world;
 		readonly WorldRenderer worldRenderer;
@@ -420,6 +440,7 @@ namespace OpenRA.Mods.CA.Widgets
 
 			var animation = new Animation(world, renderInfo.GetImage(actor, promotionsQueue.Actor.Owner.Faction.InternalName));
 			animation.Play(buildable.Icon);
+			var seq = animation.CurrentSequence as DefaultSpriteSequence;
 
 			var paletteName = buildable.IconPaletteIsPlayerPalette
 				? buildable.IconPalette + promotionsQueue.Actor.Owner.InternalName
@@ -436,6 +457,40 @@ namespace OpenRA.Mods.CA.Widgets
 				Queued = new List<ProductionItem>(),
 				ProductionQueue = promotionsQueue
 			};
+
+			if (seq == null)
+			{
+				var currentType = animation.CurrentSequence?.GetType().FullName ?? "<null>";
+				LogDebug($"Sequence missing for {actor.Name}: type={currentType} icon={buildable.Icon}");
+			}
+
+			if (seq != null)
+			{
+				var hasLabel = !string.IsNullOrEmpty(seq.ButtonLabel);
+				var hasFont = !string.IsNullOrEmpty(seq.ButtonLabelFont);
+				if (seq.Buttonize || hasLabel || hasFont)
+				{
+					icon.Buttonize = true;
+					icon.ButtonStyle = seq.ButtonStyle;
+				}
+
+				if (hasLabel)
+					icon.ButtonLabel = seq.ButtonLabel;
+
+				if (hasFont)
+				{
+					icon.ButtonLabelFont = seq.ButtonLabelFont;
+					LogDebug($"Sequence font for {actor.Name}: '{seq.ButtonLabelFont ?? "<null>"}' label '{seq.ButtonLabel ?? "<null>"}'");
+				}
+			}
+
+			if (!icon.Buttonize && (!string.IsNullOrEmpty(icon.ButtonLabel) || !string.IsNullOrEmpty(icon.ButtonLabelFont)))
+				icon.Buttonize = true;
+
+			LogDebug($"CommanderTree icon {actor.Name}: label='{icon.ButtonLabel ?? "<null>"}' font='{icon.ButtonLabelFont ?? "<null>"}'");
+
+			if (!string.IsNullOrEmpty(icon.ButtonLabelFont) && icon.ButtonLabelFont.Equals("OsShp", StringComparison.OrdinalIgnoreCase))
+				LogDebug($"OS SHP label for {actor.Name}: '{icon.ButtonLabel ?? "<null>"}'");
 
 			var palettePosition = actor.TraitInfos<PromotionPaletteInfo>().FirstOrDefault();
 			var node = new CommanderNode(actor, buildable, icon)
@@ -1227,6 +1282,7 @@ namespace OpenRA.Mods.CA.Widgets
 
 			var topLeft = RenderOrigin.ToFloat2() + node.Position;
 			var center = topLeft + iconOffset;
+			var iconRect = new Rectangle((int)topLeft.X, (int)topLeft.Y, IconWidth, IconHeight);
 
 			WidgetUtils.DrawSpriteCentered(node.Icon.Sprite, node.Icon.Palette, center);
 
@@ -1254,6 +1310,8 @@ namespace OpenRA.Mods.CA.Widgets
 			{
 				WidgetUtils.DrawSpriteCentered(cantBuild.Image, node.Icon.IconDarkenPalette, center);
 			}
+
+			ProductionIconButtonizer.Draw(node.Icon, iconRect, node.Icon.Name ?? node.Actor.Name, ButtonizerFallbackFont);
 
 			var iconPos = RenderOrigin.ToFloat2() + node.Position;
 			var totalQueued = node.Icon.Queued.Count;

@@ -15,6 +15,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 		readonly ProductionPaletteWidget palette;
 		readonly World world;
+		bool commanderTreeAutoOpened;
 
 		void SetupProductionGroupButton(ProductionTypeButtonWidget button)
 		{
@@ -108,12 +109,20 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		{
 			this.world = world;
 			palette = widget.Get<ProductionPaletteWidget>("PRODUCTION_PALETTE");
+			Game.RunAfterTick(() =>
+			{
+				if (commanderTreeAutoOpened)
+					return;
+				commanderTreeAutoOpened = true;
+				OpenCommanderTree();
+			});
 			var tooltipField = typeof(ProductionPaletteWidget).GetField("TooltipTemplate", BindingFlags.Instance | BindingFlags.Public);
 			if (tooltipField != null)
 			{
 				try
 				{
 					tooltipField.SetValue(palette, "CA_PRODUCTION_TOOLTIP");
+
 					Log.Write("debug", $"ClassicProductionLogicCA palette template={palette.TooltipTemplate}");
 				}
 				catch (FieldAccessException)
@@ -244,3 +253,5 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		}
 	}
 }
+
+

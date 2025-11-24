@@ -198,6 +198,7 @@ InterloperLaser.AA:
 
 CorrupterSpew:
 	Inherits: BigChemspray
+	Range: 4c512
 	StartBurstReport: corrupter-fire1.aud
 	ReloadDelay: 110
 	Burst: 12
@@ -237,7 +238,7 @@ CorrupterSpew.area4:
 
 CorrupterSpew.range:
 	Inherits: ChemballLauncher
-	Range: 7c512
+	Range: 6c512
 	StartBurstReport: corrupter-fire1.aud
 	ReloadDelay: 110
 	Warhead@1Dam: SpreadDamage
@@ -1005,6 +1006,24 @@ StormcrawlerZap:
 	StartBurstReport: stormcrawler-fire1.aud, stormcrawler-fire2.aud
 	Warhead@1Dam: SpreadDamage
 		Damage: 850
+
+StormcrawlerZap.Range:
+	Inherits: StormcrawlerZap
+	Range: 6c768
+
+StormcrawlerZap.Chain:
+	Inherits: StormcrawlerZap
+	Warhead@Arc: FireShrapnel
+		Weapon: StormcrawlerZap.Arc
+		Amount: 2
+		AimChance: 100
+
+StormcrawlerZap.Arc:
+	Inherits: StormcrawlerZap
+	Range: 1c512
+	-StartBurstReport: 
+	Warhead@1Dam: SpreadDamage
+		Damage: 400
 
 BastionZap:
 	Inherits: ^Energy
