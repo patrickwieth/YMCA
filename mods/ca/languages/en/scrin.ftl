@@ -790,6 +790,24 @@ commander-tree-promotion-corrupter-range =
     .tooltipextras-strengths = Strengths: Fires safely from farther behind the lines.
     .tooltipextras-weaknesses = Weaknesses: Still vulnerable if enemies break through.
     .tooltipextras-attributes = Attributes: Extended weapon range upgrade.
+commander-tree-promotion-leecher-area =
+    .description =
+        Modifies the Leecher beam to flood a wider area with stasis spores.
+        Enemy squads caught in the cloud move considerably slower.
+
+commander-tree-promotion-leecher-slow =
+    .tooltipextras-strengths = Strengths: Slows entire formations that the Leecher tags.
+    .tooltipextras-weaknesses = Weaknesses: Control effect does not increase raw damage.
+    .tooltipextras-attributes = Attributes: Enlarged stasis field around each target.
+
+commander-tree-promotion-leecher-drain =
+    .description =
+        Re-tools the Leecher conduits for more efficient health siphoning.
+        Each pulse drains extra vitality from victims.
+    .tooltipextras-strengths = Strengths: Greatly boosts self-repair while firing.
+    .tooltipextras-weaknesses = Weaknesses: Provides no crowd control or burst damage.
+    .tooltipextras-attributes = Attributes: Enhanced siphons convert more damage into health.
+
 commander-tree-promotion-corrupter-pdl =
     .description =
         Upgrades the Corrupter with a Point Laser Defense system.
@@ -1031,3 +1049,35 @@ commander-tree-promotion-bio-mechanical-thrusters =
     .tooltipextras-strengths = Strengths: Faster flight speed for Scrin air units.
     .tooltipextras-weaknesses = Weaknesses: Some ships still might be slow.
     .tooltipextras-attributes = Attributes: 10% increase to aircraft speed.
+
+commander-tree-promotion-leecher-pdl =
+    .description =
+        Upgrades the Leecher with a Point Laser Defense system.
+        PDL intercepts incoming missiles and projectiles.
+    .tooltipextras-strengths = Strengths: Filters out rockets and artillery aimed at the Leecher.
+    .tooltipextras-weaknesses = Weaknesses: Energy beams and massed infantry still punch through.
+    .tooltipextras-attributes = Attributes: Installs autonomous point-defense emitters.
+
+commander-tree-promotion-leecher-reflector =
+    .description =
+        Upgrades the Leecher with Reflector armor.
+        Reflector armor is very efficient vs energy weapons.
+    .tooltipextras-strengths = Strengths: Deflects lasers and tesla-style attacks.
+    .tooltipextras-weaknesses = Weaknesses: Kinetic shells and missiles still land full force.
+    .tooltipextras-attributes = Attributes: Hull is plated with reflector fields.
+
+commander-tree-promotion-stormcrawler-arc =
+    .description =
+        Reconfigures the Stormcrawler's weapon into a chaining arc projector.
+        Arcing bolts jump between clustered targets.
+    .tooltipextras-strengths = Strengths: Devastates blobs of infantry or light vehicles.
+    .tooltipextras-weaknesses = Weaknesses: Still relies on close range to get in damage.
+    .tooltipextras-attributes = Attributes: Lightning arcs now bounce to secondary victims.
+
+commander-tree-promotion-stormcrawler-range =
+    .description =
+        Extends the Stormcrawler's cannon range with improved capacitors.
+        Allows bombardment from further behind the line.
+    .tooltipextras-strengths = Strengths: Safer standoff distance against defenses.
+    .tooltipextras-weaknesses = Weaknesses: Loses the chaining effect of the arc refit.
+    .tooltipextras-attributes = Attributes: Firing coils tuned for long-range volleys.

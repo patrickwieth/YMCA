@@ -240,6 +240,10 @@ namespace OpenRA.Mods.CA.Widgets
 			if (mi.Button != MouseButton.Left && mi.Button != MouseButton.Right && mi.Button != MouseButton.Middle)
 				return false;
 
+			var node = hoverNode;
+			if (!HasMouseFocus && node == null)
+				return false;
+
 			if (mi.Event == MouseInputEvent.Down && !TakeMouseFocus(mi))
 				return false;
 
@@ -249,12 +253,8 @@ namespace OpenRA.Mods.CA.Widgets
 			if (mi.Event == MouseInputEvent.Up)
 				return YieldMouseFocus(mi);
 
-			var node = hoverNode;
 			if (node == null)
-			{
-				Game.Sound.PlayNotification(world.Map.Rules, null, "Sounds", clickDisabledSound, null);
-				return true;
-			}
+				return false;
 
 			switch (mi.Button)
 			{

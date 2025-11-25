@@ -11,7 +11,7 @@ Channeler:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
-		Prerequisites: nerv, ~vehicles.harvester, ~!filler.channeler
+		Prerequisites: tier2, ~vehicles.harvester, ~!filler.channeler
 		Description: Heavy hover tank with armed with rift cannon.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 		IconPalette: scrin
 	Valued:
@@ -47,7 +47,7 @@ Channeler.chain:
 	WithProductionIconOverlay@Chainer:
 		Types: Chainer
 	Buildable:
-		Prerequisites: nerv, ~vehicles.harvester, ~promotion.channeler.chain, ~!filler.channeler2
+		Prerequisites: tier2, ~vehicles.harvester, ~promotion.channeler.chain, ~!filler.channeler2
 		Description: Heavy hover tank with armed with rift cannon.\n  Rift beams chain to other targets.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 	Valued:
 		Cost: 1500
@@ -61,7 +61,7 @@ Channeler.disc:
 	WithProductionIconOverlay@Shell:
 		Types: Shell
 	Buildable:
-		Prerequisites: nerv, ~vehicles.harvester, ~promotion.channeler.disc, ~!filler.channeler2
+		Prerequisites: tier2, ~vehicles.harvester, ~promotion.channeler.disc, ~!filler.channeler2
 		Description: Heavy hover tank with armed with plasma disc cannon.\n  Strong vs Vehicles, Defenses\n  Weak vs Aircraft
 	Valued:
 		Cost: 1350
@@ -476,7 +476,7 @@ CORR:
 		Name: Corrupter
 	Buildable:
 		BuildPaletteOrder: 65
-		Prerequisites: nerv, ~vehicles.scrin, ~!filler.corrupter
+		Prerequisites: tier2, ~vehicles.scrin, ~!filler.corrupter
 		Queue: Vehicle
 		Description: Short-ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
@@ -508,7 +508,7 @@ CORR.Area:
 	Tooltip:
 		Name: Area Corrupter
 	Buildable:
-		Prerequisites: nerv, ~vehicles.scrin, ~promotion.corrupter.area, ~!filler.corrupter2
+		Prerequisites: tier2, ~vehicles.scrin, ~promotion.corrupter.area, ~!filler.corrupter2
 		Description: Short-ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
 	Health:
@@ -569,7 +569,7 @@ CORR.Range:
 	Tooltip:
 		Name: Ranged Corrupter
 	Buildable:
-		Prerequisites: nerv, ~vehicles.scrin, ~promotion.corrupter.range, ~!filler.corrupter2
+		Prerequisites: tier2, ~vehicles.scrin, ~promotion.corrupter.range, ~!filler.corrupter2
 		Description: Ranged anti-infantry/structure unit.\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
 	Armament@PRIMARY:
@@ -616,7 +616,7 @@ LCHR:
 		Name: Leecher
 	Buildable:
 		BuildPaletteOrder: 141
-		Prerequisites: radar, ~vehicles.harvester
+		Prerequisites: tier2, vehicles, ~harvester
 		Queue: Vehicle
 		Description: Medium-ranged anti-infantry/structure unit.\n  Regenerates health while dealing damage\n  Disables power plants and radars\n  Slows vehicles & cyborgs\n  Strong vs Infantry, Buildings\n  Weak vs Tanks, Defenses, Aircraft
 		IconPalette: chrome
@@ -643,6 +643,68 @@ LCHR:
 		Weapon: LeecherExplode
 		EmptyWeapon: LeecherExplode
 
+LCHR.Slow:
+	Inherits: LCHR
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Slowing Leecher
+	Buildable:
+		Prerequisites: tier2, vehicles, ~harvester, ~promotion.stormcrawler.range, ~!upg.stormcrawler2
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
+		IconPalette: scrin
+	Armament@PRIMARY:
+		Weapon: LeecherBeam.slow
+
+
+LCHR.Slow.PDL:
+	Inherits: LCHR.Slow
+	Inherits: ^PointLaserDefenseSystem
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Valued:
+		Cost: 1800
+	Tooltip:
+		Name: Slowing Leecher (PDL)
+	Buildable:
+		Prerequisites: tier2, vehicles, ~harvester, ~promotion.stormcrawler.range, ~promotion.stormcrawler.pdl
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
+		IconPalette: scrin
+
+LCHR.Slow.Reflector:
+	Inherits: LCHR.Slow
+	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Slowing Leecher (Reflector)
+	Buildable:
+		Prerequisites: tier2, vehicles, ~harvester, ~promotion.stormcrawler.range, ~promotion.stormcrawler.reflector
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
+		IconPalette: scrin
+
+
+LCHR.Drain:
+	Inherits: LCHR
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Draining Leecher
+	Buildable:
+		Prerequisites: tier2, vehicles, ~harvester, ~promotion.stormcrawler.range, ~!upg.stormcrawler2
+		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
+		IconPalette: scrin
+	Armament@PRIMARY:
+		Weapon: LeecherBeam.slow
+
+
+
 STCR:
 	Inherits: ^FightingVehicle
 	Inherits: ^HoverVehicle
@@ -658,7 +720,7 @@ STCR:
 		Name: Stormcrawler
 	Buildable:
 		BuildPaletteOrder: 65
-		Prerequisites: nerv, ~vehicles.reaper, ~!upg.stormcrawler
+		Prerequisites: tier2, ~vehicles.reaper, ~!upg.stormcrawler
 		Queue: Vehicle
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
 		IconPalette: scrin
@@ -689,7 +751,7 @@ STCR.Range:
 	Tooltip:
 		Name: Ranged Stormcrawler
 	Buildable:
-		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.range, ~!upg.stormcrawler2
+		Prerequisites: tier2, ~vehicles.reaper, ~promotion.stormcrawler.range, ~!upg.stormcrawler2
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
 		IconPalette: scrin
 	Armament@PRIMARY:
@@ -705,7 +767,7 @@ STCR.Range.PDL:
 	Tooltip:
 		Name: Ranged Stormcrawler (PDL)
 	Buildable:
-		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.range, ~promotion.stormcrawler.pdl
+		Prerequisites: tier2, ~vehicles.reaper, ~promotion.stormcrawler.range, ~promotion.stormcrawler.pdl
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
 		IconPalette: scrin
 
@@ -719,7 +781,7 @@ STCR.Range.Reflector:
 	Tooltip:
 		Name: Ranged Stormcrawler (Reflector)
 	Buildable:
-		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.range, ~promotion.stormcrawler.reflector
+		Prerequisites: tier2, ~vehicles.reaper, ~promotion.stormcrawler.range, ~promotion.stormcrawler.reflector
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
 		IconPalette: scrin
 
@@ -732,7 +794,7 @@ STCR.Arc:
 	Tooltip:
 		Name: Arcing Stormcrawler
 	Buildable:
-		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~!upg.stormcrawler2
+		Prerequisites: tier2, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~!upg.stormcrawler2
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Weak vs Aircraft
 		IconPalette: scrin
 	Armament@PRIMARY:
@@ -748,7 +810,7 @@ STCR.Arc.PDL:
 	Tooltip:
 		Name: Ranged Stormcrawler (PDL)
 	Buildable:
-		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~promotion.stormcrawler.pdl
+		Prerequisites: tier2, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~promotion.stormcrawler.pdl
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
 		IconPalette: scrin
 
@@ -762,7 +824,7 @@ STCR.Arc.Reflector:
 	Tooltip:
 		Name: Ranged Stormcrawler (Reflector)
 	Buildable:
-		Prerequisites: nerv, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~promotion.stormcrawler.reflector
+		Prerequisites: tier2, ~vehicles.reaper, ~promotion.stormcrawler.arc, ~promotion.stormcrawler.reflector
 		Description: Slow moving, durable, short-range assault unit.\n  Regenerates rapidly.\n  Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
 		IconPalette: scrin
 

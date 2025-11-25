@@ -212,47 +212,89 @@ promotion.Corrupter.Reflector:
 		Group: ScrinCorrupterDefense
 
 
-promotion.Leecher.Area:
+promotion.Leecher.Slow:
 	Inherits: ^promotion_item
 	RenderSprites:
 		Image: LCHR
 	WithProductionIconOverlay@Bullets:
 		Types: Bullets
 	Tooltip:
-		Name: Leecher Area Upgrade
+		Name: Leecher Slow Upgrade
 	Buildable:
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, nerv, vehicles, ~traveler, !promotion.corrupter.range
-		Description: commander-tree-promotion-corrupter-area.description
+		Prerequisites: has_points, tier2, vehicles, ~harvester, !promotion.leecher.drain
+		Description: commander-tree-promotion-leecher-slow.description
 	TooltipExtras:
-		Strengths: commander-tree-promotion-corrupter-area.tooltipextras-strengths
-		Weaknesses: commander-tree-promotion-corrupter-area.tooltipextras-weaknesses
-		Attributes: commander-tree-promotion-corrupter-area.tooltipextras-attributes
+		Strengths: commander-tree-promotion-leecher-slow.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-leecher-slow.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-leecher-slow.tooltipextras-attributes
 	ProvidesPrerequisite@upg:
-		Prerequisite: upg.corrupter
+		Prerequisite: upg.leecher
 	PromotionPalette:
-		Group: ScrinCorrupterCore
+		Group: LeecherCore
 
-promotion.Leecher.Range:
+promotion.Leecher.Drain:
 	Inherits: ^promotion_item
 	RenderSprites:
 		Image: LCHR
 	WithProductionIconOverlay@Crosshair:
 		Types: Crosshair
 	Tooltip:
-		Name: Leecher Range Upgrade
+		Name: Leecher Drain Upgrade
 	Buildable:
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, nerv, vehicles, ~traveler, !promotion.corrupter.area
-		Description: commander-tree-promotion-corrupter-range.description
+		Prerequisites: has_points, tier2, vehicles, ~harvester, !promotion.leecher.slow
+		Description: commander-tree-promotion-leecher-drain.description
 	TooltipExtras:
-		Strengths: commander-tree-promotion-corrupter-range.tooltipextras-strengths
-		Weaknesses: commander-tree-promotion-corrupter-range.tooltipextras-weaknesses
-		Attributes: commander-tree-promotion-corrupter-range.tooltipextras-attributes
+		Strengths: commander-tree-promotion-leecher-drain.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-leecher-drain.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-leecher-drain.tooltipextras-attributes
 	ProvidesPrerequisite@upg:
-		Prerequisite: upg.corrupter
+		Prerequisite: upg.leecher
 	PromotionPalette:
-		Group: ScrinCorrupterCore
+		Group: LeecherCore
+
+promotion.Leecher.PDL:
+	Inherits: ^promotion_item
+	RenderSprites:
+		Image: LCHR
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Tooltip:
+		Name: Leecher PDL Upgrade
+	Buildable:
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~harvester, upg.leecher, !promotion.leecher.reflector
+		Description: commander-tree-promotion-leecher-pdl.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-leecher-pdl.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-leecher-pdl.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-leecher-pdl.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.leecher2
+	PromotionPalette:
+		Group: LeecherDefense
+
+promotion.Leecher.Reflector:
+	Inherits: ^promotion_item
+	RenderSprites:
+		Image: LCHR
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Tooltip:
+		Name: Leecher Reflector Upgrade
+	Buildable:
+		BuildPaletteOrder: 15
+		Prerequisites: has_points, tier3, vehicles, ~harvester, upg.leecher, !promotion.leecher.pdl
+		Description: commander-tree-promotion-leecher-reflector.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-leecher-reflector.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-leecher-reflector.tooltipextras-weaknesses
+		Attributes: commander-tree-promotion-leecher-reflector.tooltipextras-attributes
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.leecher2
+	PromotionPalette:
+		Group: LeecherDefense
 
 
 promotion.Stormcrawler.Arc:
@@ -265,7 +307,7 @@ promotion.Stormcrawler.Arc:
 		Name: Stormcrawler Arc Upgrade
 	Buildable:
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, nerv, vehicles, ~reaper, !promotion.stormcrawler.range
+		Prerequisites: has_points, tier2, vehicles, ~reaper, !promotion.stormcrawler.range
 		Description: commander-tree-promotion-stormcrawler-arc.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormcrawler-arc.tooltipextras-strengths
@@ -286,7 +328,7 @@ promotion.Stormcrawler.Range:
 		Name: Stormcrawler Range Upgrade
 	Buildable:
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, nerv, vehicles, ~reaper, !promotion.stormcrawler.arc
+		Prerequisites: has_points, tier2, vehicles, ~reaper, !promotion.stormcrawler.arc
 		Description: commander-tree-promotion-stormcrawler-range.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormcrawler-range.tooltipextras-strengths
@@ -307,7 +349,7 @@ promotion.Stormcrawler.PDL:
 		Name: Stormcrawler PDL Upgrade
 	Buildable:
 		BuildPaletteOrder: 15
-		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.stormcrawler.reflector
+		Prerequisites: has_points, tier3, vehicles, upg.stormcrawler, ~reaper, !promotion.stormcrawler.reflector
 		Description: commander-tree-promotion-stormcrawler-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormcrawler-pdl.tooltipextras-strengths
@@ -328,7 +370,7 @@ promotion.Stormcrawler.Reflector:
 		Name: Stormcrawler Reflector Upgrade
 	Buildable:
 		BuildPaletteOrder: 15
-		Prerequisites: has_points, tier3, vehicles, ~reaper, !promotion.stormcrawler.pdl
+		Prerequisites: has_points, tier3, vehicles, upg.stormcrawler, ~reaper, !promotion.stormcrawler.pdl
 		Description: commander-tree-promotion-stormcrawler-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-stormcrawler-reflector.tooltipextras-strengths
@@ -388,7 +430,7 @@ promotion.Channeler.Chain:
 	Tooltip:
 		Name: Channeler Chain Upgrade
 	Buildable:
-		BuildPaletteOrder: 10
+		BuildPaletteOrder: 11
 		Prerequisites: has_points, nerv, vehicles, ~harvester, !promotion.channeler.disc
 		Description: commander-tree-promotion-channeler-chain.description
 	TooltipExtras:
@@ -410,7 +452,7 @@ promotion.Channeler.Disc:
 	Tooltip:
 		Name: Channeler Disc Upgrade
 	Buildable:
-		BuildPaletteOrder: 10
+		BuildPaletteOrder: 11
 		Prerequisites: has_points, nerv, vehicles, ~harvester, !promotion.channeler.chain
 		Description: commander-tree-promotion-channeler-disc.description
 	TooltipExtras:
@@ -432,7 +474,7 @@ promotion.Channeler.pdl:
 	Tooltip:
 		Name: Channeler PDL Upgrade
 	Buildable:
-		BuildPaletteOrder: 11
+		BuildPaletteOrder: 15
 		Prerequisites: has_points, tier3, vehicles, ~harvester, upg.channeler, !promotion.channeler.reflector
 		Description: commander-tree-promotion-channeler-pdl.description
 	TooltipExtras:
@@ -452,7 +494,7 @@ promotion.Channeler.Reflector:
 	Tooltip:
 		Name: Channeler Reflector Upgrade
 	Buildable:
-		BuildPaletteOrder: 11
+		BuildPaletteOrder: 15
 		Prerequisites: has_points, tier3, vehicles, ~harvester, upg.channeler, !promotion.channeler.pdl
 		Description: commander-tree-promotion-channeler-reflector.description
 	TooltipExtras:

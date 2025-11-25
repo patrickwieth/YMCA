@@ -676,3 +676,118 @@ promotion-jumpjet-railgun =
     .description = Equips the Jumpjet with a Railgun. \n  This makes it strong vs tanks.
 promotion-jumpjet-rockets =
     .description = Equips the Jumpjet with a rocket launcher.\n This makes it strong vs aircraft and vehicles.
+
+### commander-tree-promotion-shielded-miners
+
+commander-tree-promotion-shielded-miners =
+    .description = Outfits every GDI harvester with portable shield projectors to survive surprise raids.
+
+### commander-tree-promotion-slingshot
+
+commander-tree-promotion-slingshot =
+    .description = Authorizes production of the Slingshot anti-aircraft hovertank to guard the skies.
+
+### commander-tree-promotion-hover-mlrs
+
+commander-tree-promotion-hover-mlrs =
+    .description = Deploys Hover MLRS batteries that provide mobile rocket artillery even over water.
+
+### commander-tree-promotion-hover-mlrs-reflector
+
+commander-tree-promotion-hover-mlrs-reflector =
+    .description = Replaces Hover MLRS plating with reflector armor for heavy energy resistance.
+
+### commander-tree-promotion-hover-mlrs-pdl
+
+commander-tree-promotion-hover-mlrs-pdl =
+    .description = Adds a point-defense laser system to Hover MLRS to swat down incoming missiles.
+
+### commander-tree-promotion-hailstorm-mlrs
+
+commander-tree-promotion-hailstorm-mlrs =
+    .description = Unlocks the Hailstorm MLRS, a heavier bombardment variant loaded with cluster rockets.
+
+### commander-tree-promotion-mobile-sensor-pdl
+
+commander-tree-promotion-mobile-sensor-pdl =
+    .description = Bolts a point-defense laser onto Mobile Sensor Arrays so they can defend themselves from rockets.
+
+### commander-tree-promotion-medium-tank-pdl
+
+commander-tree-promotion-medium-tank-pdl =
+    .description = Installs a point-defense laser on every Medium Tank to intercept artillery shells and missiles.
+
+### commander-tree-promotion-medium-tank-reflector
+
+commander-tree-promotion-medium-tank-reflector =
+    .description = Upgrades Medium Tanks with reflector armor plating to shrug off energy weapons.
+
+### commander-tree-promotion-mobile-emp
+
+commander-tree-promotion-mobile-emp =
+    .description = Authorizes the Mobile EMP platform that shuts down enemy vehicles with focused pulses.
+
+### commander-tree-promotion-mobile-emp-stable-reactor
+
+commander-tree-promotion-mobile-emp-stable-reactor =
+    .description = Fits the Mobile EMP with a stable reactor for longer sustained disruption fields.
+
+### commander-tree-promotion-mobile-emp-volatile-reactor
+
+commander-tree-promotion-mobile-emp-volatile-reactor =
+    .description = Swaps in a volatile reactor that delivers stronger pulses at the risk of overloads.
+
+### commander-tree-promotion-apc-vulcan
+
+commander-tree-promotion-apc-vulcan =
+    .description = Refits APCs with a Vulcan chaingun turret for brutal anti-infantry support.
+
+### commander-tree-promotion-dronepair
+
+commander-tree-promotion-dronepair =
+    .description = Deploys paired guardian drones that escort frontline vehicles and share their upgrades.
+
+### commander-tree-promotion-stealth-fighter
+
+commander-tree-promotion-stealth-fighter =
+    .description = Unlocks the Stealth Fighter strike craft for surgical bombing runs.
+
+### commander-tree-promotion-stealth-fighter-payload
+
+commander-tree-promotion-stealth-fighter-payload =
+    .description = Doubles the ordnance carried by Stealth Fighters for heavier alpha strikes.
+
+### commander-tree-promotion-ion-warship
+
+commander-tree-promotion-ion-warship =
+    .description = Authorizes Orca Ion Warships armed with devastating ion cannons.
+
+### commander-tree-promotion-mammoth-mkii
+
+commander-tree-promotion-mammoth-mkii =
+    .description = Unlocks the Mammoth Mk.II walker, GDI's apex siege platform.
+
+### commander-tree-promotion-marv
+
+commander-tree-promotion-marv =
+    .description = Commissions the MARV epic unit with customizable hardpoints and ore vacuum tines.
+
+### commander-tree-promotion-titan-battle
+
+commander-tree-promotion-titan-battle =
+    .description = Reconfigures the Titan for close-range brawler duty with extra armor plating.
+
+### commander-tree-promotion-titan-railgun
+
+commander-tree-promotion-titan-railgun =
+    .description = Upgrades Titans with experimental railguns for extreme long-range fire.
+
+### commander-tree-promotion-titan-pdl
+
+commander-tree-promotion-titan-pdl =
+    .description = Adds a point-defense laser emitter to every Titan to ward off missiles.
+
+### commander-tree-promotion-titan-reflector
+
+commander-tree-promotion-titan-reflector =
+    .description = Fits Titans with reflector armor that defeats laser and ion weaponry.
