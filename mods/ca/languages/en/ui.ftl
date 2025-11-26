@@ -105,3 +105,23 @@ commander-tree-promotion-oil-pumps =
     .tooltipextras-weaknesses = Weaknesses: \u0007 Requires additional power and protection for vulnerable economy structures.
     .tooltipextras-attributes = Attributes: \u0007 Grants Supply Truck cash deliveries to teammates.
 
+
+commander-tree.title = Commander Promotions
+commander-tree.points-label = Available Points
+promotion-counter.rank = Rank
+commander-tree.close = Close
+promotion-counter.points = Points
+promotion-counter.progress = Progress
+promotion-counter.progress-max = Max rank achieved
+button-production-types-promotion-tooltip = Open Commander Promotions
+
+promotions.rank1 = Major
+promotions.rank2 = Colonel
+promotions.rank3 = Brigadier General
+promotions.rank4 = Major General
+promotions.rank5 = General
+promotions.rank6 = Five-Star General
+promotions.rank7 = Field Marshal
+promotions.rank8 = Supreme Commander
+
+loadscreen-loading = Mining Bitcoin..., Installing Malware..., Encrypting HDD..., Downloading Credit Card Data..., Doxing your grandma..., Trolling the Essence..., Overheating CPU..., Hacking into Mainframe...

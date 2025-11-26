@@ -1,4 +1,4 @@
-﻿Container@COMMANDER_TREE_OVERLAY:
+Container@COMMANDER_TREE_OVERLAY:
 	Width: WINDOW_WIDTH
 	Height: WINDOW_HEIGHT
 	Logic: CommanderTreeWindowLogic
@@ -20,19 +20,39 @@
 					Y: 18
 					Font: Bold
 					Text: commander-tree.title
-				Container@POINTS_PANEL:
+				Container@HEADER_STATS:
 					X: 24
 					Y: 56
-					Width: 300
-					Height: 32
+					Width: PARENT_WIDTH - 48
+					Height: 72
 					Children:
+						Label@RANK_LABEL:
+							Width: 220
+							Font: Bold
+							Text: promotion-counter.rank
+						Label@RANK_VALUE:
+							X: 220
+							Width: PARENT_WIDTH - 220
+							Font: Bold
 						Label@POINTS_LABEL:
+							Y: 24
+							Width: 220
 							Font: Bold
 							Text: commander-tree.points-label
 						Label@POINTS_VALUE:
-							X: 160
-							Width: 80
-							Align: Right
+							Y: 24
+							X: 220
+							Width: PARENT_WIDTH - 220
+							Font: Bold
+						Label@PROGRESS_LABEL:
+							Y: 48
+							Width: 220
+							Font: Bold
+							Text: promotion-counter.progress
+						Label@PROGRESS_VALUE:
+							Y: 48
+							X: 220
+							Width: PARENT_WIDTH - 220
 							Font: Bold
 				Button@CLOSE_BUTTON:
 					X: PARENT_WIDTH - WIDTH - 24
@@ -51,9 +71,9 @@
 							Text: X
 				ScrollPanel@TREE_SCROLL:
 					X: 24
-					Y: 104
+					Y: 148
 					Width: PARENT_WIDTH - 48
-					Height: PARENT_HEIGHT - 140
+					Height: PARENT_HEIGHT - 184
 					ScrollBar: Right
 					Children:
 						CommanderTree@COMMANDER_TREE:

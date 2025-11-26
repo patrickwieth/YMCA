@@ -12,6 +12,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 	{
 		readonly World world;
 		readonly LabelWidget pointsValue;
+		readonly LabelWidget rankValue;
+		readonly LabelWidget progressValue;
 		readonly ButtonWidget closeButton;
 		readonly ColorBlockWidget dismissArea;
 		readonly LogicKeyListenerWidget hotkeys;
@@ -21,13 +23,35 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		{
 			this.world = world;
 
+			var titleLabel = widget.GetOrNull<LabelWidget>("TITLE");
+			var pointsLabel = widget.GetOrNull<LabelWidget>("POINTS_LABEL");
+			var rankLabel = widget.GetOrNull<LabelWidget>("RANK_LABEL");
+			var progressLabel = widget.GetOrNull<LabelWidget>("PROGRESS_LABEL");
+
 			pointsValue = widget.GetOrNull<LabelWidget>("POINTS_VALUE");
+			rankValue = widget.GetOrNull<LabelWidget>("RANK_VALUE");
+			progressValue = widget.GetOrNull<LabelWidget>("PROGRESS_VALUE");
 			closeButton = widget.GetOrNull<ButtonWidget>("CLOSE_BUTTON");
 			dismissArea = widget.GetOrNull<ColorBlockWidget>("DISMISS_AREA");
 			hotkeys = widget.GetOrNull<LogicKeyListenerWidget>("HOTKEYS");
 
+			if (titleLabel != null)
+				titleLabel.GetText = () => GetLocalizedString("commander-tree.title", "Commander Promotions");
+
+			if (rankLabel != null)
+				rankLabel.GetText = () => GetLocalizedString("promotion-counter.rank", "Rank");
+
+			if (pointsLabel != null)
+				pointsLabel.GetText = () => GetLocalizedString("commander-tree.points-label", "Available Points");
+
+			if (progressLabel != null)
+				progressLabel.GetText = () => GetLocalizedString("promotion-counter.progress", "Progress");
+
 			if (closeButton != null)
+			{
 				closeButton.OnClick = Close;
+				closeButton.GetTooltipText = () => GetLocalizedString("commander-tree.close", "Close");
+			}
 
 			if (dismissArea != null)
 			{
@@ -50,18 +74,28 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			if (pointsValue != null)
 				pointsValue.GetText = () => GetCommanderPoints().ToStringInvariant();
+
+			if (rankValue != null)
+				rankValue.GetText = GetCommanderRank;
+
+			if (progressValue != null)
+				progressValue.GetText = GetCommanderProgress;
+		}
+
+		ISync GetPromotionsTrait()
+		{
+			var player = world.LocalPlayer;
+			if (player == null)
+				return null;
+
+			return player.PlayerActor
+				.TraitsImplementing<ISync>()
+				.FirstOrDefault(t => string.Equals(t.GetType().Name, "PlayerPromotions", StringComparison.OrdinalIgnoreCase));
 		}
 
 		int GetCommanderPoints()
 		{
-			var player = world.LocalPlayer;
-			if (player == null)
-				return 0;
-
-			var promotionsTrait = player.PlayerActor
-				.TraitsImplementing<ISync>()
-				.FirstOrDefault(t => string.Equals(t.GetType().Name, "PlayerPromotions", StringComparison.OrdinalIgnoreCase));
-
+			var promotionsTrait = GetPromotionsTrait();
 			if (promotionsTrait != null)
 			{
 				var pointsField = promotionsTrait.GetType().GetField("Points");
@@ -72,10 +106,66 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			return 0;
 		}
 
+
+		string GetCommanderRank()
+		{
+			var promotionsTrait = GetPromotionsTrait();
+			if (promotionsTrait != null)
+			{
+				var rankField = promotionsTrait.GetType().GetField("currentRank");
+				if (rankField != null && rankField.FieldType == typeof(string))
+				{
+					var value = rankField.GetValue(promotionsTrait) as string;
+					if (!string.IsNullOrEmpty(value))
+					{
+						if (FluentProvider.TryGetMessage(value, out var localized))
+							return localized;
+
+						return value;
+					}
+				}
+			}
+
+			return "-";
+		}
+
+		string GetCommanderProgress()
+		{
+			var promotionsTrait = GetPromotionsTrait();
+			if (promotionsTrait == null)
+				return "-";
+
+			var traitType = promotionsTrait.GetType();
+			var isMaxLevelField = traitType.GetField("IsMaxLevel");
+			var nextLevelField = traitType.GetField("nextLevelXpRequired");
+			var experienceProperty = traitType.GetProperty("Experience");
+
+			var isMaxLevel = isMaxLevelField != null && isMaxLevelField.FieldType == typeof(bool) && (bool)isMaxLevelField.GetValue(promotionsTrait);
+			if (isMaxLevel)
+				return FluentProvider.GetMessage("promotion-counter.progress-max");
+
+			var experience = 0;
+			if (experienceProperty != null && experienceProperty.PropertyType == typeof(int))
+				experience = (int)experienceProperty.GetValue(promotionsTrait);
+
+			var nextRequirement = 0;
+			if (nextLevelField != null && nextLevelField.FieldType == typeof(int))
+				nextRequirement = (int)nextLevelField.GetValue(promotionsTrait);
+
+			if (nextRequirement <= 0)
+				return experience.ToStringInvariant();
+
+			return experience.ToStringInvariant() + "/" + nextRequirement.ToStringInvariant();
+		}
+
 		void Close()
 		{
 			Ui.CloseWindow();
 		}
+
+		string GetLocalizedString(string key, string fallback)
+		{
+			return FluentProvider.TryGetMessage(key, out var message) ? message : fallback;
+		}
 	}
 }
-

@@ -59,6 +59,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		void SetupPromotionButton(ProductionTypeButtonWidget button, ProductionQueue[] queues)
 		{
 			button.IsDisabled = () => !queues.Any(q => q.Enabled);
+			button.GetTooltipText = () => FluentProvider.TryGetMessage("button-production-types-promotion-tooltip", out var message)
+				? message
+				: "Open Commander Tree";
 
 			button.OnMouseDown = mi =>
 			{

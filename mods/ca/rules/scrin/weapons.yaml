@@ -476,8 +476,8 @@ RuinerCannon:
 	Inherits: 155mm
 	Inherits: ^ShellArtillery
 	Report: ruiner-fire1.aud
-	ReloadDelay: 160
-	Burst: 4
+	ReloadDelay: 80
+	Burst: 2
 	BurstDelays: 10
 	Range: 14c0
 	Projectile: BulletCA
@@ -494,8 +494,15 @@ RuinerCannon:
 
 RuinerCannon.barrage:
 	Inherits: RuinerCannon
+	Range: 14c0
+	Burst: 4
+
+RuinerCannon.splash:
+	Inherits: RuinerCannon
+	Warhead@1Dam: SpreadDamage
+		Spread: 850
+		Falloff: 100, 55, 20, 5
 	Range: 16c0
-	ReloadDelay: 80
 
 TripodLaser:
 	Inherits: Laser
@@ -1460,7 +1467,7 @@ AtomizerBolts:
 
 AtomizerBoltsAA:
 	Inherits: AtomizerBolts
-	Range: 10c0
+	Range: 12c0
 	ValidTargets: Air, AirSmall
 	Projectile: Missile
 		Speed: 225
@@ -1474,6 +1481,10 @@ AtomizerBoltsAA:
 		ValidTargets: Air, AirSmall
 	Warhead@red: GrantExternalCondition
 		ValidTargets: Air, AirSmall
+
+AtomizerBolts.Range:
+	Inherits: AtomizerBolts
+	Range: 16c0
 
 AtomizeSpreadInit:
 	Projectile: InstantHit

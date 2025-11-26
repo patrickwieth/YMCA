@@ -796,6 +796,7 @@ commander-tree-promotion-leecher-area =
         Enemy squads caught in the cloud move considerably slower.
 
 commander-tree-promotion-leecher-slow =
+    .description = Enriches the Leecher beam with stasis spores that slow anything it touches.
     .tooltipextras-strengths = Strengths: Slows entire formations that the Leecher tags.
     .tooltipextras-weaknesses = Weaknesses: Control effect does not increase raw damage.
     .tooltipextras-attributes = Attributes: Enlarged stasis field around each target.

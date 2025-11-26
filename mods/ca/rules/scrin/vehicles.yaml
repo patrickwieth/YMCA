@@ -927,7 +927,7 @@ RUIN:
 		Name: Ruiner
 	Buildable:
 		BuildPaletteOrder: 150
-		Prerequisites: scrt, ~vehicles.harvester, ~!promotion.ruiner.barrage
+		Prerequisites: tier3, ~vehicles.harvester, ~!promotion.ruiner.barrage
 		Queue: Vehicle
 		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
@@ -961,12 +961,29 @@ RUIN.barrage:
 		Name: Barrage Ruiner
 	Buildable:
 		BuildPaletteOrder: 150
-		Prerequisites: scrt, ~vehicles.harvester, ~promotion.ruiner.barrage
+		Prerequisites: tier3, vehicles, ~harvester, ~promotion.ruiner.barrage
 		Queue: Vehicle
 		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
 		IconPalette: chrome
 	Armament:
 		Weapon: RuinerCannon.barrage
+
+RUIN.splash:
+	Inherits: RUIN
+	WithProductionIconOverlay@Scrin:
+		Types: Scrin
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Splash Ruiner
+	Buildable:
+		BuildPaletteOrder: 150
+		Prerequisites: tier3, vehicles, ~harvester, ~promotion.ruiner.splash
+		Queue: Vehicle
+		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
+		IconPalette: chrome
+	Armament:
+		Weapon: RuinerCannon.splash
 
 ATMZ:
 	Inherits: ^FightingVehicle
@@ -975,6 +992,7 @@ ATMZ:
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
 	RenderSprites:
+		Image: ATMZ
 		PlayerPalette: overlayplayerscrin
 	Valued:
 		Cost: 1250
@@ -983,7 +1001,7 @@ ATMZ:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 285
-		Prerequisites: scrt, ~vehicles.traveler
+		Prerequisites: tier3, vehicles, ~traveler
 		Description: Lightly armored long-range support unit.\n  Targets take damage over time\n  Targets have reduced rate of fire\n  Effect spreads when affected targets die\n  Strong vs Vehicles, Aircraft, Defenses\n  Weak vs Infantry, Buildings
 		IconPalette: chrome
 	Mobile:
@@ -1011,6 +1029,37 @@ ATMZ:
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
 	WithSpriteTurret:
+
+ATMZ.AA:
+	Inherits: ATMZ
+	WithProductionIconOverlay@Air:
+		Types: Air
+	Tooltip:
+		Name: Atomizer (AA)
+	Buildable:
+		BuildPaletteOrder: 150
+		Prerequisites: tier3, vehicles, ~traveler, ~promotion.ruiner.splash
+		Queue: Vehicle
+		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
+		IconPalette: chrome
+	Armament:
+		Weapon: RuinerCannon.splash
+
+ATMZ.Range:
+	Inherits: ATMZ
+	WithProductionIconOverlay@Crosshair:
+		Types: Crosshair
+	Tooltip:
+		Name: Range Atomizer
+	Buildable:
+		BuildPaletteOrder: 150
+		Prerequisites: tier3, vehicles, ~traveler, ~promotion.ruiner.splash
+		Queue: Vehicle
+		Description: Long-range artillery.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Tanks, Aircraft
+		IconPalette: chrome
+	Armament:
+		Weapon: RuinerCannon.splash
+
 
 TPOD:
 	Inherits: ^FightingTankTurreted
@@ -1153,7 +1202,7 @@ RPTP:
 	RenderSprites:
 		Image: RPTP
 	Buildable:
-		Prerequisites: scrt, ~vehicles.reaper, ~!promotion.reaper.range, ~!promotion.reaper.acid
+		Prerequisites: tier3, ~vehicles.reaper, ~!promotion.reaper.range, ~!promotion.reaper.acid
 	Valued:
 		Cost: 2200
 	Tooltip:
