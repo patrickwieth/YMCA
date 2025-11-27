@@ -10,17 +10,17 @@ STMR:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin, ~!promotion.stormhunter, ~!promotion.stormbomber, ~!promotion.stormbomber.torp
-		Description: Durable patrol craft.
+		Prerequisites: tier2, aircraft, ~scrin, !upg.stormrider
+		Description: aircraft-stormrider.buildable-description
 		IconPalette: chrome
-	TooltipExtras:
-		Strengths: • Strong vs Infantry, Light Armor
-		Weaknesses: • Weak vs Tanks, Buildings
-		Attributes: • Detects submerged vessles.
 	Valued:
 		Cost: 1250
 	Voiced:
 		VoiceSet: VehicleVoice
+	TooltipExtras:
+		Strengths: aircraft-stormrider.tooltip-strengths
+		Weaknesses: aircraft-stormrider.tooltip-weaknesses
+		Attributes: aircraft-stormrider.tooltip-attributes
 	Tooltip:
 		Name: Stormrider
 	Health:
@@ -94,18 +94,19 @@ STMR.hunter:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin, ~promotion.stormhunter
-		Description: Small hunter anti-air craft.
+		Prerequisites: tier2, aircraft, ~scrin, ~promotion.stormhunter
+		Description: aircraft-stormhunter.buildable-description
 		IconPalette: chrome
-	TooltipExtras:
-		Strengths: • Strong vs Aircraft
-		Weaknesses: • Surface Anti-Air
 	Valued:
 		Cost: 850
 	Health:
 		HP: 25000
 	ReloadDelayMultiplier:
 		Modifier: 40
+	TooltipExtras:
+		Strengths: aircraft-stormhunter.tooltip-strengths
+		Weaknesses: aircraft-stormhunter.tooltip-weaknesses
+		Attributes: aircraft-stormhunter.tooltip-attributes
 	Tooltip:
 		Name: Stormhunter
 	-Armament@PRIMARY:
@@ -122,16 +123,17 @@ STMR.bomber:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin, ~promotion.stormbomber
-		Description: Dedicated bomber.\n  Strong vs Clusters of Vehicles
+		Prerequisites: tier2, aircraft, ~scrin, ~promotion.stormbomber
+		Description: aircraft-stormbomber.buildable-description
 		IconPalette: chrome
-	TooltipExtras:
-		Strengths: • Strong vs Tanks, Buildings
-		Weaknesses: • Surface Anti-Air
 	Valued:
 		Cost: 1500
 	Health:
 		HP: 18000
+	TooltipExtras:
+		Strengths: aircraft-stormbomber.tooltip-strengths
+		Weaknesses: aircraft-stormbomber.tooltip-weaknesses
+		Attributes: aircraft-stormbomber.tooltip-attributes
 	Tooltip:
 		Name: Stormbomber
 	Armament@PRIMARY:
@@ -164,17 +166,17 @@ STMR.torp:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 40
-		Prerequisites: nerv, grav, ~aircraft.scrin, ~promotion.stormbomber.torp
-		Description: Dedicated torpedo launcher.
+		Prerequisites: tier2, aircraft, ~scrin, ~promotion.stormbomber.torp
+		Description: aircraft-stormbomber-torp.buildable-description
 		IconPalette: chrome
-	TooltipExtras:
-		Strengths: • Strong vs Ships, Submarines
-		Weaknesses: • Weak vs Anti-Air
-		Attributes: • Detects submerged vessels
 	Valued:
 		Cost: 1500
 	Health:
 		HP: 18000
+	TooltipExtras:
+		Strengths: aircraft-stormbomber-torp.tooltip-strengths
+		Weaknesses: aircraft-stormbomber-torp.tooltip-weaknesses
+		Attributes: aircraft-stormbomber-torp.tooltip-attributes
 	Tooltip:
 		Name: Stormbomber (Torpedo)
 	Armament@PRIMARY:
@@ -215,13 +217,17 @@ DEVA:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: scrt, grav, ~aircraft.scrin, ~!promotion.devastator.shard, ~!promotion.devastator.beam
-		Description: Long-range siege warship.\n  Strong vs Buildings, Defenses, Infantry\n  Weak vs Aircraft, Tanks
+		Prerequisites: tier3, aircraft, ~scrin, !upg.devastator
+		Description: aircraft-devastator.buildable-description
 		IconPalette: chrome
 	Voiced:
 		VoiceSet: DevastatorVoice
 	Valued:
 		Cost: 2200
+	TooltipExtras:
+		Strengths: aircraft-devastator.tooltip-strengths
+		Weaknesses: aircraft-devastator.tooltip-weaknesses
+		Attributes: aircraft-devastator.tooltip-attributes
 	Tooltip:
 		Name: Devastator Warship
 	Health:
@@ -262,10 +268,14 @@ DEVA.Shards:
 	WithProductionIconOverlay@Missile:
 		Types: Missile
 	Buildable:
-		Prerequisites: scrt, grav, ~aircraft.scrin, ~promotion.devastator.shard
-		Description: Long-range anti-tank warship.\n  Strong vs Tanks\n  Weak vs Aircraft
+		Prerequisites: tier3, aircraft, ~scrin, ~promotion.devastator.shard
+		Description: aircraft-devastator-shards.buildable-description
 	Valued:
 		Cost: 2200
+	TooltipExtras:
+		Strengths: aircraft-devastator-shards.tooltip-strengths
+		Weaknesses: aircraft-devastator-shards.tooltip-weaknesses
+		Attributes: aircraft-devastator-shards.tooltip-attributes
 	Tooltip:
 		Name: Devastator Shardlauncher
 	Armament@PRIMARY:
@@ -278,10 +288,14 @@ DEVA.Rift:
 	WithProductionIconOverlay@Ion:
 		Types: Ion
 	Buildable:
-		Prerequisites: scrt, grav, ~aircraft.scrin, ~promotion.devastator.beam
-		Description: Long-range anti-tank warship.\n  Strong vs masses of units\n  Weak vs Aircraft
+		Prerequisites: tier3, aircraft, ~scrin, ~promotion.devastator.beam
+		Description: aircraft-devastator-rift.buildable-description
 	Valued:
 		Cost: 2200
+	TooltipExtras:
+		Strengths: aircraft-devastator-rift.tooltip-strengths
+		Weaknesses: aircraft-devastator-rift.tooltip-weaknesses
+		Attributes: aircraft-devastator-rift.tooltip-attributes
 	Tooltip:
 		Name: Devastator Rift Opener
 	Armament@PRIMARY:
@@ -298,13 +312,17 @@ MSHP:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 190
-		Prerequisites: sign, scrt, ~aircraft.scrin, ~promotion.mothership
-		Description: Huge craft with powerful beam weapon.\n  Can create wormholes.\n  Strong vs Buildings, Defenses\n  Weak vs Aircraft
+		Prerequisites: tier4, aircraft, ~scrin, ~promotion.mothership
+		Description: aircraft-mothership.buildable-description
 		IconPalette: scrin
 	Voiced:
 		VoiceSet: MothershipVoice
 	Valued:
 		Cost: 10000
+	TooltipExtras:
+		Strengths: aircraft-mothership.tooltip-strengths
+		Weaknesses: aircraft-mothership.tooltip-weaknesses
+		Attributes: aircraft-mothership.tooltip-attributes
 	Tooltip:
 		Name: Mothership
 	Health:
@@ -421,13 +439,17 @@ Bastion:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 190
-		Prerequisites: sign, scrt, ~aircraft.scrin, ~promotion.bastion
-		Description: Defense platform for Scrin zapping incoming invaders.\n  Maximum 1 can be built.\n
+		Prerequisites: tier4, aircraft, ~scrin, ~promotion.bastion
+		Description: aircraft-bastion.buildable-description
 		IconPalette: chrometd
 	Voiced:
 		VoiceSet: MothershipVoice
 	Valued:
 		Cost: 10000
+	TooltipExtras:
+		Strengths: aircraft-bastion.tooltip-strengths
+		Weaknesses: aircraft-bastion.tooltip-weaknesses
+		Attributes: aircraft-bastion.tooltip-attributes
 	Tooltip:
 		Name: Bastion
 	Health:
@@ -447,7 +469,7 @@ Bastion:
 		CruiseAltitude: 3c512
 		InitialFacing: 768
 		TurnSpeed: 16
-		Speed: 38
+		Speed: 32
 		AltitudeVelocity: 0c50
 		CanForceLand: False
 		Voice: Move
@@ -488,13 +510,17 @@ PAC:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~!promotion.carrier.warship, ~!promotion.carrier.suicide, ~!promotion.carrier.support
-		Description: Carrier that launches a squadron\nof assault craft.\n	Strong vs Vehicles, Aircraft\n  Weak vs Infantry, Buildings, Defenses
+		Prerequisites: tier4, aircraft, ~scrin, !upg.carrier
+		Description: aircraft-pac.buildable-description
 		IconPalette: chrome
 	Voiced:
 		VoiceSet: PlanetaryAssaultCarrierVoice
 	Valued:
 		Cost: 2200
+	TooltipExtras:
+		Strengths: aircraft-pac.tooltip-strengths
+		Weaknesses: aircraft-pac.tooltip-weaknesses
+		Attributes: aircraft-pac.tooltip-attributes
 	Tooltip:
 		Name: Planetary Assault Carrier
 	Health:
@@ -568,11 +594,15 @@ PAC.suicide:
 	WithProductionIconOverlay@Skull:
 		Types: Skull
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~promotion.carrier.suicide
-		Description: Carrier with suicide drones.\n	Strong vs Vehicles, Infantry\n  Weak vs Anti-Air
+		Prerequisites: tier4, aircraft, ~scrin, ~promotion.carrier.suicide
+		Description: aircraft-pac-suicide.buildable-description
 		IconPalette: chrome
 	Valued:
 		Cost: 3000
+	TooltipExtras:
+		Strengths: aircraft-pac-suicide.tooltip-strengths
+		Weaknesses: aircraft-pac-suicide.tooltip-weaknesses
+		Attributes: aircraft-pac-suicide.tooltip-attributes
 	Tooltip:
 		Name: Suicide Drone Carrier
 	Armament@PRIMARY:
@@ -589,11 +619,15 @@ PAC.support:
 	WithProductionIconOverlay@Wrench:
 		Types: Wrench
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~promotion.carrier.support
-		Description: Massive Carrier with repair drones.\n	Repair drones have point laser defense.\n  Can teleport infantry directly into the field.\n  Strong vs Projectile based attacks.\n  Weak without army.
+		Prerequisites: tier4, aircraft, ~scrin, ~promotion.carrier.support
+		Description: aircraft-pac-support.buildable-description
 		IconPalette: chrome
 	Valued:
 		Cost: 5000
+	TooltipExtras:
+		Strengths: aircraft-pac-support.tooltip-strengths
+		Weaknesses: aircraft-pac-support.tooltip-weaknesses
+		Attributes: aircraft-pac-support.tooltip-attributes
 	Tooltip:
 		Name: Support Carrier
 	CarrierMaster@carr1:
@@ -619,11 +653,15 @@ PAC.laser:
 	WithProductionIconOverlay@Laser:
 		Types: Laser
 	Buildable:
-		Prerequisites: sign, scrt, grav, ~aircraft.scrin, ~promotion.carrier.warship
-		Description: Massive Warship with multiple armor piercing laser systems.\n	Strong vs Vehicles\n  Weak vs Aircraft, Reflector
+		Prerequisites: tier4, aircraft, ~scrin, ~promotion.carrier.warship
+		Description: aircraft-pac-laser.buildable-description
 		IconPalette: chrome
 	Valued:
 		Cost: 3600
+	TooltipExtras:
+		Strengths: aircraft-pac-laser.tooltip-strengths
+		Weaknesses: aircraft-pac-laser.tooltip-weaknesses
+		Attributes: aircraft-pac-laser.tooltip-attributes
 	Tooltip:
 		Name: Planetary Assault Warship
 	Health:
