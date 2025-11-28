@@ -4,3 +4,9 @@
 - Reference upgrade prerequisites (`upg.*`) without a leading `~` (use `upg.channeler`, not `~upg.channeler`).
 
 - Use `anypower` without a leading `~` when gating power availability; `~anypower` is invalid in commander trees.
+
+- Keep commander tree BuildPaletteOrder values within the shared low ranges (3-21) so every faction lines up with the Scrin overlay layout instead of resurrecting legacy 200+ slots.
+- Store all Buildable metadata (IconPalette, BuildPaletteOrder, Prerequisites, Description, etc.) inside the Buildable block; never duplicate these fields under PromotionPalette, TooltipExtras, or other sections.
+- PromotionPalette sections should only declare palette/visual data (Group/Name/Column/Types); no gameplay data or tooltip text belongs there.
+- Every promotion needs a TooltipExtras block that lists Strengths/Weaknesses (and optional Attributes), and those lines must stay under TooltipExtras rather than leaking into other traits.
+- When a promotion unlocks or modifies a real unit, include a RenderSprites block so the commander-tree icon references that unit's sequence instead of falling back to placeholders.

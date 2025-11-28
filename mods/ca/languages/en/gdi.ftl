@@ -110,6 +110,8 @@ aircraft-orcav2-torp =
 commander-tree-promotion-jumpjet =
     .buildable-description = Enables to build the flying Jumpjet infantry, which can be further specialized.
     .description = Enables to build the flying Jumpjet infantry, which can be further specialized.
+    .tooltipextras-strengths = Strengths: • Fields flying infantry that bypass terrain and defenses.
+    .tooltipextras-weaknesses = Weaknesses: • Lightly armored and easy prey for dedicated anti-air.
 
 ### commander-tree-promotion-jumpjet-railgun
 
@@ -118,8 +120,10 @@ commander-tree-promotion-jumpjet-railgun =
         Equips the Jumpjet with a Railgun.
         This makes it strong vs tanks.
     .description =
-        Equips the Jumpjet with a Railgun. 
+        Equips the Jumpjet with a Railgun.
           This makes it strong vs tanks.
+    .tooltipextras-strengths = Strengths: • Jumpjets gain railguns that shred armored columns.
+    .tooltipextras-weaknesses = Weaknesses: • Gives up the rocket loadout needed versus aircraft.
 
 ### commander-tree-promotion-jumpjet-rockets
 
@@ -130,6 +134,8 @@ commander-tree-promotion-jumpjet-rockets =
     .description =
         Equips the Jumpjet with a rocket launcher.
          This makes it strong vs aircraft and vehicles.
+    .tooltipextras-strengths = Strengths: • Rocket pods let jumpjets duel aircraft and vehicles.
+    .tooltipextras-weaknesses = Weaknesses: • Cannot equip the railgun configuration at the same time.
 
 ### commander-tree-promotion-mammoth-tank-gdi-hover
 
@@ -138,8 +144,10 @@ commander-tree-promotion-mammoth-tank-gdi-hover =
         The Mammoth is upgraded with Hover technology.
         This gives the Mammoth much more maneuverability.
     .description =
-        The Mammoth is upgraded with Hover technology. 
+        The Mammoth is upgraded with Hover technology.
           This gives the Mammoth much more maneuverability.
+    .tooltipextras-strengths = Strengths: • Hover skirts let Mammoths cross water and terrain obstacles.
+    .tooltipextras-weaknesses = Weaknesses: • Locks out the ion cannon and nanite reactor refits.
 
 ### commander-tree-promotion-mammoth-tank-gdi-ion
 
@@ -148,8 +156,10 @@ commander-tree-promotion-mammoth-tank-gdi-ion =
         The Mammoth is upgraded with an Ion cannon.
         Energy based weapon systems cannot be shot down by Point Laser Defense Systems.
     .description =
-        The Mammoth is upgraded with an Ion cannon. 
+        The Mammoth is upgraded with an Ion cannon.
           Energy based weapon systems cannot be shot down by Point Laser Defense Systems.
+    .tooltipextras-strengths = Strengths: • Equips ion cannons for overwhelming burst damage.
+    .tooltipextras-weaknesses = Weaknesses: • Cannot pair with hover or nanite reactor packages.
 
 ### commander-tree-promotion-mammoth-tank-gdi-nr
 
@@ -158,14 +168,18 @@ commander-tree-promotion-mammoth-tank-gdi-nr =
         The Mammoth Tank is upgraded with a Nanite Shield System.
         This makes it more durable and shield recovers fast when out of combat.
     .description =
-        The Mammoth Tank is upgraded with a Nanite Shield System. 
+        The Mammoth Tank is upgraded with a Nanite Shield System.
           This makes it more durable and shield recovers fast when out of combat.
+    .tooltipextras-strengths = Strengths: • Nanite shielding constantly repairs the Mammoth chassis.
+    .tooltipextras-weaknesses = Weaknesses: • No access to the ion cannon or hover mobility upgrades.
 
 ### commander-tree-promotion-mammoth-tank-gdi-pdl
 
 commander-tree-promotion-mammoth-tank-gdi-pdl =
     .buildable-description = Upgrades the Mammoth Tank with a Point Laser Defense System to shoot down incoming projectiles.
     .description = Upgrades the Mammoth Tank with a Point Laser Defense System to shoot down incoming projectiles.
+    .tooltipextras-strengths = Strengths: • PDL grid intercepts missiles and artillery aimed at Mammoths.
+    .tooltipextras-weaknesses = Weaknesses: • Prevents fitting the reflector armor package.
 
 ### commander-tree-promotion-mammoth-tank-gdi-reflector
 
@@ -174,8 +188,10 @@ commander-tree-promotion-mammoth-tank-gdi-reflector =
         Equips the Mammoth Tank with Reflector Armor.
         Very resistent vs. Energy Weapons.
     .description =
-        Equips the Mammoth Tank with Reflector Armor. 
+        Equips the Mammoth Tank with Reflector Armor.
          Very resistent vs. Energy Weapons.
+    .tooltipextras-strengths = Strengths: • Reflector armor deflects lasers and ion beams.
+    .tooltipextras-weaknesses = Weaknesses: • Mutually exclusive with the Mammoth PDL grid.
 
 ### commander-tree-promotion-orca-ap
 
@@ -264,114 +280,118 @@ commander-tree-promotion-orcav2-torp =
 commander-tree-promotion-railgunner =
     .buildable-description = Enables to build the Railgunner, a strong tank destroyer infantry.
     .description = Enables to build the Railgunner, a strong tank destroyer infantry.
+    .tooltipextras-strengths = Strengths: • Unlocks elite anti-tank railgun infantry squads.
+    .tooltipextras-weaknesses = Weaknesses: • Heavy infantry remain vulnerable to suppression and air.
 
 ### commander-tree-promotion-railgunner-no-crush
 
 commander-tree-promotion-railgunner-no-crush =
     .buildable-description = Upgrades the combat suit of the Railgunner, so that it can no longer be crushed by vehicles.
     .description =
-        Upgrades the combat suit of the Railgunner, 
+        Upgrades the combat suit of the Railgunner,
          so that it can no longer be crushed by vehicles.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 defaults-baseworld =
     .factionca-at-10-description =
         ZOCOM: Experimental Weapons
-        
+
         ZOCOM is a sub-faction of the GDI. The GDI designed the strongest tanks. These units are costly but easily dominate the battlefield.
-        
+
         Thanks to their hover technology the GDI still has a good mobility which complements the devasting power of their railguns and EMP Technology.
-        
+
         ZOCOM offers the newest and most innovative units. Among them are energy based experimental weapons as well as various unmanned battle drones.
-        
+
          Faction Unit: Disruptor, Sonic Tower
-        
+
          Special Ability: Drop Pods, Surgical Strike
-        
+
          Faction Bonus: Adv. Communication Center (10% Discount)
-        
+
          Key Commander Tree Options:
-        
+
           Nanite Mammoth
-        
-          No AA Vulcan upgrade for APC  
-        
-         Infantry: ++ 
-        
-         Artillery: ++ 
-        
-         Aircraft: + 
-        
-         Defense: +++ 
-        
-         Heavy Tanks: +++ 
-        
+
+          No AA Vulcan upgrade for APC
+
+         Infantry: ++
+
+         Artillery: ++
+
+         Aircraft: +
+
+         Defense: +++
+
+         Heavy Tanks: +++
+
          Recon&Stealth: ++
     .factionca-at-11-description =
         Eagle Corps: Air Power
-        
+
         Eagle is a sub-faction of the GDI. The GDI designed the strongest tanks. These units are costly but easily dominate the battlefield.
-        
+
         Thanks to their hover technology the GDI still has a good mobility which complements the devasting power of their railguns and EMP Technology.
-        
-        Eagle greatly improves the aircraft arsenal of the GDI. The Combat Chinook can load infantry and can easily destroy masses of units, 
-        
+
+        Eagle greatly improves the aircraft arsenal of the GDI. The Combat Chinook can load infantry and can easily destroy masses of units,
+
         whereas the Orca Bomber gives very good support to ground forces with its EMP Bombs.
-        
+
          Faction Unit: Orca Bomber, Combat Chinook
-        
+
          Special Ability: Interceptors
-        
+
          Faction Bonus: Reinforcements (-20% Cooldown), Aircraft (10% Discount)
-        
+
          Key Commander Tree Options:
-        
-          Ion Mammoth  
-        
-         Infantry: ++ 
-        
-         Artillery: ++++ 
-        
-         Aircraft: +++ 
-        
-         Defense: + 
-        
-         Heavy Tanks: +++ 
-        
+
+          Ion Mammoth
+
+         Infantry: ++
+
+         Artillery: ++++
+
+         Aircraft: +++
+
+         Defense: +
+
+         Heavy Tanks: +++
+
          Recon&Stealth: ++
     .factionca-at-9-description =
         Steel Talon: Mechs
-        
+
         Talon is a sub-faction of the GDI. The GDI designed the strongest tanks. These units are costly but easily dominate the battlefield.
-        
+
         Thanks to their hover technology the GDI still has a good mobility which complements the devasting power of their railguns and EMP Technology.
-        
+
         Talons take the design of GDI to the extreme, with the Titan and the Juggernaut, a very heavy walker and a very heavy artillery.
-        
+
          Faction Unit: Juggernaut, Titan
-        
+
           Special Ability: Nanite Repair
-        
+
          Faction Bonus: Recon Drone (-20% Cooldown), Drone Carrier (10% Discount)
-        
+
          Key Commander Tree Options:
-        
+
           Titan Railgun vs. Titan EMP
-        
-          No Railgun upgrade for Jumpjet Infantry  
-        
-         Infantry: ++  
-        
-         Artillery: ++++ 
-        
-         Aircraft: + 
-        
-         Defense: + 
-        
-         Heavy Tanks: ++++ 
-        
+
+          No Railgun upgrade for Jumpjet Infantry
+
+         Infantry: ++
+
+         Artillery: ++++
+
+         Aircraft: +
+
+         Defense: +
+
+         Heavy Tanks: ++++
+
          Recon&Stealth: +
     .factionca-at-randomgdi-description =
         Random GDI Faction
-        
+
         A random GDI faction will be chosen when the game starts.
 
 ### infantry-grenadier
@@ -577,9 +597,9 @@ vehicles-marv =
         Enormous slow tank with triple ion blaster cannons.
         Mines Tiberium and Ores when driving over.
 
-### vehicles-msam
+### vehicles-mlrs
 
-vehicles-msam =
+vehicles-mlrs =
     .buildable-description =
         Multiple Launch Rocket System.
         Long-range guided artillery.
@@ -587,9 +607,9 @@ vehicles-msam =
         Has weak armor.
         Strong vs Buildings, Infantry, Vehicles
 
-### vehicles-msam-hailstorm
+### vehicles-mlrs-hailstorm
 
-vehicles-msam-hailstorm =
+vehicles-mlrs-hailstorm =
     .buildable-description =
         Multiple Launch Rocket System.
         Long-range unguided multiple rocket artillery.
@@ -616,178 +636,264 @@ vehicles-vulc =
         Weak vs Tanks
 promotion-mammoth-tank-gdi-hover =
     .description = The Mammoth is upgraded with Hover technology. \n  This gives the Mammoth much more maneuverability.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-mammoth-tank-gdi-ion =
     .description = The Mammoth is upgraded with an Ion cannon. \n  Energy based weapon systems cannot be shot down by Point Laser Defense Systems.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-mammoth-tank-gdi-nr =
     .description = The Mammoth Tank is upgraded with a Nanite Shield System. \n  This makes it more durable and shield recovers fast when out of combat.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-mammoth-tank-gdi-reflector =
     .description = Equips the Mammoth Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-mammoth-tank-gdi-pdl =
     .description = Upgrades the Mammoth Tank with a Point Laser Defense System to shoot down incoming projectiles.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-orca-payload =
     .description = Increases the Payload of the Orca.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Vehicles
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Anti-Air
 promotion-orca-ap =
     .description = Equips the Orca with armor-piercing missiles.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Heavy Armor
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Anti-Air
 promotion-orca-sonic =
     .description = Equips the Orca with an experimental sonic pulsator.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Light Armor, Infantry
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Reflector Armor, Anti-Air
 promotion-orca-torp =
     .description = Equips the Orca with torpedo bombs.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Ships, Submarines
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
     .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 promotion-orcav2-swarm =
     .description = Equips the Orca with swarming missiles.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Vehicles, Aircraft
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Anti-Air
 promotion-orcav2-emp =
     .description = Equips the Orca with EMP missiles.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Heavy Armor, Aircraft
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Anti-Air
 promotion-orcav2-torp =
     .description = Equips the Orca with torpedo bombs.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Ships, Submarines
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
     .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 promotion-orca-bomber-emp =
     .description = Orca Bomber equipped with EMP Bombs, which disable vehicles and structures.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Vehicles
     .tooltipextras-weaknesses = Weaknesses: • Anti-Air
 promotion-orca-bomber-ap =
     .description = Orca Bomber equipped with armor piercing bombs.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Heavy Armor
     .tooltipextras-weaknesses = Weaknesses: • Anti-Air
 promotion-orca-bomber-he =
     .description = Orca Bomber equipped with Cluster HE Bombs.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
     .tooltipextras-strengths = Strengths: • Strong vs Light Armor, Infantry
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
 promotion-railgunner =
     .description = Enables to build the Railgunner, a strong tank destroyer infantry.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-railgunner-no-crush =
     .description = Upgrades the combat suit of the Railgunner, \n so that it can no longer be crushed by vehicles.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-jumpjet =
     .description = Enables to build the flying Jumpjet infantry, which can be further specialized.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-jumpjet-railgun =
     .description = Equips the Jumpjet with a Railgun. \n  This makes it strong vs tanks.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 promotion-jumpjet-rockets =
     .description = Equips the Jumpjet with a rocket launcher.\n This makes it strong vs aircraft and vehicles.
+    .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
+    .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
 
 ### commander-tree-promotion-shielded-miners
 
 commander-tree-promotion-shielded-miners =
     .description = Outfits every GDI harvester with portable shield projectors to survive surprise raids.
+    .tooltipextras-strengths = Strengths: • Shields harvesters so they can survive early harassment.
+    .tooltipextras-weaknesses = Weaknesses: • Shields collapse quickly under concentrated fire or EMP.
 
 ### commander-tree-promotion-slingshot
 
 commander-tree-promotion-slingshot =
     .description = Authorizes production of the Slingshot anti-aircraft hovertank to guard the skies.
+    .tooltipextras-strengths = Strengths: • Grants access to fast anti-air hovertanks.
+    .tooltipextras-weaknesses = Weaknesses: • Slingshots contribute almost nothing versus ground armor.
 
 ### commander-tree-promotion-hover-mlrs
 
 commander-tree-promotion-hover-mlrs =
     .description = Deploys Hover MLRS batteries that provide mobile rocket artillery even over water.
+    .tooltipextras-strengths = Strengths: • Deploys amphibious rocket artillery for flexible bombardment.
+    .tooltipextras-weaknesses = Weaknesses: • Batteries remain fragile to anti-vehicle fire.
 
 ### commander-tree-promotion-hover-mlrs-reflector
 
 commander-tree-promotion-hover-mlrs-reflector =
     .description = Replaces Hover MLRS plating with reflector armor for heavy energy resistance.
+    .tooltipextras-strengths = Strengths: • Reflector armor keeps Hover MLRS alive against energy weapons.
+    .tooltipextras-weaknesses = Weaknesses: • Still suffers against kinetic shells and splash damage.
 
 ### commander-tree-promotion-hover-mlrs-pdl
 
 commander-tree-promotion-hover-mlrs-pdl =
     .description = Adds a point-defense laser system to Hover MLRS to swat down incoming missiles.
+    .tooltipextras-strengths = Strengths: • Point-defense lasers intercept missiles aimed at the battery.
+    .tooltipextras-weaknesses = Weaknesses: • Does not protect against cannons or small arms.
 
 ### commander-tree-promotion-hailstorm-mlrs
 
 commander-tree-promotion-hailstorm-mlrs =
     .description = Unlocks the Hailstorm MLRS, a heavier bombardment variant loaded with cluster rockets.
+    .tooltipextras-strengths = Strengths: • Calls in heavy cluster rockets for massive area saturation.
+    .tooltipextras-weaknesses = Weaknesses: • Chassis is slow and vulnerable without escorts.
 
 ### commander-tree-promotion-mobile-sensor-pdl
 
 commander-tree-promotion-mobile-sensor-pdl =
     .description = Bolts a point-defense laser onto Mobile Sensor Arrays so they can defend themselves from rockets.
+    .tooltipextras-strengths = Strengths: • Sensor arrays can swat down missiles while scouting.
+    .tooltipextras-weaknesses = Weaknesses: • Still unarmed against dedicated ground forces.
 
 ### commander-tree-promotion-medium-tank-pdl
 
 commander-tree-promotion-medium-tank-pdl =
     .description = Installs a point-defense laser on every Medium Tank to intercept artillery shells and missiles.
+    .tooltipextras-strengths = Strengths: • Medium Tanks shoot down incoming rockets and artillery.
+    .tooltipextras-weaknesses = Weaknesses: • Mutually exclusive with the reflector armor refit.
 
 ### commander-tree-promotion-medium-tank-reflector
 
 commander-tree-promotion-medium-tank-reflector =
     .description = Upgrades Medium Tanks with reflector armor plating to shrug off energy weapons.
+    .tooltipextras-strengths = Strengths: • Reflector plating shrugs off lasers and ion fire.
+    .tooltipextras-weaknesses = Weaknesses: • Forfeits access to the point-defense laser kit.
 
 ### commander-tree-promotion-mobile-emp
 
 commander-tree-promotion-mobile-emp =
     .description = Authorizes the Mobile EMP platform that shuts down enemy vehicles with focused pulses.
+    .tooltipextras-strengths = Strengths: • Unlocks the Mobile EMP platform to disable enemy vehicles.
+    .tooltipextras-weaknesses = Weaknesses: • Platform is unarmed and lightly armored without escorts.
 
 ### commander-tree-promotion-mobile-emp-stable-reactor
 
 commander-tree-promotion-mobile-emp-stable-reactor =
     .description = Fits the Mobile EMP with a stable reactor for longer sustained disruption fields.
+    .tooltipextras-strengths = Strengths: • Stable core keeps EMP pulses consistent for long shutdowns.
+    .tooltipextras-weaknesses = Weaknesses: • Lower peak output than the volatile alternative.
 
 ### commander-tree-promotion-mobile-emp-volatile-reactor
 
 commander-tree-promotion-mobile-emp-volatile-reactor =
     .description = Swaps in a volatile reactor that delivers stronger pulses at the risk of overloads.
+    .tooltipextras-strengths = Strengths: • Volatile reactor spikes EMP strength to wipe entire columns.
+    .tooltipextras-weaknesses = Weaknesses: • Risk of overloads and downtime if overstressed.
 
 ### commander-tree-promotion-apc-vulcan
 
 commander-tree-promotion-apc-vulcan =
     .description = Refits APCs with a Vulcan chaingun turret for brutal anti-infantry support.
+    .tooltipextras-strengths = Strengths: • Refits APCs with a Vulcan turret for anti-infantry support.
+    .tooltipextras-weaknesses = Weaknesses: • Provides little benefit against heavy vehicles.
 
 ### commander-tree-promotion-dronepair
 
 commander-tree-promotion-dronepair =
     .description = Deploys paired guardian drones that escort frontline vehicles and share their upgrades.
+    .tooltipextras-strengths = Strengths: • Guardian drones share their host vehicle upgrades and fire.
+    .tooltipextras-weaknesses = Weaknesses: • Drones expire when the parent vehicle is destroyed.
 
 ### commander-tree-promotion-stealth-fighter
 
 commander-tree-promotion-stealth-fighter =
     .description = Unlocks the Stealth Fighter strike craft for surgical bombing runs.
+    .tooltipextras-strengths = Strengths: • Adds cloaked strike aircraft for surgical bombing.
+    .tooltipextras-weaknesses = Weaknesses: • Fragile craft rely on stealth and suffer versus strong AA.
 
 ### commander-tree-promotion-stealth-fighter-payload
 
 commander-tree-promotion-stealth-fighter-payload =
     .description = Doubles the ordnance carried by Stealth Fighters for heavier alpha strikes.
+    .tooltipextras-strengths = Strengths: • Doubles payload for devastating opening salvos.
+    .tooltipextras-weaknesses = Weaknesses: • Heavier load slows refits and reduces loiter time.
 
 ### commander-tree-promotion-ion-warship
 
 commander-tree-promotion-ion-warship =
     .description = Authorizes Orca Ion Warships armed with devastating ion cannons.
+    .tooltipextras-strengths = Strengths: • Ion Warships deliver punishing orbital-grade strikes.
+    .tooltipextras-weaknesses = Weaknesses: • Large target that demands heavy anti-air cover.
 
 ### commander-tree-promotion-mammoth-mkii
 
 commander-tree-promotion-mammoth-mkii =
     .description = Unlocks the Mammoth Mk.II walker, GDI's apex siege platform.
+    .tooltipextras-strengths = Strengths: • Deploys GDI's apex siege walker with overwhelming firepower.
+    .tooltipextras-weaknesses = Weaknesses: • Immense resource cost and sluggish response.
 
 ### commander-tree-promotion-marv
 
 commander-tree-promotion-marv =
     .description = Commissions the MARV epic unit with customizable hardpoints and ore vacuum tines.
+    .tooltipextras-strengths = Strengths: • MARV vacuums ore and mounts multiple customizable guns.
+    .tooltipextras-weaknesses = Weaknesses: • Slow epic unit that needs escorts and tech support.
 
 ### commander-tree-promotion-titan-battle
 
 commander-tree-promotion-titan-battle =
     .description = Reconfigures the Titan for close-range brawler duty with extra armor plating.
+    .tooltipextras-strengths = Strengths: • Turns Titans into close-range bruisers with extra armor.
+    .tooltipextras-weaknesses = Weaknesses: • Gives up the precision railgun configuration.
 
 ### commander-tree-promotion-titan-railgun
 
 commander-tree-promotion-titan-railgun =
     .description = Upgrades Titans with experimental railguns for extreme long-range fire.
+    .tooltipextras-strengths = Strengths: • Railguns let Titans snipe armor from extreme range.
+    .tooltipextras-weaknesses = Weaknesses: • Sacrifices the brawler loadout and needs screening.
 
 ### commander-tree-promotion-titan-pdl
 
 commander-tree-promotion-titan-pdl =
     .description = Adds a point-defense laser emitter to every Titan to ward off missiles.
+    .tooltipextras-strengths = Strengths: • Titan PD lasers vaporize missiles and artillery shells.
+    .tooltipextras-weaknesses = Weaknesses: • Cannot stack with the reflector armor upgrade.
 
 ### commander-tree-promotion-titan-reflector
 
 commander-tree-promotion-titan-reflector =
     .description = Fits Titans with reflector armor that defeats laser and ion weaponry.
+    .tooltipextras-strengths = Strengths: • Reflector plates negate laser and ion weaponry.
+    .tooltipextras-weaknesses = Weaknesses: • Mutually exclusive with the Titan PD laser kit.

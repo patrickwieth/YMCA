@@ -146,36 +146,48 @@ commander-tree-promotion-aurora =
         Enables to build the Aurora, a supersonic bomber. 
           It drops the Mother of all Bombs. 
           Very efficient versus groups of weakly armored units.
+    .tooltipextras-strengths = Strengths: • Supersonic bomber erases clustered ground targets and defenses.
+    .tooltipextras-weaknesses = Weaknesses: • Expensive and needs long turnaround windows between strikes.
 
 ### commander-tree-promotion-battle-fortress-bunker
 
 commander-tree-promotion-battle-fortress-bunker =
     .buildable-description = Battle Fortress is a tough tank with a bunker full of rocket infantry.
     .description = Battle Fortress is a tough tank with a bunker full of rocket infantry.
+    .tooltipextras-strengths = Strengths: • Missile bunker adds heavy anti-armor and anti-air firepower.
+    .tooltipextras-weaknesses = Weaknesses: • Fortress remains slow and demands escorts to reach the fight.
 
 ### commander-tree-promotion-battle-fortress-pdl
 
 commander-tree-promotion-battle-fortress-pdl =
     .buildable-description = Upgrades the Battle Fortress with a Point Laser Defense System to shoot down incoming projectiles.
     .description = Upgrades the Battle Fortress with a Point Laser Defense System to shoot down incoming projectiles.
+    .tooltipextras-strengths = Strengths: • Point-defense lattice swats down rockets and artillery.
+    .tooltipextras-weaknesses = Weaknesses: • Consumes the upgrade slot, blocking reflector plating.
 
 ### commander-tree-promotion-battle-fortress-prism
 
 commander-tree-promotion-battle-fortress-prism =
     .buildable-description = The Prism Fortress is a tough tank with a Prism blaster.
     .description = The Prism Fortress is a tough tank with a Prism blaster.
+    .tooltipextras-strengths = Strengths: • Converts the hull into a long-range prism artillery platform.
+    .tooltipextras-weaknesses = Weaknesses: • Prism refit offers little extra durability.
 
 ### commander-tree-promotion-battle-fortress-reflector
 
 commander-tree-promotion-battle-fortress-reflector =
     .buildable-description = Equips the Battle Fortress with Reflector Armor, which is very resistent vs. Energy Weapons.
     .description = Equips the Battle Fortress with Reflector Armor, which is very resistent vs. Energy Weapons.
+    .tooltipextras-strengths = Strengths: • Reflector plates shrug off lasers and ion weapons.
+    .tooltipextras-weaknesses = Weaknesses: • Still susceptible to massed kinetic fire.
 
 ### commander-tree-promotion-battle-fortress-support
 
 commander-tree-promotion-battle-fortress-support =
     .buildable-description = The Support Fortress is a touch tank that repairs allied vehicles.
     .description = The Support Fortress is a touch tank that repairs allied vehicles.
+    .tooltipextras-strengths = Strengths: • Repair drones keep nearby armor columns in the fight.
+    .tooltipextras-weaknesses = Weaknesses: • Offensive output stays low without bunker or prism gear.
 
 ### commander-tree-promotion-chrono-prison
 
@@ -218,12 +230,16 @@ commander-tree-promotion-chrono-tank =
     .description =
         Enables to build the Chrono Tank. 
           It can teleport over short distances and has missiles vs. tanks.
+    .tooltipextras-strengths = Strengths: • Teleports behind enemy lines for precision strikes.
+    .tooltipextras-weaknesses = Weaknesses: • Briefly vulnerable whenever it rematerializes.
 
 ### commander-tree-promotion-chrono-tank-pdl
 
 commander-tree-promotion-chrono-tank-pdl =
     .buildable-description = Upgrades the Chrono Tank with a Point Laser Defense System to shoot down incoming projectiles.
     .description = Upgrades the Chrono Tank with a Point Laser Defense System to shoot down incoming projectiles.
+    .tooltipextras-strengths = Strengths: • PD lasers protect chrono tanks during risky blink runs.
+    .tooltipextras-weaknesses = Weaknesses: • Blocks the reflector armor upgrade.
 
 ### commander-tree-promotion-chrono-tank-reflector
 
@@ -234,6 +250,8 @@ commander-tree-promotion-chrono-tank-reflector =
     .description =
         Equips the Chrono Tank with a Reflector Armor. 
          Very resistent vs. Energy Weapons.
+    .tooltipextras-strengths = Strengths: • Reflector shell resists counter-fire after teleporting.
+    .tooltipextras-weaknesses = Weaknesses: • Cannot be combined with the point-defense kit.
 
 ### commander-tree-promotion-cryo-launcher
 
@@ -244,6 +262,8 @@ commander-tree-promotion-cryo-launcher =
     .description =
         Allows to build Cryo Launcher. 
           An artillery support unit slowing enemy vehicles and making them more vulnerable.
+    .tooltipextras-strengths = Strengths: • Freezes enemy armor pushes to set up focus fire.
+    .tooltipextras-weaknesses = Weaknesses: • Minimal damage without allied follow-up.
 
 ### commander-tree-promotion-eurocopter-artillery
 
@@ -254,6 +274,8 @@ commander-tree-promotion-eurocopter-artillery =
     .description =
         Upgrades the missiles of Eurocopter Helicopter for high range use. 
           This allows the Eurocopter to be used against defensive structures efficiently.
+    .tooltipextras-strengths = Strengths: • High-arc missiles punish entrenched defenses from range.
+    .tooltipextras-weaknesses = Weaknesses: • Slow rate of fire and flimsy versus aircraft.
 
 ### commander-tree-promotion-eurocopter-cryo
 
@@ -264,6 +286,8 @@ commander-tree-promotion-eurocopter-cryo =
     .description =
         Upgrades the missiles of the Eurocopter with Cryo explosives. 
           In addition to the damage targets are also slowed.
+    .tooltipextras-strengths = Strengths: • Cryo payload slows or freezes hostile spearheads.
+    .tooltipextras-weaknesses = Weaknesses: • Reduced lethality against buildings and infantry masses.
 
 ### commander-tree-promotion-eurocopter-fire-rate
 
@@ -271,6 +295,8 @@ commander-tree-promotion-eurocopter-fire-rate =
     .buildable-description = Increases the fire rate of the Eurocopter Helicopter.
     .description =
         Increases the fire rate of the Eurocopter Helicopter. 
+    .tooltipextras-strengths = Strengths: • Upgraded drivetrain doubles sustained missile output.
+    .tooltipextras-weaknesses = Weaknesses: • Burns through ammo quickly and still fragile.
 
 
 ### commander-tree-promotion-eurocopter-torp
@@ -291,6 +317,8 @@ commander-tree-promotion-eurofighter =
     .description =
         Enables to build the Eurofighter. It is a supersonic air superiority fighter. 
           Very effective vs. other air units.
+    .tooltipextras-strengths = Strengths: • Elite interceptor dominates hostile aircraft.
+    .tooltipextras-weaknesses = Weaknesses: • Offers little value against ground targets.
 
 ### commander-tree-promotion-harrier
 
@@ -301,6 +329,8 @@ commander-tree-promotion-harrier =
     .description =
         Enables to build the Harrier, a VTOL aircraft.  
           Strong vs. groups of light armored ground units.
+    .tooltipextras-strengths = Strengths: • VTOL strike craft cracks defenses and light armor.
+    .tooltipextras-weaknesses = Weaknesses: • Must overfly the target and melts to flak.
 
 ### commander-tree-promotion-harrier-avionics
 
@@ -308,6 +338,8 @@ commander-tree-promotion-harrier-avionics =
     .buildable-description = Upgrades the Avionics of the Harrier, allowing it to hover when shooting.
     .description =
         Upgrades the Avionics of the Harrier, allowing it to hover when shooting.  
+    .tooltipextras-strengths = Strengths: • Avionics package enables stand-off attack runs.
+    .tooltipextras-weaknesses = Weaknesses: • Lighter load makes each strike less destructive.
 
 
 ### commander-tree-promotion-harrier-payload
@@ -316,6 +348,8 @@ commander-tree-promotion-harrier-payload =
     .buildable-description = Increases the Payload of the Harrier.
     .description =
         Increases the Payload of the Harrier. 
+    .tooltipextras-strengths = Strengths: • Expanded payload devastates structures in one pass.
+    .tooltipextras-weaknesses = Weaknesses: • Extra weight slows the jet and increases exposure.
 
 
 ### commander-tree-promotion-huey-cryo
@@ -323,12 +357,16 @@ commander-tree-promotion-harrier-payload =
 commander-tree-promotion-huey-cryo =
     .buildable-description = Upgrades the attack of the Huey with cryo missiles, slowing down enemies.
     .description = Upgrades the attack of the Huey with cryo missiles, slowing down enemies.
+    .tooltipextras-strengths = Strengths: • Cryo pods lock down infantry blobs for allies.
+    .tooltipextras-weaknesses = Weaknesses: • Provides little damage if flying solo.
 
 ### commander-tree-promotion-huey-grenade
 
 commander-tree-promotion-huey-grenade =
     .buildable-description = Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
     .description = Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
+    .tooltipextras-strengths = Strengths: • Grenade launcher shreds entrenched infantry and buildings.
+    .tooltipextras-weaknesses = Weaknesses: • Requires close range, so AA weapons punish it quickly.
 
 ### commander-tree-promotion-huey-recon
 
@@ -339,6 +377,9 @@ commander-tree-promotion-huey-recon =
     .description =
         Upgrades the sensors of the Huey and removes the armament. 
         The Huey can transport an infantry unit, sniper can shoot from it.
+    .tooltipextras-strengths = Strengths: • Recon package reveals stealth threats and buffs squads.
+    .tooltipextras-weaknesses = Weaknesses: • Minimal armament; needs escorts to survive.
+    .tooltipextras-attributes = Attributes: • Detects stealthed units; • Snipers and Spec Ops can fire from onboard.
 
 ### commander-tree-promotion-mirage-fire-rate
 
@@ -351,6 +392,8 @@ commander-tree-promotion-mirage-fire-rate =
 commander-tree-promotion-mirage-pdl =
     .buildable-description = Upgrades the Mirage Tank with a Point Laser Defense System to shoot down incoming projectiles.
     .description = Upgrades the Mirage Tank with a Point Laser Defense System to shoot down incoming projectiles.
+    .tooltipextras-strengths = Strengths: • PD emitters keep fragile mirages safe from missiles.
+    .tooltipextras-weaknesses = Weaknesses: • Blocks the fire-rate and reflector refits.
 
 ### commander-tree-promotion-mirage-reflector
 
@@ -361,6 +404,8 @@ commander-tree-promotion-mirage-reflector =
     .description =
         Equips the Mirage Tank with Reflector Armor. 
          Very resistent vs. Energy Weapons.
+    .tooltipextras-strengths = Strengths: • Reflector plating negates energy weapons aimed at mirages.
+    .tooltipextras-weaknesses = Weaknesses: • Still vulnerable to conventional shells.
 
 ### commander-tree-promotion-prism-blaster
 
@@ -373,6 +418,8 @@ commander-tree-promotion-prism-blaster =
         Enables to build the Prism Blaster. 
           Has less range than the Prism Tank, but does split its beam to more targets. 
           It is stronger vs. large armies and less effective against base defenses and single targets.
+    .tooltipextras-strengths = Strengths: • Focused prism beam melts structures and heavy armor.
+    .tooltipextras-weaknesses = Weaknesses: • Mediocre versus aircraft or spread-out foes.
 
 ### commander-tree-promotion-prism-cannon
 
@@ -385,6 +432,8 @@ commander-tree-promotion-prism-cannon =
         Enables to build the Prism Cannon. 
           Has higher range and more damage than the Prism Tank, but does not split its beam. 
           It is stronger vs. base defenses and single units but less effective against large armies.
+    .tooltipextras-strengths = Strengths: • Siege cannon outranges defenses with splash prism bolts.
+    .tooltipextras-weaknesses = Weaknesses: • Immobile platform that needs protection.
 
 ### commander-tree-promotion-prism-tank
 
@@ -395,6 +444,8 @@ commander-tree-promotion-prism-tank =
     .description =
         Enables to build the Prism Tank, an energy based weapon with high range.
           Srong versus light vehicles and infantry.
+    .tooltipextras-strengths = Strengths: • Mobile prism tank balances firepower and flexibility.
+    .tooltipextras-weaknesses = Weaknesses: • Less specialized than the other prism options.
 
 ### commander-tree-promotion-rafale
 
@@ -405,12 +456,16 @@ commander-tree-promotion-rafale =
     .description =
         Enables to build the Rafale. It is a supersonic air superiority fighter. 
           Very effective vs. other air units.
+    .tooltipextras-strengths = Strengths: • Multirole fighter handles both air superiority and strike runs.
+    .tooltipextras-weaknesses = Weaknesses: • Requires French tech and is costly to field.
 
 ### commander-tree-promotion-scout-tank-pdl
 
 commander-tree-promotion-scout-tank-pdl =
     .buildable-description = Upgrades the Scout Tank with a Point Laser Defense to shoot down incoming projectiles.
     .description = Upgrades the Scout Tank with a Point Laser Defense to shoot down incoming projectiles.
+    .tooltipextras-strengths = Strengths: • PD grid keeps light scouts alive versus rocket spam.
+    .tooltipextras-weaknesses = Weaknesses: • Prevents equipping reflector armor.
 
 ### commander-tree-promotion-scout-tank-reflector
 
@@ -421,6 +476,8 @@ commander-tree-promotion-scout-tank-reflector =
     .description =
         Equips the Scout Tank with a Reflector Armor. 
          Very resistent vs. Energy Weapons.
+    .tooltipextras-strengths = Strengths: • Reflector armor resists lasers and chrono weaponry.
+    .tooltipextras-weaknesses = Weaknesses: • Only available to France and removes the PD option.
 
 ### commander-tree-promotion-seahawk-armed
 
@@ -431,6 +488,8 @@ commander-tree-promotion-seahawk-armed =
     .description =
         Attaches 2 Bunker Buster missiles to the Seahawk.
           This allows taking out a defensive structure fast.
+    .tooltipextras-strengths = Strengths: • Bunker buster missiles give the Seahawk teeth during drops.
+    .tooltipextras-weaknesses = Weaknesses: • Transport hull remains fragile and unarmed versus aircraft.
 
 ### commander-tree-promotion-spec-ops
 
@@ -441,6 +500,8 @@ commander-tree-promotion-spec-ops =
     .description =
         Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.
          Can detect other stealthed units.
+    .tooltipextras-strengths = Strengths: • Deploys stealth commandos for sabotage and target marking.
+    .tooltipextras-weaknesses = Weaknesses: • Small squads die quickly if detected.
 
 ### defaults-baseworld
 
@@ -913,7 +974,13 @@ promotion-huey-grenade =
     .description = Upgrades the weapon of the Huey to a grenade machine gun, firing bursts of grenades.
 commander-tree-promotion-tank-destroyer-pdl =
     .description = Upgrades the Tank Destroyer with a Point Laser Defense System to shoot down incoming projectiles.
+    .tooltipextras-strengths = Strengths: • PD grid shields tank destroyers from missiles and artillery.
+    .tooltipextras-weaknesses = Weaknesses: • Locks out the burst and reflector refits.
 commander-tree-promotion-tank-destroyer-burst =
     .description = Upgrades the Tank Destroyer with burst fire capabilities.
+    .tooltipextras-strengths = Strengths: • Burst volley annihilates heavy armor instantly.
+    .tooltipextras-weaknesses = Weaknesses: • Long reload leaves it helpless between shots.
 commander-tree-promotion-tank-destroyer-reflector =
     .description = Equips the Tank Destroyer with Reflector Armor.
+    .tooltipextras-strengths = Strengths: • Reflector armor shrugs off lasers and ion cannons.
+    .tooltipextras-weaknesses = Weaknesses: • Still vulnerable to barrages of kinetic shells.

@@ -505,3 +505,211 @@ commander-tree-promotion-heavy-flame-tank-reflector =
     .description =
         Equips the Flame Tank with Reflector Armor. 
          Very resistent vs. Energy Weapons.
+
+
+
+### commander-tree-promotion-stealth-miners
+
+commander-tree-promotion-stealth-miners =
+    .tooltipextras-strengths = Strengths: • Cloaked harvesters can mine through contested zones safely.
+    .tooltipextras-weaknesses = Weaknesses: • Any detector or EMP burst instantly strips the cloak.
+
+
+
+### commander-tree-promotion-buggy-pdl
+
+commander-tree-promotion-buggy-pdl =
+    .tooltipextras-strengths = Strengths: • Point-defense lasers swat missiles before they hit your buggies.
+    .tooltipextras-weaknesses = Weaknesses: • No protection against cannon or small-arms fire.
+
+
+
+### commander-tree-promotion-buggy-aa
+
+commander-tree-promotion-buggy-aa =
+    .tooltipextras-strengths = Strengths: • Retrofit buggies with anti-air lasers to counter early aircraft.
+    .tooltipextras-weaknesses = Weaknesses: • Tradeoff leaves them weaker versus ground armor.
+
+
+
+### commander-tree-promotion-elite-cyborg
+
+commander-tree-promotion-elite-cyborg =
+    .tooltipextras-strengths = Strengths: • Heavy cyborg squads tear through infantry and armor.
+    .tooltipextras-weaknesses = Weaknesses: • Slow, expensive, and easy targets for air strikes.
+
+
+
+### commander-tree-promotion-elite-cyborg-range
+
+commander-tree-promotion-elite-cyborg-range =
+    .tooltipextras-strengths = Strengths: • Range upgrade lets cyborgs bombard from outside turret range.
+    .tooltipextras-weaknesses = Weaknesses: • Still sluggish and vulnerable when flanked.
+
+
+
+### commander-tree-promotion-rebel-leader
+
+commander-tree-promotion-rebel-leader =
+    .tooltipextras-strengths = Strengths: • Leader buffs nearby rebels and unlocks special reinforcements.
+    .tooltipextras-weaknesses = Weaknesses: • Lightly armed support unit that must be kept alive.
+
+
+
+### commander-tree-promotion-recon-bike-scrin
+
+commander-tree-promotion-recon-bike-scrin =
+    .tooltipextras-strengths = Strengths: • Scrin beam gives recon bikes brutal burst damage versus armor.
+    .tooltipextras-weaknesses = Weaknesses: • Loses the flexibility of conventional rockets.
+
+
+
+### commander-tree-promotion-recon-bike-scrin-pdl
+
+commander-tree-promotion-recon-bike-scrin-pdl =
+    .tooltipextras-strengths = Strengths: • Adds missile defense so the Scrin bikes survive counterfire.
+    .tooltipextras-weaknesses = Weaknesses: • Consumes the slot that could take reflector armor.
+
+
+
+### commander-tree-promotion-recon-bike-scrin-reflector
+
+commander-tree-promotion-recon-bike-scrin-reflector =
+    .tooltipextras-strengths = Strengths: • Reflector armor keeps Scrin bikes alive versus lasers and ions.
+    .tooltipextras-weaknesses = Weaknesses: • Cannot mount the point-defense laser at the same time.
+
+
+
+### commander-tree-promotion-recon-bike-rocket-hail
+
+commander-tree-promotion-recon-bike-rocket-hail =
+    .tooltipextras-strengths = Strengths: • Rocket hail variant saturates targets and overwhelms AA.
+    .tooltipextras-weaknesses = Weaknesses: • High ammo use leaves them reloading longer.
+
+
+
+### commander-tree-promotion-recon-bike-rocket-hail-pdl
+
+commander-tree-promotion-recon-bike-rocket-hail-pdl =
+    .tooltipextras-strengths = Strengths: • PD lasers keep the rocket hail bikes safe from missiles.
+    .tooltipextras-weaknesses = Weaknesses: • Still fragile versus direct gunfire.
+
+
+
+### commander-tree-promotion-recon-bike-rocket-hail-reflector
+
+commander-tree-promotion-recon-bike-rocket-hail-reflector =
+    .tooltipextras-strengths = Strengths: • Reflector plating shrugs off beam weapons targeting the bikes.
+    .tooltipextras-weaknesses = Weaknesses: • Gives up the missile-defense retrofit.
+
+
+
+### commander-tree-promotion-recon-bike-explosive
+
+commander-tree-promotion-recon-bike-explosive =
+    .tooltipextras-strengths = Strengths: • Explosive rockets deal brutal damage to buildings and armor.
+    .tooltipextras-weaknesses = Weaknesses: • Short-ranged volleys expose the bikes to return fire.
+
+
+
+### commander-tree-promotion-recon-bike-explosive-pdl
+
+commander-tree-promotion-recon-bike-explosive-pdl =
+    .tooltipextras-strengths = Strengths: • PDL grid protects explosive bikes against SAMs and artillery.
+    .tooltipextras-weaknesses = Weaknesses: • Still very fragile once enemy guns track them.
+
+
+
+### commander-tree-promotion-recon-bike-explosive-reflector
+
+commander-tree-promotion-recon-bike-explosive-reflector =
+    .tooltipextras-strengths = Strengths: • Reflector armor keeps explosive bikes alive versus lasers.
+    .tooltipextras-weaknesses = Weaknesses: • Mutually exclusive with the point-defense upgrade.
+
+
+
+### commander-tree-promotion-reinforcements-coordinator
+
+commander-tree-promotion-reinforcements-coordinator =
+    .tooltipextras-strengths = Strengths: • Unlocks extra reinforcement drops and faster call-ins.
+    .tooltipextras-weaknesses = Weaknesses: • Support staff provide no direct combat power.
+
+
+
+### commander-tree-promotion-ssm-launcher
+
+commander-tree-promotion-ssm-launcher =
+    .tooltipextras-strengths = Strengths: • Deploys long-range Nod SSM artillery for siege duties.
+    .tooltipextras-weaknesses = Weaknesses: • Slow-firing platform that needs escorts to survive.
+
+
+
+### commander-tree-promotion-ssm-toxin-launcher
+
+commander-tree-promotion-ssm-toxin-launcher =
+    .tooltipextras-strengths = Strengths: • Chemical warheads deny ground to infantry and armor alike.
+    .tooltipextras-weaknesses = Weaknesses: • Legion-exclusive upgrade that does little to aircraft.
+
+
+
+### commander-tree-promotion-ssm-multi-launcher
+
+commander-tree-promotion-ssm-multi-launcher =
+    .tooltipextras-strengths = Strengths: • Multi-launch rack saturates large areas with rockets.
+    .tooltipextras-weaknesses = Weaknesses: • Heavier rack slows traverse and reload speed.
+
+
+
+### commander-tree-promotion-stealth-tank-ap
+
+commander-tree-promotion-stealth-tank-ap =
+    .tooltipextras-strengths = Strengths: • Armor-piercing missiles shred heavy vehicles.
+    .tooltipextras-weaknesses = Weaknesses: • Gives up splash damage against infantry and bases.
+
+
+
+### commander-tree-promotion-stealth-tank-scrin
+
+commander-tree-promotion-stealth-tank-scrin =
+    .tooltipextras-strengths = Strengths: • Scrin beam refit delivers massive burst damage.
+    .tooltipextras-weaknesses = Weaknesses: • Experimental hardware is costly and slow to refit.
+
+
+
+### commander-tree-promotion-stealth-tank-explosive-rockets
+
+commander-tree-promotion-stealth-tank-explosive-rockets =
+    .tooltipextras-strengths = Strengths: • High-explosive rockets ravage structures and blobs.
+    .tooltipextras-weaknesses = Weaknesses: • Minimal effect versus heavy armor.
+
+
+
+### commander-tree-promotion-stealth-tank-pdl
+
+commander-tree-promotion-stealth-tank-pdl =
+    .tooltipextras-strengths = Strengths: • PD emitters intercept missiles aimed at covert tanks.
+    .tooltipextras-weaknesses = Weaknesses: • Blocks the reflector armor option.
+
+
+
+### commander-tree-promotion-stealth-tank-reflector
+
+commander-tree-promotion-stealth-tank-reflector =
+    .tooltipextras-strengths = Strengths: • Reflector shell shrugs off lasers and ion cannons.
+    .tooltipextras-weaknesses = Weaknesses: • Cannot be combined with the PDL upgrade.
+
+
+
+### commander-tree-promotion-beam-cannon
+
+commander-tree-promotion-beam-cannon =
+    .tooltipextras-strengths = Strengths: • Unlocks long-range beam cannons that chain damage.
+    .tooltipextras-weaknesses = Weaknesses: • Needs spotters and protection to stay alive.
+
+
+
+### commander-tree-promotion-scorpion-tank
+
+commander-tree-promotion-scorpion-tank =
+    .tooltipextras-strengths = Strengths: • Grants access to fast, cheap Scorpion battle tanks.
+    .tooltipextras-weaknesses = Weaknesses: • Light armor folds to heavy guns without upgrades.

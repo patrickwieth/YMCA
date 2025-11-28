@@ -97,13 +97,13 @@ save-map-failed-accept = OK
 overwrite-map-failed-title = Warning
 overwrite-map-failed-prompt =
     By saving you will overwrite
-    
+
     an already existing map.
 overwrite-map-failed-confirm = Save
 overwrite-map-outside-edit-title = Warning
 overwrite-map-outside-edit-prompt =
     "The map has been edited from outside the editor.
-    
+
     By saving you may overwrite progress
 overwrite-map-outside-edit-confirm = Save
 
@@ -351,20 +351,20 @@ shift = Shift
 settings-save-title = Restart Required
 settings-save-prompt =
     Some changes will not be applied until
-    
+
     the game is restarted.
 settings-save-cancel = Continue
 restart-title = Restart Now?
 restart-prompt =
     Some changes will not be applied until
-    
+
     the game is restarted. Restart now?
 restart-accept = Restart Now
 restart-cancel = Restart Later
 reset-title = Reset { $panel }
 reset-prompt =
     Are you sure you want to reset
-    
+
     all settings in this panel?
 reset-accept = Reset
 reset-cancel = Cancel
@@ -432,7 +432,7 @@ order-maps-date = Map Date
 no-video-title = Video not installed
 no-video-prompt =
     The game videos can be installed from the
-    
+
     "Manage Content" menu in the mod chooser.
 no-video-cancel = Back
 cant-play-title = Unable to play video
@@ -495,11 +495,11 @@ incompatible-replay-unknown-mod = { -incompatible-replay-recorded } an unknown m
 incompatible-replay-unavailable-mod = { -incompatible-replay-recorded } an unavailable mod: { $mod }.
 incompatible-replay-incompatible-version =
     { -incompatible-replay-recorded } an incompatible version:
-    
+
     { $version }.
 incompatible-replay-unavailable-map =
     { -incompatible-replay-recorded } an unavailable map:
-    
+
     { $map }.
 
 ## ServerListLogic
@@ -637,9 +637,9 @@ terrain-geometry-overlay = toggles the terrain geometry overlay.
 aircraft-aurora =
     .buildable-description =
         Supersonic bomber armed with the Mother of all Bombs.
-        
+
         Strong vs Buildings, Light Vehicles, Infantry
-        
+
         Weak vs Aircraft
 
 ### aircraft-chemyak
@@ -647,11 +647,11 @@ aircraft-aurora =
 aircraft-chemyak =
     .buildable-description =
         Attack Plane armed with
-        
+
         toxin spray.
-        
+
           Strong vs Infantry, Light armor
-        
+
           Weak vs Aircraft
 
 ### aircraft-chemyak-volatile
@@ -659,13 +659,13 @@ aircraft-chemyak =
 aircraft-chemyak-volatile =
     .buildable-description =
         Attack Plane armed with
-        
+
         toxin spray.
-        
+
         Releases Toxin Clouds on crash.
-        
+
           Strong vs Infantry, Light armor
-        
+
           Weak vs Aircraft
 
 ### aircraft-dropship
@@ -673,7 +673,7 @@ aircraft-chemyak-volatile =
 aircraft-dropship =
     .buildable-description =
         Superheavy cargo lifter plane.
-        
+
         Brings vehicles to the battlefield.
     .tooltipextras-attributes =
         Attributes: • Transports up to 8 Vehicles
@@ -685,7 +685,7 @@ aircraft-dropship =
 aircraft-ocar =
     .buildable-description =
         Fast VTOL Vehicle Transporter.
-        
+
         Unarmed
 
 ### aircraft-stealth-fighter
@@ -693,9 +693,9 @@ aircraft-ocar =
 aircraft-stealth-fighter =
     .buildable-description =
         Stealth Ground-Attack Plane.
-        
+
         Drops laser-guided armor piercing bombs. Strong vs Buildings, Heavy Vehicles
-        
+
          Weak vs Infantry, Aircraft
 
 ### aircraft-stealth-fighter-payload
@@ -703,11 +703,11 @@ aircraft-stealth-fighter =
 aircraft-stealth-fighter-payload =
     .buildable-description =
         Stealth Ground-Attack Plane.
-        
-        Drops laser-guided armor piercing bombs. 
-        
+
+        Drops laser-guided armor piercing bombs.
+
          Strong vs Buildings, Heavy Vehicles
-        
+
          Weak vs Infantry, Aircraft
 
 ### aircraft-tran
@@ -715,7 +715,7 @@ aircraft-stealth-fighter-payload =
 aircraft-tran =
     .buildable-description =
         Fast infantry transport helicopter.
-        
+
         Unarmed
 
 ### aircraft-tran-eagle
@@ -723,9 +723,9 @@ aircraft-tran =
 aircraft-tran-eagle =
     .buildable-description =
         Fast infantry transport helicopter.
-        
-        Infantry can fire from weapon ports. 
-        
+
+        Infantry can fire from weapon ports.
+
         Is loaded with 4 Rocket Infantry.
 
 ### aircraft-yak
@@ -733,11 +733,11 @@ aircraft-tran-eagle =
 aircraft-yak =
     .buildable-description =
         Attack Plane armed with
-        
+
         dual machine guns.
-        
+
           Strong vs Infantry, Light armor
-        
+
           Weak vs Tanks, Aircraft
 
 ### civilian-bio
@@ -772,157 +772,157 @@ civilian-oilb =
 commander-tree-commander-tree =
     .description-48 =
         Enables to build the Hover MLRS.
-        
+
         The Hover MLRS improves the MLRS' agility and gives it high explosive rockets.
     .description-49 = Upgrades the Medium Tank with a Point Laser Defense System.
     .description-50 =
         Equips the Medium Tank with Reflector Armor.
-        
+
         Very resistent vs. Energy Weapons.
     .description-51 = Enables to build the Mobile EMP unit.
     .description-52 = Upgrades the EMP reactor to allow multiple EMP Waves and don't self destruct on use.
     .description-53 = Upgrades the EMP reactor to set off an EMP blast when the vehicle is destroyed.
     .description-54 =
         Upgrades the Titan with EMP shells.
-        
+
         EMP Shells disable the target on impact.
     .description-55 =
         Upgrades the Titan with a Railgun.
-        
+
         The Railgun is strong vs. tanks and is an energy based weapon.
     .description-56 = Upgrades the Titan with a Point Laser Defense System to shoot down incoming projectiles.
     .description-57 =
         Equips the Titan with Reflector Armor.
-        
+
         Very resistent vs. Energy Weapons.
     .description-58 = All heavy tanks are produced with a mini drone attached.
     .description-59 =
         Enables to build the Stealth Fighter.
-        
+
         It is a cloaked aircraft optimized to take out single heavy armored vehicles.
     .description-60 =
         Doubles the Payload of the Stealth Fighter.
-        
+
         It allows the Stealth Fighter to take out a second target without resuppyling.
     .description-61 =
         Enables to build the Mammoth MK.II.
-        
+
         It is the epic walker of Talon.
-        
+
         Armed with dual railguns and high explosive rockets against ground and air.
     .description-62 =
         Enables to build the Orca Ion Warship.
-        
+
         It is the epic airship of Eagle.
-        
+
         Comes with ion drones delivering ion strikes vs. ground
-        
+
         and heavy missiles vs. air.
     .description-63 =
         Enables to build the Mammoth Armored Reclamation Vehicle.
-        
+
         It is the epic tanks of Zocom.
-        
+
         Armed with a triple ion cannon.
-        
+
         Mines Tiberium and Ores when driving over.
     .description-64 =
         Enables to build the Reinforcements Coordinator.
-        
+
         It coordinates reinforcements directly to the frontline when deployed.
     .description-65 = Upgrades the Buggy with a Point Laser Defense system to shoot down incoming projectiles.
     .description-66 = Upgrades the Buggy with an Anti-Air Laser to shoot down aircraft.
     .description-67 = Enables to build the SSM Launcher, a high range artillery.
     .description-68 =
         Upgrades the SSM Launcher with chemical missiles.
-        
+
         The chemical clouds remain for a prolonged time on the impact site dealing damage.
     .description-69 =
         Upgrades the SSM Launcher's missiles to split up in multiple missiles on impact.
-        
+
         This makes the SSM Launcher more effective against large groups of vehicles.
     .description-70 =
         Upgrades the Stealth Tank with a Armor Piercing Missiles.
-        
+
         This makes it much more effective vs. heavy tanks and heavy aircraft.
     .description-71 =
         Upgrades the Stealth Tank with a Scrin Weapon.
-        
+
         Energy based weapons cannot be intercepted by Point Laser Defense.
     .description-72 = Upgrades the Stealth Tank's missiles with a high explosive load.
     .description-73 =
         Equips the Stealth Tank with Reflector Armor.
-        
+
         Very resistent vs. Energy Weapons.
     .description-74 = Upgrades the Stealth Tank with a Point Laser Defense System to shoot down incoming projectiles.
     .description-75 =
         Upgrades the Recon Bike with a Scrin Weapon.
-        
+
         Energy based weapons cannot be intercepted by Point Laser Defense.
     .description-76 = Upgrades the Scrin Bike with a Point Laser Defense System to shoot down incoming projectiles.
     .description-77 =
         Equips the Scrin Bike with Reflector Armor.
-        
+
         Very resistent vs. Energy Weapons.
     .description-78 =
         Upgrades the Recon Bike to shoot more missiles at high range.
-        
+
         This makes the recon bike a hit and run artillery unit.
-        
+
         The recon bike loses its ability to fight flying targets.
     .description-79 =
         Equips the Rocket Hail Bike with Reflector Armor.
-        
+
         Very resistent vs. Energy Weapons.
     .description-80 = Upgrades the Rocket Hail Bike with a Point Laser Defense System to shoot down incoming projectiles.
     .description-81 =
         Upgrades the Recon Bike to shoot explosive missiles.
-        
+
         This is very strong vs. weakly armored units.
     .description-82 = Upgrades the Explosive Rocket Bike with a Point Laser Defense System to shoot down incoming projectiles.
     .description-83 =
         Equips the Explosive Rocket Bike with Reflector Armor.
-        
+
         Very resistent vs. Energy Weapons.
     .description-84 =
         Unlocks a small hovering scorpion tank armed with heavy laser.
-        
+
         Energy based weapons cannot be intercepted by Point Laser Defense.
     .description-85 =
         Enables to build the Beam Cannon.
-        
+
         It shoots a continuous energy beam at distant targets Strong vs. Vehicles, Weak vs. Aircraft.
     .description-86 = The Subchaser is a small naval vessel specialized in hunting submarines.
     .description-87 =
         The Hunter Submarine is a fast and destructive submerged vessel.
-        
+
         It lacks armor, but can take out unprotected ships very efficiently.
     .description-88 =
         The Patrol Boat is a versatile rocket vessel.
-        
+
         It comes with Point-Defense-Laser to stop incoming projectiles.
     .description-89 = The Recon Boat is a fast vessel armed with missiles.
     .description-90 =
         The Sea Scorpion is a flak boat specialized in fighting aircraft.
-        
+
         It comes with Point-Defense-Laser to stop incoming projectiles.
     .description-91 =
         The Attack Submarine is specialized in fighting other ships.
-        
+
         It is submerged and cannot be detected by all ships.
     .description-92 =
         The Destroyer is capable of fighting against all threats,
-        
+
         but is mostly specialized against submarines.
     .description-93 =
         The Frigate brings a heavy energy weapon to the seas.
-        
+
         This makes it suited best against Point Defense Laser systems.
     .description-94 =
         The Aegis Cruiser fires a barrage of missiles.
-        
+
         The missiles are best suited against aircraft.
-        
+
         Has Point Defense Laser system.
 
 ### commander-tree-promotion-advanced-infantry-training
@@ -949,17 +949,17 @@ commander-tree-promotion-apc-vulcan =
 
 commander-tree-promotion-battlecruiser =
     .buildable-description =
-        The Battlecruiser is the ultimate artillery ship. 
-        
-        Dual 8-inch cannons provide constant barrage, 
-        
+        The Battlecruiser is the ultimate artillery ship.
+
+        Dual 8-inch cannons provide constant barrage,
+
         while a Point Defense Laser fends of incoming enemy artillery.
     .tooltipextras-strengths = Strengths: • Strong vs Buildings, Slow Fleets
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Aircraft, Submarines
     .tooltipextras-attributes = Attributes: • Point Defense Laser
     .description =
-        The Battlecruiser is the ultimate artillery ship. 
-         Dual 8-inch cannons provide constant barrage, 
+        The Battlecruiser is the ultimate artillery ship.
+         Dual 8-inch cannons provide constant barrage,
          while a Point Defense Laser fends of incoming enemy artillery.
 
 ### commander-tree-promotion-btr
@@ -967,26 +967,26 @@ commander-tree-promotion-battlecruiser =
 commander-tree-promotion-btr =
     .buildable-description =
         Enables to build the BTR.
-        
-          It is a missile based anti-air troop transporter. 
-        
+
+          It is a missile based anti-air troop transporter.
+
         Optimal for taking out heavy air units.
     .description =
         Enables to build the BTR.
-          It is a missile based anti-air troop transporter. 
+          It is a missile based anti-air troop transporter.
         Optimal for taking out heavy air units.
 
 ### commander-tree-promotion-carrier
 
 commander-tree-promotion-carrier =
     .buildable-description =
-        The Carrier launches small strike aircraft. 
-        
+        The Carrier launches small strike aircraft.
+
         The aircraft are able to fight submarines as well as all ground targets.
     .tooltipextras-strengths = Strengths: • Strong vs Buildings, Submarines
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Aircraft, Aircraft
     .description =
-        The Carrier launches small strike aircraft. 
+        The Carrier launches small strike aircraft.
         The aircraft are able to fight submarines as well as all ground targets.
     .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 
@@ -994,11 +994,11 @@ commander-tree-promotion-carrier =
 
 commander-tree-promotion-chemyak =
     .buildable-description =
-        Equips the Yak Plane with chemical spray. 
-        
+        Equips the Yak Plane with chemical spray.
+
         It is more efficient vs. heavy vehicles and buildings.
     .description =
-        Equips the Yak Plane with chemical spray. 
+        Equips the Yak Plane with chemical spray.
           It is more efficient vs. heavy vehicles and buildings.
 
 ### commander-tree-promotion-chemyak-volatile-tanks
@@ -1011,14 +1011,14 @@ commander-tree-promotion-chemyak-volatile-tanks =
 
 commander-tree-promotion-elite-cyborg =
     .buildable-description =
-        Enables to build the Elite Cyborg. 
-        
-        A very tough cyborg infantry with scrin weaponry. 
-        
+        Enables to build the Elite Cyborg.
+
+        A very tough cyborg infantry with scrin weaponry.
+
         Energy based weapons cannot be intercepted by Point Laser Defense.
     .description =
-        Enables to build the Elite Cyborg. 
-          A very tough cyborg infantry with scrin weaponry. 
+        Enables to build the Elite Cyborg.
+          A very tough cyborg infantry with scrin weaponry.
           Energy based weapons cannot be intercepted by Point Laser Defense.
 
 ### commander-tree-promotion-elite-cyborg-range
@@ -1031,47 +1031,47 @@ commander-tree-promotion-elite-cyborg-range =
 
 commander-tree-promotion-flak-track-barrage =
     .buildable-description =
-        Upgrades the Flak Track with fast firing Flak cannons. 
-        
+        Upgrades the Flak Track with fast firing Flak cannons.
+
         This makes it better vs. Point Laser Defense Systems and groups of units.
     .description =
-        Upgrades the Flak Track with fast firing Flak cannons. 
+        Upgrades the Flak Track with fast firing Flak cannons.
           This makes it better vs. Point Laser Defense Systems and groups of units.
 
 ### commander-tree-promotion-hailstorm-mlrs
 
 commander-tree-promotion-hailstorm-mlrs =
     .buildable-description =
-        Enables to build the Hailstorm MLRS. 
-        
-         The Hailstorm MLRS fires a lot of rockets over long distances. 
-        
+        Enables to build the Hailstorm MLRS.
+
+         The Hailstorm MLRS fires a lot of rockets over long distances.
+
         This upgrade removes the anti-air capabilities.
     .description =
-        Enables to build the Hailstorm MLRS. 
-          The Hailstorm MLRS fires a lot of rockets over long distances. 
+        Enables to build the Hailstorm MLRS.
+          The Hailstorm MLRS fires a lot of rockets over long distances.
          This upgrade removes the anti-air capabilities.
 
 ### commander-tree-promotion-hover-mlrs-pdl
 
 commander-tree-promotion-hover-mlrs-pdl =
     .buildable-description =
-        Upgrades the Hover MLRS with a Point Laser Defense System. 
-        
+        Upgrades the Hover MLRS with a Point Laser Defense System.
+
         Very resistent vs. Projectile Weapons.
     .description =
-        Upgrades the Hover MLRS with a Point Laser Defense System. 
+        Upgrades the Hover MLRS with a Point Laser Defense System.
          Very resistent vs. Projectile Weapons.
 
 ### commander-tree-promotion-hover-mlrs-reflector
 
 commander-tree-promotion-hover-mlrs-reflector =
     .buildable-description =
-        Equips the Hover MLRS with Reflector Armor. 
-        
+        Equips the Hover MLRS with Reflector Armor.
+
         Very resistent vs. Energy Weapons.
     .description =
-        Equips the Hover MLRS with Reflector Armor. 
+        Equips the Hover MLRS with Reflector Armor.
          Very resistent vs. Energy Weapons.
 
 ### commander-tree-promotion-icbm-submarine
@@ -1101,7 +1101,7 @@ commander-tree-promotion-mobile-sensor-pdl =
 commander-tree-promotion-nona-svk =
     .buildable-description =
         Enables to build the Nona SVK.
-        
+
         It is a highly mobile artillery unit, excelling at hit and run tactics.
     .description =
         Enables to build the Nona SVK.
@@ -1112,7 +1112,7 @@ commander-tree-promotion-nona-svk =
 commander-tree-promotion-oil-pumps =
     .buildable-description =
         Enables to build Oil Pumps, Oil Platforms, and Supply Trucks.
-        
+
         Generates slow trickling endless income.
     .description =
         Enables to build Oil Pumps, Oil Platforms, and Supply Trucks.
@@ -1123,7 +1123,7 @@ commander-tree-promotion-oil-pumps =
 commander-tree-promotion-point-defense-turret =
     .buildable-description =
         Enables to build the Point Laser Defense Turret.
-        
+
         It shoots down incoming shells and missiles.
     .description =
         Enables to build the Point Laser Defense Turret.
@@ -1145,11 +1145,11 @@ commander-tree-promotion-shielded-miners =
 
 commander-tree-promotion-slingshot =
     .buildable-description =
-        Enables to build the Slingshot. 
-        
+        Enables to build the Slingshot.
+
         The Slingshot is a hovercraft specialized to shoot down aircraft.
     .description =
-        Enables to build the Slingshot. 
+        Enables to build the Slingshot.
           The Slingshot is a hovercraft specialized to shoot down aircraft.
 
 ### commander-tree-promotion-stealth-miners
@@ -1162,11 +1162,11 @@ commander-tree-promotion-stealth-miners =
 
 commander-tree-promotion-sukhoi =
     .buildable-description =
-        Allows to build the Sukhoi. 
-        
+        Allows to build the Sukhoi.
+
         It is a attack fighter to take down groups of vehicles.
     .description =
-        Allows to build the Sukhoi. 
+        Allows to build the Sukhoi.
           It is a attack fighter to take down groups of vehicles.
 
 ### commander-tree-promotion-sukhoi-concussion
@@ -1180,7 +1180,7 @@ commander-tree-promotion-sukhoi-concussion =
 commander-tree-promotion-surveillance-btr =
     .buildable-description =
         Enables to build the Surveillance BTR.
-        
+
         It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
     .description =
         Enables to build the Surveillance BTR.
@@ -1190,24 +1190,24 @@ commander-tree-promotion-surveillance-btr =
 
 commander-tree-promotion-yuri =
     .buildable-description =
-        Form Unholy Alliance with Yuri and his forces. 
-        
-        This replaces multiple units and support powers: 
-        
-         Lasher Tank replaces Heavy Tank. 
-        
-         Yuri replaces Boris. 
-        
-         Chaos Drone replaces MAD Tank 
-        
+        Form Unholy Alliance with Yuri and his forces.
+
+        This replaces multiple units and support powers:
+
+         Lasher Tank replaces Heavy Tank.
+
+         Yuri replaces Boris.
+
+         Chaos Drone replaces MAD Tank
+
          Genetic Mutation Bomb replaces Parabombs.
     .description =
-        Form Unholy Alliance with Yuri and his forces. 
-         This replaces multiple units and support powers: 
-          Lasher Tank replaces Heavy Tank. 
-          Yuri replaces Boris. 
-          Chaos Drone replaces MAD Tank 
-          Genetic Mutation Bomb replaces Parabombs. 
+        Form Unholy Alliance with Yuri and his forces.
+         This replaces multiple units and support powers:
+          Lasher Tank replaces Heavy Tank.
+          Yuri replaces Boris.
+          Chaos Drone replaces MAD Tank
+          Genetic Mutation Bomb replaces Parabombs.
 
 
 ### defaults-forceshieldsupportpower
@@ -1215,11 +1215,11 @@ commander-tree-promotion-yuri =
 defaults-forceshieldsupportpower =
     .grantexternalconditionpowerca-at-fshield-description =
         Makes selected friendly structures temporarily invulnerable.
-        
+
         Warning: Causes power failure.
     .grantexternalconditionpowerca-at-fshieldnukular-description =
         Makes selected friendly structures temporarily invulnerable.
-        
+
         Warning: Causes power failure.
 
 ### fakes-domf
@@ -1247,9 +1247,9 @@ fakes-weaf =
 infantry-brute =
     .buildable-description =
         Genetically engineered hulk.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Aircraft, Defenses
 
 ### infantry-dog
@@ -1257,19 +1257,19 @@ infantry-brute =
 infantry-dog =
     .buildable-description =
         Anti-infantry unit.
-        
+
         Can detect spies and cloaked units.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### infantry-engineer
 
 infantry-engineer =
     .buildable-description =
-        Unarmed battle field engineer. 
-        
+        Unarmed battle field engineer.
+
         The most important tasks of the engineer are to take over enemy structures and do push ups.
 
 ### infantry-leader
@@ -1277,11 +1277,11 @@ infantry-engineer =
 infantry-leader =
     .buildable-description =
         Nod Rebel Leader.
-        
-        Newly trained infantry enters the game from the closest map edge 
-        
-         as long as no primary infantry building is set. 
-        
+
+        Newly trained infantry enters the game from the closest map edge
+
+         as long as no primary infantry building is set.
+
          Does not work with water.
 
 ### infantry-medic
@@ -1289,7 +1289,7 @@ infantry-leader =
 infantry-medic =
     .buildable-description =
         Heals nearby infantry.
-        
+
         Unarmed
 
 ### infantry-n5
@@ -1297,7 +1297,7 @@ infantry-medic =
 infantry-n5 =
     .buildable-description =
         Advanced general-purpose infantry.
-        
+
         Strong vs all Ground Units
 
 ### infantry-seal
@@ -1305,9 +1305,9 @@ infantry-n5 =
 infantry-seal =
     .buildable-description =
         Elite infantry unit. Armed with
-        
+
         a SMG and C4.
-        
+
           Can detect cloaked units.
     .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Aircraft, Vehicles
@@ -1320,9 +1320,9 @@ infantry-seal =
 infantry-shad-commando =
     .buildable-description =
         Commando unit with emp grenades, cloaked and with heavy anti-tank mines.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Aircraft, Defenses
 
 ### player-player
@@ -1346,7 +1346,7 @@ player-player =
 scrin-bastion =
     .buildable-description =
         Defense platform for Scrin zapping incoming invaders.
-        
+
         Maximum 1 can be built.
 
 ### scrin-deva
@@ -1354,9 +1354,9 @@ scrin-bastion =
 scrin-deva =
     .buildable-description =
         Long-range siege warship.
-        
+
         Strong vs Buildings, Defenses, Infantry
-        
+
         Weak vs Aircraft, Tanks
 
 ### scrin-deva-rift
@@ -1364,9 +1364,9 @@ scrin-deva =
 scrin-deva-rift =
     .buildable-description =
         Long-range anti-tank warship.
-        
+
         Strong vs masses of units
-        
+
         Weak vs Aircraft
 
 ### scrin-deva-shards
@@ -1374,9 +1374,9 @@ scrin-deva-rift =
 scrin-deva-shards =
     .buildable-description =
         Long-range anti-tank warship.
-        
+
         Strong vs Tanks
-        
+
         Weak vs Aircraft
 
 ### scrin-grav
@@ -1389,11 +1389,11 @@ scrin-grav =
 scrin-mani =
     .buildable-description =
         Slows enemy unit movement and rate of fire.
-        
+
         Requires power to operate.
-        
+
         Maximum 1 can be built.
-        
+
         Special Ability: Suppression Field
 
 ### scrin-mast
@@ -1401,15 +1401,15 @@ scrin-mani =
 scrin-mast =
     .buildable-description =
         Elite specialist infantry.
-        
+
         Can mind-control enemy units and defenses.
-        
+
         Can detect cloaked units.
-        
+
         Maximum 1 can be trained.
-        
+
         Strong vs Infantry, Vehicles, Defenses
-        
+
         Weak vs Aircraft
 
 ### scrin-mshp
@@ -1417,11 +1417,11 @@ scrin-mast =
 scrin-mshp =
     .buildable-description =
         Huge craft with powerful beam weapon.
-        
+
         Can create wormholes.
-        
+
         Strong vs Buildings, Defenses
-        
+
         Weak vs Aircraft
 
 ### scrin-nerv
@@ -1429,7 +1429,7 @@ scrin-mshp =
 scrin-nerv =
     .buildable-description =
         Provides an overview of the battlefield.
-        
+
         Requires power to operate.
 
 ### scrin-port
@@ -1442,7 +1442,7 @@ scrin-port =
 scrin-proc-scrin =
     .buildable-description =
         Processes raw Tiberium, Ore and Gems
-        
+
         into credits.
 
 ### scrin-ptur
@@ -1450,11 +1450,11 @@ scrin-proc-scrin =
 scrin-ptur =
     .buildable-description =
         Anti-infantry base defense.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Light Armor
-        
+
         Weak vs Tanks, Aircraft
 
 ### scrin-rea2
@@ -1462,7 +1462,7 @@ scrin-ptur =
 scrin-rea2 =
     .buildable-description =
         Provides double the power of
-        
+
         a standard Reactor.
 
 ### scrin-reac
@@ -1475,11 +1475,11 @@ scrin-reac =
 scrin-rift =
     .buildable-description =
         Provides Rift support power.
-        
+
         Requires power to operate.
-        
+
         Maximum 1 can be built.
-        
+
         Special Ability: Rift
 
 ### scrin-s1
@@ -1487,9 +1487,9 @@ scrin-rift =
 scrin-s1 =
     .buildable-description =
         General-purpose scouting infantry.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### scrin-s2
@@ -1497,9 +1497,9 @@ scrin-s1 =
 scrin-s2 =
     .buildable-description =
         Fast assault infantry.
-        
+
         Strong vs Vehicles, Infantry
-        
+
         Weak vs Aircraft
 
 ### scrin-s3
@@ -1507,9 +1507,9 @@ scrin-s2 =
 scrin-s3 =
     .buildable-description =
         Anti-tank/anti-aircraft infantry.
-        
+
         Strong vs Tanks, Aircraft
-        
+
         Weak vs Infantry
 
 ### scrin-s4
@@ -1517,11 +1517,11 @@ scrin-s3 =
 scrin-s4 =
     .buildable-description =
         Heavy assault infantry.
-        
+
         Can teleport short distances.
-        
+
         Strong vs Buildings, Defenses, Light Vehicles
-        
+
         Weak vs Infantry, Aircraft
 
 ### scrin-s6
@@ -1529,13 +1529,13 @@ scrin-s4 =
 scrin-s6 =
     .buildable-description =
         Captures
-        
+
         enemy structures.
-        
+
           Can repair friendly structures & bridges.
-        
+
           Special Ability: Repair
-        
+
           Unarmed
 
 ### scrin-s7
@@ -1543,9 +1543,9 @@ scrin-s6 =
 scrin-s7 =
     .buildable-description =
         General-purpose scouting infantry.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### scrin-s8
@@ -1553,9 +1553,9 @@ scrin-s7 =
 scrin-s8 =
     .buildable-description =
         General-purpose scouting infantry.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### scrin-scol
@@ -1563,13 +1563,13 @@ scrin-s8 =
 scrin-scol =
     .buildable-description =
         Advanced base defense.
-        
+
         Requires power to operate.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Vehicles
-        
+
         Weak vs Aircraft
 
 ### scrin-scrt
@@ -1587,11 +1587,11 @@ scrin-sfac =
 scrin-shar =
     .buildable-description =
         Anti-aircraft base defense.
-        
+
         Requires power to operate.
-        
+
         Strong vs Aircraft
-        
+
         Weak vs Ground Units
 
 ### scrin-sign
@@ -1599,9 +1599,9 @@ scrin-shar =
 scrin-sign =
     .buildable-description =
         Provides Scrin tier 4 technologies.
-        
+
         Maximum 1 can be built.
-        
+
         Cannot be captured.
 
 ### scrin-silo-scrin
@@ -1626,7 +1626,7 @@ scrin-stmr =
 scrin-stmr-bomber =
     .buildable-description =
         Dedicated bomber.
-        
+
         Strong vs Clusters of Vehicles
     .tooltipextras-strengths = Strengths: • Strong vs Tanks, Buildings
     .tooltipextras-weaknesses = Weaknesses: • Surface Anti-Air
@@ -1661,11 +1661,11 @@ scrin-wsph =
 ships-aegis-cruiser =
     .buildable-description =
         Anti-aircraft fleet support vessel.
-        
-        Has Point Defense Laser 
-        
+
+        Has Point Defense Laser
+
         Strong vs Aircraft, Projectiles
-        
+
         Weak vs Submarine, Energy Weapons
     .tooltipextras-strengths = Strengths: • Strong vs Aircraft, Projectiles
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Submarines, Ships
@@ -1676,7 +1676,7 @@ ships-aegis-cruiser =
 ships-ca =
     .buildable-description =
         Very slow long-range bombardment ship.
-        
+
         Has Point Defense Laser.
     .tooltipextras-strengths = Strengths: • Strong vs Buildings, Slow Fleets
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Aircraft, Submarines
@@ -1687,11 +1687,11 @@ ships-ca =
 ships-carr =
     .buildable-description =
         Carrier that launches a squadron
-        
+
         of drone aircraft.
-        
+
           Strong vs Vehicles, Buildings
-        
+
           Weak vs Aircraft
     .tooltipextras-strengths = Strengths: • Strong vs Buildings, Submarines
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Aircraft, Aircraft
@@ -1701,13 +1701,13 @@ ships-carr =
 ships-chasub =
     .buildable-description =
         Submerged anti-ship unit
-        
+
         armed with torpedoes.
-        
+
         Can detect other submarines.
-        
+
           Strong vs Naval units
-        
+
           Weak vs Ground units, Aircraft
 
 ### ships-chflameboat
@@ -1715,7 +1715,7 @@ ships-chasub =
 ships-chflameboat =
     .buildable-description =
         Light scout & support ship.
-        
+
         Can detect submarines.
 
 ### ships-dd
@@ -1723,7 +1723,7 @@ ships-chflameboat =
 ships-dd =
     .buildable-description =
         Fast multi-role ship.
-        
+
         Can detect submarines.
     .tooltipextras-strengths = Strengths: • Strong vs Submarines
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser
@@ -1733,7 +1733,7 @@ ships-dd =
 ships-dd2 =
     .buildable-description =
         Advanced warship armed with
-        
+
         a powerful railgun.
     .tooltipextras-strengths = Strengths: • Strong vs Point Defense Laser
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Submarines, Aircraft
@@ -1743,9 +1743,9 @@ ships-dd2 =
 ships-isub =
     .buildable-description =
         Submerged unit armed with
-        
+
         long-range missiles.
-        
+
           Can detect other submarines.
     .tooltipextras-strengths = Strengths: • Strong vs Buildings, Slow Fleets
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Aircraft, Aircraft, Submarines
@@ -1755,9 +1755,9 @@ ships-isub =
 ships-lst =
     .buildable-description =
         General-purpose naval transport.
-        
+
         Can carry infantry and tanks.
-        
+
         Unarmed
 
 ### ships-msub
@@ -1765,7 +1765,7 @@ ships-lst =
 ships-msub =
     .buildable-description =
         Submerged anti-ground siege unit.
-        
+
         Can detect other submarines.
     .tooltipextras-strengths = Strengths: • Strong vs Buildings, Slow Fleets
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Sub Ships, Aircraft
@@ -1775,7 +1775,7 @@ ships-msub =
 ships-pt2 =
     .buildable-description =
         Light ship armed with guided missiles.
-        
+
         Has Point Defense Laser.
     .tooltipextras-strengths = Strengths: • Strong vs Projectiles
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Submarines
@@ -1786,9 +1786,9 @@ ships-pt2 =
 ships-sb =
     .buildable-description =
         Fast scout boat, armed with
-        
+
         rockets.
-        
+
           Can attack Aircraft.
     .tooltipextras-strengths = Strengths: • Strong vs Heavy Ships, Aircraft
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Submarines
@@ -1798,7 +1798,7 @@ ships-sb =
 ships-seas =
     .buildable-description =
         Anti-aircraft & support ship.
-        
+
         Has Point Defense Laser
     .tooltipextras-strengths = Strengths: • Strong vs Aircraft, Projectiles
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Ships, Submarines
@@ -1809,9 +1809,9 @@ ships-seas =
 ships-ss =
     .buildable-description =
         Submerged anti-ship unit
-        
+
         armed with torpedoes.
-        
+
           Can detect other submarines.
     .tooltipextras-strengths = Strengths: • Strong vs Ships
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Sub Ships, Aircraft
@@ -1821,7 +1821,7 @@ ships-ss =
 ships-ss2 =
     .buildable-description =
         Submerged anti-naval unit
-        
+
         armed with torpedoes.
     .tooltipextras-strengths = Strengths: • Strong vs Ships
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Aircraft, Anti-Sub Ships
@@ -1831,7 +1831,7 @@ ships-ss2 =
 ships-subchaser =
     .buildable-description =
         Fast submarine chaser.
-        
+
         Can detect submarines.
     .tooltipextras-strengths = Strengths: • Strong vs Submarines
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Ships, Aircraft
@@ -1846,9 +1846,9 @@ structures-afac =
 structures-afld =
     .buildable-description =
         Produces and reloads aircraft.
-        
+
         Special Ability: Spy Plane
-        
+
         Special Ability: Paratroopers
 
 ### structures-afld-allies
@@ -1861,7 +1861,7 @@ structures-afld-allies =
 structures-afld-gdi =
     .buildable-description =
         Produces and reloads aircraft.
-        
+
         Special Ability: Recon Drone
 
 ### structures-agun
@@ -1869,11 +1869,11 @@ structures-afld-gdi =
 structures-agun =
     .buildable-description =
         Anti-aircraft base defense.
-        
+
         Requires power to operate.
-        
+
         Strong vs Aircraft
-        
+
         Weak vs Ground Units
 
 ### structures-airs
@@ -1881,7 +1881,7 @@ structures-agun =
 structures-airs =
     .buildable-description =
         Provides a dropzone
-        
+
         for vehicle reinforcements
 
 ### structures-anypower
@@ -1894,7 +1894,7 @@ structures-anypower =
 structures-apwr =
     .buildable-description =
         Provides double the power of
-        
+
         a standard Power Plant.
 
 ### structures-atek
@@ -1902,7 +1902,7 @@ structures-apwr =
 structures-atek =
     .buildable-description =
         Provides Allied advanced technologies.
-        
+
         Special Ability: GPS Satellite
 
 ### structures-atwr
@@ -1910,11 +1910,11 @@ structures-atek =
 structures-atwr =
     .buildable-description =
         Advanced base defense.
-        
+
         Requires power to operate.
-        
+
         Can detect cloaked units.
-        
+
         Relay targeting system marks targets so other Advanced Guard Towers can shoot from longer distances.
     .tooltipextras-strengths = Strengths: • Strong vs Vehicles, Slow Aircraft
 
@@ -1928,11 +1928,11 @@ structures-barr =
 structures-bio-nod =
     .buildable-description =
         Replaces basic infantry with cyborgs.
-        
+
         Maximum 1 can be built.
-        
+
         Cannot be captured.
-        
+
         Special Ability: Cyborg Converter
 
 ### structures-brik
@@ -1945,7 +1945,7 @@ structures-brik =
 structures-chain =
     .buildable-description =
         Stops infantry and light vehicles.
-        
+
         Can be crushed by tanks.
 
 ### structures-cram
@@ -1953,13 +1953,13 @@ structures-chain =
 structures-cram =
     .buildable-description =
         Anti-aircraft base defense.
-        
+
         Requires power to operate.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Aircraft
-        
+
         Weak vs Ground Units
 
 ### structures-dome
@@ -1967,9 +1967,9 @@ structures-cram =
 structures-dome =
     .buildable-description =
         Provides an overview
-        
+
         of the battlefield.
-        
+
           Requires power to operate.
 
 ### structures-eye
@@ -1977,11 +1977,11 @@ structures-dome =
 structures-eye =
     .buildable-description =
         Provides radar and Orbital Ion Cannon support power.
-        
+
         Requires power to operate.
-        
+
         Maximum 1 can be built.
-        
+
         Special Ability: Ion Cannon
 
 ### structures-fact
@@ -1994,7 +1994,7 @@ structures-fact =
 structures-fenc =
     .buildable-description =
         Stops infantry and light vehicles.
-        
+
         Can be crushed by tanks.
 
 ### structures-fix
@@ -2007,11 +2007,11 @@ structures-fix =
 structures-ftur =
     .buildable-description =
         Anti-infantry base defense.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Light Armor
-        
+
         Weak vs Tanks, Aircraft
 
 ### structures-gap
@@ -2019,7 +2019,7 @@ structures-ftur =
 structures-gap =
     .buildable-description =
         Obscures the enemy's view with shroud.
-        
+
         Requires power to operate.
 
 ### structures-gtek
@@ -2032,11 +2032,11 @@ structures-gtek =
 structures-gtwr =
     .buildable-description =
         Anti-infantry base defense.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Light Armor
-        
+
         Weak vs Tanks
 
 ### structures-gun
@@ -2044,11 +2044,11 @@ structures-gtwr =
 structures-gun =
     .buildable-description =
         Basic anti-tank base defense.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Tanks, Vehicles
-        
+
         Weak vs Infantry
 
 ### structures-hand
@@ -2061,11 +2061,11 @@ structures-hand =
 structures-hbox =
     .buildable-description =
         Anti-infantry base defense.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Light Armor
-        
+
         Weak vs Tanks, Aircraft
 
 ### structures-hpad
@@ -2073,7 +2073,7 @@ structures-hbox =
 structures-hpad =
     .buildable-description =
         Produces and reloads
-        
+
         helicopters.
 
 ### structures-hpad-td
@@ -2081,7 +2081,7 @@ structures-hpad =
 structures-hpad-td =
     .buildable-description =
         Produces and reloads
-        
+
         helicopters.
 
 ### structures-hq
@@ -2089,7 +2089,7 @@ structures-hpad-td =
 structures-hq =
     .buildable-description =
         Provides an overview of the battlefield.
-        
+
         Requires power to operate.
 
 ### structures-indp
@@ -2097,9 +2097,9 @@ structures-hq =
 structures-indp =
     .buildable-description =
         Reduces cost of vehicles & aircraft by 25%
-        
+
         Maximum 1 can be built.
-        
+
         Cannot be captured.
 
 ### structures-infantry-any
@@ -2117,13 +2117,13 @@ structures-infantry-human =
 structures-iron =
     .buildable-description =
         Makes a group of units invulnerable
-        
+
         for a short time.
-        
+
           Requires power to operate.
-        
+
           Maximum 1 can be built.
-        
+
           Special Ability: Iron Curtain
 
 ### structures-kenn
@@ -2136,7 +2136,7 @@ structures-kenn =
 structures-lasp =
     .buildable-description =
         Stops infantry and blocks enemy fire.
-        
+
         Cannot be crushed by tanks.
 
 ### structures-ltur
@@ -2144,11 +2144,11 @@ structures-lasp =
 structures-ltur =
     .buildable-description =
         Anti-infantry base defense.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Light armor
-        
+
         Weak vs Tanks, Aircraft
 
 ### structures-mslo
@@ -2156,11 +2156,11 @@ structures-ltur =
 structures-mslo =
     .buildable-description =
         Provides an atomic bomb.
-        
+
         Requires power to operate.
-        
+
         Maximum 1 can be built.
-        
+
         Special Ability: Atom Bomb
 
 ### structures-mslo-nod
@@ -2168,11 +2168,11 @@ structures-mslo =
 structures-mslo-nod =
     .buildable-description =
         Provides a chemical missile.
-        
+
         Requires power to operate.
-        
+
         Maximum 1 can be built.
-        
+
         Special Ability: Chemical Missile
 
 ### structures-nsam
@@ -2180,13 +2180,13 @@ structures-mslo-nod =
 structures-nsam =
     .buildable-description =
         Anti-aircraft base defense.
-        
+
         Requires power to operate.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Aircraft
-        
+
         Cannot target Ground Units.
 
 ### structures-nuk2
@@ -2194,7 +2194,7 @@ structures-nsam =
 structures-nuk2 =
     .buildable-description =
         Provides double the power of
-        
+
         a standard Nuclear Power Plant.
 
 ### structures-nuke
@@ -2207,21 +2207,21 @@ structures-nuke =
 structures-obli =
     .buildable-description =
         Advanced experimental base defense.
-        
+
         Requires power to operate.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Vehicles, Infantry
-        
+
         Weak vs Aircraft
 
 ### structures-oil-platform
 
 structures-oil-platform =
     .buildable-description =
-        Generates income through oil exploitation. 
-        
+        Generates income through oil exploitation.
+
         Placing many within range circle decreases efficiency.
 
 ### structures-oilp
@@ -2234,11 +2234,11 @@ structures-oilp =
 structures-orep =
     .buildable-description =
         Refines income from ore, gems & tiberium by 5-10%.
-        
+
         Provides access to advanced chrono harvester technology.
-        
+
           Maximum 1 can be built.
-        
+
           Cannot be captured.
 
 ### structures-patr
@@ -2246,11 +2246,11 @@ structures-orep =
 structures-patr =
     .buildable-description =
         Launches E.M. Pulse Missiles that disable vehicles & structures.
-        
+
         Requires power to operate.
-        
+
         Maximum 1 can be built.
-        
+
         Special Ability: E.M. Pulse Missile
 
 ### structures-pbox
@@ -2258,11 +2258,11 @@ structures-patr =
 structures-pbox =
     .buildable-description =
         Anti-infantry base defense.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Light Armor
-        
+
         Weak vs Tanks, Aircraft
 
 ### structures-pdlt
@@ -2275,13 +2275,13 @@ structures-pdlt =
 structures-pdox =
     .buildable-description =
         Teleports a group of units across the
-        
+
         map for a short time.
-        
+
           Requires power to operate.
-        
+
           Maximum 1 can be built.
-        
+
           Special Ability: Chronoshift
 
 ### structures-powr
@@ -2294,13 +2294,13 @@ structures-powr =
 structures-pris =
     .buildable-description =
         Experimental base defense.
-        
+
         Requires power to operate.
-        
+
         Can detect cloaked units.
-        
+
           Strong vs Vehicles, Infantry
-        
+
           Weak vs Aircraft
 
 ### structures-proc
@@ -2308,7 +2308,7 @@ structures-pris =
 structures-proc =
     .buildable-description =
         Processes raw Tiberium, Ore and Gems
-        
+
         into credits.
 
 ### structures-proc-td
@@ -2316,7 +2316,7 @@ structures-proc =
 structures-proc-td =
     .buildable-description =
         Processes raw Tiberium, Ore and Gems
-        
+
         into useable resources
 
 ### structures-pyle
@@ -2339,13 +2339,13 @@ structures-repair =
 structures-sam =
     .buildable-description =
         Anti-aircraft base defense.
-        
+
         Requires power to operate.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Aircraft
-        
+
         Weak vs Ground Units
 
 ### structures-sbag
@@ -2353,7 +2353,7 @@ structures-sam =
 structures-sbag =
     .buildable-description =
         Stops infantry and light vehicles.
-        
+
         Can be crushed by tanks.
 
 ### structures-sgen
@@ -2361,11 +2361,11 @@ structures-sbag =
 structures-sgen =
     .buildable-description =
         Makes a group of units invisible for a short time.
-        
+
         Requires power to operate.
-        
+
         Maximum 1 can be built.
-        
+
         Special Ability: Tiberium Stealth
 
 ### structures-silo
@@ -2373,7 +2373,7 @@ structures-sgen =
 structures-silo =
     .buildable-description =
         Stores excess refined
-        
+
         Tiberium, Ore and Gems.
 
 ### structures-silo-td
@@ -2386,7 +2386,7 @@ structures-silo-td =
 structures-spen =
     .buildable-description =
         Produces and repairs
-        
+
         submarines and transports.
 
 ### structures-spen-nod
@@ -2394,7 +2394,7 @@ structures-spen =
 structures-spen-nod =
     .buildable-description =
         Produces and repairs
-        
+
         submarines and transports.
 
 ### structures-stek
@@ -2411,8 +2411,8 @@ structures-structures-tsla =
 
 structures-swiss-bank =
     .buildable-description =
-        Transfers Money to your allies. 
-        
+        Transfers Money to your allies.
+
         Avoids taxes.
 
 ### structures-syrd
@@ -2420,7 +2420,7 @@ structures-swiss-bank =
 structures-syrd =
     .buildable-description =
         Produces and repairs
-        
+
         ships and transports.
 
 ### structures-syrd-gdi
@@ -2428,7 +2428,7 @@ structures-syrd =
 structures-syrd-gdi =
     .buildable-description =
         Produces and repairs ships
-        
+
         and transports.
 
 ### structures-tent
@@ -2441,9 +2441,9 @@ structures-tent =
 structures-tmpl =
     .buildable-description =
         Provides Nod advanced technologies.
-        
+
         Requires power to operate.
-        
+
         Special Ability: Cluster Missile
 
 ### structures-tpwr
@@ -2451,11 +2451,11 @@ structures-tmpl =
 structures-tpwr =
     .buildable-description =
         Provides double the power of
-        
+
         a standard Power Plant.
-        
+
           Special Ability: Overload (Toggle)
-        
+
           Warning: Unstable when damaged and overloaded.
 
 ### structures-tsla
@@ -2463,15 +2463,15 @@ structures-tpwr =
 structures-tsla =
     .buildable-description =
         Advanced base defense.
-        
+
         Can be buffed or made work during low power by Shock Troopers.
-        
+
         Requires power to operate.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Vehicles
-        
+
         Weak vs Aircraft
 
 ### structures-ttur
@@ -2479,11 +2479,11 @@ structures-tsla =
 structures-ttur =
     .buildable-description =
         Anti-infantry base defense.
-        
+
         Can detect cloaked units.
-        
+
         Strong vs Infantry, Light armor
-        
+
         Weak vs Tanks, Aircraft
 
 ### structures-upgc
@@ -2491,9 +2491,9 @@ structures-ttur =
 structures-upgc =
     .buildable-description =
         Allows the construction of advanced weaponry and upgrades.
-        
+
         Maximum 1 can be built.
-        
+
         Cannot be captured.
 
 ### structures-upgc-bomb
@@ -2501,7 +2501,7 @@ structures-upgc =
 structures-upgc-bomb =
     .buildable-description =
         Provides an napalm rocket barrage power.
-        
+
         Units get a firepower bonus of 15%.
 
 ### structures-upgc-drop
@@ -2509,7 +2509,7 @@ structures-upgc-bomb =
 structures-upgc-drop =
     .buildable-description =
         Provides a dropzone for emergency supplies
-        
+
         You will receive an universal basic income.
 
 ### structures-upgc-hold
@@ -2517,7 +2517,7 @@ structures-upgc-drop =
 structures-upgc-hold =
     .buildable-description =
         Provides the ability to rapidly repair friendly structures.
-        
+
         Units get an armor bonus of 15%.
 
 ### structures-upgc-seek
@@ -2525,7 +2525,7 @@ structures-upgc-hold =
 structures-upgc-seek =
     .buildable-description =
         Provides detailed information on enemy locations.
-        
+
         Units get a range and speed bonus of 15%.
 
 ### structures-vehicles-any
@@ -2558,11 +2558,11 @@ structures-weap-td =
 structures-weat =
     .buildable-description =
         Provides Lightning Storm support power.
-        
+
         Requires power to operate.
-        
+
         Maximum 1 can be built.
-        
+
         Special Ability: Lightning Storm
 
 ### vehicles-1tnk
@@ -2570,11 +2570,11 @@ structures-weat =
 vehicles-1tnk =
     .buildable-description =
         Fast tank, good for scouting.
-        
+
         Strong vs Light Armor
-        
+
         Weak vs Infantry, Tanks, Aircraft
-        
+
         Special Ability: Amphibious
 
 ### vehicles-1tnk-pdl
@@ -2582,13 +2582,13 @@ vehicles-1tnk =
 vehicles-1tnk-pdl =
     .buildable-description =
         Fast tank, good for scouting.
-        
+
         Has Point Laser Defense System
-        
+
           Strong vs Light Armor
-        
+
           Weak vs Infantry, Tanks, Aircraft
-        
+
           Special Ability: Amphibious
 
 ### vehicles-1tnk-reflector
@@ -2596,13 +2596,13 @@ vehicles-1tnk-pdl =
 vehicles-1tnk-reflector =
     .buildable-description =
         Fast tank, good for scouting.
-        
-        Has Reflector Armor, which is very good vs. Energy Weapons. 
-        
+
+        Has Reflector Armor, which is very good vs. Energy Weapons.
+
           Strong vs Light Armor, Energy Weapons
-        
+
           Weak vs Infantry, Tanks, Aircraft
-        
+
           Special Ability: Amphibious
 
 ### vehicles-2tnk
@@ -2610,9 +2610,9 @@ vehicles-1tnk-reflector =
 vehicles-2tnk =
     .buildable-description =
         Allied main battle tank.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-amcv
@@ -2620,7 +2620,7 @@ vehicles-2tnk =
 vehicles-amcv =
     .buildable-description =
         Deploys into another Construction Yard.
-        
+
         Unarmed
 
 ### vehicles-apc
@@ -2628,9 +2628,9 @@ vehicles-amcv =
 vehicles-apc =
     .buildable-description =
         Tough infantry transport.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Tanks, Aircraft
 
 ### vehicles-apc2
@@ -2638,9 +2638,9 @@ vehicles-apc =
 vehicles-apc2 =
     .buildable-description =
         Tough infantry transport.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Tanks, Aircraft
 
 ### vehicles-arty
@@ -2648,9 +2648,9 @@ vehicles-apc2 =
 vehicles-arty =
     .buildable-description =
         Long-range artillery.
-        
+
         Strong vs Buildings, Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### vehicles-beam-cannon
@@ -2658,13 +2658,13 @@ vehicles-arty =
 vehicles-beam-cannon =
     .buildable-description =
         Prototype energy beam weapon.
-        
+
         Up to 5 Beam Cannons can charge another Beam Cannon up.
-        
-        Up to 3 Beam Cannons can help an Obelisk to charge up faster 
-        
+
+        Up to 3 Beam Cannons can help an Obelisk to charge up faster
+
         Strong vs Vehicles, Infantry
-        
+
         Weak vs Aircraft
 
 ### vehicles-bggy
@@ -2672,11 +2672,11 @@ vehicles-beam-cannon =
 vehicles-bggy =
     .buildable-description =
         Fast scout & anti-infantry vehicle.
-        
+
         Can detect spies and cloaked units.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### vehicles-bggy-aa
@@ -2684,11 +2684,11 @@ vehicles-bggy =
 vehicles-bggy-aa =
     .buildable-description =
         Fast scout and anti-aircraft vehicle.
-        
+
         Can detect cloaked units.
-        
+
           Strong vs Infantry, Aircraft
-        
+
           Weak vs Vehicles
 
 ### vehicles-bggy-pdl
@@ -2696,11 +2696,11 @@ vehicles-bggy-aa =
 vehicles-bggy-pdl =
     .buildable-description =
         Fast scout and anti-infantry vehicle.
-        
+
         Can detect cloaked units and has Point Laser Defense.
-        
+
           Strong vs Infantry
-        
+
           Weak vs Energy Weapons
 
 ### vehicles-bike
@@ -2708,13 +2708,13 @@ vehicles-bggy-pdl =
 vehicles-bike =
     .buildable-description =
         Fast scout vehicle, armed with
-        
+
         rockets.
-        
+
           Can attack Aircraft.
-        
+
           Strong vs Vehicles, Tanks
-        
+
           Weak vs Infantry
 
 ### vehicles-bike-explosive
@@ -2722,13 +2722,13 @@ vehicles-bike =
 vehicles-bike-explosive =
     .buildable-description =
         Fast scout vehicle, armed with
-        
+
         explosive rockets.
-        
+
          Can attack Aircraft.
-        
+
          Strong vs Light Vehicles, Aircraft, Infantry
-        
+
          Weak vs Heavy Vehicles, PDL
 
 ### vehicles-bike-explosive-pdl
@@ -2736,13 +2736,13 @@ vehicles-bike-explosive =
 vehicles-bike-explosive-pdl =
     .buildable-description =
         Fast scout vehicle, armed with explosive rockets.
-        
+
         Can attack Aircraft.
-        
+
         Has Point Laser Defense.
-        
+
         Strong vs Light Vehicles, Aircraft, Infantry
-        
+
         Weak vs Heavy Vehicles, Energy Weapons
 
 ### vehicles-bike-explosive-reflector
@@ -2750,13 +2750,13 @@ vehicles-bike-explosive-pdl =
 vehicles-bike-explosive-reflector =
     .buildable-description =
         Fast scout vehicle, armed with
-        
+
         explosive rockets.
-        
+
          Has Reflector Armor, which is very good vs. Energy Weapons.
-        
+
          Strong vs Light Vehicles, Aircraft, Infantry, Energy Weapons
-        
+
          Weak vs Heavy Vehicles, PDL
 
 ### vehicles-bike-rockethail
@@ -2764,11 +2764,11 @@ vehicles-bike-explosive-reflector =
 vehicles-bike-rockethail =
     .buildable-description =
         Fast artillery vehicle, armed with
-        
+
         many rockets.
-        
+
           Strong vs Vehicles, Tanks
-        
+
          Weak vs Infantry, Aircraft
 
 ### vehicles-bike-rockethail-pdl
@@ -2776,13 +2776,13 @@ vehicles-bike-rockethail =
 vehicles-bike-rockethail-pdl =
     .buildable-description =
         Fast scout vehicle, armed with explosive rockets.
-        
+
         Can attack Aircraft.
-        
+
         Has Point Laser Defense.
-        
+
         Strong vs Vehicles, Projectiles
-        
+
         Weak vs Infantry, Aircraft, Energy Weapons
 
 ### vehicles-bike-rockethail-reflector
@@ -2790,13 +2790,13 @@ vehicles-bike-rockethail-pdl =
 vehicles-bike-rockethail-reflector =
     .buildable-description =
         Fast artillery vehicle, armed with
-        
+
         many rockets.
-        
+
          Has Reflector Armor, which is very good vs. Energy Weapons.
-        
+
          Strong vs Vehicles, Energy Weapons
-        
+
          Weak vs Infantry, Aircraft
 
 ### vehicles-bike-scrin
@@ -2804,9 +2804,9 @@ vehicles-bike-rockethail-reflector =
 vehicles-bike-scrin =
     .buildable-description =
         Fast scout vehicle, armed with energy balls.
-        
+
         Strong vs Vehicles, Tanks
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-bike-scrin-pdl
@@ -2814,13 +2814,13 @@ vehicles-bike-scrin =
 vehicles-bike-scrin-pdl =
     .buildable-description =
         Fast scout vehicle, armed with rockets.
-        
+
         Can attack Aircraft.
-        
+
         Has Point Laser Defense.
-        
+
         Strong vs Vehicles, Tanks
-        
+
         Weak vs Infantry
 
 ### vehicles-bike-scrin-reflector
@@ -2828,11 +2828,11 @@ vehicles-bike-scrin-pdl =
 vehicles-bike-scrin-reflector =
     .buildable-description =
         Fast scout vehicle, armed with energy balls.
-        
+
         Has Reflector Armor, which is very good vs. Energy Weapons.
-        
+
         Strong vs Vehicles, Energy Weapons
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-btr
@@ -2840,11 +2840,11 @@ vehicles-bike-scrin-reflector =
 vehicles-btr =
     .buildable-description =
         Tough infantry transport.
-        
+
         Can attack Aircraft.
-        
+
         Strong vs Light Armor, Aircraft
-        
+
         Weak vs Tanks
 
 ### vehicles-btr-surveillance
@@ -2852,9 +2852,9 @@ vehicles-btr =
 vehicles-btr-surveillance =
     .buildable-description =
         Tough infantry transport.
-        
+
         Can detect stealth units.
-        
+
         Is unarmed.
 
 ### vehicles-cdrn
@@ -2862,9 +2862,9 @@ vehicles-btr-surveillance =
 vehicles-cdrn =
     .buildable-description =
         Drone armed with Chaos Gas which causes units
-        
+
         to become frenzied and attack indiscriminately.
-        
+
           Has weak armor.
 
 ### vehicles-coordinator
@@ -2872,9 +2872,9 @@ vehicles-cdrn =
 vehicles-coordinator =
     .buildable-description =
         Coordinates newly built vehicles to be airdropped close to the Coordinator when deployed.
-        
-        Airstrips must not be primary production buildings for the Coordinator to work. 
-        
+
+        Airstrips must not be primary production buildings for the Coordinator to work.
+
         Use the rally point when deployed or units will be dropped onto each other.
 
 ### vehicles-cryo
@@ -2882,11 +2882,11 @@ vehicles-coordinator =
 vehicles-cryo =
     .buildable-description =
         Long-range support artillery that slows enemies
-        
+
         and makes them take more damage.
-        
+
           Strong vs Infantry, Vehicles, Buildings
-        
+
           Weak vs Aircraft
 
 ### vehicles-disr
@@ -2894,9 +2894,9 @@ vehicles-cryo =
 vehicles-disr =
     .buildable-description =
         Armored high-tech vehicle with long-range sonic armament.
-        
+
         Strong vs Infantry, Vehicles, Buildings
-        
+
         Weak vs Aircraft
 
 ### vehicles-gdrn
@@ -2904,11 +2904,11 @@ vehicles-disr =
 vehicles-gdrn =
     .buildable-description =
         Fast scout & anti-tank vehicle.
-        
+
         Can detect spies and cloaked units.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Infantry, Buildings, Defenses, Aircraft
 
 ### vehicles-har2
@@ -2916,7 +2916,7 @@ vehicles-gdrn =
 vehicles-har2 =
     .buildable-description =
         Collects Tiberium, Ore and Gems for processing.
-        
+
         Unarmed
 
 ### vehicles-harv
@@ -2924,7 +2924,7 @@ vehicles-har2 =
 vehicles-harv =
     .buildable-description =
         Collects Ore, Gems and Tiberium for processing.
-        
+
         Unarmed
 
 ### vehicles-harv-chrono
@@ -2932,9 +2932,9 @@ vehicles-harv =
 vehicles-harv-chrono =
     .buildable-description =
         Collects Ore, Gems and Tiberium for processing.
-        
+
         Unarmed
-        
+
         Special Ability: Teleport
 
 ### vehicles-hmlrs
@@ -2942,13 +2942,13 @@ vehicles-harv-chrono =
 vehicles-hmlrs =
     .buildable-description =
         Prototype Hover Multiple Launch Rocket System.
-        
+
         Long-range guided artillery.
-        
+
           Can attack Aircraft.
-        
+
           Has weak armor.
-        
+
           Strong vs Infantry, Vehicles, Buildings
 
 ### vehicles-hmlrs-pdl
@@ -2956,11 +2956,11 @@ vehicles-hmlrs =
 vehicles-hmlrs-pdl =
     .buildable-description =
         Prototype Hover Multiple Launch Rocket System.
-        
+
         Long-range guided artillery.
-        
+
           Has Point Laser Defense, which is very good vs. Projectile Weapons.
-        
+
           Strong vs Conventional Weapons, Weak vs. Energy Weapons
 
 ### vehicles-hmlrs-reflector
@@ -2968,11 +2968,11 @@ vehicles-hmlrs-pdl =
 vehicles-hmlrs-reflector =
     .buildable-description =
         Prototype Hover Multiple Launch Rocket System.
-        
+
         Long-range guided artillery.
-        
+
           Has Reflector Armor, which is very good vs. Energy Weapons.
-        
+
           Strong vs Energy Weapons, Weak vs. Conventional Weapons
 
 ### vehicles-hmmv
@@ -2980,11 +2980,11 @@ vehicles-hmlrs-reflector =
 vehicles-hmmv =
     .buildable-description =
         Fast scout & anti-infantry vehicle.
-        
+
         Can detect spies and cloaked units.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### vehicles-ifv
@@ -2992,13 +2992,13 @@ vehicles-hmmv =
 vehicles-ifv =
     .buildable-description =
         Adaptable infantry transport.
-        
+
         Can attack Aircraft.
-        
+
         Strong vs Light Armor, Aircraft
-        
+
         Weak vs Infantry, Tanks
-        
+
         Special Ability: Transform
 
 ### vehicles-ifv-ai
@@ -3006,13 +3006,13 @@ vehicles-ifv =
 vehicles-ifv-ai =
     .buildable-description =
         Adaptable infantry transport.
-        
+
         Can attack Aircraft.
-        
+
         Strong vs Infantry, Light Armor
-        
+
         Weak vs Tanks, Aircraft
-        
+
         Special Ability: Transform
 
 ### vehicles-jeep
@@ -3020,11 +3020,11 @@ vehicles-ifv-ai =
 vehicles-jeep =
     .buildable-description =
         Fast scout & anti-infantry vehicle.
-        
+
         Can detect spies and cloaked units.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### vehicles-jugg
@@ -3032,9 +3032,9 @@ vehicles-jeep =
 vehicles-jugg =
     .buildable-description =
         Tough artillery battle-mech.
-        
+
         Strong vs Infantry, Structures
-        
+
         Weak vs Aircraft
 
 ### vehicles-ltnk
@@ -3042,11 +3042,11 @@ vehicles-jugg =
 vehicles-ltnk =
     .buildable-description =
         Fast, light tank.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Infantry, Aircraft
-        
+
         Special Ability: Amphibious
 
 ### vehicles-ltnk-laser
@@ -3054,9 +3054,9 @@ vehicles-ltnk =
 vehicles-ltnk-laser =
     .buildable-description =
         Fast, light tank shooting laser.
-        
+
         Strong vs heavy Tanks
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-mcv
@@ -3064,7 +3064,7 @@ vehicles-ltnk-laser =
 vehicles-mcv =
     .buildable-description =
         Deploys into another Construction Yard.
-        
+
         Unarmed
 
 ### vehicles-mdrn
@@ -3072,11 +3072,11 @@ vehicles-mcv =
 vehicles-mdrn =
     .buildable-description =
         Hovering drone with machine gun.
-        
+
         Attaches to certain vehicles to provide support and repairs.
-        
+
         Strong vs Infantry
-        
+
         Weak vs Vehicles, Buildings, Aircraft
 
 ### vehicles-memp
@@ -3084,11 +3084,11 @@ vehicles-mdrn =
 vehicles-memp =
     .buildable-description =
         Self destructs to disable nearby vehicles & structures.
-        
+
         Requires power to operate.
-        
+
         Strong vs Vehicles, Buildings
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-memp-stable
@@ -3096,13 +3096,13 @@ vehicles-memp =
 vehicles-memp-stable =
     .buildable-description =
         Releases EMP Wave to disable nearby vehicles & structures.
-        
+
         Upgraded with Stable Reactor to allow multiple EMP Waves.
-        
+
           Requires power to operate.
-        
+
           Strong vs Vehicles, Buildings
-        
+
           Weak vs Infantry, Aircraft
 
 ### vehicles-memp-volatile
@@ -3110,13 +3110,13 @@ vehicles-memp-stable =
 vehicles-memp-volatile =
     .buildable-description =
         Self destructs to disable nearby vehicles & structures.
-        
+
         Upgraded with Volatile Reactor to EMP on destruction.
-        
+
           Requires power to operate.
-        
+
           Strong vs Vehicles, Buildings
-        
+
           Weak vs Infantry, Aircraft
 
 ### vehicles-mgg
@@ -3124,35 +3124,35 @@ vehicles-memp-volatile =
 vehicles-mgg =
     .buildable-description =
         Regenerates the shroud nearby, obscuring the area.
-        
+
         Unarmed
 
-### vehicles-mlrs
+### vehicles-ssm
 
-vehicles-mlrs =
+vehicles-ssm =
     .buildable-description =
         Long-range incendiary rocket artillery.
-        
+
         Has weak armor.
-        
+
         Strong vs Buildings, Infantry
-        
+
         Weak vs Tanks, Aircraft
 
-### vehicles-mlrs-multi
+### vehicles-ssm-multi
 
-vehicles-mlrs-multi =
+vehicles-ssm-multi =
     .buildable-description =
         Long-range multiple rocket artillery.
-        
+
         Strong vs Infantry, Vehicles and Buildings
 
-### vehicles-mlrs-toxin
+### vehicles-ssm-toxin
 
-vehicles-mlrs-toxin =
+vehicles-ssm-toxin =
     .buildable-description =
         Long-range chemical rocket artillery.
-        
+
         Strong vs Infantry, Vehicles and Buildings
 
 ### vehicles-mrj
@@ -3160,9 +3160,9 @@ vehicles-mlrs-toxin =
 vehicles-mrj =
     .buildable-description =
         Jams nearby enemy radar systems.
-        
+
         Unarmed
-        
+
         Special Ability: Jams Missile-Lock Systems
 
 ### vehicles-msg
@@ -3170,7 +3170,7 @@ vehicles-mrj =
 vehicles-msg =
     .buildable-description =
         Cloaks nearby units and buildings.
-        
+
         Unarmed
 
 ### vehicles-mtnk
@@ -3178,9 +3178,9 @@ vehicles-msg =
 vehicles-mtnk =
     .buildable-description =
         Main battle tank.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-mtnk-drone
@@ -3188,11 +3188,11 @@ vehicles-mtnk =
 vehicles-mtnk-drone =
     .buildable-description =
         Drone battle tank.
-        
+
         Requires power to operate.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-mtnk-drone-pdl
@@ -3200,11 +3200,11 @@ vehicles-mtnk-drone =
 vehicles-mtnk-drone-pdl =
     .buildable-description =
         Drone battle tank with Point Laser Defense.
-        
+
         Requires power to operate.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-mtnk-drone-reflector
@@ -3212,11 +3212,11 @@ vehicles-mtnk-drone-pdl =
 vehicles-mtnk-drone-reflector =
     .buildable-description =
         Drone battle tank with Reflector Armor.
-        
+
         It is very good vs. Energy Weapons.
-        
+
          Strong vs Vehicles, Infantry, Aircraft
-        
+
          Weak vs Anti-Tank Weapons
 
 ### vehicles-mtnk-pdl
@@ -3224,9 +3224,9 @@ vehicles-mtnk-drone-reflector =
 vehicles-mtnk-pdl =
     .buildable-description =
         Main battle tank with Point Laser Defense.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-mtnk-reflector
@@ -3234,9 +3234,9 @@ vehicles-mtnk-pdl =
 vehicles-mtnk-reflector =
     .buildable-description =
         Main battle tank with Reflector Armor.
-        
+
         Strong vs Energy Weapons
-        
+
         Weak vs Infantry, Aircraft
 
 ### vehicles-nonasvk
@@ -3244,11 +3244,11 @@ vehicles-mtnk-reflector =
 vehicles-nonasvk =
     .buildable-description =
         Light Artillery.
-        
+
         Highly mobile artillery unit.
-        
-        Strong vs Light Armor, Infantry, Buildings 
-        
+
+        Strong vs Light Armor, Infantry, Buildings
+
         Weak vs Tanks, Aircraft
 
 ### vehicles-rtnk
@@ -3256,11 +3256,11 @@ vehicles-nonasvk =
 vehicles-rtnk =
     .buildable-description =
         Advanced Battle tank that can cloak when stationary.
-        
+
         Has high explosive shells.
-        
+
           Strong vs Light Vehicles
-        
+
           Weak vs Aircraft.
 
 ### vehicles-rtnk-firerate
@@ -3268,9 +3268,9 @@ vehicles-rtnk =
 vehicles-rtnk-firerate =
     .buildable-description =
         Advanced Battle tank that can cloak when stationary.
-        
+
         Strong vs Vehicles
-        
+
         Weak vs Aircraft, Energy Weapons.
 
 ### vehicles-rtnk-pdl
@@ -3278,11 +3278,11 @@ vehicles-rtnk-firerate =
 vehicles-rtnk-pdl =
     .buildable-description =
         Advanced Battle tank that can cloak when stationary.
-        
+
         Has average armor and Point Laser Defense.
-        
+
           Strong vs Vehicles
-        
+
           Weak vs Aircraft, Energy Weapons.
 
 ### vehicles-rtnk-reflector
@@ -3290,11 +3290,11 @@ vehicles-rtnk-pdl =
 vehicles-rtnk-reflector =
     .buildable-description =
         Advanced Battle tank that can cloak when stationary.
-        
+
         Has Reflector Armor, very good vs. Energy Weapons.
-        
+
          Strong vs Vehicles, Energy Weapons
-        
+
          Weak vs Aircraft.
 
 ### vehicles-slng
@@ -3302,9 +3302,9 @@ vehicles-rtnk-reflector =
 vehicles-slng =
     .buildable-description =
         Fast, lightly armoured anti-air unit.
-        
+
          Strong vs Aircraft
-        
+
         Weak vs Infantry, Vehicles, Buildings
 
 ### vehicles-spec
@@ -3312,9 +3312,9 @@ vehicles-slng =
 vehicles-spec =
     .buildable-description =
         Long-range stealth artillery.
-        
+
         Strong vs Buildings, Infantry
-        
+
         Weak vs Vehicles, Aircraft
 
 ### vehicles-stnk
@@ -3322,15 +3322,15 @@ vehicles-spec =
 vehicles-stnk =
     .buildable-description =
         Medium-range missile tank that can cloak.
-        
+
         Can attack Aircraft.
-        
+
         Has weak armor.
-        
+
         Can be spotted by infantry and defense structures.
-        
+
         Strong vs Vehicles, Tanks
-        
+
         Weak vs Infantry.
 
 ### vehicles-stnk-ap
@@ -3338,15 +3338,15 @@ vehicles-stnk =
 vehicles-stnk-ap =
     .buildable-description =
         Medium-range armor piercing missile tank that can cloak.
-        
+
         Can attack Aircraft.
-        
+
         Has weak armor.
-        
+
         Can be spotted by infantry and defense structures.
-        
+
         Strong vs Heavy Vehicles, Aircraft
-        
+
         Weak vs Infantry.
 
 ### vehicles-stnk-ap-pdl
@@ -3354,15 +3354,15 @@ vehicles-stnk-ap =
 vehicles-stnk-ap-pdl =
     .buildable-description =
         Medium-range armor piercing missile tank that can cloak.
-        
+
         Can attack Aircraft.
-        
+
         Has point laser defense.
-        
+
         Can be spotted by infantry and defense structures.
-        
-        Strong vs Heavy Vehicles, Aircraft, Projectiles 
-        
+
+        Strong vs Heavy Vehicles, Aircraft, Projectiles
+
         Weak vs Infantry, Energy Weapons
 
 ### vehicles-stnk-ap-reflector
@@ -3370,15 +3370,15 @@ vehicles-stnk-ap-pdl =
 vehicles-stnk-ap-reflector =
     .buildable-description =
         Medium-range armor piercing missile tank that can cloak.
-        
+
         Can attack Aircraft.
-        
+
         Has weak reflector armor.
-        
+
         Can be spotted by infantry and defense structures.
-        
+
         Strong vs Heavy Vehicles, Aircraft, Energy Weapons
-        
+
         Weak vs Infantry, Projectiles.
 
 ### vehicles-stnk-he
@@ -3386,15 +3386,15 @@ vehicles-stnk-ap-reflector =
 vehicles-stnk-he =
     .buildable-description =
         Medium-range high explosive missile tank that can cloak.
-        
+
         Can attack Aircraft.
-        
+
         Has weak armor.
-        
+
         Can be spotted by infantry and defense structures.
-        
+
         Strong vs Vehicles, Aircraft
-        
+
         Weak vs Heavy Tanks.
 
 ### vehicles-stnk-he-pdl
@@ -3402,15 +3402,15 @@ vehicles-stnk-he =
 vehicles-stnk-he-pdl =
     .buildable-description =
         Medium-range high explosive missile tank that can cloak.
-        
+
         Can attack Aircraft.
-        
+
         Has point laser defense.
-        
+
         Can be spotted by infantry and defense structures.
-        
-        Strong vs Vehicles, Aircraft, Projectiles 
-        
+
+        Strong vs Vehicles, Aircraft, Projectiles
+
         Weak vs Heavy Tanks, Energy Weapons
 
 ### vehicles-stnk-he-reflector
@@ -3418,15 +3418,15 @@ vehicles-stnk-he-pdl =
 vehicles-stnk-he-reflector =
     .buildable-description =
         Medium-range high explosive missile tank that can cloak.
-        
+
         Can attack Aircraft.
-        
+
         Has weak reflector armor.
-        
+
         Can be spotted by infantry and defense structures.
-        
+
         Strong vs Heavy Vehicles, Aircraft, Energy Weapons
-        
+
         Weak vs Infantry, Projectiles.
 
 ### vehicles-stnk-scrin
@@ -3434,13 +3434,13 @@ vehicles-stnk-he-reflector =
 vehicles-stnk-scrin =
     .buildable-description =
         Cloaked tank that fires Scrin torpedoes.
-        
+
         Has weak armor.
-        
+
         Can be spotted by infantry and defense structures.
-        
+
         Strong vs Vehicles, Infantry
-        
+
         Weak vs Aircraft, Reflector Armor.
 
 ### vehicles-stnk-scrin-pdl
@@ -3448,13 +3448,13 @@ vehicles-stnk-scrin =
 vehicles-stnk-scrin-pdl =
     .buildable-description =
         Cloaked tank that fires Scrin torpedoes.
-        
+
         Has point laser defense.
-        
+
         Can be spotted by infantry and defense structures.
-        
-        Strong vs Vehicles, Projectiles 
-        
+
+        Strong vs Vehicles, Projectiles
+
         Weak vs Aircraft, Energy Weapons
 
 ### vehicles-stnk-scrin-reflector
@@ -3462,13 +3462,13 @@ vehicles-stnk-scrin-pdl =
 vehicles-stnk-scrin-reflector =
     .buildable-description =
         Cloaked tank that fires Scrin torpedoes.
-        
+
         Has weak reflector armor.
-        
+
         Can be spotted by infantry and defense structures.
-        
+
         Strong vs Energy Weapons
-        
+
         Weak vs Aircraft, Reflector Armor.
 
 ### vehicles-titn
@@ -3476,11 +3476,11 @@ vehicles-stnk-scrin-reflector =
 vehicles-titn =
     .buildable-description =
         Tough combat battle-mech.
-        
+
          Can attack Aircraft.
-        
+
          Strong vs Infantry, Tanks
-        
+
         Weak vs Point Laser Defense
 
 ### vehicles-titn-battle
@@ -3488,11 +3488,11 @@ vehicles-titn =
 vehicles-titn-battle =
     .buildable-description =
         Tough combat battle-mech with very heavy shells.
-        
+
          EMP disables hit units.
-        
+
          Strong vs Tanks, Aircraft
-        
+
         Weak vs Point Laser Defense
 
 ### vehicles-titn-battle-pdl
@@ -3500,15 +3500,15 @@ vehicles-titn-battle =
 vehicles-titn-battle-pdl =
     .buildable-description =
         Tough combat battle-mech with very heavy shells.
-        
+
          EMP disables hit units.
-        
+
          Has Point Laser Defense System.
-        
+
          Can attack Aircraft.
-        
+
          Strong vs Tanks, Aircraft, Projectiles
-        
+
         Weak vs Energy Weapons
 
 ### vehicles-titn-battle-reflector
@@ -3516,13 +3516,13 @@ vehicles-titn-battle-pdl =
 vehicles-titn-battle-reflector =
     .buildable-description =
         Tough combat battle-mech with very heavy shells.
-        
+
          EMP disables hit units.
-        
+
          Has Reflector Armor, which is very good vs. Energy Weapons.
-        
+
          Strong vs Tanks, Energy Weapons
-        
+
         Weak vs Point Laser Defense
 
 ### vehicles-titn-railgun
@@ -3530,9 +3530,9 @@ vehicles-titn-battle-reflector =
 vehicles-titn-railgun =
     .buildable-description =
         Tough combat battle-mech with railgun.
-        
+
         Cannot be intercepted by Point Laser Defense.
-        
+
         Strong vs Tanks, Weak vs Aircraft, Infantry
 
 ### vehicles-titn-railgun-pdl
@@ -3540,11 +3540,11 @@ vehicles-titn-railgun =
 vehicles-titn-railgun-pdl =
     .buildable-description =
         Tough combat battle-mech with railgun.
-        
+
          Cannot be intercepted by Point Laser Defense.
-        
+
          Strong vs Tanks, Projectiles
-        
+
         Weak vs Aircraft, Infantry
 
 ### vehicles-titn-railgun-reflector
@@ -3552,9 +3552,9 @@ vehicles-titn-railgun-pdl =
 vehicles-titn-railgun-reflector =
     .buildable-description =
         Tough combat battle-mech with railgun.
-        
+
         Has Reflector Armor, which is very good vs. Energy Weapons.
-        
+
         Strong vs Tanks, Energy Weapons, Weak vs Aircraft, Infantry
 
 ### vehicles-tnkd
@@ -3562,9 +3562,9 @@ vehicles-titn-railgun-reflector =
 vehicles-tnkd =
     .buildable-description =
         German tank destroyer.
-        
+
         Strong vs Heavy Armor
-        
+
         Weak vs Infantry, Light Armor, Aircraft
 
 ### vehicles-tnkd-burstfire
@@ -3572,9 +3572,9 @@ vehicles-tnkd =
 vehicles-tnkd-burstfire =
     .buildable-description =
         German tank destroyer.
-        
+
         Strong vs Heavy Armor
-        
+
         Weak vs Infantry, Light Armor, Aircraft
 
 ### vehicles-tnkd-pdl
@@ -3582,9 +3582,9 @@ vehicles-tnkd-burstfire =
 vehicles-tnkd-pdl =
     .buildable-description =
         German tank destroyer.
-        
+
         Strong vs Heavy Armor
-        
+
         Weak vs Infantry, Light Armor, Aircraft
 
 ### vehicles-tnkd-reflector
@@ -3592,11 +3592,11 @@ vehicles-tnkd-pdl =
 vehicles-tnkd-reflector =
     .buildable-description =
         German tank destroyer.
-        
+
         Has Reflector Armor, very good vs. Energy Weapons.
-        
-         Strong vs Heavy Armor, Energy Weapons. 
-        
+
+         Strong vs Heavy Armor, Energy Weapons.
+
          Weak vs Infantry, Light Armor, Aircraft
 
 ### vehicles-truk
@@ -3604,7 +3604,7 @@ vehicles-tnkd-reflector =
 vehicles-truk =
     .buildable-description =
         Transports cash to other players.
-        
+
         Unarmed
 
 ### vehicles-wtnk
@@ -3612,11 +3612,11 @@ vehicles-truk =
 vehicles-wtnk =
     .buildable-description =
         Prototype microwave weapon.
-        
+
         Disables vehicles & structures.
-        
+
         Strong vs Vehicles, Infantry
-        
+
         Weak vs Aircraft
 
 ### vehicles-xo
@@ -3624,7 +3624,7 @@ vehicles-wtnk =
 vehicles-xo =
     .buildable-description =
         Light scout-mech with a short-range laser
-        
+
         and a machine gun.
     .tooltipextras-strengths = Strengths: • Strong vs Infantry, Light Armor
     .tooltipextras-weaknesses = Weaknesses: • Cannot attack Aircraft
@@ -3634,49 +3634,49 @@ vehicles-xo =
 world-baseworld =
     .factionca-at-random-description =
         Random Faction
-        
+
         A random faction will be chosen when the game starts.
     .factionca-at-randomair-description =
         Random Air Faction
-        
+
         A random faction, which has strong aircraft, will be chosen when the game starts.
     .factionca-at-randomclassic-description =
         Random Classic Faction
-        
+
         A random faction from RA or TD will be chosen when the game starts.
     .factionca-at-randomevil-description =
         Random Evil Faction
-        
+
         A random evil faction will be chosen when the game starts.
-        
+
         (Keep in mind evil is a question of perspective, if you think Putin is the good guy, this randomness here might confuse you)
     .factionca-at-randomgood-description =
         Random Good Faction
-        
+
         A random good faction will be chosen when the game starts.
-        
+
         (Keep in mind good is a question of perspective, if you wonder about China, remember they produce all the cheap sex toys)
     .factionca-at-randominfantry-description =
         Random Infantry Faction
-        
+
         A random faction, which has strong infantry, will be chosen when the game starts.
     .factionca-at-randomnotchina-description =
         PLEASE GOD NOT CHINA
-        
-        A random faction will be chosen when the game starts, 
-        
+
+        A random faction will be chosen when the game starts,
+
         but please god don't let it be China.
     .factionca-at-randomra-description =
         Random Red Alert Faction
-        
+
         A random faction from Soviets or Allies will be chosen when the game starts.
     .factionca-at-randomtanks-description =
         Random Tank Faction
-        
+
         A random faction, which has strong tanks, will be chosen when the game starts.
     .factionca-at-randomtd-description =
         Random Tiberian Dawn Faction
-        
+
         A random faction from GDI or NOD will be chosen when the game starts.
 
 ### world-world
@@ -3892,13 +3892,13 @@ commander-tree-player =
     .description = promotions.lobby-description
 commander-tree-promotion-hover-mlrs =
     .description =
-        Enables to build the Hover MLRS. 
+        Enables to build the Hover MLRS.
           The Hover MLRS improves the MLRS' agility and gives it high explosive rockets.
 commander-tree-promotion-medium-tank-pdl =
     .description = Upgrades the Medium Tank with a Point Laser Defense System.
 commander-tree-promotion-medium-tank-reflector =
     .description =
-        Equips the Medium Tank with Reflector Armor. 
+        Equips the Medium Tank with Reflector Armor.
          Very resistent vs. Energy Weapons.
 commander-tree-promotion-mobile-emp =
     .description = Enables to build the Mobile EMP unit.
@@ -3908,50 +3908,50 @@ commander-tree-promotion-mobile-emp-volatile-reactor =
     .description = Upgrades the EMP reactor to set off an EMP blast when the vehicle is destroyed.
 commander-tree-promotion-titan-battle =
     .description =
-        Upgrades the Titan with EMP shells. 
+        Upgrades the Titan with EMP shells.
           EMP Shells disable the target on impact.
 commander-tree-promotion-titan-railgun =
     .description =
-        Upgrades the Titan with a Railgun. 
+        Upgrades the Titan with a Railgun.
           The Railgun is strong vs. tanks and is an energy based weapon.
 commander-tree-promotion-titan-pdl =
     .description = Upgrades the Titan with a Point Laser Defense System to shoot down incoming projectiles.
 commander-tree-promotion-titan-reflector =
     .description =
-        Equips the Titan with Reflector Armor. 
+        Equips the Titan with Reflector Armor.
          Very resistent vs. Energy Weapons.
 commander-tree-promotion-dronepair =
     .description = All heavy tanks are produced with a mini drone attached.
 commander-tree-promotion-stealth-fighter =
     .description =
-        Enables to build the Stealth Fighter. 
+        Enables to build the Stealth Fighter.
           It is a cloaked aircraft optimized to take out single heavy armored vehicles.
 commander-tree-promotion-stealth-fighter-payload =
     .description =
-        Doubles the Payload of the Stealth Fighter. 
+        Doubles the Payload of the Stealth Fighter.
           It allows the Stealth Fighter to take out a second target without resuppyling.
 commander-tree-promotion-mammoth-mkii =
     .description =
-        Enables to build the Mammoth MK.II. 
-          It is the epic walker of Talon. 
+        Enables to build the Mammoth MK.II.
+          It is the epic walker of Talon.
         Armed with dual railguns and high explosive rockets against ground and air.
 commander-tree-promotion-ion-warship =
     .description =
-        Enables to build the Orca Ion Warship. 
-          It is the epic airship of Eagle. 
-          Comes with ion drones delivering ion strikes vs. ground 
+        Enables to build the Orca Ion Warship.
+          It is the epic airship of Eagle.
+          Comes with ion drones delivering ion strikes vs. ground
           and heavy missiles vs. air.
 
 commander-tree-promotion-marv =
     .description =
-        Enables to build the Mammoth Armored Reclamation Vehicle. 
+        Enables to build the Mammoth Armored Reclamation Vehicle.
           It is the epic tanks of Zocom.
         Armed with a triple ion cannon.
-        
+
         Mines Tiberium and Ores when driving over.
 commander-tree-promotion-reinforcements-coordinator =
     .description =
-        Enables to build the Reinforcements Coordinator. 
+        Enables to build the Reinforcements Coordinator.
          It coordinates reinforcements directly to the frontline when deployed.
 commander-tree-promotion-buggy-pdl =
     .description = Upgrades the Buggy with a Point Laser Defense system to shoot down incoming projectiles.
@@ -3965,21 +3965,21 @@ commander-tree-promotion-ssm-toxin-launcher =
           The chemical clouds remain for a prolonged time on the impact site dealing damage.
 commander-tree-promotion-ssm-multi-launcher =
     .description =
-        Upgrades the SSM Launcher's missiles to split up in multiple missiles on impact. 
+        Upgrades the SSM Launcher's missiles to split up in multiple missiles on impact.
           This makes the SSM Launcher more effective against large groups of vehicles.
 commander-tree-promotion-stealth-tank-ap =
     .description =
-        Upgrades the Stealth Tank with a Armor Piercing Missiles. 
+        Upgrades the Stealth Tank with a Armor Piercing Missiles.
           This makes it much more effective vs. heavy tanks and heavy aircraft.
 commander-tree-promotion-stealth-tank-scrin =
     .description =
-        Upgrades the Stealth Tank with a Scrin Weapon. 
+        Upgrades the Stealth Tank with a Scrin Weapon.
           Energy based weapons cannot be intercepted by Point Laser Defense.
 commander-tree-promotion-stealth-tank-explosive-rockets =
     .description = Upgrades the Stealth Tank's missiles with a high explosive load.
 commander-tree-promotion-stealth-tank-reflector =
     .description =
-        Equips the Stealth Tank with Reflector Armor. 
+        Equips the Stealth Tank with Reflector Armor.
          Very resistent vs. Energy Weapons.
 commander-tree-promotion-stealth-tank-pdl =
     .description = Upgrades the Stealth Tank with a Point Laser Defense System to shoot down incoming projectiles.
@@ -3991,37 +3991,37 @@ commander-tree-promotion-recon-bike-scrin-pdl =
     .description = Upgrades the Scrin Bike with a Point Laser Defense System to shoot down incoming projectiles.
 commander-tree-promotion-recon-bike-scrin-reflector =
     .description =
-        Equips the Scrin Bike with Reflector Armor. 
+        Equips the Scrin Bike with Reflector Armor.
          Very resistent vs. Energy Weapons.
 commander-tree-promotion-recon-bike-rocket-hail =
     .description =
-        Upgrades the Recon Bike to shoot more missiles at high range. 
-          This makes the recon bike a hit and run artillery unit. 
+        Upgrades the Recon Bike to shoot more missiles at high range.
+          This makes the recon bike a hit and run artillery unit.
           The recon bike loses its ability to fight flying targets.
 commander-tree-promotion-recon-bike-rocket-hail-reflector =
     .description =
-        Equips the Rocket Hail Bike with Reflector Armor. 
+        Equips the Rocket Hail Bike with Reflector Armor.
          Very resistent vs. Energy Weapons.
 commander-tree-promotion-recon-bike-rocket-hail-pdl =
     .description = Upgrades the Rocket Hail Bike with a Point Laser Defense System to shoot down incoming projectiles.
 commander-tree-promotion-recon-bike-explosive =
     .description =
-        Upgrades the Recon Bike to shoot explosive missiles. 
-          This is very strong vs. weakly armored units. 
+        Upgrades the Recon Bike to shoot explosive missiles.
+          This is very strong vs. weakly armored units.
 
 commander-tree-promotion-recon-bike-explosive-pdl =
     .description = Upgrades the Explosive Rocket Bike with a Point Laser Defense System to shoot down incoming projectiles.
 commander-tree-promotion-recon-bike-explosive-reflector =
     .description =
-        Equips the Explosive Rocket Bike with Reflector Armor. 
+        Equips the Explosive Rocket Bike with Reflector Armor.
          Very resistent vs. Energy Weapons.
 commander-tree-promotion-scorpion-tank =
     .description =
-        Unlocks a small hovering scorpion tank armed with heavy laser. 
+        Unlocks a small hovering scorpion tank armed with heavy laser.
           Energy based weapons cannot be intercepted by Point Laser Defense.
 commander-tree-promotion-beam-cannon =
     .description =
-        Enables to build the Beam Cannon. 
+        Enables to build the Beam Cannon.
          It shoots a continuous energy beam at distant targets Strong vs. Vehicles, Weak vs. Aircraft.
 commander-tree-promotion-subchaser =
     .description = The Subchaser is a small naval vessel specialized in hunting submarines.
@@ -4030,14 +4030,14 @@ commander-tree-promotion-subchaser =
     .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 commander-tree-promotion-hunter-submarine =
     .description =
-        The Hunter Submarine is a fast and destructive submerged vessel. 
+        The Hunter Submarine is a fast and destructive submerged vessel.
         It lacks armor, but can take out unprotected ships very efficiently.
     .tooltipextras-strengths = Strengths: • Strong vs Ships
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Aircraft, Anti-Sub Ships
     .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 commander-tree-promotion-patrol-boat =
     .description =
-        The Patrol Boat is a versatile rocket vessel. 
+        The Patrol Boat is a versatile rocket vessel.
         It comes with Point-Defense-Laser to stop incoming projectiles.
     .tooltipextras-strengths = Strengths: • Strong vs Projectiles
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Submarines
@@ -4048,34 +4048,34 @@ commander-tree-promotion-recon-boat =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Submarines
 commander-tree-promotion-sea-scorpion =
     .description =
-        The Sea Scorpion is a flak boat specialized in fighting aircraft. 
+        The Sea Scorpion is a flak boat specialized in fighting aircraft.
         It comes with Point-Defense-Laser to stop incoming projectiles.
     .tooltipextras-strengths = Strengths: • Strong vs Aircraft, Projectiles
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Ships, Submarines
     .tooltipextras-attributes = Attributes: • Point Defense Laser
 commander-tree-promotion-attack-submarine =
     .description =
-        The Attack Submarine is specialized in fighting other ships. 
+        The Attack Submarine is specialized in fighting other ships.
         It is submerged and cannot be detected by all ships.
     .tooltipextras-strengths = Strengths: • Strong vs Ships
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Sub Ships, Aircraft
     .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 commander-tree-promotion-destroyer =
     .description =
-        The Destroyer is capable of fighting against all threats, 
+        The Destroyer is capable of fighting against all threats,
         but is mostly specialized against submarines.
     .tooltipextras-strengths = Strengths: • Strong vs Submarines
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser
     .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 commander-tree-promotion-frigate =
     .description =
-        The Frigate brings a heavy energy weapon to the seas. 
+        The Frigate brings a heavy energy weapon to the seas.
         This makes it suited best against Point Defense Laser systems.
     .tooltipextras-strengths = Strengths: • Strong vs Buildings, Slow Fleets
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Aircraft, Submarines
 commander-tree-promotion-aegis-cruiser =
     .description =
-        The Aegis Cruiser fires a barrage of missiles. 
+        The Aegis Cruiser fires a barrage of missiles.
         The missiles are best suited against aircraft.
         Has Point Defense Laser system.
     .tooltipextras-strengths = Strengths: • Strong vs Aircraft, Projectiles

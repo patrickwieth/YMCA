@@ -1376,16 +1376,6 @@ LeecherBeam:
 		Delay: 2
 		AimTargetStances: Enemy, Neutral
 		InvalidTargets: Vehicle, Structure
-	Warhead@DRAIN: GrantExternalCondition
-		Range: 1c512
-		Duration: 100
-		Condition: powerdrain
-		ValidTargets: PowerDrainable
-	Warhead@SLOW: GrantExternalCondition
-		Range: 0c768
-		Duration: 30
-		Condition: slowed
-		ValidTargets: Vehicle, Cyborg
 	Warhead@3Eff: CreateEffect
 		Explosions: idle
 		ExplosionPalette: scrin
@@ -1394,9 +1384,19 @@ LeecherBeam:
 
 LeecherBeam.slow:
 	Inherits: LeecherBeam
+	Warhead@SLOW: GrantExternalCondition
+		Range: 0c768
+		Duration: 30
+		Condition: slowed
+		ValidTargets: Vehicle, Cyborg
 
 LeecherBeam.drain:
 	Inherits: LeecherBeam
+	Warhead@DRAIN: GrantExternalCondition
+		Range: 1c512
+		Duration: 100
+		Condition: powerdrain
+		ValidTargets: PowerDrainable
 
 LeecherArc:
 	Inherits: LeecherBeam
@@ -1421,7 +1421,6 @@ FeederBeam:
 	Warhead@1Dam: SpreadDamage
 		Damage: 2500
 		Spread: 128
-	-Warhead@DRAIN:
 	-Warhead@ARC:
 
 AtomizerBolts:

@@ -584,7 +584,7 @@ CORR.Area:
 	Tooltip:
 		Name: Area Corrupter
 	Buildable:
-		Prerequisites: tier2, vehicles, ~scrin, ~upg.corrupter, ~!upg.corrupter2
+		Prerequisites: tier2, vehicles, ~scrin, ~promotion.corrupter.area, ~!upg.corrupter2
 		Description: vehicle-corr-area.buildable-description
 		IconPalette: chrome
 	Health:
@@ -641,7 +641,7 @@ CORR.Area.Reflector:
 	Tooltip:
 		Name: Area Corrupter (Reflector)
 	Buildable:
-		Prerequisites: tier3, vehicles, ~scrin, ~promotion.corrupter.area ~promotion.corrupter.reflector
+		Prerequisites: tier3, vehicles, ~scrin, ~promotion.corrupter.area, ~promotion.corrupter.reflector
 		Description: vehicle-corr-area-reflector.buildable-description
 
 CORR.Range:
@@ -657,7 +657,7 @@ CORR.Range:
 	Tooltip:
 		Name: Ranged Corrupter
 	Buildable:
-		Prerequisites: tier2, vehicles, ~scrin, ~upg.corrupter, ~!upg.corrupter2
+		Prerequisites: tier2, vehicles, ~scrin, ~promotion.corrupter.range, ~!upg.corrupter2
 		Description: vehicle-corr-range.buildable-description
 		IconPalette: chrome
 	Armament@PRIMARY:
@@ -762,7 +762,6 @@ LCHR.Slow:
 	Armament@PRIMARY:
 		Weapon: LeecherBeam.slow
 
-
 LCHR.Slow.PDL:
 	Inherits: LCHR.Slow
 	Inherits: ^PointLaserDefenseSystem
@@ -799,7 +798,6 @@ LCHR.Slow.Reflector:
 		Description: vehicle-lchr-slow-reflector.buildable-description
 		IconPalette: scrin
 
-
 LCHR.Drain:
 	Inherits: LCHR
 	WithProductionIconOverlay@Crosshair:
@@ -817,9 +815,43 @@ LCHR.Drain:
 		Description: vehicle-lchr-drain.buildable-description
 		IconPalette: scrin
 	Armament@PRIMARY:
-		Weapon: LeecherBeam.slow
+		Weapon: LeecherBeam.drain
 
+LCHR.Drain.PDL:
+	Inherits: LCHR.Drain
+	Inherits: ^PointLaserDefenseSystem
+	WithProductionIconOverlay@PDL:
+		Types: PDL
+	Valued:
+		Cost: 1800
+	TooltipExtras:
+		Strengths: vehicle-lchr-slow-pdl.tooltip-strengths
+		Weaknesses: vehicle-lchr-slow-pdl.tooltip-weaknesses
+		Attributes: vehicle-lchr-slow-pdl.tooltip-attributes
+	Tooltip:
+		Name: Draining Leecher (PDL)
+	Buildable:
+		Prerequisites: tier2, vehicles, ~harvester, ~promotion.leecher.slow, ~promotion.leecher.pdl
+		Description: vehicle-lchr-slow-pdl.buildable-description
+		IconPalette: scrin
 
+LCHR.Drain.Reflector:
+	Inherits: LCHR.Drain
+	Inherits: ^ReflectorArmor
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
+	Valued:
+		Cost: 1100
+	TooltipExtras:
+		Strengths: vehicle-lchr-slow-reflector.tooltip-strengths
+		Weaknesses: vehicle-lchr-slow-reflector.tooltip-weaknesses
+		Attributes: vehicle-lchr-slow-reflector.tooltip-attributes
+	Tooltip:
+		Name: Draining Leecher (Reflector)
+	Buildable:
+		Prerequisites: tier2, vehicles, ~harvester, ~promotion.leecher.slow, ~promotion.leecher.reflector
+		Description: vehicle-lchr-slow-reflector.buildable-description
+		IconPalette: scrin
 
 STCR:
 	Inherits: ^FightingVehicle
@@ -1205,7 +1237,7 @@ ATMZ.AA:
 	Tooltip:
 		Name: Atomizer (AA)
 	Buildable:
-		Prerequisites: tier3, vehicles, ~traveler
+		Prerequisites: tier3, vehicles, ~traveler, ~promotion.atomizer.aa
 		Description: vehicle-atmz-aa.buildable-description
 	Armament@SECONDARY:
 		Name: secondary
@@ -1223,11 +1255,10 @@ ATMZ.Range:
 	Tooltip:
 		Name: Range Atomizer
 	Buildable:
-		Prerequisites: tier3, vehicles, ~traveler
+		Prerequisites: tier3, vehicles, ~traveler, promotion.atomizer.range
 		Description: vehicle-atmz-range.buildable-description
 	Armament:
 		Weapon: AtomizerBolts.range
-
 
 TPOD:
 	Inherits: ^FightingTankTurreted

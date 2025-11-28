@@ -1284,22 +1284,34 @@ commander-tree-promotion-nationalism =
          This bonus increases the fire rate of units.
         The bonus is activated when 10 units are close to each other.
     .tooltipextras-attributes = Attributes: • Horde Bonus available
+    .tooltipextras-strengths = Strengths: • Horde Bonus lets clustered infantry and Battlemasters fire faster.
+    .tooltipextras-weaknesses = Weaknesses: • No benefit unless you mass at least ten units together.
 commander-tree-promotion-subliminal-messages =
     .description = Increases the range of Propaganda Speakers.
     .tooltipextras-attributes = Attributes: • Propaganda Speakers have more range.
+    .tooltipextras-strengths = Strengths: • Expanded propaganda radius keeps entire columns buffed.
+    .tooltipextras-weaknesses = Weaknesses: • Does nothing if you are not fielding speaker towers or outposts.
 commander-tree-promotion-fortified-bunker =
     .description = The bunker is fortified and can soak up more damage.
     .tooltipextras-attributes = Attributes: • Bunkers are replaced by fortified Bunkers.
+    .tooltipextras-strengths = Strengths: • Fortified bunkers shrug off artillery and demolition runs.
+    .tooltipextras-weaknesses = Weaknesses: • Upgrade focuses on defense and adds rebuild cost.
 commander-tree-promotion-uranium-shells =
     .description = Tanks shoot Uranium Shells, dealing more damage.
     .tooltipextras-attributes = Attributes: • Firepower of tank shells is increased.
+    .tooltipextras-strengths = Strengths: • Tank shells punch much harder through armor and structures.
+    .tooltipextras-weaknesses = Weaknesses: • Requires heavy tech investment and offers no utility perks.
 commander-tree-promotion-nuclear-tanks =
     .description =
         Tanks have a nuclear engine, increasing their movement speed.
         Nuclear Tanks explode on destruction.
     .tooltipextras-attributes = Attributes: • Tanks are faster.
+    .tooltipextras-strengths = Strengths: • Nuclear engines greatly increase every tank's speed.
+    .tooltipextras-weaknesses = Weaknesses: • Exploding wrecks can devastate your own frontline until stabilized.
 commander-tree-promotion-isotope-stability =
     .description =
         Tanks with nuclear ammo or nuclear engines no longer explode on destruction.
         Damage dealt to close units is prevented.
     .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction.
+    .tooltipextras-strengths = Strengths: • Eliminates friendly-fire blasts from destroyed nuclear tanks.
+    .tooltipextras-weaknesses = Weaknesses: • Purely defensive; no direct damage boost for your army.
