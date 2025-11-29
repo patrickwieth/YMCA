@@ -1,4 +1,4 @@
-
+﻿
 promotion.shielded_miners:
 	Inherits: ^promotion_item
 	Tooltip:
@@ -102,6 +102,8 @@ promotion.Disruptor.PDL:
 	TooltipExtras:
 		Strengths: commander-tree-promotion-disruptor-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-disruptor-pdl.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.disruptor
 	PromotionPalette:
 		Group: Disruptor
 
@@ -116,11 +118,13 @@ promotion.Disruptor.Reflector:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 12
-		Prerequisites: has_points, tier3, vehicles, ~gdi, !promotion.disruptor.pdl
+		Prerequisites: has_points, tier3, vehicles, ~zocom, !promotion.disruptor.pdl
 		Description: commander-tree-promotion-disruptor-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-disruptor-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-disruptor-reflector.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.disruptor
 	PromotionPalette:
 		Group: Disruptor
 
@@ -140,6 +144,8 @@ promotion.Hailstorm_MLRS:
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hailstorm-mlrs.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-hailstorm-mlrs.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mlrs
 	PromotionPalette:
 		Group: GDIMLRS
 
@@ -154,11 +160,13 @@ promotion.AA_MLRS:
 	Buildable:
 		BuildPaletteOrder: 11
 		IconPalette: chrometd
-		Prerequisites: has_points, vehicles, ~zocom, tier3, !promotion.hover_mlrs
+		Prerequisites: has_points, vehicles, ~gdi, ~!eagle, tier3, !promotion.hover_mlrs
 		Description: commander-tree-promotion-aa-mlrs.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-aa-mlrs.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-aa-mlrs.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mlrs
 	PromotionPalette:
 		Group: GDIMLRS
 
@@ -176,6 +184,8 @@ promotion.Hover_MLRS:
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hover-mlrs.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-hover-mlrs.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mlrs
 	PromotionPalette:
 		Group: GDIMLRS
 
@@ -258,7 +268,7 @@ promotion.Mobile_EMP:
 		IconPalette: chrometd
 		Description: commander-tree-promotion-mobile-emp.description
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, tier3, vehicles, ~gdi
+		Prerequisites: has_points, tier3, vehicles, ~gdi, ~!talon
 	TooltipExtras:
 		Strengths: commander-tree-promotion-mobile-emp.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-mobile-emp.tooltipextras-weaknesses
@@ -274,10 +284,12 @@ promotion.Mobile_EMP_Stable_Reactor:
 		IconPalette: chrometd
 		Description: commander-tree-promotion-mobile-emp-stable-reactor.description
 		BuildPaletteOrder: 12
-		Prerequisites: has_points, vehicles, ~gdi, ~!talon, tier4, promotion.mobile_emp, !promotion.mobile_emp_volatile_reactor
+		Prerequisites: has_points, vehicles, ~zocom, tier4, promotion.mobile_emp, !promotion.mobile_emp_volatile_reactor
 	TooltipExtras:
 		Strengths: commander-tree-promotion-mobile-emp-stable-reactor.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-mobile-emp-stable-reactor.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mobile_emp
 	PromotionPalette:
 		Group: GDIMobileEMP2
 		Column: 7
@@ -290,23 +302,71 @@ promotion.Mobile_EMP_Volatile_Reactor:
 		IconPalette: chrometd
 		Description: commander-tree-promotion-mobile-emp-volatile-reactor.description
 		BuildPaletteOrder: 12
-		Prerequisites: has_points, vehicles, ~gdi, ~!talon, tier4, promotion.mobile_emp, !promotion.mobile_emp_stable_reactor
+		Prerequisites: has_points, vehicles, ~zocom, tier4, promotion.mobile_emp, !promotion.mobile_emp_stable_reactor
 	TooltipExtras:
 		Strengths: commander-tree-promotion-mobile-emp-volatile-reactor.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-mobile-emp-volatile-reactor.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mobile_emp
 	PromotionPalette:
 		Group: GDIMobileEMP2
+		Column: 7
+
+promotion.Juggernaut.EMP:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: EMP Juggernaut
+	RenderSprites:
+		Image: juggernaut
+	WithProductionIconOverlay@EMP:
+		Types: EMP
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 12
+		Prerequisites: has_points, vehicles, ~talon, tier3, !promotion.juggernaut.firerate
+		Description: commander-tree-promotion-emp-juggernaut.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-emp-juggernaut.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-emp-juggernaut.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.juggernaut
+	PromotionPalette:
+		Group: GDIJuggernaut
+		Column: 7
+
+promotion.Juggernaut.Firerate:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Juggernaut Fire-Rate
+	RenderSprites:
+		Image: juggernaut
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Buildable:
+		IconPalette: chrometd
+		BuildPaletteOrder: 12
+		Prerequisites: has_points, vehicles, ~talon, tier3, !promotion.juggernaut.emp
+		Description: commander-tree-promotion-juggernaut-firerate.description
+	TooltipExtras:
+		Strengths: commander-tree-promotion-juggernaut-firerate.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-juggernaut-firerate.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.juggernaut
+	PromotionPalette:
+		Group: GDIJuggernaut
 		Column: 7
 
 promotion.Titan.Battle:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Battle Titan
-	PromotionPalette:
-		Group: GDITitan
+	RenderSprites:
+		Image: titn
+	WithProductionIconOverlay@EMP:
+		Types: EMP
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 10
+		BuildPaletteOrder: 12
 		Prerequisites: has_points, vehicles, ~talon, tier3, !promotion.titan.railgun
 		Description: commander-tree-promotion-titan-battle.description
 	TooltipExtras:
@@ -322,29 +382,33 @@ promotion.Titan.Railgun:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Titan Railgun
+	RenderSprites:
+		Image: titn.railgun
+	WithProductionIconOverlay@Ion:
+		Types: Ion
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 10
+		BuildPaletteOrder: 12
 		Prerequisites: has_points, vehicles, ~talon, tier3, !promotion.titan.battle
 		Description: commander-tree-promotion-titan-railgun.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-titan-railgun.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-titan-railgun.tooltipextras-weaknesses
-	PromotionPalette:
-		Group: GDITitan
 	ProvidesPrerequisite@upg:
 		Prerequisite: upg.titan
+	PromotionPalette:
+		Group: GDITitan
 		Column: 3
 
 promotion.Titan.PDL:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Titan Point Laser Defense System
-	PromotionPalette:
-		Group: GDITitanDefense
+	RenderSprites:
+		Image: titn
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 11
+		BuildPaletteOrder: 13
 		Prerequisites: has_points, vehicles, ~talon, tier3, upg.titan, !promotion.titan.reflector
 		Description: commander-tree-promotion-titan-pdl.description
 	TooltipExtras:
@@ -352,16 +416,21 @@ promotion.Titan.PDL:
 		Weaknesses: commander-tree-promotion-titan-pdl.tooltipextras-weaknesses
 	WithProductionIconOverlay@PDL:
 		Types: PDL
+	PromotionPalette:
+		Group: GDITitanDefense
 		Column: 3
 
 promotion.Titan.Reflector:
-	PromotionPalette:
-		Group: GDITitan
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Titan Reflector Armor
+	RenderSprites:
+		Image: titn
+	WithProductionIconOverlay@Reflector:
+		Types: Reflector
 	Buildable:
-		BuildPaletteOrder: 11
+		BuildPaletteOrder: 13
+		IconPalette: chrometd
 		Prerequisites: has_points, vehicles, ~talon, tier3, upg.titan, !promotion.titan.pdl
 		Description: commander-tree-promotion-titan-reflector.description
 	TooltipExtras:
@@ -369,7 +438,7 @@ promotion.Titan.Reflector:
 		Weaknesses: commander-tree-promotion-titan-reflector.tooltipextras-weaknesses
 	PromotionPalette:
 		Group: GDITitanDefense
-		Column: 4
+		Column: 3
 
 promotion.Mammoth_Tank_GDI.Hover:
 	Inherits: ^promotion_item
@@ -533,6 +602,8 @@ promotion.Stealth_Fighter:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Stealth Fighter
+	RenderSprites:
+		Image: stealth_fighter
 	Buildable:
 		BuildPaletteOrder: 20
 		Prerequisites: has_points, tier3, aircraft, ~gdi
@@ -548,8 +619,11 @@ promotion.Stealth_Fighter.Payload:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Stealth Fighter Double Payload
+	RenderSprites:
+		Image: stealth_fighter
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
 	Buildable:
-		IconPalette: chrometd
 		BuildPaletteOrder: 21
 		Prerequisites: has_points, tier3, promotion.stealth_fighter, aircraft, ~gdi
 		Description: commander-tree-promotion-stealth-fighter-payload.description
@@ -858,4 +932,4 @@ promotion.Jumpjet_Rockets:
 		Weaknesses: commander-tree-promotion-jumpjet-rockets.tooltipextras-weaknesses
 	PromotionPalette:
 		Group: GDIJumpjet2
-		Column: 5
+		Column: 4

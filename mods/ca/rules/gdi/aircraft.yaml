@@ -64,6 +64,86 @@ A10.bomber:
 		PilotActor: mercenary
 	RejectsOrders:
 
+Stealth_Fighter:
+	Inherits: ^Plane
+	Inherits: ^BomberPlane
+	Inherits: ^BiologicalPilot
+	Inherits: ^RearmableAircraft
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^CloakSprite
+	RenderSprites:
+		Image: stealth_fighter
+	Buildable:
+		Queue: Aircraft
+		BuildAtProductionType: Plane
+		BuildPaletteOrder: 50
+		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~promotion.stealth_fighter, ~!promotion.stealth_fighter.payload,
+		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Stealth Fighter
+	Health:
+		HP: 20000
+	RevealsShroud:
+		Range: 10c0
+		Type: GroundPosition
+		MoveRecalculationThreshold: 0
+	Armament:
+		Weapon: APBomb
+		LocalOffset: 0,-640,0, 0,640,0
+		LocalYaw: -40, 24
+		PauseOnCondition: !ammo
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 16
+		Speed: 195
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		TakeoffSounds: migtoff1.aud
+		IdleBehavior: Land
+	AmmoPool:
+		Ammo: 4
+	Contrail@1:
+		Offset: -598,-683,0
+	Contrail@2:
+		Offset: -598,683,0
+	SpawnActorOnDeath:
+		Actor: stealth_fighter.Husk
+		RequiresCondition: !being-warped
+	LeavesTrails:
+		Offsets: -853,0,171
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	Cloak@NORMAL:
+		InitialDelay: 125
+		CloakDelay: 20
+
+Stealth_Fighter.payload:
+	Inherits: Stealth_Fighter
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~promotion.stealth_fighter.payload,
+		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. \n  Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Stealth Fighter (Double Payload)
+	AmmoPool:
+		Ammo: 6
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+
 ORCA:
 	Inherits: ^VoxelHelicopter
 	RenderVoxels:
@@ -522,5 +602,3 @@ dummy.ionstrike:
 		InitialDelay: 1
 	KillsSelf:
 		Delay: 10
-
-

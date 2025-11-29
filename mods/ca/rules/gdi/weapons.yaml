@@ -210,6 +210,63 @@ JuggernautDummyAim:
 	Projectile: InstantHit
 	Warhead@1Dam: TargetDamage
 
+JuggernautGun.Emp:
+	Inherits: JuggernautGun
+	Warhead@5emp: GrantExternalCondition
+		Range: 0c768
+		Duration: 100
+		Condition: empdisable
+		ValidTargets: Ground, Structure, Vehicle
+	Warhead@6Eff: CreateEffect
+		Image: sparks_overlay
+		Explosions: idle
+		ExplosionPalette: tseffect-ignore-lighting-alpha75
+		ImpactSounds: expnew16.aud
+
+JuggernautGun.Firerate:
+	Inherits: JuggernautGun
+	ReloadDelay: 70
+
+
+TitanGun:
+	Inherits: TurretGunTD
+	Inherits: ^ShellHeavy
+	ReloadDelay: 90
+	Report: vtadatta.aud, vtadattb.aud, vtadattc.aud
+	Range: 5c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 255
+		Damage: 14000
+
+TitanGun.EMP:
+	Inherits: TitanGun
+	Warhead@5emp: GrantExternalCondition
+		Range: 0c768
+		Duration: 100
+		Condition: empdisable
+		ValidTargets: Ground, Structure, Vehicle
+	Warhead@6Eff: CreateEffect
+		Image: sparks_overlay
+		Explosions: idle
+		ExplosionPalette: tseffect-ignore-lighting-alpha75
+		ImpactSounds: expnew16.aud
+
+TitanGun.Concussion:
+	Inherits: TitanGun
+	Warhead@Concussion1: GrantExternalCondition
+		Range: 1c512
+		Duration: 240
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
+	Warhead@Concussion2: GrantExternalCondition
+		Range: 3c0
+		Duration: 120
+		Condition: concussion
+		ValidTargets: Ground, Infantry, Vehicle, Ship
+	Warhead@5Shake: ShakeScreen
+		Duration: 5
+		Intensity: 1
+		Multiplier: 0.5,0.5
 
 HellfireAG.Orca:
 	Inherits: HellfireAG
@@ -284,3 +341,114 @@ HellfireAA.Orca.EMP:
 		ExplosionPalette: tseffect-ignore-lighting-alpha75
 		ImpactSounds: expnew16.aud
 
+
+#Artillery Missiles, lock-on but act dumb
+227mm:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileArtillery
+	ReloadDelay: 120
+	Burst: 2
+	BurstDelays: 4
+	Range: 10c0
+	MinRange: 4c0
+	Report: rocket1.aud
+	Projectile: MissileCA
+		Speed: 266
+		Inaccuracy: 512
+		CruiseAltitude: 5c0
+		LockOnProbability: 60
+		RangeLimit: 13c0
+	Warhead@1Dam: SpreadDamage
+		Spread: 341
+		Damage: 1300
+		Falloff: 1000, 368, 135, 50, 18, 7, 0
+		ValidTargets: Ground, Water, Trees
+		DamageTypes: Prone50Percent, TriggerProne, SmallExplosionDeath
+	Warhead@3Eff: CreateEffect
+		Explosions: large_explosion
+		ImpactSounds: kaboom15.aud
+	Warhead@4EffWater: CreateEffect
+		ImpactSounds: splashl1.aud, splashl2.aud
+
+227mm.Hailstorm:
+	Inherits: 227mm
+	ReloadDelay: 220
+	Burst: 9
+	BurstDelays: 4
+	Range: 18c0
+	MinRange: 6c0
+	Projectile: MissileCA
+		Speed: 266
+		Inaccuracy: 3c512
+		CruiseAltitude: 5c0
+		RangeLimit: 20c0
+		LockOnProbability: 0
+
+227mmH:
+	Inherits: 227mm
+	Inherits: ^MissileHE
+	ReloadDelay: 100
+	Range: 11c0
+	Report: hovrmis1.aud
+
+227mm.upg:
+	Inherits: 227mmH
+	Report: vaegattb.aud, vaegatta.aud
+	Range: 12c0
+	Projectile: MissileCA
+		Speed: 366
+		ContrailLength: 15
+		ContrailColor: 00FFFFE6
+		Inaccuracy: 341
+		RangeLimit: 12c0
+		LockOnInaccuracy: 512
+	Warhead@1Dam: SpreadDamage
+		Damage: 1200
+		DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+
+227mmAA:
+	Inherits: ^AntiAirMissile
+	ReloadDelay: 80
+	Burst: 2
+	BurstDelays: 4
+	Range: 10c512
+	Report: rocket1.aud
+	Projectile: MissileCA
+		Speed: 320
+		RangeLimit: 14c0
+		Image: Dragon
+		Inaccuracy: 0
+		HorizontalRateOfTurn: 60
+		CruiseAltitude: 2c0
+	Warhead@1Dam: SpreadDamage
+		Damage: 3000
+		ValidTargets: Air
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion_air
+		ImpactSounds: xplos.aud
+
+227mmAA.upg:
+	Inherits: 227mmAA
+	Range: 11c512
+	Report: vaegattb.aud, vaegatta.aud
+	Projectile: MissileCA
+		Speed: 366
+		RangeLimit: 14c0
+		Image: MISSILE
+		ContrailLength: 15
+		ContrailColor: 00FFFFE6
+	Warhead@1Dam: SpreadDamage
+		Damage: 3400
+
+227mmAAH:
+	Inherits: 227mmAA
+	Report: hovrmis1.aud
+
+227mmAA.dedicated:
+	Inherits: 227mmAA
+	Range: 12c512
+	Projectile: MissileCA
+		Speed: 366
+		RangeLimit: 16c0
+		Warhead@1Dam: SpreadDamage
+			Damage: 4000

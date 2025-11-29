@@ -148,45 +148,6 @@ TurretGunTD:
 	Inherits: TurretGun
 	Report: tnkfire6.aud
 
-TitanGun:
-	Inherits: TurretGunTD
-	Inherits: ^ShellHeavy
-	ReloadDelay: 90
-	Report: vtadatta.aud, vtadattb.aud, vtadattc.aud
-	Range: 5c0
-	Warhead@1Dam: SpreadDamage
-		Spread: 255
-		Damage: 14000
-
-TitanGun.EMP:
-	Inherits: TitanGun
-	Warhead@5emp: GrantExternalCondition
-		Range: 0c768
-		Duration: 100
-		Condition: empdisable
-		ValidTargets: Ground, Structure, Vehicle
-	Warhead@6Eff: CreateEffect
-		Image: sparks_overlay
-		Explosions: idle
-		ExplosionPalette: tseffect-ignore-lighting-alpha75
-		ImpactSounds: expnew16.aud
-
-TitanGun.Concussion:
-	Inherits: TitanGun
-	Warhead@Concussion1: GrantExternalCondition
-		Range: 1c512
-		Duration: 240
-		Condition: concussion
-		ValidTargets: Ground, Infantry, Vehicle, Ship
-	Warhead@Concussion2: GrantExternalCondition
-		Range: 3c0
-		Duration: 120
-		Condition: concussion
-		ValidTargets: Ground, Infantry, Vehicle, Ship
-	Warhead@5Shake: ShakeScreen
-		Duration: 5
-		Intensity: 1
-		Multiplier: 0.5,0.5
 
 ^Artillery:
 	Inherits: ^Cannon
