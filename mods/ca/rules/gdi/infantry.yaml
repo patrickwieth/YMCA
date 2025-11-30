@@ -2,15 +2,21 @@
 	Inherits: Adept
 	Tooltip:
 		Name: Mercenary
+	TooltipExtras:
+		Strengths: . Strong vs Infantry
+		Weaknesses: . Weak vs Vehicles and Aircraft
 	Buildable:
-		Prerequisites: infantry.any, ~infantry.gdi
+		Prerequisites: infantry.any, infantry, ~gdi
 
 Rocket_Mercenary:
 	Inherits: Rocket_Trooper
 	Tooltip:
 		Name: Rocket Mercenary
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles and Aircraft
+		Weaknesses: . Weak vs Infantry
 	Buildable:
-		Prerequisites: infantry.any, ~infantry.gdi
+		Prerequisites: infantry.any, infantry, ~gdi
 
 Grenadier:
 	Inherits: ^Soldier
@@ -22,12 +28,15 @@ Grenadier:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 40
-		Prerequisites: infantry.any, ~infantry.gdi, ~!promotion.advanced_infantry_training
+		Prerequisites: infantry.any, infantry, ~gdi, ~!promotion.advanced_infantry_training
 		Description: Infantry armed with grenades.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 160
 	Tooltip:
 		Name: Grenadier
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Infantry
+		Weaknesses: . Weak vs Vehicles, Aircraft
 	Health:
 		HP: 6000
 	Mobile:
@@ -57,7 +66,7 @@ Grenadier:
 Grenadier.Emp:
 	Inherits: Grenadier
 	Buildable:
-		Prerequisites: infantry.any, ~infantry.gdi, ~promotion.advanced_infantry_training
+		Prerequisites: infantry.any, infantry, ~gdi, ~promotion.advanced_infantry_training
 		Description: Infantry armed with EMP grenades (disable vehicles).\n  Strong vs Buildings, Infantry\n  Weak vs Artillery, Aircraft
 	WithProductionIconOverlay@EMP:
 		Types: EMP
@@ -65,6 +74,9 @@ Grenadier.Emp:
 		Cost: 160
 	Tooltip:
 		Name: EMP Grenadier
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Infantry
+		Weaknesses: . Weak vs Artillery, Aircraft
 	Armament@PRIMARY:
 		Weapon: EMPGrenade
 	Armament@Garrison:
@@ -80,12 +92,12 @@ Railgunner:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 50
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~promotion.railgunner, ~!promotion.railgunner.no_crush
+		Prerequisites: ~pyle, hq, infantry, ~gdi, ~promotion.railgunner, ~!promotion.railgunner.no_crush
 		Description: Heavy Infantry with Railgun.
 		IconPalette: chrometd
 	TooltipExtras:
-		Strengths: • Strong vs Heavy Tanks
-		Weaknesses: • Weak vs Infantry, Aircraft
+		Strengths: . Strong vs Heavy Tanks
+		Weaknesses: . Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -114,7 +126,7 @@ Railgunner:
 Railgunner.noCrush:
 	Inherits: Railgunner
 	Buildable:
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~promotion.railgunner.no_crush
+		Prerequisites: ~pyle, hq, infantry, ~gdi, ~promotion.railgunner.no_crush
 		Description: Heavy Infantry with Railgun. \n  Cannot be crushed. \n  Strong vs Heavy Tanks\n  Weak vs Infantry, Buildings
 		IconPalette: chrometd
 	WithProductionIconOverlay@Wrench:
@@ -123,6 +135,10 @@ Railgunner.noCrush:
 		Cost: 650
 	Tooltip:
 		Name: Railgunner (Crushproof)
+	TooltipExtras:
+		Strengths: . Strong vs Heavy Tanks
+		Weaknesses: . Weak vs Infantry, Buildings
+		Attributes: . Cannot be crushed.
 	-Crushable:
 
 Jumpjet:
@@ -141,12 +157,12 @@ Jumpjet:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 59
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~promotion.jumpjet, ~!promotion.jumpjet_railgun, ~!promotion.jumpjet_rockets
+		Prerequisites: ~pyle, hq, infantry, ~gdi, ~promotion.jumpjet, ~!promotion.jumpjet_railgun, ~!promotion.jumpjet_rockets
 		Description: Flying general-purpose infantry.\n  Can detect cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	TooltipExtras:
-		Strengths: • Strong vs Infantry
-		Weaknesses: • Weak vs Vehicles, Aircraft
-		Attributes: • Flying\n• Can land
+		Strengths: . Strong vs Infantry
+		Weaknesses: . Weak vs Vehicles, Aircraft
+		Attributes: . Flying\n. Can land
 	Valued:
 		Cost: 250
 	Tooltip:
@@ -257,11 +273,11 @@ Jumpjet.Rocket:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 59
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~promotion.jumpjet_rockets
+		Prerequisites: ~pyle, hq, infantry, ~gdi, ~promotion.jumpjet_rockets
 		Description: Flying general-purpose infantry.\n  Can detect cloaked units.
 	TooltipExtras:
-		Strengths: • Strong vs Vehicles, Aircraft
-		Weaknesses: • Weak vs Infantry, Anti-Air
+		Strengths: . Strong vs Vehicles, Aircraft
+		Weaknesses: . Weak vs Infantry, Anti-Air
 	WithProductionIconOverlay@Missile:
 		Types: Missile
 	Valued:
@@ -286,11 +302,11 @@ Jumpjet.Railgun:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 59
-		Prerequisites: ~pyle, hq, ~infantry.gdi, ~promotion.jumpjet_railgun
+		Prerequisites: ~pyle, hq, infantry, ~gdi, ~promotion.jumpjet_railgun
 		Description: Flying anti-tank infantry.\n  Can detect cloaked units.
 	TooltipExtras:
-		Strengths: • Strong vs Heavy Vehicles
-		Weaknesses: • Weak vs Infantry, Anti-Air
+		Strengths: . Strong vs Heavy Vehicles
+		Weaknesses: . Weak vs Infantry, Anti-Air
 	WithProductionIconOverlay@Ion:
 		Types: Ion
 	Valued:
@@ -317,14 +333,14 @@ RMBO:
 		Name: Yo Brother
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: ~infantry.gdi, tier3, ~promotion.advanced_infantry_training
+		Prerequisites: infantry, ~gdi, tier3, ~promotion.advanced_infantry_training
 		Queue: Infantry
 		BuildLimit: 1
 		Description: The Yo Brother is armed with a Grenadelauncher.\nHe has a good time and keeps 'em coming.
 	TooltipExtras:
-		Strengths: • Strong vs Infantry, Light Vehicles, Buildings
-		Weaknesses: • Weak vs Aircraft
-		Attributes: • Regenerates health quickly \n• Can detect cloaked units.\n• Maximum 1 can be trained.
+		Strengths: . Strong vs Infantry, Light Vehicles, Buildings
+		Weaknesses: . Weak vs Aircraft
+		Attributes: . Regenerates health quickly \n. Can detect cloaked units.\n. Maximum 1 can be trained.
 	Mobile:
 		speed: 73
 		Voice: Move
@@ -371,5 +387,10 @@ RMBO:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
 	-Crushable:
 	-TakeCover:
+
+
+
+
+
 
 

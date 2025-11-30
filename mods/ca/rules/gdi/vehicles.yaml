@@ -6,7 +6,7 @@
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
-		Prerequisites: ~vehicles.td, ~vehicles.gdi, ~!vehicles.zocom, ~!promotion.medium_tank_pdl, ~!promotion.medium_tank.reflector
+		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~!promotion.medium_tank_pdl, ~!promotion.medium_tank.reflector
 		IconPalette: chrometd
 		Description: Main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -14,6 +14,9 @@
 	Tooltip:
 		Name: Battle Tank
 		GenericName: Tank
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles
+		Weaknesses: . Weak vs Infantry, Aircraft
 	Health:
 		HP: 52000
 	Mobile:
@@ -44,13 +47,16 @@ MTNK.PDL:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
-		Prerequisites: ~vehicles.td, ~vehicles.gdi, ~!vehicles.zocom, ~promotion.medium_tank_pdl
+		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~promotion.medium_tank_pdl
 		IconPalette: chrometd
 		Description: Main battle tank with Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1500
 	Tooltip:
 		Name: Battle Tank (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles
+		Weaknesses: . Weak vs Infantry, Aircraft
 	WithSpriteTurret@gdiupg:
 		Sequence: turretpd
 
@@ -59,10 +65,13 @@ MTNK.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.td, ~vehicles.gdi, ~!vehicles.zocom, ~promotion.medium_tank.reflector
+		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~promotion.medium_tank.reflector
 		Description: Main battle tank with Reflector Armor.\n  Strong vs Energy Weapons\n  Weak vs Infantry, Aircraft
 	Tooltip:
 		Name: Battle Tank (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Energy Weapons
+		Weaknesses: . Weak vs Infantry, Aircraft
 
 MTNK.Drone:
 	Inherits: ^FightingTankTurreted
@@ -73,7 +82,7 @@ MTNK.Drone:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
-		Prerequisites: ~vehicles.zocom, weap.td, radar, ~!promotion.medium_tank_pdl, ~!promotion.medium_tank.reflector
+		Prerequisites: vehicles, ~zocom, weap.td, radar, ~!promotion.medium_tank_pdl, ~!promotion.medium_tank.reflector
 		IconPalette: chrometd
 		Description: Drone battle tank.\n  Requires power to operate.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
@@ -81,6 +90,10 @@ MTNK.Drone:
 	Tooltip:
 		Name: Battle Drone
 		GenericName: Tank
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles
+		Weaknesses: . Weak vs Infantry, Aircraft
+		Attributes: . Drone battle tank.\n. Requires power to operate.
 	Health:
 		HP: 52000
 	Mobile:
@@ -119,23 +132,31 @@ MTNK.Drone.PDL:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
-		Prerequisites: ~vehicles.zocom, weap.td, ~promotion.medium_tank_pdl
+		Prerequisites: vehicles, ~zocom, weap.td, ~promotion.medium_tank_pdl
 		IconPalette: chrometd
 		Description: Drone battle tank with Point Laser Defense.\n  Requires power to operate.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1320
 	Tooltip:
 		Name: Battle Drone (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles
+		Weaknesses: . Weak vs Infantry, Aircraft
+		Attributes: . Drone battle tank with Point Laser Defense.\n. Requires power to operate.
 
 MTNK.Drone.Reflector:
 	Inherits: MTNK.Drone
 	Inherits: ^ReflectorArmor
 	Buildable:
 		-IconPalette: chrometd
-		Prerequisites: ~vehicles.zocom, weap.td, ~promotion.medium_tank.reflector
+		Prerequisites: vehicles, ~zocom, weap.td, ~promotion.medium_tank.reflector
 		Description: Drone battle tank with Reflector Armor.\n It is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Battle Drone (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Anti-Tank Weapons
+		Attributes: . Drone battle tank with Reflector Armor.
 
 Mammoth:
 	Inherits: ^FightingTankTurreted
@@ -153,13 +174,17 @@ Mammoth:
 		Queue: Vehicle
 		BuildPaletteOrder: 185
 		IconPalette: chrometd
-		Prerequisites: tier3, ~vehicles.gdi, vehicles, ~!talon, ~!filler.gdimammoth
+		Prerequisites: tier3, vehicles, ~gdi, ~!talon, ~!upg.gdimammoth
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Nothing
 	Valued:
 		Cost: 1700
 	Tooltip:
 		Name: Mammoth Tank
 		GenericName: Tank
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Nothing
+		Attributes: . Can crush concrete walls.
 	Health:
 		HP: 78000
 	Mobile:
@@ -212,12 +237,16 @@ Mammoth.Ion:
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.ion, ~!filler.gdimammoth2
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.ion, ~!upg.gdimammoth2
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry\n  Weak vs Anti-Tank Weapons
 	WithProductionIconOverlay@Ion:
 		Types: Ion
 	Tooltip:
 		Name: Ion Mammoth Tank
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry
+		Weaknesses: . Weak vs Anti-Tank Weapons
+		Attributes: . Can crush concrete walls.
 	Valued:
 		Cost: 2000
 	Armament@PRIMARY:
@@ -231,20 +260,28 @@ Mammoth.Ion.Reflector:
 	Inherits: Mammoth.Ion
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.ion, ~promotion.mammoth_tank_gdi.reflector
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.ion, ~promotion.mammoth_tank_gdi.reflector
 		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Ion Mammoth Tank (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Anti-Tank Weapons
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 Mammoth.Ion.PDL:
 	Inherits: Mammoth.Ion
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.pdl, ~promotion.mammoth_tank_gdi.ion
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.pdl, ~promotion.mammoth_tank_gdi.ion
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Ion Mammoth Tank (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Energy Weapons
+		Attributes: . Can crush concrete walls.
 	Valued:
 		Cost: 2500
 
@@ -254,12 +291,16 @@ Mammoth.Nanite:
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.nr, ~!filler.gdimammoth2
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.nr, ~!upg.gdimammoth2
 		Description: Big and slow tank with anti-air capability.\n  Is very tough and has a nanite shield system.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Point Laser Defense
 	WithProductionIconOverlay@Wrench:
 		Types: Wrench
 	Tooltip:
 		Name: Nanite Mammoth Tank
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Point Laser Defense
+		Attributes: . Can crush concrete walls.
 	Valued:
 		Cost: 2500
 	Shielded:
@@ -271,20 +312,28 @@ Mammoth.Nanite.Reflector:
 	Inherits: Mammoth.Nanite
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.nr, ~promotion.mammoth_tank_gdi.reflector
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.nr, ~promotion.mammoth_tank_gdi.reflector
 		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Is very tough and has a nanite shield system.\n  Strong vs Vehicles, Infantry, Aircraft, Energy Weapons \n  Weak vs Conventional Weapons
 	Tooltip:
 		Name: Nanite Mammoth Tank (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft, Energy Weapons
+		Weaknesses: . Weak vs Conventional Weapons
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 Mammoth.Nanite.PDL:
 	Inherits: Mammoth.Nanite
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.pdl, ~promotion.mammoth_tank_gdi.nr,
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.pdl, ~promotion.mammoth_tank_gdi.nr
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Is very tough and has a nanite shield system.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Nanite Mammoth Tank (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Energy Weapons
+		Attributes: . Can crush concrete walls.
 	Valued:
 		Cost: 3000
 
@@ -297,12 +346,16 @@ Mammoth.Hover:
 	Buildable:
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.hover, ~!filler.gdimammoth2
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.hover, ~!upg.gdimammoth2
 		Description: Big tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	WithProductionIconOverlay@Air:
 		Types: Air
 	Tooltip:
 		Name: Hover Mammoth Tank
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Anti-Tank Weapons
+		Attributes: . Can crush concrete walls.
 	Valued:
 		Cost: 1600
 	Mobile:
@@ -326,20 +379,28 @@ Mammoth.Hover.Reflector:
 	Inherits: Mammoth.Hover
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.hover, ~promotion.mammoth_tank_gdi.reflector
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.hover, ~promotion.mammoth_tank_gdi.reflector
 		Description: Big and slow tank with anti-air capability.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Anti-Tank Weapons
 	Tooltip:
 		Name: Hover Mammoth Tank (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Anti-Tank Weapons
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 Mammoth.Hover.PDL:
 	Inherits: Mammoth.Hover
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.mammoth_tank_gdi.pdl, ~promotion.mammoth_tank_gdi.hover
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mammoth_tank_gdi.pdl, ~promotion.mammoth_tank_gdi.hover
 		Description: Big and slow tank with anti-air capability.\n  Can crush concrete walls.\n  Strong vs Vehicles, Infantry, Aircraft\n  Weak vs Energy Weapons
 	Tooltip:
 		Name: Hover Mammoth Tank (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Energy Weapons
+		Attributes: . Can crush concrete walls.
 	Valued:
 		Cost: 2200
 
@@ -364,12 +425,12 @@ MSAR:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 240
-		Prerequisites: hq, ~vehicles.gdi, ~!promotion.mobile_sensor_pdl
+		Prerequisites: hq, vehicles, ~gdi, ~!promotion.mobile_sensor_pdl
 		Description: Provides radar and increases nearby vehicle weapon range.
 	TooltipExtras:
-		Strengths: â€¢ Strong vs Stealth
-		Weaknesses: â€¢ Weak without protection
-		Attributes: â€¢ Unarmed \n â€¢ Detects cloaked units
+		Strengths: . Strong vs Stealth
+		Weaknesses: . Weak without protection
+		Attributes: . Unarmed \n . Detects cloaked units
 	Valued:
 		Cost: 1000
 	Health:
@@ -393,7 +454,11 @@ MSAR.PDL:
 	Inherits: MSAR
 	Inherits@PDL: ^PointLaserDefenseSystem
 	Buildable:
-		Prerequisites: hq, ~vehicles.gdi, ~promotion.mobile_sensor_pdl
+		Prerequisites: hq, vehicles, ~gdi, ~promotion.mobile_sensor_pdl
+	TooltipExtras:
+		Strengths: . Strong vs Stealth threats and incoming missiles
+		Weaknesses: . Weak without escorts or against direct fire
+		Attributes: . Adds Point Laser Defense to the Mobile Sensor Array\n. Extends vehicle weapon range and detects cloaked units
 	Valued:
 		Cost: 1500
 
@@ -419,9 +484,13 @@ MLRS:
 		Cost: 950
 	Tooltip:
 		Name: MLRS
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Infantry, Vehicles
+		Weaknesses: . Weak vs Heavy Armor, fast strike craft, and counter-battery fire
+		Attributes: . Can attack Aircraft.\n. Has weak armor.
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: tier2, ~vehicles.gdi, ~vehicles.td, ~!upg.mlrs
+		Prerequisites: tier2, vehicles, ~gdi, ~td, ~!upg.mlrs
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles
@@ -460,6 +529,10 @@ MLRS.AA:
 		Description: Multiple Launch Rocket System.\nLong-range guided anti-air.\n  Can only attack Aircraft.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles
 	Tooltip:
 		Name: MLRS (AA)
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Infantry, Vehicles
+		Weaknesses: . Weak vs Ground armor and dedicated anti-air defenses
+		Attributes: . Can only attack Aircraft.\n. Has weak armor.
 	Armament@PRIMARY:
 		Weapon: 227mmAA.dedicated
 	-Armament@SECONDARY:
@@ -473,9 +546,13 @@ hmlrs:
 		Cost: 1150
 	Tooltip:
 		Name: Hover MLRS
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Vehicles, Buildings
+		Weaknesses: . Weak vs Heavy tanks and concentrated anti-air fire
+		Attributes: . Can attack Aircraft.\n. Has weak armor.
 	Buildable:
 		BuildPaletteOrder: 165
-		Prerequisites: ~vehicles.gdi, tier3, ~promotion.hover_mlrs, ~!promotion.hover_mlrs.reflector, ~!promotion.hover_mlrs.pdl
+		Prerequisites: vehicles, ~gdi, tier3, ~promotion.hover_mlrs, ~!promotion.hover_mlrs.reflector, ~!promotion.hover_mlrs.pdl
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Prototype Hover Multiple Launch Rocket System.\nLong-range guided artillery.\n  Can attack Aircraft.\n  Has weak armor.\n  Strong vs Infantry, Vehicles, Buildings
@@ -527,22 +604,30 @@ hmlrs.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		IconPalette: chrome
-		Prerequisites: ~vehicles.gdi, tier3, ~promotion.hover_mlrs.reflector
+		Prerequisites: vehicles, ~gdi, tier3, ~promotion.hover_mlrs.reflector
 		Description: Prototype Hover Multiple Launch Rocket System.\nLong-range guided artillery.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Energy Weapons, Weak vs. Conventional Weapons
 	Tooltip:
 		Name: Hover MLRS (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Energy Weapons
+		Weaknesses: . Weak vs. Conventional Weapons
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 hmlrs.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Inherits: hmlrs
 	Buildable:
 		IconPalette: chrome
-		Prerequisites: ~vehicles.gdi, tier3, ~promotion.hover_mlrs.pdl
+		Prerequisites: vehicles, ~gdi, tier3, ~promotion.hover_mlrs.pdl
 		Description: Prototype Hover Multiple Launch Rocket System.\nLong-range guided artillery.\n  Has Point Laser Defense, which is very good vs. Projectile Weapons.\n  Strong vs Conventional Weapons, Weak vs. Energy Weapons
 	Valued:
 		Cost: 1750
 	Tooltip:
 		Name: Hover MLRS (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Conventional Weapons
+		Weaknesses: . Weak vs. Energy Weapons
+		Attributes: . Has Point Laser Defense, which is very good vs. Projectile Weapons.
 
 MLRS.Hailstorm:
 	Inherits: MLRS
@@ -551,9 +636,13 @@ MLRS.Hailstorm:
 		Cost: 1200
 	Tooltip:
 		Name: Hailstorm MLRS
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Infantry, Vehicles
+		Weaknesses: . Weak vs. Aircraft, Heavy Tanks
+		Attributes: . Has weak armor.
 	Buildable:
 		BuildPaletteOrder: 120
-		Prerequisites: hq, ~vehicles.gdi, ~vehicles.td, tier3, ~promotion.hailstorm_mlrs
+		Prerequisites: hq, vehicles, ~gdi, ~td, tier3, ~promotion.hailstorm_mlrs
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Multiple Launch Rocket System.\nLong-range unguided multiple rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry, Vehicles\n  Weak vs. Aircraft, Heavy Tanks
@@ -572,12 +661,16 @@ TITN:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: tier3, ~vehicles.talon, ~!upg.titan
+		Prerequisites: tier3, vehicles, ~talon, ~!upg.titan
 		Description: Tough combat battle-mech.\n  Can attack Aircraft.\n  Strong vs Infantry, Tanks\n Weak vs Point Laser Defense
 	Valued:
 		Cost: 2000
 	Tooltip:
 		Name: Titan
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Tanks
+		Weaknesses: . Weak vs Point Laser Defense
+		Attributes: . Can attack Aircraft.
 	Health:
 		HP: 100000
 	Mobile:
@@ -622,7 +715,7 @@ TITN.Battle:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.titan.battle, ~!upg.titan2
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.titan.battle, ~!upg.titan2
 		Description: Tough combat battle-mech with very heavy shells.\n  EMP disables hit units.\n  Strong vs Tanks, Aircraft\n Weak vs Point Laser Defense
 	Valued:
 		Cost: 2200
@@ -630,6 +723,9 @@ TITN.Battle:
 		HP: 110000
 	Tooltip:
 		Name: Battle Titan
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Aircraft
+		Weaknesses: . Weak vs Point Laser Defense
 	Armament@PRIMARY:
 		Weapon: TitanGun.EMP
 
@@ -640,21 +736,29 @@ TITN.Battle.PDL:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.titan.pdl, ~promotion.titan.battle
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.titan.pdl, ~promotion.titan.battle
 		Description: Tough combat battle-mech with very heavy shells.\n  EMP disables hit units.\n  Has Point Laser Defense System.\n  Can attack Aircraft.\n  Strong vs Tanks, Aircraft, Projectiles\n Weak vs Energy Weapons
 	Valued:
 		Cost: 2800
 	Tooltip:
 		Name: Battle Titan (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Aircraft, Projectiles
+		Weaknesses: . Weak vs Energy Weapons
+		Attributes: . Has Point Laser Defense System.\n. Can attack Aircraft.
 
 TITN.Battle.Reflector:
 	Inherits: TITN.Battle
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.titan.reflector, ~promotion.titan.battle
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.titan.reflector, ~promotion.titan.battle
 		Description: Tough combat battle-mech with very heavy shells.\n  EMP disables hit units.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Tanks, Energy Weapons\n Weak vs Point Laser Defense
 	Tooltip:
 		Name: Battle Titan (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Energy Weapons
+		Weaknesses: . Weak vs Point Laser Defense
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 TITN.Railgun:
 	Inherits: TITN
@@ -663,12 +767,16 @@ TITN.Railgun:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.titan.railgun, ~!upg.titan2
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.titan.railgun, ~!upg.titan2
 		Description: Tough combat battle-mech with railgun.\n  Cannot be intercepted by Point Laser Defense.\n  Strong vs Tanks, Weak vs Aircraft, Infantry
 	Valued:
 		Cost: 3000
 	Tooltip:
 		Name: Railgun Titan
+	TooltipExtras:
+		Strengths: . Strong vs Tanks
+		Weaknesses: . Weak vs Aircraft, Infantry
+		Attributes: . Cannot be intercepted by Point Laser Defense.
 	Armament@PRIMARY:
 		Weapon: Railgun.Titan
 
@@ -679,21 +787,29 @@ TITN.Railgun.PDL:
 		Queue: Vehicle
 		BuildPaletteOrder: 195
 		IconPalette: chrometd
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.titan.pdl, ~promotion.titan.railgun
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.titan.pdl, ~promotion.titan.railgun
 		Description: Tough combat battle-mech with railgun.\n  Cannot be intercepted by Point Laser Defense.\n  Strong vs Tanks, Projectiles\n Weak vs Aircraft, Infantry
 	Valued:
 		Cost: 3500
 	Tooltip:
 		Name: Railgun Titan (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Projectiles
+		Weaknesses: . Weak vs Aircraft, Infantry
+		Attributes: . Cannot be intercepted by Point Laser Defense.
 
 TITN.Railgun.Reflector:
 	Inherits: TITN.Railgun
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.titan.reflector, ~promotion.titan.railgun
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.titan.reflector, ~promotion.titan.railgun
 		Description: Tough combat battle-mech with railgun.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Tanks, Energy Weapons, Weak vs Aircraft, Infantry
 	Tooltip:
 		Name: Railgun Titan (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Energy Weapons
+		Weaknesses: . Weak vs Aircraft, Infantry
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 Juggernaut:
 	Inherits: ^FightingTank
@@ -705,6 +821,9 @@ Juggernaut:
 	Inherits: ^StopMovingToAttack
 	Tooltip:
 		Name: Juggernaut
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Structures
+		Weaknesses: . Weak vs Aircraft
 	RenderSprites:
 		Image: juggernaut
 	Buildable:
@@ -764,6 +883,9 @@ Juggernaut.Emp:
 		Description: Tough artillery battle-mech.\n  Strong vs Infantry, Structures\n  Weak vs Aircraft
 	Tooltip:
 		Name: EMP Juggernaut
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Structures
+		Weaknesses: . Weak vs Aircraft
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: JuggernautGun.EMP
@@ -780,6 +902,9 @@ Juggernaut.Firerate:
 		Description: Tough artillery battle-mech.\n  Strong vs Infantry, Structures\n  Weak vs Aircraft
 	Tooltip:
 		Name: Juggernaut (Fire-Rate)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Structures
+		Weaknesses: . Weak vs Aircraft
 	Armament@SECONDARY:
 		Name: secondary
 		Weapon: JuggernautGun.Firerate
@@ -796,11 +921,14 @@ DISR:
 		Cost: 1500
 	Tooltip:
 		Name: Disruptor
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Vehicles, Buildings
+		Weaknesses: . Weak vs Aircraft
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 220
 		IconPalette: chrometd
-		Prerequisites: tier3, ~vehicles.zocom
+		Prerequisites: tier3, vehicles, ~zocom
 		Description: Armored high-tech vehicle with long-range sonic armament.\n  Strong vs Infantry, Vehicles, Buildings\n  Weak vs Aircraft
 	Health:
 		HP: 75000
@@ -858,21 +986,29 @@ DISR.PDL:
 	Inherits: TITN.Railgun
 	Inherits: ^PointLaserDefenseSystem
 	Buildable:
-		Prerequisites: tier3, ~vehicles.zocom, ~promotion.titan.railgun
+		Prerequisites: tier3, vehicles, ~zocom, ~promotion.titan.railgun
 		Description: Tough combat battle-mech with railgun.\n  Cannot be intercepted by Point Laser Defense.\n  Strong vs Tanks, Projectiles\n Weak vs Aircraft, Infantry
 	Valued:
 		Cost: 2100
 	Tooltip:
 		Name: Railgun Titan (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Projectiles
+		Weaknesses: . Weak vs Aircraft, Infantry
+		Attributes: . Cannot be intercepted by Point Laser Defense.
 
 DISR.Reflector:
 	Inherits: TITN.Railgun
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: ~tier3, ~vehicles.gdi, ~promotion.titan.reflector, ~promotion.titan.railgun
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.titan.reflector, ~promotion.titan.railgun
 		Description: Tough combat battle-mech with railgun.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Tanks, Energy Weapons, Weak vs Aircraft, Infantry
 	Tooltip:
 		Name: Railgun Titan (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Energy Weapons
+		Weaknesses: . Weak vs Aircraft, Infantry
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 MARV:
 	Inherits: ^FightingTankTurreted
@@ -885,12 +1021,16 @@ MARV:
 		Queue: Vehicle
 		BuildPaletteOrder: 190
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.gdi, ~promotion.marv, miss.gdi
+		Prerequisites: vehicles, ~gdi, ~promotion.marv, miss.gdi
 		Description: Enormous slow tank with triple ion blaster cannons. \nMines Tiberium and Ores when driving over.
 	Valued:
 		Cost: 10000
 	Tooltip:
 		Name: M.A.R.V.
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Infantry, and Structures with triple ion cannons
+		Weaknesses: . Weak vs Massed anti-armor, artillery, and air strikes
+		Attributes: . Harvests Tiberium and ore it drives over\n. Massive, slow super-heavy platform
 	Health:
 		HP: 200000
 	Mobile:
@@ -952,10 +1092,13 @@ MAMMOTHMK2:
 		Cost: 10000
 	Tooltip:
 		Name: Mammoth Mk. II
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Vehicles and Buildings
+		Weaknesses: . Weak vs Artillery, Masses of Aircraft
 	Buildable:
 		BuildPaletteOrder: 220
 		IconPalette: chrometd
-		Prerequisites: ~vehicles.gdi, ~promotion.mammoth_mkii, miss.gdi
+		Prerequisites: vehicles, ~gdi, ~promotion.mammoth_mkii, miss.gdi
 		Queue: Vehicle
 		Description: Slow heavy walker.\nArmed with dual railguns and rocket launchers.\n  Strong vs Infantry, Vehicles and Buildings\n  Weak vs Artillery, Masses of Aircraft
 	Mobile:
@@ -1011,13 +1154,16 @@ VULC:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
-		Prerequisites: ~vehicles.gdi, ~tier3, ~promotion.apc_vulcan, ~infantry.any
+		Prerequisites: vehicles, ~gdi, tier3, ~promotion.apc_vulcan, ~infantry.any
 		IconPalette: chrometd
 		Description: Tough infantry transport, armed with a powerful chain gun.\n  Strong vs Aircraft, Light Armor, Infantry\n  Weak vs Tanks
 	Valued:
 		Cost: 800
 	Tooltip:
 		Name: Vulcan
+	TooltipExtras:
+		Strengths: . Strong vs Aircraft, Light Armor, Infantry
+		Weaknesses: . Weak vs Tanks
 	Health:
 		HP: 60000
 	Mobile:
@@ -1117,3 +1263,8 @@ VULC:
 	WithCargoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
+
+
+
+
+

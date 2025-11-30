@@ -10,9 +10,12 @@ FTNK:
 	Tooltip:
 		Name: Flame Tank
 		GenericName: Tank
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Vehicles
+		Weaknesses: . Weak vs Heavy Tanks, Aircraft
 	Buildable:
 		BuildPaletteOrder: 365
-		Prerequisites: hq, ~vehicles.nod, ~!vehicles.blackh, ~!promotion.flame_tank.pdl, ~!promotion.flame_tank.reflector
+		Prerequisites: hq, vehicles, ~nod, ~!blackh, ~!promotion.flame_tank.pdl, ~!promotion.flame_tank.reflector
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Heavily armored flame-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft
@@ -42,21 +45,29 @@ FTNK.Reflector:
 	Inherits: FTNK
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: hq, ~vehicles.nod, ~promotion.flame_tank.reflector, ~!promotion.chem_tank
+		Prerequisites: hq, vehicles, ~nod, ~promotion.flame_tank.reflector, ~!promotion.chem_tank
 		Description: Heavily armored flame-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
 		Name: Flame Tank (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Energy Weapons
+		Weaknesses: . Weak vs Conventional Weapons, Aircraft
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 FTNK.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Inherits: FTNK
 	Buildable:
-		Prerequisites: hq, ~vehicles.nod, ~promotion.flame_tank.pdl, ~!promotion.chem_tank
+		Prerequisites: hq, vehicles, ~nod, ~promotion.flame_tank.pdl, ~!promotion.chem_tank
 		Description: Heavily armored flame-throwing vehicle.\nHas Point Laser Defense\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft, Energy Weapons
 	Valued:
 		Cost: 1100
 	Tooltip:
 		Name: Flame Tank (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Vehicles
+		Weaknesses: . Weak vs Heavy Tanks, Aircraft, Energy Weapons
+		Attributes: . Has Point Laser Defense
 	Health:
 		HP: 50000
 
@@ -69,12 +80,15 @@ FTNK.PDL.Chem:
 		Types: Hazard
 	Buildable:
 		IconPalette: chrome
-		Prerequisites: hq, ~vehicles.nod, ~promotion.chem_tank, ~promotion.flame_tank.pdl
+		Prerequisites: hq, vehicles, ~nod, ~promotion.chem_tank, ~promotion.flame_tank.pdl
 		Description: Heavily armored chemical-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft
 	Valued:
 		Cost: 1300
 	Tooltip:
 		Name: Chem Tank (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Vehicles
+		Weaknesses: . Weak vs Heavy Tanks, Aircraft
 	Health:
 		HP: 60000
 	Armament@PRIMARY:
@@ -91,12 +105,16 @@ FTNK.Reflector.Chem:
 		Types: Hazard
 	Buildable:
 		IconPalette: chrome
-		Prerequisites: hq, ~vehicles.nod, ~promotion.chem_tank, ~promotion.flame_tank.reflector
+		Prerequisites: hq, vehicles, ~nod, ~promotion.chem_tank, ~promotion.flame_tank.reflector
 		Description: Heavily armored chemical-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Valued:
 		Cost: 900
 	Tooltip:
 		Name: Chem Tank (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Vehicles, Energy Weapons
+		Weaknesses: . Weak vs Conventional Weapons, Aircraft
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 	Health:
 		HP: 60000
 	Armament@PRIMARY:
@@ -117,13 +135,16 @@ HFTK:
 		Queue: Vehicle
 		BuildPaletteOrder: 365
 		IconPalette: chrometd
-		Prerequisites: radar, ~vehicles.blackh, ~!filler.flametank
+		Prerequisites: radar, vehicles, ~blackh, ~!upg.flametank
 		Description: Heavy tank armed with dual short-range flamethrowers.\n  Strong vs Infantry, Buildings, Light Armor\n  Weak vs Tanks, Defenses, Aircraft
 	Valued:
 		Cost: 1000
 	Tooltip:
 		Name: Heavy Flame Tank
 		GenericName: Tank
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Light Armor
+		Weaknesses: . Weak vs Tanks, Defenses, Aircraft
 	Health:
 		HP: 75000
 	Mobile:
@@ -163,12 +184,16 @@ HFTK.PDL:
 	Inherits@PDL: ^PointLaserDefenseSystem
 	Inherits: HFTK
 	Buildable:
-		Prerequisites: hq, ~vehicles.nod, ~promotion.heavy_flame_tank.pdl, ~!promotion.fireball_tank
+		Prerequisites: hq, vehicles, ~nod, ~promotion.heavy_flame_tank.pdl, ~!promotion.fireball_tank
 		Description: Heavily armored flame-throwing vehicle.\nHas Point Laser Defense\n  Strong vs Infantry, Buildings, Vehicles\n  Weak vs Heavy Tanks, Aircraft, Energy Weapons
 	Valued:
 		Cost: 1400
 	Tooltip:
 		Name: Heavy Flame Tank (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Vehicles
+		Weaknesses: . Weak vs Heavy Tanks, Aircraft, Energy Weapons
+		Attributes: . Has Point Laser Defense
 	Health:
 		HP: 50000
 
@@ -176,22 +201,30 @@ HFTK.Reflector:
 	Inherits: HFTK
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: hq, ~vehicles.nod, ~promotion.heavy_flame_tank.reflector, ~!promotion.fireball_tank
+		Prerequisites: hq, vehicles, ~nod, ~promotion.heavy_flame_tank.reflector, ~!promotion.fireball_tank
 		Description: Heavily armored flame-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
 		Name: Heavy Flame Tank (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Energy Weapons
+		Weaknesses: . Weak vs Conventional Weapons, Aircraft
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 
 HFTK.PDL.Fireball:
 	Inherits: HFTK.PDL
 	WithProductionIconOverlay@Flame:
 		Types: Flame
 	Buildable:
-		Prerequisites: hq, ~vehicles.nod, ~promotion.fireball_tank, ~promotion.heavy_flame_tank.pdl
+		Prerequisites: hq, vehicles, ~nod, ~promotion.fireball_tank, ~promotion.heavy_flame_tank.pdl
 		Description: Heavily armored fireball-throwing vehicle.\n  Strong vs Infantry, Buildings, Vehicles\n  Heavy Tanks, Aircraft
 	Valued:
 		Cost: 1400
 	Tooltip:
 		Name: Fireball Tank (PDL)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Vehicles
+		Weaknesses: . Weak vs Heavy Tanks and Aircraft
+		Attributes: . Point Laser Defense intercepts incoming projectiles\n. Fireball launcher saturates targets with splash damage
 	Armament@PRIMARY:
 		Weapon: FireballLauncher.Tank
 		-MuzzleSequence:
@@ -203,10 +236,14 @@ HFTK.Reflector.Fireball:
 	WithProductionIconOverlay@Flame:
 		Types: Flame
 	Buildable:
-		Prerequisites: hq, ~vehicles.nod, ~promotion.fireball_tank, ~promotion.heavy_flame_tank.reflector
+		Prerequisites: hq, vehicles, ~nod, ~promotion.fireball_tank, ~promotion.heavy_flame_tank.reflector
 		Description: Heavily armored fireball-throwing vehicle.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Infantry, Buildings, Vehicles, Energy Weapons\n  Weak vs Conventional Weapons, Aircraft
 	Tooltip:
 		Name: Fireball Tank (Reflector)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Buildings, Vehicles, Energy Weapons
+		Weaknesses: . Weak vs Conventional Weapons, Aircraft
+		Attributes: . Has Reflector Armor, which is very good vs. Energy Weapons.
 	Armament@PRIMARY:
 		Weapon: FireballLauncher.Tank
 		-MuzzleSequence:
@@ -221,10 +258,14 @@ TTRK:
 		Image: ttrk
 	Buildable:
 		BuildPaletteOrder: 255
-		Prerequisites: ~vehicles.legion, tmpl, ~vehicles.nod
+		Prerequisites: vehicles, ~legion, tmpl, ~nod
 		Description: Truck actively armed with\n a Tiberium bomb. Has very weak armor.
 	Tooltip:
 		Name: Chemical Truck
+	TooltipExtras:
+		Strengths: . Strong vs Structures and clustered units via Tiberium detonation
+		Weaknesses: . Weak vs Any fire before it reaches its target
+		Attributes: . Explodes into a massive toxin cloud when destroyed
 	Health:
 		HP: 10000
 	Mobile:

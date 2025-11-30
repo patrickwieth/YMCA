@@ -9,12 +9,15 @@
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 10
-		Prerequisites: ~infantry.allies
+		Prerequisites: infantry, ~allies
 		Description: General-purpose infantry with good scouting abilities.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 100
 	Tooltip:
 		Name: Light Infantry
+	TooltipExtras:
+		Strengths: . Strong vs Infantry
+		Weaknesses: . Weak vs Vehicles, Aircraft
 	Health:
 		HP: 5000
 	Armament@PRIMARY:
@@ -40,12 +43,15 @@ Rocket_Infantry:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 30
-		Prerequisites: ~infantry.allies, ~!promotion.advanced_infantry_training
+		Prerequisites: infantry, ~allies, ~!promotion.advanced_infantry_training
 		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 250
 	Tooltip:
 		Name: Rocket Soldier
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Aircraft
+		Weaknesses: . Weak vs Infantry
 	Health:
 		HP: 3500
 	Mobile:
@@ -97,10 +103,13 @@ Rocket_Infantry:
 Rocket_Infantry.cryo:
 	Inherits: Rocket_Infantry
 	Buildable:
-		Prerequisites: ~infantry.allies, ~promotion.advanced_infantry_training
+		Prerequisites: infantry, ~allies, ~promotion.advanced_infantry_training
 		Description: Anti-tank/anti-aircraft infantry.\n  Strong vs Tanks, Aircraft\n  Weak vs Infantry
 	Tooltip:
 		Name: Cryo Rocket Soldier
+	TooltipExtras:
+		Strengths: . Strong vs Tanks, Aircraft
+		Weaknesses: . Weak vs Infantry
 	Armament@primary:
 		Name: primary
 		Weapon: Dragon.Relay.Cryo
@@ -140,13 +149,17 @@ Cryotrooper:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 50
-		Prerequisites: ~infantry.allies, dome, ~tent, ~promotion.advanced_infantry_training
+		Prerequisites: infantry, ~allies, dome, ~tent, ~promotion.advanced_infantry_training
 		Description: Support infantry that slows enemies and makes them take more damage. \nCan intercept incoming shells and rockets.
 		IconPalette: chrometd
 	Valued:
 		Cost: 500
 	Tooltip:
 		Name: Cryo Trooper
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles and support targets by freezing them
+		Weaknesses: . Weak vs Infantry swarms and Aircraft
+		Attributes: . Slows enemies and amplifies incoming damage\n. Intercepts incoming shells and rockets
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -179,12 +192,16 @@ Sniper:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 55
-		Prerequisites: ~infantry.england, dome, ~promotion.advanced_infantry_training
+		Prerequisites: infantry, ~england, dome, ~promotion.advanced_infantry_training
 		Description: Elite marksman infantry.\n Armed with a powerful sniper rifle.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft, Structures\n  Special Ability: Camouflage\n  Special Ability: Kill Driver
 	Valued:
 		Cost: 1000
 	Tooltip:
 		Name: Sniper
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Vehicles
+		Weaknesses: . Weak vs Aircraft, Structures
+		Attributes: . Camouflage\n. Kill Driver
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	Health:
@@ -243,12 +260,16 @@ MECH:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 100
-		Prerequisites: repair, ~infantry.mechanic, ~promotion.advanced_infantry_training
+		Prerequisites: repair, infantry, ~mechanic, ~promotion.advanced_infantry_training
 		Description: Repairs nearby vehicles and restores\nhusks to working condition by capturing them.\n  Unarmed
 	Valued:
 		Cost: 400
 	Tooltip:
 		Name: Mechanic
+	TooltipExtras:
+		Strengths: . Strong at repairing vehicles directly on the battlefield
+		Weaknesses: . Weak vs all direct combat threats; unarmed
+		Attributes: . Restores captured husks to working order\n. Provides passive vehicle repairs
 	Health:
 		HP: 5000
 	Mobile:
@@ -274,7 +295,7 @@ SPY:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 90
-		Prerequisites: ~infantry.allies, dome, ~tent, ~promotion.advanced_infantry_training
+		Prerequisites: infantry, ~allies, dome, ~tent, ~promotion.advanced_infantry_training
 		Description: Infiltrates enemy structures for intel or\nsabotage. Exact effect depends on the\nbuilding infiltrated.\n  Loses disguise when attacking.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft\n  Special Ability: Disguise
 	Valued:
 		Cost: 500
@@ -282,6 +303,10 @@ SPY:
 	DisguiseTooltip:
 		Name: Spy
 		GenericName: Soldier
+	TooltipExtras:
+		Strengths: . Strong vs Infantry
+		Weaknesses: . Weak vs Vehicles, Aircraft
+		Attributes: . Infiltrates enemy structures for intel or\n. Disguise
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
 	-Guard:
@@ -324,7 +349,7 @@ SpecOps:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 100
-		Prerequisites: ~infantry.allies, atek, ~promotion.advanced_infantry_training, ~promotion.spec_ops
+		Prerequisites: infantry, ~allies, tier3, ~promotion.advanced_infantry_training, ~promotion.spec_ops
 		Description: Marks Vehicles and Buildings with a laser allowing rocket infantry to shoot at these from great distance.\n Can detect other stealthed units.
 	Valued:
 		Cost: 800
@@ -344,6 +369,10 @@ SpecOps:
 		Voice: Move
 	Tooltip:
 		Name: Special Operations
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles and Buildings when coordinating laser designations
+		Weaknesses: . Weak vs Direct firefights and Aircraft
+		Attributes: . Marks targets so rocket infantry can fire from long range\n. Detects cloaked units
 	AttackFrontal:
 		Voice: Attack
 		PauseOnCondition: being-warped
@@ -369,13 +398,13 @@ Thor:
 		Queue: Infantry
 		BuildAtProductionType: Soldier
 		BuildPaletteOrder: 120
-		Prerequisites: ~tent, atek, ~promotion.advanced_infantry_training
+		Prerequisites: ~tent, tier3, ~promotion.advanced_infantry_training
 		BuildLimit: 1
 		Description: After the Allies developed the Weather Control Device, \nThor came back from the Viking Age, \where he fought the Lazer Raptors.
 	TooltipExtras:
-		Strengths: • Strong vs Ground Units
-		Weaknesses: • Weak vs Aircraft, Reflector Armor
-		Attributes: • Can detect cloaked units.\n• Maximum 1 can be trained.
+		Strengths: . Strong vs Ground Units
+		Weaknesses: . Weak vs Aircraft, Reflector Armor
+		Attributes: . Can detect cloaked units.\n. Maximum 1 can be trained.
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -420,5 +449,10 @@ Thor:
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, ChaosImmune, MindControlImmune
 	-Crushable:
+
+
+
+
+
 
 

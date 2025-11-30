@@ -17,12 +17,15 @@
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: ~afld.gdi, ~aircraft.gdi
+		Prerequisites: ~afld.gdi, aircraft, ~gdi
 		Description: Ground attack aircraft with incendiary bombs.\n  Strong vs Buildings, Light Armor, Infantry\n  Weak vs Aircraft
 	Valued:
 		Cost: 1600
 	Tooltip:
 		Name: A-10 Warthog
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Light Armor, Infantry
+		Weaknesses: . Weak vs Aircraft
 	Health:
 		HP: 22000
 	Armament:
@@ -77,12 +80,15 @@ Stealth_Fighter:
 		Queue: Aircraft
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 50
-		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~promotion.stealth_fighter, ~!promotion.stealth_fighter.payload,
+		Prerequisites: tier3, ~afld.gdi, aircraft, ~gdi, ~promotion.stealth_fighter, ~!promotion.stealth_fighter.payload
 		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 2000
 	Tooltip:
 		Name: Stealth Fighter
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Heavy Vehicles
+		Weaknesses: . Weak vs Infantry, Aircraft
 	Health:
 		HP: 20000
 	RevealsShroud:
@@ -131,12 +137,15 @@ Stealth_Fighter.payload:
 		Types: Bullets
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: gtek, ~afld.gdi, ~aircraft.gdi, ~promotion.stealth_fighter.payload,
+		Prerequisites: tier3, ~afld.gdi, aircraft, ~gdi, ~promotion.stealth_fighter.payload
 		Description: Stealth Ground-Attack Plane.\n Drops laser-guided armor piercing bombs. \n  Strong vs Buildings, Heavy Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 2500
 	Tooltip:
 		Name: Stealth Fighter (Double Payload)
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Heavy Vehicles
+		Weaknesses: . Weak vs Infantry, Aircraft
 	AmmoPool:
 		Ammo: 6
 	WithAmmoPipsDecoration:
@@ -158,11 +167,14 @@ ORCA:
 		Cost: 1200
 	Tooltip:
 		Name: Orca
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Aircraft
+		Weaknesses: . Weak vs Infantry
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.gdi, aircraft, ~!eagle, ~!filler.orca
+		Prerequisites: ~hpad.td, aircraft, ~gdi, ~!eagle, ~!upg.orca
 		Description: VTOL gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Aircraft:
 		TurnSpeed: 20
@@ -187,10 +199,13 @@ ORCA.AP:
 	Inherits: ORCA
 	Tooltip:
 		Name: Orca (AP)
+	TooltipExtras:
+		Strengths: . Strong vs Tanks
+		Weaknesses: . Weak vs Infantry
 	WithProductionIconOverlay@Shell:
 		Types: Shell
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~promotion.orca.ap
+		Prerequisites: ~hpad.td, aircraft, ~gdi, ~promotion.orca.ap
 		Description: VTOL gunship armed\nwith armor-piercing missiles.\n  Strong vs Tanks\n  Weak vs Infantry
 	Armament@PRIMARY:
 		Weapon: HellfireAG.Orca.AP
@@ -202,10 +217,13 @@ ORCA.Sonic:
 	Inherits: ^PrioAntiLight
 	Tooltip:
 		Name: Orca (Sonic)
+	TooltipExtras:
+		Strengths: . Strong vs Light Vehicles, Infantry
+		Weaknesses: . Weak vs Reflector Armor
 	WithProductionIconOverlay@Sonic:
 		Types: Sonic
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~promotion.orca.sonic
+		Prerequisites: ~hpad.td, aircraft, ~gdi, ~promotion.orca.sonic
 		Description: VTOL gunship armed\nwith sonic pulsator.\n  Strong vs Light Vehicles, Infantry\n  Weak vs Reflector Armor
 	Armament@PRIMARY:
 		Weapon: SonicPulse.Orca
@@ -217,10 +235,14 @@ ORCA.Payload:
 		Cost: 1300
 	Tooltip:
 		Name: Orca (Fire Rate)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles and Aircraft with rapid-fire missiles
+		Weaknesses: . Weak vs Infantry and dense anti-air defenses
+		Attributes: . Increased missile payload and faster reload cycle
 	WithProductionIconOverlay@Bullets:
 		Types: Bullets
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~promotion.orca.payload
+		Prerequisites: ~hpad.td, aircraft, ~gdi, ~promotion.orca.payload
 	ReloadDelayMultiplier:
 		Modifier: 66
 
@@ -231,12 +253,12 @@ ORCA.Torp:
 	WithProductionIconOverlay@Torpedo:
 		Types: Torpedo
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.gdi, ~promotion.orca.torp
+		Prerequisites: ~hpad.td, aircraft, ~gdi, ~promotion.orca.torp
 		Description: VTOL gunship armed\nwith torpedo bombs.
 	TooltipExtras:
-		Strengths: • Strong vs Ships, Submarines
-		Weaknesses: • Weak vs Anti-Air
-		Attributes: • Detects submerged vessels
+		Strengths: . Strong vs Ships, Submarines
+		Weaknesses: . Weak vs Anti-Air
+		Attributes: . Detects submerged vessels
 	Armament@PRIMARY:
 		Weapon: TorpBomb
 	-Armament@SECONDARY:
@@ -259,11 +281,14 @@ OrcaV2:
 		Cost: 1500
 	Tooltip:
 		Name: Orca V2
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Aircraft
+		Weaknesses: . Weak vs Infantry
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.eagle, ~!filler.orca
+		Prerequisites: ~hpad.td, aircraft, ~eagle, ~!upg.orca
 		Description: VTOL gunship armed\nwith multi-purpose missiles.\n  Strong vs Vehicles, Aircraft\n  Weak vs Infantry
 	Aircraft:
 		TurnSpeed: 20
@@ -289,6 +314,9 @@ OrcaV2.Swarm:
 	Inherits: ^PrioAntiLightAA
 	Tooltip:
 		Name: Orca V2 (Swarm)
+	TooltipExtras:
+		Strengths: . Strong vs Light Vehicles, Infantry, Aircraft
+		Weaknesses: . Weak vs Tanks, Defense Buildings
 	Buildable:
 		Prerequisites: ~hpad.td, ~promotion.orcav2.swarm
 		Description: VTOL gunship armed\nwith high-explosive missiles.\n  Strong vs Light Vehicles, Infantry, Aircraft\n  Weak vs Tanks, Defense Buildings
@@ -313,6 +341,10 @@ OrcaV2.EMP:
 		Cost: 1300
 	Tooltip:
 		Name: Orca V2 (EMP)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles and Aircraft by disabling them with EMP warheads
+		Weaknesses: . Weak vs Infantry and concentrated anti-air
+		Attributes: . EMP missiles immobilize targets but reload more slowly
 	Buildable:
 		Prerequisites: ~hpad.td, ~promotion.orcav2.emp
 	WithProductionIconOverlay@EMP:
@@ -336,9 +368,9 @@ OrcaV2.Torp:
 	WithProductionIconOverlay@Torpedo:
 		Types: Torpedo
 	TooltipExtras:
-		Strengths: • Strong vs Ships, Submarines
-		Weaknesses: • Weak vs Anti-Air
-		Attributes: • Detects submerged vessels
+		Strengths: . Strong vs Ships, Submarines
+		Weaknesses: . Weak vs Anti-Air
+		Attributes: . Detects submerged vessels
 	Armament@PRIMARY:
 		Weapon: TorpBomb
 		LocalOffset: 0,-213,-85, 0,213,-85
@@ -359,13 +391,16 @@ Orca_Bomber:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
-		Prerequisites: ~hpad.td, ~aircraft.eagle, tier3, ~disabled
+		Prerequisites: ~hpad.td, aircraft, ~eagle, tier3, ~disabled
 		IconPalette: chrome
 		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft, Infantry
 	Valued:
 		Cost: 1600
 	Tooltip:
 		Name: Orca Bomber (should not be visible to you)
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Vehicles
+		Weaknesses: . Weak vs Aircraft, Infantry
 	Health:
 		HP: 36000
 	Armament:
@@ -399,10 +434,13 @@ orca_bomber.EMP:
 		Cost: 1600
 	Tooltip:
 		Name: Orca Bomber (EMP)
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Vehicles
+		Weaknesses: . Weak vs Aircraft, Infantry
 	WithProductionIconOverlay@EMP:
 		Types: EMP
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.eagle, tier3, ~promotion.orca_bomber.emp
+		Prerequisites: ~hpad.td, aircraft, ~eagle, tier3, ~promotion.orca_bomber.emp
 		Description: VTOL bomber armed with EMP bombs.\n  Strong vs Buildings, Vehicles\n  Weak vs Aircraft, Infantry
 	Armament:
 		Weapon: OrcaBomb.EMP
@@ -414,10 +452,13 @@ orca_bomber.HE:
 		Cost: 1600
 	Tooltip:
 		Name: Orca Bomber (HE)
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Light Vehicles
+		Weaknesses: . Weak vs Aircraft
 	WithProductionIconOverlay@Dynamite:
 		Types: Dynamite
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.eagle, tier3, ~promotion.orca_bomber.he
+		Prerequisites: ~hpad.td, aircraft, ~eagle, tier3, ~promotion.orca_bomber.he
 		Description: VTOL bomber armed with high explosion cluster bombs.\n  Strong vs Buildings, Light Vehicles\n  Weak vs Aircraft
 	Armament:
 		Weapon: Orcabomb.HE
@@ -428,10 +469,13 @@ orca_bomber.AP:
 		Cost: 1600
 	Tooltip:
 		Name: Orca Bomber (AP)
+	TooltipExtras:
+		Strengths: . Strong vs Heavy Vehicles
+		Weaknesses: . Weak vs Aircraft, Infantry
 	WithProductionIconOverlay@Shell:
 		Types: Shell
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.eagle, tier3, ~promotion.orca_bomber.ap
+		Prerequisites: ~hpad.td, aircraft, ~eagle, tier3, ~promotion.orca_bomber.ap
 		Description: VTOL bomber armed with AP bombs.\n  Strong vs Heavy Vehicles\n  Weak vs Aircraft, Infantry
 	Armament:
 		Weapon: APBomb
@@ -455,6 +499,10 @@ Orca.Warship:
 		Cost: 8000
 	Tooltip:
 		Name: Orca Ion Warship
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles, Ships, and Aircraft via ion drones and missiles
+		Weaknesses: . Weak vs Dedicated anti-air, EMP, and swarms of fighters
+		Attributes: . Launches ion drones that bombard ground targets\n. Requires tech center support
 	Health:
 		HP: 120000
 	RevealsShroud:
@@ -602,3 +650,8 @@ dummy.ionstrike:
 		InitialDelay: 1
 	KillsSelf:
 		Delay: 10
+
+
+
+
+

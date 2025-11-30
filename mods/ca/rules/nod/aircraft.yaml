@@ -27,12 +27,16 @@
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~promotion.banshee, ~!promotion.banshee.bomber, ~!promotion.banshee.payload,
+		Prerequisites: tmpl, ~hpad.td, aircraft, ~nod, ~promotion.banshee, ~!promotion.banshee.bomber, ~!promotion.banshee.payload
 		Description: Fast VTOL attack craft armed\nwith powerful plasma cannons.\n  Strong vs Heavy Armor, Aircraft\n  Weak vs Infantry
 	Valued:
 		Cost: 1800
 	Tooltip:
 		Name: Banshee
+	TooltipExtras:
+		Strengths: . Strong vs Heavy Armor, Aircraft
+		Weaknesses: . Weak vs Infantry
+		Attributes: . Fast VTOL attack craft armed
 	Health:
 		HP: 24000
 	Armament@PRIMARY:
@@ -82,10 +86,14 @@ SCRN.Bomber:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		-IconPalette: chrometd
-		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~promotion.banshee.bomber,
+		Prerequisites: tmpl, ~hpad.td, aircraft, ~nod, ~promotion.banshee.bomber
 		Description: Fast VTOL bomber craft armed\nwith powerful plasma bombs.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Aircraft
 	Tooltip:
 		Name: Banshee Bomber
+	TooltipExtras:
+		Strengths: . Strong vs Heavy Armor
+		Weaknesses: . Weak vs Infantry, Aircraft
+		Attributes: . Fast VTOL bomber craft armed
 	Health:
 		HP: 30000
 	Armament@PRIMARY:
@@ -101,9 +109,13 @@ SCRN.Payload:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		-IconPalette: chrometd
-		Prerequisites: tmpl, ~hpad.td, ~aircraft.nod, ~promotion.banshee.payload,
+		Prerequisites: tmpl, ~hpad.td, aircraft, ~nod, ~promotion.banshee.payload
 	Tooltip:
 		Name: Banshee (Payload)
+	TooltipExtras:
+		Strengths: . Strong vs Vehicles and Aircraft during prolonged sorties
+		Weaknesses: . Weak vs Infantry and heavy anti-air defenses
+		Attributes: . Expanded missile payload for sustained attacks
 	Valued:
 		Cost: 2000
 	Aircraft:
@@ -137,12 +149,15 @@ RAH66:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: ~hpad.td, tmpl, ~aircraft.blackh, ~!promotion.comanche.bomber,
+		Prerequisites: ~hpad.td, tmpl, aircraft, ~blackh, ~!promotion.comanche.bomber
 		Description: Stealth helicopter armed\nwith napalm rockets.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
 	Valued:
 		Cost: 1800
 	Tooltip:
 		Name: Comanche
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Light Armor, Infantry.
+		Weaknesses: . Weak vs Aircraft
 	Health:
 		HP: 18000
 	Armament@PRIMARY:
@@ -175,7 +190,7 @@ RAH66.Bomber:
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 40
 		IconPalette: chrometd
-		Prerequisites: ~hpad.td, tmpl, ~promotion.comanche.bomber,
+		Prerequisites: ~hpad.td, tmpl, ~promotion.comanche.bomber
 		Description: Stealth helicopter armed\nwith napalm bombs.\n  Strong vs Buildings, Light Armor, Infantry.\n  Weak vs Aircraft
 	WithProductionIconOverlay@Dynamite:
 		Types: Dynamite
@@ -183,6 +198,9 @@ RAH66.Bomber:
 		Cost: 1800
 	Tooltip:
 		Name: Comanche Bomber
+	TooltipExtras:
+		Strengths: . Strong vs Buildings, Light Armor, Infantry.
+		Weaknesses: . Weak vs Aircraft
 	Health:
 		HP: 22000
 	Armament@PRIMARY:
@@ -214,11 +232,14 @@ APCH:
 		Cost: 1250
 	Tooltip:
 		Name: Harpy
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Light Armor
+		Weaknesses: . Weak vs Tanks
 	Buildable:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.nod, ~!aircraft.marked, ~!promotion.apache.flyby, ~!promotion.apache.torp
+		Prerequisites: ~hpad.td, aircraft, ~nod, ~!marked, ~!promotion.apache.flyby, ~!promotion.apache.torp
 		IconPalette: chrometd
 		Description: Helicopter gunship with a chaingun.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	Aircraft:
@@ -250,12 +271,15 @@ APCH.Flyby:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.legion, ~promotion.apache.flyby
+		Prerequisites: ~hpad.td, aircraft, ~legion, ~promotion.apache.flyby
 		Description: Helicopter gunship with a chaingun.\n Upgraded to be able to fire on the move. \n Strong vs Infantry, Light Armor\n  Weak vs Tanks
 	WithProductionIconOverlay:
 		Types: Air
 	Tooltip:
 		Name: Harpy Flyby
+	TooltipExtras:
+		Strengths: . Strong vs Infantry, Light Armor
+		Weaknesses: . Weak vs Tanks
 	-AttackAircraft:
 	Turreted:
 		TurnSpeed: 1000
@@ -268,7 +292,7 @@ APCH.Torp:
 	Tooltip:
 		Name: Harpy (Torpedo)
 	Buildable:
-		Prerequisites: ~hpad.td, ~aircraft.nod, ~promotion.apache.torp
+		Prerequisites: ~hpad.td, aircraft, ~nod, ~promotion.apache.torp
 		Description: Helicopter gunship with torpedo bombs.
 	TooltipExtras:
 		Strengths: • Strong vs Ships, Submarines
@@ -300,7 +324,7 @@ VENM:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad.td, ~aircraft.marked, ~!promotion.venom.payload, ~!promotion.venom.heavy_laser
+		Prerequisites: ~hpad.td, aircraft, ~marked, ~!promotion.venom.payload, ~!promotion.venom.heavy_laser
 		IconPalette: chrometd
 		Description: VTOL gunship armed\nwith laser.\n Can be charged by Beam Cannons to increse fire rate.
 	TooltipExtras:
@@ -363,9 +387,13 @@ VENM.Payload:
 	Inherits: VENM
 	Tooltip:
 		Name: Venom (Focus)
+	TooltipExtras:
+		Strengths: . Strong vs Infantry and Light Armor with focused lasers
+		Weaknesses: . Weak vs Anti-air defenses and heavy armor
+		Attributes: . Focus upgrade boosts firepower but relies on beam charges
 	Buildable:
 		Queue: Aircraft
-		Prerequisites: ~hpad.td, ~aircraft.marked, ~promotion.venom.payload
+		Prerequisites: ~hpad.td, aircraft, ~marked, ~promotion.venom.payload
 	WithProductionIconOverlay@Bullets:
 		Types: Bullets
 	FirepowerMultiplier:
@@ -380,7 +408,7 @@ VENM.HeavyLaser:
 		Name: Venom (Heavy Laser)
 	Buildable:
 		Queue: Aircraft
-		Prerequisites: ~hpad.td, ~aircraft.marked, ~promotion.venom.heavy_laser
+		Prerequisites: ~hpad.td, aircraft, ~marked, ~promotion.venom.heavy_laser
 		Description: VTOL gunship armed\nwith a heavy laser.\n  Strong vs Tanks\n  Weak vs Infantry, Buildings
 	WithProductionIconOverlay@Laser:
 		Types: Laser

@@ -52,12 +52,16 @@ robocopy "%MAP_SOURCE_DIR%" "%MAP_WORK_DIR%" /MIR >nul
 if %ERRORLEVEL% GEQ 8 goto mapcopyfailed
 
 if exist "%MAP_WORK_FILE%" del /f /q "%MAP_WORK_FILE%" >nul 2>&1
-type nul > "%MAP_WORK_FILE%"
-
-pushd %ENGINE_DIRECTORY%
-bin\OpenRA.Utility.exe %MOD_ID% --map repack "%MAP_NAME%_pack$"
+set "MAP_TEMP_ZIP=%MAP_WORK_FILE%.zip"
+if exist "%MAP_TEMP_ZIP%" del /f /q "%MAP_TEMP_ZIP%" >nul 2>&1
+for %%I in ("%MAP_WORK_DIR%") do set "_PS_MAP_DIR=%%~fI"
+for %%I in ("%MAP_TEMP_ZIP%") do set "_PS_MAP_FILE=%%~fI"
+powershell -NoProfile -Command "Set-StrictMode -Version Latest; Set-Location -LiteralPath \"%_PS_MAP_DIR%\"; Compress-Archive -Path * -DestinationPath \"%_PS_MAP_FILE%\" -Force"
 set MAP_PACK_RC=%ERRORLEVEL%
-popd
+set "_PS_MAP_DIR="
+set "_PS_MAP_FILE="
+if %MAP_PACK_RC% EQU 0 if exist "%MAP_TEMP_ZIP%" move /Y "%MAP_TEMP_ZIP%" "%MAP_WORK_FILE%" >nul
+set "MAP_TEMP_ZIP="
 if %MAP_PACK_RC% NEQ 0 goto maprepackfailed
 
 if not exist "%MAP_WORK_FILE%" goto nomap
