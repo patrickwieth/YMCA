@@ -13,10 +13,12 @@ using System;
 using System.Linq;
 using OpenRA.Mods.CA.Traits;
 using OpenRA.Mods.CA.Tooltips;
+using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
 using OpenRA.Mods.Common.Warheads;
 using OpenRA.Primitives;
+using OpenRA.Traits;
 using OpenRA.Widgets;
 
 namespace OpenRA.Mods.CA.Widgets.Logic
@@ -26,6 +28,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		static readonly Color StrengthsTextColor = Color.FromArgb(0x33, 0xDD, 0x33);
 		static readonly Color WeaknessesTextColor = Color.FromArgb(0xEE, 0x55, 0x55);
 		static readonly Color AttributesTextColor = Color.FromArgb(0xFF, 0xFF, 0x00);
+		static readonly Damage PreviewDamage = new Damage(100);
 
 		readonly World world;
 		int selectionHash;
@@ -121,7 +124,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			var nameSize = font.Measure(name);
 
-			armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, armorTypeIcon, actor.Info);
+			armorTypeLabel = GetArmorTypeLabel(armorTypeLabel, armorTypeIcon, actor);
 			var tooltipExtras = actor.TraitsImplementing<TooltipExtras>().FirstOrDefault(Exts.IsTraitEnabled);
 
 			if (tooltipExtras != null)
@@ -154,11 +157,26 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						var dmgWarhead = weapon.Warheads.OfType<DamageWarhead>().FirstOrDefault();
 						if (dmgWarhead != null)
 						{
-							var fireRate = (weapon.Burst > 0 ? weapon.Burst : 1)*25.0 / weapon.ReloadDelay;
-							var damage = dmgWarhead.Damage / 100;
-							var range = (float)weapon.Range.Length/1024;
-							versusLabel.Text += "\\nDamage/s: "+(int)(damage*fireRate)+" - ";
-							versusLabel.Text += "Range: "+range.ToString("#.##")+"\\n\\nEffective versus:";
+							var baseDamage = armament.Info.Damage ?? dmgWarhead.Damage;
+							var firepowerModifiers = actor.TraitsImplementing<IFirepowerModifier>()
+								.Select(m => m.GetFirepowerModifier(armament.Info.Name)).ToArray();
+							var modifiedDamage = Util.ApplyPercentageModifiers(baseDamage, firepowerModifiers);
+							var reloadModifiers = actor.TraitsImplementing<IReloadModifier>()
+								.Select(m => m.GetReloadModifier(armament.Info.Name)).ToArray();
+							var baseReload = armament.Info.ReloadDelay ?? weapon.ReloadDelay;
+							var modifiedReload = Util.ApplyPercentageModifiers(baseReload, reloadModifiers);
+							if (modifiedReload <= 0)
+								modifiedReload = 1;
+							var burstCount = weapon.Burst > 0 ? weapon.Burst : 1;
+							var fireRate = burstCount * 25.0 / modifiedReload;
+							var dps = (int)Math.Round((modifiedDamage / 100f) * fireRate);
+							var baseRange = (armament.Info.Range ?? weapon.Range).Length;
+							var rangeModifiers = actor.TraitsImplementing<IRangeModifier>()
+								.Select(m => m.GetRangeModifier()).ToArray();
+							var modifiedRange = Util.ApplyPercentageModifiers(baseRange, rangeModifiers);
+							var range = modifiedRange / 1024f;
+							versusLabel.Text += "\\nDamage/s: " + dps + " - ";
+							versusLabel.Text += "Range: " + range.ToString("#.##") + "\\n\\nEffective versus:";
 							if (dmgWarhead.Versus.ContainsKey("None")) {
 								versusNoneLabel.Text += "Infantry: ";
 								versusNoneLabel.TextColor = Color.LightSalmon;
@@ -345,14 +363,18 @@ Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
 			*/
 		}
 
-		LabelWidget GetArmorTypeLabel(LabelWidget armorTypeLabel, ImageWidget armorTypeIcon, ActorInfo actor)
+		LabelWidget GetArmorTypeLabel(LabelWidget armorTypeLabel, ImageWidget armorTypeIcon, Actor actor)
 		{
-			var armor = actor.TraitInfos<ArmorInfo>().FirstOrDefault();
+			var armor = actor.Info.TraitInfos<ArmorInfo>().FirstOrDefault();
 			armorTypeLabel.Text = armor != null ? armor.Type : "";
 
 			// We also display Health in addition
-			var health = actor.TraitInfos<HealthInfo>().FirstOrDefault();
-			var healthText = health != null ? " - HP: "+health.HP/100 : "";
+			var healthInfo = actor.Info.TraitInfos<HealthInfo>().FirstOrDefault();
+			var healthTrait = actor.TraitOrDefault<Health>();
+			var baseHp = healthTrait?.MaxHP ?? healthInfo?.HP ?? 0;
+			var effectiveHp = CalculateEffectiveMaxHp(actor, baseHp);
+			var healthDisplay = baseHp > 0 ? Math.Max(1, (int)Math.Round(effectiveHp / 100f)) : 0;
+			var healthText = baseHp > 0 ? " - HP: " + healthDisplay : "";
 
 			switch (armorTypeLabel.Text)
 			{
@@ -403,6 +425,28 @@ Color GetEffectiveLabelColor(int effectValue, int neutralValue) {
 			}
 
 			return armorTypeLabel;
+		}
+
+		static float CalculateEffectiveMaxHp(Actor actor, int baseHp)
+		{
+			if (baseHp <= 0)
+				return 0;
+
+			var playerActor = actor.Owner != null ? actor.Owner.PlayerActor : null;
+			var actorModifiers = actor.TraitsImplementing<IDamageModifier>().Select(dm => dm.GetDamageModifier(null, PreviewDamage));
+			var playerModifiers = playerActor != null
+				? playerActor.TraitsImplementing<IDamageModifier>().Select(dm => dm.GetDamageModifier(null, PreviewDamage))
+				: Enumerable.Empty<int>();
+
+			var combined = actorModifiers.Concat(playerModifiers).Where(m => m != 100).ToArray();
+			if (combined.Length == 0)
+				return baseHp;
+
+			var damagePercent = Util.ApplyPercentageModifiers(100, combined);
+			if (damagePercent <= 0)
+				return baseHp;
+
+			return baseHp * 100f / damagePercent;
 		}
 	}
 }
