@@ -409,6 +409,151 @@ Mammoth.Hover.PDL:
 	Valued:
 		Cost: 2200
 
+MEMP:
+	Inherits: ^Tank
+	Inherits: ^HighResShadow
+	Inherits: ^RobotDriver
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 260
+		IconPalette: chrometd
+		Prerequisites: gtek, vehicles, ~gdi, ~promotion.mobile_emp, ~!promotion.mobile_emp_volatile_reactor, ~!promotion.mobile_emp_stable_reactor
+		Description: Self destructs to disable nearby vehicles & structures.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1050
+	Tooltip:
+		Name: Mobile E.M.P
+		GenericName: Tank
+	Health:
+		HP: 75000
+	Mobile:
+		PauseOnCondition: !radarenabled || deployed || disabled || empdisable || being-warped
+		Voice: Move
+		Speed: 135
+	ChargingSelfDestruct:
+		DeployedCondition: deployed
+		ChargingDamageWeapon: EMPExplode
+		ChargingSequence: charging
+		ChargeDelay: 6
+		DetonationDelay: 42
+		DetonationWeapon: MEMP
+		ChargeSound: mobempcharge1.aud
+		Voice: Attack
+		PauseOnCondition: !radarenabled || empdisable || being-warped
+	ChronoshiftableWithSpriteEffect:
+		RequiresCondition: !being-warped && !deployed
+	WithIdleOverlay@charging:
+		RequiresCondition: deployed
+		Palette: tseffect
+		Offset: 0, 0, 200
+		Sequence: idle-overlay
+	WithIdleOverlay@chargingpower:
+		RequiresCondition: deployed
+		Palette: tseffect-ignore-lighting-alpha75
+		Offset: 0, 0, 0
+		Sequence: emp-overlay
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune
+	WithRangeCircle:
+		Color: 0000FF80
+		Range: 5c0
+	Voiced:
+		VoiceSet: RobotTankVoice
+	Power:
+		Amount: -1
+		RequiresCondition: !being-warped
+	WithDecoration@DISABLED:
+		Image: poweroff
+		Sequence: offline
+		Palette: chrome
+		RequiresCondition: disabled
+		Position: Center
+	ProximityExternalCondition@POWERSOUND:
+		Condition: disablesound
+		RequiresCondition: disabled || empdisable
+		AffectsParent: True
+		Range: 1c0
+		EnableSound: vrobon
+		DisableSound: vroboff
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
+
+MEMP.Volatile:
+	Inherits: MEMP
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 260
+		IconPalette: chrometd
+		Prerequisites: gtek, vehicles, ~gdi, ~promotion.mobile_emp_volatile_reactor
+		Description: Self destructs to disable nearby vehicles & structures.\nUpgraded with Volatile Reactor to EMP on destruction.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1150
+	Health:
+		HP: 55000
+	Tooltip:
+		Name: Mobile E.M.P (Volatile)
+	Mobile:
+		PauseOnCondition: deployed || disabled || empdisable || being-warped
+		Voice: Move
+		Speed: 115
+	FireWarheadsOnDeathCA:
+		Weapon: MEMP.smaller
+		EmptyWeapon: VisualExplodeHusk
+
+MEMP.Stable:
+	Inherits: MEMP
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 260
+		IconPalette: chrometd
+		Prerequisites: gtek, vehicles, ~gdi, ~promotion.mobile_emp_stable_reactor
+		Description: Releases EMP Wave to disable nearby vehicles & structures.\n\nUpgraded with Stable Reactor to allow multiple EMP Waves.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1150
+	Tooltip:
+		Name: Mobile E.M.P (Stable)
+	-ChargingSelfDestruct:
+	AmmoPool:
+		Name: explosion
+		Armaments: explosion
+		ReloadDelay: 0
+		InitialAmmo: 0
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+		FullSequence: pip-red
+	ReloadAmmoPoolCA:
+		Delay: 200
+		Count: 1
+		DelayAfterReset: 50
+		ShowSelectionBar: true
+		SelectionBarColor: ff00ff
+		AmmoPool: explosion
+	PeriodicExplosion:
+		Weapon: MEMP
+		RequiresCondition: deployed && ammo
+		AmmoPoolName: explosion
+		InitialDelay: 48
+	GrantConditionOnDeploy:
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		UndeployOnMove: True
+		DeploySounds: mobempcharge1.aud
+		Voice: Attack
+		PauseOnCondition: !radarenabled || empdisable || being-warped
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
 MSAR:
 	Inherits: ^Vehicle
 	Inherits: ^VoxelVehicle
@@ -1159,6 +1304,49 @@ MAMMOTHMK2:
 		Actor: mdrn.attached
 		RequiresCondition: dronepair
 
+SLNG:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^LightHoverVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLightAA
+	Valued:
+		Cost: 550
+	Tooltip:
+		Name: Slingshot
+	Buildable:
+		BuildPaletteOrder: 130
+		Prerequisites: gtek, ~promotion.slingshot
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast, lightly armoured anti-air unit.\n  Strong vs Aircraft\n Weak vs Infantry, Vehicles, Buildings
+	Mobile:
+		Speed: 133
+	Health:
+		HP: 13500
+	Turreted:
+		TurnSpeed: 80
+	Armament@PRIMARY:
+		Recoil: 10
+		Weapon: SlingshotAA
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 450,170,400, 450,-170,400
+		PauseOnCondition: empdisable || being-warped
+	AutoTarget:
+		ScanRadius: 12
+	AttackTurreted:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: false
+		OpportunityFire: False
+	WithSpriteTurret:
+	WithMuzzleOverlay:
+	FireWarheadsOnDeathCA:
+		Weapon: ArtilleryExplode
+		EmptyWeapon: UnitExplodeSmall
+		LoadedChance: 75
+
 VULC:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^HighResShadow
@@ -1279,5 +1467,202 @@ VULC:
 		Position: BottomLeft
 		RequiresSelection: true
 
+XO:
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResWalkerShadow
+	Inherits: ^TurretedWalker
+	Inherits: ^GDIWalkerUpgrades
+	Inherits: ^SensorEquipment
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLight
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrome
+		Prerequisites: weap.td, vehicles, ~talon
+		Description: Light scout-mech with a short-range laser\n  and a machine gun.
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Armor
+		Weaknesses: • Cannot attack Aircraft
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: X-O Powersuit
+	Health:
+		HP: 22000
+	Mobile:
+		TurnSpeed: 40
+		Speed: 95
+		Voice: Move
+	Passenger:
+		CustomPipType: red
+		Voice: Move
+	Voiced:
+		VoiceSet: GhostVoice
+	Armament@PRIMARY:
+		Weapon: M60mgXO
+		LocalOffset: 450,220,400
+		MuzzleSequence: muzzle
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: XOLaser
+		LocalOffset: 450,220,400
+	WithMuzzleOverlay:
 
+MDRN:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^FightingVehicle
+	Inherits: ^HoverVehicle
+	Inherits: ^RobotDriver
+	Inherits: ^PrioAntiInfantry
+	Tooltip:
+		Name: Mini Drone
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 105
+		Prerequisites: radar, vehicles, ~zocom
+		Description: Hovering drone with machine gun.\n  Attaches to certain vehicles to provide support and repairs.\n  Strong vs Infantry\n  Weak vs Vehicles, Buildings, Aircraft
+	Valued:
+		Cost: 300
+	Health:
+		HP: 15000
+	Mobile:
+		Speed: 80
+		TurnSpeed: 255
+		Locomotor: seal
+		Voice: Move
+		PauseOnCondition: !radarenabled || empdisable || being-warped || notmobile
+	Hovers:
+		InitialHeight: 0c64
+	Voiced:
+		VoiceSet: RobotTankVoice
+	Armament@PRIMARY:
+		Weapon: M60mgMD
+		LocalOffset: 172,0,0
+		MuzzleSequence: muzzle
+		PauseOnCondition: !radarenabled || empdisable || being-warped
+	WithMuzzleOverlay:
+	WithShadow:
+		Offset: 43, 128, -250
+		ZOffset: -129
+	TurretedFloating:
+		TurnSpeed: 18
+	Turreted@SECONDARY:
+		Turret: secondary
+		Offset: 0,0,72
+		TurnSpeed: 512
+	AttackTurreted:
+		Turrets: primary, secondary
+		Voice: Attack
+	WithSpriteTurret:
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune, MindControlImmune
+	-WithDamageOverlay:
+	-InfiltrateToAttach@MINIDRONE:
+	-Targetable@MINIDRONE:
+	-ExternalCondition@MINIDRONE:
+	AttachableTo:
+		-Limits:
+		-LimitConditions:
+	Attachable:
+		AttachableType: mdrn
+	Infiltrates:
+		Types: MiniDroneAttachable
+		ValidRelationships: Ally
 
+MDRN.Attached:
+	Inherits: MDRN
+	-Buildable:
+	-Infiltrates:
+	-Selectable:
+	-Tooltip:
+	Interactable:
+	RenderSprites:
+		Image: mdrn
+	-Mobile:
+	Hovers:
+		InitialHeight: 0c512
+	AttachedAircraft:
+		TurnSpeed: 18
+		Speed: 0
+		CanHover: true
+		Repulsable: false
+		CruiseAltitude: 1
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,Water,Tree,River
+	RevealsShroud:
+		Type: GroundPosition
+	RevealsShroud@GAPGEN:
+		Type: GroundPosition
+	HiddenUnderFog:
+		Type: GroundPosition
+	WithSpriteTurret:
+		Sequence: turret-attached
+	TurnOnIdleCA:
+		MinDelay: 25
+		MaxDelay: 75
+		TurnWhileAircraftPaused: true
+	Armament@PRIMARY:
+		Weapon: M60mgMD
+		LocalOffset: -300,-100,100
+		PauseOnCondition: !radarenabled
+	DamageMultiplier@ATTACHED:
+		Modifier: 15
+	Attachable:
+	ChangesHealth:
+		PercentageStep: 2
+		Delay: 25
+		StartIfBelow: 100
+		DamageCooldown: 50
+	-ChronoshiftableWithSpriteEffect:
+
+GDRN:
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^RobotDriver
+	Inherits: ^SensorEquipment
+	Inherits: ^PrioAntiHeavy
+	RenderSprites:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 22
+		IconPalette: chrome
+		Prerequisites: vehicles, ~zocom
+		Description: Fast scout & anti-tank vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Vehicles\n  Weak vs Infantry, Buildings, Defenses, Aircraft
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Scout Drone
+	Health:
+		HP: 17000
+	Mobile:
+		TurnSpeed: 40
+		Speed: 134
+		PauseOnCondition: !radarenabled || disabled || empdisable || being-warped
+		Voice: Move
+	GrantCondition@power:
+		Condition: radarenabled
+		RequiresCondition: !lowpower
+	GrantConditionOnPowerState@LOWPOWER:
+		Condition: lowpower
+		ValidPowerStates: Low, Critical
+	Turreted:
+		TurnSpeed: 40
+		Offset: 0,0,0
+	AttackFrontal:
+		Armaments: primary
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+		FacingTolerance: 0
+	Armament:
+		Weapon: GuardianDroneGun
+		LocalOffset: 500,0,200
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	Voiced:
+		VoiceSet: RobotTankVoice
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune, MindControlImmune
+	DetectCloaked:
+		Range: 6c0
+		DetectionTypes: Cloak, Thief, AirCloak
+		RequiresCondition: !(empdisable || being-warped)

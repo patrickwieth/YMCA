@@ -103,6 +103,38 @@ PCAN:
 	Voiced:
 		VoiceSet: PrismVoice
 
+CRYO:
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	RenderSprites:
+	Valued:
+		Cost: 1150
+	Tooltip:
+		Name: Cryo Launcher
+	Buildable:
+		BuildPaletteOrder: 170
+		Prerequisites: radar, vehicles, ~allies, ~promotion.cryo_launcher
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Long-range support artillery that slows enemies\nand makes them take more damage.\n  Strong vs Infantry, Vehicles, Buildings\n  Weak vs Aircraft
+	Mobile:
+		Speed: 82
+		TurnSpeed: 24
+		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead
+	Health:
+		HP: 32000
+	AttackTurreted:
+	Turreted:
+		TurnSpeed: 8
+	Armament:
+		Weapon: CryoMissile
+		LocalOffset: 300,100,300, 300,-100,300
+	WithSpriteTurret:
+	FireWarheadsOnDeathCA:
+		Weapon: CryoExplosion
+
 CTNK:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^VoxelVehicle
@@ -797,8 +829,3 @@ BATF.AI:
 	Turreted@TERTIARY:
 	Mobile:
 		PauseOnCondition: being-captured || empdisable || being-warped
-
-
-
-
-

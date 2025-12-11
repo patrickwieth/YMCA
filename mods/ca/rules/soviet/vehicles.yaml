@@ -127,6 +127,130 @@ Devil_Tank:
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
 
+BTR:
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^Transport
+	Inherits: ^PrioAntiHeavyAA
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 45
+		Prerequisites: barr, vehicles, ~soviet, ~promotion.btr
+		Description: Tough infantry transport.\n  Can attack Aircraft.\n  Strong vs Light Armor, Aircraft\n  Weak vs Tanks
+	Valued:
+		Cost: 850
+	Tooltip:
+		Name: Armored Personnel Carrier (BTR)
+	Health:
+		HP: 33000
+	Mobile:
+		Speed: 100
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
+	Turreted:
+		TurnSpeed: 80
+		Offset: 150,0,0
+	Armament@1:
+		Weapon: IFVRockets
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: !full
+	Armament@2AA:
+		Name: secondary
+		Weapon: IFVRocketsAA
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: !full
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	WithSpriteTurret@TUR:
+		Sequence: turret
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		LoadingCondition: notmobile
+		LoadedCondition: cargo
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+BTR.Surveillance:
+	Inherits: ^Vehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^SensorEquipment
+	Inherits: ^MobileDeployableRadar
+	Inherits: ^Transport
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 45
+		Prerequisites: barr, vehicles, ~soviet, ~promotion.surveillance_btr
+		Description: Tough infantry transport.\n  Can detect stealth units.\n  Is unarmed.
+	Valued:
+		Cost: 750
+	Tooltip:
+		Name: Surveillance BTR
+	Health:
+		HP: 28000
+	Mobile:
+		Speed: 100
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: 0,0,256
+		PauseOnCondition: empdisable || being-warped
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		LoadingCondition: notmobile
+		LoadedCondition: cargo
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithProductionIconOverlay@Eye:
+		Types: Eye
+
+NonaSVK:
+	Inherits: BTR
+	Inherits: ^PrioArtillery
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 45
+		Prerequisites: vehicles, ~soviet, ~promotion.nona_svk
+		Description: Light Artillery.\n  Highly mobile artillery unit.\n  Strong vs Light Armor, Infantry, Buildings \n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Nona SVK
+	Health:
+		HP: 15000
+	Mobile:
+		Speed: 110
+		TurnSpeed: 60
+	-Cargo:
+	-WithCargoPipsDecoration:
+	Turreted:
+		TurnSpeed: 80
+		Offset: 0,0,0
+	Armament@1:
+		Weapon: 155mm.Nona
+		LocalOffset: 392,0,276
+		MuzzleSequence: muzzle
+	-Armament@2AA:
+	WithProductionIconOverlay@Shell:
+		Types: Shell
+
 Chem_Sprayer:
 	Inherits: ^FightingVehicle
 	Inherits: ^VoxelVehicle
@@ -2205,5 +2329,3 @@ Tsar_Tank:
 		UndeployOnPickup: true
 	FirepowerMultiplier@tesla_damage:
 		RequiresCondition: tesla_damage && deployed
-
-
