@@ -976,13 +976,22 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 		public static void SetupGameWidget(Widget parent, Session.Slot s, Session.Client c,
 			Dictionary<string, LobbyFaction> factions)
 		{
+			string GetGameId()
+			{
+				if (factions.TryGetValue(c.Faction, out var faction))
+					return faction.Game;
+
+				return factions.Values.FirstOrDefault(f => f.InternalName == c.Faction)?.Game ?? string.Empty;
+			}
+
 			var gameName = parent.Get<LabelWidget>("GAMENAME");
-			gameName.GetText = () => /*factions[c.Faction].Game*/ "";
+			gameName.GetText = GetGameId;
 			var gameFlag = parent.Get<ImageWidget>("GAMEFLAG");
 
-			gameFlag.GetImageName = () => factions.Values.First(f => f.InternalName == c.Faction).Game;
+			gameFlag.GetImageName = GetGameId;
 			gameFlag.GetImageCollection = () => "games";
 		}
+
 
 		public static void ShowGameDropDown(DropDownButtonWidget dropdown, Session.Client client,
 			OrderManager orderManager, Dictionary<string, LobbyFaction> factions)
