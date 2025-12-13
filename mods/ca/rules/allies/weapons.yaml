@@ -1,4 +1,53 @@
-﻿BATF.Repair:
+LOSAT:
+	Inherits: ^AntiGroundMissile
+	Inherits: ^MissileAP
+	ReloadDelay: 250
+	Burst: 4
+	BurstDelays: 1
+	Range: 6c0
+	Projectile: MissileCA
+		Speed: 298
+		HorizontalRateOfTurn: 40
+		RangeLimit: 7c204
+		LockOnProbability: 80
+		LockOnInaccuracy: 256
+	Warhead@1Dam: SpreadDamage
+		Damage: 6000
+
+JeepMissileAA:
+	Inherits: ^AntiAirMissile
+	ReloadDelay: 250
+	Range: 13c0
+	Burst: 8
+	BurstDelays: 2
+	InvalidTargets: Underwater
+	Projectile: MissileCA
+		RangeLimit: 17c0
+		Arm: 3
+		Inaccuracy: 0
+		HorizontalRateOfTurn: 20
+		Speed: 550
+		Image: DRAGON
+		-TrailImage:
+		ContrailLength: 8
+		PointDefenseType: Missile
+		LockOnProbability: 95
+		LockOnInaccuracy: 256
+		MinimumLaunchAngle: 200
+		MaximumLaunchAngle: 200
+		MinimumLaunchSpeed: 100
+		MaximumLaunchSpeed: 100
+		Acceleration: 0c40
+	Warhead@1Dam: SpreadDamage
+		Range: 0, 0c64, 0c256, 3c0
+		Falloff: 100, 100, 20, 10
+		ValidTargets: Air
+		Damage: 2000
+	Warhead@3Eff: CreateEffect
+		Explosions: med_explosion_air
+		ImpactActors: false
+
+BATF.Repair:
 	Inherits: Repair
 	Range: 7c512
 	ValidTargets: Repair, RepairInAir
@@ -173,4 +222,3 @@ WeatherCloud.Thor:
 		Explosions: weathercloud1, weathercloud2, weathercloud1f, weathercloud2f
 		ExplosionPalette: ra2unit
 		ValidTargets: Ground, Air, Water
-
