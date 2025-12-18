@@ -68,6 +68,139 @@ A10.bomber:
 		PilotActor: mercenary
 	RejectsOrders:
 
+YF23.Bomber:
+	Inherits: ^Plane
+	Inherits: ^TDAircraft
+	Inherits: ^BiologicalPilot
+	Inherits: ^AutoTargetAir
+	Tooltip:
+		Name: Black Widow
+	Health:
+		HP: 36000
+	Armament:
+		Weapon: WidowAA
+		LocalOffset: 0,-256,-43, 0,256,-43
+		PauseOnCondition: !ammo
+	AttackBomberCA:
+	AttackAircraft:
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		CruiseAltitude: 2560
+		InitialFacing: 192
+		TurnSpeed: 16
+		IdleTurnSpeed: 1
+		Speed: 240
+		RepulsionSpeed: 40
+		MaximumPitch: 56
+		MoveIntoShroud: False
+	AmmoPool:
+		Ammo: 10
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 250
+		Count: 2
+		ResetOnFire: true
+	-Selectable:
+	Interactable:
+	-Voiced:
+	RenderSprites:
+		Image: yf23
+	RejectsOrders:
+	Contrail@1:
+		Offset: -325,483,0
+	Contrail@2:
+		Offset: -325,-483,0
+	Contrail@AB1:
+		Offset: -400,-80,-10
+		StartColorUsePlayerColor: false
+		ZOffset: -512
+		StartColor: cc550080
+		TrailLength: 10
+	Contrail@AB2:
+		Offset: -400,80,-10
+		StartColorUsePlayerColor: false
+		ZOffset: -512
+		StartColor: cc550080
+		TrailLength: 10
+	SpawnActorOnDeath:
+		Actor: YF23.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: YF23.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
+	LeavesTrails:
+		Offsets: -853,0,171
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	GivesExperience:
+		Experience: 1000
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+POD:
+	Inherits: ^ExistsInWorld
+	RenderSprites:
+		Image: pod2
+		PlayerPalette: overlayplayertd
+	Valued:
+		Cost: 10
+	Tooltip:
+		Name: Drop Pod
+	Health:
+		HP: 7200
+	Aircraft:
+		TurnSpeed: 80
+		Speed: 300
+		CruiseAltitude: 8000
+		MaximumPitch: 110
+		VTOL: true
+		Repulsable: False
+		LandableTerrainTypes: Clear,Road,Rough,Ore,Gems,Tiberium,BlueTiberium,Water,Tree,River
+	HiddenUnderFog:
+		Type: CenterPosition
+	ClassicFacingBodyOrientation:
+	WithFacingSpriteBody:
+	QuantizeFacingsFromSequence:
+	HitShape:
+	Interactable:
+	WithShadow:
+	LeavesTrails:
+		Image: smokey2
+		Palette: tseffect-ignore-lighting-alpha75
+		MovingInterval: 3
+		StationaryInterval: 3
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+	FallsToEarth:
+		MaximumSpinSpeed: 0
+		Moves: True
+		Velocity: 113
+		Explosion: DropPodVisual
+	SpawnActorOnDeath:
+		Actor: mercenary
+
+POD2:
+	Inherits: POD
+	SpawnActorOnDeath:
+		Actor: grenadier
+
+POD3:
+	Inherits: POD
+	SpawnActorOnDeath:
+		Actor: rocket_mercenary
+
+
 Stealth_Fighter:
 	Inherits: ^Plane
 	Inherits: ^BomberPlane
@@ -658,5 +791,3 @@ dummy.ionstrike:
 		InitialDelay: 1
 	KillsSelf:
 		Delay: 10
-
-

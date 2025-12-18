@@ -800,6 +800,97 @@ CARR:
 		DetectionTypes: Underwater
 		Range: 10c0
 
+HORN:
+	Inherits: ^Plane
+	Inherits: ^TDAircraft
+	Inherits: ^BiologicalPilot
+	Inherits: ^PrioAntiHeavy
+	Valued:
+		Cost: 50
+	Tooltip:
+		Name: Hornet
+	Health:
+		HP: 12500
+	RevealsShroud:
+		Range: 2c0
+		MinRange: 1c0
+		Type: GroundPosition
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 1c0
+		Type: GroundPosition
+	Armament:
+		Weapon: HellfireAG.Horn
+		PauseOnCondition: !ammo
+	AttackAircraft:
+		FacingTolerance: 80
+		PersistentTargeting: false
+		OpportunityFire: false
+		PauseOnCondition: empdisable || being-warped
+	Aircraft:
+		CruiseAltitude: 1c513
+		InitialFacing: 192
+		TurnSpeed: 12
+		Speed: 240
+		MaximumPitch: 56
+		CanHover: False
+		CanSlide: False
+		RepulsionSpeed: 40
+		Repulsable: False
+		IdealSeparation: 0c256
+		VTOL: true
+		TakeoffSounds: mtoff1.aud, mtoff2.aud
+		LandingSounds: mland1.aud, mland2.aud
+	Rearmable:
+		RearmActors: carr
+	AmmoPool:
+		Ammo: 6
+		AmmoCondition: ammo
+	WithAmmoPipsDecoration:
+		PipCount: 6
+		Position: BottomLeft
+		Margin: 4, 3
+		RequiresSelection: true
+	RejectsOrders:
+	SpawnActorOnDeath:
+		Actor: HORN.Husk
+		RequiresCondition: ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@Empty:
+		Actor: HORN.Husk.empty
+		RequiresCondition: !ammo && !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: HORN.Husk.EMP
+		RequiresCondition: ammo && empdisable && !being-warped
+	SpawnActorOnDeath@EmptyEMP:
+		Actor: HORN.Husk.empty.EMP
+		RequiresCondition: !ammo && empdisable && !being-warped
+	-EjectOnDeath:
+	-Selectable:
+	Interactable:
+	-ActorLostNotification:
+	LeavesTrails:
+		Offsets: -253,0,171
+		MovingInterval: 2
+		Image: smokey
+		StationaryInterval: 2
+		SpawnAtLastPosition: False
+		TrailWhileStationary: True
+		Type: CenterPosition
+		RequiresCondition: enable-smoke
+	CarrierSlave:
+		LandingDistance: 8c0
+	Contrail@1:
+		Offset: -432,0,0
+		StartColor: cc550080
+		TrailLength: 10
+	-Contrail@2:
+	DetectCloaked:
+		DetectionTypes: Underwater
+		Range: 6c0
+	GrantConditionOnDamageState@SmokeTrail:
+		Condition: enable-smoke
+
+
 MSUB:
 	Inherits: ^Submarine
 	Inherits@AUTOTARGET: ^AutoTargetNavalAssaultMove
@@ -958,5 +1049,3 @@ chasub:
 		VoiceSet: CHNukeCannonVoice
 	RenderSprites:
 		PlayerPalette: overlayplayertd
-
-

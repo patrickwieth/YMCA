@@ -1292,9 +1292,9 @@ infantry-medic =
 
         Unarmed
 
-### infantry-n5
+### infantry-chemwarrior
 
-infantry-n5 =
+infantry-chemwarrior =
     .buildable-description =
         Advanced general-purpose infantry.
 

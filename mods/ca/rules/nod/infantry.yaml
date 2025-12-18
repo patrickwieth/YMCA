@@ -542,6 +542,85 @@ cyborgelite.range:
 		Weapon: cycannon.Range
 		LocalOffset: 0,0,555
 
+Chemwarrior:
+	Inherits: ^Soldier
+	Inherits: ^PrioAntiReflector
+	Inherits: ^GainsExperience
+	Inherits: ^BioDamageImmune
+	Buildable:
+		Queue: Infantry
+		BuildAtProductionType: Soldier
+		BuildPaletteOrder: 70
+		Prerequisites: ~bio.nod, ~hand, ~promotion.advanced_infantry_training
+		IconPalette: chrometd
+		Description: Advanced general-purpose infantry.\n  Strong vs all Ground Units
+	Valued:
+		Cost: 200
+	Tooltip:
+		Name: Chemical Warrior
+	UpdatesPlayerStatistics:
+		AddToArmyValue: true
+	Health:
+		HP: 8000
+	WithDeathAnimation:
+		DeathSequencePalette: playertd
+	Armament:
+		Weapon: Chemspray
+		LocalOffset: 341,0,254
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect-ignore-lighting-alpha85
+	Armament@Garrison:
+		Name: mounted
+		Weapon: ChemsprayE
+		LocalOffset: 341,0,254
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect-ignore-lighting-alpha85
+	TakeCover:
+		ProneOffset: 160,0,-254
+	Mobile:
+		Speed: 73
+		Voice: Move
+	AttackFrontal:
+		Voice: Attack
+		PauseOnCondition: being-warped
+		FacingTolerance: 0
+	AttackMove:
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Guard:
+		Voice: Move
+	Voiced:
+		VoiceSet: CyborgVoice
+	-Crushable:
+	GrantConditionOnTerrain@THEAL:
+		Condition: tibheal
+		TerrainTypes: Tiberium, BlueTiberium
+	WithDecoration@THEAL:
+		Image: pips
+		Sequence: medic
+		Palette: temptd
+		Position: BottomLeft
+		RequiresCondition: tibheal
+	WithMuzzleOverlay:
+	FireWarheadsOnDeathCA:
+		Weapon: UnitExplodeChemSmall
+		EmptyWeapon: UnitExplodeChemSmall
+		Chance: 33
+		DamageSource: Killer
+		RequiresCondition: !being-warped
+	Targetable:
+		TargetTypes: Ground, Infantry, Disguise, ChaosImmune
+
+ChemwarriorR1:
+	Inherits: Chemwarrior
+	RenderSprites:
+		Image: chemwarrior
+	-Buildable:
+	UpdatesPlayerStatistics:
+		OverrideActor: chemwarrior
+
+
 Cyborg_Commando:
 	Inherits: ^Soldier
 	-TakeCover:
