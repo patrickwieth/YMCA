@@ -106,7 +106,18 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 		readonly string playerLeftSound;
 		readonly string lobbyOptionChangedSound;
 
-		bool MapIsPlayable => (mapStatus & Session.MapStatus.Playable) == Session.MapStatus.Playable;
+		bool MapIsPlayable
+		{
+			get
+			{
+				if ((mapStatus & Session.MapStatus.Playable) == Session.MapStatus.Playable)
+					return true;
+
+				return map != null && map.Status == MapStatus.Available;
+			}
+		}
+
+		bool MapAllowsConfiguration => MapIsPlayable;
 
 		// Listen for connection failures
 		void ConnectionStateChanged(OrderManager om, string password, NetworkConnection connection)
@@ -224,7 +235,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 			var gameStarting = false;
 			Func<bool> configurationDisabled = () => !Game.IsHost || gameStarting ||
 			                                         panel == PanelType.Kick || panel == PanelType.ForceStart ||
-			                                         !MapIsPlayable ||
+			                                         !MapAllowsConfiguration ||
 			                                         orderManager.LocalClient == null ||
 			                                         orderManager.LocalClient.IsReady;
 
@@ -590,7 +601,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 
 		bool OptionsTabDisabled()
 		{
-			return !MapIsPlayable || panel == PanelType.Kick || panel == PanelType.ForceStart;
+			return !MapAllowsConfiguration || panel == PanelType.Kick || panel == PanelType.ForceStart;
 		}
 
 		public override void Tick()

@@ -1,3 +1,41 @@
+HMMV:
+	Inherits: ^FightingVehicleTurreted
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^SensorEquipment
+	Inherits: ^PrioAntiInfantry
+	RenderSprites:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: weap.td, vehicles, ~eagle
+		Description: Fast scout & anti-infantry vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 400
+	Tooltip:
+		Name: Hum-Vee
+	Health:
+		HP: 15000
+	Mobile:
+		TurnSpeed: 80
+		Speed: 157
+	Turreted:
+		TurnSpeed: 80
+		Offset: -85,0,128
+	Armament:
+		Weapon: M60mgTD
+		LocalOffset: 171,0,85
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	AutoTarget:
+	IgnoresDisguise:
+	DetectCloaked:
+		Range: 6c0
+		DetectionTypes: Cloak, Thief
+		RequiresCondition: !(empdisable || being-warped)
+
 MTNK:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^TDVehicleSprite

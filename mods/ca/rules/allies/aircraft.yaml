@@ -1,49 +1,4 @@
-﻿Raptor:
-	Inherits: ^VoxelJet
-	RenderVoxels:
-		Scale: 1
-	Contrail@1:
-		Offset: -350,-550,-50
-	Contrail@2:
-		Offset: -350,550,-50
-	Inherits: ^BiologicalPilot
-	Inherits: ^PrioAntiHeavyAA
-	Inherits: ^FightingPlane
-	Inherits: ^PlaneScoutVision
-	Inherits: ^RearmableAircraft
-	Buildable:
-		Queue: Aircraft
-		BuildAtProductionType: Plane
-		BuildPaletteOrder: 50
-		IconPalette: chrome
-		Prerequisites: ~afld.allies, aircraft, ~allies, ~promotion.raptor, ~disabled
-		Description: Fastest Fighter Jet armed with powerful Air-to-Air missiles.
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: F-22
-	TooltipExtras:
-		Strengths: • Strong vs Aircraft
-		Weaknesses: • Weak vs Ground
-		Attributes: • Fastest Fighter Jet
-	Health:
-		HP: 16000
-	Armament:
-		Weapon: Nike.Raptor
-		LocalOffset: 0,213,-85, 0,-213,-85
-		PauseOnCondition: !ammo || being-warped
-	AttackAircraft:
-		FacingTolerance: 512
-	Aircraft:
-		Speed: 275
-	AmmoPool:
-		Ammo: 6
-	WithAmmoPipsDecoration:
-		PipCount: 3
-	SpawnActorOnDeath:
-		Actor: raptor.Husk
-		RequiresCondition: !being-warped
-
+﻿
 Eurofighter:
 	Inherits: ^VoxelJet
 	RenderVoxels:
@@ -83,7 +38,7 @@ Eurofighter:
 	AttackAircraft:
 		FacingTolerance: 512
 	Aircraft:
-		Speed: 275
+		Speed: 290
 	AmmoPool:
 		Ammo: 6
 	WithAmmoPipsDecoration:
@@ -91,6 +46,25 @@ Eurofighter:
 	SpawnActorOnDeath:
 		Actor: eurofighter.Husk
 		RequiresCondition: !being-warped
+
+Rafale:
+	Inherits: Eurofighter
+	RenderVoxels:
+		Scale: 1
+		Image: rafale
+	RenderSprites:
+		Image: rafale
+	Tooltip:
+		Name: Rafale
+	Buildable:
+		Prerequisites: ~afld.allies, aircraft, ~france, ~promotion.rafale
+	Health:
+		HP: 15000
+	Aircraft:
+		Speed: 280
+		TurnSpeed: 22
+	SpawnActorOnDeath:
+		Actor: rafale.Husk
 
 HARR:
 	Inherits: ^Helicopter

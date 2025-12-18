@@ -131,9 +131,87 @@ aircraft-seahawk-armed =
 ### commander-tree-commander-tree
 
 commander-tree-commander-tree =
-    .description = Upgrades the Tank Destroyer with a Point Laser Defense System to shoot down incoming projectiles.
-    .description-2 = Upgrades the Tank Destroyer with burst fire capabilities.
-    .description-3 = Equips the Tank Destroyer with Reflector Armor.
+	.description = Upgrades the Tank Destroyer with a Point Laser Defense System to shoot down incoming projectiles.
+	.description-2 = Upgrades the Tank Destroyer with burst fire capabilities.
+	.description-3 = Equips the Tank Destroyer with Reflector Armor.
+
+### commander-tree-promotion-infantry-doctrine
+
+commander-tree-promotion-infantry-doctrine =
+	.buildable-description =
+		Declares an infantry-focused doctrine that pours command points into squads, logistics, and Spec Ops support.
+		Sets the tone for subsequent promotion choices on the infantry branch.
+	.description =
+		Adopt an infantry doctrine to emphasize special forces, support teams, and battlefield control tools.
+		The purchase is permanent, so pick it when you intend to lean on infantry play.
+	.tooltipextras-strengths = Strengths: • Prioritizes infantry upgrades and special forces perks.
+	.tooltipextras-weaknesses = Weaknesses: • Leaves fewer points for armored or air doctrines.
+	.tooltipextras-attributes = Attributes: • Doctrine purchases are permanent, shaping the rest of the commander tree.
+
+### commander-tree-promotion-armored-doctrine
+
+commander-tree-promotion-armored-doctrine =
+	.buildable-description =
+		Commits your commander points to armored warfare, ensuring tanks and heavy vehicles get the earliest upgrades.
+		Ideal when France or Germany expect to win through superior steel.
+	.description =
+		Adopt an armored doctrine to funnel research and command time into Battle Fortresses, Chrono Tanks, and other vehicles.
+		It is a strategic choice meant to carry your army through the mid and late game.
+	.tooltipextras-strengths = Strengths: • Focuses future promotion slots on tank and vehicle enhancements.
+	.tooltipextras-weaknesses = Weaknesses: • Opportunity cost for infantry or aircraft investments.
+	.tooltipextras-attributes = Attributes: • Doctrine selections cannot be refunded once purchased.
+
+### commander-tree-promotion-airforce-doctrine
+
+commander-tree-promotion-airforce-doctrine =
+	.buildable-description =
+		Invests in an air superiority doctrine, paving the way for stronger fighters, strike craft, and transport support.
+		Best suited for commanders who plan to control the skies.
+	.description =
+		Lock your commander tree into an airforce doctrine to emphasize Harriers, Eurocopters, Hueys, and Aurora strikes.
+		The commitment informs every aircraft promotion you pick afterward.
+	.tooltipextras-strengths = Strengths: • Highlights aircraft-specific promotions and airstrike synergy.
+	.tooltipextras-weaknesses = Weaknesses: • Diverts command points away from ground-based bonuses.
+	.tooltipextras-attributes = Attributes: • Doctrine choice is permanent and sets expectations for later unlocks.
+
+### commander-tree-promotion-cryo-tech
+
+commander-tree-promotion-cryo-tech =
+	.buildable-description =
+		Funds cryogenic research so factories can field Cryo Launchers, Huey Cryo upgrades, and Eurocopters with frost warheads.
+		Slowing enemy columns makes them easier prey for the rest of your army.
+	.description =
+		Unlock advanced cryo technology to debuff enemy armor, freeze infantry, and create openings for your strike forces.
+		Cryo support pairs best with coordinated pushes that can capitalize on frozen targets.
+	.tooltipextras-strengths = Strengths: • Cryo munitions slow, debuff, and set up kills for supporting units.
+	.tooltipextras-weaknesses = Weaknesses: • Provides little direct answer to aircraft or highly armored structures.
+	.tooltipextras-attributes = Attributes: • Enables cryo variants across multiple chassis but demands high-tier tech and power.
+
+### commander-tree-promotion-chrono-tech
+
+commander-tree-promotion-chrono-tech =
+	.buildable-description =
+		Backs Allied chrono laboratories, unlocking teleporting assault platforms like the Chrono Tank and Chrono Prison.
+		Use it if you plan on bending the front line with hit-and-run tactics.
+	.description =
+		Invest in chrono technology to field units that bypass defenses, relocate instantly, and abduct priority targets.
+		The research path is expensive but offers unparalleled battlefield control.
+	.tooltipextras-strengths = Strengths: • Teleportation allows surprise strikes and quick escapes from danger.
+	.tooltipextras-weaknesses = Weaknesses: • Chrono platforms are costly and vulnerable while their drives recharge.
+	.tooltipextras-attributes = Attributes: • High power consumption; best paired with robust infrastructure.
+
+### commander-tree-promotion-prism-tech
+
+commander-tree-promotion-prism-tech =
+	.buildable-description =
+		Authorizes advanced prism weaponry programs so you can pick between Prism Tanks, Cannons, and Blasters later in the tree.
+		Energy artillery is perfect for eliminating hardened defenses.
+	.description =
+		Unlock the prism technology branch to wield long-range energy weapons that ignore point-defense lasers and melt light armor.
+		Each Allied nation can then specialize in its preferred prism chassis.
+	.tooltipextras-strengths = Strengths: • Energy artillery devastates structures and light vehicles while ignoring PD lasers.
+	.tooltipextras-weaknesses = Weaknesses: • Reflector armor and massed aircraft can still counter prism columns.
+	.tooltipextras-attributes = Attributes: • Grants access to multiple prism chassis, each with unique roles.
 
 ### commander-tree-promotion-aurora
 
@@ -407,11 +485,35 @@ commander-tree-promotion-mirage-reflector =
     .tooltipextras-strengths = Strengths: • Reflector plating negates energy weapons aimed at mirages.
     .tooltipextras-weaknesses = Weaknesses: • Still vulnerable to conventional shells.
 
+### commander-tree-promotion-mirage-burst
+
+commander-tree-promotion-mirage-burst =
+	.buildable-description =
+		Rips out the stock autoloader and installs a burst-fire mechanism that dumps volleys the instant the Mirage decloaks.
+		The upgrade favors aggressive ambushes over subtlety.
+	.description =
+		Refit Mirage Tanks with burst fire controls so they can delete high-value targets the moment they reveal themselves.
+		It is mutually exclusive with the toughness refit, so pick the role you need most.
+	.tooltipextras-strengths = Strengths: • Alpha strike can erase heavy armor before the enemy can respond.
+	.tooltipextras-weaknesses = Weaknesses: • Keeps the tank revealed longer and blocks the survivability upgrade.
+
+### commander-tree-promotion-mirage-toughness
+
+commander-tree-promotion-mirage-toughness =
+	.buildable-description =
+		Bolts on extra plating, dampeners, and cloak stabilizers so Mirage Tanks survive longer once they open fire.
+		Trade raw damage for reliability during protracted engagements.
+	.description =
+		Add heavy armor reinforcements to Mirage Tanks to keep them alive through artillery splashes and focused retaliation.
+		This upgrade replaces the burst refit, emphasizing survivability over alpha damage.
+	.tooltipextras-strengths = Strengths: • Extra durability lets mirages stay cloaked or disengage after being spotted.
+	.tooltipextras-weaknesses = Weaknesses: • Provides no increase in firepower and forbids the burst option.
+
 ### commander-tree-promotion-prism-blaster
 
 commander-tree-promotion-prism-blaster =
-    .buildable-description =
-        Enables to build the Prism Blaster.
+	.buildable-description =
+		Enables to build the Prism Blaster.
         Has less range than the Prism Tank, but does split its beam to more targets.
         It is stronger vs. large armies and less effective against base defenses and single targets.
     .description =
@@ -981,6 +1083,17 @@ commander-tree-promotion-tank-destroyer-burst =
     .tooltipextras-strengths = Strengths: • Burst volley annihilates heavy armor instantly.
     .tooltipextras-weaknesses = Weaknesses: • Long reload leaves it helpless between shots.
 commander-tree-promotion-tank-destroyer-reflector =
-    .description = Equips the Tank Destroyer with Reflector Armor.
-    .tooltipextras-strengths = Strengths: • Reflector armor shrugs off lasers and ion cannons.
-    .tooltipextras-weaknesses = Weaknesses: • Still vulnerable to barrages of kinetic shells.
+	.description = Equips the Tank Destroyer with Reflector Armor.
+	.tooltipextras-strengths = Strengths: • Reflector armor shrugs off lasers and ion cannons.
+	.tooltipextras-weaknesses = Weaknesses: • Still vulnerable to barrages of kinetic shells.
+
+### commander-tree-promotion-tank-destroyer-toughness
+
+commander-tree-promotion-tank-destroyer-toughness =
+	.buildable-description =
+		Reinforces the Tank Destroyer hull with layered plating and shock absorbers so it can survive counter-battery fire.
+	.description =
+		Reroute upgrade efforts into armor kits that let Tank Destroyers stay on the field longer.
+		The toughness refit is mutually exclusive with the burst option.
+	.tooltipextras-strengths = Strengths: • Extra HP keeps the TD alive through artillery, splash, and EMP bursts.
+	.tooltipextras-weaknesses = Weaknesses: • Does not increase damage and prevents taking the burst-fire upgrade.

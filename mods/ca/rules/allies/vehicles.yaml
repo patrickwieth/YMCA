@@ -1,3 +1,276 @@
+HARV:
+	Inherits: ^Tank
+	Inherits: ^Harvester
+	-Crushable:
+	-Carryable:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 10
+		Prerequisites: ~proc, vehicles, ~allies, ~!orep
+		Description: Collects Ore, Gems and Tiberium for processing.\n  Unarmed
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Ore Truck
+		GenericName: Harvester
+	Selectable:
+		Priority: 7
+	Health:
+		HP: 75000
+	Mobile:
+		Speed: 56
+		Locomotor: heavywheeled
+	SpawnActorOnDeath:
+		Actor: HARV.EmptyHusk
+		RequiresCondition: !being-warped && !orep-upgrade
+	WithFacingSpriteBody:
+	GrantConditionOnPrerequisite@OREPUPGRADE:
+		Prerequisites: orep
+		Condition: orep-upgrade
+	KillsSelf@OREPUPGRADE:
+		Delay: 1
+		RemoveInstead: true
+		RequiresCondition: orep-upgrade
+	GrantCondition@WARPOUT:
+		Condition: being-warped
+		RequiresCondition: orep-upgrade
+	PeriodicExplosion@WARPOUT:
+		Weapon: HarvSwap
+		RequiresCondition: orep-upgrade
+
+HARV.Chrono:
+	Inherits: HARV
+	Inherits: ^HighResShadow
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 10
+		Prerequisites: ~proc, ~orep, vehicles, ~allies
+		Description: Collects Ore, Gems and Tiberium for processing.\n  Unarmed\n  Special Ability: Teleport
+	Valued:
+		Cost: 1400
+	RenderSprites:
+		Image: charv
+	Tooltip:
+		Name: Chrono Miner
+		GenericName: Harvester
+	Mobile:
+		Speed: 56
+		Locomotor: heavywheeled
+		Voice: Move
+	Harvester:
+		Capacity: 20
+		PipCount: 4
+		HarvestVoice: Harvest
+		DeliverVoice: Deliver
+	ChronoResourceDelivery:
+		Image: chrono
+		Palette: ra2effect-ignore-lighting-alpha75
+		WarpInSequence: warpout
+		WarpOutSequence: warpout
+		WarpInSound: vchrtele.aud
+		WarpOutSound: ichrmova.aud
+	Voiced:
+		VoiceSet: ChronoMinerVoice
+	SpawnActorOnDeath:
+		Actor: HARV.Chrono.EmptyHusk
+		RequiresCondition: !being-warped
+	-GrantConditionOnPrerequisite@OREPUPGRADE:
+	-KillsSelf@OREPUPGRADE:
+	-GrantCondition@WARPOUT:
+	-PeriodicExplosion@WARPOUT:
+	DamageMultiplier@orep2:
+		RequiresCondition: orep2
+		Modifier: 60
+	GrantConditionOnPrerequisite@orep2:
+		Condition: orep2
+		Prerequisites: orep2
+
+MCV:
+	Inherits: ^Tank
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^MustBeDestroyed
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 300
+		Prerequisites: fix, vehicles, ~ra
+		Description: Deploys into another Construction Yard.\n  Unarmed
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Mobile Construction Vehicle
+	Selectable:
+		Priority: 4
+	Health:
+		HP: 75000
+	Mobile:
+		Speed: 56
+		Locomotor: heavywheeled
+	Transforms:
+		IntoActor: fact
+		Offset: -1,-1
+		Facing: 384
+		TransformSounds: placbldg.aud, build5.aud
+		NoTransformNotification: BuildingCannotPlaceAudio
+		PauseOnCondition: empdisable || being-warped
+	BaseBuilding:
+	SpawnActorOnDeath:
+		Actor: MCV.Husk
+		RequiresCondition: !being-warped
+	TransferTimedExternalConditionOnTransform:
+		Condition: invulnerability
+	-Crushable:
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	GrantConditionOnPrerequisite@NukularOpen:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned, global.nukular
+	TransformOnCondition:
+		IntoActor: MCV.Nukular
+		RequiresCondition: NukularOpen
+
+MCV.Nukular:
+	Inherits: MCV
+	Inherits: ^NukularConyard
+	-Buildable:
+	RenderSprites:
+		Image: MCV
+	Transforms:
+		IntoActor: fact.nukular
+
+
+MGG:
+	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 245
+		Prerequisites: atek, vehicles, ~allies
+		Description: Regenerates the shroud nearby, obscuring the area.\n  Unarmed
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Mobile Gap Generator
+	Health:
+		HP: 22000
+	Mobile:
+		Speed: 82
+	Carryable:
+		CarriedCondition: pickedup
+	WithIdleOverlay@SPINNER:
+		Offset: -299,0,171
+		Sequence: spinner
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: !pickedup
+	CreatesShroud:
+		Range: 5c0
+	RenderShroudCircle:
+	SpawnActorOnDeath:
+		Actor: MGG.Husk
+		RequiresCondition: !being-warped
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+
+MRJ:
+	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Mobile Radar Jammer
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 235
+		Prerequisites: tier3, vehicles, ~mrj
+		Description: Jams nearby enemy radar systems.\n  Unarmed\n  Special Ability: Jams Missile-Lock Systems
+	Health:
+		HP: 22000
+	Mobile:
+		Speed: 82
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: -256,0,256
+		PauseOnCondition: empdisable || being-warped
+	JamsMissiles:
+		Range: 5c0
+		DeflectionStances: Neutral, Enemy
+		RequiresCondition: !empdisable
+	RenderJammerCircle:
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	PhysicalState@AlliedShield:
+		Name: AlliedShield
+		MinValue: 0
+		MaxValue: 30000
+		InitialValue: 30000
+		RelaxedValue: 30000
+		RelaxationLinear: 200
+		RelaxationDelay: 60
+		RelaxationInterval: 5
+	PhysicalStateBar@AlliedShield:
+		PhysicalStateName: AlliedShield
+		PositiveColor: 2F74E2
+		NeutralColor: 222222
+		NegativeColor: 222222
+		DisplayWhenRelaxed: true
+		ShowAbsoluteValues: true
+	ProvidesShieldFromPhysicalState:
+		PhysicalStateName: AlliedShield
+		ShareRange: 6c0
+		ProtectSelf: true
+	ReceivesShieldFromProvider:
+		PhysicalStateName: AlliedShield
+		ShieldedCondition: shielded
+		StatusCheckInterval: 5
+	WithIdleOverlay@Shield:
+		Sequence: idle
+		Image: nshield-overlay
+		Palette: effect
+		IsDecoration: true
+		RequiresCondition: shielded && !empdisable
+
+APC:
+	Inherits: ^Tank
+	Inherits: ^BiologicalDriver
+	Inherits: ^Transport
+	Inherits: ^PrioAntiInfantry
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 40
+		Prerequisites: tent, ~weap, vehicles, ~!soviet
+		Description: Tough infantry transport.\n  Strong vs Infantry\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Armored Personnel Carrier
+	Health:
+		HP: 30000
+	Mobile:
+		Speed: 135
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
+	Armament:
+		Weapon: M60mg
+		LocalOffset: 85,0,171
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		LoadingCondition: notmobile
+		LoadedCondition: cargo
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
 JEEP:
 	Inherits: ^FightingVehicle
 	Inherits: ^VoxelVehicle
@@ -71,6 +344,259 @@ AA_Jeep:
 		Name: Anti-Air Ranger
 	Armament:
 		Weapon: JeepMissileAA
+
+1TNK:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^ImprovedVision
+	RenderSprites:
+		Image: light_tank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 50
+		Prerequisites: weap, vehicles, ~allies, ~!promotion.scout_tank_pdl, ~!promotion.scout_tank.reflector
+		Description: Fast tank, good for scouting.\n  Strong vs Light Armor\n  Weak vs Infantry, Tanks, Aircraft\n  Special Ability: Amphibious
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Scout Tank
+		GenericName: Tank
+	Health:
+		HP: 33000
+	Mobile:
+		Locomotor: Amphibious
+		Speed: 113
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4
+		RequiresCondition: !onwater && !parachute && !being-warped
+	Targetable@WATER:
+		TargetTypes: Ground, Vehicle, Water, Ship
+		RequiresCondition: onwater && (!parachute && !being-warped)
+	WithFacingSpriteBody:
+		RequiresCondition: !onwater
+	WithFacingSpriteBody@WATER:
+		Sequence: idle-water
+		Name: body-water
+		RequiresCondition: onwater
+	Turreted@PRIMARY:
+		TurnSpeed: 56
+	Armament@PRIMARY:
+		Weapon: 25mm
+		Turret: primary
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 768,0,90
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: 1TNK.Husk
+		RequiresCondition: !onwater && !being-warped
+
+1TNK.PDL:
+	Inherits: 1TNK
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 50
+		IconPalette: chrometd
+		Prerequisites: weap, vehicles, ~allies, ~promotion.scout_tank_pdl
+		Description: Fast tank, good for scouting.\nHas Point Laser Defense System\n  Strong vs Light Armor\n  Weak vs Infantry, Tanks, Aircraft\n  Special Ability: Amphibious
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Scout Tank (PDL)
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		Armaments: pointdefense, primary
+
+1TNK.Reflector:
+	Inherits: 1TNK
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 50
+		Prerequisites: weap, vehicles, ~allies, ~promotion.scout_tank.reflector
+		Description: Fast tank, good for scouting.\nHas Reflector Armor, which is very good vs. Energy Weapons. \n  Strong vs Light Armor, Energy Weapons\n  Weak vs Infantry, Tanks, Aircraft\n  Special Ability: Amphibious
+	Tooltip:
+		Name: Scout Tank (Reflector)
+
+2TNK:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	RenderSprites:
+		Image: medium_tank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: vehicles, ~allies, ~!england
+		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Medium Tank
+		GenericName: Tank
+	Health:
+		HP: 45000
+	Mobile:
+		Speed: 82
+	Turreted:
+		TurnSpeed: 48
+		Offset: 0,0,20
+	Armament:
+		Weapon: 90mm
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: 2TNK.Husk
+		RequiresCondition: !being-warped
+
+2TNK.Chrono:
+	Inherits: 2TNK
+	RenderSprites:
+		Image: medium_tank
+		FactionImages:
+			england: rtnk
+	-Buildable:
+	GrantConditionOnFaction@England:
+		Factions: england
+		Condition: england
+	GrantConditionOnFaction@Germany:
+		Factions: germany
+		Condition: germany
+	Armament:
+		RequiresCondition: !(germany || england)
+	Armament@Germany:
+		Weapon: 183mm
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 868,0,0
+		MuzzleSequence: muzzle
+		RequiresCondition: germany
+	Armament@England:
+		Weapon: 120mmHEAT
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: england
+	Tooltip:
+		Name: Medium Tank
+		GenericName: Tank
+		RequiresCondition: !germany
+	Tooltip@germany:
+		Name: Tank Destroyer
+		GenericName: Tank
+		RequiresCondition: germany
+	MirageTooltip@Tree:
+		Name: Mirage Tank
+		GenericName: Civilian building
+		GenericVisibility: Enemy, Neutral
+		RequiresCondition: tree && england
+	Mirage:
+		RequiresCondition: england && !empdisable && !being-warped && !driver-dead
+		RevealOn: Attack, Move
+		MirageCondition: tree
+		DefaultTargetTypes: v08, v09, v10, v11, v12, v13, v14, v15, v16, v17, v18
+		InitialDelay: 100
+		RevealDelay: 100
+	WithMirageSpriteBody:
+		RequiresCondition: tree && england
+		Name: tree
+	SpawnActorOnDeath:
+		RequiresCondition: !(being-warped || warpout) && warpin && !(england || germany)
+	SpawnActorOnDeath@England:
+		Actor: RTNK.Husk
+		RequiresCondition: warpin && england && !(being-warped || warpout)
+	SpawnActorOnDeath@Germany:
+		Actor: TNKD.Husk
+		RequiresCondition: warpin && germany && !(being-warped || warpout)
+	GrantTimedCondition@warpin:
+		Condition: warpin
+		Duration: 850
+	KillsSelf@warpout:
+		GrantsCondition: warpout
+		RequiresCondition: !warpin
+	FireWarheadsOnDeathCA@warpout:
+		Weapon: UnitExplodeWarpOut
+		EmptyWeapon: UnitExplodeWarpOut
+		RequiresCondition: warpout
+	AutoTargetPriority@DEFAULT:
+		ValidTargets: Infantry, Water, Underwater, Defense
+	AutoTargetPriority@ATTACKANYTHING:
+		ValidTargets: Infantry, Water, Underwater, Structure, Defense, Mine
+	AutoTargetPriority@TANKDEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move && germany
+		ValidTargets: Vehicle
+		InvalidTargets: NoAutoTarget, WaterStructure
+		Priority: 10
+	AutoTargetPriority@TANKATTACKANYTHING:
+		RequiresCondition: (stance-attackanything || assault-move) && germany
+		ValidTargets: Vehicle
+		InvalidTargets: NoAutoTarget
+		Priority: 10
+
+ARTY:
+	Inherits: ^FightingVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	RenderSprites:
+		Image: arty
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 110
+		Prerequisites: weap, vehicles, ~allies
+		Description: Long-range artillery.\n  Strong vs Buildings, Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 550
+	Tooltip:
+		Name: Artillery
+	Health:
+		HP: 10000
+	Mobile:
+		TurnSpeed: 16
+		Speed: 56
+		Locomotor: lighttracked
+	Armament:
+		Weapon: 155mm
+		LocalOffset: 624,0,208
+		MuzzleSequence: muzzle
+	AttackFrontal:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	WithMuzzleOverlay:
+	FireWarheadsOnDeathCA:
+		Weapon: ArtilleryExplode
+		LoadedChance: 75
+
+ARTY.Chrono:
+	Inherits: ARTY
+	RenderSprites:
+		Image: arty
+	-Buildable:
+	GrantTimedCondition@warpin:
+		Condition: warpin
+		Duration: 850
+	KillsSelf@warpout:
+		GrantsCondition: warpout
+		RequiresCondition: !warpin
+	FireWarheadsOnDeathCA:
+		RequiresCondition: !warpout
+	FireWarheadsOnDeathCA@warpout:
+		Weapon: UnitExplodeWarpOut
+		EmptyWeapon: UnitExplodeWarpOut
+		RequiresCondition: warpout
 
 Prismtank:
 	Inherits: ^FightingVehicle
@@ -903,3 +1429,583 @@ BATF.AI:
 	Turreted@TERTIARY:
 	Mobile:
 		PauseOnCondition: being-captured || empdisable || being-warped
+
+IFV:
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^HoverVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^Transport
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^PointLaserDefenseSystem
+	-WithProductionIconOverlay@PDL:
+	Armament@pointdefense:
+		RequiresCondition: cryoturr
+	AmmoPool@pdl:
+		RequiresCondition: cryoturr
+	ReloadAmmoPool@pdl:
+		RequiresCondition: cryoturr
+	-WithRangeCircle@pdl:
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 60
+		Prerequisites: infantry.any, vehicles, ~allies
+		Description: Adaptable infantry transport.\n  Can attack Aircraft.\n  Strong vs Light Armor, Aircraft\n  Weak vs Infantry, Tanks\n  Special Ability: Transform
+	Valued:
+		Cost: 750
+	Tooltip:
+		Name: Multi-Purpose Drone
+	Health:
+		HP: 30000
+	Mobile:
+		Speed: 113
+		PauseOnCondition: notmobile || being-captured || empdisable || being-warped || driver-dead
+	RevealsShroud:
+		RequiresCondition: !spyturr
+	RevealsShroud@GAPGEN:
+		RequiresCondition: !spyturr
+	RevealsShroud@SPY:
+		Range: 14c0
+		MinRange: 8c0
+		RequiresCondition: spyturr
+	RevealsShroud@SPYGAPGEN:
+		Range: 8c0
+		RequiresCondition: spyturr
+	Turreted:
+		TurnSpeed: 48
+		Offset: -200,0,300
+	Armament@Default:
+		Weapon: IFVRockets
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: !full
+	Armament@DefaultAA:
+		Name: secondary
+		Weapon: IFVRocketsAA
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: !full
+	Armament@E1:
+		Weapon: M60mg
+		MuzzleSequence: muzzle
+		LocalOffset: 250,0,150
+		RequiresCondition: gunturr || tecnturr
+	Armament@E2:
+		Weapon: Grenade.Huey
+		MuzzleSequence: muzzle
+		LocalOffset: 450,0,200
+		RequiresCondition: fragturr
+	Armament@E3:
+		Weapon: IFVRocketsE
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturr
+	Armament@E3AA:
+		Name: secondary
+		Weapon: IFVRocketsAAE
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturr
+	Armament@flamethrower:
+		Weapon: FireballLauncher
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 350,0,150
+		MuzzleSequence: muzzle2
+		RequiresCondition: flamturr
+	Armament@E5:
+		Weapon: ChemballLauncher
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 350,0,150
+		MuzzleSequence: muzzle2
+		RequiresCondition: chemturr
+	Armament@Thor:
+		Weapon: ThorBlitz
+		MuzzleSequence: muzzle
+		LocalOffset: 560,0,200
+		RequiresCondition: thorturr
+	Armament@Shok:
+		Weapon: TTankZap
+		LocalOffset: 0,0,213
+		RequiresCondition: testurr
+	Armament@Deso:
+		Weapon: RadBeamWeapon
+		LocalOffset: 400,0,213
+		RequiresCondition: desoturr
+	Armament@Repair:
+		Weapon: RepairIFV
+		LocalOffset: 0,0,213
+		Cursor: repair
+		OutsideRangeCursor: repair
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
+		RequiresCondition: engturr
+		MuzzleSequence: emp-overlay
+		MuzzlePalette: tseffect-ignore-lighting-alpha75
+	Armament@defuse:
+		Weapon: IFVDefuseKit
+		Cursor: goldwrench
+		OutsideRangeCursor: goldwrench
+		TargetRelationships: Ally
+		RequiresCondition: engturr
+		ForceTargetRelationships: None
+		Name: secondary
+	AutoTargetPriority@defuse:
+		ValidTargets: C4Attached
+		InvalidTargets: NoAutoTarget
+		ValidRelationships: Ally
+	Armament@Acol:
+		Weapon: LaserTur
+		LocalOffset: 385,0,300
+		RequiresCondition: acolturr
+	Armament@snipe:
+		Weapon: sniperE
+		LocalOffset: 250,0,150
+		RequiresCondition: snipeturr
+	Armament@Railgun:
+		Weapon: Railgun.Infantry
+		LocalOffset: 560,0,200
+		RequiresCondition: railgunturr
+	Armament@Cryo:
+		Weapon: CryoGun
+		LocalOffset: 560,0,200
+		RequiresCondition: cryoturr
+	Armament@Relay:
+		Weapon: relayMarker
+		LocalOffset: 250,0,150
+		RequiresCondition: relayturr
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: spyturr
+		Offset: 0,0,200
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: !spyturr
+	WithMuzzleOverlay:
+	WithSpriteTurret@samturr:
+		RequiresCondition: !full
+		Sequence: turret
+	WithSpriteTurret@samturr2:
+		RequiresCondition: samturr || fragturr
+		Sequence: turretmlrs
+	WithSpriteTurret@gun:
+		RequiresCondition: gunturr || tecnturr || relayturr
+		Sequence: turretmg
+	WithSpriteTurret@snipe:
+		Sequence: turretsnipe
+		RequiresCondition: snipeturr
+	WithSpriteTurret@flame:
+		Sequence: turretspray
+		RequiresCondition: flamturr
+	WithSpriteTurret@che:
+		Sequence: turretspray
+		RequiresCondition: chemturr
+	WithSpriteTurret@laser:
+		Sequence: turretenergy
+		RequiresCondition: acolturr || railgunturr || cryoturr
+	WithSpriteTurret@des:
+		Sequence: turretradioactive
+		RequiresCondition: desoturr
+	WithSpriteTurret@com:
+		Sequence: turretcommunications
+		RequiresCondition: commturr || thorturr
+	WithSpriteTurret@rep:
+		Sequence: turretrepair
+		RequiresCondition: engturr
+	WithSpriteTurret@medic:
+		Sequence: turretmedic
+		RequiresCondition: medturr
+	WithSpriteTurret@teslakaputt:
+		Sequence: turretradioactive
+		RequiresCondition: testurr
+	Cargo:
+		Types: Infantry
+		MaxWeight: 1
+		LoadingCondition: notmobile
+		LoadedCondition: full
+		PassengerConditions:
+			light_infantry: gunturr
+			conscript: gunturr
+			rpg_soldier: samturr
+			rocket_infantry: samturr
+			flamethrower: flamturr
+			adept: gunturr
+			mercenary: gunturr
+			stormtrooper: gunturr
+			grenadier: fragturr
+			rocket_trooper: samturr
+			rocket_cyborg: samturr
+			black_hand_trooper: flamturr
+			n5: chemturr
+			desolator: desoturr
+			engineer: engturr
+			mech: engturr
+			mort: chemturr
+			shok: testurr
+			shok.nod: testurr
+			rmbo: commturr
+			bori: commturr
+			thor: thorturr
+			sab: commturr
+			snip: snipeturr
+			spy: spyturr
+			thf: spyturr
+			medic: medturr
+			obelisk_trooper: acolturr
+			cyborgelite: acolturr
+			cyborgelite.range: acolturr
+			tecn: tecnturr
+			tecn2: tecnturr
+			tecn3: tecnturr
+			leader: spyturr
+			railgunner: railgunturr
+			railgunner.nocrush: railgunturr
+			cryotrooper: cryoturr
+			specops: relayturr
+	ProximityExternalCondition@MEDIC:
+		RequiresCondition: medturr
+		EnableSound: heal2.aud
+		Condition: hospitalheal
+		Range: 3c0
+	AutoTarget:
+		AttackAnythingCondition: stance-attackanything
+		ScanRadius: 6
+	AutoTargetPriority@DEFAULTAA:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense
+		RequiresCondition: (!stance-attackanything && !assault-move) && (!full || samturr)
+	AutoTargetPriority@ATTACKANYTHINGAA:
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Structure, Defense
+		RequiresCondition: (stance-attackanything || assault-move) && (!full || samturr)
+	AutoTargetPriority@DEFAULTG:
+		RequiresCondition: !stance-attackanything && !assault-move && full && !samturr
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense
+	AutoTargetPriority@ATTACKANYTHINGG:
+		RequiresCondition: (stance-attackanything || assault-move) && full && !samturr
+		ValidTargets: Infantry, Vehicle, Water, Underwater, Structure, Defense, Mine
+	AttackMove:
+		AssaultMoveCondition: assault-move
+	AutoTargetPriority@DEFAULTREPAIR:
+		ValidTargets: Vehicle, Ship
+		RequiresCondition: engturr
+	Capturable:
+		RequiresCondition: !being-warped && !full
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !full
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !full
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+IFV.AI:
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavyAA
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 60
+		Prerequisites: ~tent, vehicles, ~allies, ~botplayer
+		Description: Adaptable infantry transport.\n  Can attack Aircraft.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft\n  Special Ability: Transform
+	Valued:
+		Cost: 650
+	Tooltip:
+		Name: Infantry Fighting Vehicle
+	Health:
+		HP: 27000
+	Mobile:
+		Speed: 113
+	Turreted:
+		TurnSpeed: 80
+		Offset: 20,0,0
+	Armament@Default:
+		Weapon: IFVRockets
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: defturr
+	Armament@DefaultAA:
+		Name: secondary
+		Weapon: IFVRocketsAA
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: defturr
+	Armament@E1:
+		Weapon: M60mg
+		MuzzleSequence: muzzle
+		LocalOffset: 250,0,150
+		RequiresCondition: gunturr
+	Armament@E3:
+		Weapon: IFVRocketsE
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturr
+	Armament@E3AA:
+		Name: secondary
+		Weapon: IFVRocketsAAE
+		LocalOffset: 192,10,176, 192,-10,176
+		RequiresCondition: samturr
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	WithSpriteTurret@default:
+		Sequence: turret
+		RequiresCondition: defturr
+	WithSpriteTurret@gun:
+		RequiresCondition: gunturr
+		Sequence: turretmg
+	WithSpriteTurret@samturr:
+		RequiresCondition: samturr
+		Sequence: turretmlrs
+	RenderSprites:
+		Image: ifv
+	GrantRandomCondition:
+		Conditions: defturr, samturr, gunturr
+	-Capturable:
+	-Capturable@DRIVER_DEAD:
+	-Targetable@DRIVERKILL:
+
+RTNK:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLight
+	Inherits: ^CloakStealth
+	RenderSprites:
+		Image: mirage
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 75
+		Prerequisites: weap, vehicles, ~england, ~!promotion.mirage_pdl, ~!promotion.mirage_fire_rate, ~!promotion.mirage.reflector
+		Description: Advanced Battle tank that can cloak when stationary.\nHas high explosive shells.\n  Strong vs Light Vehicles\n  Weak vs Aircraft.
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Mirage Tank
+		RequiresCondition: !tree
+	MirageTooltip@Tree:
+		Name: Mirage Tank
+		GenericName: Civilian building
+		GenericVisibility: Enemy, Neutral
+		RequiresCondition: tree
+	WithShadow:
+		RequiresCondition: !tree
+	Mirage:
+		RequiresCondition: !empdisable && !being-warped && !driver-dead
+		RevealOn: Attack, Move
+		MirageCondition: tree
+		DefaultTargetTypes: v08, v09, v10, v11, v12, v13, v14, v15, v16, v17, v18
+		InitialDelay: 100
+		RevealDelay: 100
+	WithMirageSpriteBody:
+		RequiresCondition: tree
+		Name: tree
+	Health:
+		HP: 43000
+	Mobile:
+		Speed: 82
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Turreted@PRIMARY:
+		TurnSpeed: 48
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: 120mmHEAT
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		Voice: Attack
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	WithFacingSpriteBody:
+		RequiresCondition: !tree
+	WithSpriteTurret:
+		RequiresCondition: !tree
+	SpawnActorOnDeath:
+		Actor: RTNK.Husk
+		RequiresCondition: !being-warped
+	Cloak@NORMAL:
+		InitialDelay: 100
+		CloakDelay: 100
+		CloakSound: vmirat2a.aud
+		CloakedCondition: hidden
+		UncloakSound: appear1.aud
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Move, Damage, Heal, SelfHeal
+		IsPlayerPalette: false
+		RequiresCondition: !cloak-force-disabled && !invisibility && !driver-dead
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical, Heavy
+	Voiced:
+		VoiceSet: MirageVoice
+
+RTNK.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: RTNK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 75
+		IconPalette: chrometd
+		Prerequisites: weap, ~promotion.mirage_pdl
+		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
+	Tooltip:
+		Name: Mirage Tank (PDL)
+	Valued:
+		Cost: 1400
+
+RTNK.Firerate:
+	Inherits: RTNK
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 75
+		IconPalette: chrometd
+		Prerequisites: weap, ~promotion.mirage_fire_rate
+		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
+	Tooltip:
+		Name: Mirage Tank (Firerate)
+	Valued:
+		Cost: 1200
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: 120mmHEAT.firerate
+
+RTNK.Reflector:
+	Inherits: RTNK
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: weap, ~promotion.mirage.reflector
+		Description: Advanced Battle tank that can cloak when stationary.\n Has Reflector Armor, very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Aircraft.
+	Tooltip:
+		Name: Mirage Tank (Reflector)
+
+TNKD:
+	Inherits: ^FightingTank
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	Inherits: ^HighResShadow
+	Inherits: ^AlliesTank
+	RenderSprites:
+		Image: tank_destroyer
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 90
+		Prerequisites: vehicles, ~germany, tier2, ~!upg.tank_destroyer
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
+	Valued:
+		Cost: 750
+	Tooltip:
+		Name: Tank Destroyer
+		GenericName: Tank
+	Health:
+		HP: 55000
+	Mobile:
+		Speed: 68
+		TurnSpeed: 12
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Armament@primary:
+		Name: primary
+		Weapon: 183mm
+		LocalOffset: 1100,0,200
+		MuzzleSequence: muzzle
+	AttackFrontal:
+		Armaments: primary
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+		FacingTolerance: 0
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: TNKD.Husk
+		RequiresCondition: !being-warped
+	Voiced:
+		VoiceSet: TnkdVoice
+	AutoTargetPriority@TANKDEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+		ValidTargets: Tank
+		InvalidTargets: NoAutoTarget, WaterStructure
+		Priority: 10
+	AutoTargetPriority@TANKATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+		ValidTargets: Tank
+		InvalidTargets: NoAutoTarget
+		Priority: 10
+
+TNKD.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: TNKD
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 90
+		IconPalette: chrometd
+		Prerequisites: dome, ~promotion.tank_destroyer.pdl, ~!upg.tank_destroyer2
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Tank Destroyer (PDL)
+
+TNKD.Reflector:
+	Inherits: TNKD
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: tier3, ~promotion.tank_destroyer.reflector, ~!upg.tank_destroyer2
+		Description: German tank destroyer.\n Has Reflector Armor, very good vs. Energy Weapons.\n  Strong vs Heavy Armor, Energy Weapons. \n  Weak vs Infantry, Light Armor, Aircraft
+	Tooltip:
+		Name: Tank Destroyer (Reflector)
+
+TNKD.PDL.Burstfire:
+	Inherits: TNKD.PDL
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Buildable:
+		Prerequisites: tier3, ~promotion.tank_destroyer.pdl, ~promotion.tank_destroyer.burst
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Tank Destroyer (PDL, Burst)
+	Armament@primary:
+		Name: primary
+		Weapon: 183mm.Burst
+
+TNKD.Reflector.Burstfire:
+	Inherits: TNKD.Reflector
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Buildable:
+		Prerequisites: tier3, ~promotion.tank_destroyer.reflector, ~promotion.tank_destroyer.burst
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
+	Tooltip:
+		Name: Tank Destroyer (Reflector, Burst)
+	Armament@primary:
+		Name: primary
+		Weapon: 183mm.Burst
+
+TNKD.PDL.Tough:
+	Inherits: TNKD.PDL
+	WithProductionIconOverlay@Shield:
+		Types: Shield
+	Buildable:
+		Prerequisites: tier3, ~promotion.tank_destroyer.pdl, ~promotion.tank_destroyer.tough
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
+	Valued:
+		Cost: 1350
+	Tooltip:
+		Name: Tank Destroyer (PDL, Tough)
+	Health:
+		HP: 80000
+
+TNKD.Reflector.Tough:
+	Inherits: TNKD.Reflector
+	WithProductionIconOverlay@Shield:
+		Types: Shield
+	Buildable:
+		Prerequisites: tier3, ~promotion.tank_destroyer.reflector, ~promotion.tank_destroyer.tough
+		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
+	Tooltip:
+		Name: Tank Destroyer (Reflector, Tough)
+	Health:
+		HP: 80000

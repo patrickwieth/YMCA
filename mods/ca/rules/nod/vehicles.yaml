@@ -1,10 +1,828 @@
+
+AMCV:
+	Inherits: ^ConstructionVehicle
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BigVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^MustBeDestroyed
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 300
+		Prerequisites: rep, vehicles, ~td
+		IconPalette: chrometd
+		Description: Deploys into another Construction Yard.\n  Unarmed
+	Valued:
+		Cost: 3000
+	Tooltip:
+		Name: Mobile Construction Vehicle
+	Selectable:
+		Priority: 4
+	Health:
+		HP: 75000
+	Mobile:
+		Speed: 56
+		Locomotor: heavywheeled
+	Transforms:
+		IntoActor: afac
+		Offset: -1,-1
+		Facing: 384
+		TransformSounds: placbldg.aud, build5.aud
+		NoTransformNotification: BuildingCannotPlaceAudio
+		PauseOnCondition: empdisable || being-warped
+	BaseBuilding:
+	SpawnActorOnDeath:
+		Actor: AMCV.Husk
+		RequiresCondition: !being-warped
+	TransferTimedExternalConditionOnTransform:
+		Condition: invulnerability
+	-Crushable:
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	GrantConditionOnPrerequisite@NukularOpen:
+		Condition: NukularOpen
+		Prerequisites: !nukular.owned, global.nukular
+	TransformOnCondition:
+		IntoActor: AMCV.Nukular
+		RequiresCondition: NukularOpen
+
+AMCV.Nukular:
+	Inherits: AMCV
+	Inherits: ^NukularConyard
+	-Buildable:
+	RenderSprites:
+		Image: AMCV
+	Transforms:
+		IntoActor: afac.nukular
+
+
+BGGY:
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^SensorEquipment
+	Inherits: ^PrioAntiInfantry
+	RenderSprites:
+		Image: buggy
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: vehicles, ~nod, ~!promotion.buggy.pdl, ~!promotion.buggy.aa
+		Description: Fast scout & anti-infantry vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+	Valued:
+		Cost: 350
+	Tooltip:
+		Name: Buggy
+	Health:
+		HP: 14000
+	Mobile:
+		Speed: 157
+	Turreted@PRIMARY:
+		TurnSpeed: 80
+		Offset: -43,0,128
+	Armament@PRIMARY:
+		Weapon: M60mgTD
+		Turret: primary
+		LocalOffset: 171,0,43
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	IgnoresDisguise:
+
+BGGY.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: BGGY
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: tier3, vehicles, ~nod, ~promotion.buggy.pdl
+		Description: Fast scout and anti-infantry vehicle.\nCan detect cloaked units and has Point Laser Defense.\n  Strong vs Infantry\n  Weak vs Energy Weapons
+	Valued:
+		Cost: 900
+	Health:
+		HP: 18000
+	Tooltip:
+		Name: Point Laser Buggy
+
+BGGY.AA:
+	Inherits: BGGY
+	Inherits: ^PrioAntiLightAA
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		IconPalette: chrometd
+		Prerequisites: tier3, vehicles, ~nod, ~promotion.buggy.aa
+		Description: Fast scout and anti-aircraft vehicle.\nCan detect cloaked units.\n  Strong vs Infantry, Aircraft\n  Weak vs Vehicles
+	Valued:
+		Cost: 500
+	Health:
+		HP: 21000
+	Tooltip:
+		Name: Anti-Air Buggy
+	Armament@Secondary:
+		Weapon: BuggyLaserAA
+		LocalOffset: 171,0,43
+		MuzzleSequence: muzzle
+
+APC2:
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^Transport
+	Inherits: ^PrioAntiInfantry
+	RenderSprites:
+		FactionImages:
+			nod: apc2.nod
+			blackh: apc2.nod
+			legion: apc2.nod
+			marked: apc2.nod
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 40
+		Prerequisites: vehicles, ~td, infantry.any, ~!promotion.apc_vulcan
+		IconPalette: chrometd
+		Description: Tough infantry transport.\n  Strong vs Infantry\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Armored Personnel Carrier
+	Health:
+		HP: 30000
+	Mobile:
+		Speed: 135
+		PauseOnCondition: being-captured || empdisable || being-warped || notmobile || driver-dead
+	Armament:
+		Weapon: M60mgTD
+		LocalOffset: 85,0,171
+		MuzzleSequence: muzzle
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	WithMuzzleOverlay:
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		LoadingCondition: notmobile
+		LoadedCondition: cargo
+	Capturable:
+		RequiresCondition: !being-warped && !cargo
+	Capturable@DRIVER_DEAD:
+		RequiresCondition: driver-dead && !cargo
+	Targetable@DRIVERKILL:
+		RequiresCondition: !driver-dead && !cargo
+	GrantConditionOnPrerequisite@DRONEPAIR:
+		Condition: dronepair
+		Prerequisites: dronepair.upgrade
+	AttachOnCreation@DRONEPAIR:
+		Actor: mdrn.attached
+		RequiresCondition: dronepair
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+
+APC2.Reinforce:
+	Inherits: APC2
+	RenderSprites:
+		Image: APC2
+	-Buildable:
+	Cargo:
+		InitialUnits: mercenary,grenadier.emp,grenadier.emp,railgunner,medic
+
+LTNK:
+	Inherits: ^FightingTankTurreted
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	RenderSprites:
+		Image: ltnk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 55
+		IconPalette: chrometd
+		Prerequisites: vehicles, ~nod
+		Description: Fast, light tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft\n  Special Ability: Amphibious
+	Valued:
+		Cost: 625
+	Tooltip:
+		Name: Light Tank
+	Health:
+		HP: 41250
+	Mobile:
+		Locomotor: Amphibious
+		Speed: 100
+	GrantConditionOnTerrain:
+		TerrainTypes: Water
+		Condition: onwater
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4
+		RequiresCondition: !onwater && !parachute && !being-warped
+	Targetable@WATER:
+		TargetTypes: Ground, Vehicle, Water, Ship
+		RequiresCondition: onwater && (!parachute && !being-warped)
+	WithFacingSpriteBody:
+		RequiresCondition: !onwater || parachute
+	WithFacingSpriteBody@WATER:
+		Sequence: idle-water
+		Name: body-water
+		RequiresCondition: onwater && !parachute
+	Turreted:
+		TurnSpeed: 56
+	Armament:
+		Weapon: 30mm
+		Recoil: 85
+		RecoilRecovery: 17
+		LocalOffset: 720,0,90
+		MuzzleSequence: muzzle
+	AttackCharges:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable
+		ChargeLevel: 50
+		ChargingCondition: charging
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: obelpowr.aud
+		Interval: 30, 40
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: LTNK.Husk
+		RequiresCondition: !onwater && !being-warped
+
+LTNK.Laser:
+	Inherits: ^FightingTank
+	Inherits: ^HoverVehicle
+	Inherits: ^TDVehicleSprite
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioEnergyAntiHeavy
+	RenderSprites:
+		Image: scorpion_tank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 56
+		Prerequisites: vehicles, ~nod, tmpl, ~promotion.scorpion_tank
+		Description: Fast, light tank shooting laser.\n  Strong vs heavy Tanks\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 750
+	Tooltip:
+		Name: Scorpion Tank
+	Health:
+		HP: 41250
+	Mobile:
+		Speed: 100
+	Armament:
+		Weapon: Laser.Tank
+		Recoil: 85
+		FireDelay: 40
+		RecoilRecovery: 17
+		LocalOffset: 100,0,250
+		MuzzleSequence: muzzle
+		PauseOnCondition: empdisable || being-warped || parachute
+	QuantizeFacingsFromSequence:
+	WithAttackAnimation:
+		Sequence: shoot
+	AttackFrontal:
+		FacingTolerance: 0
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+	GrantConditionWhileAiming:
+		Condition: aiming
+	WithMuzzleOverlay:
+	SpawnActorOnDeath:
+		Actor: LTNK.Husk
+		RequiresCondition: !onwater && !being-warped
+
+SSM:
+	Inherits: ^FightingVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioArtillery
+	RenderSprites:
+		Image: ssm
+	Valued:
+		Cost: 1050
+	Tooltip:
+		Name: SSM Launcher
+	Buildable:
+		BuildPaletteOrder: 150
+		Prerequisites: tmpl, vehicles, ~nod, ~!blackh, ~!promotion.ssm_toxin_launcher, ~!promotion.ssm_multi_launcher
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Long-range incendiary rocket artillery.\n  Has weak armor.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
+	Mobile:
+		Speed: 82
+		PauseOnCondition: aiming || being-captured || empdisable || being-warped || driver-dead
+	Health:
+		HP: 15000
+	Turreted:
+		TurnSpeed: 16
+		Offset: -128,0,128
+		RealignDelay: 0
+	Armament:
+		Weapon: honestjohn
+		LocalOffset: 0,171,0, 0,-171,0
+	AmmoPool:
+		Ammo: 2
+		AmmoCondition: ammo
+	AttackTurreted:
+		TargetFrozenActors: True
+		ForceFireIgnoresActors: True
+		PauseOnCondition: empdisable || being-warped
+		OpportunityFire: False
+	WithSpriteTurret:
+		RequiresCondition: ammo > 1
+	WithSpriteTurret@OneMissile:
+		RequiresCondition: ammo == 1
+		Sequence: turret1
+	WithSpriteTurret@NoMissiles:
+		RequiresCondition: !ammo
+		Sequence: turret0
+	GrantConditionOnAttack:
+		Condition: aiming
+		RevokeDelay: 50
+		RevokeAll: false
+	AutoTarget:
+	FireWarheadsOnDeathCA:
+		Weapon: BarrelExplode
+	ReloadAmmoPool@1:
+		Delay: 120
+		Count: 2
+
+SSM.Toxin:
+	Inherits: SSM
+	Buildable:
+		BuildPaletteOrder: 91
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.ssm_toxin_launcher
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Long-range chemical rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
+	Tooltip:
+		Name: SSM Chemical Launcher
+	Armament:
+		Weapon: honestjohn.toxin
+		LocalOffset: 0,171,0, 0,-171,0
+		PauseOnCondition: empdisable || being-warped
+
+SSM.Multi:
+	Inherits: SSM
+	Inherits: ^PrioAntiHeavy
+	Buildable:
+		BuildPaletteOrder: 91
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.ssm_multi_launcher
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Long-range multiple rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
+	Tooltip:
+		Name: SSM Multi Launcher
+	Valued:
+		Cost: 1200
+	Armament:
+		Weapon: honestjohn.multi
+		LocalOffset: 0,171,0, 0,-171,0
+		PauseOnCondition: empdisable || being-warped
+
+STNK:
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^CloakSpriteTurret
+	RenderSprites:
+		Image: stealth_tank
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Stealth Tank
+		GenericName: Tank
+	Buildable:
+		BuildPaletteOrder: 130
+		Prerequisites: tier2, vehicles, ~nod, ~!promotion.stealth_tank.ap, ~!promotion.stealth_tank.scrin, ~!promotion.stealth_tank.explosive_rockets
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Medium-range missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry.
+	Mobile:
+		Speed: 135
+	Health:
+		HP: 20000
+	Armament@PRIMARY:
+		Weapon: StnkMissile
+		LocalOffset: 213,43,128, 213,-43,128
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: StnkMissile.AA
+		LocalOffset: 213,43,128, 213,-43,128
+	Turreted:
+		TurnSpeed: 80
+		Offset: 0,0,10
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+
+STNK.Scrin:
+	Inherits: STNK
+	Inherits: ^PrioEnergyAntiHeavy
+	Buildable:
+		BuildPaletteOrder: 130
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.stealth_tank.scrin, ~!upg.stealthtank2
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Cloaked tank that fires Scrin torpedoes.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft, Reflector Armor.
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Stealth Scrin Tank
+	Armament@PRIMARY:
+		Weapon: STNKScrinTorp
+
+STNK.Scrin.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: STNK.Scrin
+	Buildable:
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.stealth_tank.scrin, ~promotion.stealth_tank.pdl
+		Description: Cloaked tank that fires Scrin torpedoes.\n  Has point laser defense.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Projectiles \n  Weak vs Aircraft, Energy Weapons
+	Valued:
+		Cost: 1800
+	Tooltip:
+		Name: Stealth Scrin Tank
+
+STNK.Scrin.Reflector:
+	Inherits: STNK.Scrin
+	Inherits: ^ReflectorArmor
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.stealth_tank.scrin, ~promotion.stealth_tank.reflector
+		Description: Cloaked tank that fires Scrin torpedoes.\n  Has weak reflector armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Energy Weapons\n  Weak vs Aircraft, Reflector Armor.
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Stealth Scrin Tank (Reflector)
+
+STNK.HE:
+	Inherits: STNK
+	Inherits: ^PrioAntiLightAA
+	Buildable:
+		BuildPaletteOrder: 130
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.stealth_tank.explosive_rockets, ~!upg.stealthtank2
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Medium-range high explosive missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Aircraft\n  Weak vs Heavy Tanks.
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Stealth HE Tank
+	Armament@PRIMARY:
+		Weapon: StnkMissile.HE
+	Armament@SECONDARY:
+		Weapon: StnkMissile.AA.HE
+
+STNK.HE.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: STNK.HE
+	Buildable:
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.stealth_tank.explosive_rockets, ~promotion.stealth_tank.pdl
+		Description: Medium-range high explosive missile tank that can cloak.\n  Can attack Aircraft.\n  Has point laser defense.\n  Can be spotted by infantry and defense structures.\n  Strong vs Vehicles, Aircraft, Projectiles \n  Weak vs Heavy Tanks, Energy Weapons
+	Valued:
+		Cost: 1800
+	Tooltip:
+		Name: Stealth HE Tank
+
+STNK.HE.Reflector:
+	Inherits: STNK.HE
+	Inherits: ^ReflectorArmor
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.stealth_tank.explosive_rockets, ~promotion.stealth_tank.reflector
+		Description: Medium-range high explosive missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak reflector armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Heavy Vehicles, Aircraft, Energy Weapons\n  Weak vs Infantry, Projectiles.
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Stealth HE Tank (Reflector)
+
+STNK.AP:
+	Inherits: STNK
+	Inherits: ^PrioAntiHeavyAA
+	Buildable:
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.stealth_tank.ap, ~!upg.stealthtank2
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Medium-range armor piercing missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Heavy Vehicles, Aircraft\n  Weak vs Infantry.
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Stealth AP Tank
+	Armament@PRIMARY:
+		Weapon: StnkMissile.AP
+	Armament@SECONDARY:
+		Weapon: StnkMissile.AP.AA
+
+STNK.AP.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: STNK.AP
+	Buildable:
+		-IconPalette:
+		Prerequisites: vehicles, ~nod, tmpl, ~promotion.stealth_tank.ap, ~promotion.stealth_tank.pdl
+		Description: Medium-range armor piercing missile tank that can cloak.\n  Can attack Aircraft.\n  Has point laser defense.\n  Can be spotted by infantry and defense structures.\n  Strong vs Heavy Vehicles, Aircraft, Projectiles \n  Weak vs Infantry, Energy Weapons
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Stealth AP Tank (PDL)
+
+STNK.AP.Reflector:
+	Inherits: STNK.AP
+	Inherits: ^ReflectorArmor
+	Buildable:
+		IconPalette: chrometd
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.stealth_tank.ap, ~promotion.stealth_tank.reflector
+		Description: Medium-range armor piercing missile tank that can cloak.\n  Can attack Aircraft.\n  Has weak reflector armor.\n  Can be spotted by infantry and defense structures.\n  Strong vs Heavy Vehicles, Aircraft, Energy Weapons\n  Weak vs Infantry, Projectiles.
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Stealth AP Tank (Reflector)
+
+BIKE:
+	Inherits: ^FightingVehicle
+	Inherits: ^TDVehicleSprite
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavyAA
+	RenderSprites:
+		Image: recon_bike
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Recon Bike
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: vehicles, ~nod, ~!upg.reconbike
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with\nrockets.\n  Can attack Aircraft.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry
+	Mobile:
+		TurnSpeed: 80
+		Speed: 180
+	Health:
+		HP: 11000
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: BikeRockets
+		LocalOffset: -128, -170, 170, -128, 170, 170
+		LocalYaw: 100, -100
+	Armament@SECONDARY:
+		Name: secondary
+		Weapon: BikeRocketsAA
+		LocalOffset: -128, -170, 170, -128, 170, 170
+		LocalYaw: 100, -100
+	AttackFrontal:
+		Armaments: primary, secondary
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+
+BIKE.Scrin:
+	Inherits: BIKE
+	-AutoTargetPriority@DEFAULT:
+	-AutoTargetPriority@ATTACKANYTHING:
+	Inherits: ^PrioEnergyWeapon
+	WithProductionIconOverlay@Scrin:
+		Types: Scrin
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.scrin, ~!upg.reconbike2
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with energy balls.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Scrin Bike
+	Health:
+		HP: 18000
+	Armament@PRIMARY:
+		Weapon: BikeScrinTorp
+
+BIKE.Scrin.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: BIKE.Scrin
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.scrin, ~promotion.recon_bike.pdl
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Vehicles, Tanks\n  Weak vs Infantry
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Scrin Bike (PDL)
+
+BIKE.Scrin.Reflector:
+	Inherits: BIKE.Scrin
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.scrin, ~promotion.recon_bike.reflector
+		Description: Fast scout vehicle, armed with energy balls.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Scrin Bike (Reflector)
+
+BIKE.RocketHail:
+	Inherits: BIKE
+	Inherits: ^PrioAntiHeavy
+	WithProductionIconOverlay@Missile:
+		Types: Missile
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.rocket_hail, ~!upg.reconbike2
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast artillery vehicle, armed with\n many rockets.\n   Strong vs Vehicles, Tanks\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Rocket Hail Bike
+	Armament@PRIMARY:
+		Weapon: BikeRocketHail
+
+BIKE.RocketHail.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: BIKE.RocketHail
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.rocket_hail, ~promotion.recon_bike.pdl
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with explosive rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Vehicles, Projectiles\n  Weak vs Infantry, Aircraft, Energy Weapons
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Rocket Hail Bike (PDL)
+
+BIKE.RocketHail.Reflector:
+	Inherits: BIKE.RocketHail
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.rocket_hail, ~promotion.recon_bike.rocket_hail.reflector
+		Description: Fast artillery vehicle, armed with\n many rockets.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Rocket Hail Bike (Reflector)
+
+BIKE.Explosive:
+	Inherits: BIKE
+	Inherits: ^PrioAntiLightAA
+	WithProductionIconOverlay@Grenade:
+		Types: Grenade
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.explosive, ~!upg.reconbike2
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with\n explosive rockets.\n  Can attack Aircraft.\n  Strong vs Light Vehicles, Aircraft, Infantry\n  Weak vs Heavy Vehicles, PDL
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Explosive Rocket Bike
+	Armament@PRIMARY:
+		Weapon: BikeRocketExplosive
+	Armament@SECONDARY:
+		Weapon: BikeRocketsAAExplosive
+
+BIKE.Explosive.PDL:
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: BIKE.Explosive
+	Buildable:
+		BuildPaletteOrder: 30
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.explosive, ~promotion.recon_bike.pdl
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Fast scout vehicle, armed with explosive rockets.\n  Can attack Aircraft.\n  Has Point Laser Defense.\n  Strong vs Light Vehicles, Aircraft, Infantry\n  Weak vs Heavy Vehicles, Energy Weapons
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Explosive Rocket Bike (PDL)
+
+BIKE.Explosive.Reflector:
+	Inherits: BIKE.Explosive
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: vehicles, ~nod, ~promotion.recon_bike.explosive, ~promotion.recon_bike.reflector
+		Description: Fast scout vehicle, armed with\n explosive rockets.\n  Has Reflector Armor, which is very good vs. Energy Weapons.\n  Strong vs Light Vehicles, Aircraft, Infantry, Energy Weapons\n  Weak vs Heavy Vehicles, PDL
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Explosive Rocket Bike (Reflector)
+
+HAR2:
+	Inherits: ^Tank
+	Inherits: ^TDVehicleSprite
+	Inherits: ^Harvester
+	Inherits: ^CloakStealth
+	-Crushable:
+	-Carryable:
+	Inherits: ^Shielded
+	GrantConditionOnPrerequisite@shielded:
+		Condition: shielded
+		Prerequisites: promotion.shielded_miners
+	RenderSprites:
+		Image: harv2
+	Valued:
+		Cost: 1400
+	Tooltip:
+		Name: Harvester
+		GenericName: Harvester
+	Buildable:
+		BuildPaletteOrder: 10
+		Prerequisites: ~proc.td, vehicles, ~td
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Collects Tiberium, Ore and Gems for processing.\n  Unarmed
+	Mobile:
+		Speed: 56
+		Locomotor: heavywheeled
+	Health:
+		HP: 75000
+	SpawnActorOnDeath:
+		Actor: HAR2.Husk
+		RequiresCondition: !being-warped
+	GrantConditionOnPrerequisite@stealthed:
+		Condition: stealth-miner
+		Prerequisites: promotion.stealth_miners
+	Cloak@NORMAL:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		CloakedCondition: hidden
+		UncloakSound: appear1.aud
+		IsPlayerPalette: false
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal, SelfHeal
+		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead && stealth-miner
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
+
+
+WTNK:
+	Inherits: ^FightingVehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiHeavy
+	AutoTargetPriority@DEFAULT:
+		RequiresCondition: !stance-attackanything && !assault-move
+		InvalidTargets: NoAutoTarget, empdisabled
+	AutoTargetPriority@ATTACKANYTHING:
+		RequiresCondition: stance-attackanything || assault-move
+		InvalidTargets: NoAutoTarget, empdisabled
+	RenderSprites:
+		Image: mwtnk
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 210
+		IconPalette: chrometd
+		Prerequisites: tmpl, vehicles, ~legion
+		Description: Prototype microwave weapon.\n  Disables vehicles & structures.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1250
+	Tooltip:
+		Name: Microwave Tank
+		GenericName: Tank
+	Health:
+		HP: 35000
+	Mobile:
+		Speed: 100
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Turreted:
+		TurnSpeed: 8
+		Offset: 0,0,0
+	Armament@PRIMARY:
+		Weapon: MicrowaveZap
+		FireDelay: 7
+		LocalOffset: 0,0,350
+		MuzzleSequence: muzzle
+		MuzzlePalette: tseffect-ignore-lighting-alpha75
+	Armament@PRIMARYSOUND:
+		Weapon: MicrowaveZapSound
+	AttackTurreted:
+		TargetFrozenActors: True
+		OpportunityFire: False
+		PauseOnCondition: empdisable || being-warped
+		Voice: Attack
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	SpawnActorOnDeath:
+		Actor: WTNK.Husk
+		RequiresCondition: !being-warped
+	Voiced:
+		VoiceSet: MWTnkVoice
 ﻿
 FTNK:
 	Inherits: ^FightingTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
 	RenderSprites:
-		Image: ftnk
+		Image: flame_tank
 	Valued:
 		Cost: 700
 	Tooltip:
@@ -15,7 +833,7 @@ FTNK:
 		Weaknesses: • Weak vs Heavy Tanks, Aircraft
 	Buildable:
 		BuildPaletteOrder: 365
-		Prerequisites: hq, vehicles, ~nod, ~!blackh, ~!promotion.flame_tank.pdl, ~!promotion.flame_tank.reflector
+		Prerequisites: tier2, vehicles, ~nod, ~!blackh, ~!promotion.flame_tank.pdl, ~!promotion.flame_tank.reflector
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Heavily armored flame-throwing vehicle.
@@ -45,7 +863,7 @@ FTNK.Reflector:
 	Inherits: FTNK
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: hq, vehicles, ~nod, ~promotion.flame_tank.reflector, ~!promotion.chem_tank
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.flame_tank.reflector, ~!promotion.chem_tank
 		Description: Heavily armored flame-throwing vehicle.
 	Tooltip:
 		Name: Flame Tank (Reflector)
@@ -58,7 +876,7 @@ FTNK.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Inherits: FTNK
 	Buildable:
-		Prerequisites: hq, vehicles, ~nod, ~promotion.flame_tank.pdl, ~!promotion.chem_tank
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.flame_tank.pdl, ~!promotion.chem_tank
 		Description: Heavily armored flame-throwing vehicle.
 	Valued:
 		Cost: 1100
@@ -75,12 +893,12 @@ FTNK.PDL.Chem:
 	Inherits: FTNK.PDL
 	Inherits: ^PrioAntiReflector
 	RenderSprites:
-		Image: chemtank
+		Image: chem_tank
 	WithProductionIconOverlay@Hazard:
 		Types: Hazard
 	Buildable:
 		IconPalette: chrome
-		Prerequisites: hq, vehicles, ~nod, ~promotion.chem_tank, ~promotion.flame_tank.pdl
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.chem_tank, ~promotion.flame_tank.pdl
 		Description: Heavily armored chemical-throwing vehicle.
 	Valued:
 		Cost: 1300
@@ -100,12 +918,12 @@ FTNK.PDL.Chem:
 FTNK.Reflector.Chem:
 	Inherits: FTNK.Reflector
 	RenderSprites:
-		Image: chemtank
+		Image: chem_tank
 	WithProductionIconOverlay@Hazard:
 		Types: Hazard
 	Buildable:
 		IconPalette: chrome
-		Prerequisites: hq, vehicles, ~nod, ~promotion.chem_tank, ~promotion.flame_tank.reflector
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.chem_tank, ~promotion.flame_tank.reflector
 		Description: Heavily armored chemical-throwing vehicle.
 	Valued:
 		Cost: 900
@@ -130,7 +948,7 @@ HFTK:
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
 	RenderSprites:
-		Image: hftk
+		Image: heavy_flame_tank
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 365
@@ -181,10 +999,10 @@ HFTK:
 		Condition: attacking
 
 HFTK.PDL:
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Inherits: HFTK
 	Buildable:
-		Prerequisites: hq, vehicles, ~nod, ~promotion.heavy_flame_tank.pdl, ~!promotion.fireball_tank
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.heavy_flame_tank.pdl, ~!promotion.fireball_tank
 		Description: Heavily armored flame-throwing vehicle.
 	Valued:
 		Cost: 1400
@@ -201,7 +1019,7 @@ HFTK.Reflector:
 	Inherits: HFTK
 	Inherits: ^ReflectorArmor
 	Buildable:
-		Prerequisites: hq, vehicles, ~nod, ~promotion.heavy_flame_tank.reflector, ~!promotion.fireball_tank
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.heavy_flame_tank.reflector, ~!promotion.fireball_tank
 		Description: Heavily armored flame-throwing vehicle.
 	Tooltip:
 		Name: Heavy Flame Tank (Reflector)
@@ -215,7 +1033,7 @@ HFTK.PDL.Fireball:
 	WithProductionIconOverlay@Flame:
 		Types: Flame
 	Buildable:
-		Prerequisites: hq, vehicles, ~nod, ~promotion.fireball_tank, ~promotion.heavy_flame_tank.pdl
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.fireball_tank, ~promotion.heavy_flame_tank.pdl
 		Description: Heavily armored fireball-throwing vehicle.
 	Valued:
 		Cost: 1400
@@ -236,7 +1054,7 @@ HFTK.Reflector.Fireball:
 	WithProductionIconOverlay@Flame:
 		Types: Flame
 	Buildable:
-		Prerequisites: hq, vehicles, ~nod, ~promotion.fireball_tank, ~promotion.heavy_flame_tank.reflector
+		Prerequisites: tier2, vehicles, ~nod, ~promotion.fireball_tank, ~promotion.heavy_flame_tank.reflector
 		Description: Heavily armored fireball-throwing vehicle.
 	Tooltip:
 		Name: Fireball Tank (Reflector)
@@ -276,3 +1094,282 @@ TTRK:
 	FireWarheadsOnDeathCA@NUKE:
 		Weapon: UnitExplodeToxinTruck
 		EmptyWeapon: UnitExplodeToxinTruck
+
+
+COORDINATOR:
+	Inherits: ^Vehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^SelectableSupportUnit
+	Inherits: ^PrimaryBuilding
+	Inherits: ^ImprovedVision
+	RenderSprites:
+		Image: reinforcements_coordinator
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Reinforcements Coordinator
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 235
+		IconPalette: chrometd
+		Prerequisites: vehicles, ~nod, ~promotion.reinforcements_coordinator
+		BuildDurationModifier: 50
+		BuildLimit: 1
+		Description: Coordinates newly built vehicles to be airdropped close to the Coordinator when deployed.\n Airstrips must not be primary production buildings for the Coordinator to work. \n Use the rally point when deployed or units will be dropped onto each other.
+	Health:
+		HP: 22000
+	Mobile:
+		Speed: 82
+		RequiresCondition: !primary
+	WithIdleOverlay@SPINNER:
+		Sequence: spinner
+		Offset: 0,0,256
+		PauseOnCondition: empdisable || being-warped
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	RallyPoint:
+		Path: 5,5
+		RequiresCondition: primary
+	ProductionParadrop:
+		Produces: Vehicle
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: c17.cargo
+		ReadyAudio: ReinforcementsArrived
+		RequiresCondition: !vehiclesdisabled
+	Exit@1:
+		ExitCell: 0,1
+		ProductionTypes: Vehicle
+	Exit@2:
+		ExitCell: 1,0
+		ProductionTypes: Vehicle
+	Exit@3:
+		ExitCell: 1,1
+		ProductionTypes: Vehicle
+	Exit@4:
+		ExitCell: 0,-1
+		ProductionTypes: Vehicle
+	Exit@5:
+		ExitCell: -1,0
+		ProductionTypes: Vehicle
+	Exit@6:
+		ExitCell: -1,-1
+		ProductionTypes: Vehicle
+	Exit@7:
+		ExitCell: -1,1
+		ProductionTypes: Vehicle
+	Exit@8:
+		ExitCell: 1,-1
+		ProductionTypes: Vehicle
+	Exit@9:
+		ExitCell: 0,2
+		ProductionTypes: Vehicle
+	Exit@10:
+		ExitCell: 2,0
+		ProductionTypes: Vehicle
+	Exit@11:
+		ExitCell: 2,2
+		ProductionTypes: Vehicle
+	Exit@12:
+		ExitCell: 0,-2
+		ProductionTypes: Vehicle
+	Exit@13:
+		ExitCell: -2,0
+		ProductionTypes: Vehicle
+	Exit@14:
+		ExitCell: -2,-2
+		ProductionTypes: Vehicle
+	Exit@15:
+		ExitCell: -2,2
+		ProductionTypes: Vehicle
+	Exit@16:
+		ExitCell: 2,-2
+		ProductionTypes: Vehicle
+
+Beam_Cannon:
+	Inherits: ^FightingVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioEnergyAntiHeavy
+	RenderSprites:
+		Image: beam_cannon
+	AutoTargetPriority@DEFAULT:
+		InvalidTargets: NoAutoTarget, WaterStructure
+		ValidTargets: BoostMe
+	AutoTargetPriority@ATTACKANYTHING:
+		InvalidTargets: NoAutoTarget
+		ValidTargets: BoostMe
+	AttackMove:
+		AttackMoveCondition: attack-move
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 210
+		IconPalette: chrometd
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.beam_cannon
+		Description: Prototype energy beam weapon.\n  Up to 5 Beam Cannons can charge another Beam Cannon up.\n  Up to 3 Beam Cannons can help an Obelisk to charge up faster \n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1250
+	Tooltip:
+		Name: Beam Cannon
+		GenericName: Tank
+	Health:
+		HP: 24000
+	Mobile:
+		Speed: 100
+		Voice: Move
+	Passenger:
+		Voice: Move
+	Turreted:
+		TurnSpeed: 16
+		Offset: 0,0,0
+	GrantConditionWhileAiming:
+		Condition: aiming
+	Armament@PRIMARY:
+		Weapon: BeamCannon
+		Name: primary0
+		LocalOffset: 100,0,200
+		RequiresCondition: !charged && !attacking1 && !attacking2 && !attacking3 && !attacking4 && !attacking5
+	GrantConditionOnAttack@attacking0:
+		ArmamentNames: primary0
+		RevokeDelay: 21
+		Condition: attacking0
+	Armament@1:
+		Name: primary1
+		Weapon: BeamCannonBoosted1
+		LocalOffset: 100,0,200
+		RequiresCondition: charged == 1 && !attacking0 && !attacking2 && !attacking3 && !attacking4 && !attacking5
+	GrantConditionOnAttack@attacking1:
+		ArmamentNames: primary1
+		RevokeDelay: 21
+		Condition: attacking1
+	Armament@2:
+		Name: primary2
+		Weapon: BeamCannonBoosted2
+		LocalOffset: 100,0,200
+		RequiresCondition: charged == 2 && !attacking0 && !attacking1 && !attacking3 && !attacking4 && !attacking5
+	GrantConditionOnAttack@attacking2:
+		ArmamentNames: primary2
+		RevokeDelay: 21
+		Condition: attacking2
+	Armament@3:
+		Name: primary3
+		Weapon: BeamCannonBoosted3
+		LocalOffset: 100,0,200
+		RequiresCondition: charged == 3 && !attacking0 && !attacking1 && !attacking2 && !attacking4 && !attacking5
+	GrantConditionOnAttack@attacking3:
+		ArmamentNames: primary3
+		RevokeDelay: 21
+		Condition: attacking3
+	Armament@4:
+		Name: primary4
+		Weapon: BeamCannonBoosted4
+		LocalOffset: 100,0,200
+		RequiresCondition: charged == 4 && !attacking0 && !attacking1 && !attacking2 && !attacking3 && !attacking5
+	GrantConditionOnAttack@attacking4:
+		ArmamentNames: primary4
+		RevokeDelay: 21
+		Condition: attacking4
+	Armament@5:
+		Name: primary5
+		Weapon: BeamCannonBoosted5
+		LocalOffset: 100,0,200
+		RequiresCondition: charged >= 5 && !attacking0 && !attacking1 && !attacking2 && !attacking3 && !attacking4
+	GrantConditionOnAttack@attacking5:
+		ArmamentNames: primary5
+		RevokeDelay: 21
+		Condition: attacking5
+	Armament@TERTIARY:
+		Weapon: BeamCannonVisual
+		Name: tertiary
+		LocalOffset: 100,0,200
+	Armament@charge:
+		Name: secondary
+		Weapon: BeamCannonCharge
+		LocalOffset: 100,0,200
+		TargetRelationships: Ally
+		ForceTargetRelationships: None
+		Cursor: ability
+		OutsideRangeCursor: ability
+		RequiresCondition: !charged
+	GrantConditionOnAttack@charge:
+		ArmamentNames: secondary
+		RevokeDelay: 61
+		Condition: boosting
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped || parachute
+		Armaments: primary0, primary1, primary2, primary3, primary4, primary5, secondary, tertiary
+		OpportunityFire: False
+	WithMuzzleOverlay:
+	WithSpriteTurret:
+	ExternalCondition@CHARGED:
+		Condition: charged
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+		RequiresCondition: (aiming || attacking0 || attacking1 || attacking2 || attacking3 || attacking4 || attacking5) && !boosting
+	Targetable@BoostMe:
+		RequiresCondition: (aiming || attacking0 || attacking1 || attacking2 || attacking3 || attacking4 ) && !boosting && charged < 5
+		TargetTypes: BoostMe
+	Targetable:
+		RequiresCondition: !being-warped
+		TargetTypes: Ground, Vehicle, C4, BeamCannon
+	SpawnActorOnDeath:
+		Actor: Beam_Cannon.Husk
+		RequiresCondition: !being-warped
+	Voiced:
+		VoiceSet: MWTnkVoice
+
+MSG:
+	Inherits: ^Vehicle
+	Inherits: ^HighResShadow
+	Inherits: ^BiologicalDriver
+	Inherits: ^AutoDeployIdler
+	RenderSprites:
+		Image: mobile_stealth_generator
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 385
+		Prerequisites: tmpl, vehicles, ~blackh
+		Description: Cloaks nearby units and buildings.\n  Unarmed
+	Valued:
+		Cost: 1250
+	Tooltip:
+		Name:
+	Tooltip:
+		Name: Mobile Stealth Generator
+		RequiresCondition: !deployed
+	Tooltip@DEPLOYED:
+		Name: Mobile Stealth Generator (deployed)
+		RequiresCondition: deployed
+	Health:
+		HP: 25000
+	Mobile:
+		Speed: 56
+	SpawnActorOnDeath:
+		Actor: MSG.Husk
+		RequiresCondition: !being-warped
+	Targetable:
+		TargetTypes: Ground, Vehicle, C4, ChaosImmune
+	GrantCondition@PREVIEWWORKAROUND:
+		Condition: real-actor
+	Carryable:
+		LocalOffset: 0,0,150
+	GrantConditionOnDeploy:
+		PauseOnCondition: empdisable || being-warped || being-captured
+		DeployedCondition: deployed
+		UndeployedCondition: undeployed
+		Facing: 368
+		AllowedTerrainTypes: Clear, Rough, Road, Ore, Gems, Beach, Tiberium, BlueTiberium
+		DeploySounds: placbldg.aud
+		UndeploySounds: clicky1.aud
+		UndeployOnMove: true
+		UndeployOnPickup: true
+	ProximityExternalCondition@MSG:
+		Condition: invisibility
+	WithRangeCircle@MSG:
+		RequiresCondition: deployed
+		Range: 4c512
+		Color: 00aa00
+	ProximityExternalCondition@MSG:
+		Range: 4c512
+		Condition: invisibility
+		RequiresCondition: deployed
+		MaximumVerticalOffset: 512
+		AffectsParent: true
