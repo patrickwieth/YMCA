@@ -1,4 +1,4 @@
-
+﻿
 AMCV:
 	Inherits: ^ConstructionVehicle
 	Inherits: ^TDVehicleSprite
@@ -110,6 +110,7 @@ BGGY.PDL:
 BGGY.AA:
 	Inherits: BGGY
 	Inherits: ^PrioAntiLightAA
+	Inherits: ^NodLaserUnit
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
@@ -232,6 +233,7 @@ SPEC:
 	Inherits: ^HighResShadow
 	Inherits: ^AutoDeployAttacker
 	Inherits: ^CloakStealth
+	Inherits: ^NodAdvancedStealthVehicle
 	RenderSprites:
 		Image: spec
 		PlayerPalette: overlayplayer
@@ -305,6 +307,7 @@ LTNK:
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
+	Inherits: ^NodLaserUnit
 	RenderSprites:
 		Image: ltnk
 	Buildable:
@@ -414,7 +417,9 @@ SSM:
 	Valued:
 		Cost: 1050
 	Tooltip:
-		Name: SSM Launcher
+		Name: SSM Napalm Launcher
+	WithProductionIconOverlay@Overlay1:
+		Types: Flame
 	Buildable:
 		BuildPaletteOrder: 150
 		Prerequisites: tmpl, vehicles, ~nod, ~!blackh, ~!promotion.ssm_toxin_launcher, ~!promotion.ssm_multi_launcher
@@ -462,27 +467,25 @@ SSM:
 
 SSM.Toxin:
 	Inherits: SSM
+	WithProductionIconOverlay@Overlay1:
+		Types: Hazard
 	Buildable:
-		BuildPaletteOrder: 91
 		Prerequisites: tmpl, vehicles, ~nod, ~promotion.ssm_toxin_launcher
-		Queue: Vehicle
-		IconPalette: chrometd
 		Description: Long-range chemical rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
 	Tooltip:
 		Name: SSM Chemical Launcher
 	Armament:
-		Weapon: honestjohn.toxin
+		Weapon: honestjohn.chemical
 		LocalOffset: 0,171,0, 0,-171,0
 		PauseOnCondition: empdisable || being-warped
 
 SSM.Multi:
 	Inherits: SSM
 	Inherits: ^PrioAntiHeavy
+	WithProductionIconOverlay@Overlay1:
+		Types: Missile
 	Buildable:
-		BuildPaletteOrder: 91
 		Prerequisites: tmpl, vehicles, ~nod, ~promotion.ssm_multi_launcher
-		Queue: Vehicle
-		IconPalette: chrometd
 		Description: Long-range multiple rocket artillery.\n  Strong vs Infantry, Vehicles and Buildings
 	Tooltip:
 		Name: SSM Multi Launcher
@@ -493,12 +496,28 @@ SSM.Multi:
 		LocalOffset: 0,171,0, 0,-171,0
 		PauseOnCondition: empdisable || being-warped
 
+SSM.Bunkerbuster:
+	Inherits: SSM
+	Inherits: ^PrioArtillery
+	WithProductionIconOverlay@Overlay1:
+		Types: Shell
+	Buildable:
+		Prerequisites: tmpl, vehicles, ~nod, ~promotion.ssm_bunkerbuster
+		Description: Long-range bunker buster artillery.\n  Strong vs Defenses, Fortified Buildings
+	Tooltip:
+		Name: SSM Bunkerbuster
+	Armament:
+		Weapon: honestjohn.bunkerbuster
+		LocalOffset: 0,171,0, 0,-171,0
+		PauseOnCondition: empdisable || being-warped
+
 STNK:
 	Inherits: ^FightingVehicle
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
 	Inherits: ^CloakSpriteTurret
+	Inherits: ^NodAdvancedStealthVehicle
 	RenderSprites:
 		Image: stealth_tank
 	Valued:
@@ -827,6 +846,7 @@ HAR2:
 	Inherits: ^TDVehicleSprite
 	Inherits: ^Harvester
 	Inherits: ^CloakStealth
+	Inherits: ^NodAdvancedStealthVehicle
 	-Crushable:
 	-Carryable:
 	Inherits: ^Shielded
@@ -925,11 +945,12 @@ WTNK:
 		RequiresCondition: !being-warped
 	Voiced:
 		VoiceSet: MWTnkVoice
-﻿
+
 FTNK:
 	Inherits: ^FightingTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
+	Inherits: ^NodFlameUnit
 	RenderSprites:
 		Image: flame_tank
 	Valued:
@@ -1056,6 +1077,7 @@ HFTK:
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
+	Inherits: ^NodFlameUnit
 	RenderSprites:
 		Image: heavy_flame_tank
 	Buildable:
@@ -1298,6 +1320,7 @@ Beam_Cannon:
 	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyAntiHeavy
+	Inherits: ^NodLaserUnit
 	RenderSprites:
 		Image: beam_cannon
 	AutoTargetPriority@DEFAULT:

@@ -1,0 +1,135 @@
+
+GUN.Nod:
+	Inherits: GUN
+	RenderSprites:
+		Image: gun2
+		PlayerPalette: overlayplayertd
+	ActorPreviewPlaceBuildingPreview:
+	Buildable:
+		Prerequisites: hand, ~structures.nod
+		IconPalette: chrometd
+	Armament:
+		Weapon: TurretGunTD
+
+LTUR:
+	Inherits: GUN.Nod
+	Inherits: ^NodLaserUnit
+	RenderSprites:
+		Image: ltur
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Laser Turret
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: hand, ~structures.nod
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+	Turreted:
+		InitialFacing: 136
+	GrantConditionOnFaction@marked:
+		Condition: marked
+		Factions: marked
+	-Armament:
+	Armament:
+		Weapon: LaserTur
+		LocalOffset: 512,0,172
+		RequiresCondition: !marked
+		MuzzleSequence: muzzle
+	Armament@Marked:
+		Weapon: LaserTur.Adv
+		LocalOffset: 512,0,172
+		RequiresCondition: marked
+		MuzzleSequence: muzzle
+	Power:
+		Amount: -25
+	WithMuzzleOverlay:
+
+OBLI:
+	Inherits: ^DefenseTD
+	Inherits: ^NodLaserUnit
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetGround
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: hq, ~structures.nod
+		IconPalette: chrometd
+		Description: Advanced experimental base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Obelisk of Light
+	Health:
+		HP: 75000
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	WithBuildingBib:
+		HasMinibib: true
+		Sequence: bibFtur2
+	-WithSpriteBody:
+	WithChargeSpriteBody:
+		Sequence: active
+	GrantConditionOnFaction@marked:
+		Condition: marked
+		Factions: marked
+	Armament:
+		Weapon: Laser
+		LocalOffset: 0,-85,1280
+		PauseOnCondition: !ammo && charged <= 2
+		RequiresCondition: !marked
+	Armament@Marked:
+		Weapon: Laser.Adv
+		LocalOffset: 0,-85,1280
+		PauseOnCondition: !ammo && charged <= 2
+		RequiresCondition: marked
+	AmmoPool:
+		Ammo: 1
+		AmmoCondition: ammo
+	ReloadAmmoPool@1:
+		Delay: 100
+		Count: 1
+		RequiresCondition: !charged
+	ReloadAmmoPool@2:
+		Delay: 45
+		Count: 1
+		RequiresCondition: charged == 1
+	ReloadAmmoPool@3:
+		Delay: 20
+		Count: 1
+		RequiresCondition: charged == 2
+	ReloadAmmoPool@3:
+		Delay: 10
+		Count: 1
+		RequiresCondition: charged > 2
+	AttackCharges@1:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+		ChargeLevel: 50
+		ChargingCondition: charging
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: obelpowr.aud
+		Interval: 30, 40
+	Power:
+		Amount: -90
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	DetectCloaked:
+		Range: 6c0
+		RequiresCondition: !(disabled || empdisable || being-warped)
+	ExternalCondition@CHARGED:
+		Condition: charged
+	Targetable@BeamCannonBoost:
+		TargetTypes: BeamCannonBoost
+	Targetable@BeamCannon:
+		TargetTypes: BeamCannon
+	Targetable@BoostMe:
+		RequiresCondition: !ammo
+		TargetTypes: BoostMe
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
