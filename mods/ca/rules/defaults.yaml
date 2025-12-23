@@ -1351,7 +1351,6 @@
 
 ^CloakStealth:
 	Cloak@NORMAL:
-		RequiresCondition: invisibility && !cloak-force-disabled
 		InitialDelay: 90
 		CloakDelay: 90
 		CloakSound: trans1.aud
@@ -4393,7 +4392,7 @@ BuildBoost.Dummy:
 	Inherits: ^ExistsInWorld
 	Inherits: ^SpriteActor
 	Inherits: ^LightArmor
-	BallisticMissile:
+	BallisticMissileCA:
 		LaunchAngle: 128
 		Speed: 165
 		AirborneCondition: airborne
@@ -4706,7 +4705,7 @@ BuildBoost.Dummy:
 	Inherits: ^TSRenderVoxel
 	Valued:
 		Cost: 0
-	BallisticMissile:
+	BallisticMissileCA:
 		LaunchAngle: 128
 		Speed: 165
 		AirborneCondition: airborne
@@ -5335,8 +5334,8 @@ BuildBoost.Dummy:
 		Condition: produced
 	ProductionBar:
 		ProductionType: Infantry
-	ProvidesPrerequisite@infantryany:
-		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantry:
+		Prerequisite: infantry
 	ProximityExternalCondition@close:
 		Range: 7c0
 		ValidRelationships: Ally
