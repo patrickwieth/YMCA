@@ -778,7 +778,7 @@ V3RL:
 		Condition: aiming
 		RevokeDelay: 50
 		RevokeAll: false
-	MissileSpawnerMaster:
+	MissileSpawnerMasterCA:
 		Actors: V3
 		RespawnTicks: 250
 	FireWarheadsOnDeathCA:
@@ -795,7 +795,7 @@ V3BRL:
 		Description: Extreme long-range rocket artillery.\n  Rockets can be shot down by anti-air.\n  Strong vs Buildings, Infantry\n  Weak vs Tanks, Aircraft
 	Tooltip:
 		Name: V3 Launcher
-	MissileSpawnerMaster:
+	MissileSpawnerMasterCA:
 		Actors: V3B
 
 V4RL:
@@ -807,7 +807,7 @@ V4RL:
 		Name: V4 Launcher
 	AttackFrontal:
 		ForceFireIgnoresActors: False
-	MissileSpawnerMaster:
+	MissileSpawnerMasterCA:
 		Actors: V4
 
 V3:
@@ -821,7 +821,7 @@ V3:
 		Name: V3 Rocket
 	Health:
 		HP: 12000
-	BallisticMissile:
+	BallisticMissileCA:
 		LaunchAngle: 95
 		Speed: 165
 	LeavesTrails:
@@ -855,7 +855,7 @@ V3B:
 
 V4:
 	Inherits: V3
-	BallisticMissile:
+	BallisticMissileCA:
 		Homing: true
 
 KATY:
@@ -2117,11 +2117,11 @@ Rice_Cooker:
 		Queue: Vehicle
 		BuildPaletteOrder: 160
 		Prerequisites: indp, ~promotion.rice_cooker
-		Description: The great leader has engineered the best Rice Cooker in the world.\nHis excellency's engineering is so supreme, the Rice Cooker can be used as an artillery\nand unsurprisingly is the best artillery in the world.\nOnce the great leader steered the Rice Cooker and fired a shot that flew around the globe and hit South Korea from the south!
+		Description: The great leader has engineered the best Rice Cooker in the world.\nHis excellency now pressure-seals infantry in the shells so they can be hurled across the map,\nthen parachute out once the bombardment lands.\nOnce the great leader steered the Rice Cooker and fired a shot that flew around the globe and hit South Korea from the south!
 	TooltipExtras:
 		Strengths: • Strong vs Infantry, Defenses
 		Weaknesses: • Weak vs Anti-Air, Aircraft
-		Attributes: • Extreme range artillery
+		Attributes: • Launches passengers \n • Airship of the People can produce directly into the Rice Cooker
 	Valued:
 		Cost: 3000
 	Tooltip:
@@ -2134,17 +2134,63 @@ Rice_Cooker:
 		Voice: Move
 	Passenger:
 		Voice: Move
-	Armament:
+	Cargo:
+		Types: Infantry
+		MaxWeight: 5
+		InitialUnits: conscript
+		LoadedCondition: ricecargo
+		CargoFullCondition: ricecargo_full
+	WithCargoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+	Production@CargoInfantry:
+		Produces: Infantry, Soldier
+		ProduceIntoCargo: True
+		CargoPriority: 100
+		PauseOnCondition: being-warped
+		RequiresCondition: closeToBarracks && !ricecargo_full && !infdisabled
+	GrantConditionOnPrerequisite@vehiclesonly:
+		Condition: infdisabled
+		Prerequisites: techlevel.vehiclesonly
+	GrantConditionOnPrerequisite@aircraftonly:
+		Condition: infdisabled
+		Prerequisites: techlevel.aircraftonly
+	ExternalCondition@closeToBarracks:
+		Condition: closeToBarracks
+	WithDecoration@closeToBarracks:
+		Image: select
+		Palette: chrometd
+		Sequence: infantry
+		Position: TopRight
+		RequiresCondition: closeToBarracks
+		RequiresSelection: True
+		ValidRelationships: Ally, Neutral
+	AttackTurreted:
+		Armaments: primary, passenger
+	Armament@primary:
+		Name: primary
 		Weapon: RiceShellLauncher
-	MissileSpawnerMaster:
+		RequiresCondition: !ricecargo
+	Armament@passenger:
+		Name: passenger
+		Weapon: RicePassengerLauncher
+		RequiresCondition: ricecargo
+	MissileSpawnerMasterCA:
 		Actors: Rice_Shell
 		RespawnTicks: 80
+		ArmamentNames: primary
+		PauseOnCondition: ricecargo
+		SpawnOffset: 100,0,1c500
+	PassengerProjectileLauncher:
+		Armament: passenger
+		ProjectileActor: rice_passengershell
+		SpawnOffset: 0,0,1c0
 	FireWarheadsOnDeathCA:
 		Weapon: BarrelExplode
 	Voiced:
 		VoiceSet: V3Voice
 	Exit:
-		SpawnOffset: 300,0,1c256
+		SpawnOffset: 300,0,3c256
 
 Rice_Shell:
 	Inherits: ^ShootableMissile
@@ -2154,7 +2200,7 @@ Rice_Shell:
 		Name: Rice Cooker Shell
 	Health:
 		HP: 25000
-	BallisticMissile:
+	BallisticMissileCA:
 		LaunchAngle: 120
 		Speed: 150
 	LeavesTrails:
@@ -2173,6 +2219,33 @@ Rice_Shell:
 		Weapon: VisualExplodeAirborne
 		RequiresCondition: airborne
 	WithFacingSpriteBody:
+
+Rice_PassengerShell:
+	Inherits: ^ShootableMissile
+	Valued:
+		Cost: 0
+	Tooltip:
+		Name: Passenger Shell
+	Tooltip@NoRow:
+		Name: Passenger Shell
+	Health:
+		HP: 25000
+	RenderSprites:
+		Image: rice_shell
+	BallisticMissileCA:
+		LaunchAngle: 120
+		Speed: 150
+		FlightTargetMultiplier: 1.5
+	LeavesTrails:
+		Image: smokey2
+		Palette: tseffect-ignore-lighting-alpha75
+		MovingInterval: 3
+		Type: CenterPosition
+		Offsets: -200, 0, 0
+	PassengerPayload:
+		DropOffset: 0,0,0c0
+		ReleaseDistance: 1c0
+		AttackMoveCells: 2
 
 Gene_Splicer:
 	Inherits: ^FightingTankTurreted

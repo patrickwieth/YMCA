@@ -424,7 +424,7 @@ HeavyBomber.Nuke:
 	Armament@PRIMARY:
 		Weapon: AtomParabombLauncher
 		PauseOnCondition: !ammo
-	MissileSpawnerMaster:
+	MissileSpawnerMasterCA:
 		Actors: AtomParabomb
 		RespawnTicks: 50
 	Exit@1:
@@ -443,7 +443,7 @@ HeavyBomber.Nuke:
 AtomParabomb:
 	Inherits: V3.Kirov
 	Inherits: ^VoxelVehicle
-	BallisticMissile:
+	BallisticMissileCA:
 		LaunchAngle: 0
 		Speed: 150
 	RenderVoxels:
@@ -453,7 +453,6 @@ AtomParabomb:
 		Image: atomparabomb
 	Tooltip:
 		Name: Nuclear Parabomb
-	-WithFacingSpriteBody:
 	ExplodesForMaster:
 		Weapon: AtomParabomb.Impact
 		EmptyWeapon: AtomParabomb.Impact
@@ -483,7 +482,7 @@ HeavyBomber.Tesla:
 	Armament@PRIMARY:
 		Weapon: TeslaGlidebombLauncher
 		PauseOnCondition: !ammo
-	MissileSpawnerMaster:
+	MissileSpawnerMasterCA:
 		Actors: TeslaParabomb
 
 TeslaParabomb:
@@ -861,6 +860,38 @@ BLIMP:
 	GrantConditionOnPrerequisite@aircraftonly:
 		Condition: infdisabled
 		Prerequisites: techlevel.aircraftonly
+	ProximityExternalCondition@close:
+		Range: 7c0
+		ValidRelationships: Ally
+		Condition: closeToBarracks
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantryra:
+		Prerequisite: infantry.human
+	ProvidesPrerequisite@soviet:
+		Factions: soviet, russia, nkorea, iraq
+		Prerequisite: infantry.soviet
+	ProvidesPrerequisite@russia:
+		Factions: russia
+		Prerequisite: infantry.russia
+	ProvidesPrerequisite@nkorea:
+		Factions: nkorea
+		Prerequisite: infantry.nkorea
+	ProvidesPrerequisite@iraq:
+		Factions: iraq
+		Prerequisite: infantry.iraq
+	ProvidesPrerequisite@sovietstructure:
+		RequiresPrerequisites: structures.soviet
+		Prerequisite: infantry.soviet
+	ProvidesPrerequisite@russianstructure:
+		RequiresPrerequisites: structures.russia
+		Prerequisite: infantry.russia
+	ProvidesPrerequisite@ukrainianstructure:
+		RequiresPrerequisites: structures.nkorea
+		Prerequisite: infantry.nkorea
+	ProvidesPrerequisite@iraqistructure:
+		RequiresPrerequisites: structures.iraq
+		Prerequisite: infantry.iraq
 	GrantExternalConditionToProduced:
 		Condition: produced, parachute
 	Exit@1:
@@ -906,7 +937,7 @@ Kirov.V3:
 	-Armament@PRIMARY-RUSSIA:
 	-Armament@PRIMARY-nkorea:
 	-Armament@PRIMARY-IRAQ:
-	MissileSpawnerMaster:
+	MissileSpawnerMasterCA:
 		Actors: V3.Kirov
 		RespawnTicks: 50
 	Exit@1:
@@ -920,7 +951,7 @@ Kirov.V3:
 
 V3.Kirov:
 	Inherits: V3
-	BallisticMissile:
+	BallisticMissileCA:
 		LaunchAngle: 20
 		Speed: 135
 
