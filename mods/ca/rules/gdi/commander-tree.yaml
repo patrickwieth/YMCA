@@ -131,6 +131,8 @@ promotion.Drone_Pairing:
 	PromotionPalette:
 		Column: 7
 
+# Vehicles
+
 promotion.Slingshot:
 	Inherits: ^promotion_item
 	Tooltip:
@@ -361,52 +363,85 @@ promotion.Mobile_EMP:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Mobile EMP
+	RenderSprites:
+		Image: mobile_emp
 	Buildable:
 		IconPalette: chrometd
 		Description: commander-tree-promotion-mobile-emp.description
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, tier3, vehicles, ~gdi, ~!talon
+		Prerequisites: has_points, tier3, vehicles, ~zocom, !upg.moblie_emp
 	TooltipExtras:
 		Strengths: commander-tree-promotion-mobile-emp.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-mobile-emp.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mobile_emp
 	PromotionPalette:
+		Group: MobileEMP
 		Column: 7
 
-promotion.Mobile_EMP_Stable_Reactor:
+promotion.Mobile_EMP.Ranged:
 	Inherits: ^promotion_item
 	Tooltip:
-		Name: Mobile EMP Stable Reactor
+		Name: Mobile EMP Ranged
+	WithProductionIconOverlay@2:
+		Types: Crosshair
+	RenderSprites:
+		Image: mobile_emp
 	Buildable:
 		IconPalette: chrometd
 		Description: commander-tree-promotion-mobile-emp-stable-reactor.description
-		BuildPaletteOrder: 12
-		Prerequisites: has_points, vehicles, ~zocom, tier4, promotion.mobile_emp, !promotion.mobile_emp_volatile_reactor
+		BuildPaletteOrder: 11
+		Prerequisites: has_points, tier4, vehicles, ~zocom, !upg.moblie_emp
 	TooltipExtras:
 		Strengths: commander-tree-promotion-mobile-emp-stable-reactor.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-mobile-emp-stable-reactor.tooltipextras-weaknesses
 	ProvidesPrerequisite@upg:
 		Prerequisite: upg.mobile_emp
 	PromotionPalette:
-		Group: GDIMobileEMP2
+		Group: MobileEMP
 		Column: 7
 
-promotion.Mobile_EMP_Volatile_Reactor:
+promotion.Mobile_EMP.Volatile_Reactor:
 	Inherits: ^promotion_item
 	Tooltip:
 		Name: Mobile EMP Volatile Reactor
+	WithProductionIconOverlay@2:
+		Types: Skull
+	RenderSprites:
+		Image: mobile_emp
 	Buildable:
 		IconPalette: chrometd
 		Description: commander-tree-promotion-mobile-emp-volatile-reactor.description
 		BuildPaletteOrder: 12
-		Prerequisites: has_points, vehicles, ~zocom, tier4, promotion.mobile_emp, !promotion.mobile_emp_stable_reactor
+		Prerequisites: has_points, vehicles, ~zocom, tier4, promotion.mobile_emp
 	TooltipExtras:
 		Strengths: commander-tree-promotion-mobile-emp-volatile-reactor.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-mobile-emp-volatile-reactor.tooltipextras-weaknesses
 	ProvidesPrerequisite@upg:
-		Prerequisite: upg.mobile_emp
+		Prerequisite: upg.mobile_emp2
 	PromotionPalette:
-		Group: GDIMobileEMP2
 		Column: 7
+
+promotion.Mobile_EMP.Ranged.Improved:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Mobile EMP Improved Range
+	WithProductionIconOverlay@2:
+		Types: Wrench
+	RenderSprites:
+		Image: mobile_emp
+	Buildable:
+		IconPalette: chrometd
+		Description: commander-tree-promotion-mobile-emp-volatile-reactor.description
+		BuildPaletteOrder: 12
+		Prerequisites: has_points, vehicles, ~zocom, tier4, promotion.mobile_emp.ranged
+	TooltipExtras:
+		Strengths: commander-tree-promotion-mobile-emp-volatile-reactor.tooltipextras-strengths
+		Weaknesses: commander-tree-promotion-mobile-emp-volatile-reactor.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mobile_emp2
+	PromotionPalette:
+		Column: 8
 
 promotion.Juggernaut.EMP:
 	Inherits: ^promotion_item
@@ -418,7 +453,7 @@ promotion.Juggernaut.EMP:
 		Types: EMP
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 12
+		BuildPaletteOrder: 11
 		Prerequisites: has_points, vehicles, ~talon, tier3, !promotion.juggernaut.firerate
 		Description: commander-tree-promotion-emp-juggernaut.description
 	TooltipExtras:
@@ -440,7 +475,7 @@ promotion.Juggernaut.Firerate:
 		Types: Bullets
 	Buildable:
 		IconPalette: chrometd
-		BuildPaletteOrder: 12
+		BuildPaletteOrder: 11
 		Prerequisites: has_points, vehicles, ~talon, tier3, !promotion.juggernaut.emp
 		Description: commander-tree-promotion-juggernaut-firerate.description
 	TooltipExtras:
@@ -651,7 +686,7 @@ promotion.Mammoth_MKII:
 	Tooltip:
 		Name: Mammoth MK.II
 	Buildable:
-		BuildPaletteOrder: 15
+		BuildPaletteOrder: 13
 		IconPalette: chrometd
 		Description: commander-tree-promotion-mammoth-mkii.description
 		Prerequisites: has_points, vehicles, ~talon, tier4,

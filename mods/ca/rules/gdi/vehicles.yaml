@@ -451,12 +451,14 @@ MEMP:
 	Inherits: ^Tank
 	Inherits: ^HighResShadow
 	Inherits: ^RobotDriver
+	RenderSprites:
+		Image: mobile_emp
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
 		IconPalette: chrometd
-		Prerequisites: gtek, vehicles, ~gdi, ~promotion.mobile_emp, ~!promotion.mobile_emp_volatile_reactor, ~!promotion.mobile_emp_stable_reactor
-		Description: Self destructs to disable nearby vehicles & structures.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp, ~!upg.moblie_emp
+		Description: Deploys a Mobile EMP carrier that unleashes disabling pulses instead of direct damage.\\n  Detonating the charge shuts down vehicles and defenses so allies can advance.\\n  Requires power to arm and escorts to survive.\\n  Strong vs Vehicles, Buildings\\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1050
 	Tooltip:
@@ -526,12 +528,10 @@ MEMP.Volatile:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
 		IconPalette: chrometd
-		Prerequisites: gtek, vehicles, ~gdi, ~promotion.mobile_emp_volatile_reactor
-		Description: Self destructs to disable nearby vehicles & structures.\nUpgraded with Volatile Reactor to EMP on destruction.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp.volatile_reactor
+		Description: Converts the Mobile EMP into a one-shot assault carrier whose volatile reactor detonates if the chassis is destroyed.\\n  Charges disabling pulses that cripple vehicles and structures, then leaves a last-gasp EMP shockwave behind.\\n  Requires power to arm and escorts to reach its target.\\n  Strong vs Vehicles, Buildings\\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1150
-	Health:
-		HP: 55000
 	Tooltip:
 		Name: Mobile E.M.P (Volatile)
 	Mobile:
@@ -539,58 +539,40 @@ MEMP.Volatile:
 		Voice: Move
 		Speed: 115
 	FireWarheadsOnDeathCA:
-		Weapon: MEMP.smaller
+		Weapon: MEMP
 		EmptyWeapon: VisualExplodeHusk
 
-MEMP.Stable:
+MEMP.Ranged:
 	Inherits: MEMP
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 260
-		IconPalette: chrometd
-		Prerequisites: gtek, vehicles, ~gdi, ~promotion.mobile_emp_stable_reactor
-		Description: Releases EMP Wave to disable nearby vehicles & structures.\n\nUpgraded with Stable Reactor to allow multiple EMP Waves.\n  Requires power to operate.\n  Strong vs Vehicles, Buildings\n  Weak vs Infantry, Aircraft
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp.ranged
+		Description: Refits the Mobile EMP with a Stable Reactor and launcher that fires EMP spheres from stand-off range instead of self-destructing.\\n  Enables repeated pulses without sacrificing the vehicle but leaves it vulnerable while channeling.\\n  Requires power to operate.\\n  Strong vs Vehicles, Buildings\\n  Weak vs Infantry, Aircraft
 	Valued:
-		Cost: 1150
+		Cost: 1250
 	Tooltip:
-		Name: Mobile E.M.P (Stable)
+		Name: Mobile E.M.P (Ranged)
 	-ChargingSelfDestruct:
-	AmmoPool:
-		Name: explosion
-		Armaments: explosion
-		ReloadDelay: 0
-		InitialAmmo: 0
-		AmmoCondition: ammo
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		Margin: 4, 3
-		RequiresSelection: true
-		FullSequence: pip-red
-	ReloadAmmoPoolCA:
-		Delay: 200
-		Count: 1
-		DelayAfterReset: 50
-		ShowSelectionBar: true
-		SelectionBarColor: ff00ff
-		AmmoPool: explosion
-	PeriodicExplosion:
-		Weapon: MEMP
-		RequiresCondition: deployed && ammo
-		AmmoPoolName: explosion
-		InitialDelay: 48
-	GrantConditionOnDeploy:
-		DeployedCondition: deployed
-		UndeployedCondition: undeployed
-		UndeployOnMove: True
-		DeploySounds: mobempcharge1.aud
-		Voice: Attack
-		PauseOnCondition: !radarenabled || empdisable || being-warped
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-	WithAmmoPipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
+	Turreted@PRIMARY:
+		Offset: 0,0,0
+		TurnSpeed: 16
+	Armament@PRIMARY:
+		Weapon: EmpSphereThrower
+		LocalOffset: 900,180,340
+		MuzzleSequence: muzzle
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+
+MEMP.Ranged.Improved:
+	Inherits: MEMP
+	Buildable:
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp.ranged.improved
+		Description: Further tunes the Stable Reactor kit for greater reach and faster cycling, letting the Mobile EMP blanket battlefields from safety.\\n  Sustains repeated EMP pulses without sacrificing the chassis but still needs escorts while firing.\\n  Requires power to operate.\\n  Strong vs Vehicles, Buildings\\n  Weak vs Infantry, Aircraft
+	Valued:
+		Cost: 1500
+	Armament@PRIMARY:
+		Weapon: EmpSphereThrower.Improved
+		LocalOffset: 900,180,340
+		MuzzleSequence: muzzle
 
 MSAR:
 	Inherits: ^Vehicle
@@ -1355,7 +1337,7 @@ SLNG:
 		Name: Slingshot
 	Buildable:
 		BuildPaletteOrder: 130
-		Prerequisites: gtek, ~promotion.slingshot
+		Prerequisites: tier3, ~promotion.slingshot
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Fast, lightly armoured anti-air unit.\n  Strong vs Aircraft\n Weak vs Infantry, Vehicles, Buildings
