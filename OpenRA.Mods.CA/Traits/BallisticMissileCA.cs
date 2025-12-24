@@ -22,6 +22,10 @@ namespace OpenRA.Mods.CA.Traits
 	[Desc("This unit, when ordered to move, will fly in ballistic path then will detonate itself upon reaching target.")]
 	public class BallisticMissileCAInfo : MissileBaseInfo
 	{
+		[Desc("Multiply the horizontal target offset to create a longer ballistic arc. " +
+			"Values > 1 overshoot the target so that the apex happens above the actual target position.")]
+		public readonly float FlightTargetMultiplier = 1f;
+
 		public override object Create(ActorInitializer init) { return new BallisticMissileCA(init, this); }
 	}
 
@@ -35,7 +39,9 @@ namespace OpenRA.Mods.CA.Traits
 
 		public override void SetTarget(Target target)
 		{
-			Target = Target.FromPos(target.CenterPosition);
+			Target = target.IsValidFor(self)
+				? Target.FromPos(target.CenterPosition)
+				: Target.FromPos(self.CenterPosition);
 		}
 
 		protected override Activity GetActivity(Actor self, Target target)

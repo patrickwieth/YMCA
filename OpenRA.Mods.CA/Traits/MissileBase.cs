@@ -72,7 +72,7 @@ namespace OpenRA.Mods.CA.Traits
 		static readonly (CPos, SubCell)[] NoCells = { };
 
 		public readonly MissileBaseInfo Info;
-		readonly Actor self;
+		protected readonly Actor self;
 		public Target Target;
 
 		IEnumerable<int> speedModifiers;
@@ -138,7 +138,8 @@ namespace OpenRA.Mods.CA.Traits
 			if (altitude.Length >= Info.MinAirborneAltitude)
 				OnAirborneAltitudeReached();
 
-			if (Info.AudibleThroughFog || (!self.World.ShroudObscures(self.CenterPosition) && !self.World.FogObscures(self.CenterPosition)))
+			if (Info.LaunchSounds.Length > 0 &&
+				(Info.AudibleThroughFog || (!self.World.ShroudObscures(self.CenterPosition) && !self.World.FogObscures(self.CenterPosition))))
 				Game.Sound.Play(SoundType.World, Info.LaunchSounds, self.World, self.CenterPosition, null, Info.SoundVolume);
 		}
 

@@ -38,7 +38,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		MapPreview mapPreview;
 
 		readonly string savedOptionsFilePath;
-		private bool hasSavedOptions;
+		readonly ButtonWidget loadOptionsButton;
+		readonly ButtonWidget saveOptionsButton;
+		readonly ButtonWidget resetOptionsButton;
+		bool hasSavedOptions;
 
 		[ObjectCreator.UseCtor]
 		internal LobbyOptionsLogicCA(Widget widget, OrderManager orderManager, Func<MapPreview> getMap, Func<bool> configurationDisabled)
@@ -52,19 +55,31 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			yMargin = optionsContainer.Bounds.Y;
 			checkboxRowTemplate = optionsContainer.Get("CHECKBOX_ROW_TEMPLATE");
 			dropdownRowTemplate = optionsContainer.Get("DROPDOWN_ROW_TEMPLATE");
+			var optionsBin = widget.Parent ?? widget;
 
 			var logDir = Platform.SupportDir + "Logs";
 			savedOptionsFilePath = Path.Combine(logDir, "cameo-lobbyoptions.log");
 			hasSavedOptions = File.Exists(savedOptionsFilePath);
-			var loadOptions = widget.Parent.Get<ButtonWidget>("LOAD_OPTIONS");
-			var saveOptions = widget.Parent.Get<ButtonWidget>("SAVE_OPTIONS");
-			var resetOptions = widget.Parent.Get<ButtonWidget>("RESET_OPTIONS");
-			loadOptions.OnClick = () => LoadOptions();
-			loadOptions.IsDisabled = () => !hasSavedOptions || configurationDisabled();
-			saveOptions.OnClick = () => SaveOptions();
-			saveOptions.IsDisabled = () => configurationDisabled();
-			resetOptions.OnClick = () => ResetOptions();
-			resetOptions.IsDisabled = () => configurationDisabled();
+			loadOptionsButton = optionsBin.GetOrNull<ButtonWidget>("LOAD_OPTIONS");
+			if (loadOptionsButton != null)
+			{
+				loadOptionsButton.OnClick = () => LoadOptions();
+				loadOptionsButton.IsDisabled = () => !hasSavedOptions || configurationDisabled();
+			}
+
+			saveOptionsButton = optionsBin.GetOrNull<ButtonWidget>("SAVE_OPTIONS");
+			if (saveOptionsButton != null)
+			{
+				saveOptionsButton.OnClick = () => SaveOptions();
+				saveOptionsButton.IsDisabled = () => configurationDisabled();
+			}
+
+			resetOptionsButton = optionsBin.GetOrNull<ButtonWidget>("RESET_OPTIONS");
+			if (resetOptionsButton != null)
+			{
+				resetOptionsButton.OnClick = () => ResetOptions();
+				resetOptionsButton.IsDisabled = () => configurationDisabled();
+			}
 
 			mapPreview = getMap();
 			RebuildOptions();
@@ -250,6 +265,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				var json = JsonConvert.SerializeObject(options);
 				File.WriteAllText(savedOptionsFilePath, json);
 				hasSavedOptions = true;
+				if (loadOptionsButton != null)
+					loadOptionsButton.IsDisabled = () => !hasSavedOptions || configurationDisabled();
 				TextNotificationsManager.AddChatLine(orderManager.Connection.LocalClientId, null, "Lobby options saved.", Color.Lime, Color.Lime);
 			}
 			catch

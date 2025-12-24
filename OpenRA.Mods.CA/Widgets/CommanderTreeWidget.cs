@@ -1216,15 +1216,18 @@ namespace OpenRA.Mods.CA.Widgets
 				if (!from.IsVisible || !to.IsVisible)
 					continue;
 
-				var fromKey = GetEdgeContainerKey(from);
-				var toKey = GetEdgeContainerKey(to);
+				var useGroupStart = ShouldUseGroupStartAnchor(edge);
+				var useGroupEnd = ShouldUseGroupEndAnchor(edge);
+
+				var fromKey = GetEdgeContainerKey(from, useGroupStart);
+				var toKey = GetEdgeContainerKey(to, useGroupEnd);
 				var dedupKey = fromKey + "->" + toKey;
 				if (!renderedKeys.Add(dedupKey))
 					continue;
 
 				var edgeColor = (!from.Revealed || !to.Revealed) ? Color.FromArgb(EdgeColor.A / 2, EdgeColor.R, EdgeColor.G, EdgeColor.B) : EdgeColor;
-				var start = RenderOrigin.ToFloat2() + GetEdgeStartAnchor(from);
-				var end = RenderOrigin.ToFloat2() + GetEdgeEndAnchor(to);
+				var start = RenderOrigin.ToFloat2() + GetEdgeStartAnchor(from, useGroupStart);
+				var end = RenderOrigin.ToFloat2() + GetEdgeEndAnchor(to, useGroupEnd);
 				var dir = end - start;
 				var length = dir.Length;
 				if (length < 1f)
@@ -1260,19 +1263,32 @@ namespace OpenRA.Mods.CA.Widgets
 		}
 
 
-		string GetEdgeContainerKey(CommanderNode node)
+		string GetEdgeContainerKey(CommanderNode node, bool useGroupAnchor)
 		{
-			return node.Group != null ? $"group:{node.Group.Key}" : $"node:{node.Actor.Name}";
+			var useGroup = useGroupAnchor && node.Group != null;
+			return useGroup ? $"group:{node.Group.Key}" : $"node:{node.Actor.Name}";
 		}
 
-		float2 GetEdgeStartAnchor(CommanderNode node)
+		float2 GetEdgeStartAnchor(CommanderNode node, bool useGroupAnchor)
 		{
-			return node.Group != null ? node.Group.BottomAnchor : node.BottomAnchor;
+			var useGroup = useGroupAnchor && node.Group != null;
+			return useGroup ? node.Group.BottomAnchor : node.BottomAnchor;
 		}
 
-		float2 GetEdgeEndAnchor(CommanderNode node)
+		float2 GetEdgeEndAnchor(CommanderNode node, bool useGroupAnchor)
 		{
-			return node.Group != null ? node.Group.TopAnchor : node.TopAnchor;
+			var useGroup = useGroupAnchor && node.Group != null;
+			return useGroup ? node.Group.TopAnchor : node.TopAnchor;
+		}
+
+		bool ShouldUseGroupStartAnchor(CommanderEdge edge)
+		{
+			return edge.From.Group != null && edge.To.Group != null;
+		}
+
+		bool ShouldUseGroupEndAnchor(CommanderEdge edge)
+		{
+			return edge.To.Group != null;
 		}
 
 		void DrawNode(CommanderNode node)

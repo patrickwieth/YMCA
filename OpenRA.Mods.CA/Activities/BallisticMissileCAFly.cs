@@ -20,8 +20,10 @@ namespace OpenRA.Mods.CA.Activities
 	{
 		readonly BallisticMissileCA sbm;
 		readonly WPos initPos;
-		readonly WPos targetPos;
-		int length;
+		readonly WPos actualTargetPos;
+		readonly WPos flightTargetPos;
+		readonly int duration;
+		readonly float flightMultiplier;
 		int ticks;
 		WAngle facing;
 
@@ -33,15 +35,30 @@ namespace OpenRA.Mods.CA.Activities
 				this.sbm = sbm;
 
 			initPos = self.CenterPosition;
-			targetPos = t.CenterPosition; // fixed position == no homing
-			length = Math.Max((targetPos - initPos).Length / this.sbm.Info.Speed, 1);
-			facing = (targetPos - initPos).Yaw;
+			actualTargetPos = t.CenterPosition; // fixed position == no homing
+			flightMultiplier = (this.sbm.Info as BallisticMissileCAInfo)?.FlightTargetMultiplier ?? 1f;
+			flightTargetPos = CalculateFlightTarget();
+			var horizontalDistance = (flightTargetPos - initPos).HorizontalLength;
+			duration = Math.Max(horizontalDistance / this.sbm.Info.Speed, 1);
+			facing = (actualTargetPos - initPos).Yaw;
 			sbm.Facing = GetEffectiveFacing();
+		}
+
+		WPos CalculateFlightTarget()
+		{
+			var multiplier = Math.Max(1f, flightMultiplier);
+			if (multiplier == 1)
+				return actualTargetPos;
+
+			var offset = actualTargetPos - initPos;
+			var horizontal = new WVec((int)(offset.X * multiplier), (int)(offset.Y * multiplier), 0);
+			var vertical = new WVec(0, 0, offset.Z);
+			return initPos + horizontal + vertical;
 		}
 
 		WAngle GetEffectiveFacing()
 		{
-			var at = (float)ticks / (length - 1);
+			var at = (float)ticks / Math.Max(duration - 1, 1);
 			var attitude = sbm.Info.LaunchAngle.Tan() * (1 - 2 * at) / (4 * 1024);
 
 			// HACK HACK HACK
@@ -59,20 +76,14 @@ namespace OpenRA.Mods.CA.Activities
 
 		void FlyToward(Actor self, BallisticMissileCA sbm)
 		{
-			var pos = WPos.LerpQuadratic(initPos, targetPos, sbm.Info.LaunchAngle, ticks, length);
+			var pos = WPos.LerpQuadratic(initPos, flightTargetPos, sbm.Info.LaunchAngle, ticks, duration);
 			sbm.SetPosition(self, pos);
 			sbm.Facing = GetEffectiveFacing();
 		}
 
 		public override bool Tick(Actor self)
 		{
-			var d = targetPos - self.CenterPosition;
-
-			// The next move would overshoot, so consider it close enough
-			var move = sbm.FlyStep(sbm.Facing);
-
-			// Destruct so that Explodes will be called
-			if (d.HorizontalLengthSquared < move.HorizontalLengthSquared || self.CenterPosition.Z <= 0)
+			if (ticks >= duration)
 			{
 				Queue(new CallFunc(() => self.Kill(self)));
 				return true;
@@ -85,7 +96,7 @@ namespace OpenRA.Mods.CA.Activities
 
 		public override IEnumerable<Target> GetTargets(Actor self)
 		{
-			yield return Target.FromPos(targetPos);
+			yield return Target.FromPos(actualTargetPos);
 		}
 	}
 }

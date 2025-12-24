@@ -85,7 +85,11 @@ namespace OpenRA.Mods.CA.Tooltips
             if (list.StartsWith(title + ":", StringComparison.OrdinalIgnoreCase))
                 return list;
 
-            return $"{title}:{NewLine}{list}";
+            var separator = list.StartsWith(BulletString, StringComparison.Ordinal)
+                ? " "
+                : NewLine;
+
+            return $"{title}:{separator}{list}";
         }
 
         static string FormatBulletList(string value)
@@ -113,8 +117,7 @@ namespace OpenRA.Mods.CA.Tooltips
 
             var lines = new List<string>();
             var prefix = parts[0].TrimEnd();
-            if (prefix.Length > 0)
-                lines.Add(prefix);
+            var prefixConsumed = false;
 
             for (var i = 1; i < parts.Length; i++)
             {
@@ -122,8 +125,17 @@ namespace OpenRA.Mods.CA.Tooltips
                 if (content.Length == 0)
                     continue;
 
-                lines.Add($"  \u2022 {content}");
+                if (!prefixConsumed && prefix.Length > 0)
+                {
+                    lines.Add($"{prefix} \u2022 {content}");
+                    prefixConsumed = true;
+                }
+                else
+                    lines.Add($"\u2022 {content}");
             }
+
+            if (!prefixConsumed && prefix.Length > 0)
+                lines.Insert(0, prefix);
 
             return string.Join(NewLine, lines);
         }
