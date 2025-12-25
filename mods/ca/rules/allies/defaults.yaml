@@ -74,6 +74,49 @@ Player:
 allies.dummy:
 	Inherits: ^AlliesSupportPowers
 
-	####################################################################################################
+####################################################################################################
+
+^AlliesInfantry:
+	GrantConditionOnPrerequisite@InfantryDoctrine:
+		Condition: infantry-doctrine
+		Prerequisites: promotion.infantry_doctrine
+	DamageMultiplier@InfantryDoctrine:
+		RequiresCondition: infantry-doctrine
+		Modifier: 80
+	RangeMultiplier@InfantryDoctrine:
+		RequiresCondition: infantry-doctrine
+		Modifier: 115
 
 ^AlliesTank:
+	ProductionCostMultiplier@ArmoredDoctrine:
+		Multiplier: 85
+		Prerequisites: promotion.armored_doctrine
+
+^AlliesAircraft:
+	ProductionCostMultiplier@AirforceDoctrine:
+		Multiplier: 85
+		Prerequisites: promotion.airforce_doctrine
+
+^AlliesChronoUnit:
+	GrantConditionOnPrerequisite@ChronoTech:
+		Condition: chrono-tech
+		Prerequisites: promotion.chrono_tech
+	FirepowerMultiplier@ChronoTech:
+		RequiresCondition: chrono-tech
+		Modifier: 120
+
+^AlliesCryoUnit:
+	GrantConditionOnPrerequisite@CryoTech:
+		Condition: cryo-tech
+		Prerequisites: promotion.cryo_tech
+	FirepowerMultiplier@CryoTech:
+		RequiresCondition: cryo-tech
+		Modifier: 120
+
+^AlliesPrismUnit:
+	GrantConditionOnPrerequisite@PrismTech:
+		Condition: prism-tech
+		Prerequisites: promotion.prism_tech
+	FirepowerMultiplier@PrismTech:
+		RequiresCondition: prism-tech
+		Modifier: 120

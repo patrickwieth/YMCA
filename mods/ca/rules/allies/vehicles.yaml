@@ -138,7 +138,6 @@ MCV.Nukular:
 	Transforms:
 		IntoActor: fact.nukular
 
-
 MGG:
 	Inherits: ^Vehicle
 	Inherits: ^BiologicalDriver
@@ -329,6 +328,9 @@ Tow_Jeep:
 		Image: towjeep
 	Tooltip:
 		Name: Tow Ranger
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	Armament:
 		Weapon: LOSAT
 
@@ -342,6 +344,9 @@ AA_Jeep:
 		Image: aajeep
 	Tooltip:
 		Name: Anti-Air Ranger
+	AttackFrontal:
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
 	Armament:
 		Weapon: JeepMissileAA
 
@@ -349,6 +354,7 @@ AA_Jeep:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
+	Inherits: ^AlliesTank
 	Inherits: ^ImprovedVision
 	RenderSprites:
 		Image: light_tank
@@ -429,6 +435,7 @@ AA_Jeep:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
+	Inherits: ^AlliesTank
 	RenderSprites:
 		Image: medium_tank
 	Buildable:
@@ -462,6 +469,7 @@ AA_Jeep:
 
 2TNK.Chrono:
 	Inherits: 2TNK
+	Inherits: ^AlliesChronoUnit
 	RenderSprites:
 		Image: medium_tank
 		FactionImages:
@@ -549,6 +557,7 @@ ARTY:
 	Inherits: ^FightingVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
+	Inherits: ^AlliesTank
 	RenderSprites:
 		Image: arty
 	Buildable:
@@ -582,6 +591,7 @@ ARTY:
 
 ARTY.Chrono:
 	Inherits: ARTY
+	Inherits: ^AlliesChronoUnit
 	RenderSprites:
 		Image: arty
 	-Buildable:
@@ -609,6 +619,8 @@ Prismtank:
 		Image: prismtank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyWeapon
+	Inherits: ^AlliesTank
+	Inherits: ^AlliesPrismUnit
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 135
@@ -708,6 +720,8 @@ CRYO:
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioArtillery
+	Inherits: ^AlliesTank
+	Inherits: ^AlliesCryoUnit
 	RenderSprites:
 	Valued:
 		Cost: 1150
@@ -747,6 +761,8 @@ CTNK:
 		Image: ctnk
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
+	Inherits: ^AlliesTank
+	Inherits: ^AlliesChronoUnit
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 175
@@ -827,6 +843,8 @@ CHPR:
 		Image: chpr
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioEnergyWeapon
+	Inherits: ^AlliesTank
+	Inherits: ^AlliesChronoUnit
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 225
@@ -989,6 +1007,7 @@ BATF:
 	Inherits: ^FightingTankTurreted
 	Inherits: ^BigVehicle
 	Inherits: ^BiologicalDriver
+	Inherits: ^AlliesTank
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 230
@@ -1072,6 +1091,7 @@ BATF.Bunker:
 	Inherits: ^Transport
 	Inherits: ^AttackingCargo
 	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^AlliesTank
 	RenderSprites:
 		Image: batf.bunker
 	Buildable:
@@ -1164,6 +1184,8 @@ BATF.Prism:
 	Inherits: ^PrioEnergyWeapon
 	Inherits: ^BiologicalDriver
 	Inherits: ^HighResShadow
+	Inherits: ^AlliesTank
+	Inherits: ^AlliesPrismUnit
 	RenderSprites:
 		Image: batf.prism
 	Buildable:
@@ -1438,6 +1460,7 @@ IFV:
 	Inherits: ^Transport
 	Inherits: ^PrioAntiHeavyAA
 	Inherits: ^PointLaserDefenseSystem
+	Inherits: ^AlliesTank
 	-WithProductionIconOverlay@PDL:
 	Armament@pointdefense:
 		RequiresCondition: cryoturr
@@ -1703,6 +1726,7 @@ IFV.AI:
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^AlliesTank
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 60
@@ -1767,6 +1791,7 @@ RTNK:
 	Inherits: ^HighResShadow
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLight
+	Inherits: ^AlliesTank
 	Inherits: ^CloakStealth
 	RenderSprites:
 		Image: mirage
