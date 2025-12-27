@@ -184,8 +184,8 @@ commander-tree-promotion-surveillance-btr =
 ### commander-tree-promotion-yuri
 
 commander-tree-promotion-yuri =
-    .buildable-description =
-        Form Unholy Alliance with Yuri and his forces.
+	.buildable-description =
+		Form Unholy Alliance with Yuri and his forces.
 
         This replaces multiple units and support powers:
 
@@ -197,12 +197,19 @@ commander-tree-promotion-yuri =
 
          Genetic Mutation Bomb replaces Parabombs.
     .description =
-        Form Unholy Alliance with Yuri and his forces.
-         This replaces multiple units and support powers:
-          Lasher Tank replaces Heavy Tank.
-          Yuri replaces Boris.
-          Chaos Drone replaces MAD Tank
-          Genetic Mutation Bomb replaces Parabombs.
+		Form Unholy Alliance with Yuri and his forces.
+		 This replaces multiple units and support powers:
+		  Lasher Tank replaces Heavy Tank.
+		  Yuri replaces Boris.
+		  Chaos Drone replaces MAD Tank
+		  Genetic Mutation Bomb replaces Parabombs.
+	.tooltipextras-strengths = Strengths: • Unlocks Yuri units plus Superweapons, giving versatile mind-control and toxins in one pick.
+	.tooltipextras-weaknesses = Weaknesses: • Replaces classic Soviet staples (Boris, MAD Tank, Heavy Tank) so you lose their roles permanently.
+	.tooltipextras-attributes =
+		Attributes: • Grants Yuri hero
+		 • Replaces Heavy Tank with Lasher Tank
+		 • Replaces MAD Tank with Chaos Drone
+		 • Swaps Parabombs for the Genetic Mutation Bomb support power
 
 
 ### commander-tree-promotion-airship
