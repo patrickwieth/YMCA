@@ -105,6 +105,71 @@ aircraft-orcav2-torp =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
     .tooltipextras-attributes = Attributes: • Detects submerged vessels
 
+### commander-tree-promotion-aircraft-armor
+
+commander-tree-promotion-aircraft-armor =
+    .buildable-description =
+        Finances a comprehensive armor refit for Orcas, stealth fighters, ion warships, and every other GDI aircraft chassis.
+        Once complete, all aircraft inheriting the armor package suffer 15% less incoming damage.
+    .description =
+        Commit commander points to the aircraft armor initiative so your strike craft can loiter longer over AA fire and survive counter-strikes.
+        The protection is passive and applies immediately to current and future aircraft.
+    .tooltipextras-strengths = Strengths: • GDI aircraft with reinforced plating take 15% less damage, extending sortie time.
+    .tooltipextras-weaknesses = Weaknesses: • Does nothing for ground vehicles or walkers.
+    .tooltipextras-attributes = Attributes: • Affects aircraft that inherit the armor trait (Orca line, OrcaV2, Stealth Fighter, Ion Warship, etc.).
+
+### commander-tree-promotion-walker-armor
+
+commander-tree-promotion-walker-armor =
+    .buildable-description =
+        Diverts funding into heavy composite plating for Titans, Juggernauts, Mammoth Mk.IIs, and other battle walkers.
+        Each armored walker takes 10% less incoming damage after the refit.
+    .description =
+        Authorize a walker armor retrofit so frontline mechs shrug off artillery and focus fire while anchoring assaults.
+        The upgrade is permanent and improves every walker chassis you already own or build next.
+    .tooltipextras-strengths = Strengths: • Walker hulls gain 10% damage resistance, boosting survivability under siege.
+    .tooltipextras-weaknesses = Weaknesses: • Provides no benefit to hovercraft, tanks, or aircraft.
+    .tooltipextras-attributes = Attributes: • Applies to units with the Walker Upgrades trait (Titans, Juggernauts, Mammoth Mk.II, etc.).
+
+### commander-tree-promotion-walker-speed
+
+commander-tree-promotion-walker-speed =
+    .buildable-description =
+        Tunes walker gyro-stabilizers and actuators for faster stride cycles, increasing speed by 10%.
+        Lets Titans, Juggernauts, and MK.IIs reposition before enemies can flank them.
+    .description =
+        Invest in walker mobility upgrades to keep your mechs responsive—useful for kiting artillery, dodging EMP, or reinforcing fronts faster.
+        The boost stacks with other movement buffs and applies automatically to all eligible walkers.
+    .tooltipextras-strengths = Strengths: • Walker leg actuators gain +10% speed, improving response time and micro potential.
+    .tooltipextras-weaknesses = Weaknesses: • No direct increase to damage or armor; walkers still need escorts.
+    .tooltipextras-attributes = Attributes: • Affects Titan, Juggernaut, Mammoth Mk.II, and any future walker inheriting the speed trait.
+
+### commander-tree-promotion-vehicle-armor
+
+commander-tree-promotion-vehicle-armor =
+    .buildable-description =
+        Authorizes a full vehicle armor program so GDI heavy armor receives layered composites and ablative panels.
+        Every chassis that inherits the Vehicle Armor package now takes 10% less incoming damage.
+    .description =
+        Commit commander points to reinforce Mammoths, MARVs, Titans, Mobile EMPs, and other heavy hulls with upgraded plating.
+        The effect is permanent and immediately buffs every qualifying vehicle you control or build afterward.
+    .tooltipextras-strengths = Strengths: • Heavy GDI vehicles take 10% less damage, letting frontline armor survive focus-fire.
+    .tooltipextras-weaknesses = Weaknesses: • Provides no benefit to lighter support craft, walkers, or aircraft.
+    .tooltipextras-attributes = Attributes: • Applies to units inheriting the Vehicle Armor template (Medium Tanks, Mammoths, MARV, Mobile EMP, etc.).
+
+### commander-tree-promotion-energy-weapons
+
+commander-tree-promotion-energy-weapons =
+    .buildable-description =
+        Funds ZOCOM research that overclocks sonic emitters, ion cannons, and other experimental energy weapons by 10%.
+        Ideal when your roster leans on Disruptors, Ion Mammoths, Ion Warships, or Mammoth Mk. IIs.
+    .description =
+        Invest commander points into the energy-weapons initiative so every unit inheriting the ZOCOM energy trait deals amplified damage.
+        The upgrade is passive, stacking instantly on existing energy platforms and any you deploy later.
+    .tooltipextras-strengths = Strengths: • +10% firepower for all sonic and ion weapons dramatically increases burst damage.
+    .tooltipextras-weaknesses = Weaknesses: • Offers no boost to ballistic, missile, or machine gun weapons.
+    .tooltipextras-attributes = Attributes: • Affects units with the ZOCOM Energy Weapons trait (Disruptor, Ion Mammoth, Ion Warship, Mammoth Mk. II, etc.).
+
 ### commander-tree-promotion-jumpjet
 
 commander-tree-promotion-jumpjet =
@@ -751,6 +816,16 @@ commander-tree-promotion-slingshot =
     .tooltipextras-strengths = Strengths: • Grants access to fast anti-air hovertanks.
     .tooltipextras-weaknesses = Weaknesses: • Slingshots contribute almost nothing versus ground armor.
 
+### commander-tree-promotion-aa-mlrs
+
+commander-tree-promotion-aa-mlrs =
+    .description =
+        Refits the MLRS into a dedicated anti-air battery loaded with seeker rockets that exclusively hunt aircraft.
+        Unlocks the MLRS (AA) variant at the War Factory while blocking the Hover and Hailstorm conversions.
+    .tooltipextras-strengths = Strengths: • Dedicated AA rockets erase gunships, bombers, and dropships from well outside flak range.
+    .tooltipextras-weaknesses = Weaknesses: • Gives up all ground-fire capability and still relies on escorts to stop tanks.
+    .tooltipextras-attributes = Attributes: • Unlocks the MLRS (AA) build option; mutually exclusive with other MLRS promotions.
+
 ### commander-tree-promotion-hover-mlrs
 
 commander-tree-promotion-hover-mlrs =
@@ -799,6 +874,26 @@ commander-tree-promotion-medium-tank-reflector =
     .description = Upgrades Medium Tanks with reflector armor plating to shrug off energy weapons.
     .tooltipextras-strengths = Strengths: • Reflector plating shrugs off lasers and ion fire.
     .tooltipextras-weaknesses = Weaknesses: • Forfeits access to the point-defense laser kit.
+
+### commander-tree-promotion-disruptor-pdl
+
+commander-tree-promotion-disruptor-pdl =
+    .description =
+        Installs a point-defense laser lattice on every Disruptor so the sonic tank can zap missiles and artillery before they land.
+        Unlocks the Disruptor (PDL) variant and prevents picking the reflector armor refit at the same time.
+    .tooltipextras-strengths = Strengths: • Point-defense lasers keep Disruptors alive against massed rockets and long-range bombardment.
+    .tooltipextras-weaknesses = Weaknesses: • Offers no extra damage and locks out the reflector armor upgrade.
+    .tooltipextras-attributes = Attributes: • Enables the Disruptor (PDL) build option with an icon overlay to highlight the refit.
+
+### commander-tree-promotion-disruptor-reflector
+
+commander-tree-promotion-disruptor-reflector =
+    .description =
+        Rebuilds the Disruptor hull with reflector armor, turning the sonic platform into a brick against lasers, ion beams, and EMP arcs.
+        Unlocks the Disruptor (Reflector) variant while removing the option to mount a point-defense laser.
+    .tooltipextras-strengths = Strengths: • Reflector plating shrugs off energy-focused retaliation so Disruptors can hold the line.
+    .tooltipextras-weaknesses = Weaknesses: • Still vulnerable to kinetic barrages and cannot equip the PDL system simultaneously.
+    .tooltipextras-attributes = Attributes: • Grants access to the Disruptor (Reflector) build icon with energy-resistance overlay.
 
 ### commander-tree-promotion-mobile-emp
 
@@ -869,6 +964,26 @@ commander-tree-promotion-marv =
     .description = Commissions the MARV epic unit with customizable hardpoints and ore vacuum tines.
     .tooltipextras-strengths = Strengths: • MARV vacuums ore and mounts multiple customizable guns.
     .tooltipextras-weaknesses = Weaknesses: • Slow epic unit that needs escorts and tech support.
+
+### commander-tree-promotion-emp-juggernaut
+
+commander-tree-promotion-emp-juggernaut =
+    .description =
+        Converts Juggernaut artillery shells into EMP capacitors that erupt with disabling pulses on impact.
+        Unlocks the EMP Juggernaut variant for Talon commanders and trades raw damage for shutdown potential.
+    .tooltipextras-strengths = Strengths: • EMP barrages can stall entire armor columns or silence defensive grids.
+    .tooltipextras-weaknesses = Weaknesses: • Reduced lethal damage versus infantry and structures compared to standard shells.
+    .tooltipextras-attributes = Attributes: • Grants access to the EMP Juggernaut build icon with EMP overlay effects.
+
+### commander-tree-promotion-juggernaut-firerate
+
+commander-tree-promotion-juggernaut-firerate =
+    .description =
+        Installs advanced autoloaders and recoil compensators to double the Juggernaut's sustained rate of fire.
+        Ideal when you need relentless artillery coverage instead of utility munitions.
+    .tooltipextras-strengths = Strengths: • Rapid-fire Juggernauts blanket targets with shells before enemies can relocate.
+    .tooltipextras-weaknesses = Weaknesses: • The Juggernaut is still weak against air and fast attackers that underrun the artillery.
+    .tooltipextras-attributes = Attributes: • Unlocks the high-rate-of-fire Juggernaut variant in the commander tree.
 
 ### commander-tree-promotion-titan-battle
 
