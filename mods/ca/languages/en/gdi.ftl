@@ -105,6 +105,19 @@ aircraft-orcav2-torp =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
     .tooltipextras-attributes = Attributes: • Detects submerged vessels
 
+
+promotion-emp-grenades =
+    .description = Refits Grenadiers with electromagnetic grenades that disable vehicles and defenses instead of relying on high-explosive charges.
+
+### commander-tree-promotion-emp-grenades
+
+commander-tree-promotion-emp-grenades =
+    .buildable-description = Refits Grenadiers with EMP grenades that disable vehicles and defenses on impact.
+    .description = Refits Grenadiers with EMP grenades that disable vehicles and defenses on impact.
+    .tooltipextras-strengths = Strengths: • Shuts down tanks, walkers, and turrets so your army can destroy them safely.
+    .tooltipextras-weaknesses = Weaknesses: • Short throw range and light armor leave squads exposed to artillery, snipers, and aircraft.
+    .tooltipextras-attributes = Attributes: • Converts every future Grenadier into an EMP Grenadier automatically.
+
 ### commander-tree-promotion-aircraft-armor
 
 commander-tree-promotion-aircraft-armor =

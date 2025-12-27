@@ -169,6 +169,42 @@ aircraft-suk-conc =
         Fast ground attack aircraft armed with powerful explosive missiles.
         Missiles cause concussion on units.
 
+
+### commander-tree-promotion-surveillance-btr
+
+commander-tree-promotion-surveillance-btr =
+    .buildable-description =
+        Enables to build the Surveillance BTR.
+
+        It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
+    .description =
+        Enables to build the Surveillance BTR.
+          It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
+
+### commander-tree-promotion-yuri
+
+commander-tree-promotion-yuri =
+    .buildable-description =
+        Form Unholy Alliance with Yuri and his forces.
+
+        This replaces multiple units and support powers:
+
+         Lasher Tank replaces Heavy Tank.
+
+         Yuri replaces Boris.
+
+         Chaos Drone replaces MAD Tank
+
+         Genetic Mutation Bomb replaces Parabombs.
+    .description =
+        Form Unholy Alliance with Yuri and his forces.
+         This replaces multiple units and support powers:
+          Lasher Tank replaces Heavy Tank.
+          Yuri replaces Boris.
+          Chaos Drone replaces MAD Tank
+          Genetic Mutation Bomb replaces Parabombs.
+
+
 ### commander-tree-promotion-airship
 
 commander-tree-promotion-airship =

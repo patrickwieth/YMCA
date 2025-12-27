@@ -846,3 +846,128 @@ commander-tree-promotion-scorpion-tank =
 	.tooltipextras-strengths = Strengths: • Strong vs. heavy tanks thanks to mobile anti-armor lasers.
 	.tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and aircraft because armor and AA are limited.
 	.tooltipextras-attributes = Attributes: • Hover chassis lets Scorpions cross water and reposition quickly.
+
+
+
+commander-tree-promotion-advanced-stealth-technology =
+    .buildable-description = Grants stealth vehicles the ability to attack without uncloaking.
+    .description =
+        Grants stealth vehicles an upgrade for enhanced cloak protocols.
+        Stealth Tanks, Specters, and other Nod stealth vehicles don't have to uncloak to attack.
+    .tooltipextras-strengths = Strengths: • Strong for stealth-heavy strategies.
+    .tooltipextras-weaknesses = Weaknesses: • Weak if you focus on overt action.
+    .tooltipextras-attributes = Attributes: • Nod stealth vehicles can stay cloaked when attacking.
+
+
+
+commander-tree-promotion-recon-bike-scrin =
+    .buildable-description = Upgrades recon bikes with Scrin energy weapons that ignore point-defense lasers.
+    .description = Upgrades recon bikes with Scrin energy weapons that ignore point-defense lasers.
+    .tooltipextras-strengths = Strengths: • Strong vs. vehicles and heavy armor through high burst energy bolts.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry screens and aircraft after losing the AA rockets.
+    .tooltipextras-attributes = Attributes: • Energy bolts bypass Point Laser Defense systems.
+
+
+
+commander-tree-promotion-recon-bike-scrin-pdl =
+    .buildable-description = Adds point laser defense modules to Scrin Bikes for extra survivability.
+    .description = Adds point laser defense modules to Scrin Bikes for extra survivability.
+    .tooltipextras-strengths = Strengths: • Strong vs. missiles and counter-battery fire targeting Scrin bikes.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers and cannon fire that the PDL cannot touch.
+    .tooltipextras-attributes = Attributes: • Point Laser Defense protects Scrin bikes without affecting their energy weapons.
+
+
+
+commander-tree-promotion-recon-bike-scrin-reflector =
+    .buildable-description = Bolts experimental reflector armor onto Scrin Bikes to counter energy weapons.
+    .description = Bolts experimental reflector armor onto Scrin Bikes to counter energy weapons.
+    .tooltipextras-strengths = Strengths: • Strong vs. lasers and ion cannons that normally counter Scrin bikes.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectile volleys and mutually exclusive with the PDL retrofit.
+    .tooltipextras-attributes = Attributes: • Reflector plating absorbs energy fire directed at the bikes.
+
+
+
+commander-tree-promotion-recon-bike-rocket-hail =
+    .buildable-description = Refits recon bikes with rocket-hail pods that trade AA for long-range volleys.
+    .description = Refits recon bikes with rocket-hail pods that trade AA for long-range volleys.
+    .tooltipextras-strengths = Strengths: • Strong vs. vehicles and clustered armor with saturating rocket barrages.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and infantry because the AA capability is removed.
+    .tooltipextras-attributes = Attributes: • Converts bikes into light artillery with extended rocket range.
+
+
+
+commander-tree-promotion-recon-bike-rocket-hail-reflector =
+    .buildable-description = Outfits rocket-hail bikes with reflector armor to blunt energy retaliation.
+    .description = Outfits rocket-hail bikes with reflector armor to blunt energy retaliation.
+    .tooltipextras-strengths = Strengths: • Strong vs. energy weapons targeting the rocket artillery bikes.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. ballistic fire and still gives up the point-defense option.
+    .tooltipextras-attributes = Attributes: • Reflector plating shields the rocket pods from laser retaliation.
+
+
+
+commander-tree-promotion-recon-bike-rocket-hail-pdl =
+    .buildable-description = Adds point laser defense to rocket-hail bikes so they survive counterfire.
+    .description = Adds point laser defense to rocket-hail bikes so they survive counterfire.
+    .tooltipextras-strengths = Strengths: • Strong vs. missiles and counter-battery fire aimed at the rocket batteries.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy cannons and energy strikes that slip past the PDL.
+    .tooltipextras-attributes = Attributes: • Point Laser Defense keeps the artillery bikes alive against missiles.
+
+
+
+commander-tree-promotion-recon-bike-explosive =
+    .buildable-description = Swaps recon bike ammo for high-explosive rockets better at shredding light targets.
+    .description = Swaps recon bike ammo for high-explosive rockets better at shredding light targets.
+    .tooltipextras-strengths = Strengths: • Strong vs. light vehicles, infantry, and buildings with high-explosive rockets.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy armor and point-defense lasers that swat the rockets.
+    .tooltipextras-attributes = Attributes: • Keeps AA rockets while adding higher explosive yield.
+
+
+
+commander-tree-promotion-recon-bike-explosive-pdl =
+    .buildable-description = Adds point laser defense to explosive bikes so their volleys land safely.
+    .description = Adds point laser defense to explosive bikes so their volleys land safely.
+    .tooltipextras-strengths = Strengths: • Strong vs. missiles and SAMs aimed at the fragile explosive bikes.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers and tank guns once enemies track the bikes.
+    .tooltipextras-attributes = Attributes: • Point Laser Defense protects the light chassis from counter-rockets.
+
+
+
+commander-tree-promotion-recon-bike-explosive-reflector =
+    .buildable-description = Armors explosive bikes with reflector plating to resist energy ambushes.
+    .description = Armors explosive bikes with reflector plating to resist energy ambushes.
+    .tooltipextras-strengths = Strengths: • Strong vs. energy weapons and aircraft beams that hunt explosive bikes.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectiles and loses access to the PDL upgrade.
+    .tooltipextras-attributes = Attributes: • Reflector plating keeps explosive bikes alive when lasers focus them.
+
+
+
+commander-tree-promotion-recon-bike-pdl =
+    .buildable-description = Installs the point laser defense module on whichever upgraded recon bike variant you field.
+    .description = Installs the point laser defense module on whichever upgraded recon bike variant you field.
+    .tooltipextras-strengths = Strengths: • Strong vs. missiles and artillery aimed at any upgraded recon bike variant.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers, shells, and small-arms fire that bypass the grid.
+    .tooltipextras-attributes = Attributes: • Universal point-defense retrofit for all recon bike loadouts.
+
+
+commander-tree-promotion-recon-bike-reflector =
+    .buildable-description = Unlocks reflector armor kits for recon bikes to blunt enemy energy weapons.
+    .description = Unlocks reflector armor kits for recon bikes to blunt enemy energy weapons.
+    .tooltipextras-strengths = Strengths: • Strong vs. energy weapons and EMP strikes focused on recon bikes.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectiles and incompatible with the point-defense retrofit.
+    .tooltipextras-attributes = Attributes: • Reflector plating replaces the PDL option to resist energy weapons.
+
+
+commander-tree-promotion-scorpion-tank =
+    .buildable-description = Unlocks Scorpion hover tanks armed with anti-armor lasers for fast assaults.
+    .description = Unlocks Scorpion hover tanks armed with anti-armor lasers for fast assaults.
+    .tooltipextras-strengths = Strengths: • Strong vs. heavy tanks thanks to mobile anti-armor lasers.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and aircraft because armor and AA are limited.
+    .tooltipextras-attributes = Attributes: • Hover chassis lets Scorpions cross water and reposition quickly.
+
+
+commander-tree-promotion-beam-cannon =
+    .buildable-description = Unlocks Nod Beam Cannons - long-range energy artillery that can chain fire.
+    .description = Unlocks Nod Beam Cannons - long-range energy artillery that can chain fire.
+    .tooltipextras-strengths = Strengths: • Strong vs. vehicles and defenses when chaining beams or charging Obelisks.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and fast raiders that flank the fragile artillery.
+    .tooltipextras-attributes = Attributes: • Beam Cannons can charge each other or power Obelisks for extra damage.

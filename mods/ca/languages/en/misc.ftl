@@ -642,32 +642,6 @@ aircraft-aurora =
 
         Weak vs Aircraft
 
-### aircraft-chemyak
-
-aircraft-chemyak =
-    .buildable-description =
-        Attack Plane armed with
-
-        toxin spray.
-
-          Strong vs Infantry, Light armor
-
-          Weak vs Aircraft
-
-### aircraft-chemyak-volatile
-
-aircraft-chemyak-volatile =
-    .buildable-description =
-        Attack Plane armed with
-
-        toxin spray.
-
-        Releases Toxin Clouds on crash.
-
-          Strong vs Infantry, Light armor
-
-          Weak vs Aircraft
-
 ### aircraft-dropship
 
 aircraft-dropship =
@@ -925,11 +899,21 @@ commander-tree-commander-tree =
 
         Has Point Defense Laser system.
 
+
+
 ### commander-tree-promotion-advanced-infantry-training
 
 commander-tree-promotion-advanced-infantry-training =
-    .buildable-description = Enables to build specialized Infantry.
-    .description = Enables to build specialized Infantry.
+    .buildable-description =
+        Funds advanced academies so every faction can field elite infantry specialists once the upgrade is complete.
+        Unlocks high-tech squads, medics, and commando options across all aligned barracks.
+    .description =
+        Commits command points to a global infantry doctrine that certifies every barracks to produce late-tier troops.
+        This is a prerequisite for most Tier 3 infantry promotions, so purchase it before planning specialized squads.
+    .tooltipextras-strengths = Strengths: • Unlocks elite infantry (commandos, medics, specialists) across every aligned barracks.
+    .tooltipextras-weaknesses = Weaknesses: • Provides no immediate stat buff—units still cost resources and training time.
+    .tooltipextras-attributes = Attributes: • Required before purchasing most Tier 3 infantry promotions in Allied, Soviet, Nod, GDI, and Scrin trees.
+
 
 ### commander-tree-promotion-air-logistics
 
@@ -937,13 +921,10 @@ commander-tree-promotion-air-logistics =
     .buildable-description = Enables to build the Chinook, Carryall and Dropship.
     .description =
         Enables to build the Chinook, Carryall and Dropship.
+    .tooltipextras-strengths = Strengths: • Strong with mobility strategies that redeploy units or harvesters by air.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. opponents who invest heavily into anti-air defenses.
+    .tooltipextras-attributes = Attributes: • Grants Chinook, Carryall, and Dropship for ferrying troops, vehicles, and supply crates.
 
-
-### commander-tree-promotion-apc-vulcan
-
-commander-tree-promotion-apc-vulcan =
-    .buildable-description = Upgrades the APC with a Vulcan cannon to attack air units.
-    .description = Upgrades the APC with a Vulcan cannon to attack air units.
 
 ### commander-tree-promotion-battlecruiser
 
@@ -990,43 +971,6 @@ commander-tree-promotion-carrier =
         The aircraft are able to fight submarines as well as all ground targets.
     .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 
-### commander-tree-promotion-chemyak
-
-commander-tree-promotion-chemyak =
-    .buildable-description =
-        Equips the Yak Plane with chemical spray.
-
-        It is more efficient vs. heavy vehicles and buildings.
-    .description =
-        Equips the Yak Plane with chemical spray.
-          It is more efficient vs. heavy vehicles and buildings.
-
-### commander-tree-promotion-chemyak-volatile-tanks
-
-commander-tree-promotion-chemyak-volatile-tanks =
-    .buildable-description = Modifies the chemical tanks of the Chemyak to release acid clouds on crash.
-    .description = Modifies the chemical tanks of the Chemyak to release acid clouds on crash.
-
-### commander-tree-promotion-elite-cyborg
-
-commander-tree-promotion-elite-cyborg =
-    .buildable-description =
-        Enables to build the Elite Cyborg.
-
-        A very tough cyborg infantry with scrin weaponry.
-
-        Energy based weapons cannot be intercepted by Point Laser Defense.
-    .description =
-        Enables to build the Elite Cyborg.
-          A very tough cyborg infantry with scrin weaponry.
-          Energy based weapons cannot be intercepted by Point Laser Defense.
-
-### commander-tree-promotion-elite-cyborg-range
-
-commander-tree-promotion-elite-cyborg-range =
-    .buildable-description = Upgrades the range of the Elite Cyborg.
-    .description = Upgrades the range of the Elite Cyborg.
-
 ### commander-tree-promotion-flak-track-barrage
 
 commander-tree-promotion-flak-track-barrage =
@@ -1037,42 +981,6 @@ commander-tree-promotion-flak-track-barrage =
     .description =
         Upgrades the Flak Track with fast firing Flak cannons.
           This makes it better vs. Point Laser Defense Systems and groups of units.
-
-### commander-tree-promotion-hailstorm-mlrs
-
-commander-tree-promotion-hailstorm-mlrs =
-    .buildable-description =
-        Enables to build the Hailstorm MLRS.
-
-         The Hailstorm MLRS fires a lot of rockets over long distances.
-
-        This upgrade removes the anti-air capabilities.
-    .description =
-        Enables to build the Hailstorm MLRS.
-          The Hailstorm MLRS fires a lot of rockets over long distances.
-         This upgrade removes the anti-air capabilities.
-
-### commander-tree-promotion-hover-mlrs-pdl
-
-commander-tree-promotion-hover-mlrs-pdl =
-    .buildable-description =
-        Upgrades the Hover MLRS with a Point Laser Defense System.
-
-        Very resistent vs. Projectile Weapons.
-    .description =
-        Upgrades the Hover MLRS with a Point Laser Defense System.
-         Very resistent vs. Projectile Weapons.
-
-### commander-tree-promotion-hover-mlrs-reflector
-
-commander-tree-promotion-hover-mlrs-reflector =
-    .buildable-description =
-        Equips the Hover MLRS with Reflector Armor.
-
-        Very resistent vs. Energy Weapons.
-    .description =
-        Equips the Hover MLRS with Reflector Armor.
-         Very resistent vs. Energy Weapons.
 
 ### commander-tree-promotion-icbm-submarine
 
@@ -1090,23 +998,6 @@ commander-tree-promotion-missile-submarine =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Submarines
     .description = The Missile Submarine launches a barrage of missiles with very high range.
 
-### commander-tree-promotion-mobile-sensor-pdl
-
-commander-tree-promotion-mobile-sensor-pdl =
-    .buildable-description = Upgrades the Mobile Sensor Array with a Point Laser Defense System.
-    .description = Upgrades the Mobile Sensor Array with a Point Laser Defense System.
-
-### commander-tree-promotion-nona-svk
-
-commander-tree-promotion-nona-svk =
-    .buildable-description =
-        Enables to build the Nona SVK.
-
-        It is a highly mobile artillery unit, excelling at hit and run tactics.
-    .description =
-        Enables to build the Nona SVK.
-          It is a highly mobile artillery unit, excelling at hit and run tactics.
-
 ### commander-tree-promotion-oil-pumps
 
 commander-tree-promotion-oil-pumps =
@@ -1117,97 +1008,23 @@ commander-tree-promotion-oil-pumps =
     .description =
         Enables to build Oil Pumps, Oil Platforms, and Supply Trucks.
           Generates slow trickling endless income.
+    .tooltipextras-strengths = Strengths: • Strong with long macro games that reward steady passive income.
+    .tooltipextras-weaknesses = Weaknesses: • Weak when oil derricks are exposed and easy for raiders to destroy.
+    .tooltipextras-attributes = Attributes: • Grants Oil Pumps, Offshore Platforms, and Supply Trucks that generate infinite trickle credits.
 
 ### commander-tree-promotion-point-defense-turret
 
 commander-tree-promotion-point-defense-turret =
     .buildable-description =
         Enables to build the Point Laser Defense Turret.
-
         It shoots down incoming shells and missiles.
     .description =
         Enables to build the Point Laser Defense Turret.
-          It shoots down incoming shells and missiles.
+        It shoots down incoming shells and missiles.
+    .tooltipextras-strengths = Strengths: • Strong vs. rockets, shells, and aircraft-launched missiles.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. beam weapons and direct-fire assaults.
+    .tooltipextras-attributes = Attributes: • Has a laser battery that needs to recharge from time to time.
 
-### commander-tree-promotion-rebel-leader
-
-commander-tree-promotion-rebel-leader =
-    .buildable-description = Enables to recruit the Rebel Leader who allows to train infantry from the map edges.
-    .description = Enables to recruit the Rebel Leader who allows to train infantry from the map edges.
-
-### commander-tree-promotion-shielded-miners
-
-commander-tree-promotion-shielded-miners =
-    .buildable-description = Equips Miners with shield technology.
-    .description = Equips Miners with shield technology.
-
-### commander-tree-promotion-slingshot
-
-commander-tree-promotion-slingshot =
-    .buildable-description =
-        Enables to build the Slingshot.
-
-        The Slingshot is a hovercraft specialized to shoot down aircraft.
-    .description =
-        Enables to build the Slingshot.
-          The Slingshot is a hovercraft specialized to shoot down aircraft.
-
-### commander-tree-promotion-stealth-miners
-
-commander-tree-promotion-stealth-miners =
-    .buildable-description = Equips Miners with stealth technology.
-    .description = Equips Miners with stealth technology.
-
-### commander-tree-promotion-sukhoi
-
-commander-tree-promotion-sukhoi =
-    .buildable-description =
-        Allows to build the Sukhoi.
-
-        It is a attack fighter to take down groups of vehicles.
-    .description =
-        Allows to build the Sukhoi.
-          It is a attack fighter to take down groups of vehicles.
-
-### commander-tree-promotion-sukhoi-concussion
-
-commander-tree-promotion-sukhoi-concussion =
-    .buildable-description = Upgrades the bombs of Sukhois to cause concussion near the strike site.
-    .description = Upgrades the bombs of Sukhois to cause concussion near the strike site.
-
-### commander-tree-promotion-surveillance-btr
-
-commander-tree-promotion-surveillance-btr =
-    .buildable-description =
-        Enables to build the Surveillance BTR.
-
-        It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
-    .description =
-        Enables to build the Surveillance BTR.
-          It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
-
-### commander-tree-promotion-yuri
-
-commander-tree-promotion-yuri =
-    .buildable-description =
-        Form Unholy Alliance with Yuri and his forces.
-
-        This replaces multiple units and support powers:
-
-         Lasher Tank replaces Heavy Tank.
-
-         Yuri replaces Boris.
-
-         Chaos Drone replaces MAD Tank
-
-         Genetic Mutation Bomb replaces Parabombs.
-    .description =
-        Form Unholy Alliance with Yuri and his forces.
-         This replaces multiple units and support powers:
-          Lasher Tank replaces Heavy Tank.
-          Yuri replaces Boris.
-          Chaos Drone replaces MAD Tank
-          Genetic Mutation Bomb replaces Parabombs.
 
 
 ### defaults-forceshieldsupportpower
@@ -2937,44 +2754,6 @@ vehicles-harv-chrono =
 
         Special Ability: Teleport
 
-### vehicles-hmlrs
-
-vehicles-hmlrs =
-    .buildable-description =
-        Prototype Hover Multiple Launch Rocket System.
-
-        Long-range guided artillery.
-
-          Can attack Aircraft.
-
-          Has weak armor.
-
-          Strong vs Infantry, Vehicles, Buildings
-
-### vehicles-hmlrs-pdl
-
-vehicles-hmlrs-pdl =
-    .buildable-description =
-        Prototype Hover Multiple Launch Rocket System.
-
-        Long-range guided artillery.
-
-          Has Point Laser Defense, which is very good vs. Projectile Weapons.
-
-          Strong vs Conventional Weapons, Weak vs. Energy Weapons
-
-### vehicles-hmlrs-reflector
-
-vehicles-hmlrs-reflector =
-    .buildable-description =
-        Prototype Hover Multiple Launch Rocket System.
-
-        Long-range guided artillery.
-
-          Has Reflector Armor, which is very good vs. Energy Weapons.
-
-          Strong vs Energy Weapons, Weak vs. Conventional Weapons
-
 ### vehicles-hmmv
 
 vehicles-hmmv =
@@ -3238,18 +3017,6 @@ vehicles-mtnk-reflector =
         Strong vs Energy Weapons
 
         Weak vs Infantry, Aircraft
-
-### vehicles-nonasvk
-
-vehicles-nonasvk =
-    .buildable-description =
-        Light Artillery.
-
-        Highly mobile artillery unit.
-
-        Strong vs Light Armor, Infantry, Buildings
-
-        Weak vs Tanks, Aircraft
 
 ### vehicles-rtnk
 
@@ -3706,15 +3473,19 @@ player =
 promotion-point-defense-turret =
     .description = Enables to build the Point Laser Defense Turret.\n  It shoots down incoming shells and missiles.
 promotion-oil-pumps =
-    .description = Enables to build Oil Pumps, Oil Platforms, and Supply Trucks.\n  Generates slow trickling endless income.
+	.description = Enables to build Oil Pumps, Oil Platforms, and Supply Trucks.\n  Generates slow trickling endless income.
 promotion-air-logistics =
-    .description = Enables to build the Chinook, Carryall and Dropship.\n
+	.description = Enables to build the Chinook, Carryall and Dropship.\n
 promotion-advanced-infantry-training =
-    .description = Enables to build specialized Infantry.
-promotion-stealth-miners =
-    .description = Equips Miners with stealth technology.
-promotion-shielded-miners =
-    .description = Equips Miners with shield technology.
+	.buildable-description =
+		Funds advanced academies so every faction can field elite infantry specialists once the upgrade is complete.
+		Unlocks high-tech squads, medics, and commando options across all aligned barracks.
+	.description =
+		Commits command points to a global infantry doctrine that certifies every barracks to produce late-tier troops.
+		This is a prerequisite for most Tier 3 infantry promotions, so purchase it before planning specialized squads.
+	.tooltipextras-strengths = Strengths: • Unlocks advanced infantry for every faction, including commandos and support teams.
+	.tooltipextras-weaknesses = Weaknesses: • Provides no immediate stat buff—units still cost resources and training time.
+	.tooltipextras-attributes = Attributes: • Required before purchasing most infantry promotions in Allied, Soviet, Nod, GDI, and Scrin trees.
 promotion-yuri =
     .description = Form Unholy Alliance with Yuri and his forces. \n This replaces multiple units and support powers: \n  Lasher Tank replaces Heavy Tank. \n  Yuri replaces Boris. \n  Chaos Drone replaces MAD Tank \n  Genetic Mutation Bomb replaces Parabombs. \n
 promotion-flak-track-barrage =
@@ -3723,66 +3494,8 @@ promotion-btr =
     .description = Enables to build the BTR.\n  It is a missile based anti-air troop transporter. \nOptimal for taking out heavy air units.
 promotion-surveillance-btr =
     .description = Enables to build the Surveillance BTR.\n  It has high visual range, detects stealth units, jams radar and is a troop transporter on top.
-promotion-nona-svk =
-    .description = Enables to build the Nona SVK.\n  It is a highly mobile artillery unit, excelling at hit and run tactics.
-promotion-chemyak =
-    .description = Equips the Yak Plane with chemical spray. \n  It is more efficient vs. heavy vehicles and buildings.
-promotion-chemyak-volatile-tanks =
-    .description = Modifies the chemical tanks of the Chemyak to release acid clouds on crash.
-promotion-sukhoi =
-    .description = Allows to build the Sukhoi. \n  It is a attack fighter to take down groups of vehicles.
-promotion-sukhoi-concussion =
-    .description = Upgrades the bombs of Sukhois to cause concussion near the strike site.
-promotion-slingshot =
-    .description = Enables to build the Slingshot. \n  The Slingshot is a hovercraft specialized to shoot down aircraft.
-promotion-hover-mlrs =
-    .description = Enables to build the Hover MLRS. \n  The Hover MLRS improves the MLRS' agility and gives it high explosive rockets.
-promotion-hover-mlrs-reflector =
-    .description = Equips the Hover MLRS with Reflector Armor. \n Very resistent vs. Energy Weapons.
-promotion-hover-mlrs-pdl =
-    .description = Upgrades the Hover MLRS with a Point Laser Defense System. \n Very resistent vs. Projectile Weapons.
-promotion-hailstorm-mlrs =
-    .description = Enables to build the Hailstorm MLRS. \n  The Hailstorm MLRS fires a lot of rockets over long distances. \n This upgrade removes the anti-air capabilities.
-promotion-mobile-sensor-pdl =
-    .description = Upgrades the Mobile Sensor Array with a Point Laser Defense System.
-promotion-medium-tank-pdl =
-    .description = Upgrades the Medium Tank with a Point Laser Defense System.
-promotion-medium-tank-reflector =
-    .description = Equips the Medium Tank with Reflector Armor. \n Very resistent vs. Energy Weapons.
 promotion-apc-vulcan =
     .description = Upgrades the APC with a Vulcan cannon to attack air units.
-promotion-mobile-emp =
-    .description = Enables to build the Mobile EMP unit.
-promotion-mobile-emp-stable-reactor =
-    .description = Upgrades the EMP reactor to allow multiple EMP Waves and don't self destruct on use.
-promotion-mobile-emp-volatile-reactor =
-    .description = Upgrades the EMP reactor to set off an EMP blast when the vehicle is destroyed.
-promotion-titan-battle =
-    .description = Upgrades the Titan with EMP shells. \n  EMP Shells disable the target on impact.
-promotion-titan-railgun =
-    .description = Upgrades the Titan with a Railgun. \n  The Railgun is strong vs. tanks and is an energy based weapon.
-promotion-titan-pdl =
-    .description = Upgrades the Titan with a Point Laser Defense System to shoot down incoming projectiles.
-promotion-titan-reflector =
-    .description = Equips the Titan with Reflector Armor. \n Very resistent vs. Energy Weapons.
-promotion-dronepair =
-    .description = All heavy tanks are produced with a mini drone attached.
-promotion-stealth-fighter =
-    .description = Enables to build the Stealth Fighter. \n  It is a cloaked aircraft optimized to take out single heavy armored vehicles.
-promotion-stealth-fighter-payload =
-    .description = Doubles the Payload of the Stealth Fighter. \n  It allows the Stealth Fighter to take out a second target without resuppyling.
-promotion-mammoth-mkii =
-    .description = Enables to build the Mammoth MK.II. \n  It is the epic walker of Talon. \nArmed with dual railguns and high explosive rockets against ground and air.
-promotion-ion-warship =
-    .description = Enables to build the Orca Ion Warship. \n  It is the epic airship of Eagle. \n  Comes with ion drones delivering ion strikes vs. ground \n  and heavy missiles vs. air.\n
-promotion-marv =
-    .description = Enables to build the Mammoth Armored Reclamation Vehicle. \n  It is the epic tanks of Zocom.\nArmed with a triple ion cannon.\n\nMines Tiberium and Ores when driving over.
-promotion-elite-cyborg =
-    .description = Enables to build the Elite Cyborg. \n  A very tough cyborg infantry with scrin weaponry. \n  Energy based weapons cannot be intercepted by Point Laser Defense.
-promotion-elite-cyborg-range =
-    .description = Upgrades the range of the Elite Cyborg.
-promotion-rebel-leader =
-    .description = Enables to recruit the Rebel Leader who allows to train infantry from the map edges.
 promotion-reinforcements-coordinator =
     .description = Enables to build the Reinforcements Coordinator. \n It coordinates reinforcements directly to the frontline when deployed.
 promotion-buggy-pdl =
@@ -3890,139 +3603,145 @@ promotion-missile-submarine =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Point Defense Laser, Submarines
 commander-tree-player =
     .description = promotions.lobby-description
-commander-tree-promotion-hover-mlrs =
-    .description =
-        Enables to build the Hover MLRS.
-          The Hover MLRS improves the MLRS' agility and gives it high explosive rockets.
-commander-tree-promotion-medium-tank-pdl =
-    .description = Upgrades the Medium Tank with a Point Laser Defense System.
-commander-tree-promotion-medium-tank-reflector =
-    .description =
-        Equips the Medium Tank with Reflector Armor.
-         Very resistent vs. Energy Weapons.
-commander-tree-promotion-mobile-emp =
-    .description = Enables to build the Mobile EMP unit.
-commander-tree-promotion-mobile-emp-stable-reactor =
-    .description = Upgrades the EMP reactor to allow multiple EMP Waves and don't self destruct on use.
-commander-tree-promotion-mobile-emp-volatile-reactor =
-    .description = Upgrades the EMP reactor to set off an EMP blast when the vehicle is destroyed.
-commander-tree-promotion-titan-battle =
-    .description =
-        Upgrades the Titan with EMP shells.
-          EMP Shells disable the target on impact.
-commander-tree-promotion-titan-railgun =
-    .description =
-        Upgrades the Titan with a Railgun.
-          The Railgun is strong vs. tanks and is an energy based weapon.
-commander-tree-promotion-titan-pdl =
-    .description = Upgrades the Titan with a Point Laser Defense System to shoot down incoming projectiles.
-commander-tree-promotion-titan-reflector =
-    .description =
-        Equips the Titan with Reflector Armor.
-         Very resistent vs. Energy Weapons.
-commander-tree-promotion-dronepair =
-    .description = All heavy tanks are produced with a mini drone attached.
-commander-tree-promotion-stealth-fighter =
-    .description =
-        Enables to build the Stealth Fighter.
-          It is a cloaked aircraft optimized to take out single heavy armored vehicles.
-commander-tree-promotion-stealth-fighter-payload =
-    .description =
-        Doubles the Payload of the Stealth Fighter.
-          It allows the Stealth Fighter to take out a second target without resuppyling.
-commander-tree-promotion-mammoth-mkii =
-    .description =
-        Enables to build the Mammoth MK.II.
-          It is the epic walker of Talon.
-        Armed with dual railguns and high explosive rockets against ground and air.
-commander-tree-promotion-ion-warship =
-    .description =
-        Enables to build the Orca Ion Warship.
-          It is the epic airship of Eagle.
-          Comes with ion drones delivering ion strikes vs. ground
-          and heavy missiles vs. air.
-
-commander-tree-promotion-marv =
-    .description =
-        Enables to build the Mammoth Armored Reclamation Vehicle.
-          It is the epic tanks of Zocom.
-        Armed with a triple ion cannon.
-
-        Mines Tiberium and Ores when driving over.
 commander-tree-promotion-reinforcements-coordinator =
-    .description =
-        Enables to build the Reinforcements Coordinator.
-         It coordinates reinforcements directly to the frontline when deployed.
-commander-tree-promotion-buggy-pdl =
-    .description = Upgrades the Buggy with a Point Laser Defense system to shoot down incoming projectiles.
-commander-tree-promotion-buggy-aa =
-    .description = Upgrades the Buggy with an Anti-Air Laser to shoot down aircraft.
-commander-tree-promotion-ssm-launcher =
-    .description = Enables to build the SSM Launcher, a high range artillery.
-commander-tree-promotion-ssm-toxin-launcher =
-    .description =
-        Upgrades the SSM Launcher with chemical missiles.
-          The chemical clouds remain for a prolonged time on the impact site dealing damage.
-commander-tree-promotion-ssm-multi-launcher =
-    .description =
-        Upgrades the SSM Launcher's missiles to split up in multiple missiles on impact.
-          This makes the SSM Launcher more effective against large groups of vehicles.
-commander-tree-promotion-stealth-tank-ap =
-    .description =
-        Upgrades the Stealth Tank with a Armor Piercing Missiles.
-          This makes it much more effective vs. heavy tanks and heavy aircraft.
-commander-tree-promotion-stealth-tank-scrin =
-    .description =
-        Upgrades the Stealth Tank with a Scrin Weapon.
-          Energy based weapons cannot be intercepted by Point Laser Defense.
-commander-tree-promotion-stealth-tank-explosive-rockets =
-    .description = Upgrades the Stealth Tank's missiles with a high explosive load.
-commander-tree-promotion-stealth-tank-reflector =
-    .description =
-        Equips the Stealth Tank with Reflector Armor.
-         Very resistent vs. Energy Weapons.
-commander-tree-promotion-stealth-tank-pdl =
-    .description = Upgrades the Stealth Tank with a Point Laser Defense System to shoot down incoming projectiles.
-commander-tree-promotion-recon-bike-scrin =
-    .description =
-        Upgrades the Recon Bike with a Scrin Weapon.
-          Energy based weapons cannot be intercepted by Point Laser Defense.
-commander-tree-promotion-recon-bike-scrin-pdl =
-    .description = Upgrades the Scrin Bike with a Point Laser Defense System to shoot down incoming projectiles.
-commander-tree-promotion-recon-bike-scrin-reflector =
-    .description =
-        Equips the Scrin Bike with Reflector Armor.
-         Very resistent vs. Energy Weapons.
-commander-tree-promotion-recon-bike-rocket-hail =
-    .description =
-        Upgrades the Recon Bike to shoot more missiles at high range.
-          This makes the recon bike a hit and run artillery unit.
-          The recon bike loses its ability to fight flying targets.
-commander-tree-promotion-recon-bike-rocket-hail-reflector =
-    .description =
-        Equips the Rocket Hail Bike with Reflector Armor.
-         Very resistent vs. Energy Weapons.
-commander-tree-promotion-recon-bike-rocket-hail-pdl =
-    .description = Upgrades the Rocket Hail Bike with a Point Laser Defense System to shoot down incoming projectiles.
-commander-tree-promotion-recon-bike-explosive =
-    .description =
-        Upgrades the Recon Bike to shoot explosive missiles.
-          This is very strong vs. weakly armored units.
+    .buildable-description = Unlocks the Reinforcements Coordinator support vehicle that redirects vehicle production to its drop zone.
+    .description = Unlocks the Reinforcements Coordinator support vehicle that redirects vehicle production to its drop zone.
+    .tooltipextras-strengths = Strengths: • Strong with frontline pushes by paradropping freshly built vehicles into the fight.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. focus fire; it's a lightly armed support chassis.
+    .tooltipextras-attributes = Attributes: • Paradrops newly built vehicles at its rally point instead of the factory exit.
 
-commander-tree-promotion-recon-bike-explosive-pdl =
-    .description = Upgrades the Explosive Rocket Bike with a Point Laser Defense System to shoot down incoming projectiles.
-commander-tree-promotion-recon-bike-explosive-reflector =
+
+
+commander-tree-promotion-buggy-pdl =
+    .buildable-description = Adds a point laser defense diode to Nod buggies to swat incoming missiles.
+    .description = Adds a point laser defense diode to Nod buggies to swat incoming missiles.
+    .tooltipextras-strengths = Strengths: • Strong vs. incoming missiles and artillery that threaten fragile scouts.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. cannons and lasers that the PDL cannot intercept.
+    .tooltipextras-attributes = Attributes: • Point Laser Defense shoots down shells and missiles aimed at the buggy.
+
+
+
+commander-tree-promotion-buggy-aa =
+    .buildable-description = Refits buggies with an anti-air laser turret for emergency air cover.
+    .description = Refits buggies with an anti-air laser turret for emergency air cover.
+    .tooltipextras-strengths = Strengths: • Strong vs. aircraft and transports thanks to the dedicated laser turret.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. armored ground forces after giving up anti-vehicle rockets.
+    .tooltipextras-attributes = Attributes: • Reprioritizes the buggy to hunt airborne targets.
+
+
+
+commander-tree-promotion-ssm-launcher =
+    .buildable-description = Unlocks basic Nod SSM launchers for long-range incendiary barrages.
+    .description = Unlocks basic Nod SSM launchers for long-range incendiary barrages.
+    .tooltipextras-strengths = Strengths: • Strong vs. buildings and infantry with long-range incendiary barrages.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. tanks and aircraft because the chassis is fragile.
+    .tooltipextras-attributes = Attributes: • Fires from extreme range but reloads slowly.
+
+
+
+commander-tree-promotion-ssm-toxin-launcher =
+    .buildable-description = Swaps SSM warheads for toxin payloads that punish armor in Legion arsenals.
+    .description = Swaps SSM warheads for toxin payloads that punish armor in Legion arsenals.
+    .tooltipextras-strengths = Strengths: • Strong vs. vehicles and infantry by leaving lethal toxin clouds.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and requires Legion tech before it appears.
+    .tooltipextras-attributes = Attributes: • Legion-only upgrade that bathes targets in lingering toxins.
+
+
+
+commander-tree-promotion-ssm-multi-launcher =
+    .buildable-description = Rebuilds the SSM rack into a MIRV barrage launcher for area saturation.
+    .description = Rebuilds the SSM rack into a MIRV barrage launcher for area saturation.
+    .tooltipextras-strengths = Strengths: • Strong vs. vehicles and structures by blanketing them with submunitions.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. fast strikes; the heavier rack traverses and reloads slowly.
+    .tooltipextras-attributes = Attributes: • Missiles split into submunitions on impact.
+
+
+
+commander-tree-promotion-stealth-tank-ap =
+    .buildable-description = Refits stealth tanks with armor-piercing missiles that excel versus heavy vehicles.
+    .description = Refits stealth tanks with armor-piercing missiles that excel versus heavy vehicles.
+    .tooltipextras-strengths = Strengths: • Strong vs. heavy vehicles and aircraft due to armor-piercing warheads.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and splash damage when forced into close fights.
+    .tooltipextras-attributes = Attributes: • Keeps cloak and AA capability while focusing on armor-piercing warheads.
+
+
+
+commander-tree-promotion-stealth-tank-scrin =
+    .buildable-description = Rearms stealth tanks with Scrin torpedoes that ignore point-defense lasers.
+    .description = Rearms stealth tanks with Scrin torpedoes that ignore point-defense lasers.
+    .tooltipextras-strengths = Strengths: • Strong vs. vehicles and infantry with versatile energy torpedoes.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and reflector armor that bounces the energy fire.
+    .tooltipextras-attributes = Attributes: • Energy torpedoes bypass Point Laser Defense.
+
+
+
+commander-tree-promotion-stealth-tank-explosive-rockets =
+    .buildable-description = Loads stealth tanks with high-explosive missiles better suited for demolishing structures.
+    .description = Loads stealth tanks with high-explosive missiles better suited for demolishing structures.
+    .tooltipextras-strengths = Strengths: • Strong vs. structures and clustered units via high-explosive splash.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy armor which shrugs off HE warheads.
+    .tooltipextras-attributes = Attributes: • Maintains cloak but trades penetration for splash damage.
+
+
+
+commander-tree-promotion-stealth-tank-reflector =
+    .buildable-description = Adds reflector armor to stealth tanks for energy resistance.
+    .description = Adds reflector armor to stealth tanks for energy resistance.
+    .tooltipextras-strengths = Strengths: • Strong vs. lasers and ion cannons that previously countered stealth tanks.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectile and explosive fire while giving up the PDL option.
+    .tooltipextras-attributes = Attributes: • Reflector plating absorbs energy weapons but disables the PDL option.
+
+
+
+commander-tree-promotion-stealth-tank-pdl =
+    .buildable-description = Mounts a point laser defense system on any upgraded stealth tank.
+    .description = Mounts a point laser defense system on any upgraded stealth tank.
+    .tooltipextras-strengths = Strengths: • Strong vs. missiles and artillery hunting your covert tanks.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. energy beams and mutually exclusive with reflector armor.
+    .tooltipextras-attributes = Attributes: • Point Laser Defense intercepts projectiles aimed at cloaked tanks.
+
+
+commander-tree-promotion-improved-lasers =
+    .buildable-description = Refines beam splitters and capacitors to lift all Nod laser damage by fifteen percent.
     .description =
-        Equips the Explosive Rocket Bike with Reflector Armor.
-         Very resistent vs. Energy Weapons.
-commander-tree-promotion-scorpion-tank =
+        Refines beam splitters and capacitors to lift all Nod laser damage by fifteen percent.
+        Applies to Venoms, Scorpion Lasers, Obelisk Troopers, and other beam-based forces.
+    .tooltipextras-strengths = Strengths: • Strong when your army leans on Venoms, Scorpion Lasers, Beam Cannons, or laser commandos.
+    .tooltipextras-weaknesses = Weaknesses: • Weak if your composition is mostly rockets, cannons, or toxins that see no benefit.
+    .tooltipextras-attributes = Attributes: • Grants +15% firepower to every Nod unit that fires a laser weapon.
+
+
+commander-tree-promotion-improved-flamethrowers =
+    .buildable-description = Tunes promethium injectors so Nod flamethrowers scorch targets fifteen percent harder.
     .description =
-        Unlocks a small hovering scorpion tank armed with heavy laser.
-          Energy based weapons cannot be intercepted by Point Laser Defense.
-commander-tree-promotion-beam-cannon =
+        Tunes promethium injectors so Nod flamethrowers scorch targets fifteen percent harder.
+        Boosts Black Hand troopers plus Flame and Heavy Flame Tanks.
+    .tooltipextras-strengths = Strengths: • Strong when rushing structures or infantry blobs with flamers that thrive on raw DPS.
+    .tooltipextras-weaknesses = Weaknesses: • Weak once enemies field heavy armor or reflectors instead of flame-vulnerable targets.
+    .tooltipextras-attributes = Attributes: • Grants +15% firepower to all Nod flamethrower infantry and vehicles.
+
+
+commander-tree-promotion-hardened-cyborgs =
+    .buildable-description = Reinforces Nod cyborg chassis, cutting incoming damage by ten percent.
     .description =
-        Enables to build the Beam Cannon.
-         It shoots a continuous energy beam at distant targets Strong vs. Vehicles, Weak vs. Aircraft.
+        Reinforces Nod cyborg chassis, cutting incoming damage by ten percent.
+        Protects Stormtroopers, Rocket Cyborgs, Elites, and the Cyborg Commando.
+    .tooltipextras-strengths = Strengths: • Strong in grinder matches where your cyborg core needs extra staying power.
+    .tooltipextras-weaknesses = Weaknesses: • Weak if you rarely field cyborg infantry or rely solely on vehicles and aircraft.
+    .tooltipextras-attributes = Attributes: • Grants all Nod cyborg infantry 10% damage reduction.
+
+
+commander-tree-promotion-cyborg-optimization =
+    .buildable-description = Upgrades gyros and optics so every cyborg marches ten percent faster with longer reach.
+    .description =
+        Upgrades gyros and optics so every cyborg marches ten percent faster with longer reach.
+        Improves movement speed, weapon range, and vision.
+    .tooltipextras-strengths = Strengths: • Strong for aggressive pushes or kiting plays that leverage faster, longer-ranged cyborgs.
+    .tooltipextras-weaknesses = Weaknesses: • Weak if your strategy excludes cyborg infantry altogether.
+    .tooltipextras-attributes = Attributes: • Gives all Nod cyborgs +10% speed, attack range, and sight radius.
+
+
+
 commander-tree-promotion-subchaser =
     .description = The Subchaser is a small naval vessel specialized in hunting submarines.
     .tooltipextras-strengths = Strengths: • Strong vs Submarines
@@ -4081,3 +3800,427 @@ commander-tree-promotion-aegis-cruiser =
     .tooltipextras-strengths = Strengths: • Strong vs Aircraft, Projectiles
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Submarines, Ships
     .tooltipextras-attributes = Attributes: • Point Defense Laser
+
+commander-tree-promotion-harpy-flyby =
+    .buildable-description = Refits Harpy gunships so they can fire while circling targets instead of hovering.
+    .description = Refits Harpy gunships so they can fire while circling targets instead of hovering.
+    .tooltipextras-strengths = Strengths: • Strong vs. infantry and light armor during constant fly-by attacks.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. tanks and layered anti-air that outranges the run.
+    .tooltipextras-attributes = Attributes: • Harpies keep moving while firing, reducing exposure to flak.
+
+
+
+commander-tree-promotion-harpy-torp =
+    .buildable-description = Equips Harpy gunships with torpedo bombs for naval strike missions.
+    .description = Equips Harpy gunships with torpedo bombs for naval strike missions.
+    .tooltipextras-strengths = Strengths: • Strong vs. ships and submarines with the new torpedo payload.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. dedicated anti-air defenses during the slower torpedo dive.
+    .tooltipextras-attributes = Attributes: • Detects submerged vessels and adds anti-naval torpedoes.
+
+
+
+commander-tree-promotion-banshee =
+    .buildable-description = Unlocks the Banshee, a Scrin-tech VTOL fighter whose plasma bolts ignore point-defense lasers.
+    .description = Unlocks the Banshee, a Scrin-tech VTOL fighter whose plasma bolts ignore point-defense lasers.
+    .tooltipextras-strengths = Strengths: • Strong vs. heavy armor and aircraft thanks to dual plasma cannons.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and massed anti-air when it lingers over targets.
+    .tooltipextras-attributes = Attributes: • Energy beams bypass Point Laser Defense coverage.
+
+
+
+commander-tree-promotion-banshee-bomber =
+    .buildable-description = Unlocks the Banshee Bomber, a Scrin VTOL that drops plasma bombs immune to point-defense lasers.
+    .description = Unlocks the Banshee Bomber, a Scrin VTOL that drops plasma bombs immune to point-defense lasers.
+    .tooltipextras-strengths = Strengths: • Strong vs. heavy armor and structures with its plasma bomb payload.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. fighters and SAM grids that punish slower bombing runs.
+    .tooltipextras-attributes = Attributes: • Bomb payload is energy-based and cannot be intercepted by Point Laser Defense.
+
+
+
+commander-tree-promotion-banshee-payload =
+    .buildable-description = Unlocks the heavy payload Banshee variant with extra missiles at the cost of speed.
+    .description = Unlocks the heavy payload Banshee variant with extra missiles at the cost of speed.
+    .tooltipextras-strengths = Strengths: • Strong vs. vehicles and aircraft during prolonged sorties with the expanded magazine.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and concentrated AA as the heavier frame lines up new passes.
+    .tooltipextras-attributes = Attributes: • Expanded missile racks extend time on target but slow the craft slightly.
+
+
+
+commander-tree-promotion-comanche-bomber =
+    .buildable-description = Refits Comanches with heavy napalm bombs, trading speed for brutal alpha strikes.
+    .description = Refits Comanches with heavy napalm bombs, trading speed for brutal alpha strikes.
+    .tooltipextras-strengths = Strengths: • Strong vs. buildings, infantry, and light armor via the upgraded napalm payload.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and heavy anti-air when slowed for a bombing run.
+    .tooltipextras-attributes = Attributes: • Remains cloaked between attacks but flies slower while carrying bombs.
+
+
+
+commander-tree-promotion-flame-tank-pdl =
+    .buildable-description = Integrates a point laser defense grid into Flame Tanks to shoot down incoming projectiles.
+    .description = Integrates a point laser defense grid into Flame Tanks to shoot down incoming projectiles.
+    .tooltipextras-strengths = Strengths: • Strong vs. infantry, buildings, and vehicles while shrugging off missiles.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy tanks and energy weapons that bypass the laser grid.
+    .tooltipextras-attributes = Attributes: • Point Laser Defense intercepts shells and rockets before they land.
+
+
+
+commander-tree-promotion-heavy-flame-tank-pdl =
+    .buildable-description = Adds point laser defense to Heavy Flame Tanks so they can escort pushes longer.
+    .description = Adds point laser defense to Heavy Flame Tanks so they can escort pushes longer.
+    .tooltipextras-strengths = Strengths: • Strong vs. infantry, buildings, and vehicles while the PDL screens projectiles.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy tanks and energy weapons that overwhelm the grid.
+    .tooltipextras-attributes = Attributes: • Point Laser Defense protects the heavy chassis from missiles and artillery.
+
+
+
+commander-tree-promotion-venom-heavy-laser =
+    .buildable-description = Upgrades Venoms with a heavy anti-armor laser that charges slowly but hits hard.
+    .description = Upgrades Venoms with a heavy anti-armor laser that charges slowly but hits hard.
+    .tooltipextras-strengths = Strengths: • Strong vs. heavy armor once the overcharged laser finishes spooling up.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. anti-air batteries and interceptors while the gunship slows to charge.
+    .tooltipextras-attributes = Attributes: • Beam Cannons can still overcharge the heavy laser for extra damage.
+
+
+
+commander-tree-promotion-venom-payload =
+    .buildable-description = Focuses Venom weapon systems for sustained beam fire, boosting damage output.
+    .description = Focuses Venom weapon systems for sustained beam fire, boosting damage output.
+    .tooltipextras-strengths = Strengths: • Strong vs. infantry and light armor with prolonged focused laser fire.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy anti-air; the focus refit adds no durability.
+    .tooltipextras-attributes = Attributes: • Focus upgrade stacks with Beam Cannon charges for higher damage per pass.
+
+defaults-baseworld =
+    .factionca-at-14-description =
+        Marked of Kane: Laser Weaponry
+
+        Marked of Kane is a sub-faction of the Brotherhood of Nod. The brotherhood has no heavy tanks and relies mostly on hit & run tactics.
+
+        This is why nod has the best units for fast and efficient strikes as well as stealth capabilities.
+
+        Their infantry becomes cyborgs with high tech available which makes them very strong.
+
+        Marked of Kane specializes in Laser weapons.
+
+         Faction Unit: Venom, Acolyte
+
+         Special Ability: Frenzy
+
+         Faction Bonus: Laser Overcharge (10% Increased Damage), Banshee (10% Discount)
+
+         Key Commander Tree Options:
+
+          Recon Bike: Scrin vs. Rocket Hail
+
+          Stealth Tank: Explosives vs. Scrin
+
+          Venom: Payload vs. Heavy Laser
+
+         Infantry: ++++
+
+         Artillery: ++
+
+         Aircraft: +++
+
+         Defense: ++
+
+         Heavy Tanks: +
+
+         Recon&Stealth: +++
+    .factionca-at-15-description =
+        Legion: Experimental Technology
+
+        Legion is a sub-faction of the Brotherhood of Nod. The brotherhood has no heavy tanks and relies mostly on hit & run tactics.
+
+        This is why nod has the best units for fast and efficient strikes as well as stealth capabilities.
+
+        Their infantry becomes cyborgs with high tech available which makes them very strong.
+
+        Legion specializes in experimental and toxin weapons.
+
+         Faction Unit: Microwave Tank, Chemical Tank
+
+         Special Ability: Cash Hack, Paratroopers
+
+         Faction Bonus: Infiltrator (20% Discount)
+
+         Key Commander Tree Options:
+
+          Recon Bike: Scrin vs. Explosives
+
+          Stealth Tank: Explosives vs. AP
+
+          Harpy Fly by Fire
+
+          SSM Toxin Missiles
+
+          Flame Tank chemical
+
+         Infantry: ++++
+
+         Artillery: +++
+
+         Aircraft: ++
+
+         Defense: ++
+
+         Heavy Tanks: +
+
+         Recon&Stealth: +++
+    .factionca-at-randomnod-description =
+        Random Nod Faction
+
+        A random Nod faction will be chosen when the game starts.
+
+### infantry-adept
+
+infantry-adept =
+    .buildable-description = General-purpose infantry with good scouting abilities.
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry
+    .tooltipextras-attributes = Attributes: • Equipped with scout equipment
+
+### infantry-black-hand-trooper
+
+infantry-black-hand-trooper =
+    .buildable-description = Elite precision flamethrower unit.
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Light Vehicles, Buildings
+
+### infantry-cyborg-commando
+
+infantry-cyborg-commando =
+    .buildable-description = Tough combat battle-mech.
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Vehicles
+    .tooltipextras-attributes = Attributes: • Laser sweeps over area
+
+### infantry-cyborgelite
+
+infantry-cyborgelite =
+    .buildable-description = Elite cyborg infantry unit armed with plasma cannons.
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Vehicles
+    .tooltipextras-attributes = Attributes: • Heavy armor infantry
+
+### infantry-cyborgelite-range
+
+infantry-cyborgelite-range =
+    .buildable-description =
+        Elite cyborg infantry unit armed with a plasma cannon.
+        Has upgraded range
+        Strong vs Infantry, Vehicles
+        Weak vs Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Vehicles with long-range plasma volleys.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs Aircraft and focused anti-infantry fire.
+    .tooltipextras-attributes = Attributes: • Extended range upgrade for the Cyborg Elite.
+
+### infantry-hack
+
+infantry-hack =
+    .buildable-description = The Hacker can take control of defenses and buildings.
+    .tooltipextras-strengths = Strengths: • Strong vs Buildings, Defenses
+    .tooltipextras-weaknesses = Weaknesses: • Cannot attack Infantry, Aircraft, Vehicles
+    .tooltipextras-attributes =
+        Attributes: • Can capture enemy structures from range
+        • Control lost if the Hacker dies
+        • Can swim
+
+### infantry-obelisk-trooper
+
+infantry-obelisk-trooper =
+    .buildable-description =
+        Elite infantry with a laser weapon.
+        Strong vs Infantry, Light Armor
+        Weak vs Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Light Vehicles
+    .tooltipextras-attributes = Attributes: • Pew pew laser gunz!
+
+### infantry-rocket-cyborg
+
+infantry-rocket-cyborg =
+    .buildable-description = Anti-tank cyborg infantry
+    .tooltipextras-strengths = Strengths: • Strong vs Heavy Vehicles, Aircraft
+
+### infantry-rocket-trooper
+
+infantry-rocket-trooper =
+    .buildable-description = Anti-tank/anti-aircraft infantry.
+    .tooltipextras-strengths = Strengths: • Strong vs Heavy Vehicles, Aircraft
+
+### infantry-sab
+
+infantry-sab =
+    .buildable-description = Covert infantry. Infiltrates enemy structures and steals technology.
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Light Vehicles
+    .tooltipextras-attributes =
+        Attributes: • Cloaked
+        • Infiltrates buildings
+        •Detects cloaked units
+
+### infantry-stormtrooper
+
+infantry-stormtrooper =
+    .buildable-description = General-purpose cyborg with good scout abilities.
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry
+    .tooltipextras-attributes = Attributes: • Equipped with scout equipment
+
+### supportpowers-nodsuperweaponsmall
+
+supportpowers-nodsuperweaponsmall =
+    .grantexternalconditionpowerca-at-stealthgen-description =
+        Makes vehicles and structures temporarily invisible.
+
+        Warning: Harmful to Infantry.
+
+### vehicles-ftnk
+
+vehicles-ftnk =
+    .buildable-description =
+        Heavily armored flame-throwing vehicle.
+        Strong vs Infantry, Buildings, Vehicles
+        Weak vs Heavy Tanks, Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, Vehicles with dual flamethrowers.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs Heavy Tanks and Aircraft overwhelming its short range.
+    .tooltipextras-attributes = Attributes: • Core Flame Tank chassis used by Nod.
+
+### vehicles-ftnk-pdl
+
+vehicles-ftnk-pdl =
+    .buildable-description =
+        Heavily armored flame-throwing vehicle.
+        Has Point Laser Defense
+        Strong vs Infantry, Buildings, Vehicles
+        Weak vs Heavy Tanks, Aircraft, Energy Weapons
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, Vehicles while Point Laser Defense blocks missiles.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs Heavy Tanks, Aircraft, and energy weapons that bypass the PDL.
+    .tooltipextras-attributes = Attributes: • Adds Point Laser Defense to the Flame Tank.
+
+### vehicles-ftnk-pdl-chem
+
+vehicles-ftnk-pdl-chem =
+    .buildable-description =
+        Heavily armored chemical-throwing vehicle.
+        Strong vs Infantry, Buildings, Vehicles
+        Weak vs Heavy Tanks, Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, Vehicles with corrosive chem spray.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs Heavy Tanks and Aircraft outside chemical range.
+    .tooltipextras-attributes = Attributes: • Chemical Flame Tank variant coupled with Point Laser Defense.
+
+### vehicles-ftnk-reflector
+
+vehicles-ftnk-reflector =
+    .buildable-description =
+        Heavily armored flame-throwing vehicle.
+        Has Reflector Armor, which is very good vs. Energy Weapons.
+        Strong vs Infantry, Buildings, Energy Weapons
+        Weak vs Conventional Weapons, Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, and resists Energy Weapons thanks to reflector armor.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs conventional tank shells and Aircraft that stay at range.
+    .tooltipextras-attributes = Attributes: • Reflector Armor upgrade for the Flame Tank.
+
+### vehicles-ftnk-reflector-chem
+
+vehicles-ftnk-reflector-chem =
+    .buildable-description =
+        Heavily armored chemical-throwing vehicle.
+        Has Reflector Armor, which is very good vs. Energy Weapons.
+        Strong vs Infantry, Buildings, Vehicles, Energy Weapons
+        Weak vs Conventional Weapons, Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, Vehicles and shrugs off Energy Weapons.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs conventional artillery and Aircraft which can tag it from afar.
+    .tooltipextras-attributes = Attributes: • Chem Tank outfitted with Reflector Armor.
+
+### vehicles-hftk
+
+vehicles-hftk =
+    .buildable-description =
+        Heavy tank armed with dual short-range flamethrowers.
+        Strong vs Infantry, Buildings, Light Armor
+        Weak vs Tanks, Defenses, Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, Light Armor with heavy twin flamethrowers.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs Tanks, defenses, and Aircraft due to short range.
+    .tooltipextras-attributes = Attributes: • Heavy Flame Tank base chassis.
+
+### vehicles-hftk-pdl
+
+vehicles-hftk-pdl =
+    .buildable-description =
+        Heavily armored flame-throwing vehicle.
+        Has Point Laser Defense
+        Strong vs Infantry, Buildings, Vehicles
+        Weak vs Heavy Tanks, Aircraft, Energy Weapons
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, Vehicles; PDL protects against missiles.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs Heavy Tanks, Aircraft, and Energy Weapons that bypass the PDL grid.
+    .tooltipextras-attributes = Attributes: • Adds Point Laser Defense to the Heavy Flame Tank.
+
+### vehicles-hftk-pdl-fireball
+
+vehicles-hftk-pdl-fireball =
+    .buildable-description =
+        Heavily armored fireball-throwing vehicle.
+        Strong vs Infantry, Buildings, Vehicles
+        Heavy Tanks, Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, Vehicles via long-range fireball payload.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs Heavy Tanks and Aircraft able to kite the slower chassis.
+    .tooltipextras-attributes = Attributes: • Fireball launcher plus Point Laser Defense on the Heavy Flame Tank.
+
+### vehicles-hftk-reflector
+
+vehicles-hftk-reflector =
+    .buildable-description =
+        Heavily armored flame-throwing vehicle.
+        Has Reflector Armor, which is very good vs. Energy Weapons.
+        Strong vs Infantry, Buildings, Energy Weapons
+        Weak vs Conventional Weapons, Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, and energy attackers thanks to reflector armor.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs conventional tank guns and Aircraft bombardment.
+    .tooltipextras-attributes = Attributes: • Heavy Flame Tank upgraded with Reflector Armor.
+
+### vehicles-hftk-reflector-fireball
+
+vehicles-hftk-reflector-fireball =
+    .buildable-description =
+        Heavily armored fireball-throwing vehicle.
+        Has Reflector Armor, which is very good vs. Energy Weapons.
+        Strong vs Infantry, Buildings, Vehicles, Energy Weapons
+        Weak vs Conventional Weapons, Aircraft
+    .tooltipextras-strengths = Strengths: • Strong vs Infantry, Buildings, Vehicles while shrugging off energy attacks.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs conventional cannons and Aircraft keeping their distance.
+    .tooltipextras-attributes = Attributes: • Fireball launcher plus Reflector Armor on the heavy chassis.
+
+### vehicles-ttrk
+
+vehicles-ttrk =
+    .buildable-description = Truck actively armed with a Tiberium bomb. Has very weak armor.
+    .tooltipextras-strengths = Strengths: • Strong vs clustered ground targets when the Tiberium bomb detonates.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs any weapons before detonation due to extremely light armor.
+    .tooltipextras-attributes = Attributes: • Suicide truck armed with a volatile Tiberium bomb.
+commander-tree-promotion-flame-tank-reflector =
+    .buildable-description = Equips Flame Tanks with reflector armor that excels against energy weapons.
+    .description = Equips Flame Tanks with reflector armor that excels against energy weapons.
+    .tooltipextras-strengths = Strengths: • Strong vs. infantry, buildings, and energy weapons after the refit.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. conventional tank guns and aircraft that stay at range.
+    .tooltipextras-attributes = Attributes: • Reflector armor absorbs laser and ion hits but adds no anti-air.
+
+
+
+commander-tree-promotion-chem-tank =
+    .buildable-description = Converts Flame Tanks into Chem Tanks whose corrosive spray melts armor quickly.
+    .description = Converts Flame Tanks into Chem Tanks whose corrosive spray melts armor quickly.
+    .tooltipextras-strengths = Strengths: • Strong vs. infantry, vehicles, and defenses with lingering toxin clouds.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy tanks and aircraft because range is still short.
+    .tooltipextras-attributes = Attributes: • Chemical flames keep damaging targets after impact.
+
+
+
+commander-tree-promotion-fireball-tank =
+    .buildable-description = Refits heavy flame tanks with fireball launchers that strike from safer range.
+    .description = Refits heavy flame tanks with fireball launchers that strike from safer range.
+    .tooltipextras-strengths = Strengths: • Strong vs. infantry, buildings, and vehicles thanks to longer-range splash damage.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy tanks and aircraft that outrange or kite the launcher.
+    .tooltipextras-attributes = Attributes: • Fireballs arc over obstacles and ignite ground targets.
+
+
+
+commander-tree-promotion-heavy-flame-tank-reflector =
+    .buildable-description = Installs reflector armor on Heavy Flame Tanks to counter energy-based retaliation.
+    .description = Installs reflector armor on Heavy Flame Tanks to counter energy-based retaliation.
+    .tooltipextras-strengths = Strengths: • Strong vs. infantry, buildings, and energy weapons while the reflector is active.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. conventional cannons and aircraft that bypass the plating.
+    .tooltipextras-attributes = Attributes: • Reflector armor soaks laser damage but cannot block artillery shells.
