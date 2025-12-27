@@ -564,12 +564,15 @@ commander-tree-promotion-heavy-flame-tank-reflector =
 ### commander-tree-promotion-stealth-miners
 
 commander-tree-promotion-stealth-miners =
-	.buildable-description = Equips Nod harvesters with stealth generators to slip through contested fields.
-	.description = Equips Nod harvesters with stealth generators to slip through contested fields.
-	.tooltipextras-strengths = Strengths: • Strong with harvesters operating behind enemy lines or under fire.
-	.tooltipextras-weaknesses = Weaknesses: • Weak vs. detectors, EMP, and splash damage that instantly decloak them.
-	.tooltipextras-attributes = Attributes: • Grants permanent cloak to Nod harvesters until detected or damaged.
-
+    .buildable-description =
+        Equips Nod harvesters with integrated stealth generators so they can slip past patrols and harvest contested fields safely.
+        Once purchased, every Nod miner cloaks automatically when idle or moving unless detected or under fire.
+    .description =
+        Fund covert upgrades for Nod harvesters so your economy survives harassment—perfect when the front line shifts constantly or Tiberium fields sit in enemy territory.
+        The cloak behaves like other Nod stealth systems: detection, EMP, or direct damage will reveal the harvester until the threat passes.
+    .tooltipextras-strengths = Strengths: • Stealthed harvesters can mine behind enemy lines and survive artillery barrages.
+    .tooltipextras-weaknesses = Weaknesses: • Detectors, EMP bursts, and splash damage still decloak and destroy them quickly.
+    .tooltipextras-attributes = Attributes: • Applies to all Nod harvesters; grants passive cloak until damaged or revealed by detectors.
 
 ### commander-tree-promotion-buggy-pdl
 
@@ -594,22 +597,26 @@ commander-tree-promotion-buggy-aa =
 ### commander-tree-promotion-elite-cyborg
 
 commander-tree-promotion-elite-cyborg =
-	.buildable-description = Unlocks elite cyborg infantry wielding Scrin plasma cannons and heavy armor.
-	.description = Unlocks elite cyborg infantry wielding Scrin plasma cannons and heavy armor.
-	.tooltipextras-strengths = Strengths: • Strong vs. infantry and vehicles with high-damage plasma volleys.
-	.tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and reflector armor that bounces energy fire.
-	.tooltipextras-attributes = Attributes: • Heavy cyborg infantry that self-heal in Tiberium and resist suppression.
-
+    .buildable-description =
+        Unlocks the Elite Cyborg squad: heavily armored infantry wielding captured Scrin plasma cannons and onboard self-repair systems.
+    .description =
+        Deploy elite cyborgs to anchor Nod infantry pushes with slow but devastating plasma volleys that cut through armor and shred infantry alike.
+        They self-heal in Tiberium, resist suppression, and benefit from follow-up range upgrades for even deadlier sieges.
+    .tooltipextras-strengths = Strengths: • Heavy plasma cannons demolish infantry and vehicles while shrugging off small-arms fire.
+    .tooltipextras-weaknesses = Weaknesses: • Slow walkers that struggle versus aircraft, reflector armor, or massed EMP.
+    .tooltipextras-attributes = Attributes: • Heavy cyborg infantry that self-heal in Tiberium and count as mechanized for certain buffs.
 
 ### commander-tree-promotion-elite-cyborg-range
 
 commander-tree-promotion-elite-cyborg-range =
-	.buildable-description = Extends the Elite Cyborg's targeting arrays to engage from safer range.
-	.description = Extends the Elite Cyborg's targeting arrays to engage from safer range.
-	.tooltipextras-strengths = Strengths: • Strong vs. infantry and vehicles by outranging bunkers and turrets.
-	.tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and flanking assaults because mobility is unchanged.
-	.tooltipextras-attributes = Attributes: • Grants the Cyborg Elite an extended plasma range upgrade.
-
+    .buildable-description =
+        Extends Elite Cyborg targeting arrays and plasma focusing lenses so they can bombard targets from safer distances.
+    .description =
+        Authorize the range refit after unlocking Elite Cyborgs to turn them into slow but methodical siege troopers capable of outranging bunkers and turrets.
+        Ideal when you need infantry that can pressure defenses without entering splash range.
+    .tooltipextras-strengths = Strengths: • Extended plasma range lets elite cyborgs dismantle static defenses and vehicles from beyond retaliation distance.
+    .tooltipextras-weaknesses = Weaknesses: • Does nothing to improve mobility or anti-air, so artillery and aircraft still counter them.
+    .tooltipextras-attributes = Attributes: • Adds the range upgrade to Elite Cyborg squads after they have been unlocked.
 
 ### commander-tree-promotion-rebel-leader
 
