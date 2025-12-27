@@ -8,9 +8,9 @@ aircraft-pac =
         Carrier that launches a squadron of assault craft.
         Strong vs Vehicles, Aircraft
         Weak vs Infantry, Buildings, Defenses
-    .tooltip-strengths = • Strong vs Vehicles, Aircraft
-    .tooltip-weaknesses = • Weak vs Infantry, Buildings, Defenses
-    .tooltip-attributes = • Launches assault craft from the carrier.
+    .tooltip-strengths = ? Strong vs Vehicles, Aircraft
+    .tooltip-weaknesses = ? Weak vs Infantry, Buildings, Defenses
+    .tooltip-attributes = ? Launches assault craft from the carrier.
 
 ### aircraft-pac-laser
 
@@ -19,9 +19,9 @@ aircraft-pac-laser =
         Massive Warship with multiple armor piercing laser systems.
         Strong vs Vehicles
         Weak vs Aircraft, Reflector
-    .tooltip-strengths = • Strong vs Vehicles
-    .tooltip-weaknesses = • Weak vs aircraft and reflector armor
-    .tooltip-attributes = • Planetary Assault Carrier refitted with piercing lasers.
+    .tooltip-strengths = ? Strong vs Vehicles
+    .tooltip-weaknesses = ? Weak vs aircraft and reflector armor
+    .tooltip-attributes = ? Planetary Assault Carrier refitted with piercing lasers.
 
 ### aircraft-pac-suicide
 
@@ -30,9 +30,9 @@ aircraft-pac-suicide =
         Carrier with suicide drones.
         Strong vs Vehicles, Infantry
         Weak vs Anti-Air
-    .tooltip-strengths = • Strong vs Vehicles, Infantry
-    .tooltip-weaknesses = • Weak vs concentrated anti-air
-    .tooltip-attributes = • Deploys explosive suicide drones.
+    .tooltip-strengths = ? Strong vs Vehicles, Infantry
+    .tooltip-weaknesses = ? Weak vs concentrated anti-air
+    .tooltip-attributes = ? Deploys explosive suicide drones.
 
 ### aircraft-pac-support
 
@@ -43,9 +43,9 @@ aircraft-pac-support =
         Can teleport infantry directly into the field.
         Strong vs Projectile based attacks.
         Weak without army.
-    .tooltip-strengths = • Strong with armies under projectile fire
-    .tooltip-weaknesses = • Weak without escorting forces
-    .tooltip-attributes = • Repair drones use point laser defense and can teleport infantry.
+    .tooltip-strengths = ? Strong with armies under projectile fire
+    .tooltip-weaknesses = ? Weak without escorting forces
+    .tooltip-attributes = ? Repair drones use point laser defense and can teleport infantry.
 
 ### aircraft-stormrider
 
@@ -54,9 +54,9 @@ aircraft-stormrider =
         Durable patrol craft.
         Strong vs Infantry, Light Armor
         Weak vs Tanks, Buildings
-    .tooltip-strengths = • Strong vs Infantry, Light Armor
-    .tooltip-weaknesses = • Weak vs Tanks, Buildings
-    .tooltip-attributes = • Durable patrol craft that detects submerged vessels.
+    .tooltip-strengths = ? Strong vs Infantry, Light Armor
+    .tooltip-weaknesses = ? Weak vs Tanks, Buildings
+    .tooltip-attributes = ? Durable patrol craft that detects submerged vessels.
 
 ### aircraft-stormhunter
 
@@ -65,9 +65,9 @@ aircraft-stormhunter =
         Small hunter anti-air craft.
         Strong vs Aircraft
         Weak vs Surface Anti-Air
-    .tooltip-strengths = • Strong vs Aircraft
-    .tooltip-weaknesses = • Weak vs surface anti-air defenses
-    .tooltip-attributes = • Agile escort craft specializing in hunting flyers.
+    .tooltip-strengths = ? Strong vs Aircraft
+    .tooltip-weaknesses = ? Weak vs surface anti-air defenses
+    .tooltip-attributes = ? Agile escort craft specializing in hunting flyers.
 
 ### aircraft-stormbomber
 
@@ -76,9 +76,9 @@ aircraft-stormbomber =
         Dedicated bomber.
         Strong vs Clusters of Vehicles
         Weak vs Surface Anti-Air
-    .tooltip-strengths = • Strong vs clusters of vehicles
-    .tooltip-weaknesses = • Weak vs surface anti-air
-    .tooltip-attributes = • Heavy bomber optimized for saturation strikes.
+    .tooltip-strengths = ? Strong vs clusters of vehicles
+    .tooltip-weaknesses = ? Weak vs surface anti-air
+    .tooltip-attributes = ? Heavy bomber optimized for saturation strikes.
 
 ### aircraft-stormbomber-torp
 
@@ -87,9 +87,9 @@ aircraft-stormbomber-torp =
         Dedicated torpedo launcher.
         Strong vs Ships, Submarines
         Weak vs Anti-Air
-    .tooltip-strengths = • Strong vs ships, submarines
-    .tooltip-weaknesses = • Weak vs anti-air coverage
-    .tooltip-attributes = • Torpedo loadout can also reveal submerged vessels.
+    .tooltip-strengths = ? Strong vs ships, submarines
+    .tooltip-weaknesses = ? Weak vs anti-air coverage
+    .tooltip-attributes = ? Torpedo loadout can also reveal submerged vessels.
 
 ### aircraft-devastator
 
@@ -98,9 +98,9 @@ aircraft-devastator =
         Long-range siege warship.
         Strong vs Buildings, Defenses, Infantry
         Weak vs Aircraft, Tanks
-    .tooltip-strengths = • Strong vs buildings, defenses, infantry
-    .tooltip-weaknesses = • Weak vs aircraft, tanks
-    .tooltip-attributes = • Slow bombardment platform built to shred ground targets.
+    .tooltip-strengths = ? Strong vs buildings, defenses, infantry
+    .tooltip-weaknesses = ? Weak vs aircraft, tanks
+    .tooltip-attributes = ? Slow bombardment platform built to shred ground targets.
 
 ### aircraft-devastator-shards
 
@@ -109,9 +109,9 @@ aircraft-devastator-shards =
         Long-range anti-tank warship.
         Strong vs Tanks
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs tanks
-    .tooltip-weaknesses = • Weak vs aircraft
-    .tooltip-attributes = • Shard cannons focus on tearing through armored columns.
+    .tooltip-strengths = ? Strong vs tanks
+    .tooltip-weaknesses = ? Weak vs aircraft
+    .tooltip-attributes = ? Shard cannons focus on tearing through armored columns.
 
 ### aircraft-devastator-rift
 
@@ -120,9 +120,9 @@ aircraft-devastator-rift =
         Long-range anti-tank warship.
         Strong vs masses of units
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs masses of units
-    .tooltip-weaknesses = • Weak vs aircraft
-    .tooltip-attributes = • Rift payloads rip apart clustered enemies.
+    .tooltip-strengths = ? Strong vs masses of units
+    .tooltip-weaknesses = ? Weak vs aircraft
+    .tooltip-attributes = ? Rift payloads rip apart clustered enemies.
 
 ### aircraft-mothership
 
@@ -132,9 +132,9 @@ aircraft-mothership =
         Can create wormholes.
         Strong vs Buildings, Defenses
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs buildings, defenses
-    .tooltip-weaknesses = • Weak vs concentrated anti-air
-    .tooltip-attributes = • Opens wormholes to devastate entrenched foes.
+    .tooltip-strengths = ? Strong vs buildings, defenses
+    .tooltip-weaknesses = ? Weak vs concentrated anti-air
+    .tooltip-attributes = ? Opens wormholes to devastate entrenched foes.
 
 ### aircraft-bastion
 
@@ -144,9 +144,9 @@ aircraft-bastion =
         Maximum 1 can be built.
         Strong vs Massed Ground Targets
         Weak vs Focused Anti-Air
-    .tooltip-strengths = • Strong vs massed ground targets
-    .tooltip-weaknesses = • Weak vs focused anti-air
-    .tooltip-attributes = • Super-heavy defensive platform; limit one per player.
+    .tooltip-strengths = ? Strong vs massed ground targets
+    .tooltip-weaknesses = ? Weak vs focused anti-air
+    .tooltip-attributes = ? Super-heavy defensive platform; limit one per player.
 commander-tree-commander-tree =
     .description-100 = Upgrades the Interloper with teleport system.
     .description-101 = Upgrades the Corrupter with an area attack.
@@ -831,6 +831,10 @@ promotion-lacerator-reflector =
     .description = Upgrades the Lacerator with Reflector armor. \nReflector armor is very efficient vs energy weapons.
 promotion-lacerator-ap =
     .description = Upgrades the Lacerator with Armor Piercing Discs.\n AP Discs are very efficient vs heavy armor.
+promotion-atomizer-range =
+    .description = Upgrades the Atomizer with extended crystal accelerators so it can bombard targets from much farther away.
+promotion-atomizer-aa =
+    .description = Retunes the Atomizer emitters to detonate mid-air, creating splash attacks that tear through clustered aircraft.
 promotion-ruiner-barrage =
     .description = Upgrades the Ruiner with a barrage cannon, capable of firing much faster.
 promotion-tripod-chainer =
@@ -859,9 +863,9 @@ promotion-stormbomber =
     .description = Upgrades the Stormrider with plasmabombs \nStrong vs vehicles but cannot target air anymore.
 promotion-stormbomber-torp =
     .description = Upgrades the Stormrider with anti-water plasmabombs
-    .tooltipextras-strengths = Strengths: . Strong vs Ships, Submarines
-    .tooltipextras-weaknesses = Weaknesses: . Weak vs Anti-Air
-    .tooltipextras-attributes = Attributes: . Detects submerged vessles.
+    .tooltipextras-strengths = Strengths: • Strong vs Ships, Submarines
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
+    .tooltipextras-attributes = Attributes: • Detects submerged vessles.
 promotion-devastator-beam =
     .description = Upgrades the Devastator with an energy beam. \nThe energy beam is strong but needs very long to recharge.
 promotion-devastator-shard =
@@ -1006,13 +1010,35 @@ commander-tree-promotion-lacerator-ap =
     .tooltipextras-weaknesses = Weaknesses: Reduced effectiveness against infantry blobs.
     .tooltipextras-attributes = Attributes: Enhanced penetrator payload.
 commander-tree-promotion-ruiner-barrage =
-    .description = Upgrades the Ruiner with a barrage cannon, capable of firing much faster.
-    .tooltipextras-strengths = Strengths: Greatly increases Ruiner rate of fire.
-    .tooltipextras-weaknesses = Weaknesses: Still needs setup time and lining up.
-    .tooltipextras-attributes = Attributes: Barrage cannon upgrade.
+	.description = Upgrades the Ruiner with a barrage cannon, capable of firing much faster.
+	.tooltipextras-strengths = Strengths: Greatly increases Ruiner rate of fire.
+	.tooltipextras-weaknesses = Weaknesses: Still needs setup time and lining up.
+	.tooltipextras-attributes = Attributes: Barrage cannon upgrade.
+### commander-tree-promotion-atomizer-range
+
+commander-tree-promotion-atomizer-range =
+    .buildable-description =
+        Extends the Atomizer crystal accelerators and targeting systems so the hover artillery can bombard targets from far outside standard engagement distance.
+    .description =
+        Tune the Atomizer's emitters for long-range fire, letting it pressure armor and defenses while remaining behind your front line.
+    .tooltipextras-strengths = Strengths: • Increased range keeps Atomizers safe while still dealing consistent damage.
+    .tooltipextras-weaknesses = Weaknesses: • Grants no extra durability or ability to fight aircraft.
+    .tooltipextras-attributes = Attributes: • Unlocks the Range Atomizer variant at the War Factory after purchasing this upgrade.
+
+### commander-tree-promotion-atomizer-aa
+
+commander-tree-promotion-atomizer-aa =
+    .buildable-description =
+        Refits the Atomizer emitters to detonate in mid-air, blanketing flight paths with crystal splash that tears through clustered aircraft.
+    .description =
+        Convert Atomizers into anti-air artillery by focusing on aerial splash detonations—perfect versus stormriders, carriers, and grouped transports.
+    .tooltipextras-strengths = Strengths: • Splashing crystal bolts devastate stacked aircraft formations.
+    .tooltipextras-weaknesses = Weaknesses: • Can no longer attack ground units.
+    .tooltipextras-attributes = Attributes: • Adds the Atomizer (AA) build option once researched.
+
 commander-tree-promotion-tripod-chainer =
-    .description = Upgrades the Tripod with imporoved laser chaining to a second and third target.
-    .tooltipextras-strengths = Strengths: Main laser now chains to additional targets.
+	.description = Upgrades the Tripod with imporoved laser chaining to a second and third target.
+	.tooltipextras-strengths = Strengths: Main laser now chains to additional targets.
     .tooltipextras-weaknesses = Weaknesses: Less burst on the initial victim.
     .tooltipextras-attributes = Attributes: Automatic chaining beam.
 commander-tree-promotion-tripod-acid =
@@ -1203,9 +1229,9 @@ infantry-s1 =
         General-purpose scouting infantry.
         Strong vs Infantry
         Weak vs Vehicles, Aircraft
-    .tooltip-strengths = • Strong vs Infantry
-    .tooltip-weaknesses = • Weak vs Vehicles, Aircraft
-    .tooltip-attributes = • General-purpose scouting infantry.
+    .tooltip-strengths = ? Strong vs Infantry
+    .tooltip-weaknesses = ? Weak vs Vehicles, Aircraft
+    .tooltip-attributes = ? General-purpose scouting infantry.
 
 ### infantry-s2
 
@@ -1214,9 +1240,9 @@ infantry-s2 =
         Fast assault infantry.
         Strong vs Vehicles, Infantry
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Infantry
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Fast assault infantry.
+    .tooltip-strengths = ? Strong vs Vehicles, Infantry
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Fast assault infantry.
 
 ### infantry-s3
 
@@ -1225,9 +1251,9 @@ infantry-s3 =
         Anti-tank/anti-aircraft infantry.
         Strong vs Tanks, Aircraft
         Weak vs Infantry
-    .tooltip-strengths = • Strong vs Tanks, Aircraft
-    .tooltip-weaknesses = • Weak vs Infantry
-    .tooltip-attributes = • Anti-tank/anti-aircraft infantry.
+    .tooltip-strengths = ? Strong vs Tanks, Aircraft
+    .tooltip-weaknesses = ? Weak vs Infantry
+    .tooltip-attributes = ? Anti-tank/anti-aircraft infantry.
 
 ### infantry-s4
 
@@ -1237,9 +1263,9 @@ infantry-s4 =
         Can teleport short distances.
         Strong vs Buildings, Defenses, Light Vehicles
         Weak vs Infantry, Aircraft
-    .tooltip-strengths = • Strong vs Buildings, Defenses, Light Vehicles
-    .tooltip-weaknesses = • Weak vs Infantry, Aircraft
-    .tooltip-attributes = • Heavy assault infantry.
+    .tooltip-strengths = ? Strong vs Buildings, Defenses, Light Vehicles
+    .tooltip-weaknesses = ? Weak vs Infantry, Aircraft
+    .tooltip-attributes = ? Heavy assault infantry.
 
 ### infantry-s6
 
@@ -1250,36 +1276,36 @@ infantry-s6 =
         Can repair friendly structures & bridges.
         Special Ability: Repair
         Unarmed
-    .tooltip-strengths = • Strong with structure captures and repairs
-    .tooltip-weaknesses = • Weak vs Combat Units
-    .tooltip-attributes = • Captures or repairs structures and bridges.
+    .tooltip-strengths = ? Strong with structure captures and repairs
+    .tooltip-weaknesses = ? Weak vs Combat Units
+    .tooltip-attributes = ? Captures or repairs structures and bridges.
 
 ### infantry-feed
 
 infantry-feed =
     .buildable-description =
         Description unavailable.
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • FEED field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? FEED field unit
 
 ### infantry-gscr
 
 infantry-gscr =
     .buildable-description =
         Description unavailable.
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • GSCR field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? GSCR field unit
 
 ### infantry-gscr-mutating
 
 infantry-gscr-mutating =
     .buildable-description =
         Description unavailable.
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • GSCR.Mutating field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? GSCR.Mutating field unit
 
 ### infantry-mast
 
@@ -1291,9 +1317,9 @@ infantry-mast =
         Maximum 1 can be trained.
         Strong vs Infantry, Vehicles, Defenses
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Vehicles, Defenses
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Elite specialist infantry.
+    .tooltip-strengths = ? Strong vs Infantry, Vehicles, Defenses
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Elite specialist infantry.
 
 ### infantry-s7
 
@@ -1302,9 +1328,9 @@ infantry-s7 =
         General-purpose scouting infantry.
         Strong vs Infantry
         Weak vs Vehicles, Aircraft
-    .tooltip-strengths = • Strong vs Infantry
-    .tooltip-weaknesses = • Weak vs Vehicles, Aircraft
-    .tooltip-attributes = • General-purpose scouting infantry.
+    .tooltip-strengths = ? Strong vs Infantry
+    .tooltip-weaknesses = ? Weak vs Vehicles, Aircraft
+    .tooltip-attributes = ? General-purpose scouting infantry.
 
 ### infantry-s8
 
@@ -1313,9 +1339,9 @@ infantry-s8 =
         General-purpose scouting infantry.
         Strong vs Infantry
         Weak vs Vehicles, Aircraft
-    .tooltip-strengths = • Strong vs Infantry
-    .tooltip-weaknesses = • Weak vs Vehicles, Aircraft
-    .tooltip-attributes = • General-purpose scouting infantry.
+    .tooltip-strengths = ? Strong vs Infantry
+    .tooltip-weaknesses = ? Weak vs Vehicles, Aircraft
+    .tooltip-attributes = ? General-purpose scouting infantry.
 
 ### vehicle-channeler
 
@@ -1324,9 +1350,9 @@ vehicle-channeler =
         Heavy hover tank with armed with rift cannon.
         Strong vs Vehicles, Defenses
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Defenses
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy hover tank with armed with rift cannon.
+    .tooltip-strengths = ? Strong vs Vehicles, Defenses
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy hover tank with armed with rift cannon.
 
 ### vehicle-channeler-chain
 
@@ -1336,9 +1362,9 @@ vehicle-channeler-chain =
         Rift beams chain to other targets.
         Strong vs Vehicles, Defenses
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Defenses
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy hover tank with armed with rift cannon.
+    .tooltip-strengths = ? Strong vs Vehicles, Defenses
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy hover tank with armed with rift cannon.
 
 ### vehicle-channeler-disc
 
@@ -1347,9 +1373,9 @@ vehicle-channeler-disc =
         Heavy hover tank with armed with plasma disc cannon.
         Strong vs Vehicles, Defenses
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Defenses
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy hover tank with armed with plasma disc cannon.
+    .tooltip-strengths = ? Strong vs Vehicles, Defenses
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy hover tank with armed with plasma disc cannon.
 
 ### vehicle-channeler-disc-reflector
 
@@ -1359,9 +1385,9 @@ vehicle-channeler-disc-reflector =
         Has Reflector Armor.
         Strong vs Vehicles, Energy Weapons
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Energy Weapons
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy hover tank with armed with plasma disc cannon.
+    .tooltip-strengths = ? Strong vs Vehicles, Energy Weapons
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy hover tank with armed with plasma disc cannon.
 
 ### vehicle-channeler-disc-pdl
 
@@ -1371,9 +1397,9 @@ vehicle-channeler-disc-pdl =
         Has Point Laser Defense System.
         Strong vs Vehicles, Projectiles
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Projectiles
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy hover tank with armed with plasma disc cannon.
+    .tooltip-strengths = ? Strong vs Vehicles, Projectiles
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy hover tank with armed with plasma disc cannon.
 
 ### vehicle-channeler-chain-reflector
 
@@ -1383,9 +1409,9 @@ vehicle-channeler-chain-reflector =
         Has Reflector Armor.
         Strong vs Vehicles, Energy Weapons
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Energy Weapons
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy hover tank with armed with rift cannon.
+    .tooltip-strengths = ? Strong vs Vehicles, Energy Weapons
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy hover tank with armed with rift cannon.
 
 ### vehicle-channeler-chain-pdl
 
@@ -1395,9 +1421,9 @@ vehicle-channeler-chain-pdl =
         Has Point Laser Defense System.
         Strong vs Vehicles, Projectiles
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Projectiles
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy hover tank with armed with rift cannon.
+    .tooltip-strengths = ? Strong vs Vehicles, Projectiles
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy hover tank with armed with rift cannon.
 
 ### vehicle-harv-scrin
 
@@ -1405,9 +1431,9 @@ vehicle-harv-scrin =
     .buildable-description =
         Collects Tiberium, Ore and Gems for processing.
         Unarmed
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • HARV.Scrin field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? HARV.Scrin field unit
 
 ### vehicle-gunw
 
@@ -1416,9 +1442,9 @@ vehicle-gunw =
         Light assault walker.
         Strong vs Infantry, Aircraft
         Weak vs Tanks
-    .tooltip-strengths = • Strong vs Infantry, Aircraft
-    .tooltip-weaknesses = • Weak vs Tanks
-    .tooltip-attributes = • Light assault walker.
+    .tooltip-strengths = ? Strong vs Infantry, Aircraft
+    .tooltip-weaknesses = ? Weak vs Tanks
+    .tooltip-attributes = ? Light assault walker.
 
 ### vehicle-gunw-sensor
 
@@ -1427,9 +1453,9 @@ vehicle-gunw-sensor =
         Light assault walker.
         Strong vs Infantry, Aircraft
         Weak vs Tanks
-    .tooltip-strengths = • Strong vs Infantry, Aircraft
-    .tooltip-weaknesses = • Weak vs Tanks
-    .tooltip-attributes = • Light assault walker.
+    .tooltip-strengths = ? Strong vs Infantry, Aircraft
+    .tooltip-weaknesses = ? Weak vs Tanks
+    .tooltip-attributes = ? Light assault walker.
 
 ### vehicle-seek
 
@@ -1438,9 +1464,9 @@ vehicle-seek =
         Light hover tank.
         Strong vs Vehicles, Buildings
         Weak vs Aircraft, Infantry
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • SEEK field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? SEEK field unit
 
 ### vehicle-seek-pdl
 
@@ -1449,9 +1475,9 @@ vehicle-seek-pdl =
         Light hover tank.
         Strong vs Vehicles, Buildings
         Weak vs Aircraft, Infantry
-    .tooltip-strengths = • Strong vs Vehicles, Buildings
-    .tooltip-weaknesses = • Weak vs Aircraft, Infantry
-    .tooltip-attributes = • Light hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Buildings
+    .tooltip-weaknesses = ? Weak vs Aircraft, Infantry
+    .tooltip-attributes = ? Light hover tank.
 
 ### vehicle-seek-reflector
 
@@ -1460,9 +1486,9 @@ vehicle-seek-reflector =
         Light hover tank.
         Strong vs Vehicles, Buildings
         Weak vs Aircraft, Infantry
-    .tooltip-strengths = • Strong vs Vehicles, Buildings
-    .tooltip-weaknesses = • Weak vs Aircraft, Infantry
-    .tooltip-attributes = • Light hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Buildings
+    .tooltip-weaknesses = ? Weak vs Aircraft, Infantry
+    .tooltip-attributes = ? Light hover tank.
 
 ### vehicle-lace
 
@@ -1471,9 +1497,9 @@ vehicle-lace =
         Fast hover tank.
         Strong vs Vehicles, Buildings
         Weak vs Aircraft, Infantry
-    .tooltip-strengths = • Strong vs Vehicles, Buildings
-    .tooltip-weaknesses = • Weak vs Aircraft, Infantry
-    .tooltip-attributes = • Light hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Buildings
+    .tooltip-weaknesses = ? Weak vs Aircraft, Infantry
+    .tooltip-attributes = ? Light hover tank.
 
 ### vehicle-lace-pdl
 
@@ -1482,9 +1508,9 @@ vehicle-lace-pdl =
         Fast hover tank.
         Strong vs Vehicles, Buildings
         Weak vs Aircraft, Infantry
-    .tooltip-strengths = • Strong vs Vehicles, Buildings
-    .tooltip-weaknesses = • Weak vs Aircraft, Infantry
-    .tooltip-attributes = • Fast hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Buildings
+    .tooltip-weaknesses = ? Weak vs Aircraft, Infantry
+    .tooltip-attributes = ? Fast hover tank.
 
 ### vehicle-lace-reflector
 
@@ -1493,9 +1519,9 @@ vehicle-lace-reflector =
         Fast hover tank.
         Strong vs Vehicles, Buildings
         Weak vs Aircraft, Infantry
-    .tooltip-strengths = • Strong vs Vehicles, Buildings
-    .tooltip-weaknesses = • Weak vs Aircraft, Infantry
-    .tooltip-attributes = • Fast hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Buildings
+    .tooltip-weaknesses = ? Weak vs Aircraft, Infantry
+    .tooltip-attributes = ? Fast hover tank.
 
 ### vehicle-lace-ap
 
@@ -1504,9 +1530,9 @@ vehicle-lace-ap =
         Fast hover tank.
         Strong vs Vehicles, Buildings
         Weak vs Aircraft, Infantry
-    .tooltip-strengths = • Strong vs Vehicles, Buildings
-    .tooltip-weaknesses = • Weak vs Aircraft, Infantry
-    .tooltip-attributes = • Fast hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Buildings
+    .tooltip-weaknesses = ? Weak vs Aircraft, Infantry
+    .tooltip-attributes = ? Fast hover tank.
 
 ### vehicle-intl
 
@@ -1516,9 +1542,9 @@ vehicle-intl =
         Can detect mines.
         Strong vs Light Vehicles
         Weak vs Tanks, Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Buildings
-    .tooltip-weaknesses = • Weak vs Aircraft, Infantry
-    .tooltip-attributes = • Fast hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Buildings
+    .tooltip-weaknesses = ? Weak vs Aircraft, Infantry
+    .tooltip-attributes = ? Fast hover tank.
 
 ### vehicle-intl-aa
 
@@ -1528,9 +1554,9 @@ vehicle-intl-aa =
         Can detect mines.
         Strong vs Light Vehicles, Aircraft
         Weak vs Tanks
-    .tooltip-strengths = • Strong vs Light Vehicles, Aircraft
-    .tooltip-weaknesses = • Weak vs Tanks
-    .tooltip-attributes = • Heavily armoured transport craft.
+    .tooltip-strengths = ? Strong vs Light Vehicles, Aircraft
+    .tooltip-weaknesses = ? Weak vs Tanks
+    .tooltip-attributes = ? Heavily armoured transport craft.
 
 ### vehicle-intl-teleport
 
@@ -1541,9 +1567,9 @@ vehicle-intl-teleport =
         Can teleport short distances (use alt-key).
         Strong vs Light Vehicles
         Weak vs Tanks, Aircraft
-    .tooltip-strengths = • Strong vs Light Vehicles
-    .tooltip-weaknesses = • Weak vs Tanks, Aircraft
-    .tooltip-attributes = • Heavily armoured transport craft.
+    .tooltip-strengths = ? Strong vs Light Vehicles
+    .tooltip-weaknesses = ? Weak vs Tanks, Aircraft
+    .tooltip-attributes = ? Heavily armoured transport craft.
 
 ### vehicle-corr
 
@@ -1552,9 +1578,9 @@ vehicle-corr =
         Short-ranged anti-infantry/structure unit.
         Strong vs Infantry, Buildings
         Weak vs Tanks, Defenses, Aircraft
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • CORR field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? CORR field unit
 
 ### vehicle-corr-area
 
@@ -1563,9 +1589,9 @@ vehicle-corr-area =
         Short-ranged anti-infantry/structure unit.
         Strong vs Infantry, Buildings
         Weak vs Tanks, Defenses, Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Defenses, Aircraft
-    .tooltip-attributes = • Short-ranged anti-infantry/structure unit.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Defenses, Aircraft
+    .tooltip-attributes = ? Short-ranged anti-infantry/structure unit.
 
 ### vehicle-corr-area-pdl
 
@@ -1574,9 +1600,9 @@ vehicle-corr-area-pdl =
         Ranged anti-infantry/structure unit.
         Strong vs Infantry, Buildings, Projectiles
         Weak vs Tanks, Defenses, Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Defenses, Aircraft
-    .tooltip-attributes = • Short-ranged anti-infantry/structure unit.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Defenses, Aircraft
+    .tooltip-attributes = ? Short-ranged anti-infantry/structure unit.
 
 ### vehicle-corr-area-reflector
 
@@ -1584,9 +1610,9 @@ vehicle-corr-area-reflector =
     .buildable-description =
         Ranged anti-infantry/structure unit.
         Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
-    .tooltip-strengths = • Strong vs Infantry, Buildings, Projectiles
-    .tooltip-weaknesses = • Weak vs Tanks, Defenses, Aircraft
-    .tooltip-attributes = • Ranged anti-infantry/structure unit.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings, Projectiles
+    .tooltip-weaknesses = ? Weak vs Tanks, Defenses, Aircraft
+    .tooltip-attributes = ? Ranged anti-infantry/structure unit.
 
 ### vehicle-corr-range
 
@@ -1595,9 +1621,9 @@ vehicle-corr-range =
         Ranged anti-infantry/structure unit.
         Strong vs Infantry, Buildings
         Weak vs Tanks, Defenses, Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Defenses, Aircraft
-    .tooltip-attributes = • Ranged anti-infantry/structure unit.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Defenses, Aircraft
+    .tooltip-attributes = ? Ranged anti-infantry/structure unit.
 
 ### vehicle-corr-range-pdl
 
@@ -1606,9 +1632,9 @@ vehicle-corr-range-pdl =
         Ranged anti-infantry/structure unit.
         Strong vs Infantry, Buildings, Projectiles
         Weak vs Tanks, Defenses, Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Defenses, Aircraft
-    .tooltip-attributes = • Ranged anti-infantry/structure unit.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Defenses, Aircraft
+    .tooltip-attributes = ? Ranged anti-infantry/structure unit.
 
 ### vehicle-corr-range-reflector
 
@@ -1616,9 +1642,9 @@ vehicle-corr-range-reflector =
     .buildable-description =
         Ranged anti-infantry/structure unit.
         Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
-    .tooltip-strengths = • Strong vs Infantry, Buildings, Projectiles
-    .tooltip-weaknesses = • Weak vs Tanks, Defenses, Aircraft
-    .tooltip-attributes = • Ranged anti-infantry/structure unit.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings, Projectiles
+    .tooltip-weaknesses = ? Weak vs Tanks, Defenses, Aircraft
+    .tooltip-attributes = ? Ranged anti-infantry/structure unit.
 
 ### vehicle-lchr
 
@@ -1630,9 +1656,9 @@ vehicle-lchr =
         Slows vehicles & cyborgs
         Strong vs Infantry, Buildings
         Weak vs Tanks, Defenses, Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Defenses, Aircraft
-    .tooltip-attributes = • Regenerates health while dealing damage and disrupts power grids.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Defenses, Aircraft
+    .tooltip-attributes = ? Regenerates health while dealing damage and disrupts power grids.
 
 ### vehicle-lchr-slow
 
@@ -1641,9 +1667,9 @@ vehicle-lchr-slow =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Defenses, Aircraft
-    .tooltip-attributes = • Medium-ranged anti-infantry/structure unit.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Defenses, Aircraft
+    .tooltip-attributes = ? Medium-ranged anti-infantry/structure unit.
 
 ### vehicle-lchr-slow-pdl
 
@@ -1652,9 +1678,9 @@ vehicle-lchr-slow-pdl =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Aircraft
-    .tooltip-attributes = • Slow Leecher variant equipped with point laser defense.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Aircraft
+    .tooltip-attributes = ? Slow Leecher variant equipped with point laser defense.
 
 ### vehicle-lchr-slow-reflector
 
@@ -1663,9 +1689,9 @@ vehicle-lchr-slow-reflector =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Aircraft
-    .tooltip-attributes = • Slow Leecher variant protected by reflector armor.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Aircraft
+    .tooltip-attributes = ? Slow Leecher variant protected by reflector armor.
 
 ### vehicle-lchr-drain
 
@@ -1674,9 +1700,9 @@ vehicle-lchr-drain =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Buildings
-    .tooltip-weaknesses = • Weak vs Tanks, Aircraft
-    .tooltip-attributes = • Draining beam slows enemies and regenerates health.
+    .tooltip-strengths = ? Strong vs Infantry, Buildings
+    .tooltip-weaknesses = ? Weak vs Tanks, Aircraft
+    .tooltip-attributes = ? Draining beam slows enemies and regenerates health.
 
 ### vehicle-stcr
 
@@ -1685,9 +1711,9 @@ vehicle-stcr =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Light Vehicles
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Durable assault crawler that rapidly regenerates.
+    .tooltip-strengths = ? Strong vs Infantry, Light Vehicles
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Durable assault crawler that rapidly regenerates.
 
 ### vehicle-stcr-range
 
@@ -1696,9 +1722,9 @@ vehicle-stcr-range =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Infantry, Light Vehicles
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Range-focused Stormcrawler variant.
+    .tooltip-strengths = ? Strong vs Infantry, Light Vehicles
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Range-focused Stormcrawler variant.
 
 ### vehicle-stcr-range-pdl
 
@@ -1707,9 +1733,9 @@ vehicle-stcr-range-pdl =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
-    .tooltip-strengths = • Strong vs Projectile Weapons
-    .tooltip-weaknesses = • Weak vs Aircraft, Energy Weapons
-    .tooltip-attributes = • Stormcrawler variant with point laser defense.
+    .tooltip-strengths = ? Strong vs Projectile Weapons
+    .tooltip-weaknesses = ? Weak vs Aircraft, Energy Weapons
+    .tooltip-attributes = ? Stormcrawler variant with point laser defense.
 
 ### vehicle-stcr-range-reflector
 
@@ -1718,9 +1744,9 @@ vehicle-stcr-range-reflector =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
-    .tooltip-strengths = • Strong vs Energy Weapons
-    .tooltip-weaknesses = • Weak vs Aircraft, Projectile Weapons
-    .tooltip-attributes = • Stormcrawler variant wrapped in reflector armor.
+    .tooltip-strengths = ? Strong vs Energy Weapons
+    .tooltip-weaknesses = ? Weak vs Aircraft, Projectile Weapons
+    .tooltip-attributes = ? Stormcrawler variant wrapped in reflector armor.
 
 ### vehicle-stcr-arc
 
@@ -1729,9 +1755,9 @@ vehicle-stcr-arc =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Clusters of Light Units
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Chain-lightning Stormcrawler variant.
+    .tooltip-strengths = ? Strong vs Clusters of Light Units
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Chain-lightning Stormcrawler variant.
 
 ### vehicle-stcr-arc-pdl
 
@@ -1740,9 +1766,9 @@ vehicle-stcr-arc-pdl =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Strong vs Projectile Weapons, Weak vs Aircraft, Energy Weapons
-    .tooltip-strengths = • Strong vs Projectile Weapons
-    .tooltip-weaknesses = • Weak vs Aircraft, Energy Weapons
-    .tooltip-attributes = • Arc Stormcrawler fitted with point laser defense.
+    .tooltip-strengths = ? Strong vs Projectile Weapons
+    .tooltip-weaknesses = ? Weak vs Aircraft, Energy Weapons
+    .tooltip-attributes = ? Arc Stormcrawler fitted with point laser defense.
 
 ### vehicle-stcr-arc-reflector
 
@@ -1751,9 +1777,9 @@ vehicle-stcr-arc-reflector =
         Slow moving, durable, short-range assault unit.
         Regenerates rapidly.
         Strong vs Energy Weapons, Weak vs Aircraft, Projectile Weapons
-    .tooltip-strengths = • Strong vs Energy Weapons
-    .tooltip-weaknesses = • Weak vs Aircraft, Projectile Weapons
-    .tooltip-attributes = • Arc Stormcrawler with reflector armor.
+    .tooltip-strengths = ? Strong vs Energy Weapons
+    .tooltip-weaknesses = ? Weak vs Aircraft, Projectile Weapons
+    .tooltip-attributes = ? Arc Stormcrawler with reflector armor.
 
 ### vehicle-devo
 
@@ -1763,9 +1789,9 @@ vehicle-devo =
         Can move in any direction while firing.
         Strong vs Vehicles, Defenses
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Defenses
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Light hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Defenses
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Light hover tank.
 
 ### vehicle-devo-acid
 
@@ -1775,9 +1801,9 @@ vehicle-devo-acid =
         Can move in any direction while firing.
         Strong vs Vehicles, Defenses
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Defenses
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Light hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Defenses
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Light hover tank.
 
 ### vehicle-devo-heavy
 
@@ -1787,9 +1813,9 @@ vehicle-devo-heavy =
         Can move in any direction while firing.
         Strong vs Vehicles, Defenses
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles, Defenses
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy hover tank.
+    .tooltip-strengths = ? Strong vs Vehicles, Defenses
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy hover tank.
 
 ### vehicle-ruin
 
@@ -1798,9 +1824,9 @@ vehicle-ruin =
         Long-range artillery.
         Strong vs Buildings, Defenses, Infantry
         Weak vs Tanks, Aircraft
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • RUIN field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? RUIN field unit
 
 ### vehicle-ruin-barrage
 
@@ -1809,9 +1835,9 @@ vehicle-ruin-barrage =
         Long-range artillery.
         Strong vs Buildings, Defenses, Infantry
         Weak vs Tanks, Aircraft
-    .tooltip-strengths = • Strong vs Buildings, Defenses, Infantry
-    .tooltip-weaknesses = • Weak vs Tanks, Aircraft
-    .tooltip-attributes = • Long-range artillery.
+    .tooltip-strengths = ? Strong vs Buildings, Defenses, Infantry
+    .tooltip-weaknesses = ? Weak vs Tanks, Aircraft
+    .tooltip-attributes = ? Long-range artillery.
 
 ### vehicle-ruin-splash
 
@@ -1820,9 +1846,9 @@ vehicle-ruin-splash =
         Long-range artillery.
         Strong vs Buildings, Defenses, Infantry
         Weak vs Tanks, Aircraft
-    .tooltip-strengths = • Strong vs Buildings, Defenses, Infantry
-    .tooltip-weaknesses = • Weak vs Tanks, Aircraft
-    .tooltip-attributes = • Long-range artillery.
+    .tooltip-strengths = ? Strong vs Buildings, Defenses, Infantry
+    .tooltip-weaknesses = ? Weak vs Tanks, Aircraft
+    .tooltip-attributes = ? Long-range artillery.
 
 ### vehicle-atmz
 
@@ -1834,9 +1860,9 @@ vehicle-atmz =
         Effect spreads when affected targets die
         Strong vs Vehicles, Aircraft, Defenses
         Weak vs Infantry, Buildings
-    .tooltip-strengths = • Strong vs Buildings, Defenses, Infantry
-    .tooltip-weaknesses = • Weak vs Tanks, Aircraft
-    .tooltip-attributes = • Long-range artillery.
+    .tooltip-strengths = ? Strong vs Buildings, Defenses, Infantry
+    .tooltip-weaknesses = ? Weak vs Tanks, Aircraft
+    .tooltip-attributes = ? Long-range artillery.
 
 ### vehicle-atmz-aa
 
@@ -1848,9 +1874,9 @@ vehicle-atmz-aa =
         Effect spreads when affected targets die
         Strong vs Vehicles, Aircraft, Defenses
         Weak vs Infantry, Buildings
-    .tooltip-strengths = • Strong vs Vehicles, Aircraft, Defenses
-    .tooltip-weaknesses = • Weak vs Infantry, Buildings
-    .tooltip-attributes = • Lightly armored long-range artillery unit.
+    .tooltip-strengths = ? Strong vs Vehicles, Aircraft, Defenses
+    .tooltip-weaknesses = ? Weak vs Infantry, Buildings
+    .tooltip-attributes = ? Lightly armored long-range artillery unit.
 
 ### vehicle-atmz-range
 
@@ -1862,9 +1888,9 @@ vehicle-atmz-range =
         Effect spreads when affected targets die
         Strong vs Vehicles, Aircraft, Defenses
         Weak vs Infantry, Buildings
-    .tooltip-strengths = • Strong vs Vehicles, Aircraft, Defenses
-    .tooltip-weaknesses = • Weak vs Infantry, Buildings
-    .tooltip-attributes = • Lightly armored long-range artillery unit.
+    .tooltip-strengths = ? Strong vs Vehicles, Aircraft, Defenses
+    .tooltip-weaknesses = ? Weak vs Infantry, Buildings
+    .tooltip-attributes = ? Lightly armored long-range artillery unit.
 
 ### vehicle-tpod
 
@@ -1873,9 +1899,9 @@ vehicle-tpod =
         Assault walker with beam weapons.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Assault walker with beam weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Assault walker with beam weapons.
 
 ### vehicle-tpod-chain
 
@@ -1884,9 +1910,9 @@ vehicle-tpod-chain =
         Heavy assault walker with beam weapons.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with beam weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with beam weapons.
 
 ### vehicle-tpod-chain-reflector
 
@@ -1896,9 +1922,9 @@ vehicle-tpod-chain-reflector =
         Has Reflector Armor.
         Strong vs Vehicles, Energy Weapons.
         Weak vs Aircraft, Projectiles
-    .tooltip-strengths = • Strong vs Vehicles, Energy Weapons.
-    .tooltip-weaknesses = • Weak vs Aircraft, Projectiles
-    .tooltip-attributes = • Heavy assault walker with beam weapons.
+    .tooltip-strengths = ? Strong vs Vehicles, Energy Weapons.
+    .tooltip-weaknesses = ? Weak vs Aircraft, Projectiles
+    .tooltip-attributes = ? Heavy assault walker with beam weapons.
 
 ### vehicle-tpod-chain-pdl
 
@@ -1908,9 +1934,9 @@ vehicle-tpod-chain-pdl =
         Has Point Laser Defense System.
         Strong vs Vehicles, Projectiles.
         Weak vs Aircraft, Energy Weapons
-    .tooltip-strengths = • Strong vs Vehicles, Projectiles.
-    .tooltip-weaknesses = • Weak vs Aircraft, Energy Weapons
-    .tooltip-attributes = • Heavy assault walker with beam weapons.
+    .tooltip-strengths = ? Strong vs Vehicles, Projectiles.
+    .tooltip-weaknesses = ? Weak vs Aircraft, Energy Weapons
+    .tooltip-attributes = ? Heavy assault walker with beam weapons.
 
 ### vehicle-tpod-acid
 
@@ -1919,9 +1945,9 @@ vehicle-tpod-acid =
         Heavy assault walker with corrosive acid weapons.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with corrosive acid weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with corrosive acid weapons.
 
 ### vehicle-tpod-acid-reflector
 
@@ -1931,9 +1957,9 @@ vehicle-tpod-acid-reflector =
         Has Reflector Armor.
         Strong vs Energy Weapons.
         Weak vs Aircraft, Projectiles
-    .tooltip-strengths = • Strong vs Energy Weapons.
-    .tooltip-weaknesses = • Weak vs Aircraft, Projectiles
-    .tooltip-attributes = • Heavy assault walker with corrosive acid weapons.
+    .tooltip-strengths = ? Strong vs Energy Weapons.
+    .tooltip-weaknesses = ? Weak vs Aircraft, Projectiles
+    .tooltip-attributes = ? Heavy assault walker with corrosive acid weapons.
 
 ### vehicle-tpod-acid-pdl
 
@@ -1943,18 +1969,18 @@ vehicle-tpod-acid-pdl =
         Has Point Laser Defense System.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with corrosive acid weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with corrosive acid weapons.
 
 ### vehicle-rptp
 
 vehicle-rptp =
     .buildable-description =
         Description unavailable.
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • RPTP field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? RPTP field unit
 
 ### vehicle-rptp-range
 
@@ -1963,9 +1989,9 @@ vehicle-rptp-range =
         Heavy assault walker with long-range beam weapons.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with long-range beam weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with long-range beam weapons.
 
 ### vehicle-rptp-range-reflector
 
@@ -1975,9 +2001,9 @@ vehicle-rptp-range-reflector =
         Has Reflector Armor.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with beam weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with beam weapons.
 
 ### vehicle-rptp-range-pdl
 
@@ -1987,9 +2013,9 @@ vehicle-rptp-range-pdl =
         Has Point Laser Defense System.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with beam weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with beam weapons.
 
 ### vehicle-rptp-acid
 
@@ -1998,9 +2024,9 @@ vehicle-rptp-acid =
         Heavy assault walker with corrosive acid weapons.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with corrosive acid weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with corrosive acid weapons.
 
 ### vehicle-rptp-acid-reflector
 
@@ -2010,9 +2036,9 @@ vehicle-rptp-acid-reflector =
         Has Reflector Armor.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with corrosive acid weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with corrosive acid weapons.
 
 ### vehicle-rptp-acid-pdl
 
@@ -2022,18 +2048,18 @@ vehicle-rptp-acid-pdl =
         Has Point Laser Defense System.
         Strong vs Vehicles.
         Weak vs Aircraft
-    .tooltip-strengths = • Strong vs Vehicles.
-    .tooltip-weaknesses = • Weak vs Aircraft
-    .tooltip-attributes = • Heavy assault walker with beam weapons.
+    .tooltip-strengths = ? Strong vs Vehicles.
+    .tooltip-weaknesses = ? Weak vs Aircraft
+    .tooltip-attributes = ? Heavy assault walker with beam weapons.
 
 ### vehicle-hexapod
 
 vehicle-hexapod =
     .buildable-description =
         Heavy assault walker with long range acid attack.
-    .tooltip-strengths = • Strong vs Vehicles, Buildings
-    .tooltip-weaknesses = • Weak vs Focused Anti-Air
-    .tooltip-attributes = • Heavy assault walker with a long-range acid barrage.
+    .tooltip-strengths = ? Strong vs Vehicles, Buildings
+    .tooltip-weaknesses = ? Weak vs Focused Anti-Air
+    .tooltip-attributes = ? Heavy assault walker with a long-range acid barrage.
 
 ### vehicle-smcv
 
@@ -2041,15 +2067,15 @@ vehicle-smcv =
     .buildable-description =
         Deploys into another Colony Platform.
         Unarmed
-    .tooltip-strengths = • Strong with rapid base deployment
-    .tooltip-weaknesses = • Weak without escort
-    .tooltip-attributes = • Deploys into a new Colony Platform.
+    .tooltip-strengths = ? Strong with rapid base deployment
+    .tooltip-weaknesses = ? Weak without escort
+    .tooltip-attributes = ? Deploys into a new Colony Platform.
 
 ### vehicle-smcv-nukular
 
 vehicle-smcv-nukular =
     .buildable-description =
         Description unavailable.
-    .tooltip-strengths = • Strong vs Unknown
-    .tooltip-weaknesses = • Weak vs Unknown
-    .tooltip-attributes = • SMCV.Nukular field unit
+    .tooltip-strengths = ? Strong vs Unknown
+    .tooltip-weaknesses = ? Weak vs Unknown
+    .tooltip-attributes = ? SMCV.Nukular field unit
