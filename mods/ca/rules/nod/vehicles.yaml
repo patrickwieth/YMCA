@@ -296,7 +296,22 @@ SPEC:
 		CloakEffectSequence: idle
 		UncloakEffectSequence: idle
 		EffectTracksActor: False
-		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+		RequiresCondition: !advanced_stealth && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+	Cloak@ADVANCEDSTEALTH:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		UncloakSound: appear1.aud
+		UncloakOn: Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		PauseOnCondition: cloak-force-disabled
+		CloakedCondition: hidden
+		IsPlayerPalette: false
+		EffectImage: stealthfade
+		EffectPalette: greenspark
+		CloakEffectSequence: idle
+		UncloakEffectSequence: idle
+		EffectTracksActor: False
+		RequiresCondition: advanced_stealth && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
@@ -885,7 +900,16 @@ HAR2:
 		UncloakSound: appear1.aud
 		IsPlayerPalette: false
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal, SelfHeal
-		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead && stealth-miner
+		RequiresCondition: !advanced_stealth && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead && stealth-miner
+	Cloak@ADVANCEDSTEALTH:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		CloakedCondition: hidden
+		UncloakSound: appear1.aud
+		IsPlayerPalette: false
+		UncloakOn: Unload, Infiltrate, Demolish, Damage, Heal, SelfHeal
+		RequiresCondition: advanced_stealth && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead && stealth-miner
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
@@ -1493,8 +1517,6 @@ MSG:
 		UndeploySounds: clicky1.aud
 		UndeployOnMove: true
 		UndeployOnPickup: true
-	ProximityExternalCondition@MSG:
-		Condition: invisibility
 	WithRangeCircle@MSG:
 		RequiresCondition: deployed
 		Range: 4c512
@@ -1503,5 +1525,6 @@ MSG:
 		Range: 4c512
 		Condition: invisibility
 		RequiresCondition: deployed
-		MaximumVerticalOffset: 512
+		MaximumVerticalOffset: 4096
 		AffectsParent: true
+		ValidRelationships: Ally

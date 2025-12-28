@@ -1369,7 +1369,23 @@
 	Cloak@NORMAL:
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
 		PauseOnCondition: cloak-force-disabled
-		RequiresCondition: !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+		RequiresCondition: !advanced_stealth && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+	Cloak@ADVANCEDSTEALTH:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		UncloakSound: appear1.aud
+		CloakedCondition: hidden
+		Palette: TAStealthTankCloakGrey
+		IsPlayerPalette: false
+		EffectImage: stealthfade
+		EffectPalette: greenspark
+		CloakEffectSequence: reversed
+		UncloakEffectSequence: idle
+		EffectTracksActor: True
+		UncloakOn: Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		PauseOnCondition: cloak-force-disabled
+		RequiresCondition: advanced_stealth && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Critical
@@ -1405,38 +1421,62 @@
 	Inherits: ^CloakStealth
 	Cloak@NORMAL:
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal
-		RequiresCondition: !cloak-force-disabled && airborne
+		RequiresCondition: !advanced_stealth && !cloak-force-disabled && airborne
+	Cloak@ADVANCEDSTEALTH:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		UncloakSound: appear1.aud
+		CloakedCondition: hidden
+		Palette: TAStealthTankCloakGrey
+		IsPlayerPalette: false
+		EffectImage: stealthfade
+		EffectPalette: greenspark
+		CloakEffectSequence: reversed
+		UncloakEffectSequence: idle
+		EffectTracksActor: True
+		UncloakOn: Unload, Infiltrate, Demolish, Dock, Damage, Heal
+		PauseOnCondition: cloak-force-disabled
+		RequiresCondition: advanced_stealth && !cloak-force-disabled && airborne
 
 ^Cloakable:
-	Inherits: ^CloakStealth
-	ExternalCondition@CLOAKGENERATOR:
-		Condition: invisibility
-	ExternalCondition@CRATE-CLOAK:
-		Condition: crate-cloak
-	Cloak@EXTERNALCLOAK:
-		RequiresCondition: invisibility && !cloak-force-disabled
+	Cloak@EXTERNALCLOAK_SPRITE:
+		RequiresCondition: invisibility && !voxel && !cloak-force-disabled
 		InitialDelay: 0
 		CloakDelay: 150
 		CloakSound: cloak5.aud
 		UncloakSound: appear1.aud
+		CloakedCondition: hidden
+		CloakStyle: Palette
+		CloakedPalette: TAStealthTankCloakGrey
+		IsPlayerPalette: false
+		EffectImage: stealthfade
+		EffectPalette: greenspark
+		CloakEffectSequence: reversed
+		UncloakEffectSequence: idle
+		EffectTracksActor: True
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage
+	Cloak@EXTERNALCLOAK_VOXEL:
+		RequiresCondition: invisibility && voxel && !cloak-force-disabled
+		InitialDelay: 0
+		CloakDelay: 150
+		CloakSound: cloak5.aud
+		UncloakSound: appear1.aud
+		CloakedCondition: hidden
+		CloakStyle: Palette
+		CloakedPalette: cloak_voxel
+		IsPlayerPalette: true
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage
+	ExternalCondition@CLOAKGENERATOR:
+		Condition: invisibility
+	ExternalCondition@CRATE-CLOAK:
+		Condition: crate-cloak
 	TimedConditionBar@STEALTHGEN:
 		Condition: invisibility
 		Color: 33ff33
 	GrantConditionOnDamageState@UNCLOAK:
 		Condition: cloak-force-disabled
 		ValidDamageStates: Heavy, Critical
-	WithModifiedPalette@STEALTHGEN:
-		RequiresCondition: invisibility
-		Palette: TAStealthTankCloak
-
-^Cloakable-Kills:
-	Inherits: ^Cloakable
-	KillsSelf@Mutation:
-		DamageTypes: ToxinDeath
-		RequiresCondition: invisibility
-
-
 ^Chillable:
 	TimedConditionBar@chilled:
 		Condition: chilled
@@ -2442,6 +2482,7 @@
 	Inherits: ^GainsExperience
 	Inherits: ^NoneArmor
 	Inherits: ^InfantryExperienceHospitalOverrides
+	Inherits: ^Cloakable
 	Inherits: ^SpriteActor
 	Inherits: ^Warpable
 	Inherits: ^IronCurtainable-Kills
@@ -2974,8 +3015,12 @@
 	TooltipExtras:
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	Cloak@EXTERNALCLOAK:
-		RequiresCondition: invisibility || crate-cloak && (!cloak-force-disabled && !airborne && !being-warped)
+	Cloak@EXTERNALCLOAK_SPRITE:
+		RequiresCondition: (invisibility || (crate-cloak && !airborne)) && !cloak-force-disabled && !being-warped
+		CloakDelay: 90
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal
+	Cloak@EXTERNALCLOAK_VOXEL:
+		RequiresCondition: (invisibility || (crate-cloak && !airborne)) && !cloak-force-disabled && !being-warped
 		CloakDelay: 90
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal
 	Repairable:
@@ -3068,7 +3113,6 @@
 	Inherits: ^GainsExperience
 
 ^RobotPilot:
-
 
 ^Airship:
 	Inherits: ^Plane
@@ -4596,7 +4640,6 @@ BuildBoost.Dummy:
 
 ^VoxelVehicle:
 	Inherits: ^TSRenderVoxel
-
 ^VoxelVehicleHusk:
 	Inherits: ^Husk
 	Inherits: ^TSRenderVoxel
@@ -5104,7 +5147,12 @@ BuildBoost.Dummy:
 	AutoTarget:
 		InitialStance: HoldFire
 		InitialStanceAI: HoldFire
-
+^CloakedVoxelAircraft:
+	Inherits: ^CloakedAircraft
+	Cloak@NORMAL:
+		CloakStyle: Palette
+		CloakedPalette: cloak_voxel
+		IsPlayerPalette: true
 ^Infiltrator:
 	Infiltrates@tec:
 		Types: SabInfiltrate
