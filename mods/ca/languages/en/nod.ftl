@@ -1,43 +1,23 @@
 ## Nod strings
-
-
 ## Faction Descriptions
-
 faction-blackhand-description =
     Black Hand: Shadow & Flame
-
     Black Hand is a sub-faction of the Brotherhood of Nod. The brotherhood has no heavy tanks and relies mostly on hit & run tactics.
-
     This is why nod has the best units for fast and efficient strikes as well as stealth capabilities.
-
     Their infantry becomes cyborgs with high tech available which makes them very strong.
-
     Black Hand specializes in stealth combat and napalm technology.
-
     Faction Unit: Comanche, Spectre
-
     Special Ability: Inferno Bomb
-
     Faction Bonus: Stealth & Flame Tanks (10% Discount)
-
     Key Commander Tree Options:
-
       Recon Bike: Explosive vs. Rocket Hail
-
       Stealth Tank: AP vs. Scrin
-
       Fireball Tank
-
     Infantry: <color=Green>++++</color>
-
     Artillery: <color=Yellow>++</color>
-
     Aircraft: <color=Yellow>++</color>
-
     Defense: <color=Yellow>++</color>
-
     Heavy Tanks: <color=Red>+</color>
-
     Recon&Stealth: <color=Green>++++</color>
 
 ### aircraft-apch
@@ -120,12 +100,10 @@ aircraft-venm-heavylaser =
 commander-tree-commander-tree =
     .description-95 =
         Equips the Flame Tank with Reflector Armor.
-
         Very resistent vs. Energy Weapons.
     .description-96 = Upgrades the Flame Tank to a Chemical Tank improving its damage against armored targets.
     .description-97 =
         Upgrades the Flame Tank to a Fireball Tank.
-
         It shoots fireballs with greater range, reducing the necessity to fight at very close range.
 
 ### commander-tree-promotion-harpy-flyby
@@ -137,7 +115,6 @@ commander-tree-promotion-harpy-flyby =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. tanks and layered anti-air that outranges the run.
     .tooltipextras-attributes = Attributes: • Harpies keep moving while firing, reducing exposure to flak.
 
-
 ### commander-tree-promotion-harpy-torp
 
 commander-tree-promotion-harpy-torp =
@@ -146,7 +123,6 @@ commander-tree-promotion-harpy-torp =
     .tooltipextras-strengths = Strengths: • Strong vs. ships and submarines with the new torpedo payload.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. dedicated anti-air defenses during the slower torpedo dive.
     .tooltipextras-attributes = Attributes: • Detects submerged vessels and adds anti-naval torpedoes.
-
 
 ### commander-tree-promotion-banshee
 
@@ -157,7 +133,6 @@ commander-tree-promotion-banshee =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and massed anti-air when it lingers over targets.
     .tooltipextras-attributes = Attributes: • Energy beams bypass Point Laser Defense coverage.
 
-
 ### commander-tree-promotion-banshee-bomber
 
 commander-tree-promotion-banshee-bomber =
@@ -166,7 +141,6 @@ commander-tree-promotion-banshee-bomber =
     .tooltipextras-strengths = Strengths: • Strong vs. heavy armor and structures with its plasma bomb payload.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. fighters and SAM grids that punish slower bombing runs.
     .tooltipextras-attributes = Attributes: • Bomb payload is energy-based and cannot be intercepted by Point Laser Defense.
-
 
 ### commander-tree-promotion-banshee-payload
 
@@ -177,7 +151,6 @@ commander-tree-promotion-banshee-payload =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and concentrated AA as the heavier frame lines up new passes.
     .tooltipextras-attributes = Attributes: • Expanded missile racks extend time on target but slow the craft slightly.
 
-
 ### commander-tree-promotion-comanche-bomber
 
 commander-tree-promotion-comanche-bomber =
@@ -186,7 +159,6 @@ commander-tree-promotion-comanche-bomber =
     .tooltipextras-strengths = Strengths: • Strong vs. buildings, infantry, and light armor via the upgraded napalm payload.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and heavy anti-air when slowed for a bombing run.
     .tooltipextras-attributes = Attributes: • Remains cloaked between attacks but flies slower while carrying bombs.
-
 
 ### commander-tree-promotion-flame-tank-pdl
 
@@ -197,7 +169,6 @@ commander-tree-promotion-flame-tank-pdl =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy tanks and energy weapons that bypass the laser grid.
     .tooltipextras-attributes = Attributes: • Point Laser Defense intercepts shells and rockets before they land.
 
-
 ### commander-tree-promotion-heavy-flame-tank-pdl
 
 commander-tree-promotion-heavy-flame-tank-pdl =
@@ -206,7 +177,6 @@ commander-tree-promotion-heavy-flame-tank-pdl =
     .tooltipextras-strengths = Strengths: • Strong vs. infantry, buildings, and vehicles while the PDL screens projectiles.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy tanks and energy weapons that overwhelm the grid.
     .tooltipextras-attributes = Attributes: • Point Laser Defense protects the heavy chassis from missiles and artillery.
-
 
 ### commander-tree-promotion-venom-heavy-laser
 
@@ -217,7 +187,6 @@ commander-tree-promotion-venom-heavy-laser =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. anti-air batteries and interceptors while the gunship slows to charge.
     .tooltipextras-attributes = Attributes: • Beam Cannons can still overcharge the heavy laser for extra damage.
 
-
 ### commander-tree-promotion-venom-payload
 
 commander-tree-promotion-venom-payload =
@@ -226,87 +195,49 @@ commander-tree-promotion-venom-payload =
     .tooltipextras-strengths = Strengths: • Strong vs. infantry and light armor with prolonged focused laser fire.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy anti-air; the focus refit adds no durability.
     .tooltipextras-attributes = Attributes: • Focus upgrade stacks with Beam Cannon charges for higher damage per pass.
-
-defaults-baseworld =
+nod-factions =
     .factionca-at-14-description =
         Marked of Kane: Laser Weaponry
-
         Marked of Kane is a sub-faction of the Brotherhood of Nod. The brotherhood has no heavy tanks and relies mostly on hit & run tactics.
-
         This is why nod has the best units for fast and efficient strikes as well as stealth capabilities.
-
         Their infantry becomes cyborgs with high tech available which makes them very strong.
-
         Marked of Kane specializes in Laser weapons.
-
          Faction Unit: Venom, Acolyte
-
          Special Ability: Frenzy
-
          Faction Bonus: Laser Overcharge (10% Increased Damage), Banshee (10% Discount)
-
          Key Commander Tree Options:
-
           Recon Bike: Scrin vs. Rocket Hail
-
           Stealth Tank: Explosives vs. Scrin
-
           Venom: Payload vs. Heavy Laser
-
          Infantry: ++++
-
          Artillery: ++
-
          Aircraft: +++
-
          Defense: ++
-
          Heavy Tanks: +
-
          Recon&Stealth: +++
     .factionca-at-15-description =
         Legion: Experimental Technology
-
         Legion is a sub-faction of the Brotherhood of Nod. The brotherhood has no heavy tanks and relies mostly on hit & run tactics.
-
         This is why nod has the best units for fast and efficient strikes as well as stealth capabilities.
-
         Their infantry becomes cyborgs with high tech available which makes them very strong.
-
         Legion specializes in experimental and toxin weapons.
-
          Faction Unit: Microwave Tank, Chemical Tank
-
          Special Ability: Cash Hack, Paratroopers
-
          Faction Bonus: Infiltrator (20% Discount)
-
          Key Commander Tree Options:
-
           Recon Bike: Scrin vs. Explosives
-
           Stealth Tank: Explosives vs. AP
-
           Harpy Fly by Fire
-
           SSM Toxin Missiles
-
           Flame Tank chemical
-
          Infantry: ++++
-
          Artillery: +++
-
          Aircraft: ++
-
          Defense: ++
-
          Heavy Tanks: +
-
          Recon&Stealth: +++
     .factionca-at-randomnod-description =
         Random Nod Faction
-
         A random Nod faction will be chosen when the game starts.
 
 ### infantry-adept
@@ -400,7 +331,6 @@ infantry-stormtrooper =
 supportpowers-nodsuperweaponsmall =
     .grantexternalconditionpowerca-at-stealthgen-description =
         Makes vehicles and structures temporarily invisible.
-
         Warning: Harmful to Infantry.
 
 ### vehicles-ftnk
@@ -521,6 +451,7 @@ promotion-venom-heavy-laser =
     .description = Upgrades the Venom with a heavy laser, \n  making it slower but very effective vs. Heavy Tanks.
 promotion-venom-payload =
     .description = Upgrades the damage of the Venom.
+
 ### commander-tree-promotion-flame-tank-reflector
 
 commander-tree-promotion-flame-tank-reflector =
@@ -529,7 +460,6 @@ commander-tree-promotion-flame-tank-reflector =
     .tooltipextras-strengths = Strengths: • Strong vs. infantry, buildings, and energy weapons after the refit.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. conventional tank guns and aircraft that stay at range.
     .tooltipextras-attributes = Attributes: • Reflector armor absorbs laser and ion hits but adds no anti-air.
-
 
 ### commander-tree-promotion-chem-tank
 
@@ -540,7 +470,6 @@ commander-tree-promotion-chem-tank =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy tanks and aircraft because range is still short.
     .tooltipextras-attributes = Attributes: • Chemical flames keep damaging targets after impact.
 
-
 ### commander-tree-promotion-fireball-tank
 
 commander-tree-promotion-fireball-tank =
@@ -550,7 +479,6 @@ commander-tree-promotion-fireball-tank =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy tanks and aircraft that outrange or kite the launcher.
     .tooltipextras-attributes = Attributes: • Fireballs arc over obstacles and ignite ground targets.
 
-
 ### commander-tree-promotion-heavy-flame-tank-reflector
 
 commander-tree-promotion-heavy-flame-tank-reflector =
@@ -559,7 +487,6 @@ commander-tree-promotion-heavy-flame-tank-reflector =
     .tooltipextras-strengths = Strengths: • Strong vs. infantry, buildings, and energy weapons while the reflector is active.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. conventional cannons and aircraft that bypass the plating.
     .tooltipextras-attributes = Attributes: • Reflector armor soaks laser damage but cannot block artillery shells.
-
 
 ### commander-tree-promotion-stealth-miners
 
@@ -583,7 +510,6 @@ commander-tree-promotion-buggy-pdl =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. cannons and lasers that the PDL cannot intercept.
     .tooltipextras-attributes = Attributes: • Point Laser Defense shoots down shells and missiles aimed at the buggy.
 
-
 ### commander-tree-promotion-buggy-aa
 
 commander-tree-promotion-buggy-aa =
@@ -592,7 +518,6 @@ commander-tree-promotion-buggy-aa =
     .tooltipextras-strengths = Strengths: • Strong vs. aircraft and transports thanks to the dedicated laser turret.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. armored ground forces after giving up anti-vehicle rockets.
     .tooltipextras-attributes = Attributes: • Reprioritizes the buggy to hunt airborne targets.
-
 
 ### commander-tree-promotion-elite-cyborg
 
@@ -627,7 +552,6 @@ commander-tree-promotion-rebel-leader =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. direct combat; the leader is lightly armed and must stay alive.
     .tooltipextras-attributes = Attributes: • Redirects infantry production to safe map edges as long as he survives.
 
-
 ### commander-tree-promotion-recon-bike-scrin
 
 commander-tree-promotion-recon-bike-scrin =
@@ -636,7 +560,6 @@ commander-tree-promotion-recon-bike-scrin =
     .tooltipextras-strengths = Strengths: • Strong vs. vehicles and heavy armor through high burst energy bolts.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry screens and aircraft after losing the AA rockets.
     .tooltipextras-attributes = Attributes: • Energy bolts bypass Point Laser Defense systems.
-
 
 ### commander-tree-promotion-recon-bike-scrin-pdl
 
@@ -647,7 +570,6 @@ commander-tree-promotion-recon-bike-scrin-pdl =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers and cannon fire that the PDL cannot touch.
     .tooltipextras-attributes = Attributes: • Point Laser Defense protects Scrin bikes without affecting their energy weapons.
 
-
 ### commander-tree-promotion-recon-bike-scrin-reflector
 
 commander-tree-promotion-recon-bike-scrin-reflector =
@@ -656,7 +578,6 @@ commander-tree-promotion-recon-bike-scrin-reflector =
     .tooltipextras-strengths = Strengths: • Strong vs. lasers and ion cannons that normally counter Scrin bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectile volleys and mutually exclusive with the PDL retrofit.
     .tooltipextras-attributes = Attributes: • Reflector plating absorbs energy fire directed at the bikes.
-
 
 ### commander-tree-promotion-recon-bike-rocket-hail
 
@@ -667,7 +588,6 @@ commander-tree-promotion-recon-bike-rocket-hail =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and infantry because the AA capability is removed.
     .tooltipextras-attributes = Attributes: • Converts bikes into light artillery with extended rocket range.
 
-
 ### commander-tree-promotion-recon-bike-rocket-hail-pdl
 
 commander-tree-promotion-recon-bike-rocket-hail-pdl =
@@ -676,7 +596,6 @@ commander-tree-promotion-recon-bike-rocket-hail-pdl =
     .tooltipextras-strengths = Strengths: • Strong vs. missiles and counter-battery fire aimed at the rocket batteries.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy cannons and energy strikes that slip past the PDL.
     .tooltipextras-attributes = Attributes: • Point Laser Defense keeps the artillery bikes alive against missiles.
-
 
 ### commander-tree-promotion-recon-bike-rocket-hail-reflector
 
@@ -687,7 +606,6 @@ commander-tree-promotion-recon-bike-rocket-hail-reflector =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. ballistic fire and still gives up the point-defense option.
     .tooltipextras-attributes = Attributes: • Reflector plating shields the rocket pods from laser retaliation.
 
-
 ### commander-tree-promotion-recon-bike-explosive
 
 commander-tree-promotion-recon-bike-explosive =
@@ -696,7 +614,6 @@ commander-tree-promotion-recon-bike-explosive =
     .tooltipextras-strengths = Strengths: • Strong vs. light vehicles, infantry, and buildings with high-explosive rockets.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy armor and point-defense lasers that swat the rockets.
     .tooltipextras-attributes = Attributes: • Keeps AA rockets while adding higher explosive yield.
-
 
 ### commander-tree-promotion-recon-bike-explosive-pdl
 
@@ -707,7 +624,6 @@ commander-tree-promotion-recon-bike-explosive-pdl =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers and tank guns once enemies track the bikes.
     .tooltipextras-attributes = Attributes: • Point Laser Defense protects the light chassis from counter-rockets.
 
-
 ### commander-tree-promotion-recon-bike-explosive-reflector
 
 commander-tree-promotion-recon-bike-explosive-reflector =
@@ -716,7 +632,6 @@ commander-tree-promotion-recon-bike-explosive-reflector =
     .tooltipextras-strengths = Strengths: • Strong vs. energy weapons and aircraft beams that hunt explosive bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectiles and loses access to the PDL upgrade.
     .tooltipextras-attributes = Attributes: • Reflector plating keeps explosive bikes alive when lasers focus them.
-
 
 ### commander-tree-promotion-recon-bike-pdl
 
@@ -727,7 +642,6 @@ commander-tree-promotion-recon-bike-pdl =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers, shells, and small-arms fire that bypass the grid.
     .tooltipextras-attributes = Attributes: • Universal point-defense retrofit for all recon bike loadouts.
 
-
 ### commander-tree-promotion-recon-bike-reflector
 
 commander-tree-promotion-recon-bike-reflector =
@@ -736,7 +650,6 @@ commander-tree-promotion-recon-bike-reflector =
     .tooltipextras-strengths = Strengths: • Strong vs. energy weapons and EMP strikes focused on recon bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectiles and incompatible with the point-defense retrofit.
     .tooltipextras-attributes = Attributes: • Reflector plating replaces the PDL option to resist energy weapons.
-
 
 ### commander-tree-promotion-reinforcements-coordinator
 
@@ -747,7 +660,6 @@ commander-tree-promotion-reinforcements-coordinator =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. focus fire; it's a lightly armed support chassis.
     .tooltipextras-attributes = Attributes: • Paradrops newly built vehicles at its rally point instead of the factory exit.
 
-
 ### commander-tree-promotion-ssm-launcher
 
 commander-tree-promotion-ssm-launcher =
@@ -756,7 +668,6 @@ commander-tree-promotion-ssm-launcher =
     .tooltipextras-strengths = Strengths: • Strong vs. buildings and infantry with long-range incendiary barrages.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. tanks and aircraft because the chassis is fragile.
     .tooltipextras-attributes = Attributes: • Fires from extreme range but reloads slowly.
-
 
 ### commander-tree-promotion-ssm-toxin-launcher
 
@@ -767,7 +678,6 @@ commander-tree-promotion-ssm-toxin-launcher =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and requires Legion tech before it appears.
     .tooltipextras-attributes = Attributes: • Legion-only upgrade that bathes targets in lingering toxins.
 
-
 ### commander-tree-promotion-ssm-multi-launcher
 
 commander-tree-promotion-ssm-multi-launcher =
@@ -776,7 +686,6 @@ commander-tree-promotion-ssm-multi-launcher =
     .tooltipextras-strengths = Strengths: • Strong vs. vehicles and structures by blanketing them with submunitions.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. fast strikes; the heavier rack traverses and reloads slowly.
     .tooltipextras-attributes = Attributes: • Missiles split into submunitions on impact.
-
 
 ### commander-tree-promotion-stealth-tank-ap
 
@@ -787,7 +696,6 @@ commander-tree-promotion-stealth-tank-ap =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and splash damage when forced into close fights.
     .tooltipextras-attributes = Attributes: • Keeps cloak and AA capability while focusing on armor-piercing warheads.
 
-
 ### commander-tree-promotion-stealth-tank-scrin
 
 commander-tree-promotion-stealth-tank-scrin =
@@ -796,7 +704,6 @@ commander-tree-promotion-stealth-tank-scrin =
     .tooltipextras-strengths = Strengths: • Strong vs. vehicles and infantry with versatile energy torpedoes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and reflector armor that bounces the energy fire.
     .tooltipextras-attributes = Attributes: • Energy torpedoes bypass Point Laser Defense.
-
 
 ### commander-tree-promotion-stealth-tank-explosive-rockets
 
@@ -807,7 +714,6 @@ commander-tree-promotion-stealth-tank-explosive-rockets =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy armor which shrugs off HE warheads.
     .tooltipextras-attributes = Attributes: • Maintains cloak but trades penetration for splash damage.
 
-
 ### commander-tree-promotion-stealth-tank-pdl
 
 commander-tree-promotion-stealth-tank-pdl =
@@ -816,7 +722,6 @@ commander-tree-promotion-stealth-tank-pdl =
     .tooltipextras-strengths = Strengths: • Strong vs. missiles and artillery hunting your covert tanks.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. energy beams and mutually exclusive with reflector armor.
     .tooltipextras-attributes = Attributes: • Point Laser Defense intercepts projectiles aimed at cloaked tanks.
-
 
 ### commander-tree-promotion-stealth-tank-reflector
 
@@ -827,7 +732,6 @@ commander-tree-promotion-stealth-tank-reflector =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectile and explosive fire while giving up the PDL option.
     .tooltipextras-attributes = Attributes: • Reflector plating absorbs energy weapons but disables the PDL option.
 
-
 ### commander-tree-promotion-beam-cannon
 
 commander-tree-promotion-beam-cannon =
@@ -837,7 +741,6 @@ commander-tree-promotion-beam-cannon =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and fast raiders that flank the fragile artillery.
     .tooltipextras-attributes = Attributes: • Beam Cannons can charge each other or power Obelisks for extra damage.
 
-
 ### commander-tree-promotion-scorpion-tank
 
 commander-tree-promotion-scorpion-tank =
@@ -846,9 +749,6 @@ commander-tree-promotion-scorpion-tank =
     .tooltipextras-strengths = Strengths: • Strong vs. heavy tanks thanks to mobile anti-armor lasers.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and aircraft because armor and AA are limited.
     .tooltipextras-attributes = Attributes: • Hover chassis lets Scorpions cross water and reposition quickly.
-
-
-
 commander-tree-promotion-advanced-stealth-technology =
     .buildable-description = Grants stealth vehicles the ability to attack without uncloaking.
     .description =
@@ -857,114 +757,78 @@ commander-tree-promotion-advanced-stealth-technology =
     .tooltipextras-strengths = Strengths: • Strong for stealth-heavy strategies.
     .tooltipextras-weaknesses = Weaknesses: • Weak if you focus on overt action.
     .tooltipextras-attributes = Attributes: • Nod stealth vehicles can stay cloaked when attacking.
-
-
-
 commander-tree-promotion-recon-bike-scrin =
     .buildable-description = Upgrades recon bikes with Scrin energy weapons that ignore point-defense lasers.
     .description = Upgrades recon bikes with Scrin energy weapons that ignore point-defense lasers.
     .tooltipextras-strengths = Strengths: • Strong vs. vehicles and heavy armor through high burst energy bolts.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry screens and aircraft after losing the AA rockets.
     .tooltipextras-attributes = Attributes: • Energy bolts bypass Point Laser Defense systems.
-
-
-
 commander-tree-promotion-recon-bike-scrin-pdl =
     .buildable-description = Adds point laser defense modules to Scrin Bikes for extra survivability.
     .description = Adds point laser defense modules to Scrin Bikes for extra survivability.
     .tooltipextras-strengths = Strengths: • Strong vs. missiles and counter-battery fire targeting Scrin bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers and cannon fire that the PDL cannot touch.
     .tooltipextras-attributes = Attributes: • Point Laser Defense protects Scrin bikes without affecting their energy weapons.
-
-
-
 commander-tree-promotion-recon-bike-scrin-reflector =
     .buildable-description = Bolts experimental reflector armor onto Scrin Bikes to counter energy weapons.
     .description = Bolts experimental reflector armor onto Scrin Bikes to counter energy weapons.
     .tooltipextras-strengths = Strengths: • Strong vs. lasers and ion cannons that normally counter Scrin bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectile volleys and mutually exclusive with the PDL retrofit.
     .tooltipextras-attributes = Attributes: • Reflector plating absorbs energy fire directed at the bikes.
-
-
-
 commander-tree-promotion-recon-bike-rocket-hail =
     .buildable-description = Refits recon bikes with rocket-hail pods that trade AA for long-range volleys.
     .description = Refits recon bikes with rocket-hail pods that trade AA for long-range volleys.
     .tooltipextras-strengths = Strengths: • Strong vs. vehicles and clustered armor with saturating rocket barrages.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. aircraft and infantry because the AA capability is removed.
     .tooltipextras-attributes = Attributes: • Converts bikes into light artillery with extended rocket range.
-
-
-
 commander-tree-promotion-recon-bike-rocket-hail-reflector =
     .buildable-description = Outfits rocket-hail bikes with reflector armor to blunt energy retaliation.
     .description = Outfits rocket-hail bikes with reflector armor to blunt energy retaliation.
     .tooltipextras-strengths = Strengths: • Strong vs. energy weapons targeting the rocket artillery bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. ballistic fire and still gives up the point-defense option.
     .tooltipextras-attributes = Attributes: • Reflector plating shields the rocket pods from laser retaliation.
-
-
-
 commander-tree-promotion-recon-bike-rocket-hail-pdl =
     .buildable-description = Adds point laser defense to rocket-hail bikes so they survive counterfire.
     .description = Adds point laser defense to rocket-hail bikes so they survive counterfire.
     .tooltipextras-strengths = Strengths: • Strong vs. missiles and counter-battery fire aimed at the rocket batteries.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy cannons and energy strikes that slip past the PDL.
     .tooltipextras-attributes = Attributes: • Point Laser Defense keeps the artillery bikes alive against missiles.
-
-
-
 commander-tree-promotion-recon-bike-explosive =
     .buildable-description = Swaps recon bike ammo for high-explosive rockets better at shredding light targets.
     .description = Swaps recon bike ammo for high-explosive rockets better at shredding light targets.
     .tooltipextras-strengths = Strengths: • Strong vs. light vehicles, infantry, and buildings with high-explosive rockets.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. heavy armor and point-defense lasers that swat the rockets.
     .tooltipextras-attributes = Attributes: • Keeps AA rockets while adding higher explosive yield.
-
-
-
 commander-tree-promotion-recon-bike-explosive-pdl =
     .buildable-description = Adds point laser defense to explosive bikes so their volleys land safely.
     .description = Adds point laser defense to explosive bikes so their volleys land safely.
     .tooltipextras-strengths = Strengths: • Strong vs. missiles and SAMs aimed at the fragile explosive bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers and tank guns once enemies track the bikes.
     .tooltipextras-attributes = Attributes: • Point Laser Defense protects the light chassis from counter-rockets.
-
-
-
 commander-tree-promotion-recon-bike-explosive-reflector =
     .buildable-description = Armors explosive bikes with reflector plating to resist energy ambushes.
     .description = Armors explosive bikes with reflector plating to resist energy ambushes.
     .tooltipextras-strengths = Strengths: • Strong vs. energy weapons and aircraft beams that hunt explosive bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectiles and loses access to the PDL upgrade.
     .tooltipextras-attributes = Attributes: • Reflector plating keeps explosive bikes alive when lasers focus them.
-
-
-
 commander-tree-promotion-recon-bike-pdl =
     .buildable-description = Installs the point laser defense module on whichever upgraded recon bike variant you field.
     .description = Installs the point laser defense module on whichever upgraded recon bike variant you field.
     .tooltipextras-strengths = Strengths: • Strong vs. missiles and artillery aimed at any upgraded recon bike variant.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. lasers, shells, and small-arms fire that bypass the grid.
     .tooltipextras-attributes = Attributes: • Universal point-defense retrofit for all recon bike loadouts.
-
-
 commander-tree-promotion-recon-bike-reflector =
     .buildable-description = Unlocks reflector armor kits for recon bikes to blunt enemy energy weapons.
     .description = Unlocks reflector armor kits for recon bikes to blunt enemy energy weapons.
     .tooltipextras-strengths = Strengths: • Strong vs. energy weapons and EMP strikes focused on recon bikes.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectiles and incompatible with the point-defense retrofit.
     .tooltipextras-attributes = Attributes: • Reflector plating replaces the PDL option to resist energy weapons.
-
-
 commander-tree-promotion-scorpion-tank =
     .buildable-description = Unlocks Scorpion hover tanks armed with anti-armor lasers for fast assaults.
     .description = Unlocks Scorpion hover tanks armed with anti-armor lasers for fast assaults.
     .tooltipextras-strengths = Strengths: • Strong vs. heavy tanks thanks to mobile anti-armor lasers.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. infantry and aircraft because armor and AA are limited.
     .tooltipextras-attributes = Attributes: • Hover chassis lets Scorpions cross water and reposition quickly.
-
-
 commander-tree-promotion-beam-cannon =
     .buildable-description = Unlocks Nod Beam Cannons - long-range energy artillery that can chain fire.
     .description = Unlocks Nod Beam Cannons - long-range energy artillery that can chain fire.
@@ -979,9 +843,6 @@ commander-tree-promotion-improved-lasers =
     .tooltipextras-strengths = Strengths: • Strong when your army leans on Venoms, Scorpion Lasers, Beam Cannons, or laser commandos.
     .tooltipextras-weaknesses = Weaknesses: • Weak if your composition is mostly rockets, cannons, or toxins that see no benefit.
     .tooltipextras-attributes = Attributes: • Grants +15% firepower to every Nod unit that fires a laser weapon.
-
-
-
 commander-tree-promotion-improved-flamethrowers =
     .buildable-description = Tunes promethium injectors so Nod flamethrowers scorch targets fifteen percent harder.
     .description =
@@ -990,9 +851,6 @@ commander-tree-promotion-improved-flamethrowers =
     .tooltipextras-strengths = Strengths: • Strong when rushing structures or infantry blobs with flamers that thrive on raw DPS.
     .tooltipextras-weaknesses = Weaknesses: • Weak once enemies field heavy armor or reflectors instead of flame-vulnerable targets.
     .tooltipextras-attributes = Attributes: • Grants +15% firepower to all Nod flamethrower infantry and vehicles.
-
-
-
 commander-tree-promotion-hardened-cyborgs =
     .buildable-description = Reinforces Nod cyborg chassis, cutting incoming damage by ten percent.
     .description =
@@ -1001,9 +859,6 @@ commander-tree-promotion-hardened-cyborgs =
     .tooltipextras-strengths = Strengths: • Strong in grinder matches where your cyborg core needs extra staying power.
     .tooltipextras-weaknesses = Weaknesses: • Weak if you rarely field cyborg infantry or rely solely on vehicles and aircraft.
     .tooltipextras-attributes = Attributes: • Grants all Nod cyborg infantry 10% damage reduction.
-
-
-
 commander-tree-promotion-cyborg-optimization =
     .buildable-description = Upgrades gyros and optics so every cyborg marches ten percent faster with longer reach.
     .description =
@@ -1012,3 +867,4 @@ commander-tree-promotion-cyborg-optimization =
     .tooltipextras-strengths = Strengths: • Strong for aggressive pushes or kiting plays that leverage faster, longer-ranged cyborgs.
     .tooltipextras-weaknesses = Weaknesses: • Weak if your strategy excludes cyborg infantry altogether.
     .tooltipextras-attributes = Attributes: • Gives all Nod cyborgs +10% speed, attack range, and sight radius.
+

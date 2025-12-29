@@ -1,6 +1,5 @@
 ## China strings
 
-
 ### aircraft-chhelix
 
 aircraft-chhelix =
@@ -114,64 +113,51 @@ commander-tree-commander-tree =
     .description-11 = Upgrades the Overlord with a Gatling Turret.
     .description-12 =
         Upgrades the Overlord with a Bunker.
-        
-        The Bunker is filled with Tank-Hunter Infantry, that shoots from the Bunker.
+The Bunker is filled with Tank-Hunter Infantry, that shoots from the Bunker.
     .description-13 = Upgrades the Overlord with a Propaganda speaker.
     .description-14 =
         Upgrades the Overlord with Nuclear Shells. Insane damage.
-        
-        Nuclear Tanks explode on destruction.
+Nuclear Tanks explode on destruction.
     .description-15 = Upgrades the Overlord with a Plasma Beam.
     .description-16 = Upgrades the Overlord with a Point Defense Laser System.
     .description-17 = Upgrades the Overlord with Reflector armor.
     .description-18 =
         Unlocks the Bi Xi Dragon.
-        
-        A long-range rocket artillery.
+A long-range rocket artillery.
     .description-19 = Unlocks the Nuke Cannon.
     .description-20 = Increases the range of the Nuke Cannon.
     .description-21 =
         Nuke Cannon's warhead is upgraded to a Neutron Bomb.
-        
-        This deals damage to drivers and infantry.
+This deals damage to drivers and infantry.
     .description-22 = Upgrades the Crawler with a Point Defense Laser System.
     .description-23 = Upgrades the Crawler with Reflector Armor.
     .description-24 = Upgrades the Listening Outpost with Propaganda Speakers.
     .description-25 =
         Upgrades the Listening Outpost to Attack Outpost.
-        
-        Infantry can shoot from inside.
-        
-        Comes filled with 5 Tank Hunter.
+Infantry can shoot from inside.
+Comes filled with 5 Tank Hunter.
     .description-26 = Upgrades the Outpost with a Point Defense Laser System.
     .description-27 = Upgrades the Outpost with Reflector Armor.
     .description-28 = Upgrades the gatling with a Point Defense Laser System.
     .description-29 = Upgrades the gatling with Reflector Armor.
     .description-30 =
         Upgrades the ECM Tank with Pulse Mode.
-        
-        It will also deal damage to disabled tanks.
+It will also deal damage to disabled tanks.
     .description-31 =
         Equips the ECM Tank with a focused Plasma Beam.
-        
-        It deals high damage to Tanks.
+It deals high damage to Tanks.
     .description-32 =
         Equips the ECM Tank with a modulated Plasma Beam.
-        
-        It jumps to multiple targets.
+It jumps to multiple targets.
     .description-33 = Equips the Helix wih a gatling.
     .description-34 =
         Equips the Helix with a Bunker.
-        
-        Infantry can shoot from the Helix.
-        
-        Comes filled with Tank Hunters.
+Infantry can shoot from the Helix.
+Comes filled with Tank Hunters.
     .description-35 =
         Equips the Helix with a Bunker.
-        
-        Infantry can shoot from the Helix.
-        
-        Comes filled with Mortars.
+Infantry can shoot from the Helix.
+Comes filled with Mortars.
     .description-36 = Equips the Helix with Napalm Bombs.
     .description-37 = Equips the Helix with Torpedo Bombs.
     .description-38 = Equips the Mig with dedicated anti-air missiles.
@@ -180,31 +166,24 @@ commander-tree-commander-tree =
     .description-40 = Equips the Mig with napalm bombs.
     .description-41 =
         Increases the power of napalm weapons.
-        
-        Napalm weapons can create a firestorm on the ground.
+Napalm weapons can create a firestorm on the ground.
     .description-42 =
         Unlocks the Horde Bonus for Battlemaster and Infantry.
-        
-        This bonus increases the fire rate of units.
-        
-        The bonus is activated when 10 units are close to each other.
+This bonus increases the fire rate of units.
+The bonus is activated when 10 units are close to each other.
     .description-43 = Increases the range of Propaganda Speakers.
     .description-44 = The bunker is fortified and can soak up more damage.
     .description-45 = Tanks shoot Uranium Shells, dealing more damage.
     .description-46 =
         Tanks have a nuclear engine, increasing their movement speed.
-        
-        Nuclear Tanks explode on destruction.
+Nuclear Tanks explode on destruction.
     .description-47 =
         Tanks with nuclear ammo or nuclear engines no longer explode on destruction.
-        
-        Damage dealt to close units is prevented.
+Damage dealt to close units is prevented.
     .description-5 =
         Upgrades the Battlemaster with nuclear shells,
-        
-        giving it a lot of damage per shot.
-        
-        Nuclear Tanks explode on destruction.
+giving it a lot of damage per shot.
+Nuclear Tanks explode on destruction.
     .description-6 = The Battlemaster is mass produced, lowering its cost and production time.
     .description-7 = Upgrades the Battlemaster with a point defense laser.
     .description-8 = Upgrades the Battlemaster with reflector armor.
@@ -247,120 +226,67 @@ commander-tree-promotion-crawler-hunter =
         Upgrades the Troop Crawler to Hunter Crawler. 
         Infantry can shoot from the Assault Crawler.
         Comes filled with 5 Tank Hunters.
-defaults-baseworld =
+china-factions =
     .factionca-at-21-description =
         Shin Fai: Infantry 
-        
         Shin Fai is a general of China. China is best at defense, base expanding and massive armies. 
-        
         Many units get a horde bonus, when many other units are close. This can be further improved with propaganda speakers. 
-        
         Shin Fai is specialized in infantry. Missing the conventional tanks of other chinese generals, 
-        
         Shin Fai has the strongest infantry in the game and many vehicles supporting infantry directly.  
-        
-         Faction Units: Minigunner, Assault Crawler, Attack Outpost
-        
-         Special Ability: Infantry Paradrop
-        
-         Faction Bonus: Super Lotus, Fortified Bunker
-        
-         Key Commander Tree Options:
-        
-          ECM Pulse vs. ECM Chain
-        
-          Outpost Propaganda vs. Bunker
-        
-          No Battlemaster and no Overlord  
-        
-         Infantry: ++++ 
-        
-         Artillery: +++ 
-        
-         Aircraft: ++ 
-        
-         Defense: ++++ 
-        
-         Heavy Tanks: + 
-        
-         Recon&Stealth: ++
+        Faction Units: Minigunner, Assault Crawler, Attack Outpost
+        Special Ability: Infantry Paradrop
+        Faction Bonus: Super Lotus, Fortified Bunker
+        Key Commander Tree Options:
+        ECM Pulse vs. ECM Chain
+        Outpost Propaganda vs. Bunker
+        No Battlemaster and no Overlord  
+        Infantry: ++++ 
+        Artillery: +++ 
+        Aircraft: ++ 
+        Defense: ++++ 
+        Heavy Tanks: + 
+        Recon&Stealth: ++
     .factionca-at-22-description =
         Ta Hun Kwai: Tanks 
-        
         Ta Hun Kwai is a general of China. China is best at defense, base expanding and massive armies. 
-        
         Many units get a horde bonus, when many other units are close. This can be further improved with propaganda speakers. 
-        
         Ta Hun Kwai is specialized in tanks. In order to mitigate China's biggest weakness, it's slowness, 
-        
         Ta Hun Kwai has many tank upgrades and options to strike fast attacks with tank armies. His biggest weakness is the lack of heavy artillery.  
-        
-         Faction Units: Emperor Overlord
-        
-         Special Ability: Tank Paradrop
-        
-         Faction Bonus: Uranium Shells
-        
-         Key Commander Tree Options:
-        
-          ECM Focus vs. ECM Chain
-        
-          gatling Tank PDL vs. Reflector
-        
-          No Nuke Cannon  
-        
-         Infantry: ++ 
-        
-         Artillery: + 
-        
-         Aircraft: ++ 
-        
-         Defense: +++ 
-        
-         Heavy Tanks: ++++ 
-        
-         Recon&Stealth: ++
+        Faction Units: Emperor Overlord
+        Special Ability: Tank Paradrop
+        Faction Bonus: Uranium Shells
+        Key Commander Tree Options:
+        ECM Focus vs. ECM Chain
+        gatling Tank PDL vs. Reflector
+        No Nuke Cannon  
+        Infantry: ++ 
+        Artillery: + 
+        Aircraft: ++ 
+        Defense: +++ 
+        Heavy Tanks: ++++ 
+        Recon&Stealth: ++
     .factionca-at-23-description =
         Tsing Shi Tao: Nuclear 
-        
         Tsing Shi Tao is a general of China. China is best at defense, base expanding and massive armies. 
-        
         Many units get a horde bonus, when many other units are close. This can be further improved with propaganda speakers. 
-        
         Tsing Shi Tao is specialized in nuclear technology. This gives him a lot of improvements on nuclear weapons for increased power or mitigated weaknesses. 
-        
         Tsing Shi Tao has many upgrades, which give nuclear weapons to units and therefore is very good at dealing massive damage on the battlefield. 
-        
         His biggest weakness are point defense systems which prevent nuclear weapons to reach their targets.  
-        
-         Faction Units: Nuke Mig, Overlord, Battlemaster, Helix. 
-        
-         Special Ability: Nuke Parabomb
-        
-         Faction Bonus: Nuclear Tanks, Isotope Stability
-        
-         Key Commander Tree Options:
-        
-          ECM Pulse vs. ECM Focus
-        
-          Nuke Cannon Neutron vs. Range
-        
-          No Inferno Cannon  
-        
-         Infantry: ++ 
-        
-         Artillery: ++++ 
-        
-         Aircraft: ++ 
-        
-         Defense: +++ 
-        
-         Heavy Tanks: +++ 
-        
-         Recon&Stealth: ++
+        Faction Units: Nuke Mig, Overlord, Battlemaster, Helix. 
+        Special Ability: Nuke Parabomb
+        Faction Bonus: Nuclear Tanks, Isotope Stability
+        Key Commander Tree Options:
+        ECM Pulse vs. ECM Focus
+        Nuke Cannon Neutron vs. Range
+        No Inferno Cannon  
+        Infantry: ++ 
+        Artillery: ++++ 
+        Aircraft: ++ 
+        Defense: +++ 
+        Heavy Tanks: +++ 
+        Recon&Stealth: ++
     .factionca-at-randomchina-description =
         Random China Faction
-        
         A random China faction will be chosen when the game starts.
 
 ### infantry-che1
@@ -1157,7 +1083,6 @@ commander-tree-promotion-bixi-dragon =
     .description =
         Unlocks the Bi Xi Dragon.
         A long-range rocket artillery.
-
     .tooltipextras-strengths = Strengths: • Strong vs any ground target
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Aircraft, Anti-Aircraft
 commander-tree-promotion-nuke-cannon =

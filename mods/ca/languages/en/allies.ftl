@@ -1,5 +1,4 @@
-﻿## Allies strings
-
+## Allies strings
 
 ### aircraft-eurofighter
 
@@ -130,7 +129,6 @@ aircraft-seahawk-armed =
 
 ### commander-tree-commander-tree
 
-
 ### commander-tree-promotion-infantry-doctrine
 
 commander-tree-promotion-infantry-doctrine =
@@ -208,7 +206,6 @@ commander-tree-promotion-prism-tech =
     .tooltipextras-strengths = Strengths: • +20% prism firepower melts structures and light vehicles while ignoring PD lasers.
     .tooltipextras-weaknesses = Weaknesses: • Reflector armor and massed aircraft can still counter prism columns.
     .tooltipextras-attributes = Attributes: • All Allied prism units gain +20% damage once this promotion is purchased.
-
 
 ### commander-tree-promotion-aurora
 
@@ -373,7 +370,6 @@ commander-tree-promotion-eurocopter-fire-rate =
     .tooltipextras-strengths = Strengths: • Upgraded drivetrain doubles sustained missile output.
     .tooltipextras-weaknesses = Weaknesses: • Burns through ammo quickly and still fragile.
 
-
 ### commander-tree-promotion-eurocopter-torp
 
 commander-tree-promotion-eurocopter-torp =
@@ -416,7 +412,6 @@ commander-tree-promotion-harrier-avionics =
     .tooltipextras-strengths = Strengths: • Avionics package enables stand-off attack runs.
     .tooltipextras-weaknesses = Weaknesses: • Lighter load makes each strike less destructive.
 
-
 ### commander-tree-promotion-harrier-payload
 
 commander-tree-promotion-harrier-payload =
@@ -425,7 +420,6 @@ commander-tree-promotion-harrier-payload =
         Increases the Payload of the Harrier.
     .tooltipextras-strengths = Strengths: • Expanded payload devastates structures in one pass.
     .tooltipextras-weaknesses = Weaknesses: • Extra weight slows the jet and increases exposure.
-
 
 ### commander-tree-promotion-huey-cryo
 
@@ -506,7 +500,6 @@ commander-tree-promotion-mirage-toughness =
     .tooltipextras-strengths = Strengths: • Extra durability lets mirages stay cloaked or disengage after being spotted.
     .tooltipextras-weaknesses = Weaknesses: • Provides no increase in firepower and forbids the burst option.
 
-
 ### commander-tree-promotion-prism-blaster
 
 commander-tree-promotion-prism-blaster =
@@ -517,7 +510,7 @@ commander-tree-promotion-prism-blaster =
         Fits the prism chassis with a blaster coil whose pulse branches on impact, saturating light vehicles and support crews.
         Use it to melt screens before your heavier prism artillery burns down priority structures.
     .tooltipextras-strengths = Strengths: • Chain-splitting prism pulse devastates infantry blobs, drones, and light armor.
-    .tooltipextras-weaknesses = Weaknesses: • Shorter reach and limited punch versus heavy armor or aircraft—needs escorts for AA.
+    .tooltipextras-weaknesses = Weaknesses: • Shorter reach and limited punch versus heavy armor or aircraft•needs escorts for AA.
     .tooltipextras-attributes = Attributes: • Beam splits into multiple lances after the first impact, overwhelming point-defense grids.
 
 ### commander-tree-promotion-prism-cannon
@@ -602,112 +595,64 @@ commander-tree-promotion-spec-ops =
     .tooltipextras-strengths = Strengths: • Deploys stealth commandos for sabotage and target marking.
     .tooltipextras-weaknesses = Weaknesses: • Small squads die quickly if detected.
 
-### defaults-baseworld
+### allies-factions
 
-defaults-baseworld =
+allies-factions =
     .factionca-at-1-description =
         England: Subterfuge
-
         England is a sub-faction of the Allies. The Allies are best at reconnaissance and agile combat.
-
         The units are good at countering special threats, but lack in overall strength.
-
         For England this applies especially as their special units further strengthen this.
-
-         Faction Units: Sniper, Mirage Tank, Camo Pillbox
-
-         Special Ability: GPS Scramble
-
-         Faction Bonus: Fake Buildings
-
-         Key Commander Tree Options:
-
-          Prism Cannon vs. Prism Blaster
-
-          Mirage Tank
-
-          No AA upgrade for Chrono Prison
-
-         Infantry: ++
-
-         Artillery: ++
-
-         Aircraft: +++
-
-         Defense: +++
-
-         Heavy Tanks: ++
-
-         Recon&Stealth: ++++
+        Faction Units: Sniper, Mirage Tank, Camo Pillbox
+        Special Ability: GPS Scramble
+        Faction Bonus: Fake Buildings
+        Key Commander Tree Options:
+         Prism Cannon vs. Prism Blaster
+         Mirage Tank
+         No AA upgrade for Chrono Prison
+        Infantry: ++
+        Artillery: ++
+        Aircraft: +++
+        Defense: +++
+        Heavy Tanks: ++
+        Recon&Stealth: ++++
     .factionca-at-2-description =
         France: Fortification
-
         France is a sub-faction of the Allies. The Allies are best at reconnaissance and agile combat.
-
         The units are good at countering special threats, but lack in overall strength.
-
         For France this is a bit mitigated by their special units, which are slow, heavy but certainly do not lack overall strength.
-
-         Faction Unit: Battle Fortress, Grand Cannon
-
-         Special Ability: Cluster Mines
-
-         Faction Bonus: Walls & Defences (10% Discount)
-
-         Key Commander Tree Options:
-
-          Prism Tank vs. Prism Blaster
-
-          Battle Fortress
-
-          No Aurora
-
-         Infantry: ++
-
-         Artillery: +++
-
-         Aircraft: ++
-
-         Defense: ++++
-
-         Heavy Tanks: +++
-
-         Recon&Stealth: +++
+        Faction Unit: Battle Fortress, Grand Cannon
+        Special Ability: Cluster Mines
+        Faction Bonus: Walls & Defences (10% Discount)
+        Key Commander Tree Options:
+         Prism Tank vs. Prism Blaster
+         Battle Fortress
+         No Aurora
+        Infantry: ++
+        Artillery: +++
+        Aircraft: ++
+        Defense: ++++
+        Heavy Tanks: +++
+        Recon&Stealth: +++
     .factionca-at-3-description =
         Germany: Innovation & Time Technology
-
         Germany is a sub-faction of the Allies. The Allies are best at reconnaissance and agile combat.
-
         The units are good at countering special threats, but lack in overall strength.
-
         Germany has the best tanks and capabilities to destroy tanks.
-
-         Faction Unit: Tank Destroyer, Guardian GI
-
-         Special Ability: Time Freeze
-
-         Faction Bonus: Chrono Tank (10% Discount)
-
-         Key Commander Tree Options:
-
-          Prism Tank vs. Prism Cannon
-
-          Tank Destroyer
-
-         Infantry: ++
-
-         Artillery: ++
-
-         Aircraft: +++
-
-         Defense: +++
-
-         Heavy Tanks: +++
-
-         Recon&Stealth: +++
+        Faction Unit: Tank Destroyer, Guardian GI
+        Special Ability: Time Freeze
+        Faction Bonus: Chrono Tank (10% Discount)
+        Key Commander Tree Options:
+         Prism Tank vs. Prism Cannon
+         Tank Destroyer
+        Infantry: ++
+        Artillery: ++
+        Aircraft: +++
+        Defense: +++
+        Heavy Tanks: +++
+        Recon&Stealth: +++
     .factionca-at-randomallies-description =
         Random Allied Faction
-
         A random Allied faction will be chosen when the game starts.
 
 ### infantry-cryotrooper

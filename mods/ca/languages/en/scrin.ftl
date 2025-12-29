@@ -1,6 +1,5 @@
 ## Scrin strings
 
-
 ### aircraft-pac
 
 aircraft-pac =
@@ -153,11 +152,9 @@ commander-tree-commander-tree =
     .description-102 = Upgrades the Corrupter with greater range.
     .description-103 =
         Upgrades the Corrupter with a Point Laser Defense system.
-
         PDL intercepts incoming missiles and projectiles.
     .description-104 =
         Upgrades the Corrupter with Reflector armor.
-
         Reflector armor is very efficient vs energy weapons.
     .description-105 = Upgrades the Devourer with an acid attack.
     .description-106 = Upgrades the Devourer with heavy armor.
@@ -165,83 +162,64 @@ commander-tree-commander-tree =
     .description-108 = Equips the Channeler with armor piercing disks.
     .description-109 =
         Upgrades the Channeler with a Point Laser Defense system.
-
         PDL intercepts incoming missiles and projectiles.
     .description-110 =
         Upgrades the Channeler with Reflector armor.
-
         Reflector armor is very efficient vs energy weapons.
     .description-111 =
         Upgrades the Seeker with a Point Laser Defense system.
-
         PDL intercepts incoming missiles and projectiles.
     .description-112 =
         Upgrades the Seeker with Reflector armor.
-
         Reflector armor is very efficient vs energy weapons.
     .description-113 =
         Upgrades the Lacerator with a Point Laser Defense system.
-
         PDL intercepts incoming missiles and projectiles.
     .description-114 =
         Upgrades the Lacerator with Reflector armor.
-
         Reflector armor is very efficient vs energy weapons.
     .description-115 =
         Upgrades the Lacerator with Armor Piercing Discs.
-
         AP Discs are very efficient vs heavy armor.
     .description-116 = Upgrades the Ruiner with a barrage cannon, capable of firing much faster.
     .description-117 = Upgrades the Tripod with imporoved laser chaining to a second and third target.
     .description-118 =
         Upgrades the Tripod with Acid Spray.
-
         Acid Spray is efficient vs Reflector Armor.
     .description-119 =
         Upgrades the Tripod with a Point Laser Defense system.
-
         PDL intercepts incoming missiles and projectiles.
     .description-120 =
         Upgrades the Tripod with Reflector armor.
-
         Reflector armor is very efficient vs energy weapons.
     .description-121 =
         Upgrades the Reaper with Acid Spray.
-
         Acid Spray is efficient vs Reflector Armor.
     .description-122 = Upgrades the Reaper with higher range.
     .description-123 =
         Upgrades the Reaper Tripod with a Point Laser Defense system.
-
         PDL intercepts incoming missiles and projectiles.
     .description-124 =
         Upgrades the Reaper Tripod with Reflector armor.
-
         Reflector armor is very efficient vs energy weapons.
     .description-125 =
         Upgrades the Stormcrawler with a Point Laser Defense system.
-
         PDL intercepts incoming missiles and projectiles.
     .description-126 =
         Upgrades the Stormcrawler with Reflector armor.
-
         Reflector armor is very efficient vs energy weapons.
     .description-127 =
         Removes the anti-ground weaponry from the Stormrider.
-
         The Stormhunter is cheaper, smaller, faster and specialized to hunt air units.
     .description-128 =
         Upgrades the Stormrider with plasmabombs
-
         Strong vs vehicles but cannot target air anymore.
     .description-129 = Upgrades the Stormrider with anti-water plasmabombs
     .description-130 =
         Upgrades the Devastator with an energy beam.
-
         The energy beam is strong but needs very long to recharge.
     .description-131 =
         Upgrades the Devastator with armor piercing Shards.
-
         Very efficient vs heavy armor.
     .description-132 = Re-equips the Carrier as Warship with strong armor piercing lasers.
     .description-133 = Re-equips the Carrier Invaders with acid suicide modules.
@@ -251,114 +229,64 @@ commander-tree-commander-tree =
     .description-137 = The Bastion is a heavy aircraft perfect for defending huge assaults or bruising weak defenses.
     .description-98 = Upgrades the Gunwalker with improved sensor bionics. Gives stealth detection.
     .description-99 = Upgrades the Interloper with anti-air lasers.
-defaults-baseworld =
+scrin-factions =
     .factionca-at-17-description =
         Reaper-17: Ground Assault
-
         Reaper is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth.
-
         Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks.
-
         The Reapers have the heaviest arsenal of Scrin specialized for ground invasion. This results in the Stormcrawler and the Heavy Tripod.
-
         The Stormcrawler soaks up a lot of damage and the Tripod is a heavy assault walker.
-
         Their epic unit is the Hexapod Eradicator, a walker with long range attack, great for breaking defenses.
-
          Faction Unit: Stormcrawler, Heavy Tripod, Hexapod
-
          Special Ability: Ion Surge
-
          Key Commander Tree Options:
-
           Stormcrawler: PDL vs. Reflector
-
           Heavy Tripod: Acid vs. Range
-
          Infantry: +
-
          Artillery: ++
-
          Aircraft: +++
-
          Defense: ++
-
          Heavy Tanks: ++++
-
          Recon&Stealth: ++
     .factionca-at-18-description =
         Traveler-59: Fast Attack
-
         Traveler is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth.
-
         Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks.
-
         The Travelers are different, because they are the forefront of Scrin invasions. They have the fast and agile units.
-
         The Devourer is a fast anti-tank hover unit and the Strider Tripod is a versatile assault walker.
-
         Their epic unit is the Mothership, able to open Wormholes for teleporting units to the battle.
-
          Faction Unit: Devourer, Strider Tripod, Mothership
-
          Special Ability: Storm Spike
-
          Key Commander Tree Options:
-
           Tripod: Acid vs. Chainer
-
          Infantry: ++
-
          Artillery: +
-
          Aircraft: ++++
-
          Defense: ++
-
          Heavy Tanks: +++
-
          Recon&Stealth: ++
     .factionca-at-19-description =
         Harvester-11: Area Damage
-
         Harvester-11 is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth.
-
         Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks.
-
         The Harvesters have good area of effect weapons as an addition to the usual Scrin arsenal. The Ruiner is an agile artillery,
-
         the Channeler is a heavy tank that opens multiple rifts and their epic unit is the Bastion, a heavy flying base, firing energy bolts splitting up against multiple units.
-
          Faction Unit: Ruiner, Channeler, Bastion
-
          Special Ability: Buzzer Swarm
-
          Key Commander Tree Options:
-
           Ruiner Barrage
-
           Tripod: Acid vs. Range
-
           Area Corrupter
-
          Infantry: +
-
          Artillery: ++++
-
          Aircraft: +++
-
          Defense: ++
-
          Heavy Tanks: +++
-
          Recon&Stealth: ++
     .factionca-at-randomscrin-description =
         Random Scrin Faction
-
         A random Scrin faction will be chosen when the game starts.
-
         Scrin is the alien race which brought Tiberium on earth.
-
         Their aircraft as well as their walkers are slow and heavy. This makes them very good at siege and slow rolling attacks.
 
 ### vehicles-atmz
@@ -911,13 +839,11 @@ commander-tree-promotion-leecher-area =
     .description =
         Modifies the Leecher beam to flood a wider area with stasis spores.
         Enemy squads caught in the cloud move considerably slower.
-
 commander-tree-promotion-leecher-slow =
     .description = Enriches the Leecher beam with stasis spores that slow anything it touches.
     .tooltipextras-strengths = Strengths: Slows entire formations that the Leecher tags.
     .tooltipextras-weaknesses = Weaknesses: Control effect does not increase raw damage.
     .tooltipextras-attributes = Attributes: Enlarged stasis field around each target.
-
 commander-tree-promotion-leecher-drain =
     .description =
         Re-tools the Leecher conduits for more efficient health siphoning.
@@ -925,7 +851,6 @@ commander-tree-promotion-leecher-drain =
     .tooltipextras-strengths = Strengths: Greatly boosts self-repair while firing.
     .tooltipextras-weaknesses = Weaknesses: Provides no crowd control or burst damage.
     .tooltipextras-attributes = Attributes: Enhanced siphons convert more damage into health.
-
 commander-tree-promotion-corrupter-pdl =
     .description =
         Upgrades the Corrupter with a Point Laser Defense system.
@@ -1014,6 +939,7 @@ commander-tree-promotion-ruiner-barrage =
 	.tooltipextras-strengths = Strengths: Greatly increases Ruiner rate of fire.
 	.tooltipextras-weaknesses = Weaknesses: Still needs setup time and lining up.
 	.tooltipextras-attributes = Attributes: Barrage cannon upgrade.
+
 ### commander-tree-promotion-atomizer-range
 
 commander-tree-promotion-atomizer-range =
@@ -1035,7 +961,6 @@ commander-tree-promotion-atomizer-aa =
     .tooltipextras-strengths = Strengths: • Splashing crystal bolts devastate stacked aircraft formations.
     .tooltipextras-weaknesses = Weaknesses: • Can no longer attack ground units.
     .tooltipextras-attributes = Attributes: • Adds the Atomizer (AA) build option once researched.
-
 commander-tree-promotion-tripod-chainer =
 	.description = Upgrades the Tripod with imporoved laser chaining to a second and third target.
 	.tooltipextras-strengths = Strengths: Main laser now chains to additional targets.
@@ -1165,31 +1090,26 @@ commander-tree-promotion-bastion =
     .tooltipextras-strengths = Strengths: Flying fortress ideal for holding defensive lines.
     .tooltipextras-weaknesses = Weaknesses: Needs escorts to survive concentrated AA.
     .tooltipextras-attributes = Attributes: Heavy aircraft with wide suppression field.
-
 commander-tree-promotion-armor-eating-acid =
     .description = Corrosive strains enhance all Scrin acid weaponry.
     .tooltipextras-strengths = Strengths: Strong vs. high HP units.
     .tooltipextras-weaknesses = Weaknesses: Weak vs. many small units.
     .tooltipextras-attributes = Attributes: Acid reduces armor of targets being hit.
-
 commander-tree-promotion-shield-generators =
     .description = Boosts the regeneration output of Scrin shield cores.
     .tooltipextras-strengths = Strengths: Strong with big Scrin air vessels.
     .tooltipextras-weaknesses = Weaknesses: Weak vs. EMP.
     .tooltipextras-attributes = Attributes: 50% Faster shield regeneration.
-
 commander-tree-promotion-harden-skin =
     .description = Reinforces Scrin infantry hide against conventional fire.
     .tooltipextras-strengths = Strengths: Reduces incoming damage to Scrin infantry.
     .tooltipextras-weaknesses = Weaknesses: No benefit to vehicles or aircraft.
     .tooltipextras-attributes = Attributes: 15% increase to infantry health.
-
 commander-tree-promotion-bio-mechanical-thrusters =
     .description = Bio-mechanical upgrades push Scrin aircraft to higher speeds.
     .tooltipextras-strengths = Strengths: Faster flight speed for Scrin air units.
     .tooltipextras-weaknesses = Weaknesses: Some ships still might be slow.
     .tooltipextras-attributes = Attributes: 10% increase to aircraft speed.
-
 commander-tree-promotion-leecher-pdl =
     .description =
         Upgrades the Leecher with a Point Laser Defense system.
@@ -1197,7 +1117,6 @@ commander-tree-promotion-leecher-pdl =
     .tooltipextras-strengths = Strengths: Filters out rockets and artillery aimed at the Leecher.
     .tooltipextras-weaknesses = Weaknesses: Energy beams and massed infantry still punch through.
     .tooltipextras-attributes = Attributes: Installs autonomous point-defense emitters.
-
 commander-tree-promotion-leecher-reflector =
     .description =
         Upgrades the Leecher with Reflector armor.
@@ -1205,7 +1124,6 @@ commander-tree-promotion-leecher-reflector =
     .tooltipextras-strengths = Strengths: Deflects lasers and tesla-style attacks.
     .tooltipextras-weaknesses = Weaknesses: Kinetic shells and missiles still land full force.
     .tooltipextras-attributes = Attributes: Hull is plated with reflector fields.
-
 commander-tree-promotion-stormcrawler-arc =
     .description =
         Reconfigures the Stormcrawler's weapon into a chaining arc projector.
@@ -1213,7 +1131,6 @@ commander-tree-promotion-stormcrawler-arc =
     .tooltipextras-strengths = Strengths: Devastates blobs of infantry or light vehicles.
     .tooltipextras-weaknesses = Weaknesses: Still relies on close range to get in damage.
     .tooltipextras-attributes = Attributes: Lightning arcs now bounce to secondary victims.
-
 commander-tree-promotion-stormcrawler-range =
     .description =
         Extends the Stormcrawler's cannon range with improved capacitors.
@@ -2079,3 +1996,4 @@ vehicle-smcv-nukular =
     .tooltip-strengths = ? Strong vs Unknown
     .tooltip-weaknesses = ? Weak vs Unknown
     .tooltip-attributes = ? SMCV.Nukular field unit
+

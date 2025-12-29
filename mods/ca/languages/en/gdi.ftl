@@ -1,8 +1,5 @@
 ## Gdi strings
-
-
 ## Auto-generated descriptions
-
 
 ### aircraft-a10
 
@@ -104,8 +101,6 @@ aircraft-orcav2-torp =
     .tooltipextras-strengths = Strengths: • Strong vs Ships, Submarines
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Air
     .tooltipextras-attributes = Attributes: • Detects submerged vessels
-
-
 promotion-emp-grenades =
     .description = Refits Grenadiers with electromagnetic grenades that disable vehicles and defenses instead of relying on high-explosive charges.
 
@@ -370,106 +365,59 @@ commander-tree-promotion-railgunner-no-crush =
          so that it can no longer be crushed by vehicles.
     .tooltipextras-strengths = Strengths: • Up-armors railgunners so vehicles can no longer crush them.
     .tooltipextras-weaknesses = Weaknesses: • Adds cost without improving their ranged damage output.
-defaults-baseworld =
+gdi-factions =
     .factionca-at-10-description =
         ZOCOM: Experimental Weapons
-
         ZOCOM is a sub-faction of the GDI. The GDI designed the strongest tanks. These units are costly but easily dominate the battlefield.
-
         Thanks to their hover technology the GDI still has a good mobility which complements the devasting power of their railguns and EMP Technology.
-
         ZOCOM offers the newest and most innovative units. Among them are energy based experimental weapons as well as various unmanned battle drones.
-
-         Faction Unit: Disruptor, Sonic Tower
-
-         Special Ability: Drop Pods, Surgical Strike
-
-         Faction Bonus: Adv. Communication Center (10% Discount)
-
-         Key Commander Tree Options:
-
-          Nanite Mammoth
-
-          No AA Vulcan upgrade for APC
-
-         Infantry: ++
-
-         Artillery: ++
-
-         Aircraft: +
-
-         Defense: +++
-
-         Heavy Tanks: +++
-
-         Recon&Stealth: ++
+        Faction Unit: Disruptor, Sonic Tower
+        Special Ability: Drop Pods, Surgical Strike
+        Faction Bonus: Adv. Communication Center (10% Discount)
+        Key Commander Tree Options:
+         Nanite Mammoth
+         No AA Vulcan upgrade for APC
+        Infantry: ++
+        Artillery: ++
+        Aircraft: +
+        Defense: +++
+        Heavy Tanks: +++
+        Recon&Stealth: ++
     .factionca-at-11-description =
         Eagle Corps: Air Power
-
         Eagle is a sub-faction of the GDI. The GDI designed the strongest tanks. These units are costly but easily dominate the battlefield.
-
         Thanks to their hover technology the GDI still has a good mobility which complements the devasting power of their railguns and EMP Technology.
-
-        Eagle greatly improves the aircraft arsenal of the GDI. The Combat Chinook can load infantry and can easily destroy masses of units,
-
-        whereas the Orca Bomber gives very good support to ground forces with its EMP Bombs.
-
-         Faction Unit: Orca Bomber, Combat Chinook
-
-         Special Ability: Interceptors
-
-         Faction Bonus: Reinforcements (-20% Cooldown), Aircraft (10% Discount)
-
-         Key Commander Tree Options:
-
-          Ion Mammoth
-
-         Infantry: ++
-
-         Artillery: ++++
-
-         Aircraft: +++
-
-         Defense: +
-
-         Heavy Tanks: +++
-
-         Recon&Stealth: ++
+        Eagle greatly improves the aircraft arsenal of the GDI. The Combat Chinook can load infantry and can easily destroy masses of units, whereas the Orca Bomber gives very good support to ground forces with its EMP Bombs.
+        Faction Unit: Orca Bomber, Combat Chinook
+        Special Ability: Interceptors
+        Faction Bonus: Reinforcements (-20% Cooldown), Aircraft (10% Discount)
+        Key Commander Tree Options:
+         Ion Mammoth
+        Infantry: ++
+        Artillery: ++++
+        Aircraft: +++
+        Defense: +
+        Heavy Tanks: +++
+        Recon&Stealth: ++
     .factionca-at-9-description =
         Steel Talon: Mechs
-
         Talon is a sub-faction of the GDI. The GDI designed the strongest tanks. These units are costly but easily dominate the battlefield.
-
         Thanks to their hover technology the GDI still has a good mobility which complements the devasting power of their railguns and EMP Technology.
-
         Talons take the design of GDI to the extreme, with the Titan and the Juggernaut, a very heavy walker and a very heavy artillery.
-
-         Faction Unit: Juggernaut, Titan
-
-          Special Ability: Nanite Repair
-
-         Faction Bonus: Recon Drone (-20% Cooldown), Drone Carrier (10% Discount)
-
-         Key Commander Tree Options:
-
-          Titan Railgun vs. Titan EMP
-
-          No Railgun upgrade for Jumpjet Infantry
-
-         Infantry: ++
-
-         Artillery: ++++
-
-         Aircraft: +
-
-         Defense: +
-
-         Heavy Tanks: ++++
-
-         Recon&Stealth: +
+        Faction Unit: Juggernaut, Titan
+        Special Ability: Nanite Repair
+        Faction Bonus: Recon Drone (-20% Cooldown), Drone Carrier (10% Discount)
+        Key Commander Tree Options:
+         Titan Railgun vs. Titan EMP
+         No Railgun upgrade for Jumpjet Infantry
+        Infantry: ++
+        Artillery: ++++
+        Aircraft: +
+        Defense: +
+        Heavy Tanks: ++++
+        Recon&Stealth: +
     .factionca-at-randomgdi-description =
         Random GDI Faction
-
         A random GDI faction will be chosen when the game starts.
 
 ### infantry-grenadier
@@ -1025,3 +973,4 @@ commander-tree-promotion-titan-reflector =
     .description = Fits Titans with reflector armor that defeats laser and ion weaponry.
     .tooltipextras-strengths = Strengths: • Reflector plates negate laser and ion weaponry.
     .tooltipextras-weaknesses = Weaknesses: • Mutually exclusive with the Titan PD laser kit.
+
