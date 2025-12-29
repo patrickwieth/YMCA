@@ -6,7 +6,9 @@ using OpenRA.Graphics;
 using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Graphics;
 using OpenRA.Mods.Common.Widgets;
+using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Cameo.Graphics;
+using OpenRA.Mods.Cameo.Traits;
 using OpenRA.Orders;
 using OpenRA.Primitives;
 using OpenRA.Traits;
@@ -812,8 +814,35 @@ namespace OpenRA.Mods.Cameo.Orders
 
 			bool queued = inMouseInput.Modifiers.HasModifier(Modifiers.Shift);
 
+			if (ordercount == 0)
+				yield break;
+
+			if (ordercount > 0)
+			{
+				var slowdownManager = OwningWorld.WorldActor.TraitOrDefault<CustomFormationSlowdownManager>();
+				if (slowdownManager != null)
+				{
+					var sessionActors = new List<Actor>(ordercount);
+					var sessionTargets = new List<WPos>(ordercount);
+
+					for (int i = 0; i < ordercount; i++)
+					{
+						var actor = sortedactors[i];
+						if (actor == null || actor.Disposed)
+							continue;
+
+						sessionActors.Add(actor);
+						sessionTargets.Add(inTargets[i].CenterPosition);
+					}
+
+					if (sessionActors.Count > 1)
+						slowdownManager.RegisterSession(sessionActors, sessionTargets);
+				}
+			}
+
 			if (inOverrideCommand == null)
 			{
+
 				for (int i = 0; i < ordercount; i++)
 				{
 					orders.Add(OrderGeneratorHelpers.OrderForUnit(sortedactors[i], inTargets[i], inCells[i], inMouseInput));
