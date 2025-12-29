@@ -8,6 +8,7 @@
  */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Effects;
@@ -60,6 +61,15 @@ namespace OpenRA.Mods.CA.Traits
 
 		[Desc("Amount of time after detonation to remove the camera")]
 		public readonly int CameraRemoveDelay = 5;
+
+		[Desc("Optional Armament name to fire instead of detonating the warhead directly.")]
+		public readonly string Armament = null;
+
+		[Desc("Optional weapon name to match if Armament is not specified.")]
+		public readonly string ArmamentWeapon = null;
+
+		[Desc("Turret name to rotate when using an armament (defaults to the armament's turret).")]
+		public readonly string Turret = null;
 
 		[SequenceReference]
 		[Desc("Sequence the launching actor should play when activating this power.")]
@@ -126,10 +136,16 @@ namespace OpenRA.Mods.CA.Traits
 			}
 
 			var targetPosition = order.Target.CenterPosition + new WVec(WDist.Zero, WDist.Zero, Info.AirburstAltitude);
+			var target = Target.FromPos(targetPosition);
+			AimTurret(self, target);
 			var weapon = Info.WeaponInfos.First(wi => wi.Key == level).Value;
 			self.World.AddFrameEndTask(w =>
 			{
-				w.Add(new DelayedAction(Info.ActivationDelay, () => self.World.AddFrameEndTask(w => weapon.Impact(Target.FromPos(targetPosition), self))));
+				w.Add(new DelayedAction(Info.ActivationDelay, () => self.World.AddFrameEndTask(w =>
+				{
+					if (!TryFireArmament(self, target))
+						weapon.Impact(target, self);
+				})));
 
 				if (!string.IsNullOrEmpty(Info.PostProcessEffectType))
 				{
@@ -201,6 +217,101 @@ namespace OpenRA.Mods.CA.Traits
 		}
 
 		float FractionComplete { get { return ticks * 1f / Info.ActivationDelay; } }
+
+		bool TryFireArmament(Actor self, Target target)
+		{
+			var armament = FindArmament(self);
+			if (armament == null)
+				return false;
+
+			if (armament.IsTraitDisabled || armament.IsTraitPaused)
+				return false;
+
+			if (!HasAmmoForArmament(self, armament))
+				return false;
+
+			var matchingAttack = self.TraitsImplementing<AttackTurreted>()
+				.FirstOrDefault(a => a.Info.Armaments != null && a.Info.Armaments
+					.Any(name => string.Equals(name, armament.Info.Name, StringComparison.OrdinalIgnoreCase)));
+
+			if (matchingAttack != null)
+			{
+				if (matchingAttack.IsTraitDisabled || matchingAttack.IsTraitPaused)
+					return false;
+
+				matchingAttack.AttackTarget(target, AttackSource.Default, queued: false, allowMove: false, forceAttack: true);
+				return true;
+			}
+
+			ForceFireArmament(self, armament, target);
+			return true;
+		}
+
+		void AimTurret(Actor self, Target target)
+		{
+			var armament = FindArmament(self);
+			if (armament == null)
+				return;
+
+			var turret = FindTurret(self, armament);
+			turret?.FaceTarget(self, target);
+		}
+
+		Armament FindArmament(Actor self)
+		{
+			var armaments = self.TraitsImplementing<Armament>().ToList();
+			if (!string.IsNullOrEmpty(Info.Armament))
+			{
+				var named = armaments.FirstOrDefault(a => string.Equals(a.Info.Name, Info.Armament, StringComparison.OrdinalIgnoreCase));
+				if (named != null)
+					return named;
+			}
+
+			if (!string.IsNullOrEmpty(Info.ArmamentWeapon))
+			{
+				var weaponMatch = armaments.FirstOrDefault(a => string.Equals(a.Info.Weapon, Info.ArmamentWeapon, StringComparison.OrdinalIgnoreCase));
+				if (weaponMatch != null)
+					return weaponMatch;
+			}
+
+			return armaments.FirstOrDefault();
+		}
+
+		Turreted FindTurret(Actor self, Armament armament)
+		{
+			var turretName = Info.Turret ?? armament.Info.Turret;
+			if (string.IsNullOrEmpty(turretName))
+				return null;
+
+			return self.TraitsImplementing<Turreted>().FirstOrDefault(t => t.Name == turretName);
+		}
+
+		bool HasAmmoForArmament(Actor self, Armament armament)
+		{
+			var pools = self.TraitsImplementing<AmmoPool>();
+			var armamentName = armament.Info.Name;
+
+			var matchingPools = pools.Where(p => p.Info.Armaments.Contains(armamentName)).ToList();
+			if (matchingPools.Count == 0)
+				return true;
+
+			return matchingPools.Any(p => p.HasAmmo);
+		}
+
+		void ForceFireArmament(Actor self, Armament armament, Target target, Turreted turret = null)
+		{
+			if (armament == null || armament.IsTraitDisabled || armament.IsTraitPaused)
+				return;
+
+			if (!HasAmmoForArmament(self, armament))
+				return;
+
+			var resolvedTurret = turret ?? FindTurret(self, armament);
+			resolvedTurret?.FaceTarget(self, target);
+
+			var facing = self.TraitOrDefault<IFacing>();
+			armament.ForceFire(self, facing, target);
+		}
 	}
 
 	public class SelectDetonateWeaponPowerTarget : OrderGenerator

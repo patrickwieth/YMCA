@@ -46,13 +46,13 @@ AtomBomb:
 		ParachuteSequence: idle
 		ParachuteOpeningSequence: open
 		ParachuteClosingSequence: close
-		ParachuteAltitude: 3072
-		ParachuteCloseAltitude: 0
+		ParachuteAltitude: 4096
+		ParachuteCloseAltitude: 512
 		ParachuteOffset: 0,0,427
-		Velocity: 0, 0, -30
-		Acceleration: 0, 0, 0
-	ReloadDelay: 80
-	ValidTargets: Ground, Trees, Water, Air
+		Velocity: 0, 0, -12
+		Acceleration: 0, 0, -1
+		ReloadDelay: 80
+		ValidTargets: Ground, Trees, Water, Air
 	Warhead@1Dam_impact: SpreadDamage
 		Spread: 1c0
 		Damage: 6250
@@ -62,7 +62,8 @@ AtomBomb:
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath, Incendiary
 	Warhead@2Res_impact: DestroyResource
 	Warhead@3Eff_impact: CreateEffect
-		Explosions: nuke
+		Explosions: nuke3
+		ExplosionPalette: ra2effect-ignore-lighting-alpha90
 		ImpactSounds: kaboom1.aud
 		ImpactActors: false
 	Warhead@4Dam_areanuke1: SpreadDamage
@@ -867,6 +868,12 @@ GpsScramble:
 	Warhead@2Eff: CreateEffect
 		Image: crate-effects
 		Explosions: stealth
+
+NanoshieldPulse:
+	Warhead@FX: CreateEffect
+		Image: nshield-overlay
+		Explosions: idle
+		ExplosionPalette: effect
 
 FirestormBarrage:
 	Inherits: ^MissileHE
