@@ -444,8 +444,9 @@ AtomParabomb:
 	Inherits: V3.Kirov
 	Inherits: ^VoxelVehicle
 	BallisticMissileCA:
-		LaunchAngle: 0
-		Speed: 150
+		LaunchAngle: 45
+		Speed: 90
+		FlightTargetMultiplier: 1.0
 	RenderVoxels:
 		Scale: 0.6
 		Image: atomparabomb
@@ -453,10 +454,11 @@ AtomParabomb:
 		Image: atomparabomb
 	Tooltip:
 		Name: Nuclear Parabomb
-	ExplodesForMaster:
-		Weapon: AtomParabomb.Impact
-		EmptyWeapon: AtomParabomb.Impact
-		MasterArmamentName: TeslaGlidebombLauncher
+ 	ExplodesForMaster:
+ 		Weapon: AtomParabomb.Impact
+ 		EmptyWeapon: AtomParabomb.Impact
+ 		MasterArmamentName: AtomParabombLauncher
+		ImpactOnGround: true
 
 HeavyBomber.Tesla:
 	Inherits: HeavyBomber.Nuke
@@ -489,10 +491,11 @@ TeslaParabomb:
 	Inherits: AtomParabomb
 	Tooltip:
 		Name: Nuclear Parabomb
-	ExplodesForMaster:
-		Weapon: TeslaBomb
-		EmptyWeapon: TeslaBomb
-		MasterArmamentName: TeslaGlidebombLauncher
+ 	ExplodesForMaster:
+ 		Weapon: TeslaBomb
+ 		EmptyWeapon: TeslaBomb
+ 		MasterArmamentName: TeslaGlidebombLauncher
+		ImpactOnGround: true
 
 SU47:
 	Inherits: MIG
@@ -768,8 +771,8 @@ Kirov:
 		Type: CenterPosition
 		RequiresCondition: enable-smoke
 	Selectable:
-		Bounds: 2048, 1536
-		DecorationBounds: 2048, 1536, 0, 000
+		Bounds: 2048, 1536, 0, -1500
+		DecorationBounds: 2048, 1536, 0, -1500
 	ChangesHealth:
 		PercentageStep: 1
 		Delay: 25
@@ -1109,16 +1112,16 @@ Kirov.Carrier:
 		SpawnOffset: 100,0,0
 		Facing: -60
 	WithIdleOverlay@ROTOR1AIR:
-		Offset: -400,-550,50
+		Offset: -400,-550,1550
 		Sequence: rotor
 	WithIdleOverlay@ROTOR2AIR:
-		Offset: -400,550,50
+		Offset: -400,550,1550
 		Sequence: rotor
 	WithIdleOverlay@ROTOR3AIR:
-		Offset: -1000,-700,80
+		Offset: -1000,-700,1580
 		Sequence: rotor2
 	WithIdleOverlay@ROTOR4AIR:
-		Offset: -1000,700,80
+		Offset: -1000,700,1580
 		Sequence: rotor2
 	SpawnActorOnDeath:
 		Actor: Kirov.Carrier.Husk
