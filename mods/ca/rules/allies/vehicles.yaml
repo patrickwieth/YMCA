@@ -255,12 +255,16 @@ JEEP:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
-		Prerequisites: weap, vehicles, ~allies
-		Description: Fast scout & anti-infantry vehicle.\n  Can detect spies and cloaked units.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
+		Prerequisites: weap, vehicles, ~allies, ~!promotion.infantry_doctrine, ~!promotion.armored_doctrine, ~!promotion.airforce_doctrine
+		Description: Fast scout & anti-infantry vehicle.\n  Can detect spies and cloaked units.\n  Available before selecting a doctrine.\n  Strong vs Infantry\n  Weak vs Vehicles, Aircraft
 	Valued:
 		Cost: 400
 	Tooltip:
 		Name: Ranger
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Spies
+		Weaknesses: • Weak vs Vehicles, Aircraft
+		Attributes: • Detects cloaked units • Available before doctrines
 	Health:
 		HP: 15000
 	Mobile:
@@ -285,8 +289,17 @@ Heavy_Jeep:
 		Image: heavyjeep
 	Tooltip:
 		Name: Heavy Ranger
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		Prerequisites: weap, vehicles, ~allies, ~promotion.infantry_doctrine
+		Description: Infantry Doctrine Ranger armed with a reinforced machine gun turret.\n  Strong vs Infantry, Light Vehicles\n  Weak vs Heavy Armor, Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Light Vehicles
+		Weaknesses: • Weak vs Heavy Armor, Aircraft
+		Attributes: • Heavy MG upgrade • Detects cloaked units
 	Armament:
-		Weapon: M60mg
+		Weapon: M60mg.Heavy
 
 Tow_Jeep:
 	Inherits: JEEP
@@ -298,6 +311,15 @@ Tow_Jeep:
 		Image: towjeep
 	Tooltip:
 		Name: Tow Ranger
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		Prerequisites: weap, vehicles, ~allies, ~promotion.armored_doctrine
+		Description: Armored Doctrine Ranger equipped with LOSAT missiles.\n  Strong vs Vehicles, Defenses\n  Weak vs Infantry, Aircraft
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Defenses
+		Weaknesses: • Weak vs Infantry, Aircraft
+		Attributes: • Fires LOSAT missiles • Detects cloaked units
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
 		FacingTolerance: 0
@@ -314,6 +336,15 @@ AA_Jeep:
 		Image: aajeep
 	Tooltip:
 		Name: Anti-Air Ranger
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 15
+		Prerequisites: weap, vehicles, ~allies, ~promotion.airforce_doctrine
+		Description: Airforce Doctrine Ranger dedicated to anti-air missile coverage.\n  Strong vs Aircraft\n  Weak vs Ground Forces
+	TooltipExtras:
+		Strengths: • Strong vs Aircraft
+		Weaknesses: • Weak vs Ground Forces
+		Attributes: • Dedicated AA missiles • Detects cloaked units
 	AttackFrontal:
 		PauseOnCondition: empdisable || being-warped
 		FacingTolerance: 0
