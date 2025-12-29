@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.Common.Traits;
-using OpenRA.Mods.Common.Traits.Air;
 using OpenRA.Primitives;
 using OpenRA.Traits;
 
@@ -112,7 +111,7 @@ namespace OpenRA.Mods.Cameo.Traits
 			foreach (var actor in removals)
 			{
 				assignments.Remove(actor);
-				actor.TraitOrDefault<CustomFormationSpeedController>()?.Reset();
+				ResetControllerIfSafe(actor);
 			}
 
 			if (assignments.Count < 2)
@@ -219,7 +218,15 @@ namespace OpenRA.Mods.Cameo.Traits
 		static void ResetControllers(IEnumerable<Actor> actors)
 		{
 			foreach (var actor in actors)
-				actor.TraitOrDefault<CustomFormationSpeedController>()?.Reset();
+				ResetControllerIfSafe(actor);
+		}
+
+		static void ResetControllerIfSafe(Actor actor)
+		{
+			if (actor == null || !actor.IsInWorld || actor.Disposed)
+				return;
+
+			actor.TraitOrDefault<CustomFormationSpeedController>()?.Reset();
 		}
 
 		static int GetActorSpeed(Actor actor)
