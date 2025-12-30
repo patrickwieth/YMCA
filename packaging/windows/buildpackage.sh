@@ -5,6 +5,11 @@ command -v makensis >/dev/null 2>&1 || { echo >&2 "The OpenRA mod SDK Windows pa
 command -v convert >/dev/null 2>&1 || { echo >&2 "The OpenRA mod SDK Windows packaging requires ImageMagick."; exit 1; }
 command -v python3 >/dev/null 2>&1 || { echo >&2 "The OpenRA mod SDK Windows packaging requires python 3."; exit 1; }
 command -v wine64 >/dev/null 2>&1 || { echo >&2 "The OpenRA mod SDK Windows packaging requires wine64."; exit 1; }
+if command -v xvfb-run >/dev/null 2>&1; then
+	WINE_CMD=(xvfb-run -a wine64)
+else
+	WINE_CMD=(wine64)
+fi
 
 require_variables() {
 	missing=""
@@ -110,7 +115,18 @@ function build_platform()
 
 	TAG_TYPE="${TAG%%-*}"
 	TAG_VERSION="${TAG#*-}"
-	BACKWARDS_TAG="${TAG_VERSION}-${TAG_TYPE}"
+	if [[ "${TAG_VERSION}" =~ ^[0-9]+$ ]]; then
+		NUMERIC_TAG_VERSION="${TAG_VERSION}"
+	else
+		NUMERIC_TAG_VERSION="0"
+	fi
+	case "${TAG_TYPE}" in
+		release) TAG_TYPE_NUM=0 ;;
+		playtest) TAG_TYPE_NUM=1 ;;
+		nightly) TAG_TYPE_NUM=2 ;;
+		*) TAG_TYPE_NUM=9 ;;
+	esac
+	BACKWARDS_TAG="${NUMERIC_TAG_VERSION}.${TAG_TYPE_NUM}.0.0"
 
 	# Create multi-resolution icon
 	convert "${ARTWORK_DIR}/icon_16x16.png" "${ARTWORK_DIR}/icon_24x24.png" "${ARTWORK_DIR}/icon_32x32.png" "${ARTWORK_DIR}/icon_48x48.png" "${ARTWORK_DIR}/icon_256x256.png" "${BUILTDIR}/${MOD_ID}.ico"
@@ -120,12 +136,12 @@ function build_platform()
 
 	# Use rcedit to patch the generated EXE with missing assembly/PortableExecutable information because .NET 6 ignores that when building on Linux.
 	# Using a backwards version tag because rcedit is unable to set versions starting with a letter.
-	wine64 rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-product-version "${BACKWARDS_TAG}"
-	wine64 rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "ProductName" "OpenRA"
-	wine64 rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "CompanyName" "The OpenRA team"
-	wine64 rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "FileDescription" "${PACKAGING_WINDOWS_LAUNCHER_NAME} mod for OpenRA"
-	wine64 rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "LegalCopyright" "Copyright (c) The OpenRA Developers and Contributors"
-	wine64 rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-icon "${BUILTDIR}/${MOD_ID}.ico"
+	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-product-version "${BACKWARDS_TAG}"
+	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "ProductName" "OpenRA"
+	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "CompanyName" "The OpenRA team"
+	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "FileDescription" "${PACKAGING_WINDOWS_LAUNCHER_NAME} mod for OpenRA"
+	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "LegalCopyright" "Copyright (c) The OpenRA Developers and Contributors"
+	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-icon "${BUILTDIR}/${MOD_ID}.ico"
 
 	echo "Building Windows setup.exe (${PLATFORM})"
 	pushd "${PACKAGING_DIR}" > /dev/null

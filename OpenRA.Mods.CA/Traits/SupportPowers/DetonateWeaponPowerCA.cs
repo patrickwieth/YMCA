@@ -227,10 +227,10 @@ namespace OpenRA.Mods.CA.Traits
 			if (armament.IsTraitDisabled || armament.IsTraitPaused)
 				return false;
 
-			if (!HasAmmoForArmament(self, armament))
+			if (!HasAmmoForArmament(self, armament, out var ammoPools))
 				return false;
 
-			var matchingAttack = self.TraitsImplementing<AttackTurreted>()
+			var matchingAttack = self.TraitsImplementing<AttackBase>()
 				.FirstOrDefault(a => a.Info.Armaments != null && a.Info.Armaments
 					.Any(name => string.Equals(name, armament.Info.Name, StringComparison.OrdinalIgnoreCase)));
 
@@ -243,7 +243,7 @@ namespace OpenRA.Mods.CA.Traits
 				return true;
 			}
 
-			ForceFireArmament(self, armament, target);
+			ForceFireArmament(self, armament, target, ammoPools: ammoPools);
 			return true;
 		}
 
@@ -286,31 +286,40 @@ namespace OpenRA.Mods.CA.Traits
 			return self.TraitsImplementing<Turreted>().FirstOrDefault(t => t.Name == turretName);
 		}
 
-		bool HasAmmoForArmament(Actor self, Armament armament)
+		bool HasAmmoForArmament(Actor self, Armament armament, out List<AmmoPool> matchingPools)
 		{
 			var pools = self.TraitsImplementing<AmmoPool>();
 			var armamentName = armament.Info.Name;
 
-			var matchingPools = pools.Where(p => p.Info.Armaments.Contains(armamentName)).ToList();
+			matchingPools = pools.Where(p => p.Info.Armaments.Contains(armamentName)).ToList();
 			if (matchingPools.Count == 0)
 				return true;
 
 			return matchingPools.Any(p => p.HasAmmo);
 		}
 
-		void ForceFireArmament(Actor self, Armament armament, Target target, Turreted turret = null)
+		void ForceFireArmament(Actor self, Armament armament, Target target, Turreted turret = null, List<AmmoPool> ammoPools = null)
 		{
 			if (armament == null || armament.IsTraitDisabled || armament.IsTraitPaused)
 				return;
 
-			if (!HasAmmoForArmament(self, armament))
+			if (ammoPools == null && !HasAmmoForArmament(self, armament, out ammoPools))
 				return;
 
 			var resolvedTurret = turret ?? FindTurret(self, armament);
 			resolvedTurret?.FaceTarget(self, target);
 
-			var facing = self.TraitOrDefault<IFacing>();
-			armament.ForceFire(self, facing, target);
+			var weapon = armament.Weapon;
+			if (weapon == null)
+				return;
+
+			weapon.Impact(target, self);
+
+			if (ammoPools != null)
+			{
+				foreach (var pool in ammoPools)
+					pool.TakeAmmo(self, armament.Info.AmmoUsage);
+			}
 		}
 	}
 
