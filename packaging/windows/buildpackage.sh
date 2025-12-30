@@ -142,6 +142,9 @@ function build_platform()
 	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "FileDescription" "${PACKAGING_WINDOWS_LAUNCHER_NAME} mod for OpenRA"
 	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-version-string "LegalCopyright" "Copyright (c) The OpenRA Developers and Contributors"
 	"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe" --set-icon "${BUILTDIR}/${MOD_ID}.ico"
+	if [ -f "${BUILTDIR}/OpenRA.exe" ]; then
+		"${WINE_CMD[@]}" rcedit-x64.exe "${BUILTDIR}/OpenRA.exe" --set-icon "${BUILTDIR}/${MOD_ID}.ico"
+	fi
 
 	echo "Building Windows setup.exe (${PLATFORM})"
 	pushd "${PACKAGING_DIR}" > /dev/null
