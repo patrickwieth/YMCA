@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using OpenRA.Mods.CA.Traits;
 using OpenRA.Mods.CA.Tooltips;
+using OpenRA.Mods.AS.Widgets;
 using OpenRA.Mods.Common;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Widgets;
@@ -82,8 +83,16 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 
 			var mapRules = world.Map.Rules;
-			var actorIcon = widget.Get<ActorIconCAWidget>("ACTOR_ICON");
-			actorIcon.setActor(actor);
+			var actorIconWidget = widget.GetOrNull<Widget>("ACTOR_ICON");
+			if (actorIconWidget is ActorIconCAWidget actorIcon)
+				actorIcon.setActor(actor);
+			else if (actorIconWidget is ActorIconWidget baseActorIcon)
+			{
+				baseActorIcon.GetActor = () => actor;
+				baseActorIcon.GetActorInfo = () => actor?.Info;
+				baseActorIcon.GetDisabled = () => false;
+				baseActorIcon.RefreshIcons();
+			}
 			var nameLabel = widget.Get<LabelWidget>("NAME");
 			var armorTypeLabel = widget.Get<LabelWidget>("ARMORTYPE");
 			var armorTypeIcon = widget.Get<ImageWidget>("ARMORTYPE_ICON");
