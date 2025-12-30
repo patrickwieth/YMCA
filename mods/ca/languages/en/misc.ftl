@@ -1,5 +1,13 @@
 ## Misc strings
 
+# Commander tree flavor popups
+promotions-flavor.prefix = Promotions Dispatch
+promotions-flavor.notification-01 = Our tacticians have flagged new battlefield doctrines. Spend Command Points to seize the initiative.
+promotions-flavor.notification-02 = Intelligence warns that the enemy is retooling. Adjust your promotion path to counter immediately.
+promotions-flavor.notification-03 = Field commanders report an opening—invest Command Points now to press the advantage.
+promotions-flavor.notification-04 = Quartermasters stand ready to supply fresh upgrades. Chain promotions for a decisive spike.
+promotions-flavor.notification-05 = Command channels are quiet—issue promotion orders before the enemy capitalizes first.
+
 normal = Normal
 
 ## Server Orders

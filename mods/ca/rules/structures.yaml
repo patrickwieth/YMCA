@@ -38,6 +38,8 @@
 	WithSupportPowerActivationAnimation:
 		RequiresCondition: !build-incomplete
 	ProvidesPrerequisite@buildingname:
+	ProvidesPrerequisite@proctd:
+		Prerequisite: proc.td
 	InfiltrateForSupportPowerReset:
 		Types: SpyInfiltrate, SabInfiltrate
 	Targetable:
@@ -896,6 +898,9 @@ FACT:
 	ProvidesPrerequisite@ra:
 		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq
 		Prerequisite: structures.ra
+	ProvidesPrerequisite@rafaction:
+		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq
+		Prerequisite: ra
 	ProvidesPrerequisite@allies:
 		Factions: allies, england, france, germany
 		Prerequisite: structures.allies
@@ -2300,7 +2305,7 @@ AFAC:
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
-		Prerequisites: ~conyardbuildable, ~structures.td, rep
+		Prerequisites: ~conyardbuildable, ~structures.td, repair
 		IconPalette: chrometd
 		Description: Produces structures.
 	Health:
@@ -2343,6 +2348,9 @@ AFAC:
 	ProvidesPrerequisite@cnc:
 		Factions: gdi, talon, zocom, eagle, nod, blackh, marked, legion
 		Prerequisite: structures.td
+	ProvidesPrerequisite@tdfaction:
+		Factions: gdi, talon, zocom, eagle, nod, blackh, marked, legion
+		Prerequisite: td
 	ProvidesPrerequisite@gdi:
 		Factions: gdi, talon, zocom, eagle
 		Prerequisite: structures.gdi
