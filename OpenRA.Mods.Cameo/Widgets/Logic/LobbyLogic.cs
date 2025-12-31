@@ -745,6 +745,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 						factions.ToDictionary(e => e.Key, e => (OpenRA.Mods.Common.Widgets.Logic.LobbyFaction)e.Value));
 					SetupEditableGameWidget(template, slot, client, orderManager, factions);
 					LobbyUtils.SetupEditableTeamWidget(template, slot, client, orderManager, map);
+					LobbyUtils.SetupEditableHandicapWidget(template, slot, client, orderManager);
 					LobbyUtils.SetupEditableSpawnWidget(template, slot, client, orderManager, map);
 					LobbyUtils.SetupEditableReadyWidget(template, client, orderManager, map, MapIsPlayable);
 				}
@@ -763,6 +764,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 					if (isHost)
 					{
 						LobbyUtils.SetupEditableTeamWidget(template, slot, client, orderManager, map);
+						LobbyUtils.SetupEditableHandicapWidget(template, slot, client, orderManager);
 						LobbyUtils.SetupEditableSpawnWidget(template, slot, client, orderManager, map);
 						LobbyUtils.SetupPlayerActionWidget(template, client, orderManager, worldRenderer,
 							lobby, () => panel = PanelType.Kick, () => panel = PanelType.Players);
@@ -771,6 +773,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 					{
 						LobbyUtils.SetupNameWidget(template, client, orderManager, worldRenderer);
 						LobbyUtils.SetupTeamWidget(template, client);
+						LobbyUtils.SetupHandicapWidget(template, client);
 						LobbyUtils.SetupSpawnWidget(template, client);
 					}
 
