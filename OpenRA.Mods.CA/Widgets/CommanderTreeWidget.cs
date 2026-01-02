@@ -87,6 +87,10 @@ namespace OpenRA.Mods.CA.Widgets
 		int contentWidth;
 		int contentHeight;
 		bool layoutDirty = true;
+		int horizontalScroll;
+		int defaultBoundsX;
+		bool defaultBoundsCaptured;
+		int lastViewportWidth = -1;
 
 		CommanderNode hoverNode;
 		CommanderNode lastTooltipNode;
@@ -123,6 +127,8 @@ namespace OpenRA.Mods.CA.Widgets
 		public Color GroupBorderColor = Color.FromArgb(192, 180, 180, 180);
 
 		public Func<ProductionIcon> GetTooltipIcon;
+		public bool HasHorizontalOverflow => GetMaxHorizontalScroll() > 0;
+		public float HorizontalScrollFraction => HasHorizontalOverflow ? horizontalScroll / Math.Max(1, (float)GetMaxHorizontalScroll()) : 0f;
 
 		[ObjectCreator.UseCtor]
 		public CommanderTreeWidget(World world, WorldRenderer worldRenderer)
@@ -179,6 +185,8 @@ namespace OpenRA.Mods.CA.Widgets
 		{
 			base.Initialize(args);
 
+			defaultBoundsX = Bounds.X;
+			defaultBoundsCaptured = true;
 			clock = new Animation(world, clockAnimation);
 			cantBuild = new Animation(world, notBuildableAnimation);
 			cantBuild.PlayFetchIndex(notBuildableSequence, () => 0);
@@ -378,7 +386,9 @@ namespace OpenRA.Mods.CA.Widgets
 			nodes.Clear();
 			edges.Clear();
 			layoutDirty = true;
+			horizontalScroll = 0;
 			UpdateIconOverlayCache();
+			UpdateHorizontalScrollLayout();
 
 			return promotionsQueue != null;
 		}
@@ -429,6 +439,8 @@ namespace OpenRA.Mods.CA.Widgets
 
 			if (layoutDirty)
 				RebuildEdgesAndLayout();
+
+			UpdateHorizontalScrollLayout();
 		}
 
 		CommanderNode CreateNode(ActorInfo actor)
@@ -828,6 +840,7 @@ namespace OpenRA.Mods.CA.Widgets
 				scrollPanel.ContentHeight = contentHeight;
 
 			layoutDirty = false;
+			UpdateHorizontalScrollLayout();
 		}
 
 		void UpdateGroups()
@@ -1162,9 +1175,87 @@ namespace OpenRA.Mods.CA.Widgets
 		}
 
 
+		public void SetHorizontalScrollFraction(float fraction)
+		{
+			var maxScroll = GetMaxHorizontalScroll();
+			if (maxScroll <= 0)
+			{
+				SetHorizontalScroll(0);
+				return;
+			}
 
+			var clamped = fraction.Clamp(0f, 1f);
+			var target = (int)Math.Round(clamped * maxScroll);
+			SetHorizontalScroll(target);
+		}
 
+		int GetMaxHorizontalScroll()
+		{
+			if (contentWidth <= 0)
+				return 0;
 
+			var viewportWidth = GetViewportWidth();
+			if (viewportWidth <= 0)
+				return contentWidth;
+
+			return Math.Max(0, contentWidth - viewportWidth);
+		}
+
+		void SetHorizontalScroll(int value)
+		{
+			var maxScroll = GetMaxHorizontalScroll();
+			var clamped = Math.Max(0, Math.Min(maxScroll, value));
+			if (clamped == horizontalScroll)
+				return;
+
+			horizontalScroll = clamped;
+			ApplyHorizontalScrollBounds();
+		}
+
+		void ApplyHorizontalScrollBounds()
+		{
+			if (!defaultBoundsCaptured)
+				return;
+
+			var bounds = Bounds;
+			bounds.X = defaultBoundsX - horizontalScroll;
+			Bounds = bounds;
+		}
+
+		int GetViewportWidth()
+		{
+			if (Parent is ScrollPanelWidget scrollPanel)
+			{
+				var width = scrollPanel.Bounds.Width;
+				if (scrollPanel.ScrollBar != ScrollBar.Hidden)
+					width -= scrollPanel.ScrollbarWidth;
+
+				width -= scrollPanel.BorderWidth * 2;
+				return Math.Max(0, width);
+			}
+
+			if (Parent != null)
+				return Parent.Bounds.Width;
+
+			return Bounds.Width;
+		}
+
+		void UpdateHorizontalScrollLayout()
+		{
+			if (!defaultBoundsCaptured)
+				return;
+
+			var viewportWidth = GetViewportWidth();
+			lastViewportWidth = viewportWidth;
+
+			var maxScroll = Math.Max(0, contentWidth - viewportWidth);
+			if (maxScroll <= 0)
+				horizontalScroll = 0;
+			else if (horizontalScroll > maxScroll)
+				horizontalScroll = maxScroll;
+
+			ApplyHorizontalScrollBounds();
+		}
 
 
 		public override void Draw()
@@ -1456,12 +1547,5 @@ namespace OpenRA.Mods.CA.Widgets
 		}
 	}
 }
-
-
-
-
-
-
-
 
 

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using OpenRA;
+using OpenRA.Mods.CA.Widgets;
 using OpenRA.Mods.Common.Widgets;
 using OpenRA.Support;
 using OpenRA.Traits;
@@ -17,6 +18,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		readonly ButtonWidget closeButton;
 		readonly ColorBlockWidget dismissArea;
 		readonly LogicKeyListenerWidget hotkeys;
+		readonly CommanderTreeWidget commanderTree;
+		readonly SliderWidget horizontalScroll;
 
 		[ObjectCreator.UseCtor]
 		public CommanderTreeWindowLogic(Widget widget, World world)
@@ -34,6 +37,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			closeButton = widget.GetOrNull<ButtonWidget>("CLOSE_BUTTON");
 			dismissArea = widget.GetOrNull<ColorBlockWidget>("DISMISS_AREA");
 			hotkeys = widget.GetOrNull<LogicKeyListenerWidget>("HOTKEYS");
+			commanderTree = widget.GetOrNull<CommanderTreeWidget>("COMMANDER_TREE");
+			horizontalScroll = widget.GetOrNull<SliderWidget>("TREE_HSCROLL");
 
 			if (titleLabel != null)
 				titleLabel.GetText = () => GetLocalizedString("commander-tree.title", "Commander Promotions");
@@ -80,6 +85,17 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 			if (progressValue != null)
 				progressValue.GetText = GetCommanderProgress;
+
+			if (horizontalScroll != null)
+			{
+				horizontalScroll.Visible = false;
+				horizontalScroll.Disabled = true;
+				horizontalScroll.GetValue = () => commanderTree?.HorizontalScrollFraction ?? 0f;
+				horizontalScroll.OnChange += value =>
+				{
+					commanderTree?.SetHorizontalScrollFraction(value);
+				};
+			}
 		}
 
 		ISync GetPromotionsTrait()
@@ -161,6 +177,21 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		void Close()
 		{
 			Ui.CloseWindow();
+		}
+
+		public override void Tick()
+		{
+			base.Tick();
+
+			if (commanderTree == null || horizontalScroll == null)
+				return;
+
+			var needsScroll = commanderTree.HasHorizontalOverflow;
+			horizontalScroll.Visible = needsScroll;
+			horizontalScroll.Disabled = !needsScroll;
+
+			if (!needsScroll && commanderTree.HorizontalScrollFraction > 0f)
+				commanderTree.SetHorizontalScrollFraction(0f);
 		}
 
 		string GetLocalizedString(string key, string fallback)
