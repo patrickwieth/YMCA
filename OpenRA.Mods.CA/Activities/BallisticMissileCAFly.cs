@@ -85,6 +85,11 @@ namespace OpenRA.Mods.CA.Activities
 		{
 			if (ticks >= duration)
 			{
+				var altitude = self.World.Map.DistanceAboveTerrain(actualTargetPos).Length;
+				var groundPos = altitude > 0
+					? actualTargetPos - new WVec(0, 0, altitude)
+					: actualTargetPos;
+				sbm.SetPosition(self, groundPos);
 				Queue(new CallFunc(() => self.Kill(self)));
 				return true;
 			}
