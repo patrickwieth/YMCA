@@ -148,10 +148,10 @@ promotion.Slingshot:
 	PromotionPalette:
 		Column: 7
 
-promotion.Medium_Tank.PDL:
+promotion.Battle_Tank.PDL:
 	Inherits: ^promotion_item
 	Tooltip:
-		Name: Medium Tank Point Laser Defense
+		Name: Battle Tank Point Laser Defense
 	RenderSprites:
 		Image: mtnk
 	WithProductionIconOverlay@PDL:
@@ -159,18 +159,20 @@ promotion.Medium_Tank.PDL:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 10
-		Prerequisites: has_points, tier3, vehicles, ~gdi, !promotion.medium_tank.reflector
+		Prerequisites: has_points, tier3, vehicles, ~gdi, !upg.gdibattletank
 		Description: commander-tree-promotion-medium-tank-pdl.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-medium-tank-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-medium-tank-pdl.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.gdibattletank
 	PromotionPalette:
 		Group: GDIMediumTank
 
-promotion.Medium_Tank.Reflector:
+promotion.Battle_Tank.Reflector:
 	Inherits: ^promotion_item
 	Tooltip:
-		Name: Medium Tank Reflector Armor
+		Name: Battle Tank Reflector Armor
 	RenderSprites:
 		Image: mtnk
 	WithProductionIconOverlay@Reflector:
@@ -178,11 +180,13 @@ promotion.Medium_Tank.Reflector:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 10
-		Prerequisites: has_points, tier3, vehicles, ~gdi, !promotion.medium_tank_pdl
+		Prerequisites: has_points, tier3, vehicles, ~gdi, !upg.gdibattletank
 		Description: commander-tree-promotion-medium-tank-reflector.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-medium-tank-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-medium-tank-reflector.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.gdibattletank
 	PromotionPalette:
 		Group: GDIMediumTank
 
@@ -239,7 +243,7 @@ promotion.Hailstorm_MLRS:
 	Buildable:
 		BuildPaletteOrder: 11
 		IconPalette: chrometd
-		Prerequisites: has_points, vehicles, ~gdi, tier3, !promotion.hover_mlrs
+		Prerequisites: has_points, vehicles, ~gdi, tier3, !upg.mlrs
 		Description: commander-tree-promotion-hailstorm-mlrs.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hailstorm-mlrs.tooltipextras-strengths
@@ -260,7 +264,7 @@ promotion.AA_MLRS:
 	Buildable:
 		BuildPaletteOrder: 11
 		IconPalette: chrometd
-		Prerequisites: has_points, vehicles, ~gdi, ~!eagle, tier3, !promotion.hover_mlrs
+		Prerequisites: has_points, vehicles, ~gdi, ~!eagle, tier3, !upg.mlrs
 		Description: commander-tree-promotion-aa-mlrs.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-aa-mlrs.tooltipextras-strengths
@@ -302,9 +306,13 @@ promotion.Hover_MLRS.Reflector:
 		IconPalette: chrometd
 		Prerequisites: has_points, vehicles, ~eagle, tier3, promotion.hover_mlrs, !promotion.hailstorm_mlrs, !promotion.hover_mlrs.pdl
 		Description: commander-tree-promotion-hover-mlrs-reflector.description
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mlrs2
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hover-mlrs-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-hover-mlrs-reflector.tooltipextras-weaknesses
+	PromotionPalette:
+		Group: GDIHoverMLRS
 
 promotion.Hover_MLRS.PDL:
 	Inherits: ^promotion_item
@@ -319,6 +327,8 @@ promotion.Hover_MLRS.PDL:
 		IconPalette: chrometd
 		Prerequisites: has_points, vehicles, ~eagle, tier3, promotion.hover_mlrs, !promotion.hailstorm_mlrs, !promotion.hover_mlrs.reflector
 		Description: commander-tree-promotion-hover-mlrs-pdl.description
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.mlrs2
 	TooltipExtras:
 		Strengths: commander-tree-promotion-hover-mlrs-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-hover-mlrs-pdl.tooltipextras-weaknesses

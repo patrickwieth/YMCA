@@ -43,10 +43,12 @@ MTNK:
 	Inherits: ^DronePairing
 	Inherits: ^GDIHeavyVehicleArmor
 	Inherits: ^PrioAntiHeavy
+	RenderSprites:
+		Image: mtnk
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
-		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~!promotion.medium_tank_pdl, ~!promotion.medium_tank.reflector
+		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~!upg.gdibattletank
 		IconPalette: chrometd
 		Description: Main battle tank.
 	Valued:
@@ -87,7 +89,7 @@ MTNK.PDL:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
-		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~promotion.medium_tank_pdl
+		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~promotion.battle_tank.pdl
 		IconPalette: chrometd
 		Description: Main battle tank with Point Laser Defense.
 	Valued:
@@ -105,7 +107,7 @@ MTNK.Reflector:
 	Inherits: ^ReflectorArmor
 	Buildable:
 		IconPalette: chrometd
-		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~promotion.medium_tank.reflector
+		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~promotion.battle_tank.reflector
 		Description: Main battle tank with Reflector Armor.
 	Tooltip:
 		Name: Battle Tank (Reflector)
@@ -120,10 +122,12 @@ MTNK.Drone:
 	Inherits: ^DronePairing
 	Inherits: ^GDIHeavyVehicleArmor
 	Inherits: ^PrioAntiHeavy
+	RenderSprites:
+		Image: mtnk.drone
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
-		Prerequisites: vehicles, ~zocom, weap.td, radar, ~!promotion.medium_tank_pdl, ~!promotion.medium_tank.reflector
+		Prerequisites: vehicles, ~zocom, weap.td, radar, ~!upg.gdibattletank
 		IconPalette: chrometd
 		Description: Drone battle tank.
 	Valued:
@@ -173,7 +177,7 @@ MTNK.Drone.PDL:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 85
-		Prerequisites: vehicles, ~zocom, weap.td, ~promotion.medium_tank_pdl
+		Prerequisites: vehicles, ~zocom, weap.td, ~promotion.battle_tank.pdl
 		IconPalette: chrometd
 		Description: Drone battle tank with Point Laser Defense.
 	Valued:
@@ -189,8 +193,8 @@ MTNK.Drone.Reflector:
 	Inherits: MTNK.Drone
 	Inherits: ^ReflectorArmor
 	Buildable:
-		-IconPalette: chrometd
-		Prerequisites: vehicles, ~zocom, weap.td, ~promotion.medium_tank.reflector
+		IconPalette: chrometd
+		Prerequisites: vehicles, ~zocom, weap.td, ~promotion.battle_tank.reflector
 		Description: Drone battle tank with Reflector Armor.
 	Tooltip:
 		Name: Battle Drone (Reflector)
@@ -694,6 +698,8 @@ MLRS:
 
 MLRS.AA:
 	Inherits: MLRS
+	WithProductionIconOverlay@Air:
+		Types: Air
 	Buildable:
 		Prerequisites: tier3, vehicles, ~gdi, ~promotion.aa_mlrs
 		Description: Multiple Launch Rocket System.
@@ -810,6 +816,8 @@ MLRS.Hailstorm:
 		Strengths: • Strong vs Buildings, Infantry, Vehicles
 		Weaknesses: • Weak vs. Aircraft, Heavy Tanks
 		Attributes: • Has weak armor.
+	WithProductionIconOverlay@Missile:
+		Types: Missile
 	Buildable:
 		BuildPaletteOrder: 120
 		Prerequisites: hq, vehicles, ~gdi, ~td, tier3, ~promotion.hailstorm_mlrs
