@@ -1,8 +1,6 @@
-ra-origin: C&C The Ultimate Collection (Origin version, English)
-	Type: RegistryDirectory
-	RegistryPrefixes: HKEY_LOCAL_MACHINE\Software\, HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\
-	RegistryKey: EA Games\Command and Conquer Red Alert
-	RegistryValue: Install Dir
+ra-steam: C&C The Ultimate Collection (Steam version, English)
+	Type: Steam
+		AppId: 2229840
 	IDFiles:
 		REDALERT.MIX: 0e58f4b54f44f6cd29fecf8cf379d33cf2d4caef
 	Install:
@@ -15,7 +13,7 @@ ra-origin: C&C The Ultimate Collection (Origin version, English)
 					^SupportDir|Content/ca/local.mix: local.mix
 					^SupportDir|Content/ca/lores.mix: lores.mix
 					^SupportDir|Content/ca/speech.mix: speech.mix
-				ExtractMix@2: MAIN.MIX
+				ExtractMix@2: MAIN1.MIX
 					^SupportDir|Content/ca/interior.mix: interior.mix
 					^SupportDir|Content/ca/conquer.mix: conquer.mix
 					^SupportDir|Content/ca/allies.mix: allies.mix
@@ -27,7 +25,7 @@ ra-origin: C&C The Ultimate Collection (Origin version, English)
 		ContentPackage@music:
 			Name: music
 			Actions:
-				ExtractMix: MAIN.MIX
+				ExtractMix: MAIN1.MIX
 					^SupportDir|Content/ca/scores.mix: scores.mix
 		# Aftermath expansion files:
 		ContentPackage@aftermathbase:
@@ -37,7 +35,9 @@ ra-origin: C&C The Ultimate Collection (Origin version, English)
 					^SupportDir|Content/ca/expand/expand2.mix: EXPAND2.MIX
 					^SupportDir|Content/ca/expand/hires1.mix: HIRES1.MIX
 					^SupportDir|Content/ca/expand/lores1.mix: LORES1.MIX
-				ExtractMix: ^SupportDir|Content/ca/sounds.mix
+				ExtractMix@1: MAIN4.MIX
+					^SupportDir|Content/ca/expand/sounds-aftermath.mix: sounds.mix
+				ExtractMix@2: ^SupportDir|Content/ca/expand/sounds-aftermath.mix
 					^SupportDir|Content/ca/expand/chrotnk1.aud: chrotnk1.aud
 					^SupportDir|Content/ca/expand/fixit1.aud: fixit1.aud
 					^SupportDir|Content/ca/expand/jburn1.aud: jburn1.aud
@@ -62,11 +62,14 @@ ra-origin: C&C The Ultimate Collection (Origin version, English)
 					^SupportDir|Content/ca/expand/mwrench1.aud: mwrench1.aud
 					^SupportDir|Content/ca/expand/myeehaw1.aud: myeehaw1.aud
 					^SupportDir|Content/ca/expand/myes1.aud: myes1.aud
+				Delete: ^SupportDir|Content/ca/expand/sounds-aftermath.mix
 		# Aftermath music (optional):
 		ContentPackage@music-aftermath:
 			Name: music-aftermath
 			Actions:
-				Copy: .
+				ExtractMix@1: MAIN4.MIX
+					^SupportDir|Content/ca/expand/scores-aftermath.mix: scores.mix
+				ExtractMix@2: ^SupportDir|Content/ca/expand/scores-aftermath.mix
 					^SupportDir|Content/ca/expand/await.aud: await.aud
 					^SupportDir|Content/ca/expand/bog.aud: bog.aud
 					^SupportDir|Content/ca/expand/float_v2.aud: float_v2.aud
@@ -76,11 +79,14 @@ ra-origin: C&C The Ultimate Collection (Origin version, English)
 					^SupportDir|Content/ca/expand/search.aud: search.aud
 					^SupportDir|Content/ca/expand/traction.aud: traction.aud
 					^SupportDir|Content/ca/expand/wastelnd.aud: wastelnd.aud
+				Delete: ^SupportDir|Content/ca/expand/scores-aftermath.mix
 		# Counterstrike music (optional):
 		ContentPackage@music-counterstrike:
 			Name: music-counterstrike
 			Actions:
-				Copy: .
+				ExtractMix@1: MAIN3.MIX
+					^SupportDir|Content/ca/expand/scores-counterstrike.mix: scores.mix
+				ExtractMix@2: ^SupportDir|Content/ca/expand/scores-counterstrike.mix
 					^SupportDir|Content/ca/expand/2nd_hand.aud: 2nd_hand.aud
 					^SupportDir|Content/ca/expand/araziod.aud: araziod.aud
 					^SupportDir|Content/ca/expand/backstab.aud: backstab.aud
@@ -89,11 +95,12 @@ ra-origin: C&C The Ultimate Collection (Origin version, English)
 					^SupportDir|Content/ca/expand/twinmix1.aud: twinmix1.aud
 					^SupportDir|Content/ca/expand/under3.aud: under3.aud
 					^SupportDir|Content/ca/expand/vr2.aud: vr2.aud
+				Delete: ^SupportDir|Content/ca/expand/scores-counterstrike.mix
 		# Allied campaign briefings (optional):
 		ContentPackage@movies-allied:
 			Name: movies-allied
 			Actions:
-				ExtractMix@1: MAIN.MIX
+				ExtractMix@1: MAIN1.MIX
 					^SupportDir|Content/ca/movies1.mix: movies1.mix
 				ExtractMix@2: ^SupportDir|Content/ca/movies1.mix
 					^SupportDir|Content/ca/movies/aagun.vqa: aagun.vqa
@@ -152,7 +159,7 @@ ra-origin: C&C The Ultimate Collection (Origin version, English)
 		ContentPackage@movies-soviet:
 			Name: movies-soviet
 			Actions:
-				ExtractMix@1: MAIN.MIX
+				ExtractMix@1: MAIN2.MIX
 					^SupportDir|Content/ca/movies2.mix: movies2.mix
 				ExtractMix@2: ^SupportDir|Content/ca/movies2.mix
 					^SupportDir|Content/ca/movies/double.vqa: double.vqa
@@ -212,13 +219,11 @@ ra-origin: C&C The Ultimate Collection (Origin version, English)
 					^SupportDir|Content/ca/movies/cronfail.vqa: cronfail.vqa
 				Delete: ^SupportDir|Content/ca/movies2.mix
 
-cnc-origin: Command & Conquer (Origin version, English)
-	Type: RegistryDirectory
-	RegistryPrefixes: HKEY_LOCAL_MACHINE\Software\, HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\
-	RegistryKey: EA Games\CNC and The Covert Operations
-	RegistryValue: Install Dir
+cnc-steam: Command & Conquer (Steam version, English)
+	Type: Steam
+		AppId: 2229830
 	IDFiles:
-		CONQUER.MIX: 833e02a09aae694659eb312d3838367f681d1b30
+		CONQUER.MIX: 713b53fa4c188ca9619c6bbeadbfc86513704266
 	Install:
 		# C&C Desert Tileset:
 		ContentPackage@cncdesert:
@@ -227,11 +232,9 @@ cnc-origin: Command & Conquer (Origin version, English)
 				Copy: .
 					^SupportDir|Content/ca/cnc/desert.mix: DESERT.MIX
 
-cncr-origin: C&C Remastered Collection (Origin version, English)
-	Type: RegistryDirectory
-	RegistryPrefixes: HKEY_LOCAL_MACHINE\Software\, HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\
-	RegistryKey: Petroglyph\CnCRemastered
-	RegistryValue: Install Dir
+cncr-steam: C&C Remastered Collection (Steam version, English)
+	Type: Steam
+		AppId: 1213210
 	IDFiles:
 		Data/CNCDATA/RED_ALERT/CD1/REDALERT.MIX: 0e58f4b54f44f6cd29fecf8cf379d33cf2d4caef
 	# The Remastered Collection doesn't include the RA Soviet CD unfortunately, so we can't install Soviet campaign briefings.
@@ -247,7 +250,7 @@ cncr-origin: C&C Remastered Collection (Origin version, English)
 					^SupportDir|Content/ca/speech.mix: speech.mix
 				ExtractMix@2: Data/CNCDATA/RED_ALERT/CD1/MAIN.MIX
 					^SupportDir|Content/ca/conquer.mix: conquer.mix
-					^SupportDir|Content/ca/general.mix: general.mix
+					^SupportDir|Content/ca/general.mix: general.mix # Is this one used? The FirstDecade and TUC installers are missing this!
 					^SupportDir|Content/ca/interior.mix: interior.mix
 					^SupportDir|Content/ca/snow.mix: snow.mix
 					^SupportDir|Content/ca/sounds.mix: sounds.mix
@@ -394,4 +397,3 @@ cncr-origin: C&C Remastered Collection (Origin version, English)
 			Actions:
 				Copy: Data/CNCDATA/TIBERIAN_DAWN/CD1
 					^SupportDir|Content/ca/cnc/desert.mix: DESERT.MIX
-
