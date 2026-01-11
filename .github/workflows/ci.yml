@@ -72,5 +72,7 @@ jobs:
         shell: powershell
         run: |
           # Work around runtime failures on the GH Actions runner
-          dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+          if (-not (dotnet nuget list source | Select-String -Quiet 'nuget\.org')) {
+            dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+          }
           .\make.ps1 check
