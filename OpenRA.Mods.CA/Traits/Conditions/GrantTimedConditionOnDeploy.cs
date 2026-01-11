@@ -78,6 +78,13 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly bool ShowSelectionBar = true;
 		public readonly bool ShowSelectionBarWhenFull = true;
 		public readonly bool ShowSelectionBarWhenEmpty = true;
+		[Desc("Hide the selection bar whenever the actor is not selected.")]
+		public readonly bool HideSelectionBarWhenUnselected = false;
+		[Desc("Hide the selection bar while inactive (cooldown) unless the actor is selected.")]
+		public readonly bool HideSelectionBarWhenInactiveIfUnselected = false;
+
+		[Desc("Hide the selection bar when fully charged unless the actor is selected.")]
+		public readonly bool HideSelectionBarWhenFullIfUnselected = false;
 		public readonly Color ChargingColor = Color.DarkRed;
 		public readonly Color DischargingColor = Color.DarkMagenta;
 
@@ -301,9 +308,41 @@ namespace OpenRA.Mods.CA.Traits
 
 		void INotifyAttack.PreparingAttack(Actor self, in Target target, Armament a, Barrel barrel) { }
 
+		bool ShouldHideSelectionBar()
+		{
+			if (self.World == null)
+				return false;
+
+			var isSelected = self.World.Selection.Contains(self) || self.World.Selection.RolloverContains(self);
+
+			if (!isSelected)
+			{
+				if (Info.HideSelectionBarWhenUnselected)
+					return true;
+
+				if (Info.HideSelectionBarWhenFullIfUnselected && deployState == TimedDeployState.Ready)
+					return true;
+
+				if (Info.HideSelectionBarWhenInactiveIfUnselected)
+				{
+					var abilityActive = deployState == TimedDeployState.Active
+						|| deployState == TimedDeployState.Deploying
+						|| deployState == TimedDeployState.Undeploying;
+
+					if (!abilityActive)
+						return true;
+				}
+			}
+
+			return false;
+		}
+
 		float ISelectionBar.GetValue()
 		{
 			if (IsTraitDisabled || !Info.ShowSelectionBar || deployState == TimedDeployState.Undeploying)
+				return 0f;
+
+			if (ShouldHideSelectionBar())
 				return 0f;
 
 			if (!Info.ShowSelectionBarWhenFull && deployState == TimedDeployState.Ready)
@@ -317,7 +356,16 @@ namespace OpenRA.Mods.CA.Traits
 				: (float)ticks / Info.DeployedTicks;
 		}
 
-		bool ISelectionBar.DisplayWhenEmpty { get { return deployState == TimedDeployState.Ready ? Info.ShowSelectionBarWhenFull : Info.ShowSelectionBarWhenEmpty; } }
+		bool ISelectionBar.DisplayWhenEmpty
+		{
+			get
+			{
+				if (ShouldHideSelectionBar())
+					return false;
+
+				return deployState == TimedDeployState.Ready ? Info.ShowSelectionBarWhenFull : Info.ShowSelectionBarWhenEmpty;
+			}
+		}
 
 		Color ISelectionBar.GetColor() { return deployState == TimedDeployState.Charging ? Info.ChargingColor : Info.DischargingColor; }
 	}
