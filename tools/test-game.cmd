@@ -36,10 +36,8 @@ if "!ENGINE_DIRECTORY!"=="" goto badconfig
 
 set TEMPLATE_DIR=%CD%
 set MAP_NAME=testmap
-set MAP_HASH=61290389ccbcc5070d8029110887b62bdb1edb39
-set MAP_ROOT=C:\Users\Patrick\OneDrive\Dokumente\OpenRA\maps\ca\%MAP_HASH%
-set MAP_SOURCE_DIR=%MAP_ROOT%\%MAP_NAME%
-set MAP_WORK_DIR=%TEMPLATE_DIR%\tools\%MAP_NAME%_pack
+set MAP_SOURCE_DIR=%TEMPLATE_DIR%\mods\ca\maps\All that Glitters B
+set MAP_WORK_DIR=%TEMP%\ymca_%MAP_NAME%_pack
 set MAP_WORK_FILE=%MAP_WORK_DIR%.oramap
 set MAP_OUTPUT=%TEMPLATE_DIR%\tools\%MAP_NAME%.oramap
 set MOD_SEARCH_PATHS=%TEMPLATE_DIR%\mods,%~dp0mods,./mods
@@ -52,7 +50,7 @@ robocopy "%MAP_SOURCE_DIR%" "%MAP_WORK_DIR%" /MIR >nul
 if %ERRORLEVEL% GEQ 8 goto mapcopyfailed
 
 if exist "%MAP_WORK_FILE%" del /f /q "%MAP_WORK_FILE%" >nul 2>&1
-set "MAP_TEMP_ZIP=%MAP_WORK_FILE%.zip"
+set "MAP_TEMP_ZIP=%TEMP%\testmap_pack_%RANDOM%_%RANDOM%.zip"
 if exist "%MAP_TEMP_ZIP%" del /f /q "%MAP_TEMP_ZIP%" >nul 2>&1
 for %%I in ("%MAP_WORK_DIR%") do set "_PS_MAP_DIR=%%~fI"
 for %%I in ("%MAP_TEMP_ZIP%") do set "_PS_MAP_FILE=%%~fI"
