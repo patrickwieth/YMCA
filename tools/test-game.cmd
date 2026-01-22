@@ -2,7 +2,8 @@
 setlocal EnableDelayedExpansion
 
 set "BUILD_LOG=%TEMP%\ymca-make-output.log"
-if exist "%BUILD_LOG%" del /f /q "%BUILD_LOG%"
+if exist "%BUILD_LOG%" del /f /q "%BUILD_LOG%" >nul 2>&1
+if exist "%BUILD_LOG%" set "BUILD_LOG=%TEMP%\ymca-make-output-%RANDOM%.log"
 
 call make.cmd all > "%BUILD_LOG%" 2>&1
 set "BUILD_RC=%ERRORLEVEL%"
@@ -76,7 +77,7 @@ if not exist %ENGINE_DIRECTORY%\bin\OpenRA.exe goto noengine
 
 cd %ENGINE_DIRECTORY%
 
-    bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Launch.Map=%MAP_PACKAGE%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%" "PlayerFaction.Multi0=russia" "PlayerType.Multi0=Human"
+    bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%" "PlayerFaction.Multi0=russia" "PlayerType.Multi0=Human"
 set ERROR=%ERRORLEVEL%
 cd %TEMPLATE_DIR%
 

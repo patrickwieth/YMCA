@@ -180,15 +180,13 @@
 		Type: Rectangle
 			TopLeft: -512, -512
 			BottomRight: 512, 512
-	Selectable:
-		Bounds: 1024, 1024
 
 ^1x1Building:
 	Inherits: ^1x1Shape
 	Building:
 		Footprint: x
 		Dimensions: 1,1
-		LocalCenterOffset: 0,-512,0
+		LocalCenterOffset: 0,-724,0
 	WithBuildingBib:
 		Sequence: bib0
 		HasMinibib: true
@@ -199,15 +197,13 @@
 		Type: Rectangle
 			TopLeft: -1024, -512
 			BottomRight: 1024, 512
-	Selectable:
-		Bounds: 2048, 1024
 
 ^2x1Building+Minibib:
 	Inherits: ^2x1Shape
 	Building:
 		Footprint: xx
 		Dimensions: 2,1
-		LocalCenterOffset: 0,-512,0
+		LocalCenterOffset: 0,-724,0
 	WithBuildingBib:
 		Sequence: bibSam
 		HasMinibib: true
@@ -218,15 +214,13 @@
 		Type: Rectangle
 			TopLeft: -1024, -1024
 			BottomRight: 1024, 1024
-	Selectable:
-		Bounds: 2048, 2048
 
 ^2x2Building:
 	Inherits: ^2x2Shape
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
-		LocalCenterOffset: 0,-512,0
+		LocalCenterOffset: 0,-724,0
 	WithBuildingBib:
 		Sequence: bib3.1
 
@@ -244,15 +238,13 @@
 		Type: Rectangle
 			TopLeft: -1536, -1024
 			BottomRight: 1536, 1024
-	Selectable:
-		Bounds: 3072, 2048
 
 ^3x2Building:
 	Inherits: ^3x2Shape
 	Building:
 		Footprint: xxx xxx
 		Dimensions: 3,2
-		LocalCenterOffset: 0,-512,0
+		LocalCenterOffset: 0,-724,0
 
 ^3x2Building+Bib:
 	Inherits: ^3x2Building
@@ -268,15 +260,13 @@
 		Type: Rectangle
 			TopLeft: -1536, -1536
 			BottomRight: 1536, 1536
-	Selectable:
-		Bounds: 3072, 3072
 
 ^3x3Building:
 	Inherits: ^3x3Shape
 	Building:
 		Footprint: xxx xxx xxx
 		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
+		LocalCenterOffset: 0,-724,0
 
 ^3x3Building+Bib:
 	Inherits: ^3x3Building
@@ -292,15 +282,13 @@
 		Type: Rectangle
 			TopLeft: -2048, -1024
 			BottomRight: 2048, 1024
-	Selectable:
-		Bounds: 4096, 2048
 
 ^4x2Building:
 	Inherits: ^4x2Shape
 	Building:
 		Footprint: xxxx xxxx
 		Dimensions: 4,2
-		LocalCenterOffset: 0,-512,0
+		LocalCenterOffset: 0,-724,0
 
 ^4x2Building+Bib:
 	Inherits: ^4x2Building
@@ -316,15 +304,13 @@
 		Type: Rectangle
 			TopLeft: -2048, -1536
 			BottomRight: 2048, 1536
-	Selectable:
-		Bounds: 4096, 3072
 
 ^4x3Building:
 	Inherits: ^4x3Shape
 	Building:
 		Footprint: xxxx xxxx xxxx
 		Dimensions: 4,3
-		LocalCenterOffset: 0,-512,0
+		LocalCenterOffset: 0,-724,0
 
 ^4x3Building+Bib:
 	Inherits: ^4x3Building
@@ -340,8 +326,6 @@
 		Type: Rectangle
 			TopLeft: -2048, -2048
 			BottomRight: 2048, 2048
-	Selectable:
-		Bounds: 4096, 4096
 
 ^BotBuilding:
 	GrantConditionOnBotOwner@BrutalAI:
@@ -2302,7 +2286,7 @@
 		RequiresCondition: !being-warped
 	WithFacingSpriteBody:
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	HitShape:
 	MapEditorData:
 		Categories: Vehicle
@@ -3081,7 +3065,7 @@
 	Hovers@CRUISING:
 		RequiresCondition: cruising
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	-Contrail@1:
 	-Contrail@2:
 	WithDamageOverlay:
@@ -3132,7 +3116,7 @@
 	GpsRadarDot:
 		Sequence: Helicopter
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	-Contrail@1:
 	-Contrail@2:
 	SpeedMultiplier@EMPDISABLE:
@@ -3279,10 +3263,6 @@
 	Inherits@selection: ^SelectableBuilding
 	Inherits@handicaps: ^PlayerHandicaps
 	Inherits: ^RelayMarkable
-	SelectionDecorations:
-	WithSpriteControlGroupDecoration:
-	Selectable:
-		Priority: 3
 	Targetable:
 		TargetTypes: Ground, C4, TNT, DetonateAttack, Structure
 	Building:
@@ -3767,7 +3747,7 @@ BuildBoost.Dummy:
 ^AmmoBox:
 	Inherits: ^TechBuilding
 	Inherits@Armor: ^LightArmor
-	-Selectable:
+	-IsometricSelectable:
 	Interactable:
 	SelectionDecorations:
 		RenderSelectionBars: False
@@ -3808,9 +3788,9 @@ BuildBoost.Dummy:
 	-Health:
 	-FireWarheadsOnDeathCA:
 	-FireWarheadsOnDeathCA@CIVPANIC:
-	-Selectable:
+	-IsometricSelectable:
 	Interactable:
-	-SelectionDecorations:
+	-IsometricSelectionDecorations:
 	Tooltip:
 		Name: Field
 	-Targetable:
@@ -3844,6 +3824,7 @@ BuildBoost.Dummy:
 	Inherits: ^1x1Shape
 	Inherits: ^WoodArmor
 	Inherits: ^TerrainSprite
+	Interactable:
 	Tooltip:
 		Name: Tree
 		ShowOwnerRow: false
@@ -3959,7 +3940,7 @@ BuildBoost.Dummy:
 	Tooltip:
 		GenericName: Destroyed Vehicle
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	FireWarheadsOnDeathCA:
 		Weapon: VisualExplodeHusk
 		EmptyWeapon: VisualExplodeHusk
@@ -4020,7 +4001,7 @@ BuildBoost.Dummy:
 	FallsToEarth:
 		Explosion: UnitExplodeHeli
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	-MapEditorData:
 	RevealOnDeath:
 		Duration: 60
@@ -4072,7 +4053,6 @@ BuildBoost.Dummy:
 	ScriptTriggers:
 	BodyOrientation:
 		QuantizedFacings: 1
-	-Selectable
 	Interactable:
 		Bounds: 4096, 2048
 	ShakeOnDeath:
@@ -4356,14 +4336,24 @@ BuildBoost.Dummy:
 		IgnoreDistanceThreshold: 0
 
 ^SelectableCombatBuilding:
-	Inherits@selectiondecorations: ^Selectable
-	Selectable:
+	IsometricSelectable:
 		Priority: 4
+		Height: 0
+		DecorationHeight: 30
+	IsometricSelectionDecorations:
+		MinimumZoom: 0.5
+	WithSpriteControlGroupDecoration:
+	DrawLineToTarget:
 
 ^SelectableBuilding:
-	Inherits@selectiondecorations: ^Selectable
-	Selectable:
+	IsometricSelectable:
 		Priority: 2
+		Height: 0
+		DecorationHeight: 30
+	IsometricSelectionDecorations:
+		MinimumZoom: 0.5
+	WithSpriteControlGroupDecoration:
+	DrawLineToTarget:
 
 ^SupportUnit:
 	AttackMove:
