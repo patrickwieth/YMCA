@@ -435,14 +435,18 @@ namespace OpenRA.Mods.Cameo.Orders
 
 			if (targets.Any())
 			{
-				WPos centerpos = OrderGeneratorHelpers.GetCenterOfActorGroup(OwningWorld.Selection.Actors.ToList());
+				var selectionActors = GetStableSelectionActors();
+				if (selectionActors.Count == 0)
+					yield break;
+
+				WPos centerpos = OrderGeneratorHelpers.GetCenterOfActorGroup(selectionActors);
 				List<Target> sortedtargets = OrderGeneratorHelpers.GetTargetsByDistance(centerpos, targets);
 				yield return StartGiveOrders();
 
 				for (int i = 0; i < sortedtargets.Count; i++)
 				{
 					CPos cell = OwningWorld.Map.CellContaining(sortedtargets[i].CenterPosition);
-					var orders = OwningWorld.Selection.Actors
+					var orders = selectionActors
 						.Select(a => OrderGeneratorHelpers.OrderForUnit(a, sortedtargets[i], cell, inMouseInput))
 						.Where(o => o != null)
 						.ToList();
@@ -487,6 +491,29 @@ namespace OpenRA.Mods.Cameo.Orders
 			MarkTileForCommandLine(inStartTile, true, false);
 		}
 
+		protected List<Actor> GetStableSelectionActors()
+		{
+			return OwningWorld.Selection.Actors
+				.OrderBy(actor => actor.ActorID)
+				.ToList();
+		}
+
+		protected IEnumerable<CPos> GetOrderedCommandLineCells(Dictionary<CPos, int> targetmap)
+		{
+			if (targetmap.Count == 0)
+				yield break;
+
+			var seen = new HashSet<CPos>();
+			foreach (var cell in CurrentMarkedCells)
+			{
+				if (!seen.Add(cell))
+					continue;
+
+				if (targetmap.ContainsKey(cell))
+					yield return cell;
+			}
+		}
+
 		protected void UpdateMarkerLocationsForCommandLine()
 		{
 			CurrentOrderMarkers.Clear();
@@ -508,9 +535,9 @@ namespace OpenRA.Mods.Cameo.Orders
 				List<Target> targets = new();
 				List<CPos> cells = new();
 				Dictionary<CPos, int> targetmap = GetCommandLineCells();
-				foreach (var kv in targetmap)
+				foreach (var cell in GetOrderedCommandLineCells(targetmap))
 				{
-					CurrentOrderMarkers.Add(OwningWorld.Map.CenterOfCell(kv.Key));
+					CurrentOrderMarkers.Add(OwningWorld.Map.CenterOfCell(cell));
 				}
 			}
 		}
@@ -642,16 +669,16 @@ namespace OpenRA.Mods.Cameo.Orders
 				List<Target> targets = new();
 				List<CPos> cells = new();
 				Dictionary<CPos, int> targetmap = GetCommandLineCells();
-				foreach (var kv in targetmap)
+				foreach (var cell in GetOrderedCommandLineCells(targetmap))
 				{
-					for (int i = 0; i < kv.Value; i++)
+					for (int i = 0; i < targetmap[cell]; i++)
 					{
-						targets.Add(Target.FromCell(OwningWorld, kv.Key));
-						cells.Add(kv.Key);
+						targets.Add(Target.FromCell(OwningWorld, cell));
+						cells.Add(cell);
 					}
 				}
 
-				IEnumerable<Order> orders = GetCommandLineOrders(OwningWorld.Selection.Actors.ToList(), targets, cells, inMouseInput, inOverrideCommand);
+				IEnumerable<Order> orders = GetCommandLineOrders(GetStableSelectionActors(), targets, cells, inMouseInput, inOverrideCommand);
 				foreach (Order o in orders)
 				{
 					yield return o;
@@ -668,7 +695,8 @@ namespace OpenRA.Mods.Cameo.Orders
 			var target = OrderGeneratorHelpers.TargetForInput(OwningWorld, inCell, inWorldPixel, inMouseInput);
 			if (inOverrideCommand == null)
 			{
-				var orders = OwningWorld.Selection.Actors
+				var selectionActors = GetStableSelectionActors();
+				var orders = selectionActors
 					.Select(a => OrderGeneratorHelpers.OrderForUnit(a, target, inCell, inMouseInput))
 					.Where(o => o != null)
 					.ToList();
@@ -686,7 +714,7 @@ namespace OpenRA.Mods.Cameo.Orders
 			}
 			else
 			{
-				foreach (var actor in OwningWorld.Selection.Actors)
+				foreach (var actor in GetStableSelectionActors())
 				{
 					yield return new Order(inOverrideCommand, actor, target, inMouseInput.Modifiers.HasModifier(Modifiers.Shift));
 				}
@@ -699,7 +727,11 @@ namespace OpenRA.Mods.Cameo.Orders
 
 		protected IEnumerable<Order> GetCommandLineOrdersSingleUnit(CPos inCell, int2 inWorldPixel, MouseInput inMouseInput, string inOverrideCommand = null)
 		{
-			Actor unitactor = OwningWorld.Selection.Actors.First();
+			var selectionActors = GetStableSelectionActors();
+			if (selectionActors.Count == 0)
+				yield break;
+
+			Actor unitactor = selectionActors[0];
 			List<Target> targets = new();
 
 			for (int i = 0; i < CurrentMarkedCells.Count; i++)
@@ -743,7 +775,7 @@ namespace OpenRA.Mods.Cameo.Orders
 
 		protected IEnumerable<Order> GetCommandLineOrdersLessTilesThanUnits(CPos inCell, int2 inWorldPixel, MouseInput inMouseInput, string inOverrideCommand = null)
 		{
-			List<Actor> selectionactors = OwningWorld.Selection.Actors.ToList();
+			List<Actor> selectionactors = GetStableSelectionActors();
 			int unitspertile = (int)Math.Ceiling((float)selectionactors.Count / (float)CurrentMarkedCells.Count);
 			List<Target> targets = new();
 			List<CPos> cells = new();
@@ -761,7 +793,7 @@ namespace OpenRA.Mods.Cameo.Orders
 
 		protected IEnumerable<Order> GetCommandLineOrdersMoreTilesThanUnits(CPos inCell, int2 inWorldPixel, MouseInput inMouseInput, string inOverrideCommand = null)
 		{
-			List<Actor> selectionactors = OwningWorld.Selection.Actors.ToList();
+			List<Actor> selectionactors = GetStableSelectionActors();
 			List<UnitOrderResult> orders = new();
 			List<Target> targets = new();
 			// why cant i get cell out of target lol
@@ -791,7 +823,7 @@ namespace OpenRA.Mods.Cameo.Orders
 
 		protected IEnumerable<Order> GetCommandLineOrdersEqualTilesAndUnits(CPos inCell, int2 inWorldPixel, MouseInput inMouseInput, string inOverrideCommand = null)
 		{
-			List<Actor> selectionactors = OwningWorld.Selection.Actors.ToList();
+			List<Actor> selectionactors = GetStableSelectionActors();
 			List<UnitOrderResult> orders = new();
 			List<Target> targets = new();
 			List<CPos> cells = new();
@@ -808,7 +840,8 @@ namespace OpenRA.Mods.Cameo.Orders
 		protected IEnumerable<Order> GetCommandLineOrders(List<Actor> inActors, List<Target> inTargets, List<CPos> inCells, MouseInput inMouseInput, string inOverrideCommand = null)
 		{
 			List<UnitOrderResult> orders = new();
-			List<Actor> sortedactors = AssignmentProblemHelpers.AssignUnitsToTargets(inActors, inTargets);
+			var orderedActors = inActors.OrderBy(actor => actor.ActorID).ToList();
+			List<Actor> sortedactors = AssignmentProblemHelpers.AssignUnitsToTargets(orderedActors, inTargets);
 
 			int ordercount = Math.Min(Math.Min(sortedactors.Count, inTargets.Count), inCells.Count);
 
@@ -866,13 +899,14 @@ namespace OpenRA.Mods.Cameo.Orders
 
 		protected Order StartGiveOrders()
 		{
-			if (OwningWorld.Selection.Actors.Count() < 0)
+			var selectionActors = GetStableSelectionActors();
+			if (selectionActors.Count == 0)
 			{
 				return new Order();
 			}
 			// HACK: This is required by the hacky player actions-per-minute calculation
 			// TODO: Reimplement APM properly and then remove this
-			return new Order("CreateGroup", OwningWorld.Selection.Actors.First().Owner.PlayerActor, false, OwningWorld.Selection.Actors.ToArray());
+			return new Order("CreateGroup", selectionActors[0].Owner.PlayerActor, false, selectionActors.ToArray());
 		}
 	}
 
@@ -1026,7 +1060,11 @@ namespace OpenRA.Mods.Cameo.Orders
 
 			public int CompareTo(TargetAndDistance other)
 			{
-				return Distance.CompareTo(other.Distance);
+				var cmp = Distance.CompareTo(other.Distance);
+				if (cmp != 0)
+					return cmp;
+
+				return CompareTargets(Target, other.Target);
 			}
 		}
 		public static List<Target> GetTargetsByDistance(WPos inReferencePosition, List<Target> inTargets)
@@ -1047,6 +1085,33 @@ namespace OpenRA.Mods.Cameo.Orders
 
 			return retval;
 
+		}
+
+		static int CompareTargets(in Target a, in Target b)
+		{
+			var typeCompare = a.Type.CompareTo(b.Type);
+			if (typeCompare != 0)
+				return typeCompare;
+
+			switch (a.Type)
+			{
+				case TargetType.Actor:
+					return a.Actor.ActorID.CompareTo(b.Actor.ActorID);
+				case TargetType.FrozenActor:
+					return a.FrozenActor.ID.CompareTo(b.FrozenActor.ID);
+				case TargetType.Terrain:
+					var apos = a.CenterPosition;
+					var bpos = b.CenterPosition;
+					var cmp = apos.X.CompareTo(bpos.X);
+					if (cmp != 0)
+						return cmp;
+					cmp = apos.Y.CompareTo(bpos.Y);
+					if (cmp != 0)
+						return cmp;
+					return apos.Z.CompareTo(bpos.Z);
+				default:
+					return 0;
+			}
 		}
 
 		public static WPos GetCenterOfActorGroup(List<Actor> inActors)
