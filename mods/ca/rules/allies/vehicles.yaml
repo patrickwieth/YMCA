@@ -23,13 +23,16 @@ HARV:
 	SpawnActorOnDeath:
 		Actor: HARV.EmptyHusk
 		RequiresCondition: !being-warped && !orep-upgrade
+	SpawnActorOnDeath@OREPUPGRADE:
+		Actor: HARV.Chrono
+		RequiresCondition: orep-upgrade
 	WithFacingSpriteBody:
 	GrantConditionOnPrerequisite@OREPUPGRADE:
 		Prerequisites: orep
 		Condition: orep-upgrade
 	KillsSelf@OREPUPGRADE:
 		Delay: 1
-		RemoveInstead: true
+		RemoveInstead: false
 		RequiresCondition: orep-upgrade
 	GrantCondition@WARPOUT:
 		Condition: being-warped
@@ -69,6 +72,9 @@ HARV.Chrono:
 		WarpOutSequence: warpout
 		WarpInSound: vchrtele.aud
 		WarpOutSound: ichrmova.aud
+	ExplodeWeaponTeleportEffect:
+		ImpactWeapon: ChronoImpact
+		TeleportWeapon: ChronoImpact
 	Voiced:
 		VoiceSet: ChronoMinerVoice
 	SpawnActorOnDeath:
