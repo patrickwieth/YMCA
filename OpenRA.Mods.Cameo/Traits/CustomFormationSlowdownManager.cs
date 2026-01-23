@@ -10,7 +10,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using OpenRA;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Primitives;
 using OpenRA.Traits;
@@ -32,8 +34,12 @@ namespace OpenRA.Mods.Cameo.Traits
 		public override object Create(ActorInitializer init) { return new CustomFormationSlowdownManager(init.Self, this); }
 	}
 
-	public class CustomFormationSlowdownManager : ITick
+	public class CustomFormationSlowdownManager : ITick, IResolveOrder
 	{
+		const string CustomFormationSessionOrder = "CustomFormationSession";
+		const char TargetSeparator = '|';
+		const char CoordSeparator = ',';
+
 		class FormationSession
 		{
 			public readonly Dictionary<Actor, WPos> Assignments;
@@ -54,6 +60,39 @@ namespace OpenRA.Mods.Cameo.Traits
 		{
 			this.worldActor = worldActor;
 			this.info = info;
+		}
+
+		void IResolveOrder.ResolveOrder(Actor self, Order order)
+		{
+			if (order.OrderString != CustomFormationSessionOrder)
+				return;
+
+			if (order.ExtraActors == null || order.ExtraActors.Length == 0)
+				return;
+
+			if (string.IsNullOrWhiteSpace(order.TargetString))
+				return;
+
+			var targets = DecodeTargets(order.TargetString);
+			if (targets.Count == 0)
+				return;
+
+			var sessionActors = new List<Actor>(order.ExtraActors.Length);
+			var sessionTargets = new List<WPos>(order.ExtraActors.Length);
+			var count = Math.Min(order.ExtraActors.Length, targets.Count);
+
+			for (var i = 0; i < count; i++)
+			{
+				var actor = order.ExtraActors[i];
+				if (!IsActorValid(actor))
+					continue;
+
+				sessionActors.Add(actor);
+				sessionTargets.Add(targets[i]);
+			}
+
+			if (sessionActors.Count > 1)
+				RegisterSession(sessionActors, sessionTargets);
 		}
 
 		public void RegisterSession(List<Actor> actors, List<WPos> targets)
@@ -252,6 +291,32 @@ namespace OpenRA.Mods.Cameo.Traits
 			}
 
 			return 1;
+		}
+
+		static List<WPos> DecodeTargets(string encoded)
+		{
+			var targets = new List<WPos>();
+			if (string.IsNullOrWhiteSpace(encoded))
+				return targets;
+
+			var entries = encoded.Split(TargetSeparator, StringSplitOptions.RemoveEmptyEntries);
+			foreach (var entry in entries)
+			{
+				var coords = entry.Split(CoordSeparator, StringSplitOptions.RemoveEmptyEntries);
+				if (coords.Length != 3)
+					continue;
+
+				if (!int.TryParse(coords[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out var x))
+					continue;
+				if (!int.TryParse(coords[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out var y))
+					continue;
+				if (!int.TryParse(coords[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out var z))
+					continue;
+
+				targets.Add(new WPos(x, y, z));
+			}
+
+			return targets;
 		}
 	}
 }

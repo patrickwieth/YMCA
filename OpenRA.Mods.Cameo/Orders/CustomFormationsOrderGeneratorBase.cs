@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Accord.Math.Optimization;
 using OpenRA.Graphics;
@@ -60,6 +61,8 @@ namespace OpenRA.Mods.Cameo.Orders
 	 */
 	public class CustomFormationsOrderGeneratorBase : IOrderGenerator
 	{
+		const string CustomFormationSessionOrder = "CustomFormationSession";
+
 		protected World OwningWorld = null;
 		protected WorldRenderer OwningWorldRenderer = null;
 
@@ -869,7 +872,7 @@ namespace OpenRA.Mods.Cameo.Orders
 					}
 
 					if (sessionActors.Count > 1)
-						slowdownManager.RegisterSession(sessionActors, sessionTargets);
+						yield return CreateFormationSessionOrder(sessionActors, sessionTargets);
 				}
 			}
 
@@ -907,6 +910,32 @@ namespace OpenRA.Mods.Cameo.Orders
 			// HACK: This is required by the hacky player actions-per-minute calculation
 			// TODO: Reimplement APM properly and then remove this
 			return new Order("CreateGroup", selectionActors[0].Owner.PlayerActor, false, selectionActors.ToArray());
+		}
+
+		static Order CreateFormationSessionOrder(List<Actor> actors, List<WPos> targets)
+		{
+			var order = new Order(CustomFormationSessionOrder, actors[0].World.WorldActor, false, actors.ToArray())
+			{
+				TargetString = EncodeFormationTargets(targets),
+				SuppressVisualFeedback = true
+			};
+
+			return order;
+		}
+
+		static string EncodeFormationTargets(IReadOnlyList<WPos> targets)
+		{
+			if (targets == null || targets.Count == 0)
+				return string.Empty;
+
+			var parts = new string[targets.Count];
+			for (var i = 0; i < targets.Count; i++)
+			{
+				var target = targets[i];
+				parts[i] = string.Format(CultureInfo.InvariantCulture, "{0},{1},{2}", target.X, target.Y, target.Z);
+			}
+
+			return string.Join("|", parts);
 		}
 	}
 
