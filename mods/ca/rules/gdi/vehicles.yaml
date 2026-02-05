@@ -461,7 +461,7 @@ MEMP:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
 		IconPalette: chrometd
-		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp, ~!upg.moblie_emp
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp, ~!upg.mobile_emp2
 		Description: Deploys a Mobile EMP carrier that unleashes disabling pulses instead of direct damage.\\n  Detonating the charge shuts down vehicles and defenses so allies can advance.\\n  Requires power to arm and escorts to survive.\\n  Strong vs Vehicles, Buildings\\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1050
@@ -528,6 +528,8 @@ MEMP:
 
 MEMP.Volatile:
 	Inherits: MEMP
+	WithProductionIconOverlay@2:
+		Types: Skull
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 260
@@ -548,8 +550,10 @@ MEMP.Volatile:
 
 MEMP.Ranged:
 	Inherits: MEMP
+	WithProductionIconOverlay@2:
+		Types: Crosshair
 	Buildable:
-		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp.ranged
+		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp.ranged, ~!upg.mobile_emp2
 		Description: Refits the Mobile EMP with a Stable Reactor and launcher that fires EMP spheres from stand-off range instead of self-destructing.\\n  Enables repeated pulses without sacrificing the vehicle but leaves it vulnerable while channeling.\\n  Requires power to operate.\\n  Strong vs Vehicles, Buildings\\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1250
@@ -567,12 +571,16 @@ MEMP.Ranged:
 		PauseOnCondition: empdisable || being-warped
 
 MEMP.Ranged.Improved:
-	Inherits: MEMP
+	Inherits: MEMP.Ranged
+	WithProductionIconOverlay@2:
+		Types: Wrench
 	Buildable:
 		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp.ranged.improved
 		Description: Further tunes the Stable Reactor kit for greater reach and faster cycling, letting the Mobile EMP blanket battlefields from safety.\\n  Sustains repeated EMP pulses without sacrificing the chassis but still needs escorts while firing.\\n  Requires power to operate.\\n  Strong vs Vehicles, Buildings\\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1500
+	Tooltip:
+		Name: Mobile E.M.P (Ranged, Improved)
 	Armament@PRIMARY:
 		Weapon: EmpSphereThrower.Improved
 		LocalOffset: 900,180,340
@@ -718,6 +726,8 @@ hmlrs:
 	Inherits: ^HoverVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiLightAA
+	RenderSprites:
+		Image: hmlrs
 	Valued:
 		Cost: 1150
 	Tooltip:
@@ -779,7 +789,6 @@ hmlrs.Reflector:
 	Inherits: hmlrs
 	Inherits: ^ReflectorArmor
 	Buildable:
-		IconPalette: chrome
 		Prerequisites: vehicles, ~gdi, tier3, ~promotion.hover_mlrs.reflector
 		Description: Prototype Hover Multiple Launch Rocket System.
 	Tooltip:
@@ -793,7 +802,6 @@ hmlrs.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Inherits: hmlrs
 	Buildable:
-		IconPalette: chrome
 		Prerequisites: vehicles, ~gdi, tier3, ~promotion.hover_mlrs.pdl
 		Description: Prototype Hover Multiple Launch Rocket System.
 	Valued:
