@@ -494,6 +494,8 @@ namespace OpenRA.Mods.CA.Widgets
 					icon.ButtonLabelFont = seq.ButtonLabelFont;
 					LogDebug($"Sequence font for {actor.Name}: '{seq.ButtonLabelFont ?? "<null>"}' label '{seq.ButtonLabel ?? "<null>"}'");
 				}
+
+				icon.ButtonLabelOffset = seq.ButtonLabelOffset;
 			}
 
 			if (!icon.Buttonize && (!string.IsNullOrEmpty(icon.ButtonLabel) || !string.IsNullOrEmpty(icon.ButtonLabelFont)))
@@ -1547,5 +1549,4 @@ namespace OpenRA.Mods.CA.Widgets
 		}
 	}
 }
-
 
