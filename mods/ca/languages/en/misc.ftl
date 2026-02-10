@@ -4,10 +4,10 @@
 promotions-flavor.prefix = Promotions Dispatch
 promotions-flavor.notification-01 = Our tacticians have flagged new battlefield doctrines. Spend Command Points to seize the initiative.
 promotions-flavor.notification-02 = Intelligence warns that the enemy is retooling. Adjust your promotion path to counter immediately.
-promotions.text-notification = Promotion rank { $rank } reached.
 promotions-flavor.notification-03 = Field commanders report an opening—invest Command Points now to press the advantage.
 promotions-flavor.notification-04 = Quartermasters stand ready to supply fresh upgrades. Chain promotions for a decisive spike.
 promotions-flavor.notification-05 = Command channels are quiet—issue promotion orders before the enemy capitalizes first.
+promotions.text-notification = Promotion rank { $rank } reached.
 
 normal = Normal
 
@@ -3328,4 +3328,3 @@ vehicles-ttrk =
     .tooltipextras-strengths = Strengths: • Strong vs clustered ground targets when the Tiberium bomb detonates.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs any weapons before detonation due to extremely light armor.
     .tooltipextras-attributes = Attributes: • Suicide truck armed with a volatile Tiberium bomb.
-

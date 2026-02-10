@@ -127,6 +127,51 @@ Devil_Tank:
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
 
+SFTNK:
+	Inherits: ^FightingTank
+	Inherits: ^VoxelVehicle
+	Inherits: ^BiologicalDriver
+	Inherits: ^PrioAntiLight
+	RenderVoxels:
+		Scale: 0.8
+		Image: flame_tank
+	WithVoxelBody@turret:
+		Sequence: turret
+	RenderSprites:
+		Image: flame_tank
+	Valued:
+		Cost: 700
+	Tooltip:
+		Name: Flame Tank
+		GenericName: Tank
+	TooltipExtras:
+		Strengths: • Strong vs Infantry, Buildings, Vehicles
+		Weaknesses: • Weak vs Heavy Tanks, Aircraft
+	Buildable:
+		BuildPaletteOrder: 365
+		Prerequisites: tier2, vehicles, ~soviet, ~disabled
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Heavily armored flame-throwing vehicle.
+	Mobile:
+		Speed: 82
+	Health:
+		HP: 40000
+	Armament@PRIMARY:
+		Name: primary
+		Weapon: BigFlamer
+		MuzzleSequence: muzzle
+		MuzzlePalette: tdeffect
+		LocalOffset: 512,128,42, 512,-128,42
+	WithMuzzleOverlay:
+	AttackFrontal:
+		Armaments: primary, secondary
+		PauseOnCondition: empdisable || being-warped
+		FacingTolerance: 0
+	FireWarheadsOnDeathCA:
+		Weapon: BarrelExplode
+		EmptyWeapon: BarrelExplode
+
 BTR:
 	Inherits: ^FightingVehicle
 	Inherits: ^HighResShadow
