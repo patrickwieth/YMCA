@@ -93,6 +93,23 @@ hotkeys-hotkeys =
     .description-8 = Power-down mode
 promotions =
     .lobby-description = Configure the number of commander points available each match.
+    .text-notification = Promotion rank { $rank } reached.
+    .rank1 = Major (1)
+    .rank2 = Colonel (2)
+    .rank3 = Brigadier General (3)
+    .rank4 = Major General (4)
+    .rank5 = General (5)
+    .rank6 = Five-Star General (6)
+    .rank7 = Field Marshal (7)
+    .rank8 = Supreme Commander (8)
+
+promotions-flavor =
+    .prefix = Promotions Dispatch
+    .notification-01 = Our tacticians have flagged new battlefield doctrines. Spend Command Points to seize the initiative.
+    .notification-02 = Intelligence warns that the enemy is retooling. Adjust your promotion path to counter immediately.
+    .notification-03 = Field commanders report an opening—invest Command Points now to press the advantage.
+    .notification-04 = Quartermasters stand ready to supply fresh upgrades. Chain promotions for a decisive spike.
+    .notification-05 = Command channels are quiet—issue promotion orders before the enemy capitalizes first.
 
 
 
@@ -114,14 +131,5 @@ promotion-counter.points = Points
 promotion-counter.progress = Progress
 promotion-counter.progress-max = Max rank achieved
 button-production-types-promotion-tooltip = Open Commander Promotions
-
-promotions.rank1 = Major
-promotions.rank2 = Colonel
-promotions.rank3 = Brigadier General
-promotions.rank4 = Major General
-promotions.rank5 = General
-promotions.rank6 = Five-Star General
-promotions.rank7 = Field Marshal
-promotions.rank8 = Supreme Commander
 
 loadscreen-loading = Mining Bitcoin..., Installing Malware..., Encrypting HDD..., Downloading Credit Card Data..., Doxing your grandma..., Trolling the Essence..., Overheating CPU..., Hacking into Mainframe...
