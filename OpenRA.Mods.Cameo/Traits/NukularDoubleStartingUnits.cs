@@ -18,7 +18,7 @@ using OpenRA.Traits;
 namespace OpenRA.Mods.Cameo.Traits
 {
 	[Desc("Ensures Double MCV start gives nukular MCVs when Nukular mode is enabled. Attach this to the world actor.")]
-	public class NukularDoubleStartingUnitsInfo : TraitInfo, Requires<SpawnStartingUnitsInfo>
+	public class NukularDoubleStartingUnitsInfo : TraitInfo
 	{
 		[Desc("Lobby option id for starting units.")]
 		public readonly string StartingUnitsOptionId = "startingunits";
