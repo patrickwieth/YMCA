@@ -29,9 +29,12 @@ namespace OpenRA.Mods.Cameo.Traits
 		[Desc("Starting units class that should receive double nukular MCVs.")]
 		public readonly string StartingUnitsClass = "doubled";
 
+		[Desc("How many ticks after game start to keep scanning for starting actors to convert.")]
+		public readonly int ConversionTicks = 8;
+
 		[ActorReference]
-		[Desc("Base MCV actor ids to convert into nukular variants.")]
-		public readonly string[] McvActors = { "mcv", "amcv", "smcv", "chnmcv" };
+		[Desc("Starting actor ids to convert into nukular variants.")]
+		public readonly string[] McvActors = { "mcv", "amcv", "smcv", "chnmcv", "chcommand" };
 
 		public override object Create(ActorInitializer init) { return new NukularDoubleStartingUnits(init.Self, this); }
 	}
@@ -40,8 +43,10 @@ namespace OpenRA.Mods.Cameo.Traits
 	{
 		readonly NukularDoubleStartingUnitsInfo info;
 		readonly HashSet<string> mcvActors;
+		readonly HashSet<uint> processedActors = new();
 		bool pending;
 		bool enabled;
+		int ticksRemaining;
 
 		public NukularDoubleStartingUnits(Actor self, NukularDoubleStartingUnitsInfo info)
 		{
@@ -57,6 +62,7 @@ namespace OpenRA.Mods.Cameo.Traits
 
 			enabled = nukularEnabled && startingUnits == info.StartingUnitsClass;
 			pending = enabled;
+			ticksRemaining = info.ConversionTicks;
 		}
 
 		void ITick.Tick(Actor self)
@@ -64,13 +70,21 @@ namespace OpenRA.Mods.Cameo.Traits
 			if (!pending)
 				return;
 
-			pending = false;
+			if (ticksRemaining-- <= 0)
+			{
+				pending = false;
+				return;
+			}
+
 			var world = self.World;
 			var rules = world.Map.Rules.Actors;
 
 			foreach (var actor in world.Actors)
 			{
 				if (!actor.IsInWorld || actor.Owner == null || !actor.Owner.Playable)
+					continue;
+
+				if (processedActors.Contains(actor.ActorID))
 					continue;
 
 				var baseId = actor.Info.Name.ToLowerInvariant();
@@ -93,6 +107,7 @@ namespace OpenRA.Mods.Cameo.Traits
 
 				actor.CancelActivity();
 				actor.QueueActivity(transform);
+				processedActors.Add(actor.ActorID);
 			}
 		}
 	}
