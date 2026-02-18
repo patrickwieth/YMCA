@@ -1805,7 +1805,7 @@ RTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
-		Prerequisites: weap, vehicles, ~england, ~!promotion.mirage_pdl, ~!promotion.mirage_fire_rate, ~!promotion.mirage.reflector
+		Prerequisites: weap, vehicles, ~england, ~!upg.mirage
 		Description: Advanced Battle tank that can cloak when stationary.\nHas high explosive shells.\n  Strong vs Light Vehicles\n  Weak vs Aircraft.
 	Valued:
 		Cost: 800
@@ -1876,41 +1876,73 @@ RTNK.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Inherits: RTNK
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 75
-		IconPalette: chrometd
-		Prerequisites: weap, ~promotion.mirage_pdl
+		Prerequisites: weap, ~promotion.mirage.pdl, ~!upg.mirage2
 		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
 	Tooltip:
 		Name: Mirage Tank (PDL)
 	Valued:
 		Cost: 1400
 
-RTNK.Firerate:
+RTNK.Reflector:
 	Inherits: RTNK
+	Inherits: ^ReflectorArmor
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 75
-		IconPalette: chrometd
-		Prerequisites: weap, ~promotion.mirage_fire_rate
+		Prerequisites: weap, ~promotion.mirage.reflector, ~!upg.mirage2
+		Description: Advanced Battle tank that can cloak when stationary.\n Has Reflector Armor, very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Aircraft.
+	Tooltip:
+		Name: Mirage Tank (Reflector)
+
+RTNK.PDL.Firerate:
+	Inherits: RTNK.PDL
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Buildable:
+		Prerequisites: weap, ~promotion.mirage.pdl, ~promotion.mirage.burst
 		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
 	Tooltip:
-		Name: Mirage Tank (Firerate)
-	Valued:
-		Cost: 1200
+		Name: Mirage Tank (PDL, Firerate)
 	Armament@PRIMARY:
 		Name: primary
 		Turret: primary
 		Weapon: 120mmHEAT.firerate
 
-RTNK.Reflector:
-	Inherits: RTNK
-	Inherits: ^ReflectorArmor
+RTNK.Reflector.Firerate:
+	Inherits: RTNK.Reflector
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
 	Buildable:
-		Prerequisites: weap, ~promotion.mirage.reflector
-		Description: Advanced Battle tank that can cloak when stationary.\n Has Reflector Armor, very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Aircraft.
+		Prerequisites: weap, ~promotion.mirage.reflector, ~promotion.mirage.burst
+		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Projectiles.
 	Tooltip:
-		Name: Mirage Tank (Reflector)
+		Name: Mirage Tank (Reflector, Firerate)
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: 120mmHEAT.firerate
+
+RTNK.PDL.Toughness:
+	Inherits: RTNK.PDL
+	WithProductionIconOverlay@Shield:
+		Types: Shield
+	Buildable:
+		Prerequisites: weap, ~promotion.mirage.pdl, ~promotion.mirage.toughness
+		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
+	Tooltip:
+		Name: Mirage Tank (PDL, Toughness)
+	Health:
+		HP: 63000
+
+RTNK.Reflector.Toughness:
+	Inherits: RTNK.Reflector
+	WithProductionIconOverlay@Shield:
+		Types: Shield
+	Buildable:
+		Prerequisites: weap, ~promotion.mirage.reflector, ~promotion.mirage.toughness
+		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Projectiles.
+	Tooltip:
+		Name: Mirage Tank (Reflector, Toughness)
+	Health:
+		HP: 63000
 
 TNKD:
 	Inherits: ^FightingTank
