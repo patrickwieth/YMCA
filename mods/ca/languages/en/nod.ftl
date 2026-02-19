@@ -209,12 +209,12 @@ nod-factions =
           Recon Bike: Scrin vs. Rocket Hail
           Stealth Tank: Explosives vs. Scrin
           Venom: Payload vs. Heavy Laser
-         Infantry: ++++
-         Artillery: ++
-         Aircraft: +++
-         Defense: ++
-         Heavy Tanks: +
-         Recon&Stealth: +++
+         Infantry: <color=Green>++++</color>
+         Artillery: <color=Yellow>++</color>
+         Aircraft: <color=#8BCF8B>+++</color>
+         Defense: <color=Yellow>++</color>
+         Heavy Tanks: <color=Red>+</color>
+         Recon&Stealth: <color=#8BCF8B>+++</color>
     .factionca-at-15-description =
         Legion: Experimental Technology
         Legion is a sub-faction of the Brotherhood of Nod. The brotherhood has no heavy tanks and relies mostly on hit & run tactics.
@@ -230,12 +230,12 @@ nod-factions =
           Harpy Fly by Fire
           SSM Toxin Missiles
           Flame Tank chemical
-         Infantry: ++++
-         Artillery: +++
-         Aircraft: ++
-         Defense: ++
-         Heavy Tanks: +
-         Recon&Stealth: +++
+         Infantry: <color=Green>++++</color>
+         Artillery: <color=#8BCF8B>+++</color>
+         Aircraft: <color=Yellow>++</color>
+         Defense: <color=Yellow>++</color>
+         Heavy Tanks: <color=Red>+</color>
+         Recon&Stealth: <color=#8BCF8B>+++</color>
     .factionca-at-randomnod-description =
         Random Nod Faction
         A random Nod faction will be chosen when the game starts.
