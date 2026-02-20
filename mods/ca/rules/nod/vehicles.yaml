@@ -540,11 +540,15 @@ SSM.Bunkerbuster:
 
 STNK:
 	Inherits: ^FightingVehicle
+	Inherits: ^VoxelVehicle
 	Inherits: ^TDVehicleSprite
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavyAA
-	Inherits: ^CloakSpriteTurret
+	Inherits: ^CloakVoxel
 	Inherits: ^NodAdvancedStealthVehicle
+	RenderVoxels:
+		Scale: 0.8
+		Image: stealth_tank
 	RenderSprites:
 		Image: stealth_tank
 	Valued:
@@ -574,6 +578,31 @@ STNK:
 		Offset: 0,0,10
 	AttackTurreted:
 		PauseOnCondition: empdisable || being-warped
+	WithVoxelTurret:
+	Cloak@NORMAL:
+		UncloakOn: Attack, Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		PauseOnCondition: cloak-force-disabled
+		RequiresCondition: !advanced_stealth && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+	Cloak@ADVANCEDSTEALTH:
+		InitialDelay: 90
+		CloakDelay: 90
+		CloakSound: trans1.aud
+		UncloakSound: appear1.aud
+		CloakedCondition: hidden
+		CloakStyle: Palette
+		CloakedPalette: cloak_voxel
+		IsPlayerPalette: true
+		EffectImage: stealthfade
+		EffectPalette: greenspark
+		CloakEffectSequence: reversed
+		UncloakEffectSequence: idle
+		EffectTracksActor: True
+		UncloakOn: Unload, Infiltrate, Demolish, Dock, Damage, Heal, SelfHeal
+		PauseOnCondition: cloak-force-disabled
+		RequiresCondition: advanced_stealth && !cloak-force-disabled && !invisibility && !being-warped && !driver-dead
+	GrantConditionOnDamageState@UNCLOAK:
+		Condition: cloak-force-disabled
+		ValidDamageStates: Critical
 
 STNK.Scrin:
 	Inherits: STNK
