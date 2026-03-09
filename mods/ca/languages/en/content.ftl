@@ -1,5 +1,6 @@
 ca-content-package-ramusic = Red Alert Music
 ca-content-package-cncmusic = C&C Music
+ca-content-package-cnccovertopsmusic = Covert Ops Music
 ca-content-package-tsmusic = Tiberian Sun Music
 ca-content-package-fsmusic = Firestorm Music
 ca-content-package-ra2music = Red Alert 2 Music

@@ -6,6 +6,7 @@ modcontent-header =
 
 modcontent-package-ramusic = Red Alert Music
 modcontent-package-cncmusic = C&C Music
+modcontent-package-cnccovertopsmusic = Covert Ops Music
 modcontent-package-tsmusic = Tiberian Sun Music
 modcontent-package-fsmusic = Firestorm Music
 modcontent-package-ymcamusic = YMCA Music
