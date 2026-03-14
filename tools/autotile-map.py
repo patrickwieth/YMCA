@@ -266,19 +266,37 @@ def mpos_to_cpos(u: int, v: int, grid_type: str) -> tuple[int, int]:
 def neighbor_dirs_for_cell(x: int, y: int, grid_type: str) -> list[tuple[int, int, int]]:
     if grid_type != "RectangularIsometric":
         return [(x + dx, y + dy, mask) for dx, dy, mask in RECT_NEIGHBOR_STEPS]
-    return [(x + dx, y + dy, mask) for dx, dy, mask in RECT_NEIGHBOR_STEPS]
+    u, v = cpos_to_mpos(x, y, grid_type)
+    return [(*mpos_to_cpos(u + du, v + dv, grid_type), mask) for du, dv, mask in ISO_NEIGHBOR_STEPS]
 
 
 def diagonal_dirs_for_cell(x: int, y: int, grid_type: str) -> list[tuple[int, int, int]]:
     if grid_type != "RectangularIsometric":
         return [(x + dx, y + dy, mask) for dx, dy, mask in RECT_DIAGONAL_STEPS]
-    return [(x + dx, y + dy, mask) for dx, dy, mask in RECT_DIAGONAL_STEPS]
+    u, v = cpos_to_mpos(x, y, grid_type)
+    return [(*mpos_to_cpos(u + du, v + dv, grid_type), mask) for du, dv, mask in ISO_DIAGONAL_STEPS]
 
 
 def offsets_by_mask(x: int, y: int, dirs: list[tuple[int, int, int]]) -> dict[int, tuple[int, int]]:
     offsets: dict[int, tuple[int, int]] = {}
     for nx, ny, mask in dirs:
         offsets[mask] = (nx - x, ny - y)
+    return offsets
+
+
+def autotile_offsets_for_cell(x: int, y: int, grid_type: str, radius: int = 3) -> list[tuple[int, int]]:
+    offsets: list[tuple[int, int]] = []
+    if grid_type in ("Rectangular", "RectangularIsometric"):
+        for dy in range(-radius, radius + 1):
+            for dx in range(-radius, radius + 1):
+                offsets.append((dx, dy))
+        return offsets
+
+    u, v = cpos_to_mpos(x, y, grid_type)
+    for dv in range(-radius, radius + 1):
+        for du in range(-radius, radius + 1):
+            nx, ny = mpos_to_cpos(u + du, v + dv, grid_type)
+            offsets.append((nx - x, ny - y))
     return offsets
 
 
@@ -602,13 +620,32 @@ def resolve_all(
     pattern_group_id: str | None = None,
     pattern_only: bool = False,
     iterations: int = 1,
+    cell_space: str = "mpos",
 ) -> list[list[int]]:
     width = len(ids)
     height = len(ids[0]) if width else 0
     current_ids = [[ids[x][y] for y in range(height)] for x in range(width)]
 
     def contains(x: int, y: int) -> bool:
-        return 0 <= x < width and 0 <= y < height
+        if cell_space == "mpos":
+            return 0 <= x < width and 0 <= y < height
+        if grid_type == "RectangularIsometric" and x < y:
+            return False
+        u, v = cpos_to_mpos(x, y, grid_type)
+        return 0 <= u < width and 0 <= v < height
+
+    def get_tid(source_ids: list[list[int]], x: int, y: int) -> int:
+        if cell_space == "mpos":
+            return source_ids[x][y]
+        u, v = cpos_to_mpos(x, y, grid_type)
+        return source_ids[u][v]
+
+    def set_tid(target_ids: list[list[int]], x: int, y: int, value: int) -> None:
+        if cell_space == "mpos":
+            target_ids[x][y] = value
+            return
+        u, v = cpos_to_mpos(x, y, grid_type)
+        target_ids[u][v] = value
 
     def is_normal_priority(nei_p: int, grp_p: int) -> bool:
         return nei_p > grp_p if rules.use_higher_priority else nei_p < grp_p
@@ -619,7 +656,7 @@ def resolve_all(
     def is_base_template_in_group(x: int, y: int, group_id: str) -> bool:
         if not contains(x, y):
             return False
-        tid = current_ids[x][y]
+        tid = get_tid(current_ids, x, y)
         st = rules.style_by_template.get(tid)
         if not st:
             return False
@@ -629,7 +666,7 @@ def resolve_all(
         for nx, ny, _ in neighbor_dirs_for_cell(x, y, grid_type):
             if not contains(nx, ny):
                 return False
-            tid = current_ids[nx][ny]
+            tid = get_tid(current_ids, nx, ny)
             st = rules.style_by_template.get(tid)
             if not st or st.group_id != enclosing_group_id:
                 return False
@@ -682,7 +719,7 @@ def resolve_all(
     ) -> bool:
         if not contains(x, y):
             return False
-        tid = current_ids[x][y]
+        tid = get_tid(current_ids, x, y)
         neighbor_style = rules.style_by_template.get(tid)
         if not neighbor_style:
             return False
@@ -729,7 +766,7 @@ def resolve_all(
     ) -> bool:
         if not contains(x, y):
             return False
-        tid = current_ids[x][y]
+        tid = get_tid(current_ids, x, y)
         neighbor_style = rules.style_by_template.get(tid)
         if not neighbor_style:
             return False
@@ -760,6 +797,34 @@ def resolve_all(
             return True
         return neighbor_group_id in style.transitions
 
+    def try_find_pattern_only_neighbor_group(
+        x: int, y: int, style: Style, group_priority: int
+    ) -> str | None:
+        selected_priority = -10**9
+        selected_group_id = None
+
+        for candidate_group_id, candidate_transitions in style.transitions.items():
+            if not candidate_transitions or not candidate_transitions.get("PatternOnly", False):
+                continue
+
+            neighbor_group = rules.groups.get(candidate_group_id)
+            if not neighbor_group:
+                continue
+
+            if not any(
+                is_base_neighbor_group(nx, ny, style, neighbor_group, group_priority, candidate_group_id)
+                for nx, ny, _ in neighbor_dirs_for_cell(x, y, grid_type)
+            ):
+                continue
+
+            if neighbor_group.priority <= selected_priority:
+                continue
+
+            selected_priority = neighbor_group.priority
+            selected_group_id = candidate_group_id
+
+        return selected_group_id
+
     def try_find_neighbor_group(
         x: int, y: int, style: Style, group_priority: int
     ) -> tuple[str | None, str | None]:
@@ -770,7 +835,7 @@ def resolve_all(
         for nx, ny, _ in neighbor_dirs_for_cell(x, y, grid_type):
             if not contains(nx, ny):
                 continue
-            tid = current_ids[nx][ny]
+            tid = get_tid(current_ids, nx, ny)
             neighbor_style = rules.style_by_template.get(tid)
             if not neighbor_style:
                 continue
@@ -801,10 +866,260 @@ def resolve_all(
 
         return selected_group_id, selected_style_id
 
+    def has_base_group_in_pattern_radius(x: int, y: int, group_id: str, radius: int) -> bool:
+        if radius <= 0:
+            return False
+
+        if grid_type != "RectangularIsometric":
+            for dv in range(-radius, radius + 1):
+                for du in range(-radius, radius + 1):
+                    if du == 0 and dv == 0:
+                        continue
+                    if is_base_template_in_group(x + du, y + dv, group_id):
+                        return True
+            return False
+
+        u, v = cpos_to_mpos(x, y, grid_type)
+        for dv in range(-radius, radius + 1):
+            for du in range(-radius, radius + 1):
+                if du == 0 and dv == 0:
+                    continue
+                nx, ny = mpos_to_cpos(u + du, v + dv, grid_type)
+                if is_base_template_in_group(nx, ny, group_id):
+                    return True
+        return False
+
+    def try_find_pattern_neighbor_group(
+        x: int, y: int, style: Style, group_priority: int
+    ) -> str | None:
+        selected_priority = -10**9
+        selected_group_id = None
+
+        for candidate_group_id, candidate_transitions in style.transitions.items():
+            if not candidate_transitions:
+                continue
+            radius = int(candidate_transitions.get("PatternRadius", 0) or 0)
+            raw_map = candidate_transitions.get("PatternMap")
+            if radius <= 0 or not isinstance(raw_map, dict) or len(raw_map) == 0:
+                continue
+
+            neighbor_group = rules.groups.get(candidate_group_id)
+            if not neighbor_group:
+                continue
+            if not has_base_group_in_pattern_radius(x, y, candidate_group_id, radius):
+                continue
+            if neighbor_group.priority <= selected_priority:
+                continue
+
+            selected_priority = neighbor_group.priority
+            selected_group_id = candidate_group_id
+
+        return selected_group_id
+
     def try_resolve_transitions(style: Style, neighbor_group_id: str, neighbor_style_id: str | None) -> dict[str, int] | None:
         if neighbor_style_id is not None and neighbor_style_id in style.transitions:
             return style.transitions[neighbor_style_id]
         return style.transitions.get(neighbor_group_id)
+
+    def rotate_pattern_tuple(bits: tuple[bool, ...], radius: int, turns: int) -> tuple[bool, ...]:
+        if turns % 4 == 0 or radius <= 0:
+            return bits
+
+        offsets = pattern_offsets_for_radius(radius)
+        index_by_offset = {offset: i for i, offset in enumerate(offsets)}
+
+        rotated = [False] * len(bits)
+        for src, (du, dv) in enumerate(offsets):
+            for _ in range(turns % 4):
+                du, dv = dv, -du
+            rotated[index_by_offset[(du, dv)]] = bits[src]
+        return tuple(rotated)
+
+    def pattern_offsets_for_radius(radius: int) -> list[tuple[int, int]]:
+        offsets: list[tuple[int, int]] = []
+        for dv in range(-radius, radius + 1):
+            for du in range(-radius, radius + 1):
+                if du == 0 and dv == 0:
+                    continue
+                offsets.append((du, dv))
+        return offsets
+
+    def gcd(a: int, b: int) -> int:
+        a = abs(a)
+        b = abs(b)
+        while b != 0:
+            a, b = b, a % b
+        return a or 1
+
+    def normalize_pattern_direction(du: int, dv: int) -> tuple[int, int]:
+        d = gcd(du, dv)
+        return (du, dv) if d <= 1 else (du // d, dv // d)
+
+    def pattern_ray_step(du: int, dv: int) -> int:
+        return gcd(du, dv)
+
+    def is_compatible_pattern_superset(
+        actual_bits: tuple[bool, ...], candidate_bits: tuple[bool, ...], radius: int
+    ) -> tuple[int, int] | None:
+        offsets = pattern_offsets_for_radius(radius)
+        if len(actual_bits) != len(candidate_bits) or len(candidate_bits) != len(offsets):
+            return None
+
+        nearest_steps_by_direction: dict[tuple[int, int], int] = {}
+        specificity = 0
+        extra_count = 0
+
+        for i, bit in enumerate(candidate_bits):
+            du, dv = offsets[i]
+            step = pattern_ray_step(du, dv)
+            if step == 1 and actual_bits[i] != candidate_bits[i]:
+                return None
+
+            if not bit:
+                continue
+            if not actual_bits[i]:
+                return None
+            specificity += 1
+            direction = normalize_pattern_direction(du, dv)
+            current = nearest_steps_by_direction.get(direction)
+            if current is None or step < current:
+                nearest_steps_by_direction[direction] = step
+
+        for i, bit in enumerate(actual_bits):
+            if not bit or candidate_bits[i]:
+                continue
+            extra_count += 1
+            du, dv = offsets[i]
+            direction = normalize_pattern_direction(du, dv)
+            step = pattern_ray_step(du, dv)
+            nearest = nearest_steps_by_direction.get(direction)
+            if nearest is None or nearest != 1 or nearest >= step:
+                return None
+
+        return specificity, extra_count
+
+    def try_find_compatible_pattern_template(
+        actual_bits: tuple[bool, ...], transitions: dict[str, int], radius: int
+    ) -> tuple[int, int, int] | None:
+        raw_map = transitions.get("PatternMap")
+        if not isinstance(raw_map, dict) or len(raw_map) == 0:
+            return None
+
+        best_template_id = None
+        best_specificity = -1
+        best_extra_count = 10**9
+        ambiguous = False
+        for candidate_bits, template_id in pattern_map.items():
+            match = is_compatible_pattern_superset(actual_bits, candidate_bits, radius)
+            if match is None:
+                continue
+
+            specificity, extra_count = match
+            if (
+                best_template_id is None
+                or specificity > best_specificity
+                or (specificity == best_specificity and extra_count < best_extra_count)
+            ):
+                best_template_id = template_id
+                best_specificity = specificity
+                best_extra_count = extra_count
+                ambiguous = False
+                continue
+
+            if specificity == best_specificity and extra_count == best_extra_count and template_id != best_template_id:
+                ambiguous = True
+
+        if best_template_id is None or ambiguous:
+            return None
+
+        return best_template_id, best_specificity, best_extra_count
+
+    def rotate_template_ccw_once(transitions: dict[str, int], template_id: int) -> int:
+        if template_id == transitions.get("N", 0): return transitions.get("W", template_id)
+        if template_id == transitions.get("W", 0): return transitions.get("S", template_id)
+        if template_id == transitions.get("S", 0): return transitions.get("E", template_id)
+        if template_id == transitions.get("E", 0): return transitions.get("N", template_id)
+        if template_id == transitions.get("NE", 0): return transitions.get("NW", template_id)
+        if template_id == transitions.get("NW", 0): return transitions.get("SW", template_id)
+        if template_id == transitions.get("SW", 0): return transitions.get("SE", template_id)
+        if template_id == transitions.get("SE", 0): return transitions.get("NE", template_id)
+        if template_id == transitions.get("WNE", 0): return transitions.get("SWN", template_id)
+        if template_id == transitions.get("SWN", 0): return transitions.get("ESW", template_id)
+        if template_id == transitions.get("ESW", 0): return transitions.get("NES", template_id)
+        if template_id == transitions.get("NES", 0): return transitions.get("WNE", template_id)
+        if template_id == transitions.get("U_NW", 0): return transitions.get("U_SW", template_id)
+        if template_id == transitions.get("U_SW", 0): return transitions.get("U_SE", template_id)
+        if template_id == transitions.get("U_SE", 0): return transitions.get("U_NE", template_id)
+        if template_id == transitions.get("U_NE", 0): return transitions.get("U_NW", template_id)
+        if template_id == transitions.get("End_NW", 0): return transitions.get("End_SW", template_id)
+        if template_id == transitions.get("End_SW", 0): return transitions.get("End_SE", template_id)
+        if template_id == transitions.get("End_SE", 0): return transitions.get("End_NE", template_id)
+        if template_id == transitions.get("End_NE", 0): return transitions.get("End_NW", template_id)
+        if template_id == transitions.get("Parallel_NE_SW", 0): return transitions.get("Parallel_NW_SE", template_id)
+        if template_id == transitions.get("Parallel_NW_SE", 0): return transitions.get("Parallel_NE_SW", template_id)
+        return template_id
+
+    def rotate_template_ccw(transitions: dict[str, int], template_id: int, turns: int) -> int:
+        for _ in range(turns % 4):
+            template_id = rotate_template_ccw_once(transitions, template_id)
+        return template_id
+
+    def try_resolve_pattern_template(
+        x: int, y: int, style: Style, neighbor_group_id: str, transitions: dict[str, int]
+    ) -> int | None:
+        raw_map = transitions.get("PatternMap")
+        radius = int(transitions.get("PatternRadius", 0) or 0)
+        if radius <= 0 or not isinstance(raw_map, dict) or len(raw_map) == 0:
+            return None
+
+        key = pattern_for_cell(x, y, style, neighbor_group_id)
+        if key is None:
+            return None
+        if pattern_map and neighbor_group_id == pattern_group_id and key in pattern_map:
+            return pattern_map[key]
+
+        if grid_type == "RectangularIsometric":
+            for turns in range(1, 4):
+                rotated_key = rotate_pattern_tuple(key, radius, turns)
+                if rotated_key not in pattern_map:
+                    continue
+                return rotate_template_ccw(transitions, pattern_map[rotated_key], turns)
+
+        best = try_find_compatible_pattern_template(key, transitions, radius)
+        if best is not None:
+            return best[0]
+
+        if grid_type == "RectangularIsometric":
+            best_template = None
+            best_specificity = -1
+            best_extra_count = 10**9
+            ambiguous = False
+            for turns in range(1, 4):
+                rotated_key = rotate_pattern_tuple(key, radius, turns)
+                best = try_find_compatible_pattern_template(rotated_key, transitions, radius)
+                if best is None:
+                    continue
+
+                template_id, specificity, extra_count = best
+                resolved_template_id = rotate_template_ccw(transitions, template_id, turns)
+                if (
+                    best_template is None
+                    or specificity > best_specificity
+                    or (specificity == best_specificity and extra_count < best_extra_count)
+                ):
+                    best_template = resolved_template_id
+                    best_specificity = specificity
+                    best_extra_count = extra_count
+                    ambiguous = False
+                    continue
+
+                if specificity == best_specificity and extra_count == best_extra_count and resolved_template_id != best_template:
+                    ambiguous = True
+
+            if best_template is not None and not ambiguous:
+                return best_template
+
+        return None
 
     def try_resolve_special_template(
         x: int,
@@ -839,6 +1154,7 @@ def resolve_all(
         seT = edge_at(diagonal_offsets.get(4 | 2), 1 | 8)
         swT = edge_at(diagonal_offsets.get(4 | 8), 1 | 2)
         all_orth = nT and eT and sT and wT
+        allow_end_caps = grid_type != "RectangularIsometric"
 
         if transitions.get("Hole", 0) and all_orth and neT and nwT and seT and swT:
             return transitions["Hole"]
@@ -852,13 +1168,13 @@ def resolve_all(
         if transitions.get("ESW", 0) and sT and eT and not nT and not wT and seT and neT and swT and not nwT:
             return transitions["ESW"]
 
-        if transitions.get("End_NW", 0) and nT and wT and not eT and not sT and not nwT:
+        if allow_end_caps and transitions.get("End_NW", 0) and nT and wT and not eT and not sT and not nwT:
             return transitions["End_NW"]
-        if transitions.get("End_NE", 0) and nT and eT and not sT and not wT and not neT:
+        if allow_end_caps and transitions.get("End_NE", 0) and nT and eT and not sT and not wT and not neT:
             return transitions["End_NE"]
-        if transitions.get("End_SE", 0) and sT and eT and not nT and not wT and not seT:
+        if allow_end_caps and transitions.get("End_SE", 0) and sT and eT and not nT and not wT and not seT:
             return transitions["End_SE"]
-        if transitions.get("End_SW", 0) and sT and wT and not nT and not eT and not swT:
+        if allow_end_caps and transitions.get("End_SW", 0) and sT and wT and not nT and not eT and not swT:
             return transitions["End_SW"]
 
         if all_orth:
@@ -923,7 +1239,7 @@ def resolve_all(
         return apply_mask_direction_overrides(mask, rules.invert_mask)
 
     def resolve_template(x: int, y: int) -> int:
-        tid = current_ids[x][y]
+        tid = get_tid(current_ids, x, y) if cell_space != "mpos" else current_ids[x][y]
         style = rules.style_by_template.get(tid)
         if not style:
             return tid
@@ -938,25 +1254,15 @@ def resolve_all(
         neighbor_group_id = None
         neighbor_style_id = None
 
-        # Prefer pattern-only groups based on base neighbors.
-        for candidate_group_id, candidate_transitions in style.transitions.items():
-            if not candidate_transitions or not candidate_transitions.get("PatternOnly", False):
-                continue
-            neighbor_group = rules.groups.get(candidate_group_id)
-            if not neighbor_group:
-                continue
-            if any(
-                is_base_neighbor_group(nx, ny, style, neighbor_group, group.priority, candidate_group_id)
-                for nx, ny, _ in neighbor_dirs_for_cell(x, y, grid_type)
-            ):
-                neighbor_group_id = candidate_group_id
-                base_only = True
-                break
-
-        if neighbor_group_id is None:
+        neighbor_group_id = try_find_pattern_only_neighbor_group(x, y, style, group.priority)
+        if neighbor_group_id is not None:
+            base_only = True
+        else:
             neighbor_group_id, neighbor_style_id = try_find_neighbor_group(x, y, style, group.priority)
             if not neighbor_group_id:
-                return style.base_template
+                neighbor_group_id = try_find_pattern_neighbor_group(x, y, style, group.priority)
+                if not neighbor_group_id:
+                    return style.base_template
 
         transitions = try_resolve_transitions(style, neighbor_group_id, neighbor_style_id)
         if not transitions:
@@ -965,12 +1271,11 @@ def resolve_all(
         if transitions.get("PatternOnly", False):
             base_only = True
 
-        if pattern_map and neighbor_group_id == pattern_group_id:
-            key = pattern_for_cell(x, y)
-            if key is not None and key in pattern_map:
-                return pattern_map[key]
-            if pattern_only:
-                return tid
+        pattern_template = try_resolve_pattern_template(x, y, style, neighbor_group_id, transitions)
+        if pattern_template is not None:
+            return pattern_template
+        if transitions.get("PatternMap") and transitions.get("PatternOnly", False):
+            return style.base_template
 
         special = try_resolve_special_template(x, y, style, group.priority, neighbor_group_id, transitions, base_only)
         if special:
@@ -999,40 +1304,52 @@ def resolve_all(
             base_group_by_cell = None
             return
 
-        base_group_by_cell = [[None for _ in range(height)] for _ in range(width)]
-        for x in range(width):
-            for y in range(height):
-                tid = current_ids[x][y]
-                style = rules.style_by_template.get(tid)
-                if style and tid == style.base_template:
-                    base_group_by_cell[x][y] = style.group_id
+        base_group_by_cell = {}
+        if cell_space == "mpos":
+            for x in range(width):
+                for y in range(height):
+                    tid = current_ids[x][y]
+                    style = rules.style_by_template.get(tid)
+                    if style and tid == style.base_template:
+                        base_group_by_cell[(x, y)] = style.group_id
+        else:
+            for u in range(width):
+                for v in range(height):
+                    tid = current_ids[u][v]
+                    style = rules.style_by_template.get(tid)
+                    if style and tid == style.base_template:
+                        cx, cy = mpos_to_cpos(u, v, grid_type)
+                        base_group_by_cell[(cx, cy)] = style.group_id
 
-    def pattern_for_cell(x: int, y: int) -> tuple[bool, ...] | None:
+    def pattern_for_cell(x: int, y: int, style: Style, neighbor_group_id: str) -> tuple[bool, ...] | None:
         if not pattern_map or not pattern_offsets or not pattern_group_id:
             return None
-        tid = current_ids[x][y]
-        style = rules.style_by_template.get(tid)
-        if not style or pattern_group_id not in style.transitions:
+        if neighbor_group_id != pattern_group_id or neighbor_group_id not in style.transitions:
             return None
         bits = []
-        if grid_type == "RectangularIsometric":
+        if cell_space == "mpos" and grid_type != "RectangularIsometric":
             for du, dv in pattern_offsets:
                 nx, ny = x + du, y + dv
                 in_group = False
                 if 0 <= nx < width and 0 <= ny < height:
-                    in_group = base_group_by_cell[nx][ny] == pattern_group_id
+                    in_group = base_group_by_cell.get((nx, ny)) == pattern_group_id
                 bits.append(in_group)
         else:
             u, v = cpos_to_mpos(x, y, grid_type)
             for du, dv in pattern_offsets:
                 nx, ny = mpos_to_cpos(u + du, v + dv, grid_type)
                 in_group = False
-                if 0 <= nx < width and 0 <= ny < height:
-                    in_group = base_group_by_cell[nx][ny] == pattern_group_id
+                if contains(nx, ny):
+                    in_group = base_group_by_cell.get((nx, ny)) == pattern_group_id
                 bits.append(in_group)
         return tuple(bits)
 
-    targets = update_cells if update_cells is not None else {(x, y) for x in range(width) for y in range(height)}
+    if update_cells is not None:
+        targets = update_cells
+    elif cell_space == "mpos":
+        targets = {(x, y) for x in range(width) for y in range(height)}
+    else:
+        targets = {mpos_to_cpos(u, v, grid_type) for u in range(width) for v in range(height)}
     target_list = sorted(targets)
 
     for _ in range(max(1, iterations)):
@@ -1043,8 +1360,8 @@ def resolve_all(
             new_value = None
             if new_value is None:
                 new_value = resolve_template(x, y)
-            if new_value != current_ids[x][y]:
-                next_ids[x][y] = new_value
+            if new_value != get_tid(current_ids, x, y):
+                set_tid(next_ids, x, y, new_value)
                 changed += 1
         current_ids = next_ids
         if changed == 0:
@@ -1053,10 +1370,153 @@ def resolve_all(
     return current_ids
 
 
+def parse_cells(values: list[str]) -> list[tuple[int, int]]:
+    cells: list[tuple[int, int]] = []
+    for value in values:
+        for part in value.split(";"):
+            part = part.strip()
+            if not part:
+                continue
+            x_str, y_str = part.split(",", 1)
+            cells.append((int(x_str), int(y_str)))
+    return cells
+
+
+def simulate_brush_stroke(
+    ids: list[list[int]],
+    rules: AutoTileRules,
+    grid_type: str,
+    paint_template: int,
+    paint_cells: list[tuple[int, int]],
+    pattern_map: dict[tuple[bool, ...], int] | None = None,
+    pattern_offsets: list[tuple[int, int]] | None = None,
+    pattern_group_id: str | None = None,
+    pattern_only: bool = False,
+    finalize: bool = True,
+    max_passes: int = 8,
+) -> tuple[list[list[int]], list[str]]:
+    auto_tile_update_radius = 3
+    auto_tile_finalize_padding = 8
+    width = len(ids)
+    height = len(ids[0]) if width else 0
+    current_ids = [[ids[x][y] for y in range(height)] for x in range(width)]
+    trace: list[str] = []
+
+    def contains(x: int, y: int) -> bool:
+        if grid_type == "RectangularIsometric" and x < y:
+            return False
+        u, v = cpos_to_mpos(x, y, grid_type)
+        return 0 <= u < width and 0 <= v < height
+
+    def get_tid(source_ids: list[list[int]], x: int, y: int) -> int:
+        u, v = cpos_to_mpos(x, y, grid_type)
+        return source_ids[u][v]
+
+    def set_tid(target_ids: list[list[int]], x: int, y: int, value: int) -> None:
+        u, v = cpos_to_mpos(x, y, grid_type)
+        target_ids[u][v] = value
+
+    def add_autotile_cells(targets: set[tuple[int, int]], seed: tuple[int, int]) -> None:
+        sx, sy = seed
+        for dx, dy in autotile_offsets_for_cell(sx, sy, grid_type, radius=auto_tile_update_radius):
+            nx, ny = sx + dx, sy + dy
+            if contains(nx, ny):
+                targets.add((nx, ny))
+
+    def add_autotile_bounding_region(targets: set[tuple[int, int]], seeds: list[tuple[int, int]]) -> None:
+        if not seeds:
+            return
+
+        min_x = min(x for x, _ in seeds) - auto_tile_finalize_padding
+        max_x = max(x for x, _ in seeds) + auto_tile_finalize_padding
+        min_y = min(y for _, y in seeds) - auto_tile_finalize_padding
+        max_y = max(y for _, y in seeds) + auto_tile_finalize_padding
+        for y in range(min_y, max_y + 1):
+            for x in range(min_x, max_x + 1):
+                if contains(x, y):
+                    targets.add((x, y))
+
+    def normalize_autotile_cells(source_ids: list[list[int]], targets: set[tuple[int, int]]) -> list[list[int]]:
+        normalized_ids = [[source_ids[x][y] for y in range(height)] for x in range(width)]
+        for x, y in sorted(targets, key=lambda c: (c[1], c[0])):
+            tid = get_tid(normalized_ids, x, y)
+            style = rules.style_by_template.get(tid)
+            if not style or tid == style.base_template:
+                continue
+            set_tid(normalized_ids, x, y, style.base_template)
+        return normalized_ids
+
+    def run_action(label: str, seeds: list[tuple[int, int]], include_bounding_region: bool = False) -> None:
+        nonlocal current_ids
+        auto_tile_cells: set[tuple[int, int]] = set()
+        for seed in seeds:
+            add_autotile_cells(auto_tile_cells, seed)
+        if include_bounding_region:
+            add_autotile_bounding_region(auto_tile_cells, seeds)
+
+        total_updates = 0
+        for brush_pass in range(max_passes):
+            normalized_ids = normalize_autotile_cells(current_ids, auto_tile_cells)
+            next_ids = resolve_all(
+                normalized_ids,
+                rules,
+                auto_tile_cells,
+                grid_type,
+                pattern_map=pattern_map,
+                pattern_offsets=pattern_offsets,
+                pattern_group_id=pattern_group_id,
+                pattern_only=pattern_only,
+                iterations=1,
+                cell_space="cpos",
+            )
+
+            changed_cells = [
+                (x, y, get_tid(current_ids, x, y), get_tid(next_ids, x, y))
+                for (x, y) in sorted(auto_tile_cells, key=lambda c: (c[1], c[0]))
+                if get_tid(next_ids, x, y) != get_tid(current_ids, x, y)
+            ]
+
+            if not changed_cells:
+                trace.append(f"{label}: pass={brush_pass} touched={len(auto_tile_cells)} updates=0")
+                break
+
+            total_updates += len(changed_cells)
+            trace.append(
+                f"{label}: pass={brush_pass} touched={len(auto_tile_cells)} updates={len(changed_cells)} "
+                f"sample={changed_cells[:12]}"
+            )
+
+            current_ids = next_ids
+            for x, y, _, _ in changed_cells:
+                add_autotile_cells(auto_tile_cells, (x, y))
+        else:
+            trace.append(f"{label}: reached max_passes={max_passes} total_updates={total_updates}")
+
+    stroke_seeds: list[tuple[int, int]] = []
+    for step, (x, y) in enumerate(paint_cells, start=1):
+        if not contains(x, y):
+            trace.append(f"paint[{step}]: skip out-of-bounds cell={(x, y)}")
+            continue
+        old_id = get_tid(current_ids, x, y)
+        set_tid(current_ids, x, y, paint_template)
+        stroke_seeds.append((x, y))
+        trace.append(f"paint[{step}]: cell={(x, y)} {old_id}->{paint_template}")
+        run_action(f"stroke[{step}]", [(x, y)])
+
+    if finalize and stroke_seeds:
+        run_action("finalize", stroke_seeds, include_bounding_region=True)
+
+    return current_ids, trace
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Reapply AutoTile transitions to a map.")
     parser.add_argument("map", type=Path, help="Path to .oramap")
     parser.add_argument("--dry-run", action="store_true", help="Do not write changes")
+    parser.add_argument("--simulate-paint-cell", action="append", help="Simulate brush painting for x,y or x1,y1;x2,y2")
+    parser.add_argument("--simulate-paint-template", type=int, help="Template id to paint during simulation")
+    parser.add_argument("--simulate-no-finalize", action="store_true", help="Skip the final stroke retile pass in simulation")
+    parser.add_argument("--simulate-dump-radius", type=int, default=4, help="Dump changed cells within this radius around simulated paint")
     parser.add_argument("--marker-id", type=int, help="Only update patches near this marker tile id")
     parser.add_argument("--pattern-learn-marker", type=int, help="Learn a pattern map from patches near this marker tile id")
     parser.add_argument("--pattern-radius", type=int, default=3, help="Pattern radius in MPos (default: 3)")
@@ -1190,6 +1650,56 @@ def main() -> int:
         )
         if yaml_pattern_only:
             pattern_only = True
+
+    if args.simulate_paint_cell:
+        if args.simulate_paint_template is None:
+            raise SystemExit("--simulate-paint-template is required with --simulate-paint-cell")
+
+        paint_cells = parse_cells(args.simulate_paint_cell)
+        simulated_ids, trace = simulate_brush_stroke(
+            ids,
+            rules,
+            grid_type,
+            args.simulate_paint_template,
+            paint_cells,
+            pattern_map=pattern_map,
+            pattern_offsets=pattern_offsets,
+            pattern_group_id=pattern_group_id if pattern_map else None,
+            pattern_only=pattern_only,
+            finalize=not args.simulate_no_finalize,
+        )
+
+        for line in trace:
+            print(line)
+
+        def contains_cpos(x: int, y: int) -> bool:
+            if grid_type == "RectangularIsometric" and x < y:
+                return False
+            u, v = cpos_to_mpos(x, y, grid_type)
+            return 0 <= u < width and 0 <= v < height
+
+        def get_tid(source_ids: list[list[int]], x: int, y: int) -> int:
+            u, v = cpos_to_mpos(x, y, grid_type)
+            return source_ids[u][v]
+
+        dump_radius = max(0, args.simulate_dump_radius)
+        focus: set[tuple[int, int]] = set()
+        for sx, sy in paint_cells:
+            for dy in range(-dump_radius, dump_radius + 1):
+                for dx in range(-dump_radius, dump_radius + 1):
+                    x, y = sx + dx, sy + dy
+                    if contains_cpos(x, y):
+                        focus.add((x, y))
+
+        changed = [
+            (x, y, get_tid(original_ids, x, y), get_tid(simulated_ids, x, y))
+            for x, y in sorted(focus, key=lambda c: (c[1], c[0]))
+            if get_tid(original_ids, x, y) != get_tid(simulated_ids, x, y)
+        ]
+        print(f"simulate changed={len(changed)} focus={len(focus)}")
+        for x, y, old_id, new_id in changed:
+            print(f"  cell=({x},{y}) {old_id}->{new_id}")
+        return 0
 
     update_cells: set[tuple[int, int]] | None = None
     if args.marker_id is not None:
