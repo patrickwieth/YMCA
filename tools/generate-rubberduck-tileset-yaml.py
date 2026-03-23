@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from math import ceil
 from pathlib import Path
+import subprocess
 
 
 DEBUG_AUTOTILE = True
@@ -9,6 +10,27 @@ FRAME_SIZE = (128, 64)
 BASE_FRAME_AMOUNT = 80
 SOURCE_BLOCK_COLS = 8
 SOURCE_BLOCK_ROWS = 10
+ATOMIC_PATTERN_ORDER = [
+    "N",
+    "E",
+    "S",
+    "W",
+    "NE",
+    "NW",
+    "SE",
+    "SW",
+    "WNE",
+    "NES",
+    "SWN",
+    "ESW",
+]
+ATOMIC_OVERLAY_TEMPLATE_IDS = {
+    "grass_a": 3000,
+    "grass_b": 3020,
+    "sand": 3040,
+    "dirt_a": 3060,
+    "dirt_b": 3080,
+}
 
 
 TERRAIN_SECTION = """Terrain:
@@ -349,6 +371,10 @@ Templates:
     templates.append(emit_template(1020, "Rubberduck Sand", base_images["sand"], "Sand", None))
     templates.append(emit_template(1030, "Rubberduck Dirt", base_images["dirt_a"], "Dirt", None))
     templates.append(emit_template(1040, "Rubberduck Dirt", base_images["dirt_b"], "Dirt", None))
+    templates.append(emit_template(1050, "Rubberduck Markers", f"bits/terrain/rubberduck/water_marker_v01{suffix}.png", "Water", [0]))
+    templates.append(emit_template(1060, "Rubberduck Markers", f"bits/terrain/rubberduck/water_marker_v02{suffix}.png", "Water", [0]))
+    templates.append(emit_template(1070, "Rubberduck Water", f"bits/terrain/rubberduck/water_v01{suffix}.png", "Water", None))
+    templates.append(emit_template(1080, "Rubberduck Water", f"bits/terrain/rubberduck/water_v02{suffix}.png", "Water", None))
 
     def add_transition_set(transition_key: str, base_id: int, image: str, nesw_image: str, terrain: str = "Clear") -> None:
         for i, pattern in enumerate(PATTERN_ORDER):
@@ -407,6 +433,14 @@ Templates:
         "sand_over_grass_b": f"bits/terrain/rubberduck/sand_over_grass_b_nesw{suffix}.png",
     }
 
+    atomic_overlay_images = {
+        "grass_a": f"bits/terrain/rubberduck/grass_a_atomic_overlay{suffix}.png",
+        "grass_b": f"bits/terrain/rubberduck/grass_b_atomic_overlay{suffix}.png",
+        "sand": f"bits/terrain/rubberduck/sand_atomic_overlay{suffix}.png",
+        "dirt_a": f"bits/terrain/rubberduck/dirt_a_atomic_overlay{suffix}.png",
+        "dirt_b": f"bits/terrain/rubberduck/dirt_b_atomic_overlay{suffix}.png",
+    }
+
     add_transition_set("grass_a_over_dirt", 1100, transition_images["grass_a_over_dirt"], nesw_images["grass_a_over_dirt"])
     add_transition_set("grass_a_over_sand", 1120, transition_images["grass_a_over_sand"], nesw_images["grass_a_over_sand"])
     add_transition_set("grass_b_over_dirt", 1140, transition_images["grass_b_over_dirt"], nesw_images["grass_b_over_dirt"])
@@ -417,6 +451,26 @@ Templates:
     add_transition_set("sand_over_dirt_dark", 1240, transition_images["sand_over_dirt_dark"], nesw_images["sand_over_dirt_dark"])
     add_transition_set("sand_over_grass_a", 1260, transition_images["sand_over_grass_a"], nesw_images["sand_over_grass_a"], terrain="Sand")
     add_transition_set("sand_over_grass_b", 1280, transition_images["sand_over_grass_b"], nesw_images["sand_over_grass_b"], terrain="Sand")
+
+    def add_atomic_overlay_set(style_key: str, terrain: str) -> None:
+        image = atomic_overlay_images[style_key]
+        base_id = ATOMIC_OVERLAY_TEMPLATE_IDS[style_key]
+        for i, pattern in enumerate(ATOMIC_PATTERN_ORDER):
+            templates.append(
+                emit_template(
+                    base_id + i,
+                    "Rubberduck Transitions",
+                    image,
+                    terrain,
+                    [i],
+                )
+            )
+
+    add_atomic_overlay_set("grass_a", "Clear")
+    add_atomic_overlay_set("grass_b", "Clear")
+    add_atomic_overlay_set("sand", "Sand")
+    add_atomic_overlay_set("dirt_a", "Dirt")
+    add_atomic_overlay_set("dirt_b", "Dirt")
 
     output.write_text(header + "\n\n".join(templates) + "\n", encoding="ascii")
 
@@ -509,6 +563,16 @@ def generate_special_transition_images(root: Path) -> None:
     frame_w, frame_h = FRAME_SIZE
     extra_frames = sum(len(SPECIAL_PATTERN_FRAMES[p]) for p in ALL_SPECIAL_PATTERNS)
     new_frame_amount = BASE_FRAME_AMOUNT + extra_frames
+
+    def embed_frame_metadata(image_path: Path) -> None:
+        utility = root / "utility.cmd"
+        subprocess.run(
+            [str(utility), "ca", "--png-sheet-import", str(image_path)],
+            cwd=root,
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
 
     def frame_rect(index: int, frames_per_row: int) -> tuple[int, int, int, int]:
         row = index // frames_per_row
@@ -763,6 +827,90 @@ def generate_special_transition_images(root: Path) -> None:
 
             new_image.save(image_path)
             update_frame_amount(meta_path)
+            embed_frame_metadata(image_path)
+
+
+def generate_atomic_overlay_images(root: Path) -> None:
+    try:
+        from PIL import Image
+    except Exception as exc:
+        raise RuntimeError("PIL is required to generate atomic overlay images.") from exc
+
+    rubberduck_dir = root / "mods" / "ca" / "bits" / "terrain" / "rubberduck"
+    source_dir = root.parent / "rubberduck terrain"
+    frame_w, frame_h = FRAME_SIZE
+
+    if not source_dir.exists():
+        raise FileNotFoundError(f"Source tileset directory not found: {source_dir}")
+
+    def embed_frame_metadata(image_path: Path) -> None:
+        utility = root / "utility.cmd"
+        subprocess.run(
+            [str(utility), "ca", "--png-sheet-import", str(image_path)],
+            cwd=root,
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+
+    def source_block_index(terrain_key: str, shaded: bool) -> int:
+        if terrain_key == "grass_a":
+            return 1 if shaded else 0
+        if terrain_key == "grass_b":
+            return 3 if shaded else 2
+        if terrain_key == "dirt_a":
+            return 1 if shaded else 0
+        if terrain_key == "dirt_b":
+            return 3 if shaded else 2
+        if terrain_key == "sand":
+            return 1 if shaded else 0
+        raise ValueError(f"Unknown terrain key: {terrain_key}")
+
+    def source_sheet_name(terrain_key: str) -> str:
+        if terrain_key.startswith("grass"):
+            return "grass"
+        if terrain_key.startswith("sand"):
+            return "sand"
+        if terrain_key.startswith("dirt"):
+            return "dirt"
+        raise ValueError(f"Unknown terrain key: {terrain_key}")
+
+    def frame_rect(index: int, block_index: int) -> tuple[int, int, int, int]:
+        row = index // SOURCE_BLOCK_COLS
+        col = index % SOURCE_BLOCK_COLS
+        x0 = col * frame_w
+        y0 = (block_index * SOURCE_BLOCK_ROWS + row) * frame_h
+        return (x0, y0, x0 + frame_w, y0 + frame_h)
+
+    def write_metadata(meta_path: Path, frame_count: int) -> None:
+        meta_path.write_text(
+            f"FrameSize: {frame_w},{frame_h}\nFrameAmount: {frame_count}\n",
+            encoding="ascii",
+        )
+
+    for terrain_key in ATOMIC_OVERLAY_TEMPLATE_IDS:
+        for suffix in ("", "_shaded"):
+            shaded = suffix == "_shaded"
+            block_index = source_block_index(terrain_key, shaded)
+            sheet_path = source_dir / f"{source_sheet_name(terrain_key)}_tiles_w_trans.png"
+            if not sheet_path.exists():
+                raise FileNotFoundError(f"Overlay source not found: {sheet_path}")
+
+            source_image = Image.open(sheet_path).convert("RGBA")
+            output = Image.new("RGBA", (frame_w * 4, frame_h * 3), (0, 0, 0, 0))
+
+            for i, pattern in enumerate(ATOMIC_PATTERN_ORDER):
+                source_index = SHEET_FRAMES[pattern][0]
+                tile = source_image.crop(frame_rect(source_index, block_index))
+                x = (i % 4) * frame_w
+                y = (i // 4) * frame_h
+                output.paste(tile, (x, y))
+
+            output_path = rubberduck_dir / f"{terrain_key}_atomic_overlay{suffix}.png"
+            meta_path = rubberduck_dir / f"{terrain_key}_atomic_overlay{suffix}.yaml"
+            output.save(output_path)
+            write_metadata(meta_path, len(ATOMIC_PATTERN_ORDER))
+            embed_frame_metadata(output_path)
 
 
 def main() -> None:
@@ -772,6 +920,7 @@ def main() -> None:
     tilesets_dir.mkdir(parents=True, exist_ok=True)
     rules_dir.mkdir(parents=True, exist_ok=True)
 
+    generate_atomic_overlay_images(root)
     generate_special_transition_images(root)
     generate_tileset_yaml(tilesets_dir / "rubberduck-temperate.yaml", shaded=False)
     generate_tileset_yaml(tilesets_dir / "rubberduck-temperate-shaded.yaml", shaded=True)
