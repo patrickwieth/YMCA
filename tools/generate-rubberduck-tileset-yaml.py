@@ -492,12 +492,14 @@ def generate_autotile_yaml(output: Path) -> None:
         return "\n".join(lines)
 
     world_block = f"""\tAutoTile:
+\t\tEnabled: true
 \t\tDebug: {str(DEBUG_AUTOTILE).lower()}
 \t\tUseHigherPriority: false
 \t\tInvertMask: false
 \t\tIncludeDiagonals: true
 \t\tAllowEnclosedTransitions: true
 \t\tIgnoreNonBaseTemplates: false
+\t\tIgnoreTransitionNeighbors: true
 \t\tGroups:
 \t\t\tDirt:
 \t\t\t\tPriority: 1
@@ -540,6 +542,7 @@ def generate_autotile_yaml(output: Path) -> None:
 \t\t\tDirtDark:
 \t\t\t\tGroup: Dirt
 \t\t\t\tBaseTemplate: 1040
+\tTerrainTransitionOverlay:
 """
 
     autotile = f"""World:
@@ -900,7 +903,16 @@ def generate_atomic_overlay_images(root: Path) -> None:
             output = Image.new("RGBA", (frame_w * 4, frame_h * 3), (0, 0, 0, 0))
 
             for i, pattern in enumerate(ATOMIC_PATTERN_ORDER):
-                source_index = SHEET_FRAMES[pattern][0]
+                if pattern == "N":
+                    source_index = SHEET_FRAMES["WNE"][1]
+                elif pattern == "E":
+                    source_index = SHEET_FRAMES["NES"][1]
+                elif pattern == "S":
+                    source_index = SHEET_FRAMES["ESW"][1]
+                elif pattern == "W":
+                    source_index = SHEET_FRAMES["SWN"][1]
+                else:
+                    source_index = SHEET_FRAMES[pattern][0]
                 tile = source_image.crop(frame_rect(source_index, block_index))
                 x = (i % 4) * frame_w
                 y = (i // 4) * frame_h

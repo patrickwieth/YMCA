@@ -59,14 +59,14 @@ namespace Win32
 }
 "@
 
-function Test-BitmapHasContent {
+function Test-BitmapHasUsefulContent {
     param(
         [Parameter(Mandatory = $true)]
         [System.Drawing.Bitmap]$Bitmap
     )
 
-    $stepX = [Math]::Max(1, [int]($Bitmap.Width / 16))
-    $stepY = [Math]::Max(1, [int]($Bitmap.Height / 16))
+    $stepX = [Math]::Max(1, [int]($Bitmap.Width / 32))
+    $stepY = [Math]::Max(1, [int]($Bitmap.Height / 32))
     $nonBlack = 0
     $sampled = 0
 
@@ -74,13 +74,14 @@ function Test-BitmapHasContent {
         for ($x = 0; $x -lt $Bitmap.Width; $x += $stepX) {
             $pixel = $Bitmap.GetPixel($x, $y)
             $sampled++
-            if (($pixel.A -gt 0) -and (($pixel.R + $pixel.G + $pixel.B) -gt 24)) {
+            if (($pixel.A -gt 0) -and (($pixel.R + $pixel.G + $pixel.B) -gt 40)) {
                 $nonBlack++
             }
         }
     }
 
-    return $sampled -gt 0 -and $nonBlack -ge 4
+    if ($sampled -le 0) { return $false }
+    return ($nonBlack / $sampled) -ge 0.08
 }
 
 $process = Get-Process OpenRA -ErrorAction SilentlyContinue |
@@ -98,31 +99,6 @@ Start-Sleep -Milliseconds 200
 try { [Microsoft.VisualBasic.Interaction]::AppActivate($process.Id) | Out-Null } catch { }
 [void][Win32.User32]::SetWindowPos($process.MainWindowHandle, [IntPtr](-1), 0, 0, 0, 0, 0x0001 -bor 0x0002 -bor 0x0040)
 Start-Sleep -Milliseconds 400
-
-$rect = New-Object Win32.RECT
-if (-not [Win32.User32]::GetClientRect($process.MainWindowHandle, [ref]$rect)) {
-    throw "Failed to query OpenRA client bounds."
-}
-
-$topLeft = New-Object Win32.User32+POINT
-$topLeft.X = $rect.Left
-$topLeft.Y = $rect.Top
-if (-not [Win32.User32]::ClientToScreen($process.MainWindowHandle, [ref]$topLeft)) {
-    throw "Failed to convert OpenRA client origin to screen coordinates."
-}
-
-$bottomRight = New-Object Win32.User32+POINT
-$bottomRight.X = $rect.Right
-$bottomRight.Y = $rect.Bottom
-if (-not [Win32.User32]::ClientToScreen($process.MainWindowHandle, [ref]$bottomRight)) {
-    throw "Failed to convert OpenRA client bottom-right to screen coordinates."
-}
-
-$width = $bottomRight.X - $topLeft.X
-$height = $bottomRight.Y - $topLeft.Y
-if ($width -le 0 -or $height -le 0) {
-    throw "OpenRA window bounds are invalid: ${width}x${height}."
-}
 
 $windowRect = New-Object Win32.RECT
 if (-not [Win32.User32]::GetWindowRect($process.MainWindowHandle, [ref]$windowRect)) {
@@ -149,30 +125,27 @@ if ($destDir -and -not (Test-Path $destDir)) {
 
 $bitmap = $null
 $graphics = $null
-$windowBitmap = $null
-$windowGraphics = $null
+$printBitmap = $null
+$printGraphics = $null
 try {
-    $clientX = $topLeft.X - $windowRect.Left
-    $clientY = $topLeft.Y - $windowRect.Top
-    $clientRect = New-Object System.Drawing.Rectangle($clientX, $clientY, $width, $height)
-
-    $windowBitmap = New-Object System.Drawing.Bitmap($windowWidth, $windowHeight)
-    $windowGraphics = [System.Drawing.Graphics]::FromImage($windowBitmap)
-    $windowHdc = $windowGraphics.GetHdc()
+    $printBitmap = New-Object System.Drawing.Bitmap($windowWidth, $windowHeight)
+    $printGraphics = [System.Drawing.Graphics]::FromImage($printBitmap)
+    $hdc = $printGraphics.GetHdc()
     try {
-        $printOk = [Win32.User32]::PrintWindow($process.MainWindowHandle, $windowHdc, 2)
+        $printOk = [Win32.User32]::PrintWindow($process.MainWindowHandle, $hdc, 0)
     }
     finally {
-        $windowGraphics.ReleaseHdc($windowHdc)
+        $printGraphics.ReleaseHdc($hdc)
     }
 
-    if ($printOk -and (Test-BitmapHasContent -Bitmap $windowBitmap)) {
-        $bitmap = $windowBitmap.Clone($clientRect, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+    if ($printOk -and (Test-BitmapHasUsefulContent -Bitmap $printBitmap)) {
+        $bitmap = $printBitmap
+        $printBitmap = $null
     }
     else {
-        $bitmap = New-Object System.Drawing.Bitmap($width, $height)
+        $bitmap = New-Object System.Drawing.Bitmap($windowWidth, $windowHeight)
         $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-        $graphics.CopyFromScreen($topLeft.X, $topLeft.Y, 0, 0, $bitmap.Size)
+        $graphics.CopyFromScreen($windowRect.Left, $windowRect.Top, 0, 0, $bitmap.Size)
     }
 
     $bitmap.Save($destPath, [System.Drawing.Imaging.ImageFormat]::Png)
@@ -181,8 +154,8 @@ finally {
     [void][Win32.User32]::SetWindowPos($process.MainWindowHandle, [IntPtr](-2), 0, 0, 0, 0, 0x0001 -bor 0x0002 -bor 0x0040)
     if ($null -ne $graphics) { $graphics.Dispose() }
     if ($null -ne $bitmap) { $bitmap.Dispose() }
-    if ($null -ne $windowGraphics) { $windowGraphics.Dispose() }
-    if ($null -ne $windowBitmap) { $windowBitmap.Dispose() }
+    if ($null -ne $printGraphics) { $printGraphics.Dispose() }
+    if ($null -ne $printBitmap) { $printBitmap.Dispose() }
 }
 
 Write-Output $destPath
