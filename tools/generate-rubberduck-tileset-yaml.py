@@ -7,6 +7,7 @@ import subprocess
 
 DEBUG_AUTOTILE = True
 FRAME_SIZE = (128, 64)
+HIGH_CLIFF_FRAME_SIZE = (128, 192)
 BASE_FRAME_AMOUNT = 80
 SOURCE_BLOCK_COLS = 8
 SOURCE_BLOCK_ROWS = 10
@@ -30,6 +31,42 @@ ATOMIC_OVERLAY_TEMPLATE_IDS = {
     "sand": 3040,
     "dirt_a": 3060,
     "dirt_b": 3080,
+}
+ROCK_CLIFF_BRUSH_TEMPLATE_ID = 3990
+WALL_CLIFF_BRUSH_TEMPLATE_ID = 3991
+ROCK_CLIFF_TEMPLATE_BASE_ID = 4000
+WALL_CLIFF_TEMPLATE_BASE_ID = 6000
+WALL_CLIFF_COLUMN_TEMPLATE_BASE_ID = 6400
+CLIFF_BASE_TEMPLATE_BASE_IDS = {
+    "grass": 9000,
+    "sand": 9120,
+    "dirt": 9200,
+}
+HIGH_CLIFF_TEMPLATE_BASE_IDS = {
+    "high_sw": 12000,
+    "high_se": 12020,
+    "high_s_outer": 12040,
+    "high_s_inner": 12060,
+    "high_e_outer": 12080,
+    "high_w_outer": 12100,
+    "high_e_inner": 12120,
+    "high_w_inner": 12130,
+    "high_ne_outer": 12140,
+    "high_nw_outer": 12150,
+    "high_n_outer": 12160,
+}
+HIGH_CLIFF_PICKANY_TEMPLATE_IDS = {
+    "high_sw": 11900,
+    "high_se": 11910,
+    "high_s_outer": 11920,
+    "high_s_inner": 11930,
+    "high_e_outer": 11940,
+    "high_w_outer": 11950,
+    "high_e_inner": 11960,
+    "high_w_inner": 11970,
+    "high_ne_outer": 11980,
+    "high_nw_outer": 11990,
+    "high_n_outer": 11995,
 }
 
 
@@ -326,6 +363,153 @@ def emit_template(
     return "\n".join(lines)
 
 
+def emit_sized_template(
+    template_id: int,
+    categories: str,
+    image: str,
+    size: tuple[int, int],
+    terrain_by_tile: list[str],
+    frames: list[int] | None,
+) -> str:
+    lines: list[str] = []
+    lines.append(f"\tTemplate@{template_id}:")
+    lines.append(f"\t\tCategories: {categories}")
+    lines.append(f"\t\tId: {template_id}")
+    lines.append(f"\t\tImages: {image}")
+    lines.append(f"\t\tSize: {size[0]}, {size[1]}")
+    if frames is not None:
+        lines.append(f"\t\tFrames: {format_frames(frames)}")
+    lines.append("\t\tTiles:")
+    for i, terrain in enumerate(terrain_by_tile):
+        lines.append(f"\t\t\t{i}: {terrain}")
+    return "\n".join(lines)
+
+
+def emit_high_cliff_actual_template(
+    template_id: int,
+    categories: str,
+    image: str,
+    terrain: str,
+    frame_index: int,
+) -> str:
+    return emit_sized_template(template_id, categories, image, (1, 1), [terrain], [frame_index])
+
+
+def emit_high_cliff_selector_template(
+    template_id: int,
+    categories: str,
+    image: str,
+    terrain: str,
+    frame_indices: list[int],
+) -> str:
+    return emit_template(template_id, categories, image, terrain, frame_indices)
+
+
+def write_sheet_metadata(meta_path: Path, frame_count: int, frame_size: tuple[int, int] = FRAME_SIZE) -> None:
+    meta_path.write_text(
+        f"FrameSize: {frame_size[0]},{frame_size[1]}\nFrameAmount: {frame_count}\n",
+        encoding="ascii",
+    )
+
+
+def embed_frame_metadata_for_root(root: Path, image_path: Path) -> None:
+    utility = root / "utility.cmd"
+    subprocess.run(
+        [str(utility), "ca", "--png-sheet-import", str(image_path)],
+        cwd=root,
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+
+
+def fill_transparent_pixels(base_image, fill_image):
+    output = fill_image.copy()
+    output_pixels = list(output.getdata())
+    base_pixels = list(base_image.getdata())
+    for i, pixel in enumerate(base_pixels):
+        if pixel[3] > 0:
+            output_pixels[i] = pixel
+
+    output.putdata(output_pixels)
+    return output
+
+
+def make_high_cliff_underlay(grass_underlay):
+    from PIL import Image
+
+    opaque_pixels = [(r, g, b) for r, g, b, a in grass_underlay.getdata() if a]
+    if opaque_pixels:
+        avg_r = sum(r for r, _, _ in opaque_pixels) // len(opaque_pixels)
+        avg_g = sum(g for _, g, _ in opaque_pixels) // len(opaque_pixels)
+        avg_b = sum(b for _, _, b in opaque_pixels) // len(opaque_pixels)
+        tile_underlay = Image.new("RGBA", FRAME_SIZE, (avg_r, avg_g, avg_b, 255))
+    else:
+        tile_underlay = Image.new("RGBA", FRAME_SIZE, (40, 68, 40, 255))
+
+    tile_underlay.alpha_composite(grass_underlay, (0, 0))
+
+    underlay = Image.new("RGBA", HIGH_CLIFF_FRAME_SIZE, (0, 0, 0, 0))
+    for y in range(FRAME_SIZE[1], HIGH_CLIFF_FRAME_SIZE[1], FRAME_SIZE[1]):
+        underlay.alpha_composite(tile_underlay, (0, y))
+
+    return underlay
+
+
+def nonempty_frame_indices(image_path: Path) -> list[int]:
+    return nonempty_frame_indices_for_size(image_path, FRAME_SIZE)
+
+
+def nonempty_frame_indices_for_size(image_path: Path, frame_size: tuple[int, int]) -> list[int]:
+    try:
+        from PIL import Image
+    except Exception as exc:
+        raise RuntimeError("PIL is required to enumerate cliff frames.") from exc
+
+    fw, fh = frame_size
+    image = Image.open(image_path).convert("RGBA")
+    cols = image.width // fw
+    rows = image.height // fh
+    frames: list[int] = []
+
+    for index in range(cols * rows):
+        x = (index % cols) * fw
+        y = (index // cols) * fh
+        if image.crop((x, y, x + fw, y + fh)).getbbox():
+            frames.append(index)
+
+    return frames
+
+
+def valid_rock_cliff_frame_indices(image_path: Path) -> list[int]:
+    try:
+        from PIL import Image
+    except Exception as exc:
+        raise RuntimeError("PIL is required to enumerate cliff frames.") from exc
+
+    fw, fh = FRAME_SIZE
+    image = Image.open(image_path).convert("RGBA")
+    cols = image.width // fw
+    rows = image.height // fh
+    frames: list[int] = []
+
+    for index in range(cols * rows):
+        x = (index % cols) * fw
+        y = (index // cols) * fh
+        frame = image.crop((x, y, x + fw, y + fh))
+        bbox = frame.getbbox()
+        if not bbox:
+            continue
+
+        width = bbox[2] - bbox[0]
+        height = bbox[3] - bbox[1]
+        alpha_sum = sum(frame.getchannel("A").getdata())
+        if width >= 32 and height >= 16 and alpha_sum >= 50000:
+            frames.append(index)
+
+    return frames
+
+
 def generate_tileset_yaml(output: Path, shaded: bool) -> None:
     suffix = "_shaded" if shaded else ""
     tileset_id = "RUBBERDUCK-TEMPERATE-SHADED" if shaded else "RUBBERDUCK-TEMPERATE"
@@ -337,7 +521,7 @@ def generate_tileset_yaml(output: Path, shaded: bool) -> None:
 \tTileSize: 128, 64
 \tSheetSize: 2048
 \tEnableDepth: false
-\tEditorTemplateOrder: Rubberduck Grass, Rubberduck Dirt, Rubberduck Sand, Rubberduck Transitions
+\tEditorTemplateOrder: Rubberduck Grass, Rubberduck Dirt, Rubberduck Sand, Rubberduck High Cliff Brush
 
 {TERRAIN_SECTION}
 Templates:
@@ -440,6 +624,32 @@ Templates:
         "dirt_a": f"bits/terrain/rubberduck/dirt_a_atomic_overlay{suffix}.png",
         "dirt_b": f"bits/terrain/rubberduck/dirt_b_atomic_overlay{suffix}.png",
     }
+    rock_cliff_image = f"bits/terrain/rubberduck/rock_cliffs{suffix}.png"
+    wall_cliff_image = f"bits/terrain/rubberduck/wall_cliffs{suffix}.png"
+    wall_cliff_columns_image = f"bits/terrain/rubberduck/wall_cliff_columns{suffix}.png"
+    cliff_base_images = {
+        "grass": f"bits/terrain/rubberduck/grass_cliff_trans{suffix}.png",
+        "sand": f"bits/terrain/rubberduck/sand_cliff_trans{suffix}.png",
+        "dirt": f"bits/terrain/rubberduck/dirt_cliff_trans{suffix}.png",
+    }
+    cliff_base_terrains = {
+        "grass": "Clear",
+        "sand": "Sand",
+        "dirt": "Dirt",
+    }
+    high_cliff_images = {
+        "high_sw": f"bits/terrain/rubberduck/cliffs/high_sw{suffix}.png",
+        "high_se": f"bits/terrain/rubberduck/cliffs/high_se{suffix}.png",
+        "high_s_outer": f"bits/terrain/rubberduck/cliffs/high_s_outer{suffix}.png",
+        "high_s_inner": f"bits/terrain/rubberduck/cliffs/high_s_inner{suffix}.png",
+        "high_e_outer": f"bits/terrain/rubberduck/cliffs/high_e_outer{suffix}.png",
+        "high_w_outer": f"bits/terrain/rubberduck/cliffs/high_w_outer{suffix}.png",
+        "high_e_inner": f"bits/terrain/rubberduck/cliffs/high_e_inner{suffix}.png",
+        "high_w_inner": f"bits/terrain/rubberduck/cliffs/high_w_inner{suffix}.png",
+        "high_ne_outer": f"bits/terrain/rubberduck/cliffs/high_ne_outer{suffix}.png",
+        "high_nw_outer": f"bits/terrain/rubberduck/cliffs/high_nw_outer{suffix}.png",
+        "high_n_outer": f"bits/terrain/rubberduck/cliffs/high_n_outer{suffix}.png",
+    }
 
     add_transition_set("grass_a_over_dirt", 1100, transition_images["grass_a_over_dirt"], nesw_images["grass_a_over_dirt"])
     add_transition_set("grass_a_over_sand", 1120, transition_images["grass_a_over_sand"], nesw_images["grass_a_over_sand"])
@@ -471,6 +681,71 @@ Templates:
     add_atomic_overlay_set("sand", "Sand")
     add_atomic_overlay_set("dirt_a", "Dirt")
     add_atomic_overlay_set("dirt_b", "Dirt")
+
+    rock_cliff_source = output.parent.parent / "bits" / "terrain" / "rubberduck" / f"rock_cliffs{suffix}.png"
+    wall_cliff_source = output.parent.parent / "bits" / "terrain" / "rubberduck" / f"wall_cliffs{suffix}.png"
+    wall_cliff_columns_source = output.parent.parent / "bits" / "terrain" / "rubberduck" / f"wall_cliff_columns{suffix}.png"
+
+    if rock_cliff_source.exists():
+        templates.append(emit_template(ROCK_CLIFF_BRUSH_TEMPLATE_ID, "Rubberduck Rock Cliff Brush", rock_cliff_image, "Cliff", [24]))
+        for i, frame_index in enumerate(valid_rock_cliff_frame_indices(rock_cliff_source)):
+            templates.append(emit_template(ROCK_CLIFF_TEMPLATE_BASE_ID + i, "Rubberduck Rock Cliffs", rock_cliff_image, "Cliff", [frame_index]))
+
+    if wall_cliff_source.exists():
+        templates.append(emit_template(WALL_CLIFF_BRUSH_TEMPLATE_ID, "Rubberduck Wall Cliff Brush", wall_cliff_columns_image, "Cliff", [0]))
+        for i, frame_index in enumerate(nonempty_frame_indices(wall_cliff_source)):
+            templates.append(emit_template(WALL_CLIFF_TEMPLATE_BASE_ID + i, "Rubberduck Wall Cliffs", wall_cliff_image, "Cliff", [frame_index]))
+
+    if wall_cliff_columns_source.exists():
+        for i, frame_index in enumerate(nonempty_frame_indices(wall_cliff_columns_source)):
+            templates.append(emit_template(WALL_CLIFF_COLUMN_TEMPLATE_BASE_ID + i, "Rubberduck Wall Cliffs", wall_cliff_columns_image, "Cliff", [frame_index]))
+
+    high_cliff_actual_category = "Rubberduck High Cliff Atomics"
+    for key, base_id in HIGH_CLIFF_TEMPLATE_BASE_IDS.items():
+        source = output.parent.parent / "bits" / "terrain" / "rubberduck" / "cliffs" / f"{key}{suffix}.png"
+        if not source.exists():
+            continue
+
+        frame_indices = nonempty_frame_indices_for_size(source, HIGH_CLIFF_FRAME_SIZE)
+        if not frame_indices:
+            continue
+
+        templates.append(
+            emit_high_cliff_selector_template(
+                HIGH_CLIFF_PICKANY_TEMPLATE_IDS[key],
+                "Rubberduck High Cliff Brush" if key in ("high_sw", "high_se") else "Rubberduck High Cliff Sets",
+                high_cliff_images[key],
+                "Clear",
+                frame_indices,
+            )
+        )
+
+        for i, frame_index in enumerate(frame_indices):
+            templates.append(
+                emit_high_cliff_actual_template(
+                    base_id + i,
+                    high_cliff_actual_category,
+                    high_cliff_images[key],
+                    "Clear",
+                    frame_index,
+                )
+            )
+
+    for key, base_id in CLIFF_BASE_TEMPLATE_BASE_IDS.items():
+        base_source = output.parent.parent / "bits" / "terrain" / "rubberduck" / f"{key}_cliff_trans{suffix}.png"
+        if not base_source.exists():
+            continue
+
+        for i, frame_index in enumerate(nonempty_frame_indices(base_source)):
+            templates.append(
+                emit_template(
+                    base_id + i,
+                    "Rubberduck Cliff Bases",
+                    cliff_base_images[key],
+                    cliff_base_terrains[key],
+                    [frame_index],
+                )
+            )
 
     output.write_text(header + "\n\n".join(templates) + "\n", encoding="ascii")
 
@@ -543,6 +818,7 @@ def generate_autotile_yaml(output: Path) -> None:
 \t\t\t\tGroup: Dirt
 \t\t\t\tBaseTemplate: 1040
 \tTerrainTransitionOverlay:
+\tHighCliffOverlay:
 """
 
     autotile = f"""World:
@@ -925,6 +1201,54 @@ def generate_atomic_overlay_images(root: Path) -> None:
             embed_frame_metadata(output_path)
 
 
+def generate_high_cliff_images(root: Path) -> None:
+    try:
+        from PIL import Image
+    except Exception as exc:
+        raise RuntimeError("PIL is required to generate high cliff images.") from exc
+
+    rubberduck_dir = root / "mods" / "ca" / "bits" / "terrain" / "rubberduck"
+    source_dir = root.parent / "rubberduck terrain" / "cliffs"
+    high_cliffs_dir = rubberduck_dir / "cliffs"
+    high_cliffs_dir.mkdir(parents=True, exist_ok=True)
+
+    sources = {
+        "high_sw": source_dir / "high SW.png",
+        "high_se": source_dir / "high SE.png",
+        "high_s_outer": source_dir / "high S outer corner.png",
+        "high_s_inner": source_dir / "high S inner corner.png",
+        "high_e_outer": source_dir / "high E outer corner.png",
+        "high_w_outer": source_dir / "high W outer corner.png",
+        "high_e_inner": source_dir / "high E inner corner.png",
+        "high_w_inner": source_dir / "high W inner corner.png",
+        "high_ne_outer": source_dir / "high NE outer corner.png",
+        "high_nw_outer": source_dir / "high NW outer corner.png",
+        "high_n_outer": source_dir / "high N outer corner.png",
+    }
+
+    for key, source_path in sources.items():
+        if not source_path.exists():
+            raise FileNotFoundError(f"Cliff atomic source not found: {source_path}")
+
+        base_image = Image.open(source_path).convert("RGBA")
+        source_frames_per_row = base_image.width // HIGH_CLIFF_FRAME_SIZE[0]
+        source_frame_count = (base_image.width // HIGH_CLIFF_FRAME_SIZE[0]) * (base_image.height // HIGH_CLIFF_FRAME_SIZE[1])
+
+        for suffix in ("", "_shaded"):
+            output_image = Image.new("RGBA", base_image.size, (0, 0, 0, 0))
+            for frame_index in range(source_frame_count):
+                sx = (frame_index % source_frames_per_row) * HIGH_CLIFF_FRAME_SIZE[0]
+                sy = (frame_index // source_frames_per_row) * HIGH_CLIFF_FRAME_SIZE[1]
+                frame = base_image.crop((sx, sy, sx + HIGH_CLIFF_FRAME_SIZE[0], sy + HIGH_CLIFF_FRAME_SIZE[1]))
+                output_image.alpha_composite(frame, (sx, sy))
+
+            output_path = high_cliffs_dir / f"{key}{suffix}.png"
+            meta_path = high_cliffs_dir / f"{key}{suffix}.yaml"
+            output_image.save(output_path)
+            write_sheet_metadata(meta_path, source_frame_count, HIGH_CLIFF_FRAME_SIZE)
+            embed_frame_metadata_for_root(root, output_path)
+
+
 def main() -> None:
     root = Path(__file__).resolve().parents[1]
     tilesets_dir = root / "mods" / "ca" / "tilesets"
@@ -934,6 +1258,7 @@ def main() -> None:
 
     generate_atomic_overlay_images(root)
     generate_special_transition_images(root)
+    generate_high_cliff_images(root)
     generate_tileset_yaml(tilesets_dir / "rubberduck-temperate.yaml", shaded=False)
     generate_tileset_yaml(tilesets_dir / "rubberduck-temperate-shaded.yaml", shaded=True)
     generate_autotile_yaml(rules_dir / "autotile.yaml")

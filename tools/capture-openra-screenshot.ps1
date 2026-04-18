@@ -55,6 +55,9 @@ namespace Win32
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+
     }
 }
 "@
@@ -82,6 +85,57 @@ function Test-BitmapHasUsefulContent {
 
     if ($sampled -le 0) { return $false }
     return ($nonBlack / $sampled) -ge 0.08
+}
+
+function Get-OpenRAScreenshotRoots {
+    param(
+        [string]$ModId,
+        [System.Diagnostics.Process]$Process
+    )
+
+    $roots = New-Object System.Collections.Generic.List[string]
+
+    $appDataRoot = Join-Path $env:APPDATA "OpenRA\Screenshots\$ModId"
+    if (Test-Path $appDataRoot) {
+        $roots.Add($appDataRoot)
+    }
+
+    try {
+        $processDir = Split-Path -Parent $Process.MainModule.FileName
+        $engineDir = Split-Path -Parent $processDir
+        $localRoot = Join-Path $engineDir "Support\Screenshots\$ModId"
+        if (Test-Path $localRoot) {
+            $roots.Add($localRoot)
+        }
+    }
+    catch { }
+
+    return $roots
+}
+
+function Find-NewestOpenRAScreenshot {
+    param(
+        [string[]]$Roots,
+        [datetime]$After
+    )
+
+    $candidate = $null
+    foreach ($root in $Roots) {
+        if (-not (Test-Path $root)) {
+            continue
+        }
+
+        $latest = Get-ChildItem -Path $root -Recurse -Filter "*.png" -ErrorAction SilentlyContinue |
+            Where-Object { $_.LastWriteTime -ge $After } |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+
+        if ($latest -and (($null -eq $candidate) -or ($latest.LastWriteTime -gt $candidate.LastWriteTime))) {
+            $candidate = $latest
+        }
+    }
+
+    return $candidate
 }
 
 $process = Get-Process OpenRA -ErrorAction SilentlyContinue |
@@ -121,6 +175,31 @@ else {
 $destDir = Split-Path -Parent $destPath
 if ($destDir -and -not (Test-Path $destDir)) {
     New-Item -ItemType Directory -Path $destDir | Out-Null
+}
+
+$screenshotRoots = @(Get-OpenRAScreenshotRoots -ModId $ModId -Process $process)
+$screenshotStart = (Get-Date).AddSeconds(-1)
+if ($screenshotRoots.Length -gt 0) {
+    [void][Win32.User32]::SetForegroundWindow($process.MainWindowHandle)
+    try { [Microsoft.VisualBasic.Interaction]::AppActivate($process.Id) | Out-Null } catch { }
+
+    # Trigger OpenRA's own framebuffer screenshot. This avoids black captures from
+    # OpenGL/DirectX windows where PrintWindow and CopyFromScreen can fail.
+    [Win32.User32]::keybd_event(0x7B, 0, 0, [UIntPtr]::Zero)
+    Start-Sleep -Milliseconds 50
+    [Win32.User32]::keybd_event(0x7B, 0, 2, [UIntPtr]::Zero)
+
+    $deadline = (Get-Date).AddSeconds($TimeoutSec)
+    while ((Get-Date) -lt $deadline) {
+        Start-Sleep -Milliseconds 250
+        $screenshot = Find-NewestOpenRAScreenshot -Roots $screenshotRoots -After $screenshotStart
+        if ($screenshot) {
+            Copy-Item -LiteralPath $screenshot.FullName -Destination $destPath -Force
+            [void][Win32.User32]::SetWindowPos($process.MainWindowHandle, [IntPtr](-2), 0, 0, 0, 0, 0x0001 -bor 0x0002 -bor 0x0040)
+            Write-Output $destPath
+            return
+        }
+    }
 }
 
 $bitmap = $null
