@@ -5,8 +5,10 @@ set "BUILD_LOG=%TEMP%\ymca-make-output.log"
 if exist "%BUILD_LOG%" del /f /q "%BUILD_LOG%" >nul 2>&1
 if exist "%BUILD_LOG%" set "BUILD_LOG=%TEMP%\ymca-make-output-%RANDOM%.log"
 
+pushd "%~dp0.."
 call make.cmd all > "%BUILD_LOG%" 2>&1
 set "BUILD_RC=%ERRORLEVEL%"
+popd
 type "%BUILD_LOG%"
 echo.
 if %BUILD_RC% NEQ 0 (
@@ -28,58 +30,27 @@ if %ERRORLEVEL% EQU 0 (
 
 del /f /q "%BUILD_LOG%" >nul 2>&1
 
-FOR /F "tokens=1,2 delims==" %%A IN (mod.config) DO (set %%A=%%B)
-if exist user.config (FOR /F "tokens=1,2 delims==" %%A IN (user.config) DO (set %%A=%%B))
+FOR /F "usebackq tokens=1,2 delims==" %%A IN ("%~dp0..\mod.config") DO (set %%A=%%B)
+if exist "%~dp0..\user.config" (FOR /F "usebackq tokens=1,2 delims==" %%A IN ("%~dp0..\user.config") DO (set %%A=%%B))
 
 if "!MOD_ID!"=="" goto badconfig
 if "!ENGINE_VERSION!"=="" goto badconfig
 if "!ENGINE_DIRECTORY!"=="" goto badconfig
 
-set TEMPLATE_DIR=%CD%
-set MAP_NAME=testmap
-set MAP_SOURCE_DIR=%TEMPLATE_DIR%\mods\ca\maps\All that Glitters B
-set MAP_WORK_DIR=%TEMP%\ymca_%MAP_NAME%_pack
-set MAP_WORK_FILE=%MAP_WORK_DIR%.oramap
-set MAP_OUTPUT=%TEMPLATE_DIR%\tools\%MAP_NAME%.oramap
+set TEMPLATE_DIR=%~dp0..
+set MAP_PACKAGE=testmap1.oramap
 set MOD_SEARCH_PATHS=%TEMPLATE_DIR%\mods,%~dp0mods,./mods
-for %%I in ("%ENGINE_DIRECTORY%") do set "ENGINE_DIR=%%~fI"
 
-if not exist "%MAP_SOURCE_DIR%" goto nosourcemap
+if not exist "%TEMPLATE_DIR%\mods\ca\maps\%MAP_PACKAGE%" goto nomap
 
-if exist "%MAP_WORK_DIR%" rmdir /s /q "%MAP_WORK_DIR%"
-robocopy "%MAP_SOURCE_DIR%" "%MAP_WORK_DIR%" /MIR >nul
-if %ERRORLEVEL% GEQ 8 goto mapcopyfailed
+if not exist "%~dp0..\engine\bin\OpenRA.exe" goto noengine
+>nul findstr /C:"%ENGINE_VERSION%" "%~dp0..\engine\VERSION" || goto noengine
 
-if exist "%MAP_WORK_FILE%" del /f /q "%MAP_WORK_FILE%" >nul 2>&1
-set "MAP_TEMP_ZIP=%TEMP%\testmap_pack_%RANDOM%_%RANDOM%.zip"
-if exist "%MAP_TEMP_ZIP%" del /f /q "%MAP_TEMP_ZIP%" >nul 2>&1
-for %%I in ("%MAP_WORK_DIR%") do set "_PS_MAP_DIR=%%~fI"
-for %%I in ("%MAP_TEMP_ZIP%") do set "_PS_MAP_FILE=%%~fI"
-powershell -NoProfile -Command "Set-StrictMode -Version Latest; Set-Location -LiteralPath \"%_PS_MAP_DIR%\"; Compress-Archive -Path * -DestinationPath \"%_PS_MAP_FILE%\" -Force"
-set MAP_PACK_RC=%ERRORLEVEL%
-set "_PS_MAP_DIR="
-set "_PS_MAP_FILE="
-if %MAP_PACK_RC% EQU 0 if exist "%MAP_TEMP_ZIP%" move /Y "%MAP_TEMP_ZIP%" "%MAP_WORK_FILE%" >nul
-set "MAP_TEMP_ZIP="
-if %MAP_PACK_RC% NEQ 0 goto maprepackfailed
-
-if not exist "%MAP_WORK_FILE%" goto nomap
-
-copy /Y "%MAP_WORK_FILE%" "%MAP_OUTPUT%" >nul
-if %ERRORLEVEL% NEQ 0 goto mapcopyfailed
-
-del /f /q "%MAP_WORK_FILE%" >nul 2>&1
-
-set MAP_PACKAGE=%MAP_NAME%.oramap
-
-if not exist %ENGINE_DIRECTORY%\bin\OpenRA.exe goto noengine
->nul find %ENGINE_VERSION% %ENGINE_DIRECTORY%\VERSION || goto noengine
-
-cd %ENGINE_DIRECTORY%
+cd /d "%~dp0..\engine"
 
     bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%" "PlayerFaction.Multi0=russia" "PlayerType.Multi0=Human"
 set ERROR=%ERRORLEVEL%
-cd %TEMPLATE_DIR%
+cd /d "%TEMPLATE_DIR%"
 
 if %ERROR% NEQ 0 goto crashdialog
 exit /b 0
@@ -104,8 +75,8 @@ echo Ensure that MOD_ID ENGINE_VERSION and ENGINE_DIRECTORY are defined in your 
 pause
 exit /b 1
 
-:nosourcemap
-echo Required map sources not found at %MAP_SOURCE_DIR%.
+::nosourcemap
+echo Required map sources not found.
 pause
 exit /b 1
 
@@ -119,8 +90,7 @@ echo OpenRA.Utility --map repack failed.
 pause
 exit /b 1
 
-:nomap
-echo Required map not found at %MAP_OUTPUT%.
+echo Required map not found at %TEMPLATE_DIR%\mods\ca\maps\%MAP_PACKAGE%.
 pause
 exit /b 1
 

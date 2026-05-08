@@ -710,10 +710,16 @@ Templates:
         if not frame_indices:
             continue
 
+        selector_category = "Rubberduck High Cliff Sets"
+        if key == "high_sw":
+            selector_category = "Rubberduck Raise Height"
+        elif key == "high_se":
+            selector_category = "Rubberduck Lower Height"
+
         templates.append(
             emit_high_cliff_selector_template(
                 HIGH_CLIFF_PICKANY_TEMPLATE_IDS[key],
-                "Rubberduck High Cliff Brush" if key in ("high_sw", "high_se") else "Rubberduck High Cliff Sets",
+                selector_category,
                 high_cliff_images[key],
                 "Clear",
                 frame_indices,

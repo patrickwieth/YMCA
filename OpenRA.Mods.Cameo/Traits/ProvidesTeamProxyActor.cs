@@ -46,7 +46,7 @@ namespace OpenRA.Mods.Cameo.Traits
 			base.Created(self);
 		}
 
-		public void AddedToWorld(Actor self)
+		void INotifyAddedToWorld.AddedToWorld(Actor self)
 		{
 			team = self.World.Players.Where(p => !p.NonCombatant && p.InternalName != "Everyone" && p.IsAlliedWith(self.Owner));
 
@@ -88,7 +88,7 @@ namespace OpenRA.Mods.Cameo.Traits
 				proxy.Dispose();
 		}
 
-		public void Disposing(Actor self)
+		void INotifyActorDisposing.Disposing(Actor self)
 		{
 			ClearActors();
 		}
