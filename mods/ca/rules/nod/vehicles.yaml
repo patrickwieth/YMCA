@@ -1,4 +1,4 @@
-﻿
+
 AMCV:
 	Inherits: ^ConstructionVehicle
 	Inherits: ^TDVehicleSprite
@@ -331,10 +331,13 @@ SPEC:
 
 LTNK:
 	Inherits: ^FightingTankTurreted
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^NodLaserUnit
+	RenderVoxels:
+		Scale: 0.8
+		Image: nodlighttank
 	RenderSprites:
 		Image: ltnk
 	Buildable:
@@ -342,7 +345,7 @@ LTNK:
 		BuildPaletteOrder: 55
 		IconPalette: chrometd
 		Prerequisites: vehicles, ~nod
-		Description: Fast, light tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft\n  Special Ability: Amphibious
+		Description: Fast, light tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 625
 	Tooltip:
@@ -350,23 +353,7 @@ LTNK:
 	Health:
 		HP: 41250
 	Mobile:
-		Locomotor: Amphibious
 		Speed: 100
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	Targetable:
-		TargetTypes: Ground, Vehicle, C4
-		RequiresCondition: !onwater && !parachute && !being-warped
-	Targetable@WATER:
-		TargetTypes: Ground, Vehicle, Water, Ship
-		RequiresCondition: onwater && (!parachute && !being-warped)
-	WithFacingSpriteBody:
-		RequiresCondition: !onwater || parachute
-	WithFacingSpriteBody@WATER:
-		Sequence: idle-water
-		Name: body-water
-		RequiresCondition: onwater && !parachute
 	Turreted:
 		TurnSpeed: 56
 	Armament:
@@ -375,17 +362,8 @@ LTNK:
 		RecoilRecovery: 17
 		LocalOffset: 720,0,90
 		MuzzleSequence: muzzle
-	AttackCharges:
-		RequiresCondition: !build-incomplete
-		PauseOnCondition: disabled || empdisable
-		ChargeLevel: 50
-		ChargingCondition: charging
-	AmbientSound:
-		RequiresCondition: charging
-		SoundFiles: obelpowr.aud
-		Interval: 30, 40
+	WithVoxelBarrel:
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: LTNK.Husk
 		RequiresCondition: !onwater && !being-warped
