@@ -365,10 +365,14 @@ AA_Jeep:
 
 1TNK:
 	Inherits: ^FightingTankTurreted
+	Inherits: ^VoxelTurretedTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^AlliesTank
 	Inherits: ^ImprovedVision
+	RenderVoxels:
+		Scale: 0.9
+		Image: lighttank
 	RenderSprites:
 		Image: light_tank
 	Buildable:
@@ -384,25 +388,9 @@ AA_Jeep:
 	Health:
 		HP: 33000
 	Mobile:
-		Locomotor: Amphibious
 		Speed: 113
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	Targetable:
-		TargetTypes: Ground, Vehicle, C4
-		RequiresCondition: !onwater && !parachute && !being-warped
-	Targetable@WATER:
-		TargetTypes: Ground, Vehicle, Water, Ship
-		RequiresCondition: onwater && (!parachute && !being-warped)
-	WithFacingSpriteBody:
-		RequiresCondition: !onwater
-	WithFacingSpriteBody@WATER:
-		Sequence: idle-water
-		Name: body-water
-		RequiresCondition: onwater
 	Turreted@PRIMARY:
-		TurnSpeed: 56
+		TurnSpeed: 76
 	Armament@PRIMARY:
 		Weapon: 25mm
 		Turret: primary
@@ -411,7 +399,6 @@ AA_Jeep:
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 1TNK.Husk
 		RequiresCondition: !onwater && !being-warped
