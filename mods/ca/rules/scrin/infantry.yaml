@@ -353,11 +353,23 @@ MAST:
 		RequiresCondition: produced
 		Voice: Build
 	CaptureManager:
+	GrantConditionOnPrerequisite@GLOBALREUSABLEENGINEER:
+		Condition: global-reusable-engineers
+		Prerequisites: global-reusable-engineers
 	Captures:
+		RequiresCondition: !global-reusable-engineers
 		CaptureTypes: building
 		PlayerExperience: 25
 		CaptureDelay: 100
 		ConsumedByCapture: false
+	Captures@REUSABLE:
+		RequiresCondition: global-reusable-engineers
+		CaptureTypes: building
+		PlayerExperience: 25
+		CaptureDelay: 150
+		ConsumedByCapture: false
+		EnterCursor: ability
+		EnterBlockedCursor: move-blocked
 	Targetable:
 		TargetTypes: Ground, Infantry, Disguise, MindControlImmune
 	WithIdleOverlay@mindcontrolling:
