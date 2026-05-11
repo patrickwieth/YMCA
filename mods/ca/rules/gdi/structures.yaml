@@ -1,3 +1,128 @@
+CRAM:
+	Inherits: AGUN
+	Buildable:
+		Prerequisites: hq, ~structures.gdi
+		IconPalette: chrometd
+		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
+	-Armament:
+	Armament@GAT0:
+		Weapon: Gatt.0
+		LocalOffset: 520,0,450
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling == 0
+	Armament@GAT1:
+		Weapon: Gatt.1
+		LocalOffset: 520,0,450
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling == 1
+	Armament@GAT2:
+		Weapon: Gatt.2
+		LocalOffset: 520,0,450
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling == 2
+	Armament@GAT3:
+		Weapon: Gatt.3
+		LocalOffset: 520,0,450
+		MuzzleSequence: muzzle
+		RequiresCondition: gatling == 3
+	GrantConditionOnAttack:
+		Condition: gatling
+		RequiredShotsPerInstance: 1,4,7
+		MaximumInstances: 3
+		RevokeDelay: 40
+		RevokeOnNewTarget: False
+		RevokeAll: True
+	DetectCloaked:
+		Range: 8c0
+		RequiresCondition: !(disabled || empdisable || being-warped)
+
+ATWR:
+	Inherits: ^DefenseTD
+	Inherits: ^DisableOnLowPower
+	Inherits: ^AutoTargetGround
+	Inherits: ^PrioAntiHeavyAA
+	Inherits: ^RelayTargeting
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: hq, ~structures.gdi, ~!structures.zocom
+		IconPalette: chrometd
+		Description: Advanced base defense.\n Requires power to operate.\n Can detect cloaked units.\n Relay targeting system marks targets so other Advanced Guard Towers can shoot from longer distances.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Slow Aircraft
+		Weaknesses: • Weak vs. Point Defense Laser, Infantry
+		Attributes: • Relay targeting laser system.\n•Detects cloaked units
+	Valued:
+		Cost: 1000
+	Tooltip:
+		Name: Advanced Guard Tower
+	Health:
+		HP: 60000
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	WithBuildingBib:
+		Sequence: bibFtur3
+		HasMinibib: true
+	RenderRangeCircle:
+	Turreted:
+		TurnSpeed: 1000
+		Offset: 0,0,0
+	Armament@primary:
+		Weapon: StingerGTWR
+		Name: primary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo || being-warped
+	Armament@secondary:
+		Weapon: StingerGTWR.Relay
+		Name: secondary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo || being-warped
+	Armament@tertiary:
+		Weapon: StingerGTWR.AA
+		Name: tertiary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo || being-warped
+	Armament@quartary:
+		Weapon: StingerGTWR.AA.Relay
+		Name: quartary
+		LocalOffset: 256,128,0, 256,-128,0
+		LocalYaw: -100,100
+		PauseOnCondition: !ammo || being-warped
+	Armament@flare:
+		Weapon: Flare.AGT
+		Name: flare
+		LocalOffset: 0,0,800
+	AttackTurreted:
+		Armaments: primary, secondary, tertiary, quartary, flare
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+	AmmoPool:
+		Armaments: primary, secondary, tertiary, quartary
+		Ammo: 2
+		AmmoCondition: ammo
+	ReloadAmmoPool:
+		Delay: 50
+		Count: 2
+	BodyOrientation:
+		QuantizedFacings: 8
+	Power:
+		Amount: -50
+		RequiresCondition: !being-warped
+	DetectCloaked:
+		Range: 6c0
+		RequiresCondition: !(disabled || empdisable || being-warped)
+	-RenderRangeCircle:
+	WithRangeCircle@1:
+		Color: C12900
+		Range: 7c0
+
 UPGC:
 	Inherits: ^BuildingTD
 	Inherits: ^TechLevelBuilding

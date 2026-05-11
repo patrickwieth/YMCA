@@ -54,3 +54,169 @@
 	DetectCloaked:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
+PRIS:
+	Inherits: ^Defense
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetGround
+	AutoTargetPriority@DEFAULT:
+		InvalidTargets: NoAutoTarget, WaterStructure, PrismTower
+	AutoTargetPriority@ATTACKANYTHING:
+		InvalidTargets: NoAutoTarget, PrismTower
+	AutoTargetPriority@PRISMNORMAL:
+		RequiresCondition: !assault-move && !attack-move
+		ValidTargets: PrismTower
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 90
+		Prerequisites: radar, ~structures.allies
+		Description: Experimental base defense.\nRequires power to operate.\nCan detect cloaked units.\n  Strong vs Vehicles, Infantry\n  Weak vs Aircraft
+	Valued:
+		Cost: 1300
+	Tooltip:
+		Name: Prism Tower
+	Building:
+	Health:
+		HP: 35000
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	Power:
+		Amount: -75
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	WithBuildingBib:
+		Sequence: bibFtur
+		HasMinibib: true
+	WithSpriteBody@charged:
+		PauseOnCondition: disabled || empdisable || being-warped
+		RequiresCondition: !charging
+	WithSpriteBody@charging:
+		Sequence: active
+		Name: bodyactive
+		RequiresCondition: charging
+	GrantCondition@charging:
+		Condition: charging
+		RequiresCondition: !fired && !ammo
+	AmbientSound:
+		RequiresCondition: charging
+		SoundFiles: bpripow.aud
+		Interval: 30, 40
+	AttackTurreted:
+		RequiresCondition: !build-incomplete
+		Armaments: primary, secondary, tertiary
+		PauseOnCondition: disabled || empdisable || being-warped
+	Turreted:
+		TurnSpeed: 1000
+		Offset: 0,0,112
+	Targetable@PrismTower:
+		TargetTypes: PrismTower
+	Targetable@PrismTowerChargeable:
+		TargetTypes: PrismTowerChargeable
+		RequiresCondition: !ammo
+	Armament@primary:
+		Weapon: PrisLaser
+		LocalOffset: 0,0,996
+		Name: primary
+		PauseOnCondition: !ammo && !powercharged
+	GrantConditionOnAttack@primary:
+		ArmamentNames: primary
+		Condition: fired
+		MaximumInstances: 1
+		RevokeDelay: 40
+	Armament@secondary:
+		Weapon: PrisLaserCharge
+		LocalOffset: 0,0,986
+		Name: secondary
+		TargetRelationships: Ally
+		ForceTargetRelationships: Ally
+		PauseOnCondition: fired && !powercharged
+		RequiresCondition: ammo
+	GrantConditionOnAttack@secondary:
+		ArmamentNames: secondary
+		Condition: fired
+		MaximumInstances: 1
+		RevokeDelay: 40
+	ExternalCondition@POWERCHARGED:
+		Condition: powercharged
+	ProximityExternalCondition@aiming:
+		Condition: aiming
+		Range: 8c512
+		RequiresCondition: aiming && !fired
+	ExternalCondition@aiming:
+		Condition: aiming
+	GrantConditionWhileAiming:
+		Condition: aiming
+	AmmoPool:
+		Name: primary
+		Ammo: 5
+		InitialAmmo: 1
+		Armaments: primary, secondary
+		AmmoCondition: ammo
+	ReloadAmmoPoolCA@autocharge:
+		Delay: 25
+		Count: 1
+		ResetOnFire: False
+		RequiresCondition: ammo < 1 && !fired
+		ShowSelectionBar: false
+		SelectionBarColor: 0000ff
+	ReloadAmmoPoolCA@discharge:
+		Delay: 15
+		Count: -1
+		ResetOnFire: False
+		RequiresCondition: ammo > 1
+		ShowSelectionBar: false
+		SelectionBarColor: ff0000
+	ReloadAmmoPoolCA@powercharge:
+		AmmoPool: primary
+		Delay: 1
+		Count: 1
+		RequiresCondition: powercharged
+		ShowSelectionBar: false
+		SelectionBarColor: 00ff00
+	WithAmmoPipsDecoration:
+		Position: BottomLeft
+		RequiresSelection: true
+		FullSequence: pip-red
+
+GAP:
+	Inherits: ^ScienceBuilding
+	Inherits: ^1x1Building+Minibib
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Valued:
+		Cost: 800
+	Tooltip:
+		Name: Gap Generator
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 110
+		Prerequisites: atek, ~structures.allies
+		Description: Obscures the enemy's view with shroud.\n  Requires power to operate.
+	WithSpriteBody:
+		PauseOnCondition: disabled || empdisable || being-warped
+	Health:
+		HP: 50000
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	CreatesShroud:
+		Range: 5c0
+		RequiresCondition: !disabled && !empdisable && !being-warped
+	RenderShroudCircle:
+	Power:
+		Amount: -60
+	MustBeDestroyed:
+		RequiredForShortGame: false
+	-AcceptsDeliveredCash:
+	FireWarheadsOnDeathCA:
+		Weapon: SmallBuildingExplode
+		EmptyWeapon: SmallBuildingExplode
+	HitShape:
+		Type: Rectangle
+			TopLeft: -512, -512
+			BottomRight: 512, 512
