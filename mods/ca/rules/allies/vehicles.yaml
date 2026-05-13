@@ -435,13 +435,9 @@ AA_Jeep:
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^AlliesTank
+	-Buildable:
 	RenderSprites:
 		Image: medium_tank
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 70
-		Prerequisites: vehicles, ~allies, ~!england
-		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -453,18 +449,70 @@ AA_Jeep:
 		Speed: 82
 	Turreted:
 		TurnSpeed: 48
-		Offset: 0,0,20
+		Offset: 0,0,0
 	Armament:
 		Weapon: 90mm
 		Recoil: 128
 		RecoilRecovery: 38
-		LocalOffset: 720,0,80
+		LocalOffset: 1200,0,200
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 2TNK.Husk
 		RequiresCondition: !being-warped
+
+Challenger_Tank:
+	Inherits: 2TNK
+	Inherits: ^VoxelTurretedTank
+	RenderSprites:
+		Image: Challenger_Tank
+	RenderVoxels:
+		Scale: 0.9
+		Image: challengertank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: vehicles, ~england
+		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Challenger
+		GenericName: Tank
+	WithMuzzleOverlay:
+
+Leclerc_Tank:
+	Inherits: 2TNK
+	Inherits: ^VoxelTurretedTank
+	RenderSprites:
+		Image: Leclerc_Tank
+	RenderVoxels:
+		Scale: 0.9
+		Image: leclerctank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: vehicles, ~france
+		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Leclerc
+		GenericName: Tank
+
+Leopard_Tank:
+	Inherits: 2TNK
+	Inherits: ^VoxelTurretedTank
+	RenderSprites:
+		Image: Leopard_Tank
+	RenderVoxels:
+		Scale: 0.9
+		Image: leopardtank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: vehicles, ~germany
+		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Leopard
+		GenericName: Tank
+	WithMuzzleOverlay:
 
 2TNK.Chrono:
 	Inherits: 2TNK
@@ -473,7 +521,6 @@ AA_Jeep:
 		Image: medium_tank
 		FactionImages:
 			england: mirage
-	-Buildable:
 	GrantConditionOnFaction@England:
 		Factions: england
 		Condition: england
@@ -489,6 +536,34 @@ AA_Jeep:
 		LocalOffset: 868,0,0
 		MuzzleSequence: muzzle
 		RequiresCondition: germany
+	Armament@England:
+		Weapon: 120mmHEAT
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: england
+	Tooltip:
+		Name: Medium Tank
+		GenericName: Tank
+		RequiresCondition: !germany
+	Tooltip@germany:
+		Name: Tank Destroyer
+		GenericName: Tank
+		RequiresCondition: germany
+	MirageTooltip@Tree:
+		Name: Mirage Tank
+		GenericName: Civilian building
+		GenericVisibility: Enemy, Neutral
+		RequiresCondition: tree && england
+	Mirage:
+		RequiresCondition: england && !empdisable && !being-warped && !driver-dead
+		RevealOn: Attack, Move
+		MirageCondition: tree
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 868,0,0
+		MuzzleSequence: muzzle
 	Armament@England:
 		Weapon: 120mmHEAT
 		Recoil: 128

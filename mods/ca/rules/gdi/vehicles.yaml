@@ -1,10 +1,12 @@
 HMMV:
 	Inherits: ^FightingVehicleTurreted
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^SensorEquipment
 	Inherits: ^PrioAntiInfantry
-	RenderSprites:
+	RenderVoxels:
+		Scale: 1
+		Image: humvee
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 15
@@ -22,33 +24,29 @@ HMMV:
 		Speed: 157
 	Turreted:
 		TurnSpeed: 80
-		Offset: -85,0,128
+		Offset: 0,0,0
 	Armament:
 		Weapon: M60mgTD
-		LocalOffset: 171,0,85
+		LocalOffset: 171,0,285
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	AutoTarget:
 	IgnoresDisguise:
-	DetectCloaked:
-		Range: 6c0
-		DetectionTypes: Cloak, Thief
-		RequiresCondition: !(empdisable || being-warped)
 
 MTNK:
 	Inherits: ^FightingTankTurreted
-	Inherits: ^TDVehicleSprite
+	Inherits: ^VoxelTurretedTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^DronePairing
 	Inherits: ^GDIHeavyVehicleArmor
 	Inherits: ^PrioAntiHeavy
-	RenderSprites:
-		Image: mtnk
+	RenderVoxels:
+		Scale: 1.0
+		Image: abramstank
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
-		Prerequisites: vehicles, ~td, ~gdi, ~!zocom, ~!upg.gdibattletank
+		Prerequisites: vehicles, ~td, ~gdi, ~!upg.gdibattletank
 		IconPalette: chrometd
 		Description: Main battle tank.
 	Valued:
@@ -65,27 +63,27 @@ MTNK:
 		Speed: 82
 	Turreted@PRIMARY:
 		TurnSpeed: 48
-		Offset: 0,0,30
+		Offset: 0,0,0
 	Armament@PRIMARY:
 		Turret: primary
 		Weapon: 120mm
 		Recoil: 128
 		RecoilRecovery: 26
-		LocalOffset: 768,0,90
+		LocalOffset: 1200,0,120
 		MuzzleSequence: muzzle
 		PauseOnCondition: empdisable || being-warped
 	AttackTurreted:
 		Turrets: primary, secondary
 		PauseOnCondition: empdisable || being-warped
+	WithVoxelBarrel:
 	WithMuzzleOverlay:
-	WithSpriteTurret@default:
 	SpawnActorOnDeath:
 		Actor: MTNK.Husk
 		RequiresCondition: !being-warped
 
 MTNK.PDL:
 	Inherits: MTNK
-	Inherits@PDL: ^PointLaserDefenseSystem
+	Inherits: ^PointLaserDefenseSystem
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 80
@@ -99,8 +97,6 @@ MTNK.PDL:
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles
 		Weaknesses: • Weak vs Infantry, Aircraft
-	WithSpriteTurret@gdiupg:
-		Sequence: turretpd
 
 MTNK.Reflector:
 	Inherits: MTNK
@@ -114,94 +110,6 @@ MTNK.Reflector:
 	TooltipExtras:
 		Strengths: • Strong vs Energy Weapons
 		Weaknesses: • Weak vs Infantry, Aircraft
-
-MTNK.Drone:
-	Inherits: ^FightingTankTurreted
-	Inherits: ^TDVehicleSprite
-	Inherits: ^RobotDriver
-	Inherits: ^DronePairing
-	Inherits: ^GDIHeavyVehicleArmor
-	Inherits: ^PrioAntiHeavy
-	RenderSprites:
-		Image: mtnk.drone
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 85
-		Prerequisites: vehicles, ~zocom, weap.td, radar, ~!upg.gdibattletank
-		IconPalette: chrometd
-		Description: Drone battle tank.
-	Valued:
-		Cost: 720
-	Tooltip:
-		Name: Battle Drone
-		GenericName: Tank
-	TooltipExtras:
-		Strengths: • Strong vs Vehicles
-		Weaknesses: • Weak vs Infantry, Aircraft
-		Attributes: • Drone battle tank.\n  • Requires power to operate.
-	Health:
-		HP: 52000
-	Mobile:
-		Speed: 82
-		PauseOnCondition: !radarenabled || disabled || empdisable || being-warped
-		Voice: Move
-	Turreted:
-		TurnSpeed: 48
-		Offset: 0,0,20
-	Armament:
-		Weapon: 90mm
-		Recoil: 128
-		RecoilRecovery: 26
-		LocalOffset: 768,0,90
-		MuzzleSequence: muzzle
-	AttackTurreted:
-		Turrets: primary
-		PauseOnCondition: !radarenabled || disabled || empdisable || being-warped
-		Voice: Attack
-	WithMuzzleOverlay:
-	WithSpriteTurret:
-	SpawnActorOnDeath:
-		Actor: MTNK.Drone.Husk
-		RequiresCondition: !being-warped
-	Voiced:
-		VoiceSet: RobotTankVoice
-	Power:
-		Amount: -1
-		RequiresCondition: !being-warped
-	Targetable:
-		TargetTypes: Ground, Vehicle, C4, ChaosImmune, DriverKillImmune
-
-MTNK.Drone.PDL:
-	Inherits: MTNK.Drone
-	Inherits@PDL: ^PointLaserDefenseSystem
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 85
-		Prerequisites: vehicles, ~zocom, weap.td, ~promotion.battle_tank.pdl
-		IconPalette: chrometd
-		Description: Drone battle tank with Point Laser Defense.
-	Valued:
-		Cost: 1320
-	Tooltip:
-		Name: Battle Drone (PDL)
-	TooltipExtras:
-		Strengths: • Strong vs Vehicles
-		Weaknesses: • Weak vs Infantry, Aircraft
-		Attributes: • Drone battle tank with Point Laser Defense.\n  • Requires power to operate.
-
-MTNK.Drone.Reflector:
-	Inherits: MTNK.Drone
-	Inherits: ^ReflectorArmor
-	Buildable:
-		IconPalette: chrometd
-		Prerequisites: vehicles, ~zocom, weap.td, ~promotion.battle_tank.reflector
-		Description: Drone battle tank with Reflector Armor.
-	Tooltip:
-		Name: Battle Drone (Reflector)
-	TooltipExtras:
-		Strengths: • Strong vs Vehicles, Infantry, Aircraft
-		Weaknesses: • Weak vs Anti-Tank Weapons
-		Attributes: • Drone battle tank with Reflector Armor.
 
 Mammoth:
 	Inherits: ^FightingTankTurreted
