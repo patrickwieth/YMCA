@@ -1,3 +1,59 @@
+^MakeSmallChina:
+	make:
+		Combine:
+			0:
+				Filename: make-small1.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+			1:
+				Filename: make-small2.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+		Length: 10
+		Tick: 80
+		Scale: 0.5
+
+^MakeMediumChina:
+	make:
+		Combine:
+			0:
+				Filename: make-medium1.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+			1:
+				Filename: make-medium2.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+			2:
+				Filename: make-medium3.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+		Length: 15
+		Tick: 80
+		Scale: 0.5
+
+^MakeBigChina:
+	make:
+		Combine:
+			0:
+				Filename: make-big1.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+			1:
+				Filename: make-big2.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+			2:
+				Filename: make-big3.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+			3:
+				Filename: make-big4.png
+				Frames: 0, 0, 0, 0, 0
+				Length: 5
+		Length: 20
+		Tick: 80
+		Scale: 0.5
 
 chmcv:
 	Inherits: ^VehicleOverlays
@@ -8,15 +64,13 @@ chmcv:
 
 chcommand:
 	Inherits: ^StructureOverlays
+	Inherits: ^MakeBigChina
 	Defaults:
 		Filename: commandcenter.shp
 	idle:
 	radar:
 		Filename: radarantenna.shp
 		Offset: -47,-25
-	make:
-		Filename: chbuildingmakebig.shp
-		Length: *
 	icon:
 		Filename: chcommandicon.shp
 
@@ -29,13 +83,11 @@ chcommand.radar:
 		Filename: chradarupgradeicon.shp
 
 chpower:
+	Inherits: ^MakeMediumChina
 	Inherits: ^StructureOverlays
 	idle:
 		Filename: chinapower.shp
 		Offset: 0,-10
-	make:
-		Filename: chbuildingmake2x2.shp
-		Length: *
 	icon:
 		Filename: chpowericon.shp
 	iconadv:
@@ -53,100 +105,83 @@ chpower2:
 
 chbarracks:
 	Inherits: ^StructureOverlays
+	Inherits: ^MakeMediumChina
 	idle:
 		Filename: chinabarracks.shp
-	make:
-		Filename: chbuildingmakebig.shp
-		Length: *
 	icon:
 		Filename: chbarracksicon.shp
 
 chsupply:
+	Inherits: ^MakeMediumChina
 	Inherits: ^StructureOverlays
 	idle:
 		Filename: supplydepot.shp
-	make:
-		Filename: chbuildingmakebig.shp
-		Length: *
 	icon:
 		Filename: chsupplyicon.shp
 
+
 chweap:
+	Inherits: ^MakeBigChina
 	Inherits: ^StructureOverlays
 	idle:
 		Filename: chinaweap.shp
-	make:
-		Filename: chbuildingmakebig.shp
-		Length: *
 	icon:
 		Filename: chweapicon.shp
 
 chpropaganda:
+	Inherits: ^MakeMediumChina
 	Inherits: ^StructureOverlays
 	idle:
 		Filename: propagandacenter.shp
-	make:
-		Filename: chbuildingmakebig.shp
-		Length: *
 	icon:
 		Filename: chpropagandaicon.shp
 		Offset: 0,0
 
 chpropagandatower:
+	Inherits: ^MakeSmallChina
 	Inherits: ^StructureOverlays
 	idle:
 		Filename: propagandaspeaker.shp
 		Offset: 0,-50
-	make:
-		Filename: chbuildingmake1x1.shp
-		Length: *
 	icon:
 		Filename: chpropagandatowericon.shp
 
 chinternetcenter:
 	Inherits: ^StructureOverlays
+	Inherits: ^MakeMediumChina
 	idle:
 		Filename: espionagecenter.shp
-	make:
-		Filename: chbuildingmakebig.shp
-		Length: *
 	icon:
 		Filename: chinternetcentericon.shp
 
 chsilo:
 	Inherits: ^StructureOverlays
+	Inherits: ^MakeMediumChina
 	idle:
 		Filename: chinanukesilo.shp
-	make:
-		Filename: chbuildingmakebig.shp
-		Length: *
 	icon:
 		Filename: chsiloicon.shp
 
+
 chairport:
 	Inherits: ^StructureOverlays
+	Inherits: ^MakeBigChina
 	idle:
 		Filename: chinaairfield.shp
 		ZOffset: -1023
 		Offset: 0,-4
-	make:
-		Filename: chbuildingmakebig.shp
-		Length: *
 	icon:
 		Filename: chairporticon.shp
 		Offset: 0,0
 
 chgatling:
+	Inherits: ^MakeSmallChina
 	Inherits: ^StructureOverlays
 	Defaults:
 		Scale: 2
 		Filename: chgatling.shp
 	idle:
 	dead:
-	make:
-		Filename: chbuildingmake1x1.shp
-		Length: *
-		Tick: 80
 	turret:
 		Filename: chgatlingt.shp
 		Facings: 32
@@ -159,11 +194,9 @@ chgatling:
 
 chbunker:
 	Inherits: ^StructureOverlays
+	Inherits: ^MakeMediumChina
 	idle:
 		Filename: bunker.shp
-	make:
-		Filename: chbuildingmake2x2.shp
-		Length: *
 	icon:
 		Filename: chbunkericon.shp
 
