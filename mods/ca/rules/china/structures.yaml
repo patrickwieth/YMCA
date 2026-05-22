@@ -293,6 +293,7 @@ chgatling:
 		Offset: 0,0,120
 	WithSpriteBody:
 	WithSpriteTurret:
+		RequiresCondition: !build-incomplete
 	AttackTurreted:
 		PauseOnCondition: lowpower || disabled
 	WithMuzzleOverlay:
@@ -424,7 +425,6 @@ chsupply:
 	Inherits: ^3x2Building+Bib
 	Inherits: ^BotIncome
 	Inherits: ^Refinery
-	Inherits: ^MinefieldUpgrade
 	Building:
 		Footprint: =x= xx= ===
 	Valued:
@@ -439,12 +439,15 @@ chsupply:
 		HP: 90000
 	RevealsShroud:
 		Range: 6c0
-	SpawnNeighboringActors@minefield:
-		ActorTypes: chminv.minefield
-		Locations: 0,-1, 1,-1, 2,-1, -1,0, -1,1, 3,0, 3,1, 0,2, 1,2, 2,2
-	Refinery:
-		DockAngle: 128
-		DockOffset: 2,1
+	DockHost:
+		DockAngle: 256
+		DockOffset: 1c0,1c0,0
+	SpawnNeighboringActors@dockhelper:
+		ActorTypes: chsupply.dockhelper
+		Locations: 0,1
+	SpawnNeighboringActors@dockhelper2:
+		ActorTypes: chsupply.dockhelper
+		Locations: 2,1
 	DrawLineToTarget:
 	CustomSellValue:
 		Value: 600
@@ -459,6 +462,17 @@ chsupply:
 	SelectionDecorations:
 	Voiced:
 		VoiceSet: PRCSupplyVoice
+
+chsupply.dockhelper:
+	Inherits: ^DummyDockBuilding
+	Refinery:
+		DockAngle: 128
+		UseStorage: false
+	DockHost:
+		DockAngle: 128
+		DockOffset: 0,-1c0,0
+		Type: Unload
+		MaxQueueLength: 2
 
 chweap:
 	Inherits: ^BuildingChina
