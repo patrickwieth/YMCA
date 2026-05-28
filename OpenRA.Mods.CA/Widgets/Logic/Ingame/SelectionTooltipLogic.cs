@@ -257,7 +257,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				var buildable = actor.Info.TraitInfoOrDefault<BuildableInfo>();
 
-				if (buildable != null)
+				if (buildable != null && !string.IsNullOrEmpty(buildable.Description))
 				{
 					descLabel.Text = buildable.Description.Replace("\\n", "\n");
 				}
