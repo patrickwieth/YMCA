@@ -690,12 +690,12 @@ chairport:
 	Tooltip:
 		Name: Airfield
 	Building:
-		Footprint: x=x= xxx= ====
+		Footprint: x=== ==== ====
 	Health:
 		HP: 150000
 	Reservable:
 	Exit@1:
-		ExitCell: 0,0
+		ExitCell: 2,0
 		Facing: 870
 	Power:
 		Amount: -20
@@ -732,6 +732,20 @@ chairport:
 	GrantConditionOnPowerState@LOWPOWER:
 		Condition: lowpower
 		ValidPowerStates: Low, Critical
+	SpawnNeighboringActors@dockhelper1:
+		ActorTypes: airfield.dockhelper
+		Locations: 1,1
+	SpawnNeighboringActors@dockhelper2:
+		ActorTypes: airfield.dockhelper
+		Locations: 2,0
+
+airfield.dockhelper:
+	Inherits: ^DummyDockBuilding
+	Inherits: ^RepairsAircraftWithRepairBay
+	Exit@1:
+		ExitCell: 0,0
+		Facing: 870
+
 
 CHSYRD:
 	Inherits: SYRD
