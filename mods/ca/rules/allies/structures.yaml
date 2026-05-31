@@ -220,3 +220,87 @@ GAP:
 		Type: Rectangle
 			TopLeft: -512, -512
 			BottomRight: 512, 512
+
+PROC:
+	Inherits: ^Building
+	Inherits: ^BotIncome
+	Inherits: ^3x3Building+Bib
+	Inherits: ^Refinery
+	Building:
+		Footprint: _X_ xxx X++ +++
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 60
+		Prerequisites: anypower, ~structures.allies
+		Description: Processes raw Tiberium, Ore and Gems\ninto credits.
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Ore Refinery
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
+	Health:
+		HP: 90000
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	DrawLineToTarget:
+	GrantConditionOnPrerequisite@OREP:
+		Prerequisites: orep
+		Condition: orep-built
+	GrantConditionOnPrerequisite@NOOREP:
+		Prerequisites: !orep
+		Condition: orep-notbuilt
+	GrantCondition@SPAWNHARV:
+		Condition: spawn-harv
+		GrantPermanently: true
+		RequiresCondition: orep-notbuilt
+	GrantCondition@SPAWNCHARV:
+		Condition: spawn-charv
+		GrantPermanently: true
+		RequiresCondition: orep-built
+	FreeActor:
+		Actor: HARV
+		SpawnOffset: 1,2
+		Facing: 64
+		RequiresCondition: spawn-harv && !spawn-charv && !build-incomplete
+	FreeActor@CHARV:
+		Actor: HARV.Chrono
+		SpawnOffset: 1,2
+		Facing: 64
+		RequiresCondition: spawn-charv && !spawn-harv && !build-incomplete
+	WithIdleOverlay@TOP:
+		RequiresCondition: !build-incomplete
+		Sequence: idle-top
+	Power:
+		Amount: -30
+		RequiresCondition: !being-warped
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+	ProvidesPrerequisite@buildingname:
+	HitShape:
+		Type: Rectangle
+			TopLeft: -1536, -512
+			BottomRight: 1536, 598
+	HitShape@TOP:
+		TargetableOffsets: 1680,0,0
+		Type: Rectangle
+			TopLeft: -512, -1536
+			BottomRight: 512, -512
+	HitShape@BOTTOMLEFT:
+		TargetableOffsets: -1260,-1024,0
+		Type: Rectangle
+			TopLeft: -1536, 598
+			BottomRight: -512, 1280
+	-ActorPreviewPlaceBuildingPreview:
+	SequencePlaceBuildingPreview:
+		Sequence: idle
+	SpawnActorsOnSell:
+		ActorTypes: light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+	SpawnNeighboringActors@dockhelper1:
+		ActorTypes: refinery.dockhelper
+		Locations: 0,1
