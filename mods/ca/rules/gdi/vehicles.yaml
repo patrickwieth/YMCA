@@ -178,12 +178,6 @@ Mammoth:
 	Carryable:
 		LocalOffset: 0,0,500
 	-Crushable:
-	GrantConditionOnPrerequisite@DRONEPAIR:
-		Condition: dronepair
-		Prerequisites: dronepair.upgrade
-	AttachOnCreation@DRONEPAIR:
-		Actor: mdrn.attached
-		RequiresCondition: dronepair
 
 Mammoth.Ion:
 	Inherits: Mammoth
@@ -365,6 +359,7 @@ MEMP:
 	Inherits: ^Tank
 	Inherits: ^HighResShadow
 	Inherits: ^RobotDriver
+	Inherits: ^DronePairing
 	RenderSprites:
 		Image: mobile_emp
 	Buildable:
@@ -429,12 +424,6 @@ MEMP:
 		Range: 1c0
 		EnableSound: vrobon
 		DisableSound: vroboff
-	GrantConditionOnPrerequisite@DRONEPAIR:
-		Condition: dronepair
-		Prerequisites: dronepair.upgrade
-	AttachOnCreation@DRONEPAIR:
-		Actor: mdrn.attached
-		RequiresCondition: dronepair
 
 MEMP.Volatile:
 	Inherits: MEMP
@@ -459,26 +448,39 @@ MEMP.Volatile:
 		EmptyWeapon: VisualExplodeHusk
 
 MEMP.Ranged:
-	Inherits: MEMP
+	Inherits: ^FightingTankTurreted
+	Inherits: ^HighResShadow
+	Inherits: ^RobotDriver
+	Inherits: ^DronePairing
+	Inherits: ^PrioAntiHeavy
+	RenderSprites:
+		Image: mobile_emp
 	WithProductionIconOverlay@2:
 		Types: Crosshair
 	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 260
+		IconPalette: chrometd
 		Prerequisites: tier3, vehicles, ~gdi, ~promotion.mobile_emp.ranged, ~!upg.mobile_emp2
 		Description: Refits the Mobile EMP with a Stable Reactor and launcher that fires EMP spheres from stand-off range instead of self-destructing.\\n  Enables repeated pulses without sacrificing the vehicle but leaves it vulnerable while channeling.\\n  Requires power to operate.\\n  Strong vs Vehicles, Buildings\\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 1250
+	Health:
+		HP: 75000
 	Tooltip:
 		Name: Mobile E.M.P (Ranged)
-	-ChargingSelfDestruct:
+	Mobile:
+		Voice: Move
+		Speed: 135
 	Turreted@PRIMARY:
 		Offset: 0,0,0
-		TurnSpeed: 16
+		TurnSpeed: 100
 	Armament@PRIMARY:
 		Weapon: EmpSphereThrower
 		LocalOffset: 900,180,340
 		MuzzleSequence: muzzle
-	AttackTurreted:
-		PauseOnCondition: empdisable || being-warped
+	Voiced:
+		VoiceSet: RobotTankVoice
 
 MEMP.Ranged.Improved:
 	Inherits: MEMP.Ranged
@@ -1085,12 +1087,6 @@ DISR:
 	SpawnActorOnDeath:
 		Actor: DISR.Husk
 		RequiresCondition: !being-warped
-	GrantConditionOnPrerequisite@DRONEPAIR:
-		Condition: dronepair
-		Prerequisites: dronepair.upgrade
-	AttachOnCreation@DRONEPAIR:
-		Actor: mdrn.attached
-		RequiresCondition: dronepair
 
 DISR.PDL:
 	Inherits: DISR
@@ -1253,12 +1249,6 @@ MAMMOTHMK2:
 		PauseOnCondition: empdisable || being-warped
 	WithMuzzleOverlay:
 	SelectionDecorations:
-	GrantConditionOnPrerequisite@DRONEPAIR:
-		Condition: dronepair
-		Prerequisites: dronepair.upgrade
-	AttachOnCreation@DRONEPAIR:
-		Actor: mdrn.attached
-		RequiresCondition: dronepair
 
 SLNG:
 	Inherits: ^FightingTankTurreted
@@ -1310,6 +1300,7 @@ VULC:
 	Inherits: ^GDIHeavyVehicleArmor
 	Inherits: ^Transport
 	Inherits: ^PrioAntiLight
+	Inherits: ^DronePairing
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
@@ -1413,12 +1404,6 @@ VULC:
 		RequiresCondition: driver-dead && !cargo
 	Targetable@DRIVERKILL:
 		RequiresCondition: !driver-dead && !cargo
-	GrantConditionOnPrerequisite@DRONEPAIR:
-		Condition: dronepair
-		Prerequisites: dronepair.upgrade
-	AttachOnCreation@DRONEPAIR:
-		Actor: mdrn.attached
-		RequiresCondition: dronepair
 	WithCargoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
