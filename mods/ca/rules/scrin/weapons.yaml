@@ -1,3 +1,11 @@
+^CorrosionEffect:
+	Warhead@Corrosion: ApplyPhysicalState
+		PhysicalStateName: ArmorCorrosion
+		Amount: 2
+		ValidTargets: Vehicle, Ship, Structure
+		ValidRelationships: Enemy, Ally, Neutral
+		Range: 0c512
+
 WarriorGun:
 	Inherits: M1Carbine
 	Report: warrior-fire1.aud
@@ -272,17 +280,17 @@ DevourerLaser:
 		Damage: 1000
 
 DevourerAcid:
-	Inherits: ^Chemical
+	Inherits: ^Acid
 	ValidTargets: Ground, Water
 	Range: 7c512
 	ReloadDelay: 60
 	Projectile: Bullet
-	Speed: 204
-	Blockable: True
-	LaunchAngle: 56
-	Inaccuracy: 512
-	ContrailLength: 30
-	ContrailStartColor: 5dff00
+		Speed: 204
+		Blockable: True
+		LaunchAngle: 56
+		Inaccuracy: 512
+		ContrailLength: 30
+		ContrailStartColor: 5dff00
 	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
 	FirstBurstTargetOffset: 0,-600,0
 	FollowingBurstTargetOffset: -0,100,0
@@ -299,12 +307,10 @@ DevourerAcid:
 
 DevourerAcid.Corrosive:
 	Inherits: DevourerAcid
-	Warhead@Corrosion: ApplyPhysicalState
-		PhysicalStateName: ArmorCorrosion
-		Amount: 10
+	Inherits: ^CorrosionEffect
 
 HexapodAcid:
-	Inherits: ^Chemical
+	Inherits: ^Acid
 	ValidTargets: Ground, Water
 	Range: 11c512
 	ReloadDelay: 60
@@ -329,9 +335,7 @@ HexapodAcid:
 
 HexapodAcid.Corrosive:
 	Inherits: HexapodAcid
-	Warhead@Corrosion: ApplyPhysicalState
-		PhysicalStateName: ArmorCorrosion
-		Amount: 10
+	Inherits: ^CorrosionEffect
 
 WarshipLaser:
 	Inherits: ^ScrinLaser
@@ -523,17 +527,17 @@ TripodLaser:
 		DamageTypes: Prone50Percent, TriggerProne, FireDeath
 
 Tripod.acid:
-	Inherits: ^Chemical
+	Inherits: ^Acid
 	ValidTargets: Ground, Water
 	Range: 6c0
 	ReloadDelay: 60
 	Projectile: Bullet
-	Speed: 204
-	Blockable: True
-	LaunchAngle: 56
-	Inaccuracy: 512
-	ContrailLength: 30
-	ContrailStartColor: 5dff00
+		Speed: 204
+		Blockable: True
+		LaunchAngle: 56
+		Inaccuracy: 512
+		ContrailLength: 30
+		ContrailStartColor: 5dff00
 	StartBurstReport: devourer-fire1.aud, devourer-fire2.aud, devourer-fire3.aud
 	Burst: 13
 	BurstDelays: 1
@@ -548,9 +552,7 @@ Tripod.acid:
 
 Tripod.acid.Corrosive:
 	Inherits: Tripod.acid
-	Warhead@Corrosion: ApplyPhysicalState
-		PhysicalStateName: ArmorCorrosion
-		Amount: 10
+	Inherits: ^CorrosionEffect
 
 TripodLaser.chain:
 	Inherits: ^Energy
@@ -626,6 +628,7 @@ Reaper.acid:
 
 Reaper.acid.Corrosive:
 	Inherits: Tripod.acid.Corrosive
+	Inherits: ^CorrosionEffect
 
 StormriderZap:
 	Inherits: ^BulletHeavy
@@ -903,7 +906,7 @@ InvaderExplosion:
 		ValidTargets: Ground, Ship, Trees
 
 SuicideAcid:
-	Inherits: ^Chemical
+	Inherits: ^Acid
 	ValidTargets: Ground, Water
 	Range: 7c0
 	ReloadDelay: 60
@@ -930,9 +933,7 @@ InvaderExplosion.Corrosive:
 
 SuicideAcid.Corrosive:
 	Inherits: SuicideAcid
-	Warhead@Corrosion: ApplyPhysicalState
-		PhysicalStateName: ArmorCorrosion
-		Amount: 10
+	Inherits: ^CorrosionEffect
 
 PlasmaTurretGun:
 	Inherits: ^EnergyLight

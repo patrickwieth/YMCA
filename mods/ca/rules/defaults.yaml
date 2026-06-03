@@ -2869,8 +2869,8 @@ refinery.dockhelper:
 		RequiresCondition: onwater && driver-dead
 
 ^Submarine:
-	Inherits@1: ^Ship
-	Inherits@Armor: ^LightArmor
+	Inherits: ^Ship
+	Inherits: ^LightArmor
 	Targetable:
 		TargetTypes: Ground, Water, Ship, Submarine, Repair
 		RequiresCondition: !underwater && !being-warped
@@ -3783,7 +3783,7 @@ BuildBoost.Dummy:
 
 ^AmmoBox:
 	Inherits: ^TechBuilding
-	Inherits@Armor: ^LightArmor
+	Inherits: ^LightArmor
 	-Selectable:
 	Interactable:
 	SelectionDecorations:
@@ -5867,18 +5867,21 @@ BuildBoost.Dummy:
 		TargetTypes: none
 
 ^LightArmor:
+	Inherits: ^CorrodibleArmor
 	Armor:
 		Type: Light
 	Targetable@armorclass:
 		TargetTypes: light
 
 ^HeavyArmor:
+	Inherits: ^CorrodibleArmor
 	Armor:
 		Type: Heavy
 	Targetable@armorclass:
 		TargetTypes: heavy
 
 ^ReflectorArmor:
+	Inherits: ^CorrodibleArmor
 	TooltipExtras:
 		Attributes: • Reflector Armor absorbs Energy Weapons
 	WithProductionIconOverlay@Reflector:
@@ -6123,11 +6126,11 @@ BuildBoost.Dummy:
 	DamageMultiplierProportionalToPhysicalState@CORROSION:
 		PhysicalStateName: ArmorCorrosion
 		DamageMultiplierAtMinimum: 100
-		DamageMultiplierAtMaximum: 1000
+		DamageMultiplierAtMaximum: 500
 		UseDeviationFromRelaxed: true
 	PhysicalStateBar@CORROSION:
 		PhysicalStateName: ArmorCorrosion
-		PositiveColor: 6EE061FF
+		PositiveColor: 6EE0A1FF
 		NegativeColor: 2E6E1FFF
 		NeutralColor: 4C4C4CFF
 		DisplayWhenRelaxed: false

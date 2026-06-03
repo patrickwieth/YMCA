@@ -907,7 +907,7 @@ STCR.Range:
 	Tooltip:
 		Name: Ranged Stormcrawler
 	Buildable:
-		Prerequisites: tier2, vehicles, ~reaper, ~upg.stormcrawler, ~!upg.stormcrawler2
+		Prerequisites: tier2, vehicles, ~reaper, ~promotion.stormcrawler.range, ~!upg.stormcrawler2
 		Description: vehicle-stcr-range.buildable-description
 		IconPalette: scrin
 	Armament@PRIMARY:
@@ -962,7 +962,7 @@ STCR.Arc:
 	Tooltip:
 		Name: Arcing Stormcrawler
 	Buildable:
-		Prerequisites: tier2, vehicles, ~reaper, ~upg.stormcrawler, ~!upg.stormcrawler2
+		Prerequisites: tier2, vehicles, ~reaper, ~promotion.stormcrawler.ar, ~!upg.stormcrawler2
 		Description: vehicle-stcr-arc.buildable-description
 		IconPalette: scrin
 	Armament@PRIMARY:
@@ -1066,11 +1066,11 @@ DEVO.acid:
 		Attributes: vehicle-devo-acid.tooltip-attributes
 	Tooltip:
 		Name: Acid Devourer Tank
-	Armament@ACID:
+	Armament:
 		Weapon: DevourerAcid
 		LocalOffset: 750,0,208
 		RequiresCondition: !scrin_corrosion
-	Armament@ACID_UPGRADED:
+	Armament@CORROSIVE:
 		Weapon: DevourerAcid.Corrosive
 		LocalOffset: 750,0,208
 		RequiresCondition: scrin_corrosion
@@ -1316,7 +1316,7 @@ TPOD.chain:
 	WithProductionIconOverlay@Chainer:
 		Types: Chainer
 	Buildable:
-		Prerequisites: tier3, vehicles, ~traveler, ~upg.tripod, ~!upg.tripod2
+		Prerequisites: tier3, vehicles, ~traveler, ~promotion.tripod.chainer, ~!upg.tripod2
 		Description: vehicle-tpod-chain.buildable-description
 		IconPalette: chrome
 	TooltipExtras:
@@ -1371,7 +1371,7 @@ TPOD.acid:
 	WithProductionIconOverlay@Hazard:
 		Types: Hazard
 	Buildable:
-		Prerequisites: tier3, vehicles, ~traveler, ~upg.tripod, ~!upg.tripod2
+		Prerequisites: tier3, vehicles, ~traveler, ~promotion.tripod.acid, ~!upg.tripod2
 		Description: vehicle-tpod-acid.buildable-description
 		IconPalette: chrome
 	TooltipExtras:
@@ -1429,7 +1429,7 @@ RPTP:
 	RenderSprites:
 		Image: RPTP
 	Buildable:
-		Prerequisites: tier3, vehicles, ~reaper, ~!upg.reaper, ~!upg.reaper
+		Prerequisites: tier3, vehicles, ~reaper, ~!upg.reaper
 	Valued:
 		Cost: 2200
 	Tooltip:
@@ -1455,7 +1455,7 @@ RPTP.range:
 	WithProductionIconOverlay@Crosshair:
 		Types: Crosshair
 	Buildable:
-		Prerequisites: tier3, vehicles, ~reaper, ~upg.reaper, ~!upg.reaper2
+		Prerequisites: tier3, vehicles, ~reaper, ~promotion.reaper.range, ~!upg.reaper2
 		Description: vehicle-rptp-range.buildable-description
 		IconPalette: chrome
 	TooltipExtras:
@@ -1511,7 +1511,7 @@ RPTP.acid:
 	WithProductionIconOverlay@Hazard:
 		Types: Hazard
 	Buildable:
-		Prerequisites: tier3, vehicles, ~reaper, ~upg.reaper, ~!upg.reaper2
+		Prerequisites: tier3, vehicles, ~reaper, ~promotion.reaper.acid, ~!upg.reaper2
 		Description: vehicle-rptp-acid.buildable-description
 		IconPalette: chrome
 	TooltipExtras:
@@ -1523,6 +1523,11 @@ RPTP.acid:
 	Armament@PRIMARY:
 		Weapon: Reaper.Acid
 		-MuzzleSequence: muzzle
+		RequiresCondition: !scrin_corrosion
+	Armament@CORROSIVE:
+		Weapon: Reaper.Acid.Corrosive
+		LocalOffset: 750,0,208
+		RequiresCondition: scrin_corrosion
 
 RPTP.acid.reflector:
 	Inherits: RPTP.acid
