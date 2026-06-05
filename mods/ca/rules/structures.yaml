@@ -208,59 +208,6 @@ IRON:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
-PDOX:
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^SuperWeapon
-	Inherits: ^AlliesSuperweaponSmall
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 120
-		Prerequisites: atek, ~structures.allies, ~techlevel.superw
-		BuildLimit: 1
-		Description: Teleports a group of units across the\nmap for a short time.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Chronoshift
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: Chronosphere
-	Health:
-		HP: 100000
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RequiresCondition: !disabled
-		RevealGeneratedShroud: False
-	RevealsShroud@Offline:
-		Range: 5c0
-		RequiresCondition: disabled
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-		RequiresCondition: !disabled
-	WithBuildingBib:
-		HasMinibib: true
-	ProvidesPrerequisite@germany:
-		Factions: germany
-		Prerequisite: pdox.germany
-	ProvidesPrerequisite@germanstructure:
-		RequiresPrerequisites: structures.germany
-		Prerequisite: pdox.germany
-	WithChronosphereOverlay:
-		Image: chronobubble
-		WarpInSequence: warpin
-		WarpOutSequence: warpout
-		Palette: ra2effect-ignore-lighting-alpha75
-	SupportPowerChargeBar:
-	Power:
-		Amount: -200
-		RequiresCondition: !being-warped
-	MustBeDestroyed:
-		RequiredForShortGame: false
-	ProvidesPrerequisite@buildingname:
-	InfiltrateForSupportPowerReset:
-		Types: SpyInfiltrate, SabInfiltrate
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 AGUN:
 	Inherits: ^Defense
