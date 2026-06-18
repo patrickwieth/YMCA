@@ -901,12 +901,12 @@ soviet-factions =
          Akatsiya vs. V3
          Tesla Tank Arcing
          No Barrage Upgrade for Flak Track
-        Infantry: +++
-        Artillery: +++
-        Aircraft: ++
-        Defense: ++
-        Heavy Tanks: +++
-        Recon&Stealth: +
+        Infantry: <color=#8BCF8B>+++</color>
+        Artillery: <color=#8BCF8B>+++</color>
+        Aircraft: <color=Yellow>++</color>
+        Defense: <color=Yellow>++</color>
+        Heavy Tanks: <color=#8BCF8B>+++</color>
+        Recon&Stealth: <color=Red>+</color>
     .factionca-at-6-description =
         North Korea: Supreme Leadership
         North Korea is a sub-faction of the Soviets. The Soviets can build very heavy tanks and are still able to mass produce these.
@@ -921,12 +921,12 @@ soviet-factions =
          Katyusha vs. V3
          ISU-152
          Sukhoi
-        Infantry: ++
-        Artillery: ++++
-        Aircraft: +++
-        Defense: ++
-        Heavy Tanks: ++
-        Recon&Stealth: ++
+        Infantry: <color=Yellow>++</color>
+        Artillery: <color=Green>++++</color>
+        Aircraft: <color=#8BCF8B>+++</color>
+        Defense: <color=Yellow>++</color>
+        Heavy Tanks: <color=Yellow>++</color>
+        Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-7-description =
         Iraq: Chemicals and Radiation
         Iraq is a sub-faction of the Soviets. The Soviets can build very heavy tanks and are still able to mass produce these.
@@ -942,12 +942,12 @@ soviet-factions =
          Nuclear Mammoth Shells
          Dirty Bombs Frogfoot
          No Propaganda turret for Mammoth
-        Infantry: ++++
-        Artillery: +++
-        Aircraft: ++
-        Defense: ++
-        Heavy Tanks: ++
-        Recon&Stealth: +
+        Infantry: <color=Green>++++</color>
+        Artillery: <color=#8BCF8B>+++</color>
+        Aircraft: <color=Yellow>++</color>
+        Defense: <color=Yellow>++</color>
+        Heavy Tanks: <color=Yellow>++</color>
+        Recon&Stealth: <color=Red>+</color>
     .factionca-at-randomsoviet-description =
         Random Soviet Faction
         A random Soviet faction will be chosen when the game starts.

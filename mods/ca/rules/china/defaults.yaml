@@ -1,4 +1,4 @@
-﻿^BaseWorld:
+^BaseWorld:
 	FactionCA@randomchina:
 		Name: China
 		InternalName: RandomChina
@@ -129,13 +129,33 @@ Player:
 
 ^MinefieldUpgrade:
 	Inherits@gensound: ^GeneralsDamageBuilding
-	GrantConditionOnPrerequisite@minefield:
-		Condition: minefield
-		Prerequisites: uplandmines
 	SpawnNeighboringActors@minefield:
 		ActorTypes: chminv.minefield
-		RecreationInterval: 1600
-		RequiresCondition: minefield
+		RequiresCondition: local-uplandmines
+	Pluggable:
+		Conditions:
+			minefield: local-uplandmines
+		Requirements:
+			minefield: !build-incomplete && !local-uplandmines
+
+building.mines:
+	Inherits: ^BuildingPlugTD
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Upgrade: Land Mines
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 50
+		Prerequisites: ~structures.china
+		Description: Places land mines around a chinese structure.
+		Icon: icon
+	RenderSprites:
+		Image: tank_mine
+	WithSpriteBody:
+	Plug:
+		Type: minefield
+
 
 ^HordeBonus:
 	ExternalCondition@HordeEffect:

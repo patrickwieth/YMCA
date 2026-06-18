@@ -44,7 +44,7 @@ set MOD_SEARCH_PATHS=%TEMPLATE_DIR%\mods,%~dp0mods,./mods
 if not exist "%TEMPLATE_DIR%\mods\ca\maps\%MAP_PACKAGE%" goto nomap
 
 if not exist "%~dp0..\engine\bin\OpenRA.exe" goto noengine
->nul findstr /C:"%ENGINE_VERSION%" "%~dp0..\engine\VERSION" || goto noengine
+powershell -NoProfile -Command "$v = (Get-Content '%~dp0..\engine\VERSION' -Raw).Trim(); if ($v -eq '%ENGINE_VERSION%') { exit 0 } exit 1" >nul 2>&1 || goto noengine
 
 cd /d "%~dp0..\engine"
 

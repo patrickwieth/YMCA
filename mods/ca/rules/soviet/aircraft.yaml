@@ -181,7 +181,7 @@ Hind:
 		Queue: Aircraft
 		BuildAtProductionType: Helicopter
 		BuildPaletteOrder: 20
-		Prerequisites: ~hpad, ~aircraft.soviet, ~!filler.hind
+		Prerequisites: ~hpad, ~aircraft.soviet, ~!upg.hind
 		Description: Helicopter gunship armed\nwith dual chainguns.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	TooltipExtras:
 		Strengths: • Strong vs Infantry
@@ -439,6 +439,12 @@ HeavyBomber.Nuke:
 		Offset: 50,-950,50
 	Contrail@2:
 		Offset: 50,950,50
+	SpawnActorOnDeath:
+		Actor: HeavyBomber.Husk
+		RequiresCondition: !empdisable && !being-warped
+	SpawnActorOnDeath@EMP:
+		Actor: HeavyBomber.Husk.EMP
+		RequiresCondition: empdisable && !being-warped
 
 AtomParabomb:
 	Inherits: V3.Kirov
@@ -703,7 +709,7 @@ Kirov:
 		BuildAtProductionType: Plane
 		BuildPaletteOrder: 55
 		IconPalette: chrome
-		Prerequisites: ~afld, stek, ~aircraft.soviet, ~!filler.kirov
+		Prerequisites: ~afld, stek, ~aircraft.soviet, ~!upg.kirov
 		Description: Heavily armoured airship equipped with specialised bombs.\n  Vulnerable when dropping bombs.
 	TooltipExtras:
 		Strengths: • Strong vs Buildings, Slow units

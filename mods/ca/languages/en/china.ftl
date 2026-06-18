@@ -240,12 +240,12 @@ china-factions =
         ECM Pulse vs. ECM Chain
         Outpost Propaganda vs. Bunker
         No Battlemaster and no Overlord  
-        Infantry: ++++ 
-        Artillery: +++ 
-        Aircraft: ++ 
-        Defense: ++++ 
-        Heavy Tanks: + 
-        Recon&Stealth: ++
+        Infantry: <color=Green>++++</color> 
+        Artillery: <color=#8BCF8B>+++</color> 
+        Aircraft: <color=Yellow>++</color> 
+        Defense: <color=Green>++++</color> 
+        Heavy Tanks: <color=Red>+</color> 
+        Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-22-description =
         Ta Hun Kwai: Tanks 
         Ta Hun Kwai is a general of China. China is best at defense, base expanding and massive armies. 
@@ -259,12 +259,12 @@ china-factions =
         ECM Focus vs. ECM Chain
         gatling Tank PDL vs. Reflector
         No Nuke Cannon  
-        Infantry: ++ 
-        Artillery: + 
-        Aircraft: ++ 
-        Defense: +++ 
-        Heavy Tanks: ++++ 
-        Recon&Stealth: ++
+        Infantry: <color=Yellow>++</color> 
+        Artillery: <color=Red>+</color> 
+        Aircraft: <color=Yellow>++</color> 
+        Defense: <color=#8BCF8B>+++</color> 
+        Heavy Tanks: <color=Green>++++</color> 
+        Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-23-description =
         Tsing Shi Tao: Nuclear 
         Tsing Shi Tao is a general of China. China is best at defense, base expanding and massive armies. 
@@ -279,12 +279,12 @@ china-factions =
         ECM Pulse vs. ECM Focus
         Nuke Cannon Neutron vs. Range
         No Inferno Cannon  
-        Infantry: ++ 
-        Artillery: ++++ 
-        Aircraft: ++ 
-        Defense: +++ 
-        Heavy Tanks: +++ 
-        Recon&Stealth: ++
+        Infantry: <color=Yellow>++</color> 
+        Artillery: <color=Green>++++</color> 
+        Aircraft: <color=Yellow>++</color> 
+        Defense: <color=#8BCF8B>+++</color> 
+        Heavy Tanks: <color=#8BCF8B>+++</color> 
+        Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-randomchina-description =
         Random China Faction
         A random China faction will be chosen when the game starts.

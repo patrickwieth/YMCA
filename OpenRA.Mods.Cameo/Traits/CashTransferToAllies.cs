@@ -80,6 +80,7 @@ namespace OpenRA.Mods.Cameo.Traits
 			ticks = info.ChargeDuration;
 			modifierAboveThreshold = new int[] { info.ModifierAboveThreshold };
 			modifierBelowThreshold = new int[] { info.ModifierBelowThreshold };
+			teams = new Dictionary<int, List<PlayerResources>>();
 		}
 
 		void INotifyCreated.Created(Actor self)
@@ -139,7 +140,7 @@ namespace OpenRA.Mods.Cameo.Traits
 
 		void ITick.Tick(Actor self)
 		{
-			if (!Enabled)
+			if (!Enabled || teams == null)
 			{
 				return;
 			}

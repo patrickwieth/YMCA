@@ -168,7 +168,8 @@ namespace OpenRA.Mods.Cameo.Traits
 			PromoteToRank(currentLevel);
 
 			Game.Sound.PlayNotification(self.World.Map.Rules, self.Owner, Info.NotificationType, Info.LevelUpNotification, self.Owner.Faction.InternalName);
-			TextNotificationsManager.AddTransientLine(self.Owner, string.Format(Info.LevelUpTextNotification, currentLevel));
+			if (!string.IsNullOrEmpty(Info.LevelUpTextNotification))
+				TextNotificationsManager.AddTransientLine(self.Owner, FluentProvider.GetMessage(Info.LevelUpTextNotification, "level", currentLevel, "rank", currentRank));
 		}
 
 		void PromoteToRank(int level)

@@ -33,7 +33,7 @@ if "!ENGINE_VERSION!" == "" goto badconfig
 if "!ENGINE_DIRECTORY!" == "" goto badconfig
 
 if not exist %ENGINE_DIRECTORY%\bin\OpenRA.exe goto noengine
->nul find %ENGINE_VERSION% %ENGINE_DIRECTORY%\VERSION || goto noengine
+powershell -NoProfile -Command "$v = (Get-Content '%ENGINE_DIRECTORY%\VERSION' -Raw).Trim(); if ($v -eq '%ENGINE_VERSION%') { exit 0 } exit 1" >nul 2>&1 || goto noengine
 cd %ENGINE_DIRECTORY%
 
 :loop

@@ -191,6 +191,12 @@
 		Sequence: bib0
 		HasMinibib: true
 
+^1x1Building+Minibib:
+	Inherits: ^1x1Shape
+	WithBuildingBib:
+		Sequence: bibFtur
+		HasMinibib: true
+
 ^2x1Shape:
 	HitShape:
 		UseTargetableCellsOffsets: true
@@ -465,10 +471,10 @@
 		DockAngle: 256
 		DockOffset: 1c0,2c0,0
 		Type: Unload
-		MaxQueueLength: 5
+		MaxQueueLength: 3
 	Refinery:
 	StoresPlayerResources:
-		Capacity: 2000
+		Capacity: 4000
 	WithResourceStoragePipsDecoration:
 		Position: BottomLeft
 		Margin: 5, 4
@@ -487,9 +493,20 @@
 		Percentage: 50
 		Types: SpyInfiltrate, ThiefInfiltrate
 		Notification: CreditsStolen
+	SpawnNeighboringActors@dockhelper1:
+		ActorTypes: refinery.dockhelper
+		Locations: 0,1
+
+refinery.dockhelper:
+	Inherits: ^DummyDockBuilding
+	Refinery:
+	DockHost:
+		DockAngle: 128
+		DockOffset: 0,-1c0,0
+		Type: Unload
+		MaxQueueLength: 2
 
 ^Harvester:
-	Inherits: ^HarvesterBalancer
 	Inherits: ^SelectableEconomicUnit
 	DockClientManager:
 		SearchAllyDocks: true
@@ -2398,6 +2415,8 @@
 ^RobotDriver:
 	Inherits: ^DisabledByRadarLoss
 	Inherits: ^Hackable
+	Mobile:
+		PauseOnCondition: !radarenabled || deployed || disabled || empdisable || being-warped
 	IgnoresDisguise:
 	WithDecoration@DISABLED:
 		Image: poweroff
@@ -2448,7 +2467,7 @@
 		OpeningSequence: open
 		ClosingSEquence: close
 		Offset: 0,0,427
-		RequiresCondition: parachute
+		RequiresCondition: parachute && !sovietparachute
 	WithParachute@soviet:
 		ShadowImage: parach-shadow
 		ShadowSequence: idle
@@ -2836,8 +2855,8 @@
 		RequiresCondition: onwater && driver-dead
 
 ^Submarine:
-	Inherits@1: ^Ship
-	Inherits@Armor: ^LightArmor
+	Inherits: ^Ship
+	Inherits: ^LightArmor
 	Targetable:
 		TargetTypes: Ground, Water, Ship, Submarine, Repair
 		RequiresCondition: !underwater && !being-warped
@@ -3182,7 +3201,7 @@
 		Position: BottomLeft
 		RequiresSelection: true
 	Rearmable:
-		RearmActors: afld, afld.gdi, afld.allies, chairport
+		RearmActors: afld, afld.gdi, afld.allies, chairport, airfield.dockhelper
 
 ^RearmableHelicopter:
 	Inherits: ^RearmableAircraft
@@ -3252,16 +3271,16 @@
 		TrailLength: 10
 
 ^BasicBuilding:
-	Inherits@1: ^ExistsInWorld
-	Inherits@Armor: ^WoodArmor
-	Inherits@2: ^IronCurtainable
-	Inherits@3: ^SpriteActor
-	Inherits@4: ^C4Plantable
-	Inherits@TNT: ^TNTPlantable
-	Inherits@shape: ^1x1Shape
-	Inherits@bounty: ^GlobalBounty
-	Inherits@selection: ^SelectableBuilding
-	Inherits@handicaps: ^PlayerHandicaps
+	Inherits: ^ExistsInWorld
+	Inherits: ^WoodArmor
+	Inherits: ^IronCurtainable
+	Inherits: ^SpriteActor
+	Inherits: ^C4Plantable
+	Inherits: ^TNTPlantable
+	Inherits: ^1x1Shape
+	Inherits: ^GlobalBounty
+	Inherits: ^SelectableBuilding
+	Inherits: ^PlayerHandicaps
 	Inherits: ^RelayMarkable
 	Targetable:
 		TargetTypes: Ground, C4, TNT, DetonateAttack, Structure
@@ -3307,14 +3326,14 @@
 		Sequence: tntbig
 
 ^Building:
-	Inherits@1: ^BasicBuilding
-	Inherits@2: ^Cloakable
-	Inherits@3: ^ForceShieldable
-	Inherits@4: ^EmpDisable
-	Inherits@6: ^Warpable
-	Inherits@7: ^BotBuilding
-	Inherits@8: ^Chillable
-	Inherits@9: ^NaniteShieldable
+	Inherits: ^BasicBuilding
+	Inherits: ^Cloakable
+	Inherits: ^ForceShieldable
+	Inherits: ^EmpDisable
+	Inherits: ^Warpable
+	Inherits: ^BotBuilding
+	Inherits: ^Chillable
+	Inherits: ^NaniteShieldable
 	Inherits: ^BuildingVision
 	Inherits: ^WhiteFlash
 	Inherits: ^GreenFlash
@@ -3746,7 +3765,7 @@ BuildBoost.Dummy:
 
 ^AmmoBox:
 	Inherits: ^TechBuilding
-	Inherits@Armor: ^LightArmor
+	Inherits: ^LightArmor
 	-IsometricSelectable:
 	Interactable:
 	SelectionDecorations:
@@ -4178,9 +4197,7 @@ BuildBoost.Dummy:
 		Sequence: offline
 		Palette: chrome
 		RequiresCondition: forcedisabled && !forceshield
-		ReferencePoint: Center
-		Offsets:
-			repairing: 10, 0
+		Position: Center
 	RepairableBuilding:
 		RepairCondition: repairing
 
@@ -4198,9 +4215,7 @@ BuildBoost.Dummy:
 		Sequence: offline
 		Palette: chrome
 		RequiresCondition: powerdown
-		ReferencePoint: Center
-		Offsets:
-			repairing: 10, 0
+		Position: Center
 	PowerMultiplier@POWERDOWN:
 		RequiresCondition: powerdown
 		Modifier: 0
@@ -4224,9 +4239,7 @@ BuildBoost.Dummy:
 		Sequence: offline
 		Palette: chrome
 		RequiresCondition: powerdown || forcedisabled
-		ReferencePoint: Center
-		Offsets:
-			repairing: 10, 0
+		Position: Center
 	PowerMultiplier@POWERDOWN:
 		RequiresCondition: powerdown
 		Modifier: 0
@@ -4258,6 +4271,7 @@ BuildBoost.Dummy:
 		Sequence: offline
 		Palette: chrome
 		RequiresCondition: forcedisabled && !forceshield
+		Position: Center
 		ReferencePoint: Center
 	GrantCondition@IDISABLE:
 		RequiresCondition: power-outage || forcedisabled
@@ -5219,10 +5233,22 @@ BuildBoost.Dummy:
 	InstantlyRepairs:
 	RepairsBridges:
 	CaptureManager:
+	GrantConditionOnPrerequisite@GLOBALREUSABLEENGINEER:
+		Condition: global-reusable-engineers
+		Prerequisites: global-reusable-engineers
 	Captures:
+		RequiresCondition: !global-reusable-engineers
 		CaptureTypes: building
 		PlayerExperience: 25
 		CaptureDelay: 100
+	Captures@REUSABLE:
+		RequiresCondition: global-reusable-engineers
+		CaptureTypes: building
+		PlayerExperience: 25
+		CaptureDelay: 150
+		ConsumedByCapture: False
+		EnterCursor: ability
+		EnterBlockedCursor: move-blocked
 
 ^Mechanic:
 	Inherits: ^TankSupportUnit
@@ -5833,18 +5859,21 @@ BuildBoost.Dummy:
 		TargetTypes: none
 
 ^LightArmor:
+	Inherits: ^CorrodibleArmor
 	Armor:
 		Type: Light
 	Targetable@armorclass:
 		TargetTypes: light
 
 ^HeavyArmor:
+	Inherits: ^CorrodibleArmor
 	Armor:
 		Type: Heavy
 	Targetable@armorclass:
 		TargetTypes: heavy
 
 ^ReflectorArmor:
+	Inherits: ^CorrodibleArmor
 	TooltipExtras:
 		Attributes: • Reflector Armor absorbs Energy Weapons
 	WithProductionIconOverlay@Reflector:
@@ -6033,6 +6062,26 @@ BuildBoost.Dummy:
 	KillsSelf:
 		RequiresCondition: invulnerability || triggered || berserk
 
+^DummyDockBuilding:
+	Building:
+	HitShape:
+		UseTargetableCellsOffsets: true
+	Targetable:
+		TargetTypes: Structure
+	Reservable:
+	Tooltip:
+		Name: Dock Helper
+		ShowOwnerRow: false
+	Interactable:
+	AlwaysVisible:
+	WithSpriteBody:
+	RenderSprites:
+		Image: structuredummy
+	Health:
+		HP: 10000
+	BodyOrientation:
+		QuantizedFacings: 1
+
 ^MadnessSusceptible:
 	PhysicalState@Madness:
 		Name: Madness
@@ -6069,11 +6118,11 @@ BuildBoost.Dummy:
 	DamageMultiplierProportionalToPhysicalState@CORROSION:
 		PhysicalStateName: ArmorCorrosion
 		DamageMultiplierAtMinimum: 100
-		DamageMultiplierAtMaximum: 1000
+		DamageMultiplierAtMaximum: 500
 		UseDeviationFromRelaxed: true
 	PhysicalStateBar@CORROSION:
 		PhysicalStateName: ArmorCorrosion
-		PositiveColor: 6EE061FF
+		PositiveColor: 6EE0A1FF
 		NegativeColor: 2E6E1FFF
 		NeutralColor: 4C4C4CFF
 		DisplayWhenRelaxed: false

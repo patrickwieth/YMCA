@@ -377,12 +377,12 @@ gdi-factions =
         Key Commander Tree Options:
          Nanite Mammoth
          No AA Vulcan upgrade for APC
-        Infantry: ++
-        Artillery: ++
-        Aircraft: +
-        Defense: +++
-        Heavy Tanks: +++
-        Recon&Stealth: ++
+        Infantry: <color=Yellow>++</color>
+        Artillery: <color=Yellow>++</color>
+        Aircraft: <color=Red>+</color>
+        Defense: <color=#8BCF8B>+++</color>
+        Heavy Tanks: <color=#8BCF8B>+++</color>
+        Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-11-description =
         Eagle Corps: Air Power
         Eagle is a sub-faction of the GDI. The GDI designed the strongest tanks. These units are costly but easily dominate the battlefield.
@@ -393,12 +393,12 @@ gdi-factions =
         Faction Bonus: Reinforcements (-20% Cooldown), Aircraft (10% Discount)
         Key Commander Tree Options:
          Ion Mammoth
-        Infantry: ++
-        Artillery: ++++
-        Aircraft: +++
-        Defense: +
-        Heavy Tanks: +++
-        Recon&Stealth: ++
+        Infantry: <color=Yellow>++</color>
+        Artillery: <color=Green>++++</color>
+        Aircraft: <color=#8BCF8B>+++</color>
+        Defense: <color=Red>+</color>
+        Heavy Tanks: <color=#8BCF8B>+++</color>
+        Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-9-description =
         Steel Talon: Mechs
         Talon is a sub-faction of the GDI. The GDI designed the strongest tanks. These units are costly but easily dominate the battlefield.
@@ -410,12 +410,12 @@ gdi-factions =
         Key Commander Tree Options:
          Titan Railgun vs. Titan EMP
          No Railgun upgrade for Jumpjet Infantry
-        Infantry: ++
-        Artillery: ++++
-        Aircraft: +
-        Defense: +
-        Heavy Tanks: ++++
-        Recon&Stealth: +
+        Infantry: <color=Yellow>++</color>
+        Artillery: <color=Green>++++</color>
+        Aircraft: <color=Red>+</color>
+        Defense: <color=Red>+</color>
+        Heavy Tanks: <color=Green>++++</color>
+        Recon&Stealth: <color=Red>+</color>
     .factionca-at-randomgdi-description =
         Random GDI Faction
         A random GDI faction will be chosen when the game starts.

@@ -23,13 +23,16 @@ HARV:
 	SpawnActorOnDeath:
 		Actor: HARV.EmptyHusk
 		RequiresCondition: !being-warped && !orep-upgrade
+	SpawnActorOnDeath@OREPUPGRADE:
+		Actor: HARV.Chrono
+		RequiresCondition: orep-upgrade
 	WithFacingSpriteBody:
 	GrantConditionOnPrerequisite@OREPUPGRADE:
 		Prerequisites: orep
 		Condition: orep-upgrade
 	KillsSelf@OREPUPGRADE:
 		Delay: 1
-		RemoveInstead: true
+		RemoveInstead: false
 		RequiresCondition: orep-upgrade
 	GrantCondition@WARPOUT:
 		Condition: being-warped
@@ -69,6 +72,9 @@ HARV.Chrono:
 		WarpOutSequence: warpout
 		WarpInSound: vchrtele.aud
 		WarpOutSound: ichrmova.aud
+	ExplodeWeaponTeleportEffect:
+		ImpactWeapon: ChronoImpact
+		TeleportWeapon: ChronoImpact
 	Voiced:
 		VoiceSet: ChronoMinerVoice
 	SpawnActorOnDeath:
@@ -200,9 +206,15 @@ MRJ:
 
 APC:
 	Inherits: ^Tank
+	Inherits: ^VoxelVehicle
 	Inherits: ^BiologicalDriver
 	Inherits: ^Transport
 	Inherits: ^PrioAntiInfantry
+	RenderVoxels:
+		Scale: 0.8
+		Image: apc
+	WithVoxelBody@turret:
+		Sequence: turret
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 40
@@ -353,10 +365,14 @@ AA_Jeep:
 
 1TNK:
 	Inherits: ^FightingTankTurreted
+	Inherits: ^VoxelTurretedTank
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^AlliesTank
 	Inherits: ^ImprovedVision
+	RenderVoxels:
+		Scale: 0.9
+		Image: lighttank
 	RenderSprites:
 		Image: light_tank
 	Buildable:
@@ -372,25 +388,9 @@ AA_Jeep:
 	Health:
 		HP: 33000
 	Mobile:
-		Locomotor: Amphibious
 		Speed: 113
-	GrantConditionOnTerrain:
-		TerrainTypes: Water
-		Condition: onwater
-	Targetable:
-		TargetTypes: Ground, Vehicle, C4
-		RequiresCondition: !onwater && !parachute && !being-warped
-	Targetable@WATER:
-		TargetTypes: Ground, Vehicle, Water, Ship
-		RequiresCondition: onwater && (!parachute && !being-warped)
-	WithFacingSpriteBody:
-		RequiresCondition: !onwater
-	WithFacingSpriteBody@WATER:
-		Sequence: idle-water
-		Name: body-water
-		RequiresCondition: onwater
 	Turreted@PRIMARY:
-		TurnSpeed: 56
+		TurnSpeed: 76
 	Armament@PRIMARY:
 		Weapon: 25mm
 		Turret: primary
@@ -399,7 +399,6 @@ AA_Jeep:
 		LocalOffset: 768,0,90
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 1TNK.Husk
 		RequiresCondition: !onwater && !being-warped
@@ -410,7 +409,6 @@ AA_Jeep:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 50
-		IconPalette: chrometd
 		Prerequisites: weap, vehicles, ~allies, ~promotion.scout_tank_pdl
 		Description: Fast tank, good for scouting.\nHas Point Laser Defense System\n  Strong vs Light Armor\n  Weak vs Infantry, Tanks, Aircraft\n  Special Ability: Amphibious
 	Valued:
@@ -437,13 +435,9 @@ AA_Jeep:
 	Inherits: ^BiologicalDriver
 	Inherits: ^PrioAntiHeavy
 	Inherits: ^AlliesTank
+	-Buildable:
 	RenderSprites:
 		Image: medium_tank
-	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 70
-		Prerequisites: vehicles, ~allies, ~!england
-		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -455,18 +449,70 @@ AA_Jeep:
 		Speed: 82
 	Turreted:
 		TurnSpeed: 48
-		Offset: 0,0,20
+		Offset: 0,0,0
 	Armament:
 		Weapon: 90mm
 		Recoil: 128
 		RecoilRecovery: 38
-		LocalOffset: 720,0,80
+		LocalOffset: 1200,0,200
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
-	WithSpriteTurret:
 	SpawnActorOnDeath:
 		Actor: 2TNK.Husk
 		RequiresCondition: !being-warped
+
+Challenger_Tank:
+	Inherits: 2TNK
+	Inherits: ^VoxelTurretedTank
+	RenderSprites:
+		Image: Challenger_Tank
+	RenderVoxels:
+		Scale: 0.9
+		Image: challengertank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: vehicles, ~england
+		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Challenger
+		GenericName: Tank
+	WithMuzzleOverlay:
+
+Leclerc_Tank:
+	Inherits: 2TNK
+	Inherits: ^VoxelTurretedTank
+	RenderSprites:
+		Image: Leclerc_Tank
+	RenderVoxels:
+		Scale: 0.9
+		Image: leclerctank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: vehicles, ~france
+		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Leclerc
+		GenericName: Tank
+
+Leopard_Tank:
+	Inherits: 2TNK
+	Inherits: ^VoxelTurretedTank
+	RenderSprites:
+		Image: Leopard_Tank
+	RenderVoxels:
+		Scale: 0.9
+		Image: leopardtank
+	Buildable:
+		Queue: Vehicle
+		BuildPaletteOrder: 70
+		Prerequisites: vehicles, ~germany
+		Description: Allied main battle tank.\n  Strong vs Vehicles\n  Weak vs Infantry, Aircraft
+	Tooltip:
+		Name: Leopard
+		GenericName: Tank
+	WithMuzzleOverlay:
 
 2TNK.Chrono:
 	Inherits: 2TNK
@@ -475,7 +521,6 @@ AA_Jeep:
 		Image: medium_tank
 		FactionImages:
 			england: mirage
-	-Buildable:
 	GrantConditionOnFaction@England:
 		Factions: england
 		Condition: england
@@ -491,6 +536,34 @@ AA_Jeep:
 		LocalOffset: 868,0,0
 		MuzzleSequence: muzzle
 		RequiresCondition: germany
+	Armament@England:
+		Weapon: 120mmHEAT
+		Recoil: 128
+		RecoilRecovery: 38
+		LocalOffset: 720,0,80
+		MuzzleSequence: muzzle
+		RequiresCondition: england
+	Tooltip:
+		Name: Medium Tank
+		GenericName: Tank
+		RequiresCondition: !germany
+	Tooltip@germany:
+		Name: Tank Destroyer
+		GenericName: Tank
+		RequiresCondition: germany
+	MirageTooltip@Tree:
+		Name: Mirage Tank
+		GenericName: Civilian building
+		GenericVisibility: Enemy, Neutral
+		RequiresCondition: tree && england
+	Mirage:
+		RequiresCondition: england && !empdisable && !being-warped && !driver-dead
+		RevealOn: Attack, Move
+		MirageCondition: tree
+		Recoil: 85
+		RecoilRecovery: 25
+		LocalOffset: 868,0,0
+		MuzzleSequence: muzzle
 	Armament@England:
 		Weapon: 120mmHEAT
 		Recoil: 128
@@ -1799,7 +1872,7 @@ RTNK:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 75
-		Prerequisites: weap, vehicles, ~england, ~!promotion.mirage_pdl, ~!promotion.mirage_fire_rate, ~!promotion.mirage.reflector
+		Prerequisites: weap, vehicles, ~england, ~!upg.mirage
 		Description: Advanced Battle tank that can cloak when stationary.\nHas high explosive shells.\n  Strong vs Light Vehicles\n  Weak vs Aircraft.
 	Valued:
 		Cost: 800
@@ -1870,41 +1943,73 @@ RTNK.PDL:
 	Inherits: ^PointLaserDefenseSystem
 	Inherits: RTNK
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 75
-		IconPalette: chrometd
-		Prerequisites: weap, ~promotion.mirage_pdl
+		Prerequisites: weap, ~promotion.mirage.pdl, ~!upg.mirage2
 		Description: Advanced Battle tank that can cloak when stationary.\nHas average armor and Point Laser Defense.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
 	Tooltip:
 		Name: Mirage Tank (PDL)
 	Valued:
 		Cost: 1400
 
-RTNK.Firerate:
+RTNK.Reflector:
 	Inherits: RTNK
+	Inherits: ^ReflectorArmor
 	Buildable:
-		Queue: Vehicle
-		BuildPaletteOrder: 75
-		IconPalette: chrometd
-		Prerequisites: weap, ~promotion.mirage_fire_rate
+		Prerequisites: weap, ~promotion.mirage.reflector, ~!upg.mirage2
+		Description: Advanced Battle tank that can cloak when stationary.\n Has Reflector Armor, very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Aircraft.
+	Tooltip:
+		Name: Mirage Tank (Reflector)
+
+RTNK.PDL.Firerate:
+	Inherits: RTNK.PDL
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
+	Buildable:
+		Prerequisites: weap, ~promotion.mirage.pdl, ~promotion.mirage.burst
 		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
 	Tooltip:
-		Name: Mirage Tank (Firerate)
-	Valued:
-		Cost: 1200
+		Name: Mirage Tank (PDL, Firerate)
 	Armament@PRIMARY:
 		Name: primary
 		Turret: primary
 		Weapon: 120mmHEAT.firerate
 
-RTNK.Reflector:
-	Inherits: RTNK
-	Inherits: ^ReflectorArmor
+RTNK.Reflector.Firerate:
+	Inherits: RTNK.Reflector
+	WithProductionIconOverlay@Bullets:
+		Types: Bullets
 	Buildable:
-		Prerequisites: weap, ~promotion.mirage.reflector
-		Description: Advanced Battle tank that can cloak when stationary.\n Has Reflector Armor, very good vs. Energy Weapons.\n  Strong vs Vehicles, Energy Weapons\n  Weak vs Aircraft.
+		Prerequisites: weap, ~promotion.mirage.reflector, ~promotion.mirage.burst
+		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Projectiles.
 	Tooltip:
-		Name: Mirage Tank (Reflector)
+		Name: Mirage Tank (Reflector, Firerate)
+	Armament@PRIMARY:
+		Name: primary
+		Turret: primary
+		Weapon: 120mmHEAT.firerate
+
+RTNK.PDL.Toughness:
+	Inherits: RTNK.PDL
+	WithProductionIconOverlay@Shield:
+		Types: Shield
+	Buildable:
+		Prerequisites: weap, ~promotion.mirage.pdl, ~promotion.mirage.toughness
+		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Energy Weapons.
+	Tooltip:
+		Name: Mirage Tank (PDL, Toughness)
+	Health:
+		HP: 63000
+
+RTNK.Reflector.Toughness:
+	Inherits: RTNK.Reflector
+	WithProductionIconOverlay@Shield:
+		Types: Shield
+	Buildable:
+		Prerequisites: weap, ~promotion.mirage.reflector, ~promotion.mirage.toughness
+		Description: Advanced Battle tank that can cloak when stationary.\n  Strong vs Vehicles\n  Weak vs Aircraft, Projectiles.
+	Tooltip:
+		Name: Mirage Tank (Reflector, Toughness)
+	Health:
+		HP: 63000
 
 TNKD:
 	Inherits: ^FightingTank
@@ -1965,7 +2070,6 @@ TNKD.PDL:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 90
-		IconPalette: chrometd
 		Prerequisites: dome, ~promotion.tank_destroyer.pdl, ~!upg.tank_destroyer2
 		Description: German tank destroyer.\n  Strong vs Heavy Armor\n  Weak vs Infantry, Light Armor, Aircraft
 	Valued:

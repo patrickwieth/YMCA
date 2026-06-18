@@ -610,12 +610,12 @@ allies-factions =
          Prism Cannon vs. Prism Blaster
          Mirage Tank
          No AA upgrade for Chrono Prison
-        Infantry: ++
-        Artillery: ++
-        Aircraft: +++
-        Defense: +++
-        Heavy Tanks: ++
-        Recon&Stealth: ++++
+        Infantry: <color=Yellow>++</color>
+        Artillery: <color=Yellow>++</color>
+        Aircraft: <color=#8BCF8B>+++</color>
+        Defense: <color=#8BCF8B>+++</color>
+        Heavy Tanks: <color=Yellow>++</color>
+        Recon&Stealth: <color=Green>++++</color>
     .factionca-at-2-description =
         France: Fortification
         France is a sub-faction of the Allies. The Allies are best at reconnaissance and agile combat.
@@ -628,12 +628,12 @@ allies-factions =
          Prism Tank vs. Prism Blaster
          Battle Fortress
          No Aurora
-        Infantry: ++
-        Artillery: +++
-        Aircraft: ++
-        Defense: ++++
-        Heavy Tanks: +++
-        Recon&Stealth: +++
+        Infantry: <color=Yellow>++</color>
+        Artillery: <color=#8BCF8B>+++</color>
+        Aircraft: <color=Yellow>++</color>
+        Defense: <color=Green>++++</color>
+        Heavy Tanks: <color=#8BCF8B>+++</color>
+        Recon&Stealth: <color=#8BCF8B>+++</color>
     .factionca-at-3-description =
         Germany: Innovation & Time Technology
         Germany is a sub-faction of the Allies. The Allies are best at reconnaissance and agile combat.
@@ -645,12 +645,12 @@ allies-factions =
         Key Commander Tree Options:
          Prism Tank vs. Prism Cannon
          Tank Destroyer
-        Infantry: ++
-        Artillery: ++
-        Aircraft: +++
-        Defense: +++
-        Heavy Tanks: +++
-        Recon&Stealth: +++
+        Infantry: <color=Yellow>++</color>
+        Artillery: <color=Yellow>++</color>
+        Aircraft: <color=#8BCF8B>+++</color>
+        Defense: <color=#8BCF8B>+++</color>
+        Heavy Tanks: <color=#8BCF8B>+++</color>
+        Recon&Stealth: <color=#8BCF8B>+++</color>
     .factionca-at-randomallies-description =
         Random Allied Faction
         A random Allied faction will be chosen when the game starts.

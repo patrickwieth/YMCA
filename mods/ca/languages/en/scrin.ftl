@@ -242,12 +242,12 @@ scrin-factions =
          Key Commander Tree Options:
           Stormcrawler: PDL vs. Reflector
           Heavy Tripod: Acid vs. Range
-         Infantry: +
-         Artillery: ++
-         Aircraft: +++
-         Defense: ++
-         Heavy Tanks: ++++
-         Recon&Stealth: ++
+         Infantry: <color=Red>+</color>
+         Artillery: <color=Yellow>++</color>
+         Aircraft: <color=#8BCF8B>+++</color>
+         Defense: <color=Yellow>++</color>
+         Heavy Tanks: <color=Green>++++</color>
+         Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-18-description =
         Traveler-59: Fast Attack
         Traveler is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth.
@@ -259,12 +259,12 @@ scrin-factions =
          Special Ability: Storm Spike
          Key Commander Tree Options:
           Tripod: Acid vs. Chainer
-         Infantry: ++
-         Artillery: +
-         Aircraft: ++++
-         Defense: ++
-         Heavy Tanks: +++
-         Recon&Stealth: ++
+         Infantry: <color=Yellow>++</color>
+         Artillery: <color=Red>+</color>
+         Aircraft: <color=Green>++++</color>
+         Defense: <color=Yellow>++</color>
+         Heavy Tanks: <color=#8BCF8B>+++</color>
+         Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-19-description =
         Harvester-11: Area Damage
         Harvester-11 is a sub-faction of Scrin. Scrin is the alien race which brought Tiberium on earth.
@@ -277,12 +277,12 @@ scrin-factions =
           Ruiner Barrage
           Tripod: Acid vs. Range
           Area Corrupter
-         Infantry: +
-         Artillery: ++++
-         Aircraft: +++
-         Defense: ++
-         Heavy Tanks: +++
-         Recon&Stealth: ++
+         Infantry: <color=Red>+</color>
+         Artillery: <color=Green>++++</color>
+         Aircraft: <color=#8BCF8B>+++</color>
+         Defense: <color=Yellow>++</color>
+         Heavy Tanks: <color=#8BCF8B>+++</color>
+         Recon&Stealth: <color=Yellow>++</color>
     .factionca-at-randomscrin-description =
         Random Scrin Faction
         A random Scrin faction will be chosen when the game starts.

@@ -59,3 +59,160 @@ Cloning_Vats:
 	RallyPoint:
 		Path: 3,3
 
+FTUR:
+	Inherits: ^Defense
+	Inherits: ^1x1Building+Minibib
+	Inherits: ^AutoTargetGround
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 60
+		Prerequisites: barr, ~!structures.iraq, ~structures.soviet
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 600
+	Tooltip:
+		Name: Flame Tower
+	Building:
+	Health:
+		HP: 40000
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+	Turreted:
+		TurnSpeed: 1000
+		Offset: 0,0,112
+	Armament:
+		Weapon: FireballLauncher
+		LocalOffset: 512,0,0
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: !build-incomplete
+	-QuantizeFacingsFromSequence:
+	BodyOrientation:
+		QuantizedFacings: 8
+	Power:
+		Amount: -20
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	FireWarheadsOnDeathCA:
+		Weapon: BuildingExplode
+		EmptyWeapon: BuildingExplode
+
+TTUR:
+	Inherits: ^DefenseTD
+	Inherits: ^1x1Building+Minibib
+	Inherits: ^AutoTargetGround
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 60
+		Prerequisites: barr, ~structures.iraq
+		IconPalette: chrometd
+		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
+	Valued:
+		Cost: 650
+	Tooltip:
+		Name: Chemical Tower
+	Building:
+	Health:
+		HP: 40000
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+	Turreted:
+		TurnSpeed: 1000
+		Offset: 0,0,112
+	Armament:
+		Weapon: ChemballLauncher
+		LocalOffset: 512,0,0
+	AttackTurreted:
+		PauseOnCondition: empdisable || being-warped
+		RequiresCondition: !build-incomplete
+	-QuantizeFacingsFromSequence:
+	BodyOrientation:
+		QuantizedFacings: 8
+	Power:
+		Amount: -20
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	FireWarheadsOnDeathCA:
+		Weapon: BuildingExplode
+		EmptyWeapon: BuildingExplode
+
+TSLA:
+	Inherits: ^Defense
+	Inherits: ^1x1Building+Minibib
+	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^AutoTargetGround
+	Inherits: ^WhiteFlash
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 80
+		Prerequisites: weap, ~structures.soviet
+		Description: Advanced base defense.\n  Can be buffed or made work during low power by Shock Troopers.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Infantry, Vehicles\n  Weak vs Aircraft
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Tesla Coil
+	Health:
+		HP: 40000
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 8c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+	Targetable@TeslaBoost:
+		TargetTypes: TeslaBoost
+		RequiresCondition: !powerdown
+	WithTeslaChargeAnimation:
+	Armament:
+		Weapon: TeslaZap
+		LocalOffset: 0,0,896
+		RequiresCondition: (!lowpower && !charged) || (lowpower && charged == 1)
+	Armament@1:
+		Weapon: TeslaZapBoost1
+		LocalOffset: 0,0,896
+		RequiresCondition: (!lowpower && charged == 1) || (lowpower && charged == 2)
+	Armament@2:
+		Weapon: TeslaZapBoost2
+		LocalOffset: 0,0,896
+		RequiresCondition: (!lowpower && charged == 2) || (lowpower && charged >= 3)
+	Armament@3:
+		Weapon: TeslaZapBoost3
+		LocalOffset: 0,0,896
+		RequiresCondition: !lowpower && charged >= 3
+	AttackTesla:
+		RequiresCondition: !build-incomplete
+		PauseOnCondition: disabled || empdisable || being-warped
+		ChargeAudio: tslachg2.aud
+		MaxCharges: 3
+		ReloadDelay: 120
+	Power:
+		Amount: -100
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	DetectCloaked:
+		Range: 6c0
+		RequiresCondition: !(disabled || empdisable || being-warped)
+	GrantConditionOnPowerState@LOWPOWER:
+		RequiresCondition: !charged
+	ExternalCondition@CHARGED:
+		Condition: charged
+	WithDecoration@CHARGED:
+		Image: poweroff
+		Sequence: offline
+		Palette: chrome
+		Position: BottomLeft
+		ValidRelationships: Ally
+		RequiresCondition: charged
+		BlinkInterval: 64
+		RequiresSelection: true
+	ProvidesPrerequisite@TSLA:
+		Factions: soviet, russia, nkorea, iraq
+		Prerequisite: structures.tsla
