@@ -1,5 +1,7 @@
-﻿Soviet_Refinery:
+Soviet_Refinery:
 	Inherits: PROC
+	RenderSprites:
+		Image: soviet_refinery.soviet
 	Buildable:
 		Prerequisites: anypower, ~structures.soviet
 	FreeActor:
@@ -14,6 +16,8 @@ Cloning_Vats:
 	Inherits: ^BuildingTD
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
+	RenderSprites:
+		Image: cloning_vats.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 640,-384,0, 640,512,0, -710,-512,0, -710,512,0
@@ -63,6 +67,9 @@ FTUR:
 	Inherits: ^Defense
 	Inherits: ^1x1Building+Minibib
 	Inherits: ^AutoTargetGround
+	RenderSprites:
+		Image: ftur.soviet
+	-Selectable:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
@@ -84,6 +91,8 @@ FTUR:
 	Turreted:
 		TurnSpeed: 1000
 		Offset: 0,0,112
+	WithSpriteTurret:
+		Recoils: false
 	Armament:
 		Weapon: FireballLauncher
 		LocalOffset: 512,0,0
@@ -105,6 +114,9 @@ TTUR:
 	Inherits: ^DefenseTD
 	Inherits: ^1x1Building+Minibib
 	Inherits: ^AutoTargetGround
+	RenderSprites:
+		Image: ttur.soviet
+	-Selectable:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
@@ -127,6 +139,8 @@ TTUR:
 	Turreted:
 		TurnSpeed: 1000
 		Offset: 0,0,112
+	WithSpriteTurret:
+		Recoils: false
 	Armament:
 		Weapon: ChemballLauncher
 		LocalOffset: 512,0,0
@@ -150,6 +164,8 @@ TSLA:
 	Inherits: ^DisableOnLowPowerOrPowerDown
 	Inherits: ^AutoTargetGround
 	Inherits: ^WhiteFlash
+	RenderSprites:
+		Image: tsla.soviet
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80

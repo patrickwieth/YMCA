@@ -4,6 +4,8 @@ MSLO:
 	Inherits: ^2x1Shape
 	Inherits: ^SuperWeapon
 	Inherits: ^SovietSuperweaponBig
+	RenderSprites:
+		Image: mslo.soviet
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -53,6 +55,7 @@ SPEN:
 	Inherits: ^ShipProduction
 	RenderSprites:
 		PlayerPalette: playernavy
+		Image: spen.soviet
 	InfiltrateForSupportPower:
 		Proxy: powerproxy.sonarpulse
 		Types: SpyInfiltrate
@@ -174,6 +177,8 @@ IRON:
 	Inherits: ^2x1Building+Minibib
 	Inherits: ^SuperWeapon
 	Inherits: ^SovietSuperweaponSmall
+	RenderSprites:
+		Image: iron.soviet
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -265,6 +270,12 @@ DOME:
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^2x2Building+Bib
 	Inherits: ^RadarStation
+	RenderSprites:
+		FactionImages:
+			soviet: dome.soviet
+			russia: dome.soviet
+			nkorea: dome.soviet
+			iraq: dome.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-384,0, 630,384,0, -700,-512,0, -700,512,0
@@ -459,6 +470,8 @@ SAM:
 	Inherits: ^DisableOnLowPowerOrPowerDown
 	Inherits: ^AutoTargetAir
 	Inherits: ^2x1Shape
+	RenderSprites:
+		Image: sam.soviet
 	HitShape:
 		Type: Rectangle
 			TopLeft: -768,-512
@@ -638,6 +651,12 @@ WEAP:
 	Inherits@shape: ^3x2Building+Bib
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@VehicleProduction: ^VehicleProduction
+	RenderSprites:
+		FactionImages:
+			soviet: weap.soviet
+			russia: weap.soviet
+			nkorea: weap.soviet
+			iraq: weap.soviet
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
@@ -680,6 +699,12 @@ FACT:
 	Inherits: ^ConcreteArmor
 	Inherits: ^StructureProduction
 	Inherits: ^BotFallbackInsurance
+	RenderSprites:
+		FactionImages:
+			soviet: fact.soviet
+			russia: fact.soviet
+			nkorea: fact.soviet
+			iraq: fact.soviet
 	Building:
 		Footprint: xxX xxx XxX ===
 	Buildable:
@@ -779,6 +804,11 @@ FACT.Nukular:
 	Inherits: ^NukularConyard
 	RenderSprites:
 		Image: FACT
+		FactionImages:
+			soviet: fact.soviet
+			russia: fact.soviet
+			nkorea: fact.soviet
+			iraq: fact.soviet
 	Transforms:
 		IntoActor: mcv.nukular
 
@@ -981,7 +1011,14 @@ AFLD:
 POWR:
 	Inherits: ^Building
 	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^2x2Building+Bib
+	Inherits@shape: ^2x2Building
+	-WithBuildingBib:
+	RenderSprites:
+		FactionImages:
+			soviet: powr.soviet
+			russia: powr.soviet
+			nkorea: powr.soviet
+			iraq: powr.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 640,-384,0, 640,512,0, -710,-512,0, -710,512,0
@@ -1015,11 +1052,19 @@ POWR:
 APWR:
 	Inherits: ^Building
 	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^3x2Building+Bib
+	Inherits@shape: ^4x4Shape
+	RenderSprites:
+		FactionImages:
+			soviet: apwr.soviet
+			russia: apwr.soviet
+			nkorea: apwr.soviet
+			iraq: apwr.soviet
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Building:
-		Footprint: xxx Xxx ===
+		Footprint: xxxx xxxx xxxx xxxx
+		Dimensions: 4,4
+		LocalCenterOffset: 0,-724,0
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 110
@@ -1028,7 +1073,7 @@ APWR:
 	Valued:
 		Cost: 500
 	Tooltip:
-		Name: Advanced Power Plant
+		Name: Nuclear Powerplant
 	ProvidesPrerequisite:
 		Prerequisite: anypower
 	Health:
@@ -1049,6 +1094,8 @@ APWR:
 
 TPWR:
 	Inherits: APWR
+	RenderSprites:
+		Image: tpwr.soviet
 	Buildable:
 		Prerequisites: dome, ~structures.russia
 		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload (Toggle)\n  Warning: Unstable when damaged and overloaded.
@@ -1112,6 +1159,8 @@ STEK:
 	Inherits: ^Tier3Tech
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^3x2Building+Bib
+	RenderSprites:
+		Image: stek.soviet
 	HitShape:
 		TargetableOffsets: 420,-768,0, 420,768,0, -770,-768,0, -770,768,0
 	Buildable:
@@ -1145,14 +1194,16 @@ STEK:
 
 BARR:
 	Inherits: ^Building
-	Inherits: ^2x2Building+Bib
+	Inherits: ^3x2Building
 	Inherits: ^PrimaryBuilding
 	Inherits: ^InfantryProduction
+	RenderSprites:
+		Image: barr.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 490,-470,0, 355,512,0, -355,-512,0, -630,512,0
 	Building:
-		Footprint: xx xx ++
+		Footprint: xxx xxx
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 30
@@ -1174,12 +1225,12 @@ BARR:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -170,810,0
-		ExitCell: 1,2
+		ExitCell: 1,1
 		ProductionTypes: Soldier, Infantry
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: -725,640,0
-		ExitCell: 0,2
+		ExitCell: 0,1
 		ProductionTypes: Soldier, Infantry
 	ProvidesPrerequisite@infantryany:
 		Prerequisite: infantry.any
@@ -1357,6 +1408,12 @@ TENT:
 FIX:
 	Inherits: ^Building
 	Inherits: ^3x3Shape
+	RenderSprites:
+		FactionImages:
+			soviet: fix.soviet
+			russia: fix.soviet
+			nkorea: fix.soviet
+			iraq: fix.soviet
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 100
@@ -3208,6 +3265,8 @@ INDP:
 	Inherits: ^Tier4Tech
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^3x3Building+Bib
+	RenderSprites:
+		Image: indp.soviet
 	WithSpriteBody:
 		PauseOnCondition: disabled || being-warped
 	HitShape:
