@@ -133,7 +133,7 @@ This deals damage to drivers and infantry.
     .description-23 = Upgrades the Crawler with Reflector Armor.
     .description-24 = Upgrades the Listening Outpost with Propaganda Speakers.
     .description-25 =
-        Upgrades the Listening Outpost to Attack Outpost.
+        Upgrades the Listening Outpost to Bunker Outpost.
 Infantry can shoot from inside.
 Comes filled with 5 Tank Hunter.
     .description-26 = Upgrades the Outpost with a Point Defense Laser System.
@@ -233,7 +233,7 @@ china-factions =
         Many units get a horde bonus, when many other units are close. This can be further improved with propaganda speakers. 
         Shin Fai is specialized in infantry. Missing the conventional tanks of other chinese generals, 
         Shin Fai has the strongest infantry in the game and many vehicles supporting infantry directly.  
-        Faction Units: Minigunner, Assault Crawler, Attack Outpost
+        Faction Units: Minigunner, Assault Crawler, Bunker Outpost
         Special Ability: Infantry Paradrop
         Faction Bonus: Super Lotus, Fortified Bunker
         Key Commander Tree Options:
@@ -924,7 +924,7 @@ promotion-outpost-propaganda =
     .tooltipextras-strengths = Strengths: • Strong vs Infantry, Aircraft
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Vehicle
 promotion-outpost-bunker =
-    .description = Upgrades the Listening Outpost to Attack Outpost. \nInfantry can shoot from inside.\nComes filled with 5 Tank Hunter.
+    .description = Upgrades the Listening Outpost to Bunker Outpost. \nInfantry can shoot from inside.\nComes filled with 5 Tank Hunter.
     .tooltipextras-strengths = Strengths: • Strong vs Vehicles, Aircraft
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Infantry, Point Defense Laser
 promotion-outpost-pdl =
@@ -1113,7 +1113,7 @@ commander-tree-promotion-outpost-propaganda =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Vehicle
 commander-tree-promotion-outpost-bunker =
     .description =
-        Upgrades the Listening Outpost to Attack Outpost. 
+        Upgrades the Listening Outpost to Bunker Outpost.
         Infantry can shoot from inside.
         Comes filled with 5 Tank Hunter.
     .tooltipextras-strengths = Strengths: • Strong vs Vehicles, Aircraft
