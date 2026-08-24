@@ -116,6 +116,7 @@ SYRD:
 	Inherits@Shipyard: ^ShipPrerequisites
 	Inherits@ShipProd: ^ShipProduction
 	RenderSprites:
+		Image: syrd.allies
 		PlayerPalette: playernavy
 	InfiltrateForSupportPower:
 		Proxy: powerproxy.sonarpulse
@@ -653,6 +654,10 @@ WEAP:
 	Inherits@VehicleProduction: ^VehicleProduction
 	RenderSprites:
 		FactionImages:
+			allies: weap.allies
+			england: weap.allies
+			france: weap.allies
+			germany: weap.allies
 			soviet: weap.soviet
 			russia: weap.soviet
 			nkorea: weap.soviet
@@ -944,6 +949,12 @@ AFLD:
 	Inherits: ^PrimaryBuilding
 	Inherits: ^AircraftProduction
 	Inherits: ^RepairsAircraftWithRepairBay
+	RenderSprites:
+		FactionImages:
+			soviet: afld.soviet
+			russia: afld.soviet
+			nkorea: afld.soviet
+			iraq: afld.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
@@ -956,7 +967,7 @@ AFLD:
 		Cost: 500
 	Tooltip:
 		Name: Airfield
-	Selectable:
+	IsometricSelectable:
 		Class: afld
 	Building:
 		Footprint: xxx xxx
@@ -1015,6 +1026,10 @@ POWR:
 	-WithBuildingBib:
 	RenderSprites:
 		FactionImages:
+			allies: powr.allies
+			england: powr.allies
+			france: powr.allies
+			germany: powr.allies
 			soviet: powr.soviet
 			russia: powr.soviet
 			nkorea: powr.soviet
@@ -1055,6 +1070,10 @@ APWR:
 	Inherits@shape: ^4x4Shape
 	RenderSprites:
 		FactionImages:
+			allies: apwr.allies
+			england: apwr.allies
+			france: apwr.allies
+			germany: apwr.allies
 			soviet: apwr.soviet
 			russia: apwr.soviet
 			nkorea: apwr.soviet
@@ -1320,6 +1339,8 @@ TENT:
 	Inherits: ^2x2Building+Bib
 	Inherits: ^PrimaryBuilding
 	Inherits: ^InfantryProduction
+	RenderSprites:
+		Image: tent.allies
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
@@ -1410,6 +1431,10 @@ FIX:
 	Inherits: ^3x3Shape
 	RenderSprites:
 		FactionImages:
+			allies: fix.allies
+			england: fix.allies
+			france: fix.allies
+			germany: fix.allies
 			soviet: fix.soviet
 			russia: fix.soviet
 			nkorea: fix.soviet
@@ -1760,6 +1785,8 @@ HAND:
 	Inherits: ^2x2Building+Bib
 	Inherits: ^PrimaryBuilding
 	Inherits: ^InfantryProduction
+	RenderSprites:
+		Image: nodhand
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
@@ -2009,10 +2036,10 @@ NUK2:
 		TargetableOffsets: 630,299,0
 	RenderSprites:
 		FactionImages:
-			nod: nodnuk2
-			blackh: nodnuk2
-			marked: nodnuk2
-			legion: nodnuk2
+			nod: nodnuk2.custom
+			blackh: nodnuk2.custom
+			marked: nodnuk2.custom
+			legion: nodnuk2.custom
 	WithSpriteBody:
 		PauseOnCondition: disabled
 	Buildable:
@@ -2055,10 +2082,10 @@ AFAC:
 	Inherits: ^BotFallbackInsurance
 	RenderSprites:
 		FactionImages:
-			nod: nodfact
-			blackh: nodfact
-			marked: nodfact
-			legion: nodfact
+			nod: nodfact.custom
+			blackh: nodfact.custom
+			marked: nodfact.custom
+			legion: nodfact.custom
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
@@ -2272,10 +2299,10 @@ HQ:
 	Inherits: ^RadarStation
 	RenderSprites:
 		FactionImages:
-			nod: nodhq
-			blackh: nodhq
-			marked: nodhq
-			legion: nodhq
+			nod: nodhq.custom
+			blackh: nodhq.custom
+			marked: nodhq.custom
+			legion: nodhq.custom
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
@@ -2370,6 +2397,8 @@ EYE:
 REP:
 	Inherits: ^BuildingTD
 	Inherits: ^3x3Building
+	RenderSprites:
+		Image: nodrep
 	HitShape:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
 		Type: Polygon
@@ -2432,6 +2461,11 @@ HPAD.TD:
 	Inherits: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: hpad2
+		FactionImages:
+			nod: nodhpad
+			blackh: nodhpad
+			marked: nodhpad
+			legion: nodhpad
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 768,-512,0, 768,512,0, -281,-512,0, -630,512,0
@@ -2545,10 +2579,10 @@ PROC.TD:
 	RenderSprites:
 		Image: proc2
 		FactionImages:
-			nod: nodproc
-			blackh: nodproc
-			marked: nodproc
-			legion: nodproc
+			nod: nodproc.custom
+			blackh: nodproc.custom
+			marked: nodproc.custom
+			legion: nodproc.custom
 	Building:
 		Footprint: _x_ xxx === ===
 	Valued:
@@ -2717,7 +2751,7 @@ AFLD.allies:
 	Inherits: ^RepairsAircraftWithRepairBay
 	Inherits: ^AircraftProduction
 	RenderSprites:
-		Image: afld.allies
+		Image: afld.allies.custom
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
@@ -2830,6 +2864,8 @@ TMPL:
 	Inherits: ^Tier3Tech
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^3x2Building+Bib
+	RenderSprites:
+		Image: nodtmpl
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 0,-896,0, 0,896,0, 840,0,0, -706,0,0, -706,-768,0, -706,640,0
@@ -3322,6 +3358,8 @@ OREP:
 	Inherits: ^Tier4Tech
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^3x2Building+Bib
+	RenderSprites:
+		Image: orep.allies
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Building:
@@ -3385,7 +3423,7 @@ BIO.Nod:
 	Inherits: ^3x2Building+Bib
 	Inherits: ^PrimaryBuilding
 	RenderSprites:
-		Image: tmpp
+		Image: nodbio
 		PlayerPalette: overlayplayertd
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,1024,0, 0,-1024,0
@@ -3505,6 +3543,8 @@ WEAT:
 	Inherits: ^2x2Shape
 	Inherits: ^SuperWeapon
 	Inherits: ^AlliesSuperweaponBig
+	RenderSprites:
+		Image: weat.allies
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130

@@ -12,6 +12,21 @@ Soviet_Refinery:
 	ProvidesPrerequisite@ra:
 		Prerequisite: proc
 
+NKOREA_BUNKER:
+	Inherits: chbunker
+	Buildable:
+		BuildPaletteOrder: 40
+		Prerequisites: barr, ~structures.nkorea
+		Queue: Defense
+		Description: Garrisonable defensive structure.\n  Strong vs ground targets\n  Weak vs Aircraft
+	Cargo:
+		InitialUnits: conscript, flamethrower, flamethrower
+	RenderSprites:
+		Image: nkorea_bunker
+	IsometricSelectable:
+		Class: nkorea_bunker
+	-Voiced:
+
 Cloning_Vats:
 	Inherits: ^BuildingTD
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
@@ -69,11 +84,10 @@ FTUR:
 	Inherits: ^AutoTargetGround
 	RenderSprites:
 		Image: ftur.soviet
-	-Selectable:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
-		Prerequisites: barr, ~!structures.iraq, ~structures.soviet
+		Prerequisites: barr, ~!structures.iraq, ~!structures.nkorea, ~structures.soviet
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 	Valued:
 		Cost: 600
@@ -116,7 +130,6 @@ TTUR:
 	Inherits: ^AutoTargetGround
 	RenderSprites:
 		Image: ttur.soviet
-	-Selectable:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60

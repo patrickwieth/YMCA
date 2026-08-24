@@ -48,7 +48,7 @@ powershell -NoProfile -Command "$v = (Get-Content '%~dp0..\engine\VERSION' -Raw)
 
 cd /d "%~dp0..\engine"
 
-    bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%" "PlayerFaction.Multi0=russia" "PlayerType.Multi0=Human"
+    bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Launch.Map=%MAP_PACKAGE%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%" "PlayerFaction.Multi0=blackh" "PlayerType.Multi0=Human"
 set ERROR=%ERRORLEVEL%
 cd /d "%TEMPLATE_DIR%"
 
