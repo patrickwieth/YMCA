@@ -38,19 +38,26 @@ if "!ENGINE_VERSION!"=="" goto badconfig
 if "!ENGINE_DIRECTORY!"=="" goto badconfig
 
 set TEMPLATE_DIR=%~dp0..
-set MAP_PACKAGE=testmap1.oramap
+set MAP_SOURCE=testmap1.oramap
+set MAP_PACKAGE=testmap1-debug.oramap
+set MAP_SOURCE_PATH=%TEMPLATE_DIR%\mods\ca\maps\%MAP_SOURCE%
+set MAP_PACKAGE_PATH=%TEMPLATE_DIR%\mods\ca\maps\%MAP_PACKAGE%
 set MOD_SEARCH_PATHS=%TEMPLATE_DIR%\mods,%~dp0mods,./mods
 
-if not exist "%TEMPLATE_DIR%\mods\ca\maps\%MAP_PACKAGE%" goto nomap
+if not exist "%MAP_SOURCE_PATH%" goto nomap
 
 if not exist "%~dp0..\engine\bin\OpenRA.exe" goto noengine
 powershell -NoProfile -Command "$v = (Get-Content '%~dp0..\engine\VERSION' -Raw).Trim(); if ($v -eq '%ENGINE_VERSION%') { exit 0 } exit 1" >nul 2>&1 || goto noengine
+
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0prepare-test-game-map.ps1" -SourceMap "%MAP_SOURCE_PATH%" -DestinationMap "%MAP_PACKAGE_PATH%"
+if %ERRORLEVEL% NEQ 0 goto mapcopyfailed
 
 cd /d "%~dp0..\engine"
 
     bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Launch.Map=%MAP_PACKAGE%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%" "PlayerFaction.Multi0=blackh" "PlayerType.Multi0=Human"
 set ERROR=%ERRORLEVEL%
 cd /d "%TEMPLATE_DIR%"
+del /f /q "%MAP_PACKAGE_PATH%" >nul 2>&1
 
 if %ERROR% NEQ 0 goto crashdialog
 exit /b 0
@@ -90,7 +97,8 @@ echo OpenRA.Utility --map repack failed.
 pause
 exit /b 1
 
-echo Required map not found at %TEMPLATE_DIR%\mods\ca\maps\%MAP_PACKAGE%.
+:nomap
+echo Required map not found at %MAP_SOURCE_PATH%.
 pause
 exit /b 1
 
