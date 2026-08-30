@@ -30,7 +30,10 @@ public sealed class TournamentSchedulingTests
             var store = new StateStore(config.StateFile);
             await using var pool = new OpenRaServerPool(config.Server, new ReplayMetadataReader(config.Server));
             var coordinator = new TournamentCoordinator(config, store, pool);
-            var tournament = await coordinator.CreateTournamentAsync("Test", format, "map", "Map");
+            await coordinator.AddMapAsync("map-a", "Map A");
+            await coordinator.AddMapAsync("map-b", "Map B");
+            await coordinator.AddMapAsync("map-c", "Map C");
+            var tournament = await coordinator.CreateTournamentAsync("Test", format);
 
             for (ulong player = 1; player <= (ulong)playerCount; player++)
             {
@@ -39,6 +42,7 @@ public sealed class TournamentSchedulingTests
             }
 
             await coordinator.StartTournamentAsync(tournament.Id);
+            string? previousRoundMap = null;
             while ((await coordinator.GetTournamentAsync(tournament.Id))!.Status == TournamentStatus.Running)
             {
                 var current = (await coordinator.GetTournamentAsync(tournament.Id))!;
@@ -51,6 +55,14 @@ public sealed class TournamentSchedulingTests
                 }
 
                 Assert.That(unresolved, Is.Not.Empty, "A running tournament must have matches to resolve.");
+                Assert.That(unresolved.Select(match => match.MapUid).Distinct().ToList(), Has.Count.EqualTo(1),
+                    "All matches in a round must use the same map.");
+                var roundMap = unresolved[0].MapUid;
+                if (previousRoundMap != null)
+                    Assert.That(roundMap, Is.Not.EqualTo(previousRoundMap),
+                        "Consecutive rounds must not repeat a map while alternatives exist.");
+                previousRoundMap = roundMap;
+
                 foreach (var match in unresolved)
                     await coordinator.ResolveAsync(match.Id, match.PlayerOneDiscordId);
             }

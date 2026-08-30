@@ -69,6 +69,12 @@ public sealed class MatchRecord
     public DateTime? FinishedAtUtc { get; set; }
 }
 
+public sealed class TournamentMap
+{
+    public string Uid { get; set; } = "";
+    public string Title { get; set; } = "";
+}
+
 public sealed class TournamentRecord
 {
     public string Id { get; set; } = "";
@@ -77,6 +83,9 @@ public sealed class TournamentRecord
     public TournamentStatus Status { get; set; }
     public string MapUid { get; set; } = "";
     public string MapTitle { get; set; } = "";
+    public List<TournamentMap> MapPool { get; set; } = new();
+    public List<string> MapHistory { get; set; } = new();
+    public int RoundNumber { get; set; }
     public List<ulong> Entrants { get; set; } = new();
     public Dictionary<ulong, int> Losses { get; set; } = new();
     public List<string> MatchIds { get; set; } = new();
@@ -92,6 +101,7 @@ public sealed class TournamentState
     public Dictionary<ulong, RegisteredPlayer> Players { get; set; } = new();
     public Dictionary<string, MatchRecord> Matches { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, TournamentRecord> Tournaments { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public List<TournamentMap> MapPool { get; set; } = new();
     public int NextMatchNumber { get; set; } = 1;
     public int NextTournamentNumber { get; set; } = 1;
 }

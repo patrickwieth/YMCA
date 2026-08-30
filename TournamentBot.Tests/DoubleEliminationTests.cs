@@ -30,8 +30,10 @@ public sealed class DoubleEliminationTests
             const ulong bob = 2;
             await coordinator.RegisterAsync(alice, "Alice", "Alice");
             await coordinator.RegisterAsync(bob, "Bob", "Bob");
+            await coordinator.AddMapAsync("map-a", "Map A");
+            await coordinator.AddMapAsync("map-b", "Map B");
             var tournament = await coordinator.CreateTournamentAsync(
-                "Double test", TournamentFormat.DoubleElimination, "map", "Map");
+                "Double test", TournamentFormat.DoubleElimination);
             await coordinator.JoinTournamentAsync(tournament.Id, alice);
             await coordinator.JoinTournamentAsync(tournament.Id, bob);
             await coordinator.StartTournamentAsync(tournament.Id);

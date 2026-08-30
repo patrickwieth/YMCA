@@ -104,16 +104,39 @@ public sealed class TournamentCoordinator
         return match;
     }
 
-    public Task<TournamentRecord> CreateTournamentAsync(
-        string name,
-        TournamentFormat format,
-        string mapUid,
-        string mapTitle) => store.UpdateAsync(state =>
+    public Task<TournamentMap> AddMapAsync(string uid, string title) => store.UpdateAsync(state =>
+    {
+        if (string.IsNullOrWhiteSpace(uid))
+            throw new InvalidOperationException("A map UID is required.");
+        if (state.MapPool.Any(map => map.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase)))
+            throw new InvalidOperationException("This map is already in the tournament pool.");
+
+        var map = new TournamentMap
+        {
+            Uid = uid.Trim(),
+            Title = string.IsNullOrWhiteSpace(title) ? uid.Trim() : title.Trim()
+        };
+        state.MapPool.Add(map);
+        return map;
+    });
+
+    public Task<TournamentMap> RemoveMapAsync(string uid) => store.UpdateAsync(state =>
+    {
+        var map = state.MapPool.FirstOrDefault(value => value.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase))
+            ?? throw new InvalidOperationException("Map not found in the tournament pool.");
+        state.MapPool.Remove(map);
+        return map;
+    });
+
+    public Task<IReadOnlyList<TournamentMap>> GetMapPoolAsync() =>
+        store.ReadAsync<IReadOnlyList<TournamentMap>>(state => state.MapPool.ToList());
+
+    public Task<TournamentRecord> CreateTournamentAsync(string name, TournamentFormat format) => store.UpdateAsync(state =>
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new InvalidOperationException("A tournament name is required.");
-        if (string.IsNullOrWhiteSpace(mapUid))
-            throw new InvalidOperationException("A map UID is required.");
+        if (state.MapPool.Count == 0)
+            throw new InvalidOperationException("Add at least one map to the tournament map pool first.");
 
         var id = $"T{state.NextTournamentNumber++:000}";
         var tournament = new TournamentRecord
@@ -122,8 +145,7 @@ public sealed class TournamentCoordinator
             Name = name.Trim(),
             Format = format,
             Status = TournamentStatus.Registration,
-            MapUid = mapUid.Trim(),
-            MapTitle = string.IsNullOrWhiteSpace(mapTitle) ? mapUid.Trim() : mapTitle.Trim(),
+            MapPool = state.MapPool.Select(map => new TournamentMap { Uid = map.Uid, Title = map.Title }).ToList(),
             CreatedAtUtc = DateTime.UtcNow
         };
         state.Tournaments[id] = tournament;
@@ -164,7 +186,11 @@ public sealed class TournamentCoordinator
             if (tournament.Entrants.Count < 2)
                 throw new InvalidOperationException("At least two players are required.");
 
+            if (state.MapPool.Count == 0)
+                throw new InvalidOperationException("The tournament map pool is empty.");
+
             Shuffle(tournament.Entrants);
+            tournament.MapPool = state.MapPool.Select(map => new TournamentMap { Uid = map.Uid, Title = map.Title }).ToList();
             tournament.Losses = tournament.Entrants.ToDictionary(player => player, _ => 0);
             tournament.Status = TournamentStatus.Running;
             tournament.StartedAtUtc = DateTime.UtcNow;
@@ -329,6 +355,11 @@ public sealed class TournamentCoordinator
         if (pairings.Count == 0)
             throw new InvalidOperationException($"Tournament {tournament.Id} cannot schedule its next round.");
 
+        var roundMap = SelectRoundMap(tournament);
+        tournament.RoundNumber++;
+        tournament.MapUid = roundMap.Uid;
+        tournament.MapTitle = roundMap.Title;
+
         var matches = new List<MatchRecord>();
         foreach (var pairing in pairings)
         {
@@ -338,13 +369,35 @@ public sealed class TournamentCoordinator
                 state,
                 first,
                 second,
-                tournament.MapUid,
-                tournament.MapTitle,
+                roundMap.Uid,
+                roundMap.Title,
                 null,
                 tournament.Id));
         }
 
         return new TournamentTransition(tournament, matches, false);
+    }
+
+    static TournamentMap SelectRoundMap(TournamentRecord tournament)
+    {
+        if (tournament.MapPool.Count == 0)
+            throw new InvalidOperationException($"Tournament {tournament.Id} has no maps configured.");
+
+        var available = tournament.MapPool
+            .Where(map => !tournament.MapHistory.Contains(map.Uid, StringComparer.OrdinalIgnoreCase))
+            .ToList();
+        if (available.Count == 0)
+        {
+            tournament.MapHistory.Clear();
+            available = tournament.MapPool
+                .Where(map => tournament.MapPool.Count == 1
+                    || !map.Uid.Equals(tournament.MapUid, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+        }
+
+        var selected = available[Random.Shared.Next(available.Count)];
+        tournament.MapHistory.Add(selected.Uid);
+        return selected;
     }
 
     static MatchRecord CreateMatchRecord(
