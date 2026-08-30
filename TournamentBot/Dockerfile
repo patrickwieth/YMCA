@@ -32,7 +32,11 @@ COPY --from=build /src/engine/mods /app/game/engine/mods
 COPY --from=build /src/mods /app/game/mods
 COPY --from=build /src/tools /app/game/tools
 
-RUN mkdir -p /data/matches
+RUN useradd --create-home --uid 1000 ymca \
+    && mkdir -p /data/matches \
+    && chown -R ymca:ymca /data /app
+
+USER ymca
 
 EXPOSE 5080 12400-12407
 ENTRYPOINT ["dotnet", "/app/bot/TournamentBot.dll", "/config/tournament-bot.json"]
