@@ -120,27 +120,27 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             new SlashCommandBuilder()
                 .WithName("tournament-join")
                 .WithDescription("Join an open tournament.")
-                .AddOption("tournament-id", ApplicationCommandOptionType.String, "Tournament ID, for example T001", true)
+                .AddOption(TournamentOption("Choose an open tournament", true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-leave")
                 .WithDescription("Leave a tournament before it starts.")
-                .AddOption("tournament-id", ApplicationCommandOptionType.String, "Tournament ID", true)
+                .AddOption(TournamentOption("Choose a tournament", true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-delete")
                 .WithDescription("Delete a tournament that is not running.")
-                .AddOption("tournament-id", ApplicationCommandOptionType.String, "Tournament ID", true)
+                .AddOption(TournamentOption("Choose a tournament to delete", true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-start")
                 .WithDescription("Close registration and start a tournament.")
-                .AddOption("tournament-id", ApplicationCommandOptionType.String, "Tournament ID", true)
+                .AddOption(TournamentOption("Choose an open tournament", true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-status")
                 .WithDescription("Show tournament standings and current state.")
-                .AddOption("tournament-id", ApplicationCommandOptionType.String, "Tournament ID", false)
+                .AddOption(TournamentOption("Choose a tournament", false))
                 .Build()
         };
 
@@ -378,6 +378,30 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         try
         {
             var query = interaction.Data.Current.Value?.ToString()?.Trim() ?? "";
+            if (interaction.Data.CommandName.StartsWith("tournament-", StringComparison.Ordinal))
+            {
+                IEnumerable<TournamentRecord> tournaments = await coordinator.GetTournamentsAsync();
+                tournaments = interaction.Data.CommandName switch
+                {
+                    "tournament-join" or "tournament-start" => tournaments.Where(value => value.Status == TournamentStatus.Registration),
+                    "tournament-leave" => tournaments.Where(value => value.Status == TournamentStatus.Registration),
+                    _ => tournaments
+                };
+
+                var tournamentResults = tournaments
+                    .Where(value => query.Length == 0
+                        || value.Id.Contains(query, StringComparison.OrdinalIgnoreCase)
+                        || value.Name.Contains(query, StringComparison.OrdinalIgnoreCase))
+                    .OrderByDescending(value => value.Status == TournamentStatus.Registration)
+                    .ThenByDescending(value => value.CreatedAtUtc)
+                    .Take(25)
+                    .Select(value => new AutocompleteResult(
+                        Truncate($"{value.Id} — {value.Name} ({value.Status})", 100),
+                        value.Id));
+                await interaction.RespondAsync(tournamentResults);
+                return;
+            }
+
             IEnumerable<OfficialMap> candidates;
             if (interaction.Data.CommandName == "map-add")
             {
@@ -568,6 +592,14 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
     static string Mention(ulong userId) => userId == 0 ? "unknown" : $"<@{userId}>";
     static string Escape(string text) => Format.Sanitize(text);
+    static SlashCommandOptionBuilder TournamentOption(string description, bool required) =>
+        new SlashCommandOptionBuilder()
+            .WithName("tournament-id")
+            .WithDescription(description)
+            .WithType(ApplicationCommandOptionType.String)
+            .WithRequired(required)
+            .WithAutocomplete(true);
+
     static string FormatTournamentFormat(TournamentFormat format) => format == TournamentFormat.DoubleElimination
         ? "Double Elimination"
         : "Single Elimination";
