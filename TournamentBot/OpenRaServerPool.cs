@@ -138,6 +138,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         AddArgument(info, "Server.ListenPort", match.Port!.Value.ToString());
         AddArgument(info, "Server.AdvertiseOnline", config.AdvertiseOnline.ToString());
         AddArgument(info, "Server.Password", match.Password);
+        AddArgument(info, "Server.AllowedPlayerNames", $"{match.PlayerOneOpenRaName},{match.PlayerTwoOpenRaName}");
         AddArgument(info, "Server.RecordReplays", "True");
         AddArgument(info, "Server.RequireAuthentication", "False");
         AddArgument(info, "Server.Map", match.MapUid);
