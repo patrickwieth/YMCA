@@ -5,13 +5,15 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /src
-COPY . .
 
-# Always build the configured engine revision for Linux instead of copying a
-# possibly present Windows development build into the image.
-RUN rm -rf engine \
-    && ./fetch-engine.sh \
-    && make TARGETPLATFORM=linux-x64 all \
+# Keep the expensive engine build in a cache layer that only changes when
+# mod.config selects a new engine revision.
+COPY mod.config fetch-engine.sh ./
+RUN ./fetch-engine.sh \
+    && make -C engine TARGETPLATFORM=linux-x64 all
+
+COPY . .
+RUN dotnet build YMCA.sln --configuration Release \
     && dotnet publish TournamentBot/TournamentBot.csproj \
         --configuration Release \
         --output /out/bot \
