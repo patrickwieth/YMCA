@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
 
+ARG YMCA_VERSION=v0.96.13
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates curl make python3 unzip \
     && rm -rf /var/lib/apt/lists/*
@@ -13,7 +15,8 @@ RUN ./fetch-engine.sh \
     && make -C engine TARGETPLATFORM=linux-x64 all
 
 COPY . .
-RUN dotnet build YMCA.sln --configuration Release \
+RUN make version VERSION="${YMCA_VERSION}" \
+    && dotnet build YMCA.sln --configuration Release \
     && dotnet publish TournamentBot/TournamentBot.csproj \
         --configuration Release \
         --output /out/bot \
