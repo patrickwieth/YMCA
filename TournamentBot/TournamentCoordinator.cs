@@ -176,6 +176,16 @@ public sealed class TournamentCoordinator
             return tournament;
         });
 
+    public Task<TournamentRecord> DeleteTournamentAsync(string tournamentId) => store.UpdateAsync(state =>
+    {
+        var tournament = GetTournament(state, tournamentId);
+        if (tournament.Status == TournamentStatus.Running)
+            throw new InvalidOperationException("A running tournament cannot be deleted while its matches are active.");
+
+        state.Tournaments.Remove(tournament.Id);
+        return tournament;
+    });
+
     public async Task<TournamentRecord> StartTournamentAsync(string tournamentId)
     {
         var transition = await store.UpdateAsync(state =>

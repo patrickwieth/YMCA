@@ -128,6 +128,11 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .AddOption("tournament-id", ApplicationCommandOptionType.String, "Tournament ID", true)
                 .Build(),
             new SlashCommandBuilder()
+                .WithName("tournament-delete")
+                .WithDescription("Delete a tournament that is not running.")
+                .AddOption("tournament-id", ApplicationCommandOptionType.String, "Tournament ID", true)
+                .Build(),
+            new SlashCommandBuilder()
                 .WithName("tournament-start")
                 .WithDescription("Close registration and start a tournament.")
                 .AddOption("tournament-id", ApplicationCommandOptionType.String, "Tournament ID", true)
@@ -178,6 +183,9 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                     break;
                 case "tournament-leave":
                     await LeaveTournamentAsync(command);
+                    break;
+                case "tournament-delete":
+                    await DeleteTournamentAsync(command);
                     break;
                 case "tournament-start":
                     await StartTournamentAsync(command);
@@ -304,6 +312,17 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         await command.RespondAsync(
             $"You left **{Escape(tournament.Name)}** (`{tournament.Id}`).",
             ephemeral: true);
+    }
+
+    async Task DeleteTournamentAsync(SocketSlashCommand command)
+    {
+        EnsureAdmin(command.User);
+        var tournament = await coordinator.DeleteTournamentAsync(GetString(command, "tournament-id"));
+        await command.RespondAsync(
+            $"Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) was deleted.",
+            ephemeral: true);
+        await SendAnnouncementAsync(
+            $"🗑️ Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) was removed by an administrator.");
     }
 
     async Task StartTournamentAsync(SocketSlashCommand command)

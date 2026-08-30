@@ -12,6 +12,7 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 - `/tournament-create name format` — admin: open a single- or double-elimination tournament.
 - `/tournament-join tournament-id` — enter an open tournament.
 - `/tournament-leave tournament-id` — leave before the tournament starts.
+- `/tournament-delete tournament-id` — admin: delete a tournament that is not running.
 - `/tournament-start tournament-id` — admin: close registration and queue the first round.
 - `/tournament-status [tournament-id]` — show entrants, losses, and champion.
 
