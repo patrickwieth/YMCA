@@ -8,6 +8,11 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 - `/match player-one player-two map-uid [map-title]` — admin: queue a match.
 - `/matches` — show recent matches.
 - `/resolve match-id winner` — admin: resolve a disputed match.
+- `/tournament-create name format map-uid [map-title]` — admin: open a single- or double-elimination tournament.
+- `/tournament-join tournament-id` — enter an open tournament.
+- `/tournament-leave tournament-id` — leave before the tournament starts.
+- `/tournament-start tournament-id` — admin: close registration and queue the first round.
+- `/tournament-status [tournament-id]` — show entrants, losses, and champion.
 
 ## Setup
 
@@ -33,7 +38,9 @@ The `maxConcurrentServers` workers each own one port. Matches beyond this limit 
 
 Each match gets an isolated `Engine.SupportDir`, so its logs and server replay cannot collide with other matches. Once a completed replay can be read with `OpenRA.Utility --replay-metadata`, the server process is terminated and the slot is returned to the queue.
 
-Automatic replay results are not final until player feedback agrees. Conflicting reports, explicit disputes, missing players, and ambiguous OpenRA outcomes are sent to the admin channel for manual review. A rematch is queued automatically only when both players request one.
+Automatic replay results are not final until player feedback agrees. Conflicting reports, explicit disputes, missing players, and ambiguous OpenRA outcomes are sent to the admin channel for manual review. A technical rematch is queued automatically only when both players request one and does not advance the bracket.
+
+Tournament scheduling supports single elimination and double elimination. In double elimination a player moves to the losers pool after the first loss and is eliminated after the second. If the one-loss finalist beats the undefeated finalist, the bot schedules the required grand-final reset. Odd player counts receive automatic byes between rounds.
 
 ## Notes
 

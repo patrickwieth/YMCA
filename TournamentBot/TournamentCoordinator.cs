@@ -8,6 +8,8 @@ public interface ITournamentNotifier
     Task MatchCompletedAsync(MatchRecord match);
     Task MatchDisputedAsync(MatchRecord match, string reason);
     Task MatchFailedAsync(MatchRecord match, string reason);
+    Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches);
+    Task TournamentCompletedAsync(TournamentRecord tournament);
 }
 
 public sealed class TournamentCoordinator
@@ -79,7 +81,8 @@ public sealed class TournamentCoordinator
         ulong playerTwoId,
         string mapUid,
         string mapTitle,
-        string? parentMatchId = null)
+        string? parentMatchId = null,
+        string? tournamentId = null)
     {
         if (playerOneId == playerTwoId)
             throw new InvalidOperationException("A player cannot play against themselves.");
@@ -93,28 +96,92 @@ public sealed class TournamentCoordinator
             if (!state.Players.TryGetValue(playerTwoId, out var playerTwo))
                 throw new InvalidOperationException("Player two is not registered.");
 
-            var id = $"M{state.NextMatchNumber++:0000}";
-            var created = new MatchRecord
-            {
-                Id = id,
-                PlayerOneDiscordId = playerOneId,
-                PlayerTwoDiscordId = playerTwoId,
-                PlayerOneOpenRaName = playerOne.OpenRaName,
-                PlayerTwoOpenRaName = playerTwo.OpenRaName,
-                MapUid = mapUid.Trim(),
-                MapTitle = string.IsNullOrWhiteSpace(mapTitle) ? mapUid.Trim() : mapTitle.Trim(),
-                Status = MatchStatus.Queued,
-                ParentMatchId = parentMatchId,
-                CreatedAtUtc = DateTime.UtcNow
-            };
-            state.Matches[id] = created;
-            return created;
+            return CreateMatchRecord(state, playerOne, playerTwo, mapUid, mapTitle, parentMatchId, tournamentId);
         });
 
         await serverPool.EnqueueAsync(match);
         await NotifyAsync(value => value.MatchQueuedAsync(match));
         return match;
     }
+
+    public Task<TournamentRecord> CreateTournamentAsync(
+        string name,
+        TournamentFormat format,
+        string mapUid,
+        string mapTitle) => store.UpdateAsync(state =>
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new InvalidOperationException("A tournament name is required.");
+        if (string.IsNullOrWhiteSpace(mapUid))
+            throw new InvalidOperationException("A map UID is required.");
+
+        var id = $"T{state.NextTournamentNumber++:000}";
+        var tournament = new TournamentRecord
+        {
+            Id = id,
+            Name = name.Trim(),
+            Format = format,
+            Status = TournamentStatus.Registration,
+            MapUid = mapUid.Trim(),
+            MapTitle = string.IsNullOrWhiteSpace(mapTitle) ? mapUid.Trim() : mapTitle.Trim(),
+            CreatedAtUtc = DateTime.UtcNow
+        };
+        state.Tournaments[id] = tournament;
+        return tournament;
+    });
+
+    public Task<TournamentRecord> JoinTournamentAsync(string tournamentId, ulong playerId) =>
+        store.UpdateAsync(state =>
+        {
+            var tournament = GetTournament(state, tournamentId);
+            if (tournament.Status != TournamentStatus.Registration)
+                throw new InvalidOperationException("Tournament registration is closed.");
+            if (!state.Players.ContainsKey(playerId))
+                throw new InvalidOperationException("Register your OpenRA name first using /register.");
+            if (!tournament.Entrants.Contains(playerId))
+                tournament.Entrants.Add(playerId);
+            return tournament;
+        });
+
+    public Task<TournamentRecord> LeaveTournamentAsync(string tournamentId, ulong playerId) =>
+        store.UpdateAsync(state =>
+        {
+            var tournament = GetTournament(state, tournamentId);
+            if (tournament.Status != TournamentStatus.Registration)
+                throw new InvalidOperationException("You cannot leave after the tournament has started.");
+            if (!tournament.Entrants.Remove(playerId))
+                throw new InvalidOperationException("You are not entered in this tournament.");
+            return tournament;
+        });
+
+    public async Task<TournamentRecord> StartTournamentAsync(string tournamentId)
+    {
+        var transition = await store.UpdateAsync(state =>
+        {
+            var tournament = GetTournament(state, tournamentId);
+            if (tournament.Status != TournamentStatus.Registration)
+                throw new InvalidOperationException("Tournament is not open for registration.");
+            if (tournament.Entrants.Count < 2)
+                throw new InvalidOperationException("At least two players are required.");
+
+            Shuffle(tournament.Entrants);
+            tournament.Losses = tournament.Entrants.ToDictionary(player => player, _ => 0);
+            tournament.Status = TournamentStatus.Running;
+            tournament.StartedAtUtc = DateTime.UtcNow;
+            return ScheduleNextRound(state, tournament);
+        });
+
+        await StartScheduledMatchesAsync(transition);
+        return transition.Tournament;
+    }
+
+    public Task<TournamentRecord?> GetTournamentAsync(string tournamentId) =>
+        store.ReadAsync(state => state.Tournaments.GetValueOrDefault(tournamentId.Trim().ToUpperInvariant()));
+
+    public Task<IReadOnlyList<TournamentRecord>> GetTournamentsAsync() =>
+        store.ReadAsync<IReadOnlyList<TournamentRecord>>(state => state.Tournaments.Values
+            .OrderByDescending(tournament => tournament.CreatedAtUtc)
+            .ToList());
 
     public Task<RegisteredPlayer?> GetPlayerAsync(ulong discordId) =>
         store.ReadAsync(state => state.Players.GetValueOrDefault(discordId));
@@ -154,10 +221,14 @@ public sealed class TournamentCoordinator
                 resolution.Match.PlayerTwoDiscordId,
                 resolution.Match.MapUid,
                 resolution.Match.MapTitle,
-                resolution.Match.Id);
+                resolution.Match.Id,
+                resolution.Match.TournamentId);
         }
         else if (resolution.Match.Status == MatchStatus.Completed)
+        {
             await NotifyAsync(value => value.MatchCompletedAsync(resolution.Match));
+            await AdvanceTournamentAsync(resolution.Match);
+        }
         else if (resolution.Match.Status == MatchStatus.Disputed)
             await NotifyAsync(value => value.MatchDisputedAsync(resolution.Match, "Player reports conflict or a player disputed the result."));
     }
@@ -170,6 +241,8 @@ public sealed class TournamentCoordinator
                 throw new InvalidOperationException("Match not found.");
             if (winnerId != existing.PlayerOneDiscordId && winnerId != existing.PlayerTwoDiscordId)
                 throw new InvalidOperationException("The selected winner did not participate in this match.");
+            if (existing.Status == MatchStatus.Completed)
+                throw new InvalidOperationException("This match has already been resolved.");
 
             existing.FinalWinnerDiscordId = winnerId;
             existing.Status = MatchStatus.Completed;
@@ -178,6 +251,146 @@ public sealed class TournamentCoordinator
         });
 
         await NotifyAsync(value => value.MatchCompletedAsync(match));
+        await AdvanceTournamentAsync(match);
+    }
+
+    async Task AdvanceTournamentAsync(MatchRecord match)
+    {
+        if (match.TournamentId == null || match.FinalWinnerDiscordId == null)
+            return;
+
+        var transition = await store.UpdateAsync(state =>
+        {
+            var tournament = GetTournament(state, match.TournamentId);
+            if (tournament.Status != TournamentStatus.Running
+                || !tournament.ProcessedMatchIds.Add(match.Id))
+                return new TournamentTransition(tournament, Array.Empty<MatchRecord>(), false);
+
+            var loser = match.FinalWinnerDiscordId == match.PlayerOneDiscordId
+                ? match.PlayerTwoDiscordId
+                : match.PlayerOneDiscordId;
+            tournament.Losses[loser] = tournament.Losses.GetValueOrDefault(loser) + 1;
+            return ScheduleNextRound(state, tournament);
+        });
+
+        await StartScheduledMatchesAsync(transition);
+    }
+
+    async Task StartScheduledMatchesAsync(TournamentTransition transition)
+    {
+        foreach (var match in transition.NewMatches)
+        {
+            await serverPool.EnqueueAsync(match);
+            await NotifyAsync(value => value.MatchQueuedAsync(match));
+        }
+
+        if (transition.Completed)
+            await NotifyAsync(value => value.TournamentCompletedAsync(transition.Tournament));
+        else if (transition.NewMatches.Count > 0)
+            await NotifyAsync(value => value.TournamentUpdatedAsync(transition.Tournament, transition.NewMatches));
+    }
+
+    static TournamentTransition ScheduleNextRound(TournamentState state, TournamentRecord tournament)
+    {
+        var eliminationLosses = tournament.Format == TournamentFormat.DoubleElimination ? 2 : 1;
+        var active = tournament.Entrants
+            .Where(player => tournament.Losses.GetValueOrDefault(player) < eliminationLosses)
+            .ToList();
+
+        var unresolvedMatchExists = tournament.MatchIds
+            .Where(state.Matches.ContainsKey)
+            .Select(id => state.Matches[id])
+            .Any(match => !tournament.ProcessedMatchIds.Contains(match.Id)
+                && match.Status is not MatchStatus.RematchRequested and not MatchStatus.Cancelled);
+        if (unresolvedMatchExists)
+            return new TournamentTransition(tournament, Array.Empty<MatchRecord>(), false);
+
+        if (active.Count == 1)
+        {
+            tournament.ChampionDiscordId = active[0];
+            tournament.Status = TournamentStatus.Completed;
+            tournament.FinishedAtUtc = DateTime.UtcNow;
+            return new TournamentTransition(tournament, Array.Empty<MatchRecord>(), true);
+        }
+
+        var pairings = new List<(ulong First, ulong Second)>();
+        if (active.Count == 2 && tournament.Losses[active[0]] != tournament.Losses[active[1]])
+            pairings.Add((active[0], active[1]));
+        else
+        {
+            foreach (var group in active.GroupBy(player => tournament.Losses[player]).OrderBy(group => group.Key))
+            {
+                var players = group.ToList();
+                for (var i = 0; i + 1 < players.Count; i += 2)
+                    pairings.Add((players[i], players[i + 1]));
+            }
+        }
+
+        if (pairings.Count == 0)
+            throw new InvalidOperationException($"Tournament {tournament.Id} cannot schedule its next round.");
+
+        var matches = new List<MatchRecord>();
+        foreach (var pairing in pairings)
+        {
+            var first = state.Players[pairing.First];
+            var second = state.Players[pairing.Second];
+            matches.Add(CreateMatchRecord(
+                state,
+                first,
+                second,
+                tournament.MapUid,
+                tournament.MapTitle,
+                null,
+                tournament.Id));
+        }
+
+        return new TournamentTransition(tournament, matches, false);
+    }
+
+    static MatchRecord CreateMatchRecord(
+        TournamentState state,
+        RegisteredPlayer playerOne,
+        RegisteredPlayer playerTwo,
+        string mapUid,
+        string mapTitle,
+        string? parentMatchId,
+        string? tournamentId)
+    {
+        var id = $"M{state.NextMatchNumber++:0000}";
+        var match = new MatchRecord
+        {
+            Id = id,
+            PlayerOneDiscordId = playerOne.DiscordUserId,
+            PlayerTwoDiscordId = playerTwo.DiscordUserId,
+            PlayerOneOpenRaName = playerOne.OpenRaName,
+            PlayerTwoOpenRaName = playerTwo.OpenRaName,
+            MapUid = mapUid.Trim(),
+            MapTitle = string.IsNullOrWhiteSpace(mapTitle) ? mapUid.Trim() : mapTitle.Trim(),
+            Status = MatchStatus.Queued,
+            ParentMatchId = parentMatchId,
+            TournamentId = tournamentId,
+            CreatedAtUtc = DateTime.UtcNow
+        };
+        state.Matches[id] = match;
+        if (tournamentId != null && state.Tournaments.TryGetValue(tournamentId, out var tournament))
+            tournament.MatchIds.Add(id);
+        return match;
+    }
+
+    static TournamentRecord GetTournament(TournamentState state, string tournamentId)
+    {
+        if (!state.Tournaments.TryGetValue(tournamentId.Trim().ToUpperInvariant(), out var tournament))
+            throw new InvalidOperationException("Tournament not found.");
+        return tournament;
+    }
+
+    static void Shuffle<T>(IList<T> values)
+    {
+        for (var i = values.Count - 1; i > 0; i--)
+        {
+            var other = Random.Shared.Next(i + 1);
+            (values[i], values[other]) = (values[other], values[i]);
+        }
     }
 
     Task OnServerStartingAsync(MatchRecord match) => store.UpdateAsync(state =>
@@ -305,4 +518,5 @@ public sealed class TournamentCoordinator
     }
 
     sealed record ReportResolution(MatchRecord? Match, bool CreateRematch);
+    sealed record TournamentTransition(TournamentRecord Tournament, IReadOnlyList<MatchRecord> NewMatches, bool Completed);
 }
