@@ -62,6 +62,7 @@ public sealed class JoinPageServer : IAsyncDisposable
             return;
         }
 
+        var tournament = match.TournamentId == null ? null : await coordinator.GetTournamentAsync(match.TournamentId);
         var host = config.Server.PublicHost;
         var joinUri = $"ymca://{host}:{match.Port}?password={Uri.EscapeDataString(match.Password)}&name={Uri.EscapeDataString(playerName)}";
         var lobby = ReadLobbyStatus(match);
@@ -91,6 +92,8 @@ public sealed class JoinPageServer : IAsyncDisposable
 </head>
 <body><div class=""card"">
   <h1>YMCA tournament match {WebUtility.HtmlEncode(match.Id)}</h1>
+  {(tournament == null ? "" : $"<p>Tournament: <strong>{WebUtility.HtmlEncode(tournament.Name)}</strong> ({WebUtility.HtmlEncode(tournament.Id)})</p>")}
+  {(match.TournamentRound > 0 ? $"<p>Round: <strong>{match.TournamentRound}</strong>{(match.IsThirdPlaceMatch ? " — Third-place playoff" : "")}</p>" : "")}
   <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
   <p>Match status: <strong>{WebUtility.HtmlEncode(liveState)}</strong></p>
   {countdown}
