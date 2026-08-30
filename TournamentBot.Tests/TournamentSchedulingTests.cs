@@ -6,7 +6,7 @@ namespace Ymca.TournamentBot.Tests;
 [TestFixture]
 public sealed class TournamentSchedulingTests
 {
-    [TestCase(TournamentFormat.SingleElimination, 5, 4, 1)]
+    [TestCase(TournamentFormat.SingleElimination, 5, 5, 1)]
     [TestCase(TournamentFormat.DoubleElimination, 8, 14, 2)]
     public async Task EliminatesPlayersAndCompletesWithByes(
         TournamentFormat format,

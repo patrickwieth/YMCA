@@ -375,7 +375,21 @@ public sealed class TournamentCoordinator
         }
 
         var pairings = new List<(ulong First, ulong Second)>();
-        if (active.Count == 2 && tournament.Losses[active[0]] != tournament.Losses[active[1]])
+        if (tournament.Format == TournamentFormat.SingleElimination)
+        {
+            var pairingCount = active.Count / 2;
+            if (tournament.RoundNumber == 0 && (active.Count & (active.Count - 1)) != 0)
+            {
+                var bracketSize = 1;
+                while (bracketSize * 2 < active.Count)
+                    bracketSize *= 2;
+                pairingCount = active.Count - bracketSize;
+            }
+
+            for (var i = 0; i < pairingCount * 2; i += 2)
+                pairings.Add((active[i], active[i + 1]));
+        }
+        else if (active.Count == 2 && tournament.Losses[active[0]] != tournament.Losses[active[1]])
             pairings.Add((active[0], active[1]));
         else
         {
