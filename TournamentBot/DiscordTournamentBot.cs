@@ -36,6 +36,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         client.Ready += OnReadyAsync;
         client.SlashCommandExecuted += OnSlashCommandAsync;
         client.ButtonExecuted += OnButtonAsync;
+        client.ModalSubmitted += OnModalAsync;
         client.AutocompleteExecuted += OnAutocompleteAsync;
     }
 
@@ -293,14 +294,27 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             $"🏆 **{Escape(tournament.Name)}** is open for registration!\n" +
             $"Format: **{FormatTournamentFormat(tournament.Format)}**\n" +
             "Each round uses one randomly drawn map from the shared map pool.\n\n" +
-            "Register your exact YMCA player name with `/register`, then press the button below to enter.\n" +
+            "Press **Join tournament** below. If needed, the bot will ask for your exact YMCA/OpenRA player name.\n" +
             $"Tournament ID: `{tournament.Id}`",
             joinButton);
     }
 
     async Task JoinTournamentAsync(SocketSlashCommand command)
     {
-        var tournament = await coordinator.JoinTournamentAsync(GetString(command, "tournament-id"), command.User.Id);
+        var tournamentId = GetString(command, "tournament-id");
+        if (await coordinator.GetPlayerAsync(command.User.Id) == null)
+        {
+            var registrationButton = new ComponentBuilder()
+                .WithButton("Register player name and join", $"register-join:{tournamentId}", ButtonStyle.Success)
+                .Build();
+            await command.RespondAsync(
+                "Register your exact YMCA/OpenRA player name before joining.",
+                components: registrationButton,
+                ephemeral: true);
+            return;
+        }
+
+        var tournament = await coordinator.JoinTournamentAsync(tournamentId, command.User.Id);
         await command.RespondAsync(
             $"You joined **{Escape(tournament.Name)}** (`{tournament.Id}`). Entrants: **{tournament.Entrants.Count}**.",
             ephemeral: true);
@@ -443,8 +457,20 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         try
         {
             var parts = component.Data.CustomId.Split(':');
+            if (parts.Length == 2 && parts[0] == "register-join")
+            {
+                await ShowRegistrationModalAsync(component, parts[1]);
+                return;
+            }
+
             if (parts.Length == 3 && parts[0] == "tournament" && parts[2] == "join")
             {
+                if (await coordinator.GetPlayerAsync(component.User.Id) == null)
+                {
+                    await ShowRegistrationModalAsync(component, parts[1]);
+                    return;
+                }
+
                 var tournament = await coordinator.JoinTournamentAsync(parts[1], component.User.Id);
                 await component.RespondAsync(
                     $"You joined **{Escape(tournament.Name)}** (`{tournament.Id}`). " +
@@ -462,6 +488,50 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         catch (Exception ex)
         {
             await component.RespondAsync($"Error: {ex.Message}", ephemeral: true);
+        }
+    }
+
+    static Task ShowRegistrationModalAsync(SocketMessageComponent component, string tournamentId)
+    {
+        var modal = new ModalBuilder()
+            .WithTitle("Register YMCA player name")
+            .WithCustomId($"registration:{tournamentId}")
+            .AddTextInput(
+                "Exact in-game player name",
+                "openra-name",
+                TextInputStyle.Short,
+                "Enter the name shown in YMCA",
+                minLength: 1,
+                maxLength: 32,
+                required: true)
+            .Build();
+        return component.RespondWithModalAsync(modal);
+    }
+
+    async Task OnModalAsync(SocketModal modal)
+    {
+        try
+        {
+            var parts = modal.Data.CustomId.Split(':');
+            if (parts.Length != 2 || parts[0] != "registration")
+                throw new InvalidOperationException("Invalid registration form.");
+
+            var openRaName = modal.Data.Components
+                .First(component => component.CustomId == "openra-name")
+                .Value;
+            await coordinator.RegisterAsync(
+                modal.User.Id,
+                modal.User.GlobalName ?? modal.User.Username,
+                openRaName);
+            var tournament = await coordinator.JoinTournamentAsync(parts[1], modal.User.Id);
+            await modal.RespondAsync(
+                $"Registered as **{Escape(openRaName)}** and joined **{Escape(tournament.Name)}** (`{tournament.Id}`). " +
+                $"Entrants: **{tournament.Entrants.Count}**.",
+                ephemeral: true);
+        }
+        catch (Exception ex)
+        {
+            await modal.RespondAsync($"Error: {ex.Message}", ephemeral: true);
         }
     }
 

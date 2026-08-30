@@ -4,7 +4,7 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 
 ## Commands
 
-- `/register openra-name` — associate a Discord account with an exact OpenRA player name.
+- `/register openra-name` — associate a Discord account with an exact OpenRA player name. Unregistered users can also press a tournament join button and complete the registration modal.
 - `/match player-one player-two map-uid [map-title]` — admin: queue a match.
 - `/matches` — show recent matches.
 - `/resolve match-id winner` — admin: resolve a disputed match.
