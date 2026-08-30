@@ -357,9 +357,18 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             .WithButton("Accept team", $"team:{tournament.Id}:{command.User.Id}:accept", ButtonStyle.Success)
             .WithButton("Decline", $"team:{tournament.Id}:{command.User.Id}:decline", ButtonStyle.Danger)
             .Build();
-        await SendDmAsync(teammate.Id,
-            $"{Mention(command.User.Id)} invited you to join team **{Escape(team.Name)}** for " +
-            $"**{Escape(tournament.Name)}** (`{tournament.Id}`).", components);
+        try
+        {
+            await SendDmAsync(teammate.Id,
+                $"{Mention(command.User.Id)} invited you to join team **{Escape(team.Name)}** for " +
+                $"**{Escape(tournament.Name)}** (`{tournament.Id}`).", components);
+        }
+        catch
+        {
+            await coordinator.RespondToTeamInviteAsync(tournament.Id, command.User.Id, teammate.Id, false);
+            throw new InvalidOperationException("The teammate could not receive the invitation DM. Ask them to enable direct messages.");
+        }
+
         await command.RespondAsync(
             $"Invitation sent to {teammate.Mention}. The team enters after they accept.", ephemeral: true);
     }
