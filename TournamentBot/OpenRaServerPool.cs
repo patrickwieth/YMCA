@@ -138,7 +138,14 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         AddArgument(info, "Server.ListenPort", match.Port!.Value.ToString());
         AddArgument(info, "Server.AdvertiseOnline", config.AdvertiseOnline.ToString());
         AddArgument(info, "Server.Password", match.Password);
-        AddArgument(info, "Server.AllowedPlayerNames", $"{match.PlayerOneOpenRaName},{match.PlayerTwoOpenRaName}");
+        var teamOneNames = new[] { match.PlayerOneOpenRaName, match.PlayerOneTeammateOpenRaName }
+            .Where(name => !string.IsNullOrEmpty(name)).ToArray();
+        var teamTwoNames = new[] { match.PlayerTwoOpenRaName, match.PlayerTwoTeammateOpenRaName }
+            .Where(name => !string.IsNullOrEmpty(name)).ToArray();
+        AddArgument(info, "Server.AllowedPlayerNames", string.Join(',', teamOneNames.Concat(teamTwoNames)));
+        AddArgument(info, "Server.TeamOnePlayerNames", string.Join(',', teamOneNames));
+        AddArgument(info, "Server.TeamTwoPlayerNames", string.Join(',', teamTwoNames));
+        AddArgument(info, "Server.RequiredPlayerCount", (teamOneNames.Length + teamTwoNames.Length).ToString());
         AddArgument(info, "Server.AutoStartDelaySeconds", "5");
         AddArgument(info, "Server.AutoAssignCompetitiveSpawns", "True");
         AddArgument(info, "Server.LobbyStatusFile", Path.Combine(match.SupportDirectory, "lobby-status.json"));

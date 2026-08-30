@@ -53,6 +53,8 @@ public sealed class JoinPageServer : IAsyncDisposable
         {
             _ when playerId == match.PlayerOneDiscordId => match.PlayerOneOpenRaName,
             _ when playerId == match.PlayerTwoDiscordId => match.PlayerTwoOpenRaName,
+            _ when playerId == match.PlayerOneTeammateDiscordId => match.PlayerOneTeammateOpenRaName,
+            _ when playerId == match.PlayerTwoTeammateDiscordId => match.PlayerTwoTeammateOpenRaName,
             _ => null
         };
         if (playerName == null)
@@ -66,7 +68,10 @@ public sealed class JoinPageServer : IAsyncDisposable
         var host = config.Server.PublicHost;
         var joinUri = $"ymca://{host}:{match.Port}?password={Uri.EscapeDataString(match.Password)}&name={Uri.EscapeDataString(playerName)}";
         var lobby = ReadLobbyStatus(match);
-        var playerRows = RenderPlayerRow(match.PlayerOneOpenRaName, lobby) + RenderPlayerRow(match.PlayerTwoOpenRaName, lobby);
+        var playerRows = RenderPlayerRow(match.PlayerOneOpenRaName, match.PlayerOneTeamName, lobby)
+            + RenderPlayerRow(match.PlayerOneTeammateOpenRaName, match.PlayerOneTeamName, lobby)
+            + RenderPlayerRow(match.PlayerTwoOpenRaName, match.PlayerTwoTeamName, lobby)
+            + RenderPlayerRow(match.PlayerTwoTeammateOpenRaName, match.PlayerTwoTeamName, lobby);
         var liveState = lobby?.State == "GameStarted" ? "Playing" : lobby == null ? match.Status.ToString() : "Lobby";
         var countdown = lobby?.AutoStartAtUtc is DateTime startAt
             ? $"<p class=\"countdown\">Game starts in approximately {Math.Max(0, (int)Math.Ceiling((startAt - DateTime.UtcNow).TotalSeconds))} seconds</p>"
@@ -97,7 +102,7 @@ public sealed class JoinPageServer : IAsyncDisposable
   <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
   <p>Match status: <strong>{WebUtility.HtmlEncode(liveState)}</strong></p>
   {countdown}
-  <table><thead><tr><th>Player</th><th>Connection</th><th>Ready</th><th>Team</th><th>Spawn</th></tr></thead>
+  <table><thead><tr><th>Player</th><th>Tournament team</th><th>Connection</th><th>Ready</th><th>Team</th><th>Spawn</th></tr></thead>
   <tbody>{playerRows}</tbody></table>
   <p class=""muted"">This page refreshes every four seconds.</p>
   <p>Your player name: <code>{WebUtility.HtmlEncode(playerName)}</code></p>
@@ -135,8 +140,10 @@ public sealed class JoinPageServer : IAsyncDisposable
         }
     }
 
-    static string RenderPlayerRow(string expectedName, LobbyStatus? lobby)
+    static string RenderPlayerRow(string expectedName, string teamName, LobbyStatus? lobby)
     {
+        if (string.IsNullOrEmpty(expectedName))
+            return "";
         var player = lobby?.Players.FirstOrDefault(value =>
             value.Name.Equals(expectedName, StringComparison.OrdinalIgnoreCase));
         var connection = player == null ? "Not connected" : "Connected";
@@ -144,7 +151,7 @@ public sealed class JoinPageServer : IAsyncDisposable
         var readyClass = player?.Ready == true ? "ready" : "waiting";
         var team = player?.Team > 0 ? player.Team.ToString() : "—";
         var spawn = player?.SpawnPoint > 0 ? player.SpawnPoint.ToString() : "—";
-        return $"<tr><td>{WebUtility.HtmlEncode(expectedName)}</td><td>{connection}</td>" +
+        return $"<tr><td>{WebUtility.HtmlEncode(expectedName)}</td><td>{WebUtility.HtmlEncode(teamName)}</td><td>{connection}</td>" +
             $"<td class=\"{readyClass}\">{ready}</td><td>{team}</td><td>{spawn}</td></tr>";
     }
 

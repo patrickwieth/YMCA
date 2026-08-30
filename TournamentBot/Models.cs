@@ -28,6 +28,12 @@ public enum TournamentFormat
     DoubleElimination
 }
 
+public enum TournamentMode
+{
+    OneVsOne,
+    TwoVsTwo
+}
+
 public enum TournamentStatus
 {
     Registration,
@@ -51,6 +57,12 @@ public sealed class MatchRecord
     public ulong PlayerTwoDiscordId { get; set; }
     public string PlayerOneOpenRaName { get; set; } = "";
     public string PlayerTwoOpenRaName { get; set; } = "";
+    public ulong? PlayerOneTeammateDiscordId { get; set; }
+    public ulong? PlayerTwoTeammateDiscordId { get; set; }
+    public string PlayerOneTeammateOpenRaName { get; set; } = "";
+    public string PlayerTwoTeammateOpenRaName { get; set; } = "";
+    public string PlayerOneTeamName { get; set; } = "";
+    public string PlayerTwoTeamName { get; set; } = "";
     public string MapUid { get; set; } = "";
     public string MapTitle { get; set; } = "";
     public MatchStatus Status { get; set; }
@@ -75,6 +87,15 @@ public sealed class TournamentMap
 {
     public string Uid { get; set; } = "";
     public string Title { get; set; } = "";
+    public int PlayerCount { get; set; }
+}
+
+public sealed class TournamentTeam
+{
+    public string Name { get; set; } = "";
+    public ulong CaptainDiscordId { get; set; }
+    public ulong TeammateDiscordId { get; set; }
+    public bool Accepted { get; set; }
 }
 
 public sealed class TournamentRecord
@@ -82,6 +103,8 @@ public sealed class TournamentRecord
     public string Id { get; set; } = "";
     public string Name { get; set; } = "";
     public TournamentFormat Format { get; set; }
+    public TournamentMode Mode { get; set; }
+    public Dictionary<ulong, TournamentTeam> Teams { get; set; } = new();
     public TournamentStatus Status { get; set; }
     public string MapUid { get; set; } = "";
     public string MapTitle { get; set; } = "";

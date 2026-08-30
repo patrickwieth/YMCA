@@ -117,6 +117,20 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                     .WithRequired(true)
                     .AddChoice("Single Elimination", "single")
                     .AddChoice("Double Elimination", "double"))
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("mode")
+                    .WithDescription("Player mode")
+                    .WithType(ApplicationCommandOptionType.String)
+                    .WithRequired(true)
+                    .AddChoice("1v1", "1v1")
+                    .AddChoice("2v2", "2v2"))
+                .Build(),
+            new SlashCommandBuilder()
+                .WithName("tournament-team-join")
+                .WithDescription("Invite a teammate and enter an open 2v2 tournament.")
+                .AddOption(TournamentOption("Choose an open 2v2 tournament", true))
+                .AddOption("team-name", ApplicationCommandOptionType.String, "Your team name", true)
+                .AddOption("teammate", ApplicationCommandOptionType.User, "Your teammate", true)
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-join")
@@ -181,6 +195,9 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                     break;
                 case "tournament-join":
                     await JoinTournamentAsync(command);
+                    break;
+                case "tournament-team-join":
+                    await JoinTournamentTeamAsync(command);
                     break;
                 case "tournament-leave":
                     await LeaveTournamentAsync(command);
@@ -251,7 +268,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         EnsureAdmin(command.User);
         var selected = mapCatalog.Get(GetString(command, "map"))
             ?? throw new InvalidOperationException("Select an official YMCA map from the autocomplete list.");
-        var map = await coordinator.AddMapAsync(selected.Uid, selected.Title);
+        var map = await coordinator.AddMapAsync(selected.Uid, selected.Title, selected.PlayerCount);
         await command.RespondAsync(
             $"Added **{Escape(map.Title)}** (`{map.Uid}`) to the tournament map pool.",
             ephemeral: true);
@@ -282,7 +299,10 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         var format = GetString(command, "format").Equals("double", StringComparison.OrdinalIgnoreCase)
             ? TournamentFormat.DoubleElimination
             : TournamentFormat.SingleElimination;
-        var tournament = await coordinator.CreateTournamentAsync(name, format);
+        var mode = GetString(command, "mode").Equals("2v2", StringComparison.OrdinalIgnoreCase)
+            ? TournamentMode.TwoVsTwo
+            : TournamentMode.OneVsOne;
+        var tournament = await coordinator.CreateTournamentAsync(name, format, mode);
 
         await command.RespondAsync(
             $"Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) created in the announcements channel.",
@@ -292,9 +312,11 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             .Build();
         await SendAnnouncementAsync(
             $"🏆 **{Escape(tournament.Name)}** is open for registration!\n" +
-            $"Format: **{FormatTournamentFormat(tournament.Format)}**\n" +
+            $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}**\n" +
             "Each round uses one randomly drawn map from the shared map pool.\n\n" +
-            "Press **Join tournament** below. If needed, the bot will ask for your exact YMCA/OpenRA player name.\n" +
+            (tournament.Mode == TournamentMode.TwoVsTwo
+                ? "Create a team using `/tournament-team-join`; your teammate must accept the invitation.\n"
+                : "Press **Join tournament** below. If needed, the bot will ask for your exact YMCA/OpenRA player name.\n") +
             $"Tournament ID: `{tournament.Id}`",
             joinButton);
     }
@@ -318,6 +340,28 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         await command.RespondAsync(
             $"You joined **{Escape(tournament.Name)}** (`{tournament.Id}`). Entrants: **{tournament.Entrants.Count}**.",
             ephemeral: true);
+    }
+
+    async Task JoinTournamentTeamAsync(SocketSlashCommand command)
+    {
+        var tournamentId = GetString(command, "tournament-id");
+        var teammate = GetUser(command, "teammate");
+        var team = await coordinator.InviteTeamAsync(
+            tournamentId,
+            command.User.Id,
+            teammate.Id,
+            GetString(command, "team-name"));
+        var tournament = await coordinator.GetTournamentAsync(tournamentId)
+            ?? throw new InvalidOperationException("Tournament not found.");
+        var components = new ComponentBuilder()
+            .WithButton("Accept team", $"team:{tournament.Id}:{command.User.Id}:accept", ButtonStyle.Success)
+            .WithButton("Decline", $"team:{tournament.Id}:{command.User.Id}:decline", ButtonStyle.Danger)
+            .Build();
+        await SendDmAsync(teammate.Id,
+            $"{Mention(command.User.Id)} invited you to join team **{Escape(team.Name)}** for " +
+            $"**{Escape(tournament.Name)}** (`{tournament.Id}`).", components);
+        await command.RespondAsync(
+            $"Invitation sent to {teammate.Mention}. The team enters after they accept.", ephemeral: true);
     }
 
     async Task LeaveTournamentAsync(SocketSlashCommand command)
@@ -363,6 +407,10 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             return;
         }
 
+        string DisplayEntrant(ulong id) => tournament.Mode == TournamentMode.TwoVsTwo
+            && tournament.Teams.TryGetValue(id, out var team)
+                ? $"**{Escape(team.Name)}** ({Mention(team.CaptainDiscordId)} + {Mention(team.TeammateDiscordId)})"
+                : Mention(id);
         var eliminationLosses = tournament.Format == TournamentFormat.DoubleElimination ? 2 : 1;
         var entrants = tournament.Entrants.Count == 0
             ? "No entrants yet."
@@ -372,20 +420,20 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 var state = tournament.Status == TournamentStatus.Registration
                     ? "registered"
                     : losses >= eliminationLosses ? "eliminated" : $"{losses} loss(es)";
-                return $"• {Mention(player)} — {state}";
+                return $"• {DisplayEntrant(player)} — {state}";
             }));
         var podium = tournament.ChampionDiscordId is ulong championId
-            ? $"\n🥇 {Mention(championId)}"
+            ? $"\n🥇 {DisplayEntrant(championId)}"
             : "";
         if (tournament.RunnerUpDiscordId is ulong runnerUpId)
-            podium += $"\n🥈 {Mention(runnerUpId)}";
+            podium += $"\n🥈 {DisplayEntrant(runnerUpId)}";
         if (tournament.ThirdPlaceDiscordId is ulong thirdPlaceId)
-            podium += $"\n🥉 {Mention(thirdPlaceId)}";
+            podium += $"\n🥉 {DisplayEntrant(thirdPlaceId)}";
         var mapStatus = tournament.RoundNumber > 0
             ? $"Round {tournament.RoundNumber} map: **{Escape(tournament.MapTitle)}**"
             : $"Map pool: **{tournament.MapPool.Count}** map(s) will be snapshotted when the tournament starts";
         var text = $"**{Escape(tournament.Name)}** (`{tournament.Id}`)\n" +
-            $"Format: **{FormatTournamentFormat(tournament.Format)}**\n" +
+            $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}**\n" +
             $"Status: **{tournament.Status}**\n{mapStatus}\n" +
             $"Entrants: **{tournament.Entrants.Count}**\n{entrants}{podium}";
         await command.RespondAsync(text.Length <= 2000 ? text : text[..1997] + "...", ephemeral: true);
@@ -401,7 +449,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 IEnumerable<TournamentRecord> tournaments = await coordinator.GetTournamentsAsync();
                 tournaments = interaction.Data.CommandName switch
                 {
-                    "tournament-join" or "tournament-start" => tournaments.Where(value => value.Status == TournamentStatus.Registration),
+                    "tournament-join" or "tournament-team-join" or "tournament-start" => tournaments.Where(value => value.Status == TournamentStatus.Registration),
                     "tournament-leave" => tournaments.Where(value => value.Status == TournamentStatus.Registration),
                     _ => tournaments
                 };
@@ -467,8 +515,29 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 return;
             }
 
+            if (parts.Length == 4 && parts[0] == "team")
+            {
+                if (!ulong.TryParse(parts[2], out var captainId))
+                    throw new InvalidOperationException("Invalid team invitation.");
+                var accept = parts[3] == "accept";
+                var response = await coordinator.RespondToTeamInviteAsync(parts[1], captainId, component.User.Id, accept);
+                await component.RespondAsync(accept
+                    ? $"Team **{Escape(response.Team.Name)}** joined **{Escape(response.Tournament.Name)}**."
+                    : $"You declined the invitation to **{Escape(response.Team.Name)}**.", ephemeral: true);
+                return;
+            }
+
             if (parts.Length == 3 && parts[0] == "tournament" && parts[2] == "join")
             {
+                var selectedTournament = await coordinator.GetTournamentAsync(parts[1])
+                    ?? throw new InvalidOperationException("Tournament not found.");
+                if (selectedTournament.Mode == TournamentMode.TwoVsTwo)
+                {
+                    await component.RespondAsync(
+                        "Use `/tournament-team-join` to choose a team name and invite your teammate.", ephemeral: true);
+                    return;
+                }
+
                 if (await coordinator.GetPlayerAsync(component.User.Id) == null)
                 {
                     await ShowRegistrationModalAsync(component, parts[1]);
@@ -540,13 +609,13 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     }
 
     public Task MatchQueuedAsync(MatchRecord match) => SendAdminAsync(
-        $"Match **{match.Id}** queued: {Mention(match.PlayerOneDiscordId)} vs {Mention(match.PlayerTwoDiscordId)} on **{Escape(match.MapTitle)}**.");
+        $"Match **{match.Id}** queued: {MatchSide(match, true)} vs {MatchSide(match, false)} on **{Escape(match.MapTitle)}**.");
 
     public async Task ServerReadyAsync(MatchRecord match, string joinUri)
     {
-        string MessageFor(ulong opponentId, string playerName) =>
+        string MessageFor(string opponent, string playerName) =>
             $"**YMCA tournament {(match.IsThirdPlaceMatch ? "third-place " : "")}match {match.Id}**\n" +
-            $"Opponent: {Mention(opponentId)}\n" +
+            $"Opponent: {opponent}\n" +
             $"Map: **{Escape(match.MapTitle)}**\n" +
             $"Join using this exact player name: `{playerName}`\n" +
             $"Server: `{config.Server.PublicHost}:{match.Port}`\n" +
@@ -560,17 +629,23 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .WithButton("Join YMCA server", style: ButtonStyle.Link, url: joinPage.GetPublicJoinUrl(match.Id, playerId))
                 .Build();
 
-        await SendDmAsync(match.PlayerOneDiscordId, MessageFor(match.PlayerTwoDiscordId, match.PlayerOneOpenRaName),
+        await SendDmAsync(match.PlayerOneDiscordId, MessageFor(MatchSide(match, false), match.PlayerOneOpenRaName),
             ComponentsFor(match.PlayerOneDiscordId));
-        await SendDmAsync(match.PlayerTwoDiscordId, MessageFor(match.PlayerOneDiscordId, match.PlayerTwoOpenRaName),
+        await SendDmAsync(match.PlayerTwoDiscordId, MessageFor(MatchSide(match, true), match.PlayerTwoOpenRaName),
             ComponentsFor(match.PlayerTwoDiscordId));
+        if (match.PlayerOneTeammateDiscordId is ulong firstTeammate)
+            await SendDmAsync(firstTeammate, MessageFor(MatchSide(match, false), match.PlayerOneTeammateOpenRaName),
+                ComponentsFor(firstTeammate));
+        if (match.PlayerTwoTeammateDiscordId is ulong secondTeammate)
+            await SendDmAsync(secondTeammate, MessageFor(MatchSide(match, true), match.PlayerTwoTeammateOpenRaName),
+                ComponentsFor(secondTeammate));
         await SendAdminAsync($"Server for **{match.Id}** is ready on `{config.Server.PublicHost}:{match.Port}`.");
     }
 
     public async Task ResultReadyAsync(MatchRecord match, ReplayResult result)
     {
         var automaticResult = match.AutomaticWinnerDiscordId is ulong winner
-            ? $"OpenRA reports {Mention(winner)} as winner."
+            ? $"OpenRA reports {(winner == match.PlayerOneDiscordId ? MatchSide(match, true) : MatchSide(match, false))} as winner."
             : "OpenRA could not determine an unambiguous winner. Both reports will be checked manually if necessary.";
 
         var components = new ComponentBuilder()
@@ -581,8 +656,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             .Build();
 
         var text = $"**Result for match {match.Id}**\n{automaticResult}\nPlease report your result.";
-        await SendDmAsync(match.PlayerOneDiscordId, text, components);
-        await SendDmAsync(match.PlayerTwoDiscordId, text, components);
+        foreach (var participant in MatchParticipantIds(match))
+            await SendDmAsync(participant, text, components);
         await SendAdminAsync($"Match **{match.Id}** is awaiting player confirmation. Replay: `{result.ReplayPath}`");
     }
 
@@ -590,7 +665,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     {
         var text = match.Status == MatchStatus.RematchRequested
             ? $"Both players requested a rematch for **{match.Id}**. A new match was queued."
-            : $"Match **{match.Id}** completed. Winner: {Mention(match.FinalWinnerDiscordId ?? 0)}.";
+            : $"Match **{match.Id}** completed. Winner: " +
+                (match.FinalWinnerDiscordId == match.PlayerOneDiscordId ? MatchSide(match, true) : MatchSide(match, false)) + ".";
         await SendAdminAsync(text);
     }
 
@@ -603,7 +679,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     public Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches)
     {
         var pairings = string.Join('\n', newMatches.Select(match =>
-            $"• `{match.Id}`: {Mention(match.PlayerOneDiscordId)} vs {Mention(match.PlayerTwoDiscordId)}" +
+            $"• `{match.Id}`: {MatchSide(match, true)} vs {MatchSide(match, false)}" +
             (match.IsThirdPlaceMatch ? " — **Third-place playoff**" : "")));
         return SendAnnouncementAsync(
             $"⚔️ **{Escape(tournament.Name)}** — Round {tournament.RoundNumber}\n" +
@@ -613,11 +689,15 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
     public Task TournamentCompletedAsync(TournamentRecord tournament)
     {
-        var podium = $"🥇 {Mention(tournament.ChampionDiscordId ?? 0)}";
+        string Entrant(ulong id) => tournament.Mode == TournamentMode.TwoVsTwo
+            && tournament.Teams.TryGetValue(id, out var team)
+                ? $"**{Escape(team.Name)}** ({Mention(team.CaptainDiscordId)} + {Mention(team.TeammateDiscordId)})"
+                : Mention(id);
+        var podium = $"🥇 {Entrant(tournament.ChampionDiscordId ?? 0)}";
         if (tournament.RunnerUpDiscordId is ulong runnerUp)
-            podium += $"\n🥈 {Mention(runnerUp)}";
+            podium += $"\n🥈 {Entrant(runnerUp)}";
         if (tournament.ThirdPlaceDiscordId is ulong thirdPlace)
-            podium += $"\n🥉 {Mention(thirdPlace)}";
+            podium += $"\n🥉 {Entrant(thirdPlace)}";
 
         return SendAnnouncementAsync(
             $"🏆 Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) completed!\n\n{podium}");
@@ -685,9 +765,28 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             .WithRequired(required)
             .WithAutocomplete(true);
 
+    static IEnumerable<ulong> MatchParticipantIds(MatchRecord match)
+    {
+        yield return match.PlayerOneDiscordId;
+        if (match.PlayerOneTeammateDiscordId is ulong firstTeammate)
+            yield return firstTeammate;
+        yield return match.PlayerTwoDiscordId;
+        if (match.PlayerTwoTeammateDiscordId is ulong secondTeammate)
+            yield return secondTeammate;
+    }
+
+    static string MatchSide(MatchRecord match, bool first)
+    {
+        var captain = first ? match.PlayerOneDiscordId : match.PlayerTwoDiscordId;
+        var teammate = first ? match.PlayerOneTeammateDiscordId : match.PlayerTwoTeammateDiscordId;
+        var name = first ? match.PlayerOneTeamName : match.PlayerTwoTeamName;
+        return teammate == null ? Mention(captain) : $"**{Escape(name)}** ({Mention(captain)} + {Mention(teammate.Value)})";
+    }
+
     static string FormatTournamentFormat(TournamentFormat format) => format == TournamentFormat.DoubleElimination
         ? "Double Elimination"
         : "Single Elimination";
+    static string FormatTournamentMode(TournamentMode mode) => mode == TournamentMode.TwoVsTwo ? "2v2" : "1v1";
     static string Truncate(string text, int length) => text.Length <= length ? text : text[..(length - 3)] + "...";
 
     public async ValueTask DisposeAsync()
