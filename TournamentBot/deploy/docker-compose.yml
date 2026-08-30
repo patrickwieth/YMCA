@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  tournament-bot:
+    build:
+      context: ../..
+      dockerfile: TournamentBot/Dockerfile
+    image: ymca-tournament-bot:local
+    container_name: ymca-tournament-bot
+    restart: unless-stopped
+    stop_signal: SIGINT
+    stop_grace_period: 30s
+    env_file:
+      - .env
+    volumes:
+      - ./tournament-bot.json:/config/tournament-bot.json:ro
+      - ./data:/data
+    ports:
+      - "12400-12407:12400-12407/tcp"
+      - "127.0.0.1:15080:5080/tcp"
+    networks:
+      - tournament
+      - cardchain
+
+networks:
+  tournament:
+  cardchain:
+    external:
+      name: cardchain_default
