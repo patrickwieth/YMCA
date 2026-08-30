@@ -540,14 +540,15 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
     public async Task ServerReadyAsync(MatchRecord match, string joinUri)
     {
-        string MessageFor(ulong opponentId) =>
+        string MessageFor(ulong opponentId, string playerName) =>
             $"**YMCA tournament match {match.Id}**\n" +
             $"Opponent: {Mention(opponentId)}\n" +
             $"Map: **{Escape(match.MapTitle)}**\n" +
+            $"Join using this exact player name: `{playerName}`\n" +
             $"Server: `{config.Server.PublicHost}:{match.Port}`\n" +
             $"Password: `{match.Password}`\n\n" +
             $"Join link: `{joinUri}`\n\n" +
-            "Manual join: YMCA → Multiplayer → Direct Connect, then enter the server and password shown above.";
+            "Manual join: YMCA → Multiplayer → Direct Connect, then enter the player name, server, and password shown above.";
 
         MessageComponent? components = null;
         if (config.JoinPage.Enabled)
@@ -555,8 +556,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .WithButton("Join YMCA server", style: ButtonStyle.Link, url: joinPage.GetPublicJoinUrl(match.Id))
                 .Build();
 
-        await SendDmAsync(match.PlayerOneDiscordId, MessageFor(match.PlayerTwoDiscordId), components);
-        await SendDmAsync(match.PlayerTwoDiscordId, MessageFor(match.PlayerOneDiscordId), components);
+        await SendDmAsync(match.PlayerOneDiscordId, MessageFor(match.PlayerTwoDiscordId, match.PlayerOneOpenRaName), components);
+        await SendDmAsync(match.PlayerTwoDiscordId, MessageFor(match.PlayerOneDiscordId, match.PlayerTwoOpenRaName), components);
         await SendAdminAsync($"Server for **{match.Id}** is ready on `{config.Server.PublicHost}:{match.Port}`.");
     }
 
