@@ -8,6 +8,7 @@ public sealed class BotConfiguration
     public ulong GuildId { get; set; }
     public ulong AdminRoleId { get; set; }
     public ulong AdminChannelId { get; set; }
+    public ulong AnnouncementChannelId { get; set; }
     public string StateFile { get; set; } = "TournamentBot/data/tournament-state.json";
     public OpenRaServerConfiguration Server { get; set; } = new();
     public JoinPageConfiguration JoinPage { get; set; } = new();

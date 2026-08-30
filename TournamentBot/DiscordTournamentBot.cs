@@ -211,11 +211,18 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         var tournament = await coordinator.CreateTournamentAsync(name, format, mapUid, mapTitle);
 
         await command.RespondAsync(
-            $"Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) is open for registration. " +
-            $"Players can join with `/tournament-join tournament-id:{tournament.Id}`.");
-        await SendAdminAsync(
-            $"🏆 Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) created: " +
-            $"**{FormatTournamentFormat(tournament.Format)}**, map **{Escape(tournament.MapTitle)}**.");
+            $"Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) created in the announcements channel.",
+            ephemeral: true);
+        var joinButton = new ComponentBuilder()
+            .WithButton("Join tournament", $"tournament:{tournament.Id}:join", ButtonStyle.Success)
+            .Build();
+        await SendAnnouncementAsync(
+            $"🏆 **{Escape(tournament.Name)}** is open for registration!\n" +
+            $"Format: **{FormatTournamentFormat(tournament.Format)}**\n" +
+            $"Map: **{Escape(tournament.MapTitle)}**\n\n" +
+            "Register your exact YMCA player name with `/register`, then press the button below to enter.\n" +
+            $"Tournament ID: `{tournament.Id}`",
+            joinButton);
     }
 
     async Task JoinTournamentAsync(SocketSlashCommand command)
@@ -284,6 +291,16 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         try
         {
             var parts = component.Data.CustomId.Split(':');
+            if (parts.Length == 3 && parts[0] == "tournament" && parts[2] == "join")
+            {
+                var tournament = await coordinator.JoinTournamentAsync(parts[1], component.User.Id);
+                await component.RespondAsync(
+                    $"You joined **{Escape(tournament.Name)}** (`{tournament.Id}`). " +
+                    $"Entrants: **{tournament.Entrants.Count}**.",
+                    ephemeral: true);
+                return;
+            }
+
             if (parts.Length != 3 || parts[0] != "match" || !Enum.TryParse<PlayerReport>(parts[2], true, out var report))
                 throw new InvalidOperationException("Invalid tournament action.");
 
@@ -354,15 +371,19 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     public Task MatchFailedAsync(MatchRecord match, string reason) =>
         SendAdminAsync($"❌ Server for match **{match.Id}** failed: {Escape(reason)}");
 
-    public Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches) =>
-        SendAdminAsync(
-            $"🏆 **{Escape(tournament.Name)}** (`{tournament.Id}`) advanced. " +
-            $"Queued matches: {string.Join(", ", newMatches.Select(match => $"`{match.Id}`"))}.");
+    public Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches)
+    {
+        var pairings = string.Join('\n', newMatches.Select(match =>
+            $"• `{match.Id}`: {Mention(match.PlayerOneDiscordId)} vs {Mention(match.PlayerTwoDiscordId)}"));
+        return SendAnnouncementAsync(
+            $"⚔️ **{Escape(tournament.Name)}** — next matches\n{pairings}\n\n" +
+            "Players will receive their server details by DM.");
+    }
 
     public Task TournamentCompletedAsync(TournamentRecord tournament) =>
-        SendAdminAsync(
-            $"🏆 Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) completed. " +
-            $"Champion: {Mention(tournament.ChampionDiscordId ?? 0)}.");
+        SendAnnouncementAsync(
+            $"🏆 Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) completed!\n" +
+            $"Champion: {Mention(tournament.ChampionDiscordId ?? 0)}");
 
     async Task SendDmAsync(ulong userId, string text, MessageComponent? components = null)
     {
@@ -382,6 +403,19 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         if (client.GetChannel(config.AdminChannelId) is not IMessageChannel channel)
             throw new InvalidOperationException($"Admin channel {config.AdminChannelId} is unavailable.");
         await channel.SendMessageAsync(text);
+    }
+
+    async Task SendAnnouncementAsync(string text, MessageComponent? components = null)
+    {
+        if (config.AnnouncementChannelId == 0)
+        {
+            await SendAdminAsync(text);
+            return;
+        }
+
+        if (client.GetChannel(config.AnnouncementChannelId) is not IMessageChannel channel)
+            throw new InvalidOperationException($"Announcement channel {config.AnnouncementChannelId} is unavailable.");
+        await channel.SendMessageAsync(text, components: components);
     }
 
     void EnsureAdmin(SocketUser user)
