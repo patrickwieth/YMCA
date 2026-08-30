@@ -139,6 +139,9 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         AddArgument(info, "Server.AdvertiseOnline", config.AdvertiseOnline.ToString());
         AddArgument(info, "Server.Password", match.Password);
         AddArgument(info, "Server.AllowedPlayerNames", $"{match.PlayerOneOpenRaName},{match.PlayerTwoOpenRaName}");
+        AddArgument(info, "Server.AutoStartDelaySeconds", "5");
+        AddArgument(info, "Server.AutoAssignCompetitiveSpawns", "True");
+        AddArgument(info, "Server.LobbyStatusFile", Path.Combine(match.SupportDirectory, "lobby-status.json"));
         AddArgument(info, "Server.RecordReplays", "True");
         AddArgument(info, "Server.RequireAuthentication", "False");
         AddArgument(info, "Server.Map", match.MapUid);
