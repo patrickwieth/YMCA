@@ -8,14 +8,20 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     readonly BotConfiguration config;
     readonly TournamentCoordinator coordinator;
     readonly JoinPageServer joinPage;
+    readonly OfficialMapCatalog mapCatalog;
     readonly DiscordSocketClient client;
     readonly TaskCompletionSource stopped = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-    public DiscordTournamentBot(BotConfiguration config, TournamentCoordinator coordinator, JoinPageServer joinPage)
+    public DiscordTournamentBot(
+        BotConfiguration config,
+        TournamentCoordinator coordinator,
+        JoinPageServer joinPage,
+        OfficialMapCatalog mapCatalog)
     {
         this.config = config;
         this.coordinator = coordinator;
         this.joinPage = joinPage;
+        this.mapCatalog = mapCatalog;
         client = new DiscordSocketClient(new DiscordSocketConfig
         {
             GatewayIntents = GatewayIntents.Guilds,
@@ -30,6 +36,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         client.Ready += OnReadyAsync;
         client.SlashCommandExecuted += OnSlashCommandAsync;
         client.ButtonExecuted += OnButtonAsync;
+        client.AutocompleteExecuted += OnAutocompleteAsync;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken)
@@ -76,14 +83,23 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("map-add")
-                .WithDescription("Add a map to the shared tournament map pool.")
-                .AddOption("map-uid", ApplicationCommandOptionType.String, "OpenRA map UID", true)
-                .AddOption("map-title", ApplicationCommandOptionType.String, "Human-readable map title", true)
+                .WithDescription("Add an official YMCA map to the shared tournament map pool.")
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("map")
+                    .WithDescription("Start typing an official map name")
+                    .WithType(ApplicationCommandOptionType.String)
+                    .WithRequired(true)
+                    .WithAutocomplete(true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("map-remove")
                 .WithDescription("Remove a map from the shared tournament map pool.")
-                .AddOption("map-uid", ApplicationCommandOptionType.String, "OpenRA map UID", true)
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("map")
+                    .WithDescription("Start typing a map-pool name")
+                    .WithType(ApplicationCommandOptionType.String)
+                    .WithRequired(true)
+                    .WithAutocomplete(true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("map-pool")
@@ -224,7 +240,9 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     async Task AddMapAsync(SocketSlashCommand command)
     {
         EnsureAdmin(command.User);
-        var map = await coordinator.AddMapAsync(GetString(command, "map-uid"), GetString(command, "map-title"));
+        var selected = mapCatalog.Get(GetString(command, "map"))
+            ?? throw new InvalidOperationException("Select an official YMCA map from the autocomplete list.");
+        var map = await coordinator.AddMapAsync(selected.Uid, selected.Title);
         await command.RespondAsync(
             $"Added **{Escape(map.Title)}** (`{map.Uid}`) to the tournament map pool.",
             ephemeral: true);
@@ -233,7 +251,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     async Task RemoveMapAsync(SocketSlashCommand command)
     {
         EnsureAdmin(command.User);
-        var map = await coordinator.RemoveMapAsync(GetString(command, "map-uid"));
+        var map = await coordinator.RemoveMapAsync(GetString(command, "map"));
         await command.RespondAsync(
             $"Removed **{Escape(map.Title)}** from the tournament map pool.",
             ephemeral: true);
@@ -334,6 +352,47 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             $"Status: **{tournament.Status}**\n{mapStatus}\n" +
             $"Entrants: **{tournament.Entrants.Count}**\n{entrants}{champion}";
         await command.RespondAsync(text.Length <= 2000 ? text : text[..1997] + "...", ephemeral: true);
+    }
+
+    async Task OnAutocompleteAsync(SocketAutocompleteInteraction interaction)
+    {
+        try
+        {
+            var query = interaction.Data.Current.Value?.ToString()?.Trim() ?? "";
+            IEnumerable<OfficialMap> candidates;
+            if (interaction.Data.CommandName == "map-add")
+            {
+                var pool = await coordinator.GetMapPoolAsync();
+                candidates = mapCatalog.Maps.Where(map =>
+                    pool.All(existing => !existing.Uid.Equals(map.Uid, StringComparison.OrdinalIgnoreCase)));
+            }
+            else if (interaction.Data.CommandName == "map-remove")
+            {
+                var pool = await coordinator.GetMapPoolAsync();
+                candidates = pool.Select(map => mapCatalog.Get(map.Uid)
+                    ?? new OfficialMap(map.Uid, 0, map.Title));
+            }
+            else
+            {
+                await interaction.RespondAsync(Array.Empty<AutocompleteResult>());
+                return;
+            }
+
+            var results = candidates
+                .Where(map => query.Length == 0 || map.Title.Contains(query, StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(map => map.Title.StartsWith(query, StringComparison.OrdinalIgnoreCase))
+                .ThenBy(map => map.Title, StringComparer.OrdinalIgnoreCase)
+                .Take(25)
+                .Select(map => new AutocompleteResult(
+                    Truncate($"{map.Title} ({map.PlayerCount} players)", 100),
+                    map.Uid));
+            await interaction.RespondAsync(results);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Map autocomplete failed: {ex}");
+            await interaction.RespondAsync(Array.Empty<AutocompleteResult>());
+        }
     }
 
     async Task OnButtonAsync(SocketMessageComponent component)
@@ -493,6 +552,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     static string FormatTournamentFormat(TournamentFormat format) => format == TournamentFormat.DoubleElimination
         ? "Double Elimination"
         : "Single Elimination";
+    static string Truncate(string text, int length) => text.Length <= length ? text : text[..(length - 3)] + "...";
 
     public async ValueTask DisposeAsync()
     {

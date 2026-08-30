@@ -8,7 +8,7 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 - `/match player-one player-two map-uid [map-title]` — admin: queue a match.
 - `/matches` — show recent matches.
 - `/resolve match-id winner` — admin: resolve a disputed match.
-- `/map-add map-uid map-title`, `/map-remove map-uid`, `/map-pool` — manage or view the shared round map pool.
+- `/map-add map`, `/map-remove map`, `/map-pool` — choose official YMCA maps from autocomplete and manage the shared round map pool.
 - `/tournament-create name format` — admin: open a single- or double-elimination tournament.
 - `/tournament-join tournament-id` — enter an open tournament.
 - `/tournament-leave tournament-id` — leave before the tournament starts.

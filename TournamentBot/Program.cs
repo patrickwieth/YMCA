@@ -15,12 +15,14 @@ internal static class Program
         try
         {
             var config = BotConfiguration.Load(configPath);
+            var mapCatalog = new OfficialMapCatalog(config.Server);
+            await mapCatalog.LoadAsync(shutdown.Token);
             var store = new StateStore(config.StateFile);
             var replayReader = new ReplayMetadataReader(config.Server);
             await using var serverPool = new OpenRaServerPool(config.Server, replayReader);
             var coordinator = new TournamentCoordinator(config, store, serverPool);
             await using var joinPage = new JoinPageServer(config, coordinator);
-            await using var discord = new DiscordTournamentBot(config, coordinator, joinPage);
+            await using var discord = new DiscordTournamentBot(config, coordinator, joinPage, mapCatalog);
 
             await joinPage.StartAsync(shutdown.Token);
             Console.WriteLine($"YMCA Tournament Bot starting with {config.Server.MaxConcurrentServers} server slots.");
