@@ -41,8 +41,28 @@ public sealed class JoinPageServer : IAsyncDisposable
             return;
         }
 
+        if (!ulong.TryParse(context.Request.Query["player"], out var playerId))
+        {
+            context.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await context.Response.WriteAsync("This join link does not identify a tournament participant.");
+            return;
+        }
+
+        var playerName = playerId switch
+        {
+            _ when playerId == match.PlayerOneDiscordId => match.PlayerOneOpenRaName,
+            _ when playerId == match.PlayerTwoDiscordId => match.PlayerTwoOpenRaName,
+            _ => null
+        };
+        if (playerName == null)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync("This player is not registered for the match.");
+            return;
+        }
+
         var host = config.Server.PublicHost;
-        var joinUri = $"ymca://{host}:{match.Port}?password={Uri.EscapeDataString(match.Password)}";
+        var joinUri = $"ymca://{host}:{match.Port}?password={Uri.EscapeDataString(match.Password)}&name={Uri.EscapeDataString(playerName)}";
         var html = $@"<!doctype html>
 <html lang=""en"">
 <head>
@@ -59,6 +79,7 @@ public sealed class JoinPageServer : IAsyncDisposable
 <body><div class=""card"">
   <h1>YMCA tournament match {WebUtility.HtmlEncode(match.Id)}</h1>
   <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
+  <p>Player name: <code>{WebUtility.HtmlEncode(playerName)}</code></p>
   <p><a class=""join"" href=""{WebUtility.HtmlEncode(joinUri)}"">Start YMCA and join</a></p>
   <h2>Manual connection</h2>
   <p>Server: <code>{WebUtility.HtmlEncode(host)}:{match.Port}</code></p>
@@ -71,7 +92,8 @@ public sealed class JoinPageServer : IAsyncDisposable
         await context.Response.WriteAsync(html);
     }
 
-    public string GetPublicJoinUrl(string matchId) => $"{config.JoinPage.PublicBaseUrl}/join/{Uri.EscapeDataString(matchId)}";
+    public string GetPublicJoinUrl(string matchId, ulong playerId) =>
+        $"{config.JoinPage.PublicBaseUrl}/join/{Uri.EscapeDataString(matchId)}?player={playerId}";
 
     public async ValueTask DisposeAsync()
     {

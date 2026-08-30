@@ -13,6 +13,13 @@ if grep -q 'replace-with-the-discord-bot-token' .env; then
     exit 1
 fi
 
+if [ "${FORCE_DEPLOY:-0}" != "1" ] \
+    && docker top ymca-tournament-bot -eo args 2>/dev/null | grep -q 'OpenRA.Server.dll'; then
+    echo "Deployment blocked: tournament match servers are running." >&2
+    echo "Wait for the tournament to finish, or use FORCE_DEPLOY=1 for an intentional restart." >&2
+    exit 1
+fi
+
 mkdir -p data/matches
 chmod 700 data
 chmod 600 .env
