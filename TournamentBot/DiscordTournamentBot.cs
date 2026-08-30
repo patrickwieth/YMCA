@@ -374,16 +374,20 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                     : losses >= eliminationLosses ? "eliminated" : $"{losses} loss(es)";
                 return $"• {Mention(player)} — {state}";
             }));
-        var champion = tournament.ChampionDiscordId is ulong championId
-            ? $"\nChampion: {Mention(championId)}"
+        var podium = tournament.ChampionDiscordId is ulong championId
+            ? $"\n🥇 {Mention(championId)}"
             : "";
+        if (tournament.RunnerUpDiscordId is ulong runnerUpId)
+            podium += $"\n🥈 {Mention(runnerUpId)}";
+        if (tournament.ThirdPlaceDiscordId is ulong thirdPlaceId)
+            podium += $"\n🥉 {Mention(thirdPlaceId)}";
         var mapStatus = tournament.RoundNumber > 0
             ? $"Round {tournament.RoundNumber} map: **{Escape(tournament.MapTitle)}**"
             : $"Map pool: **{tournament.MapPool.Count}** map(s) will be snapshotted when the tournament starts";
         var text = $"**{Escape(tournament.Name)}** (`{tournament.Id}`)\n" +
             $"Format: **{FormatTournamentFormat(tournament.Format)}**\n" +
             $"Status: **{tournament.Status}**\n{mapStatus}\n" +
-            $"Entrants: **{tournament.Entrants.Count}**\n{entrants}{champion}";
+            $"Entrants: **{tournament.Entrants.Count}**\n{entrants}{podium}";
         await command.RespondAsync(text.Length <= 2000 ? text : text[..1997] + "...", ephemeral: true);
     }
 
@@ -541,7 +545,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     public async Task ServerReadyAsync(MatchRecord match, string joinUri)
     {
         string MessageFor(ulong opponentId, string playerName) =>
-            $"**YMCA tournament match {match.Id}**\n" +
+            $"**YMCA tournament {(match.IsThirdPlaceMatch ? "third-place " : "")}match {match.Id}**\n" +
             $"Opponent: {Mention(opponentId)}\n" +
             $"Map: **{Escape(match.MapTitle)}**\n" +
             $"Join using this exact player name: `{playerName}`\n" +
@@ -599,17 +603,25 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     public Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches)
     {
         var pairings = string.Join('\n', newMatches.Select(match =>
-            $"• `{match.Id}`: {Mention(match.PlayerOneDiscordId)} vs {Mention(match.PlayerTwoDiscordId)}"));
+            $"• `{match.Id}`: {Mention(match.PlayerOneDiscordId)} vs {Mention(match.PlayerTwoDiscordId)}" +
+            (match.IsThirdPlaceMatch ? " — **Third-place playoff**" : "")));
         return SendAnnouncementAsync(
             $"⚔️ **{Escape(tournament.Name)}** — Round {tournament.RoundNumber}\n" +
             $"Map for every match this round: **{Escape(tournament.MapTitle)}**\n{pairings}\n\n" +
             "Players will receive their server details by DM.");
     }
 
-    public Task TournamentCompletedAsync(TournamentRecord tournament) =>
-        SendAnnouncementAsync(
-            $"🏆 Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) completed!\n" +
-            $"Champion: {Mention(tournament.ChampionDiscordId ?? 0)}");
+    public Task TournamentCompletedAsync(TournamentRecord tournament)
+    {
+        var podium = $"🥇 {Mention(tournament.ChampionDiscordId ?? 0)}";
+        if (tournament.RunnerUpDiscordId is ulong runnerUp)
+            podium += $"\n🥈 {Mention(runnerUp)}";
+        if (tournament.ThirdPlaceDiscordId is ulong thirdPlace)
+            podium += $"\n🥉 {Mention(thirdPlace)}";
+
+        return SendAnnouncementAsync(
+            $"🏆 Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) completed!\n\n{podium}");
+    }
 
     async Task SendDmAsync(ulong userId, string text, MessageComponent? components = null)
     {

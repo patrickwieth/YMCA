@@ -82,7 +82,9 @@ public sealed class TournamentCoordinator
         string mapUid,
         string mapTitle,
         string? parentMatchId = null,
-        string? tournamentId = null)
+        string? tournamentId = null,
+        int tournamentRound = 0,
+        bool isThirdPlaceMatch = false)
     {
         if (playerOneId == playerTwoId)
             throw new InvalidOperationException("A player cannot play against themselves.");
@@ -96,7 +98,8 @@ public sealed class TournamentCoordinator
             if (!state.Players.TryGetValue(playerTwoId, out var playerTwo))
                 throw new InvalidOperationException("Player two is not registered.");
 
-            return CreateMatchRecord(state, playerOne, playerTwo, mapUid, mapTitle, parentMatchId, tournamentId);
+            return CreateMatchRecord(state, playerOne, playerTwo, mapUid, mapTitle, parentMatchId, tournamentId,
+                tournamentRound, isThirdPlaceMatch);
         });
 
         await serverPool.EnqueueAsync(match);
@@ -258,7 +261,9 @@ public sealed class TournamentCoordinator
                 resolution.Match.MapUid,
                 resolution.Match.MapTitle,
                 resolution.Match.Id,
-                resolution.Match.TournamentId);
+                resolution.Match.TournamentId,
+                resolution.Match.TournamentRound,
+                resolution.Match.IsThirdPlaceMatch);
         }
         else if (resolution.Match.Status == MatchStatus.Completed)
         {
@@ -305,7 +310,27 @@ public sealed class TournamentCoordinator
             var loser = match.FinalWinnerDiscordId == match.PlayerOneDiscordId
                 ? match.PlayerTwoDiscordId
                 : match.PlayerOneDiscordId;
-            tournament.Losses[loser] = tournament.Losses.GetValueOrDefault(loser) + 1;
+            if (match.IsThirdPlaceMatch)
+            {
+                tournament.ThirdPlaceDiscordId = match.FinalWinnerDiscordId;
+                tournament.FourthPlaceDiscordId = loser;
+            }
+            else
+            {
+                tournament.Losses[loser] = tournament.Losses.GetValueOrDefault(loser) + 1;
+                var eliminationLosses = tournament.Format == TournamentFormat.DoubleElimination ? 2 : 1;
+                if (tournament.Losses[loser] >= eliminationLosses)
+                {
+                    tournament.EliminatedInRound[loser] = match.TournamentRound;
+                    var survivors = tournament.Entrants.Count(player =>
+                        tournament.Losses.GetValueOrDefault(player) < eliminationLosses);
+                    if (survivors == 1)
+                        tournament.RunnerUpDiscordId = loser;
+                    else if (survivors == 2 && tournament.Format == TournamentFormat.DoubleElimination)
+                        tournament.ThirdPlaceDiscordId = loser;
+                }
+            }
+
             return ScheduleNextRound(state, tournament);
         });
 
@@ -370,11 +395,31 @@ public sealed class TournamentCoordinator
         tournament.MapUid = roundMap.Uid;
         tournament.MapTitle = roundMap.Title;
 
+        if (tournament.Format == TournamentFormat.SingleElimination && active.Count == 2
+            && tournament.ThirdPlaceDiscordId == null
+            && !tournament.MatchIds.Where(state.Matches.ContainsKey).Select(id => state.Matches[id])
+                .Any(match => match.IsThirdPlaceMatch))
+        {
+            var latestEliminationRound = tournament.EliminatedInRound.Values.DefaultIfEmpty().Max();
+            var bronzeCandidates = tournament.EliminatedInRound
+                .Where(entry => entry.Value == latestEliminationRound)
+                .Select(entry => entry.Key)
+                .ToList();
+            if (bronzeCandidates.Count == 2)
+                pairings.Add((bronzeCandidates[0], bronzeCandidates[1]));
+            else if (bronzeCandidates.Count == 1)
+                tournament.ThirdPlaceDiscordId = bronzeCandidates[0];
+        }
+
         var matches = new List<MatchRecord>();
         foreach (var pairing in pairings)
         {
             var first = state.Players[pairing.First];
             var second = state.Players[pairing.Second];
+            var isThirdPlaceMatch = tournament.Format == TournamentFormat.SingleElimination
+                && active.Count == 2
+                && tournament.Losses.GetValueOrDefault(pairing.First) > 0
+                && tournament.Losses.GetValueOrDefault(pairing.Second) > 0;
             matches.Add(CreateMatchRecord(
                 state,
                 first,
@@ -382,7 +427,9 @@ public sealed class TournamentCoordinator
                 roundMap.Uid,
                 roundMap.Title,
                 null,
-                tournament.Id));
+                tournament.Id,
+                tournament.RoundNumber,
+                isThirdPlaceMatch));
         }
 
         return new TournamentTransition(tournament, matches, false);
@@ -417,7 +464,9 @@ public sealed class TournamentCoordinator
         string mapUid,
         string mapTitle,
         string? parentMatchId,
-        string? tournamentId)
+        string? tournamentId,
+        int tournamentRound = 0,
+        bool isThirdPlaceMatch = false)
     {
         var id = $"M{state.NextMatchNumber++:0000}";
         var match = new MatchRecord
@@ -432,6 +481,8 @@ public sealed class TournamentCoordinator
             Status = MatchStatus.Queued,
             ParentMatchId = parentMatchId,
             TournamentId = tournamentId,
+            TournamentRound = tournamentRound,
+            IsThirdPlaceMatch = isThirdPlaceMatch,
             CreatedAtUtc = DateTime.UtcNow
         };
         state.Matches[id] = match;

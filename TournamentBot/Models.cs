@@ -64,6 +64,8 @@ public sealed class MatchRecord
     public string? FailureReason { get; set; }
     public string? ParentMatchId { get; set; }
     public string? TournamentId { get; set; }
+    public int TournamentRound { get; set; }
+    public bool IsThirdPlaceMatch { get; set; }
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? StartedAtUtc { get; set; }
     public DateTime? FinishedAtUtc { get; set; }
@@ -90,7 +92,11 @@ public sealed class TournamentRecord
     public Dictionary<ulong, int> Losses { get; set; } = new();
     public List<string> MatchIds { get; set; } = new();
     public HashSet<string> ProcessedMatchIds { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<ulong, int> EliminatedInRound { get; set; } = new();
     public ulong? ChampionDiscordId { get; set; }
+    public ulong? RunnerUpDiscordId { get; set; }
+    public ulong? ThirdPlaceDiscordId { get; set; }
+    public ulong? FourthPlaceDiscordId { get; set; }
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? StartedAtUtc { get; set; }
     public DateTime? FinishedAtUtc { get; set; }

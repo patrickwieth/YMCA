@@ -55,6 +55,8 @@ public sealed class DoubleEliminationTests
             {
                 Assert.That(completed!.Status, Is.EqualTo(TournamentStatus.Completed));
                 Assert.That(completed.ChampionDiscordId, Is.EqualTo(alice));
+                Assert.That(completed.RunnerUpDiscordId, Is.EqualTo(bob));
+                Assert.That(completed.ThirdPlaceDiscordId, Is.Null);
                 Assert.That(completed.Losses[bob], Is.EqualTo(2));
                 Assert.That(completed.MatchIds, Has.Count.EqualTo(3));
             });
