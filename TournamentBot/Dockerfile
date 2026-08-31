@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
 
-ARG YMCA_VERSION=v0.96.17
+ARG YMCA_VERSION=v0.96.18
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates curl make python3 unzip \
