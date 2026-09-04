@@ -1,6 +1,8 @@
 
 GUN.Nod:
 	Inherits: GUN
+	Inherits: ^Nod1x1Visuals
+	-WithBuildingBib:
 	RenderSprites:
 		Image: gun2
 		PlayerPalette: overlayplayertd
@@ -48,6 +50,9 @@ OBLI:
 	Inherits: ^DefenseTD
 	Inherits: ^NodLaserUnit
 	Inherits: ^DisableOnLowPowerOrPowerDown
+	Inherits: ^NodTall1x1Visuals
+	RenderSprites:
+		Image: obli.custom
 	Inherits: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
@@ -67,9 +72,6 @@ OBLI:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 6c0
-	WithBuildingBib:
-		HasMinibib: true
-		Sequence: bibFtur2
 	-WithSpriteBody:
 	WithChargeSpriteBody:
 		Sequence: active
@@ -78,12 +80,12 @@ OBLI:
 		Factions: marked
 	Armament:
 		Weapon: Laser
-		LocalOffset: 0,-85,1280
+		LocalOffset: 0,-85,3840
 		PauseOnCondition: !ammo && charged <= 2
 		RequiresCondition: !marked
 	Armament@Marked:
 		Weapon: Laser.Adv
-		LocalOffset: 0,-85,1280
+		LocalOffset: 0,-85,3840
 		PauseOnCondition: !ammo && charged <= 2
 		RequiresCondition: marked
 	AmmoPool:
@@ -133,3 +135,502 @@ OBLI:
 	WithAmmoPipsDecoration:
 		Position: BottomLeft
 		RequiresSelection: true
+
+NUKE.Nod:
+	Inherits: NUKE
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodnuke.custom
+	Buildable:
+		Prerequisites: ~structures.nod
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	ProvidesPrerequisite@sharedactor:
+		Prerequisite: nuke
+
+NUK2.Nod:
+	Inherits: NUK2
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodnuk2.custom
+	Buildable:
+		Prerequisites: hq, ~structures.nod
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	ProvidesPrerequisite@sharedactor:
+		Prerequisite: nuk2
+
+AFAC.Nod:
+	Inherits: AFAC
+	Inherits: ^Nod3x3Visuals
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodfact.custom
+	Buildable:
+		Prerequisites: ~conyardbuildable, ~structures.nod, repair
+	Building:
+		Footprint: xxx xxx xxx
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	ProvidesPrerequisite@sharedactor:
+		Prerequisite: afac
+
+HQ.Nod:
+	Inherits: HQ
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodhq.custom
+	Buildable:
+		Prerequisites: proc.td, ~structures.nod, ~!techlevel.low
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	ProvidesPrerequisite@sharedactor:
+		Prerequisite: hq
+
+REP.Nod:
+	Inherits: REP
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodrep
+	Buildable:
+		Prerequisites: vehicles.td, ~structures.nod
+	Building:
+		Footprint: xx= xx= ==+
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	-HitShape:
+	HitShape@NOD:
+		Type: Rectangle
+			TopLeft: -1024, -1024
+			BottomRight: 1024, 1024
+	ProvidesPrerequisite@sharedactor:
+		Prerequisite: rep
+
+HPAD.TD.Nod:
+	Inherits: HPAD.TD
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodhpad
+	Buildable:
+		Prerequisites: radar, ~structures.nod
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	ProvidesPrerequisite@sharedactor:
+		Prerequisite: hpad.td
+
+PROC.TD.Nod:
+	Inherits: PROC.TD
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodproc.custom
+	Buildable:
+		Prerequisites: anypower, ~structures.nod
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	ProvidesPrerequisite@sharedactor:
+		Prerequisite: proc.td
+
+HAND:
+	Inherits: ^BuildingTD
+	Inherits: ^2x2Building+Bib
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	Inherits: ^PrimaryBuilding
+	-WithBuildingBib:
+	Inherits: ^InfantryProduction
+	RenderSprites:
+		Image: nodhand
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 20
+		Prerequisites: anypower, ~structures.nod
+		IconPalette: chrometd
+		Description: Trains infantry.
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Hand of Nod
+	Health:
+		HP: 60000
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Exit@1:
+		RequiresCondition: !being-captured
+		SpawnOffset: 512,1024,0
+		ExitCell: 1,2
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
+	ProvidesPrerequisite@infantryany:
+		Prerequisite: infantry.any
+	ProvidesPrerequisite@infantrytd:
+		Prerequisite: infantry.human
+	ProvidesPrerequisite@nod:
+		Factions: nod, blackh, marked, legion
+		Prerequisite: infantry.nod
+	ProvidesPrerequisite@nodvanilla:
+		Factions: nod
+		Prerequisite: infantry.nodvanilla
+	ProvidesPrerequisite@blackh:
+		Factions: blackh
+		Prerequisite: infantry.blackh
+	ProvidesPrerequisite@marked:
+		Factions: marked
+		Prerequisite: infantry.marked
+	ProvidesPrerequisite@legion:
+		Factions: legion
+		Prerequisite: infantry.legion
+	ProvidesPrerequisite@nodstructure:
+		RequiresPrerequisites: structures.nod
+		Prerequisite: infantry.nod
+	ProvidesPrerequisite@nodvanillastructure:
+		RequiresPrerequisites: structures.nodvanilla
+		Prerequisite: infantry.nodvanilla
+	ProvidesPrerequisite@blackhstructure:
+		RequiresPrerequisites: structures.blackh
+		Prerequisite: infantry.blackh
+	ProvidesPrerequisite@markedstructure:
+		RequiresPrerequisites: structures.marked
+		Prerequisite: infantry.marked
+	ProvidesPrerequisite@legionstructure:
+		RequiresPrerequisites: structures.legion
+		Prerequisite: infantry.legion
+	InfiltrateForSupportPower@inf:
+		Types: SabInfiltrate
+		Proxy: inf.nod.stolen
+	Power:
+		Amount: -20
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	InfiltrateForSupportPower@spy:
+		Proxy: barracks.upgraded
+		Types: SpyInfiltrate
+
+AIRS:
+	Inherits: ^BuildingTD
+	Inherits: ^PrimaryBuilding
+	Inherits: ^VehicleProduction
+	Inherits: ^3x3Building
+	Inherits: ^Nod3x3Visuals
+	RenderSprites:
+		Image: astrip.custom
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 80
+		Prerequisites: proc.td, ~structures.nod, ~!structures.legion
+		IconPalette: chrometd
+		Description: Provides a dropzone\nfor vehicle reinforcements
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Airstrip
+	Building:
+		Footprint: xxx xxx ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+
+	Health:
+		HP: 220000
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 7c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+	Exit@1:
+		SpawnOffset: -1024,0,0
+		ExitCell: 3,1
+	-Production:
+	ProductionAirdropCA:
+		Produces: Vehicle
+		PauseOnCondition: forceshield || invulnerability || being-warped
+		ActorType: c17.cargo
+		EntryType: DropSiteClosestEdge
+		ExitType: StraightAhead
+		LandingFacing: 64
+		ReadyAudio: ReinforcementsArrived
+		RequiresCondition: !vehiclesdisabled
+	WithDeliveryAnimation:
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
+	Power:
+		Amount: -30
+		RequiresCondition: !being-warped
+	InfiltrateForSupportPower@veh:
+		Types: SabInfiltrate
+		Proxy: veh.nod.stolen
+	ProvidesPrerequisite@buildingname:
+	InfiltrateForSupportPower@spy:
+		Proxy: vehicles.upgraded
+		Types: SpyInfiltrate
+
+TMPL:
+	Inherits: ^ScienceBuildingTD
+	Inherits: ^TechLevelBuilding
+	Inherits: ^Tier3Tech
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod3x2Selection
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodtmpl
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 0,-896,0, 0,896,0, 840,0,0, -706,0,0, -706,-768,0, -706,640,0
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Temple of Nod
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 140
+		Prerequisites: hq, ~vehicles.nod, ~structures.nod, ~!techlevel.medium
+		IconPalette: chrometd
+		Description: Provides Nod advanced technologies.\n  Requires power to operate.\n  Special Ability: Cluster Missile
+	Building:
+		Footprint: xxx xxx ===
+		LocalCenterOffset: 0,0,0
+	Health:
+		HP: 70000
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
+	RevealsShroud@Offline:
+		Range: 5c0
+		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
+	SupportPowerChargeBar:
+	Power:
+		Amount: -150
+		RequiresCondition: !being-warped
+	MustBeDestroyed:
+		RequiredForShortGame: false
+	WithSupportPowerActivationAnimation:
+		RequiresCondition: !build-incomplete
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
+	InfiltrateForSupportPower@tec:
+		Types: SabInfiltrate
+		Proxy: tec.nod.stolen
+	ProvidesPrerequisite@buildingname:
+		Prerequisite: tmpl
+
+BIO.Nod:
+	Inherits: ^BuildingTD
+	Inherits: ^TechLevelBuilding
+	Inherits: ^Tier4Tech
+	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits: ^3x2Building+Bib
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	Inherits: ^PrimaryBuilding
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nodbio
+		PlayerPalette: overlayplayertd
+	HitShape:
+		TargetableOffsets: 0,0,0, 0,1024,0, 0,-1024,0
+		Type: Rectangle
+			TopLeft: -1536, -1024
+			BottomRight: 1536, 512
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	Health:
+		HP: 80000
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 200
+		IconPalette: chrometd
+		Prerequisites: ~structures.nod, tmpl
+		Description: Replaces basic infantry with cyborgs.\n  Maximum 1 can be built.\n  Cannot be captured.\n  Special Ability: Cyborg Converter
+		BuildLimit: 1
+	-Capturable:
+	-CaptureNotification:
+	-CapturableProgressBar:
+	-CapturableProgressBlink:
+	-CaptureManager:
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Temple Prime
+	Power:
+		Amount: -150
+		RequiresCondition: !being-warped
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack
+	WithDeathAnimation:
+		DeathSequence: dead
+		DeathSequencePalette: overlayplayertd
+		UseDeathTypeSuffix: false
+	ProvidesPrerequisite@Name:
+		RequiresCondition: !being-warped
+	Sellable:
+		RequiresCondition: !build-incomplete && !c4 && !being-warped
+	Production:
+		Produces: Infantry, Cyborg
+		PauseOnCondition: forceshield || invulnerability || being-warped
+	Exit@1:
+		SpawnOffset: -170,1310,0
+		ExitCell: 1,3
+		ProductionTypes: Cyborg, Infantry
+	RallyPoint:
+	UnitConverter:
+		Type: Cyborg
+		ReadyAudio: UnitUpgraded
+		NoCashAudio: InsufficientFunds
+		BlockedAudio: OnHold
+		RequiresCondition: true
+		CostDifferenceRequired: true
+		EjectOnInsufficientFunds: true
+
+MSLO.Nod:
+	Inherits: ^ScienceBuilding
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^3x3Shape
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	Inherits: ^SuperWeapon
+	Inherits: ^NodSuperweaponBig
+	RenderSprites:
+		Image: nmslo.custom
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Missile Silo
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 140
+		IconPalette: chrometd
+		Prerequisites: tmpl, ~techlevel.superw, ~structures.nod
+		BuildLimit: 1
+		Description: Provides a chemical missile.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Chemical Missile
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	Health:
+		HP: 100000
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
+	RevealsShroud@Offline:
+		Range: 5c0
+		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
+	SupportPowerChargeBar:
+	Power:
+		Amount: -150
+		RequiresCondition: !being-warped
+	MustBeDestroyed:
+		RequiredForShortGame: false
+	WithSupportPowerActivationAnimation:
+		RequiresCondition: !build-incomplete
+	ProvidesPrerequisite@buildingname:
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
+
+SGEN:
+	Inherits: ^ScienceBuilding
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x2Building+Bib
+	Inherits: ^Nod3x3Bib
+	Inherits: ^Nod2x2Selection
+	Inherits: ^SuperWeapon
+	Inherits: ^NodSuperweaponSmall
+	-WithBuildingBib:
+	RenderSprites:
+		Image: sgen.custom
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 130
+		Prerequisites: tmpl, ~structures.nod, ~techlevel.superw
+		BuildLimit: 1
+		IconPalette: chrometd
+		Description: Makes a group of units invisible for a short time.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Tiberium Stealth
+	Valued:
+		Cost: 1500
+	Tooltip:
+		Name: Stealth Generator
+	Building:
+		Footprint: xx= xx= ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,0,0
+	Health:
+		HP: 100000
+	RevealsShroud:
+		MinRange: 5c0
+		Range: 6c0
+		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
+	RevealsShroud@Offline:
+		Range: 5c0
+		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 5c0
+		RequiresCondition: !disabled
+	SupportPowerChargeBar:
+	Power:
+		Amount: -200
+		RequiresCondition: !being-warped
+	MustBeDestroyed:
+		RequiredForShortGame: false
+	-HitShape:
+	HitShape@NOD:
+		Type: Rectangle
+			TopLeft: -1024, -1024
+			BottomRight: 1024, 1024
+	InfiltrateForSupportPowerReset:
+		Types: SpyInfiltrate, SabInfiltrate
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate

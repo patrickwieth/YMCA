@@ -960,7 +960,6 @@ KATY:
 		ForceFireIgnoresActors: True
 		PauseOnCondition: empdisable || being-warped
 		FacingTolerance: 0
-	SelectionDecorations:
 	FireWarheadsOnDeathCA:
 		Weapon: BarrelExplode
 
@@ -1017,7 +1016,6 @@ KATY:
 	GrantConditionOnMovement:
 		MovementType: Horizontal, Vertical, Turn
 		Condition: moving
-	SelectionDecorations:
 
 
 Peoples_Tank:
@@ -2447,3 +2445,23 @@ Tsar_Tank:
 		UndeployOnPickup: true
 	FirepowerMultiplier@tesla_damage:
 		RequiresCondition: tesla_damage && deployed
+
+MCV.Soviet:
+	Inherits: MCV
+	RenderSprites:
+		Image: mcv
+	Buildable:
+		Prerequisites: fix, vehicles, ~structures.soviet
+	Transforms:
+		IntoActor: fact.soviet
+	TransformOnCondition:
+		IntoActor: mcv.nukular.soviet
+	ProvidesPrerequisite@sharedactor:
+		Prerequisite: mcv
+
+MCV.Nukular.Soviet:
+	Inherits: MCV.Soviet
+	Inherits: ^NukularConyard
+	-Buildable:
+	Transforms:
+		IntoActor: fact.nukular.soviet

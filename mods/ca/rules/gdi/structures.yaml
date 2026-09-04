@@ -575,3 +575,455 @@ STWR:
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
+
+NUKE:
+	Inherits: ^BuildingTD
+	Inherits: ^DisabledByPowerOutage
+	Inherits: ^2x2Building+Bib
+	HitShape:
+		TargetableOffsets: 630,299,0
+	WithSpriteBody:
+		PauseOnCondition: disabled
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 10
+		Prerequisites: ~structures.gdi
+		IconPalette: chrometd
+		Description: Provides power for other structures.
+	Valued:
+		Cost: 300
+	Tooltip:
+		Name: Nuclear Power Plant
+	ProvidesPrerequisite:
+		Prerequisite: anypower
+	Building:
+		Footprint: xX xx ==
+	Health:
+		HP: 40000
+	RevealsShroud:
+		Range: 4c0
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+		DeathSequencePalette: overlayplayertd
+	Power:
+		Amount: 100
+		RequiresCondition: !forceshield || !being-warped
+	ProvidesPrerequisite:
+		Prerequisite: anypower
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, PowerInfiltrate
+	ScalePowerWithHealth:
+	ProvidesPrerequisite@buildingname:
+	InfiltrateForPowerOutage:
+		Types: SpyInfiltrate, PowerInfiltrate
+
+NUK2:
+	Inherits: ^BuildingTD
+	Inherits: ^DisabledByPowerOutage
+	Inherits: ^2x2Building+Bib
+	HitShape:
+		TargetableOffsets: 630,299,0
+	WithSpriteBody:
+		PauseOnCondition: disabled
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 110
+		Prerequisites: hq, ~structures.gdi
+		IconPalette: chrometd
+		Description: Provides double the power of\na standard Nuclear Power Plant.
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Advanced Nuclear Power Plant
+	ProvidesPrerequisite:
+		Prerequisite: anypower
+	Building:
+		Footprint: xX xx ==
+	Health:
+		HP: 70000
+	RevealsShroud:
+		Range: 5c0
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+		DeathSequencePalette: overlayplayertd
+	Power:
+		Amount: 200
+		RequiresCondition: !forceshield || !being-warped
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, PowerInfiltrate
+	ProvidesPrerequisite@buildingname:
+	ScalePowerWithHealth:
+	InfiltrateForPowerOutage:
+		Types: SpyInfiltrate, PowerInfiltrate
+
+AFAC:
+	Inherits: ^BuildingTD
+	Inherits: ^3x3Building+Bib
+	Inherits: ^ConcreteArmor
+	Inherits: ^StructureProduction
+	Inherits: ^BotFallbackInsurance
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 1000
+		Prerequisites: ~conyardbuildable, ~structures.gdi, repair
+		IconPalette: chrometd
+		Description: Produces structures.
+	Health:
+		HP: 150000
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Valued:
+		Cost: 2500
+	Tooltip:
+		Name: Construction Yard
+	Transforms:
+		RequiresCondition: factundeploy
+		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
+		IntoActor: amcv
+		Offset: 1,1
+		Facing: 384
+	TransformsIntoMobile:
+		RequiresCondition: factundeploy
+		Locomotor: heavywheeled
+		RequiresForceMove: true
+	TransformsIntoPassenger:
+		RequiresCondition: factundeploy
+		CargoType: Vehicle
+		RequiresForceMove: true
+	TransformsIntoRepairable:
+		RequiresCondition: factundeploy
+		RepairActors: fix, fix.soviet, rep, rep.nod
+		RequiresForceMove: true
+	TransformsIntoTransforms:
+		RequiresCondition: factundeploy && build-incomplete
+	Sellable:
+		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !c4 && !being-warped
+	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
+		Condition: factundeploy
+		Prerequisites: global-factundeploy
+	ProvidesPrerequisite@cnc:
+		Factions: gdi, talon, zocom, eagle, nod, blackh, marked, legion
+		Prerequisite: structures.td
+	ProvidesPrerequisite@tdfaction:
+		Factions: gdi, talon, zocom, eagle, nod, blackh, marked, legion
+		Prerequisite: td
+	ProvidesPrerequisite@gdi:
+		Factions: gdi, talon, zocom, eagle
+		Prerequisite: structures.gdi
+	ProvidesPrerequisite@talon:
+		Factions: talon
+		Prerequisite: structures.talon
+	ProvidesPrerequisite@zocom:
+		Factions: zocom
+		Prerequisite: structures.zocom
+	ProvidesPrerequisite@eagle:
+		Factions: eagle
+		Prerequisite: structures.eagle
+	ProvidesPrerequisite@nod:
+		Factions: nod, blackh, marked, legion
+		Prerequisite: structures.nod
+	ProvidesPrerequisite@blackh:
+		Factions: blackh
+		Prerequisite: structures.blackh
+	ProvidesPrerequisite@marked:
+		Factions: marked
+		Prerequisite: structures.marked
+	ProvidesPrerequisite@legion:
+		Factions: legion
+		Prerequisite: structures.legion
+	ProvidesPrerequisite@weap.tdFAC:
+		Factions: gdi, talon, zocom, eagle, legion
+		Prerequisite: structures.weap.td
+	ProvidesPrerequisite@sandbag:
+		Factions: gdi, talon, zocom, eagle
+		Prerequisite: structures.sandbag
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+		DeathSequencePalette: overlayplayertd
+	WithBuildingPlacedAnimation:
+		RequiresCondition: !build-incomplete && !chrono-vortex
+	Power:
+		Amount: 0
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite:
+		Prerequisite: afac
+		Condition: invulnerability
+	SpawnActorsOnSell@GDI:
+		ActorTypes: mercenary,mercenary,mercenary,mercenary,engineer
+		RequiresCondition: structures.gdi
+	SpawnActorsOnSell@Default:
+		ActorTypes: adept,adept,adept,adept,engineer
+		RequiresCondition: !structures.gdi
+
+HQ:
+	Inherits: ^BuildingTD
+	Inherits: ^TechLevelBuilding
+	Inherits: ^Tier2Tech
+	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits: ^2x2Building+Bib
+	Inherits: ^RadarStation
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 90
+		Prerequisites: proc.td, ~structures.gdi, ~!techlevel.low
+		IconPalette: chrometd
+		Description: Provides an overview of the battlefield.\n  Requires power to operate.
+	Valued:
+		Cost: 1800
+	Tooltip:
+		Name: Comm. Center
+	Building:
+		Footprint: X_ xx ==
+	WithSpriteBody:
+		PauseOnCondition: disabled || being-warped
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate,  SabInfiltrate
+	Health:
+		HP: 100000
+	RevealsShroud:
+		MinRange: 6c0
+		Range: 10c0
+		RequiresCondition: !disabled
+		RevealGeneratedShroud: False
+	RevealsShroud@Offline:
+		Range: 5c0
+		RequiresCondition: disabled
+	RevealsShroud@GAPGEN:
+		Range: 6c0
+		RequiresCondition: !disabled
+	InfiltrateForExploration:
+		Types: SpyInfiltrate, SabInfiltrate
+	Power:
+		Amount: -40
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@radar:
+		Prerequisite: radar
+	ProvidesPrerequisite@gdirad:
+		Factions: gdi, zocom, talon, eagle
+		Prerequisite: radar.gdi
+	ProvidesPrerequisite@buildingname:
+	InfiltrateForSupportPower@tec:
+		Types: SabInfiltrate
+		Proxy: rad.gdi.stolen
+
+REP:
+	Inherits: ^BuildingTD
+	Inherits: ^3x3Building
+	HitShape:
+		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
+		Type: Polygon
+			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 100
+		Prerequisites: vehicles.td, ~structures.gdi
+		IconPalette: chrometd
+		Description: Repairs vehicles.
+	Valued:
+		Cost: 1200
+	Tooltip:
+		Name: Repair Facility
+	Building:
+		Footprint: _+_ +++ _+_
+		Dimensions: 3,3
+	Health:
+		HP: 80000
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	WithBuildingBib:
+		Sequence: bibFix
+		HasMinibib: true
+	Reservable:
+	RallyPoint:
+	RepairsUnits:
+		ValuePercentage: 0
+		HpPerStep: 1000
+		Interval: 7
+		StartRepairingNotification: Repairing
+		FinishRepairingNotification: UnitRepaired
+		PlayerExperience: 15
+		RequiresCondition: !forceshield && !invulnerability && !being-warped
+	WithResupplyAnimation:
+		RequiresCondition: !build-incomplete
+	Power:
+		Amount: -30
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	ProvidesPrerequisite@repair:
+		Prerequisite: repair
+	ProximityExternalCondition@AIRCRAFTREPAIR:
+		Condition: aircraft-repair
+		Range: 10c0
+	WithRangeCircle@AIRCRAFTREPAIR:
+		Color: 888899AA
+		Range: 10c0
+
+HPAD.TD:
+	Inherits: ^BuildingTD
+	Inherits: ^2x2Building+Bib
+	Inherits: ^PrimaryBuilding
+	Inherits: ^RepairsAircraftWithRepairBay
+	Inherits: ^AircraftProduction
+	Inherits: ^GDIUpgradeProducer
+	RenderSprites:
+		Image: hpad2
+	HitShape:
+		UseTargetableCellsOffsets: false
+		TargetableOffsets: 0,0,0, 768,-512,0, 768,512,0, -281,-512,0, -630,512,0
+	Buildable:
+		Queue: Building
+		BuildPaletteOrder: 120
+		Prerequisites: radar, ~structures.gdi
+		IconPalette: chrometd
+		Description: Produces and reloads\nhelicopters.
+	Valued:
+		Cost: 500
+	Tooltip:
+		Name: Helipad
+	Building:
+		Footprint: xx xx ==
+	Health:
+		HP: 80000
+	RevealsShroud:
+		MinRange: 4c0
+		Range: 5c0
+		RevealGeneratedShroud: False
+	RevealsShroud@GAPGEN:
+		Range: 4c0
+	Exit@1:
+		SpawnOffset: 0,-256,0
+		ExitCell: 0,0
+		Facing: 224
+	Reservable:
+	Power:
+		Amount: -10
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@all:
+		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq, gdi, talon, zocom, eagle, nod, blackh, marked, legion
+		Prerequisite: aircraft.all
+	ProvidesPrerequisite@gdi:
+		Factions: gdi, zocom, talon, eagle
+		Prerequisite: aircraft.gdi
+	ProvidesPrerequisite@gdistructure:
+		RequiresPrerequisites: structures.gdi
+		Prerequisite: aircraft.gdi
+	ProvidesPrerequisite@nod:
+		Factions: nod, marked, blackh, legion
+		Prerequisite: aircraft.nod
+	ProvidesPrerequisite@nodstructure:
+		RequiresPrerequisites: structures.nod
+		Prerequisite: aircraft.nod
+	ProvidesPrerequisite@blackh:
+		Factions: blackh
+		Prerequisite: aircraft.blackh
+	ProvidesPrerequisite@blackhstructure:
+		RequiresPrerequisites: structures.blackh
+		Prerequisite: aircraft.blackh
+	ProvidesPrerequisite@legion:
+		Factions: legion
+		Prerequisite: aircraft.legion
+	ProvidesPrerequisite@legionstructure:
+		RequiresPrerequisites: structures.legion
+		Prerequisite: aircraft.legion
+	ProvidesPrerequisite@marked:
+		Factions: marked
+		Prerequisite: aircraft.marked
+	ProvidesPrerequisite@markedstructure:
+		RequiresPrerequisites: structures.marked
+		Prerequisite: aircraft.marked
+	ProvidesPrerequisite@zocom:
+		Factions: zocom
+		Prerequisite: aircraft.zocom
+	ProvidesPrerequisite@zocomstructure:
+		RequiresPrerequisites: structures.zocom
+		Prerequisite: aircraft.zocom
+	ProvidesPrerequisite@talon:
+		Factions: talon
+		Prerequisite: aircraft.talon
+	ProvidesPrerequisite@talonstructure:
+		RequiresPrerequisites: structures.talon
+		Prerequisite: aircraft.talon
+	ProvidesPrerequisite@eagle:
+		Factions: eagle
+		Prerequisite: aircraft.eagle
+	ProvidesPrerequisite@eaglestructure:
+		RequiresPrerequisites: structures.eagle
+		Prerequisite: aircraft.eagle
+	ProvidesPrerequisite@buildingname:
+	Targetable:
+		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
+	WithResupplyAnimation:
+		RequiresCondition: !build-incomplete
+	InfiltrateForSupportPower:
+		Types: SpyInfiltrate
+		Proxy: powerproxy.paratroopers2
+
+PROC.TD:
+	Inherits: ^BuildingTD
+	Inherits: ^BotIncome
+	Inherits: ^3x3Building+Bib
+	Inherits: ^Refinery
+	DockHost:
+		DockAngle: 448
+		DockOffset: -1c0, 1c0, 0
+		IsDragRequired: True
+		DragOffset: -554,512,0
+		DragLength: 12
+	HitShape:
+		Type: Rectangle
+			TopLeft: -1536, -512
+			BottomRight: 1536, 853
+	HitShape@TOP:
+		Type: Rectangle
+			TopLeft: -512, -1450
+			BottomRight: 896, -512
+	RenderSprites:
+		Image: proc2
+	Building:
+		Footprint: _x_ xxx === ===
+	Valued:
+		Cost: 2000
+	Tooltip:
+		Name: Refinery
+	Buildable:
+		BuildPaletteOrder: 60
+		Prerequisites: anypower, ~structures.gdi
+		Queue: Building
+		IconPalette: chrometd
+		Description: Processes raw Tiberium, Ore and Gems\ninto useable resources
+	Health:
+		HP: 90000
+	Targetable:
+		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
+	DrawLineToTarget:
+	WithDeathAnimation:
+		DeathSequence: dead
+		UseDeathTypeSuffix: false
+		DeathSequencePalette: overlayplayertd
+	FreeActor:
+		Actor: HAR2
+		SpawnOffset: 1,2
+		Facing: 64
+	WithResourceLevelOverlay:
+		RequiresCondition: !build-incomplete
+	Power:
+		Amount: -30
+		RequiresCondition: !being-warped
+	ProvidesPrerequisite@buildingname:
+	SpawnActorsOnSell@GDI:
+		ActorTypes: mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+		RequiresCondition: structures.gdi
+	SpawnActorsOnSell@Default:
+		ActorTypes: adept,adept,adept,adept,adept,adept,adept,adept,adept,adept,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+		RequiresCondition: !structures.gdi

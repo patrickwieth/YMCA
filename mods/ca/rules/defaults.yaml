@@ -526,13 +526,12 @@ refinery.dockhelper:
 		Margin: 5, 4
 		RequiresSelection: true
 		PipCount: 5
+		PipStride: 6, 3
 		ResourceSequences:
 			Ore: pip-yellow
 			Gems: pip-red
 			Tiberium: pip-green
 			BlueTiberium: pip-blue
-	Selectable:
-		DecorationBounds: 1536, 1536
 	WithHarvestAnimation:
 	WithDockingAnimation:
 	ChangesHealth:
@@ -2259,7 +2258,8 @@ refinery.dockhelper:
 		TurnSpeed: 48
 	UpdatesPlayerStatistics:
 		AddToArmyValue: true
-	SelectionDecorations:
+	IsometricSelectionDecorationsForUnits:
+		MinimumZoom: 0.5
 	WithSpriteControlGroupDecoration:
 	Selectable:
 		Bounds: 1024, 1024
@@ -2274,7 +2274,7 @@ refinery.dockhelper:
 		ValidDamageStates: Light, Medium, Heavy, Critical
 	Repairable:
 		HpPerStep: 5000
-		RepairActors: fix, rep, srep
+		RepairActors: fix, fix.soviet, rep, rep.nod, srep
 	ChronoshiftableWithSpriteEffect:
 		Image: chrono
 		WarpInSequence: warpin
@@ -2531,7 +2531,8 @@ refinery.dockhelper:
 		InternalOwner: Creeps
 		DeathType: ToxinDeath
 		RequiresLobbyCreeps: false
-	SelectionDecorations:
+	IsometricSelectionDecorationsForUnits:
+		MinimumZoom: 0.5
 	WithSpriteControlGroupDecoration:
 	Selectable:
 		Bounds: 768, 768, 0, -256
@@ -2769,7 +2770,8 @@ refinery.dockhelper:
 	Mobile:
 		Locomotor: naval
 		PauseOnCondition: empdisable || being-warped
-	SelectionDecorations:
+	IsometricSelectionDecorationsForUnits:
+		MinimumZoom: 0.5
 	WithSpriteControlGroupDecoration:
 	Selectable:
 		Bounds: 1024, 1024
@@ -2909,7 +2911,8 @@ refinery.dockhelper:
 	UpdatesPlayerStatistics:
 	AppearsOnRadar:
 		UseLocation: true
-	SelectionDecorations:
+	IsometricSelectionDecorationsForUnits:
+		MinimumZoom: 0.5
 	WithSpriteControlGroupDecoration:
 	Selectable:
 		Bounds: 1536, 1194, 0, 85
@@ -3027,7 +3030,7 @@ refinery.dockhelper:
 		CloakDelay: 90
 		UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage, Heal
 	Repairable:
-		RepairActors: fix, rep, srep, afld, afld.gdi, afld.allies, chairport
+		RepairActors: fix, fix.soviet, rep, rep.nod, srep, afld, afld.gdi, afld.allies, chairport
 	Aircraft:
 		CruisingCondition: cruising
 		PauseOnCondition: empdisable && !airborne || being-warped
@@ -3078,7 +3081,7 @@ refinery.dockhelper:
 		CanSlide: True
 		Crushes: crate, mine, infantry
 	Repairable:
-		RepairActors: fix, rep, srep, hpad, hpad.td
+		RepairActors: fix, fix.soviet, rep, rep.nod, srep, hpad, hpad.td, hpad.td.nod
 	GpsRadarDot:
 		Sequence: Helicopter
 	Hovers@CRUISING:
@@ -3206,7 +3209,7 @@ refinery.dockhelper:
 ^RearmableHelicopter:
 	Inherits: ^RearmableAircraft
 	Rearmable:
-		RearmActors: hpad, hpad.td
+		RearmActors: hpad, hpad.soviet, hpad.td, hpad.td.nod
 
 ^RearmInAir:
 	ReloadAmmoPool:
