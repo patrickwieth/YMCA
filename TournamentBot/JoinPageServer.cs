@@ -28,6 +28,9 @@ public sealed class JoinPageServer : IAsyncDisposable
         builder.WebHost.UseUrls(config.JoinPage.ListenUrl);
         application = builder.Build();
         application.MapGet("/join/{matchId}", RenderJoinPageAsync);
+        application.MapGet("/spectate/{matchId}", RenderSpectatorPageAsync);
+        application.MapGet("/replay/{matchId}", RenderReplayPageAsync);
+        application.MapGet("/replay/{matchId}/download", DownloadReplayAsync);
         await application.StartAsync(cancellationToken);
     }
 
@@ -118,6 +121,114 @@ public sealed class JoinPageServer : IAsyncDisposable
         await context.Response.WriteAsync(html);
     }
 
+    async Task RenderSpectatorPageAsync(HttpContext context, string matchId)
+    {
+        var match = await coordinator.GetMatchAsync(matchId);
+        if (match == null || !match.AllowSpectators || match.Port == null || string.IsNullOrEmpty(match.SpectatorPassword)
+            || match.Status is MatchStatus.Completed or MatchStatus.Cancelled or MatchStatus.Failed)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsync("Spectator access is not available for this match.");
+            return;
+        }
+
+        var spectatorUri = $"ymca://{config.Server.PublicHost}:{match.Port}" +
+            $"?password={Uri.EscapeDataString(match.SpectatorPassword)}&spectator=true";
+        var lobby = ReadLobbyStatus(match);
+        var liveState = lobby?.State == "GameStarted" ? "Playing — spectator joining is closed" : "Waiting for players";
+        var html = $@"<!doctype html>
+<html lang=""en"">
+<head>
+  <meta charset=""utf-8"">
+  <meta name=""viewport"" content=""width=device-width,initial-scale=1"">
+  <title>Spectate YMCA match {WebUtility.HtmlEncode(match.Id)}</title>
+  <style>
+    body {{ font: 18px system-ui; max-width: 680px; margin: 4rem auto; padding: 0 1rem; background: #17191f; color: #eee; }}
+    .card {{ background: #242832; padding: 2rem; border-radius: 12px; }}
+    .watch {{ display: inline-block; padding: .8rem 1.2rem; border-radius: 7px; background: #5865f2; color: white; text-decoration: none; font-weight: 700; }}
+    .muted {{ color: #aeb4c0; }}
+  </style>
+</head>
+<body><div class=""card"">
+  <h1>Spectate YMCA match {WebUtility.HtmlEncode(match.Id)}</h1>
+  <p>{WebUtility.HtmlEncode(match.PlayerOneOpenRaName)} vs {WebUtility.HtmlEncode(match.PlayerTwoOpenRaName)}</p>
+  <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
+  <p>Status: <strong>{WebUtility.HtmlEncode(liveState)}</strong></p>
+  <p><a class=""watch"" href=""{WebUtility.HtmlEncode(spectatorUri)}"">Join as spectator</a></p>
+  <p class=""muted"">This link can only create a spectator connection and cannot occupy a player slot.</p>
+</div></body>
+</html>";
+
+        context.Response.ContentType = "text/html; charset=utf-8";
+        await context.Response.WriteAsync(html);
+    }
+
+    async Task RenderReplayPageAsync(HttpContext context, string matchId)
+    {
+        var match = await GetReplayMatchAsync(matchId);
+        if (match == null)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsync("Replay not found.");
+            return;
+        }
+
+        var downloadUrl = GetPublicReplayDownloadUrl(match.Id);
+        var replayUri = $"ymca://replay?url={Uri.EscapeDataString(downloadUrl)}";
+        var html = $@"<!doctype html>
+<html lang=""en"">
+<head>
+  <meta charset=""utf-8"">
+  <meta name=""viewport"" content=""width=device-width,initial-scale=1"">
+  <title>Watch YMCA replay {WebUtility.HtmlEncode(match.Id)}</title>
+  <style>
+    body {{ font: 18px system-ui; max-width: 680px; margin: 4rem auto; padding: 0 1rem; background: #17191f; color: #eee; }}
+    .card {{ background: #242832; padding: 2rem; border-radius: 12px; }}
+    .watch {{ display: inline-block; padding: .8rem 1.2rem; border-radius: 7px; background: #5865f2; color: white; text-decoration: none; font-weight: 700; }}
+    .muted {{ color: #aeb4c0; }}
+  </style>
+</head>
+<body><div class=""card"">
+  <h1>YMCA replay {WebUtility.HtmlEncode(match.Id)}</h1>
+  <p>{WebUtility.HtmlEncode(match.PlayerOneOpenRaName)} vs {WebUtility.HtmlEncode(match.PlayerTwoOpenRaName)}</p>
+  <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
+  <p><a id=""watch"" class=""watch"" href=""{WebUtility.HtmlEncode(replayUri)}"">Open replay in YMCA</a></p>
+  <p class=""muted"">YMCA will download the replay and play it. If nothing happens, click the button above.</p>
+  <p class=""muted""><a href=""{WebUtility.HtmlEncode(downloadUrl)}"">Download replay only</a></p>
+</div>
+<script>window.location.href = document.getElementById('watch').href;</script>
+</body>
+</html>";
+
+        context.Response.ContentType = "text/html; charset=utf-8";
+        await context.Response.WriteAsync(html);
+    }
+
+    async Task DownloadReplayAsync(HttpContext context, string matchId)
+    {
+        var match = await GetReplayMatchAsync(matchId);
+        if (match == null)
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsync("Replay not found.");
+            return;
+        }
+
+        context.Response.ContentType = "application/octet-stream";
+        context.Response.Headers.ContentDisposition = $"attachment; filename=\"YMCA-{match.Id}.orarep\"";
+        await context.Response.SendFileAsync(match.ReplayPath!);
+    }
+
+    async Task<MatchRecord?> GetReplayMatchAsync(string matchId)
+    {
+        var match = await coordinator.GetMatchAsync(matchId);
+        return match?.Status == MatchStatus.Completed
+            && !string.IsNullOrEmpty(match.ReplayPath)
+            && File.Exists(match.ReplayPath)
+                ? match
+                : null;
+    }
+
     static LobbyStatus? ReadLobbyStatus(MatchRecord match)
     {
         if (string.IsNullOrEmpty(match.SupportDirectory))
@@ -157,6 +268,15 @@ public sealed class JoinPageServer : IAsyncDisposable
 
     public string GetPublicJoinUrl(string matchId, ulong playerId) =>
         $"{config.JoinPage.PublicBaseUrl}/join/{Uri.EscapeDataString(matchId)}?player={playerId}";
+
+    public string GetPublicSpectatorUrl(string matchId) =>
+        $"{config.JoinPage.PublicBaseUrl}/spectate/{Uri.EscapeDataString(matchId)}";
+
+    public string GetPublicReplayUrl(string matchId) =>
+        $"{config.JoinPage.PublicBaseUrl}/replay/{Uri.EscapeDataString(matchId)}";
+
+    string GetPublicReplayDownloadUrl(string matchId) =>
+        $"{config.JoinPage.PublicBaseUrl}/replay/{Uri.EscapeDataString(matchId)}/download";
 
     sealed class LobbyStatus
     {

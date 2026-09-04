@@ -68,6 +68,8 @@ public sealed class MatchRecord
     public MatchStatus Status { get; set; }
     public int? Port { get; set; }
     public string Password { get; set; } = "";
+    public bool AllowSpectators { get; set; }
+    public string SpectatorPassword { get; set; } = "";
     public string SupportDirectory { get; set; } = "";
     public string? ReplayPath { get; set; }
     public ulong? AutomaticWinnerDiscordId { get; set; }
@@ -104,6 +106,7 @@ public sealed class TournamentRecord
     public string Name { get; set; } = "";
     public TournamentFormat Format { get; set; }
     public TournamentMode Mode { get; set; }
+    public bool AllowSpectators { get; set; }
     public Dictionary<ulong, TournamentTeam> Teams { get; set; } = new();
     public TournamentStatus Status { get; set; }
     public string MapUid { get; set; } = "";

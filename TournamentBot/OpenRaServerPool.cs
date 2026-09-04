@@ -63,6 +63,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     {
         match.Port = port;
         match.Password = CreatePassword();
+        match.SpectatorPassword = match.AllowSpectators ? CreatePassword() : "";
         match.SupportDirectory = Path.Combine(config.MatchDirectory, match.Id);
         Directory.CreateDirectory(match.SupportDirectory);
 
@@ -86,9 +87,6 @@ public sealed class OpenRaServerPool : IAsyncDisposable
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (process.HasExited)
-                    throw new InvalidOperationException($"OpenRA.Server exited with code {process.ExitCode}.");
-
                 foreach (var replay in Directory.EnumerateFiles(match.SupportDirectory, "*.orarep", SearchOption.AllDirectories)
                     .OrderByDescending(File.GetLastWriteTimeUtc))
                 {
@@ -100,6 +98,11 @@ public sealed class OpenRaServerPool : IAsyncDisposable
                     await InvokeAsync(ResultAvailable, match, result);
                     return;
                 }
+
+                // ExitOnGameOver closes and finalizes the replay before terminating the server.
+                // Always try the replay first so a successful match is not reported as a crash.
+                if (process.HasExited)
+                    throw new InvalidOperationException($"OpenRA.Server exited with code {process.ExitCode} without a readable replay.");
 
                 await Task.Delay(TimeSpan.FromSeconds(config.ReplayPollSeconds), cancellationToken);
             }
@@ -138,6 +141,8 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         AddArgument(info, "Server.ListenPort", match.Port!.Value.ToString());
         AddArgument(info, "Server.AdvertiseOnline", config.AdvertiseOnline.ToString());
         AddArgument(info, "Server.Password", match.Password);
+        AddArgument(info, "Server.AllowSpectators", match.AllowSpectators.ToString());
+        AddArgument(info, "Server.SpectatorPassword", match.SpectatorPassword);
         var teamOneNames = new[] { match.PlayerOneOpenRaName, match.PlayerOneTeammateOpenRaName }
             .Where(name => !string.IsNullOrEmpty(name)).ToArray();
         var teamTwoNames = new[] { match.PlayerTwoOpenRaName, match.PlayerTwoTeammateOpenRaName }
@@ -150,6 +155,8 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         AddArgument(info, "Server.AutoAssignCompetitiveSpawns", "True");
         AddArgument(info, "Server.LobbyStatusFile", Path.Combine(match.SupportDirectory, "lobby-status.json"));
         AddArgument(info, "Server.RecordReplays", "True");
+        AddArgument(info, "Server.ExitOnGameOver", "True");
+        AddArgument(info, "Server.GameOverShutdownDelaySeconds", "5");
         AddArgument(info, "Server.RequireAuthentication", "False");
         AddArgument(info, "Server.Map", match.MapUid);
         info.Environment["MOD_SEARCH_PATHS"] = string.Join(',', config.ModSearchPaths.Split(',', StringSplitOptions.RemoveEmptyEntries)

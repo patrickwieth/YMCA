@@ -124,6 +124,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                     .WithRequired(true)
                     .AddChoice("1v1", "1v1")
                     .AddChoice("2v2", "2v2"))
+                .AddOption("spectators", ApplicationCommandOptionType.Boolean,
+                    "Allow public spectator joins and announce live matches", true)
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-team-join")
@@ -302,7 +304,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         var mode = GetString(command, "mode").Equals("2v2", StringComparison.OrdinalIgnoreCase)
             ? TournamentMode.TwoVsTwo
             : TournamentMode.OneVsOne;
-        var tournament = await coordinator.CreateTournamentAsync(name, format, mode);
+        var allowSpectators = GetBool(command, "spectators");
+        var tournament = await coordinator.CreateTournamentAsync(name, format, mode, allowSpectators);
 
         await command.RespondAsync(
             $"Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) created in the announcements channel.",
@@ -313,6 +316,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         await SendAnnouncementAsync(
             $"🏆 **{Escape(tournament.Name)}** is open for registration!\n" +
             $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}**\n" +
+            $"Public spectators: **{(tournament.AllowSpectators ? "Yes" : "No")}**\n" +
             "Each round uses one randomly drawn map from the shared map pool.\n\n" +
             (tournament.Mode == TournamentMode.TwoVsTwo
                 ? "Create a team using `/tournament-team-join`; your teammate must accept the invitation.\n"
@@ -443,6 +447,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             : $"Map pool: **{tournament.MapPool.Count}** map(s) will be snapshotted when the tournament starts";
         var text = $"**{Escape(tournament.Name)}** (`{tournament.Id}`)\n" +
             $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}**\n" +
+            $"Public spectators: **{(tournament.AllowSpectators ? "Yes" : "No")}**\n" +
             $"Status: **{tournament.Status}**\n{mapStatus}\n" +
             $"Entrants: **{tournament.Entrants.Count}**\n{entrants}{podium}";
         await command.RespondAsync(text.Length <= 2000 ? text : text[..1997] + "...", ephemeral: true);
@@ -649,6 +654,18 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             await SendDmAsync(secondTeammate, MessageFor(MatchSide(match, true), match.PlayerTwoTeammateOpenRaName),
                 ComponentsFor(secondTeammate));
         await SendAdminAsync($"Server for **{match.Id}** is ready on `{config.Server.PublicHost}:{match.Port}`.");
+
+        if (match.AllowSpectators && config.JoinPage.Enabled)
+        {
+            var spectatorComponents = new ComponentBuilder()
+                .WithButton("Join as spectator", style: ButtonStyle.Link,
+                    url: joinPage.GetPublicSpectatorUrl(match.Id))
+                .Build();
+            await SendAnnouncementAsync(
+                $"📺 **{match.Id}** is ready: {MatchSide(match, true)} vs {MatchSide(match, false)}\n" +
+                $"Map: **{Escape(match.MapTitle)}**\nJoin as spectator before the match starts.",
+                spectatorComponents);
+        }
     }
 
     public async Task ResultReadyAsync(MatchRecord match, ReplayResult result)
@@ -672,11 +689,22 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
     public async Task MatchCompletedAsync(MatchRecord match)
     {
-        var text = match.Status == MatchStatus.RematchRequested
+        var isRematch = match.Status == MatchStatus.RematchRequested;
+        var winner = match.FinalWinnerDiscordId == match.PlayerOneDiscordId
+            ? MatchSide(match, true)
+            : MatchSide(match, false);
+        var replayUrl = config.JoinPage.Enabled && !string.IsNullOrEmpty(match.ReplayPath)
+            ? joinPage.GetPublicReplayUrl(match.Id)
+            : null;
+        var text = isRematch
             ? $"Both players requested a rematch for **{match.Id}**. A new match was queued."
-            : $"Match **{match.Id}** completed. Winner: " +
-                (match.FinalWinnerDiscordId == match.PlayerOneDiscordId ? MatchSide(match, true) : MatchSide(match, false)) + ".";
+            : $"Match **{match.Id}** completed. Winner: {winner}." +
+                (replayUrl == null ? "" : $"\nReplay: {replayUrl}");
         await SendAdminAsync(text);
+
+        if (!isRematch)
+            await SendAnnouncementAsync($"🏁 **{match.Id}** — Winner: {winner}" +
+                (replayUrl == null ? "" : $"\n▶️ [Watch replay in YMCA]({replayUrl})"));
     }
 
     public Task MatchDisputedAsync(MatchRecord match, string reason) =>
@@ -763,6 +791,10 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
     static string? GetOptionalString(SocketSlashCommand command, string name) =>
         command.Data.Options.FirstOrDefault(option => option.Name == name)?.Value as string;
+
+    static bool GetBool(SocketSlashCommand command, string name) =>
+        (bool)(command.Data.Options.First(option => option.Name == name).Value
+            ?? throw new InvalidOperationException($"Missing option {name}."));
 
     static string Mention(ulong userId) => userId == 0 ? "unknown" : $"<@{userId}>";
     static string Escape(string text) => Format.Sanitize(text);

@@ -48,6 +48,7 @@ public sealed class TournamentCoordinator
                 match.Status = MatchStatus.Queued;
                 match.Port = null;
                 match.Password = "";
+                match.SpectatorPassword = "";
                 match.FailureReason = null;
             }
 
@@ -150,7 +151,8 @@ public sealed class TournamentCoordinator
     public Task<TournamentRecord> CreateTournamentAsync(
         string name,
         TournamentFormat format,
-        TournamentMode mode = TournamentMode.OneVsOne) => store.UpdateAsync(state =>
+        TournamentMode mode = TournamentMode.OneVsOne,
+        bool allowSpectators = false) => store.UpdateAsync(state =>
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new InvalidOperationException("A tournament name is required.");
@@ -164,6 +166,7 @@ public sealed class TournamentCoordinator
             Name = name.Trim(),
             Format = format,
             Mode = mode,
+            AllowSpectators = allowSpectators,
             Status = TournamentStatus.Registration,
             MapPool = state.MapPool.Select(map => new TournamentMap
             {
@@ -614,6 +617,9 @@ public sealed class TournamentCoordinator
             TournamentId = tournamentId,
             TournamentRound = tournamentRound,
             IsThirdPlaceMatch = isThirdPlaceMatch,
+            AllowSpectators = tournamentId != null
+                && state.Tournaments.TryGetValue(tournamentId, out var spectatorTournament)
+                && spectatorTournament.AllowSpectators,
             CreatedAtUtc = DateTime.UtcNow
         };
         state.Matches[id] = match;
@@ -643,6 +649,7 @@ public sealed class TournamentCoordinator
         var stored = state.Matches[match.Id];
         stored.Port = match.Port;
         stored.Password = match.Password;
+        stored.SpectatorPassword = match.SpectatorPassword;
         stored.SupportDirectory = match.SupportDirectory;
         stored.Status = MatchStatus.StartingServer;
     });
@@ -654,6 +661,7 @@ public sealed class TournamentCoordinator
             var stored = state.Matches[match.Id];
             stored.Port = match.Port;
             stored.Password = match.Password;
+            stored.SpectatorPassword = match.SpectatorPassword;
             stored.SupportDirectory = match.SupportDirectory;
             stored.Status = MatchStatus.WaitingForPlayers;
             stored.StartedAtUtc = DateTime.UtcNow;
@@ -762,13 +770,14 @@ public sealed class TournamentCoordinator
             _ => null
         };
 
-        if (reportedWinner == null
-            || match.AutomaticWinnerDiscordId != null && match.AutomaticWinnerDiscordId != reportedWinner)
+        if (reportedWinner == null)
         {
             match.Status = MatchStatus.Disputed;
             return new ReportResolution(match, false);
         }
 
+        // A consistent report from both sides takes precedence over the replay parser.
+        // Explicit disputes and conflicting player reports are handled above.
         match.FinalWinnerDiscordId = reportedWinner;
         match.Status = MatchStatus.Completed;
         match.FinishedAtUtc = DateTime.UtcNow;
