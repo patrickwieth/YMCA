@@ -1,0 +1,28 @@
+name: Deploy Tournament Bot
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy tournament bot without interrupting matches
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script_stop: true
+          command_timeout: 45m
+          script: |
+            set -eu
+            cd ~/src/YMCA-tournament
+            git fetch origin tournament-bot
+            git checkout tournament-bot
+            git pull --ff-only origin tournament-bot
+            ./TournamentBot/deploy/deploy.sh
