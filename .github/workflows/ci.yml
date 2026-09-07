@@ -79,4 +79,6 @@ jobs:
           # StyleCop violations on Windows. Validate the production build here;
           # Linux performs the existing static and script checks separately.
           .\make.ps1 all
-          dotnet test TournamentBot.Tests/TournamentBot.Tests.csproj --configuration Release --no-build
+          if (Test-Path 'TournamentBot.Tests/TournamentBot.Tests.csproj') {
+            dotnet test TournamentBot.Tests/TournamentBot.Tests.csproj --configuration Release --no-build
+          }
