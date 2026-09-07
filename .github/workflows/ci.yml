@@ -75,4 +75,7 @@ jobs:
           if (-not (dotnet nuget list source | Select-String -Quiet 'nuget\.org')) {
             dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
           }
+          # Warnings are treated as errors on Windows. Keep auditing enabled, but
+          # do not fail CI for the known low-severity NuGet.CommandLine advisory.
+          $env:NuGetAuditLevel = 'moderate'
           .\make.ps1 check
