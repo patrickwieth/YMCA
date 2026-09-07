@@ -4,6 +4,7 @@ public interface ITournamentNotifier
 {
     Task MatchQueuedAsync(MatchRecord match);
     Task ServerReadyAsync(MatchRecord match, string joinUri);
+    Task MatchStartedAsync(MatchRecord match);
     Task ResultReadyAsync(MatchRecord match, ReplayResult result);
     Task MatchCompletedAsync(MatchRecord match);
     Task MatchDisputedAsync(MatchRecord match, string reason);
@@ -26,6 +27,7 @@ public sealed class TournamentCoordinator
         this.serverPool = serverPool;
         serverPool.ServerStarting += OnServerStartingAsync;
         serverPool.ServerReady += OnServerReadyAsync;
+        serverPool.MatchStarted += OnMatchStartedAsync;
         serverPool.ResultAvailable += OnResultAvailableAsync;
         serverPool.ServerFailed += OnServerFailedAsync;
     }
@@ -334,6 +336,27 @@ public sealed class TournamentCoordinator
             .OrderByDescending(match => match.CreatedAtUtc)
             .Take(count)
             .ToList());
+
+    public Task RecordTournamentAnnouncementAsync(string tournamentId, ulong messageId) => store.UpdateAsync(state =>
+        GetTournament(state, tournamentId).RegistrationAnnouncementMessageId = messageId);
+
+    public Task RecordTeamInvitationAsync(string tournamentId, ulong captainId, ulong messageId) => store.UpdateAsync(state =>
+        GetTournament(state, tournamentId).Teams[captainId].InvitationMessageId = messageId);
+
+    public Task RecordMatchMessagesAsync(
+        string matchId,
+        IReadOnlyDictionary<ulong, ulong>? joinMessages = null,
+        IReadOnlyDictionary<ulong, ulong>? resultMessages = null,
+        ulong? spectatorMessageId = null) => store.UpdateAsync(state =>
+    {
+        var match = state.Matches[matchId];
+        if (joinMessages != null)
+            match.JoinDmMessageIds = new Dictionary<ulong, ulong>(joinMessages);
+        if (resultMessages != null)
+            match.ResultDmMessageIds = new Dictionary<ulong, ulong>(resultMessages);
+        if (spectatorMessageId != null)
+            match.SpectatorAnnouncementMessageId = spectatorMessageId;
+    });
 
     public async Task SubmitReportAsync(string matchId, ulong playerId, PlayerReport report)
     {
@@ -669,6 +692,18 @@ public sealed class TournamentCoordinator
 
         var joinUri = $"ymca://{config.Server.PublicHost}:{match.Port}?password={Uri.EscapeDataString(match.Password)}";
         await NotifyAsync(value => value.ServerReadyAsync(match, joinUri));
+    }
+
+    async Task OnMatchStartedAsync(MatchRecord match)
+    {
+        var updated = await store.UpdateAsync(state =>
+        {
+            var stored = state.Matches[match.Id];
+            stored.Status = MatchStatus.Playing;
+            return stored;
+        });
+
+        await NotifyAsync(value => value.MatchStartedAsync(updated));
     }
 
     async Task OnResultAvailableAsync(MatchRecord match, ReplayResult result)

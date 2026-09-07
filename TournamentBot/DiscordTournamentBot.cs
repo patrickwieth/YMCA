@@ -313,7 +313,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         var joinButton = new ComponentBuilder()
             .WithButton("Join tournament", $"tournament:{tournament.Id}:join", ButtonStyle.Success)
             .Build();
-        await SendAnnouncementAsync(
+        var announcement = await SendAnnouncementMessageAsync(
             $"🏆 **{Escape(tournament.Name)}** is open for registration!\n" +
             $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}**\n" +
             $"Public spectators: **{(tournament.AllowSpectators ? "Yes" : "No")}**\n" +
@@ -323,6 +323,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 : "Press **Join tournament** below. If needed, the bot will ask for your exact YMCA/OpenRA player name.\n") +
             $"Tournament ID: `{tournament.Id}`",
             joinButton);
+        if (announcement != null)
+            await coordinator.RecordTournamentAnnouncementAsync(tournament.Id, announcement.Id);
     }
 
     async Task JoinTournamentAsync(SocketSlashCommand command)
@@ -363,9 +365,10 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             .Build();
         try
         {
-            await SendDmAsync(teammate.Id,
+            var invitation = await SendDmMessageAsync(teammate.Id,
                 $"{Mention(command.User.Id)} invited you to join team **{Escape(team.Name)}** for " +
                 $"**{Escape(tournament.Name)}** (`{tournament.Id}`).", components);
+            await coordinator.RecordTeamInvitationAsync(tournament.Id, command.User.Id, invitation.Id);
         }
         catch
         {
@@ -389,6 +392,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     {
         EnsureAdmin(command.User);
         var tournament = await coordinator.DeleteTournamentAsync(GetString(command, "tournament-id"));
+        await RemoveTournamentButtonsAsync(tournament);
         await command.RespondAsync(
             $"Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) was deleted.",
             ephemeral: true);
@@ -400,6 +404,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     {
         EnsureAdmin(command.User);
         var tournament = await coordinator.StartTournamentAsync(GetString(command, "tournament-id"));
+        await RemoveTournamentButtonsAsync(tournament);
         await command.RespondAsync(
             $"Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) started with " +
             $"**{tournament.Entrants.Count}** players.");
@@ -535,9 +540,14 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                     throw new InvalidOperationException("Invalid team invitation.");
                 var accept = parts[3] == "accept";
                 var response = await coordinator.RespondToTeamInviteAsync(parts[1], captainId, component.User.Id, accept);
-                await component.RespondAsync(accept
+                var responseText = accept
                     ? $"Team **{Escape(response.Team.Name)}** joined **{Escape(response.Tournament.Name)}**."
-                    : $"You declined the invitation to **{Escape(response.Team.Name)}**.", ephemeral: true);
+                    : $"You declined the invitation to **{Escape(response.Team.Name)}**.";
+                await component.UpdateAsync(properties =>
+                {
+                    properties.Content = responseText;
+                    properties.Components = new ComponentBuilder().Build();
+                });
                 return;
             }
 
@@ -570,7 +580,11 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 throw new InvalidOperationException("Invalid tournament action.");
 
             await coordinator.SubmitReportAsync(parts[1], component.User.Id, report);
-            await component.RespondAsync($"Your response **{report}** was recorded for match **{parts[1]}**.", ephemeral: true);
+            await component.UpdateAsync(properties =>
+            {
+                properties.Content = $"Your response **{report}** was recorded for match **{parts[1]}**.";
+                properties.Components = new ComponentBuilder().Build();
+            });
         }
         catch (Exception ex)
         {
@@ -643,16 +657,22 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .WithButton("Join YMCA server", style: ButtonStyle.Link, url: joinPage.GetPublicJoinUrl(match.Id, playerId))
                 .Build();
 
-        await SendDmAsync(match.PlayerOneDiscordId, MessageFor(MatchSide(match, false), match.PlayerOneOpenRaName),
-            ComponentsFor(match.PlayerOneDiscordId));
-        await SendDmAsync(match.PlayerTwoDiscordId, MessageFor(MatchSide(match, true), match.PlayerTwoOpenRaName),
-            ComponentsFor(match.PlayerTwoDiscordId));
+        var joinMessages = new Dictionary<ulong, ulong>();
+        async Task SendJoinAsync(ulong playerId, string opponent, string playerName)
+        {
+            var message = await SendDmMessageAsync(playerId, MessageFor(opponent, playerName), ComponentsFor(playerId));
+            if (ComponentsFor(playerId) != null)
+                joinMessages[playerId] = message.Id;
+        }
+
+        await SendJoinAsync(match.PlayerOneDiscordId, MatchSide(match, false), match.PlayerOneOpenRaName);
+        await SendJoinAsync(match.PlayerTwoDiscordId, MatchSide(match, true), match.PlayerTwoOpenRaName);
         if (match.PlayerOneTeammateDiscordId is ulong firstTeammate)
-            await SendDmAsync(firstTeammate, MessageFor(MatchSide(match, false), match.PlayerOneTeammateOpenRaName),
-                ComponentsFor(firstTeammate));
+            await SendJoinAsync(firstTeammate, MatchSide(match, false), match.PlayerOneTeammateOpenRaName);
         if (match.PlayerTwoTeammateDiscordId is ulong secondTeammate)
-            await SendDmAsync(secondTeammate, MessageFor(MatchSide(match, true), match.PlayerTwoTeammateOpenRaName),
-                ComponentsFor(secondTeammate));
+            await SendJoinAsync(secondTeammate, MatchSide(match, true), match.PlayerTwoTeammateOpenRaName);
+        if (joinMessages.Count != 0)
+            await coordinator.RecordMatchMessagesAsync(match.Id, joinMessages: joinMessages);
         await SendAdminAsync($"Server for **{match.Id}** is ready on `{config.Server.PublicHost}:{match.Port}`.");
 
         if (match.AllowSpectators && config.JoinPage.Enabled)
@@ -661,15 +681,20 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .WithButton("Join as spectator", style: ButtonStyle.Link,
                     url: joinPage.GetPublicSpectatorUrl(match.Id))
                 .Build();
-            await SendAnnouncementAsync(
+            var announcement = await SendAnnouncementMessageAsync(
                 $"📺 **{match.Id}** is ready: {MatchSide(match, true)} vs {MatchSide(match, false)}\n" +
                 $"Map: **{Escape(match.MapTitle)}**\nJoin as spectator before the match starts.",
                 spectatorComponents);
+            if (announcement != null)
+                await coordinator.RecordMatchMessagesAsync(match.Id, spectatorMessageId: announcement.Id);
         }
     }
 
+    public Task MatchStartedAsync(MatchRecord match) => RemoveMatchJoinButtonsAsync(match);
+
     public async Task ResultReadyAsync(MatchRecord match, ReplayResult result)
     {
+        await RemoveMatchJoinButtonsAsync(match);
         var automaticResult = match.AutomaticWinnerDiscordId is ulong winner
             ? $"OpenRA reports {(winner == match.PlayerOneDiscordId ? MatchSide(match, true) : MatchSide(match, false))} as winner."
             : "OpenRA could not determine an unambiguous winner. Both reports will be checked manually if necessary.";
@@ -682,13 +707,20 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             .Build();
 
         var text = $"**Result for match {match.Id}**\n{automaticResult}\nPlease report your result.";
+        var resultMessages = new Dictionary<ulong, ulong>();
         foreach (var participant in MatchParticipantIds(match))
-            await SendDmAsync(participant, text, components);
+        {
+            var message = await SendDmMessageAsync(participant, text, components);
+            resultMessages[participant] = message.Id;
+        }
+
+        await coordinator.RecordMatchMessagesAsync(match.Id, resultMessages: resultMessages);
         await SendAdminAsync($"Match **{match.Id}** is awaiting player confirmation. Replay: `{result.ReplayPath}`");
     }
 
     public async Task MatchCompletedAsync(MatchRecord match)
     {
+        await RemoveAllMatchButtonsAsync(match);
         var isRematch = match.Status == MatchStatus.RematchRequested;
         var winner = match.FinalWinnerDiscordId == match.PlayerOneDiscordId
             ? MatchSide(match, true)
@@ -707,11 +739,17 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 (replayUrl == null ? "" : $"\n▶️ [Watch replay in YMCA]({replayUrl})"));
     }
 
-    public Task MatchDisputedAsync(MatchRecord match, string reason) =>
-        SendAdminAsync($"⚠️ Match **{match.Id}** requires manual review: {reason}");
+    public async Task MatchDisputedAsync(MatchRecord match, string reason)
+    {
+        await RemoveResultButtonsAsync(match);
+        await SendAdminAsync($"⚠️ Match **{match.Id}** requires manual review: {reason}");
+    }
 
-    public Task MatchFailedAsync(MatchRecord match, string reason) =>
-        SendAdminAsync($"❌ Server for match **{match.Id}** failed: {Escape(reason)}");
+    public async Task MatchFailedAsync(MatchRecord match, string reason)
+    {
+        await RemoveAllMatchButtonsAsync(match);
+        await SendAdminAsync($"❌ Server for match **{match.Id}** failed: {Escape(reason)}");
+    }
 
     public Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches)
     {
@@ -740,11 +778,76 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             $"🏆 Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) completed!\n\n{podium}");
     }
 
-    async Task SendDmAsync(ulong userId, string text, MessageComponent? components = null)
+    async Task RemoveTournamentButtonsAsync(TournamentRecord tournament)
+    {
+        if (tournament.RegistrationAnnouncementMessageId is ulong registrationMessageId)
+            await RemoveChannelMessageComponentsAsync(config.AnnouncementChannelId, registrationMessageId);
+
+        foreach (var team in tournament.Teams.Values)
+            if (team.InvitationMessageId is ulong invitationMessageId)
+                await RemoveDmMessageComponentsAsync(team.TeammateDiscordId, invitationMessageId);
+    }
+
+    async Task RemoveMatchJoinButtonsAsync(MatchRecord match)
+    {
+        foreach (var (userId, messageId) in match.JoinDmMessageIds)
+            await RemoveDmMessageComponentsAsync(userId, messageId);
+        if (match.SpectatorAnnouncementMessageId is ulong spectatorMessageId)
+            await RemoveChannelMessageComponentsAsync(config.AnnouncementChannelId, spectatorMessageId);
+    }
+
+    async Task RemoveResultButtonsAsync(MatchRecord match)
+    {
+        foreach (var (userId, messageId) in match.ResultDmMessageIds)
+            await RemoveDmMessageComponentsAsync(userId, messageId);
+    }
+
+    async Task RemoveAllMatchButtonsAsync(MatchRecord match)
+    {
+        await RemoveMatchJoinButtonsAsync(match);
+        await RemoveResultButtonsAsync(match);
+    }
+
+    async Task RemoveDmMessageComponentsAsync(ulong userId, ulong messageId)
+    {
+        try
+        {
+            IUser? user = client.GetUser(userId);
+            user ??= await client.Rest.GetUserAsync(userId);
+            var channel = await user.CreateDMChannelAsync();
+            if (await channel.GetMessageAsync(messageId) is IUserMessage message)
+                await message.ModifyAsync(properties => properties.Components = new ComponentBuilder().Build());
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Could not remove components from DM {messageId}: {ex.Message}");
+        }
+    }
+
+    async Task RemoveChannelMessageComponentsAsync(ulong channelId, ulong messageId)
+    {
+        try
+        {
+            if (client.GetChannel(channelId) is IMessageChannel channel
+                && await channel.GetMessageAsync(messageId) is IUserMessage message)
+                await message.ModifyAsync(properties => properties.Components = new ComponentBuilder().Build());
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Could not remove components from channel message {messageId}: {ex.Message}");
+        }
+    }
+
+    async Task<IUserMessage> SendDmMessageAsync(ulong userId, string text, MessageComponent? components = null)
     {
         IUser? user = client.GetUser(userId);
         user ??= await client.Rest.GetUserAsync(userId);
-        await user.SendMessageAsync(text, components: components);
+        return await user.SendMessageAsync(text, components: components);
+    }
+
+    async Task SendDmAsync(ulong userId, string text, MessageComponent? components = null)
+    {
+        await SendDmMessageAsync(userId, text, components);
     }
 
     async Task SendAdminAsync(string text)
@@ -760,17 +863,22 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         await channel.SendMessageAsync(text);
     }
 
-    async Task SendAnnouncementAsync(string text, MessageComponent? components = null)
+    async Task<IUserMessage?> SendAnnouncementMessageAsync(string text, MessageComponent? components = null)
     {
         if (config.AnnouncementChannelId == 0)
         {
             await SendAdminAsync(text);
-            return;
+            return null;
         }
 
         if (client.GetChannel(config.AnnouncementChannelId) is not IMessageChannel channel)
             throw new InvalidOperationException($"Announcement channel {config.AnnouncementChannelId} is unavailable.");
-        await channel.SendMessageAsync(text, components: components);
+        return await channel.SendMessageAsync(text, components: components);
+    }
+
+    async Task SendAnnouncementAsync(string text, MessageComponent? components = null)
+    {
+        await SendAnnouncementMessageAsync(text, components);
     }
 
     void EnsureAdmin(SocketUser user)

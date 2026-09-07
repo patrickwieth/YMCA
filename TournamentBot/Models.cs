@@ -83,6 +83,9 @@ public sealed class MatchRecord
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? StartedAtUtc { get; set; }
     public DateTime? FinishedAtUtc { get; set; }
+    public Dictionary<ulong, ulong> JoinDmMessageIds { get; set; } = new();
+    public Dictionary<ulong, ulong> ResultDmMessageIds { get; set; } = new();
+    public ulong? SpectatorAnnouncementMessageId { get; set; }
 }
 
 public sealed class TournamentMap
@@ -98,6 +101,7 @@ public sealed class TournamentTeam
     public ulong CaptainDiscordId { get; set; }
     public ulong TeammateDiscordId { get; set; }
     public bool Accepted { get; set; }
+    public ulong? InvitationMessageId { get; set; }
 }
 
 public sealed class TournamentRecord
@@ -126,6 +130,7 @@ public sealed class TournamentRecord
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? StartedAtUtc { get; set; }
     public DateTime? FinishedAtUtc { get; set; }
+    public ulong? RegistrationAnnouncementMessageId { get; set; }
 }
 
 public sealed class TournamentState

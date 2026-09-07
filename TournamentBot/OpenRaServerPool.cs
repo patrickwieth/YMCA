@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Net.Sockets;
 using System.Security.Cryptography;
+using System.Text.Json;
 using System.Threading.Channels;
 
 namespace Ymca.TournamentBot;
@@ -15,6 +16,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
 
     public event Func<MatchRecord, Task>? ServerStarting;
     public event Func<MatchRecord, Task>? ServerReady;
+    public event Func<MatchRecord, Task>? MatchStarted;
     public event Func<MatchRecord, ReplayResult, Task>? ResultAvailable;
     public event Func<MatchRecord, string, Task>? ServerFailed;
 
@@ -84,9 +86,16 @@ public sealed class OpenRaServerPool : IAsyncDisposable
             await WaitUntilListeningAsync(process, port, cancellationToken);
             await VerifyInitialMapAsync(process, match, cancellationToken);
             await InvokeAsync(ServerReady, match);
+            var gameStarted = false;
 
             while (!cancellationToken.IsCancellationRequested)
             {
+                if (!gameStarted && HasGameStarted(match))
+                {
+                    gameStarted = true;
+                    await InvokeAsync(MatchStarted, match);
+                }
+
                 foreach (var replay in Directory.EnumerateFiles(match.SupportDirectory, "*.orarep", SearchOption.AllDirectories)
                     .OrderByDescending(File.GetLastWriteTimeUtc))
                 {
@@ -166,6 +175,28 @@ public sealed class OpenRaServerPool : IAsyncDisposable
 
     static void AddArgument(ProcessStartInfo info, string key, string value) =>
         info.ArgumentList.Add($"{key}={value}");
+
+    static bool HasGameStarted(MatchRecord match)
+    {
+        var path = Path.Combine(match.SupportDirectory, "lobby-status.json");
+        try
+        {
+            if (!File.Exists(path))
+                return false;
+
+            using var document = JsonDocument.Parse(File.ReadAllText(path));
+            return document.RootElement.TryGetProperty("State", out var state)
+                && state.GetString() == "GameStarted";
+        }
+        catch (IOException)
+        {
+            return false;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
 
     async Task WaitUntilListeningAsync(Process process, int port, CancellationToken cancellationToken)
     {

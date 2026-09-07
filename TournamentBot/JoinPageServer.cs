@@ -109,7 +109,7 @@ public sealed class JoinPageServer : IAsyncDisposable
   <tbody>{playerRows}</tbody></table>
   <p class=""muted"">This page refreshes every four seconds.</p>
   <p>Your player name: <code>{WebUtility.HtmlEncode(playerName)}</code></p>
-  <p><a class=""join"" href=""{WebUtility.HtmlEncode(joinUri)}"">Start YMCA and join</a></p>
+  {(lobby?.State == "GameStarted" ? "<p class=\"muted\">Joining is closed because the match has started.</p>" : $"<p><a class=\"join\" href=\"{WebUtility.HtmlEncode(joinUri)}\">Start YMCA and join</a></p>")}
   <h2>Manual connection</h2>
   <p>Server: <code>{WebUtility.HtmlEncode(host)}:{match.Port}</code></p>
   <p>Password: <code>{WebUtility.HtmlEncode(match.Password)}</code></p>
@@ -154,7 +154,7 @@ public sealed class JoinPageServer : IAsyncDisposable
   <p>{WebUtility.HtmlEncode(match.PlayerOneOpenRaName)} vs {WebUtility.HtmlEncode(match.PlayerTwoOpenRaName)}</p>
   <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
   <p>Status: <strong>{WebUtility.HtmlEncode(liveState)}</strong></p>
-  <p><a class=""watch"" href=""{WebUtility.HtmlEncode(spectatorUri)}"">Join as spectator</a></p>
+  {(lobby?.State == "GameStarted" ? "" : $"<p><a class=\"watch\" href=\"{WebUtility.HtmlEncode(spectatorUri)}\">Join as spectator</a></p>")}
   <p class=""muted"">This link can only create a spectator connection and cannot occupy a player slot.</p>
 </div></body>
 </html>";
