@@ -357,13 +357,13 @@ commander-tree-promotion-chem-sprayer-spread =
 commander-tree-promotion-chemical-missiles =
     .buildable-description =
         RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.
-        Chemical missiles release a chemical cloud on impact.
+        Chemical missiles release a chemical cloud on impact. RPG Soldiers gain 10% attack range.
     .tooltipextras-strengths = Strengths: • Strong vs. Infantry, Light Vehicles.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. Heavy Armor.
-    .tooltipextras-attributes = Attributes: • Converts part of each barrage into toxin warheads.
+    .tooltipextras-attributes = Attributes: • Converts part of each barrage into toxin warheads. • RPG Soldiers gain 10% range.
     .description =
         RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.
-        Chemical missiles release a chemical cloud on impact.
+        Chemical missiles release a chemical cloud on impact. RPG Soldiers gain 10% attack range.
 
 ### commander-tree-promotion-cluster-grenades
 
@@ -1789,7 +1789,7 @@ promotion-tesla-arc =
 promotion-tesla-damage =
     .description = Upgrades the Tesla Coils to increase its damage by 20%.
 promotion-chemical-missiles =
-    .description = RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.\nChemical missiles release a chemical cloud on impact.
+    .description = RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.\nChemical missiles release a chemical cloud on impact. RPG Soldiers gain 10% attack range.
 promotion-metal-acid-missiles =
     .description = The Chemical Missiles are improved by releasing metal acid clouds.\nThose are efficient against heavy armored targets.
 promotion-artillery-upgrade =
