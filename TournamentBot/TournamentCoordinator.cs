@@ -9,6 +9,7 @@ public interface ITournamentNotifier
     Task MatchCompletedAsync(MatchRecord match);
     Task MatchDisputedAsync(MatchRecord match, string reason);
     Task MatchFailedAsync(MatchRecord match, string reason);
+    Task SeriesMapPicksRequestedAsync(TournamentRecord tournament, TournamentSeries series);
     Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches);
     Task TournamentCompletedAsync(TournamentRecord tournament);
 }
@@ -112,6 +113,12 @@ public sealed class TournamentCoordinator
                 created.PlayerTwoTeammateOpenRaName = teamSource.PlayerTwoTeammateOpenRaName;
                 created.PlayerOneTeamName = teamSource.PlayerOneTeamName;
                 created.PlayerTwoTeamName = teamSource.PlayerTwoTeamName;
+                created.SeriesId = teamSource.SeriesId;
+                created.SeriesGameNumber = teamSource.SeriesGameNumber;
+                created.WinsRequired = teamSource.WinsRequired;
+                if (!string.IsNullOrEmpty(created.SeriesId)
+                    && state.Series.TryGetValue(created.SeriesId, out var series))
+                    series.MatchIds.Add(created.Id);
             }
 
             return created;
@@ -154,12 +161,15 @@ public sealed class TournamentCoordinator
         string name,
         TournamentFormat format,
         TournamentMode mode = TournamentMode.OneVsOne,
-        bool allowSpectators = false) => store.UpdateAsync(state =>
+        bool allowSpectators = false,
+        int winsRequired = 1) => store.UpdateAsync(state =>
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new InvalidOperationException("A tournament name is required.");
         if (state.MapPool.Count == 0)
             throw new InvalidOperationException("Add at least one map to the tournament map pool first.");
+        if (winsRequired is < 1 or > 3)
+            throw new InvalidOperationException("Required wins must be between one and three.");
 
         var id = $"T{state.NextTournamentNumber++:000}";
         var tournament = new TournamentRecord
@@ -169,6 +179,7 @@ public sealed class TournamentCoordinator
             Format = format,
             Mode = mode,
             AllowSpectators = allowSpectators,
+            WinsRequired = winsRequired,
             Status = TournamentStatus.Registration,
             MapPool = state.MapPool.Select(map => new TournamentMap
             {
@@ -331,6 +342,70 @@ public sealed class TournamentCoordinator
     public Task<MatchRecord?> GetMatchAsync(string id) =>
         store.ReadAsync(state => state.Matches.GetValueOrDefault(id.Trim().ToUpperInvariant()));
 
+    public Task<TournamentSeries?> GetSeriesAsync(string id) =>
+        store.ReadAsync(state => state.Series.GetValueOrDefault(id.Trim().ToUpperInvariant()));
+
+    public async Task<SeriesMapPickResult> SubmitSeriesMapPickAsync(string seriesId, ulong playerId, string mapUid)
+    {
+        var result = await store.UpdateAsync(state =>
+        {
+            if (!state.Series.TryGetValue(seriesId.Trim().ToUpperInvariant(), out var series))
+                throw new InvalidOperationException("Tournament series not found.");
+            var tournament = GetTournament(state, series.TournamentId);
+            if (series.Status != TournamentSeriesStatus.AwaitingMapPicks)
+                throw new InvalidOperationException("Map selection for this series is closed.");
+            if (playerId != series.PlayerOneDiscordId && playerId != series.PlayerTwoDiscordId)
+                throw new InvalidOperationException("Only the team representatives can select maps.");
+
+            var required = tournament.WinsRequired - 1;
+            var picks = series.MapPicks[playerId];
+            if (picks.Count >= required)
+                throw new InvalidOperationException("You have already selected all your maps.");
+
+            var excluded = series.MapPicks.Values.SelectMany(value => value).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var randomMap = tournament.RandomMapByRound[series.TournamentRound];
+            var available = tournament.MapPool.Where(map => !excluded.Contains(map.Uid)
+                && (tournament.MapPool.Count <= 1 || !map.Uid.Equals(randomMap.Uid, StringComparison.OrdinalIgnoreCase))).ToList();
+            TournamentMap selected;
+            if (mapUid == "__random__")
+            {
+                if (available.Count == 0)
+                    available = tournament.MapPool.Where(map => !excluded.Contains(map.Uid)).ToList();
+                if (available.Count == 0)
+                    available = tournament.MapPool.ToList();
+                selected = available[Random.Shared.Next(available.Count)];
+            }
+            else
+            {
+                selected = tournament.MapPool.FirstOrDefault(map => map.Uid.Equals(mapUid, StringComparison.OrdinalIgnoreCase))
+                    ?? throw new InvalidOperationException("The selected map is not in this tournament's pool.");
+                if (excluded.Contains(selected.Uid) && tournament.MapPool.Count > excluded.Count)
+                    throw new InvalidOperationException("That map has already been selected for this series.");
+            }
+
+            picks.Add(selected.Uid);
+            var ready = series.MapPicks.Values.All(value => value.Count >= required);
+            MatchRecord? match = null;
+            if (ready)
+            {
+                series.Maps = BuildSeriesMaps(tournament, series);
+                series.Status = TournamentSeriesStatus.Playing;
+                match = CreateSeriesMatch(state, tournament, series, 1);
+            }
+
+            return new SeriesMapPickResult(tournament, series, selected, match);
+        });
+
+        if (result.Match != null)
+        {
+            await serverPool.EnqueueAsync(result.Match);
+            await NotifyAsync(value => value.MatchQueuedAsync(result.Match));
+            await NotifyAsync(value => value.TournamentUpdatedAsync(result.Tournament, new[] { result.Match }));
+        }
+
+        return result;
+    }
+
     public Task<IReadOnlyList<MatchRecord>> GetRecentMatchesAsync(int count = 10) =>
         store.ReadAsync<IReadOnlyList<MatchRecord>>(state => state.Matches.Values
             .OrderByDescending(match => match.CreatedAtUtc)
@@ -435,6 +510,21 @@ public sealed class TournamentCoordinator
                 || !tournament.ProcessedMatchIds.Add(match.Id))
                 return new TournamentTransition(tournament, Array.Empty<MatchRecord>(), false);
 
+            if (!string.IsNullOrEmpty(match.SeriesId)
+                && state.Series.TryGetValue(match.SeriesId, out var series))
+            {
+                series.Wins[match.FinalWinnerDiscordId.Value] =
+                    series.Wins.GetValueOrDefault(match.FinalWinnerDiscordId.Value) + 1;
+                if (series.Wins[match.FinalWinnerDiscordId.Value] < series.WinsRequired)
+                {
+                    var next = CreateSeriesMatch(state, tournament, series, match.SeriesGameNumber + 1);
+                    return new TournamentTransition(tournament, new[] { next }, false);
+                }
+
+                series.Status = TournamentSeriesStatus.Completed;
+                tournament.ProcessedSeriesIds.Add(series.Id);
+            }
+
             var loser = match.FinalWinnerDiscordId == match.PlayerOneDiscordId
                 ? match.PlayerTwoDiscordId
                 : match.PlayerOneDiscordId;
@@ -473,9 +563,12 @@ public sealed class TournamentCoordinator
             await NotifyAsync(value => value.MatchQueuedAsync(match));
         }
 
+        foreach (var series in transition.NewSeries.Where(series => series.Status == TournamentSeriesStatus.AwaitingMapPicks))
+            await NotifyAsync(value => value.SeriesMapPicksRequestedAsync(transition.Tournament, series));
+
         if (transition.Completed)
             await NotifyAsync(value => value.TournamentCompletedAsync(transition.Tournament));
-        else if (transition.NewMatches.Count > 0)
+        else if (transition.NewMatches.Count > 0 || transition.NewSeries.Count > 0)
             await NotifyAsync(value => value.TournamentUpdatedAsync(transition.Tournament, transition.NewMatches));
     }
 
@@ -491,7 +584,9 @@ public sealed class TournamentCoordinator
             .Select(id => state.Matches[id])
             .Any(match => !tournament.ProcessedMatchIds.Contains(match.Id)
                 && match.Status is not MatchStatus.RematchRequested and not MatchStatus.Cancelled);
-        if (unresolvedMatchExists)
+        var unresolvedSeriesExists = tournament.SeriesIds.Any(id =>
+            state.Series.TryGetValue(id, out var series) && series.Status != TournamentSeriesStatus.Completed);
+        if (unresolvedMatchExists || unresolvedSeriesExists)
             return new TournamentTransition(tournament, Array.Empty<MatchRecord>(), false);
 
         if (active.Count == 1)
@@ -536,6 +631,7 @@ public sealed class TournamentCoordinator
         tournament.RoundNumber++;
         tournament.MapUid = roundMap.Uid;
         tournament.MapTitle = roundMap.Title;
+        tournament.RandomMapByRound[tournament.RoundNumber] = roundMap;
 
         if (tournament.Format == TournamentFormat.SingleElimination && active.Count == 2
             && tournament.ThirdPlaceDiscordId == null
@@ -554,42 +650,48 @@ public sealed class TournamentCoordinator
         }
 
         var matches = new List<MatchRecord>();
+        var seriesList = new List<TournamentSeries>();
         foreach (var pairing in pairings)
         {
-            var first = state.Players[pairing.First];
-            var second = state.Players[pairing.Second];
             var isThirdPlaceMatch = tournament.Format == TournamentFormat.SingleElimination
                 && active.Count == 2
                 && tournament.Losses.GetValueOrDefault(pairing.First) > 0
                 && tournament.Losses.GetValueOrDefault(pairing.Second) > 0;
-            var match = CreateMatchRecord(
-                state,
-                first,
-                second,
-                roundMap.Uid,
-                roundMap.Title,
-                null,
-                tournament.Id,
-                tournament.RoundNumber,
-                isThirdPlaceMatch);
-            if (tournament.Mode == TournamentMode.TwoVsTwo)
+            var series = new TournamentSeries
             {
-                var firstTeam = tournament.Teams[pairing.First];
-                var secondTeam = tournament.Teams[pairing.Second];
-                var firstTeammate = state.Players[firstTeam.TeammateDiscordId];
-                var secondTeammate = state.Players[secondTeam.TeammateDiscordId];
-                match.PlayerOneTeamName = firstTeam.Name;
-                match.PlayerTwoTeamName = secondTeam.Name;
-                match.PlayerOneTeammateDiscordId = firstTeammate.DiscordUserId;
-                match.PlayerTwoTeammateDiscordId = secondTeammate.DiscordUserId;
-                match.PlayerOneTeammateOpenRaName = firstTeammate.OpenRaName;
-                match.PlayerTwoTeammateOpenRaName = secondTeammate.OpenRaName;
+                Id = $"S{state.NextSeriesNumber++:0000}",
+                TournamentId = tournament.Id,
+                PlayerOneDiscordId = pairing.First,
+                PlayerTwoDiscordId = pairing.Second,
+                TournamentRound = tournament.RoundNumber,
+                IsThirdPlaceMatch = isThirdPlaceMatch,
+                WinsRequired = tournament.WinsRequired,
+                Status = tournament.WinsRequired == 1
+                    ? TournamentSeriesStatus.Playing
+                    : TournamentSeriesStatus.AwaitingMapPicks,
+                MapPicks = new Dictionary<ulong, List<string>>
+                {
+                    [pairing.First] = new(),
+                    [pairing.Second] = new()
+                },
+                Wins = new Dictionary<ulong, int>
+                {
+                    [pairing.First] = 0,
+                    [pairing.Second] = 0
+                }
+            };
+            if (tournament.WinsRequired == 1)
+            {
+                series.Maps.Add(roundMap);
+                matches.Add(CreateSeriesMatch(state, tournament, series, 1));
             }
 
-            matches.Add(match);
+            state.Series[series.Id] = series;
+            tournament.SeriesIds.Add(series.Id);
+            seriesList.Add(series);
         }
 
-        return new TournamentTransition(tournament, matches, false);
+        return new TournamentTransition(tournament, matches, false, seriesList);
     }
 
     static TournamentMap SelectRoundMap(TournamentRecord tournament)
@@ -612,6 +714,61 @@ public sealed class TournamentCoordinator
         var selected = available[Random.Shared.Next(available.Count)];
         tournament.MapHistory.Add(selected.Uid);
         return selected;
+    }
+
+    static List<TournamentMap> BuildSeriesMaps(TournamentRecord tournament, TournamentSeries series)
+    {
+        var maps = new List<TournamentMap>();
+        var picksPerSide = tournament.WinsRequired - 1;
+        for (var i = 0; i < picksPerSide; i++)
+        {
+            maps.Add(tournament.MapPool.First(map => map.Uid.Equals(
+                series.MapPicks[series.PlayerOneDiscordId][i], StringComparison.OrdinalIgnoreCase)));
+            maps.Add(tournament.MapPool.First(map => map.Uid.Equals(
+                series.MapPicks[series.PlayerTwoDiscordId][i], StringComparison.OrdinalIgnoreCase)));
+        }
+
+        maps.Add(tournament.RandomMapByRound[series.TournamentRound]);
+        return maps;
+    }
+
+    static MatchRecord CreateSeriesMatch(
+        TournamentState state,
+        TournamentRecord tournament,
+        TournamentSeries series,
+        int gameNumber)
+    {
+        var map = series.Maps[gameNumber - 1];
+        var match = CreateMatchRecord(
+            state,
+            state.Players[series.PlayerOneDiscordId],
+            state.Players[series.PlayerTwoDiscordId],
+            map.Uid,
+            map.Title,
+            null,
+            tournament.Id,
+            series.TournamentRound,
+            series.IsThirdPlaceMatch);
+        match.SeriesId = series.Id;
+        match.SeriesGameNumber = gameNumber;
+        match.WinsRequired = series.WinsRequired;
+        series.MatchIds.Add(match.Id);
+
+        if (tournament.Mode == TournamentMode.TwoVsTwo)
+        {
+            var firstTeam = tournament.Teams[series.PlayerOneDiscordId];
+            var secondTeam = tournament.Teams[series.PlayerTwoDiscordId];
+            var firstTeammate = state.Players[firstTeam.TeammateDiscordId];
+            var secondTeammate = state.Players[secondTeam.TeammateDiscordId];
+            match.PlayerOneTeamName = firstTeam.Name;
+            match.PlayerTwoTeamName = secondTeam.Name;
+            match.PlayerOneTeammateDiscordId = firstTeammate.DiscordUserId;
+            match.PlayerTwoTeammateDiscordId = secondTeammate.DiscordUserId;
+            match.PlayerOneTeammateOpenRaName = firstTeammate.OpenRaName;
+            match.PlayerTwoTeammateOpenRaName = secondTeammate.OpenRaName;
+        }
+
+        return match;
     }
 
     static MatchRecord CreateMatchRecord(
@@ -849,6 +1006,19 @@ public sealed class TournamentCoordinator
             yield return match.PlayerTwoTeammateOpenRaName;
     }
 
+    public sealed record SeriesMapPickResult(
+        TournamentRecord Tournament,
+        TournamentSeries Series,
+        TournamentMap SelectedMap,
+        MatchRecord? Match);
+
     sealed record ReportResolution(MatchRecord? Match, bool CreateRematch);
-    sealed record TournamentTransition(TournamentRecord Tournament, IReadOnlyList<MatchRecord> NewMatches, bool Completed);
+    sealed record TournamentTransition(
+        TournamentRecord Tournament,
+        IReadOnlyList<MatchRecord> NewMatches,
+        bool Completed,
+        IReadOnlyList<TournamentSeries>? ScheduledSeries = null)
+    {
+        public IReadOnlyList<TournamentSeries> NewSeries => ScheduledSeries ?? Array.Empty<TournamentSeries>();
+    }
 }

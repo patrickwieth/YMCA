@@ -9,7 +9,7 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 - `/matches` — show recent matches.
 - `/resolve match-id winner` — admin: resolve a disputed match.
 - `/map-add map`, `/map-remove map`, `/map-pool` — choose official YMCA maps from autocomplete and manage the shared round map pool.
-- `/tournament-create name format` — admin: open a single- or double-elimination tournament.
+- `/tournament-create name format mode best-of spectators` — admin: open a BO1, BO3, or BO5 single- or double-elimination tournament.
 - `/tournament-join tournament-id` — enter an open tournament.
 - `/tournament-leave tournament-id` — leave before the tournament starts.
 - `/tournament-delete tournament-id` — admin: delete a tournament that is not running.
@@ -44,7 +44,7 @@ Automatic replay results are not final until player feedback agrees. Conflicting
 
 Tournament scheduling supports single elimination and double elimination. In double elimination a player moves to the losers pool after the first loss and is eliminated after the second. If the one-loss finalist beats the undefeated finalist, the bot schedules the required grand-final reset. Odd player counts receive automatic byes between rounds.
 
-Admins maintain one shared tournament map pool. Each tournament snapshots that pool when it starts. The scheduler randomly draws one map for the whole round, avoids consecutive repeats, and cycles through every configured map before reusing maps. Technical rematches retain the original round map.
+Admins maintain one shared tournament map pool, which each tournament snapshots when it starts. BO1 uses one random map shared by the whole round. In BO3 each side chooses one map by DM and a shared random round map is used as the decider. In BO5 each side chooses two maps and the fifth map is the shared random decider. Every dropdown also offers **I don't care** for an automatic pick. Maps do not repeat within a series while enough alternatives remain, and technical rematches retain the same map.
 
 ## Notes
 

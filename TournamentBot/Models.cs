@@ -42,6 +42,13 @@ public enum TournamentStatus
     Cancelled
 }
 
+public enum TournamentSeriesStatus
+{
+    AwaitingMapPicks,
+    Playing,
+    Completed
+}
+
 public sealed class RegisteredPlayer
 {
     public ulong DiscordUserId { get; set; }
@@ -79,6 +86,9 @@ public sealed class MatchRecord
     public string? ParentMatchId { get; set; }
     public string? TournamentId { get; set; }
     public int TournamentRound { get; set; }
+    public string SeriesId { get; set; } = "";
+    public int SeriesGameNumber { get; set; } = 1;
+    public int WinsRequired { get; set; } = 1;
     public bool IsThirdPlaceMatch { get; set; }
     public DateTime CreatedAtUtc { get; set; }
     public DateTime? StartedAtUtc { get; set; }
@@ -104,6 +114,22 @@ public sealed class TournamentTeam
     public ulong? InvitationMessageId { get; set; }
 }
 
+public sealed class TournamentSeries
+{
+    public string Id { get; set; } = "";
+    public string TournamentId { get; set; } = "";
+    public ulong PlayerOneDiscordId { get; set; }
+    public ulong PlayerTwoDiscordId { get; set; }
+    public int TournamentRound { get; set; }
+    public bool IsThirdPlaceMatch { get; set; }
+    public int WinsRequired { get; set; } = 1;
+    public TournamentSeriesStatus Status { get; set; }
+    public Dictionary<ulong, List<string>> MapPicks { get; set; } = new();
+    public List<TournamentMap> Maps { get; set; } = new();
+    public Dictionary<ulong, int> Wins { get; set; } = new();
+    public List<string> MatchIds { get; set; } = new();
+}
+
 public sealed class TournamentRecord
 {
     public string Id { get; set; } = "";
@@ -111,6 +137,7 @@ public sealed class TournamentRecord
     public TournamentFormat Format { get; set; }
     public TournamentMode Mode { get; set; }
     public bool AllowSpectators { get; set; }
+    public int WinsRequired { get; set; } = 1;
     public Dictionary<ulong, TournamentTeam> Teams { get; set; } = new();
     public TournamentStatus Status { get; set; }
     public string MapUid { get; set; } = "";
@@ -121,7 +148,10 @@ public sealed class TournamentRecord
     public List<ulong> Entrants { get; set; } = new();
     public Dictionary<ulong, int> Losses { get; set; } = new();
     public List<string> MatchIds { get; set; } = new();
+    public List<string> SeriesIds { get; set; } = new();
     public HashSet<string> ProcessedMatchIds { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public HashSet<string> ProcessedSeriesIds { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<int, TournamentMap> RandomMapByRound { get; set; } = new();
     public Dictionary<ulong, int> EliminatedInRound { get; set; } = new();
     public ulong? ChampionDiscordId { get; set; }
     public ulong? RunnerUpDiscordId { get; set; }
@@ -137,9 +167,11 @@ public sealed class TournamentState
 {
     public Dictionary<ulong, RegisteredPlayer> Players { get; set; } = new();
     public Dictionary<string, MatchRecord> Matches { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, TournamentSeries> Series { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, TournamentRecord> Tournaments { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public List<TournamentMap> MapPool { get; set; } = new();
     public int NextMatchNumber { get; set; } = 1;
+    public int NextSeriesNumber { get; set; } = 1;
     public int NextTournamentNumber { get; set; } = 1;
 }
 
