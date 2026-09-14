@@ -1422,9 +1422,15 @@ chnukecann:
 		Cost: 2400
 	Tooltip:
 		Name: Nuke Cannon
-	Buildable:
+	Buildable@INFANTRY:
 		BuildPaletteOrder: 60
-		Prerequisites: tier3, ~chweap, ~promotion.nuke_cannon, ~!upg.nuke_cannon
+		Prerequisites: tier3, ~chweap, ~vehicles.chinainf, ~promotion.nuke_cannon, ~!upg.nuke_cannon
+		Queue: Vehicle
+		IconPalette: chrometd
+		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
+	Buildable@NUKE:
+		BuildPaletteOrder: 60
+		Prerequisites: tier3, ~chweap, ~vehicles.chinaatom, ~!upg.nuke_cannon
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
@@ -1502,14 +1508,17 @@ chnukecann:
 chnukecann.Range:
 	Inherits: chnukecann
 	Valued:
-		Cost: 3000
+		Cost: 2700
 	Tooltip:
 		Name: Nuke Cannon (Range)
 	WithProductionIconOverlay@Crosshair:
 		Types: Crosshair
-	Buildable:
-		Prerequisites: chweap, tier3, ~promotion.nuke_cannon.range
+	-Buildable@INFANTRY:
+	Buildable@NUKE:
+		Prerequisites: chweap, tier3, ~vehicles.chinaatom, ~promotion.nuke_cannon.range
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
+	Health:
+		HP: 30000
 	TooltipExtras:
 		Strengths: • Strong vs Masses
 		Weaknesses: • Weak vs PDL, Aircraft
@@ -1519,14 +1528,17 @@ chnukecann.Range:
 chnukecann.Neutron:
 	Inherits: chnukecann
 	Valued:
-		Cost: 3000
+		Cost: 2700
 	Tooltip:
 		Name: Neutron Cannon (Neutron)
 	WithProductionIconOverlay@Neutron:
 		Types: Neutron
-	Buildable:
-		Prerequisites: chweap, tier3, ~promotion.nuke_cannon.neutron
+	-Buildable@INFANTRY:
+	Buildable@NUKE:
+		Prerequisites: chweap, tier3, ~vehicles.chinaatom, ~promotion.nuke_cannon.neutron
 		Description: Slow heavy artillery.\n Must be deployed to fire neutron shells.
+	Health:
+		HP: 30000
 	TooltipExtras:
 		Strengths: • Strong vs Masses
 		Weaknesses: • Weak vs PDL, Aircraft, Buildings

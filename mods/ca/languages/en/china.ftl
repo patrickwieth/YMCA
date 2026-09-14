@@ -1011,8 +1011,8 @@ promotion-nuclear-tanks =
     .description = Tanks have a nuclear engine, increasing their movement speed.\nNuclear Tanks explode on destruction.
     .tooltipextras-attributes = Attributes: • Tanks are faster.
 promotion-isotope-stability =
-    .description = Tanks with nuclear ammo or nuclear engines no longer explode on destruction.\nDamage dealt to close units is prevented.
-    .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction.
+    .description = Tanks with nuclear ammo or nuclear engines no longer explode on destruction and take 10% less damage.
+    .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction. • 10% damage resistance.
 commander-tree-promotion-speakertower-pdl =
     .description = Upgrades the Speaker Tower with a Point Defense Laser system.
     .tooltipextras-strengths = Strengths: • Strong vs Projectiles
@@ -1235,8 +1235,7 @@ commander-tree-promotion-nuclear-tanks =
     .tooltipextras-weaknesses = Weaknesses: • Exploding wrecks can devastate your own frontline until stabilized.
 commander-tree-promotion-isotope-stability =
     .description =
-        Tanks with nuclear ammo or nuclear engines no longer explode on destruction.
-        Damage dealt to close units is prevented.
-    .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction.
-    .tooltipextras-strengths = Strengths: • Eliminates friendly-fire blasts from destroyed nuclear tanks.
+        Tanks with nuclear ammo or nuclear engines no longer explode on destruction and take 10% less damage.
+    .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction. • 10% damage resistance.
+    .tooltipextras-strengths = Strengths: • Eliminates friendly-fire blasts and improves nuclear tank durability.
     .tooltipextras-weaknesses = Weaknesses: • Purely defensive; no direct damage boost for your army.
