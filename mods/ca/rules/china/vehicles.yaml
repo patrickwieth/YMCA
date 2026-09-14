@@ -1436,7 +1436,7 @@ chnukecann:
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
 	TooltipExtras:
 		Strengths: • Strong vs Masses
-		Weaknesses: • Weak vs PDL, Aircraft
+		Weaknesses: • Shell is vulnerable to Anti-Air and Aircraft
 	Mobile:
 		Locomotor: tracked
 		TurnSpeed: 8
@@ -1455,6 +1455,11 @@ chnukecann:
 		Weapon: CHNukeCannon
 		LocalOffset: 400,0,600
 		PauseOnCondition: !ammo || fired
+	MissileSpawnerMasterCA:
+		Actors: chnukecannon.shell
+		RespawnTicks: 100
+		ArmamentNames: primary
+		SpawnOffset: 400,0,600
 	Voiced:
 		VoiceSet: CHNukeCannonVoice
 	FireWarheadsOnDeathCA:
@@ -1521,9 +1526,11 @@ chnukecann.Range:
 		HP: 30000
 	TooltipExtras:
 		Strengths: • Strong vs Masses
-		Weaknesses: • Weak vs PDL, Aircraft
+		Weaknesses: • Shell is vulnerable to Anti-Air and Aircraft
 	Armament@PRIMARY:
 		Weapon: CHNukeCannon.Range
+	MissileSpawnerMasterCA:
+		Actors: chnukecannon.shell.range
 
 chnukecann.Neutron:
 	Inherits: chnukecann
@@ -1541,10 +1548,54 @@ chnukecann.Neutron:
 		HP: 30000
 	TooltipExtras:
 		Strengths: • Strong vs Masses
-		Weaknesses: • Weak vs PDL, Aircraft, Buildings
+		Weaknesses: • Shell is vulnerable to Anti-Air and Aircraft • Weak vs Buildings
 		Attributes: • Kills Drivers
 	Armament@PRIMARY:
 		Weapon: CHNukeCannon.Neutron
+	MissileSpawnerMasterCA:
+		Actors: chnukecannon.shell.neutron
+
+chnukecannon.shell:
+	Inherits: ^ShootableMissile
+	RenderSprites:
+		Image: red-missile
+	Valued:
+		Cost: 50
+	Tooltip:
+		Name: Nuclear Shell
+	Health:
+		HP: 15000
+	BallisticMissileCA:
+		LaunchAngle: 100
+		Speed: 180
+	LeavesTrails:
+		Image: smokey2
+		Palette: tseffect-ignore-lighting-alpha75
+		MovingInterval: 3
+		Type: CenterPosition
+		Offsets: -200, 0, 0
+	MissileSpawnerSlave:
+	ExplodesForMaster:
+		Weapon: CHNukeCannon.Impact
+		MasterArmamentName: CHNukeCannon
+		EmptyWeapon: VisualExplodeHusk
+		RequiresCondition: !airborne
+	FireWarheadsOnDeathCA:
+		Weapon: VisualExplodeAirborne
+		RequiresCondition: airborne
+
+chnukecannon.shell.range:
+	Inherits: chnukecannon.shell
+	ExplodesForMaster:
+		MasterArmamentName: CHNukeCannon.Range
+
+chnukecannon.shell.neutron:
+	Inherits: chnukecannon.shell
+	Tooltip:
+		Name: Neutron Shell
+	ExplodesForMaster:
+		Weapon: CHNukeCannon.NeutronImpact
+		MasterArmamentName: CHNukeCannon.Neutron
 
 chnukecann.Husk:
 	Inherits: ^LightHusk

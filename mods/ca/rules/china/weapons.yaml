@@ -296,21 +296,14 @@ NukeCannonDummyAim:
 	Warhead@1Dam: TargetDamage
 
 CHNukeCannon:
-	Inherits: ^ShellArtillery
-	Inherits: ^MiniNuke
+	Inherits: ^ShellPrototype
 	ReloadDelay: 250
 	Range: 18c0
 	MinRange: 8c0
 	Report: vnukweaa.wav
-	TargetActorCenter: true
-	Projectile: BulletCA
-		ContrailLength: 30
-		LaunchAngle: 100
-		Speed: 180
-	Warhead@1Dam: SpreadDamage
-		Damage: 2500
-	Warhead@3Eff: CreateEffect
-		Explosions: schnukeexplosion
+	ValidTargets: Ground, Trees, Water, Underwater
+	Projectile: InstantHit
+	Warhead@1Dam: TargetDamage
 
 CHNukeCannon.Range:
 	Inherits: CHNukeCannon
@@ -319,9 +312,21 @@ CHNukeCannon.Range:
 
 CHNukeCannon.Neutron:
 	Inherits: CHNukeCannon
-	Inherits: ^Radiation
 	ReloadDelay: 210
 	Range: 20c0
+
+CHNukeCannon.Impact:
+	Inherits: ^ShellArtillery
+	Inherits: ^MiniNuke
+	-Report:
+	Warhead@1Dam: SpreadDamage
+		Damage: 2500
+	Warhead@3Eff: CreateEffect
+		Explosions: schnukeexplosion
+
+CHNukeCannon.NeutronImpact:
+	Inherits: CHNukeCannon.Impact
+	Inherits: ^Radiation
 	Warhead@1Dam: SpreadDamage
 		Damage: 25000
 	Warhead@DriverDam: DriverPoisonDamage
@@ -331,7 +336,7 @@ CHNukeCannon.Neutron:
 		Explosions: plasmaball
 	Warhead@18Radio: CreateTintedCells
 		Level: 50
-	-Warhead@3Eff_impact: CreateEffect
+	-Warhead@3Eff_impact:
 
 CHAtomicTorpTube:
 	Inherits: TorpTube
