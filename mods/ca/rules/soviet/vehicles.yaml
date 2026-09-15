@@ -102,7 +102,7 @@ Devil_Tank:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 110
-		Prerequisites: ~vehicles.iraq
+		Prerequisites: ~vehicles.iraq, ~!upg.devil_tank
 		Description: Light Iraqi tank.
 	TooltipExtras:
 		Strengths: • Strong vs Vehicles, Reflector Armor
@@ -126,6 +126,36 @@ Devil_Tank:
 		LocalOffset: 750,0,300
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
+
+Devil_Tank.PDL:
+	Inherits: Devil_Tank
+	Inherits: ^PointLaserDefenseSystem
+	Buildable:
+		Prerequisites: ~vehicles.iraq, tier3, ~promotion.devil_tank.pdl
+		Description: Light Iraqi tank with Point Laser Defense.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor, Projectiles
+		Weaknesses: • Weak vs Infantry, Aircraft, Energy Weapons
+		Attributes: • Point Defense Laser intercepts projectiles
+	Valued:
+		Cost: 1100
+	Tooltip:
+		Name: Devil Tank (PDL)
+
+Devil_Tank.Reflector:
+	Inherits: Devil_Tank
+	Inherits: ^ReflectorArmor
+	Buildable:
+		Prerequisites: ~vehicles.iraq, tier3, ~promotion.devil_tank.reflector
+		Description: Light Iraqi tank with Reflector Armor.
+	TooltipExtras:
+		Strengths: • Strong vs Vehicles, Reflector Armor, Energy Weapons
+		Weaknesses: • Weak vs Infantry, Aircraft, Projectiles
+		Attributes: • Reflector Armor absorbs energy weapons
+	Valued:
+		Cost: 900
+	Tooltip:
+		Name: Devil Tank (Reflector)
 
 SFTNK:
 	Inherits: ^FightingTank

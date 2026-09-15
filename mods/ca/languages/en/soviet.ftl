@@ -776,6 +776,22 @@ commander-tree-promotion-source-of-pollution-metal-acid =
     .description = The Source of Pollution's fires acid shells which eat through metal.
     .tooltipextras-attributes = Attributes: • Deals significant damage to heavy armor.
 
+### commander-tree-promotion-devil-tank-pdl
+
+commander-tree-promotion-devil-tank-pdl =
+    .description = Equips the Devil Tank with a Point Laser Defense System.
+    .tooltipextras-strengths = Strengths: • Strong vs. projectiles.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. energy weapons.
+    .tooltipextras-attributes = Attributes: • Adds a protective Point Defense Laser.
+
+### commander-tree-promotion-devil-tank-reflector
+
+commander-tree-promotion-devil-tank-reflector =
+    .description = Equips the Devil Tank with Reflector Armor.
+    .tooltipextras-strengths = Strengths: • Strong vs. energy weapons.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectiles.
+    .tooltipextras-attributes = Attributes: • Outfitted with Reflector Armor panels.
+
 ### commander-tree-promotion-source-of-pollution-pdl
 
 commander-tree-promotion-source-of-pollution-pdl =
