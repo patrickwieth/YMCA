@@ -936,7 +936,6 @@ soviet-factions =
         Iraq replaces the rather conventional weaponry of the Soviets with radiation and chemicals in many instances.
         Faction Unit: Desolator, Toxin Turret, Chemyak
         Special Ability: A-Bomb
-        Faction Bonus: Nuclear Tanks (+25% Speed, explode when destroyed)
         Key Commander Tree Options:
          Katyusha vs. Akatsiya
          Nuclear Mammoth Shells
