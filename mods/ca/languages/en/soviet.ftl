@@ -938,7 +938,6 @@ soviet-factions =
         Special Ability: A-Bomb
         Key Commander Tree Options:
          Katyusha vs. Akatsiya
-         Nuclear Mammoth Shells
          Dirty Bombs Frogfoot
          No Propaganda turret for Mammoth
         Infantry: <color=Green>++++</color>
