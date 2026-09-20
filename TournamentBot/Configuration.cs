@@ -9,6 +9,7 @@ public sealed class BotConfiguration
     public ulong AdminRoleId { get; set; }
     public ulong AdminChannelId { get; set; }
     public ulong AnnouncementChannelId { get; set; }
+    public ReleaseAnnouncementConfiguration ReleaseAnnouncements { get; set; } = new();
     public string StateFile { get; set; } = "TournamentBot/data/tournament-state.json";
     public OpenRaServerConfiguration Server { get; set; } = new();
     public JoinPageConfiguration JoinPage { get; set; } = new();
@@ -31,9 +32,33 @@ public sealed class BotConfiguration
             throw new InvalidDataException("GuildId must be configured.");
 
         config.StateFile = Path.GetFullPath(config.StateFile);
+        config.ReleaseAnnouncements.Validate();
         config.Server.NormalizeAndValidate();
         config.JoinPage.Validate();
         return config;
+    }
+}
+
+public sealed class ReleaseAnnouncementConfiguration
+{
+    public bool Enabled { get; set; }
+    public ulong ChannelId { get; set; }
+    public string ManifestUrl { get; set; } = "https://raw.githubusercontent.com/patrickwieth/YMCA/tournament-bot/update/stable.yaml";
+    public string GitHubRepository { get; set; } = "patrickwieth/YMCA";
+    public int PollIntervalMinutes { get; set; } = 5;
+
+    public void Validate()
+    {
+        if (!Enabled)
+            return;
+        if (ChannelId == 0)
+            throw new InvalidDataException("ReleaseAnnouncements.ChannelId must be configured when release announcements are enabled.");
+        if (!Uri.TryCreate(ManifestUrl, UriKind.Absolute, out _))
+            throw new InvalidDataException("ReleaseAnnouncements.ManifestUrl must be an absolute URL.");
+        if (string.IsNullOrWhiteSpace(GitHubRepository) || GitHubRepository.Count(value => value == '/') != 1)
+            throw new InvalidDataException("ReleaseAnnouncements.GitHubRepository must use the owner/repository format.");
+        if (PollIntervalMinutes < 1)
+            throw new InvalidDataException("ReleaseAnnouncements.PollIntervalMinutes must be at least 1.");
     }
 }
 

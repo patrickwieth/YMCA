@@ -34,6 +34,8 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 
 The configured OpenRA port range and join-page port must be allowed through the host firewall. Put the HTTP join page behind HTTPS (for example nginx or Caddy) and set `joinPage.publicBaseUrl` to that public URL.
 
+Set `releaseAnnouncements.enabled` and its Discord channel ID to let YMCA Overlord monitor the stable update manifest. After all platform packages finish and the manifest advances, the bot posts the GitHub release notes once in the configured `#releases` channel. The last announced version is persisted in the tournament state file to prevent duplicate posts after restarts.
+
 ## Match lifecycle
 
 The `maxConcurrentServers` workers each own one port. Matches beyond this limit remain queued. A worker starts `OpenRA.Server`, waits until its TCP port accepts connections, then the bot DMs both players a HTTPS join button plus manual host/password details.

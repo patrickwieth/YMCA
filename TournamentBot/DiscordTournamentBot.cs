@@ -6,22 +6,28 @@ namespace Ymca.TournamentBot;
 public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 {
     readonly BotConfiguration config;
+    readonly StateStore store;
     readonly TournamentCoordinator coordinator;
     readonly JoinPageServer joinPage;
     readonly OfficialMapCatalog mapCatalog;
     readonly DiscordSocketClient client;
+    readonly ReleaseFeedClient releaseFeed;
+    readonly TaskCompletionSource ready = new(TaskCreationOptions.RunContinuationsAsynchronously);
     readonly TaskCompletionSource stopped = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
     public DiscordTournamentBot(
         BotConfiguration config,
+        StateStore store,
         TournamentCoordinator coordinator,
         JoinPageServer joinPage,
         OfficialMapCatalog mapCatalog)
     {
         this.config = config;
+        this.store = store;
         this.coordinator = coordinator;
         this.joinPage = joinPage;
         this.mapCatalog = mapCatalog;
+        releaseFeed = new ReleaseFeedClient(config.ReleaseAnnouncements);
         client = new DiscordSocketClient(new DiscordSocketConfig
         {
             GatewayIntents = GatewayIntents.Guilds,
@@ -47,10 +53,18 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         await client.LoginAsync(TokenType.Bot, config.DiscordToken);
         await client.StartAsync();
         await coordinator.StartAsync();
+        var releaseWatcher = WatchReleaseAnnouncementsAsync(cancellationToken);
 
         using var registration = cancellationToken.Register(() => stopped.TrySetResult());
         await stopped.Task;
         await client.StopAsync();
+        try
+        {
+            await releaseWatcher;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+        }
     }
 
     async Task OnReadyAsync()
@@ -172,6 +186,64 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
         await guild.BulkOverwriteApplicationCommandAsync(commands);
         Console.WriteLine($"Registered tournament commands in {guild.Name}.");
+        ready.TrySetResult();
+    }
+
+    async Task WatchReleaseAnnouncementsAsync(CancellationToken cancellationToken)
+    {
+        if (!config.ReleaseAnnouncements.Enabled)
+            return;
+
+        await ready.Task.WaitAsync(cancellationToken);
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                await AnnounceLatestReleaseAsync(cancellationToken);
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                break;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"[{DateTime.Now:O}] Release announcement check failed: {ex}");
+            }
+
+            await Task.Delay(TimeSpan.FromMinutes(config.ReleaseAnnouncements.PollIntervalMinutes), cancellationToken);
+        }
+    }
+
+    async Task AnnounceLatestReleaseAsync(CancellationToken cancellationToken)
+    {
+        var release = await releaseFeed.GetLatestAsync(cancellationToken);
+        var lastVersion = await store.ReadAsync(state => state.LastAnnouncedReleaseVersion);
+        if (string.Equals(lastVersion, release.Version, StringComparison.OrdinalIgnoreCase))
+            return;
+
+        if (client.GetChannel(config.ReleaseAnnouncements.ChannelId) is not IMessageChannel channel)
+            throw new InvalidOperationException($"Release channel {config.ReleaseAnnouncements.ChannelId} is unavailable.");
+
+        const int MaxDescriptionLength = 4096;
+        var notes = string.IsNullOrWhiteSpace(release.Notes)
+            ? $"YMCA {release.Version} is now available for Windows, Linux, and macOS."
+            : release.Notes.Trim();
+        if (notes.Length > MaxDescriptionLength)
+            notes = notes[..(MaxDescriptionLength - 1)] + "…";
+
+        var title = release.Name.Length <= 256 ? release.Name : release.Name[..256];
+        var embed = new EmbedBuilder()
+            .WithTitle(title)
+            .WithUrl(release.ReleaseUrl)
+            .WithDescription(notes)
+            .WithColor(new Color(0x8B, 0xCF, 0x8B))
+            .WithFooter("YMCA Overlord • Automatic release announcement")
+            .WithCurrentTimestamp()
+            .Build();
+
+        await channel.SendMessageAsync(embed: embed);
+        await store.UpdateAsync(state => state.LastAnnouncedReleaseVersion = release.Version);
+        Console.WriteLine($"Announced YMCA release {release.Version} in channel {config.ReleaseAnnouncements.ChannelId}.");
     }
 
     async Task OnSlashCommandAsync(SocketSlashCommand command)
@@ -1040,6 +1112,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
+        releaseFeed.Dispose();
         await client.DisposeAsync();
     }
 }

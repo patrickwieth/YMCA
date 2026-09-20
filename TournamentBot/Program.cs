@@ -22,7 +22,7 @@ internal static class Program
             await using var serverPool = new OpenRaServerPool(config.Server, replayReader);
             var coordinator = new TournamentCoordinator(config, store, serverPool);
             await using var joinPage = new JoinPageServer(config, coordinator);
-            await using var discord = new DiscordTournamentBot(config, coordinator, joinPage, mapCatalog);
+            await using var discord = new DiscordTournamentBot(config, store, coordinator, joinPage, mapCatalog);
 
             await joinPage.StartAsync(shutdown.Token);
             Console.WriteLine($"YMCA Tournament Bot starting with {config.Server.MaxConcurrentServers} server slots.");

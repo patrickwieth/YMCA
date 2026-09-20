@@ -173,6 +173,7 @@ public sealed class TournamentState
     public int NextMatchNumber { get; set; } = 1;
     public int NextSeriesNumber { get; set; } = 1;
     public int NextTournamentNumber { get; set; } = 1;
+    public string LastAnnouncedReleaseVersion { get; set; } = "";
 }
 
 public sealed record ReplayPlayerResult(string Name, string Outcome, bool IsHuman);

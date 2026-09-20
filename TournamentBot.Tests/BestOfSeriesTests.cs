@@ -24,24 +24,24 @@ public sealed class BestOfSeriesTests
                 var randomMap = tournament.RandomMapByRound[1];
                 var choices = tournament.MapPool.Where(map => map.Uid != randomMap.Uid).Take(2).ToList();
 
-                await coordinator.SubmitSeriesMapPickAsync(series.Id, 1, choices[0].Uid);
-                await coordinator.SubmitSeriesMapPickAsync(series.Id, 2, choices[1].Uid);
+                await coordinator.SubmitSeriesMapPickAsync(series.Id, series.PlayerOneDiscordId, choices[0].Uid);
+                await coordinator.SubmitSeriesMapPickAsync(series.Id, series.PlayerTwoDiscordId, choices[1].Uid);
 
                 var first = (await coordinator.GetRecentMatchesAsync()).Single();
                 Assert.That(first.MapUid, Is.EqualTo(choices[0].Uid));
-                await coordinator.ResolveAsync(first.Id, 1);
+                await coordinator.ResolveAsync(first.Id, series.PlayerOneDiscordId);
 
                 var second = (await coordinator.GetRecentMatchesAsync()).First(match => match.Id != first.Id);
                 Assert.That(second.MapUid, Is.EqualTo(choices[1].Uid));
-                await coordinator.ResolveAsync(second.Id, 2);
+                await coordinator.ResolveAsync(second.Id, series.PlayerTwoDiscordId);
 
                 var third = (await coordinator.GetRecentMatchesAsync()).First(match =>
                     match.Id != first.Id && match.Id != second.Id);
                 Assert.That(third.MapUid, Is.EqualTo(randomMap.Uid));
-                await coordinator.ResolveAsync(third.Id, 1);
+                await coordinator.ResolveAsync(third.Id, series.PlayerOneDiscordId);
 
                 var completed = await coordinator.GetTournamentAsync(tournament.Id);
-                Assert.That(completed!.ChampionDiscordId, Is.EqualTo(1));
+                Assert.That(completed!.ChampionDiscordId, Is.EqualTo(series.PlayerOneDiscordId));
             }
             finally
             {
