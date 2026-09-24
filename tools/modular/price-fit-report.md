@@ -1,6 +1,7 @@
 # Joint Battlemaster price study
 
 Exploratory model, not an accepted balance change. Active catalog remains unchanged.
+Reference source blocks audited at 9d8a9dec; see reference-audit.md.
 Base hardware anchored at 950 credits (0 CP). Targets read from catalog.json.
 Price = manufacturing factor * complete hardware - CP count * global CP credit value.
 Manufacturing has 1 CP, no separate hardware fee, and replaces the earlier cheaper-chassis assumption.

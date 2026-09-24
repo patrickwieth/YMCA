@@ -1,7 +1,8 @@
 # Vehicle calibration report
 
 EXPERIMENTAL scalar fit, not a complete gameplay-equivalence test.
-Legacy targets are manually transcribed at 7f5aeadf. Rows are independent candidates.
+Legacy target source blocks audited at 9d8a9dec. Rows are independent candidates.
+Base states without isotope stability, horde, uranium or veterancy bonuses. Isotope stability now applies 90% received damage as well as death-explosion suppression; not modeled as extra HP.
 CP, tech and catalog columns are NEW design values, not audited legacy targets.
 
 Global credit value per CP: 300 (experimental).

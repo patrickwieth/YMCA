@@ -1,8 +1,10 @@
 # Modular vehicles: reference study
 
-Status: design research, not executable mod rules. Baseline: `modular` at
-`7f5aeadf` (derived from `isometric`), not the newer `tournament-bot` rules.
-No gameplay changes or new power/mass values are introduced by this document.
+Status: design research, not executable mod rules. Original baseline: `modular`
+at `7f5aeadf`. References refreshed by selected-source-block audit against merged
+Game `9d8a9dec` with combined engine `484afea27c`; see
+`tools/modular/reference-audit.md`. No gameplay changes are introduced here.
+The original observations below are historical where explicitly noted.
 
 ## Agreed scope
 
@@ -56,9 +58,10 @@ Sources:
   supplies a conditional 125% speed multiplier and `CHAtomicTankExplode` on
   death. `chbattle.Nuclear_Shells` instead changes the main weapon. Do not bundle
   nuclear shells into every nuclear drive.
-- In THIS branch, isotope stability suppresses the nuclear death explosion;
-  `being-warped` also prevents it. The newer branch's balance changes must not
-  silently be assumed present here.
+- Isotope stability suppresses the nuclear death explosion; `being-warped`
+  also prevents it. Since the integration at `9d8a9dec`, isotope stability also
+  applies a 90% received-damage multiplier. Base-state references do not enable
+  this upgrade or replace base HP with an effective-HP estimate.
 - The Battlemaster also has horde bonuses and uranium-shell firepower upgrades.
   These are separate rule layers, not intrinsic engine power.
 - Juggernaut walker upgrades apply 110% speed and a 90% received-damage

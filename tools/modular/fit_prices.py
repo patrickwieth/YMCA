@@ -76,6 +76,7 @@ def report(catalog):
     feasible = [r for r in results if r is not None]
     lines = ['# Joint Battlemaster price study', '',
              'Exploratory model, not an accepted balance change. Active catalog remains unchanged.',
+             f"Reference source blocks audited at {catalog['reference_commit']}; see {catalog['reference_audit']}.",
              f'Base hardware anchored at {base:g} credits (0 CP). Targets read from catalog.json.',
              'Price = manufacturing factor * complete hardware - CP count * global CP credit value.',
              'Manufacturing has 1 CP, no separate hardware fee, and replaces the earlier cheaper-chassis assumption.',

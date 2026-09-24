@@ -104,7 +104,8 @@ def comparison(old, new):
 def report(catalog):
     lines = ["# Vehicle calibration report", "",
              "EXPERIMENTAL scalar fit, not a complete gameplay-equivalence test.",
-             "Legacy targets are manually transcribed at 7f5aeadf. Rows are independent candidates.",
+             f"Legacy target source blocks audited at {catalog['reference_commit']}. Rows are independent candidates.",
+             catalog['reference_conditions'],
              "CP, tech and catalog columns are NEW design values, not audited legacy targets.", "",
              f"Global credit value per CP: {catalog['credits_per_cp']:g} (experimental).", "",
              "## Existing vehicle vs configured vehicle", "",

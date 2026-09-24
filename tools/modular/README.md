@@ -9,13 +9,15 @@ python -m unittest discover -s tools/modular -v
 
 `catalog.json` is an experimental research fixture, NOT engine YAML or the final
 saved-design format. No gameplay rules or artwork are modified. Legacy targets
-are manually transcribed from commit `7f5aeadf`; see
+were transcribed at `7f5aeadf` and their selected source blocks have now been
+compared against integrated commit `9d8a9dec`; see
 `docs/modular/vehicle-reference-study.md`. All mass, power, prices and catalog
 tiers are proposals. Matching fitted targets does not establish general balance.
 
 ## Excel workbook
 
-Open `tools/modular/vehicle-calibration.xlsx` in Excel. Seven sheets provide
+Open **`tools/modular/vehicle-calibration-integrated.xlsx`** in Excel.
+The original `vehicle-calibration.xlsx` is retained as the old, pre-merge snapshot. Seven sheets provide
 instructions, editable parameters, all components, design selections/calculations,
 legacy-vs-new comparison, sampled price fits and every fit residual. Excel tables
 have filters; fixed headers and component-ID dropdowns aid navigation. Hardware,
@@ -40,7 +42,25 @@ for faction, slot and compatibility validation. Round-trip tests check structure
 and formula links, not Excel-calculated values. Missing spreadsheet formula
 caches are expected until Excel or another compatible spreadsheet app recalculates.
 
-## Branch freshness / merge preview
+## Integrated reference audit
+
+Game merge `9d8a9dec` combines modular/isometric with tournament-bot; engine
+`484afea27c` combines isometric-building-anchor and cameo-engine. Master was not
+additionally merged. Local conyard.png artwork remains unchanged by this work.
+
+`python tools/modular/audit_reference_changes.py --output tools/modular/reference-audit.md`
+compares 42 selected actor, weapon, promotion and shared-trait source blocks from
+`7f5aeadf` to `9d8a9dec`. One changed: `^AtomicTank` now grants isotope stability a
+90% received-damage multiplier in addition to suppressing the nuclear death effect.
+Current base-state price/HP/speed targets stay unchanged. Damage resistance is NOT
+converted to extra HP, nor silently applied to every nuclear-drive design.
+
+This reproducible audit compares source text, not complete resolved MiniYaml
+inheritance or all weapon matchups. Repeated root definitions are preserved for
+comparison. It does not certify full gameplay equivalence. The workbook labels
+its reference conditions explicitly; hypothetical fit parameters remain separate.
+
+## Historical branch freshness / merge preview (before integration)
 
 Remote refs fetched during this workbook task:
 - `origin/master`: `7628f569`, does NOT contain release `v0.96.20` (`09474add`).

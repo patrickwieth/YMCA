@@ -50,7 +50,7 @@ def build(catalog, output):
     info.title = 'Hinweise'
     for row in [
         ['YMCA Modular – Kalibrierung', ''],
-        ['Referenz', 'Legacy-Ziele: 7f5aeadf (isometric/modular), NICHT aktuelles Release-Balancing.'],
+        ['Referenz', f"Quellblock-Abgleich: {catalog['reference_commit']} (integrierter Game-Stand), siehe {catalog['reference_audit']}."],
         ['Status', 'Experimentelle Zahlen; keine Spielregeln oder grafische/volle Verhaltensgleichheit.'],
         ['Eingaben', 'Parameter und Bausteinwerte sind editierbar. Formeln berechnen Entwuerfe/Vergleich beim Öffnen neu.'],
         ['Preise', 'Hardwarekosten minus CP-Anforderung mal globaler CP-Creditwert. Keine Sonderrabatte.'],
@@ -61,9 +61,9 @@ def build(catalog, output):
         ['Validierung', 'Excel prüft nur elektrische/physische Grenzen; Rolle, Fraktion und Montage weiterhin im Python-Rechner prüfen.'],
         ['Momentaufnahme', 'Python-Werte und Preisfit sind statisch. Änderungen in Excel aktualisieren nur die Formelspalten.'],
         ['Genauigkeit', 'CP/Tier sind unabhängig; 1% Abweichung kann akzeptabel sein. Preisfit ist kein Beweis des CP-Wertes.'],
-        ['Branches', 'Geprüft: master 7628f569 ohne v0.96.20; tournament-bot 98769f53 enthält v0.96.20.'],
-        ['Merge-Vorschau', 'master konfliktfrei; tournament-bot Konflikt in mod.config. Kein Merge ausgeführt.'],
-        ['Engine', 'Vor Merge Isometric-Engine-Anpassungen und korrespondierenden Engine-Branch prüfen.'],
+        ['Branches', 'Game modular: tournament-bot integriert in 9d8a9dec; master nicht zusätzlich gemergt.'],
+        ['Merge', 'Engine modular-engine: 484afea27c kombiniert Isometric und Tournament.'],
+        ['Referenzbedingungen', catalog['reference_conditions']],
     ]:
         info.append(row)
     info.column_dimensions['A'].width = 26
@@ -178,7 +178,7 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-integrated.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     build(data, args.output)
