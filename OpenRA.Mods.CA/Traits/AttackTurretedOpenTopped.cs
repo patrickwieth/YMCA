@@ -45,6 +45,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly new AttackTurretedOpenToppedInfo Info;
 		readonly Lazy<BodyOrientation> coords;
 		readonly List<Actor> actors;
+		Armament[] turretArmaments;
 		readonly List<Armament> passengerArmaments;
 		readonly HashSet<(AnimationWithOffset Animation, string Sequence)> muzzles;
 		readonly Dictionary<Actor, IFacing> paxFacing;
@@ -72,10 +73,10 @@ namespace OpenRA.Mods.CA.Traits
 
 		protected override Func<IEnumerable<Armament>> InitializeGetArmaments(Actor self)
 		{
-			var armaments = self.TraitsImplementing<Armament>()
+			turretArmaments = self.TraitsImplementing<Armament>()
 				.Where(a => Info.Armaments.Contains(a.Info.Name)).ToArray();
 
-			return () => armaments.Concat(passengerArmaments);
+			return () => turretArmaments.Concat(passengerArmaments);
 		}
 
 		void OnActorEntered(Actor enterer)
@@ -169,7 +170,7 @@ namespace OpenRA.Mods.CA.Traits
 		public override void DoAttack(Actor self, in Target target)
 		{
 			if (TurretCanAttack(self, target))
-				foreach (var a in Armaments)
+				foreach (var a in turretArmaments)
 					a.CheckFire(self, facing, target);
 
 			if (!PassengerCanAttack(self, target))

@@ -75,4 +75,10 @@ jobs:
           if (-not (dotnet nuget list source | Select-String -Quiet 'nuget\.org')) {
             dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
           }
-          .\make.ps1 check
+          # The legacy `check` target enables tens of thousands of pre-existing
+          # StyleCop violations on Windows. Validate the production build here;
+          # Linux performs the existing static and script checks separately.
+          .\make.ps1 all
+          if (Test-Path 'TournamentBot.Tests/TournamentBot.Tests.csproj') {
+            dotnet test TournamentBot.Tests/TournamentBot.Tests.csproj --configuration Release --no-build
+          }

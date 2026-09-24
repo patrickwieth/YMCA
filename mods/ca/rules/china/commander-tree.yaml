@@ -458,11 +458,13 @@ promotion.Nuke_Cannon:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 11
-		Prerequisites: has_points, vehicles, ~china
+		Prerequisites: has_points, vehicles, ~chinainf
 		Description: commander-tree-promotion-nuke-cannon.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-nuke-cannon.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-nuke-cannon.tooltipextras-weaknesses
+	ProvidesPrerequisite@access:
+		Prerequisite: nuke_cannon.access
 	PromotionPalette:
 		Column: 7
 
@@ -477,11 +479,13 @@ promotion.Nuke_Cannon.Range:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 12
-		Prerequisites: has_points, vehicles, ~chinaatom, promotion.nuke_cannon, !promotion.nuke_cannon.neutron
+		Prerequisites: has_points, vehicles, ~chinaatom, !promotion.nuke_cannon.neutron, !upg.nuke_cannon
 		Description: commander-tree-promotion-nuke-cannon-range.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-nuke-cannon-range.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-nuke-cannon-range.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.nuke_cannon
 	PromotionPalette:
 		Group: ChinaNuke_Cannon
 		Column: 7
@@ -497,11 +501,13 @@ promotion.Nuke_Cannon.Neutron:
 	Buildable:
 		IconPalette: chrometd
 		BuildPaletteOrder: 12
-		Prerequisites: has_points, vehicles, ~china, ~chinaatom, promotion.nuke_cannon, !promotion.nuke_cannon.range
+		Prerequisites: has_points, vehicles, ~china, ~chinaatom, !promotion.nuke_cannon.range, !upg.nuke_cannon
 		Description: commander-tree-promotion-nuke-cannon-neutron.description
 	TooltipExtras:
 		Strengths: commander-tree-promotion-nuke-cannon-neutron.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-nuke-cannon-neutron.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.nuke_cannon
 	PromotionPalette:
 		Group: ChinaNuke_Cannon
 		Column: 7
@@ -618,7 +624,7 @@ promotion.Outpost.Propaganda:
 promotion.Outpost.Bunker:
 	Inherits: ^promotion_item
 	Tooltip:
-		Name: Attack Outpost
+		Name: Bunker Outpost
 	RenderSprites:
 		Image: choutpost
 	WithProductionIconOverlay@Missile:
@@ -652,6 +658,8 @@ promotion.Outpost.PDL:
 	TooltipExtras:
 		Strengths: commander-tree-promotion-outpost-pdl.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-outpost-pdl.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.outpost2
 	PromotionPalette:
 		Group: ChinaOutpostDefense
 
@@ -671,6 +679,8 @@ promotion.Outpost.Reflector:
 	TooltipExtras:
 		Strengths: commander-tree-promotion-outpost-reflector.tooltipextras-strengths
 		Weaknesses: commander-tree-promotion-outpost-reflector.tooltipextras-weaknesses
+	ProvidesPrerequisite@upg:
+		Prerequisite: upg.outpost2
 	PromotionPalette:
 		Group: ChinaOutpostDefense
 

@@ -357,13 +357,13 @@ commander-tree-promotion-chem-sprayer-spread =
 commander-tree-promotion-chemical-missiles =
     .buildable-description =
         RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.
-        Chemical missiles release a chemical cloud on impact.
+        Chemical missiles release a chemical cloud on impact. RPG Soldiers gain 10% attack range.
     .tooltipextras-strengths = Strengths: • Strong vs. Infantry, Light Vehicles.
     .tooltipextras-weaknesses = Weaknesses: • Weak vs. Heavy Armor.
-    .tooltipextras-attributes = Attributes: • Converts part of each barrage into toxin warheads.
+    .tooltipextras-attributes = Attributes: • Converts part of each barrage into toxin warheads. • RPG Soldiers gain 10% range.
     .description =
         RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.
-        Chemical missiles release a chemical cloud on impact.
+        Chemical missiles release a chemical cloud on impact. RPG Soldiers gain 10% attack range.
 
 ### commander-tree-promotion-cluster-grenades
 
@@ -776,6 +776,22 @@ commander-tree-promotion-source-of-pollution-metal-acid =
     .description = The Source of Pollution's fires acid shells which eat through metal.
     .tooltipextras-attributes = Attributes: • Deals significant damage to heavy armor.
 
+### commander-tree-promotion-devil-tank-pdl
+
+commander-tree-promotion-devil-tank-pdl =
+    .description = Equips the Devil Tank with a Point Laser Defense System.
+    .tooltipextras-strengths = Strengths: • Strong vs. projectiles.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. energy weapons.
+    .tooltipextras-attributes = Attributes: • Adds a protective Point Defense Laser.
+
+### commander-tree-promotion-devil-tank-reflector
+
+commander-tree-promotion-devil-tank-reflector =
+    .description = Equips the Devil Tank with Reflector Armor.
+    .tooltipextras-strengths = Strengths: • Strong vs. energy weapons.
+    .tooltipextras-weaknesses = Weaknesses: • Weak vs. projectiles.
+    .tooltipextras-attributes = Attributes: • Outfitted with Reflector Armor panels.
+
 ### commander-tree-promotion-source-of-pollution-pdl
 
 commander-tree-promotion-source-of-pollution-pdl =
@@ -936,10 +952,8 @@ soviet-factions =
         Iraq replaces the rather conventional weaponry of the Soviets with radiation and chemicals in many instances.
         Faction Unit: Desolator, Toxin Turret, Chemyak
         Special Ability: A-Bomb
-        Faction Bonus: Nuclear Tanks (+25% Speed, explode when destroyed)
         Key Commander Tree Options:
          Katyusha vs. Akatsiya
-         Nuclear Mammoth Shells
          Dirty Bombs Frogfoot
          No Propaganda turret for Mammoth
         Infantry: <color=Green>++++</color>
@@ -1789,7 +1803,7 @@ promotion-tesla-arc =
 promotion-tesla-damage =
     .description = Upgrades the Tesla Coils to increase its damage by 20%.
 promotion-chemical-missiles =
-    .description = RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.\nChemical missiles release a chemical cloud on impact.
+    .description = RPG Soldier, Hyena, V3 and Katyusha shoot a fraction of their missiles as chemical missiles.\nChemical missiles release a chemical cloud on impact. RPG Soldiers gain 10% attack range.
 promotion-metal-acid-missiles =
     .description = The Chemical Missiles are improved by releasing metal acid clouds.\nThose are efficient against heavy armored targets.
 promotion-artillery-upgrade =

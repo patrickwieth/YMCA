@@ -79,6 +79,12 @@ Section "-Reg" Reg
 	WriteRegStr HKLM "Software\Classes\openra-${MOD_ID}-${TAG}\DefaultIcon" "" "$INSTDIR\${MOD_ID}.ico,0"
 	WriteRegStr HKLM "Software\Classes\openra-${MOD_ID}-${TAG}\Shell\Open\Command" "" "$INSTDIR\${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe Launch.URI=%1"
 
+	; Stable YMCA tournament join URL scheme (ymca://host:port?password=...)
+	WriteRegStr HKLM "Software\Classes\${PACKAGING_WINDOWS_URL_PROTOCOL}" "" "URL:Join YMCA server"
+	WriteRegStr HKLM "Software\Classes\${PACKAGING_WINDOWS_URL_PROTOCOL}" "URL Protocol" ""
+	WriteRegStr HKLM "Software\Classes\${PACKAGING_WINDOWS_URL_PROTOCOL}\DefaultIcon" "" "$INSTDIR\${MOD_ID}.ico,0"
+	WriteRegStr HKLM "Software\Classes\${PACKAGING_WINDOWS_URL_PROTOCOL}\Shell\Open\Command" "" "$\"$INSTDIR\${PACKAGING_WINDOWS_LAUNCHER_NAME}.exe$\" $\"Launch.URI=%1$\""
+
 	!ifdef USE_DISCORDID
 		WriteRegStr HKLM "Software\Classes\discord-${USE_DISCORDID}" "" "URL:Run game ${USE_DISCORDID} protocol"
 		WriteRegStr HKLM "Software\Classes\discord-${USE_DISCORDID}" "URL Protocol" ""
@@ -179,6 +185,7 @@ Function ${UN}Clean
 
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGING_WINDOWS_REGISTRY_KEY}"
 	DeleteRegKey HKLM "Software\Classes\openra-${MOD_ID}-${TAG}"
+	DeleteRegKey HKLM "Software\Classes\${PACKAGING_WINDOWS_URL_PROTOCOL}"
 
 	!ifdef USE_DISCORDID
 		DeleteRegKey HKLM "Software\Classes\discord-${USE_DISCORDID}"

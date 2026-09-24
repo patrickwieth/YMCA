@@ -114,3 +114,50 @@ jobs:
           overwrite: true
           file_glob: true
           file: build/windows/*
+
+  publish-update-manifest:
+    name: Publish Update Manifest
+    needs: [linux, macos, windows]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Clone deployment branch
+        uses: actions/checkout@v4
+        with:
+          ref: tournament-bot
+
+      - name: Download and verify release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          mkdir -p update/assets
+          gh release download "${TAG}" --dir update/assets
+          WINDOWS="YouMustConstructAdditional-${TAG}-x64.exe"
+          LINUX="YouMustConstructAdditional-${TAG}-x86_64.AppImage"
+          MAC="YouMustConstructAdditional-${TAG}.dmg"
+          test -f "update/assets/${WINDOWS}"
+          test -f "update/assets/${LINUX}"
+          test -f "update/assets/${MAC}"
+          WINDOWS_SHA=$(sha256sum "update/assets/${WINDOWS}" | cut -d' ' -f1)
+          LINUX_SHA=$(sha256sum "update/assets/${LINUX}" | cut -d' ' -f1)
+          MAC_SHA=$(sha256sum "update/assets/${MAC}" | cut -d' ' -f1)
+          cat > update/stable.yaml <<EOF
+          Version: ${TAG}
+          ReleaseUrl: https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TAG}
+          WindowsInstaller: https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/${WINDOWS}
+          WindowsInstallerSha256: ${WINDOWS_SHA}
+          LinuxAppImage: https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/${LINUX}
+          LinuxAppImageSha256: ${LINUX_SHA}
+          MacDiskImage: https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/${MAC}
+          MacDiskImageSha256: ${MAC_SHA}
+          EOF
+          rm -rf update/assets
+
+      - name: Publish stable channel
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add update/stable.yaml
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish ${GITHUB_REF#refs/tags/} update manifest"
+          git push origin HEAD:tournament-bot

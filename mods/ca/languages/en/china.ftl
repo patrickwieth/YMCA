@@ -133,7 +133,7 @@ This deals damage to drivers and infantry.
     .description-23 = Upgrades the Crawler with Reflector Armor.
     .description-24 = Upgrades the Listening Outpost with Propaganda Speakers.
     .description-25 =
-        Upgrades the Listening Outpost to Attack Outpost.
+        Upgrades the Listening Outpost to Bunker Outpost.
 Infantry can shoot from inside.
 Comes filled with 5 Tank Hunter.
     .description-26 = Upgrades the Outpost with a Point Defense Laser System.
@@ -233,7 +233,7 @@ china-factions =
         Many units get a horde bonus, when many other units are close. This can be further improved with propaganda speakers. 
         Shin Fai is specialized in infantry. Missing the conventional tanks of other chinese generals, 
         Shin Fai has the strongest infantry in the game and many vehicles supporting infantry directly.  
-        Faction Units: Minigunner, Assault Crawler, Attack Outpost
+        Faction Units: Minigunner, Assault Crawler, Bunker Outpost
         Special Ability: Infantry Paradrop
         Faction Bonus: Super Lotus, Fortified Bunker
         Key Commander Tree Options:
@@ -924,7 +924,7 @@ promotion-outpost-propaganda =
     .tooltipextras-strengths = Strengths: • Strong vs Infantry, Aircraft
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Vehicle
 promotion-outpost-bunker =
-    .description = Upgrades the Listening Outpost to Attack Outpost. \nInfantry can shoot from inside.\nComes filled with 5 Tank Hunter.
+    .description = Upgrades the Listening Outpost to Bunker Outpost. \nInfantry can shoot from inside.\nComes filled with 5 Tank Hunter.
     .tooltipextras-strengths = Strengths: • Strong vs Vehicles, Aircraft
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Infantry, Point Defense Laser
 promotion-outpost-pdl =
@@ -1011,8 +1011,8 @@ promotion-nuclear-tanks =
     .description = Tanks have a nuclear engine, increasing their movement speed.\nNuclear Tanks explode on destruction.
     .tooltipextras-attributes = Attributes: • Tanks are faster.
 promotion-isotope-stability =
-    .description = Tanks with nuclear ammo or nuclear engines no longer explode on destruction.\nDamage dealt to close units is prevented.
-    .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction.
+    .description = Tanks with nuclear ammo or nuclear engines no longer explode on destruction and take 10% less damage.
+    .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction. • 10% damage resistance.
 commander-tree-promotion-speakertower-pdl =
     .description = Upgrades the Speaker Tower with a Point Defense Laser system.
     .tooltipextras-strengths = Strengths: • Strong vs Projectiles
@@ -1113,7 +1113,7 @@ commander-tree-promotion-outpost-propaganda =
     .tooltipextras-weaknesses = Weaknesses: • Weak vs Anti-Vehicle
 commander-tree-promotion-outpost-bunker =
     .description =
-        Upgrades the Listening Outpost to Attack Outpost. 
+        Upgrades the Listening Outpost to Bunker Outpost.
         Infantry can shoot from inside.
         Comes filled with 5 Tank Hunter.
     .tooltipextras-strengths = Strengths: • Strong vs Vehicles, Aircraft
@@ -1235,8 +1235,7 @@ commander-tree-promotion-nuclear-tanks =
     .tooltipextras-weaknesses = Weaknesses: • Exploding wrecks can devastate your own frontline until stabilized.
 commander-tree-promotion-isotope-stability =
     .description =
-        Tanks with nuclear ammo or nuclear engines no longer explode on destruction.
-        Damage dealt to close units is prevented.
-    .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction.
-    .tooltipextras-strengths = Strengths: • Eliminates friendly-fire blasts from destroyed nuclear tanks.
+        Tanks with nuclear ammo or nuclear engines no longer explode on destruction and take 10% less damage.
+    .tooltipextras-attributes = Attributes: • Nuclear Tanks no longer explode on destruction. • 10% damage resistance.
+    .tooltipextras-strengths = Strengths: • Eliminates friendly-fire blasts and improves nuclear tank durability.
     .tooltipextras-weaknesses = Weaknesses: • Purely defensive; no direct damage boost for your army.
