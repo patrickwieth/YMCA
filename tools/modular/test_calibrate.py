@@ -25,6 +25,24 @@ class CalibrationTests(unittest.TestCase):
             for key, target in design['target'].items():
                 self.assertEqual(result[key], target, (name, key))
 
+    def test_dragon_and_gatling_share_existing_defense_package(self):
+        for family, price, hp, speed in [('Dragon Tank', 600, 28000, 103), ('Gatling Tank', 800, 30000, 108)]:
+            for suffix in ('', ' PDL', ' Reflector'):
+                d = self.named(family + suffix)
+                r = calculate(self.catalog, d)
+                self.assertEqual((r['hp'], r['speed']), (hp, speed))
+                self.assertEqual(r['cp'], 0 if not suffix else 1)
+                self.assertEqual(r['tech'], 1 if not suffix else 3)
+                self.assertEqual(r['cost'], price + (650 if suffix == ' PDL' else 0))
+                self.assertEqual(r['cost'] - d['target']['cost'], 50 if suffix == ' PDL' else 0)
+                if suffix:
+                    self.assertIn('diesel-large', d['components'])
+                    self.assertIn('efficient-generator', d['components'])
+            text = report(self.catalog)
+            self.assertIn(family, text)
+        self.assertEqual(self.catalog['components']['pdl']['cost'], 650)
+        self.assertEqual(self.catalog['credits_per_cp'], 300)
+
     def test_nuclear_shell_family(self):
         for name in ('Battlemaster Nuclear Shells', 'Battlemaster Nuclear Shells PDL',
                      'Battlemaster Nuclear Shells Reflector'):

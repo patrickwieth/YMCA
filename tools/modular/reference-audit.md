@@ -16,18 +16,41 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/china/vehicles.yaml` / `chbattle.Mass_Production` | unchanged |
 | `mods/ca/rules/china/vehicles.yaml` / `chbattle.Mass_Production.PDL` | unchanged |
 | `mods/ca/rules/china/vehicles.yaml` / `chbattle.Mass_Production.Reflector` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `chdragon` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `chdragon.PDL` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `chdragon.Reflector` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `chgtnk` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `chgtnk.PDL` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `chgtnk.Reflector` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon.Autoloader` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon.Nuclear_Shells` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHAtomicTankExplode` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `CHDragonFlamer` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `CHDragonFlamer.Black_Napalm` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `CHDragonFirestorm` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `CHDragonFirestorm2` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.0G` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.1G` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.2G` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.3G` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.0` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.1` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.2` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.3` | unchanged |
 | `mods/ca/rules/china/defaults.yaml` / `^AtomicTank` | CHANGED |
 | `mods/ca/rules/china/defaults.yaml` / `^UranShells` | unchanged |
 | `mods/ca/rules/china/defaults.yaml` / `^HordeBonus` | unchanged |
+| `mods/ca/rules/china/defaults.yaml` / `^ChinaGatling` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Autoloader` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Nuclear_Shells` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Mass_Production` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.PDL` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Reflector` | unchanged |
+| `mods/ca/rules/china/commander-tree.yaml` / `promotion.Dragon_Tank.PDL` | unchanged |
+| `mods/ca/rules/china/commander-tree.yaml` / `promotion.Dragon_Tank.Reflector` | unchanged |
+| `mods/ca/rules/china/commander-tree.yaml` / `promotion.Gatling.PDL` | unchanged |
+| `mods/ca/rules/china/commander-tree.yaml` / `promotion.Gatling.Reflector` | unchanged |
 | `mods/ca/rules/gdi/vehicles.yaml` / `Juggernaut` | unchanged |
 | `mods/ca/rules/gdi/vehicles.yaml` / `Juggernaut.Emp` | unchanged |
 | `mods/ca/rules/gdi/weapons.yaml` / `JuggernautGun` | unchanged |
@@ -49,7 +72,7 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/defaults.yaml` / `^BigVehicle` | unchanged |
 | `mods/ca/weapons/other.yaml` / `AdvancedPointLaser` | unchanged |
 
-42 blocks compared; 1 changed.
+65 blocks compared; 1 changed.
 
 ## ^AtomicTank
 

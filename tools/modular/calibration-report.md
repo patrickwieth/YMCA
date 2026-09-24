@@ -11,6 +11,12 @@ Global credit value per CP: 300 (experimental).
 
 | Reference / configured candidate | Credits old -> new | HP old -> new | Speed old -> new | New CP / catalog / tech | Gross - discount = price |
 |---|---|---|---|---|---|
+| Dragon Tank | 600 -> 600 (+0.0%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 0 / 1 / 1 | 600 - 0 = 600 |
+| Dragon Tank PDL | 1200 -> 1250 (+4.2%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 1 / 4 / 3 | 1550 - 300 = 1250 |
+| Dragon Tank Reflector | 600 -> 600 (+0.0%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 1 / 4 / 3 | 900 - 300 = 600 |
+| Gatling Tank | 800 -> 800 (+0.0%) | 30000 -> 30000 (+0.0%) | 108 -> 108 (+0.0%) | 0 / 1 / 1 | 800 - 0 = 800 |
+| Gatling Tank PDL | 1400 -> 1450 (+3.6%) | 30000 -> 30000 (+0.0%) | 108 -> 108 (+0.0%) | 1 / 4 / 3 | 1750 - 300 = 1450 |
+| Gatling Tank Reflector | 800 -> 800 (+0.0%) | 30000 -> 30000 (+0.0%) | 108 -> 108 (+0.0%) | 1 / 4 / 3 | 1100 - 300 = 800 |
 | Battlemaster Nuclear Shells | 950 -> 950 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 1 / 2 / 1 | 1250 - 300 = 950 |
 | Battlemaster Nuclear Shells PDL | 1600 -> 1600 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 2 / 5 / 3 | 2200 - 600 = 1600 |
 | Battlemaster Nuclear Shells Reflector | 950 -> 950 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 2 / 5 / 3 | 1550 - 600 = 950 |
@@ -33,6 +39,12 @@ Armor modifies chassis price before hardware is summed. Credits are not deducted
 
 | Reference candidate | Hardware contributions (credits) | Total - CP credit = price |
 |---|---|---|
+| Dragon Tank | dragon-chassis: 250; diesel: 100; baseline-generator: 0; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50 | 600 - 0 x 300 = 600 |
+| Dragon Tank PDL | dragon-chassis: 250; diesel-large: 200; efficient-generator: 200; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50; pdl: 650 | 1550 - 1 x 300 = 1250 |
+| Dragon Tank Reflector | dragon-chassis: 250; diesel-large: 200; efficient-generator: 200; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50 | 900 - 1 x 300 = 600 |
+| Gatling Tank | gatling-chassis: 350; diesel: 100; baseline-generator: 0; gatling-turret: 100; gatling-gun: 150; gatling-rounds: 100 | 800 - 0 x 300 = 800 |
+| Gatling Tank PDL | gatling-chassis: 350; diesel-large: 200; efficient-generator: 200; gatling-turret: 100; gatling-gun: 150; gatling-rounds: 100; pdl: 650 | 1750 - 1 x 300 = 1450 |
+| Gatling Tank Reflector | gatling-chassis: 350; diesel-large: 200; efficient-generator: 200; gatling-turret: 100; gatling-gun: 150; gatling-rounds: 100 | 1100 - 1 x 300 = 800 |
 | Battlemaster Nuclear Shells | battlemaster: 500; diesel: 100; baseline-generator: 0; cannon-turret: 100; cannon: 200; nuclear-shell: 350 | 1250 - 1 x 300 = 950 |
 | Battlemaster Nuclear Shells PDL | battlemaster: 500; diesel-large: 200; efficient-generator: 200; cannon-turret: 100; cannon: 200; nuclear-shell: 350; pdl: 650 | 2200 - 2 x 300 = 1600 |
 | Battlemaster Nuclear Shells Reflector | battlemaster: 500; diesel-large: 200; efficient-generator: 200; cannon-turret: 100; cannon: 200; nuclear-shell: 350 | 1550 - 2 x 300 = 950 |
@@ -74,9 +86,11 @@ Single-shot interval 0 denotes not applicable, not an audited engine default.
 | Battlemaster Autoloader | +650 / +650 | +0 / +0 |
 | Battlemaster Nuclear Shells | +650 / +650 | +0 / +0 |
 | Battlemaster Mass Production | +400 / +650 | +0 / +0 |
+| Dragon Tank | +600 / +650 | +0 / +0 |
+| Gatling Tank | +600 / +650 | +0 / +0 |
 
 With identical added hardware and CP, an additive model yields the same increment.
-Changing the global CP value cannot make that same PDL package cost both +650 and +400.
+Changing the global CP value cannot make that same PDL package cost +650, +600 and +400.
 
 ## Experimental combinations without an exact legacy counterpart
 

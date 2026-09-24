@@ -153,7 +153,7 @@ def report(catalog):
               "| Family | PDL increment old / new | Reflector increment old / new |",
               "|---|---|---|"]
     indexed = {d["name"]: d for d in catalog["designs"]}
-    for family in ("Battlemaster Autoloader", "Battlemaster Nuclear Shells", "Battlemaster Mass Production"):
+    for family in ("Battlemaster Autoloader", "Battlemaster Nuclear Shells", "Battlemaster Mass Production", "Dragon Tank", "Gatling Tank"):
         base = indexed[family]
         base_cost = calculate(catalog, base)["cost"]
         cells = []
@@ -164,7 +164,7 @@ def report(catalog):
             cells.append(f"{old_delta:+g} / {new_delta:+g}")
         lines.append(f"| {family} | {' | '.join(cells)} |")
     lines += ["", "With identical added hardware and CP, an additive model yields the same increment.",
-              "Changing the global CP value cannot make that same PDL package cost both +650 and +400."]
+              "Changing the global CP value cannot make that same PDL package cost +650, +600 and +400."]
     lines += ["", "## Experimental combinations without an exact legacy counterpart", "",
               "These are not claims of matching existing PDL/autoloader/reflector variants.", "",
               "| Design | Credits | HP | Speed | Armor | CP / catalog / tech |",

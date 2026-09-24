@@ -16,7 +16,9 @@ tiers are proposals. Matching fitted targets does not establish general balance.
 
 ## Excel workbook
 
-Open **`tools/modular/vehicle-calibration-integrated.xlsx`** in Excel.
+Open **`tools/modular/vehicle-calibration-china-expanded.xlsx`** in Excel.
+This snapshot adds Dragon/Gatling families; `vehicle-calibration-integrated.xlsx`
+is retained as the earlier integrated-state snapshot.
 The original `vehicle-calibration.xlsx` is retained as the old, pre-merge snapshot. Seven sheets provide
 instructions, editable parameters, all components, design selections/calculations,
 legacy-vs-new comparison, sampled price fits and every fit residual. Excel tables
@@ -75,6 +77,41 @@ blindly selecting either version. After integration, re-audit reference targets
 and regenerate reports/workbook from the new source commit. The local conyard.png
 change was left untouched. The workbook remains explicitly labeled with its OLD
 reference basis until that audit occurs.
+
+## Dragon and Gatling reference families
+
+Six designs now cover Dragon and Gatling bases, PDL and Reflector variants.
+Legacy Dragon prices are 600 / 1200 / 600, HP 28000, speed 103; Gatling prices
+are 800 / 1400 / 800, HP 30000, speed 108. Both defenses require one CP and
+tech3. Source actor, weapon, promotion and gatling-state blocks are added to the
+reproducible audit (now 65 selected blocks).
+
+New chassis/carrier/weapon/loadout splits are fitted ONLY to the base vehicles.
+Their masses are hypothetical, not recovered engine specifications. Existing
+PDL/Reflector, drive/generator and global CP parameters remain unchanged. Each
+upgraded design uses the same larger diesel and efficient generator already used
+by Battlemaster. Result: both base and Reflector prices match; PDL comes out 1250
+and 1450, **50 credits above** the respective legacy prices. HP and rounded speeds
+match all six. These residuals are not repaired with a family-specific rebate.
+The price-increment table now exposes +650 (Battlemaster), +600 (Dragon/Gatling)
+and +400 (mass-produced Battlemaster) legacy PDL increments.
+
+This is a scalar comparison, not a complete reconstruction:
+- Dragon's regular flamer is burst 8, interval 4, reload 45, range 5; damage 2500
+  is only one warhead. Firewall deploy cycles, Black Napalm, fire clusters, heat
+  and garrison damage are recorded but not executed by the calculator. Its
+  deploy capability does not expand the first implementation scope implicitly.
+- Gatling uses separate ground/AA spin-up states and reload stages 12/8/4/2.
+  Ground range/damage are 6/350, air 9.5/660; the simple weapon columns show only
+  a cold ground representative, NOT total DPS or the complete weapon system.
+- Gatling's legacy 6-cell sight override differs from the proposed generic
+  vehicle-vision policy; this remains an explicit unresolved behavior detail.
+- Gatling defense promotions were Tank-General-only. The hypothetical catalog
+  follows the agreed China base-faction availability; actual game rules unchanged.
+
+Excel includes per-design reference notes and component behavior notes. The
+`Preisfit` sheets STILL fit only the Battlemaster family; no silent extension of
+that mathematical model to the new chassis has occurred.
 
 ## One global CP value
 

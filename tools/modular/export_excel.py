@@ -91,7 +91,7 @@ def build(catalog, output):
     designs = wb.create_sheet('Entwuerfe')
     designs.append(['Design', 'Fraktion', 'Chassis', 'Motor', 'Generator', 'Panzerung', 'Traeger', 'Waffe', 'Munition',
                     'Zusatz 1', 'Zusatz 2', 'Zusatz 3', 'Katalog', 'CP', 'Tech', 'Hardware', 'CP-Abzug', 'Preis',
-                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo'])
+                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis'])
     roles = ['chassis', 'drive', 'generator', 'armor', 'carrier', 'weapon', 'ammunition']
     def lookup(cell, field):
         index = next(i for i, (_, f) in enumerate(FIELDS, 1) if f == field)
@@ -103,6 +103,7 @@ def build(catalog, output):
         if len(equipment) > 3:
             raise ValueError('Workbook template supports at most 3 equipment slots')
         designs.append([design['name'], design['faction']] + picks + equipment + [''] * (3 - len(equipment)))
+        designs[f'AB{rownum}'] = design.get('note', '')
         r = rownum
         def v(c, field):
             return lookup(f'{c}{r}', field)
@@ -178,7 +179,7 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-integrated.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-china-expanded.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     build(data, args.output)
