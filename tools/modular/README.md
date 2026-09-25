@@ -1,5 +1,33 @@
 # Offline vehicle calibration prototype
 
+## Current correction: Type 59 and manufacturing module
+
+Latest workbook: **`vehicle-calibration-manufacturing.xlsx`**. Older workbook names
+and historical results below are retained for context, not the current selection.
+`battlemaster` is the stable technical ID; its display name is **Type 59 Chassis**.
+The duplicated `battlemaster-mass-produced` chassis has been removed. All three
+mass-production designs now use the same chassis plus `mass-production`.
+
+Manufacturing is one optional dedicated design selection, not physical equipment
+consuming the PDL slot. This prototype choice keeps manufacturing separate from
+vehicle-mounted hardware. The module costs 1 CP, adds no mass/price and currently
+uses **95% hardware cost** as an explicitly provisional trial, NOT an approved
+final value or the optimum of the separate joint-fit study.
+
+`final price = raw hardware * manufacturing factor - CP * global credit value`.
+Armor chassis modifiers are applied before this hardware-wide factor. The global
+CP deduction is never scaled. Python, report and Excel use the same rule. Prices
+remain unrounded decimals in the research calculator; game credit rounding is
+not yet decided. At the current fixed hardware prices, mass-production base/PDL/
+Reflector cost **602.5 / 1205 / 587.5**, against legacy **600 / 1000 / 600**. These
+residuals replace the earlier cheaper-chassis results; no special rebate is added.
+
+Existing weapon behavior is reused, not reimplemented: see
+`docs/modular/ammunition-components.md` for projectile/impact payload ownership,
+Säure/Korrosion, Toxin/DriverPoisonDamage and safe armament composition. New payload
+concepts are not assigned invented prices or advertised as compiled actor rules.
+
+
 Run from Game (Python standard library only):
 
 ```sh
@@ -16,10 +44,13 @@ tiers are proposals. Matching fitted targets does not establish general balance.
 
 ## Excel workbook
 
-Open **`tools/modular/vehicle-calibration-china-expanded.xlsx`** in Excel.
+Open **`tools/modular/vehicle-calibration-overlord-study.xlsx`** in Excel.
+The `SchwereReferenzen` sheet contains original Overlord-family prices only, not
+yet configured designs. See `docs/modular/overlord-study.md` for behavior and
+naming proposals. The previous `vehicle-calibration-china-expanded.xlsx` is retained.
 This snapshot adds Dragon/Gatling families; `vehicle-calibration-integrated.xlsx`
 is retained as the earlier integrated-state snapshot.
-The original `vehicle-calibration.xlsx` is retained as the old, pre-merge snapshot. Seven sheets provide
+The original `vehicle-calibration.xlsx` is retained as the old, pre-merge snapshot. Eight sheets provide
 instructions, editable parameters, all components, design selections/calculations,
 legacy-vs-new comparison, sampled price fits and every fit residual. Excel tables
 have filters; fixed headers and component-ID dropdowns aid navigation. Hardware,
@@ -118,7 +149,7 @@ that mathematical model to the new chassis has occurred.
 ```
 hardware = chassis_cost * armor_cost_percent / 100 + other_component_costs
 CP = sum(component CP contributions)
-production_cost = hardware - CP * credits_per_cp
+production_cost = hardware * manufacturing_factor - CP * credits_per_cp
 ```
 
 The initial global value is **300 credits per CP**, not a measured universal fact.

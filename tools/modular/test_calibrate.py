@@ -58,15 +58,18 @@ class CalibrationTests(unittest.TestCase):
             d = self.named(name)
             r = calculate(self.catalog, d)
             for key, target in d['target'].items():
-                self.assertEqual(r[key], target, (name, key))
+                if key != 'cost':
+                    self.assertEqual(r[key], target, (name, key))
+            self.assertIn('battlemaster', d['components'])
+            self.assertIn('mass-production', d['components'])
         d = self.named('Battlemaster Mass Production PDL')
         r = calculate(self.catalog, d)
-        self.assertEqual((r['gross_cost'], r['discount'], r['cost']), (1850, 600, 1250))
+        self.assertEqual((r['gross_cost'], r['discount'], r['cost']), (1900, 600, 1205))
         self.assertEqual(d['target']['cost'], 1000)
         for key, target in d['target'].items():
             if key != 'cost':
                 self.assertEqual(r[key], target, key)
-        self.assertIn('1000 -> 1250 (+25.0%)', report(self.catalog))
+        self.assertIn('1000 -> 1205 (+20.5%)', report(self.catalog))
 
     def test_same_pdl_increment_cannot_fit_different_legacy_increments(self):
         for cp_value in (0, 200, 300):
@@ -77,7 +80,19 @@ class CalibrationTests(unittest.TestCase):
                 base = calculate(self.catalog, self.named(family))
                 pdl = calculate(self.catalog, self.named(family + ' PDL'))
                 deltas.append(pdl['cost'] - base['cost'])
-            self.assertEqual(deltas, [950 - cp_value] * 3)
+            self.assertEqual(deltas, [950 - cp_value, 950 - cp_value, 950 * 0.95 - cp_value])
+
+    def test_manufacturing_is_not_a_chassis_or_equipment(self):
+        self.assertNotIn('battlemaster-mass-produced', self.catalog['components'])
+        self.assertEqual(self.catalog['components']['battlemaster']['display_name'], 'Type 59 Chassis')
+        self.design['components'].append('mass-production')
+        r = calculate(self.catalog, self.design)
+        self.assertEqual((r['gross_cost'], r['manufactured_cost'], r['discount'], r['cost']), (950, 902.5, 300, 602.5))
+        self.assertEqual((r['mass'], r['hp'], r['speed']), (10000, 40000, 100))
+        for factor in (0, -5, 101, float('nan')):
+            self.catalog['components']['mass-production']['hardware_percent'] = factor
+            with self.assertRaises(ValueError):
+                calculate(self.catalog, self.design)
 
     def test_autoloader_pdl(self):
         d = self.named('Battlemaster Autoloader PDL')
@@ -95,7 +110,7 @@ class CalibrationTests(unittest.TestCase):
         for key in ('armor', 'cp', 'tech', 'burst', 'burst_delay_ticks', 'reload_ticks', 'range_cells', 'damage'):
             self.assertEqual(r[key], d['target'][key])
         self.assertEqual((r['gross_cost'], r['discount']), (1550, 600))
-        self.assertIn('1550 - 600 = 950', report(self.catalog))
+        self.assertIn('1550 x 1 - 600 = 950', report(self.catalog))
 
     def test_emp_discount_matches_legacy_target(self):
         design = self.named('Juggernaut EMP / efficient')
@@ -115,7 +130,7 @@ class CalibrationTests(unittest.TestCase):
                     continue
                 result = calculate(self.catalog, design)
                 self.assertEqual(result['discount'], result['cp'] * value)
-                self.assertEqual(result['cost'], result['gross_cost'] - result['cp'] * value)
+                self.assertEqual(result['cost'], result['manufactured_cost'] - result['cp'] * value)
 
     def test_individual_discounts_rejected(self):
         self.catalog['components']['emp-shell']['design_credit_discount'] = 200
@@ -132,7 +147,7 @@ class CalibrationTests(unittest.TestCase):
     def test_report_separates_references_and_experiments(self):
         text = report(self.catalog)
         self.assertIn('2000 -> 2000 (+0.0%)', text)
-        self.assertIn('2300 - 300 = 2000', text)
+        self.assertIn('2300 x 1 - 300 = 2000', text)
         references, experiments = text.split('## Experimental combinations')
         self.assertNotIn('Battlemaster PDL /', references)
         self.assertIn('Battlemaster PDL /', experiments)

@@ -22,7 +22,7 @@ def calculate(catalog, design):
             by_role[part["role"]] = part
         if part["tier"] not in range(4) or part["cp"] < 0:
             raise ValueError("Invalid component point cost")
-    if set(by_role) != ROLES:
+    if set(by_role) - {"manufacturing"} != ROLES:
         raise ValueError("Select exactly one component for every required role")
     chassis = by_role["chassis"]
     if chassis["tier"] < 1:
@@ -50,6 +50,11 @@ def calculate(catalog, design):
     mass = chassis["mass"] * armor["mass_percent"] / 100 + sum(p["mass"] for p in others)
     cost = chassis["cost"] * armor["cost_percent"] / 100 + sum(p["cost"] for p in others)
     gross_cost = cost
+    manufacturing_factor = by_role.get("manufacturing", {}).get("hardware_percent", 100) / 100
+    if not math.isfinite(manufacturing_factor) or not 0 < manufacturing_factor <= 1:
+        raise ValueError("Manufacturing factor must be in (0, 1]")
+    cost *= manufacturing_factor
+    manufactured_cost = cost
     if "design_credit_discount" in design or any("design_credit_discount" in p for p in parts):
         raise ValueError("Individual discounts are not supported")
     cp_value = catalog["credits_per_cp"]
@@ -75,6 +80,7 @@ def calculate(catalog, design):
     ratio = (reserve / mass) / (chassis["reference_kw"] / chassis["reference_mass"])
     speed = min(chassis["max_speed"], chassis["reference_speed"] * ratio ** catalog["alpha"])
     return dict(mass=mass, hp=hp, cost=cost, gross_cost=gross_cost, discount=discount,
+                manufacturing_factor=manufacturing_factor, manufactured_cost=manufactured_cost,
                 electric_kw=demand, reserve_kw=reserve,
                 speed=math.floor(speed + 0.5), armor=armor["armor_type"],
                 catalog_points=sum(p["tier"] for p in parts), cp=sum(p["cp"] for p in parts),
@@ -109,7 +115,7 @@ def report(catalog):
              "CP, tech and catalog columns are NEW design values, not audited legacy targets.", "",
              f"Global credit value per CP: {catalog['credits_per_cp']:g} (experimental).", "",
              "## Existing vehicle vs configured vehicle", "",
-             "| Reference / configured candidate | Credits old -> new | HP old -> new | Speed old -> new | New CP / catalog / tech | Gross - discount = price |",
+             "| Reference / configured candidate | Credits old -> new | HP old -> new | Speed old -> new | New CP / catalog / tech | Hardware x manufacturing - CP = price |",
              "|---|---|---|---|---|---|"]
     for design in catalog["designs"]:
         if not design.get("target"):
@@ -117,7 +123,7 @@ def report(catalog):
         r = calculate(catalog, design)
         target = design["target"]
         cells = " | ".join(comparison(target[k], r[k]) for k in ("cost", "hp", "speed"))
-        lines.append(f"| {design['name']} | {cells} | {r['cp']} / {r['catalog_points']} / {r['tech']} | {r['gross_cost']:g} - {r['discount']:g} = {r['cost']:g} |")
+        lines.append(f"| {design['name']} | {cells} | {r['cp']} / {r['catalog_points']} / {r['tech']} | {r['gross_cost']:g} x {r['manufacturing_factor']:g} - {r['discount']:g} = {r['cost']:g} |")
     lines += ["", "## Hardware cost breakdown", "",
               "Armor modifies chassis price before hardware is summed. Credits are not deducted per component.", "",
               "| Reference candidate | Hardware contributions (credits) | Total - CP credit = price |",
@@ -134,7 +140,7 @@ def report(catalog):
                 continue
             cost = p["cost"] * armor["cost_percent"] / 100 if p["role"] == "chassis" else p["cost"]
             contributions.append(f"{key}: {cost:g}")
-        lines.append(f"| {design['name']} | {'; '.join(contributions)} | {r['gross_cost']:g} - {r['cp']} x {catalog['credits_per_cp']:g} = {r['cost']:g} |")
+        lines.append(f"| {design['name']} | {'; '.join(contributions)} | {r['gross_cost']:g} x {r['manufacturing_factor']:g} - {r['cp']} x {catalog['credits_per_cp']:g} = {r['cost']:g} |")
     lines += ["", "## Audited Battlemaster variant fields (old -> configured)", "",
               "Rule-data comparison only, not engine firing/armor simulation. Damage is the raw warhead value.",
               "Tech 1 means no explicit tier2/tier3 requirement, not waived factory prerequisites.",
@@ -163,8 +169,8 @@ def report(catalog):
             new_delta = calculate(catalog, variant)["cost"] - base_cost
             cells.append(f"{old_delta:+g} / {new_delta:+g}")
         lines.append(f"| {family} | {' | '.join(cells)} |")
-    lines += ["", "With identical added hardware and CP, an additive model yields the same increment.",
-              "Changing the global CP value cannot make that same PDL package cost +650, +600 and +400."]
+    lines += ["", "Manufacturing scales hardware increments, never the global CP deduction.",
+              "One shared manufacturing factor still leaves visible residuals against legacy prices."]
     lines += ["", "## Experimental combinations without an exact legacy counterpart", "",
               "These are not claims of matching existing PDL/autoloader/reflector variants.", "",
               "| Design | Credits | HP | Speed | Armor | CP / catalog / tech |",

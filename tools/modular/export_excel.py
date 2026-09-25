@@ -27,7 +27,8 @@ FIELDS = [
     ('Salve', 'burst'), ('Schussabstand Ticks', 'burst_delay_ticks'), ('Nachladen Ticks', 'reload_ticks'),
     ('Reichweite Zellen', 'range_cells'), ('Rohschaden', 'damage'), ('Hinweis', 'note'),
     ('Quelle', 'source'), ('Kompatibilitaet', 'allowed'), ('Ausrüstung erlaubt', 'equipment'),
-    ('Waffen erlaubt', 'weapons'), ('Munition erlaubt', 'ammunition')]
+    ('Waffen erlaubt', 'weapons'), ('Munition erlaubt', 'ammunition'),
+    ('Anzeigename', 'display_name'), ('Hardware Fertigung %', 'hardware_percent')]
 
 
 def table(ws, name):
@@ -54,7 +55,7 @@ def build(catalog, output):
         ['Status', 'Experimentelle Zahlen; keine Spielregeln oder grafische/volle Verhaltensgleichheit.'],
         ['Eingaben', 'Parameter und Bausteinwerte sind editierbar. Formeln berechnen Entwuerfe/Vergleich beim Öffnen neu.'],
         ['Preise', 'Hardwarekosten minus CP-Anforderung mal globaler CP-Creditwert. Keine Sonderrabatte.'],
-        ['Massenproduktion', 'Entwuerfe nutzen noch die günstigere Chassisvariante. Prozentfertigung wird nur im Preisfit untersucht.'],
+        ['Massenproduktion', 'Separates Fertigungsmodul: vorläufig 95% aller Hardwarekosten, danach globaler CP-Abzug. Preisfit ist separate Studie.'],
         ['Arbeitsfluss', 'catalog.json ist Quelle. export_excel.py erzeugt eine neue Momentaufnahme, kein Excel-Import.'],
         ['Schutz', 'Exporter überschreibt keine bestehende Arbeitsmappe; für neue Daten neuen Dateinamen verwenden.'],
         ['Erweiterung', 'Neue Bausteine/Designs in JSON eintragen und neu exportieren. Manuelles Zeilenanfügen wird nicht automatisch verdrahtet.'],
@@ -91,7 +92,7 @@ def build(catalog, output):
     designs = wb.create_sheet('Entwuerfe')
     designs.append(['Design', 'Fraktion', 'Chassis', 'Motor', 'Generator', 'Panzerung', 'Traeger', 'Waffe', 'Munition',
                     'Zusatz 1', 'Zusatz 2', 'Zusatz 3', 'Katalog', 'CP', 'Tech', 'Hardware', 'CP-Abzug', 'Preis',
-                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis'])
+                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis', 'Fertigungsmodul', 'Fertigungsfaktor', 'Hardware nach Fertigung'])
     roles = ['chassis', 'drive', 'generator', 'armor', 'carrier', 'weapon', 'ammunition']
     def lookup(cell, field):
         index = next(i for i, (_, f) in enumerate(FIELDS, 1) if f == field)
@@ -104,16 +105,19 @@ def build(catalog, output):
             raise ValueError('Workbook template supports at most 3 equipment slots')
         designs.append([design['name'], design['faction']] + picks + equipment + [''] * (3 - len(equipment)))
         designs[f'AB{rownum}'] = design.get('note', '')
+        designs[f'AC{rownum}'] = next((k for k in ids if catalog['components'][k]['role'] == 'manufacturing'), '')
         r = rownum
         def v(c, field):
             return lookup(f'{c}{r}', field)
         def total(field, letters='CDEFGHIJKL'):
-            return '+'.join(v(c, field) for c in letters)
+            return '+'.join(v(c, field) for c in list(letters) + ['AC'])
         formulas = {
             'M': total('tier'), 'N': total('cp'),
-            'O': 'MAX(' + ','.join(v(c, 'tech') for c in 'CDEFGHIJKL') + ')',
+            'O': 'MAX(' + ','.join(v(c, 'tech') for c in list('CDEFGHIJKL') + ['AC']) + ')',
             'P': f"{v('C','cost')}*{v('F','cost_percent')}/100+" + total('cost', 'DEGHIJKL'),
-            'Q': f'N{r}*Parameter!$B$2', 'R': f'P{r}-Q{r}',
+            'Q': f'N{r}*Parameter!$B$2', 'R': f'AE{r}-Q{r}',
+            'AD': f'IF(AC{r}="",1,' + v('AC','hardware_percent') + '/100)',
+            'AE': f'P{r}*AD{r}',
             'S': f"{v('C','hp')}*{v('F','hp_percent')}/100",
             'T': f"{v('C','mass')}*{v('F','mass_percent')}/100+" + total('mass', 'DEGHIJKL'),
             'U': total('electric_kw'),
@@ -121,7 +125,7 @@ def build(catalog, output):
             'W': f'IF(Y{r}<>"OK","",ROUND(MIN(' + v('C','max_speed') + ',' + v('C','reference_speed') +
                  f'*(V{r}/T{r}/(' + v('C','reference_kw') + '/' + v('C','reference_mass') + '))^Parameter!$B$3),0))',
             'X': v('F','armor_type'),
-            'Y': f'IFERROR(IF(OR(R{r}<=0,T{r}<=0,V{r}<=0,U{r}>' + v('E','max_electric_kw') +
+            'Y': f'IFERROR(IF(OR(AD{r}<=0,AD{r}>1,R{r}<=0,T{r}<=0,V{r}<=0,U{r}>' + v('E','max_electric_kw') +
                  f',T{r}>' + v('C','max_mass') + ',' + v('E','efficiency') + '<=0,' + v('E','efficiency') +
                  '>1),"UNGUELTIG","OK"),"FEHLER")',
         }
@@ -137,22 +141,35 @@ def build(catalog, output):
     dv.showErrorMessage = True
     designs.add_data_validation(dv)
     dv.add(f'C2:L{designs.max_row}')
+    dv.add(f'AC2:AC{designs.max_row}')
     table(designs, 'Designs')
 
     compare = wb.create_sheet('AltNeu')
-    compare.append(['Design', 'Preis alt', 'Hardware neu', 'CP-Abzug', 'Preis neu', 'Differenz', 'Differenz %',
+    compare.append(['Design', 'Preis alt', 'Hardware nach Fertigung', 'CP-Abzug', 'Preis neu', 'Differenz', 'Differenz %',
                     'HP alt', 'HP neu', 'Tempo alt', 'Tempo neu', 'CP neu', 'Katalog neu', 'Grenzen'])
     for source, design in enumerate(catalog['designs'], 2):
         if not design.get('target'):
             continue
         r = compare.max_row + 1
         target = design['target']
-        compare.append([design['name'], target['cost'], f'=Entwuerfe!P{source}', f'=Entwuerfe!Q{source}',
+        compare.append([design['name'], target['cost'], f'=Entwuerfe!AE{source}', f'=Entwuerfe!Q{source}',
                         f'=Entwuerfe!R{source}', f'=E{r}-B{r}', f'=IF(B{r}=0,0,F{r}/B{r})',
                         target['hp'], f'=Entwuerfe!S{source}', target['speed'], f'=Entwuerfe!W{source}',
                         f'=Entwuerfe!N{source}', f'=Entwuerfe!M{source}', f'=Entwuerfe!Y{source}'])
         compare[f'G{r}'].number_format = '0.0%'
     table(compare, 'Comparison')
+
+    legacy = wb.create_sheet('SchwereReferenzen')
+    legacy.append(['Familie', 'Actor', 'Originalpreis', 'PDL Preis', 'PDL Aufpreis', 'Reflector Preis',
+                   'Reflector Aufpreis', 'CP ohne Abwehr', 'CP mit Abwehr', 'Basis HP', 'Basistempo', 'Hinweise'])
+    for reference in catalog.get('legacy_families', []):
+        r = legacy.max_row + 1
+        has_defense = 'pdl_price' in reference
+        legacy.append([reference['name'], reference['actor'], reference['price'], reference.get('pdl_price'),
+                       f'=D{r}-C{r}' if has_defense else None, reference.get('reflector_price'),
+                       f'=F{r}-C{r}' if has_defense else None, reference['cp'], reference['cp'] + 1 if has_defense else None,
+                       reference['hp'], reference['speed'], 'NUR ORIGINAL, noch kein Baukastendesign. ' + reference['note']])
+    table(legacy, 'HeavyReferences')
 
     fit = wb.create_sheet('Preisfit')
     fit.append(['CP-Wert', 'Fertigungsfaktor', 'Upgrade Hardware', 'PDL Paket', 'Reflector Paket', 'RMSE Credits', 'Max Fehler Credits', 'Status'])
@@ -179,11 +196,11 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-china-expanded.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-manufacturing.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     build(data, args.output)
     # Round-trip integrity check; openpyxl cannot evaluate Excel formulas.
     book = load_workbook(args.output)
-    assert len(book.sheetnames) == 7
+    assert len(book.sheetnames) == 8
     print(args.output.resolve())

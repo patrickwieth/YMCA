@@ -15,12 +15,21 @@ class ExcelExportTests(unittest.TestCase):
             path = Path(directory) / 'test.xlsx'
             build(catalog, path)
             book = load_workbook(path)
-            self.assertEqual(len(book.sheetnames), 7)
+            self.assertEqual(len(book.sheetnames), 8)
+            self.assertEqual(book['SchwereReferenzen'].max_row, 7)
+            self.assertEqual(book['SchwereReferenzen']['D3'].value, 2800)
+            self.assertEqual(book['SchwereReferenzen']['E3'].value, '=D3-C3')
             self.assertEqual(book['Bausteine'].max_row, len(catalog['components']) + 1)
             self.assertEqual(book['Entwuerfe'].max_row, len(catalog['designs']) + 1)
             self.assertEqual(book['Entwuerfe']['Q2'].value, '=N2*Parameter!$B$2')
             self.assertEqual(book['AltNeu']['E2'].value, '=Entwuerfe!R2')
             self.assertEqual(book['Parameter']['B2'].value, 300)
+            self.assertEqual(book['Entwuerfe']['R2'].value, '=AE2-Q2')
+            self.assertIn('AC2', book['Entwuerfe']['N2'].value)
+            mass_row = next(row for row in book['Entwuerfe'].iter_rows(min_row=2) if row[0].value == 'Battlemaster Mass Production PDL')
+            self.assertEqual(mass_row[2].value, 'battlemaster')
+            self.assertEqual(mass_row[28].value, 'mass-production')
+            self.assertEqual(mass_row[25].value, 1205)
             self.assertTrue(book.calculation.fullCalcOnLoad)
             for row in book['Entwuerfe'].iter_rows(min_row=2):
                 for cell in row[12:25]:
