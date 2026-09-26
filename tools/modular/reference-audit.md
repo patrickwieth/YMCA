@@ -22,6 +22,13 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/china/vehicles.yaml` / `chgtnk` | unchanged |
 | `mods/ca/rules/china/vehicles.yaml` / `chgtnk.PDL` | unchanged |
 | `mods/ca/rules/china/vehicles.yaml` / `chgtnk.Reflector` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Nuke_Shells` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Nuke_Shells.PDL` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Nuke_Shells.Reflector` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Propaganda` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Propaganda.PDL` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Propaganda.Reflector` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon.Autoloader` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon.Nuclear_Shells` | unchanged |
@@ -38,10 +45,13 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.1` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.2` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `ChinaMGatt.3` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `OverlordCannon` | unchanged |
+| `mods/ca/rules/china/weapons.yaml` / `OverlordCannonNuclear` | CHANGED |
 | `mods/ca/rules/china/defaults.yaml` / `^AtomicTank` | CHANGED |
 | `mods/ca/rules/china/defaults.yaml` / `^UranShells` | unchanged |
 | `mods/ca/rules/china/defaults.yaml` / `^HordeBonus` | unchanged |
 | `mods/ca/rules/china/defaults.yaml` / `^ChinaGatling` | unchanged |
+| `mods/ca/rules/china/defaults.yaml` / `^PropagandaSpeaker` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Autoloader` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Nuclear_Shells` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Mass_Production` | unchanged |
@@ -51,6 +61,10 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Dragon_Tank.Reflector` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Gatling.PDL` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Gatling.Reflector` | unchanged |
+| `mods/ca/rules/china/commander-tree.yaml` / `promotion.Overlord.Nuclear_Shells` | unchanged |
+| `mods/ca/rules/china/commander-tree.yaml` / `promotion.Overlord.Propaganda` | unchanged |
+| `mods/ca/rules/china/commander-tree.yaml` / `promotion.Overlord.PDL` | unchanged |
+| `mods/ca/rules/china/commander-tree.yaml` / `promotion.Overlord.Reflector` | unchanged |
 | `mods/ca/rules/gdi/vehicles.yaml` / `Juggernaut` | unchanged |
 | `mods/ca/rules/gdi/vehicles.yaml` / `Juggernaut.Emp` | unchanged |
 | `mods/ca/rules/gdi/weapons.yaml` / `JuggernautGun` | unchanged |
@@ -72,21 +86,34 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/defaults.yaml` / `^BigVehicle` | unchanged |
 | `mods/ca/weapons/other.yaml` / `AdvancedPointLaser` | unchanged |
 
-65 blocks compared; 1 changed.
+79 blocks compared; 2 changed.
 
+## OverlordCannonNuclear
+
+```diff
+--- 7f5aeadf
++++ 9d8a9dec
+@@ -1,5 +1,6 @@
+ OverlordCannonNuclear:
+     Inherits: OverlordCannon
++    Range: 5c512
+     Warhead@1Dam: SpreadDamage
+         Spread: 1c0
+         Damage: 24000
+```
 ## ^AtomicTank
 
 ```diff
 --- 7f5aeadf
 +++ 9d8a9dec
 @@ -8,6 +8,9 @@
- 	SpeedMultiplier@atomictank:
- 		RequiresCondition: nucleartank
- 		Modifier: 125
-+	DamageMultiplier@isotopestability:
-+		RequiresCondition: isotopestability
-+		Modifier: 90
- 	FireWarheadsOnDeathCA@atomictank:
- 		Weapon: CHAtomicTankExplode
- 		EmptyWeapon: CHAtomicTankExplode
+     SpeedMultiplier@atomictank:
+         RequiresCondition: nucleartank
+         Modifier: 125
++    DamageMultiplier@isotopestability:
++        RequiresCondition: isotopestability
++        Modifier: 90
+     FireWarheadsOnDeathCA@atomictank:
+         Weapon: CHAtomicTankExplode
+         EmptyWeapon: CHAtomicTankExplode
 ```

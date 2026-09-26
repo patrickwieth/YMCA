@@ -11,6 +11,13 @@ Global credit value per CP: 300 (experimental).
 
 | Reference / configured candidate | Credits old -> new | HP old -> new | Speed old -> new | New CP / catalog / tech | Hardware x manufacturing - CP = price |
 |---|---|---|---|---|---|
+| Overlord baseline | 2000 -> 2000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 0 / 4 / 2 | 2000 x 1 - 0 = 2000 |
+| Overlord Nuclear Shells | 2500 -> 2500 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 1 / 5 / 3 | 2800 x 1 - 300 = 2500 |
+| Overlord Nuclear Shells PDL | 3000 -> 3150 (+5.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 2 / 8 / 3 | 3750 x 1 - 600 = 3150 |
+| Overlord Nuclear Shells Reflector | 2500 -> 2500 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 2 / 8 / 3 | 3100 x 1 - 600 = 2500 |
+| Overlord Propaganda | 2200 -> 2200 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 53 (-5.4%) | 1 / 5 / 3 | 2500 x 1 - 300 = 2200 |
+| Overlord Propaganda PDL | 2800 -> 2850 (+1.8%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 3450 x 1 - 600 = 2850 |
+| Overlord Propaganda Reflector | 2200 -> 2200 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 2800 x 1 - 600 = 2200 |
 | Dragon Tank | 600 -> 600 (+0.0%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 0 / 1 / 1 | 600 x 1 - 0 = 600 |
 | Dragon Tank PDL | 1200 -> 1250 (+4.2%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 1 / 4 / 3 | 1550 x 1 - 300 = 1250 |
 | Dragon Tank Reflector | 600 -> 600 (+0.0%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 1 / 4 / 3 | 900 x 1 - 300 = 600 |
@@ -39,6 +46,13 @@ Armor modifies chassis price before hardware is summed. Credits are not deducted
 
 | Reference candidate | Hardware contributions (credits) | Total - CP credit = price |
 |---|---|---|
+| Overlord baseline | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150 | 2000 x 1 - 0 x 300 = 2000 |
+| Overlord Nuclear Shells | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950 | 2800 x 1 - 1 x 300 = 2500 |
+| Overlord Nuclear Shells PDL | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950; pdl: 650 | 3750 x 1 - 2 x 300 = 3150 |
+| Overlord Nuclear Shells Reflector | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950 | 3100 x 1 - 2 x 300 = 2500 |
+| Overlord Propaganda | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; propaganda-speaker: 500 | 2500 x 1 - 1 x 300 = 2200 |
+| Overlord Propaganda PDL | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; propaganda-speaker: 500; pdl: 650 | 3450 x 1 - 2 x 300 = 2850 |
+| Overlord Propaganda Reflector | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; propaganda-speaker: 500 | 2800 x 1 - 2 x 300 = 2200 |
 | Dragon Tank | dragon-chassis: 250; diesel: 100; baseline-generator: 0; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50 | 600 x 1 - 0 x 300 = 600 |
 | Dragon Tank PDL | dragon-chassis: 250; diesel-large: 200; efficient-generator: 200; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50; pdl: 650 | 1550 x 1 - 1 x 300 = 1250 |
 | Dragon Tank Reflector | dragon-chassis: 250; diesel-large: 200; efficient-generator: 200; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50 | 900 x 1 - 1 x 300 = 600 |
@@ -88,6 +102,8 @@ Single-shot interval 0 denotes not applicable, not an audited engine default.
 | Battlemaster Mass Production | +400 / +602.5 | +0 / -15 |
 | Dragon Tank | +600 / +650 | +0 / +0 |
 | Gatling Tank | +600 / +650 | +0 / +0 |
+| Overlord Nuclear Shells | +500 / +650 | +0 / +0 |
+| Overlord Propaganda | +600 / +650 | +0 / +0 |
 
 Manufacturing scales hardware increments, never the global CP deduction.
 One shared manufacturing factor still leaves visible residuals against legacy prices.

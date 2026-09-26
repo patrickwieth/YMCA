@@ -9,18 +9,21 @@ SOURCES = {
         'chbattle.Autoloader.Reflector', 'chbattle.Nuclear_Shells', 'chbattle.Nuclear_Shells.PDL',
         'chbattle.Nuclear_Shells.Reflector', 'chbattle.Mass_Production', 'chbattle.Mass_Production.PDL',
         'chbattle.Mass_Production.Reflector', 'chdragon', 'chdragon.PDL', 'chdragon.Reflector',
-        'chgtnk', 'chgtnk.PDL', 'chgtnk.Reflector'],
+        'chgtnk', 'chgtnk.PDL', 'chgtnk.Reflector', 'choverlord', 'choverlord.Nuke_Shells',
+        'choverlord.Nuke_Shells.PDL', 'choverlord.Nuke_Shells.Reflector', 'choverlord.Propaganda',
+        'choverlord.Propaganda.PDL', 'choverlord.Propaganda.Reflector'],
     'mods/ca/rules/china/weapons.yaml': ['CHBattlemasterCannon', 'CHBattlemasterCannon.Autoloader',
         'CHBattlemasterCannon.Nuclear_Shells', 'CHAtomicTankExplode', 'CHDragonFlamer',
         'CHDragonFlamer.Black_Napalm', 'CHDragonFirestorm', 'CHDragonFirestorm2',
         'ChinaMGatt.0G', 'ChinaMGatt.1G', 'ChinaMGatt.2G', 'ChinaMGatt.3G',
-        'ChinaMGatt.0', 'ChinaMGatt.1', 'ChinaMGatt.2', 'ChinaMGatt.3'],
-    'mods/ca/rules/china/defaults.yaml': ['^AtomicTank', '^UranShells', '^HordeBonus', '^ChinaGatling'],
+        'ChinaMGatt.0', 'ChinaMGatt.1', 'ChinaMGatt.2', 'ChinaMGatt.3', 'OverlordCannon', 'OverlordCannonNuclear'],
+    'mods/ca/rules/china/defaults.yaml': ['^AtomicTank', '^UranShells', '^HordeBonus', '^ChinaGatling', '^PropagandaSpeaker'],
     'mods/ca/rules/china/commander-tree.yaml': ['promotion.Battlemaster.Autoloader',
         'promotion.Battlemaster.Nuclear_Shells', 'promotion.Battlemaster.Mass_Production',
         'promotion.Battlemaster.PDL', 'promotion.Battlemaster.Reflector',
         'promotion.Dragon_Tank.PDL', 'promotion.Dragon_Tank.Reflector',
-        'promotion.Gatling.PDL', 'promotion.Gatling.Reflector'],
+        'promotion.Gatling.PDL', 'promotion.Gatling.Reflector', 'promotion.Overlord.Nuclear_Shells',
+        'promotion.Overlord.Propaganda', 'promotion.Overlord.PDL', 'promotion.Overlord.Reflector'],
     'mods/ca/rules/gdi/vehicles.yaml': ['Juggernaut', 'Juggernaut.Emp'],
     'mods/ca/rules/gdi/weapons.yaml': ['JuggernautGun', 'JuggernautGun.Emp', 'JuggernautDummyAim'],
     'mods/ca/rules/gdi/defaults.yaml': ['^GDIWalkerUpgrades'],
@@ -63,7 +66,7 @@ def audit(repo, old, new):
             lines.append(f'| `{path}` / `{key}` | {"CHANGED" if changed else "unchanged"} |')
             if changed:
                 changes.append(f'## {key}\n\n```diff\n' + '\n'.join(difflib.unified_diff(
-                    a.splitlines(), b.splitlines(), fromfile=old, tofile=new, lineterm='')) + '\n```')
+                    a.expandtabs(4).splitlines(), b.expandtabs(4).splitlines(), fromfile=old, tofile=new, lineterm='')) + '\n```')
     lines += ['', f'{count} blocks compared; {len(changes)} changed.', ''] + changes
     return '\n'.join(lines) + '\n'
 

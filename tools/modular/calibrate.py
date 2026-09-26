@@ -87,7 +87,7 @@ def calculate(catalog, design):
                 tech=max(p["tech"] for p in parts),
                 burst=carrier["burst"], burst_delay_ticks=carrier.get("burst_delay_ticks", 0),
                 reload_ticks=carrier["reload_ticks"],
-                range_cells=by_role["weapon"].get("range_cells"),
+                range_cells=by_role["ammunition"].get("range_override_cells", by_role["weapon"].get("range_cells")),
                 damage=by_role["ammunition"].get("damage"))
 
 
@@ -159,7 +159,7 @@ def report(catalog):
               "| Family | PDL increment old / new | Reflector increment old / new |",
               "|---|---|---|"]
     indexed = {d["name"]: d for d in catalog["designs"]}
-    for family in ("Battlemaster Autoloader", "Battlemaster Nuclear Shells", "Battlemaster Mass Production", "Dragon Tank", "Gatling Tank"):
+    for family in ("Battlemaster Autoloader", "Battlemaster Nuclear Shells", "Battlemaster Mass Production", "Dragon Tank", "Gatling Tank", "Overlord Nuclear Shells", "Overlord Propaganda"):
         base = indexed[family]
         base_cost = calculate(catalog, base)["cost"]
         cells = []

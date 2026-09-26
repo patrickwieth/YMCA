@@ -1,5 +1,49 @@
 # Offline vehicle calibration prototype
 
+## Latest: configured heavy vehicles
+
+Open **`vehicle-calibration-heavy-designs.xlsx`**. It contains seven new configured
+Overlord references, not just the legacy-only `SchwereReferenzen` sheet. All older
+workbook names below refer to preserved snapshots.
+
+New proposed components: heavy tracked chassis, 1000/1045 kW heavy diesels,
+heavy twin carrier, heavy cannon, conventional/nuclear heavy loadouts and a
+propaganda speaker. Player-facing names are recorded separately from stable IDs.
+Existing PDL, Reflector, generators, CP credit value and lighter vehicles were
+NOT retuned. Heavy chassis mass, power and price allocation are fitted proposals,
+not physical facts inferred from the art or a general size-scaling law.
+
+| Reference | Legacy / configured price | Legacy / configured speed |
+|---|---|---|
+| Overlord | 2000 / 2000 | 56 / 56 |
+| Nuclear shells | 2500 / 2500 | 56 / 56 |
+| Nuclear shells + PDL | 3000 / 3150 | 56 / 56 |
+| Nuclear shells + Reflector | 2500 / 2500 | 56 / 56 |
+| Propaganda | 2200 / 2200 | 56 / 53 |
+| Propaganda + PDL | 2800 / 2850 | 56 / 55 |
+| Propaganda + Reflector | 2200 / 2200 | 56 / 55 |
+
+All use 95000 base HP; Emperor's conditional received-damage modifier and nuclear
+propulsion/isotope upgrades are excluded. Base Overlord tech2 is a prototype
+mapping of the radar prerequisite. Upgraded references require tech3. Nuclear
+payload changes range from 5 to 5.5 cells via an explicit ammunition override,
+consistent with composing projectile/weapon data rather than only a warhead.
+Its existing complete nuclear effect remains a source binding for the future
+compiler; the calculator does not execute damage or radiation effects.
+
+The speaker's 500-credit/500-kg/20-kWe proposal fits its base price after 1 CP,
+but shows a mobility deficit. Preserve the existing `^PropagandaSpeaker` behavior
+when compiling. Its aura is not being reimplemented. No hidden HP/speed bonus or
+price correction hides the current 150-credit nuclear-PDL and 50-credit
+speaker-PDL residuals. These are base fits plus reuse tests, not held-out evidence
+that the entire catalog is balanced.
+
+Gatling Overlord and Bunker Overlord remain legacy-only entries: implementing
+multiple carriers and prefilled firing cargo is a separate composition step, not
+something this single-carrier calculator silently claims to cover. The joint
+`Preisfit` sheets still fit Battlemaster prices only.
+
+
 ## Current correction: Type 59 and manufacturing module
 
 Latest workbook: **`vehicle-calibration-manufacturing.xlsx`**. Older workbook names

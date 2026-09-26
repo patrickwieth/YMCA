@@ -25,6 +25,40 @@ class CalibrationTests(unittest.TestCase):
             for key, target in design['target'].items():
                 self.assertEqual(result[key], target, (name, key))
 
+    def test_overlord_reference_residuals(self):
+        expected = {
+            'Overlord baseline': (2000, 56, 0),
+            'Overlord Nuclear Shells': (2500, 56, 1),
+            'Overlord Nuclear Shells PDL': (3150, 56, 2),
+            'Overlord Nuclear Shells Reflector': (2500, 56, 2),
+            'Overlord Propaganda': (2200, 53, 1),
+            'Overlord Propaganda PDL': (2850, 55, 2),
+            'Overlord Propaganda Reflector': (2200, 55, 2),
+        }
+        for name, values in expected.items():
+            d = self.named(name)
+            r = calculate(self.catalog, d)
+            self.assertEqual((r['cost'], r['speed'], r['cp']), values, name)
+            self.assertEqual(r['hp'], 95000)
+            self.assertEqual(r['range_cells'], 5.5 if 'Nuclear Shells' in name else 5)
+            self.assertEqual(r['armor'], d['target']['armor'])
+            if name.endswith(' PDL'):
+                self.assertIn('pdl', d['components'])
+                self.assertIn('efficient-generator', d['components'])
+        self.assertEqual(self.catalog['components']['pdl']['cost'], 650)
+        self.assertEqual(self.catalog['components']['reflector']['electric_kw'], 57.5)
+        self.assertEqual(self.catalog['credits_per_cp'], 300)
+        self.assertIn('3000 -> 3150 (+5.0%)', report(self.catalog))
+
+    def test_heavy_payload_compatibility(self):
+        design = copy.deepcopy(self.named('Overlord baseline'))
+        design['components'][design['components'].index('heavy-shell')] = 'shell'
+        with self.assertRaisesRegex(ValueError, 'Incompatible carrier, weapon or ammunition'):
+            calculate(self.catalog, design)
+        # Explicit payload range override must not modify the shared cannon definition.
+        calculate(self.catalog, self.named('Overlord Nuclear Shells'))
+        self.assertEqual(self.catalog['components']['overlord-cannon']['range_cells'], 5)
+
     def test_dragon_and_gatling_share_existing_defense_package(self):
         for family, price, hp, speed in [('Dragon Tank', 600, 28000, 103), ('Gatling Tank', 800, 30000, 108)]:
             for suffix in ('', ' PDL', ' Reflector'):

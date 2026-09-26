@@ -28,7 +28,8 @@ FIELDS = [
     ('Reichweite Zellen', 'range_cells'), ('Rohschaden', 'damage'), ('Hinweis', 'note'),
     ('Quelle', 'source'), ('Kompatibilitaet', 'allowed'), ('Ausrüstung erlaubt', 'equipment'),
     ('Waffen erlaubt', 'weapons'), ('Munition erlaubt', 'ammunition'),
-    ('Anzeigename', 'display_name'), ('Hardware Fertigung %', 'hardware_percent')]
+    ('Anzeigename', 'display_name'), ('Hardware Fertigung %', 'hardware_percent'),
+    ('Munition Reichweite Override', 'range_override_cells')]
 
 
 def table(ws, name):
@@ -196,7 +197,7 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-manufacturing.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-heavy-designs.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     build(data, args.output)
