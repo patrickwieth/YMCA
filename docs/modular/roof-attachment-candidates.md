@@ -56,6 +56,19 @@ Reproduction: export `bits/artytur.shp` as above, then run the preview script wi
 `--sprites artytur`. No carrier cost, faction permission or engine rule is changed
 by this inspection.
 
+## Follow-up: opt-in mortar drafts
+
+The offline catalog now contains `mortar-roof-carrier`, `roof-mortar` and
+`mortar-he`, with the artillery sprite as the proposed visual. Three draft designs
+retain the Overlord main cannon. The package is provisionally priced at 650
+credits before any defense additions; there is no original equivalent vehicle
+and no claim of balanced combat power. See the latest README and workbook.
+
+Both `experimental_carriers` membership and explicit design draft opt-in are
+required. Geometry and rendering have not been validated on a moving Overlord.
+The existing projectile/warhead definitions will be reused by a future compiler;
+adding this numerical package is not executable YAML generation.
+
 ## Earlier China-only search: mortar rules but no identified mount
 
 `weapons/ballistics.yaml` defines `MortarPrototype` (reload 60, range 11c0,

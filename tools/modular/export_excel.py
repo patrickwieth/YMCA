@@ -32,7 +32,8 @@ FIELDS = [
     ('Munition Reichweite Override', 'range_override_cells'),
     ('Transportkapazitaet', 'cargo_capacity'),
     ('Ausschluesse', 'excludes'), ('Aufsatzplatz', 'attachment_slot'),
-    ('Zusatztraeger erlaubt', 'auxiliary_mount'), ('Infanterie erlaubt', 'allowed_infantry')]
+    ('Zusatztraeger erlaubt', 'auxiliary_mount'), ('Infanterie erlaubt', 'allowed_infantry'),
+    ('Mindestreichweite Zellen', 'min_range_cells'), ('Feuerverzug Ticks', 'fire_delay_ticks')]
 
 
 def table(ws, name):
@@ -66,7 +67,7 @@ def build(catalog, output):
         ['Validierung', 'Excel prüft nur elektrische/physische Grenzen; Rolle, Fraktion, Montage und Besatzungskosten-Konsistenz im Python-Rechner prüfen.'],
         ['Bunkerpreis', 'Leeres Bunkermodul plus separat gewählte Startbesatzung. Infanteriepreise und Besatzungszeilen sind editierbar; Kosten/Masse werden einmal addiert.'],
         ['Aufsatzplatz', 'Gatling, Bunker und Lautsprecher teilen roof. Vollständige Slot-/Fraktions-/Kapazitätsprüfung weiterhin im Python-Rechner.'],
-        ['Grafikentwürfe', 'Flame Roof / draft ist nur Offline-Kalkulation. Sprite geprüft, Montage auf Overlord noch nicht. Kein Originalvergleich oder spielbarer Actor.'],
+        ['Grafikentwürfe', 'Flame/Mortar Roof / draft sind nur Offline-Kalkulation. Sprites geprüft, Montage auf Overlord noch nicht. Kein Originalvergleich oder spielbarer Actor.'],
         ['Besatzung', '0 in Excel deaktiviert eine vorhandene Zeile; für neue Typen/Zeilen JSON ändern und neu exportieren. Infanteriemasse ist ein Designwert.'],
         ['Momentaufnahme', 'Python-Werte und Preisfit sind statisch. Änderungen in Excel aktualisieren nur die Formelspalten.'],
         ['Genauigkeit', 'CP/Tier sind unabhängig; 1% Abweichung kann akzeptabel sein. Preisfit ist kein Beweis des CP-Wertes.'],
@@ -125,7 +126,7 @@ def build(catalog, output):
     designs = wb.create_sheet('Entwuerfe')
     designs.append(['Design', 'Fraktion', 'Chassis', 'Motor', 'Generator', 'Panzerung', 'Traeger', 'Waffe', 'Munition',
                     'Zusatz 1', 'Zusatz 2', 'Zusatz 3', 'Katalog', 'CP', 'Tech', 'Hardware', 'CP-Abzug', 'Preis',
-                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis', 'Fertigungsmodul', 'Fertigungsfaktor', 'Hardware nach Fertigung', 'Aufsatztraeger', 'Aufsatzwaffe', 'Aufsatzmunition', 'Besatzungspreis', 'Besatzungsmasse', 'Besatzungstech'])
+                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis', 'Fertigungsmodul', 'Fertigungsfaktor', 'Hardware nach Fertigung', 'Aufsatztraeger', 'Aufsatzwaffe', 'Aufsatzmunition', 'Besatzungspreis', 'Besatzungsmasse', 'Besatzungstech', 'Aufsatz Reichweite', 'Aufsatz Mindestreichweite', 'Aufsatz Reload Ticks', 'Aufsatz Salve', 'Aufsatz Rohschaden'])
     roles = ['chassis', 'drive', 'generator', 'armor', 'carrier', 'weapon', 'ammunition']
     def lookup(cell, field):
         index = next(i for i, (_, f) in enumerate(FIELDS, 1) if f == field)
@@ -158,6 +159,11 @@ def build(catalog, output):
             'AI': f'SUMIF(Startbesatzung!$A$2:$A${crew.max_row},A{r},Startbesatzung!$D$2:$D${crew.max_row})',
             'AJ': f'SUMIF(Startbesatzung!$A$2:$A${crew.max_row},A{r},Startbesatzung!$E$2:$E${crew.max_row})',
             'AK': 'MAX(0,' + ','.join(f'IF(Startbesatzung!A{s}=A{r},Startbesatzung!G{s},0)' for s in range(2, crew.max_row + 1)) + ')',
+            'AL': f'IF(AF{r}="","",IF(' + v('AH', 'range_override_cells') + '>0,' + v('AH', 'range_override_cells') + ',' + v('AG', 'range_cells') + '))',
+            'AM': f'IF(AF{r}="","",' + v('AG', 'min_range_cells') + ')',
+            'AN': f'IF(AF{r}="","",' + v('AF', 'reload_ticks') + ')',
+            'AO': f'IF(AF{r}="","",' + v('AF', 'burst') + ')',
+            'AP': f'IF(AF{r}="","",' + v('AH', 'damage') + ')',
             'U': total('electric_kw'),
             'V': f"{v('D','mechanical_kw')}-U{r}/{v('E','efficiency')}",
             'W': f'IF(Y{r}<>"OK","",ROUND(MIN(' + v('C','max_speed') + ',' + v('C','reference_speed') +
@@ -235,7 +241,7 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-roof-drafts.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-mortar-drafts.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     build(data, args.output)

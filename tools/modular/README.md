@@ -1,5 +1,45 @@
 # Offline vehicle calibration prototype
 
+## Latest: artillery sprite as experimental mortar carrier
+
+Open **`vehicle-calibration-mortar-drafts.xlsx`**. The separated `artytur.shp`
+identified from Battle Fortress now backs an explicitly experimental roof-carrier
+concept. It is not promoted to the normal graphics-compatible allowlist.
+
+Three NEW designs (no legacy target) retain the heavy main gun and add:
+- Light artillery carrier: proposed 200 credits / 400 kg / 2 kWe, no CP.
+- Vehicle mortar: proposed 350 credits / 600 kg / 3 kWe, no CP.
+- HE loadout: proposed 100 credits / 300 kg, no CP.
+
+Thus the additional package costs **650 credits**, not a price inferred from the
+150-credit infantry mortar. Range 11 cells, minimum 1, reload 60 and raw damage
+5500 come from the existing `Mortar`/`MortarPrototype` rules. A 15-tick fire delay
+from the infantry actor is retained as an initial carrier proposal, not a proven
+requirement of the artillery sprite. No invented caliber is assigned.
+
+| Experimental design | Price | CP | Speed |
+|---|---:|---:|---:|
+| Overlord + mortar roof | 2650 | 0 | 54 |
+| + PDL | 3300 | 1 | 55 |
+| + Reflector | 2650 | 1 | 55 |
+
+All retain 95000 base HP. Existing main cannon, protection, generator and motor
+parameters are unchanged. These costs do not prove that long-range artillery on
+an Overlord is balanced; they are an explicit first package proposal. The draft
+flag still checks the roof slot, faction, weapon and payload compatibility.
+
+The report and Excel now show the auxiliary weapon's range/minimum range, reload,
+burst and raw damage separately from the retained main gun. These are template
+fields, NOT DPS or simulated projectile behavior. Existing Gatling spin-up/AA
+variants still use their real templates later; its simple displayed row is cold
+ground fire. Neither auxiliary weapon changes the reported main-gun values.
+
+Actual sprite offset/scale, muzzle origin, aim/attack composition and runtime
+behavior still need an in-game prototype. No game YAML, module permissions in
+production, or engine traits were changed. Earlier notes about not yet finding
+a mortar graphic describe the pre-Battle-Fortress inspection only.
+
+
 ## Latest: flame-roof drafts and asset inspection
 
 Latest workbook: **`vehicle-calibration-roof-drafts.xlsx`**. Three flame-roof

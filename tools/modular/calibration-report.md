@@ -142,6 +142,9 @@ No legacy-equivalence claim. Rows labeled draft explicitly opt into unverified m
 
 | Design | Credits | HP | Speed | Armor | CP / catalog / tech |
 |---|---:|---:|---:|---|---|
+| Overlord Mortar Roof / draft | 2650 | 95000 | 54 | Heavy | 0 / 6 / 3 |
+| Overlord Mortar Roof PDL / draft | 3300 | 95000 | 55 | Heavy | 1 / 9 / 3 |
+| Overlord Mortar Roof Reflector / draft | 2650 | 95000 | 55 | Reflector | 1 / 9 / 3 |
 | Overlord Flame Roof / draft | 2250 | 95000 | 55 | Heavy | 0 / 4 / 2 |
 | Overlord Flame Roof PDL / draft | 2900 | 95000 | 55 | Heavy | 1 / 7 / 3 |
 | Overlord Flame Roof Reflector / draft | 2250 | 95000 | 55 | Reflector | 1 / 7 / 3 |
@@ -153,6 +156,23 @@ No legacy-equivalence claim. Rows labeled draft explicitly opt into unverified m
 | Battlemaster reflector / efficient | 850 | 40000 | 94 | Reflector | 1 / 3 / 3 |
 | Battlemaster PDL + reflector / baseline | INVALID: Generator output exceeded | | | | |
 | Battlemaster PDL + reflector / efficient | 1200 | 40000 | 86 | Reflector | 2 / 4 / 3 |
+
+## Auxiliary weapon data (separate from retained main gun)
+
+Configured template fields, not simulated DPS or an in-game compositing test.
+Gatling columns represent cold ground fire only; its full template also has AA/spin-up.
+
+| Design | Weapon / ammunition | Range / minimum cells | Reload ticks | Burst | Fire delay ticks | Raw damage |
+|---|---|---|---:|---:|---:|---:|
+| Overlord Mortar Roof / draft | roof-mortar / mortar-he | 11 / 1 | 60 | 1 | 15 | 5500 |
+| Overlord Mortar Roof PDL / draft | roof-mortar / mortar-he | 11 / 1 | 60 | 1 | 15 | 5500 |
+| Overlord Mortar Roof Reflector / draft | roof-mortar / mortar-he | 11 / 1 | 60 | 1 | 15 | 5500 |
+| Overlord Flame Roof / draft | dragon-flamer / flame-fuel | 5 / 0 | 45 | 8 | 0 | 2500 |
+| Overlord Flame Roof PDL / draft | dragon-flamer / flame-fuel | 5 / 0 | 45 | 8 | 0 | 2500 |
+| Overlord Flame Roof Reflector / draft | dragon-flamer / flame-fuel | 5 / 0 | 45 | 8 | 0 | 2500 |
+| Overlord Gatling | gatling-gun / gatling-rounds | 6 / 0 | 12 | 1 | 0 | 350 |
+| Overlord Gatling PDL | gatling-gun / gatling-rounds | 6 / 0 | 12 | 1 | 0 | 350 |
+| Overlord Gatling Reflector | gatling-gun / gatling-rounds | 6 / 0 | 12 | 1 | 0 | 350 |
 
 All CP contributions use the same global credit value. No component or design rebates.
 The discount applies to every configuration, including cheaper/slower alternatives.

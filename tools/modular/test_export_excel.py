@@ -20,6 +20,11 @@ class ExcelExportTests(unittest.TestCase):
             self.assertIn('VLOOKUP', book['Startbesatzung']['D2'].value)
             self.assertIn('AF2', book['Entwuerfe']['N2'].value)
             self.assertIn('AI2', book['Entwuerfe']['P2'].value)
+            mortar_row = next(row for row in book['Entwuerfe'].iter_rows(min_row=2) if row[0].value == 'Overlord Mortar Roof / draft')
+            self.assertEqual(mortar_row[31].value, 'mortar-roof-carrier')
+            self.assertEqual(mortar_row[25].value, 2650)
+            for cell in mortar_row[37:42]:
+                self.assertEqual(cell.data_type, 'f')
             gatling_row = next(row for row in book['Entwuerfe'].iter_rows(min_row=2) if row[0].value == 'Overlord Gatling')
             self.assertEqual(gatling_row[31].value, 'gatling-roof-carrier')
             self.assertEqual(book['SchwereReferenzen'].max_row, 7)

@@ -75,6 +75,32 @@ class CalibrationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Incompatible auxiliary weapon'):
             calculate(self.catalog, d)
 
+    def test_mortar_drafts_preserve_main_gun_and_separate_weapon_data(self):
+        for suffix, price, cp, speed in [('', 2650, 0, 54), (' PDL', 3300, 1, 55), (' Reflector', 2650, 1, 55)]:
+            d = self.named('Overlord Mortar Roof' + suffix + ' / draft')
+            r = calculate(self.catalog, d)
+            self.assertEqual((r['cost'], r['cp'], r['speed']), (price, cp, speed))
+            self.assertEqual((r['range_cells'], r['damage'], r['burst']), (5, 8000, 2))
+            a = r['auxiliary']
+            self.assertEqual((a['range_cells'], a['min_range_cells'], a['reload_ticks'], a['damage']), (11, 1, 60, 5500))
+            self.assertNotIn('target', d)
+        self.assertIn('roof-mortar / mortar-he | 11 / 1', report(self.catalog))
+
+    def test_mortar_draft_permissions_and_roof_conflicts(self):
+        d = copy.deepcopy(self.named('Overlord Mortar Roof / draft'))
+        del d['experimental_graphics']
+        with self.assertRaisesRegex(ValueError, 'Incompatible auxiliary mount'):
+            calculate(self.catalog, d)
+        d['experimental_graphics'] = True
+        for equipment in ('firing-bunker', 'propaganda-speaker'):
+            conflict = copy.deepcopy(d)
+            conflict['components'].append(equipment)
+            with self.assertRaisesRegex(ValueError, 'slot is already occupied'):
+                calculate(self.catalog, conflict)
+        d['auxiliary_mount']['ammunition'] = 'gatling-rounds'
+        with self.assertRaisesRegex(ValueError, 'Incompatible auxiliary weapon'):
+            calculate(self.catalog, d)
+
     def test_flame_roof_is_opt_in_and_uses_shared_parts(self):
         d = copy.deepcopy(self.named('Overlord Flame Roof / draft'))
         result = calculate(self.catalog, d)

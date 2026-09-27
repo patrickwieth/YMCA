@@ -35,6 +35,17 @@ def crew_totals(catalog, design, parts):
     return totals
 
 
+def auxiliary_summary(catalog, selection):
+    if not selection:
+        return None
+    carrier, weapon, ammo = (catalog['components'][selection[k]] for k in ('carrier', 'weapon', 'ammunition'))
+    return dict(carrier=selection['carrier'], weapon=selection['weapon'], ammunition=selection['ammunition'],
+                range_cells=ammo.get('range_override_cells', weapon.get('range_cells')),
+                min_range_cells=weapon.get('min_range_cells', 0),
+                reload_ticks=carrier['reload_ticks'], burst=carrier['burst'],
+                fire_delay_ticks=carrier.get('fire_delay_ticks', 0), damage=ammo.get('damage'))
+
+
 def calculate(catalog, design):
     ids = design["components"]
     if len(ids) != len(set(ids)):
@@ -137,6 +148,7 @@ def calculate(catalog, design):
     return dict(mass=mass, hp=hp, cost=cost, gross_cost=gross_cost, discount=discount,
                 manufacturing_factor=manufacturing_factor, manufactured_cost=manufactured_cost,
                 included_crew_cost=crew['cost'], crew_mass=crew['mass'], crew_count=crew['count'],
+                auxiliary=auxiliary_summary(catalog, auxiliary),
                 electric_kw=demand, reserve_kw=reserve,
                 speed=math.floor(speed + 0.5), armor=armor["armor_type"],
                 catalog_points=sum(p["tier"] for p in parts), cp=sum(p["cp"] for p in parts),
@@ -253,6 +265,15 @@ def report(catalog):
             lines.append(f"| {design['name']} | INVALID: {error} | | | | |")
             continue
         lines.append(f"| {design['name']} | {r['cost']:g} | {r['hp']:g} | {r['speed']} | {r['armor']} | {r['cp']} / {r['catalog_points']} / {r['tech']} |")
+    lines += ["", "## Auxiliary weapon data (separate from retained main gun)", "",
+              "Configured template fields, not simulated DPS or an in-game compositing test.",
+              "Gatling columns represent cold ground fire only; its full template also has AA/spin-up.", "",
+              "| Design | Weapon / ammunition | Range / minimum cells | Reload ticks | Burst | Fire delay ticks | Raw damage |",
+              "|---|---|---|---:|---:|---:|---:|"]
+    for design in catalog['designs']:
+        a = auxiliary_summary(catalog, design.get('auxiliary_mount'))
+        if a:
+            lines.append(f"| {design['name']} | {a['weapon']} / {a['ammunition']} | {a['range_cells']} / {a['min_range_cells']} | {a['reload_ticks']} | {a['burst']} | {a['fire_delay_ticks']} | {a['damage']} |")
     lines += ["", "All CP contributions use the same global credit value. No component or design rebates.",
               "The discount applies to every configuration, including cheaper/slower alternatives."]
     return "\n".join(lines) + "\n"
