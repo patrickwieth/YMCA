@@ -138,10 +138,13 @@ One shared manufacturing factor still leaves visible residuals against legacy pr
 
 ## Experimental combinations without an exact legacy counterpart
 
-These are not claims of matching existing PDL/autoloader/reflector variants.
+No legacy-equivalence claim. Rows labeled draft explicitly opt into unverified mounting graphics.
 
 | Design | Credits | HP | Speed | Armor | CP / catalog / tech |
 |---|---:|---:|---:|---|---|
+| Overlord Flame Roof / draft | 2250 | 95000 | 55 | Heavy | 0 / 4 / 2 |
+| Overlord Flame Roof PDL / draft | 2900 | 95000 | 55 | Heavy | 1 / 7 / 3 |
+| Overlord Flame Roof Reflector / draft | 2250 | 95000 | 55 | Reflector | 1 / 7 / 3 |
 | Overlord Bunker / mixed crew | 2560 | 95000 | 55 | Heavy | 1 / 5 / 3 |
 | Overlord Bunker / empty | 1800 | 95000 | 55 | Heavy | 1 / 5 / 3 |
 | Overlord Bunker / partial crew | 2200 | 95000 | 55 | Heavy | 1 / 5 / 3 |

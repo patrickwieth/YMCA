@@ -66,6 +66,7 @@ def build(catalog, output):
         ['Validierung', 'Excel prüft nur elektrische/physische Grenzen; Rolle, Fraktion, Montage und Besatzungskosten-Konsistenz im Python-Rechner prüfen.'],
         ['Bunkerpreis', 'Leeres Bunkermodul plus separat gewählte Startbesatzung. Infanteriepreise und Besatzungszeilen sind editierbar; Kosten/Masse werden einmal addiert.'],
         ['Aufsatzplatz', 'Gatling, Bunker und Lautsprecher teilen roof. Vollständige Slot-/Fraktions-/Kapazitätsprüfung weiterhin im Python-Rechner.'],
+        ['Grafikentwürfe', 'Flame Roof / draft ist nur Offline-Kalkulation. Sprite geprüft, Montage auf Overlord noch nicht. Kein Originalvergleich oder spielbarer Actor.'],
         ['Besatzung', '0 in Excel deaktiviert eine vorhandene Zeile; für neue Typen/Zeilen JSON ändern und neu exportieren. Infanteriemasse ist ein Designwert.'],
         ['Momentaufnahme', 'Python-Werte und Preisfit sind statisch. Änderungen in Excel aktualisieren nur die Formelspalten.'],
         ['Genauigkeit', 'CP/Tier sind unabhängig; 1% Abweichung kann akzeptabel sein. Preisfit ist kein Beweis des CP-Wertes.'],
@@ -234,7 +235,7 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-loadouts.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-roof-drafts.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     build(data, args.output)

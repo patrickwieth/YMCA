@@ -75,6 +75,24 @@ class CalibrationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Incompatible auxiliary weapon'):
             calculate(self.catalog, d)
 
+    def test_flame_roof_is_opt_in_and_uses_shared_parts(self):
+        d = copy.deepcopy(self.named('Overlord Flame Roof / draft'))
+        result = calculate(self.catalog, d)
+        self.assertEqual((result['cost'], result['cp']), (2250, 0))
+        self.assertEqual((result['damage'], result['range_cells']), (8000, 5))
+        self.assertNotIn('target', d)
+        del d['experimental_graphics']
+        with self.assertRaisesRegex(ValueError, 'Incompatible auxiliary mount'):
+            calculate(self.catalog, d)
+        d['experimental_graphics'] = True
+        d['components'].append('firing-bunker')
+        with self.assertRaisesRegex(ValueError, 'slot is already occupied'):
+            calculate(self.catalog, d)
+        d = copy.deepcopy(self.named('Overlord Flame Roof / draft'))
+        d['auxiliary_mount']['carrier'] = 'fixed-triple'
+        with self.assertRaisesRegex(ValueError, 'Incompatible auxiliary mount'):
+            calculate(self.catalog, d)
+
     def test_gatling_roof_is_separate_from_main_weapon(self):
         for suffix, cost, cp in [('', 2000, 1), (' PDL', 2650, 2), (' Reflector', 2000, 2)]:
             r = calculate(self.catalog, self.named('Overlord Gatling' + suffix))

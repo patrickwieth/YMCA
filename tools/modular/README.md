@@ -1,5 +1,21 @@
 # Offline vehicle calibration prototype
 
+## Latest: flame-roof drafts and asset inspection
+
+Latest workbook: **`vehicle-calibration-roof-drafts.xlsx`**. Three flame-roof
+candidates reuse existing Dragon carrier/weapon/fuel components. They appear as
+explicit `/ draft` combinations WITHOUT legacy targets, not as tested game units.
+See `docs/modular/roof-attachment-candidates.md` and `roof-sprite-preview.png` for
+the asset evidence, engine scale limitation and remaining mount checks.
+
+The sprite alternative `chdragontur.shp` exists separately with 32 facings; raw
+frames were actually exported and inspected. No Overlord in-game composite has
+been tested. The calculator requires both a chassis experimental allowlist AND
+`experimental_graphics: true`. This does not bypass occupied slots or weapon
+compatibility. The mortar weapon templates exist, but a suitable separated mortar
+turret has not yet been identified in the inspected China assets.
+
+
 ## Latest: shared roof slot and selectable starting infantry
 
 Open **`vehicle-calibration-loadouts.xlsx`** (10 sheets). Older workbook names and

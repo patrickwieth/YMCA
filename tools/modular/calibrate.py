@@ -76,8 +76,11 @@ def calculate(catalog, design):
         if set(auxiliary) != {'carrier', 'weapon', 'ammunition'}:
             raise ValueError('Auxiliary mount needs carrier, weapon and ammunition')
         mount = chassis.get('auxiliary_mount')
-        if chassis['carrier_slots'] < 2 or not mount or auxiliary['carrier'] not in mount['carriers']:
-            raise ValueError('Incompatible auxiliary mount')
+        approved = mount and auxiliary['carrier'] in mount['carriers']
+        draft = (mount and design.get('experimental_graphics') is True
+                 and auxiliary['carrier'] in mount.get('experimental_carriers', []))
+        if chassis['carrier_slots'] < 2 or not (approved or draft):
+            raise ValueError('Incompatible auxiliary mount (unverified graphics require explicit draft opt-in)')
         occupied.append(mount['slot'])
         extra = [catalog['components'][auxiliary[role]] for role in ('carrier', 'weapon', 'ammunition')]
         for role, part in zip(('carrier', 'weapon', 'ammunition'), extra):
@@ -238,7 +241,7 @@ def report(catalog):
     lines += ["", "Manufacturing scales hardware increments, never the global CP deduction.",
               "One shared manufacturing factor still leaves visible residuals against legacy prices."]
     lines += ["", "## Experimental combinations without an exact legacy counterpart", "",
-              "These are not claims of matching existing PDL/autoloader/reflector variants.", "",
+              "No legacy-equivalence claim. Rows labeled draft explicitly opt into unverified mounting graphics.", "",
               "| Design | Credits | HP | Speed | Armor | CP / catalog / tech |",
               "|---|---:|---:|---:|---|---|"]
     for design in catalog["designs"]:
