@@ -80,8 +80,10 @@ def calculate(catalog, design):
         raise ValueError('Incompatible running gear')
     if gear['tier'] not in range(4) or gear['cp'] < 0:
         raise ValueError('Invalid running gear point cost')
+    stationary = gear.get('kind') == 'stationary'
     for field in ('max_mass', 'max_speed', 'turn_speed'):
-        if not math.isfinite(gear[field]) or gear[field] <= 0:
+        value = gear[field]
+        if not math.isfinite(value) or (value <= 0 if field == 'max_mass' or not stationary else value != 0):
             raise ValueError('Invalid running gear limit')
     for field in ('mass', 'cost', 'electric_kw'):
         if not math.isfinite(gear[field]) or gear[field] < 0:
@@ -157,12 +159,15 @@ def calculate(catalog, design):
     if demand > gen["max_electric_kw"]:
         raise ValueError("Generator output exceeded")
     reserve = by_role["drive"]["mechanical_kw"] - demand / efficiency
-    if reserve <= 0:
+    if reserve < 0 or (reserve == 0 and not stationary):
         raise ValueError("No mechanical driving reserve")
     if mass <= 0 or mass > min(chassis["max_mass"], gear['max_mass']):
         raise ValueError("Invalid mass or chassis load exceeded")
-    ratio = (reserve / mass) / (chassis["reference_kw"] / chassis["reference_mass"])
-    speed = min(chassis["max_speed"], gear['max_speed'], chassis["reference_speed"] * ratio ** catalog["alpha"])
+    if stationary:
+        speed = 0
+    else:
+        ratio = (reserve / mass) / (chassis["reference_kw"] / chassis["reference_mass"])
+        speed = min(chassis["max_speed"], gear['max_speed'], chassis["reference_speed"] * ratio ** catalog["alpha"])
     return dict(mass=mass, hp=hp, cost=cost, gross_cost=gross_cost, discount=discount,
                 manufacturing_factor=manufacturing_factor, manufactured_cost=manufactured_cost,
                 included_crew_cost=crew['cost'], crew_mass=crew['mass'], crew_count=crew['count'],

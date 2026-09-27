@@ -1,4 +1,31 @@
-# Offline vehicle calibration prototype
+# Modular vehicle tools
+
+## Latest: first in-game map prototype
+
+**`mods/ca/maps/modular-gdi-lab.oramap`** contains three generated GDI actors:
+normal tank (900 credits), hover test (1100) and stationary platform (850).
+A manual Carryall, original MTNK and enemy target are placed alongside them.
+Read **`docs/modular/playable-prototype.md`** for launch/test instructions and limits.
+
+`compile_prototype.py` is an OFFLINE compiler for a strict component subset, not
+an automatic match-load JSON hook or a general trait composer. It emits normal
+map rules, using full MTNK/120mm templates and the existing hover/transport traits.
+Unsupported equipment, cargo, secondary mounts and CP unlocks fail closed.
+The new mobility parts live in `prototype.json`; the broad catalog and old Excel
+snapshots are unchanged. No factory production of the stationary actor yet.
+
+```sh
+python tools/modular/compile_prototype.py --output mods/ca/maps/modular-gdi-lab-v2.oramap
+python tools/modular/check_prototype.py --map mods/ca/maps/modular-gdi-lab-v2.oramap
+```
+
+Use a new output path: existing maps are never overwritten. Both special vehicles
+still use tracked tank placeholder artwork. **61 tests pass**; engine map/rule
+lint ran, but is NOT globally clean. Differential errors only repeat the inherited
+stock MTNK diagnostics; see `prototype-validation.md`. Interactive play and
+Carryall/hover tests remain pending. Historical sections below describe earlier
+steps and their then-pending mobility work.
+
 
 ## Latest: families instead of raw actor counts
 
