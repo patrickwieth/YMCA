@@ -1,5 +1,40 @@
 # Offline vehicle calibration prototype
 
+## Latest: running gear and cross-faction vehicle sweep
+
+Open **`vehicle-calibration-running-gear.xlsx`** (12 sheets). Added explicit
+running-gear selection in `Entwuerfe` AQ, resolved locomotor/body turn rate in
+AR/AS, `Fahrprofile` terrain/crush metadata, and `FahrzeugInventar` coverage.
+See `docs/modular/running-gear-and-coverage.md` for the design contract and next
+vehicle families. Older sections/workbooks below remain historical snapshots.
+
+- Rumpf, Fahrwerk and Motor are separate. Default gear is selected from the hull;
+  `design.running_gear` can explicitly override it only if compatible.
+- Existing hardware allocations were moved out of hulls, not charged twice.
+  All **48** previous examples retain their scalar results (including the invalid
+  generator example staying invalid). Regression fixture basis: `06f6fa36`.
+- Added **12** reference rows: Hum-Vee, Buggy, Nod Light Tank, T-34, Devil Tank,
+  GDI Battle Tank, Allied Medium Tank parent + Challenger/Leclerc/Leopard,
+  Soviet Heavy Tank and Allied Artillery. Shared MG/sensor, light cannon and
+  medium-cannon families. No individual rebates; global CP value unchanged.
+- New base prices/HP/speeds match by initial calibration of hull values, NOT an
+  independent balancing proof. The three Allied skins share the same parent;
+  2TNK itself is disabled. Special abilities/upgrades are not compiled yet.
+- The automated inventory covers six faction vehicle files, including helpers,
+  variants and disabled prototypes. Local fields only: blank is unresolved, not
+  zero. It does not claim all those vehicles are modeled or even buildable.
+- Wheels/tracks/legs reference actual existing engine locomotors; no new terrain
+  movement rules. Juggernaut's legs still use sheavytracked. ARTY keeps Light
+  armor and lighttracked (no infantry crush). Hover and generic cargo are next
+  capabilities, not silently substituted components.
+
+Regenerate the coverage report with:
+
+```sh
+python tools/modular/survey_vehicles.py --output tools/modular/vehicle-coverage.md
+```
+
+
 ## Latest: artillery sprite as experimental mortar carrier
 
 Open **`vehicle-calibration-mortar-drafts.xlsx`**. The separated `artytur.shp`

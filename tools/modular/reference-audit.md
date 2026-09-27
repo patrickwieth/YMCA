@@ -77,13 +77,43 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Overlord.Reflector` | unchanged |
 | `mods/ca/rules/gdi/vehicles.yaml` / `Juggernaut` | unchanged |
 | `mods/ca/rules/gdi/vehicles.yaml` / `Juggernaut.Emp` | unchanged |
+| `mods/ca/rules/gdi/vehicles.yaml` / `HMMV` | unchanged |
+| `mods/ca/rules/gdi/vehicles.yaml` / `MTNK` | unchanged |
+| `mods/ca/rules/nod/vehicles.yaml` / `BGGY` | unchanged |
+| `mods/ca/rules/nod/vehicles.yaml` / `LTNK` | unchanged |
+| `mods/ca/rules/allies/vehicles.yaml` / `2TNK` | unchanged |
+| `mods/ca/rules/allies/vehicles.yaml` / `Challenger_Tank` | unchanged |
+| `mods/ca/rules/allies/vehicles.yaml` / `Leclerc_Tank` | unchanged |
+| `mods/ca/rules/allies/vehicles.yaml` / `Leopard_Tank` | unchanged |
+| `mods/ca/rules/allies/vehicles.yaml` / `ARTY` | unchanged |
+| `mods/ca/rules/allies/defaults.yaml` / `^AlliesTank` | unchanged |
+| `mods/ca/rules/world.yaml` / `^BaseWorld` | unchanged |
+| `mods/ca/weapons/smallcaliber.yaml` / `^HeavyMG` | unchanged |
+| `mods/ca/weapons/smallcaliber.yaml` / `^LightMG` | unchanged |
+| `mods/ca/weapons/smallcaliber.yaml` / `M60mg` | unchanged |
+| `mods/ca/weapons/smallcaliber.yaml` / `M60mgTD` | unchanged |
+| `mods/ca/weapons/ballistics.yaml` / `^Cannon` | unchanged |
+| `mods/ca/weapons/ballistics.yaml` / `25mm` | unchanged |
+| `mods/ca/weapons/ballistics.yaml` / `90mm` | unchanged |
+| `mods/ca/weapons/ballistics.yaml` / `120mm` | unchanged |
+| `mods/ca/weapons/ballistics.yaml` / `^Artillery` | unchanged |
+| `mods/ca/weapons/ballistics.yaml` / `155mm` | unchanged |
+| `mods/ca/weapons/weapontypes.yaml` / `^ShellPrototype` | unchanged |
+| `mods/ca/weapons/weapontypes.yaml` / `^Shell` | unchanged |
+| `mods/ca/weapons/weapontypes.yaml` / `^ShellHeavy` | unchanged |
+| `mods/ca/weapons/weapontypes.yaml` / `^ShellArtillery` | unchanged |
 | `mods/ca/rules/gdi/weapons.yaml` / `JuggernautGun` | unchanged |
 | `mods/ca/rules/gdi/weapons.yaml` / `JuggernautGun.Emp` | unchanged |
 | `mods/ca/rules/gdi/weapons.yaml` / `JuggernautDummyAim` | unchanged |
 | `mods/ca/rules/gdi/defaults.yaml` / `^GDIWalkerUpgrades` | unchanged |
 | `mods/ca/rules/soviet/vehicles.yaml` / `TTNK.RA2` | unchanged |
+| `mods/ca/rules/soviet/vehicles.yaml` / `T-34` | unchanged |
+| `mods/ca/rules/soviet/vehicles.yaml` / `Devil_Tank` | CHANGED |
+| `mods/ca/rules/soviet/vehicles.yaml` / `Heavy_Tank` | unchanged |
 | `mods/ca/rules/soviet/weapons.yaml` / `TTankZap` | unchanged |
 | `mods/ca/rules/soviet/weapons.yaml` / `TTankZapMK2` | unchanged |
+| `mods/ca/rules/soviet/weapons.yaml` / `30mm` | unchanged |
+| `mods/ca/rules/soviet/weapons.yaml` / `125mm` | unchanged |
 | `mods/ca/rules/soviet/defaults.yaml` / `^TeslaUnit` | unchanged |
 | `mods/ca/rules/defaults.yaml` / `^Vehicle` | unchanged |
 | `mods/ca/rules/defaults.yaml` / `^VehicleVision` | unchanged |
@@ -98,7 +128,7 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/defaults.yaml` / `^AttackingCargoAndPDL` | unchanged |
 | `mods/ca/weapons/other.yaml` / `AdvancedPointLaser` | unchanged |
 
-91 blocks compared; 2 changed.
+121 blocks compared; 3 changed.
 
 ## OverlordCannonNuclear
 
@@ -128,4 +158,19 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
      FireWarheadsOnDeathCA@atomictank:
          Weapon: CHAtomicTankExplode
          EmptyWeapon: CHAtomicTankExplode
+```
+## Devil_Tank
+
+```diff
+--- 7f5aeadf
++++ 9d8a9dec
+@@ -11,7 +11,7 @@
+     Buildable:
+         Queue: Vehicle
+         BuildPaletteOrder: 110
+-        Prerequisites: ~vehicles.iraq
++        Prerequisites: ~vehicles.iraq, ~!upg.devil_tank
+         Description: Light Iraqi tank.
+     TooltipExtras:
+         Strengths: • Strong vs Vehicles, Reflector Armor
 ```

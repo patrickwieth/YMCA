@@ -71,6 +71,24 @@ def calculate(catalog, design):
     for role, allowed in chassis["allowed"].items():
         if not any(key in allowed and catalog["components"][key]["role"] == role for key in ids):
             raise ValueError("Incompatible chassis " + role)
+    gear_id = design.get('running_gear', chassis.get('default_running_gear'))
+    if not gear_id or gear_id not in catalog['components']:
+        raise ValueError('Select a running gear component')
+    gear = catalog['components'][gear_id]
+    if (gear['role'] != 'running_gear' or design['faction'] not in gear['factions']
+            or gear_id not in chassis.get('allowed_running_gear', [])):
+        raise ValueError('Incompatible running gear')
+    if gear['tier'] not in range(4) or gear['cp'] < 0:
+        raise ValueError('Invalid running gear point cost')
+    for field in ('max_mass', 'max_speed', 'turn_speed'):
+        if not math.isfinite(gear[field]) or gear[field] <= 0:
+            raise ValueError('Invalid running gear limit')
+    for field in ('mass', 'cost', 'electric_kw'):
+        if not math.isfinite(gear[field]) or gear[field] < 0:
+            raise ValueError('Invalid running gear rating')
+    if gear['locomotor'] not in catalog['locomotors']:
+        raise ValueError('Unknown running gear locomotor')
+    parts.append(gear)
     carrier = by_role["carrier"]
     weapon_id = next(key for key in ids if catalog["components"][key]["role"] == "weapon")
     ammo_id = next(key for key in ids if catalog["components"][key]["role"] == "ammunition")
@@ -104,7 +122,7 @@ def calculate(catalog, design):
         parts += extra
     if len(occupied) != len(set(occupied)):
         raise ValueError('Attachment slot is already occupied')
-    all_ids = ids + (list(auxiliary.values()) if auxiliary else [])
+    all_ids = ids + [gear_id] + (list(auxiliary.values()) if auxiliary else [])
     for part in parts:
         if 'included_units' in part:
             raise ValueError('Fixed module crew is obsolete; use design crew selection')
@@ -141,14 +159,16 @@ def calculate(catalog, design):
     reserve = by_role["drive"]["mechanical_kw"] - demand / efficiency
     if reserve <= 0:
         raise ValueError("No mechanical driving reserve")
-    if mass <= 0 or mass > chassis["max_mass"]:
+    if mass <= 0 or mass > min(chassis["max_mass"], gear['max_mass']):
         raise ValueError("Invalid mass or chassis load exceeded")
     ratio = (reserve / mass) / (chassis["reference_kw"] / chassis["reference_mass"])
-    speed = min(chassis["max_speed"], chassis["reference_speed"] * ratio ** catalog["alpha"])
+    speed = min(chassis["max_speed"], gear['max_speed'], chassis["reference_speed"] * ratio ** catalog["alpha"])
     return dict(mass=mass, hp=hp, cost=cost, gross_cost=gross_cost, discount=discount,
                 manufacturing_factor=manufacturing_factor, manufactured_cost=manufactured_cost,
                 included_crew_cost=crew['cost'], crew_mass=crew['mass'], crew_count=crew['count'],
                 auxiliary=auxiliary_summary(catalog, auxiliary),
+                running_gear=gear_id, locomotor=gear['locomotor'],
+                turn_speed=min(chassis['turn_speed_limit'], gear['turn_speed']),
                 electric_kw=demand, reserve_kw=reserve,
                 speed=math.floor(speed + 0.5), armor=armor["armor_type"],
                 catalog_points=sum(p["tier"] for p in parts), cp=sum(p["cp"] for p in parts),
@@ -192,6 +212,17 @@ def report(catalog):
         target = design["target"]
         cells = " | ".join(comparison(target[k], r[k]) for k in ("cost", "hp", "speed"))
         lines.append(f"| {design['name']} | {cells} | {r['cp']} / {r['catalog_points']} / {r['tech']} | {r['gross_cost']:g} x {r['manufacturing_factor']:g} - {r['discount']:g} = {r['cost']:g} |")
+    lines += ["", "## Running gear (separate component)", "",
+              "Hull defaults are selected unless the design explicitly overrides running_gear.",
+              "No automatic tracked/wheeled conversion: compatibility and artwork must be approved first.",
+              "Turn rate is the minimum of hull and running-gear limits. Terrain profiles reuse world.yaml.", "",
+              "| Design | Gear | Engine locomotor | Body turn rate |", "|---|---|---|---:|"]
+    for design in catalog['designs']:
+        try:
+            r = calculate(catalog, design)
+        except ValueError:
+            continue  # Deliberately invalid teaching examples are reported below.
+        lines.append(f"| {design['name']} | {r['running_gear']} | {r['locomotor']} | {r['turn_speed']} |")
     lines += ["", "## Hardware cost breakdown", "",
               "Armor modifies chassis price before hardware is summed. Credits are not deducted per component.", "",
               "| Reference candidate | Hardware contributions (credits) | Total - CP credit = price |",
@@ -200,7 +231,7 @@ def report(catalog):
         if not design.get("target"):
             continue
         r = calculate(catalog, design)
-        selected = design['components'] + list(design.get('auxiliary_mount', {}).values())
+        selected = design['components'] + [r['running_gear']] + list(design.get('auxiliary_mount', {}).values())
         parts = [(key, catalog["components"][key]) for key in selected]
         armor = next(p for _, p in parts if p["role"] == "armor")
         contributions = []

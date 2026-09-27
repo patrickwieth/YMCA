@@ -12,7 +12,10 @@ Players design a faction and its vehicles in the main menu. Designs are frozen,
 validated and shared before a match. Match loading compiles these designs into
 ordinary actor/weapon rules. No runtime ruleset mutation or power simulation.
 
-Separate chassis, drive, armor, weapon carrier, weapon, ammunition and equipment.
+Separate hull/chassis, running gear (wheels/tracks/legs), drive, generator, armor,
+weapon carrier, weapon, ammunition and equipment. See
+[running-gear-and-coverage.md](running-gear-and-coverage.md) for the current
+cross-faction sweep, migration and remaining capability gaps.
 Compatibility includes mechanical interfaces AND available artwork. Components
 may be locked together without merging their conceptual responsibilities.
 Existing vehicles are reference designs, not an excuse for arbitrary per-design

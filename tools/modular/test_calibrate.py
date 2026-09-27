@@ -282,7 +282,8 @@ class CalibrationTests(unittest.TestCase):
         text = report(self.catalog)
         self.assertIn('2000 -> 2000 (+0.0%)', text)
         self.assertIn('2300 x 1 - 300 = 2000', text)
-        references, experiments = text.split('## Experimental combinations')
+        references = text.split('## Running gear')[0]
+        experiments = text.split('## Experimental combinations')[1]
         self.assertNotIn('Battlemaster PDL /', references)
         self.assertIn('Battlemaster PDL /', experiments)
         self.assertIn('Battlemaster Autoloader PDL', references)
@@ -301,9 +302,10 @@ class CalibrationTests(unittest.TestCase):
         # Exercise non-neutral percentages independently of the fitted defaults.
         self.catalog['components']['reflector'].update(mass_percent=120, hp_percent=90, cost_percent=120)
         result = calculate(self.catalog, self.design)
-        self.assertEqual(result['mass'], 11600)
+        # Armor now scales the 6500-kg hull, not its separately allocated 1500-kg tracks.
+        self.assertEqual(result['mass'], 11300)
         self.assertEqual(result['hp'], 36000)
-        self.assertEqual((result['gross_cost'], result['discount'], result['cost']), (1050, 300, 750))
+        self.assertEqual((result['gross_cost'], result['discount'], result['cost']), (1030, 300, 730))
         self.assertEqual(result['electric_kw'], 67.5)
         self.assertEqual(result['armor'], 'Reflector')
 

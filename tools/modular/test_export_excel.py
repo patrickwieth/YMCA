@@ -3,10 +3,20 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+import subprocess
+import sys
 
 
 @unittest.skipUnless(importlib.util.find_spec('openpyxl'), 'Optional Excel dependency not installed')
 class ExcelExportTests(unittest.TestCase):
+    def test_cli_roundtrip(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'cli.xlsx'
+            result = subprocess.run([sys.executable, str(Path(__file__).with_name('export_excel.py')),
+                                     '--output', str(path)], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(path.exists())
+
     def test_roundtrip_formulas_and_overwrite_protection(self):
         from openpyxl import load_workbook
         from export_excel import build
@@ -15,7 +25,14 @@ class ExcelExportTests(unittest.TestCase):
             path = Path(directory) / 'test.xlsx'
             build(catalog, path)
             book = load_workbook(path)
-            self.assertEqual(len(book.sheetnames), 10)
+            self.assertEqual(len(book.sheetnames), 12)
+            self.assertIn('FahrzeugInventar', book.sheetnames)
+            self.assertIn('Fahrprofile', book.sheetnames)
+            self.assertEqual(book['Entwuerfe']['AQ2'].value, 'wheels-light')
+            for c in ('M', 'N', 'O', 'P', 'T', 'U', 'W', 'Y'):
+                self.assertIn('AQ2', book['Entwuerfe'][f'{c}2'].value)
+            self.assertIn('VLOOKUP', book['Entwuerfe']['AR2'].value)
+            self.assertGreater(book['FahrzeugInventar'].max_row, 100)
             self.assertEqual(book['Infanterie'].max_row, 4)
             self.assertIn('VLOOKUP', book['Startbesatzung']['D2'].value)
             self.assertIn('AF2', book['Entwuerfe']['N2'].value)

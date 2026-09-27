@@ -12,6 +12,7 @@ from openpyxl.workbook.properties import CalcProperties
 from openpyxl.utils import get_column_letter as col
 
 from calibrate import calculate
+from survey_vehicles import survey
 from fit_prices import family_targets, scan, CP_CANDIDATES
 
 FIELDS = [
@@ -33,7 +34,10 @@ FIELDS = [
     ('Transportkapazitaet', 'cargo_capacity'),
     ('Ausschluesse', 'excludes'), ('Aufsatzplatz', 'attachment_slot'),
     ('Zusatztraeger erlaubt', 'auxiliary_mount'), ('Infanterie erlaubt', 'allowed_infantry'),
-    ('Mindestreichweite Zellen', 'min_range_cells'), ('Feuerverzug Ticks', 'fire_delay_ticks')]
+    ('Mindestreichweite Zellen', 'min_range_cells'), ('Feuerverzug Ticks', 'fire_delay_ticks'),
+    ('Standardfahrwerk', 'default_running_gear'), ('Fahrwerke erlaubt', 'allowed_running_gear'),
+    ('Locomotor', 'locomotor'), ('Fahrwerkstyp', 'kind'), ('Fahrwerk Wenderate', 'turn_speed'),
+    ('Rumpf Wendelimit', 'turn_speed_limit')]
 
 
 def table(ws, name):
@@ -68,6 +72,8 @@ def build(catalog, output):
         ['Bunkerpreis', 'Leeres Bunkermodul plus separat gewählte Startbesatzung. Infanteriepreise und Besatzungszeilen sind editierbar; Kosten/Masse werden einmal addiert.'],
         ['Aufsatzplatz', 'Gatling, Bunker und Lautsprecher teilen roof. Vollständige Slot-/Fraktions-/Kapazitätsprüfung weiterhin im Python-Rechner.'],
         ['Grafikentwürfe', 'Flame/Mortar Roof / draft sind nur Offline-Kalkulation. Sprites geprüft, Montage auf Overlord noch nicht. Kein Originalvergleich oder spielbarer Actor.'],
+        ['Fahrwerk', 'AQ ist ein eigener Baustein, vorbelegt mit Rumpf-Standard. Masse/Preis einmal addiert; Rumpfpanzerung skaliert das Fahrwerk nicht. Ketten/Räder nicht ohne passende Grafik tauschen.'],
+        ['Abdeckung', 'FahrzeugInventar zeigt lokale Rohblöcke aus sechs Fraktionen, KEINE aufgelösten Spielregeln. Leer = geerbt/ungeprüft; Helfer und deaktivierte Prototypen enthalten.'],
         ['Besatzung', '0 in Excel deaktiviert eine vorhandene Zeile; für neue Typen/Zeilen JSON ändern und neu exportieren. Infanteriemasse ist ein Designwert.'],
         ['Momentaufnahme', 'Python-Werte und Preisfit sind statisch. Änderungen in Excel aktualisieren nur die Formelspalten.'],
         ['Genauigkeit', 'CP/Tier sind unabhängig; 1% Abweichung kann akzeptabel sein. Preisfit ist kein Beweis des CP-Wertes.'],
@@ -126,7 +132,7 @@ def build(catalog, output):
     designs = wb.create_sheet('Entwuerfe')
     designs.append(['Design', 'Fraktion', 'Chassis', 'Motor', 'Generator', 'Panzerung', 'Traeger', 'Waffe', 'Munition',
                     'Zusatz 1', 'Zusatz 2', 'Zusatz 3', 'Katalog', 'CP', 'Tech', 'Hardware', 'CP-Abzug', 'Preis',
-                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis', 'Fertigungsmodul', 'Fertigungsfaktor', 'Hardware nach Fertigung', 'Aufsatztraeger', 'Aufsatzwaffe', 'Aufsatzmunition', 'Besatzungspreis', 'Besatzungsmasse', 'Besatzungstech', 'Aufsatz Reichweite', 'Aufsatz Mindestreichweite', 'Aufsatz Reload Ticks', 'Aufsatz Salve', 'Aufsatz Rohschaden'])
+                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis', 'Fertigungsmodul', 'Fertigungsfaktor', 'Hardware nach Fertigung', 'Aufsatztraeger', 'Aufsatzwaffe', 'Aufsatzmunition', 'Besatzungspreis', 'Besatzungsmasse', 'Besatzungstech', 'Aufsatz Reichweite', 'Aufsatz Mindestreichweite', 'Aufsatz Reload Ticks', 'Aufsatz Salve', 'Aufsatz Rohschaden', 'Fahrwerk', 'Locomotor', 'Wenderate'])
     roles = ['chassis', 'drive', 'generator', 'armor', 'carrier', 'weapon', 'ammunition']
     def lookup(cell, field):
         index = next(i for i, (_, f) in enumerate(FIELDS, 1) if f == field)
@@ -142,14 +148,16 @@ def build(catalog, output):
         designs[f'AC{rownum}'] = next((k for k in ids if catalog['components'][k]['role'] == 'manufacturing'), '')
         for c, role in [('AF', 'carrier'), ('AG', 'weapon'), ('AH', 'ammunition')]:
             designs[f'{c}{rownum}'] = design.get('auxiliary_mount', {}).get(role, '')
+        hull = catalog['components'][picks[0]]
+        designs[f'AQ{rownum}'] = design.get('running_gear', hull['default_running_gear'])
         r = rownum
         def v(c, field):
             return lookup(f'{c}{r}', field)
         def total(field, letters='CDEFGHIJKL'):
-            return '+'.join(v(c, field) for c in list(letters) + ['AC', 'AF', 'AG', 'AH'])
+            return '+'.join(v(c, field) for c in list(letters) + ['AC', 'AF', 'AG', 'AH', 'AQ'])
         formulas = {
             'M': total('tier'), 'N': total('cp'),
-            'O': 'MAX(' + ','.join(v(c, 'tech') for c in list('CDEFGHIJKL') + ['AC', 'AF', 'AG', 'AH']) + f',AK{r})',
+            'O': 'MAX(' + ','.join(v(c, 'tech') for c in list('CDEFGHIJKL') + ['AC', 'AF', 'AG', 'AH', 'AQ']) + f',AK{r})',
             'P': f"{v('C','cost')}*{v('F','cost_percent')}/100+" + total('cost', 'DEGHIJKL') + f'+AI{r}',
             'Q': f'N{r}*Parameter!$B$2', 'R': f'AE{r}-Q{r}',
             'AD': f'IF(AC{r}="",1,' + v('AC','hardware_percent') + '/100)',
@@ -164,13 +172,15 @@ def build(catalog, output):
             'AN': f'IF(AF{r}="","",' + v('AF', 'reload_ticks') + ')',
             'AO': f'IF(AF{r}="","",' + v('AF', 'burst') + ')',
             'AP': f'IF(AF{r}="","",' + v('AH', 'damage') + ')',
+            'AR': v('AQ', 'locomotor'),
+            'AS': 'MIN(' + v('AQ', 'turn_speed') + ',' + v('C', 'turn_speed_limit') + ')',
             'U': total('electric_kw'),
             'V': f"{v('D','mechanical_kw')}-U{r}/{v('E','efficiency')}",
-            'W': f'IF(Y{r}<>"OK","",ROUND(MIN(' + v('C','max_speed') + ',' + v('C','reference_speed') +
+            'W': f'IF(Y{r}<>"OK","",ROUND(MIN(' + v('C','max_speed') + ',' + v('AQ','max_speed') + ',' + v('C','reference_speed') +
                  f'*(V{r}/T{r}/(' + v('C','reference_kw') + '/' + v('C','reference_mass') + '))^Parameter!$B$3),0))',
             'X': v('F','armor_type'),
             'Y': f'IFERROR(IF(OR(AD{r}<=0,AD{r}>1,R{r}<=0,T{r}<=0,V{r}<=0,U{r}>' + v('E','max_electric_kw') +
-                 f',T{r}>' + v('C','max_mass') + ',' + v('E','efficiency') + '<=0,' + v('E','efficiency') +
+                 f',T{r}>MIN(' + v('C','max_mass') + ',' + v('AQ','max_mass') + '),' + v('E','efficiency') + '<=0,' + v('E','efficiency') +
                  '>1),"UNGUELTIG","OK"),"FEHLER")',
         }
         for c, formula in formulas.items():
@@ -187,7 +197,22 @@ def build(catalog, output):
     dv.add(f'C2:L{designs.max_row}')
     dv.add(f'AC2:AC{designs.max_row}')
     dv.add(f'AF2:AH{designs.max_row}')
+    dv.add(f'AQ2:AQ{designs.max_row}')
     table(designs, 'Designs')
+
+    movement = wb.create_sheet('Fahrprofile')
+    terrains = ['Clear', 'Rough', 'Road', 'Bridge', 'Ford', 'Ore', 'Gems', 'Tiberium', 'BlueTiberium', 'Beach']
+    movement.append(['Locomotor', 'Quelle', 'Ueberfahren'] + terrains)
+    for name, profile in catalog['locomotors'].items():
+        movement.append([name, profile['source'], ', '.join(profile['crushes'])] + [profile['terrain_speeds'].get(t) for t in terrains])
+    table(movement, 'MovementProfiles')
+
+    inventory = wb.create_sheet('FahrzeugInventar')
+    inventory.append(['Fraktion', 'Actor', 'Name lokal', 'Preis lokal', 'HP lokal', 'Tempo lokal', 'Locomotor lokal', 'Buildable lokal', 'Voraussetzungen lokal', 'Erbt von', 'Waffen lokal', 'Pruefhinweise', 'Status', 'Entwuerfe', 'Quelle'])
+    for item in survey(Path(__file__).resolve().parents[2], catalog):
+        inventory.append([', '.join(item[k]) if isinstance(item[k], list) else item[k] for k in
+            ('faction', 'actor', 'name', 'cost', 'hp', 'speed', 'locomotor', 'buildable', 'prerequisites', 'inherits', 'weapons', 'hints', 'status', 'designs', 'source')])
+    table(inventory, 'VehicleInventory')
 
     compare = wb.create_sheet('AltNeu')
     compare.append(['Design', 'Preis alt', 'Hardware nach Fertigung', 'CP-Abzug', 'Preis neu', 'Differenz', 'Differenz %',
@@ -241,11 +266,12 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-mortar-drafts.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-running-gear.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
-    build(data, args.output)
+    expected = build(data, args.output)
     # Round-trip integrity check; openpyxl cannot evaluate Excel formulas.
     book = load_workbook(args.output)
-    assert len(book.sheetnames) == 10
+    assert book.sheetnames == expected.sheetnames
+    book.close()
     print(args.output.resolve())
