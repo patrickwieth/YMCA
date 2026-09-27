@@ -12,7 +12,7 @@ from openpyxl.workbook.properties import CalcProperties
 from openpyxl.utils import get_column_letter as col
 
 from calibrate import calculate
-from survey_vehicles import survey
+from survey_vehicles import survey, family_summary
 from fit_prices import family_targets, scan, CP_CANDIDATES
 
 FIELDS = [
@@ -73,7 +73,7 @@ def build(catalog, output):
         ['Aufsatzplatz', 'Gatling, Bunker und Lautsprecher teilen roof. Vollständige Slot-/Fraktions-/Kapazitätsprüfung weiterhin im Python-Rechner.'],
         ['Grafikentwürfe', 'Flame/Mortar Roof / draft sind nur Offline-Kalkulation. Sprites geprüft, Montage auf Overlord noch nicht. Kein Originalvergleich oder spielbarer Actor.'],
         ['Fahrwerk', 'AQ ist ein eigener Baustein, vorbelegt mit Rumpf-Standard. Masse/Preis einmal addiert; Rumpfpanzerung skaliert das Fahrwerk nicht. Ketten/Räder nicht ohne passende Grafik tauschen.'],
-        ['Abdeckung', 'FahrzeugInventar zeigt lokale Rohblöcke aus sechs Fraktionen, KEINE aufgelösten Spielregeln. Leer = geerbt/ungeprüft; Helfer und deaktivierte Prototypen enthalten.'],
+        ['Abdeckung', 'FahrzeugFamilien ist die Hauptübersicht. FahrzeugInventar bleibt Rohdaten-Anhang mit getrennten Kategorien. Familien sind Arbeitsgruppen, keine verifizierte Baubarkeit. Leer = geerbt/ungeprüft.'],
         ['Besatzung', '0 in Excel deaktiviert eine vorhandene Zeile; für neue Typen/Zeilen JSON ändern und neu exportieren. Infanteriemasse ist ein Designwert.'],
         ['Momentaufnahme', 'Python-Werte und Preisfit sind statisch. Änderungen in Excel aktualisieren nur die Formelspalten.'],
         ['Genauigkeit', 'CP/Tier sind unabhängig; 1% Abweichung kann akzeptabel sein. Preisfit ist kein Beweis des CP-Wertes.'],
@@ -207,11 +207,23 @@ def build(catalog, output):
         movement.append([name, profile['source'], ', '.join(profile['crushes'])] + [profile['terrain_speeds'].get(t) for t in terrains])
     table(movement, 'MovementProfiles')
 
+    inventory_rows = survey(Path(__file__).resolve().parents[2], catalog)
+    families = wb.create_sheet('FahrzeugFamilien')
+    families.append(['Fraktion', 'Familie', 'Name', 'Status', 'Rohakteure', 'Skalarreferenzen',
+                     'Referenzakteure', 'Noch ohne Entwurf', 'Varianten', 'Nicht direkt produziert / Prototypen',
+                     'Zu pruefende Faehigkeiten', 'Gruppierungshinweis', 'Basispreis lokal', 'Basis HP lokal', 'Basistempo lokal'])
+    for family in family_summary(inventory_rows):
+        families.append([family['faction'], family['family'], family['name'], family['status'],
+                         len(family['members']), len(family['covered'])] +
+                        [', '.join(family[k]) for k in ('covered', 'pending', 'variants', 'excluded', 'hints', 'notes')] +
+                        [family[k] for k in ('cost', 'hp', 'speed')])
+    table(families, 'VehicleFamilies')
+
     inventory = wb.create_sheet('FahrzeugInventar')
-    inventory.append(['Fraktion', 'Actor', 'Name lokal', 'Preis lokal', 'HP lokal', 'Tempo lokal', 'Locomotor lokal', 'Buildable lokal', 'Voraussetzungen lokal', 'Erbt von', 'Waffen lokal', 'Pruefhinweise', 'Status', 'Entwuerfe', 'Quelle'])
-    for item in survey(Path(__file__).resolve().parents[2], catalog):
+    inventory.append(['Fraktion', 'Actor', 'Name lokal', 'Preis lokal', 'HP lokal', 'Tempo lokal', 'Locomotor lokal', 'Buildable lokal', 'Voraussetzungen lokal', 'Erbt von', 'Waffen lokal', 'Pruefhinweise', 'Status', 'Entwuerfe', 'Quelle', 'Kategorie', 'Familie', 'Gruppierungsbasis', 'Gruppierungshinweis'])
+    for item in inventory_rows:
         inventory.append([', '.join(item[k]) if isinstance(item[k], list) else item[k] for k in
-            ('faction', 'actor', 'name', 'cost', 'hp', 'speed', 'locomotor', 'buildable', 'prerequisites', 'inherits', 'weapons', 'hints', 'status', 'designs', 'source')])
+            ('faction', 'actor', 'name', 'cost', 'hp', 'speed', 'locomotor', 'buildable', 'prerequisites', 'inherits', 'weapons', 'hints', 'status', 'designs', 'source', 'category', 'family', 'classification', 'family_note')])
     table(inventory, 'VehicleInventory')
 
     compare = wb.create_sheet('AltNeu')
@@ -266,7 +278,7 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-running-gear.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-families.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     expected = build(data, args.output)

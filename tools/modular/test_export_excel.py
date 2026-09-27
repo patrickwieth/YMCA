@@ -25,7 +25,11 @@ class ExcelExportTests(unittest.TestCase):
             path = Path(directory) / 'test.xlsx'
             build(catalog, path)
             book = load_workbook(path)
-            self.assertEqual(len(book.sheetnames), 12)
+            self.assertEqual(len(book.sheetnames), 13)
+            self.assertIn('FahrzeugFamilien', book.sheetnames)
+            jeep = next(row for row in book['FahrzeugFamilien'].iter_rows(min_row=2) if row[1].value == 'JEEP')
+            self.assertIn('AA_Jeep', jeep[8].value)
+            self.assertNotIn('V3', [row[1].value for row in book['FahrzeugFamilien'].iter_rows(min_row=2)])
             self.assertIn('FahrzeugInventar', book.sheetnames)
             self.assertIn('Fahrprofile', book.sheetnames)
             self.assertEqual(book['Entwuerfe']['AQ2'].value, 'wheels-light')

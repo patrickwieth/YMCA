@@ -100,6 +100,31 @@ single versus twin carriers. Sound/recoil/muzzle differences still need explicit
 legacy bindings; scalar reuse is not permission to overwrite a complete weapon
 with a damage-only definition. ARTY has fixed frontal artwork and Light armor.
 
+## Family grouping supersedes raw actor counts
+
+Use the new `vehicle-calibration-families.xlsx` / `FahrzeugFamilien` sheet.
+The editorial grouping currently yields **108 provisional production-candidate
+families**, plus **one prototype-only/availability-review family**. The original
+388 raw blocks include upgrades, projectiles, wrecks and other helpers; that was
+never a count of distinct vehicles. **15 families** have at least one scalar
+reference design; neither all their variants nor runtime behavior are complete.
+
+`vehicle-family-policy.json` records explicit anchors and aliases. Grouping does
+not follow every inheritance link: Nona is not merely a BTR transport variant,
+Heavy Tesla remains separate from light Tesla, while national Allied Medium Tank
+skins and named Ranger upgrades belong together. Helpers are classified by local
+ancestry plus reviewed exceptions; unknown cases stay visible for review.
+
+A disabled base does not remove its active descendants: BATF and 2TNK are useful
+family anchors. Non-production transformed/spawned forms are kept distinct from
+locally `~disabled` prototypes. Raw appendix categories account for every actor
+exactly once. Family member lists expose which specific actors have designs and
+which do not; no family-wide gameplay completion claim is made.
+
+The source-file faction is not a resolved ownership list. A local Buildable is
+only evidence of a production candidate, not proof all prerequisites are
+satisfiable. The original raw inventory remains available for source auditing.
+
 ## Sweep over six factions
 
 `tools/modular/survey_vehicles.py` visits ALL roots of the China, GDI, Nod, Allies,

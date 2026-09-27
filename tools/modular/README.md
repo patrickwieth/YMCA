@@ -1,5 +1,39 @@
 # Offline vehicle calibration prototype
 
+## Latest: families instead of raw actor counts
+
+Open **`vehicle-calibration-families.xlsx`** (13 sheets), starting with
+**`FahrzeugFamilien`**, not the raw `FahrzeugInventar` appendix.
+
+The current working grouping contains **108 provisional vehicle families** with
+at least one local production declaration, plus **one prototype-only/review
+family** (SFTNK). This is not engine-validated availability. The 388 raw blocks are
+still available for auditing, but are no longer presented as a vehicle count.
+
+**15 families** contain at least one scalar reference design. That does NOT mean
+all variants, special abilities or artwork in those families have been modeled.
+Individual covered/unmodeled actor IDs are shown. The 60 design examples remain
+unchanged, including experimental combinations without legacy equivalents.
+
+`vehicle-family-policy.json` records editorial grouping exceptions. Named Ranger
+variants and national Medium Tank variants are grouped; the Heavy Tesla remains
+separate from the light Tesla. Nona/BTR and Howitzer/Specter are not automatically
+merged just because their rules share inheritance. Longest dotted anchors handle
+ordinary upgrade branches. Unknown ambiguous roots are flagged for review.
+
+The raw appendix separates 7 wrecks, 9 projectile actors, 1 attached helper,
+1 unresolved actor, 4 locally disabled prototypes and 8 non-production forms.
+A removed Buildable trait is NOT proof that a spawned/transform form is obsolete.
+Disabled BATF/2TNK parents do not hide their relevant production variants.
+
+Family base prices/HP/speed are local anchor values only; blanks mean unresolved,
+not zero. Faction names identify source files, not resolved production allowlists.
+The checked-in policy and reports are investigation tools, not a new rules loader.
+
+Hover hardware and stationary Carryall platforms remain the next design task;
+this change only clarifies vehicle coverage and does not implement either.
+
+
 ## Latest: running gear and cross-faction vehicle sweep
 
 Open **`vehicle-calibration-running-gear.xlsx`** (12 sheets). Added explicit
