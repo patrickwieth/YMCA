@@ -29,7 +29,10 @@ FIELDS = [
     ('Quelle', 'source'), ('Kompatibilitaet', 'allowed'), ('Ausrüstung erlaubt', 'equipment'),
     ('Waffen erlaubt', 'weapons'), ('Munition erlaubt', 'ammunition'),
     ('Anzeigename', 'display_name'), ('Hardware Fertigung %', 'hardware_percent'),
-    ('Munition Reichweite Override', 'range_override_cells')]
+    ('Munition Reichweite Override', 'range_override_cells'),
+    ('Leerpreis Modul', 'empty_cost'), ('Leermasse Modul', 'empty_mass'),
+    ('Transportkapazitaet', 'cargo_capacity'), ('Enthaltene Einheiten', 'included_units'),
+    ('Ausschluesse', 'excludes')]
 
 
 def table(ws, name):
@@ -60,7 +63,8 @@ def build(catalog, output):
         ['Arbeitsfluss', 'catalog.json ist Quelle. export_excel.py erzeugt eine neue Momentaufnahme, kein Excel-Import.'],
         ['Schutz', 'Exporter überschreibt keine bestehende Arbeitsmappe; für neue Daten neuen Dateinamen verwenden.'],
         ['Erweiterung', 'Neue Bausteine/Designs in JSON eintragen und neu exportieren. Manuelles Zeilenanfügen wird nicht automatisch verdrahtet.'],
-        ['Validierung', 'Excel prüft nur elektrische/physische Grenzen; Rolle, Fraktion und Montage weiterhin im Python-Rechner prüfen.'],
+        ['Validierung', 'Excel prüft nur elektrische/physische Grenzen; Rolle, Fraktion, Montage und Besatzungskosten-Konsistenz im Python-Rechner prüfen.'],
+        ['Bunkerpreis', 'Modulpreis/Masse enthalten bereits die mitgelieferten Einheiten. Leerpreis und Besatzungsdaten sind separat sichtbar; nicht nochmals addieren.'],
         ['Momentaufnahme', 'Python-Werte und Preisfit sind statisch. Änderungen in Excel aktualisieren nur die Formelspalten.'],
         ['Genauigkeit', 'CP/Tier sind unabhängig; 1% Abweichung kann akzeptabel sein. Preisfit ist kein Beweis des CP-Wertes.'],
         ['Branches', 'Game modular: tournament-bot integriert in 9d8a9dec; master nicht zusätzlich gemergt.'],
@@ -197,7 +201,7 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-heavy-designs.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-bunker.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     build(data, args.output)

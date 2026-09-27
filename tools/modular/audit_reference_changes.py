@@ -11,7 +11,9 @@ SOURCES = {
         'chbattle.Mass_Production.Reflector', 'chdragon', 'chdragon.PDL', 'chdragon.Reflector',
         'chgtnk', 'chgtnk.PDL', 'chgtnk.Reflector', 'choverlord', 'choverlord.Nuke_Shells',
         'choverlord.Nuke_Shells.PDL', 'choverlord.Nuke_Shells.Reflector', 'choverlord.Propaganda',
-        'choverlord.Propaganda.PDL', 'choverlord.Propaganda.Reflector'],
+        'choverlord.Propaganda.PDL', 'choverlord.Propaganda.Reflector',
+        'choverlord.Bunker', 'choverlord.Bunker.PDL', 'choverlord.Bunker.Reflector'],
+    'mods/ca/rules/china/infantry.yaml': ['CHE3'],
     'mods/ca/rules/china/weapons.yaml': ['CHBattlemasterCannon', 'CHBattlemasterCannon.Autoloader',
         'CHBattlemasterCannon.Nuclear_Shells', 'CHAtomicTankExplode', 'CHDragonFlamer',
         'CHDragonFlamer.Black_Napalm', 'CHDragonFirestorm', 'CHDragonFirestorm2',
@@ -31,7 +33,7 @@ SOURCES = {
     'mods/ca/rules/soviet/weapons.yaml': ['TTankZap', 'TTankZapMK2'],
     'mods/ca/rules/soviet/defaults.yaml': ['^TeslaUnit'],
     'mods/ca/rules/defaults.yaml': ['^Vehicle', '^VehicleVision', '^Tank', '^FightingTank',
-        '^FightingTankTurreted', '^PointLaserDefenseSystem', '^ReflectorArmor', '^HeavyArmor', '^BigVehicle'],
+        '^FightingTankTurreted', '^PointLaserDefenseSystem', '^ReflectorArmor', '^HeavyArmor', '^BigVehicle', '^AttackingCargoAndTurret', '^AttackingCargoAndPDL'],
     'mods/ca/weapons/other.yaml': ['AdvancedPointLaser'],
 }
 

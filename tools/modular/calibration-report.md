@@ -11,6 +11,9 @@ Global credit value per CP: 300 (experimental).
 
 | Reference / configured candidate | Credits old -> new | HP old -> new | Speed old -> new | New CP / catalog / tech | Hardware x manufacturing - CP = price |
 |---|---|---|---|---|---|
+| Overlord Bunker | 3000 -> 3000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 1 / 5 / 3 | 3300 x 1 - 300 = 3000 |
+| Overlord Bunker PDL | 3600 -> 3650 (+1.4%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 4250 x 1 - 600 = 3650 |
+| Overlord Bunker Reflector | 3000 -> 3000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 3600 x 1 - 600 = 3000 |
 | Overlord baseline | 2000 -> 2000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 0 / 4 / 2 | 2000 x 1 - 0 = 2000 |
 | Overlord Nuclear Shells | 2500 -> 2500 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 1 / 5 / 3 | 2800 x 1 - 300 = 2500 |
 | Overlord Nuclear Shells PDL | 3000 -> 3150 (+5.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 2 / 8 / 3 | 3750 x 1 - 600 = 3150 |
@@ -46,6 +49,9 @@ Armor modifies chassis price before hardware is summed. Credits are not deducted
 
 | Reference candidate | Hardware contributions (credits) | Total - CP credit = price |
 |---|---|---|
+| Overlord Bunker | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 1300 | 3300 x 1 - 1 x 300 = 3000 |
+| Overlord Bunker PDL | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 1300; pdl: 650 | 4250 x 1 - 2 x 300 = 3650 |
+| Overlord Bunker Reflector | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 1300 | 3600 x 1 - 2 x 300 = 3000 |
 | Overlord baseline | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150 | 2000 x 1 - 0 x 300 = 2000 |
 | Overlord Nuclear Shells | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950 | 2800 x 1 - 1 x 300 = 2500 |
 | Overlord Nuclear Shells PDL | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950; pdl: 650 | 3750 x 1 - 2 x 300 = 3150 |
@@ -74,6 +80,15 @@ Armor modifies chassis price before hardware is summed. Credits are not deducted
 | Juggernaut EMP / baseline | juggernaut: 1100; diesel: 100; baseline-generator: 0; fixed-triple: 300; artillery: 300; emp-shell: 300 | 2100 x 1 - 1 x 300 = 1800 |
 | Juggernaut EMP / efficient | juggernaut: 1100; diesel: 100; efficient-generator: 200; fixed-triple: 300; artillery: 300; emp-shell: 300 | 2300 x 1 - 1 x 300 = 2000 |
 | Heavy Tesla Tank baseline | heavy-tesla: 600; diesel: 100; baseline-generator: 0; twin-coil: 200; tesla: 350; discharge: 100 | 1350 x 1 - 0 x 300 = 1350 |
+
+## Included cargo cost breakdown
+
+Crew is already included in gross module cost/mass; never add it to the vehicle a second time.
+Manufacturing currently scales loaded package cost too; treatment of personnel in future manufacturing designs is provisional.
+
+| Module | Empty cost | Included units | Crew cost | Loaded module cost |
+|---|---:|---|---:|---:|
+| firing-bunker | 100 | 4 x che3 @ 300 | 1200 | 1300 |
 
 ## Audited Battlemaster variant fields (old -> configured)
 
@@ -104,6 +119,7 @@ Single-shot interval 0 denotes not applicable, not an audited engine default.
 | Gatling Tank | +600 / +650 | +0 / +0 |
 | Overlord Nuclear Shells | +500 / +650 | +0 / +0 |
 | Overlord Propaganda | +600 / +650 | +0 / +0 |
+| Overlord Bunker | +600 / +650 | +0 / +0 |
 
 Manufacturing scales hardware increments, never the global CP deduction.
 One shared manufacturing factor still leaves visible residuals against legacy prices.

@@ -1,5 +1,48 @@
 # Offline vehicle calibration prototype
 
+## Latest: Bunker Overlord and included infantry
+
+Latest workbook: **`vehicle-calibration-bunker.xlsx`**. Older names below are
+preserved historical snapshots. Three configured bunker references are added:
+
+| Variant | Legacy / configured price | Legacy / configured speed |
+|---|---|---|
+| Bunker | 3000 / 3000 | 56 / 55 |
+| Bunker + PDL | 3600 / 3650 | 56 / 55 |
+| Bunker + Reflector | 3000 / 3000 | 56 / 55 |
+
+All retain 95000 base HP; defense designs cost 2 CP total, base bunker 1 CP.
+This uses the same heavy engines, generators, armor and PDL as the other heavy
+references, with no new price correction. Bunker costs 1300 gross: **100 empty
+hardware + four Tank Hunters at 300 each**. Then the shared 300-credit CP deduction
+makes the complete vehicle cost 3000. CHE3's 300-credit standalone price is sourced;
+the 100-credit empty-module price is an inferred trial, not an independently
+established market value. Do not conclude a large physical bunker inherently
+costs only 100 credits.
+
+Module mass 1000 kg includes a proposed empty mass of 600 plus four 100 kg
+passenger packages. Load 5 kWe and these masses remain experimental. Passenger
+transport weight is 1 per infantry (engine default), fitting capacity 4. No new
+runtime passenger mass behavior is introduced: this is a fixed initial design
+loadout for the offline calculator.
+
+Gross module cost/mass already include infantry. `included_units`, `empty_cost`
+and `empty_mass` expose that breakdown and Python validates it to prevent double
+counting. Editing troop price/count requires updating gross module totals too;
+Excel records the breakdown but does not validate its consistency. Manufacturing
+currently scales the whole loaded package; no manufacturing bunker reference is
+added and personnel pricing under manufacturing is still provisional.
+
+A physical cargo slot does not cost another main turret slot. The loaded bunker
+is equipment, with references to `^AttackingCargoAndTurret` and, when PDL is
+selected, `^AttackingCargoAndPDL`. Existing traits handle mounted passenger fire.
+No new attack implementation is written. Source turretbunker geometry must be
+bound during compilation. Bunker and speaker are provisionally mutually exclusive
+because there is no verified combined visual; this is not a new gameplay nerf.
+The new calculator validation does not prove runtime trait composition, pathing,
+loading/unloading or artwork alignment. Gatling's second carrier is still next.
+
+
 ## Latest: configured heavy vehicles
 
 Open **`vehicle-calibration-heavy-designs.xlsx`**. It contains seven new configured

@@ -43,6 +43,21 @@ def calculate(catalog, design):
     if any(key not in chassis["equipment"] for key in equipment):
         raise ValueError("Incompatible equipment")
     for part in parts:
+        if "included_units" in part:
+            loadout = part["included_units"]
+            if any(not math.isfinite(part[k]) or part[k] < 0 for k in ('empty_cost', 'empty_mass', 'cargo_capacity')):
+                raise ValueError("Invalid empty module values or capacity")
+            for unit in loadout:
+                if not isinstance(unit['count'], int) or unit['count'] < 0:
+                    raise ValueError("Included unit count must be a nonnegative integer")
+                if any(not math.isfinite(unit[k]) or unit[k] < 0 for k in ('unit_cost', 'unit_mass', 'transport_weight')):
+                    raise ValueError("Invalid included unit cost, mass or weight")
+            if sum(u['count'] * u['transport_weight'] for u in loadout) > part['cargo_capacity']:
+                raise ValueError("Included units exceed cargo capacity")
+            for total, empty, field in [('cost', 'empty_cost', 'unit_cost'), ('mass', 'empty_mass', 'unit_mass')]:
+                expected = part[empty] + sum(u['count'] * u[field] for u in loadout)
+                if not math.isclose(part[total], expected, rel_tol=0, abs_tol=1e-8):
+                    raise ValueError("Loaded module " + total + " must include crew exactly once")
         if any(key in ids for key in part.get("excludes", [])):
             raise ValueError("Mutually exclusive components")
     armor = by_role["armor"]
@@ -81,6 +96,7 @@ def calculate(catalog, design):
     speed = min(chassis["max_speed"], chassis["reference_speed"] * ratio ** catalog["alpha"])
     return dict(mass=mass, hp=hp, cost=cost, gross_cost=gross_cost, discount=discount,
                 manufacturing_factor=manufacturing_factor, manufactured_cost=manufactured_cost,
+                included_crew_cost=sum(u['count'] * u['unit_cost'] for p in parts for u in p.get('included_units', [])),
                 electric_kw=demand, reserve_kw=reserve,
                 speed=math.floor(speed + 0.5), armor=armor["armor_type"],
                 catalog_points=sum(p["tier"] for p in parts), cp=sum(p["cp"] for p in parts),
@@ -141,6 +157,16 @@ def report(catalog):
             cost = p["cost"] * armor["cost_percent"] / 100 if p["role"] == "chassis" else p["cost"]
             contributions.append(f"{key}: {cost:g}")
         lines.append(f"| {design['name']} | {'; '.join(contributions)} | {r['gross_cost']:g} x {r['manufacturing_factor']:g} - {r['cp']} x {catalog['credits_per_cp']:g} = {r['cost']:g} |")
+    lines += ["", "## Included cargo cost breakdown", "",
+              "Crew is already included in gross module cost/mass; never add it to the vehicle a second time.",
+              "Manufacturing currently scales loaded package cost too; treatment of personnel in future manufacturing designs is provisional.", "",
+              "| Module | Empty cost | Included units | Crew cost | Loaded module cost |",
+              "|---|---:|---|---:|---:|"]
+    for key, part in catalog['components'].items():
+        if 'included_units' in part:
+            units = ', '.join(f"{u['count']} x {u['actor']} @ {u['unit_cost']}" for u in part['included_units'])
+            crew = sum(u['count'] * u['unit_cost'] for u in part['included_units'])
+            lines.append(f"| {key} | {part['empty_cost']} | {units} | {crew} | {part['cost']} |")
     lines += ["", "## Audited Battlemaster variant fields (old -> configured)", "",
               "Rule-data comparison only, not engine firing/armor simulation. Damage is the raw warhead value.",
               "Tech 1 means no explicit tier2/tier3 requirement, not waived factory prerequisites.",
@@ -159,7 +185,7 @@ def report(catalog):
               "| Family | PDL increment old / new | Reflector increment old / new |",
               "|---|---|---|"]
     indexed = {d["name"]: d for d in catalog["designs"]}
-    for family in ("Battlemaster Autoloader", "Battlemaster Nuclear Shells", "Battlemaster Mass Production", "Dragon Tank", "Gatling Tank", "Overlord Nuclear Shells", "Overlord Propaganda"):
+    for family in ("Battlemaster Autoloader", "Battlemaster Nuclear Shells", "Battlemaster Mass Production", "Dragon Tank", "Gatling Tank", "Overlord Nuclear Shells", "Overlord Propaganda", "Overlord Bunker"):
         base = indexed[family]
         base_cost = calculate(catalog, base)["cost"]
         cells = []

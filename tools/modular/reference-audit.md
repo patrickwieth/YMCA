@@ -29,6 +29,10 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/china/vehicles.yaml` / `choverlord.Propaganda` | unchanged |
 | `mods/ca/rules/china/vehicles.yaml` / `choverlord.Propaganda.PDL` | unchanged |
 | `mods/ca/rules/china/vehicles.yaml` / `choverlord.Propaganda.Reflector` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Bunker` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Bunker.PDL` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Bunker.Reflector` | unchanged |
+| `mods/ca/rules/china/infantry.yaml` / `CHE3` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon.Autoloader` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon.Nuclear_Shells` | unchanged |
@@ -84,9 +88,11 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/defaults.yaml` / `^ReflectorArmor` | unchanged |
 | `mods/ca/rules/defaults.yaml` / `^HeavyArmor` | unchanged |
 | `mods/ca/rules/defaults.yaml` / `^BigVehicle` | unchanged |
+| `mods/ca/rules/defaults.yaml` / `^AttackingCargoAndTurret` | unchanged |
+| `mods/ca/rules/defaults.yaml` / `^AttackingCargoAndPDL` | unchanged |
 | `mods/ca/weapons/other.yaml` / `AdvancedPointLaser` | unchanged |
 
-79 blocks compared; 2 changed.
+85 blocks compared; 2 changed.
 
 ## OverlordCannonNuclear
 

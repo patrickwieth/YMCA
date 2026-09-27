@@ -25,6 +25,31 @@ class CalibrationTests(unittest.TestCase):
             for key, target in design['target'].items():
                 self.assertEqual(result[key], target, (name, key))
 
+    def test_bunker_includes_crew_once(self):
+        for suffix, cost, cp in [('', 3000, 1), (' PDL', 3650, 2), (' Reflector', 3000, 2)]:
+            result = calculate(self.catalog, self.named('Overlord Bunker' + suffix))
+            self.assertEqual((result['cost'], result['cp'], result['speed']), (cost, cp, 55))
+            self.assertEqual(result['included_crew_cost'], 1200)
+            self.assertEqual(result['hp'], 95000)
+        self.assertIn('4 x che3 @ 300', report(self.catalog))
+
+    def test_bunker_loadout_validation(self):
+        d = self.named('Overlord Bunker')
+        for field, value in [('cost', 100), ('mass', 600), ('cargo_capacity', 3)]:
+            c = copy.deepcopy(self.catalog)
+            c['components']['firing-bunker'][field] = value
+            with self.assertRaises(ValueError):
+                calculate(c, d)
+        for count in (-1, 1.5):
+            c = copy.deepcopy(self.catalog)
+            c['components']['firing-bunker']['included_units'][0]['count'] = count
+            with self.assertRaises(ValueError):
+                calculate(c, d)
+        d = copy.deepcopy(d)
+        d['components'].append('propaganda-speaker')
+        with self.assertRaisesRegex(ValueError, 'Mutually exclusive'):
+            calculate(self.catalog, d)
+
     def test_overlord_reference_residuals(self):
         expected = {
             'Overlord baseline': (2000, 56, 0),
