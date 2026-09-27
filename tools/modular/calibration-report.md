@@ -11,6 +11,9 @@ Global credit value per CP: 300 (experimental).
 
 | Reference / configured candidate | Credits old -> new | HP old -> new | Speed old -> new | New CP / catalog / tech | Hardware x manufacturing - CP = price |
 |---|---|---|---|---|---|
+| Overlord Gatling | 2000 -> 2000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 54 (-3.6%) | 1 / 5 / 3 | 2300 x 1 - 300 = 2000 |
+| Overlord Gatling PDL | 2800 -> 2650 (-5.4%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 3250 x 1 - 600 = 2650 |
+| Overlord Gatling Reflector | 2000 -> 2000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 2600 x 1 - 600 = 2000 |
 | Overlord Bunker | 3000 -> 3000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 1 / 5 / 3 | 3300 x 1 - 300 = 3000 |
 | Overlord Bunker PDL | 3600 -> 3650 (+1.4%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 4250 x 1 - 600 = 3650 |
 | Overlord Bunker Reflector | 3000 -> 3000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 3600 x 1 - 600 = 3000 |
@@ -49,9 +52,12 @@ Armor modifies chassis price before hardware is summed. Credits are not deducted
 
 | Reference candidate | Hardware contributions (credits) | Total - CP credit = price |
 |---|---|---|
-| Overlord Bunker | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 1300 | 3300 x 1 - 1 x 300 = 3000 |
-| Overlord Bunker PDL | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 1300; pdl: 650 | 4250 x 1 - 2 x 300 = 3650 |
-| Overlord Bunker Reflector | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 1300 | 3600 x 1 - 2 x 300 = 3000 |
+| Overlord Gatling | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; gatling-roof-carrier: 50; gatling-gun: 150; gatling-rounds: 100 | 2300 x 1 - 1 x 300 = 2000 |
+| Overlord Gatling PDL | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; pdl: 650; gatling-roof-carrier: 50; gatling-gun: 150; gatling-rounds: 100 | 3250 x 1 - 2 x 300 = 2650 |
+| Overlord Gatling Reflector | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; gatling-roof-carrier: 50; gatling-gun: 150; gatling-rounds: 100 | 2600 x 1 - 2 x 300 = 2000 |
+| Overlord Bunker | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 100; start crew: 1200 | 3300 x 1 - 1 x 300 = 3000 |
+| Overlord Bunker PDL | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 100; pdl: 650; start crew: 1200 | 4250 x 1 - 2 x 300 = 3650 |
+| Overlord Bunker Reflector | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 100; start crew: 1200 | 3600 x 1 - 2 x 300 = 3000 |
 | Overlord baseline | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150 | 2000 x 1 - 0 x 300 = 2000 |
 | Overlord Nuclear Shells | overlord-chassis: 1000; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950 | 2800 x 1 - 1 x 300 = 2500 |
 | Overlord Nuclear Shells PDL | overlord-chassis: 1000; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950; pdl: 650 | 3750 x 1 - 2 x 300 = 3150 |
@@ -81,14 +87,19 @@ Armor modifies chassis price before hardware is summed. Credits are not deducted
 | Juggernaut EMP / efficient | juggernaut: 1100; diesel: 100; efficient-generator: 200; fixed-triple: 300; artillery: 300; emp-shell: 300 | 2300 x 1 - 1 x 300 = 2000 |
 | Heavy Tesla Tank baseline | heavy-tesla: 600; diesel: 100; baseline-generator: 0; twin-coil: 200; tesla: 350; discharge: 100 | 1350 x 1 - 0 x 300 = 1350 |
 
-## Included cargo cost breakdown
+## Selectable starting crew
 
-Crew is already included in gross module cost/mass; never add it to the vehicle a second time.
-Manufacturing currently scales loaded package cost too; treatment of personnel in future manufacturing designs is provisional.
+Empty bunker and selected infantry are charged separately, exactly once.
+Manufacturing currently scales loaded package cost too; personnel treatment remains provisional.
 
-| Module | Empty cost | Included units | Crew cost | Loaded module cost |
-|---|---:|---|---:|---:|
-| firing-bunker | 100 | 4 x che3 @ 300 | 1200 | 1300 |
+| Design | Starting units | Crew cost | Crew mass kg |
+|---|---|---:|---:|
+| Overlord Bunker / mixed crew | 2 x che3, 2 x che1 | 760 | 400 |
+| Overlord Bunker / empty | empty | 0 | 0 |
+| Overlord Bunker / partial crew | 2 x minigunner | 400 | 200 |
+| Overlord Bunker | 4 x che3 | 1200 | 400 |
+| Overlord Bunker PDL | 4 x che3 | 1200 | 400 |
+| Overlord Bunker Reflector | 4 x che3 | 1200 | 400 |
 
 ## Audited Battlemaster variant fields (old -> configured)
 
@@ -120,6 +131,7 @@ Single-shot interval 0 denotes not applicable, not an audited engine default.
 | Overlord Nuclear Shells | +500 / +650 | +0 / +0 |
 | Overlord Propaganda | +600 / +650 | +0 / +0 |
 | Overlord Bunker | +600 / +650 | +0 / +0 |
+| Overlord Gatling | +800 / +650 | +0 / +0 |
 
 Manufacturing scales hardware increments, never the global CP deduction.
 One shared manufacturing factor still leaves visible residuals against legacy prices.
@@ -130,6 +142,9 @@ These are not claims of matching existing PDL/autoloader/reflector variants.
 
 | Design | Credits | HP | Speed | Armor | CP / catalog / tech |
 |---|---:|---:|---:|---|---|
+| Overlord Bunker / mixed crew | 2560 | 95000 | 55 | Heavy | 1 / 5 / 3 |
+| Overlord Bunker / empty | 1800 | 95000 | 55 | Heavy | 1 / 5 / 3 |
+| Overlord Bunker / partial crew | 2200 | 95000 | 55 | Heavy | 1 / 5 / 3 |
 | Battlemaster PDL / baseline generator | 1300 | 40000 | 76 | Heavy | 1 / 2 / 3 |
 | Battlemaster PDL / efficient generator | 1500 | 40000 | 95 | Heavy | 1 / 3 / 3 |
 | Battlemaster reflector / efficient | 850 | 40000 | 94 | Reflector | 1 / 3 / 3 |

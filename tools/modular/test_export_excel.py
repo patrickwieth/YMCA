@@ -15,7 +15,12 @@ class ExcelExportTests(unittest.TestCase):
             path = Path(directory) / 'test.xlsx'
             build(catalog, path)
             book = load_workbook(path)
-            self.assertEqual(len(book.sheetnames), 8)
+            self.assertEqual(len(book.sheetnames), 10)
+            self.assertEqual(book['Infanterie'].max_row, 4)
+            self.assertIn('VLOOKUP', book['Startbesatzung']['D2'].value)
+            self.assertIn('AF2', book['Entwuerfe']['N2'].value)
+            self.assertIn('AI2', book['Entwuerfe']['P2'].value)
+            self.assertEqual(book['Entwuerfe']['AF2'].value, 'gatling-roof-carrier')
             self.assertEqual(book['SchwereReferenzen'].max_row, 7)
             self.assertEqual(book['SchwereReferenzen']['D3'].value, 2800)
             self.assertEqual(book['SchwereReferenzen']['E3'].value, '=D3-C3')

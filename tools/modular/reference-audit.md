@@ -32,7 +32,12 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/china/vehicles.yaml` / `choverlord.Bunker` | unchanged |
 | `mods/ca/rules/china/vehicles.yaml` / `choverlord.Bunker.PDL` | unchanged |
 | `mods/ca/rules/china/vehicles.yaml` / `choverlord.Bunker.Reflector` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Gatling` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Gatling.PDL` | unchanged |
+| `mods/ca/rules/china/vehicles.yaml` / `choverlord.Gatling.Reflector` | unchanged |
 | `mods/ca/rules/china/infantry.yaml` / `CHE3` | unchanged |
+| `mods/ca/rules/china/infantry.yaml` / `CHE1` | unchanged |
+| `mods/ca/rules/china/infantry.yaml` / `minigunner` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon.Autoloader` | unchanged |
 | `mods/ca/rules/china/weapons.yaml` / `CHBattlemasterCannon.Nuclear_Shells` | unchanged |
@@ -56,6 +61,7 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/china/defaults.yaml` / `^HordeBonus` | unchanged |
 | `mods/ca/rules/china/defaults.yaml` / `^ChinaGatling` | unchanged |
 | `mods/ca/rules/china/defaults.yaml` / `^PropagandaSpeaker` | unchanged |
+| `mods/ca/rules/china/defaults.yaml` / `^ChinaGatlingOverlord` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Autoloader` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Nuclear_Shells` | unchanged |
 | `mods/ca/rules/china/commander-tree.yaml` / `promotion.Battlemaster.Mass_Production` | unchanged |
@@ -92,7 +98,7 @@ Missing blocks stop the audit. Comments and blank lines are ignored.
 | `mods/ca/rules/defaults.yaml` / `^AttackingCargoAndPDL` | unchanged |
 | `mods/ca/weapons/other.yaml` / `AdvancedPointLaser` | unchanged |
 
-85 blocks compared; 2 changed.
+91 blocks compared; 2 changed.
 
 ## OverlordCannonNuclear
 

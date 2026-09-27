@@ -1,5 +1,64 @@
 # Offline vehicle calibration prototype
 
+## Latest: shared roof slot and selectable starting infantry
+
+Open **`vehicle-calibration-loadouts.xlsx`** (10 sheets). Older workbook names and
+loaded-bunker representations below are historical snapshots, superseded here.
+
+Overlord now exposes one main carrier and one optional auxiliary carrier, sharing
+its roof attachment point with bunker and speaker equipment. `auxiliary_mount`
+selects carrier, weapon and ammunition separately; their prices, mass, power,
+tech, tiers and CP contributions are counted alongside the main assembly. Main
+weapon results are NOT overwritten by the secondary weapon. The approved roof
+carrier currently is `gatling-roof-carrier`, with existing gatling weapon/ammo.
+A carrier count of two is a maximum; it does not imply two guns when a bunker or
+speaker occupies the roof. Python rejects conflicting roof use, wrong payloads
+and unapproved auxiliary mounts. PDL is independent equipment, not a roof mount.
+
+The new Gatling assembly references `^ChinaGatlingOverlord` and `^SensorEquipment`
+for its full legacy behavior. The 50-credit carrier +150 weapon +100 loadout is a
+provisional base price allocation, offset by 1 CP; it is not a measured value of
+its sensor capability. Legacy/source actor generation is still future work.
+Gatling PDL computes 2650 versus legacy 2800, deliberately leaving -150 residual.
+The source actor's mixed sprite/voxel rendering and armament names must be bound
+properly by a future compiler; arithmetic tests do not certify rendering.
+
+`firing-bunker` is now EMPTY: 100 credits, 600 kg, 5 kWe and capacity 4. It carries
+no fixed `included_units`. Each design owns an optional `crew` list of actor/count
+pairs. Infantry catalog prices: Tank Hunter 300, Red Guard 80, Minigunner 200;
+100 kg per passenger package is still hypothetical. Original bunker designs
+select four Tank Hunters explicitly, preserving their existing computed totals.
+
+Examples using the same base bunker vehicle:
+- Empty: 1800 credits, 1 CP.
+- Two Minigunners: 2200 credits, 1 CP; two capacity points unused.
+- Two Tank Hunters + two Red Guards: 2560 credits, 1 CP.
+- Four Tank Hunters: 3000 credits, 1 CP.
+
+Crew cost/mass is added once, NOT also stored in the module price. Capacity uses
+transport weights. Python rejects noninteger/negative counts, overcapacity, crew
+without a bunker, duplicate type entries and faction-incompatible infantry. Crew
+tech requirements contribute to the design maximum. This initial catalog uses
+standard infantry with no additional CP/tier contribution; rules for custom
+CP-gated infantry are not established. Faction policy is the agreed base China
+catalog, rather than preserving all historical general restrictions.
+
+Workbook sheets `Infanterie` and `Startbesatzung` are formula-linked to designs.
+Change infantry price/mass or existing crew rows to recalculate costs/weight.
+A zero Excel count disables a row; JSON omits that entry instead. New rows/designs
+should be added in JSON and exported to a new workbook, not assumed to extend
+fixed formula ranges. `Entwuerfe` includes separate auxiliary selections plus crew
+cost/mass columns. Excel only checks scalar limits; full roof/cargo/faction and
+compatibility validation stays in Python. Formula round-trip checks do not execute
+Excel calculations. Empty/partial/mixed examples have no fabricated legacy target.
+
+Next candidates: flame or mortar roof carriers. They are deliberately not enabled
+until mount geometry/artwork and behavior compatibility are verified. Existing
+Dragon flame behavior can be reused; that alone does not prove its complete turret
+fits this mount. An empty/filled transport remains an equipment module and uses
+existing open-topped/passenger traits, not a new combat simulation.
+
+
 ## Latest: Bunker Overlord and included infantry
 
 Latest workbook: **`vehicle-calibration-bunker.xlsx`**. Older names below are

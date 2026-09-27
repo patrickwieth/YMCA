@@ -30,9 +30,9 @@ FIELDS = [
     ('Waffen erlaubt', 'weapons'), ('Munition erlaubt', 'ammunition'),
     ('Anzeigename', 'display_name'), ('Hardware Fertigung %', 'hardware_percent'),
     ('Munition Reichweite Override', 'range_override_cells'),
-    ('Leerpreis Modul', 'empty_cost'), ('Leermasse Modul', 'empty_mass'),
-    ('Transportkapazitaet', 'cargo_capacity'), ('Enthaltene Einheiten', 'included_units'),
-    ('Ausschluesse', 'excludes')]
+    ('Transportkapazitaet', 'cargo_capacity'),
+    ('Ausschluesse', 'excludes'), ('Aufsatzplatz', 'attachment_slot'),
+    ('Zusatztraeger erlaubt', 'auxiliary_mount'), ('Infanterie erlaubt', 'allowed_infantry')]
 
 
 def table(ws, name):
@@ -64,7 +64,9 @@ def build(catalog, output):
         ['Schutz', 'Exporter überschreibt keine bestehende Arbeitsmappe; für neue Daten neuen Dateinamen verwenden.'],
         ['Erweiterung', 'Neue Bausteine/Designs in JSON eintragen und neu exportieren. Manuelles Zeilenanfügen wird nicht automatisch verdrahtet.'],
         ['Validierung', 'Excel prüft nur elektrische/physische Grenzen; Rolle, Fraktion, Montage und Besatzungskosten-Konsistenz im Python-Rechner prüfen.'],
-        ['Bunkerpreis', 'Modulpreis/Masse enthalten bereits die mitgelieferten Einheiten. Leerpreis und Besatzungsdaten sind separat sichtbar; nicht nochmals addieren.'],
+        ['Bunkerpreis', 'Leeres Bunkermodul plus separat gewählte Startbesatzung. Infanteriepreise und Besatzungszeilen sind editierbar; Kosten/Masse werden einmal addiert.'],
+        ['Aufsatzplatz', 'Gatling, Bunker und Lautsprecher teilen roof. Vollständige Slot-/Fraktions-/Kapazitätsprüfung weiterhin im Python-Rechner.'],
+        ['Besatzung', '0 in Excel deaktiviert eine vorhandene Zeile; für neue Typen/Zeilen JSON ändern und neu exportieren. Infanteriemasse ist ein Designwert.'],
         ['Momentaufnahme', 'Python-Werte und Preisfit sind statisch. Änderungen in Excel aktualisieren nur die Formelspalten.'],
         ['Genauigkeit', 'CP/Tier sind unabhängig; 1% Abweichung kann akzeptabel sein. Preisfit ist kein Beweis des CP-Wertes.'],
         ['Branches', 'Game modular: tournament-bot integriert in 9d8a9dec; master nicht zusätzlich gemergt.'],
@@ -94,10 +96,35 @@ def build(catalog, output):
     end = parts.max_row
     wb.defined_names.add(DefinedName('ComponentIDs', attr_text=f"'Bausteine'!$A$2:$A${end}"))
 
+    infantry = wb.create_sheet('Infanterie')
+    infantry.append(['ID', 'Name', 'Fraktionen', 'Preis', 'Masse kg', 'Transportgewicht', 'Tech'])
+    for key, unit in catalog['infantry'].items():
+        infantry.append([key, unit['display_name'], ', '.join(unit['factions']), unit['cost'], unit['mass'], unit['weight'], unit['tech']])
+    table(infantry, 'Infantry')
+    wb.defined_names.add(DefinedName('InfantryIDs', attr_text=f"'Infanterie'!$A$2:$A${infantry.max_row}"))
+    crew = wb.create_sheet('Startbesatzung')
+    crew.append(['Design', 'Infanterie', 'Anzahl', 'Preis', 'Masse kg', 'Transportgewicht', 'Tech'])
+    for design in catalog['designs']:
+        for unit in design.get('crew', []):
+            r = crew.max_row + 1
+            crew.append([design['name'], unit['actor'], unit['count']])
+            for column, index in [('D', 4), ('E', 5), ('F', 6), ('G', 7)]:
+                lookup_unit = f'VLOOKUP(B{r},Infanterie!$A$2:$G${infantry.max_row},{index},FALSE)'
+                crew[f'{column}{r}'] = '=' + (f'C{r}*{lookup_unit}' if column != 'G' else f'IF(C{r}>0,{lookup_unit},0)')
+    table(crew, 'Crew')
+    choices = DataValidation(type='list', formula1='InfantryIDs')
+    choices.showErrorMessage = True
+    crew.add_data_validation(choices)
+    choices.add(f'B2:B{crew.max_row}')
+    counts = DataValidation(type='whole', operator='between', formula1=0, formula2=4)
+    counts.showErrorMessage = True
+    crew.add_data_validation(counts)
+    counts.add(f'C2:C{crew.max_row}')
+
     designs = wb.create_sheet('Entwuerfe')
     designs.append(['Design', 'Fraktion', 'Chassis', 'Motor', 'Generator', 'Panzerung', 'Traeger', 'Waffe', 'Munition',
                     'Zusatz 1', 'Zusatz 2', 'Zusatz 3', 'Katalog', 'CP', 'Tech', 'Hardware', 'CP-Abzug', 'Preis',
-                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis', 'Fertigungsmodul', 'Fertigungsfaktor', 'Hardware nach Fertigung'])
+                    'HP', 'Masse kg', 'Last kWe', 'Rest kWm', 'Tempo', 'Armor', 'Grenzen', 'Python Preis', 'Python Tempo', 'Referenzhinweis', 'Fertigungsmodul', 'Fertigungsfaktor', 'Hardware nach Fertigung', 'Aufsatztraeger', 'Aufsatzwaffe', 'Aufsatzmunition', 'Besatzungspreis', 'Besatzungsmasse', 'Besatzungstech'])
     roles = ['chassis', 'drive', 'generator', 'armor', 'carrier', 'weapon', 'ammunition']
     def lookup(cell, field):
         index = next(i for i, (_, f) in enumerate(FIELDS, 1) if f == field)
@@ -111,20 +138,25 @@ def build(catalog, output):
         designs.append([design['name'], design['faction']] + picks + equipment + [''] * (3 - len(equipment)))
         designs[f'AB{rownum}'] = design.get('note', '')
         designs[f'AC{rownum}'] = next((k for k in ids if catalog['components'][k]['role'] == 'manufacturing'), '')
+        for c, role in [('AF', 'carrier'), ('AG', 'weapon'), ('AH', 'ammunition')]:
+            designs[f'{c}{rownum}'] = design.get('auxiliary_mount', {}).get(role, '')
         r = rownum
         def v(c, field):
             return lookup(f'{c}{r}', field)
         def total(field, letters='CDEFGHIJKL'):
-            return '+'.join(v(c, field) for c in list(letters) + ['AC'])
+            return '+'.join(v(c, field) for c in list(letters) + ['AC', 'AF', 'AG', 'AH'])
         formulas = {
             'M': total('tier'), 'N': total('cp'),
-            'O': 'MAX(' + ','.join(v(c, 'tech') for c in list('CDEFGHIJKL') + ['AC']) + ')',
-            'P': f"{v('C','cost')}*{v('F','cost_percent')}/100+" + total('cost', 'DEGHIJKL'),
+            'O': 'MAX(' + ','.join(v(c, 'tech') for c in list('CDEFGHIJKL') + ['AC', 'AF', 'AG', 'AH']) + f',AK{r})',
+            'P': f"{v('C','cost')}*{v('F','cost_percent')}/100+" + total('cost', 'DEGHIJKL') + f'+AI{r}',
             'Q': f'N{r}*Parameter!$B$2', 'R': f'AE{r}-Q{r}',
             'AD': f'IF(AC{r}="",1,' + v('AC','hardware_percent') + '/100)',
             'AE': f'P{r}*AD{r}',
             'S': f"{v('C','hp')}*{v('F','hp_percent')}/100",
-            'T': f"{v('C','mass')}*{v('F','mass_percent')}/100+" + total('mass', 'DEGHIJKL'),
+            'T': f"{v('C','mass')}*{v('F','mass_percent')}/100+" + total('mass', 'DEGHIJKL') + f'+AJ{r}',
+            'AI': f'SUMIF(Startbesatzung!$A$2:$A${crew.max_row},A{r},Startbesatzung!$D$2:$D${crew.max_row})',
+            'AJ': f'SUMIF(Startbesatzung!$A$2:$A${crew.max_row},A{r},Startbesatzung!$E$2:$E${crew.max_row})',
+            'AK': 'MAX(0,' + ','.join(f'IF(Startbesatzung!A{s}=A{r},Startbesatzung!G{s},0)' for s in range(2, crew.max_row + 1)) + ')',
             'U': total('electric_kw'),
             'V': f"{v('D','mechanical_kw')}-U{r}/{v('E','efficiency')}",
             'W': f'IF(Y{r}<>"OK","",ROUND(MIN(' + v('C','max_speed') + ',' + v('C','reference_speed') +
@@ -147,6 +179,7 @@ def build(catalog, output):
     designs.add_data_validation(dv)
     dv.add(f'C2:L{designs.max_row}')
     dv.add(f'AC2:AC{designs.max_row}')
+    dv.add(f'AF2:AH{designs.max_row}')
     table(designs, 'Designs')
 
     compare = wb.create_sheet('AltNeu')
@@ -201,11 +234,11 @@ def build(catalog, output):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-bunker.xlsx'))
+    parser.add_argument('--output', type=Path, default=Path(__file__).with_name('vehicle-calibration-loadouts.xlsx'))
     args = parser.parse_args()
     data = json.loads(Path(__file__).with_name('catalog.json').read_text(encoding='utf-8'))
     build(data, args.output)
     # Round-trip integrity check; openpyxl cannot evaluate Excel formulas.
     book = load_workbook(args.output)
-    assert len(book.sheetnames) == 8
+    assert len(book.sheetnames) == 10
     print(args.output.resolve())

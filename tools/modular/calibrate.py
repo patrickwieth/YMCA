@@ -7,6 +7,34 @@ from pathlib import Path
 ROLES = {"chassis", "drive", "generator", "armor", "carrier", "weapon", "ammunition"}
 
 
+def crew_totals(catalog, design, parts):
+    loadout = design.get('crew', [])
+    cargo = [p for p in parts if 'cargo_capacity' in p]
+    if loadout and len(cargo) != 1:
+        raise ValueError('Start crew requires exactly one cargo module')
+    totals = dict(cost=0, mass=0, weight=0, count=0, tech=0)
+    seen = set()
+    for entry in loadout:
+        actor, count = entry['actor'], entry['count']
+        if actor in seen:
+            raise ValueError('Duplicate crew type; use its count field')
+        seen.add(actor)
+        if isinstance(count, bool) or not isinstance(count, int) or count <= 0:
+            raise ValueError('Crew count must be a positive integer')
+        unit = catalog['infantry'][actor]
+        if design['faction'] not in unit['factions'] or actor not in cargo[0]['allowed_infantry']:
+            raise ValueError('Infantry not compatible with faction or cargo module')
+        for key in ('cost', 'mass', 'weight'):
+            if not math.isfinite(unit[key]) or unit[key] < 0:
+                raise ValueError('Invalid infantry ' + key)
+            totals[key] += count * unit[key]
+        totals['count'] += count
+        totals['tech'] = max(totals['tech'], unit['tech'])
+    if cargo and totals['weight'] > cargo[0]['cargo_capacity']:
+        raise ValueError('Crew exceeds cargo capacity')
+    return totals
+
+
 def calculate(catalog, design):
     ids = design["components"]
     if len(ids) != len(set(ids)):
@@ -27,8 +55,8 @@ def calculate(catalog, design):
     chassis = by_role["chassis"]
     if chassis["tier"] < 1:
         raise ValueError("Chassis cannot be tier zero")
-    if chassis["carrier_slots"] != 1:
-        raise ValueError("Prototype supports one carrier only")
+    if chassis["carrier_slots"] not in (1, 2):
+        raise ValueError("Prototype supports one main and at most one auxiliary carrier")
     for role, allowed in chassis["allowed"].items():
         if not any(key in allowed and catalog["components"][key]["role"] == role for key in ids):
             raise ValueError("Incompatible chassis " + role)
@@ -42,28 +70,37 @@ def calculate(catalog, design):
         raise ValueError("Equipment slot capacity exceeded")
     if any(key not in chassis["equipment"] for key in equipment):
         raise ValueError("Incompatible equipment")
+    occupied = [p['attachment_slot'] for p in parts if 'attachment_slot' in p]
+    auxiliary = design.get('auxiliary_mount')
+    if auxiliary:
+        if set(auxiliary) != {'carrier', 'weapon', 'ammunition'}:
+            raise ValueError('Auxiliary mount needs carrier, weapon and ammunition')
+        mount = chassis.get('auxiliary_mount')
+        if chassis['carrier_slots'] < 2 or not mount or auxiliary['carrier'] not in mount['carriers']:
+            raise ValueError('Incompatible auxiliary mount')
+        occupied.append(mount['slot'])
+        extra = [catalog['components'][auxiliary[role]] for role in ('carrier', 'weapon', 'ammunition')]
+        for role, part in zip(('carrier', 'weapon', 'ammunition'), extra):
+            if part['role'] != role or design['faction'] not in part['factions']:
+                raise ValueError('Invalid auxiliary role or faction')
+            if part['tier'] not in range(4) or part['cp'] < 0:
+                raise ValueError('Invalid auxiliary point cost')
+        if auxiliary['weapon'] not in extra[0]['weapons'] or auxiliary['ammunition'] not in extra[1]['ammunition']:
+            raise ValueError('Incompatible auxiliary weapon or ammunition')
+        parts += extra
+    if len(occupied) != len(set(occupied)):
+        raise ValueError('Attachment slot is already occupied')
+    all_ids = ids + (list(auxiliary.values()) if auxiliary else [])
     for part in parts:
-        if "included_units" in part:
-            loadout = part["included_units"]
-            if any(not math.isfinite(part[k]) or part[k] < 0 for k in ('empty_cost', 'empty_mass', 'cargo_capacity')):
-                raise ValueError("Invalid empty module values or capacity")
-            for unit in loadout:
-                if not isinstance(unit['count'], int) or unit['count'] < 0:
-                    raise ValueError("Included unit count must be a nonnegative integer")
-                if any(not math.isfinite(unit[k]) or unit[k] < 0 for k in ('unit_cost', 'unit_mass', 'transport_weight')):
-                    raise ValueError("Invalid included unit cost, mass or weight")
-            if sum(u['count'] * u['transport_weight'] for u in loadout) > part['cargo_capacity']:
-                raise ValueError("Included units exceed cargo capacity")
-            for total, empty, field in [('cost', 'empty_cost', 'unit_cost'), ('mass', 'empty_mass', 'unit_mass')]:
-                expected = part[empty] + sum(u['count'] * u[field] for u in loadout)
-                if not math.isclose(part[total], expected, rel_tol=0, abs_tol=1e-8):
-                    raise ValueError("Loaded module " + total + " must include crew exactly once")
-        if any(key in ids for key in part.get("excludes", [])):
-            raise ValueError("Mutually exclusive components")
+        if 'included_units' in part:
+            raise ValueError('Fixed module crew is obsolete; use design crew selection')
+        if any(key in all_ids for key in part.get('excludes', [])):
+            raise ValueError('Mutually exclusive components')
+    crew = crew_totals(catalog, design, parts)
     armor = by_role["armor"]
     others = [p for p in parts if p["role"] not in ("chassis", "armor")]
-    mass = chassis["mass"] * armor["mass_percent"] / 100 + sum(p["mass"] for p in others)
-    cost = chassis["cost"] * armor["cost_percent"] / 100 + sum(p["cost"] for p in others)
+    mass = chassis["mass"] * armor["mass_percent"] / 100 + sum(p["mass"] for p in others) + crew['mass']
+    cost = chassis["cost"] * armor["cost_percent"] / 100 + sum(p["cost"] for p in others) + crew['cost']
     gross_cost = cost
     manufacturing_factor = by_role.get("manufacturing", {}).get("hardware_percent", 100) / 100
     if not math.isfinite(manufacturing_factor) or not 0 < manufacturing_factor <= 1:
@@ -96,11 +133,11 @@ def calculate(catalog, design):
     speed = min(chassis["max_speed"], chassis["reference_speed"] * ratio ** catalog["alpha"])
     return dict(mass=mass, hp=hp, cost=cost, gross_cost=gross_cost, discount=discount,
                 manufacturing_factor=manufacturing_factor, manufactured_cost=manufactured_cost,
-                included_crew_cost=sum(u['count'] * u['unit_cost'] for p in parts for u in p.get('included_units', [])),
+                included_crew_cost=crew['cost'], crew_mass=crew['mass'], crew_count=crew['count'],
                 electric_kw=demand, reserve_kw=reserve,
                 speed=math.floor(speed + 0.5), armor=armor["armor_type"],
                 catalog_points=sum(p["tier"] for p in parts), cp=sum(p["cp"] for p in parts),
-                tech=max(p["tech"] for p in parts),
+                tech=max(crew['tech'], max(p["tech"] for p in parts)),
                 burst=carrier["burst"], burst_delay_ticks=carrier.get("burst_delay_ticks", 0),
                 reload_ticks=carrier["reload_ticks"],
                 range_cells=by_role["ammunition"].get("range_override_cells", by_role["weapon"].get("range_cells")),
@@ -148,7 +185,8 @@ def report(catalog):
         if not design.get("target"):
             continue
         r = calculate(catalog, design)
-        parts = [(key, catalog["components"][key]) for key in design["components"]]
+        selected = design['components'] + list(design.get('auxiliary_mount', {}).values())
+        parts = [(key, catalog["components"][key]) for key in selected]
         armor = next(p for _, p in parts if p["role"] == "armor")
         contributions = []
         for key, p in parts:
@@ -156,17 +194,19 @@ def report(catalog):
                 continue
             cost = p["cost"] * armor["cost_percent"] / 100 if p["role"] == "chassis" else p["cost"]
             contributions.append(f"{key}: {cost:g}")
+        if design.get('crew'):
+            contributions.append(f"start crew: {r['included_crew_cost']:g}")
         lines.append(f"| {design['name']} | {'; '.join(contributions)} | {r['gross_cost']:g} x {r['manufacturing_factor']:g} - {r['cp']} x {catalog['credits_per_cp']:g} = {r['cost']:g} |")
-    lines += ["", "## Included cargo cost breakdown", "",
-              "Crew is already included in gross module cost/mass; never add it to the vehicle a second time.",
-              "Manufacturing currently scales loaded package cost too; treatment of personnel in future manufacturing designs is provisional.", "",
-              "| Module | Empty cost | Included units | Crew cost | Loaded module cost |",
-              "|---|---:|---|---:|---:|"]
-    for key, part in catalog['components'].items():
-        if 'included_units' in part:
-            units = ', '.join(f"{u['count']} x {u['actor']} @ {u['unit_cost']}" for u in part['included_units'])
-            crew = sum(u['count'] * u['unit_cost'] for u in part['included_units'])
-            lines.append(f"| {key} | {part['empty_cost']} | {units} | {crew} | {part['cost']} |")
+    lines += ["", "## Selectable starting crew", "",
+              "Empty bunker and selected infantry are charged separately, exactly once.",
+              "Manufacturing currently scales loaded package cost too; personnel treatment remains provisional.", "",
+              "| Design | Starting units | Crew cost | Crew mass kg |",
+              "|---|---|---:|---:|"]
+    for design in catalog['designs']:
+        if 'crew' in design:
+            result = calculate(catalog, design)
+            units = ', '.join(f"{u['count']} x {u['actor']}" for u in design['crew']) or 'empty'
+            lines.append(f"| {design['name']} | {units} | {result['included_crew_cost']:g} | {result['crew_mass']:g} |")
     lines += ["", "## Audited Battlemaster variant fields (old -> configured)", "",
               "Rule-data comparison only, not engine firing/armor simulation. Damage is the raw warhead value.",
               "Tech 1 means no explicit tier2/tier3 requirement, not waived factory prerequisites.",
@@ -185,7 +225,7 @@ def report(catalog):
               "| Family | PDL increment old / new | Reflector increment old / new |",
               "|---|---|---|"]
     indexed = {d["name"]: d for d in catalog["designs"]}
-    for family in ("Battlemaster Autoloader", "Battlemaster Nuclear Shells", "Battlemaster Mass Production", "Dragon Tank", "Gatling Tank", "Overlord Nuclear Shells", "Overlord Propaganda", "Overlord Bunker"):
+    for family in ("Battlemaster Autoloader", "Battlemaster Nuclear Shells", "Battlemaster Mass Production", "Dragon Tank", "Gatling Tank", "Overlord Nuclear Shells", "Overlord Propaganda", "Overlord Bunker", "Overlord Gatling"):
         base = indexed[family]
         base_cost = calculate(catalog, base)["cost"]
         cells = []

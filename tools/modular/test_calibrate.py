@@ -31,24 +31,55 @@ class CalibrationTests(unittest.TestCase):
             self.assertEqual((result['cost'], result['cp'], result['speed']), (cost, cp, 55))
             self.assertEqual(result['included_crew_cost'], 1200)
             self.assertEqual(result['hp'], 95000)
-        self.assertIn('4 x che3 @ 300', report(self.catalog))
+        self.assertIn('4 x che3', report(self.catalog))
 
     def test_bunker_loadout_validation(self):
-        d = self.named('Overlord Bunker')
-        for field, value in [('cost', 100), ('mass', 600), ('cargo_capacity', 3)]:
-            c = copy.deepcopy(self.catalog)
-            c['components']['firing-bunker'][field] = value
+        for count in (-1, 1.5, True, 5):
+            d = copy.deepcopy(self.named('Overlord Bunker'))
+            d['crew'][0]['count'] = count
             with self.assertRaises(ValueError):
-                calculate(c, d)
-        for count in (-1, 1.5):
-            c = copy.deepcopy(self.catalog)
-            c['components']['firing-bunker']['included_units'][0]['count'] = count
-            with self.assertRaises(ValueError):
-                calculate(c, d)
-        d = copy.deepcopy(d)
-        d['components'].append('propaganda-speaker')
-        with self.assertRaisesRegex(ValueError, 'Mutually exclusive'):
+                calculate(self.catalog, d)
+        d = copy.deepcopy(self.named('Overlord Bunker'))
+        d['components'].remove('firing-bunker')
+        with self.assertRaisesRegex(ValueError, 'requires exactly one'):
             calculate(self.catalog, d)
+        c = copy.deepcopy(self.catalog)
+        c['infantry']['che3']['factions'] = ['gdi']
+        with self.assertRaisesRegex(ValueError, 'Infantry not compatible'):
+            calculate(c, self.named('Overlord Bunker'))
+
+    def test_empty_partial_and_mixed_crew(self):
+        for name, cost, count in [('empty', 1800, 0), ('partial crew', 2200, 2), ('mixed crew', 2560, 4)]:
+            r = calculate(self.catalog, self.named('Overlord Bunker / ' + name))
+            self.assertEqual((r['cost'], r['crew_count'], r['cp']), (cost, count, 1))
+        c = copy.deepcopy(self.catalog)
+        c['infantry']['che3']['cost'] += 10
+        self.assertEqual(calculate(c, self.named('Overlord Bunker'))['cost'], 3040)
+
+    def test_roof_slot_exclusion_and_auxiliary_compatibility(self):
+        for module in ('firing-bunker', 'propaganda-speaker'):
+            d = copy.deepcopy(self.named('Overlord Gatling'))
+            d['components'].append(module)
+            with self.assertRaisesRegex(ValueError, 'slot is already occupied'):
+                calculate(self.catalog, d)
+        d = copy.deepcopy(self.named('Overlord Bunker'))
+        d['components'].append('propaganda-speaker')
+        with self.assertRaisesRegex(ValueError, 'slot is already occupied'):
+            calculate(self.catalog, d)
+        d = copy.deepcopy(self.named('Overlord Gatling'))
+        d['auxiliary_mount']['carrier'] = 'flame-turret'
+        with self.assertRaisesRegex(ValueError, 'Incompatible auxiliary mount'):
+            calculate(self.catalog, d)
+        d = copy.deepcopy(self.named('Overlord Gatling'))
+        d['auxiliary_mount']['ammunition'] = 'shell'
+        with self.assertRaisesRegex(ValueError, 'Incompatible auxiliary weapon'):
+            calculate(self.catalog, d)
+
+    def test_gatling_roof_is_separate_from_main_weapon(self):
+        for suffix, cost, cp in [('', 2000, 1), (' PDL', 2650, 2), (' Reflector', 2000, 2)]:
+            r = calculate(self.catalog, self.named('Overlord Gatling' + suffix))
+            self.assertEqual((r['cost'], r['cp']), (cost, cp))
+            self.assertEqual((r['burst'], r['damage'], r['range_cells']), (2, 8000, 5))
 
     def test_overlord_reference_residuals(self):
         expected = {
