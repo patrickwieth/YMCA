@@ -61,7 +61,12 @@ tank rather than a claim that the entire faction compiler is complete.
   profile and generated actor/weapon rules; changing the profile later cannot
   mutate an existing match, replay or saved snapshot.
 - The mod registers this user-map folder and selects the generated UID through
-  the existing local-server/skirmish workflow. No installation directory writes
+  the existing local-server/skirmish workflow. Designer test sessions bypass the
+  stock `skirmish.ca.yaml` restoration AND persistence: otherwise joining the lobby
+  silently replaces the generated map with the last ordinary skirmish map. A fresh
+  default bot is added instead. Normal skirmishes keep their original behavior.
+  This isolation lasts for the test server's lifetime, including manual map changes.
+  No installation directory writes
   and no local JSON reading by simulated actors.
 - Normal map transfer/checksum machinery handles the generated snapshot if used
   with other clients. Multiplayer transfer and save/load have NOT been live-tested.
@@ -94,11 +99,16 @@ dotnet test Modular.Tests/Modular.Tests.csproj -c Release
 dotnet build OpenRA.Mods.CA/OpenRA.Mods.CA.csproj -c Release
 ```
 
-Verified: **62 Python tests**, **10 native tests**, successful CA Release build.
+Verified: **63 Python tests**, **16 native tests**, successful CA Release build.
+The extra regression tests cover test-session isolation and server-trait registration.
+The first interactive user report exposed stock skirmish restoration overriding
+an initially correct generated map; `CustomFactionSkirmishLogic` now prevents that.
+An interactive retry with this correction is still pending.
 An exported native HE sample was read by Engine Utility: 1687 rule-lint errors,
 versus 1685 on the stock control. The two additional diagnostics repeat the stock
 MTNK condition/palette errors for `modular.custom`; no invalid faction or missing
 field errors appeared. This is NOT a clean full-mod lint pass.
 
-No interactive menu click-through, factory-production match, Carryall transport,
-hover/water, multiplayer transfer or save/load test has been performed yet.
+Interactive user testing of the menu has begun. The corrected lobby handoff,
+factory production, Carryall transport, hover/water, multiplayer transfer and
+save/load still need confirmation in-game.

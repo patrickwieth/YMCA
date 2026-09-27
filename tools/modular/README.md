@@ -16,11 +16,13 @@ map integration or a custom multiplayer synchronization protocol.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, storage and limitations.
 The native C# compiler and all 24 numeric combinations are tested independently
-against the Python calculator. **62 Python + 10 native tests pass**, CA Release
+against the Python calculator. **63 Python + 16 native tests pass**, CA Release
 build succeeds. An engine-linted native sample only adds inherited MTNK diagnostics;
 interactive UI/gameplay checks remain pending. Prior sections describe earlier
 stages; the current entry point is the main-menu editor, not a manually selected
-static lab map.
+static lab map. Designer test sessions now bypass stock skirmish-settings restore/save:
+the first interactive report revealed that restoring the previous skirmish silently
+switched back to the old lab map. Normal skirmishes retain their usual persistence.
 
 
 ## Latest: first in-game map prototype
