@@ -38,7 +38,25 @@ publish an unverified design; the future compiler needs its own mount validation
 The draft flag does not bypass payload compatibility, faction or occupied-roof
 checks, and cannot enable arbitrary unlisted carriers.
 
-## Mortar: weapon rules exist, mount not identified yet
+## Artillery turret found after the Battle Fortress hint
+
+`mods/ca/bits/artytur.shp` is still present. `sequences/allies.yaml` binds it as
+`batf.turret` and both `batf.artillery.turret` / `turret2`, with 32 facings and
+`UseClassicFacings: False`. It is a separate long-barrel artillery turret, not
+part of the hull. The old base BATF is marked unused, but the artwork remains.
+
+Raw frames were exported through the same engine Utility and inspected in
+`artillery-turret-preview.png`. This identifies the asset the user recalled and
+makes it a concrete artillery/mortar-carrier candidate. Overlord roof size,
+mount/muzzle offsets, layering and palette still require a live composite check.
+Reusing Allied artwork does not automatically grant China Allied weapon modules;
+visual compatibility and gameplay faction availability are separate decisions.
+
+Reproduction: export `bits/artytur.shp` as above, then run the preview script with
+`--sprites artytur`. No carrier cost, faction permission or engine rule is changed
+by this inspection.
+
+## Earlier China-only search: mortar rules but no identified mount
 
 `weapons/ballistics.yaml` defines `MortarPrototype` (reload 60, range 11c0,
 minimum range 1c0, arcing BulletCA) and `Mortar`/`MortarE`. Chinese `Mortar`
