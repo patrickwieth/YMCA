@@ -1,5 +1,28 @@
 # Modular vehicle tools
 
+## Latest: native main-menu faction editor
+
+The game now has **Eigene Fraktion** in the main menu: GDI/Eagle's normal roster
+plus one named custom tank. Tracks/hover/stationary, two motors, two generators,
+and normal/HE ammunition are selectable (24 combinations). Other component roles
+are visible but deliberately limited to the supported GDI assembly.
+
+Save locally or **Speichern und Testspiel** to compile a frozen user-map snapshot
+and open its skirmish lobby. Normal/hover tanks are additional factory choices;
+stationary is preplaced/Carryall-only pending a proper deployment workflow.
+No Python installation is required by players. No changes to ongoing matches or
+ordinary maps. This is not yet the full catalog, multi-design roster, arbitrary
+map integration or a custom multiplayer synchronization protocol.
+
+Read **`docs/modular/main-menu-designer.md`** for workflow, storage and limitations.
+The native C# compiler and all 24 numeric combinations are tested independently
+against the Python calculator. **62 Python + 10 native tests pass**, CA Release
+build succeeds. An engine-linted native sample only adds inherited MTNK diagnostics;
+interactive UI/gameplay checks remain pending. Prior sections describe earlier
+stages; the current entry point is the main-menu editor, not a manually selected
+static lab map.
+
+
 ## Latest: first in-game map prototype
 
 **`mods/ca/maps/modular-gdi-lab.oramap`** contains three generated GDI actors:
