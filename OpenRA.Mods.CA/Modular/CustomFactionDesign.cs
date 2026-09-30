@@ -80,7 +80,8 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				{ "tracks-standard", ("tracks", "tracked") }, { "prototype-hover", ("hover", "hover") },
 				{ "gdi-stationary", ("stationary", "wheeled") }, { "wheels-light", ("wheels", "wheeled") },
-				{ "designer-mlrs-gear", ("tracks", "wheeled") }
+				{ "designer-mlrs-gear", ("tracks", "wheeled") }, { "walker-heavy", ("walker", "sheavytracked") },
+				{ "designer-heavy-tracks", ("tracks", "heavytracked") }, { "designer-mk2-legs", ("walker", "heavytracked") }
 			};
 			foreach (var binding in gearBindings)
 			{
@@ -125,6 +126,8 @@ namespace OpenRA.Mods.CA.Modular
 			}
 
 			var assembly = Assembly(profile);
+			if ((Part(profile, "weapon").Value<bool?>("template_locked") ?? false) != assembly.PreserveWeaponTemplates)
+				throw new InvalidDataException("Waffenpaket passt nicht zur vollstaendigen Trait-Bindung.");
 			if (Roles.Any(r => !assembly.Choices[r].Contains(profile.Parts[r])))
 				throw new InvalidDataException("Rumpf, Grafik, Fahrwerk und Waffengruppe sind nicht kompatibel.");
 			var builtIn = assembly.BuiltIn.Select(id => catalog["components"][id] as JObject).ToArray();
@@ -218,14 +221,15 @@ namespace OpenRA.Mods.CA.Modular
 			var v = Calculate(p);
 			var assembly = Assembly(p);
 			var s = new StringBuilder(actor + ":\n\tInherits: " + assembly.Actor + "\n");
-			if (p.Parts["running_gear"] == "prototype-hover")
+			if (p.Parts["running_gear"] == "prototype-hover" && !assembly.NativeHover)
 				s.Append("\tInherits@MODULARHOVER: ^HoverVehicle\n");
 			if (v.Stationary)
 				s.Append("\t-Buildable:\n");
 			else
-				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures.eagle" + (v.Tech > 1 ? ", tier" + v.Tech : "") +
+				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures.eagle" + (v.Tech > 1 ? ", tier" + v.Tech : "") + assembly.ExtraPrerequisites +
 					"\n\t\tBuildPaletteOrder: " + (1000 + index) + "\n\t\tDescription: Eigener Entwurf - vor dem Spiel eingefroren.\n");
 			s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n\tTooltip:\n\t\tName: " + p.TankName + "\n");
+			if (assembly.VoxelImage != null) s.Append("\tRenderVoxels:\n\t\tImage: " + assembly.VoxelImage + "\n");
 			s.Append("\t-TooltipExtras:\n"); // Stock anti-tank strengths would be misleading for the HE loadout.
 			s.Append("\tValued:\n\t\tCost: " + I(v.Cost) + "\n\tHealth:\n\t\tHP: " + I(v.Hp) + "\n");
 			s.Append("\tArmor:\n\t\tType: " + Part(p, "armor").Value<string>("armor_type") + "\n\tMobile:\n\t\tLocomotor: " + Part(p, "running_gear").Value<string>("locomotor") + "\n");
@@ -233,21 +237,25 @@ namespace OpenRA.Mods.CA.Modular
 			if (v.Stationary)
 				s.Append("\t\tImmovableCondition: modular-stationary\n\t\tPauseOnCondition: being-captured || empdisable || being-warped || driver-dead || notmobile || modular-stationary\n" +
 					"\tGrantCondition@MODULARSTATIONARY:\n\t\tCondition: modular-stationary\n\t-ChronoshiftableWithSpriteEffect:\n\t-TeleportNetworkTransportable:\n");
-			s.Append("\t" + assembly.Turret + ":\n\t\tTurnSpeed: " + I(N(Part(p, "carrier"), "turn_speed_reference")) + "\n");
+			if (assembly.Turret != null && !assembly.PreserveWeaponTemplates)
+				s.Append("\t" + assembly.Turret + ":\n\t\tTurnSpeed: " + I(N(Part(p, "carrier"), "turn_speed_reference")) + "\n");
 			var slot = 0;
 			foreach (var armament in assembly.Armaments)
 			{
-				s.Append("\t" + armament.Key + ":\n\t\tWeapon: " + actor + (slot++ == 0 ? ".gun" : ".aa") + "\n");
-				if (Part(p, "carrier")["fire_delay_ticks"] != null)
+				s.Append("\t" + armament.Key + ":\n\t\tWeapon: " + BoundWeaponId(actor, slot++, assembly) + "\n");
+				if (!assembly.PreserveWeaponTemplates && Part(p, "carrier")["fire_delay_ticks"] != null)
 				{
 					var delay = N(Part(p, "carrier"), "fire_delay_ticks");
 					if (delay < 0 || delay % 1 != 0) throw new InvalidDataException("Ungueltige Feuerverzoegerung.");
 					s.Append("\t\tFireDelay: " + I(delay) + "\n");
 				}
 			}
-			s.Append("\tCarryable:\n");
+			if (!assembly.PreserveWeaponTemplates) s.Append("\tCarryable:\n");
 			return s.ToString();
 		}
+
+		static string BoundWeaponId(string actor, int slot, CustomVehicleAssembly assembly) =>
+			actor + (assembly.PreserveWeaponTemplates ? ".w" + I(slot) : slot == 0 ? ".gun" : ".aa");
 
 		public string Weapons(CustomFactionProfile p)
 		{
@@ -258,6 +266,9 @@ namespace OpenRA.Mods.CA.Modular
 		{
 			Calculate(p);
 			var assembly = Assembly(p);
+			if (assembly.PreserveWeaponTemplates)
+				return string.Concat(assembly.Armaments.Select((binding, i) => BoundWeaponId(actor, i, assembly) +
+					":\n\tInherits: " + binding.Value + "\n"));
 			var carrier = Part(p, "carrier"); var weapon = Part(p, "weapon"); var ammo = Part(p, "ammunition");
 			var text = new StringBuilder();
 			var slot = 0;

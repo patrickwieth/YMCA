@@ -11,6 +11,11 @@ namespace OpenRA.Mods.CA.Modular
 		public readonly Dictionary<string, string[]> Choices;
 		public readonly string[] BuiltIn;
 		public readonly Dictionary<string, string> Armaments;
+		public bool PreserveWeaponTemplates { get; init; }
+		public bool NativeHover { get; init; }
+		public string VoxelImage { get; init; }
+		public string ExtraPrerequisites { get; init; } = "";
+		public string Summary { get; init; }
 
 		public CustomVehicleAssembly(string hull, string actor, string image, string turret,
 			string[] gear, string[] motors, string armor, string carrier, string weapon, string[] ammunition,
@@ -41,7 +46,50 @@ namespace OpenRA.Mods.CA.Modular
 			new CustomVehicleAssembly("designer-mlrs-hull", "MLRS", "mlrs", "Turreted",
 				new[] { "designer-mlrs-gear" }, new[] { "diesel", "diesel-large" },
 				"light", "designer-rocket-mount", "designer-rockets", new[] { "designer-rocket-payload" },
-				new Dictionary<string, string> { { "Armament@PRIMARY", "227mm" }, { "Armament@SECONDARY", "227mmAA" } })
+				new Dictionary<string, string> { { "Armament@PRIMARY", "227mm" }, { "Armament@SECONDARY", "227mmAA" } }),
+			new CustomVehicleAssembly("juggernaut", "Juggernaut", "juggernaut", null,
+				new[] { "walker-heavy" }, new[] { "diesel" }, "heavy", "fixed-triple", "artillery", new[] { "artillery-shell" },
+				new Dictionary<string, string> { { "Armament@PRIMARY", "JuggernautGun" }, { "Armament@SECONDARY", "JuggernautDummyAim" } })
+			{
+				PreserveWeaponTemplates = true,
+				Summary = "Juggernaut: Artillerie + Zielhilfswaffe; Schreit-, Ziel- und Schussanimationen bleiben erhalten."
+			},
+			new CustomVehicleAssembly("designer-mammoth-hull", "Mammoth", "mammoth", "Turreted@PRIMARY",
+				new[] { "designer-heavy-tracks" }, new[] { "diesel-heavy" }, "heavy",
+				"designer-mammoth-mount", "designer-mammoth-weapons", new[] { "designer-mammoth-payload" },
+				new Dictionary<string, string> { { "Armament@PRIMARY", "130mmTD" }, { "Armament@SECONDARY", "MammothTusk" } })
+			{
+				PreserveWeaponTemplates = true,
+				Summary = "Mammut: Doppelkanone, Raketen gegen Infanterie/Luft, Regeneration und schwere Ketten."
+			},
+			new CustomVehicleAssembly("designer-hmlrs-hull", "hmlrs", "hmlrs", "Turreted",
+				new[] { "prototype-hover" }, new[] { "diesel" }, "light",
+				"designer-hmlrs-mount", "designer-hmlrs-weapons", new[] { "designer-hmlrs-payload" },
+				new Dictionary<string, string> { { "Armament@PRIMARY", "227mmH" }, { "Armament@SECONDARY", "227mmAAH" },
+					{ "Armament@PRIMARY-UPG2", "227mm.upg" }, { "Armament@SECONDARY-UPG2", "227mmAA.upg" } })
+			{
+				PreserveWeaponTemplates = true, NativeHover = true, ExtraPrerequisites = ", ~promotion.hover_mlrs",
+				Summary = "Echter Hover-MLRS: Boden/AA + beide Upgrade-Kanaele. Benoetigt Hover-MLRS-Freischaltung."
+			},
+			new CustomVehicleAssembly("designer-disruptor-hull", "DISR", "disr", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel" }, "heavy",
+				"designer-disruptor-mount", "designer-disruptor-weapons", new[] { "designer-disruptor-payload" },
+				new Dictionary<string, string> { { "Armament@PRIMARY", "SonicZap" }, { "Armament@SECONDARY", "SonicZapVisual" },
+					{ "Armament@PRIMARYUPG", "SonicZap.UPG" }, { "Armament@SECONDARYUPG", "SonicZapVisual.UPG" } })
+			{
+				PreserveWeaponTemplates = true,
+				Summary = "Disruptor: Flaechen-Schallstrahl, visueller Begleitstrahl und bedingte Upgrades; kein Granatenersatz."
+			},
+			new CustomVehicleAssembly("designer-mk2-hull", "MAMMOTHMK2", "mammothmk2", null,
+				new[] { "designer-mk2-legs" }, new[] { "diesel-heavy" }, "heavy",
+				"designer-mk2-mount", "designer-mk2-weapons", new[] { "designer-mk2-payload" },
+				new Dictionary<string, string> { { "Armament@RAILGUN", "Railgun.MKII" }, { "Armament@MISSILES", "Dragon.MKII" },
+					{ "Armament@AAMISSILES", "RedEye.MKII" } })
+			{
+				PreserveWeaponTemplates = true, VoxelImage = "mammothmk2",
+				ExtraPrerequisites = ", ~promotion.mammoth_mkii, miss.gdi",
+				Summary = "Mk II: Railgun + Bodenraketen + AA; regenerierender Walker. Originalfreischaltung erforderlich."
+			}
 		};
 
 		CustomVehicleAssembly Assembly(CustomFactionProfile p) => Assemblies.Single(a => a.Hull == p.Parts["chassis"]);
@@ -65,9 +113,12 @@ namespace OpenRA.Mods.CA.Modular
 				}
 		}
 
+		public bool IsNativeHover(CustomFactionProfile p) => Assembly(p).NativeHover;
+
 		public string WeaponSummary(CustomFactionProfile p)
 		{
 			var a = Assembly(p);
+			if (a.Summary != null) return a.Summary;
 			var range = N(Part(p, "weapon"), "range_cells");
 			var burst = N(Part(p, "carrier"), "burst");
 			if (a.Actor == "HMMV")

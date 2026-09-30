@@ -7,7 +7,7 @@ Restart the locally built game, then **Eigene Fraktion**.
 - The base is still **GDI / Eagle**, with its ordinary roster retained.
 - **Neu / Kopie / Entfernen** manage up to **16 own vehicle designs**. Select a
   design in the numbered dropdown to edit it. Removing a design needs confirmation.
-- **Vorlagen** adds missing cannon, MG and missile assemblies in one click. It
+- **Vorlagen** adds missing supported GDI assemblies in one click. It
   does not replace your existing designs, names or selections.
 - **Einbaugruppe** selects the compatible hull/weapon/artwork group. Incompatible
   parts are explicitly reset to valid defaults; compatible motor/generator choices
@@ -33,13 +33,18 @@ Their production is intentionally disabled until a real factory/deployment workf
 
 ## Supported assemblies
 
-There are currently **32 supported component combinations** across these groups:
+There are currently **42 supported component combinations across eight GDI families**:
 
 | Assembly | Existing actor / full weapon bindings | Reference price / HP / speed | Configured default |
 |---|---|---|---|
 | Battle tank | MTNK; 120mm or experimental 120mmHEAT | 900 / 52000 / 82 | 900 / 52000 / 82 |
 | MG scout | HMMV; M60mgTD, including sensor/driver/targeting traits | 400 / 15000 / 157 | 400 / 15000 / 157 |
 | Missile launcher | MLRS; **227mm + 227mmAA** | 950 / 16000 / 82 | 950 / 16000 / 82 |
+| Juggernaut | JuggernautGun + JuggernautDummyAim | 2000 / 60000 / 50 | 2000 / 60000 / 50 |
+| Mammoth | 130mmTD + MammothTusk, regeneration | 1700 / 78000 / 52 | 1700 / 78000 / 52 |
+| Native Hover MLRS | Four ground/AA/upgrade channels | 1150 / 18000 / 113 | 1150 / 18000 / 113 |
+| Disruptor | SonicZap + visual beam + both upgrade channels | 1500 / 75000 / 56 | 1500 / 75000 / 56 |
+| Mammoth Mk II | Railgun, ground missiles, AA missiles, regeneration | 10000 / 350000 / 35 | 10000 / 350000 / 35 |
 
 These exact default scalar matches are constructed calibration fits, NOT independent
 balance validation. Allocations for mass, power and component prices remain experimental.
@@ -63,8 +68,31 @@ balance validation. Allocations for mass, power and component prices remain expe
 Parts remain conceptually separate, but graphically bound assemblies prevent a Hum-Vee
 MG or MLRS launcher from silently becoming a cannon-looking tank. MG/MLRS rendering
 inherits their complete original actor templates, not just the MTNK with another weapon.
-Scalar weapon fields are compiled from JSON; complete inherited projectile and warhead
-packages remain intact. MLRS secondary range/damage/reload are explicit independent fields.
+Scalar weapon fields for the original three groups are compiled from JSON; complete
+inherited projectile and warhead packages remain intact. MLRS secondary range/damage/reload
+are explicit independent fields. The five new complex families use **template-locked weapon
+packages** instead: each channel derives its complete source weapon without scalar overrides.
+Their JSON records configure physical/economic values, not a fake single damage/cadence for
+a multi-weapon or beam system. Neutral calculator cadence fields are not emitted as rules.
+
+Juggernaut retains stop-to-fire, aim/attack/run/death animations and its TargetDamage dummy
+weapon; it does not acquire a turret or a firing delay on the dummy. Disruptor retains the
+AreaBeam behavior, allied-damage rules, visual companion and conditional upgrade channels.
+Native Hover MLRS uses its actual hover artwork and does not get a second hover trait group.
+Mk II retains AttackFollow, regeneration, repair/transport weight and its original voxel scale;
+its voxel image is explicitly rebound so generated actor IDs cannot become missing asset names.
+
+Each preserved channel gets a unique `.w0`, `.w1`, etc. weapon ID; armament names, conditions,
+attack lists, muzzle positions and delays remain inherited. No added Carryable or turret traits
+are forced onto these complex families. Walker gear reuses `sheavytracked` for Juggernaut and
+`heavytracked` for Mk II, exactly as in the original rules.
+
+The original `promotion.hover_mlrs` and `promotion.mammoth_mkii` / `miss.gdi` unlocks remain
+production requirements in addition to calculated tech. Preplaced examples are for testing.
+The custom GDI roster allows selected GDI families independently of their original national
+unit-list restrictions (e.g. Talon Juggernaut / ZOCOM Disruptor); the base remains Eagle, so
+inherited nation-specific upgrades are only active if that owner actually grants them. Global
+unit availability, existing faction rules and the original actors are not modified.
 
 The frozen actor and weapon IDs are unique per design and stable across renaming/reordering.
 A copied design gets a new ID and an independent component dictionary. All designs are
@@ -128,16 +156,17 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **64 Python tests**, **30 native tests**, and a successful **YMCA.sln Release build**.
-The six-design differential reports **1685 control / 1697 generated errors**: 12
+Verified: **65 Python tests**, **40 native tests**, and a successful **YMCA.sln Release build**.
+The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
 
 Native tests cover schema migration, roundtrip/backups, library isolation, shared budget,
 copy independence, namespace stability, invalid combinations and weapon-channel preservation.
-All 32 offered numeric combinations are checked against the independent Python calculator.
-The six-design engine sample also includes tank hover and both stationary hull variants.
-See `tools/modular/designer-roster-validation.md` for the exact differential result.
+All 42 offered numeric combinations are checked against the independent Python calculator.
+The earlier six-design sample includes tank hover and both stationary hull variants.
+The eight-family sample can be exported with `MODULAR_GDI_EXPORT=/absolute/new-gdi.oramap`.
+See `tools/modular/designer-gdi-validation.md` for the current differential result.
 
 The earlier single-design menu/lobby path was confirmed by the user. This expanded
 multi-design UI, factory production, mixed-weapon firing and transport still need

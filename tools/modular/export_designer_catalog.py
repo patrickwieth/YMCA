@@ -2,9 +2,11 @@
 import copy
 import itertools
 import json
+import re
 from pathlib import Path
 from calibrate import calculate
 from compile_prototype import load_inputs, REPO
+from gdi_designer_expansion import additional_assemblies, extend_parts
 
 
 def assemblies():
@@ -19,7 +21,7 @@ def assemblies():
               'light', 'scout-mg-mount', 'scout-mg', ['scout-mg-rounds'], ['scout-sensors']),
         frame('designer-mlrs-hull', ['designer-mlrs-gear'], ['diesel', 'diesel-large'],
               'light', 'designer-rocket-mount', 'designer-rockets', ['designer-rocket-payload']),
-    ]
+    ] + additional_assemblies()
 
 
 def data():
@@ -57,6 +59,7 @@ def data():
     parts['designer-rocket-payload'] = dict(common, display_name='MLRS Boden-/Luft-Sprengkoepfe', role='ammunition',
         mass=400, cost=75, damage=1300, secondary_damage=3000, source='227mm + 227mmAA',
         note='Ground raw damage 1300 with existing falloff; AA 3000. All projectile/versus/effect rules inherited.')
+    extend_parts(parts, catalog)
     # These are explicit designer adapters, not changes to the broad catalog/workbooks.
     for assembly in assemblies():
         choices = assembly['options']
@@ -72,6 +75,15 @@ def cases():
     catalog, _ = load_inputs()
     exported = data()
     catalog['components'].update(exported['components'])
+    world = (REPO / 'mods/ca/rules/world.yaml').read_text(encoding='utf-8')
+    match = re.search(r'\tLocomotor@HEAVYTRACKED:\n(.*?)(?=\n\t[^\t ]|\Z)', world, re.S)
+    if not match or '\t\tName: heavytracked' not in match.group(1):
+        raise ValueError('Missing existing heavytracked locomotor')
+    catalog['locomotors']['heavytracked'] = {
+        'source': 'mods/ca/rules/world.yaml / Locomotor@HEAVYTRACKED',
+        'terrain_speeds': {k: int(v) for k, v in re.findall(r'^\t{3}(\w+): (\d+)$', match.group(1), re.M)},
+        'crushes': re.search(r'^\t\tCrushes: (.+)$', match.group(1), re.M).group(1).split(', '),
+    }
     rows = []
     for assembly in assemblies():
         choices = assembly['options']

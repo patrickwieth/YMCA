@@ -5,8 +5,9 @@
 **Eigene Fraktion** now supports GDI/Eagle's normal roster plus **up to 16 custom
 vehicle designs**, with New/Copy/Remove, shared budget, named faction save/load and
 in-memory migration of existing single-tank profiles. **Vorlagen** adds missing
-cannon, MG-scout and MLRS assemblies. Their 32 supported combinations use compatible
-artwork and full existing weapons, including separate ground/AA missile channels.
+**eight GDI families**: tank, MG scout, MLRS, Mammoth, Juggernaut, native Hover MLRS,
+Disruptor and Mammoth Mk II. Their **42 supported combinations** use compatible
+artwork and full existing weapons, including helper, visual and conditional upgrade channels.
 The Hum-Vee's mandatory sensors are explicitly counted once in price/mass/power.
 
 **Speichern und Testspiel** freezes the complete roster into a separate user map.
@@ -16,11 +17,16 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**64 Python + 30 native tests pass**; all 32 numeric combinations match the independent
-Python calculator. CA Release build succeeds. The six-design engine differential
-is **1685 control / 1697 generated errors**, all 12 additions inherited diagnostics,
-**zero unexpected new errors**; see `designer-roster-validation.md`. This is NOT a
+**65 Python + 40 native tests pass**; all 42 numeric combinations match the independent
+Python calculator. Release build succeeds. The eight-family engine differential
+is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
+**zero unexpected new errors**; see `designer-gdi-validation.md`. This is NOT a
 clean full-mod lint or a live gameplay pass. Expanded UI/gameplay checks remain pending.
+
+The five complex new families use template-locked weapon packages: no fake SpreadDamage
+on a dummy aim weapon, no erased beam behavior, no colliding upgrade-channel names.
+Hover MLRS and Mk II keep their original special production unlock requirements.
+Other base factions and further vehicle families are not integrated yet.
 
 The confirmed fix preventing ordinary skirmish restoration from replacing the chosen
 snapshot remains active. Test sessions also do not overwrite ordinary skirmish setups.

@@ -6,19 +6,28 @@
     "chassis": [
       "gdi-battle-hull",
       "humvee-hull",
-      "designer-mlrs-hull"
+      "designer-mlrs-hull",
+      "juggernaut",
+      "designer-mammoth-hull",
+      "designer-hmlrs-hull",
+      "designer-disruptor-hull",
+      "designer-mk2-hull"
     ],
     "running_gear": [
       "tracks-standard",
       "prototype-hover",
       "gdi-stationary",
       "wheels-light",
-      "designer-mlrs-gear"
+      "designer-mlrs-gear",
+      "walker-heavy",
+      "designer-heavy-tracks",
+      "designer-mk2-legs"
     ],
     "drive": [
       "diesel",
       "diesel-large",
-      "diesel-light"
+      "diesel-light",
+      "diesel-heavy"
     ],
     "generator": [
       "baseline-generator",
@@ -31,18 +40,33 @@
     "carrier": [
       "medium-cannon-mount",
       "scout-mg-mount",
-      "designer-rocket-mount"
+      "designer-rocket-mount",
+      "fixed-triple",
+      "designer-mammoth-mount",
+      "designer-hmlrs-mount",
+      "designer-disruptor-mount",
+      "designer-mk2-mount"
     ],
     "weapon": [
       "medium-cannon",
       "scout-mg",
-      "designer-rockets"
+      "designer-rockets",
+      "artillery",
+      "designer-mammoth-weapons",
+      "designer-hmlrs-weapons",
+      "designer-disruptor-weapons",
+      "designer-mk2-weapons"
     ],
     "ammunition": [
       "medium-tank-shell",
       "designer-he-shell",
       "scout-mg-rounds",
-      "designer-rocket-payload"
+      "designer-rocket-payload",
+      "artillery-shell",
+      "designer-mammoth-payload",
+      "designer-hmlrs-payload",
+      "designer-disruptor-payload",
+      "designer-mk2-payload"
     ]
   },
   "components": {
@@ -123,6 +147,42 @@
         "scout-sensors"
       ],
       "source": "HMMV"
+    },
+    "juggernaut": {
+      "source": "Juggernaut",
+      "role": "chassis",
+      "factions": [
+        "gdi"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "mass": 12500,
+      "cost": 800,
+      "hp": 60000,
+      "default_running_gear": "walker-heavy",
+      "allowed_running_gear": [
+        "walker-heavy"
+      ],
+      "turn_speed_limit": 16,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 3,
+      "max_mass": 30000,
+      "reference_mass": 20000,
+      "reference_kw": 460,
+      "reference_speed": 50,
+      "max_speed": 50,
+      "allowed": {
+        "carrier": [
+          "fixed-triple"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "display_name": "Juggernaut - Artillerielaeufer"
     },
     "tracks-standard": {
       "display_name": "Standard-Kettenlaufwerk",
@@ -207,6 +267,25 @@
       "max_speed": 180,
       "turn_speed": 80
     },
+    "walker-heavy": {
+      "display_name": "Schweres Schreitwerk",
+      "role": "running_gear",
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "mass": 3500,
+      "cost": 300,
+      "electric_kw": 0,
+      "locomotor": "sheavytracked",
+      "kind": "walker",
+      "max_mass": 30000,
+      "max_speed": 50,
+      "turn_speed": 16,
+      "note": "Juggernaut physically walks, but its existing engine Locomotor is sheavytracked. Artwork does not determine locomotor semantics."
+    },
     "diesel": {
       "role": "drive",
       "factions": [
@@ -258,6 +337,23 @@
       "electric_kw": 0,
       "mechanical_kw": 250,
       "note": "New shared scout motor; all physical values experimental."
+    },
+    "diesel-heavy": {
+      "display_name": "Schwerer Dieselmotor",
+      "role": "drive",
+      "factions": [
+        "china",
+        "gdi",
+        "soviet"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 2,
+      "mass": 2000,
+      "cost": 300,
+      "electric_kw": 0,
+      "mechanical_kw": 1000,
+      "note": "New provisional heavy family, not a formula derived from engine size."
     },
     "baseline-generator": {
       "role": "generator",
@@ -375,6 +471,27 @@
       "turn_speed_reference": 80,
       "source": "M60mgTD; HMMV / BGGY turrets"
     },
+    "fixed-triple": {
+      "role": "carrier",
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "mass": 1500,
+      "cost": 300,
+      "electric_kw": 0,
+      "weapons": [
+        "artillery"
+      ],
+      "burst": 3,
+      "burst_delay_ticks": 1,
+      "reload_ticks": 100,
+      "fire_delay_ticks": 33,
+      "locked_visual": "juggernaut",
+      "display_name": "Juggernaut Dreifachlafette"
+    },
     "medium-cannon": {
       "display_name": "Mittlere Panzerkanone",
       "role": "weapon",
@@ -416,6 +533,24 @@
       "range_cells": 4,
       "source": "M60mgTD"
     },
+    "artillery": {
+      "role": "weapon",
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "mass": 900,
+      "cost": 300,
+      "electric_kw": 0,
+      "ammunition": [
+        "artillery-shell"
+      ],
+      "source": "JuggernautGun",
+      "display_name": "Juggernaut Geschuetz- und Zielsystem",
+      "template_locked": true
+    },
     "medium-tank-shell": {
       "display_name": "Panzergranaten gegen schwere Ziele",
       "role": "ammunition",
@@ -449,6 +584,19 @@
       "electric_kw": 0,
       "damage": 1000,
       "source": "M60mgTD / ^LightMG / ^Bullet"
+    },
+    "artillery-shell": {
+      "role": "ammunition",
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "mass": 1000,
+      "cost": 200,
+      "electric_kw": 0,
+      "display_name": "Juggernaut Sprenggranaten"
     },
     "scout-sensors": {
       "display_name": "SpÃ¤hsensoren",
@@ -599,6 +747,402 @@
       "secondary_damage": 3000,
       "source": "227mm + 227mmAA",
       "note": "Ground raw damage 1300 with existing falloff; AA 3000. All projectile/versus/effect rules inherited."
+    },
+    "designer-heavy-tracks": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "running_gear",
+      "display_name": "Schwere Ketten (Mammut)",
+      "mass": 3500,
+      "cost": 200,
+      "kind": "tracks",
+      "locomotor": "heavytracked",
+      "max_mass": 50000,
+      "max_speed": 90,
+      "turn_speed": 16
+    },
+    "designer-mk2-legs": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "running_gear",
+      "display_name": "Mk-II-Schreitwerk",
+      "mass": 5000,
+      "cost": 400,
+      "kind": "walker",
+      "locomotor": "heavytracked",
+      "max_mass": 100000,
+      "max_speed": 45,
+      "turn_speed": 8
+    },
+    "designer-mammoth-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Mammut Waffentraeger",
+      "mass": 1000,
+      "cost": 200,
+      "weapons": [
+        "designer-mammoth-weapons"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "source": "Mammoth",
+      "note": "Cadence is template-locked per channel; these neutral calculator fields do not override weapons."
+    },
+    "designer-mammoth-weapons": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "weapon",
+      "display_name": "Mammut komplettes Waffensystem",
+      "mass": 1000,
+      "cost": 300,
+      "ammunition": [
+        "designer-mammoth-payload"
+      ],
+      "template_locked": true,
+      "source": "Mammoth"
+    },
+    "designer-mammoth-payload": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Mammut Waffenpaket",
+      "mass": 500,
+      "cost": 100,
+      "source": "Mammoth",
+      "note": "Full existing payloads, helper weapons and upgrade channels retained. No damage-only substitution."
+    },
+    "designer-mammoth-hull": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Mammut - gebundene Einbaugruppe",
+      "hp": 78000,
+      "mass": 18000,
+      "cost": 600,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "designer-heavy-tracks",
+      "allowed_running_gear": [
+        "designer-heavy-tracks"
+      ],
+      "turn_speed_limit": 16,
+      "max_mass": 50000,
+      "reference_mass": 26000,
+      "reference_kw": 960.0,
+      "reference_speed": 52,
+      "max_speed": 90,
+      "allowed": {
+        "carrier": [
+          "designer-mammoth-mount"
+        ],
+        "drive": [
+          "diesel-heavy"
+        ]
+      },
+      "source": "Mammoth",
+      "note": "Constructed baseline fit. Hull allocation includes fixed stock abilities (e.g. regeneration); no per-design rebates."
+    },
+    "designer-hmlrs-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Hover-MLRS Waffentraeger",
+      "mass": 1000,
+      "cost": 150,
+      "weapons": [
+        "designer-hmlrs-weapons"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "source": "hmlrs",
+      "note": "Cadence is template-locked per channel; these neutral calculator fields do not override weapons."
+    },
+    "designer-hmlrs-weapons": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "weapon",
+      "display_name": "Hover-MLRS komplettes Waffensystem",
+      "mass": 1000,
+      "cost": 175,
+      "ammunition": [
+        "designer-hmlrs-payload"
+      ],
+      "template_locked": true,
+      "source": "hmlrs"
+    },
+    "designer-hmlrs-payload": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Hover-MLRS Waffenpaket",
+      "mass": 500,
+      "cost": 75,
+      "source": "hmlrs",
+      "note": "Full existing payloads, helper weapons and upgrade channels retained. No damage-only substitution."
+    },
+    "designer-hmlrs-hull": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Hover-MLRS - gebundene Einbaugruppe",
+      "hp": 18000,
+      "mass": 8000,
+      "cost": 350,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "prototype-hover",
+      "allowed_running_gear": [
+        "prototype-hover"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 20000,
+      "reference_mass": 12300,
+      "reference_kw": 420.0,
+      "reference_speed": 113,
+      "max_speed": 150,
+      "allowed": {
+        "carrier": [
+          "designer-hmlrs-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "source": "hmlrs",
+      "note": "Constructed baseline fit. Hull allocation includes fixed stock abilities (e.g. regeneration); no per-design rebates."
+    },
+    "designer-disruptor-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Disruptor Waffentraeger",
+      "mass": 1000,
+      "cost": 200,
+      "weapons": [
+        "designer-disruptor-weapons"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "source": "DISR",
+      "note": "Cadence is template-locked per channel; these neutral calculator fields do not override weapons."
+    },
+    "designer-disruptor-weapons": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 50,
+      "role": "weapon",
+      "display_name": "Disruptor komplettes Waffensystem",
+      "mass": 1000,
+      "cost": 350,
+      "ammunition": [
+        "designer-disruptor-payload"
+      ],
+      "template_locked": true,
+      "source": "DISR"
+    },
+    "designer-disruptor-payload": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Disruptor Waffenpaket",
+      "mass": 500,
+      "cost": 75,
+      "source": "DISR",
+      "note": "Full existing payloads, helper weapons and upgrade channels retained. No damage-only substitution."
+    },
+    "designer-disruptor-hull": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Disruptor - gebundene Einbaugruppe",
+      "hp": 75000,
+      "mass": 12500,
+      "cost": 675,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 8,
+      "max_mass": 20000,
+      "reference_mass": 17100,
+      "reference_kw": 260.0,
+      "reference_speed": 56,
+      "max_speed": 150,
+      "allowed": {
+        "carrier": [
+          "designer-disruptor-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "source": "DISR",
+      "note": "Constructed baseline fit. Hull allocation includes fixed stock abilities (e.g. regeneration); no per-design rebates."
+    },
+    "designer-mk2-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Mammoth Mk II Waffentraeger",
+      "mass": 1000,
+      "cost": 700,
+      "weapons": [
+        "designer-mk2-weapons"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "source": "MAMMOTHMK2",
+      "note": "Cadence is template-locked per channel; these neutral calculator fields do not override weapons."
+    },
+    "designer-mk2-weapons": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "weapon",
+      "display_name": "Mammoth Mk II komplettes Waffensystem",
+      "mass": 1000,
+      "cost": 4500,
+      "ammunition": [
+        "designer-mk2-payload"
+      ],
+      "template_locked": true,
+      "source": "MAMMOTHMK2"
+    },
+    "designer-mk2-payload": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Mammoth Mk II Waffenpaket",
+      "mass": 500,
+      "cost": 800,
+      "source": "MAMMOTHMK2",
+      "note": "Full existing payloads, helper weapons and upgrade channels retained. No damage-only substitution."
+    },
+    "designer-mk2-hull": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Mammoth Mk II - gebundene Einbaugruppe",
+      "hp": 350000,
+      "mass": 30000,
+      "cost": 3300,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "designer-mk2-legs",
+      "allowed_running_gear": [
+        "designer-mk2-legs"
+      ],
+      "turn_speed_limit": 8,
+      "max_mass": 100000,
+      "reference_mass": 39500,
+      "reference_kw": 960.0,
+      "reference_speed": 35,
+      "max_speed": 45,
+      "allowed": {
+        "carrier": [
+          "designer-mk2-mount"
+        ],
+        "drive": [
+          "diesel-heavy"
+        ]
+      },
+      "source": "MAMMOTHMK2",
+      "note": "Constructed baseline fit. Hull allocation includes fixed stock abilities (e.g. regeneration); no per-design rebates."
     }
   },
   "assemblies": [
@@ -696,6 +1240,156 @@
         ],
         "ammunition": [
           "designer-rocket-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "juggernaut"
+        ],
+        "running_gear": [
+          "walker-heavy"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "fixed-triple"
+        ],
+        "weapon": [
+          "artillery"
+        ],
+        "ammunition": [
+          "artillery-shell"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "designer-mammoth-hull"
+        ],
+        "running_gear": [
+          "designer-heavy-tracks"
+        ],
+        "drive": [
+          "diesel-heavy"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "designer-mammoth-mount"
+        ],
+        "weapon": [
+          "designer-mammoth-weapons"
+        ],
+        "ammunition": [
+          "designer-mammoth-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "designer-hmlrs-hull"
+        ],
+        "running_gear": [
+          "prototype-hover"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "designer-hmlrs-mount"
+        ],
+        "weapon": [
+          "designer-hmlrs-weapons"
+        ],
+        "ammunition": [
+          "designer-hmlrs-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "designer-disruptor-hull"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "designer-disruptor-mount"
+        ],
+        "weapon": [
+          "designer-disruptor-weapons"
+        ],
+        "ammunition": [
+          "designer-disruptor-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "designer-mk2-hull"
+        ],
+        "running_gear": [
+          "designer-mk2-legs"
+        ],
+        "drive": [
+          "diesel-heavy"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "designer-mk2-mount"
+        ],
+        "weapon": [
+          "designer-mk2-weapons"
+        ],
+        "ammunition": [
+          "designer-mk2-payload"
         ]
       },
       "built_in": []

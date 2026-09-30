@@ -34,7 +34,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		[ObjectCreator.UseCtor]
 		public CustomFactionLogic(Widget widget, ModData modData, Action onExit, Action<string> onPlay)
 		{
-			string message = "GDI-Roster plus eigene Fahrzeuge. Vorlagen fuegt die verfuegbaren Waffengruppen hinzu.";
+			string message = "GDI-Roster plus eigene Fahrzeuge. Vorlagen fuegt die verfuegbaren Fahrzeugfamilien hinzu.";
 			widget.Get<LabelWidget>("STATUS").GetText = () => message;
 			bool dirty = false;
 			void DiscardThen(Action action)
@@ -90,7 +90,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					power = $"Masse {v.Mass:0} kg   Elektrisch {v.Electric:0.##} kW   Antriebsreserve {v.Reserve:0.##} kW";
 					weapons = compiler.WeaponSummary(p);
 					warning = v.Stationary ? "Stationaer: nur vorplatziert + Carryall, nicht baubar. Fahrzeuggrafik ist Platzhalter." :
-						p.Parts["running_gear"] == "prototype-hover" ? "Hover mit Platzhaltergrafik. Baubar ab Tech 2; eigene Fahrzeuge hinten im Fahrzeugmenue." :
+						p.Parts["running_gear"] == "prototype-hover" && !compiler.IsNativeHover(p) ? "Hover mit Platzhaltergrafik. Baubar ab Tech 2; eigene Fahrzeuge hinten im Fahrzeugmenue." :
 						"Baubar ab Tech " + v.Tech + "; eigene Fahrzeuge hinten im Fahrzeugmenue. Rumpf und Waffengrafik sind gebunden.";
 					valid = true;
 					if (edited) message = "Ungespeichert. Alle " + roster.Designs.Count + " Entwuerfe werden gemeinsam ins Testspiel uebernommen.";
@@ -141,7 +141,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						item.Get<LabelWidget>("LABEL").GetText = () => compiler.Label(id);
 						return item;
 					}
-					choice.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", options.Length * 30, options, Setup);
+					choice.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 30, options, Setup);
 				};
 			}
 
@@ -176,7 +176,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						if (roster.Designs.Any(d => d.Parts["chassis"] == hull)) continue;
 						var d = compiler.AddDesign(roster);
 						compiler.SelectPart(compiler.Profile(roster, d), "chassis", hull);
-						var name = hull == "humvee-hull" ? "Eigener MG-Wagen" : hull == "designer-mlrs-hull" ? "Eigener MLRS" : "Eigener Kampfpanzer";
+						var name = "Eigen " + compiler.Label(hull).Split(new[] { " - " }, StringSplitOptions.None)[0];
+						if (name.Length > 32) name = name.Substring(0, 32);
 						if (!roster.Designs.Any(other => other != d && string.Equals(other.Name, name, StringComparison.OrdinalIgnoreCase))) d.Name = name;
 					}
 					compiler.ValidateRoster(roster); Select(selected); Refresh(true);

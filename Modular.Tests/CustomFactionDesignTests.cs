@@ -56,7 +56,7 @@ public class CustomFactionDesignTests
     public void AllNativeCalculationsMatchTheIndependentPythonCalculator()
     {
         var rows = JArray.Parse(File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "designer-calculation-cases.json")));
-        Assert.That(rows.Count, Is.EqualTo(32));
+        Assert.That(rows.Count, Is.EqualTo(42));
         foreach (var row in rows)
         {
             var profile = new CustomFactionProfile { Parts = row["parts"].ToObject<Dictionary<string, string>>() };
