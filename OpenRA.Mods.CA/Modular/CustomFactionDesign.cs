@@ -34,19 +34,15 @@ namespace OpenRA.Mods.CA.Modular
 	}
 
 	// Pure compiler/persistence service: no Python, world state, UI or engine mutation.
-	public sealed class CustomFactionDesign
+	public sealed partial class CustomFactionDesign
 	{
 		readonly JObject catalog;
 		public static readonly string[] Roles = { "chassis", "running_gear", "drive", "generator", "armor", "carrier", "weapon", "ammunition" };
-		static readonly string[][] Bindings =
-		{
-			new[] { "gdi-battle-hull" }, new[] { "tracks-standard", "prototype-hover", "gdi-stationary" },
-			new[] { "diesel", "diesel-large" }, new[] { "baseline-generator", "efficient-generator" }, new[] { "heavy" },
-			new[] { "medium-cannon-mount" }, new[] { "medium-cannon" }, new[] { "medium-tank-shell", "designer-he-shell" }
-		};
+		static string[][] Bindings => Roles.Select(r => Assemblies.SelectMany(a => a.Choices[r]).Distinct().ToArray()).ToArray();
 		static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
 		{
 			MissingMemberHandling = MissingMemberHandling.Error,
+			ObjectCreationHandling = ObjectCreationHandling.Replace,
 			TypeNameHandling = TypeNameHandling.None
 		};
 
@@ -65,15 +61,31 @@ namespace OpenRA.Mods.CA.Modular
 					options.Values<string>().Any(id => !Bindings[i].Contains(id) || catalog["components"][id] is not JObject))
 					throw new InvalidDataException("Bausteinkatalog passt nicht zu den Compiler-Bindungen.");
 			}
-			if (catalog["components"]["heavy"].Value<string>("armor_type") != "Heavy" ||
+			var descriptors = catalog["assemblies"] as JArray;
+			if (descriptors == null || descriptors.Count != Assemblies.Length)
+				throw new InvalidDataException("Einbaugruppen fehlen im Katalog.");
+			foreach (var assembly in Assemblies)
+			{
+				var matches = descriptors.Where(d => d["options"]?["chassis"]?.First?.Value<string>() == assembly.Hull).ToArray();
+				if (matches.Length != 1 || Roles.Any(r => matches[0]["options"][r] is not JArray choices ||
+					!choices.Values<string>().SequenceEqual(assembly.Choices[r])) ||
+					matches[0]["built_in"] is not JArray builtIn || !builtIn.Values<string>().SequenceEqual(assembly.BuiltIn))
+					throw new InvalidDataException("Einbaugruppen passen nicht zu den Grafik- und Trait-Bindungen.");
+			}
+			if (catalog["components"]["light"].Value<string>("armor_type") != "Light" ||
+				catalog["components"]["heavy"].Value<string>("armor_type") != "Heavy" ||
 				catalog["components"]["medium-cannon-mount"].Value<int>("burst") != 1)
 				throw new InvalidDataException("Panzerungs- oder Waffenbindung nicht unterstuetzt.");
-			var kinds = new[] { "tracks", "hover", "stationary" };
-			var locomotors = new[] { "tracked", "hover", "wheeled" };
-			for (var i = 0; i < Bindings[1].Length; i++)
+			var gearBindings = new Dictionary<string, (string Kind, string Locomotor)>
 			{
-				var gear = (JObject)catalog["components"][Bindings[1][i]];
-				if (gear == null || gear.Value<string>("kind") != kinds[i] || gear.Value<string>("locomotor") != locomotors[i])
+				{ "tracks-standard", ("tracks", "tracked") }, { "prototype-hover", ("hover", "hover") },
+				{ "gdi-stationary", ("stationary", "wheeled") }, { "wheels-light", ("wheels", "wheeled") },
+				{ "designer-mlrs-gear", ("tracks", "wheeled") }
+			};
+			foreach (var binding in gearBindings)
+			{
+				var gear = (JObject)catalog["components"][binding.Key];
+				if (gear == null || gear.Value<string>("kind") != binding.Value.Kind || gear.Value<string>("locomotor") != binding.Value.Locomotor)
 					throw new InvalidDataException("Fahrwerksbindung nicht unterstuetzt.");
 			}
 		}
@@ -112,6 +124,15 @@ namespace OpenRA.Mods.CA.Modular
 						throw new InvalidDataException("Ungueltiger Bausteinwert.");
 			}
 
+			var assembly = Assembly(profile);
+			if (Roles.Any(r => !assembly.Choices[r].Contains(profile.Parts[r])))
+				throw new InvalidDataException("Rumpf, Grafik, Fahrwerk und Waffengruppe sind nicht kompatibel.");
+			var builtIn = assembly.BuiltIn.Select(id => catalog["components"][id] as JObject).ToArray();
+			if (builtIn.Any(p => p == null || p.Value<string>("role") != "equipment" || N(p, "cp") != 0 ||
+				!p["factions"].Values<string>().Contains("gdi") || N(p, "cost") < 0 || N(p, "mass") < 0 || N(p, "electric_kw") < 0 ||
+				N(p, "tier") < 0 || N(p, "tier") > 3 || N(p, "tier") % 1 != 0 || N(p, "tech") < 1 || N(p, "tech") > 3 || N(p, "tech") % 1 != 0))
+				throw new InvalidDataException("Ungueltige fest eingebaute Ausruestung.");
+			var selected = Roles.Select(r => Part(profile, r)).Concat(builtIn).ToArray();
 			var hull = Part(profile, "chassis");
 			var gear = Part(profile, "running_gear");
 			var armor = Part(profile, "armor");
@@ -123,15 +144,15 @@ namespace OpenRA.Mods.CA.Modular
 			var efficiency = N(generator, "efficiency");
 			if (efficiency <= 0 || efficiency > 1)
 				throw new InvalidDataException("Ungueltiger Generatorwirkungsgrad.");
-			var other = Roles.Where(r => r != "chassis" && r != "armor").Select(r => Part(profile, r)).ToArray();
+			var other = selected.Where(p => p.Value<string>("role") != "chassis" && p.Value<string>("role") != "armor").ToArray();
 			var v = new CustomTankValues
 			{
 				Mass = N(hull, "mass") * N(armor, "mass_percent") / 100 + other.Sum(p => N(p, "mass")),
 				Cost = N(hull, "cost") * N(armor, "cost_percent") / 100 + other.Sum(p => N(p, "cost")),
 				Hp = N(hull, "hp") * N(armor, "hp_percent") / 100,
-				Electric = Roles.Sum(r => N(Part(profile, r), "electric_kw")),
-				Points = Roles.Sum(r => (int)N(Part(profile, r), "tier")),
-				Tech = Roles.Max(r => (int)N(Part(profile, r), "tech")),
+				Electric = selected.Sum(p => N(p, "electric_kw")),
+				Points = selected.Sum(p => (int)N(p, "tier")),
+				Tech = selected.Max(p => (int)N(p, "tech")),
 				Stationary = profile.Parts["running_gear"] == "gdi-stationary"
 			};
 			v.Reserve = N(Part(profile, "drive"), "mechanical_kw") - v.Electric / efficiency;
@@ -164,7 +185,11 @@ namespace OpenRA.Mods.CA.Modular
 
 		public void Save(string path, CustomFactionProfile p)
 		{
-			var text = Serialize(p);
+			SaveText(path, Serialize(p));
+		}
+
+		static void SaveText(string path, string text)
+		{
 			Directory.CreateDirectory(Path.GetDirectoryName(path));
 			var temp = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
 			try
@@ -183,36 +208,93 @@ namespace OpenRA.Mods.CA.Modular
 
 		public string Rules(CustomFactionProfile p)
 		{
+			return WorldRules(p.Name) + ActorRules(p, "modular.custom", 0);
+		}
+
+		static string WorldRules(string name) => "World:\n\tFactionCA@11:\n\t\tName: " + name + " (GDI)\n";
+
+		string ActorRules(CustomFactionProfile p, string actor, int index)
+		{
 			var v = Calculate(p);
-			var s = new StringBuilder("World:\n\tFactionCA@11:\n\t\tName: " + p.Name + " (GDI)\n");
-			s.Append("modular.custom:\n\tInherits: MTNK\n");
+			var assembly = Assembly(p);
+			var s = new StringBuilder(actor + ":\n\tInherits: " + assembly.Actor + "\n");
 			if (p.Parts["running_gear"] == "prototype-hover")
 				s.Append("\tInherits@MODULARHOVER: ^HoverVehicle\n");
 			if (v.Stationary)
 				s.Append("\t-Buildable:\n");
 			else
-				s.Append("\tBuildable:\n\t\tPrerequisites: vehicles, ~structures.eagle" + (v.Tech > 1 ? ", tier" + v.Tech : "") +
-					"\n\t\tBuildPaletteOrder: 81\n\t\tDescription: Custom modular vehicle. Frozen before this match.\n");
-			s.Append("\tRenderSprites:\n\t\tImage: mtnk\n\tTooltip:\n\t\tName: " + p.TankName + "\n");
+				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures.eagle" + (v.Tech > 1 ? ", tier" + v.Tech : "") +
+					"\n\t\tBuildPaletteOrder: " + (1000 + index) + "\n\t\tDescription: Eigener Entwurf - vor dem Spiel eingefroren.\n");
+			s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n\tTooltip:\n\t\tName: " + p.TankName + "\n");
 			s.Append("\t-TooltipExtras:\n"); // Stock anti-tank strengths would be misleading for the HE loadout.
 			s.Append("\tValued:\n\t\tCost: " + I(v.Cost) + "\n\tHealth:\n\t\tHP: " + I(v.Hp) + "\n");
-			s.Append("\tArmor:\n\t\tType: Heavy\n\tMobile:\n\t\tLocomotor: " + Part(p, "running_gear").Value<string>("locomotor") + "\n");
+			s.Append("\tArmor:\n\t\tType: " + Part(p, "armor").Value<string>("armor_type") + "\n\tMobile:\n\t\tLocomotor: " + Part(p, "running_gear").Value<string>("locomotor") + "\n");
 			s.Append("\t\tSpeed: " + I(v.Speed) + "\n\t\tTurnSpeed: " + I(v.Turn) + "\n");
 			if (v.Stationary)
 				s.Append("\t\tImmovableCondition: modular-stationary\n\t\tPauseOnCondition: being-captured || empdisable || being-warped || driver-dead || notmobile || modular-stationary\n" +
 					"\tGrantCondition@MODULARSTATIONARY:\n\t\tCondition: modular-stationary\n\t-ChronoshiftableWithSpriteEffect:\n\t-TeleportNetworkTransportable:\n");
-			s.Append("\tTurreted@PRIMARY:\n\t\tTurnSpeed: " + I(N(Part(p, "carrier"), "turn_speed_reference")) + "\n");
-			s.Append("\tArmament@PRIMARY:\n\t\tWeapon: modular.custom.gun\n\tCarryable:\n");
+			s.Append("\t" + assembly.Turret + ":\n\t\tTurnSpeed: " + I(N(Part(p, "carrier"), "turn_speed_reference")) + "\n");
+			var slot = 0;
+			foreach (var armament in assembly.Armaments)
+			{
+				s.Append("\t" + armament.Key + ":\n\t\tWeapon: " + actor + (slot++ == 0 ? ".gun" : ".aa") + "\n");
+				if (Part(p, "carrier")["fire_delay_ticks"] != null)
+				{
+					var delay = N(Part(p, "carrier"), "fire_delay_ticks");
+					if (delay < 0 || delay % 1 != 0) throw new InvalidDataException("Ungueltige Feuerverzoegerung.");
+					s.Append("\t\tFireDelay: " + I(delay) + "\n");
+				}
+			}
+			s.Append("\tCarryable:\n");
 			return s.ToString();
 		}
 
 		public string Weapons(CustomFactionProfile p)
 		{
+			return ActorWeapons(p, "modular.custom");
+		}
+
+		string ActorWeapons(CustomFactionProfile p, string actor)
+		{
 			Calculate(p);
-			var range = (int)Math.Round(N(Part(p, "weapon"), "range_cells") * 1024, MidpointRounding.AwayFromZero);
-			return "modular.custom.gun:\n\tInherits: " + (p.Parts["ammunition"] == "designer-he-shell" ? "120mmHEAT" : "120mm") +
-				"\n\tReloadDelay: " + I(N(Part(p, "carrier"), "reload_ticks")) + "\n\tBurst: 1\n\tRange: " + range / 1024 + "c" + range % 1024 +
-				"\n\tWarhead@1Dam: SpreadDamage\n\t\tDamage: " + I(N(Part(p, "ammunition"), "damage")) + "\n";
+			var assembly = Assembly(p);
+			var carrier = Part(p, "carrier"); var weapon = Part(p, "weapon"); var ammo = Part(p, "ammunition");
+			var text = new StringBuilder();
+			var slot = 0;
+			foreach (var binding in assembly.Armaments)
+			{
+				var secondary = slot++ != 0;
+				var reload = N(carrier, secondary ? "secondary_reload_ticks" : "reload_ticks");
+				var range = N(weapon, secondary ? "secondary_range_cells" : "range_cells");
+				var damage = N(ammo, secondary ? "secondary_damage" : "damage");
+				var burst = N(carrier, "burst");
+				if (reload < 1 || reload % 1 != 0 || burst < 1 || burst % 1 != 0 || damage < 0 || range <= 0)
+					throw new InvalidDataException("Ungueltige Waffenwerte.");
+				var parent = p.Parts["ammunition"] == "designer-he-shell" ? "120mmHEAT" : binding.Value;
+				text.Append(actor + (secondary ? ".aa" : ".gun") + ":\n\tInherits: " + parent + "\n\tReloadDelay: " + I(reload) +
+					"\n\tBurst: " + I(burst) + "\n\tRange: " + Distance(range) + "\n");
+				if (carrier["burst_delay_ticks"] != null)
+				{
+					var delay = N(carrier, "burst_delay_ticks");
+					if (delay < 0 || delay % 1 != 0) throw new InvalidDataException("Ungueltiger Salvenabstand.");
+					text.Append("\tBurstDelays: " + I(delay) + "\n");
+				}
+				if (!secondary && weapon["min_range_cells"] != null)
+				{
+					var minimum = N(weapon, "min_range_cells");
+					if (minimum > range) throw new InvalidDataException("Mindestreichweite groesser als Reichweite.");
+					text.Append("\tMinRange: " + Distance(minimum) + "\n");
+				}
+				text.Append("\tWarhead@1Dam: SpreadDamage\n\t\tDamage: " + I(damage) + "\n");
+			}
+			return text.ToString();
+		}
+
+		static string Distance(double cells)
+		{
+			if (cells < 0 || cells > 1024) throw new InvalidDataException("Ungueltige Waffenreichweite.");
+			var value = (int)Math.Round(cells * 1024, MidpointRounding.AwayFromZero);
+			return I(value / 1024) + "c" + I(value % 1024);
 		}
 
 		// Base is the known lab package, not an arbitrary map with unmerged custom rules.
@@ -220,6 +302,11 @@ namespace OpenRA.Mods.CA.Modular
 		{
 			var frozen = Serialize(input);
 			var p = Deserialize(frozen);
+			return PackageMap(p.Name, frozen, Rules(p), Weapons(p), new[] { "modular.custom" }, lab);
+		}
+
+		static byte[] PackageMap(string factionName, string frozen, string rules, string weapons, IEnumerable<string> actors, byte[] lab)
+		{
 			using var source = new ZipArchive(new MemoryStream(lab), ZipArchiveMode.Read);
 			string Read(string name)
 			{
@@ -228,13 +315,19 @@ namespace OpenRA.Mods.CA.Modular
 			}
 
 			var map = Read("map.yaml");
-			map = Regex.Replace(map, @"(?m)^Title: .*$", "Title: Custom Faction - " + p.Name);
+			map = Regex.Replace(map, @"(?m)^Title: .*$", "Title: Custom Faction - " + factionName);
 			map = Regex.Replace(map, @"(?m)^\tPrototype\d+: modular\.[^\r\n]+\r?\n(?:\t\t[^\r\n]+\r?\n)*", "");
-			map += "\tCustomTank: modular.custom\n\t\tOwner: Multi0\n\t\tLocation: 103,-29\n\t\tFacing: 384\n";
+			var index = 0;
+			foreach (var actor in actors)
+			{
+				map += "\tCustomTank" + (index == 0 ? "" : index.ToString(CultureInfo.InvariantCulture)) + ": " + actor +
+					"\n\t\tOwner: Multi0\n\t\tLocation: " + I(103 + index % 4 * 3) + "," + I(-29 - index / 4 * 3) + "\n\t\tFacing: 384\n";
+				index++;
+			}
 			var entries = new SortedDictionary<string, byte[]>(StringComparer.Ordinal)
 			{
-				{ "map.yaml", Encoding.UTF8.GetBytes(map) }, { "modular-rules.yaml", Encoding.UTF8.GetBytes(Rules(p)) },
-				{ "modular-weapons.yaml", Encoding.UTF8.GetBytes(Weapons(p)) }, { "custom-faction.json", Encoding.UTF8.GetBytes(frozen) }
+				{ "map.yaml", Encoding.UTF8.GetBytes(map) }, { "modular-rules.yaml", Encoding.UTF8.GetBytes(rules) },
+				{ "modular-weapons.yaml", Encoding.UTF8.GetBytes(weapons) }, { "custom-faction.json", Encoding.UTF8.GetBytes(frozen) }
 			};
 			foreach (var name in new[] { "map.bin", "map.png" })
 			{

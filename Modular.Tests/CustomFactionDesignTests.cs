@@ -28,10 +28,10 @@ public class CustomFactionDesignTests
     public void AllOfferedCombinationsCompileAndUseFullPayloadTemplate()
     {
         var compiler = Compiler;
-        foreach (var gear in compiler.Options("running_gear"))
-        foreach (var drive in compiler.Options("drive"))
+        foreach (var gear in compiler.CompatibleOptions(new CustomFactionProfile(), "running_gear"))
+        foreach (var drive in compiler.CompatibleOptions(new CustomFactionProfile(), "drive"))
         foreach (var generator in compiler.Options("generator"))
-        foreach (var ammo in compiler.Options("ammunition"))
+        foreach (var ammo in compiler.CompatibleOptions(new CustomFactionProfile(), "ammunition"))
         {
             var p = new CustomFactionProfile();
             p.Parts["running_gear"] = gear; p.Parts["drive"] = drive;
@@ -56,7 +56,7 @@ public class CustomFactionDesignTests
     public void AllNativeCalculationsMatchTheIndependentPythonCalculator()
     {
         var rows = JArray.Parse(File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "designer-calculation-cases.json")));
-        Assert.That(rows.Count, Is.EqualTo(24));
+        Assert.That(rows.Count, Is.EqualTo(32));
         foreach (var row in rows)
         {
             var profile = new CustomFactionProfile { Parts = row["parts"].ToObject<Dictionary<string, string>>() };

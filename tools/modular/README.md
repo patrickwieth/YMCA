@@ -2,30 +2,31 @@
 
 ## Latest: native main-menu faction editor
 
-The game now has **Eigene Fraktion** in the main menu: GDI/Eagle's normal roster
-plus one named custom tank. Tracks/hover/stationary, two motors, two generators,
-and normal/HE ammunition are selectable (24 combinations). Other component roles
-are visible but deliberately limited to the supported GDI assembly.
+**Eigene Fraktion** now supports GDI/Eagle's normal roster plus **up to 16 custom
+vehicle designs**, with New/Copy/Remove, shared budget, named faction save/load and
+in-memory migration of existing single-tank profiles. **Vorlagen** adds missing
+cannon, MG-scout and MLRS assemblies. Their 32 supported combinations use compatible
+artwork and full existing weapons, including separate ground/AA missile channels.
+The Hum-Vee's mandatory sensors are explicitly counted once in price/mass/power.
 
-Save locally or **Speichern und Testspiel** to compile a frozen user-map snapshot
-and open its skirmish lobby. Normal/hover tanks are additional factory choices;
-stationary is preplaced/Carryall-only pending a proper deployment workflow.
-No Python installation is required by players. No changes to ongoing matches or
-ordinary maps. This is not yet the full catalog, multi-design roster, arbitrary
-map integration or a custom multiplayer synchronization protocol.
+**Speichern und Testspiel** freezes the complete roster into a separate user map.
+Each design is preplaced near start A; moving designs are additional named factory
+choices. Stationary remains preplaced/Carryall-only. No Python needed at runtime,
+no mutation of ongoing games, no overwriting immutable map snapshots. This is not
+yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
-Read **`docs/modular/main-menu-designer.md`** for workflow, storage and limitations.
-The native C# compiler and all 24 numeric combinations are tested independently
-against the Python calculator. **63 Python + 16 native tests pass**, CA Release
-build succeeds. An engine-linted native sample only adds inherited MTNK diagnostics;
-interactive UI/gameplay checks remain pending. Prior sections describe earlier
-stages; the current entry point is the main-menu editor, not a manually selected
-static lab map. Designer test sessions now bypass stock skirmish-settings restore/save:
-the first interactive report revealed that restoring the previous skirmish silently
-switched back to the old lab map. Normal skirmishes retain their usual persistence.
+Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
+**64 Python + 30 native tests pass**; all 32 numeric combinations match the independent
+Python calculator. CA Release build succeeds. The six-design engine differential
+is **1685 control / 1697 generated errors**, all 12 additions inherited diagnostics,
+**zero unexpected new errors**; see `designer-roster-validation.md`. This is NOT a
+clean full-mod lint or a live gameplay pass. Expanded UI/gameplay checks remain pending.
 
+The confirmed fix preventing ordinary skirmish restoration from replacing the chosen
+snapshot remains active. Test sessions also do not overwrite ordinary skirmish setups.
+The following sections document earlier stages; the current entry point is the editor.
 
-## Latest: first in-game map prototype
+## Earlier: first in-game map prototype
 
 **`mods/ca/maps/modular-gdi-lab.oramap`** contains three generated GDI actors:
 normal tank (900 credits), hover test (1100) and stationary platform (850).

@@ -14,17 +14,28 @@ import zipfile
 from compile_prototype import REPO
 
 
-def differences(control, prototype):
+def differences(control, prototype, sources=None):
     if any('Failed with exception' in s for s in (control, prototype)):
         raise ValueError('Map loading failed; lint baseline cannot be compared')
+    sources = sources if sources is not None else {f'modular.{kind}': 'mtnk' for kind in ('tank', 'hover', 'stationary')}
     errors = lambda text: Counter(line for line in text.splitlines() if 'Error:' in line)
     old, new = errors(control), errors(prototype)
     inherited, unexpected = [], []
     for line, count in (new - old).items():
-        normalized = re.sub(r'modular\.(tank|hover|stationary)', 'mtnk', line)
+        normalized = line
+        for actor, parent in sources.items():
+            normalized = re.sub(r'(?<![\w.])' + re.escape(actor) + r'(?![\w.])', parent, normalized)
         target = inherited if normalized != line and normalized in old else unexpected
         target.extend([line] * count)
     return sum(old.values()), sum(new.values()), inherited, unexpected
+
+
+def actor_sources(rules):
+    sources = dict((actor, parent.lower()) for actor, parent in re.findall(
+        r'(?m)^(modular\.[a-z0-9.]+):\r?\n\tInherits: ([A-Za-z0-9.]+)\r?$', rules))
+    if not sources or any(parent not in ('mtnk', 'hmmv', 'mlrs') for parent in sources.values()):
+        raise ValueError('Unknown or missing prototype actor bindings')
+    return sources
 
 
 def check(path):
@@ -34,9 +45,11 @@ def check(path):
     with tempfile.TemporaryDirectory() as temp:
         control = Path(temp) / 'control.oramap'
         with zipfile.ZipFile(path) as src, zipfile.ZipFile(control, 'x') as dest:
+            sources = actor_sources(src.read('modular-rules.yaml').decode())
             text = src.read('map.yaml').decode().replace('Rules: modular-rules.yaml', 'Rules:')
             text = text.replace('Weapons: modular-weapons.yaml\n', '')
-            text = re.sub(r'modular\.(tank|hover|stationary)', 'mtnk', text)
+            for actor, parent in sources.items():
+                text = re.sub(r'(?m)(?<=: )' + re.escape(actor) + r'(?=\r?$)', parent, text)
             dest.writestr('map.yaml', text)
             for name in ('map.bin', 'map.png'):
                 dest.writestr(name, src.read(name))
@@ -47,13 +60,14 @@ def check(path):
             if result.returncode not in (0, 1) or 'Testing map:' not in text:
                 raise ValueError('Utility did not check map:\n' + text)
             logs.append(text)
-    old, new, inherited, unexpected = differences(*logs)
+    old, new, inherited, unexpected = differences(*logs, sources=sources)
     lines = ['# Modular prototype engine validation', '',
              'DIFFERENTIAL LINT ONLY. Not a full lint pass and not a live match test.', '',
              f'Control errors: {old}. Prototype errors: {new}.',
-             f'Additional inherited MTNK diagnostics: {len(inherited)}.',
+             f'Additional inherited actor diagnostics: {len(inherited)}.',
              f'Unexpected new diagnostics: {len(unexpected)}.', '',
-             'The control has identical terrain, players and map-local Player rules, but stock MTNK actors.',
+             'The control has identical terrain, players and map-local Player rules, but the corresponding stock actors.',
+             'Bindings: ' + ', '.join(f'{actor} -> {parent}' for actor, parent in sources.items()),
              'An unmodified map without Rules would skip the rule lint pass and is NOT a valid control.', '',
              '## Additional inherited diagnostics', ''] + inherited + ['', '## Unexpected diagnostics', ''] + unexpected
     return '\n'.join(lines) + '\n', bool(unexpected)

@@ -4,33 +4,45 @@
   "credits_per_cp": 300,
   "options": {
     "chassis": [
-      "gdi-battle-hull"
+      "gdi-battle-hull",
+      "humvee-hull",
+      "designer-mlrs-hull"
     ],
     "running_gear": [
       "tracks-standard",
       "prototype-hover",
-      "gdi-stationary"
+      "gdi-stationary",
+      "wheels-light",
+      "designer-mlrs-gear"
     ],
     "drive": [
       "diesel",
-      "diesel-large"
+      "diesel-large",
+      "diesel-light"
     ],
     "generator": [
       "baseline-generator",
       "efficient-generator"
     ],
     "armor": [
-      "heavy"
+      "heavy",
+      "light"
     ],
     "carrier": [
-      "medium-cannon-mount"
+      "medium-cannon-mount",
+      "scout-mg-mount",
+      "designer-rocket-mount"
     ],
     "weapon": [
-      "medium-cannon"
+      "medium-cannon",
+      "scout-mg",
+      "designer-rockets"
     ],
     "ammunition": [
       "medium-tank-shell",
-      "designer-he-shell"
+      "designer-he-shell",
+      "scout-mg-rounds",
+      "designer-rocket-payload"
     ]
   },
   "components": {
@@ -51,9 +63,9 @@
       "equipment_slots": 1,
       "default_running_gear": "tracks-standard",
       "allowed_running_gear": [
-        "gdi-stationary",
+        "tracks-standard",
         "prototype-hover",
-        "tracks-standard"
+        "gdi-stationary"
       ],
       "turn_speed_limit": 48,
       "max_mass": 20000,
@@ -66,11 +78,51 @@
           "medium-cannon-mount"
         ],
         "drive": [
-          "diesel"
+          "diesel",
+          "diesel-large"
         ]
       },
       "equipment": [],
       "source": "MTNK"
+    },
+    "humvee-hull": {
+      "display_name": "Hum-Vee Rumpf",
+      "role": "chassis",
+      "factions": [
+        "gdi"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 1600,
+      "cost": 125,
+      "hp": 15000,
+      "electric_kw": 5,
+      "carrier_slots": 1,
+      "equipment_slots": 1,
+      "default_running_gear": "wheels-light",
+      "allowed_running_gear": [
+        "wheels-light",
+        "gdi-stationary"
+      ],
+      "turn_speed_limit": 80,
+      "max_mass": 6000,
+      "reference_mass": 2500,
+      "reference_kw": 210,
+      "reference_speed": 157,
+      "max_speed": 180,
+      "allowed": {
+        "carrier": [
+          "scout-mg-mount"
+        ],
+        "drive": [
+          "diesel-light"
+        ]
+      },
+      "equipment": [
+        "scout-sensors"
+      ],
+      "source": "HMMV"
     },
     "tracks-standard": {
       "display_name": "Standard-Kettenlaufwerk",
@@ -134,6 +186,27 @@
       "turn_speed": 0,
       "note": "Land occupancy for Carryall placement, NOT the empty immobile locomotor. No self movement or body rotation. GDI only; manual transport, no production exit yet."
     },
+    "wheels-light": {
+      "display_name": "Leichtes Radfahrwerk",
+      "role": "running_gear",
+      "factions": [
+        "gdi",
+        "nod",
+        "allies",
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 300,
+      "cost": 50,
+      "electric_kw": 0,
+      "locomotor": "wheeled",
+      "kind": "wheels",
+      "max_mass": 6000,
+      "max_speed": 180,
+      "turn_speed": 80
+    },
     "diesel": {
       "role": "drive",
       "factions": [
@@ -167,6 +240,24 @@
       "electric_kw": 0,
       "mechanical_kw": 550,
       "display_name": "Leistungsgesteigerter Dieselmotor"
+    },
+    "diesel-light": {
+      "display_name": "Leichter Dieselmotor",
+      "role": "drive",
+      "factions": [
+        "gdi",
+        "nod",
+        "allies",
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 250,
+      "cost": 60,
+      "electric_kw": 0,
+      "mechanical_kw": 250,
+      "note": "New shared scout motor; all physical values experimental."
     },
     "baseline-generator": {
       "role": "generator",
@@ -223,6 +314,25 @@
       "cost_percent": 100,
       "display_name": "Schwere Panzerung"
     },
+    "light": {
+      "display_name": "Leichte Panzerung",
+      "role": "armor",
+      "factions": [
+        "gdi",
+        "nod",
+        "allies",
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "armor_type": "Light",
+      "mass_percent": 100,
+      "hp_percent": 100,
+      "cost_percent": 100,
+      "source": "^LightArmor"
+    },
     "medium-cannon-mount": {
       "display_name": "Mittlerer Kanonenturm",
       "role": "carrier",
@@ -244,6 +354,27 @@
       "turn_speed_reference": 48,
       "source": "90mm / 120mm"
     },
+    "scout-mg-mount": {
+      "display_name": "Leichte MG-Lafette",
+      "role": "carrier",
+      "factions": [
+        "gdi",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 100,
+      "cost": 25,
+      "electric_kw": 0,
+      "weapons": [
+        "scout-mg"
+      ],
+      "burst": 5,
+      "reload_ticks": 30,
+      "turn_speed_reference": 80,
+      "source": "M60mgTD; HMMV / BGGY turrets"
+    },
     "medium-cannon": {
       "display_name": "Mittlere Panzerkanone",
       "role": "weapon",
@@ -259,11 +390,31 @@
       "cost": 200,
       "electric_kw": 0,
       "ammunition": [
-        "medium-tank-shell"
+        "medium-tank-shell",
+        "designer-he-shell"
       ],
       "range_cells": 4.75,
       "source": "90mm / 120mm / 125mm",
       "note": "Shared scalar gun family. Carrier chooses single/twin cadence; full legacy source binding retains different reports and muzzle/recoil behavior. No caliber inferred for new designs."
+    },
+    "scout-mg": {
+      "display_name": "SpÃ¤hfahrzeug-MG",
+      "role": "weapon",
+      "factions": [
+        "gdi",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 100,
+      "cost": 65,
+      "electric_kw": 0,
+      "ammunition": [
+        "scout-mg-rounds"
+      ],
+      "range_cells": 4,
+      "source": "M60mgTD"
     },
     "medium-tank-shell": {
       "display_name": "Panzergranaten gegen schwere Ziele",
@@ -283,6 +434,38 @@
       "source": "^Cannon / ^ShellHeavy",
       "note": "Must reuse full existing versus/effect package; raw damage alone is not equivalence."
     },
+    "scout-mg-rounds": {
+      "display_name": "MG-Munition",
+      "role": "ammunition",
+      "factions": [
+        "gdi",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 100,
+      "cost": 25,
+      "electric_kw": 0,
+      "damage": 1000,
+      "source": "M60mgTD / ^LightMG / ^Bullet"
+    },
+    "scout-sensors": {
+      "display_name": "SpÃ¤hsensoren",
+      "role": "equipment",
+      "factions": [
+        "gdi",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 50,
+      "cost": 50,
+      "electric_kw": 5,
+      "source": "^SensorEquipment",
+      "note": "Shared 50-credit proposal. Reuse detection/shroud traits, not detection simulated by calculator."
+    },
     "designer-he-shell": {
       "display_name": "Sprenggranaten (Test)",
       "role": "ammunition",
@@ -297,7 +480,225 @@
       "electric_kw": 0,
       "damage": 4000,
       "source": "120mmHEAT",
-      "note": "Experimental 75-credit allocation; preserves full existing HE projectile/versus package."
+      "note": "Experimental 75-credit allocation; full existing HE projectile/versus package."
+    },
+    "designer-mlrs-hull": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 2,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 10,
+      "display_name": "MLRS-Rumpf mit Raketenwerfer",
+      "role": "chassis",
+      "mass": 8000,
+      "cost": 350,
+      "hp": 16000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "default_running_gear": "designer-mlrs-gear",
+      "allowed_running_gear": [
+        "designer-mlrs-gear"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 20000,
+      "reference_mass": 11600,
+      "reference_kw": 460,
+      "reference_speed": 82,
+      "max_speed": 110,
+      "allowed": {
+        "carrier": [
+          "designer-rocket-mount"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ]
+      },
+      "equipment": [],
+      "source": "MLRS"
+    },
+    "designer-mlrs-gear": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 0,
+      "display_name": "MLRS-Fahrwerk (bestehendes Fahrprofil)",
+      "role": "running_gear",
+      "mass": 1500,
+      "cost": 100,
+      "locomotor": "wheeled",
+      "kind": "tracks",
+      "max_mass": 20000,
+      "max_speed": 150,
+      "turn_speed": 48,
+      "note": "MLRS inherits wheeled terrain/crushing from ^Vehicle despite its artwork. Preserve existing profile."
+    },
+    "designer-rocket-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 0,
+      "display_name": "MLRS-Startlafette (grafisch gebunden)",
+      "role": "carrier",
+      "mass": 600,
+      "cost": 150,
+      "weapons": [
+        "designer-rockets"
+      ],
+      "burst": 2,
+      "reload_ticks": 120,
+      "secondary_reload_ticks": 80,
+      "burst_delay_ticks": 4,
+      "fire_delay_ticks": 10,
+      "turn_speed_reference": 80,
+      "source": "MLRS",
+      "note": "Ground reference cadence; AA armament keeps its independent 80-tick reload. Full frontal attack and aiming animation inherited."
+    },
+    "designer-rockets": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 0,
+      "display_name": "MLRS Boden- und Flugabwehrraketen",
+      "role": "weapon",
+      "mass": 500,
+      "cost": 175,
+      "ammunition": [
+        "designer-rocket-payload"
+      ],
+      "range_cells": 10,
+      "min_range_cells": 4,
+      "secondary_range_cells": 10.5,
+      "source": "227mm + 227mmAA",
+      "note": "Two complete weapons, not one damage-only approximation. AA range 10.5."
+    },
+    "designer-rocket-payload": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 0,
+      "display_name": "MLRS Boden-/Luft-Sprengkoepfe",
+      "role": "ammunition",
+      "mass": 400,
+      "cost": 75,
+      "damage": 1300,
+      "secondary_damage": 3000,
+      "source": "227mm + 227mmAA",
+      "note": "Ground raw damage 1300 with existing falloff; AA 3000. All projectile/versus/effect rules inherited."
     }
-  }
+  },
+  "assemblies": [
+    {
+      "options": {
+        "chassis": [
+          "gdi-battle-hull"
+        ],
+        "running_gear": [
+          "tracks-standard",
+          "prototype-hover",
+          "gdi-stationary"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "medium-cannon-mount"
+        ],
+        "weapon": [
+          "medium-cannon"
+        ],
+        "ammunition": [
+          "medium-tank-shell",
+          "designer-he-shell"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "humvee-hull"
+        ],
+        "running_gear": [
+          "wheels-light",
+          "gdi-stationary"
+        ],
+        "drive": [
+          "diesel-light"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "scout-mg-mount"
+        ],
+        "weapon": [
+          "scout-mg"
+        ],
+        "ammunition": [
+          "scout-mg-rounds"
+        ]
+      },
+      "built_in": [
+        "scout-sensors"
+      ]
+    },
+    {
+      "options": {
+        "chassis": [
+          "designer-mlrs-hull"
+        ],
+        "running_gear": [
+          "designer-mlrs-gear"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "designer-rocket-mount"
+        ],
+        "weapon": [
+          "designer-rockets"
+        ],
+        "ammunition": [
+          "designer-rocket-payload"
+        ]
+      },
+      "built_in": []
+    }
+  ]
 }
