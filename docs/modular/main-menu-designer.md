@@ -244,6 +244,9 @@ independent per-player faction admission/synchronization.
 
 ## Scope still open
 
+The complete missing-vehicle checklist (combat, economy/support, variants and air/naval)
+is in **`docs/modular/missing-vehicles.md`**, generated from rules and actual native bindings.
+
 This is both a multi-design editor and an expanded native compiler, but **not all 75
 catalog components, complete faction rosters or all subfactions**. It still uses the known lab terrain, not arbitrary
 map selection. CP unlocks, additional vehicle families, freely composable multiple mounts,
@@ -277,7 +280,7 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **73 Python tests**, **86 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **76 Python tests**, **86 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.

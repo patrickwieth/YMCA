@@ -1,5 +1,12 @@
 # Modular vehicle tools
 
+## Missing-vehicle inventory
+
+See **`docs/modular/missing-vehicles.md`** for the complete current gap list: combat versus
+support/economy/transport, unbound variants of supported families, and aircraft/naval appendices.
+Regenerate with `python tools/modular/list_missing_vehicles.py`. Counts use native bindings,
+not spreadsheet coverage; roles and production candidacy remain explicitly editorial.
+
 ## Latest: native main-menu faction editor
 
 **Eigene Fraktion** supports **GDI/Eagle, Nod/Black Hand, China/Tank-General, Allies/England, Soviets/Russia and Scrin/Traveler-59**, plus **up to 16 custom
@@ -25,7 +32,7 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**73 Python + 86 native tests pass**; all 90 numeric combinations match the independent
+**76 Python + 86 native tests pass**; all 90 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential
