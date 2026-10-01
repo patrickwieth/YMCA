@@ -9,6 +9,7 @@ from compile_prototype import load_inputs, REPO
 from gdi_designer_expansion import additional_assemblies, extend_parts
 import nod_designer_expansion as nod
 import china_designer_expansion as china
+import allied_designer_expansion as allies
 
 
 def assemblies():
@@ -23,7 +24,7 @@ def assemblies():
               'light', 'scout-mg-mount', 'scout-mg', ['scout-mg-rounds'], ['scout-sensors']),
         frame('designer-mlrs-hull', ['designer-mlrs-gear'], ['diesel', 'diesel-large'],
               'light', 'designer-rocket-mount', 'designer-rockets', ['designer-rocket-payload']),
-    ] + additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies()
+    ] + additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies()
 
 
 def data():
@@ -64,13 +65,18 @@ def data():
     extend_parts(parts, catalog)
     nod.extend_parts(parts, catalog)
     china.extend_parts(parts)
-    # These are explicit designer adapters, not changes to the broad catalog/workbooks.
+    allies.extend_parts(parts)
+    # Shared weapons accept the union; individual assemblies still restrict their own payloads.
+    weapon_ammo = {}
     for assembly in assemblies():
         choices = assembly['options']
         hull = parts[choices['chassis'][0]]
         hull['allowed_running_gear'] = choices['running_gear'][:]
         hull['allowed']['drive'] = choices['drive'][:]
-        parts[choices['weapon'][0]]['ammunition'] = choices['ammunition'][:]
+        allowed = weapon_ammo.setdefault(choices['weapon'][0], [])
+        allowed.extend(a for a in choices['ammunition'] if a not in allowed)
+    for weapon, ammo in weapon_ammo.items():
+        parts[weapon]['ammunition'] = ammo
     return dict(schema=1, alpha=catalog['alpha'], credits_per_cp=catalog['credits_per_cp'], options=options, components=parts,
                 assemblies=assemblies())
 
@@ -96,7 +102,7 @@ def cases():
             design = dict(name='Native comparison', faction=assembly.get('faction', 'gdi'), running_gear=parts['running_gear'],
                           components=[v for k, v in parts.items() if k != 'running_gear'] + assembly['built_in'])
             result = calculate(catalog, design)
-            rows.append(dict(base_faction={'gdi': 'eagle', 'nod': 'blackh', 'china': 'chinatnk'}[assembly.get('faction', 'gdi')], parts=parts, values={k: result[k] for k in
+            rows.append(dict(base_faction={'gdi': 'eagle', 'nod': 'blackh', 'china': 'chinatnk', 'allies': 'england'}[assembly.get('faction', 'gdi')], parts=parts, values={k: result[k] for k in
                 ('cost', 'mass', 'hp', 'speed', 'turn_speed', 'electric_kw', 'reserve_kw', 'tech', 'catalog_points')}))
     return rows
 

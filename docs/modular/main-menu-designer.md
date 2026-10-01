@@ -4,7 +4,8 @@
 
 Restart the locally built game, then **Eigene Fraktion**.
 
-- Select **GDI / Eagle**, **Nod / Black Hand** or **China / Tank-General** in the top-right base dropdown.
+- Select **GDI / Eagle**, **Nod / Black Hand**, **China / Tank-General** or
+  **Alliierte / England** in the top-right base dropdown.
   The ordinary roster of the selected base remains available. Switching needs confirmation:
   the current faction is first saved in the library, then a fresh independent roster is
   created. Existing library names are reserved; a suffix prevents accidental replacement.
@@ -29,7 +30,8 @@ Restart the locally built game, then **Eigene Fraktion**.
 
 Use the first player slot and start **A**. One example of **every configured design**
 stands near that start. GDI keeps its MTNK comparison and Carryall; Nod gets an LTNK
-comparison, China a Battlemaster. Non-GDI maps have no free GDI Carryall. All retain the enemy target.
+comparison, China a Battlemaster and England a Challenger. Non-GDI maps have no free
+GDI Carryall. All retain the enemy target.
 Moving designs are additional vehicle-factory choices, grouped at palette orders
 1000 onward under your vehicle names. The selected base's stock units remain available too.
 The highest selected tech tier is required for production; Hum-Vees also retain the
@@ -38,9 +40,10 @@ Their production is intentionally disabled until a real factory/deployment workf
 
 ## Supported assemblies
 
-There are currently **66 supported component combinations across sixteen families**:
-eight GDI families (42 combinations), four Nod families (8 combinations) and four China
-families (16 combinations).
+There are currently **74 supported component combinations in 20 faction-specific bindings**:
+eight GDI bindings (42 combinations), four Nod (8), four China (16) and four Allied (8).
+These represent **19 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
+of the same field-artillery family, not two independently counted families.
 
 | Assembly | Existing actor / full weapon bindings | Reference price / HP / speed | Configured default |
 |---|---|---|---|
@@ -60,6 +63,10 @@ families (16 combinations).
 | Dragon | chdragon; normal/Black Napalm + two Firewall channels | 600 / 28000 / 103 | 600 / 28000 / 103 |
 | Gatling tank | chgtnk; eight ground/AA spin-up channels | 800 / 30000 / 108 | 800 / 30000 / 108 |
 | Overlord / Emperor | choverlord; OverlordCannon, conditional Emperor body/armor | 2000 / 95000 / 56 | 2000 / 95000 / 56 |
+| Allied Challenger | Challenger_Tank / 2TNK; 90mm, doctrine discount | 800 / 45000 / 82 | 800 / 45000 / 82 |
+| Allied Ranger | JEEP; M60mg, sensors, pre-doctrine availability | 400 / 15000 / 157 | 400 / 15000 / 157 |
+| Allied field artillery | ARTY; 155mm, frontal attack and ammunition explosion | 550 / 10000 / 56 | 550 / 10000 / 56 |
+| Allied Prism tank | Prismtank; PrisTLaser including secondary beam cluster | 1350 / 22000 / 82 | 1350 / 22000 / 82 |
 
 These exact default scalar matches are constructed calibration fits, NOT independent
 balance validation. Allocations for mass, power and component prices remain experimental.
@@ -83,7 +90,7 @@ balance validation. Allocations for mass, power and component prices remain expe
 Parts remain conceptually separate, but graphically bound assemblies prevent a Hum-Vee
 MG or MLRS launcher from silently becoming a cannon-looking tank. MG/MLRS rendering
 inherits their complete original actor templates, not just the MTNK with another weapon.
-Scalar weapon fields for the original three groups and the Buggy are compiled from JSON; complete
+Scalar weapon fields for the original three groups, Buggy, Ranger and Challenger are compiled from JSON; complete
 inherited projectile and warhead packages remain intact. MLRS secondary range/damage/reload
 are explicit independent fields. The other families use **template-locked weapon
 packages** instead: each channel derives its complete source weapon without scalar overrides.
@@ -141,6 +148,25 @@ are **not** enabled by these four bindings. The native snapshot does not expose 
 Overlord roof/equipment slots as usable options. All China families offer their two explicitly
 bound diesel motors and the two shared generators, without per-design price adjustments.
 
+England's Challenger inherits the buildable national actor, not the disabled `2TNK` parent.
+It keeps the 90mm weapon and Challenger graphics; its medium cannon hardware remains shared
+with GDI. The exporter unions allowed ammunition for shared weapons, while the native binding
+still denies GDI HE ammunition to Challenger. Existing GDI HE designs continue to load unchanged.
+Ranger uses M60mg (not M60mgTD), an explicitly bound 48-turn turret, 80-turn hull and the shared
+50-credit sensors counted once. It retains all three doctrine exclusions: the standard Ranger
+is only producible before selecting a doctrine. Doctrine-specific Jeep variants remain unsupported.
+
+Prism tank inherits the full PrisTLaser/LaserZap/FireCluster/PrisTBurst chain, targeting rules,
+Prism Tech, death husk and voices. Its original promotion and radar requirements remain.
+Despite its tank graphics, stock Prismtank is **Light armor / wheeled locomotor**; the native
+binding preserves that. Displayed prices are **base prices**: inherited Armored Doctrine can
+apply its common 85% production multiplier to Challenger, artillery and Prism tank in-game.
+This is the existing faction-wide doctrine, not a designer-specific rebate. Range, damage,
+cluster beams and price modifiers are not flattened to match a single preview number.
+Allied generator/sensor admission uses unchanged shared component prices and ratings.
+Battle Fortress/cargo weapons, Cryo/Chrono vehicles, other national tank graphics and other
+Allied units are not included in these four bindings.
+
 The frozen actor and weapon IDs are unique per design and stable across renaming/reordering.
 A copied design gets a new ID and an independent component dictionary. All designs are
 validated before generation; incompatible parts, invalid faction, unsupported fields,
@@ -165,7 +191,8 @@ duplicate IDs/names and budget overflow fail closed. CP-bearing modules are not 
   behavior. Stock AI build lists are not yet extended to deliberately produce new IDs.
 
 The test map renames the selected faction's display name: `eagle` / `FactionCA@11` or
-`blackh` / `FactionCA@13` or `chinatnk` / `FactionCA@22`. Both playable slots are locked to that base; production requires
+`blackh` / `FactionCA@13`, `chinatnk` / `FactionCA@22` or `england` / `FactionCA@1`.
+Both playable slots are locked to that base; production requires
 its `structures.<base>` token. Internal faction IDs, original rosters and commander behavior
 remain intact. Other players of that base on the snapshot can produce the same custom roster. This is not yet
 independent per-player faction admission/synchronization.
@@ -205,14 +232,14 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **69 Python tests**, **60 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **71 Python tests**, **69 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
 
 Native tests cover schema migration, roundtrip/backups, library isolation, shared budget,
 copy independence, namespace stability, invalid combinations and weapon-channel preservation.
-All 66 offered numeric combinations are checked against the independent Python calculator.
+All 74 offered numeric combinations are checked against the independent Python calculator.
 The earlier six-design sample includes tank hover and both stationary hull variants.
 The eight-family sample can be exported with `MODULAR_GDI_EXPORT=/absolute/new-gdi.oramap`.
 See `tools/modular/designer-gdi-validation.md` for the GDI differential result.
@@ -225,6 +252,12 @@ The China sample exports with `MODULAR_CHINA_EXPORT=/absolute/new-china.oramap` 
 new errors**; see `tools/modular/designer-china-validation.md`. Tests cover all Dragon/Gatling
 channels against the source declarations, conditional Emperor names, raw baseline values,
 original production exclusions, faction isolation and deterministic map freezing.
+The Allied sample exports with `MODULAR_ALLIES_EXPORT=/absolute/new-allies.oramap` and reports
+**1685 control / 1692 generated errors**, seven inherited diagnostics and **zero unexpected
+new errors**; see `tools/modular/designer-allies-validation.md`. Tests also cover shared
+ammunition union/GDI HE regression, Ranger rotation/sensors/doctrine exclusions, Prism's
+complete weapon package and movement/armor binding, and England player/reference selection.
+The differential checker now recognizes inspected parent names containing underscores.
 
 The earlier single-design menu/lobby path was confirmed by the user. This expanded
 multi-design UI, factory production, mixed-weapon firing and transport still need

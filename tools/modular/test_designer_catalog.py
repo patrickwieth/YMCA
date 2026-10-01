@@ -69,6 +69,24 @@ class DesignerCatalogTests(unittest.TestCase):
             for trait, weapon in bindings:
                 self.assertIn('{ "' + trait + '", "' + weapon + '" }', native)
 
+    def test_allied_defaults_match_inspected_stock_parents(self):
+        source = (REPO / 'mods/ca/rules/allies/vehicles.yaml').read_text(encoding='utf-8')
+        for hull, actor in [('allied-medium-hull', '2TNK'), ('designer-ranger-hull', 'JEEP'),
+                            ('field-artillery-hull', 'ARTY'), ('designer-prism-hull', 'Prismtank')]:
+            row = next(r for r in cases() if r['parts']['chassis'] == hull and r['parts']['generator'] == 'baseline-generator')
+            self.assertEqual(row['base_faction'], 'england')
+            block = re.search(r'(?ms)^' + actor + r':\n(.*?)(?=^\S|\Z)', source).group(1)
+            for field, key in [('Cost', 'cost'), ('HP', 'hp'), ('Speed', 'speed')]:
+                self.assertEqual(row['values'][key], int(re.search(r'(?m)^\t\t' + field + r': (\d+)$', block).group(1)))
+
+    def test_shared_ammunition_union_keeps_gdi_he_but_not_as_allied_choice(self):
+        catalog = data()
+        self.assertIn('designer-he-shell', catalog['components']['medium-cannon']['ammunition'])
+        allied = next(a for a in catalog['assemblies'] if a['options']['chassis'] == ['allied-medium-hull'])
+        self.assertEqual(allied['options']['ammunition'], ['medium-tank-shell'])
+        self.assertEqual(actor_sources('modular.custom.tank1:\n\tInherits: Challenger_Tank\n'),
+                         {'modular.custom.tank1': 'challenger_tank'})
+
     def test_native_weapon_parent_names_use_exact_yaml_declaration_case(self):
         native = (REPO / 'OpenRA.Mods.CA/Modular/CustomVehicleAssembly.cs').read_text(encoding='utf-8')
         parents = re.findall(r'\{ "Armament(?:@[A-Za-z0-9_-]+)?", "([^"]+)" \}', native)
@@ -83,7 +101,7 @@ class DesignerCatalogTests(unittest.TestCase):
     def test_shipped_snapshot_and_native_fixtures_are_current(self):
         self.assertEqual(json.loads((REPO / 'mods/ca/modular/designer-catalog.json').read_text(encoding='utf-8')), data())
         self.assertEqual(json.loads(Path(__file__).with_name('designer-calculation-cases.json').read_text()), cases())
-        self.assertEqual(len(cases()), 66)
+        self.assertEqual(len(cases()), 74)
 
 
 if __name__ == '__main__':

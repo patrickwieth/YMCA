@@ -19,7 +19,11 @@
       "battlemaster",
       "dragon-chassis",
       "gatling-chassis",
-      "overlord-chassis"
+      "overlord-chassis",
+      "allied-medium-hull",
+      "designer-ranger-hull",
+      "field-artillery-hull",
+      "designer-prism-hull"
     ],
     "running_gear": [
       "tracks-standard",
@@ -32,7 +36,8 @@
       "designer-mk2-legs",
       "tracks-light-artillery",
       "designer-ssm-gear",
-      "tracks-superheavy"
+      "tracks-superheavy",
+      "designer-prism-gear"
     ],
     "drive": [
       "diesel",
@@ -64,7 +69,9 @@
       "cannon-turret",
       "flame-turret",
       "gatling-turret",
-      "heavy-twin-turret"
+      "heavy-twin-turret",
+      "designer-ranger-mount",
+      "designer-prism-mount"
     ],
     "weapon": [
       "medium-cannon",
@@ -81,7 +88,8 @@
       "cannon",
       "dragon-flamer",
       "gatling-gun",
-      "overlord-cannon"
+      "overlord-cannon",
+      "designer-prism-weapon"
     ],
     "ammunition": [
       "medium-tank-shell",
@@ -99,7 +107,8 @@
       "shell",
       "flame-fuel",
       "gatling-rounds",
-      "heavy-shell"
+      "heavy-shell",
+      "designer-prism-payload"
     ]
   },
   "components": {
@@ -443,6 +452,80 @@
       "source": "choverlord",
       "note": "Base scalar values; China Tank General activates the inherited Emperor artwork and 80% received-damage modifier. Effective durability is not displayed raw HP. Roof modules are not admitted here."
     },
+    "allied-medium-hull": {
+      "display_name": "Challenger - alliierter Kampfpanzer",
+      "role": "chassis",
+      "factions": [
+        "allies"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 7500,
+      "cost": 250,
+      "hp": 45000,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 1,
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 20000,
+      "reference_mass": 11000,
+      "reference_kw": 460,
+      "reference_speed": 82,
+      "max_speed": 110,
+      "allowed": {
+        "carrier": [
+          "medium-cannon-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "source": "Challenger_Tank / 2TNK",
+      "note": "Raw baseline; inherited Armored Doctrine production discount remains active in-game."
+    },
+    "field-artillery-hull": {
+      "display_name": "Feldartillerie - alliierte Ausfuehrung",
+      "role": "chassis",
+      "factions": [
+        "allies"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 5000,
+      "cost": 75,
+      "hp": 10000,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 1,
+      "default_running_gear": "tracks-light-artillery",
+      "allowed_running_gear": [
+        "tracks-light-artillery"
+      ],
+      "turn_speed_limit": 16,
+      "max_mass": 14000,
+      "reference_mass": 8300,
+      "reference_kw": 460,
+      "reference_speed": 56,
+      "max_speed": 80,
+      "allowed": {
+        "carrier": [
+          "field-artillery-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "source": "ARTY",
+      "note": "Light armor despite tracked graphics. Fixed hull/gun artwork, no free turret replacement."
+    },
     "tracks-standard": {
       "display_name": "Standard-Kettenlaufwerk",
       "role": "running_gear",
@@ -695,7 +778,8 @@
         "china",
         "gdi",
         "soviet",
-        "nod"
+        "nod",
+        "allies"
       ],
       "tier": 1,
       "cp": 0,
@@ -962,7 +1046,8 @@
       "role": "weapon",
       "factions": [
         "gdi",
-        "nod"
+        "nod",
+        "allies"
       ],
       "tier": 0,
       "cp": 0,
@@ -1032,7 +1117,7 @@
       ],
       "range_cells": 14,
       "min_range_cells": 4,
-      "source": "155mmTD (native Nod binding); complete weapon inherited",
+      "source": "155mm / 155mmTD; complete faction-specific weapon inherited",
       "template_locked": true
     },
     "cannon": {
@@ -1137,7 +1222,8 @@
       "role": "ammunition",
       "factions": [
         "gdi",
-        "nod"
+        "nod",
+        "allies"
       ],
       "tier": 0,
       "cp": 0,
@@ -1258,7 +1344,8 @@
       "role": "equipment",
       "factions": [
         "gdi",
-        "nod"
+        "nod",
+        "allies"
       ],
       "tier": 0,
       "cp": 0,
@@ -1943,6 +2030,174 @@
       "cost": 75,
       "source": "HonestJohn",
       "note": "Full projectile, warheads and effects inherited; not scalar damage emulation."
+    },
+    "designer-ranger-hull": {
+      "display_name": "Ranger - MG-Spaehwagen",
+      "role": "chassis",
+      "factions": [
+        "allies"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 1600,
+      "cost": 125,
+      "hp": 15000,
+      "electric_kw": 5,
+      "carrier_slots": 1,
+      "equipment_slots": 1,
+      "default_running_gear": "wheels-light",
+      "allowed_running_gear": [
+        "wheels-light"
+      ],
+      "turn_speed_limit": 80,
+      "max_mass": 6000,
+      "reference_mass": 2500,
+      "reference_kw": 210,
+      "reference_speed": 157,
+      "max_speed": 180,
+      "allowed": {
+        "carrier": [
+          "designer-ranger-mount"
+        ],
+        "drive": [
+          "diesel-light"
+        ]
+      },
+      "equipment": [
+        "scout-sensors"
+      ],
+      "source": "JEEP",
+      "note": "Shared scout allocations, mandatory sensors counted once. Ranger retains its own MG report and 48-turn turret."
+    },
+    "designer-ranger-mount": {
+      "display_name": "Ranger-MG-Lafette",
+      "role": "carrier",
+      "factions": [
+        "allies"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 100,
+      "cost": 25,
+      "electric_kw": 0,
+      "weapons": [
+        "scout-mg"
+      ],
+      "burst": 5,
+      "reload_ticks": 30,
+      "turn_speed_reference": 48,
+      "source": "JEEP / M60mg"
+    },
+    "designer-prism-hull": {
+      "factions": [
+        "allies"
+      ],
+      "tier": 2,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Prism-Tank - gebundene Einbaugruppe",
+      "mass": 8000,
+      "cost": 575,
+      "hp": 22000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "designer-prism-gear",
+      "allowed_running_gear": [
+        "designer-prism-gear"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 20000,
+      "reference_mass": 11600,
+      "reference_kw": 320,
+      "reference_speed": 82,
+      "max_speed": 110,
+      "allowed": {
+        "carrier": [
+          "designer-prism-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "source": "Prismtank",
+      "note": "Constructed baseline fit, experimental mass/power allocations. Doctrine discount and Prism Tech are inherited, not simulated here."
+    },
+    "designer-prism-gear": {
+      "factions": [
+        "allies"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 0,
+      "role": "running_gear",
+      "display_name": "Prism-Fahrwerk",
+      "mass": 1500,
+      "cost": 100,
+      "kind": "tracks",
+      "locomotor": "wheeled",
+      "max_mass": 20000,
+      "max_speed": 150,
+      "turn_speed": 48,
+      "note": "Preserves stock wheeled locomotor and Light armor despite tank artwork."
+    },
+    "designer-prism-mount": {
+      "factions": [
+        "allies"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Prism-Strahlenturm",
+      "mass": 500,
+      "cost": 150,
+      "weapons": [
+        "designer-prism-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 45,
+      "source": "Prismtank"
+    },
+    "designer-prism-weapon": {
+      "factions": [
+        "allies"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 35,
+      "role": "weapon",
+      "display_name": "Prism-Strahlsystem",
+      "mass": 700,
+      "cost": 350,
+      "ammunition": [
+        "designer-prism-payload"
+      ],
+      "template_locked": true,
+      "source": "PrisTLaser",
+      "note": "Full LaserZap and FireCluster secondary-beam package. No damage-only rewrite."
+    },
+    "designer-prism-payload": {
+      "factions": [
+        "allies"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Prism-Energiepaket",
+      "mass": 300,
+      "cost": 75,
+      "source": "PrisTLaser / PrisTBurst",
+      "note": "Complete effects inherited; allocation does not emulate ammunition consumption."
     }
   },
   "assemblies": [
@@ -2444,6 +2699,132 @@
         ],
         "ammunition": [
           "heavy-shell"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "allies",
+      "options": {
+        "chassis": [
+          "allied-medium-hull"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "medium-cannon-mount"
+        ],
+        "weapon": [
+          "medium-cannon"
+        ],
+        "ammunition": [
+          "medium-tank-shell"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "allies",
+      "options": {
+        "chassis": [
+          "designer-ranger-hull"
+        ],
+        "running_gear": [
+          "wheels-light"
+        ],
+        "drive": [
+          "diesel-light"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "designer-ranger-mount"
+        ],
+        "weapon": [
+          "scout-mg"
+        ],
+        "ammunition": [
+          "scout-mg-rounds"
+        ]
+      },
+      "built_in": [
+        "scout-sensors"
+      ]
+    },
+    {
+      "faction": "allies",
+      "options": {
+        "chassis": [
+          "field-artillery-hull"
+        ],
+        "running_gear": [
+          "tracks-light-artillery"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "field-artillery-mount"
+        ],
+        "weapon": [
+          "field-artillery"
+        ],
+        "ammunition": [
+          "field-artillery-he"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "allies",
+      "options": {
+        "chassis": [
+          "designer-prism-hull"
+        ],
+        "running_gear": [
+          "designer-prism-gear"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "designer-prism-mount"
+        ],
+        "weapon": [
+          "designer-prism-weapon"
+        ],
+        "ammunition": [
+          "designer-prism-payload"
         ]
       },
       "built_in": []

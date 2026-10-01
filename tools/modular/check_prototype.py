@@ -32,8 +32,8 @@ def differences(control, prototype, sources=None):
 
 def actor_sources(rules):
     sources = dict((actor, parent.lower()) for actor, parent in re.findall(
-        r'(?m)^(modular\.[a-z0-9.]+):\r?\n\tInherits: ([A-Za-z0-9.]+)\r?$', rules))
-    if not sources or any(parent not in ('mtnk', 'hmmv', 'mlrs', 'juggernaut', 'mammoth', 'hmlrs', 'disr', 'mammothmk2', 'ltnk', 'bggy', 'arty.nod', 'ssm', 'chbattle', 'chdragon', 'chgtnk', 'choverlord') for parent in sources.values()):
+        r'(?m)^(modular\.[a-z0-9.]+):\r?\n\tInherits: ([A-Za-z0-9_.]+)\r?$', rules))
+    if not sources or any(parent not in ('mtnk', 'hmmv', 'mlrs', 'juggernaut', 'mammoth', 'hmlrs', 'disr', 'mammothmk2', 'ltnk', 'bggy', 'arty.nod', 'ssm', 'chbattle', 'chdragon', 'chgtnk', 'choverlord', 'challenger_tank', 'jeep', 'arty', 'prismtank') for parent in sources.values()):
         raise ValueError('Unknown or missing prototype actor bindings')
     return sources
 

@@ -154,6 +154,35 @@ namespace OpenRA.Mods.CA.Modular
 				Faction = "china", PreserveWeaponTemplates = true, AlternateTooltips = new[] { "Tooltip@Emperor" },
 				ExtraPrerequisites = ", radar, ~vehicles.china, ~!vehicles.chinainf, ~!upg.overlord",
 				Summary = "Overlord: Doppelkanone; Tank-General nutzt Emperor-Grafik und 80% erlittenen Schaden. HP-Anzeige ist roh."
+			},
+			new CustomVehicleAssembly("allied-medium-hull", "Challenger_Tank", "Challenger_Tank", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel" }, "heavy", "medium-cannon-mount", "medium-cannon", new[] { "medium-tank-shell" },
+				new Dictionary<string, string> { { "Armament", "90mm" } })
+			{
+				Faction = "allies", ExtraPrerequisites = ", ~england",
+				Summary = "Challenger: volle 90-mm-Kanone und eigene Grafik. Angezeigter Basispreis vor Panzer-Doktrinrabatt."
+			},
+			new CustomVehicleAssembly("designer-ranger-hull", "JEEP", "jeep", "Turreted",
+				new[] { "wheels-light" }, new[] { "diesel-light" }, "light", "designer-ranger-mount", "scout-mg", new[] { "scout-mg-rounds" },
+				new Dictionary<string, string> { { "Armament", "M60mg" } }, "scout-sensors")
+			{
+				Faction = "allies",
+				ExtraPrerequisites = ", weap, ~allies, ~!promotion.infantry_doctrine, ~!promotion.armored_doctrine, ~!promotion.airforce_doctrine",
+				Summary = "Ranger: M60mg und Sensoren (50 Credits enthalten). Wie das Original nur vor der Doktrinwahl baubar."
+			},
+			new CustomVehicleAssembly("field-artillery-hull", "ARTY", "arty", null,
+				new[] { "tracks-light-artillery" }, new[] { "diesel" }, "light", "field-artillery-mount", "field-artillery", new[] { "field-artillery-he" },
+				new Dictionary<string, string> { { "Armament", "155mm" } })
+			{
+				Faction = "allies", PreserveWeaponTemplates = true, ExtraPrerequisites = ", weap, ~allies",
+				Summary = "Feldartillerie: 155mm, Frontwaffe und Munitionsexplosion. Basispreis vor Panzer-Doktrinrabatt."
+			},
+			new CustomVehicleAssembly("designer-prism-hull", "Prismtank", "prismtank", "Turreted",
+				new[] { "designer-prism-gear" }, new[] { "diesel" }, "light", "designer-prism-mount", "designer-prism-weapon", new[] { "designer-prism-payload" },
+				new Dictionary<string, string> { { "Armament", "PrisTLaser" } })
+			{
+				Faction = "allies", PreserveWeaponTemplates = true, ExtraPrerequisites = ", radar, ~promotion.prism_tank",
+				Summary = "Prism-Tank: Strahl samt Sekundaerstrahlen und Prism-Tech. Freischaltung/Radar noetig; Preis vor Doktrinrabatt."
 			}
 		};
 

@@ -12,7 +12,8 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				{ "eagle", ("gdi", "GDI / Eagle", "FactionCA@11", "mtnk") },
 				{ "blackh", ("nod", "Nod / Black Hand", "FactionCA@13", "ltnk") },
-				{ "chinatnk", ("china", "China / Tank-General", "FactionCA@22", "chbattle") }
+				{ "chinatnk", ("china", "China / Tank-General", "FactionCA@22", "chbattle") },
+				{ "england", ("allies", "Alliierte / England", "FactionCA@1", "challenger_tank") }
 			};
 
 		public static string[] BaseFactions => Bases.Keys.ToArray();
