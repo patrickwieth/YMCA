@@ -5,7 +5,7 @@
 Restart the locally built game, then **Eigene Fraktion**.
 
 - Select **GDI / Eagle**, **Nod / Black Hand**, **China / Tank-General** or
-  **Alliierte / England** in the top-right base dropdown.
+  **Alliierte / England** or **Sowjets / Russland** in the top-right base dropdown.
   The ordinary roster of the selected base remains available. Switching needs confirmation:
   the current faction is first saved in the library, then a fresh independent roster is
   created. Existing library names are reserved; a suffix prevents accidental replacement.
@@ -30,7 +30,7 @@ Restart the locally built game, then **Eigene Fraktion**.
 
 Use the first player slot and start **A**. One example of **every configured design**
 stands near that start. GDI keeps its MTNK comparison and Carryall; Nod gets an LTNK
-comparison, China a Battlemaster and England a Challenger. Non-GDI maps have no free
+comparison, China a Battlemaster, England a Challenger and Russia a Heavy Tank. Non-GDI maps have no free
 GDI Carryall. All retain the enemy target.
 Moving designs are additional vehicle-factory choices, grouped at palette orders
 1000 onward under your vehicle names. The selected base's stock units remain available too.
@@ -40,9 +40,9 @@ Their production is intentionally disabled until a real factory/deployment workf
 
 ## Supported assemblies
 
-There are currently **74 supported component combinations in 20 faction-specific bindings**:
-eight GDI bindings (42 combinations), four Nod (8), four China (16) and four Allied (8).
-These represent **19 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
+There are currently **82 supported component combinations in 24 faction-specific bindings**:
+eight GDI bindings (42 combinations), four Nod (8), four China (16), four Allied (8) and
+four Soviet (8). These represent **23 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
 of the same field-artillery family, not two independently counted families.
 
 | Assembly | Existing actor / full weapon bindings | Reference price / HP / speed | Configured default |
@@ -67,6 +67,10 @@ of the same field-artillery family, not two independently counted families.
 | Allied Ranger | JEEP; M60mg, sensors, pre-doctrine availability | 400 / 15000 / 157 | 400 / 15000 / 157 |
 | Allied field artillery | ARTY; 155mm, frontal attack and ammunition explosion | 550 / 10000 / 56 | 550 / 10000 / 56 |
 | Allied Prism tank | Prismtank; PrisTLaser including secondary beam cluster | 1350 / 22000 / 82 | 1350 / 22000 / 82 |
+| Soviet heavy tank | Heavy_Tank; 125mm twin cannon, original recoil/husk | 1100 / 65000 / 68 | 1100 / 65000 / 68 |
+| T-34 | T-34; normal 30mm and conditional cluster-upgrade channel | 600 / 42000 / 100 | 600 / 42000 / 100 |
+| Heavy Tesla tank | TTNK.RA2; full TTankZapMK2, fire delay and attack animation | 1350 / 48000 / 100 | 1350 / 48000 / 100 |
+| Mobile Flak | FTRK; separate FLAK-23-AA and FLAK-23-AG packages | 500 / 15000 / 118 | 500 / 15000 / 118 |
 
 These exact default scalar matches are constructed calibration fits, NOT independent
 balance validation. Allocations for mass, power and component prices remain experimental.
@@ -90,7 +94,7 @@ balance validation. Allocations for mass, power and component prices remain expe
 Parts remain conceptually separate, but graphically bound assemblies prevent a Hum-Vee
 MG or MLRS launcher from silently becoming a cannon-looking tank. MG/MLRS rendering
 inherits their complete original actor templates, not just the MTNK with another weapon.
-Scalar weapon fields for the original three groups, Buggy, Ranger and Challenger are compiled from JSON; complete
+Scalar weapon fields for the original three groups, Buggy, Ranger, Challenger and Soviet Heavy Tank are compiled from JSON; complete
 inherited projectile and warhead packages remain intact. MLRS secondary range/damage/reload
 are explicit independent fields. The other families use **template-locked weapon
 packages** instead: each channel derives its complete source weapon without scalar overrides.
@@ -167,6 +171,23 @@ Allied generator/sensor admission uses unchanged shared component prices and rat
 Battle Fortress/cargo weapons, Cryo/Chrono vehicles, other national tank graphics and other
 Allied units are not included in these four bindings.
 
+Russia adds four Soviet bindings. Heavy Tank keeps the full 125mm twin-shot package,
+radar requirement and `!upg.heavy_tank` exclusion. Its shared medium cannon hardware uses
+the Soviet twin carrier's cadence; GDI's single-shot cadence is unchanged. T-34 retains
+both standard and conditional cluster weapons and the existing cluster prerequisite trait.
+Like the custom GDI family policy, the custom Soviet roster explicitly admits the originally
+North-Korean T-34 hull under Russia; vanilla national availability is not modified. Conditional
+upgrades only activate if the owner actually grants their prerequisites.
+
+Heavy Tesla preserves TTankZapMK2, the 13-tick armament delay, sprite turret attack animation,
+Tesla damage upgrade and death husk. It keeps `dome`, Russia and `!promotion.tesla_arc`
+requirements. The separate Arc actor variant is not included, and the designer does not
+pretend its base weapon is already the Arc weapon. The 50 kWe weapon demand is counted once
+(60 kWe total baseline). Mobile Flak preserves independent ground/air targeting, projectiles,
+range and spread, Light armor/wheeled movement, and its barrage-promotion exclusion.
+ISU, V3/missile launchers, Apocalypse, support/cargo units, Devil Tank and promoted variants
+remain outside these four bindings. No stationary Soviet conversion is offered.
+
 The frozen actor and weapon IDs are unique per design and stable across renaming/reordering.
 A copied design gets a new ID and an independent component dictionary. All designs are
 validated before generation; incompatible parts, invalid faction, unsupported fields,
@@ -191,7 +212,8 @@ duplicate IDs/names and budget overflow fail closed. CP-bearing modules are not 
   behavior. Stock AI build lists are not yet extended to deliberately produce new IDs.
 
 The test map renames the selected faction's display name: `eagle` / `FactionCA@11` or
-`blackh` / `FactionCA@13`, `chinatnk` / `FactionCA@22` or `england` / `FactionCA@1`.
+`blackh` / `FactionCA@13`, `chinatnk` / `FactionCA@22`, `england` / `FactionCA@1`
+or `russia` / `FactionCA@5`.
 Both playable slots are locked to that base; production requires
 its `structures.<base>` token. Internal faction IDs, original rosters and commander behavior
 remain intact. Other players of that base on the snapshot can produce the same custom roster. This is not yet
@@ -232,14 +254,14 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **71 Python tests**, **69 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **72 Python tests**, **78 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
 
 Native tests cover schema migration, roundtrip/backups, library isolation, shared budget,
 copy independence, namespace stability, invalid combinations and weapon-channel preservation.
-All 74 offered numeric combinations are checked against the independent Python calculator.
+All 82 offered numeric combinations are checked against the independent Python calculator.
 The earlier six-design sample includes tank hover and both stationary hull variants.
 The eight-family sample can be exported with `MODULAR_GDI_EXPORT=/absolute/new-gdi.oramap`.
 See `tools/modular/designer-gdi-validation.md` for the GDI differential result.
@@ -257,7 +279,12 @@ The Allied sample exports with `MODULAR_ALLIES_EXPORT=/absolute/new-allies.orama
 new errors**; see `tools/modular/designer-allies-validation.md`. Tests also cover shared
 ammunition union/GDI HE regression, Ranger rotation/sensors/doctrine exclusions, Prism's
 complete weapon package and movement/armor binding, and England player/reference selection.
-The differential checker now recognizes inspected parent names containing underscores.
+The differential checker recognizes inspected parent names containing underscores and hyphens.
+The Soviet sample exports with `MODULAR_SOVIET_EXPORT=/absolute/new-soviet.oramap` and reports
+**1685 control / 1693 generated errors**, eight inherited diagnostics and **zero unexpected
+new errors**; see `tools/modular/designer-soviet-validation.md`. Tests cover source scalar
+baselines, both T-34 channels, independent Flak weapons, Tesla inheritance/power accounting,
+shared cannon cadence isolation, national reference actor and both player slots.
 
 The earlier single-design menu/lobby path was confirmed by the user. This expanded
 multi-design UI, factory production, mixed-weapon firing and transport still need

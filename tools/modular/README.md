@@ -2,7 +2,7 @@
 
 ## Latest: native main-menu faction editor
 
-**Eigene Fraktion** supports **GDI/Eagle, Nod/Black Hand, China/Tank-General and Allies/England**, plus **up to 16 custom
+**Eigene Fraktion** supports **GDI/Eagle, Nod/Black Hand, China/Tank-General, Allies/England and Soviets/Russia**, plus **up to 16 custom
 vehicle designs**, with New/Copy/Remove, shared budget, named faction save/load and
 in-memory migration of existing single-tank profiles. The base selector saves the
 previous faction in the library before starting an independent roster with a free name.
@@ -10,8 +10,9 @@ previous faction in the library before starting an independent roster with a fre
 MLRS, Mammoth, Juggernaut, native Hover MLRS, Disruptor, Mammoth Mk II), **four Nod
 families** (light tank, Buggy, artillery, SSM) and **four China families** (Battlemaster,
 Dragon, Gatling tank, Overlord), plus **four Allied bindings** (Challenger, Ranger,
-field artillery, Prism tank). That is **20 faction-specific bindings / 19 families**:
-Nod and Allied field artillery share a family. Their **74 supported combinations** use compatible
+field artillery, Prism tank) and **four Soviet bindings** (Heavy Tank, T-34, heavy Tesla,
+Mobile Flak). That is **24 faction-specific bindings / 23 families**:
+Nod and Allied field artillery share a family. Their **82 supported combinations** use compatible
 artwork and full existing weapons, including helper, visual and conditional upgrade channels.
 Hum-Vee/Buggy mandatory sensors are counted once. Mixed-faction and non-GDI stationary
 profiles fail native validation. Both test-map player slots use the selected base.
@@ -23,14 +24,16 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**71 Python + 69 native tests pass**; all 74 numeric combinations match the independent
+**72 Python + 78 native tests pass**; all 82 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential
 is **1685 / 1691**, six inherited diagnostics, **zero unexpected new errors**; see
 `designer-nod-validation.md`. China: **1685 / 1693**, eight inherited diagnostics,
 **zero unexpected new errors**; see `designer-china-validation.md`. Allies: **1685 / 1692**,
-seven inherited diagnostics, **zero unexpected new errors**; see `designer-allies-validation.md`. This is NOT a
+seven inherited diagnostics, **zero unexpected new errors**; see `designer-allies-validation.md`.
+Soviets: **1685 / 1693**, eight inherited diagnostics, **zero unexpected new errors**;
+see `designer-soviet-validation.md`. This is NOT a
 clean full-mod lint or a live gameplay pass. Expanded UI/gameplay checks remain pending.
 
 Complex families use template-locked weapon packages: no fake SpreadDamage
@@ -49,7 +52,11 @@ England preserves national Challenger art/90mm, Ranger M60mg/sensors and doctrin
 Armored Doctrine production discounts remain; displayed prices are raw base prices. Prism
 keeps stock Light armor/wheeled movement and radar/promotion requirements. Shared ammunition
 export now unions compatibility, preserving existing GDI HE profiles without granting HE to
-Challenger. Other Allied units, Soviets, Scrin and further GDI/Nod/China families remain open.
+Challenger. Russia adds full twin-cannon cadence, T-34 normal/cluster channels, Tesla
+animation/delay/upgrades and independent Flak ground/AA packages. Production prerequisites
+and promotion exclusions remain. The custom Soviet roster admits the North Korean T-34
+without editing vanilla national rosters. Tesla Arc and other promoted variants remain open.
+Scrin and further families in every other base faction are not integrated yet.
 
 The confirmed fix preventing ordinary skirmish restoration from replacing the chosen
 snapshot remains active. Test sessions also do not overwrite ordinary skirmish setups.

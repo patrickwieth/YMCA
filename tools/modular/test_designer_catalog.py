@@ -87,6 +87,18 @@ class DesignerCatalogTests(unittest.TestCase):
         self.assertEqual(actor_sources('modular.custom.tank1:\n\tInherits: Challenger_Tank\n'),
                          {'modular.custom.tank1': 'challenger_tank'})
 
+    def test_soviet_defaults_match_stock_and_hyphenated_parent_is_recognized(self):
+        source = (REPO / 'mods/ca/rules/soviet/vehicles.yaml').read_text(encoding='utf-8')
+        for hull, actor in [('soviet-heavy-hull', 'Heavy_Tank'), ('t34-hull', 'T-34'),
+                            ('heavy-tesla', 'TTNK.RA2'), ('designer-flak-hull', 'FTRK')]:
+            row = next(r for r in cases() if r['parts']['chassis'] == hull and r['parts']['generator'] == 'baseline-generator')
+            self.assertEqual(row['base_faction'], 'russia')
+            block = re.search(r'(?ms)^' + re.escape(actor) + r':\n(.*?)(?=^\S|\Z)', source).group(1)
+            for field, key in [('Cost', 'cost'), ('HP', 'hp'), ('Speed', 'speed')]:
+                self.assertEqual(row['values'][key], int(re.search(r'(?m)^\t\t' + field + r': (\d+)$', block).group(1)))
+            self.assertEqual(actor_sources('modular.custom.tank1:\n\tInherits: ' + actor + '\n'),
+                             {'modular.custom.tank1': actor.lower()})
+
     def test_native_weapon_parent_names_use_exact_yaml_declaration_case(self):
         native = (REPO / 'OpenRA.Mods.CA/Modular/CustomVehicleAssembly.cs').read_text(encoding='utf-8')
         parents = re.findall(r'\{ "Armament(?:@[A-Za-z0-9_-]+)?", "([^"]+)" \}', native)
@@ -101,7 +113,7 @@ class DesignerCatalogTests(unittest.TestCase):
     def test_shipped_snapshot_and_native_fixtures_are_current(self):
         self.assertEqual(json.loads((REPO / 'mods/ca/modular/designer-catalog.json').read_text(encoding='utf-8')), data())
         self.assertEqual(json.loads(Path(__file__).with_name('designer-calculation-cases.json').read_text()), cases())
-        self.assertEqual(len(cases()), 74)
+        self.assertEqual(len(cases()), 82)
 
 
 if __name__ == '__main__':

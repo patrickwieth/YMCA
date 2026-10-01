@@ -183,6 +183,36 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				Faction = "allies", PreserveWeaponTemplates = true, ExtraPrerequisites = ", radar, ~promotion.prism_tank",
 				Summary = "Prism-Tank: Strahl samt Sekundaerstrahlen und Prism-Tech. Freischaltung/Radar noetig; Preis vor Doktrinrabatt."
+			},
+			new CustomVehicleAssembly("soviet-heavy-hull", "Heavy_Tank", "heavytank", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel" }, "heavy", "soviet-twin-mount", "medium-cannon", new[] { "medium-tank-shell" },
+				new Dictionary<string, string> { { "Armament", "125mm" } })
+			{
+				Faction = "soviet", ExtraPrerequisites = ", ~vehicles.russia, radar, ~!upg.heavy_tank",
+				Summary = "Schwerer Panzer: volle 125-mm-Zwillingskanone, Rueckstoss und Wrack. Radar erforderlich."
+			},
+			new CustomVehicleAssembly("t34-hull", "T-34", "t34", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel" }, "heavy", "light-cannon-mount", "light-cannon", new[] { "light-tank-shell" },
+				new Dictionary<string, string> { { "Armament@primary", "30mm" }, { "Armament@primary-cluster", "30mm.Cluster_Upgrade" } })
+			{
+				Faction = "soviet", PreserveWeaponTemplates = true,
+				Summary = "T-34: normale/Cluster-Kanone bedingt geerbt. Nordkoreanischer Rumpf fuer das eigene Sowjet-Roster."
+			},
+			new CustomVehicleAssembly("heavy-tesla", "TTNK.RA2", "ttnk.ra2", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel" }, "heavy", "twin-coil", "tesla", new[] { "discharge" },
+				new Dictionary<string, string> { { "Armament", "TTankZapMK2" } })
+			{
+				Faction = "soviet", PreserveWeaponTemplates = true,
+				ExtraPrerequisites = ", dome, ~vehicles.russia, ~!promotion.tesla_arc",
+				Summary = "Tesla-Panzer: Doppelentladung, Schussverzoegerung und Animation geerbt. Radar noetig; Arc-Variante separat."
+			},
+			new CustomVehicleAssembly("designer-flak-hull", "FTRK", "ftrk", "Turreted",
+				new[] { "designer-flak-gear" }, new[] { "diesel-light" }, "light", "designer-flak-mount", "designer-flak-weapon", new[] { "designer-flak-payload" },
+				new Dictionary<string, string> { { "Armament@AA", "FLAK-23-AA" }, { "Armament@AG", "FLAK-23-AG" } })
+			{
+				Faction = "soviet", PreserveWeaponTemplates = true,
+				ExtraPrerequisites = ", ~vehicles.soviet, ~!promotion.flak_track.barrage",
+				Summary = "Flak-Laster: unabhaengige Boden-/Luftwaffen mit eigenen Projektilen, Reichweiten und Streuung."
 			}
 		};
 

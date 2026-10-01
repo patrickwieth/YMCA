@@ -10,6 +10,7 @@ from gdi_designer_expansion import additional_assemblies, extend_parts
 import nod_designer_expansion as nod
 import china_designer_expansion as china
 import allied_designer_expansion as allies
+import soviet_designer_expansion as soviet
 
 
 def assemblies():
@@ -24,7 +25,7 @@ def assemblies():
               'light', 'scout-mg-mount', 'scout-mg', ['scout-mg-rounds'], ['scout-sensors']),
         frame('designer-mlrs-hull', ['designer-mlrs-gear'], ['diesel', 'diesel-large'],
               'light', 'designer-rocket-mount', 'designer-rockets', ['designer-rocket-payload']),
-    ] + additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies()
+    ] + additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies()
 
 
 def data():
@@ -66,6 +67,7 @@ def data():
     nod.extend_parts(parts, catalog)
     china.extend_parts(parts)
     allies.extend_parts(parts)
+    soviet.extend_parts(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}
     for assembly in assemblies():
@@ -102,7 +104,7 @@ def cases():
             design = dict(name='Native comparison', faction=assembly.get('faction', 'gdi'), running_gear=parts['running_gear'],
                           components=[v for k, v in parts.items() if k != 'running_gear'] + assembly['built_in'])
             result = calculate(catalog, design)
-            rows.append(dict(base_faction={'gdi': 'eagle', 'nod': 'blackh', 'china': 'chinatnk', 'allies': 'england'}[assembly.get('faction', 'gdi')], parts=parts, values={k: result[k] for k in
+            rows.append(dict(base_faction={'gdi': 'eagle', 'nod': 'blackh', 'china': 'chinatnk', 'allies': 'england', 'soviet': 'russia'}[assembly.get('faction', 'gdi')], parts=parts, values={k: result[k] for k in
                 ('cost', 'mass', 'hp', 'speed', 'turn_speed', 'electric_kw', 'reserve_kw', 'tech', 'catalog_points')}))
     return rows
 

@@ -23,7 +23,11 @@
       "allied-medium-hull",
       "designer-ranger-hull",
       "field-artillery-hull",
-      "designer-prism-hull"
+      "designer-prism-hull",
+      "soviet-heavy-hull",
+      "t34-hull",
+      "heavy-tesla",
+      "designer-flak-hull"
     ],
     "running_gear": [
       "tracks-standard",
@@ -37,7 +41,8 @@
       "tracks-light-artillery",
       "designer-ssm-gear",
       "tracks-superheavy",
-      "designer-prism-gear"
+      "designer-prism-gear",
+      "designer-flak-gear"
     ],
     "drive": [
       "diesel",
@@ -71,7 +76,10 @@
       "gatling-turret",
       "heavy-twin-turret",
       "designer-ranger-mount",
-      "designer-prism-mount"
+      "designer-prism-mount",
+      "soviet-twin-mount",
+      "twin-coil",
+      "designer-flak-mount"
     ],
     "weapon": [
       "medium-cannon",
@@ -89,7 +97,9 @@
       "dragon-flamer",
       "gatling-gun",
       "overlord-cannon",
-      "designer-prism-weapon"
+      "designer-prism-weapon",
+      "tesla",
+      "designer-flak-weapon"
     ],
     "ammunition": [
       "medium-tank-shell",
@@ -108,7 +118,9 @@
       "flame-fuel",
       "gatling-rounds",
       "heavy-shell",
-      "designer-prism-payload"
+      "designer-prism-payload",
+      "discharge",
+      "designer-flak-payload"
     ]
   },
   "components": {
@@ -525,6 +537,115 @@
       "equipment": [],
       "source": "ARTY",
       "note": "Light armor despite tracked graphics. Fixed hull/gun artwork, no free turret replacement."
+    },
+    "soviet-heavy-hull": {
+      "display_name": "Schwerer Panzer - Zwillingskanone",
+      "role": "chassis",
+      "factions": [
+        "soviet"
+      ],
+      "tier": 2,
+      "cp": 0,
+      "tech": 2,
+      "mass": 11000,
+      "cost": 450,
+      "hp": 65000,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 2,
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 20000,
+      "reference_mass": 15000,
+      "reference_kw": 460,
+      "reference_speed": 68,
+      "max_speed": 95,
+      "allowed": {
+        "carrier": [
+          "soviet-twin-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "source": "Heavy_Tank"
+    },
+    "t34-hull": {
+      "display_name": "T-34 - leichter Kampfpanzer",
+      "role": "chassis",
+      "factions": [
+        "soviet"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 6500,
+      "cost": 100,
+      "hp": 42000,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 1,
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 18000,
+      "reference_mass": 10000,
+      "reference_kw": 460,
+      "reference_speed": 100,
+      "max_speed": 125,
+      "allowed": {
+        "carrier": [
+          "light-cannon-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "source": "T-34",
+      "note": "Custom Soviet roster admits this North Korean hull. Both standard and conditional cluster weapons inherited."
+    },
+    "heavy-tesla": {
+      "source": "TTNK.RA2",
+      "role": "chassis",
+      "factions": [
+        "soviet"
+      ],
+      "tier": 2,
+      "cp": 0,
+      "tech": 2,
+      "mass": 6500,
+      "cost": 500,
+      "hp": 48000,
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 48,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 2,
+      "max_mass": 18000,
+      "reference_mass": 10000,
+      "reference_kw": 260,
+      "reference_speed": 100,
+      "max_speed": 110,
+      "allowed": {
+        "carrier": [
+          "twin-coil"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "display_name": "Tesla-Panzer - schwere Doppelspule"
     },
     "tracks-standard": {
       "display_name": "Standard-Kettenlaufwerk",
@@ -1019,6 +1140,47 @@
       "source": "OverlordCannon",
       "note": "Normal, nuclear and speaker artwork bindings must select appropriate existing turret sequences; no claim of arbitrary visual interchangeability."
     },
+    "soviet-twin-mount": {
+      "display_name": "Zwillings-Panzerkanonenturm",
+      "role": "carrier",
+      "factions": [
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "mass": 1000,
+      "cost": 200,
+      "electric_kw": 0,
+      "weapons": [
+        "medium-cannon"
+      ],
+      "burst": 2,
+      "reload_ticks": 70,
+      "turn_speed_reference": 48,
+      "source": "125mm / Heavy_Tank"
+    },
+    "twin-coil": {
+      "role": "carrier",
+      "factions": [
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "mass": 500,
+      "cost": 200,
+      "electric_kw": 0,
+      "weapons": [
+        "tesla"
+      ],
+      "burst": 2,
+      "burst_delay_ticks": 1,
+      "reload_ticks": 100,
+      "fire_delay_ticks": 13,
+      "turn_speed_reference": 28,
+      "display_name": "Tesla-Doppelspulenturm"
+    },
     "medium-cannon": {
       "display_name": "Mittlere Panzerkanone",
       "role": "weapon",
@@ -1199,6 +1361,25 @@
       "template_locked": true,
       "note": "Full native weapon channels inherited, including conditional stages/upgrades. Scalar weapon fields are reference metadata only, not emitted overrides."
     },
+    "tesla": {
+      "role": "weapon",
+      "factions": [
+        "soviet"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 2,
+      "mass": 700,
+      "cost": 350,
+      "electric_kw": 50,
+      "ammunition": [
+        "discharge"
+      ],
+      "source": "TTankZapMK2",
+      "display_name": "Tesla-Strahlsystem",
+      "template_locked": true,
+      "note": "Full TTankZapMK2 behavior retained, not damage-only substitution."
+    },
     "medium-tank-shell": {
       "display_name": "Panzergranaten gegen schwere Ziele",
       "role": "ammunition",
@@ -1338,6 +1519,20 @@
       "electric_kw": 0,
       "damage": 8000,
       "source": "OverlordCannon"
+    },
+    "discharge": {
+      "role": "ammunition",
+      "factions": [
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "mass": 200,
+      "cost": 100,
+      "electric_kw": 0,
+      "note": "Fixed payload-package mass, not physical shells; no duplicate Tesla electrical charge.",
+      "display_name": "Tesla-Entladungspaket"
     },
     "scout-sensors": {
       "display_name": "SpÃ¤hsensoren",
@@ -2198,6 +2393,114 @@
       "cost": 75,
       "source": "PrisTLaser / PrisTBurst",
       "note": "Complete effects inherited; allocation does not emulate ammunition consumption."
+    },
+    "designer-flak-hull": {
+      "factions": [
+        "soviet"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 5,
+      "role": "chassis",
+      "display_name": "Flak-Laster - Boden und Luft",
+      "mass": 3000,
+      "cost": 200,
+      "hp": 15000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "designer-flak-gear",
+      "allowed_running_gear": [
+        "designer-flak-gear"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 8000,
+      "reference_mass": 4350,
+      "reference_kw": 230,
+      "reference_speed": 118,
+      "max_speed": 145,
+      "allowed": {
+        "carrier": [
+          "designer-flak-mount"
+        ],
+        "drive": [
+          "diesel-light"
+        ]
+      },
+      "source": "FTRK",
+      "note": "Constructed baseline fit; physical allocations experimental, no per-design rebate."
+    },
+    "designer-flak-gear": {
+      "factions": [
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "running_gear",
+      "display_name": "Flak-Fahrwerk",
+      "mass": 500,
+      "cost": 65,
+      "kind": "wheels",
+      "locomotor": "wheeled",
+      "max_mass": 8000,
+      "max_speed": 150,
+      "turn_speed": 48,
+      "source": "FTRK / ^Vehicle"
+    },
+    "designer-flak-mount": {
+      "factions": [
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Flak-Zwillingslafette",
+      "mass": 200,
+      "cost": 50,
+      "weapons": [
+        "designer-flak-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator fields; original independent weapon cadences are not overridden."
+    },
+    "designer-flak-weapon": {
+      "factions": [
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "weapon",
+      "display_name": "Flak Boden und Luft",
+      "mass": 250,
+      "cost": 100,
+      "ammunition": [
+        "designer-flak-payload"
+      ],
+      "template_locked": true,
+      "source": "FLAK-23-AA / FLAK-23-AG"
+    },
+    "designer-flak-payload": {
+      "factions": [
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Flak-Geschosse",
+      "mass": 150,
+      "cost": 25,
+      "source": "FLAK-23-AA / FLAK-23-AG",
+      "note": "Independent target masks, projectiles, spread and effects preserved."
     }
   },
   "assemblies": [
@@ -2825,6 +3128,130 @@
         ],
         "ammunition": [
           "designer-prism-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "soviet",
+      "options": {
+        "chassis": [
+          "soviet-heavy-hull"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "soviet-twin-mount"
+        ],
+        "weapon": [
+          "medium-cannon"
+        ],
+        "ammunition": [
+          "medium-tank-shell"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "soviet",
+      "options": {
+        "chassis": [
+          "t34-hull"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "light-cannon-mount"
+        ],
+        "weapon": [
+          "light-cannon"
+        ],
+        "ammunition": [
+          "light-tank-shell"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "soviet",
+      "options": {
+        "chassis": [
+          "heavy-tesla"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "twin-coil"
+        ],
+        "weapon": [
+          "tesla"
+        ],
+        "ammunition": [
+          "discharge"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "soviet",
+      "options": {
+        "chassis": [
+          "designer-flak-hull"
+        ],
+        "running_gear": [
+          "designer-flak-gear"
+        ],
+        "drive": [
+          "diesel-light"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "designer-flak-mount"
+        ],
+        "weapon": [
+          "designer-flak-weapon"
+        ],
+        "ammunition": [
+          "designer-flak-payload"
         ]
       },
       "built_in": []
