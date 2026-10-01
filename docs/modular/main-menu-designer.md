@@ -5,7 +5,7 @@
 Restart the locally built game, then **Eigene Fraktion**.
 
 - Select **GDI / Eagle**, **Nod / Black Hand**, **China / Tank-General** or
-  **Alliierte / England** or **Sowjets / Russland** in the top-right base dropdown.
+  **Alliierte / England**, **Sowjets / Russland** or **Scrin / Traveler-59** in the top-right base dropdown.
   The ordinary roster of the selected base remains available. Switching needs confirmation:
   the current faction is first saved in the library, then a fresh independent roster is
   created. Existing library names are reserved; a suffix prevents accidental replacement.
@@ -30,7 +30,7 @@ Restart the locally built game, then **Eigene Fraktion**.
 
 Use the first player slot and start **A**. One example of **every configured design**
 stands near that start. GDI keeps its MTNK comparison and Carryall; Nod gets an LTNK
-comparison, China a Battlemaster, England a Challenger and Russia a Heavy Tank. Non-GDI maps have no free
+comparison, China a Battlemaster, England a Challenger, Russia a Heavy Tank and Scrin a Seeker. Non-GDI maps have no free
 GDI Carryall. All retain the enemy target.
 Moving designs are additional vehicle-factory choices, grouped at palette orders
 1000 onward under your vehicle names. The selected base's stock units remain available too.
@@ -40,9 +40,9 @@ Their production is intentionally disabled until a real factory/deployment workf
 
 ## Supported assemblies
 
-There are currently **82 supported component combinations in 24 faction-specific bindings**:
-eight GDI bindings (42 combinations), four Nod (8), four China (16), four Allied (8) and
-four Soviet (8). These represent **23 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
+There are currently **90 supported component combinations in 28 faction-specific bindings**:
+eight GDI bindings (42 combinations), four Nod (8), four China (16), four Allied (8),
+four Soviet (8) and four Scrin (8). These represent **27 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
 of the same field-artillery family, not two independently counted families.
 
 | Assembly | Existing actor / full weapon bindings | Reference price / HP / speed | Configured default |
@@ -71,6 +71,10 @@ of the same field-artillery family, not two independently counted families.
 | T-34 | T-34; normal 30mm and conditional cluster-upgrade channel | 600 / 42000 / 100 | 600 / 42000 / 100 |
 | Heavy Tesla tank | TTNK.RA2; full TTankZapMK2, fire delay and attack animation | 1350 / 48000 / 100 | 1350 / 48000 / 100 |
 | Mobile Flak | FTRK; separate FLAK-23-AA and FLAK-23-AG packages | 500 / 15000 / 118 | 500 / 15000 / 118 |
+| Gun Walker | GUNW; GunWalkerZap + GunWalkerZapAA, frontal attack | 650 / 30000 / 113 | 650 / 30000 / 113 |
+| Seeker | SEEK; PlasmaDiscs, LightHoverVehicle | 800 / 20000 / 135 | 800 / 20000 / 135 |
+| Corrupter | CORR; CorrupterSpew, attack animation and death explosion | 700 / 45000 / 82 | 700 / 45000 / 82 |
+| Devourer | DEVO; DevourerLaser burst, floating turret, LightHoverVehicle | 1250 / 35000 / 90 | 1250 / 35000 / 90 |
 
 These exact default scalar matches are constructed calibration fits, NOT independent
 balance validation. Allocations for mass, power and component prices remain experimental.
@@ -188,6 +192,25 @@ range and spread, Light armor/wheeled movement, and its barrage-promotion exclus
 ISU, V3/missile launchers, Apocalypse, support/cargo units, Devil Tank and promoted variants
 remain outside these four bindings. No stationary Soviet conversion is offered.
 
+Traveler-59 adds four Scrin bindings with complete sprite/light/driver/attack inheritance.
+Gun Walker retains distinct ground/AA weapons and its turn/move animation. Corrupter retains
+its complete spew weapon, frontal aiming, shoot animation and death explosion; this does not
+invent a healing or ammunition mechanic. Their walker hardware uses the original `wheeled`
+engine locomotor despite walking graphics. Seeker and Devourer retain full LightHoverVehicle
+behavior (`lighthover`), bobbing, water targeting and EMP/driver-death sinking risk. No duplicate
+hover trait group is added. Devourer retains its floating turret, quantized facings and **1000**
+body turn speed; its 13-shot offset laser sweep is not replaced with a single damage event.
+All four preserve their original Light armor, production requirements and upgrade exclusions.
+
+Scrin use separately admitted **drive/converter abstractions**, not diesel motors disguised
+as established lore. Their numeric price/mass/power ratings reuse the shared baseline and
+efficient-generator model, but physical allocations remain experimental. These are static
+calculator budgets, not an in-match electrical network or fuel simulation. Human generators
+cannot be selected on Scrin designs, and Scrin converters cannot be inserted into GDI profiles.
+The broad JSON calibration catalog and Excel snapshots remain untouched. Tripods, Lacerators,
+shield/teleport support, aircraft and promoted Scrin variants remain unbound. All six base
+faction groups now have representatives, **not complete vehicle rosters or every subfaction**.
+
 The frozen actor and weapon IDs are unique per design and stable across renaming/reordering.
 A copied design gets a new ID and an independent component dictionary. All designs are
 validated before generation; incompatible parts, invalid faction, unsupported fields,
@@ -213,7 +236,7 @@ duplicate IDs/names and budget overflow fail closed. CP-bearing modules are not 
 
 The test map renames the selected faction's display name: `eagle` / `FactionCA@11` or
 `blackh` / `FactionCA@13`, `chinatnk` / `FactionCA@22`, `england` / `FactionCA@1`
-or `russia` / `FactionCA@5`.
+`russia` / `FactionCA@5` or `traveler` / `FactionCA@18`.
 Both playable slots are locked to that base; production requires
 its `structures.<base>` token. Internal faction IDs, original rosters and commander behavior
 remain intact. Other players of that base on the snapshot can produce the same custom roster. This is not yet
@@ -222,7 +245,7 @@ independent per-player faction admission/synchronization.
 ## Scope still open
 
 This is both a multi-design editor and an expanded native compiler, but **not all 75
-catalog components or all factions**. It still uses the known lab terrain, not arbitrary
+catalog components, complete faction rosters or all subfactions**. It still uses the known lab terrain, not arbitrary
 map selection. CP unlocks, additional vehicle families, freely composable multiple mounts,
 passenger loadouts, stationary factory/deployment handling, real hover/platform art,
 main-menu vehicle previews and dependency-aware asset loading remain future work.
@@ -254,14 +277,14 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **72 Python tests**, **78 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **73 Python tests**, **86 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
 
 Native tests cover schema migration, roundtrip/backups, library isolation, shared budget,
 copy independence, namespace stability, invalid combinations and weapon-channel preservation.
-All 82 offered numeric combinations are checked against the independent Python calculator.
+All 90 offered numeric combinations are checked against the independent Python calculator.
 The earlier six-design sample includes tank hover and both stationary hull variants.
 The eight-family sample can be exported with `MODULAR_GDI_EXPORT=/absolute/new-gdi.oramap`.
 See `tools/modular/designer-gdi-validation.md` for the GDI differential result.
@@ -285,6 +308,11 @@ The Soviet sample exports with `MODULAR_SOVIET_EXPORT=/absolute/new-soviet.orama
 new errors**; see `tools/modular/designer-soviet-validation.md`. Tests cover source scalar
 baselines, both T-34 channels, independent Flak weapons, Tesla inheritance/power accounting,
 shared cannon cadence isolation, national reference actor and both player slots.
+The Scrin sample exports with `MODULAR_SCRIN_EXPORT=/absolute/new-scrin.oramap` and reports
+**1685 control / 1689 generated errors**, four inherited diagnostics and **zero unexpected
+new errors**; see `tools/modular/designer-scrin-validation.md`. Tests cover all four raw
+baselines, turn rates, weapon inheritance, native hover/no duplicate traits, Light armor,
+converter admission/isolation, shared ratings and Traveler map/snapshot selection.
 
 The earlier single-design menu/lobby path was confirmed by the user. This expanded
 multi-design UI, factory production, mixed-weapon firing and transport still need

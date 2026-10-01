@@ -99,6 +99,23 @@ class DesignerCatalogTests(unittest.TestCase):
             self.assertEqual(actor_sources('modular.custom.tank1:\n\tInherits: ' + actor + '\n'),
                              {'modular.custom.tank1': actor.lower()})
 
+    def test_scrin_defaults_match_stock_and_converter_admission_is_explicit(self):
+        source = (REPO / 'mods/ca/rules/scrin/vehicles.yaml').read_text(encoding='utf-8')
+        for key, actor in [('gunwalker', 'GUNW'), ('seeker', 'SEEK'), ('corrupter', 'CORR'), ('devourer', 'DEVO')]:
+            row = next(r for r in cases() if r['parts']['chassis'] == 'scrin-' + key + '-hull'
+                       and r['parts']['generator'] == 'scrin-converter')
+            self.assertEqual(row['base_faction'], 'traveler')
+            block = re.search(r'(?ms)^' + actor + r':\n(.*?)(?=^\S|\Z)', source).group(1)
+            for field, result in [('Cost', 'cost'), ('HP', 'hp'), ('Speed', 'speed')]:
+                self.assertEqual(row['values'][result], int(re.search(r'(?m)^\t\t' + field + r': (\d+)$', block).group(1)))
+        catalog = data()['components']
+        self.assertEqual(catalog['scrin-drive']['factions'], ['scrin'])
+        self.assertNotIn('scrin', catalog['diesel']['factions'])
+        for scrin, regular in [('scrin-drive', 'diesel'), ('scrin-converter', 'baseline-generator'),
+                               ('scrin-converter-efficient', 'efficient-generator')]:
+            for field in ('cost', 'mass', 'electric_kw', 'tier', 'cp', 'tech'):
+                self.assertEqual(catalog[scrin][field], catalog[regular][field])
+
     def test_native_weapon_parent_names_use_exact_yaml_declaration_case(self):
         native = (REPO / 'OpenRA.Mods.CA/Modular/CustomVehicleAssembly.cs').read_text(encoding='utf-8')
         parents = re.findall(r'\{ "Armament(?:@[A-Za-z0-9_-]+)?", "([^"]+)" \}', native)
@@ -113,7 +130,7 @@ class DesignerCatalogTests(unittest.TestCase):
     def test_shipped_snapshot_and_native_fixtures_are_current(self):
         self.assertEqual(json.loads((REPO / 'mods/ca/modular/designer-catalog.json').read_text(encoding='utf-8')), data())
         self.assertEqual(json.loads(Path(__file__).with_name('designer-calculation-cases.json').read_text()), cases())
-        self.assertEqual(len(cases()), 82)
+        self.assertEqual(len(cases()), 90)
 
 
 if __name__ == '__main__':

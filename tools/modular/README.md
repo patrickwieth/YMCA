@@ -2,7 +2,7 @@
 
 ## Latest: native main-menu faction editor
 
-**Eigene Fraktion** supports **GDI/Eagle, Nod/Black Hand, China/Tank-General, Allies/England and Soviets/Russia**, plus **up to 16 custom
+**Eigene Fraktion** supports **GDI/Eagle, Nod/Black Hand, China/Tank-General, Allies/England, Soviets/Russia and Scrin/Traveler-59**, plus **up to 16 custom
 vehicle designs**, with New/Copy/Remove, shared budget, named faction save/load and
 in-memory migration of existing single-tank profiles. The base selector saves the
 previous faction in the library before starting an independent roster with a free name.
@@ -11,8 +11,9 @@ MLRS, Mammoth, Juggernaut, native Hover MLRS, Disruptor, Mammoth Mk II), **four 
 families** (light tank, Buggy, artillery, SSM) and **four China families** (Battlemaster,
 Dragon, Gatling tank, Overlord), plus **four Allied bindings** (Challenger, Ranger,
 field artillery, Prism tank) and **four Soviet bindings** (Heavy Tank, T-34, heavy Tesla,
-Mobile Flak). That is **24 faction-specific bindings / 23 families**:
-Nod and Allied field artillery share a family. Their **82 supported combinations** use compatible
+Mobile Flak), plus **four Scrin bindings** (Gun Walker, Seeker, Corrupter, Devourer).
+That is **28 faction-specific bindings / 27 families**:
+Nod and Allied field artillery share a family. Their **90 supported combinations** use compatible
 artwork and full existing weapons, including helper, visual and conditional upgrade channels.
 Hum-Vee/Buggy mandatory sensors are counted once. Mixed-faction and non-GDI stationary
 profiles fail native validation. Both test-map player slots use the selected base.
@@ -24,7 +25,7 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**72 Python + 78 native tests pass**; all 82 numeric combinations match the independent
+**73 Python + 86 native tests pass**; all 90 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential
@@ -33,7 +34,8 @@ is **1685 / 1691**, six inherited diagnostics, **zero unexpected new errors**; s
 **zero unexpected new errors**; see `designer-china-validation.md`. Allies: **1685 / 1692**,
 seven inherited diagnostics, **zero unexpected new errors**; see `designer-allies-validation.md`.
 Soviets: **1685 / 1693**, eight inherited diagnostics, **zero unexpected new errors**;
-see `designer-soviet-validation.md`. This is NOT a
+see `designer-soviet-validation.md`. Scrin: **1685 / 1689**, four inherited diagnostics,
+**zero unexpected new errors**; see `designer-scrin-validation.md`. This is NOT a
 clean full-mod lint or a live gameplay pass. Expanded UI/gameplay checks remain pending.
 
 Complex families use template-locked weapon packages: no fake SpreadDamage
@@ -56,7 +58,13 @@ Challenger. Russia adds full twin-cannon cadence, T-34 normal/cluster channels, 
 animation/delay/upgrades and independent Flak ground/AA packages. Production prerequisites
 and promotion exclusions remain. The custom Soviet roster admits the North Korean T-34
 without editing vanilla national rosters. Tesla Arc and other promoted variants remain open.
-Scrin and further families in every other base faction are not integrated yet.
+Scrin preserves Gun Walker ground/AA, Corrupter spew/animation/death explosion, Seeker
+plasma discs and Devourer's full laser sweep/floating turret. Native light-hover behavior,
+water/EMP risks, original turn rates, Light armor and production prerequisites remain.
+Explicit Scrin drive/converter adapters use experimental shared physical ratings, not
+claimed diesel technology or in-match electrical simulation. Human/Scrin converter admission
+is enforced natively. All six base groups now have representatives, but further families,
+complete faction rosters and the other subfactions are not integrated yet.
 
 The confirmed fix preventing ordinary skirmish restoration from replacing the chosen
 snapshot remains active. Test sessions also do not overwrite ordinary skirmish setups.

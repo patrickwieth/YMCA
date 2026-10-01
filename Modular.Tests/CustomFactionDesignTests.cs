@@ -30,7 +30,7 @@ public class CustomFactionDesignTests
         var compiler = Compiler;
         foreach (var gear in compiler.CompatibleOptions(new CustomFactionProfile(), "running_gear"))
         foreach (var drive in compiler.CompatibleOptions(new CustomFactionProfile(), "drive"))
-        foreach (var generator in compiler.Options("generator"))
+        foreach (var generator in compiler.CompatibleOptions(new CustomFactionProfile(), "generator"))
         foreach (var ammo in compiler.CompatibleOptions(new CustomFactionProfile(), "ammunition"))
         {
             var p = new CustomFactionProfile();
@@ -56,7 +56,7 @@ public class CustomFactionDesignTests
     public void AllNativeCalculationsMatchTheIndependentPythonCalculator()
     {
         var rows = JArray.Parse(File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "designer-calculation-cases.json")));
-        Assert.That(rows.Count, Is.EqualTo(82));
+        Assert.That(rows.Count, Is.EqualTo(90));
         foreach (var row in rows)
         {
             var profile = new CustomFactionProfile { BaseFaction = row.Value<string>("base_faction"), Parts = row["parts"].ToObject<Dictionary<string, string>>() };

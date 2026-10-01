@@ -84,7 +84,8 @@ namespace OpenRA.Mods.CA.Modular
 				{ "designer-heavy-tracks", ("tracks", "heavytracked") }, { "designer-mk2-legs", ("walker", "heavytracked") },
 				{ "tracks-light-artillery", ("tracks", "lighttracked") }, { "designer-ssm-gear", ("tracks", "wheeled") },
 				{ "tracks-superheavy", ("tracks", "sheavytracked") }, { "designer-prism-gear", ("tracks", "wheeled") },
-				{ "designer-flak-gear", ("wheels", "wheeled") }
+				{ "designer-flak-gear", ("wheels", "wheeled") },
+				{ "scrin-walker-gear", ("walker", "wheeled") }, { "scrin-hover-gear", ("hover", "lighthover") }
 			};
 			foreach (var binding in gearBindings)
 			{

@@ -35,6 +35,20 @@ namespace OpenRA.Mods.CA.Modular
 
 	public sealed partial class CustomFactionDesign
 	{
+		static CustomVehicleAssembly ScrinAssembly(string key, string actor, string gear, string turret,
+			Dictionary<string, string> weapons, string prerequisites, string summary)
+		{
+			var a = new CustomVehicleAssembly("scrin-" + key + "-hull", actor, actor.ToLowerInvariant(), turret,
+				new[] { gear }, new[] { "scrin-drive" }, "light", "scrin-" + key + "-mount", "scrin-" + key + "-weapon",
+				new[] { "scrin-" + key + "-payload" }, weapons)
+			{
+				Faction = "scrin", PreserveWeaponTemplates = true, NativeHover = gear == "scrin-hover-gear",
+				ExtraPrerequisites = prerequisites, Summary = summary
+			};
+			a.Choices["generator"] = new[] { "scrin-converter", "scrin-converter-efficient" };
+			return a;
+		}
+
 		static readonly CustomVehicleAssembly[] Assemblies =
 		{
 			new CustomVehicleAssembly("gdi-battle-hull", "MTNK", "mtnk", "Turreted@PRIMARY",
@@ -213,7 +227,19 @@ namespace OpenRA.Mods.CA.Modular
 				Faction = "soviet", PreserveWeaponTemplates = true,
 				ExtraPrerequisites = ", ~vehicles.soviet, ~!promotion.flak_track.barrage",
 				Summary = "Flak-Laster: unabhaengige Boden-/Luftwaffen mit eigenen Projektilen, Reichweiten und Streuung."
-			}
+			},
+			ScrinAssembly("gunwalker", "GUNW", "scrin-walker-gear", null,
+				new Dictionary<string, string> { { "Armament@PRIMARY", "GunWalkerZap" }, { "Armament@SECONDARY", "GunWalkerZapAA" } },
+				", wsph, ~scrin, ~!upg.gunwalker", "Gun Walker: getrennte Boden-/Luftwaffen, Frontangriff und originale Laufanimation."),
+			ScrinAssembly("seeker", "SEEK", "scrin-hover-gear", "Turreted",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "PlasmaDiscs" } },
+				", ~seeker, ~!upg.seeker", "Seeker: Plasmascheiben und echtes LightHover-Verhalten; Wasserrisiken bei EMP/Fahrertod bleiben."),
+			ScrinAssembly("corrupter", "CORR", "scrin-walker-gear", null,
+				new Dictionary<string, string> { { "Armament@PRIMARY", "CorrupterSpew" } },
+				", ~scrin, ~!upg.corrupter", "Corrupter: vollstaendiger Spew-Angriff, Frontausrichtung, Lauf-/Schussanimation und Todesexplosion."),
+			ScrinAssembly("devourer", "DEVO", "scrin-hover-gear", "TurretedFloating",
+				new Dictionary<string, string> { { "Armament", "DevourerLaser" } },
+				", radar, ~traveler, ~!upg.devourer", "Devourer: Laser-Salve, schwebender Turm und LightHover; originales schnelles Rumpfdrehen bleibt.")
 		};
 
 		CustomVehicleAssembly Assembly(CustomFactionProfile p) => Assemblies.Single(a => a.Hull == p.Parts["chassis"]);

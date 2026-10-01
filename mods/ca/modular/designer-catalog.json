@@ -27,7 +27,11 @@
       "soviet-heavy-hull",
       "t34-hull",
       "heavy-tesla",
-      "designer-flak-hull"
+      "designer-flak-hull",
+      "scrin-gunwalker-hull",
+      "scrin-seeker-hull",
+      "scrin-corrupter-hull",
+      "scrin-devourer-hull"
     ],
     "running_gear": [
       "tracks-standard",
@@ -42,18 +46,23 @@
       "designer-ssm-gear",
       "tracks-superheavy",
       "designer-prism-gear",
-      "designer-flak-gear"
+      "designer-flak-gear",
+      "scrin-walker-gear",
+      "scrin-hover-gear"
     ],
     "drive": [
       "diesel",
       "diesel-large",
       "diesel-light",
       "diesel-heavy",
-      "diesel-heavy-boost"
+      "diesel-heavy-boost",
+      "scrin-drive"
     ],
     "generator": [
       "baseline-generator",
-      "efficient-generator"
+      "efficient-generator",
+      "scrin-converter",
+      "scrin-converter-efficient"
     ],
     "armor": [
       "heavy",
@@ -79,7 +88,11 @@
       "designer-prism-mount",
       "soviet-twin-mount",
       "twin-coil",
-      "designer-flak-mount"
+      "designer-flak-mount",
+      "scrin-gunwalker-mount",
+      "scrin-seeker-mount",
+      "scrin-corrupter-mount",
+      "scrin-devourer-mount"
     ],
     "weapon": [
       "medium-cannon",
@@ -99,7 +112,11 @@
       "overlord-cannon",
       "designer-prism-weapon",
       "tesla",
-      "designer-flak-weapon"
+      "designer-flak-weapon",
+      "scrin-gunwalker-weapon",
+      "scrin-seeker-weapon",
+      "scrin-corrupter-weapon",
+      "scrin-devourer-weapon"
     ],
     "ammunition": [
       "medium-tank-shell",
@@ -120,7 +137,11 @@
       "heavy-shell",
       "designer-prism-payload",
       "discharge",
-      "designer-flak-payload"
+      "designer-flak-payload",
+      "scrin-gunwalker-payload",
+      "scrin-seeker-payload",
+      "scrin-corrupter-payload",
+      "scrin-devourer-payload"
     ]
   },
   "components": {
@@ -938,7 +959,8 @@
         "gdi",
         "nod",
         "allies",
-        "soviet"
+        "soviet",
+        "scrin"
       ],
       "tier": 0,
       "cp": 0,
@@ -2501,6 +2523,447 @@
       "cost": 25,
       "source": "FLAK-23-AA / FLAK-23-AG",
       "note": "Independent target masks, projectiles, spread and effects preserved."
+    },
+    "scrin-drive": {
+      "role": "drive",
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 600,
+      "cost": 100,
+      "electric_kw": 0,
+      "mechanical_kw": 500,
+      "display_name": "Scrin-Antriebsmodul",
+      "note": "Provisional equivalent mechanical/electrical budget. Same shared numeric ratings/prices; no in-game fuel/electrical simulation."
+    },
+    "scrin-converter": {
+      "role": "generator",
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 0,
+      "cost": 0,
+      "electric_kw": 0,
+      "efficiency": 0.25,
+      "max_electric_kw": 100,
+      "display_name": "Scrin-Grundkonverter",
+      "note": "Provisional equivalent mechanical/electrical budget. Same shared numeric ratings/prices; no in-game fuel/electrical simulation."
+    },
+    "scrin-converter-efficient": {
+      "role": "generator",
+      "factions": [
+        "scrin"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 2,
+      "mass": 0,
+      "cost": 200,
+      "electric_kw": 0,
+      "efficiency": 0.75,
+      "max_electric_kw": 120,
+      "display_name": "Scrin-Effizienzkonverter",
+      "note": "Provisional equivalent mechanical/electrical budget. Same shared numeric ratings/prices; no in-game fuel/electrical simulation."
+    },
+    "scrin-walker-gear": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "running_gear",
+      "display_name": "Scrin-Laufwerk",
+      "mass": 1500,
+      "cost": 100,
+      "kind": "walker",
+      "locomotor": "wheeled",
+      "max_mass": 20000,
+      "max_speed": 150,
+      "turn_speed": 48,
+      "note": "Stock GUNW/CORR use wheeled engine terrain/crushing despite walking animation."
+    },
+    "scrin-hover-gear": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 10,
+      "role": "running_gear",
+      "display_name": "Scrin-Leichtschwebewerk",
+      "mass": 1500,
+      "cost": 200,
+      "kind": "hover",
+      "locomotor": "lighthover",
+      "max_mass": 20000,
+      "max_speed": 170,
+      "turn_speed": 1024,
+      "note": "Complete stock LightHoverVehicle inherited; Devourer keeps its 1000 body turn rate."
+    },
+    "scrin-gunwalker-mount": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Gun Walker Waffentraeger",
+      "mass": 400,
+      "cost": 50,
+      "weapons": [
+        "scrin-gunwalker-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator fields, not emitted weapon cadence."
+    },
+    "scrin-gunwalker-weapon": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 10,
+      "role": "weapon",
+      "display_name": "Gun Walker Waffensystem",
+      "mass": 500,
+      "cost": 100,
+      "ammunition": [
+        "scrin-gunwalker-payload"
+      ],
+      "template_locked": true,
+      "source": "GUNW",
+      "note": "Full original weapons/projectiles/warheads retained. Static demand is an experimental allocation."
+    },
+    "scrin-gunwalker-payload": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Gun Walker Waffenpaket",
+      "mass": 200,
+      "cost": 50,
+      "source": "GUNW"
+    },
+    "scrin-gunwalker-hull": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Gun Walker - Scrin-Einbaugruppe",
+      "mass": 5000,
+      "cost": 250,
+      "hp": 30000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "scrin-walker-gear",
+      "allowed_running_gear": [
+        "scrin-walker-gear"
+      ],
+      "turn_speed_limit": 8,
+      "max_mass": 20000,
+      "reference_mass": 8200,
+      "reference_kw": 420.0,
+      "reference_speed": 113,
+      "max_speed": 170,
+      "allowed": {
+        "carrier": [
+          "scrin-gunwalker-mount"
+        ],
+        "drive": [
+          "scrin-drive"
+        ]
+      },
+      "source": "GUNW",
+      "note": "Constructed baseline fit, not independently established economics or physical specifications. All four use stock Light armor."
+    },
+    "scrin-seeker-mount": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Seeker Waffentraeger",
+      "mass": 400,
+      "cost": 50,
+      "weapons": [
+        "scrin-seeker-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator fields, not emitted weapon cadence."
+    },
+    "scrin-seeker-weapon": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 10,
+      "role": "weapon",
+      "display_name": "Seeker Waffensystem",
+      "mass": 500,
+      "cost": 150,
+      "ammunition": [
+        "scrin-seeker-payload"
+      ],
+      "template_locked": true,
+      "source": "SEEK",
+      "note": "Full original weapons/projectiles/warheads retained. Static demand is an experimental allocation."
+    },
+    "scrin-seeker-payload": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Seeker Waffenpaket",
+      "mass": 200,
+      "cost": 50,
+      "source": "SEEK"
+    },
+    "scrin-seeker-hull": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Seeker - Scrin-Einbaugruppe",
+      "mass": 5000,
+      "cost": 250,
+      "hp": 20000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "scrin-hover-gear",
+      "allowed_running_gear": [
+        "scrin-hover-gear"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 20000,
+      "reference_mass": 8200,
+      "reference_kw": 380.0,
+      "reference_speed": 135,
+      "max_speed": 170,
+      "allowed": {
+        "carrier": [
+          "scrin-seeker-mount"
+        ],
+        "drive": [
+          "scrin-drive"
+        ]
+      },
+      "source": "SEEK",
+      "note": "Constructed baseline fit, not independently established economics or physical specifications. All four use stock Light armor."
+    },
+    "scrin-corrupter-mount": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Corrupter Waffentraeger",
+      "mass": 400,
+      "cost": 50,
+      "weapons": [
+        "scrin-corrupter-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator fields, not emitted weapon cadence."
+    },
+    "scrin-corrupter-weapon": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 10,
+      "role": "weapon",
+      "display_name": "Corrupter Waffensystem",
+      "mass": 500,
+      "cost": 150,
+      "ammunition": [
+        "scrin-corrupter-payload"
+      ],
+      "template_locked": true,
+      "source": "CORR",
+      "note": "Full original weapons/projectiles/warheads retained. Static demand is an experimental allocation."
+    },
+    "scrin-corrupter-payload": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Corrupter Waffenpaket",
+      "mass": 200,
+      "cost": 50,
+      "source": "CORR"
+    },
+    "scrin-corrupter-hull": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 2,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Corrupter - Scrin-Einbaugruppe",
+      "mass": 5000,
+      "cost": 250,
+      "hp": 45000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "scrin-walker-gear",
+      "allowed_running_gear": [
+        "scrin-walker-gear"
+      ],
+      "turn_speed_limit": 24,
+      "max_mass": 20000,
+      "reference_mass": 8200,
+      "reference_kw": 420.0,
+      "reference_speed": 82,
+      "max_speed": 170,
+      "allowed": {
+        "carrier": [
+          "scrin-corrupter-mount"
+        ],
+        "drive": [
+          "scrin-drive"
+        ]
+      },
+      "source": "CORR",
+      "note": "Constructed baseline fit, not independently established economics or physical specifications. All four use stock Light armor."
+    },
+    "scrin-devourer-mount": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Devourer Waffentraeger",
+      "mass": 400,
+      "cost": 50,
+      "weapons": [
+        "scrin-devourer-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator fields, not emitted weapon cadence."
+    },
+    "scrin-devourer-weapon": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 10,
+      "role": "weapon",
+      "display_name": "Devourer Waffensystem",
+      "mass": 500,
+      "cost": 350,
+      "ammunition": [
+        "scrin-devourer-payload"
+      ],
+      "template_locked": true,
+      "source": "DEVO",
+      "note": "Full original weapons/projectiles/warheads retained. Static demand is an experimental allocation."
+    },
+    "scrin-devourer-payload": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Devourer Waffenpaket",
+      "mass": 200,
+      "cost": 50,
+      "source": "DEVO"
+    },
+    "scrin-devourer-hull": {
+      "factions": [
+        "scrin"
+      ],
+      "tier": 2,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Devourer - Scrin-Einbaugruppe",
+      "mass": 5000,
+      "cost": 500,
+      "hp": 35000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "scrin-hover-gear",
+      "allowed_running_gear": [
+        "scrin-hover-gear"
+      ],
+      "turn_speed_limit": 1000,
+      "max_mass": 20000,
+      "reference_mass": 8200,
+      "reference_kw": 380.0,
+      "reference_speed": 90,
+      "max_speed": 170,
+      "allowed": {
+        "carrier": [
+          "scrin-devourer-mount"
+        ],
+        "drive": [
+          "scrin-drive"
+        ]
+      },
+      "source": "DEVO",
+      "note": "Constructed baseline fit, not independently established economics or physical specifications. All four use stock Light armor."
     }
   },
   "assemblies": [
@@ -3252,6 +3715,130 @@
         ],
         "ammunition": [
           "designer-flak-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "scrin",
+      "options": {
+        "chassis": [
+          "scrin-gunwalker-hull"
+        ],
+        "running_gear": [
+          "scrin-walker-gear"
+        ],
+        "drive": [
+          "scrin-drive"
+        ],
+        "generator": [
+          "scrin-converter",
+          "scrin-converter-efficient"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "scrin-gunwalker-mount"
+        ],
+        "weapon": [
+          "scrin-gunwalker-weapon"
+        ],
+        "ammunition": [
+          "scrin-gunwalker-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "scrin",
+      "options": {
+        "chassis": [
+          "scrin-seeker-hull"
+        ],
+        "running_gear": [
+          "scrin-hover-gear"
+        ],
+        "drive": [
+          "scrin-drive"
+        ],
+        "generator": [
+          "scrin-converter",
+          "scrin-converter-efficient"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "scrin-seeker-mount"
+        ],
+        "weapon": [
+          "scrin-seeker-weapon"
+        ],
+        "ammunition": [
+          "scrin-seeker-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "scrin",
+      "options": {
+        "chassis": [
+          "scrin-corrupter-hull"
+        ],
+        "running_gear": [
+          "scrin-walker-gear"
+        ],
+        "drive": [
+          "scrin-drive"
+        ],
+        "generator": [
+          "scrin-converter",
+          "scrin-converter-efficient"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "scrin-corrupter-mount"
+        ],
+        "weapon": [
+          "scrin-corrupter-weapon"
+        ],
+        "ammunition": [
+          "scrin-corrupter-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "scrin",
+      "options": {
+        "chassis": [
+          "scrin-devourer-hull"
+        ],
+        "running_gear": [
+          "scrin-hover-gear"
+        ],
+        "drive": [
+          "scrin-drive"
+        ],
+        "generator": [
+          "scrin-converter",
+          "scrin-converter-efficient"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "scrin-devourer-mount"
+        ],
+        "weapon": [
+          "scrin-devourer-weapon"
+        ],
+        "ammunition": [
+          "scrin-devourer-payload"
         ]
       },
       "built_in": []

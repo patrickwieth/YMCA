@@ -14,7 +14,8 @@ namespace OpenRA.Mods.CA.Modular
 				{ "blackh", ("nod", "Nod / Black Hand", "FactionCA@13", "ltnk") },
 				{ "chinatnk", ("china", "China / Tank-General", "FactionCA@22", "chbattle") },
 				{ "england", ("allies", "Alliierte / England", "FactionCA@1", "challenger_tank") },
-				{ "russia", ("soviet", "Sowjets / Russland", "FactionCA@5", "heavy_tank") }
+				{ "russia", ("soviet", "Sowjets / Russland", "FactionCA@5", "heavy_tank") },
+				{ "traveler", ("scrin", "Scrin / Traveler-59", "FactionCA@18", "seek") }
 			};
 
 		public static string[] BaseFactions => Bases.Keys.ToArray();
