@@ -4,11 +4,11 @@
 
 Restart the locally built game, then **Eigene Fraktion**.
 
-- Select **GDI / Eagle** or **Nod / Black Hand** in the top-right base dropdown.
+- Select **GDI / Eagle**, **Nod / Black Hand** or **China / Tank-General** in the top-right base dropdown.
   The ordinary roster of the selected base remains available. Switching needs confirmation:
   the current faction is first saved in the library, then a fresh independent roster is
   created. Existing library names are reserved; a suffix prevents accidental replacement.
-  This is not a conversion or mixing of existing GDI and Nod designs.
+  This is not a conversion or mixing of existing designs across base factions.
 - **Neu / Kopie / Entfernen** manage up to **16 own vehicle designs**. Select a
   design in the numbered dropdown to edit it. Removing a design needs confirmation.
 - **Vorlagen** adds missing supported assemblies for the selected base in one click. It
@@ -29,7 +29,7 @@ Restart the locally built game, then **Eigene Fraktion**.
 
 Use the first player slot and start **A**. One example of **every configured design**
 stands near that start. GDI keeps its MTNK comparison and Carryall; Nod gets an LTNK
-comparison and no free GDI Carryall. Both maps retain the enemy target.
+comparison, China a Battlemaster. Non-GDI maps have no free GDI Carryall. All retain the enemy target.
 Moving designs are additional vehicle-factory choices, grouped at palette orders
 1000 onward under your vehicle names. The selected base's stock units remain available too.
 The highest selected tech tier is required for production; Hum-Vees also retain the
@@ -38,8 +38,9 @@ Their production is intentionally disabled until a real factory/deployment workf
 
 ## Supported assemblies
 
-There are currently **50 supported component combinations across twelve families**:
-eight GDI families (42 combinations) and four Nod families (8 combinations).
+There are currently **66 supported component combinations across sixteen families**:
+eight GDI families (42 combinations), four Nod families (8 combinations) and four China
+families (16 combinations).
 
 | Assembly | Existing actor / full weapon bindings | Reference price / HP / speed | Configured default |
 |---|---|---|---|
@@ -55,6 +56,10 @@ eight GDI families (42 combinations) and four Nod families (8 combinations).
 | Nod buggy | BGGY; M60mgTD + sensors | 350 / 14000 / 157 | 350 / 14000 / 157 |
 | Nod artillery | ARTY.nod; 155mmTD, frontal attack, ammunition explosion | 550 / 10000 / 56 | 550 / 10000 / 56 |
 | Nod SSM | SSM; HonestJohn, ammo pool/reload and missile graphics | 1050 / 15000 / 82 | 1050 / 15000 / 82 |
+| Battlemaster | chbattle; CHBattlemasterCannon, Horde, nuclear upgrades | 950 / 40000 / 100 | 950 / 40000 / 100 |
+| Dragon | chdragon; normal/Black Napalm + two Firewall channels | 600 / 28000 / 103 | 600 / 28000 / 103 |
+| Gatling tank | chgtnk; eight ground/AA spin-up channels | 800 / 30000 / 108 | 800 / 30000 / 108 |
+| Overlord / Emperor | choverlord; OverlordCannon, conditional Emperor body/armor | 2000 / 95000 / 56 | 2000 / 95000 / 56 |
 
 These exact default scalar matches are constructed calibration fits, NOT independent
 balance validation. Allocations for mass, power and component prices remain experimental.
@@ -117,6 +122,25 @@ No generic reload/damage overrides are inserted into those complete weapon templ
 `HonestJohn` uses the exact weapon declaration case for MiniYaml inheritance, unlike the
 case-insensitive weapon lookup performed by an Armament.
 
+China uses `chinatnk` (Tank General). All four assemblies retain complete actor inheritance,
+including damaged/pursuit/attack modifiers, announcements and voices. Battlemaster retains
+Horde, uranium shells and nuclear tank/isotope upgrades. Dragon retains Black Napalm,
+deployment, both Firewall phases and forced-move/undeploy rules without adding a second
+movement or deploy system. Gatling preserves all eight channels, independent air/ground
+spin-up, engagement locks, 1/3/5 shot thresholds and 40-tick decay; it is not a fixed-DPS MG.
+
+Overlord retains the conditional Emperor voxel body and **80% received damage** under the
+Tank General. Displayed HP and speed are raw template values, not effective durability or
+runtime upgrade/formation bonuses. Both normal and Emperor tooltips use the custom vehicle
+name while keeping their original conditions. Original voxel images/scales and turret
+rotation remain unchanged; superheavy tracks use `sheavytracked` and hull turn speed 8.
+Original factory/radar and promotion-exclusion prerequisites are retained. Once an upgrade
+replaces a stock family, the unupgraded custom assembly follows the same production exclusion.
+Overlord roof attachments, PDL/reflectors, nuclear-shell variants and arbitrary module mixing
+are **not** enabled by these four bindings. The native snapshot does not expose the offline
+Overlord roof/equipment slots as usable options. All China families offer their two explicitly
+bound diesel motors and the two shared generators, without per-design price adjustments.
+
 The frozen actor and weapon IDs are unique per design and stable across renaming/reordering.
 A copied design gets a new ID and an independent component dictionary. All designs are
 validated before generation; incompatible parts, invalid faction, unsupported fields,
@@ -141,7 +165,7 @@ duplicate IDs/names and budget overflow fail closed. CP-bearing modules are not 
   behavior. Stock AI build lists are not yet extended to deliberately produce new IDs.
 
 The test map renames the selected faction's display name: `eagle` / `FactionCA@11` or
-`blackh` / `FactionCA@13`. Both playable slots are locked to that base; production requires
+`blackh` / `FactionCA@13` or `chinatnk` / `FactionCA@22`. Both playable slots are locked to that base; production requires
 its `structures.<base>` token. Internal faction IDs, original rosters and commander behavior
 remain intact. Other players of that base on the snapshot can produce the same custom roster. This is not yet
 independent per-player faction admission/synchronization.
@@ -181,14 +205,14 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **67 Python tests**, **51 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **69 Python tests**, **60 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
 
 Native tests cover schema migration, roundtrip/backups, library isolation, shared budget,
 copy independence, namespace stability, invalid combinations and weapon-channel preservation.
-All 50 offered numeric combinations are checked against the independent Python calculator.
+All 66 offered numeric combinations are checked against the independent Python calculator.
 The earlier six-design sample includes tank hover and both stationary hull variants.
 The eight-family sample can be exported with `MODULAR_GDI_EXPORT=/absolute/new-gdi.oramap`.
 See `tools/modular/designer-gdi-validation.md` for the GDI differential result.
@@ -196,6 +220,11 @@ The Nod sample exports with `MODULAR_NOD_EXPORT=/absolute/new-nod.oramap` and re
 **1685 control / 1691 generated errors**, six inherited diagnostics and **zero unexpected
 new errors**; see `tools/modular/designer-nod-validation.md`. Native tests also cover faction
 filtering/rejection, independent library names, sensor accounting and both player slots.
+The China sample exports with `MODULAR_CHINA_EXPORT=/absolute/new-china.oramap` and reports
+**1685 control / 1693 generated errors**, eight inherited diagnostics and **zero unexpected
+new errors**; see `tools/modular/designer-china-validation.md`. Tests cover all Dragon/Gatling
+channels against the source declarations, conditional Emperor names, raw baseline values,
+original production exclusions, faction isolation and deterministic map freezing.
 
 The earlier single-design menu/lobby path was confirmed by the user. This expanded
 multi-design UI, factory production, mixed-weapon firing and transport still need

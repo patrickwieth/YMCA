@@ -17,6 +17,7 @@ namespace OpenRA.Mods.CA.Modular
 		public string VoxelImage { get; init; }
 		public string ExtraPrerequisites { get; init; } = "";
 		public string Summary { get; init; }
+		public string[] AlternateTooltips { get; init; } = Array.Empty<string>();
 
 		public CustomVehicleAssembly(string hull, string actor, string image, string turret,
 			string[] gear, string[] motors, string armor, string carrier, string weapon, string[] ammunition,
@@ -117,6 +118,42 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				Faction = "nod", PreserveWeaponTemplates = true, ExtraPrerequisites = ", tmpl, ~promotion.ssm_launcher",
 				Summary = "SSM: Napalmraketen, Munitionsvorrat, Nachladen und variable Raketengrafik. Freischaltung + Tempel erforderlich."
+			},
+			new CustomVehicleAssembly("battlemaster", "chbattle", "chbattle", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel", "diesel-large" }, "heavy", "cannon-turret", "cannon", new[] { "shell" },
+				new Dictionary<string, string> { { "Armament", "CHBattlemasterCannon" } })
+			{
+				Faction = "china", PreserveWeaponTemplates = true,
+				ExtraPrerequisites = ", chweap, ~vehicles.china, ~!vehicles.chinainf, ~!upg.battlemaster",
+				Summary = "Battlemaster: Kanone, Horde und Nuklear-Upgrades geerbt. Anzeige zeigt Basiswerte ohne situative Boni."
+			},
+			new CustomVehicleAssembly("dragon-chassis", "chdragon", "chdragon", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel", "diesel-large" }, "heavy", "flame-turret", "dragon-flamer", new[] { "flame-fuel" },
+				new Dictionary<string, string> { { "Armament", "CHDragonFlamer" }, { "Armament@Black_Napalm", "CHDragonFlamer.Black_Napalm" },
+					{ "Armament@Firewall1", "CHDragonFirestorm" }, { "Armament@Firewall2", "CHDragonFirestorm2" } })
+			{
+				Faction = "china", PreserveWeaponTemplates = true,
+				ExtraPrerequisites = ", ~vehicles.china, ~!promotion.dragon_tank.pdl, ~!promotion.dragon_tank.reflector",
+				Summary = "Dragon: Flammenwerfer, Black Napalm und beide Firewall-Phasen; originales Deploy-/Bewegungsverhalten."
+			},
+			new CustomVehicleAssembly("gatling-chassis", "chgtnk", "chgtnk", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel", "diesel-large" }, "heavy", "gatling-turret", "gatling-gun", new[] { "gatling-rounds" },
+				new Dictionary<string, string> { { "Armament@GAT0", "ChinaMGatt.0" }, { "Armament@GAT1", "ChinaMGatt.1" },
+					{ "Armament@GAT2", "ChinaMGatt.2" }, { "Armament@GAT3", "ChinaMGatt.3" },
+					{ "Armament@GAT0G", "ChinaMGatt.0G" }, { "Armament@GAT1G", "ChinaMGatt.1G" },
+					{ "Armament@GAT2G", "ChinaMGatt.2G" }, { "Armament@GAT3G", "ChinaMGatt.3G" } })
+			{
+				Faction = "china", PreserveWeaponTemplates = true,
+				ExtraPrerequisites = ", ~vehicles.china, ~!promotion.gatling.pdl, ~!promotion.gatling.reflector",
+				Summary = "Gatling: je vier Boden-/Luft-Drehzahlstufen mit getrenntem Hochlauf, Zielwechsel und Abklingzeit."
+			},
+			new CustomVehicleAssembly("overlord-chassis", "choverlord", "choverlord", "Turreted",
+				new[] { "tracks-superheavy" }, new[] { "diesel-heavy", "diesel-heavy-boost" }, "heavy", "heavy-twin-turret", "overlord-cannon", new[] { "heavy-shell" },
+				new Dictionary<string, string> { { "Armament", "OverlordCannon" } })
+			{
+				Faction = "china", PreserveWeaponTemplates = true, AlternateTooltips = new[] { "Tooltip@Emperor" },
+				ExtraPrerequisites = ", radar, ~vehicles.china, ~!vehicles.chinainf, ~!upg.overlord",
+				Summary = "Overlord: Doppelkanone; Tank-General nutzt Emperor-Grafik und 80% erlittenen Schaden. HP-Anzeige ist roh."
 			}
 		};
 

@@ -48,6 +48,27 @@ class DesignerCatalogTests(unittest.TestCase):
             for field, key in [('Cost', 'cost'), ('HP', 'hp'), ('Speed', 'speed')]:
                 self.assertEqual(row['values'][key], int(re.search(r'(?m)^\t\t' + field + r': (\d+)$', block).group(1)))
 
+    def test_china_defaults_match_stock_without_claiming_effective_upgrade_stats(self):
+        source = (REPO / 'mods/ca/rules/china/vehicles.yaml').read_text(encoding='utf-8')
+        for hull, actor, motor in [('battlemaster', 'chbattle', 'diesel'), ('dragon-chassis', 'chdragon', 'diesel'),
+                                   ('gatling-chassis', 'chgtnk', 'diesel'), ('overlord-chassis', 'choverlord', 'diesel-heavy')]:
+            row = next(r for r in cases() if r['parts']['chassis'] == hull and r['parts']['generator'] == 'baseline-generator'
+                       and r['parts']['drive'] == motor)
+            self.assertEqual(row['base_faction'], 'chinatnk')
+            block = re.search(r'(?ms)^' + actor + r':\n(.*?)(?=^\S|\Z)', source).group(1)
+            for field, key in [('Cost', 'cost'), ('HP', 'hp'), ('Speed', 'speed')]:
+                self.assertEqual(row['values'][key], int(re.search(r'(?m)^\t\t' + field + r': (\d+)$', block).group(1)))
+
+    def test_china_conditional_weapon_channels_are_all_explicitly_bound(self):
+        native = (REPO / 'OpenRA.Mods.CA/Modular/CustomVehicleAssembly.cs').read_text(encoding='utf-8')
+        for filename, actor, count in [('vehicles.yaml', 'chdragon', 4), ('defaults.yaml', '^ChinaGatling', 8)]:
+            text = (REPO / 'mods/ca/rules/china' / filename).read_text(encoding='utf-8')
+            block = re.search(r'(?ms)^' + re.escape(actor) + r':\n(.*?)(?=^\S|\Z)', text).group(1)
+            bindings = re.findall(r'(?m)^\t(Armament(?:@[^:]+)?):\n\t\t(?:Name: [^\n]+\n\t\t)?Weapon: ([^\n]+)', block)
+            self.assertEqual(len(bindings), count)
+            for trait, weapon in bindings:
+                self.assertIn('{ "' + trait + '", "' + weapon + '" }', native)
+
     def test_native_weapon_parent_names_use_exact_yaml_declaration_case(self):
         native = (REPO / 'OpenRA.Mods.CA/Modular/CustomVehicleAssembly.cs').read_text(encoding='utf-8')
         parents = re.findall(r'\{ "Armament(?:@[A-Za-z0-9_-]+)?", "([^"]+)" \}', native)
@@ -62,7 +83,7 @@ class DesignerCatalogTests(unittest.TestCase):
     def test_shipped_snapshot_and_native_fixtures_are_current(self):
         self.assertEqual(json.loads((REPO / 'mods/ca/modular/designer-catalog.json').read_text(encoding='utf-8')), data())
         self.assertEqual(json.loads(Path(__file__).with_name('designer-calculation-cases.json').read_text()), cases())
-        self.assertEqual(len(cases()), 50)
+        self.assertEqual(len(cases()), 66)
 
 
 if __name__ == '__main__':

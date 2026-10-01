@@ -7,11 +7,12 @@ namespace OpenRA.Mods.CA.Modular
 {
 	public sealed partial class CustomFactionDesign
 	{
-		static readonly Dictionary<string, (string Group, string Label, string WorldTrait)> Bases =
-			new Dictionary<string, (string, string, string)>
+		static readonly Dictionary<string, (string Group, string Label, string WorldTrait, string ReferenceActor)> Bases =
+			new Dictionary<string, (string, string, string, string)>
 			{
-				{ "eagle", ("gdi", "GDI / Eagle", "FactionCA@11") },
-				{ "blackh", ("nod", "Nod / Black Hand", "FactionCA@13") }
+				{ "eagle", ("gdi", "GDI / Eagle", "FactionCA@11", "mtnk") },
+				{ "blackh", ("nod", "Nod / Black Hand", "FactionCA@13", "ltnk") },
+				{ "chinatnk", ("china", "China / Tank-General", "FactionCA@22", "chbattle") }
 			};
 
 		public static string[] BaseFactions => Bases.Keys.ToArray();

@@ -82,7 +82,8 @@ namespace OpenRA.Mods.CA.Modular
 				{ "gdi-stationary", ("stationary", "wheeled") }, { "wheels-light", ("wheels", "wheeled") },
 				{ "designer-mlrs-gear", ("tracks", "wheeled") }, { "walker-heavy", ("walker", "sheavytracked") },
 				{ "designer-heavy-tracks", ("tracks", "heavytracked") }, { "designer-mk2-legs", ("walker", "heavytracked") },
-				{ "tracks-light-artillery", ("tracks", "lighttracked") }, { "designer-ssm-gear", ("tracks", "wheeled") }
+				{ "tracks-light-artillery", ("tracks", "lighttracked") }, { "designer-ssm-gear", ("tracks", "wheeled") },
+				{ "tracks-superheavy", ("tracks", "sheavytracked") }
 			};
 			foreach (var binding in gearBindings)
 			{
@@ -233,6 +234,8 @@ namespace OpenRA.Mods.CA.Modular
 				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures." + p.BaseFaction + (v.Tech > 1 ? ", tier" + v.Tech : "") + assembly.ExtraPrerequisites +
 					"\n\t\tBuildPaletteOrder: " + (1000 + index) + "\n\t\tDescription: Eigener Entwurf - vor dem Spiel eingefroren.\n");
 			s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n\tTooltip:\n\t\tName: " + p.TankName + "\n");
+			foreach (var tooltip in assembly.AlternateTooltips)
+				s.Append("\t" + tooltip + ":\n\t\tName: " + p.TankName + "\n");
 			if (assembly.VoxelImage != null) s.Append("\tRenderVoxels:\n\t\tImage: " + assembly.VoxelImage + "\n");
 			s.Append("\t-TooltipExtras:\n"); // Stock anti-tank strengths would be misleading for the HE loadout.
 			s.Append("\tValued:\n\t\tCost: " + I(v.Cost) + "\n\tHealth:\n\t\tHP: " + I(v.Hp) + "\n");
@@ -335,7 +338,7 @@ namespace OpenRA.Mods.CA.Modular
 			if (baseFaction != "eagle")
 			{
 				map = Regex.Replace(map, @"(?m)^\tTransport: [^\r\n]+\r?\n(?:\t\t[^\r\n]+\r?\n)*", "");
-				map = Regex.Replace(map, @"(?m)^\tReference: mtnk\r?$", "\tReference: ltnk");
+				map = Regex.Replace(map, @"(?m)^\tReference: mtnk\r?$", "\tReference: " + Bases[baseFaction].ReferenceActor);
 			}
 			map = Regex.Replace(map, @"(?m)^Title: .*$", "Title: Custom Faction - " + factionName);
 			map = Regex.Replace(map, @"(?m)^\tPrototype\d+: modular\.[^\r\n]+\r?\n(?:\t\t[^\r\n]+\r?\n)*", "");

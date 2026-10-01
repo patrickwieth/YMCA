@@ -15,7 +15,11 @@
       "nod-light-hull",
       "buggy-hull",
       "designer-nod-artillery-hull",
-      "designer-ssm-hull"
+      "designer-ssm-hull",
+      "battlemaster",
+      "dragon-chassis",
+      "gatling-chassis",
+      "overlord-chassis"
     ],
     "running_gear": [
       "tracks-standard",
@@ -27,13 +31,15 @@
       "designer-heavy-tracks",
       "designer-mk2-legs",
       "tracks-light-artillery",
-      "designer-ssm-gear"
+      "designer-ssm-gear",
+      "tracks-superheavy"
     ],
     "drive": [
       "diesel",
       "diesel-large",
       "diesel-light",
-      "diesel-heavy"
+      "diesel-heavy",
+      "diesel-heavy-boost"
     ],
     "generator": [
       "baseline-generator",
@@ -54,7 +60,11 @@
       "designer-mk2-mount",
       "light-cannon-mount",
       "field-artillery-mount",
-      "designer-ssm-mount"
+      "designer-ssm-mount",
+      "cannon-turret",
+      "flame-turret",
+      "gatling-turret",
+      "heavy-twin-turret"
     ],
     "weapon": [
       "medium-cannon",
@@ -67,7 +77,11 @@
       "designer-mk2-weapons",
       "light-cannon",
       "field-artillery",
-      "designer-ssm-weapons"
+      "designer-ssm-weapons",
+      "cannon",
+      "dragon-flamer",
+      "gatling-gun",
+      "overlord-cannon"
     ],
     "ammunition": [
       "medium-tank-shell",
@@ -81,7 +95,11 @@
       "designer-mk2-payload",
       "light-tank-shell",
       "field-artillery-he",
-      "designer-ssm-payload"
+      "designer-ssm-payload",
+      "shell",
+      "flame-fuel",
+      "gatling-rounds",
+      "heavy-shell"
     ]
   },
   "components": {
@@ -273,6 +291,158 @@
       ],
       "source": "BGGY"
     },
+    "battlemaster": {
+      "display_name": "Battlemaster - Type 59",
+      "source": "chbattle",
+      "role": "chassis",
+      "factions": [
+        "china"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 6500,
+      "cost": 400,
+      "hp": 40000,
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 48,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "max_mass": 18000,
+      "reference_mass": 10000,
+      "reference_kw": 460,
+      "reference_speed": 100,
+      "max_speed": 125,
+      "allowed": {
+        "carrier": [
+          "cannon-turret",
+          "autoloader-turret"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ]
+      },
+      "equipment": []
+    },
+    "dragon-chassis": {
+      "role": "chassis",
+      "factions": [
+        "china"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 5000,
+      "cost": 150,
+      "hp": 28000,
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 48,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "max_mass": 14000,
+      "reference_mass": 8000,
+      "reference_kw": 460,
+      "reference_speed": 103,
+      "max_speed": 125,
+      "allowed": {
+        "carrier": [
+          "flame-turret"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ]
+      },
+      "equipment": [],
+      "source": "chdragon",
+      "note": "Native binding retains Firewall deploy/cycle and Black Napalm conditions.",
+      "display_name": "Dragon - Flammenpanzer"
+    },
+    "gatling-chassis": {
+      "role": "chassis",
+      "factions": [
+        "china"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 5500,
+      "cost": 250,
+      "hp": 30000,
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 48,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "max_mass": 16000,
+      "reference_mass": 9000,
+      "reference_kw": 460,
+      "reference_speed": 108,
+      "max_speed": 130,
+      "allowed": {
+        "carrier": [
+          "gatling-turret"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ]
+      },
+      "equipment": [],
+      "source": "chgtnk",
+      "note": "Native binding retains independent ground/AA spin-up and inherited sight.",
+      "display_name": "Gatling - Boden und Flugabwehr"
+    },
+    "overlord-chassis": {
+      "display_name": "Overlord - schwere Einbaugruppe",
+      "role": "chassis",
+      "factions": [
+        "china"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 2,
+      "mass": 20000,
+      "cost": 750,
+      "hp": 95000,
+      "default_running_gear": "tracks-superheavy",
+      "allowed_running_gear": [
+        "tracks-superheavy"
+      ],
+      "turn_speed_limit": 8,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "max_mass": 45000,
+      "reference_mass": 32000,
+      "reference_kw": 960,
+      "reference_speed": 56,
+      "max_speed": 70,
+      "allowed": {
+        "carrier": [
+          "heavy-twin-turret"
+        ],
+        "drive": [
+          "diesel-heavy",
+          "diesel-heavy-boost"
+        ]
+      },
+      "equipment": [],
+      "source": "choverlord",
+      "note": "Base scalar values; China Tank General activates the inherited Emperor artwork and 80% received-damage modifier. Effective durability is not displayed raw HP. Roof modules are not admitted here."
+    },
     "tracks-standard": {
       "display_name": "Standard-Kettenlaufwerk",
       "role": "running_gear",
@@ -395,6 +565,26 @@
       "turn_speed": 64,
       "note": "No infantry crush: exact existing lighttracked locomotor, not ordinary tracked."
     },
+    "tracks-superheavy": {
+      "display_name": "Schwerlast-Kettenlaufwerk",
+      "role": "running_gear",
+      "factions": [
+        "china",
+        "gdi",
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "mass": 5000,
+      "cost": 250,
+      "electric_kw": 0,
+      "locomotor": "sheavytracked",
+      "kind": "tracks",
+      "max_mass": 45000,
+      "max_speed": 90,
+      "turn_speed": 16
+    },
     "diesel": {
       "role": "drive",
       "factions": [
@@ -463,6 +653,22 @@
       "electric_kw": 0,
       "mechanical_kw": 1000,
       "note": "New provisional heavy family, not a formula derived from engine size."
+    },
+    "diesel-heavy-boost": {
+      "display_name": "Leistungsgesteigerter schwerer Dieselmotor",
+      "role": "drive",
+      "factions": [
+        "china",
+        "gdi",
+        "soviet"
+      ],
+      "tier": 2,
+      "cp": 0,
+      "tech": 2,
+      "mass": 2000,
+      "cost": 400,
+      "electric_kw": 0,
+      "mechanical_kw": 1045
     },
     "baseline-generator": {
       "role": "generator",
@@ -645,6 +851,90 @@
       "locked_visual": "ARTY",
       "note": "Fixed assembly, not a freely rotatable roof turret."
     },
+    "cannon-turret": {
+      "role": "carrier",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 500,
+      "cost": 100,
+      "electric_kw": 0,
+      "weapons": [
+        "cannon"
+      ],
+      "burst": 1,
+      "reload_ticks": 50,
+      "turn_speed_reference": 12,
+      "display_name": "Battlemaster-Kanonenturm"
+    },
+    "flame-turret": {
+      "role": "carrier",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 400,
+      "cost": 75,
+      "electric_kw": 0,
+      "weapons": [
+        "dragon-flamer"
+      ],
+      "burst": 8,
+      "burst_delay_ticks": 4,
+      "reload_ticks": 45,
+      "turn_speed_reference": 9,
+      "source": "CHDragonFlamer",
+      "note": "Normal attack only; deployed Firewall has additional armaments and state changes.",
+      "display_name": "Dragon-Flammenturm"
+    },
+    "gatling-turret": {
+      "role": "carrier",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 500,
+      "cost": 100,
+      "electric_kw": 0,
+      "weapons": [
+        "gatling-gun"
+      ],
+      "burst": 1,
+      "reload_ticks": 12,
+      "turn_speed_reference": 16,
+      "source": "^ChinaGatling",
+      "note": "Ground cold-state representative only. Reload stages 12/8/4/2 ticks, separate air/ground charge, thresholds 1/3/5, reset delay 40. Full attack-state behavior not modeled.",
+      "display_name": "Gatling-Turm"
+    },
+    "heavy-twin-turret": {
+      "display_name": "Schwerer ZwillingsgeschÃ¼tzturm",
+      "role": "carrier",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "mass": 2000,
+      "cost": 250,
+      "electric_kw": 0,
+      "weapons": [
+        "overlord-cannon"
+      ],
+      "burst": 2,
+      "burst_delay_ticks": 6,
+      "reload_ticks": 90,
+      "turn_speed_reference": 3,
+      "source": "OverlordCannon",
+      "note": "Normal, nuclear and speaker artwork bindings must select appropriate existing turret sequences; no claim of arbitrary visual interchangeability."
+    },
     "medium-cannon": {
       "display_name": "Mittlere Panzerkanone",
       "role": "weapon",
@@ -745,6 +1035,85 @@
       "source": "155mmTD (native Nod binding); complete weapon inherited",
       "template_locked": true
     },
+    "cannon": {
+      "role": "weapon",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 500,
+      "cost": 200,
+      "electric_kw": 0,
+      "ammunition": [
+        "shell"
+      ],
+      "range_cells": 4,
+      "source": "CHBattlemasterCannon",
+      "template_locked": true,
+      "note": "Full native weapon channels inherited, including conditional stages/upgrades. Scalar weapon fields are reference metadata only, not emitted overrides."
+    },
+    "dragon-flamer": {
+      "role": "weapon",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 400,
+      "cost": 125,
+      "electric_kw": 0,
+      "ammunition": [
+        "flame-fuel"
+      ],
+      "range_cells": 5,
+      "source": "CHDragonFlamer",
+      "display_name": "Dragon-Flammenwerfer und Firewall",
+      "template_locked": true,
+      "note": "Full native weapon channels inherited, including conditional stages/upgrades. Scalar weapon fields are reference metadata only, not emitted overrides."
+    },
+    "gatling-gun": {
+      "role": "weapon",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 500,
+      "cost": 150,
+      "electric_kw": 0,
+      "ammunition": [
+        "gatling-rounds"
+      ],
+      "range_cells": 6,
+      "source": "ChinaMGatt.0G",
+      "note": "Full native weapon channels inherited, including conditional stages/upgrades. Scalar weapon fields are reference metadata only, not emitted overrides.",
+      "display_name": "Gatling Boden und Luft - alle Drehzahlstufen",
+      "template_locked": true
+    },
+    "overlord-cannon": {
+      "display_name": "Schwere Panzerkanone",
+      "role": "weapon",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "mass": 1500,
+      "cost": 300,
+      "electric_kw": 0,
+      "ammunition": [
+        "heavy-shell"
+      ],
+      "range_cells": 5,
+      "source": "OverlordCannon",
+      "template_locked": true,
+      "note": "Full native weapon channels inherited, including conditional stages/upgrades. Scalar weapon fields are reference metadata only, not emitted overrides."
+    },
     "medium-tank-shell": {
       "display_name": "Panzergranaten gegen schwere Ziele",
       "role": "ammunition",
@@ -825,6 +1194,64 @@
       "damage": 6500,
       "source": "155mm",
       "note": "Not Juggernaut or mortar ammunition: preserve full projectile spread/effects and targeting."
+    },
+    "shell": {
+      "role": "ammunition",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 400,
+      "cost": 50,
+      "electric_kw": 0,
+      "damage": 5000
+    },
+    "flame-fuel": {
+      "role": "ammunition",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 100,
+      "cost": 50,
+      "electric_kw": 0,
+      "damage": 2500,
+      "note": "Raw primary warhead only; fire clusters, heat and garrison damage omitted from calculator.",
+      "display_name": "Flammenwerfer-Brennstoff"
+    },
+    "gatling-rounds": {
+      "role": "ammunition",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 400,
+      "cost": 100,
+      "electric_kw": 0,
+      "damage": 350,
+      "note": "Raw ground damage 350; AA raw damage 660. Values are not DPS.",
+      "display_name": "Gatling-Munition"
+    },
+    "heavy-shell": {
+      "display_name": "Schwere Panzergranaten",
+      "role": "ammunition",
+      "factions": [
+        "china"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "mass": 1500,
+      "cost": 150,
+      "electric_kw": 0,
+      "damage": 8000,
+      "source": "OverlordCannon"
     },
     "scout-sensors": {
       "display_name": "SpÃ¤hsensoren",
@@ -1889,6 +2316,134 @@
         ],
         "ammunition": [
           "designer-ssm-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "china",
+      "options": {
+        "chassis": [
+          "battlemaster"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "cannon-turret"
+        ],
+        "weapon": [
+          "cannon"
+        ],
+        "ammunition": [
+          "shell"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "china",
+      "options": {
+        "chassis": [
+          "dragon-chassis"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "flame-turret"
+        ],
+        "weapon": [
+          "dragon-flamer"
+        ],
+        "ammunition": [
+          "flame-fuel"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "china",
+      "options": {
+        "chassis": [
+          "gatling-chassis"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel",
+          "diesel-large"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "gatling-turret"
+        ],
+        "weapon": [
+          "gatling-gun"
+        ],
+        "ammunition": [
+          "gatling-rounds"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "china",
+      "options": {
+        "chassis": [
+          "overlord-chassis"
+        ],
+        "running_gear": [
+          "tracks-superheavy"
+        ],
+        "drive": [
+          "diesel-heavy",
+          "diesel-heavy-boost"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "heavy-twin-turret"
+        ],
+        "weapon": [
+          "overlord-cannon"
+        ],
+        "ammunition": [
+          "heavy-shell"
         ]
       },
       "built_in": []

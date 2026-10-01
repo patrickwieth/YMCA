@@ -2,15 +2,16 @@
 
 ## Latest: native main-menu faction editor
 
-**Eigene Fraktion** supports **GDI/Eagle or Nod/Black Hand**, plus **up to 16 custom
+**Eigene Fraktion** supports **GDI/Eagle, Nod/Black Hand and China/Tank-General**, plus **up to 16 custom
 vehicle designs**, with New/Copy/Remove, shared budget, named faction save/load and
 in-memory migration of existing single-tank profiles. The base selector saves the
 previous faction in the library before starting an independent roster with a free name.
 **Vorlagen** adds missing families for that base: **eight GDI families** (tank, MG scout,
-MLRS, Mammoth, Juggernaut, native Hover MLRS, Disruptor, Mammoth Mk II) and **four Nod
-families** (light tank, Buggy, artillery, SSM). Their **50 supported combinations** use compatible
+MLRS, Mammoth, Juggernaut, native Hover MLRS, Disruptor, Mammoth Mk II), **four Nod
+families** (light tank, Buggy, artillery, SSM) and **four China families** (Battlemaster,
+Dragon, Gatling tank, Overlord). Their **66 supported combinations** use compatible
 artwork and full existing weapons, including helper, visual and conditional upgrade channels.
-Hum-Vee/Buggy mandatory sensors are counted once. Mixed-faction and stationary Nod
+Hum-Vee/Buggy mandatory sensors are counted once. Mixed-faction and non-GDI stationary
 profiles fail native validation. Both test-map player slots use the selected base.
 
 **Speichern und Testspiel** freezes the complete roster into a separate user map.
@@ -20,12 +21,13 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**67 Python + 51 native tests pass**; all 50 numeric combinations match the independent
+**69 Python + 60 native tests pass**; all 66 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential
 is **1685 / 1691**, six inherited diagnostics, **zero unexpected new errors**; see
-`designer-nod-validation.md`. This is NOT a
+`designer-nod-validation.md`. China: **1685 / 1693**, eight inherited diagnostics,
+**zero unexpected new errors**; see `designer-china-validation.md`. This is NOT a
 clean full-mod lint or a live gameplay pass. Expanded UI/gameplay checks remain pending.
 
 Complex families use template-locked weapon packages: no fake SpreadDamage
@@ -34,7 +36,12 @@ Hover MLRS, Mk II and SSM keep their special production unlock requirements.
 SSM preserves ammo pools, reloading and missile graphics; Nod artillery uses the full
 155mmTD package and original death explosion. Efficient generators are admitted for Nod
 at the same shared price/performance. Broad calibration JSON and Excel files are untouched.
-China, Allies, Soviets, Scrin and further GDI/Nod families are not integrated yet.
+Dragon retains Black Napalm and both Firewall phases; Gatling keeps all eight ground/AA
+channels and spin-up states. Battlemaster retains Horde/nuclear upgrades. Overlord inherits
+Emperor art and 80% received damage for Tank General; shown HP/speed remain raw base values.
+Conditional Emperor tooltips preserve custom names. China factory/radar requirements and
+promotion exclusions remain; roof attachments and PDL variants are not enabled.
+Allies, Soviets, Scrin and further GDI/Nod/China families are not integrated yet.
 
 The confirmed fix preventing ordinary skirmish restoration from replacing the chosen
 snapshot remains active. Test sessions also do not overwrite ordinary skirmish setups.
