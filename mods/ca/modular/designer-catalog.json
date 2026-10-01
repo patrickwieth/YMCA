@@ -11,7 +11,11 @@
       "designer-mammoth-hull",
       "designer-hmlrs-hull",
       "designer-disruptor-hull",
-      "designer-mk2-hull"
+      "designer-mk2-hull",
+      "nod-light-hull",
+      "buggy-hull",
+      "designer-nod-artillery-hull",
+      "designer-ssm-hull"
     ],
     "running_gear": [
       "tracks-standard",
@@ -21,7 +25,9 @@
       "designer-mlrs-gear",
       "walker-heavy",
       "designer-heavy-tracks",
-      "designer-mk2-legs"
+      "designer-mk2-legs",
+      "tracks-light-artillery",
+      "designer-ssm-gear"
     ],
     "drive": [
       "diesel",
@@ -45,7 +51,10 @@
       "designer-mammoth-mount",
       "designer-hmlrs-mount",
       "designer-disruptor-mount",
-      "designer-mk2-mount"
+      "designer-mk2-mount",
+      "light-cannon-mount",
+      "field-artillery-mount",
+      "designer-ssm-mount"
     ],
     "weapon": [
       "medium-cannon",
@@ -55,7 +64,10 @@
       "designer-mammoth-weapons",
       "designer-hmlrs-weapons",
       "designer-disruptor-weapons",
-      "designer-mk2-weapons"
+      "designer-mk2-weapons",
+      "light-cannon",
+      "field-artillery",
+      "designer-ssm-weapons"
     ],
     "ammunition": [
       "medium-tank-shell",
@@ -66,7 +78,10 @@
       "designer-mammoth-payload",
       "designer-hmlrs-payload",
       "designer-disruptor-payload",
-      "designer-mk2-payload"
+      "designer-mk2-payload",
+      "light-tank-shell",
+      "field-artillery-he",
+      "designer-ssm-payload"
     ]
   },
   "components": {
@@ -184,6 +199,80 @@
       "equipment": [],
       "display_name": "Juggernaut - Artillerielaeufer"
     },
+    "nod-light-hull": {
+      "display_name": "Nod Leichtpanzerrumpf",
+      "role": "chassis",
+      "factions": [
+        "nod"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 6500,
+      "cost": 125,
+      "hp": 41250,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 1,
+      "default_running_gear": "tracks-standard",
+      "allowed_running_gear": [
+        "tracks-standard"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 18000,
+      "reference_mass": 10000,
+      "reference_kw": 460,
+      "reference_speed": 100,
+      "max_speed": 125,
+      "allowed": {
+        "carrier": [
+          "light-cannon-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "source": "LTNK"
+    },
+    "buggy-hull": {
+      "display_name": "Buggy Rumpf",
+      "role": "chassis",
+      "factions": [
+        "nod"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 1300,
+      "cost": 75,
+      "hp": 14000,
+      "electric_kw": 5,
+      "carrier_slots": 1,
+      "equipment_slots": 1,
+      "default_running_gear": "wheels-light",
+      "allowed_running_gear": [
+        "wheels-light"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 6000,
+      "reference_mass": 2200,
+      "reference_kw": 210,
+      "reference_speed": 157,
+      "max_speed": 180,
+      "allowed": {
+        "carrier": [
+          "scout-mg-mount"
+        ],
+        "drive": [
+          "diesel-light"
+        ]
+      },
+      "equipment": [
+        "scout-sensors"
+      ],
+      "source": "BGGY"
+    },
     "tracks-standard": {
       "display_name": "Standard-Kettenlaufwerk",
       "role": "running_gear",
@@ -286,6 +375,26 @@
       "turn_speed": 16,
       "note": "Juggernaut physically walks, but its existing engine Locomotor is sheavytracked. Artwork does not determine locomotor semantics."
     },
+    "tracks-light-artillery": {
+      "display_name": "Leichtes Kettenlaufwerk",
+      "role": "running_gear",
+      "factions": [
+        "allies",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 1000,
+      "cost": 75,
+      "electric_kw": 0,
+      "locomotor": "lighttracked",
+      "kind": "tracks",
+      "max_mass": 14000,
+      "max_speed": 130,
+      "turn_speed": 64,
+      "note": "No infantry crush: exact existing lighttracked locomotor, not ordinary tracked."
+    },
     "diesel": {
       "role": "drive",
       "factions": [
@@ -379,7 +488,8 @@
       "factions": [
         "china",
         "gdi",
-        "soviet"
+        "soviet",
+        "nod"
       ],
       "tier": 1,
       "cp": 0,
@@ -492,6 +602,49 @@
       "locked_visual": "juggernaut",
       "display_name": "Juggernaut Dreifachlafette"
     },
+    "light-cannon-mount": {
+      "display_name": "Leichter Kanonenturm",
+      "role": "carrier",
+      "factions": [
+        "nod",
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 500,
+      "cost": 75,
+      "electric_kw": 0,
+      "weapons": [
+        "light-cannon"
+      ],
+      "burst": 1,
+      "reload_ticks": 36,
+      "turn_speed_reference": 56,
+      "source": "30mm / LTNK / T-34 / Devil_Tank"
+    },
+    "field-artillery-mount": {
+      "display_name": "Festes ArtilleriegeschÃ¼tz",
+      "role": "carrier",
+      "factions": [
+        "allies",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 500,
+      "cost": 50,
+      "electric_kw": 0,
+      "weapons": [
+        "field-artillery"
+      ],
+      "burst": 1,
+      "reload_ticks": 60,
+      "source": "ARTY / AttackFrontal / 155mm",
+      "locked_visual": "ARTY",
+      "note": "Fixed assembly, not a freely rotatable roof turret."
+    },
     "medium-cannon": {
       "display_name": "Mittlere Panzerkanone",
       "role": "weapon",
@@ -551,6 +704,47 @@
       "display_name": "Juggernaut Geschuetz- und Zielsystem",
       "template_locked": true
     },
+    "light-cannon": {
+      "display_name": "Leichte Panzerkanone",
+      "role": "weapon",
+      "factions": [
+        "nod",
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 500,
+      "cost": 175,
+      "electric_kw": 0,
+      "ammunition": [
+        "light-tank-shell"
+      ],
+      "range_cells": 4.75,
+      "source": "30mm / 25mm / ^Cannon",
+      "template_locked": true
+    },
+    "field-artillery": {
+      "display_name": "Feldartillerie",
+      "role": "weapon",
+      "factions": [
+        "allies",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 700,
+      "cost": 200,
+      "electric_kw": 0,
+      "ammunition": [
+        "field-artillery-he"
+      ],
+      "range_cells": 14,
+      "min_range_cells": 4,
+      "source": "155mmTD (native Nod binding); complete weapon inherited",
+      "template_locked": true
+    },
     "medium-tank-shell": {
       "display_name": "Panzergranaten gegen schwere Ziele",
       "role": "ammunition",
@@ -597,6 +791,40 @@
       "cost": 200,
       "electric_kw": 0,
       "display_name": "Juggernaut Sprenggranaten"
+    },
+    "light-tank-shell": {
+      "display_name": "Leichte Panzergranaten",
+      "role": "ammunition",
+      "factions": [
+        "nod",
+        "soviet"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 400,
+      "cost": 50,
+      "electric_kw": 0,
+      "damage": 3500,
+      "source": "30mm / ^Shell",
+      "note": "Existing versus table is NOT the medium ShellHeavy payload."
+    },
+    "field-artillery-he": {
+      "display_name": "Artillerie-Sprenggranaten",
+      "role": "ammunition",
+      "factions": [
+        "allies",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 500,
+      "cost": 50,
+      "electric_kw": 0,
+      "damage": 6500,
+      "source": "155mm",
+      "note": "Not Juggernaut or mortar ammunition: preserve full projectile spread/effects and targeting."
     },
     "scout-sensors": {
       "display_name": "SpÃ¤hsensoren",
@@ -1143,6 +1371,151 @@
       },
       "source": "MAMMOTHMK2",
       "note": "Constructed baseline fit. Hull allocation includes fixed stock abilities (e.g. regeneration); no per-design rebates."
+    },
+    "designer-nod-artillery-hull": {
+      "display_name": "Nod-Artillerie - gebundene Einbaugruppe",
+      "role": "chassis",
+      "factions": [
+        "nod"
+      ],
+      "tier": 1,
+      "cp": 0,
+      "tech": 1,
+      "mass": 5000,
+      "cost": 75,
+      "hp": 10000,
+      "electric_kw": 10,
+      "carrier_slots": 1,
+      "equipment_slots": 1,
+      "default_running_gear": "tracks-light-artillery",
+      "allowed_running_gear": [
+        "tracks-light-artillery"
+      ],
+      "turn_speed_limit": 16,
+      "max_mass": 14000,
+      "reference_mass": 8300,
+      "reference_kw": 460,
+      "reference_speed": 56,
+      "max_speed": 80,
+      "allowed": {
+        "carrier": [
+          "field-artillery-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "source": "ARTY.nod",
+      "note": "Light armor despite tracked graphics. Fixed hull/gun artwork, no free turret replacement."
+    },
+    "designer-ssm-hull": {
+      "factions": [
+        "nod"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "SSM - Napalmraketenwerfer",
+      "mass": 8000,
+      "cost": 450,
+      "hp": 15000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "default_running_gear": "designer-ssm-gear",
+      "allowed_running_gear": [
+        "designer-ssm-gear"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 20000,
+      "reference_mass": 11600,
+      "reference_kw": 460,
+      "reference_speed": 82,
+      "max_speed": 110,
+      "allowed": {
+        "carrier": [
+          "designer-ssm-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "equipment": [],
+      "source": "SSM",
+      "note": "Experimental allocation including fixed ammo-pool/reload equipment. Constructed baseline fit, not an independent balance proof."
+    },
+    "designer-ssm-gear": {
+      "factions": [
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "running_gear",
+      "display_name": "SSM-Fahrwerk",
+      "mass": 1500,
+      "cost": 100,
+      "locomotor": "wheeled",
+      "kind": "tracks",
+      "max_mass": 20000,
+      "max_speed": 150,
+      "turn_speed": 48,
+      "note": "Preserves stock SSM wheeled locomotor despite tracked artwork."
+    },
+    "designer-ssm-mount": {
+      "factions": [
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "SSM-Doppelstartlafette",
+      "mass": 600,
+      "cost": 150,
+      "weapons": [
+        "designer-ssm-weapons"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator cadence fields, never emitted. Original ammo pool and reload traits are authoritative."
+    },
+    "designer-ssm-weapons": {
+      "factions": [
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "weapon",
+      "display_name": "SSM-Napalmraketen",
+      "mass": 500,
+      "cost": 175,
+      "ammunition": [
+        "designer-ssm-payload"
+      ],
+      "template_locked": true,
+      "source": "HonestJohn"
+    },
+    "designer-ssm-payload": {
+      "factions": [
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "SSM-Napalmgefechtskopf",
+      "mass": 400,
+      "cost": 75,
+      "source": "HonestJohn",
+      "note": "Full projectile, warheads and effects inherited; not scalar damage emulation."
     }
   },
   "assemblies": [
@@ -1390,6 +1763,132 @@
         ],
         "ammunition": [
           "designer-mk2-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "nod",
+      "options": {
+        "chassis": [
+          "nod-light-hull"
+        ],
+        "running_gear": [
+          "tracks-standard"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "light-cannon-mount"
+        ],
+        "weapon": [
+          "light-cannon"
+        ],
+        "ammunition": [
+          "light-tank-shell"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "nod",
+      "options": {
+        "chassis": [
+          "buggy-hull"
+        ],
+        "running_gear": [
+          "wheels-light"
+        ],
+        "drive": [
+          "diesel-light"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "scout-mg-mount"
+        ],
+        "weapon": [
+          "scout-mg"
+        ],
+        "ammunition": [
+          "scout-mg-rounds"
+        ]
+      },
+      "built_in": [
+        "scout-sensors"
+      ]
+    },
+    {
+      "faction": "nod",
+      "options": {
+        "chassis": [
+          "designer-nod-artillery-hull"
+        ],
+        "running_gear": [
+          "tracks-light-artillery"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "field-artillery-mount"
+        ],
+        "weapon": [
+          "field-artillery"
+        ],
+        "ammunition": [
+          "field-artillery-he"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "faction": "nod",
+      "options": {
+        "chassis": [
+          "designer-ssm-hull"
+        ],
+        "running_gear": [
+          "designer-ssm-gear"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "designer-ssm-mount"
+        ],
+        "weapon": [
+          "designer-ssm-weapons"
+        ],
+        "ammunition": [
+          "designer-ssm-payload"
         ]
       },
       "built_in": []

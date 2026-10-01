@@ -35,9 +35,9 @@ namespace OpenRA.Mods.CA.Modular
 
 		public int ValidateRoster(CustomFactionRoster roster)
 		{
-			if (roster == null || roster.Schema != 2 || roster.BaseFaction != "eagle" || !ValidName(roster.Name) ||
+			if (roster == null || roster.Schema != 2 || !SupportedBase(roster.BaseFaction) || !ValidName(roster.Name) ||
 				string.IsNullOrWhiteSpace(roster.Name) || roster.Designs == null || roster.Designs.Count < 1 || roster.Designs.Count > MaxDesigns)
-				throw new InvalidDataException("Fraktion braucht einen gueltigen Namen und 1-16 GDI-Entwuerfe.");
+				throw new InvalidDataException("Fraktion braucht einen gueltigen Namen und 1-16 passende Entwuerfe.");
 			if (roster.Designs.Any(d => d == null || d.Id == null || !Regex.IsMatch(d.Id, @"\A[a-z][a-z0-9]{0,32}\z")))
 				throw new InvalidDataException("Ungueltige interne Entwurfs-ID.");
 			if (roster.Designs.Select(d => d.Id).Distinct(StringComparer.Ordinal).Count() != roster.Designs.Count ||
@@ -57,7 +57,7 @@ namespace OpenRA.Mods.CA.Modular
 			for (var i = 2; roster.Designs.Any(d => string.Equals(d.Name.Trim(), name, StringComparison.OrdinalIgnoreCase)); i++)
 				name = seed + " " + i;
 			var design = new CustomVehicleDesign { Id = "v" + Guid.NewGuid().ToString("N"), Name = name };
-			if (copy != null) design.Parts = new Dictionary<string, string>(copy.Parts);
+			design.Parts = copy == null ? DefaultParts(roster.BaseFaction) : new Dictionary<string, string>(copy.Parts);
 			roster.Designs.Add(design);
 			try { ValidateRoster(roster); }
 			catch { roster.Designs.Remove(design); throw; }
@@ -101,19 +101,21 @@ namespace OpenRA.Mods.CA.Modular
 
 		public void SaveRoster(string path, CustomFactionRoster roster) => SaveText(path, SerializeRoster(roster));
 
+		static string LibraryFileName(string directory, string name) => Path.Combine(directory,
+			"faction-" + ContentHash(Encoding.UTF8.GetBytes(name.Trim().ToUpperInvariant())) + ".json");
+
 		// Named library entries use hashed names, never user-supplied file paths. Renaming creates a new entry.
 		public void SaveLibrary(string directory, CustomFactionRoster roster)
 		{
 			var text = SerializeRoster(roster);
-			var id = ContentHash(Encoding.UTF8.GetBytes(roster.Name.Trim().ToUpperInvariant()));
-			SaveText(Path.Combine(directory, "faction-" + id + ".json"), text);
+			SaveText(LibraryFileName(directory, roster.Name), text);
 		}
 
 		public byte[] CompileRosterMap(CustomFactionRoster input, byte[] lab)
 		{
 			var frozen = SerializeRoster(input);
 			var roster = DeserializeRoster(frozen);
-			var rules = new StringBuilder(WorldRules(roster.Name));
+			var rules = new StringBuilder(WorldRules(roster.Name, roster.BaseFaction));
 			var weapons = new StringBuilder();
 			var actors = new List<string>();
 			foreach (var design in roster.Designs)
@@ -124,7 +126,7 @@ namespace OpenRA.Mods.CA.Modular
 				weapons.Append(ActorWeapons(profile, id));
 				actors.Add(id);
 			}
-			return PackageMap(roster.Name, frozen, rules.ToString(), weapons.ToString(), actors, lab);
+			return PackageMap(roster.Name, roster.BaseFaction, frozen, rules.ToString(), weapons.ToString(), actors, lab);
 		}
 	}
 }

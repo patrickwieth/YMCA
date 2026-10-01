@@ -67,7 +67,7 @@ namespace OpenRA.Mods.CA.Modular
 			foreach (var assembly in Assemblies)
 			{
 				var matches = descriptors.Where(d => d["options"]?["chassis"]?.First?.Value<string>() == assembly.Hull).ToArray();
-				if (matches.Length != 1 || Roles.Any(r => matches[0]["options"][r] is not JArray choices ||
+				if (matches.Length != 1 || (matches[0].Value<string>("faction") ?? "gdi") != assembly.Faction || Roles.Any(r => matches[0]["options"][r] is not JArray choices ||
 					!choices.Values<string>().SequenceEqual(assembly.Choices[r])) ||
 					matches[0]["built_in"] is not JArray builtIn || !builtIn.Values<string>().SequenceEqual(assembly.BuiltIn))
 					throw new InvalidDataException("Einbaugruppen passen nicht zu den Grafik- und Trait-Bindungen.");
@@ -81,7 +81,8 @@ namespace OpenRA.Mods.CA.Modular
 				{ "tracks-standard", ("tracks", "tracked") }, { "prototype-hover", ("hover", "hover") },
 				{ "gdi-stationary", ("stationary", "wheeled") }, { "wheels-light", ("wheels", "wheeled") },
 				{ "designer-mlrs-gear", ("tracks", "wheeled") }, { "walker-heavy", ("walker", "sheavytracked") },
-				{ "designer-heavy-tracks", ("tracks", "heavytracked") }, { "designer-mk2-legs", ("walker", "heavytracked") }
+				{ "designer-heavy-tracks", ("tracks", "heavytracked") }, { "designer-mk2-legs", ("walker", "heavytracked") },
+				{ "tracks-light-artillery", ("tracks", "lighttracked") }, { "designer-ssm-gear", ("tracks", "wheeled") }
 			};
 			foreach (var binding in gearBindings)
 			{
@@ -106,9 +107,9 @@ namespace OpenRA.Mods.CA.Modular
 
 		public CustomTankValues Calculate(CustomFactionProfile profile)
 		{
-			if (profile == null || profile.Schema != 1 || profile.BaseFaction != "eagle" || !ValidName(profile.Name) ||
+			if (profile == null || profile.Schema != 1 || !SupportedBase(profile.BaseFaction) || !ValidName(profile.Name) ||
 				!ValidName(profile.TankName) || string.IsNullOrWhiteSpace(profile.Name) || string.IsNullOrWhiteSpace(profile.TankName))
-				throw new InvalidDataException("Nur GDI/Eagle; Namen: 1-32 Buchstaben, Zahlen, Leerzeichen, _ oder -.");
+				throw new InvalidDataException("Unterstuetzte Basisfraktion erforderlich; Namen: 1-32 Buchstaben, Zahlen, Leerzeichen, _ oder -.");
 			if (profile.Parts == null || profile.Parts.Count != Roles.Length || Roles.Any(r => !profile.Parts.ContainsKey(r)))
 				throw new InvalidDataException("Jede Bausteinrolle muss genau einmal belegt sein.");
 			foreach (var role in Roles)
@@ -116,7 +117,7 @@ namespace OpenRA.Mods.CA.Modular
 				if (!Options(role).Contains(profile.Parts[role]))
 					throw new InvalidDataException("Nicht unterstuetzter Baustein: " + role);
 				var part = Part(profile, role);
-				if (part.Value<string>("role") != role || !part["factions"].Values<string>().Contains("gdi") || N(part, "cp") != 0)
+				if (part.Value<string>("role") != role || !part["factions"].Values<string>().Contains(ComponentFaction(profile.BaseFaction)) || N(part, "cp") != 0)
 					throw new InvalidDataException("Fraktion, Rolle oder CP-Bindung nicht unterstuetzt.");
 				if (N(part, "tier") > 3 || N(part, "tier") % 1 != 0 || N(part, "tech") < 1 || N(part, "tech") > 3 || N(part, "tech") % 1 != 0)
 					throw new InvalidDataException("Ungueltige Katalog- oder Techstufe.");
@@ -126,13 +127,15 @@ namespace OpenRA.Mods.CA.Modular
 			}
 
 			var assembly = Assembly(profile);
+			if (assembly.Faction != ComponentFaction(profile.BaseFaction))
+				throw new InvalidDataException("Einbaugruppe gehoert nicht zur Basisfraktion.");
 			if ((Part(profile, "weapon").Value<bool?>("template_locked") ?? false) != assembly.PreserveWeaponTemplates)
 				throw new InvalidDataException("Waffenpaket passt nicht zur vollstaendigen Trait-Bindung.");
 			if (Roles.Any(r => !assembly.Choices[r].Contains(profile.Parts[r])))
 				throw new InvalidDataException("Rumpf, Grafik, Fahrwerk und Waffengruppe sind nicht kompatibel.");
 			var builtIn = assembly.BuiltIn.Select(id => catalog["components"][id] as JObject).ToArray();
 			if (builtIn.Any(p => p == null || p.Value<string>("role") != "equipment" || N(p, "cp") != 0 ||
-				!p["factions"].Values<string>().Contains("gdi") || N(p, "cost") < 0 || N(p, "mass") < 0 || N(p, "electric_kw") < 0 ||
+				!p["factions"].Values<string>().Contains(ComponentFaction(profile.BaseFaction)) || N(p, "cost") < 0 || N(p, "mass") < 0 || N(p, "electric_kw") < 0 ||
 				N(p, "tier") < 0 || N(p, "tier") > 3 || N(p, "tier") % 1 != 0 || N(p, "tech") < 1 || N(p, "tech") > 3 || N(p, "tech") % 1 != 0))
 				throw new InvalidDataException("Ungueltige fest eingebaute Ausruestung.");
 			var selected = Roles.Select(r => Part(profile, r)).Concat(builtIn).ToArray();
@@ -211,10 +214,11 @@ namespace OpenRA.Mods.CA.Modular
 
 		public string Rules(CustomFactionProfile p)
 		{
-			return WorldRules(p.Name) + ActorRules(p, "modular.custom", 0);
+			return WorldRules(p.Name, p.BaseFaction) + ActorRules(p, "modular.custom", 0);
 		}
 
-		static string WorldRules(string name) => "World:\n\tFactionCA@11:\n\t\tName: " + name + " (GDI)\n";
+		static string WorldRules(string name, string baseFaction) => "World:\n\t" + Bases[baseFaction].WorldTrait +
+			":\n\t\tName: " + name + " (" + ComponentFaction(baseFaction).ToUpperInvariant() + ")\n";
 
 		string ActorRules(CustomFactionProfile p, string actor, int index)
 		{
@@ -226,7 +230,7 @@ namespace OpenRA.Mods.CA.Modular
 			if (v.Stationary)
 				s.Append("\t-Buildable:\n");
 			else
-				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures.eagle" + (v.Tech > 1 ? ", tier" + v.Tech : "") + assembly.ExtraPrerequisites +
+				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures." + p.BaseFaction + (v.Tech > 1 ? ", tier" + v.Tech : "") + assembly.ExtraPrerequisites +
 					"\n\t\tBuildPaletteOrder: " + (1000 + index) + "\n\t\tDescription: Eigener Entwurf - vor dem Spiel eingefroren.\n");
 			s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n\tTooltip:\n\t\tName: " + p.TankName + "\n");
 			if (assembly.VoxelImage != null) s.Append("\tRenderVoxels:\n\t\tImage: " + assembly.VoxelImage + "\n");
@@ -313,10 +317,10 @@ namespace OpenRA.Mods.CA.Modular
 		{
 			var frozen = Serialize(input);
 			var p = Deserialize(frozen);
-			return PackageMap(p.Name, frozen, Rules(p), Weapons(p), new[] { "modular.custom" }, lab);
+			return PackageMap(p.Name, p.BaseFaction, frozen, Rules(p), Weapons(p), new[] { "modular.custom" }, lab);
 		}
 
-		static byte[] PackageMap(string factionName, string frozen, string rules, string weapons, IEnumerable<string> actors, byte[] lab)
+		static byte[] PackageMap(string factionName, string baseFaction, string frozen, string rules, string weapons, IEnumerable<string> actors, byte[] lab)
 		{
 			using var source = new ZipArchive(new MemoryStream(lab), ZipArchiveMode.Read);
 			string Read(string name)
@@ -326,6 +330,13 @@ namespace OpenRA.Mods.CA.Modular
 			}
 
 			var map = Read("map.yaml");
+			map = Regex.Replace(map, @"(?m)^\tPlayerReference@Multi[01]:\r?\n(?:\t\t[^\r\n]+\r?\n)*",
+				m => Regex.Replace(m.Value, @"(?m)^(\t\tFaction: ).*$", "$1" + baseFaction));
+			if (baseFaction != "eagle")
+			{
+				map = Regex.Replace(map, @"(?m)^\tTransport: [^\r\n]+\r?\n(?:\t\t[^\r\n]+\r?\n)*", "");
+				map = Regex.Replace(map, @"(?m)^\tReference: mtnk\r?$", "\tReference: ltnk");
+			}
 			map = Regex.Replace(map, @"(?m)^Title: .*$", "Title: Custom Faction - " + factionName);
 			map = Regex.Replace(map, @"(?m)^\tPrototype\d+: modular\.[^\r\n]+\r?\n(?:\t\t[^\r\n]+\r?\n)*", "");
 			var index = 0;

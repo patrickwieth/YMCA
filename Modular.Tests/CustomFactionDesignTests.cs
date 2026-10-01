@@ -56,10 +56,10 @@ public class CustomFactionDesignTests
     public void AllNativeCalculationsMatchTheIndependentPythonCalculator()
     {
         var rows = JArray.Parse(File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "designer-calculation-cases.json")));
-        Assert.That(rows.Count, Is.EqualTo(42));
+        Assert.That(rows.Count, Is.EqualTo(50));
         foreach (var row in rows)
         {
-            var profile = new CustomFactionProfile { Parts = row["parts"].ToObject<Dictionary<string, string>>() };
+            var profile = new CustomFactionProfile { BaseFaction = row.Value<string>("base_faction"), Parts = row["parts"].ToObject<Dictionary<string, string>>() };
             var v = Compiler.Calculate(profile); var expected = row["values"];
             Assert.That(v.Cost, Is.EqualTo(expected.Value<double>("cost")).Within(0.00001));
             Assert.That(v.Mass, Is.EqualTo(expected.Value<double>("mass")).Within(0.00001));

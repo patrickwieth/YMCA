@@ -11,6 +11,7 @@ namespace OpenRA.Mods.CA.Modular
 		public readonly Dictionary<string, string[]> Choices;
 		public readonly string[] BuiltIn;
 		public readonly Dictionary<string, string> Armaments;
+		public string Faction { get; init; } = "gdi";
 		public bool PreserveWeaponTemplates { get; init; }
 		public bool NativeHover { get; init; }
 		public string VoxelImage { get; init; }
@@ -89,6 +90,33 @@ namespace OpenRA.Mods.CA.Modular
 				PreserveWeaponTemplates = true, VoxelImage = "mammothmk2",
 				ExtraPrerequisites = ", ~promotion.mammoth_mkii, miss.gdi",
 				Summary = "Mk II: Railgun + Bodenraketen + AA; regenerierender Walker. Originalfreischaltung erforderlich."
+			},
+			new CustomVehicleAssembly("nod-light-hull", "LTNK", "ltnk", "Turreted",
+				new[] { "tracks-standard" }, new[] { "diesel" }, "heavy", "light-cannon-mount", "light-cannon", new[] { "light-tank-shell" },
+				new Dictionary<string, string> { { "Armament", "30mm" } })
+			{
+				Faction = "nod", PreserveWeaponTemplates = true,
+				Summary = "Nod-Leichtpanzer: vollstaendige 30-mm-Kanone, Rueckstoss, Fahrer- und Upgrade-Verhalten."
+			},
+			new CustomVehicleAssembly("buggy-hull", "BGGY", "buggy", "Turreted@PRIMARY",
+				new[] { "wheels-light" }, new[] { "diesel-light" }, "light", "scout-mg-mount", "scout-mg", new[] { "scout-mg-rounds" },
+				new Dictionary<string, string> { { "Armament@PRIMARY", "M60mgTD" } }, "scout-sensors")
+			{
+				Faction = "nod", ExtraPrerequisites = ", ~!promotion.buggy.pdl, ~!promotion.buggy.aa"
+			},
+			new CustomVehicleAssembly("designer-nod-artillery-hull", "ARTY.nod", "artynod", null,
+				new[] { "tracks-light-artillery" }, new[] { "diesel" }, "light", "field-artillery-mount", "field-artillery", new[] { "field-artillery-he" },
+				new Dictionary<string, string> { { "Armament", "155mmTD" } })
+			{
+				Faction = "nod", PreserveWeaponTemplates = true,
+				Summary = "Nod-Artillerie: 155mmTD, feste Frontwaffe, leichtes Kettenfahrprofil und Munitionsexplosion."
+			},
+			new CustomVehicleAssembly("designer-ssm-hull", "SSM", "ssm", "Turreted",
+				new[] { "designer-ssm-gear" }, new[] { "diesel" }, "light", "designer-ssm-mount", "designer-ssm-weapons", new[] { "designer-ssm-payload" },
+				new Dictionary<string, string> { { "Armament", "HonestJohn" } })
+			{
+				Faction = "nod", PreserveWeaponTemplates = true, ExtraPrerequisites = ", tmpl, ~promotion.ssm_launcher",
+				Summary = "SSM: Napalmraketen, Munitionsvorrat, Nachladen und variable Raketengrafik. Freischaltung + Tempel erforderlich."
 			}
 		};
 
@@ -96,7 +124,8 @@ namespace OpenRA.Mods.CA.Modular
 
 		public string[] CompatibleOptions(CustomFactionProfile p, string role)
 		{
-			return role == "chassis" ? Options(role) : Assembly(p).Choices[role].Where(Options(role).Contains).ToArray();
+			return role == "chassis" ? Assemblies.Where(a => a.Faction == ComponentFaction(p.BaseFaction))
+				.Select(a => a.Hull).Where(Options(role).Contains).ToArray() : Assembly(p).Choices[role].Where(Options(role).Contains).ToArray();
 		}
 
 		// Only explicit UI selection normalizes linked parts. Loading profiles never silently repairs invalid data.
@@ -121,7 +150,7 @@ namespace OpenRA.Mods.CA.Modular
 			if (a.Summary != null) return a.Summary;
 			var range = N(Part(p, "weapon"), "range_cells");
 			var burst = N(Part(p, "carrier"), "burst");
-			if (a.Actor == "HMMV")
+			if (a.Actor == "HMMV" || a.Actor == "BGGY")
 			{
 				var sensors = N((Newtonsoft.Json.Linq.JObject)catalog["components"]["scout-sensors"], "cost");
 				return $"MG: Boden, Reichweite {range:0.##}, {burst:0}er-Salve. Sensoren enthalten (+{sensors:0} Credits).";

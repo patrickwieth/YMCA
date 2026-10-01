@@ -4,10 +4,14 @@
 
 Restart the locally built game, then **Eigene Fraktion**.
 
-- The base is still **GDI / Eagle**, with its ordinary roster retained.
+- Select **GDI / Eagle** or **Nod / Black Hand** in the top-right base dropdown.
+  The ordinary roster of the selected base remains available. Switching needs confirmation:
+  the current faction is first saved in the library, then a fresh independent roster is
+  created. Existing library names are reserved; a suffix prevents accidental replacement.
+  This is not a conversion or mixing of existing GDI and Nod designs.
 - **Neu / Kopie / Entfernen** manage up to **16 own vehicle designs**. Select a
   design in the numbered dropdown to edit it. Removing a design needs confirmation.
-- **Vorlagen** adds missing supported GDI assemblies in one click. It
+- **Vorlagen** adds missing supported assemblies for the selected base in one click. It
   does not replace your existing designs, names or selections.
 - **Einbaugruppe** selects the compatible hull/weapon/artwork group. Incompatible
   parts are explicitly reset to valid defaults; compatible motor/generator choices
@@ -24,16 +28,18 @@ Restart the locally built game, then **Eigene Fraktion**.
   its skirmish lobby. No Python installation is needed by players.
 
 Use the first player slot and start **A**. One example of **every configured design**
-stands near that start, alongside the stock MTNK comparison, enemy target and Carryall.
+stands near that start. GDI keeps its MTNK comparison and Carryall; Nod gets an LTNK
+comparison and no free GDI Carryall. Both maps retain the enemy target.
 Moving designs are additional vehicle-factory choices, grouped at palette orders
-1000 onward under your vehicle names. The stock GDI units remain available too.
+1000 onward under your vehicle names. The selected base's stock units remain available too.
 The highest selected tech tier is required for production; Hum-Vees also retain the
 stock GDI factory prerequisite. Stationary designs remain **preplaced / Carryall-only**.
 Their production is intentionally disabled until a real factory/deployment workflow exists.
 
 ## Supported assemblies
 
-There are currently **42 supported component combinations across eight GDI families**:
+There are currently **50 supported component combinations across twelve families**:
+eight GDI families (42 combinations) and four Nod families (8 combinations).
 
 | Assembly | Existing actor / full weapon bindings | Reference price / HP / speed | Configured default |
 |---|---|---|---|
@@ -45,6 +51,10 @@ There are currently **42 supported component combinations across eight GDI famil
 | Native Hover MLRS | Four ground/AA/upgrade channels | 1150 / 18000 / 113 | 1150 / 18000 / 113 |
 | Disruptor | SonicZap + visual beam + both upgrade channels | 1500 / 75000 / 56 | 1500 / 75000 / 56 |
 | Mammoth Mk II | Railgun, ground missiles, AA missiles, regeneration | 10000 / 350000 / 35 | 10000 / 350000 / 35 |
+| Nod light tank | LTNK; complete 30mm package | 625 / 41250 / 100 | 625 / 41250 / 100 |
+| Nod buggy | BGGY; M60mgTD + sensors | 350 / 14000 / 157 | 350 / 14000 / 157 |
+| Nod artillery | ARTY.nod; 155mmTD, frontal attack, ammunition explosion | 550 / 10000 / 56 | 550 / 10000 / 56 |
+| Nod SSM | SSM; HonestJohn, ammo pool/reload and missile graphics | 1050 / 15000 / 82 | 1050 / 15000 / 82 |
 
 These exact default scalar matches are constructed calibration fits, NOT independent
 balance validation. Allocations for mass, power and component prices remain experimental.
@@ -68,9 +78,9 @@ balance validation. Allocations for mass, power and component prices remain expe
 Parts remain conceptually separate, but graphically bound assemblies prevent a Hum-Vee
 MG or MLRS launcher from silently becoming a cannon-looking tank. MG/MLRS rendering
 inherits their complete original actor templates, not just the MTNK with another weapon.
-Scalar weapon fields for the original three groups are compiled from JSON; complete
+Scalar weapon fields for the original three groups and the Buggy are compiled from JSON; complete
 inherited projectile and warhead packages remain intact. MLRS secondary range/damage/reload
-are explicit independent fields. The five new complex families use **template-locked weapon
+are explicit independent fields. The other families use **template-locked weapon
 packages** instead: each channel derives its complete source weapon without scalar overrides.
 Their JSON records configure physical/economic values, not a fake single damage/cadence for
 a multi-weapon or beam system. Neutral calculator cadence fields are not emitted as rules.
@@ -93,6 +103,19 @@ The custom GDI roster allows selected GDI families independently of their origin
 unit-list restrictions (e.g. Talon Juggernaut / ZOCOM Disruptor); the base remains Eagle, so
 inherited nation-specific upgrades are only active if that owner actually grants them. Global
 unit availability, existing faction rules and the original actors are not modified.
+
+Nod uses native faction admission, not just a filtered menu: mixed-faction profiles and
+stationary Nod builds are rejected even when loading hand-edited JSON. New/copy/templates
+use the selected base. The efficient generator is explicitly admitted for Nod with the
+same shared price and ratings; broad JSON calibration and workbook files are not edited.
+Buggy sensors are charged once (50 credits / 50 kg / 5 kWe), just like Hum-Vee sensors.
+Its PDL/AA promotion exclusions remain; those variants are not yet designer assemblies.
+SSM keeps its original Temple and `promotion.ssm_launcher` requirements, two-round ammo
+pool, reload behavior, aiming movement pause and zero/one/two-missile turret sequences.
+Nod artillery retains `lighttracked`; SSM retains stock `wheeled` despite tracked art.
+No generic reload/damage overrides are inserted into those complete weapon templates.
+`HonestJohn` uses the exact weapon declaration case for MiniYaml inheritance, unlike the
+case-insensitive weapon lookup performed by an Armament.
 
 The frozen actor and weapon IDs are unique per design and stable across renaming/reordering.
 A copied design gets a new ID and an independent component dictionary. All designs are
@@ -117,9 +140,10 @@ duplicate IDs/names and budget overflow fail closed. CP-bearing modules are not 
   lab map remains fixed. A fresh default bot is added; normal skirmishes retain stock
   behavior. Stock AI build lists are not yet extended to deliberately produce new IDs.
 
-The test map renames the existing `eagle` faction's display name via `FactionCA@11`;
-its internal faction ID, original roster and commander behavior remain intact. Other
-Eagle players on that snapshot can produce the same custom roster. This is not yet
+The test map renames the selected faction's display name: `eagle` / `FactionCA@11` or
+`blackh` / `FactionCA@13`. Both playable slots are locked to that base; production requires
+its `structures.<base>` token. Internal faction IDs, original rosters and commander behavior
+remain intact. Other players of that base on the snapshot can produce the same custom roster. This is not yet
 independent per-player faction admission/synchronization.
 
 ## Scope still open
@@ -137,6 +161,7 @@ needs live validation. There is no dedicated water course on this terrain yet.
 - `OpenRA.Mods.CA/Modular/CustomVehicleAssembly.cs`: explicit graphics/trait bindings.
 - `CustomFactionDesign.cs`: native calculations and actor/weapon/map generation.
 - `CustomFactionRoster.cs`: roster validation, stable IDs, migration and library saving.
+- `CustomFactionBases.cs`: explicit base bindings and independent new-roster creation.
 - `OpenRA.Mods.CA/Widgets/Logic/CustomFactionLogic.cs`: full editor and test launch.
 - `mods/ca/modular/designer-catalog.json`: generated supported component snapshot.
 - `tools/modular/export_designer_catalog.py`: developer-only exporter and independent
@@ -156,17 +181,21 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **65 Python tests**, **40 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **67 Python tests**, **51 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
 
 Native tests cover schema migration, roundtrip/backups, library isolation, shared budget,
 copy independence, namespace stability, invalid combinations and weapon-channel preservation.
-All 42 offered numeric combinations are checked against the independent Python calculator.
+All 50 offered numeric combinations are checked against the independent Python calculator.
 The earlier six-design sample includes tank hover and both stationary hull variants.
 The eight-family sample can be exported with `MODULAR_GDI_EXPORT=/absolute/new-gdi.oramap`.
-See `tools/modular/designer-gdi-validation.md` for the current differential result.
+See `tools/modular/designer-gdi-validation.md` for the GDI differential result.
+The Nod sample exports with `MODULAR_NOD_EXPORT=/absolute/new-nod.oramap` and reports
+**1685 control / 1691 generated errors**, six inherited diagnostics and **zero unexpected
+new errors**; see `tools/modular/designer-nod-validation.md`. Native tests also cover faction
+filtering/rejection, independent library names, sensor accounting and both player slots.
 
 The earlier single-design menu/lobby path was confirmed by the user. This expanded
 multi-design UI, factory production, mixed-weapon firing and transport still need

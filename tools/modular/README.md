@@ -2,13 +2,16 @@
 
 ## Latest: native main-menu faction editor
 
-**Eigene Fraktion** now supports GDI/Eagle's normal roster plus **up to 16 custom
+**Eigene Fraktion** supports **GDI/Eagle or Nod/Black Hand**, plus **up to 16 custom
 vehicle designs**, with New/Copy/Remove, shared budget, named faction save/load and
-in-memory migration of existing single-tank profiles. **Vorlagen** adds missing
-**eight GDI families**: tank, MG scout, MLRS, Mammoth, Juggernaut, native Hover MLRS,
-Disruptor and Mammoth Mk II. Their **42 supported combinations** use compatible
+in-memory migration of existing single-tank profiles. The base selector saves the
+previous faction in the library before starting an independent roster with a free name.
+**Vorlagen** adds missing families for that base: **eight GDI families** (tank, MG scout,
+MLRS, Mammoth, Juggernaut, native Hover MLRS, Disruptor, Mammoth Mk II) and **four Nod
+families** (light tank, Buggy, artillery, SSM). Their **50 supported combinations** use compatible
 artwork and full existing weapons, including helper, visual and conditional upgrade channels.
-The Hum-Vee's mandatory sensors are explicitly counted once in price/mass/power.
+Hum-Vee/Buggy mandatory sensors are counted once. Mixed-faction and stationary Nod
+profiles fail native validation. Both test-map player slots use the selected base.
 
 **Speichern und Testspiel** freezes the complete roster into a separate user map.
 Each design is preplaced near start A; moving designs are additional named factory
@@ -17,16 +20,21 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**65 Python + 40 native tests pass**; all 42 numeric combinations match the independent
+**67 Python + 51 native tests pass**; all 50 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
-**zero unexpected new errors**; see `designer-gdi-validation.md`. This is NOT a
+**zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential
+is **1685 / 1691**, six inherited diagnostics, **zero unexpected new errors**; see
+`designer-nod-validation.md`. This is NOT a
 clean full-mod lint or a live gameplay pass. Expanded UI/gameplay checks remain pending.
 
-The five complex new families use template-locked weapon packages: no fake SpreadDamage
+Complex families use template-locked weapon packages: no fake SpreadDamage
 on a dummy aim weapon, no erased beam behavior, no colliding upgrade-channel names.
-Hover MLRS and Mk II keep their original special production unlock requirements.
-Other base factions and further vehicle families are not integrated yet.
+Hover MLRS, Mk II and SSM keep their special production unlock requirements.
+SSM preserves ammo pools, reloading and missile graphics; Nod artillery uses the full
+155mmTD package and original death explosion. Efficient generators are admitted for Nod
+at the same shared price/performance. Broad calibration JSON and Excel files are untouched.
+China, Allies, Soviets, Scrin and further GDI/Nod families are not integrated yet.
 
 The confirmed fix preventing ordinary skirmish restoration from replacing the chosen
 snapshot remains active. Test sessions also do not overwrite ordinary skirmish setups.

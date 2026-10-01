@@ -82,7 +82,7 @@ public class GdiFamilyTests
     public void AllEightFamiliesFitTogetherAndFreezeInOneMap()
     {
         var c = Compiler; var r = new CustomFactionRoster();
-        foreach (var hull in c.Options("chassis").Skip(1))
+        foreach (var hull in c.CompatibleOptions(new CustomFactionProfile(), "chassis").Skip(1))
         {
             var d = c.AddDesign(r); c.SelectPart(c.Profile(r, d), "chassis", hull);
         }

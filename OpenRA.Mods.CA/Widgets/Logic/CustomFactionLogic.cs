@@ -34,7 +34,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		[ObjectCreator.UseCtor]
 		public CustomFactionLogic(Widget widget, ModData modData, Action onExit, Action<string> onPlay)
 		{
-			string message = "GDI-Roster plus eigene Fahrzeuge. Vorlagen fuegt die verfuegbaren Fahrzeugfamilien hinzu.";
+			string message = "Basis-Roster plus eigene Fahrzeuge. Vorlagen fuegt die verfuegbaren Fahrzeugfamilien hinzu.";
 			widget.Get<LabelWidget>("STATUS").GetText = () => message;
 			bool dirty = false;
 			void DiscardThen(Action action)
@@ -54,7 +54,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			catch (Exception e)
 			{
 				message = "Bausteinkatalog nicht geladen: " + e.Message;
-				foreach (var id in new[] { "SAVE", "PLAY", "ADD", "COPY", "DELETE", "TEMPLATES" })
+				foreach (var id in new[] { "SAVE", "PLAY", "ADD", "COPY", "DELETE", "TEMPLATES", "BASE" })
 					widget.Get<ButtonWidget>(id).Disabled = true;
 				return;
 			}
@@ -109,6 +109,36 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			widget.Get<LabelWidget>("POWER").GetText = () => power;
 			widget.Get<LabelWidget>("WARNING").GetText = () => warning;
 			widget.Get<LabelWidget>("WEAPON_STATS").GetText = () => weapons;
+
+			var basis = widget.Get<DropDownButtonWidget>("BASE");
+			basis.GetText = () => CustomFactionDesign.BaseLabel(roster.BaseFaction);
+			basis.IsDisabled = () => !valid;
+			basis.OnMouseDown = _ =>
+			{
+				ScrollItemWidget Setup(string id, ScrollItemWidget template)
+				{
+					var item = ScrollItemWidget.Setup(template, () => roster.BaseFaction == id, () =>
+					{
+						if (id == roster.BaseFaction) return;
+						ConfirmationDialogs.ButtonPrompt(modData, "Neue Basisfraktion",
+							"Aktuelle Fraktion in der Bibliothek sichern und eine neue Fraktion beginnen?",
+							onConfirm: () =>
+							{
+								try
+								{
+									compiler.SaveLibrary(libraryPath, roster);
+									var next = compiler.NewRoster(id, libraryPath);
+									roster = next; factionName.Text = roster.Name; Select(0); Refresh(true);
+									message = "Vorherige Fraktion gesichert. Neue Basis gewaehlt; Vorlagen ergaenzt passende Fahrzeuge.";
+								}
+								catch (Exception e) { message = "Basiswechsel fehlgeschlagen: " + e.Message; }
+							}, confirmText: "Sichern und wechseln", onCancel: () => { }, cancelText: "Abbrechen");
+					});
+					item.Get<LabelWidget>("LABEL").GetText = () => CustomFactionDesign.BaseLabel(id);
+					return item;
+				}
+				basis.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", CustomFactionDesign.BaseFactions.Length * 30, CustomFactionDesign.BaseFactions, Setup);
+			};
 
 			var designs = widget.Get<DropDownButtonWidget>("DESIGN");
 			designs.GetText = () => $"{selected + 1}/{roster.Designs.Count}  {roster.Designs[selected].Name}";
@@ -171,7 +201,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				var before = compiler.SerializeRoster(roster);
 				try
 				{
-					foreach (var hull in compiler.Options("chassis"))
+					foreach (var hull in compiler.CompatibleOptions(Profile(), "chassis"))
 					{
 						if (roster.Designs.Any(d => d.Parts["chassis"] == hull)) continue;
 						var d = compiler.AddDesign(roster);
