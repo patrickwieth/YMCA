@@ -68,6 +68,11 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 			catch (Exception e) { message = "Profil nicht geladen; Standard angezeigt. Alte Datei bleibt bis Speichern erhalten. " + e.Message; }
 
+			var preview = widget.Get<CustomVehiclePreviewWidget>("VEHICLE_PREVIEW");
+			widget.Get<LabelWidget>("PREVIEW_STATUS").GetText = () => preview.Status;
+			var rotation = widget.Get<ButtonWidget>("PREVIEW_ROTATION");
+			rotation.GetText = () => preview.Rotating ? "Rotation anhalten" : "Langsam drehen";
+			rotation.OnClick = () => preview.Rotating = !preview.Rotating;
 			var selected = 0;
 			var factionName = widget.Get<TextFieldWidget>("FACTION_NAME");
 			var tankName = widget.Get<TextFieldWidget>("TANK_NAME");
@@ -86,6 +91,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					var budget = compiler.ValidateRoster(roster);
 					var p = Profile();
 					var v = compiler.Calculate(p);
+					preview.SetVehicle(compiler.PreviewActor(p), p.BaseFaction);
 					stats = $"Preis {v.Cost:0}   HP {v.Hp:0}   Tempo {v.Speed}   CP 0   Tech {v.Tech}   Entwuerfe {budget}/50";
 					power = $"Masse {v.Mass:0} kg   Elektrisch {v.Electric:0.##} kW   Antriebsreserve {v.Reserve:0.##} kW";
 					weapons = compiler.WeaponSummary(p);
@@ -156,7 +162,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			foreach (var role in CustomFactionDesign.Roles)
 			{
 				var choice = widget.Get<DropDownButtonWidget>(role.ToUpperInvariant());
-				choice.GetText = () => compiler.Label(roster.Designs[selected].Parts[role]);
+				choice.GetText = () => WidgetUtils.TruncateText(compiler.Label(roster.Designs[selected].Parts[role]),
+					choice.Bounds.Width - choice.LeftMargin - choice.RightMargin, Game.Renderer.Fonts[choice.Font]);
 				choice.OnMouseDown = _ =>
 				{
 					var options = compiler.CompatibleOptions(Profile(), role);

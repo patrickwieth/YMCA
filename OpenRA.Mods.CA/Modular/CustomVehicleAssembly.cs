@@ -106,6 +106,27 @@ namespace OpenRA.Mods.CA.Modular
 				ExtraPrerequisites = ", ~promotion.mammoth_mkii, miss.gdi",
 				Summary = "Mk II: Railgun + Bodenraketen + AA; regenerierender Walker. Originalfreischaltung erforderlich."
 			},
+			new CustomVehicleAssembly("designer-titan-hull", "TITN", "titn", "Turreted@PRIMARY",
+				new[] { "walker-heavy" }, new[] { "diesel" }, "heavy", "designer-titan-mount", "designer-titan-weapon", new[] { "designer-titan-payload" },
+				new Dictionary<string, string> { { "Armament@PRIMARY", "TitanGun" }, { "Armament@SECONDARY", "TitanTusk" } })
+			{
+				PreserveWeaponTemplates = true, ExtraPrerequisites = ", ~!upg.titan",
+				Summary = "Titan: Sprite-Walker mit Kanone, Raketen, Regeneration und originalem Turm-/Laufverhalten."
+			},
+			new CustomVehicleAssembly("designer-slingshot-hull", "SLNG", "slng", "Turreted",
+				new[] { "gdi-light-hover" }, new[] { "diesel-light" }, "light", "designer-slingshot-mount", "designer-slingshot-weapon", new[] { "designer-slingshot-payload" },
+				new Dictionary<string, string> { { "Armament@PRIMARY", "SlingshotAA" } })
+			{
+				PreserveWeaponTemplates = true, NativeHover = true, ExtraPrerequisites = ", ~promotion.slingshot",
+				Summary = "Slingshot: echte leichte Hover-Flak, nur Luftziele; Originalfreischaltung erforderlich."
+			},
+			new CustomVehicleAssembly("designer-marv-hull", "MARV", "marv", "Turreted",
+				new[] { "tracks-superheavy" }, new[] { "diesel-heavy" }, "heavy", "designer-marv-mount", "designer-marv-weapon", new[] { "designer-marv-payload" },
+				new Dictionary<string, string> { { "Armament@PRIMARY", "IonZap.Marv" } })
+			{
+				PreserveWeaponTemplates = true, ExtraPrerequisites = ", ~promotion.marv, miss.gdi",
+				Summary = "MARV: Dreifach-Ionenwaffe, Regeneration und Ernte beim Ueberfahren; Originalfreischaltung erforderlich."
+			},
 			new CustomVehicleAssembly("nod-light-hull", "LTNK", "ltnk", "Turreted",
 				new[] { "tracks-standard" }, new[] { "diesel" }, "heavy", "light-cannon-mount", "light-cannon", new[] { "light-tank-shell" },
 				new Dictionary<string, string> { { "Armament", "30mm" } })
@@ -263,6 +284,8 @@ namespace OpenRA.Mods.CA.Modular
 					if (!allowed.Contains(p.Parts[r])) p.Parts[r] = allowed[0];
 				}
 		}
+
+		public string PreviewActor(CustomFactionProfile p) => Assembly(p).Actor;
 
 		public bool IsNativeHover(CustomFactionProfile p) => Assembly(p).NativeHover;
 

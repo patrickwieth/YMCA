@@ -1,12 +1,12 @@
 # Was im Fahrzeugdesigner noch fehlt
 
-Stand: native Bindings nach Scrin-Erweiterung `5386db78`; aus aktuellen Regeln und Compiler-Bindungen erzeugt.
+Stand: aktuelle native Bindings einschließlich Titan, Slingshot und MARV; aus Regeln und Compiler-Bindungen erzeugt.
 
 **Fehlend bedeutet nicht im Designer konfigurier-/kompilierbar.** Die normalen Fraktionsroster bleiben erhalten;
 diese Fahrzeuge können dort bereits existieren. Tabellen-/Excel-Einträge und vorplatzierte Carryalls zählen nicht als Designer-Unterstützung.
 
-In den sechs Bodenfahrzeug-Dateien: **80 vollständig fehlende Fraktions-Familiengruppen**:
-**61 Kampf-/bewaffnete Transportgruppen**, **19 Wirtschafts-/Bau-/Transport-/Unterstützungsgruppen**.
+In den sechs Bodenfahrzeug-Dateien: **77 vollständig fehlende Fraktions-Familiengruppen**:
+**58 Kampf-/bewaffnete Transportgruppen**, **19 Wirtschafts-/Bau-/Transport-/Unterstützungsgruppen**.
 Das sind redaktionelle Gruppen mit lokaler Produktionsdeklaration, keine vollständig aufgelöste Baubarkeitsprüfung.
 Fraktionszuordnung folgt der Quelldatei, nicht exklusiver Verfügbarkeit. APC2, AMCV und HAR2 werden von GDI/Nod geteilt.
 APCs, kämpfende Besatzungstransporter und Selbstmordfahrzeuge stehen unter Kampf; EMP/ECM/Radar unter Unterstützung.
@@ -15,13 +15,10 @@ Wracks, Projektile, Dummy-Akteure und angehängte Hilfsobjekte werden nicht als 
 
 ## 1. Vollständig fehlende Boden-Kampffahrzeuge
 
-### GDI (7)
+### GDI (4)
 
 - **Scout Drone** (`GDRN`)
-- **M.A.R.V.** (`MARV`)
 - **Mini Drone** (`MDRN`)
-- **Slingshot** (`SLNG`)
-- **Titan** (`TITN`)
 - **Vulcan** (`VULC`)
 - **X-O Powersuit** (`XO`)
 
@@ -150,6 +147,7 @@ Bereits geerbte bedingte Waffen (z.B. T-34 Cluster, Dragon Black Napalm, Emperor
 - **GDI / MLRS** (vorhanden: MLRS): `MLRS.AA`, `MLRS.Hailstorm`
 - **GDI / MTNK** (vorhanden: MTNK): `MTNK.PDL`, `MTNK.Reflector`
 - **GDI / Mammoth** (vorhanden: Mammoth): `Mammoth.Ion`, `Mammoth.Ion.Reflector`, `Mammoth.Ion.PDL`, `Mammoth.Nanite`, `Mammoth.Nanite.Reflector`, `Mammoth.Nanite.PDL`, `Mammoth.Hover`, `Mammoth.Hover.Reflector`, `Mammoth.Hover.PDL`
+- **GDI / TITN** (vorhanden: TITN): `TITN.Battle`, `TITN.Battle.PDL`, `TITN.Battle.Reflector`, `TITN.Railgun`, `TITN.Railgun.PDL`, `TITN.Railgun.Reflector`
 - **GDI / hmlrs** (vorhanden: hmlrs): `hmlrs.Reflector`, `hmlrs.PDL`
 - **Nod / BGGY** (vorhanden: BGGY): `BGGY.PDL`, `BGGY.AA`
 - **Nod / LTNK** (vorhanden: LTNK): `LTNK.Laser`
@@ -189,12 +187,9 @@ Basisakteure und Varianten als Prüfliste; nicht als zusätzliche Familien zähl
 - **China / chnukecann**: `chnukecann`, `chnukecann.Range`, `chnukecann.Neutron`
 - **China / choutpost**: `choutpost`, `choutpost.Propaganda`, `choutpost.Propaganda.PDL`, `choutpost.Propaganda.Reflector`, `choutpost.Bunker`, `choutpost.Bunker.PDL`, `choutpost.Bunker.Reflector`
 - **GDI / GDRN**: `GDRN`
-- **GDI / MARV**: `MARV`
 - **GDI / MDRN**: `MDRN`
 - **GDI / MEMP**: `MEMP`, `MEMP.Volatile`, `MEMP.Ranged`, `MEMP.Ranged.Improved`
 - **GDI / MSAR**: `MSAR`, `MSAR.PDL`
-- **GDI / SLNG**: `SLNG`
-- **GDI / TITN**: `TITN`, `TITN.Battle`, `TITN.Battle.PDL`, `TITN.Battle.Reflector`, `TITN.Railgun`, `TITN.Railgun.PDL`, `TITN.Railgun.Reflector`
 - **GDI / VULC**: `VULC`
 - **GDI / XO**: `XO`
 - **Nod / AMCV**: `AMCV`, `AMCV.Nukular`

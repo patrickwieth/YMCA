@@ -6,11 +6,12 @@ from list_missing_vehicles import REPO, inventory, native_actors, report
 
 class MissingVehicleTests(unittest.TestCase):
     def test_actual_native_bindings_not_spreadsheet_coverage(self):
-        self.assertEqual(len(native_actors()), 28)
+        self.assertEqual(len(native_actors()), 31)
         _, families = inventory()
         missing = [f for f in families if not f['native'] and f['status'] == 'production candidate']
-        self.assertEqual(Counter(f['role'] for f in missing), {'combat': 61, 'support': 19})
-        self.assertIn('MARV', [f['family'] for f in missing])
+        self.assertEqual(Counter(f['role'] for f in missing), {'combat': 58, 'support': 19})
+        self.assertNotIn('MARV', [f['family'] for f in missing])
+        self.assertIn('VULC', [f['family'] for f in missing])
         self.assertNotIn('DEVO', [f['family'] for f in missing])
         self.assertNotIn('T-34', [f['family'] for f in missing])
 

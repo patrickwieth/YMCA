@@ -48,7 +48,7 @@ def report():
     missing = [f for f in families if not f['native'] and f['status'] == 'production candidate']
     counts = {role: sum(f['role'] == role for f in missing) for role in ('combat', 'support')}
     lines = ['# Was im Fahrzeugdesigner noch fehlt', '',
-        'Stand: native Bindings nach Scrin-Erweiterung `5386db78`; aus aktuellen Regeln und Compiler-Bindungen erzeugt.', '',
+        'Stand: aktuelle native Bindings einschließlich Titan, Slingshot und MARV; aus Regeln und Compiler-Bindungen erzeugt.', '',
         '**Fehlend bedeutet nicht im Designer konfigurier-/kompilierbar.** Die normalen Fraktionsroster bleiben erhalten;',
         'diese Fahrzeuge können dort bereits existieren. Tabellen-/Excel-Einträge und vorplatzierte Carryalls zählen nicht als Designer-Unterstützung.', '',
         f'In den sechs Bodenfahrzeug-Dateien: **{len(missing)} vollständig fehlende Fraktions-Familiengruppen**:',

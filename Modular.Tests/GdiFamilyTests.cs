@@ -17,6 +17,9 @@ public class GdiFamilyTests
     [TestCase("designer-hmlrs-hull", 1150, 18000, 113, "hmlrs")]
     [TestCase("designer-disruptor-hull", 1500, 75000, 56, "DISR")]
     [TestCase("designer-mk2-hull", 10000, 350000, 35, "MAMMOTHMK2")]
+    [TestCase("designer-titan-hull", 2000, 100000, 50, "TITN")]
+    [TestCase("designer-slingshot-hull", 550, 13500, 133, "SLNG")]
+    [TestCase("designer-marv-hull", 10000, 200000, 40, "MARV")]
     public void DefaultsMatchFullActorBaseline(string hull, int price, int hp, int speed, string actor)
     {
         var c = Compiler; var p = Design(c, hull); var v = c.Calculate(p);
@@ -79,21 +82,21 @@ public class GdiFamilyTests
     }
 
     [Test]
-    public void AllEightFamiliesFitTogetherAndFreezeInOneMap()
+    public void AllGdiFamiliesFitTogetherAndFreezeInOneMap()
     {
         var c = Compiler; var r = new CustomFactionRoster();
         foreach (var hull in c.CompatibleOptions(new CustomFactionProfile(), "chassis").Skip(1))
         {
             var d = c.AddDesign(r); c.SelectPart(c.Profile(r, d), "chassis", hull);
         }
-        Assert.That(r.Designs.Count, Is.EqualTo(8));
+        Assert.That(r.Designs.Count, Is.EqualTo(11));
         Assert.That(c.ValidateRoster(r), Is.LessThanOrEqualTo(50));
         var lab = File.ReadAllBytes(Path.Combine(TestContext.CurrentContext.TestDirectory, "lab.oramap"));
         var bytes = c.CompileRosterMap(r, lab);
         Assert.That(c.CompileRosterMap(r, lab), Is.EqualTo(bytes));
         using var zip = new ZipArchive(new MemoryStream(bytes));
         using var reader = new StreamReader(zip.GetEntry("custom-faction.json").Open());
-        Assert.That(c.DeserializeRoster(reader.ReadToEnd()).Designs.Count, Is.EqualTo(8));
+        Assert.That(c.DeserializeRoster(reader.ReadToEnd()).Designs.Count, Is.EqualTo(11));
         var path = Environment.GetEnvironmentVariable("MODULAR_GDI_EXPORT");
         if (!string.IsNullOrEmpty(path))
         {

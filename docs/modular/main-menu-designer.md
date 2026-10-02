@@ -18,6 +18,12 @@ Restart the locally built game, then **Eigene Fraktion**.
   parts are explicitly reset to valid defaults; compatible motor/generator choices
   are retained. Other dropdowns only offer supported combinations for this group.
 - Rename each vehicle. Duplicate names within the faction are rejected.
+- A **240×192 actor preview on the right** shows the bound body/turret/barrel artwork,
+  using the actual sprite **and voxel** render pipelines. It rotates once every **24 seconds**;
+  the button pauses/resumes rotation. All headings are fitted together to avoid zoom pumping.
+  This is an inspection view, not a movement order: stationary vehicles can rotate in the
+  viewer without gaining body rotation in-game. Hover/stationary placeholder art stays labelled
+  in the existing warning. No actors are spawned and no live rules or simulation state change.
 - The displayed price, HP, speed, power, tech and weapon summary refer to the
   selected vehicle. **Entwuerfe …/50** is the shared development budget for the
   additional designs, not the existing base roster or commander-tree CP budget.
@@ -40,9 +46,9 @@ Their production is intentionally disabled until a real factory/deployment workf
 
 ## Supported assemblies
 
-There are currently **90 supported component combinations in 28 faction-specific bindings**:
-eight GDI bindings (42 combinations), four Nod (8), four China (16), four Allied (8),
-four Soviet (8) and four Scrin (8). These represent **27 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
+There are currently **96 supported component combinations in 31 faction-specific bindings**:
+eleven GDI bindings (48 combinations), four Nod (8), four China (16), four Allied (8),
+four Soviet (8) and four Scrin (8). These represent **30 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
 of the same field-artillery family, not two independently counted families.
 
 | Assembly | Existing actor / full weapon bindings | Reference price / HP / speed | Configured default |
@@ -75,6 +81,9 @@ of the same field-artillery family, not two independently counted families.
 | Seeker | SEEK; PlasmaDiscs, LightHoverVehicle | 800 / 20000 / 135 | 800 / 20000 / 135 |
 | Corrupter | CORR; CorrupterSpew, attack animation and death explosion | 700 / 45000 / 82 | 700 / 45000 / 82 |
 | Devourer | DEVO; DevourerLaser burst, floating turret, LightHoverVehicle | 1250 / 35000 / 90 | 1250 / 35000 / 90 |
+| Titan | TITN; TitanGun + TitanTusk, regeneration and walker/turret animation | 2000 / 100000 / 50 | 2000 / 100000 / 50 |
+| Slingshot | SLNG; SlingshotAA, native LightHoverVehicle | 550 / 13500 / 133 | 550 / 13500 / 133 |
+| MARV | MARV; IonZap.Marv, terrain harvesting and regeneration | 10000 / 200000 / 40 | 10000 / 200000 / 40 |
 
 These exact default scalar matches are constructed calibration fits, NOT independent
 balance validation. Allocations for mass, power and component prices remain experimental.
@@ -216,6 +225,26 @@ A copied design gets a new ID and an independent component dictionary. All desig
 validated before generation; incompatible parts, invalid faction, unsupported fields,
 duplicate IDs/names and budget overflow fail closed. CP-bearing modules are not enabled yet.
 
+## Preview and further GDI combat bindings
+
+Titan is **sprite-based in this mod**, not a voxel model: `sequences/gdi.yaml` uses `titan.shp`
+with 32 stand/run facings and a separate turret sequence at frame 416. It inherits `^TurretedWalker`.
+The native binding retains both weapon channels, regeneration, death explosion, transport offset
+and the `!upg.titan` production exclusion. Like Juggernaut, its Talon hull is admitted to the custom
+GDI roster without modifying vanilla national availability.
+Slingshot keeps its AA-only weapon, real light-hover behavior, death explosion and promotion.
+MARV retains its ion burst, health regeneration, terrain-conditional CashTrickler/MARVest behavior
+and `promotion.marv` / `miss.gdi` gates; no second harvesting implementation is injected.
+These are the first three additions from the requested remaining combat inventory, **not all 61**.
+The refreshed inventory still lists **58 wholly missing ground combat groups** (plus variants).
+
+The viewer uses the bound stock actor as the graphics template. It does not simulate upgrades,
+firing, passengers, damage or all conditional combat states. Initial visual conditions and ammo
+are resolved on preview-only clones: for example one Emperor body for Tank General and the
+loaded SSM turret. Original trait info is not mutated. Models/sequences/palettes use the current
+menu world's caches; asset/render failures disable only the preview and write the detailed error
+to the debug log. CPU trait checks are not proof of GPU rendering on the user's machine.
+
 ## Persistence and match isolation
 
 - Active profile: `<OpenRA SupportDir>/Modular/custom-faction.json`.
@@ -251,7 +280,7 @@ This is both a multi-design editor and an expanded native compiler, but **not al
 catalog components, complete faction rosters or all subfactions**. It still uses the known lab terrain, not arbitrary
 map selection. CP unlocks, additional vehicle families, freely composable multiple mounts,
 passenger loadouts, stationary factory/deployment handling, real hover/platform art,
-main-menu vehicle previews and dependency-aware asset loading remain future work.
+full preview state simulation and dependency-aware asset loading remain future work.
 Normal map transfer/checksums carry snapshots; multiplayer/save-load equivalence still
 needs live validation. There is no dedicated water course on this terrain yet.
 
@@ -280,14 +309,14 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **76 Python tests**, **86 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **79 Python tests**, **92 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
 
 Native tests cover schema migration, roundtrip/backups, library isolation, shared budget,
 copy independence, namespace stability, invalid combinations and weapon-channel preservation.
-All 90 offered numeric combinations are checked against the independent Python calculator.
+All 96 offered numeric combinations are checked against the independent Python calculator.
 The earlier six-design sample includes tank hover and both stationary hull variants.
 The eight-family sample can be exported with `MODULAR_GDI_EXPORT=/absolute/new-gdi.oramap`.
 See `tools/modular/designer-gdi-validation.md` for the GDI differential result.
@@ -316,6 +345,12 @@ The Scrin sample exports with `MODULAR_SCRIN_EXPORT=/absolute/new-scrin.oramap` 
 new errors**; see `tools/modular/designer-scrin-validation.md`. Tests cover all four raw
 baselines, turn rates, weapon inheritance, native hover/no duplicate traits, Light armor,
 converter admission/isolation, shared ratings and Traveler map/snapshot selection.
+The expanded eleven-design GDI sample reports **1685 / 1701** errors, all 16 additions
+inherited, **zero unexpected diagnostics**: `tools/modular/designer-gdi-expanded-validation.md`.
+`--check-custom-faction-previews` validates all **31** preview-only trait bindings headlessly,
+including source isolation, single Emperor body and loaded SSM state. Separate tests cover
+24-second rotation, fitting, UI registration and Titan's sprite source. Interactive sprite/voxel
+rendering, clipping and pause/resume still require user confirmation.
 
 The earlier single-design menu/lobby path was confirmed by the user. This expanded
 multi-design UI, factory production, mixed-weapon firing and transport still need

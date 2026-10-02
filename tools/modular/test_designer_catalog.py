@@ -28,7 +28,8 @@ class DesignerCatalogTests(unittest.TestCase):
     def test_expanded_gdi_defaults_match_current_stock_scalar_fields(self):
         text = (REPO / 'mods/ca/rules/gdi/vehicles.yaml').read_text(encoding='utf-8')
         targets = {'juggernaut': 'Juggernaut', 'designer-mammoth-hull': 'Mammoth',
-                   'designer-hmlrs-hull': 'hmlrs', 'designer-disruptor-hull': 'DISR', 'designer-mk2-hull': 'MAMMOTHMK2'}
+                   'designer-hmlrs-hull': 'hmlrs', 'designer-disruptor-hull': 'DISR', 'designer-mk2-hull': 'MAMMOTHMK2', 'designer-titan-hull': 'TITN',
+                   'designer-slingshot-hull': 'SLNG', 'designer-marv-hull': 'MARV'}
         for hull, actor in targets.items():
             row = next(r for r in cases() if r['parts']['chassis'] == hull and r['parts']['generator'] == 'baseline-generator')
             block = re.search(r'(?ms)^' + re.escape(actor) + r':\n(.*?)(?=^\S|\Z)', text).group(1)
@@ -130,7 +131,7 @@ class DesignerCatalogTests(unittest.TestCase):
     def test_shipped_snapshot_and_native_fixtures_are_current(self):
         self.assertEqual(json.loads((REPO / 'mods/ca/modular/designer-catalog.json').read_text(encoding='utf-8')), data())
         self.assertEqual(json.loads(Path(__file__).with_name('designer-calculation-cases.json').read_text()), cases())
-        self.assertEqual(len(cases()), 90)
+        self.assertEqual(len(cases()), 96)
 
 
 if __name__ == '__main__':

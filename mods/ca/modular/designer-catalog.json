@@ -12,6 +12,9 @@
       "designer-hmlrs-hull",
       "designer-disruptor-hull",
       "designer-mk2-hull",
+      "designer-titan-hull",
+      "designer-slingshot-hull",
+      "designer-marv-hull",
       "nod-light-hull",
       "buggy-hull",
       "designer-nod-artillery-hull",
@@ -42,9 +45,10 @@
       "walker-heavy",
       "designer-heavy-tracks",
       "designer-mk2-legs",
+      "gdi-light-hover",
+      "tracks-superheavy",
       "tracks-light-artillery",
       "designer-ssm-gear",
-      "tracks-superheavy",
       "designer-prism-gear",
       "designer-flak-gear",
       "scrin-walker-gear",
@@ -77,6 +81,9 @@
       "designer-hmlrs-mount",
       "designer-disruptor-mount",
       "designer-mk2-mount",
+      "designer-titan-mount",
+      "designer-slingshot-mount",
+      "designer-marv-mount",
       "light-cannon-mount",
       "field-artillery-mount",
       "designer-ssm-mount",
@@ -103,6 +110,9 @@
       "designer-hmlrs-weapons",
       "designer-disruptor-weapons",
       "designer-mk2-weapons",
+      "designer-titan-weapon",
+      "designer-slingshot-weapon",
+      "designer-marv-weapon",
       "light-cannon",
       "field-artillery",
       "designer-ssm-weapons",
@@ -128,6 +138,9 @@
       "designer-hmlrs-payload",
       "designer-disruptor-payload",
       "designer-mk2-payload",
+      "designer-titan-payload",
+      "designer-slingshot-payload",
+      "designer-marv-payload",
       "light-tank-shell",
       "field-artillery-he",
       "designer-ssm-payload",
@@ -770,26 +783,6 @@
       "turn_speed": 16,
       "note": "Juggernaut physically walks, but its existing engine Locomotor is sheavytracked. Artwork does not determine locomotor semantics."
     },
-    "tracks-light-artillery": {
-      "display_name": "Leichtes Kettenlaufwerk",
-      "role": "running_gear",
-      "factions": [
-        "allies",
-        "nod"
-      ],
-      "tier": 0,
-      "cp": 0,
-      "tech": 1,
-      "mass": 1000,
-      "cost": 75,
-      "electric_kw": 0,
-      "locomotor": "lighttracked",
-      "kind": "tracks",
-      "max_mass": 14000,
-      "max_speed": 130,
-      "turn_speed": 64,
-      "note": "No infantry crush: exact existing lighttracked locomotor, not ordinary tracked."
-    },
     "tracks-superheavy": {
       "display_name": "Schwerlast-Kettenlaufwerk",
       "role": "running_gear",
@@ -809,6 +802,26 @@
       "max_mass": 45000,
       "max_speed": 90,
       "turn_speed": 16
+    },
+    "tracks-light-artillery": {
+      "display_name": "Leichtes Kettenlaufwerk",
+      "role": "running_gear",
+      "factions": [
+        "allies",
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "mass": 1000,
+      "cost": 75,
+      "electric_kw": 0,
+      "locomotor": "lighttracked",
+      "kind": "tracks",
+      "max_mass": 14000,
+      "max_speed": 130,
+      "turn_speed": 64,
+      "note": "No infantry crush: exact existing lighttracked locomotor, not ordinary tracked."
     },
     "diesel": {
       "role": "drive",
@@ -2964,6 +2977,291 @@
       },
       "source": "DEVO",
       "note": "Constructed baseline fit, not independently established economics or physical specifications. All four use stock Light armor."
+    },
+    "gdi-light-hover": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "running_gear",
+      "display_name": "Leichtes GDI-Schwebewerk",
+      "mass": 500,
+      "cost": 150,
+      "kind": "hover",
+      "locomotor": "lighthover",
+      "max_mass": 6000,
+      "max_speed": 180,
+      "turn_speed": 48
+    },
+    "designer-titan-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Titan carrier",
+      "cost": 300,
+      "mass": 1000,
+      "source": "TITN",
+      "weapons": [
+        "designer-titan-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator fields. Per-channel stock cadence/delay is inherited without overrides."
+    },
+    "designer-titan-weapon": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "weapon",
+      "display_name": "Titan weapon",
+      "cost": 300,
+      "mass": 1200,
+      "source": "TITN",
+      "ammunition": [
+        "designer-titan-payload"
+      ],
+      "template_locked": true
+    },
+    "designer-titan-payload": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Titan ammunition",
+      "cost": 200,
+      "mass": 1200,
+      "source": "TITN"
+    },
+    "designer-titan-hull": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Titan - gebundene Einbaugruppe",
+      "cost": 800,
+      "mass": 13000,
+      "hp": 100000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "walker-heavy",
+      "allowed_running_gear": [
+        "walker-heavy"
+      ],
+      "turn_speed_limit": 16,
+      "max_mass": 30000,
+      "reference_mass": 20500,
+      "reference_kw": 460.0,
+      "reference_speed": 50,
+      "max_speed": 50,
+      "allowed": {
+        "carrier": [
+          "designer-titan-mount"
+        ],
+        "drive": [
+          "diesel"
+        ]
+      },
+      "source": "TITN",
+      "note": "Constructed baseline fit. Includes bound stock abilities; mass/power/cost split remains experimental. No per-design rebates."
+    },
+    "designer-slingshot-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Slingshot carrier",
+      "cost": 50,
+      "mass": 100,
+      "source": "SLNG",
+      "weapons": [
+        "designer-slingshot-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator fields. Per-channel stock cadence/delay is inherited without overrides."
+    },
+    "designer-slingshot-weapon": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "weapon",
+      "display_name": "Slingshot weapon",
+      "cost": 100,
+      "mass": 100,
+      "source": "SLNG",
+      "ammunition": [
+        "designer-slingshot-payload"
+      ],
+      "template_locked": true
+    },
+    "designer-slingshot-payload": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "Slingshot ammunition",
+      "cost": 25,
+      "mass": 100,
+      "source": "SLNG"
+    },
+    "designer-slingshot-hull": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "Slingshot - gebundene Einbaugruppe",
+      "cost": 165,
+      "mass": 1500,
+      "hp": 13500,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "gdi-light-hover",
+      "allowed_running_gear": [
+        "gdi-light-hover"
+      ],
+      "turn_speed_limit": 48,
+      "max_mass": 6000,
+      "reference_mass": 2550,
+      "reference_kw": 170.0,
+      "reference_speed": 133,
+      "max_speed": 180,
+      "allowed": {
+        "carrier": [
+          "designer-slingshot-mount"
+        ],
+        "drive": [
+          "diesel-light"
+        ]
+      },
+      "source": "SLNG",
+      "note": "Constructed baseline fit. Includes bound stock abilities; mass/power/cost split remains experimental. No per-design rebates."
+    },
+    "designer-marv-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "MARV carrier",
+      "cost": 700,
+      "mass": 2000,
+      "source": "MARV",
+      "weapons": [
+        "designer-marv-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Neutral calculator fields. Per-channel stock cadence/delay is inherited without overrides."
+    },
+    "designer-marv-weapon": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 50,
+      "role": "weapon",
+      "display_name": "MARV weapon",
+      "cost": 3500,
+      "mass": 2000,
+      "source": "MARV",
+      "ammunition": [
+        "designer-marv-payload"
+      ],
+      "template_locked": true
+    },
+    "designer-marv-payload": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "ammunition",
+      "display_name": "MARV ammunition",
+      "cost": 1000,
+      "mass": 1000,
+      "source": "MARV"
+    },
+    "designer-marv-hull": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 3,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 10,
+      "role": "chassis",
+      "display_name": "MARV - gebundene Einbaugruppe",
+      "cost": 4250,
+      "mass": 25000,
+      "hp": 200000,
+      "carrier_slots": 1,
+      "equipment_slots": 0,
+      "equipment": [],
+      "default_running_gear": "tracks-superheavy",
+      "allowed_running_gear": [
+        "tracks-superheavy"
+      ],
+      "turn_speed_limit": 9,
+      "max_mass": 45000,
+      "reference_mass": 37000,
+      "reference_kw": 760.0,
+      "reference_speed": 40,
+      "max_speed": 90,
+      "allowed": {
+        "carrier": [
+          "designer-marv-mount"
+        ],
+        "drive": [
+          "diesel-heavy"
+        ]
+      },
+      "source": "MARV",
+      "note": "Constructed baseline fit. Includes bound stock abilities; mass/power/cost split remains experimental. No per-design rebates."
     }
   },
   "assemblies": [
@@ -3211,6 +3509,96 @@
         ],
         "ammunition": [
           "designer-mk2-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "designer-titan-hull"
+        ],
+        "running_gear": [
+          "walker-heavy"
+        ],
+        "drive": [
+          "diesel"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "designer-titan-mount"
+        ],
+        "weapon": [
+          "designer-titan-weapon"
+        ],
+        "ammunition": [
+          "designer-titan-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "designer-slingshot-hull"
+        ],
+        "running_gear": [
+          "gdi-light-hover"
+        ],
+        "drive": [
+          "diesel-light"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "light"
+        ],
+        "carrier": [
+          "designer-slingshot-mount"
+        ],
+        "weapon": [
+          "designer-slingshot-weapon"
+        ],
+        "ammunition": [
+          "designer-slingshot-payload"
+        ]
+      },
+      "built_in": []
+    },
+    {
+      "options": {
+        "chassis": [
+          "designer-marv-hull"
+        ],
+        "running_gear": [
+          "tracks-superheavy"
+        ],
+        "drive": [
+          "diesel-heavy"
+        ],
+        "generator": [
+          "baseline-generator",
+          "efficient-generator"
+        ],
+        "armor": [
+          "heavy"
+        ],
+        "carrier": [
+          "designer-marv-mount"
+        ],
+        "weapon": [
+          "designer-marv-weapon"
+        ],
+        "ammunition": [
+          "designer-marv-payload"
         ]
       },
       "built_in": []

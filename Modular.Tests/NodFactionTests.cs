@@ -36,7 +36,7 @@ public class NodFactionTests
     {
         var c = Compiler; var r = c.NewRoster("blackh"); var p = c.Profile(r, r.Designs[0]);
         Assert.That(c.CompatibleOptions(p, "chassis").Length, Is.EqualTo(4));
-        Assert.That(c.CompatibleOptions(new CustomFactionProfile(), "chassis").Length, Is.EqualTo(8));
+        Assert.That(c.CompatibleOptions(new CustomFactionProfile(), "chassis").Length, Is.EqualTo(11));
         Assert.Throws<ArgumentException>(() => c.SelectPart(p, "chassis", "gdi-battle-hull"));
         p.BaseFaction = "eagle";
         Assert.Throws<InvalidDataException>(() => c.Calculate(p));

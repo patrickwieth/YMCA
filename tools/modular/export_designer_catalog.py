@@ -12,6 +12,7 @@ import china_designer_expansion as china
 import allied_designer_expansion as allies
 import soviet_designer_expansion as soviet
 import scrin_designer_expansion as scrin
+import gdi_heavy_designer_expansion as gdi_heavy
 
 
 def assemblies():
@@ -26,7 +27,7 @@ def assemblies():
               'light', 'scout-mg-mount', 'scout-mg', ['scout-mg-rounds'], ['scout-sensors']),
         frame('designer-mlrs-hull', ['designer-mlrs-gear'], ['diesel', 'diesel-large'],
               'light', 'designer-rocket-mount', 'designer-rockets', ['designer-rocket-payload']),
-    ] + additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies() + scrin.additional_assemblies()
+    ] + additional_assemblies() + gdi_heavy.additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies() + scrin.additional_assemblies()
 
 
 def data():
@@ -70,6 +71,7 @@ def data():
     allies.extend_parts(parts)
     soviet.extend_parts(parts)
     scrin.extend_parts(parts)
+    gdi_heavy.extend_parts(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}
     for assembly in assemblies():
