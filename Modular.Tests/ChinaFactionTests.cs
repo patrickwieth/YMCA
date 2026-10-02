@@ -34,6 +34,42 @@ public class ChinaFactionTests
         Assert.That(c.Weapons(p), Does.Not.Contain("Warhead@"));
     }
 
+    [TestCase("inferno", "charty", 900, 12000, 90, 48)]
+    [TestCase("crawler", "chcrawl2", 1000, 45000, 125, 48)]
+    [TestCase("nuke", "chnukecann", 2400, 24000, 55, 8)]
+    [TestCase("bixi", "Bixi", 900, 16000, 56, 8)]
+    public void FurtherCombatBaselines(string key, string actor, int cost, int hp, int speed, int turn)
+    {
+        var c = Compiler; var p = Design(c, "china-combat-" + key + "-hull"); var v = c.Calculate(p);
+        Assert.That(v.Cost, Is.EqualTo(cost)); Assert.That(v.Hp, Is.EqualTo(hp));
+        Assert.That(v.Speed, Is.EqualTo(speed)); Assert.That(v.Turn, Is.EqualTo(turn));
+        Assert.That(c.Rules(p), Does.Contain("Inherits: " + actor + "\n"));
+        Assert.That(c.Rules(p), Does.Contain("~structures.chinatnk"));
+        Assert.That(c.Rules(p), Does.Not.Contain("\tCargo:"));
+        Assert.That(c.Rules(p), Does.Not.Contain("\tMissileSpawnerMasterCA:"));
+        Assert.That(c.Rules(p), Does.Not.Contain("\tGrantConditionOnDeploy:"));
+        Assert.That(c.Rules(p), Does.Not.Contain("\tAmmoPool:"));
+        Assert.That(c.Weapons(p), Does.Not.Contain("ReloadDelay:"));
+    }
+
+    [Test]
+    public void PassengerWeaponsAndSpawnedMissilesAreNotReplacedByGenericCannons()
+    {
+        var c = Compiler; var p = Design(c, "china-combat-crawler-hull");
+        Assert.That(c.Weapons(p), Is.Empty);
+        Assert.That(c.Rules(p), Does.Not.Contain("\tArmament"));
+        Assert.That(c.Rules(p), Does.Contain("chweap, ~!upg.crawler, ~structures.chinatnk"));
+        c.SelectPart(p, "chassis", "china-combat-nuke-hull");
+        Assert.That(c.Weapons(p), Does.Contain("Inherits: CHNukeCannon\n"));
+        Assert.That(c.Weapons(p), Does.Contain("Inherits: NukeCannonDummyAim\n"));
+        Assert.That(c.Rules(p), Does.Contain("~nuke_cannon.access, ~!upg.nuke_cannon"));
+        c.SelectPart(p, "chassis", "china-combat-bixi-hull");
+        Assert.That(c.Weapons(p), Does.Contain("Inherits: BixiLauncher\n"));
+        Assert.That(c.Rules(p), Does.Contain("~promotion.bixi_dragon"));
+        c.SelectPart(p, "chassis", "china-combat-inferno-hull");
+        Assert.That(c.Weapons(p), Does.Contain("Inherits: CHInfernoCannon.Black_Napalm\n"));
+    }
+
     [Test]
     public void DragonKeepsEveryDeployAndNapalmChannelWithoutOverridingStateTraits()
     {
@@ -83,7 +119,7 @@ public class ChinaFactionTests
     public void ChinaCannotMixNodGdiOrStationaryAndCopiesKeepTheirBase()
     {
         var c = Compiler; var r = c.NewRoster("chinatnk"); var p = c.Profile(r, r.Designs[0]);
-        Assert.That(c.CompatibleOptions(p, "chassis").Length, Is.EqualTo(4));
+        Assert.That(c.CompatibleOptions(p, "chassis").Length, Is.EqualTo(8));
         Assert.Throws<ArgumentException>(() => c.SelectPart(p, "chassis", "nod-light-hull"));
         Assert.Throws<ArgumentException>(() => c.SelectPart(p, "running_gear", "gdi-stationary"));
         var d = c.AddDesign(r); var copy = c.AddDesign(r, d);
@@ -113,7 +149,7 @@ public class ChinaFactionTests
         Assert.That(map, Does.Contain("Reference: chbattle"));
         Assert.That(map, Does.Not.Contain("Transport: ocar"));
         Assert.That(Read(zip, "modular-rules.yaml"), Does.Contain("FactionCA@22"));
-        Assert.That(c.DeserializeRoster(Read(zip, "custom-faction.json")).Designs.Count, Is.EqualTo(4));
+        Assert.That(c.DeserializeRoster(Read(zip, "custom-faction.json")).Designs.Count, Is.EqualTo(8));
         var path = Environment.GetEnvironmentVariable("MODULAR_CHINA_EXPORT");
         if (!string.IsNullOrEmpty(path)) { using var file = new FileStream(path, FileMode.CreateNew); file.Write(bytes); }
     }

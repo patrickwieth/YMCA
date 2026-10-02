@@ -30,14 +30,31 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				{
 					compiler.SelectPart(p, "chassis", hull);
 					var source = rules.Actors[compiler.PreviewActor(p).ToLowerInvariant()];
+					if (hull.StartsWith("nod-combat-", StringComparison.Ordinal) || hull.StartsWith("china-combat-", StringComparison.Ordinal))
+					{
+						var values = compiler.Calculate(p);
+						var mobile = source.TraitInfo<MobileInfo>();
+						var output = compiler.Rules(p);
+						if (values.Cost != source.TraitInfo<ValuedInfo>().Cost || values.Hp != source.TraitInfo<HealthInfo>().HP ||
+							values.Speed != mobile.Speed || values.Turn != mobile.TurnSpeed.Angle ||
+							!output.Contains("Locomotor: " + mobile.Locomotor + "\n", StringComparison.Ordinal) ||
+							!output.Contains("Type: " + source.TraitInfo<ArmorInfo>().Type + "\n", StringComparison.Ordinal))
+							throw new InvalidOperationException("Stock baseline mismatch: " + source.Name);
+						var weaponRules = compiler.Weapons(p);
+						foreach (var armament in source.TraitInfos<ArmamentInfo>())
+							if (!weaponRules.Contains("Inherits: " + armament.Weapon + "\n", StringComparison.OrdinalIgnoreCase))
+								throw new InvalidOperationException("Missing stock weapon channel: " + source.Name + "/" + armament.Weapon);
+					}
 					var before = source.TraitInfos<ConditionalTraitInfo>().Select(t => t.EnabledByDefault).ToArray();
 					var preview = CustomVehiclePreviewWidget.BuildPreviewActor(utility.ModData, rules, source, faction);
 					if (!before.SequenceEqual(source.TraitInfos<ConditionalTraitInfo>().Select(t => t.EnabledByDefault)))
 						throw new InvalidOperationException("Preview mutated source rules: " + source.Name);
-					if (preview.TraitInfos<WithVoxelBodyInfo>().Count() > 1)
+					if (preview.TraitInfos<WithVoxelBodyInfo>().GroupBy(t => t.Sequence).Any(g => g.Count() > 1))
 						throw new InvalidOperationException("Overlapping voxel body variants: " + source.Name);
 					if (source.Name == "choverlord" && preview.TraitInfos<WithVoxelBodyInfo>().Single().Sequence != "emperor")
 						throw new InvalidOperationException("Tank-General preview did not select Emperor body.");
+					if (source.Name == "spec" && (preview.TraitInfos<WithSpriteTurretInfo>().Any() || preview.TraitInfos<WithFacingSpriteBodyInfo>().Count() != 1))
+						throw new InvalidOperationException("Specter preview did not select its undeployed body.");
 					if (source.Name == "ssm" && preview.TraitInfos<WithSpriteTurretInfo>().Single().Sequence != "turret")
 						throw new InvalidOperationException("SSM preview did not select its loaded turret.");
 					Console.WriteLine(faction + "/" + source.Name + ": " + preview.TraitInfos<IRenderActorPreviewSpritesInfo>().Count() +

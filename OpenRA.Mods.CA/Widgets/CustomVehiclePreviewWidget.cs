@@ -51,6 +51,10 @@ namespace OpenRA.Mods.CA.Widgets
 				if (!string.IsNullOrEmpty(ammo.AmmoCondition))
 					variables[ammo.AmmoCondition] = ammo.InitialAmmo < 0 ? ammo.Ammo : Math.Min(ammo.InitialAmmo, ammo.Ammo);
 
+			foreach (var deploy in source.TraitInfos<GrantConditionOnDeployInfo>())
+				if (!string.IsNullOrEmpty(deploy.UndeployedCondition) && (deploy.RequiresCondition == null || deploy.RequiresCondition.Evaluate(variables)))
+					variables[deploy.UndeployedCondition] = 1;
+
 			var traits = new List<TraitInfo>();
 			foreach (var trait in source.TraitInfos<TraitInfo>())
 			{

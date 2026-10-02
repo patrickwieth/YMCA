@@ -86,6 +86,16 @@ class PrototypeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             differences('', 'Failed with exception')
 
+    def test_cargo_field_diagnostics_are_inherited_only_when_the_exact_stock_error_exists(self):
+        base = 'Error: `chcrawl2.CargoInfo.PassengerConditions`: Missing actor `mort`.'
+        child = base.replace('chcrawl2.', 'modular.custom.crawler.')
+        sources = {'modular.custom.crawler': 'chcrawl2'}
+        self.assertEqual(differences(base, base + '\n' + child, sources)[2], [child])
+        bad = child.replace('`mort`', '`new-missing-passenger`')
+        self.assertEqual(differences(base, base + '\n' + bad, sources)[3], [bad])
+        weapon = 'Error: bad modular.custom.crawler.w0'
+        self.assertEqual(differences('Error: bad chcrawl2.w0', weapon, sources)[3], [weapon])
+
     def test_package_is_deterministic_and_preserves_existing_files(self):
         with tempfile.TemporaryDirectory() as temp:
             a, b = (Path(temp) / name for name in ('a.oramap', 'b.oramap'))

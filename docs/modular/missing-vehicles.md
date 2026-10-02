@@ -1,12 +1,12 @@
 # Was im Fahrzeugdesigner noch fehlt
 
-Stand: aktuelle native Bindings einschließlich Titan, Slingshot und MARV; aus Regeln und Compiler-Bindungen erzeugt.
+Stand: aktuelle native Bindings einschließlich aller Nod-/China-Boden-Kampfgrundfamilien; aus Regeln und Compiler-Bindungen erzeugt.
 
 **Fehlend bedeutet nicht im Designer konfigurier-/kompilierbar.** Die normalen Fraktionsroster bleiben erhalten;
 diese Fahrzeuge können dort bereits existieren. Tabellen-/Excel-Einträge und vorplatzierte Carryalls zählen nicht als Designer-Unterstützung.
 
-In den sechs Bodenfahrzeug-Dateien: **77 vollständig fehlende Fraktions-Familiengruppen**:
-**58 Kampf-/bewaffnete Transportgruppen**, **19 Wirtschafts-/Bau-/Transport-/Unterstützungsgruppen**.
+In den sechs Bodenfahrzeug-Dateien: **63 vollständig fehlende Fraktions-Familiengruppen**:
+**44 Kampf-/bewaffnete Transportgruppen**, **19 Wirtschafts-/Bau-/Transport-/Unterstützungsgruppen**.
 Das sind redaktionelle Gruppen mit lokaler Produktionsdeklaration, keine vollständig aufgelöste Baubarkeitsprüfung.
 Fraktionszuordnung folgt der Quelldatei, nicht exklusiver Verfügbarkeit. APC2, AMCV und HAR2 werden von GDI/Nod geteilt.
 APCs, kämpfende Besatzungstransporter und Selbstmordfahrzeuge stehen unter Kampf; EMP/ECM/Radar unter Unterstützung.
@@ -22,25 +22,11 @@ Wracks, Projektile, Dummy-Akteure und angehängte Hilfsobjekte werden nicht als 
 - **Vulcan** (`VULC`)
 - **X-O Powersuit** (`XO`)
 
-### Nod (10)
+### Nod (0)
 
-- **Armored Personnel Carrier** (`APC2`)
-- **Recon Bike** (`BIKE`)
-- **Beam Cannon** (`Beam_Cannon`)
-- **Devil's Tongue** (`FTNK`)
-- **Heavy Flame Tank** (`HFTK`)
-- **Howitzer** (`HOWI`)
-- **Specter** (`SPEC`)
-- **Stealth Tank** (`STNK`)
-- **Chemical Truck** (`TTRK`)
-- **Microwave Tank** (`WTNK`)
 
-### China (4)
+### China (0)
 
-- **Bixi Dragon** (`Bixi`)
-- **Inferno Cannon** (`charty`)
-- **Heavy Troop Crawler** (`chcrawl2`)
-- **Nuke Cannon** (`chnukecann`)
 
 ### Alliierte (9)
 
@@ -139,8 +125,10 @@ Bereits geerbte bedingte Waffen (z.B. T-34 Cluster, Dragon Black Napalm, Emperor
 - **Alliierte / JEEP** (vorhanden: JEEP): `Heavy_Jeep`, `Tow_Jeep`, `AA_Jeep`
 - **Alliierte / Prismtank** (vorhanden: Prismtank): `PBLASTER`, `PCAN`
 - **China / chbattle** (vorhanden: chbattle): `chbattle.Autoloader`, `chbattle.Autoloader.PDL`, `chbattle.Autoloader.Reflector`, `chbattle.Nuclear_Shells`, `chbattle.Nuclear_Shells.PDL`, `chbattle.Nuclear_Shells.Reflector`, `chbattle.Mass_Production`, `chbattle.Mass_Production.PDL`, `chbattle.Mass_Production.Reflector`
+- **China / chcrawl2** (vorhanden: chcrawl2): `chcrawl2.Hunter`, `chcrawl2.Hunter.PDL`, `chcrawl2.Hunter.Reflector`, `chcrawl2.Assault`, `chcrawl2.Assault.PDL`, `chcrawl2.Assault.Reflector`
 - **China / chdragon** (vorhanden: chdragon): `chdragon.PDL`, `chdragon.Reflector`
 - **China / chgtnk** (vorhanden: chgtnk): `chgtnk.PDL`, `chgtnk.Reflector`
+- **China / chnukecann** (vorhanden: chnukecann): `chnukecann.Range`, `chnukecann.Neutron`
 - **China / choverlord** (vorhanden: choverlord): `choverlord.Gatling`, `choverlord.Gatling.PDL`, `choverlord.Gatling.Reflector`, `choverlord.Bunker`, `choverlord.Bunker.PDL`, `choverlord.Bunker.Reflector`, `choverlord.Propaganda`, `choverlord.Propaganda.PDL`, `choverlord.Propaganda.Reflector`, `choverlord.Nuke_Shells`, `choverlord.Nuke_Shells.PDL`, `choverlord.Nuke_Shells.Reflector`, `choverlord.Plasma`, `choverlord.Plasma.PDL`, `choverlord.Plasma.Reflector`
 - **GDI / DISR** (vorhanden: DISR): `DISR.PDL`, `DISR.Reflector`
 - **GDI / Juggernaut** (vorhanden: Juggernaut): `Juggernaut.Emp`, `Juggernaut.Firerate`
@@ -150,8 +138,12 @@ Bereits geerbte bedingte Waffen (z.B. T-34 Cluster, Dragon Black Napalm, Emperor
 - **GDI / TITN** (vorhanden: TITN): `TITN.Battle`, `TITN.Battle.PDL`, `TITN.Battle.Reflector`, `TITN.Railgun`, `TITN.Railgun.PDL`, `TITN.Railgun.Reflector`
 - **GDI / hmlrs** (vorhanden: hmlrs): `hmlrs.Reflector`, `hmlrs.PDL`
 - **Nod / BGGY** (vorhanden: BGGY): `BGGY.PDL`, `BGGY.AA`
+- **Nod / BIKE** (vorhanden: BIKE): `BIKE.Scrin`, `BIKE.Scrin.PDL`, `BIKE.Scrin.Reflector`, `BIKE.RocketHail`, `BIKE.RocketHail.PDL`, `BIKE.RocketHail.Reflector`, `BIKE.Explosive`, `BIKE.Explosive.PDL`, `BIKE.Explosive.Reflector`
+- **Nod / FTNK** (vorhanden: FTNK): `FTNK.Reflector`, `FTNK.PDL`, `FTNK.PDL.Chem`, `FTNK.Reflector.Chem`
+- **Nod / HFTK** (vorhanden: HFTK): `HFTK.PDL`, `HFTK.Reflector`, `HFTK.PDL.Fireball`, `HFTK.Reflector.Fireball`
 - **Nod / LTNK** (vorhanden: LTNK): `LTNK.Laser`
 - **Nod / SSM** (vorhanden: SSM): `SSM.Toxin`, `SSM.Multi`, `SSM.Bunkerbuster`
+- **Nod / STNK** (vorhanden: STNK): `STNK.Scrin`, `STNK.Scrin.PDL`, `STNK.Scrin.Reflector`, `STNK.HE`, `STNK.HE.PDL`, `STNK.HE.Reflector`, `STNK.AP`, `STNK.AP.PDL`, `STNK.AP.Reflector`
 - **Scrin / CORR** (vorhanden: CORR): `CORR.Area`, `CORR.Area.PDL`, `CORR.Area.Reflector`, `CORR.Range`, `CORR.Range.PDL`, `CORR.Range.Reflector`
 - **Scrin / DEVO** (vorhanden: DEVO): `DEVO.acid`, `DEVO.heavy`
 - **Scrin / GUNW** (vorhanden: GUNW): `GUNW.sensor`
@@ -177,14 +169,10 @@ Basisakteure und Varianten als Prüfliste; nicht als zusätzliche Familien zähl
 - **Alliierte / MRJ**: `MRJ`
 - **Alliierte / RTNK**: `RTNK`, `RTNK.PDL`, `RTNK.Reflector`, `RTNK.PDL.Firerate`, `RTNK.Reflector.Firerate`, `RTNK.PDL.Toughness`, `RTNK.Reflector.Toughness`
 - **Alliierte / TNKD**: `TNKD`, `TNKD.PDL`, `TNKD.Reflector`, `TNKD.PDL.Burstfire`, `TNKD.Reflector.Burstfire`, `TNKD.PDL.Tough`, `TNKD.Reflector.Tough`
-- **China / Bixi**: `Bixi`
 - **China / CHNMCV**: `CHNMCV`, `CHNMCV.Nukular`
-- **China / charty**: `charty`
 - **China / chcrawl**: `chcrawl`
-- **China / chcrawl2**: `chcrawl2`, `chcrawl2.Hunter`, `chcrawl2.Hunter.PDL`, `chcrawl2.Hunter.Reflector`, `chcrawl2.Assault`, `chcrawl2.Assault.PDL`, `chcrawl2.Assault.Reflector`
 - **China / checm**: `checm`, `checm.pulse`, `checm.focus`, `checm.chain`
 - **China / chharv**: `chharv`
-- **China / chnukecann**: `chnukecann`, `chnukecann.Range`, `chnukecann.Neutron`
 - **China / choutpost**: `choutpost`, `choutpost.Propaganda`, `choutpost.Propaganda.PDL`, `choutpost.Propaganda.Reflector`, `choutpost.Bunker`, `choutpost.Bunker.PDL`, `choutpost.Bunker.Reflector`
 - **GDI / GDRN**: `GDRN`
 - **GDI / MDRN**: `MDRN`
@@ -193,19 +181,9 @@ Basisakteure und Varianten als Prüfliste; nicht als zusätzliche Familien zähl
 - **GDI / VULC**: `VULC`
 - **GDI / XO**: `XO`
 - **Nod / AMCV**: `AMCV`, `AMCV.Nukular`
-- **Nod / APC2**: `APC2`, `APC2.Reinforce`
-- **Nod / BIKE**: `BIKE`, `BIKE.Scrin`, `BIKE.Scrin.PDL`, `BIKE.Scrin.Reflector`, `BIKE.RocketHail`, `BIKE.RocketHail.PDL`, `BIKE.RocketHail.Reflector`, `BIKE.Explosive`, `BIKE.Explosive.PDL`, `BIKE.Explosive.Reflector`
-- **Nod / Beam_Cannon**: `Beam_Cannon`
 - **Nod / COORDINATOR**: `COORDINATOR`
-- **Nod / FTNK**: `FTNK`, `FTNK.Reflector`, `FTNK.PDL`, `FTNK.PDL.Chem`, `FTNK.Reflector.Chem`
 - **Nod / HAR2**: `HAR2`
-- **Nod / HFTK**: `HFTK`, `HFTK.PDL`, `HFTK.Reflector`, `HFTK.PDL.Fireball`, `HFTK.Reflector.Fireball`
-- **Nod / HOWI**: `HOWI`
 - **Nod / MSG**: `MSG`
-- **Nod / SPEC**: `SPEC`
-- **Nod / STNK**: `STNK`, `STNK.Scrin`, `STNK.Scrin.PDL`, `STNK.Scrin.Reflector`, `STNK.HE`, `STNK.HE.PDL`, `STNK.HE.Reflector`, `STNK.AP`, `STNK.AP.PDL`, `STNK.AP.Reflector`
-- **Nod / TTRK**: `TTRK`
-- **Nod / WTNK**: `WTNK`
 - **Scrin / ATMZ**: `ATMZ`, `ATMZ.AA`, `ATMZ.Range`
 - **Scrin / Channeler**: `Channeler`, `Channeler.chain`, `Channeler.disc`, `Channeler.disc.reflector`, `Channeler.disc.pdl`, `Channeler.chain.reflector`, `Channeler.chain.pdl`
 - **Scrin / HARV.Scrin**: `HARV.Scrin`

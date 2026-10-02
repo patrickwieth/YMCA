@@ -14,13 +14,13 @@ vehicle designs**, with New/Copy/Remove, shared budget, named faction save/load 
 in-memory migration of existing single-tank profiles. The base selector saves the
 previous faction in the library before starting an independent roster with a free name.
 **Vorlagen** adds missing families for that base: **eleven GDI families** (tank, MG scout,
-MLRS, Mammoth, Juggernaut, native Hover MLRS, Disruptor, Mammoth Mk II, Titan, Slingshot, MARV), **four Nod
-families** (light tank, Buggy, artillery, SSM) and **four China families** (Battlemaster,
-Dragon, Gatling tank, Overlord), plus **four Allied bindings** (Challenger, Ranger,
+MLRS, Mammoth, Juggernaut, native Hover MLRS, Disruptor, Mammoth Mk II, Titan, Slingshot, MARV), **fourteen Nod
+bindings** (including all base combat families from the ground inventory) and **eight China
+bindings** (Battlemaster, Dragon, Gatling, Overlord, Inferno, Heavy Troop Crawler, Nuke Cannon, Bixi), plus **four Allied bindings** (Challenger, Ranger,
 field artillery, Prism tank) and **four Soviet bindings** (Heavy Tank, T-34, heavy Tesla,
 Mobile Flak), plus **four Scrin bindings** (Gun Walker, Seeker, Corrupter, Devourer).
-That is **31 faction-specific bindings / 30 families**:
-Nod and Allied field artillery share a family. Their **96 supported combinations** use compatible
+That is **45 faction-specific bindings / 44 families**:
+Nod and Allied field artillery share a family. Their **124 supported combinations** use compatible
 artwork and full existing weapons, including helper, visual and conditional upgrade channels.
 Hum-Vee/Buggy mandatory sensors are counted once. Mixed-faction and non-GDI stationary
 profiles fail native validation. Both test-map player slots use the selected base.
@@ -29,12 +29,20 @@ A right-hand **sprite/voxel actor preview** rotates slowly (24 seconds/revolutio
 pause/resume, all-heading auto-fit and clipping. It renders graphics templates, not a live unit.
 Titan is sprite-based (`titan.shp`), with a separately rendered turret. Preview-only conditional
 trait clones avoid duplicate Emperor bodies and empty SSM launcher graphics. Failures disable
-only the preview; GPU rendering still needs interactive confirmation. The headless
-`--check-custom-faction-previews` utility checks all 31 clone configurations.
-Titan, Slingshot and MARV are newly bound with complete weapons/abilities/unlocks; **58 other
-whole ground combat groups still remain**. This is not completion of the full requested inventory.
+only the preview. The user confirmed the earlier viewer; new models still need interactive checks.
+The headless `--check-custom-faction-previews` utility checks all 45 clone configurations and all
+fourteen newly bound Nod/China raw baselines/armaments against engine-resolved stock traits.
+**44 other whole ground combat groups still remain**, plus promoted variants. This is not completion of the full requested inventory.
 Expanded GDI differential: **1685 / 1701**, 16 inherited additions, zero unexpected diagnostics;
 see `designer-gdi-expanded-validation.md`.
+
+MLRS/SSM/Prism now share **Light Tracks**: the compatibility class is distinct from the engine
+locomotor, which remains `wheeled`. **14 gear components instead of 16**, with legacy saved-ID
+migration and all 96 previous numeric combinations unchanged. New combat families share mount
+and storage hardware, but their complete weapons/abilities remain explicitly bound. See
+`docs/modular/shared-gear-combat-expansion.md` for national-admission exceptions and verification.
+Expanded Nod differential: **1685 / 1706**, 21 inherited additions; China: **1685 / 1705**, 20 inherited
+additions. Both have zero unexpected diagnostics (`designer-{nod,china}-combat-validation.md`).
 
 **Speichern und Testspiel** freezes the complete roster into a separate user map.
 Each design is preplaced near start A; moving designs are additional named factory
@@ -43,7 +51,7 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**79 Python + 92 native tests pass**; all 96 numeric combinations match the independent
+**85 Python + 112 native tests pass**; all 124 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential

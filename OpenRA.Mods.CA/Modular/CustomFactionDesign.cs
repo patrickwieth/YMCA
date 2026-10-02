@@ -80,10 +80,10 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				{ "tracks-standard", ("tracks", "tracked") }, { "prototype-hover", ("hover", "hover") },
 				{ "gdi-stationary", ("stationary", "wheeled") }, { "wheels-light", ("wheels", "wheeled") },
-				{ "designer-mlrs-gear", ("tracks", "wheeled") }, { "walker-heavy", ("walker", "sheavytracked") },
+				{ "light-tracks", ("tracks", "wheeled") }, { "walker-heavy", ("walker", "sheavytracked") },
 				{ "designer-heavy-tracks", ("tracks", "heavytracked") }, { "designer-mk2-legs", ("walker", "heavytracked") },
-				{ "tracks-light-artillery", ("tracks", "lighttracked") }, { "designer-ssm-gear", ("tracks", "wheeled") },
-				{ "tracks-superheavy", ("tracks", "sheavytracked") }, { "designer-prism-gear", ("tracks", "wheeled") },
+				{ "tracks-light-artillery", ("tracks", "lighttracked") },
+				{ "tracks-superheavy", ("tracks", "sheavytracked") },
 				{ "designer-flak-gear", ("wheels", "wheeled") },
 				{ "gdi-light-hover", ("hover", "lighthover") }, { "scrin-walker-gear", ("walker", "wheeled") }, { "scrin-hover-gear", ("hover", "lighthover") }
 			};
@@ -144,6 +144,9 @@ namespace OpenRA.Mods.CA.Modular
 			var selected = Roles.Select(r => Part(profile, r)).Concat(builtIn).ToArray();
 			var hull = Part(profile, "chassis");
 			var gear = Part(profile, "running_gear");
+			if (gear.Value<string>("compatibility_class") is not string gearClass ||
+				hull["allowed_running_gear_classes"] is not JArray gearClasses || !gearClasses.Values<string>().Contains(gearClass))
+				throw new InvalidDataException("Fahrwerksklasse passt nicht zum Chassis.");
 			var armor = Part(profile, "armor");
 			var generator = Part(profile, "generator");
 			var stationary = profile.Parts["running_gear"] == "gdi-stationary";
@@ -188,8 +191,15 @@ namespace OpenRA.Mods.CA.Modular
 		public CustomFactionProfile Deserialize(string json)
 		{
 			var p = JsonConvert.DeserializeObject<CustomFactionProfile>(json, JsonSettings);
+			MigrateGear(p?.Parts);
 			Calculate(p);
 			return p;
+		}
+
+		static void MigrateGear(Dictionary<string, string> parts)
+		{
+			if (parts != null && parts.TryGetValue("running_gear", out var id))
+				parts["running_gear"] = CustomVehicleAssembly.CanonicalGear(id);
 		}
 
 		public void Save(string path, CustomFactionProfile p)
@@ -233,7 +243,8 @@ namespace OpenRA.Mods.CA.Modular
 			if (v.Stationary)
 				s.Append("\t-Buildable:\n");
 			else
-				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures." + p.BaseFaction + (v.Tech > 1 ? ", tier" + v.Tech : "") + assembly.ExtraPrerequisites +
+				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.StockPrerequisites != null ? assembly.StockPrerequisites + ", ~structures." + p.BaseFaction :
+					(assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures." + p.BaseFaction + (v.Tech > 1 ? ", tier" + v.Tech : "") + assembly.ExtraPrerequisites) +
 					"\n\t\tBuildPaletteOrder: " + (1000 + index) + "\n\t\tDescription: Eigener Entwurf - vor dem Spiel eingefroren.\n");
 			s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n\tTooltip:\n\t\tName: " + p.TankName + "\n");
 			foreach (var tooltip in assembly.AlternateTooltips)

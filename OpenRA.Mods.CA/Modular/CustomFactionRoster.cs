@@ -95,6 +95,8 @@ namespace OpenRA.Mods.CA.Modular
 			if (designs.Any(d => d is not JObject entry || entry["Id"] == null || entry["Name"] == null || entry["Parts"] is not JObject))
 				throw new InvalidDataException("Jeder gespeicherte Entwurf braucht ID, Namen und Bausteine.");
 			var roster = JsonConvert.DeserializeObject<CustomFactionRoster>(json, JsonSettings);
+			if (roster?.Designs != null)
+				foreach (var design in roster.Designs) MigrateGear(design?.Parts);
 			ValidateRoster(roster);
 			return roster;
 		}

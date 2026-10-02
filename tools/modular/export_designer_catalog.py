@@ -13,6 +13,9 @@ import allied_designer_expansion as allies
 import soviet_designer_expansion as soviet
 import scrin_designer_expansion as scrin
 import gdi_heavy_designer_expansion as gdi_heavy
+import nod_combat_expansion as nod_combat
+import china_combat_expansion as china_combat
+import shared_running_gear as gear
 
 
 def assemblies():
@@ -20,14 +23,17 @@ def assemblies():
         return dict(options=dict(chassis=[hull], running_gear=gear, drive=drive,
                     generator=['baseline-generator', 'efficient-generator'], armor=[armor],
                     carrier=[carrier], weapon=[weapon], ammunition=ammo), built_in=built_in or [])
-    return [
+    result = [
         frame('gdi-battle-hull', ['tracks-standard', 'prototype-hover', 'gdi-stationary'], ['diesel', 'diesel-large'],
               'heavy', 'medium-cannon-mount', 'medium-cannon', ['medium-tank-shell', 'designer-he-shell']),
         frame('humvee-hull', ['wheels-light', 'gdi-stationary'], ['diesel-light'],
               'light', 'scout-mg-mount', 'scout-mg', ['scout-mg-rounds'], ['scout-sensors']),
         frame('designer-mlrs-hull', ['designer-mlrs-gear'], ['diesel', 'diesel-large'],
               'light', 'designer-rocket-mount', 'designer-rockets', ['designer-rocket-payload']),
-    ] + additional_assemblies() + gdi_heavy.additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies() + scrin.additional_assemblies()
+    ] + additional_assemblies() + gdi_heavy.additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies() + scrin.additional_assemblies() + nod_combat.additional_assemblies() + china_combat.additional_assemblies()
+    for assembly in result:
+        assembly['options']['running_gear'] = [gear.canonical(k) for k in assembly['options']['running_gear']]
+    return result
 
 
 def data():
@@ -72,12 +78,17 @@ def data():
     soviet.extend_parts(parts)
     scrin.extend_parts(parts)
     gdi_heavy.extend_parts(parts)
+    gear.consolidate(parts)
+    nod_combat.extend_parts(parts)
+    china_combat.extend_parts(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}
     for assembly in assemblies():
         choices = assembly['options']
         hull = parts[choices['chassis'][0]]
         hull['allowed_running_gear'] = choices['running_gear'][:]
+        hull['default_running_gear'] = choices['running_gear'][0]
+        hull['allowed_running_gear_classes'] = sorted({parts[k]['compatibility_class'] for k in choices['running_gear']})
         hull['allowed']['drive'] = choices['drive'][:]
         allowed = weapon_ammo.setdefault(choices['weapon'][0], [])
         allowed.extend(a for a in choices['ammunition'] if a not in allowed)

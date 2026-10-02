@@ -16,6 +16,8 @@ namespace OpenRA.Mods.CA.Modular
 		public bool NativeHover { get; init; }
 		public string VoxelImage { get; init; }
 		public string ExtraPrerequisites { get; init; } = "";
+		// Exact non-national stock gates; engineering component tiers must not add gameplay gates.
+		public string StockPrerequisites { get; init; }
 		public string Summary { get; init; }
 		public string[] AlternateTooltips { get; init; } = Array.Empty<string>();
 
@@ -26,11 +28,13 @@ namespace OpenRA.Mods.CA.Modular
 			Hull = hull; Actor = actor; Image = image; Turret = turret; Armaments = armaments; BuiltIn = builtIn;
 			Choices = new Dictionary<string, string[]>
 			{
-				{ "chassis", new[] { hull } }, { "running_gear", gear }, { "drive", motors },
+				{ "chassis", new[] { hull } }, { "running_gear", gear.Select(CanonicalGear).ToArray() }, { "drive", motors },
 				{ "generator", new[] { "baseline-generator", "efficient-generator" } }, { "armor", new[] { armor } },
 				{ "carrier", new[] { carrier } }, { "weapon", new[] { weapon } }, { "ammunition", ammunition }
 			};
 		}
+
+		public static string CanonicalGear(string id) => id == "designer-mlrs-gear" || id == "designer-ssm-gear" || id == "designer-prism-gear" ? "light-tracks" : id;
 	}
 
 	public sealed partial class CustomFactionDesign
@@ -48,6 +52,22 @@ namespace OpenRA.Mods.CA.Modular
 			a.Choices["generator"] = new[] { "scrin-converter", "scrin-converter-efficient" };
 			return a;
 		}
+
+		static CustomVehicleAssembly NodCombatAssembly(string key, string actor, string image, string gear, string motor,
+			string armor, string prerequisites, Dictionary<string, string> weapons, string summary) =>
+			new CustomVehicleAssembly("nod-combat-" + key + "-hull", actor, image, null, new[] { gear }, new[] { motor },
+				armor, "integrated-mount", "nod-combat-" + key + "-weapon", new[] { "integral-stores" }, weapons)
+			{
+				Faction = "nod", PreserveWeaponTemplates = true, StockPrerequisites = prerequisites, Summary = summary
+			};
+
+		static CustomVehicleAssembly ChinaCombatAssembly(string key, string actor, string image, string gear,
+			string armor, string prerequisites, Dictionary<string, string> weapons, string summary) =>
+			new CustomVehicleAssembly("china-combat-" + key + "-hull", actor, image, null, new[] { gear }, new[] { "diesel" },
+				armor, "integrated-mount", "china-combat-" + key + "-weapon", new[] { "integral-stores" }, weapons)
+			{
+				Faction = "china", PreserveWeaponTemplates = true, StockPrerequisites = prerequisites, Summary = summary
+			};
 
 		static readonly CustomVehicleAssembly[] Assemblies =
 		{
@@ -260,7 +280,40 @@ namespace OpenRA.Mods.CA.Modular
 				", ~scrin, ~!upg.corrupter", "Corrupter: vollstaendiger Spew-Angriff, Frontausrichtung, Lauf-/Schussanimation und Todesexplosion."),
 			ScrinAssembly("devourer", "DEVO", "scrin-hover-gear", "TurretedFloating",
 				new Dictionary<string, string> { { "Armament", "DevourerLaser" } },
-				", radar, ~traveler, ~!upg.devourer", "Devourer: Laser-Salve, schwebender Turm und LightHover; originales schnelles Rumpfdrehen bleibt.")
+				", radar, ~traveler, ~!upg.devourer", "Devourer: Laser-Salve, schwebender Turm und LightHover; originales schnelles Rumpfdrehen bleibt."),
+			NodCombatAssembly("apc", "APC2", "apc2", "tracks-standard", "diesel", "heavy", "vehicles, infantry.any, ~!promotion.apc_vulcan",
+				new Dictionary<string, string> { { "Armament", "M60mgTD" } }, "APC: Original-MG, fuenf Infanterieplaetze, Ladesperre und besatzungsabhaengige Eroberbarkeit."),
+			NodCombatAssembly("bike", "BIKE", "recon_bike", "wheels-light", "diesel-light", "light", "vehicles, ~!upg.reconbike",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "BikeRockets" }, { "Armament@SECONDARY", "BikeRocketsAA" } }, "Recon Bike: getrennte Boden-/Luftraketen und originales Frontangriffsverhalten."),
+			NodCombatAssembly("beam", "Beam_Cannon", "beam_cannon", "light-tracks", "diesel", "light", "tmpl, vehicles, ~promotion.beam_cannon",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "BeamCannon" }, { "Armament@1", "BeamCannonBoosted1" },
+					{ "Armament@2", "BeamCannonBoosted2" }, { "Armament@3", "BeamCannonBoosted3" }, { "Armament@4", "BeamCannonBoosted4" },
+					{ "Armament@5", "BeamCannonBoosted5" }, { "Armament@TERTIARY", "BeamCannonVisual" }, { "Armament@charge", "BeamCannonCharge" } },
+				"Beam Cannon: alle sechs Strahlstaerken, Visualisierung und Verstaerkung von Kanonen/Obelisken bleiben erhalten."),
+			NodCombatAssembly("flame", "FTNK", "devils_tongue", "tracks-standard", "diesel", "heavy", "tier2, vehicles, ~!promotion.flame_tank.pdl, ~!promotion.flame_tank.reflector",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "BigFlamer" } }, "Devil's Tongue: Originalflammen, Todesexplosion und Black-Hand-Kostenmodifikator."),
+			NodCombatAssembly("heavy-flame", "HFTK", "heavy_flame_tank", "designer-heavy-tracks", "diesel", "heavy", "radar, vehicles, ~!upg.flametank",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "HeavyFlameTankFlamer" }, { "Armament@FF", "HeavyFlameTankFlamerFF" } }, "Heavy Flame Tank: beide Flammenkanaele, Animation, Schleifensound und schwere Ketten."),
+			NodCombatAssembly("howitzer", "HOWI", "howi", "tracks-light-artillery", "diesel", "light", "vehicles",
+				new Dictionary<string, string> { { "Armament", "155mmTDM" } }, "Howitzer: Originalgeschuetz, Turm und leichte Ketten; langsame Rumpfdrehung bleibt."),
+			NodCombatAssembly("specter", "SPEC", "spec", "tracks-light-artillery", "diesel", "light", "tmpl, vehicles",
+				new Dictionary<string, string> { { "Armament", "155mmSpec" } }, "Specter: Tarnung, automatische Aufstellung, Originalgeschuetz und Aufstellanimation."),
+			NodCombatAssembly("stealth", "STNK", "stealth_tank", "light-tracks", "diesel", "light", "tier2, vehicles, ~!promotion.stealth_tank.ap, ~!promotion.stealth_tank.scrin, ~!promotion.stealth_tank.explosive_rockets",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "StnkMissile" }, { "Armament@SECONDARY", "StnkMissile.AA" } }, "Stealth Tank: Boden-/Luftraketen, normale/verbesserte Tarnung und Schadenstarnschwelle."),
+			NodCombatAssembly("chemical", "TTRK", "ttrk", "wheels-light", "diesel-light", "light", "vehicles, tmpl",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "DemoTruckTargeting" } }, "Chemical Truck: Original-Selbstzerstoerung, Entschaerfung und Giftwolke; keine normale Schadenskanone."),
+			NodCombatAssembly("microwave", "WTNK", "mwtnk", "light-tracks", "diesel", "light", "tmpl, vehicles",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "MicrowaveZap" }, { "Armament@PRIMARYSOUND", "MicrowaveZapSound" } }, "Microwave Tank: Deaktivierung, separater Soundkanal, Zielausschluesse und Muzzle-Effekt."),
+			ChinaCombatAssembly("inferno", "charty", "charty", "light-tracks", "light", "chweap, radar, ~vehicles.china, ~!vehicles.chinainf",
+				new Dictionary<string, string> { { "Armament", "CHInfernoCannon" }, { "Armament@Upgraded", "CHInfernoCannon.Black_Napalm" } },
+				"Inferno Cannon: normales/Black-Napalm-Geschoss, Feuersturm und originale Frontausrichtung."),
+			ChinaCombatAssembly("crawler", "chcrawl2", "chcrawl", "tracks-standard", "heavy", "chweap, ~!upg.crawler",
+				new Dictionary<string, string>(), "Heavy Troop Crawler: sechs Plaetze, Originalbesatzung und Schiessscharten; keine zusaetzliche Bordkanone."),
+			ChinaCombatAssembly("nuke", "chnukecann", "chnukecann", "tracks-standard", "heavy", "tier3, ~chweap, ~nuke_cannon.access, ~!upg.nuke_cannon",
+				new Dictionary<string, string> { { "Armament@PRIMARY", "CHNukeCannon" }, { "Armament@AIM", "NukeCannonDummyAim" } },
+				"Nuke Cannon: Aufstellung, Munitionszyklus, abschiessbare Granate und Nuklearexplosion bleiben erhalten."),
+			ChinaCombatAssembly("bixi", "Bixi", "bixi", "light-tracks", "light", "tier3, ~chweap, ~promotion.bixi_dragon",
+				new Dictionary<string, string> { { "Armament", "BixiLauncher" } }, "Bixi Dragon: zwei echte Raketenakteure, Nachladen, Zielpause und Originalanimation.")
 		};
 
 		CustomVehicleAssembly Assembly(CustomFactionProfile p) => Assemblies.Single(a => a.Hull == p.Parts["chassis"]);

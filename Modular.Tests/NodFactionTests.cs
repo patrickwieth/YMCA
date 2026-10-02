@@ -18,6 +18,16 @@ public class NodFactionTests
     [TestCase("buggy-hull", 350, 14000, 157, "BGGY", "M60mgTD")]
     [TestCase("designer-nod-artillery-hull", 550, 10000, 56, "ARTY.nod", "155mmTD")]
     [TestCase("designer-ssm-hull", 1050, 15000, 82, "SSM", "HonestJohn")]
+    [TestCase("nod-combat-apc-hull", 600, 30000, 135, "APC2", "M60mgTD")]
+    [TestCase("nod-combat-bike-hull", 500, 11000, 180, "BIKE", "BikeRockets")]
+    [TestCase("nod-combat-beam-hull", 1250, 24000, 100, "Beam_Cannon", "BeamCannon")]
+    [TestCase("nod-combat-flame-hull", 700, 40000, 82, "FTNK", "BigFlamer")]
+    [TestCase("nod-combat-heavy-flame-hull", 1000, 75000, 68, "HFTK", "HeavyFlameTankFlamer")]
+    [TestCase("nod-combat-howitzer-hull", 550, 15000, 68, "HOWI", "155mmTDM")]
+    [TestCase("nod-combat-specter-hull", 1100, 11000, 100, "SPEC", "155mmSpec")]
+    [TestCase("nod-combat-stealth-hull", 1200, 20000, 135, "STNK", "StnkMissile")]
+    [TestCase("nod-combat-chemical-hull", 1200, 10000, 92, "TTRK", "DemoTruckTargeting")]
+    [TestCase("nod-combat-microwave-hull", 1250, 35000, 100, "WTNK", "MicrowaveZap")]
     public void BaselinesAndCompleteWeaponBindings(string hull, int cost, int hp, int speed, string actor, string weapon)
     {
         var c = Compiler; var r = c.NewRoster("blackh"); var p = c.Profile(r, r.Designs[0]);
@@ -35,7 +45,7 @@ public class NodFactionTests
     public void FamilyFilteringAndCrossFactionRejectionAreNativeNotJustUi()
     {
         var c = Compiler; var r = c.NewRoster("blackh"); var p = c.Profile(r, r.Designs[0]);
-        Assert.That(c.CompatibleOptions(p, "chassis").Length, Is.EqualTo(4));
+        Assert.That(c.CompatibleOptions(p, "chassis").Length, Is.EqualTo(14));
         Assert.That(c.CompatibleOptions(new CustomFactionProfile(), "chassis").Length, Is.EqualTo(11));
         Assert.Throws<ArgumentException>(() => c.SelectPart(p, "chassis", "gdi-battle-hull"));
         p.BaseFaction = "eagle";
@@ -107,7 +117,7 @@ public class NodFactionTests
     }
 
     [Test]
-    public void MapLocksBothPlayersToNodAndFreezesAllFourFamilies()
+    public void MapLocksBothPlayersToNodAndFreezesAllFourteenFamilies()
     {
         var c = Compiler; var r = c.NewRoster("blackh");
         foreach (var hull in c.CompatibleOptions(c.Profile(r, r.Designs[0]), "chassis").Skip(1))
@@ -123,7 +133,7 @@ public class NodFactionTests
         Assert.That(map, Does.Not.Contain("Transport: ocar"));
         Assert.That(Read(zip, "modular-rules.yaml"), Does.Contain("FactionCA@13"));
         var loaded = c.DeserializeRoster(Read(zip, "custom-faction.json"));
-        Assert.That(loaded.Designs.Count, Is.EqualTo(4)); Assert.That(loaded.BaseFaction, Is.EqualTo("blackh"));
+        Assert.That(loaded.Designs.Count, Is.EqualTo(14)); Assert.That(loaded.BaseFaction, Is.EqualTo("blackh"));
         var path = Environment.GetEnvironmentVariable("MODULAR_NOD_EXPORT");
         if (!string.IsNullOrEmpty(path)) { using var file = new FileStream(path, FileMode.CreateNew); file.Write(bytes); }
     }
