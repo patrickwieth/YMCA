@@ -66,8 +66,12 @@ def calculate(catalog, design):
     chassis = by_role["chassis"]
     if chassis["tier"] < 1:
         raise ValueError("Chassis cannot be tier zero")
-    if chassis["carrier_slots"] not in (1, 2):
-        raise ValueError("Prototype supports one main and at most one auxiliary carrier")
+    capacity = chassis['carrier_slots']
+    used_slots = by_role['carrier'].get('slots_required', 1)
+    if type(capacity) is not int or capacity not in (1, 2, 3):
+        raise ValueError('Invalid carrier slot capacity')
+    if type(used_slots) is not int or used_slots < 1 or used_slots > capacity:
+        raise ValueError('Carrier slot capacity exceeded or invalid slot requirement')
     for role, allowed in chassis["allowed"].items():
         if not any(key in allowed and catalog["components"][key]["role"] == role for key in ids):
             raise ValueError("Incompatible chassis " + role)
@@ -119,6 +123,9 @@ def calculate(catalog, design):
                 raise ValueError('Invalid auxiliary role or faction')
             if part['tier'] not in range(4) or part['cp'] < 0:
                 raise ValueError('Invalid auxiliary point cost')
+        auxiliary_slots = extra[0].get('slots_required', 1)
+        if type(auxiliary_slots) is not int or auxiliary_slots < 1 or used_slots + auxiliary_slots > capacity:
+            raise ValueError('Carrier slot capacity exceeded or invalid auxiliary slot requirement')
         if auxiliary['weapon'] not in extra[0]['weapons'] or auxiliary['ammunition'] not in extra[1]['ammunition']:
             raise ValueError('Incompatible auxiliary weapon or ammunition')
         parts += extra

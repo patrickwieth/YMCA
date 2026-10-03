@@ -73,7 +73,7 @@ def extend_parts(parts):
         note='Whole stock arsenal/abilities are included in the chassis price. Not a freely interchangeable weapon or a free retrofit.')
     parts['integrated-mount']['weapons'].append('original-armament')
     parts['superheavy-bunker'] = dict(common, factions=factions[:], role='carrier', display_name='Bunker Module',
-        cost=1000, mass=1000, weapons=['original-armament'], burst=1, reload_ticks=1,
+        cost=1000, mass=1000, slots_required=3, weapons=['original-armament'], burst=1, reload_ticks=1,
         compatible_chassis_classes=['superheavy'], source='BATF.Bunker',
         note='Super-heavy chassis only; explicit graphics/trait binding still required. Original attacking cargo, five initial rocket infantry, M60/ZSU and bunker artwork inherited. Provisional 1000-credit allocation based on the 3000 vs 2000 stock reference difference, not a validated retrofit price.')
     for r in ROWS:
@@ -91,7 +91,7 @@ def extend_parts(parts):
         if price < 0: raise ValueError('Shared hardware cannot fit stock price: '+r['actor'])
         g = parts[gear(r)]
         parts[key(r)+'-hull'] = dict(common, factions=[r['faction']], role='chassis', display_name='Battle Fortress' if r['actor'] == 'BATF.Bunker' else r.get('label', r['actor'].replace('_', ' ')),
-            tier=1, mass=hull_mass, cost=price, hp=r['hp'], electric_kw=10, carrier_slots=1, equipment_slots=0, equipment=[],
+            tier=1, mass=hull_mass, cost=price, hp=r['hp'], electric_kw=10, carrier_slots=3 if r['actor'] == 'BATF.Bunker' else 1, equipment_slots=0, equipment=[],
             default_running_gear=gear(r), allowed_running_gear=[gear(r)], turn_speed_limit=r['turn'],
             max_mass=g['max_mass'], max_speed=r['speed'], reference_speed=r['speed'], reference_mass=mass,
             reference_kw=parts[motor(r)]['mechanical_kw'] - demand / parts[generator(r)]['efficiency'],

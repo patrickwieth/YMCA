@@ -42,7 +42,7 @@ migration and all 96 previous numeric combinations unchanged at that step.
 The final 44 combat bindings reuse hardware and add only Heavy Wheels/Amphibious Micro Drive,
 bringing the total back to **16**. All 124 preceding numeric combinations remain unchanged.
 Battle Fortress is now a **superheavy chassis + Bunker Module** (1000-credit module, 3000 total);
-only explicit compatible assemblies can use it. The original bunker cargo, weapons, art and unlock remain.
+the chassis has **3 turret slots**, all **3 occupied by the bunker**. Only explicit compatible assemblies can use it. The original bunker cargo, weapons, art and unlock remain.
 The template button fills available slots under the unchanged 16-design/50-point limit, without rollback
 when the catalog is larger. Other types remain selectable in the chassis dropdown. New combat families share mount
 and storage hardware, but their complete weapons/abilities remain explicitly bound. See
@@ -57,7 +57,7 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**91 Python + 167 native tests pass**; all 168 numeric combinations match the independent
+**92 Python + 174 native tests pass**; all 168 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential

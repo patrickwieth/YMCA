@@ -263,7 +263,9 @@ The follow-up adds 44 stock combat bindings using shared hardware and chassis-bo
 Only two distinct gear profiles are added (Heavy Wheels and Amphibious Micro Drive), bringing gear count
 back to **16**. All 124 preceding numeric combinations are unchanged.
 **Battle Fortress** is a **superheavy chassis** with a separate **Bunker Module**, not a chassis named
-Bunker. The 1000-credit module is superheavy-only and the complete 3000-credit assembly inherits the
+Bunker. Battle Fortress has **3 turret slots** and the bunker occupies **3/3**, leaving none
+for another turret. Capacity is validated natively and by the independent calculator.
+The 1000-credit module is superheavy-only and the complete 3000-credit assembly inherits the
 original `BATF.Bunker` cargo/weapons/art and promotion gates. Other superheavy hulls require explicit
 bunker-compatible graphics/trait bindings before the module is offered there.
 The template button now fills available slots without rolling back when the catalog exceeds the
@@ -333,7 +335,7 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **91 Python tests**, **167 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **92 Python tests**, **174 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.

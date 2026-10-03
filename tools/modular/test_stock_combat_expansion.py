@@ -1,5 +1,7 @@
 import unittest
 from collections import Counter
+from calibrate import calculate
+from compile_prototype import load_inputs
 from export_designer_catalog import data, cases
 from stock_combat_expansion import ROWS, key, prerequisites
 from generate_stock_combat_bindings import render, TARGET
@@ -47,7 +49,24 @@ class StockCombatExpansionTests(unittest.TestCase):
         self.assertEqual(parts['superheavy-bunker']['compatible_chassis_classes'], ['superheavy'])
         self.assertEqual(parts['superheavy-bunker']['display_name'], 'Bunker Module')
         self.assertEqual(parts['superheavy-bunker']['cost'], 1000)
+        self.assertEqual(parts['superheavy-bunker']['slots_required'], 3)
+        self.assertEqual(parts['stock-batf-hull']['carrier_slots'], 3)
         self.assertEqual(parts['stock-batf-hull']['allowed']['carrier'], ['superheavy-bunker'])
+
+    def test_bunker_uses_all_three_slots_and_blocks_even_an_approved_auxiliary_mount(self):
+        catalog, _ = load_inputs()
+        snapshot = data(); catalog['components'].update(snapshot['components'])
+        choices = next(a['options'] for a in snapshot['assemblies'] if a['options']['chassis'] == ['stock-batf-hull'])
+        design = dict(faction='allies', running_gear=choices['running_gear'][0],
+            components=[v[0] for role, v in choices.items() if role != 'running_gear'])
+        self.assertEqual(calculate(catalog, design)['cost'], 3000)
+        hull = catalog['components']['stock-batf-hull']
+        hull['carrier_slots'] = 2
+        with self.assertRaisesRegex(ValueError, 'slot'): calculate(catalog, design)
+        hull['carrier_slots'] = 3
+        hull['auxiliary_mount'] = dict(carriers=['integrated-mount'], slot='roof')
+        design['auxiliary_mount'] = dict(carrier='integrated-mount', weapon='original-armament', ammunition='integral-stores')
+        with self.assertRaisesRegex(ValueError, 'slot'): calculate(catalog, design)
 
     def test_catalog_is_larger_than_any_one_saved_roster(self):
         counts = Counter(a.get('faction', 'gdi') for a in data()['assemblies'])

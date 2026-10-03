@@ -55,8 +55,11 @@ snapshots are not changed by this native adapter.
 
 ## Battle Fortress and Bunker Module
 
-- Chassis: **Battle Fortress**, `chassis_class: superheavy`.
-- Separate carrier component: **Bunker Module**, compatible only with `superheavy` chassis.
+- Chassis: **Battle Fortress**, `chassis_class: superheavy`, with **3 turret/mount slots**.
+- Separate carrier component: **Bunker Module**, compatible only with `superheavy` chassis,
+  requiring **all 3 slots** (`slots_required: 3`). The UI shows **3/3 occupied**. No additional
+  turret fits alongside it. Capacity/occupancy is checked by both native and Python calculators;
+  this does not yet enable three independently configured turrets or unreviewed graphics combinations.
 - Bunker allocation: **1000 credits**; the other fitted components total **2000**, preserving the
   stock Bunker Fortress price of **3000**. This split follows the stock 2000/3000 reference difference
   but is not an independently validated generic bunker installation price.
@@ -93,7 +96,7 @@ the whole template action fail validation.
 
 ## Verification
 
-- **91 Python / 167 native tests**, all **168** calculator combinations checked independently.
+- **92 Python / 174 native tests**, all **168** calculator combinations checked independently.
 - All 44 new baselines checked against the engine-resolved originals, plus the prior 14 combat
   additions; **89** preview-only trait configurations checked headlessly.
 - Every new design compiled into immutable maps, including empty map-local weapon files (stock

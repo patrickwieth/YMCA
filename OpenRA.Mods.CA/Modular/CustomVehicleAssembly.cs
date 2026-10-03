@@ -349,7 +349,12 @@ namespace OpenRA.Mods.CA.Modular
 		public string WeaponSummary(CustomFactionProfile p)
 		{
 			var a = Assembly(p);
-			if (a.Summary != null) return a.Summary;
+			if (a.Summary != null)
+			{
+				var slots = N(Part(p, "chassis"), "carrier_slots");
+				var used = Part(p, "carrier")["slots_required"] == null ? 1 : N(Part(p, "carrier"), "slots_required");
+				return (slots > 1 ? $"Turmplaetze: {used:0}/{slots:0} belegt. " : "") + a.Summary;
+			}
 			var range = N(Part(p, "weapon"), "range_cells");
 			var burst = N(Part(p, "carrier"), "burst");
 			if (a.Actor == "HMMV" || a.Actor == "BGGY")

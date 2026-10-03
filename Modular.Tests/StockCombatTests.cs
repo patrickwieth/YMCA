@@ -72,10 +72,29 @@ public class StockCombatTests
         var catalog = JObject.Parse(File.ReadAllText(Path.Combine(DirectoryRoot, "designer-catalog.json")));
         Assert.That(catalog["components"]["stock-batf-hull"].Value<string>("chassis_class"), Is.EqualTo("superheavy"));
         Assert.That(catalog["components"]["superheavy-bunker"].Value<int>("cost"), Is.EqualTo(1000));
+        Assert.That(catalog["components"]["stock-batf-hull"].Value<int>("carrier_slots"), Is.EqualTo(3));
+        Assert.That(catalog["components"]["superheavy-bunker"].Value<int>("slots_required"), Is.EqualTo(3));
+        Assert.That(c.WeaponSummary(p), Does.StartWith("Turmplaetze: 3/3 belegt."));
         catalog["components"]["stock-batf-hull"]["chassis_class"] = "standard";
         Assert.Throws<InvalidDataException>(() => new CustomFactionDesign(catalog.ToString()).Calculate(p));
         var tank = new CustomFactionProfile();
         Assert.Throws<ArgumentException>(() => c.SelectPart(tank, "carrier", "superheavy-bunker"));
+    }
+
+    [TestCase("carrier_slots", 2)]
+    [TestCase("carrier_slots", 0)]
+    [TestCase("carrier_slots", 3.5)]
+    [TestCase("slots_required", 4)]
+    [TestCase("slots_required", 0)]
+    [TestCase("slots_required", -1)]
+    [TestCase("slots_required", 1.5)]
+    public void InvalidBunkerSlotAllocationsAreRejectedNatively(string field, double value)
+    {
+        var data = JObject.Parse(File.ReadAllText(Path.Combine(DirectoryRoot, "designer-catalog.json")));
+        data["components"][field == "carrier_slots" ? "stock-batf-hull" : "superheavy-bunker"][field] = value;
+        var c = new CustomFactionDesign(data.ToString()); var r = c.NewRoster("england");
+        var p = c.Profile(r, r.Designs[0]); c.SelectPart(p, "chassis", "stock-batf-hull");
+        Assert.Throws<InvalidDataException>(() => c.Calculate(p));
     }
 
     [TestCase("gdi")]

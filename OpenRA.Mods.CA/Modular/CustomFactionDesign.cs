@@ -148,6 +148,10 @@ namespace OpenRA.Mods.CA.Modular
 			if (gear.Value<string>("compatibility_class") is not string gearClass ||
 				hull["allowed_running_gear_classes"] is not JArray gearClasses || !gearClasses.Values<string>().Contains(gearClass))
 				throw new InvalidDataException("Fahrwerksklasse passt nicht zum Chassis.");
+			var capacity = N(hull, "carrier_slots");
+			var usedSlots = Part(profile, "carrier")["slots_required"] == null ? 1 : N(Part(profile, "carrier"), "slots_required");
+			if (capacity < 1 || capacity > 3 || capacity % 1 != 0 || usedSlots < 1 || usedSlots % 1 != 0 || usedSlots > capacity)
+				throw new InvalidDataException("Turmplatzbedarf ueberschreitet die Chassiskapazitaet oder ist ungueltig.");
 			if (Part(profile, "carrier")["compatible_chassis_classes"] is JArray mountClasses &&
 				!mountClasses.Values<string>().Contains(hull.Value<string>("chassis_class")))
 				throw new InvalidDataException("Aufbaumodul passt nicht zur Chassisklasse.");
