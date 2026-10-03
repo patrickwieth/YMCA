@@ -8,7 +8,7 @@ from shared_running_gear import ALIASES
 class SharedRunningGearTests(unittest.TestCase):
     def test_classes_are_distinct_from_locomotors_and_old_duplicates_are_removed(self):
         parts = data()['components']
-        self.assertEqual(sum(p['role'] == 'running_gear' for p in parts.values()), 14)
+        self.assertEqual(sum(p['role'] == 'running_gear' for p in parts.values()), 16)
         for alias in ALIASES: self.assertNotIn(alias, parts)
         for key, locomotor in [('light-tracks', 'wheeled'), ('tracks-light-artillery', 'lighttracked')]:
             self.assertEqual(parts[key]['compatibility_class'], 'light-tracks')

@@ -42,7 +42,7 @@ def add_families(parts, families, faction, prefix):
     common = dict(factions=[faction], tier=0, cp=0, tech=1, electric_kw=0)
     for key, actor, label, gear, motor, armor, price, hp, speed, turn, tech, weapon_cost in families:
         for part in (gear, motor, armor, 'integrated-mount', 'integral-stores'):
-            if faction not in parts[part]['factions']: parts[part]['factions'].append(faction)
+            if faction not in parts[part]['factions']: parts[part]['factions'] = parts[part]['factions'] + [faction]
         weapon = f'{prefix}-{key}-weapon'
         if weapon not in parts['integrated-mount']['weapons']: parts['integrated-mount']['weapons'].append(weapon)
         parts[weapon] = dict(common, role='weapon', display_name=label + ' - Original Weapon Package', cost=weapon_cost,

@@ -80,11 +80,7 @@ public class AlliedFactionTests
     public void MapAndRoundtripUseEnglandAndCorrectNationalTankReference()
     {
         var c = Compiler; var r = c.NewRoster("england");
-        foreach (var hull in c.CompatibleOptions(c.Profile(r, r.Designs[0]), "chassis").Skip(1))
-        {
-            var d = c.AddDesign(r); c.SelectPart(c.Profile(r, d), "chassis", hull);
-            d.Name = "Eigen " + c.Label(hull).Split(new[] { " - " }, StringSplitOptions.None)[0];
-        }
+        Assert.That(c.AddTemplates(r), Is.Zero);
         var lab = File.ReadAllBytes(Path.Combine(TestContext.CurrentContext.TestDirectory, "lab.oramap"));
         var bytes = c.CompileRosterMap(r, lab); Assert.That(c.CompileRosterMap(r, lab), Is.EqualTo(bytes));
         using var zip = new ZipArchive(new MemoryStream(bytes)); var map = Read(zip, "map.yaml");
@@ -94,7 +90,7 @@ public class AlliedFactionTests
         Assert.That(map, Does.Not.Contain("Transport: ocar"));
         Assert.That(Read(zip, "modular-rules.yaml"), Does.Contain("FactionCA@1:"));
         var loaded = c.DeserializeRoster(Read(zip, "custom-faction.json"));
-        Assert.That(loaded.BaseFaction, Is.EqualTo("england")); Assert.That(loaded.Designs.Count, Is.EqualTo(4));
+        Assert.That(loaded.BaseFaction, Is.EqualTo("england")); Assert.That(loaded.Designs.Count, Is.EqualTo(13));
         var path = Environment.GetEnvironmentVariable("MODULAR_ALLIES_EXPORT");
         if (!string.IsNullOrEmpty(path)) { using var file = new FileStream(path, FileMode.CreateNew); file.Write(bytes); }
     }

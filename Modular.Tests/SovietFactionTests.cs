@@ -79,7 +79,7 @@ public class SovietFactionTests
     public void FrozenRussiaRosterHasFourFamiliesAndMatchingReference()
     {
         var c = Compiler; var r = c.NewRoster("russia");
-        foreach (var hull in c.CompatibleOptions(c.Profile(r, r.Designs[0]), "chassis").Skip(1))
+        foreach (var hull in c.CompatibleOptions(c.Profile(r, r.Designs[0]), "chassis").Where(h => !h.StartsWith("stock-")).Skip(1))
         {
             var d = c.AddDesign(r); c.SelectPart(c.Profile(r, d), "chassis", hull);
             d.Name = "Eigen " + c.Label(hull).Split(new[] { " - " }, StringSplitOptions.None)[0];

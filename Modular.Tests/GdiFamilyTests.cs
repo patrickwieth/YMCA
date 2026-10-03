@@ -89,14 +89,14 @@ public class GdiFamilyTests
         {
             var d = c.AddDesign(r); c.SelectPart(c.Profile(r, d), "chassis", hull);
         }
-        Assert.That(r.Designs.Count, Is.EqualTo(11));
+        Assert.That(r.Designs.Count, Is.EqualTo(15));
         Assert.That(c.ValidateRoster(r), Is.LessThanOrEqualTo(50));
         var lab = File.ReadAllBytes(Path.Combine(TestContext.CurrentContext.TestDirectory, "lab.oramap"));
         var bytes = c.CompileRosterMap(r, lab);
         Assert.That(c.CompileRosterMap(r, lab), Is.EqualTo(bytes));
         using var zip = new ZipArchive(new MemoryStream(bytes));
         using var reader = new StreamReader(zip.GetEntry("custom-faction.json").Open());
-        Assert.That(c.DeserializeRoster(reader.ReadToEnd()).Designs.Count, Is.EqualTo(11));
+        Assert.That(c.DeserializeRoster(reader.ReadToEnd()).Designs.Count, Is.EqualTo(15));
         var path = Environment.GetEnvironmentVariable("MODULAR_GDI_EXPORT");
         if (!string.IsNullOrEmpty(path))
         {

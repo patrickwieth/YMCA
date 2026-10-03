@@ -208,16 +208,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				var before = compiler.SerializeRoster(roster);
 				try
 				{
-					foreach (var hull in compiler.CompatibleOptions(Profile(), "chassis"))
-					{
-						if (roster.Designs.Any(d => d.Parts["chassis"] == hull)) continue;
-						var d = compiler.AddDesign(roster);
-						compiler.SelectPart(compiler.Profile(roster, d), "chassis", hull);
-						var name = "Eigen " + compiler.Label(hull).Split(new[] { " - " }, StringSplitOptions.None)[0];
-						if (name.Length > 32) name = name.Substring(0, 32);
-						if (!roster.Designs.Any(other => other != d && string.Equals(other.Name, name, StringComparison.OrdinalIgnoreCase))) d.Name = name;
-					}
-					compiler.ValidateRoster(roster); Select(selected); Refresh(true);
+					var remaining = compiler.AddTemplates(roster);
+					Select(selected); Refresh(true);
+					message = remaining == 0 ? "Alle Vorlagen dieser Basis hinzugefuegt." :
+						remaining + " weitere Typen im Rumpf-Menue; Fraktionslimit 16 Entwuerfe / 50 Punkte erreicht.";
 				}
 				catch (Exception e) { roster = compiler.DeserializeRoster(before); Select(selected); message = e.Message; }
 			};

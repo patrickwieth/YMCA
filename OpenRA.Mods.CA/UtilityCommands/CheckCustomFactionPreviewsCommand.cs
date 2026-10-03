@@ -30,7 +30,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				{
 					compiler.SelectPart(p, "chassis", hull);
 					var source = rules.Actors[compiler.PreviewActor(p).ToLowerInvariant()];
-					if (hull.StartsWith("nod-combat-", StringComparison.Ordinal) || hull.StartsWith("china-combat-", StringComparison.Ordinal))
+					if (hull.StartsWith("nod-combat-", StringComparison.Ordinal) || hull.StartsWith("china-combat-", StringComparison.Ordinal) || compiler.UsesStockArmaments(p))
 					{
 						var values = compiler.Calculate(p);
 						var mobile = source.TraitInfo<MobileInfo>();
@@ -41,7 +41,12 @@ namespace OpenRA.Mods.CA.UtilityCommands
 							!output.Contains("Type: " + source.TraitInfo<ArmorInfo>().Type + "\n", StringComparison.Ordinal))
 							throw new InvalidOperationException("Stock baseline mismatch: " + source.Name);
 						var weaponRules = compiler.Weapons(p);
-						foreach (var armament in source.TraitInfos<ArmamentInfo>())
+						if (compiler.UsesStockArmaments(p))
+						{
+							if (weaponRules.Length != 0 || output.Contains("\tArmament", StringComparison.Ordinal) || output.Contains("\tRenderSprites:", StringComparison.Ordinal))
+								throw new InvalidOperationException("Stock armaments/graphics were overridden: " + source.Name);
+						}
+						else foreach (var armament in source.TraitInfos<ArmamentInfo>())
 							if (!weaponRules.Contains("Inherits: " + armament.Weapon + "\n", StringComparison.OrdinalIgnoreCase))
 								throw new InvalidOperationException("Missing stock weapon channel: " + source.Name + "/" + armament.Weapon);
 					}

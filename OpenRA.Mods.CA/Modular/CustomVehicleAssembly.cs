@@ -13,6 +13,8 @@ namespace OpenRA.Mods.CA.Modular
 		public readonly Dictionary<string, string> Armaments;
 		public string Faction { get; init; } = "gdi";
 		public bool PreserveWeaponTemplates { get; init; }
+		public bool PreserveActorGraphics { get; init; }
+		public bool InheritStockWeapons { get; init; }
 		public bool NativeHover { get; init; }
 		public string VoxelImage { get; init; }
 		public string ExtraPrerequisites { get; init; } = "";
@@ -69,7 +71,7 @@ namespace OpenRA.Mods.CA.Modular
 				Faction = "china", PreserveWeaponTemplates = true, StockPrerequisites = prerequisites, Summary = summary
 			};
 
-		static readonly CustomVehicleAssembly[] Assemblies =
+		static readonly CustomVehicleAssembly[] Assemblies = new CustomVehicleAssembly[]
 		{
 			new CustomVehicleAssembly("gdi-battle-hull", "MTNK", "mtnk", "Turreted@PRIMARY",
 				new[] { "tracks-standard", "prototype-hover", "gdi-stationary" }, new[] { "diesel", "diesel-large" },
@@ -314,7 +316,9 @@ namespace OpenRA.Mods.CA.Modular
 				"Nuke Cannon: Aufstellung, Munitionszyklus, abschiessbare Granate und Nuklearexplosion bleiben erhalten."),
 			ChinaCombatAssembly("bixi", "Bixi", "bixi", "light-tracks", "light", "tier3, ~chweap, ~promotion.bixi_dragon",
 				new Dictionary<string, string> { { "Armament", "BixiLauncher" } }, "Bixi Dragon: zwei echte Raketenakteure, Nachladen, Zielpause und Originalanimation.")
-		};
+		}.Concat(CreateStockCombatAssemblies()).ToArray();
+
+		public bool UsesStockArmaments(CustomFactionProfile p) => Assembly(p).InheritStockWeapons;
 
 		CustomVehicleAssembly Assembly(CustomFactionProfile p) => Assemblies.Single(a => a.Hull == p.Parts["chassis"]);
 

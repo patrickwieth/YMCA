@@ -1,11 +1,14 @@
 # Shared running gear and further ground combat bindings
 
+Historical increment. The [follow-up](all-ground-combat.md) closes the remaining 44 base-family gaps
+and models Battle Fortress as a superheavy chassis with a separate Bunker Module.
+
 ## Scope and compatibility
 
 This increment adds **14 base combat families**: the ten remaining Nod groups and four remaining
 China groups in the generated ground inventory. It does **not** complete all factions or promoted
-variants. Current native coverage: **45 faction bindings / 44 editorial families / 124 combinations**.
-**44 whole combat groups remain**, plus variants; see [missing-vehicles.md](missing-vehicles.md).
+variants. Coverage at this increment: **45 faction bindings / 44 editorial families / 124 combinations**.
+At this stage **44 whole combat groups remained**, plus variants; see [missing-vehicles.md](missing-vehicles.md).
 
 Running gear now has a `compatibility_class`; chassis declare `allowed_running_gear_classes`.
 A class is not an engine locomotor. MLRS, SSM and Prism use one **Light Tracks** component

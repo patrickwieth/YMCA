@@ -35,7 +35,7 @@ public class SharedGearAndNodCombatTests
     {
         var c = Compiler; var p = new CustomFactionProfile(); c.SelectPart(p, "chassis", "designer-mlrs-hull");
         Assert.That(c.Label("light-tracks"), Is.EqualTo("Light Tracks"));
-        Assert.That(c.Options("running_gear").Length, Is.EqualTo(14));
+        Assert.That(c.Options("running_gear").Length, Is.EqualTo(16));
         Assert.Throws<ArgumentException>(() => c.SelectPart(p, "running_gear", "tracks-light-artillery"));
         var data = JObject.Parse(Catalog); data["components"]["light-tracks"]["compatibility_class"] = "heavy-tracks";
         var invalid = new CustomFactionDesign(data.ToString());

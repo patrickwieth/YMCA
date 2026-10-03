@@ -46,9 +46,9 @@ Their production is intentionally disabled until a real factory/deployment workf
 
 ## Supported assemblies
 
-There are currently **124 supported component combinations in 45 faction-specific bindings**:
-eleven GDI bindings (48 combinations), fourteen Nod (28), eight China (24), four Allied (8),
-four Soviet (8) and four Scrin (8). These represent **44 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
+There are currently **168 supported component combinations in 89 faction-specific bindings**:
+fifteen GDI bindings (52 combinations), fourteen Nod (28), eight China (24), thirteen Allied (17),
+twenty-five Soviet (29) and fourteen Scrin (18). These represent **88 vehicle families**: ARTY and ARTY.nod are two faction-specific bindings
 of the same field-artillery family, not two independently counted families.
 
 | Assembly | Existing actor / full weapon bindings | Reference price / HP / speed | Configured default |
@@ -237,8 +237,10 @@ MARV retains its ion burst, health regeneration, terrain-conditional CashTrickle
 and `promotion.marv` / `miss.gdi` gates; no second harvesting implementation is injected.
 These are the first three additions from the requested remaining combat inventory, **not all 61**.
 The subsequent [shared-gear/combat expansion](shared-gear-combat-expansion.md) adds the ten
-remaining Nod and four remaining China base combat groups. There are still **44 wholly missing
-ground combat groups** across the other factions (plus variants). This is not full inventory completion.
+remaining Nod and four remaining China base combat groups. The subsequent
+[all-ground-combat expansion](all-ground-combat.md) closes the remaining **44 base-family gaps**.
+There are now **zero wholly missing production-candidate ground combat base-family groups**.
+Promoted/national variants, support/economy vehicles, aircraft and naval remain separate inventory sections.
 
 The viewer uses the bound stock actor as the graphics template. It does not simulate upgrades,
 firing, passengers, damage or all conditional combat states. Initial visual conditions and ammo
@@ -257,6 +259,15 @@ The light-tracks compatibility class is distinct from the engine locomotor. Gear
 16 to **14**; old profile IDs migrate on load and all 96 previous numeric combinations stay unchanged.
 New families also share mount/store hardware rather than creating a separate copy for every vehicle.
 Class admission does not override explicit graphics/trait assembly restrictions.
+The follow-up adds 44 stock combat bindings using shared hardware and chassis-bound original armaments.
+Only two distinct gear profiles are added (Heavy Wheels and Amphibious Micro Drive), bringing gear count
+back to **16**. All 124 preceding numeric combinations are unchanged.
+**Battle Fortress** is a **superheavy chassis** with a separate **Bunker Module**, not a chassis named
+Bunker. The 1000-credit module is superheavy-only and the complete 3000-credit assembly inherits the
+original `BATF.Bunker` cargo/weapons/art and promotion gates. Other superheavy hulls require explicit
+bunker-compatible graphics/trait bindings before the module is offered there.
+The template button now fills available slots without rolling back when the catalog exceeds the
+unchanged **16-design / 50-point** limit. Further chassis stay selectable individually.
 
 ## Persistence and match isolation
 
@@ -322,14 +333,14 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **85 Python tests**, **112 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **91 Python tests**, **167 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
 
 Native tests cover schema migration, roundtrip/backups, library isolation, shared budget,
 copy independence, namespace stability, invalid combinations and weapon-channel preservation.
-All 124 offered numeric combinations are checked against the independent Python calculator.
+All 168 offered numeric combinations are checked against the independent Python calculator.
 The earlier six-design sample includes tank hover and both stationary hull variants.
 The eight-family sample can be exported with `MODULAR_GDI_EXPORT=/absolute/new-gdi.oramap`.
 See `tools/modular/designer-gdi-validation.md` for the GDI differential result.
@@ -360,7 +371,7 @@ baselines, turn rates, weapon inheritance, native hover/no duplicate traits, Lig
 converter admission/isolation, shared ratings and Traveler map/snapshot selection.
 The expanded eleven-design GDI sample reports **1685 / 1701** errors, all 16 additions
 inherited, **zero unexpected diagnostics**: `tools/modular/designer-gdi-expanded-validation.md`.
-`--check-custom-faction-previews` validates all **45** preview-only trait bindings headlessly,
+`--check-custom-faction-previews` validates all **89** preview-only trait bindings headlessly,
 including source isolation, single Emperor body and loaded SSM state. Separate tests cover
 24-second rotation, fitting, UI registration and Titan's sprite source. Interactive sprite/voxel
 rendering was confirmed by the user for the earlier viewer; the newly added models/abilities
@@ -368,6 +379,9 @@ still need live verification. Additional engine-resolved checks cover all fourte
 baselines (cost, HP, speed, turn, armor, locomotor) and every intrinsic armament.
 Expanded Nod differential: **1685 / 1706**, 21 inherited additions; China: **1685 / 1705**, 20 inherited
 additions. Both have **zero unexpected diagnostics**; see `designer-{nod,china}-combat-validation.md`.
+The final 44 additions were checked in five immutable-map batches, all with zero unexpected diagnostics:
+GDI 1685/1689, Allies 1685/1706, Scrin 1685/1695, Soviets 1685/1712 and 1685/1694.
+See `designer-stock-*-validation.md` and [the final coverage report](all-ground-combat.md).
 
 The earlier single-design menu/lobby path was confirmed by the user. This expanded
 multi-design UI, factory production, mixed-weapon firing and transport still need

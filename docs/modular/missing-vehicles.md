@@ -1,12 +1,12 @@
 # Was im Fahrzeugdesigner noch fehlt
 
-Stand: aktuelle native Bindings einschließlich aller Nod-/China-Boden-Kampfgrundfamilien; aus Regeln und Compiler-Bindungen erzeugt.
+Stand: aktuelle native Bindings einschließlich aller sechs Boden-Kampfgrundroster (BATF über die baubare Bunker-Variante); aus Regeln und Compiler-Bindungen erzeugt.
 
 **Fehlend bedeutet nicht im Designer konfigurier-/kompilierbar.** Die normalen Fraktionsroster bleiben erhalten;
 diese Fahrzeuge können dort bereits existieren. Tabellen-/Excel-Einträge und vorplatzierte Carryalls zählen nicht als Designer-Unterstützung.
 
-In den sechs Bodenfahrzeug-Dateien: **63 vollständig fehlende Fraktions-Familiengruppen**:
-**44 Kampf-/bewaffnete Transportgruppen**, **19 Wirtschafts-/Bau-/Transport-/Unterstützungsgruppen**.
+In den sechs Bodenfahrzeug-Dateien: **19 vollständig fehlende Fraktions-Familiengruppen**:
+**0 Kampf-/bewaffnete Transportgruppen**, **19 Wirtschafts-/Bau-/Transport-/Unterstützungsgruppen**.
 Das sind redaktionelle Gruppen mit lokaler Produktionsdeklaration, keine vollständig aufgelöste Baubarkeitsprüfung.
 Fraktionszuordnung folgt der Quelldatei, nicht exklusiver Verfügbarkeit. APC2, AMCV und HAR2 werden von GDI/Nod geteilt.
 APCs, kämpfende Besatzungstransporter und Selbstmordfahrzeuge stehen unter Kampf; EMP/ECM/Radar unter Unterstützung.
@@ -15,12 +15,8 @@ Wracks, Projektile, Dummy-Akteure und angehängte Hilfsobjekte werden nicht als 
 
 ## 1. Vollständig fehlende Boden-Kampffahrzeuge
 
-### GDI (4)
+### GDI (0)
 
-- **Scout Drone** (`GDRN`)
-- **Mini Drone** (`MDRN`)
-- **Vulcan** (`VULC`)
-- **X-O Powersuit** (`XO`)
 
 ### Nod (0)
 
@@ -28,54 +24,14 @@ Wracks, Projektile, Dummy-Akteure und angehängte Hilfsobjekte werden nicht als 
 ### China (0)
 
 
-### Alliierte (9)
+### Alliierte (0)
 
-- **Scout Tank** (`1TNK`)
-- **Armored Personnel Carrier** (`APC`)
-- **Missile Fortress** (`BATF`)
-- **Chrono Prison** (`CHPR`)
-- **Cryo Launcher** (`CRYO`)
-- **Chrono Tank** (`CTNK`)
-- **Multi-Purpose Drone** (`IFV`)
-- **Mirage Tank** (`RTNK`)
-- **Tank Destroyer** (`TNKD`)
 
-### Sowjets (21)
+### Sowjets (0)
 
-- **Akatsiya** (`2S3`)
-- **Armored Personnel Carrier (BTR)** (`BTR`)
-- **Chemical Sprayer** (`Chem_Sprayer`)
-- **Demolition Truck** (`DTRK`)
-- **Devil Tank** (`Devil_Tank`)
-- **Gene Splicer** (`Gene_Splicer`)
-- **HQ7 Missile Launcher** (`HQ7`)
-- **HTK5 Missile Launcher** (`HTK5`)
-- **Hyena Missile Launcher** (`Hyena`)
-- **ISU-152** (`ISU`)
-- **Katyusha** (`KATY`)
-- **Nona SVK** (`NonaSVK`)
-- **The People's Tank** (`Peoples_Tank`)
-- **MAD Tank** (`QTNK`)
-- **Kim's Giant Rice Cooker** (`Rice_Cooker`)
-- **Source of Pollution** (`Source_of_Pollution`)
-- **Tesla Tank** (`TTNK`)
-- **Tsar Tank** (`Tsar_Tank`)
-- **V3 Launcher** (`V3RL`)
-- **Apocalypse Tank** (`apoc`)
-- **Kim's Monowheel** (`kims_wheel`)
 
-### Scrin (10)
+### Scrin (0)
 
-- **Atomizer** (`ATMZ`)
-- **Channeler Tank** (`Channeler`)
-- **Hexapod Eradicator** (`Hexapod`)
-- **Interloper** (`INTL`)
-- **Lacerator** (`LACE`)
-- **Leecher** (`LCHR`)
-- **Heavy Tripod** (`RPTP`)
-- **Ruiner** (`RUIN`)
-- **Stormcrawler** (`STCR`)
-- **Annihilator Tripod** (`TPOD`)
 
 ## 2. Vollständig fehlende andere Bodenfahrzeuge
 
@@ -121,9 +77,16 @@ Wracks, Projektile, Dummy-Akteure und angehängte Hilfsobjekte werden nicht als 
 Hier fehlt nicht die ganze Familie. Eigenständige Varianten/Promotions sind nicht durch ihre Basiseinheit erledigt.
 Bereits geerbte bedingte Waffen (z.B. T-34 Cluster, Dragon Black Napalm, Emperor-Zustand) sind dagegen kein zweites fehlendes Fahrzeug.
 
+- **Alliierte / 1TNK** (vorhanden: 1TNK): `1TNK.PDL`, `1TNK.Reflector`
 - **Alliierte / 2TNK** (vorhanden: Challenger_Tank): `Leclerc_Tank`, `Leopard_Tank`, `2TNK.Chrono`
+- **Alliierte / BATF** (vorhanden: BATF.Bunker): `BATF.Bunker.PDL`, `BATF.Bunker.Reflector`, `BATF.Prism`, `BATF.Prism.PDL`, `BATF.Prism.Reflector`, `BATF.Support`, `BATF.Support.PDL`, `BATF.Support.Reflector`, `BATF.Artillery`, `BATF.Artillery.PDL`, `BATF.Artillery.Reflector`, `BATF.AI`
+- **Alliierte / CHPR** (vorhanden: CHPR): `CHPR.Range`, `CHPR.AA`
+- **Alliierte / CTNK** (vorhanden: CTNK): `CTNK.PDL`, `CTNK.Reflector`
+- **Alliierte / IFV** (vorhanden: IFV): `IFV.AI`
 - **Alliierte / JEEP** (vorhanden: JEEP): `Heavy_Jeep`, `Tow_Jeep`, `AA_Jeep`
 - **Alliierte / Prismtank** (vorhanden: Prismtank): `PBLASTER`, `PCAN`
+- **Alliierte / RTNK** (vorhanden: RTNK): `RTNK.PDL`, `RTNK.Reflector`, `RTNK.PDL.Firerate`, `RTNK.Reflector.Firerate`, `RTNK.PDL.Toughness`, `RTNK.Reflector.Toughness`
+- **Alliierte / TNKD** (vorhanden: TNKD): `TNKD.PDL`, `TNKD.Reflector`, `TNKD.PDL.Burstfire`, `TNKD.Reflector.Burstfire`, `TNKD.PDL.Tough`, `TNKD.Reflector.Tough`
 - **China / chbattle** (vorhanden: chbattle): `chbattle.Autoloader`, `chbattle.Autoloader.PDL`, `chbattle.Autoloader.Reflector`, `chbattle.Nuclear_Shells`, `chbattle.Nuclear_Shells.PDL`, `chbattle.Nuclear_Shells.Reflector`, `chbattle.Mass_Production`, `chbattle.Mass_Production.PDL`, `chbattle.Mass_Production.Reflector`
 - **China / chcrawl2** (vorhanden: chcrawl2): `chcrawl2.Hunter`, `chcrawl2.Hunter.PDL`, `chcrawl2.Hunter.Reflector`, `chcrawl2.Assault`, `chcrawl2.Assault.PDL`, `chcrawl2.Assault.Reflector`
 - **China / chdragon** (vorhanden: chdragon): `chdragon.PDL`, `chdragon.Reflector`
@@ -144,81 +107,54 @@ Bereits geerbte bedingte Waffen (z.B. T-34 Cluster, Dragon Black Napalm, Emperor
 - **Nod / LTNK** (vorhanden: LTNK): `LTNK.Laser`
 - **Nod / SSM** (vorhanden: SSM): `SSM.Toxin`, `SSM.Multi`, `SSM.Bunkerbuster`
 - **Nod / STNK** (vorhanden: STNK): `STNK.Scrin`, `STNK.Scrin.PDL`, `STNK.Scrin.Reflector`, `STNK.HE`, `STNK.HE.PDL`, `STNK.HE.Reflector`, `STNK.AP`, `STNK.AP.PDL`, `STNK.AP.Reflector`
+- **Scrin / ATMZ** (vorhanden: ATMZ): `ATMZ.AA`, `ATMZ.Range`
 - **Scrin / CORR** (vorhanden: CORR): `CORR.Area`, `CORR.Area.PDL`, `CORR.Area.Reflector`, `CORR.Range`, `CORR.Range.PDL`, `CORR.Range.Reflector`
+- **Scrin / Channeler** (vorhanden: Channeler): `Channeler.chain`, `Channeler.disc`, `Channeler.disc.reflector`, `Channeler.disc.pdl`, `Channeler.chain.reflector`, `Channeler.chain.pdl`
 - **Scrin / DEVO** (vorhanden: DEVO): `DEVO.acid`, `DEVO.heavy`
 - **Scrin / GUNW** (vorhanden: GUNW): `GUNW.sensor`
+- **Scrin / INTL** (vorhanden: INTL): `INTL.AA`, `INTL.Teleport`
+- **Scrin / LACE** (vorhanden: LACE): `LACE.PDL`, `LACE.Reflector`, `LACE.AP`
+- **Scrin / LCHR** (vorhanden: LCHR): `LCHR.Slow`, `LCHR.Slow.PDL`, `LCHR.Slow.Reflector`, `LCHR.Drain`, `LCHR.Drain.PDL`, `LCHR.Drain.Reflector`
+- **Scrin / RPTP** (vorhanden: RPTP): `RPTP.range`, `RPTP.range.reflector`, `RPTP.range.PDL`, `RPTP.acid`, `RPTP.acid.reflector`, `RPTP.acid.PDL`
+- **Scrin / RUIN** (vorhanden: RUIN): `RUIN.barrage`, `RUIN.splash`
 - **Scrin / SEEK** (vorhanden: SEEK): `SEEK.PDL`, `SEEK.Reflector`
+- **Scrin / STCR** (vorhanden: STCR): `STCR.Range`, `STCR.Range.PDL`, `STCR.Range.Reflector`, `STCR.Arc`, `STCR.Arc.PDL`, `STCR.Arc.Reflector`
+- **Scrin / TPOD** (vorhanden: TPOD): `TPOD.chain`, `TPOD.chain.reflector`, `TPOD.chain.PDL`, `TPOD.acid`, `TPOD.acid.reflector`, `TPOD.acid.pdl`
+- **Sowjets / BTR** (vorhanden: BTR): `BTR.Surveillance`
+- **Sowjets / Chem_Sprayer** (vorhanden: Chem_Sprayer): `Chem_Sprayer.Range`, `Chem_Sprayer.Range.Metal_Acid`, `Chem_Sprayer.Range.Spread`, `Chem_Sprayer.Splash`, `Chem_Sprayer.Splash.Metal_Acid`, `Chem_Sprayer.Splash.Spread`, `Chem_Sprayer.Cloud`, `Chem_Sprayer.Cloud.Metal_Acid`, `Chem_Sprayer.Cloud.Spread`
+- **Sowjets / Devil_Tank** (vorhanden: Devil_Tank): `Devil_Tank.PDL`, `Devil_Tank.Reflector`
 - **Sowjets / FTRK** (vorhanden: FTRK): `FTRK.Barrage`
 - **Sowjets / Heavy_Tank** (vorhanden: Heavy_Tank): `Heavy_Tank.AP`, `Heavy_Tank.AP.PDL`, `Heavy_Tank.AP.Reflector`, `Heavy_Tank.Tesla`, `Heavy_Tank.Tesla.PDL`, `Heavy_Tank.Tesla.Reflector`
+- **Sowjets / ISU** (vorhanden: ISU): `ISU.Concussion`, `ISU.Concussion.Reflector`, `ISU.Concussion.PDL`, `ISU.Cluster`, `ISU.Cluster.Reflector`, `ISU.Cluster.PDL`, `ISU.AP`, `ISU.AP.Reflector`, `ISU.AP.PDL`
+- **Sowjets / Peoples_Tank** (vorhanden: Peoples_Tank): `Peoples_Tank.Speaker`, `Peoples_Tank.Speaker.Reflector`, `Peoples_Tank.Speaker.PDL`, `Peoples_Tank.Mass_Production`, `Peoples_Tank.Mass_Production.Reflector`, `Peoples_Tank.Mass_Production.PDL`
+- **Sowjets / Source_of_Pollution** (vorhanden: Source_of_Pollution): `Source_of_Pollution.Metal_Acid`, `Source_of_Pollution.Metal_Acid.Reflector`, `Source_of_Pollution.Metal_Acid.PDL`, `Source_of_Pollution.Chem_Spray`, `Source_of_Pollution.Chem_Spray.Reflector`, `Source_of_Pollution.Chem_Spray.PDL`, `Source_of_Pollution.Chem_Bomb`, `Source_of_Pollution.Chem_Bomb.Reflector`, `Source_of_Pollution.Chem_Bomb.PDL`
+- **Sowjets / TTNK** (vorhanden: TTNK): `TTNK.Arc`
 - **Sowjets / TTNK.RA2** (vorhanden: TTNK.RA2): `TTNK.RA2.Arc`
+- **Sowjets / apoc** (vorhanden: apoc): `apoc.Speaker`, `apoc.Speaker.Reflector`, `apoc.Speaker.PDL`, `apoc.Nuke`, `apoc.Nuke.Reflector`, `apoc.Nuke.PDL`, `apoc.Drozd`, `apoc.Drozd.Reflector`, `apoc.Drozd.PDL`
 
 ## 4. Alle Varianten vollständig fehlender Bodenfamilien
 
 Basisakteure und Varianten als Prüfliste; nicht als zusätzliche Familien zählen.
 
-- **Alliierte / 1TNK**: `1TNK`, `1TNK.PDL`, `1TNK.Reflector`
-- **Alliierte / APC**: `APC`
-- **Alliierte / BATF**: `BATF`, `BATF.Bunker`, `BATF.Bunker.PDL`, `BATF.Bunker.Reflector`, `BATF.Prism`, `BATF.Prism.PDL`, `BATF.Prism.Reflector`, `BATF.Support`, `BATF.Support.PDL`, `BATF.Support.Reflector`, `BATF.Artillery`, `BATF.Artillery.PDL`, `BATF.Artillery.Reflector`, `BATF.AI`
-- **Alliierte / CHPR**: `CHPR`, `CHPR.Range`, `CHPR.AA`
-- **Alliierte / CRYO**: `CRYO`
-- **Alliierte / CTNK**: `CTNK`, `CTNK.PDL`, `CTNK.Reflector`
 - **Alliierte / HARV**: `HARV`, `HARV.Chrono`
-- **Alliierte / IFV**: `IFV`, `IFV.AI`
 - **Alliierte / MCV**: `MCV`, `MCV.Nukular`
 - **Alliierte / MGG**: `MGG`
 - **Alliierte / MRJ**: `MRJ`
-- **Alliierte / RTNK**: `RTNK`, `RTNK.PDL`, `RTNK.Reflector`, `RTNK.PDL.Firerate`, `RTNK.Reflector.Firerate`, `RTNK.PDL.Toughness`, `RTNK.Reflector.Toughness`
-- **Alliierte / TNKD**: `TNKD`, `TNKD.PDL`, `TNKD.Reflector`, `TNKD.PDL.Burstfire`, `TNKD.Reflector.Burstfire`, `TNKD.PDL.Tough`, `TNKD.Reflector.Tough`
 - **China / CHNMCV**: `CHNMCV`, `CHNMCV.Nukular`
 - **China / chcrawl**: `chcrawl`
 - **China / checm**: `checm`, `checm.pulse`, `checm.focus`, `checm.chain`
 - **China / chharv**: `chharv`
 - **China / choutpost**: `choutpost`, `choutpost.Propaganda`, `choutpost.Propaganda.PDL`, `choutpost.Propaganda.Reflector`, `choutpost.Bunker`, `choutpost.Bunker.PDL`, `choutpost.Bunker.Reflector`
-- **GDI / GDRN**: `GDRN`
-- **GDI / MDRN**: `MDRN`
 - **GDI / MEMP**: `MEMP`, `MEMP.Volatile`, `MEMP.Ranged`, `MEMP.Ranged.Improved`
 - **GDI / MSAR**: `MSAR`, `MSAR.PDL`
-- **GDI / VULC**: `VULC`
-- **GDI / XO**: `XO`
 - **Nod / AMCV**: `AMCV`, `AMCV.Nukular`
 - **Nod / COORDINATOR**: `COORDINATOR`
 - **Nod / HAR2**: `HAR2`
 - **Nod / MSG**: `MSG`
-- **Scrin / ATMZ**: `ATMZ`, `ATMZ.AA`, `ATMZ.Range`
-- **Scrin / Channeler**: `Channeler`, `Channeler.chain`, `Channeler.disc`, `Channeler.disc.reflector`, `Channeler.disc.pdl`, `Channeler.chain.reflector`, `Channeler.chain.pdl`
 - **Scrin / HARV.Scrin**: `HARV.Scrin`
-- **Scrin / Hexapod**: `Hexapod`
-- **Scrin / INTL**: `INTL`, `INTL.AA`, `INTL.Teleport`
-- **Scrin / LACE**: `LACE`, `LACE.PDL`, `LACE.Reflector`, `LACE.AP`
-- **Scrin / LCHR**: `LCHR`, `LCHR.Slow`, `LCHR.Slow.PDL`, `LCHR.Slow.Reflector`, `LCHR.Drain`, `LCHR.Drain.PDL`, `LCHR.Drain.Reflector`
-- **Scrin / RPTP**: `RPTP`, `RPTP.range`, `RPTP.range.reflector`, `RPTP.range.PDL`, `RPTP.acid`, `RPTP.acid.reflector`, `RPTP.acid.PDL`
-- **Scrin / RUIN**: `RUIN`, `RUIN.barrage`, `RUIN.splash`
 - **Scrin / SMCV**: `SMCV`, `SMCV.Nukular`
-- **Scrin / STCR**: `STCR`, `STCR.Range`, `STCR.Range.PDL`, `STCR.Range.Reflector`, `STCR.Arc`, `STCR.Arc.PDL`, `STCR.Arc.Reflector`
-- **Scrin / TPOD**: `TPOD`, `TPOD.chain`, `TPOD.chain.reflector`, `TPOD.chain.PDL`, `TPOD.acid`, `TPOD.acid.reflector`, `TPOD.acid.pdl`
-- **Sowjets / 2S3**: `2S3`
-- **Sowjets / BTR**: `BTR`, `BTR.Surveillance`
-- **Sowjets / Chem_Sprayer**: `Chem_Sprayer`, `Chem_Sprayer.Range`, `Chem_Sprayer.Range.Metal_Acid`, `Chem_Sprayer.Range.Spread`, `Chem_Sprayer.Splash`, `Chem_Sprayer.Splash.Metal_Acid`, `Chem_Sprayer.Splash.Spread`, `Chem_Sprayer.Cloud`, `Chem_Sprayer.Cloud.Metal_Acid`, `Chem_Sprayer.Cloud.Spread`
-- **Sowjets / DTRK**: `DTRK`
-- **Sowjets / Devil_Tank**: `Devil_Tank`, `Devil_Tank.PDL`, `Devil_Tank.Reflector`
-- **Sowjets / Gene_Splicer**: `Gene_Splicer`
-- **Sowjets / HQ7**: `HQ7`
-- **Sowjets / HTK5**: `HTK5`
-- **Sowjets / Hyena**: `Hyena`
-- **Sowjets / ISU**: `ISU`, `ISU.Concussion`, `ISU.Concussion.Reflector`, `ISU.Concussion.PDL`, `ISU.Cluster`, `ISU.Cluster.Reflector`, `ISU.Cluster.PDL`, `ISU.AP`, `ISU.AP.Reflector`, `ISU.AP.PDL`
-- **Sowjets / KATY**: `KATY`
 - **Sowjets / MCV.Soviet**: `MCV.Soviet`, `MCV.Nukular.Soviet`
-- **Sowjets / NonaSVK**: `NonaSVK`
-- **Sowjets / Peoples_Tank**: `Peoples_Tank`, `Peoples_Tank.Speaker`, `Peoples_Tank.Speaker.Reflector`, `Peoples_Tank.Speaker.PDL`, `Peoples_Tank.Mass_Production`, `Peoples_Tank.Mass_Production.Reflector`, `Peoples_Tank.Mass_Production.PDL`
-- **Sowjets / QTNK**: `QTNK`
-- **Sowjets / Rice_Cooker**: `Rice_Cooker`
-- **Sowjets / Source_of_Pollution**: `Source_of_Pollution`, `Source_of_Pollution.Metal_Acid`, `Source_of_Pollution.Metal_Acid.Reflector`, `Source_of_Pollution.Metal_Acid.PDL`, `Source_of_Pollution.Chem_Spray`, `Source_of_Pollution.Chem_Spray.Reflector`, `Source_of_Pollution.Chem_Spray.PDL`, `Source_of_Pollution.Chem_Bomb`, `Source_of_Pollution.Chem_Bomb.Reflector`, `Source_of_Pollution.Chem_Bomb.PDL`
 - **Sowjets / Soviet_Miner**: `Soviet_Miner`
-- **Sowjets / TTNK**: `TTNK`, `TTNK.Arc`
-- **Sowjets / Tsar_Tank**: `Tsar_Tank`
-- **Sowjets / V3RL**: `V3RL`, `V3BRL`, `V4RL`
-- **Sowjets / apoc**: `apoc`, `apoc.Speaker`, `apoc.Speaker.Reflector`, `apoc.Speaker.PDL`, `apoc.Nuke`, `apoc.Nuke.Reflector`, `apoc.Nuke.PDL`, `apoc.Drozd`, `apoc.Drozd.Reflector`, `apoc.Drozd.PDL`
-- **Sowjets / kims_wheel**: `kims_wheel`
 
 ## 5. Sonder-/Prüffälle am Boden
 

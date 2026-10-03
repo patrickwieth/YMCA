@@ -76,7 +76,7 @@ public class ScrinFactionTests
     }
 
     [Test]
-    public void SixBasesExistAndScrinMapFreezesFourFamiliesWithTravelerReference()
+    public void SixBasesExistAndScrinMapFreezesFourteenFamiliesWithTravelerReference()
     {
         var c = Compiler; Assert.That(CustomFactionDesign.BaseFactions.Length, Is.EqualTo(6));
         var r = c.NewRoster("traveler");
@@ -93,7 +93,7 @@ public class ScrinFactionTests
         Assert.That(map, Does.Contain("Reference: seek")); Assert.That(map, Does.Not.Contain("Transport: ocar"));
         Assert.That(Read(zip, "modular-rules.yaml"), Does.Contain("FactionCA@18:"));
         var loaded = c.DeserializeRoster(Read(zip, "custom-faction.json"));
-        Assert.That(loaded.BaseFaction, Is.EqualTo("traveler")); Assert.That(loaded.Designs.Count, Is.EqualTo(4));
+        Assert.That(loaded.BaseFaction, Is.EqualTo("traveler")); Assert.That(loaded.Designs.Count, Is.EqualTo(14));
         var path = Environment.GetEnvironmentVariable("MODULAR_SCRIN_EXPORT");
         if (!string.IsNullOrEmpty(path)) { using var file = new FileStream(path, FileMode.CreateNew); file.Write(bytes); }
     }

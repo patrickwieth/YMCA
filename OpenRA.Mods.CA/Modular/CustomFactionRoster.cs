@@ -64,6 +64,27 @@ namespace OpenRA.Mods.CA.Modular
 			return design;
 		}
 
+		// Fill available slots without rolling back successful additions when the catalog exceeds roster limits.
+		public int AddTemplates(CustomFactionRoster roster)
+		{
+			ValidateRoster(roster);
+			var hulls = CompatibleOptions(Profile(roster, roster.Designs[0]), "chassis");
+			foreach (var hull in hulls.Where(h => !roster.Designs.Any(d => d.Parts["chassis"] == h)))
+			{
+				if (roster.Designs.Count >= MaxDesigns) break;
+				var name = Regex.Replace("Eigen " + Label(hull).Split(new[] { " - " }, StringSplitOptions.None)[0], @"[^\p{L}\p{N} _-]", "-").Trim();
+				name = name.Substring(0, Math.Min(27, name.Length));
+				var unique = name;
+				for (var i = 2; roster.Designs.Any(d => string.Equals(d.Name.Trim(), unique, StringComparison.OrdinalIgnoreCase)); i++) unique = name + " " + i;
+				var design = new CustomVehicleDesign { Id = "v" + Guid.NewGuid().ToString("N"), Name = unique, Parts = DefaultParts(roster.BaseFaction) };
+				SelectPart(Profile(roster, design), "chassis", hull);
+				roster.Designs.Add(design);
+				try { ValidateRoster(roster); }
+				catch (InvalidDataException) { roster.Designs.Remove(design); }
+			}
+			return hulls.Count(h => !roster.Designs.Any(d => d.Parts["chassis"] == h));
+		}
+
 		public string SerializeRoster(CustomFactionRoster roster)
 		{
 			ValidateRoster(roster);

@@ -24,6 +24,8 @@ def native_actors():
     text = (REPO / 'OpenRA.Mods.CA/Modular/CustomVehicleAssembly.cs').read_text(encoding='utf-8')
     actors = re.findall(r'new CustomVehicleAssembly\("[^"]+", "([^"]+)"', text)
     actors += re.findall(r'(?:ScrinAssembly|NodCombatAssembly|ChinaCombatAssembly)\("[^"]+", "([^"]+)"', text)
+    stock = (REPO / 'OpenRA.Mods.CA/Modular/StockCombatAssemblies.cs').read_text(encoding='utf-8')
+    actors += re.findall(r'StockAssembly\("[^"]+", "([^"]+)"', stock)
     return {a.lower() for a in actors}
 
 
@@ -48,7 +50,7 @@ def report():
     missing = [f for f in families if not f['native'] and f['status'] == 'production candidate']
     counts = {role: sum(f['role'] == role for f in missing) for role in ('combat', 'support')}
     lines = ['# Was im Fahrzeugdesigner noch fehlt', '',
-        'Stand: aktuelle native Bindings einschließlich aller Nod-/China-Boden-Kampfgrundfamilien; aus Regeln und Compiler-Bindungen erzeugt.', '',
+        'Stand: aktuelle native Bindings einschließlich aller sechs Boden-Kampfgrundroster (BATF über die baubare Bunker-Variante); aus Regeln und Compiler-Bindungen erzeugt.', '',
         '**Fehlend bedeutet nicht im Designer konfigurier-/kompilierbar.** Die normalen Fraktionsroster bleiben erhalten;',
         'diese Fahrzeuge können dort bereits existieren. Tabellen-/Excel-Einträge und vorplatzierte Carryalls zählen nicht als Designer-Unterstützung.', '',
         f'In den sechs Bodenfahrzeug-Dateien: **{len(missing)} vollständig fehlende Fraktions-Familiengruppen**:',

@@ -16,6 +16,7 @@ import gdi_heavy_designer_expansion as gdi_heavy
 import nod_combat_expansion as nod_combat
 import china_combat_expansion as china_combat
 import shared_running_gear as gear
+import stock_combat_expansion as stock
 
 
 def assemblies():
@@ -30,7 +31,7 @@ def assemblies():
               'light', 'scout-mg-mount', 'scout-mg', ['scout-mg-rounds'], ['scout-sensors']),
         frame('designer-mlrs-hull', ['designer-mlrs-gear'], ['diesel', 'diesel-large'],
               'light', 'designer-rocket-mount', 'designer-rockets', ['designer-rocket-payload']),
-    ] + additional_assemblies() + gdi_heavy.additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies() + scrin.additional_assemblies() + nod_combat.additional_assemblies() + china_combat.additional_assemblies()
+    ] + additional_assemblies() + gdi_heavy.additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies() + scrin.additional_assemblies() + nod_combat.additional_assemblies() + china_combat.additional_assemblies() + stock.additional_assemblies()
     for assembly in result:
         assembly['options']['running_gear'] = [gear.canonical(k) for k in assembly['options']['running_gear']]
     return result
@@ -81,6 +82,7 @@ def data():
     gear.consolidate(parts)
     nod_combat.extend_parts(parts)
     china_combat.extend_parts(parts)
+    stock.extend_parts(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}
     for assembly in assemblies():
@@ -89,6 +91,7 @@ def data():
         hull['allowed_running_gear'] = choices['running_gear'][:]
         hull['default_running_gear'] = choices['running_gear'][0]
         hull['allowed_running_gear_classes'] = sorted({parts[k]['compatibility_class'] for k in choices['running_gear']})
+        hull['chassis_class'] = 'superheavy' if any(k in ('tracks-superheavy', 'designer-mk2-legs') for k in choices['running_gear']) or choices['chassis'][0] == 'stock-hexapod-hull' else 'standard'
         hull['allowed']['drive'] = choices['drive'][:]
         allowed = weapon_ammo.setdefault(choices['weapon'][0], [])
         allowed.extend(a for a in choices['ammunition'] if a not in allowed)
@@ -119,6 +122,12 @@ def cases():
         'terrain_speeds': {k: int(v) for k, v in re.findall(r'^\t{3}(\w+): (\d+)$', match.group(1), re.M)},
         'crushes': re.search(r'^\t\tCrushes: (.+)$', match.group(1), re.M).group(1).split(', '),
     }
+    for name in ('heavywheeled', 'seal'):
+        match = re.search(r'\tLocomotor@' + name.upper() + r':\n(.*?)(?=\n\t[^\t ]|\Z)', world, re.S)
+        if not match or '\t\tName: ' + name not in match.group(1): raise ValueError('Missing stock locomotor: ' + name)
+        catalog['locomotors'][name] = dict(source='mods/ca/rules/world.yaml',
+            terrain_speeds={k: int(v) for k, v in re.findall(r'^\t{3}(\w+): (\d+)$', match.group(1), re.M)},
+            crushes=re.search(r'^\t\tCrushes: (.+)$', match.group(1), re.M).group(1).split(', '))
     rows = []
     for assembly in assemblies():
         choices = assembly['options']

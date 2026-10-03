@@ -85,6 +85,7 @@ namespace OpenRA.Mods.CA.Modular
 				{ "tracks-light-artillery", ("tracks", "lighttracked") },
 				{ "tracks-superheavy", ("tracks", "sheavytracked") },
 				{ "designer-flak-gear", ("wheels", "wheeled") },
+				{ "heavy-wheels", ("wheels", "heavywheeled") }, { "amphibious-micro", ("wheels", "seal") },
 				{ "gdi-light-hover", ("hover", "lighthover") }, { "scrin-walker-gear", ("walker", "wheeled") }, { "scrin-hover-gear", ("hover", "lighthover") }
 			};
 			foreach (var binding in gearBindings)
@@ -147,6 +148,9 @@ namespace OpenRA.Mods.CA.Modular
 			if (gear.Value<string>("compatibility_class") is not string gearClass ||
 				hull["allowed_running_gear_classes"] is not JArray gearClasses || !gearClasses.Values<string>().Contains(gearClass))
 				throw new InvalidDataException("Fahrwerksklasse passt nicht zum Chassis.");
+			if (Part(profile, "carrier")["compatible_chassis_classes"] is JArray mountClasses &&
+				!mountClasses.Values<string>().Contains(hull.Value<string>("chassis_class")))
+				throw new InvalidDataException("Aufbaumodul passt nicht zur Chassisklasse.");
 			var armor = Part(profile, "armor");
 			var generator = Part(profile, "generator");
 			var stationary = profile.Parts["running_gear"] == "gdi-stationary";
@@ -246,7 +250,9 @@ namespace OpenRA.Mods.CA.Modular
 				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.StockPrerequisites != null ? assembly.StockPrerequisites + ", ~structures." + p.BaseFaction :
 					(assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures." + p.BaseFaction + (v.Tech > 1 ? ", tier" + v.Tech : "") + assembly.ExtraPrerequisites) +
 					"\n\t\tBuildPaletteOrder: " + (1000 + index) + "\n\t\tDescription: Eigener Entwurf - vor dem Spiel eingefroren.\n");
-			s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n\tTooltip:\n\t\tName: " + p.TankName + "\n");
+			if (!assembly.PreserveActorGraphics)
+				s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n");
+			s.Append("\tTooltip:\n\t\tName: " + p.TankName + "\n");
 			foreach (var tooltip in assembly.AlternateTooltips)
 				s.Append("\t" + tooltip + ":\n\t\tName: " + p.TankName + "\n");
 			if (assembly.VoxelImage != null) s.Append("\tRenderVoxels:\n\t\tImage: " + assembly.VoxelImage + "\n");
