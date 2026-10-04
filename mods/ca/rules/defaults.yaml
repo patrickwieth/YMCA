@@ -1769,6 +1769,7 @@ refinery.dockhelper:
 
 ^AutoTargetNavalAssaultMove:
 	Inherits: ^AutoTargetGroundAssaultMove
+	Inherits@GAME-MODE: ^Autobattler
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Defense, Mine
 		InvalidTargets: NoAutoTarget
@@ -1807,6 +1808,7 @@ refinery.dockhelper:
 
 ^AutoTargetAllNavalAssaultMove:
 	Inherits: ^AutoTargetAllAssaultMove
+	Inherits@GAME-MODE: ^Autobattler
 	AutoTargetPriority@DEFAULT:
 		ValidTargets: Infantry, Vehicle, Water, Underwater, Air, Defense, Mine
 		InvalidTargets: NoAutoTarget
@@ -2254,6 +2256,7 @@ refinery.dockhelper:
 		Action: Kill
 	DrawLineToTarget:
 	Mobile:
+		TerrainOrientationAdjustmentMargin: 256
 		PauseOnCondition: being-captured || empdisable || being-warped || driver-dead || notmobile || driver-dead
 		Locomotor: wheeled
 		TurnSpeed: 48
@@ -3159,6 +3162,7 @@ refinery.dockhelper:
 		RequiresCondition: !structures.gdi
 
 ^FightingPlane:
+	Inherits: ^Autobattler
 	AttackAircraft:
 		FacingTolerance: 80
 		PersistentTargeting: false
@@ -3182,6 +3186,7 @@ refinery.dockhelper:
 		PauseOnCondition: empdisable || being-warped
 
 ^FightingHelicopter:
+	Inherits: ^Autobattler
 	AttackAircraft:
 		FacingTolerance: 80
 		AttackType: Hover
@@ -5407,6 +5412,14 @@ BuildBoost.Dummy:
 		RequiresCondition: !jammed && !disabled && !being-warped
 
 ^InfantryProduction:
+	GeneratedModeProductionQueue:
+		Type: Infantry
+		Group: Infantry
+		DisplayOrder: 2
+		LowPowerModifier: 300
+		DisallowPaused: true
+		InfiniteBuildLimit: 10
+	ArmyProductionAssignment:
 	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
@@ -5459,6 +5472,14 @@ BuildBoost.Dummy:
 		Prerequisite: infantry.harvester
 
 ^VehicleProduction:
+	GeneratedModeProductionQueue:
+		Type: Vehicle
+		Group: Vehicle
+		DisplayOrder: 3
+		LowPowerModifier: 300
+		DisallowPaused: true
+		InfiniteBuildLimit: 10
+	ArmyProductionAssignment:
 	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
@@ -5486,8 +5507,6 @@ BuildBoost.Dummy:
 		Range: 7c0
 		ValidRelationships: Ally
 		Condition: closeToFactory
-	ProvidesPrerequisite@any:
-		Prerequisite: vehicles
 	ProvidesPrerequisite@allies:
 		Factions: allies, england, france, germany
 		Prerequisite: vehicles.allies
@@ -5632,6 +5651,14 @@ BuildBoost.Dummy:
 		Prerequisite: vehicles.chinaatom
 
 ^AircraftProduction:
+	GeneratedModeProductionQueue:
+		Type: Aircraft
+		Group: Aircraft
+		DisplayOrder: 4
+		LowPowerModifier: 300
+		DisallowPaused: true
+		InfiniteBuildLimit: 10
+	ArmyProductionAssignment:
 	Exit@1:
 		ExitCell: 1,1
 		Facing: 192
@@ -5679,9 +5706,14 @@ BuildBoost.Dummy:
 		Range: 16c0
 
 ^ShipProduction:
-	Exit@1:
-		ExitCell: 1,1
-		Facing: 192
+	GeneratedModeProductionQueue:
+		Type: Ship
+		Group: Ship
+		DisplayOrder: 5
+		LowPowerModifier: 300
+		DisallowPaused: true
+		InfiniteBuildLimit: 10
+	ArmyProductionAssignment:
 	RallyPoint:
 	Production:
 		Produces: Ship, Submarine, Boat
@@ -5956,13 +5988,18 @@ BuildBoost.Dummy:
 		DamageTypes: ToxinDeath
 
 ^Autobattler:
-	GrantConditionOnPrerequisite@autobattle:
-		Condition: autobattle
-		Prerequisites: global.autobattle
-	RejectsOrders:
-		RequiresCondition: autobattle
+	GrantConditionOnPrerequisite@strategic-mode:
+		Condition: strategic-mode
+		Prerequisites: mode.strategic
+	GrantConditionOnPrerequisite@operational-mode:
+		Condition: operational-mode
+		Prerequisites: mode.operational
+	RejectsOrders@GAME-MODE:
+		RequiresCondition: strategic-mode || operational-mode
 	Autobattler:
-		RequiresCondition: autobattle
+		RequiresCondition: strategic-mode
+	ArmyFollower:
+		RequiresCondition: operational-mode
 
 ^Checkpoint:
 	Checkpoint:

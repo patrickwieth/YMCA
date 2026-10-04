@@ -66,9 +66,16 @@ namespace OpenRA.Mods.CA.Traits
 
 					if (nextCheckpoint != null && potentialNextCheckpoint != null)
 					{
-						potentialInitCheckpoints = new List<Actor> { nextCheckpoint, potentialNextCheckpoint};
+						potentialInitCheckpoints = new List<Actor> { nextCheckpoint, potentialNextCheckpoint };
 
-						setNextCheckpoint(potentialInitCheckpoints.ClosestToIgnoringPath(self.World.Map.CenterOfCell(self.Owner.HomeLocation)));
+						var client = self.World.LobbyInfo.ClientWithIndex(self.Owner.ClientIndex);
+						if (client?.Team == 1)
+							setNextCheckpoint(potentialNextCheckpoint);
+						else if (client?.Team == 2)
+							setNextCheckpoint(nextCheckpoint);
+						else
+							setNextCheckpoint(potentialInitCheckpoints.ClosestToIgnoringPath(
+								self.World.Map.CenterOfCell(self.Owner.HomeLocation)));
 
 						// check if the player already has a home checkpoint, if not set it
 						if (cpOrigin.HomeCheckpoint == null)
@@ -115,23 +122,17 @@ namespace OpenRA.Mods.CA.Traits
 			}
 		}
 
-		public void findNextCheckpoint(bool ascending) {
-			if (nextCheckpoint != null)
-			{
-				if (ascending)
-					potentialNextCheckpoint = self.World.ActorsHavingTrait<Checkpoint>()
-						.Where(a => a.TraitOrDefault<Checkpoint>().Hierarchy > Hierarchy)
-						.ClosestToIgnoringPath(self.World.Map.CenterOfCell(nextCheckpoint.TraitOrDefault<Checkpoint>().RallyPoint.Path.FirstOrDefault()));
-				else
-					potentialNextCheckpoint = self.World.ActorsHavingTrait<Checkpoint>()
-						.Where(a => a.TraitOrDefault<Checkpoint>().Hierarchy < Hierarchy)
-						.ClosestToIgnoringPath(self.World.Map.CenterOfCell(nextCheckpoint.TraitOrDefault<Checkpoint>().RallyPoint.Path.FirstOrDefault()));
-			}
+		public void findNextCheckpoint(bool ascending)
+		{
+			if (nextCheckpoint == null)
+				return;
 
-			//TextNotificationsManager.Debug("rallypoint"+nextCheckpoint.TraitOrDefault<Checkpoint>().RallyPoint.Path.FirstOrDefault());
-			if (potentialNextCheckpoint != null) {
+			var targetHierarchy = Hierarchy + (ascending ? 1 : -1);
+			potentialNextCheckpoint = self.World.ActorsHavingTrait<Checkpoint>()
+				.Where(a => !a.IsDead && a.Trait<Checkpoint>().Hierarchy == targetHierarchy)
+				.SingleOrDefault();
+			if (potentialNextCheckpoint != null)
 				setNextCheckpoint(potentialNextCheckpoint);
-			}
 		}
 
 		void setNextCheckpoint(Actor next) {

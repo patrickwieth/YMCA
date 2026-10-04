@@ -496,6 +496,10 @@ namespace OpenRA.Mods.CA.Projectiles
 			return move;
 		}
 
+		// Use the physical surface, including ramp interpolation. Isometric height steps are
+		// not 512 world units; using that constant underestimates Rubberduck cliffs.
+		internal static int TerrainAltitude(Map map, WPos position) => position.Z - map.DistanceAboveTerrain(position).Length;
+
 		// NOTE: It might be desirable to make lookahead more intelligent by outputting more information
 		// than just the highest point in the lookahead distance
 		void InclineLookahead(World world, int distCheck, out int predClfHgt, out int predClfDist, out int lastHtChg, out int lastHt)
@@ -516,16 +520,16 @@ namespace OpenRA.Mods.CA.Projectiles
 			var posProbe = pos;
 			var curDist = 0;
 			var tickLimit = System.Math.Min(maxLookaheadDistance, distCheck) / stepSize;
-			var prevHt = 0;
+			var prevHt = TerrainAltitude(world.Map, posProbe);
 
-			// TODO: Make sure cell on map!!!
+			// Stop at the playable boundary before sampling terrain.
 			for (var tick = 0; tick <= tickLimit; tick++)
 			{
 				posProbe += step;
 				if (!world.Map.Contains(world.Map.CellContaining(posProbe)))
 					break;
 
-				var ht = world.Map.Height[world.Map.CellContaining(posProbe)] * 512;
+				var ht = TerrainAltitude(world.Map, posProbe);
 
 				curDist += stepSize;
 				if (ht > predClfHgt)

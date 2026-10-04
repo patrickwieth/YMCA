@@ -939,3 +939,129 @@ tec.scrin.stolen:
 	ProvidesPrerequisite:
 		Prerequisite: vehicles.tpod
 		Factions: blackh, marked, legion
+
+^ArmyLeader:
+	Inherits: ^Airship
+	Tooltip:
+		Name: Army Leader
+	RenderSprites:
+		Image: blimp
+	Health:
+		HP: 100000
+	Aircraft:
+		Speed: 112
+	DamageMultiplier@INVULNERABLE:
+		Modifier: 0
+	Guardable:
+	Voiced:
+		VoiceSet: KirovVoice
+	ArmyLeader:
+	-Targetable@GROUND:
+	-Targetable@AIRBORNE:
+	-Targetable@REPAIR:
+	-Targetable@Temporal:
+	-Targetable@TemporalAir:
+	-Targetable@c4:
+	-Targetable@tnt:
+	-GivesExperience:
+	-FireWarheadsOnDeathCA:
+	-SpawnActorOnDeath:
+
+army.rallypoint:
+	AlwaysVisible:
+	Immobile:
+		OccupiesSpace: false
+	ArmyRallyPoint:
+
+army.leader.red:
+	Inherits: ^ArmyLeader
+	Tooltip:
+		Name: Red Army Leader
+	ArmyLeader:
+		Group: Red
+	ProvidesPrerequisite:
+		Prerequisite: army.leader.red
+
+army.leader.blue:
+	Inherits: ^ArmyLeader
+	Tooltip:
+		Name: Blue Army Leader
+	ArmyLeader:
+		Group: Blue
+	ProvidesPrerequisite:
+		Prerequisite: army.leader.blue
+
+army.leader.black:
+	Inherits: ^ArmyLeader
+	Tooltip:
+		Name: Black Army Leader
+	ArmyLeader:
+		Group: Black
+	ProvidesPrerequisite:
+		Prerequisite: army.leader.black
+
+^ArmyAssignment:
+	AlwaysVisible:
+	Interactable:
+	Valued:
+		Cost: 0
+	Buildable:
+		Queue: Infantry, Vehicle, Aircraft, Ship
+		BuildDuration: 1
+		BuildPaletteOrder: 0
+	RenderSprites:
+		Image: blimp
+	KillsSelf:
+		RemoveInstead: true
+
+army.assignment.red:
+	Inherits: ^ArmyAssignment
+	Tooltip:
+		Name: Assign production to Red Leader
+	Buildable:
+		Prerequisites: mode.operational, army.leader.red
+		BuildPaletteOrder: 0
+
+army.assignment.blue:
+	Inherits: ^ArmyAssignment
+	Tooltip:
+		Name: Assign production to Blue Leader
+	Buildable:
+		Prerequisites: mode.operational, army.leader.blue
+		BuildPaletteOrder: 1
+
+army.assignment.black:
+	Inherits: ^ArmyAssignment
+	Tooltip:
+		Name: Assign production to Black Leader
+	Buildable:
+		Prerequisites: mode.operational, army.leader.black
+		BuildPaletteOrder: 2
+
+promotion.army_leader_blue:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Activate Blue Army Leader
+	Buildable:
+		BuildPaletteOrder: 0
+		Icon: icon
+		Prerequisites: has_points, ~mode.operational, !army.leader.blue
+		Description: Deploys a second Army Leader at the player spawn.
+	RenderSprites:
+		Image: blimp
+	SpawnArmyLeader:
+		Actor: army.leader.blue
+
+promotion.army_leader_black:
+	Inherits: ^promotion_item
+	Tooltip:
+		Name: Activate Black Army Leader
+	Buildable:
+		BuildPaletteOrder: 1
+		Icon: icon
+		Prerequisites: has_points, ~mode.operational, !army.leader.black
+		Description: Deploys a third Army Leader at the player spawn.
+	RenderSprites:
+		Image: blimp
+	SpawnArmyLeader:
+		Actor: army.leader.black
