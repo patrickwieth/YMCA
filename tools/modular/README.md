@@ -65,10 +65,15 @@ cargo, PDL magazines/reload, Reflector armor, deploy/transform and missile spawn
 new electrical costs or enabling arbitrary combinations. See `docs/modular/existing-vehicle-loadouts.md`
 and `tools/modular/vehicle-loadouts.json` (deduplicated trait definitions). Rebuild CA first, then run
 `python tools/modular/survey_loadouts.py --refresh`; without `--refresh` it regenerates the report
-from a source-hash-checked snapshot. The six faction ground files include support/helpers; air/naval
-still need the same detailed pass. This audit does not expand runtime coverage.
+from a source-hash-checked snapshot. The six faction ground files include support/helpers. A matching **air/naval survey** now covers
+**160 declarations** in nine files: **114 structurally gated production candidates**, plus disabled/bot
+vehicles, carrier/drone slaves, missiles, wrecks, upgrades and nonproduction review objects.
+See `docs/modular/existing-air-naval-loadouts.md` and `tools/modular/air-naval-loadouts.json`;
+refresh with `python tools/modular/survey_air_naval.py --refresh` after rebuilding CA.
+Aircraft speed/flight/landing, Rearmable bases, manual/automatic Carryall, CarrierMaster spawns
+and naval Mobile locomotors are captured separately. Neither audit expands runtime coverage.
 
-**98 Python + 174 native tests pass**; all 168 numeric combinations match the independent
+**105 Python + 174 native tests pass**; all 168 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential

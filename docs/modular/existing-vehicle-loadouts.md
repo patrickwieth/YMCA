@@ -19,7 +19,7 @@ Identische Trait-Konfigurationen sind unter `trait_definitions` dedupliziert; Ac
 - PDL wird an PointDefense-Traits erkannt, Reflector am tatsächlichen Armor-Typ – nicht am Namenssuffix.
 - Reflector ist im Original hier ein Armor-/Zielklassen-/Palette-Paket; es wird kein neuer elektrischer Verbrauch erfunden.
 - Fahrzeugfamilien, konkrete Varianten, Helfer/Wracks und Editor-Bindungen werden nicht zusammengerechnet.
-- Flugzeuge/Schiffe bleiben außerhalb dieser Detailerfassung; ihre ID-Liste steht in [missing-vehicles.md](missing-vehicles.md).
+- Flugzeuge/Schiffe stehen in der separaten [aufgelösten Luft-/See-Erfassung](existing-air-naval-loadouts.md); keine Vermischung mit Bodenfamilien.
 
 ## Battle Fortress: Originalzustände
 

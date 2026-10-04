@@ -6,6 +6,8 @@ base-family groups** across GDI, Nod, China, Allies, Soviets and Scrin.
 
 The follow-up [resolved loadout survey](existing-vehicle-loadouts.md) documents existing variants
 and their actual weapons/mounts/protection without adding balance assumptions or runtime bindings.
+The corresponding [air/naval survey](existing-air-naval-loadouts.md) covers 160 additional declarations;
+this does not change ground-family or native-binding counts.
 
 This is not a claim that every national/promotion variant, aircraft, ship, support/economy vehicle
 or helper actor is a configurable design. Those are still listed separately in the inventory.
@@ -99,7 +101,7 @@ the whole template action fail validation.
 
 ## Verification
 
-- **98 Python / 174 native tests**, all **168** calculator combinations checked independently.
+- **105 Python / 174 native tests**, all **168** calculator combinations checked independently.
 - All 44 new baselines checked against the engine-resolved originals, plus the prior 14 combat
   additions; **89** preview-only trait configurations checked headlessly.
 - Every new design compiled into immutable maps, including empty map-local weapon files (stock

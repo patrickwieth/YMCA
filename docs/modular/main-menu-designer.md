@@ -255,6 +255,10 @@ The [resolved loadout inventory](existing-vehicle-loadouts.md) captures all 388 
 the six faction files, including 252 editorial variants. There are still 247 gated-candidate variants
 without native compiler bindings. It separates actual weapon channels and turret traits from physical
 mount slots, records PDL/Reflector/cargo/deploy behavior, and highlights inherited anomalies.
+The separate [air/naval loadout inventory](existing-air-naval-loadouts.md) now covers another
+160 declarations, including 114 structural production candidates; carriers, slave drones/missiles,
+nonproduction aircraft and non-mobile upgrade objects stay distinct. Aircraft speed and flight/landing
+parameters, transport/Carryall, rearming bases and spawned aircraft are exported from resolved traits.
 This is read-only research: no new power consumption, balance changes or runtime assembly admission.
 
 ## Shared gear and further combat coverage
@@ -343,7 +347,7 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **98 Python tests**, **174 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **105 Python tests**, **174 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.
