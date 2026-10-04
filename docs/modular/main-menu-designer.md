@@ -249,6 +249,14 @@ loaded SSM turret. Original trait info is not mutated. Models/sequences/palettes
 menu world's caches; asset/render failures disable only the preview and write the detailed error
 to the debug log. CPU trait checks are not proof of GPU rendering on the user's machine.
 
+## Existing variants and loadout research
+
+The [resolved loadout inventory](existing-vehicle-loadouts.md) captures all 388 ground actors from
+the six faction files, including 252 editorial variants. There are still 247 gated-candidate variants
+without native compiler bindings. It separates actual weapon channels and turret traits from physical
+mount slots, records PDL/Reflector/cargo/deploy behavior, and highlights inherited anomalies.
+This is read-only research: no new power consumption, balance changes or runtime assembly admission.
+
 ## Shared gear and further combat coverage
 
 See [shared running gear and combat expansion](shared-gear-combat-expansion.md) for all fourteen
@@ -335,7 +343,7 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **92 Python tests**, **174 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **98 Python tests**, **174 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.

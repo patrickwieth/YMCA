@@ -4,6 +4,9 @@ The remaining **44 production-candidate ground combat families** are now bound i
 configurator. The generated [inventory](missing-vehicles.md) has **zero wholly missing combat
 base-family groups** across GDI, Nod, China, Allies, Soviets and Scrin.
 
+The follow-up [resolved loadout survey](existing-vehicle-loadouts.md) documents existing variants
+and their actual weapons/mounts/protection without adding balance assumptions or runtime bindings.
+
 This is not a claim that every national/promotion variant, aircraft, ship, support/economy vehicle
 or helper actor is a configurable design. Those are still listed separately in the inventory.
 In particular, the disabled `BATF` actor is not re-enabled: Battle Fortress with its required
@@ -96,7 +99,7 @@ the whole template action fail validation.
 
 ## Verification
 
-- **92 Python / 174 native tests**, all **168** calculator combinations checked independently.
+- **98 Python / 174 native tests**, all **168** calculator combinations checked independently.
 - All 44 new baselines checked against the engine-resolved originals, plus the prior 14 combat
   additions; **89** preview-only trait configurations checked headlessly.
 - Every new design compiled into immutable maps, including empty map-local weapon files (stock

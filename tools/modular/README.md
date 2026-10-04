@@ -57,7 +57,18 @@ no mutation of ongoing games, no overwriting immutable map snapshots. This is no
 yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
-**92 Python + 174 native tests pass**; all 168 numeric combinations match the independent
+
+The read-only **existing-loadout survey** now resolves all **388 ground actor declarations**,
+including **252 editorial variants**, through the actual engine rules. Of these, **247 gated-candidate
+variants are not yet native designer bindings**. It records mount/weapon conditions, offsets, rendering,
+cargo, PDL magazines/reload, Reflector armor, deploy/transform and missile spawners, without assigning
+new electrical costs or enabling arbitrary combinations. See `docs/modular/existing-vehicle-loadouts.md`
+and `tools/modular/vehicle-loadouts.json` (deduplicated trait definitions). Rebuild CA first, then run
+`python tools/modular/survey_loadouts.py --refresh`; without `--refresh` it regenerates the report
+from a source-hash-checked snapshot. The six faction ground files include support/helpers; air/naval
+still need the same detailed pass. This audit does not expand runtime coverage.
+
+**98 Python + 174 native tests pass**; all 168 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential
