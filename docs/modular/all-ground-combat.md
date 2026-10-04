@@ -30,6 +30,10 @@ ActorInfo with `--export-combat-baselines`. It includes the full trait-name inve
 `generate_stock_combat_bindings.py` produces the explicit native actor whitelist. Editing the
 runtime catalog alone cannot bind new actors or arbitrary assemblies.
 
+The subsequent [named turret module pass](ground-turret-modules.md) exposes Prism/Artillery/Missile/Sonic
+modules on their existing source chassis, with legacy-ID migration and unchanged numeric values.
+Battle Fortress mixing remains a separate, unimplemented mounting step.
+
 ## Original behavior, shared components
 
 The additional 44 bindings retain their complete original armaments directly on their parent
@@ -101,7 +105,7 @@ the whole template action fail validation.
 
 ## Verification
 
-- **105 Python / 174 native tests**, all **168** calculator combinations checked independently.
+- **110 Python / 180 native tests**, all **168** calculator combinations checked independently.
 - All 44 new baselines checked against the engine-resolved originals, plus the prior 14 combat
   additions; **89** preview-only trait configurations checked headlessly.
 - Every new design compiled into immutable maps, including empty map-local weapon files (stock

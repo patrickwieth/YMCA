@@ -117,7 +117,7 @@ namespace OpenRA.Mods.CA.Modular
 				throw new InvalidDataException("Jeder gespeicherte Entwurf braucht ID, Namen und Bausteine.");
 			var roster = JsonConvert.DeserializeObject<CustomFactionRoster>(json, JsonSettings);
 			if (roster?.Designs != null)
-				foreach (var design in roster.Designs) MigrateGear(design?.Parts);
+				foreach (var design in roster.Designs) MigrateParts(design?.Parts);
 			ValidateRoster(roster);
 			return roster;
 		}

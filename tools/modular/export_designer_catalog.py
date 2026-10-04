@@ -17,6 +17,7 @@ import nod_combat_expansion as nod_combat
 import china_combat_expansion as china_combat
 import shared_running_gear as gear
 import stock_combat_expansion as stock
+import turret_modules as turrets
 
 
 def assemblies():
@@ -34,6 +35,8 @@ def assemblies():
     ] + additional_assemblies() + gdi_heavy.additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies() + scrin.additional_assemblies() + nod_combat.additional_assemblies() + china_combat.additional_assemblies() + stock.additional_assemblies()
     for assembly in result:
         assembly['options']['running_gear'] = [gear.canonical(k) for k in assembly['options']['running_gear']]
+        hull = assembly['options']['chassis'][0]
+        assembly['options']['carrier'] = [turrets.canonical(hull, k) for k in assembly['options']['carrier']]
     return result
 
 
@@ -83,6 +86,7 @@ def data():
     nod_combat.extend_parts(parts)
     china_combat.extend_parts(parts)
     stock.extend_parts(parts)
+    turrets.extend_parts(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}
     for assembly in assemblies():
@@ -93,12 +97,13 @@ def data():
         hull['allowed_running_gear_classes'] = sorted({parts[k]['compatibility_class'] for k in choices['running_gear']})
         hull['chassis_class'] = 'superheavy' if any(k in ('tracks-superheavy', 'designer-mk2-legs') for k in choices['running_gear']) or choices['chassis'][0] == 'stock-hexapod-hull' else 'standard'
         hull['allowed']['drive'] = choices['drive'][:]
+        hull['allowed']['carrier'] = choices['carrier'][:]
         allowed = weapon_ammo.setdefault(choices['weapon'][0], [])
         allowed.extend(a for a in choices['ammunition'] if a not in allowed)
     for weapon, ammo in weapon_ammo.items():
         parts[weapon]['ammunition'] = ammo
     return dict(schema=1, alpha=catalog['alpha'], credits_per_cp=catalog['credits_per_cp'], options=options, components=parts,
-                assemblies=assemblies())
+                assemblies=assemblies(), turret_modules=copy.deepcopy(turrets.recipes()))
 
 
 def cases():

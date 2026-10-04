@@ -249,6 +249,16 @@ loaded SSM turret. Original trait info is not mutated. Models/sequences/palettes
 menu world's caches; asset/render failures disable only the preview and write the detailed error
 to the debug log. CPU trait checks are not proof of GPU rendering on the user's machine.
 
+## Named ground turret modules
+
+[Prism, artillery, missile and sonic turrets](ground-turret-modules.md) now have named native module
+IDs on Prismtank, HOWI, STNK and DISR respectively. Each consumes one slot and displays its module
+name and occupancy. Original weapon profiles and sprite/voxel assemblies remain source-qualified;
+Battle Fortress does not yet accept arbitrary mixtures. Legacy mount IDs migrate on load, including
+chassis-specific Integrated Mount migration for HOWI/STNK. All 168 numeric results remain unchanged;
+no new electrical balancing is applied. `turret_modules` records source geometry/conditions for the
+next explicit mounting pass, not permission to splice unreviewed graphics.
+
 ## Existing variants and loadout research
 
 The [resolved loadout inventory](existing-vehicle-loadouts.md) captures all 388 ground actors from
@@ -347,7 +357,7 @@ MODULAR_ROSTER_EXPORT=/absolute/new-roster.oramap dotnet test Modular.Tests/Modu
 python tools/modular/check_prototype.py --map /absolute/new-roster.oramap
 ```
 
-Verified: **105 Python tests**, **174 native tests**, and a successful **YMCA.sln Release build**.
+Verified: **110 Python tests**, **180 native tests**, and a successful **YMCA.sln Release build**.
 The eight-family differential reports **1685 control / 1698 generated errors**: 13
 inherited condition/palette diagnostics, **zero unexpected new errors**. Full-mod
 lint remains unclean for the pre-existing reasons.

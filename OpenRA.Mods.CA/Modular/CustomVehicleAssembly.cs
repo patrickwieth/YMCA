@@ -32,9 +32,18 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				{ "chassis", new[] { hull } }, { "running_gear", gear.Select(CanonicalGear).ToArray() }, { "drive", motors },
 				{ "generator", new[] { "baseline-generator", "efficient-generator" } }, { "armor", new[] { armor } },
-				{ "carrier", new[] { carrier } }, { "weapon", new[] { weapon } }, { "ammunition", ammunition }
+				{ "carrier", new[] { CanonicalCarrier(hull, carrier) } }, { "weapon", new[] { weapon } }, { "ammunition", ammunition }
 			};
 		}
+
+		public static string CanonicalCarrier(string hull, string id) => (hull, id) switch
+		{
+			("designer-prism-hull", "designer-prism-mount") => "prism-turret",
+			("designer-disruptor-hull", "designer-disruptor-mount") => "sonic-turret",
+			("nod-combat-howitzer-hull", "integrated-mount") => "artillery-turret",
+			("nod-combat-stealth-hull", "integrated-mount") => "missile-turret",
+			_ => id
+		};
 
 		public static string CanonicalGear(string id) => id == "designer-mlrs-gear" || id == "designer-ssm-gear" || id == "designer-prism-gear" ? "light-tracks" : id;
 	}
@@ -353,7 +362,8 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				var slots = N(Part(p, "chassis"), "carrier_slots");
 				var used = Part(p, "carrier")["slots_required"] == null ? 1 : N(Part(p, "carrier"), "slots_required");
-				return (slots > 1 ? $"Turmplaetze: {used:0}/{slots:0} belegt. " : "") + a.Summary;
+				var module = Part(p, "carrier")["module_family"] != null ? Label(p.Parts["carrier"]) + ": " : "";
+				return module + (slots > 1 || module.Length > 0 ? $"Turmplaetze: {used:0}/{slots:0} belegt. " : "") + a.Summary;
 			}
 			var range = N(Part(p, "weapon"), "range_cells");
 			var burst = N(Part(p, "carrier"), "burst");

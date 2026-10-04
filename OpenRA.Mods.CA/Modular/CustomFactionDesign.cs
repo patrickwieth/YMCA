@@ -137,6 +137,16 @@ namespace OpenRA.Mods.CA.Modular
 				throw new InvalidDataException("Waffenpaket passt nicht zur vollstaendigen Trait-Bindung.");
 			if (Roles.Any(r => !assembly.Choices[r].Contains(profile.Parts[r])))
 				throw new InvalidDataException("Rumpf, Grafik, Fahrwerk und Waffengruppe sind nicht kompatibel.");
+			if (Part(profile, "carrier")["module_family"] != null)
+			{
+				var recipe = catalog["turret_modules"]?[profile.Parts["carrier"]];
+				if (recipe?.Value<string>("source_actor") != assembly.Actor || recipe.Value<int?>("slots_required") != 1 ||
+					N(Part(profile, "carrier"), "slots_required") != 1 ||
+					recipe.Value<string>("family") != Part(profile, "carrier").Value<string>("module_family") ||
+					recipe["native_hulls"] is not JArray nativeHulls || !nativeHulls.Values<string>().Contains(assembly.Hull) ||
+					recipe.Value<bool?>("arbitrary_mounting") != false)
+					throw new InvalidDataException("Turmmodul passt nicht zur Originalwaffen-/Grafikbindung.");
+			}
 			var builtIn = assembly.BuiltIn.Select(id => catalog["components"][id] as JObject).ToArray();
 			if (builtIn.Any(p => p == null || p.Value<string>("role") != "equipment" || N(p, "cp") != 0 ||
 				!p["factions"].Values<string>().Contains(ComponentFaction(profile.BaseFaction)) || N(p, "cost") < 0 || N(p, "mass") < 0 || N(p, "electric_kw") < 0 ||
@@ -199,15 +209,18 @@ namespace OpenRA.Mods.CA.Modular
 		public CustomFactionProfile Deserialize(string json)
 		{
 			var p = JsonConvert.DeserializeObject<CustomFactionProfile>(json, JsonSettings);
-			MigrateGear(p?.Parts);
+			MigrateParts(p?.Parts);
 			Calculate(p);
 			return p;
 		}
 
-		static void MigrateGear(Dictionary<string, string> parts)
+		static void MigrateParts(Dictionary<string, string> parts)
 		{
-			if (parts != null && parts.TryGetValue("running_gear", out var id))
+			if (parts == null) return;
+			if (parts.TryGetValue("running_gear", out var id))
 				parts["running_gear"] = CustomVehicleAssembly.CanonicalGear(id);
+			if (parts.TryGetValue("chassis", out var hull) && parts.TryGetValue("carrier", out var carrier))
+				parts["carrier"] = CustomVehicleAssembly.CanonicalCarrier(hull, carrier);
 		}
 
 		public void Save(string path, CustomFactionProfile p)

@@ -60,7 +60,7 @@ public class SharedGearAndNodCombatTests
             Assert.That(rules, Does.Not.Contain("\tFireWarheadsOnDeathCA"));
             Assert.That(c.Weapons(p), Does.Not.Contain("Damage:"));
             Assert.That(c.Weapons(p), Does.Not.Contain("ReloadDelay:"));
-            Assert.That(c.CompatibleOptions(p, "carrier"), Is.EqualTo(new[] { "integrated-mount" }));
+            Assert.That(c.CompatibleOptions(p, "carrier"), Is.EqualTo(new[] { CustomVehicleAssembly.CanonicalCarrier(hull, "integrated-mount") }));
             Assert.That(c.CompatibleOptions(p, "ammunition"), Is.EqualTo(new[] { "integral-stores" }));
         }
         c.SelectPart(p, "chassis", "nod-combat-beam-hull");

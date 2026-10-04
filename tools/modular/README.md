@@ -58,6 +58,14 @@ yet all 75 components, arbitrary map integration, or per-player faction syncing.
 
 Read **`docs/modular/main-menu-designer.md`** for workflow, bindings and limitations.
 
+Four **named ground turret modules** are now bound on their existing chassis: **Prism Turret**
+(Prismtank), **Artillery Turret** (HOWI), **Missile Turret** (STNK) and **Sonic Turret** (DISR).
+Each uses one slot and retains its source-qualified weapon/render channels. Existing carrier IDs migrate
+on profile load; all 168 numeric results are unchanged. Battle Fortress mixed mounts remain blocked
+pending per-position graphics/attack bindings. No new electric ratings were introduced.
+See `docs/modular/ground-turret-modules.md`; regenerate with `python tools/modular/report_turret_modules.py`.
+
+
 The read-only **existing-loadout survey** now resolves all **388 ground actor declarations**,
 including **252 editorial variants**, through the actual engine rules. Of these, **247 gated-candidate
 variants are not yet native designer bindings**. It records mount/weapon conditions, offsets, rendering,
@@ -73,7 +81,7 @@ refresh with `python tools/modular/survey_air_naval.py --refresh` after rebuildi
 Aircraft speed/flight/landing, Rearmable bases, manual/automatic Carryall, CarrierMaster spawns
 and naval Mobile locomotors are captured separately. Neither audit expands runtime coverage.
 
-**105 Python + 174 native tests pass**; all 168 numeric combinations match the independent
+**110 Python + 180 native tests pass**; all 168 numeric combinations match the independent
 Python calculator. Release build succeeds. The eight-family engine differential
 is **1685 control / 1698 generated errors**, all 13 additions inherited diagnostics,
 **zero unexpected new errors**; see `designer-gdi-validation.md`. The Nod differential

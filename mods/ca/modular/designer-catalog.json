@@ -137,7 +137,7 @@
       "fixed-triple",
       "designer-mammoth-mount",
       "designer-hmlrs-mount",
-      "designer-disruptor-mount",
+      "sonic-turret",
       "designer-mk2-mount",
       "designer-titan-mount",
       "designer-slingshot-mount",
@@ -150,7 +150,7 @@
       "gatling-turret",
       "heavy-twin-turret",
       "designer-ranger-mount",
-      "designer-prism-mount",
+      "prism-turret",
       "soviet-twin-mount",
       "twin-coil",
       "designer-flak-mount",
@@ -159,6 +159,8 @@
       "scrin-corrupter-mount",
       "scrin-devourer-mount",
       "integrated-mount",
+      "artillery-turret",
+      "missile-turret",
       "superheavy-bunker"
     ],
     "weapon": [
@@ -473,8 +475,7 @@
       "max_speed": 125,
       "allowed": {
         "carrier": [
-          "cannon-turret",
-          "autoloader-turret"
+          "cannon-turret"
         ],
         "drive": [
           "diesel",
@@ -2083,26 +2084,6 @@
       ],
       "chassis_class": "standard"
     },
-    "designer-disruptor-mount": {
-      "factions": [
-        "gdi"
-      ],
-      "tier": 0,
-      "cp": 0,
-      "tech": 3,
-      "electric_kw": 0,
-      "role": "carrier",
-      "display_name": "Disruptor Waffentraeger",
-      "mass": 1000,
-      "cost": 200,
-      "weapons": [
-        "designer-disruptor-weapons"
-      ],
-      "burst": 1,
-      "reload_ticks": 1,
-      "source": "DISR",
-      "note": "Cadence is template-locked per channel; these neutral calculator fields do not override weapons."
-    },
     "designer-disruptor-weapons": {
       "factions": [
         "gdi"
@@ -2164,7 +2145,7 @@
       "max_speed": 150,
       "allowed": {
         "carrier": [
-          "designer-disruptor-mount"
+          "sonic-turret"
         ],
         "drive": [
           "diesel"
@@ -2496,7 +2477,7 @@
       "max_speed": 110,
       "allowed": {
         "carrier": [
-          "designer-prism-mount"
+          "prism-turret"
         ],
         "drive": [
           "diesel"
@@ -2508,25 +2489,6 @@
         "light-tracks"
       ],
       "chassis_class": "standard"
-    },
-    "designer-prism-mount": {
-      "factions": [
-        "allies"
-      ],
-      "tier": 0,
-      "cp": 0,
-      "tech": 2,
-      "electric_kw": 0,
-      "role": "carrier",
-      "display_name": "Prism-Strahlenturm",
-      "mass": 500,
-      "cost": 150,
-      "weapons": [
-        "designer-prism-weapon"
-      ],
-      "burst": 1,
-      "reload_ticks": 45,
-      "source": "Prismtank"
     },
     "designer-prism-weapon": {
       "factions": [
@@ -3855,7 +3817,7 @@
       "reference_speed": 68,
       "allowed": {
         "carrier": [
-          "integrated-mount"
+          "artillery-turret"
         ],
         "drive": [
           "diesel"
@@ -3973,7 +3935,7 @@
       "reference_speed": 135,
       "allowed": {
         "carrier": [
-          "integrated-mount"
+          "missile-turret"
         ],
         "drive": [
           "diesel"
@@ -6246,6 +6208,94 @@
         "light-wheels"
       ],
       "chassis_class": "standard"
+    },
+    "prism-turret": {
+      "factions": [
+        "allies"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 2,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Prism Turret",
+      "mass": 500,
+      "cost": 150,
+      "weapons": [
+        "designer-prism-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 45,
+      "source": "Prismtank",
+      "module_family": "prism",
+      "slots_required": 1,
+      "note": "One turret slot. Source-qualified complete weapon/render package; existing pricing/mass/power allocation unchanged. Other chassis require explicit mounting/graphics bindings."
+    },
+    "artillery-turret": {
+      "factions": [
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Artillery Turret",
+      "cost": 50,
+      "mass": 500,
+      "weapons": [
+        "nod-combat-howitzer-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "One turret slot. Source-qualified complete weapon/render package; existing pricing/mass/power allocation unchanged. Other chassis require explicit mounting/graphics bindings.",
+      "module_family": "artillery",
+      "source": "HOWI",
+      "slots_required": 1
+    },
+    "missile-turret": {
+      "factions": [
+        "nod"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Missile Turret",
+      "cost": 50,
+      "mass": 500,
+      "weapons": [
+        "nod-combat-stealth-weapon"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "One turret slot. Source-qualified complete weapon/render package; existing pricing/mass/power allocation unchanged. Other chassis require explicit mounting/graphics bindings.",
+      "module_family": "missile",
+      "source": "STNK",
+      "slots_required": 1
+    },
+    "sonic-turret": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 3,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Sonic Turret",
+      "mass": 1000,
+      "cost": 200,
+      "weapons": [
+        "designer-disruptor-weapons"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "source": "DISR",
+      "note": "One turret slot. Source-qualified complete weapon/render package; existing pricing/mass/power allocation unchanged. Other chassis require explicit mounting/graphics bindings.",
+      "module_family": "sonic",
+      "slots_required": 1
     }
   },
   "assemblies": [
@@ -6456,7 +6506,7 @@
           "heavy"
         ],
         "carrier": [
-          "designer-disruptor-mount"
+          "sonic-turret"
         ],
         "weapon": [
           "designer-disruptor-weapons"
@@ -6956,7 +7006,7 @@
           "light"
         ],
         "carrier": [
-          "designer-prism-mount"
+          "prism-turret"
         ],
         "weapon": [
           "designer-prism-weapon"
@@ -7390,7 +7440,7 @@
           "light"
         ],
         "carrier": [
-          "integrated-mount"
+          "artillery-turret"
         ],
         "weapon": [
           "nod-combat-howitzer-weapon"
@@ -7452,7 +7502,7 @@
           "light"
         ],
         "carrier": [
-          "integrated-mount"
+          "missile-turret"
         ],
         "weapon": [
           "nod-combat-stealth-weapon"
@@ -8969,5 +9019,339 @@
       },
       "built_in": []
     }
-  ]
+  ],
+  "turret_modules": {
+    "prism-turret": {
+      "family": "prism",
+      "source_actor": "Prismtank",
+      "slots_required": 1,
+      "native_hulls": [
+        "designer-prism-hull"
+      ],
+      "arbitrary_mounting": false,
+      "turrets": [
+        {
+          "fields": {
+            "Offset": "0,0,0",
+            "PauseOnCondition": "",
+            "RequiresCondition": "",
+            "TurnSpeed": "48",
+            "Turret": "primary"
+          },
+          "instance": null,
+          "type": "TurretedInfo"
+        }
+      ],
+      "armaments": [
+        {
+          "fields": {
+            "FireDelay": "0",
+            "ForceTargetRelationships": "Enemy, Neutral, Ally",
+            "LocalOffset": "100,0,350",
+            "LocalYaw": "",
+            "Name": "primary",
+            "PauseOnCondition": "",
+            "RequiresCondition": "",
+            "TargetRelationships": "Enemy",
+            "Turret": "primary",
+            "Weapon": "PrisTLaser"
+          },
+          "instance": null,
+          "type": "ArmamentInfo"
+        }
+      ],
+      "graphics": [
+        {
+          "fields": {
+            "FactionImages": "",
+            "Image": "prismtank",
+            "Palette": "",
+            "PlayerPalette": "overlayplayer"
+          },
+          "instance": null,
+          "type": "RenderSpritesInfo"
+        },
+        {
+          "fields": {
+            "Image": "prismtank",
+            "Palette": "",
+            "PlayerPalette": "playerts",
+            "Scale": "0.7"
+          },
+          "instance": null,
+          "type": "RenderVoxelsInfo"
+        },
+        {
+          "fields": {
+            "RequiresCondition": "",
+            "Sequence": "turret",
+            "Turret": "primary"
+          },
+          "instance": null,
+          "type": "WithVoxelTurretInfo"
+        }
+      ]
+    },
+    "artillery-turret": {
+      "family": "artillery",
+      "source_actor": "HOWI",
+      "slots_required": 1,
+      "native_hulls": [
+        "nod-combat-howitzer-hull"
+      ],
+      "arbitrary_mounting": false,
+      "turrets": [
+        {
+          "fields": {
+            "Offset": "-200,0,250",
+            "PauseOnCondition": "",
+            "RequiresCondition": "",
+            "TurnSpeed": "8",
+            "Turret": "primary"
+          },
+          "instance": null,
+          "type": "TurretedInfo"
+        }
+      ],
+      "armaments": [
+        {
+          "fields": {
+            "FireDelay": "0",
+            "ForceTargetRelationships": "Enemy, Neutral, Ally",
+            "LocalOffset": "900,0,350",
+            "LocalYaw": "",
+            "Name": "primary",
+            "PauseOnCondition": "",
+            "RequiresCondition": "",
+            "TargetRelationships": "Enemy",
+            "Turret": "primary",
+            "Weapon": "155mmTDM"
+          },
+          "instance": null,
+          "type": "ArmamentInfo"
+        }
+      ],
+      "graphics": [
+        {
+          "fields": {
+            "FactionImages": "",
+            "Image": "howi",
+            "Palette": "",
+            "PlayerPalette": "overlayplayer"
+          },
+          "instance": null,
+          "type": "RenderSpritesInfo"
+        },
+        {
+          "fields": {
+            "IsPlayerPalette": "False",
+            "Palette": "",
+            "RequiresCondition": "",
+            "Sequence": "turret",
+            "Turret": "primary"
+          },
+          "instance": null,
+          "type": "WithSpriteTurretInfo"
+        }
+      ]
+    },
+    "missile-turret": {
+      "family": "missile",
+      "source_actor": "STNK",
+      "slots_required": 1,
+      "native_hulls": [
+        "nod-combat-stealth-hull"
+      ],
+      "arbitrary_mounting": false,
+      "turrets": [
+        {
+          "fields": {
+            "Offset": "0,0,10",
+            "PauseOnCondition": "",
+            "RequiresCondition": "",
+            "TurnSpeed": "80",
+            "Turret": "primary"
+          },
+          "instance": null,
+          "type": "TurretedInfo"
+        }
+      ],
+      "armaments": [
+        {
+          "fields": {
+            "FireDelay": "0",
+            "ForceTargetRelationships": "Enemy, Neutral, Ally",
+            "LocalOffset": "213,43,128, 213,-43,128",
+            "LocalYaw": "",
+            "Name": "primary",
+            "PauseOnCondition": "",
+            "RequiresCondition": "",
+            "TargetRelationships": "Enemy",
+            "Turret": "primary",
+            "Weapon": "StnkMissile"
+          },
+          "instance": "PRIMARY",
+          "type": "ArmamentInfo"
+        },
+        {
+          "fields": {
+            "FireDelay": "0",
+            "ForceTargetRelationships": "Enemy, Neutral, Ally",
+            "LocalOffset": "213,43,128, 213,-43,128",
+            "LocalYaw": "",
+            "Name": "secondary",
+            "PauseOnCondition": "",
+            "RequiresCondition": "",
+            "TargetRelationships": "Enemy",
+            "Turret": "primary",
+            "Weapon": "StnkMissile.AA"
+          },
+          "instance": "SECONDARY",
+          "type": "ArmamentInfo"
+        }
+      ],
+      "graphics": [
+        {
+          "fields": {
+            "FactionImages": "",
+            "Image": "stealth_tank",
+            "Palette": "",
+            "PlayerPalette": "overlayplayertd"
+          },
+          "instance": null,
+          "type": "RenderSpritesInfo"
+        },
+        {
+          "fields": {
+            "Image": "stealth_tank",
+            "Palette": "",
+            "PlayerPalette": "playerts",
+            "Scale": "0.8"
+          },
+          "instance": null,
+          "type": "RenderVoxelsInfo"
+        },
+        {
+          "fields": {
+            "RequiresCondition": "",
+            "Sequence": "turret",
+            "Turret": "primary"
+          },
+          "instance": null,
+          "type": "WithVoxelTurretInfo"
+        }
+      ]
+    },
+    "sonic-turret": {
+      "family": "sonic",
+      "source_actor": "DISR",
+      "slots_required": 1,
+      "native_hulls": [
+        "designer-disruptor-hull"
+      ],
+      "arbitrary_mounting": false,
+      "turrets": [
+        {
+          "fields": {
+            "Offset": "-300,0,0",
+            "PauseOnCondition": "",
+            "RequiresCondition": "",
+            "TurnSpeed": "48",
+            "Turret": "primary"
+          },
+          "instance": null,
+          "type": "TurretedInfo"
+        }
+      ],
+      "armaments": [
+        {
+          "fields": {
+            "FireDelay": "0",
+            "ForceTargetRelationships": "Enemy, Neutral, Ally",
+            "LocalOffset": "0,0,400",
+            "LocalYaw": "",
+            "Name": "primary",
+            "PauseOnCondition": "",
+            "RequiresCondition": "!gdiupg2",
+            "TargetRelationships": "Enemy",
+            "Turret": "primary",
+            "Weapon": "SonicZap"
+          },
+          "instance": "PRIMARY",
+          "type": "ArmamentInfo"
+        },
+        {
+          "fields": {
+            "FireDelay": "0",
+            "ForceTargetRelationships": "Enemy, Neutral, Ally",
+            "LocalOffset": "0,0,400",
+            "LocalYaw": "",
+            "Name": "secondary",
+            "PauseOnCondition": "",
+            "RequiresCondition": "!gdiupg2",
+            "TargetRelationships": "Enemy",
+            "Turret": "primary",
+            "Weapon": "SonicZapVisual"
+          },
+          "instance": "SECONDARY",
+          "type": "ArmamentInfo"
+        },
+        {
+          "fields": {
+            "FireDelay": "0",
+            "ForceTargetRelationships": "Enemy, Neutral, Ally",
+            "LocalOffset": "0,0,400",
+            "LocalYaw": "",
+            "Name": "primary",
+            "PauseOnCondition": "",
+            "RequiresCondition": "gdiupg2",
+            "TargetRelationships": "Enemy",
+            "Turret": "primary",
+            "Weapon": "SonicZap.UPG"
+          },
+          "instance": "PRIMARYUPG",
+          "type": "ArmamentInfo"
+        },
+        {
+          "fields": {
+            "FireDelay": "0",
+            "ForceTargetRelationships": "Enemy, Neutral, Ally",
+            "LocalOffset": "0,0,400",
+            "LocalYaw": "",
+            "Name": "secondary",
+            "PauseOnCondition": "",
+            "RequiresCondition": "gdiupg2",
+            "TargetRelationships": "Enemy",
+            "Turret": "primary",
+            "Weapon": "SonicZapVisual.UPG"
+          },
+          "instance": "SECONDARYUPG",
+          "type": "ArmamentInfo"
+        }
+      ],
+      "graphics": [
+        {
+          "fields": {
+            "FactionImages": "",
+            "Image": "disr",
+            "Palette": "",
+            "PlayerPalette": "overlayplayertd"
+          },
+          "instance": null,
+          "type": "RenderSpritesInfo"
+        },
+        {
+          "fields": {
+            "IsPlayerPalette": "False",
+            "Palette": "",
+            "RequiresCondition": "",
+            "Sequence": "turret",
+            "Turret": "primary"
+          },
+          "instance": null,
+          "type": "WithSpriteTurretInfo"
+        }
+      ]
+    }
+  }
 }

@@ -3,6 +3,7 @@ from export_designer_catalog import data, cases
 from nod_combat_expansion import FAMILIES
 from list_missing_vehicles import inventory
 from shared_running_gear import ALIASES
+from turret_modules import canonical
 
 
 class SharedRunningGearTests(unittest.TestCase):
@@ -31,7 +32,7 @@ class SharedRunningGearTests(unittest.TestCase):
             base = next(c for c in rows if c['parts']['generator'] == 'baseline-generator')
             for field, expected in [('cost', price), ('hp', hp), ('speed', speed), ('turn_speed', turn)]:
                 self.assertEqual(base['values'][field], expected, (actor, field))
-            self.assertEqual(base['parts']['carrier'], 'integrated-mount')
+            self.assertEqual(base['parts']['carrier'], canonical(f'nod-combat-{key}-hull', 'integrated-mount'))
             self.assertEqual(base['parts']['ammunition'], 'integral-stores')
             self.assertGreaterEqual(parts[f'nod-combat-{key}-hull']['cost'], 0)
 
