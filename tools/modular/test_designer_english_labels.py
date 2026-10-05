@@ -15,6 +15,7 @@ class DesignerEnglishLabelsTests(unittest.TestCase):
             label = part.get('display_name', '')
             self.assertTrue(label, id)
             self.assertIsNone(re.search(r'[äöüß]|Waffen|Panzer|Rumpf|Fahrwerk|Einbaugruppe|Spreng|Geschuetz|Schwere|Schweres|Leichte|Leichtes|Boden|Luft|Doppel|Schreit|Dieselmotor|Entladung|Mammut', label, re.I), (id, label))
+        self.assertEqual(parts['tracks-standard']['display_name'], 'Heavy Tank Treads')
         self.assertEqual(parts['diesel']['display_name'], 'Standard Diesel Engine')
         self.assertEqual(parts['heavy']['display_name'], 'Heavy Armor')
         self.assertEqual(parts['designer-mammoth-hull']['display_name'], 'Mammoth - Bound Assembly')

@@ -45,7 +45,9 @@ The schematic is generic, not a claim that every original actor uses tracks or a
 zone boundaries. They still require free, in-bounds space and block other items normally. Generator is
 now a separate green category, not a free module. Reflector remains in the blue armor category.
 
-The matching sidebar fields/options use the same colors; no separate legend is shown under the schematic. These constraints apply to the **prototype layout**, not to new compiled physical dimensions.
+The matching sidebar fields/options use the same colors; no separate legend is shown under the schematic.
+[Military pixel-art module icons](module-icons.md) appear in selectors, option menus, fitted blocks and
+cursor-held items. English names remain in the sidebar/selection line. The redundant FRONT arrow label is removed. These constraints apply to the **prototype layout**, not to new compiled physical dimensions.
 
 ## Right-hand preview and properties
 

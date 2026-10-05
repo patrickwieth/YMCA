@@ -135,9 +135,22 @@ namespace OpenRA.Mods.CA.Widgets
 			for (var iy = 0; iy < size.Height; iy++)
 				for (var ix = 0; ix < size.Width; ix++) Border(x + ix * Cell, y + iy * Cell, Cell - 2, Cell - 2, Tint(id));
 			Border(x, y, w, h, border);
-			var label = WidgetUtils.TruncateText(m.Label, w - 6, Game.Renderer.Fonts["Small"]);
-			Text(label, x + 3, y + 2, Color.White);
-			if (held) Text($"{size.Width} x {size.Height}", x + 3, y + h - 13, Color.White);
+			var iconWidth = w >= 80 && h < 40 ? 36 : w - 6;
+			var hasIcon = CustomVehicleModuleIconWidget.DrawIcon(id,
+				new Rectangle(RenderOrigin.X + x + 3, RenderOrigin.Y + y + 3, iconWidth, h - 6));
+			if (!hasIcon || iconWidth == 36)
+			{
+				var offset = hasIcon ? 41 : 3;
+				var label = WidgetUtils.TruncateText(m.Label, w - offset - 3, Game.Renderer.Fonts["Small"]);
+				Text(label, x + offset, y + 2, Color.White);
+			}
+			if (held)
+			{
+				var dimensions = $"{size.Width}x{size.Height}";
+				var width = Game.Renderer.Fonts["Small"].Measure(dimensions).X;
+				Fill(x + w - width - 3, y + h - 14, width + 2, 13, Color.FromArgb(230, 13, 19, 25));
+				Text(dimensions, x + w - width - 2, y + h - 13, Color.White);
+			}
 		}
 
 		// Drawn last by a non-intercepting window overlay, including above the sidebar.
@@ -166,7 +179,6 @@ namespace OpenRA.Mods.CA.Widgets
 			var metal = Color.FromArgb(255, 63, 78, 84);
 			Fill(0, 0, Bounds.Width, Bounds.Height, dark);
 			Text("LEFT SIDE VIEW", 16, 8, Color.White);
-			Text("FRONT  -->", 382, 8, Color.White);
 			if (!Layout.HasChassis) { Text("Choose a chassis on the left to begin.", 104, 180, Color.White); return; }
 			var hw = Layout.HullWidth * Cell;
 			var hh = Layout.HullHeight * Cell;

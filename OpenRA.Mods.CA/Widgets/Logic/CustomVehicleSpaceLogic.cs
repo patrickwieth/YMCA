@@ -55,7 +55,21 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				};
 				sidebar.AddChild(button); return button;
 			}
-			string Fit(string text) => WidgetUtils.TruncateText(text, 188, Game.Renderer.Fonts["Bold"]);
+			string Fit(string text, int width = 188) => WidgetUtils.TruncateText(text, width, Game.Renderer.Fonts["Bold"]);
+			void ButtonIcon(DropDownButtonWidget button, Func<string> module)
+			{
+				button.Align = TextAlign.Left; button.LeftMargin = 42;
+				button.AddChild(new CustomVehicleModuleIconWidget { Bounds = new WidgetBounds(5, 0, 32, button.Bounds.Height), GetModule = module });
+			}
+			void OptionIcon(ScrollItemWidget item, string module)
+			{
+				var label = item.Get<LabelWidget>("LABEL");
+				var x = label.Bounds.X;
+				label.Bounds.X += 36; label.Bounds.Width -= 36;
+				var text = label.GetText;
+				label.GetText = () => WidgetUtils.TruncateText(text(), label.Bounds.Width, Game.Renderer.Fonts[label.Font]);
+				item.AddChild(new CustomVehicleModuleIconWidget { Bounds = new WidgetBounds(x, (item.Bounds.Height - 24) / 2, 32, 24), GetModule = () => module });
+			}
 			var chassis = Field("Chassis", 0, Color.White, () => true);
 			chassis.GetText = () => canvas.Layout.HasChassis ? Fit(compiler.Label(profile().Parts["chassis"])) : "Select chassis...";
 			chassis.OnMouseDown = _ =>
@@ -111,7 +125,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			void PartField(string title, int row, Color color, string role, string module, bool armor = false)
 			{
 				var button = Field(title, row, color, () => Ready);
-				button.GetText = () => Fit(compiler.Label(profile().Parts[role]));
+				ButtonIcon(button, () => module);
+				button.GetText = () => Fit(compiler.Label(profile().Parts[role]), 150);
 				button.OnMouseDown = _ =>
 				{
 					ScrollItemWidget Setup(string id, ScrollItemWidget template)
@@ -121,10 +136,11 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 							if (id == "@reflector") Pick("reflector", null, null); else Pick(module, role, id);
 						});
 						item.Get<LabelWidget>("LABEL").GetText = () => id == "@reflector" ? "Reflector armor (planning)" : compiler.Label(id);
-						item.Get<LabelWidget>("LABEL").GetColor = () => color; return item;
+						item.Get<LabelWidget>("LABEL").GetColor = () => color;
+						OptionIcon(item, id == "@reflector" ? "reflector" : module); return item;
 					}
 					var options = compiler.CompatibleOptions(profile(), role).Concat(armor ? new[] { "@reflector" } : Array.Empty<string>()).ToArray();
-					button.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 30, options, Setup);
+					button.ShowDropDown("MODULAR_PART_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 32, options, Setup);
 				};
 			}
 			PartField("Engine - green interior", 2, CustomVehicleSpaceWidget.ZoneColor(Zone.Interior), "drive", "engine");
@@ -135,16 +151,18 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			PartField("Armor - hull edge", 7, CustomVehicleSpaceWidget.ZoneColor(Zone.Armor), "armor", "armor", true);
 			var free = Field("Free modules - any free slots", 8, Color.White, () => Ready);
 			free.GetText = () => "Pick up...";
+			ButtonIcon(free, () => canvas.Selected is "pdl" or "battery" ? canvas.Selected : "battery");
 			free.OnMouseDown = _ =>
 			{
 				ScrollItemWidget Setup(string id, ScrollItemWidget template)
 				{
 					var item = ScrollItemWidget.Setup(template, () => false, () => Pick(id, null, null));
 					item.Get<LabelWidget>("LABEL").GetText = () => CustomVehicleSpaceDemo.Definition(id).Label + " (planning, any slots)";
+					OptionIcon(item, id);
 					return item;
 				}
 				var options = new[] { "battery", "pdl" };
-				free.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 30, options, Setup);
+				free.ShowDropDown("MODULAR_PART_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 32, options, Setup);
 			};
 			// New pickups use pending part IDs; moving an existing block without a sidebar choice changes layout only.
 			canvas.OnLayoutChanged = () => { pendingRole = pendingPart = null; };

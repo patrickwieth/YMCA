@@ -15,7 +15,7 @@ LABELS = {
     'soviet-heavy-hull': 'Heavy Tank - Twin Cannon',
     't34-hull': 'T-34 - Light Battle Tank',
     'heavy-tesla': 'Tesla Tank - Heavy Twin Coil',
-    'tracks-standard': 'Standard Tracks',
+    'tracks-standard': 'Heavy Tank Treads',
     'prototype-hover': 'Hover Drive (Prototype)',
     'gdi-stationary': 'Stationary GDI Platform',
     'wheels-light': 'Light Wheels',
