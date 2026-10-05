@@ -188,7 +188,9 @@ DRAW = dict(zip(IDS, (weapon, engine, generator, gear, ammo, armor, battery, pdl
 def render(): return {id: DRAW[id]() for id in IDS}
 
 def atlas(images):
-    sheet = Image.new('RGBA', (192,144))
+    # ChromeProvider uploads the whole PNG directly; texture dimensions must be
+    # powers of two. Keep the 192x144 icon region unchanged and pad transparently.
+    sheet = Image.new('RGBA', (256,256))
     for i,id in enumerate(IDS): sheet.paste(images[id], (i%3*64, i//3*48))
     return sheet
 

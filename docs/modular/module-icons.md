@@ -2,7 +2,12 @@
 
 ![Module icon review sheet, enlarged 3x with nearest-neighbor sampling](module-icons-preview.png)
 
-Nine original **64×48 RGBA PNGs**, plus a runtime atlas, in `mods/ca/bits/modular/`:
+Nine original **64×48 RGBA PNGs**, plus a **256×256 runtime atlas**, in `mods/ca/bits/modular/`.
+Chrome textures require power-of-two dimensions: the atlas keeps its 192×144 icon region in the
+upper-left corner, with transparent padding and unchanged chrome coordinates. Individual source
+icons and the documentation review sheet are not uploaded as standalone chrome textures.
+
+Icons:
 
 - `weapon.png`: smoothbore gun, breech and mount
 - `engine.png`: armored diesel engine block

@@ -17,6 +17,16 @@ class ModuleIconTests(unittest.TestCase):
                 self.assertEqual(alpha.getextrema(), (0, 255))
                 self.assertGreater(len(set(image.getdata())), 8, id)
 
+    def test_runtime_atlas_has_power_of_two_dimensions_and_transparent_padding(self):
+        with Image.open(OUT / 'module-icons.png') as sheet:
+            self.assertEqual(sheet.mode, 'RGBA')
+            self.assertEqual(sheet.size, (256, 256))
+            for dimension in sheet.size:
+                self.assertGreater(dimension, 0)
+                self.assertEqual(dimension & (dimension - 1), 0)
+            self.assertIsNone(sheet.crop((192, 0, 256, 256)).getchannel('A').getbbox())
+            self.assertIsNone(sheet.crop((0, 144, 256, 256)).getchannel('A').getbbox())
+
     def test_atlas_regions_and_review_sheet_are_reproducible(self):
         images = render()
         with Image.open(OUT / 'module-icons.png') as sheet:
