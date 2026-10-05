@@ -18,7 +18,7 @@ The 1120×740 panel has a left sidebar, central schematic, and the original rota
 
 Hull and turret are shown from the **left side, front facing right**. The tank outline is independent
 of the rectangular grid: sloped hull nose, rear deck, track loop/road wheels, angular turret, hatch,
-antenna, turret ring and forward gun barrels. The turret docks above the hull.
+antenna, turret ring and forward gun barrels. The turret docks above the hull. Mount selection is only in the sidebar; there is no extra dock button or white box on the silhouette.
 The schematic is generic, not a claim that every original actor uses tracks or a rotating turret.
 
 - Select a component on the left to carry its multi-cell footprint at the cursor.
@@ -45,11 +45,12 @@ The schematic is generic, not a claim that every original actor uses tracks or a
 zone boundaries. They still require free, in-bounds space and block other items normally. Generator is
 now a separate green category, not a free module. Reflector remains in the blue armor category.
 
-The matching sidebar fields/options use the same colors. These constraints apply to the **prototype layout**, not to new compiled physical dimensions.
+The matching sidebar fields/options use the same colors; no separate legend is shown under the schematic. These constraints apply to the **prototype layout**, not to new compiled physical dimensions.
 
 ## Right-hand preview and properties
 
-The original sprite/voxel preview and rotation control remain. Beneath them, a scrollable vertical list shows
+The original sprite/voxel preview and rotation control remain. Beneath them, a compact scrollable list uses
+**`Property: value` on the same line** (for example `Hitpoints: 45000`); only long descriptions wrap. It shows
 price, HP, speed, turn speed, mass, technology, experimental electrical demand/drive reserve, development
 budget, CP, base faction, production/graphics notes, all configured parts and the original weapon/ability summary.
 These describe the configured stock design, **not** an unimplemented mixed actor or an electrical simulation.

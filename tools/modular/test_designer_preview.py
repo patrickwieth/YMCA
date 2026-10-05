@@ -40,6 +40,17 @@ class DesignerPreviewTests(unittest.TestCase):
         self.assertIn('play.OnClick = () => ConfirmPlanningExport(', source)
         self.assertIn('new CustomVehicleSpaceLogic(widget, modData, compiler, Profile', source)
 
+    def test_compact_properties_without_extra_dock_button_or_legend(self):
+        chrome = (REPO / 'mods/ca/chrome/custom-faction.yaml').read_text(encoding='utf-8')
+        logic = (REPO / 'OpenRA.Mods.CA/Widgets/Logic/CustomFactionLogic.cs').read_text(encoding='utf-8')
+        canvas = (REPO / 'OpenRA.Mods.CA/Widgets/CustomVehicleSpaceWidget.cs').read_text(encoding='utf-8')
+        self.assertNotIn('@LEGEND:', chrome)
+        self.assertNotIn('DockBounds', canvas)
+        self.assertNotIn('TURRET DOCK', canvas)
+        self.assertIn('WrapText($"{key}: {value}"', logic)
+        self.assertIn('height + 4', logic)
+        self.assertNotIn('GetText = () => key', logic)
+
     def test_preview_is_render_only_and_supports_voxel_components(self):
         source = (REPO / 'OpenRA.Mods.CA/Widgets/CustomVehiclePreviewWidget.cs').read_text(encoding='utf-8')
         self.assertIn('IRenderActorPreviewVoxelsInfo', source)

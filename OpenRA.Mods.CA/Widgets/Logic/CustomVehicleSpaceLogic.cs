@@ -41,7 +41,6 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			rotate.OnClick = () => canvas.Rotated = !canvas.Rotated;
 			var cancel = widget.Get<ButtonWidget>("CANCEL");
 			cancel.IsVisible = () => Ready; cancel.OnClick = canvas.Cancel;
-			widget.Get<LabelWidget>("LEGEND").IsVisible = () => Ready;
 
 			DropDownButtonWidget Field(string title, int row, Color color, Func<bool> visible)
 			{
@@ -96,7 +95,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				var options = compiler.CompatibleOptions(profile(), "carrier");
 				turret.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 8) * 30, options, Setup);
 			}
-			turret.OnMouseDown = _ => ChooseTurret(); canvas.Dock = ChooseTurret;
+			turret.OnMouseDown = _ => ChooseTurret();
 
 			void Pick(string module, string role, string part)
 			{

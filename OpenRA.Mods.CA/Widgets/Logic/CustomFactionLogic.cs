@@ -90,11 +90,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				propertyPanel.RemoveChildren();
 				foreach (var (key, value) in values)
 				{
-					var wrapped = WidgetUtils.WrapText(value, 224, Game.Renderer.Fonts["Small"]);
+					var wrapped = WidgetUtils.WrapText($"{key}: {value}", 224, Game.Renderer.Fonts["Small"]);
 					var height = Math.Max(18, Game.Renderer.Fonts["Small"].Measure(wrapped).Y);
-					var row = new ContainerWidget { Bounds = new WidgetBounds(0, 0, 244, height + 28) };
-					row.AddChild(new LabelWidget(modData) { Bounds = new WidgetBounds(8, 4, 224, 18), Font = "Small", GetText = () => key });
-					row.AddChild(new LabelWidget(modData) { Bounds = new WidgetBounds(8, 22, 224, height), Font = "Small", GetText = () => wrapped });
+					var row = new ContainerWidget { Bounds = new WidgetBounds(0, 0, 244, height + 4) };
+					row.AddChild(new LabelWidget(modData) { Bounds = new WidgetBounds(8, 2, 224, height), Font = "Small", GetText = () => wrapped });
 					propertyPanel.AddChild(row);
 				}
 			}

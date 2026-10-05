@@ -15,7 +15,6 @@ namespace OpenRA.Mods.CA.Widgets
 		public string Selected;
 		public bool Rotated;
 		public int? Moving;
-		public Action Dock = () => { };
 		public Action<string> Notify = _ => { };
 		public Func<string, bool> OnInstall = _ => true;
 		public Action OnLayoutChanged = () => { };
@@ -23,7 +22,6 @@ namespace OpenRA.Mods.CA.Widgets
 		const int Cell = 28;
 		static readonly int2 HullOrigin = new(72, 202);
 		static readonly int2 TurretOrigin = new(156, 32);
-		static readonly Rectangle DockBounds = new(170, 159, 84, 30);
 
 		public void Cancel() { Selected = null; Moving = null; Rotated = false; OnSelectionCancelled(); }
 		public void Choose(string id) { Cancel(); Selected = id; }
@@ -96,7 +94,6 @@ namespace OpenRA.Mods.CA.Widgets
 			var mouse = input.Location - RenderOrigin;
 			if (!RenderBounds.Contains(input.Location)) return false;
 			if (input.Event != MouseInputEvent.Up) return true;
-			if (input.Button == MouseButton.Left && Layout.HasChassis && DockBounds.Contains(mouse)) { Dock(); return true; }
 			if (!HitGrid(mouse, out var turret, out var x, out var y))
 			{
 				if (input.Button == MouseButton.Right) Cancel();
@@ -203,14 +200,10 @@ namespace OpenRA.Mods.CA.Widgets
 					Fill(156 + tw + 8, center - 7, 90, 14, metal);
 					Fill(156 + tw + 92, center - 11, 14, 22, ZoneColor(Zone.Weapon));
 				}
-				Fill(194, bottom + 12, 34, 160 - bottom - 12, metal);
+				Fill(194, bottom + 12, 34, 188 - bottom - 12, metal);
 				Text($"Turret {Layout.TurretWidth} x {Layout.TurretHeight}", 20, 48, Color.White);
 				Text($"{Layout.Used(true)} cells used", 20, 65, Color.White);
 			}
-			Fill(DockBounds.X, DockBounds.Y, DockBounds.Width, DockBounds.Height, metal);
-			Border(DockBounds.X, DockBounds.Y, DockBounds.Width, DockBounds.Height, Color.White);
-			Text(Layout.TurretWidth == 0 ? "+ TURRET" : "TURRET DOCK", 175, 168, Color.White);
-			Fill(198, 189, 26, 7, metal);
 			foreach (var t in new[] { false, true })
 			{
 				var o = t ? TurretOrigin : HullOrigin;
