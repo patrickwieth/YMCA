@@ -249,6 +249,13 @@ loaded SSM turret. Original trait info is not mutated. Models/sequences/palettes
 menu world's caches; asset/render failures disable only the preview and write the detailed error
 to the debug log. CPU trait checks are not proof of GPU rendering on the user's machine.
 
+## Visual space prototype
+
+Use **Bauraum ausprobieren** in the designer to open the [interactive hull/turret inventory example](vehicle-space-prototype.md).
+Running gear, engine, generator and batteries occupy hull cells; the turret has its own grid for weapons,
+ammunition and modules. Example sizes only; temporary layout, no roster/compiler changes. The adjacent
+rotating model remains the stock reference, not a render of the hypothetical grid assembly.
+
 ## Named ground turret modules
 
 [Prism, artillery, missile and sonic turrets](ground-turret-modules.md) now have named native module

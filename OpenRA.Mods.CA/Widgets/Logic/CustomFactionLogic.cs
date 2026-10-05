@@ -33,6 +33,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		[ObjectCreator.UseCtor]
 		public CustomFactionLogic(Widget widget, ModData modData, Action onExit, Action<string> onPlay)
 		{
+			widget.Get<ButtonWidget>("SPACE_DEMO").OnClick = () => Game.OpenWindow("CUSTOM_VEHICLE_SPACE", new WidgetArgs());
 			string message = "Basis-Roster plus eigene Fahrzeuge. Vorlagen fuegt die verfuegbaren Fahrzeugfamilien hinzu.";
 			widget.Get<LabelWidget>("STATUS").GetText = () => message;
 			bool dirty = false;
