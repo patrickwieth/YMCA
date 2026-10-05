@@ -99,6 +99,53 @@ nod.dummy:
 		RequiresCondition: cyborg-optimization
 		Modifier: 110
 
+^Nod1x1Visuals:
+	WithIdleOverlay@NODBIB:
+		Image: nodbib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
+^NodTall1x1Visuals:
+	Inherits: ^Nod1x1Visuals
+	IsometricSelectable:
+		DecorationHeight: 190
+
+^Nod2x2Selection:
+	IsometricSelectable:
+		DecorationHeight: 120
+
+^Nod3x2Selection:
+	IsometricSelectable:
+		DecorationHeight: 120
+
+^Nod2x2Visuals:
+	Inherits: ^Nod2x2Selection
+	GrantConditionOnFaction@NODBIB:
+		Condition: nod-custom-bib
+		Factions: nod, blackh, marked, legion
+	WithIdleOverlay@NODBIB:
+		Image: nodbib2x2
+		Sequence: idle
+		RequiresCondition: nod-custom-bib && !build-incomplete
+		IsDecoration: true
+
+^Nod3x3Bib:
+	GrantConditionOnFaction@NODBIB:
+		Condition: nod-custom-bib
+		Factions: nod, blackh, marked, legion
+	WithIdleOverlay@NODBIB:
+		Image: nodbib3x3
+		Sequence: idle
+		RequiresCondition: nod-custom-bib && !build-incomplete
+		IsDecoration: true
+
+^Nod3x3Visuals:
+	Inherits: ^Nod3x3Bib
+	IsometricSelectable:
+		DecorationBounds: 4344, 4344
+		DecorationHeight: 190
+
 ^NodLaserUnit:
 	GrantConditionOnPrerequisite@ImprovedLasers:
 		Condition: improved-lasers
