@@ -74,7 +74,7 @@ public class StockCombatTests
         Assert.That(catalog["components"]["superheavy-bunker"].Value<int>("cost"), Is.EqualTo(1000));
         Assert.That(catalog["components"]["stock-batf-hull"].Value<int>("carrier_slots"), Is.EqualTo(3));
         Assert.That(catalog["components"]["superheavy-bunker"].Value<int>("slots_required"), Is.EqualTo(3));
-        Assert.That(c.WeaponSummary(p), Does.StartWith("Turmplaetze: 3/3 belegt."));
+        Assert.That(c.WeaponSummary(p), Does.StartWith("Turret slots: 3/3 occupied."));
         catalog["components"]["stock-batf-hull"]["chassis_class"] = "standard";
         Assert.Throws<InvalidDataException>(() => new CustomFactionDesign(catalog.ToString()).Calculate(p));
         var tank = new CustomFactionProfile();

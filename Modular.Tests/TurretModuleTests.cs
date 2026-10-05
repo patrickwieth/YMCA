@@ -18,7 +18,7 @@ public class TurretModuleTests
         c.SelectPart(p, "chassis", hull);
         Assert.That(p.Parts["carrier"], Is.EqualTo(module)); Assert.That(c.Label(module), Is.EqualTo(label));
         var v = c.Calculate(p); Assert.That(v.Cost, Is.EqualTo(cost)); Assert.That(v.Hp, Is.EqualTo(hp)); Assert.That(v.Speed, Is.EqualTo(speed));
-        Assert.That(c.WeaponSummary(p), Does.StartWith(label + ": Turmplaetze: 1/1 belegt."));
+        Assert.That(c.WeaponSummary(p), Does.StartWith(label + ": Turret slots: 1/1 occupied."));
         var legacy = c.SerializeRoster(r).Replace("\"" + module + "\"", "\"" + oldId + "\"");
         var loaded = c.DeserializeRoster(legacy);
         Assert.That(c.SerializeRoster(loaded), Is.EqualTo(c.SerializeRoster(r)));

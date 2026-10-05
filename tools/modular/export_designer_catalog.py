@@ -18,6 +18,7 @@ import china_combat_expansion as china_combat
 import shared_running_gear as gear
 import stock_combat_expansion as stock
 import turret_modules as turrets
+from designer_english_labels import apply as apply_english_labels
 
 
 def assemblies():
@@ -87,6 +88,7 @@ def data():
     china_combat.extend_parts(parts)
     stock.extend_parts(parts)
     turrets.extend_parts(parts)
+    apply_english_labels(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}
     for assembly in assemblies():

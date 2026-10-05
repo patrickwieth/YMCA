@@ -259,6 +259,15 @@ scrollable vertical property list. Native component choices are applied on valid
 and battery/PDL/Reflector planning blocks are still temporary and are not compiled; Save/Test asks for
 confirmation before ignoring planning-only modules. Existing native profiles and maps retain their format.
 
+## English component labels
+
+All 216 runtime component labels are English, including chassis, running gear, engines, generators,
+mounts, weapons, ammunition and armor. Native weapon/ability summaries and turret occupancy text are
+English too. `tools/modular/designer_english_labels.py` is the explicit ID-keyed presentation adapter,
+applied last by the catalog exporter so regeneration cannot restore the old German labels.
+Only display text changes: internal IDs, user-authored design names, numeric fixtures, broad calibration
+sources and Excel files remain unchanged. Existing saved rosters resolve the new labels without migration.
+
 ## Named ground turret modules
 
 [Prism, artillery, missile and sonic turrets](ground-turret-modules.md) now have named native module

@@ -20,7 +20,7 @@ def render():
         '\t\t\t{',
         '\t\t\t\tFaction = faction, PreserveWeaponTemplates = true, PreserveActorGraphics = true, InheritStockWeapons = true,',
         '\t\t\t\tStockPrerequisites = prerequisites, NativeHover = hover,',
-        '\t\t\t\tSummary = carrier == "superheavy-bunker" ? "Battle Fortress + Bunker Module: originale Besatzung, Schiessscharten, MG/Flak und Bunkergrafik." : "Originale Kampfgruppe: Waffen/Spezialfunktionen am Chassis gebunden und im Preis enthalten."',
+        '\t\t\t\tSummary = carrier == "superheavy-bunker" ? "Battle Fortress + Bunker Module: original passengers, firing ports, machine gun/flak and bunker graphics." : "Original combat assembly: chassis-bound weapons and abilities included in the price."',
         '\t\t\t};',
         '\t\t\tassembly.Choices["generator"] = new[] { generator };',
         '\t\t\treturn assembly;', '\t\t}', '',

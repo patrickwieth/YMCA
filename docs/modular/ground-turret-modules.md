@@ -18,7 +18,7 @@ Das sind keine vier neuen Fahrzeugfamilien und noch keine frei mischbare Battle-
 - Die Engine erbt weiterhin die vollständigen Originalwaffen und Spezialfunktionen. Rezepte erzeugen keine vereinfachten Waffen.
 - Bestehende Einzelprofile und Fraktionsroster migrieren beim Laden: alte Prism-/Disruptor-Mount-IDs sowie Integrated Mount auf HOWI/STNK.
 - Integrated Mount anderer Fahrzeuge bleibt unverändert. IDs/Namen gespeicherter Entwürfe bleiben erhalten.
-- Die Oberfläche zeigt Modulname und `1/1 belegt`; Battle Fortress behält Bunker `3/3`.
+- Die Oberfläche zeigt Modulname und `Turret slots: 1/1 occupied`; Battle Fortress behält Bunker `3/3`.
 
 ## Keine falsche Zusammenlegung von Waffenprofilen
 

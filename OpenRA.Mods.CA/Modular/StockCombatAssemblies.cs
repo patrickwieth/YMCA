@@ -12,7 +12,7 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				Faction = faction, PreserveWeaponTemplates = true, PreserveActorGraphics = true, InheritStockWeapons = true,
 				StockPrerequisites = prerequisites, NativeHover = hover,
-				Summary = carrier == "superheavy-bunker" ? "Battle Fortress + Bunker Module: originale Besatzung, Schiessscharten, MG/Flak und Bunkergrafik." : "Originale Kampfgruppe: Waffen/Spezialfunktionen am Chassis gebunden und im Preis enthalten."
+				Summary = carrier == "superheavy-bunker" ? "Battle Fortress + Bunker Module: original passengers, firing ports, machine gun/flak and bunker graphics." : "Original combat assembly: chassis-bound weapons and abilities included in the price."
 			};
 			assembly.Choices["generator"] = new[] { generator };
 			return assembly;
