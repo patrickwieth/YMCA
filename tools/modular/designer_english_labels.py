@@ -30,7 +30,7 @@ LABELS = {
     'efficient-generator': 'Efficient Generator',
     'heavy': 'Heavy Armor',
     'light': 'Light Armor',
-    'medium-cannon-mount': 'Medium Cannon Turret',
+    'medium-cannon-mount': '105mm Smoothbore Cannon',
     'scout-mg-mount': 'Light Machine Gun Mount',
     'fixed-triple': 'Juggernaut Triple Mount',
     'light-cannon-mount': 'Light Cannon Turret',
