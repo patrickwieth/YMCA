@@ -12,13 +12,13 @@ namespace OpenRA.Mods.CA.Modular
 		public sealed record Placement(int Id, string ModuleId, bool InTurret, int X, int Y, bool Rotated);
 		public static readonly IReadOnlyList<Module> Modules = Array.AsReadOnly(new[]
 		{
-			new Module("weapon", "Cannon", 2, 2, false, true, Zone.Weapon),
+			new Module("weapon", "Weapon", 2, 2, false, true, Zone.Weapon),
 			new Module("ammo", "Ammunition", 1, 2, true, true),
 			new Module("pdl", "PDL", 1, 2, false, true),
 			new Module("battery", "Battery", 1, 2, true, true),
 			new Module("generator", "Generator", 2, 2, true, false),
 			new Module("engine", "Engine", 2, 2, true, false),
-			new Module("gear", "Tracks", 4, 1, true, false, Zone.RunningGear),
+			new Module("gear", "Running gear", 4, 1, true, false, Zone.RunningGear),
 			new Module("armor", "Armor plate", 2, 1, true, false, Zone.Armor),
 			new Module("reflector", "Reflector armor", 2, 1, true, false, Zone.Armor)
 		});
@@ -40,6 +40,14 @@ namespace OpenRA.Mods.CA.Modular
 			Heavy = heavy;
 			TurretWidth = 0;
 			placements.Clear();
+		}
+
+		public void LoadStockConfiguration(bool heavy)
+		{
+			SetChassis(heavy); SetTurret(3);
+			Place("engine", false, 1, 1, false); Place("generator", false, 3, 1, false);
+			Place("gear", false, 1, HullHeight - 1, false); Place("armor", false, 0, 0, false);
+			Place("weapon", true, 1, 1, false); Place("ammo", true, 0, 0, false);
 		}
 
 		public void LoadExample()

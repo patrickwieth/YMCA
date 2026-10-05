@@ -17,12 +17,15 @@ namespace OpenRA.Mods.CA.Widgets
 		public int? Moving;
 		public Action Dock = () => { };
 		public Action<string> Notify = _ => { };
+		public Func<string, bool> OnInstall = _ => true;
+		public Action OnLayoutChanged = () => { };
+		public Action OnSelectionCancelled = () => { };
 		const int Cell = 28;
 		static readonly int2 HullOrigin = new(72, 202);
 		static readonly int2 TurretOrigin = new(156, 32);
 		static readonly Rectangle DockBounds = new(170, 159, 84, 30);
 
-		public void Cancel() { Selected = null; Moving = null; Rotated = false; }
+		public void Cancel() { Selected = null; Moving = null; Rotated = false; OnSelectionCancelled(); }
 		public void Choose(string id) { Cancel(); Selected = id; }
 		public static Color ZoneColor(Zone zone) => zone switch
 		{
@@ -42,6 +45,14 @@ namespace OpenRA.Mods.CA.Widgets
 
 		void Fill(int x, int y, int w, int h, Color c) => WidgetUtils.FillRectWithColor(new Rectangle(RenderOrigin.X + x, RenderOrigin.Y + y, w, h), c);
 		void Text(string s, int x, int y, Color c) => Game.Renderer.Fonts["Small"].DrawText(s, new float2(RenderOrigin.X + x, RenderOrigin.Y + y), c);
+		void Ellipse(int x, int y, int w, int h, Color color) => Game.Renderer.RgbaColorRenderer.FillEllipse(
+			new float3(RenderOrigin.X + x, RenderOrigin.Y + y, 0), new float3(RenderOrigin.X + x + w, RenderOrigin.Y + y + h, 0), color);
+		void Polygon(Color color, params int2[] points)
+		{
+			float3 At(int2 p) => new float3(RenderOrigin.X + p.X, RenderOrigin.Y + p.Y, 0);
+			for (var i = 1; i < points.Length - 1; i++) Game.Renderer.RgbaColorRenderer.FillTriangle(At(points[0]), At(points[i]), At(points[i + 1]), color);
+		}
+
 		void Border(int x, int y, int w, int h, Color c)
 		{
 			Fill(x, y, w, 2, c); Fill(x, y + h - 2, w, 2, c);
@@ -83,15 +94,20 @@ namespace OpenRA.Mods.CA.Widgets
 			var occupant = Layout.At(turret, x, y);
 			if (input.Button == MouseButton.Right)
 			{
-				if (Selected == null && occupant != null) { Layout.Remove(occupant.Id); Notify("Module removed."); }
+				if (Selected == null && occupant != null) { Layout.Remove(occupant.Id); OnLayoutChanged(); Notify("Layout block removed; configured stock part is unchanged."); }
 				else { Cancel(); Notify("Selection cancelled. The original position is preserved."); }
 				return true;
 			}
 			if (input.Button != MouseButton.Left) return true;
 			if (Selected != null)
 			{
-				if (Layout.Place(Selected, turret, x, y, Rotated, Moving)) { Cancel(); Notify("Installed. Click a module to pick it up again."); }
-				else Notify("Cannot place here: check the colored zone, free space and orientation.");
+				if (!Layout.CanPlace(Selected, turret, x, y, Rotated, Moving))
+					Notify("Cannot place here: check the colored zone, free space and orientation.");
+				else if (OnInstall(Selected))
+				{
+					Layout.Place(Selected, turret, x, y, Rotated, Moving);
+					Cancel(); OnLayoutChanged(); Notify("Placed. Click a module to pick it up again.");
+				}
 			}
 			else if (occupant != null)
 			{
@@ -146,16 +162,28 @@ namespace OpenRA.Mods.CA.Widgets
 			if (!Layout.HasChassis) { Text("Choose a chassis on the left to begin.", 104, 180, Color.White); return; }
 			var hw = Layout.HullWidth * Cell;
 			var hh = Layout.HullHeight * Cell;
-			// Long hull, sloped nose and a continuous running-gear band underneath.
-			Fill(52, 196, hw + 38, hh + 12, metal);
-			Fill(72, 188, hw - 8, 8, metal);
-			Fill(72 + hw + 18, 210, 12, hh - 18, metal);
-			Fill(60, 202 + hh, hw + 20, 10, ZoneColor(Zone.RunningGear));
+			// Independent tank contour: sloped glacis, rear deck, track loop and road wheels.
+			var trackY = 202 + hh - 10;
+			var track = Color.FromArgb(255, 17, 22, 25);
+			Ellipse(26, trackY, 56, 46, track); Ellipse(hw + 76, trackY, 56, 46, track);
+			Fill(54, trackY, hw + 50, 46, track);
+			for (var x = 48; x < hw + 118; x += 36)
+			{
+				Ellipse(x, trackY + 5, 32, 32, metal);
+				Ellipse(x + 10, trackY + 15, 12, 12, dark);
+			}
+			for (var x = 38; x < hw + 122; x += 15) Fill(x, trackY + 40, 10, 3, metal);
+			Polygon(metal, new int2(26, 214), new int2(56, 183), new int2(hw + 76, 183),
+				new int2(hw + 132, 224), new int2(hw + 110, 202 + hh), new int2(40, 202 + hh));
+			Fill(38, 179, 83, 5, metal);
+			for (var x = 45; x < 113; x += 12) Fill(x, 185, 6, 8, dark);
 			if (Layout.TurretWidth > 0)
 			{
 				var tw = Layout.TurretWidth * Cell;
-				Fill(148, 28, tw + 16, 122, metal);
-				Fill(164, 22, tw - 18, 6, metal);
+				Polygon(metal, new int2(128, 144), new int2(132, 44), new int2(158, 18),
+					new int2(tw + 146, 18), new int2(tw + 178, 51), new int2(tw + 180, 134), new int2(tw + 156, 150));
+				Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
+				Ellipse(169, 146, 86, 16, metal);
 				foreach (var weapon in Layout.Placements.Where(p => p.InTurret && p.ModuleId == "weapon" && p.Id != Moving))
 				{
 					var size = CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(weapon.ModuleId), weapon.Rotated);
@@ -189,7 +217,7 @@ namespace OpenRA.Mods.CA.Widgets
 				var o = p.InTurret ? TurretOrigin : HullOrigin;
 				Item(p.ModuleId, p.Rotated, o.X + p.X * Cell, o.Y + p.Y * Cell, Tint(p.ModuleId), false);
 			}
-			Text($"Hull {Layout.HullWidth} x {Layout.HullHeight}: {Layout.Used(false)} cells used", 72, 354, Color.White);
+			Text($"Schematic hull: {Layout.HullWidth} x {Layout.HullHeight} / {Layout.Used(false)} cells used", 72, 389, Color.White);
 		}
 	}
 

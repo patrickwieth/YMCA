@@ -18,7 +18,7 @@ Restart the locally built game, then **Eigene Fraktion**.
   parts are explicitly reset to valid defaults; compatible motor/generator choices
   are retained. Other dropdowns only offer supported combinations for this group.
 - Rename each vehicle. Duplicate names within the faction are rejected.
-- A **240×192 actor preview on the right** shows the bound body/turret/barrel artwork,
+- A **260×192 actor preview on the right** shows the bound body/turret/barrel artwork,
   using the actual sprite **and voxel** render pipelines. It rotates once every **24 seconds**;
   the button pauses/resumes rotation. All headings are fitted together to avoid zoom pumping.
   This is an inspection view, not a movement order: stationary vehicles can rotate in the
@@ -251,12 +251,13 @@ to the debug log. CPU trait checks are not proof of GPU rendering on the user's 
 
 ## Visual space prototype
 
-Use **Space designer** to open the [side-view hull/turret inventory example](vehicle-space-prototype.md).
-An English sidebar provides chassis/turret selection and module pickup. Held items follow the mouse as
-multi-cell footprints and snap into the grids. Yellow bottom slots accept running gear (4×1), red front
-turret slots anchor weapons, and blue hull-edge slots accept armor. Engine/generator/battery equipment
-uses interior cells. Example sizes only; temporary layout, no roster/compiler changes. The small rotating
-model remains the stock reference, not a render of the hypothetical grid assembly.
+The [side-view inventory](vehicle-space-prototype.md) is now embedded in the **single faction designer**;
+there is no separate Space designer window. Faction/library/roster controls stay at the top. The left sidebar
+reveals mount selection after chassis selection, and component options after mounting. The center shows
+an independent tank-shaped contour around the grids; the right retains the rotating preview and adds a
+scrollable vertical property list. Native component choices are applied on valid drops. Grid coordinates
+and battery/PDL/Reflector planning blocks are still temporary and are not compiled; Save/Test asks for
+confirmation before ignoring planning-only modules. Existing native profiles and maps retain their format.
 
 ## Named ground turret modules
 

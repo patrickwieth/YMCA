@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.CA.Modular;
 using OpenRA.Mods.Common.Widgets;
@@ -8,119 +9,177 @@ using Zone = OpenRA.Mods.CA.Modular.CustomVehicleSpaceDemo.Zone;
 
 namespace OpenRA.Mods.CA.Widgets.Logic
 {
-	public sealed class CustomVehicleSpaceLogic : ChromeLogic
+	// Embedded controller for the one faction designer, not a second window.
+	public sealed class CustomVehicleSpaceLogic
 	{
-		[ObjectCreator.UseCtor]
-		public CustomVehicleSpaceLogic(Widget widget, ModData modData)
-		{
-			var canvas = widget.Get<CustomVehicleSpaceWidget>("LAYOUT");
-			var layout = canvas.Layout;
-			var preview = widget.Get<CustomVehiclePreviewWidget>("REFERENCE");
-			preview.IsVisible = () => layout.HasChassis;
-			widget.Get<LabelWidget>("PREVIEW_LABEL").IsVisible = () => layout.HasChassis;
-			var sidebar = widget.Get("SIDEBAR");
-			var message = "Choose a chassis, then mount a turret from above.";
-			canvas.Notify = s => message = s;
-			widget.Get<LabelWidget>("STATUS").GetText = () => WidgetUtils.TruncateText(
-				(layout.HasPdlWithoutBattery ? "PDL needs a battery! " : "") + message, 554, Game.Renderer.Fonts["Small"]);
-			widget.Get<LabelWidget>("SELECTION").GetText = () => canvas.Selected == null ? "Choose a module on the left to pick it up." :
-				$"In hand: {CustomVehicleSpaceDemo.Definition(canvas.Selected).Label} - " +
-				$"{CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(canvas.Selected), canvas.Rotated).Width} x " +
-				$"{CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(canvas.Selected), canvas.Rotated).Height}. Green fits; red cannot be placed.";
-			widget.Get<ButtonWidget>("BACK").OnClick = () => Ui.CloseWindow();
-			widget.Get<ButtonWidget>("CANCEL").OnClick = canvas.Cancel;
-			var rotate = widget.Get<ButtonWidget>("ROTATE");
-			rotate.IsDisabled = () => canvas.Selected == null;
-			rotate.OnClick = () => canvas.Rotated = !canvas.Rotated;
+		readonly CustomVehicleSpaceWidget canvas;
+		readonly CustomFactionDesign compiler;
+		readonly Func<CustomFactionProfile> profile;
+		readonly Dictionary<CustomVehicleDesign, CustomVehicleSpaceDemo> layouts = new();
+		string pendingRole, pendingPart;
+		public bool HasChassis => canvas.Layout.HasChassis;
+		public bool Ready => canvas.Layout.HasChassis && canvas.Layout.TurretWidth > 0;
+		public bool HasPlanningModules => layouts.Values.Any(l => l.Placements.Any(p => p.ModuleId is "battery" or "pdl" or "reflector"));
 
-			DropDownButtonWidget Field(string title, int row, Color color)
+		public CustomVehicleSpaceLogic(Widget widget, ModData modData, CustomFactionDesign compiler,
+			Func<CustomFactionProfile> profile, Func<string, string, bool> commitPart, Action<string> notify)
+		{
+			this.compiler = compiler; this.profile = profile;
+			canvas = widget.Get<CustomVehicleSpaceWidget>("LAYOUT");
+			var sidebar = widget.Get("SIDEBAR");
+			canvas.Notify = notify;
+			canvas.OnSelectionCancelled = () => { pendingRole = pendingPart = null; };
+			canvas.OnInstall = _ => pendingRole == null || commitPart(pendingRole, pendingPart);
+			var selection = widget.Get<LabelWidget>("SELECTION");
+			selection.GetText = () => !Ready ? "Choose a chassis, then a turret / mount." : canvas.Selected == null ?
+				"Pick a part on the left, then drop it into the grid." :
+				$"In hand: {CustomVehicleSpaceDemo.Definition(canvas.Selected).Label} " +
+				$"({CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(canvas.Selected), canvas.Rotated).Width} x " +
+				$"{CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(canvas.Selected), canvas.Rotated).Height}) - R rotates; Esc cancels.";
+			var rotate = widget.Get<ButtonWidget>("ROTATE");
+			rotate.IsVisible = () => Ready; rotate.IsDisabled = () => canvas.Selected == null;
+			rotate.OnClick = () => canvas.Rotated = !canvas.Rotated;
+			var cancel = widget.Get<ButtonWidget>("CANCEL");
+			cancel.IsVisible = () => Ready; cancel.OnClick = canvas.Cancel;
+			widget.Get<LabelWidget>("LEGEND").IsVisible = () => Ready;
+
+			DropDownButtonWidget Field(string title, int row, Color color, Func<bool> visible)
 			{
 				sidebar.AddChild(new LabelWidget(modData)
 				{
-					Bounds = new WidgetBounds(0, row * 58, 220, 18), Font = "Small", GetText = () => title, GetColor = () => color
+					Bounds = new WidgetBounds(0, row * 50, 220, 18), Font = "Small", GetText = () => title,
+					GetColor = () => color, IsVisible = visible
 				});
-				var button = new DropDownButtonWidget(modData) { Bounds = new WidgetBounds(0, row * 58 + 20, 220, 28), GetColor = () => color };
-				sidebar.AddChild(button);
-				return button;
+				var button = new DropDownButtonWidget(modData)
+				{
+					Bounds = new WidgetBounds(0, row * 50 + 19, 220, 28), GetColor = () => color, IsVisible = visible
+				};
+				sidebar.AddChild(button); return button;
 			}
-
-			var chassis = Field("Chassis", 0, Color.White);
-			chassis.GetText = () => !layout.HasChassis ? "Select chassis..." : layout.Heavy ? "Mammoth (10 x 5)" : "Battle Tank (8 x 4)";
+			string Fit(string text) => WidgetUtils.TruncateText(text, 188, Game.Renderer.Fonts["Bold"]);
+			var chassis = Field("Chassis", 0, Color.White, () => true);
+			chassis.GetText = () => canvas.Layout.HasChassis ? Fit(compiler.Label(profile().Parts["chassis"])) : "Select chassis...";
 			chassis.OnMouseDown = _ =>
 			{
-				ScrollItemWidget Setup(bool heavy, ScrollItemWidget template)
+				ScrollItemWidget Setup(string id, ScrollItemWidget template)
 				{
-					var item = ScrollItemWidget.Setup(template, () => layout.HasChassis && layout.Heavy == heavy, () =>
+					var item = ScrollItemWidget.Setup(template, () => canvas.Layout.HasChassis && profile().Parts["chassis"] == id, () =>
 					{
-						if (layout.HasChassis && heavy == layout.Heavy) return;
-						layout.SetChassis(heavy); canvas.Cancel();
-						preview.SetVehicle(heavy ? "mammoth" : "mtnk", "eagle");
-						message = "Chassis selected. Temporary layout cleared; choose a turret next.";
+						if (canvas.Layout.HasChassis && profile().Parts["chassis"] == id) return;
+						if (!commitPart("chassis", id)) return;
+						canvas.Cancel(); pendingRole = pendingPart = null;
+						canvas.Layout.SetChassis(LargeSchematic());
+						notify("Chassis selected. Choose its compatible turret / mount next.");
 					});
-					item.Get<LabelWidget>("LABEL").GetText = () => heavy ? "Mammoth (10 x 5)" : "Battle Tank (8 x 4)";
-					return item;
+					item.Get<LabelWidget>("LABEL").GetText = () => compiler.Label(id); return item;
 				}
-				chassis.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", 60, new[] { false, true }, Setup);
+				var options = compiler.CompatibleOptions(profile(), "chassis");
+				chassis.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 8) * 30, options, Setup);
 			};
-
-			var turret = Field("Turret", 1, Color.White);
-			turret.IsDisabled = () => !layout.HasChassis;
-			string TurretLabel(int width) => width == 0 ? "No turret" : $"Example turret ({width} x 4)";
-			turret.GetText = () => !layout.HasChassis ? "Choose a chassis first" : TurretLabel(layout.TurretWidth);
+			var turret = Field("Turret / mount", 1, Color.White, () => canvas.Layout.HasChassis);
+			turret.GetText = () => Ready ? Fit(compiler.Label(profile().Parts["carrier"])) : "Select turret / mount...";
 			void ChooseTurret()
 			{
-				if (!layout.HasChassis) return;
-				ScrollItemWidget Setup(int width, ScrollItemWidget template)
+				if (!canvas.Layout.HasChassis) return;
+				ScrollItemWidget Setup(string id, ScrollItemWidget template)
 				{
-					var item = ScrollItemWidget.Setup(template, () => layout.TurretWidth == width, () =>
+					var item = ScrollItemWidget.Setup(template, () => Ready && profile().Parts["carrier"] == id, () =>
 					{
-						if (width == layout.TurretWidth) return;
-						layout.SetTurret(width); canvas.Cancel();
-						message = "Turret changed. Turret contents cleared; hull contents preserved.";
+						if (!commitPart("carrier", id)) return;
+						canvas.Cancel(); pendingRole = pendingPart = null;
+						if (!Ready) canvas.Layout.LoadStockConfiguration(canvas.Layout.Heavy);
+						else canvas.Layout.SetTurret(3);
+						notify("Stock parts arranged. Pick up a replacement from the sidebar or move a block.");
 					});
-					item.Get<LabelWidget>("LABEL").GetText = () => TurretLabel(width);
-					return item;
+					item.Get<LabelWidget>("LABEL").GetText = () => compiler.Label(id); return item;
 				}
-				turret.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", 90, new[] { 0, 3, 4 }, Setup);
+				var options = compiler.CompatibleOptions(profile(), "carrier");
+				turret.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 8) * 30, options, Setup);
 			}
-			turret.OnMouseDown = _ => ChooseTurret();
-			canvas.Dock = ChooseTurret;
+			turret.OnMouseDown = _ => ChooseTurret(); canvas.Dock = ChooseTurret;
 
-			void ModuleField(string title, int row, Color color, params string[] ids)
+			void Pick(string module, string role, string part)
 			{
-				var button = Field(title, row, color);
-				button.IsDisabled = () => !layout.HasChassis || (ids.All(id => !CustomVehicleSpaceDemo.Definition(id).Hull) && layout.TurretWidth == 0);
-				button.GetText = () => canvas.Selected != null && ids.Contains(canvas.Selected) ?
-					CustomVehicleSpaceDemo.Definition(canvas.Selected).Label + " (in hand)" : "Pick up...";
+				canvas.Choose(module); pendingRole = role; pendingPart = part;
+				if (role != null)
+				{
+					// The compiler has one component per native role. Picking a replacement moves that block.
+					var existing = canvas.Layout.Placements.FirstOrDefault(p => p.ModuleId == module);
+					if (existing != null) { canvas.Moving = existing.Id; canvas.Rotated = existing.Rotated; }
+				}
+				notify(role == null ? "Planning-only module: not saved or included in test games." : "Drop to apply this stock part and update preview / stats.");
+			}
+			void PartField(string title, int row, Color color, string role, string module, bool armor = false)
+			{
+				var button = Field(title, row, color, () => Ready);
+				button.GetText = () => Fit(compiler.Label(profile().Parts[role]));
 				button.OnMouseDown = _ =>
 				{
 					ScrollItemWidget Setup(string id, ScrollItemWidget template)
 					{
-						var module = CustomVehicleSpaceDemo.Definition(id);
-						var item = ScrollItemWidget.Setup(template, () => canvas.Selected == id, () =>
+						var item = ScrollItemWidget.Setup(template, () => profile().Parts[role] == id, () =>
 						{
-							canvas.Choose(id); message = "Module in hand. Click a slot to drop it; R rotates, Esc cancels.";
+							if (id == "@reflector") Pick("reflector", null, null); else Pick(module, role, id);
 						});
-						item.Get<LabelWidget>("LABEL").GetText = () => $"{module.Label} ({module.Width} x {module.Height})";
-						item.Get<LabelWidget>("LABEL").GetColor = () => color;
-						return item;
+						item.Get<LabelWidget>("LABEL").GetText = () => id == "@reflector" ? "Reflector armor (planning)" : compiler.Label(id);
+						item.Get<LabelWidget>("LABEL").GetColor = () => color; return item;
 					}
-					var options = ids.Where(id => layout.TurretWidth > 0 || CustomVehicleSpaceDemo.Definition(id).Hull).ToArray();
-					button.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", options.Length * 30, options, Setup);
+					var options = compiler.CompatibleOptions(profile(), role).Concat(armor ? new[] { "@reflector" } : Array.Empty<string>()).ToArray();
+					button.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 30, options, Setup);
 				};
 			}
-			ModuleField("Engine", 2, Color.White, "engine");
-			ModuleField("Running gear - bottom slots", 3, CustomVehicleSpaceWidget.ZoneColor(Zone.RunningGear), "gear");
-			ModuleField("Weapon - front turret dock", 4, CustomVehicleSpaceWidget.ZoneColor(Zone.Weapon), "weapon");
-			ModuleField("Ammunition", 5, Color.White, "ammo");
-			ModuleField("Armor - hull edge", 6, CustomVehicleSpaceWidget.ZoneColor(Zone.Armor), "armor", "reflector");
-			ModuleField("Free modules", 7, Color.White, "generator", "battery", "pdl");
-			widget.Get<ButtonWidget>("EXAMPLE").OnClick = () =>
+			PartField("Engine", 2, Color.White, "drive", "engine");
+			PartField("Running gear - bottom", 3, CustomVehicleSpaceWidget.ZoneColor(Zone.RunningGear), "running_gear", "gear");
+			PartField("Weapon - turret front", 4, CustomVehicleSpaceWidget.ZoneColor(Zone.Weapon), "weapon", "weapon");
+			PartField("Ammunition", 5, Color.White, "ammunition", "ammo");
+			PartField("Armor - hull edge", 6, CustomVehicleSpaceWidget.ZoneColor(Zone.Armor), "armor", "armor", true);
+			var free = Field("Free modules / generator", 7, Color.White, () => Ready);
+			free.GetText = () => "Pick up...";
+			free.OnMouseDown = _ =>
 			{
-				layout.LoadExample(); canvas.Cancel(); preview.SetVehicle(layout.Heavy ? "mammoth" : "mtnk", "eagle");
-				message = "Example loaded. Pick up a fitted module and try moving it.";
+				ScrollItemWidget Setup(string id, ScrollItemWidget template)
+				{
+					var planning = id.StartsWith("@");
+					var item = ScrollItemWidget.Setup(template, () => false, () => Pick(planning ? id.Substring(1) : "generator", planning ? null : "generator", planning ? null : id));
+					item.Get<LabelWidget>("LABEL").GetText = () => planning ? CustomVehicleSpaceDemo.Definition(id.Substring(1)).Label + " (planning)" : compiler.Label(id);
+					return item;
+				}
+				var options = compiler.CompatibleOptions(profile(), "generator").Concat(new[] { "@battery", "@pdl" }).ToArray();
+				free.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 30, options, Setup);
 			};
-			widget.AddChild(new CustomVehicleSpaceCursorWidget { Bounds = new WidgetBounds(0, 0, 800, 640), Canvas = canvas });
+			// New pickups use pending part IDs; moving an existing block without a sidebar choice changes layout only.
+			canvas.OnLayoutChanged = () => { pendingRole = pendingPart = null; };
+			widget.AddChild(new CustomVehicleSpaceCursorWidget { Bounds = new WidgetBounds(0, 0, widget.Bounds.Width, widget.Bounds.Height), Canvas = canvas });
+		}
+
+		bool LargeSchematic()
+		{
+			// Editing a name must not break layout switching; geometry does not depend on names.
+			var current = profile();
+			return compiler.Calculate(new CustomFactionProfile
+			{
+				Name = "Layout", TankName = "Layout", BaseFaction = current.BaseFaction, Parts = current.Parts
+			}).Mass >= 20000;
+		}
+
+		public void RetainDesigns(IEnumerable<CustomVehicleDesign> designs)
+		{
+			var keep = new HashSet<CustomVehicleDesign>(designs);
+			foreach (var key in layouts.Keys.Where(k => !keep.Contains(k)).ToArray()) layouts.Remove(key);
+		}
+
+		public void SelectDesign(CustomVehicleDesign design, bool restore)
+		{
+			canvas.Cancel(); pendingRole = pendingPart = null;
+			if (!layouts.TryGetValue(design, out var layout))
+			{
+				layouts.Add(design, layout = new CustomVehicleSpaceDemo());
+				if (restore)
+				{
+					layout.LoadStockConfiguration(LargeSchematic());
+				}
+			}
+			canvas.Layout = layout;
 		}
 	}
 }

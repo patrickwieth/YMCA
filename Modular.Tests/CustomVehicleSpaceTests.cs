@@ -11,6 +11,19 @@ public class CustomVehicleSpaceTests
         var layout = new CustomVehicleSpaceDemo(); layout.SetChassis(heavy); return layout;
     }
 
+    [TestCase(false)]
+    [TestCase(true)]
+    public void RestoredStockLayoutContainsOnlyConfiguredRolesNotPlanningModules(bool heavy)
+    {
+        var layout = Empty(); layout.LoadExample(); layout.LoadStockConfiguration(heavy);
+        Assert.That(layout.Heavy, Is.EqualTo(heavy));
+        Assert.That(layout.HasChassis, Is.True);
+        Assert.That(layout.TurretWidth, Is.EqualTo(3));
+        Assert.That(layout.Placements.Select(p => p.ModuleId), Is.EquivalentTo(new[] { "engine", "generator", "gear", "armor", "weapon", "ammo" }));
+        foreach (var p in layout.Placements)
+            Assert.That(layout.CanPlace(p.ModuleId, p.InTurret, p.X, p.Y, p.Rotated, p.Id), Is.True);
+    }
+
     [Test]
     public void ChooseChassisBeforeDockingOrInstallingAnything()
     {

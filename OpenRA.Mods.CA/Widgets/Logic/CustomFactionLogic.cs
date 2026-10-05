@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.CA.Modular;
 using OpenRA.Mods.Common.Widgets;
@@ -33,15 +34,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		[ObjectCreator.UseCtor]
 		public CustomFactionLogic(Widget widget, ModData modData, Action onExit, Action<string> onPlay)
 		{
-			widget.Get<ButtonWidget>("SPACE_DEMO").OnClick = () => Game.OpenWindow("CUSTOM_VEHICLE_SPACE", new WidgetArgs());
-			string message = "Basis-Roster plus eigene Fahrzeuge. Vorlagen fuegt die verfuegbaren Fahrzeugfamilien hinzu.";
-			widget.Get<LabelWidget>("STATUS").GetText = () => message;
+			string message = "Configure a vehicle here. Add templates to include more stock families.";
+			widget.Get<LabelWidget>("STATUS").GetText = () => WidgetUtils.TruncateText(message, 788, Game.Renderer.Fonts["Small"]);
 			bool dirty = false;
 			void DiscardThen(Action action)
 			{
 				if (!dirty) { action(); return; }
-				ConfirmationDialogs.ButtonPrompt(modData, "Ungespeicherte Aenderungen", "Aenderungen an dieser Fraktion verwerfen?",
-					onConfirm: action, confirmText: "Verwerfen", onCancel: () => { }, cancelText: "Abbrechen");
+				ConfirmationDialogs.ButtonPrompt(modData, "Unsaved changes", "Discard changes to this faction?",
+					onConfirm: action, confirmText: "Discard", onCancel: () => { }, cancelText: "Cancel");
 			}
 			widget.Get<ButtonWidget>("BACK").OnClick = () => DiscardThen(() => { Ui.CloseWindow(); onExit(); });
 			CustomFactionDesign compiler;
@@ -53,7 +53,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 			catch (Exception e)
 			{
-				message = "Bausteinkatalog nicht geladen: " + e.Message;
+				message = "Component catalog could not be loaded: " + e.Message;
 				foreach (var id in new[] { "SAVE", "PLAY", "ADD", "COPY", "DELETE", "TEMPLATES", "BASE" })
 					widget.Get<ButtonWidget>(id).Disabled = true;
 				return;
@@ -62,16 +62,19 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var profilePath = Path.Combine(Platform.SupportDir, "Modular", "custom-faction.json");
 			var libraryPath = Path.Combine(Platform.SupportDir, "Modular", "Factions");
 			var roster = new CustomFactionRoster();
+			var loadedRoster = false;
 			try
 			{
-				if (File.Exists(profilePath)) roster = compiler.DeserializeRoster(File.ReadAllText(profilePath));
+				if (File.Exists(profilePath)) { roster = compiler.DeserializeRoster(File.ReadAllText(profilePath)); loadedRoster = true; }
 			}
-			catch (Exception e) { message = "Profil nicht geladen; Standard angezeigt. Alte Datei bleibt bis Speichern erhalten. " + e.Message; }
+			catch (Exception e) { message = "Profile could not be loaded; showing defaults. The old file is preserved until saving. " + e.Message; }
 
+			CustomVehicleSpaceLogic space = null;
 			var preview = widget.Get<CustomVehiclePreviewWidget>("VEHICLE_PREVIEW");
-			widget.Get<LabelWidget>("PREVIEW_STATUS").GetText = () => preview.Status;
+			preview.IsVisible = () => space?.HasChassis ?? false;
+			widget.Get<LabelWidget>("PREVIEW_STATUS").GetText = () => space?.HasChassis == true ? preview.Status : "Choose a chassis to preview.";
 			var rotation = widget.Get<ButtonWidget>("PREVIEW_ROTATION");
-			rotation.GetText = () => preview.Rotating ? "Rotation anhalten" : "Langsam drehen";
+			rotation.GetText = () => preview.Rotating ? "Pause rotation" : "Rotate slowly";
 			rotation.OnClick = () => preview.Rotating = !preview.Rotating;
 			var selected = 0;
 			var factionName = widget.Get<TextFieldWidget>("FACTION_NAME");
@@ -79,8 +82,22 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			factionName.Text = roster.Name;
 			tankName.Text = roster.Designs[selected].Name;
 			CustomFactionProfile Profile() => compiler.Profile(roster, roster.Designs[selected]);
-			string stats = "", power = "", warning = "", weapons = "";
 			bool valid = false;
+			var propertyPanel = widget.Get<ScrollPanelWidget>("PROPERTIES");
+			propertyPanel.IsVisible = () => space?.HasChassis ?? false;
+			void Properties(IEnumerable<(string Key, string Value)> values)
+			{
+				propertyPanel.RemoveChildren();
+				foreach (var (key, value) in values)
+				{
+					var wrapped = WidgetUtils.WrapText(value, 224, Game.Renderer.Fonts["Small"]);
+					var height = Math.Max(18, Game.Renderer.Fonts["Small"].Measure(wrapped).Y);
+					var row = new ContainerWidget { Bounds = new WidgetBounds(0, 0, 244, height + 28) };
+					row.AddChild(new LabelWidget(modData) { Bounds = new WidgetBounds(8, 4, 224, 18), Font = "Small", GetText = () => key });
+					row.AddChild(new LabelWidget(modData) { Bounds = new WidgetBounds(8, 22, 224, height), Font = "Small", GetText = () => wrapped });
+					propertyPanel.AddChild(row);
+				}
+			}
 			void Refresh(bool edited)
 			{
 				roster.Name = factionName.Text;
@@ -92,29 +109,53 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					var p = Profile();
 					var v = compiler.Calculate(p);
 					preview.SetVehicle(compiler.PreviewActor(p), p.BaseFaction);
-					stats = $"Preis {v.Cost:0}   HP {v.Hp:0}   Tempo {v.Speed}   CP 0   Tech {v.Tech}   Entwuerfe {budget}/50";
-					power = $"Masse {v.Mass:0} kg   Elektrisch {v.Electric:0.##} kW   Antriebsreserve {v.Reserve:0.##} kW";
-					weapons = compiler.WeaponSummary(p);
-					warning = v.Stationary ? "Stationaer: nur vorplatziert + Carryall, nicht baubar. Fahrzeuggrafik ist Platzhalter." :
-						p.Parts["running_gear"] == "prototype-hover" && !compiler.IsNativeHover(p) ? "Hover mit Platzhaltergrafik. Baubar ab Tech 2; eigene Fahrzeuge hinten im Fahrzeugmenue." :
-						"Baubar ab Tech " + v.Tech + "; eigene Fahrzeuge hinten im Fahrzeugmenue. Rumpf und Waffengrafik sind gebunden.";
+					var values = new List<(string, string)>
+					{
+						("Price", $"{v.Cost:0} credits"), ("Hitpoints", $"{v.Hp:0}"), ("Speed", v.Speed.ToString()),
+						("Turn speed", v.Turn.ToString()), ("Mass", $"{v.Mass:0} kg"), ("Technology", v.Tech.ToString()),
+						("Electrical demand (experimental)", $"{v.Electric:0.##} kW"), ("Drive reserve (experimental)", $"{v.Reserve:0.##} kW"),
+						("Development points", $"{v.Points}; faction total {budget}/50"), ("Command points", "0"),
+						("Faction", CustomFactionDesign.BaseLabel(p.BaseFaction)),
+						("Production", v.Stationary ? "Stationary; preplaced + manual Carryall only." : "Buildable with original prerequisites."),
+						("Graphics", p.Parts["running_gear"] == "prototype-hover" && !compiler.IsNativeHover(p) ? "Hover placeholder graphics." : "Bound original actor graphics.")
+					};
+					var names = new[] { "Chassis", "Running gear", "Engine", "Generator", "Armor", "Turret / mount", "Weapon", "Ammunition" };
+					for (var i = 0; i < CustomFactionDesign.Roles.Length; i++) values.Add((names[i], compiler.Label(p.Parts[CustomFactionDesign.Roles[i]])));
+					values.Add(("Original weapon / ability package", compiler.WeaponSummary(p)));
+					Properties(values);
 					valid = true;
-					if (edited) message = "Ungespeichert. Alle " + roster.Designs.Count + " Entwuerfe werden gemeinsam ins Testspiel uebernommen.";
+					if (edited) message = "Unsaved changes. All " + roster.Designs.Count + " designs will be included in the test game.";
 				}
-				catch (Exception e) { stats = e.Message; power = warning = weapons = ""; valid = false; }
+				catch (Exception e) { Properties(new[] { ("Validation", e.Message) }); valid = false; }
 			}
-			void Select(int index)
+			void Select(int index, bool restore = true)
 			{
 				selected = index;
 				tankName.Text = roster.Designs[selected].Name;
+				space?.RetainDesigns(roster.Designs);
+				space?.SelectDesign(roster.Designs[selected], restore);
 				Refresh(false);
 			}
 			factionName.OnTextEdited = () => Refresh(true);
 			tankName.OnTextEdited = () => Refresh(true);
-			widget.Get<LabelWidget>("STATS").GetText = () => stats;
-			widget.Get<LabelWidget>("POWER").GetText = () => power;
-			widget.Get<LabelWidget>("WARNING").GetText = () => warning;
-			widget.Get<LabelWidget>("WEAPON_STATS").GetText = () => weapons;
+			space = new CustomVehicleSpaceLogic(widget, modData, compiler, Profile, (role, id) =>
+			{
+				var design = roster.Designs[selected];
+				var before = new Dictionary<string, string>(design.Parts);
+				try
+				{
+					compiler.SelectPart(Profile(), role, id); compiler.ValidateRoster(roster); Refresh(true); return true;
+				}
+				catch (Exception e) { design.Parts = before; Refresh(false); message = e.Message; return false; }
+			}, text => message = text);
+			space.SelectDesign(roster.Designs[selected], loadedRoster);
+			void ConfirmPlanningExport(Action action)
+			{
+				if (!space.HasPlanningModules) { action(); return; }
+				ConfirmationDialogs.ButtonPrompt(modData, "Planning-only modules",
+					"Batteries, PDL and Reflector layout blocks are not saved or compiled yet. Continue with configured stock parts only?",
+					onConfirm: action, confirmText: "Stock parts only", onCancel: () => { }, cancelText: "Cancel");
+			}
 
 			var basis = widget.Get<DropDownButtonWidget>("BASE");
 			basis.GetText = () => CustomFactionDesign.BaseLabel(roster.BaseFaction);
@@ -126,8 +167,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					var item = ScrollItemWidget.Setup(template, () => roster.BaseFaction == id, () =>
 					{
 						if (id == roster.BaseFaction) return;
-						ConfirmationDialogs.ButtonPrompt(modData, "Neue Basisfraktion",
-							"Aktuelle Fraktion in der Bibliothek sichern und eine neue Fraktion beginnen?",
+						ConfirmationDialogs.ButtonPrompt(modData, "New base faction",
+							"Save this faction to the library and start a new faction?",
 							onConfirm: () =>
 							{
 								try
@@ -135,10 +176,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 									compiler.SaveLibrary(libraryPath, roster);
 									var next = compiler.NewRoster(id, libraryPath);
 									roster = next; factionName.Text = roster.Name; Select(0); Refresh(true);
-									message = "Vorherige Fraktion gesichert. Neue Basis gewaehlt; Vorlagen ergaenzt passende Fahrzeuge.";
+									message = "Previous faction saved. New base selected; add templates for compatible vehicles.";
 								}
-								catch (Exception e) { message = "Basiswechsel fehlgeschlagen: " + e.Message; }
-							}, confirmText: "Sichern und wechseln", onCancel: () => { }, cancelText: "Abbrechen");
+								catch (Exception e) { message = "Base faction switch failed: " + e.Message; }
+							}, confirmText: "Save and switch", onCancel: () => { }, cancelText: "Cancel");
 					});
 					item.Get<LabelWidget>("LABEL").GetText = () => CustomFactionDesign.BaseLabel(id);
 					return item;
@@ -159,29 +200,6 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				designs.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(roster.Designs.Count, 8) * 30,
 					Enumerable.Range(0, roster.Designs.Count), Setup);
 			};
-			foreach (var role in CustomFactionDesign.Roles)
-			{
-				var choice = widget.Get<DropDownButtonWidget>(role.ToUpperInvariant());
-				choice.GetText = () => WidgetUtils.TruncateText(compiler.Label(roster.Designs[selected].Parts[role]),
-					choice.Bounds.Width - choice.LeftMargin - choice.RightMargin, Game.Renderer.Fonts[choice.Font]);
-				choice.OnMouseDown = _ =>
-				{
-					var options = compiler.CompatibleOptions(Profile(), role);
-					ScrollItemWidget Setup(string id, ScrollItemWidget template)
-					{
-						var item = ScrollItemWidget.Setup(template, () => roster.Designs[selected].Parts[role] == id,
-							() =>
-							{
-								compiler.SelectPart(Profile(), role, id); Refresh(true);
-								if (role == "chassis") message = "Einbaugruppe gewechselt: nicht passende Bausteine wurden durch kompatible ersetzt.";
-							});
-						item.Get<LabelWidget>("LABEL").GetText = () => compiler.Label(id);
-						return item;
-					}
-					choice.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 30, options, Setup);
-				};
-			}
-
 			foreach (var id in new[] { "ADD", "COPY" })
 			{
 				var button = widget.Get<ButtonWidget>(id);
@@ -191,16 +209,16 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					try
 					{
 						compiler.AddDesign(roster, id == "COPY" ? roster.Designs[selected] : null);
-						Select(roster.Designs.Count - 1); Refresh(true);
+						Select(roster.Designs.Count - 1, id == "COPY"); Refresh(true);
 					}
 					catch (Exception e) { message = e.Message; }
 				};
 			}
 			var delete = widget.Get<ButtonWidget>("DELETE");
 			delete.IsDisabled = () => roster.Designs.Count <= 1;
-			delete.OnClick = () => ConfirmationDialogs.ButtonPrompt(modData, "Entwurf entfernen", roster.Designs[selected].Name + " aus der Fraktion entfernen?",
+			delete.OnClick = () => ConfirmationDialogs.ButtonPrompt(modData, "Remove design", "Remove " + roster.Designs[selected].Name + " from this faction?",
 				onConfirm: () => { roster.Designs.RemoveAt(selected); Select(Math.Min(selected, roster.Designs.Count - 1)); Refresh(true); },
-				confirmText: "Entfernen", onCancel: () => { }, cancelText: "Abbrechen");
+				confirmText: "Remove", onCancel: () => { }, cancelText: "Cancel");
 			var templates = widget.Get<ButtonWidget>("TEMPLATES");
 			templates.IsDisabled = () => !valid;
 			templates.OnClick = () =>
@@ -210,14 +228,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				{
 					var remaining = compiler.AddTemplates(roster);
 					Select(selected); Refresh(true);
-					message = remaining == 0 ? "Alle Vorlagen dieser Basis hinzugefuegt." :
-						remaining + " weitere Typen im Rumpf-Menue; Fraktionslimit 16 Entwuerfe / 50 Punkte erreicht.";
+					message = remaining == 0 ? "All templates for this base have been added." :
+						remaining + " more chassis available; faction limit is 16 designs / 50 points.";
 				}
 				catch (Exception e) { roster = compiler.DeserializeRoster(before); Select(selected); message = e.Message; }
 			};
 
 			var load = widget.Get<DropDownButtonWidget>("LOAD");
-			load.GetText = () => "Fraktion laden...";
+			load.GetText = () => "Load faction...";
 			load.OnMouseDown = _ =>
 			{
 				try
@@ -227,9 +245,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					foreach (var path in files)
 					{
 						try { entries.Add((compiler.DeserializeRoster(File.ReadAllText(path)).Name, path)); }
-						catch (Exception e) { message = "Ein gespeichertes Profil konnte nicht gelesen werden: " + e.Message; }
+						catch (Exception e) { message = "A saved profile could not be read: " + e.Message; }
 					}
-					if (entries.Count == 0) { message = "Keine lesbaren gespeicherten Fraktionen. Erst Speichern verwenden."; return; }
+					if (entries.Count == 0) { message = "No readable saved factions. Save a faction first."; return; }
 					ScrollItemWidget Setup((string Name, string Path) entry, ScrollItemWidget template)
 					{
 						var item = ScrollItemWidget.Setup(template, () => false, () => DiscardThen(() =>
@@ -237,16 +255,16 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 							try
 							{
 								roster = compiler.DeserializeRoster(File.ReadAllText(entry.Path));
-								factionName.Text = roster.Name; dirty = false; Select(0); message = "Fraktion geladen.";
+								factionName.Text = roster.Name; dirty = false; Select(0); message = "Faction loaded.";
 							}
-							catch (Exception e) { message = "Laden fehlgeschlagen: " + e.Message; }
+							catch (Exception e) { message = "Load failed: " + e.Message; }
 						}));
 						item.Get<LabelWidget>("LABEL").GetText = () => entry.Name;
 						return item;
 					}
 					load.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(entries.Count, 8) * 30, entries.OrderBy(e => e.Name), Setup);
 				}
-				catch (Exception e) { message = "Bibliothek nicht geladen: " + e.Message; }
+				catch (Exception e) { message = "Library could not be loaded: " + e.Message; }
 			};
 			void Save()
 			{
@@ -256,15 +274,15 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 			Refresh(false);
 			var save = widget.Get<ButtonWidget>("SAVE");
-			save.IsDisabled = () => !valid;
-			save.OnClick = () =>
+			save.IsDisabled = () => !valid || !space.Ready;
+			save.OnClick = () => ConfirmPlanningExport(() =>
 			{
-				try { Save(); message = "Fraktion samt allen Entwuerfen gespeichert. Vorheriger Stand bleibt als .bak."; }
-				catch (Exception e) { message = "Speichern fehlgeschlagen: " + e.Message; }
-			};
+				try { Save(); message = "Faction and configured parts saved. Previous version retained as .bak; grid positions are temporary."; }
+				catch (Exception e) { message = "Save failed: " + e.Message; }
+			});
 			var play = widget.Get<ButtonWidget>("PLAY");
-			play.IsDisabled = () => !valid;
-			play.OnClick = () =>
+			play.IsDisabled = () => !valid || !space.Ready;
+			play.OnClick = () => ConfirmPlanningExport(() =>
 			{
 				try
 				{
@@ -283,20 +301,20 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						finally { if (File.Exists(temp)) File.Delete(temp); }
 					}
 					else if (!File.ReadAllBytes(path).SequenceEqual(bytes))
-						throw new InvalidDataException("Vorhandene Testkarte wurde veraendert; sie wird nicht ueberschrieben.");
+						throw new InvalidDataException("Existing test map was modified; it will not be overwritten.");
 					var location = modData.MapCache.MapLocations.Where(kv => kv.Value == MapClassification.User).Select(kv => kv.Key).First(p =>
 						string.Equals(Path.GetFullPath(p.Name).TrimEnd(Path.DirectorySeparatorChar),
 						Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar), StringComparison.OrdinalIgnoreCase));
 					string uid;
 					using (var package = location.OpenPackage(filename, modData.ModFiles)) uid = Map.ComputeUID(package);
 					modData.MapCache.LoadMap(filename, location, MapClassification.User, modData.Manifest.Get<MapGrid>(), null);
-					if (modData.MapCache[uid].Status != MapStatus.Available) throw new InvalidDataException("Die erzeugte Karte konnte nicht geladen werden.");
+					if (modData.MapCache[uid].Status != MapStatus.Available) throw new InvalidDataException("The generated map could not be loaded.");
 					Save();
 					modData.MapCache.PickLastModifiedMap(MapVisibility.Lobby);
 					Ui.CloseWindow(); onPlay(uid);
 				}
-				catch (Exception e) { message = "Testspiel fehlgeschlagen: " + e.Message; }
-			};
+				catch (Exception e) { message = "Test game failed: " + e.Message; }
+			});
 		}
 	}
 }
