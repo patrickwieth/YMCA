@@ -21,20 +21,44 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			if (button == null)
 				return;
 
-			var queues = world?.LocalPlayer?.PlayerActor?
-				.TraitsImplementing<ProductionQueue>()
-				.Where(q => (q.Info.Group ?? q.Info.Type) == button.ProductionGroup)
-				.ToArray() ?? Array.Empty<ProductionQueue>();
+			var queueCacheTick = -1;
+			var queueCache = Array.Empty<ProductionQueue>();
+			ProductionQueue[] Queues()
+			{
+				if (world?.LocalPlayer == null)
+					return Array.Empty<ProductionQueue>();
+				if (queueCacheTick == world.WorldTick)
+					return queueCache;
+
+				queueCacheTick = world.WorldTick;
+				queueCache = world.ActorsWithTrait<ProductionQueue>()
+					.Where(candidate => candidate.Actor.Owner == world.LocalPlayer && candidate.Actor.IsInWorld &&
+						(candidate.Trait.Info.Group ?? candidate.Trait.Info.Type) == button.ProductionGroup)
+					.Select(candidate => candidate.Trait)
+					.ToArray();
+				return queueCache;
+			}
 
 			if (string.Equals(button.ProductionGroup, PromotionGroupName, StringComparison.OrdinalIgnoreCase))
 			{
-				SetupPromotionButton(button, queues);
+				SetupPromotionButton(button, Queues);
 				return;
 			}
 
 			void SelectTab(bool reverse)
 			{
-				palette.CurrentQueue = queues.FirstOrDefault(q => q.Enabled);
+				var queues = Queues().Where(q => q.Enabled && (q.AnyItemsToBuild() || q.AlwaysVisible)).ToArray();
+				if (queues.Length == 0)
+					return;
+
+				var currentIndex = Array.IndexOf(queues, palette.CurrentQueue);
+				if (currentIndex < 0)
+					currentIndex = reverse ? 0 : -1;
+				var offset = reverse ? queues.Length - 1 : 1;
+				palette.CurrentQueue = queues[(currentIndex + offset) % queues.Length];
+				var productionActor = palette.CurrentQueue.Actor;
+				if (productionActor != world.LocalPlayer.PlayerActor && productionActor.IsInWorld)
+					world.Selection.Combine(world, new[] { productionActor }, false, false);
 
 				// When a tab is selected, scroll to the top because the current row position may be invalid for the new tab
 				palette.ScrollToTop();
@@ -43,21 +67,21 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				palette.PickUpCompletedBuilding();
 			}
 
-			button.IsDisabled = () => !queues.Any(q => q.AnyItemsToBuild() || q.AlwaysVisible);
+			button.IsDisabled = () => !Queues().Any(q => q.Enabled && (q.AnyItemsToBuild() || q.AlwaysVisible));
 			button.OnMouseUp = mi => SelectTab(mi.Modifiers.HasModifier(Modifiers.Shift));
 			button.OnKeyPress = e => SelectTab(e.Modifiers.HasModifier(Modifiers.Shift));
 			button.OnClick = () => SelectTab(false);
-			button.IsHighlighted = () => queues.Contains(palette.CurrentQueue);
+			button.IsHighlighted = () => Queues().Contains(palette.CurrentQueue);
 
 			var chromeName = button.ProductionGroup.ToLowerInvariant();
 			var icon = button.Get<ImageWidget>("ICON");
 			icon.GetImageName = () => button.IsDisabled() ? chromeName + "-disabled" :
-				queues.Any(q => q.AllQueued().Any(i => i.Done)) ? chromeName + "-alert" : chromeName;
+				Queues().Any(q => q.AllQueued().Any(i => i.Done)) ? chromeName + "-alert" : chromeName;
 		}
 
-		void SetupPromotionButton(ProductionTypeButtonWidget button, ProductionQueue[] queues)
+		void SetupPromotionButton(ProductionTypeButtonWidget button, Func<ProductionQueue[]> getQueues)
 		{
-			button.IsDisabled = () => !queues.Any(q => q.Enabled);
+			button.IsDisabled = () => !getQueues().Any(q => q.Enabled);
 			button.GetTooltipText = () => FluentProvider.TryGetMessage("button-production-types-promotion-tooltip", out var message)
 				? message
 				: "Open Commander Tree";
@@ -89,7 +113,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				if (button.IsDisabled())
 					return chromeName + "-disabled";
 
-				return queues.Any(q => q.AllQueued().Any(i => i.Done)) ? chromeName + "-alert" : chromeName;
+				return getQueues().Any(q => q.AllQueued().Any(i => i.Done)) ? chromeName + "-alert" : chromeName;
 			};
 		}
 

@@ -38,6 +38,12 @@ namespace Win32
         public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        public static extern bool PostMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll")]
         public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
 
         [DllImport("user32.dll")]
@@ -73,8 +79,12 @@ function Test-BitmapHasUsefulContent {
     $nonBlack = 0
     $sampled = 0
 
-    for ($y = 0; $y -lt $Bitmap.Height; $y += $stepY) {
-        for ($x = 0; $x -lt $Bitmap.Width; $x += $stepX) {
+    $minX = [int]($Bitmap.Width / 10)
+    $maxX = [int]($Bitmap.Width * 9 / 10)
+    $minY = [int]($Bitmap.Height / 10)
+    $maxY = [int]($Bitmap.Height * 9 / 10)
+    for ($y = $minY; $y -lt $maxY; $y += $stepY) {
+        for ($x = $minX; $x -lt $maxX; $x += $stepX) {
             $pixel = $Bitmap.GetPixel($x, $y)
             $sampled++
             if (($pixel.A -gt 0) -and (($pixel.R + $pixel.G + $pixel.B) -gt 40)) {
@@ -96,9 +106,9 @@ function Get-OpenRAScreenshotRoots {
     $roots = New-Object System.Collections.Generic.List[string]
 
     $appDataRoot = Join-Path $env:APPDATA "OpenRA\Screenshots\$ModId"
-    if (Test-Path $appDataRoot) {
-        $roots.Add($appDataRoot)
-    }
+    # The directory does not exist until the first successful screenshot.
+    # Still try the framebuffer hotkey on a fresh installation.
+    $roots.Add($appDataRoot)
 
     try {
         $processDir = Split-Path -Parent $Process.MainModule.FileName
@@ -147,12 +157,7 @@ if (-not $process) {
     throw "No running OpenRA window found."
 }
 
-[void][Win32.User32]::ShowWindowAsync($process.MainWindowHandle, 9)
-Start-Sleep -Milliseconds 200
-[void][Win32.User32]::SetForegroundWindow($process.MainWindowHandle)
-try { [Microsoft.VisualBasic.Interaction]::AppActivate($process.Id) | Out-Null } catch { }
-[void][Win32.User32]::SetWindowPos($process.MainWindowHandle, [IntPtr](-1), 0, 0, 0, 0, 0x0001 -bor 0x0002 -bor 0x0040)
-Start-Sleep -Milliseconds 400
+$previousForegroundWindow = [Win32.User32]::GetForegroundWindow()
 
 $windowRect = New-Object Win32.RECT
 if (-not [Win32.User32]::GetWindowRect($process.MainWindowHandle, [ref]$windowRect)) {
@@ -180,26 +185,46 @@ if ($destDir -and -not (Test-Path $destDir)) {
 $screenshotRoots = @(Get-OpenRAScreenshotRoots -ModId $ModId -Process $process)
 $screenshotStart = (Get-Date).AddSeconds(-1)
 if ($screenshotRoots.Length -gt 0) {
+    # TakeScreenshot is Ctrl+P. SDL does not reliably preserve modifier state
+    # for posted window messages, so briefly focus OpenRA and send real key events.
+    [void][Win32.User32]::ShowWindowAsync($process.MainWindowHandle, 9)
     [void][Win32.User32]::SetForegroundWindow($process.MainWindowHandle)
-    try { [Microsoft.VisualBasic.Interaction]::AppActivate($process.Id) | Out-Null } catch { }
+    Start-Sleep -Milliseconds 500
+    if ([Win32.User32]::GetForegroundWindow() -ne $process.MainWindowHandle) {
+        [Microsoft.VisualBasic.Interaction]::AppActivate($process.Id)
+        Start-Sleep -Milliseconds 500
+    }
+    try {
+        if ([Win32.User32]::GetForegroundWindow() -ne $process.MainWindowHandle) {
+            throw "Could not focus OpenRA; refusing to send hotkeys to another application."
+        }
+        [Win32.User32]::keybd_event(0x11, 0x1D, 0, [UIntPtr]::Zero)
+        Start-Sleep -Milliseconds 100
+        [Win32.User32]::keybd_event(0x50, 0x19, 0, [UIntPtr]::Zero)
+        Start-Sleep -Milliseconds 100
+        [Win32.User32]::keybd_event(0x50, 0x19, 2, [UIntPtr]::Zero)
+        [Win32.User32]::keybd_event(0x11, 0x1D, 2, [UIntPtr]::Zero)
 
-    # Trigger OpenRA's own framebuffer screenshot. This avoids black captures from
-    # OpenGL/DirectX windows where PrintWindow and CopyFromScreen can fail.
-    [Win32.User32]::keybd_event(0x7B, 0, 0, [UIntPtr]::Zero)
-    Start-Sleep -Milliseconds 50
-    [Win32.User32]::keybd_event(0x7B, 0, 2, [UIntPtr]::Zero)
-
-    $deadline = (Get-Date).AddSeconds($TimeoutSec)
-    while ((Get-Date) -lt $deadline) {
-        Start-Sleep -Milliseconds 250
-        $screenshot = Find-NewestOpenRAScreenshot -Roots $screenshotRoots -After $screenshotStart
-        if ($screenshot) {
-            Copy-Item -LiteralPath $screenshot.FullName -Destination $destPath -Force
-            [void][Win32.User32]::SetWindowPos($process.MainWindowHandle, [IntPtr](-2), 0, 0, 0, 0, 0x0001 -bor 0x0002 -bor 0x0040)
-            Write-Output $destPath
-            return
+        $deadline = (Get-Date).AddSeconds($TimeoutSec)
+        while ((Get-Date) -lt $deadline) {
+            Start-Sleep -Milliseconds 250
+            $screenshot = Find-NewestOpenRAScreenshot -Roots $screenshotRoots -After $screenshotStart
+            if ($screenshot) {
+                Copy-Item -LiteralPath $screenshot.FullName -Destination $destPath -Force
+                Write-Output $destPath
+                return
+            }
         }
     }
+    finally {
+        [Win32.User32]::keybd_event(0x50, 0x19, 2, [UIntPtr]::Zero)
+        [Win32.User32]::keybd_event(0x11, 0x1D, 2, [UIntPtr]::Zero)
+        if ($previousForegroundWindow -ne [IntPtr]::Zero) {
+            [void][Win32.User32]::SetForegroundWindow($previousForegroundWindow)
+        }
+    }
+
+    throw "OpenRA did not produce a framebuffer screenshot within $TimeoutSec seconds."
 }
 
 $bitmap = $null
@@ -222,6 +247,9 @@ try {
         $printBitmap = $null
     }
     else {
+        [void][Win32.User32]::ShowWindowAsync($process.MainWindowHandle, 9)
+        [void][Win32.User32]::SetForegroundWindow($process.MainWindowHandle)
+        Start-Sleep -Milliseconds 250
         $bitmap = New-Object System.Drawing.Bitmap($windowWidth, $windowHeight)
         $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
         $graphics.CopyFromScreen($windowRect.Left, $windowRect.Top, 0, 0, $bitmap.Size)
@@ -231,6 +259,9 @@ try {
 }
 finally {
     [void][Win32.User32]::SetWindowPos($process.MainWindowHandle, [IntPtr](-2), 0, 0, 0, 0, 0x0001 -bor 0x0002 -bor 0x0040)
+    if ($previousForegroundWindow -ne [IntPtr]::Zero) {
+        [void][Win32.User32]::SetForegroundWindow($previousForegroundWindow)
+    }
     if ($null -ne $graphics) { $graphics.Dispose() }
     if ($null -ne $bitmap) { $bitmap.Dispose() }
     if ($null -ne $printGraphics) { $printGraphics.Dispose() }

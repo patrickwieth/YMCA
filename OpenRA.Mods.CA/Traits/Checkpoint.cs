@@ -69,6 +69,10 @@ namespace OpenRA.Mods.CA.Traits
 			if (autobattler != null)
 				autobattler.handleCheckpoint(other);
 
+			// Once captured, allied units contribute to control without
+			// transferring ownership between members of the same team.
+			if (Captured && Self.Owner.RelationshipWith(other.Owner) == PlayerRelationship.Ally)
+				return;
 			base.ActorEntered(other);
 		}
 

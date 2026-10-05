@@ -14,6 +14,18 @@ class DesignerCatalogTests(unittest.TestCase):
         self.assertIn('\tCustomFactionSkirmishLogic\n', server_traits)
         self.assertNotIn('\tSkirmishLogic\n', server_traits)
 
+    def test_isometric_wizard_and_designer_have_separate_entry_paths(self):
+        manifest = (REPO / 'mods/ca/mod.yaml').read_text(encoding='utf-8')
+        menu = (REPO / 'mods/ca/chrome/mainmenu.yaml').read_text(encoding='utf-8')
+        designer = (REPO / 'OpenRA.Mods.CA/Widgets/Logic/CustomFactionLogic.cs').read_text(encoding='utf-8')
+        wrapper = (REPO / 'OpenRA.Mods.CA/Server/CustomFactionSkirmishLogic.cs').read_text(encoding='utf-8')
+        for folder in ('modular', 'generated'):
+            self.assertIn(f'~^SupportDir|maps/ca/{folder}: User', manifest)
+        self.assertIn('Logic: MainMenuLogicCA, CustomFactionMenuLogic', menu)
+        self.assertIn('OfType<MainMenuLogicCA>().Single().StartConfiguredSkirmish(uid)', designer)
+        self.assertNotIn('Get<ButtonWidget>("SKIRMISH_BUTTON").OnClick()', designer)
+        self.assertIn('readonly SkirmishLogicCA stock = new SkirmishLogicCA()', wrapper)
+
     def test_roster_lint_matches_each_parent_not_everything_to_tank(self):
         sources = actor_sources('modular.custom.a:\n\tInherits: HMMV\nmodular.custom.b:\n\tInherits: MLRS\n')
         baseline = 'Error: palette for hmmv\nError: condition for mlrs'

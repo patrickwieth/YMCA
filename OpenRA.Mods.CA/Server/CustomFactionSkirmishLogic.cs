@@ -1,16 +1,15 @@
 using System.Linq;
 using OpenRA.Mods.CA.Modular;
-using OpenRA.Mods.Common.Server;
 using OpenRA.Server;
 using OpenRA.Traits;
 using S = OpenRA.Server.Server;
 
 namespace OpenRA.Mods.CA.Server
 {
-	// Preserve stock skirmish behavior except for explicitly generated designer maps.
+	// Preserve CA's generated-map wizard/diagnostics except for frozen designer sessions.
 	public sealed class CustomFactionSkirmishLogic : ServerTrait, IClientJoined, INotifySyncLobbyInfo
 	{
-		readonly SkirmishLogic stock = new SkirmishLogic();
+		readonly SkirmishLogicCA stock = new SkirmishLogicCA();
 		readonly CustomFactionLobbySession session = new CustomFactionLobbySession();
 
 		bool UseSavedSettings(S server) => session.UseSavedSettings(server.Type == ServerType.Skirmish,

@@ -83,6 +83,9 @@ namespace OpenRA.Mods.Cameo.Traits
 		[Desc("Prevent the option from being changed from its default value.")]
 		public readonly bool Locked = false;
 
+		[Desc("Prerequisites that suppress ordinary experience gains while available.")]
+		public readonly string[] BlockedExperiencePrerequisites = Array.Empty<string>();
+
 		[Desc("Whether to display the option in the lobby.")]
 		public readonly bool Visible = true;
 
@@ -154,11 +157,18 @@ namespace OpenRA.Mods.Cameo.Traits
 
 		void INotifyPlayerExperience.OnGainsExperience(OpenRA.Actor player, int exp)
 		{
+			if (Info.BlockedExperiencePrerequisites.Length > 0 &&
+				self.Trait<TechTree>().HasPrerequisites(Info.BlockedExperiencePrerequisites))
+				return;
+			GiveExperienceIgnoringBlock(exp);
+		}
+
+		/// <summary>Grants Commander experience from an explicitly permitted source.</summary>
+		public void GiveExperienceIgnoringBlock(int exp)
+		{
 			Experience += exp;
 			while (currentLevel < MaxLevel && Experience >= nextLevel[currentLevel].RequiredExperience)
-			{
 				LevelUp();
-			}
 		}
 
 		void LevelUp()

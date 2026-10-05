@@ -7,7 +7,8 @@ import subprocess
 
 DEBUG_AUTOTILE = True
 FRAME_SIZE = (128, 64)
-HIGH_CLIFF_FRAME_SIZE = (128, 192)
+HIGH_CLIFF_SOURCE_FRAME_SIZE = (128, 192)
+HIGH_CLIFF_FRAME_SIZE = (128, 256)
 BASE_FRAME_AMOUNT = 80
 SOURCE_BLOCK_COLS = 8
 SOURCE_BLOCK_ROWS = 10
@@ -33,7 +34,12 @@ ATOMIC_OVERLAY_TEMPLATE_IDS = {
     "dirt_b": 3080,
 }
 ROCK_CLIFF_BRUSH_TEMPLATE_ID = 3990
+RAISED_GRASS_TEMPLATE_ID = 3950
+SHORE_TEMPLATE_BASE_ID = 3960
+WATER_SHORE_TEMPLATE_BASE_ID = 12500
+MOUNTAIN_BOUNDARY_TEMPLATE_BASE_ID = 3980
 WALL_CLIFF_BRUSH_TEMPLATE_ID = 3991
+MOUNTAIN_INTERIOR_TEMPLATE_ID = 3992
 ROCK_CLIFF_TEMPLATE_BASE_ID = 4000
 WALL_CLIFF_TEMPLATE_BASE_ID = 6000
 WALL_CLIFF_COLUMN_TEMPLATE_BASE_ID = 6400
@@ -55,6 +61,11 @@ HIGH_CLIFF_TEMPLATE_BASE_IDS = {
     "high_nw_outer": 12150,
     "high_n_outer": 12160,
 }
+HIGH_CLIFF_WATER_TEMPLATE_BASE_IDS = {
+    key: template_id + 200 for key, template_id in HIGH_CLIFF_TEMPLATE_BASE_IDS.items()
+}
+HIGH_SOUTH_STRAIGHT_TEMPLATE_ID = 12400
+HIGH_SOUTH_STRAIGHT_WATER_TEMPLATE_ID = 12420
 HIGH_CLIFF_PICKANY_TEMPLATE_IDS = {
     "high_sw": 11900,
     "high_se": 11910,
@@ -405,11 +416,16 @@ def emit_high_cliff_selector_template(
     return emit_template(template_id, categories, image, terrain, frame_indices)
 
 
-def write_sheet_metadata(meta_path: Path, frame_count: int, frame_size: tuple[int, int] = FRAME_SIZE) -> None:
-    meta_path.write_text(
-        f"FrameSize: {frame_size[0]},{frame_size[1]}\nFrameAmount: {frame_count}\n",
-        encoding="ascii",
-    )
+def write_sheet_metadata(
+    meta_path: Path,
+    frame_count: int,
+    frame_size: tuple[int, int] = FRAME_SIZE,
+    offset: tuple[int, int] | None = None,
+) -> None:
+    metadata = f"FrameSize: {frame_size[0]},{frame_size[1]}\nFrameAmount: {frame_count}\n"
+    if offset is not None:
+        metadata += f"Offset: {offset[0]},{offset[1]}\n"
+    meta_path.write_text(metadata, encoding="ascii")
 
 
 def embed_frame_metadata_for_root(root: Path, image_path: Path) -> None:
@@ -438,15 +454,7 @@ def fill_transparent_pixels(base_image, fill_image):
 def make_high_cliff_underlay(grass_underlay):
     from PIL import Image
 
-    opaque_pixels = [(r, g, b) for r, g, b, a in grass_underlay.getdata() if a]
-    if opaque_pixels:
-        avg_r = sum(r for r, _, _ in opaque_pixels) // len(opaque_pixels)
-        avg_g = sum(g for _, g, _ in opaque_pixels) // len(opaque_pixels)
-        avg_b = sum(b for _, _, b in opaque_pixels) // len(opaque_pixels)
-        tile_underlay = Image.new("RGBA", FRAME_SIZE, (avg_r, avg_g, avg_b, 255))
-    else:
-        tile_underlay = Image.new("RGBA", FRAME_SIZE, (40, 68, 40, 255))
-
+    tile_underlay = Image.new("RGBA", FRAME_SIZE, (0, 0, 0, 0))
     tile_underlay.alpha_composite(grass_underlay, (0, 0))
 
     underlay = Image.new("RGBA", HIGH_CLIFF_FRAME_SIZE, (0, 0, 0, 0))
@@ -624,7 +632,11 @@ Templates:
         "dirt_a": f"bits/terrain/rubberduck/dirt_a_atomic_overlay{suffix}.png",
         "dirt_b": f"bits/terrain/rubberduck/dirt_b_atomic_overlay{suffix}.png",
     }
-    rock_cliff_image = f"bits/terrain/rubberduck/rock_cliffs{suffix}.png"
+    rock_cliff_image = f"bits/terrain/rubberduck/rock_cliffs_grass{suffix}.png"
+    raised_grass_image = f"bits/terrain/rubberduck/raised_grass{suffix}.png"
+    shoreline_image = f"bits/terrain/rubberduck/grass_shore{suffix}.png"
+    water_shoreline_image = f"bits/terrain/rubberduck/sand_over_water_shore{suffix}.png"
+    mountain_boundary_image = f"bits/terrain/rubberduck/mountain_boundary{suffix}.png"
     wall_cliff_image = f"bits/terrain/rubberduck/wall_cliffs{suffix}.png"
     wall_cliff_columns_image = f"bits/terrain/rubberduck/wall_cliff_columns{suffix}.png"
     cliff_base_images = {
@@ -650,6 +662,12 @@ Templates:
         "high_nw_outer": f"bits/terrain/rubberduck/cliffs/high_nw_outer{suffix}.png",
         "high_n_outer": f"bits/terrain/rubberduck/cliffs/high_n_outer{suffix}.png",
     }
+    high_cliff_water_images = {
+        key: f"bits/terrain/rubberduck/cliffs/{key}_water{suffix}.png"
+        for key in HIGH_CLIFF_TEMPLATE_BASE_IDS
+    }
+    high_south_straight_image = f"bits/terrain/rubberduck/cliffs/high_s_straight{suffix}.png"
+    high_south_straight_water_image = f"bits/terrain/rubberduck/cliffs/high_s_straight_water{suffix}.png"
 
     add_transition_set("grass_a_over_dirt", 1100, transition_images["grass_a_over_dirt"], nesw_images["grass_a_over_dirt"])
     add_transition_set("grass_a_over_sand", 1120, transition_images["grass_a_over_sand"], nesw_images["grass_a_over_sand"])
@@ -685,6 +703,33 @@ Templates:
     rock_cliff_source = output.parent.parent / "bits" / "terrain" / "rubberduck" / f"rock_cliffs{suffix}.png"
     wall_cliff_source = output.parent.parent / "bits" / "terrain" / "rubberduck" / f"wall_cliffs{suffix}.png"
     wall_cliff_columns_source = output.parent.parent / "bits" / "terrain" / "rubberduck" / f"wall_cliff_columns{suffix}.png"
+
+    templates.append(
+        emit_template(RAISED_GRASS_TEMPLATE_ID, "Rubberduck Raised Grass", raised_grass_image, "Clear", [0])
+    )
+
+    for frame_index in range(16):
+        templates.append(
+            emit_template(SHORE_TEMPLATE_BASE_ID + frame_index, "Rubberduck Grass Shore", shoreline_image, "Clear", [frame_index])
+        )
+        templates.append(
+            emit_template(
+                WATER_SHORE_TEMPLATE_BASE_ID + frame_index,
+                "Rubberduck Sand over Water Shore",
+                water_shoreline_image,
+                "Water",
+                [frame_index],
+            )
+        )
+
+    for frame_index in range(8):
+        templates.append(
+            emit_template(MOUNTAIN_BOUNDARY_TEMPLATE_BASE_ID + frame_index, "Rubberduck Mountain Boundary", mountain_boundary_image, "Cliff", [frame_index])
+        )
+
+    templates.append(
+        emit_template(MOUNTAIN_INTERIOR_TEMPLATE_ID, "Rubberduck Mountain Interior", base_images["dirt_a"], "Cliff", None)
+    )
 
     if rock_cliff_source.exists():
         templates.append(emit_template(ROCK_CLIFF_BRUSH_TEMPLATE_ID, "Rubberduck Rock Cliff Brush", rock_cliff_image, "Cliff", [24]))
@@ -732,10 +777,39 @@ Templates:
                     base_id + i,
                     high_cliff_actual_category,
                     high_cliff_images[key],
-                    "Clear",
+                    "Cliff",
                     frame_index,
                 )
             )
+            templates.append(
+                emit_high_cliff_actual_template(
+                    HIGH_CLIFF_WATER_TEMPLATE_BASE_IDS[key] + i,
+                    "Rubberduck Water High Cliff Atomics",
+                    high_cliff_water_images[key],
+                    "Cliff",
+                    frame_index,
+                )
+            )
+
+    for frame_index in range(9):
+        templates.append(
+            emit_high_cliff_actual_template(
+                HIGH_SOUTH_STRAIGHT_TEMPLATE_ID + frame_index,
+                "Rubberduck High Cliff Atomics",
+                high_south_straight_image,
+                "Cliff",
+                frame_index,
+            )
+        )
+        templates.append(
+            emit_high_cliff_actual_template(
+                HIGH_SOUTH_STRAIGHT_WATER_TEMPLATE_ID + frame_index,
+                "Rubberduck Water High Cliff Atomics",
+                high_south_straight_water_image,
+                "Cliff",
+                frame_index,
+            )
+        )
 
     for key, base_id in CLIFF_BASE_TEMPLATE_BASE_IDS.items():
         base_source = output.parent.parent / "bits" / "terrain" / "rubberduck" / f"{key}_cliff_trans{suffix}.png"
@@ -1237,22 +1311,31 @@ def generate_high_cliff_images(root: Path) -> None:
             raise FileNotFoundError(f"Cliff atomic source not found: {source_path}")
 
         base_image = Image.open(source_path).convert("RGBA")
-        source_frames_per_row = base_image.width // HIGH_CLIFF_FRAME_SIZE[0]
-        source_frame_count = (base_image.width // HIGH_CLIFF_FRAME_SIZE[0]) * (base_image.height // HIGH_CLIFF_FRAME_SIZE[1])
+        source_frames_per_row = base_image.width // HIGH_CLIFF_SOURCE_FRAME_SIZE[0]
+        source_frame_count = (base_image.width // HIGH_CLIFF_SOURCE_FRAME_SIZE[0]) * (base_image.height // HIGH_CLIFF_SOURCE_FRAME_SIZE[1])
 
         for suffix in ("", "_shaded"):
-            output_image = Image.new("RGBA", base_image.size, (0, 0, 0, 0))
-            for frame_index in range(source_frame_count):
-                sx = (frame_index % source_frames_per_row) * HIGH_CLIFF_FRAME_SIZE[0]
-                sy = (frame_index // source_frames_per_row) * HIGH_CLIFF_FRAME_SIZE[1]
-                frame = base_image.crop((sx, sy, sx + HIGH_CLIFF_FRAME_SIZE[0], sy + HIGH_CLIFF_FRAME_SIZE[1]))
-                output_image.alpha_composite(frame, (sx, sy))
+            underlays = (
+                (suffix, rubberduck_dir / f"grass_a_base{suffix}.png"),
+                (f"_water{suffix}", rubberduck_dir / "water_marker_v01.png"),
+            )
+            for output_suffix, underlay_path in underlays:
+                underlay_sheet = Image.open(underlay_path).convert("RGBA")
+                underlay_tile = underlay_sheet.crop((0, 0, FRAME_SIZE[0], FRAME_SIZE[1]))
+                high_cliff_underlay = make_high_cliff_underlay(underlay_tile)
+                output_image = Image.new("RGBA", (base_image.width, HIGH_CLIFF_FRAME_SIZE[1]), (0, 0, 0, 0))
+                for frame_index in range(source_frame_count):
+                    sx = (frame_index % source_frames_per_row) * HIGH_CLIFF_SOURCE_FRAME_SIZE[0]
+                    sy = (frame_index // source_frames_per_row) * HIGH_CLIFF_SOURCE_FRAME_SIZE[1]
+                    frame = base_image.crop((sx, sy, sx + HIGH_CLIFF_SOURCE_FRAME_SIZE[0], sy + HIGH_CLIFF_SOURCE_FRAME_SIZE[1]))
+                    output_image.alpha_composite(high_cliff_underlay, (sx, sy))
+                    output_image.alpha_composite(frame, (sx, sy))
 
-            output_path = high_cliffs_dir / f"{key}{suffix}.png"
-            meta_path = high_cliffs_dir / f"{key}{suffix}.yaml"
-            output_image.save(output_path)
-            write_sheet_metadata(meta_path, source_frame_count, HIGH_CLIFF_FRAME_SIZE)
-            embed_frame_metadata_for_root(root, output_path)
+                output_path = high_cliffs_dir / f"{key}{output_suffix}.png"
+                meta_path = high_cliffs_dir / f"{key}{output_suffix}.yaml"
+                output_image.save(output_path)
+                write_sheet_metadata(meta_path, source_frame_count, HIGH_CLIFF_FRAME_SIZE, (0, -96))
+                embed_frame_metadata_for_root(root, output_path)
 
 
 def main() -> None:

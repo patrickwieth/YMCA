@@ -111,7 +111,7 @@ namespace OpenRA.Mods.CA.Traits
     var finalPalette =  new ImmutablePalette(MasterPalette[playerName][0]);
 
     wr.AddPalette(info.PaletteName + playerName, finalPalette, info.AllowModifiers, replaceExisting);
-    playernames.Add(playerName);
+    if (!playernames.Contains(playerName)) playernames.Add(playerName);
   }
 
   public PhasingPaletteEffect(PhasingPaletteEffectInfo info)
@@ -128,14 +128,22 @@ namespace OpenRA.Mods.CA.Traits
    foreach(var playerName in playernames) {
      var p = b[info.PaletteName + playerName];
 
-     for (int j = 1; j < Palette.Size; j++)
-      {
-        if (info.ShadowIndex != null && info.ShadowIndex == j)
-         continue;
-
-        p.SetColor(j, MasterPalette[playerName][pulseTick].GetColor(j));
-      }
+     CopyPulse(p, MasterPalette[playerName][pulseTick], info.ShadowIndex);
    }
+  }
+
+  // Palette modifiers run every rendered frame. Copy the already computed ARGB
+  // table directly instead of round-tripping 255 Color values per player/effect.
+  // Entries excluded by the old loop retain previous modifiers' values exactly.
+  internal static void CopyPulse(MutablePalette target, IPalette source, int? shadowIndex)
+  {
+   var transparent = target[0];
+   var index = shadowIndex.GetValueOrDefault(-1);
+   var preserveShadow = index >= 0 && index < Palette.Size;
+   var shadow = preserveShadow ? target[index] : 0;
+   target.SetFromPalette(source);
+   target[0] = transparent;
+   if (preserveShadow) target[index] = shadow;
   }
 
   void ITick.Tick(Actor self)

@@ -21,8 +21,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					{ "onPlay", (Action<string>)(uid =>
 						{
 							widget.Visible = true;
-							Game.Settings.Server.Map = uid;
-							widget.Get<ButtonWidget>("SKIRMISH_BUTTON").OnClick();
+							widget.LogicObjects.OfType<MainMenuLogicCA>().Single().StartConfiguredSkirmish(uid);
 						}) }
 				});
 			};
