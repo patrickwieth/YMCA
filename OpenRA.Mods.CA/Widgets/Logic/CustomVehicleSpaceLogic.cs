@@ -47,12 +47,12 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				sidebar.AddChild(new LabelWidget(modData)
 				{
-					Bounds = new WidgetBounds(0, row * 50, 220, 18), Font = "Small", GetText = () => title,
+					Bounds = new WidgetBounds(0, row * 44, 220, 18), Font = "Small", GetText = () => title,
 					GetColor = () => color, IsVisible = visible
 				});
 				var button = new DropDownButtonWidget(modData)
 				{
-					Bounds = new WidgetBounds(0, row * 50 + 19, 220, 28), GetColor = () => color, IsVisible = visible
+					Bounds = new WidgetBounds(0, row * 44 + 19, 220, 24), GetColor = () => color, IsVisible = visible
 				};
 				sidebar.AddChild(button); return button;
 			}
@@ -88,7 +88,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						if (!commitPart("carrier", id)) return;
 						canvas.Cancel(); pendingRole = pendingPart = null;
 						if (!Ready) canvas.Layout.LoadStockConfiguration(canvas.Layout.Heavy);
-						else canvas.Layout.SetTurret(3);
+						else canvas.Layout.SetTurret(5);
 						notify("Stock parts arranged. Pick up a replacement from the sidebar or move a block.");
 					});
 					item.Get<LabelWidget>("LABEL").GetText = () => compiler.Label(id); return item;
@@ -128,23 +128,23 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					button.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 30, options, Setup);
 				};
 			}
-			PartField("Engine", 2, Color.White, "drive", "engine");
-			PartField("Running gear - bottom", 3, CustomVehicleSpaceWidget.ZoneColor(Zone.RunningGear), "running_gear", "gear");
-			PartField("Weapon - turret front", 4, CustomVehicleSpaceWidget.ZoneColor(Zone.Weapon), "weapon", "weapon");
-			PartField("Ammunition", 5, Color.White, "ammunition", "ammo");
-			PartField("Armor - hull edge", 6, CustomVehicleSpaceWidget.ZoneColor(Zone.Armor), "armor", "armor", true);
-			var free = Field("Free modules / generator", 7, Color.White, () => Ready);
+			PartField("Engine - green interior", 2, CustomVehicleSpaceWidget.ZoneColor(Zone.Interior), "drive", "engine");
+			PartField("Generator - green interior", 3, CustomVehicleSpaceWidget.ZoneColor(Zone.Interior), "generator", "generator");
+			PartField("Running gear - bottom", 4, CustomVehicleSpaceWidget.ZoneColor(Zone.RunningGear), "running_gear", "gear");
+			PartField("Weapon - turret front", 5, CustomVehicleSpaceWidget.ZoneColor(Zone.Weapon), "weapon", "weapon");
+			PartField("Ammunition - violet turret slots", 6, CustomVehicleSpaceWidget.ZoneColor(Zone.Ammunition), "ammunition", "ammo");
+			PartField("Armor - hull edge", 7, CustomVehicleSpaceWidget.ZoneColor(Zone.Armor), "armor", "armor", true);
+			var free = Field("Free modules - any free slots", 8, Color.White, () => Ready);
 			free.GetText = () => "Pick up...";
 			free.OnMouseDown = _ =>
 			{
 				ScrollItemWidget Setup(string id, ScrollItemWidget template)
 				{
-					var planning = id.StartsWith("@");
-					var item = ScrollItemWidget.Setup(template, () => false, () => Pick(planning ? id.Substring(1) : "generator", planning ? null : "generator", planning ? null : id));
-					item.Get<LabelWidget>("LABEL").GetText = () => planning ? CustomVehicleSpaceDemo.Definition(id.Substring(1)).Label + " (planning)" : compiler.Label(id);
+					var item = ScrollItemWidget.Setup(template, () => false, () => Pick(id, null, null));
+					item.Get<LabelWidget>("LABEL").GetText = () => CustomVehicleSpaceDemo.Definition(id).Label + " (planning, any slots)";
 					return item;
 				}
-				var options = compiler.CompatibleOptions(profile(), "generator").Concat(new[] { "@battery", "@pdl" }).ToArray();
+				var options = new[] { "battery", "pdl" };
 				free.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 30, options, Setup);
 			};
 			// New pickups use pending part IDs; moving an existing block without a sidebar choice changes layout only.

@@ -7,15 +7,15 @@ namespace OpenRA.Mods.CA.Modular
 	// Isolated spatial UI experiment: no profile serialization or combat rules.
 	public sealed class CustomVehicleSpaceDemo
 	{
-		public enum Zone { None, Interior, RunningGear, Weapon, Armor }
+		public enum Zone { None, Interior, RunningGear, Weapon, Armor, Ammunition, Any }
 		public sealed record Module(string Id, string Label, int Width, int Height, bool Hull, bool Turret, Zone Mount = Zone.Interior);
 		public sealed record Placement(int Id, string ModuleId, bool InTurret, int X, int Y, bool Rotated);
 		public static readonly IReadOnlyList<Module> Modules = Array.AsReadOnly(new[]
 		{
 			new Module("weapon", "Weapon", 2, 2, false, true, Zone.Weapon),
-			new Module("ammo", "Ammunition", 1, 2, true, true),
-			new Module("pdl", "PDL", 1, 2, false, true),
-			new Module("battery", "Battery", 1, 2, true, true),
+			new Module("ammo", "Ammunition", 1, 2, false, true, Zone.Ammunition),
+			new Module("pdl", "PDL", 1, 2, true, true, Zone.Any),
+			new Module("battery", "Battery", 1, 2, true, true, Zone.Any),
 			new Module("generator", "Generator", 2, 2, true, false),
 			new Module("engine", "Engine", 2, 2, true, false),
 			new Module("gear", "Running gear", 4, 1, true, false, Zone.RunningGear),
@@ -31,7 +31,7 @@ namespace OpenRA.Mods.CA.Modular
 		public int HullWidth => !HasChassis ? 0 : Heavy ? 10 : 8;
 		public int HullHeight => !HasChassis ? 0 : Heavy ? 5 : 4;
 		public int TurretWidth { get; private set; }
-		public int TurretHeight => TurretWidth == 0 ? 0 : 4;
+		public int TurretHeight => TurretWidth == 0 ? 0 : 3;
 		public bool HasPdlWithoutBattery => placements.Any(p => p.ModuleId == "pdl") && !placements.Any(p => p.ModuleId == "battery");
 
 		public void SetChassis(bool heavy)
@@ -44,29 +44,29 @@ namespace OpenRA.Mods.CA.Modular
 
 		public void LoadStockConfiguration(bool heavy)
 		{
-			SetChassis(heavy); SetTurret(3);
+			SetChassis(heavy); SetTurret(5);
 			Place("engine", false, 1, 1, false); Place("generator", false, 3, 1, false);
 			Place("gear", false, 1, HullHeight - 1, false); Place("armor", false, 0, 0, false);
-			Place("weapon", true, 1, 1, false); Place("ammo", true, 0, 0, false);
+			Place("weapon", true, 3, 1, false); Place("ammo", true, 0, 0, false);
 		}
 
 		public void LoadExample()
 		{
 			SetChassis(Heavy);
-			SetTurret(3);
+			SetTurret(5);
 			Place("engine", false, 1, 1, false);
 			Place("generator", false, 3, 1, false);
 			Place("gear", false, 1, HullHeight - 1, false);
 			Place("battery", false, 5, 1, false);
 			Place("armor", false, 0, 0, false);
-			Place("weapon", true, 1, 1, false);
+			Place("weapon", true, 3, 1, false);
 			Place("ammo", true, 0, 0, false);
-			Place("pdl", true, 0, 2, false);
+			Place("pdl", true, 1, 0, false);
 		}
 
 		public void SetTurret(int width)
 		{
-			if (width != 0 && width != 3 && width != 4) throw new ArgumentOutOfRangeException(nameof(width));
+			if (width != 0 && width != 5) throw new ArgumentOutOfRangeException(nameof(width));
 			if (width != 0 && !HasChassis) throw new InvalidOperationException("Choose a chassis first.");
 			if (width == TurretWidth) return;
 			TurretWidth = width;
@@ -79,7 +79,7 @@ namespace OpenRA.Mods.CA.Modular
 			var w = turret ? TurretWidth : HullWidth;
 			var h = turret ? TurretHeight : HullHeight;
 			if (x < 0 || y < 0 || x >= w || y >= h) return Zone.None;
-			if (turret) return x == w - 1 ? Zone.Weapon : Zone.Interior;
+			if (turret) return x == w - 1 ? Zone.Weapon : Zone.Ammunition;
 			if (y == h - 1) return Zone.RunningGear;
 			if (x == 0 || x == w - 1 || y == 0) return Zone.Armor;
 			return Zone.Interior;
@@ -105,7 +105,8 @@ namespace OpenRA.Mods.CA.Modular
 				for (var dx = 0; dx < size.Width; dx++)
 				{
 					var zone = ZoneAt(turret, x + dx, y + dy);
-					if (module.Mount == Zone.Weapon ? zone != Zone.Weapon && zone != Zone.Interior : zone != module.Mount) return false;
+					if (module.Mount != Zone.Any && (module.Mount == Zone.Weapon
+						? zone != Zone.Weapon && zone != Zone.Ammunition : zone != module.Mount)) return false;
 					var occupant = At(turret, x + dx, y + dy);
 					if (occupant != null && occupant.Id != movingId) return false;
 				}

@@ -8,7 +8,7 @@ The 1120×740 panel has a left sidebar, central schematic, and the original rota
 
 - A new design initially shows **Chassis** only.
 - Choosing a valid chassis reveals **Turret / mount**. Only the compiler's explicitly compatible original mounts are offered.
-- Choosing the mount reveals **Engine, Running gear, Weapon, Ammunition, Armor, Free modules / generator**.
+- Choosing the mount reveals **Engine, Generator, Running gear, Weapon, Ammunition, Armor, Free modules**.
 - Stock components are arranged as illustrative blocks when the mount is selected. Loaded/copied designs restore their configured parts and reveal their existing selections immediately.
 - These are the actual faction/chassis choices from the catalog, not the old two-vehicle demo selector.
 - Each design has its own temporary layout, keyed by the design object (not its mutable name or a cross-faction ID).
@@ -35,10 +35,15 @@ The schematic is generic, not a claim that every original actor uses tracks or a
 
 | Color | Zone | Rule |
 |---|---|---|
-| Yellow | Bottom hull row | Running gear is **4×1**, entirely in this row. Other modules cannot use it. |
-| Red | Right/front turret column | Weapons must touch the front edge; the rest of their footprint may occupy turret interior. Other modules cannot use red cells. |
+| Yellow | Bottom hull row | Running gear is **4×1**, entirely in this row. |
+| Red | Right/front turret column | Weapons must touch the front edge; the rest of their footprint may extend into violet turret cells. Ammunition cannot use red cells. |
 | Blue | Hull top/front/rear perimeter | Armor strips fit only at the edge; rotate a 2×1 strip for vertical edges. Bottom cells remain reserved for running gear. |
-| Gray | Interior | Engine, generator, ammunition, batteries and PDL subject to their hull/turret restrictions. |
+| Green | Hull interior | Engine and generator must fit entirely inside this zone. Both have green sidebar fields. |
+| Violet | All non-red turret cells | Ammunition belongs here, not in the hull or across the red weapon dock. |
+
+**Free modules** (battery and PDL) ignore zone colors and fit in either hull or turret, including across
+zone boundaries. They still require free, in-bounds space and block other items normally. Generator is
+now a separate green category, not a free module. Reflector remains in the blue armor category.
 
 The matching sidebar fields/options use the same colors. These constraints apply to the **prototype layout**, not to new compiled physical dimensions.
 
@@ -59,7 +64,7 @@ Save/Test Game asks for confirmation before proceeding with **configured stock p
 new energy consumption, charging logic, armor coverage model or permission for arbitrary turret swaps.
 
 Grid sizes and module dimensions remain illustrative. The current generic hull templates use 8×4 or 10×5
-(selected at chassis initialization from the provisional configured mass), and a 3×4 mount interior. These
+(selected at chassis initialization from the provisional configured mass), and a **5×3 mount interior**. These
 are not calibrated budgets, and do not override Battle Fortress's three-slot/full-width Bunker policy.
 
 Model: `OpenRA.Mods.CA/Modular/CustomVehicleSpaceDemo.cs`.

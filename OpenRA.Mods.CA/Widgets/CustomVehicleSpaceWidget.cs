@@ -32,14 +32,25 @@ namespace OpenRA.Mods.CA.Widgets
 			Zone.RunningGear => Color.FromArgb(255, 230, 193, 63),
 			Zone.Weapon => Color.FromArgb(255, 231, 87, 80),
 			Zone.Armor => Color.FromArgb(255, 76, 158, 235),
+			Zone.Interior => Color.FromArgb(255, 86, 175, 111),
+			Zone.Ammunition => Color.FromArgb(255, 178, 113, 224),
 			_ => Color.FromArgb(255, 100, 123, 130)
+		};
+		static Color ZoneFill(Zone zone) => zone switch
+		{
+			Zone.Interior => Color.FromArgb(255, 22, 52, 36),
+			Zone.Ammunition => Color.FromArgb(255, 48, 29, 66),
+			Zone.Weapon => Color.FromArgb(255, 64, 29, 30),
+			Zone.RunningGear => Color.FromArgb(255, 58, 50, 26),
+			Zone.Armor => Color.FromArgb(255, 26, 43, 64),
+			_ => Color.FromArgb(255, 25, 34, 41)
 		};
 		static Color Tint(string id) => id switch
 		{
-			"ammo" => Color.FromArgb(255, 156, 120, 69),
+			"ammo" => ZoneColor(Zone.Ammunition),
 			"pdl" => Color.FromArgb(255, 101, 169, 169),
-			"battery" => Color.FromArgb(255, 98, 165, 106),
-			"generator" => Color.FromArgb(255, 148, 117, 178),
+			"battery" => Color.FromArgb(255, 101, 169, 169),
+			"generator" => ZoneColor(Zone.Interior),
 			_ => ZoneColor(CustomVehicleSpaceDemo.Definition(id).Mount)
 		};
 
@@ -180,10 +191,11 @@ namespace OpenRA.Mods.CA.Widgets
 			if (Layout.TurretWidth > 0)
 			{
 				var tw = Layout.TurretWidth * Cell;
-				Polygon(metal, new int2(128, 144), new int2(132, 44), new int2(158, 18),
-					new int2(tw + 146, 18), new int2(tw + 178, 51), new int2(tw + 180, 134), new int2(tw + 156, 150));
+				var bottom = TurretOrigin.Y + Layout.TurretHeight * Cell + 6;
+				Polygon(metal, new int2(128, bottom), new int2(132, 44), new int2(158, 18),
+					new int2(tw + 146, 18), new int2(tw + 178, 51), new int2(tw + 180, bottom - 10), new int2(tw + 156, bottom + 6));
 				Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
-				Ellipse(169, 146, 86, 16, metal);
+				Ellipse(169, bottom + 2, 86, 16, metal);
 				foreach (var weapon in Layout.Placements.Where(p => p.InTurret && p.ModuleId == "weapon" && p.Id != Moving))
 				{
 					var size = CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(weapon.ModuleId), weapon.Rotated);
@@ -191,8 +203,8 @@ namespace OpenRA.Mods.CA.Widgets
 					Fill(156 + tw + 8, center - 7, 90, 14, metal);
 					Fill(156 + tw + 92, center - 11, 14, 22, ZoneColor(Zone.Weapon));
 				}
-				Fill(194, 150, 34, 10, metal);
-				Text($"Turret {Layout.TurretWidth} x 4", 20, 48, Color.White);
+				Fill(194, bottom + 12, 34, 160 - bottom - 12, metal);
+				Text($"Turret {Layout.TurretWidth} x {Layout.TurretHeight}", 20, 48, Color.White);
 				Text($"{Layout.Used(true)} cells used", 20, 65, Color.White);
 			}
 			Fill(DockBounds.X, DockBounds.Y, DockBounds.Width, DockBounds.Height, metal);
@@ -207,7 +219,7 @@ namespace OpenRA.Mods.CA.Widgets
 				for (var y = 0; y < h; y++)
 					for (var x = 0; x < w; x++)
 					{
-						Fill(o.X + x * Cell, o.Y + y * Cell, Cell - 2, Cell - 2, dark);
+						Fill(o.X + x * Cell, o.Y + y * Cell, Cell - 2, Cell - 2, ZoneFill(Layout.ZoneAt(t, x, y)));
 						Border(o.X + x * Cell, o.Y + y * Cell, Cell - 2, Cell - 2, ZoneColor(Layout.ZoneAt(t, x, y)));
 					}
 			}
