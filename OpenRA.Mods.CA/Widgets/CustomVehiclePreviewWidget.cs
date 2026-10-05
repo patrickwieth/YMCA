@@ -28,7 +28,7 @@ namespace OpenRA.Mods.CA.Widgets
 		Rectangle bounds;
 		long elapsed, lastTime;
 		public bool Rotating = true;
-		public string Status { get; private set; } = "Grafik-Vorlage";
+		public string Status { get; private set; } = "Stock visual reference";
 
 		[ObjectCreator.UseCtor]
 		public CustomVehiclePreviewWidget(ModData modData, WorldRenderer worldRenderer)
@@ -104,7 +104,7 @@ namespace OpenRA.Mods.CA.Widgets
 				bounds = allBounds.Union();
 				facing = new WAngle(384);
 				if (bounds.Width <= 0 || bounds.Height <= 0) throw new InvalidOperationException("No visible preview geometry.");
-				Status = actor.TraitInfos<RenderVoxelsInfo>().Any() ? "Voxel-Modell + Anbauteile" : "Sprite-Modell + Anbauteile";
+				Status = actor.TraitInfos<RenderVoxelsInfo>().Any() ? "Voxel model + attachments" : "Sprite model + attachments";
 			}
 			catch (Exception e) { Fail(e); }
 		}
@@ -113,7 +113,7 @@ namespace OpenRA.Mods.CA.Widgets
 		{
 			previews = Array.Empty<IActorPreview>();
 			renderables = Array.Empty<IFinalizedRenderable>();
-			Status = "Vorschau nicht verfuegbar";
+			Status = "Preview unavailable";
 			Log.Write("debug", "Designer preview " + selection + ": " + e);
 		}
 

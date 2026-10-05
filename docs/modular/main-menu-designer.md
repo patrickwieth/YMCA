@@ -251,10 +251,12 @@ to the debug log. CPU trait checks are not proof of GPU rendering on the user's 
 
 ## Visual space prototype
 
-Use **Bauraum ausprobieren** in the designer to open the [interactive hull/turret inventory example](vehicle-space-prototype.md).
-Running gear, engine, generator and batteries occupy hull cells; the turret has its own grid for weapons,
-ammunition and modules. Example sizes only; temporary layout, no roster/compiler changes. The adjacent
-rotating model remains the stock reference, not a render of the hypothetical grid assembly.
+Use **Space designer** to open the [side-view hull/turret inventory example](vehicle-space-prototype.md).
+An English sidebar provides chassis/turret selection and module pickup. Held items follow the mouse as
+multi-cell footprints and snap into the grids. Yellow bottom slots accept running gear (4×1), red front
+turret slots anchor weapons, and blue hull-edge slots accept armor. Engine/generator/battery equipment
+uses interior cells. Example sizes only; temporary layout, no roster/compiler changes. The small rotating
+model remains the stock reference, not a render of the hypothetical grid assembly.
 
 ## Named ground turret modules
 
