@@ -89,7 +89,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				var options = compiler.CompatibleOptions(profile(), "chassis");
 				chassis.ShowDropDown("LABEL_DROPDOWN_TEMPLATE", Math.Min(options.Length, 8) * 30, options, Setup);
 			};
-			var turret = Field("Turret / mount", 1, Color.White, () => canvas.Layout.HasChassis);
+			var turret = Field("Turret", 1, Color.White, () => canvas.Layout.HasChassis);
 			turret.GetText = () => Ready ? Fit(compiler.Label(profile().Parts["carrier"])) : "Select turret / mount...";
 			void ChooseTurret()
 			{
@@ -143,13 +143,13 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					button.ShowDropDown("MODULAR_PART_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 32, options, Setup);
 				};
 			}
-			PartField("Engine - green interior", 2, CustomVehicleSpaceWidget.ZoneColor(Zone.Interior), "drive", "engine");
-			PartField("Generator - green interior", 3, CustomVehicleSpaceWidget.ZoneColor(Zone.Interior), "generator", "generator");
-			PartField("Running gear - bottom", 4, CustomVehicleSpaceWidget.ZoneColor(Zone.RunningGear), "running_gear", "gear");
-			PartField("Weapon - turret front", 5, CustomVehicleSpaceWidget.ZoneColor(Zone.Weapon), "weapon", "weapon");
-			PartField("Ammunition - violet turret slots", 6, CustomVehicleSpaceWidget.ZoneColor(Zone.Ammunition), "ammunition", "ammo");
-			PartField("Armor - hull edge", 7, CustomVehicleSpaceWidget.ZoneColor(Zone.Armor), "armor", "armor", true);
-			var free = Field("Free modules - any free slots", 8, Color.White, () => Ready);
+			PartField("Engine", 2, CustomVehicleSpaceWidget.ZoneColor(Zone.Interior), "drive", "engine");
+			PartField("Generator", 3, CustomVehicleSpaceWidget.ZoneColor(Zone.Interior), "generator", "generator");
+			PartField("Running gear", 4, CustomVehicleSpaceWidget.ZoneColor(Zone.RunningGear), "running_gear", "gear");
+			PartField("Weapon", 5, CustomVehicleSpaceWidget.ZoneColor(Zone.Weapon), "weapon", "weapon");
+			PartField("Ammunition", 6, CustomVehicleSpaceWidget.ZoneColor(Zone.Ammunition), "ammunition", "ammo");
+			PartField("Armor", 7, CustomVehicleSpaceWidget.ZoneColor(Zone.Armor), "armor", "armor", true);
+			var free = Field("Free modules", 8, Color.White, () => Ready);
 			free.GetText = () => "Pick up...";
 			ButtonIcon(free, () => canvas.Selected is "pdl" or "battery" ? canvas.Selected : "battery");
 			free.OnMouseDown = _ =>

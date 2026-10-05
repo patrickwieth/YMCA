@@ -22,7 +22,10 @@ class DesignerPreviewTests(unittest.TestCase):
         source = (REPO / 'OpenRA.Mods.CA/Widgets/Logic/CustomVehicleSpaceLogic.cs').read_text(encoding='utf-8')
         canvas = (REPO / 'OpenRA.Mods.CA/Widgets/CustomVehicleSpaceWidget.cs').read_text(encoding='utf-8')
         self.assertIn('IsVisible = visible', source)
-        self.assertIn('Field("Turret / mount", 1, Color.White, () => canvas.Layout.HasChassis)', source)
+        self.assertIn('Field("Turret", 1, Color.White, () => canvas.Layout.HasChassis)', source)
+        for row, title in enumerate(('Engine', 'Generator', 'Running gear', 'Weapon', 'Ammunition', 'Armor'), 2):
+            self.assertIn(f'PartField("{title}", {row},', source)
+        self.assertIn('Field("Free modules", 8,', source)
         self.assertIn('Field(title, row, color, () => Ready)', source)
         self.assertIn('compiler.CompatibleOptions(profile(), "chassis")', source)
         self.assertIn('canvas.OnInstall', source)
