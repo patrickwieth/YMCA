@@ -28,12 +28,32 @@ public class StockCombatTests
         Assert.That(rules, Does.Contain("Inherits: " + row.Value<string>("actor") + "\n"));
         Assert.That(rules, Does.Contain("Locomotor: " + row.Value<string>("locomotor") + "\n"));
         Assert.That(rules, Does.Contain("Type: " + row.Value<string>("armor") + "\n"));
-        foreach (var trait in new[] { "Armament", "Cargo", "RenderSprites", "RenderVoxels", "Transforms", "Carryable", "GrantConditionOnDeploy", "Turreted" })
+        Assert.That(rules, Does.Contain("\tRenderSprites:\n\t\tImage: " + row.Value<string>("image") + "\n"),
+            "Bind the resolved original image; custom actor IDs must never become sprite names.");
+        foreach (var trait in new[] { "Armament", "Cargo", "RenderVoxels", "Transforms", "Carryable", "GrantConditionOnDeploy", "Turreted" })
             Assert.That(rules, Does.Not.Contain("\t" + trait + ":"));
         foreach (var requirement in row["prerequisites"].Values<string>().Where(r => r.StartsWith("~promotion.") || r.StartsWith("~!upg.") || r.StartsWith("~!promotion.") || !r.StartsWith("~")))
             Assert.That(rules, Does.Contain(requirement));
         Assert.That(rules, Does.Not.Contain("~disabled"));
         Assert.That(c.Deserialize(c.Serialize(p)).Parts, Is.EquivalentTo(p.Parts));
+    }
+
+    [Test]
+    public void RenamedScoutDronePinsItsImageInTheFrozenMap()
+    {
+        var c = Compiler; var roster = c.NewRoster("eagle");
+        var design = roster.Designs[0];
+        design.Id = "v28992c1c8f004d54bc80a611884d8fee";
+        design.Name = "Custom Scout Drone";
+        c.SelectPart(c.Profile(roster, design), "chassis", "stock-gdrn-hull");
+        using var zip = new ZipArchive(new MemoryStream(c.CompileRosterMap(roster,
+            File.ReadAllBytes(Path.Combine(DirectoryRoot, "lab.oramap")))));
+        using var reader = new StreamReader(zip.GetEntry("modular-rules.yaml").Open());
+        var rules = reader.ReadToEnd();
+        Assert.That(rules, Does.Contain("modular.custom." + design.Id + ":\n\tInherits: GDRN\n"));
+        Assert.That(rules, Does.Contain("\tRenderSprites:\n\t\tImage: gdrn\n"));
+        Assert.That(rules, Does.Not.Contain("-WithIdleOverlay"));
+        Assert.That(rules, Does.Not.Contain("Image: modular.custom"));
     }
 
     [TestCase("eagle", 15, 0)]

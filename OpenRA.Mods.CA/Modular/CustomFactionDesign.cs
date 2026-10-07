@@ -267,8 +267,9 @@ namespace OpenRA.Mods.CA.Modular
 				s.Append("\tBuildable:\n\t\tPrerequisites: " + (assembly.StockPrerequisites != null ? assembly.StockPrerequisites + ", ~structures." + p.BaseFaction :
 					(assembly.Actor == "HMMV" ? "weap.td, " : "") + "vehicles, ~structures." + p.BaseFaction + (v.Tech > 1 ? ", tier" + v.Tech : "") + assembly.ExtraPrerequisites) +
 					"\n\t\tBuildPaletteOrder: " + (1000 + index) + "\n\t\tDescription: Eigener Entwurf - vor dem Spiel eingefroren.\n");
-			if (!assembly.PreserveActorGraphics)
-				s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n");
+			// Inheritance preserves render settings, not the original actor-name fallback.
+			// Pin the resolved stock image even for intact stock graphics/overlay packages.
+			s.Append("\tRenderSprites:\n\t\tImage: " + assembly.Image + "\n");
 			s.Append("\tTooltip:\n\t\tName: " + p.TankName + "\n");
 			foreach (var tooltip in assembly.AlternateTooltips)
 				s.Append("\t" + tooltip + ":\n\t\tName: " + p.TankName + "\n");

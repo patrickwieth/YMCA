@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.CA.Modular;
 using OpenRA.Mods.CA.Widgets;
@@ -22,6 +23,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var compiler = new CustomFactionDesign(reader.ReadToEnd());
 			var rules = utility.ModData.DefaultRules;
 			var count = 0;
+			var compiledNodes = new List<MiniYamlNode>();
+			var bindings = new List<(string Key, ActorInfo Source, string Faction)>();
 			foreach (var faction in CustomFactionDesign.BaseFactions)
 			{
 				var roster = compiler.NewRoster(faction);
@@ -30,6 +33,10 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				{
 					compiler.SelectPart(p, "chassis", hull);
 					var source = rules.Actors[compiler.PreviewActor(p).ToLowerInvariant()];
+					var key = "modular.graphicscheck" + count;
+					var actorNode = MiniYaml.FromString(compiler.Rules(p), "generated-graphics-check").Single(n => n.Key == "modular.custom");
+					compiledNodes.Add(new MiniYamlNode(key, actorNode.Value));
+					bindings.Add((key, source, faction));
 					if (hull.StartsWith("nod-combat-", StringComparison.Ordinal) || hull.StartsWith("china-combat-", StringComparison.Ordinal) || compiler.UsesStockArmaments(p))
 					{
 						var values = compiler.Calculate(p);
@@ -43,8 +50,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 						var weaponRules = compiler.Weapons(p);
 						if (compiler.UsesStockArmaments(p))
 						{
-							if (weaponRules.Length != 0 || output.Contains("\tArmament", StringComparison.Ordinal) || output.Contains("\tRenderSprites:", StringComparison.Ordinal))
-								throw new InvalidOperationException("Stock armaments/graphics were overridden: " + source.Name);
+							if (weaponRules.Length != 0 || output.Contains("\tArmament", StringComparison.Ordinal))
+								throw new InvalidOperationException("Stock armaments were overridden: " + source.Name);
 						}
 						else foreach (var armament in source.TraitInfos<ArmamentInfo>())
 							if (!weaponRules.Contains("Inherits: " + armament.Weapon + "\n", StringComparison.OrdinalIgnoreCase))
@@ -67,7 +74,29 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					count++;
 				}
 			}
-			Console.WriteLine("Validated " + count + " preview bindings. GPU/palettes/assets still require an interactive test.");
+			// Preview actors keep the original name, so preview-only checks cannot catch
+			// inherited null Image fields resolving to the generated actor's new name.
+			var resolved = MiniYaml.Load(utility.ModData.DefaultFileSystem, utility.ModData.Manifest.Rules,
+				new MiniYaml(null, compiledNodes)).ToDictionary(n => n.Key.ToLowerInvariant(), n => n.Value);
+			foreach (var (key, source, faction) in bindings)
+			{
+				var compiled = new ActorInfo(utility.ModData.ObjectCreator, key, resolved[key]);
+				var originalSprites = source.TraitInfo<RenderSpritesInfo>();
+				var compiledSprites = compiled.TraitInfo<RenderSpritesInfo>();
+				var factions = CustomFactionDesign.BaseFactions.Concat(new[] { faction, "" })
+					.Concat(originalSprites.FactionImages?.Keys ?? Enumerable.Empty<string>()).Distinct();
+				foreach (var f in factions)
+					if (originalSprites.GetImage(source, f) != compiledSprites.GetImage(compiled, f))
+						throw new InvalidOperationException($"Compiled sprite image mismatch: {source.Name}/{f} -> {compiledSprites.GetImage(compiled, f)}");
+				var originalVoxels = source.TraitInfoOrDefault<RenderVoxelsInfo>();
+				var compiledVoxels = compiled.TraitInfoOrDefault<RenderVoxelsInfo>();
+				if ((originalVoxels == null) != (compiledVoxels == null) || originalVoxels != null &&
+					!string.Equals(originalVoxels.Image ?? source.Name, compiledVoxels.Image ?? compiled.Name, StringComparison.OrdinalIgnoreCase))
+					throw new InvalidOperationException("Compiled voxel image mismatch: " + source.Name);
+				if (source.TraitInfos<WithIdleOverlayInfo>().Count() != compiled.TraitInfos<WithIdleOverlayInfo>().Count())
+					throw new InvalidOperationException("Compiled idle overlays changed: " + source.Name);
+			}
+			Console.WriteLine("Validated " + count + " preview and compiled graphics bindings. GPU/palettes/assets still require an interactive test.");
 		}
 	}
 }
