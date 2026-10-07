@@ -13,11 +13,11 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		[ObjectCreator.UseCtor]
 		public CustomFactionMenuLogic(Widget widget)
 		{
-			widget.Get<ButtonWidget>("CUSTOM_FACTION_BUTTON").OnClick = () =>
+			void Open(bool playMode)
 			{
-				widget.Visible = false;
-				Game.OpenWindow("CUSTOM_FACTION_PANEL", new WidgetArgs
+				Game.OpenWindow("CUSTOM_FACTION_LIBRARY_PANEL", new WidgetArgs
 				{
+					{ "playMode", playMode },
 					{ "onExit", () => widget.Visible = true },
 					{ "onPlay", (Action<string>)(uid =>
 						{
@@ -25,18 +25,21 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 							widget.LogicObjects.OfType<MainMenuLogicCA>().Single().StartConfiguredSkirmish(uid);
 						}) }
 				});
-			};
+				widget.Visible = false;
+			}
+			widget.Get<ButtonWidget>("CUSTOM_FACTION_BUTTON").OnClick = () => Open(false);
+			widget.Get<ButtonWidget>("CUSTOM_PLAY_BUTTON").OnClick = () => Open(true);
 		}
 	}
 
 	public sealed class CustomFactionLogic : ChromeLogic
 	{
 		[ObjectCreator.UseCtor]
-		public CustomFactionLogic(Widget widget, ModData modData, Action onExit, Action<string> onPlay)
+		public CustomFactionLogic(Widget widget, ModData modData, Action onExit, Action<string> onPlay, CustomFactionEditorSession editorSession = null)
 		{
 			string message = "Configure a vehicle here. Add templates to include more stock families.";
 			widget.Get<LabelWidget>("STATUS").GetText = () => WidgetUtils.TruncateText(message, 788, Game.Renderer.Fonts["Small"]);
-			bool dirty = false;
+			bool dirty = editorSession?.NewDesign ?? false;
 			void DiscardThen(Action action)
 			{
 				if (!dirty) { action(); return; }
@@ -65,9 +68,23 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var loadedRoster = false;
 			try
 			{
-				if (File.Exists(profilePath)) { roster = compiler.DeserializeRoster(File.ReadAllText(profilePath)); loadedRoster = true; }
+				if (editorSession != null)
+				{
+					roster = compiler.DeserializeRoster(compiler.SerializeRoster(editorSession.Roster));
+					loadedRoster = !editorSession.NewDesign;
+				}
+				else if (File.Exists(profilePath)) { roster = compiler.DeserializeRoster(File.ReadAllText(profilePath)); loadedRoster = true; }
 			}
-			catch (Exception e) { message = "Profile could not be loaded; showing defaults. The old file is preserved until saving. " + e.Message; }
+			catch (Exception e)
+			{
+				message = "Profile could not be loaded. The saved file is preserved. " + e.Message;
+				if (editorSession != null)
+				{
+					foreach (var id in new[] { "SAVE", "PLAY", "ADD", "COPY", "DELETE", "TEMPLATES", "BASE", "LOAD" })
+						widget.Get<ButtonWidget>(id).Disabled = true;
+					return;
+				}
+			}
 
 			CustomVehicleSpaceLogic space = null;
 			var preview = widget.Get<CustomVehiclePreviewWidget>("VEHICLE_PREVIEW");
@@ -76,7 +93,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var rotation = widget.Get<ButtonWidget>("PREVIEW_ROTATION");
 			rotation.GetText = () => preview.Rotating ? "Pause rotation" : "Rotate slowly";
 			rotation.OnClick = () => preview.Rotating = !preview.Rotating;
-			var selected = 0;
+			var selected = editorSession?.Selected ?? 0;
 			var factionName = widget.Get<TextFieldWidget>("FACTION_NAME");
 			var tankName = widget.Get<TextFieldWidget>("TANK_NAME");
 			factionName.Text = roster.Name;
@@ -113,12 +130,12 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						("Price", $"{v.Cost:0} credits"), ("Hitpoints", $"{v.Hp:0}"), ("Speed", v.Speed.ToString()),
 						("Turn speed", v.Turn.ToString()), ("Mass", $"{v.Mass:0} kg"), ("Technology", v.Tech.ToString()),
 						("Electrical demand (experimental)", $"{v.Electric:0.##} kW"), ("Drive reserve (experimental)", $"{v.Reserve:0.##} kW"),
-						("Development points", $"{v.Points}; faction total {budget}/50"), ("Command points", "0"),
+						("Catalog points", $"{v.Points}; faction total {budget}/{roster.Level}"), ("Command points", "0"),
 						("Faction", CustomFactionDesign.BaseLabel(p.BaseFaction)),
 						("Production", v.Stationary ? "Stationary; preplaced + manual Carryall only." : "Buildable with original prerequisites."),
 						("Graphics", p.Parts["running_gear"] == "prototype-hover" && !compiler.IsNativeHover(p) ? "Hover placeholder graphics." : "Bound original actor graphics.")
 					};
-					var names = new[] { "Chassis", "Running gear", "Engine", "Generator", "Armor", "Turret / mount", "Weapon", "Ammunition" };
+					var names = new[] { "Chassis", "Running gear", "Engine", "Generator", "Armor", "Turret", "Weapon", "Ammunition" };
 					for (var i = 0; i < CustomFactionDesign.Roles.Length; i++) values.Add((names[i], compiler.Label(p.Parts[CustomFactionDesign.Roles[i]])));
 					values.Add(("Original weapon / ability package", compiler.WeaponSummary(p)));
 					Properties(values);
@@ -267,9 +284,20 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			};
 			void Save()
 			{
-				compiler.SaveLibrary(libraryPath, roster);
-				compiler.SaveRoster(profilePath, roster);
+				if (editorSession != null) editorSession.Save(roster);
+				else
+				{
+					compiler.SaveLibrary(libraryPath, roster);
+					compiler.SaveRoster(profilePath, roster);
+				}
 				dirty = false;
+			}
+			if (editorSession != null)
+			{
+				foreach (var id in new[] { "BASE", "LOAD", "DESIGN_LABEL", "DESIGN", "ADD", "COPY", "DELETE", "TEMPLATES", "PLAY" })
+					widget.Get(id).IsVisible = () => false;
+				factionName.IsDisabled = () => true;
+				widget.Get<LabelWidget>("TITLE").GetText = () => "Vehicle designer";
 			}
 			Refresh(false);
 			var save = widget.Get<ButtonWidget>("SAVE");
@@ -285,29 +313,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				try
 				{
-					byte[] lab;
-					using (var stream = modData.DefaultFileSystem.Open("ca|maps/modular-gdi-lab.oramap"))
-					using (var memory = new MemoryStream()) { stream.CopyTo(memory); lab = memory.ToArray(); }
-					var bytes = compiler.CompileRosterMap(roster, lab);
-					var directory = Path.Combine(Platform.SupportDir, "maps", "ca", "modular");
-					Directory.CreateDirectory(directory);
-					var filename = "custom-" + CustomFactionDesign.ContentHash(bytes) + ".oramap";
-					var path = Path.Combine(directory, filename);
-					if (!File.Exists(path))
-					{
-						var temp = path + "." + Guid.NewGuid().ToString("N") + ".tmp";
-						try { File.WriteAllBytes(temp, bytes); File.Move(temp, path); }
-						finally { if (File.Exists(temp)) File.Delete(temp); }
-					}
-					else if (!File.ReadAllBytes(path).SequenceEqual(bytes))
-						throw new InvalidDataException("Existing test map was modified; it will not be overwritten.");
-					var location = modData.MapCache.MapLocations.Where(kv => kv.Value == MapClassification.User).Select(kv => kv.Key).First(p =>
-						string.Equals(Path.GetFullPath(p.Name).TrimEnd(Path.DirectorySeparatorChar),
-						Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar), StringComparison.OrdinalIgnoreCase));
-					string uid;
-					using (var package = location.OpenPackage(filename, modData.ModFiles)) uid = Map.ComputeUID(package);
-					modData.MapCache.LoadMap(filename, location, MapClassification.User, modData.Manifest.Get<MapGrid>(), null);
-					if (modData.MapCache[uid].Status != MapStatus.Available) throw new InvalidDataException("The generated map could not be loaded.");
+					var uid = CustomFactionNavigation.PrepareGame(modData, compiler, roster);
 					Save();
 					modData.MapCache.PickLastModifiedMap(MapVisibility.Lobby);
 					Ui.CloseWindow(); onPlay(uid);

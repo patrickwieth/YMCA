@@ -22,6 +22,8 @@ namespace OpenRA.Mods.CA.Widgets
 		const int Cell = 28;
 		static readonly int2 HullOrigin = new(72, 202);
 		static readonly int2 TurretOrigin = new(156, 32);
+		bool LightBody => Layout.Silhouette is CustomVehicleSilhouetteKind.LightVehicle or CustomVehicleSilhouetteKind.Bike;
+		int GridCell(bool turret) => turret && LightBody ? 20 : Cell;
 
 		public void Cancel() { Selected = null; Moving = null; Rotated = false; OnSelectionCancelled(); }
 		public void Choose(string id) { Cancel(); Selected = id; }
@@ -75,8 +77,9 @@ namespace OpenRA.Mods.CA.Widgets
 				var o = t ? TurretOrigin : HullOrigin;
 				var w = t ? Layout.TurretWidth : Layout.HullWidth;
 				var h = t ? Layout.TurretHeight : Layout.HullHeight;
-				if (new Rectangle(o.X, o.Y, w * Cell, h * Cell).Contains(point))
-				{ turret = t; x = (point.X - o.X) / Cell; y = (point.Y - o.Y) / Cell; return true; }
+				var cell = GridCell(t);
+				if (new Rectangle(o.X, o.Y, w * cell, h * cell).Contains(point))
+				{ turret = t; x = (point.X - o.X) / cell; y = (point.Y - o.Y) / cell; return true; }
 			}
 			turret = false; x = y = 0; return false;
 		}
@@ -125,15 +128,15 @@ namespace OpenRA.Mods.CA.Widgets
 			return true;
 		}
 
-		void Item(string id, bool rotated, int x, int y, Color border, bool held)
+		void Item(string id, bool rotated, int x, int y, Color border, bool held, int cell = Cell)
 		{
 			var m = CustomVehicleSpaceDemo.Definition(id);
 			var size = CustomVehicleSpaceDemo.Size(m, rotated);
-			var w = size.Width * Cell - 2;
-			var h = size.Height * Cell - 2;
+			var w = size.Width * cell - 2;
+			var h = size.Height * cell - 2;
 			Fill(x, y, w, h, held ? Color.FromArgb(220, 35, 49, 56) : Color.FromArgb(255, 39, 55, 62));
 			for (var iy = 0; iy < size.Height; iy++)
-				for (var ix = 0; ix < size.Width; ix++) Border(x + ix * Cell, y + iy * Cell, Cell - 2, Cell - 2, Tint(id));
+				for (var ix = 0; ix < size.Width; ix++) Border(x + ix * cell, y + iy * cell, cell - 2, cell - 2, Tint(id));
 			Border(x, y, w, h, border);
 			var iconWidth = w >= 80 && h < 40 ? 36 : w - 6;
 			var hasIcon = CustomVehicleModuleIconWidget.DrawIcon(id,
@@ -161,8 +164,9 @@ namespace OpenRA.Mods.CA.Widgets
 			if (HitGrid(mouse, out var turret, out var x, out var y))
 			{
 				var o = turret ? TurretOrigin : HullOrigin;
-				Item(Selected, Rotated, o.X + x * Cell, o.Y + y * Cell,
-					Layout.CanPlace(Selected, turret, x, y, Rotated, Moving) ? Color.Lime : Color.Red, true);
+				var cell = GridCell(turret);
+				Item(Selected, Rotated, o.X + x * cell, o.Y + y * cell,
+					Layout.CanPlace(Selected, turret, x, y, Rotated, Moving) ? Color.Lime : Color.Red, true, cell);
 			}
 			else
 			{
@@ -170,6 +174,76 @@ namespace OpenRA.Mods.CA.Widgets
 				var px = Math.Clamp(Viewport.LastMousePos.X + 14, window.Left, window.Right - size.Width * Cell);
 				var py = Math.Clamp(Viewport.LastMousePos.Y + 14, window.Top, window.Bottom - size.Height * Cell);
 				Item(Selected, Rotated, px - RenderOrigin.X, py - RenderOrigin.Y, Tint(Selected), true);
+			}
+		}
+
+		void DrawChassis(int hw, int hh, Color metal, Color dark)
+		{
+			var bottom = HullOrigin.Y + hh;
+			var tire = Color.FromArgb(255, 17, 22, 25);
+			void Wheel(int x, int diameter)
+			{
+				Ellipse(x, bottom - 20, diameter, diameter, tire);
+				Ellipse(x + 8, bottom - 12, diameter - 16, diameter - 16, metal);
+				Ellipse(x + diameter / 2 - 5, bottom + diameter / 2 - 25, 10, 10, dark);
+			}
+			switch (Layout.Silhouette)
+			{
+				case CustomVehicleSilhouetteKind.Walker:
+				case CustomVehicleSilhouetteKind.Tripod:
+					var hips = Layout.Silhouette == CustomVehicleSilhouetteKind.Tripod ? new[] { 48, 170, hw + 76 } : new[] { 48, hw + 76 };
+					foreach (var x in hips)
+					{
+						Polygon(metal, new int2(x, bottom - 60), new int2(x + 25, bottom - 55),
+							new int2(x + 36, bottom + 2), new int2(x + 13, bottom + 28), new int2(x + 46, bottom + 28),
+							new int2(x + 52, bottom + 40), new int2(x - 10, bottom + 40), new int2(x - 10, bottom + 26), new int2(x + 10, bottom));
+						Ellipse(x + 4, bottom - 10, 26, 26, dark); Ellipse(x + 11, bottom - 3, 12, 12, metal);
+						Fill(x - 8, bottom + 36, 57, 4, tire);
+					}
+					Polygon(metal, new int2(30, 220), new int2(54, 180), new int2(hw + 98, 180),
+						new int2(hw + 123, 221), new int2(hw + 105, bottom - 18), new int2(47, bottom - 18));
+					Polygon(metal, new int2(92, 181), new int2(114, 153), new int2(170, 153), new int2(188, 181));
+					Fill(115, 160, 48, 14, dark);
+					break;
+				case CustomVehicleSilhouetteKind.LightVehicle:
+				case CustomVehicleSilhouetteKind.Wheeled:
+				case CustomVehicleSilhouetteKind.Bike:
+					Polygon(metal, new int2(34, 222), new int2(42, 194), new int2(184, 194),
+						new int2(209, 180), new int2(245, 210), new int2(hw + 115, 220), new int2(hw + 121, bottom - 8), new int2(35, bottom - 8));
+					if (Layout.Silhouette != CustomVehicleSilhouetteKind.Bike)
+					{
+						Polygon(metal, new int2(98, 198), new int2(106, 154), new int2(177, 154), new int2(201, 198));
+						Polygon(dark, new int2(114, 163), new int2(172, 163), new int2(186, 189), new int2(110, 189));
+						Fill(147, 160, 4, 34, metal);
+					}
+					else { Fill(95, 181, 66, 10, metal); Fill(hw + 48, 180, 7, 39, metal); }
+					Wheel(43, 60); Wheel(hw + 55, 60);
+					if (Layout.Silhouette == CustomVehicleSilhouetteKind.Wheeled) Wheel(166, 60);
+					Fill(hw + 112, 230, 8, 16, Color.FromArgb(255, 142, 146, 116));
+					break;
+				case CustomVehicleSilhouetteKind.Hover:
+					Polygon(metal, new int2(25, 240), new int2(69, 181), new int2(hw + 72, 181),
+						new int2(hw + 135, 247), new int2(hw + 110, bottom), new int2(41, bottom));
+					for (var x = 48; x < hw + 100; x += 84)
+					{
+						Ellipse(x, bottom - 8, 65, 24, tire); Fill(x + 10, bottom + 11, 45, 3, metal);
+						Fill(x + 17, bottom + 26, 30, 2, Color.FromArgb(255, 64, 105, 111));
+					}
+					break;
+				default:
+					var trackY = bottom - 10;
+					Ellipse(26, trackY, 56, 46, tire); Ellipse(hw + 76, trackY, 56, 46, tire);
+					Fill(54, trackY, hw + 50, 46, tire);
+					for (var x = 48; x < hw + 118; x += 36)
+					{
+						Ellipse(x, trackY + 5, 32, 32, metal); Ellipse(x + 10, trackY + 15, 12, 12, dark);
+					}
+					for (var x = 38; x < hw + 122; x += 15) Fill(x, trackY + 40, 10, 3, metal);
+					Polygon(metal, new int2(26, 214), new int2(56, 183), new int2(hw + 76, 183),
+						new int2(hw + 132, 224), new int2(hw + 110, bottom), new int2(40, bottom));
+					Fill(38, 179, 83, 5, metal);
+					for (var x = 45; x < 113; x += 12) Fill(x, 185, 6, 8, dark);
+					break;
 			}
 		}
 
@@ -182,37 +256,34 @@ namespace OpenRA.Mods.CA.Widgets
 			if (!Layout.HasChassis) { Text("Choose a chassis on the left to begin.", 104, 180, Color.White); return; }
 			var hw = Layout.HullWidth * Cell;
 			var hh = Layout.HullHeight * Cell;
-			// Independent tank contour: sloped glacis, rear deck, track loop and road wheels.
-			var trackY = 202 + hh - 10;
-			var track = Color.FromArgb(255, 17, 22, 25);
-			Ellipse(26, trackY, 56, 46, track); Ellipse(hw + 76, trackY, 56, 46, track);
-			Fill(54, trackY, hw + 50, 46, track);
-			for (var x = 48; x < hw + 118; x += 36)
-			{
-				Ellipse(x, trackY + 5, 32, 32, metal);
-				Ellipse(x + 10, trackY + 15, 12, 12, dark);
-			}
-			for (var x = 38; x < hw + 122; x += 15) Fill(x, trackY + 40, 10, 3, metal);
-			Polygon(metal, new int2(26, 214), new int2(56, 183), new int2(hw + 76, 183),
-				new int2(hw + 132, 224), new int2(hw + 110, 202 + hh), new int2(40, 202 + hh));
-			Fill(38, 179, 83, 5, metal);
-			for (var x = 45; x < 113; x += 12) Fill(x, 185, 6, 8, dark);
+			DrawChassis(hw, hh, metal, dark);
 			if (Layout.TurretWidth > 0)
 			{
-				var tw = Layout.TurretWidth * Cell;
-				var bottom = TurretOrigin.Y + Layout.TurretHeight * Cell + 6;
-				Polygon(metal, new int2(128, bottom), new int2(132, 44), new int2(158, 18),
-					new int2(tw + 146, 18), new int2(tw + 178, 51), new int2(tw + 180, bottom - 10), new int2(tw + 156, bottom + 6));
-				Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
-				Ellipse(169, bottom + 2, 86, 16, metal);
+				var cell = GridCell(true);
+				var tw = Layout.TurretWidth * cell;
+				var bottom = TurretOrigin.Y + Layout.TurretHeight * cell + 6;
+				if (LightBody)
+				{
+					Polygon(metal, new int2(146, bottom), new int2(146, 42), new int2(161, 26),
+						new int2(tw + 150, 26), new int2(tw + 166, 44), new int2(tw + 166, bottom));
+					Ellipse(182, bottom + 2, 52, 10, metal);
+				}
+				else
+				{
+					Polygon(metal, new int2(128, bottom), new int2(132, 44), new int2(158, 18),
+						new int2(tw + 146, 18), new int2(tw + 178, 51), new int2(tw + 180, bottom - 10), new int2(tw + 156, bottom + 6));
+					Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
+					Ellipse(169, bottom + 2, 86, 16, metal);
+				}
 				foreach (var weapon in Layout.Placements.Where(p => p.InTurret && p.ModuleId == "weapon" && p.Id != Moving))
 				{
 					var size = CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(weapon.ModuleId), weapon.Rotated);
-					var center = TurretOrigin.Y + weapon.Y * Cell + size.Height * Cell / 2;
-					Fill(156 + tw + 8, center - 7, 90, 14, metal);
-					Fill(156 + tw + 92, center - 11, 14, 22, ZoneColor(Zone.Weapon));
+					var center = TurretOrigin.Y + weapon.Y * cell + size.Height * cell / 2;
+					var length = LightBody ? 48 : 90;
+					Fill(156 + tw + 8, center - (LightBody ? 3 : 7), length, LightBody ? 6 : 14, metal);
+					Fill(156 + tw + length + 2, center - (LightBody ? 5 : 11), 10, LightBody ? 10 : 22, ZoneColor(Zone.Weapon));
 				}
-				Fill(194, bottom + 12, 34, 188 - bottom - 12, metal);
+				Fill(LightBody ? 204 : 194, bottom + 12, LightBody ? 14 : 34, 188 - bottom - 12, metal);
 				Text($"Turret {Layout.TurretWidth} x {Layout.TurretHeight}", 20, 48, Color.White);
 				Text($"{Layout.Used(true)} cells used", 20, 65, Color.White);
 			}
@@ -221,18 +292,20 @@ namespace OpenRA.Mods.CA.Widgets
 				var o = t ? TurretOrigin : HullOrigin;
 				var w = t ? Layout.TurretWidth : Layout.HullWidth;
 				var h = t ? Layout.TurretHeight : Layout.HullHeight;
+				var cell = GridCell(t);
 				for (var y = 0; y < h; y++)
 					for (var x = 0; x < w; x++)
 					{
-						Fill(o.X + x * Cell, o.Y + y * Cell, Cell - 2, Cell - 2, ZoneFill(Layout.ZoneAt(t, x, y)));
-						Border(o.X + x * Cell, o.Y + y * Cell, Cell - 2, Cell - 2, ZoneColor(Layout.ZoneAt(t, x, y)));
+						Fill(o.X + x * cell, o.Y + y * cell, cell - 2, cell - 2, ZoneFill(Layout.ZoneAt(t, x, y)));
+						Border(o.X + x * cell, o.Y + y * cell, cell - 2, cell - 2, ZoneColor(Layout.ZoneAt(t, x, y)));
 					}
 			}
 			foreach (var p in Layout.Placements)
 			{
 				if (p.Id == Moving) continue;
 				var o = p.InTurret ? TurretOrigin : HullOrigin;
-				Item(p.ModuleId, p.Rotated, o.X + p.X * Cell, o.Y + p.Y * Cell, Tint(p.ModuleId), false);
+				var cell = GridCell(p.InTurret);
+				Item(p.ModuleId, p.Rotated, o.X + p.X * cell, o.Y + p.Y * cell, Tint(p.ModuleId), false, cell);
 			}
 			Text($"Schematic hull: {Layout.HullWidth} x {Layout.HullHeight} / {Layout.Used(false)} cells used", 72, 389, Color.White);
 		}

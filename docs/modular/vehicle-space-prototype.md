@@ -1,13 +1,14 @@
 # Unified vehicle designer / spatial prototype
 
-The faction designer is now **one view**. The separate Space designer button/window has been removed.
-Faction selection, faction library loading, naming, New/Copy/Remove, templates, Save and Test Game remain.
-The 1120×740 panel has a left sidebar, central schematic, and the original rotating preview on the right.
+There is **one vehicle designer**, reached from the [faction overview](faction-navigation.md).
+The separate Space designer button/window has been removed. Faction creation is under Play; faction
+loading, naming, roster management and Test Game are now owned by the library/overview.
+The 1120×740 vehicle panel has a left sidebar, central schematic, and the original rotating preview on the right.
 
 ## Progressive configuration
 
 - A new design initially shows **Chassis** only.
-- Choosing a valid chassis reveals **Turret / mount**. Only the compiler's explicitly compatible original mounts are offered.
+- Choosing a valid chassis reveals **Turret**. Only the compiler's explicitly compatible original mounts are offered.
 - Choosing the mount reveals **Engine, Generator, Running gear, Weapon, Ammunition, Armor, Free modules**.
 - Stock components are arranged as illustrative blocks when the mount is selected. Loaded/copied designs restore their configured parts and reveal their existing selections immediately.
 - These are the actual faction/chassis choices from the catalog, not the old two-vehicle demo selector.
@@ -19,7 +20,10 @@ The 1120×740 panel has a left sidebar, central schematic, and the original rota
 Hull and turret are shown from the **left side, front facing right**. The tank outline is independent
 of the rectangular grid: sloped hull nose, rear deck, track loop/road wheels, angular turret, hatch,
 antenna, turret ring and forward gun barrels. The turret docks above the hull. Mount selection is only in the sidebar; there is no extra dock button or white box on the silhouette.
-The schematic is generic, not a claim that every original actor uses tracks or a rotating turret.
+[Class-specific silhouettes](faction-navigation.md#silhouettes) now replace the all-tank fallback for
+explicit walker, light vehicle, wheeled, motorcycle and native-hover bindings. Light-vehicle mounts
+are drawn smaller, including a matching smaller grid display scale, without altering slot counts.
+These remain schematics, not exact reproductions of each stock actor or proof of arbitrary mixed art.
 
 - Select a component on the left to carry its multi-cell footprint at the cursor.
 - Over a grid it snaps to cells: green outside border = valid; red = invalid.

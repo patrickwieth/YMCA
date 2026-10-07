@@ -82,6 +82,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						if (!commitPart("chassis", id)) return;
 						canvas.Cancel(); pendingRole = pendingPart = null;
 						canvas.Layout.SetChassis(LargeSchematic());
+						canvas.Layout.Silhouette = Silhouette();
 						notify("Chassis selected. Choose its compatible turret / mount next.");
 					});
 					item.Get<LabelWidget>("LABEL").GetText = () => compiler.Label(id); return item;
@@ -169,6 +170,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			widget.AddChild(new CustomVehicleSpaceCursorWidget { Bounds = new WidgetBounds(0, 0, widget.Bounds.Width, widget.Bounds.Height), Canvas = canvas });
 		}
 
+		CustomVehicleSilhouetteKind Silhouette() => CustomVehicleSilhouette.ForActor(
+			compiler.PreviewActor(profile()), compiler.IsNativeHover(profile()));
+
 		bool LargeSchematic()
 		{
 			// Editing a name must not break layout switching; geometry does not depend on names.
@@ -196,6 +200,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					layout.LoadStockConfiguration(LargeSchematic());
 				}
 			}
+			layout.Silhouette = Silhouette();
 			canvas.Layout = layout;
 		}
 	}

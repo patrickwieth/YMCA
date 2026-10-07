@@ -28,6 +28,7 @@ namespace OpenRA.Mods.CA.Modular
 		public IReadOnlyList<Placement> Placements => placements.AsReadOnly();
 		public bool HasChassis { get; private set; }
 		public bool Heavy { get; private set; }
+		public CustomVehicleSilhouetteKind Silhouette { get; set; }
 		public int HullWidth => !HasChassis ? 0 : Heavy ? 10 : 8;
 		public int HullHeight => !HasChassis ? 0 : Heavy ? 5 : 4;
 		public int TurretWidth { get; private set; }

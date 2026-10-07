@@ -13,8 +13,8 @@ namespace OpenRA.Mods.CA.Modular
 				{ "eagle", ("gdi", "GDI / Eagle", "FactionCA@11", "mtnk") },
 				{ "blackh", ("nod", "Nod / Black Hand", "FactionCA@13", "ltnk") },
 				{ "chinatnk", ("china", "China / Tank-General", "FactionCA@22", "chbattle") },
-				{ "england", ("allies", "Alliierte / England", "FactionCA@1", "challenger_tank") },
-				{ "russia", ("soviet", "Sowjets / Russland", "FactionCA@5", "heavy_tank") },
+				{ "england", ("allies", "Allies / England", "FactionCA@1", "challenger_tank") },
+				{ "russia", ("soviet", "Soviets / Russia", "FactionCA@5", "heavy_tank") },
 				{ "traveler", ("scrin", "Scrin / Traveler-59", "FactionCA@18", "seek") }
 			};
 

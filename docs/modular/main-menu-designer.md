@@ -2,7 +2,21 @@
 
 ## Current workflow
 
-Restart the locally built game, then **Eigene Fraktion**.
+**Play > New faction** creates a faction. **My factions > select a faction** opens its overview,
+where names, catalog points and vehicle entries are managed. **Edit** opens the spatial vehicle
+editor; Back returns to the overview. Deletion always requires confirmation, and renaming retains
+the faction's identity instead of creating another library entry.
+
+Current balancing factions use **level 50 / 100**, hence **50 catalog points**, with varying
+per-vehicle point costs. The separate 16-design prototype limit remains. Other unit categories and
+the custom tech-tier Commander Tree are not implemented yet.
+
+See [faction navigation and silhouettes](faction-navigation.md) for persistence, migration, UI
+boundaries, the new chassis-specific silhouettes and live acceptance checks.
+
+## Previous flat-editor workflow (historical)
+
+Before the overview was introduced, the entry point was **Eigene Fraktion**.
 
 - Select **GDI / Eagle**, **Nod / Black Hand**, **China / Tank-General** or
   **Alliierte / England**, **Sowjets / Russland** or **Scrin / Traveler-59** in the top-right base dropdown.

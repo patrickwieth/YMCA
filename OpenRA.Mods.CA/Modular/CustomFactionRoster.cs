@@ -21,6 +21,7 @@ namespace OpenRA.Mods.CA.Modular
 		public int Schema { get; set; } = 2;
 		public string Name { get; set; } = "Meine GDI";
 		public string BaseFaction { get; set; } = "eagle";
+		public int Level { get; set; } = 50;
 		public List<CustomVehicleDesign> Designs { get; set; } = new List<CustomVehicleDesign> { new CustomVehicleDesign() };
 	}
 
@@ -37,22 +38,23 @@ namespace OpenRA.Mods.CA.Modular
 		{
 			if (roster == null || roster.Schema != 2 || !SupportedBase(roster.BaseFaction) || !ValidName(roster.Name) ||
 				string.IsNullOrWhiteSpace(roster.Name) || roster.Designs == null || roster.Designs.Count < 1 || roster.Designs.Count > MaxDesigns)
-				throw new InvalidDataException("Fraktion braucht einen gueltigen Namen und 1-16 passende Entwuerfe.");
+				throw new InvalidDataException("A faction needs a valid name and 1-16 compatible designs.");
 			if (roster.Designs.Any(d => d == null || d.Id == null || !Regex.IsMatch(d.Id, @"\A[a-z][a-z0-9]{0,32}\z")))
-				throw new InvalidDataException("Ungueltige interne Entwurfs-ID.");
+				throw new InvalidDataException("Invalid internal design ID.");
 			if (roster.Designs.Select(d => d.Id).Distinct(StringComparer.Ordinal).Count() != roster.Designs.Count ||
 				roster.Designs.Select(d => d.Name?.Trim()).Distinct(StringComparer.OrdinalIgnoreCase).Count() != roster.Designs.Count)
-				throw new InvalidDataException("Fahrzeugnamen und IDs muessen innerhalb der Fraktion eindeutig sein.");
+				throw new InvalidDataException("Vehicle names and IDs must be unique within the faction.");
+			if (roster.Level < 1 || roster.Level > 100) throw new InvalidDataException("Faction level must be between 1 and 100.");
 			var points = roster.Designs.Sum(d => Calculate(Profile(roster, d)).Points);
-			if (points > 50) throw new InvalidDataException("Gemeinsames Katalogbudget von 50 ueberschritten.");
+			if (points > roster.Level) throw new InvalidDataException($"Catalog budget of {roster.Level} points exceeded.");
 			return points;
 		}
 
 		public CustomVehicleDesign AddDesign(CustomFactionRoster roster, CustomVehicleDesign copy = null)
 		{
 			ValidateRoster(roster);
-			if (roster.Designs.Count == MaxDesigns) throw new InvalidDataException("Maximal 16 Entwuerfe pro Fraktion.");
-			var seed = copy == null ? "Fahrzeug" : copy.Name.Substring(0, Math.Min(copy.Name.Length, 23)) + " Kopie";
+			if (roster.Designs.Count == MaxDesigns) throw new InvalidDataException("Maximum of 16 designs per faction.");
+			var seed = copy == null ? "Vehicle" : copy.Name.Substring(0, Math.Min(copy.Name.Length, 23)) + " Copy";
 			var name = seed;
 			for (var i = 2; roster.Designs.Any(d => string.Equals(d.Name.Trim(), name, StringComparison.OrdinalIgnoreCase)); i++)
 				name = seed + " " + i;
@@ -72,7 +74,7 @@ namespace OpenRA.Mods.CA.Modular
 			foreach (var hull in hulls.Where(h => !roster.Designs.Any(d => d.Parts["chassis"] == h)))
 			{
 				if (roster.Designs.Count >= MaxDesigns) break;
-				var name = Regex.Replace("Eigen " + Label(hull).Split(new[] { " - " }, StringSplitOptions.None)[0], @"[^\p{L}\p{N} _-]", "-").Trim();
+				var name = Regex.Replace("Custom " + Label(hull).Split(new[] { " - " }, StringSplitOptions.None)[0], @"[^\p{L}\p{N} _-]", "-").Trim();
 				name = name.Substring(0, Math.Min(27, name.Length));
 				var unique = name;
 				for (var i = 2; roster.Designs.Any(d => string.Equals(d.Name.Trim(), unique, StringComparison.OrdinalIgnoreCase)); i++) unique = name + " " + i;
@@ -90,7 +92,7 @@ namespace OpenRA.Mods.CA.Modular
 			ValidateRoster(roster);
 			return new JObject
 			{
-				["Schema"] = 2, ["Name"] = roster.Name, ["BaseFaction"] = roster.BaseFaction,
+				["Schema"] = 2, ["Name"] = roster.Name, ["BaseFaction"] = roster.BaseFaction, ["Level"] = roster.Level,
 				["Designs"] = new JArray(roster.Designs.Select(d => new JObject
 				{
 					["Id"] = d.Id, ["Name"] = d.Name,
@@ -112,9 +114,9 @@ namespace OpenRA.Mods.CA.Modular
 				};
 			}
 			if (root.Value<int?>("Schema") != 2 || root["Designs"] is not JArray designs || root["Name"] == null || root["BaseFaction"] == null)
-				throw new InvalidDataException("Unbekanntes oder unvollstaendiges Fraktionsformat.");
+				throw new InvalidDataException("Unknown or incomplete faction format.");
 			if (designs.Any(d => d is not JObject entry || entry["Id"] == null || entry["Name"] == null || entry["Parts"] is not JObject))
-				throw new InvalidDataException("Jeder gespeicherte Entwurf braucht ID, Namen und Bausteine.");
+				throw new InvalidDataException("Each saved design needs an ID, name and components.");
 			var roster = JsonConvert.DeserializeObject<CustomFactionRoster>(json, JsonSettings);
 			if (roster?.Designs != null)
 				foreach (var design in roster.Designs) MigrateParts(design?.Parts);
