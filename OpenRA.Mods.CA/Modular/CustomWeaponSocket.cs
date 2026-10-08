@@ -1,12 +1,15 @@
 namespace OpenRA.Mods.CA.Modular
 {
 	// Editor geometry only. Concrete weapon compatibility still comes from the native binding.
-	public enum CustomWeaponKind { Cannon, BattleTankCannon, TwinCannon, DualGatling, TripleIon, MissileLauncher, SonicEmitter, PrismEmitter }
+	public enum CustomWeaponKind { Cannon, BattleTankCannon, BattleTank120mm, TwinCannon, DualGatling, TripleIon, MissileLauncher, SonicEmitter, PrismEmitter }
 
 	public sealed record CustomWeaponSocket(CustomWeaponKind Kind, int X, int Y, int Width, int Height)
 	{
 		public bool Contains(int x, int y) => x >= X && y >= Y && x - X < Width && y - Y < Height;
 		public bool Fits(int x, int y, int width, int height) => x == X && y == Y && width == Width && height == Height;
+
+		public static CustomWeaponKind ForParts(string carrier, string weapon) =>
+			carrier == "medium-cannon-mount" && weapon == "battle-tank-120mm" ? CustomWeaponKind.BattleTank120mm : ForCarrier(carrier);
 
 		public static CustomWeaponKind ForCarrier(string carrier) => carrier switch
 		{
@@ -22,6 +25,7 @@ namespace OpenRA.Mods.CA.Modular
 
 		public static string Label(CustomWeaponKind kind) => kind switch
 		{
+			CustomWeaponKind.BattleTank120mm => "120mm Smoothbore Cannon",
 			CustomWeaponKind.BattleTankCannon => "105mm Smoothbore Cannon",
 			CustomWeaponKind.TwinCannon => "Twin cannons",
 			CustomWeaponKind.DualGatling => "Dual Gatling guns",

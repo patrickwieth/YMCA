@@ -37,6 +37,12 @@ namespace OpenRA.Mods.CA.Modular
 			};
 		}
 
+		public CustomVehicleAssembly WithWeapon(string weapon)
+		{
+			Choices["weapon"] = Choices["weapon"].Concat(new[] { weapon }).ToArray();
+			return this;
+		}
+
 		public static string CanonicalCarrier(string hull, string id) => (hull, id) switch
 		{
 			("designer-prism-hull", "designer-prism-mount") => "prism-turret",
@@ -88,7 +94,7 @@ namespace OpenRA.Mods.CA.Modular
 			new CustomVehicleAssembly("gdi-battle-hull", "MTNK", "mtnk", "Turreted@PRIMARY",
 				new[] { "tracks-standard", "prototype-hover", "gdi-stationary" }, new[] { "diesel", "diesel-large" },
 				"heavy", "medium-cannon-mount", "medium-cannon", new[] { "medium-tank-shell", "designer-he-shell" },
-				new Dictionary<string, string> { { "Armament@PRIMARY", "120mm" } }),
+				new Dictionary<string, string> { { "Armament@PRIMARY", "120mm" } }).WithWeapon("battle-tank-120mm"),
 			new CustomVehicleAssembly("humvee-hull", "HMMV", "hmmv", "Turreted",
 				new[] { "wheels-light", "gdi-stationary" }, new[] { "diesel-light" },
 				"light", "scout-mg-mount", "scout-mg", new[] { "scout-mg-rounds" },
@@ -391,7 +397,8 @@ namespace OpenRA.Mods.CA.Modular
 				var air = N(Part(p, "weapon"), "secondary_range_cells");
 				return $"Rockets: ground {minimum:0.##}-{range:0.##} / air {air:0.##}, {burst:0}-round bursts; separate weapons.";
 			}
-			return (p.Parts["ammunition"] == "designer-he-shell" ? "HE cannon" : "Tank cannon") + $": range {range:0.##}, {burst:0} rounds per burst.";
+			return (p.Parts["ammunition"] == "designer-he-shell" ? "HE cannon" : "Tank cannon") + $": range {range:0.##}, {burst:0} rounds per burst." +
+				(p.Parts["weapon"] == "battle-tank-120mm" ? " 120mm: +20% damage; other allocations unchanged (provisional)." : "");
 		}
 	}
 }

@@ -71,7 +71,7 @@ class StockCombatExpansionTests(unittest.TestCase):
     def test_catalog_is_larger_than_any_one_saved_roster(self):
         counts = Counter(a.get('faction', 'gdi') for a in data()['assemblies'])
         self.assertEqual(counts, dict(gdi=15, nod=14, china=8, allies=13, soviet=25, scrin=14))
-        self.assertEqual(len(cases()), 168)
+        self.assertEqual(len(cases()), 192)
 
 
 if __name__ == '__main__':

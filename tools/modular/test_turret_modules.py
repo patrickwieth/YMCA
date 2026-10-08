@@ -28,7 +28,7 @@ class TurretModuleTests(unittest.TestCase):
             self.assertEqual(catalog['components'][id]['electric_kw'], 0)
             row = next(c for c in fixtures if c['parts']['carrier'] == id and c['parts']['generator'] == 'baseline-generator')
             self.assertEqual((row['values']['cost'], row['values']['hp'], row['values']['speed']), (price, hp, speed))
-        self.assertEqual(len(fixtures), 168)
+        self.assertEqual(len(fixtures), 192)
 
     def test_weapon_profiles_and_render_models_remain_distinct(self):
         r = recipes()

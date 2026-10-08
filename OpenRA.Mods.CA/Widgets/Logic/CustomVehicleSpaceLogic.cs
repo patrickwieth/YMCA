@@ -17,6 +17,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		readonly Func<CustomFactionProfile> profile;
 		readonly Dictionary<CustomVehicleDesign, CustomVehicleSpaceDemo> layouts = new();
 		string pendingRole, pendingPart;
+		CustomWeaponKind? originalWeaponKind;
 		public bool HasChassis => canvas.Layout.HasChassis;
 		public bool Ready => canvas.Layout.HasChassis && canvas.Layout.TurretWidth > 0;
 		public bool HasPlanningModules => layouts.Values.Any(l => l.Placements.Any(p => p.ModuleId is "battery" or "pdl" or "reflector"));
@@ -28,8 +29,18 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			canvas = widget.Get<CustomVehicleSpaceWidget>("LAYOUT");
 			var sidebar = widget.Get("SIDEBAR");
 			canvas.Notify = notify;
-			canvas.OnSelectionCancelled = () => { pendingRole = pendingPart = null; };
-			canvas.OnInstall = _ => pendingRole == null || commitPart(pendingRole, pendingPart);
+			canvas.OnSelectionCancelled = () =>
+			{
+				if (originalWeaponKind.HasValue) canvas.Layout.WeaponKind = originalWeaponKind.Value;
+				originalWeaponKind = null;
+				pendingRole = pendingPart = null;
+			};
+			canvas.OnInstall = _ =>
+			{
+				if (pendingRole != null && !commitPart(pendingRole, pendingPart)) return false;
+				originalWeaponKind = null;
+				return true;
+			};
 			var selection = widget.Get<LabelWidget>("SELECTION");
 			selection.GetText = () => !Ready ? "Choose a chassis, then a turret / mount." : canvas.Selected == null ?
 				"Pick a part on the left, then drop it into the grid." :
@@ -112,6 +123,11 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			void Pick(string module, string role, string part)
 			{
 				canvas.Choose(module); pendingRole = role; pendingPart = part;
+				if (role == "weapon")
+				{
+					originalWeaponKind = canvas.Layout.WeaponKind;
+					canvas.Layout.WeaponKind = CustomWeaponSocket.ForParts(profile().Parts["carrier"], part);
+				}
 				if (role != null)
 				{
 					// The compiler has one component per native role. Picking a replacement moves that block.
@@ -167,7 +183,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			widget.AddChild(new CustomVehicleSpaceCursorWidget { Bounds = new WidgetBounds(0, 0, widget.Bounds.Width, widget.Bounds.Height), Canvas = canvas });
 		}
 
-		CustomWeaponKind WeaponKind() => CustomWeaponSocket.ForCarrier(profile().Parts["carrier"]);
+		CustomWeaponKind WeaponKind() => CustomWeaponSocket.ForParts(profile().Parts["carrier"], profile().Parts["weapon"]);
 
 		CustomVehicleSilhouetteKind Silhouette() => CustomVehicleSilhouette.ForActor(
 			compiler.PreviewActor(profile()), compiler.IsNativeHover(profile()));

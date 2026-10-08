@@ -324,7 +324,8 @@ namespace OpenRA.Mods.CA.Modular
 				var secondary = slot++ != 0;
 				var reload = N(carrier, secondary ? "secondary_reload_ticks" : "reload_ticks");
 				var range = N(weapon, secondary ? "secondary_range_cells" : "range_cells");
-				var damage = N(ammo, secondary ? "secondary_damage" : "damage");
+				var damage = N(ammo, secondary ? "secondary_damage" : "damage") *
+					(p.Parts["weapon"] == "battle-tank-120mm" ? 1.2 : 1);
 				var burst = N(carrier, "burst");
 				if (reload < 1 || reload % 1 != 0 || burst < 1 || burst % 1 != 0 || damage < 0 || range <= 0)
 					throw new InvalidDataException("Ungueltige Waffenwerte.");

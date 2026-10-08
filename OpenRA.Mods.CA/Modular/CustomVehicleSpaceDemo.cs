@@ -30,12 +30,13 @@ namespace OpenRA.Mods.CA.Modular
 		public bool Heavy { get; private set; }
 		public CustomVehicleSilhouetteKind Silhouette { get; set; }
 		public CustomWeaponKind WeaponKind { get; set; }
+		public int WeaponWidth => WeaponKind is CustomWeaponKind.SonicEmitter or CustomWeaponKind.BattleTank120mm ? 5 : 4;
 		public CustomWeaponSocket WeaponSocket => TurretWidth == 0 ? null : WeaponKind == CustomWeaponKind.SonicEmitter
 			? new CustomWeaponSocket(WeaponKind, 0, 0, 5, 1)
-			: new CustomWeaponSocket(WeaponKind, WeaponKind == CustomWeaponKind.BattleTankCannon ? TurretWidth : TurretWidth - 1, 1, 4, 1);
+			: new CustomWeaponSocket(WeaponKind, WeaponKind is CustomWeaponKind.BattleTankCannon or CustomWeaponKind.BattleTank120mm ? TurretWidth : TurretWidth - 1, 1, WeaponWidth, 1);
 		public Module ModuleFor(string id) => id != "weapon" ? Definition(id) : Definition(id) with
 		{
-			Label = CustomWeaponSocket.Label(WeaponKind), Width = WeaponKind == CustomWeaponKind.SonicEmitter ? 5 : 4, Height = 1
+			Label = CustomWeaponSocket.Label(WeaponKind), Width = WeaponWidth, Height = 1
 		};
 		public bool ContainsCell(bool turret, int x, int y) => x >= 0 && y >= 0 &&
 			(x < (turret ? TurretWidth : HullWidth) && y < (turret ? TurretHeight : HullHeight) ||

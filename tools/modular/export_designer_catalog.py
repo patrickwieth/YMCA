@@ -34,6 +34,7 @@ def assemblies():
         frame('designer-mlrs-hull', ['designer-mlrs-gear'], ['diesel', 'diesel-large'],
               'light', 'designer-rocket-mount', 'designer-rockets', ['designer-rocket-payload']),
     ] + additional_assemblies() + gdi_heavy.additional_assemblies() + nod.additional_assemblies() + china.additional_assemblies() + allies.additional_assemblies() + soviet.additional_assemblies() + scrin.additional_assemblies() + nod_combat.additional_assemblies() + china_combat.additional_assemblies() + stock.additional_assemblies()
+    result[0]['options']['weapon'].append('battle-tank-120mm')
     for assembly in result:
         assembly['options']['running_gear'] = [gear.canonical(k) for k in assembly['options']['running_gear']]
         hull = assembly['options']['chassis'][0]
@@ -90,6 +91,10 @@ def data():
     turrets.extend_parts(parts)
     parts['gdi-battle-hull']['allowed_turret_classes'] = ['medium-tank']
     parts['medium-cannon-mount']['turret_class'] = 'medium-tank'
+    parts['medium-cannon-mount']['weapons'].append('battle-tank-120mm')
+    parts['battle-tank-120mm'] = copy.deepcopy(parts['medium-cannon'])
+    parts['battle-tank-120mm'].update(display_name='120mm Smoothbore Cannon', factions=['gdi'],
+        damage_percent=120, note='Reviewed GDI Battle Tank alternative: +20% direct damage, 5 external grid cells. Other allocations provisionally unchanged from 105mm.')
     apply_english_labels(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}
@@ -102,8 +107,9 @@ def data():
         hull['chassis_class'] = 'superheavy' if any(k in ('tracks-superheavy', 'designer-mk2-legs') for k in choices['running_gear']) or choices['chassis'][0] == 'stock-hexapod-hull' else 'standard'
         hull['allowed']['drive'] = choices['drive'][:]
         hull['allowed']['carrier'] = choices['carrier'][:]
-        allowed = weapon_ammo.setdefault(choices['weapon'][0], [])
-        allowed.extend(a for a in choices['ammunition'] if a not in allowed)
+        for weapon in choices['weapon']:
+            allowed = weapon_ammo.setdefault(weapon, [])
+            allowed.extend(a for a in choices['ammunition'] if a not in allowed)
     for weapon, ammo in weapon_ammo.items():
         parts[weapon]['ammunition'] = ammo
     return dict(schema=1, alpha=catalog['alpha'], credits_per_cp=catalog['credits_per_cp'], options=options, components=parts,

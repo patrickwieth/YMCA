@@ -36,11 +36,21 @@ The actual weapon dropdown still uses `CompatibleOptions` and the native compile
 shapes do not admit arbitrary weapon/turret combinations, change weapon values, add firing channels
 or save grid placements. Current layouts represent one bound weapon package per mount.
 
-**Agreed next weapon variant:** a 120mm Smoothbore Cannon for the Battle Tank Cannon Turret,
-with one additional forward cell (5×1), not an extra interior slot. This is not yet selectable:
-its increased damage and other provisional allocations need to be defined before adding a reviewed
-compiler binding. Do not infer changed caliber or damage from the existing stock weapon's internal
-`120mm` ID; the existing 105mm display designation retains its original package.
+**Implemented alternative:** the **120mm Smoothbore Cannon** (`battle-tank-120mm`) is selectable
+on the GDI Battle Tank only. Its 5×1 footprint starts at the same external anchor as the standard
+105mm's 4×1 footprint, extending one cell farther forward without consuming another interior cell.
+Picking it previews the longer footprint; cancelling restores the previous geometry and leaves
+configured parts untouched. Dropping commits the selected variant through the native compiler.
+
+The user-approved provisional increase is **+20% primary damage**, for both existing AP and HE
+ammunition. Reload, range, burst, projectile, versus tables and effects remain inherited/unchanged.
+Price, mass, electricity, tech and catalog points provisionally equal the 105mm allocations; they
+have not been independently rebalanced. Shared Challenger/Soviet weapons do not gain this option.
+The 105mm remains the default, existing saved profiles and frozen maps remain unchanged, and the
+original actor preview still uses stock artwork (the extended barrel is a grid schematic).
+The designer fixture now has 192 combinations instead of 168; no broad calibration/Excel changes.
+Do not infer caliber from the stock weapon's internal `120mm` ID: both designer variants inherit
+that original package (or `120mmHEAT`), with only the selected alternative's damage increased.
 
 **Still pending:** Mammoth Mk. II's single four-legged platform with two independent cannon sockets
 and one missile-package socket, and further source-specific socket definitions. Its stock railgun

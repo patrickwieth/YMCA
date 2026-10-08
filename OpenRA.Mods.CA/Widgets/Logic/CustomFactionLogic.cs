@@ -138,7 +138,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					};
 					var names = new[] { "Chassis", "Running gear", "Engine", "Generator", "Armor", "Turret", "Weapon", "Ammunition" };
 					for (var i = 0; i < CustomFactionDesign.Roles.Length; i++) values.Add((names[i], compiler.Label(p.Parts[CustomFactionDesign.Roles[i]])));
-					values.Add(("Original weapon / ability package", compiler.WeaponSummary(p)));
+					values.Add(("Weapon / ability package", compiler.WeaponSummary(p)));
 					Properties(values);
 					valid = true;
 					if (edited) message = "Unsaved changes. All " + roster.Designs.Count + " designs will be included in the test game.";
