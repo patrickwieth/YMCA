@@ -30,6 +30,8 @@ namespace OpenRA.Mods.CA.Modular
 		public bool Heavy { get; private set; }
 		public CustomVehicleSilhouetteKind Silhouette { get; set; }
 		public CustomWeaponKind WeaponKind { get; set; }
+		public string AmmunitionId { get; set; }
+		public int AmmunitionWidth => AmmunitionId is "medium-tank-shell" or "designer-he-shell" ? 2 : 1;
 		public int WeaponWidth => WeaponKind is CustomWeaponKind.SonicEmitter or CustomWeaponKind.BattleTank120mm ? 5 : 4;
 		public CustomWeaponSocket WeaponSocket => TurretWidth == 0 ? null : WeaponKind == CustomWeaponKind.SonicEmitter
 			? new CustomWeaponSocket(WeaponKind, 0, 0, 5, 1)
@@ -38,9 +40,11 @@ namespace OpenRA.Mods.CA.Modular
 		// Mount geometry is fixed. The larger breech consumes an existing interior cell.
 		public CustomWeaponSocket WeaponFootprint => WeaponSocket == null ? null : WeaponKind == CustomWeaponKind.BattleTank120mm
 			? new CustomWeaponSocket(WeaponKind, WeaponSocket.X - 1, WeaponSocket.Y, 5, 1) : WeaponSocket;
-		public Module ModuleFor(string id) => id != "weapon" ? Definition(id) : Definition(id) with
+		public Module ModuleFor(string id) => id switch
 		{
-			Label = CustomWeaponSocket.Label(WeaponKind), Width = WeaponWidth, Height = 1
+			"weapon" => Definition(id) with { Label = CustomWeaponSocket.Label(WeaponKind), Width = WeaponWidth, Height = 1 },
+			"ammo" => Definition(id) with { Width = AmmunitionWidth },
+			_ => Definition(id)
 		};
 		public bool ContainsCell(bool turret, int x, int y) => x >= 0 && y >= 0 &&
 			(x < (turret ? TurretWidth : HullWidth) && y < (turret ? TurretHeight : HullHeight) ||
@@ -80,7 +84,7 @@ namespace OpenRA.Mods.CA.Modular
 			Place("armor", false, 0, 0, false);
 			Place("weapon", true, WeaponFootprint.X, WeaponFootprint.Y, false);
 			Place("ammo", true, 0, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
-			Place("pdl", true, 1, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
+			Place("pdl", true, AmmunitionWidth, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
 		}
 
 		public void SetTurret(int width)
@@ -106,8 +110,9 @@ namespace OpenRA.Mods.CA.Modular
 
 		public static Module Definition(string id) => Modules.FirstOrDefault(m => m.Id == id);
 		public static (int Width, int Height) Size(Module module, bool rotated) => rotated ? (module.Height, module.Width) : (module.Width, module.Height);
-		public Placement At(bool turret, int x, int y) => placements.FirstOrDefault(p =>
+		public Placement At(bool turret, int x, int y, int? ignoredId = null) => placements.FirstOrDefault(p =>
 		{
+			if (p.Id == ignoredId) return false;
 			var size = Size(ModuleFor(p.ModuleId), p.Rotated);
 			return p.InTurret == turret && x >= p.X && y >= p.Y && x < p.X + size.Width && y < p.Y + size.Height;
 		});
@@ -133,8 +138,8 @@ namespace OpenRA.Mods.CA.Modular
 						if (zone != Zone.Weapon && zone != Zone.Ammunition) return false;
 					}
 					else if (module.Mount != Zone.Any && zone != module.Mount) return false;
-					var occupant = At(turret, x + dx, y + dy);
-					if (occupant != null && occupant.Id != movingId) return false;
+					var occupant = At(turret, x + dx, y + dy, movingId);
+					if (occupant != null) return false;
 				}
 			return true;
 		}

@@ -17,7 +17,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		readonly Func<CustomFactionProfile> profile;
 		readonly Dictionary<CustomVehicleDesign, CustomVehicleSpaceDemo> layouts = new();
 		string pendingRole, pendingPart;
-		CustomWeaponKind? originalWeaponKind;
+		(CustomWeaponKind Weapon, string Ammunition)? originalEquipmentGeometry;
 		public bool HasChassis => canvas.Layout.HasChassis;
 		public bool Ready => canvas.Layout.HasChassis && canvas.Layout.TurretWidth > 0;
 		public bool HasPlanningModules => layouts.Values.Any(l => l.Placements.Any(p => p.ModuleId is "battery" or "pdl" or "reflector"));
@@ -31,14 +31,18 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			canvas.Notify = notify;
 			canvas.OnSelectionCancelled = () =>
 			{
-				if (originalWeaponKind.HasValue) canvas.Layout.WeaponKind = originalWeaponKind.Value;
-				originalWeaponKind = null;
+				if (originalEquipmentGeometry is { } original)
+				{
+					canvas.Layout.WeaponKind = original.Weapon;
+					canvas.Layout.AmmunitionId = original.Ammunition;
+				}
+				originalEquipmentGeometry = null;
 				pendingRole = pendingPart = null;
 			};
 			canvas.OnInstall = _ =>
 			{
 				if (pendingRole != null && !commitPart(pendingRole, pendingPart)) return false;
-				originalWeaponKind = null;
+				originalEquipmentGeometry = null;
 				return true;
 			};
 			var selection = widget.Get<LabelWidget>("SELECTION");
@@ -89,6 +93,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						canvas.Cancel(); pendingRole = pendingPart = null;
 						canvas.Layout.Silhouette = Silhouette();
 						canvas.Layout.WeaponKind = WeaponKind();
+						canvas.Layout.AmmunitionId = profile().Parts["ammunition"];
 						canvas.Layout.SetChassis(LargeSchematic());
 						notify("Chassis selected. Choose its compatible turret / mount next.");
 					});
@@ -109,6 +114,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						if (!commitPart("carrier", id)) return;
 						canvas.Cancel(); pendingRole = pendingPart = null;
 						canvas.Layout.WeaponKind = WeaponKind();
+						canvas.Layout.AmmunitionId = profile().Parts["ammunition"];
 						if (!Ready) canvas.Layout.LoadStockConfiguration(canvas.Layout.Heavy);
 						else canvas.Layout.SetTurret(5);
 						notify("Stock parts arranged. Pick up a replacement from the sidebar or move a block.");
@@ -123,10 +129,11 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			void Pick(string module, string role, string part)
 			{
 				canvas.Choose(module); pendingRole = role; pendingPart = part;
-				if (role == "weapon")
+				if (role is "weapon" or "ammunition")
 				{
-					originalWeaponKind = canvas.Layout.WeaponKind;
-					canvas.Layout.WeaponKind = CustomWeaponSocket.ForParts(profile().Parts["carrier"], part);
+					originalEquipmentGeometry = (canvas.Layout.WeaponKind, canvas.Layout.AmmunitionId);
+					if (role == "weapon") canvas.Layout.WeaponKind = CustomWeaponSocket.ForParts(profile().Parts["carrier"], part);
+					else canvas.Layout.AmmunitionId = part;
 				}
 				if (role != null)
 				{
@@ -209,7 +216,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			canvas.Cancel(); pendingRole = pendingPart = null;
 			if (!layouts.TryGetValue(design, out var layout))
 			{
-				layouts.Add(design, layout = new CustomVehicleSpaceDemo { Silhouette = Silhouette(), WeaponKind = WeaponKind() });
+				layouts.Add(design, layout = new CustomVehicleSpaceDemo { Silhouette = Silhouette(), WeaponKind = WeaponKind(), AmmunitionId = profile().Parts["ammunition"] });
 				if (restore)
 				{
 					layout.LoadStockConfiguration(LargeSchematic());
@@ -217,6 +224,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 			layout.Silhouette = Silhouette();
 			layout.WeaponKind = WeaponKind();
+			layout.AmmunitionId = profile().Parts["ammunition"];
 			canvas.Layout = layout;
 		}
 	}

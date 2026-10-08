@@ -19,6 +19,10 @@ itself fills its red socket cells**, including while picked up. All cells remain
   Rotating these horizontal weapons produces an invalid vertical fit. Cancel preserves the original.
 - Hovering any cell of the matching socket snaps a held weapon to the socket origin. The protruding
   cells are rendered, hit-tested and pickable, just like the cells inside the turret.
+- Standard tank shells (`medium-tank-shell`) and high-explosive shells (`designer-he-shell`) now
+  occupy **2×2 cells**, including held/rotated footprints and restored stock layouts. Other ammunition
+  keeps its existing 1×2 allocation. A 2×2 shell block cannot overlap the 120mm's interior breech;
+  ammunition capacity, damage, price and mass are unchanged.
 - Ammunition uses only violet interior cells. Battery/PDL retain their color exception inside a
   container, but cannot occupy protruding weapon-only cells. They can block a weapon if placed over
   the in-body part of its socket; collision checks still apply.
