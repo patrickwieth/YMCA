@@ -362,6 +362,7 @@ namespace OpenRA.Mods.CA.Modular
 		{
 			"mini" => "Mini",
 			"medium" => "Medium Turret",
+			"medium-tank" => "Medium Tank Turret",
 			"heavy-walker" => "Heavy Walker",
 			"super-heavy" => "Super Heavy",
 			_ => "Native mount (unclassified)"

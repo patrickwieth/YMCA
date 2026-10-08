@@ -362,8 +362,10 @@ namespace OpenRA.Mods.CA.Widgets
 				}
 				else
 				{
+					var externalSocket = Layout.WeaponSocket.X >= Layout.TurretWidth;
 					Polygon(metal, new int2(128, bottom), new int2(132, 44), new int2(158, 18),
-						new int2(tw + 146, 18), new int2(tw + 178, 51), new int2(tw + 180, bottom - 10), new int2(tw + 156, bottom + 6));
+						new int2(tw + 146, 18), new int2(tw + (externalSocket ? 156 : 178), 51),
+						new int2(tw + (externalSocket ? 156 : 180), bottom - 10), new int2(tw + 156, bottom + 6));
 					Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
 					Ellipse(169, bottom + 2, 86, 16, metal);
 				}

@@ -8,6 +8,7 @@ public class DesignerTurretClassTests
 {
     static string Catalog => File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "designer-catalog.json"));
 
+    [TestCase("gdi-battle-hull", "medium-cannon-mount", "Medium Tank Turret", "Battle Tank Cannon Turret")]
     [TestCase("stock-gdrn-hull", "mini-turret-mount", "Mini", "Mini Turret Mount")]
     [TestCase("designer-hmlrs-hull", "designer-hmlrs-mount", "Medium Turret", "Dual Missile Launcher")]
     [TestCase("designer-marv-hull", "designer-marv-mount", "Super Heavy", "Triple Ion Cannon")]

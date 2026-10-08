@@ -88,6 +88,8 @@ def data():
     china_combat.extend_parts(parts)
     stock.extend_parts(parts)
     turrets.extend_parts(parts)
+    parts['gdi-battle-hull']['allowed_turret_classes'] = ['medium-tank']
+    parts['medium-cannon-mount']['turret_class'] = 'medium-tank'
     apply_english_labels(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}

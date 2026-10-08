@@ -32,7 +32,7 @@ namespace OpenRA.Mods.CA.Modular
 		public CustomWeaponKind WeaponKind { get; set; }
 		public CustomWeaponSocket WeaponSocket => TurretWidth == 0 ? null : WeaponKind == CustomWeaponKind.SonicEmitter
 			? new CustomWeaponSocket(WeaponKind, 0, 0, 5, 1)
-			: new CustomWeaponSocket(WeaponKind, TurretWidth - 1, 1, 4, 1);
+			: new CustomWeaponSocket(WeaponKind, WeaponKind == CustomWeaponKind.BattleTankCannon ? TurretWidth : TurretWidth - 1, 1, 4, 1);
 		public Module ModuleFor(string id) => id != "weapon" ? Definition(id) : Definition(id) with
 		{
 			Label = CustomWeaponSocket.Label(WeaponKind), Width = WeaponKind == CustomWeaponKind.SonicEmitter ? 5 : 4, Height = 1

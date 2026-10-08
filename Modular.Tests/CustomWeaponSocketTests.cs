@@ -35,6 +35,26 @@ public class CustomWeaponSocketTests
     }
 
     [Test]
+    public void BattleTankHasFourFullyExternalCellsAndSeparateTurretAndWeaponNames()
+    {
+        var kind = CustomWeaponSocket.ForCarrier("medium-cannon-mount");
+        var layout = Layout(kind);
+        Assert.That(kind, Is.EqualTo(CustomWeaponKind.BattleTankCannon));
+        Assert.That(layout.WeaponSocket.X, Is.EqualTo(layout.TurretWidth));
+        Assert.That(layout.WeaponSocket.Width, Is.EqualTo(4));
+        for (var x = 5; x < 9; x++)
+            Assert.That(layout.ZoneAt(true, x, 1), Is.EqualTo(Zone.Weapon));
+        Assert.That(layout.ZoneAt(true, 4, 1), Is.EqualTo(Zone.Ammunition));
+        Assert.That(layout.Place("weapon", true, 4, 1, false), Is.False);
+        Assert.That(layout.Place("weapon", true, 5, 1, false), Is.True);
+        Assert.That(layout.At(true, 8, 1)?.ModuleId, Is.EqualTo("weapon"));
+        Assert.That(layout.ContainsCell(true, 9, 1), Is.False);
+        var c = new CustomFactionDesign(File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "designer-catalog.json")));
+        Assert.That(c.Label("medium-cannon-mount"), Is.EqualTo("Battle Tank Cannon Turret"));
+        Assert.That(c.Label("medium-cannon"), Is.EqualTo("105mm Smoothbore Cannon"));
+    }
+
+    [Test]
     public void OnlyWeaponCanUseProtrudingCells()
     {
         var layout = Layout(CustomWeaponKind.Cannon);

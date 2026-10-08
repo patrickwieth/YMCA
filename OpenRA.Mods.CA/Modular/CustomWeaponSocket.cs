@@ -1,7 +1,7 @@
 namespace OpenRA.Mods.CA.Modular
 {
 	// Editor geometry only. Concrete weapon compatibility still comes from the native binding.
-	public enum CustomWeaponKind { Cannon, TwinCannon, DualGatling, TripleIon, MissileLauncher, SonicEmitter, PrismEmitter }
+	public enum CustomWeaponKind { Cannon, BattleTankCannon, TwinCannon, DualGatling, TripleIon, MissileLauncher, SonicEmitter, PrismEmitter }
 
 	public sealed record CustomWeaponSocket(CustomWeaponKind Kind, int X, int Y, int Width, int Height)
 	{
@@ -10,6 +10,7 @@ namespace OpenRA.Mods.CA.Modular
 
 		public static CustomWeaponKind ForCarrier(string carrier) => carrier switch
 		{
+			"medium-cannon-mount" => CustomWeaponKind.BattleTankCannon,
 			"sonic-turret" => CustomWeaponKind.SonicEmitter,
 			"prism-turret" => CustomWeaponKind.PrismEmitter,
 			"dual-gatling-turret" => CustomWeaponKind.DualGatling,
@@ -21,6 +22,7 @@ namespace OpenRA.Mods.CA.Modular
 
 		public static string Label(CustomWeaponKind kind) => kind switch
 		{
+			CustomWeaponKind.BattleTankCannon => "105mm Smoothbore Cannon",
 			CustomWeaponKind.TwinCannon => "Twin cannons",
 			CustomWeaponKind.DualGatling => "Dual Gatling guns",
 			CustomWeaponKind.TripleIon => "Triple Ion Cannon",

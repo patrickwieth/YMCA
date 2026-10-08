@@ -5,7 +5,11 @@ itself fills its red socket cells**, including while picked up. All cells remain
 
 ## Geometry and input
 
-- The first forward socket is **4×1**, at turret-local `(4, 1)` for the 5-column turret: one cell
+- **Battle Tank Cannon Turret** belongs to **Medium Tank Turret**, admitted by the GDI Battle Tank Hull.
+  Its standard **105mm Smoothbore Cannon** uses **4×1 fully external cells**, starting at `(5, 1)`.
+  The turret silhouette stops at that boundary too. Carrier/weapon IDs and combat values are unchanged;
+  the shared Challenger binding retains the same carrier and gets its corrected labels and geometry.
+- Other initial forward sockets are **4×1**, at turret-local `(4, 1)` for the 5-column turret: one cell
   inside the body and three cells protruding forward. Only that row exists beyond the turret body;
   this does not create extra storage columns.
 - **Sonic Turret** uses a **5×1** socket at `(0, 0)`, entirely inside the top row. Ammunition restores
@@ -31,6 +35,12 @@ The right-hand original actor preview remains the visual reference.
 The actual weapon dropdown still uses `CompatibleOptions` and the native compiler. These grid
 shapes do not admit arbitrary weapon/turret combinations, change weapon values, add firing channels
 or save grid placements. Current layouts represent one bound weapon package per mount.
+
+**Agreed next weapon variant:** a 120mm Smoothbore Cannon for the Battle Tank Cannon Turret,
+with one additional forward cell (5×1), not an extra interior slot. This is not yet selectable:
+its increased damage and other provisional allocations need to be defined before adding a reviewed
+compiler binding. Do not infer changed caliber or damage from the existing stock weapon's internal
+`120mm` ID; the existing 105mm display designation retains its original package.
 
 **Still pending:** Mammoth Mk. II's single four-legged platform with two independent cannon sockets
 and one missile-package socket, and further source-specific socket definitions. Its stock railgun
