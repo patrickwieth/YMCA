@@ -49,23 +49,56 @@ public class BattleTankCannonTests
     }
 
     [Test]
-    public void LargerWeaponAddsOneExternalCellAndCanReturnToTheOldFootprint()
+    public void LargerWeaponConsumesInteriorSpaceWithoutChangingTurretOrSocket()
     {
-        var layout = new CustomVehicleSpaceDemo { WeaponKind = CustomWeaponSocket.ForParts("medium-cannon-mount", "medium-cannon") };
+        var layout = new CustomVehicleSpaceDemo { WeaponKind = CustomWeaponKind.BattleTankCannon };
         layout.LoadStockConfiguration(false);
         var original = layout.Placements.Single(p => p.ModuleId == "weapon");
-        Assert.That(layout.ContainsCell(true, 9, 1), Is.False);
-        layout.WeaponKind = CustomWeaponSocket.ForParts("medium-cannon-mount", "battle-tank-120mm");
-        Assert.That(layout.WeaponSocket.X, Is.EqualTo(5));
+        var socket = layout.WeaponSocket;
+        var zones = (from y in Enumerable.Range(-1, 6) from x in Enumerable.Range(-1, 12)
+                     select layout.ZoneAt(true, x, y)).ToArray();
+        var used = layout.Used(true);
+        layout.WeaponKind = CustomWeaponKind.BattleTank120mm;
+        Assert.That(layout.WeaponSocket, Is.EqualTo(socket));
+        Assert.That(layout.TurretWidth, Is.EqualTo(5));
+        Assert.That(layout.TurretHeight, Is.EqualTo(3));
+        Assert.That((from y in Enumerable.Range(-1, 6) from x in Enumerable.Range(-1, 12)
+                     select layout.ZoneAt(true, x, y)).ToArray(), Is.EqualTo(zones));
+        Assert.That(layout.ContainsCell(true, 9, 1), Is.False, "no new outside cell");
         Assert.That(layout.ModuleFor("weapon").Width, Is.EqualTo(5));
-        Assert.That(layout.ContainsCell(true, 9, 1), Is.True);
-        Assert.That(layout.At(true, 9, 1)?.Id, Is.EqualTo(original.Id));
-        Assert.That(layout.Place("battery", true, 9, 1, false), Is.False);
-        Assert.That(layout.CanPlace("weapon", true, 5, 1, false, original.Id), Is.True);
-        Assert.That(layout.CanPlace("weapon", true, 5, 1, true, original.Id), Is.False);
+        Assert.That(layout.WeaponFootprint.X, Is.EqualTo(4));
+        Assert.That(layout.CanPlace("weapon", true, 5, 1, false, original.Id), Is.False);
+        Assert.That(layout.CanPlace("weapon", true, 4, 1, true, original.Id), Is.False);
+        Assert.That(layout.Place("weapon", true, 4, 1, false, original.Id), Is.True);
+        Assert.That(layout.At(true, 4, 1)?.Id, Is.EqualTo(original.Id));
+        Assert.That(layout.At(true, 8, 1)?.Id, Is.EqualTo(original.Id));
+        Assert.That(layout.Used(true), Is.EqualTo(used + 1));
+        Assert.That(layout.Place("battery", true, 4, 0, false), Is.False, "breech occupies interior cell");
         layout.WeaponKind = CustomWeaponKind.BattleTankCannon;
-        Assert.That(layout.ContainsCell(true, 9, 1), Is.False);
-        Assert.That(layout.ModuleFor("weapon").Width, Is.EqualTo(4));
-        Assert.That(layout.Placements.Single(p => p.ModuleId == "weapon"), Is.EqualTo(original));
+        Assert.That(layout.Place("weapon", true, 5, 1, false, original.Id), Is.True);
+        Assert.That(layout.At(true, 4, 1), Is.Null);
+        Assert.That(layout.Place("battery", true, 4, 0, false), Is.True, "105mm frees the interior cell");
+    }
+
+    [TestCase("battery")]
+    [TestCase("pdl")]
+    [TestCase("ammo")]
+    public void OccupiedBreechSpaceRejectsUpgradeWithoutRemovingAnything(string module)
+    {
+        var layout = new CustomVehicleSpaceDemo { WeaponKind = CustomWeaponKind.BattleTankCannon };
+        layout.LoadStockConfiguration(false);
+        Assert.That(layout.Place(module, true, 4, 0, false), Is.True);
+        var original = layout.Placements.Single(p => p.ModuleId == "weapon");
+        var before = layout.Placements.ToArray();
+        layout.WeaponKind = CustomWeaponKind.BattleTank120mm;
+        Assert.That(layout.Place("weapon", true, 4, 1, false, original.Id), Is.False);
+        Assert.That(layout.Placements, Is.EqualTo(before));
+        // Same cancellation path as the sidebar: restore kind, keep original placements.
+        layout.WeaponKind = CustomWeaponKind.BattleTankCannon;
+        foreach (var p in layout.Placements)
+            Assert.That(layout.CanPlace(p.ModuleId, p.InTurret, p.X, p.Y, p.Rotated, p.Id), Is.True);
+        layout.Remove(layout.At(true, 4, 1).Id);
+        layout.WeaponKind = CustomWeaponKind.BattleTank120mm;
+        Assert.That(layout.Place("weapon", true, 4, 1, false, original.Id), Is.True);
     }
 }

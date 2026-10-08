@@ -94,7 +94,7 @@ def data():
     parts['medium-cannon-mount']['weapons'].append('battle-tank-120mm')
     parts['battle-tank-120mm'] = copy.deepcopy(parts['medium-cannon'])
     parts['battle-tank-120mm'].update(display_name='120mm Smoothbore Cannon', factions=['gdi'],
-        damage_percent=120, note='Reviewed GDI Battle Tank alternative: +20% direct damage, 5 external grid cells. Other allocations provisionally unchanged from 105mm.')
+        damage_percent=120, note='Reviewed GDI Battle Tank alternative: +20% direct damage, 4 external cells plus one interior breech cell. Other allocations provisionally unchanged from 105mm.')
     apply_english_labels(parts)
     # Shared weapons accept the union; individual assemblies still restrict their own payloads.
     weapon_ammo = {}

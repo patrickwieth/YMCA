@@ -14,7 +14,8 @@ itself fills its red socket cells**, including while picked up. All cells remain
   this does not create extra storage columns.
 - **Sonic Turret** uses a **5×1** socket at `(0, 0)`, entirely inside the top row. Ammunition restores
   below it, not over the emitter.
-- Weapons must match the **entire socket footprint and anchor**, not merely touch its red edge.
+- Weapons must match their **mount-specific footprint and anchor**, not merely touch a red edge.
+  Socket geometry is fixed; a larger weapon may require additional occupied cells inside the turret.
   Rotating these horizontal weapons produces an invalid vertical fit. Cancel preserves the original.
 - Hovering any cell of the matching socket snaps a held weapon to the socket origin. The protruding
   cells are rendered, hit-tested and pickable, just like the cells inside the turret.
@@ -37,10 +38,13 @@ shapes do not admit arbitrary weapon/turret combinations, change weapon values, 
 or save grid placements. Current layouts represent one bound weapon package per mount.
 
 **Implemented alternative:** the **120mm Smoothbore Cannon** (`battle-tank-120mm`) is selectable
-on the GDI Battle Tank only. Its 5×1 footprint starts at the same external anchor as the standard
-105mm's 4×1 footprint, extending one cell farther forward without consuming another interior cell.
-Picking it previews the longer footprint; cancelling restores the previous geometry and leaves
-configured parts untouched. Dropping commits the selected variant through the native compiler.
+on the GDI Battle Tank only. **Turret geometry and its four external socket cells remain identical**
+when switching weapons. The 105mm occupies `(5, 1)` through `(8, 1)`. The 120mm occupies `(4, 1)`
+through `(8, 1)`: its fifth cell is the breech **inside the turret**, consuming space otherwise
+available to ammunition, batteries or PDL. It does not add exterior cells or move the turret outline.
+Picking it previews that interior footprint; an occupied breech cell prevents the drop and native
+part commit. Cancel restores the original weapon footprint and all placements. Switching back to
+105mm frees the interior cell. Stock reconstruction restores the 120mm at its correct inward anchor.
 
 The user-approved provisional increase is **+20% primary damage**, for both existing AP and HE
 ammunition. Reload, range, burst, projectile, versus tables and effects remain inherited/unchanged.

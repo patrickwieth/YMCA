@@ -88,8 +88,8 @@ namespace OpenRA.Mods.CA.Widgets
 
 		void SnapWeaponSocket(bool turret, ref int x, ref int y)
 		{
-			if (Selected == "weapon" && turret && Layout.WeaponSocket?.Contains(x, y) == true)
-			{ x = Layout.WeaponSocket.X; y = Layout.WeaponSocket.Y; }
+			if (Selected == "weapon" && turret && Layout.WeaponFootprint?.Contains(x, y) == true)
+			{ x = Layout.WeaponFootprint.X; y = Layout.WeaponFootprint.Y; }
 		}
 
 		public override bool HandleKeyPress(KeyInput input)
@@ -122,7 +122,7 @@ namespace OpenRA.Mods.CA.Widgets
 			{
 				SnapWeaponSocket(turret, ref x, ref y);
 				if (!Layout.CanPlace(Selected, turret, x, y, Rotated, Moving))
-					Notify(Selected == "weapon" ? "Weapon must fit its red socket exactly; check orientation and occupied cells." :
+					Notify(Selected == "weapon" ? "Weapon cannot fit: check mounting position, orientation and free interior breech space." :
 						"Cannot place here: check the colored zone, free space and orientation.");
 				else if (OnInstall(Selected))
 				{

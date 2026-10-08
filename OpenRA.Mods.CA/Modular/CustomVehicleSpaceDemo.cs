@@ -33,7 +33,11 @@ namespace OpenRA.Mods.CA.Modular
 		public int WeaponWidth => WeaponKind is CustomWeaponKind.SonicEmitter or CustomWeaponKind.BattleTank120mm ? 5 : 4;
 		public CustomWeaponSocket WeaponSocket => TurretWidth == 0 ? null : WeaponKind == CustomWeaponKind.SonicEmitter
 			? new CustomWeaponSocket(WeaponKind, 0, 0, 5, 1)
-			: new CustomWeaponSocket(WeaponKind, WeaponKind is CustomWeaponKind.BattleTankCannon or CustomWeaponKind.BattleTank120mm ? TurretWidth : TurretWidth - 1, 1, WeaponWidth, 1);
+			: new CustomWeaponSocket(WeaponKind == CustomWeaponKind.BattleTank120mm ? CustomWeaponKind.BattleTankCannon : WeaponKind,
+				WeaponKind is CustomWeaponKind.BattleTankCannon or CustomWeaponKind.BattleTank120mm ? TurretWidth : TurretWidth - 1, 1, 4, 1);
+		// Mount geometry is fixed. The larger breech consumes an existing interior cell.
+		public CustomWeaponSocket WeaponFootprint => WeaponSocket == null ? null : WeaponKind == CustomWeaponKind.BattleTank120mm
+			? new CustomWeaponSocket(WeaponKind, WeaponSocket.X - 1, WeaponSocket.Y, 5, 1) : WeaponSocket;
 		public Module ModuleFor(string id) => id != "weapon" ? Definition(id) : Definition(id) with
 		{
 			Label = CustomWeaponSocket.Label(WeaponKind), Width = WeaponWidth, Height = 1
@@ -61,7 +65,7 @@ namespace OpenRA.Mods.CA.Modular
 			SetChassis(heavy); SetTurret(5);
 			Place("engine", false, 1, 1, false); Place("generator", false, Portrait ? 1 : 3, Portrait ? 3 : 1, false);
 			Place("gear", false, Portrait ? 0 : 1, HullHeight - 1, false); Place("armor", false, 0, 0, false);
-			Place("weapon", true, WeaponSocket.X, WeaponSocket.Y, false);
+			Place("weapon", true, WeaponFootprint.X, WeaponFootprint.Y, false);
 			Place("ammo", true, 0, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
 		}
 
@@ -74,7 +78,7 @@ namespace OpenRA.Mods.CA.Modular
 			Place("gear", false, Portrait ? 0 : 1, HullHeight - 1, false);
 			Place("battery", false, Portrait ? 1 : 5, Portrait ? 5 : 1, false);
 			Place("armor", false, 0, 0, false);
-			Place("weapon", true, WeaponSocket.X, WeaponSocket.Y, false);
+			Place("weapon", true, WeaponFootprint.X, WeaponFootprint.Y, false);
 			Place("ammo", true, 0, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
 			Place("pdl", true, 1, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
 		}
@@ -116,15 +120,19 @@ namespace OpenRA.Mods.CA.Modular
 			var size = Size(module, rotated);
 			if (module.Mount == Zone.Weapon)
 			{
-				// The whole weapon must match its socket; touching a red edge is not sufficient.
-				if (!turret || WeaponSocket?.Fits(x, y, size.Width, size.Height) != true) return false;
+				// Exact mount-specific fit, including any required breech space inside the turret.
+				if (!turret || WeaponFootprint?.Fits(x, y, size.Width, size.Height) != true) return false;
 			}
 			else if (x < 0 || y < 0 || x > (turret ? TurretWidth : HullWidth) - size.Width || y > (turret ? TurretHeight : HullHeight) - size.Height) return false;
 			for (var dy = 0; dy < size.Height; dy++)
 				for (var dx = 0; dx < size.Width; dx++)
 				{
 					var zone = ZoneAt(turret, x + dx, y + dy);
-					if (module.Mount != Zone.Any && zone != module.Mount) return false;
+					if (module.Mount == Zone.Weapon)
+					{
+						if (zone != Zone.Weapon && zone != Zone.Ammunition) return false;
+					}
+					else if (module.Mount != Zone.Any && zone != module.Mount) return false;
 					var occupant = At(turret, x + dx, y + dy);
 					if (occupant != null && occupant.Id != movingId) return false;
 				}
