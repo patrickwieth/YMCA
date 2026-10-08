@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using OpenRA.Graphics;
 using OpenRA.Mods.CA.Modular;
 using OpenRA.Mods.Common.Widgets;
@@ -77,13 +76,20 @@ namespace OpenRA.Mods.CA.Widgets
 			foreach (var t in new[] { false, true })
 			{
 				var o = t ? TurretOrigin : HullOrigin;
-				var w = t ? Layout.TurretWidth : Layout.HullWidth;
-				var h = t ? Layout.TurretHeight : Layout.HullHeight;
 				var cell = GridCell(t);
-				if (new Rectangle(o.X, o.Y, w * cell, h * cell).Contains(point))
-				{ turret = t; x = (point.X - o.X) / cell; y = (point.Y - o.Y) / cell; return true; }
+				if (point.X < o.X || point.Y < o.Y) continue;
+				var cx = (point.X - o.X) / cell;
+				var cy = (point.Y - o.Y) / cell;
+				if (Layout.ContainsCell(t, cx, cy))
+				{ turret = t; x = cx; y = cy; return true; }
 			}
 			turret = false; x = y = 0; return false;
+		}
+
+		void SnapWeaponSocket(bool turret, ref int x, ref int y)
+		{
+			if (Selected == "weapon" && turret && Layout.WeaponSocket?.Contains(x, y) == true)
+			{ x = Layout.WeaponSocket.X; y = Layout.WeaponSocket.Y; }
 		}
 
 		public override bool HandleKeyPress(KeyInput input)
@@ -114,8 +120,10 @@ namespace OpenRA.Mods.CA.Widgets
 			if (input.Button != MouseButton.Left) return true;
 			if (Selected != null)
 			{
+				SnapWeaponSocket(turret, ref x, ref y);
 				if (!Layout.CanPlace(Selected, turret, x, y, Rotated, Moving))
-					Notify("Cannot place here: check the colored zone, free space and orientation.");
+					Notify(Selected == "weapon" ? "Weapon must fit its red socket exactly; check orientation and occupied cells." :
+						"Cannot place here: check the colored zone, free space and orientation.");
 				else if (OnInstall(Selected))
 				{
 					Layout.Place(Selected, turret, x, y, Rotated, Moving);
@@ -130,24 +138,79 @@ namespace OpenRA.Mods.CA.Widgets
 			return true;
 		}
 
+		// The installed weapon itself occupies its red cells. No unrelated barrel is drawn
+		// outside the inventory anymore. Rotate the artwork with the held footprint.
+		void DrawWeapon(int x, int y, int width, int height, bool rotated)
+		{
+			var w = rotated ? height : width;
+			var h = rotated ? width : height;
+			var steel = Color.FromArgb(255, 116, 134, 140);
+			var light = Color.FromArgb(255, 186, 198, 181);
+			var shadow = Color.FromArgb(255, 22, 29, 34);
+			var energy = Color.FromArgb(255, 108, 218, 225);
+			void Part(int px, int py, int pw, int ph, Color color)
+			{
+				if (rotated) Fill(x + h - py - ph, y + px, ph, pw, color);
+				else Fill(x + px, y + py, pw, ph, color);
+			}
+			if (Layout.WeaponKind == CustomWeaponKind.SonicEmitter)
+			{
+				Part(4, 7, w - 8, 13, shadow);
+				for (var i = 0; i < 5; i++)
+				{
+					var px = i * Cell + 6;
+					Part(px, 4, 16, 18, steel); Part(px + 2, 5, 12, 2, light);
+					Part(px + 5, 10, 6, 9, energy);
+				}
+				return;
+			}
+			if (Layout.WeaponKind == CustomWeaponKind.MissileLauncher)
+			{
+				foreach (var py in new[] { 4, 15 })
+				{
+					Part(5, py, w - 15, 8, steel); Part(7, py, w - 19, 2, light);
+					Part(w - 19, py + 2, 10, 5, shadow); Part(w - 16, py + 3, 4, 3, light);
+					Part(19, py, 3, 8, shadow); Part(63, py, 3, 8, shadow);
+				}
+				return;
+			}
+			Part(4, 5, 24, 17, shadow); Part(6, 6, 19, 14, steel); Part(7, 6, 17, 2, light);
+			var barrels = Layout.WeaponKind == CustomWeaponKind.TripleIon ? new[] { 5, 12, 19 } :
+				Layout.WeaponKind is CustomWeaponKind.TwinCannon or CustomWeaponKind.DualGatling ? new[] { 7, 17 } : new[] { 12 };
+			foreach (var py in barrels)
+			{
+				Part(25, py - 1, w - 35, 5, shadow); Part(25, py, w - 37, 3, steel);
+				Part(26, py, w - 40, 1, light); Part(w - 15, py - 2, 10, 7, steel);
+				Part(w - 7, py, 2, 3, shadow);
+				if (Layout.WeaponKind is CustomWeaponKind.TripleIon or CustomWeaponKind.PrismEmitter)
+					Part(34, py + 1, w - 47, 2, energy);
+				if (Layout.WeaponKind == CustomWeaponKind.DualGatling)
+					for (var px = 37; px < w - 19; px += 13) Part(px, py - 1, 3, 5, light);
+			}
+		}
+
 		void Item(string id, bool rotated, int x, int y, Color border, bool held, int cell = Cell)
 		{
-			var m = CustomVehicleSpaceDemo.Definition(id);
+			var m = Layout.ModuleFor(id);
 			var size = CustomVehicleSpaceDemo.Size(m, rotated);
 			var w = size.Width * cell - 2;
 			var h = size.Height * cell - 2;
-			Fill(x, y, w, h, held ? Color.FromArgb(220, 35, 49, 56) : Color.FromArgb(255, 39, 55, 62));
+			Fill(x, y, w, h, id == "weapon" ? ZoneFill(Zone.Weapon) : held ? Color.FromArgb(220, 35, 49, 56) : Color.FromArgb(255, 39, 55, 62));
 			for (var iy = 0; iy < size.Height; iy++)
 				for (var ix = 0; ix < size.Width; ix++) Border(x + ix * cell, y + iy * cell, cell - 2, cell - 2, Tint(id));
 			Border(x, y, w, h, border);
-			var iconWidth = w >= 80 && h < 40 ? 36 : w - 6;
-			var hasIcon = CustomVehicleModuleIconWidget.DrawIcon(id,
-				new Rectangle(RenderOrigin.X + x + 3, RenderOrigin.Y + y + 3, iconWidth, h - 6));
-			if (!hasIcon || iconWidth == 36)
+			if (id == "weapon") DrawWeapon(x, y, w, h, rotated);
+			else
 			{
-				var offset = hasIcon ? 41 : 3;
-				var label = WidgetUtils.TruncateText(m.Label, w - offset - 3, Game.Renderer.Fonts["Small"]);
-				Text(label, x + offset, y + 2, Color.White);
+				var iconWidth = w >= 80 && h < 40 ? 36 : w - 6;
+				var hasIcon = CustomVehicleModuleIconWidget.DrawIcon(id,
+					new Rectangle(RenderOrigin.X + x + 3, RenderOrigin.Y + y + 3, iconWidth, h - 6));
+				if (!hasIcon || iconWidth == 36)
+				{
+					var offset = hasIcon ? 41 : 3;
+					var label = WidgetUtils.TruncateText(m.Label, w - offset - 3, Game.Renderer.Fonts["Small"]);
+					Text(label, x + offset, y + 2, Color.White);
+				}
 			}
 			if (held)
 			{
@@ -165,6 +228,7 @@ namespace OpenRA.Mods.CA.Widgets
 			var mouse = Viewport.LastMousePos - RenderOrigin;
 			if (HitGrid(mouse, out var turret, out var x, out var y))
 			{
+				SnapWeaponSocket(turret, ref x, ref y);
 				var o = turret ? TurretOrigin : HullOrigin;
 				var cell = GridCell(turret);
 				Item(Selected, Rotated, o.X + x * cell, o.Y + y * cell,
@@ -172,7 +236,7 @@ namespace OpenRA.Mods.CA.Widgets
 			}
 			else
 			{
-				var size = CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(Selected), Rotated);
+				var size = CustomVehicleSpaceDemo.Size(Layout.ModuleFor(Selected), Rotated);
 				var px = Math.Clamp(Viewport.LastMousePos.X + 14, window.Left, window.Right - size.Width * Cell);
 				var py = Math.Clamp(Viewport.LastMousePos.Y + 14, window.Top, window.Bottom - size.Height * Cell);
 				Item(Selected, Rotated, px - RenderOrigin.X, py - RenderOrigin.Y, Tint(Selected), true);
@@ -210,7 +274,6 @@ namespace OpenRA.Mods.CA.Widgets
 					Ellipse(42, 215, 25, 56, tire); Ellipse(hw + 76, 215, 25, 56, tire);
 					Fill(49, 229, 11, 26, metal); Fill(hw + 83, 229, 11, 26, metal);
 					Ellipse(hw + 91, 225, 16, 14, Color.FromArgb(255, 113, 176, 183));
-					Fill(hw + 98, 250, 29, 5, metal);
 					Ellipse(77, bottom + 31, hw - 6, 9, tire);
 					Fill(92, bottom + 18, hw - 38, 2, Color.FromArgb(255, 64, 105, 111));
 					break;
@@ -304,27 +367,21 @@ namespace OpenRA.Mods.CA.Widgets
 					Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
 					Ellipse(169, bottom + 2, 86, 16, metal);
 				}
-				foreach (var weapon in Layout.Placements.Where(p => p.InTurret && p.ModuleId == "weapon" && p.Id != Moving && !DroneBody))
-				{
-					var size = CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(weapon.ModuleId), weapon.Rotated);
-					var center = TurretOrigin.Y + weapon.Y * cell + size.Height * cell / 2;
-					var length = LightBody ? 48 : 90;
-					Fill(156 + tw + 8, center - (LightBody ? 3 : 7), length, LightBody ? 6 : 14, metal);
-					Fill(156 + tw + length + 2, center - (LightBody ? 5 : 11), 10, LightBody ? 10 : 22, ZoneColor(Zone.Weapon));
-				}
 				if (!DroneBody) Fill(LightBody ? 204 : 194, bottom + 12, LightBody ? 14 : 34, (Layout.Portrait ? 176 : 188) - bottom - 12, metal);
 				Text($"{(DroneBody ? "Mount" : "Turret")} {Layout.TurretWidth} x {Layout.TurretHeight}", 20, 48, Color.White);
 				Text($"{Layout.Used(true)} cells used", 20, 65, Color.White);
+				Text($"Socket {Layout.WeaponSocket.Width} x {Layout.WeaponSocket.Height}", 20, 82, ZoneColor(Zone.Weapon));
 			}
 			foreach (var t in new[] { false, true })
 			{
 				var o = t ? TurretOrigin : HullOrigin;
-				var w = t ? Layout.TurretWidth : Layout.HullWidth;
+				var w = t ? Math.Max(Layout.TurretWidth, Layout.WeaponSocket is { } socket ? socket.X + socket.Width : 0) : Layout.HullWidth;
 				var h = t ? Layout.TurretHeight : Layout.HullHeight;
 				var cell = GridCell(t);
 				for (var y = 0; y < h; y++)
 					for (var x = 0; x < w; x++)
 					{
+						if (!Layout.ContainsCell(t, x, y)) continue;
 						Fill(o.X + x * cell, o.Y + y * cell, cell - 2, cell - 2, ZoneFill(Layout.ZoneAt(t, x, y)));
 						Border(o.X + x * cell, o.Y + y * cell, cell - 2, cell - 2, ZoneColor(Layout.ZoneAt(t, x, y)));
 					}

@@ -23,7 +23,8 @@ antenna, turret ring and forward gun barrels. The turret docks above the hull. M
 [Class-specific silhouettes](faction-navigation.md#silhouettes) now replace the all-tank fallback for
 explicit walker, light vehicle, wheeled, motorcycle and native-hover bindings. Light-vehicle mounts
 have lighter outlines, but **every grid cell is 28×28**. Titan uses a 4×6 upright chassis and 5×4 turret.
-See [layout refinements](turret-layout-refinements.md) for class bindings and the pending fixed weapon sockets.
+See [layout refinements](turret-layout-refinements.md) for class bindings and
+[fixed weapon sockets](fixed-weapon-sockets.md) for the implemented forward barrels and internal Sonic emitter.
 These remain schematics, not exact reproductions of each stock actor or proof of arbitrary mixed art.
 
 - Select a component on the left to carry its multi-cell footprint at the cursor.
@@ -41,10 +42,10 @@ These remain schematics, not exact reproductions of each stock actor or proof of
 | Color | Zone | Rule |
 |---|---|---|
 | Yellow | Bottom hull row | Running gear is **4×1**, entirely in this row. |
-| Red | Right/front turret column | Weapons must touch the front edge; the rest of their footprint may extend into violet turret cells. Ammunition cannot use red cells. |
+| Red | Fixed weapon socket | Exact 4×1 forward fit (partly protruding), or Sonic's internal 5×1 top row. Weapons fill the socket, not arbitrary neighboring cells. Ammunition cannot use red cells. |
 | Blue | Hull top/front/rear perimeter | Armor strips fit only at the edge; rotate a 2×1 strip for vertical edges. Bottom cells remain reserved for running gear. |
 | Green | Hull interior | Engine and generator must fit entirely inside this zone. Both have green sidebar fields. |
-| Violet | All non-red turret cells | Ammunition belongs here, not in the hull or across the red weapon dock. |
+| Violet | Non-red turret interior | Ammunition belongs here, not in the hull, protruding socket or red cells. |
 
 **Free modules** (battery and PDL) ignore zone colors and fit in either hull or turret, including across
 zone boundaries. They still require free, in-bounds space and block other items normally. Generator is

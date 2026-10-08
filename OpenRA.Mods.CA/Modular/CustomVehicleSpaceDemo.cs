@@ -12,7 +12,7 @@ namespace OpenRA.Mods.CA.Modular
 		public sealed record Placement(int Id, string ModuleId, bool InTurret, int X, int Y, bool Rotated);
 		public static readonly IReadOnlyList<Module> Modules = Array.AsReadOnly(new[]
 		{
-			new Module("weapon", "Weapon", 2, 2, false, true, Zone.Weapon),
+			new Module("weapon", "Weapon", 4, 1, false, true, Zone.Weapon),
 			new Module("ammo", "Ammunition", 1, 2, false, true, Zone.Ammunition),
 			new Module("pdl", "PDL", 1, 2, true, true, Zone.Any),
 			new Module("battery", "Battery", 1, 2, true, true, Zone.Any),
@@ -29,6 +29,17 @@ namespace OpenRA.Mods.CA.Modular
 		public bool HasChassis { get; private set; }
 		public bool Heavy { get; private set; }
 		public CustomVehicleSilhouetteKind Silhouette { get; set; }
+		public CustomWeaponKind WeaponKind { get; set; }
+		public CustomWeaponSocket WeaponSocket => TurretWidth == 0 ? null : WeaponKind == CustomWeaponKind.SonicEmitter
+			? new CustomWeaponSocket(WeaponKind, 0, 0, 5, 1)
+			: new CustomWeaponSocket(WeaponKind, TurretWidth - 1, 1, 4, 1);
+		public Module ModuleFor(string id) => id != "weapon" ? Definition(id) : Definition(id) with
+		{
+			Label = CustomWeaponSocket.Label(WeaponKind), Width = WeaponKind == CustomWeaponKind.SonicEmitter ? 5 : 4, Height = 1
+		};
+		public bool ContainsCell(bool turret, int x, int y) => x >= 0 && y >= 0 &&
+			(x < (turret ? TurretWidth : HullWidth) && y < (turret ? TurretHeight : HullHeight) ||
+			 turret && WeaponSocket?.Contains(x, y) == true);
 		public bool Portrait => Silhouette == CustomVehicleSilhouetteKind.HeavyWalker;
 		public int HullWidth => !HasChassis ? 0 : Portrait ? 4 : (Heavy ? 10 : 8);
 		public int HullHeight => !HasChassis ? 0 : Portrait ? 6 : (Heavy ? 5 : 4);
@@ -49,7 +60,8 @@ namespace OpenRA.Mods.CA.Modular
 			SetChassis(heavy); SetTurret(5);
 			Place("engine", false, 1, 1, false); Place("generator", false, Portrait ? 1 : 3, Portrait ? 3 : 1, false);
 			Place("gear", false, Portrait ? 0 : 1, HullHeight - 1, false); Place("armor", false, 0, 0, false);
-			Place("weapon", true, 3, 1, false); Place("ammo", true, 0, 0, false);
+			Place("weapon", true, WeaponSocket.X, WeaponSocket.Y, false);
+			Place("ammo", true, 0, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
 		}
 
 		public void LoadExample()
@@ -61,9 +73,9 @@ namespace OpenRA.Mods.CA.Modular
 			Place("gear", false, Portrait ? 0 : 1, HullHeight - 1, false);
 			Place("battery", false, Portrait ? 1 : 5, Portrait ? 5 : 1, false);
 			Place("armor", false, 0, 0, false);
-			Place("weapon", true, 3, 1, false);
-			Place("ammo", true, 0, 0, false);
-			Place("pdl", true, 1, 0, false);
+			Place("weapon", true, WeaponSocket.X, WeaponSocket.Y, false);
+			Place("ammo", true, 0, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
+			Place("pdl", true, 1, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
 		}
 
 		public void SetTurret(int width)
@@ -78,10 +90,10 @@ namespace OpenRA.Mods.CA.Modular
 		// Front is right. Bottom takes precedence over the blue hull perimeter.
 		public Zone ZoneAt(bool turret, int x, int y)
 		{
+			if (!ContainsCell(turret, x, y)) return Zone.None;
 			var w = turret ? TurretWidth : HullWidth;
 			var h = turret ? TurretHeight : HullHeight;
-			if (x < 0 || y < 0 || x >= w || y >= h) return Zone.None;
-			if (turret) return x == w - 1 ? Zone.Weapon : Zone.Ammunition;
+			if (turret) return WeaponSocket?.Contains(x, y) == true ? Zone.Weapon : Zone.Ammunition;
 			if (y == h - 1) return Zone.RunningGear;
 			if (x == 0 || x == w - 1 || y == 0) return Zone.Armor;
 			return Zone.Interior;
@@ -91,24 +103,27 @@ namespace OpenRA.Mods.CA.Modular
 		public static (int Width, int Height) Size(Module module, bool rotated) => rotated ? (module.Height, module.Width) : (module.Width, module.Height);
 		public Placement At(bool turret, int x, int y) => placements.FirstOrDefault(p =>
 		{
-			var size = Size(Definition(p.ModuleId), p.Rotated);
+			var size = Size(ModuleFor(p.ModuleId), p.Rotated);
 			return p.InTurret == turret && x >= p.X && y >= p.Y && x < p.X + size.Width && y < p.Y + size.Height;
 		});
 
 		public bool CanPlace(string moduleId, bool turret, int x, int y, bool rotated, int? movingId = null)
 		{
-			var module = Definition(moduleId);
+			var module = ModuleFor(moduleId);
 			if (!HasChassis || module == null || (turret ? !module.Turret : !module.Hull)) return false;
 			if (movingId != null && !placements.Any(p => p.Id == movingId && p.ModuleId == moduleId)) return false;
 			var size = Size(module, rotated);
-			if (x < 0 || y < 0 || x > (turret ? TurretWidth : HullWidth) - size.Width || y > (turret ? TurretHeight : HullHeight) - size.Height) return false;
-			if (module.Mount == Zone.Weapon && x + size.Width != TurretWidth) return false;
+			if (module.Mount == Zone.Weapon)
+			{
+				// The whole weapon must match its socket; touching a red edge is not sufficient.
+				if (!turret || WeaponSocket?.Fits(x, y, size.Width, size.Height) != true) return false;
+			}
+			else if (x < 0 || y < 0 || x > (turret ? TurretWidth : HullWidth) - size.Width || y > (turret ? TurretHeight : HullHeight) - size.Height) return false;
 			for (var dy = 0; dy < size.Height; dy++)
 				for (var dx = 0; dx < size.Width; dx++)
 				{
 					var zone = ZoneAt(turret, x + dx, y + dy);
-					if (module.Mount != Zone.Any && (module.Mount == Zone.Weapon
-						? zone != Zone.Weapon && zone != Zone.Ammunition : zone != module.Mount)) return false;
+					if (module.Mount != Zone.Any && zone != module.Mount) return false;
 					var occupant = At(turret, x + dx, y + dy);
 					if (occupant != null && occupant.Id != movingId) return false;
 				}
@@ -124,6 +139,6 @@ namespace OpenRA.Mods.CA.Modular
 		}
 
 		public void Remove(int id) => placements.RemoveAll(p => p.Id == id);
-		public int Used(bool turret) => placements.Where(p => p.InTurret == turret).Sum(p => { var m = Definition(p.ModuleId); return m.Width * m.Height; });
+		public int Used(bool turret) => placements.Where(p => p.InTurret == turret).Sum(p => { var m = ModuleFor(p.ModuleId); return m.Width * m.Height; });
 	}
 }

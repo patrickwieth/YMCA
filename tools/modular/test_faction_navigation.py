@@ -51,8 +51,10 @@ class FactionNavigationTests(unittest.TestCase):
         self.assertNotIn('Button@CANCEL:', chrome)
         self.assertIn('Keycode.R', source)
         self.assertIn('Keycode.ESCAPE', source)
-        self.assertIn('w * cell, h * cell).Contains(point)', source)
-        self.assertIn('x = (point.X - o.X) / cell', source)
+        self.assertIn('Layout.ContainsCell(t, cx, cy)', source)
+        self.assertIn('var cx = (point.X - o.X) / cell', source)
+        self.assertIn('SnapWeaponSocket(turret, ref x, ref y)', source)
+        self.assertIn('if (id == "weapon") DrawWeapon', source)
         self.assertIn('o.X + p.X * cell, o.Y + p.Y * cell', source)
         self.assertIn('Color.Lime : Color.Red, true, cell)', source)
         for kind in ('Walker', 'Tripod', 'LightVehicle', 'Wheeled', 'Bike', 'Hover', 'HeavyWalker', 'MiniDrone'):

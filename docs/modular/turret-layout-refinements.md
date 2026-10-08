@@ -35,14 +35,14 @@
   pause/resume. Duplicate unnamed MDRN turret infos share one initializer. Nothing changes
   live actor facings, movement, attack behavior or shared rules.
 
-## Agreed next layout revision — not yet implemented
+## Fixed weapon sockets and remaining platform work
 
-The present generic weapon block/red front-column rule will be replaced by **fixed, typed
-weapon sockets per turret/platform**, with matching footprint and weapon category:
+The [first fixed weapon sockets](fixed-weapon-sockets.md) are now implemented, replacing the old
+2×2 weapon block/red front-column rule with exact-fit footprints:
 
 - Typical cannon socket: **4×1**, protruding forward from the turret.
 - Sonic Turret socket: **5×1**, across the top, inside the turret silhouette, colored red.
-- Mammoth Mk. II: a single large **four-legged fixed platform**, no separate turret selector
+- **Still pending — Mammoth Mk. II:** a single large **four-legged fixed platform**, no separate turret selector
   or turret container; **two cannon sockets and one missile-launcher socket**.
 
 Mammoth's original Railgun.MKII channel has two muzzle offsets. Dragon.MKII and RedEye.MKII
@@ -50,8 +50,8 @@ are separate ground/air channels of its missile package; these must not become t
 launcher slots or extra weapons. Separate sockets must not double the inherited firepower.
 
 Socket matching must distinguish weapon class from turret class and grid cell size. Independent
-weapon swapping will still need explicit weapon/art/trait bindings. The current red-zone placement
-model and Mammoth's generic walker view do not yet implement this next revision.
+weapon swapping will still need explicit weapon/art/trait bindings. Mammoth's generic walker view
+does not yet implement the separate three-socket fixed-platform revision.
 
 ## Validation
 

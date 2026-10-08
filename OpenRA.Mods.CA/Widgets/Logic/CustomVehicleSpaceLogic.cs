@@ -33,9 +33,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var selection = widget.Get<LabelWidget>("SELECTION");
 			selection.GetText = () => !Ready ? "Choose a chassis, then a turret / mount." : canvas.Selected == null ?
 				"Pick a part on the left, then drop it into the grid." :
-				$"In hand: {CustomVehicleSpaceDemo.Definition(canvas.Selected).Label} " +
-				$"({CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(canvas.Selected), canvas.Rotated).Width} x " +
-				$"{CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(canvas.Selected), canvas.Rotated).Height}) - R rotates; Esc cancels.";
+				$"In hand: {canvas.Layout.ModuleFor(canvas.Selected).Label} " +
+				$"({CustomVehicleSpaceDemo.Size(canvas.Layout.ModuleFor(canvas.Selected), canvas.Rotated).Width} x " +
+				$"{CustomVehicleSpaceDemo.Size(canvas.Layout.ModuleFor(canvas.Selected), canvas.Rotated).Height}) - R rotates; Esc cancels.";
 
 			DropDownButtonWidget Field(string title, int row, Color color, Func<bool> visible)
 			{
@@ -77,6 +77,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						if (!commitPart("chassis", id)) return;
 						canvas.Cancel(); pendingRole = pendingPart = null;
 						canvas.Layout.Silhouette = Silhouette();
+						canvas.Layout.WeaponKind = WeaponKind();
 						canvas.Layout.SetChassis(LargeSchematic());
 						notify("Chassis selected. Choose its compatible turret / mount next.");
 					});
@@ -96,6 +97,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					{
 						if (!commitPart("carrier", id)) return;
 						canvas.Cancel(); pendingRole = pendingPart = null;
+						canvas.Layout.WeaponKind = WeaponKind();
 						if (!Ready) canvas.Layout.LoadStockConfiguration(canvas.Layout.Heavy);
 						else canvas.Layout.SetTurret(5);
 						notify("Stock parts arranged. Pick up a replacement from the sidebar or move a block.");
@@ -165,6 +167,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			widget.AddChild(new CustomVehicleSpaceCursorWidget { Bounds = new WidgetBounds(0, 0, widget.Bounds.Width, widget.Bounds.Height), Canvas = canvas });
 		}
 
+		CustomWeaponKind WeaponKind() => CustomWeaponSocket.ForCarrier(profile().Parts["carrier"]);
+
 		CustomVehicleSilhouetteKind Silhouette() => CustomVehicleSilhouette.ForActor(
 			compiler.PreviewActor(profile()), compiler.IsNativeHover(profile()));
 
@@ -189,13 +193,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			canvas.Cancel(); pendingRole = pendingPart = null;
 			if (!layouts.TryGetValue(design, out var layout))
 			{
-				layouts.Add(design, layout = new CustomVehicleSpaceDemo { Silhouette = Silhouette() });
+				layouts.Add(design, layout = new CustomVehicleSpaceDemo { Silhouette = Silhouette(), WeaponKind = WeaponKind() });
 				if (restore)
 				{
 					layout.LoadStockConfiguration(LargeSchematic());
 				}
 			}
 			layout.Silhouette = Silhouette();
+			layout.WeaponKind = WeaponKind();
 			canvas.Layout = layout;
 		}
 	}

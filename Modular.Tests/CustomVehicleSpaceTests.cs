@@ -36,10 +36,10 @@ public class CustomVehicleSpaceTests
         Assert.That(layout.Place("engine", false, 1, 1, false), Is.False);
         Assert.Throws<InvalidOperationException>(() => layout.SetTurret(5));
         layout.SetChassis(false);
-        Assert.That(layout.Place("weapon", true, 3, 0, false), Is.False);
+        Assert.That(layout.Place("weapon", true, 4, 1, false), Is.False);
         layout.SetTurret(5);
         Assert.That(layout.TurretWidth * layout.TurretHeight, Is.EqualTo(15));
-        Assert.That(layout.Place("weapon", true, 3, 0, false), Is.True);
+        Assert.That(layout.Place("weapon", true, 4, 1, false), Is.True);
         Assert.Throws<ArgumentOutOfRangeException>(() => layout.SetTurret(3));
         Assert.Throws<ArgumentOutOfRangeException>(() => layout.SetTurret(4));
     }
@@ -81,18 +81,18 @@ public class CustomVehicleSpaceTests
     }
 
     [Test]
-    public void AmmunitionUsesVioletAndWeaponAnchorsToRedFront()
+    public void AmmunitionUsesVioletAndWeaponFitsTheExactProtrudingSocket()
     {
         var layout = Empty();
         for (var y = 0; y < 3; y++)
             for (var x = 0; x < 5; x++)
-                Assert.That(layout.ZoneAt(true, x, y), Is.EqualTo(x == 4 ? Zone.Weapon : Zone.Ammunition));
+                Assert.That(layout.ZoneAt(true, x, y), Is.EqualTo(x == 4 && y == 1 ? Zone.Weapon : Zone.Ammunition));
         Assert.That(layout.Place("ammo", false, 1, 1, false), Is.False);
         Assert.That(layout.Place("ammo", true, 4, 0, false), Is.False);
-        Assert.That(layout.Place("ammo", true, 3, 0, true), Is.False);
+        Assert.That(layout.Place("ammo", true, 3, 1, true), Is.False);
         Assert.That(layout.Place("ammo", true, 0, 0, false), Is.True);
         Assert.That(layout.Place("weapon", true, 1, 0, false), Is.False);
-        Assert.That(layout.Place("weapon", true, 3, 1, false), Is.True);
+        Assert.That(layout.Place("weapon", true, 4, 1, false), Is.True);
     }
 
     [TestCase("battery")]
@@ -106,7 +106,7 @@ public class CustomVehicleSpaceTests
         Assert.That(layout.Place(module, true, 4, 0, false), Is.True, "red");
         Assert.That(layout.Place(module, true, 0, 0, false), Is.True, "violet");
         Assert.That(layout.Place(module, true, 2, 2, true), Is.True, "bottom turret row");
-        Assert.That(layout.Place("weapon", true, 3, 0, false), Is.False, "free modules still block weapons");
+        Assert.That(layout.Place("weapon", true, 4, 1, false), Is.False, "free modules still block weapons");
         Assert.That(layout.Place(module, true, 4, 2, false), Is.False, "bounds");
         Assert.That(layout.Place(module, true, 4, 0, false), Is.False, "overlap");
         var fresh = Empty();
@@ -118,10 +118,12 @@ public class CustomVehicleSpaceTests
     public void FreeModulesMayStraddleTheWeaponDockAndVioletCells(string module)
     {
         var layout = Empty();
-        Assert.That(layout.Place(module, true, 3, 0, true), Is.True);
-        Assert.That(layout.At(true, 4, 0)?.ModuleId, Is.EqualTo(module));
-        Assert.That(layout.Place("weapon", true, 3, 0, false), Is.False);
-        Assert.That(layout.Place("weapon", true, 3, 1, false), Is.True);
+        Assert.That(layout.Place(module, true, 3, 1, true), Is.True);
+        Assert.That(layout.At(true, 4, 1)?.ModuleId, Is.EqualTo(module));
+        Assert.That(layout.Place("weapon", true, 4, 1, false), Is.False);
+        Assert.That(layout.Place("weapon", true, 4, 2, false), Is.False, "a different row is not a socket");
+        layout.Remove(layout.Placements.Single().Id);
+        Assert.That(layout.Place("weapon", true, 4, 1, false), Is.True);
     }
 
     [Test]
@@ -131,7 +133,7 @@ public class CustomVehicleSpaceTests
         Assert.That(layout.Place("ammo", true, 2, 2, false), Is.False);
         Assert.That(layout.Place("ammo", true, 2, 2, true), Is.True);
         var original = layout.Placements.Single();
-        Assert.That(layout.Place("ammo", true, 3, 2, true, original.Id), Is.False);
+        Assert.That(layout.Place("ammo", true, 3, 1, true, original.Id), Is.False);
         Assert.That(layout.Placements.Single(), Is.EqualTo(original));
     }
 
@@ -145,7 +147,7 @@ public class CustomVehicleSpaceTests
         Assert.That(layout.Place("battery", false, 0, 3, true, original.Id), Is.True);
         Assert.That(layout.At(true, 0, 0), Is.Null);
         Assert.That(layout.At(false, 1, 3)?.Id, Is.EqualTo(original.Id));
-        Assert.That(layout.Place("weapon", true, 3, 0, false, original.Id), Is.False);
+        Assert.That(layout.Place("weapon", true, 4, 1, false, original.Id), Is.False);
     }
 
     [Test]
