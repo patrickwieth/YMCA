@@ -25,6 +25,22 @@ class FactionNavigationTests(unittest.TestCase):
         self.assertIn('Save = r => library.Update(path, r)', source)
         self.assertIn('"Vehicles", "Infantry", "Ships", "Aircraft", "Buildings"', source)
 
+    def test_lobby_identity_is_map_local_and_does_not_change_gameplay_ids(self):
+        source = (ROOT / 'OpenRA.Mods.Cameo/Widgets/Logic/LobbyLogic.cs').read_text(encoding='utf-8')
+        self.assertIn('map.Package.GetStream("custom-faction.json")', source)
+        self.assertIn('customIdentityMap = map.Uid; customIdentity = null;', source)
+        self.assertIn('!customIdentity.AppliesTo(client.Faction)', source)
+        self.assertEqual(source.count('SetupCustomFactionIdentity(template, client);'), 2)
+        presentation = source.split('void SetupCustomFactionIdentity(')[1].split('void UpdatePlayerList()')[0]
+        self.assertIn('identity.Side', presentation)
+        self.assertIn('WidgetUtils.TruncateText(identity.Name', presentation)
+        self.assertIn('flag.GetImageCollection = () => "flags"', presentation)
+        self.assertIn('flag.GetImageName = () => identity.BaseFaction', presentation)
+        self.assertNotIn('IssueOrder', presentation)
+        self.assertNotIn('client.Faction =', presentation)
+        self.assertNotIn('GetMessage(identity.Name)', presentation)
+        self.assertIn('row.GetOrNull("FACTION") as DropDownButtonWidget', presentation)
+
     def test_light_turret_hit_testing_drawing_and_items_share_display_scale(self):
         source = (ROOT / 'OpenRA.Mods.CA/Widgets/CustomVehicleSpaceWidget.cs').read_text(encoding='utf-8')
         self.assertIn('int GridCell(bool turret) => turret && LightBody ? 20 : Cell;', source)

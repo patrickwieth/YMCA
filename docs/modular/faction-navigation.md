@@ -39,6 +39,20 @@ prototype ceiling of **16 vehicle designs** remains explicit. Level progression/
 Infantry, Ships, Aircraft and Buildings are disabled categories, not runtime-admitted content.
 The tier-grouped custom Commander Tree is still pending; no stock tree is replaced by this change.
 
+## Lobby identity
+
+On a frozen custom-faction map, matching faction rows show **Side: Custom** and the frozen
+faction's exact name under **Faction**. Both columns use the original base sub-faction flag;
+no nonexistent `games/Custom` icon is requested. The native faction ID, stock dropdown choices,
+slot locks, prerequisites and runtime behavior are unchanged. Long names are truncated to the
+existing column width and shown in full in the editable faction button's tooltip.
+
+Identity comes from the map's `custom-faction.json`, not the mutable local faction library.
+Legacy schema-1 snapshots are supported. Non-custom maps and nonmatching factions retain stock
+labels. On map changes the metadata cache is reset and normal row setup restores the original
+labels, flags and tooltips before applying any custom presentation. Spectators are unaffected.
+This changes lobby presentation only; it does not add arbitrary-map custom-faction selection.
+
 ## Silhouettes
 
 The spatial editor chooses presentation from the bound native actor, never from translated names
