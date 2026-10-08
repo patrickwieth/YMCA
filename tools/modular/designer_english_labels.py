@@ -104,6 +104,12 @@ for key, name in [('titan', 'Titan'), ('slingshot', 'Slingshot'), ('marv', 'MARV
         LABELS[f'designer-{key}-{suffix}'] = name + label
 
 
+LABELS['designer-hmlrs-mount'] = 'Dual Missile Launcher'
+LABELS['designer-marv-mount'] = 'Triple Ion Cannon'
+LABELS['designer-titan-mount'] = 'Heavy Walker Turret'
+LABELS['designer-titan-weapon'] = '120mm Cannon and Missiles'
+
+
 def apply(parts):
     missing = set(LABELS) - set(parts)
     if missing: raise ValueError(f'Stale English designer label IDs: {sorted(missing)}')

@@ -24,7 +24,7 @@ namespace OpenRA.Mods.CA.Widgets
 		IActorPreview[] previews = Array.Empty<IActorPreview>();
 		IFinalizedRenderable[] renderables = Array.Empty<IFinalizedRenderable>();
 		string selection;
-		WAngle facing = new WAngle(384);
+		WAngle facing = new WAngle(384), turretFacing = new WAngle(384);
 		Rectangle bounds;
 		long elapsed, lastTime;
 		public bool Rotating = true;
@@ -79,6 +79,17 @@ namespace OpenRA.Mods.CA.Widgets
 			return new ActorInfo(source.Name, traits.ToArray());
 		}
 
+		public static void AddTurretPreviewInits(TypeDictionary inits, ActorInfo actor, bool voxels,
+			Func<WAngle> bodyFacing, Func<WAngle> worldTurretFacing)
+		{
+			// MDRN has both Turreted and TurretedFloating with the same instance name.
+			foreach (var turret in actor.TraitInfos<TurretedInfo>().GroupBy(t => t.InstanceName).Select(g => g.First()))
+				inits.Add(new DynamicTurretFacingInit(turret, () =>
+					(voxels ? worldTurretFacing() - bodyFacing() : worldTurretFacing()) + turret.InitialFacing));
+			// Sprite WorldFacingFromInit does not add DynamicFacingInit; voxel preview
+			// orientation does add body orientation. Supply world vs relative angles accordingly.
+		}
+
 		public void SetVehicle(string actorName, string faction)
 		{
 			var key = actorName + ":" + faction;
@@ -86,23 +97,28 @@ namespace OpenRA.Mods.CA.Widgets
 			selection = key;
 			previews = Array.Empty<IActorPreview>();
 			renderables = Array.Empty<IFinalizedRenderable>();
-			elapsed = 0; lastTime = Game.RunTime; facing = new WAngle(384);
+			elapsed = 0; lastTime = Game.RunTime; facing = turretFacing = new WAngle(384);
 			try
 			{
 				var actor = BuildPreviewActor(modData, wr.World.Map.Rules, wr.World.Map.Rules.Actors[actorName.ToLowerInvariant()], faction);
 				var owner = wr.World.LocalPlayer ?? wr.World.WorldActor.Owner;
-				var td = new TypeDictionary { new OwnerInit(owner), new FactionInit(faction), new DynamicFacingInit(() => facing) };
-				var init = new ActorPreviewInitializer(actor, wr, td);
-				previews = actor.TraitInfos<IRenderActorPreviewInfo>().SelectMany(p => p.RenderPreview(init)).ToArray();
+				previews = actor.TraitInfos<IRenderActorPreviewInfo>().SelectMany(p =>
+				{
+					var td = new TypeDictionary { new OwnerInit(owner), new FactionInit(faction), new DynamicFacingInit(() => facing) };
+					AddTurretPreviewInits(td, actor, p is RenderVoxelsInfo, () => facing, () => turretFacing);
+					return p.RenderPreview(new ActorPreviewInitializer(actor, wr, td));
+				}).ToArray();
 				// Fit all headings once, avoiding size pumping while rotating and accounting for turrets.
 				var allBounds = new List<Rectangle>();
 				for (var yaw = 0; yaw < 1024; yaw += 32)
 				{
 					facing = new WAngle(yaw);
+					turretFacing = new WAngle((768 - yaw + 1024) % 1024);
 					foreach (var preview in previews) { preview.Tick(); allBounds.AddRange(preview.ScreenBounds(wr, WPos.Zero)); }
 				}
 				bounds = allBounds.Union();
-				facing = new WAngle(384);
+				facing = turretFacing = new WAngle(384);
+				foreach (var preview in previews) preview.Tick();
 				if (bounds.Width <= 0 || bounds.Height <= 0) throw new InvalidOperationException("No visible preview geometry.");
 				Status = actor.TraitInfos<RenderVoxelsInfo>().Any() ? "Voxel model + attachments" : "Sprite model + attachments";
 			}
@@ -123,6 +139,7 @@ namespace OpenRA.Mods.CA.Widgets
 			if (Rotating) elapsed += Math.Max(0, now - lastTime);
 			lastTime = now;
 			facing = new WAngle(CustomPreviewMath.Facing(elapsed));
+			turretFacing = new WAngle(CustomPreviewMath.CounterFacing(elapsed));
 			try { foreach (var p in previews) p.Tick(); }
 			catch (Exception e) { Fail(e); }
 		}

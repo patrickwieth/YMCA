@@ -62,15 +62,20 @@ or shared running-gear labels. Initial explicit styles cover:
 - HMMV, BGGY, JEEP: wheeled light body/cabin and smaller weapon mount.
 - BIKE: two-wheel frame and light mount.
 - BTR, APC2, IFV, KATY, V3RL, HQ7, HTK5: multi-wheel body.
-- TITN, Juggernaut, Mammoth Mk II, XO, GUNW: articulated walker legs.
+- TITN: upright heavy walker with a 4×6 chassis grid and 5×4 turret grid.
+- Juggernaut, Mammoth Mk II, XO, GUNW: articulated walker legs (Mk II's four-legged fixed platform is the next revision).
+- MDRN: integrated hover-drone silhouette.
+- GDRN: miniature tracked silhouette and Mini-class turret socket.
 - TPOD, Hexapod: additional visible support leg.
 - Other explicitly native-hover bindings: hover pods and no tracks.
 
 These are class silhouettes, not individual stock sprite reproductions. The right-hand original
-rotating sprite/voxel preview remains unchanged. Light mounts render their 5×3 inventory at 20px
-per cell instead of 28px; hit testing, held snapping and installed blocks use the same scale.
-This is a display scale, not a new slot budget or a physical-volume calibration. Module sizes,
-collision rules, explicit native compatibility and stock combat values remain unchanged.
+rotating sprite/voxel preview remains authoritative for original artwork. All cells are now 28×28,
+including hit testing, held snapping and installed blocks. Body and separately rendered turrets
+counter-rotate. See [the latest layout refinements](turret-layout-refinements.md) for the taller
+window, explicit turret classes, and the pending fixed weapon socket revision.
+These grids are not physical-volume calibration; explicit native compatibility and stock combat
+values remain unchanged.
 
 ## Validation and live review
 
@@ -82,4 +87,4 @@ widget/graphics correctness.
 Manual checks: create from Play; cancel creation; reopen from My factions; cancel/confirm deletion;
 rename and reopen without duplicates; attempt a conflicting name; edit/save a vehicle and return;
 cancel a new vehicle draft; test-game lobby; switch MTNK/HMMV/TITN/TPOD and move/rotate/drop blocks
-in each grid, including the smaller light-vehicle turret. Verify original preview fidelity.
+in each grid, including the upright Titan layout. Verify original preview fidelity.

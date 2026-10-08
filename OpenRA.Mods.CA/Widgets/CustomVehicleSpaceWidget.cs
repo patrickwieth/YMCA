@@ -20,10 +20,12 @@ namespace OpenRA.Mods.CA.Widgets
 		public Action OnLayoutChanged = () => { };
 		public Action OnSelectionCancelled = () => { };
 		const int Cell = 28;
-		static readonly int2 HullOrigin = new(72, 202);
+		int2 HullOrigin => Layout.Portrait ? new int2(176, 176) : new int2(72, 202);
 		static readonly int2 TurretOrigin = new(156, 32);
-		bool LightBody => Layout.Silhouette is CustomVehicleSilhouetteKind.LightVehicle or CustomVehicleSilhouetteKind.Bike;
-		int GridCell(bool turret) => turret && LightBody ? 20 : Cell;
+		bool LightBody => Layout.Silhouette is CustomVehicleSilhouetteKind.LightVehicle or CustomVehicleSilhouetteKind.Bike or CustomVehicleSilhouetteKind.MiniTracked;
+		bool DroneBody => Layout.Silhouette == CustomVehicleSilhouetteKind.MiniDrone;
+		// Every container uses the same cell scale, including held-item snapping.
+		int GridCell(bool turret) => Cell;
 
 		public void Cancel() { Selected = null; Moving = null; Rotated = false; OnSelectionCancelled(); }
 		public void Choose(string id) { Cancel(); Selected = id; }
@@ -189,6 +191,29 @@ namespace OpenRA.Mods.CA.Widgets
 			}
 			switch (Layout.Silhouette)
 			{
+				case CustomVehicleSilhouetteKind.HeavyWalker:
+					var left = HullOrigin.X;
+					foreach (var x in new[] { left - 24, left + hw - 2 })
+					{
+						Polygon(metal, new int2(x, bottom - 80), new int2(x + 23, bottom - 76),
+							new int2(x + 26, bottom - 25), new int2(x + 10, bottom + 10), new int2(x + 39, bottom + 13),
+							new int2(x + 44, bottom + 25), new int2(x - 9, bottom + 25), new int2(x - 12, bottom + 10), new int2(x + 6, bottom - 25));
+						Ellipse(x + 1, bottom - 36, 22, 22, dark);
+						Fill(x - 7, bottom + 21, 46, 4, tire);
+					}
+					Polygon(metal, new int2(left - 16, 193), new int2(left - 4, 159), new int2(left + hw + 3, 159),
+						new int2(left + hw + 18, 193), new int2(left + hw + 10, bottom - 14), new int2(left - 10, bottom - 14));
+					Fill(left + 16, 163, hw - 30, 8, dark);
+					break;
+				case CustomVehicleSilhouetteKind.MiniDrone:
+					Ellipse(51, 184, hw + 42, hh + 39, metal);
+					Ellipse(42, 215, 25, 56, tire); Ellipse(hw + 76, 215, 25, 56, tire);
+					Fill(49, 229, 11, 26, metal); Fill(hw + 83, 229, 11, 26, metal);
+					Ellipse(hw + 91, 225, 16, 14, Color.FromArgb(255, 113, 176, 183));
+					Fill(hw + 98, 250, 29, 5, metal);
+					Ellipse(77, bottom + 31, hw - 6, 9, tire);
+					Fill(92, bottom + 18, hw - 38, 2, Color.FromArgb(255, 64, 105, 111));
+					break;
 				case CustomVehicleSilhouetteKind.Walker:
 				case CustomVehicleSilhouetteKind.Tripod:
 					var hips = Layout.Silhouette == CustomVehicleSilhouetteKind.Tripod ? new[] { 48, 170, hw + 76 } : new[] { 48, hw + 76 };
@@ -254,15 +279,19 @@ namespace OpenRA.Mods.CA.Widgets
 			Fill(0, 0, Bounds.Width, Bounds.Height, dark);
 			Text("LEFT SIDE VIEW", 16, 8, Color.White);
 			if (!Layout.HasChassis) { Text("Choose a chassis on the left to begin.", 104, 180, Color.White); return; }
-			var hw = Layout.HullWidth * Cell;
-			var hh = Layout.HullHeight * Cell;
+			var hw = Layout.HullWidth * GridCell(false);
+			var hh = Layout.HullHeight * GridCell(false);
 			DrawChassis(hw, hh, metal, dark);
 			if (Layout.TurretWidth > 0)
 			{
 				var cell = GridCell(true);
 				var tw = Layout.TurretWidth * cell;
 				var bottom = TurretOrigin.Y + Layout.TurretHeight * cell + 6;
-				if (LightBody)
+				if (DroneBody)
+				{
+					Ellipse(143, 20, tw + 26, bottom - 9, metal);
+				}
+				else if (LightBody)
 				{
 					Polygon(metal, new int2(146, bottom), new int2(146, 42), new int2(161, 26),
 						new int2(tw + 150, 26), new int2(tw + 166, 44), new int2(tw + 166, bottom));
@@ -275,7 +304,7 @@ namespace OpenRA.Mods.CA.Widgets
 					Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
 					Ellipse(169, bottom + 2, 86, 16, metal);
 				}
-				foreach (var weapon in Layout.Placements.Where(p => p.InTurret && p.ModuleId == "weapon" && p.Id != Moving))
+				foreach (var weapon in Layout.Placements.Where(p => p.InTurret && p.ModuleId == "weapon" && p.Id != Moving && !DroneBody))
 				{
 					var size = CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(weapon.ModuleId), weapon.Rotated);
 					var center = TurretOrigin.Y + weapon.Y * cell + size.Height * cell / 2;
@@ -283,8 +312,8 @@ namespace OpenRA.Mods.CA.Widgets
 					Fill(156 + tw + 8, center - (LightBody ? 3 : 7), length, LightBody ? 6 : 14, metal);
 					Fill(156 + tw + length + 2, center - (LightBody ? 5 : 11), 10, LightBody ? 10 : 22, ZoneColor(Zone.Weapon));
 				}
-				Fill(LightBody ? 204 : 194, bottom + 12, LightBody ? 14 : 34, 188 - bottom - 12, metal);
-				Text($"Turret {Layout.TurretWidth} x {Layout.TurretHeight}", 20, 48, Color.White);
+				if (!DroneBody) Fill(LightBody ? 204 : 194, bottom + 12, LightBody ? 14 : 34, (Layout.Portrait ? 176 : 188) - bottom - 12, metal);
+				Text($"{(DroneBody ? "Mount" : "Turret")} {Layout.TurretWidth} x {Layout.TurretHeight}", 20, 48, Color.White);
 				Text($"{Layout.Used(true)} cells used", 20, 65, Color.White);
 			}
 			foreach (var t in new[] { false, true })
@@ -307,7 +336,7 @@ namespace OpenRA.Mods.CA.Widgets
 				var cell = GridCell(p.InTurret);
 				Item(p.ModuleId, p.Rotated, o.X + p.X * cell, o.Y + p.Y * cell, Tint(p.ModuleId), false, cell);
 			}
-			Text($"Schematic hull: {Layout.HullWidth} x {Layout.HullHeight} / {Layout.Used(false)} cells used", 72, 389, Color.White);
+			Text($"Schematic hull: {Layout.HullWidth} x {Layout.HullHeight} / {Layout.Used(false)} cells used", 72, Bounds.Height - 19, Color.White);
 		}
 	}
 

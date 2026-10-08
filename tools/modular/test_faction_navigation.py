@@ -41,14 +41,21 @@ class FactionNavigationTests(unittest.TestCase):
         self.assertNotIn('GetMessage(identity.Name)', presentation)
         self.assertIn('row.GetOrNull("FACTION") as DropDownButtonWidget', presentation)
 
-    def test_light_turret_hit_testing_drawing_and_items_share_display_scale(self):
+    def test_all_containers_hit_testing_drawing_and_items_share_display_scale(self):
         source = (ROOT / 'OpenRA.Mods.CA/Widgets/CustomVehicleSpaceWidget.cs').read_text(encoding='utf-8')
-        self.assertIn('int GridCell(bool turret) => turret && LightBody ? 20 : Cell;', source)
+        self.assertIn('const int Cell = 28;', source)
+        self.assertIn('int GridCell(bool turret) => Cell;', source)
+        chrome = (ROOT / 'mods/ca/chrome/custom-faction.yaml').read_text(encoding='utf-8')
+        self.assertIn('Width: 1120\n\tHeight: 900', chrome)
+        self.assertNotIn('Button@ROTATE:', chrome)
+        self.assertNotIn('Button@CANCEL:', chrome)
+        self.assertIn('Keycode.R', source)
+        self.assertIn('Keycode.ESCAPE', source)
         self.assertIn('w * cell, h * cell).Contains(point)', source)
         self.assertIn('x = (point.X - o.X) / cell', source)
         self.assertIn('o.X + p.X * cell, o.Y + p.Y * cell', source)
         self.assertIn('Color.Lime : Color.Red, true, cell)', source)
-        for kind in ('Walker', 'Tripod', 'LightVehicle', 'Wheeled', 'Bike', 'Hover'):
+        for kind in ('Walker', 'Tripod', 'LightVehicle', 'Wheeled', 'Bike', 'Hover', 'HeavyWalker', 'MiniDrone'):
             self.assertIn('case CustomVehicleSilhouetteKind.' + kind, source)
 
 

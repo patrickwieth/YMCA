@@ -35,3 +35,7 @@ def extend_parts(parts):
             reference_mass=mass, reference_kw=parts[motor]['mechanical_kw'] - demand / parts['baseline-generator']['efficiency'],
             reference_speed=speed, max_speed=parts[gear]['max_speed'], allowed=dict(carrier=[ids[0]], drive=[motor]), source=actor,
             note='Constructed baseline fit. Includes bound stock abilities; mass/power/cost split remains experimental. No per-design rebates.')
+        if key in ('titan', 'marv'):
+            turret_class = 'heavy-walker' if key == 'titan' else 'super-heavy'
+            parts[ids[0]]['turret_class'] = turret_class
+            parts[f'designer-{key}-hull']['allowed_turret_classes'] = [turret_class]

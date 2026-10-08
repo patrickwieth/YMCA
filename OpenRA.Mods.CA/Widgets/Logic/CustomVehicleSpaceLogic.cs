@@ -36,11 +36,6 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				$"In hand: {CustomVehicleSpaceDemo.Definition(canvas.Selected).Label} " +
 				$"({CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(canvas.Selected), canvas.Rotated).Width} x " +
 				$"{CustomVehicleSpaceDemo.Size(CustomVehicleSpaceDemo.Definition(canvas.Selected), canvas.Rotated).Height}) - R rotates; Esc cancels.";
-			var rotate = widget.Get<ButtonWidget>("ROTATE");
-			rotate.IsVisible = () => Ready; rotate.IsDisabled = () => canvas.Selected == null;
-			rotate.OnClick = () => canvas.Rotated = !canvas.Rotated;
-			var cancel = widget.Get<ButtonWidget>("CANCEL");
-			cancel.IsVisible = () => Ready; cancel.OnClick = canvas.Cancel;
 
 			DropDownButtonWidget Field(string title, int row, Color color, Func<bool> visible)
 			{
@@ -81,8 +76,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						if (canvas.Layout.HasChassis && profile().Parts["chassis"] == id) return;
 						if (!commitPart("chassis", id)) return;
 						canvas.Cancel(); pendingRole = pendingPart = null;
-						canvas.Layout.SetChassis(LargeSchematic());
 						canvas.Layout.Silhouette = Silhouette();
+						canvas.Layout.SetChassis(LargeSchematic());
 						notify("Chassis selected. Choose its compatible turret / mount next.");
 					});
 					item.Get<LabelWidget>("LABEL").GetText = () => compiler.Label(id); return item;
@@ -194,7 +189,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			canvas.Cancel(); pendingRole = pendingPart = null;
 			if (!layouts.TryGetValue(design, out var layout))
 			{
-				layouts.Add(design, layout = new CustomVehicleSpaceDemo());
+				layouts.Add(design, layout = new CustomVehicleSpaceDemo { Silhouette = Silhouette() });
 				if (restore)
 				{
 					layout.LoadStockConfiguration(LargeSchematic());

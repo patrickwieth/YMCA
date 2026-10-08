@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace OpenRA.Mods.CA.Modular
 {
@@ -42,6 +43,8 @@ namespace OpenRA.Mods.CA.Modular
 			("designer-disruptor-hull", "designer-disruptor-mount") => "sonic-turret",
 			("nod-combat-howitzer-hull", "integrated-mount") => "artillery-turret",
 			("nod-combat-stealth-hull", "integrated-mount") => "missile-turret",
+			("stock-gdrn-hull", "integrated-mount") => "mini-turret-mount",
+			("stock-vulc-hull", "integrated-mount") => "dual-gatling-turret",
 			_ => id
 		};
 
@@ -354,6 +357,15 @@ namespace OpenRA.Mods.CA.Modular
 		public string PreviewActor(CustomFactionProfile p) => Assembly(p).Actor;
 
 		public bool IsNativeHover(CustomFactionProfile p) => Assembly(p).NativeHover;
+
+		public string TurretClass(CustomFactionProfile p) => Part(p, "carrier").Value<string>("turret_class") switch
+		{
+			"mini" => "Mini",
+			"medium" => "Medium Turret",
+			"heavy-walker" => "Heavy Walker",
+			"super-heavy" => "Super Heavy",
+			_ => "Native mount (unclassified)"
+		};
 
 		public string WeaponSummary(CustomFactionProfile p)
 		{

@@ -7,6 +7,7 @@ using OpenRA.Mods.CA.Widgets;
 using OpenRA.Mods.Cnc.Traits.Render;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Traits.Render;
+using OpenRA.Primitives;
 
 namespace OpenRA.Mods.CA.UtilityCommands
 {
@@ -61,6 +62,15 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					var preview = CustomVehiclePreviewWidget.BuildPreviewActor(utility.ModData, rules, source, faction);
 					if (!before.SequenceEqual(source.TraitInfos<ConditionalTraitInfo>().Select(t => t.EnabledByDefault)))
 						throw new InvalidOperationException("Preview mutated source rules: " + source.Name);
+					foreach (var voxels in new[] { false, true })
+					{
+						var inits = new TypeDictionary();
+						CustomVehiclePreviewWidget.AddTurretPreviewInits(inits, preview, voxels, () => new WAngle(640), () => new WAngle(128));
+						var expected = preview.TraitInfos<TurretedInfo>().GroupBy(t => t.InstanceName).Select(g =>
+							(new WAngle(voxels ? 128 - 640 : 128) + g.First().InitialFacing).Angle);
+						if (!inits.WithInterface<DynamicTurretFacingInit>().Select(i => i.Value().Angle).SequenceEqual(expected))
+							throw new InvalidOperationException("Counter-rotating turret preview init mismatch: " + source.Name);
+					}
 					if (preview.TraitInfos<WithVoxelBodyInfo>().GroupBy(t => t.Sequence).Any(g => g.Count() > 1))
 						throw new InvalidOperationException("Overlapping voxel body variants: " + source.Name);
 					if (source.Name == "choverlord" && preview.TraitInfos<WithVoxelBodyInfo>().Single().Sequence != "emperor")
@@ -96,7 +106,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				if (source.TraitInfos<WithIdleOverlayInfo>().Count() != compiled.TraitInfos<WithIdleOverlayInfo>().Count())
 					throw new InvalidOperationException("Compiled idle overlays changed: " + source.Name);
 			}
-			Console.WriteLine("Validated " + count + " preview and compiled graphics bindings. GPU/palettes/assets still require an interactive test.");
+			Console.WriteLine("Validated " + count + " preview, compiled graphics and counter-rotation bindings. GPU/palettes/assets still require an interactive test.");
 		}
 	}
 }

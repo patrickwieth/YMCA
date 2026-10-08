@@ -24,7 +24,7 @@ Style references inspected: `bits/gdi/vehicle_armor.png`, `bits/gdi/energy_weapo
 64×48: dark contours, olive/steel hardware, strong specular highlights and small colored accents.
 The new artwork uses hand-authored integer-pixel shapes and material palettes. No original artwork
 was copied, altered or used as a generation input. Transparent backgrounds keep the slot colors legible.
-This first set covers **module categories**, not a distinct portrait for every one of the 216 stock components.
+This first set covers **module categories**, not a distinct portrait for every supported stock component.
 
 The icons appear on component selectors, in wider option menus, on fitted blocks and on cursor-held
 items. Slot outlines and held-item dimensions remain visible; icons stay upright when footprints rotate.

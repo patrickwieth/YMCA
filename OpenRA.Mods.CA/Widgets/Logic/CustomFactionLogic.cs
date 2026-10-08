@@ -129,6 +129,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					{
 						("Price", $"{v.Cost:0} credits"), ("Hitpoints", $"{v.Hp:0}"), ("Speed", v.Speed.ToString()),
 						("Turn speed", v.Turn.ToString()), ("Mass", $"{v.Mass:0} kg"), ("Technology", v.Tech.ToString()),
+						("Turret class", compiler.TurretClass(p)),
 						("Electrical demand (experimental)", $"{v.Electric:0.##} kW"), ("Drive reserve (experimental)", $"{v.Reserve:0.##} kW"),
 						("Catalog points", $"{v.Points}; faction total {budget}/{roster.Level}"), ("Command points", "0"),
 						("Faction", CustomFactionDesign.BaseLabel(p.BaseFaction)),

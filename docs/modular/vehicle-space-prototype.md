@@ -3,7 +3,7 @@
 There is **one vehicle designer**, reached from the [faction overview](faction-navigation.md).
 The separate Space designer button/window has been removed. Faction creation is under Play; faction
 loading, naming, roster management and Test Game are now owned by the library/overview.
-The 1120×740 vehicle panel has a left sidebar, central schematic, and the original rotating preview on the right.
+The 1120×900 vehicle panel has a left sidebar, central schematic, and the original rotating preview on the right.
 
 ## Progressive configuration
 
@@ -22,12 +22,13 @@ of the rectangular grid: sloped hull nose, rear deck, track loop/road wheels, an
 antenna, turret ring and forward gun barrels. The turret docks above the hull. Mount selection is only in the sidebar; there is no extra dock button or white box on the silhouette.
 [Class-specific silhouettes](faction-navigation.md#silhouettes) now replace the all-tank fallback for
 explicit walker, light vehicle, wheeled, motorcycle and native-hover bindings. Light-vehicle mounts
-are drawn smaller, including a matching smaller grid display scale, without altering slot counts.
+have lighter outlines, but **every grid cell is 28×28**. Titan uses a 4×6 upright chassis and 5×4 turret.
+See [layout refinements](turret-layout-refinements.md) for class bindings and the pending fixed weapon sockets.
 These remain schematics, not exact reproductions of each stock actor or proof of arbitrary mixed art.
 
 - Select a component on the left to carry its multi-cell footprint at the cursor.
 - Over a grid it snaps to cells: green outside border = valid; red = invalid.
-- Click to drop; **R** rotates; **Esc**, Cancel or right-click cancels a held item.
+- Click to drop; **R** rotates; **Esc** or right-click cancels a held item. The redundant Rotate/Cancel buttons are removed.
 - Selecting a native replacement picks up the existing block for that role rather than creating an extra engine/weapon/etc.
 - Dropping a compatible native part applies it to the configured stock design, refreshing the **preview and properties**.
   Failed validation restores the previous native parts; failed placement leaves the previous block in place.
@@ -71,8 +72,8 @@ Save/Test Game asks for confirmation before proceeding with **configured stock p
 new energy consumption, charging logic, armor coverage model or permission for arbitrary turret swaps.
 
 Grid sizes and module dimensions remain illustrative. The current generic hull templates use 8×4 or 10×5
-(selected at chassis initialization from the provisional configured mass), and a **5×3 mount interior**. These
-are not calibrated budgets, and do not override Battle Fortress's three-slot/full-width Bunker policy.
+(selected at chassis initialization from the provisional configured mass), and a **5×3 mount interior**.
+Titan instead uses **4×6 below and 5×4 above**. All cells are 28×28 pixels. These are not calibrated budgets, and do not override Battle Fortress's three-slot/full-width Bunker policy.
 
 Model: `OpenRA.Mods.CA/Modular/CustomVehicleSpaceDemo.cs`.
 Drawing/input/held-item overlay: `Widgets/CustomVehicleSpaceWidget.cs`.

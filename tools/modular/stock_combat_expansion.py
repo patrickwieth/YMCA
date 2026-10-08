@@ -2,6 +2,7 @@
 No damage-only emulation, no per-design price overrides, no freely mixable stock arsenals.
 """
 import json
+from copy import deepcopy
 from pathlib import Path
 
 SOURCE = Path(__file__).with_name('stock-combat-baselines.json')
@@ -44,7 +45,7 @@ def prerequisites(row):
 
 
 def carrier(row):
-    return 'superheavy-bunker' if row['actor'] == 'BATF.Bunker' else 'integrated-mount'
+    return {'BATF.Bunker': 'superheavy-bunker', 'GDRN': 'mini-turret-mount', 'VULC': 'dual-gatling-turret'}.get(row['actor'], 'integrated-mount')
 
 
 def additional_assemblies():
@@ -72,6 +73,14 @@ def extend_parts(parts):
         mass=0, cost=0, template_locked=True, ammunition=['integral-stores'],
         note='Whole stock arsenal/abilities are included in the chassis price. Not a freely interchangeable weapon or a free retrofit.')
     parts['integrated-mount']['weapons'].append('original-armament')
+    parts['mini-turret-mount'] = deepcopy(parts['integrated-mount'])
+    parts['mini-turret-mount'].update(display_name='Mini Turret Mount', factions=['gdi'], turret_class='mini',
+        weapons=['original-armament'], source='GDRN',
+        note='Mini-class socket. Original GDRN armament/graphics remain bound; stock art has no separate turret sprite. No arbitrary mini turret admission.')
+    parts['dual-gatling-turret'] = deepcopy(parts['integrated-mount'])
+    parts['dual-gatling-turret'].update(display_name='Dual Gatling Turret', factions=['gdi'],
+        weapons=['original-armament'], source='VULC',
+        note='Vulcan native sprite turret with both barrels. Preserves all ground/air spin-up channels and conditions. No arbitrary chassis mixing; unchanged provisional stock allocation.')
     parts['superheavy-bunker'] = dict(common, factions=factions[:], role='carrier', display_name='Bunker Module',
         cost=1000, mass=1000, slots_required=3, weapons=['original-armament'], burst=1, reload_ticks=1,
         compatible_chassis_classes=['superheavy'], source='BATF.Bunker',
@@ -97,3 +106,5 @@ def extend_parts(parts):
             reference_kw=parts[motor(r)]['mechanical_kw'] - demand / parts[generator(r)]['efficiency'],
             allowed=dict(carrier=[carrier(r)], drive=[motor(r)]), source=r['actor'],
             note='Fixed stock combat assembly; arsenal, cargo and special hardware included in chassis. Shared costs deducted once. Provisional allocation, NOT an independently calibrated modular weapon. Stock promotion/technology gates retained.')
+        if r['actor'] == 'GDRN':
+            parts[key(r)+'-hull']['allowed_turret_classes'] = ['mini']

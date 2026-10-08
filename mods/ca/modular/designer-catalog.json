@@ -161,7 +161,9 @@
       "integrated-mount",
       "artillery-turret",
       "missile-turret",
-      "superheavy-bunker"
+      "superheavy-bunker",
+      "mini-turret-mount",
+      "dual-gatling-turret"
     ],
     "weapon": [
       "medium-cannon",
@@ -2001,7 +2003,7 @@
       "tech": 3,
       "electric_kw": 0,
       "role": "carrier",
-      "display_name": "Hover MLRS Weapon Mount",
+      "display_name": "Dual Missile Launcher",
       "mass": 1000,
       "cost": 150,
       "weapons": [
@@ -2010,7 +2012,8 @@
       "burst": 1,
       "reload_ticks": 1,
       "source": "hmlrs",
-      "note": "Cadence is template-locked per channel; these neutral calculator fields do not override weapons."
+      "note": "Cadence is template-locked per channel; these neutral calculator fields do not override weapons.",
+      "turret_class": "medium"
     },
     "designer-hmlrs-weapons": {
       "factions": [
@@ -2081,6 +2084,9 @@
       },
       "source": "hmlrs",
       "note": "Constructed baseline fit. Hull allocation includes fixed stock abilities (e.g. regeneration); no per-design rebates.",
+      "allowed_turret_classes": [
+        "medium"
+      ],
       "allowed_running_gear_classes": [
         "medium-hover"
       ],
@@ -3127,7 +3133,7 @@
       "tech": 3,
       "electric_kw": 0,
       "role": "carrier",
-      "display_name": "Titan Weapon Mount",
+      "display_name": "Heavy Walker Turret",
       "cost": 300,
       "mass": 1000,
       "source": "TITN",
@@ -3136,7 +3142,8 @@
       ],
       "burst": 1,
       "reload_ticks": 1,
-      "note": "Neutral calculator fields. Per-channel stock cadence/delay is inherited without overrides."
+      "note": "Neutral calculator fields. Per-channel stock cadence/delay is inherited without overrides.",
+      "turret_class": "heavy-walker"
     },
     "designer-titan-weapon": {
       "factions": [
@@ -3147,7 +3154,7 @@
       "tech": 3,
       "electric_kw": 0,
       "role": "weapon",
-      "display_name": "Titan Weapon System",
+      "display_name": "120mm Cannon and Missiles",
       "cost": 300,
       "mass": 1200,
       "source": "TITN",
@@ -3206,6 +3213,9 @@
       },
       "source": "TITN",
       "note": "Constructed baseline fit. Includes bound stock abilities; mass/power/cost split remains experimental. No per-design rebates.",
+      "allowed_turret_classes": [
+        "heavy-walker"
+      ],
       "allowed_running_gear_classes": [
         "heavy-walker"
       ],
@@ -3313,7 +3323,7 @@
       "tech": 3,
       "electric_kw": 0,
       "role": "carrier",
-      "display_name": "MARV Weapon Mount",
+      "display_name": "Triple Ion Cannon",
       "cost": 700,
       "mass": 2000,
       "source": "MARV",
@@ -3322,7 +3332,8 @@
       ],
       "burst": 1,
       "reload_ticks": 1,
-      "note": "Neutral calculator fields. Per-channel stock cadence/delay is inherited without overrides."
+      "note": "Neutral calculator fields. Per-channel stock cadence/delay is inherited without overrides.",
+      "turret_class": "super-heavy"
     },
     "designer-marv-weapon": {
       "factions": [
@@ -3392,6 +3403,9 @@
       },
       "source": "MARV",
       "note": "Constructed baseline fit. Includes bound stock abilities; mass/power/cost split remains experimental. No per-design rebates.",
+      "allowed_turret_classes": [
+        "super-heavy"
+      ],
       "allowed_running_gear_classes": [
         "superheavy-tracks"
       ],
@@ -4378,6 +4392,47 @@
       ],
       "note": "Whole stock arsenal/abilities are included in the chassis price. Not a freely interchangeable weapon or a free retrofit."
     },
+    "mini-turret-mount": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Mini Turret Mount",
+      "cost": 50,
+      "mass": 500,
+      "weapons": [
+        "original-armament"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Mini-class socket. Original GDRN armament/graphics remain bound; stock art has no separate turret sprite. No arbitrary mini turret admission.",
+      "turret_class": "mini",
+      "source": "GDRN"
+    },
+    "dual-gatling-turret": {
+      "factions": [
+        "gdi"
+      ],
+      "tier": 0,
+      "cp": 0,
+      "tech": 1,
+      "electric_kw": 0,
+      "role": "carrier",
+      "display_name": "Dual Gatling Turret",
+      "cost": 50,
+      "mass": 500,
+      "weapons": [
+        "original-armament"
+      ],
+      "burst": 1,
+      "reload_ticks": 1,
+      "note": "Vulcan native sprite turret with both barrels. Preserves all ground/air spin-up channels and conditions. No arbitrary chassis mixing; unchanged provisional stock allocation.",
+      "source": "VULC"
+    },
     "superheavy-bunker": {
       "tier": 0,
       "cp": 0,
@@ -4804,7 +4859,7 @@
       "reference_kw": 210.0,
       "allowed": {
         "carrier": [
-          "integrated-mount"
+          "mini-turret-mount"
         ],
         "drive": [
           "diesel-light"
@@ -4812,6 +4867,9 @@
       },
       "source": "GDRN",
       "note": "Fixed stock combat assembly; arsenal, cargo and special hardware included in chassis. Shared costs deducted once. Provisional allocation, NOT an independently calibrated modular weapon. Stock promotion/technology gates retained.",
+      "allowed_turret_classes": [
+        "mini"
+      ],
       "allowed_running_gear_classes": [
         "light-wheels"
       ],
@@ -4886,7 +4944,7 @@
       "reference_kw": 460.0,
       "allowed": {
         "carrier": [
-          "integrated-mount"
+          "dual-gatling-turret"
         ],
         "drive": [
           "diesel"
@@ -7990,7 +8048,7 @@
           "light"
         ],
         "carrier": [
-          "integrated-mount"
+          "mini-turret-mount"
         ],
         "weapon": [
           "original-armament"
@@ -8050,7 +8108,7 @@
           "heavy"
         ],
         "carrier": [
-          "integrated-mount"
+          "dual-gatling-turret"
         ],
         "weapon": [
           "original-armament"

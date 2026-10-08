@@ -57,3 +57,6 @@ def extend_parts(parts, catalog):
             reference_speed=speed, max_speed=max(speed, parts[gear]['max_speed']),
             allowed=dict(carrier=[carrier], drive=[drive]), source=actor,
             note='Constructed baseline fit. Hull allocation includes fixed stock abilities (e.g. regeneration); no per-design rebates.')
+        if key == 'hmlrs':
+            parts[f'designer-{key}-mount']['turret_class'] = 'medium'
+            parts[f'designer-{key}-hull']['allowed_turret_classes'] = ['medium']

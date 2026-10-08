@@ -16,6 +16,18 @@ public class CustomPreviewTests
     }
 
     [Test]
+    public void TurretCounterRotationUsesTheSameClockAndPeriod()
+    {
+        Assert.That(CustomPreviewMath.CounterFacing(0), Is.EqualTo(384));
+        Assert.That(CustomPreviewMath.CounterFacing(6000), Is.EqualTo(128));
+        Assert.That(CustomPreviewMath.CounterFacing(24000), Is.EqualTo(384));
+        Assert.That(CustomPreviewMath.CounterFacing(-1), Is.EqualTo(384));
+        Assert.That(CustomPreviewMath.CounterFacing(long.MaxValue), Is.InRange(0, 1023));
+        for (var time = 0; time < 24000; time += 750)
+            Assert.That((CustomPreviewMath.Facing(time) + CustomPreviewMath.CounterFacing(time)) % 1024, Is.EqualTo(768));
+    }
+
+    [Test]
     public void FitKeepsLargeModelsInsideThePanelAndDoesNotOvermagnifyTinySprites()
     {
         Assert.That(CustomPreviewMath.Fit(1000, 500, 216, 168), Is.EqualTo(.216f).Within(.0001));

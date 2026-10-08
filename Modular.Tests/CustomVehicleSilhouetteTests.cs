@@ -6,7 +6,9 @@ namespace Modular.Tests;
 public class CustomVehicleSilhouetteTests
 {
     [TestCase("MTNK", false, CustomVehicleSilhouetteKind.Tank)]
-    [TestCase("TITN", false, CustomVehicleSilhouetteKind.Walker)]
+    [TestCase("TITN", false, CustomVehicleSilhouetteKind.HeavyWalker)]
+    [TestCase("MDRN", false, CustomVehicleSilhouetteKind.MiniDrone)]
+    [TestCase("GDRN", false, CustomVehicleSilhouetteKind.MiniTracked)]
     [TestCase("Juggernaut", false, CustomVehicleSilhouetteKind.Walker)]
     [TestCase("MAMMOTHMK2", false, CustomVehicleSilhouetteKind.Walker)]
     [TestCase("GUNW", false, CustomVehicleSilhouetteKind.Walker)]
@@ -21,6 +23,21 @@ public class CustomVehicleSilhouetteTests
     public void NativeActorSelectsPresentation(string actor, bool hover, CustomVehicleSilhouetteKind expected)
         => Assert.That(CustomVehicleSilhouette.ForActor(actor, hover), Is.EqualTo(expected));
 
+    [TestCase(false, 4, 6)]
+    [TestCase(true, 4, 6)]
+    public void TitanPortraitLayoutReconstructsAllStockBlocks(bool heavy, int width, int height)
+    {
+        var layout = new CustomVehicleSpaceDemo { Silhouette = CustomVehicleSilhouetteKind.HeavyWalker };
+        layout.LoadStockConfiguration(heavy);
+        Assert.That(layout.HullWidth, Is.EqualTo(width));
+        Assert.That(layout.HullHeight, Is.EqualTo(height));
+        Assert.That(layout.TurretWidth, Is.EqualTo(5));
+        Assert.That(layout.TurretHeight, Is.EqualTo(4));
+        Assert.That(layout.Placements.Count, Is.EqualTo(6));
+        foreach (var p in layout.Placements)
+            Assert.That(layout.CanPlace(p.ModuleId, p.InTurret, p.X, p.Y, p.Rotated, p.Id), Is.True, p.ModuleId);
+    }
+
     [Test]
     public void PresentationDoesNotChangePlacementBudgets()
     {
@@ -31,8 +48,8 @@ public class CustomVehicleSilhouetteTests
         {
             layout.Silhouette = kind;
             Assert.That(layout.TurretWidth, Is.EqualTo(5));
-            Assert.That(layout.TurretHeight, Is.EqualTo(3));
-            Assert.That(layout.HullWidth, Is.EqualTo(8));
+            Assert.That(layout.TurretHeight, Is.EqualTo(kind == CustomVehicleSilhouetteKind.HeavyWalker ? 4 : 3));
+            Assert.That(layout.HullWidth * layout.HullHeight, Is.EqualTo(kind == CustomVehicleSilhouetteKind.HeavyWalker ? 24 : 32));
             Assert.That(layout.Placements, Is.EqualTo(placements));
         }
     }

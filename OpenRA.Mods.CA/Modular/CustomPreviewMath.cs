@@ -8,6 +8,8 @@ namespace OpenRA.Mods.CA.Modular
 		public const int RotationPeriodMs = 24000;
 		public static int Facing(long elapsedMs) => (384 + (int)(Math.Max(0, elapsedMs) % RotationPeriodMs * 1024 / RotationPeriodMs)) % 1024;
 
+		public static int CounterFacing(long elapsedMs) => (768 - Facing(elapsedMs) + 1024) % 1024;
+
 		public static float Fit(double width, double height, double availableWidth, double availableHeight)
 		{
 			if (width <= 0 || height <= 0 || availableWidth <= 0 || availableHeight <= 0 ||

@@ -1,6 +1,6 @@
 namespace OpenRA.Mods.CA.Modular
 {
-	public enum CustomVehicleSilhouetteKind { Tank, LightVehicle, Wheeled, Bike, Walker, Tripod, Hover }
+	public enum CustomVehicleSilhouetteKind { Tank, LightVehicle, Wheeled, Bike, Walker, Tripod, Hover, MiniDrone, MiniTracked, HeavyWalker }
 
 	public static class CustomVehicleSilhouette
 	{
@@ -12,7 +12,10 @@ namespace OpenRA.Mods.CA.Modular
 			{
 				"hmmv" or "bggy" or "jeep" => CustomVehicleSilhouetteKind.LightVehicle,
 				"bike" => CustomVehicleSilhouetteKind.Bike,
-				"titn" or "juggernaut" or "mammothmk2" or "xo" or "gunw" => CustomVehicleSilhouetteKind.Walker,
+				"mdrn" => CustomVehicleSilhouetteKind.MiniDrone,
+				"gdrn" => CustomVehicleSilhouetteKind.MiniTracked,
+				"titn" => CustomVehicleSilhouetteKind.HeavyWalker,
+				"juggernaut" or "mammothmk2" or "xo" or "gunw" => CustomVehicleSilhouetteKind.Walker,
 				"tpod" or "hexapod" => CustomVehicleSilhouetteKind.Tripod,
 				"btr" or "apc2" or "ifv" or "katy" or "v3rl" or "hq7" or "htk5" => CustomVehicleSilhouetteKind.Wheeled,
 				_ => nativeHover ? CustomVehicleSilhouetteKind.Hover : CustomVehicleSilhouetteKind.Tank

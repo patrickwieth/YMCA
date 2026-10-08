@@ -29,10 +29,11 @@ namespace OpenRA.Mods.CA.Modular
 		public bool HasChassis { get; private set; }
 		public bool Heavy { get; private set; }
 		public CustomVehicleSilhouetteKind Silhouette { get; set; }
-		public int HullWidth => !HasChassis ? 0 : Heavy ? 10 : 8;
-		public int HullHeight => !HasChassis ? 0 : Heavy ? 5 : 4;
+		public bool Portrait => Silhouette == CustomVehicleSilhouetteKind.HeavyWalker;
+		public int HullWidth => !HasChassis ? 0 : Portrait ? 4 : (Heavy ? 10 : 8);
+		public int HullHeight => !HasChassis ? 0 : Portrait ? 6 : (Heavy ? 5 : 4);
 		public int TurretWidth { get; private set; }
-		public int TurretHeight => TurretWidth == 0 ? 0 : 3;
+		public int TurretHeight => TurretWidth == 0 ? 0 : Portrait ? 4 : 3;
 		public bool HasPdlWithoutBattery => placements.Any(p => p.ModuleId == "pdl") && !placements.Any(p => p.ModuleId == "battery");
 
 		public void SetChassis(bool heavy)
@@ -46,8 +47,8 @@ namespace OpenRA.Mods.CA.Modular
 		public void LoadStockConfiguration(bool heavy)
 		{
 			SetChassis(heavy); SetTurret(5);
-			Place("engine", false, 1, 1, false); Place("generator", false, 3, 1, false);
-			Place("gear", false, 1, HullHeight - 1, false); Place("armor", false, 0, 0, false);
+			Place("engine", false, 1, 1, false); Place("generator", false, Portrait ? 1 : 3, Portrait ? 3 : 1, false);
+			Place("gear", false, Portrait ? 0 : 1, HullHeight - 1, false); Place("armor", false, 0, 0, false);
 			Place("weapon", true, 3, 1, false); Place("ammo", true, 0, 0, false);
 		}
 
@@ -56,9 +57,9 @@ namespace OpenRA.Mods.CA.Modular
 			SetChassis(Heavy);
 			SetTurret(5);
 			Place("engine", false, 1, 1, false);
-			Place("generator", false, 3, 1, false);
-			Place("gear", false, 1, HullHeight - 1, false);
-			Place("battery", false, 5, 1, false);
+			Place("generator", false, Portrait ? 1 : 3, Portrait ? 3 : 1, false);
+			Place("gear", false, Portrait ? 0 : 1, HullHeight - 1, false);
+			Place("battery", false, Portrait ? 1 : 5, Portrait ? 5 : 1, false);
 			Place("armor", false, 0, 0, false);
 			Place("weapon", true, 3, 1, false);
 			Place("ammo", true, 0, 0, false);
