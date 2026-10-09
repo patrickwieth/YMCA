@@ -8,7 +8,7 @@ class DesignerPreviewTests(unittest.TestCase):
     def test_unified_panel_preserves_actor_preview_and_roster_controls(self):
         chrome = (REPO / 'mods/ca/chrome/custom-faction.yaml').read_text(encoding='utf-8')
         logic = (REPO / 'OpenRA.Mods.CA/Widgets/Logic/CustomFactionLogic.cs').read_text(encoding='utf-8')
-        self.assertIn('Width: 1120\n\tHeight: 900', chrome)
+        self.assertIn('Width: WINDOW_WIDTH - 32\n\tHeight: WINDOW_HEIGHT - 32', chrome)
         for name in ('SIDEBAR', 'LAYOUT', 'PROPERTIES', 'BASE', 'LOAD', 'DESIGN', 'SAVE', 'PLAY'):
             self.assertIn('@' + name + ':', chrome)
         self.assertNotIn('SPACE_DEMO', chrome)

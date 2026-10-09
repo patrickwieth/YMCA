@@ -26,6 +26,8 @@ namespace OpenRA.Mods.CA.Widgets
 			if (module == null || bounds.Width <= 0 || bounds.Height <= 0) return false;
 			var collection = module is "engine-basic" or "engine-improved" or "generator-basic"
 				? "modular-component-icons" : "modular-module-icons";
+			if (collection == "modular-component-icons" && Math.Max(bounds.Width, bounds.Height) > 64)
+				collection = "modular-component-icons-large";
 			var sprite = ChromeProvider.TryGetImage(collection, module);
 			if (sprite == null) return false;
 			var scale = Math.Min(bounds.Width / sprite.Size.X, bounds.Height / sprite.Size.Y);

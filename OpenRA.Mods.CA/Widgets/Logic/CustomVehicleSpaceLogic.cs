@@ -102,6 +102,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						canvas.Layout.WeaponKind = WeaponKind();
 						canvas.Layout.AmmunitionId = profile().Parts["ammunition"];
 						canvas.Layout.SetChassis(LargeSchematic());
+						canvas.ResetView();
 						notify("Chassis selected. Choose its compatible turret / mount next.");
 					});
 					item.Get<LabelWidget>("LABEL").GetText = () => compiler.Label(id); return item;
@@ -233,6 +234,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			layout.WeaponKind = WeaponKind();
 			layout.AmmunitionId = profile().Parts["ammunition"];
 			canvas.Layout = layout;
+			canvas.ResetView();
 		}
 	}
 }

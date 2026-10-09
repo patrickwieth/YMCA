@@ -2,7 +2,8 @@
 
 ## User-provided engine and generator portraits
 
-The three original **256×256 RGBA** PNGs are retained without modification:
+The user-provided square **RGBA** PNGs are retained without modification by the icon generator.
+The current sources are 256×256, except the user-updated improved diesel at 192×192:
 
 | Source under `mods/ca/bits/modular/` | Bound component |
 | --- | --- |
@@ -10,11 +11,13 @@ The three original **256×256 RGBA** PNGs are retained without modification:
 | `engines/improved diesel.png` | `diesel-large` — High-Output Diesel Engine |
 | `generators/basic generator.png` | `baseline-generator` — Baseline Generator |
 
-A 2×2 module still occupies **56×56 UI pixels** (28px cells); the icon has about 48×48 pixels
-inside borders/padding. The 256px sources are useful masters, not a reason to enlarge the grid.
-Fine details will naturally become less visible at inventory size. We prefilter them to 64×64
-with Pillow's RGBA Lanczos resampling, then fit them proportionally in the UI. These three icons
-live in the **256×64 power-of-two** `component-icons.png` atlas; the remaining column is transparent.
+The enlarged designer now uses **96×96 UI-pixel cells**. A 2×2 module occupies **192×192 pixels**,
+with about 184×184 pixels available for its icon. Large grid/held icons use the **1024×256**
+`component-icons-large.png` atlas (256px tiles), generated directly from the source PNGs. The
+192px source is resampled, not rewritten. Menus keep the prefiltered **256×64** `component-icons.png`
+atlas (64px tiles). Both atlases have power-of-two dimensions and a transparent fourth column.
+The renderer selects the larger atlas above 64px, so it never stretches a small menu icon to fill
+an enlarged module. The remaining generic category art intentionally retains its pixel-art scale.
 
 Run `python tools/modular/generate_component_icons.py` after updating the source PNGs.
 This does not regenerate or overwrite the separate generic category artwork below.

@@ -19,9 +19,22 @@ namespace OpenRA.Mods.CA.Widgets
 		public Func<string, string> GetModuleIcon = id => id;
 		public Action OnLayoutChanged = () => { };
 		public Action OnSelectionCancelled = () => { };
-		const int Cell = 28;
-		int2 HullOrigin => Layout.Portrait ? new int2(176, 176) : new int2(72, 202);
-		static readonly int2 TurretOrigin = new(156, 32);
+		const int Cell = CustomVehicleCanvasGeometry.Cell;
+		const int SketchCell = CustomVehicleCanvasGeometry.SketchCell;
+		int2 HullOrigin => new(CustomVehicleCanvasGeometry.HullOrigin(Layout).X, CustomVehicleCanvasGeometry.HullOrigin(Layout).Y);
+		int2 TurretOrigin => new(CustomVehicleCanvasGeometry.TurretOrigin(Layout).X, CustomVehicleCanvasGeometry.TurretOrigin(Layout).Y);
+		int2 SketchHullOrigin => Layout.Portrait ? new int2(176, 176) : new int2(72, 202);
+		int2 pan, lastDrag, sketchOffset;
+		bool dragging, drawingCanvas, drawingSketch;
+		static int Scale(int value) => CustomVehicleCanvasGeometry.Scale(value);
+		public void ResetView() { pan = int2.Zero; }
+		void ClampPan()
+		{
+			var p = CustomVehicleCanvasGeometry.ClampPan(Layout, Bounds.Width, Bounds.Height, pan.X, pan.Y);
+			pan = new int2(p.X, p.Y);
+		}
+		int2 ScreenPoint(int x, int y) => RenderOrigin +
+			(drawingSketch ? new int2(Scale(x), Scale(y)) + sketchOffset : new int2(x, y)) - (drawingCanvas ? pan : int2.Zero);
 		bool LightBody => Layout.Silhouette is CustomVehicleSilhouetteKind.LightVehicle or CustomVehicleSilhouetteKind.Bike or CustomVehicleSilhouetteKind.MiniTracked;
 		bool DroneBody => Layout.Silhouette == CustomVehicleSilhouetteKind.MiniDrone;
 		// Every container uses the same cell scale, including held-item snapping.
@@ -56,13 +69,24 @@ namespace OpenRA.Mods.CA.Widgets
 			_ => ZoneColor(CustomVehicleSpaceDemo.Definition(id).Mount)
 		};
 
-		void Fill(int x, int y, int w, int h, Color c) => WidgetUtils.FillRectWithColor(new Rectangle(RenderOrigin.X + x, RenderOrigin.Y + y, w, h), c);
-		void Text(string s, int x, int y, Color c) => Game.Renderer.Fonts["Small"].DrawText(s, new float2(RenderOrigin.X + x, RenderOrigin.Y + y), c);
-		void Ellipse(int x, int y, int w, int h, Color color) => Game.Renderer.RgbaColorRenderer.FillEllipse(
-			new float3(RenderOrigin.X + x, RenderOrigin.Y + y, 0), new float3(RenderOrigin.X + x + w, RenderOrigin.Y + y + h, 0), color);
+		void Fill(int x, int y, int w, int h, Color c)
+		{
+			var p = ScreenPoint(x, y);
+			WidgetUtils.FillRectWithColor(new Rectangle(p.X, p.Y, drawingSketch ? Scale(w) : w, drawingSketch ? Scale(h) : h), c);
+		}
+		void Text(string s, int x, int y, Color c)
+		{
+			var p = ScreenPoint(x, y);
+			Game.Renderer.Fonts["Small"].DrawText(s, new float2(p.X, p.Y), c);
+		}
+		void Ellipse(int x, int y, int w, int h, Color color)
+		{
+			var a = ScreenPoint(x, y); var b = ScreenPoint(x + w, y + h);
+			Game.Renderer.RgbaColorRenderer.FillEllipse(new float3(a.X, a.Y, 0), new float3(b.X, b.Y, 0), color);
+		}
 		void Polygon(Color color, params int2[] points)
 		{
-			float3 At(int2 p) => new float3(RenderOrigin.X + p.X, RenderOrigin.Y + p.Y, 0);
+			float3 At(int2 p) { var q = ScreenPoint(p.X, p.Y); return new float3(q.X, q.Y, 0); }
 			for (var i = 1; i < points.Length - 1; i++) Game.Renderer.RgbaColorRenderer.FillTriangle(At(points[0]), At(points[i]), At(points[i + 1]), color);
 		}
 
@@ -103,9 +127,25 @@ namespace OpenRA.Mods.CA.Widgets
 
 		public override bool HandleMouseInput(MouseInput input)
 		{
-			var mouse = input.Location - RenderOrigin;
+			if (dragging)
+			{
+				if (input.Event == MouseInputEvent.Move)
+				{ pan += lastDrag - input.Location; lastDrag = input.Location; ClampPan(); return true; }
+				if (input.Event == MouseInputEvent.Up && input.Button == MouseButton.Middle)
+				{ dragging = false; return YieldMouseFocus(input); }
+			}
 			if (!RenderBounds.Contains(input.Location)) return false;
+			if (input.Event == MouseInputEvent.Scroll)
+			{
+				pan -= input.Modifiers.HasModifier(Modifiers.Shift) ? new int2(input.Delta.Y * Cell, 0) : new int2(input.Delta.X * Cell, input.Delta.Y * Cell);
+				ClampPan(); return true;
+			}
+			if (input.Event == MouseInputEvent.Down && input.Button == MouseButton.Middle)
+			{ dragging = TakeMouseFocus(input); lastDrag = input.Location; return true; }
+			var mouse = input.Location - RenderOrigin + pan;
 			if (input.Event != MouseInputEvent.Up) return true;
+			if (input.Location.Y < RenderOrigin.Y + 24)
+			{ if (input.Button == MouseButton.Right) Cancel(); return true; }
 			if (!HitGrid(mouse, out var turret, out var x, out var y))
 			{
 				if (input.Button == MouseButton.Right) Cancel();
@@ -143,23 +183,27 @@ namespace OpenRA.Mods.CA.Widgets
 		// outside the inventory anymore. Rotate the artwork with the held footprint.
 		void DrawWeapon(int x, int y, int width, int height, bool rotated)
 		{
-			var w = rotated ? height : width;
-			var h = rotated ? width : height;
+			var actualW = rotated ? height : width;
+			var actualH = rotated ? width : height;
+			var w = (actualW + 2) / Cell * SketchCell - 2;
+			var h = SketchCell - 2;
 			var steel = Color.FromArgb(255, 116, 134, 140);
 			var light = Color.FromArgb(255, 186, 198, 181);
 			var shadow = Color.FromArgb(255, 22, 29, 34);
 			var energy = Color.FromArgb(255, 108, 218, 225);
 			void Part(int px, int py, int pw, int ph, Color color)
 			{
-				if (rotated) Fill(x + h - py - ph, y + px, ph, pw, color);
-				else Fill(x + px, y + py, pw, ph, color);
+				int X(int value) => (int)Math.Round(value * (double)actualW / w);
+				int Y(int value) => (int)Math.Round(value * (double)actualH / h);
+				if (rotated) Fill(x + actualH - Y(py + ph), y + X(px), Y(py + ph) - Y(py), X(px + pw) - X(px), color);
+				else Fill(x + X(px), y + Y(py), X(px + pw) - X(px), Y(py + ph) - Y(py), color);
 			}
 			if (Layout.WeaponKind == CustomWeaponKind.SonicEmitter)
 			{
 				Part(4, 7, w - 8, 13, shadow);
 				for (var i = 0; i < 5; i++)
 				{
-					var px = i * Cell + 6;
+					var px = i * SketchCell + 6;
 					Part(px, 4, 16, 18, steel); Part(px + 2, 5, 12, 2, light);
 					Part(px + 5, 10, 6, 9, energy);
 				}
@@ -204,8 +248,9 @@ namespace OpenRA.Mods.CA.Widgets
 			else
 			{
 				var iconWidth = w >= 80 && h < 40 ? 36 : w - 6;
+				var iconPosition = ScreenPoint(x + 3, y + 3);
 				var hasIcon = CustomVehicleModuleIconWidget.DrawIcon(GetModuleIcon(id),
-					new Rectangle(RenderOrigin.X + x + 3, RenderOrigin.Y + y + 3, iconWidth, h - 6));
+					new Rectangle(iconPosition.X, iconPosition.Y, iconWidth, h - 6));
 				if (!hasIcon || iconWidth == 36)
 				{
 					var offset = hasIcon ? 41 : 3;
@@ -226,27 +271,29 @@ namespace OpenRA.Mods.CA.Widgets
 		public void DrawHeld(Rectangle window)
 		{
 			if (Selected == null || !window.Contains(Viewport.LastMousePos)) return;
-			var mouse = Viewport.LastMousePos - RenderOrigin;
-			if (HitGrid(mouse, out var turret, out var x, out var y))
+			var mouse = Viewport.LastMousePos - RenderOrigin + pan;
+			if (RenderBounds.Contains(Viewport.LastMousePos) && Viewport.LastMousePos.Y >= RenderOrigin.Y + 24 && HitGrid(mouse, out var turret, out var x, out var y))
 			{
 				SnapWeaponSocket(turret, ref x, ref y);
 				var o = turret ? TurretOrigin : HullOrigin;
 				var cell = GridCell(turret);
-				Item(Selected, Rotated, o.X + x * cell, o.Y + y * cell,
+				Game.Renderer.EnableScissor(RenderBounds);
+				Item(Selected, Rotated, o.X + x * cell - pan.X, o.Y + y * cell - pan.Y,
 					Layout.CanPlace(Selected, turret, x, y, Rotated, Moving) ? Color.Lime : Color.Red, true, cell);
+				Game.Renderer.DisableScissor();
 			}
 			else
 			{
 				var size = CustomVehicleSpaceDemo.Size(Layout.ModuleFor(Selected), Rotated);
-				var px = Math.Clamp(Viewport.LastMousePos.X + 14, window.Left, window.Right - size.Width * Cell);
-				var py = Math.Clamp(Viewport.LastMousePos.Y + 14, window.Top, window.Bottom - size.Height * Cell);
+				var px = Math.Clamp(Viewport.LastMousePos.X + 14, window.Left, Math.Max(window.Left, window.Right - size.Width * Cell));
+				var py = Math.Clamp(Viewport.LastMousePos.Y + 14, window.Top, Math.Max(window.Top, window.Bottom - size.Height * Cell));
 				Item(Selected, Rotated, px - RenderOrigin.X, py - RenderOrigin.Y, Tint(Selected), true);
 			}
 		}
 
 		void DrawChassis(int hw, int hh, Color metal, Color dark)
 		{
-			var bottom = HullOrigin.Y + hh;
+			var bottom = SketchHullOrigin.Y + hh;
 			var tire = Color.FromArgb(255, 17, 22, 25);
 			void Wheel(int x, int diameter)
 			{
@@ -257,7 +304,7 @@ namespace OpenRA.Mods.CA.Widgets
 			switch (Layout.Silhouette)
 			{
 				case CustomVehicleSilhouetteKind.HeavyWalker:
-					var left = HullOrigin.X;
+					var left = SketchHullOrigin.X;
 					foreach (var x in new[] { left - 24, left + hw - 2 })
 					{
 						Polygon(metal, new int2(x, bottom - 80), new int2(x + 23, bottom - 76),
@@ -343,14 +390,25 @@ namespace OpenRA.Mods.CA.Widgets
 			Fill(0, 0, Bounds.Width, Bounds.Height, dark);
 			Text("LEFT SIDE VIEW", 16, 8, Color.White);
 			if (!Layout.HasChassis) { Text("Choose a chassis on the left to begin.", 104, 180, Color.White); return; }
-			var hw = Layout.HullWidth * GridCell(false);
-			var hh = Layout.HullHeight * GridCell(false);
-			DrawChassis(hw, hh, metal, dark);
+			ClampPan();
+			Game.Renderer.EnableScissor(RenderBounds);
+			drawingCanvas = true;
+			try { DrawCanvas(metal, dark); }
+			finally { drawingCanvas = drawingSketch = false; Game.Renderer.DisableScissor(); }
+			Fill(0, 0, Bounds.Width, 24, dark);
+			Text("96px cells | Wheel: scroll | Shift+wheel: horizontal | Middle drag: pan", 12, 5, Color.White);
+		}
+
+		void DrawCanvas(Color metal, Color dark)
+		{
+			drawingSketch = true;
+			sketchOffset = HullOrigin - new int2(Scale(SketchHullOrigin.X), Scale(SketchHullOrigin.Y));
+			DrawChassis(Layout.HullWidth * SketchCell, Layout.HullHeight * SketchCell, metal, dark);
 			if (Layout.TurretWidth > 0)
 			{
-				var cell = GridCell(true);
-				var tw = Layout.TurretWidth * cell;
-				var bottom = TurretOrigin.Y + Layout.TurretHeight * cell + 6;
+				sketchOffset = TurretOrigin - new int2(Scale(156), Scale(32));
+				var tw = Layout.TurretWidth * SketchCell;
+				var bottom = 32 + Layout.TurretHeight * SketchCell + 6;
 				if (DroneBody)
 				{
 					Ellipse(143, 20, tw + 26, bottom - 9, metal);
@@ -370,11 +428,14 @@ namespace OpenRA.Mods.CA.Widgets
 					Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
 					Ellipse(169, bottom + 2, 86, 16, metal);
 				}
-				if (!DroneBody) Fill(LightBody ? 204 : 194, bottom + 12, LightBody ? 14 : 34, (Layout.Portrait ? 176 : 188) - bottom - 12, metal);
-				Text($"{(DroneBody ? "Mount" : "Turret")} {Layout.TurretWidth} x {Layout.TurretHeight}", 20, 48, Color.White);
-				Text($"{Layout.Used(true)} cells used", 20, 65, Color.White);
-				Text($"Socket {Layout.WeaponSocket.Width} x {Layout.WeaponSocket.Height}", 20, 82, ZoneColor(Zone.Weapon));
+				drawingSketch = false;
+				var connectorY = TurretOrigin.Y + Layout.TurretHeight * Cell + Scale(18);
+				if (!DroneBody) Fill(TurretOrigin.X + Scale((LightBody ? 204 : 194) - 156), connectorY,
+					Scale(LightBody ? 14 : 34), Math.Max(0, HullOrigin.Y - Scale(14) - connectorY), metal);
+				Text($"{(DroneBody ? "Mount" : "Turret")} {Layout.TurretWidth} x {Layout.TurretHeight} | Socket {Layout.WeaponSocket.Width} x {Layout.WeaponSocket.Height}",
+					TurretOrigin.X, TurretOrigin.Y - 22, Color.White);
 			}
+			drawingSketch = false;
 			foreach (var t in new[] { false, true })
 			{
 				var o = t ? TurretOrigin : HullOrigin;
@@ -396,7 +457,7 @@ namespace OpenRA.Mods.CA.Widgets
 				var cell = GridCell(p.InTurret);
 				Item(p.ModuleId, p.Rotated, o.X + p.X * cell, o.Y + p.Y * cell, Tint(p.ModuleId), false, cell);
 			}
-			Text($"Schematic hull: {Layout.HullWidth} x {Layout.HullHeight} / {Layout.Used(false)} cells used", 72, Bounds.Height - 19, Color.White);
+			Text($"Chassis {Layout.HullWidth} x {Layout.HullHeight} / {Layout.Used(false)} cells used", HullOrigin.X, HullOrigin.Y + Layout.HullHeight * Cell + 150, Color.White);
 		}
 	}
 

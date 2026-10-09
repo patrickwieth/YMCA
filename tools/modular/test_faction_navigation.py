@@ -43,10 +43,15 @@ class FactionNavigationTests(unittest.TestCase):
 
     def test_all_containers_hit_testing_drawing_and_items_share_display_scale(self):
         source = (ROOT / 'OpenRA.Mods.CA/Widgets/CustomVehicleSpaceWidget.cs').read_text(encoding='utf-8')
-        self.assertIn('const int Cell = 28;', source)
+        self.assertIn('const int Cell = CustomVehicleCanvasGeometry.Cell;', source)
+        geometry = (ROOT / 'OpenRA.Mods.CA/Modular/CustomVehicleCanvasGeometry.cs').read_text(encoding='utf-8')
+        self.assertIn('const int Cell = 96;', geometry)
+        self.assertIn('input.Location - RenderOrigin + pan', source)
+        self.assertIn('Game.Renderer.EnableScissor(RenderBounds)', source)
+        self.assertIn('MouseButton.Middle', source)
         self.assertIn('int GridCell(bool turret) => Cell;', source)
         chrome = (ROOT / 'mods/ca/chrome/custom-faction.yaml').read_text(encoding='utf-8')
-        self.assertIn('Width: 1120\n\tHeight: 900', chrome)
+        self.assertIn('Width: WINDOW_WIDTH - 32\n\tHeight: WINDOW_HEIGHT - 32', chrome)
         self.assertNotIn('Button@ROTATE:', chrome)
         self.assertNotIn('Button@CANCEL:', chrome)
         self.assertIn('Keycode.R', source)

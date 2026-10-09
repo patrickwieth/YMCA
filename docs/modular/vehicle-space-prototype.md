@@ -3,7 +3,9 @@
 There is **one vehicle designer**, reached from the [faction overview](faction-navigation.md).
 The separate Space designer button/window has been removed. Faction creation is under Play; faction
 loading, naming, roster management and Test Game are now owned by the library/overview.
-The 1120×900 vehicle panel has a left sidebar, central schematic, and the original rotating preview on the right.
+The vehicle panel uses the available window minus 16px margins, with a left sidebar, enlarged central
+schematic, and the original rotating preview on the right. All cells are 96px; see
+[large-grid navigation](large-grid-navigation.md) for scrolling and panning.
 
 ## Progressive configuration
 
@@ -22,7 +24,7 @@ of the rectangular grid: sloped hull nose, rear deck, track loop/road wheels, an
 antenna, turret ring and forward gun barrels. The turret docks above the hull. Mount selection is only in the sidebar; there is no extra dock button or white box on the silhouette.
 [Class-specific silhouettes](faction-navigation.md#silhouettes) now replace the all-tank fallback for
 explicit walker, light vehicle, wheeled, motorcycle and native-hover bindings. Light-vehicle mounts
-have lighter outlines, but **every grid cell is 28×28**. Titan uses a 4×6 upright chassis and 5×4 turret.
+have lighter outlines, but **every grid cell is 96×96**. Titan uses a 4×6 upright chassis and 5×4 turret.
 See [layout refinements](turret-layout-refinements.md) for class bindings and
 [fixed weapon sockets](fixed-weapon-sockets.md) for the implemented forward barrels and internal Sonic emitter.
 These remain schematics, not exact reproductions of each stock actor or proof of arbitrary mixed art.
@@ -74,7 +76,7 @@ new energy consumption, charging logic, armor coverage model or permission for a
 
 Grid sizes and module dimensions remain illustrative. The current generic hull templates use 8×4 or 10×5
 (selected at chassis initialization from the provisional configured mass), and a **5×3 mount interior**.
-Titan instead uses **4×6 below and 5×4 above**. All cells are 28×28 pixels. These are not calibrated budgets, and do not override Battle Fortress's three-slot/full-width Bunker policy.
+Titan instead uses **4×6 below and 5×4 above**. All cells are 96×96 UI pixels. These are not calibrated budgets, and do not override Battle Fortress's three-slot/full-width Bunker policy.
 
 Model: `OpenRA.Mods.CA/Modular/CustomVehicleSpaceDemo.cs`.
 Drawing/input/held-item overlay: `Widgets/CustomVehicleSpaceWidget.cs`.

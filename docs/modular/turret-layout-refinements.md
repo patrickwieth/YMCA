@@ -2,8 +2,9 @@
 
 ## Implemented
 
-- All inventory cells, in all containers, now use **28×28 pixels**. There is no per-chassis
-  visual scaling. The vehicle window is **1120×900**, with a taller canvas/property panel.
+- All inventory cells, in all containers, now use **96×96 UI pixels**. There is no per-chassis
+  cell scaling. The vehicle window fills the available screen minus 16px margins; its central
+  canvas supports scrolling and panning. See [large-grid navigation](large-grid-navigation.md).
   The layout Rotate/Cancel buttons are removed; R, Esc and right-click still work.
   The separate right-hand preview rotation toggle remains.
 - MDRN (Mini Drone) has a hover-drone body, integrated weapon silhouette and no large turret
