@@ -25,6 +25,7 @@ namespace OpenRA.Mods.CA.Widgets
 		int2 TurretOrigin => new(CustomVehicleCanvasGeometry.TurretOrigin(Layout).X, CustomVehicleCanvasGeometry.TurretOrigin(Layout).Y);
 		int2 SketchHullOrigin => Layout.Portrait ? new int2(176, 176) : new int2(72, 202);
 		int2 pan, lastDrag, sketchOffset;
+		int2 CanvasOffset => new(CustomVehicleCanvasGeometry.HorizontalOffset(Layout, Bounds.Width), 0);
 		bool dragging, drawingCanvas, drawingSketch;
 		static int Scale(int value) => CustomVehicleCanvasGeometry.Scale(value);
 		public void ResetView() { pan = int2.Zero; }
@@ -34,7 +35,7 @@ namespace OpenRA.Mods.CA.Widgets
 			pan = new int2(p.X, p.Y);
 		}
 		int2 ScreenPoint(int x, int y) => RenderOrigin +
-			(drawingSketch ? new int2(Scale(x), Scale(y)) + sketchOffset : new int2(x, y)) - (drawingCanvas ? pan : int2.Zero);
+			(drawingSketch ? new int2(Scale(x), Scale(y)) + sketchOffset : new int2(x, y)) + (drawingCanvas ? CanvasOffset - pan : int2.Zero);
 		bool LightBody => Layout.Silhouette is CustomVehicleSilhouetteKind.LightVehicle or CustomVehicleSilhouetteKind.Bike or CustomVehicleSilhouetteKind.MiniTracked;
 		bool DroneBody => Layout.Silhouette == CustomVehicleSilhouetteKind.MiniDrone;
 		// Every container uses the same cell scale, including held-item snapping.
@@ -142,7 +143,7 @@ namespace OpenRA.Mods.CA.Widgets
 			}
 			if (input.Event == MouseInputEvent.Down && input.Button == MouseButton.Middle)
 			{ dragging = TakeMouseFocus(input); lastDrag = input.Location; return true; }
-			var mouse = input.Location - RenderOrigin + pan;
+			var mouse = input.Location - RenderOrigin + pan - CanvasOffset;
 			if (input.Event != MouseInputEvent.Up) return true;
 			if (input.Location.Y < RenderOrigin.Y + 24)
 			{ if (input.Button == MouseButton.Right) Cancel(); return true; }
@@ -271,14 +272,14 @@ namespace OpenRA.Mods.CA.Widgets
 		public void DrawHeld(Rectangle window)
 		{
 			if (Selected == null || !window.Contains(Viewport.LastMousePos)) return;
-			var mouse = Viewport.LastMousePos - RenderOrigin + pan;
+			var mouse = Viewport.LastMousePos - RenderOrigin + pan - CanvasOffset;
 			if (RenderBounds.Contains(Viewport.LastMousePos) && Viewport.LastMousePos.Y >= RenderOrigin.Y + 24 && HitGrid(mouse, out var turret, out var x, out var y))
 			{
 				SnapWeaponSocket(turret, ref x, ref y);
 				var o = turret ? TurretOrigin : HullOrigin;
 				var cell = GridCell(turret);
 				Game.Renderer.EnableScissor(RenderBounds);
-				Item(Selected, Rotated, o.X + x * cell - pan.X, o.Y + y * cell - pan.Y,
+				Item(Selected, Rotated, o.X + x * cell + CanvasOffset.X - pan.X, o.Y + y * cell - pan.Y,
 					Layout.CanPlace(Selected, turret, x, y, Rotated, Moving) ? Color.Lime : Color.Red, true, cell);
 				Game.Renderer.DisableScissor();
 			}

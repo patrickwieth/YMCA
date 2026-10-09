@@ -49,6 +49,9 @@ public class CustomVehicleCanvasGeometryTests
             layout.LoadStockConfiguration(true);
             var hull = CustomVehicleCanvasGeometry.HullOrigin(layout);
             var turret = CustomVehicleCanvasGeometry.TurretOrigin(layout);
+            var offset = CustomVehicleCanvasGeometry.HorizontalOffset(layout, width);
+            Assert.That(hull.X + layout.HullWidth * cell / 2 + offset, Is.EqualTo(width / 2), "chassis is horizontally centered");
+            Assert.That(CustomVehicleCanvasGeometry.ClampPan(layout, width, height, 0, 0), Is.EqualTo((0, 0)));
             Assert.That(hull.Y, Is.GreaterThan(turret.Y + layout.TurretHeight * cell), "containers must not overlap");
             foreach (var inTurret in new[] { false, true })
             for (var y = 0; y < 6; y++)
@@ -56,7 +59,7 @@ public class CustomVehicleCanvasGeometryTests
             {
                 if (!layout.ContainsCell(inTurret, x, y)) continue;
                 var origin = inTurret ? turret : hull;
-                var px = origin.X + x * cell;
+                var px = origin.X + x * cell + offset;
                 var py = origin.Y + y * cell;
                 var pan = CustomVehicleCanvasGeometry.ClampPan(layout, width, height, px, py - 24);
                 Assert.That(px - pan.X, Is.GreaterThanOrEqualTo(0));
@@ -64,10 +67,20 @@ public class CustomVehicleCanvasGeometryTests
                 Assert.That(px + cell - pan.X, Is.LessThanOrEqualTo(width));
                 Assert.That(py + cell - pan.Y, Is.LessThanOrEqualTo(height));
                 // Panning is a translation: the same cell is hit after converting back.
-                Assert.That((px - pan.X + pan.X - origin.X) / cell, Is.EqualTo(x));
+                Assert.That((px - pan.X + pan.X - offset - origin.X) / cell, Is.EqualTo(x));
                 Assert.That((py - pan.Y + pan.Y - origin.Y) / cell, Is.EqualTo(y));
             }
-            Assert.That(CustomVehicleCanvasGeometry.ClampPan(layout, width, height, -999, -999), Is.EqualTo((0, 0)));
+            Assert.That(CustomVehicleCanvasGeometry.ClampPan(layout, width, height, -999, -999), Is.EqualTo((Math.Min(0, offset), 0)));
         }
+    }
+
+    [Test]
+    public void CannonChangeDoesNotMoveTheCenteredChassis()
+    {
+        var layout = new CustomVehicleSpaceDemo { WeaponKind = CustomWeaponKind.BattleTankCannon };
+        layout.LoadStockConfiguration(false);
+        var before = CustomVehicleCanvasGeometry.HorizontalOffset(layout, 1328);
+        layout.WeaponKind = CustomWeaponKind.BattleTank120mm;
+        Assert.That(CustomVehicleCanvasGeometry.HorizontalOffset(layout, 1328), Is.EqualTo(before));
     }
 }

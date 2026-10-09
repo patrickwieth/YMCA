@@ -25,7 +25,11 @@ cells or clipping away inaccessible modules, the canvas supports:
 
 Content and snapped held items are clipped to the canvas, so they cannot cover neighboring UI.
 A held item outside the canvas still follows the cursor over the designer, as before. Hit testing
-adds the same pan offset that drawing subtracts. Panning is clamped to include all grid cells,
+adds the same pan offset that drawing subtracts. The initial view centers the chassis horizontally
+in the canvas, independent of barrel length and spare pan margins. The whole assembly (including
+turret, silhouettes, modules and snapped held items) shares that horizontal translation; input
+subtracts it. Panning can move in either direction from this centered view, including on narrower
+screens, and switching designs restores the centered position. Panning is clamped to include all grid cells,
 external sockets, silhouettes and the chassis footer. Switching designs/chassis resets the view.
 The turret and chassis keep separate origins and non-overlapping grids, including Titan's upright
 layout. The grid-to-grid vertical gap is now **110px** for ordinary chassis and **60px** for the

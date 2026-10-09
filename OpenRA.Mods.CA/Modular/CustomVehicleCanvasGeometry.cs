@@ -19,10 +19,16 @@ namespace OpenRA.Mods.CA.Modular
 			return (Math.Max(hull.X + layout.HullWidth * Cell + 220,
 				turret.X + Math.Max(layout.TurretWidth, socketEnd) * Cell + 100), hull.Y + layout.HullHeight * Cell + 180);
 		}
+		// Center on the chassis, not on the asymmetric weapon overhang or spare pan margins.
+		public static int HorizontalOffset(CustomVehicleSpaceDemo layout, int width) =>
+			width / 2 - HullOrigin(layout).X - layout.HullWidth * Cell / 2;
+
 		public static (int X, int Y) ClampPan(CustomVehicleSpaceDemo layout, int width, int height, int x, int y)
 		{
 			var extent = Extent(layout);
-			return (Math.Clamp(x, 0, Math.Max(0, extent.Width - width)), Math.Clamp(y, 0, Math.Max(0, extent.Height - height)));
+			var offset = HorizontalOffset(layout, width);
+			return (Math.Clamp(x, Math.Min(0, offset), Math.Max(0, extent.Width + offset - width)),
+				Math.Clamp(y, 0, Math.Max(0, extent.Height - height)));
 		}
 	}
 }
