@@ -10,6 +10,7 @@ namespace OpenRA.Mods.CA.Modular
 		public enum Zone { None, Interior, RunningGear, Weapon, Armor, Ammunition, Any }
 		public sealed record Module(string Id, string Label, int Width, int Height, bool Hull, bool Turret, Zone Mount = Zone.Interior);
 		public sealed record Placement(int Id, string ModuleId, bool InTurret, int X, int Y, bool Rotated);
+		public sealed record GridEdge(int X, int Y, bool Vertical, string ModuleId, Zone Mount);
 		public static readonly IReadOnlyList<Module> Modules = Array.AsReadOnly(new[]
 		{
 			new Module("weapon", "Weapon", 4, 1, false, true, Zone.Weapon),
@@ -116,6 +117,35 @@ namespace OpenRA.Mods.CA.Modular
 			var size = Size(ModuleFor(p.ModuleId), p.Rotated);
 			return p.InTurret == turret && x >= p.X && y >= p.Y && x < p.X + size.Width && y < p.Y + size.Height;
 		});
+
+		// Each shared edge is emitted once. Cells belonging to the same placement have no seam.
+		public IEnumerable<GridEdge> Edges(bool turret, int? ignoredId = null)
+		{
+			var socket = turret ? WeaponSocket : null;
+			var width = turret ? Math.Max(TurretWidth, socket == null ? 0 : socket.X + socket.Width) : HullWidth;
+			var height = turret ? TurretHeight : HullHeight;
+			GridEdge Between(int x, int y, bool vertical)
+			{
+				var ax = vertical ? x - 1 : x;
+				var ay = vertical ? y : y - 1;
+				var hasA = ContainsCell(turret, ax, ay);
+				var hasB = ContainsCell(turret, x, y);
+				if (!hasA && !hasB) return null;
+				var a = hasA ? At(turret, ax, ay, ignoredId) : null;
+				var b = hasB ? At(turret, x, y, ignoredId) : null;
+				if (a != null && b != null && a.Id == b.Id) return null;
+				var za = ZoneAt(turret, ax, ay);
+				var zb = ZoneAt(turret, x, y);
+				var zone = za == Zone.Weapon || zb == Zone.Weapon ? Zone.Weapon : hasA ? za : zb;
+				return new GridEdge(x, y, vertical, a?.ModuleId ?? b?.ModuleId, zone);
+			}
+			for (var y = 0; y <= height; y++)
+				for (var x = 0; x <= width; x++)
+				{
+					if (x < width && Between(x, y, false) is { } horizontal) yield return horizontal;
+					if (y < height && Between(x, y, true) is { } vertical) yield return vertical;
+				}
+		}
 
 		public bool CanPlace(string moduleId, bool turret, int x, int y, bool rotated, int? movingId = null)
 		{

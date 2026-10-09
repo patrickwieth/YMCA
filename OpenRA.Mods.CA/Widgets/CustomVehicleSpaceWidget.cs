@@ -93,8 +93,9 @@ namespace OpenRA.Mods.CA.Widgets
 
 		void Border(int x, int y, int w, int h, Color c)
 		{
-			Fill(x, y, w, 2, c); Fill(x, y + h - 2, w, 2, c);
-			Fill(x, y, 2, h, c); Fill(x + w - 2, y, 2, h, c);
+			// Center the outline on the same coordinates as shared grid edges.
+			Fill(x - 1, y - 1, w + 2, 2, c); Fill(x - 1, y + h - 1, w + 2, 2, c);
+			Fill(x - 1, y - 1, 2, h + 2, c); Fill(x + w - 1, y - 1, 2, h + 2, c);
 		}
 
 		bool HitGrid(int2 point, out bool turret, out int x, out int y)
@@ -239,12 +240,9 @@ namespace OpenRA.Mods.CA.Widgets
 		{
 			var m = Layout.ModuleFor(id);
 			var size = CustomVehicleSpaceDemo.Size(m, rotated);
-			var w = size.Width * cell - 2;
-			var h = size.Height * cell - 2;
-			Fill(x, y, w, h, id == "weapon" ? ZoneFill(Zone.Weapon) : held ? Color.FromArgb(220, 35, 49, 56) : Color.FromArgb(255, 39, 55, 62));
-			for (var iy = 0; iy < size.Height; iy++)
-				for (var ix = 0; ix < size.Width; ix++) Border(x + ix * cell, y + iy * cell, cell - 2, cell - 2, Tint(id));
-			Border(x, y, w, h, border);
+			var w = size.Width * cell;
+			var h = size.Height * cell;
+			Fill(x, y, w, h, id == "weapon" ? ZoneFill(Zone.Weapon) : held ? Color.FromArgb(255, 35, 49, 56) : Color.FromArgb(255, 39, 55, 62));
 			if (id == "weapon") DrawWeapon(x, y, w, h, rotated);
 			else
 			{
@@ -261,6 +259,7 @@ namespace OpenRA.Mods.CA.Widgets
 			}
 			if (held)
 			{
+				Border(x, y, w, h, border);
 				var dimensions = $"{size.Width}x{size.Height}";
 				var width = Game.Renderer.Fonts["Small"].Measure(dimensions).X;
 				Fill(x + w - width - 3, y + h - 14, width + 2, 13, Color.FromArgb(230, 13, 19, 25));
@@ -447,8 +446,7 @@ namespace OpenRA.Mods.CA.Widgets
 					for (var x = 0; x < w; x++)
 					{
 						if (!Layout.ContainsCell(t, x, y)) continue;
-						Fill(o.X + x * cell, o.Y + y * cell, cell - 2, cell - 2, ZoneFill(Layout.ZoneAt(t, x, y)));
-						Border(o.X + x * cell, o.Y + y * cell, cell - 2, cell - 2, ZoneColor(Layout.ZoneAt(t, x, y)));
+						Fill(o.X + x * cell, o.Y + y * cell, cell, cell, ZoneFill(Layout.ZoneAt(t, x, y)));
 					}
 			}
 			foreach (var p in Layout.Placements)
@@ -457,6 +455,18 @@ namespace OpenRA.Mods.CA.Widgets
 				var o = p.InTurret ? TurretOrigin : HullOrigin;
 				var cell = GridCell(p.InTurret);
 				Item(p.ModuleId, p.Rotated, o.X + p.X * cell, o.Y + p.Y * cell, Tint(p.ModuleId), false, cell);
+			}
+			// Draw boundaries after backgrounds and artwork: no double frames or internal module seams.
+			foreach (var turret in new[] { false, true })
+			{
+				var o = turret ? TurretOrigin : HullOrigin;
+				var cell = GridCell(turret);
+				foreach (var edge in Layout.Edges(turret, Moving))
+				{
+					var color = edge.ModuleId == null ? ZoneColor(edge.Mount) : Tint(edge.ModuleId);
+					Fill(o.X + edge.X * cell - 1, o.Y + edge.Y * cell - 1,
+						edge.Vertical ? 2 : cell + 2, edge.Vertical ? cell + 2 : 2, color);
+				}
 			}
 			Text($"Chassis {Layout.HullWidth} x {Layout.HullHeight} / {Layout.Used(false)} cells used", HullOrigin.X, HullOrigin.Y + Layout.HullHeight * Cell + 150, Color.White);
 		}

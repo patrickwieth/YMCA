@@ -49,6 +49,15 @@ class VehicleDesignerLayoutTests(unittest.TestCase):
             self.assertEqual((sy, sh), (by, bh))
             self.assertLessEqual(sx + sw, bx)
 
+    def test_grid_draws_one_shared_boundary_pass_after_module_art(self):
+        source = (ROOT / 'OpenRA.Mods.CA/Widgets/CustomVehicleSpaceWidget.cs').read_text(encoding='utf-8')
+        self.assertIn('Layout.Edges(turret, Moving)', source)
+        self.assertGreater(source.index('Layout.Edges(turret, Moving)'), source.index('foreach (var p in Layout.Placements)'))
+        item = source.split('void Item(', 1)[1].split('// Drawn last', 1)[0]
+        self.assertNotIn('for (var iy', item)
+        self.assertIn('if (held)\n\t\t\t{\n\t\t\t\tBorder(x, y, w, h, border);', item)
+        self.assertNotIn('cell - 2, cell - 2', source)
+
     def test_faction_fields_and_legacy_controls_are_hidden_even_on_load_error(self):
         nodes = widgets()
         for id in ('FACTION_NAME_LABEL', 'FACTION_NAME', 'BASE', 'LOAD', 'DESIGN_LABEL', 'DESIGN',

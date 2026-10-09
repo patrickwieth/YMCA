@@ -36,6 +36,13 @@ layout. The grid-to-grid vertical gap is now **110px** for ordinary chassis and 
 upright Titan, half the previous 220/120px gap. The 120mm still occupies one interior cell without
 enlarging the turret or external socket.
 
+Grid lines are shared edges, not separate inset frames per cell. Empty cells retain their raster;
+occupied cells of the same placement have no internal seams. Adjacent modules (including two
+instances of the same type) share a single boundary. A pickup temporarily restores the empty-cell
+raster at its old location; its held preview has only one opaque footprint and an outer validity
+outline aligned with the shared edges. Colors remain category/zone-based. Cell counts, hit testing
+and collision rules are unchanged.
+
 The old 28px coordinates remain only as **reference artwork coordinates**: chassis silhouettes
 and procedural weapon drawings are scaled to the new cells. They do not introduce a second grid
 cell size. Text and outlines remain UI-sized.
