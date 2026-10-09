@@ -2,7 +2,7 @@
 
 ## Implemented
 
-- All inventory cells, in all containers, now use **96×96 UI pixels**. There is no per-chassis
+- All inventory cells, in all containers, now use **64×64 UI pixels**. There is no per-chassis
   cell scaling. The vehicle window fills the available screen minus 16px margins; its central
   canvas supports scrolling and panning. See [large-grid navigation](large-grid-navigation.md).
   The layout Rotate/Cancel buttons are removed; R, Esc and right-click still work.

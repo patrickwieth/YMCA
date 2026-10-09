@@ -8,9 +8,9 @@ public class CustomVehicleCanvasGeometryTests
     [Test]
     public void DisplayScaleDoesNotChangeInventoryCapacity()
     {
-        Assert.That(CustomVehicleCanvasGeometry.Cell, Is.EqualTo(96));
-        Assert.That(CustomVehicleCanvasGeometry.Scale(28), Is.EqualTo(96));
-        Assert.That(CustomVehicleCanvasGeometry.Scale(56), Is.EqualTo(192));
+        Assert.That(CustomVehicleCanvasGeometry.Cell, Is.EqualTo(64));
+        Assert.That(CustomVehicleCanvasGeometry.Scale(28), Is.EqualTo(64));
+        Assert.That(CustomVehicleCanvasGeometry.Scale(56), Is.EqualTo(128));
         var layout = new CustomVehicleSpaceDemo { WeaponKind = CustomWeaponKind.BattleTank120mm, AmmunitionId = "medium-tank-shell" };
         layout.LoadStockConfiguration(false);
         Assert.That(layout.HullWidth, Is.EqualTo(8));
@@ -19,7 +19,7 @@ public class CustomVehicleCanvasGeometryTests
         Assert.That(layout.TurretHeight, Is.EqualTo(3));
         Assert.That(layout.WeaponSocket.Width, Is.EqualTo(4));
         Assert.That(layout.WeaponFootprint.Width, Is.EqualTo(5));
-        Assert.That(layout.ModuleFor("ammo").Width * CustomVehicleCanvasGeometry.Cell, Is.EqualTo(192));
+        Assert.That(layout.ModuleFor("ammo").Width * CustomVehicleCanvasGeometry.Cell, Is.EqualTo(128));
     }
 
     [TestCase(1280, 720)]

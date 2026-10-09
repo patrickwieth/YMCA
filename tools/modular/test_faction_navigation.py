@@ -45,7 +45,7 @@ class FactionNavigationTests(unittest.TestCase):
         source = (ROOT / 'OpenRA.Mods.CA/Widgets/CustomVehicleSpaceWidget.cs').read_text(encoding='utf-8')
         self.assertIn('const int Cell = CustomVehicleCanvasGeometry.Cell;', source)
         geometry = (ROOT / 'OpenRA.Mods.CA/Modular/CustomVehicleCanvasGeometry.cs').read_text(encoding='utf-8')
-        self.assertIn('const int Cell = 96;', geometry)
+        self.assertIn('const int Cell = 64;', geometry)
         self.assertIn('input.Location - RenderOrigin + pan', source)
         self.assertIn('Game.Renderer.EnableScissor(RenderBounds)', source)
         self.assertIn('MouseButton.Middle', source)

@@ -11,8 +11,8 @@ The current sources are 256×256, except the user-updated improved diesel at 192
 | `engines/improved diesel.png` | `diesel-large` — High-Output Diesel Engine |
 | `generators/basic generator.png` | `baseline-generator` — Baseline Generator |
 
-The enlarged designer now uses **96×96 UI-pixel cells**. A 2×2 module occupies **192×192 pixels**,
-with about 184×184 pixels available for its icon. Large grid/held icons use the **1024×256**
+The enlarged designer now uses **64×64 UI-pixel cells**. A 2×2 module occupies **128×128 UI pixels**,
+with about 120×120 pixels available for its icon. OpenRA's UI scaling applies additionally. Large grid/held icons use the **1024×256**
 `component-icons-large.png` atlas (256px tiles), generated directly from the source PNGs. The
 192px source is resampled, not rewritten. Menus keep the prefiltered **256×64** `component-icons.png`
 atlas (64px tiles). Both atlases have power-of-two dimensions and a transparent fourth column.

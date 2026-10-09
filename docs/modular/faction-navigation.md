@@ -70,7 +70,7 @@ or shared running-gear labels. Initial explicit styles cover:
 - Other explicitly native-hover bindings: hover pods and no tracks.
 
 These are class silhouettes, not individual stock sprite reproductions. The right-hand original
-rotating sprite/voxel preview remains authoritative for original artwork. All cells are now 96×96 UI pixels, with a larger, pannable central canvas,
+rotating sprite/voxel preview remains authoritative for original artwork. All cells are now 64×64 UI pixels, with a larger, pannable central canvas,
 including hit testing, held snapping and installed blocks. Body and separately rendered turrets
 counter-rotate. See [the latest layout refinements](turret-layout-refinements.md) for the taller
 window, explicit turret classes, and the pending fixed weapon socket revision.

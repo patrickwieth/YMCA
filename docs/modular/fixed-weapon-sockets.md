@@ -1,7 +1,7 @@
 # Fixed weapon sockets: first working grid implementation
 
 The old 2×2 weapon block and decorative barrel outside the grid are removed. The **weapon drawing
-itself fills its red socket cells**, including while picked up. All cells now use **96×96 UI pixels**; footprint counts and socket rules are unchanged.
+itself fills its red socket cells**, including while picked up. All cells now use **64×64 UI pixels**; footprint counts and socket rules are unchanged.
 
 ## Geometry and input
 

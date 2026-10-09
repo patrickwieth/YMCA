@@ -5,7 +5,7 @@ namespace OpenRA.Mods.CA.Modular
 	// Display pixels only: never changes inventory capacities or compiled vehicle values.
 	public static class CustomVehicleCanvasGeometry
 	{
-		public const int Cell = 96;
+		public const int Cell = 64;
 		public const int SketchCell = 28;
 		public static int Scale(int value) => (int)Math.Round(value * (double)Cell / SketchCell);
 		public static (int X, int Y) TurretOrigin(CustomVehicleSpaceDemo layout) => (layout.Portrait ? 144 : 256, 136);

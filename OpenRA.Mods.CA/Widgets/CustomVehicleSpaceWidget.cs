@@ -396,7 +396,7 @@ namespace OpenRA.Mods.CA.Widgets
 			try { DrawCanvas(metal, dark); }
 			finally { drawingCanvas = drawingSketch = false; Game.Renderer.DisableScissor(); }
 			Fill(0, 0, Bounds.Width, 24, dark);
-			Text("96px cells | Wheel: scroll | Shift+wheel: horizontal | Middle drag: pan", 12, 5, Color.White);
+			Text($"{Cell}px cells | Wheel: scroll | Shift+wheel: horizontal | Middle drag: pan", 12, 5, Color.White);
 		}
 
 		void DrawCanvas(Color metal, Color dark)

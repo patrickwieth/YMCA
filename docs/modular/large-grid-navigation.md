@@ -1,8 +1,9 @@
-# 96px vehicle designer grid
+# 64px vehicle designer grid
 
-This supersedes the earlier 28px display cells. Every inventory cell is now **96×96 UI pixels**,
+This supersedes the earlier 28px and 96px display cells. Every inventory cell is now **64×64 UI pixels**,
 including held items and protruding weapon cells. A 2×2 engine, generator or shell block occupies
-192×192 pixels. Inventory cell counts, placement rules, prices, damage and saved designs are unchanged.
+128×128 UI pixels. OpenRA's UI scaling applies additionally: at 150%, a cell occupies 96×96
+screen pixels. Inventory cell counts, placement rules, prices, damage and saved designs are unchanged.
 
 The designer window uses the screen minus 16px margins. The left component sidebar and right
 preview/property column retain their widths; additional width goes to the middle canvas. The
@@ -31,7 +32,7 @@ Engine/generator portraits use their full-size atlas for the enlarged grid and h
 menus keep prefiltered thumbnails. Both runtime atlases have power-of-two dimensions, even when
 a source PNG is 192px. See [module icons](module-icons.md).
 
-Tests verify fixed 96px dimensions, unchanged capacities, non-overlapping grids and reachability
+Tests verify fixed 64px dimensions, unchanged capacities, non-overlapping grids and reachability
 of every cell across all silhouettes at 1280×720, 1920×1080, 2560×1440 and 3840×2160. Static UI tests
 cover pan-aware hit testing, scissoring and responsive window expressions. Interactive review of
 layout/artwork and input behavior remains necessary; these are not GPU acceptance tests.
