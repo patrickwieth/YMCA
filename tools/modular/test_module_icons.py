@@ -43,7 +43,7 @@ class ModuleIconTests(unittest.TestCase):
         canvas = (ROOT / 'OpenRA.Mods.CA/Widgets/CustomVehicleSpaceWidget.cs').read_text(encoding='utf-8')
         sidebar = (ROOT / 'OpenRA.Mods.CA/Widgets/Logic/CustomVehicleSpaceLogic.cs').read_text(encoding='utf-8')
         icon = (ROOT / 'OpenRA.Mods.CA/Widgets/CustomVehicleModuleIconWidget.cs').read_text(encoding='utf-8')
-        self.assertIn('CustomVehicleModuleIconWidget.DrawIcon(id', canvas)
+        self.assertIn('CustomVehicleModuleIconWidget.DrawIcon(GetModuleIcon(id)', canvas)
         self.assertIn('ButtonIcon(button', sidebar)
         self.assertIn('OptionIcon(item', sidebar)
         self.assertIn('"MODULAR_PART_DROPDOWN_TEMPLATE"', sidebar)

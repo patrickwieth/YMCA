@@ -16,6 +16,7 @@ namespace OpenRA.Mods.CA.Widgets
 		public int? Moving;
 		public Action<string> Notify = _ => { };
 		public Func<string, bool> OnInstall = _ => true;
+		public Func<string, string> GetModuleIcon = id => id;
 		public Action OnLayoutChanged = () => { };
 		public Action OnSelectionCancelled = () => { };
 		const int Cell = 28;
@@ -203,7 +204,7 @@ namespace OpenRA.Mods.CA.Widgets
 			else
 			{
 				var iconWidth = w >= 80 && h < 40 ? 36 : w - 6;
-				var hasIcon = CustomVehicleModuleIconWidget.DrawIcon(id,
+				var hasIcon = CustomVehicleModuleIconWidget.DrawIcon(GetModuleIcon(id),
 					new Rectangle(RenderOrigin.X + x + 3, RenderOrigin.Y + y + 3, iconWidth, h - 6));
 				if (!hasIcon || iconWidth == 36)
 				{

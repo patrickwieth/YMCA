@@ -1,4 +1,31 @@
-# Vehicle module icons - first pixel-art set
+# Vehicle module icons
+
+## User-provided engine and generator portraits
+
+The three original **256×256 RGBA** PNGs are retained without modification:
+
+| Source under `mods/ca/bits/modular/` | Bound component |
+| --- | --- |
+| `engines/basic diesel.png` | `diesel` — Standard Diesel Engine |
+| `engines/improved diesel.png` | `diesel-large` — High-Output Diesel Engine |
+| `generators/basic generator.png` | `baseline-generator` — Baseline Generator |
+
+A 2×2 module still occupies **56×56 UI pixels** (28px cells); the icon has about 48×48 pixels
+inside borders/padding. The 256px sources are useful masters, not a reason to enlarge the grid.
+Fine details will naturally become less visible at inventory size. We prefilter them to 64×64
+with Pillow's RGBA Lanczos resampling, then fit them proportionally in the UI. These three icons
+live in the **256×64 power-of-two** `component-icons.png` atlas; the remaining column is transparent.
+
+Run `python tools/modular/generate_component_icons.py` after updating the source PNGs.
+This does not regenerate or overwrite the separate generic category artwork below.
+
+The selected component's portrait appears in the sidebar, dropdown, fitted grid block and held
+item. A pending replacement uses its own portrait; cancelling restores the configured component's
+portrait. Components without a specific portrait keep their generic category icon. No module
+footprints, stats, saved IDs or bindings change. Automated checks cover the sources, generated
+pixels, chrome regions and UI wiring; final small-icon readability needs live review.
+
+## Original category set
 
 ![Module icon review sheet, enlarged 3x with nearest-neighbor sampling](module-icons-preview.png)
 

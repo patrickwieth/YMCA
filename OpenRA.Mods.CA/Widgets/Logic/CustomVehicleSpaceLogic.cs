@@ -29,6 +29,13 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			canvas = widget.Get<CustomVehicleSpaceWidget>("LAYOUT");
 			var sidebar = widget.Get("SIDEBAR");
 			canvas.Notify = notify;
+			canvas.GetModuleIcon = module =>
+			{
+				var role = module == "engine" ? "drive" : module == "generator" ? "generator" : null;
+				if (role == null) return module;
+				var part = pendingRole == role ? pendingPart : profile().Parts[role];
+				return CustomVehicleModuleIconWidget.ForPart(module, part);
+			};
 			canvas.OnSelectionCancelled = () =>
 			{
 				if (originalEquipmentGeometry is { } original)
@@ -146,7 +153,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			void PartField(string title, int row, Color color, string role, string module, bool armor = false)
 			{
 				var button = Field(title, row, color, () => Ready);
-				ButtonIcon(button, () => module);
+				ButtonIcon(button, () => CustomVehicleModuleIconWidget.ForPart(module, profile().Parts[role]));
 				button.GetText = () => Fit(compiler.Label(profile().Parts[role]), 150);
 				button.OnMouseDown = _ =>
 				{
@@ -158,7 +165,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						});
 						item.Get<LabelWidget>("LABEL").GetText = () => id == "@reflector" ? "Reflector armor (planning)" : compiler.Label(id);
 						item.Get<LabelWidget>("LABEL").GetColor = () => color;
-						OptionIcon(item, id == "@reflector" ? "reflector" : module); return item;
+						OptionIcon(item, id == "@reflector" ? "reflector" : CustomVehicleModuleIconWidget.ForPart(module, id)); return item;
 					}
 					var options = compiler.CompatibleOptions(profile(), role).Concat(armor ? new[] { "@reflector" } : Array.Empty<string>()).ToArray();
 					button.ShowDropDown("MODULAR_PART_DROPDOWN_TEMPLATE", Math.Min(options.Length, 7) * 32, options, Setup);
