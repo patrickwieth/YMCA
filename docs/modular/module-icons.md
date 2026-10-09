@@ -3,7 +3,7 @@
 ## User-provided engine and generator portraits
 
 The user-provided square **RGBA** PNGs are retained without modification by the icon generator.
-The current sources are 256×256, except the user-updated improved diesel at 192×192:
+The current diesel sources are both 192×192; the generator source is 256×256:
 
 | Source under `mods/ca/bits/modular/` | Bound component |
 | --- | --- |
@@ -19,7 +19,10 @@ atlas (64px tiles). Both atlases have power-of-two dimensions and a transparent 
 The renderer selects the larger atlas above 64px, so it never stretches a small menu icon to fill
 an enlarged module. The remaining generic category art intentionally retains its pixel-art scale.
 
-Run `python tools/modular/generate_component_icons.py` after updating the source PNGs.
+Run `python tools/modular/generate_component_icons.py` after updating the source PNGs, then
+restart OpenRA. The game reads the generated atlases, not the original source PNGs. Neither a
+normal .NET build nor the running designer regenerates these atlases automatically. Commit the
+changed originals together with both regenerated atlases so the source and displayed art agree.
 This does not regenerate or overwrite the separate generic category artwork below.
 
 The selected component's portrait appears in the sidebar, dropdown, fitted grid block and held
