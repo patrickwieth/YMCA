@@ -53,11 +53,15 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				return true;
 			};
 			var selection = widget.Get<LabelWidget>("SELECTION");
-			selection.GetText = () => !Ready ? "Choose a chassis, then a turret / mount." : canvas.Selected == null ?
-				"Pick a part on the left, then drop it into the grid." :
-				$"In hand: {canvas.Layout.ModuleFor(canvas.Selected).Label} " +
-				$"({CustomVehicleSpaceDemo.Size(canvas.Layout.ModuleFor(canvas.Selected), canvas.Rotated).Width} x " +
-				$"{CustomVehicleSpaceDemo.Size(canvas.Layout.ModuleFor(canvas.Selected), canvas.Rotated).Height}) - R rotates; Esc cancels.";
+			selection.GetText = () =>
+			{
+				if (!Ready) return "Choose a chassis, then a mount.";
+				if (canvas.Selected == null) return "Choose a part, then place it.";
+				var module = canvas.Layout.ModuleFor(canvas.Selected);
+				var size = CustomVehicleSpaceDemo.Size(module, canvas.Rotated);
+				return WidgetUtils.TruncateText($"In hand: {module.Label}", selection.Bounds.Width, Game.Renderer.Fonts["Small"]) +
+					$"\n{size.Width} x {size.Height} | R rotate / Esc cancel";
+			};
 
 			DropDownButtonWidget Field(string title, int row, Color color, Func<bool> visible)
 			{

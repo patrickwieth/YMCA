@@ -73,7 +73,9 @@ These are class silhouettes, not individual stock sprite reproductions. The righ
 rotating sprite/voxel preview remains authoritative for original artwork. All cells are now 64×64 UI pixels, with a larger, pannable central canvas,
 including hit testing, held snapping and installed blocks. Body and separately rendered turrets
 counter-rotate. See [the latest layout refinements](turret-layout-refinements.md) for the taller
-window, explicit turret classes, and the pending fixed weapon socket revision.
+window and explicit turret classes, and [fixed weapon sockets](fixed-weapon-sockets.md) for the
+implemented weapon footprints. The vehicle designer hides faction naming, places vehicle naming
+and Save/Back on the left, and reserves the full central height for the grid.
 These grids are not physical-volume calibration; explicit native compatibility and stock combat
 values remain unchanged.
 

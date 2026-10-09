@@ -4,7 +4,9 @@ There is **one vehicle designer**, reached from the [faction overview](faction-n
 The separate Space designer button/window has been removed. Faction creation is under Play; faction
 loading, naming, roster management and Test Game are now owned by the library/overview.
 The vehicle panel uses the available window minus 16px margins, with a left sidebar, enlarged central
-schematic, and the original rotating preview on the right. All cells are 64 UI pixels; see
+full-height schematic, and the original rotating preview at the top right. Vehicle naming and
+Save/Back live in the left column; the faction name is hidden. The turret/chassis gap is halved.
+All cells are 64 UI pixels; see
 [large-grid navigation](large-grid-navigation.md) for scrolling and panning.
 
 ## Progressive configuration

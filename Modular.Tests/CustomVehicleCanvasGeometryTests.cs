@@ -22,6 +22,17 @@ public class CustomVehicleCanvasGeometryTests
         Assert.That(layout.ModuleFor("ammo").Width * CustomVehicleCanvasGeometry.Cell, Is.EqualTo(128));
     }
 
+    [TestCase(CustomVehicleSilhouetteKind.Tank, 110)]
+    [TestCase(CustomVehicleSilhouetteKind.HeavyWalker, 60)]
+    public void TurretChassisGapIsHalved(CustomVehicleSilhouetteKind kind, int gap)
+    {
+        var layout = new CustomVehicleSpaceDemo { Silhouette = kind };
+        layout.LoadStockConfiguration(false);
+        var hull = CustomVehicleCanvasGeometry.HullOrigin(layout);
+        var turret = CustomVehicleCanvasGeometry.TurretOrigin(layout);
+        Assert.That(hull.Y - turret.Y - layout.TurretHeight * CustomVehicleCanvasGeometry.Cell, Is.EqualTo(gap));
+    }
+
     [TestCase(1280, 720)]
     [TestCase(1920, 1080)]
     [TestCase(2560, 1440)]
@@ -29,7 +40,7 @@ public class CustomVehicleCanvasGeometryTests
     public void EveryCellIncludingExternalSocketsIsReachableWithoutShrinking(int screenWidth, int screenHeight)
     {
         var width = screenWidth - 32 - 560;
-        var height = screenHeight - 32 - 330;
+        var height = screenHeight - 32 - 32;
         const int cell = CustomVehicleCanvasGeometry.Cell;
         foreach (var kind in Enum.GetValues<CustomVehicleSilhouetteKind>())
         foreach (var weapon in new[] { CustomWeaponKind.Cannon, CustomWeaponKind.BattleTank120mm, CustomWeaponKind.SonicEmitter })

@@ -10,7 +10,7 @@ namespace OpenRA.Mods.CA.Modular
 		public static int Scale(int value) => (int)Math.Round(value * (double)Cell / SketchCell);
 		public static (int X, int Y) TurretOrigin(CustomVehicleSpaceDemo layout) => (layout.Portrait ? 144 : 256, 136);
 		public static (int X, int Y) HullOrigin(CustomVehicleSpaceDemo layout) =>
-			(layout.Portrait ? 192 : 160, 136 + layout.TurretHeight * Cell + (layout.Portrait ? 120 : 220));
+			(layout.Portrait ? 192 : 160, 136 + layout.TurretHeight * Cell + (layout.Portrait ? 60 : 110));
 		public static (int Width, int Height) Extent(CustomVehicleSpaceDemo layout)
 		{
 			var hull = HullOrigin(layout);

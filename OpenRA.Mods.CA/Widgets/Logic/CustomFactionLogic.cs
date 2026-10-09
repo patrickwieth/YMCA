@@ -38,7 +38,9 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		public CustomFactionLogic(Widget widget, ModData modData, Action onExit, Action<string> onPlay, CustomFactionEditorSession editorSession = null)
 		{
 			string message = "Configure a vehicle here. Add templates to include more stock families.";
-			widget.Get<LabelWidget>("STATUS").GetText = () => WidgetUtils.TruncateText(message, 788, Game.Renderer.Fonts["Small"]);
+			var status = widget.Get<LabelWithTooltipWidget>("STATUS");
+			status.GetText = () => WidgetUtils.TruncateText(message, status.Bounds.Width, Game.Renderer.Fonts["Small"]);
+			status.GetTooltipText = () => WidgetUtils.WrapText(message, 360, Game.Renderer.Fonts["Small"]);
 			bool dirty = editorSession?.NewDesign ?? false;
 			void DiscardThen(Action action)
 			{
