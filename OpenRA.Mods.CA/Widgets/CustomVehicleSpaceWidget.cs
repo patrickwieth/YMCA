@@ -17,6 +17,7 @@ namespace OpenRA.Mods.CA.Widgets
 		public Action<string> Notify = _ => { };
 		public Func<string, bool> OnInstall = _ => true;
 		public Func<string, string> GetModuleIcon = id => id;
+		public Func<CustomVehicleCannonArt> GetCannonArt = () => null;
 		public Action OnLayoutChanged = () => { };
 		public Action OnSelectionCancelled = () => { };
 		const int Cell = CustomVehicleCanvasGeometry.Cell;
@@ -185,6 +186,9 @@ namespace OpenRA.Mods.CA.Widgets
 		// outside the inventory anymore. Rotate the artwork with the held footprint.
 		void DrawWeapon(int x, int y, int width, int height, bool rotated)
 		{
+			var position = ScreenPoint(x + 3, y + 3);
+			if (CustomVehicleModuleIconWidget.DrawCannon(GetCannonArt(),
+				new Rectangle(position.X, position.Y, width - 6, height - 6), rotated)) return;
 			var actualW = rotated ? height : width;
 			var actualH = rotated ? width : height;
 			var w = (actualW + 2) / Cell * SketchCell - 2;

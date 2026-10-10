@@ -139,7 +139,12 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 						("Graphics", p.Parts["running_gear"] == "prototype-hover" && !compiler.IsNativeHover(p) ? "Hover placeholder graphics." : "Bound original actor graphics.")
 					};
 					var names = new[] { "Chassis", "Running gear", "Engine", "Generator", "Armor", "Turret", "Weapon", "Ammunition" };
-					for (var i = 0; i < CustomFactionDesign.Roles.Length; i++) values.Add((names[i], compiler.Label(p.Parts[CustomFactionDesign.Roles[i]])));
+					for (var i = 0; i < CustomFactionDesign.Roles.Length; i++)
+					{
+						var role = CustomFactionDesign.Roles[i];
+						var label = role == "weapon" ? CustomVehicleCannonArt.For(p.Parts["chassis"], p.Parts[role])?.Label : null;
+						values.Add((names[i], label ?? compiler.Label(p.Parts[role])));
+					}
 					values.Add(("Weapon / ability package", compiler.WeaponSummary(p)));
 					Properties(values);
 					valid = true;

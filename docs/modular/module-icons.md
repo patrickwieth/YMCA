@@ -31,6 +31,13 @@ portrait. Components without a specific portrait keep their generic category ico
 footprints, stats, saved IDs or bindings change. Automated checks cover the sources, generated
 pixels, chrome regions and UI wiring; final small-icon readability needs live review.
 
+## Cannon portraits
+
+Source-qualified cannon pictures now replace the generic schematic for matching stock weapons.
+Bindings use chassis plus weapon ID, not a shared calculator ID alone. See
+[cannon assignment and reserves](cannon-art.md) for the 14 covered families, missing calibers and
+preserved special variants. Rebuild these separately with `python tools/modular/generate_cannon_art.py`.
+
 ## Original category set
 
 ![Module icon review sheet, enlarged 3x with nearest-neighbor sampling](module-icons-preview.png)

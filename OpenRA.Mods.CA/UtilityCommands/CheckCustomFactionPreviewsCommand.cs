@@ -24,6 +24,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var compiler = new CustomFactionDesign(reader.ReadToEnd());
 			var rules = utility.ModData.DefaultRules;
 			var count = 0;
+			var cannonBindings = 0;
 			var compiledNodes = new List<MiniYamlNode>();
 			var bindings = new List<(string Key, ActorInfo Source, string Faction)>();
 			foreach (var faction in CustomFactionDesign.BaseFactions)
@@ -34,6 +35,17 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				{
 					compiler.SelectPart(p, "chassis", hull);
 					var source = rules.Actors[compiler.PreviewActor(p).ToLowerInvariant()];
+					foreach (var weapon in compiler.CompatibleOptions(p, "weapon"))
+					{
+						var art = CustomVehicleCannonArt.For(hull, weapon);
+						if (art == null) continue;
+						var armaments = source.TraitInfos<ArmamentInfo>().Where(a =>
+							string.Equals(a.Weapon, art.SourceWeapon, StringComparison.OrdinalIgnoreCase)).ToArray();
+						if (!string.Equals(source.Name, art.SourceActor, StringComparison.OrdinalIgnoreCase) || armaments.Length == 0 ||
+							art.Sprite != null && art.Barrels > 1 && !armaments.Any(a => a.LocalOffset.Length >= art.Barrels))
+							throw new InvalidOperationException("Cannon art does not match stock source: " + hull + "/" + weapon);
+						cannonBindings++;
+					}
 					var key = "modular.graphicscheck" + count;
 					var actorNode = MiniYaml.FromString(compiler.Rules(p), "generated-graphics-check").Single(n => n.Key == "modular.custom");
 					compiledNodes.Add(new MiniYamlNode(key, actorNode.Value));
@@ -106,7 +118,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				if (source.TraitInfos<WithIdleOverlayInfo>().Count() != compiled.TraitInfos<WithIdleOverlayInfo>().Count())
 					throw new InvalidOperationException("Compiled idle overlays changed: " + source.Name);
 			}
-			Console.WriteLine("Validated " + count + " preview, compiled graphics and counter-rotation bindings. GPU/palettes/assets still require an interactive test.");
+			Console.WriteLine("Validated " + count + " preview, compiled graphics and counter-rotation bindings, plus " + cannonBindings +
+				" source-qualified cannon labels/art bindings. GPU/palettes/assets still require an interactive test.");
 		}
 	}
 }
