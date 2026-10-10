@@ -9,6 +9,18 @@ Nine existing pictures cover **21 chassis families / 22 weapon choices**. They a
 grid, held-item preview and weapon picker. Twin cannon packages draw two barrels without
 adding components or firing channels. Original PNGs are never overwritten.
 
+## Faction direction for heavy artillery calibers
+
+Prefer **152mm for China and Soviet vehicles**, and **155mm for NATO-oriented vehicles**.
+This is a design direction for this caliber family, not a replacement for all tank calibers or
+an automatic admission of new interchangeable weapons. Soviet Nona SVK now uses the supplied
+`152mm artillery.png` and a 152mm label; its legacy `155mm.Nona` rule remains unchanged.
+Akatsiya, ISU and Tsar already follow the 152mm direction. Allied artillery and Tank Destroyer
+retain 155mm. Future Chinese artillery assignments should follow the 152mm direction where
+appropriate; nuclear/incendiary package details still require their own review.
+Nod is not automatically classified as NATO; its existing assignments remain pending a separate
+faction decision. No damage, firing-rate or range changes follow from these designations.
+
 ## Approved consolidation
 
 These are deliberate designer caliber designations, not changes to combat statistics or claims
@@ -36,8 +48,8 @@ compatibility, balancing and PNG are future work.
 | `120mm.png` | GDI's already-approved +20% alternative; Titan (`TitanGun`, approved 120mm designation); Mirage (`120mmHEAT`). |
 | `125mm.png` | Heavy Tank and People's Tank, both twin-barrel packages. |
 | `130mm.png` | Mammoth (`130mmTD`) and Apocalypse (`130mm`), both twin barrels plus original missiles. |
-| `152mm artillery.png` | Akatsiya (`152mm.Akatsiya`) and ISU (`152mm`). |
-| `155mm artillery.png` | Nod/Allied Artillery, Howitzer, Specter and Nona SVK, plus the reclassified Tank Destroyer. |
+| `152mm artillery.png` | Akatsiya (`152mm.Akatsiya`), ISU (`152mm`) and Nona SVK (legacy `155mm.Nona`). |
+| `155mm artillery.png` | Nod/Allied Artillery, Howitzer and Specter, plus the reclassified Tank Destroyer. |
 
 The original actor preview and in-game sprites/voxels remain unchanged. Only the inventory
 schematic and contextual component labels change. Damage, range, burst, reload, prerequisites,

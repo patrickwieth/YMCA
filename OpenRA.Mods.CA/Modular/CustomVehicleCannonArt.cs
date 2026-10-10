@@ -15,7 +15,7 @@ namespace OpenRA.Mods.CA.Modular
 			("stock-rtnk-hull", "original-armament") => new("cannon-120mm", 1, "120mm HEAT Cannon", "RTNK", "120mmHEAT"),
 			("stock-2s3-hull", "original-armament") => new("cannon-152mm-artillery", 1, "152mm Artillery Cannon", "2S3", "152mm.Akatsiya"),
 			("stock-isu-hull", "original-armament") => new("cannon-152mm-artillery", 1, "152mm Artillery Cannon", "ISU", "152mm"),
-			("stock-nonasvk-hull", "original-armament") => new("cannon-155mm-artillery", 1, "155mm Artillery Cannon", "NonaSVK", "155mm.Nona"),
+			("stock-nonasvk-hull", "original-armament") => new("cannon-152mm-artillery", 1, "152mm Artillery Cannon", "NonaSVK", "155mm.Nona"),
 			("designer-nod-artillery-hull", "field-artillery") => new("cannon-155mm-artillery", 1, "155mm Artillery Cannon", "ARTY.nod", "155mmTD"),
 			("field-artillery-hull", "field-artillery") => new("cannon-155mm-artillery", 1, "155mm Artillery Cannon", "ARTY", "155mm"),
 			("nod-combat-howitzer-hull", "nod-combat-howitzer-weapon") => new("cannon-155mm-artillery", 1, "155mm Howitzer", "HOWI", "155mmTDM"),

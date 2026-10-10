@@ -15,7 +15,7 @@ public class CustomVehicleCannonArtTests
     [TestCase("stock-rtnk-hull", "original-armament", "cannon-120mm", 1)]
     [TestCase("stock-2s3-hull", "original-armament", "cannon-152mm-artillery", 1)]
     [TestCase("stock-isu-hull", "original-armament", "cannon-152mm-artillery", 1)]
-    [TestCase("stock-nonasvk-hull", "original-armament", "cannon-155mm-artillery", 1)]
+    [TestCase("stock-nonasvk-hull", "original-armament", "cannon-152mm-artillery", 1)]
     [TestCase("designer-nod-artillery-hull", "field-artillery", "cannon-155mm-artillery", 1)]
     [TestCase("field-artillery-hull", "field-artillery", "cannon-155mm-artillery", 1)]
     [TestCase("nod-combat-howitzer-hull", "nod-combat-howitzer-weapon", "cannon-155mm-artillery", 1)]
@@ -59,6 +59,16 @@ public class CustomVehicleCannonArtTests
         Assert.That(art.Label, Is.EqualTo("75mm Cannon"));
         Assert.That(art.SourceWeapon, Is.EqualTo("30mm"));
         Assert.That(CustomVehicleCannonArt.For(hull, "30mm-autocannon"), Is.Null);
+    }
+
+    [Test]
+    public void ArtilleryCalibersFollowFactionDirectionWithoutChangingNativeRules()
+    {
+        foreach (var hull in new[] { "stock-2s3-hull", "stock-isu-hull", "stock-nonasvk-hull", "stock-tsar-tank-hull" })
+            Assert.That(CustomVehicleCannonArt.For(hull, "original-armament").Label, Does.StartWith("152mm"));
+        Assert.That(CustomVehicleCannonArt.For("stock-nonasvk-hull", "original-armament").SourceWeapon, Is.EqualTo("155mm.Nona"));
+        Assert.That(CustomVehicleCannonArt.For("field-artillery-hull", "field-artillery").Label, Does.StartWith("155mm"));
+        Assert.That(CustomVehicleCannonArt.For("stock-tnkd-hull", "original-armament").Label, Does.StartWith("155mm"));
     }
 
     [Test]
