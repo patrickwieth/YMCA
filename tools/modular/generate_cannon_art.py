@@ -3,7 +3,7 @@ import json
 import math
 import re
 from pathlib import Path
-from PIL import Image, ImageDraw
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 ART = ROOT / 'mods/ca/bits/modular/cannons'
@@ -53,21 +53,6 @@ def cs_source():
     return '\n'.join(lines + ['\t\t\t_ => null', '\t\t};', '\t}', '}', ''])
 
 
-def review_sheet():
-    names = sorted(p.name for p in ART.glob('*.png'))
-    used = {b['image'] for b in bindings()['bindings'] if b['image']}
-    sheet = Image.new('RGBA', (4 * 300, math.ceil(len(names) / 4) * 112), '#171f25')
-    draw = ImageDraw.Draw(sheet)
-    for i, name in enumerate(names):
-        x, y = i % 4 * 300, i // 4 * 112
-        with Image.open(ART / name) as image:
-            sheet.alpha_composite(image, (x + (300 - image.width) // 2, y + 30))
-        draw.text((x + 8, y + 6), name, fill='#dae1cf')
-        draw.text((x + 8, y + 94), 'BOUND TO STOCK' if name in used else 'RESERVE',
-                  fill='#7acc91' if name in used else '#b3b3b3')
-    return sheet
-
-
 if __name__ == '__main__':
     sheet, chrome = assets()
     sheet.save(ROOT / 'mods/ca/bits/modular/cannon-icons.png')
@@ -78,5 +63,4 @@ if __name__ == '__main__':
     text = re.sub(re.escape(BEGIN) + r'.*?' + re.escape(END), lambda _: chrome, text, flags=re.S)
     path.write_text(text, encoding='utf-8')
     (ROOT / 'OpenRA.Mods.CA/Modular/CustomVehicleCannonArt.cs').write_text(cs_source(), encoding='utf-8')
-    review_sheet().save(ROOT / 'docs/modular/cannon-art-review.png')
-    print(f'Generated cannon atlas {sheet.size}, chrome regions, bindings and review sheet.')
+    print(f'Packed supplied PNGs into atlas {sheet.size}; updated chrome regions and bindings. No item artwork created.')

@@ -20,6 +20,13 @@ public class CustomVehicleCannonArtTests
     [TestCase("field-artillery-hull", "field-artillery", "cannon-155mm-artillery", 1)]
     [TestCase("nod-combat-howitzer-hull", "nod-combat-howitzer-weapon", "cannon-155mm-artillery", 1)]
     [TestCase("nod-combat-specter-hull", "nod-combat-specter-weapon", "cannon-155mm-artillery", 1)]
+    [TestCase("allied-medium-hull", "medium-cannon", "cannon-88mm", 1)]
+    [TestCase("stock-1tnk-hull", "original-armament", "cannon-75mm", 1)]
+    [TestCase("nod-light-hull", "light-cannon", "cannon-75mm", 1)]
+    [TestCase("t34-hull", "light-cannon", "cannon-75mm", 1)]
+    [TestCase("stock-devil-tank-hull", "original-armament", "cannon-75mm", 1)]
+    [TestCase("stock-tnkd-hull", "original-armament", "cannon-155mm-artillery", 1)]
+    [TestCase("stock-tsar-tank-hull", "original-armament", "cannon-152mm-short", 1)]
     public void ApprovedPicturesAreBoundToConcreteHullsAndWeapons(string hull, string weapon, string sprite, int barrels)
     {
         var art = CustomVehicleCannonArt.For(hull, weapon);
@@ -35,11 +42,23 @@ public class CustomVehicleCannonArtTests
         Assert.That(CustomVehicleCannonArt.For("gdi-battle-hull", "medium-cannon").Label, Is.EqualTo("105mm Smoothbore Cannon"));
         Assert.That(CustomVehicleCannonArt.For("soviet-heavy-hull", "medium-cannon").Label, Is.EqualTo("Dual 125mm Cannons"));
         var challenger = CustomVehicleCannonArt.For("allied-medium-hull", "medium-cannon");
-        Assert.That(challenger.Label, Is.EqualTo("90mm Cannon"));
-        Assert.That(challenger.Sprite, Is.Null, "88mm/105mm are not substitutes for missing stock 90mm art");
+        Assert.That(challenger.Label, Is.EqualTo("88mm Cannon"));
+        Assert.That(challenger.Sprite, Is.EqualTo("cannon-88mm"));
+        Assert.That(challenger.SourceWeapon, Is.EqualTo("90mm"), "Presentation reclassification preserves the native rule ID");
         Assert.That(CustomVehicleCannonArt.For("allied-medium-hull", "battle-tank-120mm"), Is.Null);
-        Assert.That(CustomVehicleCannonArt.For("stock-tnkd-hull", "original-armament").Sprite, Is.Null);
+        Assert.That(CustomVehicleCannonArt.For("stock-tnkd-hull", "original-armament").Sprite, Is.EqualTo("cannon-155mm-artillery"));
         Assert.That(CustomVehicleCannonArt.For("designer-mk2-hull", "designer-mk2-weapons"), Is.Null, "railguns are not ordinary shell guns");
+    }
+
+    [TestCase("nod-light-hull", "light-cannon")]
+    [TestCase("t34-hull", "light-cannon")]
+    [TestCase("stock-devil-tank-hull", "original-armament")]
+    public void LegacyCannonsAreNotTheFutureRapidFireAutocannon(string hull, string weapon)
+    {
+        var art = CustomVehicleCannonArt.For(hull, weapon);
+        Assert.That(art.Label, Is.EqualTo("75mm Cannon"));
+        Assert.That(art.SourceWeapon, Is.EqualTo("30mm"));
+        Assert.That(CustomVehicleCannonArt.For(hull, "30mm-autocannon"), Is.Null);
     }
 
     [Test]

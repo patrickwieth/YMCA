@@ -20,13 +20,13 @@ namespace OpenRA.Mods.CA.Modular
 			("field-artillery-hull", "field-artillery") => new("cannon-155mm-artillery", 1, "155mm Artillery Cannon", "ARTY", "155mm"),
 			("nod-combat-howitzer-hull", "nod-combat-howitzer-weapon") => new("cannon-155mm-artillery", 1, "155mm Howitzer", "HOWI", "155mmTDM"),
 			("nod-combat-specter-hull", "nod-combat-specter-weapon") => new("cannon-155mm-artillery", 1, "155mm Artillery Cannon", "SPEC", "155mmSpec"),
-			("allied-medium-hull", "medium-cannon") => new(null, 1, "90mm Cannon", "Challenger_Tank", "90mm"),
-			("nod-light-hull", "light-cannon") => new(null, 1, "30mm Cannon", "LTNK", "30mm"),
-			("t34-hull", "light-cannon") => new(null, 1, "30mm Cannon (Stock)", "T-34", "30mm"),
-			("stock-devil-tank-hull", "original-armament") => new(null, 1, "30mm Cannon", "Devil_Tank", "30mm"),
-			("stock-1tnk-hull", "original-armament") => new(null, 1, "25mm Cannon", "1TNK", "25mm"),
-			("stock-tnkd-hull", "original-armament") => new(null, 1, "183mm Cannon", "TNKD", "183mm"),
-			("stock-tsar-tank-hull", "original-armament") => new(null, 1, "150mm Cannon and Tesla Ball", "Tsar_Tank", "150mm.Tsar"),
+			("allied-medium-hull", "medium-cannon") => new("cannon-88mm", 1, "88mm Cannon", "Challenger_Tank", "90mm"),
+			("nod-light-hull", "light-cannon") => new("cannon-75mm", 1, "75mm Cannon", "LTNK", "30mm"),
+			("t34-hull", "light-cannon") => new("cannon-75mm", 1, "75mm Cannon", "T-34", "30mm"),
+			("stock-devil-tank-hull", "original-armament") => new("cannon-75mm", 1, "75mm Cannon", "Devil_Tank", "30mm"),
+			("stock-1tnk-hull", "original-armament") => new("cannon-75mm", 1, "75mm Cannon", "1TNK", "25mm"),
+			("stock-tnkd-hull", "original-armament") => new("cannon-155mm-artillery", 1, "155mm Cannon", "TNKD", "183mm"),
+			("stock-tsar-tank-hull", "original-armament") => new("cannon-152mm-short", 1, "152mm Cannon and Tesla Ball", "Tsar_Tank", "150mm.Tsar"),
 			_ => null
 		};
 	}

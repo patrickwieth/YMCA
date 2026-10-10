@@ -1,62 +1,66 @@
-# Cannon portraits: stock-first assignment
+# Cannon portraits and approved caliber consolidation
 
-![All supplied cannon PNGs: assigned pictures and reserves](cannon-art-review.png)
+Only the user's supplied item PNGs are used. Do not create new item artwork or placeholder
+pictures. `generate_cannon_art.py` only packs existing pixels (plus quarter-turn copies) into
+a runtime texture atlas and emits bindings/chrome regions. It no longer creates review images.
+The previous `cannon-art-review.png` is historical and its assignment labels are obsolete.
 
-The 20 user-supplied PNGs remain unchanged under `mods/ca/bits/modular/cannons/`.
-Six ordinary cannon/artillery pictures currently cover **14 chassis families / 15 weapon choices**.
-They are shown in the grid, held-item preview and weapon picker. Twin cannon packages draw two
-barrels without adding a second component or any firing channels. Rotated held items use a
-clockwise-rotated copy; original pixel proportions are preserved and muzzles align to the forward end.
+Nine existing pictures cover **21 chassis families / 22 weapon choices**. They appear in the
+grid, held-item preview and weapon picker. Twin cannon packages draw two barrels without
+adding components or firing channels. Original PNGs are never overwritten.
 
-## Assigned pictures
+## Approved consolidation
 
-| Picture | Vehicles / existing source |
+These are deliberate designer caliber designations, not changes to combat statistics or claims
+that internal rule names describe the new caliber. Preserve native rule IDs and saved component
+identities, including conditional upgrades, secondary weapons and frozen compiled maps.
+
+| Vehicle | Legacy native rule | New designation / supplied PNG |
+| --- | --- | --- |
+| Scout Tank | `25mm` | 75mm / `75mm.png` |
+| Nod Light Tank, T-34, Devil Tank | `30mm` | 75mm / `75mm.png` |
+| Challenger | `90mm` | 88mm / `88mm.png` |
+| Tsar Tank | `150mm.Tsar` | 152mm / `152mm short.png`; Tesla channel retained |
+| Tank Destroyer | `183mm` | 155mm / `155mm artillery.png` |
+
+**Future class: 30mm Autocannon.** This will be a distinct, rapidly firing weapon class, not a
+rename of today's slow-firing legacy `30mm` cannon. Do not admit it, assign firing statistics,
+reuse the existing slow-fire package as an autocannon, or fabricate artwork now. Its component,
+compatibility, balancing and PNG are future work.
+
+## Retained assignments
+
+| Picture | Existing vehicles |
 | --- | --- |
-| `105mm.png` | GDI Battle Tank standard. Approved designer label; stock source ID is `120mm`. |
-| `120mm.png` | GDI's already-approved +20% alternative; Titan (`TitanGun`, approved 120mm label); Mirage (`120mmHEAT`). |
-| `125mm.png` | Heavy Tank and People's Tank, both twin-barrel `125mm` packages. |
-| `130mm.png` | Mammoth (`130mmTD`) and Apocalypse (`130mm`), both twin barrels; missiles remain in their original package. |
+| `105mm.png` | GDI Battle Tank standard; approved designer designation, stock source ID `120mm`. |
+| `120mm.png` | GDI's already-approved +20% alternative; Titan (`TitanGun`, approved 120mm designation); Mirage (`120mmHEAT`). |
+| `125mm.png` | Heavy Tank and People's Tank, both twin-barrel packages. |
+| `130mm.png` | Mammoth (`130mmTD`) and Apocalypse (`130mm`), both twin barrels plus original missiles. |
 | `152mm artillery.png` | Akatsiya (`152mm.Akatsiya`) and ISU (`152mm`). |
-| `155mm artillery.png` | Nod/Allied Artillery (`155mmTD`/`155mm`), Howitzer (`155mmTDM`), Specter (`155mmSpec`), Nona SVK (`155mm.Nona`). |
+| `155mm artillery.png` | Nod/Allied Artillery, Howitzer, Specter and Nona SVK, plus the reclassified Tank Destroyer. |
 
-This uses **YMCA stock rule bindings**, not an inferred real-world caliber. Nona, for example,
-uses `155mm.Nona` here. The original actor preview and in-game sprites/voxels are unchanged.
-Only the inventory schematic and contextual component labels change. The supplied image names
-do not override damage, range, burst, reload, prerequisites or existing conditional upgrades.
+The original actor preview and in-game sprites/voxels remain unchanged. Only the inventory
+schematic and contextual component labels change. Damage, range, burst, reload, prerequisites,
+spatial footprints and existing conditional upgrades remain unchanged.
 
-Shared calculator IDs are not sufficient to choose art: `medium-cannon` is shared by GDI,
-Challenger and Heavy Tank, while `original-armament` covers many entirely different vehicles.
-The registry therefore matches **chassis + selected weapon**. It also gives the picker/properties
-contextual names (105mm, 90mm, twin 125mm) without renaming saved component IDs or broad Excel data.
+Shared calculator IDs cannot determine art alone: `medium-cannon` covers GDI, Challenger and
+Heavy Tank, while `original-armament` covers many unrelated vehicles. The registry matches
+**chassis + selected weapon**. Contextual names do not rename saved IDs or broad Excel data.
 
-## Missing matching art — do not substitute nearby calibers
+## Still open / reserved
 
-- **25mm:** Scout Tank.
-- **30mm:** Nod Light Tank, T-34, Devil Tank. T-34 really uses the legacy `30mm` rule in YMCA;
-  no silent conversion to a historical caliber is made.
-- **90mm:** Challenger; the supplied 88mm is not automatically equivalent.
-- **150mm:** Tsar Tank, alongside its existing Tesla channel.
-- **183mm:** Tank Destroyer.
-- **Unspecified caliber:** Battlemaster, Overlord, Juggernaut, Inferno Cannon and Nuke Cannon.
-  Existing named weapon packages do not supply an unambiguous numeric caliber; keep their
-  schematic pending a deliberate designation instead of guessing 115/125/140/155mm.
-- Mammoth Mk. II uses railguns and missiles. Energy weapons, machine guns and launchers are
-  not replaced with ordinary cannon art.
+Battlemaster, Overlord, Juggernaut, Inferno Cannon and Nuke Cannon have no explicit approved
+numeric caliber yet. Their existing schematics remain until a deliberate designation is made.
+Mammoth Mk. II uses railguns and missiles, not an ordinary shell cannon. No new fallback images
+are generated for these vehicles.
 
-Missing/specialized art keeps the existing procedural schematic. A missing portrait does not
-remove or disable the stock vehicle.
+The other 11 supplied PNGs remain in reserve, not selectable new weapons: `115mm`, `140mm`,
+`105mm artillery`, `120mm artillery`, `122mm artillery`, `122mm short artillery`,
+`152mm short artillery`, `120mm burst`, `125mm burst`, `120mm long` and `130mm recoil`.
+The approved Tsar assignment is the specific exception for `152mm short.png`.
+New engine, generator and infantry PNGs are outside this cannon pass.
 
-## Reserve
-
-The other 14 supplied images are retained for later, not added as new selectable weapon parts:
-`75mm`, `88mm`, `115mm`, `140mm`, `105mm artillery`, `120mm artillery`, `122mm artillery`,
-`122mm short artillery`, `152mm short artillery`, `152mm short`, `120mm burst`, `125mm burst`,
-`120mm long` and `130mm recoil`.
-
-A `burst`/`recoil`/`long` filename is not permission to change gameplay. Matching upgrades need
-separate reviewed bindings. New engine, generator and infantry PNGs are outside this cannon pass.
-
-## Regeneration and validation
+## Repacking and validation
 
 Edit `tools/modular/cannon-art-bindings.json`, then run:
 
@@ -64,14 +68,13 @@ Edit `tools/modular/cannon-art-bindings.json`, then run:
 python tools/modular/generate_cannon_art.py
 ```
 
-This regenerates the C# presentation registry, `cannon-icons.png`, the marked chrome collection
-and the review sheet. The irregular-sized original PNGs are packed unscaled with rotated copies
-in a **1024×1024 power-of-two atlas**, avoiding direct upload of non-power-of-two sources.
-Commit changed sources and generated outputs together; restart OpenRA to refresh the art.
+This updates the C# presentation registry, the marked chrome collection and the runtime
+`cannon-icons.png` atlas. The nine source pictures and rotated copies are packed unscaled in a
+**1024×2048 power-of-two texture**; this is technical packing, not new item artwork.
+Commit sources and generated outputs together; restart OpenRA after updating the atlas.
 
-Native tests cover chassis-qualified labels, missing-art fallbacks and unchanged profiles/rules/
-weapon options. Python tests compare original pixels, rotations, chrome regions and reserved variants.
-The existing preview utility additionally validates all **22 assigned/missing-art registry entries**
-against resolved stock actors and armaments, including dual muzzle offsets. Automated checks do not
-replace live review of artwork size and placement. The main grid's footprints and shared-edge rules
-are unchanged.
+Native tests cover exact assignments, contextual labels, separation from the future autocannon
+and unchanged profiles/rules/weapon options. Python tests compare source pixels, rotations,
+chrome regions and reserved variants. The preview utility checks all 22 registry entries against
+resolved original actors/armaments, including twin muzzle offsets. Live graphics still require
+interactive review.

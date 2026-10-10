@@ -35,7 +35,7 @@ pixels, chrome regions and UI wiring; final small-icon readability needs live re
 
 Source-qualified cannon pictures now replace the generic schematic for matching stock weapons.
 Bindings use chassis plus weapon ID, not a shared calculator ID alone. See
-[cannon assignment and reserves](cannon-art.md) for the 14 covered families, missing calibers and
+[cannon assignment and reserves](cannon-art.md) for the 21 covered families, approved caliber consolidation and
 preserved special variants. Rebuild these separately with `python tools/modular/generate_cannon_art.py`.
 
 ## Original category set
