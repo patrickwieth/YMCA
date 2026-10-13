@@ -15,7 +15,7 @@ public class CustomVehicleCannonArtTests
     [TestCase("stock-rtnk-hull", "original-armament", "cannon-120mm", 1)]
     [TestCase("stock-2s3-hull", "original-armament", "cannon-152mm-artillery", 1)]
     [TestCase("stock-isu-hull", "original-armament", "cannon-152mm-artillery", 1)]
-    [TestCase("stock-nonasvk-hull", "original-armament", "cannon-152mm-artillery", 1)]
+    [TestCase("stock-nonasvk-hull", "original-armament", "cannon-75mm", 1)]
     [TestCase("designer-nod-artillery-hull", "field-artillery", "cannon-155mm-artillery", 1)]
     [TestCase("field-artillery-hull", "field-artillery", "cannon-155mm-artillery", 1)]
     [TestCase("nod-combat-howitzer-hull", "nod-combat-howitzer-weapon", "cannon-155mm-artillery", 1)]
@@ -64,9 +64,12 @@ public class CustomVehicleCannonArtTests
     [Test]
     public void ArtilleryCalibersFollowFactionDirectionWithoutChangingNativeRules()
     {
-        foreach (var hull in new[] { "stock-2s3-hull", "stock-isu-hull", "stock-nonasvk-hull", "stock-tsar-tank-hull" })
+        foreach (var hull in new[] { "stock-2s3-hull", "stock-isu-hull", "stock-tsar-tank-hull" })
             Assert.That(CustomVehicleCannonArt.For(hull, "original-armament").Label, Does.StartWith("152mm"));
-        Assert.That(CustomVehicleCannonArt.For("stock-nonasvk-hull", "original-armament").SourceWeapon, Is.EqualTo("155mm.Nona"));
+        var nona = CustomVehicleCannonArt.For("stock-nonasvk-hull", "original-armament");
+        Assert.That(nona.Label, Is.EqualTo("75mm Short Cannon"), "Nona is not part of the heavy artillery caliber family");
+        Assert.That(nona.Sprite, Is.EqualTo("cannon-75mm"), "Use supplied art unchanged until dedicated short art is available");
+        Assert.That(nona.SourceWeapon, Is.EqualTo("155mm.Nona"));
         Assert.That(CustomVehicleCannonArt.For("field-artillery-hull", "field-artillery").Label, Does.StartWith("155mm"));
         Assert.That(CustomVehicleCannonArt.For("stock-tnkd-hull", "original-armament").Label, Does.StartWith("155mm"));
     }

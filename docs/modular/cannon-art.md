@@ -13,8 +13,9 @@ adding components or firing channels. Original PNGs are never overwritten.
 
 Prefer **152mm for China and Soviet vehicles**, and **155mm for NATO-oriented vehicles**.
 This is a design direction for this caliber family, not a replacement for all tank calibers or
-an automatic admission of new interchangeable weapons. Soviet Nona SVK now uses the supplied
-`152mm artillery.png` and a 152mm label; its legacy `155mm.Nona` rule remains unchanged.
+an automatic admission of new interchangeable weapons. **Nona SVK is explicitly a 75mm Short
+Cannon**, not heavy 152mm artillery. It currently uses the existing `75mm.png` unchanged until
+the user supplies dedicated short artwork. Its legacy `155mm.Nona` rule remains unchanged.
 Akatsiya, ISU and Tsar already follow the 152mm direction. Allied artillery and Tank Destroyer
 retain 155mm. Future Chinese artillery assignments should follow the 152mm direction where
 appropriate; nuclear/incendiary package details still require their own review.
@@ -30,6 +31,7 @@ identities, including conditional upgrades, secondary weapons and frozen compile
 | Vehicle | Legacy native rule | New designation / supplied PNG |
 | --- | --- | --- |
 | Scout Tank | `25mm` | 75mm / `75mm.png` |
+| Nona SVK | `155mm.Nona` | 75mm Short Cannon / existing `75mm.png`, dedicated short PNG pending |
 | Nod Light Tank, T-34, Devil Tank | `30mm` | 75mm / `75mm.png` |
 | Challenger | `90mm` | 88mm / `88mm.png` |
 | Tsar Tank | `150mm.Tsar` | 152mm / `152mm short.png`; Tesla channel retained |
@@ -48,7 +50,7 @@ compatibility, balancing and PNG are future work.
 | `120mm.png` | GDI's already-approved +20% alternative; Titan (`TitanGun`, approved 120mm designation); Mirage (`120mmHEAT`). |
 | `125mm.png` | Heavy Tank and People's Tank, both twin-barrel packages. |
 | `130mm.png` | Mammoth (`130mmTD`) and Apocalypse (`130mm`), both twin barrels plus original missiles. |
-| `152mm artillery.png` | Akatsiya (`152mm.Akatsiya`), ISU (`152mm`) and Nona SVK (legacy `155mm.Nona`). |
+| `152mm artillery.png` | Akatsiya (`152mm.Akatsiya`) and ISU (`152mm`). |
 | `155mm artillery.png` | Nod/Allied Artillery, Howitzer and Specter, plus the reclassified Tank Destroyer. |
 
 The original actor preview and in-game sprites/voxels remain unchanged. Only the inventory
