@@ -9,7 +9,7 @@ The current diesel sources are both 192×192; the generator source is 256×256:
 | --- | --- |
 | `engines/basic diesel.png` | `diesel` — Standard Diesel Engine |
 | `engines/improved diesel.png` | `diesel-large` — High-Output Diesel Engine |
-| `generators/basic generator.png` | `baseline-generator` — Baseline Generator |
+| `generators/big mechanic to electric.png` | `baseline-generator` — Baseline Generator |
 
 The enlarged designer now uses **64×64 UI-pixel cells**. A 2×2 module occupies **128×128 UI pixels**,
 with about 120×120 pixels available for its icon. OpenRA's UI scaling applies additionally. Large grid/held icons use the **1024×256**

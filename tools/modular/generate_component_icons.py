@@ -7,7 +7,7 @@ OUT = ROOT / 'mods/ca/bits/modular'
 SOURCES = {
     'engine-basic': 'engines/basic diesel.png',
     'engine-improved': 'engines/improved diesel.png',
-    'generator-basic': 'generators/basic generator.png',
+    'generator-basic': 'generators/big mechanic to electric.png',
 }
 
 
