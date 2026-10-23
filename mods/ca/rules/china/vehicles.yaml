@@ -994,6 +994,7 @@ choutpost:
 		Speed: 85
 	Health:
 		HP: 24000
+	SelectionDecorations:
 	Turreted:
 		TurnSpeed: 10
 	Voiced:
@@ -1353,9 +1354,10 @@ chcrawl2.Assault:
 		InitialUnits: minigunner,minigunner,minigunner,minigunner,minigunner
 
 chcrawl2.Assault.PDL:
-	Inherits: chcrawl2.Assault
+	Inherits: chcrawl2
 	-AttackOpenTopped:
-	Inherits: ^AttackingCargoAndPDL
+	Inherits: ^PointLaserDefenseSystem
+	Inherits: ^ChinaGatling
 	Valued:
 		Cost: 2600
 	Tooltip:
@@ -1367,6 +1369,8 @@ chcrawl2.Assault.PDL:
 		Strengths: • Strong vs Projectiles, Aircraft
 		Weaknesses: • Weak vs Tanks, Energy Weapons
 		Attributes: • Point Defense Laser
+	FirepowerMultiplier@gatfix:
+		Modifier: 225
 
 chcrawl2.Assault.Reflector:
 	Inherits: chcrawl2.Assault
@@ -1423,13 +1427,13 @@ chnukecann:
 		Name: Nuke Cannon
 	Buildable:
 		BuildPaletteOrder: 60
-		Prerequisites: tier3, ~chweap, ~nuke_cannon.access, ~!upg.nuke_cannon
+		Prerequisites: tier3, ~chweap, ~promotion.nuke_cannon, ~!upg.nuke_cannon
 		Queue: Vehicle
 		IconPalette: chrometd
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
 	TooltipExtras:
 		Strengths: • Strong vs Masses
-		Weaknesses: • Shell is vulnerable to Anti-Air and Aircraft
+		Weaknesses: • Weak vs PDL, Aircraft
 	Mobile:
 		Locomotor: tracked
 		TurnSpeed: 8
@@ -1441,17 +1445,13 @@ chnukecann:
 	Turreted:
 		TurnSpeed: 8
 		Offset: -150,0,0
+	SelectionDecorations:
 	Selectable:
 	Armament@PRIMARY:
 		Name: primary
 		Weapon: CHNukeCannon
 		LocalOffset: 400,0,600
 		PauseOnCondition: !ammo || fired
-	MissileSpawnerMasterCA:
-		Actors: chnukecannon.shell
-		RespawnTicks: 100
-		ArmamentNames: primary
-		SpawnOffset: 400,0,600
 	Voiced:
 		VoiceSet: CHNukeCannonVoice
 	FireWarheadsOnDeathCA:
@@ -1505,88 +1505,37 @@ chnukecann:
 chnukecann.Range:
 	Inherits: chnukecann
 	Valued:
-		Cost: 2700
+		Cost: 3000
 	Tooltip:
 		Name: Nuke Cannon (Range)
 	WithProductionIconOverlay@Crosshair:
 		Types: Crosshair
 	Buildable:
-		Prerequisites: chweap, tier3, ~vehicles.chinaatom, ~promotion.nuke_cannon.range
+		Prerequisites: chweap, tier3, ~promotion.nuke_cannon.range
 		Description: Slow heavy artillery.\n Must be deployed to fire nuclear shells.
-	Health:
-		HP: 30000
 	TooltipExtras:
 		Strengths: • Strong vs Masses
-		Weaknesses: • Shell is vulnerable to Anti-Air and Aircraft
+		Weaknesses: • Weak vs PDL, Aircraft
 	Armament@PRIMARY:
 		Weapon: CHNukeCannon.Range
-	MissileSpawnerMasterCA:
-		Actors: chnukecannon.shell.range
 
 chnukecann.Neutron:
 	Inherits: chnukecann
 	Valued:
-		Cost: 2700
+		Cost: 3000
 	Tooltip:
 		Name: Neutron Cannon (Neutron)
 	WithProductionIconOverlay@Neutron:
 		Types: Neutron
 	Buildable:
-		Prerequisites: chweap, tier3, ~vehicles.chinaatom, ~promotion.nuke_cannon.neutron
+		Prerequisites: chweap, tier3, ~promotion.nuke_cannon.neutron
 		Description: Slow heavy artillery.\n Must be deployed to fire neutron shells.
-	Health:
-		HP: 30000
 	TooltipExtras:
 		Strengths: • Strong vs Masses
-		Weaknesses: • Shell is vulnerable to Anti-Air and Aircraft • Weak vs Buildings
+		Weaknesses: • Weak vs PDL, Aircraft, Buildings
 		Attributes: • Kills Drivers
 	Armament@PRIMARY:
 		Weapon: CHNukeCannon.Neutron
-	MissileSpawnerMasterCA:
-		Actors: chnukecannon.shell.neutron
-
-chnukecannon.shell:
-	Inherits: ^ShootableMissile
-	RenderSprites:
-		Image: rice_shell
-	Valued:
-		Cost: 50
-	Tooltip:
-		Name: Nuclear Shell
-	Health:
-		HP: 15000
-	BallisticMissileCA:
-		LaunchAngle: 120
-		Speed: 150
-	LeavesTrails:
-		Image: smokey2
-		Palette: tseffect-ignore-lighting-alpha75
-		MovingInterval: 3
-		Type: CenterPosition
-		Offsets: -200, 0, 0
-	MissileSpawnerSlave:
-	ExplodesForMaster:
-		Weapon: CHNukeCannon.Impact
-		MasterArmamentName: CHNukeCannon
-		EmptyWeapon: VisualExplodeHusk
-		ImpactOnGround: true
-		RequiresCondition: !airborne
-	FireWarheadsOnDeathCA:
-		Weapon: VisualExplodeAirborne
-		RequiresCondition: airborne
-
-chnukecannon.shell.range:
-	Inherits: chnukecannon.shell
-	ExplodesForMaster:
-		MasterArmamentName: CHNukeCannon.Range
-
-chnukecannon.shell.neutron:
-	Inherits: chnukecannon.shell
-	Tooltip:
-		Name: Neutron Shell
-	ExplodesForMaster:
-		Weapon: CHNukeCannon.NeutronImpact
-		MasterArmamentName: CHNukeCannon.Neutron
 
 chnukecann.Husk:
 	Inherits: ^LightHusk
