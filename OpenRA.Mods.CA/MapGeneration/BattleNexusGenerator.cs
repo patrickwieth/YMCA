@@ -13,8 +13,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 			options.Validate();
 			for (var attempt = 0; attempt < MaximumAttempts; attempt++)
 			{
-				var plan = new MapPlan(options.Width, options.Height)
+				// Finish rock contours beyond the playable bounds, as on Hill Fortress.
+				// Keep the custom river variant on its existing unpadded layout.
+				var inset = options.Custom?.River == true ? 0 : 16;
+				var plan = new MapPlan(options.Width + 2 * inset, options.Height + 2 * inset)
 				{
+					PlayableInset = inset,
 					Seed = options.Seed,
 					GenerationAttempt = attempt,
 					SymmetrySlotCount = options.Players,
@@ -29,7 +33,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		static bool TryGenerate(MapPlan plan, MapGenerationOptions options, MersenneTwister random)
 		{
-			var minimumDimension = Math.Min(plan.Width, plan.Height);
+			var minimumDimension = Math.Min(options.Width, options.Height);
 			var centerX = (plan.Width - 1) / 2.0;
 			var centerY = (plan.Height - 1) / 2.0;
 			var phase = random.NextFloat() * Math.PI * 2;
@@ -61,7 +65,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 					if (inWall || inRing && !inGate)
 					{
-						plan.SetTerrain(x, y, PlannedTerrain.Mountain);
+						plan.SetTerrain(x, y, options.Custom?.River == true ? PlannedTerrain.Water : PlannedTerrain.Mountain);
 						continue;
 					}
 
@@ -90,6 +94,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				plan.AddFeature(spawn.X, spawn.Y, PlannedFeature.Spawn);
 			}
 
+			if (options.Custom?.River != true && !RubberduckMountainTopology.Prepare(plan)) return false;
 			PlaceResources(plan, options, centerRadius, random);
 			PlaceCenterTechBuildings(plan, options.TechBuildings, random);
 			return true;
@@ -99,8 +104,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 		{
 			if (options.Resources == ResourceFieldLayout.Glitter)
 			{
-				for (var y = 0; y < plan.Height; y++)
-					for (var x = 0; x < plan.Width; x++)
+				for (var y = plan.PlayableInset; y < plan.Height - plan.PlayableInset; y++)
+					for (var x = plan.PlayableInset; x < plan.Width - plan.PlayableInset; x++)
 						if (plan.TerrainAt(x, y) == PlannedTerrain.Land &&
 							!plan.HasFeature(x, y, PlannedFeature.BuildClearance | PlannedFeature.Bottleneck) &&
 							plan.HasFeature(x, y, PlannedFeature.Home) && random.Next(100) < 76)
@@ -160,7 +165,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				{
 					if ((x - center.X) * (x - center.X) + (y - center.Y) * (y - center.Y) > radius * radius)
 						continue;
-					if (!plan.Contains(x, y) || plan.TerrainAt(x, y) != PlannedTerrain.Land ||
+					if (!plan.ContainsPlayable(x, y) || plan.TerrainAt(x, y) != PlannedTerrain.Land ||
 						plan.HasFeature(x, y, PlannedFeature.Resource | PlannedFeature.Bottleneck) ||
 						!allowCenter && plan.HasFeature(x, y, PlannedFeature.ContestedCenter))
 						return false;
@@ -247,8 +252,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var centerY = (plan.Height - 1) / 2.0;
 			var dx = Math.Cos(angle);
 			var dy = Math.Sin(angle);
-			var scaleX = ((plan.Width - 1) / 2.0 - margin) / Math.Max(0.0001, Math.Abs(dx));
-			var scaleY = ((plan.Height - 1) / 2.0 - margin) / Math.Max(0.0001, Math.Abs(dy));
+			var scaleX = ((plan.Width - 1) / 2.0 - plan.PlayableInset - margin) / Math.Max(0.0001, Math.Abs(dx));
+			var scaleY = ((plan.Height - 1) / 2.0 - plan.PlayableInset - margin) / Math.Max(0.0001, Math.Abs(dy));
 			var scale = Math.Min(scaleX, scaleY) * radialPosition;
 			return new PlanPoint(
 				(int)Math.Round(centerX + dx * scale),

@@ -226,7 +226,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					using var input = File.OpenRead(path);
 					using var package = new ZipFileLoader.ReadOnlyZipFile(input, path);
 					using var map = new Map(utility.ModData, package);
-					var surfaces = map.AllCells.Where(c => map.Contains(c) && (map.Height[c] != 0 || map.Ramp[c] != 0 || map.Tiles[c].Type == 3992))
+					var surfaces = map.AllCells.Where(c => PlateauTopology.ContainsTerrain(map, c) && (map.Height[c] != 0 || map.Ramp[c] != 0 || map.Tiles[c].Type == 3992))
 						.ToDictionary(c => c, c => new PlateauSurface(map.Height[c], map.Ramp[c], map.Tiles[c].Type == 3992));
 					var selected = new RubberduckClosedCliffSelection(map, surfaces).Pieces.ToHashSet();
 					var actors = map.ActorDefinitions.Where(n => n.Value.Value.StartsWith("terrain.rubberduck.closedcliff", StringComparison.Ordinal)).ToArray();
@@ -243,7 +243,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 						var actor = new ActorReference(node.Value.Value, node.Value.ToDictionary());
 						var cell = actor.Get<LocationInit>().Value;
 						var slot = int.Parse(node.Value.Value.Substring("terrain.rubberduck.closedcliff".Length));
-						if (!selected.Remove((cell, slot))) throw new InvalidDataException("Exported actor lost its unique reserved socket: " + path);
+						if (!selected.Remove((cell, slot))) throw new InvalidDataException($"Exported actor lost its unique reserved socket: {path} at {cell} slot={slot} in-bounds={map.Contains(cell)} tile={map.Tiles[cell].Type} height={map.Height[cell]} resource={map.Resources[cell].Type}; reconstructed={selected.Count}");
 					}
 					Console.WriteLine($"AUDIT PASS: {Path.GetFileName(path)} ({actors.Length} closed actors).");
 				}

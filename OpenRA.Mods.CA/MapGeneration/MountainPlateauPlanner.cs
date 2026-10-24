@@ -124,7 +124,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			return false;
 		}
 
-		public static bool AddHome(MapPlan plan, IEnumerable<PlanPoint> footprint, PlanPoint center, int owner)
+		public static bool AddHome(MapPlan plan, IEnumerable<PlanPoint> footprint, PlanPoint center, int owner, bool insetRamp = false, int rampCount = 1)
 		{
 			var cells = footprint.Select(p => Cell(p.X, p.Y)).ToHashSet();
 			if (cells.Any(c => plan.PlateauSurfaces.ContainsKey(Point(c)) ||
@@ -151,9 +151,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 				cells = fitCoarse && fieldsFit && coarse.Contains(origin) ? coarse : originalCells;
 				var outward = PlateauTopology.Directions[direction];
 				var lateral = PlateauTopology.Directions[(direction + 1) % 4];
-				foreach (var landing in cells.OrderBy(c => Math.Abs((c.X - origin.X) * lateral.X + (c.Y - origin.Y) * lateral.Y))
+				foreach (var candidateLanding in cells.OrderBy(c => Math.Abs((c.X - origin.X) * lateral.X + (c.Y - origin.Y) * lateral.Y))
 					.ThenByDescending(c => c.X * outward.X + c.Y * outward.Y).ThenBy(c => c.X).ThenBy(c => c.Y))
 				{
+					// Recess wide ramps into the roof: the surrounding plateau retains
+					// the slope, without projecting guard strips into the valley.
+					var landing = insetRamp ? candidateLanding - outward * 4 : candidateLanding;
 					if (Enumerable.Range(-2, 5).Any(lane => !cells.Contains(landing + lateral * lane) ||
 						!cells.Contains(landing - outward + lateral * lane))) continue;
 					var rampCells = new HashSet<CPos>();
@@ -163,7 +166,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 						{
 							var cell = landing + outward * step + lateral * lane;
 							var p = Point(cell);
-							if ((step >= 4 && cells.Contains(cell)) || !plan.Contains(p.U, p.V) || plan.TerrainAt(p.U, p.V) != PlannedTerrain.Land ||
+							if ((insetRamp ? (step <= 4 ? !cells.Contains(cell) : cells.Contains(cell)) : step >= 4 && cells.Contains(cell)) || !plan.Contains(p.U, p.V) || plan.TerrainAt(p.U, p.V) != PlannedTerrain.Land ||
 								plan.HasFeature(p.U, p.V, PlannedFeature.Home | PlannedFeature.Enclosed | PlannedFeature.Expansion)) fits = false;
 							rampCells.Add(cell);
 						}
@@ -172,7 +175,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 					var ramp = (byte)((direction + 2) % 4 + 1);
 					for (var step = 1; step <= 4; step++)
 						for (var lane = -2; lane <= 2; lane++)
-							surfaces[landing + outward * step + lateral * lane] = Math.Abs(lane) == 2
+							surfaces[landing + outward * step + lateral * lane] = !insetRamp && Math.Abs(lane) == 2
 								? new PlateauSurface((byte)(5 - step), 0, true) : new PlateauSurface((byte)(4 - step), ramp);
 					// A curved rim may need a shallow lip cut. Keep both starting fields
 					// intact and put the foot of the ramp entirely outside the footprint.
@@ -187,14 +190,28 @@ namespace OpenRA.Mods.CA.MapGeneration
 						((p.Value.Height & 1) != 0 && p.Value.Ramp == 0 &&
 							(Point(p.Key).U < 1 || Point(p.Key).U >= plan.Width - 1)))) continue;
 					for (var step = 0; step <= 4; step++)
-						for (var lane = -1; lane <= 1; lane++)
+						for (var lane = insetRamp ? -2 : -1; lane <= (insetRamp ? 2 : 1); lane++)
 						{
 							var cell = landing + outward * step + lateral * lane;
 							if (!PlateauTopology.Continuous(PlateauTopology.Get(surfaces, cell),
 								PlateauTopology.Get(surfaces, cell + outward), direction))
 								throw new InvalidOperationException("Discontinuous home plateau ramp.");
 						}
-					if (!SealDisconnectedRim(surfaces, rampCells, origin)) continue;
+					var landings = new List<CPos> { landing };
+					for (var extra = 1; extra < rampCount && fits; extra++)
+					{
+						var next = landing + lateral * (extra % 2 == 1 ? 14 : -14);
+						for (var step = -1; step <= 6; step++) for (var lane = -2; lane <= 2; lane++)
+						{
+							var cell = next + outward * step + lateral * lane; var p = Point(cell);
+							if ((step <= 4 ? !cells.Contains(cell) : cells.Contains(cell)) || !plan.Contains(p.U, p.V) ||
+								plan.TerrainAt(p.U, p.V) != PlannedTerrain.Land || plan.HasFeature(p.U, p.V, PlannedFeature.Home | PlannedFeature.Enclosed | PlannedFeature.Expansion)) fits = false;
+							if (step > 0) rampCells.Add(cell);
+							if (step > 0 && step <= 4) surfaces[cell] = new PlateauSurface((byte)(4 - step), ramp);
+						}
+						landings.Add(next);
+					}
+					if (!fits || !SealDisconnectedRim(surfaces, rampCells, origin)) continue;
 					var reserved = ReserveClosedFeet(plan, surfaces);
 					if (ReferenceEquals(reserved, surfaces)) continue;
 					surfaces = reserved;
@@ -214,9 +231,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 						var p = Point(cell);
 						plan.AddFeature(p.U, p.V, PlannedFeature.Enclosed | PlannedFeature.Entrance);
 					}
-					var approach = Point(landing + outward * 6);
-					var top = Point(landing);
-					plan.Plateaus.Add(new PlannedPlateau(new PlanPoint(approach.U, approach.V), new PlanPoint(top.U, top.V), ramp));
+					foreach (var entry in landings)
+					{
+						var approach = Point(entry + outward * 6);
+						var top = Point(entry);
+						plan.Plateaus.Add(new PlannedPlateau(new PlanPoint(approach.U, approach.V), new PlanPoint(top.U, top.V), ramp));
+					}
 					return true;
 				}
 			}

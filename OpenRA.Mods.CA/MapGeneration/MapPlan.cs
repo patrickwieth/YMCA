@@ -69,10 +69,15 @@ namespace OpenRA.Mods.CA.MapGeneration
 		public int GenerationAttempt { get; internal set; }
 		public int SymmetrySlotCount { get; internal set; }
 		public bool RequireClosedPlateaus { get; internal set; }
+		public bool PreserveObjectiveTerrain { get; internal set; }
+		// Terrain backing outside the playable rectangle (not additional playable area).
+		public int PlayableInset { get; internal set; }
 		public List<PlanPoint> Spawns { get; } = new();
 		public List<PlannedRubberduckBridge> Bridges { get; } = new();
 		public List<PlanPoint> ExpansionCenters { get; } = new();
 		public List<PlanCheckpoint> StrategicCheckpoints { get; } = new();
+		public List<PlanPoint> StrategicRoute { get; } = new();
+		public HashSet<MPos> StrategicReservations { get; } = new();
 		public Dictionary<MPos, PlateauSurface> PlateauSurfaces { get; } = new();
 		public List<PlannedPlateau> Plateaus { get; } = new();
 		public HashSet<(MPos Point, int Direction)> NativeCliffFaces { get; } = new();
@@ -94,7 +99,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var copy = new MapPlan(Width, Height)
 			{
 				Seed = Seed, GenerationAttempt = GenerationAttempt,
-				SymmetrySlotCount = SymmetrySlotCount, RequireClosedPlateaus = RequireClosedPlateaus,
+				SymmetrySlotCount = SymmetrySlotCount, RequireClosedPlateaus = RequireClosedPlateaus, PlayableInset = PlayableInset,
+				PreserveObjectiveTerrain = PreserveObjectiveTerrain,
 			};
 			Array.Copy(terrain, copy.terrain, terrain.Length);
 			Array.Copy(features, copy.features, features.Length);
@@ -102,6 +108,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			copy.Bridges.AddRange(Bridges);
 			copy.Spawns.AddRange(Spawns); copy.ExpansionCenters.AddRange(ExpansionCenters);
 			copy.StrategicCheckpoints.AddRange(StrategicCheckpoints); copy.Plateaus.AddRange(Plateaus);
+			copy.StrategicRoute.AddRange(StrategicRoute); copy.StrategicReservations.UnionWith(StrategicReservations);
 			foreach (var pair in PlateauSurfaces) copy.PlateauSurfaces.Add(pair.Key, pair.Value);
 			copy.NativeCliffFaces.UnionWith(NativeCliffFaces); copy.NativeCliffPieces.AddRange(NativeCliffPieces);
 			copy.ValidationMessages.AddRange(ValidationMessages);
@@ -154,9 +161,18 @@ namespace OpenRA.Mods.CA.MapGeneration
 			return x >= 0 && y >= 0 && x < Width && y < Height;
 		}
 
+		public bool ContainsPlayable(int x, int y)
+		{
+			if (!Contains(x, y)) return false;
+			if (PlayableInset == 0) return true;
+			PlateauSurfaces.TryGetValue(new MPos(x, y), out var surface);
+			return x >= PlayableInset && x < Width - PlayableInset &&
+				y - surface.Height - (surface.Ramp == 0 ? 0 : 1) >= PlayableInset && y - surface.Height < Height - PlayableInset;
+		}
+
 		public bool IsTraversable(int x, int y)
 		{
-			if (!Contains(x, y))
+			if (!ContainsPlayable(x, y))
 				return false;
 
 			var value = TerrainAt(x, y);

@@ -44,8 +44,15 @@ namespace OpenRA.Mods.CA.MapGeneration
 		const PlannedFeature Protected = PlannedFeature.Resource | PlannedFeature.RichResource |
 			PlannedFeature.ResourceGenerator | PlannedFeature.TechBuilding | PlannedFeature.BuildClearance | PlannedFeature.Spawn;
 
-		public static bool Connect(MapPlan plan, IReadOnlyList<PlanPoint> continents)
+		public static bool Connect(MapPlan plan, IReadOnlyList<PlanPoint> continents, IReadOnlyList<int> teams = null, bool network = false, int parallelLinks = 0)
 		{
+			if (teams != null)
+			{
+				if (teams.Count != continents.Count) throw new ArgumentException("Each island needs a team owner.", nameof(teams));
+				// Like the previous island links, singleton/uneven small teams get
+				// no ground crossings rather than an advantage for the larger team.
+				if (teams.GroupBy(t => t).Min(g => g.Count()) < 2) return true;
+			}
 			bool Is(CPos c, PlannedTerrain terrain)
 			{
 				var p = PlannedRubberduckBridge.Point(c);
@@ -63,11 +70,11 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}
 			// Small custom continents keep one approach cell rather than erasing
 			// economy to fit the longer two-team approach. The inland anchor is equal.
-			var approachLength = continents.Count == 2 ? 2 : 1;
-			var bankHalfWidth = continents.Count == 2 ? 1 : 0;
+			var approachLength = teams == null && continents.Count == 2 ? 2 : 1;
+			var bankHalfWidth = teams == null && continents.Count == 2 ? 1 : 0;
 			bool BankFits(CPos shore, CVec inland, CVec side)
 			{
-				if (!ClearEnd(shore)) return false;
+				if (!ClearEnd(shore) || network && !ClearEnd(shore + inland)) return false;
 				// Require an existing dry landing pad. Do not fill a bay or flatten
 				// a blocked bank just to conceal an unsupported bridge end.
 				for (var depth = 1; depth <= approachLength + 1; depth++)
@@ -122,8 +129,14 @@ namespace OpenRA.Mods.CA.MapGeneration
 						var end = start + step * length;
 						var side = alongY ? new CVec(1, 0) : new CVec(0, 1);
 						if (length < 2 || !Is(end, PlannedTerrain.Land) || !BankFits(start, -step, side) || !BankFits(end, step, side)) continue;
+						// Island chains may pass beside a third island. Require a real
+						// navigable cross-section, not just one water cell along the deck.
+						// Never fill the adjacent island to make a crossing fit.
+						var middle = start + step * ((length + 1) / 2);
+						if ((teams != null || network) && Enumerable.Range(-1, 3).Any(along => Enumerable.Range(-2, 5)
+							.Any(lateral => !Is(middle + step * along + side * lateral, PlannedTerrain.Water)))) continue;
 						var a = Owner(start); var b = Owner(end);
-						if (a >= 0 && b >= 0 && a != b)
+						if (a >= 0 && b >= 0 && a != b && (teams == null || teams[a] == teams[b]))
 							candidates.Add((new PlannedRubberduckBridge(start - step, alongY, length + 3, 2, approachLength), Math.Min(a, b), Math.Max(a, b)));
 					}
 				}
@@ -131,7 +144,40 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var chosen = new List<PlannedRubberduckBridge>();
 			// Two continents receive an atomic half-turn pair, not two unrelated
 			// shortest crossings that could favor one team's approach routes.
-			if (continents.Count == 2)
+			if (network)
+			{
+				// A forest may leave tiny protected oil islands accessible only by sea.
+				// Never flatten banks or erase economy to force a connection.
+				var parents = Enumerable.Range(0, continents.Count).ToArray();
+				int Root(int n) { while (parents[n] != n) n = parents[n]; return n; }
+				var reserved = new HashSet<CPos>();
+				foreach (var candidate in candidates.OrderBy(c => c.Bridge.Length).ThenBy(c => c.Bridge.Start.X).ThenBy(c => c.Bridge.Start.Y))
+				{
+					if (Root(candidate.A) == Root(candidate.B) || candidate.Bridge.Cells().Any(reserved.Contains)) continue;
+					parents[Root(candidate.A)] = Root(candidate.B);
+					chosen.Add(candidate.Bridge);
+					foreach (var c in candidate.Bridge.Cells())
+						for (var x = -4; x <= 4; x++) for (var y = -4; y <= 4; y++) reserved.Add(c + new CVec(x, y));
+				}
+				if (chosen.Count == 0) return false;
+				while (continents.Count == 2 && chosen.Count < parallelLinks)
+				{
+					var extra = candidates.Where(c => !c.Bridge.Cells().Any(reserved.Contains))
+						.OrderByDescending(c => chosen.Min(b => (long)(c.Bridge.Start.X - b.Start.X) * (c.Bridge.Start.X - b.Start.X) +
+							(long)(c.Bridge.Start.Y - b.Start.Y) * (c.Bridge.Start.Y - b.Start.Y))).FirstOrDefault().Bridge;
+					if (extra == null) return false;
+					chosen.Add(extra);
+					foreach (var c in extra.Cells())
+						for (var x = -4; x <= 4; x++) for (var y = -4; y <= 4; y++) reserved.Add(c + new CVec(x, y));
+				}
+			}
+			else if (teams != null)
+			{
+				chosen = ChooseTeamBridges(candidates, teams);
+				if (chosen == null) return false;
+				plan.ValidationMessages.Add($"Archipelago: {chosen.Count} same-team bridges, equal counts per team; remaining islands require transport.");
+			}
+			else if (continents.Count == 2)
 			{
 				var center = PlannedRubberduckBridge.Cell((plan.Width - 1) / 2, (plan.Height - 1) / 2);
 				var lookup = candidates.ToDictionary(c => (c.Bridge.Start, c.Bridge.AlongY, c.Bridge.Length), c => c.Bridge);
@@ -147,7 +193,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				if (chosen.Count != 2) return false;
 			}
 			var occupied = new HashSet<CPos>();
-			for (var link = 0; continents.Count != 2 && link < continents.Count; link++)
+			for (var link = 0; !network && teams == null && continents.Count != 2 && link < continents.Count; link++)
 			{
 				var a = Math.Min(link, (link + 1) % continents.Count);
 				var b = Math.Max(link, (link + 1) % continents.Count);
@@ -186,6 +232,30 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}
 			plan.Bridges.AddRange(chosen);
 			return true;
+		}
+
+		static List<PlannedRubberduckBridge> ChooseTeamBridges(
+			IEnumerable<(PlannedRubberduckBridge Bridge, int A, int B)> candidates, IReadOnlyList<int> teams)
+		{
+			// A native-axis spanning forest, never arbitrary diagonal sand lines.
+			// Not every pair of radial islands has compatible dry bridge banks.
+			var roots = Enumerable.Range(0, teams.Count).ToArray();
+			int Root(int i) { while (roots[i] != i) i = roots[i]; return i; }
+			var occupied = new HashSet<CPos>();
+			var groups = teams.Distinct().ToDictionary(t => t, _ => new List<PlannedRubberduckBridge>());
+			foreach (var candidate in candidates.OrderBy(c => c.Bridge.Length).ThenBy(c => c.Bridge.Start.X).ThenBy(c => c.Bridge.Start.Y))
+			{
+				if (Root(candidate.A) == Root(candidate.B) || candidate.Bridge.Cells().Any(occupied.Contains)) continue;
+				roots[Root(candidate.A)] = Root(candidate.B);
+				groups[teams[candidate.A]].Add(candidate.Bridge);
+				foreach (var cell in candidate.Bridge.Cells())
+					for (var x = -4; x <= 4; x++)
+						for (var y = -4; y <= 4; y++) occupied.Add(cell + new CVec(x, y));
+			}
+			var count = groups.Values.Min(g => g.Count);
+			// Retry the complete layout if even one crossing per team cannot fit.
+			if (count == 0) return null;
+			return groups.OrderBy(g => g.Key).SelectMany(g => g.Value.Take(count)).ToList();
 		}
 	}
 }

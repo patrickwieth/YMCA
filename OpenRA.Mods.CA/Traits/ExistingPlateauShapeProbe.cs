@@ -15,6 +15,7 @@ namespace OpenRA.Mods.CA.Traits
 	{
 		public readonly string ResultPath = "";
 		public readonly CPos Cell;
+		public readonly int StrokeSize = 1;
 		public override object Create(ActorInitializer init) => new ExistingPlateauShapeProbe(this);
 	}
 	public class ExistingPlateauShapeProbe : IPostWorldLoaded, ITickRender
@@ -48,28 +49,36 @@ namespace OpenRA.Mods.CA.Traits
 				Ui.Root.Get<ButtonWidget>("PLATEAU_GROW").OnClick();
 				var controller = Ui.Root.Get<EditorViewportControllerWidget>("MAP_EDITOR");
 				var brush = controller.CurrentBrush as PlateauShapeBrush ?? throw new InvalidOperationException("Grow button did not activate.");
-				var plan = brush.Plan(new[] { info.Cell });
+				if (info.StrokeSize < 1 || info.StrokeSize > 4) throw new InvalidOperationException("Unsupported diagnostic stroke size.");
+				var stroke = Enumerable.Range(0, info.StrokeSize).SelectMany(y => Enumerable.Range(0, info.StrokeSize)
+					.Select(x => info.Cell + new CVec(y % 2 == 0 ? x : info.StrokeSize - 1 - x, y))).ToArray();
+				var plan = brush.Plan(stroke);
 				if (plan.NativePieces == 0) throw new InvalidOperationException("Native generated shape lost its native composition.");
-				var center = wr.ScreenPxPosition(map.CenterOfCell(info.Cell));
-				var pixel = wr.Viewport.WorldToViewPx(center);
-				if (wr.Viewport.ViewToWorld(pixel) != info.Cell)
+				int2 Pick(CPos cell)
 				{
-					// A projected center may be covered even when part of the ground
-					// diamond is selectable. Use the real picker, never bypass the brush.
-					var tileSize = map.Grid.TileSize;
-					var hits = Enumerable.Range(-tileSize.Height / 2, tileSize.Height + 1)
-						.SelectMany(y => Enumerable.Range(-tileSize.Width / 2, tileSize.Width + 1).Select(x => new int2(x, y)))
-						.Where(d => Math.Abs(d.X) * 2.0 / tileSize.Width + Math.Abs(d.Y) * 2.0 / tileSize.Height < 0.9)
-						.OrderBy(d => d.X * d.X + d.Y * d.Y)
-						.Select(d => wr.Viewport.WorldToViewPx(center + d)).Where(p => wr.Viewport.ViewToWorld(p) == info.Cell).Take(1).ToArray();
-					if (hits.Length == 0) throw new InvalidOperationException($"Existing shape fixture cell {info.Cell} has no selectable ground pixel.");
-					pixel = hits[0];
+					var center = wr.ScreenPxPosition(map.CenterOfCell(cell));
+					var pixel = wr.Viewport.WorldToViewPx(center);
+					if (wr.Viewport.ViewToWorld(pixel) != cell)
+					{
+						// Use the real picker even when the ground diamond is partly covered.
+						var tileSize = map.Grid.TileSize;
+						var hits = Enumerable.Range(-tileSize.Height / 2, tileSize.Height + 1)
+							.SelectMany(y => Enumerable.Range(-tileSize.Width / 2, tileSize.Width + 1).Select(x => new int2(x, y)))
+							.Where(d => Math.Abs(d.X) * 2.0 / tileSize.Width + Math.Abs(d.Y) * 2.0 / tileSize.Height < 0.9)
+							.OrderBy(d => d.X * d.X + d.Y * d.Y)
+							.Select(d => wr.Viewport.WorldToViewPx(center + d)).Where(p => wr.Viewport.ViewToWorld(p) == cell).Take(1).ToArray();
+						if (hits.Length == 0) throw new InvalidOperationException($"Existing shape fixture cell {cell} has no selectable ground pixel.");
+						pixel = hits[0];
+					}
+					return pixel;
 				}
-				brush.HandleMouseInput(new MouseInput(MouseInputEvent.Down, MouseButton.Left, pixel, int2.Zero, Modifiers.Shift, 1));
-				Check(before, "single-cell draft is non-mutating");
-				brush.HandleMouseInput(new MouseInput(MouseInputEvent.Up, MouseButton.Left, pixel, int2.Zero, Modifiers.Shift, 1));
+				brush.HandleMouseInput(new MouseInput(MouseInputEvent.Down, MouseButton.Left, Pick(stroke[0]), int2.Zero, Modifiers.Shift, 1));
+				foreach (var cell in stroke.Skip(1))
+					brush.HandleMouseInput(new MouseInput(MouseInputEvent.Move, MouseButton.Left, Pick(cell), int2.Zero, Modifiers.Shift, 1));
+				Check(before, "draft is non-mutating");
+				brush.HandleMouseInput(new MouseInput(MouseInputEvent.Up, MouseButton.Left, Pick(stroke[stroke.Length - 1]), int2.Zero, Modifiers.Shift, 1));
 				controller.ClearBrush();
-				if (map.Height[info.Cell] != 4 || map.Ramp[info.Cell] != 0 || map.Tiles[info.Cell].Type != 1000)
+				if (map.Height[info.Cell] != 4 || map.Ramp[info.Cell] != 0 || map.Tiles[info.Cell].Type != (plan.Patch[info.Cell].Blocked ? 3992 : 1000))
 					throw new InvalidOperationException("Existing plateau did not extend to its painted cell.");
 				after = PlateauEditorProbe.Snapshot(map, layer); Check(after, "extend generated native plateau");
 			}

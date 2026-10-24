@@ -6,6 +6,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 	// Front-facing lean adds 64px to the column drop; rear-facing lean subtracts it.
 	static class RubberduckClosedCliffGeometry
 	{
+		// The fourth row below the rear roof socket is opaque source matte,
+		// not stone. Keep the authored lip without exposing that black wire.
+		public const int RearLipDepth = 3;
+
 		public static double SourceY(int slot, double x, double y)
 		{
 			var column = Column(slot, x, y);

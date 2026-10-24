@@ -48,7 +48,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var modernFootprint = false;
 			try { modernFootprint = cells.SetEquals(RubberduckRockCoastPlan.Footprint(map, banks, Array.Empty<CPos>(), Restored).Keys); }
 			catch (InvalidOperationException) { /* An old saved coast may not have room for corrected end sockets. */ }
-			if (!legacyFootprint && !modernFootprint)
+			var edgeFootprint = false;
+			try { edgeFootprint = cells.SetEquals(RubberduckRockCoastPlan.Footprint(map, banks, Array.Empty<CPos>(), Restored, clipMapEdge: true).Keys); }
+			catch (InvalidOperationException) { /* Retain exact recovery for older saved contours. */ }
+			if (!legacyFootprint && !modernFootprint && !edgeFootprint)
 				throw new InvalidOperationException("Incomplete or shared coast footprint; removal refused.");
 
 			var saved = layer.Save().ToList(); var actors = new List<MiniYamlNode>();
@@ -56,7 +59,19 @@ namespace OpenRA.Mods.CA.MapGeneration
 			string Signature(MiniYamlNode n) => new[] { new MiniYamlNode("Actor", n.Value) }.WriteToString();
 			var bySignature = saved.GroupBy(Signature).ToDictionary(g => g.Key, g => g.ToArray());
 			var wanted = RubberduckRockCoastRenderer.Actors(map, banks, "Recovered", Restored);
-			if (!modernFootprint || wanted.Any(n => !bySignature.TryGetValue(Signature(n), out var m) || m.Length != 1))
+			bool Matches(List<MiniYamlNode> nodes) => nodes.All(n => bySignature.TryGetValue(Signature(n), out var m) && m.Length == 1);
+			if (modernFootprint && !Matches(wanted))
+			{
+				var continuous = RubberduckRockCoastRenderer.Actors(map, banks, "Recovered", Restored, naturalJoints: true);
+				if (Matches(continuous)) wanted = continuous;
+			}
+			if (edgeFootprint && !Matches(wanted))
+			{
+				var edge = RubberduckRockCoastRenderer.Actors(map, banks, "Recovered", Restored,
+					naturalJoints: true, clipMapEdge: true, lowRearEnds: true);
+				if (Matches(edge)) wanted = edge;
+			}
+			if (!(modernFootprint || edgeFootprint) || !Matches(wanted))
 			{
 				if (!legacyFootprint) throw new InvalidOperationException("Missing, duplicated or customized coast artwork; removal refused.");
 				wanted = RubberduckRockCoastRenderer.Actors(map, banks, "Recovered", Restored, true);

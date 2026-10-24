@@ -1,5 +1,6 @@
 ^BaseWorld:
 	Inherits: ^Palettes
+	TiberiumResourceCompatibility:
 	AlwaysVisible:
 	ActorMap:
 	ScreenMap:
@@ -155,6 +156,7 @@
 		Crushes: crate, mine
 		TerrainSpeeds:
 			Water: 100
+			Sand: 70
 			Beach: 70
 			Ford: 70
 			Bridge: 100
@@ -336,14 +338,6 @@
 		Description: world-baseworld.factionca-at-randomnotchina-description
 	ResourceRenderer:
 		ResourceTypes:
-			Ore:
-				Sequences: gold01, gold02, gold03, gold04
-				Palette: player
-				Name: Valuable Minerals
-			Gems:
-				Sequences: gem01, gem02, gem03, gem04
-				Palette: player
-				Name: Valuable Minerals
 			Tiberium:
 				Sequences: ti1,ti2,ti3,ti4,ti5,ti6,ti7,ti8,ti9,ti10,ti11,ti12
 				Palette: tiberiumpalette
@@ -353,6 +347,7 @@
 				Palette: bluetiberium
 				Name: Azure Tiberium
 	TerrainLighting:
+	TiberiumTerrainLight:
 
 World:
 	Inherits: ^BaseWorld
@@ -413,26 +408,17 @@ World:
 		MaxSmokeOffsetDistance: 213
 	ResourceLayer:
 		RecalculateResourceDensity: true
+		# Legacy map indices are normalized before the resource layer loads.
 		ResourceTypes:
-			Ore:
-				ResourceIndex: 1
-				TerrainType: Ore
-				AllowedTerrainTypes: Clear, Road
-				MaxDensity: 12
-			Gems:
-				ResourceIndex: 2
-				TerrainType: Gems
-				AllowedTerrainTypes: Clear, Road
-				MaxDensity: 3
 			Tiberium:
 				ResourceIndex: 3
 				TerrainType: Tiberium
-				AllowedTerrainTypes: Clear, Road
+				AllowedTerrainTypes: Clear, Road, Dirt
 				MaxDensity: 12
 			BlueTiberium:
 				ResourceIndex: 4
 				TerrainType: BlueTiberium
-				AllowedTerrainTypes: Clear, Road
+				AllowedTerrainTypes: Clear, Road, Dirt
 				MaxDensity: 12
 	ResourceClaimLayer:
 	TintedCellsLayer@RAD:
@@ -545,25 +531,15 @@ EditorWorld:
 	EditorResourceLayer:
 		RecalculateResourceDensity: true
 		ResourceTypes:
-			Ore:
-				ResourceIndex: 1
-				TerrainType: Ore
-				AllowedTerrainTypes: Clear, Road
-				MaxDensity: 12
-			Gems:
-				ResourceIndex: 2
-				TerrainType: Gems
-				AllowedTerrainTypes: Clear, Road
-				MaxDensity: 3
 			Tiberium:
 				ResourceIndex: 3
 				TerrainType: Tiberium
-				AllowedTerrainTypes: Clear, Road
+				AllowedTerrainTypes: Clear, Road, Dirt
 				MaxDensity: 12
 			BlueTiberium:
 				ResourceIndex: 4
 				TerrainType: BlueTiberium
-				AllowedTerrainTypes: Clear, Road
+				AllowedTerrainTypes: Clear, Road, Dirt
 				MaxDensity: 12
 	LoadWidgetAtGameStart:
 	EditorActionManager:

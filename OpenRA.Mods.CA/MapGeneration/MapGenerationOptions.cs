@@ -44,10 +44,17 @@ namespace OpenRA.Mods.CA.MapGeneration
 		Migration,
 	}
 
+	static class MapGenerationPresetNames
+	{
+		// Keep the serialized enum/old CLI identifier stable for existing content.
+		public static string DisplayName(this MapGenerationPreset preset) => preset == MapGenerationPreset.Arabia ? "Plains" : preset.ToString();
+	}
+
 	sealed class MapGenerationOptions
 	{
 		public GeneratedMapMode Mode { get; set; } = GeneratedMapMode.Tactical;
 		public MapGenerationPreset Preset { get; set; } = MapGenerationPreset.MountainValleys;
+		public CustomMapSettings Custom { get; set; }
 		public MapArchetype Archetype
 		{
 			get
@@ -80,6 +87,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		public void Validate()
 		{
+			if (Custom != null && (Custom.BasePreset != Preset || !Custom.Compatible(Mode)))
+				throw new ArgumentException("The custom topology is incompatible with the selected mode or generator.");
 			if (Width < 64 || Height < 64)
 				throw new ArgumentException("Map dimensions must be at least 64 cells.");
 			if ((Players < 2 || Players > 12) && Players != 16)

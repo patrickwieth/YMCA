@@ -11,7 +11,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 		{
 			if (options.Preset != MapGenerationPreset.Archipelago && options.Preset != MapGenerationPreset.Continents &&
 				options.Preset != MapGenerationPreset.Migration && options.Preset != MapGenerationPreset.WaterBasins) return;
-			if (options.Preset == MapGenerationPreset.WaterBasins) RubberduckCoastSmoother.Apply(plan, false, PlayerSpawnLayout.SymmetryOrder(options.Players));
+			if (options.Preset == MapGenerationPreset.WaterBasins)
+				RubberduckCoastSmoother.Apply(plan, false, options.Mode == GeneratedMapMode.Strategic ? 2 : PlayerSpawnLayout.SymmetryOrder(options.Players));
 			var directions = new (int X, int Y)[] { (1, 0), (-1, 0), (0, 1), (0, -1) };
 			var shores = new HashSet<(int X, int Y)>(); var land = new HashSet<(int X, int Y)>();
 			for (var y = 0; y < plan.Height; y++)
@@ -65,9 +66,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 					Landing(boundary.OrderByDescending(c => c.X).ThenByDescending(c => c.Y).First());
 				}
 			}
-			foreach (var c in shores)
-				if (!plan.HasFeature(c.X, c.Y, PlannedFeature.LaunchShore | PlannedFeature.DestructibleBridge | PlannedFeature.Bottleneck)) plan.AddFeature(c.X, c.Y, PlannedFeature.CliffShore);
-			plan.ValidationMessages.Add("Coast topology: player and component landing areas reserved before rock-coast selection.");
+			// All island presets and basins use genuinely open shores, not hidden
+			// rock sprites with invisible collision left behind. Two Sides owns
+			// its separate continuous-bank policy and does not enter this method.
+			plan.ValidationMessages.Add("Open-shore topology: player and component landing areas reserved without rock banks.");
 		}
 	}
 }

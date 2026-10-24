@@ -16,12 +16,14 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			return args.Length >= 2;
 		}
 
-		[Desc("OUTPUT-DIRECTORY [mode=tactical|operational|strategic] [preset=mountain-valleys|two-sides|hill-fortress|battle-nexus|arabia|water-basins|continents|archipelago|migration] [seed=N] [size=auto|128x128] " +
+		[Desc("OUTPUT-DIRECTORY [mode=tactical|operational|strategic] [preset=mountain-valleys|two-sides|hill-fortress|battle-nexus|plains|water-basins|continents|archipelago|migration] [seed=N] [size=auto|128x128] " +
 			"[players=8] [teams=2] [expansions=1] [resources=none|glitter|patches] " +
 			"[finite=true|false] [tech=none|sparse|dense] [final-only=true|false] [validate-only=true|false] [export-map=true|false]",
 			"Generate planning masks and debug PNGs without creating an OpenRA map.")]
 		void IUtilityCommand.Run(Utility utility, string[] args)
 		{
+			// Coast preflight uses the same terrain rules as the playable export.
+			Game.ModData = utility.ModData;
 			try
 			{
 				var options = ParseOptions(args);
@@ -43,7 +45,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					Console.WriteLine($"Playable Rubberduck map: {mapPath}");
 				}
 
-				Console.WriteLine($"Generated {options.Preset} seed {options.Seed} (attempt {plan.GenerationAttempt}).");
+				Console.WriteLine($"Generated {options.Preset.DisplayName()} seed {options.Seed} (attempt {plan.GenerationAttempt}).");
 				Console.WriteLine($"Debug output: {outputDirectory}");
 				foreach (var message in plan.ValidationMessages)
 					Console.WriteLine($"  {message}");
@@ -118,7 +120,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				options.Resources = ResourceFieldLayout.Patches;
 				options.FiniteResources = false;
 			}
-			else if (options.Preset == MapGenerationPreset.HillFortress)
+			else if (options.Preset == MapGenerationPreset.HillFortress && !values.ContainsKey("resources"))
 				options.Resources = ResourceFieldLayout.Glitter;
 			else if (options.Preset == MapGenerationPreset.Arabia)
 			{
@@ -165,6 +167,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 		static MapGenerationPreset ParsePreset(string value)
 		{
 			var normalized = value.Replace("-", "", StringComparison.Ordinal);
+			if (normalized.Equals("plains", StringComparison.OrdinalIgnoreCase)) return MapGenerationPreset.Arabia;
 			return ParseEnum<MapGenerationPreset>("preset", normalized);
 		}
 
@@ -186,6 +189,10 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				16 => 192,
 				_ => throw new ArgumentException("Automatic map sizing supports 2–12 or 16 players."),
 			};
+			// Six neutral oil islands must fit full foundations plus dry shore margins.
+			if (options.Preset == MapGenerationPreset.Archipelago) size = Math.Max(size, 96);
+			// Migration needs a wider sea ring for separated home and oil islands.
+			if (options.Preset == MapGenerationPreset.Migration) size += 32;
 			options.Width = size;
 			options.Height = size;
 		}

@@ -1,5 +1,10 @@
 # Blocked mountain walls: authored material projection
 
+Follow-up: [shared mountain visual pass](shared-mountain-visuals.md) supersedes
+these original three-variant sampling details with nine source windows per direction
+and shared material-corner selection. New generation additionally uses
+[shared closed mountain contours](shared-mountain-contours.md).
+
 The separate blocked-mountain renderer now uses its own four-direction wall
 vocabulary, with three stable variants per direction. It no longer fills a full
 wall by repeating a tiny 24x80 rock sample. Walkable plateaus, ramp strips and

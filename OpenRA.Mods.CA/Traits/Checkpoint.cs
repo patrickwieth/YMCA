@@ -40,12 +40,13 @@ namespace OpenRA.Mods.CA.Traits
 		public override object Create(ActorInitializer init) { return new Checkpoint(init, this); }
 	}
 
-	class Checkpoint : ProximityCapturable, INotifyAddedToWorld, ITick
+	class Checkpoint : ProximityCapturable, INotifyCreated, ITick
 	{
 		readonly CheckpointInfo info;
 		readonly public int Hierarchy;
 		public RallyPoint RallyPoint;
 		public int Ticks;
+		WPos previousPosition;
 
 		public Checkpoint(ActorInitializer init, CheckpointInfo info)
 			: base(init, info)
@@ -58,7 +59,7 @@ namespace OpenRA.Mods.CA.Traits
 				 Ticks = Hierarchy;
 		}
 
-		protected void Created(Actor self)
+		void INotifyCreated.Created(Actor self)
 		{
 			RallyPoint = self.TraitOrDefault<RallyPoint>();
 		}
@@ -66,7 +67,7 @@ namespace OpenRA.Mods.CA.Traits
 		public override void ActorEntered(Actor other)
 		{
 			var autobattler = other.TraitOrDefault<Autobattler>();
-			if (autobattler != null)
+			if (autobattler != null && autobattler.Hierarchy == Hierarchy)
 				autobattler.handleCheckpoint(other);
 
 			// Once captured, allied units contribute to control without
@@ -77,12 +78,14 @@ namespace OpenRA.Mods.CA.Traits
 		}
 
 		void ITick.Tick(Actor self) {
+			// Keep ProximityCapturable's trigger lifecycle. Reimplementing
+			// AddedToWorld here used to bypass creation of the capture trigger.
+			if (self.IsInWorld && self.CenterPosition != previousPosition)
+			{
+				base.TickInner(self);
+				previousPosition = self.CenterPosition;
+			}
 			if (++Ticks >= info.waveInterval) Ticks = 0;
-		}
-
-		void INotifyAddedToWorld.AddedToWorld(Actor self)
-		{
-			RallyPoint = self.TraitOrDefault<RallyPoint>();
 		}
 	}
 

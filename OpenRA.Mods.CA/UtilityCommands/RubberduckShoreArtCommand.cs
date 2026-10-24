@@ -35,7 +35,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					topologies.Add(key);
 				}
 			if (topologies.Count != 47) throw new InvalidDataException("Expected the complete 47-case corner/edge topology.");
-			var provenance = new StringBuilder("Derived intersection of authored RGBA ground-edge pieces; not original complete 47-case artwork, not invented foam. No terrain/collision modifications. No ruin assets. Frames 40..47 are half-cell wedges, excluded from full-cell coast composition to preserve visible land centers.\n");
+			var provenance = new StringBuilder("Derived intersection of authored RGBA ground-edge pieces; not original complete 47-case artwork, not invented foam. No terrain/collision modifications. No ruin assets. Exactly two adjacent water edges use one even authored half-cell wedge (40/42/44/46); all other cases retain full-cell edge cuts. Opposing wedges are never intersected; odd sand wedges with translucent/erased centers are excluded.\n");
 			var report = new StringBuilder("material\tshaded\ttopology\tvariant\tdonors\tcenter-alpha\n");
 			var atlasPixels = new byte[1024 * 3840 * 4];
 			var materials = new[] { ("grass", 0, "grass-a"), ("grass", 2, "grass-b"), ("sand", 0, "sand"), ("dirt", 0, "dirt-a"), ("dirt", 2, "dirt-b") };
@@ -75,7 +75,13 @@ namespace OpenRA.Mods.CA.UtilityCommands
 						for (var variant = 0; variant < 4; variant++, cell++)
 						{
 							var pixels = RubberduckShoreTopology.Compose(frames, topology, variant);
-							var exclusion = Enumerable.Range(0, 128 * 64).Select(p => pixels[p * 4 + 3] == 0).ToArray();
+							var exclusion = RubberduckShoreTopology.GroundBlendExclusion(pixels, frames[variant]);
+							for (var p = 0; p < exclusion.Length; p++)
+							{
+								var alpha = pixels[p * 4 + 3]; var full = frames[variant][p * 4 + 3];
+								if (alpha > 0 && (alpha == full || alpha > 16) && exclusion[p] || alpha < full && alpha <= 16 && !exclusion[p])
+									throw new InvalidDataException("Ground blend changed diamond seams or repainted the authored shore fringe.");
+							}
 							var covered = new byte[128 * 64];
 							foreach (var rectangle in RubberduckMaterialLayer.ExclusionRectangles(exclusion))
 								for (var y = rectangle.Y; y < rectangle.Bottom; y++)

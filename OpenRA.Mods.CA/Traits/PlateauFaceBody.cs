@@ -70,8 +70,8 @@ namespace OpenRA.Mods.CA.Traits
 		Sprite[] BuildSlicesCore(Map map, CPos location, string image)
 		{
 			var sequence = map.Sequences.GetSequence(image, "idle");
-			var variation = unchecked((uint)(location.X * 73856093 ^ location.Y * 19349663)) % (uint)sequence.Length;
-			var sprite = sequence.GetSprite((int)variation);
+			var variation = RubberduckCliffVisuals.Variant(location, sequence.Length, info.Direction);
+			var sprite = sequence.GetSprite(variation);
 			var height = map.Height[location];
 			var roofs = new List<(double X, double Y, double Depth)[]>();
 			for (var dx = -1; dx <= 5; dx++)
@@ -130,16 +130,30 @@ namespace OpenRA.Mods.CA.Traits
 			}
 
 			var result = new List<Sprite>();
-			for (var first = 0; first < limits.Length;)
+			void AddSlices(Sprite source, int left = 0, int right = 128)
 			{
-				var end = first + 1;
-				while (end < limits.Length && limits[end] == limits[first]) end++;
-				var h = limits[first];
-				if (h > 0)
-					result.Add(new Sprite(sprite.Sheet, new Rectangle(sprite.Bounds.Left + first, sprite.Bounds.Top, end - first, h),
-						0, new float3(first + (end - first) / 2f - 64, h / 2f - 64, 0), sprite.Channel, sprite.BlendMode));
-				first = end;
+				for (var first = left; first < right;)
+				{
+					var end = first + 1;
+					while (end < right && limits[end] == limits[first]) end++;
+					var h = limits[first];
+					if (h > 0)
+						result.Add(new Sprite(source.Sheet, new Rectangle(source.Bounds.Left + first, source.Bounds.Top, end - first, h),
+							0, new float3(first + (end - first) / 2f - 64, h / 2f - 64, 0), source.Channel, source.BlendMode));
+					first = end;
+				}
 			}
+			AddSlices(sprite);
+			if (image.StartsWith("terrain.rubberduck.mountainwall", StringComparison.Ordinal) && height == 4 && map.Ramp[location] == 0)
+				for (var end = 0; end < 2; end++)
+				{
+					var kind = RubberduckCliffVisuals.Corner(map, location, info.Direction, end);
+					if (kind < 0) continue;
+					var corner = map.Sequences.GetSequence("terrain.rubberduck.mountaincorners", "idle").GetSprite((info.Direction * 2 + end) * 2 + kind);
+					var vertex = (int)CornerX[end == 0 ? edge.A : edge.B] + 64;
+					var other = (int)CornerX[end == 0 ? edge.B : edge.A] + 64;
+					AddSlices(corner, Math.Max(0, other < vertex ? vertex - 12 : vertex), Math.Min(128, other < vertex ? vertex : vertex + 12));
+				}
 			return result.ToArray();
 		}
 	}

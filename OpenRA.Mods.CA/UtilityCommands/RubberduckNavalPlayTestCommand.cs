@@ -31,7 +31,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			File.WriteAllText(Path.Combine(args[2], "runtime-results-path.txt"), result);
 			var rank = args.Length == 4 ? int.Parse(args[3]) : 0;
 			var rules = map.RuleDefinitions?.Nodes.ToList() ?? new List<MiniYamlNode>();
-			rules.AddRange(MiniYaml.FromString($"World:\n\tMapOptions:\n\t\tGameSpeed: fastest\n\t\tGameSpeedDropdownLocked: true\n\tNavalRouteProbe:\n\t\tBodyRank: {rank}\n\t\tResultPath: {result}\nPlayer:\n\tShroud:\n\t\tExploredMapCheckboxEnabled: true\n\t\tExploredMapCheckboxLocked: true\n", "naval-runtime"));
+			rules.AddRange(MiniYaml.FromString($"World:\n\tMapOptions:\n\t\tGameSpeed: fastest\n\t\tGameSpeedDropdownLocked: true\n\tNavalRouteProbe:\n\t\tBodyRank: {rank}\n\t\tResultPath: {result}\n^Autobattler:\n\tAutobattler:\n\t\tRequiresCondition: false\nPlayer:\n\tShroud:\n\t\tExploredMapCheckboxEnabled: true\n\t\tExploredMapCheckboxLocked: true\n", "naval-runtime"));
 			map.RuleDefinitions = new MiniYaml("", rules);
 			var path = Path.Combine(args[2], "rubberduck-naval-runtime.oramap");
 			using (var package = ZipFileLoader.Create(path)) map.Save(package);
@@ -42,7 +42,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			foreach (var cell in map.AllCells)
 				if (!map.Tiles[cell].Equals(reload.Tiles[cell]) || map.Height[cell] != reload.Height[cell] || !map.Resources[cell].Equals(reload.Resources[cell]))
 					throw new InvalidDataException("Naval probe changed terrain during save/reload.");
-			File.WriteAllText(Path.Combine(args[2], "scope.txt"), "Locked fastest simulation speed for diagnostic throughput; travel comparisons are simulation ticks, not wall-clock seconds. Terrain/resources/actors are unchanged by export. Runtime uses actual footprint checks, production exits and unmodified locomotors. Observer/camera diagnostics are not a competitive balance proof.\n");
+			File.WriteAllText(Path.Combine(args[2], "scope.txt"), "Locked fastest simulation speed for diagnostic throughput; travel comparisons are simulation ticks, not wall-clock seconds. Terrain/resources/actors are unchanged by export. The diagnostic disables autonomous Autobattler orders so Strategic waves cannot override its explicit ship route orders. Runtime uses actual footprint checks, production exits and unmodified locomotors. Observer/camera diagnostics are not a competitive balance proof.\n");
 			Console.WriteLine(path);
 		}
 	}

@@ -71,6 +71,11 @@ namespace OpenRA.Mods.CA.Traits
 
 		Sprite[] BuildCore(Map map, CPos location, string image)
 		{
+			// Saved actor variants and newly generated variants share one stable
+			// selector with editor previews; corners and ramp mouths stay explicit.
+			foreach (var prefix in new[] { "terrain.rubberduck.nativecliff", "terrain.rubberduck.closedcliff" })
+				if (image == prefix + info.Slot)
+					image = prefix + RubberduckCliffVisuals.StraightSlot(info.Slot, location);
 			var sprite = map.Sequences.GetSequence(image, "idle").GetSprite(0);
 			var offsetX = info.GroundAbutment ? -64 : info.SourceGrid ? -64 : info.Slot <= 2 ? -128 : info.Slot <= 7 ? 0 : info.Slot == 26 ? 64 : info.Slot == 30 ? -192 : -64;
 			// Derive padding from the actual sprite, so older unpadded map-local
@@ -80,6 +85,7 @@ namespace OpenRA.Mods.CA.Traits
 				throw new InvalidOperationException("Native outer-corner sprite has unsupported roof padding.");
 			var offsetY = (info.GroundAbutment ? -160 : info.SourceGrid ? -192 : info.Slot <= 7 ? -32 : info.Slot == 26 || info.Slot == 30 ? -64 : 0) - topPadding;
 			var roofs = new List<(double X, double Y, double Depth)[]>();
+			var rimRoofs = new HashSet<(double X, double Y, double Depth)[]>();
 			for (var dx = info.SourceGrid ? -6 : -3; dx <= 6; dx++)
 				for (var dy = info.SourceGrid ? -6 : -3; dy <= 6; dy++)
 				{
@@ -93,12 +99,13 @@ namespace OpenRA.Mods.CA.Traits
 						corners[c] = (64 * (dx - dy) + CornerX[c], depth - 32 * (surface.CornerHeight(c) - map.Height[location]), depth);
 					}
 					roofs.Add(corners);
+					if (surface.Ramp == 0 && surface.Height == map.Height[location] + 4) rimRoofs.Add(corners);
 				}
 			var spans = new List<(int X, int Y, int Height)>();
 			for (var x = 0; x < 128; x++)
 			{
 				var px = offsetX + x + 0.5;
-				var columns = new List<(double NearY, double FarY, double NearDepth, double FarDepth)>();
+				var columns = new List<(double NearY, double FarY, double NearDepth, double FarDepth, bool RimRoof)>();
 				foreach (var roof in roofs)
 				{
 					var nearY = double.PositiveInfinity; var farY = double.NegativeInfinity;
@@ -112,7 +119,7 @@ namespace OpenRA.Mods.CA.Traits
 						if (y < nearY) { nearY = y; nearDepth = depth; }
 						if (y > farY) { farY = y; farDepth = depth; }
 					}
-					if (!double.IsInfinity(nearY)) columns.Add((nearY, farY, nearDepth, farDepth));
+					if (!double.IsInfinity(nearY)) columns.Add((nearY, farY, nearDepth, farDepth, rimRoofs.Contains(roof)));
 				}
 				var southwest = info.Slot <= 2 || info.Slot == 30 || info.Slot == 24 && x < 64 || info.Slot == 16 && x >= 64;
 				var columnGeometry = info.SourceGrid ? RubberduckClosedCliffGeometry.Column(info.Slot, x + 0.5) :
@@ -127,14 +134,20 @@ namespace OpenRA.Mods.CA.Traits
 					// A ramp opening must not expose that opaque backface as a black
 					// side wall. Keep the authored roof lip, not the hidden interior.
 					if (info.SourceGrid && geometry.Item2 == 64 &&
-						(y + 0.5 > geometry.Item1 + topPadding + 4 ||
+						(y + 0.5 > geometry.Item1 + topPadding + RubberduckClosedCliffGeometry.RearLipDepth ||
 						info.Slot >= 8 && info.Slot <= 10 && x > 65 ||
 						info.Slot >= 12 && info.Slot <= 14 && x < 62)) visible = false;
 					var v = Math.Clamp((y + 0.5 - topPadding - geometry.Item1) / geometry.Item2, 0, 1);
 					// Unlike a vertical face, native rock depth changes down the leaning wall.
 					var depth = info.GroundAbutment ? 0 : py - 128 * v + (info.SourceGrid ? 128 : 0);
+					var rearLip = info.SourceGrid && geometry.Item2 == 64 && y + 0.5 <= geometry.Item1 + topPadding + RubberduckClosedCliffGeometry.RearLipDepth;
+					var rimDepth = offsetY + topPadding + geometry.Item1 + 128;
 					foreach (var column in columns)
 					{
+						// The authored rear lip belongs ON its own roof boundary. Treating
+						// its few pixels as a leaning wall buried it under that same roof.
+						// A genuinely nearer roof still occludes it normally.
+						if (rearLip && column.RimRoof && column.NearDepth <= rimDepth + 0.001 && column.FarDepth >= rimDepth - 0.001) continue;
 						if (column.FarDepth <= depth + 0.001) continue;
 						var nearY = column.NearY;
 						if (column.NearDepth < depth)

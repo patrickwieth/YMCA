@@ -63,7 +63,7 @@ namespace OpenRA.Mods.CA.Traits
 				map.Height[source] = 0;
 				if (!staleRefused) throw new InvalidOperationException("Changed ramp selection was accepted.");
 				Check(before, "source is revalidated");
-				map.Resources[target] = new ResourceTile(1, 5);
+				map.Resources[target] = new ResourceTile(3, 5);
 				var refused = false;
 				try { brush.CreateAction(target); } catch (InvalidOperationException) { refused = true; }
 				map.Resources[target] = default;
@@ -91,7 +91,7 @@ namespace OpenRA.Mods.CA.Traits
 				var brush = controller.CurrentBrush as PlateauRampBrush ?? throw new InvalidOperationException("Add-ramp button failed.");
 				void Click(CPos c) => brush.HandleMouseInput(new MouseInput(MouseInputEvent.Down, MouseButton.Left,
 					wr.Viewport.WorldToViewPx(wr.ScreenPxPosition(map.CenterOfCell(c))), int2.Zero, Modifiers.None, 1));
-				map.Resources[target] = new ResourceTile(1, 5);
+				map.Resources[target] = new ResourceTile(3, 5);
 				var refused = false;
 				try { brush.CreateAction(target); } catch (InvalidOperationException) { refused = true; }
 				map.Resources[target] = default;
@@ -104,7 +104,7 @@ namespace OpenRA.Mods.CA.Traits
 				history.Undo(); Check(before, "undo add"); history.Redo(); Check(added, "redo add");
 				Ui.Root.Get<ButtonWidget>("PLATEAU_RAMP_CLOSE").OnClick();
 				brush = controller.CurrentBrush as PlateauRampBrush ?? throw new InvalidOperationException("Close-ramp button failed.");
-				map.Resources[source] = new ResourceTile(1, 5); refused = false;
+				map.Resources[source] = new ResourceTile(3, 5); refused = false;
 				try { brush.CreateAction(source); } catch (InvalidOperationException) { refused = true; }
 				map.Resources[source] = default;
 				if (!refused) throw new InvalidOperationException("Close-ramp resource protection failed.");

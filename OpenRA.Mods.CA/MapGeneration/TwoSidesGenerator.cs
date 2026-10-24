@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenRA.Support;
 
 namespace OpenRA.Mods.CA.MapGeneration
 {
 	sealed class TwoSidesGenerator
 	{
-		const int MaximumAttempts = 32;
+		internal const int MaximumAttempts = 32;
 
-		public MapPlan Generate(MapGenerationOptions options)
+		public MapPlan Generate(MapGenerationOptions options, int startAttempt = 0)
 		{
 			options.Validate();
-			for (var attempt = 0; attempt < MaximumAttempts; attempt++)
+			for (var attempt = startAttempt; attempt < MaximumAttempts; attempt++)
 			{
 				var plan = new MapPlan(options.Width, options.Height)
 				{
@@ -33,20 +34,32 @@ namespace OpenRA.Mods.CA.MapGeneration
 		{
 			var centerX = (plan.Width - 1) / 2.0;
 			var centerY = (plan.Height - 1) / 2.0;
-			var channelSlope = 0.34 + random.NextFloat() * 0.12;
+			// Native isometric axes have slope +/-2 in staggered MPos, not +/-1.
+			// Follow those axes so long cliff faces join directly instead of placing
+			// an inside/outside corner at almost every cell along a shallow raster line.
+			var channelSlope = random.Next(2) == 0 ? 2.0 : -2.0;
 			var waveAmplitude = Math.Min(plan.Width, plan.Height) * (0.018 + random.NextFloat() * 0.018);
 			var wavePhase = random.NextFloat() * Math.PI * 2;
-			var halfWaterWidth = Math.Clamp(Math.Min(plan.Width, plan.Height) / 11, 8, 14);
+			var halfWaterWidth = Math.Clamp(Math.Min(plan.Width, plan.Height) / 9, 10, 18);
+			var bankNormal = channelSlope > 0 ? new CVec(0, 1) : new CVec(1, 0);
+			var nativeCenter = MountainPlateauPlanner.Cell(plan.Width / 2, plan.Height / 2);
+			double BankDistance(int x, int y)
+			{
+				var cell = MountainPlateauPlanner.Cell(x, y);
+				var along = bankNormal.X == 0 ? cell.X - nativeCenter.X : cell.Y - nativeCenter.Y;
+				var across = bankNormal.X == 0 ? cell.Y - nativeCenter.Y : cell.X - nativeCenter.X;
+				return across - Math.Sin(along / (double)Math.Min(plan.Width, plan.Height) * Math.PI * 2 + wavePhase) * waveAmplitude / 2;
+			}
 
 			double ChannelY(double x)
 			{
 				return centerY + (x - centerX) * channelSlope +
-					Math.Sin(x / plan.Width * Math.PI * 2 + wavePhase) * waveAmplitude;
+					Math.Sin((x - centerX) / plan.Width * Math.PI * 2 + wavePhase) * waveAmplitude;
 			}
 
 			for (var y = 0; y < plan.Height; y++)
 				for (var x = 0; x < plan.Width; x++)
-					if (Math.Abs(y - ChannelY(x)) <= halfWaterWidth)
+					if (Math.Abs(BankDistance(x, y)) <= halfWaterWidth / 2.0)
 						plan.SetTerrain(x, y, PlannedTerrain.Water);
 
 			// Cross the water at a shallow random angle. Shallow crossings stay long while
@@ -59,7 +72,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var causewayCenterY = ChannelY(centerX);
 			var causewayHalfLength = (int)Math.Ceiling((halfWaterWidth + 9) / Math.Sin(Math.Abs(crossingDelta)));
 			causewayHalfLength = Math.Clamp(causewayHalfLength, 28, (int)(Math.Min(plan.Width, plan.Height) * 0.43));
-			var causewayHalfWidth = Math.Clamp(Math.Min(plan.Width, plan.Height) / 48, 2, 4);
+			var causewayHalfWidth = Math.Clamp(Math.Min(plan.Width, plan.Height) / 32, 4, 6);
 			var causewayCos = Math.Cos(causewayAngle);
 			var causewaySin = Math.Sin(causewayAngle);
 			var curveAmplitude = random.NextFloat() * Math.Min(10, halfWaterWidth * 0.7);
@@ -73,8 +86,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 					secondCurveAmplitude * Math.Sin(normalized * Math.PI * 2);
 				var x = (int)Math.Round(centerX + along * causewayCos - curveOffset * causewaySin);
 				var y = (int)Math.Round(causewayCenterY + along * causewaySin + curveOffset * causewayCos);
-				var localWidth = causewayHalfWidth + (Math.Abs(step) % 17 == 0 ? 1 : 0);
-				PaintDisk(plan, new PlanPoint(x, y), localWidth, (px, py) =>
+				PaintDisk(plan, new PlanPoint(x, y), causewayHalfWidth, (px, py) =>
 				{
 					if (plan.TerrainAt(px, py) != PlannedTerrain.Water)
 						return;
@@ -84,42 +96,37 @@ namespace OpenRA.Mods.CA.MapGeneration
 				});
 			}
 
-			var (upperContactX, lowerContactX) = FindCausewayContacts(plan, ChannelY);
-			MarkShores(plan, ChannelY, upperContactX, lowerContactX);
-			PlaceTeamSpawns(plan, options.Players, ChannelY, halfWaterWidth);
-			PlaceResources(plan, options, random);
-			return true;
+			PlaceTeamSpawns(plan, options.Players, bankNormal, halfWaterWidth);
+			// Reduce one-cell coastline teeth before classifying banks or placing
+			// economy. Paired swaps preserve area/connectivity and protect crossings/homes.
+			RubberduckCoastSmoother.Apply(plan);
+			var (upperContactX, lowerContactX) = FindCausewayContacts(plan, (x, y) => BankDistance(x, y) > 0);
+			MarkShores(plan, (x, y) => BankDistance(x, y) > 0, upperContactX, lowerContactX);
+			return PlaceResources(plan, options, random, bankNormal);
 		}
 
 		static (double UpperContactX, double LowerContactX) FindCausewayContacts(
 			MapPlan plan,
-			Func<double, double> channelY)
+			Func<int, int, bool> isLowerBank)
 		{
 			var upperX = 0.0;
 			var lowerX = 0.0;
 			var upperCount = 0;
 			var lowerCount = 0;
-			var neighbors = new[]
-			{
-				new PlanPoint(1, 0),
-				new PlanPoint(-1, 0),
-				new PlanPoint(0, 1),
-				new PlanPoint(0, -1),
-			};
 			for (var y = 0; y < plan.Height; y++)
 				for (var x = 0; x < plan.Width; x++)
 				{
 					if (!plan.HasFeature(x, y, PlannedFeature.Bottleneck))
 						continue;
 
-					foreach (var offset in neighbors)
+					foreach (var neighbor in NativeNeighbors(x, y))
 					{
-						var landX = x + offset.X;
-						var landY = y + offset.Y;
+						var landX = neighbor.U;
+						var landY = neighbor.V;
 						if (!plan.Contains(landX, landY) || plan.TerrainAt(landX, landY) != PlannedTerrain.Land)
 							continue;
 
-						if (landY < channelY(landX))
+						if (!isLowerBank(landX, landY))
 						{
 							upperX += landX;
 							upperCount++;
@@ -139,17 +146,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		static void MarkShores(
 			MapPlan plan,
-			Func<double, double> channelY,
+			Func<int, int, bool> isLowerBank,
 			double upperContactX,
 			double lowerContactX)
 		{
-			var neighbors = new[]
-			{
-				new PlanPoint(1, 0),
-				new PlanPoint(-1, 0),
-				new PlanPoint(0, 1),
-				new PlanPoint(0, -1),
-			};
 
 			for (var y = 0; y < plan.Height; y++)
 				for (var x = 0; x < plan.Width; x++)
@@ -158,9 +158,9 @@ namespace OpenRA.Mods.CA.MapGeneration
 						continue;
 
 					var touchesWater = false;
-					foreach (var offset in neighbors)
-						if (plan.Contains(x + offset.X, y + offset.Y) &&
-							plan.TerrainAt(x + offset.X, y + offset.Y) == PlannedTerrain.Water)
+					foreach (var neighbor in NativeNeighbors(x, y))
+						if (plan.Contains(neighbor.U, neighbor.V) &&
+							plan.TerrainAt(neighbor.U, neighbor.V) == PlannedTerrain.Water)
 						{
 							touchesWater = true;
 							break;
@@ -169,7 +169,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 					if (!touchesWater)
 						continue;
 
-					var lowerBank = y > channelY(x);
+					var lowerBank = isLowerBank(x, y);
 					var contactX = lowerBank ? lowerContactX : upperContactX;
 					if (Math.Abs(x - contactX) <= 3)
 						continue;
@@ -179,32 +179,52 @@ namespace OpenRA.Mods.CA.MapGeneration
 				}
 		}
 
-		static void PlaceTeamSpawns(MapPlan plan, int playerCount, Func<double, double> channelY, int halfWaterWidth)
+		static IEnumerable<MPos> NativeNeighbors(int x, int y)
+		{
+			var cell = MountainPlateauPlanner.Cell(x, y);
+			foreach (var direction in PlateauTopology.Directions)
+				yield return MountainPlateauPlanner.Point(cell + direction);
+		}
+
+		static void PlaceTeamSpawns(MapPlan plan, int playerCount, CVec bankNormal, int halfWaterWidth)
 		{
 			var firstTeamPlayers = (playerCount + 1) / 2;
 			var secondTeamPlayers = playerCount - firstTeamPlayers;
-			PlaceTeam(plan, 0, firstTeamPlayers, 0, false, channelY, halfWaterWidth);
-			PlaceTeam(plan, firstTeamPlayers, secondTeamPlayers, 1, true, channelY, halfWaterWidth);
+			PlaceTeam(plan, firstTeamPlayers, 0, false, bankNormal, halfWaterWidth);
+			PlaceTeam(plan, secondTeamPlayers, 1, true, bankNormal, halfWaterWidth);
 		}
 
 		static void PlaceTeam(
 			MapPlan plan,
-			int firstPlayer,
 			int count,
 			int team,
 			bool lowerBank,
-			Func<double, double> channelY,
+			CVec bankNormal,
 			int halfWaterWidth)
 		{
 			if (count == 0)
 				return;
 
-			for (var index = 0; index < count; index++)
+			var center = MountainPlateauPlanner.Cell(plan.Width / 2, plan.Height / 2);
+			var tangent = bankNormal.X == 0 ? new CVec(1, 0) : new CVec(0, 1);
+			var depth = halfWaterWidth / 2 + Math.Clamp(Math.Min(plan.Width, plan.Height) / 6, 14, 32);
+			var bankCenter = center + bankNormal * (lowerBank ? depth : -depth);
+			var reach = Math.Max(plan.Width, plan.Height);
+			var available = Enumerable.Range(-reach, 2 * reach + 1).Where(along =>
 			{
-				var fraction = (index + 1.0) / (count + 1.0);
-				var x = (int)Math.Round(plan.Width * (0.12 + fraction * 0.76));
-				var bankY = channelY(x) + (lowerBank ? 1 : -1) * (halfWaterWidth + 14);
-				var y = (int)Math.Round(Math.Clamp(bankY, 10, plan.Height - 11));
+				var p = MountainPlateauPlanner.Point(bankCenter + tangent * along);
+				return p.U >= 12 && p.V >= 12 && p.U < plan.Width - 12 && p.V < plan.Height - 12;
+			}).ToArray();
+			if (available.Length == 0) return;
+			var positions = Enumerable.Range(0, count).Select(i => available[(int)Math.Round((i + 1.0) * (available.Length - 1) / (count + 1))]).ToArray();
+			var shift = positions.OrderBy(Math.Abs).ThenBy(p => p).First();
+			// Translate the evenly spaced formation so its nearest slot is exactly
+			// on the native river normal. The usual opponents therefore face each
+			// other diagonally, while teammates use the available length of each bank.
+			foreach (var along in positions.Select(p => p - shift).OrderBy(Math.Abs).ThenBy(p => p))
+			{
+				var p = MountainPlateauPlanner.Point(bankCenter + tangent * along);
+				var x = p.U; var y = p.V;
 				var spawn = new PlanPoint(x, y);
 				if (!plan.IsTraversable(x, y))
 					continue;
@@ -220,43 +240,57 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}
 		}
 
-		static void PlaceResources(MapPlan plan, MapGenerationOptions options, MersenneTwister random)
+		static bool PlaceResources(MapPlan plan, MapGenerationOptions options, MersenneTwister random, CVec bankNormal)
 		{
 			if (options.Resources == ResourceFieldLayout.Glitter)
 			{
 				for (var y = 0; y < plan.Height; y++)
 					for (var x = 0; x < plan.Width; x++)
-						if (plan.IsTraversable(x, y) && plan.HomeOwnerAt(x, y) >= 0 &&
-							!plan.HasFeature(x, y, PlannedFeature.BuildClearance) && random.Next(100) < 78)
+						if (GlitterCell(plan, x, y) && random.Next(100) < 78)
 							plan.AddFeature(x, y, PlannedFeature.Resource);
 			}
 			else if (options.Resources == ResourceFieldLayout.Patches)
 			{
 				var firstTeamPlayers = (options.Players + 1) / 2;
 				var patchRadius = 7;
-				if (!PlaceAllResourcePatches(plan, options.Players, firstTeamPlayers, patchRadius, random))
-					throw new InvalidOperationException("Could not place a complete mirrored resource patch layout.");
+				if (!PlaceAllResourcePatches(plan, options.Players, firstTeamPlayers, patchRadius, random, bankNormal))
+					return false;
 			}
 
-			if (!options.FiniteResources)
+			if (options.Resources != ResourceFieldLayout.None && !options.FiniteResources)
 				PlaceSymmetricActors(plan, PlannedFeature.ResourceGenerator, Math.Max(1, options.Players / 4), random);
 
 			if (options.TechBuildings == TechBuildingDensity.Sparse)
 				PlaceSymmetricActors(plan, PlannedFeature.TechBuilding, Math.Max(1, options.Players / 4), random);
 			else if (options.TechBuildings == TechBuildingDensity.Dense)
 				PlaceOilClusters(plan, Math.Max(1, options.Players / 4), random);
+			return true;
+		}
+
+		static bool GlitterCell(MapPlan plan, int x, int y)
+		{
+			// HomeOwner only labels the cleared starting disk on Two Sides. Requiring
+			// it together with !BuildClearance excluded every possible resource cell.
+			if (!plan.Contains(x, y) || plan.TerrainAt(x, y) != PlannedTerrain.Land ||
+				plan.HasFeature(x, y, PlannedFeature.BuildClearance)) return false;
+			for (var dy = -4; dy <= 4; dy++) for (var dx = -3; dx <= 3; dx++)
+				if (!plan.Contains(x + dx, y + dy) || plan.TerrainAt(x + dx, y + dy) != PlannedTerrain.Land ||
+					plan.HasFeature(x + dx, y + dy, PlannedFeature.CliffShore | PlannedFeature.LaunchShore | PlannedFeature.Bottleneck)) return false;
+			return true;
 		}
 
 		static bool PlaceAllResourcePatches(
-			MapPlan plan, int playerCount, int firstTeamPlayers, int radius, MersenneTwister random)
+			MapPlan plan, int playerCount, int firstTeamPlayers, int radius, MersenneTwister random, CVec bankNormal)
 		{
 			var centers = new List<PlanPoint>();
-			foreach (var spawn in plan.Spawns)
+			for (var player = 0; player < plan.Spawns.Count; player++)
 			{
+				var spawn = plan.Spawns[player];
+				var outward = MountainPlateauPlanner.Point(MountainPlateauPlanner.Cell(spawn.X, spawn.Y) + bankNormal * (player < firstTeamPlayers ? -2 : 2));
+				var outwardAngle = Math.Atan2(outward.V - spawn.Y, outward.U - spawn.X);
 				var placed = false;
 				for (var attempt = 0; attempt < 2000 && !placed; attempt++)
 				{
-					var outwardAngle = spawn.Y < plan.Height / 2 ? -Math.PI / 2 : Math.PI / 2;
 					var angle = attempt < 41
 						? outwardAngle + (attempt % 2 == 0 ? -1 : 1) * ((attempt + 1) / 2) * 0.025
 						: random.NextFloat() * Math.PI * 2;
@@ -466,7 +500,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			if (launchShore == 0 || cliffShore == 0)
 				return false;
 
-			if (options.Resources == ResourceFieldLayout.Patches)
+			if (options.Resources != ResourceFieldLayout.None)
 				foreach (var spawn in plan.Spawns)
 				{
 					var nearbyResource = false;

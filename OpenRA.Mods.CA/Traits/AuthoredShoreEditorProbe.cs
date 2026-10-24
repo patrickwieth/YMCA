@@ -83,6 +83,7 @@ namespace OpenRA.Mods.CA.Traits
 						throw new InvalidOperationException("Shore save/reload changed terrain or resources.");
 				Pass("save/reload preserves terrain and resources");
 				PlateauMovementProbe.WriteResult(info.ResultPath, materials.ValidateAuthoredShoreCache());
+				Pass(materials.ProfileCache(true));
 			}
 			if (frames == 150) Game.TakeScreenshot();
 		}

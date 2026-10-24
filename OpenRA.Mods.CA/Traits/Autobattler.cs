@@ -96,6 +96,7 @@ namespace OpenRA.Mods.CA.Traits
 		}
 
 		void ITick.Tick(Actor self) {
+			if (IsTraitDisabled) return;
 			//TextNotificationsManager.Debug(ticks.ToString());
 			if (++ticks >= info.waveInterval) {
 				ticks = 0;

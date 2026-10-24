@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenRA.Support;
 
 namespace OpenRA.Mods.CA.MapGeneration
@@ -63,6 +64,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 				: Math.Clamp(minimumDimension / (options.Players + 6), 7, 11);
 			var homeRadius = Math.Min(14, valleyRadius + 3);
 			var spawnCenters = CreateSpawnCenters(plan, options.Players, homeRadius, random);
+			var teamOrder = new List<PlanPoint>(spawnCenters);
+			if (options.Mode == GeneratedMapMode.Strategic) StrategicCheckpointPlanner.OrderSpawns(teamOrder, options.Players);
 			plan.SymmetrySlotCount = spawnCenters.Count;
 			var homeGateOffsets = CreateOpenGateOffsets(random);
 			var homeShapeSeed = random.Next();
@@ -90,7 +93,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 					return Failed("home overlap " + slot);
 
 				occupiedSites.Add(site);
-				if (!PaintMountainRing(plan, site, PlannedFeature.Home, occupied ? slot : -1, homeShapeSeed))
+				if (!PaintMountainRing(plan, site, PlannedFeature.Home, occupied ? teamOrder.IndexOf(center) : -1, homeShapeSeed))
 					return Failed("home ramp " + slot);
 				if (occupied)
 				{
@@ -105,13 +108,23 @@ namespace OpenRA.Mods.CA.MapGeneration
 				PaintDisk(plan, site.Center, 9, (x, y) => plan.AddFeature(x, y, PlannedFeature.BuildClearance));
 			}
 
+			if (options.Mode == GeneratedMapMode.Strategic)
+			{
+				plan.Spawns.Clear();
+				plan.Spawns.AddRange(teamOrder.GetRange(0, options.Players));
+				if (!StrategicCheckpointPlanner.ReserveFront(plan, options)) return Failed("Strategic front does not fit between home regions");
+			}
+
 			for (var expansion = 0; expansion < options.ExpansionsPerPlayer; expansion++)
 			{
 				var targetDistance = minimumDimension * (0.27 + random.NextFloat() * 0.05);
 				var expansionGateOffsets = CreateOpenGateOffsets(random);
 				var expansionDirectionOffset = (random.NextFloat() - 0.5) * Math.PI * 0.9;
 				var expansionShapeSeed = random.Next();
-				for (var slot = 0; slot < spawnCenters.Count; slot++)
+				var expansionOrder = Enumerable.Range(0, spawnCenters.Count);
+				if (options.Mode == GeneratedMapMode.Strategic)
+					expansionOrder = expansionOrder.OrderBy(slot => DistanceSquared(spawnCenters[slot], new PlanPoint(plan.Width / 2, plan.Height / 2)));
+				foreach (var slot in expansionOrder)
 				{
 					var site = FindExpansionSite(
 						plan,
@@ -121,12 +134,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 						targetDistance,
 						expansionDirectionOffset,
 						expansionGateOffsets,
-						random);
+						random, expansionShapeSeed, out var expanded);
 					if (site == null)
 						return Failed("expansion " + slot);
 
 					occupiedSites.Add(site);
-					PaintMountainRing(plan, site, PlannedFeature.Expansion, -1, expansionShapeSeed);
+					plan = expanded;
 					plan.ExpansionCenters.Add(site.Center);
 				}
 			}
@@ -264,8 +277,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 			double targetDistance,
 			double directionOffset,
 			double[] gateOffsets,
-			MersenneTwister random)
+			MersenneTwister random, int shapeSeed, out MapPlan result)
 		{
+			result = plan;
+			var before = MountainPlateauPlanner.Reachable(plan, plan.Spawns[0]);
 			var towardCenter = Math.Atan2((plan.Height - 1) / 2.0 - spawn.Y, (plan.Width - 1) / 2.0 - spawn.X);
 			for (var attempt = 0; attempt < 400; attempt++)
 			{
@@ -289,8 +304,16 @@ namespace OpenRA.Mods.CA.MapGeneration
 					Rotation = direction,
 					GateAngles = RotateGateOffsets(gateOffsets, preferredGateAngle),
 				};
-				if (SiteFits(plan, occupiedSites, site, 1))
-					return site;
+				if (!SiteFits(plan, occupiedSites, site, 1)) continue;
+				var draft = plan.Clone();
+				if (!PaintMountainRing(draft, site, PlannedFeature.Expansion, -1, shapeSeed)) continue;
+				var after = MountainPlateauPlanner.Reachable(draft, plan.Spawns[0]);
+				var connected = after[center.X + center.Y * plan.Width];
+				for (var y = 0; y < plan.Height && connected; y++) for (var x = 0; x < plan.Width; x++)
+					if (before[x + y * plan.Width] && draft.IsTraversable(x, y) && !after[x + y * plan.Width]) { connected = false; break; }
+				if (!connected) continue;
+				result = draft;
+				return site;
 			}
 
 			return null;
@@ -418,7 +441,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 			for (var y = candidate.Center.Y - candidate.RadiusY - 2; y <= candidate.Center.Y + candidate.RadiusY + 2; y++)
 				for (var x = candidate.Center.X - candidate.RadiusX - 2; x <= candidate.Center.X + candidate.RadiusX + 2; x++)
 					if (plan.Contains(x, y) && (plan.HasFeature(x, y, PlannedFeature.Entrance | PlannedFeature.Enclosed) ||
-						plan.PlateauSurfaces.ContainsKey(new MPos(x, y))) &&
+						plan.PlateauSurfaces.ContainsKey(new MPos(x, y)) ||
+						(candidate.Raised || candidate.GateAngles.Length == 0) && plan.StrategicReservations.Contains(new MPos(x, y))) &&
 						(x - candidate.Center.X) * (x - candidate.Center.X) / (double)(candidate.RadiusX * candidate.RadiusX) +
 						(y - candidate.Center.Y) * (y - candidate.Center.Y) / (double)(candidate.RadiusY * candidate.RadiusY) <= 1.14 * 1.14)
 						return false;
@@ -450,6 +474,9 @@ namespace OpenRA.Mods.CA.MapGeneration
 				: 0;
 			var ringThickness = 3.2;
 			var plateauFootprint = new List<PlanPoint>();
+			var expansionRim = new List<PlanPoint>();
+			var interior = new List<PlanPoint>();
+			var entrances = new HashSet<MPos>();
 
 			for (var y = site.Center.Y - site.RadiusY - 2; y <= site.Center.Y + site.RadiusY + 2; y++)
 			{
@@ -457,7 +484,6 @@ namespace OpenRA.Mods.CA.MapGeneration
 				{
 					if (!plan.Contains(x, y))
 						continue;
-
 					var dx = x - site.Center.X;
 					var dy = y - site.Center.Y;
 					var angle = Math.Atan2(dy, dx);
@@ -491,21 +517,35 @@ namespace OpenRA.Mods.CA.MapGeneration
 						}
 
 					if (normalized >= innerEdge && normalized <= edgeNoise && !inGate && !openToBorder)
-						plan.SetTerrain(x, y, PlannedTerrain.Mountain);
+						expansionRim.Add(new PlanPoint(x, y));
+					else if (plan.StrategicReservations.Contains(new MPos(x, y)))
+						continue;
 					else if (normalized < innerEdge - 0.04)
 					{
-						plan.AddFeature(x, y, interiorFeature);
-						if (homeOwner >= 0)
-							plan.SetHomeOwner(x, y, homeOwner);
+						interior.Add(new PlanPoint(x, y));
 					}
 					else if (inGate && !openToBorder && normalized <= edgeNoise)
-						plan.AddFeature(x, y, PlannedFeature.Entrance);
+						entrances.Add(new MPos(x, y));
 				}
 			}
+			var protectedCells = new HashSet<MPos>(entrances);
+			if (interiorFeature == PlannedFeature.Expansion)
+			{
+				var center = MountainPlateauPlanner.Cell(site.Center.X, site.Center.Y);
+				for (var x = -2; x <= 2; x++) for (var y = -2; y <= 2; y++)
+					protectedCells.Add(MountainPlateauPlanner.Point(center + new CVec(x, y)));
+			}
+			if (!PaintExpansionRim(plan, expansionRim, protectedCells)) return false;
+			foreach (var p in interior)
+				if (!plan.PlateauSurfaces.ContainsKey(new MPos(p.X, p.Y))) plan.AddFeature(p.X, p.Y, interiorFeature);
+			foreach (var p in entrances) plan.AddFeature(p.U, p.V, PlannedFeature.Entrance);
 			if (interiorFeature == PlannedFeature.Home)
 				return MountainPlateauPlanner.AddHome(plan, plateauFootprint, site.Center, homeOwner);
 			return open || MountainPlateauPlanner.AddIsland(plan, plateauFootprint, site.Rotation);
 		}
+
+		internal static bool PaintExpansionRim(MapPlan plan, IReadOnlyList<PlanPoint> rim, ISet<MPos> protectedCells = null) =>
+			ClosedExpansionRimPlanner.Place(plan, rim, protectedCells ?? new HashSet<MPos>());
 
 		static void PlaceResources(MapPlan plan, MapGenerationOptions options, MersenneTwister random)
 		{
@@ -521,19 +561,6 @@ namespace OpenRA.Mods.CA.MapGeneration
 					PlaceResourcePatches(plan, options.Players * 2, random);
 					break;
 			}
-
-			if (options.Resources != ResourceFieldLayout.None)
-				foreach (var spawn in plan.Spawns)
-					foreach (var side in new[] { -1, 1 })
-						for (var dy = -2; dy <= 2; dy++)
-							for (var dx = -2; dx <= 2; dx++)
-							{
-								var x = spawn.X + side * 5 + dx;
-								var y = spawn.Y + dy;
-								if (!plan.PlateauSurfaces.TryGetValue(new MPos(x, y), out var surface) || surface.Height != 4 || surface.Ramp != 0 || surface.Blocked)
-									throw new InvalidOperationException("Starting ore field does not fit on its plateau.");
-								plan.AddFeature(x, y, PlannedFeature.Resource);
-							}
 
 			if (options.Resources != ResourceFieldLayout.None && !options.FiniteResources)
 				PlaceSingletons(plan, PlannedFeature.ResourceGenerator, Math.Max(1, options.Players / 2), random);
@@ -572,8 +599,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		static bool CanPlaceResource(MapPlan plan, int x, int y)
 		{
-			return plan.IsTraversable(x, y) &&
-				!plan.HasFeature(x, y, PlannedFeature.BuildClearance | PlannedFeature.Enclosed | PlannedFeature.Entrance);
+			// Start roofs and ramp surfaces stay empty; economy belongs in the valleys.
+			return plan.IsTraversable(x, y) && !plan.PlateauSurfaces.ContainsKey(new MPos(x, y)) &&
+				!plan.StrategicReservations.Contains(new MPos(x, y)) &&
+				!plan.HasFeature(x, y, PlannedFeature.Home | PlannedFeature.BuildClearance | PlannedFeature.Enclosed | PlannedFeature.Entrance);
 		}
 
 		static void PlaceSingletons(MapPlan plan, PlannedFeature feature, int count, MersenneTwister random)
@@ -624,6 +653,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				for (var dx = -3; dx <= 3; dx++)
 				{
 					if (!plan.IsTraversable(x + dx, y + dy) || plan.PlateauSurfaces.ContainsKey(new MPos(x + dx, y + dy)) ||
+						plan.StrategicReservations.Contains(new MPos(x + dx, y + dy)) ||
 						plan.HasFeature(x + dx, y + dy, PlannedFeature.Home | PlannedFeature.Enclosed | PlannedFeature.Entrance)) return false;
 					var other = MountainPlateauPlanner.Cell(x + dx, y + dy);
 					if (Math.Abs(cell.X - other.X) <= 1 && Math.Abs(cell.Y - other.Y) <= 1 &&
@@ -671,7 +701,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 					return false;
 
 			foreach (var pair in plan.PlateauSurfaces)
+			{
 				if (!pair.Value.Blocked && !reachable[pair.Key.U + pair.Key.V * plan.Width]) return false;
+				if (plan.HasFeature(pair.Key.U, pair.Key.V, PlannedFeature.Resource | PlannedFeature.RichResource | PlannedFeature.ResourceGenerator | PlannedFeature.TechBuilding)) return false;
+			}
 
 			if (plan.ExpansionCenters.Count != plan.SymmetrySlotCount * options.ExpansionsPerPlayer)
 				return false;
@@ -686,8 +719,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				}
 
 			plan.ValidationMessages.Add($"All {options.Players} player spawns are connected and have a clear, flat height-4 construction area.");
-			if (options.Resources != ResourceFieldLayout.None)
-				plan.ValidationMessages.Add("Every start has two complete 25-cell ore fields on its plateau.");
+			plan.ValidationMessages.Add("Start plateaus and ramps contain no resources, resource generators or tech buildings; economy stays in the valleys.");
 			plan.ValidationMessages.Add($"All {plan.ExpansionCenters.Count} expansion valleys are reachable.");
 			plan.ValidationMessages.Add($"All walkable cells of {plan.Plateaus.Count} filled plateaus are height-connected; each has one three-wide, four-level ascent.");
 			if (options.FiniteResources)

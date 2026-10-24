@@ -77,7 +77,7 @@ namespace OpenRA.Mods.CA.Traits
 				brush.HandleMouseInput(Mouse(first + new CVec(19, 6), MouseInputEvent.Move));
 				Check(before, "drag is non-mutating until release");
 				var guarded = first + new CVec(12, 6);
-				map.Resources[guarded] = new ResourceTile(1, 5);
+				map.Resources[guarded] = new ResourceTile(3, 5);
 				brush.HandleMouseInput(Mouse(first + new CVec(19, 6), MouseInputEvent.Up));
 				map.Resources[guarded] = default;
 				Check(before, "release revalidates newly protected cells");

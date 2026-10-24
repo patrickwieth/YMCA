@@ -8,6 +8,13 @@ namespace OpenRA.Mods.CA.MapGeneration
 	// A diagonal only cuts a concave corner when both adjacent edges remain land.
 	internal static class RubberduckShoreTopology
 	{
+		// Old square-neighborhood autotiling baked sand into otherwise Clear grass
+		// cells. Resolve their material identity without changing collision or IDs.
+		internal static bool IsLegacyGrassSand(ushort tile) => tile >= 1120 && tile <= 1139 || tile >= 1304 && tile <= 1307;
+
+		internal static bool IsLegacyGrassDirt(ushort tile) => tile >= 1100 && tile <= 1119 || tile >= 1200 && tile <= 1219 ||
+			tile >= 1300 && tile <= 1303 || tile >= 1320 && tile <= 1323;
+
 		static readonly int[] Edges = { 20, 28, 24, 16 };
 		static readonly int[] Concave = { 32, 34, 38, 36 };
 
@@ -26,15 +33,34 @@ namespace OpenRA.Mods.CA.MapGeneration
 			if (topology != Normalize(topology & 15, topology >> 4) || variant < 0 || variant > 3)
 				throw new ArgumentOutOfRangeException(nameof(topology));
 			var frames = new List<int>();
+			// Exactly two adjacent sea edges can use one authored diagonal shoreline.
+			// Never intersect opposing half-cell wedges on spits or tiny islands.
+			// Even frames retain a majority-opaque center in all ten material blocks;
+			// several odd sand variants erase the physical cell center.
+			var diagonal = (topology & 15) switch { 3 => 46, 6 => 44, 12 => 40, 9 => 42, _ => -1 };
+			if (diagonal >= 0) frames.Add(diagonal);
 			for (var d = 0; d < 4; d++)
 			{
-				if ((topology & (1 << d)) != 0) frames.Add(Edges[d] + variant);
-				// Frames 40..47 are half-diamond land wedges, not full-cell corners.
-				// Intersecting opposing wedges makes a walkable island almost invisible.
-				// Full-cell convex corners therefore use the two authored edge cuts.
+				if (diagonal < 0 && (topology & (1 << d)) != 0) frames.Add(Edges[d] + variant);
 				if ((topology & (16 << d)) != 0) frames.Add(Concave[d] + variant % 2);
 			}
 			return frames.ToArray();
+		}
+
+		internal static bool[] GroundBlendExclusion(byte[] shore, byte[] fullDiamond)
+		{
+			if (shore.Length != 128 * 64 * 4 || fullDiamond.Length != shore.Length)
+				throw new ArgumentException("Expected matching 128x64 RGBA shore and ground frames.");
+			var exclusion = new bool[128 * 64];
+			for (var p = 0; p < exclusion.Length; p++)
+			{
+				var alpha = shore[p * 4 + 3];
+				// Suppress only the almost transparent tail that a ground overlay
+				// would turn into an opaque fringe. Keep the broad authored blend
+				// and uncut land/land diamond antialiasing intact.
+				exclusion[p] = alpha == 0 || alpha <= 16 && alpha < fullDiamond[p * 4 + 3];
+			}
+			return exclusion;
 		}
 
 		// Intersection retains an actual source RGBA sample at every output pixel.

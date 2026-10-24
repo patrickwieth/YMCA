@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenRA.Support;
 
 namespace OpenRA.Mods.CA.MapGeneration
@@ -35,11 +36,109 @@ namespace OpenRA.Mods.CA.MapGeneration
 					MapGenerationPreset.Migration => GenerateMigration(plan, options, random),
 					_ => false,
 				};
+				if (generated && options.Custom != null)
+				{
+					ApplyCustomResources(plan, options);
+					generated = ApplyCustomEconomy(plan, options);
+				}
 				if (generated && Validate(plan, options))
 					return plan;
 			}
 
 			throw new InvalidOperationException($"Failed to generate a valid {options.Preset} map after {MaximumAttempts} attempts.");
+		}
+
+		static bool ApplyCustomEconomy(MapPlan plan, MapGenerationOptions options)
+		{
+			for (var y = 0; y < plan.Height; y++) for (var x = 0; x < plan.Width; x++)
+			{
+				if (options.TechBuildings == TechBuildingDensity.None) plan.RemoveFeature(x, y, PlannedFeature.TechBuilding);
+				if (options.FiniteResources || options.Resources == ResourceFieldLayout.None) plan.RemoveFeature(x, y, PlannedFeature.ResourceGenerator);
+			}
+			if (options.FiniteResources || options.Resources == ResourceFieldLayout.None || options.Preset != MapGenerationPreset.Migration) return true;
+
+			// Migration normally has no generators. Infinite custom resources need
+			// real trees on the central resource island, never on economy-free homes.
+			var candidates = new List<PlanPoint>();
+			for (var y = 0; y < plan.Height; y++) for (var x = 0; x < plan.Width; x++)
+			{
+				if (plan.TerrainAt(x, y) != PlannedTerrain.Land || !plan.HasFeature(x, y, PlannedFeature.Resource) ||
+					!plan.HasFeature(x, y, PlannedFeature.ContestedCenter) || plan.HasFeature(x, y,
+						PlannedFeature.BuildClearance | PlannedFeature.Bottleneck | PlannedFeature.DestructibleBridge | PlannedFeature.LaunchShore)) continue;
+				var blocked = false;
+				for (var dy = -3; dy <= 3; dy++) for (var dx = -3; dx <= 3; dx++)
+					if (plan.Contains(x + dx, y + dy) && plan.HasFeature(x + dx, y + dy, PlannedFeature.TechBuilding)) blocked = true;
+				if (!blocked) candidates.Add(new PlanPoint(x, y));
+			}
+			if (candidates.Count == 0) return false;
+			var center = Center(plan);
+			var radius = Math.Sqrt(candidates.Max(p => DistanceSquared(p.X, p.Y, center))) * 0.6;
+			var trees = new List<PlanPoint>();
+			for (var i = 0; i < options.Players; i++)
+			{
+				var target = new PlanPoint(center.X + (int)Math.Round(Math.Cos(i * 2 * Math.PI / options.Players) * radius),
+					center.Y + (int)Math.Round(Math.Sin(i * 2 * Math.PI / options.Players) * radius));
+				var available = candidates.Where(p => trees.All(t => DistanceSquared(p.X, p.Y, t) >= 25))
+					.OrderBy(p => DistanceSquared(p.X, p.Y, target)).ToArray();
+				if (available.Length == 0) return false;
+				trees.Add(available[0]); plan.AddFeature(available[0].X, available[0].Y, PlannedFeature.ResourceGenerator);
+			}
+			return true;
+		}
+
+		static void ApplyCustomResources(MapPlan plan, MapGenerationOptions options)
+		{
+			var migration = options.Preset == MapGenerationPreset.Migration;
+			var baseline = migration ? ResourceFieldLayout.Glitter : ResourceFieldLayout.Patches;
+			if (options.Resources == baseline) return;
+			if (options.Resources == ResourceFieldLayout.None)
+			{
+				for (var y = 0; y < plan.Height; y++) for (var x = 0; x < plan.Width; x++)
+					plan.RemoveFeature(x, y, PlannedFeature.Resource | PlannedFeature.RichResource | PlannedFeature.ResourceGenerator);
+				return;
+			}
+
+			if (!migration)
+			{
+				// Glitter spreads over home land, not neutral oil islands. Keep starting
+				// build disks, launch shores, bridge approaches and tech footprints clear.
+				var homes = plan.Spawns.Select(p => PlannedRubberduckBridge.Cell(p.X, p.Y)).ToHashSet();
+				var land = CustomIslandConnections.Components(plan).Where(c => c.Overlaps(homes)).SelectMany(c => c)
+					.OrderBy(c => c.X).ThenBy(c => c.Y);
+				var random = new MersenneTwister(unchecked(options.Seed + plan.GenerationAttempt * 130363 + 8719));
+				foreach (var c in land)
+				{
+					var p = PlannedRubberduckBridge.Point(c);
+					if (plan.HasFeature(p.U, p.V, PlannedFeature.BuildClearance | PlannedFeature.DestructibleBridge |
+						PlannedFeature.Bottleneck | PlannedFeature.LaunchShore)) continue;
+					var shore = false;
+					for (var dy = -2; dy <= 2; dy++) for (var dx = -2; dx <= 2; dx++)
+					{
+						var bank = PlannedRubberduckBridge.Point(c + new CVec(dx, dy));
+						if (!plan.Contains(bank.U, bank.V) || plan.TerrainAt(bank.U, bank.V) != PlannedTerrain.Land) shore = true;
+					}
+					if (shore) continue;
+					var nearTech = false;
+					for (var dy = -3; dy <= 3; dy++) for (var dx = -3; dx <= 3; dx++)
+						if (plan.Contains(p.U + dx, p.V + dy) && plan.HasFeature(p.U + dx, p.V + dy, PlannedFeature.TechBuilding)) nearTech = true;
+					if (!nearTech && random.Next(100) < 65) plan.AddFeature(p.U, p.V, PlannedFeature.Resource);
+				}
+				return;
+			}
+
+			// Migration keeps its economy on the central island. Selecting Patches
+			// explicitly replaces the dense field with separated radial deposits.
+			var cells = new List<PlanPoint>();
+			for (var y = 0; y < plan.Height; y++) for (var x = 0; x < plan.Width; x++)
+				if (plan.HasFeature(x, y, PlannedFeature.Resource)) cells.Add(new PlanPoint(x, y));
+			if (cells.Count == 0) return;
+			var center = Center(plan);
+			var radius = Math.Sqrt(cells.Max(p => DistanceSquared(p.X, p.Y, center))) * 0.58;
+			var anchors = Enumerable.Range(0, options.Players).Select(i => new PlanPoint(
+				center.X + (int)Math.Round(Math.Cos(i * 2 * Math.PI / options.Players) * radius),
+				center.Y + (int)Math.Round(Math.Sin(i * 2 * Math.PI / options.Players) * radius))).ToArray();
+			foreach (var p in cells)
+				if (!anchors.Any(a => DistanceSquared(p.X, p.Y, a) <= 16)) plan.RemoveFeature(p.X, p.Y, PlannedFeature.Resource);
 		}
 
 		static bool GenerateContinents(MapPlan plan, MapGenerationOptions options, MersenneTwister random)
@@ -91,7 +190,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 			foreach (var center in teamCenters)
 				plan.AddFeature(center.X, center.Y, PlannedFeature.TechBuilding);
-			if (!RubberduckBridgePlanner.Connect(plan, teamCenters)) return false;
+			if (options.Custom?.Connections != false && !RubberduckBridgePlanner.Connect(plan, teamCenters)) return false;
 			MarkLaunchShores(plan);
 			RubberduckCoastSmoother.Apply(plan, true, teamCount);
 			return true;
@@ -127,7 +226,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var symmetryOrder = PlayerSpawnLayout.SymmetryOrder(options.Players);
 			for (var attempt = 0; attempt < 5000 && neutralCenters.Count < neutralTarget; attempt++)
 			{
-				var radius = random.Next(4, 8);
+				// Four to six full 2x2 derricks plus a dry shore margin need a real interior.
+				var radius = random.Next(6, 8);
 				var extent = (int)Math.Ceiling(radius * 1.22) + 3;
 				var baseCenter = new PlanPoint(
 					random.Next(extent, plan.Width - extent),
@@ -147,11 +247,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 			if (neutralCenters.Count < neutralTarget)
 				return false;
 
-			PlaceSameTeamShallows(plan, homes, options, random);
+			if (options.Custom == null && !PlaceSameTeamBridges(plan, homes, options)) return false;
 			MarkLaunchShores(plan);
 			RubberduckCoastSmoother.Apply(plan, true, PlayerSpawnLayout.SymmetryOrder(options.Players));
 			foreach (var center in neutralCenters)
-				PlaceOilCluster(plan, center, random.Next(4, 7));
+				if (!PlaceOilCluster(plan, center, random.Next(4, 7))) return false;
+			if (options.Custom?.Connections == true && !CustomIslandConnections.Connect(plan)) return false;
 			MarkLaunchShores(plan);
 			return true;
 		}
@@ -163,23 +264,32 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var homeRadius = Math.Clamp(13 - options.Players / 3, 8, 12);
 			var maximumCenterExtent = minimumDimension / 2.0 - homeRadius * 2 - 5;
 			var centerRadius = (int)Math.Round(Math.Min(minimumDimension * 0.27, maximumCenterExtent / 1.2));
-			PaintIslandBlob(plan, mapCenter, centerRadius, random);
+			PaintMigrationIsland(plan, mapCenter, centerRadius, 0, random.NextFloat() * Math.PI * 2, random.NextFloat() * Math.PI * 2);
 			plan.AddFeature(mapCenter.X, mapCenter.Y, PlannedFeature.ContestedCenter);
 
 			var orbit = minimumDimension / 2.0 - homeRadius - 3;
-			var homes = RadialCenters(plan, options.Players, orbit, random.NextFloat() * Math.PI * 2);
+			var homePhase = random.NextFloat() * Math.PI * 2;
+			var homes = RadialCenters(plan, options.Players, orbit, homePhase);
 			for (var player = 0; player < homes.Count; player++)
 			{
-				PaintDisk(plan, homes[player], homeRadius, (x, y) => plan.SetTerrain(x, y, PlannedTerrain.Land));
+				PaintMigrationIsland(plan, homes[player], homeRadius, 0, 0, 0, false);
 				AddSpawn(plan, homes[player], player, Math.Max(4, homeRadius - 3));
 			}
 
+			if (!PlaceMigrationOilIslands(plan, options, orbit, homePhase, random)) return false;
 			MarkLaunchShores(plan);
 			RubberduckCoastSmoother.Apply(plan, true, PlayerSpawnLayout.SymmetryOrder(options.Players));
+			if ((options.Custom == null || options.TechBuildings != TechBuildingDensity.None) && !PlaceMigrationHomeOil(plan)) return false;
+			if (options.Custom != null)
+			{
+				CustomIslandConnections.MarkMigrationCenter(plan);
+				if (options.Custom.Connections && !CustomIslandConnections.Connect(plan)) return false;
+			}
 			for (var y = 0; y < plan.Height; y++)
 				for (var x = 0; x < plan.Width; x++)
 					if (DistanceSquared(x, y, mapCenter) <= centerRadius * centerRadius * 1.25 &&
-						plan.TerrainAt(x, y) == PlannedTerrain.Land && random.Next(100) < 82)
+						plan.TerrainAt(x, y) == PlannedTerrain.Land && random.Next(100) < 82 &&
+						(options.Custom == null || !plan.HasFeature(x, y, PlannedFeature.DestructibleBridge | PlannedFeature.Bottleneck | PlannedFeature.LaunchShore)))
 						plan.AddFeature(x, y, PlannedFeature.Resource);
 
 			var clusterPhase = random.NextFloat() * Math.PI * 2;
@@ -189,39 +299,71 @@ namespace OpenRA.Mods.CA.MapGeneration
 				var center = new PlanPoint(
 					(int)Math.Round(mapCenter.X + Math.Cos(angle) * centerRadius * 0.52),
 					(int)Math.Round(mapCenter.Y + Math.Sin(angle) * centerRadius * 0.52));
-				PlaceOilCluster(plan, center, 6, true);
+				if (!PlaceOilCluster(plan, center, 6, true)) return false;
 			}
 			MarkLaunchShores(plan);
 			return true;
 		}
 
-		static void PlaceSameTeamShallows(
-			MapPlan plan, List<PlanPoint> homes, MapGenerationOptions options, MersenneTwister random)
+		static bool PlaceMigrationHomeOil(MapPlan plan)
 		{
-			var teamCount = EffectiveTeamCount(options);
-			var teamMembers = new List<List<int>>();
-			var comparablePlayers = int.MaxValue;
-			for (var team = 0; team < teamCount; team++)
+			var components = CustomIslandConnections.Components(plan);
+			foreach (var home in plan.Spawns)
 			{
-				var members = new List<int>();
-				for (var player = 0; player < options.Players; player++)
-					if (TeamForPlayer(player, options.Players, teamCount) == team)
-						members.Add(player);
-				teamMembers.Add(members);
-				comparablePlayers = Math.Min(comparablePlayers, members.Count);
-			}
-
-			for (var relativePlayer = 0; relativePlayer < comparablePlayers - 1; relativePlayer++)
-			{
-				if (random.Next(100) >= 72)
-					continue;
-				foreach (var members in teamMembers)
-					PaintLine(plan, homes[members[relativePlayer]], homes[members[relativePlayer + 1]], 1, (x, y) =>
+				var spawn = PlannedRubberduckBridge.Cell(home.X, home.Y);
+				var island = components.Single(c => c.Contains(spawn));
+				bool Fits(CPos origin)
+				{
+					if (!OilHasDryMargin(plan, origin)) return false;
+					for (var y = 0; y < 2; y++) for (var x = 0; x < 2; x++)
 					{
-						if (plan.TerrainAt(x, y) == PlannedTerrain.Water)
-							plan.SetTerrain(x, y, PlannedTerrain.ShallowWater);
-					});
+						var c = origin + new CVec(x, y);
+						if (!island.Contains(c)) return false;
+						var p = PlannedRubberduckBridge.Point(c);
+						if (plan.HasFeature(p.U, p.V, PlannedFeature.BuildClearance | PlannedFeature.TechBuilding | PlannedFeature.ResourceGenerator)) return false;
+						for (var dy = -2; dy <= 2; dy++) for (var dx = -2; dx <= 2; dx++)
+						{
+							var shore = PlannedRubberduckBridge.Point(c + new CVec(dx, dy));
+							if (plan.Contains(shore.U, shore.V) && plan.HasFeature(shore.U, shore.V, PlannedFeature.LaunchShore)) return false;
+						}
+					}
+					return true;
+				}
+				var candidates = island.Where(Fits).OrderBy(c => (c - spawn).LengthSquared).ThenBy(c => c.X).ThenBy(c => c.Y).ToArray();
+				var pair = (from a in candidates from b in candidates where (a - b).LengthSquared >= 16
+					orderby (a - spawn).LengthSquared + (b - spawn).LengthSquared select new[] { a, b }).FirstOrDefault();
+				if (pair == null) return false;
+				foreach (var c in pair)
+				{
+					var p = PlannedRubberduckBridge.Point(c); plan.AddFeature(p.U, p.V, PlannedFeature.TechBuilding);
+				}
 			}
+			return true;
+		}
+
+		static bool PlaceMigrationOilIslands(MapPlan plan, MapGenerationOptions options, double orbit, double homePhase, MersenneTwister random)
+		{
+			var centers = RadialCenters(plan, options.Players, orbit, homePhase + Math.PI / options.Players);
+			var groupCount = options.Players / PlayerSpawnLayout.SymmetryOrder(options.Players);
+			var counts = Enumerable.Range(0, groupCount).Select(_ => random.Next(1, 3)).ToArray();
+			var shapeA = random.NextFloat() * Math.PI * 2; var shapeB = random.NextFloat() * Math.PI * 2;
+			for (var i = 0; i < centers.Count; i++)
+			{
+				// One small island per gap, with a real sea corridor on every side.
+				// A failed placement rejects the whole layout, never a partial orbit.
+				if (!CanPaintLandIsland(plan, centers[i], 5, 4)) return false;
+				PaintMigrationIsland(plan, centers[i], 4, homePhase + (2 * i + 1) * Math.PI / options.Players, shapeA, shapeB);
+				if (!PlaceOilCluster(plan, centers[i], counts[i % groupCount])) return false;
+			}
+			return true;
+		}
+
+		static bool PlaceSameTeamBridges(MapPlan plan, List<PlanPoint> homes, MapGenerationOptions options)
+		{
+			var teams = new List<int>();
+			for (var player = 0; player < options.Players; player++)
+				teams.Add(TeamForPlayer(player, options.Players, EffectiveTeamCount(options)));
+			return RubberduckBridgePlanner.Connect(plan, homes, teams);
 		}
 
 		static void PlaceHomePatch(MapPlan plan, PlanPoint spawn, PlanPoint continentCenter, int radius, bool generator)
@@ -241,21 +383,59 @@ namespace OpenRA.Mods.CA.MapGeneration
 				plan.AddFeature(patchCenter.X, patchCenter.Y, PlannedFeature.ResourceGenerator);
 		}
 
-		static void PlaceOilCluster(MapPlan plan, PlanPoint center, int count, bool clearResources = false)
+		internal static bool OilHasDryMargin(MapPlan plan, CPos origin)
 		{
-			for (var i = 0; i < count; i++)
+			// Native building coordinates: the 2x2 foundation plus one complete land
+			// cell on every side, including corners, not just its anchor in plan space.
+			for (var y = -1; y <= 2; y++) for (var x = -1; x <= 2; x++)
 			{
-				var angle = i * Math.PI * 2 / count;
-				var point = new PlanPoint(
-					(int)Math.Round(center.X + Math.Cos(angle) * 2),
-					(int)Math.Round(center.Y + Math.Sin(angle) * 2));
-				if (plan.Contains(point.X, point.Y) && plan.TerrainAt(point.X, point.Y) == PlannedTerrain.Land)
-				{
-					plan.AddFeature(point.X, point.Y, PlannedFeature.TechBuilding);
-					if (clearResources)
-						PaintDisk(plan, point, 1, (x, y) => plan.RemoveFeature(x, y, PlannedFeature.Resource));
-				}
+				var p = PlannedRubberduckBridge.Point(origin + new CVec(x, y));
+				if (!plan.Contains(p.U, p.V) || plan.TerrainAt(p.U, p.V) != PlannedTerrain.Land ||
+					plan.HasFeature(p.U, p.V, PlannedFeature.DestructibleBridge | PlannedFeature.CliffShore)) return false;
 			}
+			return true;
+		}
+
+		static bool PlaceOilCluster(MapPlan plan, PlanPoint center, int count, bool clearResources = false)
+		{
+			var target = PlannedRubberduckBridge.Cell(center.X, center.Y);
+			var island = CustomIslandConnections.Components(plan).Single(c => c.Contains(target));
+			bool Fits(CPos c)
+			{
+				if (!OilHasDryMargin(plan, c)) return false;
+				for (var y = 0; y < 2; y++) for (var x = 0; x < 2; x++)
+				{
+					var p = PlannedRubberduckBridge.Point(c + new CVec(x, y));
+					if (plan.HasFeature(p.U, p.V, PlannedFeature.BuildClearance | PlannedFeature.LaunchShore | PlannedFeature.Bottleneck)) return false;
+				}
+				for (var y = -1; y <= 1; y++) for (var x = -1; x <= 1; x++)
+				{
+					var p = PlannedRubberduckBridge.Point(c + new CVec(x, y));
+					if (plan.HasFeature(p.U, p.V, PlannedFeature.TechBuilding | PlannedFeature.ResourceGenerator)) return false;
+				}
+				return true;
+			}
+			var candidates = island.Where(c => (c - target).LengthSquared <= 64 && Fits(c))
+				.OrderBy(c => (c - target).LengthSquared).ThenBy(c => c.X).ThenBy(c => c.Y).ToArray();
+			// A two-cell lattice packs non-overlapping foundations. Try each phase
+			// before rejecting the complete layout; never silently drop a derrick.
+			for (var phase = 0; phase < 4; phase++)
+			{
+				var selected = candidates.Where(c => (c.X & 1) == phase % 2 && (c.Y & 1) == phase / 2).Take(count).ToArray();
+				if (selected.Length != count) continue;
+				foreach (var c in selected)
+				{
+					var p = PlannedRubberduckBridge.Point(c); plan.AddFeature(p.U, p.V, PlannedFeature.TechBuilding);
+					if (clearResources)
+						for (var y = 0; y < 2; y++) for (var x = 0; x < 2; x++)
+						{
+							var foot = PlannedRubberduckBridge.Point(c + new CVec(x, y));
+							plan.RemoveFeature(foot.U, foot.V, PlannedFeature.Resource);
+						}
+				}
+				return true;
+			}
+			return false;
 		}
 
 		static void AddSpawn(MapPlan plan, PlanPoint spawn, int player, int clearanceRadius)
@@ -309,6 +489,9 @@ namespace OpenRA.Mods.CA.MapGeneration
 					!plan.HasFeature(spawn.X, spawn.Y, PlannedFeature.BuildClearance))
 					return false;
 
+			for (var y = 0; y < plan.Height; y++) for (var x = 0; x < plan.Width; x++)
+				if (plan.HasFeature(x, y, PlannedFeature.TechBuilding) && !OilHasDryMargin(plan, PlannedRubberduckBridge.Cell(x, y))) return false;
+
 			// Reject invalid candidates inside the retry loop, before the shared
 			// validator/exporter sees them. Never silently discard inaccessible economy.
 			for (var y = 0; y < plan.Height; y++)
@@ -323,40 +506,39 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 			if (options.Preset == MapGenerationPreset.Continents)
 			{
-				if (CountFeatures(plan, PlannedFeature.DestructibleBridge) == 0)
+				if (options.Custom?.Connections != false && CountFeatures(plan, PlannedFeature.DestructibleBridge) == 0)
 					return false;
 				var waterCells = CountTerrain(plan, PlannedTerrain.Water) + CountTerrain(plan, PlannedTerrain.ShallowWater);
 				var waterPercent = waterCells * 100.0 / (plan.Width * plan.Height);
 				if (EffectiveTeamCount(options) == 2 && (waterPercent < 30 || waterPercent > 40))
 					return false;
 				plan.ValidationMessages.Add($"Water covers {waterPercent:0.0}% of the map.");
-				plan.ValidationMessages.Add("Continents are linked only by destructible bridges across deep water.");
+				plan.ValidationMessages.Add(options.Custom?.Connections == false ? "Continents have no bridges; naval transport is required." :
+					"Continents are linked only by destructible bridges across deep water.");
 			}
 			else if (options.Preset == MapGenerationPreset.Archipelago)
 			{
-				if (!ValidateTeamSafeShallows(plan, options))
+				if (options.Custom?.Connections != true && !ValidateTeamSafeCrossings(plan, options))
 					return false;
-				plan.ValidationMessages.Add("No shallow-water component connects starting islands from different teams.");
+				plan.ValidationMessages.Add(options.Custom == null ? "Only same-team destructible bridges cross deep water; no permanent shallow-water causeways or enemy ground connections." :
+					options.Custom.Connections ? "Optional bridge network includes a cross-team route; protected small islands may still require transport." : "No bridges, including team bridges; naval transport is required.");
 				plan.ValidationMessages.Add("Resource patches and generators are confined to player home islands.");
 			}
 			else
 			{
-				if (!ResourcesConfinedToCenter(plan) ||
-					CountFeatures(plan, PlannedFeature.TechBuilding) != options.Players * 6)
-					return false;
-				var centralReachable = MountainValleysGenerator.FindReachable(plan, Center(plan));
-				foreach (var spawn in plan.Spawns)
-					if (centralReachable[spawn.X + spawn.Y * plan.Width])
-						return false;
-				plan.ValidationMessages.Add($"The central island contains exactly six Oil Derricks per player ({options.Players * 6} total).");
-				plan.ValidationMessages.Add("Every starting island is separated from the central island by deep water.");
+				if (!ResourcesConfinedToCenter(plan) || !ValidateMigrationIslands(plan, options.Players, options.Custom?.Connections == true, options.Custom != null && options.Resources == ResourceFieldLayout.None, options.Custom != null && options.TechBuildings == TechBuildingDensity.None)) return false;
+				plan.ValidationMessages.Add(options.Custom == null ?
+					$"Central island: {options.Players * 6} Oil Derricks and finite resources. {options.Players} separate small oil islands: one or two derricks each." :
+					$"Custom central economy: {options.Resources}, finite={options.FiniteResources}; tech buildings={CountFeatures(plan, PlannedFeature.TechBuilding)}, generators={CountFeatures(plan, PlannedFeature.ResourceGenerator)}.");
+				plan.ValidationMessages.Add(options.Custom?.Connections == true ? "Dry home/oil islands remain distinct, with optional bridge connections; home islands have oil derricks but no Tiberium fields or rock banks." :
+					"Every home and oil island is separated by deep water; home islands have oil derricks but no Tiberium fields or rock banks.");
 			}
 
 			plan.ValidationMessages.Add("Every player has a deep-water launch shore.");
 			return true;
 		}
 
-		static bool ValidateTeamSafeShallows(MapPlan plan, MapGenerationOptions options)
+		static bool ValidateTeamSafeCrossings(MapPlan plan, MapGenerationOptions options)
 		{
 			var teamCount = EffectiveTeamCount(options);
 			var visited = new bool[plan.Width * plan.Height];
@@ -381,10 +563,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 								return false;
 							componentTeam = team;
 						}
-					foreach (var offset in CardinalOffsets)
+					foreach (var offset in PlateauTopology.Directions)
 					{
-						var x = cell.X + offset.X;
-						var y = cell.Y + offset.Y;
+						// Bridges follow native cell axes, not the staggered debug grid.
+						var neighbor = PlannedRubberduckBridge.Point(PlannedRubberduckBridge.Cell(cell.X, cell.Y) + offset);
+						var x = neighbor.U;
+						var y = neighbor.V;
 						if (!plan.Contains(x, y) || !plan.IsTraversable(x, y))
 							continue;
 						var neighborIndex = x + y * plan.Width;
@@ -396,6 +580,50 @@ namespace OpenRA.Mods.CA.MapGeneration
 				}
 			}
 			return true;
+		}
+
+		internal static bool ValidateMigrationIslands(MapPlan plan, int players, bool bridges = false, bool noResources = false, bool noTech = false)
+		{
+			var remaining = new HashSet<CPos>();
+			for (var y = 0; y < plan.Height; y++) for (var x = 0; x < plan.Width; x++)
+			{
+				if (plan.TerrainAt(x, y) != PlannedTerrain.Land && plan.TerrainAt(x, y) != PlannedTerrain.Water &&
+					!(bridges && plan.TerrainAt(x, y) == PlannedTerrain.ShallowWater && plan.HasFeature(x, y, PlannedFeature.DestructibleBridge))) return false;
+				if (plan.TerrainAt(x, y) == PlannedTerrain.Land) remaining.Add(PlannedRubberduckBridge.Cell(x, y));
+			}
+			var center = PlannedRubberduckBridge.Cell(Center(plan).X, Center(plan).Y);
+			var homes = plan.Spawns.Select(p => PlannedRubberduckBridge.Cell(p.X, p.Y)).ToHashSet();
+			var homeCount = 0; var oilIslands = 0; var foundCenter = false;
+			while (remaining.Count != 0)
+			{
+				var pending = new Queue<CPos>(); pending.Enqueue(remaining.First());
+				var component = new HashSet<CPos>(); var oils = 0; var resources = 0;
+				while (pending.Count != 0)
+				{
+					var c = pending.Dequeue(); if (!remaining.Remove(c)) continue;
+					component.Add(c); var p = PlannedRubberduckBridge.Point(c);
+					if (plan.HasFeature(p.U, p.V, PlannedFeature.TechBuilding)) oils++;
+					if (plan.HasFeature(p.U, p.V, PlannedFeature.Resource | PlannedFeature.RichResource | PlannedFeature.ResourceGenerator)) resources++;
+					foreach (var d in PlateauTopology.Directions) if (remaining.Contains(c + d)) pending.Enqueue(c + d);
+				}
+				var starts = component.Count(homes.Contains);
+				if (component.Contains(center))
+				{
+					if (starts != 0 || oils != (noTech ? 0 : players * 6) || (noResources ? resources != 0 : resources == 0)) return false;
+					foundCenter = true;
+				}
+				else if (starts != 0)
+				{
+					if (starts != 1 || oils != (noTech ? 0 : 2) || resources != 0) return false;
+					homeCount++;
+				}
+				else
+				{
+					if ((noTech ? oils != 0 : oils < 1 || oils > 2) || resources != 0) return false;
+					oilIslands++;
+				}
+			}
+			return foundCenter && homeCount == players && oilIslands == players;
 		}
 
 		static bool ResourcesConfinedToCenter(MapPlan plan)
@@ -584,10 +812,21 @@ namespace OpenRA.Mods.CA.MapGeneration
 				}
 		}
 
-		static void PaintIslandBlob(MapPlan plan, PlanPoint center, int radius, MersenneTwister random)
+		static void PaintMigrationIsland(MapPlan plan, PlanPoint center, int radius, double rotation, double phaseA, double phaseB, bool irregular = true)
 		{
-			PaintRotatedIslandBlob(plan, center, radius, 0,
-				random.NextFloat() * Math.PI * 2, random.NextFloat() * Math.PI * 2);
+			var extent = (int)Math.Ceiling(radius * 1.22) + 1;
+			for (var y = center.Y - extent; y <= center.Y + extent; y++)
+				for (var x = center.X - extent; x <= center.X + extent; x++)
+				{
+					if (!plan.Contains(x, y)) continue;
+					// Account for the staggered native rows. A circle in raw MPos
+					// coordinates otherwise leaves a disconnected tip on each home.
+					var dx = x - center.X + (((y + 1) & 1) - ((center.Y + 1) & 1)) * .5;
+					var dy = y - center.Y;
+					var angle = Math.Atan2(dy, dx) - rotation;
+					var localRadius = radius * (irregular ? 1 + .12 * Math.Sin(angle * 3 + phaseA) + .07 * Math.Sin(angle * 5 + phaseB) : 1);
+					if (dx * dx + dy * dy <= localRadius * localRadius) plan.SetTerrain(x, y, PlannedTerrain.Land);
+				}
 		}
 
 		static void PaintRotatedIslandBlob(
@@ -624,17 +863,5 @@ namespace OpenRA.Mods.CA.MapGeneration
 						paint(x, y);
 		}
 
-		static void PaintLine(MapPlan plan, PlanPoint from, PlanPoint to, int radius, Action<int, int> paint)
-		{
-			var dx = to.X - from.X;
-			var dy = to.Y - from.Y;
-			var steps = Math.Max(Math.Abs(dx), Math.Abs(dy));
-			for (var step = 0; step <= steps; step++)
-			{
-				var x = (int)Math.Round(from.X + dx * step / (double)Math.Max(1, steps));
-				var y = (int)Math.Round(from.Y + dy * step / (double)Math.Max(1, steps));
-				PaintDisk(plan, new PlanPoint(x, y), radius, paint);
-			}
-		}
 	}
 }

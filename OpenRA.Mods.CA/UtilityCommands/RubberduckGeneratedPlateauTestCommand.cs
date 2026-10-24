@@ -14,14 +14,20 @@ namespace OpenRA.Mods.CA.UtilityCommands
 		string IUtilityCommand.Name => "--rubberduck-generated-plateau-test";
 		bool IUtilityCommand.ValidateArguments(string[] args) => args.Length >= 2;
 
-		[Desc("OUTPUT [players=N] [seed=N] [mode=tactical|operational|strategic] [fog=true] [army-followers=true] [shaded=true]",   "Export a production Mountain Valleys map and a separate copy with real plateau movement probes.")]
+		[Desc("OUTPUT [preset=mountain-valleys|hill-fortress] [players=N] [seed=N] [mode=tactical|operational|strategic] [fog=true] [army-followers=true] [shaded=true] [open-valley=true]",    "Export a production plateau map and a separate copy with real plateau movement probes.")]
 		void IUtilityCommand.Run(Utility utility, string[] args)
 		{
 			Game.ModData = utility.ModData;
 			var options = DebugMapGeneratorCommand.ParseOptions(args.Where((a, i) => i < 2 ||
 				!a.StartsWith("fog=", StringComparison.OrdinalIgnoreCase) && !a.StartsWith("army-followers=", StringComparison.OrdinalIgnoreCase) &&
-				!a.StartsWith("shaded=", StringComparison.OrdinalIgnoreCase)).ToArray());
-			if (options.Preset != MapGenerationPreset.MountainValleys) throw new ArgumentException("This probe requires Mountain Valleys.");
+				!a.StartsWith("shaded=", StringComparison.OrdinalIgnoreCase) && !a.StartsWith("open-valley=", StringComparison.OrdinalIgnoreCase)).ToArray());
+			if (options.Preset != MapGenerationPreset.MountainValleys && options.Preset != MapGenerationPreset.HillFortress)
+				throw new ArgumentException("This probe requires Mountain Valleys or Hill Fortress.");
+			if (args.Contains("open-valley=true"))
+			{
+				if (options.Preset != MapGenerationPreset.HillFortress) throw new ArgumentException("Open-valley ramp probes require Hill Fortress.");
+				options.Custom = new CustomMapSettings { BattleInTheCenter = false };
+			}
 			var plan = MapPlanGenerator.Generate(options);
 			if (plan.Plateaus.Count == 0) throw new InvalidDataException("This plan contains no plateaus to test.");
 			var output = Path.GetFullPath(args[1]);
@@ -104,7 +110,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 								map.Tiles[low].Type != 1000 || map.Height[low] != 0) continue;
 							cliffTop = cell; cliffBottom = foot; blockedFoot = true; break;
 						}
-					var lateral = PlateauTopology.Directions[plateau.Ramp % 4] * (kind == 0 ? -1 : 1);
+					var lane = (kind == 0 ? -1 : 1) * (options.Preset == MapGenerationPreset.HillFortress ? 2 : 1);
+					var lateral = PlateauTopology.Directions[plateau.Ramp % 4] * lane;
 					var start = Cell(plateau.Approach) + lateral;
 					var end = target + lateral;
 					var name = $"calibration.generatedplateau{index}-{kind}";

@@ -44,13 +44,13 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var brush = stroke.ToHashSet();
 			if (brush.Count == 0 || brush.Count > 2048) throw new InvalidOperationException("Use a stroke of 1–2048 cells.");
 			var actors = definitions.ToArray();
-			var playable = map.AllCells.Where(map.Contains).ToHashSet();
+			var playable = map.AllCells.Where(c => PlateauTopology.ContainsTerrain(map, c)).ToHashSet();
 			var elevated = playable.Where(c => map.Height[c] > 0 || map.Ramp[c] != 0).ToHashSet();
 			var affected = new HashSet<CPos>();
 			var pending = new Queue<CPos>();
 			foreach (var c in brush)
 			{
-				if (Around(c, 4).Any(n => !playable.Contains(n))) throw new InvalidOperationException("Leave four cells of space to the map boundary.");
+				if (Around(c, 4).Any(n => !map.Contains(n))) throw new InvalidOperationException("Leave four cells of space to the map boundary.");
 				foreach (var n in Around(c, 3)) if (elevated.Contains(n)) pending.Enqueue(n);
 			}
 			// Include nearby/shared-foot components so one stroke can join two roofs.
@@ -67,7 +67,6 @@ namespace OpenRA.Mods.CA.MapGeneration
 				var type = map.Tiles[c].Type;
 				if (map.Height[c] > 4 || (type != 1000 && type != 3992 && (type < 14001 || type > 14004)))
 					throw new InvalidOperationException("Connected terrain contains an unsupported surface.");
-				if (Around(c, 3).Any(n => !playable.Contains(n))) throw new InvalidOperationException("Connected plateau is too close to the map boundary.");
 			}
 			var oldFeet = affected.SelectMany(c => Around(c, 1)).Where(c => playable.Contains(c) && map.Height[c] == 0 && map.Tiles[c].Type == 3992).ToHashSet();
 			var ownedCells = affected.Concat(oldFeet).ToHashSet();
@@ -93,16 +92,22 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}
 			var rampProtection = affected.Where(c => map.Ramp[c] != 0 && (oldRamp == null || !oldRamp.Contains(c))).SelectMany(c => Around(c, 2)).Where(playable.Contains).ToHashSet();
 			var protectedTerrain = protectedCells.Concat(rampProtection).Concat(playable.Where(c => map.Resources[c].Type != 0)).ToHashSet();
+			// An interior edit may belong to a boundary-reaching mountain. Freeze its
+			// existing edge geometry instead of rejecting the whole connected ridge.
+			protectedTerrain.UnionWith(ownedCells.Where(c => Around(c, 3).Any(n => !map.Contains(n))));
 			// Existing feet are committed collision, not vacant candidates for a new
 			// apron. Preserve them while editing, then release only orphaned feet.
 			var surfaces = ownedCells.ToDictionary(c => c, c => Surface(map, c));
+			// Extending an obstacle ridge must not create an unreachable walkable roof.
+			var blockedRoof = affected.All(c => map.Ramp[c] == 0 && map.Tiles[c].Type == 3992);
 			foreach (var c in brush)
 			{
 				var original = Surface(map, c);
-				var next = replacement != null ? replacement[c] : new PlateauSurface(grow ? (byte)4 : (byte)0);
+				var next = replacement != null ? replacement[c] : new PlateauSurface(grow ? (byte)4 : (byte)0, 0, grow && blockedRoof);
 				if (Same(original, next)) continue;
 				if (protectedTerrain.Contains(c)) throw new InvalidOperationException("The stroke touches a ramp, landing, resource, start or actor footprint.");
-				if (replacement == null && map.Tiles[c].Type != 1000 && !(oldFeet.Contains(c) && original.Height == 0))
+				if (replacement == null && map.Tiles[c].Type != 1000 && !(oldFeet.Contains(c) && original.Height == 0) &&
+					!(affected.Contains(c) && original.Blocked && original.Height == 4 && original.Ramp == 0))
 					throw new InvalidOperationException("Paint grass roofs/ground or their native feet, not retaining walls or other terrain.");
 				surfaces[c] = next;
 			}
