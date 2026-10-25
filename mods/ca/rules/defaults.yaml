@@ -1635,6 +1635,11 @@ refinery.dockhelper:
 		Interval: 5
 		RequiresCondition: c4
 
+# Separate target provider: immunity survives additional/overridden target types.
+^MindControlImmune:
+	Targetable@MINDCONTROLIMMUNE:
+		TargetTypes: MindControlImmune
+
 ^MindControllableBase:
 	MindControllableCA:
 		ControlledConditions:
@@ -4472,6 +4477,7 @@ BuildBoost.Dummy:
 		Categories: Critter
 
 ^ShootableMissile:
+	Inherits: ^MindControlImmune
 	Inherits: ^ExistsInWorld
 	Inherits: ^SpriteActor
 	Inherits: ^LightArmor
@@ -4781,6 +4787,7 @@ BuildBoost.Dummy:
 		SkipRate: 1
 
 ^VoxelShootableMissile:
+	Inherits: ^MindControlImmune
 	Inherits: ^ExistsInWorld
 	Inherits: ^SpriteActor
 	Inherits: ^LightArmor
