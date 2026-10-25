@@ -310,6 +310,16 @@ namespace OpenRA.Mods.CA.Traits
 			if (target.Actor == null || !target.IsValidFor(self))
 				return;
 
+			// Weapon target types may also match actors that cannot be mind controlled
+			// (including actors supplied by custom maps). Do not start control progress for them.
+			if (target.Actor.TraitOrDefault<MindControllableCA>() == null)
+			{
+				ResetProgress(self);
+				lastTarget = currentTarget;
+				currentTarget = Target.Invalid;
+				return;
+			}
+
 			lastTarget = currentTarget;
 			currentTarget = target;
 
@@ -339,13 +349,9 @@ namespace OpenRA.Mods.CA.Traits
 
 			var mindControllable = target.TraitOrDefault<MindControllableCA>();
 
-			if (mindControllable == null)
-			{
-				throw new InvalidOperationException(
-					"`{self.Info.Name}` tried to mindcontrol `{target.Info.Name}`, but the latter does not have the necessary trait!");
-			}
-
-			if (mindControllable.IsTraitDisabled || mindControllable.IsTraitPaused)
+			// Recheck at completion as well; invalid targets must not change capacity,
+			// release an existing slave, award experience or crash the simulation.
+			if (mindControllable == null || mindControllable.IsTraitDisabled || mindControllable.IsTraitPaused)
 				return;
 
 			if (capacity > 0 && !Info.DiscardOldest && slaves.Count >= capacity)
