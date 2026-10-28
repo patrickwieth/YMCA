@@ -15,10 +15,18 @@ RequiresCondition: genespliced. The transition to the final zombie was therefore
 - Shared ^GeneSpliceEffect is inherited before ^Radiation/^Bullet. Resolved condition warheads
   now precede every damage warhead, including on all four Gene Splicer beam variants.
 - ZombieAttack retains its existing shorter condition duration (10 ticks versus 100 for the beam).
-- Zombie.Mutating explicitly removes the inherited RequiresCondition on its final-zombie spawn.
-  The actual infantry victim still requires genespliced; unmarked deaths do not produce zombies.
-- Existing make animation, delayed self-kill, killer -> mutation -> zombie ownership chain,
-  damage, ranges, burst, reload, marker radius, probabilities and defeat behavior remain intact.
+- Zombie.Mutating removes the inherited source-tracking spawn trait and uses an unconditional
+  standard SpawnActorOnDeath for its final zombie. The actual victim still requires genespliced.
+- GeneSpliceWarhead records each successfully granted external-condition token and the source
+  player at application time. SpawnActorOnDeathFromConditionSource uses the latest still-valid
+  token's owner, never the player who lands the killing blow. The intermediate actor preserves
+  that ownership when becoming the final zombie.
+- If the latest mark expires or is revoked, an older still-active mark applies; with no active
+  tracked mark, no zombie spawns. ExternalCondition remains responsible for all token lifetimes
+  and revocation (including capture). Source death/capture does not rewrite recorded player identity.
+- Existing make animation, delayed self-kill, damage, ranges, burst, reload, marker radius,
+  probabilities and victim-defeat behavior remain intact. Friendly infantry can still be marked;
+  the resulting zombie belongs to the infecting player, not the opposing killing player.
 
 This introduces no random conversion chance. The existing spawn probability is 100% for eligible
 marked deaths, not for every infantry unit killed anywhere in the damage area. The marker's
@@ -31,11 +39,15 @@ dotnet engine/bin/OpenRA.Utility.dll mods/ca --check-gene-splicer
 ```
 
 Checks resolved warhead order, unchanged values, ownership/conditions/probability of both spawn
-stages, and final zombie movement/armament. The base beam, all four firing variants and zombie
-melee pass. Solution build succeeds. These are headless rule checks, not a completed live
-animation/kill regression test.
+stages, and final zombie movement/armament. Also tests source tracking with multiple active marks,
+revocation/expiry, invalid tokens and reinfection. The base beam, all four firing variants and zombie
+melee pass. Solution build succeeds. These are headless rule/source-tracker checks, not a completed
+live animation/kill regression test.
 
 Recommended live cases before release: lethal first beam hit, several nonlethal hits then death,
 lethal zombie melee, unmarked death, expired marker, and correct zombie ownership after mutation.
+Specifically test friendly infantry marked by a player's beam then killed by the opponent, enemy
+infantry killed by a third player after infection, source death/capture, and competing infections.
+All resulting zombies must belong to the most recent still-active infection's original source player.
 Suggested player-facing release note: "Fixed Gene Splicer victims failing to turn into zombies."
 No release is created for this fix alone.
