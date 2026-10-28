@@ -6,7 +6,12 @@ on:
     - '*'
 
 permissions:
-  contents: write  #  for release creation (svenstaro/upload-release-action)
+  contents: write  # for release creation and stable manifest publication
+
+# Keep builds, manifest publication and deployment in one serialized release pipeline.
+concurrency:
+  group: ymca-release-pipeline
+  cancel-in-progress: false
 
 jobs:
   linux:
@@ -14,10 +19,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Clone Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install .NET 6.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
 
@@ -81,10 +86,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Clone Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install .NET 6.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '6.0.x'
 
@@ -129,7 +134,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -eu
           TAG="${GITHUB_REF#refs/tags/}"
+          # Draft/prerelease packages must never replace stable or reach the servers.
+          gh release view "${TAG}" --json isDraft,isPrerelease --jq '(.isDraft == false) and (.isPrerelease == false)' | grep -qx true
           mkdir -p update/assets
           gh release download "${TAG}" --dir update/assets
           WINDOWS="YouMustConstructAdditional-${TAG}-x64.exe"
@@ -161,3 +169,30 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Publish ${GITHUB_REF#refs/tags/} update manifest"
           git push origin HEAD:tournament-bot
+
+  deploy-servers:
+    name: Deploy Game Servers
+    needs: publish-update-manifest
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ymca-game-server-deployment
+      cancel-in-progress: false
+    steps:
+      - name: Verify this release is the published stable version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -eu
+          gh api "repos/${GITHUB_REPOSITORY}/contents/update/stable.yaml?ref=tournament-bot" --jq .content | base64 --decode > stable.yaml
+          test "$(awk '/^Version: / { print $2 }' stable.yaml | tr -d '\r')" = "${RELEASE_TAG}"
+          gh release view "${RELEASE_TAG}" --repo "${GITHUB_REPOSITORY}" --json isDraft,isPrerelease --jq '(.isDraft == false) and (.isPrerelease == false)' | grep -qx true
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: ./deploy-ymca-server.sh
