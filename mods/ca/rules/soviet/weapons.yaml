@@ -911,7 +911,16 @@ RiceShellImpact:
 		Explosions: large_splash
 		ImpactSounds: splashl1.aud, splashl2.aud
 
+# Must resolve before damage warheads so a lethal first hit can trigger mutation.
+^GeneSpliceEffect:
+	Warhead@gsplice: GrantExternalCondition
+		Range: 0c256
+		Duration: 100
+		Condition: genespliced
+		ValidTargets: Infantry
+
 GeneSpliceBeam:
+	Inherits@gsplice: ^GeneSpliceEffect
 	Inherits: ^Radiation
 	ValidTargets: Ground, Water
 	Range: 9c512
@@ -942,11 +951,6 @@ GeneSpliceBeam:
 		Damage: 2000
 	Warhead@2DriverDam: DriverPoisonDamage
 		Damage: 4000
-	Warhead@gsplice: GrantExternalCondition
-		Range: 0c256
-		Duration: 100
-		Condition: genespliced
-		ValidTargets: Infantry
 
 GeneSpliceBeam1:
 	Inherits: GeneSpliceBeam
@@ -969,6 +973,7 @@ GeneSpliceBeam4:
 	FollowingBurstTargetOffset: -200,-200,0
 
 ZombieAttack:
+	Inherits@gsplice: ^GeneSpliceEffect
 	Inherits: ^Bullet
 	ReloadDelay: 60
 	Range: 1c512
@@ -980,11 +985,8 @@ ZombieAttack:
 		Damage: 10000
 		DamageTypes: DefaultDeath
 		InvalidTargets: Structure
-	Warhead@gsplice: GrantExternalCondition
-		Range: 0c256
+	Warhead@gsplice:
 		Duration: 10
-		Condition: genespliced
-		ValidTargets: Infantry
 
 
 ^TeslaWeapon:
