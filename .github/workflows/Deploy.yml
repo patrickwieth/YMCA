@@ -1,24 +1,32 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Deploy
 
+# Automatic deployment lives in packaging.yml, after stable manifest publication.
+# Release description edits must not restart servers.
 on:
-  release:
-    types: [edited]
+  workflow_dispatch:
+    inputs:
+      confirm_deployment:
+        description: 'Deploy the current stable release using the existing server script'
+        required: true
+        default: false
+        type: boolean
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+permissions:
+  contents: read
+
 jobs:
-  # This workflow contains a single job called "build"
   deploy:
-    # The type of runner that the job will run on
+    if: ${{ inputs.confirm_deployment }}
     runs-on: ubuntu-latest
-
+    concurrency:
+      group: ymca-game-server-deployment
+      cancel-in-progress: false
     steps:
-    - name: Deploy to server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: ./deploy-ymca-server.sh
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: ./deploy-ymca-server.sh
