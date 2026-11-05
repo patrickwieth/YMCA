@@ -49,8 +49,28 @@ if not exist "%MAP_SOURCE_PATH%" goto nomap
 if not exist "%~dp0..\engine\bin\OpenRA.exe" goto noengine
 powershell -NoProfile -Command "$v = (Get-Content '%~dp0..\engine\VERSION' -Raw).Trim(); if ($v -eq '%ENGINE_VERSION%') { exit 0 } exit 1" >nul 2>&1 || goto noengine
 
+set "ENGINE_DIR=%TEMPLATE_DIR%\engine"
+rem Do not invoke the stale dotnet.cmd shim in the project working directory.
+set "DOTNET_EXE="
+if exist "%TEMPLATE_DIR%\.dotnet\dotnet.exe" set "DOTNET_EXE=%TEMPLATE_DIR%\.dotnet\dotnet.exe"
+for /f "delims=" %%D in ('where dotnet.exe 2^>nul') do if not defined DOTNET_EXE set "DOTNET_EXE=%%D"
+if not defined DOTNET_EXE goto nodotnet
+
+echo Checking selection traits...
+"%DOTNET_EXE%" "%TEMPLATE_DIR%\engine\bin\OpenRA.Utility.dll" "%MOD_ID%" --check-selection-traits
+if %ERRORLEVEL% NEQ 0 goto selectioncheckfailed
+
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0prepare-test-game-map.ps1" -SourceMap "%MAP_SOURCE_PATH%" -DestinationMap "%MAP_PACKAGE_PATH%"
 if %ERRORLEVEL% NEQ 0 goto mapcopyfailed
+
+"%DOTNET_EXE%" "%TEMPLATE_DIR%\engine\bin\OpenRA.Utility.dll" "%MOD_ID%" --prepare-building-test-water "%MAP_PACKAGE_PATH%"
+if %ERRORLEVEL% NEQ 0 goto mapcopyfailed
+
+if /I "%~1"=="--check-only" (
+    del /f /q "%MAP_PACKAGE_PATH%" >nul 2>&1
+    echo Build, selection traits and test map preparation passed. Game was not started.
+    exit /b 0
+)
 
 cd /d "%~dp0..\engine"
 
@@ -84,6 +104,16 @@ exit /b 1
 
 ::nosourcemap
 echo Required map sources not found.
+pause
+exit /b 1
+
+:nodotnet
+echo No dotnet.exe found. Install a compatible .NET SDK or add it to PATH.
+pause
+exit /b 1
+
+:selectioncheckfailed
+echo Selection trait validation failed. Fix the reported actors before starting the test map.
 pause
 exit /b 1
 

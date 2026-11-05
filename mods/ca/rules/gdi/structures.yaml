@@ -577,9 +577,9 @@ STWR:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 NUKE:
-	Inherits: ^BuildingTD
-	Inherits: ^DisabledByPowerOutage
-	Inherits: ^2x2Building+Bib
+	Inherits@BUILDING: ^BuildingTD
+	Inherits@POWER: ^DisabledByPowerOutage
+	Inherits@SHAPE: ^2x2Building+Bib
 	HitShape:
 		TargetableOffsets: 630,299,0
 	WithSpriteBody:
@@ -594,8 +594,6 @@ NUKE:
 		Cost: 300
 	Tooltip:
 		Name: Nuclear Power Plant
-	ProvidesPrerequisite:
-		Prerequisite: anypower
 	Building:
 		Footprint: xX xx ==
 	Health:
@@ -659,11 +657,11 @@ NUK2:
 		Types: SpyInfiltrate, PowerInfiltrate
 
 AFAC:
-	Inherits: ^BuildingTD
-	Inherits: ^3x3Building+Bib
-	Inherits: ^ConcreteArmor
-	Inherits: ^StructureProduction
-	Inherits: ^BotFallbackInsurance
+	Inherits@BUILDING: ^BuildingTD
+	Inherits@SHAPE: ^3x3Building+Bib
+	Inherits@ARMOR: ^ConcreteArmor
+	Inherits@PRODUCTION: ^StructureProduction
+	Inherits@BOT: ^BotFallbackInsurance
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
@@ -763,12 +761,12 @@ AFAC:
 		RequiresCondition: !structures.gdi
 
 HQ:
-	Inherits: ^BuildingTD
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier2Tech
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^RadarStation
+	Inherits@BUILDING: ^BuildingTD
+	Inherits@TECH: ^TechLevelBuilding
+	Inherits@TIER: ^Tier2Tech
+	Inherits@POWER: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@RADAR: ^RadarStation
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
@@ -814,8 +812,8 @@ HQ:
 		Proxy: rad.gdi.stolen
 
 REP:
-	Inherits: ^BuildingTD
-	Inherits: ^3x3Building
+	Inherits@BUILDING: ^BuildingTD
+	Inherits@SHAPE: ^3x3Building
 	HitShape:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
 		Type: Polygon
@@ -870,12 +868,12 @@ REP:
 		Range: 10c0
 
 HPAD.TD:
-	Inherits: ^BuildingTD
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^RepairsAircraftWithRepairBay
-	Inherits: ^AircraftProduction
-	Inherits: ^GDIUpgradeProducer
+	Inherits@BUILDING: ^BuildingTD
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@REPAIR: ^RepairsAircraftWithRepairBay
+	Inherits@PRODUCTION: ^AircraftProduction
+	Inherits@UPGRADES: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: hpad2
 	HitShape:
@@ -970,10 +968,10 @@ HPAD.TD:
 		Proxy: powerproxy.paratroopers2
 
 PROC.TD:
-	Inherits: ^BuildingTD
-	Inherits: ^BotIncome
-	Inherits: ^3x3Building+Bib
-	Inherits: ^Refinery
+	Inherits@BUILDING: ^BuildingTD
+	Inherits@BOT: ^BotIncome
+	Inherits@SHAPE: ^3x3Building+Bib
+	Inherits@REFINERY: ^Refinery
 	DockHost:
 		DockAngle: 448
 		DockOffset: -1c0, 1c0, 0

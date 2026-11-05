@@ -1,4 +1,5 @@
 MSLO:
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: ^ScienceBuilding
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^2x1Shape
@@ -48,6 +49,7 @@ MSLO:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 SPEN:
+	Inherits@SOVIETBIB: ^Soviet4x4Bib
 	Inherits: ^Building
 	Inherits: ^PrimaryBuilding
 	Inherits: ^3x3Shape
@@ -110,6 +112,7 @@ SPEN:
 	-SpawnRandomActorOnDeath:
 
 SYRD:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@shape: ^3x3Shape
@@ -118,6 +121,8 @@ SYRD:
 	RenderSprites:
 		Image: syrd.allies
 		PlayerPalette: playernavy
+	IsometricSelectable:
+		DecorationHeight: 60
 	InfiltrateForSupportPower:
 		Proxy: powerproxy.sonarpulse
 		Types: SpyInfiltrate
@@ -173,9 +178,11 @@ SYRD:
 	-SpawnRandomActorOnDeath:
 
 IRON:
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: ^ScienceBuilding
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^2x1Building+Minibib
+	-WithBuildingBib:
 	Inherits: ^SuperWeapon
 	Inherits: ^SovietSuperweaponSmall
 	RenderSprites:
@@ -264,8 +271,14 @@ AGUN:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 PBOX:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Defense
 	Inherits@AUTOTARGET: ^AutoTargetAll
+	Inherits@visuals: ^Allied1x1Visuals
+	RenderSprites:
+		Image: pbox.allies
+	IsometricSelectable:
+		DecorationHeight: 76
 	Tooltip:
 		Name: Pillbox
 	Building:
@@ -286,9 +299,6 @@ PBOX:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 5c0
-	WithBuildingBib:
-		HasMinibib: true
-		Sequence: bibPbox
 	Turreted:
 		TurnSpeed: 1000
 	-QuantizeFacingsFromSequence:
@@ -366,7 +376,7 @@ GUN:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 70
-		Prerequisites: tent, ~structures.allies
+		Prerequisites: tent, ~structures.allies, ~disabled
 		Description: Basic anti-tank base defense.\n  Can detect cloaked units.\n  Strong vs Tanks, Vehicles\n  Weak vs Infantry
 	Valued:
 		Cost: 800
@@ -406,6 +416,7 @@ GUN:
 		UseClassicFacings: False
 
 SAM:
+	Inherits@SOVIETBIB: ^Soviet2x2Bib
 	Inherits: ^Defense
 	Inherits: ^DisableOnLowPowerOrPowerDown
 	Inherits: ^AutoTargetAir
@@ -459,11 +470,18 @@ SAM:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 ATEK:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier3Tech
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^2x2Building+Bib
+	Inherits@visuals: ^Allied2x2DriveableBib
+	-WithBuildingBib:
+	RenderSprites:
+		Image: atek.allies
+	IsometricSelectable:
+		DecorationHeight: 108
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 140
@@ -473,8 +491,6 @@ ATEK:
 		Cost: 1500
 	Tooltip:
 		Name: Allied Tech Center
-	Building:
-		Footprint: xx xx ==
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -587,17 +603,14 @@ ATEK:
 		Proxy: tec.allies.stolen
 
 AFLD:
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: ^Building
 	Inherits: ^3x2Shape
 	Inherits: ^PrimaryBuilding
 	Inherits: ^AircraftProduction
 	Inherits: ^RepairsAircraftWithRepairBay
 	RenderSprites:
-		FactionImages:
-			soviet: afld.soviet
-			russia: afld.soviet
-			nkorea: afld.soviet
-			iraq: afld.soviet
+		Image: afld.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
@@ -663,11 +676,13 @@ AFLD:
 		RequiresCondition: !build-incomplete
 
 STEK:
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier3Tech
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^3x2Building+Bib
+	-WithBuildingBib:
 	RenderSprites:
 		Image: stek.soviet
 	HitShape:
@@ -702,6 +717,7 @@ STEK:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
 
 BARR:
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: ^Building
 	Inherits: ^3x2Building
 	Inherits: ^PrimaryBuilding
@@ -825,17 +841,28 @@ KENN:
 	ProvidesPrerequisite@buildingname:
 
 TENT:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
-	Inherits: ^2x2Building+Bib
+	Inherits: ^3x2Building+Bib
+	Inherits@visuals: ^Allied3x3Visuals
+	-WithBuildingBib:
 	Inherits: ^PrimaryBuilding
 	Inherits: ^InfantryProduction
 	RenderSprites:
 		Image: tent.allies
+	IsometricSelectable:
+		-DecorationBounds:
+		DecorationHeight: 64
+	Building:
+		Footprint: xxx xxx ===
+		Dimensions: 3,3
+		LocalCenterOffset: 362,-362,0
+	WithIdleOverlay@ALLIEDBIB:
+		# Body-local -> world -362,362,0; keep the 3x3 bib centered on its site.
+		Offset: -567,-362,0
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
-	Building:
-		Footprint: xx xx ++
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
@@ -1262,8 +1289,8 @@ WEAP.TD:
 		Sequence: place
 
 AFAC.Nukular:
-	Inherits: AFAC
-	Inherits: ^NukularConyard
+	Inherits@FACT: AFAC
+	Inherits@NUKULAR: ^NukularConyard
 	RenderSprites:
 		Image: AFAC
 	Transforms:
@@ -1425,7 +1452,7 @@ SILO.TD:
 		Name: Silo
 	Buildable:
 		BuildPaletteOrder: 35
-		Prerequisites: proc.td, ~structures.td
+		Prerequisites: proc.td, ~structures.td, ~disabled
 		Queue: Defense
 		IconPalette: chrometd
 		Description: Stores processed Tiberium, Ore and Gems
@@ -1462,12 +1489,12 @@ SILO.TD:
 		PipCount: 5
 
 AFLD.GDI:
-	Inherits: ^Building
-	Inherits: ^3x2Shape
-	Inherits: ^PrimaryBuilding
-	Inherits: ^RepairsAircraftWithRepairBay
-	Inherits: ^AircraftProduction
-	Inherits: ^GDIUpgradeProducer
+	Inherits@BUILDING: ^Building
+	Inherits@SHAPE: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@REPAIR: ^RepairsAircraftWithRepairBay
+	Inherits@PRODUCTION: ^AircraftProduction
+	Inherits@UPGRADES: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: afldgdi
 	HitShape:
@@ -1538,6 +1565,7 @@ AFLD.GDI:
 		Proxy: powerproxy.airstrike
 
 AFLD.allies:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
 	Inherits: ^3x2Shape
 	Inherits: ^PrimaryBuilding
@@ -1545,6 +1573,18 @@ AFLD.allies:
 	Inherits: ^AircraftProduction
 	RenderSprites:
 		Image: afld.allies.custom
+	Inherits@visuals: ^Allied3x3Visuals
+	IsometricSelectable:
+		-DecorationBounds:
+		DecorationHeight: 83
+		# Decoration only: retain the 3x2 gameplay body and original mouse bounds.
+		DecorationFootprint: 4,2
+		# Extend the 2-cell axis by 1/4 cell: approximately 16px left / 8px down.
+		DecorationFootprintExtraDepth: 181
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib4x3
+		# Body-local -> world 0,724,0, preserving the existing 3x2 body pivot.
+		Offset: -1134,0,0
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
@@ -1558,8 +1598,9 @@ AFLD.allies:
 	Tooltip:
 		Name: Airfield
 	Building:
-		Footprint: xxx xxx
-		Dimensions: 3,2
+		Footprint: xxx= xxx= ====
+		Dimensions: 4,3
+		LocalCenterOffset: 0,-724,0
 	Health:
 		HP: 100000
 	RevealsShroud:
@@ -1610,11 +1651,11 @@ AFLD.allies:
 		Proxy: powerproxy.airstrike
 
 GTEK:
-	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
+	Inherits@BUILDING: ^ScienceBuilding
+	Inherits@TECH: ^TechLevelBuilding
+	Inherits@TIER: ^Tier3Tech
+	Inherits@POWER: ^DisableOnLowPowerOrForceDisabled
+	Inherits@SHAPE: ^3x2Building+Bib
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 150
@@ -1988,11 +2029,13 @@ PATR:
 		RequiresSelection: true
 
 INDP:
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier4Tech
 	Inherits: ^DisableOnLowPowerOrForceDisabled
 	Inherits: ^3x3Building+Bib
+	-WithBuildingBib:
 	RenderSprites:
 		Image: indp.soviet
 	WithSpriteBody:
@@ -2045,6 +2088,7 @@ INDP:
 		RequiresCondition: !build-incomplete && !c4 && !being-warped
 
 OREP:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^ScienceBuilding
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier4Tech
@@ -2052,10 +2096,12 @@ OREP:
 	Inherits: ^3x2Building+Bib
 	RenderSprites:
 		Image: orep.allies
+	Inherits@visuals: ^Allied2x2DriveableBib
+	-WithBuildingBib:
+	IsometricSelectable:
+		DecorationHeight: 112
 	HitShape:
 		TargetableOffsets: -355,-1024,0
-	Building:
-		Footprint: xxx xxx ===
 	Health:
 		HP: 80000
 	RevealsShroud:
@@ -2108,6 +2154,7 @@ OREP:
 		RequiresCondition: !disabled && !empdisable && !being-warped
 
 WEAT:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^ScienceBuilding
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^2x2Shape
@@ -2115,6 +2162,9 @@ WEAT:
 	Inherits: ^AlliesSuperweaponBig
 	RenderSprites:
 		Image: weat.allies
+	Inherits@visuals: ^Allied2x2DriveableBib
+	IsometricSelectable:
+		DecorationHeight: 81
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -2125,9 +2175,6 @@ WEAT:
 		Cost: 2500
 	Tooltip:
 		Name: Weather Control Device
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
 	Health:
 		HP: 100000
 	RevealsShroud:
@@ -2141,9 +2188,6 @@ WEAT:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 		RequiresCondition: !disabled
-	WithBuildingBib:
-		HasMinibib: true
-		Sequence: bibIron
 	WithIdleOverlay@ACTIVE:
 		Sequence: active-overlay
 		Palette: d2keffect

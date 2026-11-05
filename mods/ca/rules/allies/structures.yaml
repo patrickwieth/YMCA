@@ -55,9 +55,15 @@ Grand_Cannon:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 PRIS:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Defense
 	Inherits: ^DisableOnLowPowerOrPowerDown
 	Inherits: ^AutoTargetGround
+	Inherits@visuals: ^Allied1x1Visuals
+	RenderSprites:
+		Image: pris.allies
+	IsometricSelectable:
+		DecorationHeight: 171
 	AutoTargetPriority@DEFAULT:
 		InvalidTargets: NoAutoTarget, WaterStructure, PrismTower
 	AutoTargetPriority@ATTACKANYTHING:
@@ -87,9 +93,6 @@ PRIS:
 		Amount: -75
 		RequiresCondition: !being-warped
 	ProvidesPrerequisite@buildingname:
-	WithBuildingBib:
-		Sequence: bibFtur
-		HasMinibib: true
 	WithSpriteBody@charged:
 		PauseOnCondition: disabled || empdisable || being-warped
 		RequiresCondition: !charging
@@ -183,8 +186,19 @@ PRIS:
 
 GAP:
 	Inherits: ^ScienceBuilding
-	Inherits: ^1x1Building+Minibib
+	Inherits: ^2x2Building
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@visuals: ^Allied2x2Visuals
+	Building:
+		LocalCenterOffset: 0,0,0
+	-WithBuildingBib:
+	RenderSprites:
+		Image: gap.allies
+	Inherits@shadow: ^AlliedBuildingShadow
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib2x2
+	IsometricSelectable:
+		DecorationHeight: 183
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -216,10 +230,6 @@ GAP:
 	FireWarheadsOnDeathCA:
 		Weapon: SmallBuildingExplode
 		EmptyWeapon: SmallBuildingExplode
-	HitShape:
-		Type: Rectangle
-			TopLeft: -512, -512
-			BottomRight: 512, 512
 
 PROC:
 	Inherits: ^Building
@@ -228,6 +238,13 @@ PROC:
 	Inherits: ^Refinery
 	RenderSprites:
 		Image: proc.allies
+	Inherits@shadow: ^AlliedBuildingShadow
+	Inherits@visuals: ^Allied3x3Visuals
+	-WithBuildingBib:
+	IsometricSelectable:
+		# Retain the trimmed ground diamond; increase only the decoration height.
+		DecorationBounds: 4344, 4163, 0, -91
+		DecorationHeight: 55
 	Building:
 		Footprint: _X_ xxx X++ +++
 	Buildable:
@@ -308,6 +325,7 @@ PROC:
 		Locations: 0,1
 
 PDOX:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^ScienceBuilding
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^2x2Building+Bib
@@ -315,8 +333,10 @@ PDOX:
 	Inherits: ^AlliesSuperweaponSmall
 	RenderSprites:
 		Image: pdox.allies
-	Building:
-		Footprint: xx xx ++
+	Inherits@visuals: ^Allied2x2DriveableBib
+	-WithBuildingBib:
+	IsometricSelectable:
+		DecorationHeight: 105
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 120
@@ -364,17 +384,22 @@ PDOX:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 DOME:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
 	Inherits: ^TechLevelBuilding
 	Inherits: ^Tier2Tech
 	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits: ^2x2Building+Bib
 	Inherits: ^RadarStation
+	Inherits@visuals: ^Allied2x2DriveableBib
+	-WithBuildingBib:
+	RenderSprites:
+		Image: dome.allies
+	IsometricSelectable:
+		DecorationHeight: 103
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-384,0, 630,384,0, -700,-512,0, -700,512,0
-	Building:
-		Footprint: xx xx ==
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 90
@@ -383,7 +408,7 @@ DOME:
 	Valued:
 		Cost: 1800
 	Tooltip:
-		Name: Radar Dome
+		Name: Radar Station
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 	Health:
@@ -419,11 +444,29 @@ DOME:
 
 WEAP:
 	Inherits: ^Building
-	Inherits@shape: ^3x2Building+Bib
+	Inherits@shadow: ^AlliedBuildingShadow
+	Inherits@shape: ^4x2Building+Bib
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@VehicleProduction: ^VehicleProduction
 	RenderSprites:
 		Image: weap.allies
+	-WithBuildingBib:
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib4x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+		# Body-local -> world -362,362,0: center the 4x3 bib beneath the rear 4x2 body.
+		Offset: -567,-362,0
+	Building:
+		# Preserve the occupied body and exit; one driveable apron row.
+		Footprint: xxxx xxxx ====
+		Dimensions: 4,3
+		# Compensate the site size to preserve the existing actor/sprite world center.
+		LocalCenterOffset: 362,-362,0
+	IsometricSelectable:
+		# Infer the selection footprint from occupied cells, excluding the exit strip.
+		DecorationHeight: 76
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
@@ -461,13 +504,27 @@ WEAP:
 		Sequence: place
 
 FACT:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
 	Inherits: ^3x3Building+Bib
 	Inherits: ^ConcreteArmor
 	Inherits: ^StructureProduction
 	Inherits: ^BotFallbackInsurance
+	-WithBuildingBib:
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib4x4
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+		# Body-local -> world 362,1086,0: preserve the existing Conyard pivot.
+		Offset: -1701,362,0
 	Building:
-		Footprint: xxX xxx XxX ===
+		Footprint: xxX= xxx= XxX= ====
+		Dimensions: 4,4
+		# Keep all previous art, collision, selection and transform registration unchanged.
+		LocalCenterOffset: -362,-1086,0
+	IsometricSelectable:
+		DecorationHeight: 60
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
@@ -573,7 +630,7 @@ SILO:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 35
-		Prerequisites: proc, ~structures.allies
+		Prerequisites: proc, ~structures.allies, ~disabled
 		Description: Stores excess refined\nTiberium, Ore and Gems.
 	Valued:
 		Cost: 150
@@ -609,8 +666,15 @@ SILO:
 		FullSequence: pip-yellow
 
 HPAD:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
 	Inherits: ^2x2Building+Bib
+	Inherits@visuals: ^Allied2x2DriveableBib
+	-WithBuildingBib:
+	RenderSprites:
+		Image: hpad.allies
+	IsometricSelectable:
+		DecorationHeight: 118
 	Inherits: ^PrimaryBuilding
 	Inherits: ^AircraftProduction
 	Inherits: ^RepairsAircraftWithRepairBay
@@ -695,12 +759,17 @@ HPAD:
 		Proxy: powerproxy.paratroopers2
 
 POWR:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
 	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
 	Inherits@shape: ^2x2Building
+	Inherits@visuals: ^Allied2x2DriveableBib
 	-WithBuildingBib:
 	RenderSprites:
 		Image: powr.allies
+	IsometricSelectable:
+		DecorationBounds: 2896, 2896, 0, -181
+		DecorationHeight: 69
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 640,-384,0, 640,512,0, -710,-512,0, -710,512,0
@@ -732,17 +801,20 @@ POWR:
 		Types: SpyInfiltrate, PowerInfiltrate
 
 APWR:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
 	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^4x4Shape
+	Inherits@shape: ^2x2Shape
+	Inherits@visuals: ^Allied2x2DriveableBib
 	RenderSprites:
 		Image: apwr.allies
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib3x3
+	IsometricSelectable:
+		DecorationBounds: 2896, 2896, 0, -181
+		DecorationHeight: 90
 	HitShape:
 		TargetableOffsets: -355,-1024,0
-	Building:
-		Footprint: xxxx xxxx xxxx xxxx
-		Dimensions: 4,4
-		LocalCenterOffset: 0,-724,0
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 110
@@ -773,8 +845,12 @@ APWR:
 FIX:
 	Inherits: ^Building
 	Inherits: ^3x3Shape
+	Inherits@visuals: ^Allied3x3Visuals
+	Inherits@shadow: ^AlliedBuildingShadow
 	RenderSprites:
 		Image: fix.allies
+	IsometricSelectable:
+		DecorationHeight: 38
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 100
@@ -805,9 +881,6 @@ FIX:
 		FinishRepairingNotification: UnitRepaired
 		PlayerExperience: 15
 		RequiresCondition: !forceshield && !invulnerability && !being-warped
-	WithBuildingBib:
-		HasMinibib: true
-		Sequence: bibFix
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 	Power:

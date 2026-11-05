@@ -1,0 +1,104 @@
+--- a/engine/OpenRA.Mods.Common/Traits/IsometricSelectable.cs
++++ b/engine/OpenRA.Mods.Common/Traits/IsometricSelectable.cs
+@@ -38,6 +38,15 @@
+ 			"If Height is 0, this must be defined with a value greater than 0.")]
+ 		public readonly int DecorationHeight = -1;
+ 
++		[Desc("Optional decoration-only footprint dimensions in cell axes. 0,0 uses the actual occupied body.",
++			"Anchored at the occupied body's minimum cell; does not change interaction bounds or occupancy.",
++			"Requires DecorationBounds and Bounds to be unset.")]
++		public readonly CVec DecorationFootprint = CVec.Zero;
++
++		[Desc("Extra decoration-only depth toward the positive second cell axis, in world-axis units.",
++			"Moves the left and bottom ground corners only; requires DecorationFootprint.")]
++		public readonly int DecorationFootprintExtraDepth = 0;
++
+ 		public readonly int Priority = 10;
+ 
+ 		[Desc("Allow selection priority to be modified using a hotkey.",
+@@ -65,6 +74,12 @@
+ 			if (grid.Type != MapGridType.RectangularIsometric)
+ 				throw new YamlException("IsometricSelectable can only be used in mods that use the RectangularIsometric MapGrid type.");
+ 
++			if (DecorationFootprint != CVec.Zero && (DecorationFootprint.X <= 0 || DecorationFootprint.Y <= 0 ||
++				DecorationBounds != null || Bounds != null))
++				throw new YamlException("DecorationFootprint requires positive dimensions and no explicit Bounds/DecorationBounds.");
++			if (DecorationFootprintExtraDepth < 0 || (DecorationFootprintExtraDepth != 0 && DecorationFootprint == CVec.Zero))
++				throw new YamlException("DecorationFootprintExtraDepth requires DecorationFootprint and must be non-negative.");
++
+ 			if (Height == 0 && DecorationHeight <= 0)
+ 				throw new YamlException("DecorationHeight must be defined and greater than 0 if Height is 0.");
+ 		}
+@@ -83,7 +98,7 @@
+ 			buildingInfo = self.Info.TraitInfo<BuildingInfo>();
+ 		}
+ 
+-		Polygon Bounds(Actor self, WorldRenderer wr, int[] bounds, int height)
++		Polygon Bounds(Actor self, WorldRenderer wr, int[] bounds, int height, CVec footprint = default, int extraDepth = 0)
+ 		{
+ 			int2 left, right, top, bottom;
+ 			if (bounds != null)
+@@ -118,10 +133,17 @@
+ 					yMax = Math.Max(yMax, c.Y);
+ 				}
+ 
+-				left = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMin, yMax)) - new WVec(768, 0, 0));
++				if (footprint != CVec.Zero)
++				{
++					xMax = xMin + footprint.X - 1;
++					yMax = yMin + footprint.Y - 1;
++				}
++
++				var extension = new WVec(-extraDepth, extraDepth, 0);
++				left = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMin, yMax)) - new WVec(768, 0, 0) + extension);
+ 				right = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMax, yMin)) + new WVec(768, 0, 0));
+ 				top = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMin, yMin)) - new WVec(0, 768, 0));
+-				bottom = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMax, yMax)) + new WVec(0, 768, 0));
++				bottom = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMax, yMax)) + new WVec(0, 768, 0) + extension);
+ 			}
+ 
+ 			if (height == 0)
+@@ -138,7 +160,8 @@
+ 
+ 		public Polygon DecorationBounds(Actor self, WorldRenderer wr)
+ 		{
+-			return Bounds(self, wr, info.DecorationBounds ?? info.Bounds, info.DecorationHeight >= 0 ? info.DecorationHeight : info.Height);
++			return Bounds(self, wr, info.DecorationBounds ?? info.Bounds, info.DecorationHeight >= 0 ? info.DecorationHeight : info.Height,
++				info.DecorationFootprint, info.DecorationFootprintExtraDepth);
+ 		}
+ 
+ 		Polygon IMouseBounds.MouseoverBounds(Actor self, WorldRenderer wr)
+--- /dev/null
++++ b/engine/OpenRA.Test/OpenRA.Mods.Common/IsometricSelectionDecorationTest.cs
+@@ -0,0 +1,31 @@
++using NUnit.Framework;
++using OpenRA.Mods.Common.Traits;
++
++namespace OpenRA.Test
++{
++	[TestFixture]
++	public class IsometricSelectionDecorationTest
++	{
++		[Test]
++		public void DecorationFootprintIsOptIn()
++		{
++			var info = new IsometricSelectableInfo();
++			Assert.That(info.DecorationFootprint, Is.EqualTo(CVec.Zero));
++			Assert.That(info.DecorationFootprintExtraDepth, Is.Zero);
++		}
++
++		[Test]
++		public void EnlargedDecorationDoesNotChangeInteractionSettings()
++		{
++			var info = new IsometricSelectableInfo();
++			var originalHeight = info.Height;
++			FieldLoader.Load(info, new MiniYaml("", MiniYaml.FromString(
++				"DecorationFootprint: 4,2\nDecorationFootprintExtraDepth: 181\nDecorationHeight: 83", "selection-test")));
++			Assert.That(info.DecorationFootprint, Is.EqualTo(new CVec(4, 2)));
++			Assert.That(info.DecorationFootprintExtraDepth, Is.EqualTo(181));
++			Assert.That(info.DecorationHeight, Is.EqualTo(83));
++			Assert.That(info.Bounds, Is.Null);
++			Assert.That(info.Height, Is.EqualTo(originalHeight));
++		}
++	}
++}

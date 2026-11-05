@@ -4,6 +4,7 @@ using System.Linq;
 using OpenRA.FileSystem;
 using OpenRA.Primitives;
 using OpenRA.Traits;
+using OpenRA.Mods.Common.Traits;
 
 namespace OpenRA.Mods.CA.UtilityCommands
 {
@@ -30,6 +31,16 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					Console.WriteLine($"DUPLICATE SELECTION {actor.Name}: {string.Join(", ", traits.Select(t => t.GetType().Name))}"); errors++;
 				}
 				if (errors != 0) throw new InvalidDataException($"{errors} actor definitions have ambiguous selection traits.");
+				var actors = rules.Actors;
+				foreach (var name in new[] { "hosp", "miss", "oilb" })
+					if (actors[name].TraitInfo<ISelectableInfo>().Priority != 0)
+						throw new InvalidOperationException(name + ": original priority must remain zero.");
+				foreach (var name in new[] { "chbunker", "chbunker2", "nkorea_bunker" })
+					if (actors[name].TraitInfo<IsometricSelectableInfo>().Class != name)
+						throw new InvalidOperationException(name + ": selection class changed.");
+				if (actors["oilb.indestructible"].TraitInfos<ISelectableInfo>().Any())
+					throw new InvalidOperationException("Indestructible oil derrick must remain unselectable.");
+				_ = actors["oilb.indestructible"].TraitsInConstructOrder().ToArray();
 				Console.WriteLine($"SELECTION PASS {count} concrete actor definitions have at most one selection trait.");
 			}
 			if (args.Length == 1) Check(utility.ModData.DefaultRules);

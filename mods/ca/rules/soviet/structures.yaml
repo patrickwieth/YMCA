@@ -1,7 +1,12 @@
 Soviet_Refinery:
 	Inherits: PROC
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	-WithIdleOverlay@ALLIEDBIB:
+	-WithShadow@BUILDINGTRIAL:
 	RenderSprites:
 		Image: soviet_refinery.soviet
+	IsometricSelectable:
+		DecorationHeight: 44
 	Buildable:
 		Prerequisites: anypower, ~structures.soviet
 	FreeActor:
@@ -13,7 +18,17 @@ Soviet_Refinery:
 		Prerequisite: proc
 
 DOME.Soviet:
-	Inherits: DOME
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits: ^SovietRadarBase
+	Tooltip:
+		Name: Radar Dome
+	Building:
+		Dimensions: 2,3
+		Footprint: xx xx ==
+		LocalCenterOffset: 0,-724,0
+	-WithBuildingBib:
+	IsometricSelectable:
+		DecorationHeight: 30
 	RenderSprites:
 		Image: dome.soviet
 	Buildable:
@@ -22,7 +37,20 @@ DOME.Soviet:
 		Prerequisite: dome
 
 WEAP.Soviet:
-	Inherits: WEAP
+	Inherits@SOVIETBIB: ^Soviet4x4Bib
+	Inherits: ^SovietFactoryBase
+	# Keep the Soviet footprint independent of the larger Allied factory.
+	Building:
+		Footprint: xxx xxx ===
+		Dimensions: 3,3
+		LocalCenterOffset: 0,-724,0
+	HitShape:
+		Type: Rectangle
+			TopLeft: -1536, -1024
+			BottomRight: 1536, 1024
+	-WithBuildingBib:
+	IsometricSelectable:
+		DecorationHeight: 30
 	RenderSprites:
 		Image: weap.soviet
 	Buildable:
@@ -31,9 +59,17 @@ WEAP.Soviet:
 		Prerequisite: weap
 
 FACT.Soviet:
-	Inherits: FACT
+	Inherits@SOVIETBIB: ^Soviet4x4Bib
+	Inherits: ^SovietConyardBase
+	-WithBuildingBib:
+	Building:
+		Footprint: xxX xxx XxX ===
+		Dimensions: 3,4
+		LocalCenterOffset: 0,-724,0
 	RenderSprites:
 		Image: fact.soviet
+	IsometricSelectable:
+		DecorationHeight: 30
 	Buildable:
 		Prerequisites: ~conyardbuildable, ~structures.soviet, fix
 	Transforms:
@@ -53,21 +89,36 @@ SILO.Soviet:
 	RenderSprites:
 		Image: silo
 	Buildable:
-		Prerequisites: proc, ~structures.soviet
+		Prerequisites: proc, ~structures.soviet, ~disabled
 	ProvidesPrerequisite@sharedactor:
 		Prerequisite: silo
 
 HPAD.Soviet:
-	Inherits: HPAD
+	Inherits: ^SovietHelipadBase
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Building:
+		Dimensions: 2,3
+		Footprint: xx xx ==
+		LocalCenterOffset: 0,-724,0
 	RenderSprites:
-		Image: hpad
+		Image: hpad.soviet
+	-WithBuildingBib:
+	IsometricSelectable:
+		DecorationHeight: 30
 	Buildable:
 		Prerequisites: dome, ~structures.soviet
 	ProvidesPrerequisite@sharedactor:
 		Prerequisite: hpad
 
 POWR.Soviet:
-	Inherits: POWR
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits: ^SovietPowerBase
+	Building:
+		Dimensions: 2,2
+		Footprint: xx xx
+		LocalCenterOffset: 0,-724,0
+	IsometricSelectable:
+		DecorationHeight: 30
 	RenderSprites:
 		Image: powr.soviet
 	Buildable:
@@ -76,7 +127,18 @@ POWR.Soviet:
 		Prerequisite: powr
 
 APWR.Soviet:
-	Inherits: APWR
+	Inherits@SOVIETBIB: ^Soviet4x4Bib
+	Inherits: ^SovietAdvancedPowerBase
+	Building:
+		Dimensions: 4,4
+		Footprint: xxxx xxxx xxxx xxxx
+		LocalCenterOffset: 0,-724,0
+	HitShape:
+		Type: Rectangle
+			TopLeft: -2048,-2048
+			BottomRight: 2048,2048
+	IsometricSelectable:
+		DecorationHeight: 30
 	RenderSprites:
 		Image: apwr.soviet
 	Buildable:
@@ -85,7 +147,11 @@ APWR.Soviet:
 		Prerequisite: apwr
 
 FIX.Soviet:
-	Inherits: FIX
+	Inherits@SOVIETBIB: ^Soviet4x4Bib
+	Inherits: ^SovietRepairBase
+	-WithBuildingBib:
+	IsometricSelectable:
+		DecorationHeight: 30
 	RenderSprites:
 		Image: fix.soviet
 	Buildable:
@@ -94,7 +160,9 @@ FIX.Soviet:
 		Prerequisite: fix
 
 NKOREA_BUNKER:
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: chbunker
+	-WithBuildingBib:
 	Buildable:
 		BuildPaletteOrder: 40
 		Prerequisites: barr, ~structures.nkorea
@@ -109,6 +177,7 @@ NKOREA_BUNKER:
 	-Voiced:
 
 Cloning_Vats:
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: ^BuildingTD
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@shape: ^2x2Shape
@@ -136,7 +205,6 @@ Cloning_Vats:
 		HP: 50000
 	RevealsShroud:
 		Range: 4c0
-	WithBuildingBib:
 	Power:
 		Amount: -100
 		RequiresCondition: !being-warped
@@ -160,8 +228,10 @@ Cloning_Vats:
 		Path: 3,3
 
 FTUR:
+	Inherits@SOVIETBIB: ^Soviet2x2Bib
 	Inherits: ^Defense
 	Inherits: ^1x1Building+Minibib
+	-WithBuildingBib:
 	Inherits: ^AutoTargetGround
 	RenderSprites:
 		Image: ftur.soviet
@@ -206,8 +276,10 @@ FTUR:
 		EmptyWeapon: BuildingExplode
 
 TTUR:
+	Inherits@SOVIETBIB: ^Soviet2x2Bib
 	Inherits: ^DefenseTD
 	Inherits: ^1x1Building+Minibib
+	-WithBuildingBib:
 	Inherits: ^AutoTargetGround
 	RenderSprites:
 		Image: ttur.soviet
@@ -253,8 +325,10 @@ TTUR:
 		EmptyWeapon: BuildingExplode
 
 TSLA:
+	Inherits@SOVIETBIB: ^Soviet2x2Bib
 	Inherits: ^Defense
 	Inherits: ^1x1Building+Minibib
+	-WithBuildingBib:
 	Inherits: ^DisableOnLowPowerOrPowerDown
 	Inherits: ^AutoTargetGround
 	Inherits: ^WhiteFlash
@@ -328,7 +402,21 @@ TSLA:
 		Prerequisite: structures.tsla
 
 TPWR:
+	Inherits@SOVIETBIB: ^Soviet4x4Bib
 	Inherits: APWR
+	-WithShadow@BUILDINGTRIAL:
+	Building:
+		Dimensions: 4,4
+		Footprint: xxxx xxxx xxxx xxxx
+		LocalCenterOffset: 0,-724,0
+	HitShape:
+		Type: Rectangle
+			TopLeft: -2048,-2048
+			BottomRight: 2048,2048
+	-WithIdleOverlay@ALLIEDBIB:
+	IsometricSelectable:
+		-DecorationBounds:
+		DecorationHeight: 30
 	RenderSprites:
 		Image: tpwr.soviet
 	Buildable:
