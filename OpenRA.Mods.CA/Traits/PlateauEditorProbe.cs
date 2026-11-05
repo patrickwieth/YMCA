@@ -123,7 +123,7 @@ namespace OpenRA.Mods.CA.Traits
 				try { new PlateauStampBrush(controller, wr, false, _ => { }).CreateAction(center); }
 				catch (InvalidOperationException) { rejected = true; }
 				if (!rejected) throw new InvalidOperationException("Overlapping plateau stamp accepted.");
-				map.Resources[center] = new ResourceTile(1, 5);
+				map.Resources[center] = new ResourceTile(3, 5);
 				rejected = false;
 				try { new PlateauStampBrush(controller, wr, true, _ => { }).CreateAction(center); }
 				catch (InvalidOperationException) { rejected = true; }

@@ -24,6 +24,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				{ "onSelect", (Action<string>)StartConfiguredSkirmish },
 			});
+			SkirmishSetupUiProbe.Start(menu);
 		}
 
 		// Also used by the designer: its frozen map must bypass the map wizard.
@@ -51,6 +52,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		GeneratedMapMode mode;
 		MapGenerationPreset preset;
 		MapGenerationOptions options;
+		CustomMapSettings customSettings = new CustomMapSettings();
 		int players = 4;
 		int stage;
 		bool customize;
@@ -67,10 +69,19 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				if (busy) return;
 				if (stage == 0) Ui.CloseWindow();
-				else { stage--; Show(); }
+				else
+				{
+					stage--;
+					if (stage == 1) { customize = false; ResetOptions(); }
+					Show();
+				}
 			};
 			widget.Get<ButtonWidget>("BACK").IsDisabled = () => busy;
 			widget.Get<LabelWidget>("STATUS").GetText = () => status;
+			var generate = widget.Get<ButtonWidget>("GENERATE_PRESET");
+			generate.IsVisible = () => stage == 1;
+			generate.IsDisabled = () => busy;
+			generate.OnClick = Generate;
 			Show();
 		}
 
@@ -84,7 +95,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			return mode == GeneratedMapMode.Tactical ? !Has("Operational") && !Has("Strategic") : Has(mode.ToString());
 		}
 
-		static string Title(object value) => System.Text.RegularExpressions.Regex.Replace(value.ToString(), "([a-z])([A-Z])", "$1 $2");
+		static string Title(object value) => System.Text.RegularExpressions.Regex.Replace(
+			value is MapGenerationPreset mapPreset ? mapPreset.DisplayName() : value.ToString(), "([a-z])([A-Z])", "$1 $2");
 
 		void Label(string text, int x, int y, int width = 790)
 		{
@@ -125,8 +137,22 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 		void ResetOptions()
 		{
+			if (customize) preset = customSettings.BasePreset;
 			options = DebugMapGeneratorCommand.ParseOptions(new[] { "setup", ".", "mode=" + mode, "preset=" + preset,
 				"players=" + players, "teams=2", "seed=" + Game.CosmeticRandom.Next(1, int.MaxValue), "size=auto" });
+			if (customize)
+			{
+				options.Custom = customSettings.Copy();
+				customSettings.ApplyAutomaticSize(options);
+			}
+		}
+
+		void SelectMode(GeneratedMapMode selectedMode)
+		{
+			mode = selectedMode;
+			customize = false;
+			if (!Compatible(mode, preset)) preset = MapGenerationPreset.TwoSides;
+			ResetOptions(); stage = 1; Show();
 		}
 
 		void Show()
@@ -143,76 +169,115 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					content.AddChild(new SkirmishModePreviewWidget
 					{
 						Bounds = new WidgetBounds(i * 270, 65, 250, 155), Mode = i,
-						OnClick = () => { mode = choice; stage = 1; Show(); },
+						OnClick = () => SelectMode(choice),
 					});
-					Button(choice.ToString(), i * 270, 235, 250, () => { mode = choice; stage = 1; Show(); });
+					Button(choice.ToString(), i * 270, 235, 250, () => SelectMode(choice));
 					Label(descriptions[i], i * 270, 285, 265);
 				}
 			}
 			else if (stage == 1)
 			{
-				Button("Normal Map", 60, 110, 310, () => { stage = 2; Show(); });
-				Label("Generate a new map from a preset", 60, 160, 360);
-				Button("Custom Map", 440, 110, 310, ChooseMap);
-				Label("Choose an existing compatible map", 440, 160, 360);
-			}
-			else if (stage == 2)
-			{
-				var presets = Enum.GetValues<MapGenerationPreset>().Where(p => Compatible(mode, p)).ToArray();
+
+				DropDown("Players (automatic size)", 38, new[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16 }, () => players,
+					value => { var seed = options.Seed; players = value; ResetOptions(); options.Seed = seed; Show(); });
+				// UI order only: keep serialized preset values and generator dispatch unchanged.
+				var presets = Enum.GetValues<MapGenerationPreset>().Select(p => p switch
+				{
+					MapGenerationPreset.MountainValleys => MapGenerationPreset.BattleNexus,
+					MapGenerationPreset.BattleNexus => MapGenerationPreset.MountainValleys,
+					_ => p,
+				}).Where(p => Compatible(mode, p)).ToArray();
 				for (var i = 0; i < presets.Length; i++)
 				{
 					var choice = presets[i];
-					Button(Title(choice), i % 3 * 270, 65 + i / 3 * 65, 250,
-						() => { preset = choice; customize = false; ResetOptions(); stage = 3; Show(); });
+					content.AddChild(new SkirmishPresetButtonWidget(modData, choice)
+					{
+						Bounds = new WidgetBounds(i % 3 * 270, 76 + i / 3 * 102, 250, 100),
+						GetText = () => Title(choice), IsDisabled = () => busy,
+						IsHighlighted = () => !customize && preset == choice,
+						OnClick = () => { preset = choice; customize = false; ResetOptions(); Show(); },
+					});
 				}
-				Button("Customize", 270, 300, 250, () =>
+				Button("Custom Map Parameters", 135, 385, 250, () =>
 				{
-					if (!Compatible(mode, preset)) preset = MapGenerationPreset.MountainValleys;
-					customize = true; ResetOptions(); stage = 3; Show();
+					if (!customSettings.Compatible(mode)) customSettings = new CustomMapSettings();
+					customize = true; ResetOptions(); stage = 2; Show();
 				});
+				Button("Hand Made Map", 405, 385, 250, ChooseMap);
 			}
+			else ShowCustomization();
+		}
+
+		void ChangeCustom(Action change)
+		{
+			var previous = customSettings.Copy();
+			change();
+			if (!customSettings.Compatible(mode))
+			{
+				customSettings = previous;
+				status = "This topology combination is unavailable in Strategic mode.";
+				return;
+			}
+			if (previous.Topology != customSettings.Topology || previous.HasCenter != customSettings.HasCenter)
+				customSettings.ResetCenterDefault();
+			var oldOptions = options;
+			ResetOptions();
+			options.Seed = oldOptions.Seed;
+			if (previous.Topology == customSettings.Topology && customSettings.Topology != CustomTopology.Islands)
+			{
+				options.Resources = oldOptions.Resources;
+				options.FiniteResources = oldOptions.FiniteResources;
+				options.TechBuildings = oldOptions.TechBuildings;
+			}
+			if (previous.Topology == CustomTopology.Islands && customSettings.Topology == CustomTopology.Islands)
+			{
+				options.Resources = oldOptions.Resources;
+				options.FiniteResources = oldOptions.FiniteResources;
+				if (oldOptions.TechBuildings == TechBuildingDensity.None) options.TechBuildings = TechBuildingDensity.None;
+				if (options.Resources == ResourceFieldLayout.None) options.FiniteResources = true;
+			}
+			Show();
+		}
+
+		void ShowCustomization()
+		{
+			DropDown("Players (automatic size)", 38, new[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16 }, () => players,
+				value => { var old = options; players = value; ResetOptions(); old.Players = players; old.Width = options.Width; old.Height = options.Height; options = old; Show(); });
+			DropDown("Archetype", 76, Enum.GetValues<CustomTopology>().Where(t => mode != GeneratedMapMode.Strategic || t != CustomTopology.Islands).ToArray(),
+				() => customSettings.Topology, t => ChangeCustom(() => customSettings.Topology = t));
+			if (customSettings.Topology == CustomTopology.Strongholds)
+			{
+				DropDown("Subtype", 114, Enum.GetValues<StrongholdSubtype>(), () => customSettings.Strongholds, t => ChangeCustom(() => customSettings.Strongholds = t));
+				Check("Connected Start Areas", 194, () => customSettings.ConnectedStartAreas, () => ChangeCustom(() => customSettings.ConnectedStartAreas = !customSettings.ConnectedStartAreas));
+				Check("Battle in the Center", 228, () => customSettings.BattleInTheCenter, () => ChangeCustom(() => customSettings.BattleInTheCenter = !customSettings.BattleInTheCenter));
+			}
+			else if (customSettings.Topology == CustomTopology.OpenPlains)
+				DropDown("Subtype", 114, Enum.GetValues<PlainsSubtype>(), () => customSettings.Plains, t => ChangeCustom(() => customSettings.Plains = t));
 			else
 			{
-				DropDown("Players (automatic size)", 42, new[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16 }, () => players,
-					value =>
-					{
-						var previous = options;
-						players = value; ResetOptions();
-						previous.Players = players; previous.Width = options.Width; previous.Height = options.Height;
-						options = previous; Show();
-					});
-				Label($"{options.Width} x {options.Height} / 2 teams / seed {options.Seed}", 220, 75);
-				if (customize)
-				{
-					DropDown("Archetype", 110, Enum.GetValues<MapArchetype>().Where(a => Enum.GetValues<MapGenerationPreset>().Any(p => Compatible(mode, p) && new MapGenerationOptions { Preset = p }.Archetype == a)).ToArray(), () => options.Archetype, value =>
-					{
-						var candidate = Enum.GetValues<MapGenerationPreset>().FirstOrDefault(p => Compatible(mode, p) && new MapGenerationOptions { Preset = p }.Archetype == value);
-						if (new MapGenerationOptions { Preset = candidate }.Archetype != value) { status = "This archetype is unavailable in Strategic mode."; return; }
-						preset = candidate; ResetOptions(); Show();
-					});
-					DropDown("Preset", 148, Enum.GetValues<MapGenerationPreset>().Where(p => Compatible(mode, p) && new MapGenerationOptions { Preset = p }.Archetype == options.Archetype).ToArray(),
-						() => preset, value => { preset = value; ResetOptions(); Show(); });
-					if (preset != MapGenerationPreset.Migration)
-					{
-						DropDown("Resources", 186, Enum.GetValues<ResourceFieldLayout>(), () => options.Resources, value => options.Resources = value);
-						Check("Finite resources (no generators)", 224, () => options.FiniteResources, () => options.FiniteResources = !options.FiniteResources);
-						Check("Tech buildings", 258, () => options.TechBuildings != TechBuildingDensity.None,
-							() => options.TechBuildings = options.TechBuildings == TechBuildingDensity.None ? TechBuildingDensity.Sparse : TechBuildingDensity.None);
-						if (options.Archetype == MapArchetype.OpenPlains)
-							Check("Mountain lines", 292, () => options.MountainLines, () => options.MountainLines = !options.MountainLines);
-					}
-					else Label("Migration: central Glitter, finite resources, six oil derricks/player", 0, 200);
-				}
-				else Label("Preset: " + Title(preset), 0, 120);
-				Button("Generate and enter lobby", 220, 355, 400, Generate);
+				DropDown("Subtype", 114, Enum.GetValues<IslandSubtype>(), () => customSettings.Islands, t => ChangeCustom(() => customSettings.Islands = t));
+				Check("Connections", 194, () => customSettings.Connections, () => ChangeCustom(() => customSettings.Connections = !customSettings.Connections));
 			}
+			if (customSettings.HasCenter)
+				Check("Center buildable", 262, () => customSettings.CenterBuildable, () => ChangeCustom(() => customSettings.CenterBuildable = !customSettings.CenterBuildable));
+			DropDown("Resources", 152, Enum.GetValues<ResourceFieldLayout>(), () => options.Resources, value =>
+			{
+				options.Resources = value;
+				if (value == ResourceFieldLayout.None) options.FiniteResources = true;
+			});
+			Check("Finite resources (no generators)", 296, () => options.FiniteResources, () => { if (options.Resources != ResourceFieldLayout.None) options.FiniteResources = !options.FiniteResources; });
+			Check("Tech buildings", 330, () => options.TechBuildings != TechBuildingDensity.None,
+				() => options.TechBuildings = options.TechBuildings != TechBuildingDensity.None ? TechBuildingDensity.None :
+					customSettings.Topology == CustomTopology.Islands && options.Preset != MapGenerationPreset.Continents ? TechBuildingDensity.Dense : TechBuildingDensity.Sparse);
+			Label($"{options.Width} x {options.Height} / 2 teams / seed {options.Seed}", 220, 355, 590);
+			Button("Generate and enter lobby", 220, 385, 400, Generate);
 		}
 
 		void ChooseMap()
 		{
 			var pool = new HashSet<string>(modData.MapCache.Where(m => m.Status == MapStatus.Available &&
 				m.Visibility.HasFlag(MapVisibility.Lobby) && Matches(m)).Select(m => m.Uid));
-			if (pool.Count == 0) { status = "No installed maps match " + mode + ". Use Normal Map to generate one."; return; }
+			if (pool.Count == 0) { status = "No installed maps match " + mode + ". Select a preset to generate one."; return; }
 			// Reuse the engine's restricted-map-pool support, including its random selector.
 			Game.OpenWindow("MAPCHOOSER_PANEL", new WidgetArgs
 			{
@@ -227,7 +292,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		void Generate()
 		{
 			busy = true;
-			status = "Generating and validating map...";
+			status = "Generating temporary map (removed when exiting the game)...";
 			// Export uses engine resources: keep it on the game thread, after the UI updates.
 			Game.RunAfterDelay(100, () =>
 			{
@@ -235,7 +300,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				{
 					var folder = modData.MapCache.MapLocations.First(p => p.Value == MapClassification.User);
 					var plan = MapPlanGenerator.Generate(options);
-					var path = new RubberduckMapExporter(modData).Export(plan, options, folder.Key.Name);
+					var path = new RubberduckMapExporter(modData).Export(plan, options, folder.Key.Name, temporary: true);
+					TemporaryGeneratedMaps.Register(path);
 					modData.MapCache.LoadMap(Path.GetFileName(path), folder.Key, folder.Value, modData.Manifest.Get<MapGrid>(), null);
 					var map = modData.MapCache.First(m => m.Status == MapStatus.Available && string.Equals(Path.GetFullPath(m.PackageName), Path.GetFullPath(path), StringComparison.OrdinalIgnoreCase));
 					Ui.CloseWindow();

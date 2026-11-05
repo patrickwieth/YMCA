@@ -18,8 +18,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 		const ushort Dirt = 1030;
 		const ushort WaterA = 1050;
 		const ushort MountainInterior = 3992;
-		const byte OreResource = 1;
-		const byte GemResource = 2;
+		const byte TiberiumResource = 3;
+		const byte BlueTiberiumResource = 4;
 
 		readonly ModData modData;
 
@@ -28,7 +28,35 @@ namespace OpenRA.Mods.CA.MapGeneration
 			this.modData = modData;
 		}
 
-		public string Export(MapPlan plan, MapGenerationOptions options, string outputDirectory)
+		internal static void ValidateTwoSidesCoasts(MapPlan plan, MapGenerationOptions options)
+		{
+			// Preflight the actual physical coast planner before accepting a layout.
+			// In particular, a clipped boundary must not isolate a last land cell.
+			var mod = Game.ModData;
+			var height = mod.Manifest.Get<MapGrid>().MaximumTerrainHeight;
+			using var map = new Map(mod, (DefaultTerrain)mod.DefaultTerrainInfo[Tileset], plan.Width + 2, plan.Height + height + 2);
+			map.SetBounds(new PPos(1, 1 + height), new PPos(plan.Width, plan.Height + height));
+			foreach (var cell in map.AllCells) map.Tiles[cell] = new TerrainTile(GrassA, 0);
+			for (var y = 0; y < plan.Height; y++)
+				for (var x = 0; x < plan.Width; x++)
+				{
+					var uv = ToMapPosition(x, y, height);
+					var tile = plan.TerrainAt(x, y) switch
+					{
+						PlannedTerrain.Land => GrassA,
+						PlannedTerrain.Water => WaterA,
+						PlannedTerrain.ShallowWater => Sand,
+						_ => throw new InvalidOperationException("Unexpected raised terrain in Two Sides coast preflight."),
+					};
+					map.Tiles[uv] = new TerrainTile(tile, 0);
+					if (plan.HasFeature(x, y, PlannedFeature.RichResource)) map.Resources[uv] = new ResourceTile(BlueTiberiumResource, 3);
+					else if (plan.HasFeature(x, y, PlannedFeature.Resource)) map.Resources[uv] = new ResourceTile(TiberiumResource, 12);
+				}
+			var actors = CreateActors(map, plan, options, height).ToList();
+			RubberduckGeneratedRockCoasts.Apply(map, plan, actors, (x, y) => ToMapPosition(x, y, height).ToCPos(map), true);
+		}
+
+		public string Export(MapPlan plan, MapGenerationOptions options, string outputDirectory, bool temporary = false)
 		{
 			if (!(modData.DefaultTerrainInfo[Tileset] is DefaultTerrain terrainInfo))
 				throw new InvalidDataException($"Tileset '{Tileset}' does not use the expected terrain parser.");
@@ -39,11 +67,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var maximumHeight = modData.Manifest.Get<MapGrid>().MaximumTerrainHeight;
 			using (var map = new Map(modData, terrainInfo, plan.Width + 2, plan.Height + maximumHeight + 2))
 			{
-				map.Title = $"{options.Mode} {options.Preset} {options.Players}P {options.Seed}";
+				map.Title = $"{options.Mode} {options.Custom?.Description ?? options.Preset.DisplayName()} {options.Players}P {options.Seed}";
 				map.Author = "YMCA procedural map generator";
 				map.RequiresMod = "ca";
 				map.Categories = new[] { "Conquest", options.Mode.ToString() };
-				map.SetBounds(new PPos(1, 1 + maximumHeight), new PPos(plan.Width, plan.Height + maximumHeight));
+				map.SetBounds(new PPos(1 + plan.PlayableInset, 1 + maximumHeight + plan.PlayableInset),
+					new PPos(plan.Width - plan.PlayableInset, plan.Height + maximumHeight - plan.PlayableInset));
 				map.PlayerDefinitions = CreatePlayers(map, options).ToMiniYaml();
 
 				// The reserved projection border also needs complete ground tiles.
@@ -57,12 +86,13 @@ namespace OpenRA.Mods.CA.MapGeneration
 						var uv = ToMapPosition(x, y, maximumHeight);
 						map.Tiles[uv] = raisedCells[x, y]
 							? new TerrainTile(MountainInterior, 0)
-							: PickTerrainTile(plan, terrainInfo, x, y, maximumHeight, random);
+							: PickTerrainTile(plan, terrainInfo, x, y, maximumHeight, random, options.Preset == MapGenerationPreset.HillFortress,
+								options.Preset == MapGenerationPreset.BattleNexus, options.Custom);
 						map.Height[uv] = 0;
 						if (plan.HasFeature(x, y, PlannedFeature.RichResource))
-							map.Resources[uv] = new ResourceTile(GemResource, 3);
+							map.Resources[uv] = new ResourceTile(BlueTiberiumResource, 3);
 						else if (plan.HasFeature(x, y, PlannedFeature.Resource))
-							map.Resources[uv] = new ResourceTile(OreResource, 12);
+							map.Resources[uv] = new ResourceTile(TiberiumResource, 12);
 					}
 
 				ApplyAutoTile(map, plan, maximumHeight);
@@ -76,6 +106,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 						for (var x = 0; x < plan.Width; x++)
 							if (raisedCells[x, y] && !plan.PlateauSurfaces.ContainsKey(new MPos(x, y)))
 								mountains.Add(ToMapPosition(x, y, maximumHeight).ToCPos(map));
+					if (options.Preset == MapGenerationPreset.MountainValleys && mountains.Count != 0)
+						throw new InvalidDataException("Mountain Valleys contains an unplanned rock wall; legacy rendering is forbidden.");
 					foreach (var cell in mountains)
 						if (map.Tiles[cell].Type != MountainInterior || map.Resources[cell].Type != 0)
 							throw new InvalidDataException("Mountain rendering may only elevate existing blocked, resource-free terrain.");
@@ -99,7 +131,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 					}
 				}
 				var coastSegments = RubberduckGeneratedRockCoasts.Apply(map, plan, actors,
-					(x, y) => ToMapPosition(x, y, maximumHeight).ToCPos(map));
+					(x, y) => ToMapPosition(x, y, maximumHeight).ToCPos(map), options.Preset == MapGenerationPreset.TwoSides);
 				if (coastSegments != 0) Console.WriteLine($"Flat rock coast: {coastSegments} protected-topology segments.");
 				RubberduckBridgeExporter.Apply(map, plan, actors, maximumHeight);
 				map.ActorDefinitions = actors;
@@ -107,10 +139,14 @@ namespace OpenRA.Mods.CA.MapGeneration
 				var modePrefix = options.Mode == GeneratedMapMode.Tactical
 					? ""
 					: options.Mode.ToString().ToLowerInvariant() + "-";
-				var filename = $"{modePrefix}{PresetName(options.Preset)}-players-{options.Players}-seed-{options.Seed}.oramap";
+				var filename = temporary ? TemporaryGeneratedMapFiles.NewFilename() :
+					$"{modePrefix}{PresetName(options.Preset)}-players-{options.Players}-seed-{options.Seed}.oramap";
 				var path = Path.Combine(outputDirectory, filename);
 				if (File.Exists(path))
+				{
+					if (temporary) throw new IOException("Temporary map filename already exists: " + path);
 					File.Delete(path);
+				}
 				using (var package = ZipFileLoader.Create(path))
 					map.Save(package);
 
@@ -132,7 +168,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 		static MapPlayers CreatePlayers(Map map, MapGenerationOptions options)
 		{
 			var players = new MapPlayers(map.Rules, options.Players);
-			if (options.Mode != GeneratedMapMode.Strategic)
+			if (options.Mode != GeneratedMapMode.Strategic && options.Preset != MapGenerationPreset.TwoSides)
 				return players;
 
 			var firstTeamPlayers = (options.Players + 1) / 2;
@@ -148,7 +184,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 		}
 
 		static TerrainTile PickTerrainTile(
-			MapPlan plan, DefaultTerrain terrainInfo, int x, int y, int maximumHeight, MersenneTwister random)
+			MapPlan plan, DefaultTerrain terrainInfo, int x, int y, int maximumHeight, MersenneTwister random, bool centeredDirt, bool fullCenterDirt, CustomMapSettings custom)
 		{
 			ushort template;
 			switch (plan.TerrainAt(x, y))
@@ -159,7 +195,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 				case PlannedTerrain.ShallowWater:
 					// The actor supplies the intact crossing. Destruction must expose
 					// actual water, not the old indestructible sand causeway.
-					template = plan.HasFeature(x, y, PlannedFeature.DestructibleBridge) ? WaterA : Sand;
+					template = plan.HasFeature(x, y, PlannedFeature.DestructibleBridge) ? WaterA :
+						custom?.HasCenter == true && plan.HasFeature(x, y, PlannedFeature.ContestedCenter) ? (custom.CenterBuildable ? GrassA : Dirt) : Sand;
 					break;
 				case PlannedTerrain.Mountain:
 					template = MountainInterior;
@@ -167,7 +204,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 				default:
 					if (plan.HasFeature(x, y, PlannedFeature.DestructibleBridge))
 						template = GrassA;
-					else if (plan.HasFeature(x, y, PlannedFeature.ContestedCenter) && IsDirtPatch(plan.Seed, x, y))
+					else if (custom != null && plan.HasFeature(x, y, PlannedFeature.ContestedCenter))
+						template = custom.HasCenter && !custom.CenterBuildable ? Dirt : GrassA;
+					else if (plan.HasFeature(x, y, PlannedFeature.ContestedCenter) &&
+						(fullCenterDirt || (centeredDirt ? IsCenteredDirtPatch(plan, x, y) : IsDirtPatch(plan.Seed, x, y))))
 						template = Dirt;
 					else
 						template = GrassA;
@@ -176,6 +216,15 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 			var count = terrainInfo.Templates[template].TilesCount;
 			return new TerrainTile(template, (byte)random.Next(Math.Max(1, count)));
+		}
+
+		static bool IsCenteredDirtPatch(MapPlan plan, int x, int y)
+		{
+			// A compact copy of the already centered contested ellipse, not a
+			// seed-phased noise slice that can leave only its far right edge.
+			var cx = (plan.Width - 1) / 2.0; var cy = (plan.Height - 1) / 2.0;
+			return plan.HasFeature((int)Math.Round(cx + (x - cx) / 0.65),
+				(int)Math.Round(cy + (y - cy) / 0.65), PlannedFeature.ContestedCenter);
 		}
 
 		static bool IsDirtPatch(int seed, int x, int y)
@@ -212,7 +261,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 					if (!autoTile.IsAutoTileTemplate(current.Type))
 						continue;
 					var resolved = autoTile.ResolveTemplate(map, uv.ToCPos(map));
-					if (resolved != current.Type)
+					// Native runtime/editor joins replace rectangular grass/sand and grass/dirt masks.
+					if (resolved != current.Type && !RubberduckShoreTopology.IsLegacyGrassSand(resolved) && !RubberduckShoreTopology.IsLegacyGrassDirt(resolved))
 						updates.Add((uv, resolved));
 				}
 
@@ -251,7 +301,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 					if (plan.HasFeature(x, y, PlannedFeature.TechBuilding))
 						AddActor(actors, map, "oilb", new PlanPoint(x, y), maximumHeight);
 					if (plan.HasFeature(x, y, PlannedFeature.ResourceGenerator))
-						AddActor(actors, map, "mine", new PlanPoint(x, y), maximumHeight);
+						AddActor(actors, map, options.Preset == MapGenerationPreset.BattleNexus && plan.HasFeature(x, y, PlannedFeature.ContestedCenter)
+							? "splitblue" : "split2", new PlanPoint(x, y), maximumHeight);
 				}
 			return actors;
 		}
@@ -287,7 +338,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		static string PresetName(MapGenerationPreset preset)
 		{
-			var name = preset.ToString();
+			var name = preset.DisplayName();
 			var result = new List<char>();
 			for (var i = 0; i < name.Length; i++)
 			{

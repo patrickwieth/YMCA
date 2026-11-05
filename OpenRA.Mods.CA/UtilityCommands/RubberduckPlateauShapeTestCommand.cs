@@ -40,7 +40,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			Add("Spawn1", "mpspawn", new MPos(90, 110).ToCPos(map));
 			Add("ProtectedRefinery", "proc", Second(map));
 			map.ActorDefinitions = actors;
-			for (var x = -1; x <= 1; x++) for (var y = -1; y <= 1; y++) map.Resources[First(map) + new CVec(x, y)] = new ResourceTile(1, 5);
+			for (var x = -1; x <= 1; x++) for (var y = -1; y <= 1; y++) map.Resources[First(map) + new CVec(x, y)] = new ResourceTile(3, 5);
 			var report = new StringBuilder();
 			void Reject(IEnumerable<CPos> stroke, bool grow, string label)
 			{

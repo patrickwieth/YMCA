@@ -1,5 +1,7 @@
 Derived wall-plane projection, not untouched native cliff templates. Original silhouettes and shared depth clipping retained; no terrain/collision edits.
 Source grassland/grassland_1x1.png SHA256 3B20F2709F2CF559D658E3C44DAA8B1461CD86FBA8A0D9D95CCC0F3EA2A8E8C3
-Donors: 5..7, 0..2, 12..14, 8..10. Plane-interior projection, horizontal 20..80 percent and vertical 10..90 percent sampling to exclude silhouette bevels, nearest opaque same-row relief samples (up to 16 rows of bounded fallback for empty relief rows). No ruin assets.
-49920 sampled pixels; all 12 alpha masks match the established full-height wall geometry.
-Output SHA256 FEF20DE598F5FCB225B867757E7EA96430C2F6CF068B0E6DFBA0CE03AB8EEE93
+Donors: 5..7, 0..2, 12..14, 8..10. Plane-interior projection, three horizontal windows (17..77, 20..80, 23..83 percent) and three vertical windows (5..70, 15..80, 25..90 percent) sampling to exclude silhouette bevels, nearest opaque same-row relief samples (up to 16 rows of bounded fallback for empty relief rows). No ruin assets.
+149760 sampled pixels; all 36 alpha masks match the established full-height wall geometry. Corner overlays use original slot 24/16 wall samples with a 12-pixel alpha fade inside the same wall mask; no silhouette expansion. Shared runtime/editor topology chooses convex/concave overlays.
+Output SHA256 355FCD73119109DBD0C52D520C5C91318C9BF6B92606DCA9F10174F9AB68C791
+Corner output SHA256 271EEF3032CA86692A4787F820F912AE22AF566E43FBBD84F461D0EEB47E9239
+Rear-contact follow-up: rear faces and rear corner overlays sample exposed front stone (slots 0..2 and 5..7), not opaque backface matte. Original front RGBA, all alpha masks and transparent pixels are validated unchanged.

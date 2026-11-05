@@ -8,6 +8,13 @@ namespace OpenRA.Mods.CA.MapGeneration
 	{
 		const int MaximumAttempts = 32;
 
+		static bool Reject(string reason)
+		{
+			if (Environment.GetEnvironmentVariable("YMCA_MAPGEN_DIAGNOSTICS") == "1")
+				Console.Error.WriteLine("Rejected Plains layout: " + reason);
+			return false;
+		}
+
 		public MapPlan Generate(MapGenerationOptions options)
 		{
 			options.Validate();
@@ -28,7 +35,9 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		static bool TryGenerate(MapPlan plan, MapGenerationOptions options, MersenneTwister random)
 		{
-			var slots = PlayerSpawnLayout.Create(plan, options.Players, 10, random);
+			var slots = options.Preset == MapGenerationPreset.WaterBasins && options.Mode == GeneratedMapMode.Strategic
+				? WaterBasinsStrategicPlanner.CreateStarts(plan, options.Players)
+				: PlayerSpawnLayout.Create(plan, options.Players, 10, random);
 			plan.SymmetrySlotCount = slots.Count;
 			foreach (var slot in slots)
 				PaintDisk(plan, slot, 10, (x, y) => plan.AddFeature(x, y, PlannedFeature.BuildClearance));
@@ -41,19 +50,38 @@ namespace OpenRA.Mods.CA.MapGeneration
 				plan.AddFeature(spawn.X, spawn.Y, PlannedFeature.Spawn);
 			}
 
+			if (options.Preset == MapGenerationPreset.Arabia && options.Resources == ResourceFieldLayout.Patches &&
+				options.Mode == GeneratedMapMode.Strategic)
+			{
+				// Reserve objectives first: the legacy post-pass cleared pieces of deposits.
+				plan.PreserveObjectiveTerrain = true;
+				StrategicCheckpointPlanner.OrderSpawns(plan.Spawns, options.Players);
+				if (!StrategicCheckpointPlanner.ReserveFront(plan, options, reserveCorridor: false)) return Reject("front geometry");
+			}
+
 			if (options.MountainLines)
 			{
 				if (!PlaceResources(plan, options, slots, random))
 					return false;
-				PlaceMountainLines(plan, options.Players, random);
+				if (options.Preset == MapGenerationPreset.Arabia)
+				{
+					if (!ArabiaMountainPlanner.Place(plan, options.Players, random)) return false;
+				}
+				else PlaceMountainLines(plan, options.Players, random);
+				// Existing native Arabia contours are a no-op; custom raw mountain
+				// lines use the same fitter and must respect the reserved economy.
+				if (!RubberduckMountainTopology.Prepare(plan)) return false;
 			}
 			else
 			{
-				if (options.WaterPatches && !PlaceWaterBasins(plan, options.Players, random))
+				if (options.WaterPatches && !PlaceWaterBasins(plan, options.Players, random,
+					options.Preset == MapGenerationPreset.WaterBasins && options.Mode == GeneratedMapMode.Strategic ? 2 : PlayerSpawnLayout.SymmetryOrder(options.Players)))
 					return false;
 				// Reserve coast geometry before scattering Glitter, instead of later
 				// deleting resources or rejecting every shoreline as occupied.
 				RubberduckCoastTopology.Mark(plan, options);
+				if (options.Preset == MapGenerationPreset.WaterBasins && options.Mode == GeneratedMapMode.Strategic &&
+					!WaterBasinsStrategicPlanner.Reserve(plan, options)) return false;
 				if (!PlaceResources(plan, options, slots, random))
 					return false;
 			}
@@ -123,9 +151,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 			return false;
 		}
 
-		static bool PlaceWaterBasins(MapPlan plan, int playerCount, MersenneTwister random)
+		static bool PlaceWaterBasins(MapPlan plan, int playerCount, MersenneTwister random, int symmetryOrder)
 		{
-			var symmetryOrder = PlayerSpawnLayout.SymmetryOrder(playerCount);
 			var minimumGroups = (playerCount + symmetryOrder - 1) / symmetryOrder;
 			var targetWaterCells = (int)Math.Ceiling(plan.Width * plan.Height * 0.1);
 			var centerX = (plan.Width - 1) / 2.0;
@@ -227,29 +254,38 @@ namespace OpenRA.Mods.CA.MapGeneration
 			{
 				for (var y = 0; y < plan.Height; y++)
 					for (var x = 0; x < plan.Width; x++)
-						if (plan.TerrainAt(x, y) == PlannedTerrain.Land &&
+						if (plan.TerrainAt(x, y) == PlannedTerrain.Land && !plan.StrategicReservations.Contains(new MPos(x, y)) &&
 							!plan.HasFeature(x, y, PlannedFeature.BuildClearance | PlannedFeature.CliffShore) && random.Next(100) < 78)
 							plan.AddFeature(x, y, PlannedFeature.Resource);
 			}
 			else if (options.Resources == ResourceFieldLayout.Patches)
 			{
-				if (!PlaceRotatedPatchGroup(plan, symmetrySlots, random.Next(5, 8), 18, 24,
-					Math.PI, !options.FiniteResources, random) ||
+				// Plains (including custom Flat/Rocky) owns this starting economy policy.
+				// Water Basins shares this generator but retains its separate placement.
+				var closeStartingFields = options.Preset == MapGenerationPreset.Arabia;
+				var startingRadius = random.Next(5, 8);
+				if (!PlaceRotatedPatchGroup(plan, symmetrySlots, startingRadius,
+					closeStartingFields ? startingRadius + 11 : 18, closeStartingFields ? startingRadius + 13 : 24,
+					Math.PI, !options.FiniteResources, random, closeStartingFields) ||
 					!PlaceRotatedPatchGroup(plan, symmetrySlots, random.Next(4, 7), 28, 37,
-						Math.PI, !options.FiniteResources, random))
-					return false;
+						Math.PI, !options.FiniteResources, random, expansionField: closeStartingFields))
+					return Reject("patch placement");
 			}
 			return true;
 		}
 
 		static bool PlaceRotatedPatchGroup(
 			MapPlan plan, List<PlanPoint> slots, int radius, int minimumDistance, int maximumDistance,
-			double angleVariation, bool addGenerators, MersenneTwister random)
+			double angleVariation, bool addGenerators, MersenneTwister random, bool startingField = false, bool expansionField = false)
 		{
 			var mapCenterX = (plan.Width - 1) / 2.0;
 			var mapCenterY = (plan.Height - 1) / 2.0;
-			for (var attempt = 0; attempt < 1000; attempt++)
+			for (var attempt = 0; attempt <= 1000; attempt++)
 			{
+				// Native-distance ownership and fixed objective pads may rule out a
+				// common rotation. Replan whole equal-sized fields, never relax access.
+				var independent = attempt == 1000;
+				if (independent && !(startingField || expansionField)) return false;
 				var distance = minimumDistance + random.NextFloat() * (maximumDistance - minimumDistance);
 				var angleOffset = Math.PI + (random.NextFloat() - 0.5) * angleVariation * 2;
 				var centers = new List<PlanPoint>();
@@ -257,22 +293,35 @@ namespace OpenRA.Mods.CA.MapGeneration
 				foreach (var slot in slots)
 				{
 					var radialAngle = Math.Atan2(slot.Y - mapCenterY, slot.X - mapCenterX);
-					var angle = radialAngle + angleOffset;
-					var center = new PlanPoint(
-						(int)Math.Round(slot.X + Math.Cos(angle) * distance),
-						(int)Math.Round(slot.Y + Math.Sin(angle) * distance));
-					if (!CanPlacePatch(plan, center, radius) || !SeparatedFrom(centers, center, radius * 2 + 3))
+					var found = false;
+					for (var candidate = 0; candidate < (independent ? 1000 : 1); candidate++)
 					{
-						valid = false;
-						break;
+						if (independent)
+						{
+							distance = minimumDistance + random.NextFloat() * (maximumDistance - minimumDistance);
+							angleOffset = Math.PI + (random.NextFloat() - 0.5) * angleVariation * 2;
+						}
+						var angle = radialAngle + angleOffset;
+						var center = new PlanPoint(
+							(int)Math.Round(slot.X + Math.Cos(angle) * distance),
+							(int)Math.Round(slot.Y + Math.Sin(angle) * distance));
+						if (!CanPlacePatch(plan, center, radius, startingField || expansionField) || !SeparatedFrom(centers, center, radius * 2 + 3) ||
+							(startingField ? !StartingPatchFits(plan, slots, slot, center, radius) :
+								expansionField && !SeparatedFrom(slots, center, radius + 16))) continue;
+						centers.Add(center); found = true; break;
 					}
-					centers.Add(center);
+					if (!found) { valid = false; break; }
 				}
 
 				if (!valid)
 					continue;
-				foreach (var center in centers)
+				for (var i = 0; i < centers.Count; i++)
 				{
+					var center = centers[i];
+					// Reserve a broad direct approach before rocky terrain is planned.
+					if (startingField)
+						foreach (var cell in StartingApproach(slots[i], center))
+							plan.AddFeature(cell.X, cell.Y, PlannedFeature.Entrance);
 					PaintDisk(plan, center, radius, (x, y) => plan.AddFeature(x, y, PlannedFeature.Resource));
 					if (addGenerators)
 						plan.AddFeature(center.X, center.Y, PlannedFeature.ResourceGenerator);
@@ -281,6 +330,39 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}
 
 			return false;
+		}
+
+		static bool StartingPatchFits(MapPlan plan, List<PlanPoint> slots, PlanPoint start, PlanPoint center, int radius)
+		{
+			for (var y = center.Y - radius; y <= center.Y + radius; y++)
+				for (var x = center.X - radius; x <= center.X + radius; x++)
+				{
+					if ((x - center.X) * (x - center.X) + (y - center.Y) * (y - center.Y) > radius * radius) continue;
+					// Native ground distance: an MPos column is twice as wide as a row.
+					var ownDistance = Math.Sqrt(2.0 * (x - start.X) * (x - start.X) + 0.5 * (y - start.Y) * (y - start.Y));
+					foreach (var other in slots)
+					{
+						if (other.X == start.X && other.Y == start.Y) continue;
+						if (Math.Sqrt(2.0 * (x - other.X) * (x - other.X) + 0.5 * (y - other.Y) * (y - other.Y)) < ownDistance + 3)
+							return false;
+					}
+				}
+			foreach (var cell in StartingApproach(start, center))
+				if (!plan.IsTraversable(cell.X, cell.Y) || plan.TerrainAt(cell.X, cell.Y) != PlannedTerrain.Land) return false;
+			return true;
+		}
+
+		static IEnumerable<PlanPoint> StartingApproach(PlanPoint start, PlanPoint center)
+		{
+			var steps = Math.Max(Math.Abs(center.X - start.X), Math.Abs(center.Y - start.Y));
+			for (var i = 0; i <= steps; i++)
+			{
+				var x = start.X + (int)Math.Round((center.X - start.X) * (double)i / steps);
+				var y = start.Y + (int)Math.Round((center.Y - start.Y) * (double)i / steps);
+				for (var dx = -2; dx <= 2; dx++)
+					for (var dy = -2; dy <= 2; dy++)
+						if (dx * dx + dy * dy <= 4) yield return new PlanPoint(x + dx, y + dy);
+			}
 		}
 
 		static bool SeparatedFrom(List<PlanPoint> points, PlanPoint candidate, int minimumDistance)
@@ -295,17 +377,23 @@ namespace OpenRA.Mods.CA.MapGeneration
 			return true;
 		}
 
-		static bool CanPlacePatch(MapPlan plan, PlanPoint center, int radius)
+		static bool CanPlacePatch(MapPlan plan, PlanPoint center, int radius, bool separateFields)
 		{
 			for (var y = center.Y - radius; y <= center.Y + radius; y++)
 				for (var x = center.X - radius; x <= center.X + radius; x++)
 				{
 					if ((x - center.X) * (x - center.X) + (y - center.Y) * (y - center.Y) > radius * radius)
 						continue;
-					if (!plan.Contains(x, y) || plan.TerrainAt(x, y) != PlannedTerrain.Land ||
+					if (!plan.Contains(x, y) || plan.TerrainAt(x, y) != PlannedTerrain.Land || plan.StrategicReservations.Contains(new MPos(x, y)) ||
 						plan.HasFeature(x, y, PlannedFeature.Resource | PlannedFeature.BuildClearance))
 						return false;
 				}
+			if (!separateFields) return true;
+			// Keep separate deposits visually separate, including between patch groups.
+			for (var y = center.Y - radius - 2; y <= center.Y + radius + 2; y++)
+				for (var x = center.X - radius - 2; x <= center.X + radius + 2; x++)
+					if ((x - center.X) * (x - center.X) + (y - center.Y) * (y - center.Y) <= (radius + 2) * (radius + 2) &&
+						plan.Contains(x, y) && plan.HasFeature(x, y, PlannedFeature.Resource)) return false;
 			return true;
 		}
 
@@ -324,8 +412,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 				{
 					var x = random.Next(8, plan.Width - 8);
 					var y = random.Next(8, plan.Height - 8);
-					if (plan.TerrainAt(x, y) != PlannedTerrain.Land ||
-						plan.HasFeature(x, y, PlannedFeature.BuildClearance | PlannedFeature.TechBuilding |
+					if (plan.TerrainAt(x, y) != PlannedTerrain.Land || plan.StrategicReservations.Contains(new MPos(x, y)) ||
+						plan.HasFeature(x, y, PlannedFeature.BuildClearance | PlannedFeature.TechBuilding | PlannedFeature.Entrance |
 							PlannedFeature.ResourceGenerator))
 						continue;
 					plan.AddFeature(x, y, feature);
@@ -348,6 +436,9 @@ namespace OpenRA.Mods.CA.MapGeneration
 				{
 					if (plan.IsTraversable(x, y))
 						traversable++;
+					if (plan.HasFeature(x, y, PlannedFeature.Entrance) &&
+						(!plan.IsTraversable(x, y) || plan.HasFeature(x, y, PlannedFeature.TechBuilding)))
+						return false;
 					if (options.FiniteResources && plan.HasFeature(x, y, PlannedFeature.ResourceGenerator))
 						return false;
 				}
@@ -358,9 +449,14 @@ namespace OpenRA.Mods.CA.MapGeneration
 				(CountTerrainComponents(plan, PlannedTerrain.Water) < options.Players ||
 				CountTerrainCells(plan, PlannedTerrain.Water) < (int)Math.Ceiling(plan.Width * plan.Height * 0.1)))
 				return false;
+			if (plan.StrategicRoute.Count != 0)
+			{
+				try { StrategicCheckpointPlanner.ValidateReservedFront(plan, options); }
+				catch (InvalidOperationException e) { return Reject(e.Message); }
+			}
 			plan.ValidationMessages.Add("All player starts share one broad open land region.");
 			plan.ValidationMessages.Add("Local obstacles leave at least two thirds of the map traversable.");
-			if (options.MountainLines)
+			if (options.MountainLines && options.Preset != MapGenerationPreset.Arabia)
 				plan.ValidationMessages.Add("Mountain lines are placed in rotationally symmetric groups.");
 			if (options.WaterPatches)
 				plan.ValidationMessages.Add($"At least {options.Players} separate water basins cover at least 10% of the map.");

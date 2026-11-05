@@ -18,6 +18,7 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly bool ValidateHomeBase = false;
 		public readonly bool ValidateMaterialOcclusion = false;
 		public readonly bool ValidateMixedWater = false;
+		public readonly bool ValidateExtendedZoom = false;
 		public readonly bool ReportCliffGeometry = false;
 		public readonly string ResultPath = "";
 
@@ -30,6 +31,7 @@ namespace OpenRA.Mods.CA.Traits
 		int screenshotTicks;
 		WorldRenderer renderer;
 		bool deployed;
+		float initialMaximumZoom;
 
 		public TerrainCalibrationView(TerrainCalibrationViewInfo info)
 		{
@@ -53,6 +55,20 @@ namespace OpenRA.Mods.CA.Traits
 			}
 			if (--screenshotTicks == 0)
 			{
+				if (info.ValidateExtendedZoom)
+				{
+					var viewport = renderer.Viewport;
+					viewport.AdjustZoom(-100);
+					var minimum = viewport.Zoom;
+					if (Math.Abs(minimum - viewport.MinZoom / 3) > 0.00001f)
+						throw new InvalidOperationException("Extended zoom did not reach one third of the normal minimum.");
+					viewport.AdjustZoom(100);
+					if (Math.Abs(viewport.Zoom - initialMaximumZoom) > 0.00001f)
+						throw new InvalidOperationException("Extended zoom changed the maximum zoom-in.");
+					viewport.AdjustZoom(-100);
+					PlateauMovementProbe.WriteResult(info.ResultPath,
+						$"EXTENDED ZOOM PASS normal={viewport.MinZoom} expanded={minimum} maximum={initialMaximumZoom}");
+				}
 				if (info.ValidateMixedWater)
 					PlateauMovementProbe.WriteResult(info.ResultPath, self.Trait<RubberduckMaterialTransitions>().ValidateMixedWater());
 				if (info.ValidateMaterialOcclusion)
@@ -115,6 +131,12 @@ namespace OpenRA.Mods.CA.Traits
 		void IPostWorldLoaded.PostWorldLoaded(World world, WorldRenderer wr)
 		{
 			renderer = wr;
+			if (info.ValidateExtendedZoom)
+			{
+				initialMaximumZoom = wr.Viewport.MaxZoom;
+				if (Math.Abs(wr.Viewport.Zoom - wr.Viewport.MinZoom) > 0.00001f)
+					throw new InvalidOperationException("Extended zoom changed the initial camera scale.");
+			}
 			if (info.MinimumZoomScale > 0 && info.MinimumZoomScale < 1)
 				wr.Viewport.UnlockMinimumZoom(info.MinimumZoomScale);
 			if (info.ZoomScale > 0)

@@ -15,6 +15,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		public static Dictionary<string, byte[]> Export(Png source, string output, StringBuilder provenance)
 		{
+			provenance.AppendLine("Continuous .bank aliases reuse these PNGs unchanged; bank-plane projection and clipping are shared by runtime/editor. Low rear end/corner aliases also retain the bank band; see docs/two-sides-edge-coasts.md.");
 			var slots = new[] { 5, 0, 12, 8 };
 			var offsets = new[] { "64,64", "-64,64", "-64,-64", "64,-64" };
 			var images = new Dictionary<string, byte[]>();
@@ -89,6 +90,26 @@ namespace OpenRA.Mods.CA.MapGeneration
 				var actor = "terrain.rubberduck." + Path.GetFileNameWithoutExtension(filename);
 				rules.AppendLine($"{actor}:\n\tInherits: ^RubberduckRockCoast");
 				sequences.AppendLine($"{actor}:\n\tidle:\n\t\tFilename: bits/terrain/rubberduck/derived/coasts/{filename}");
+			}
+			rules.AppendLine("^RubberduckBankAlignedRearCoast:\n\tInherits: ^RubberduckRockCoast\n\t-WithSpriteBody:\n\tRockCoastBody:");
+			for (var direction = 0; direction < 4; direction++)
+				for (var variant = 0; variant < 3; variant++)
+				{
+					var actor = "terrain.rubberduck." + Name(direction, variant, 0);
+					rules.AppendLine($"{actor}.bank:\n\tInherits: ^RubberduckBankAlignedRearCoast");
+					sequences.AppendLine($"{actor}.bank:\n\tInherits: {actor}");
+				}
+			foreach (var slot in new[] { 24, 25, 26, 27, 28, 29, 30, 31 })
+			{
+				var actor = "terrain.rubberduck.coast-piece-" + slot;
+				rules.AppendLine($"{actor}.bank:\n\tInherits: ^RubberduckBankAlignedRearCoast");
+				sequences.AppendLine($"{actor}.bank:\n\tInherits: {actor}");
+			}
+			foreach (var direction in new[] { 2, 3 })
+			{
+				var actor = "terrain.rubberduck.coast-abutment-" + direction;
+				rules.AppendLine($"{actor}.bank:\n\tInherits: ^RubberduckBankAlignedRearCoast");
+				sequences.AppendLine($"{actor}.bank:\n\tInherits: {actor}");
 			}
 			File.WriteAllText(Path.Combine(output, "coast-rules.yaml"), rules.ToString());
 			File.WriteAllText(Path.Combine(output, "coast-sequences.yaml"), sequences.ToString());

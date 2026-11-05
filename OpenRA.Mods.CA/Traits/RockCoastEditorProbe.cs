@@ -308,7 +308,7 @@ namespace OpenRA.Mods.CA.Traits
 				if (!rolledBack) throw new InvalidOperationException("Missing coast rollback failure."); Check(before, "tile transaction rollback");
 				Ui.Root.Get<ButtonWidget>("ROCK_COAST").OnClick();
 				var brush = Ui.Root.Get<EditorViewportControllerWidget>("MAP_EDITOR").CurrentBrush as RockCoastBrush ?? throw new InvalidOperationException("Coast button failed.");
-				map.Resources[corner] = new ResourceTile(1, 5); var refused = false;
+				map.Resources[corner] = new ResourceTile(3, 5); var refused = false;
 				try { brush.CreateAction(corner); } catch (InvalidOperationException) { refused = true; }
 				map.Resources[corner] = default;
 				if (!refused) throw new InvalidOperationException("Coast ignored resource protection."); Check(before, "resource protection");
@@ -401,13 +401,13 @@ namespace OpenRA.Mods.CA.Traits
 					history.Undo(); Check(before, "freehand atomic undo");
 					history.Redo(); Check(drawn, "freehand exact redo");
 					history.Undo();
-					map.Resources[end] = new ResourceTile(1, 5);
+					map.Resources[end] = new ResourceTile(3, 5);
 					var protectedSnapshot = PlateauEditorProbe.Snapshot(map, layer);
 					DragInput(MouseInputEvent.Down, start); DragInput(MouseInputEvent.Up, end);
 					Check(protectedSnapshot, "freehand rejects entire resource-crossing stroke");
 					map.Resources[end] = default;
 					history.Redo(); Check(drawn, "restore freehand stroke for save/reload");
-					map.Resources[start] = new ResourceTile(1, 5);
+					map.Resources[start] = new ResourceTile(3, 5);
 					var refusedRemoval = false;
 					try { brush.RemoveAction(start); } catch (InvalidOperationException) { refusedRemoval = true; }
 					map.Resources[start] = default;
@@ -441,7 +441,7 @@ namespace OpenRA.Mods.CA.Traits
 					history.Undo(); Check(trimmed, "join exact undo");
 					history.Redo(); Check(joined, "join exact redo");
 					var extension = center + new CVec(12, 4);
-					map.Resources[extension] = new ResourceTile(1, 5); var guarded = PlateauEditorProbe.Snapshot(map, layer);
+					map.Resources[extension] = new ResourceTile(3, 5); var guarded = PlateauEditorProbe.Snapshot(map, layer);
 					DragInput(MouseInputEvent.Down, extension); DragInput(MouseInputEvent.Up, extension);
 					Check(guarded, "extension rejects resources without altering existing coast"); map.Resources[extension] = default;
 					DragInput(MouseInputEvent.Down, end); DragInput(MouseInputEvent.Up, extension);

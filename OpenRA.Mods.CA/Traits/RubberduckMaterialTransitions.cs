@@ -32,7 +32,7 @@ namespace OpenRA.Mods.CA.Traits
 		internal bool ApronOccluded(CPos cell) => apronLayer?.IsClipped(cell) ?? false;
 		World world;
 		WorldRenderer renderer;
-		Sprite empty;
+		Sprite empty, legacyGrassBase;
 		readonly bool nativeWater;
 		readonly bool authoredShores;
 		RubberduckAuthoredShoreLayer shoreLayer;
@@ -132,7 +132,7 @@ namespace OpenRA.Mods.CA.Traits
 		// cliff template 3992 as dirt: blending it would conceal blocked feet.
 		// Legacy water keeps its saved tile/index IDs, but shares spatial phases
 		// and shore masks with the corresponding marker family.
-		static int Material(ushort tile) => tile == 1000 || tile == 14012 ? 1 : tile == 1020 || tile == 14011 ? 2 : tile == 1050 || tile == 1070 || tile == 14010 ? 3 : tile == 1030 ? 4 : tile == 1010 ? 5 : tile == 1040 ? 6 : tile == 1060 || tile == 1080 ? 7 : 0;
+		static int Material(ushort tile) => tile == 1000 || tile == 14012 || RubberduckShoreTopology.IsLegacyGrassSand(tile) || RubberduckShoreTopology.IsLegacyGrassDirt(tile) ? 1 : tile == 1020 || tile == 14011 ? 2 : tile == 1050 || tile == 1070 || tile == 14010 ? 3 : tile == 1030 ? 4 : tile == 1010 ? 5 : tile == 1040 ? 6 : tile == 1060 || tile == 1080 ? 7 : 0;
 		static byte[] Frame(World world, string name)
 		{
 			var path = "ca|bits/terrain/rubberduck/" + name + ".png";
@@ -160,6 +160,8 @@ namespace OpenRA.Mods.CA.Traits
 				if (actor.OccupiesSpace == null || !map.Contains(actor.Location)) continue;
 				foreach (var body in actor.TraitsImplementing<NativeCliffBody>())
 					foreach (var sprite in body.Prepare(actor)) sheets.Add(sprite.Sheet);
+				foreach (var body in actor.TraitsImplementing<RockCoastBody>())
+					foreach (var sprite in body.Prepare(actor)) sheets.Add(sprite.Sheet);
 				foreach (var body in actor.TraitsImplementing<PlateauFaceBody>())
 					foreach (var sprite in body.Prepare(actor)) sheets.Add(sprite.Sheet);
 				if (++count % 128 == 0) Game.ModData.LoadScreen.Display();
@@ -182,6 +184,7 @@ namespace OpenRA.Mods.CA.Traits
 			if (nativeWater) waterPhases = LoadWaterPhases(world, "water_v01");
 			sheet = new SheetBuilder(SheetType.BGRA, 2048);
 			empty = sheet.Add(new byte[128 * 64 * 4], SpriteFrameType.Rgba32, new Size(128, 64));
+			legacyGrassBase = sheet.Add(grass, SpriteFrameType.Rgba32, new Size(128, 64), 1, float3.Zero);
 			layer = new RubberduckMaterialLayer(world, wr, empty, BlendMode.Alpha, world.Type != WorldType.Editor, cell => shoreLayer?.GroundExclusion(cell));
 			if (nativeWater) waterLayer = new RubberduckMaterialLayer(world, wr, empty, BlendMode.Alpha, world.Type != WorldType.Editor);
 			if (nativeWater && authoredShores) shoreLayer = new RubberduckAuthoredShoreLayer(world, wr);
@@ -302,10 +305,16 @@ namespace OpenRA.Mods.CA.Traits
 				if (material == 7 || secondaryWaterMask != 0 || shoreWater == 2) EnsureSecondaryWater();
 				if (secondaryWaterLayer != null) UpdateNativeWater(c, material == 7 || shoreWater == 2, secondaryWaterMask, true);
 			}
-			if (key == 0) { cellKeys.Remove(c); layer.Update(c, (Sprite)null, null); return; }
+			if (shoreLayer != null && material == 2 && (grassMask | grassBMask) != 0) key |= 1 << 24;
+			// Keep multi-material junctions on the existing blend; pure grass/dirt
+			// joins use native source silhouettes instead of rectangular masks.
+			if (shoreLayer != null && (material == 4 || material == 6) && (grassMask | grassBMask) != 0 && sandMask == 0 && dirtMask == 0)
+				key |= 1 << (material == 4 ? 25 : 26);
+			var baseSprite = RubberduckShoreTopology.IsLegacyGrassSand(map.Tiles[c].Type) || RubberduckShoreTopology.IsLegacyGrassDirt(map.Tiles[c].Type) ? legacyGrassBase : null;
+			if (key == 0) { cellKeys.Remove(c); layer.Update(c, baseSprite, null); return; }
 			cellKeys[c] = key;
-			var groundKey = nativeWater ? key & 0xFFFF0 : key;
-			layer.Update(c, groundKey == 0 ? null : SpriteFor(groundKey), null);
+			var groundKey = nativeWater ? key & 0x70FFFF0 : key;
+			layer.Update(c, groundKey == 0 ? baseSprite : SpriteFor(groundKey), null);
 		}
 
 		internal static bool IsApronDonor(Map map, CPos donor)
@@ -475,9 +484,9 @@ namespace OpenRA.Mods.CA.Traits
 			if (!sprites.TryGetValue(key, out var sprite))
 			{
 				// Match the depth slope of DefaultTileCache's flat terrain sprites.
-				sprite = sheet.Add(Blend(key & 15, key >> 4 & 15, key >> 8 & 15, key >> 12 & 15, key >> 16 & 15), SpriteFrameType.Rgba32, new Size(128, 64), 1, float3.Zero);
+				sprite = sheet.Add(Blend(key & 15, key >> 4 & 15, key >> 8 & 15, key >> 12 & 15, key >> 16 & 15, (key & (1 << 26)) != 0 ? 4 : (key & (1 << 25)) != 0 ? 3 : (key & (1 << 24)) != 0 ? 2 : 0), SpriteFrameType.Rgba32, new Size(128, 64), 1, float3.Zero);
 				sprites.Add(key, sprite);
-				if (sprites.Count > (nativeWater ? 624 : 1295)) throw new InvalidDataException("Material cache exceeded its neighborhood bound.");
+				if (sprites.Count > (nativeWater ? 864 : 1295)) throw new InvalidDataException("Material cache exceeded its neighborhood bound.");
 			}
 			return sprite;
 		}
@@ -495,6 +504,15 @@ namespace OpenRA.Mods.CA.Traits
 					if (value % radix != 0) key |= 1 << ((value % radix - (nativeWater ? 0 : 1)) * 4 + direction);
 				SpriteFor(key);
 			}
+			if (shoreLayer != null)
+				for (var materialBit = 24; materialBit <= 26; materialBit++)
+					for (var neighborhood = 1; neighborhood < 81; neighborhood++)
+					{
+						var value = neighborhood; var key = 1 << materialBit;
+						for (var direction = 0; direction < 4; direction++, value /= 3)
+							if (value % 3 != 0) key |= 1 << ((value % 3 == 1 ? 4 : 12) + direction);
+						SpriteFor(key);
+					}
 			if (nativeWater)
 				for (var phase = 0; phase < 36; phase++)
 					for (var coverage = 1; coverage <= 16; coverage++)
@@ -506,8 +524,11 @@ namespace OpenRA.Mods.CA.Traits
 			var sheets = 0;
 			foreach (var unused in sheet.AllSheets) sheets++;
 			var expectedWaterSprites = !nativeWater ? 0 : secondaryWaterLayer == null ? 576 : 1152;
-			if (sprites.Count != (nativeWater ? 624 : 1295) || waterSprites.Count != expectedWaterSprites || apronSprites.Count != 15 || sheets > 4)
-				throw new InvalidDataException("Material atlas packing exceeded its bound.");
+			// 864 ground + 1152 water + 15 apron frames exceed four 465-frame
+			// sheets only when both water families and all dry joins are precached.
+			var maxSheets = shoreLayer != null && secondaryWaterLayer != null ? 5 : 4;
+			if (sprites.Count != (nativeWater ? shoreLayer != null ? 864 : 624 : 1295) || waterSprites.Count != expectedWaterSprites || apronSprites.Count != 15 || sheets > maxSheets)
+				throw new InvalidDataException($"Material atlas packing exceeded its bound: {sprites.Count} ground, {waterSprites.Count} water, {apronSprites.Count} aprons, {sheets}/{maxSheets} sheets.");
 			var cacheMilliseconds = timer.ElapsedMilliseconds;
 			var cacheAllocations = GC.GetAllocatedBytesForCurrentThread() - allocated;
 			timer.Restart();
@@ -529,8 +550,9 @@ namespace OpenRA.Mods.CA.Traits
 			return t * t * (3 - 2 * t);
 		}
 
-		byte[] Blend(int waterMask, int grassMask, int sandMask, int grassBMask, int dirtMask)
+		byte[] Blend(int waterMask, int grassMask, int sandMask, int grassBMask, int dirtMask, int authoredMaterial = 0)
 		{
+			var cover = authoredMaterial != 0 ? shoreLayer.DryCover(authoredMaterial, grassMask | grassBMask) : null;
 			var data = new byte[128 * 64 * 4];
 			for (var y = 0; y < 64; y++)
 				for (var x = 0; x < 128; x++)
@@ -544,6 +566,17 @@ namespace OpenRA.Mods.CA.Traits
 					var w = water[i + 3] == 0 ? 0 : Alpha(waterMask, u, v, 0.24);
 					var g = grass[i + 3] == 0 ? 0 : Alpha(grassMask, u, v, 0.4) * (1 - w);
 					var gb = grassB[i + 3] == 0 ? 0 : Alpha(grassBMask, u, v, 0.4) * Math.Max(0, 1 - w - g);
+					if (cover != null)
+					{
+						// Authored diagonal corners replace the square cell-edge blend.
+						// Normalize antialiased outer pixels; shoreline exclusions still
+						// prevent this dry-material overlay from repainting any water.
+						var fullAlpha = authoredMaterial == 2 ? sand[i + 3] : dirt[i + 3];
+						var amount = fullAlpha == 0 ? 0 : Math.Clamp(1 - cover[i + 3] / (double)fullAlpha, 0, 1);
+						var total = g + gb;
+						g = amount * (total > 0 ? g / total : grassMask != 0 ? 1 : 0);
+						gb = amount - g;
+					}
 					var s = sand[i + 3] == 0 ? 0 : Alpha(sandMask, u, v, 0.4) * Math.Max(0, 1 - w - g - gb);
 					var d = dirt[i + 3] == 0 ? 0 : Alpha(dirtMask, u, v, 0.4) * Math.Max(0, 1 - w - g - gb - s);
 					var alpha = w + g + gb + s + d;
@@ -594,7 +627,7 @@ namespace OpenRA.Mods.CA.Traits
 			}
 			layer?.Dispose(); waterLayer?.Dispose(); secondaryWaterLayer?.Dispose(); apronLayer?.Dispose(); sheet?.Dispose();
 			layer = null; waterLayer = null; secondaryWaterLayer = null; apronLayer = null; sheet = null; map = null;
-			world = null; renderer = null; empty = null;
+			world = null; renderer = null; empty = null; legacyGrassBase = null;
 			sprites.Clear(); waterSprites.Clear(); apronSprites.Clear(); apronKeys.Clear(); apronCandidates.Clear(); apronDirty = false; cellKeys.Clear(); waterPhases = null; secondaryWaterPhases = null;
 		}
 	}

@@ -58,7 +58,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			if (options.TechBuildings == TechBuildingDensity.None && techBuildings != 0)
 				throw new InvalidOperationException("TechBuildings=None map contains Tech Buildings.");
 			if (options.Mode == GeneratedMapMode.Strategic)
-				ValidateStrategicCheckpoints(plan);
+				ValidateStrategicCheckpoints(plan, options);
 			else if (plan.StrategicCheckpoints.Count != 0)
 				throw new InvalidOperationException("Non-Strategic map contains Strategic checkpoints.");
 
@@ -70,9 +70,9 @@ namespace OpenRA.Mods.CA.MapGeneration
 			plan.ValidationMessages.Add($"Economy actors: {resourceGenerators} resource generators and {techBuildings} Tech Buildings.");
 		}
 
-		static void ValidateStrategicCheckpoints(MapPlan plan)
+		static void ValidateStrategicCheckpoints(MapPlan plan, MapGenerationOptions options)
 		{
-			var expectedCount = Math.Min(plan.Width, plan.Height) switch
+			var expectedCount = (Math.Min(plan.Width, plan.Height) - 2 * plan.PlayableInset) switch
 			{
 				<= 96 => 3,
 				<= 144 => 4,
@@ -88,9 +88,15 @@ namespace OpenRA.Mods.CA.MapGeneration
 				if (matches.Length != 1)
 					throw new InvalidOperationException($"Strategic checkpoint hierarchy {hierarchy} is not unique.");
 				var checkpoint = matches[0];
-				if (!plan.Contains(checkpoint.Point.X, checkpoint.Point.Y) ||
-					plan.TerrainAt(checkpoint.Point.X, checkpoint.Point.Y) != PlannedTerrain.Land)
+				var p = checkpoint.Point;
+				// Two Sides exports its non-destructible causeway as ordinary sand.
+				// Keep that material rather than repainting it as grass for a checkpoint.
+				var sandCauseway = options.Preset == MapGenerationPreset.TwoSides && plan.Contains(p.X, p.Y) &&
+					plan.TerrainAt(p.X, p.Y) == PlannedTerrain.ShallowWater && plan.HasFeature(p.X, p.Y, PlannedFeature.Bottleneck);
+				if (!plan.Contains(p.X, p.Y) || plan.TerrainAt(p.X, p.Y) != PlannedTerrain.Land && !sandCauseway)
 					throw new InvalidOperationException($"Strategic checkpoint hierarchy {hierarchy} is not on land.");
+				if (options.Preset == MapGenerationPreset.TwoSides && !StrategicCheckpointPlanner.FitsUnmodifiedCheckpointArea(plan, p))
+					throw new InvalidOperationException($"Strategic checkpoint hierarchy {hierarchy} does not fit the original terrain/economy.");
 			}
 
 		}

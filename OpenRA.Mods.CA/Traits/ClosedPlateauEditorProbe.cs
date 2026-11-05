@@ -54,7 +54,7 @@ namespace OpenRA.Mods.CA.Traits
 					var savedResource = map.Resources[resourceCell]; var resourceRejected = false;
 					try
 					{
-						map.Resources[resourceCell] = new ResourceTile(1, 5);
+						map.Resources[resourceCell] = new ResourceTile(3, 5);
 						new RubberduckClosedPlateauPlan(map, info.Center, info.Notch, Array.Empty<CPos>(), info.RearRamp, info.RampDirection, layer.Save());
 					}
 					catch (InvalidOperationException) { resourceRejected = true; }

@@ -4,9 +4,9 @@
 
 Player homes are now filled, traversable height-4 terrain, not low interiors surrounded
 by blocked raised rings. The same treatment applies to vacant home slots. Closed mountain
-islands retain the filled plateau implementation; expansion valleys remain low and still
-use the older ring layout. Their wall rendering is now shared with the plateaus; see
-[original-source wall faces](rubberduck-native-cliff-faces.md). Supported plateau fronts now
+islands retain the filled plateau implementation; expansion valleys remain low, but their
+walls now use [planned closed contours without the legacy wall fallback](map-rocks-and-dry-oil.md).
+Supported plateau fronts now
 use [complete native pieces with planned footing and roof clipping](rubberduck-native-cliff-production.md).
 This is not a claim that all terrain artwork or the editor is finished. The first
 [editor stamp workflow with atomic Undo/Redo](editor-plateau-stamps.md) and
@@ -24,14 +24,14 @@ has been replaced with the ordinary, probe-free export.
 - Ramp shared-edge corners are checked at both endpoints. Cardinal height-aware
   connectivity covers every unblocked plateau cell, all spawns and expansion valleys.
   Small isolated raster tips are treated as cliff rim, not falsely advertised as usable land.
-- Each start has a clear, flat 5x5 CPos construction core. With resources enabled, two
-  complete 5x5 plan-cell ore fields are guaranteed on the roof (50 cells, density 12).
-  Nearest starting ore is 3 plan cells away in the checked cases. None remains empty.
+- Each start has a clear, flat 5x5 CPos construction core. The entire roof and ramp
+  now stay free of resources, resource generators and tech buildings. The former two
+  guaranteed roof fields have been removed; see [the feedback fix](mountain-valleys-empty-homes.md).
 - Homes leave extra projection margin at map boundaries. Subsequent terrain placement
   cannot overwrite committed surfaces or ramp approaches.
 - Expansion placement first tries its old target orbit, then searches outer valley gaps
   when central packing fails. Expansion distances can consequently vary; broader balance
-  review is still needed. Starting fields remain equal.
+  review is still needed. Resource fields are now confined to the valleys.
 - Economy placement protects a footprint-sized area from plateaus, slopes and cliff edges.
   Dense tech placement falls back to other safe sites instead of silently producing an
   empty cluster when the first patch is unsuitable.

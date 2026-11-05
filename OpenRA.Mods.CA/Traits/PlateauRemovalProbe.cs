@@ -63,7 +63,7 @@ namespace OpenRA.Mods.CA.Traits
 				Ui.Root.Get<ButtonWidget>("PLATEAU_LOWER").OnClick();
 				var brush = controller.CurrentBrush as PlateauRemovalBrush ?? throw new InvalidOperationException("Lower button did not activate brush.");
 				// A resource added after hover must invalidate the action, not just its preview.
-				map.Resources[info.Cell] = new ResourceTile(1, 5);
+				map.Resources[info.Cell] = new ResourceTile(3, 5);
 				var refused = false;
 				try { brush.CreateAction(info.Cell); }
 				catch (InvalidOperationException) { refused = true; }

@@ -23,14 +23,16 @@ namespace OpenRA.Mods.CA.MapGeneration
 					component.Add(c);
 					foreach (var d in PlateauTopology.Directions) if (remaining.Contains(c + d)) pending.Push(c + d);
 				}
-				if (!TryPieces(surfaces, component, FlatLow, out var pieces) ||
+				if (!TryPieces(surfaces, component, FlatLow, out var pieces,
+					reason => { if (Environment.GetEnvironmentVariable("YMCA_MAPGEN_DIAGNOSTICS") == "1") Console.Error.WriteLine(reason); }) ||
 					pieces.Any(p => !map.Rules.Actors.ContainsKey("terrain.rubberduck.closedcliff" + p.Slot))) continue;
 				Cells.UnionWith(component); Pieces.AddRange(pieces);
 			}
 
 			bool FlatLow(CPos cell, bool blocked)
 			{
-				if (!map.Contains(cell) || map.Resources[cell].Type != 0) return false;
+				// A closed contour can end in non-playable terrain backing.
+				if (!map.Tiles.Contains(cell) || map.Resources[cell].Type != 0) return false;
 				if (surfaces.TryGetValue(cell, out var value)) return value.Height == 0 && value.Ramp == 0 && value.Blocked == blocked;
 				return map.Height[cell] == 0 && map.Ramp[cell] == 0 && (blocked ? map.Tiles[cell].Type == 3992 : map.Tiles[cell].Type == 1000);
 			}

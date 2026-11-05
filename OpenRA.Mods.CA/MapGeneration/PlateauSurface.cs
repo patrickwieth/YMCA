@@ -30,6 +30,14 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 	static class PlateauTopology
 	{
+		// Recover the complete physical contour, including terrain backing beyond
+		// playable bounds. Movement still uses Map.Contains; this is topology only.
+		public static bool ContainsTerrain(Map map, CPos cell)
+		{
+			if (map.Contains(cell)) return true;
+			return map.Height.Contains(cell) && (map.Height[cell] == 4 || map.Tiles[cell].Type == 3992 || map.Ramp[cell] != 0);
+		}
+
 		public static readonly CVec[] Directions = { new CVec(1, 0), new CVec(0, 1), new CVec(-1, 0), new CVec(0, -1) };
 
 		public static PlateauSurface Get(IReadOnlyDictionary<CPos, PlateauSurface> cells, CPos cell) =>

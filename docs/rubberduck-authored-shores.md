@@ -26,15 +26,21 @@ normalization is idempotent and rotation-compatible.
 
 Frames 40..47 are half-diamond wedges. The first experiment intersected these as
 full-cell convex corners. It reduced some walkable land centers to alpha 19 and
-made isolated cells almost disappear. **That composition is rejected.** Full-cell
-convex shores instead intersect the two authored edge cuts. Each resulting RGBA
+made isolated cells almost disappear. **That composition remains rejected.** The
+Two Sides feedback follow-up now uses **one even wedge** only for exactly two
+adjacent water edges: south=46, west=44, north=40, east=42. These four source
+frames preserve center alpha >=128 in all ten material blocks. Odd sand variants
+are excluded; opposite edges, spits and isolated cells still use full-cell edge
+cuts. This restores the authored diagonal shoreline without intersecting opposing
+wedges or changing physical terrain. Each resulting RGBA
 pixel is copied at the same coordinate from a source donor; no color synthesis,
 rescaling or invented foam is involved. These are derived compositions, not an
 assertion that the artist supplied 47 original whole-cell tiles.
 
 `validated-art` passed 1880 compositions (47 cases x four variants x ten material/
-lighting blocks), exact donor RGBA checks and center alpha >=128. Source wedges
-are preserved in the atlas, not silently reclassified as safe full-cell terrain.
+lighting blocks), exact donor RGBA checks and center alpha >=128. The same checks
+pass again with the restricted even-wedge selection in
+`%TEMP%/ymca-two-sides-feedback/shore-art/`. The installed atlas pixels are unchanged.
 
 ## Runtime implementation and tests
 

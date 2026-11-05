@@ -202,6 +202,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 						slot == 18 || slot == 20 || slot == 22 ? slot : RubberduckNativeCornerLabCommand.FootSourceSlot(slot));
 					pixels = layered.Pixels; padding = layered.TopPadding;
 				}
+				pixels = RubberduckRearRimArt.Apply(pixels, cliffAtlas, slot, padding);
 				var png = new Png(pixels, SpriteFrameType.Rgba32, 128, 256 + padding);
 				png.EmbeddedData.Add("FrameSize", $"128,{256 + padding}"); png.EmbeddedData.Add("FrameAmount", "1");
 				png.EmbeddedData.Add("Offset", $"0,{-64 - padding / 2}");
@@ -215,7 +216,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				"Side-contact pinning and short-family replacement were rejected after client inspection.\n" +
 				"Side pieces 18/22 reconstruct only connected opaque matte inside their front plane from original complete faces 4/3 before fitting; see side-completion-*.txt. Alpha, original visible art and shared fitting are preserved.\n" +
 				"Side inward pieces use two planes meeting on y=64+x (18), y=192-x (22); 256 continuity/socket checks and monotone row checks. No local contact-pinning warp.\n" +
-				"Source-grid renderer retains the authored four-pixel rear lip and culls opaque rear interiors; no pixel-color keying.\n" +
+				"Rear crest extends nine to twelve pixels above the original roof edge with authored rock samples; runtime clips the rear interior after three pixels, before the opaque matte row.\n" +
 				(mouthSlot >= 0 ? "Front-mouth end plane projects the opposite original face into connected opaque matte, reconstructing only its one-pixel opaque AA border. Nearest opaque row sampling preserves strata scale; alpha and translucent shadows are unchanged. This is derived art, not an unchanged authored end template. See mouth-*-provenance.txt.\n" : "") +
 				(rearRamp ? $"Experimental three-wide ramp, uphill direction {rampDirection}: 12 slope cells, 8 blocked high guards, 6 clear landing/approach cells. Existing derived retaining strips, NOT authored ramp art. Ramp end contacts still require visual acceptance.\n" : "") +
 				"Real height-four clear roof, height-zero blocked one-cell foot ring. Map-local art/rules; ordinary production generation unchanged.\n");

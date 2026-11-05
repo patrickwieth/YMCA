@@ -12,6 +12,21 @@ namespace OpenRA.Mods.CA.UtilityCommands
 	// This is a geometry-normalized import, not a claim that atlas slots are ready-made tiles.
 	sealed class RubberduckNativeCliffArtCommand : IUtilityCommand
 	{
+		internal static int RearRockSample(Png atlas, int slot, double u, double v)
+		{
+			var sx = (int)(slot >= 5 ? 64 * u + 64 * v : 64 + 64 * u - 64 * v);
+			var sy = (int)(slot >= 5 ? 64 - 32 * u + 192 * v : 32 + 32 * u + 192 * v);
+			for (var distance = 0; distance <= 16; distance++)
+				foreach (var row in new[] { sy - distance, sy + distance })
+				{
+					if (row < 0 || row >= 256 || sx < 0 || sx >= 128) continue;
+					var index = ((slot / 12 * 256 + row) * atlas.Width + slot % 12 * 128 + sx) * 4;
+					if (atlas.Data[index + 3] >= 250 && Math.Max(atlas.Data[index], Math.Max(atlas.Data[index + 1], atlas.Data[index + 2])) > 16)
+						return index;
+				}
+			throw new InvalidDataException("Rear contact material has no opaque authored face sample.");
+		}
+
 		string IUtilityCommand.Name => "--rubberduck-native-cliff-art";
 		bool IUtilityCommand.ValidateArguments(string[] args) => args.Length == 3 || args.Length == 4;
 
@@ -86,13 +101,12 @@ namespace OpenRA.Mods.CA.UtilityCommands
 											if (!IsRim(sample)) throw new InvalidDataException("Rear rim contact sample leaves native rock.");
 										}
 										var dest = ((frame / 10 * 320 + y) * width + frame % 10 * 128 + x) * 4;
-										// The top outline contains pale earth. Retain its exact alpha,
-										// but take the rim material from rock just inside that outline.
-										var materialX = Math.Clamp(sx, 32, 95);
-										var materialY = (int)Math.Round((direction == 2 ? 160 - materialX / 2.0 : 96 + materialX / 2.0) + 12 + 2 * (y + 0.5 - top));
-										var material = ((slot / 12 * 256 + materialY) * sheet.Width + slot % 12 * 128 + materialX) * 4;
-										if (!IsRim(material)) material = sample;
-										Array.Copy(sheet.Data, material, data, dest, 3);
+										// The rear source interior fades into its black matte. Keep
+										// the exact silhouette, but use authored exposed rock relief
+										// rather than projecting that dark fade into a visible stripe.
+										var material = RearRockSample(high, (direction == 2 ? 5 : 0) + variant,
+											0.2 + 0.6 * (x % 64 + 0.5) / 64, 0.35 - (y + 0.5 - top) * 0.015);
+										Array.Copy(high.Data, material, data, dest, 3);
 										data[dest + 3] = sheet.Data[sample + 3];
 									}
 									continue;
@@ -170,8 +184,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				"PASS all 150 front frames unchanged RGBA; each visible pixel matches its full-height material reference; all 150 rear profiles retain their six-above/two-below bounds and continuous contact.\n" +
 				"Rear profiles bounded to six pixels above/two below the roof with continuous contact and empty zero-drop profiles.\n" +
 				"Front art: grassland_1x1 slots 0-2 and 5-7 for every drop; roof-relative vertical sampling uses constant denominator 128. Short profiles crop the same strata, never shrink or change material.\n" +
-				"Rear art: derived roof-relative sampling of original rock_cliffs slots 8-10 and 12-14. Native alpha silhouette retained above roof; inward rock samples extend contact at leaning ends.\n" +
-				"Sampling: source x = floor(128 * (0.08 + 0.84 * edgeFraction)); rear roof y = 160-x/2 or 96+x/2; vertical sampling scale 2. RGB samples the same rock sheet 12 source pixels inward with x clamped to 32..95; alpha unchanged. Contact fallback clamps x to 32..95 and samples roof+8.\n");
+				"Rear alpha: original rock_cliffs slots 8-10 and 12-14, unchanged. Rear RGB: exposed grassland_1x1 front-face slots 0-2 and 5-7, avoiding the rear source's black interior fade.\n" +
+				"Alpha sampling: source x = floor(128 * (0.08 + 0.84 * edgeFraction)); rear roof y = 160-x/2 or 96+x/2; vertical scale 2. Contact fallback clamps x to 32..95 and samples roof+8. RGB: u=0.2+0.6*edgeFraction, v=0.35-roofDepth*0.015, bounded 16-row opaque donor search. No recoloring or silhouette/collision change.\n");
 			var result = new Png(data, SpriteFrameType.Rgba32, width, 9600);
 			result.EmbeddedData.Add("FrameSize", "128,320");
 			result.EmbeddedData.Add("FrameAmount", "300");

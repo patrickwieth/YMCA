@@ -46,7 +46,12 @@ namespace OpenRA.Mods.CA.Traits
 			land = new RubberduckMaterialLayer(world, renderer, empty, BlendMode.Alpha, world.Type != WorldType.Editor);
 		}
 
-		static int Material(ushort tile) => tile == 1000 ? 0 : tile == 1010 ? 1 : tile == 1020 ? 2 : tile == 1030 ? 3 : tile == 1040 ? 4 : -1;
+		// Reuse authored sand/dirt silhouettes for dry grass joins. The caller
+		// supplies grass behind the cover, never water or collision changes.
+		internal byte[] DryCover(int material, int grassEdges) => RubberduckShoreTopology.Compose(materials[material],
+			RubberduckShoreTopology.Normalize(grassEdges, 0), 0);
+
+		static int Material(ushort tile) => tile == 1000 || RubberduckShoreTopology.IsLegacyGrassSand(tile) || RubberduckShoreTopology.IsLegacyGrassDirt(tile) ? 0 : tile == 1010 ? 1 : tile == 1020 ? 2 : tile == 1030 ? 3 : tile == 1040 ? 4 : -1;
 		int Water(CPos c)
 		{
 			if (!map.Contains(c) || map.Height[c] != 0 || map.Ramp[c] != 0) return 0;
@@ -88,11 +93,9 @@ namespace OpenRA.Mods.CA.Traits
 				var pixels = RubberduckShoreTopology.Compose(materials[key / 1024], key % 256, key / 256 % 4);
 				sprite = sheet.Add(pixels, SpriteFrameType.Rgba32, new Size(128, 64), 1, float3.Zero);
 				sprites.Add(key, sprite);
-				// Ordinary material blends must not repaint water revealed by the native
-				// fringe. Preserve nonzero antialias coverage at adjoining land edges,
-				// but never let a ground blend fill fully transparent source pixels.
-				var exclusion = new bool[128 * 64];
-				for (var p = 0; p < exclusion.Length; p++) exclusion[p] = pixels[p * 4 + 3] == 0;
+				// Do not harden almost transparent shore tails with a dry overlay.
+				// Preserve broad blends and the diamond's land/land antialiasing.
+				var exclusion = RubberduckShoreTopology.GroundBlendExclusion(pixels, materials[key / 1024][key / 256 % 4]);
 				groundExclusions.Add(key, exclusion);
 				if (sprites.Count > 920) throw new InvalidDataException("Authored shore cache exceeded 46 topologies x four variants x five materials.");
 			}

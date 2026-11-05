@@ -50,7 +50,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				{
 					var cell = approach + new CVec(maximumHeight / 2, maximumHeight / 2);
 					var p = PlannedRubberduckBridge.Point(approach);
-					if (!map.Contains(cell) || map.Tiles[cell].Type != 1000 || map.Height[cell] != 0 || map.Resources[cell].Type != 0 ||
+					if (!map.Contains(cell) || (map.Tiles[cell].Type != 1000 && map.Tiles[cell].Type != 1030) || map.Height[cell] != 0 || map.Resources[cell].Type != 0 ||
 						plan.HasFeature(p.U, p.V, PlannedFeature.Resource | PlannedFeature.RichResource | PlannedFeature.BuildClearance | PlannedFeature.TechBuilding | PlannedFeature.ResourceGenerator))
 						throw new InvalidOperationException("Bridge approach no longer has unoccupied dry ground.");
 					// Existing dirt material, with its ordinary movement cost and blends.

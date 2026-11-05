@@ -43,11 +43,13 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}).ToHashSet();
 			// Validate against current passable land/water, not the virtually restored
 			// coast: existing landings and connections must survive the extension.
-			var patch = RubberduckRockCoastPlan.Create(map, banks, protection, Terrain);
+			var edgeStyle = before.Values.Any(n => n.Value.Value.EndsWith(".bank", StringComparison.Ordinal));
+			var patch = RubberduckRockCoastPlan.Create(map, banks, protection, Terrain, clipMapEdge: edgeStyle);
 			if (restored.Keys.Any(c => !patch.ContainsKey(c))) throw new InvalidOperationException("Extension would unexpectedly remove an existing footprint.");
 			var serial = 0; var saved = layer.Save();
 			while (saved.Any(n => n.Key.StartsWith($"EditorRockCoast{serial}_", StringComparison.Ordinal))) serial++;
-			var actors = RubberduckRockCoastRenderer.Actors(map, banks, $"EditorRockCoast{serial}_", Terrain);
+			var actors = RubberduckRockCoastRenderer.Actors(map, banks, $"EditorRockCoast{serial}_", Terrain,
+				naturalJoints: edgeStyle, clipMapEdge: edgeStyle, lowRearEnds: edgeStyle);
 			return new RubberduckCoastExtensionPlan(patch, before.Values.ToList(), actors);
 		}
 	}

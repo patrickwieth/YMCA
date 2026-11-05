@@ -45,7 +45,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var resource = map.Resources[protectedCell];
 			try
 			{
-				map.Resources[protectedCell] = new ResourceTile(1, 1);
+				map.Resources[protectedCell] = new ResourceTile(3, 1);
 				if (LegacyCliffAbutments.Select(map, entries).Contains(protectedCell)) throw new InvalidDataException("Abutment covered a resource.");
 			}
 			finally { map.Resources[protectedCell] = resource; }

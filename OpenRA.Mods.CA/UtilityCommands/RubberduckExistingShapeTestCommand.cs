@@ -21,25 +21,28 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var output = Path.GetFullPath(args[2]); Directory.CreateDirectory(output);
 			using var stream = File.OpenRead(args[1]); using var zip = new ZipFileLoader.ReadOnlyZipFile(stream, args[1]);
 			using var map = new Map(utility.ModData, zip);
-			var candidates = map.AllCells.Where(c => map.Contains(c) && map.Height[c] == 4 && map.Tiles[c].Type == 1000)
+			var candidates = map.AllCells.Where(c => map.Contains(c) && map.Height[c] == 4 && (map.Tiles[c].Type == 1000 || map.Tiles[c].Type == 3992))
 				.SelectMany(c => PlateauTopology.Directions.Take(2).Select(d => c + d))
 				.Where(c => map.Contains(c) && map.Height[c] == 0 && map.Ramp[c] == 0 &&
 					Enumerable.Range(1, 2).All(step => !map.Contains(c + new CVec(step, step)) || map.Height[c + new CVec(step, step)] == 0)).Distinct().ToArray();
-			PlateauShapePlan plan = null; var cell = default(CPos);
+			PlateauShapePlan plan = null; var cell = default(CPos); var strokeSize = 1;
 			var errors = new HashSet<string>();
 			var nativeAnchors = map.ActorDefinitions.Where(n => Native(n.Value.Value))
 				.Select(n => new ActorReference(n.Value.Value, n.Value.ToDictionary()).GetOrDefault<LocationInit>())
 				.Where(location => location != null).Select(location => location.Value).ToHashSet();
+			foreach (var size in new[] { 1, 2, 4 })
 			foreach (var candidate in candidates.OrderByDescending(c => nativeAnchors.Contains(c))
 				.ThenByDescending(c => PlateauTopology.Directions.Any(d => nativeAnchors.Contains(c - d))).Take(512))
 			{
 				try
 				{
-					var candidatePlan = PlateauShapePlan.Create(map, map.ActorDefinitions, new[] { candidate }, true, Array.Empty<CPos>());
+					if (plan != null) break;
+					var stroke = Enumerable.Range(0, size).SelectMany(y => Enumerable.Range(0, size).Select(x => candidate + new CVec(x, y))).ToArray();
+					var candidatePlan = PlateauShapePlan.Create(map, map.ActorDefinitions, stroke, true, Array.Empty<CPos>());
 					// A supported edit may belong to a fallback-only component. Keep
 					// searching: this regression specifically exercises native replanning.
 					if (!candidatePlan.BeforeActors.Any(n => Native(n.Value.Value)) || candidatePlan.NativePieces == 0) continue;
-					plan = candidatePlan; cell = candidate; break;
+					plan = candidatePlan; cell = candidate; strokeSize = size; break;
 				}
 				catch (InvalidOperationException e) { errors.Add(e.Message); }
 			}
@@ -48,7 +51,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath)); File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);
 			File.WriteAllText(Path.Combine(output, "preflight-results.txt"), $"PASS existing native extension at {cell}: {plan.Patch.Count} changed cells, {plan.BeforeActors.Count} old cliff objects, {plan.NativePieces} native pieces after replan.\n");
-			map.RuleDefinitions = new MiniYaml("", MiniYaml.FromString($"World:\n\tExistingPlateauShapeProbe:\n\t\tCell: {cell}\n\t\tResultPath: {resultPath}\nEditorWorld:\n\tExistingPlateauShapeProbe:\n\t\tCell: {cell}\n\t\tResultPath: {resultPath}\n", "existing-shape"));
+			map.RuleDefinitions = new MiniYaml("", MiniYaml.FromString($"World:\n\tExistingPlateauShapeProbe:\n\t\tCell: {cell}\n\t\tStrokeSize: {strokeSize}\n\t\tResultPath: {resultPath}\nEditorWorld:\n\tExistingPlateauShapeProbe:\n\t\tCell: {cell}\n\t\tStrokeSize: {strokeSize}\n\t\tResultPath: {resultPath}\n", "existing-shape"));
 			map.Title = "Existing generated plateau shape editor test";
 			var path = Path.Combine(output, "rubberduck-existing-shape-test.oramap");
 			using (var package = ZipFileLoader.Create(path)) map.Save(package);

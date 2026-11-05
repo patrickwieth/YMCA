@@ -51,7 +51,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				catch (InvalidOperationException) { messages.AppendLine("PASS rejection: " + name); return; }
 				throw new InvalidDataException("Unsafe removal accepted: " + name);
 			}
-			map.Resources[clicked] = new ResourceTile(1, 5);
+			map.Resources[clicked] = new ResourceTile(3, 5);
 			Reject(map.ActorDefinitions, "resources");
 			map.Resources[clicked] = default;
 			var spawn = new ActorReference("mpspawn") { new LocationInit(clicked), new OwnerInit("Neutral") };

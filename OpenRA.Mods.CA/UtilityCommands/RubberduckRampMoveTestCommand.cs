@@ -99,7 +99,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			while (closures.Count != 0) closures.Pop().Undo();
 			report.AppendLine("PASS last accessible ramp protected");
 			var selected = PlateauRampMovePlan.Find(map, Source(map));
-			map.Resources[Source(map)] = new ResourceTile(1, 5);
+			map.Resources[Source(map)] = new ResourceTile(3, 5);
 			var rejected = false;
 			try { selected.Move(map, actors, Target(map), Array.Empty<CPos>()); }
 			catch (InvalidOperationException) { rejected = true; }

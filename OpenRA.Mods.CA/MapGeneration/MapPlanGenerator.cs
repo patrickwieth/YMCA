@@ -7,8 +7,21 @@ namespace OpenRA.Mods.CA.MapGeneration
 		public static MapPlan Generate(MapGenerationOptions options)
 		{
 			options.Validate();
-			if (options.Preset == MapGenerationPreset.MountainValleys && options.Mode == GeneratedMapMode.Strategic)
-				return GenerateStrategicMountains(options);
+			if (options.Custom?.Topology == CustomTopology.OpenPlains)
+			{
+				options.MountainLines = options.Custom.Plains == PlainsSubtype.Rocky;
+				options.WaterPatches = options.Custom.Plains == PlainsSubtype.Ponds;
+			}
+			if (options.Custom?.River == true && !options.Custom.BattleInTheCenter)
+			{
+				var rivers = new CustomRiverGenerator().Generate(options);
+				StrategicCheckpointPlanner.Place(rivers, options);
+				MapPlanGameplayValidator.Validate(rivers, options);
+				return rivers;
+			}
+			if (options.Preset == MapGenerationPreset.TwoSides ||
+				options.Preset == MapGenerationPreset.MountainValleys && options.Mode == GeneratedMapMode.Strategic)
+				return GenerateProtectedLayout(options);
 			var plan = options.Preset switch
 			{
 				MapGenerationPreset.TwoSides => new TwoSidesGenerator().Generate(options),
@@ -24,29 +37,37 @@ namespace OpenRA.Mods.CA.MapGeneration
 			return plan;
 		}
 
-		static MapPlan GenerateStrategicMountains(MapGenerationOptions options)
+		static MapPlan GenerateProtectedLayout(MapGenerationOptions options)
 		{
 			InvalidOperationException lastPlacementFailure = null;
 			var attempt = 0;
-			while (attempt < MountainValleysGenerator.MaximumAttempts)
+			var twoSides = options.Preset == MapGenerationPreset.TwoSides;
+			var limit = twoSides ? TwoSidesGenerator.MaximumAttempts : MountainValleysGenerator.MaximumAttempts;
+			while (attempt < limit)
 			{
-				var plan = new MountainValleysGenerator().Generate(options, attempt);
+				var plan = twoSides ? new TwoSidesGenerator().Generate(options, attempt) :
+					new MountainValleysGenerator().Generate(options, attempt);
 				try
 				{
 					StrategicCheckpointPlanner.Place(plan, options);
+					if (twoSides) RubberduckMapExporter.ValidateTwoSidesCoasts(plan, options);
 				}
 				catch (InvalidOperationException e)
 				{
-					// Checkpoint clearance is part of topology feasibility. Retry a complete
-					// deterministic layout instead of flattening a plateau or blocking its ramp.
+					// Checkpoints and boundary-reaching banks are topology constraints.
+					// Retry a complete layout, never fill water or isolate land to make art fit.
 					lastPlacementFailure = e;
 					attempt = plan.GenerationAttempt + 1;
 					continue;
 				}
+				if (twoSides && options.Custom?.HasCenter == true)
+					for (var y = 0; y < plan.Height; y++) for (var x = 0; x < plan.Width; x++)
+						if (plan.TerrainAt(x, y) == PlannedTerrain.ShallowWater && plan.HasFeature(x, y, PlannedFeature.Bottleneck))
+							plan.AddFeature(x, y, PlannedFeature.ContestedCenter);
 				MapPlanGameplayValidator.Validate(plan, options);
 				return plan;
 			}
-			throw new InvalidOperationException("No Mountain Valleys layout fits the protected plateaus and Strategic checkpoint route.", lastPlacementFailure);
+			throw new InvalidOperationException($"No {options.Preset} layout fits the protected terrain/economy, coast and mode objectives.", lastPlacementFailure);
 		}
 	}
 }

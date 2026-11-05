@@ -9,13 +9,17 @@ namespace OpenRA.Mods.CA.MapGeneration
 	static class RubberduckRockCoastPlan
 	{
 		static readonly HashSet<string> Walkable = new(StringComparer.Ordinal) { "Clear", "Sand", "Road", "Rough", "Ore", "Gems", "Tiberium", "BlueTiberium" };
+		internal sealed class ConnectivityException : InvalidOperationException
+		{
+			public ConnectivityException(string message) : base(message) { }
+		}
 		public const ushort BlockedWater = 14010;
 		public const ushort BlockedSand = 14011;
 		public const ushort BlockedGrass = 14012;
 		public static IReadOnlyDictionary<CPos, TerrainTile> Create(Map map, IEnumerable<CPos> bankCells,
-			IReadOnlyCollection<CPos> protectedCells, Func<CPos, ushort> terrainType = null)
+			IReadOnlyCollection<CPos> protectedCells, Func<CPos, ushort> terrainType = null, bool clipMapEdge = false)
 		{
-			var patch = Footprint(map, bankCells, protectedCells, terrainType ?? (c => map.Tiles[c].Type));
+			var patch = Footprint(map, bankCells, protectedCells, terrainType ?? (c => map.Tiles[c].Type), clipMapEdge);
 			PreserveConnections(map, patch, true);
 			PreserveConnections(map, patch, false);
 			return patch;
@@ -23,7 +27,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		// Also used against a nonmutating restored view when trimming an existing coast.
 		internal static Dictionary<CPos, TerrainTile> Footprint(Map map, IEnumerable<CPos> bankCells,
-			IReadOnlyCollection<CPos> protectedCells, Func<CPos, ushort> terrainType)
+			IReadOnlyCollection<CPos> protectedCells, Func<CPos, ushort> terrainType, bool clipMapEdge = false)
 		{
 			var banks = bankCells.ToHashSet();
 			if (banks.Count == 0 || banks.Count > 512) throw new InvalidOperationException("Select 1–512 coast cells.");
@@ -42,6 +46,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 				// ships cannot sail through it or unload across a decorative wall.
 				void Reserve(CPos foot)
 				{
+					// Clip only nonplayable cells, never in-map water requirements.
+					if (clipMapEdge && !map.Contains(foot)) return;
 					if (!map.Contains(foot) || terrainType(foot) != 1050 || map.Height[foot] != 0 || map.Ramp[foot] != 0)
 						throw new InvalidOperationException("Rock coast needs two clear water rows; narrow channels are protected.");
 					patch[foot] = new TerrainTile(BlockedWater, 0);
@@ -54,7 +60,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}
 			// Native end piles lean into water beyond the last face. Reserve their
 			// actual end sockets too, not just the straight face's two water rows.
-			foreach (var cap in RubberduckRockCoastRenderer.EndCaps(map, banks, terrainType))
+			foreach (var cap in RubberduckRockCoastRenderer.EndCaps(map, banks, terrainType, clipMapEdge))
 			{
 				var outward = PlateauTopology.Directions[cap.Direction];
 				var tangent = cap.Direction % 2 == 0 ? new CVec(0, 1) : new CVec(1, 0);
@@ -62,6 +68,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 					for (var depth = 1; depth <= 2; depth++)
 					{
 						var foot = cap.Cell + tangent * lane + outward * depth;
+						if (clipMapEdge && !map.Contains(foot)) continue;
 						if (!map.Contains(foot) || terrainType(foot) != 1050 || map.Height[foot] != 0 || map.Ramp[foot] != 0)
 							throw new InvalidOperationException("Coast end piece needs clear water; nearby land and narrow landings are protected.");
 						patch[foot] = new TerrainTile(BlockedWater, 0);
@@ -97,13 +104,13 @@ namespace OpenRA.Mods.CA.MapGeneration
 				var component = Flood(remaining.First(), remaining); remaining.ExceptWith(component);
 				var survivors = component.Where(c => !patch.ContainsKey(c)).ToHashSet();
 				if (survivors.Count == 0 || Flood(survivors.First(), survivors).Count != survivors.Count)
-					throw new InvalidOperationException("Rock coast would disconnect or erase a " + (water ? "waterway." : "land route."));
+					throw new ConnectivityException("Rock coast would disconnect or erase a " + (water ? "waterway." : "land route."));
 				if (!water)
 				{
 					bool Landing(CPos c) => PlateauTopology.Directions.Any(d => map.Contains(c + d) && map.Height[c] == 0 &&
 						map.GetTerrainInfo(c + d).Type == "Water" && !patch.ContainsKey(c + d));
 					if (component.Any(c => PlateauTopology.Directions.Any(d => map.Contains(c + d) && map.GetTerrainInfo(c + d).Type == "Water")) && !survivors.Any(Landing))
-						throw new InvalidOperationException("Rock coast would remove the last landing access.");
+						throw new ConnectivityException("Rock coast would remove the last landing access.");
 				}
 			}
 		}

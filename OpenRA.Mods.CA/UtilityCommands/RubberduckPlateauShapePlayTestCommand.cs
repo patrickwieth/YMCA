@@ -23,7 +23,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var center = RubberduckPlateauShapeTestCommand.First(map);
 			if (RubberduckPlateauShapeTestCommand.Bridge(map).Any(c => map.Height[c] != 4 || map.Ramp[c] != 0) ||
 				RubberduckPlateauShapeTestCommand.Trim(map).Any(c => map.Height[c] != 0)) throw new InvalidDataException("Save is not the joined/trimmed editor fixture.");
-			if (map.Resources[center].Type != 1 || !map.ActorDefinitions.Any(n => n.Key == "ProtectedRefinery"))
+			if (map.Resources[center].Type != 3 || !map.ActorDefinitions.Any(n => n.Key == "ProtectedRefinery"))
 				throw new InvalidDataException("Protected resource/building is missing.");
 			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath)); File.WriteAllText(resultPath, "");
