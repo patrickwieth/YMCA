@@ -1,9 +1,77 @@
 # Visual-only integration: gameplay footprints, docking and exits stay unchanged.
 
+# Supplied native guard tower; no rotating building art was supplied.
+GTWR:
+	-WithBuildingBib:
+	-WithMakeAnimation:
+	RenderSprites:
+		Image: gtwr.gdi.png
+	Turreted:
+		Offset: 0,0,2007
+	IsometricSelectable:
+		DecorationBounds: 1086, 1086, 0, 0
+		DecorationHeight: 111
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
+# Native Heavy Blaster V5 on the existing Ion Defense. Its modeled stationary
+# foundation replaces the legacy bib/shadow; the occupied 2x2 cells stay intact.
+Ion_Defense:
+	-WithBuildingBib:
+	-WithShadow:
+	-WithEmbeddedTurretSpriteBody:
+	RenderSprites:
+		Image: ion_defense.native
+	# Visual attachment coordinates from the saved model; weapon stats unchanged.
+	BodyOrientation:
+		CameraPitch: 85
+	Turreted:
+		Offset: 0,0,226
+	Armament:
+		LocalOffset: 1631,0,675
+	WithSpriteTurret:
+		Sequence: turret
+		Recoils: false
+	IsometricSelectable:
+		DecorationBounds: 1901, 1901, 0, 0
+		DecorationHeight: 66
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib2x2
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
+SYRD.gdi:
+	RenderSprites:
+		Image: gsyrd.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 3439, 3439, 34, -317
+		DecorationHeight: 88
+	# No foundation overlay: the map water must remain visible below the piers.
+
+UPGC:
+	-WithBuildingBib:
+	RenderSprites:
+		Image: upgc.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 3077, 3077, 0, -46
+		DecorationHeight: 176
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib3x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
 AFAC:
 	-WithBuildingBib:
 	RenderSprites:
 		Image: afac.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 3620, 3620, -34, -1019
+		DecorationHeight: 143
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib4x4
 		Sequence: idle
@@ -14,6 +82,9 @@ NUKE:
 	-WithBuildingBib:
 	RenderSprites:
 		Image: nuke.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 3077, 3077, -125, -498
+		DecorationHeight: 190
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib3x3
 		Sequence: idle
@@ -24,6 +95,9 @@ PYLE:
 	-WithBuildingBib:
 	RenderSprites:
 		Image: pyle.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 2534, 2534, 159, -747
+		DecorationHeight: 109
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib3x3
 		Sequence: idle
@@ -34,6 +108,9 @@ HQ:
 	-WithBuildingBib:
 	RenderSprites:
 		Image: hq.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 2534, 2534, -374, -521
+		DecorationHeight: 168
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib3x3
 		Sequence: idle
@@ -44,6 +121,9 @@ REP:
 	-WithBuildingBib:
 	RenderSprites:
 		Image: rep.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 3258, 3258, 12, -521
+		DecorationHeight: 134
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib3x3
 		Sequence: idle
@@ -54,6 +134,9 @@ HPAD.TD:
 	-WithBuildingBib:
 	RenderSprites:
 		Image: hpad2.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 2353, 2353, -12, 0
+		DecorationHeight: 46
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib3x3
 		Sequence: idle
@@ -64,6 +147,9 @@ PROC.TD:
 	-WithBuildingBib:
 	RenderSprites:
 		Image: proc2.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 2534, 2534, -340, -566
+		DecorationHeight: 107
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib3x3
 		Sequence: idle
@@ -73,8 +159,11 @@ PROC.TD:
 AFLD.GDI:
 	RenderSprites:
 		Image: afldgdi.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 4706, 4706, -114, 634
+		DecorationHeight: 181
 	WithIdleOverlay@GDIBIB:
-		Image: gdibib4x4
+		Image: gdibib4x5
 		Sequence: idle
 		RequiresCondition: !build-incomplete
 		IsDecoration: true
@@ -83,6 +172,37 @@ GTEK:
 	-WithBuildingBib:
 	RenderSprites:
 		Image: gtek.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 2715, 2715, 46, -589
+		DecorationHeight: 160
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib3x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
+# Supplied factory includes its doorway; do not draw the unrelated SHP door on it.
+WEAP.TD:
+	-WithBuildingBib:
+	-WithProductionDoorOverlayCA:
+	RenderSprites:
+		Image: awep.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 4525, 4525, -442, -181
+		DecorationHeight: 169
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib4x4
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
+EYE:
+	-WithBuildingBib:
+	RenderSprites:
+		Image: eye.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 2896, 2896, -306, -408
+		DecorationHeight: 201
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib3x3
 		Sequence: idle
@@ -93,25 +213,39 @@ AFAC.Nukular:
 	RenderSprites:
 		Image: afac.gdi.png
 
+# Do not leak GDI art-envelope selection boxes into Nod or the legacy color picker.
 fact.colorpicker:
+	IsometricSelectable:
+		-DecorationBounds:
+		DecorationHeight: 30
 	-WithIdleOverlay@GDIBIB:
 	WithBuildingBib:
 		Sequence: bib2
 
 NUKE.Nod:
+	IsometricSelectable:
+		-DecorationBounds:
 	-WithIdleOverlay@GDIBIB:
 
 AFAC.Nod:
 	-WithIdleOverlay@GDIBIB:
 
 HQ.Nod:
+	IsometricSelectable:
+		-DecorationBounds:
 	-WithIdleOverlay@GDIBIB:
 
 REP.Nod:
+	IsometricSelectable:
+		-DecorationBounds:
 	-WithIdleOverlay@GDIBIB:
 
 HPAD.TD.Nod:
+	IsometricSelectable:
+		-DecorationBounds:
 	-WithIdleOverlay@GDIBIB:
 
 PROC.TD.Nod:
+	IsometricSelectable:
+		-DecorationBounds:
 	-WithIdleOverlay@GDIBIB:

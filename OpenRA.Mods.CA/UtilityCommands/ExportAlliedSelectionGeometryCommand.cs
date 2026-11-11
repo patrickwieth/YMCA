@@ -8,11 +8,11 @@ using OpenRA.Mods.Common.Traits.Render;
 
 namespace OpenRA.Mods.CA.UtilityCommands
 {
-	[Desc("--export-allied-selection-geometry", "Export resolved Allied selection and idle PNG registration on flat isometric terrain.")]
+	[Desc("--export-allied-selection-geometry [ACTOR ...]", "Export resolved selection/PNG/bib registration; defaults to Allied actors, or accepts named actors.")]
 	public sealed class ExportAlliedSelectionGeometryCommand : IUtilityCommand
 	{
 		string IUtilityCommand.Name => "--export-allied-selection-geometry";
-		bool IUtilityCommand.ValidateArguments(string[] args) => args.Length == 1;
+		bool IUtilityCommand.ValidateArguments(string[] args) => args.Length >= 1;
 
 		void IUtilityCommand.Run(Utility utility, string[] args)
 		{
@@ -23,7 +23,9 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var sequences = MiniYaml.Load(utility.ModData.DefaultFileSystem, utility.ModData.Manifest.Sequences, null)
 				.ToDictionary(n => n.Key, n => n.Value);
 			var report = new List<object>();
-			foreach (var name in new[] { "fact", "proc", "weap", "pbox", "pris", "powr", "apwr", "tent", "gap", "orep", "pdox", "weat", "atek", "hpad", "dome", "fix", "syrd", "afld.allies" })
+			var names = args.Length > 1 ? args.Skip(1).Select(n => n.ToLowerInvariant()) :
+				new[] { "fact", "proc", "weap", "pbox", "pris", "powr", "apwr", "tent", "gap", "orep", "pdox", "weat", "atek", "hpad", "dome", "fix", "syrd", "afld.allies" };
+			foreach (var name in names)
 			{
 				var actor = utility.ModData.DefaultRules.Actors[name];
 				var building = actor.TraitInfo<BuildingInfo>();
@@ -83,9 +85,33 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				foreach (var value in nodes["idle"].ToDictionary())
 					values[value.Key] = value.Value;
 				string Get(string key, string fallback) => values.TryGetValue(key, out var value) ? value.Value : fallback;
+				var bibs = actor.TraitInfos<WithIdleOverlayInfo>()
+					.Where(i => i.Image != null && i.Image.Contains("bib", StringComparison.OrdinalIgnoreCase))
+					.Select(i =>
+					{
+						var bibNodes = sequences[i.Image].ToDictionary();
+						var fields = bibNodes.TryGetValue("Defaults", out var d) ? d.ToDictionary() : new Dictionary<string, MiniYaml>();
+						foreach (var field in bibNodes[i.Sequence].ToDictionary())
+							fields[field.Key] = field.Value;
+						string Value(string key, string fallback) => fields.TryGetValue(key, out var field) ? field.Value : fallback;
+						var world = actor.TraitInfo<BodyOrientationInfo>().LocalToWorld(i.Offset.Rotate(WRot.None));
+						return new
+						{
+							Image = i.Image, File = Value("Filename", null), Anchor = Value("Anchor", "Center"),
+							Offset = Value("Offset", "0,0"), Scale = Value("Scale", "1"),
+							WorldOffset = new[] { world.X, world.Y, world.Z },
+							ScreenOffset = new[] { (int)Math.Round((float)world.X * grid.TileSize.Width / grid.TileScale),
+								(int)Math.Round((float)(world.Y - world.Z) * grid.TileSize.Height / grid.TileScale) }
+						};
+					}).ToArray();
 				report.Add(new
 				{
 					Actor = name, Image = image, File = Get("Filename", null),
+					TileSize = new[] { grid.TileSize.Width, grid.TileSize.Height }, TileScale = grid.TileScale,
+					BuildingDimensions = new[] { building.Dimensions.X, building.Dimensions.Y },
+					BuildingCenterOffset = new[] { building.LocalCenterOffset.X, building.LocalCenterOffset.Y, building.LocalCenterOffset.Z },
+					InteractionBounds = selection.Bounds, InteractionHeight = selection.Height,
+					DecorationBounds = selection.DecorationBounds, Bibs = bibs,
 					Anchor = Get("Anchor", "Center"), Offset = Get("Offset", "0,0"), Scale = Get("Scale", "1"),
 					BaseTop = baseTop, Height = height, SelectionTop = baseTop - height,
 					BodyCells = bodyCells,

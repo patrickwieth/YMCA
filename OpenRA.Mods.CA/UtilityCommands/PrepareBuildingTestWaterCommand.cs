@@ -39,11 +39,13 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			}
 			var changed = 0;
 			var yards = 0;
-			foreach (var node in map.ActorDefinitions.Where(n => n.Value.Value.Equals("syrd", StringComparison.OrdinalIgnoreCase)))
+			foreach (var node in map.ActorDefinitions.Where(n =>
+				n.Value.Value.Equals("syrd", StringComparison.OrdinalIgnoreCase) ||
+				n.Value.Value.Equals("syrd.gdi", StringComparison.OrdinalIgnoreCase)))
 			{
 				var actor = new ActorReference(node.Value.Value, node.Value.ToDictionary());
 				var location = actor.Get<LocationInit>().Value;
-				var size = map.Rules.Actors["syrd"].TraitInfo<BuildingInfo>().Dimensions;
+				var size = map.Rules.Actors[node.Value.Value.ToLowerInvariant()].TraitInfo<BuildingInfo>().Dimensions;
 				// Include a one-cell water border for the ship exits.
 				for (var y = -1; y <= size.Y; y++)
 					for (var x = -1; x <= size.X; x++)
@@ -52,6 +54,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 						if (!map.Contains(cell))
 							throw new InvalidDataException("Naval Yard water pool extends outside the map.");
 						map.Tiles[cell] = water;
+						if (map.GetTerrainInfo(cell).Type != "Water")
+							throw new InvalidDataException("Naval Yard pool did not resolve to water terrain.");
 						changed++;
 					}
 
@@ -59,7 +63,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			}
 
 			if (yards == 0)
-				throw new InvalidDataException("No Allied Naval Yard found in the test map.");
+				throw new InvalidDataException("No Allied/GDI Naval Yard found in the test map.");
 			map.Save((IReadWritePackage)package);
 			Console.WriteLine($"Building test water prepared: {yards} Naval Yard(s), {changed} cells; original map untouched.");
 		}

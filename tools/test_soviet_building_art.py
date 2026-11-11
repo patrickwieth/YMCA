@@ -10,7 +10,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 BIBS = {'FACT.Soviet': 4, 'POWR.Soviet': 3, 'APWR.Soviet': 4, 'TPWR': 4,
         'DOME.Soviet': 3, 'WEAP.Soviet': 4, 'FIX.Soviet': 4, 'Soviet_Refinery': 3,
-        'Cloning_Vats': 3, 'NKOREA_BUNKER': 3, 'FTUR': 2, 'TTUR': 2, 'TSLA': 2,
+        'Cloning_Vats': 3, 'NKOREA_BUNKER': 3, 'FTUR': 2, 'TTUR': 2, 'TSLA': 1,
         'MSLO': 3, 'SPEN': 4, 'IRON': 3, 'SAM': 2, 'AFLD': 3, 'STEK': 3,
         'BARR': 3, 'INDP': 3, 'HPAD.Soviet': 3, 'FACT.Nukular.Soviet': 4}
 
@@ -20,7 +20,10 @@ def traits(text):
 
 
 def gameplay_hash(text):
-    values = {key: re.sub(r'\s+', '', value) for key, value in traits(text).items()
+    fields = traits(text)
+    if 'IsometricSelectable' in fields:
+        fields['IsometricSelectable'] = re.sub(r'(?m)^[\t ]+(?:DecorationBounds|DecorationHeight):[^\n]*\n?', '', fields['IsometricSelectable'])
+    values = {key: re.sub(r'\s+', '', value) for key, value in fields.items()
               if not key.startswith(('RenderSprites', 'WithIdleOverlay', 'WithBuildingBib'))}
     return hashlib.sha256(json.dumps(values, sort_keys=True).encode()).hexdigest()
 
@@ -35,7 +38,9 @@ def resolved(command, name):
 
 class SovietBuildingArtTests(unittest.TestCase):
     def test_resolved_bibs_and_unchanged_gameplay(self):
-        baseline = json.loads((ROOT / 'tools/soviet-building-gameplay-baseline.json').read_text())
+        baseline = json.loads((ROOT / 'tools/soviet-building-alignment-gameplay-baseline.json').read_text())
+        calibration = {e['Actor']: e for e in json.loads((ROOT / 'tools/soviet-building-alignment.json').read_text())['entries']}
+        calibration['fact.nukular.soviet'] = calibration['fact.soviet']
         for actor, size in BIBS.items():
             with self.subTest(actor=actor):
                 text = resolved('--resolved-rules', actor)
@@ -45,8 +50,11 @@ class SovietBuildingArtTests(unittest.TestCase):
                 self.assertNotIn('WithIdleOverlay@ALLIEDBIB', fields)
                 # Disabled legacy bibs still load sequences in AddedToWorld.
                 self.assertNotIn('WithBuildingBib', fields)
-                if actor in baseline:
-                    self.assertEqual(gameplay_hash(text), baseline[actor])
+                self.assertEqual(gameplay_hash(text), baseline[actor])
+                if actor.lower() in calibration:
+                    entry = calibration[actor.lower()]
+                    self.assertIn('DecorationBounds: ' + ', '.join(map(str, entry['DecorationBounds'])), fields['IsometricSelectable'])
+                    self.assertIn('DecorationHeight: ' + str(entry['DecorationHeight']), fields['IsometricSelectable'])
                 if actor == 'AFLD':
                     self.assertIn('Image: afld.soviet', fields['RenderSprites'])
                 if actor == 'HPAD.Soviet':
@@ -64,15 +72,33 @@ class SovietBuildingArtTests(unittest.TestCase):
             self.assertRegex(block, r'Inherits: \^Soviet\w+Base')
             self.assertNotRegex(block, r'Inherits: ' + actor + r'\s')
 
+    def test_sentry_rotation_uses_existing_sheet_metadata(self):
+        from PIL import Image
+        path = ROOT / 'mods/ca/bits/soviet/buildings/rotational/sentry turret.png'
+        metadata = path.with_suffix('.yaml').read_text()
+        self.assertIn('FrameSize: 106,106', metadata)
+        self.assertIn('FrameAmount: 9', metadata)
+        with Image.open(path) as image:
+            self.assertGreaterEqual(image.width, 3 * 106)
+            self.assertGreaterEqual(image.height, 3 * 106)
+        for name in ('ftur.soviet', 'ttur.soviet'):
+            fields = traits(resolved('--resolved-sequences', name))
+            for state in ('turret', 'damaged-turret'):
+                self.assertIn('Filename: bits/soviet/buildings/rotational/sentry turret.png', fields[state])
+                self.assertIn('Frames: 7, 8, 5, 2, 1, 0, 3, 6', fields[state])
+                self.assertIn('Facings: 8', fields[state])
+
     def test_missile_animation_preserved(self):
         sequence = resolved('--resolved-sequences', 'mslo.soviet')
         fields = traits(sequence)
         for state in ('active', 'damaged-active'):
             self.assertIn('Count: 7', fields[state])
             self.assertIn('Length: 7', fields[state])
+        calibration = json.loads((ROOT / 'tools/soviet-building-alignment.json').read_text())['entries']
+        offset = ','.join(map(str, next(e for e in calibration if e['Actor'] == 'mslo')['Offset']))
         for state in ('idle', 'damaged-idle', 'active', 'damaged-active', 'open', 'damaged-open'):
             self.assertIn('Anchor: Bottom', fields[state])
-            self.assertIn('Offset: 0,-43', fields[state])
+            self.assertIn('Offset: ' + offset, fields[state])
 
 
 if __name__ == '__main__':

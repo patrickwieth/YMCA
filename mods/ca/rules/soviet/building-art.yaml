@@ -1,4 +1,5 @@
-# Decorative foundations only: no changes to footprints, exits or docking.
+# Decorative foundations and an independent art-test actor.
+# Existing actor footprints, exits and docking remain unchanged.
 ^Soviet1x1Bib:
 	WithIdleOverlay@SOVIETBIB:
 		Image: sovietbib1x1
@@ -20,6 +21,45 @@
 	Inherits: ^Soviet1x1Bib
 	WithIdleOverlay@SOVIETBIB:
 		Image: sovietbib4x4
+
+# Independent art-test actor. FTUR remains the Flame Tower; no production-menu
+# duplicate until this Sentry has its own approved weapon/balance definition.
+SENTRY.SOVIET:
+	Inherits: FTUR
+	-Buildable:
+	RenderSprites:
+		Image: ftur.soviet.v13
+	Tooltip:
+		Name: Sentry V13 (art test)
+	Turreted:
+		InitialFacing: 384
+		TurnSpeed: 32
+	BodyOrientation:
+		QuantizedFacings: 32
+	WithIdleOverlay@SOVIETBIB:
+		Image: sovietbib1x1
+	IsometricSelectable:
+		DecorationBounds: 1267, 1267, 0, 0
+		DecorationHeight: 49
+
+# Separate comparison actor: unchanged PNG base plus a real rotating VXL turret.
+SENTRY.SOVIET.VOXEL:
+	Inherits: SENTRY.SOVIET
+	-WithSpriteTurret:
+	Tooltip:
+		Name: Sentry V13 (voxel test)
+	BodyOrientation:
+		QuantizedFacings: 0
+		CameraPitch: 85
+	RenderVoxels:
+		Image: sentry.soviet.voxel
+		Palette: sentry-voxel-source
+		Scale: 0.98765432
+		LightAmbientColor: 0.82, 0.82, 0.82
+		LightDiffuseColor: 0.18, 0.18, 0.18
+	WithVoxelTurret:
+		Sequence: turret
+		ShowShadow: false
 
 # Concrete actors remove legacy WithBuildingBib entirely: even a disabled
 # legacy trait loads its sprite sequence when the actor is added to the world.

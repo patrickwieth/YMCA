@@ -174,12 +174,12 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			if (rules.Actors["weap.soviet"].TraitInfo<BuildingInfo>().Dimensions != new CVec(3, 3))
 				throw new InvalidDataException("Soviet factory footprint must not change.");
 			foreach (var entry in new[] { (Name: "powr", Height: 69), (Name: "fact", Height: 60),
-				(Name: "fact.nukular", Height: 60), (Name: "fact.soviet", Height: 30), (Name: "fact.nukular.soviet", Height: 30),
+				(Name: "fact.nukular", Height: 60), (Name: "fact.soviet", Height: 125), (Name: "fact.nukular.soviet", Height: 125),
 				(Name: "proc", Height: 55), (Name: "afld.allies", Height: 83), (Name: "syrd", Height: 60),
 				(Name: "pdox", Height: 105), (Name: "gap", Height: 183), (Name: "atek", Height: 108),
 				(Name: "fix", Height: 38), (Name: "weap", Height: 76), (Name: "pris", Height: 171),
-				(Name: "soviet_refinery", Height: 44), (Name: "fix.soviet", Height: 30),
-				(Name: "weap.soviet", Height: 30), (Name: "chsyrd", Height: 30) })
+				(Name: "soviet_refinery", Height: 174), (Name: "fix.soviet", Height: 211),
+				(Name: "weap.soviet", Height: 95), (Name: "chsyrd", Height: 30) })
 				if (rules.Actors[entry.Name].TraitInfo<IsometricSelectableInfo>().DecorationHeight != entry.Height)
 					throw new InvalidDataException(entry.Name + ": requested selection height or Soviet isolation changed.");
 			if (rules.Actors["pbox"].TraitInfo<IsometricSelectableInfo>().DecorationHeight != 76)
@@ -238,7 +238,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			foreach (var entry in new[]
 			{
 				(Image: "weap.allies", Offset: "-10,17"),
-				(Image: "fact", Offset: "40,-3"), (Image: "fact.soviet", Offset: "0,-26"),
+				(Image: "fact", Offset: "40,-3"), (Image: "fact.soviet", Offset: "-39,-54"),
 				(Image: "pris.allies", Offset: "0,-6"), (Image: "powr.allies", Offset: "0,38"),
 				(Image: "apwr.allies", Offset: "0,29"), (Image: "proc.allies", Offset: "0,-5"),
 				(Image: "tent.allies", Offset: "4,-7"), (Image: "gap.allies", Offset: "5,-21"),

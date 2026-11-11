@@ -52,6 +52,9 @@ try {
 
     $yaml = $yaml.Remove($needleIndex, $needle.Length).Insert($needleIndex, $developerMode)
 
+    # SENTRY.SOVIET is a separate prototype actor now. Do not override FTUR:
+    # the Flame Tower must keep its own image, turning and build-menu entry.
+
     # Only change the disposable test copy: show the current Allied Prism Tower
     # in the old Allied Turret slot, preserving actor IDs, ownership and placement.
     $actors = [regex]::Match($yaml, '(?ms)(^Actors:\r?\n)(.*?)(?=^[^\t\r\n#][^\r\n]*:|\z)')
@@ -75,6 +78,9 @@ try {
         @('Actor23', 'fact', 'fact.soviet', '116,-40'),
         @('Actor24', 'powr', 'powr.soviet', '122,-46'),
         @('Actor25', 'apwr', 'apwr.soviet', '128,-52'),
+        # Reuse the removed storage-silo slot directly screen-above the helipad.
+        # Same x-y (204), smaller x+y: 76 versus 84. Independent Sentry actor.
+        @('Actor27', 'silo', 'sentry.soviet', '140,-64'),
         @('Actor30', 'weap', 'weap.soviet', '132,-48'),
         @('Actor31', 'dome', 'dome.soviet', '138,-54'),
         @('Actor32', 'hpad', 'hpad.soviet', '144,-60'),
@@ -93,7 +99,18 @@ try {
         $replacement = $match.Groups[1].Value + $slot[2] + $match.Groups[3].Value
         $actorText = $actorText.Remove($match.Index, $match.Length).Insert($match.Index, $replacement)
     }
-    Write-Host "Test map: assigned 7 Soviet display slots to their dedicated Soviet actors."
+    Write-Host "Test map: assigned $($sovietSlots.Count) Soviet display slots, including the Sentry above the helipad."
+
+    # Side-by-side real voxel comparison, same screen row, two isometric cells right.
+    if ($actorText -match '(?m)^\tActorSentryVoxel:') {
+        throw "Unexpected existing Sentry voxel slot."
+    }
+    $actorText = $actorText.TrimEnd() + $newline + (@(
+        "`tActorSentryVoxel: sentry.soviet.voxel"
+        "`t`tOwner: Multi0"
+        "`t`tLocation: 142,-66"
+    ) -join $newline) + $newline + $newline
+    Write-Host "Test map: added independent voxel Sentry beside the sprite Sentry."
 
     # Remove only resource-storage silos, never missile/nuclear silo actors.
     $siloPattern = '(?mi)^\t[^\t\r\n:]+:[ \t]*(?:silo|silo\.td|silo\.scrin|silo\.soviet)[ \t]*\r?\n(?:\t\t[^\r\n]*(?:\r?\n|\z))*'

@@ -1,5 +1,6 @@
 import unittest
 import re
+import json
 from pathlib import Path
 from PIL import Image
 import audit_png_case
@@ -28,14 +29,17 @@ class SuppliedBuildingArtTests(unittest.TestCase):
                 with Image.open(path) as image:
                     image.verify()
 
-    def test_gdi_rearward_placement_preserves_all_png_body_states(self):
+    def test_gdi_calibrated_placement_preserves_all_png_body_states(self):
         source = (ROOT / 'mods/ca/sequences/gdi-building-art.yaml').read_text()
         placement = (ROOT / 'mods/ca/sequences/gdi-building-placement.yaml').read_text()
         manifest = (ROOT / 'mods/ca/mod.yaml').read_text()
         self.assertLess(manifest.index('ca|sequences/gdi-building-art.yaml'),
                         manifest.index('ca|sequences/gdi-building-placement.yaml'))
         images = re.findall(r'^([^\s#]+\.gdi\.png):$', placement, re.M)
-        self.assertEqual(len(images), 9)
+        calibration = json.loads((ROOT / 'tools/gdi-building-alignment.json').read_text())
+        offsets = {entry['Image']: entry['Offset'] for entry in calibration['entries']}
+        self.assertEqual(len(images), 13)
+        self.assertEqual(set(images), set(offsets))
         for image in images:
             original = block(source, image)
             override = block(placement, image)
@@ -44,9 +48,35 @@ class SuppliedBuildingArtTests(unittest.TestCase):
                 if 'Filename: bits/gdi/buildings/' not in fields:
                     continue
                 expected_states.append(state)
-                old = re.search(r'Offset: 0,(-?\d+)', fields)
-                self.assertIn(f'\t{state}:\n\t\tOffset: 0,{int(old[1]) - 32}', override)
+                x, y = offsets[image]
+                self.assertIn(f'\t{state}:\n\t\tOffset: {x},{y}', override)
             self.assertEqual(len(re.findall(r'^\t[^\s:]+:', override, re.M)), len(expected_states))
+
+    def test_new_gdi_factory_and_communications_bindings(self):
+        rules = (ROOT / 'mods/ca/rules/gdi/building-art.yaml').read_text()
+        sequences = (ROOT / 'mods/ca/sequences/gdi-building-art.yaml').read_text()
+        for actor, image, filename, bib in (
+                ('WEAP.TD', 'awep.gdi.png', 'weapons factory.png', 4),
+                ('EYE', 'eye.gdi.png', 'communication center.png', 3),
+                ('UPGC', 'upgc.gdi.png', 'upgrade center.png', 3)):
+            actor_rules = block(rules, actor)
+            self.assertIn('Image: ' + image, actor_rules)
+            self.assertIn('-WithBuildingBib:', actor_rules)
+            self.assertIn(f'Image: gdibib{bib}x{bib}', actor_rules)
+            self.assertIn('IsDecoration: true', actor_rules)
+            for state in ('idle', 'damaged-idle', 'dead'):
+                fields = re.search(r'^\t' + state + r':\n((?:\t\t[^\n]*\n?)*)',
+                                   block(sequences, image), re.M)[1]
+                self.assertIn('Filename: bits/gdi/buildings/' + filename, fields)
+                self.assertIn('Scale: 1', fields)
+                self.assertIn('Length: 1', fields)
+        self.assertIn('-WithProductionDoorOverlayCA:', block(rules, 'WEAP.TD'))
+        self.assertIn('\tplace:\n\t\tFilename: bits/gdi/buildings/weapons factory.png',
+                      block(sequences, 'awep.gdi.png'))
+        # Existing radar remains separate from the advanced communications center.
+        self.assertIn('Filename: bits/gdi/buildings/radar.png', block(sequences, 'hq.gdi.png'))
+        eye_rules = block((ROOT / 'mods/ca/rules/structures.yaml').read_text(), 'EYE')
+        self.assertEqual(len(re.findall(r'^\tInherits@', eye_rules, re.M)), 6)
 
     def test_checkpoint_restores_checkpoint_not_forward_command(self):
         rules = (ROOT / 'mods/ca/rules/husks.yaml').read_text()
