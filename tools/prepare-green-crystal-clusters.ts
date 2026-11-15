@@ -1,5 +1,5 @@
 // External tsx/pngjs; see docs/green-crystal-clusters.md.
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve, join } from 'node:path';
 import { withBlackOutline } from './crystal-outlines';
@@ -173,10 +173,23 @@ const outlined = new Map(pool.map(m=>{
 }));
 records.push(`Small broken-earth bases added only to ${Object.keys(earthBodies).length} previously bare scene motifs; original soil-bearing motifs unchanged.`);
 const outlineBodies: Record<string,string> = {};
+const handEdited: Record<string,{file:string;sha256:string}> = {};
 for (const [name,art] of outlined) {
   outlineBodies[name]=`outlined-${name}-body.png`;
-  save(outlineBodies[name],art);
+  // Hand corrections are final art: bypass every color, earth and outline pass.
+  // Always read from the source directory, including when output is staged elsewhere.
+  const file=join('hand-edited',outlineBodies[name]);
+  const path=join(root,'green-crystal-clusters',file);
+  if (existsSync(path)) {
+    const bytes=readFileSync(path), corrected:Image=PNG.sync.read(bytes);
+    if (corrected.width!==160 || corrected.height!==128 || !corrected.data.some((v,i)=>i%4===3&&v>0))
+      throw new Error(`Invalid hand-edited motif (expected nonempty 160x128 PNG): ${path}`);
+    outlined.set(name,corrected);
+    handEdited[name]={file:file.replace(/\\/g,'/'),sha256:createHash('sha256').update(bytes).digest('hex')};
+    writeFileSync(join(output,outlineBodies[name]),bytes);
+  } else save(outlineBodies[name],art);
 }
+records.push(`Final hand-edited overrides: ${Object.keys(handEdited).length}. See layouts.json for source files/hashes. Copied byte-for-byte after all generated processing.`);
 records.push('Final outline: opaque black, one native pixel (4-neighbor mask), existing dark outlines not expanded; per motif before depth compositing; existing RGBA pixels preserved.');
 const positions = [[0,-10],[-22,2],[22,2],[0,16]];
 function fits(art: Image, dx: number, dy: number, outlineMargin = 0) {
@@ -231,7 +244,7 @@ for (let p = 0; p < preview.data.length; p += 4) {
   preview.data[p+3] = 255;
 }
 save('preview.png',preview);
-writeFileSync(join(output,'layouts.json'),JSON.stringify({ positions, layouts, paletteReference, paletteReferenceSHA256, palette:palette.map(p=>p.rgb), paletteBodies, contrastRepaired, earthBodies, outlineBodies, outline:{color:[0,0,0,255],radius:1,neighbors:4,preserveExistingDark:true} },null,2)+'\n');
+writeFileSync(join(output,'layouts.json'),JSON.stringify({ positions, layouts, paletteReference, paletteReferenceSHA256, palette:palette.map(p=>p.rgb), paletteBodies, contrastRepaired, earthBodies, outlineBodies, handEdited, outline:{color:[0,0,0,255],radius:1,neighbors:4,preserveExistingDark:true} },null,2)+'\n');
 writeFileSync(join(output,'provenance.txt'),records.join('\n')+'\n');
 if (!readFileSync(source).equals(original)) throw new Error('Source modified.');
 console.log(`PASS: eleven exact extractions (${sourceCount} pixels), ${pool.length} small native-size motifs, twelve stable density layouts.`);

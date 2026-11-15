@@ -1,5 +1,14 @@
 # Small green crystals: density by count, not scale
 
+Final artist corrections: sixteen hand-edited motifs now override generated art.
+Their authoritative PNGs are in `bits/resources/green-crystal-clusters/hand-edited/`
+(relative to `mods/ca/`). Edit those copies, not the parent generated bodies. The
+helper copies them byte-for-byte after all automatic processing and recomposes
+all density frames without recoloring, earth/outline changes, resizing or shifting.
+See that directory's README and `layouts.json` → `handEdited` for paths/hashes.
+The initial regeneration verified all 144 frames and preserved all sixteen edited
+PNGs exactly; existing layouts, blue art and trees were unchanged.
+
 Current rendering applies a [shared earthy legacy palette](green-crystal-palette.md) to every active green motif, superseding the separate sheet-level colors described below.
 
 Current height review: **26 active green motifs** (blue: 30). Eleven-sheet motif 6 and seven-sheet motif 7 are now excluded: their tips extended 33 and 32 pixels above the ground anchor, the two tallest remaining silhouettes. Source assets are retained; the density layout still uses 1–4 unscaled small groups per cell.
