@@ -1,5 +1,7 @@
 # Authored blue Tiberium sprites
 
+Current runtime selection: [small blue clusters](blue-crystal-clusters.md) uses legacy motifs 4,6,8 together with 27 scene motifs. Density now changes motif count instead of size. Original artwork and extraction outputs below remain unchanged.
+
 Source `../8 blue crystals.png` remains unchanged, SHA256 `dd8e640795b0ffb3e6b3a3ed94815c847df2b7884c111319b3b34d0644e0afa1`.
 
 Reproduce using external tsx/pngjs dependencies (same tools environment as `green-crystals.md`), from the repository parent:

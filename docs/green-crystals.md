@@ -1,5 +1,7 @@
 # Authored green Tiberium crystals
 
+Current runtime selection: [size filtering and green palette harmonization](crystal-size-and-color.md). Original motif 2 is excluded; motifs 1, 3 and 4 now use derived yellow-green runtime PNGs. The extraction and original assets described below remain unchanged.
+
 Source: repository-root `4 green crystals.png`, unchanged; SHA256 `da601479ead4435d0ae3cd96539bb19d2b0e201f218ab2acaceb93ab6e2d2918`.
 
 Outputs in `mods/ca/bits/resources/green-crystals/`:
@@ -12,7 +14,7 @@ Outputs in `mods/ca/bits/resources/green-crystals/`:
 
 The four large connected components and adjacent detached crack pixels are retained. Twelve isolated stray pixels are omitted. Only the original flat olive ground color and its near-identical palette variants are removed. Authored crystal, stone and crack colors remain intact (8,978 pixels). The removed ground mask (6,961 pixels) is softened with three box filters and becomes RGB (76,226,63), alpha up to 100/255. That separate diagnostic overlay is no longer composited into runtime PNGs. The game now supplies [dynamic terrain lighting](tiberium-terrain-light.md).
 
-The 160x128 frames share a foot anchor at (80,80); PNG frame metadata supplies offset (0,-16). Existing `resources.ti1` through `ti12` map cyclically to the four atlases on Rubberduck normal and shaded tilesets, maintaining equal variant frequency. Other tilesets, blue Tiberium, trees, quantities, prices and harvesting rules are untouched. Game and editor use the shared resource sequences. Existing maps receive the visual change on reload; regeneration is unnecessary.
+The 160x128 frames share a foot anchor at (80,80); PNG frame metadata supplies offset (0,-16). Initially, `resources.ti1` through `ti12` cycled through these four atlases. The [seven additional green motifs](seven-green-crystals.md) now occupy `ti5`–`ti11`, with a small new motif repeated at `ti12`; these original four remain at `ti1`–`ti4` on Rubberduck normal and shaded tilesets. Other tilesets, blue Tiberium, trees, quantities, prices and harvesting rules are untouched. Game and editor use the shared resource sequences. Existing maps receive the visual change on reload; regeneration is unnecessary.
 
 ## Reproduction
 
