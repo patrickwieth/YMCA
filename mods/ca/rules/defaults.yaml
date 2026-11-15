@@ -1618,6 +1618,11 @@ refinery.dockhelper:
 		Interval: 5
 		RequiresCondition: c4
 
+# Separate target provider: immunity survives additional/overridden target types.
+^MindControlImmune:
+	Targetable@MINDCONTROLIMMUNE:
+		TargetTypes: MindControlImmune
+
 ^MindControllableBase:
 	MindControllableCA:
 		ControlledConditions:
@@ -1687,9 +1692,9 @@ refinery.dockhelper:
 		RequiresCondition: geneticmutation
 	ExternalCondition@genespliced:
 		Condition: genespliced
-	SpawnActorOnDeath@Zombie:
+	SpawnActorOnDeathFromConditionSource@Zombie:
 		Actor: zombie.mutating
-		OwnerType: Killer
+		SourceCondition: genespliced
 		SpawnAfterDefeat: false
 		SkipMakeAnimations: false
 		RequiresCondition: genespliced
@@ -4470,6 +4475,7 @@ BuildBoost.Dummy:
 		Categories: Critter
 
 ^ShootableMissile:
+	Inherits: ^MindControlImmune
 	Inherits: ^ExistsInWorld
 	Inherits: ^SpriteActor
 	Inherits: ^LightArmor
@@ -4779,6 +4785,7 @@ BuildBoost.Dummy:
 		SkipRate: 1
 
 ^VoxelShootableMissile:
+	Inherits: ^MindControlImmune
 	Inherits: ^ExistsInWorld
 	Inherits: ^SpriteActor
 	Inherits: ^LightArmor

@@ -585,10 +585,13 @@ Zombie.Mutating:
 		Delay: 10
 	DamageMultiplier:
 		Modifier: 0
+	# This stage already belongs to the mutation source and needs no new infection.
+	-SpawnActorOnDeathFromConditionSource@Zombie:
 	SpawnActorOnDeath@Zombie:
 		Actor: zombie
 		OwnerType: Victim
 		SpawnAfterDefeat: false
+		SkipMakeAnimations: false
 	-UpdatesPlayerStatistics:
 	-Selectable:
 	Interactable:
