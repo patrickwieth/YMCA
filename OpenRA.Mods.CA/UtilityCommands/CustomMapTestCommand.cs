@@ -17,11 +17,11 @@ namespace OpenRA.Mods.CA.UtilityCommands
 		{
 			Game.ModData = utility.ModData;
 			var cases = new List<CustomMapSettings>();
-			foreach (var subtype in Enum.GetValues<StrongholdSubtype>())
+			foreach (var subtype in RuntimeCompat.EnumValues<StrongholdSubtype>())
 				foreach (var connected in new[] { false, true }) foreach (var battle in new[] { false, true })
 					cases.Add(new CustomMapSettings { Strongholds = subtype, ConnectedStartAreas = connected, BattleInTheCenter = battle });
-			foreach (var subtype in Enum.GetValues<PlainsSubtype>()) cases.Add(new CustomMapSettings { Topology = CustomTopology.OpenPlains, Plains = subtype });
-			foreach (var subtype in Enum.GetValues<IslandSubtype>()) foreach (var connections in new[] { false, true })
+			foreach (var subtype in RuntimeCompat.EnumValues<PlainsSubtype>()) cases.Add(new CustomMapSettings { Topology = CustomTopology.OpenPlains, Plains = subtype });
+			foreach (var subtype in RuntimeCompat.EnumValues<IslandSubtype>()) foreach (var connections in new[] { false, true })
 				cases.Add(new CustomMapSettings { Topology = CustomTopology.Islands, Islands = subtype, Connections = connections });
 			cases.AddRange(cases.Where(c => c.HasCenter).Select(c => { var copy = c.Copy(); copy.CenterBuildable = !c.CenterBuildable; return copy; }).ToArray());
 			var failures = 0;

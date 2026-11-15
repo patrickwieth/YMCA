@@ -75,8 +75,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			}
 			footProvenance.AppendLine("Existing height-four fitting and logical roof/foot sockets retained. Original variants include baked-light and ground-detail differences; not pixel-identical bodies.");
 			footProvenance.AppendLine("Existing opaque-matte keying retained except the outer corner's verified translucent contact shadow. Existing authored grass roof layers retained.");
-			footProvenance.AppendLine("grassland_1x1.png SHA256 " + Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine(Path.GetFullPath(args[1]), "grassland", "grassland_1x1.png")))));
-			footProvenance.AppendLine("Roof-layer source grass_cliff_trans.png SHA256 " + Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine(Path.GetFullPath(args[1]), "grassland", "grass_cliff_trans.png")))));
+			footProvenance.AppendLine("grassland_1x1.png SHA256 " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(Path.Combine(Path.GetFullPath(args[1]), "grassland", "grassland_1x1.png")))));
+			footProvenance.AppendLine("Roof-layer source grass_cliff_trans.png SHA256 " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(Path.Combine(Path.GetFullPath(args[1]), "grassland", "grass_cliff_trans.png")))));
 			footProvenance.AppendLine("See docs/rubberduck-authored-cliff-feet.md for source matching, runtime evidence and remaining junction limitations.");
 			File.WriteAllText(Path.Combine(output, "authored-foot-provenance.txt"), footProvenance.ToString());
 
@@ -124,7 +124,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				}
 
 			var results = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes",
-				Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+				RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(results));
 			File.WriteAllText(results, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), results);

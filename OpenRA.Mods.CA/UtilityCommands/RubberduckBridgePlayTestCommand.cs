@@ -28,7 +28,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var center = cell + (body.AlongY ? new CVec(0, body.Length / 2) : new CVec(body.Length / 2, 0));
 			if (args.Contains("shaded")) map.Tileset = "RUBBERDUCK-TEMPERATE-SHADED";
 			var logs = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes"); Directory.CreateDirectory(logs);
-			var result = Path.Combine(logs, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(logs, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			File.WriteAllText(result, ""); File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			var editor = args.Contains("editor");
 			var probe = editor ? $"\tRubberduckBridgeEditorProbe:\n\t\tCell: {cell}\n\t\tResultPath: {result}\n" : $"\tRubberduckBridgeProbe:\n\t\tResultPath: {result}\n";

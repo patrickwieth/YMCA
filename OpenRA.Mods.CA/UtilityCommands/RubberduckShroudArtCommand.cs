@@ -91,7 +91,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			{
 				"Procedural overlay, NOT native/unwarped artist artwork. Original files unchanged.",
 				"Reference opacity/layout source: " + sourcePath,
-				"Reference SHA256: " + Convert.ToHexString(SHA256.HashData(original)),
+				"Reference SHA256: " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(original)),
 				"Full opacity: " + opacity + " (source alpha " + sourceOpacity + "; RGBA fog uses the standard indexed fog palette's 128 alpha); 48 frames of 128x64; existing sequence frame/index mapping retained.",
 				"Positive black-corner bilinear field in CPos-aligned u/v; smoothstep from 0.25 to 0.75. Clamp u/v outside the diamond to continue its edge field.",
 				"Validated all 16 masks for quarter-turn symmetry, range, monotone visibility and matching shared edges; exact RGBA PNG roundtrip. Runtime/shroud screenshots required before acceptance."

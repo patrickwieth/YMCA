@@ -49,7 +49,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 						Console.WriteLine($"NEXUS CENTER PASS {mode} seed={seed} resources={resources}: dirt={count}, planned/exported gems={gems}.");
 						if (mode != "tactical" || seed != 42 || resources != "glitter") continue;
 						var logs = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes"); Directory.CreateDirectory(logs);
-						var result = Path.Combine(logs, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output + "-nexus"))) + ".log");
+						var result = Path.Combine(logs, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output + "-nexus"))) + ".log");
 						File.WriteAllText(result, ""); File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 						var center = new MPos(plan.Width / 2 + 1, plan.Height / 2 + map.Grid.MaximumTerrainHeight + 1).ToCPos(map);
 						map.RuleDefinitions = new MiniYaml("", MiniYaml.FromString($"World:\n\tNexusResourceProbe:\n\t\tResultPath: {result}\n\tTerrainCalibrationView:\n\t\tCenter: {center}\n\t\tZoomScale: 0.7\n\t\tMinimumZoomScale: 0.1\n\t\tScreenshotTicks: 160\nPlayer:\n\tShroud:\n\t\tFogCheckboxEnabled: false\n\t\tFogCheckboxLocked: true\n\t\tExploredMapCheckboxEnabled: true\n\t\tExploredMapCheckboxLocked: true\n", "nexus-center-probe"));

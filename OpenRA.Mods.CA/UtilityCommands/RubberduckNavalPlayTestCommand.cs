@@ -26,7 +26,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				throw new InvalidDataException("Naval probe requires a production Rubberduck map (generated bridge rules are preserved).");
 			var directory = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes");
 			Directory.CreateDirectory(directory);
-			var result = Path.Combine(directory, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(args[2])))) + ".log");
+			var result = Path.Combine(directory, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(args[2])))) + ".log");
 			File.WriteAllText(result, "");
 			File.WriteAllText(Path.Combine(args[2], "runtime-results-path.txt"), result);
 			var rank = args.Length == 4 ? int.Parse(args[3]) : 0;

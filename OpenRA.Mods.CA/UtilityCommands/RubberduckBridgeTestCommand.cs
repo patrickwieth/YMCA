@@ -41,7 +41,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			using var map = new Map(utility.ModData, zip);
 			if (args.Contains("shaded")) map.Tileset = "RUBBERDUCK-TEMPERATE-SHADED";
 			var logs = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes"); Directory.CreateDirectory(logs);
-			var result = Path.Combine(logs, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(logs, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			if (File.Exists(result)) File.Delete(result);
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			var focus = args.FirstOrDefault(a => a.StartsWith("focus=", StringComparison.Ordinal));

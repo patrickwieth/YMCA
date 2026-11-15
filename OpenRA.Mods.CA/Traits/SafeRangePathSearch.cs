@@ -17,7 +17,7 @@ namespace OpenRA.Mods.CA.Traits
 			path = new List<CPos>();
 			var cost = new Dictionary<CPos, int> { [source] = 0 };
 			var parent = new Dictionary<CPos, CPos> { [source] = source };
-			var queue = new System.Collections.Generic.PriorityQueue<(CPos Cell, int Cost), int>();
+			var queue = new PortablePriorityQueue<(CPos Cell, int Cost), int>();
 			queue.Enqueue((source, 0), estimate(source));
 			var expanded = 0;
 			while (queue.TryDequeue(out var current, out _))

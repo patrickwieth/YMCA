@@ -57,7 +57,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					actors.Add(new MiniYamlNode("LegacyTalus" + i, new ActorReference(type) { new LocationInit(cells[i]), new OwnerInit("Neutral") }.Save()));
 			var logs = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes");
 			Directory.CreateDirectory(logs);
-			var result = Path.Combine(logs, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(args[2])))) + ".log");
+			var result = Path.Combine(logs, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(args[2])))) + ".log");
 			File.WriteAllText(result, "");
 			File.WriteAllText(Path.Combine(args[2], "runtime-results-path.txt"), result);
 			actors.Add(new MiniYamlNode("LegacyFootVehicle", new ActorReference("calibration.legacyvehicle") { new LocationInit(start), new OwnerInit("Multi0") }.Save()));

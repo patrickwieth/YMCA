@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.Json;
+using Newtonsoft.Json;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Mods.Common.Traits.Render;
 
@@ -123,7 +123,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				});
 			}
 
-			Console.WriteLine(JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }));
+			Console.WriteLine(JsonConvert.SerializeObject(report, Formatting.Indented));
 		}
 	}
 }

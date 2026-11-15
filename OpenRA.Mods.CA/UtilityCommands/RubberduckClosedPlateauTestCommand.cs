@@ -229,7 +229,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			ValidateRampRotations(map, center);
 			var plan = new RubberduckClosedPlateauPlan(map, center, notch, Array.Empty<CPos>(), rearRamp, rampDirection);
 			CPos RampCell(int x, int y) => center + RubberduckClosedPlateauPlan.RampOffset(x, y, rampDirection);
-			var log = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var log = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(log)); File.WriteAllText(log, ""); File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), log);
 			var rules = new StringBuilder($"World:\n\tTerrainCalibrationView:\n\t\tCenter: {center + new CVec(5, -2)}\n\t\tMinimumZoomScale: 0.65\n\t\tZoomScale: 0.65\nPlayer:\n\tShroud:\n\t\tFogCheckboxEnabled: false\n\t\tFogCheckboxLocked: true\n\t\tExploredMapCheckboxEnabled: true\n\t\tExploredMapCheckboxLocked: true\n");
 			if (editor)

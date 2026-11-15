@@ -135,7 +135,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			if (!new Png(check).Data.SequenceEqual(png.Data)) throw new InvalidDataException("Catalog PNG changed decoded pixels.");
 		}
 
-		static string Hash(byte[] data) => Convert.ToHexString(SHA256.HashData(data));
+		static string Hash(byte[] data) => RuntimeCompat.ToHexString(RuntimeCompat.HashData(data));
 		static void Mark(byte[] data, int width, int x, int y, byte r, byte g, byte b)
 		{
 			var p = (y * width + x) * 4;

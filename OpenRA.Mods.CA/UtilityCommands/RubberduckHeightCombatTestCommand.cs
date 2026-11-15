@@ -26,7 +26,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var unit = (args.Skip(2).SingleOrDefault(a => a.StartsWith("unit=", StringComparison.Ordinal)) ?? "unit=challenger_tank").Substring(5).ToLowerInvariant();
 			Directory.CreateDirectory(args[1]);
 			var logs = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes"); Directory.CreateDirectory(logs);
-			var result = Path.Combine(logs, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(args[1])))) + ".log");
+			var result = Path.Combine(logs, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(args[1])))) + ".log");
 			File.WriteAllText(result, ""); File.WriteAllText(Path.Combine(args[1], "runtime-results-path.txt"), result);
 			using var map = new Map(utility.ModData, (DefaultTerrain)utility.ModData.DefaultTerrainInfo["RUBBERDUCK-TEMPERATE"], 98, 114);
 			var unitInfo = map.Rules.Actors[unit];

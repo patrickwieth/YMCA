@@ -181,7 +181,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				DropDown("Players (automatic size)", 38, new[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16 }, () => players,
 					value => { var seed = options.Seed; players = value; ResetOptions(); options.Seed = seed; Show(); });
 				// UI order only: keep serialized preset values and generator dispatch unchanged.
-				var presets = Enum.GetValues<MapGenerationPreset>().Select(p => p switch
+				var presets = RuntimeCompat.EnumValues<MapGenerationPreset>().Select(p => p switch
 				{
 					MapGenerationPreset.MountainValleys => MapGenerationPreset.BattleNexus,
 					MapGenerationPreset.BattleNexus => MapGenerationPreset.MountainValleys,
@@ -243,24 +243,24 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		{
 			DropDown("Players (automatic size)", 38, new[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16 }, () => players,
 				value => { var old = options; players = value; ResetOptions(); old.Players = players; old.Width = options.Width; old.Height = options.Height; options = old; Show(); });
-			DropDown("Archetype", 76, Enum.GetValues<CustomTopology>().Where(t => mode != GeneratedMapMode.Strategic || t != CustomTopology.Islands).ToArray(),
+			DropDown("Archetype", 76, RuntimeCompat.EnumValues<CustomTopology>().Where(t => mode != GeneratedMapMode.Strategic || t != CustomTopology.Islands).ToArray(),
 				() => customSettings.Topology, t => ChangeCustom(() => customSettings.Topology = t));
 			if (customSettings.Topology == CustomTopology.Strongholds)
 			{
-				DropDown("Subtype", 114, Enum.GetValues<StrongholdSubtype>(), () => customSettings.Strongholds, t => ChangeCustom(() => customSettings.Strongholds = t));
+				DropDown("Subtype", 114, RuntimeCompat.EnumValues<StrongholdSubtype>(), () => customSettings.Strongholds, t => ChangeCustom(() => customSettings.Strongholds = t));
 				Check("Connected Start Areas", 194, () => customSettings.ConnectedStartAreas, () => ChangeCustom(() => customSettings.ConnectedStartAreas = !customSettings.ConnectedStartAreas));
 				Check("Battle in the Center", 228, () => customSettings.BattleInTheCenter, () => ChangeCustom(() => customSettings.BattleInTheCenter = !customSettings.BattleInTheCenter));
 			}
 			else if (customSettings.Topology == CustomTopology.OpenPlains)
-				DropDown("Subtype", 114, Enum.GetValues<PlainsSubtype>(), () => customSettings.Plains, t => ChangeCustom(() => customSettings.Plains = t));
+				DropDown("Subtype", 114, RuntimeCompat.EnumValues<PlainsSubtype>(), () => customSettings.Plains, t => ChangeCustom(() => customSettings.Plains = t));
 			else
 			{
-				DropDown("Subtype", 114, Enum.GetValues<IslandSubtype>(), () => customSettings.Islands, t => ChangeCustom(() => customSettings.Islands = t));
+				DropDown("Subtype", 114, RuntimeCompat.EnumValues<IslandSubtype>(), () => customSettings.Islands, t => ChangeCustom(() => customSettings.Islands = t));
 				Check("Connections", 194, () => customSettings.Connections, () => ChangeCustom(() => customSettings.Connections = !customSettings.Connections));
 			}
 			if (customSettings.HasCenter)
 				Check("Center buildable", 262, () => customSettings.CenterBuildable, () => ChangeCustom(() => customSettings.CenterBuildable = !customSettings.CenterBuildable));
-			DropDown("Resources", 152, Enum.GetValues<ResourceFieldLayout>(), () => options.Resources, value =>
+			DropDown("Resources", 152, RuntimeCompat.EnumValues<ResourceFieldLayout>(), () => options.Resources, value =>
 			{
 				options.Resources = value;
 				if (value == ResourceFieldLayout.None) options.FiniteResources = true;

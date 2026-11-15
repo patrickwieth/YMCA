@@ -29,7 +29,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			foreach (var player in players.Players.Values.Where(p => p.Playable)) { player.Faction = "blackh"; player.LockFaction = true; }
 			map.PlayerDefinitions = players.ToMiniYaml();
 			var directory = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes"); Directory.CreateDirectory(directory);
-			var result = Path.Combine(directory, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(directory, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			File.WriteAllText(result, ""); File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			var middle = plan.StrategicCheckpoints[plan.StrategicCheckpoints.Count / 2].Point;
 			var center = new MPos(middle.X + 1, middle.Y + map.Grid.MaximumTerrainHeight + 1).ToCPos(map);

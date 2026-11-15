@@ -47,7 +47,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				if (map.Height[c] != 0 || map.Tiles[c].Type != 1000 || map.Ramp[c] != 0)
 					throw new InvalidOperationException("Failed actor patch left partial terrain changes.");
 			File.WriteAllText(Path.Combine(output, "transaction-results.txt"), "PASS three Do/Undo cycles.\nPASS failed actor patch rolls terrain back.\n");
-			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
 			File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);

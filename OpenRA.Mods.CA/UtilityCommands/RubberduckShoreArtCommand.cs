@@ -48,7 +48,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				if (png.Type != SpriteFrameType.Rgba32 || png.Width != 1024 || png.Height != (name == "sand" ? 768 : 1536))
 					throw new InvalidDataException("Unexpected authored material atlas: " + path);
 				sources.Add(name, png);
-				provenance.AppendLine($"grassland/{name}_tiles.png SHA256 {Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path)))}");
+				provenance.AppendLine($"grassland/{name}_tiles.png SHA256 {RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(path)))}");
 			}
 
 			var cases = 0;
@@ -105,7 +105,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			atlas.EmbeddedData.Add("FrameSize", "128,64"); atlas.EmbeddedData.Add("FrameAmount", "480");
 			var result = Path.Combine(output, "ground-edge-sources.png"); atlas.Save(result);
 			provenance.AppendLine("Blocks: grass-a normal/shaded, grass-b normal/shaded, sand normal/shaded, dirt-a normal/shaded, dirt-b normal/shaded. Each 48 frames; source RGBA is unchanged.");
-			provenance.AppendLine($"ground-edge-sources.png SHA256 {Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(result)))}");
+			provenance.AppendLine($"ground-edge-sources.png SHA256 {RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(result)))}");
 			File.WriteAllText(Path.Combine(output, "provenance.txt"), provenance.ToString());
 			File.WriteAllText(Path.Combine(output, "shore-sockets.tsv"), report.ToString());
 			Console.WriteLine($"PASS: {cases} compositions, 47 topologies, ten material/lighting blocks; exact source RGBA samples, majority-opaque land centers and exact fringe clipping coverage.");

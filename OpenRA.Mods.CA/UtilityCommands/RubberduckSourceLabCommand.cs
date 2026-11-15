@@ -35,7 +35,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				using var stream = File.OpenRead(path);
 				var png = new Png(stream);
 				using var hash = SHA256.Create();
-				inventory.AppendLine($"{Path.GetFileName(path)}\t{png.Width}\t{png.Height}\t{png.Type}\t{Convert.ToHexString(hash.ComputeHash(File.ReadAllBytes(path)))}");
+				inventory.AppendLine($"{Path.GetFileName(path)}\t{png.Width}\t{png.Height}\t{png.Type}\t{RuntimeCompat.ToHexString(hash.ComputeHash(File.ReadAllBytes(path)))}");
 			}
 			File.WriteAllText(Path.Combine(output, "source-inventory.tsv"), inventory.ToString());
 

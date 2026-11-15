@@ -29,7 +29,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				throw new InvalidDataException("Soak requires a production Rubberduck map without custom rules.");
 			var directory = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes");
 			Directory.CreateDirectory(directory);
-			var result = Path.Combine(directory, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(args[2])))) + ".log");
+			var result = Path.Combine(directory, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(Path.GetFullPath(args[2])))) + ".log");
 			File.WriteAllText(result, "");
 			File.WriteAllText(Path.Combine(args[2], "runtime-results-path.txt"), result);
 			var exploration = bots == 0 ? "Player:\n\tShroud:\n\t\tExploredMapCheckboxEnabled: true\n\t\tExploredMapCheckboxLocked: true\n" : "";

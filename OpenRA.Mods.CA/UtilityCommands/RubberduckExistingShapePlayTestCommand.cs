@@ -34,7 +34,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			bool Roof(CPos c) => map.Contains(c) && map.Height[c] == 4 && map.Ramp[c] == 0 && map.Tiles[c].Type == 1000;
 			var top = PlateauTopology.Directions.Select(d => grown + d).First(Roof);
 			var other = PlateauTopology.Directions.Select(d => top + d).First(c => c != grown && Roof(c));
-			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath)); File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);
 			var rules = new StringBuilder($"World:\n\tTerrainCalibrationView:\n\t\tCenter: {grown}\n\t\tMinimumZoomScale: 0.1\n\t\tZoomScale: 0.5\n\t\tScreenshotTicks: 1200\nPlayer:\n\tShroud:\n\t\tFogCheckboxEnabled: false\n\t\tFogCheckboxLocked: true\n\t\tExploredMapCheckboxEnabled: true\n\t\tExploredMapCheckboxLocked: true\n");

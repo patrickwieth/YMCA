@@ -22,7 +22,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			using var map = new Map(utility.ModData, zip);
 			var source = RubberduckRampMoveTestCommand.Source(map); var target = RubberduckRampMoveTestCommand.Target(map);
 			if (map.Ramp[source] != 0 || map.Height[source] != 4 || map.Ramp[target] != 2) throw new InvalidDataException("Not the moved-ramp editor save.");
-			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(result)); File.WriteAllText(result, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			var rules = new StringBuilder($"World:\n\tTerrainCalibrationView:\n\t\tCenter: {RubberduckRampMoveTestCommand.Center(map) + new CVec(9, -6)}\n\t\tMinimumZoomScale: 0.1\n\t\tZoomScale: 0.4\n\t\tScreenshotTicks: 1200\nPlayer:\n\tShroud:\n\t\tFogCheckboxEnabled: false\n\t\tFogCheckboxLocked: true\n\t\tExploredMapCheckboxEnabled: true\n\t\tExploredMapCheckboxLocked: true\n");

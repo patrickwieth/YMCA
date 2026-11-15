@@ -29,7 +29,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var sourcePath = Path.Combine(source, "grassland", "rock_cliffs.png");
 			using var sourceStream = File.OpenRead(sourcePath); var image = new Png(sourceStream);
 			if (image.Type != SpriteFrameType.Rgba32 || image.Width != 1536 || image.Height != 2048) throw new InvalidDataException("Unexpected native cliff sheet.");
-			var provenance = new StringBuilder("Unwarped original rock_cliffs.png crops; no heightmap change.\nSHA256: " + Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(sourcePath))) + "\n");
+			var provenance = new StringBuilder("Unwarped original rock_cliffs.png crops; no heightmap change.\nSHA256: " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(sourcePath))) + "\n");
 			var images = RubberduckRockCoastArt.Export(image, output, provenance);
 			File.WriteAllText(Path.Combine(output, "art-provenance.txt"), provenance.ToString());
 			foreach (var side in new[] { (Slot: 26, Sign: 1), (Slot: 30, Sign: -1) })
@@ -106,7 +106,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 						map.Tiles[center + new CVec(x, y)] = new TerrainTile((ushort)tile, frame);
 					}
 			if (map.AllCells.Any(c => map.Height[c] != 0 || map.Ramp[c] != 0)) throw new InvalidDataException("Pseudo-height coast changed elevation.");
-			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(result)); File.WriteAllText(result, ""); File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			var viewCenter = waterVariants ? center + new CVec(2, -2) : gallery ? center + new CVec(3, -3) : corners ? center + new CVec(12, 12) : args.Length == 4 ? center + new CVec(12, 6) : center + new CVec(3, -3);
 			var zoom = waterVariants ? "0.6" : gallery ? "0.25" : corners ? "0.4" : args.Length == 4 ? "0.6" : "0.2";

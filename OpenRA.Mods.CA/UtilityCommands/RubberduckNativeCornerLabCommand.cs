@@ -136,8 +136,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					"One connected 14-piece original contour: both end orientations, two convex turns, one concave turn, all six straight variants. Both roof and foot sockets checked.\n" +
 					"Authored grass-foot source variants plus original roof layers, no fitting, recoloring, matte removal or fallback walls. Original opaque dark pixels deliberately retained.\n" +
 					"Reference wall contour only: no inferred gameplay height, collision, ramp or complete plateau roof fill. Not a production replacement.\n" +
-					"grassland_1x1.png SHA256 " + Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(Path.Combine(source, "grassland", "grassland_1x1.png")))) + "\n" +
-					"grass_cliff_trans.png SHA256 " + Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(Path.Combine(source, "grassland", "grass_cliff_trans.png")))) + "\n");
+					"grassland_1x1.png SHA256 " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(Path.Combine(source, "grassland", "grassland_1x1.png")))) + "\n" +
+					"grass_cliff_trans.png SHA256 " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(Path.Combine(source, "grassland", "grass_cliff_trans.png")))) + "\n");
 			}
 			else if (layerReview)
 			{
@@ -160,7 +160,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			if (closed)
 				foreach (var file in new[] { "grassland_1x1.png", "grass_cliff_trans.png" })
 					File.AppendAllText(Path.Combine(output, "section-scope.txt"), file + " SHA256 " +
-						Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(Path.Combine(source, "grassland", file)))) + "\n");
+						RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(Path.Combine(source, "grassland", file)))) + "\n");
 			Png roof = null;
 			var roofCells = closed ? RubberduckOriginalClosedReference.Roof(notch) : roofReference ? SectionRoof(scenes.Single().Value) : Array.Empty<CVec>();
 			if (roofReference)
@@ -182,7 +182,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					throw new InvalidDataException("Reference roof changed source pixels or its anchor.");
 				File.WriteAllText(Path.Combine(output, "roof-provenance.txt"),
 					"Original grass_tiles.png rectangle (0,0,128,64), unchanged RGBA; repeated at exact isometric offsets. No generated masks, fitting or recoloring.\n" +
-					"SHA256 " + Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(File.ReadAllBytes(roofPath))) + "\n" +
+					"SHA256 " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(roofPath))) + "\n" +
 					(closed ? $"{roofCells.Length} full roof diamonds; complete 20-edge perimeter matched to original walls, all outer corner vertices checked.\n" :
 					$"{roofCells.Length} connected full roof diamonds; all eleven front contour edges covered. Rear/side boundary remains a reference cutoff, not a matched cliff closure.\n") +
 					"Flat diagnostic map and decorative sprites only; no buildability, collision or gameplay elevation claim.\n");

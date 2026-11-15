@@ -47,7 +47,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				catch (InvalidOperationException e) { errors.Add(e.Message); }
 			}
 			if (plan == null) throw new InvalidDataException("No supported extension: " + string.Join("; ", errors));
-			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath)); File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);
 			File.WriteAllText(Path.Combine(output, "preflight-results.txt"), $"PASS existing native extension at {cell}: {plan.Patch.Count} changed cells, {plan.BeforeActors.Count} old cliff objects, {plan.NativePieces} native pieces after replan.\n");

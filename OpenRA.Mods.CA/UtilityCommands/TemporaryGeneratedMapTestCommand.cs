@@ -35,7 +35,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				Check(!File.Exists(missing), "already missing map tolerated");
 				otherSession.Cleanup(reports.Add); Check(!File.Exists(foreign), "other session cleans only its own map");
 				files.Cleanup(reports.Add); Check(File.Exists(edited), "cleanup is idempotent");
-				if (OperatingSystem.IsWindows())
+				if (RuntimeCompat.IsWindows)
 				{
 					var locked = Create(); files.Register(locked);
 					using (var stream = File.Open(locked, FileMode.Open, FileAccess.Read, FileShare.None))

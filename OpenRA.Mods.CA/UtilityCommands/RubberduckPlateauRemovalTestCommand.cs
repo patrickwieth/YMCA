@@ -73,7 +73,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				throw new InvalidDataException("Removal depends on generated actor IDs.");
 			messages.AppendLine("PASS arbitrary actor IDs");
 			File.WriteAllText(Path.Combine(output, "preflight-results.txt"), messages.ToString());
-			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
 			File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);

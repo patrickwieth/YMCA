@@ -25,7 +25,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				RubberduckPlateauShapeTestCommand.Trim(map).Any(c => map.Height[c] != 0)) throw new InvalidDataException("Save is not the joined/trimmed editor fixture.");
 			if (map.Resources[center].Type != 3 || !map.ActorDefinitions.Any(n => n.Key == "ProtectedRefinery"))
 				throw new InvalidDataException("Protected resource/building is missing.");
-			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath)); File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);
 			var rules = new StringBuilder($"World:\n\tTerrainCalibrationView:\n\t\tCenter: {center + new CVec(12, 0)}\n\t\tMinimumZoomScale: 0.1\n\t\tZoomScale: 0.35\n\t\tScreenshotTicks: 1400\nPlayer:\n\tShroud:\n\t\tFogCheckboxEnabled: false\n\t\tFogCheckboxLocked: true\n\t\tExploredMapCheckboxEnabled: true\n\t\tExploredMapCheckboxLocked: true\n");

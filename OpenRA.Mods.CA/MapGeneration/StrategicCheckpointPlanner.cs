@@ -317,7 +317,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var previous = Enumerable.Repeat(-1, count).ToArray();
 			var startIndex = start.X + start.Y * plan.Width;
 			var endIndex = destination.X + destination.Y * plan.Width;
-			var queue = new PriorityQueue<PlanPoint, (int Cost, int Index)>();
+			var queue = new PortablePriorityQueue<PlanPoint, (int Cost, int Index)>();
 			distance[startIndex] = 0;
 			queue.Enqueue(start, (0, startIndex));
 			while (queue.TryDequeue(out var current, out var priority))
@@ -359,8 +359,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 		{
 			return Enumerable.Range(0, path.Count)
 				.OrderBy(index => Math.Abs(index - targetIndex))
-				.FirstOrDefault(index => IsValidCheckpointCell(plan, path[index]) &&
-					usedIndices.All(used => Math.Abs(used - index) >= 8), -1);
+				.Where(index => IsValidCheckpointCell(plan, path[index]) &&
+					usedIndices.All(used => Math.Abs(used - index) >= 8)).DefaultIfEmpty(-1).First();
 		}
 
 		internal static PlanPoint TwoSidesObjectiveCenter(MapPlan plan)
@@ -424,7 +424,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 							previous[step, i] = j;
 						}
 				}
-			var end = Enumerable.Range(0, candidates.Length).OrderBy(i => cost[count - 1, i]).FirstOrDefault(-1);
+			var end = Enumerable.Range(0, candidates.Length).OrderBy(i => cost[count - 1, i]).DefaultIfEmpty(-1).First();
 			if (end < 0 || double.IsPositiveInfinity(cost[count - 1, end]))
 				throw new InvalidOperationException($"Two Sides needs {count} unmodified objective pads; found {candidates.Length} candidates along {path.Count} route cells.");
 			var result = new int[count];

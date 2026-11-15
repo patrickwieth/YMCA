@@ -28,7 +28,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					for (var y = 0; y < 320; y++) Array.Copy(faces.Data, ((direction * 320 + y) * faces.Width + variant * 128) * 4, frame, y * 512, 512);
 					for (var p = 3; p < frame.Length; p += 4)
 						if (frame[p] != mask[p]) throw new InvalidDataException("Wall silhouette changed.");
-					unique.Add(Convert.ToHexString(SHA256.HashData(frame)));
+					unique.Add(RuntimeCompat.ToHexString(RuntimeCompat.HashData(frame)));
 				}
 				if (unique.Count != 9) throw new InvalidDataException($"Direction {direction} does not have nine distinct variants.");
 				for (var end = 0; end < 2; end++)

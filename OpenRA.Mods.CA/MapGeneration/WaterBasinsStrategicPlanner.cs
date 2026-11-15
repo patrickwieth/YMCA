@@ -29,7 +29,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 		internal static int[] Distances(MapPlan plan, PlanPoint start)
 		{
 			var distance = Enumerable.Repeat(int.MaxValue, plan.Width * plan.Height).ToArray();
-			var queue = new PriorityQueue<CPos, (int Cost, int Index)>();
+			var queue = new PortablePriorityQueue<CPos, (int Cost, int Index)>();
 			var origin = MountainPlateauPlanner.Cell(start.X, start.Y);
 			var index = start.X + start.Y * plan.Width;
 			distance[index] = 0; queue.Enqueue(origin, (0, index));

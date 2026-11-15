@@ -198,10 +198,10 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			File.WriteAllText(Path.Combine(output, "native-cliff-frames.tsv"), audit.ToString());
 			var hashes = new StringBuilder();
 			foreach (var name in new[] { "grassland_1x1.png", "rock_cliffs.png" })
-				hashes.AppendLine(name + "\t" + Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine(source, "grassland", name)))));
+				hashes.AppendLine(name + "\t" + RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(Path.Combine(source, "grassland", name)))));
 			File.WriteAllText(Path.Combine(output, "native-cliff-sources.sha256"), hashes.ToString());
 			File.AppendAllText(Path.Combine(output, "rim-preflight.txt"), hashes.ToString() +
-				"Atlas SHA256: " + Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(Path.Combine(output, "native-cliff-faces.png")))) + "\n");
+				"Atlas SHA256: " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(File.ReadAllBytes(Path.Combine(output, "native-cliff-faces.png")))) + "\n");
 			var fixture = Path.Combine(output, "fixture");
 			if (args.Length == 3)
 				((IUtilityCommand)new RubberduckGeneratedPlateauTestCommand()).Run(utility,

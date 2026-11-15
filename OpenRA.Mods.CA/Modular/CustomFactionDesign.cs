@@ -240,7 +240,7 @@ namespace OpenRA.Mods.CA.Modular
 				File.WriteAllText(temp, text, new UTF8Encoding(false));
 				if (File.Exists(path))
 					File.Copy(path, path + ".bak", true);
-				File.Move(temp, path, true);
+				RuntimeCompat.ReplaceFile(temp, path);
 			}
 			finally
 			{

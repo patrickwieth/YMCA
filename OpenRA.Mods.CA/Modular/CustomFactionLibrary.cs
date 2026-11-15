@@ -22,7 +22,7 @@ namespace OpenRA.Mods.CA.Modular
 		string CheckedPath(string path)
 		{
 			var full = Path.GetFullPath(path);
-			var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+			var comparison = RuntimeCompat.IsWindows ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 			if (!string.Equals(Path.GetDirectoryName(full), directory, comparison) ||
 				!Regex.IsMatch(Path.GetFileName(full), @"\Afaction-[a-fA-F0-9]+\.json\z"))
 				throw new InvalidDataException("Not a faction library entry.");

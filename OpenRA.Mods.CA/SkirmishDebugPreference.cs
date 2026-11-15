@@ -57,7 +57,7 @@ namespace OpenRA.Mods.CA
 			try
 			{
 				File.WriteAllText(path + ".tmp", enabled.Value.ToString());
-				File.Move(path + ".tmp", path, true);
+				RuntimeCompat.ReplaceFile(path + ".tmp", path);
 			}
 			catch (IOException e) { Log.Write("debug", "Cannot save skirmish debug preference: " + e.Message); }
 			catch (UnauthorizedAccessException e) { Log.Write("debug", "Cannot save skirmish debug preference: " + e.Message); }

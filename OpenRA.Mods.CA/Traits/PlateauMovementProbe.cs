@@ -51,7 +51,7 @@ namespace OpenRA.Mods.CA.Traits
 			var root = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetTempPath(), "ymca-terrain-probes"));
 			var fullPath = System.IO.Path.GetFullPath(path);
 			var name = System.IO.Path.GetFileNameWithoutExtension(fullPath);
-			var comparison = OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+			var comparison = RuntimeCompat.IsWindows ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 			if (!string.Equals(System.IO.Path.GetDirectoryName(fullPath), root, comparison) ||
 				System.IO.Path.GetExtension(fullPath) != ".log" || name.Length != 64 || !name.All(Uri.IsHexDigit))
 				throw new InvalidOperationException("Terrain probe results must use the dedicated temporary log directory.");

@@ -41,7 +41,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var removed = plan.Decorations.Select(n => n.Key).ToHashSet();
 			if (original.ActorDefinitions.Where(n => !removed.Contains(n.Key)).OrderBy(n => n.Key).WriteToString() !=
 				map.ActorDefinitions.OrderBy(n => n.Key).WriteToString()) throw new InvalidDataException("Editor removal changed unrelated actors.");
-			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
 			File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);

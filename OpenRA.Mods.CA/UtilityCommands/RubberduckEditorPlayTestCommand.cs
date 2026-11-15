@@ -27,7 +27,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			foreach (var pair in expected)
 				if (map.Height[pair.Key] != pair.Value.Height || map.Ramp[pair.Key] != pair.Value.Ramp)
 					throw new InvalidDataException("Saved editor fixture does not contain the expected plateau.");
-			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
 			File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);

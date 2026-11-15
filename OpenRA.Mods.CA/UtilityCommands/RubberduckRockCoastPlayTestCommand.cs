@@ -42,7 +42,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				return (Rock: rock, Boarder: rock - outward * 2, Beach: center + outward * 13, Land: center + outward * 9, Start: rock + outward * 3);
 			}).ToArray();
 			var view = args.Length == 4 ? routes[0].Rock : center + new CVec(12, 12);
-			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(result)); File.WriteAllText(result, ""); File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			var rules = new StringBuilder($"World:\n\tTerrainCalibrationView:\n\t\tCenter: {view}\n\t\tMinimumZoomScale: 0.1\n\t\tZoomScale: 0.4\n\t\tScreenshotTicks: 1800\nPlayer:\n\tShroud:\n\t\tFogCheckboxEnabled: {(fog ? "true" : "false")}\n\t\tFogCheckboxLocked: true\n\t\tExploredMapCheckboxEnabled: {(fog ? "false" : "true")}\n\t\tExploredMapCheckboxLocked: true\n");
 			foreach (var kind in new[] { "infantry", "tank" })
@@ -83,7 +83,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				}
 				throw new InvalidDataException("No resource-free ground probe endpoint near spawn.");
 			}
-			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(result)); File.WriteAllText(result, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			var rules = new StringBuilder($"World:\n\tTerrainCalibrationView:\n\t\tCenter: {spawns[0] + new CVec(3, -3)}\n\t\tMinimumZoomScale: 0.1\n\t\tZoomScale: 0.35\n\t\tScreenshotTicks: 1200\nPlayer:\n\tShroud:\n\t\tFogCheckboxEnabled: {(fog ? "true" : "false")}\n\t\tFogCheckboxLocked: true\n\t\tExploredMapCheckboxEnabled: {(fog ? "false" : "true")}\n\t\tExploredMapCheckboxLocked: true\n");
@@ -163,7 +163,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			{
 				var resultDirectory = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes");
 				Directory.CreateDirectory(resultDirectory);
-				var resultName = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(output)));
+				var resultName = RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output)));
 				var resultPath = Path.Combine(resultDirectory, resultName + ".log");
 				File.WriteAllText(resultPath, "");
 				File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);

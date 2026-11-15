@@ -116,8 +116,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			}
 			File.WriteAllText(Path.Combine(output, "plateau-ramp-provenance.txt"),
 				"Derived affine grass slopes, not native ramp artwork. Source frames: grass_a_base.png / grass_a_base_shaded.png, first 128x64 RGBA frame.\n" +
-				"Normal frame SHA256: " + Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(grass)) + "\n" +
-				"Shaded frame SHA256: " + Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(shadedGrass)) + "\n" +
+				"Normal frame SHA256: " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(grass)) + "\n" +
+				"Shaded frame SHA256: " + RuntimeCompat.ToHexString(RuntimeCompat.HashData(shadedGrass)) + "\n" +
 				"Projected pixel-center coverage is opaque inside, transparent outside. Source matte fringe RGB samples use u/v clamped to 0.06..0.94.\n" +
 				"Eight decoded PNG checks: exact RGBA roundtrip; 2048 opaque pixels for ramps 1/2, 6144 for ramps 3/4; no partial-alpha pixels.\n" +
 				"Two plateau-roof PNGs: source grass diamond at 0,0 in a 128x256 canvas, Offset 0,96. Normal RGBA exactly equals anchored-cliffs frame 17; shaded uses its own grass frame.\n");
@@ -138,7 +138,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 
 		static void Export(ModData modData, string output, byte[] rock, bool shaded)
 		{
-			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(result));
 			File.WriteAllText(result, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);

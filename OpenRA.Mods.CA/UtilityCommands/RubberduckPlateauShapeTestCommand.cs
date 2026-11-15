@@ -84,7 +84,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			report.AppendLine("PASS rejected disconnected low courtyard");
 			action.Undo();
 			File.WriteAllText(Path.Combine(output, "preflight-results.txt"), report.ToString());
-			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var resultPath = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(resultPath)); File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);
 			map.RuleDefinitions = new MiniYaml("", MiniYaml.FromString($"World:\n\tPlateauShapeProbe:\n\t\tResultPath: {resultPath}\nEditorWorld:\n\tPlateauShapeProbe:\n\t\tResultPath: {resultPath}\n", "shape-test"));

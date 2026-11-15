@@ -57,7 +57,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var fog = fogOption != null && bool.Parse(fogOption.Substring(4));
 			var resultDirectory = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes");
 			Directory.CreateDirectory(resultDirectory);
-			var resultName = Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(Encoding.UTF8.GetBytes(output)));
+			var resultName = RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output)));
 			var resultPath = Path.Combine(resultDirectory, resultName + ".log");
 			File.WriteAllText(resultPath, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), resultPath);

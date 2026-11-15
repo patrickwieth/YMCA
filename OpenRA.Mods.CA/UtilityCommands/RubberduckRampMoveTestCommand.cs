@@ -107,7 +107,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			if (!rejected) throw new InvalidDataException("Source resource was not protected.");
 			report.AppendLine("PASS protected source resource");
 			File.WriteAllText(Path.Combine(output, "preflight-results.txt"), report.ToString());
-			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes", RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			Directory.CreateDirectory(Path.GetDirectoryName(result)); File.WriteAllText(result, "");
 			File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			map.RuleDefinitions = new MiniYaml("", MiniYaml.FromString($"World:\n\tPlateauRampMoveProbe:\n\t\tResultPath: {result}\nEditorWorld:\n\tPlateauRampMoveProbe:\n\t\tResultPath: {result}\n", "ramp-move"));

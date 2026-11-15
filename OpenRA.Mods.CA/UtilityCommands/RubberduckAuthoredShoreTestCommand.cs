@@ -52,7 +52,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				new MiniYamlNode("Spawn1", new ActorReference("mpspawn") { new LocationInit(centers[1]), new OwnerInit("Neutral") }.Save())
 			};
 			var logs = Path.Combine(Path.GetTempPath(), "ymca-terrain-probes"); Directory.CreateDirectory(logs);
-			var result = Path.Combine(logs, Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
+			var result = Path.Combine(logs, RuntimeCompat.ToHexString(RuntimeCompat.HashData(Encoding.UTF8.GetBytes(output))) + ".log");
 			File.WriteAllText(result, ""); File.WriteAllText(Path.Combine(output, "runtime-results-path.txt"), result);
 			var probes = new StringBuilder();
 			for (var m = 0; m < centers.Count; m++)
