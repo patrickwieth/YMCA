@@ -147,10 +147,10 @@ all: engine
 ifeq ($(RUNTIME), mono)
 	@command -v $(MSBUILD) >/dev/null || (echo "OpenRA requires the '$(MSBUILD)' tool provided by Mono >= 6.4."; exit 1)
 ifneq ("$(MOD_SOLUTION_FILES)","")
-	@find . -maxdepth 1 -name '*.sln' -exec $(MSBUILD) -t:Build -restore -p:Configuration=${CONFIGURATION} -p:TargetPlatform=$(TARGETPLATFORM) -p:Mono=true \;
+	@set -e; for solution in ./*.sln; do $(MSBUILD) "$$solution" -t:Build -restore -p:Configuration=${CONFIGURATION} -p:TargetPlatform=$(TARGETPLATFORM) -p:Mono=true; done
 endif
 else
-	@find . -maxdepth 1 -name '*.sln' -exec $(DOTNET) build -c ${CONFIGURATION} -p:TargetPlatform=$(TARGETPLATFORM) \;
+	@set -e; for solution in ./*.sln; do $(DOTNET) build "$$solution" -c ${CONFIGURATION} -p:TargetPlatform=$(TARGETPLATFORM); done
 endif
 
 clean: engine

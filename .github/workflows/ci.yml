@@ -14,10 +14,10 @@ jobs:
 
     steps:
       - name: Clone Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Install .NET 6.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '6.0.x'
 
@@ -26,6 +26,15 @@ jobs:
           . mod.config;
           awk '/\r$$/ { exit(1); }' mod.config || (printf "Invalid mod.config format. File must be saved using unix-style (LF, not CRLF or CR) line endings.\n"; exit 1);
 
+      - name: Prepare Engine Patches
+        shell: bash
+        run: |
+          ./fetch-engine.sh
+          patch=tools/patches/isometric-selection-decoration.patch
+          if ! git apply --reverse --check --ignore-space-change "$patch"; then
+            git apply --ignore-space-change "$patch"
+          fi
+
       - name: Check Code
         run: |
           make
@@ -33,7 +42,8 @@ jobs:
 
       - name: Check Mod
         run: |
-          sudo apt-get install lua5.1
+          sudo apt-get -o Acquire::Retries=3 -o APT::Update::Error-Mode=any update
+          sudo apt-get -o Acquire::Retries=3 install --yes lua5.1
           make check-scripts
 
   linux-mono:
@@ -42,12 +52,21 @@ jobs:
 
     steps:
       - name: Clone Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Prepare Environment
         run: |
           . mod.config;
           awk '/\r$$/ { exit(1); }' mod.config || (printf "Invalid mod.config format. File must be saved using unix-style (LF, not CRLF or CR) line endings.\n"; exit 1);
+
+      - name: Prepare Engine Patches
+        shell: bash
+        run: |
+          ./fetch-engine.sh
+          patch=tools/patches/isometric-selection-decoration.patch
+          if ! git apply --reverse --check --ignore-space-change "$patch"; then
+            git apply --ignore-space-change "$patch"
+          fi
 
       - name: Check Code
         run: |
@@ -61,12 +80,21 @@ jobs:
 
     steps:
       - name: Clone Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
 
       - name: Install .NET 6.0
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '6.0.x'
+
+      - name: Prepare Engine Patches
+        shell: bash
+        run: |
+          ./fetch-engine.sh
+          patch=tools/patches/isometric-selection-decoration.patch
+          if ! git apply --reverse --check --ignore-space-change "$patch"; then
+            git apply --ignore-space-change "$patch"
+          fi
 
       - name: Check Code
         shell: powershell
@@ -80,5 +108,6 @@ jobs:
           # Linux performs the existing static and script checks separately.
           .\make.ps1 all
           if (Test-Path 'TournamentBot.Tests/TournamentBot.Tests.csproj') {
-            dotnet test TournamentBot.Tests/TournamentBot.Tests.csproj --configuration Release --no-build
+            dotnet test TournamentBot.Tests/TournamentBot.Tests.csproj --configuration Release
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
