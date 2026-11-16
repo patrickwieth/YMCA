@@ -1,23 +1,37 @@
 
 GUN.Nod:
-	Inherits: GUN
-	Inherits: ^Nod1x1Visuals
+	Inherits@GRID1: GUN
+	Inherits@GRID2: ^Nod1x1Visuals
 	-WithBuildingBib:
 	RenderSprites:
 		Image: gun2
 		PlayerPalette: overlayplayertd
 	ActorPreviewPlaceBuildingPreview:
 	Buildable:
-		Prerequisites: hand, ~structures.nod
+		Prerequisites: hand, ~structures.nod, ~disabled
 		IconPalette: chrometd
 	Armament:
 		Weapon: TurretGunTD
 
 LTUR:
-	Inherits: GUN.Nod
-	Inherits: ^NodLaserUnit
+	Inherits@GRID1: GUN.Nod
+	Inherits@GRID2: ^NodLaserUnit
 	RenderSprites:
-		Image: ltur
+		Image: ltur.native
+	-WithEmbeddedTurretSpriteBody:
+	BodyOrientation:
+		CameraPitch: 85
+		UseClassicPerspectiveFudge: false
+	WithSpriteBody:
+		Sequence: base
+		PauseOnCondition: empdisable || being-warped
+	WithSpriteTurret:
+		Sequence: turret
+		RequiresCondition: !build-incomplete
+		Recoils: false
+	IsometricSelectable:
+		DecorationBounds: 724, 724, 0, 0
+		DecorationHeight: 59
 	Valued:
 		Cost: 600
 	Tooltip:
@@ -28,18 +42,19 @@ LTUR:
 		Description: Anti-infantry base defense.\n  Can detect cloaked units.\n  Strong vs Infantry, Light armor\n  Weak vs Tanks, Aircraft
 	Turreted:
 		InitialFacing: 136
+		Offset: 0,0,79
 	GrantConditionOnFaction@marked:
 		Condition: marked
 		Factions: marked
 	-Armament:
 	Armament:
 		Weapon: LaserTur
-		LocalOffset: 512,0,172
+		LocalOffset: 477,0,784
 		RequiresCondition: !marked
 		MuzzleSequence: muzzle
 	Armament@Marked:
 		Weapon: LaserTur.Adv
-		LocalOffset: 512,0,172
+		LocalOffset: 477,0,784
 		RequiresCondition: marked
 		MuzzleSequence: muzzle
 	Power:
@@ -47,13 +62,13 @@ LTUR:
 	WithMuzzleOverlay:
 
 OBLI:
-	Inherits: ^DefenseTD
-	Inherits: ^NodLaserUnit
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^NodTall1x1Visuals
+	Inherits@GRID1: ^DefenseTD
+	Inherits@GRID2: ^NodLaserUnit
+	Inherits@GRID3: ^DisableOnLowPowerOrPowerDown
+	Inherits@GRID4: ^NodTall1x1Visuals
 	RenderSprites:
 		Image: obli.custom
-	Inherits: ^AutoTargetGround
+	Inherits@GRID5: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
@@ -99,10 +114,6 @@ OBLI:
 		Delay: 45
 		Count: 1
 		RequiresCondition: charged == 1
-	ReloadAmmoPool@3:
-		Delay: 20
-		Count: 1
-		RequiresCondition: charged == 2
 	ReloadAmmoPool@3:
 		Delay: 10
 		Count: 1
@@ -152,10 +163,9 @@ NUKE.Nod:
 		Prerequisite: nuke
 
 NUK2.Nod:
-	Inherits: NUK2
-	Inherits: ^Nod3x3Bib
-	Inherits: ^Nod2x2Selection
-	-WithBuildingBib:
+	Inherits@BASE: NUK2
+	Inherits@BIB: ^Nod3x3Bib
+	Inherits@SELECTION: ^Nod2x2Selection
 	RenderSprites:
 		Image: nodnuk2.custom
 	Buildable:
@@ -169,9 +179,13 @@ NUK2.Nod:
 
 AFAC.Nod:
 	Inherits@BASE: AFAC
+	Transforms:
+		IntoActor: amcv.nod
 	Inherits@VISUALS: ^Nod3x3Visuals
 	RenderSprites:
 		Image: nodfact.custom
+	IsometricSelectable:
+		DecorationBounds: 4344, 4344, 0, -91
 	Buildable:
 		Prerequisites: ~conyardbuildable, ~structures.nod, repair
 	Building:
@@ -180,6 +194,12 @@ AFAC.Nod:
 		LocalCenterOffset: 0,0,0
 	ProvidesPrerequisite@sharedactor:
 		Prerequisite: afac
+
+AFAC.Nod.Nukular:
+	Inherits@FACT: AFAC.Nod
+	Inherits@NUKULAR: ^NukularConyard
+	Transforms:
+		IntoActor: amcv.nod.nukular
 
 HQ.Nod:
 	Inherits@BASE: HQ
@@ -247,13 +267,13 @@ PROC.TD.Nod:
 		Prerequisite: proc.td
 
 HAND:
-	Inherits: ^BuildingTD
-	Inherits: ^2x2Building+Bib
-	Inherits: ^Nod3x3Bib
-	Inherits: ^Nod2x2Selection
-	Inherits: ^PrimaryBuilding
+	Inherits@GRID1: ^BuildingTD
+	Inherits@GRID2: ^2x2Building+Bib
+	Inherits@GRID3: ^Nod3x3Bib
+	Inherits@GRID4: ^Nod2x2Selection
+	Inherits@GRID5: ^PrimaryBuilding
 	-WithBuildingBib:
-	Inherits: ^InfantryProduction
+	Inherits@GRID6: ^InfantryProduction
 	RenderSprites:
 		Image: nodhand
 	HitShape:
@@ -332,18 +352,42 @@ HAND:
 		Proxy: barracks.upgraded
 		Types: SpyInfiltrate
 
+# Independent Nod variant of the standard factory formerly shared by Legion/GDI.
+# Keep its ground production, stats, queues and exits; do not inherit GDI artwork.
+WEAP.NOD:
+	Inherits@FACTORY: WEAP.TD
+	-WithIdleOverlay@GDIBIB:
+	RenderSprites:
+		Image: weap.nod.png
+	Buildable:
+		Prerequisites: proc.td, ~structures.nod
+	Tooltip:
+		Name: Weapons Factory
+	IsometricSelectable:
+		DecorationBounds: 4344,4344,0,0
+		DecorationHeight: 190
+	WithIdleOverlay@NODBIB:
+		Image: nodbib4x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+	InfiltrateForSupportPower@veh:
+		Proxy: veh.nod.stolen
+	# Preserve the former shared factory's technology token (not its build permission).
+	ProvidesPrerequisite@sharedfactory:
+		Prerequisite: weap.td
+
 AIRS:
 	Inherits: ^BuildingTD
 	Inherits: ^PrimaryBuilding
 	Inherits: ^VehicleProduction
 	Inherits: ^3x3Building
-	Inherits: ^Nod3x3Visuals
 	RenderSprites:
-		Image: astrip.custom
+		Image: astrip
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 80
-		Prerequisites: proc.td, ~structures.nod, ~!structures.legion
+		Prerequisites: proc.td, ~structures.nod, ~!structures.legion, ~disabled
 		IconPalette: chrometd
 		Description: Provides a dropzone\nfor vehicle reinforcements
 	Valued:
@@ -391,13 +435,13 @@ AIRS:
 		Types: SpyInfiltrate
 
 TMPL:
-	Inherits: ^ScienceBuildingTD
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
-	Inherits: ^Nod3x3Bib
-	Inherits: ^Nod3x2Selection
+	Inherits@GRID1: ^ScienceBuildingTD
+	Inherits@GRID2: ^TechLevelBuilding
+	Inherits@GRID3: ^Tier3Tech
+	Inherits@GRID4: ^DisableOnLowPowerOrForceDisabled
+	Inherits@GRID5: ^3x2Building+Bib
+	Inherits@GRID6: ^Nod3x3Bib
+	Inherits@GRID7: ^Nod3x2Selection
 	-WithBuildingBib:
 	RenderSprites:
 		Image: nodtmpl
@@ -447,14 +491,14 @@ TMPL:
 		Prerequisite: tmpl
 
 BIO.Nod:
-	Inherits: ^BuildingTD
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier4Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
-	Inherits: ^Nod3x3Bib
-	Inherits: ^Nod2x2Selection
-	Inherits: ^PrimaryBuilding
+	Inherits@GRID1: ^BuildingTD
+	Inherits@GRID2: ^TechLevelBuilding
+	Inherits@GRID3: ^Tier4Tech
+	Inherits@GRID4: ^DisableOnLowPowerOrForceDisabled
+	Inherits@GRID5: ^3x2Building+Bib
+	Inherits@GRID6: ^Nod3x3Bib
+	Inherits@GRID7: ^Nod2x2Selection
+	Inherits@GRID8: ^PrimaryBuilding
 	-WithBuildingBib:
 	RenderSprites:
 		Image: nodbio
@@ -523,13 +567,13 @@ BIO.Nod:
 		EjectOnInsufficientFunds: true
 
 MSLO.Nod:
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^3x3Shape
-	Inherits: ^Nod3x3Bib
-	Inherits: ^Nod2x2Selection
-	Inherits: ^SuperWeapon
-	Inherits: ^NodSuperweaponBig
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID3: ^3x3Shape
+	Inherits@GRID4: ^Nod3x3Bib
+	Inherits@GRID5: ^Nod2x2Selection
+	Inherits@GRID6: ^SuperWeapon
+	Inherits@GRID7: ^NodSuperweaponBig
 	RenderSprites:
 		Image: nmslo.custom
 	Valued:
@@ -575,13 +619,13 @@ MSLO.Nod:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 SGEN:
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^Nod3x3Bib
-	Inherits: ^Nod2x2Selection
-	Inherits: ^SuperWeapon
-	Inherits: ^NodSuperweaponSmall
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID3: ^2x2Building+Bib
+	Inherits@GRID4: ^Nod3x3Bib
+	Inherits@GRID5: ^Nod2x2Selection
+	Inherits@GRID6: ^SuperWeapon
+	Inherits@GRID7: ^NodSuperweaponSmall
 	-WithBuildingBib:
 	RenderSprites:
 		Image: sgen.custom

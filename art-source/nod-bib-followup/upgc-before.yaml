@@ -1,0 +1,866 @@
+AppearsOnRadar:
+CombatDebugOverlay:
+GivesExperience:
+	PlayerExperienceModifier: 1
+ScriptTriggers:
+RenderDebugState:
+Armor:
+	Type: Wood
+Targetable@armorclass:
+	TargetTypes: wood
+WithModifiedPalette@IRONCURTAIN:
+	RequiresCondition: invulnerability && rasprite
+	Palette: invuln_ra
+	IsPlayerPalette: true
+WithModifiedPalette@IRONCURTAIN_RA2:
+	RequiresCondition: invulnerability && ra2sprite
+	Palette: invuln_ra2
+	IsPlayerPalette: true
+WithModifiedPalette@IRONCURTAIN_TD:
+	RequiresCondition: invulnerability && tdsprite
+	Palette: invuln_td
+	IsPlayerPalette: true
+WithModifiedPalette@IRONCURTAIN_SCRIN:
+	RequiresCondition: invulnerability && scrinsprite
+	Palette: invuln_scrin
+	IsPlayerPalette: true
+WithModifiedPalette@IRONCURTAIN_VOXEL:
+	RequiresCondition: invulnerability && voxel
+	Palette: invuln_voxel
+	IsPlayerPalette: true
+DamageMultiplier@IRONCURTAIN:
+	RequiresCondition: invulnerability
+	Modifier: 0
+TimedConditionBar@IRONCURTAIN:
+	Condition: invulnerability
+ExternalCondition@INVULNERABILITY:
+	Condition: invulnerability
+BodyOrientation:
+QuantizeFacingsFromSequence:
+RenderSprites:
+	PlayerPalette: overlayplayertd
+	SuppressBuildingAnimations: true
+	AnimatedBuildingSequences: construction
+	Image: upgc.gdi.png
+GrantCondition@Model:
+	Condition: tdsprite
+DelayedWeaponAttachable@C4:
+	Type: c4
+	Condition: c4
+	ProgressBarColor: FF000080
+Targetable@c4:
+	TargetTypes: C4Attached
+	RequiresCondition: c4
+WithDecoration@c4:
+	Image: c4
+	Sequence: c4
+	ReferencePoint: center, center
+	ZOffset: 2047
+	RequiresCondition: c4
+	RequiresSelection: False
+	ValidRelationships: Ally, Neutral, Enemy
+ExternalCondition@detachable:
+	Condition: detach
+WithModifiedPalette@detach:
+	Palette: moveflash
+	RequiresCondition: detach
+AmbientSound@c4:
+	SoundFiles: icoltima.aud, icoltimb.aud, icoltimc.aud
+	Delay: 5
+	Interval: 5
+	RequiresCondition: c4
+DelayedWeaponAttachable@TNT:
+	Type: tnt
+	Condition: tnt
+	ProgressBarColor: FF000080
+Targetable@tnt:
+	TargetTypes: TNTAttached
+	RequiresCondition: tnt
+WithDecoration@tnt:
+	Image: tnt
+	Sequence: tntbig
+	ReferencePoint: center, center
+	ZOffset: 2047
+	RequiresCondition: tnt
+	RequiresSelection: False
+	ValidRelationships: Ally, Neutral, Enemy
+AmbientSound@tnt:
+	SoundFiles: icraloop.aud
+	Delay: 6
+	Interval: 6
+	RequiresCondition: tnt
+AmbientSound@tnt-armed:
+	SoundFiles: icraatta.aud
+	Delay: 0
+	Interval: 160
+	RequiresCondition: tnt
+HitShape:
+	UseTargetableCellsOffsets: true
+	Type: Rectangle
+		TopLeft: -1536, -1024
+		BottomRight: 1536, 1024
+	TargetableOffsets: -355,-1024,0
+GrantConditionOnPrerequisite@GLOBALBOUNTY:
+	Condition: global-bounty
+	Prerequisites: global-bounty
+GivesBounty:
+	RequiresCondition: global-bounty
+IsometricSelectable:
+	Priority: 2
+	Height: 0
+	DecorationHeight: 176
+	DecorationBounds: 3077, 3077, 0, -46
+	DecorationOffset: 0,0,0
+IsometricSelectionDecorations:
+	MinimumZoom: 0.5
+WithSpriteControlGroupDecoration:
+DrawLineToTarget:
+HandicapFirepowerMultiplier:
+HandicapDamageMultiplier:
+HandicapProductionTimeMultiplier:
+ExternalCondition@RELAYMARKED:
+	Condition: relayMarked
+Targetable@relay:
+	RequiresCondition: relayMarked
+	TargetTypes: relayTarget
+ProximityExternalCondition@RELAYABLE:
+	Range: 20c0
+	ValidRelationships: Enemy, Neutral, Ally
+	Condition: relayTarget
+	RequiresCondition: relayMarked
+Targetable:
+	TargetTypes: Ground, Structure, C4, DetonateAttack
+	RequiresCondition: !being-warped
+Building:
+	Dimensions: 3,3
+	Footprint: xxx xxx ===
+	TerrainTypes: Clear,Road
+	RequiresBaseProvider: True
+	BuildSounds: placbldg.aud, build5.aud
+	UndeploySounds: cashturn.aud
+	LocalCenterOffset: 0,-1448,0
+ActorPreviewPlaceBuildingPreview:
+	OverridePalette: placebuildingtd
+	Animated: false
+RequiresBuildableArea:
+	AreaTypes: building
+	Adjacent: 4
+SoundOnDamageTransition:
+	DamagedSounds: kaboom1.aud
+	DestroyedSounds: kaboom22.aud
+WithSpriteBody:
+	UseIdleFrameForRendering: true
+	PauseOnCondition: disabled || being-warped
+FireWarheadsOnDeathCA:
+	Type: Footprint
+	Weapon: BuildingExplode
+	EmptyWeapon: BuildingExplode
+ShakeOnDeath:
+ProximityCaptor:
+	Types: Building
+Guardable:
+	Range: 3c0
+FrozenUnderFog:
+Tooltip:
+	GenericName: Structure
+	Name: Upgrade Center
+MapEditorData:
+	Categories: Building
+CommandBarBlacklist:
+WithModifiedPalette@FLARE:
+	Palette: flare
+	RequiresCondition: flare
+ExternalCondition@FLARE:
+	Condition: flare
+Cloak@EXTERNALCLOAK_SPRITE:
+	RequiresCondition: invisibility && !voxel && !cloak-force-disabled
+	InitialDelay: 0
+	CloakDelay: 150
+	CloakSound: cloak5.aud
+	UncloakSound: appear1.aud
+	CloakedCondition: hidden
+	CloakStyle: Palette
+	CloakedPalette: TAStealthTankCloakGrey
+	IsPlayerPalette: false
+	EffectImage: stealthfade
+	EffectPalette: greenspark
+	CloakEffectSequence: reversed
+	UncloakEffectSequence: idle
+	EffectTracksActor: True
+	UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage
+Cloak@EXTERNALCLOAK_VOXEL:
+	RequiresCondition: invisibility && voxel && !cloak-force-disabled
+	InitialDelay: 0
+	CloakDelay: 150
+	CloakSound: cloak5.aud
+	UncloakSound: appear1.aud
+	CloakedCondition: hidden
+	CloakStyle: Palette
+	CloakedPalette: cloak_voxel
+	IsPlayerPalette: true
+	UncloakOn: Attack, Unload, Infiltrate, Demolish, Damage
+ExternalCondition@CLOAKGENERATOR:
+	Condition: invisibility
+TimedConditionBar@STEALTHGEN:
+	Condition: invisibility
+	Color: 33ff33
+GrantConditionOnDamageState@UNCLOAK:
+	Condition: cloak-force-disabled
+	ValidDamageStates: Heavy, Critical
+WithModifiedPalette@FORCESHIELD:
+	RequiresCondition: forceshield && !invulnerability && rasprite
+	Palette: forces_ra
+	IsPlayerPalette: true
+WithModifiedPalette@FORCESHIELD_RA2:
+	RequiresCondition: forceshield && !invulnerability && ra2sprite
+	Palette: forces_ra2
+	IsPlayerPalette: true
+WithModifiedPalette@FORCESHIELD_TD:
+	RequiresCondition: forceshield && !invulnerability && tdsprite
+	Palette: forces_td
+	IsPlayerPalette: true
+WithModifiedPalette@FORCESHIELD_SCRIN:
+	RequiresCondition: forceshield && !invulnerability && scrinsprite
+	Palette: forces_scrin
+	IsPlayerPalette: true
+WithModifiedPalette@FORCESHIELD_VOXEL:
+	RequiresCondition: forceshield && !invulnerability && voxel
+	Palette: forces_voxel
+	IsPlayerPalette: true
+DamageMultiplier@FORCESHIELD:
+	RequiresCondition: forceshield
+	Modifier: 0
+TimedConditionBar@FORCESHIELD:
+	Condition: forceshield
+	Color: 2f74e2
+ExternalCondition@FORCESHIELD:
+	Condition: forceshield
+PowerMultiplier@FSPOWERDOWN:
+	RequiresCondition: forceshield && !invulnerability
+	Modifier: 0
+WithColoredOverlay@EMPDISABLE:
+	RequiresCondition: empdisable
+	Color: 000000b4
+TimedConditionBar@EMPDISABLE:
+	Condition: empdisable
+	Color: FFFFFF
+WithIdleOverlay@EMPDISABLE:
+	Sequence: emp-overlay
+	IsDecoration: true
+	Palette: tseffect
+	RequiresCondition: empdisable
+PowerMultiplier@EMPDISABLE:
+	RequiresCondition: empdisable
+	Modifier: 0
+ExternalCondition@EMPDISABLE:
+	Condition: empdisable
+Targetable@empdisabled:
+	TargetTypes: empdisabled
+	RequiresCondition: empdisable
+Warpable:
+	Condition: being-warped
+	RevokeDelay: 120
+	DamageTypes: ChronoDeath
+	ScaleWithCurrentHealthPercentage: true
+	ShowSelectionBar: true
+	SelectionBarColor: 40FFFF
+Targetable@Temporal:
+	TargetTypes: Temporal
+WithModifiedPalette@temporal:
+	RequiresCondition: being-warped && rasprite
+	Palette: temporal_ra
+	IsPlayerPalette: true
+WithModifiedPalette@temporal_RA2:
+	RequiresCondition: being-warped && ra2sprite
+	Palette: temporal_ra2
+	IsPlayerPalette: true
+WithModifiedPalette@temporal_TD:
+	RequiresCondition: being-warped && tdsprite
+	Palette: temporal_td
+	IsPlayerPalette: true
+WithModifiedPalette@temporal_SCRIN:
+	RequiresCondition: being-warped && scrinsprite
+	Palette: temporal_scrin
+	IsPlayerPalette: true
+WithModifiedPalette@temporal_VOXEL:
+	RequiresCondition: being-warped && voxel
+	Palette: temporal_voxel
+	IsPlayerPalette: true
+WithColoredOverlay@temporal2:
+	RequiresCondition: being-warped
+	Color: b4000000
+TimedConditionBar@temporal:
+	Condition: being-warped
+	Color: 2f74e2
+WithIdleOverlay@temporal:
+	Sequence: chrono-overlay
+	IsDecoration: true
+	RequiresCondition: being-warped
+FireWarheadsOnDeathCA@temporal:
+	Weapon: TemporalExplodeLarge
+	EmptyWeapon: TemporalExplodeLarge
+	DeathTypes: ChronoDeath
+ExternalCondition@temporal:
+	Condition: being-warped
+GrantConditionOnBotOwner@BrutalAI:
+	Condition: owned-by-brutal-ai
+	Bots: brutal
+ProvidesPrerequisite@BrutalAI:
+	Prerequisite: is-brutal-ai
+	RequiresCondition: owned-by-brutal-ai
+GrantConditionOnBotOwner@VeryHardAI:
+	Condition: owned-by-vhard-ai
+	Bots: vhard
+ProvidesPrerequisite@VeryHardAI:
+	Prerequisite: is-vhard-ai
+	RequiresCondition: owned-by-vhard-ai
+GrantConditionOnBotOwner@HardAI:
+	Condition: owned-by-hard-ai
+	Bots: hard
+ProvidesPrerequisite@HardAI:
+	Prerequisite: is-hard-ai
+	RequiresCondition: owned-by-hard-ai
+GrantConditionOnBotOwner@NormalAI:
+	Condition: owned-by-normal-ai
+	Bots: normal
+ProvidesPrerequisite@NormalAI:
+	Prerequisite: is-normal-ai
+	RequiresCondition: owned-by-normal-ai
+GrantConditionOnBotOwner@EasyAI:
+	Condition: owned-by-easy-ai
+	Bots: easy
+ProvidesPrerequisite@EasyAI:
+	Prerequisite: is-easy-ai
+	RequiresCondition: owned-by-easy-ai
+GrantConditionOnBotOwner@NavalAI:
+	Condition: owned-by-naval-ai
+	Bots: naval
+ProvidesPrerequisite@NavalAI:
+	Prerequisite: is-naval-ai
+	RequiresCondition: owned-by-naval-ai
+ProvidesPrerequisite@AI:
+	Prerequisite: botplayer
+	RequiresCondition: owned-by-brutal-ai || owned-by-vhard-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai
+ProductionTimeMultiplier@brutalbonus:
+	Multiplier: 88
+	Prerequisites: is-brutal-ai
+ProductionTimeMultiplier@vhardbonus:
+	Multiplier: 92
+	Prerequisites: is-vhard-ai
+ProductionTimeMultiplier@hardbonus:
+	Multiplier: 96
+	Prerequisites: is-hard-ai
+TimedConditionBar@chilled:
+	Condition: chilled
+	Color: 72edff
+ExternalCondition@chilled:
+	Condition: chilled
+SpeedMultiplier@chilled1:
+	Modifier: 75
+	RequiresCondition: chilled == 1
+DamageMultiplier@chilled1:
+	Modifier: 116
+	RequiresCondition: chilled == 1
+WithColoredOverlay@chilled1:
+	Color: 51aeda1c
+	RequiresCondition: chilled == 1
+SpeedMultiplier@chilled2:
+	Modifier: 58
+	RequiresCondition: chilled == 2
+DamageMultiplier@chilled2:
+	Modifier: 132
+	RequiresCondition: chilled == 2
+WithColoredOverlay@chilled2:
+	Color: 51aeda38
+	RequiresCondition: chilled == 2
+SpeedMultiplier@chilled3:
+	Modifier: 47
+	RequiresCondition: chilled == 3
+DamageMultiplier@chilled3:
+	Modifier: 148
+	RequiresCondition: chilled == 3
+WithColoredOverlay@chilled3:
+	Color: 51aeda54
+	RequiresCondition: chilled == 3
+SpeedMultiplier@chilled4:
+	Modifier: 40
+	RequiresCondition: chilled == 4
+DamageMultiplier@chilled4:
+	Modifier: 164
+	RequiresCondition: chilled == 4
+WithColoredOverlay@chilled4:
+	Color: 51aeda70
+	RequiresCondition: chilled == 4
+SpeedMultiplier@chilled5:
+	Modifier: 35
+	RequiresCondition: chilled == 5
+DamageMultiplier@chilled5:
+	Modifier: 175
+	RequiresCondition: chilled == 5
+WithColoredOverlay@chilled5:
+	Color: 51aeda8c
+	RequiresCondition: chilled == 5
+SpeedMultiplier@chilled6:
+	Modifier: 30
+	RequiresCondition: chilled > 5
+DamageMultiplier@chilled6:
+	Modifier: 200
+	RequiresCondition: chilled > 5
+WithColoredOverlay@chilled6:
+	Color: 51aedaa8
+	RequiresCondition: chilled > 5
+WithModifiedPalette@NSHIELD:
+	RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && rasprite
+	Palette: nrepair_ra
+	IsPlayerPalette: true
+WithModifiedPalette@NSHIELD_RA2:
+	RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && ra2sprite
+	Palette: nrepair_ra2
+	IsPlayerPalette: true
+WithModifiedPalette@NSHIELD_TD:
+	RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && tdsprite
+	Palette: nrepair_td
+	IsPlayerPalette: true
+WithModifiedPalette@NSHIELD_SCRIN:
+	RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && scrinsprite
+	Palette: nrepair_scrin
+	IsPlayerPalette: true
+WithModifiedPalette@NSHIELD_VOXEL:
+	RequiresCondition: nshield && damaged && !(empdisable || invulnerability || invisibility) && voxel
+	Palette: nrepair_voxel
+	IsPlayerPalette: true
+TimedConditionBar@NSHIELD:
+	Condition: nshield
+	Color: 25cde999
+ExternalCondition@NSHIELD:
+	Condition: nshield
+WithIdleOverlay@NSHIELD:
+	Sequence: emp-overlay
+	IsDecoration: true
+	Palette: tseffect
+	RequiresCondition: nshield && damaged
+ChangesHealth@NSHIELD:
+	PercentageStep: 6
+	Delay: 30
+	StartIfBelow: 100
+	DamageCooldown: 0
+	RequiresCondition: nshield
+WithDecoration@NSHIELD:
+	Image: select
+	Palette: chrome
+	Sequence: repair
+	Position: Center
+	RequiresCondition: nshield
+	BlinkInterval: 15
+	BlinkPattern: on, off
+	RequiresSelection: False
+	ValidRelationships: Ally, Neutral
+DamageMultiplier@NSHIELD:
+	RequiresCondition: nshield
+	Modifier: 66
+RevealsShroud:
+	MinRange: 4c0
+	Range: 5c0
+	RevealGeneratedShroud: False
+RevealsShroud@GAPGEN:
+	Range: 4c0
+ExternalCondition@HIGH:
+	Condition: highlight
+WithColoredOverlay@HIGH:
+	RequiresCondition: highlight
+	Color: ffffff80
+ExternalCondition@GHIGH:
+	Condition: greenhighlight
+WithColoredOverlay@GHIGH:
+	Color: 80ff8080
+	RequiresCondition: greenhighlight
+MindControllableCA:
+	ControlledConditions:
+		mast: mindcontrolled
+		yuri: mindcontrolled
+		hack: hacked
+	RevokingConditions:
+		hack: restoring
+Targetable@HACKABLE:
+	TargetTypes: Hackable
+	RequiresCondition: !mindcontrolled && !hacked
+MindControllableProgressBar@HACKABLE:
+	Color: 1ce312
+	RequiresCondition: !hacked
+WithDecoration@HACKED:
+	Image: hacked
+	Sequence: hacked
+	RequiresCondition: hacked && !restoring
+	Position: Center
+	Palette: effect
+	ValidRelationships: Ally, Neutral, Enemy
+WithDecoration@RESTORING:
+	Image: hacked
+	Sequence: restoring
+	RequiresCondition: restoring
+	Position: Center
+	Palette: effect
+	ValidRelationships: Ally, Neutral, Enemy
+FreeActor@BuildBoostLimit:
+	Actor: BuildBoost.Dummy
+	RequiresCondition: !noMoreDummies
+GrantConditionOnPrerequisite@BuildBoostLimit:
+	Condition: noMoreDummies
+	Prerequisites: BuildUpBoostEnded
+ProductionTimeMultiplier@BuildUpBoost:
+	Multiplier: 1
+	Prerequisites: !BuildUpBoostEnded
+	Queue: Building
+GrantConditionOnPrerequisite@NukularMode:
+	Condition: NukularMode
+	Prerequisites: global.nukular
+GrantConditionOnPrerequisite@NukularOpen:
+	Condition: NukularOpen
+	Prerequisites: !nukular.owned, global.nukular
+MustBeDestroyed:
+	RequiredForShortGame: true
+	RequiresCondition: !NukularMode || NukularOpen
+Buildable:
+	Queue: Building
+	BuildDurationModifier: 100
+	IconPalette: chrometd
+	BuildPaletteOrder: 200
+	Prerequisites: ~structures.gdi, gtek
+	Description: Allows the construction of advanced weaponry and upgrades.\n  Maximum 1 can be built.\n  Cannot be captured.
+	BuildLimit: 1
+TooltipExtras:
+Huntable:
+OwnerLostAction:
+	Action: Kill
+UpdatesPlayerStatistics:
+	AddToArmyValue: true
+GivesBuildableArea:
+	AreaTypes: building, outpost_building, fake
+RepairableBuilding:
+	RepairStep: 700
+	PlayerExperience: 25
+	RepairingNotification: Repairing
+	RequiresCondition: !being-warped
+	RepairCondition: repairing
+InstantlyRepairable:
+AcceptsDeliveredCash:
+WithMakeAnimation:
+	Sequence: construction
+	Condition: build-incomplete
+SpawnActorsOnSell:
+	ActorTypes: light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,light_infantry,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+SpawnActorOnDeath:
+	Actor: light_infantry
+	Probability: 5
+	RequiresCondition: !being-warped
+SpawnRandomActorOnDeath:
+	Actors: c1,c7,c10
+	Probability: 10
+	RequiresCondition: !being-warped
+GpsRadarDot:
+	Sequence: Structure
+Sellable:
+	RequiresCondition: !build-incomplete && !c4 && !being-warped
+	SellSounds: cashturn.aud
+WithBuildingRepairDecoration:
+	Image: allyrepair
+	Sequence: repair
+	Position: Center
+	Palette: player
+	IsPlayerPalette: True
+	RequiresCondition: !being-warped
+GrantConditionOnDamageState@DAMAGED:
+	Condition: damaged
+	ValidDamageStates: Light, Medium, Heavy, Critical
+SpawnActorOnDeath@GDI:
+	Actor: mercenary
+	RequiresCondition: structures.gdi
+SpawnActorOnDeath@default:
+	Actor: adept
+	RequiresCondition: !structures.gdi
+SpawnActorsOnSell@GDI:
+	ActorTypes: mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+	RequiresCondition: structures.gdi
+SpawnActorsOnSell@default:
+	ActorTypes: adept,adept,adept,adept,adept,adept,adept,adept,adept,adept,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
+	RequiresCondition: !structures.gdi
+FreeActor@BuildBoostLimit2:
+	Actor: BuildBoost.Dummy
+	RequiresCondition: !noMoreDummies
+FreeActor@BuildBoostLimit3:
+	Actor: BuildBoost.Dummy
+	RequiresCondition: !noMoreDummies
+FreeActor@BuildBoostLimit4:
+	Actor: BuildBoost.Dummy
+	RequiresCondition: !noMoreDummies
+ProvidesPrerequisite@tier4:
+	Prerequisite: tier4
+WithColoredOverlay@IDISABLE:
+	RequiresCondition: disabled && !(invulnerability || empdisable || forceshield || being-warped)
+	Color: 000000b4
+GrantConditionOnPowerState@LOWPOWER:
+	Condition: lowpower
+	ValidPowerStates: Low, Critical
+GrantCondition@IDISABLE:
+	RequiresCondition: lowpower || empdisable || forcedisabled
+	Condition: disabled
+ExternalCondition:
+	Condition: forcedisabled
+TimedConditionBar@FSDISABLE:
+	Condition: forcedisabled
+	Color: FFFF66
+WithDecoration@FORCEDISABLED:
+	Image: poweroff
+	Sequence: offline
+	Palette: chrome
+	RequiresCondition: forcedisabled && !forceshield
+	Position: Center
+Health:
+	HP: 80000
+Valued:
+	Cost: 2500
+ValidFactions:
+	Factions: talon, zocom, eagle
+ProvidesPrerequisiteValidatedFaction@talonupgc:
+	Factions: talon
+	Prerequisite: upgc.talon
+ProvidesPrerequisiteValidatedFaction@zocomupgc:
+	Factions: zocom
+	Prerequisite: upgc.zocom
+ProvidesPrerequisiteValidatedFaction@eagleupgc:
+	Factions: eagle
+	Prerequisite: upgc.eagle
+ProvidesPrerequisite@Name:
+ProvidesDelayedPrerequisite@UPGRADE1:
+	Prerequisite: miss.gdi
+	Delay: 3
+	Notification: UnitArmorUpgraded
+	RequiresCondition: !disabled && !empdisable && !being-warped
+Power:
+	Amount: -150
+	RequiresCondition: !being-warped
+WithDeathAnimation:
+	DeathSequence: dead
+	UseDeathTypeSuffix: false
+	DeathSequencePalette: overlayplayertd
+ProductionAirdropCA:
+	Produces: Money
+	PauseOnCondition: forceshield || invulnerability || being-warped
+	ActorType: ocar.reinforce
+	BaselineSpawn: true
+	IncomingAudio: SuppliesInbound
+WithDeliveryOverlay:
+	Sequence: flare
+	Palette: effect
+	IsPlayerPalette: false
+	Offset: -1024,768,0
+ProduceActorPowerCA@SUPPLYDROP:
+	PauseOnCondition: disabled || empdisable || being-warped
+	Prerequisites:
+		1: dropzone.strat
+	IconImage: upgc.drop
+	Names:
+		1: Supply Drop
+	Descriptions:
+		1: Dispatches a convoy that delivers additional credits to your HQ.
+	Icons:
+		1: icon
+	IconPalette: chrometd
+	Actors: truk
+	Type: Money
+	ChargeInterval: 1000
+	OrderName: supplydrop
+	ReadyAudio: SuppliesInbound
+	BlockedAudio: OnHold
+	DisplayTimerRelationships: Ally
+Exit:
+	SpawnOffset: 511,511,0
+	ExitCell: 1,1
+Turreted:
+	TurnSpeed: 12
+	InitialFacing: 384
+	RealignDelay: -1
+	Offset: -768,468,0
+Armament@ROCKET:
+	Name: firestorm
+	RequiresCondition: tower.rocket
+	Weapon: FirestormBarrage
+	LocalOffset: 768,64,368, 768,-64,368, 768,64,255, 768,-64,255
+SupportPowerChargeBar:
+RejectsOrders:
+	Except: Sell, PowerDown
+AmmoPool:
+	Ammo: 3
+	ReloadCount: 3
+	AmmoCondition: loaded-rocket
+ReloadAmmoPool:
+	Delay: 100
+	Count: 3
+WithSpriteTurret@ROCKET:
+	RequiresCondition: !build-incomplete && tower.rocket
+	Recoils: false
+	Sequence: turret-rocket
+AttackTurreted:
+	Armaments: firestorm
+	RequiresCondition: !build-incomplete && tower.rocket && loaded-rocket > 0
+	PauseOnCondition: disabled || empdisable || being-warped
+WithIdleOverlay@RADAR:
+	RequiresCondition: !build-incomplete && tower.radar
+	Sequence: turret-radar
+	Offset: 0, 350, 0
+	PauseOnCondition: !scan-active || disabled || being-warped
+WithIdleOverlay@SHIELD:
+	RequiresCondition: !build-incomplete && tower.shield && !nshield-active
+	Sequence: turret-shield
+	Offset: 0, 350, 0
+	PauseOnCondition: disabled || being-warped
+WithIdleOverlay@SHIELD-ACTIVE:
+	RequiresCondition: !build-incomplete && tower.shield && nshield-active
+	Sequence: turret-shield-active
+	Offset: 0, 350, 0
+	PauseOnCondition: disabled || being-warped
+WithIdleOverlay@SHIELD-ACTIVE-EFFECT:
+	RequiresCondition: !build-incomplete && tower.shield && nshield-active
+	Sequence: emp-overlay
+	Palette: tseffect
+	Offset: -1284,350,0
+	PauseOnCondition: disabled || being-warped
+WithIdleOverlay@DZONE:
+	RequiresCondition: !build-incomplete && tower.drop
+	Sequence: turret-drop
+	Offset: 0, 350, 0
+	PauseOnCondition: disabled || being-warped
+AttackOrderPower@FIRESTORM:
+	OrderName: firestormbarrage
+	Prerequisites:
+		1: bombard.strat
+	IconImage: upgc.bomb
+	Icons:
+		1: icon
+	IconPalette: chrometd
+	Cursor: ability
+	ChargeInterval: 6000
+	Names:
+		1: Firestorm Missile Barrage
+	Descriptions:
+		1: Unleash a wave of napalm missiles that saturate a medium target area.
+	RequiresCondition: !build-incomplete && tower.rocket
+	PauseOnCondition: disabled || empdisable || being-warped
+	SelectTargetSpeechNotification: SelectTarget
+	InsufficientPowerSpeechNotification: InsufficientPower
+	DisplayRadarPing: True
+GrantExternalConditionPowerCA@NANOSHIELD:
+	OrderName: nanoshield
+	Prerequisites:
+		1: hold.strat
+	IconImage: upgc.hold
+	Icons:
+		1: icon
+	IconPalette: chrometd
+	ChargeInterval: 5250
+	Weapon: NanoshieldPulse
+	Names:
+		1: Nanoshield Generator
+	Descriptions:
+		1: Deploys nanites that rapidly repair and shield allied units in the target area.
+	Condition: nshield
+	Dimensions: 5, 5
+	Footprint: _xxx_ xxxxx xxxxx xxxxx _xxx_
+	ValidRelationships: Ally
+	Duration: 500
+	ActivationDelay: 0
+	AllowMultiple: false
+	RequiresCondition: !build-incomplete && tower.shield
+	PauseOnCondition: disabled || empdisable || being-warped
+	SelectTargetSpeechNotification: SelectTarget
+	InsufficientPowerSpeechNotification: InsufficientPower
+	DisplayRadarPing: True
+	Cursor: ability
+	DisplayTimerRelationships: Ally
+GrantPrerequisiteChargeDrainPowerCA@RADAR:
+	OrderName: advradarorder
+	DischargeModifier: 1200
+	Prerequisite: scan-active
+	ChargeInterval: 3000
+	IconImage: upgc.seek
+	Icons:
+		1: icon
+	IconPalette: chrometd
+	Names:
+		1: Advanced Radar Scan
+	Descriptions:
+		1: Provides information on enemy structures & units positions.
+	RequiresCondition: !build-incomplete && tower.radar
+	PauseOnCondition: !tower.radar || disabled || being-warped
+	LaunchSound: gradarup.aud
+	BeginChargeSound: gradardn.aud
+	DisplayTimerRelationships: Ally
+	SelectTargetSpeechNotification: SelectTarget
+	InsufficientPowerSpeechNotification: InsufficientPower
+	Prerequisites:
+		1: scan-strat
+DrainPrerequisitePowerOnDamage@RADAR:
+	OrderName: advradarorder
+GrantConditionOnPrerequisite@SCAN:
+	Prerequisites: scan-active
+	Condition: scan-active
+GrantConditionOnBotOwner@RADAR:
+	Condition: scan-active
+	Bots: brutal, vhard, hard, normal, easy, naval
+GrantConditionOnPrerequisite@RADAR:
+	Prerequisites: radar-active
+	Condition: radar-active
+GpsRadarProvider:
+	RequiresCondition: tower.radar && scan-active && !(disabled || being-warped)
+ExternalCondition@NSACTIVE:
+	Condition: nshield-active
+ExternalCondition@NSAUDIO:
+	Condition: nshield-audio
+ProximityExternalCondition@NSHIELD-AUDIO:
+	Condition: nshield-audio
+	RequiresCondition: nshield-active
+	AffectsParent: true
+	EnableSound: uscolo1.aud
+AmbientSound@NSHIELD-AUDIO:
+	SoundFiles: uscolo2a.aud, uscolo2b.aud, uscolo2c.aud
+	Delay: 3
+	Interval: 0
+	RequiresCondition: nshield-audio || nshield-active
+Pluggable:
+	Conditions:
+		tower.rocket: tower.rocket
+		tower.radar: tower.radar
+		tower.shield: tower.shield
+		tower.drop: tower.drop
+	Requirements:
+		tower.rocket: !build-incomplete && !tower.radar && !tower.rocket && !tower.shield && !tower.drop
+		tower.radar: !build-incomplete && !tower.radar && !tower.rocket && !tower.shield && !tower.drop
+		tower.shield: !build-incomplete && !tower.radar && !tower.rocket && !tower.shield && !tower.drop
+		tower.drop: !build-incomplete && !tower.radar && !tower.rocket && !tower.shield && !tower.drop
+ProvidesPrerequisite@pluggable:
+	RequiresCondition: !build-incomplete && (tower.rocket || tower.radar || tower.shield || tower.drop)
+	Prerequisite: upgc.plugged
+ProvidesPrerequisite@SCANACTIVE:
+	RequiresCondition: !build-incomplete && tower.radar
+	Prerequisite: scan-strat
+ProvidesPrerequisite@AMPDROP:
+	RequiresCondition: !build-incomplete && tower.drop
+	Prerequisite: dropzone.strat
+ProvidesPrerequisite@upgb:
+	Prerequisite: bombard.strat
+	RequiresCondition: tower.rocket
+ProvidesPrerequisite@upgs:
+	Prerequisite: seek.strat
+	RequiresCondition: tower.radar
+ProvidesPrerequisite@upgh:
+	Prerequisite: hold.strat
+	RequiresCondition: tower.shield
+WithAmmoPipsDecoration:
+	Position: BottomLeft
+	RequiresSelection: true
+WithIdleOverlay@GDIBIB:
+	Image: gdibib3x3
+	Sequence: idle
+	RequiresCondition: !build-incomplete
+	IsDecoration: true
+

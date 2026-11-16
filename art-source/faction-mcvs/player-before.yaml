@@ -1,0 +1,3538 @@
+ModularBot@BrutalAI:
+	Name: Brutal AI
+	Type: brutal
+ModularBot@VeryHardAI:
+	Name: Very Hard AI
+	Type: vhard
+GrantConditionOnBotOwner@BrutalAI:
+	Condition: enable-brutal-ai
+	Bots: brutal
+GrantConditionOnBotOwner@VeryHardAI:
+	Condition: enable-vhard-ai
+	Bots: vhard
+BaseBuilderBotModuleCA@brutal-vhard:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai
+	BuildingQueues: Building, Promotion
+	MinimumExcessPower: 50
+	MaximumExcessPower: 500
+	ExcessPowerIncrement: 10
+	ExcessPowerIncreaseThreshold: 1
+	PlaceDefenseTowardsEnemyChance: 75
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	RefineryTypes: proc,proc.td,proc.td.nod,proc.scrin,chsupply,soviet_refinery
+	PowerTypes: powr,powr.soviet,apwr,apwr.soviet,nuke,nuke.nod,nuk2,nuk2.nod,tpwr,reac,rea2,chpower,chpower2
+	BarracksTypes: barr,tent,hand,pyle,port,chsyrd,chbarracks
+	VehiclesFactoryTypes: weap,airs,weap.td,weap.nod,wsph,chweap
+	ProductionTypes: barr,tent,hand,pyle,port,airs,weap,weap.soviet,weap.td,weap.nod,wsph,afld,afld.gdi,afld.allies,chairport,hpad,hpad.soviet,hpad.td,hpad.td.nod,grav,chbarracks,chairport,chweap
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	SiloTypes: silo,silo.td,silo.scrin
+	AntiAirTypes: sam, flak.soviet.sprite, nsam, agun, cram, shar, chgatling
+	MaxBaseRadius: 30
+	BuildingFractions:
+		promotion.advanced_infantry_training: 30
+		proc: 30
+		tent: 3
+		pbox: 7
+		hbox: 7
+		gun: 7
+		grand_cannon: 7
+		pris: 8
+		agun: 9
+		gap: 1
+		atek: 1
+		afld.allies: 2
+		weat: 1
+		pdox: 1
+		orep: 1
+		syrd: 1
+		soviet_refinery: 30
+		barr: 3
+		kenn: 1
+		weap: 5
+		ftur: 10
+		nkorea_bunker: 10
+		ttur: 10
+		tsla: 9
+		sam: 9
+		stek: 1
+		fix: 1
+		silo: 1
+		dome: 10
+		afld: 2
+		mslo: 1
+		iron: 1
+		indp: 1
+		hpad: 2
+		spen: 1
+		promotion.heavy_tank.tesla: 10
+		promotion.heavy_tank.pdl: 10
+		promotion.devil_tank.pdl: 10
+		promotion.devil_tank.reflector: 10
+		promotion.chem_sprayer.cloud: 10
+		promotion.chem_sprayer.metal_acid: 10
+		promotion.source_of_pollution.chem_spray: 10
+		promotion.source_of_pollution.pdl: 10
+		promotion.peoples_tank.speaker: 10
+		promotion.peoples_tank.reflector: 10
+		promotion.isu.concussion: 10
+		promotion.isu.pdl: 10
+		promotion.apocalypse_tank.drozd: 10
+		promotion.apocalypse_tank.pdl: 10
+		chcommand: 5
+		chsupply: 10
+		chbarracks: 3
+		chweap: 5
+		chgatling: 7
+		chpropagandatower: 3
+		chpropagandatower.pdl: 3
+		chbunker.ai: 7
+		chpropaganda: 1
+		chcommand.radar: 10
+		chairport: 2
+		chsilo: 1
+		chsyrd: 1
+		promotion.battlemaster.nuclear_shells: 5
+		promotion.battlemaster.mass_production: 5
+		promotion.battlemaster.autoloader: 5
+		promotion.battlemaster.pdl: 20
+		promotion.speakertower.pdl: 1
+		promotion.overlord.bunker: 5
+		promotion.overlord.propaganda: 5
+		promotion.overlord.plasma: 5
+		promotion.overlord.reflector: 20
+		promotion.nuke_cannon: 1
+		promotion.crawler.hunter: 10
+		promotion.crawler.pdl: 20
+		promotion.outpost.propaganda: 10
+		promotion.outpost.pdl: 10
+		promotion.gatling.pdl: 10
+		promotion.ecm.chain: 5
+		promotion.ecm.focus: 5
+		promotion.ecm.pulse: 5
+		promotion.chinamig.aa: 5
+		promotion.chinamig.napalm: 5
+		promotion.chinamig.nuke: 5
+		promotion.nationalism: 10
+		promotion.subliminal_messages: 5
+		promotion.uranium_shells: 10
+		promotion.nuclear_tanks: 10
+		promotion.isotope_stability: 10
+		pyle: 3
+		weap.td: 5
+		gtwr: 7
+		atwr: 10
+		stwr: 8
+		cram: 9
+		gtek: 1
+		afld.gdi: 2
+		eye: 1
+		miss.gdi: 1
+		patr: 1
+		syrd.gdi: 1
+		bombard.strat: 1
+		seek.strat: 1
+		hold.strat: 1
+		proc.td: 30
+		hand: 3
+		weap.nod: 5
+		obli: 8
+		ltur: 10
+		nsam: 9
+		silo.td: 1
+		tmpl: 1
+		rep: 1
+		hq: 10
+		mslo.nod: 1
+		sgen: 1
+		bio.nod: 1
+		hpad.td: 2
+		spen.nod: 1
+		proc.scrin: 30
+		port: 3
+		wsph: 5
+		ptur: 7
+		scol: 9
+		shar: 9
+		silo.scrin: 1
+		scrt: 1
+		srep: 1
+		nerv: 10
+		grav: 2
+		mani: 1
+		rift: 1
+		sign: 1
+	BuildingDelays:
+		syrd: 6000
+		afld.allies: 6375
+		atek: 6375
+		orep: 8000
+		weat: 8000
+		kenn: 2800
+		dome: 4500
+		spen: 6000
+		afld: 6375
+		hpad: 6375
+		stek: 6375
+		indp: 8000
+		mslo: 8000
+		chcommand.radar: 4500
+		chsyrd: 6000
+		chairport: 6375
+		chpropaganda: 6375
+		chinternetcenter: 8000
+		chsilo: 8000
+		syrd.gdi: 6000
+		afld.gdi: 6375
+		gtek: 6375
+		miss.gdi: 8000
+		eye: 8000
+		hq: 4500
+		spen.nod: 6000
+		hpad.td: 6375
+		tmpl: 6375
+		mslo.nod: 8000
+		bio.nod: 8000
+		nerv: 4500
+		grav: 6375
+		scrt: 6375
+		sign: 8000
+		rift: 8000
+	BuildingLimits:
+		tent: 20
+		afld.allies: 10
+		atek: 1
+		syrd: 2
+		barr: 20
+		kenn: 1
+		dome: 1
+		weap: 20
+		hpad: 10
+		afld: 10
+		stek: 1
+		fix: 1
+		spen: 2
+		chcommand: 5
+		chbarracks: 20
+		chcommand.radar: 2
+		chweap: 20
+		chairport: 20
+		chpropaganda: 2
+		chinternetcenter: 1
+		chsyrd: 10
+		pyle: 20
+		weap.td: 20
+		afld.gdi: 10
+		gtek: 1
+		syrd.gdi: 2
+		hand: 20
+		hq: 1
+		weap.nod: 20
+		hpad.td: 10
+		tmpl: 1
+		spen.nod: 2
+		rep: 1
+		port: 20
+		nerv: 1
+		wsph: 20
+		grav: 20
+		scrt: 1
+		srep: 1
+UnitBuilderBotModuleCA@brutal-vhard:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai
+	IdleBaseUnitsMaximum: 50
+	UnitBuilderMinCredits: 1800
+	MaxAircraft: 8
+	MaintainAirSuperiority: true
+	AirToAirUnits: heli, yak, mig, orca, apch, scrn, venm, stmr, enrv, a10.upg, harr, chmig.aa
+	AirThreatUnits: heli, yak, mig, orca, apch, scrn, venm, stmr, enrv, a10.upg, harr, pac, deva, kirov, mshp, chmig, chmig.aa
+	UnitsToBuild:
+		ss: 1
+		msub: 1
+		dd: 1
+		ca: 1
+		carr: 1
+		pt: 1
+		pt2: 1
+		dd2: 1
+		ss2: 2
+		isub: 1
+		sb: 1
+		seas: 1
+		thor: 15
+		mech: 3
+		medic: 3
+		snip: 15
+		apc: 20
+		jeep: 30
+		prismtank: 20
+		pcan: 20
+		1tnk: 70
+		ifv.ai: 70
+		2tnk: 45
+		tnkd: 45
+		rtnk: 4
+		cryo: 10
+		ctnk: 3
+		chpr: 3
+		batf.ai: 10
+		heli: 5
+		aurora: 5
+		harr: 3
+		conscript: 65
+		rpg_soldier: 40
+		flamethrower: 15
+		engineer: 5
+		bori: 15
+		ivan: 15
+		mortar: 15
+		dog: 2
+		shok: 15
+		desolator: 15
+		btr: 20
+		v3rl: 10
+		ttnk: 25
+		v2rl: 20
+		katy: 20
+		heavy_tank: 70
+		heavy_tank.tesla: 70
+		heavy_tank.pdl: 70
+		apoc: 40
+		apoc.drozd: 40
+		apoc.drozd.pdl: 40
+		kims_wheel: 70
+		t-34: 70
+		peoples_tank: 70
+		peoples_tank.speaker: 70
+		peoples_tank.speaker.reflector: 70
+		isu: 40
+		isu.concussion: 40
+		isu.concussion.pdl: 40
+		devil_tank: 70
+		devil_tank.pdl: 70
+		devil_tank.reflector: 70
+		chem_sprayer: 70
+		chem_sprayer.cloud: 70
+		chem_sprayer.cloud.metal_acid: 70
+		source_of_pollution: 40
+		source_of_pollution.chem_spray: 40
+		source_of_pollution.chem_spray.pdl: 40
+		hind: 5
+		mig: 3
+		suk: 3
+		yak: 2
+		kirov: 2
+		che1: 65
+		minigunner: 65
+		che3: 40
+		chlotus: 5
+		chbattle: 30
+		chbattle.nuclear_shells: 30
+		chbattle.nuclear_shells.pdl: 50
+		chbattle.mass_production: 30
+		chbattle.mass_production.pdl: 50
+		chbattle.autoloader: 30
+		chbattle.autoloader.pdl: 50
+		choverlord: 20
+		choverlord.bunker: 30
+		choverlord.bunker.reflector: 50
+		choverlord.propaganda: 30
+		choverlord.propaganda.reflector: 50
+		choverlord.plasma: 30
+		choverlord.plasma.reflector: 50
+		charty: 10
+		chgtnk: 5
+		chgtnk.pdl: 10
+		choutpost: 10
+		choutpost.propaganda: 20
+		choutpost.propaganda.pdl: 30
+		checm: 5
+		checm.chain: 50
+		chcrawl2: 10
+		chcrawl2.hunter: 30
+		chcrawl2.hunter.pdl: 50
+		chnukecann: 20
+		chmig: 10
+		chmig.aa: 20
+		mercenary: 65
+		rocket_mercenary: 40
+		grenadier: 25
+		rmbo: 15
+		jumpjet: 15
+		hmmv: 30
+		apc2: 20
+		vulc: 10
+		mtnk: 70
+		mtnk.drone: 70
+		mlrs: 25
+		ssm: 20
+		Mammoth: 40
+		Mammoth.ion: 40
+		titn: 40
+		juggernaut: 10
+		orca: 5
+		orca_bomber: 3
+		disr: 10
+		a10: 5
+		adept: 65
+		rocket_trooper: 40
+		black_hand_trooper: 15
+		chemwarrior: 15
+		stormtrooper: 65
+		rocket_cyborg: 40
+		obelisk_trooper: 15
+		cyborgelite: 15
+		mortar.chemical: 15
+		sab: 2
+		bggy: 30
+		arty: 20
+		howi: 20
+		ltnk: 40
+		spec: 20
+		bike: 30
+		wtnk: 3
+		stnk: 15
+		ftnk: 15
+		apch: 5
+		venm: 5
+		scrn: 5
+		rah: 3
+		s1: 65
+		s2: 40
+		s3: 40
+		s4: 15
+		s6: 5
+		mast: 15
+		intl: 10
+		gunw: 20
+		tpod: 40
+		rptp: 40
+		seek: 40
+		lace: 40
+		devo: 45
+		channeler: 45
+		ruin: 20
+		corr: 15
+		stcr: 25
+		stmr: 5
+		deva: 3
+		pac: 3
+	UnitLimits:
+		msub: 4
+		ca: 4
+		isub: 4
+		carr: 4
+		jumpjet: 8
+		kirov: 3
+		deva: 3
+		pac: 3
+		ss: 10
+		ss2: 10
+		sb: 10
+		seas: 10
+		jeep: 2
+		apc: 2
+		mech: 1
+		medic: 1
+		dog: 2
+		engineer: 1
+		chharv: 20
+		vulc: 2
+		hmmv: 2
+		sab: 2
+		apc2: 2
+		bggy: 2
+		intl: 3
+		s6: 1
+	UnitIntervals:
+		harv: 2250
+		harv.chrono: 2250
+		thor: 2250
+		light_infantry: 65
+		rocket_infantry: 40
+		yuri: 2250
+		bori: 2250
+		mcv: 3000
+		soviet_miner: 2250
+		chharv: 1250
+		chmcv: 3750
+		chlotus: 3000
+		rmbo: 2250
+		amcv: 3000
+		harv.td: 2250
+		mshp: 7500
+		smcv: 3000
+		mast: 2250
+		harv.scrin: 2250
+SquadManagerBotModule@brutal-vhard:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai
+	MinimumAttackForceDelay: 25
+	SquadValue: 6000
+	SquadValueRandomBonus: 2500
+	SquadSize: 22
+	SquadSizeRandomBonus: 9
+	ExcludeFromSquadsTypes: harv, har2, harv.scrin, soviet_miner, harv.chrono, chharv, chnmcv, mcv, mcv.nukular, amcv, amcv.nukular, smcv, smcv.nukular, dog, engineer, s6
+	ExcludeFromAirSquadsTypes: deva, pac, jumpjet, bjet
+	NavalUnitsTypes: ss,msub,dd,ca,lst,pt,dd2,pt2,ss2,isub,sb,seas
+	NavalProductionTypes: syrd, spen, syrd.gdi, spen.nod, chsyrd
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	StaticAntiAirTypes: agun, sam, flak.soviet.sprite, nsam, cram, shar, chgatling
+	ProtectionScanRadius: 12
+	AirToAirPriority: 65
+	BigAirThreats: pac, deva, kirov, mshp
+	AirSquadTargetTypes:
+		heli: Aircraft, Vehicle
+		seahawk: Infantry
+		harr: Infantry, Building, Aircraft
+		hind: Infantry, Building, Aircraft
+		yak: Building, Infantry
+		mig: Aircraft, Vehicle, Defense
+		suk: Vehicle, Defense
+		suk.conc: Building
+		kirov: Building
+		orca: Aircraft, Vehicle
+		orca_bomber: Vehicle, Defense
+		a10: Infantry, Building, Aircraft
+		apch: Infantry, Building
+		venm: Infantry, Aircraft
+		rah: Infantry, Building, Aircraft
+		scrn: Aircraft, Vehicle, Defense
+		stmr: Aircraft, Infantry, Building
+		enrv: Aircraft, Vehicle, Defense
+		mshp: Building
+HarvesterBotModuleCA:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai || enable-naval-ai
+	HarvesterTypes: harv,har2,harv.scrin,harv.chrono,chharv
+	RefineryTypes: proc,proc.td,proc.td.nod,proc.scrin,chsupply,soviet_refinery
+CaptureManagerBotModuleCA:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai
+	CapturingActorTypes: engineer, s6
+	CheckCaptureTargetsForVisibility: false
+	MaximumCaptureTargetOptions: 15
+BuildingRepairBotModule:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai || enable-naval-ai
+PowerDownBotModule:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai || enable-naval-ai
+McvManagerBotModule@upper:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai || enable-hard-ai
+	McvTypes: mcv, amcv, smcv, chnmcv, mcv.nukular, amcv.nukular, smcv.nukular
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	McvFactoryTypes: weap, weap.td, weap.nod, airs, wsph, chcommand, chcommand.nukular
+	ScanForNewMcvInterval: 80
+	MaxBaseRadius: 25
+	MinimumConstructionYardCount: 2
+McvManagerBotModule@lower:
+	RequiresCondition: enable-normal-ai || enable-easy-ai || enable-naval-ai
+	McvTypes: mcv, amcv, smcv, chnmcv, mcv.nukular, amcv.nukular, smcv.nukular
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	McvFactoryTypes: weap, weap.td, weap.nod, airs, wsph, chcommand, chcommand.nukular
+AutoDeployManager:
+SupportPowerBotModule:
+	RequiresCondition: enable-brutal-ai || enable-vhard-ai || enable-hard-ai || enable-normal-ai || enable-easy-ai || enable-naval-ai
+	Decisions:
+		crateairstrike:
+			OrderName: crateairstrike
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		crateparabombs:
+			OrderName: crateparabombs
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		chronoshiftai:
+			OrderName: Chronoshiftai
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		stormpower:
+			OrderName: storm
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		clusterminepower:
+			OrderName: clustermine
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		timewarppower:
+			OrderName: TimeWarp
+			MinimumAttractiveness: 1000
+			FineScanRadius: 2
+			Consideration@1:
+				Against: Enemy
+				Types: Air, Vehicle, Infantry, Water
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 2c0
+			Consideration@2:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 2c0
+			Consideration@3:
+				Against: Ally
+				Types: Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 3c0
+		gpsscramblerpower:
+			OrderName: gpsscramble
+			MinimumAttractiveness: 1000
+			FineScanRadius: 2
+			Consideration@2:
+				Against: Enemy
+				Types: Infantry, Vehicle
+				Attractiveness: -2
+				TargetMetric: Value
+				CheckRadius: 2c0
+			Consideration@3:
+				Against: Ally
+				Types: Infantry, Vehicle
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 3c0
+		spyplane:
+			OrderName: spyplane
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		paratroopers:
+			OrderName: paratroopers
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		stormtroopers:
+			OrderName: stormtroopers
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		carpetbomb:
+			OrderName: carpetbomb
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		parabombs:
+			OrderName: parabombs
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		iparabombs:
+			OrderName: atombomb
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		nukepower:
+			OrderName: NukePowerInfoOrder
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		ironcurtainpower:
+			OrderName: ironcurtain
+			MinimumAttractiveness: 1000
+			FineScanRadius: 2
+			Consideration@2:
+				Against: Enemy
+				Types: Infantry
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 2c0
+			Consideration@3:
+				Against: Ally
+				Types: Vehicle
+				Attractiveness: 5
+				TargetMetric: Value
+				CheckRadius: 3c0
+			Consideration@4:
+				Against: Ally
+				Types: Infantry
+				Attractiveness: -2
+				TargetMetric: Value
+				CheckRadius: 2c0
+		chartillerybarrage:
+			OrderName: chartillerybarrage
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		chclusterbomb:
+			OrderName: chclusterbomb
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		chcarpetbombing:
+			OrderName: chcarpetbombing
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		minigunnerdrop:
+			OrderName: minigunnerdrop
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		tankdrop:
+			OrderName: tankdrop
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		satellitehack1:
+			OrderName: satellitehack1
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		chempbomb:
+			OrderName: chempbomb
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		gdiuav:
+			OrderName: gdiuav
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		gdiuavtalon:
+			OrderName: gdiuavtalon
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		gdidropzone:
+			OrderName: dropzone
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		eagledropzone:
+			OrderName: dropzoneeagle
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		droppods:
+			OrderName: droppods
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		ioncannonpower:
+			OrderName: ioncannon
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		surgicalstrikepower:
+			OrderName: surgicalstrike
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		interceptorpower:
+			OrderName: interceptors
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Air
+				Attractiveness: 5
+				TargetMetric: Value
+				CheckRadius: 7c0
+			Consideration@2:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 3c0
+		empmissilepower:
+			OrderName: empmissile
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		naniterepairpower:
+			OrderName: nrepair
+			MinimumAttractiveness: 1000
+			Consideration@1:
+				Against: Ally
+				Types: Vehicle
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 4c0
+		sathack:
+			OrderName: sathack
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		cashhack:
+			OrderName: cashhack
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+		nodairdrop:
+			OrderName: nodairdrop
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		LegionParatroopers:
+			OrderName: LegionParatroopers
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+		LegionParatroopersUPG:
+			OrderName: LegionParatroopersUPG
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@2:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 8c0
+			Consideration@3:
+				Against: Enemy
+				Types: Water
+				Attractiveness: -5
+				TargetMetric: None
+				CheckRadius: 5c0
+		hackercell:
+			OrderName: hackercell
+			Consideration@1:
+				Against: Ally
+		infernobombs:
+			OrderName: infernobomb
+			MinimumAttractiveness: 1
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 5c0
+		chemmissilepower:
+			OrderName: chemmissile
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		clustermissilepower:
+			OrderName: clustermissile
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+		stealthgenpower:
+			OrderName: stealthgen
+			MinimumAttractiveness: 1000
+			FineScanRadius: 2
+			Consideration@1:
+				Against: Enemy
+				Types: Structure, Vehicle
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 3c0
+			Consideration@2:
+				Against: Enemy
+				Types: Infantry
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 2c0
+			Consideration@3:
+				Against: Ally
+				Types: Vehicle
+				Attractiveness: 3
+				TargetMetric: Value
+				CheckRadius: 3c0
+			Consideration@4:
+				Against: Ally
+				Types: Infantry
+				Attractiveness: -2
+				TargetMetric: Value
+				CheckRadius: 2c0
+		frenzypower:
+			OrderName: frenzy
+			MinimumAttractiveness: 1000
+			FineScanRadius: 2
+			Consideration@3:
+				Against: Ally
+				Types: Vehicle, Infantry
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 3c0
+		stormspikepower:
+			OrderName: stormspike
+			MinimumAttractiveness: 5
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: None
+				CheckRadius: 8c0
+		buzzerswarmpower:
+			OrderName: buzzerswarmai
+			MinimumAttractiveness: 1000
+			FineScanRadius: 2
+			Consideration@3:
+				Against: Enemy
+				Types: Infantry, Vehicle
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 2c0
+		ionsurgepower:
+			OrderName: ionsurge
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 7c0
+		suppressionpower:
+			OrderName: suppression
+			MinimumAttractiveness: 1000
+			FineScanRadius: 2
+			Consideration@3:
+				Against: Enemy
+				Types: Vehicle, Infantry
+				Attractiveness: 2
+				TargetMetric: Value
+				CheckRadius: 3c0
+		riftpower:
+			OrderName: rift
+			MinimumAttractiveness: 3000
+			Consideration@1:
+				Against: Enemy
+				Types: Structure
+				Attractiveness: 1
+				TargetMetric: Value
+				CheckRadius: 5c0
+			Consideration@2:
+				Against: Ally
+				Types: Air, Ground, Water
+				Attractiveness: -10
+				TargetMetric: Value
+				CheckRadius: 7c0
+ModularBot@EasyAI:
+	Name: Easy AI
+	Type: easy
+GrantConditionOnBotOwner@EasyAI:
+	Condition: enable-easy-ai
+	Bots: easy
+BaseBuilderBotModuleCA@easy:
+	RequiresCondition: enable-easy-ai
+	BuildingQueues: Building, Promotion
+	MinimumExcessPower: 50
+	MaximumExcessPower: 200
+	ExcessPowerIncrement: 50
+	ExcessPowerIncreaseThreshold: 5
+	PlaceDefenseTowardsEnemyChance: 75
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	RefineryTypes: proc,proc.td,proc.td.nod,proc.scrin,chsupply,soviet_refinery
+	PowerTypes: powr,powr.soviet,apwr,apwr.soviet,nuke,nuke.nod,nuk2,nuk2.nod,tpwr,reac,rea2,chpower,chpower2
+	BarracksTypes: barr,tent,hand,pyle,port,chsyrd,chbarracks
+	VehiclesFactoryTypes: weap,airs,weap.td,weap.nod,wsph,chweap
+	ProductionTypes: barr,tent,hand,pyle,port,airs,weap,weap.soviet,weap.td,weap.nod,wsph,afld,afld.gdi,afld.allies,chairport,hpad,hpad.soviet,hpad.td,hpad.td.nod,grav,chbarracks,chairport,chweap
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	SiloTypes: silo,silo.td,silo.scrin
+	AntiAirTypes: sam, flak.soviet.sprite, nsam, agun, cram, shar, chgatling
+	BuildingDelays:
+		kenn: 2800
+		dome: 4500
+		hq: 4500
+		nerv: 4500
+		syrd: 6000
+		spen: 6000
+		syrd.gdi: 6000
+		spen.nod: 6000
+		afld: 6375
+		afld.gdi: 6375
+		grav: 6375
+		hpad: 6375
+		hpad.td: 6375
+		atek: 6375
+		gtek: 6375
+		stek: 6375
+		tmpl: 6375
+		scrt: 6375
+		bio.nod: 8000
+		miss.gdi: 8000
+		indp: 8000
+		orep: 8000
+		sign: 8000
+		mslo: 8000
+		mslo.nod: 8000
+		weat: 8000
+		eye: 8000
+		rift: 8000
+		chcommand: 6000
+		chcommand.radar: 4500
+		chsyrd: 6000
+		chairport: 5000
+		chpropaganda: 6375
+		chinternetcenter: 8000
+		chsilo: 8000
+	BuildingLimits:
+		barr: 3
+		tent: 3
+		pyle: 3
+		hand: 3
+		port: 3
+		kenn: 1
+		dome: 1
+		hq: 1
+		nerv: 1
+		weap: 3
+		weap.td: 3
+		weap.nod: 3
+		wsph: 3
+		hpad: 2
+		hpad.td: 2
+		afld: 1
+		afld.gdi: 1
+		grav: 2
+		atek: 1
+		stek: 1
+		gtek: 1
+		tmpl: 1
+		scrt: 1
+		fix: 1
+		rep: 1
+		srep: 1
+		spen: 2
+		syrd: 2
+		spen.nod: 2
+		syrd.gdi: 2
+		chcommand: 2
+		chbarracks: 2
+		chcommand.radar: 1
+		chweap: 2
+		chairport: 2
+		chpropaganda: 1
+		chinternetcenter: 1
+		chsyrd: 1
+	BuildingFractions:
+		proc: 30
+		proc.td: 30
+		proc.scrin: 30
+		soviet_refinery: 30
+		hand: 2
+		pyle: 2
+		barr: 2
+		tent: 2
+		port: 2
+		kenn: 1
+		weap: 3
+		weap.td: 3
+		weap.nod: 3
+		wsph: 3
+		pbox: 7
+		hbox: 7
+		gtwr: 7
+		gun: 7
+		gun.td: 7
+		ptur: 7
+		scol: 5
+		tsla: 5
+		obli: 5
+		ltur: 10
+		ftur: 10
+		ttur: 10
+		grand_cannon: 3
+		atwr: 7
+		stwr: 5
+		pris: 5
+		agun: 3
+		cram: 3
+		sam: 3
+		flak.soviet.sprite: 3
+		nsam: 3
+		shar: 3
+		gap: 1
+		atek: 1
+		stek: 1
+		silo: 1
+		silo.td: 1
+		silo.scrin: 1
+		fix: 1
+		dome: 10
+		tmpl: 1
+		gtek: 1
+		scrt: 1
+		rep: 1
+		srep: 1
+		hq: 10
+		nerv: 1
+		afld: 1
+		afld.gdi: 1
+		grav: 1
+		mslo: 1
+		iron: 1
+		pdox: 1
+		sgen: 1
+		mani: 1
+		eye: 1
+		weat: 1
+		mslo.nod: 1
+		rift: 1
+		indp: 1
+		bio.nod: 1
+		miss.gdi: 1
+		orep: 1
+		sign: 1
+		patr: 1
+		hpad: 1
+		hpad.td: 1
+		spen: 1
+		syrd: 1
+		spen.nod: 1
+		syrd.gdi: 1
+		bombard.strat: 1
+		seek.strat: 1
+		hold.strat: 1
+		sonic.upgrade: 1
+		drone.upgrade: 1
+		pointlaser.upgrade: 1
+		hypersonic.upgrade: 1
+		walker.upgrade: 1
+		ionmam.upgrade: 1
+		vulcan.upgrade: 1
+		hazmat.upgrade: 1
+		howi.upgrade: 1
+		cyborg.upgrade: 1
+		cyborgspeed.upgrade: 1
+		cyborgarmor.upgrade: 1
+		cluster.upgrade: 1
+		indp.upgrade: 1
+		iraqtank.upgrade: 1
+		orep.upgrade: 1
+		charv.upgrade: 1
+		regen.upgrade: 1
+		shields.upgrade: 1
+		chcommand: 5
+		chsupply: 10
+		chbarracks: 3
+		chweap: 5
+		chgatling: 7
+		chpropagandatower: 3
+		chbunker.ai: 7
+		chpropaganda: 1
+		chcommand.radar: 10
+		chairport: 2
+		chsilo: 1
+		chsyrd: 1
+		promotion.battlemaster.nuclear_shells: 5
+		promotion.battlemaster.mass_production: 5
+		promotion.battlemaster.autoloader: 5
+		promotion.battlemaster.pdl: 1
+		promotion.speakertower.pdl: 1
+		promotion.overlord.bunker: 5
+		promotion.overlord.propaganda: 5
+		promotion.overlord.plasma: 5
+		promotion.overlord.reflector: 1
+		promotion.nuke_cannon: 1
+		promotion.crawler.hunter: 5
+		promotion.crawler.pdl: 1
+		promotion.outpost.propaganda: 5
+		promotion.outpost.pdl: 1
+		promotion.gatling.pdl: 1
+		promotion.ecm.chain: 5
+		promotion.chinamig.aa: 5
+		promotion.chinamig.napalm: 5
+		promotion.chinamig.nuke: 5
+		promotion.nationalism: 5
+		promotion.subliminal_messages: 5
+		promotion.uranium_shells: 5
+		promotion.nuclear_tanks: 5
+		promotion.isotope_stability: 5
+UnitBuilderBotModuleCA@easy:
+	RequiresCondition: enable-easy-ai
+	MaxAircraft: 2
+	UnitDelays:
+		arty: 5250
+		arty.nod: 5250
+		katy: 5250
+	UnitIntervals:
+		mshp: 7500
+		harv: 2250
+		harv.td: 2250
+		harv.scrin: 2250
+		harv.chrono: 2250
+		rmbo: 4500
+		thor: 4500
+		mast: 4500
+		yuri: 4500
+		bori: 4500
+		chharv: 2250
+		chmcv: 3750
+		chlotus: 3000
+	UnitsToBuild:
+		conscript: 65
+		light_infantry: 65
+		rpg_soldier: 40
+		rocket_infantry: 40
+		flamethrower: 15
+		adept: 65
+		mercenary: 65
+		grenadier: 25
+		rocket_mercenary: 40
+		rocket_trooper: 40
+		black_hand_trooper: 15
+		chemwarrior: 15
+		engineer: 5
+		stormtrooper: 65
+		rocket_cyborg: 40
+		s1: 65
+		s2: 40
+		s3: 40
+		s4: 15
+		s6: 5
+		cyborgelite: 15
+		mort: 15
+		medic: 3
+		mech: 3
+		dog: 2
+		sab: 2
+		shok: 15
+		desolator: 15
+		snip: 15
+		jumpjet: 15
+		obelisk_trooper: 15
+		rmbo: 15
+		thor: 15
+		bori: 15
+		ivan: 15
+		mast: 15
+		apc: 20
+		intl: 10
+		jeep: 30
+		apc2: 20
+		vulc: 10
+		hmmv: 30
+		btr: 20
+		gunw: 20
+		bggy: 30
+		arty: 20
+		howi: 20
+		prismtank: 20
+		pcan: 20
+		v2rl: 20
+		katy: 20
+		ssm: 25
+		mlrs: 20
+		spec: 20
+		hsam: 25
+		ruin: 20
+		1tnk: 70
+		ifv.ai: 70
+		2tnk: 45
+		tnkd: 45
+		rtnk: 45
+		heavy_tank: 70
+		apoc: 40
+		kims_wheel: 70
+		t-34: 70
+		peoples_tank: 70
+		ISU: 40
+		devil_tank: 70
+		chem_sprayer: 70
+		source_of_pollution: 40
+		tpod: 40
+		rptp: 40
+		ltnk: 40
+		mtnk: 70
+		mtnk.drone: 70
+		seek: 40
+		lace: 40
+		devo: 45
+		channeler: 45
+		bike: 30
+		Mammoth: 40
+		Mammoth.ion: 40
+		v3rl: 10
+		titn: 40
+		juggernaut: 10
+		cryo: 10
+		cdrn: 3
+		ctnk: 3
+		chpr: 3
+		batf.ai: 10
+		wtnk: 3
+		ttnk: 25
+		isu: 20
+		stnk: 15
+		ftnk: 15
+		corr: 15
+		stcr: 25
+		hind: 5
+		heli: 5
+		apch: 5
+		venm: 5
+		orca: 5
+		orca_bomber: 3
+		scrn: 5
+		rah: 3
+		mig: 3
+		suk: 3
+		harr: 3
+		yak: 2
+		disr: 10
+		kirov: 2
+		a10: 5
+		auro: 5
+		ss: 1
+		msub: 1
+		dd: 1
+		ca: 1
+		carr: 1
+		pt: 1
+		pt2: 1
+		dd2: 1
+		ss2: 2
+		isub: 1
+		sb: 1
+		seas: 1
+		stmr: 5
+		deva: 3
+		pac: 3
+		che1: 65
+		minigunner: 65
+		che3: 40
+		chlotus: 5
+		chbattle: 30
+		chbattle.nuclear_shells: 30
+		chbattle.nuclear_shells.pdl: 50
+		chbattle.mass_production: 30
+		chbattle.mass_production.pdl: 50
+		chbattle.autoloader: 30
+		chbattle.autoloader.pdl: 50
+		choverlord: 20
+		choverlord.bunker: 30
+		choverlord.bunker.reflector: 50
+		choverlord.propaganda: 30
+		choverlord.propaganda.reflector: 50
+		choverlord.plasma: 30
+		choverlord.plasma.reflector: 50
+		charty: 10
+		chgtnk: 5
+		chgtnk.pdl: 10
+		choutpost: 10
+		choutpost.propaganda: 20
+		choutpost.propaganda.pdl: 30
+		checm: 5
+		checm.chain: 50
+		chcrawl2: 10
+		chcrawl2.hunter: 30
+		chcrawl2.hunter.pdl: 50
+		chnukecann: 20
+		chmig: 5
+		chmig.aa: 20
+		chmig.nuke: 20
+		chmig.napalm: 20
+	UnitLimits:
+		dog: 2
+		sab: 2
+		cdrn: 1
+		apc: 2
+		apc2: 2
+		intl: 3
+		vulc: 2
+		hmmv: 2
+		bggy: 2
+		jeep: 2
+		engineer: 1
+		s6: 1
+		mech: 1
+		medic: 1
+		msub: 4
+		ca: 4
+		isub: 4
+		carr: 4
+		jumpjet: 8
+		kirov: 1
+		deva: 1
+		pac: 1
+		ss: 10
+		ss2: 10
+		sb: 10
+		seas: 10
+		harv: 8
+		har2: 8
+		harv.scrin: 8
+		harv.chrono: 8
+		chharv: 5
+SquadManagerBotModule@easy:
+	RequiresCondition: enable-easy-ai
+	SquadValue: 2000
+	RushInterval: 6000
+	SquadValueRandomBonus: 1500
+	MinimumAttackForceDelay: 7500
+	SquadSize: 10
+	SquadSizeRandomBonus: 5
+	ExcludeFromSquadsTypes: harv, har2, harv.scrin, soviet_miner, harv.chrono, chharv, chnmcv, mcv, mcv.nukular, amcv, amcv.nukular, smcv, smcv.nukular, dog, engineer, s6
+	ExcludeFromAirSquadsTypes: deva, pac, jumpjet, bjet
+	NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	StaticAntiAirTypes: agun, sam, flak.soviet.sprite, nsam, cram, shar, chgatling
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	AirToAirPriority: 45
+	AirSquadTargetTypes:
+		mshp: Building
+ModularBot@HardAI:
+	Name: Hard AI
+	Type: hard
+GrantConditionOnBotOwner@HardAI:
+	Condition: enable-hard-ai
+	Bots: hard
+BaseBuilderBotModuleCA@hard:
+	RequiresCondition: enable-hard-ai
+	BuildingQueues: Building, Promotion
+	MinimumExcessPower: 50
+	MaximumExcessPower: 290
+	ExcessPowerIncrement: 30
+	ExcessPowerIncreaseThreshold: 3
+	PlaceDefenseTowardsEnemyChance: 75
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	RefineryTypes: proc,proc.td,proc.td.nod,proc.scrin,chsupply,soviet_refinery
+	PowerTypes: powr,powr.soviet,apwr,apwr.soviet,nuke,nuke.nod,nuk2,nuk2.nod,tpwr,reac,rea2,chpower,chpower2
+	BarracksTypes: barr,tent,hand,pyle,port,chsyrd,chbarracks
+	VehiclesFactoryTypes: weap,airs,weap.td,weap.nod,wsph,chweap
+	ProductionTypes: barr,tent,hand,pyle,port,airs,weap,weap.soviet,weap.td,weap.nod,wsph,afld,afld.gdi,afld.allies,chairport,hpad,hpad.soviet,hpad.td,hpad.td.nod,grav,chbarracks,chairport,chweap
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	SiloTypes: silo,silo.td,silo.scrin
+	AntiAirTypes: sam, flak.soviet.sprite, nsam, agun, cram, shar, chgatling
+	MaxBaseRadius: 23
+	BuildingDelays:
+		kenn: 2800
+		dome: 4500
+		hq: 4500
+		nerv: 4500
+		syrd: 6000
+		spen: 6000
+		syrd.gdi: 6000
+		spen.nod: 6000
+		afld: 6375
+		afld.gdi: 6375
+		grav: 6375
+		hpad: 6375
+		hpad.td: 6375
+		atek: 6375
+		gtek: 6375
+		stek: 6375
+		tmpl: 6375
+		scrt: 6375
+		bio.nod: 8000
+		miss.gdi: 8000
+		indp: 8000
+		orep: 8000
+		sign: 8000
+		mslo: 8000
+		mslo.nod: 8000
+		weat: 8000
+		eye: 8000
+		rift: 8000
+		chcommand: 6000
+		chcommand.radar: 4500
+		chsyrd: 6000
+		chairport: 5000
+		chpropaganda: 6375
+		chinternetcenter: 8000
+		chsilo: 8000
+	BuildingLimits:
+		barr: 3
+		tent: 3
+		pyle: 3
+		hand: 3
+		port: 3
+		kenn: 1
+		dome: 1
+		hq: 1
+		nerv: 1
+		weap: 3
+		weap.td: 3
+		weap.nod: 3
+		wsph: 3
+		hpad: 2
+		hpad.td: 2
+		afld: 2
+		afld.gdi: 2
+		grav: 3
+		atek: 1
+		stek: 1
+		gtek: 1
+		tmpl: 1
+		scrt: 1
+		fix: 1
+		rep: 1
+		srep: 1
+		spen: 2
+		syrd: 2
+		spen.nod: 2
+		syrd.gdi: 2
+		chcommand: 3
+		chbarracks: 15
+		chcommand.radar: 1
+		chweap: 15
+		chairport: 15
+		chpropaganda: 1
+		chinternetcenter: 1
+		chsyrd: 5
+	BuildingFractions:
+		proc: 30
+		proc.td: 30
+		proc.scrin: 30
+		soviet_refinery: 30
+		hand: 3
+		pyle: 3
+		barr: 3
+		tent: 3
+		port: 3
+		kenn: 1
+		weap: 5
+		weap.td: 5
+		weap.nod: 5
+		wsph: 5
+		pbox: 7
+		hbox: 7
+		gtwr: 7
+		gun: 7
+		gun.td: 7
+		ptur: 7
+		scol: 7
+		tsla: 7
+		obli: 6
+		ltur: 10
+		ftur: 10
+		ttur: 10
+		grand_cannon: 5
+		atwr: 8
+		stwr: 6
+		pris: 6
+		agun: 7
+		cram: 7
+		sam: 7
+		flak.soviet.sprite: 7
+		nsam: 7
+		shar: 7
+		gap: 1
+		atek: 1
+		stek: 1
+		silo: 1
+		silo.td: 1
+		silo.scrin: 1
+		fix: 1
+		dome: 10
+		tmpl: 1
+		gtek: 1
+		scrt: 1
+		rep: 1
+		srep: 1
+		hq: 10
+		nerv: 10
+		afld: 2
+		afld.gdi: 2
+		grav: 2
+		mslo: 1
+		iron: 1
+		pdox: 1
+		sgen: 1
+		mani: 1
+		eye: 1
+		weat: 1
+		mslo.nod: 1
+		rift: 1
+		indp: 1
+		bio.nod: 1
+		miss.gdi: 1
+		orep: 1
+		sign: 1
+		patr: 1
+		hpad: 2
+		hpad.td: 2
+		spen: 1
+		syrd: 1
+		spen.nod: 1
+		syrd.gdi: 1
+		bombard.strat: 1
+		seek.strat: 1
+		hold.strat: 1
+		sonic.upgrade: 1
+		drone.upgrade: 1
+		pointlaser.upgrade: 1
+		hypersonic.upgrade: 1
+		walker.upgrade: 1
+		ionmam.upgrade: 1
+		vulcan.upgrade: 1
+		hazmat.upgrade: 1
+		howi.upgrade: 1
+		cyborg.upgrade: 1
+		cyborgspeed.upgrade: 1
+		cyborgarmor.upgrade: 1
+		cluster.upgrade: 1
+		indp.upgrade: 1
+		iraqtank.upgrade: 1
+		orep.upgrade: 1
+		charv.upgrade: 1
+		regen.upgrade: 1
+		shields.upgrade: 1
+		chcommand: 5
+		chsupply: 10
+		chbarracks: 3
+		chweap: 5
+		chgatling: 7
+		chpropagandatower: 3
+		chbunker.ai: 7
+		chpropaganda: 1
+		chcommand.radar: 10
+		chairport: 2
+		chsilo: 1
+		chsyrd: 1
+		promotion.battlemaster.nuclear_shells: 5
+		promotion.battlemaster.mass_production: 5
+		promotion.battlemaster.autoloader: 5
+		promotion.battlemaster.pdl: 10
+		promotion.speakertower.pdl: 1
+		promotion.overlord.bunker: 5
+		promotion.overlord.propaganda: 5
+		promotion.overlord.plasma: 5
+		promotion.overlord.reflector: 5
+		promotion.nuke_cannon: 1
+		promotion.crawler.hunter: 10
+		promotion.crawler.pdl: 10
+		promotion.outpost.propaganda: 10
+		promotion.outpost.pdl: 5
+		promotion.gatling.pdl: 5
+		promotion.ecm.chain: 5
+		promotion.chinamig.aa: 5
+		promotion.chinamig.napalm: 5
+		promotion.chinamig.nuke: 5
+		promotion.nationalism: 10
+		promotion.subliminal_messages: 5
+		promotion.uranium_shells: 10
+		promotion.nuclear_tanks: 10
+		promotion.isotope_stability: 10
+UnitBuilderBotModuleCA@hard:
+	RequiresCondition: enable-hard-ai
+	IdleBaseUnitsMaximum: 50
+	MaxAircraft: 6
+	MaintainAirSuperiority: true
+	MaxAirSuperiority: 8
+	AirToAirUnits: heli, mig, orca, scrn, venm, stmr, enrv, a10, harr, rah, hind
+	AirThreatUnits: heli, mig, orca, scrn, venm, stmr, enrv, a10, harr, rah, hind, pac, deva, kirov, mshp
+	UnitDelays:
+		arty: 4500
+		arty.nod: 4500
+		katy: 4500
+	UnitIntervals:
+		mshp: 7500
+		mcv: 3750
+		amcv: 3750
+		smcv: 3750
+		harv: 2250
+		harv.td: 2250
+		harv.scrin: 2250
+		harv.chrono: 2250
+		rmbo: 3000
+		thor: 3000
+		mast: 3000
+		yuri: 3000
+		bori: 3000
+		chharv: 2250
+		chmcv: 3750
+		chlotus: 3000
+	UnitsToBuild:
+		conscript: 65
+		light_infantry: 65
+		rpg_soldier: 40
+		rocket_infantry: 40
+		flamethrower: 15
+		adept: 65
+		mercenary: 65
+		grenadier: 25
+		rocket_mercenary: 40
+		rocket_trooper: 40
+		black_hand_trooper: 15
+		chemwarrior: 15
+		engineer: 5
+		stormtrooper: 65
+		rocket_cyborg: 40
+		s1: 65
+		s2: 40
+		s3: 40
+		s4: 15
+		s6: 5
+		cyborgelite: 15
+		mort: 15
+		medic: 3
+		mech: 3
+		dog: 2
+		sab: 2
+		shok: 15
+		desolator: 15
+		snip: 15
+		jumpjet: 15
+		obelisk_trooper: 15
+		rmbo: 15
+		thor: 15
+		bori: 15
+		ivan: 15
+		mast: 15
+		apc: 20
+		intl: 10
+		jeep: 30
+		apc2: 20
+		vulc: 10
+		hmmv: 30
+		btr: 20
+		gunw: 20
+		bggy: 30
+		arty: 20
+		howi: 20
+		prismtank: 20
+		pcan: 20
+		v2rl: 20
+		katy: 20
+		ssm: 25
+		mlrs: 20
+		spec: 20
+		hsam: 25
+		ruin: 20
+		1tnk: 70
+		ifv.ai: 70
+		2tnk: 45
+		tnkd: 45
+		rtnk: 45
+		heavy_tank: 70
+		apoc: 40
+		kims_wheel: 70
+		t-34: 70
+		peoples_tank: 70
+		ISU: 40
+		devil_tank: 70
+		chem_sprayer: 70
+		source_of_pollution: 40
+		tpod: 40
+		rptp: 40
+		ltnk: 40
+		mtnk: 70
+		mtnk.drone: 70
+		seek: 40
+		lace: 40
+		devo: 45
+		channeler: 45
+		bike: 30
+		Mammoth: 40
+		Mammoth.ion: 40
+		v3rl: 10
+		titn: 40
+		juggernaut: 10
+		cryo: 10
+		cdrn: 3
+		ctnk: 3
+		chpr: 3
+		batf.ai: 10
+		wtnk: 3
+		ttnk: 25
+		isu: 20
+		stnk: 15
+		ftnk: 15
+		corr: 15
+		stcr: 25
+		hind: 5
+		heli: 5
+		apch: 5
+		venm: 5
+		orca: 5
+		orca_bomber: 3
+		scrn: 5
+		rah: 3
+		mig: 3
+		suk: 3
+		harr: 3
+		yak: 2
+		disr: 10
+		kirov: 2
+		a10: 5
+		auro: 5
+		ss: 1
+		msub: 1
+		dd: 1
+		ca: 1
+		carr: 1
+		pt: 1
+		pt2: 1
+		dd2: 1
+		ss2: 2
+		isub: 1
+		sb: 1
+		seas: 1
+		stmr: 5
+		deva: 3
+		pac: 3
+		che1: 65
+		minigunner: 65
+		che3: 40
+		chlotus: 5
+		chbattle: 30
+		chbattle.nuclear_shells: 30
+		chbattle.nuclear_shells.pdl: 50
+		chbattle.mass_production: 30
+		chbattle.mass_production.pdl: 50
+		chbattle.autoloader: 30
+		chbattle.autoloader.pdl: 50
+		choverlord: 20
+		choverlord.bunker: 30
+		choverlord.bunker.reflector: 50
+		choverlord.propaganda: 30
+		choverlord.propaganda.reflector: 50
+		choverlord.plasma: 30
+		choverlord.plasma.reflector: 50
+		charty: 10
+		chgtnk: 5
+		chgtnk.pdl: 10
+		choutpost: 10
+		choutpost.propaganda: 20
+		choutpost.propaganda.pdl: 30
+		checm: 5
+		checm.chain: 50
+		chcrawl2: 10
+		chcrawl2.hunter: 30
+		chcrawl2.hunter.pdl: 50
+		chnukecann: 20
+		chmig: 5
+		chmig.aa: 20
+		chmig.nuke: 20
+		chmig.napalm: 20
+	UnitLimits:
+		dog: 2
+		sab: 2
+		cdrn: 1
+		apc: 2
+		apc2: 2
+		intl: 3
+		vulc: 2
+		hmmv: 2
+		bggy: 2
+		jeep: 2
+		engineer: 1
+		s6: 1
+		mech: 1
+		medic: 1
+		msub: 4
+		ca: 4
+		isub: 4
+		carr: 4
+		jumpjet: 8
+		kirov: 3
+		deva: 3
+		pac: 3
+		ss: 10
+		ss2: 10
+		sb: 10
+		seas: 10
+		harv: 8
+		har2: 8
+		harv.scrin: 8
+		harv.chrono: 8
+		chharv: 10
+SquadManagerBotModule@hard:
+	RequiresCondition: enable-hard-ai
+	MinimumAttackForceDelay: 25
+	SquadValue: 6000
+	SquadValueRandomBonus: 2500
+	SquadSize: 22
+	SquadSizeRandomBonus: 9
+	ExcludeFromSquadsTypes: harv, har2, harv.scrin, soviet_miner, harv.chrono, chharv, chnmcv, mcv, mcv.nukular, amcv, amcv.nukular, smcv, smcv.nukular, dog, engineer, s6
+	NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	StaticAntiAirTypes: agun, sam, flak.soviet.sprite, nsam, cram, shar, chgatling
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	ProtectionScanRadius: 12
+	AirToAirPriority: 65
+	BigAirThreats: pac, deva, kirov, mshp
+	AirSquadTargetTypes:
+		heli: Aircraft, Vehicle
+		seahawk: Infantry
+		hind: Infantry, Building, Aircraft
+		yak: Building, Infantry
+		mig: Aircraft, Vehicle, Defense
+		suk: Vehicle, Defense
+		suk.conc: Building
+		kirov: Building
+		orca: Aircraft, Vehicle
+		orca_bomber: Vehicle, Defense
+		a10: Infantry, Building, Aircraft
+		apch: Infantry, Building
+		venm: Infantry, Aircraft
+		rah: Infantry, Building, Aircraft
+		harr: Infantry, Building, Aircraft
+		scrn: Aircraft, Vehicle, Defense
+		stmr: Aircraft, Infantry, Building
+		enrv: Aircraft, Vehicle, Defense
+		mshp: Building
+ModularBot@NavalAI:
+	Name: Naval AI
+	Type: naval
+GrantConditionOnBotOwner@NavalAI:
+	Condition: enable-naval-ai
+	Bots: naval
+BaseBuilderBotModuleCA@naval:
+	RequiresCondition: enable-naval-ai
+	BuildingQueues: Building, Promotion
+	MinimumExcessPower: 50
+	MaximumExcessPower: 300
+	ExcessPowerIncrement: 20
+	ExcessPowerIncreaseThreshold: 2
+	PlaceDefenseTowardsEnemyChance: 75
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	RefineryTypes: proc,proc.td,proc.td.nod,proc.scrin,chsupply,soviet_refinery
+	PowerTypes: powr,powr.soviet,apwr,apwr.soviet,nuke,nuke.nod,nuk2,nuk2.nod,tpwr,reac,rea2,chpower,chpower2
+	BarracksTypes: barr,tent,hand,pyle,port,chsyrd,chbarracks
+	VehiclesFactoryTypes: weap,airs,weap.td,weap.nod,wsph,chweap
+	ProductionTypes: barr,tent,hand,pyle,port,airs,weap,weap.soviet,weap.td,weap.nod,wsph,afld,afld.gdi,afld.allies,chairport,hpad,hpad.soviet,hpad.td,hpad.td.nod,grav,chbarracks,chairport,chweap
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	SiloTypes: silo,silo.td,silo.scrin
+	AntiAirTypes: sam, flak.soviet.sprite, nsam, agun, cram, shar, chgatling
+	BuildingLimits:
+		barr: 3
+		tent: 3
+		pyle: 3
+		hand: 3
+		port: 3
+		kenn: 1
+		dome: 1
+		hq: 1
+		nerv: 1
+		weap: 3
+		weap.td: 3
+		weap.nod: 3
+		wsph: 3
+		hpad: 5
+		hpad.td: 5
+		afld: 3
+		afld.gdi: 3
+		grav: 3
+		atek: 1
+		stek: 1
+		gtek: 1
+		tmpl: 1
+		scrt: 1
+		fix: 1
+		rep: 1
+		srep: 1
+		spen: 2
+		syrd: 2
+		spen.nod: 2
+		syrd.gdi: 2
+		chcommand: 5
+		chbarracks: 5
+		chcommand.radar: 1
+		chweap: 5
+		chairport: 10
+		chpropaganda: 1
+		chinternetcenter: 1
+		chsyrd: 20
+	BuildingFractions:
+		proc: 30
+		proc.td: 30
+		proc.scrin: 30
+		soviet_refinery: 30
+		hand: 2
+		pyle: 2
+		barr: 2
+		tent: 2
+		port: 2
+		kenn: 1
+		weap: 3
+		weap.td: 3
+		weap.nod: 3
+		wsph: 3
+		pbox: 7
+		hbox: 7
+		gtwr: 7
+		gun: 7
+		gun.td: 7
+		ptur: 7
+		scol: 5
+		tsla: 5
+		obli: 5
+		ltur: 10
+		ftur: 10
+		ttur: 10
+		grand_cannon: 3
+		atwr: 7
+		stwr: 5
+		pris: 5
+		agun: 3
+		cram: 3
+		sam: 3
+		flak.soviet.sprite: 3
+		nsam: 3
+		shar: 3
+		gap: 1
+		atek: 1
+		stek: 1
+		fix: 1
+		dome: 10
+		tmpl: 1
+		gtek: 1
+		scrt: 1
+		rep: 1
+		srep: 1
+		hq: 10
+		nerv: 10
+		afld: 3
+		afld.gdi: 3
+		grav: 3
+		mslo: 1
+		iron: 1
+		pdox: 1
+		sgen: 1
+		mani: 1
+		indp: 1
+		bio.nod: 1
+		miss.gdi: 1
+		orep: 1
+		sign: 1
+		patr: 1
+		weat: 1
+		mslo.nod: 1
+		rift: 1
+		eye: 1
+		hpad: 3
+		hpad.td: 3
+		spen: 1
+		syrd: 1
+		spen.nod: 1
+		syrd.gdi: 1
+		bombard.strat: 1
+		seek.strat: 1
+		hold.strat: 1
+		sonic.upgrade: 1
+		drone.upgrade: 1
+		pointlaser.upgrade: 1
+		hypersonic.upgrade: 1
+		walker.upgrade: 1
+		ionmam.upgrade: 1
+		vulcan.upgrade: 1
+		hazmat.upgrade: 1
+		howi.upgrade: 1
+		cyborg.upgrade: 1
+		cyborgspeed.upgrade: 1
+		cyborgarmor.upgrade: 1
+		cluster.upgrade: 1
+		indp.upgrade: 1
+		iraqtank.upgrade: 1
+		orep.upgrade: 1
+		charv.upgrade: 1
+		regen.upgrade: 1
+		shields.upgrade: 1
+		chcommand: 5
+		chsupply: 10
+		chbarracks: 2
+		chweap: 3
+		chgatling: 7
+		chpropagandatower: 3
+		chpropagandatower.pdl: 3
+		chbunker.ai: 7
+		chpropaganda: 1
+		chcommand.radar: 10
+		chairport: 4
+		chsilo: 1
+		chsyrd: 20
+		promotion.speakertower.pdl: 1
+		promotion.nuke_cannon: 5
+		promotion.nuke_cannon.range: 10
+		promotion.chinamig.aa: 5
+		promotion.chinamig.napalm: 5
+		promotion.chinamig.nuke: 5
+		promotion.Helix.gatling: 5
+		promotion.Helix.Bunker: 5
+		promotion.Helix.Napalm: 5
+		promotion.Helix.Nuke: 5
+		promotion.Helix.Torpedo: 10
+		promotion.nationalism: 10
+		promotion.subliminal_messages: 5
+		promotion.uranium_shells: 10
+		promotion.nuclear_tanks: 10
+		promotion.isotope_stability: 10
+	BuildingDelays:
+		chcommand: 6000
+		chcommand.radar: 4500
+		chsyrd: 3000
+		chairport: 5000
+		chpropaganda: 6375
+		chinternetcenter: 8000
+		chsilo: 8000
+UnitBuilderBotModuleCA@naval:
+	RequiresCondition: enable-naval-ai
+	MaxAircraft: 4
+	UnitIntervals:
+		mshp: 7500
+		harv: 2250
+		harv.td: 2250
+		harv.scrin: 2250
+		harv.chrono: 2250
+		chharv: 2250
+		chmcv: 3750
+		chlotus: 3000
+	UnitsToBuild:
+		conscript: 65
+		light_infantry: 65
+		rpg_soldier: 40
+		rocket_infantry: 40
+		flamethrower: 15
+		adept: 65
+		mercenary: 65
+		grenadier: 25
+		rocket_mercenary: 40
+		rocket_trooper: 40
+		black_hand_trooper: 15
+		chemwarrior: 15
+		stormtrooper: 65
+		rocket_cyborg: 40
+		s1: 65
+		s2: 40
+		s3: 40
+		s4: 15
+		s6: 5
+		cyborgelite: 15
+		ivan: 15
+		dog: 2
+		hsam: 40
+		1tnk: 70
+		ltnk: 40
+		hind: 5
+		heli: 5
+		apch: 5
+		venm: 5
+		orca: 5
+		orca_bomber: 3
+		scrn: 5
+		rah: 3
+		mig: 3
+		suk: 3
+		harr: 3
+		yak: 2
+		disr: 10
+		kirov: 2
+		a10: 5
+		auro: 5
+		ss: 20
+		msub: 10
+		dd: 10
+		ca: 10
+		carr: 10
+		pt: 20
+		pt2: 20
+		dd2: 10
+		ss2: 20
+		isub: 10
+		sb: 10
+		seas: 10
+		stmr: 5
+		deva: 3
+		pac: 3
+		msub.ai: 100
+		aegis_cruiser.ai: 100
+		ss2.ai: 100
+		che1: 65
+		minigunner: 65
+		che3: 40
+		chlotus: 5
+		chbattle: 10
+		choverlord: 5
+		charty: 2
+		chgtnk: 5
+		choutpost: 1
+		checm: 1
+		chcrawl2: 10
+		chnukecann: 20
+		chnukecann.range: 20
+		chmig: 10
+		chmig.aa: 20
+		chmig.napalm: 20
+		chmig.nuke: 20
+		chhelix: 40
+		chhelix.napalm: 40
+		chhelix.nuke: 40
+		chhelix.bunker: 40
+		chhelix.torpedo: 40
+	UnitLimits:
+		chharv: 20
+SquadManagerBotModule@naval:
+	RequiresCondition: enable-naval-ai
+	SquadSize: 1
+	ExcludeFromSquadsTypes: harv, har2, harv.scrin, soviet_miner, harv.chrono, chharv, chnmcv, mcv, mcv.nukular, amcv, amcv.nukular, smcv, smcv.nukular, dog, engineer, s6
+	ExcludeFromAirSquadsTypes: deva, pac, jumpjet, bjet
+	NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	StaticAntiAirTypes: agun, sam, flak.soviet.sprite, nsam, cram, shar, chgatling
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	AirSquadTargetTypes:
+		mshp: Building
+ModularBot@NormalAI:
+	Name: Normal AI
+	Type: normal
+GrantConditionOnBotOwner@NormalAI:
+	Condition: enable-normal-ai
+	Bots: normal
+BaseBuilderBotModuleCA@normal:
+	RequiresCondition: enable-normal-ai
+	BuildingQueues: Building, Promotion
+	MinimumExcessPower: 50
+	MaximumExcessPower: 200
+	ExcessPowerIncrement: 40
+	ExcessPowerIncreaseThreshold: 4
+	PlaceDefenseTowardsEnemyChance: 75
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	RefineryTypes: proc,proc.td,proc.td.nod,proc.scrin,chsupply,soviet_refinery
+	PowerTypes: powr,powr.soviet,apwr,apwr.soviet,nuke,nuke.nod,nuk2,nuk2.nod,tpwr,reac,rea2,chpower,chpower2
+	BarracksTypes: barr,tent,hand,pyle,port,chsyrd,chbarracks
+	VehiclesFactoryTypes: weap,airs,weap.td,weap.nod,wsph,chweap
+	ProductionTypes: barr,tent,hand,pyle,port,airs,weap,weap.soviet,weap.td,weap.nod,wsph,afld,afld.gdi,afld.allies,chairport,hpad,hpad.soviet,hpad.td,hpad.td.nod,grav,chbarracks,chairport,chweap
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	SiloTypes: silo,silo.td,silo.scrin
+	AntiAirTypes: sam, flak.soviet.sprite, nsam, agun, cram, shar, chgatling
+	BuildingDelays:
+		kenn: 2800
+		dome: 4500
+		hq: 4500
+		nerv: 4500
+		syrd: 6000
+		spen: 6000
+		syrd.gdi: 6000
+		spen.nod: 6000
+		afld: 6375
+		afld.gdi: 6375
+		grav: 6375
+		hpad: 6375
+		hpad.td: 6375
+		atek: 6375
+		gtek: 6375
+		stek: 6375
+		tmpl: 6375
+		scrt: 6375
+		bio.nod: 8000
+		miss.gdi: 8000
+		indp: 8000
+		orep: 8000
+		sign: 8000
+		mslo: 8000
+		mslo.nod: 8000
+		weat: 8000
+		eye: 8000
+		rift: 8000
+		chcommand: 6000
+		chcommand.radar: 4500
+		chsyrd: 6000
+		chairport: 5000
+		chpropaganda: 6375
+		chinternetcenter: 8000
+		chsilo: 8000
+	BuildingLimits:
+		barr: 3
+		tent: 3
+		pyle: 3
+		hand: 3
+		port: 3
+		kenn: 1
+		dome: 1
+		hq: 1
+		nerv: 1
+		weap: 3
+		weap.td: 3
+		weap.nod: 3
+		wsph: 3
+		hpad: 2
+		hpad.td: 2
+		afld: 1
+		afld.gdi: 1
+		grav: 2
+		atek: 1
+		stek: 1
+		gtek: 1
+		tmpl: 1
+		scrt: 1
+		fix: 1
+		rep: 1
+		srep: 1
+		spen: 2
+		syrd: 2
+		spen.nod: 2
+		syrd.gdi: 2
+		chcommand: 3
+		chbarracks: 3
+		chcommand.radar: 1
+		chweap: 5
+		chairport: 5
+		chpropaganda: 1
+		chinternetcenter: 1
+		chsyrd: 2
+	BuildingFractions:
+		proc: 30
+		proc.td: 30
+		proc.scrin: 30
+		soviet_refinery: 30
+		hand: 3
+		pyle: 3
+		barr: 3
+		tent: 3
+		port: 3
+		kenn: 1
+		weap: 5
+		weap.td: 5
+		weap.nod: 5
+		wsph: 5
+		pbox: 7
+		hbox: 7
+		gtwr: 7
+		gun: 7
+		gun.td: 7
+		ptur: 5
+		scol: 5
+		tsla: 5
+		obli: 5
+		ltur: 10
+		ftur: 10
+		ttur: 10
+		grand_cannon: 3
+		atwr: 7
+		stwr: 5
+		pris: 5
+		agun: 5
+		cram: 5
+		sam: 5
+		flak.soviet.sprite: 5
+		nsam: 5
+		shar: 5
+		gap: 1
+		atek: 1
+		stek: 1
+		silo: 1
+		silo.td: 1
+		silo.scrin: 1
+		fix: 1
+		dome: 10
+		tmpl: 1
+		gtek: 1
+		scrt: 1
+		rep: 1
+		srep: 1
+		hq: 10
+		nerv: 10
+		afld: 2
+		afld.gdi: 2
+		grav: 1
+		mslo: 1
+		iron: 1
+		pdox: 1
+		sgen: 1
+		mani: 1
+		eye: 1
+		weat: 1
+		mslo.nod: 1
+		rift: 1
+		indp: 1
+		bio.nod: 1
+		miss.gdi: 1
+		orep: 1
+		sign: 1
+		patr: 1
+		hpad: 2
+		hpad.td: 2
+		spen: 1
+		syrd: 1
+		spen.nod: 1
+		syrd.gdi: 1
+		bombard.strat: 1
+		seek.strat: 1
+		hold.strat: 1
+		sonic.upgrade: 1
+		drone.upgrade: 1
+		pointlaser.upgrade: 1
+		hypersonic.upgrade: 1
+		walker.upgrade: 1
+		ionmam.upgrade: 1
+		vulcan.upgrade: 1
+		hazmat.upgrade: 1
+		howi.upgrade: 1
+		cyborg.upgrade: 1
+		cyborgspeed.upgrade: 1
+		cyborgarmor.upgrade: 1
+		cluster.upgrade: 1
+		indp.upgrade: 1
+		iraqtank.upgrade: 1
+		orep.upgrade: 1
+		charv.upgrade: 1
+		regen.upgrade: 1
+		shields.upgrade: 1
+		chcommand: 5
+		chsupply: 10
+		chbarracks: 3
+		chweap: 5
+		chgatling: 7
+		chpropagandatower: 3
+		chbunker.ai: 7
+		chpropaganda: 1
+		chcommand.radar: 10
+		chairport: 2
+		chsilo: 1
+		chsyrd: 1
+		promotion.battlemaster.nuclear_shells: 5
+		promotion.battlemaster.mass_production: 5
+		promotion.battlemaster.autoloader: 5
+		promotion.battlemaster.pdl: 5
+		promotion.speakertower.pdl: 1
+		promotion.overlord.bunker: 5
+		promotion.overlord.propaganda: 5
+		promotion.overlord.plasma: 5
+		promotion.overlord.reflector: 5
+		promotion.nuke_cannon: 1
+		promotion.crawler.hunter: 5
+		promotion.crawler.pdl: 10
+		promotion.outpost.propaganda: 5
+		promotion.outpost.pdl: 5
+		promotion.gatling.pdl: 5
+		promotion.ecm.chain: 5
+		promotion.chinamig.aa: 5
+		promotion.chinamig.napalm: 5
+		promotion.chinamig.nuke: 5
+		promotion.nationalism: 5
+		promotion.subliminal_messages: 5
+		promotion.uranium_shells: 5
+		promotion.nuclear_tanks: 5
+		promotion.isotope_stability: 5
+UnitBuilderBotModuleCA@normal:
+	RequiresCondition: enable-normal-ai
+	IdleBaseUnitsMaximum: 50
+	MaxAircraft: 4
+	UnitDelays:
+		arty: 5250
+		arty.nod: 5250
+		katy: 5250
+	UnitIntervals:
+		mshp: 7500
+		harv: 2250
+		harv.td: 2250
+		harv.scrin: 2250
+		harv.chrono: 2250
+		rmbo: 3750
+		thor: 3750
+		mast: 3750
+		yuri: 3750
+		bori: 3750
+		chharv: 2250
+		chmcv: 3750
+		chlotus: 3000
+	UnitsToBuild:
+		conscript: 65
+		light_infantry: 65
+		rpg_soldier: 40
+		rocket_infantry: 40
+		flamethrower: 15
+		adept: 65
+		mercenary: 65
+		grenadier: 25
+		rocket_mercenary: 40
+		rocket_trooper: 40
+		black_hand_trooper: 15
+		chemwarrior: 15
+		engineer: 5
+		stormtrooper: 65
+		rocket_cyborg: 40
+		s1: 65
+		s2: 40
+		s3: 40
+		s4: 15
+		s6: 5
+		cyborgelite: 15
+		mort: 15
+		medic: 3
+		mech: 3
+		dog: 2
+		sab: 2
+		shok: 15
+		desolator: 15
+		snip: 15
+		jumpjet: 15
+		obelisk_trooper: 15
+		rmbo: 15
+		thor: 15
+		bori: 15
+		ivan: 15
+		mast: 15
+		apc: 20
+		intl: 10
+		jeep: 30
+		apc2: 20
+		vulc: 10
+		hmmv: 30
+		btr: 20
+		gunw: 20
+		bggy: 30
+		arty: 20
+		howi: 20
+		prismtank: 20
+		pcan: 20
+		v2rl: 20
+		katy: 20
+		ssm: 25
+		mlrs: 20
+		spec: 20
+		hsam: 25
+		ruin: 20
+		1tnk: 70
+		ifv.ai: 70
+		2tnk: 45
+		tnkd: 45
+		rtnk: 45
+		heavy_tank: 70
+		apoc: 40
+		kims_wheel: 70
+		t-34: 70
+		peoples_tank: 70
+		ISU: 40
+		devil_tank: 70
+		chem_sprayer: 70
+		source_of_pollution: 40
+		tpod: 40
+		rptp: 40
+		ltnk: 40
+		mtnk: 70
+		mtnk.drone: 70
+		seek: 40
+		lace: 40
+		devo: 45
+		channeler: 45
+		bike: 30
+		Mammoth: 40
+		Mammoth.ion: 40
+		v3rl: 10
+		titn: 40
+		juggernaut: 10
+		cryo: 10
+		cdrn: 3
+		ctnk: 3
+		chpr: 3
+		batf.ai: 10
+		wtnk: 3
+		ttnk: 25
+		isu: 20
+		stnk: 15
+		ftnk: 15
+		corr: 15
+		stcr: 25
+		hind: 5
+		heli: 5
+		apch: 5
+		venm: 5
+		orca: 5
+		orca_bomber: 3
+		scrn: 5
+		rah: 3
+		mig: 3
+		suk: 3
+		harr: 3
+		yak: 2
+		disr: 10
+		kirov: 2
+		a10: 5
+		auro: 5
+		ss: 1
+		msub: 1
+		dd: 1
+		ca: 1
+		carr: 1
+		pt: 1
+		pt2: 1
+		dd2: 1
+		ss2: 2
+		isub: 1
+		sb: 1
+		seas: 1
+		stmr: 5
+		deva: 3
+		pac: 3
+		che1: 65
+		minigunner: 65
+		che3: 40
+		chlotus: 5
+		chbattle: 30
+		chbattle.nuclear_shells: 30
+		chbattle.nuclear_shells.pdl: 50
+		chbattle.mass_production: 30
+		chbattle.mass_production.pdl: 50
+		chbattle.autoloader: 30
+		chbattle.autoloader.pdl: 50
+		choverlord: 20
+		choverlord.bunker: 30
+		choverlord.bunker.reflector: 50
+		choverlord.propaganda: 30
+		choverlord.propaganda.reflector: 50
+		choverlord.plasma: 30
+		choverlord.plasma.reflector: 50
+		charty: 10
+		chgtnk: 5
+		chgtnk.pdl: 10
+		choutpost: 10
+		choutpost.propaganda: 20
+		choutpost.propaganda.pdl: 30
+		checm: 5
+		checm.chain: 50
+		chcrawl2: 10
+		chcrawl2.hunter: 30
+		chcrawl2.hunter.pdl: 50
+		chnukecann: 20
+		chmig: 5
+		chmig.aa: 20
+		chmig.nuke: 20
+		chmig.napalm: 20
+	UnitLimits:
+		dog: 2
+		sab: 2
+		cdrn: 1
+		apc: 2
+		apc2: 2
+		intl: 3
+		vulc: 2
+		hmmv: 2
+		bggy: 2
+		jeep: 2
+		engineer: 1
+		s6: 1
+		mech: 1
+		medic: 1
+		msub: 4
+		ca: 4
+		isub: 4
+		carr: 4
+		jumpjet: 8
+		kirov: 2
+		deva: 2
+		pac: 2
+		ss: 10
+		ss2: 10
+		sb: 10
+		seas: 10
+		harv: 8
+		har2: 8
+		harv.scrin: 8
+		harv.chrono: 8
+		chharv: 5
+SquadManagerBotModule@normal:
+	RequiresCondition: enable-normal-ai
+	MinimumAttackForceDelay: 25
+	SquadValue: 5000
+	SquadValueRandomBonus: 2100
+	SquadSize: 18
+	SquadSizeRandomBonus: 8
+	ExcludeFromSquadsTypes: harv, har2, harv.scrin, soviet_miner, harv.chrono, chharv, chnmcv, mcv, mcv.nukular, amcv, amcv.nukular, smcv, smcv.nukular, dog, engineer, s6
+	ExcludeFromAirSquadsTypes: deva, pac, jumpjet, bjet
+	NavalUnitsTypes: ss,msub,dd,ca,lst,pt,pt2,ss2,dd2,isub,sb,seas
+	ConstructionYardTypes: fact,fact.soviet,afac,afac.nod,sfac,chcommand,fact.nukular,afac.nukular,sfac.nukular,chcommand.nukular
+	StaticAntiAirTypes: agun, sam, flak.soviet.sprite, nsam, cram, shar, chgatling
+	NavalProductionTypes: spen,syrd,spen.nod,syrd.gdi,chsyrd
+	AirToAirPriority: 55
+	AirSquadTargetTypes:
+		mshp: Building
+AlwaysVisible:
+Shroud:
+	FogCheckboxEnabled: True
+	FogCheckboxLocked: False
+	FogCheckboxDisplayOrder: 3
+	ExploredMapCheckboxEnabled: True
+PlayerResources:
+	ResourceValues:
+		Tiberium: 35
+		BlueTiberium: 60
+		Ore: 25
+		Gems: 50
+	DefaultCash: 20000
+	SelectableCash: 2500, 5000, 10000, 15000, 20000, 25000, 100000
+	InsufficientFundsNotification: InsufficientFunds
+	CashTickUpNotification: CashTickUp
+	CashTickDownNotification: CashTickDown
+CheckpointOrigin:
+GrantConditionOnMapMode@TACTICAL:
+	Mode: Tactical
+	Condition: tactical-mode
+GrantConditionOnMapMode@OPERATIONAL:
+	Mode: Operational
+	Condition: operational-mode
+GrantConditionOnMapMode@STRATEGIC:
+	Mode: Strategic
+	Condition: strategic-mode
+ProvidesPrerequisite@TACTICAL-MODE:
+	Prerequisite: mode.tactical
+	RequiresCondition: tactical-mode
+ProvidesPrerequisite@OPERATIONAL-MODE:
+	Prerequisite: mode.operational
+	RequiresCondition: operational-mode
+ProvidesPrerequisite@STRATEGIC-MODE:
+	Prerequisite: mode.strategic
+	RequiresCondition: strategic-mode
+ArmyLeaderSpawner:
+	RequiresCondition: operational-mode
+OperationalArmyLeaderBotModule:
+	RequiresCondition: operational-mode
+CheckpointVictoryConditions:
+	RequiresCondition: strategic-mode
+ClassicProductionQueue@Building:
+	Type: Building
+	DisplayOrder: 0
+	LowPowerModifier: 300
+	ReadyAudio: ConstructionComplete
+	BlockedAudio: NoBuild
+	LimitedAudio: BuildingInProgress
+	QueuedAudio: Building
+	OnHoldAudio: OnHold
+	CancelledAudio: Cancelled
+	SpeedUp: True
+	BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	DisallowPaused: True
+	InfiniteBuildLimit: 10
+ClassicProductionQueue@Defense:
+	Type: Defense
+	DisplayOrder: 1
+	LowPowerModifier: 300
+	ReadyAudio: ConstructionComplete
+	BlockedAudio: NoBuild
+	LimitedAudio: BuildingInProgress
+	QueuedAudio: Building
+	OnHoldAudio: OnHold
+	CancelledAudio: Cancelled
+	SpeedUp: True
+	BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	DisallowPaused: True
+	InfiniteBuildLimit: 10
+TacticalProductionQueue@Vehicle:
+	Type: Vehicle
+	DisplayOrder: 3
+	LowPowerModifier: 300
+	ReadyAudio: UnitReady
+	BlockedAudio: NoBuild
+	LimitedAudio: BuildingInProgress
+	QueuedAudio: Building
+	OnHoldAudio: OnHold
+	CancelledAudio: Cancelled
+	SpeedUp: True
+	BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	DisallowPaused: True
+	InfiniteBuildLimit: 10
+TacticalProductionQueue@Infantry:
+	Type: Infantry
+	DisplayOrder: 2
+	LowPowerModifier: 300
+	ReadyAudio: UnitReady
+	BlockedAudio: NoBuild
+	LimitedAudio: BuildingInProgress
+	QueuedAudio: Training
+	OnHoldAudio: OnHold
+	CancelledAudio: Cancelled
+	SpeedUp: True
+	BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	DisallowPaused: True
+	InfiniteBuildLimit: 10
+TacticalProductionQueue@Ship:
+	Type: Ship
+	DisplayOrder: 5
+	LowPowerModifier: 300
+	ReadyAudio: UnitReady
+	BlockedAudio: NoBuild
+	LimitedAudio: BuildingInProgress
+	QueuedAudio: Building
+	OnHoldAudio: OnHold
+	CancelledAudio: Cancelled
+	SpeedUp: True
+	BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	DisallowPaused: True
+	InfiniteBuildLimit: 10
+TacticalProductionQueue@Aircraft:
+	Type: Aircraft
+	DisplayOrder: 4
+	LowPowerModifier: 300
+	ReadyAudio: UnitReady
+	BlockedAudio: NoBuild
+	LimitedAudio: BuildingInProgress
+	QueuedAudio: Building
+	OnHoldAudio: OnHold
+	CancelledAudio: Cancelled
+	SpeedUp: True
+	BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
+	DisallowPaused: True
+	InfiniteBuildLimit: 10
+PlaceBuilding:
+	NewOptionsNotification: NewOptions
+	CannotPlaceNotification: BuildingCannotPlaceAudio
+CustomFormationsModOptions:
+	MoveOrderTileMarkerPalette: cursor
+	MoveOrderTileMarkerImage: cftilemarkers
+	MoveOrderTileMarkerSequence: MoveOrder
+	PlaysMoveOrderTileMarkerAnimation: false
+	MoveOrderMarkerPalette: cursor
+	MoveOrderMarkerImage: cfordermarkers
+	MoveOrderMarkerSequence: MoveOrder
+	PlaysMoveOrderMarkerAnimation: true
+	AttackMoveOrderTileMarkerPalette: cursor
+	AttackMoveOrderTileMarkerImage: cftilemarkers
+	AttackMoveOrderTileMarkerSequence: AttackMoveOrder
+	PlaysAttackMoveOrderTileMarkerAnimation: false
+	AttackMoveOrderMarkerPalette: cursor
+	AttackMoveOrderMarkerImage: cfamoveordermarkers
+	AttackMoveOrderMarkerSequence: AttackMoveOrder
+	PlaysAttackMoveOrderMarkerAnimation: true
+	AssaultMoveOrderTileMarkerPalette: cursor
+	AssaultMoveOrderTileMarkerImage: cftilemarkers
+	AssaultMoveOrderTileMarkerSequence: AssaultMoveOrder
+	PlaysAssaultMoveOrderTileMarkerAnimation: false
+	AssaultMoveOrderMarkerPalette: cursor
+	AssaultMoveOrderMarkerImage: cfamoveordermarkers
+	AssaultMoveOrderMarkerSequence: AssaultMoveOrder
+	PlaysAssaultMoveOrderMarkerAnimation: true
+	ForceFireOrderTileMarkerPalette: cursor
+	ForceFireOrderTileMarkerImage: cftilemarkers
+	ForceFireOrderTileMarkerSequence: ForceFireOrder
+	PlaysForceFireOrderTileMarkerAnimation: false
+	ForceFireOrderMarkerPalette: cursor
+	ForceFireOrderMarkerImage: cfordermarkers
+	ForceFireOrderMarkerSequence: ForceFireOrder
+	PlaysForceFireOrderMarkerAnimation: true
+SupportPowerManager:
+ScriptTriggers:
+MissionObjectives:
+	WinNotification: Win
+	LoseNotification: Lose
+	LeaveNotification: Leave
+ConquestVictoryConditions:
+PowerManager:
+	SpeechNotification: LowPower
+AllyRepair:
+DeveloperMode:
+	CheckboxDisplayOrder: 16
+LobbyPrerequisiteCheckbox@GLOBALBOUNTY:
+	ID: bounty
+	Label: Kill Bounties
+	Description: Players receive cash bonuses when killing enemy units.
+	Enabled: True
+	DisplayOrder: 8
+	Prerequisites: global-bounty
+LobbyPrerequisiteCheckbox@GLOBALFACTUNDEPLOY:
+	ID: factundeploy
+	Label: Redeployable MCVs
+	Description: Allow undeploying Construction Yard.
+	Enabled: True
+	DisplayOrder: 7
+	Prerequisites: global-factundeploy
+LobbyPrerequisiteCheckbox@REUSABLEENGINEERS:
+	ID: reusable-engineers
+	Label: German Engineers
+	Description: Engineers, assimilators, and similar building capturers exit captured buildings instead of being consumed.
+	Enabled: False
+	DisplayOrder: 9
+	Prerequisites: global-reusable-engineers
+LobbyPrerequisiteCheckbox@FORCESHIELD:
+	ID: forceshield
+	Label: Force Shield
+	Description: Grants all factions the Force Shield support power ability.
+	Enabled: True
+	DisplayOrder: 12
+	Prerequisites: forceshield.enabled
+LobbyPrerequisiteCheckbox@SUPERW:
+	ID: superweapon
+	Label: Super Weapons
+	Description: Enable or Disable Super Weapons.
+	Enabled: True
+	DisplayOrder: 13
+	Prerequisites: techlevel.superw
+LobbyPrerequisiteCheckbox@NONAVAL:
+	ID: nonaval
+	Label: No Naval Units
+	Description: Enable or Disable Naval Units.
+	Enabled: False
+	DisplayOrder: 13
+	Prerequisites: global.nonaval
+LobbyPrerequisiteCheckbox@RadarOn:
+	ID: radarOn
+	Label: Radar Always Activated
+	Description: If activated players always see their radar.
+	Enabled: True
+	DisplayOrder: 13
+	Prerequisites: global.radarAlwaysOn
+LobbyPrerequisiteCheckbox@REVEALONFIRE:
+	ID: revealonfire
+	Label: Reveal on Fire
+	Description: Units reveal themselves when firing.
+	Enabled: True
+	DisplayOrder: 14
+	Prerequisites: global.revealonfire
+LobbyPrerequisiteCheckbox@OILP:
+	ID: buildableoilpumps
+	Label: Buildable Oil Pumps
+	Description: Players can build oil pumps for infinite income scaling.
+	Enabled: True
+	DisplayOrder: 15
+	Prerequisites: global.oilpumps
+LobbyPrerequisiteCheckbox@Swiss_Bank:
+	ID: swissbanks
+	Label: Buildable Swiss Banks
+	Description: Players can build Swiss Banks to transfer cash to other players steadily.
+	Enabled: True
+	DisplayOrder: 15
+	Prerequisites: global.swiss_banks
+LobbyPrerequisiteCheckbox@BALANCEDHARVESTING:
+	ID: balancedharvesting
+	Label: Balanced Harvesting
+	Description: Enables dynamic harvester speed to account for the direction of resources relative to refineries.
+	Enabled: True
+	DisplayOrder: 15
+	Prerequisites: global.balancedharvesting
+LobbyPrerequisiteCheckbox@NukularConyard:
+	ID: nukular
+	Label: Nukular MCV
+	Description: Enables Nukular MCV Mode - The first conyard of each player is Nukular, this means if you lose it, you lose the game and it will explode in a gigantic nuclear detonation. Great for FFA.
+	Enabled: False
+	DisplayOrder: 19
+	Prerequisites: global.nukular
+FrozenActorLayer:
+BaseAttackNotifier:
+PlayerStatistics:
+PlaceBeacon:
+TechTree:
+ProvidesTechPrerequisite@infonly:
+	Name: Infantry Only
+	Prerequisites: techlevel.infonly
+	Id: infantryonly
+ProvidesTechPrerequisite@vehiclesonly:
+	Name: Vehicles Only
+	Prerequisites: techlevel.vehiclesonly
+	Id: vehiclesonly
+ProvidesTechPrerequisite@aircraftonly:
+	Name: Aircraft Only
+	Prerequisites: techlevel.aircraftonly
+	Id: aircraftonly
+ProvidesTechPrerequisite@low:
+	Name: Low
+	Prerequisites: techlevel.low
+	Id: low
+ProvidesTechPrerequisite@medium:
+	Name: Medium
+	Prerequisites: techlevel.medium
+	Id: medium
+ProvidesTechPrerequisite@unrestricted:
+	Name: Unrestricted
+	Prerequisites: techlevel.unrestricted
+	Id: unrestricted
+GrantConditionOnPrerequisiteManager:
+EnemyWatcher:
+ResourceStorageWarning:
+PlayerExperience:
+GameSaveViewportManager:
+PlayerRadarTerrain:
+GpsRadarWatcher:
+GpsWatcher:
+RangedGpsWatcher:
+TeleportNetworkManager:
+	Type: Wormhole
+	RandomExit: true
+ExternalCondition@BuildingsOwned:
+	Condition: BuildingsOwned
+ExternalCondition@TechBuildingsOwned:
+	Condition: TechBuildingsOwned
+ProvidesPrerequisite@BuildUpBoost:
+	Prerequisite: BuildUpBoostEnded
+	RequiresCondition: BuildingsOwned > 11
+ProximityCaptor:
+	Types: Infantry, Vehicle
+ExternalCondition@NukularOwned:
+	Condition: NukularOwned
+ProvidesPrerequisite@NukularOwned:
+	Prerequisite: nukular.owned
+	RequiresCondition: NukularActivated
+GrantCondition@NukularActivated:
+	Condition: NukularActivated
+	GrantPermanently: true
+	RequiresCondition: NukularOwned
+PlayerPromotions:
+	Conditions:
+		0:
+		100:
+		300:
+		1000:
+		3000:
+	HasPointsCondition: haspoints
+	BlockedExperiencePrerequisites: mode.strategic
+	PointsPerRank:
+		noinit: 0, 1, 1, 1, 2
+		fewer: 3, 1, 1, 1, 1
+		normal: 6, 1, 1, 1, 2
+		later: 3, 2, 2, 2, 3
+		toomany: 12, 1, 1, 1, 2
+		all: 100, 1, 1, 1, 2
+	PointsPerRankDefault: normal
+	Ranks:
+		default: promotions.rank1, promotions.rank2, promotions.rank3, promotions.rank4, promotions.rank5, promotions.rank6, promotions.rank7, promotions.rank8
+	RanksDefault: default
+	ID: promotions
+	Label: promotions.lobby-label
+	Description: commander-tree-player.description
+	NotificationType: Sounds
+	LevelUpNotification: World
+	LevelUpTextNotification: promotions.text-notification
+	FlavorTextNotifications: promotions-flavor.notification-01, promotions-flavor.notification-02, promotions-flavor.notification-03, promotions-flavor.notification-04, promotions-flavor.notification-05
+	FlavorTextPrefix: promotions-flavor.prefix
+ProvidesPrerequisite@has_points:
+	Prerequisite: has_points
+	RequiresCondition: haspoints
+ClassicProductionQueue@PROMOTIONS:
+	Type: Promotions
+	DisplayOrder: 10
+	Group: Promotion
+	ItemLimit: 1
+	SpeedUp: false
+	DisallowPaused: true
+	AlwaysShowForFactions: gdi, nod, allies, soviet
+Production:
+	Produces: Promotions
+UsePointsOnProduction:
+ProductionIconOverlayManager@Veterancy:
+	Type: Veterancy
+	Image: iconchevrons
+	Sequence: veteran
+ProductionIconOverlayManager@Air:
+	Type: Air
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: air
+ProductionIconOverlayManager@Beamfocus:
+	Type: Beamfocus
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: beamfocus
+ProductionIconOverlayManager@Bullets:
+	Type: Bullets
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: bullets
+ProductionIconOverlayManager@Chainer:
+	Type: Chainer
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: chainer
+ProductionIconOverlayManager@Counter:
+	Type: Counter
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: counter
+ProductionIconOverlayManager@Crosshair:
+	Type: Crosshair
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: crosshair
+ProductionIconOverlayManager@EMP:
+	Type: EMP
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: emp
+ProductionIconOverlayManager@Eye:
+	Type: Eye
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: eye
+ProductionIconOverlayManager@Frost:
+	Type: Frost
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: frost
+ProductionIconOverlayManager@Grenade:
+	Type: Grenade
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: grenade
+ProductionIconOverlayManager@Hazard:
+	Type: Hazard
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: hazard
+ProductionIconOverlayManager@Metal_Acid:
+	Type: Metal_Acid
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: metal_acid
+ProductionIconOverlayManager@Metal_Acid_right:
+	Type: Metal_Acid_right
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: metal_acid_right
+ProductionIconOverlayManager@Ion:
+	Type: Ion
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: ion
+ProductionIconOverlayManager@Laser:
+	Type: Laser
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: laser
+ProductionIconOverlayManager@Minigun:
+	Type: Minigun
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: minigun
+ProductionIconOverlayManager@Missile:
+	Type: Missile
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: missile
+ProductionIconOverlayManager@APMissile:
+	Type: APMissile
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: apmissile
+ProductionIconOverlayManager@Neutron:
+	Type: Neutron
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: neutron
+ProductionIconOverlayManager@Nuke:
+	Type: Nuke
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: nuke
+ProductionIconOverlayManager@PDL:
+	Type: PDL
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: pdl
+ProductionIconOverlayManager@Plasma:
+	Type: Plasma
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: plasma
+ProductionIconOverlayManager@Prism:
+	Type: Prism
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: prism
+ProductionIconOverlayManager@Pulse:
+	Type: Pulse
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: pulse
+ProductionIconOverlayManager@Radiation:
+	Type: Radiation
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: radiation
+ProductionIconOverlayManager@Reflector:
+	Type: Reflector
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: reflector
+ProductionIconOverlayManager@Scrin:
+	Type: Scrin
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: scrin
+ProductionIconOverlayManager@Shell:
+	Type: Shell
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: shell
+ProductionIconOverlayManager@Shield:
+	Type: Shield
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: shield
+ProductionIconOverlayManager@Skull:
+	Type: Skull
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: skull
+ProductionIconOverlayManager@Sonic:
+	Type: Sonic
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: sonic
+ProductionIconOverlayManager@Speaker:
+	Type: Speaker
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: speaker
+ProductionIconOverlayManager@Splash:
+	Type: Splash
+	Image: iconoverlays
+	Palette: chrome
+	Sequence: splash
+ProductionIconOverlayManager@Spread:
+	Type: Spread
+	Image: iconoverlays
+	Palette: chrome
+	Sequence: spread
+ProductionIconOverlayManager@Spread_right:
+	Type: Spread_right
+	Image: iconoverlays
+	Palette: chrome
+	Sequence: spread_right
+ProductionIconOverlayManager@Tesla:
+	Type: Tesla
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: tesla
+ProductionIconOverlayManager@Torpedo:
+	Type: Torpedo
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: torpedo
+ProductionIconOverlayManager@Wrench:
+	Type: Wrench
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: wrench
+ProductionIconOverlayManager@Flame:
+	Type: Flame
+	Image: iconoverlays
+	Palette: chrome
+	Sequence: flame
+ProductionIconOverlayManager@Dynamite:
+	Type: Dynamite
+	Image: iconoverlays
+	Palette: chrometd
+	Sequence: dynamite
+ProductionIconOverlayManager@Slow:
+	Type: Slow
+	Image: iconoverlays
+	Palette: chrome
+	Sequence: slow
+ProductionIconOverlayManager@Drain:
+	Type: Drain
+	Image: iconoverlays
+	Palette: chrome
+	Sequence: drain
+ProvidesPrerequisite@regular-allies:
+	Prerequisite: allies
+	Factions: allies, england, france, germany
+ProvidesPrerequisite@england-allies:
+	Prerequisite: england
+	Factions: england
+ProvidesPrerequisite@france-allies:
+	Prerequisite: france
+	Factions: france
+ProvidesPrerequisite@germany-allies:
+	Prerequisite: germany
+	Factions: germany
+ProvidesPrerequisite@ra-allies:
+	Prerequisite: ra
+	Factions: allies, england, france, germany
+ProvidesPrerequisite@regular-soviet:
+	Prerequisite: soviet
+	Factions: soviet, russia, nkorea, iraq
+ProvidesPrerequisite@russia-soviet:
+	Prerequisite: russia
+	Factions: russia
+ProvidesPrerequisite@nkorea-soviet:
+	Prerequisite: nkorea
+	Factions: nkorea
+ProvidesPrerequisite@iraq-soviet:
+	Prerequisite: iraq
+	Factions: iraq
+ProvidesPrerequisite@ra-soviet:
+	Prerequisite: ra
+	Factions: soviet, russia, nkorea, iraq
+ProvidesPrerequisite@regular-china:
+	Prerequisite: china
+	Factions: chinainf, chinatnk, chinaatom
+ProvidesPrerequisite@tank-china:
+	Prerequisite: chinatnk
+	Factions: chinatnk
+ProvidesPrerequisite@inf-china:
+	Prerequisite: chinainf
+	Factions: chinainf
+ProvidesPrerequisite@nuke-china:
+	Prerequisite: chinaatom
+	Factions: chinaatom
+ProvidesPrerequisite@nuke-cannon-access:
+	Prerequisite: nuke_cannon.access
+	Factions: chinaatom
+ProvidesPrerequisite@regular-gdi:
+	Prerequisite: gdi
+	Factions: gdi, talon, zocom, eagle
+ProvidesPrerequisite@talon-gdi:
+	Prerequisite: talon
+	Factions: talon
+ProvidesPrerequisite@zocom-gdi:
+	Prerequisite: zocom
+	Factions: zocom
+ProvidesPrerequisite@eagle-gdi:
+	Prerequisite: eagle
+	Factions: eagle
+ProvidesPrerequisite@td-gdi:
+	Prerequisite: td
+	Factions: gdi, talon, zocom, eagle
+ProvidesPrerequisite@regular-nod:
+	Prerequisite: nod
+	Factions: nod, blackh, marked, legion
+ProvidesPrerequisite@blackh-nod:
+	Prerequisite: blackh
+	Factions: blackh
+ProvidesPrerequisite@marked-nod:
+	Prerequisite: marked
+	Factions: marked
+ProvidesPrerequisite@legion-nod:
+	Prerequisite: legion
+	Factions: legion
+ProvidesPrerequisite@td-nod:
+	Prerequisite: td
+	Factions: nod, blackh, marked, legion
+ProvidesPrerequisite@regular-scrin:
+	Prerequisite: scrin
+	Factions: reaper, traveler, harvester
+ProvidesPrerequisite@reaper-scrin:
+	Prerequisite: reaper
+	Factions: reaper
+ProvidesPrerequisite@traveler-scrin:
+	Prerequisite: traveler
+	Factions: traveler
+ProvidesPrerequisite@harvester-scrin:
+	Prerequisite: harvester
+	Factions: harvester
+ProvidesPrerequisite@seeker:
+	Factions: scrin, reaper, harvester
+	Prerequisite: seeker
+

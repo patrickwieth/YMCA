@@ -42,11 +42,12 @@ Live appearance/firing still needs review. No running game was stopped/restarted
 No commit, push or deployment. Original source PNGs and protected Nod conyard stay
 untouched. The test-map actor remains at `169,-35`, beside the GDI Naval Yard.
 
-The subsequent [GDI-yellow harmonization](../../gdi-color-match/README.md) is now
-installed. Active sequence filenames point to color-only derivatives under
-`bits/gdi/buildings/color-matched/`; this directory's V11 exports remain the
-unaltered pre-color geometry baseline. Centering, alpha and bib are unchanged.
-Rerun the harmonizer after regenerating the underlying art.
+The approved [GDI-yellow harmonization](../../gdi-color-match/README.md) is preserved
+byte-identically in canonical `bits/gdi/buildings/heavy-blaster-base.png` and
+`heavy-blaster-turret32.png`. Active sequences point directly to these root files;
+the old color Filename override layer is retired. This directory's V11 exports
+remain the unaltered pre-color geometry baseline. Centering, alpha and bib are
+unchanged. The harmonizer produces previews only; later promotion must be explicit.
 
 Reproduce from Game:
 

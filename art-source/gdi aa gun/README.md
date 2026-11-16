@@ -1,12 +1,26 @@
-# GDI AA Gun — modeled/textured native 32-direction study
+# GDI AA Gun — approved pass11 installed locally
+
+**Pass11 is explicitly approved by the user and installed on CRAM.**
+See [integration, physical muzzle adjustment and validation](integration-pass11/README.md).
+Runtime assets bind directly from the authoritative GDI building folder. Allied AGUN
+is unchanged. Live firing/appearance verification is still outstanding.
+
+## Art development history
 
 **User rejected pass-05 visually. It is NOT approved or selected for integration.**
 
-Rework started: pass-06 replaces projected moving armor with explicit panels and
-separate mechanical geometry, but is still too plain. Further pass-07 texture and
-shape corrections are written in `tools/art/small_turret_rework.py` but have NOT yet
-been rendered/reviewed. Work was interrupted by the new power-plant inputs and Nod
-laser study request. Do not present the old pass-05 technical checks as approval.
+Current material update: **pass-11**. The user positively evaluated the pass10
+shape and requested restrained wear resembling the base; do not redesign it.
+Pass11 adds low-strength paint variation from bounded base-paint cuts, with no
+procedural RGB noise. Background-Blender fingerprints confirm identical vertices,
+polygon topology and object transforms against pass10. All 32 native views were
+rendered and visually inspected. The subsequent user approval applies to this pass;
+its local CRAM integration is documented above.
+Passes 07/08 were rejected internally for repeated seams/foreign details; pass09
+replaced these with clean armor cuts and pass10 added restrained maintenance details.
+[Current eight views](pass-11/review/eight-views-2x.png). Source, palette, alpha,
+clipping, frame order and stationary/raw-composite checks pass in
+`test_native_turret_working_studies.py`; these do NOT establish visual approval.
 
 The links and implementation record below describe the **rejected historical pass-05**.
 

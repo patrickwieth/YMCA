@@ -166,6 +166,10 @@ if args.kind=='sonic' and args.iteration>=2:
   if obj.type=='MESH' and 'bearing' not in obj.name:
    for vert in obj.data.vertices:vert.co.x*=.8;vert.co.y*=.8
    obj.data.update()
+if args.kind=='sonic' and args.iteration>=11:
+ sys.path.insert(0,str(Path(__file__).resolve().parent))
+ from refine_sonic_base import apply
+ apply(globals())
 relight=None
 if args.iteration>=6:
  sys.path.insert(0,str(Path(__file__).resolve().parent))
@@ -194,6 +198,16 @@ bpy.ops.wm.save_as_mainfile(filepath=str(OUT/(args.kind+'-source-model.blend')))
 mov=[o for o in moving.objects if o.type=='MESH'];sta=[o for o in fixed.objects if o.type=='MESH']
 original_base_materials={o.name:list(o.data.materials) for o in sta}
 holdout=bpy.data.materials.new('EXPORT ONLY / stationary base occlusion');holdout.use_nodes=True;n=holdout.node_tree.nodes;n.clear();h=n.new('ShaderNodeHoldout');out=n.new('ShaderNodeOutputMaterial');holdout.node_tree.links.new(h.outputs[0],out.inputs[0])
+id_materials={}
+if args.iteration>=9:
+ for i,o in enumerate(mov,1):
+  m=bpy.data.materials.new('SURFACE ID '+str(i));m.use_nodes=True;nodes=m.node_tree.nodes;nodes.clear();e=nodes.new('ShaderNodeEmission');out=nodes.new('ShaderNodeOutputMaterial');e.inputs[0].default_value=(lin(i),0,0,1);m.node_tree.links.new(e.outputs[0],out.inputs[0]);id_materials[o.name]=m
+  if args.kind=='sonic' and args.iteration>=21:
+   # R/G hold surface IDs; B marks object-local forward surfaces.
+   rgb=nodes.new('ShaderNodeCombineRGB');rgb.inputs[0].default_value=lin(i&255);rgb.inputs[1].default_value=lin(i>>8)
+   geo=nodes.new('ShaderNodeNewGeometry');transform=nodes.new('ShaderNodeVectorTransform');transform.vector_type='POINT';transform.convert_from='WORLD';transform.convert_to='OBJECT'
+   split=nodes.new('ShaderNodeSeparateXYZ');front=nodes.new('ShaderNodeMath');front.operation='GREATER_THAN';front.inputs[1].default_value=-.65
+   links=m.node_tree.links;links.new(geo.outputs['Position'],transform.inputs[0]);links.new(transform.outputs[0],split.inputs[0]);links.new(split.outputs['X'],front.inputs[0]);links.new(front.outputs[0],rgb.inputs[2]);links.new(rgb.outputs[0],e.inputs[0])
 def render(name,angle=0,part='turret'):
  pivot.rotation_euler.z=math.radians(angle)
  for o in mov:o.hide_render=part=='base'
@@ -203,6 +217,13 @@ def render(name,angle=0,part='turret'):
  bpy.context.view_layer.update()
  if relight:relight()
  s.render.filepath=str(OUT/name);bpy.ops.render.render(write_still=True)
+ if args.iteration>=9 and part=='turret':
+  originals={o.name:list(o.data.materials) for o in mov}
+  for o in mov:
+   for j in range(len(o.data.materials)):o.data.materials[j]=id_materials[o.name]
+  s.render.filepath=str(OUT/name.replace('-raw.png','-ids.png'));bpy.ops.render.render(write_still=True)
+  for o in mov:
+   for j,mat in enumerate(originals[o.name]):o.data.materials[j]=mat
 render('base-raw.png',part='base');render('base-control-raw.png',123.75,'base');render('assembly-reference-raw.png',part='assembly')
 for i in (range(32) if args.all else range(0,32,4)):render(f'turret-{i:03d}-raw.png',i*11.25)
-(OUT/'geometry.json').write_text(json.dumps({'kind':args.kind,'pass':args.iteration,'source':SOURCE.name,'source_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'frame_size':[SIZE,SIZE],'native_density':K,'runtime_scale':1,'ground_origin_source':[64,ORIGIN],'ground_origin_frame':[SIZE/2,ORIGIN+PAD],'pivot_world':list(pivot.location),'pivot_frame':[x+PAD for x in screen(pivot.location)],'objects':records,'palette_samples':role_colors,'facings':32 if args.all else 8,'base_occlusion_holdout':args.iteration>=5,'footprint_target':'1x1 with separate original GDI bib; not installed','limitations':['explicit UV islands and source-palette directional shading; unseen surfaces inferred' if args.iteration>=6 else 'single-view projected source texturing; unseen panels inferred/reused','sonic source cropped at top/right/bottom; geometry completes those edges','no live game validation']},indent=2)+'\n');print('SMALL_TURRET_STUDY_RENDERED',args.kind,args.iteration)
+(OUT/'geometry.json').write_text(json.dumps({'kind':args.kind,'pass':args.iteration,'source':SOURCE.name,'source_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),'frame_size':[SIZE,SIZE],'native_density':K,'runtime_scale':1,'surface_id_channels':2 if args.kind=='sonic' and args.iteration>=21 else 1,'ground_origin_source':[64,ORIGIN],'ground_origin_frame':[SIZE/2,ORIGIN+PAD],'pivot_world':list(pivot.location),'pivot_frame':[x+PAD for x in screen(pivot.location)],'objects':records,'palette_samples':role_colors,'facings':32 if args.all else 8,'base_occlusion_holdout':args.iteration>=5,'footprint_target':'1x1 with separate original GDI bib; not installed','limitations':['explicit UV islands and source-palette directional shading; unseen surfaces inferred' if args.iteration>=6 else 'single-view projected source texturing; unseen panels inferred/reused','sonic source cropped at top/right/bottom; geometry completes those edges','no live game validation']},indent=2)+'\n');print('SMALL_TURRET_STUDY_RENDERED',args.kind,args.iteration)

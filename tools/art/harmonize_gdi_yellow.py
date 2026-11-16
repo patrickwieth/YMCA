@@ -1,4 +1,6 @@
-"""Reference-palette derivatives only: originals, references and geometry unchanged."""
+"""Preview-only reference-palette derivatives. NEVER redirect runtime art bindings.
+The supplied files in bits/gdi/buildings are authoritative; promotion is explicit.
+"""
 from pathlib import Path
 from PIL import Image,ImageDraw
 from PIL.PngImagePlugin import PngInfo
@@ -16,14 +18,14 @@ for name in REFERENCES:
  # Exclude pale warm stone/metal from the reference ramp: use actual gold paint.
  colors=[c for c,n in counts.items() if n>=24 and eligible(c) and colorsys.rgb_to_hsv(*(v/255 for v in c))[1]>=.4];palette.update(colors);reference_info[name]={'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'colors':colors}
 palette=sorted(palette,key=lambda c:(lum(c),c));entries=[];bindings={};previews=[]
-files=[p for p in sorted(ART.glob('*.png')) if p.name not in REFERENCES and not p.name.startswith('bib')]
+files=[p for p in sorted(ART.glob('*.png')) if p.name not in REFERENCES and not p.name.startswith(('bib','heavy-blaster-'))]
 files += [ART/'experimental/heavy-blaster-base.png',ART/'experimental/heavy-blaster-turret32.png']
 for p in files:
  with Image.open(p) as im:a=np.array(im.convert('RGBA'));text=im.text.copy()
  b=a.copy();colors=np.unique(a[:,:,:3].reshape(-1,3),axis=0);mapping={tuple(map(int,c)):min(palette,key=lambda x:(abs(lum(x)-lum(c)),x)) for c in colors if eligible(c)}
  # Preserve the power plant's orange reactor glass/emission, not painted armor.
  protected=Image.new('L',(a.shape[1],a.shape[0]))
- if p.name=='power plant.png':ImageDraw.Draw(protected).polygon([(98,119),(138,114),(141,170),(127,183),(100,172)],fill=255)
+ if p.name=='power plant.png' and a.shape[:2]==(281,256):ImageDraw.Draw(protected).polygon([(98,119),(138,114),(141,170),(127,183),(100,172)],fill=255)
  protect=np.array(protected)>0
  for old,new in mapping.items():b[np.all(a[:,:,:3]==old,axis=2)&(a[:,:,3]>0)&~protect,:3]=new
  changed=np.any(a!=b,axis=2);assert np.array_equal(a[:,:,3],b[:,:,3]);assert np.array_equal(a[protect],b[protect])
@@ -41,19 +43,14 @@ for p in files:
    v=Image.new('RGBA',(192,192));v.alpha_composite(base,(16,16));v.alpha_composite(Image.fromarray(data).crop((x,y,x+160,y+160)),(22,20));pair.append(v)
  else:pair=[Image.fromarray(a),Image.fromarray(b)]
  previews.append((p.stem,pair))
-# Add only Filename overrides. All offsets, facings, scales and effects stay inherited.
-lines=['# Generated color-only overrides; see art-source/gdi-color-match/README.md.']
+# Record canonical direct bindings for validation, but never emit runtime overrides.
 nodes={};actor=state=None
 for line in (ROOT/'mods/ca/sequences/gdi-building-art.yaml').read_text().splitlines():
  if line and not line.startswith(('\t','#')):actor=line.split(':')[0]
  elif line.startswith('\t') and not line.startswith('\t\t'):state=line.strip().split(':')[0]
  elif line.startswith('\t\tFilename: '):
   old=line.split(': ',1)[1]
-  if old in bindings:nodes.setdefault(actor,{})[state]=bindings[old]
-for actor,states in nodes.items():
- lines+=['',actor+':']
- for state,path in states.items():lines += ['\t'+state+':','\t\tFilename: '+path]
-(ROOT/'mods/ca/sequences/gdi-building-colors.yaml').write_text('\n'.join(lines)+'\n')
+  if Path(old).parent.as_posix()=='bits/gdi/buildings':nodes.setdefault(actor,{})[state]=old
 # Paired native-resolution thumbnails (large buildings downsampled for review only).
 w=960;cellw=480;cellh=300;canvas=Image.new('RGB',(w,cellh*((len(previews)+1)//2)),'#77736e');d=ImageDraw.Draw(canvas)
 for i,(name,pair) in enumerate(previews):

@@ -129,6 +129,16 @@ if args.iteration>=3:
    o['textured_faces']=[f.index for f in o.data.polygons if f.material_index==list(mats).index('source')]
    for rec in records:
     if rec['name']==o.name:rec['vertices']=len(o.data.vertices);rec['faces']=len(o.data.polygons)
+if args.iteration>=5:
+ sys.path.insert(0,str(Path(__file__).resolve().parent))
+ from refine_nod_laser_turret import refine
+ refine(globals())
+if args.iteration>=7:
+ from texture_nod_laser_turret import apply
+ (OUT/'coating.json').write_text(json.dumps(apply(globals()),indent=2)+'\n')
+if args.iteration>=10:
+ from finish_nod_materials import apply as finish_materials
+ finish_materials(globals())
 # Fixed camera and native density; extra canvas is padding only.
 target=Vector((0,0,58/(20*math.sqrt(3)/2)));bpy.ops.object.camera_add();cam=bpy.context.object;cam.location=target+Vector((7,-7,math.sqrt(98)/math.sqrt(3)));cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.type='ORTHO';cam.data.ortho_scale=12.8;s.camera=cam
 holdout=bpy.data.materials.new('EXPORT / fixed-base holdout');holdout.use_nodes=True;n=holdout.node_tree.nodes;n.clear();h=n.new('ShaderNodeHoldout');out=n.new('ShaderNodeOutputMaterial');holdout.node_tree.links.new(h.outputs[0],out.inputs[0]);names=list(mats)
@@ -138,8 +148,9 @@ def light():
  for o in objects:
   rot=o.matrix_world.to_3x3();fixedmat=o.get('constant');family=o['family'];bias=o['bias'];exclude=set(o['textured_faces'])
   for poly in o.data.polygons:
-   if poly.index in exclude:poly.material_index=names.index('source');continue
    shade=max(0,min(5,int(((rot@poly.normal).normalized().dot(light)+1)*2.7)+bias))
+   if poly.index in exclude:
+    key=o.get('texture_key','source');poly.material_index=names.index(key+str(shade) if o.get('coating_shaded',False) else key);continue
    poly.material_index=names.index(fixedmat or family+str(shade))
 bpy.context.view_layer.update();light();bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'nod-laser-model.blend'))
 def render(filename,idx=0,part='turret',mask=False):

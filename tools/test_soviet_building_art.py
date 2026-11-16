@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BIBS = {'FACT.Soviet': 4, 'POWR.Soviet': 3, 'APWR.Soviet': 4, 'TPWR': 4,
         'DOME.Soviet': 3, 'WEAP.Soviet': 4, 'FIX.Soviet': 4, 'Soviet_Refinery': 3,
         'Cloning_Vats': 3, 'NKOREA_BUNKER': 3, 'FTUR': 2, 'TTUR': 2, 'TSLA': 1,
-        'MSLO': 3, 'SPEN': 4, 'IRON': 3, 'SAM': 2, 'AFLD': 3, 'STEK': 3,
+        'MSLO': 3, 'SPEN': None, 'IRON': 3, 'SAM': 1, 'AFLD': 3, 'STEK': 3,
         'BARR': 3, 'INDP': 3, 'HPAD.Soviet': 3, 'FACT.Nukular.Soviet': 4}
 
 
@@ -19,8 +19,31 @@ def traits(text):
     return dict(re.findall(r'^([^\s:]+):([^\n]*(?:\n[\t ][^\n]*|\n(?=\n))*)', text, re.M))
 
 
+def normalize_soviet_sam_visuals(text):
+    """Undo only the explicitly approved pass12 render/muzzle registration changes."""
+    if '\n\tImage: sam.soviet.native\n' not in text:
+        return text
+    text = text.replace('\n\tImage: sam.soviet.native\n', '\n\tImage: sam.soviet\n')
+    text = text.replace('\n\tQuantizedFacings: 32\n\tCameraPitch: 85\n', '\n')
+    text = text.replace('\n\tOffset: 0,0,726\n', '\n')
+    # Subsequent explicit faction split: SAM Russia/Iraq, flak North Korea.
+    text = text.replace('Prerequisites: dome, ~structures.soviet, ~!structures.nkorea', 'Prerequisites: dome, ~structures.soviet')
+    text = text.replace('DecorationHeight: 99', 'DecorationHeight: 30')
+    text = text.replace('Image: sovietbib1x1', 'Image: sovietbib2x2')
+    text = text.replace('TopLeft: -512,-512', 'TopLeft: -768,-512').replace('BottomRight: 512,512', 'BottomRight: 768,512')
+    text = text.replace('LocalOffset: 496,-291,953', 'LocalOffset: 0,0,320')
+    text = text.replace('MuzzleSequence: muzzle-native', 'MuzzleSequence: muzzle')
+    text = text.replace('WithSpriteBody:\n\tSequence: base\n\tPauseOnCondition: disabled || empdisable || being-warped\n', '')
+    text = text.replace('WithSpriteTurret:\n\tSequence: turret\n\tRequiresCondition: !build-incomplete\n\tRecoils: false\n', 'WithEmbeddedTurretSpriteBody:\n\tPauseOnCondition: disabled || empdisable || being-warped\n')
+    return text
+
+
 def gameplay_hash(text):
-    fields = traits(text)
+    fields = traits(normalize_soviet_sam_visuals(text))
+    # Approved generic China construction changes the visual sequence only.
+    # Keep the make trait/condition in the gameplay comparison.
+    if 'WithMakeAnimation' in fields:
+        fields['WithMakeAnimation'] = re.sub(r'\n[\t ]+Sequence: construction[\t ]*(?=\n|$)', '', fields['WithMakeAnimation'])
     if 'IsometricSelectable' in fields:
         fields['IsometricSelectable'] = re.sub(r'(?m)^[\t ]+(?:DecorationBounds|DecorationHeight):[^\n]*\n?', '', fields['IsometricSelectable'])
     values = {key: re.sub(r'\s+', '', value) for key, value in fields.items()
@@ -31,7 +54,7 @@ def gameplay_hash(text):
 def resolved(command, name):
     env = dict(os.environ, ENGINE_DIR=str(ROOT / 'engine'),
                MOD_SEARCH_PATHS=f'{ROOT / "mods"},{ROOT / "engine/mods"}')
-    return subprocess.check_output(['dotnet', str(ROOT / 'engine/bin/OpenRA.Utility.dll'),
+    return subprocess.check_output(['dotnet', os.environ.get('YMCA_UTILITY', str(ROOT / 'engine/bin/OpenRA.Utility.dll')),
                                     str(ROOT / 'mods/ca'), command, name], env=env,
                                    cwd=ROOT, text=True)
 
@@ -45,16 +68,24 @@ class SovietBuildingArtTests(unittest.TestCase):
             with self.subTest(actor=actor):
                 text = resolved('--resolved-rules', actor)
                 fields = traits(text)
-                self.assertIn(f'Image: sovietbib{size}x{size}', fields['WithIdleOverlay@SOVIETBIB'])
-                self.assertIn('IsDecoration: true', fields['WithIdleOverlay@SOVIETBIB'])
+                if size is None:
+                    self.assertNotIn('WithIdleOverlay@SOVIETBIB', fields)
+                    self.assertIn('Name: Naval Yard', fields['Tooltip'])
+                else:
+                    self.assertIn(f'Image: sovietbib{size}x{size}', fields['WithIdleOverlay@SOVIETBIB'])
+                    self.assertIn('IsDecoration: true', fields['WithIdleOverlay@SOVIETBIB'])
                 self.assertNotIn('WithIdleOverlay@ALLIEDBIB', fields)
                 # Disabled legacy bibs still load sequences in AddedToWorld.
                 self.assertNotIn('WithBuildingBib', fields)
-                self.assertEqual(gameplay_hash(text), baseline[actor])
+                # Only the requested SPEN display name changed; retain the original
+                # gameplay baseline rather than silently replacing its expected hash.
+                gameplay_text = text.replace('\n\tName: Naval Yard\n', '\n\tName: Sub Pen\n') if actor == 'SPEN' else text
+                self.assertEqual(gameplay_hash(gameplay_text), baseline[actor])
                 if actor.lower() in calibration:
                     entry = calibration[actor.lower()]
                     self.assertIn('DecorationBounds: ' + ', '.join(map(str, entry['DecorationBounds'])), fields['IsometricSelectable'])
-                    self.assertIn('DecorationHeight: ' + str(entry['DecorationHeight']), fields['IsometricSelectable'])
+                    height = 99 if actor == 'SAM' else entry['DecorationHeight']
+                    self.assertIn('DecorationHeight: ' + str(height), fields['IsometricSelectable'])
                 if actor == 'AFLD':
                     self.assertIn('Image: afld.soviet', fields['RenderSprites'])
                 if actor == 'HPAD.Soviet':

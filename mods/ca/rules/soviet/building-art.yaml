@@ -22,25 +22,75 @@
 	WithIdleOverlay@SOVIETBIB:
 		Image: sovietbib4x4
 
-# Independent art-test actor. FTUR remains the Flame Tower; no production-menu
-# duplicate until this Sentry has its own approved weapon/balance definition.
+# Shared Sentry implementation; FTUR below is the production/map-compatible actor.
 SENTRY.SOVIET:
-	Inherits: FTUR
+	Inherits: ^SovietFlameTowerBase
+	Inherits@GATLING: ^ChinaGatling
 	-Buildable:
+	-Armament:
+	-Armament@GAT0:
+	-Armament@GAT1:
+	-Armament@GAT2:
+	-Armament@GAT3:
+	-Armament@GAT0G:
+	-Armament@GAT1G:
+	-Armament@GAT2G:
+	-Armament@GAT3G:
+	-GrantConditionOnAttackCA:
+	SharedBarrelSequence:
 	RenderSprites:
 		Image: ftur.soviet.v13
 	Tooltip:
-		Name: Sentry V13 (art test)
+		Name: Sentry Gun
+	AttackTurreted:
+		Armaments: secondary
+	SharedBarrelArmament@GAT0G:
+		Name: secondary
+		Weapon: ChinaMGatt.0G
+		LocalOffset: 547,86,655, 547,-86,655
+		MuzzleSequence: muzzle-mg
+		RequiresCondition: gatling-ground == 0
+	SharedBarrelArmament@GAT1G:
+		Name: secondary
+		Weapon: ChinaMGatt.1G
+		LocalOffset: 547,86,655, 547,-86,655
+		MuzzleSequence: muzzle-mg
+		RequiresCondition: gatling-ground == 1
+	SharedBarrelArmament@GAT2G:
+		Name: secondary
+		Weapon: ChinaMGatt.2G
+		LocalOffset: 547,86,655, 547,-86,655
+		MuzzleSequence: muzzle-mg
+		RequiresCondition: gatling-ground == 2
+	SharedBarrelArmament@GAT3G:
+		Name: secondary
+		Weapon: ChinaMGatt.3G
+		LocalOffset: 547,86,655, 547,-86,655
+		MuzzleSequence: muzzle-mg
+		RequiresCondition: gatling-ground == 3
+	WithMuzzleOverlay:
+		RequiresCondition: !build-incomplete
 	Turreted:
 		InitialFacing: 384
 		TurnSpeed: 32
 	BodyOrientation:
 		QuantizedFacings: 32
+		CameraPitch: 85
+		UseClassicPerspectiveFudge: false
 	WithIdleOverlay@SOVIETBIB:
 		Image: sovietbib1x1
 	IsometricSelectable:
 		DecorationBounds: 1267, 1267, 0, 0
 		DecorationHeight: 49
+
+# User-requested replacement: keep FTUR actor ID for maps, AI and prerequisites.
+FTUR:
+	Inherits: SENTRY.SOVIET
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 60
+		Prerequisites: barr, ~!structures.iraq, ~!structures.nkorea, ~structures.soviet
+		Description: Anti-infantry base defense with twin machine guns.\n  Can detect cloaked units.\n  Strong vs Infantry, Light Armor\n  Weak vs Tanks, Aircraft
 
 # Separate comparison actor: unchanged PNG base plus a real rotating VXL turret.
 SENTRY.SOVIET.VOXEL:
@@ -60,6 +110,103 @@ SENTRY.SOVIET.VOXEL:
 	WithVoxelTurret:
 		Sequence: turret
 		ShowShadow: false
+
+# Isolated playable/editor voxel test: no replacement or balance change to SAM.
+FLAK.SOVIET.VOXEL:
+	Inherits: SAM
+	-Buildable:
+	-WithSpriteBody:
+	-WithSpriteTurret:
+	-WithMakeAnimation:
+	-WithIdleOverlay@SOVIETBIB:
+	-WithMuzzleOverlay:
+	Tooltip:
+		Name: Soviet Flak (voxel recoil test)
+	RenderSprites:
+		Image: sam.soviet
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+	HitShape:
+		Type: Rectangle
+			TopLeft: -512,-512
+			BottomRight: 512,512
+	BodyOrientation:
+		QuantizedFacings: 0
+		CameraPitch: 85
+		UseClassicPerspectiveFudge: true
+	Turreted:
+		Offset: 0,0,0
+	RenderVoxels:
+		Image: flak.soviet.voxel
+		Palette: flak-voxel-source
+		Scale: 1
+		LightAmbientColor: 0.55,0.55,0.55
+		LightDiffuseColor: 0.45,0.45,0.45
+	WithVoxelBody:
+		Sequence: base
+		ShowShadow: false
+	WithVoxelTurret:
+		Sequence: turret
+		ShowShadow: false
+	WithVoxelBarrelAxis:
+		Sequence: barrel
+		RecoilDirection: -761,0,-594
+		ShowShadow: false
+	Armament:
+		Weapon: FLAK-23-AA
+		LocalOffset: 1337,0,1846
+		Recoil: 109
+		RecoilRecovery: 12
+		MuzzleSequence: muzzle
+	IsometricSelectable:
+		DecorationBounds: 1448,1448,0,0
+		DecorationHeight: 100
+
+# Sprite replacement for the rejected voxel presentation. Keep the old prototype
+# and its exports available, but use this actor in the building tests.
+FLAK.SOVIET.SPRITE:
+	Inherits: FLAK.SOVIET.VOXEL
+	-RenderVoxels:
+	-WithVoxelBody:
+	-WithVoxelTurret:
+	-WithVoxelBarrelAxis:
+	Tooltip:
+		Name: Soviet Flak
+	Buildable:
+		Queue: Defense
+		BuildPaletteOrder: 100
+		Prerequisites: dome, ~structures.nkorea
+		Description: Anti-aircraft cluster flak defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
+	RenderSprites:
+		Image: flak.soviet.sprite
+	WithIdleOverlay@SOVIETBIB:
+		Image: sovietbib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+	BodyOrientation:
+		QuantizedFacings: 32
+		UseClassicPerspectiveFudge: false
+	Turreted:
+		Offset: 0,0,243
+	WithSpriteBody:
+		Sequence: base
+		PauseOnCondition: disabled || empdisable || being-warped
+	WithSpriteTurret:
+		Sequence: turret
+		RequiresCondition: !build-incomplete
+		Recoils: false
+	WithMakeAnimation:
+		Sequence: construction
+		Condition: build-incomplete
+	Armament:
+		Weapon: SOVIET-CLUSTER-AA
+		LocalOffset: 669,0,1603
+		Recoil: 0
+		MuzzleSequence: muzzle-cluster
+	WithMuzzleOverlay:
+		RequiresCondition: !build-incomplete
 
 # Concrete actors remove legacy WithBuildingBib entirely: even a disabled
 # legacy trait loads its sprite sequence when the actor is added to the world.

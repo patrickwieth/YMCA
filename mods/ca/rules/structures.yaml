@@ -48,8 +48,8 @@ MSLO:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
+# Water structures have no land-foundation overlay.
 SPEN:
-	Inherits@SOVIETBIB: ^Soviet4x4Bib
 	Inherits@BASE: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@SHAPE: ^3x3Shape
@@ -64,7 +64,7 @@ SPEN:
 	Valued:
 		Cost: 800
 	Tooltip:
-		Name: Sub Pen
+		Name: Naval Yard
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 50
@@ -222,9 +222,9 @@ IRON:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
 AGUN:
-	Inherits: ^Defense
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetAir
+	Inherits@DEFENSE: ^Defense
+	Inherits@POWER: ^DisableOnLowPowerOrPowerDown
+	Inherits@TARGET: ^AutoTargetAir
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
@@ -321,6 +321,12 @@ PBOX:
 HBOX:
 	Inherits: ^Defense
 	Inherits: ^AutoTargetAll
+	Inherits@visuals: ^Allied1x1Visuals
+	Inherits@shadow: ^AlliedBuildingShadow
+	RenderSprites:
+		Image: pbox.allies
+	IsometricSelectable:
+		DecorationHeight: 76
 	Tooltip:
 		Name: Camo Pillbox
 	Building:
@@ -416,21 +422,24 @@ GUN:
 		UseClassicFacings: False
 
 SAM:
-	Inherits@SOVIETBIB: ^Soviet2x2Bib
-	Inherits: ^Defense
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetAir
-	Inherits: ^2x1Shape
+	Inherits@SOVIETBIB: ^Soviet1x1Bib
+	Inherits@GRID1: ^Defense
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDown
+	Inherits@GRID3: ^AutoTargetAir
+	Inherits@GRID4: ^1x1Shape
+	Building:
+		Footprint: x
+		Dimensions: 1,1
 	RenderSprites:
-		Image: sam.soviet
+		Image: sam.soviet.native
 	HitShape:
 		Type: Rectangle
-			TopLeft: -768,-512
-			BottomRight: 768,512
+			TopLeft: -512,-512
+			BottomRight: 512,512
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 100
-		Prerequisites: dome, ~structures.soviet
+		Prerequisites: dome, ~structures.soviet, ~!structures.nkorea
 		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
 	Valued:
 		Cost: 700
@@ -447,13 +456,18 @@ SAM:
 	Turreted:
 		TurnSpeed: 120
 		InitialFacing: 0
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
+		Offset: 0,0,726
+	WithSpriteBody:
+		Sequence: base
 		PauseOnCondition: disabled || empdisable || being-warped
+	WithSpriteTurret:
+		Sequence: turret
+		RequiresCondition: !build-incomplete
+		Recoils: false
 	Armament:
 		Weapon: Nike
-		LocalOffset: 0,0,320
-		MuzzleSequence: muzzle
+		LocalOffset: 496,-291,953
+		MuzzleSequence: muzzle-native
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -465,17 +479,21 @@ SAM:
 		RequiresCondition: !being-warped
 	BodyOrientation:
 		UseClassicFacings: False
+		QuantizedFacings: 32
+		CameraPitch: 85
+	IsometricSelectable:
+		DecorationHeight: 99
 	DetectCloaked:
 		Range: 8c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 ATEK:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^2x2Building+Bib
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^TechLevelBuilding
+	Inherits@GRID3: ^Tier3Tech
+	Inherits@GRID4: ^DisableOnLowPowerOrForceDisabled
+	Inherits@GRID5: ^2x2Building+Bib
 	Inherits@visuals: ^Allied2x2DriveableBib
 	-WithBuildingBib:
 	RenderSprites:
@@ -799,8 +817,8 @@ BARR:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 
 KENN:
-	Inherits: ^Building
-	Inherits: ^PrimaryBuilding
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^PrimaryBuilding
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 175
@@ -815,9 +833,16 @@ KENN:
 		HP: 30000
 	RevealsShroud:
 		Range: 4c0
-	WithBuildingBib:
-		Sequence: bibSilo
-		HasMinibib: True
+	RenderSprites:
+		Image: kenn.soviet
+	IsometricSelectable:
+		DecorationBounds: 905, 905, 0, 0
+		DecorationHeight: 70
+	WithIdleOverlay@SOVIETBIB:
+		Image: sovietbib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
 	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
@@ -842,12 +867,12 @@ KENN:
 
 TENT:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^Building
-	Inherits: ^3x2Building+Bib
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^3x2Building+Bib
 	Inherits@visuals: ^Allied3x3Visuals
 	-WithBuildingBib:
-	Inherits: ^PrimaryBuilding
-	Inherits: ^InfantryProduction
+	Inherits@GRID3: ^PrimaryBuilding
+	Inherits@GRID4: ^InfantryProduction
 	RenderSprites:
 		Image: tent.allies
 	IsometricSelectable:
@@ -945,11 +970,6 @@ TENT:
 
 SBAG:
 	Inherits: ^Wall
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 10
-		Prerequisites: ~structures.sandbag
-		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -969,11 +989,6 @@ SBAG:
 
 FENC:
 	Inherits: ^Wall
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 20
-		Prerequisites: fact, ~structures.soviet
-		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -991,11 +1006,6 @@ FENC:
 
 BRIK:
 	Inherits: ^Wall
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 30
-		Prerequisites: anypower
-		Description: Stops units and blocks enemy fire.
 	Valued:
 		Cost: 200
 	CustomSellValue:
@@ -1020,11 +1030,6 @@ BRIK:
 CHAIN:
 	Inherits: ^Wall
 	Inherits: ^WoodArmor
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 20
-		Prerequisites: afac, ~structures.nod
-		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -1298,13 +1303,18 @@ AFAC.Nukular:
 
 NSAM:
 	Inherits: ^DefenseTD
+	WithIdleOverlay@NODBIB:
+		Image: nodbib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetAir
-	Inherits@shape: ^2x1Shape
+	Inherits@shape: ^1x1Shape
 	HitShape:
 		Type: Rectangle
-			TopLeft: -768,-512
-			BottomRight: 768,512
+			TopLeft: -512,-512
+			BottomRight: 512,512
 	Buildable:
 		Queue: Defense
 		IconPalette: chrome
@@ -1316,8 +1326,8 @@ NSAM:
 	Tooltip:
 		Name: SAM Site
 	Building:
-		Footprint: xx
-		Dimensions: 2,1
+		Footprint: x
+		Dimensions: 1,1
 	Health:
 		HP: 40000
 	RevealsShroud:
@@ -1326,18 +1336,53 @@ NSAM:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 5c0
+	RenderSprites:
+		Image: nsam.native
 	Turreted:
 		TurnSpeed: 120
-		InitialFacing: 0
+		InitialFacing: 896
 		RealignDelay: -1
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
-		PauseOnCondition: disabled || empdisable || being-warped
-	AttackPopupTurreted:
+		Offset: 0,-88,611
+	WithSpriteBody:
+		Sequence: base
+	WithSpriteTurret@4:
+		Sequence: turret-4
+		RequiresCondition: !build-incomplete && (!sam-active || sam-ammo == 4)
+		Recoils: false
+	WithSpriteTurret@3:
+		Sequence: turret-3
+		RequiresCondition: !build-incomplete && sam-active && sam-ammo == 3
+		Recoils: false
+	WithSpriteTurret@2:
+		Sequence: turret-2
+		RequiresCondition: !build-incomplete && sam-active && sam-ammo == 2
+		Recoils: false
+	WithSpriteTurret@1:
+		Sequence: turret-1
+		RequiresCondition: !build-incomplete && sam-active && sam-ammo == 1
+		Recoils: false
+	WithSpriteTurret@0:
+		Sequence: turret-0
+		RequiresCondition: !build-incomplete && sam-active && sam-ammo == 0
+		Recoils: false
+	GrantCondition@sam-active:
+		Condition: sam-active
+	AmmoPool:
+		Ammo: 4
+		Armaments: primary
+		AmmoCondition: sam-ammo
+	ReloadAmmoPool:
+		Delay: 30
+		Count: 4
+		ResetOnFire: true
+	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
 	Armament:
-		Weapon: Nike
+		Weapon: Nike.Nod
+		# Engine selects barrel Burst % 4: indices 0,3,2,1 -> missile slots 2,3,0,1.
+		LocalOffset: 112,60,913, 375,-60,913, 188,-94,913, 298,94,913
+		PauseOnCondition: !sam-ammo
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
 	Power:
@@ -1345,6 +1390,14 @@ NSAM:
 		RequiresCondition: !being-warped
 	BodyOrientation:
 		UseClassicFacings: False
+		CameraPitch: 85
+		QuantizedFacings: 32
+		UseClassicPerspectiveFudge: false
+	IsometricSelectable:
+		Bounds: 950, 977, 0, -55
+		Height: 60
+		DecorationBounds: 950, 977, 0, -55
+		DecorationHeight: 60
 	-ActorPreviewPlaceBuildingPreview:
 	SequencePlaceBuildingPreview:
 		Sequence: place
@@ -1566,11 +1619,11 @@ AFLD.GDI:
 
 AFLD.allies:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^Building
-	Inherits: ^3x2Shape
-	Inherits: ^PrimaryBuilding
-	Inherits: ^RepairsAircraftWithRepairBay
-	Inherits: ^AircraftProduction
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^3x2Shape
+	Inherits@GRID3: ^PrimaryBuilding
+	Inherits@GRID4: ^RepairsAircraftWithRepairBay
+	Inherits@GRID5: ^AircraftProduction
 	RenderSprites:
 		Image: afld.allies.custom
 	Inherits@visuals: ^Allied3x3Visuals
@@ -1701,6 +1754,8 @@ SPEN.nod:
 	RenderSprites:
 		Image: SPENNOD
 		PlayerPalette: playernavy
+	IsometricSelectable:
+		DecorationHeight: 160
 	InfiltrateForSupportPower:
 		Types: SpyInfiltrate
 		Proxy: powerproxy.sonarpulse
@@ -1841,12 +1896,7 @@ LASP:
 	Inherits: ^Building
 	Inherits: ^BrickArmor
 	Inherits: ^DisableOnLowPowerOrPowerDown
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 30
-		Prerequisites: ~structures.nod, nuk2
-		IconPalette: chrometd
-		Description: Stops infantry and blocks enemy fire.\n   Cannot be crushed by tanks.
+	-Buildable:
 	Valued:
 		Cost: 200
 	CustomSellValue:
@@ -1945,11 +1995,11 @@ LASF:
 		Bounds: 2048, 1024
 
 PATR:
-	Inherits: ^DefenseTD
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Shape
-	Inherits: ^SuperWeapon
-	Inherits: ^GDISuperweaponSmall
+	Inherits@GRID1: ^DefenseTD
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID3: ^2x2Shape
+	Inherits@GRID4: ^SuperWeapon
+	Inherits@GRID5: ^GDISuperweaponSmall
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -1977,35 +2027,31 @@ PATR:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 		RequiresCondition: !disabled
-	Turreted:
-		TurnSpeed: 8
-		InitialFacing: 0
-		RealignDelay: -1
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
+	RenderSprites:
+		Image: patr.gdi.png
+	WithSpriteBody:
+		Sequence: empty
 		PauseOnCondition: disabled || empdisable || being-warped
 	WithIdleAnimation:
-		Sequences: empty
+		Sequences: idle
 		Interval: 0
-		RequiresCondition: !loaded-rocket
-	AttackTurreted:
+		RequiresCondition: loaded-rocket && !build-incomplete
+	AttackOmni:
 		PauseOnCondition: disabled || empdisable || being-warped
 		RequiresCondition: !build-incomplete && !reloading
-		OpportunityFire: False
-		PersistentTargeting: False
 		ForceFireIgnoresActors: True
 	Armament:
-		Weapon: THLauncher
-		PauseOnCondition: disabled || empdisable || being-warped
-		LocalOffset: 1000,0,500
+		Weapon: THLauncher.Fixed
+		PauseOnCondition: disabled || empdisable || being-warped || !loaded-rocket
+		LocalOffset: 0,-931,3249
+		LocalYaw: 256
 		ReloadingCondition: reloading
 	AmmoPool:
 		Ammo: 1
+		InitialAmmo: 0
 		ReloadCount: 1
 		AmmoCondition: loaded-rocket
-	ReloadAmmoPool:
-		Delay: 100
-		Count: 1
+	ReloadAmmoOnSupportPowerCharged:
 	SupportPowerChargeBar:
 	Power:
 		Amount: -150
@@ -2015,9 +2061,14 @@ PATR:
 	FireWarheadsOnDeathCA:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
-	WithBuildingBib:
-		Sequence: bibSam2
-		HasMinibib: true
+	IsometricSelectable:
+		DecorationBounds: 2534, 2534, 0, 0
+		DecorationHeight: 165
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib3x3.emp
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
 	RejectsOrders:
 		Except: Sell, PowerDown
 	InfiltrateForSupportPowerReset:
@@ -2089,11 +2140,11 @@ INDP:
 
 OREP:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier4Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^TechLevelBuilding
+	Inherits@GRID3: ^Tier4Tech
+	Inherits@GRID4: ^DisableOnLowPowerOrForceDisabled
+	Inherits@GRID5: ^3x2Building+Bib
 	RenderSprites:
 		Image: orep.allies
 	Inherits@visuals: ^Allied2x2DriveableBib
@@ -2105,8 +2156,8 @@ OREP:
 	Health:
 		HP: 80000
 	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
+		MinRange: 3c0
+		Range: 4c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
@@ -2132,9 +2183,6 @@ OREP:
 	ResourcePurifier@orep2:
 		Modifier: 5
 		RequiresCondition: !disabled && !being-warped && orep2
-	RevealsShroud:
-		Range: 4c0
-		MinRange: 3c0
 	Power:
 		Amount: -150
 		RequiresCondition: !being-warped
@@ -2155,11 +2203,11 @@ OREP:
 
 WEAT:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Shape
-	Inherits: ^SuperWeapon
-	Inherits: ^AlliesSuperweaponBig
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID3: ^2x2Shape
+	Inherits@GRID4: ^SuperWeapon
+	Inherits@GRID5: ^AlliesSuperweaponBig
 	RenderSprites:
 		Image: weat.allies
 	Inherits@visuals: ^Allied2x2DriveableBib

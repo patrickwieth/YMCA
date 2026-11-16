@@ -8,12 +8,14 @@ STUDY=ROOT/'art-source/gdi ion cannon/attempt-11-centering';ASSETS=ROOT/'mods/ca
 class IonDefenseArtTests(unittest.TestCase):
  def test_gameplay_unchanged(self):
   before=traits((ROOT/'art-source/gdi ion cannon/attempt-04/integration/resolved-before.yaml').read_text(encoding='utf-8-sig'));after=traits(resolved('--resolved-rules','Ion_Defense'))
-  allowed={'RenderSprites','IsometricSelectable','WithShadow','WithBuildingBib','WithEmbeddedTurretSpriteBody','WithSpriteTurret','WithIdleOverlay@GDIBIB'}
-  attachment_fields={'BodyOrientation':'CameraPitch:','Turreted':'Offset:','Armament':'LocalOffset:'}
+  allowed={'RenderSprites','IsometricSelectable','WithShadow','WithBuildingBib','WithEmbeddedTurretSpriteBody','WithSpriteTurret','WithIdleOverlay@GDIBIB','WithMakeAnimation'}
+  attachment_fields={'BodyOrientation':('CameraPitch:','UseClassicPerspectiveFudge:'),'Turreted':'Offset:','Armament':'LocalOffset:'}
   def gameplay(data):
    return {k:'\n'.join(line for line in v.splitlines() if not (k in attachment_fields and line.strip().startswith(attachment_fields[k]))).strip() for k,v in data.items() if k not in allowed}
   self.assertEqual(gameplay(before),gameplay(after))
-  self.assertIn('CameraPitch: 85',after['BodyOrientation']);self.assertIn('Offset: 0,0,226',after['Turreted']);self.assertIn('LocalOffset: 1631,0,675',after['Armament'])
+  # Global construction sprites were installed after the historical V4 snapshot.
+  self.assertEqual(after['WithMakeAnimation'].strip(),'Sequence: construction\n\tCondition: build-incomplete')
+  self.assertIn('CameraPitch: 85',after['BodyOrientation']);self.assertIn('Offset: 0,0,226',after['Turreted']);self.assertIn('LocalOffset: 816,0,675',after['Armament'])
   for field in ('Priority: 4','Height: 0','Bounds: 1024, 1024'):self.assertIn(field,after['IsometricSelectable'])
   self.assertIn('DecorationBounds: 1901, 1901, 0, 0',after['IsometricSelectable']);self.assertIn('DecorationHeight: 66',after['IsometricSelectable'])
   self.assertIn('Image: ion_defense.native',after['RenderSprites']);self.assertIn('Sequence: base',after['WithSpriteBody']);self.assertIn('Recoils: false',after['WithSpriteTurret'])

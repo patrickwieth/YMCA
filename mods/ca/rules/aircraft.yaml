@@ -207,6 +207,27 @@ TRAN:
 	Inherits: ^BiologicalPilot
 	Inherits: ^Transport
 	Inherits: ^DualRotors
+	-WithIdleOverlay@ROTOR1AIR:
+	-WithIdleOverlay@ROTOR1GROUND:
+	-WithIdleOverlay@ROTOR2AIR:
+	-WithIdleOverlay@ROTOR2GROUND:
+	# Chinook voxel hub centers; preserve voxel camera, scale and flight physics.
+	WithVoxelRotorOverlay@ROTOR1AIR:
+		Offset: 449,0,164
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithVoxelRotorOverlay@ROTOR1GROUND:
+		Offset: 449,0,164
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithVoxelRotorOverlay@ROTOR2AIR:
+		Offset: -574,0,206
+		Sequence: rotor2
+		RequiresCondition: airborne
+	WithVoxelRotorOverlay@ROTOR2GROUND:
+		Offset: -574,0,206
+		Sequence: slow-rotor2
+		RequiresCondition: !airborne
 	Inherits: ^TSRenderVoxel
 	RenderVoxels:
 		Image: tran
@@ -520,6 +541,7 @@ OCAR:
 		AllowDropOff: True
 		CarryableConditions:
 			amcv.nukular: NukularCargo
+			amcv.nod.nukular: NukularCargo
 			mcv.nukular: NukularCargo
 			smcv.nukular: NukularCargo
 	Health:

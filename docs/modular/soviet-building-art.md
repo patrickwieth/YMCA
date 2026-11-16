@@ -1,6 +1,58 @@
 # Soviet building separation and foundations
 
-Current alignment work is local on `Game / modular`; no new commit, push or release.
+Current alignment follow-up is local on `Game / isometric`; no new commit, push or release.
+
+## Construction yard / ordinary power plant — bib centering correction
+
+The user reported rear-left misalignment. Corrected the final, later placement layer:
+FACT.Soviet / FACT.Nukular.Soviet now use Bottom `-1,-9` (previously `-39,-54`), and
+POWR.Soviet uses `0,-12` (previously `-29,-64`), in normal and damaged states. Reviewed
+ground contacts are centered on the original bibs; selection decorations follow.
+Source PNGs, scales, bib registrations and gameplay footprints/exits remain unchanged.
+The conyard's older calibration referenced a now-transparent point on replaced art;
+its previous hash/contact calibration is preserved in the follow-up archive.
+
+[Before/after](../../art-source/soviet-bib-alignment/before-after.png) and
+[selection review](../../art-source/soviet-bib-alignment/before-after-selection.png)
+are composed engine-registration previews, not live screenshots. Actual sprite loading
+and offsets pass `--check-soviet-bib-alignment`; targeted geometry/gameplay tests pass.
+The broader historical alignment suite still flags pre-existing supplied-art changes
+for APWR, FIX and IRON (including FIX's contact and IRON's envelope); they were not
+silently rebaselined or changed as part of this two-building correction.
+See `art-source/soviet-bib-alignment/README.md`. Restart/new match for live review.
+
+## SAM size follow-up — 75%, 1×1
+
+SAM now renders at Scale0.75 with a Soviet1×1 bib, explicit1×1 footprint and ±512
+hit rectangle. Attachment726, muzzle496,-291,953 and selection height99 track the
+smaller art. Source PNGs/model and Flak are unchanged. Engine32-direction muzzle
+check:0.123px maximum error; build/regressions pass. A new test match loads the
+updated size automatically. Live visual review remains pending.
+
+## SAM / flak faction split and test display
+
+Follow-up user request: Russia/Iraq build `SAM`; North Korea builds
+`FLAK.SOVIET.SPRITE`. Radar requirements and existing weapon stats/costs remain;
+voxel flak remains a non-buildable study. AI anti-air lists/weights include sprite
+flak. Both disposable test generators show flak at148,-56 and the new SAM at154,-62,
+with one airborne practice target per defense. `test-gebaeude.cmd` uses this layout.
+Original testmap1 is preserved; restart the test to load the regenerated layout.
+
+## Soviet SAM pass12 — local integration
+
+The user requested iterative reconstruction through pass12 followed by installation.
+`SAM` now uses the native modeled base and32-direction launcher through
+`sam.soviet.native`; supplied source and passes01–12 are preserved. Source-palette
+materials, Blender reproduction commands, per-pass review notes and integration
+registration are documented in
+[`art-source/soviet sam site/README.md`](../../art-source/soviet%20sam%20site/README.md).
+
+Separate body/turret sprites replace the embedded turret presentation. The muzzle
+and selection decoration are registered to the new model. Existing Nike weapon
+values, footprint, power/cost and detection are unchanged. Derived flak actors and
+Nod SAM retain their previous resolved definitions. Native sprite paths and32 muzzle
+projections were checked by the engine; live match visual review is still pending.
+No running game was restarted, and no commit/push/release was performed.
 
 ## Independent buildings
 
@@ -24,13 +76,21 @@ or previewed outside the original Soviet factions.
 All supplied 1x1/2x2/3x3/4x4 Soviet bibs are registered at Scale 1. Current use:
 
 - 4x4: conyard (including Nukular), nuclear/tesla power plants, factory,
-  repair depot and naval yard.
+  repair depot.
 - 3x3: ordinary power plant, radar, refinery, cloning vats, North Korean bunker,
   missile silo, Iron Curtain, airfield, tech center, barracks, industrial plant
   and helipad.
 - 2x2: legacy sentry/tesla turrets and SAM/flak base.
 - 1x1: Tesla Coil; the native32 Sentry also uses 1x1 in the disposable test map.
 - 1x1: registered but not currently assigned.
+
+The Soviet Naval Yard (`SPEN`, formerly displayed as `Sub Pen`) has **no bib**.
+Its Soviet 4x4 overlay inheritance was removed; the existing native body placement,
+selection decoration, 3x3 water footprint, hit shapes, exits, docking and production
+remain unchanged. Resolved-rule tests assert `Naval Yard`, no Soviet/Allied/legacy
+bib and the original gameplay hash after normalizing only the display-name change.
+The older calibration JSON's 4x4 bib fields remain a historical alignment envelope,
+not a live overlay assignment. No game restart was performed.
 
 These are decoration-only overlays. Legacy SHP bib traits are removed entirely;
 the refinery no longer inherits an Allied bib. Disabling a legacy bib with

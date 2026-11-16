@@ -37,11 +37,11 @@ CRAM:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 ATWR:
-	Inherits: ^DefenseTD
-	Inherits: ^DisableOnLowPower
-	Inherits: ^AutoTargetGround
-	Inherits: ^PrioAntiHeavyAA
-	Inherits: ^RelayTargeting
+	Inherits@BASE: ^DefenseTD
+	Inherits@POWER: ^DisableOnLowPower
+	Inherits@TARGET: ^AutoTargetGround
+	Inherits@PRIORITY: ^PrioAntiHeavyAA
+	Inherits@RELAY: ^RelayTargeting
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
@@ -508,7 +508,6 @@ Ion_Defense:
 		Sequence: base
 	WithEmbeddedTurretSpriteBody:
 		PauseOnCondition: disabled || empdisable || being-warped
-	-WithMakeAnimation:
 	AttackTurreted:
 		PauseOnCondition: disabled || empdisable || being-warped
 	Armament:
@@ -527,9 +526,9 @@ Ion_Defense:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 STWR:
-	Inherits: ^Defense
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetGround
+	Inherits@GRID1: ^Defense
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDown
+	Inherits@GRID3: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80
@@ -548,17 +547,30 @@ STWR:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 6c0
-	WithBuildingBib:
-		Sequence: bibFtur4
-		HasMinibib: true
+	RenderSprites:
+		Image: stwr.native
+	IsometricSelectable:
+		DecorationBounds: 941, 941, 0, 0
+		DecorationHeight: 78
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
 	Turreted:
 		TurnSpeed: 20
 		InitialFacing: 48
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
+		Offset: 0,0,599
+	WithSpriteBody:
+		Sequence: base
 		PauseOnCondition: disabled || empdisable || being-warped
+	WithSpriteTurret:
+		Sequence: turret
+		RequiresCondition: !build-incomplete
+		Recoils: false
 	Armament:
 		Weapon: SonicPulse
+		LocalOffset: 957,0,677
 		PauseOnCondition: empdisable && being-warped
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
@@ -569,6 +581,7 @@ STWR:
 		RequiresCondition: !being-warped
 	BodyOrientation:
 		UseClassicFacings: False
+		CameraPitch: 85
 	DetectCloaked:
 		Range: 6c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
@@ -614,9 +627,9 @@ NUKE:
 		Types: SpyInfiltrate, PowerInfiltrate
 
 NUK2:
-	Inherits: ^BuildingTD
-	Inherits: ^DisabledByPowerOutage
-	Inherits: ^2x2Building+Bib
+	Inherits@BUILDING: ^BuildingTD
+	Inherits@POWER: ^DisabledByPowerOutage
+	Inherits@SHAPE: ^2x2Building+Bib
 	HitShape:
 		TargetableOffsets: 630,299,0
 	WithSpriteBody:
@@ -733,7 +746,7 @@ AFAC:
 		Factions: legion
 		Prerequisite: structures.legion
 	ProvidesPrerequisite@weap.tdFAC:
-		Factions: gdi, talon, zocom, eagle, legion
+		Factions: gdi, talon, zocom, eagle
 		Prerequisite: structures.weap.td
 	ProvidesPrerequisite@sandbag:
 		Factions: gdi, talon, zocom, eagle

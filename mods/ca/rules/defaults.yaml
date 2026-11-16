@@ -2268,6 +2268,7 @@ refinery.dockhelper:
 		AddToArmyValue: true
 	IsometricSelectionDecorationsForUnits:
 		MinimumZoom: 0.5
+		Height: 24
 	WithSpriteControlGroupDecoration:
 	Selectable:
 		Bounds: 1024, 1024
@@ -3306,13 +3307,18 @@ refinery.dockhelper:
 		UndeploySounds: cashturn.aud
 	ActorPreviewPlaceBuildingPreview:
 		OverridePalette: placebuilding
+		Animated: false
 	RequiresBuildableArea:
 		AreaTypes: building
 		Adjacent: 4
 	SoundOnDamageTransition:
 		DamagedSounds: kaboom1.aud
 		DestroyedSounds: kaboom22.aud
+	RenderSprites:
+		SuppressBuildingAnimations: true
+		AnimatedBuildingSequences: construction
 	WithSpriteBody:
+		UseIdleFrameForRendering: true
 	FireWarheadsOnDeathCA:
 		Type: Footprint
 		Weapon: BuildingExplode
@@ -3372,6 +3378,7 @@ refinery.dockhelper:
 	InstantlyRepairable:
 	AcceptsDeliveredCash:
 	WithMakeAnimation:
+		Sequence: construction
 		Condition: build-incomplete
 	CaptureManager:
 		BeingCapturedCondition: being-captured
@@ -3501,6 +3508,7 @@ BuildBoost.Dummy:
 	Cargo:
 		PassengerConditions:
 			amcv.nukular: NukularCargo
+			amcv.nod.nukular: NukularCargo
 			mcv.nukular: NukularCargo
 			smcv.nukular: NukularCargo
 

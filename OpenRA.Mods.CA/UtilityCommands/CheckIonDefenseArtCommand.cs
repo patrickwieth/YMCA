@@ -25,7 +25,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				throw new InvalidDataException("Incorrect Ion Defense image/body binding.");
 			foreach (var item in new[] { ("heavy-blaster-base.png", 1), ("heavy-blaster-turret32.png", 32) })
 			{
-				var filename = "bits/gdi/buildings/color-matched/" + item.Item1;
+				var filename = "bits/gdi/buildings/" + item.Item1;
 				using var stream = mod.DefaultFileSystem.Open(filename);
 				var frames = FrameLoader.GetFrames(stream, mod.SpriteLoaders, filename, out _);
 				if (frames.Length != item.Item2 || frames.Any(f => f.Size.Width != 160 || f.Size.Height != 160 ||
@@ -45,8 +45,11 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var turret = actor.TraitInfo<TurretedInfo>();
 			var arm = actor.TraitInfo<ArmamentInfo>();
 			var offset = body.LocalToWorld(turret.Offset);
-			const double Pixels = 64.0 / 1448;
-			var pivotX = offset.X * Pixels + 81.06066021392667 - 80 - 1;
+			var grid = mod.Manifest.Get<MapGrid>();
+			if (body.UseClassicPerspectiveFudge) throw new InvalidDataException("Ion Defense requires actual-grid projection.");
+			var PixelsX = (double)grid.TileSize.Width / grid.TileScale;
+			var Pixels = (double)grid.TileSize.Height / grid.TileScale;
+			var pivotX = offset.X * PixelsX + 81.06066021392667 - 80 - 1;
 			var pivotY = (offset.Y - offset.Z) * Pixels + 89.57754749356471 - 80 - 10;
 			// Plinth polygon centroid projected at the unchanged .7 model-unit pivot height.
 			var centerDx = pivotX - (87.10539547314792 - 87);
@@ -64,7 +67,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				var y = -3.605 * Math.Cos(angle);
 				var expectedX = pivotX + 20 * (x + y) / Math.Sqrt(2);
 				var expectedY = pivotY + 20 * (x - y) / Math.Sqrt(8) - 20 * 1.7225 * Math.Sqrt(3) / 2;
-				var dx = muzzle.X * Pixels - expectedX;
+				var dx = muzzle.X * PixelsX - expectedX;
 				var dy = (muzzle.Y - muzzle.Z) * Pixels - expectedY;
 				maxError = Math.Max(maxError, Math.Sqrt(dx * dx + dy * dy));
 			}

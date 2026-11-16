@@ -20,8 +20,8 @@ class BuildingTestMapFactionTests(unittest.TestCase):
         source = ROOT / 'mods/ca/maps/testmap1.oramap'
         original = source.read_bytes()
         before = actors(source)
-        expected = {23: 'fact.soviet', 24: 'powr.soviet', 25: 'apwr.soviet',
-                    27: 'sentry.soviet', 30: 'weap.soviet', 31: 'dome.soviet', 32: 'hpad.soviet', 35: 'fix.soviet'}
+        expected = {10: 'weap.nod', 23: 'fact.soviet', 24: 'powr.soviet', 25: 'apwr.soviet',
+                    27: 'sentry.soviet', 30: 'weap.soviet', 31: 'dome.soviet', 32: 'hpad.soviet', 35: 'fix.soviet', 37: 'flak.soviet.sprite'}
         with tempfile.TemporaryDirectory() as temp:
             destination = Path(temp) / 'test.oramap'
             subprocess.run(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass',
@@ -35,6 +35,19 @@ class BuildingTestMapFactionTests(unittest.TestCase):
                 self.assertIn('Owner: Multi0', body)
                 return tuple(map(int, re.search(r'Location: (-?\d+),(-?\d+)', body).groups()))
             self.assertNotRegex(text, r'(?m)^\tFTUR:')
+            self.assertNotIn('Actor9', after)
+            self.assertNotIn('sentry.soviet.voxel', text)
+            self.assertEqual(text.count(': aa.practice'), 5)
+            self.assertIn('\tSovietSamDisplay: sam\n\t\tOwner: Multi0\n\t\tLocation: 154,-62', text.replace('\r\n', '\n'))
+            self.assertIn('AirTargetSovietSamDisplay: aa.practice', text)
+            self.assertIn('Inherits: TRAN', text)
+            self.assertIn('IdleBehavior: None', text)
+            self.assertIn('TakeOffOnCreation: true', text)
+            for slot in (14, 37, 59, 80):
+                self.assertIn(f'AirTargetActor{slot}: aa.practice\n\t\tOwner: Multi0', text.replace('\r\n', '\n'))
+            self.assertEqual(after['Actor71'], 'weap.td')
+            self.assertEqual(location(37), (148, -56))
+            self.assertIn('\tFLAK.SOVIET.SPRITE:\n\t\tArmament:\n\t\t\tWeapon: SOVIET-CLUSTER-AA.Test', text.replace('\r\n', '\n'))
             tx, ty = location(27)
             hx, hy = location(32)
             self.assertEqual((tx, ty), (140, -64))

@@ -68,14 +68,15 @@ class SentryV13GameTests(unittest.TestCase):
  def test_native_sequences_and_legacy_states(self):
   old=traits(resolved('--resolved-sequences','ftur.soviet'))
   new=traits(resolved('--resolved-sequences','ftur.soviet.v13'))
-  self.assertEqual(old.keys(),new.keys())
+  self.assertEqual(old.keys() | {'muzzle-mg'},new.keys())
+  self.assertIn('Filename: gunfire2.shp',new['muzzle-mg'])
   for name in old:
    if name in ('turret','damaged-turret'):
     for field in ('Filename: '+BINDING['sheet'],'Offset: -4,-24','Facings: 32','Frames: '+', '.join(map(str,range(32))),'Scale: 1'):
      self.assertIn(field,new[name])
    elif name in ('idle','damaged-idle'):
     for field in ('Filename: '+BINDING['base_sheet'],'Scale: 1','Offset: 0,-3'):self.assertIn(field,new[name])
-   else:self.assertEqual(old[name],new[name])
+   else:self.assertEqual(old[name].rstrip(),new[name].rstrip())
 
  def test_independent_sentry_does_not_override_flame_tower(self):
   source=ROOT/'mods/ca/maps/testmap1.oramap';before=source.read_bytes()
@@ -98,9 +99,22 @@ class SentryV13GameTests(unittest.TestCase):
    self.assertIn('QuantizedFacings: 32',actual['BodyOrientation'])
    self.assertIn('Image: sovietbib1x1',actual['WithIdleOverlay@SOVIETBIB'])
    self.assertIn('DecorationHeight: 49',actual['IsometricSelectable'])
-   self.assertEqual(default.keys()-{'Buildable'},actual.keys())
-   allowed={'RenderSprites':('Image',),'Tooltip':('Name',),'WithIdleOverlay@SOVIETBIB':('Image',),'Turreted':('InitialFacing','TurnSpeed'),'BodyOrientation':('QuantizedFacings',),'IsometricSelectable':('DecorationBounds','DecorationHeight')}
+   gatling={f'SharedBarrelArmament@GAT{i}G' for i in range(4)}
+   self.assertEqual((default.keys()-{'Buildable','Armament'}) | {'WithMuzzleOverlay','GrantConditionOnAttackCA@GROUND','SharedBarrelSequence'} | gatling,actual.keys())
+   self.assertIn('Weapon: FireballLauncher',default['Armament'])
+   for i in range(4):
+    arm=actual[f'SharedBarrelArmament@GAT{i}G']
+    self.assertIn(f'Weapon: ChinaMGatt.{i}G',arm)
+    self.assertIn('MuzzleSequence: muzzle-mg',arm)
+    self.assertIn('LocalOffset: 547,86,655, 547,-86,655',arm)
+   china=traits(resolved('--resolved-rules','chgatling'))
+   self.assertEqual(actual['GrantConditionOnAttackCA@GROUND'].strip(),china['GrantConditionOnAttackCA@GROUND'].strip())
+   self.assertIn('Armaments: secondary',actual['AttackTurreted'])
+   allowed={'RenderSprites':('Image',),'Tooltip':('Name',),'WithIdleOverlay@SOVIETBIB':('Image',),'Turreted':('InitialFacing','TurnSpeed'),'AttackTurreted':('Armaments',),'BodyOrientation':('QuantizedFacings','CameraPitch','UseClassicPerspectiveFudge'),'IsometricSelectable':('DecorationBounds','DecorationHeight')}
    for name in actual:
+    if name in gatling or name in ('GrantConditionOnAttackCA@GROUND','SharedBarrelSequence'):continue
+    if name == 'WithMuzzleOverlay':
+     self.assertIn('RequiresCondition: !build-incomplete',actual[name]);continue
     def clean(text):
      for key in allowed.get(name,()):text=re.sub(r'(?m)^[\t ]+'+key+r':[^\n]*\n?','',text)
      return text.strip()

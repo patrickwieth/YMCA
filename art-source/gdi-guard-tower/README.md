@@ -1,8 +1,9 @@
 # Supplied GDI Guard Tower — native integration
 
 Update: a separate **1x1 gdibib1x1** decorative overlay is now installed (128x64,
-Scale1). No occupancy or gameplay changes. The source body is color-matched by the
-shared GDI palette layer; its original PNG below remains untouched.
+Scale1). No occupancy or gameplay changes. The original PNG below is now the
+canonical direct runtime image. The former color-override layer is retired so
+replacing this supplied file cannot be hidden by an older derivative.
 
 Original: `mods/ca/bits/gdi/buildings/guard tower.png`, **128x150 RGBA**.
 SHA256: `550479cc38b06c5e64cc1e9e8fbc1346b3cb81019ac5f6904db729a6489e7d76`.

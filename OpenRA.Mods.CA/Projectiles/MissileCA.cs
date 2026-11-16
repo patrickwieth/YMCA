@@ -112,6 +112,9 @@ namespace OpenRA.Mods.CA.Projectiles
 		[Desc("Activate homing mechanism after this many ticks.")]
 		public readonly int HomingActivationDelay = 0;
 
+		[Desc("Orient the first rendered frame along the launch velocity instead of the default north facing.")]
+		public readonly bool InitializeFacingFromVelocity = false;
+
 		[Desc("Image that contains the trail animation.")]
 		public readonly string TrailImage = null;
 
@@ -281,6 +284,9 @@ namespace OpenRA.Mods.CA.Projectiles
 			velocity = new WVec(0, -speed, 0)
 				.Rotate(new WRot(WAngle.FromFacing(vFacing), WAngle.Zero, WAngle.Zero))
 				.Rotate(new WRot(WAngle.Zero, WAngle.Zero, WAngle.FromFacing(hFacing)));
+
+			if (info.InitializeFacingFromVelocity)
+				renderFacing = new WVec(velocity.X, velocity.Y - velocity.Z, 0).Yaw;
 
 			if (!string.IsNullOrEmpty(info.Image))
 			{

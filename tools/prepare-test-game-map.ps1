@@ -72,6 +72,14 @@ try {
         throw "No Allied Turret slot or existing Prism Tower found in the test map."
     }
 
+    # Nod's former Legion/shared-factory display slot, not the GDI block.
+    $nodFactoryPattern = '(?m)^(\tActor10:[ \t]*)(weap\.td|weap\.nod)(\r?\n(?:\t\t[^\r\n]*(?:\r?\n|\z))*)'
+    $nodFactory = [regex]::Match($actorText, $nodFactoryPattern)
+    if (-not $nodFactory.Success -or $nodFactory.Groups[3].Value -notmatch '(?m)^\t\tLocation:[ \t]*78,6\r?$') {
+        throw "Nod factory display slot changed; refusing ambiguous replacement."
+    }
+    $actorText = [regex]::Replace($actorText, $nodFactoryPattern, '${1}weap.nod${3}')
+
     # The Soviet display block in this legacy map still uses Allied actor IDs.
     # Replace only these exact slots, never all instances of the shared names.
     $sovietSlots = @(
@@ -84,7 +92,9 @@ try {
         @('Actor30', 'weap', 'weap.soviet', '132,-48'),
         @('Actor31', 'dome', 'dome.soviet', '138,-54'),
         @('Actor32', 'hpad', 'hpad.soviet', '144,-60'),
-        @('Actor35', 'fix', 'fix.soviet', '136,-44')
+        @('Actor35', 'fix', 'fix.soviet', '136,-44'),
+        # Display the sprite replacement only in the disposable map.
+        @('Actor37', 'sam', 'flak.soviet.sprite', '148,-56')
     )
     foreach ($slot in $sovietSlots) {
         $pattern = '(?m)^(\t' + [regex]::Escape($slot[0]) + ':[ \t]*)(' +
@@ -102,15 +112,7 @@ try {
     Write-Host "Test map: assigned $($sovietSlots.Count) Soviet display slots, including the Sentry above the helipad."
 
     # Side-by-side real voxel comparison, same screen row, two isometric cells right.
-    if ($actorText -match '(?m)^\tActorSentryVoxel:') {
-        throw "Unexpected existing Sentry voxel slot."
-    }
-    $actorText = $actorText.TrimEnd() + $newline + (@(
-        "`tActorSentryVoxel: sentry.soviet.voxel"
-        "`t`tOwner: Multi0"
-        "`t`tLocation: 142,-66"
-    ) -join $newline) + $newline + $newline
-    Write-Host "Test map: added independent voxel Sentry beside the sprite Sentry."
+    # Only the approved sprite Sentry is displayed, never the voxel study.
 
     # Remove only resource-storage silos, never missile/nuclear silo actors.
     $siloPattern = '(?mi)^\t[^\t\r\n:]+:[ \t]*(?:silo|silo\.td|silo\.scrin|silo\.soviet)[ \t]*\r?\n(?:\t\t[^\r\n]*(?:\r?\n|\z))*'
@@ -118,6 +120,20 @@ try {
     $actorText = [regex]::Replace($actorText, $siloPattern, '')
     $yaml = $yaml.Remove($actors.Index, $actors.Length).Insert($actors.Index, $actors.Groups[1].Value + $actorText)
     Write-Host "Test map: removed $siloCount resource silo(s); missile/nuclear silos unchanged."
+
+    # Ground-force-fire is for this disposable firing test only; stock SAM and
+    # the global anti-air flak actor retain their normal weapons.
+    $rulesPattern = '(?m)^Rules:(\r?\n)'
+    if ([regex]::Matches($yaml, $rulesPattern).Count -ne 1) {
+        throw "Expected exactly one map Rules block."
+    }
+    $flakRule = 'Rules:' + $newline + (@(
+        "`tFLAK.SOVIET.SPRITE:"
+        "`t`tArmament:"
+        "`t`t`tWeapon: SOVIET-CLUSTER-AA.Test"
+    ) -join $newline) + $newline
+    $yaml = [regex]::Replace($yaml, $rulesPattern, $flakRule)
+    Write-Host "Test map: Soviet sprite flak replaces the SAM display slot; Ctrl+click ground tests firing."
 
     $entry.Delete()
     $entry = $archive.CreateEntry('map.yaml', [System.IO.Compression.CompressionLevel]::Optimal)
@@ -132,3 +148,9 @@ try {
 finally {
     $archive.Dispose()
 }
+
+& python "$PSScriptRoot/prepare_air_defense_targets.py" $DestinationMap
+if ($LASTEXITCODE -ne 0) { throw "Air-defense test target preparation failed." }
+
+& python "$PSScriptRoot/prepare_extra_faction_buildings.py" $DestinationMap
+if ($LASTEXITCODE -ne 0) { throw "China/Scrin building test preparation failed." }

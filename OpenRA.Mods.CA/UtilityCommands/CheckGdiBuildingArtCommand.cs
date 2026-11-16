@@ -26,6 +26,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			{
 				(Actor: "afac", Image: "afac", File: "conyard.png", Bib: "4x4", X: 3, Y: 4),
 				(Actor: "nuke", Image: "nuke", File: "power plant.png", Bib: "3x3", X: 2, Y: 3),
+				(Actor: "nuk2", Image: "nuk2", File: "advanced power plant.png", Bib: "3x3", X: 2, Y: 3),
 				(Actor: "pyle", Image: "pyle", File: "barracks.png", Bib: "3x3", X: 2, Y: 3),
 				(Actor: "hq", Image: "hq", File: "radar.png", Bib: "3x3", X: 2, Y: 3),
 				(Actor: "rep", Image: "rep", File: "service depot.png", Bib: "3x3", X: 3, Y: 3),
@@ -39,6 +40,14 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				(Actor: "syrd.gdi", Image: "gsyrd", File: "naval yard.png", Bib: "", X: 3, Y: 3)
 			})
 			{
+				if (entry.Actor == "nuke" || entry.Actor == "nuk2")
+				{
+					var path = "bits/gdi/buildings/" + entry.File;
+					using var stream = utility.ModData.DefaultFileSystem.Open(path);
+					var frames = OpenRA.Graphics.FrameLoader.GetFrames(stream, utility.ModData.SpriteLoaders, path, out _);
+					if (frames.Length != 1 || frames[0].Size.Width != 256 || frames[0].Size.Height != 256)
+						throw new InvalidDataException(path + ": expected one native 256x256 frame.");
+				}
 				var actor = rules.Actors[entry.Actor];
 				var image = entry.Image + ".gdi.png";
 				if (actor.TraitInfo<RenderSpritesInfo>().Image != image ||
@@ -76,9 +85,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					var bodyState = state.Key.StartsWith("damaged-", StringComparison.Ordinal) ? state.Key.Substring(8) : state.Key;
 					if (!new[] { "idle", "dead", "build", "pdox", "active", "resources", "place" }.Contains(bodyState))
 						continue;
-					var reference = entry.File == "weapons factory.png" || entry.File == "communication center.png";
 					var expected = state.Key.Contains("resources", StringComparison.Ordinal) ? "bits/misc/overlays/blank.png" :
-						"bits/gdi/buildings/" + (reference ? "" : "color-matched/") + entry.File;
+						"bits/gdi/buildings/" + entry.File;
 					if (filename.Value != expected || fields["Start"].Value != "0" || fields["Length"].Value != "1" ||
 						fields["Scale"].Value != "1" || !utility.ModData.DefaultFileSystem.Exists("ca|" + expected))
 						throw new InvalidDataException(image + "." + state.Key + ": invalid PNG binding.");
@@ -88,7 +96,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			if (rules.Actors["weap.td"].HasTraitInfo<WithProductionDoorOverlayCAInfo>())
 				throw new InvalidDataException("Supplied factory must not retain the legacy SHP door overlay.");
 
-			foreach (var name in new[] { "nuke.nod", "afac.nod", "hq.nod", "rep.nod", "hpad.td.nod", "proc.td.nod", "fact.colorpicker" })
+			foreach (var name in new[] { "nuke.nod", "nuk2.nod", "afac.nod", "hq.nod", "rep.nod", "hpad.td.nod", "proc.td.nod", "fact.colorpicker" })
 			{
 				if (rules.Actors[name].TraitInfos<WithIdleOverlayInfo>().Any(i => i.Image?.StartsWith("gdibib", StringComparison.Ordinal) == true))
 					throw new InvalidDataException(name + ": GDI foundation leaked into unrelated actor.");
@@ -123,7 +131,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					fields["Start"].Value != "0" || fields["Length"].Value != "1")
 					throw new InvalidDataException("Research Core state: " + state);
 			}
-			Console.WriteLine("GDI building art and Research Core checks passed (13 buildings plus Nukular variant; isolated bibs; checkpoint restoration).");
+			Console.WriteLine("GDI building art and Research Core checks passed (14 buildings plus Nukular variant; isolated bibs; checkpoint restoration).");
 		}
 	}
 }

@@ -1,3 +1,28 @@
+# Approved Allied flak pass15: original fixed pedestal and independent turret.
+AGUN:
+	-WithBuildingBib:
+	-WithEmbeddedTurretSpriteBody:
+	RenderSprites:
+		Image: agun.native
+	BodyOrientation:
+		CameraPitch: 85
+		UseClassicPerspectiveFudge: false
+	Turreted:
+		Offset: 0,0,656
+	WithSpriteBody:
+		Sequence: base
+		PauseOnCondition: disabled || empdisable || being-warped
+	WithSpriteTurret:
+		Sequence: turret
+		RequiresCondition: !build-incomplete
+		Recoils: false
+	# Four physical mouths, clockwise cycle; one shell per shot, unchanged cadence.
+	Armament:
+		LocalOffset: 529,98,1500, 529,-98,1500, 622,-98,1287, 622,98,1287
+	IsometricSelectable:
+		DecorationBounds: 1448,1448,0,0
+		DecorationHeight: 103
+
 Grand_Cannon:
 	Inherits: ^Defense
 	Inherits: ^HighResShadow
@@ -49,16 +74,19 @@ Grand_Cannon:
 	FireWarheadsOnDeathCA:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
-	WithBuildingBib:
-		HasMinibib: true
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib2x2
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
 	DetectCloaked:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 PRIS:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^Defense
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetGround
+	Inherits@GRID1: ^Defense
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDown
+	Inherits@GRID3: ^AutoTargetGround
 	Inherits@visuals: ^Allied1x1Visuals
 	RenderSprites:
 		Image: pris.allies
@@ -185,9 +213,9 @@ PRIS:
 		FullSequence: pip-red
 
 GAP:
-	Inherits: ^ScienceBuilding
-	Inherits: ^2x2Building
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^2x2Building
+	Inherits@GRID3: ^DisableOnLowPowerOrPowerDownOrForceDisable
 	Inherits@visuals: ^Allied2x2Visuals
 	Building:
 		LocalCenterOffset: 0,0,0
@@ -232,10 +260,10 @@ GAP:
 		EmptyWeapon: SmallBuildingExplode
 
 PROC:
-	Inherits: ^Building
-	Inherits: ^BotIncome
-	Inherits: ^3x3Building+Bib
-	Inherits: ^Refinery
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^BotIncome
+	Inherits@GRID3: ^3x3Building+Bib
+	Inherits@GRID4: ^Refinery
 	RenderSprites:
 		Image: proc.allies
 	Inherits@shadow: ^AlliedBuildingShadow
@@ -326,11 +354,11 @@ PROC:
 
 PDOX:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^SuperWeapon
-	Inherits: ^AlliesSuperweaponSmall
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID3: ^2x2Building+Bib
+	Inherits@GRID4: ^SuperWeapon
+	Inherits@GRID5: ^AlliesSuperweaponSmall
 	RenderSprites:
 		Image: pdox.allies
 	Inherits@visuals: ^Allied2x2DriveableBib
@@ -385,12 +413,12 @@ PDOX:
 
 DOME:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^Building
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier2Tech
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^RadarStation
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^TechLevelBuilding
+	Inherits@GRID3: ^Tier2Tech
+	Inherits@GRID4: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID5: ^2x2Building+Bib
+	Inherits@GRID6: ^RadarStation
 	Inherits@visuals: ^Allied2x2DriveableBib
 	-WithBuildingBib:
 	RenderSprites:
@@ -505,11 +533,11 @@ WEAP:
 
 FACT:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^Building
-	Inherits: ^3x3Building+Bib
-	Inherits: ^ConcreteArmor
-	Inherits: ^StructureProduction
-	Inherits: ^BotFallbackInsurance
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^3x3Building+Bib
+	Inherits@GRID3: ^ConcreteArmor
+	Inherits@GRID4: ^StructureProduction
+	Inherits@GRID5: ^BotFallbackInsurance
 	-WithBuildingBib:
 	WithIdleOverlay@ALLIEDBIB:
 		Image: alliedbib4x4
@@ -618,8 +646,8 @@ FACT:
 		ActorTypes: light_infantry,light_infantry,light_infantry,light_infantry,engineer
 
 FACT.Nukular:
-	Inherits: FACT
-	Inherits: ^NukularConyard
+	Inherits@GRID1: FACT
+	Inherits@GRID2: ^NukularConyard
 	RenderSprites:
 		Image: FACT
 	Transforms:
@@ -667,17 +695,17 @@ SILO:
 
 HPAD:
 	Inherits@shadow: ^AlliedBuildingShadow
-	Inherits: ^Building
-	Inherits: ^2x2Building+Bib
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^2x2Building+Bib
 	Inherits@visuals: ^Allied2x2DriveableBib
 	-WithBuildingBib:
 	RenderSprites:
 		Image: hpad.allies
 	IsometricSelectable:
 		DecorationHeight: 118
-	Inherits: ^PrimaryBuilding
-	Inherits: ^AircraftProduction
-	Inherits: ^RepairsAircraftWithRepairBay
+	Inherits@GRID3: ^PrimaryBuilding
+	Inherits@GRID4: ^AircraftProduction
+	Inherits@GRID5: ^RepairsAircraftWithRepairBay
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 768,-512,0, 768,512,0, -281,-512,0, -630,512,0
@@ -823,7 +851,7 @@ APWR:
 	Valued:
 		Cost: 500
 	Tooltip:
-		Name: Nuclear Powerplant
+		Name: Fusion Power Plant
 	ProvidesPrerequisite:
 		Prerequisite: anypower
 	Health:
@@ -843,8 +871,8 @@ APWR:
 		Types: SpyInfiltrate, PowerInfiltrate
 
 FIX:
-	Inherits: ^Building
-	Inherits: ^3x3Shape
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^3x3Shape
 	Inherits@visuals: ^Allied3x3Visuals
 	Inherits@shadow: ^AlliedBuildingShadow
 	RenderSprites:

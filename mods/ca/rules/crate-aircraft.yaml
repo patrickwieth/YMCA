@@ -1,0 +1,40 @@
+# Dedicated visual variants: preserve C17 flight/cargo/drop rules and leave other C17 missions alone.
+C17.Crate:
+	Inherits@DELIVERY: C17
+	Inherits@MODEL: ^TSRenderVoxel
+	-WithFacingSpriteBody:
+	-WithShadow:
+	RenderSprites:
+		Image: c130
+	RenderVoxels:
+		Image: c130
+		Scale: 1.3
+	Contrail@1:
+		Offset: -432,560,0
+	Contrail@2:
+		Offset: -432,-560,0
+	-Contrail@3:
+	-Contrail@4:
+	SpawnActorOnDeath:
+		Actor: c17.crate.husk
+	SpawnActorOnDeath@EMP:
+		Actor: c17.crate.husk.emp
+
+C17.Crate.No_Color:
+	Inherits: C17.Crate
+	-Targetable@AIRBORNE:
+
+C17.Crate.Husk:
+	Inherits@HUSK: C17.Husk
+	Inherits@MODEL: ^TSRenderVoxel
+	-WithFacingSpriteBody:
+	-WithShadow:
+	RenderSprites:
+		Image: c130
+	RenderVoxels:
+		Image: c130
+		Scale: 1.3
+
+C17.Crate.Husk.EMP:
+	Inherits: C17.Crate.Husk
+	Inherits@EMP: ^EmpVisualEffect

@@ -25,7 +25,7 @@ class GuardTowerArtTests(unittest.TestCase):
   old=traits(resolved('--resolved-sequences','gtwr'));new=traits(resolved('--resolved-sequences','gtwr.gdi.png'))
   for key in ('icon','muzzle'):self.assertEqual(old[key].strip(),new[key].strip())
   for key in ('idle','damaged-idle','dead'):
-   for field in ('Filename: bits/gdi/buildings/color-matched/guard tower.png','Start: 0','Scale: 1','Anchor: Center','Offset: -1,-56'):self.assertIn(field,new[key])
+   for field in ('Filename: bits/gdi/buildings/guard tower.png','Start: 0','Scale: 1','Anchor: Center','Offset: -1,-56'):self.assertIn(field,new[key])
   with zipfile.ZipFile(ROOT/'mods/ca/maps/testmap1.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig')
   self.assertRegex(text,r'Actor75: gtwr\r?\n\t\tOwner: Multi0\r?\n\t\tLocation: 141,-15')
 

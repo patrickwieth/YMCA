@@ -37,20 +37,22 @@ The existing test-map Actor84 at `169,-35` uses it. Live visual/firing review pe
 
 ## GDI
 
-**Color harmonization is installed:** Weapons Factory and Communication Center
-remain unchanged as yellow references. Other supplied GDI building images, Guard
-Tower and Ion Defense use color-only derivatives in `bits/gdi/buildings/color-matched/`.
-`sequences/gdi-building-colors.yaml` overrides Filename only; original PNGs, alpha,
-metadata, placements and all gameplay values are preserved.
-[Comparison, source hashes and tests](../../art-source/gdi-color-match/README.md).
+**The root PNG folder is authoritative:** supplied buildings bind directly from
+`bits/gdi/buildings/`. The color-override layer has been retired: it incorrectly
+hid the user's replacement power-plant PNG. Color matching now creates previews
+only and cannot redirect runtime filenames. Approved Ion Defense pixels were
+promoted byte-identically into this same root folder. Weapons Factory and
+Communication Center remain unchanged.
+[Policy, comparison and tests](../../art-source/gdi-color-match/README.md).
 
-`rules/gdi/building-art.yaml` binds thirteen buildings to independent sequences in
+`rules/gdi/building-art.yaml` binds fourteen buildings to independent sequences in
 `sequences/gdi-building-art.yaml`. The original PNG bytes are unchanged, Scale 1.
 
 | Actor | PNG under bits/gdi/buildings | Bib |
 | --- | --- | --- |
 | AFAC (also AFAC.Nukular) | conyard.png | 4x4 |
 | NUKE | power plant.png | 3x3 |
+| NUK2 | advanced power plant.png | 3x3 |
 | PYLE | barracks.png | 3x3 |
 | HQ | radar.png | 3x3 |
 | REP | service depot.png | 3x3 |
@@ -74,7 +76,8 @@ frames follow the native artwork and remain on the bib. Existing bib offsets and
 gameplay pivots stay fixed; only the airfield receives a longer decorative bib.
 No additional cells become occupied or pathable.
 The supplied 1x1/2x2 bibs are registered for future use.
-NUK2 retains its existing artwork (no dedicated new PNG).
+NUKE and NUK2 now use the supplied 256x256 power-plant PNGs directly, with centered
+visual envelopes and unchanged gameplay. See [refresh validation](../../art-source/gdi-power-plant-refresh/README.md).
 
 The new factory (384x384) and advanced communications center (256x256) are rendered
 at Scale 1, now using bottom-anchor offsets `-27,-34` and `-29,-52` respectively.
@@ -164,7 +167,8 @@ Current reviewed values (native source pixels; height is decoration-only):
 | Actor | Body offset X,Y | Visual ground width/depth | Selection height |
 | --- | --- | --- | ---: |
 | AFAC / AFAC.Nukular | 1,-39 | 320x160 | 143 |
-| NUKE | -14,-36 | 272x136 | 190 |
+| NUKE | -2,5 | 256x128 | 136 |
+| NUK2 | 12,-3 | 272x136 | 140 |
 | PYLE | 9,-56 | 224x112 | 109 |
 | HQ | -49,-45 | 224x112 | 168 |
 | REP | 6,-12 | 288x144 | 134 |
@@ -205,7 +209,7 @@ registrations. These are reproducible diagnostics, not live-game screenshots.
 The exporter accepts optional actor names, keeping its original Allied defaults:
 
 ```text
-dotnet engine/bin/OpenRA.Utility.dll mods/ca --export-allied-selection-geometry AFAC NUKE PYLE HQ REP HPAD.TD PROC.TD AFLD.GDI GTEK WEAP.TD EYE
+dotnet engine/bin/OpenRA.Utility.dll mods/ca --export-allied-selection-geometry AFAC NUKE NUK2 PYLE HQ REP HPAD.TD PROC.TD AFLD.GDI GTEK WEAP.TD EYE
 python tools/calibrate_gdi_building_alignment.py docs/modular/gdi-building-alignment-geometry.json --preview docs/modular/gdi-building-alignment-preview.png
 python -B -m unittest discover -s tools -p 'test_gdi_building_alignment.py'
 ```

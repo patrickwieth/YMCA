@@ -1,9 +1,43 @@
 # Visual-only integration: gameplay footprints, docking and exits stay unchanged.
 
+# User-approved AA pass11 on CRAM only; Allied AGUN remains unchanged.
+CRAM:
+	# AGUN now already supplies the separate body/turret and removes the legacy bib.
+	RenderSprites:
+		Image: cram.native
+	BodyOrientation:
+		CameraPitch: 85
+		UseClassicPerspectiveFudge: false
+	Turreted:
+		Offset: 0,0,862
+	WithSpriteBody:
+		Sequence: base
+		PauseOnCondition: disabled || empdisable || being-warped
+	WithSpriteTurret:
+		Sequence: turret
+		RequiresCondition: !build-incomplete
+		Recoils: false
+	# Physical muzzle registration only; Gatt.0..3 and their conditions unchanged.
+	Armament@GAT0:
+		LocalOffset: 652,0,750
+	Armament@GAT1:
+		LocalOffset: 652,0,750
+	Armament@GAT2:
+		LocalOffset: 652,0,750
+	Armament@GAT3:
+		LocalOffset: 652,0,750
+	IsometricSelectable:
+		DecorationBounds: 1448, 1448, 0, 0
+		DecorationHeight: 84
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
 # Supplied native guard tower; no rotating building art was supplied.
 GTWR:
 	-WithBuildingBib:
-	-WithMakeAnimation:
 	RenderSprites:
 		Image: gtwr.gdi.png
 	Turreted:
@@ -28,10 +62,11 @@ Ion_Defense:
 	# Visual attachment coordinates from the saved model; weapon stats unchanged.
 	BodyOrientation:
 		CameraPitch: 85
+		UseClassicPerspectiveFudge: false
 	Turreted:
 		Offset: 0,0,226
 	Armament:
-		LocalOffset: 1631,0,675
+		LocalOffset: 816,0,675
 	WithSpriteTurret:
 		Sequence: turret
 		Recoils: false
@@ -83,8 +118,21 @@ NUKE:
 	RenderSprites:
 		Image: nuke.gdi.png
 	IsometricSelectable:
-		DecorationBounds: 3077, 3077, -125, -498
-		DecorationHeight: 190
+		DecorationBounds: 2896, 2896, -80, 0
+		DecorationHeight: 136
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib3x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
+NUK2:
+	-WithBuildingBib:
+	RenderSprites:
+		Image: nuk2.gdi.png
+	IsometricSelectable:
+		DecorationBounds: 3077, 3077, 91, 0
+		DecorationHeight: 140
 	WithIdleOverlay@GDIBIB:
 		Image: gdibib3x3
 		Sequence: idle
@@ -225,6 +273,12 @@ fact.colorpicker:
 NUKE.Nod:
 	IsometricSelectable:
 		-DecorationBounds:
+	-WithIdleOverlay@GDIBIB:
+
+NUK2.Nod:
+	IsometricSelectable:
+		-DecorationBounds:
+		DecorationHeight: 120
 	-WithIdleOverlay@GDIBIB:
 
 AFAC.Nod:

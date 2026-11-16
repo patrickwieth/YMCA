@@ -66,6 +66,9 @@ if %ERRORLEVEL% NEQ 0 goto mapcopyfailed
 "%DOTNET_EXE%" "%TEMPLATE_DIR%\engine\bin\OpenRA.Utility.dll" "%MOD_ID%" --prepare-building-test-water "%MAP_PACKAGE_PATH%"
 if %ERRORLEVEL% NEQ 0 goto mapcopyfailed
 
+"%DOTNET_EXE%" "%TEMPLATE_DIR%\engine\bin\OpenRA.Utility.dll" "%MOD_ID%" --check-extra-building-test "%MAP_PACKAGE_PATH%"
+if %ERRORLEVEL% NEQ 0 goto mapcopyfailed
+
 if /I "%~1"=="--check-only" (
     del /f /q "%MAP_PACKAGE_PATH%" >nul 2>&1
     echo Build, selection traits and test map preparation passed. Game was not started.

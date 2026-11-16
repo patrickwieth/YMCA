@@ -1,11 +1,13 @@
-"""Native Soviet PNG placement from visible rear ground contacts; decoration only.
+"""Native Soviet PNG placement from reviewed ground contacts; decoration only.
 Helipad and animated turret studies are intentionally excluded (no supplied helipad PNG).
 """
 from pathlib import Path
-import argparse,json,re,copy
+import argparse,json,re,copy,math
+import numpy as np
+from PIL import Image
 from calibrate_gdi_building_alignment import ROOT,propose,report,signed_round,world_offset
 GROUND_CONTACTS={
- 'fact.soviet':[(41,198),(362,177)],
+ 'fact.soviet':[(38,189),(55,197),(322,181),(188,254),(122,231)],
  'powr.soviet':[(6,190),(176,161)],
  'apwr.soviet':[(10,175),(432,189)],
  'tpwr':[(7,183),(248,183)],
@@ -27,7 +29,32 @@ GROUND_CONTACTS={
 ACTOR_NAMES={n.lower():n for n in ['FACT.Soviet','POWR.Soviet','APWR.Soviet','TPWR','DOME.Soviet','STEK','BARR',
  'WEAP.Soviet','FIX.Soviet','AFLD','SPEN','IRON','MSLO','INDP','Soviet_Refinery','NKOREA_BUNKER','Cloning_Vats','TSLA']}
 
+def centered_ground(entry):
+ # Center the reviewed ground arrangement, NOT the roof/canvas or two rear bib edges.
+ result=propose(entry,GROUND_CONTACTS,'sovietbib')
+ contacts=result['SourceGroundContacts']+result['FrontContactSamples']
+ us=[x+2*y for x,y in contacts];vs=[-x+2*y for x,y in contacts]
+ center_x=(min(us)+max(us)-min(vs)-max(vs))/4
+ center_y=(min(us)+max(us)+min(vs)+max(vs))/8
+ w,h=result['SourceSize'];ox=signed_round(w/2-center_x);oy=signed_round(h-w/4-center_y)
+ origin_x=ox-w/2;origin_y=oy-h+w/4
+ with Image.open(ROOT/'mods/ca'/entry['File']) as image:ys,xs=np.where(np.array(image.convert('RGBA'))[:,:,3]>=32)
+ nx,ny=result['BibCells'];choices=[]
+ for cx in range(-96,97):
+  xx=xs+.5+origin_x-cx;width=math.ceil((2*float(np.max(abs(xx)))+8)/16)*16
+  lower=max(math.ceil(float(np.max(ys+.5+origin_y+.5*abs(xx)))-width/4+2),math.ceil((-nx*64+width/2-cx)/2),math.ceil((-ny*64+width/2+cx)/2))
+  upper=math.floor(min((nx*64-width/2-cx)/2,(ny*64-width/2+cx)/2))
+  if lower<=upper:
+   cy=max(lower,min(0,upper));choices.append((abs(cx)+abs(cy),width,cx,cy))
+ assert choices,entry['Actor']
+ _,width,cx,cy=min(choices);depth=width//2;rear=cy-depth/2
+ height=math.ceil(float(np.max(rear+.5*abs(xs+.5+origin_x-cx)-(ys+.5+origin_y))))+2
+ tx,ty=entry['TileSize'];scale=entry['TileScale']
+ result.update(Offset=[ox,oy],DecorationBounds=[int(width*scale/tx),int(depth*scale/ty),world_offset(cx,tx,scale),world_offset(cy,ty,scale)],DecorationHeight=height,VisualGroundWidth=width,VisualGroundDepth=depth,GroundRearY=rear,PlacementPolicy='centered-reviewed-ground-envelope',SourceGroundCenter=[center_x,center_y])
+ return result
+
 def propose_soviet(entry):
+ if entry['Actor'] in ('fact.soviet','powr.soviet'):return centered_ground(entry)
  extra=[f'bits/soviet/buildings/missile silo {i}.png' for i in range(1,7)] if entry['Actor']=='mslo' else []
  if entry['Actor']!='tsla':return propose(entry,GROUND_CONTACTS,'sovietbib',extra)
  # Tesla's unchanged coil silhouette is wider than its 1x1 ground base. Keep
@@ -71,6 +98,6 @@ if __name__=='__main__':
  if a.propose or a.emit:
   values=[propose_soviet(e) for e in entries if e['Actor'] in GROUND_CONTACTS]
   if a.emit:emit(values)
-  if a.propose:a.propose.write_text(json.dumps({'policy':'Reviewed native ground contacts; Tesla centered on 1x1 bib with a wider visual selection envelope. Other original bib registrations retained. Scale 1; no PNG edits.', 'entries':values},indent=2)+'\n')
+  if a.propose:a.propose.write_text(json.dumps({'policy':'Reviewed native ground contacts. Conyard and ordinary power plant centered on their original bibs; Tesla centered on1x1; other placements retained. Scale1, no PNG edits.', 'entries':values},indent=2)+'\n')
   for e in values:print(e['Actor'],e['Offset'],e['DecorationBounds'],e['DecorationHeight'])
  if a.preview:report(entries,a.preview,GROUND_CONTACTS,'sovietbib')

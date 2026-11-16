@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common.Graphics;
 using OpenRA.Mods.Common.Traits;
@@ -14,6 +16,9 @@ namespace OpenRA.Mods.CA.Traits.Render
 		[Desc("Height of the top edge above the base selection diamond.")]
 		public readonly int Height = 10;
 
+		[Desc("Fit the visual prism to the unit body without changing mouse/collision bounds.")]
+		public readonly bool FitToBody = true;
+
 		[Desc("If true, the extra (non-health) selection bars are only shown while this actor is selected.")]
 		public readonly bool ExtraBarsRequireSelection = false;
 
@@ -24,6 +29,7 @@ namespace OpenRA.Mods.CA.Traits.Render
 	{
 		readonly Interactable interactable;
 		readonly IsometricSelectionDecorationsForUnitsInfo info;
+		IAutoMouseBounds[] bodyBounds;
 
 		public IsometricSelectionDecorationsForUnits(Actor self, IsometricSelectionDecorationsForUnitsInfo info)
 			: base(info)
@@ -34,12 +40,46 @@ namespace OpenRA.Mods.CA.Traits.Render
 
 		Polygon DecorationBounds(Actor self, WorldRenderer wr)
 		{
-			var rect = interactable.DecorationBounds(self, wr);
+			// ScreenMap may still hold a pending bounds update after actor disposal.
+			// Never query traits or body providers on that deferred render path.
+			if (self.Disposed)
+				return Polygon.Empty;
+
+			var body = Rectangle.Empty;
+			if (info.FitToBody)
+			{
+				// Lazy initialization is after trait creation and preserves the base class's
+				// INotifyCreated implementation. Do not enumerate the trait dictionary per frame.
+				bodyBounds ??= self.TraitsImplementing<IAutoMouseBounds>().ToArray();
+				foreach (var provider in bodyBounds)
+				{
+					body = provider.AutoMouseoverBounds(self, wr);
+					if (!body.IsEmpty)
+						break;
+				}
+			}
+
+			return ProjectBounds(interactable.DecorationBounds(self, wr), body, info.Height);
+		}
+
+		/// <summary>Fit a screen-space visual prism without modifying interaction or collision bounds.</summary>
+		public static Polygon ProjectBounds(Rectangle rect, Rectangle body, int height)
+		{
+			if (!body.IsEmpty)
+			{
+				var center = new int2(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
+				var radius = Math.Max(Math.Abs(body.Left - center.X), Math.Abs(body.Right - center.X)) + 2;
+				var width = Math.Max(rect.Width, 2 * radius);
+				var depth = Math.Max(2, width / 2);
+				center = new int2(center.X, Math.Max(center.Y, body.Bottom - depth / 2 + radius / 2));
+				rect = new Rectangle(center.X - width / 2, center.Y - depth / 2, width, depth);
+				height = Math.Max(height, center.Y - depth / 2 + radius / 2 - body.Top + 2);
+			}
 			var top = new int2(rect.Left + rect.Width / 2, rect.Top);
 			var left = new int2(rect.Left, rect.Top + rect.Height / 2);
 			var bottom = new int2(rect.Left + rect.Width / 2, rect.Bottom);
 			var right = new int2(rect.Right, rect.Top + rect.Height / 2);
-			var h = new int2(0, info.Height);
+			var h = new int2(0, height);
 
 			return new Polygon(new[] { top - h, left - h, left, bottom, right, right - h });
 		}
@@ -47,6 +87,9 @@ namespace OpenRA.Mods.CA.Traits.Render
 		int2 GetDecorationPosition(Actor self, WorldRenderer wr, string pos)
 		{
 			var bounds = DecorationBounds(self, wr);
+			if (bounds.IsEmpty)
+				return int2.Zero;
+
 			switch (pos)
 			{
 				case "TopLeft": return bounds.Vertices[1];
@@ -78,12 +121,18 @@ namespace OpenRA.Mods.CA.Traits.Render
 
 		protected override IEnumerable<IRenderable> RenderSelectionBox(Actor self, WorldRenderer wr, Color color)
 		{
+			if (self.Disposed)
+				yield break;
+
 			var bounds = DecorationBounds(self, wr);
 			yield return new IsometricSelectionBoxAnnotationRenderable(self, bounds, color);
 		}
 
 		protected override IEnumerable<IRenderable> RenderSelectionBars(Actor self, WorldRenderer wr, bool displayHealth, bool displayExtra)
 		{
+			if (self.Disposed)
+				yield break;
+
 			if (info.ExtraBarsRequireSelection && !self.World.Selection.Contains(self))
 				displayExtra = false;
 
@@ -101,7 +150,8 @@ namespace OpenRA.Mods.CA.Traits.Render
 
 		IEnumerable<Rectangle> IRender.ScreenBounds(Actor self, WorldRenderer wr)
 		{
-			yield return DecorationBounds(self, wr).BoundingRect;
+			if (!self.Disposed)
+				yield return DecorationBounds(self, wr).BoundingRect;
 		}
 	}
 }

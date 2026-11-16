@@ -16,8 +16,8 @@ def polygon(entry):
  return [top,left,bottom,right],[[top[0],top[1]-h],[left[0],left[1]-h],left,bottom,right,[right[0],right[1]-h]]
 
 class GdiBuildingAlignmentTests(unittest.TestCase):
- def test_all_thirteen_source_images_and_native_dimensions(self):
-  self.assertEqual(len(CONFIG),13)
+ def test_all_fourteen_source_images_and_native_dimensions(self):
+  self.assertEqual(len(CONFIG),14)
   for e in CONFIG:
    with self.subTest(actor=e['Actor']):
     path=ROOT/'mods/ca'/e['File']
@@ -32,7 +32,7 @@ class GdiBuildingAlignmentTests(unittest.TestCase):
     x0=ox-w/2;y0=oy-h+w/4
     uv=[(x+x0+2*(y+y0),-(x+x0)+2*(y+y0)) for x,y in e['SourceGroundContacts']]
     if e.get('PlacementPolicy')=='centered-visual-ground-envelope':
-     self.assertEqual(e['Actor'],'hpad.td');self.assertEqual(e['DecorationBounds'][3],0)
+     self.assertIn(e['Actor'],('hpad.td','nuke','nuk2'));self.assertEqual(e['DecorationBounds'][3],0)
      self.assertGreaterEqual(min(u for u,v in uv)+nx*64,2);self.assertGreaterEqual(min(v for u,v in uv)+ny*64,2)
     else:
      self.assertTrue(2<=min(u for u,v in uv)+nx*64<=6)
@@ -73,7 +73,7 @@ class GdiBuildingAlignmentTests(unittest.TestCase):
 
  def test_nod_and_colorpicker_do_not_inherit_gdi_decoration_bounds(self):
   rules=(ROOT/'mods/ca/rules/gdi/building-art.yaml').read_text()
-  for actor in ('NUKE.Nod','HQ.Nod','REP.Nod','HPAD.TD.Nod','PROC.TD.Nod','fact.colorpicker'):
+  for actor in ('NUKE.Nod','NUK2.Nod','HQ.Nod','REP.Nod','HPAD.TD.Nod','PROC.TD.Nod','fact.colorpicker'):
    self.assertIn('-DecorationBounds:',block(rules,actor))
   self.assertIn('DecorationHeight: 30',block(rules,'fact.colorpicker'))
   # AFAC.Nod retains its own explicit 3x3 Nod decoration, not a null override.

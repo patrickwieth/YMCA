@@ -7,12 +7,12 @@ import argparse,json,math,hashlib
 from PIL import Image,ImageDraw
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1]
-ACTORS=('afac','nuke','pyle','hq','rep','hpad.td','proc.td','afld.gdi','gtek','weap.td','eye','upgc','syrd.gdi')
+ACTORS=('afac','nuke','nuk2','pyle','hq','rep','hpad.td','proc.td','afld.gdi','gtek','weap.td','eye','upgc','syrd.gdi')
 # Reviewed native ground contacts, not elevated flags or roof edges.
 GROUND_CONTACTS={
  'upgc':[(3,181),(251,181)],
  'syrd.gdi':[(5,151),(290,156)],
- 'afac':[(5,166),(299,169)], 'nuke':[(2,229),(253,215)],
+ 'afac':[(5,166),(299,169)], 'nuke':[(10,159),(242,155)], 'nuk2':[(10,170),(243,180)],
  'pyle':[(31,113),(229,124)], 'hq':[(44,209),(218,163)],
  'rep':[(9,166),(281,167)], 'hpad.td':[(7,83),(192,82)],
  'proc.td':[(4,147),(199,114)], 'gtek':[(10,181),(229,188)],
@@ -77,8 +77,8 @@ def propose(entry, ground_contacts=None, bib_prefix='gdibib', extra_files=()):
   'Offset':[ox,oy],'DecorationBounds':bounds,'DecorationHeight':height,
   'VisualGroundWidth':width,'VisualGroundDepth':depth,'GroundRearY':rear,'SourceGroundContacts':contacts,'FrontContactSamples':front,
   'SourceSize':list(im.size),'SourceSHA256':hashlib.sha256(path.read_bytes()).hexdigest()}
- if entry['Actor']=='hpad.td':
-  # A small helipad centered on its foundation, not pushed against the rear edge.
+ if entry['Actor'] in ('hpad.td','nuke','nuk2'):
+  # Small supplied structures centered on their foundation, not pushed to the rear.
   shift=-center_y
   result['Offset'][1]+=shift;result['DecorationBounds'][3]=0
   result['GroundRearY']+=shift;result['PlacementPolicy']='centered-visual-ground-envelope'

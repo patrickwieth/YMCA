@@ -1,8 +1,16 @@
-# AA Gun and Sonic Turret — rejected studies, rework pending
+# AA Gun and Sonic Turret — current approval status
 
-**Both pass-05 studies were explicitly rejected by the user. Do not integrate them.**
-Pass-06 reconstruction studies exist; pass-07 refinements are written but unrendered.
-The following comparisons/checks document the historical pass-05, not an approval.
+**AA pass11 is explicitly user-approved and installed locally on CRAM.**
+See [integration and checks](gdi%20aa%20gun/integration-pass11/README.md).
+
+**Sonic pass10 was explicitly rejected and must NOT be installed.** Pass11 fixes
+the cut vent slats; pass12 starts further housing/neck/emitter reconstruction.
+The turret still requires substantial source-led work, not merely more passes.
+
+## Historical pass05 record — not current approval or integration status
+
+Both pass05 studies below were explicitly rejected. The following historical
+comparisons/checks do not validate or describe the current installed AA.
 
 [Both at actual native size on 1x1 bibs](gdi-small-turrets-native-preview.png).
 

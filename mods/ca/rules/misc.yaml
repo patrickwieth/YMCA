@@ -71,8 +71,13 @@ CRATE:
 	GiveBaseBuilderCrateAction@TD:
 		SelectionShares: 0
 		NoBaseSelectionShares: 100
-		ValidFactions: gdi, talon, zocom, eagle, nod, blackh, marked, legion
+		ValidFactions: gdi, talon, zocom, eagle
 		Units: amcv
+	GiveBaseBuilderCrateAction@Nod:
+		SelectionShares: 0
+		NoBaseSelectionShares: 100
+		ValidFactions: nod, blackh, marked, legion
+		Units: amcv.nod
 	GiveBaseBuilderCrateAction@Scrin:
 		SelectionShares: 0
 		NoBaseSelectionShares: 100
@@ -977,6 +982,7 @@ army.leader.black:
 		Queue: Infantry, Vehicle, Aircraft, Ship
 		BuildDuration: 1
 		BuildPaletteOrder: 0
+		AllowedMapCategories: Operational
 	RenderSprites:
 		Image: blimp
 	KillsSelf:
@@ -987,7 +993,7 @@ army.assignment.red:
 	Tooltip:
 		Name: Assign production to Red Leader
 	Buildable:
-		Prerequisites: mode.operational, army.leader.red
+		Prerequisites: ~mode.operational, army.leader.red
 		BuildPaletteOrder: 0
 
 army.assignment.blue:
@@ -995,7 +1001,7 @@ army.assignment.blue:
 	Tooltip:
 		Name: Assign production to Blue Leader
 	Buildable:
-		Prerequisites: mode.operational, army.leader.blue
+		Prerequisites: ~mode.operational, army.leader.blue
 		BuildPaletteOrder: 1
 
 army.assignment.black:
@@ -1003,7 +1009,7 @@ army.assignment.black:
 	Tooltip:
 		Name: Assign production to Black Leader
 	Buildable:
-		Prerequisites: mode.operational, army.leader.black
+		Prerequisites: ~mode.operational, army.leader.black
 		BuildPaletteOrder: 2
 
 promotion.army_leader_blue:
@@ -1014,6 +1020,7 @@ promotion.army_leader_blue:
 		BuildPaletteOrder: 0
 		Icon: icon
 		Prerequisites: has_points, ~mode.operational, !army.leader.blue
+		AllowedMapCategories: Operational
 		Description: Deploys a second Army Leader at the player spawn.
 	RenderSprites:
 		Image: blimp
@@ -1028,6 +1035,7 @@ promotion.army_leader_black:
 		BuildPaletteOrder: 1
 		Icon: icon
 		Prerequisites: has_points, ~mode.operational, !army.leader.black
+		AllowedMapCategories: Operational
 		Description: Deploys a third Army Leader at the player spawn.
 	RenderSprites:
 		Image: blimp

@@ -1,0 +1,37 @@
+# User-authorized ATWR art installation: static repaired base + real rotating voxel turret.
+ATWR:
+	-WithBuildingBib:
+	-QuantizeFacingsFromSequence:
+	RenderSprites:
+		Image: atwr.missile.native
+	BodyOrientation:
+		QuantizedFacings: 0
+		CameraPitch: 86
+		UseClassicPerspectiveFudge: false
+	RenderVoxels:
+		Image: atwr.missile.voxel
+		Palette: gdi-missile-source
+		Scale: 0.85
+		LightAmbientColor: 1,1,1
+		LightDiffuseColor: 0,0,0
+	WithVoxelTurret:
+		Sequence: turret
+		RequiresCondition: !build-incomplete
+		ShowShadow: false
+	Turreted:
+		Offset: 0,11,1527
+	# Physical registration of the two middle-row missile tips. Weapons/ammo/yaw unchanged.
+	Armament@primary:
+		LocalOffset: 365,163,853, 365,-163,853
+	Armament@secondary:
+		LocalOffset: 365,163,853, 365,-163,853
+	Armament@tertiary:
+		LocalOffset: 365,163,853, 365,-163,853
+	Armament@quartary:
+		LocalOffset: 365,163,853, 365,-163,853
+	# Keep the relay marker's absolute elevation unchanged despite the new turret mount.
+	Armament@flare:
+		LocalOffset: 0,-11,-727
+	IsometricSelectable:
+		DecorationBounds: 1448,1448,0,0
+		DecorationHeight: 116

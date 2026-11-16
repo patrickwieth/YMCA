@@ -41,7 +41,10 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			var yards = 0;
 			foreach (var node in map.ActorDefinitions.Where(n =>
 				n.Value.Value.Equals("syrd", StringComparison.OrdinalIgnoreCase) ||
-				n.Value.Value.Equals("syrd.gdi", StringComparison.OrdinalIgnoreCase)))
+				n.Value.Value.Equals("syrd.gdi", StringComparison.OrdinalIgnoreCase) ||
+				n.Value.Value.Equals("chsyrd", StringComparison.OrdinalIgnoreCase) ||
+				n.Value.Value.Equals("spen", StringComparison.OrdinalIgnoreCase) ||
+				n.Value.Value.Equals("spen.nod", StringComparison.OrdinalIgnoreCase)))
 			{
 				var actor = new ActorReference(node.Value.Value, node.Value.ToDictionary());
 				var location = actor.Get<LocationInit>().Value;
@@ -63,7 +66,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			}
 
 			if (yards == 0)
-				throw new InvalidDataException("No Allied/GDI Naval Yard found in the test map.");
+				throw new InvalidDataException("No Allied/GDI Naval Yard or Nod Sub Pen found in the test map.");
 			map.Save((IReadWritePackage)package);
 			Console.WriteLine($"Building test water prepared: {yards} Naval Yard(s), {changed} cells; original map untouched.");
 		}

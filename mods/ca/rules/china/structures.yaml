@@ -1,12 +1,12 @@
 chcommand:
 	Inherits: ^BuildingChina
-	Inherits: ^4x3Building+Bib
-	Inherits: ^ConcreteArmor
-	Inherits: ^MinefieldUpgrade
-	Inherits: ^BotFallbackInsurance
-	Inherits: ^StructureProduction
-	Inherits: ^RadarStation
-	Inherits: ^Tier2Tech
+	Inherits@SHAPE: ^4x3Building+Bib
+	Inherits@ARMOR: ^ConcreteArmor
+	Inherits@MINES: ^MinefieldUpgrade
+	Inherits@BOT: ^BotFallbackInsurance
+	Inherits@PRODUCTION: ^StructureProduction
+	Inherits@RADAR: ^RadarStation
+	Inherits@TECH: ^Tier2Tech
 	ProvidesPrerequisite@tier2:
 		RequiresCondition: radar
 	ProvidesPrerequisite:
@@ -55,9 +55,7 @@ chcommand:
 	GrantConditionOnPowerState@LOWPOWER:
 		Condition: lowpower
 		ValidPowerStates: Low, Critical
-	GrantConditionOnBotOwner@BOTRADAR:
-		Condition: radar
-		Bots: brutal, vhard, hard, normal, easy, naval
+	# Preserve the previously resolved last BOTRADAR definition.
 	GrantConditionOnBotOwner@BOTRADAR:
 		Condition: botowner
 		Bots: brutal, vhard, hard, normal, easy, naval
@@ -90,7 +88,7 @@ chcommand:
 
 chcommand.Nukular:
 	Inherits: chcommand
-	Inherits: ^NukularConyard
+	Inherits@NUKULAR: ^NukularConyard
 	-Buildable:
 	RenderSprites:
 		Image: chcommand
@@ -116,9 +114,9 @@ chcommand.radar:
 
 chpower:
 	Inherits: ^BuildingChinaTD
-	Inherits: ^2x2Building+Bib
-	Inherits: ^DisabledByPowerOutage
-	Inherits: ^MinefieldUpgrade
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@DISABLE: ^DisabledByPowerOutage
+	Inherits@MINES: ^MinefieldUpgrade
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1
@@ -189,10 +187,10 @@ chpower2:
 
 chbarracks:
 	Inherits: ^BuildingChina
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^InfantryProduction
-	Inherits: ^MinefieldUpgrade
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@PRODUCTION: ^InfantryProduction
+	Inherits@MINES: ^MinefieldUpgrade
 	Valued:
 		Cost: 500
 	Tooltip:
@@ -252,10 +250,10 @@ chbarracks:
 
 chgatling:
 	Inherits: ^DefenseTD
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetAll
-	Inherits: ^MinefieldUpgrade
-	Inherits: ^ChinaGatling
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits@TARGET: ^AutoTargetAll
+	Inherits@MINES: ^MinefieldUpgrade
+	Inherits@GATLING: ^ChinaGatling
 	Valued:
 		Cost: 800
 	Tooltip:
@@ -300,12 +298,14 @@ chgatling:
 
 chbunker:
 	Inherits: ^DefenseTD
-	Inherits: ^RA2Sprite
-	Inherits: ^2x2Building
-	Inherits: ^AutoTargetAll
-	Inherits: ^Transport
-	Inherits: ^AttackingCargo
-	Inherits: ^MinefieldUpgrade
+	Inherits@ART: ^RA2Sprite
+	Inherits@SHAPE: ^2x2Building
+	Inherits@TARGET: ^AutoTargetAll
+	Inherits@TRANSPORT: ^Transport
+	Inherits@CARGO: ^AttackingCargo
+	Inherits@MINES: ^MinefieldUpgrade
+	Building:
+		LocalCenterOffset: 0,0,0
 	Tooltip:
 		Name: Bunker
 	Buildable:
@@ -400,10 +400,10 @@ chbunker2.advinf:
 
 chsupply:
 	Inherits: ^BuildingChina
-	Inherits: ^3x2Building+Bib
-	Inherits: ^BotIncome
-	Inherits: ^Refinery
-	Inherits: ^MinefieldUpgrade
+	Inherits@SHAPE: ^3x2Building+Bib
+	Inherits@BOT: ^BotIncome
+	Inherits@REFINERY: ^Refinery
+	Inherits@MINES: ^MinefieldUpgrade
 	Building:
 		Footprint: =x= xx= ===
 	Valued:
@@ -447,10 +447,10 @@ chsupply:
 
 chweap:
 	Inherits: ^BuildingChina
-	Inherits: ^4x3Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^VehicleProduction
-	Inherits: ^MinefieldUpgrade
+	Inherits@SHAPE: ^4x3Building+Bib
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@PRODUCTION: ^VehicleProduction
+	Inherits@MINES: ^MinefieldUpgrade
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -499,12 +499,12 @@ chweap:
 
 chpropaganda:
 	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^3x2Building
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^MinefieldUpgrade
-	Inherits: ^PropagandaSpeaker
+	Inherits@TECHLEVEL: ^TechLevelBuilding
+	Inherits@TECH: ^Tier3Tech
+	Inherits@SHAPE: ^3x2Building
+	Inherits@DISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@MINES: ^MinefieldUpgrade
+	Inherits@SPEAKER: ^PropagandaSpeaker
 	Valued:
 		Cost: 2000
 	Tooltip:
@@ -527,9 +527,9 @@ chpropaganda:
 
 chpropagandatower:
 	Inherits: ^BuildingChina
-	Inherits: ^1x1Building
-	Inherits: ^PropagandaSpeaker
-	Inherits: ^DisableOnLowPowerOrForceDisabled
+	Inherits@SHAPE: ^1x1Building
+	Inherits@SPEAKER: ^PropagandaSpeaker
+	Inherits@DISABLE: ^DisableOnLowPowerOrForceDisabled
 	RenderSprites:
 		Image: chpropagandatower
 	Building:
@@ -574,8 +574,8 @@ chpropagandatower:
 
 chpropagandatower.pdl:
 	Inherits: chpropagandatower
-	Inherits: ^PointLaserDefenseSystemBig
-	Inherits: ^AutoTargetGround
+	Inherits@PDL: ^PointLaserDefenseSystemBig
+	Inherits@TARGET: ^AutoTargetGround
 	WithProductionIconOverlay@PDL:
 		Types: PDL
 	Valued:
@@ -592,12 +592,12 @@ chpropagandatower.pdl:
 
 chinternetcenter:
 	Inherits: ^BuildingChinaTD
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier4Tech
-	Inherits: ^Transport
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
-	Inherits: ^MinefieldUpgrade
+	Inherits@TECHLEVEL: ^TechLevelBuilding
+	Inherits@TECH: ^Tier4Tech
+	Inherits@TRANSPORT: ^Transport
+	Inherits@DISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@SHAPE: ^3x2Building+Bib
+	Inherits@MINES: ^MinefieldUpgrade
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -627,10 +627,10 @@ chinternetcenter:
 
 chsilo:
 	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^3x2Building
-	Inherits: ^MinefieldUpgrade
-	Inherits: ^ChinaSuperweapons
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@SHAPE: ^3x2Building
+	Inherits@MINES: ^MinefieldUpgrade
+	Inherits@SUPER: ^ChinaSuperweapons
 	Valued:
 		Cost: 4000
 	Tooltip:
@@ -668,11 +668,11 @@ chsilo:
 
 chairport:
 	Inherits: ^BuildingChina
-	Inherits: ^4x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^RepairsAircraftWithRepairBay
-	Inherits: ^AircraftProduction
-	Inherits: ^MinefieldUpgrade
+	Inherits@SHAPE: ^4x2Building+Bib
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@REPAIR: ^RepairsAircraftWithRepairBay
+	Inherits@PRODUCTION: ^AircraftProduction
+	Inherits@MINES: ^MinefieldUpgrade
 	Buildable:
 		BuildPaletteOrder: 7
 		Prerequisites: radar, ~structures.china

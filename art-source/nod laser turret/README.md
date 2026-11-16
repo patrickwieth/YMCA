@@ -1,6 +1,59 @@
 # Nod laser turret — native reconstruction candidate
 
-Current review candidate: **pass-04**, after four actual model/render/review cycles.
+## Current material work: pass10
+
+The outstanding material feedback is now being implemented rather than left at09.
+Pass10 adds part-local machining/coating tone fields, bounded neutral source-metal
+variation at native texel density and sparse finish breaks on steel/red paint.
+The large bearing/barrel surfaces no longer rely only on pass09's faint height
+modulation. Existing detailed source plates and constant lens/ink materials remain
+protected; no gear teeth or other photographed mechanisms are duplicated.
+
+32 facings rendered and inspected. Geometry fingerprint verifies all121 mesh
+vertices, topology and world transforms match09 exactly, including its corrected
+circular muzzle/recessed rectangular aperture. The user subsequently approved this pass for installation. It is now bound to
+LTUR with independent base/turret and recalibrated muzzles; see
+`integration-pass10/README.md`. Engine checks pass; live firing/appearance review
+remains pending. See `pass-10/review/eight-views-2x.png`.
+
+## Previous correction: pass09
+
+The user identified the incorrect separate angular muzzle attachment. Pass09
+removes it and bridges the existing circular jacket into a circular beveled front
+with a genuinely rectangular recessed aperture. Copper rim, dark cavity and emitter
+are moved0.14 model units inward; no actor/muzzle gameplay binding exists yet.
+The rest of the form is retained. Broad steel/red surfaces now receive restrained
+local-height tonal modulation in addition to world-normal lighting and bounded
+source cuts, so flat-color fills are not the default. Glow/ink stay protected.
+32 native facings rendered; reference/opposite comparison inspected. Further
+material fidelity work remains; this is not an integration or new user approval.
+
+## Previous texture update: pass08
+
+Pass07's projected metal coating was rendered and rejected internally: it copied
+gear details onto modeled bearings. Pass08 replaces that with a narrow clean metal
+cut at low strength and rotation-aware geometric shading. Gear fronts retain their
+own geometry, without duplicated photographed teeth. The barrel/end faces retain
+physical shading and the pink emitter stays visible. All 32 native views inspected.
+Background-Blender fingerprints verify that vertices, polygon topology and world
+transforms match pass06 exactly. No geometry redesign, actor binding or live test.
+[Current rotation](pass-08/review/all-32-native.png).
+
+## Earlier geometry history
+
+The user positively evaluated the direction of **pass-04** and requested more
+source-fidelity iterations. Further local working passes now exist:
+
+- Pass05: thicker stepped barrel jacket, rounded bearing housings, connected
+  eight-tooth gears, thicker support ribs and a larger source-palette pink core.
+- Pass06: corrected the jacket's inward normals found during review. 32 native
+  directions and exact full-3D/raw-layer controls pass. No new actor integration.
+- [Latest source comparison](pass-06/review/source-comparison-2x.png) and
+  [rotation](pass-06/review/rotation.gif). These are new review candidates, not
+  a claim of final fidelity/approval. The earlier engine-loader/geometry-inspector
+  record below still specifically describes pass04, not the newer passes.
+
+Previous review candidate: **pass-04**, after four actual model/render/review cycles.
 Not an installed gameplay actor or an artistically approved final asset.
 
 - [Source / current model / opposite side](pass-04/review/source-comparison-2x.png)

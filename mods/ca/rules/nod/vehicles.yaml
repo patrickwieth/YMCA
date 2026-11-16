@@ -8,13 +8,13 @@ AMCV:
 	Buildable:
 		Queue: Vehicle
 		BuildPaletteOrder: 300
-		Prerequisites: repair, vehicles, ~td
+		Prerequisites: repair, vehicles, ~gdi
 		IconPalette: chrometd
 		Description: Deploys into another Construction Yard.\n  Unarmed
 	Valued:
 		Cost: 3000
 	Tooltip:
-		Name: Mobile Construction Vehicle
+		Name: GDI Mobile Construction Vehicle
 	Selectable:
 		Priority: 4
 	Health:
@@ -23,7 +23,7 @@ AMCV:
 		Speed: 56
 		Locomotor: heavywheeled
 	Transforms:
-		IntoActor: afac.nod
+		IntoActor: afac
 		Offset: -1,-1
 		Facing: 384
 		TransformSounds: placbldg.aud, build5.aud
@@ -54,6 +54,29 @@ AMCV.Nukular:
 	Transforms:
 		IntoActor: afac.nukular
 
+
+# Separate deployment identity, including capture/recovery and Nukular mode.
+AMCV.Nod:
+	Inherits: AMCV
+	Buildable:
+		Prerequisites: repair, vehicles, ~nod
+	Tooltip:
+		Name: Nod Mobile Construction Vehicle
+	RenderSprites:
+		Image: AMCV
+	Transforms:
+		IntoActor: afac.nod
+	TransformOnCondition:
+		IntoActor: amcv.nod.nukular
+	SpawnActorOnDeath:
+		Actor: amcv.nod.husk
+
+AMCV.Nod.Nukular:
+	Inherits: AMCV.Nod
+	Inherits@NUKULAR: ^NukularConyard
+	-Buildable:
+	Transforms:
+		IntoActor: afac.nod.nukular
 
 BGGY:
 	Inherits: ^FightingVehicle

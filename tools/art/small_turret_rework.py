@@ -23,6 +23,14 @@ def rebuild(c):
         m=materials['source gold'].copy();name=f'REWORK texarmor {i}';m.name=name
         nodes=m.node_tree.nodes;em=next(n for n in nodes if n.type=='EMISSION');link=em.inputs[0].links[0];up=link.from_socket;m.node_tree.links.remove(link)
         mul=nodes.new('ShaderNodeMixRGB');mul.blend_type='MULTIPLY';mul.inputs[0].default_value=1;mul.inputs[2].default_value=(factor,factor,factor,1);m.node_tree.links.new(up,mul.inputs[1]);m.node_tree.links.new(mul.outputs[0],em.inputs[0]);materials[name]=m
+    if kind=='aa' and iteration>=11:
+        for i in range(6):
+            m=materials[f'REWORK texarmor {i}'].copy();name=f'REWORK wornarmor {i}';m.name=name
+            nodes=m.node_tree.nodes;em=next(n for n in nodes if n.type=='EMISSION');link=em.inputs[0].links[0];up=link.from_socket;m.node_tree.links.remove(link)
+            tex=nodes.new('ShaderNodeTexImage');tex.image=next(n.image for n in nodes if n.type=='TEX_IMAGE' and n.image);tex.interpolation='Closest';tex.extension='CLIP'
+            uv=nodes.new('ShaderNodeUVMap');uv.uv_map='Bounded base paint';m.node_tree.links.new(uv.outputs[0],tex.inputs[0])
+            mix=nodes.new('ShaderNodeMixRGB');mix.blend_type='MULTIPLY';mix.inputs[0].default_value=.24
+            m.node_tree.links.new(up,mix.inputs[1]);m.node_tree.links.new(tex.outputs['Color'],mix.inputs[2]);m.node_tree.links.new(mix.outputs[0],em.inputs[0]);materials[name]=m
     lit=[]
     def mesh(name,vs,fs,family='metal',texture=None,shaded_texture=False):
         # Every UV island is explicit. Flat material faces never sample the photo.
@@ -56,9 +64,10 @@ def rebuild(c):
         # Closed inset backing under armor plates replaces the empty black slot.
         levels=[(1.49,2.22),(1.51,2.53),(1.40,2.98),(1.13,3.46),(.62,3.83),(.08,3.96)]
         n=64
-        vs=[(r*.94*math.cos(i*math.tau/n),r*.94*math.sin(i*math.tau/n),z) for r,z in levels for i in range(n)]
+        vs=[(r*(.72 if iteration>=8 else .94)*math.cos(i*math.tau/n),r*(.72 if iteration>=8 else .94)*math.sin(i*math.tau/n),z) for r,z in levels for i in range(n)]
         fs=[(j*n+i,j*n+(i+1)%n,(j+1)*n+(i+1)%n,(j+1)*n+i) for j in range(len(levels)-1) for i in range(n)]
-        fs.append(tuple((len(levels)-1)*n+i for i in range(n)));mesh('AA enclosed inner armor',vs,fs)
+        fs.append(tuple((len(levels)-1)*n+i for i in range(n)));backing=mesh('AA enclosed inner armor',vs,fs)
+        if iteration>=9:backing['shade_bias']=-2
         # Panel seams are actual narrow geometric gaps, not stretched photo lines.
         for sector in range(8):
             lo=sector*math.pi/4+.009;hi=(sector+1)*math.pi/4-.009
@@ -70,11 +79,46 @@ def rebuild(c):
                     for k in range(9):
                         theta=lo+(hi-lo)*k/8
                         # Narrow armored longitudinal gun channel; solid backing remains.
-                        rr=r-(.13 if 1.24<theta<1.90 and j>=2 else 0)
+                        rr=r-(r*.30 if iteration>=8 and 1.05<theta<2.10 and j>=2 else .13 if 1.24<theta<1.90 and j>=2 else 0)
                         vs.append((rr*math.cos(theta),rr*math.sin(theta),z))
                 fs=[(j*9+k,j*9+k+1,(j+1)*9+k+1,(j+1)*9+k) for j in range(len(rings)-1) for k in range(8)]
                 tex={i:[(48+15*(vi%9)/8,68-25*(vs[vi][2]-2.22)/1.74) for vi in face] for i,face in enumerate(fs)} if iteration>=7 else None
-                mesh(f'AA curved armor plate {sector} {band}',vs,fs,'armor',tex,True)
+                if iteration>=8:
+                    tex={}
+                    for fi,face in enumerate(fs):
+                        pixels=[]
+                        for vi in face:
+                            x,y,z=vs[vi];theta=lo+(hi-lo)*(vi%9)/8
+                            canonical=-math.pi/2+((theta%(math.pi/2))/(math.pi/2))*math.pi/4
+                            radius=math.hypot(x,y);pixels.append(c['screen']((radius*math.cos(canonical),radius*math.sin(canonical),z)))
+                        tex[fi]=pixels
+                if iteration>=9:
+                    # A clean armor-only source cut: no projected vents, gun opening,
+                    # opposite-side parts or diagonal seams repeated around the pole.
+                    tex={fi:[(49+6*(vi%9)/8,62-6*(vs[vi][2]-2.22)/1.74) for vi in face] for fi,face in enumerate(fs)}
+                plate=mesh(f'AA curved armor plate {sector} {band}',vs,fs,'armor',tex,True)
+                if iteration>=11:
+                    # Small plain-paint cuts from the fixed base, not vents or seams.
+                    cuts=((56,99,59,103),(62,97,65,101),(89,86,92,90))
+                    x0,y0,x1,y1=cuts[(sector+band)%len(cuts)];uv=plate.data.uv_layers.new(name='Bounded base paint')
+                    for loop in plate.data.loops:
+                        vi=loop.vertex_index;u=(vi%9)/8;v=(vs[vi][2]-levels[rings[0]][1])/(levels[rings[-1]][1]-levels[rings[0]][1]);u=1-u if sector%2 else u
+                        uv.data[loop.index].uv=((x0+(x1-x0)*u)/128,1-(y0+(y1-y0)*v)/128)
+                    plate.data.uv_layers.active_index=0;plate['bounded_paint_wear']=True
+        if iteration>=10:
+            # Two bounded maintenance panels at approximately source-native texel density.
+            # No duplicated sensors, muzzle parts or stretched seams across the hemisphere.
+            def surface(theta,z,extra=.012):
+                for (r0,z0),(r1,z1) in zip(levels,levels[1:]):
+                    if z0<=z<=z1:
+                        r=r0+(r1-r0)*(z-z0)/(z1-z0)+extra
+                        return (r*math.cos(theta),r*math.sin(theta),z)
+            for center in (-67.5,202.5):
+                lo,hi=map(math.radians,(center-14,center+14));vs=[surface(lo,3.30),surface(hi,3.30),surface(hi,2.74),surface(lo,2.74)]
+                mesh('AA bounded maintenance panel '+str(center),vs,[(0,1,2,3)],'armor',{0:[(47,48),(58,48),(58,62),(47,62)]},True)
+                for theta in (lo+.025,hi-.025):
+                    a=surface(theta,2.80,.023);b=surface(theta,2.80,.055)
+                    bolt=tube('AA armor fastening',a,b,.028,family='armor',n=8);bolt['shade_bias']=-2
         tube('AA lower steel retaining rim',(0,0,2.21),(0,0,2.28),1.50,inner=1.43)
         axis=Vector((0,math.cos(math.radians(25)),math.sin(math.radians(25))));root=Vector((0,.75,3.12));u=Vector((1,0,0));v=axis.cross(u)
         tube('AA gun receiver',root-axis*.30,root+axis*.61,.36,n=32)
@@ -101,6 +145,9 @@ def rebuild(c):
         tube('AA radar rim',dish-normal*.05,dish+normal*.02,.28,inner=.23,n=20)
         tube('AA radar reflector',dish-normal*.07,dish-normal*.055,.235,n=20)
         tube('AA radar feed',dish-normal*.03,dish+normal*.15,.025,n=8)
+    elif iteration>=8:
+        from rebuild_sonic_turret import build
+        build(locals())
     else:
         # Real chamfered receiver with a level roof, not an extruded photo silhouette.
         xmin,xmax=-2.25,.55;y=1.05 if iteration>=7 else .83;z0,z1=(3.65,5.65) if iteration>=7 else (3.85,5.12);b=.18
@@ -151,6 +198,9 @@ def rebuild(c):
         tube('SONIC sensor stalk',dish-Vector((0,0,.45)),dish,.05,n=8)
         tube('SONIC sensor rim',dish-normal*.035,dish+normal*.035,.24,inner=.18,n=20)
         tube('SONIC sensor face',dish-normal*.04,dish-normal*.03,.18,n=20)
+    if kind=='aa' and iteration>=9:
+        for o,family,_ in lit:
+            if any(t in o.name for t in ('hollow barrel','receiver','socket lip','barrel collar')):o['shade_bias']=-1
     def relight():
         light=Vector((-.35,-.55,.80)).normalized();names=list(materials)
         for o,family,excluded in lit:
@@ -162,5 +212,5 @@ def rebuild(c):
                 bias=o.get('shade_bias',0)
                 if iteration>=7 and any(t in o.name for t in ('raised ring','aperture rim','socket lip','lens bezel')):bias+=1
                 shade=max(0,min(5,int((value+1)*2.8)+bias))
-                poly.material_index=names.index(f'REWORK {"texarmor" if textured else family} {shade}')
+                poly.material_index=names.index(f'REWORK {"wornarmor" if textured and o.get("bounded_paint_wear") else "texarmor" if textured else family} {shade}')
     return relight

@@ -78,8 +78,8 @@ FACT.Soviet:
 		Prerequisite: fact
 
 FACT.Nukular.Soviet:
-	Inherits: FACT.Soviet
-	Inherits: ^NukularConyard
+	Inherits@GRID1: FACT.Soviet
+	Inherits@GRID2: ^NukularConyard
 	-Buildable:
 	Transforms:
 		IntoActor: mcv.nukular.soviet
@@ -104,7 +104,8 @@ HPAD.Soviet:
 		Image: hpad.soviet
 	-WithBuildingBib:
 	IsometricSelectable:
-		DecorationHeight: 30
+		DecorationBounds: 1901,1901,0,11
+		DecorationHeight: 62
 	Buildable:
 		Prerequisites: dome, ~structures.soviet
 	ProvidesPrerequisite@sharedactor:
@@ -143,6 +144,15 @@ APWR.Soviet:
 		Image: apwr.soviet
 	Buildable:
 		Prerequisites: dome, ~structures.soviet, ~!structures.russia
+		Description: Provides eight times the power of a standard Power Plant.\n  Warning: Nuclear explosion when destroyed.
+	Valued:
+		Cost: 1500
+	Power:
+		Amount: 800
+	FireWarheadsOnDeathCA:
+		Type: CenterPosition
+		Weapon: CHNukeCannon.Impact
+		EmptyWeapon: CHNukeCannon.Impact
 	ProvidesPrerequisite@sharedactor:
 		Prerequisite: apwr
 
@@ -162,7 +172,8 @@ FIX.Soviet:
 NKOREA_BUNKER:
 	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: chbunker
-	-WithBuildingBib:
+	Building:
+		LocalCenterOffset: 0,-724,0
 	Buildable:
 		BuildPaletteOrder: 40
 		Prerequisites: barr, ~structures.nkorea
@@ -174,6 +185,7 @@ NKOREA_BUNKER:
 		Image: nkorea_bunker
 	IsometricSelectable:
 		Class: nkorea_bunker
+		Bounds: 1024, 1024
 	-Voiced:
 
 Cloning_Vats:
@@ -227,7 +239,7 @@ Cloning_Vats:
 	RallyPoint:
 		Path: 3,3
 
-FTUR:
+^SovietFlameTowerBase:
 	Inherits@SOVIETBIB: ^Soviet2x2Bib
 	Inherits@BASE: ^Defense
 	Inherits@SHAPE: ^1x1Building+Minibib
@@ -276,11 +288,11 @@ FTUR:
 		EmptyWeapon: BuildingExplode
 
 TTUR:
-	Inherits@SOVIETBIB: ^Soviet2x2Bib
-	Inherits: ^DefenseTD
-	Inherits: ^1x1Building+Minibib
+	Inherits@SOVIETBIB: ^Soviet1x1Bib
+	Inherits@GRID1: ^DefenseTD
+	Inherits@GRID2: ^1x1Building+Minibib
 	-WithBuildingBib:
-	Inherits: ^AutoTargetGround
+	Inherits@GRID3: ^AutoTargetGround
 	RenderSprites:
 		Image: ttur.soviet
 	Buildable:
@@ -357,19 +369,19 @@ TSLA:
 	WithTeslaChargeAnimation:
 	Armament:
 		Weapon: TeslaZap
-		LocalOffset: 0,0,896
+		LocalOffset: 0,0,3270
 		RequiresCondition: (!lowpower && !charged) || (lowpower && charged == 1)
 	Armament@1:
 		Weapon: TeslaZapBoost1
-		LocalOffset: 0,0,896
+		LocalOffset: 0,0,3270
 		RequiresCondition: (!lowpower && charged == 1) || (lowpower && charged == 2)
 	Armament@2:
 		Weapon: TeslaZapBoost2
-		LocalOffset: 0,0,896
+		LocalOffset: 0,0,3270
 		RequiresCondition: (!lowpower && charged == 2) || (lowpower && charged >= 3)
 	Armament@3:
 		Weapon: TeslaZapBoost3
-		LocalOffset: 0,0,896
+		LocalOffset: 0,0,3270
 		RequiresCondition: !lowpower && charged >= 3
 	AttackTesla:
 		RequiresCondition: !build-incomplete
@@ -402,7 +414,7 @@ TSLA:
 		Prerequisite: structures.tsla
 
 TPWR:
-	Inherits@SOVIETBIB: ^Soviet4x4Bib
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: APWR
 	-WithShadow@BUILDINGTRIAL:
 	Building:

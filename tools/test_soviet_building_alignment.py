@@ -26,7 +26,9 @@ class SovietBuildingAlignmentTests(unittest.TestCase):
    with self.subTest(actor=e['Actor']):
     nx,ny=e['BibCells'];w,h=e['SourceSize'];ox,oy=e['Offset'];x0=ox-w/2;y0=oy-h+w/4
     uv=[(x+x0+2*(y+y0),-(x+x0)+2*(y+y0)) for x,y in e['SourceGroundContacts']]
-    if e['Actor']=='tsla':
+    if e.get('PlacementPolicy')=='centered-reviewed-ground-envelope':
+     cx,cy=e['SourceGroundCenter'];self.assertLessEqual(abs(cx+x0),.5);self.assertLessEqual(abs(cy+y0),.5)
+    elif e['Actor']=='tsla':
      self.assertEqual(e['Bib'],'sovietbib1x1');self.assertEqual((nx,ny),(1,1))
      self.assertLessEqual(abs(sum(x+x0 for x,y in e['SourceGroundContacts'])/2),.5)
      self.assertLessEqual(abs(sum(y+y0 for x,y in e['SourceGroundContacts'])/2),.5)
