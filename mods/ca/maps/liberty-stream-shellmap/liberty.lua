@@ -86,7 +86,8 @@ SpawnNext = function()
 	Utils.Do(raiders, function(a) if Alive(a) then table.insert(live, a) end end)
 	raiders = live
 	if #raiders < 48 then SendBomber(Cell(-25, 96)) end
-	Trigger.AfterDelay(DateTime.Seconds(3), SpawnNext)
+	-- Fourteen seconds between recurring Kirovs; the opening column is unchanged.
+	Trigger.AfterDelay(DateTime.Seconds(14), SpawnNext)
 end
 
 WorldLoaded = function()

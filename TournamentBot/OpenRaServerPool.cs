@@ -10,6 +10,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
 {
     readonly OpenRaServerConfiguration config;
     readonly ReplayMetadataReader replayReader;
+    readonly TournamentMapGenerator mapGenerator;
     readonly Channel<MatchRecord> queue = Channel.CreateUnbounded<MatchRecord>();
     readonly CancellationTokenSource shutdown = new();
     readonly List<Task> workers = new();
@@ -24,6 +25,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     {
         this.config = config;
         this.replayReader = replayReader;
+        mapGenerator = new TournamentMapGenerator(config);
     }
 
     public void Start()
@@ -69,10 +71,25 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         match.SupportDirectory = Path.Combine(config.MatchDirectory, match.Id);
         Directory.CreateDirectory(match.SupportDirectory);
 
+        if (match.Generation != null)
+        {
+            var artifact = await mapGenerator.GetAsync(match.Generation, cancellationToken);
+            if ((!match.MapUid.StartsWith("generated:", StringComparison.Ordinal) && match.MapUid != artifact.Uid) ||
+                (match.GeneratedMapSha256.Length != 0 && match.GeneratedMapSha256 != artifact.Sha256))
+                throw new InvalidDataException("Generated map differs from the previously hosted match.");
+            match.MapUid = artifact.Uid;
+            match.GeneratedMapPath = artifact.Path;
+            match.GeneratedMapSha256 = artifact.Sha256;
+            var maps = Path.Combine(match.SupportDirectory, "maps", config.ModId, "generated");
+            Directory.CreateDirectory(maps);
+            File.Copy(artifact.Path, Path.Combine(maps, artifact.Uid + ".oramap"), true);
+        }
+
+        // Persist the resolved UID and immutable package before clients receive join links.
+        await InvokeAsync(ServerStarting, match);
         var startInfo = CreateServerStartInfo(match);
         using var process = Process.Start(startInfo)
             ?? throw new InvalidOperationException("OpenRA.Server could not be started.");
-        await InvokeAsync(ServerStarting, match);
 
         var stdoutPath = Path.Combine(match.SupportDirectory, "process-output.log");
         var stderrPath = Path.Combine(match.SupportDirectory, "process-error.log");

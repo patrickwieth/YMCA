@@ -31,6 +31,7 @@ public sealed class JoinPageServer : IAsyncDisposable
         application.MapGet("/spectate/{matchId}", RenderSpectatorPageAsync);
         application.MapGet("/replay/{matchId}", RenderReplayPageAsync);
         application.MapGet("/replay/{matchId}/download", DownloadReplayAsync);
+        application.MapGet("/map/{matchId}/download", DownloadMapAsync);
         await application.StartAsync(cancellationToken);
     }
 
@@ -103,6 +104,7 @@ public sealed class JoinPageServer : IAsyncDisposable
   {(tournament == null ? "" : $"<p>Tournament: <strong>{WebUtility.HtmlEncode(tournament.Name)}</strong> ({WebUtility.HtmlEncode(tournament.Id)})</p>")}
   {(match.TournamentRound > 0 ? $"<p>Round: <strong>{match.TournamentRound}</strong>{(match.IsThirdPlaceMatch ? " — Third-place playoff" : "")}</p>" : "")}
   <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
+  {MapInstallationNotice(match)}
   <p>Match status: <strong>{WebUtility.HtmlEncode(liveState)}</strong></p>
   {countdown}
   <table><thead><tr><th>Player</th><th>Tournament team</th><th>Connection</th><th>Ready</th><th>Team</th><th>Spawn</th></tr></thead>
@@ -153,6 +155,7 @@ public sealed class JoinPageServer : IAsyncDisposable
   <h1>Spectate YMCA match {WebUtility.HtmlEncode(match.Id)}</h1>
   <p>{WebUtility.HtmlEncode(match.PlayerOneOpenRaName)} vs {WebUtility.HtmlEncode(match.PlayerTwoOpenRaName)}</p>
   <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
+  {MapInstallationNotice(match)}
   <p>Status: <strong>{WebUtility.HtmlEncode(liveState)}</strong></p>
   {(lobby?.State == "GameStarted" ? "" : $"<p><a class=\"watch\" href=\"{WebUtility.HtmlEncode(spectatorUri)}\">Join as spectator</a></p>")}
   <p class=""muted"">This link can only create a spectator connection and cannot occupy a player slot.</p>
@@ -192,16 +195,40 @@ public sealed class JoinPageServer : IAsyncDisposable
   <h1>YMCA replay {WebUtility.HtmlEncode(match.Id)}</h1>
   <p>{WebUtility.HtmlEncode(match.PlayerOneOpenRaName)} vs {WebUtility.HtmlEncode(match.PlayerTwoOpenRaName)}</p>
   <p>Map: <strong>{WebUtility.HtmlEncode(match.MapTitle)}</strong></p>
+  {MapInstallationNotice(match)}
   <p><a id=""watch"" class=""watch"" href=""{WebUtility.HtmlEncode(replayUri)}"">Open replay in YMCA</a></p>
   <p class=""muted"">YMCA will download the replay and play it. If nothing happens, click the button above.</p>
   <p class=""muted""><a href=""{WebUtility.HtmlEncode(downloadUrl)}"">Download replay only</a></p>
 </div>
-<script>window.location.href = document.getElementById('watch').href;</script>
+{(match.Generation == null ? "<script>window.location.href = document.getElementById('watch').href;</script>" : "")}
 </body>
 </html>";
 
         context.Response.ContentType = "text/html; charset=utf-8";
         await context.Response.WriteAsync(html);
+    }
+
+    static string MapInstallationNotice(MatchRecord match) => match.Generation == null ? "" :
+        $"<p><strong>Generated tournament map — install before joining:</strong> " +
+        $"<a href=\"/map/{Uri.EscapeDataString(match.Id)}/download\">Download map (.oramap)</a>.</p>" +
+        "<p>Save it in your OpenRA support folder under <code>maps/ca/generated/</code>, " +
+        "then restart YMCA and use the join button. Both players and spectators need this map. " +
+        "Tournament-hosted maps must be installed from this download before joining.</p>" +
+        $"<p>Map ID: <code>{WebUtility.HtmlEncode(match.MapUid)}</code><br>SHA-256: <code>{WebUtility.HtmlEncode(match.GeneratedMapSha256)}</code></p>";
+
+    async Task DownloadMapAsync(HttpContext context, string matchId)
+    {
+        var match = await coordinator.GetMatchAsync(matchId);
+        var root = Path.GetFullPath(Path.Combine(config.Server.MatchDirectory, "generated-maps")) + Path.DirectorySeparatorChar;
+        if (match?.Generation == null || string.IsNullOrEmpty(match.GeneratedMapPath) ||
+            !Path.GetFullPath(match.GeneratedMapPath).StartsWith(root, StringComparison.Ordinal) || !File.Exists(match.GeneratedMapPath))
+        {
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            return;
+        }
+        context.Response.ContentType = "application/octet-stream";
+        context.Response.Headers.ContentDisposition = $"attachment; filename=\"YMCA-{match.Generation.Id}.oramap\"";
+        await context.Response.SendFileAsync(match.GeneratedMapPath);
     }
 
     async Task DownloadReplayAsync(HttpContext context, string matchId)
