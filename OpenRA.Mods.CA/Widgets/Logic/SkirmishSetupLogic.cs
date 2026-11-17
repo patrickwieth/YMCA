@@ -11,7 +11,7 @@ using OpenRA.Widgets;
 
 namespace OpenRA.Mods.CA.Widgets.Logic
 {
-	public class MainMenuLogicCA : MainMenuLogic
+	public class MainMenuLogicCA : YmcaNewsMainMenuLogic
 	{
 		readonly Widget menu;
 		[ObjectCreator.UseCtor]
