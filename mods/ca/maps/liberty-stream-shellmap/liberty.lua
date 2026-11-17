@@ -79,7 +79,6 @@ local SendBomber = function(location)
 		if Alive(unit) then unit.Destroy() end
 	end)
 end
-local spawnDelayRemainder = 0
 local SpawnNext
 SpawnNext = function()
 	if not statueStanding then return end
@@ -87,10 +86,8 @@ SpawnNext = function()
 	Utils.Do(raiders, function(a) if Alive(a) then table.insert(live, a) end end)
 	raiders = live
 	if #raiders < 48 then SendBomber(Cell(-25, 96)) end
-	-- 90% of the previous spawn rate; carry fractional ticks instead of rounding every interval.
-	local delay = DateTime.Seconds(3) * 10 + spawnDelayRemainder
-	spawnDelayRemainder = delay % 9
-	Trigger.AfterDelay(math.floor(delay / 9), SpawnNext)
+	-- Fourteen seconds between recurring Kirovs; the opening column is unchanged.
+	Trigger.AfterDelay(DateTime.Seconds(14), SpawnNext)
 end
 
 WorldLoaded = function()

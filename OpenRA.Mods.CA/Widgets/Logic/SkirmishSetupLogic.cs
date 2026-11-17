@@ -49,6 +49,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		readonly Widget content;
 		readonly ModData modData;
 		readonly Action<string> onSelect;
+		readonly Action<string> onGenerateRecipe;
+		readonly Action onChooseExisting;
 		GeneratedMapMode mode;
 		MapGenerationPreset preset;
 		MapGenerationOptions options;
@@ -60,10 +62,12 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		string status = "";
 
 		[ObjectCreator.UseCtor]
-		public SkirmishSetupLogic(Widget widget, ModData modData, Action<string> onSelect)
+		public SkirmishSetupLogic(Widget widget, ModData modData, Action<string> onSelect, Action<string> onGenerateRecipe = null, Action onChooseExisting = null)
 		{
 			this.modData = modData;
 			this.onSelect = onSelect;
+			this.onGenerateRecipe = onGenerateRecipe;
+			this.onChooseExisting = onChooseExisting;
 			content = widget.Get("CONTENT");
 			widget.Get<ButtonWidget>("BACK").OnClick = () =>
 			{
@@ -159,7 +163,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		{
 			content.RemoveChildren();
 			status = "";
-			Label($"{stage + 1}. Skirmish setup" + (stage > 0 ? " - " + mode : ""), 0, 0);
+			Label($"{stage + 1}. " + (onGenerateRecipe == null ? "Skirmish setup" : "Map setup") + (stage > 0 ? " - " + mode : ""), 0, 0);
 			if (stage == 0)
 			{
 				var descriptions = new[] { "Direct unit control", "Command through army leaders", "Two teams, ordered checkpoints" };
@@ -270,11 +274,18 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				() => options.TechBuildings = options.TechBuildings != TechBuildingDensity.None ? TechBuildingDensity.None :
 					customSettings.Topology == CustomTopology.Islands && options.Preset != MapGenerationPreset.Continents ? TechBuildingDensity.Dense : TechBuildingDensity.Sparse);
 			Label($"{options.Width} x {options.Height} / 2 teams / seed {options.Seed}", 220, 355, 590);
-			Button("Generate and enter lobby", 220, 385, 400, Generate);
+			Button(onGenerateRecipe == null ? "Generate and enter lobby" : "Generate and change map", 220, 385, 400, Generate);
 		}
 
 		void ChooseMap()
 		{
+			if (onChooseExisting != null)
+			{
+				Ui.CloseWindow();
+				onChooseExisting();
+				return;
+			}
+
 			var pool = new HashSet<string>(modData.MapCache.Where(m => m.Status == MapStatus.Available &&
 				m.Visibility.HasFlag(MapVisibility.Lobby) && Matches(m)).Select(m => m.Uid));
 			if (pool.Count == 0) { status = "No installed maps match " + mode + ". Select a preset to generate one."; return; }
@@ -298,14 +309,16 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				try
 				{
-					var folder = modData.MapCache.MapLocations.First(p => p.Value == MapClassification.User);
-					var plan = MapPlanGenerator.Generate(options);
-					var path = new RubberduckMapExporter(modData).Export(plan, options, folder.Key.Name, temporary: true);
-					TemporaryGeneratedMaps.Register(path);
-					modData.MapCache.LoadMap(Path.GetFileName(path), folder.Key, folder.Value, modData.Manifest.Get<MapGrid>(), null);
-					var map = modData.MapCache.First(m => m.Status == MapStatus.Available && string.Equals(Path.GetFullPath(m.PackageName), Path.GetFullPath(path), StringComparison.OrdinalIgnoreCase));
+					if (onGenerateRecipe != null)
+					{
+						onGenerateRecipe(GeneratedMapRecipe.Encode(options));
+						Ui.CloseWindow();
+						return;
+					}
+
+					var uid = GeneratedMapInstallation.Install(modData, MapPlanGenerator.Generate(options), options);
 					Ui.CloseWindow();
-					onSelect(map.Uid);
+					onSelect(uid);
 				}
 				catch (Exception e) { status = "Generation failed: " + e.Message; Log.Write("debug", e); }
 				finally { busy = false; }

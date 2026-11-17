@@ -59,6 +59,9 @@ public sealed class RegisteredPlayer
 
 public sealed class MatchRecord
 {
+    public GeneratedMapSpec? Generation { get; set; }
+    public string GeneratedMapPath { get; set; } = "";
+    public string GeneratedMapSha256 { get; set; } = "";
     public string Id { get; set; } = "";
     public ulong PlayerOneDiscordId { get; set; }
     public ulong PlayerTwoDiscordId { get; set; }
@@ -100,6 +103,7 @@ public sealed class MatchRecord
 
 public sealed class TournamentMap
 {
+    public GeneratedMapSpec? Generation { get; set; }
     public string Uid { get; set; } = "";
     public string Title { get; set; } = "";
     public int PlayerCount { get; set; }
@@ -132,6 +136,7 @@ public sealed class TournamentSeries
 
 public sealed class TournamentRecord
 {
+    public bool UseGeneratedMaps { get; set; }
     public string Id { get; set; } = "";
     public string Name { get; set; } = "";
     public TournamentFormat Format { get; set; }

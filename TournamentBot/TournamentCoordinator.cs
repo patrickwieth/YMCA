@@ -113,6 +113,9 @@ public sealed class TournamentCoordinator
                 created.PlayerTwoTeammateOpenRaName = teamSource.PlayerTwoTeammateOpenRaName;
                 created.PlayerOneTeamName = teamSource.PlayerOneTeamName;
                 created.PlayerTwoTeamName = teamSource.PlayerTwoTeamName;
+                created.Generation = teamSource.Generation;
+                created.GeneratedMapPath = teamSource.GeneratedMapPath;
+                created.GeneratedMapSha256 = teamSource.GeneratedMapSha256;
                 created.SeriesId = teamSource.SeriesId;
                 created.SeriesGameNumber = teamSource.SeriesGameNumber;
                 created.WinsRequired = teamSource.WinsRequired;
@@ -166,7 +169,7 @@ public sealed class TournamentCoordinator
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new InvalidOperationException("A tournament name is required.");
-        if (state.MapPool.Count == 0)
+        if (!config.Server.GenerateTournamentMaps && state.MapPool.Count == 0)
             throw new InvalidOperationException("Add at least one map to the tournament map pool first.");
         if (winsRequired is < 1 or > 3)
             throw new InvalidOperationException("Required wins must be between one and three.");
@@ -181,7 +184,8 @@ public sealed class TournamentCoordinator
             AllowSpectators = allowSpectators,
             WinsRequired = winsRequired,
             Status = TournamentStatus.Registration,
-            MapPool = state.MapPool.Select(map => new TournamentMap
+            UseGeneratedMaps = config.Server.GenerateTournamentMaps,
+            MapPool = (config.Server.GenerateTournamentMaps ? GeneratedTournamentMaps.Archetypes : state.MapPool).Select(map => new TournamentMap
             {
                 Uid = map.Uid,
                 Title = map.Title,
@@ -308,11 +312,11 @@ public sealed class TournamentCoordinator
             if (tournament.Entrants.Count < 2)
                 throw new InvalidOperationException("At least two players are required.");
 
-            if (state.MapPool.Count == 0)
+            if (!tournament.UseGeneratedMaps && state.MapPool.Count == 0)
                 throw new InvalidOperationException("The tournament map pool is empty.");
 
             Shuffle(tournament.Entrants);
-            tournament.MapPool = state.MapPool
+            tournament.MapPool = (tournament.UseGeneratedMaps ? GeneratedTournamentMaps.Archetypes : state.MapPool)
                 .Where(map => tournament.Mode == TournamentMode.OneVsOne || map.PlayerCount == 0 || map.PlayerCount >= 4)
                 .Select(map => new TournamentMap { Uid = map.Uid, Title = map.Title, PlayerCount = map.PlayerCount })
                 .ToList();
@@ -362,7 +366,9 @@ public sealed class TournamentCoordinator
             if (picks.Count >= required)
                 throw new InvalidOperationException("You have already selected all your maps.");
 
-            var excluded = series.MapPicks.Values.SelectMany(value => value).ToHashSet(StringComparer.OrdinalIgnoreCase);
+            // An archetype is not a finished map: both sides may choose the same type.
+            var excluded = (tournament.UseGeneratedMaps ? Enumerable.Empty<string>() : series.MapPicks.Values.SelectMany(value => value))
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
             var randomMap = tournament.RandomMapByRound[series.TournamentRound];
             var available = tournament.MapPool.Where(map => !excluded.Contains(map.Uid)
                 && (tournament.MapPool.Count <= 1 || !map.Uid.Equals(randomMap.Uid, StringComparison.OrdinalIgnoreCase))).ToList();
@@ -713,7 +719,7 @@ public sealed class TournamentCoordinator
 
         var selected = available[Random.Shared.Next(available.Count)];
         tournament.MapHistory.Add(selected.Uid);
-        return selected;
+        return tournament.UseGeneratedMaps ? GeneratedTournamentMaps.Freeze(selected, tournament.Mode) : selected;
     }
 
     static List<TournamentMap> BuildSeriesMaps(TournamentRecord tournament, TournamentSeries series)
@@ -728,6 +734,9 @@ public sealed class TournamentCoordinator
                 series.MapPicks[series.PlayerTwoDiscordId][i], StringComparison.OrdinalIgnoreCase)));
         }
 
+        if (tournament.UseGeneratedMaps)
+            maps = maps.Select(map => GeneratedTournamentMaps.Freeze(map, tournament.Mode)).ToList();
+        // Do not freeze again: every series in this round shares this exact request.
         maps.Add(tournament.RandomMapByRound[series.TournamentRound]);
         return maps;
     }
@@ -749,6 +758,7 @@ public sealed class TournamentCoordinator
             tournament.Id,
             series.TournamentRound,
             series.IsThirdPlaceMatch);
+        match.Generation = map.Generation;
         match.SeriesId = series.Id;
         match.SeriesGameNumber = gameNumber;
         match.WinsRequired = series.WinsRequired;
@@ -827,6 +837,10 @@ public sealed class TournamentCoordinator
     Task OnServerStartingAsync(MatchRecord match) => store.UpdateAsync(state =>
     {
         var stored = state.Matches[match.Id];
+        stored.MapUid = match.MapUid;
+        stored.Generation = match.Generation;
+        stored.GeneratedMapPath = match.GeneratedMapPath;
+        stored.GeneratedMapSha256 = match.GeneratedMapSha256;
         stored.Port = match.Port;
         stored.Password = match.Password;
         stored.SpectatorPassword = match.SpectatorPassword;

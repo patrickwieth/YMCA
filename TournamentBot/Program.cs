@@ -16,7 +16,8 @@ internal static class Program
         {
             var config = BotConfiguration.Load(configPath);
             var mapCatalog = new OfficialMapCatalog(config.Server);
-            await mapCatalog.LoadAsync(shutdown.Token);
+            if (!config.Server.GenerateTournamentMaps)
+                await mapCatalog.LoadAsync(shutdown.Token);
             var store = new StateStore(config.StateFile);
             var replayReader = new ReplayMetadataReader(config.Server);
             await using var serverPool = new OpenRaServerPool(config.Server, replayReader);
