@@ -62,7 +62,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			try
 			{
 				await File.WriteAllTextAsync(temporary, json);
-				File.Move(temporary, cachePath, true);
+				if (File.Exists(cachePath))
+					File.Replace(temporary, cachePath, null);
+				else
+					File.Move(temporary, cachePath);
 			}
 			catch (Exception ex) when (ex is IOException || ex is UnauthorizedAccessException)
 			{ Log.Write("debug", "Could not cache YMCA release notes: " + ex.Message); }

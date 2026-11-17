@@ -32,6 +32,7 @@ jobs:
       - name: Package AppImage
         run: |
           make engine
+          sh tools/prepare-engine-patches.sh
           mkdir -p build/linux
           sudo apt-get update
           sudo apt-get install -y libfuse2 desktop-file-utils
@@ -69,6 +70,7 @@ jobs:
           MACOS_DEVELOPER_PASSWORD: ${{ secrets.MACOS_DEVELOPER_PASSWORD }}
         run: |
           make engine
+          sh tools/prepare-engine-patches.sh
           mkdir -p build/macos
           ./packaging/macos/buildpackage.sh "${GIT_TAG}" "${PWD}/build/macos"
 
@@ -103,6 +105,7 @@ jobs:
       - name: Package Installers with Debugging
         run: |
           make engine
+          sh tools/prepare-engine-patches.sh
           mkdir -p build/windows
           echo "Checking wine version"
           wine64 --version
