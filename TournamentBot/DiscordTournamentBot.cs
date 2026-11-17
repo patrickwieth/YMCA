@@ -349,6 +349,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     async Task AddMapAsync(SocketSlashCommand command)
     {
         EnsureAdmin(command.User);
+        if (config.Server.GenerateTournamentMaps)
+            throw new InvalidOperationException("Generated tournaments use archetypes; /map-pool lists the available types.");
         var selected = mapCatalog.Get(GetString(command, "map"))
             ?? throw new InvalidOperationException("Select an official YMCA map from the autocomplete list.");
         var map = await coordinator.AddMapAsync(selected.Uid, selected.Title, selected.PlayerCount);
@@ -360,6 +362,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     async Task RemoveMapAsync(SocketSlashCommand command)
     {
         EnsureAdmin(command.User);
+        if (config.Server.GenerateTournamentMaps)
+            throw new InvalidOperationException("Generated tournaments use archetypes; the legacy map pool is unchanged.");
         var map = await coordinator.RemoveMapAsync(GetString(command, "map"));
         await command.RespondAsync(
             $"Removed **{Escape(map.Title)}** from the tournament map pool.",
@@ -368,10 +372,11 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
     async Task ShowMapPoolAsync(SocketSlashCommand command)
     {
-        var maps = await coordinator.GetMapPoolAsync();
+        var maps = config.Server.GenerateTournamentMaps ? GeneratedTournamentMaps.Archetypes : await coordinator.GetMapPoolAsync();
         var text = maps.Count == 0
             ? "The tournament map pool is empty."
-            : "**Tournament map pool**\n" + string.Join('\n', maps.Select(map => $"• **{Escape(map.Title)}** — `{map.Uid}`"));
+            : (config.Server.GenerateTournamentMaps ? "**Generated tournament archetypes**\n" : "**Tournament map pool**\n")
+                + string.Join('\n', maps.Select(map => $"• **{Escape(map.Title)}** — `{map.Uid}`"));
         await command.RespondAsync(text.Length <= 2000 ? text : text[..1997] + "...", ephemeral: true);
     }
 
@@ -756,6 +761,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 : "") +
             $"Opponent: {opponent}\n" +
             $"Map: **{Escape(match.MapTitle)}**\n" +
+            (match.Generation == null ? "" : "**Generated map:** open the join page and install the map download before joining.\n") +
             $"Join using this exact player name: `{playerName}`\n" +
             $"Server: `{config.Server.PublicHost}:{match.Port}`\n" +
             $"Password: `{match.Password}`\n\n" +
@@ -876,13 +882,16 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         var required = series.WinsRequired - 1;
         await SendDmAsync(playerId,
             $"**{Escape(tournament.Name)}** — map choice {pickNumber}/{required} for series `{series.Id}`.\n" +
-            "Choose a map, or select **I don't care** to let YMCA Overlord choose one for you.",
+            (tournament.UseGeneratedMaps
+                ? "Choose a map archetype. The match host will generate a fresh map. The deciding map is fixed for this whole round."
+                : "Choose a map, or select **I don't care** to let YMCA Overlord choose one for you."),
             BuildMapPickComponents(tournament, series));
     }
 
     static MessageComponent BuildMapPickComponents(TournamentRecord tournament, TournamentSeries series)
     {
-        var used = series.MapPicks.Values.SelectMany(value => value).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var used = (tournament.UseGeneratedMaps ? Enumerable.Empty<string>() : series.MapPicks.Values.SelectMany(value => value))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var randomMap = tournament.RandomMapByRound[series.TournamentRound];
         var maps = tournament.MapPool
             .Where(map => !used.Contains(map.Uid)
@@ -910,7 +919,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             builder.WithSelectMenu(
                 $"series-map:{series.Id}:{row}",
                 options,
-                chunks.Count == 1 ? "Choose your map" : $"Choose your map ({row + 1}/{chunks.Count})",
+                tournament.UseGeneratedMaps ? "Choose your map archetype" : chunks.Count == 1 ? "Choose your map" : $"Choose your map ({row + 1}/{chunks.Count})",
                 row: row);
         }
 

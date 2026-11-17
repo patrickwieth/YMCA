@@ -35,6 +35,8 @@ public sealed class BotConfiguration
         config.ReleaseAnnouncements.Validate();
         config.Server.NormalizeAndValidate();
         config.JoinPage.Validate();
+        if (config.Server.GenerateTournamentMaps && !config.JoinPage.Enabled)
+            throw new InvalidDataException("Generated tournament maps require the join page for map downloads.");
         return config;
     }
 }
@@ -83,6 +85,8 @@ public sealed class JoinPageConfiguration
 
 public sealed class OpenRaServerConfiguration
 {
+    public bool GenerateTournamentMaps { get; set; }
+    public int MapGenerationTimeoutSeconds { get; set; } = 180;
     public int MaxConcurrentServers { get; set; } = 2;
     public int FirstPort { get; set; } = 1234;
     public string PublicHost { get; set; } = "localhost";
@@ -100,6 +104,8 @@ public sealed class OpenRaServerConfiguration
 
     public void NormalizeAndValidate()
     {
+        if (MapGenerationTimeoutSeconds < 1)
+            throw new InvalidDataException("MapGenerationTimeoutSeconds must be positive.");
         if (MaxConcurrentServers < 1)
             throw new InvalidDataException("MaxConcurrentServers must be at least 1.");
         if (FirstPort is < 1 or > 65535 || FirstPort + MaxConcurrentServers - 1 > 65535)
