@@ -21,7 +21,7 @@ function All-Command
 
 	if ($lastexitcode -ne 0)
 	{
-		Write-Host "Build failed. If just the development tools failed to build, try installing Visual Studio. You may also still be able to run the game." -ForegroundColor Red
+		throw "Build failed (exit code $LASTEXITCODE)."
 	}
 	else
 	{
@@ -312,6 +312,7 @@ if ($command -eq "all" -or $command -eq "clean" -or $command -eq "check")
 	{
 		cd $env:ENGINE_DIRECTORY
 		Invoke-Expression ".\make.cmd $command"
+		if ($LASTEXITCODE -ne 0) { throw "Engine command failed (exit code $LASTEXITCODE)." }
 		Write-Host ""
 		cd $templateDir
 	}
@@ -369,7 +370,9 @@ if ($command -eq "all" -or $command -eq "clean" -or $command -eq "check")
 
 		cd $env:ENGINE_DIRECTORY
 		Invoke-Expression ".\make.cmd version $env:ENGINE_VERSION"
+		if ($LASTEXITCODE -ne 0) { throw "Engine version command failed (exit code $LASTEXITCODE)." }
 		Invoke-Expression ".\make.cmd $command"
+		if ($LASTEXITCODE -ne 0) { throw "Engine command failed (exit code $LASTEXITCODE)." }
 		Write-Host ""
 		cd $templateDir
 	}

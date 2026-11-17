@@ -1,0 +1,185 @@
+namespace Ymca.TournamentBot;
+
+public enum MatchStatus
+{
+    Queued,
+    StartingServer,
+    WaitingForPlayers,
+    Playing,
+    AwaitingConfirmation,
+    Completed,
+    RematchRequested,
+    Disputed,
+    Failed,
+    Cancelled
+}
+
+public enum PlayerReport
+{
+    Won,
+    Lost,
+    Rematch,
+    Dispute
+}
+
+public enum TournamentFormat
+{
+    SingleElimination,
+    DoubleElimination
+}
+
+public enum TournamentMode
+{
+    OneVsOne,
+    TwoVsTwo
+}
+
+public enum TournamentStatus
+{
+    Registration,
+    Running,
+    Completed,
+    Cancelled
+}
+
+public enum TournamentSeriesStatus
+{
+    AwaitingMapPicks,
+    Playing,
+    Completed
+}
+
+public sealed class RegisteredPlayer
+{
+    public ulong DiscordUserId { get; set; }
+    public string DiscordDisplayName { get; set; } = "";
+    public string OpenRaName { get; set; } = "";
+    public DateTime RegisteredAtUtc { get; set; }
+}
+
+public sealed class MatchRecord
+{
+    public string Id { get; set; } = "";
+    public ulong PlayerOneDiscordId { get; set; }
+    public ulong PlayerTwoDiscordId { get; set; }
+    public string PlayerOneOpenRaName { get; set; } = "";
+    public string PlayerTwoOpenRaName { get; set; } = "";
+    public ulong? PlayerOneTeammateDiscordId { get; set; }
+    public ulong? PlayerTwoTeammateDiscordId { get; set; }
+    public string PlayerOneTeammateOpenRaName { get; set; } = "";
+    public string PlayerTwoTeammateOpenRaName { get; set; } = "";
+    public string PlayerOneTeamName { get; set; } = "";
+    public string PlayerTwoTeamName { get; set; } = "";
+    public string MapUid { get; set; } = "";
+    public string MapTitle { get; set; } = "";
+    public MatchStatus Status { get; set; }
+    public int? Port { get; set; }
+    public string Password { get; set; } = "";
+    public bool AllowSpectators { get; set; }
+    public string SpectatorPassword { get; set; } = "";
+    public string SupportDirectory { get; set; } = "";
+    public string? ReplayPath { get; set; }
+    public ulong? AutomaticWinnerDiscordId { get; set; }
+    public ulong? FinalWinnerDiscordId { get; set; }
+    public Dictionary<ulong, PlayerReport> PlayerReports { get; set; } = new();
+    public string? FailureReason { get; set; }
+    public string? ParentMatchId { get; set; }
+    public string? TournamentId { get; set; }
+    public int TournamentRound { get; set; }
+    public string SeriesId { get; set; } = "";
+    public int SeriesGameNumber { get; set; } = 1;
+    public int WinsRequired { get; set; } = 1;
+    public bool IsThirdPlaceMatch { get; set; }
+    public DateTime CreatedAtUtc { get; set; }
+    public DateTime? StartedAtUtc { get; set; }
+    public DateTime? FinishedAtUtc { get; set; }
+    public Dictionary<ulong, ulong> JoinDmMessageIds { get; set; } = new();
+    public Dictionary<ulong, ulong> ResultDmMessageIds { get; set; } = new();
+    public ulong? SpectatorAnnouncementMessageId { get; set; }
+}
+
+public sealed class TournamentMap
+{
+    public string Uid { get; set; } = "";
+    public string Title { get; set; } = "";
+    public int PlayerCount { get; set; }
+}
+
+public sealed class TournamentTeam
+{
+    public string Name { get; set; } = "";
+    public ulong CaptainDiscordId { get; set; }
+    public ulong TeammateDiscordId { get; set; }
+    public bool Accepted { get; set; }
+    public ulong? InvitationMessageId { get; set; }
+}
+
+public sealed class TournamentSeries
+{
+    public string Id { get; set; } = "";
+    public string TournamentId { get; set; } = "";
+    public ulong PlayerOneDiscordId { get; set; }
+    public ulong PlayerTwoDiscordId { get; set; }
+    public int TournamentRound { get; set; }
+    public bool IsThirdPlaceMatch { get; set; }
+    public int WinsRequired { get; set; } = 1;
+    public TournamentSeriesStatus Status { get; set; }
+    public Dictionary<ulong, List<string>> MapPicks { get; set; } = new();
+    public List<TournamentMap> Maps { get; set; } = new();
+    public Dictionary<ulong, int> Wins { get; set; } = new();
+    public List<string> MatchIds { get; set; } = new();
+}
+
+public sealed class TournamentRecord
+{
+    public string Id { get; set; } = "";
+    public string Name { get; set; } = "";
+    public TournamentFormat Format { get; set; }
+    public TournamentMode Mode { get; set; }
+    public bool AllowSpectators { get; set; }
+    public int WinsRequired { get; set; } = 1;
+    public Dictionary<ulong, TournamentTeam> Teams { get; set; } = new();
+    public TournamentStatus Status { get; set; }
+    public string MapUid { get; set; } = "";
+    public string MapTitle { get; set; } = "";
+    public List<TournamentMap> MapPool { get; set; } = new();
+    public List<string> MapHistory { get; set; } = new();
+    public int RoundNumber { get; set; }
+    public List<ulong> Entrants { get; set; } = new();
+    public Dictionary<ulong, int> Losses { get; set; } = new();
+    public List<string> MatchIds { get; set; } = new();
+    public List<string> SeriesIds { get; set; } = new();
+    public HashSet<string> ProcessedMatchIds { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public HashSet<string> ProcessedSeriesIds { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<int, TournamentMap> RandomMapByRound { get; set; } = new();
+    public Dictionary<ulong, int> EliminatedInRound { get; set; } = new();
+    public ulong? ChampionDiscordId { get; set; }
+    public ulong? RunnerUpDiscordId { get; set; }
+    public ulong? ThirdPlaceDiscordId { get; set; }
+    public ulong? FourthPlaceDiscordId { get; set; }
+    public DateTime CreatedAtUtc { get; set; }
+    public DateTime? StartedAtUtc { get; set; }
+    public DateTime? FinishedAtUtc { get; set; }
+    public ulong? RegistrationAnnouncementMessageId { get; set; }
+}
+
+public sealed class TournamentState
+{
+    public Dictionary<ulong, RegisteredPlayer> Players { get; set; } = new();
+    public Dictionary<string, MatchRecord> Matches { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, TournamentSeries> Series { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public Dictionary<string, TournamentRecord> Tournaments { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public List<TournamentMap> MapPool { get; set; } = new();
+    public int NextMatchNumber { get; set; } = 1;
+    public int NextSeriesNumber { get; set; } = 1;
+    public int NextTournamentNumber { get; set; } = 1;
+    public string LastAnnouncedReleaseVersion { get; set; } = "";
+}
+
+public sealed record ReplayPlayerResult(string Name, string Outcome, bool IsHuman);
+
+public sealed record ReplayResult(
+    string ReplayPath,
+    string MapTitle,
+    string Version,
+    IReadOnlyList<ReplayPlayerResult> Players);

@@ -1,5 +1,36 @@
+Background@SKIRMISH_SETUP:
+	Width: 880
+	Height: 570
+	X: (WINDOW_WIDTH - WIDTH) / 2
+	Y: (WINDOW_HEIGHT - HEIGHT) / 2
+	Background: dialog
+	Logic: SkirmishSetupLogic
+	Children:
+		Container@CONTENT:
+			X: 30
+			Y: 25
+			Width: 820
+			Height: 435
+		Label@STATUS:
+			X: 30
+			Y: 465
+			Width: 820
+			Height: 35
+		Button@BACK:
+			X: 30
+			Y: 515
+			Width: 160
+			Height: 35
+			Text: Back
+		Button@GENERATE_PRESET:
+			X: PARENT_WIDTH - WIDTH - 30
+			Y: 515
+			Width: 400
+			Height: 35
+			Text: Generate and enter lobby
+
 Container@MAINMENU:
-	Logic: MainMenuLogicCA
+	Logic: MainMenuLogicCA, CustomFactionMenuLogic
 	Children:
 		LogicKeyListener@GLOBAL_KEYHANDLER:
 			Logic: MusicHotkeyLogic, ScreenshotHotkeyLogic, MuteHotkeyLogic
@@ -35,7 +66,7 @@ Container@MAINMENU:
 			X: 13 + (WINDOW_WIDTH - 522) / 4 - WIDTH / 2
 			Y: WINDOW_HEIGHT / 2 - HEIGHT / 2
 			Width: 200
-			Height: 320
+			Height: 400
 			Children:
 				Background@MAIN_MENU:
 					Width: PARENT_WIDTH
@@ -49,6 +80,15 @@ Container@MAINMENU:
 							Text: YMCA
 							Align: Center
 							Font: MediumBold
+						Button@CUSTOM_PLAY_BUTTON:
+							X: PARENT_WIDTH / 2 - WIDTH / 2
+							Y: 60
+							Width: 140
+							Height: 30
+							Text: Play
+							Font: Bold
+							Disabled: true
+							Visible: false
 						Button@SINGLEPLAYER_BUTTON:
 							X: PARENT_WIDTH / 2 - WIDTH / 2
 							Y: 60
@@ -84,9 +124,16 @@ Container@MAINMENU:
 							Height: 30
 							Text: Manage Content
 							Font: Bold
-						Button@QUIT_BUTTON:
+						Button@CUSTOM_FACTION_BUTTON:
 							X: PARENT_WIDTH / 2 - WIDTH / 2
 							Y: 260
+							Width: 140
+							Height: 30
+							Text: My factions
+							Font: Bold
+						Button@QUIT_BUTTON:
+							X: PARENT_WIDTH / 2 - WIDTH / 2
+							Y: 300
 							Width: 140
 							Height: 30
 							Text: Quit
@@ -257,24 +304,28 @@ Container@MAINMENU:
 					Height: 25
 					Text: Battlefield News
 					Font: Bold
-		Container@UPDATE_NOTICE:
+		Background@UPDATE_NOTICE:
 			X: (WINDOW_WIDTH - WIDTH) / 2
 			Y: 95
-			Width: 128
+			Width: 430
+			Height: 75
+			Background: dialog4
 			Children:
-				Label@A:
-					Width: PARENT_WIDTH
+				Label@UPDATE_LABEL:
+					X: 15
+					Y: 8
+					Width: PARENT_WIDTH - 30
 					Height: 25
 					Align: Center
 					Shadow: true
-					Text: You are running an outdated version of OpenRA.
-				Label@B:
-					Y: 20
-					Width: PARENT_WIDTH
-					Height: 25
-					Align: Center
-					Shadow: true
-					Text: Download the latest version from www.openra.net
+					Text: A new YMCA version is available.
+				Button@UPDATE_BUTTON:
+					X: (PARENT_WIDTH - WIDTH) / 2
+					Y: 38
+					Width: 220
+					Height: 28
+					Text: Install update
+					Font: Bold
 		Container@PLAYER_PROFILE_CONTAINER:
 			X: 25
 			Y: 25

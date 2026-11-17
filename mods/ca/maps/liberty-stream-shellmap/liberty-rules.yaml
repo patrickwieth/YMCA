@@ -1,0 +1,53 @@
+# Cinematic menu scenario only. No global combat or artwork overrides.
+World:
+	-CrateSpawner:
+	-SpawnStartingUnits:
+	-StartGameNotification:
+	-TimeLimitManager:
+	LuaScript:
+		Scripts: liberty.lua
+	ShellmapBattleMonitor:
+		Players: Allies, Raiders
+		ClearSmudgesInterval: 375
+	MusicPlaylist:
+		DisableWorldSounds: true
+Player:
+	-ConquestVictoryConditions:
+	-CheckpointVictoryConditions:
+	Shroud:
+		FogCheckboxEnabled: false
+		FogCheckboxLocked: true
+		ExploredMapCheckboxEnabled: true
+		ExploredMapCheckboxLocked: true
+# Cinematic durability/speed: some bombers must penetrate the ten-ship screen.
+# These overrides are scoped to this background map, not normal matches.
+LIBERTY.KIROV:
+	Inherits: Kirov
+	RenderVoxels:
+		Image: kirov
+	RenderSprites:
+		Image: kirov
+	Health:
+		HP: 300000
+	Aircraft:
+		Speed: 80
+AGUN:
+	Power:
+		Amount: 0
+LIBERTY.STATUE:
+	Inherits: ^Building
+	Inherits@SHAPE: ^3x3Shape
+	Building:
+		Dimensions: 3,3
+		Footprint: xxx xxx xxx
+		TerrainTypes: Clear, Sand
+	Health:
+		HP: 800000
+	Tooltip:
+		Name: Statue of Liberty
+	RenderSprites:
+		Image: liberty.statue
+	WithSpriteBody:
+		Sequence: idle
+	MapEditorData:
+		Categories: Civilian building

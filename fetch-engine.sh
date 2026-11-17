@@ -58,7 +58,7 @@ if [ "${AUTOMATIC_ENGINE_MANAGEMENT}" = "True" ]; then
 
 	echo "Downloading engine..."
 	if command -v curl > /dev/null 2>&1; then
-		curl -s -L -o "${AUTOMATIC_ENGINE_TEMP_ARCHIVE_NAME}" -O "${AUTOMATIC_ENGINE_SOURCE}" || exit 3
+		curl --fail --show-error --silent --location --retry 3 -o "${AUTOMATIC_ENGINE_TEMP_ARCHIVE_NAME}" "${AUTOMATIC_ENGINE_SOURCE}" || exit 3
 	else
 		wget -cq "${AUTOMATIC_ENGINE_SOURCE}" -O "${AUTOMATIC_ENGINE_TEMP_ARCHIVE_NAME}" || exit 3
 	fi
@@ -76,7 +76,11 @@ if [ "${AUTOMATIC_ENGINE_MANAGEMENT}" = "True" ]; then
 
 	echo "Compiling engine..."
 	cd "${ENGINE_DIRECTORY}" || exit 1
-	make version VERSION="${ENGINE_VERSION}"
+	# Same version setup as `make version`, without requiring GNU make during
+	# bootstrap (Git Bash on Windows prepares CI patches before make.ps1 runs).
+	. ./packaging/functions.sh || exit 1
+	set_engine_version "${ENGINE_VERSION}" . || exit 1
+	set_mod_version "${ENGINE_VERSION}" mods/*/mod.yaml || exit 1
 	exit 0
 fi
 

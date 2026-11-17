@@ -119,6 +119,58 @@ allies.dummy:
 		RequiresCondition: cryo-tech
 		Modifier: 120
 
+# Separate foundation sprites preserve the supplied RGBA building artwork.
+^AlliedBuildingShadow:
+	WithShadow@BUILDINGTRIAL:
+		RequiresCondition: !build-incomplete
+		ShadowColor: 00000070
+		# WORLD offset: short silhouette approximately 4px straight down (sun upper-center).
+		Offset: 0,90,0
+		ZOffset: -2048
+
+^Allied1x1Visuals:
+	IsometricSelectable:
+		DecorationBounds: 1448, 1448
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
+^Allied2x2Visuals:
+	# Keep the 2x2 body/selection inside a larger surrounding foundation.
+	IsometricSelectable:
+		DecorationBounds: 2896, 2896
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib3x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
+^Allied2x2DriveableBib:
+	Inherits: ^Allied2x2Visuals
+	HitShape:
+		Type: Rectangle
+			TopLeft: -1024,-1024
+			BottomRight: 1024,1024
+	Building:
+		Dimensions: 3,3
+		Footprint: xx= xx= ===
+		LocalCenterOffset: 0,-724,0
+	WithIdleOverlay@ALLIEDBIB:
+		# Body-local coordinates: LocalToWorld rotates and applies camera-pitch scaling.
+		# With the building's default pitch this becomes WORLD 0,724,0 (screen 0,+32).
+		Offset: -1134,0,0
+
+^Allied3x3Visuals:
+	IsometricSelectable:
+		DecorationBounds: 4344, 4344
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib3x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+
 ^AlliesPrismUnit:
 	GrantConditionOnPrerequisite@PrismTech:
 		Condition: prism-tech

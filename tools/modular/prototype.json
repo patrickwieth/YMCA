@@ -1,0 +1,12 @@
+{
+  "status": "Experimental map-only GDI vertical slice. Not a general runtime designer/compiler. Stationary and hover artwork use the existing tank as a placeholder.",
+  "components": {
+    "prototype-hover": {"display_name":"Hover-Fahrwerk (Prototyp)","role":"running_gear","factions":["gdi"],"tier":1,"cp":0,"tech":2,"mass":1200,"cost":300,"electric_kw":10,"locomotor":"hover","kind":"hover","max_mass":20000,"max_speed":150,"turn_speed":64,"source":"^HoverVehicle","note":"Reuse hover water/EMP/driver-death behavior. Test tank artwork is placeholder, not verified hover hull."},
+    "gdi-stationary": {"display_name":"Stationaere GDI-Plattform","role":"running_gear","factions":["gdi"],"tier":0,"cp":0,"tech":1,"mass":1000,"cost":50,"electric_kw":0,"locomotor":"wheeled","kind":"stationary","max_mass":20000,"max_speed":0,"turn_speed":0,"note":"Land occupancy for Carryall placement, NOT the empty immobile locomotor. No self movement or body rotation. GDI only; manual transport, no production exit yet."}
+  },
+  "designs": [
+    {"actor":"modular.tank","name":"Modular GDI Tank","faction":"gdi","components":["gdi-battle-hull","diesel","baseline-generator","heavy","medium-cannon-mount","medium-cannon","medium-tank-shell"]},
+    {"actor":"modular.hover","name":"Modular GDI Hover Test","faction":"gdi","running_gear":"prototype-hover","components":["gdi-battle-hull","diesel","baseline-generator","heavy","medium-cannon-mount","medium-cannon","medium-tank-shell"]},
+    {"actor":"modular.stationary","name":"Modular GDI Stationary Test","faction":"gdi","running_gear":"gdi-stationary","components":["gdi-battle-hull","diesel","baseline-generator","heavy","medium-cannon-mount","medium-cannon","medium-tank-shell"]}
+  ]
+}

@@ -25,7 +25,7 @@ namespace OpenRA.Mods.CA.Traits
 
         if (HomeCheckpoint != null)
         {
-          if (HomeCheckpoint.TraitOrDefault<Checkpoint>().Hierarchy < 0)
+          if (HomeCheckpoint.TraitOrDefault<Checkpoint>().Hierarchy <= 0)
             HierarchyAscending = true;
           else
             HierarchyAscending = false;

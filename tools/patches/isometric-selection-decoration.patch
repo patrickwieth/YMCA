@@ -1,0 +1,884 @@
+--- a/engine/OpenRA.Game/Game.cs
++++ b/engine/OpenRA.Game/Game.cs
+@@ -363,6 +363,14 @@
+ 			return Run();
+ 		}
+ 
++		static void ResetSessionForLaunchUri()
++		{
++			// Match the normal quit-to-menu path. The shellmap has its own players;
++			// reusing a match/replay lobby can refer to absent slots such as Multi1.
++			Disconnect();
++			Ui.ResetAll();
++		}
++
+ 		static void ProcessPendingLaunchUri()
+ 		{
+ 			string uri = null;
+@@ -375,6 +383,7 @@
+ 			var launch = new LaunchArguments(new Arguments(new[] { $"Launch.URI={uri}" }));
+ 			if (!string.IsNullOrEmpty(launch.ReplayUrl))
+ 			{
++				ResetSessionForLaunchUri();
+ 				LoadShellMap();
+ 				Renderer.Window.Raise();
+ 				_ = DownloadAndPlayReplayAsync(launch.ReplayUrl);
+@@ -389,6 +398,7 @@
+ 				Settings.Player.Name = Settings.SanitizedPlayerName(launch.PlayerName);
+ 
+ 			// Reset any menu, lobby, replay, or active game before joining the new server.
++			ResetSessionForLaunchUri();
+ 			LoadShellMap();
+ 			Renderer.Window.Raise();
+ 			RemoteDirectConnect(endpoint, launch.Password, launch.Spectator);
+--- a/engine/OpenRA.Game/Graphics/Animation.cs
++++ b/engine/OpenRA.Game/Graphics/Animation.cs
+@@ -22,6 +22,15 @@
+ 		public string Name { get; private set; }
+ 		public bool IsDecoration { get; set; }
+ 
++		/// <summary>Optional frame-zero presentation override. Return null for normal animated playback. Clocks and callbacks are unchanged.</summary>
++		public Func<ISpriteSequence> RenderSequenceOverride { get; set; }
++
++		ISpriteSequence DisplaySequence => RenderSequenceOverride?.Invoke() ?? CurrentSequence;
++		int DisplayFrame => RenderSequenceOverride?.Invoke() != null ? 0 : CurrentFrame;
++
++		/// <summary>Scale of the displayed sequence, which may differ from the sequence controlling playback.</summary>
++		public float RenderScale => DisplaySequence.Scale;
++
+ 		readonly Map map;
+ 		readonly SequenceSet sequences;
+ 		readonly Func<WAngle> facingFunc;
+@@ -53,25 +62,27 @@
+ 
+ 		public int CurrentFrame => backwards ? CurrentSequence.Length - frame - 1 : frame;
+ 
+-		public Sprite Image => CurrentSequence.GetSprite(CurrentFrame, facingFunc());
++		public Sprite Image => DisplaySequence.GetSprite(DisplayFrame, facingFunc());
+ 
+ 		public IRenderable[] Render(WPos pos, in WVec offset, int zOffset, PaletteReference palette)
+ 		{
+-			var tintModifiers = CurrentSequence.IgnoreWorldTint ? TintModifiers.IgnoreWorldTint : TintModifiers.None;
+-			var alpha = CurrentSequence.GetAlpha(CurrentFrame);
+-			var (image, rotation) = CurrentSequence.GetSpriteWithRotation(CurrentFrame, facingFunc());
++			var sequence = DisplaySequence;
++			var displayFrame = DisplayFrame;
++			var tintModifiers = sequence.IgnoreWorldTint ? TintModifiers.IgnoreWorldTint : TintModifiers.None;
++			var alpha = sequence.GetAlpha(displayFrame);
++			var (image, rotation) = sequence.GetSpriteWithRotation(displayFrame, facingFunc());
+ 			var imageRenderable = new SpriteRenderable(
+-				image, pos, offset, CurrentSequence.ZOffset + zOffset, palette,
+-				CurrentSequence.Scale, alpha, float3.Ones, tintModifiers, IsDecoration, rotation);
+-
+-			var shadow = CurrentSequence.GetShadow(CurrentFrame, facingFunc());
++				image, pos, offset, sequence.ZOffset + zOffset, palette,
++				sequence.Scale, alpha, float3.Ones, tintModifiers, IsDecoration, rotation);
++
++			var shadow = sequence.GetShadow(displayFrame, facingFunc());
+ 			if (shadow != null)
+ 			{
+ 				var height = map.DistanceAboveTerrain(pos).Length;
+ 
+ 				var shadowRenderable = new SpriteRenderable(
+-					shadow, pos, offset - new WVec(0, 0, height), CurrentSequence.ShadowZOffset + zOffset + height, palette,
+-					CurrentSequence.Scale, 1f, float3.Ones, tintModifiers,
++					shadow, pos, offset - new WVec(0, 0, height), sequence.ShadowZOffset + zOffset + height, palette,
++					sequence.Scale, 1f, float3.Ones, tintModifiers,
+ 					true, rotation);
+ 				return new IRenderable[] { shadowRenderable, imageRenderable };
+ 			}
+@@ -81,17 +92,19 @@
+ 
+ 		public IRenderable[] RenderUI(WorldRenderer wr, int2 pos, in WVec offset, int zOffset, PaletteReference palette, float scale = 1f, float rotation = 0f)
+ 		{
+-			scale *= CurrentSequence.Scale;
++			var sequence = DisplaySequence;
++			var displayFrame = DisplayFrame;
++			scale *= sequence.Scale;
+ 			var screenOffset = (scale * wr.ScreenVectorComponents(offset)).XY.ToInt2();
+ 			var imagePos = pos + screenOffset - new int2((int)(scale * Image.Size.X / 2), (int)(scale * Image.Size.Y / 2));
+-			var alpha = CurrentSequence.GetAlpha(CurrentFrame);
+-			var imageRenderable = new UISpriteRenderable(Image, WPos.Zero + offset, imagePos, CurrentSequence.ZOffset + zOffset, palette, scale, alpha, rotation);
+-
+-			var shadow = CurrentSequence.GetShadow(CurrentFrame, facingFunc());
++			var alpha = sequence.GetAlpha(displayFrame);
++			var imageRenderable = new UISpriteRenderable(Image, WPos.Zero + offset, imagePos, sequence.ZOffset + zOffset, palette, scale, alpha, rotation);
++
++			var shadow = sequence.GetShadow(displayFrame, facingFunc());
+ 			if (shadow != null)
+ 			{
+ 				var shadowPos = pos - new int2((int)(scale * shadow.Size.X / 2), (int)(scale * shadow.Size.Y / 2));
+-				var shadowRenderable = new UISpriteRenderable(shadow, WPos.Zero + offset, shadowPos, CurrentSequence.ShadowZOffset + zOffset, palette, scale, 1f, rotation);
++				var shadowRenderable = new UISpriteRenderable(shadow, WPos.Zero + offset, shadowPos, sequence.ShadowZOffset + zOffset, palette, scale, 1f, rotation);
+ 				return new IRenderable[] { shadowRenderable, imageRenderable };
+ 			}
+ 
+@@ -100,9 +113,10 @@
+ 
+ 		public Rectangle ScreenBounds(WorldRenderer wr, WPos pos, in WVec offset)
+ 		{
+-			var scale = CurrentSequence.Scale;
++			var sequence = DisplaySequence;
++			var scale = sequence.Scale;
+ 			var xy = wr.ScreenPxPosition(pos) + wr.ScreenPxOffset(offset);
+-			var cb = CurrentSequence.Bounds;
++			var cb = sequence.Bounds;
+ 			return Rectangle.FromLTRB(
+ 				xy.X + (int)(cb.Left * scale),
+ 				xy.Y + (int)(cb.Top * scale),
+--- a/engine/OpenRA.Game/Traits/World/ScreenMap.cs
++++ b/engine/OpenRA.Game/Traits/World/ScreenMap.cs
+@@ -214,6 +214,14 @@
+ 		{
+ 			foreach (var a in addOrUpdateActors)
+ 			{
++				// Removal wins over an earlier queued update. Bounds providers may access
++				// actor traits, which have already been removed after disposal.
++				if (a.Disposed || removeActors.Contains(a))
++				{
++					removeActors.Add(a);
++					continue;
++				}
++
+ 				var mouseBounds = a.MouseBounds(worldRenderer);
+ 				if (!mouseBounds.IsEmpty)
+ 				{
+--- a/engine/OpenRA.Mods.Common/Graphics/SpriteActorPreview.cs
++++ b/engine/OpenRA.Mods.Common/Graphics/SpriteActorPreview.cs
+@@ -19,6 +19,9 @@
+ 	public class SpriteActorPreview : IActorPreview
+ 	{
+ 		readonly Animation animation;
++
++		/// <summary>The sprite animation used to apply presentation-only preview filtering.</summary>
++		public Animation Animation => animation;
+ 		readonly Func<WVec> offset;
+ 		readonly Func<int> zOffset;
+ 		readonly PaletteReference pr;
+--- a/engine/OpenRA.Mods.Common/Traits/Buildable.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Buildable.cs
+@@ -23,6 +23,19 @@
+ 			"and/or ~ to hide the actor from the production palette if the prerequisite is not available.",
+ 			"Prerequisites are granted by actors with the ProvidesPrerequisite trait.")]
+ 		public readonly string[] Prerequisites = Array.Empty<string>();
++
++		[Desc("Optional hard map-category whitelist. Unlike prerequisites this is not bypassed by All Tech.")]
++		public readonly string[] AllowedMapCategories = Array.Empty<string>();
++
++		[Desc("Optional hard owner-faction whitelist. Unlike prerequisites this is not bypassed by All Tech.")]
++		public readonly string[] AllowedOwnerFactions = Array.Empty<string>();
++
++		/// <summary>Whether this actor belongs in the production roster for this map and owner.</summary>
++		public bool IsAvailableInContext(IEnumerable<string> categories, string faction)
++		{
++			return (AllowedMapCategories.Length == 0 || categories.Intersect(AllowedMapCategories, StringComparer.OrdinalIgnoreCase).Any()) &&
++				(AllowedOwnerFactions.Length == 0 || AllowedOwnerFactions.Contains(faction, StringComparer.OrdinalIgnoreCase));
++		}
+ 
+ 		[Desc("Production queue(s) that can produce this.")]
+ 		public readonly HashSet<string> Queue = new();
+--- a/engine/OpenRA.Mods.Common/Traits/Buildings/ActorPreviewPlaceBuildingPreview.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Buildings/ActorPreviewPlaceBuildingPreview.cs
+@@ -79,8 +79,10 @@
+ 			var previewRenderables = preview
+ 				.SelectMany(p => p.Render(wr, centerPosition));
+ 
+-			if (info.FootprintUnderPreview != PlaceBuildingCellType.None)
+-				foreach (var r in RenderFootprint(wr, topLeft, footprint, info.FootprintUnderPreview))
++			var under = info.FootprintUnderPreview & ~SequenceFootprintOverPreview;
++			var over = info.FootprintOverPreview | SequenceFootprintOverPreview;
++			if (under != PlaceBuildingCellType.None)
++				foreach (var r in RenderFootprint(wr, topLeft, footprint, under))
+ 					yield return r;
+ 
+ 			foreach (var r in previewRenderables.OrderBy(WorldRenderer.RenderableZPositionComparisonKey))
+@@ -95,8 +97,8 @@
+ 				yield return renderable;
+ 			}
+ 
+-			if (info.FootprintOverPreview != PlaceBuildingCellType.None)
+-				foreach (var r in RenderFootprint(wr, topLeft, footprint, info.FootprintOverPreview))
++			if (over != PlaceBuildingCellType.None)
++				foreach (var r in RenderFootprint(wr, topLeft, footprint, over))
+ 					yield return r;
+ 		}
+ 	}
+--- a/engine/OpenRA.Mods.Common/Traits/Buildings/Building.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Buildings/Building.cs
+@@ -41,6 +41,9 @@
+ 
+ 		public readonly CVec Dimensions = new(1, 1);
+ 
++		[Desc("Cell offset of the footprint rectangle relative to actor Location. Does not move the actor or exits.")]
++		public readonly CVec FootprintOffset = CVec.Zero;
++
+ 		[Desc("Shift center of the actor by this offset.")]
+ 		public readonly WVec LocalCenterOffset = WVec.Zero;
+ 
+@@ -101,6 +104,8 @@
+ 				throw new YamlException($"Invalid footprint: {fp} does not match dimensions {dims}");
+ 			}
+ 
++			var offsetYaml = yaml.NodeWithKeyOrDefault("FootprintOffset");
++			var offset = offsetYaml != null ? FieldLoader.GetValue<CVec>("FootprintOffset", offsetYaml.Value.Value) : CVec.Zero;
+ 			var index = 0;
+ 			var ret = new Dictionary<CVec, FootprintCellType>();
+ 			for (var y = 0; y < dim.Y; y++)
+@@ -111,7 +116,7 @@
+ 					if (!Enum.IsDefined(typeof(FootprintCellType), (FootprintCellType)c))
+ 						throw new YamlException($"Invalid footprint cell type '{c}'");
+ 
+-					ret[new CVec(x, y)] = (FootprintCellType)c;
++					ret[new CVec(x, y) + offset] = (FootprintCellType)c;
+ 				}
+ 			}
+ 
+@@ -239,8 +244,9 @@
+ 			var adjacent = requiresBuildableArea.Adjacent;
+ 			var buildingMaxBounds = Dimensions;
+ 
+-			var scanStart = world.Map.Clamp(topLeft - new CVec(adjacent, adjacent));
+-			var scanEnd = world.Map.Clamp(topLeft + buildingMaxBounds + new CVec(adjacent, adjacent));
++			// Footprint rectangles may extend behind Location without moving the actor center.
++			var scanStart = world.Map.Clamp(topLeft + FootprintOffset - new CVec(adjacent, adjacent));
++			var scanEnd = world.Map.Clamp(topLeft + FootprintOffset + buildingMaxBounds + new CVec(adjacent, adjacent));
+ 
+ 			var nearnessCandidates = new List<CPos>();
+ 			var bi = world.WorldActor.Trait<BuildingInfluence>();
+--- a/engine/OpenRA.Mods.Common/Traits/Buildings/FootprintPlaceBuildingPreview.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Buildings/FootprintPlaceBuildingPreview.cs
+@@ -28,6 +28,12 @@
+ 		[Desc("Custom opacity to apply to the placement sprite.")]
+ 		public readonly float FootprintAlpha = 1f;
+ 
++		[Desc("Optional overlay sequence for valid passable footprint cells (= and +). Invalid cells always use build-invalid.")]
++		public readonly string PassableSequence = "build-valid-passable";
++
++		[Desc("Replacement RGB color for passable placement markers; sprite alpha is preserved.")]
++		public readonly Color PassableColor = Color.FromArgb(144, 255, 144);
++
+ 		[Desc("Custom opacity to apply to the line-build placement sprite.")]
+ 		public readonly float LineBuildFootprintAlpha = 1f;
+ 
+@@ -51,8 +57,16 @@
+ 		readonly FootprintPlaceBuildingPreviewInfo info;
+ 		readonly IPlaceBuildingDecorationInfo[] decorations;
+ 		readonly int2 topLeftScreenOffset;
+-		readonly Sprite validTile, blockedTile;
+-		readonly float validAlpha, blockedAlpha;
++		readonly BuildingInfo building;
++		readonly Sprite validTile, blockedTile, passableTile;
++		readonly float validAlpha, blockedAlpha, passableAlpha;
++		readonly float validScale, blockedScale, passableScale;
++		readonly int validZOffset, blockedZOffset, passableZOffset;
++
++		// Explicit positive sequence depth also places markers after preview sprites.
++		protected PlaceBuildingCellType SequenceFootprintOverPreview =>
++			(validZOffset > 0 || passableZOffset > 0 ? PlaceBuildingCellType.Valid | PlaceBuildingCellType.LineBuild : PlaceBuildingCellType.None) |
++			(blockedZOffset > 0 ? PlaceBuildingCellType.Invalid : PlaceBuildingCellType.None);
+ 
+ 		public FootprintPlaceBuildingPreviewPreview(WorldRenderer wr, ActorInfo ai, FootprintPlaceBuildingPreviewInfo info)
+ 		{
+@@ -61,7 +75,8 @@
+ 			decorations = ActorInfo.TraitInfos<IPlaceBuildingDecorationInfo>().ToArray();
+ 
+ 			var world = wr.World;
+-			CenterOffset = ActorInfo.TraitInfo<BuildingInfo>().CenterOffset(world);
++			building = ActorInfo.TraitInfo<BuildingInfo>();
++			CenterOffset = building.CenterOffset(world);
+ 			topLeftScreenOffset = -wr.ScreenPxOffset(CenterOffset);
+ 
+ 			var tileset = world.Map.Tileset.ToLowerInvariant();
+@@ -71,17 +86,41 @@
+ 				var validSequence = sequences.GetSequence("overlay", $"build-valid-{tileset}");
+ 				validTile = validSequence.GetSprite(0);
+ 				validAlpha = validSequence.GetAlpha(0);
++				validScale = validSequence.Scale;
++				validZOffset = validSequence.ZOffset;
+ 			}
+ 			else
+ 			{
+ 				var validSequence = sequences.GetSequence("overlay", "build-valid");
+ 				validTile = validSequence.GetSprite(0);
+ 				validAlpha = validSequence.GetAlpha(0);
++				validScale = validSequence.Scale;
++				validZOffset = validSequence.ZOffset;
++			}
++
++			if (info.PassableSequence != null && sequences.HasSequence("overlay", info.PassableSequence))
++			{
++				var passableSequence = sequences.GetSequence("overlay", info.PassableSequence);
++				passableTile = passableSequence.GetSprite(0);
++				passableAlpha = passableSequence.GetAlpha(0);
++				passableScale = passableSequence.Scale;
++				passableZOffset = passableSequence.ZOffset;
+ 			}
+ 
+ 			var blockedSequence = sequences.GetSequence("overlay", "build-invalid");
+ 			blockedTile = blockedSequence.GetSprite(0);
+ 			blockedAlpha = blockedSequence.GetAlpha(0);
++			blockedScale = blockedSequence.Scale;
++			blockedZOffset = blockedSequence.ZOffset;
++		}
++
++		/// <summary>Classify movement separately from placement validity, using Location-relative footprint keys.</summary>
++		public static bool IsPassableCell(BuildingInfo building, CVec cell, PlaceBuildingCellType placement)
++		{
++			return (placement & PlaceBuildingCellType.Valid) != 0 &&
++				(placement & (PlaceBuildingCellType.Invalid | PlaceBuildingCellType.LineBuild)) == 0 &&
++				building.Footprint.TryGetValue(cell, out var type) &&
++				(type == FootprintCellType.OccupiedPassable || type == FootprintCellType.OccupiedPassableTransitOnly);
+ 		}
+ 
+ 		protected virtual void TickInner() { }
+@@ -96,12 +135,20 @@
+ 				if ((c.Value & filter) == 0)
+ 					continue;
+ 
+-				var tile = (c.Value & PlaceBuildingCellType.Invalid) != 0 ? blockedTile : validTile;
+-				var sequenceAlpha = (c.Value & PlaceBuildingCellType.Invalid) != 0 ? blockedAlpha : validAlpha;
++				var invalid = (c.Value & PlaceBuildingCellType.Invalid) != 0;
++				var passable = passableTile != null && IsPassableCell(building, c.Key - topLeft, c.Value);
++				var tile = invalid ? blockedTile : passable ? passableTile : validTile;
++				var sequenceAlpha = invalid ? blockedAlpha : passable ? passableAlpha : validAlpha;
+ 				var pos = wr.World.Map.CenterOfCell(c.Key);
+ 				var offset = new WVec(0, 0, topLeftPos.Z - pos.Z);
+ 				var traitAlpha = (c.Value & PlaceBuildingCellType.LineBuild) != 0 ? info.LineBuildFootprintAlpha : info.FootprintAlpha;
+-				yield return new SpriteRenderable(tile, pos, offset, -511, palette, 1f, sequenceAlpha * traitAlpha, float3.Ones, TintModifiers.IgnoreWorldTint, true);
++				var scale = invalid ? blockedScale : passable ? passableScale : validScale;
++				var zOffset = invalid ? blockedZOffset : passable ? passableZOffset : validZOffset;
++				// Reuse the existing marker's silhouette/alpha; no extra asset is required.
++				var tint = passable ? new float3(info.PassableColor.R / 255f, info.PassableColor.G / 255f, info.PassableColor.B / 255f) : float3.Ones;
++				var modifiers = TintModifiers.IgnoreWorldTint | (passable ? TintModifiers.ReplaceColor : TintModifiers.None);
++				// Honor sequence presentation overrides, retaining the legacy depth bias by default.
++				yield return new SpriteRenderable(tile, pos, offset, -511 + zOffset, palette, scale, sequenceAlpha * traitAlpha, tint, modifiers, true);
+ 			}
+ 		}
+ 
+--- a/engine/OpenRA.Mods.Common/Traits/Buildings/SequencePlaceBuildingPreview.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Buildings/SequencePlaceBuildingPreview.cs
+@@ -10,6 +10,7 @@
+ #endregion
+ 
+ using System.Collections.Generic;
++using System.Linq;
+ using OpenRA.Graphics;
+ using OpenRA.Mods.Common.Orders;
+ using OpenRA.Mods.Common.Traits.Render;
+@@ -64,6 +65,12 @@
+ 			palette = wr.Palette(rsi.Palette ?? rsi.PlayerPalette + ownerName);
+ 			preview = new Animation(wr.World, rsi.GetImage(ai, faction));
+ 			preview.PlayRepeating(info.Sequence);
++			if (rsi.SuppressBuildingAnimations)
++			{
++				var idle = ai.TraitInfos<WithSpriteBodyInfo>().FirstOrDefault(b => b.Name == "body")?.Sequence ?? "idle";
++				if (preview.HasSequence(idle))
++					preview.RenderSequenceOverride = () => preview.GetSequence(idle);
++			}
+ 		}
+ 
+ 		protected override void TickInner()
+@@ -73,8 +80,10 @@
+ 
+ 		protected override IEnumerable<IRenderable> RenderInner(WorldRenderer wr, CPos topLeft, Dictionary<CPos, PlaceBuildingCellType> footprint)
+ 		{
+-			if (info.FootprintUnderPreview != PlaceBuildingCellType.None)
+-				foreach (var r in RenderFootprint(wr, topLeft, footprint, info.FootprintUnderPreview))
++			var under = info.FootprintUnderPreview & ~SequenceFootprintOverPreview;
++			var over = info.FootprintOverPreview | SequenceFootprintOverPreview;
++			if (under != PlaceBuildingCellType.None)
++				foreach (var r in RenderFootprint(wr, topLeft, footprint, under))
+ 					yield return r;
+ 
+ 			var centerPosition = wr.World.Map.CenterOfCell(topLeft) + CenterOffset;
+@@ -86,8 +95,8 @@
+ 					yield return r;
+ 			}
+ 
+-			if (info.FootprintOverPreview != PlaceBuildingCellType.None)
+-				foreach (var r in RenderFootprint(wr, topLeft, footprint, info.FootprintOverPreview))
++			if (over != PlaceBuildingCellType.None)
++				foreach (var r in RenderFootprint(wr, topLeft, footprint, over))
+ 					yield return r;
+ 		}
+ 	}
+--- a/engine/OpenRA.Mods.Common/Traits/IsometricSelectable.cs
++++ b/engine/OpenRA.Mods.Common/Traits/IsometricSelectable.cs
+@@ -38,6 +38,18 @@
+ 			"If Height is 0, this must be defined with a value greater than 0.")]
+ 		public readonly int DecorationHeight = -1;
+ 
++		[Desc("Optional decoration-only footprint dimensions in cell axes. 0,0 uses the actual occupied body.",
++			"Anchored at the occupied body's minimum cell; does not change interaction bounds or occupancy.",
++			"Requires DecorationBounds to be unset; explicit interaction Bounds are retained.")]
++		public readonly CVec DecorationFootprint = CVec.Zero;
++
++		[Desc("Extra decoration-only depth toward the positive second cell axis, in world-axis units.",
++			"Moves the left and bottom ground corners only; requires DecorationFootprint.")]
++		public readonly int DecorationFootprintExtraDepth = 0;
++
++		[Desc("World-space translation of the decoration only. Mouse bounds and occupied cells are unchanged.")]
++		public readonly WVec DecorationOffset = WVec.Zero;
++
+ 		public readonly int Priority = 10;
+ 
+ 		[Desc("Allow selection priority to be modified using a hotkey.",
+@@ -65,6 +77,12 @@
+ 			if (grid.Type != MapGridType.RectangularIsometric)
+ 				throw new YamlException("IsometricSelectable can only be used in mods that use the RectangularIsometric MapGrid type.");
+ 
++			if (DecorationFootprint != CVec.Zero && (DecorationFootprint.X <= 0 || DecorationFootprint.Y <= 0 ||
++				DecorationBounds != null))
++				throw new YamlException("DecorationFootprint requires positive dimensions and no explicit DecorationBounds.");
++			if (DecorationFootprintExtraDepth < 0 || (DecorationFootprintExtraDepth != 0 && DecorationFootprint == CVec.Zero))
++				throw new YamlException("DecorationFootprintExtraDepth requires DecorationFootprint and must be non-negative.");
++
+ 			if (Height == 0 && DecorationHeight <= 0)
+ 				throw new YamlException("DecorationHeight must be defined and greater than 0 if Height is 0.");
+ 		}
+@@ -83,7 +101,7 @@
+ 			buildingInfo = self.Info.TraitInfo<BuildingInfo>();
+ 		}
+ 
+-		Polygon Bounds(Actor self, WorldRenderer wr, int[] bounds, int height)
++		Polygon Bounds(Actor self, WorldRenderer wr, int[] bounds, int height, CVec footprint = default, int extraDepth = 0)
+ 		{
+ 			int2 left, right, top, bottom;
+ 			if (bounds != null)
+@@ -118,10 +136,17 @@
+ 					yMax = Math.Max(yMax, c.Y);
+ 				}
+ 
+-				left = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMin, yMax)) - new WVec(768, 0, 0));
++				if (footprint != CVec.Zero)
++				{
++					xMax = xMin + footprint.X - 1;
++					yMax = yMin + footprint.Y - 1;
++				}
++
++				var extension = new WVec(-extraDepth, extraDepth, 0);
++				left = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMin, yMax)) - new WVec(768, 0, 0) + extension);
+ 				right = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMax, yMin)) + new WVec(768, 0, 0));
+ 				top = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMin, yMin)) - new WVec(0, 768, 0));
+-				bottom = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMax, yMax)) + new WVec(0, 768, 0));
++				bottom = wr.ScreenPxPosition(self.World.Map.CenterOfCell(new CPos(xMax, yMax)) + new WVec(0, 768, 0) + extension);
+ 			}
+ 
+ 			if (height == 0)
+@@ -138,7 +163,15 @@
+ 
+ 		public Polygon DecorationBounds(Actor self, WorldRenderer wr)
+ 		{
+-			return Bounds(self, wr, info.DecorationBounds ?? info.Bounds, info.DecorationHeight >= 0 ? info.DecorationHeight : info.Height);
++			// An explicit decoration footprint must not replace or inherit mouse/click bounds.
++			var decorationBounds = info.DecorationFootprint == CVec.Zero ? info.DecorationBounds ?? info.Bounds : null;
++			var bounds = Bounds(self, wr, decorationBounds, info.DecorationHeight >= 0 ? info.DecorationHeight : info.Height,
++				info.DecorationFootprint, info.DecorationFootprintExtraDepth);
++			if (info.DecorationOffset == WVec.Zero)
++				return bounds;
++
++			var offset = wr.ScreenPxOffset(info.DecorationOffset);
++			return new Polygon(bounds.Vertices.Select(p => p + offset).ToArray());
+ 		}
+ 
+ 		Polygon IMouseBounds.MouseoverBounds(Actor self, WorldRenderer wr)
+--- a/engine/OpenRA.Mods.Common/Traits/Player/ProductionQueue.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Player/ProductionQueue.cs
+@@ -271,7 +271,8 @@
+ 				.Where(x =>
+ 					x.Name[0] != '^' &&
+ 					x.HasTraitInfo<BuildableInfo>() &&
+-					BuildableInfo.GetTraitForQueue(x, category) != null);
++					BuildableInfo.GetTraitForQueue(x, category) is BuildableInfo buildable &&
++					buildable.IsAvailableInContext(Actor.World.Map.Categories, Actor.Owner.Faction.InternalName));
+ 		}
+ 
+ 		public void PrerequisitesAvailable(string key)
+--- a/engine/OpenRA.Mods.Common/Traits/Render/RenderSprites.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Render/RenderSprites.cs
+@@ -41,6 +41,15 @@
+ 		[Desc("Custom PlayerColorPalette: BaseName")]
+ 		public readonly string PlayerPalette = "player";
+ 
++		[Desc("Hide cosmetic building animation overlays without stopping their clocks or gameplay callbacks. Static parts, weapons and status feedback remain visible.")]
++		public readonly bool SuppressBuildingAnimations = false;
++
++		[Desc("Body sequences allowed to animate while other building presentation is static.")]
++		public readonly string[] AnimatedBuildingSequences = Array.Empty<string>();
++
++		[Desc("Hide only sprite-body rendering during build-incomplete; animation clocks and completion callbacks continue.")]
++		public readonly bool HideBodyWhileBuilding = false;
++
+ 		public override object Create(ActorInitializer init) { return new RenderSprites(init, this); }
+ 
+ 		public IEnumerable<IActorPreview> RenderPreview(ActorPreviewInitializer init)
+@@ -66,7 +75,13 @@
+ 
+ 			foreach (var spi in init.Actor.TraitInfos<IRenderActorPreviewSpritesInfo>())
+ 				foreach (var preview in spi.RenderPreviewSprites(init, image, facings, palette))
+-					yield return preview;
++				{
++					if (SuppressBuildingAnimations && spi is WithSpriteBodyInfo bodyInfo && preview is SpriteActorPreview bodyPreview)
++						bodyInfo.ConfigureStaticPresentation(bodyPreview.Animation, () => init.GetDamageState(), true, AnimatedBuildingSequences);
++					if (!SuppressBuildingAnimations || !(preview is SpriteActorPreview spritePreview) ||
++						!RenderSprites.ShouldSuppressBuildingAnimation(spritePreview.Animation))
++						yield return preview;
++				}
+ 		}
+ 
+ 		public string GetImage(ActorInfo actor, string faction)
+@@ -78,7 +93,7 @@
+ 		}
+ 	}
+ 
+-	public class RenderSprites : IRender, ITick, INotifyOwnerChanged, INotifyEffectiveOwnerChanged, IActorPreviewInitModifier
++	public class RenderSprites : IRender, ITick, INotifyOwnerChanged, INotifyEffectiveOwnerChanged, IActorPreviewInitModifier, IObservesVariables
+ 	{
+ 		static readonly (DamageState DamageState, string Prefix)[] DamagePrefixes =
+ 		{
+@@ -94,13 +109,17 @@
+ 			public readonly string Palette;
+ 			public readonly bool IsPlayerPalette;
+ 			public PaletteReference PaletteReference { get; private set; }
++			readonly bool suppressBuildingAnimations;
++			readonly Func<bool> hideBody;
+ 
+ 			bool cachedVisible;
+ 			WVec cachedOffset;
+ 			ISpriteSequence cachedSequence;
+ 
+-			public AnimationWrapper(AnimationWithOffset animation, string palette, bool isPlayerPalette)
+-			{
++			public AnimationWrapper(AnimationWithOffset animation, string palette, bool isPlayerPalette, bool suppressBuildingAnimations, Func<bool> hideBody)
++			{
++				this.hideBody = hideBody;
++				this.suppressBuildingAnimations = suppressBuildingAnimations;
+ 				Animation = animation;
+ 				Palette = palette;
+ 				IsPlayerPalette = isPlayerPalette;
+@@ -118,7 +137,8 @@
+ 					PaletteReference = null;
+ 			}
+ 
+-			public bool IsVisible => Animation.DisableFunc == null || !Animation.DisableFunc();
++			public bool IsVisible => !(hideBody() && Animation.Animation.RenderSequenceOverride != null) && (Animation.DisableFunc == null || !Animation.DisableFunc()) &&
++				(!suppressBuildingAnimations || !ShouldSuppressBuildingAnimation(Animation.Animation));
+ 
+ 			public bool Tick()
+ 			{
+@@ -128,7 +148,7 @@
+ 				// Return to the caller whether the renderable position or size has changed
+ 				var visible = IsVisible;
+ 				var offset = Animation.OffsetFunc?.Invoke() ?? WVec.Zero;
+-				var sequence = Animation.Animation.CurrentSequence;
++				var sequence = Animation.Animation.RenderSequenceOverride?.Invoke() ?? Animation.Animation.CurrentSequence;
+ 
+ 				var updated = visible != cachedVisible || offset != cachedOffset || sequence != cachedSequence;
+ 				cachedVisible = visible;
+@@ -140,6 +160,13 @@
+ 		}
+ 
+ 		public readonly RenderSpritesInfo Info;
++		bool hideBody;
++
++		public IEnumerable<VariableObserver> GetVariableObservers()
++		{
++			if (Info.HideBodyWhileBuilding)
++				yield return new VariableObserver((actor, variables) => hideBody = variables.TryGetValue("build-incomplete", out var count) && count > 0, new[] { "build-incomplete" });
++		}
+ 		readonly string faction;
+ 		readonly List<AnimationWrapper> anims = new();
+ 		string cachedImage;
+@@ -225,12 +252,29 @@
+ 				isPlayerPalette = Info.Palette == null;
+ 			}
+ 
+-			anims.Add(new AnimationWrapper(anim, palette, isPlayerPalette));
++			anims.Add(new AnimationWrapper(anim, palette, isPlayerPalette, Info.SuppressBuildingAnimations, () => hideBody));
+ 		}
+ 
+ 		public void Remove(AnimationWithOffset anim)
+ 		{
+ 			anims.RemoveAll(a => a.Animation == anim);
++		}
++
++		/// <summary>Presentation-only filter; never controls ticking, weapon state or completion callbacks.</summary>
++		public static bool ShouldSuppressBuildingAnimation(Animation animation)
++		{
++			var sequence = animation.CurrentSequence;
++			if (sequence == null || animation.RenderSequenceOverride != null)
++				return false;
++			var name = UnnormalizeSequence(sequence.Name);
++			if (animation.Name.Contains("bib", StringComparison.OrdinalIgnoreCase) ||
++				animation.Name.Contains("shield", StringComparison.OrdinalIgnoreCase) ||
++				name.StartsWith("muzzle", StringComparison.Ordinal) || name.StartsWith("turret", StringComparison.Ordinal) ||
++				name.StartsWith("barrel", StringComparison.Ordinal) || name == "emp-overlay" || name == "chrono-overlay" || name == "mind-overlay")
++				return false;
++			return sequence.Length > 1 || name.StartsWith("build", StringComparison.Ordinal) ||
++				name.StartsWith("production", StringComparison.Ordinal) || name.StartsWith("delivery", StringComparison.Ordinal) ||
++				name == "make" || name == "construction";
+ 		}
+ 
+ 		public static string UnnormalizeSequence(string sequence)
+@@ -271,7 +315,7 @@
+ 		{
+ 			return anims.Where(b => b.IsVisible
+ 				&& b.Animation.Animation.CurrentSequence != null)
+-					.Select(a => (a.Animation.Animation.Image.Size.XY * a.Animation.Animation.CurrentSequence.Scale).ToInt2())
++					.Select(a => (a.Animation.Animation.Image.Size.XY * a.Animation.Animation.RenderScale).ToInt2())
+ 					.FirstOrDefault();
+ 		}
+ 
+--- a/engine/OpenRA.Mods.Common/Traits/Render/WithChargeSpriteBody.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Render/WithChargeSpriteBody.cs
+@@ -28,6 +28,7 @@
+ 
+ 			var anim = new Animation(init.World, image);
+ 			anim.PlayFetchIndex(RenderSprites.NormalizeSequence(anim, init.GetDamageState(), Sequence), () => 0);
++			ConfigureStaticPresentation(anim, () => init.GetDamageState(), init.Actor.TraitInfo<RenderSpritesInfo>().SuppressBuildingAnimations);
+ 
+ 			yield return new SpriteActorPreview(anim, () => WVec.Zero, () => 0, p);
+ 		}
+--- a/engine/OpenRA.Mods.Common/Traits/Render/WithDeathAnimation.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Render/WithDeathAnimation.cs
+@@ -104,6 +104,9 @@
+ 
+ 		public void SpawnDeathAnimation(Actor self, WPos pos, string image, string sequence, string palette, int delay)
+ 		{
++			if (rs.Info.SuppressBuildingAnimations)
++				return;
++
+ 			self.World.AddFrameEndTask(w => w.Add(new SpriteEffect(pos, w, image, sequence, palette, delay: delay)));
+ 		}
+ 
+--- a/engine/OpenRA.Mods.Common/Traits/Render/WithResourceLevelSpriteBody.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Render/WithResourceLevelSpriteBody.cs
+@@ -31,6 +31,7 @@
+ 
+ 			var anim = new Animation(init.World, image);
+ 			anim.PlayFetchIndex(RenderSprites.NormalizeSequence(anim, init.GetDamageState(), Sequence), () => 0);
++			ConfigureStaticPresentation(anim, () => init.GetDamageState(), init.Actor.TraitInfo<RenderSpritesInfo>().SuppressBuildingAnimations);
+ 
+ 			yield return new SpriteActorPreview(anim, () => WVec.Zero, () => 0, p);
+ 		}
+--- a/engine/OpenRA.Mods.Common/Traits/Render/WithSpriteBody.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Render/WithSpriteBody.cs
+@@ -29,6 +29,9 @@
+ 		[Desc("Animation to play when the actor is idle.")]
+ 		public readonly string Sequence = "idle";
+ 
++		[Desc("Render frame zero of the idle/damaged idle sequence while animation timing and callbacks continue normally.")]
++		public readonly bool UseIdleFrameForRendering = false;
++
+ 		[Desc("Identifier used to assign modifying traits to this sprite body.")]
+ 		public readonly string Name = "body";
+ 
+@@ -44,6 +47,19 @@
+ 
+ 		public override object Create(ActorInitializer init) { return new WithSpriteBody(init, this); }
+ 
++		/// <summary>Freeze only presentation; resource/charge/construction playback remains intact.</summary>
++		public void ConfigureStaticPresentation(Animation animation, Func<DamageState> damageState, bool suppressBuildingAnimations, string[] animatedSequences = null)
++		{
++			var stagedBody = this is WithChargeSpriteBodyInfo || this is WithResourceLevelSpriteBodyInfo;
++			if (!UseIdleFrameForRendering && !suppressBuildingAnimations)
++				return;
++
++			var sequence = stagedBody && animation.HasSequence("idle") ? "idle" : Sequence;
++			animation.RenderSequenceOverride = () =>
++				animatedSequences != null && Array.IndexOf(animatedSequences, RenderSprites.UnnormalizeSequence(animation.CurrentSequence?.Name ?? "")) >= 0
++					? null : animation.GetSequence(RenderSprites.NormalizeSequence(animation, damageState(), sequence));
++		}
++
+ 		public virtual IEnumerable<IActorPreview> RenderPreviewSprites(ActorPreviewInitializer init, string image, int facings, PaletteReference p)
+ 		{
+ 			if (!EnabledByDefault)
+@@ -56,6 +72,7 @@
+ 
+ 			var anim = new Animation(init.World, image);
+ 			anim.PlayRepeating(RenderSprites.NormalizeSequence(anim, init.GetDamageState(), Sequence));
++			ConfigureStaticPresentation(anim, () => init.GetDamageState(), init.Actor.TraitInfo<RenderSpritesInfo>().SuppressBuildingAnimations);
+ 
+ 			yield return new SpriteActorPreview(anim, () => WVec.Zero, () => 0, p);
+ 		}
+@@ -84,6 +101,7 @@
+ 				subtractDAT = () => new WVec(0, 0, -self.World.Map.DistanceAboveTerrain(self.CenterPosition).Length);
+ 
+ 			DefaultAnimation = new Animation(init.World, rs.GetImage(self), baseFacing, Paused);
++			info.ConfigureStaticPresentation(DefaultAnimation, () => self.GetDamageState(), rs.Info.SuppressBuildingAnimations, rs.Info.AnimatedBuildingSequences);
+ 			rs.Add(new AnimationWithOffset(DefaultAnimation, subtractDAT, () => IsTraitDisabled), info.Palette, info.IsPlayerPalette);
+ 
+ 			// Cache the bounds from the default sequence to avoid flickering when the animation changes
+--- a/engine/OpenRA.Mods.Common/Traits/SupportPowers/SupportPower.cs
++++ b/engine/OpenRA.Mods.Common/Traits/SupportPowers/SupportPower.cs
+@@ -9,6 +9,7 @@
+  */
+ #endregion
+ 
++using System;
+ using System.Collections.Generic;
+ using System.Linq;
+ using OpenRA.Traits;
+@@ -180,6 +181,13 @@
+ 			return string.IsNullOrEmpty(genericName) ? "" : FluentProvider.GetMessage(genericName);
+ 		}
+ 
++		public int GetAvailableLevel(bool allTech, Func<string[], bool> hasPrerequisites)
++		{
++			// AllTech bypasses requirements, but cannot invent a level for an empty definition.
++			return Prerequisites.Where(p => allTech || hasPrerequisites(p.Value))
++				.Select(p => p.Key).DefaultIfEmpty(0).Max();
++		}
++
+ 		protected SupportPowerInfo() { OrderName = GetType().Name + "Order"; }
+ 	}
+ 
+@@ -216,10 +224,7 @@
+ 
+ 		public int GetLevel()
+ 		{
+-			var availables = Info.Prerequisites.Where(p => techTree.HasPrerequisites(p.Value));
+-			var level = availables.Any() ? availables.Max(p => p.Key) : 0;
+-
+-			return developerMode.AllTech ? Info.Prerequisites.Max(p => p.Key) : level;
++			return Info.GetAvailableLevel(developerMode.AllTech, p => techTree.HasPrerequisites(p));
+ 		}
+ 
+ 		protected override void Created(Actor self)
+--- a/engine/OpenRA.Mods.Common/Traits/SupportPowers/SupportPowerManager.cs
++++ b/engine/OpenRA.Mods.Common/Traits/SupportPowers/SupportPowerManager.cs
+@@ -315,10 +315,7 @@
+ 			if (Info == null)
+ 				return 0;
+ 
+-			var availables = Info.Prerequisites.Where(p => Manager.TechTree.HasPrerequisites(p.Value));
+-			var level = availables.Any() ? availables.Max(p => p.Key) : 0;
+-
+-			return Manager.DevMode.AllTech ? Info.Prerequisites.Max(p => p.Key) : level;
++			return Info.GetAvailableLevel(Manager.DevMode.AllTech, p => Manager.TechTree.HasPrerequisites(p));
+ 		}
+ 
+ 		public virtual string IconOverlayTextOverride()
+--- /dev/null
++++ b/engine/OpenRA.Test/OpenRA.Game/LaunchUriSessionResetTest.cs
+@@ -0,0 +1,46 @@
++using System;
++using System.IO;
++using System.Reflection;
++using NUnit.Framework;
++using OpenRA.Network;
++
++namespace OpenRA.Test
++{
++	[TestFixture]
++	[NonParallelizable]
++	public class LaunchUriSessionResetTest
++	{
++		[Test]
++		public void ForwardedLinkClearsOldPlayableSlotsBeforeShellmapLoads()
++		{
++			const BindingFlags Flags = BindingFlags.Static | BindingFlags.NonPublic;
++			var managerField = typeof(Game).GetField("OrderManager", Flags);
++			var previousManager = managerField.GetValue(null);
++			var previousSettings = Game.Settings;
++			var old = new OrderManager(new EchoConnection());
++			try
++			{
++				Game.Settings = new Settings(Path.Combine(Path.GetTempPath(), Guid.NewGuid() + ".yaml"), new Arguments(Array.Empty<string>()));
++				old.LobbyInfo.Slots.Add("Multi1", new Session.Slot { PlayerReference = "Multi1" });
++				old.LobbyInfo.Clients.Add(new Session.Client { Index = 0, Slot = "Multi1", Faction = "russia" });
++				managerField.SetValue(null, old);
++
++				typeof(Game).GetMethod("ResetSessionForLaunchUri", Flags).Invoke(null, null);
++
++				var current = (OrderManager)managerField.GetValue(null);
++				Assert.That(current, Is.Not.SameAs(old));
++				Assert.That(current.LobbyInfo.Slots, Is.Empty);
++				Assert.That(current.LobbyInfo.Clients.Count, Is.EqualTo(1));
++				Assert.That(current.LobbyInfo.Clients[0].Slot, Is.Null);
++				Assert.That(current.Connection, Is.TypeOf<EchoConnection>());
++			}
++			finally
++			{
++				((OrderManager)managerField.GetValue(null))?.Dispose();
++				old.Dispose();
++				managerField.SetValue(null, previousManager);
++				Game.Settings = previousSettings;
++			}
++		}
++	}
++}
+--- /dev/null
++++ b/engine/OpenRA.Test/OpenRA.Mods.Common/IsometricSelectionDecorationTest.cs
+@@ -0,0 +1,31 @@
++using NUnit.Framework;
++using OpenRA.Mods.Common.Traits;
++
++namespace OpenRA.Test
++{
++	[TestFixture]
++	public class IsometricSelectionDecorationTest
++	{
++		[Test]
++		public void DecorationFootprintIsOptIn()
++		{
++			var info = new IsometricSelectableInfo();
++			Assert.That(info.DecorationFootprint, Is.EqualTo(CVec.Zero));
++			Assert.That(info.DecorationFootprintExtraDepth, Is.Zero);
++		}
++
++		[Test]
++		public void EnlargedDecorationDoesNotChangeInteractionSettings()
++		{
++			var info = new IsometricSelectableInfo();
++			var originalHeight = info.Height;
++			FieldLoader.Load(info, new MiniYaml("", MiniYaml.FromString(
++				"DecorationFootprint: 4,2\nDecorationFootprintExtraDepth: 181\nDecorationHeight: 83", "selection-test")));
++			Assert.That(info.DecorationFootprint, Is.EqualTo(new CVec(4, 2)));
++			Assert.That(info.DecorationFootprintExtraDepth, Is.EqualTo(181));
++			Assert.That(info.DecorationHeight, Is.EqualTo(83));
++			Assert.That(info.Bounds, Is.Null);
++			Assert.That(info.Height, Is.EqualTo(originalHeight));
++		}
++	}
++}
+--- /dev/null
++++ b/engine/OpenRA.Test/OpenRA.Mods.Common/SupportPowerLevelTest.cs
+@@ -0,0 +1,37 @@
++using NUnit.Framework;
++using OpenRA.Mods.Common.Traits;
++
++namespace OpenRA.Test
++{
++	[TestFixture]
++	public class SupportPowerLevelTest
++	{
++		[TestCase(false)]
++		[TestCase(true)]
++		public void EmptyLevelsRemainUnavailable(bool allTech)
++		{
++			var info = new AirstrikePowerInfo();
++			Assert.That(info.GetAvailableLevel(allTech, _ => true), Is.Zero);
++		}
++
++		[Test]
++		public void NormalModeUsesHighestSatisfiedLevel()
++		{
++			var info = new AirstrikePowerInfo();
++			info.Prerequisites.Add(1, new[] { "tier1" });
++			info.Prerequisites.Add(3, new[] { "tier3" });
++			Assert.That(info.GetAvailableLevel(false, p => p[0] == "tier1"), Is.EqualTo(1));
++			Assert.That(info.GetAvailableLevel(false, _ => false), Is.Zero);
++			Assert.That(info.GetAvailableLevel(false, _ => true), Is.EqualTo(3));
++		}
++
++		[Test]
++		public void AllTechUsesHighestDefinedLevelWithoutQueryingTechTree()
++		{
++			var info = new AirstrikePowerInfo();
++			info.Prerequisites.Add(1, new[] { "tier1" });
++			info.Prerequisites.Add(3, new[] { "tier3" });
++			Assert.That(info.GetAvailableLevel(true, _ => throw new System.InvalidOperationException()), Is.EqualTo(3));
++		}
++	}
++}

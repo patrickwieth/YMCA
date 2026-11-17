@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using OpenRA.Graphics;
 using OpenRA.Primitives;
 using OpenRA.Traits;
@@ -119,6 +120,9 @@ namespace OpenRA.Mods.CA.Traits
 		int t;
 		readonly TAStealthTankCloakPaletteEffectInfo info;
 		readonly Color[] colors;
+		IReadOnlyDictionary<string, MutablePalette> previousPalettes;
+		string[] matchingNames = Array.Empty<string>();
+		int previousPaletteCount = -1;
 
 		public TAStealthTankCloakPaletteEffect(TAStealthTankCloakPaletteEffectInfo info)
 		{
@@ -137,11 +141,16 @@ namespace OpenRA.Mods.CA.Traits
 			if (info.AffectedPalette == null)
 				yield break;
 
-			foreach (var kv in palettes)
+			// HardwarePalette only appends names or replaces their values. Cache the
+			// name filter, but look up current values so player-color replacement works.
+			if (!ReferenceEquals(previousPalettes, palettes) || previousPaletteCount != palettes.Count)
 			{
-				if (PaletteMatches(kv.Key))
-					yield return kv.Value;
+				previousPalettes = palettes;
+				previousPaletteCount = palettes.Count;
+				matchingNames = palettes.Keys.Where(PaletteMatches).ToArray();
 			}
+			foreach (var name in matchingNames)
+				yield return palettes[name];
 		}
 
 		bool PaletteMatches(string paletteName)

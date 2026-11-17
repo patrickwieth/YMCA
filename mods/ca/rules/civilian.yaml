@@ -87,17 +87,25 @@ FCOM:
 	AppearsOnMapPreview:
 
 FCOM.checkpoint:
-	Inherits: FCOM
-	Inherits: ^Checkpoint
+	Inherits@FCOM: FCOM
+	Inherits@CHECKPOINT: ^Checkpoint
+	StrategicPoint:
+	CheckpointExperience:
+		Amount: 5
+		Interval: 150
 	Tooltip:
-		Name: Forward Command (Checkpoint)
+		Name: Research Core
+	RenderSprites:
+		Image: fcom.checkpoint
+	SpawnActorOnDeath:
+		Actor: fcom.checkpoint.husk
 
 HOSP:
 	Inherits: ^TechBuilding
 	Inherits@shape: ^2x2Shape
 	OwnerLostAction:
 		Action: ChangeOwner
-	Selectable:
+	IsometricSelectable:
 		Priority: 0
 	Building:
 		Footprint: xx xx
@@ -309,7 +317,7 @@ V19.Husk:
 	WithIdleOverlay:
 		StartSequence: fire-start
 		Sequence: fire-loop
-	-Selectable:
+	-IsometricSelectable:
 	Interactable
 		Bounds: 1024, 1024
 	SelectionDecorations:
@@ -322,7 +330,7 @@ V19.Husk:
 
 BARL:
 	Inherits: ^TechBuilding
-	-Selectable:
+	-IsometricSelectable:
 	Interactable
 		Bounds: 1024, 1024
 	SelectionDecorations:
@@ -342,7 +350,7 @@ BARL:
 
 BRL3:
 	Inherits: ^TechBuilding
-	-Selectable:
+	-IsometricSelectable:
 	Interactable
 		Bounds: 1024, 1024
 	SelectionDecorations:
@@ -375,7 +383,7 @@ MISS:
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 840,0,0, 840,-1024,0, 420,768,0, -840,0,0, -840,-1024,0, -840,1024,0
-	Selectable:
+	IsometricSelectable:
 		Priority: 0
 	OwnerLostAction:
 		Action: ChangeOwner
@@ -455,7 +463,7 @@ OILB:
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-300,0, 420,512,0, -420,-512,0, -630,300,0
-	Selectable:
+	IsometricSelectable:
 		Priority: 0
 	OwnerLostAction:
 		Action: ChangeOwner
@@ -494,7 +502,8 @@ OILB:
 OILB.indestructible:
 	Inherits: OILB
 	-Targetable:
-	-Selectable:
+	-IsometricSelectable:
+	-IsometricSelectionDecorations:
 	Interactable:
 	DamageMultiplier@indestructible:
 		Modifier: 0
@@ -634,12 +643,12 @@ V37:
 RICE:
 	Inherits: ^CivField
 	MapEditorData:
-		RequireTilesets: TEMPERAT
+		RequireTilesets: OMEGABOLT-TEMPERATE
 
 RUSHOUSE:
 	Inherits: ^CivBuilding
 	MapEditorData:
-		RequireTilesets: TEMPERAT
+		RequireTilesets: OMEGABOLT-TEMPERATE
 	Building:
 		Footprint: x x
 		Dimensions: 1,2
@@ -649,7 +658,7 @@ RUSHOUSE:
 RUSHOUSE2:
 	Inherits: ^CivBuilding
 	MapEditorData:
-		RequireTilesets: TEMPERAT, WINTER, BARREN
+		RequireTilesets: OMEGABOLT-TEMPERATE, WINTER, BARREN
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
@@ -659,7 +668,7 @@ RUSHOUSE2:
 RUSHOUSE3:
 	Inherits: ^CivBuilding
 	MapEditorData:
-		RequireTilesets: TEMPERAT, WINTER, BARREN
+		RequireTilesets: OMEGABOLT-TEMPERATE, WINTER, BARREN
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
@@ -669,7 +678,7 @@ RUSHOUSE3:
 RUSHOUSE4:
 	Inherits: ^CivBuilding
 	MapEditorData:
-		RequireTilesets: TEMPERAT, WINTER, BARREN
+		RequireTilesets: OMEGABOLT-TEMPERATE, WINTER, BARREN
 	Building:
 		Footprint: xx xx
 		Dimensions: 2,2
@@ -679,7 +688,7 @@ RUSHOUSE4:
 ASIANHUT:
 	Inherits: ^CivBuilding
 	MapEditorData:
-		RequireTilesets: TEMPERAT
+		RequireTilesets: OMEGABOLT-TEMPERATE
 
 SNOWHUT:
 	Inherits: ^CivBuilding
@@ -695,7 +704,7 @@ SNOWHUT:
 LHUS:
 	Inherits: ^CivBuilding
 	MapEditorData:
-		RequireTilesets: TEMPERAT
+		RequireTilesets: OMEGABOLT-TEMPERATE
 	Tooltip:
 		Name: Lighthouse
 	Building:
@@ -705,7 +714,7 @@ LHUS:
 WINDMILL:
 	Inherits: ^CivBuilding
 	MapEditorData:
-		RequireTilesets: TEMPERAT
+		RequireTilesets: OMEGABOLT-TEMPERATE
 	SelectionDecorations:
 	Tooltip:
 		Name: Windmill

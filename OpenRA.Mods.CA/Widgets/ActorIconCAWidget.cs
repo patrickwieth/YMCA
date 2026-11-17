@@ -49,7 +49,7 @@ namespace OpenRA.Mods.CA.Widgets
 			var faction = actor.Owner.Faction.InternalName;
 			var rsi = actor.Info.TraitInfoOrDefault<RenderSpritesInfo>();
 			icon = new Animation(World, rsi.GetImage(actor.Info, faction));
-			var bi = actor.Info.TraitInfoOrDefault<BuildableInfo>();
+			var bi = actor.Info.TraitInfos<BuildableInfo>().FirstOrDefault();
 			if (bi == null)
 			{
 					actor = null;

@@ -5,12 +5,6 @@ SWAL:
 		Palette: scrin
 	Building:
 		BuildSounds: scrinbuild.aud
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 30
-		Prerequisites: anypower, ~structures.scrin
-		Description: Stops units and blocks enemy fire. Regenerates over time.
-		IconPalette: scrin
 	Valued:
 		Cost: 200
 	CustomSellValue:
@@ -39,10 +33,10 @@ SWAL:
 
 SFAC:
 	Inherits: ^ScrinBuilding
-	Inherits: ^3x2Building+Bib
-	Inherits: ^ConcreteArmor
-	Inherits: ^BotFallbackInsurance
-	Inherits: ^StructureProduction
+	Inherits@SHAPE: ^3x2Building+Bib
+	Inherits@ARMOR: ^ConcreteArmor
+	Inherits@BOT: ^BotFallbackInsurance
+	Inherits@PRODUCTION: ^StructureProduction
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 1000
@@ -78,7 +72,7 @@ SFAC:
 		RequiresForceMove: true
 	TransformsIntoRepairable:
 		RequiresCondition: factundeploy
-		RepairActors: fix, rep
+		RepairActors: fix, fix.soviet, rep, rep.nod
 		RequiresForceMove: true
 	TransformsIntoTransforms:
 		RequiresCondition: factundeploy && build-incomplete
@@ -109,7 +103,7 @@ SFAC:
 
 SFAC.Nukular:
 	Inherits: SFAC
-	Inherits: ^NukularConyard
+	Inherits@NUKULAR: ^NukularConyard
 	RenderSprites:
 		Image: SFAC
 	Transforms:
@@ -117,10 +111,10 @@ SFAC.Nukular:
 
 REAC:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSpriteTS
-	Inherits: ^DisabledByPowerOutage
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PowerDrainable
+	Inherits@ART: ^ScrinSpriteTS
+	Inherits@DISABLE: ^DisabledByPowerOutage
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@DRAIN: ^PowerDrainable
 	HitShape:
 		TargetableOffsets: 630,299,0
 	WithSpriteBody:
@@ -135,8 +129,6 @@ REAC:
 		Cost: 300
 	Tooltip:
 		Name: Reactor
-	ProvidesPrerequisite:
-		Prerequisite: anypower
 	Health:
 		HP: 40000
 	RevealsShroud:
@@ -155,10 +147,10 @@ REAC:
 
 REA2:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSpriteRA2
-	Inherits: ^DisabledByPowerOutage
-	Inherits: ^3x2Building+Bib
-	Inherits: ^PowerDrainable
+	Inherits@ART: ^ScrinSpriteRA2
+	Inherits@DISABLE: ^DisabledByPowerOutage
+	Inherits@SHAPE: ^3x2Building+Bib
+	Inherits@DRAIN: ^PowerDrainable
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	WithSpriteBody:
@@ -191,10 +183,10 @@ REA2:
 
 PROC.SCRIN:
 	Inherits: ^ScrinBuilding
-	Inherits: ^3x3Building+Bib
-	Inherits: ^ScrinSpriteRA2
-	Inherits: ^BotIncome
-	Inherits: ^Refinery
+	Inherits@SHAPE: ^3x3Building+Bib
+	Inherits@ART: ^ScrinSpriteRA2
+	Inherits@BOT: ^BotIncome
+	Inherits@REFINERY: ^Refinery
 	HitShape:
 		Type: Rectangle
 			TopLeft: -1536, -512
@@ -245,10 +237,10 @@ PROC.SCRIN:
 
 PORT:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSpriteTS
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^InfantryProduction
+	Inherits@ART: ^ScrinSpriteTS
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@PRODUCTION: ^InfantryProduction
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 840,-256,0, 840,512,0, 210,-512,0, -71,512,0
@@ -286,10 +278,10 @@ PORT:
 
 WSPH:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSpriteRA2
-	Inherits: ^PrimaryBuilding
-	Inherits: ^VehicleProduction
-	Inherits: ^3x2Building+Bib
+	Inherits@ART: ^ScrinSpriteRA2
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@PRODUCTION: ^VehicleProduction
+	Inherits@SHAPE: ^3x2Building+Bib
 	HitShape:
 		TargetableOffsets: 0,0,0, 0,1024,0, 0,-1024,0
 		Type: Rectangle
@@ -325,12 +317,12 @@ WSPH:
 
 NERV:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSpriteRA2
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier2Tech
-	Inherits: ^2x2Building+Bib
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^RadarStation
+	Inherits@ART: ^ScrinSpriteRA2
+	Inherits@TECHLEVEL: ^TechLevelBuilding
+	Inherits@TECH: ^Tier2Tech
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@RADAR: ^RadarStation
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-384,0, 630,384,0, -700,-512,0, -700,512,0
@@ -379,10 +371,10 @@ NERV:
 
 SCRT:
 	Inherits: ^ScrinBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^2x2Building+Bib
+	Inherits@TECHLEVEL: ^TechLevelBuilding
+	Inherits@TECH: ^Tier3Tech
+	Inherits@DISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@SHAPE: ^2x2Building+Bib
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 150
@@ -408,9 +400,9 @@ SCRT:
 
 GRAV:
 	Inherits: ^ScrinBuilding
-	Inherits: ^3x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^AircraftProduction
+	Inherits@SHAPE: ^3x2Building+Bib
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@PRODUCTION: ^AircraftProduction
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Buildable:
@@ -475,10 +467,10 @@ GRAV:
 
 SIGN:
 	Inherits: ^ScrinBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier4Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
+	Inherits@TECHLEVEL: ^TechLevelBuilding
+	Inherits@TECH: ^Tier4Tech
+	Inherits@DISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@SHAPE: ^3x2Building+Bib
 	HitShape:
 		TargetableOffsets: -355,-1024,0
 	Health:
@@ -512,8 +504,8 @@ SIGN:
 
 SREP:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSpriteRA2
-	Inherits: ^3x3Shape
+	Inherits@ART: ^ScrinSpriteRA2
+	Inherits@SHAPE: ^3x3Shape
 	HitShape:
 		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
 		Type: Polygon
@@ -562,14 +554,14 @@ SREP:
 
 SILO.SCRIN:
 	Inherits: ^ScrinBuilding
-	Inherits: ^ScrinSpriteRA2
+	Inherits@ART: ^ScrinSpriteRA2
 	Valued:
 		Cost: 150
 	Tooltip:
 		Name: Silo
 	Buildable:
 		BuildPaletteOrder: 35
-		Prerequisites: proc.scrin, ~structures.scrin
+		Prerequisites: proc.scrin, ~structures.scrin, ~disabled
 		Queue: Defense
 		IconPalette: scrin
 		Description: Stores processed Tiberium, Ore and Gems
@@ -602,10 +594,10 @@ SILO.SCRIN:
 
 MANI:
 	Inherits: ^ScrinBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^SuperWeapon
-	Inherits: ^ScrinSuperweaponSmall
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@SUPER: ^SuperWeapon
+	Inherits@ART: ^ScrinSuperweaponSmall
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -637,10 +629,10 @@ MANI:
 
 RIFT:
 	Inherits: ^ScrinBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Shape
-	Inherits: ^SuperWeapon
-	Inherits: ^ScrinSuperweaponBig
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@SHAPE: ^2x2Shape
+	Inherits@SUPER: ^SuperWeapon
+	Inherits@ART: ^ScrinSuperweaponBig
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -681,8 +673,10 @@ RIFT:
 
 PTUR:
 	Inherits: ^Defense
-	Inherits: ^ScrinSpriteTS
-	Inherits: ^AutoTargetGround
+	Inherits@ART: ^ScrinSpriteTS
+	Inherits@TARGET: ^AutoTargetGround
+	RenderSprites:
+		AnimatedBuildingSequences: []
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 60
@@ -718,16 +712,18 @@ PTUR:
 		Amount: -25
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	SpawnActorOnDeath:
 		Actor: s1
 	-SpawnRandomActorOnDeath:
 
 SHAR:
 	Inherits: ^Defense
-	Inherits: ^ScrinSpriteTS
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetAir
+	Inherits@ART: ^ScrinSpriteTS
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDown
+	Inherits@TARGET: ^AutoTargetAir
+	RenderSprites:
+		AnimatedBuildingSequences: []
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
@@ -761,7 +757,7 @@ SHAR:
 		Amount: -50
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	DetectCloaked:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 	SpawnActorOnDeath:
@@ -770,12 +766,13 @@ SHAR:
 
 SCOL:
 	Inherits: ^Defense
-	Inherits: ^ScrinSpriteRA2
+	Inherits@ART: ^ScrinSpriteRA2
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetGround
 	Inherits@Flash: ^WhiteFlash
 	RenderSprites:
 		PlayerPalette: overlayplayerscrin
+		AnimatedBuildingSequences: []
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 80

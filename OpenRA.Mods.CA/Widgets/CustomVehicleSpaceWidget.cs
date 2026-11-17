@@ -1,0 +1,485 @@
+using System;
+using OpenRA.Graphics;
+using OpenRA.Mods.CA.Modular;
+using OpenRA.Mods.Common.Widgets;
+using OpenRA.Primitives;
+using OpenRA.Widgets;
+using Zone = OpenRA.Mods.CA.Modular.CustomVehicleSpaceDemo.Zone;
+
+namespace OpenRA.Mods.CA.Widgets
+{
+	public sealed class CustomVehicleSpaceWidget : Widget
+	{
+		public CustomVehicleSpaceDemo Layout = new();
+		public string Selected;
+		public bool Rotated;
+		public int? Moving;
+		public Action<string> Notify = _ => { };
+		public Func<string, bool> OnInstall = _ => true;
+		public Func<string, string> GetModuleIcon = id => id;
+		public Func<CustomVehicleCannonArt> GetCannonArt = () => null;
+		public Action OnLayoutChanged = () => { };
+		public Action OnSelectionCancelled = () => { };
+		const int Cell = CustomVehicleCanvasGeometry.Cell;
+		const int SketchCell = CustomVehicleCanvasGeometry.SketchCell;
+		int2 HullOrigin => new(CustomVehicleCanvasGeometry.HullOrigin(Layout).X, CustomVehicleCanvasGeometry.HullOrigin(Layout).Y);
+		int2 TurretOrigin => new(CustomVehicleCanvasGeometry.TurretOrigin(Layout).X, CustomVehicleCanvasGeometry.TurretOrigin(Layout).Y);
+		int2 SketchHullOrigin => Layout.Portrait ? new int2(176, 176) : new int2(72, 202);
+		int2 pan, lastDrag, sketchOffset;
+		int2 CanvasOffset => new(CustomVehicleCanvasGeometry.HorizontalOffset(Layout, Bounds.Width), 0);
+		bool dragging, drawingCanvas, drawingSketch;
+		static int Scale(int value) => CustomVehicleCanvasGeometry.Scale(value);
+		public void ResetView() { pan = int2.Zero; }
+		void ClampPan()
+		{
+			var p = CustomVehicleCanvasGeometry.ClampPan(Layout, Bounds.Width, Bounds.Height, pan.X, pan.Y);
+			pan = new int2(p.X, p.Y);
+		}
+		int2 ScreenPoint(int x, int y) => RenderOrigin +
+			(drawingSketch ? new int2(Scale(x), Scale(y)) + sketchOffset : new int2(x, y)) + (drawingCanvas ? CanvasOffset - pan : int2.Zero);
+		bool LightBody => Layout.Silhouette is CustomVehicleSilhouetteKind.LightVehicle or CustomVehicleSilhouetteKind.Bike or CustomVehicleSilhouetteKind.MiniTracked;
+		bool DroneBody => Layout.Silhouette == CustomVehicleSilhouetteKind.MiniDrone;
+		// Every container uses the same cell scale, including held-item snapping.
+		int GridCell(bool turret) => Cell;
+
+		public void Cancel() { Selected = null; Moving = null; Rotated = false; OnSelectionCancelled(); }
+		public void Choose(string id) { Cancel(); Selected = id; }
+		public static Color ZoneColor(Zone zone) => zone switch
+		{
+			Zone.RunningGear => Color.FromArgb(255, 230, 193, 63),
+			Zone.Weapon => Color.FromArgb(255, 231, 87, 80),
+			Zone.Armor => Color.FromArgb(255, 76, 158, 235),
+			Zone.Interior => Color.FromArgb(255, 86, 175, 111),
+			Zone.Ammunition => Color.FromArgb(255, 178, 113, 224),
+			_ => Color.FromArgb(255, 100, 123, 130)
+		};
+		static Color ZoneFill(Zone zone) => zone switch
+		{
+			Zone.Interior => Color.FromArgb(255, 22, 52, 36),
+			Zone.Ammunition => Color.FromArgb(255, 48, 29, 66),
+			Zone.Weapon => Color.FromArgb(255, 64, 29, 30),
+			Zone.RunningGear => Color.FromArgb(255, 58, 50, 26),
+			Zone.Armor => Color.FromArgb(255, 26, 43, 64),
+			_ => Color.FromArgb(255, 25, 34, 41)
+		};
+		static Color Tint(string id) => id switch
+		{
+			"ammo" => ZoneColor(Zone.Ammunition),
+			"pdl" => Color.FromArgb(255, 101, 169, 169),
+			"battery" => Color.FromArgb(255, 101, 169, 169),
+			"generator" => ZoneColor(Zone.Interior),
+			_ => ZoneColor(CustomVehicleSpaceDemo.Definition(id).Mount)
+		};
+
+		void Fill(int x, int y, int w, int h, Color c)
+		{
+			var p = ScreenPoint(x, y);
+			WidgetUtils.FillRectWithColor(new Rectangle(p.X, p.Y, drawingSketch ? Scale(w) : w, drawingSketch ? Scale(h) : h), c);
+		}
+		void Text(string s, int x, int y, Color c)
+		{
+			var p = ScreenPoint(x, y);
+			Game.Renderer.Fonts["Small"].DrawText(s, new float2(p.X, p.Y), c);
+		}
+		void Ellipse(int x, int y, int w, int h, Color color)
+		{
+			var a = ScreenPoint(x, y); var b = ScreenPoint(x + w, y + h);
+			Game.Renderer.RgbaColorRenderer.FillEllipse(new float3(a.X, a.Y, 0), new float3(b.X, b.Y, 0), color);
+		}
+		void Polygon(Color color, params int2[] points)
+		{
+			float3 At(int2 p) { var q = ScreenPoint(p.X, p.Y); return new float3(q.X, q.Y, 0); }
+			for (var i = 1; i < points.Length - 1; i++) Game.Renderer.RgbaColorRenderer.FillTriangle(At(points[0]), At(points[i]), At(points[i + 1]), color);
+		}
+
+		void Border(int x, int y, int w, int h, Color c)
+		{
+			// Center the outline on the same coordinates as shared grid edges.
+			Fill(x - 1, y - 1, w + 2, 2, c); Fill(x - 1, y + h - 1, w + 2, 2, c);
+			Fill(x - 1, y - 1, 2, h + 2, c); Fill(x + w - 1, y - 1, 2, h + 2, c);
+		}
+
+		bool HitGrid(int2 point, out bool turret, out int x, out int y)
+		{
+			foreach (var t in new[] { false, true })
+			{
+				var o = t ? TurretOrigin : HullOrigin;
+				var cell = GridCell(t);
+				if (point.X < o.X || point.Y < o.Y) continue;
+				var cx = (point.X - o.X) / cell;
+				var cy = (point.Y - o.Y) / cell;
+				if (Layout.ContainsCell(t, cx, cy))
+				{ turret = t; x = cx; y = cy; return true; }
+			}
+			turret = false; x = y = 0; return false;
+		}
+
+		void SnapWeaponSocket(bool turret, ref int x, ref int y)
+		{
+			if (Selected == "weapon" && turret && Layout.WeaponFootprint?.Contains(x, y) == true)
+			{ x = Layout.WeaponFootprint.X; y = Layout.WeaponFootprint.Y; }
+		}
+
+		public override bool HandleKeyPress(KeyInput input)
+		{
+			if (Selected == null || input.Event != KeyInputEvent.Down) return false;
+			if (input.Key == Keycode.ESCAPE) { Cancel(); return true; }
+			if (input.Key == Keycode.R) { Rotated = !Rotated; return true; }
+			return false;
+		}
+
+		public override bool HandleMouseInput(MouseInput input)
+		{
+			if (dragging)
+			{
+				if (input.Event == MouseInputEvent.Move)
+				{ pan += lastDrag - input.Location; lastDrag = input.Location; ClampPan(); return true; }
+				if (input.Event == MouseInputEvent.Up && input.Button == MouseButton.Middle)
+				{ dragging = false; return YieldMouseFocus(input); }
+			}
+			if (!RenderBounds.Contains(input.Location)) return false;
+			if (input.Event == MouseInputEvent.Scroll)
+			{
+				pan -= input.Modifiers.HasModifier(Modifiers.Shift) ? new int2(input.Delta.Y * Cell, 0) : new int2(input.Delta.X * Cell, input.Delta.Y * Cell);
+				ClampPan(); return true;
+			}
+			if (input.Event == MouseInputEvent.Down && input.Button == MouseButton.Middle)
+			{ dragging = TakeMouseFocus(input); lastDrag = input.Location; return true; }
+			var mouse = input.Location - RenderOrigin + pan - CanvasOffset;
+			if (input.Event != MouseInputEvent.Up) return true;
+			if (input.Location.Y < RenderOrigin.Y + 24)
+			{ if (input.Button == MouseButton.Right) Cancel(); return true; }
+			if (!HitGrid(mouse, out var turret, out var x, out var y))
+			{
+				if (input.Button == MouseButton.Right) Cancel();
+				return true;
+			}
+			var occupant = Layout.At(turret, x, y);
+			if (input.Button == MouseButton.Right)
+			{
+				if (Selected == null && occupant != null) { Layout.Remove(occupant.Id); OnLayoutChanged(); Notify("Layout block removed; configured stock part is unchanged."); }
+				else { Cancel(); Notify("Selection cancelled. The original position is preserved."); }
+				return true;
+			}
+			if (input.Button != MouseButton.Left) return true;
+			if (Selected != null)
+			{
+				SnapWeaponSocket(turret, ref x, ref y);
+				if (!Layout.CanPlace(Selected, turret, x, y, Rotated, Moving))
+					Notify(Selected == "weapon" ? "Weapon cannot fit: check mounting position, orientation and free interior breech space." :
+						"Cannot place here: check the colored zone, free space and orientation.");
+				else if (OnInstall(Selected))
+				{
+					Layout.Place(Selected, turret, x, y, Rotated, Moving);
+					Cancel(); OnLayoutChanged(); Notify("Placed. Click a module to pick it up again.");
+				}
+			}
+			else if (occupant != null)
+			{
+				Selected = occupant.ModuleId; Moving = occupant.Id; Rotated = occupant.Rotated;
+				Notify("Module in hand. Click to drop; R to rotate; Esc to return it.");
+			}
+			return true;
+		}
+
+		// The installed weapon itself occupies its red cells. No unrelated barrel is drawn
+		// outside the inventory anymore. Rotate the artwork with the held footprint.
+		void DrawWeapon(int x, int y, int width, int height, bool rotated)
+		{
+			var position = ScreenPoint(x + 3, y + 3);
+			if (CustomVehicleModuleIconWidget.DrawCannon(GetCannonArt(),
+				new Rectangle(position.X, position.Y, width - 6, height - 6), rotated)) return;
+			var actualW = rotated ? height : width;
+			var actualH = rotated ? width : height;
+			var w = (actualW + 2) / Cell * SketchCell - 2;
+			var h = SketchCell - 2;
+			var steel = Color.FromArgb(255, 116, 134, 140);
+			var light = Color.FromArgb(255, 186, 198, 181);
+			var shadow = Color.FromArgb(255, 22, 29, 34);
+			var energy = Color.FromArgb(255, 108, 218, 225);
+			void Part(int px, int py, int pw, int ph, Color color)
+			{
+				int X(int value) => (int)Math.Round(value * (double)actualW / w);
+				int Y(int value) => (int)Math.Round(value * (double)actualH / h);
+				if (rotated) Fill(x + actualH - Y(py + ph), y + X(px), Y(py + ph) - Y(py), X(px + pw) - X(px), color);
+				else Fill(x + X(px), y + Y(py), X(px + pw) - X(px), Y(py + ph) - Y(py), color);
+			}
+			if (Layout.WeaponKind == CustomWeaponKind.SonicEmitter)
+			{
+				Part(4, 7, w - 8, 13, shadow);
+				for (var i = 0; i < 5; i++)
+				{
+					var px = i * SketchCell + 6;
+					Part(px, 4, 16, 18, steel); Part(px + 2, 5, 12, 2, light);
+					Part(px + 5, 10, 6, 9, energy);
+				}
+				return;
+			}
+			if (Layout.WeaponKind == CustomWeaponKind.MissileLauncher)
+			{
+				foreach (var py in new[] { 4, 15 })
+				{
+					Part(5, py, w - 15, 8, steel); Part(7, py, w - 19, 2, light);
+					Part(w - 19, py + 2, 10, 5, shadow); Part(w - 16, py + 3, 4, 3, light);
+					Part(19, py, 3, 8, shadow); Part(63, py, 3, 8, shadow);
+				}
+				return;
+			}
+			Part(4, 5, 24, 17, shadow); Part(6, 6, 19, 14, steel); Part(7, 6, 17, 2, light);
+			var barrels = Layout.WeaponKind == CustomWeaponKind.TripleIon ? new[] { 5, 12, 19 } :
+				Layout.WeaponKind is CustomWeaponKind.TwinCannon or CustomWeaponKind.DualGatling ? new[] { 7, 17 } : new[] { 12 };
+			foreach (var py in barrels)
+			{
+				Part(25, py - 1, w - 35, 5, shadow); Part(25, py, w - 37, 3, steel);
+				Part(26, py, w - 40, 1, light); Part(w - 15, py - 2, 10, 7, steel);
+				Part(w - 7, py, 2, 3, shadow);
+				if (Layout.WeaponKind is CustomWeaponKind.TripleIon or CustomWeaponKind.PrismEmitter)
+					Part(34, py + 1, w - 47, 2, energy);
+				if (Layout.WeaponKind == CustomWeaponKind.DualGatling)
+					for (var px = 37; px < w - 19; px += 13) Part(px, py - 1, 3, 5, light);
+			}
+		}
+
+		void Item(string id, bool rotated, int x, int y, Color border, bool held, int cell = Cell)
+		{
+			var m = Layout.ModuleFor(id);
+			var size = CustomVehicleSpaceDemo.Size(m, rotated);
+			var w = size.Width * cell;
+			var h = size.Height * cell;
+			Fill(x, y, w, h, id == "weapon" ? ZoneFill(Zone.Weapon) : held ? Color.FromArgb(255, 35, 49, 56) : Color.FromArgb(255, 39, 55, 62));
+			if (id == "weapon") DrawWeapon(x, y, w, h, rotated);
+			else
+			{
+				var iconWidth = w >= 80 && h < 40 ? 36 : w - 6;
+				var iconPosition = ScreenPoint(x + 3, y + 3);
+				var hasIcon = CustomVehicleModuleIconWidget.DrawIcon(GetModuleIcon(id),
+					new Rectangle(iconPosition.X, iconPosition.Y, iconWidth, h - 6));
+				if (!hasIcon || iconWidth == 36)
+				{
+					var offset = hasIcon ? 41 : 3;
+					var label = WidgetUtils.TruncateText(m.Label, w - offset - 3, Game.Renderer.Fonts["Small"]);
+					Text(label, x + offset, y + 2, Color.White);
+				}
+			}
+			if (held)
+			{
+				Border(x, y, w, h, border);
+				var dimensions = $"{size.Width}x{size.Height}";
+				var width = Game.Renderer.Fonts["Small"].Measure(dimensions).X;
+				Fill(x + w - width - 3, y + h - 14, width + 2, 13, Color.FromArgb(230, 13, 19, 25));
+				Text(dimensions, x + w - width - 2, y + h - 13, Color.White);
+			}
+		}
+
+		// Drawn last by a non-intercepting window overlay, including above the sidebar.
+		public void DrawHeld(Rectangle window)
+		{
+			if (Selected == null || !window.Contains(Viewport.LastMousePos)) return;
+			var mouse = Viewport.LastMousePos - RenderOrigin + pan - CanvasOffset;
+			if (RenderBounds.Contains(Viewport.LastMousePos) && Viewport.LastMousePos.Y >= RenderOrigin.Y + 24 && HitGrid(mouse, out var turret, out var x, out var y))
+			{
+				SnapWeaponSocket(turret, ref x, ref y);
+				var o = turret ? TurretOrigin : HullOrigin;
+				var cell = GridCell(turret);
+				Game.Renderer.EnableScissor(RenderBounds);
+				Item(Selected, Rotated, o.X + x * cell + CanvasOffset.X - pan.X, o.Y + y * cell - pan.Y,
+					Layout.CanPlace(Selected, turret, x, y, Rotated, Moving) ? Color.Lime : Color.Red, true, cell);
+				Game.Renderer.DisableScissor();
+			}
+			else
+			{
+				var size = CustomVehicleSpaceDemo.Size(Layout.ModuleFor(Selected), Rotated);
+				var px = Math.Clamp(Viewport.LastMousePos.X + 14, window.Left, Math.Max(window.Left, window.Right - size.Width * Cell));
+				var py = Math.Clamp(Viewport.LastMousePos.Y + 14, window.Top, Math.Max(window.Top, window.Bottom - size.Height * Cell));
+				Item(Selected, Rotated, px - RenderOrigin.X, py - RenderOrigin.Y, Tint(Selected), true);
+			}
+		}
+
+		void DrawChassis(int hw, int hh, Color metal, Color dark)
+		{
+			var bottom = SketchHullOrigin.Y + hh;
+			var tire = Color.FromArgb(255, 17, 22, 25);
+			void Wheel(int x, int diameter)
+			{
+				Ellipse(x, bottom - 20, diameter, diameter, tire);
+				Ellipse(x + 8, bottom - 12, diameter - 16, diameter - 16, metal);
+				Ellipse(x + diameter / 2 - 5, bottom + diameter / 2 - 25, 10, 10, dark);
+			}
+			switch (Layout.Silhouette)
+			{
+				case CustomVehicleSilhouetteKind.HeavyWalker:
+					var left = SketchHullOrigin.X;
+					foreach (var x in new[] { left - 24, left + hw - 2 })
+					{
+						Polygon(metal, new int2(x, bottom - 80), new int2(x + 23, bottom - 76),
+							new int2(x + 26, bottom - 25), new int2(x + 10, bottom + 10), new int2(x + 39, bottom + 13),
+							new int2(x + 44, bottom + 25), new int2(x - 9, bottom + 25), new int2(x - 12, bottom + 10), new int2(x + 6, bottom - 25));
+						Ellipse(x + 1, bottom - 36, 22, 22, dark);
+						Fill(x - 7, bottom + 21, 46, 4, tire);
+					}
+					Polygon(metal, new int2(left - 16, 193), new int2(left - 4, 159), new int2(left + hw + 3, 159),
+						new int2(left + hw + 18, 193), new int2(left + hw + 10, bottom - 14), new int2(left - 10, bottom - 14));
+					Fill(left + 16, 163, hw - 30, 8, dark);
+					break;
+				case CustomVehicleSilhouetteKind.MiniDrone:
+					Ellipse(51, 184, hw + 42, hh + 39, metal);
+					Ellipse(42, 215, 25, 56, tire); Ellipse(hw + 76, 215, 25, 56, tire);
+					Fill(49, 229, 11, 26, metal); Fill(hw + 83, 229, 11, 26, metal);
+					Ellipse(hw + 91, 225, 16, 14, Color.FromArgb(255, 113, 176, 183));
+					Ellipse(77, bottom + 31, hw - 6, 9, tire);
+					Fill(92, bottom + 18, hw - 38, 2, Color.FromArgb(255, 64, 105, 111));
+					break;
+				case CustomVehicleSilhouetteKind.Walker:
+				case CustomVehicleSilhouetteKind.Tripod:
+					var hips = Layout.Silhouette == CustomVehicleSilhouetteKind.Tripod ? new[] { 48, 170, hw + 76 } : new[] { 48, hw + 76 };
+					foreach (var x in hips)
+					{
+						Polygon(metal, new int2(x, bottom - 60), new int2(x + 25, bottom - 55),
+							new int2(x + 36, bottom + 2), new int2(x + 13, bottom + 28), new int2(x + 46, bottom + 28),
+							new int2(x + 52, bottom + 40), new int2(x - 10, bottom + 40), new int2(x - 10, bottom + 26), new int2(x + 10, bottom));
+						Ellipse(x + 4, bottom - 10, 26, 26, dark); Ellipse(x + 11, bottom - 3, 12, 12, metal);
+						Fill(x - 8, bottom + 36, 57, 4, tire);
+					}
+					Polygon(metal, new int2(30, 220), new int2(54, 180), new int2(hw + 98, 180),
+						new int2(hw + 123, 221), new int2(hw + 105, bottom - 18), new int2(47, bottom - 18));
+					Polygon(metal, new int2(92, 181), new int2(114, 153), new int2(170, 153), new int2(188, 181));
+					Fill(115, 160, 48, 14, dark);
+					break;
+				case CustomVehicleSilhouetteKind.LightVehicle:
+				case CustomVehicleSilhouetteKind.Wheeled:
+				case CustomVehicleSilhouetteKind.Bike:
+					Polygon(metal, new int2(34, 222), new int2(42, 194), new int2(184, 194),
+						new int2(209, 180), new int2(245, 210), new int2(hw + 115, 220), new int2(hw + 121, bottom - 8), new int2(35, bottom - 8));
+					if (Layout.Silhouette != CustomVehicleSilhouetteKind.Bike)
+					{
+						Polygon(metal, new int2(98, 198), new int2(106, 154), new int2(177, 154), new int2(201, 198));
+						Polygon(dark, new int2(114, 163), new int2(172, 163), new int2(186, 189), new int2(110, 189));
+						Fill(147, 160, 4, 34, metal);
+					}
+					else { Fill(95, 181, 66, 10, metal); Fill(hw + 48, 180, 7, 39, metal); }
+					Wheel(43, 60); Wheel(hw + 55, 60);
+					if (Layout.Silhouette == CustomVehicleSilhouetteKind.Wheeled) Wheel(166, 60);
+					Fill(hw + 112, 230, 8, 16, Color.FromArgb(255, 142, 146, 116));
+					break;
+				case CustomVehicleSilhouetteKind.Hover:
+					Polygon(metal, new int2(25, 240), new int2(69, 181), new int2(hw + 72, 181),
+						new int2(hw + 135, 247), new int2(hw + 110, bottom), new int2(41, bottom));
+					for (var x = 48; x < hw + 100; x += 84)
+					{
+						Ellipse(x, bottom - 8, 65, 24, tire); Fill(x + 10, bottom + 11, 45, 3, metal);
+						Fill(x + 17, bottom + 26, 30, 2, Color.FromArgb(255, 64, 105, 111));
+					}
+					break;
+				default:
+					var trackY = bottom - 10;
+					Ellipse(26, trackY, 56, 46, tire); Ellipse(hw + 76, trackY, 56, 46, tire);
+					Fill(54, trackY, hw + 50, 46, tire);
+					for (var x = 48; x < hw + 118; x += 36)
+					{
+						Ellipse(x, trackY + 5, 32, 32, metal); Ellipse(x + 10, trackY + 15, 12, 12, dark);
+					}
+					for (var x = 38; x < hw + 122; x += 15) Fill(x, trackY + 40, 10, 3, metal);
+					Polygon(metal, new int2(26, 214), new int2(56, 183), new int2(hw + 76, 183),
+						new int2(hw + 132, 224), new int2(hw + 110, bottom), new int2(40, bottom));
+					Fill(38, 179, 83, 5, metal);
+					for (var x = 45; x < 113; x += 12) Fill(x, 185, 6, 8, dark);
+					break;
+			}
+		}
+
+		public override void Draw()
+		{
+			var dark = Color.FromArgb(255, 25, 34, 41);
+			var metal = Color.FromArgb(255, 63, 78, 84);
+			Fill(0, 0, Bounds.Width, Bounds.Height, dark);
+			Text("LEFT SIDE VIEW", 16, 8, Color.White);
+			if (!Layout.HasChassis) { Text("Choose a chassis on the left to begin.", 104, 180, Color.White); return; }
+			ClampPan();
+			Game.Renderer.EnableScissor(RenderBounds);
+			drawingCanvas = true;
+			try { DrawCanvas(metal, dark); }
+			finally { drawingCanvas = drawingSketch = false; Game.Renderer.DisableScissor(); }
+			Fill(0, 0, Bounds.Width, 24, dark);
+			Text($"{Cell}px cells | Wheel: scroll | Shift+wheel: horizontal | Middle drag: pan", 12, 5, Color.White);
+		}
+
+		void DrawCanvas(Color metal, Color dark)
+		{
+			drawingSketch = true;
+			sketchOffset = HullOrigin - new int2(Scale(SketchHullOrigin.X), Scale(SketchHullOrigin.Y));
+			DrawChassis(Layout.HullWidth * SketchCell, Layout.HullHeight * SketchCell, metal, dark);
+			if (Layout.TurretWidth > 0)
+			{
+				sketchOffset = TurretOrigin - new int2(Scale(156), Scale(32));
+				var tw = Layout.TurretWidth * SketchCell;
+				var bottom = 32 + Layout.TurretHeight * SketchCell + 6;
+				if (DroneBody)
+				{
+					Ellipse(143, 20, tw + 26, bottom - 9, metal);
+				}
+				else if (LightBody)
+				{
+					Polygon(metal, new int2(146, bottom), new int2(146, 42), new int2(161, 26),
+						new int2(tw + 150, 26), new int2(tw + 166, 44), new int2(tw + 166, bottom));
+					Ellipse(182, bottom + 2, 52, 10, metal);
+				}
+				else
+				{
+					var externalSocket = Layout.WeaponSocket.X >= Layout.TurretWidth;
+					Polygon(metal, new int2(128, bottom), new int2(132, 44), new int2(158, 18),
+						new int2(tw + 146, 18), new int2(tw + (externalSocket ? 156 : 178), 51),
+						new int2(tw + (externalSocket ? 156 : 180), bottom - 10), new int2(tw + 156, bottom + 6));
+					Fill(170, 12, 36, 6, metal); Fill(145, 0, 3, 36, metal);
+					Ellipse(169, bottom + 2, 86, 16, metal);
+				}
+				drawingSketch = false;
+				var connectorY = TurretOrigin.Y + Layout.TurretHeight * Cell + Scale(18);
+				if (!DroneBody) Fill(TurretOrigin.X + Scale((LightBody ? 204 : 194) - 156), connectorY,
+					Scale(LightBody ? 14 : 34), Math.Max(0, HullOrigin.Y - Scale(14) - connectorY), metal);
+				Text($"{(DroneBody ? "Mount" : "Turret")} {Layout.TurretWidth} x {Layout.TurretHeight} | Socket {Layout.WeaponSocket.Width} x {Layout.WeaponSocket.Height}",
+					TurretOrigin.X, TurretOrigin.Y - 22, Color.White);
+			}
+			drawingSketch = false;
+			foreach (var t in new[] { false, true })
+			{
+				var o = t ? TurretOrigin : HullOrigin;
+				var w = t ? Math.Max(Layout.TurretWidth, Layout.WeaponSocket is { } socket ? socket.X + socket.Width : 0) : Layout.HullWidth;
+				var h = t ? Layout.TurretHeight : Layout.HullHeight;
+				var cell = GridCell(t);
+				for (var y = 0; y < h; y++)
+					for (var x = 0; x < w; x++)
+					{
+						if (!Layout.ContainsCell(t, x, y)) continue;
+						Fill(o.X + x * cell, o.Y + y * cell, cell, cell, ZoneFill(Layout.ZoneAt(t, x, y)));
+					}
+			}
+			foreach (var p in Layout.Placements)
+			{
+				if (p.Id == Moving) continue;
+				var o = p.InTurret ? TurretOrigin : HullOrigin;
+				var cell = GridCell(p.InTurret);
+				Item(p.ModuleId, p.Rotated, o.X + p.X * cell, o.Y + p.Y * cell, Tint(p.ModuleId), false, cell);
+			}
+			// Draw boundaries after backgrounds and artwork: no double frames or internal module seams.
+			foreach (var turret in new[] { false, true })
+			{
+				var o = turret ? TurretOrigin : HullOrigin;
+				var cell = GridCell(turret);
+				foreach (var edge in Layout.Edges(turret, Moving))
+				{
+					var color = edge.ModuleId == null ? ZoneColor(edge.Mount) : Tint(edge.ModuleId);
+					Fill(o.X + edge.X * cell - 1, o.Y + edge.Y * cell - 1,
+						edge.Vertical ? 2 : cell + 2, edge.Vertical ? cell + 2 : 2, color);
+				}
+			}
+			Text($"Chassis {Layout.HullWidth} x {Layout.HullHeight} / {Layout.Used(false)} cells used", HullOrigin.X, HullOrigin.Y + Layout.HullHeight * Cell + 150, Color.White);
+		}
+	}
+
+	public sealed class CustomVehicleSpaceCursorWidget : Widget
+	{
+		public CustomVehicleSpaceWidget Canvas;
+		public override bool EventBoundsContains(int2 location) => false;
+		public override void Draw() => Canvas?.DrawHeld(RenderBounds);
+	}
+}

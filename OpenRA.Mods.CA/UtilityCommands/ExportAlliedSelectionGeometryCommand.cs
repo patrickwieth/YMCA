@@ -1,0 +1,166 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using Newtonsoft.Json;
+using OpenRA.Mods.Common.Traits;
+using OpenRA.Mods.Common.Traits.Render;
+
+namespace OpenRA.Mods.CA.UtilityCommands
+{
+	[Desc("--export-allied-selection-geometry [ACTOR ...]", "Export resolved selection/PNG/bib registration; defaults to Allied actors, or accepts named actors.")]
+	public sealed class ExportAlliedSelectionGeometryCommand : IUtilityCommand
+	{
+		string IUtilityCommand.Name => "--export-allied-selection-geometry";
+		bool IUtilityCommand.ValidateArguments(string[] args) => args.Length >= 1;
+
+		void IUtilityCommand.Run(Utility utility, string[] args)
+		{
+			Game.ModData = utility.ModData;
+			var grid = utility.ModData.Manifest.Get<MapGrid>();
+			if (grid.Type != MapGridType.RectangularIsometric)
+				throw new InvalidDataException("This diagnostic requires the isometric grid.");
+			var sequences = MiniYaml.Load(utility.ModData.DefaultFileSystem, utility.ModData.Manifest.Sequences, null)
+				.ToDictionary(n => n.Key, n => n.Value);
+			var resolvedRules = MiniYaml.Load(utility.ModData.DefaultFileSystem, utility.ModData.Manifest.Rules, null)
+				.ToDictionary(n => n.Key.ToLowerInvariant());
+			string StableRule(MiniYamlNode node, string parent)
+			{
+				if ((parent == "Building" && node.Key == "LocalCenterOffset") ||
+					(parent == "IsometricSelectable" && node.Key == "DecorationOffset") ||
+					(parent == "RenderSprites" && node.Key == "AnimatedBuildingSequences")) return "";
+				return node.Key + ":" + node.Value.Value + "[" + string.Join("", node.Value.Nodes
+					.Select(n => StableRule(n, node.Key)).OrderBy(s => s, StringComparer.Ordinal)) + "]";
+			}
+			string RuleHash(string name)
+			{
+				using var sha = SHA256.Create();
+				var text = string.Join("", resolvedRules[name].Value.Nodes.Select(n => StableRule(n, "")).OrderBy(s => s, StringComparer.Ordinal));
+				return string.Concat(sha.ComputeHash(Encoding.UTF8.GetBytes(text)).Select(b => b.ToString("x2")));
+			}
+			var report = new List<object>();
+			var names = args.Length == 2 && (args[1] == "--all-bibs" || args[1] == "--all-buildings") ? utility.ModData.DefaultRules.Actors
+				.Where(a => !a.Key.StartsWith("^", StringComparison.Ordinal) && a.Value.HasTraitInfo<BuildingInfo>() &&
+					a.Value.HasTraitInfo<IsometricSelectableInfo>() && a.Value.HasTraitInfo<RenderSpritesInfo>() &&
+					(args[1] == "--all-buildings" || a.Value.TraitInfos<WithIdleOverlayInfo>().Any(i => i.Image != null && i.Image.Contains("bib", StringComparison.OrdinalIgnoreCase))))
+				.Select(a => a.Key).OrderBy(n => n) : args.Length > 1 ? args.Skip(1).Select(n => n.ToLowerInvariant()) :
+				new[] { "fact", "proc", "weap", "pbox", "pris", "powr", "apwr", "tent", "gap", "orep", "pdox", "weat", "atek", "hpad", "dome", "fix", "syrd", "afld.allies" };
+			foreach (var name in names)
+			{
+				var actor = utility.ModData.DefaultRules.Actors[name];
+				var building = actor.TraitInfo<BuildingInfo>();
+				var selection = actor.TraitInfo<IsometricSelectableInfo>();
+				var bounds = selection.DecorationFootprint == CVec.Zero ? selection.DecorationBounds ?? selection.Bounds : null;
+				var height = selection.DecorationHeight >= 0 ? selection.DecorationHeight : selection.Height;
+				var cells = building.FootprintTiles(CPos.Zero, FootprintCellType.Occupied)
+					.Concat(building.FootprintTiles(CPos.Zero, FootprintCellType.OccupiedUntargetable)).ToArray();
+				if (cells.Length == 0)
+					cells = building.OccupiedTiles(CPos.Zero).ToArray();
+				if (cells.Length == 0)
+					cells = new[] { CPos.Zero };
+				var xMin = cells.Min(c => c.X);
+				var xMax = cells.Max(c => c.X);
+				var yMin = cells.Min(c => c.Y);
+				var yMax = cells.Max(c => c.Y);
+				var bodyCells = new[] { xMax - xMin + 1, yMax - yMin + 1 };
+				int[] left, right, top, bottom;
+				if (bounds != null)
+				{
+					// Mirror IsometricSelectable.Bounds integer divisions, including odd widths.
+					var ox = bounds.Length >= 4 ? bounds[2] * grid.TileSize.Width / grid.TileScale : 0;
+					var oy = bounds.Length >= 4 ? bounds[3] * grid.TileSize.Height / grid.TileScale : 0;
+					left = new[] { ox - bounds[0] * grid.TileSize.Width / (2 * grid.TileScale), oy };
+					right = new[] { left[0] + bounds[0] * grid.TileSize.Width / grid.TileScale, oy };
+					top = new[] { ox, oy - bounds[1] * grid.TileSize.Height / (2 * grid.TileScale) };
+					bottom = new[] { ox, top[1] + bounds[1] * grid.TileSize.Height / grid.TileScale };
+				}
+				else
+				{
+					if (selection.DecorationFootprint != CVec.Zero)
+					{
+						xMax = xMin + selection.DecorationFootprint.X - 1;
+						yMax = yMin + selection.DecorationFootprint.Y - 1;
+					}
+					var extraDepth = selection.DecorationFootprintExtraDepth;
+					// Flat Map.CenterOfCell + Building.CenterOffset, relative to actor screen center.
+					var actorX = 724 + 362 * (building.Dimensions.X - building.Dimensions.Y) + building.LocalCenterOffset.X;
+					var actorY = 724 + 362 * (building.Dimensions.X + building.Dimensions.Y - 2) + building.LocalCenterOffset.Y - building.LocalCenterOffset.Z;
+					int[] Project(int x, int y, int dx, int dy) => new[]
+					{
+						(int)Math.Round((float)(724 * (x - y + 1) + dx) * grid.TileSize.Width / grid.TileScale) -
+							(int)Math.Round((float)actorX * grid.TileSize.Width / grid.TileScale),
+						(int)Math.Round((float)(724 * (x + y + 1) + dy) * grid.TileSize.Height / grid.TileScale) -
+							(int)Math.Round((float)actorY * grid.TileSize.Height / grid.TileScale)
+					};
+					left = Project(xMin, yMax, -768 - extraDepth, extraDepth);
+					right = Project(xMax, yMin, 768, 0);
+					top = Project(xMin, yMin, 0, -768);
+					bottom = Project(xMax, yMax, -extraDepth, 768 + extraDepth);
+				}
+
+				var decorationOffset = new[] {
+					(int)Math.Round((float)selection.DecorationOffset.X * grid.TileSize.Width / grid.TileScale),
+					(int)Math.Round((float)(selection.DecorationOffset.Y - selection.DecorationOffset.Z) * grid.TileSize.Height / grid.TileScale) };
+				foreach (var point in new[] { top, left, bottom, right })
+				{
+					point[0] += decorationOffset[0];
+					point[1] += decorationOffset[1];
+				}
+				var baseTop = top[1];
+				int[] Raised(int[] point) => new[] { point[0], point[1] - height };
+
+				var image = (actor.TraitInfo<RenderSpritesInfo>().Image ?? name).ToLowerInvariant();
+				var nodes = sequences[image].ToDictionary();
+				var values = nodes.TryGetValue("Defaults", out var defaults) ? defaults.ToDictionary() : new Dictionary<string, MiniYaml>();
+				var bodySequence = actor.TraitInfos<WithSpriteBodyInfo>().FirstOrDefault()?.Sequence ?? "idle";
+				foreach (var value in nodes[bodySequence].ToDictionary())
+					values[value.Key] = value.Value;
+				string Get(string key, string fallback) => values.TryGetValue(key, out var value) ? value.Value : fallback;
+				var bibs = actor.TraitInfos<WithIdleOverlayInfo>()
+					.Where(i => i.Image != null && i.Image.Contains("bib", StringComparison.OrdinalIgnoreCase))
+					.Select(i =>
+					{
+						var bibNodes = sequences[i.Image].ToDictionary();
+						var fields = bibNodes.TryGetValue("Defaults", out var d) ? d.ToDictionary() : new Dictionary<string, MiniYaml>();
+						foreach (var field in bibNodes[i.Sequence].ToDictionary())
+							fields[field.Key] = field.Value;
+						string Value(string key, string fallback) => fields.TryGetValue(key, out var field) ? field.Value : fallback;
+						var world = actor.TraitInfo<BodyOrientationInfo>().LocalToWorld(i.Offset.Rotate(WRot.None));
+						return new
+						{
+							Image = i.Image, File = Value("Filename", null), Anchor = Value("Anchor", "Center"),
+							Offset = Value("Offset", "0,0"), Scale = Value("Scale", "1"),
+							WorldOffset = new[] { world.X, world.Y, world.Z },
+							ScreenOffset = new[] { (int)Math.Round((float)world.X * grid.TileSize.Width / grid.TileScale),
+								(int)Math.Round((float)(world.Y - world.Z) * grid.TileSize.Height / grid.TileScale) }
+						};
+					}).ToArray();
+				report.Add(new
+				{
+					Actor = name, BodySequence = bodySequence, RuleKey = resolvedRules[name].Key, GameplayAndAttachmentsHash = RuleHash(name), Image = image, File = Get("Filename", null),
+					TileSize = new[] { grid.TileSize.Width, grid.TileSize.Height }, TileScale = grid.TileScale,
+					BuildingDimensions = new[] { building.Dimensions.X, building.Dimensions.Y },
+					BuildingCenterOffset = new[] { building.LocalCenterOffset.X, building.LocalCenterOffset.Y, building.LocalCenterOffset.Z },
+					FootprintCells = building.Footprint.Select(p => new { X = p.Key.X, Y = p.Key.Y, Type = ((char)p.Value).ToString() }).ToArray(),
+					Exits = actor.TraitInfos<ExitInfo>().Select(e => new { Cell = new[] { e.ExitCell.X, e.ExitCell.Y }, Spawn = new[] { e.SpawnOffset.X, e.SpawnOffset.Y, e.SpawnOffset.Z } }).ToArray(),
+					Docks = actor.TraitInfos<DockHostInfo>().Select(d => new[] { d.DockOffset.X, d.DockOffset.Y, d.DockOffset.Z }).ToArray(),
+					InteractionBounds = selection.Bounds, InteractionHeight = selection.Height,
+					DecorationBounds = selection.DecorationBounds,
+					DecorationOffset = new[] { selection.DecorationOffset.X, selection.DecorationOffset.Y, selection.DecorationOffset.Z }, Bibs = bibs,
+					Anchor = Get("Anchor", "Center"), Offset = Get("Offset", "0,0"), Scale = Get("Scale", "1"),
+					BaseTop = baseTop, Height = height, SelectionTop = baseTop - height,
+					BodyCells = bodyCells,
+					DecorationFootprint = new[] { selection.DecorationFootprint.X, selection.DecorationFootprint.Y },
+					DecorationFootprintExtraDepth = selection.DecorationFootprintExtraDepth,
+					GroundCorners = new[] { top, left, bottom, right },
+					SelectionPolygon = new[] { Raised(top), Raised(left), left, bottom, right, Raised(right) },
+					PreserveConfirmedBox = new[] { "pbox", "syrd", "proc" }.Contains(name)
+				});
+			}
+
+			Console.WriteLine(JsonConvert.SerializeObject(report, Formatting.Indented));
+		}
+	}
+}

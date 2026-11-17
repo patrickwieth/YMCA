@@ -1,0 +1,188 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace OpenRA.Mods.CA.Modular
+{
+	// Isolated spatial UI experiment: no profile serialization or combat rules.
+	public sealed class CustomVehicleSpaceDemo
+	{
+		public enum Zone { None, Interior, RunningGear, Weapon, Armor, Ammunition, Any }
+		public sealed record Module(string Id, string Label, int Width, int Height, bool Hull, bool Turret, Zone Mount = Zone.Interior);
+		public sealed record Placement(int Id, string ModuleId, bool InTurret, int X, int Y, bool Rotated);
+		public sealed record GridEdge(int X, int Y, bool Vertical, string ModuleId, Zone Mount);
+		public static readonly IReadOnlyList<Module> Modules = Array.AsReadOnly(new[]
+		{
+			new Module("weapon", "Weapon", 4, 1, false, true, Zone.Weapon),
+			new Module("ammo", "Ammunition", 1, 2, false, true, Zone.Ammunition),
+			new Module("pdl", "PDL", 1, 2, true, true, Zone.Any),
+			new Module("battery", "Battery", 1, 2, true, true, Zone.Any),
+			new Module("generator", "Generator", 2, 2, true, false),
+			new Module("engine", "Engine", 2, 2, true, false),
+			new Module("gear", "Running gear", 4, 1, true, false, Zone.RunningGear),
+			new Module("armor", "Armor plate", 2, 1, true, false, Zone.Armor),
+			new Module("reflector", "Reflector armor", 2, 1, true, false, Zone.Armor)
+		});
+
+		readonly List<Placement> placements = new();
+		int nextId;
+		public IReadOnlyList<Placement> Placements => placements.AsReadOnly();
+		public bool HasChassis { get; private set; }
+		public bool Heavy { get; private set; }
+		public CustomVehicleSilhouetteKind Silhouette { get; set; }
+		public CustomWeaponKind WeaponKind { get; set; }
+		public string AmmunitionId { get; set; }
+		public int AmmunitionWidth => AmmunitionId is "medium-tank-shell" or "designer-he-shell" ? 2 : 1;
+		public int WeaponWidth => WeaponKind is CustomWeaponKind.SonicEmitter or CustomWeaponKind.BattleTank120mm ? 5 : 4;
+		public CustomWeaponSocket WeaponSocket => TurretWidth == 0 ? null : WeaponKind == CustomWeaponKind.SonicEmitter
+			? new CustomWeaponSocket(WeaponKind, 0, 0, 5, 1)
+			: new CustomWeaponSocket(WeaponKind == CustomWeaponKind.BattleTank120mm ? CustomWeaponKind.BattleTankCannon : WeaponKind,
+				WeaponKind is CustomWeaponKind.BattleTankCannon or CustomWeaponKind.BattleTank120mm ? TurretWidth : TurretWidth - 1, 1, 4, 1);
+		// Mount geometry is fixed. The larger breech consumes an existing interior cell.
+		public CustomWeaponSocket WeaponFootprint => WeaponSocket == null ? null : WeaponKind == CustomWeaponKind.BattleTank120mm
+			? new CustomWeaponSocket(WeaponKind, WeaponSocket.X - 1, WeaponSocket.Y, 5, 1) : WeaponSocket;
+		public Module ModuleFor(string id) => id switch
+		{
+			"weapon" => Definition(id) with { Label = CustomWeaponSocket.Label(WeaponKind), Width = WeaponWidth, Height = 1 },
+			"ammo" => Definition(id) with { Width = AmmunitionWidth },
+			_ => Definition(id)
+		};
+		public bool ContainsCell(bool turret, int x, int y) => x >= 0 && y >= 0 &&
+			(x < (turret ? TurretWidth : HullWidth) && y < (turret ? TurretHeight : HullHeight) ||
+			 turret && WeaponSocket?.Contains(x, y) == true);
+		public bool Portrait => Silhouette == CustomVehicleSilhouetteKind.HeavyWalker;
+		public int HullWidth => !HasChassis ? 0 : Portrait ? 4 : (Heavy ? 10 : 8);
+		public int HullHeight => !HasChassis ? 0 : Portrait ? 6 : (Heavy ? 5 : 4);
+		public int TurretWidth { get; private set; }
+		public int TurretHeight => TurretWidth == 0 ? 0 : Portrait ? 4 : 3;
+		public bool HasPdlWithoutBattery => placements.Any(p => p.ModuleId == "pdl") && !placements.Any(p => p.ModuleId == "battery");
+
+		public void SetChassis(bool heavy)
+		{
+			HasChassis = true;
+			Heavy = heavy;
+			TurretWidth = 0;
+			placements.Clear();
+		}
+
+		public void LoadStockConfiguration(bool heavy)
+		{
+			SetChassis(heavy); SetTurret(5);
+			Place("engine", false, 1, 1, false); Place("generator", false, Portrait ? 1 : 3, Portrait ? 3 : 1, false);
+			Place("gear", false, Portrait ? 0 : 1, HullHeight - 1, false); Place("armor", false, 0, 0, false);
+			Place("weapon", true, WeaponFootprint.X, WeaponFootprint.Y, false);
+			Place("ammo", true, 0, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
+		}
+
+		public void LoadExample()
+		{
+			SetChassis(Heavy);
+			SetTurret(5);
+			Place("engine", false, 1, 1, false);
+			Place("generator", false, Portrait ? 1 : 3, Portrait ? 3 : 1, false);
+			Place("gear", false, Portrait ? 0 : 1, HullHeight - 1, false);
+			Place("battery", false, Portrait ? 1 : 5, Portrait ? 5 : 1, false);
+			Place("armor", false, 0, 0, false);
+			Place("weapon", true, WeaponFootprint.X, WeaponFootprint.Y, false);
+			Place("ammo", true, 0, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
+			Place("pdl", true, AmmunitionWidth, WeaponKind == CustomWeaponKind.SonicEmitter ? 1 : 0, false);
+		}
+
+		public void SetTurret(int width)
+		{
+			if (width != 0 && width != 5) throw new ArgumentOutOfRangeException(nameof(width));
+			if (width != 0 && !HasChassis) throw new InvalidOperationException("Choose a chassis first.");
+			if (width == TurretWidth) return;
+			TurretWidth = width;
+			placements.RemoveAll(p => p.InTurret);
+		}
+
+		// Front is right. Bottom takes precedence over the blue hull perimeter.
+		public Zone ZoneAt(bool turret, int x, int y)
+		{
+			if (!ContainsCell(turret, x, y)) return Zone.None;
+			var w = turret ? TurretWidth : HullWidth;
+			var h = turret ? TurretHeight : HullHeight;
+			if (turret) return WeaponSocket?.Contains(x, y) == true ? Zone.Weapon : Zone.Ammunition;
+			if (y == h - 1) return Zone.RunningGear;
+			if (x == 0 || x == w - 1 || y == 0) return Zone.Armor;
+			return Zone.Interior;
+		}
+
+		public static Module Definition(string id) => Modules.FirstOrDefault(m => m.Id == id);
+		public static (int Width, int Height) Size(Module module, bool rotated) => rotated ? (module.Height, module.Width) : (module.Width, module.Height);
+		public Placement At(bool turret, int x, int y, int? ignoredId = null) => placements.FirstOrDefault(p =>
+		{
+			if (p.Id == ignoredId) return false;
+			var size = Size(ModuleFor(p.ModuleId), p.Rotated);
+			return p.InTurret == turret && x >= p.X && y >= p.Y && x < p.X + size.Width && y < p.Y + size.Height;
+		});
+
+		// Each shared edge is emitted once. Cells belonging to the same placement have no seam.
+		public IEnumerable<GridEdge> Edges(bool turret, int? ignoredId = null)
+		{
+			var socket = turret ? WeaponSocket : null;
+			var width = turret ? Math.Max(TurretWidth, socket == null ? 0 : socket.X + socket.Width) : HullWidth;
+			var height = turret ? TurretHeight : HullHeight;
+			GridEdge Between(int x, int y, bool vertical)
+			{
+				var ax = vertical ? x - 1 : x;
+				var ay = vertical ? y : y - 1;
+				var hasA = ContainsCell(turret, ax, ay);
+				var hasB = ContainsCell(turret, x, y);
+				if (!hasA && !hasB) return null;
+				var a = hasA ? At(turret, ax, ay, ignoredId) : null;
+				var b = hasB ? At(turret, x, y, ignoredId) : null;
+				if (a != null && b != null && a.Id == b.Id) return null;
+				var za = ZoneAt(turret, ax, ay);
+				var zb = ZoneAt(turret, x, y);
+				var zone = za == Zone.Weapon || zb == Zone.Weapon ? Zone.Weapon : hasA ? za : zb;
+				return new GridEdge(x, y, vertical, a?.ModuleId ?? b?.ModuleId, zone);
+			}
+			for (var y = 0; y <= height; y++)
+				for (var x = 0; x <= width; x++)
+				{
+					if (x < width && Between(x, y, false) is { } horizontal) yield return horizontal;
+					if (y < height && Between(x, y, true) is { } vertical) yield return vertical;
+				}
+		}
+
+		public bool CanPlace(string moduleId, bool turret, int x, int y, bool rotated, int? movingId = null)
+		{
+			var module = ModuleFor(moduleId);
+			if (!HasChassis || module == null || (turret ? !module.Turret : !module.Hull)) return false;
+			if (movingId != null && !placements.Any(p => p.Id == movingId && p.ModuleId == moduleId)) return false;
+			var size = Size(module, rotated);
+			if (module.Mount == Zone.Weapon)
+			{
+				// Exact mount-specific fit, including any required breech space inside the turret.
+				if (!turret || WeaponFootprint?.Fits(x, y, size.Width, size.Height) != true) return false;
+			}
+			else if (x < 0 || y < 0 || x > (turret ? TurretWidth : HullWidth) - size.Width || y > (turret ? TurretHeight : HullHeight) - size.Height) return false;
+			for (var dy = 0; dy < size.Height; dy++)
+				for (var dx = 0; dx < size.Width; dx++)
+				{
+					var zone = ZoneAt(turret, x + dx, y + dy);
+					if (module.Mount == Zone.Weapon)
+					{
+						if (zone != Zone.Weapon && zone != Zone.Ammunition) return false;
+					}
+					else if (module.Mount != Zone.Any && zone != module.Mount) return false;
+					var occupant = At(turret, x + dx, y + dy, movingId);
+					if (occupant != null) return false;
+				}
+			return true;
+		}
+
+		public bool Place(string moduleId, bool turret, int x, int y, bool rotated, int? movingId = null)
+		{
+			if (!CanPlace(moduleId, turret, x, y, rotated, movingId)) return false;
+			if (movingId != null) placements.RemoveAll(p => p.Id == movingId);
+			placements.Add(new Placement(movingId ?? ++nextId, moduleId, turret, x, y, rotated));
+			return true;
+		}
+
+		public void Remove(int id) => placements.RemoveAll(p => p.Id == id);
+		public int Used(bool turret) => placements.Where(p => p.InTurret == turret).Sum(p => { var m = ModuleFor(p.ModuleId); return m.Width * m.Height; });
+	}
+}
