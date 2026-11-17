@@ -185,6 +185,8 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         AddArgument(info, "Server.GameOverShutdownDelaySeconds", "5");
         AddArgument(info, "Server.RequireAuthentication", "False");
         AddArgument(info, "Server.Map", match.MapUid);
+        // A tournament match must retain its assigned map, even for lobby admins.
+        AddArgument(info, "Server.MapPool", match.MapUid);
         info.Environment["MOD_SEARCH_PATHS"] = string.Join(',', config.ModSearchPaths.Split(',', StringSplitOptions.RemoveEmptyEntries)
             .Select(path => Path.GetFullPath(Path.IsPathRooted(path) ? path : Path.Combine(config.WorkingDirectory, path.Trim()))));
         return info;
