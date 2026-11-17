@@ -14,6 +14,30 @@ EditorPlayer:
 Player:
 	Inherits: ^BasePlayer
 	CheckpointOrigin:
+	GrantConditionOnMapMode@TACTICAL:
+		Mode: Tactical
+		Condition: tactical-mode
+	GrantConditionOnMapMode@OPERATIONAL:
+		Mode: Operational
+		Condition: operational-mode
+	GrantConditionOnMapMode@STRATEGIC:
+		Mode: Strategic
+		Condition: strategic-mode
+	ProvidesPrerequisite@TACTICAL-MODE:
+		Prerequisite: mode.tactical
+		RequiresCondition: tactical-mode
+	ProvidesPrerequisite@OPERATIONAL-MODE:
+		Prerequisite: mode.operational
+		RequiresCondition: operational-mode
+	ProvidesPrerequisite@STRATEGIC-MODE:
+		Prerequisite: mode.strategic
+		RequiresCondition: strategic-mode
+	ArmyLeaderSpawner:
+		RequiresCondition: operational-mode
+	OperationalArmyLeaderBotModule:
+		RequiresCondition: operational-mode
+	CheckpointVictoryConditions:
+		RequiresCondition: strategic-mode
 	ClassicProductionQueue@Building:
 		Type: Building
 		DisplayOrder: 0
@@ -42,7 +66,7 @@ Player:
 		BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
 		DisallowPaused: True
 		InfiniteBuildLimit: 10
-	ClassicProductionQueue@Vehicle:
+	TacticalProductionQueue@Vehicle:
 		Type: Vehicle
 		DisplayOrder: 3
 		LowPowerModifier: 300
@@ -56,7 +80,7 @@ Player:
 		BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
 		DisallowPaused: True
 		InfiniteBuildLimit: 10
-	ClassicProductionQueue@Infantry:
+	TacticalProductionQueue@Infantry:
 		Type: Infantry
 		DisplayOrder: 2
 		LowPowerModifier: 300
@@ -70,7 +94,7 @@ Player:
 		BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
 		DisallowPaused: True
 		InfiniteBuildLimit: 10
-	ClassicProductionQueue@Ship:
+	TacticalProductionQueue@Ship:
 		Type: Ship
 		DisplayOrder: 5
 		LowPowerModifier: 300
@@ -84,7 +108,7 @@ Player:
 		BuildTimeSpeedReduction: 100, 50, 33, 25, 20, 17, 14, 13, 11, 10, 9, 8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2
 		DisallowPaused: True
 		InfiniteBuildLimit: 10
-	ClassicProductionQueue@Aircraft:
+	TacticalProductionQueue@Aircraft:
 		Type: Aircraft
 		DisplayOrder: 4
 		LowPowerModifier: 300
@@ -241,13 +265,6 @@ Player:
 		Enabled: False
 		DisplayOrder: 19
 		Prerequisites: global.nukular
-	LobbyPrerequisiteCheckbox@Autobattle:
-		ID: autobattle
-		Label: Autobattle Mode
-		Description: Enables Autobattle Mode - Checkpoints must be captured to win the game and most units cannot be controlled. THIS IS HIGHLY EXPERIMENTAL! Only works on special maps.
-		Enabled: false
-		DisplayOrder: 20
-		Prerequisites: global.autobattle
 	FrozenActorLayer:
 	BaseAttackNotifier:
 	PlayerStatistics:

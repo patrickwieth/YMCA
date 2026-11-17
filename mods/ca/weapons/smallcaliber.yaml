@@ -28,6 +28,46 @@ ZSU-23:
 		Damage: 4000
 		Range: 0, 0c64, 0c256, 3c768
 
+# Allied ZSU-23 fires one 4000-damage shell every 8 ticks (alternating barrels).
+# Soviet: central visual burst, then four damaging airbursts after 4 ticks.
+# One shell every32 ticks; unchanged4x4000 damage budget, no extra central damage.
+SOVIET-CLUSTER-AA:
+	Inherits: ZSU-23
+	ReloadDelay: 32
+	Range: 10c512
+	Report: flak1.aud, flak2.aud
+	-Warhead@1Dam:
+	Warhead@Cluster: AirburstCluster
+		Delay: 4
+		Weapon: SOVIET-CLUSTER-PAYLOAD
+		ValidTargets: Air
+		Offsets: -384,0,0, 384,0,0, 0,-384,0, 0,384,0
+
+SOVIET-CLUSTER-PAYLOAD:
+	Inherits: ZSU-23
+	-Projectile:
+	-Report:
+	Warhead@1Dam: SpreadDamage
+		# All four nearby bursts retain full damage around the aim point.
+		# Deliberately wider inner splash than Allied flak; same total damage budget.
+		Range: 0, 0c512, 0c768, 3c768
+	Warhead@2Eff: CreateEffect
+		ImpactSoundChance: 25
+
+# Disposable test maps only: identical cadence/clusters, also allow Ctrl+ground fire.
+SOVIET-CLUSTER-AA.Test:
+	Inherits: SOVIET-CLUSTER-AA
+	ValidTargets: Air, Ground, Water
+	Warhead@Cluster: AirburstCluster
+		Weapon: SOVIET-CLUSTER-PAYLOAD.Test
+		ValidTargets: Air, Ground, Water
+
+SOVIET-CLUSTER-PAYLOAD.Test:
+	Inherits: SOVIET-CLUSTER-PAYLOAD
+	ValidTargets: Air, Ground, Water
+	Warhead@1Dam: SpreadDamage
+		ValidTargets: Air, Ground, Water
+
 FLAK-23-AA:
 	Inherits: ^AACannon
 	Range: 10c512
@@ -211,6 +251,18 @@ Vulcan:
 GTChainGun:
 	Inherits: Vulcan
 	Report: mg42.aud
+
+# Match Guard Tower sustained damage and armor multipliers, retaining real MG bursts.
+# Guard: 6x1000 / 30 ticks. Sentry: 5x2000 / (4x5 + 30) ticks.
+SentryMG:
+	Inherits: ^HeavyMG
+	Range: 4c0
+	Report: mg42.aud
+	Burst: 5
+	BurstDelays: 5
+	ReloadDelay: 30
+	Warhead@1Dam: SpreadDamage
+		Damage: 2000
 
 ChainGun:
 	Inherits: ^HeavyMG

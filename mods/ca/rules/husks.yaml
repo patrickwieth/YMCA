@@ -338,7 +338,7 @@ T04.Husk:
 		Footprint: __ x_
 		Dimensions: 2,2
 	MapEditorData:
-		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
+		ExcludeTilesets: OMEGABOLT-TEMPERATE, SNOW, INTERIOR
 
 T05.Husk:
 	Inherits: ^TreeHusk
@@ -373,7 +373,7 @@ T08.Husk:
 T09.Husk:
 	Inherits: ^TreeHusk
 	MapEditorData:
-		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR
+		ExcludeTilesets: OMEGABOLT-TEMPERATE, SNOW, INTERIOR
 
 T10.Husk:
 	Inherits: ^TreeHusk
@@ -445,7 +445,7 @@ T18.Husk:
 		Footprint: ___ xx_
 		Dimensions: 3,2
 	MapEditorData:
-		ExcludeTilesets: TEMPERAT, SNOW, INTERIOR, WINTER, BARREN, JUNGLE
+		ExcludeTilesets: OMEGABOLT-TEMPERATE, SNOW, INTERIOR, WINTER, BARREN, JUNGLE
 
 TC01.Husk:
 	Inherits: ^TreeHusk
@@ -499,41 +499,50 @@ AMCV.Husk:
 		PlayerPalette: overlayplayertd
 		Image: amcv.destroyed
 
+AMCV.Nod.Husk:
+	Inherits: AMCV.Husk
+	Tooltip:
+		Name: Husk (Nod Mobile Construction Vehicle)
+	TransformOnCapture:
+		IntoActor: amcv.nod
+	InfiltrateForTransform:
+		IntoActor: amcv.nod
+
 APC2.Husk:
-	Inherits: ^HuskTD
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 0.8
+		Image: apc
 	Tooltip:
 		Name: Husk (APC)
 	TransformOnCapture:
 		IntoActor: apc2
 	InfiltrateForTransform:
 		IntoActor: apc2
-	RenderSprites:
-		Image: apc2.destroyed
-		PlayerPalette: overlayplayertd
 
 HMMV.Husk:
-	Inherits: ^HuskTD
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 1
+		Image: humvee
 	Tooltip:
 		Name: Husk (Hum-Vee)
 	TransformOnCapture:
 		IntoActor: hmmv
 	InfiltrateForTransform:
 		IntoActor: hmmv
-	RenderSprites:
-		Image: hmmv.destroyed
-		PlayerPalette: overlayplayertd
 
 BGGY.Husk:
-	Inherits: ^HuskTD
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 1.25
+		Image: bggy
 	Tooltip:
 		Name: Husk (Fast Attack Buggy)
 	TransformOnCapture:
 		IntoActor: bggy
 	InfiltrateForTransform:
 		IntoActor: bggy
-	RenderSprites:
-		Image: bggy.destroyed
-		PlayerPalette: overlayplayertd
 
 MTNK.Husk:
 	Inherits: ^VoxelVehicleHusk
@@ -548,30 +557,28 @@ MTNK.Husk:
 		IntoActor: mtnk
 
 MTNK.DRONE.Husk:
-	Inherits: ^HuskTD
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 1
+		Image: abramstank
 	Tooltip:
 		Name: Husk (Battle Drone)
-	ThrowsParticle@turret:
-		Anim: turret
 	TransformOnCapture:
 		IntoActor: mtnk.drone
 	InfiltrateForTransform:
 		IntoActor: mtnk.drone
-	RenderSprites:
-		Image: mtnk.drone.destroyed
-		PlayerPalette: overlayplayertd
 
 FTNK.Husk:
-	Inherits: ^HuskTD
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 0.8
+		Image: flame_tank
 	Tooltip:
 		Name: Husk (Flame Tank)
 	TransformOnCapture:
 		IntoActor: ftnk
 	InfiltrateForTransform:
 		IntoActor: ftnk
-	RenderSprites:
-		Image: flame_tank.destroyed
-		PlayerPalette: overlayplayertd
 
 HFTK.Husk:
 	Inherits: ^Husk
@@ -587,28 +594,28 @@ HFTK.Husk:
 		Image: heavy_flame_tank.destroyed
 
 BIKE.Husk:
-	Inherits: ^HuskTD
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 1.2
+		Image: bike
 	Tooltip:
 		Name: Husk (Recon Bike)
 	TransformOnCapture:
 		IntoActor: bike
 	InfiltrateForTransform:
 		IntoActor: bike
-	RenderSprites:
-		Image: bike.destroyed
-		PlayerPalette: overlayplayertd
 
 STNK.Husk:
-	Inherits: ^HuskTD
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 0.8
+		Image: stealth_tank
 	Tooltip:
 		Name: Husk (Stealth Tank)
 	TransformOnCapture:
 		IntoActor: stnk
 	InfiltrateForTransform:
 		IntoActor: stnk
-	RenderSprites:
-		Image: stnk.destroyed
-		PlayerPalette: overlayplayertd
 
 APCH.Husk:
 	Inherits: ^HelicopterHusk
@@ -893,15 +900,16 @@ BLIMP.Husk.EMP:
 	Inherits: ^EmpVisualEffect
 
 APC.Husk:
-	Inherits: ^Husk
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 0.8
+		Image: apc
 	Tooltip:
 		Name: Husk (APC)
 	TransformOnCapture:
 		IntoActor: apc
 	InfiltrateForTransform:
 		IntoActor: apc
-	RenderSprites:
-		Image: apc.destroyed
 
 TTNK.Husk:
 	Inherits: ^Husk
@@ -1014,6 +1022,17 @@ FCOM.Husk:
 		Image: FCOM.destroyed
 	WithBuildingBib:
 		Sequence: bib3
+
+FCOM.checkpoint.Husk:
+	Inherits: FCOM.Husk
+	Tooltip:
+		Name: Ruin (Research Core)
+	TransformOnCapture:
+		IntoActor: fcom.checkpoint
+	InfiltrateForTransform:
+		IntoActor: fcom.checkpoint
+	RenderSprites:
+		Image: fcom.checkpoint
 
 OILB.Husk:
 	Inherits: ^TechHusk
@@ -1191,15 +1210,16 @@ SUK.Husk.Empty.EMP:
 	Inherits: ^EmpVisualEffect
 
 Prismtank.Husk:
-	Inherits: ^Husk
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 0.7
+		Image: prismtank
 	Tooltip:
 		Name: Husk (Prism Tank)
 	TransformOnCapture:
 		IntoActor: prismtank
 	InfiltrateForTransform:
 		IntoActor: prismtank
-	RenderSprites:
-		Image: prismtank.destroyed
 
 WTNK.Husk:
 	Inherits: ^HuskTD
@@ -1216,18 +1236,16 @@ WTNK.Husk:
 		PlayerPalette: overlayplayertd
 
 LTNK.Husk:
-	Inherits: ^HuskTD
+	Inherits: ^VoxelVehicleHusk
+	RenderVoxels:
+		Scale: 0.8
+		Image: nodlighttank
 	Tooltip:
 		Name: Husk (Light Tank)
-	ThrowsParticle@turret:
-		Anim: turret
 	TransformOnCapture:
 		IntoActor: ltnk
 	InfiltrateForTransform:
 		IntoActor: ltnk
-	RenderSprites:
-		Image: ltnk.destroyed
-		PlayerPalette: overlayplayertd
 
 2S3.Husk:
 	Inherits: ^Husk

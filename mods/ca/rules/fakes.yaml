@@ -22,7 +22,10 @@
 		Dimensions: 3,3
 		TerrainTypes: Water
 	RenderSprites:
-		Image: SYRD
+		Image: syrd.allies
+	Inherits@shadow: ^AlliedBuildingShadow
+	IsometricSelectable:
+		DecorationHeight: 60
 	Valued:
 		Cost: 100
 	Health:
@@ -50,12 +53,19 @@ WEAF:
 	Building:
 		Footprint: xxx xxx ===
 		Dimensions: 3,3
-		LocalCenterOffset: 0,-512,0
-	WithBuildingBib:
-		Sequence: bib2
+		LocalCenterOffset: 724,6,0
 	RenderSprites:
-		Image: WEAP
-	WithProductionDoorOverlay:
+		Image: weap.allies
+	Inherits@shadow: ^AlliedBuildingShadow
+	IsometricSelectable:
+		DecorationHeight: 76
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib4x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+		Offset: -567,-362,0
+	WithProductionDoorOverlayCA:
 		Sequence: build-top
 		RequiresCondition: !build-incomplete
 	Valued:
@@ -85,11 +95,19 @@ DOMF:
 	Building:
 		Footprint: xx xx ==
 		Dimensions: 2,3
-		LocalCenterOffset: 0,-512,0
-	WithBuildingBib:
-		Sequence: bib3
+		LocalCenterOffset: 362,-362,0
 	RenderSprites:
-		Image: DOME
+		Image: dome.allies
+	Inherits@shadow: ^AlliedBuildingShadow
+	IsometricSelectable:
+		DecorationHeight: 103
+		DecorationBounds: 2896,2896
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib3x3
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+		Offset: -1134,0,0
 	Valued:
 		Cost: 180
 	Health:
@@ -113,13 +131,20 @@ FACF:
 	Building:
 		Footprint: xxX xxx XxX ===
 		Dimensions: 3,4
-		LocalCenterOffset: 0,-512,0
-	WithBuildingBib:
-		Sequence: bib2
+		LocalCenterOffset: 0,-724,0
+	Inherits@shadow: ^AlliedBuildingShadow
+	IsometricSelectable:
+		DecorationHeight: 60
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib4x4
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
+		Offset: -1701,362,0
 	WithBuildingPlacedAnimation:
 		RequiresCondition: !build-incomplete
 	RenderSprites:
-		Image: FACT
+		Image: fact
 	Valued:
 		Cost: 250
 	Health:

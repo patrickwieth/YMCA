@@ -148,6 +148,12 @@ namespace OpenRA.Mods.CA.Traits
 				if (playerResources.Cash + playerResources.Resources < Info.ProductionMinCashRequirement)
 					return;
 
+				if (world.Map.Categories.Contains("Operational"))
+				{
+					BuildOperationalUnits(bot);
+					return;
+				}
+
 				for (var i = 0; i < Info.UnitQueues.Length; i++)
 				{
 					if (++currentQueueIndex >= Info.UnitQueues.Length)
@@ -163,6 +169,30 @@ namespace OpenRA.Mods.CA.Traits
 							break;
 					}
 				}
+			}
+		}
+
+		void BuildOperationalUnits(IBot bot)
+		{
+			var queues = world.ActorsWithTrait<ProductionQueue>()
+				.Where(candidate => candidate.Actor.Owner == player && candidate.Actor.IsInWorld &&
+					candidate.Actor != player.PlayerActor && candidate.Trait.Enabled &&
+					Info.UnitQueues.Contains(candidate.Trait.Info.Type) && !candidate.Trait.AllQueued().Any())
+				.OrderBy(candidate => candidate.Actor.ActorID)
+				.Select(candidate => candidate.Trait)
+				.ToArray();
+
+			foreach (var queue in queues)
+			{
+				var unit = idleUnitCount < Info.IdleBaseUnitsMaximum
+					? ChooseRandomUnitToBuild(queue, false)
+					: ChooseUnitToBuild(queue, false);
+				if (unit == null || !ShouldBuild(unit.Name, false))
+					continue;
+
+				SetUnitInterval(unit.Name);
+				bot.QueueOrder(Order.StartProduction(queue.Actor, unit.Name, 1));
+				AIUtils.BotDebug("Operational AI: {0} queued {1} at {2}", player, unit.Name, queue.Actor.Info.Name);
 			}
 		}
 

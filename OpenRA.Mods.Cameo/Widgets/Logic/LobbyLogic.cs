@@ -13,7 +13,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using OpenRA.Mods.CA.Modular;
 using OpenRA.Graphics;
 using OpenRA.Mods.Cameo.Traits.Player;
 using OpenRA.Mods.Common;
@@ -85,6 +87,8 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 		readonly ScrollPanelWidget players;
 
 		readonly Dictionary<string, LobbyFaction> factions = new();
+		string customIdentityMap;
+		CustomFactionLobbyIdentity customIdentity;
 
 		readonly IColorPickerManagerInfo colorManager;
 
@@ -672,10 +676,51 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 				modData.MapCache.QueryRemoteMapDetails(services.MapRepository, new[] { uid });
 		}
 
+		void UpdateCustomFactionIdentity()
+		{
+			if (map.Status != MapStatus.Available)
+			{
+				customIdentityMap = null; customIdentity = null;
+				return;
+			}
+			if (customIdentityMap == map.Uid) return;
+			customIdentityMap = map.Uid; customIdentity = null;
+			try
+			{
+				if (!map.Package.Contents.Contains("custom-faction.json")) return;
+				using var stream = map.Package.GetStream("custom-faction.json");
+				using var reader = new StreamReader(stream);
+				customIdentity = CustomFactionDesign.ReadLobbyIdentity(reader.ReadToEnd());
+			}
+			catch (Exception e) { Log.Write("debug", "Custom faction lobby metadata: " + e.Message); }
+		}
+
+		void SetupCustomFactionIdentity(Widget row, Session.Client client)
+		{
+			if (customIdentity == null || !customIdentity.AppliesTo(client.Faction)) return;
+			var identity = customIdentity;
+			row.Get<LabelWidget>("GAMENAME").GetText = () => identity.Side;
+			var name = row.Get<LabelWidget>("FACTIONNAME");
+			name.GetText = () => WidgetUtils.TruncateText(identity.Name, name.Bounds.Width, Game.Renderer.Fonts[name.Font]);
+			// There is no games/Custom icon. Keep the base sub-faction flag for both columns.
+			var flag = row.Get<ImageWidget>("GAMEFLAG");
+			flag.GetImageCollection = () => "flags";
+			flag.GetImageName = () => identity.BaseFaction;
+			// FACTIONFLAG is already bound to client.Faction by the normal lobby setup.
+			var dropdown = row.GetOrNull("FACTION") as DropDownButtonWidget;
+			if (dropdown != null)
+			{
+				dropdown.GetTooltipText = () => identity.Name;
+				dropdown.GetTooltipDesc = () => "Custom faction based on " + FluentProvider.GetMessage(factions[identity.BaseFaction].Name);
+			}
+		}
+
 		void UpdatePlayerList()
 		{
 			if (orderManager.LocalClient == null)
 				return;
+
+			UpdateCustomFactionIdentity();
 
 			// Check if we are not assigned to any team, and are no spectator
 			// If we are a spectator, check if there are more and enable spectator chat
@@ -744,6 +789,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 					LobbyUtils.SetupEditableFactionWidget(template, slot, client, orderManager,
 						factions.ToDictionary(e => e.Key, e => (OpenRA.Mods.Common.Widgets.Logic.LobbyFaction)e.Value));
 					SetupEditableGameWidget(template, slot, client, orderManager, factions);
+					SetupCustomFactionIdentity(template, client);
 					LobbyUtils.SetupEditableTeamWidget(template, slot, client, orderManager, map);
 					LobbyUtils.SetupEditableHandicapWidget(template, slot, client, orderManager);
 					LobbyUtils.SetupEditableSpawnWidget(template, slot, client, orderManager, map);
@@ -760,6 +806,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 					LobbyUtils.SetupFactionWidget(template, client,
 						factions.ToDictionary(e => e.Key, e => (OpenRA.Mods.Common.Widgets.Logic.LobbyFaction)e.Value));
 					SetupGameWidget(template, slot, client, factions);
+					SetupCustomFactionIdentity(template, client);
 
 					if (isHost)
 					{

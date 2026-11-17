@@ -11,7 +11,6 @@
 				Length: 5
 		Length: 10
 		Tick: 80
-		Scale: 0.5
 
 ^MakeMediumChina:
 	make:
@@ -30,7 +29,6 @@
 				Length: 5
 		Length: 15
 		Tick: 80
-		Scale: 0.5
 
 ^MakeBigChina:
 	make:
@@ -53,7 +51,6 @@
 				Length: 5
 		Length: 20
 		Tick: 80
-		Scale: 0.5
 
 chmcv:
 	Inherits: ^VehicleOverlays
@@ -63,8 +60,8 @@ chmcv:
 		Filename: chmcvicon.shp
 
 chcommand:
-	Inherits: ^StructureOverlays
-	Inherits: ^MakeBigChina
+	Inherits@OVERLAYS: ^StructureOverlays
+	Inherits@MAKE: ^MakeBigChina
 	Defaults:
 		Filename: commandcenter.shp
 	idle:
@@ -77,14 +74,14 @@ chcommand:
 chcommand.radar:
 	idle:
 		Filename: radarantenna.shp
-		Offset: 0, -12, 12
+		Offset: 0,-12,12
 		UseTilesetCode: true
 	icon:
 		Filename: chradarupgradeicon.shp
 
 chpower:
-	Inherits: ^MakeMediumChina
-	Inherits: ^StructureOverlays
+	Inherits@MAKE: ^MakeMediumChina
+	Inherits@OVERLAYS: ^StructureOverlays
 	idle:
 		Filename: chinapower.shp
 		Offset: 0,-10
@@ -95,7 +92,7 @@ chpower:
 	idle-anim2:
 		Filename: plantsmoke.shp
 		Length: 15
-		Offset: 8, -38
+		Offset: 24,-46
 		Tick: 60
 
 chpower2:
@@ -104,16 +101,16 @@ chpower2:
 		Filename: chinaadvpower.shp
 
 chbarracks:
-	Inherits: ^StructureOverlays
-	Inherits: ^MakeMediumChina
+	Inherits@OVERLAYS: ^StructureOverlays
+	Inherits@MAKE: ^MakeMediumChina
 	idle:
 		Filename: chinabarracks.shp
 	icon:
 		Filename: chbarracksicon.shp
 
 chsupply:
-	Inherits: ^MakeMediumChina
-	Inherits: ^StructureOverlays
+	Inherits@MAKE: ^MakeMediumChina
+	Inherits@OVERLAYS: ^StructureOverlays
 	idle:
 		Filename: supplydepot.shp
 	icon:
@@ -121,25 +118,24 @@ chsupply:
 
 
 chweap:
-	Inherits: ^MakeBigChina
-	Inherits: ^StructureOverlays
+	Inherits@MAKE: ^MakeBigChina
+	Inherits@OVERLAYS: ^StructureOverlays
 	idle:
 		Filename: chinaweap.shp
 	icon:
 		Filename: chweapicon.shp
 
 chpropaganda:
-	Inherits: ^MakeMediumChina
-	Inherits: ^StructureOverlays
+	Inherits@MAKE: ^MakeMediumChina
+	Inherits@OVERLAYS: ^StructureOverlays
 	idle:
 		Filename: propagandacenter.shp
 	icon:
 		Filename: chpropagandaicon.shp
 		Offset: 0,0
-
 chpropagandatower:
-	Inherits: ^MakeSmallChina
-	Inherits: ^StructureOverlays
+	Inherits@MAKE: ^MakeSmallChina
+	Inherits@OVERLAYS: ^StructureOverlays
 	idle:
 		Filename: propagandaspeaker.shp
 		Offset: 0,-50
@@ -147,16 +143,16 @@ chpropagandatower:
 		Filename: chpropagandatowericon.shp
 
 chinternetcenter:
-	Inherits: ^StructureOverlays
-	Inherits: ^MakeMediumChina
+	Inherits@OVERLAYS: ^StructureOverlays
+	Inherits@MAKE: ^MakeMediumChina
 	idle:
 		Filename: espionagecenter.shp
 	icon:
 		Filename: chinternetcentericon.shp
 
 chsilo:
-	Inherits: ^StructureOverlays
-	Inherits: ^MakeMediumChina
+	Inherits@OVERLAYS: ^StructureOverlays
+	Inherits@MAKE: ^MakeMediumChina
 	idle:
 		Filename: chinanukesilo.shp
 	icon:
@@ -164,8 +160,8 @@ chsilo:
 
 
 chairport:
-	Inherits: ^StructureOverlays
-	Inherits: ^MakeBigChina
+	Inherits@OVERLAYS: ^StructureOverlays
+	Inherits@MAKE: ^MakeBigChina
 	idle:
 		Filename: chinaairfield.shp
 		ZOffset: -1023
@@ -173,10 +169,9 @@ chairport:
 	icon:
 		Filename: chairporticon.shp
 		Offset: 0,0
-
 chgatling:
-	Inherits: ^MakeSmallChina
-	Inherits: ^StructureOverlays
+	Inherits@MAKE: ^MakeSmallChina
+	Inherits@OVERLAYS: ^StructureOverlays
 	Defaults:
 		Scale: 2
 		Filename: chgatling.shp
@@ -193,8 +188,8 @@ chgatling:
 		Filename: chgatlingicon.shp
 
 chbunker:
-	Inherits: ^StructureOverlays
-	Inherits: ^MakeMediumChina
+	Inherits@OVERLAYS: ^StructureOverlays
+	Inherits@MAKE: ^MakeMediumChina
 	idle:
 		Filename: bunker.shp
 	icon:
@@ -736,7 +731,7 @@ choverlord:
 	turretgat:
 		Filename: chgatlingt.shp
 		Facings: 32
-		UseClassicFacings: True
+		UseClassicFacings: False
 	turretpro:
 		Filename: invisibleitem.shp
 	muzzle:
@@ -831,11 +826,11 @@ chflameboat:
 		Scale: 2
 	idle:
 		Facings: 32
-		UseClassicFacings: True
+		UseClassicFacings: False
 	turret:
 		Filename: chdragontur.shp
 		Facings: 32
-		UseClassicFacings: True
+		UseClassicFacings: False
 	muzzle:
 		Filename: gunfire2.shp
 		Length: *
@@ -850,11 +845,11 @@ chasub:
 		Scale: 2
 	idle:
 		Facings: 32
-		UseClassicFacings: True
+		UseClassicFacings: False
 	turret:
 		Filename: chdragontur.shp
 		Facings: 32
-		UseClassicFacings: True
+		UseClassicFacings: False
 	muzzle:
 		Filename: gunfire2.shp
 		Length: *

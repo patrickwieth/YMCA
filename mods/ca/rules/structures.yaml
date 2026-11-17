@@ -1,9 +1,12 @@
 MSLO:
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x1Shape
-	Inherits: ^SuperWeapon
-	Inherits: ^SovietSuperweaponBig
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits@BASE: ^ScienceBuilding
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@SHAPE: ^2x1Shape
+	Inherits@SUPERWEAPON: ^SuperWeapon
+	Inherits@FACTION: ^SovietSuperweaponBig
+	RenderSprites:
+		Image: mslo.soviet
 	Valued:
 		Cost: 2500
 	Tooltip:
@@ -45,21 +48,23 @@ MSLO:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
+# Water structures have no land-foundation overlay.
 SPEN:
-	Inherits: ^Building
-	Inherits: ^PrimaryBuilding
-	Inherits: ^3x3Shape
-	Inherits: ^ShipPrerequisites
-	Inherits: ^ShipProduction
+	Inherits@BASE: ^Building
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@SHAPE: ^3x3Shape
+	Inherits@PREREQUISITES: ^ShipPrerequisites
+	Inherits@PRODUCTION: ^ShipProduction
 	RenderSprites:
 		PlayerPalette: playernavy
+		Image: spen.soviet
 	InfiltrateForSupportPower:
 		Proxy: powerproxy.sonarpulse
 		Types: SpyInfiltrate
 	Valued:
 		Cost: 800
 	Tooltip:
-		Name: Sub Pen
+		Name: Naval Yard
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 50
@@ -107,13 +112,17 @@ SPEN:
 	-SpawnRandomActorOnDeath:
 
 SYRD:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@shape: ^3x3Shape
 	Inherits@Shipyard: ^ShipPrerequisites
 	Inherits@ShipProd: ^ShipProduction
 	RenderSprites:
+		Image: syrd.allies
 		PlayerPalette: playernavy
+	IsometricSelectable:
+		DecorationHeight: 60
 	InfiltrateForSupportPower:
 		Proxy: powerproxy.sonarpulse
 		Types: SpyInfiltrate
@@ -169,11 +178,15 @@ SYRD:
 	-SpawnRandomActorOnDeath:
 
 IRON:
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x1Building+Minibib
-	Inherits: ^SuperWeapon
-	Inherits: ^SovietSuperweaponSmall
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits@BASE: ^ScienceBuilding
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@SHAPE: ^2x1Building+Minibib
+	-WithBuildingBib:
+	Inherits@SUPERWEAPON: ^SuperWeapon
+	Inherits@FACTION: ^SovietSuperweaponSmall
+	RenderSprites:
+		Image: iron.soviet
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -208,11 +221,10 @@ IRON:
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
 
-
 AGUN:
-	Inherits: ^Defense
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetAir
+	Inherits@DEFENSE: ^Defense
+	Inherits@POWER: ^DisableOnLowPowerOrPowerDown
+	Inherits@TARGET: ^AutoTargetAir
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 90
@@ -253,68 +265,20 @@ AGUN:
 		Amount: -50
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	DetectCloaked:
 		Range: 8c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
-DOME:
-	Inherits: ^Building
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier2Tech
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^RadarStation
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 630,-384,0, 630,384,0, -700,-512,0, -700,512,0
-	Building:
-		Footprint: xx xx ==
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 90
-		Prerequisites: proc, ~structures.ra, ~!techlevel.low
-		Description: Provides an overview\nof the battlefield.\n  Requires power to operate.
-	Valued:
-		Cost: 1800
-	Tooltip:
-		Name: Radar Dome
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-	Health:
-		HP: 100000
-	RevealsShroud:
-		MinRange: 6c0
-		Range: 10c0
-		RequiresCondition: !disabled
-		RevealGeneratedShroud: False
-	RevealsShroud@Offline:
-		Range: 5c0
-		RequiresCondition: disabled
-	RevealsShroud@GAPGEN:
-		Range: 6c0
-		RequiresCondition: !disabled
-	InfiltrateForExploration:
-		Types: SpyInfiltrate, SabInfiltrate
-	Power:
-		Amount: -40
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@radar:
-		Prerequisite: radar
-	ProvidesPrerequisite@nodrad:
-		Factions: nod, marked, blackh, legion
-		Prerequisite: radar.nod
-	ProvidesPrerequisite@gdirad:
-		Factions: gdi, zocom, talon, eagle
-		Prerequisite: radar.gdi
-	ProvidesPrerequisite@buildingname:
-	InfiltrateForSupportPower@tec:
-		Types: SabInfiltrate
-		Proxy: rad.soviet.stolen
-
 PBOX:
+	Inherits@shadow: ^AlliedBuildingShadow
 	Inherits: ^Defense
 	Inherits@AUTOTARGET: ^AutoTargetAll
+	Inherits@visuals: ^Allied1x1Visuals
+	RenderSprites:
+		Image: pbox.allies
+	IsometricSelectable:
+		DecorationHeight: 76
 	Tooltip:
 		Name: Pillbox
 	Building:
@@ -335,9 +299,6 @@ PBOX:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 5c0
-	WithBuildingBib:
-		HasMinibib: true
-		Sequence: bibPbox
 	Turreted:
 		TurnSpeed: 1000
 	-QuantizeFacingsFromSequence:
@@ -360,6 +321,12 @@ PBOX:
 HBOX:
 	Inherits: ^Defense
 	Inherits: ^AutoTargetAll
+	Inherits@visuals: ^Allied1x1Visuals
+	Inherits@shadow: ^AlliedBuildingShadow
+	RenderSprites:
+		Image: pbox.allies
+	IsometricSelectable:
+		DecorationHeight: 76
 	Tooltip:
 		Name: Camo Pillbox
 	Building:
@@ -415,7 +382,7 @@ GUN:
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 70
-		Prerequisites: tent, ~structures.allies
+		Prerequisites: tent, ~structures.allies, ~disabled
 		Description: Basic anti-tank base defense.\n  Can detect cloaked units.\n  Strong vs Tanks, Vehicles\n  Weak vs Infantry
 	Valued:
 		Cost: 800
@@ -452,21 +419,27 @@ GUN:
 		Amount: -40
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 
 SAM:
-	Inherits: ^Defense
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^AutoTargetAir
-	Inherits: ^2x1Shape
+	Inherits@SOVIETBIB: ^Soviet1x1Bib
+	Inherits@GRID1: ^Defense
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDown
+	Inherits@GRID3: ^AutoTargetAir
+	Inherits@GRID4: ^1x1Shape
+	Building:
+		Footprint: x
+		Dimensions: 1,1
+	RenderSprites:
+		Image: sam.soviet.native
 	HitShape:
 		Type: Rectangle
-			TopLeft: -768,-512
-			BottomRight: 768,512
+			TopLeft: -512,-512
+			BottomRight: 512,512
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 100
-		Prerequisites: dome, ~structures.soviet
+		Prerequisites: dome, ~structures.soviet, ~!structures.nkorea
 		Description: Anti-aircraft base defense.\n  Requires power to operate.\n  Can detect cloaked units.\n  Strong vs Aircraft\n  Weak vs Ground Units
 	Valued:
 		Cost: 700
@@ -483,13 +456,18 @@ SAM:
 	Turreted:
 		TurnSpeed: 120
 		InitialFacing: 0
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
+		Offset: 0,0,726
+	WithSpriteBody:
+		Sequence: base
 		PauseOnCondition: disabled || empdisable || being-warped
+	WithSpriteTurret:
+		Sequence: turret
+		RequiresCondition: !build-incomplete
+		Recoils: false
 	Armament:
 		Weapon: Nike
-		LocalOffset: 0,0,320
-		MuzzleSequence: muzzle
+		LocalOffset: 496,-291,953
+		MuzzleSequence: muzzle-native
 	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
@@ -500,17 +478,28 @@ SAM:
 		Amount: -40
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
+		QuantizedFacings: 32
+		CameraPitch: 85
+	IsometricSelectable:
+		DecorationHeight: 99
 	DetectCloaked:
 		Range: 8c0
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 ATEK:
-	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^2x2Building+Bib
+	Inherits@shadow: ^AlliedBuildingShadow
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^TechLevelBuilding
+	Inherits@GRID3: ^Tier3Tech
+	Inherits@GRID4: ^DisableOnLowPowerOrForceDisabled
+	Inherits@GRID5: ^2x2Building+Bib
+	Inherits@visuals: ^Allied2x2DriveableBib
+	-WithBuildingBib:
+	RenderSprites:
+		Image: atek.allies
+	IsometricSelectable:
+		DecorationHeight: 108
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 140
@@ -520,8 +509,6 @@ ATEK:
 		Cost: 1500
 	Tooltip:
 		Name: Allied Tech Center
-	Building:
-		Footprint: xx xx ==
 	Health:
 		HP: 60000
 	RevealsShroud:
@@ -633,287 +620,15 @@ ATEK:
 		Types: SabInfiltrate
 		Proxy: tec.allies.stolen
 
-WEAP:
-	Inherits: ^Building
-	Inherits@shape: ^3x2Building+Bib
-	Inherits@PRIMARY: ^PrimaryBuilding
-	Inherits@VehicleProduction: ^VehicleProduction
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 80
-		Prerequisites: proc, ~structures.ra
-		Description: Produces vehicles.
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: War Factory
-	Health:
-		HP: 150000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	WithProductionDoorOverlayCA:
-		RequiresCondition: !build-incomplete
-		Sequence: build-top
-	Power:
-		Amount: -30
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@buildingname:
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	InfiltrateForSupportPower:
-		Proxy: vehicles.upgraded
-		Types: SpyInfiltrate
-	InfiltrateForSupportPower@veh:
-		Types: SabInfiltrate
-		Proxy: veh.soviet.stolen
-	-ActorPreviewPlaceBuildingPreview:
-	SequencePlaceBuildingPreview:
-		Sequence: place
-
-FACT:
-	Inherits: ^Building
-	Inherits: ^3x3Building+Bib
-	Inherits: ^ConcreteArmor
-	Inherits: ^StructureProduction
-	Inherits: ^BotFallbackInsurance
-	Building:
-		Footprint: xxX xxx XxX ===
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 1000
-		Prerequisites: ~conyardbuildable, ~structures.ra, fix
-		Description: Produces structures.
-	ProvidesPrerequisite@ra:
-		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq
-		Prerequisite: structures.ra
-	ProvidesPrerequisite@rafaction:
-		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq
-		Prerequisite: ra
-	ProvidesPrerequisite@allies:
-		Factions: allies, england, france, germany
-		Prerequisite: structures.allies
-	ProvidesPrerequisite@alliesvanilla:
-		Factions: allies
-		Prerequisite: structures.alliesvanilla
-	ProvidesPrerequisite@england:
-		Factions: england
-		Prerequisite: structures.england
-	ProvidesPrerequisite@france:
-		Factions: france
-		Prerequisite: structures.france
-	ProvidesPrerequisite@germany:
-		Factions: germany
-		Prerequisite: structures.germany
-	ProvidesPrerequisite@soviet:
-		Factions: soviet, russia, nkorea, iraq
-		Prerequisite: structures.soviet
-	ProvidesPrerequisite@russia:
-		Factions: russia
-		Prerequisite: structures.russia
-	ProvidesPrerequisite@nkorea:
-		Factions: nkorea
-		Prerequisite: structures.nkorea
-	ProvidesPrerequisite@iraq:
-		Factions: iraq
-		Prerequisite: structures.iraq
-	ProvidesPrerequisite@sandbag:
-		Factions: allies, england, france, germany
-		Prerequisite: structures.sandbag
-	Health:
-		HP: 150000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Valued:
-		Cost: 2500
-	Tooltip:
-		Name: Construction Yard
-	Transforms:
-		RequiresCondition: factundeploy
-		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
-		IntoActor: mcv
-		Offset: 1,1
-		Facing: 384
-	TransformsIntoMobile:
-		RequiresCondition: factundeploy
-		Locomotor: heavywheeled
-		RequiresForceMove: true
-	TransformsIntoPassenger:
-		RequiresCondition: factundeploy
-		CargoType: Vehicle
-		RequiresForceMove: true
-	TransformsIntoRepairable:
-		RequiresCondition: factundeploy
-		RepairActors: fix, rep
-		RequiresForceMove: true
-	TransformsIntoTransforms:
-		RequiresCondition: factundeploy && build-incomplete
-	Sellable:
-		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !c4 && !being-warped
-	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
-		Condition: factundeploy
-		Prerequisites: global-factundeploy
-		Color: 8A8A8A
-	WithBuildingPlacedAnimation:
-		RequiresCondition: !build-incomplete && !chrono-vortex
-	Power:
-		Amount: 0
-		RequiresCondition: !being-warped
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-	ProvidesPrerequisite@buildingname:
-		Condition: invulnerability
-	SpawnActorsOnSell:
-		ActorTypes: light_infantry,light_infantry,light_infantry,light_infantry,engineer
-
-FACT.Nukular:
-	Inherits: FACT
-	Inherits: ^NukularConyard
-	RenderSprites:
-		Image: FACT
-	Transforms:
-		IntoActor: mcv.nukular
-
-SILO:
-	Inherits: ^Building
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 35
-		Prerequisites: proc, ~structures.ra
-		Description: Stores excess refined\nTiberium, Ore and Gems.
-	Valued:
-		Cost: 150
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack
-	Tooltip:
-		Name: Silo
-	-GivesBuildableArea:
-	Health:
-		HP: 30000
-	RevealsShroud:
-		Range: 4c0
-	WithBuildingBib:
-		HasMinibib: true
-		Sequence: bibSilo
-	-WithSpriteBody:
-	WithResourceLevelSpriteBody:
-		Sequence: stages
-	StoresPlayerResources:
-		Capacity: 5000
-	-MustBeDestroyed:
-	-SpawnActorsOnSell:
-	Power:
-		Amount: -10
-		RequiresCondition: !being-warped
-	FireWarheadsOnDeathCA:
-		Weapon: SmallBuildingExplode
-		EmptyWeapon: SmallBuildingExplode
-	WithResourceStoragePipsDecoration:
-		Position: BottomLeft
-		RequiresSelection: true
-		PipCount: 5
-		FullSequence: pip-yellow
-
-HPAD:
-	Inherits: ^Building
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^AircraftProduction
-	Inherits: ^RepairsAircraftWithRepairBay
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 768,-512,0, 768,512,0, -281,-512,0, -630,512,0
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 120
-		Prerequisites: dome, ~structures.ra
-		Description: Produces and reloads\nhelicopters.
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Helipad
-	Health:
-		HP: 80000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	WithResupplyAnimation:
-		RequiresCondition: !build-incomplete
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: 0,-256,0
-		ExitCell: 0,0
-		Facing: 224
-	Reservable:
-	Power:
-		Amount: -10
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@allies:
-		Factions: allies, england, france, germany
-		Prerequisite: aircraft.allies
-	ProvidesPrerequisite@alliesvanilla:
-		Factions: allies
-		Prerequisite: aircraft.alliesvanilla
-	ProvidesPrerequisite@england:
-		Factions: england
-		Prerequisite: aircraft.england
-	ProvidesPrerequisite@france:
-		Factions: france
-		Prerequisite: aircraft.france
-	ProvidesPrerequisite@germany:
-		Factions: germany
-		Prerequisite: aircraft.germany
-	ProvidesPrerequisite@alliedstructure:
-		RequiresPrerequisites: structures.allies
-		Prerequisite: aircraft.allies
-	ProvidesPrerequisite@englishstructure:
-		RequiresPrerequisites: structures.england
-		Prerequisite: aircraft.england
-	ProvidesPrerequisite@frenchstructure:
-		RequiresPrerequisites: structures.france
-		Prerequisite: aircraft.france
-	ProvidesPrerequisite@germanstructure:
-		RequiresPrerequisites: structures.germany
-		Prerequisite: aircraft.germany
-	ProvidesPrerequisite@soviets:
-		Factions: soviet, russia, nkorea, iraq
-		Prerequisite: aircraft.soviet
-	ProvidesPrerequisite@russianstructure:
-		RequiresPrerequisites: structures.russia
-		Prerequisite: aircraft.russia
-	ProvidesPrerequisite@ukrainianstructure:
-		RequiresPrerequisites: structures.nkorea
-		Prerequisite: aircraft.nkorea
-	ProvidesPrerequisite@iraqistructure:
-		RequiresPrerequisites: structures.iraq
-		Prerequisite: aircraft.iraq
-	ProvidesPrerequisite@all:
-		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq, gdi, talon, zocom, nod, blackh, marked
-		Prerequisite: aircraft.all
-	ProvidesPrerequisite@buildingname:
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-	InfiltrateForSupportPower:
-		Types: SpyInfiltrate
-		Proxy: powerproxy.paratroopers2
-
 AFLD:
-	Inherits: ^Building
-	Inherits: ^3x2Shape
-	Inherits: ^PrimaryBuilding
-	Inherits: ^AircraftProduction
-	Inherits: ^RepairsAircraftWithRepairBay
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits@BASE: ^Building
+	Inherits@SHAPE: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@PRODUCTION: ^AircraftProduction
+	Inherits@REPAIR: ^RepairsAircraftWithRepairBay
+	RenderSprites:
+		Image: afld.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
@@ -926,7 +641,7 @@ AFLD:
 		Cost: 500
 	Tooltip:
 		Name: Airfield
-	Selectable:
+	IsometricSelectable:
 		Class: afld
 	Building:
 		Footprint: xxx xxx
@@ -978,140 +693,16 @@ AFLD:
 	WithResupplyAnimation:
 		RequiresCondition: !build-incomplete
 
-POWR:
-	Inherits: ^Building
-	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^2x2Building+Bib
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 640,-384,0, 640,512,0, -710,-512,0, -710,512,0
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 10
-		Prerequisites: ~structures.ra
-		Description: Provides power for other structures.
-	Valued:
-		Cost: 300
-	Tooltip:
-		Name: Power Plant
-	ProvidesPrerequisite:
-		Prerequisite: anypower
-	Health:
-		HP: 40000
-	RevealsShroud:
-		Range: 4c0
-	Power:
-		Amount: 100
-		RequiresCondition: !being-warped
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, PowerInfiltrate
-	ScalePowerWithHealth:
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-	InfiltrateForPowerOutage:
-		Types: SpyInfiltrate, PowerInfiltrate
-
-APWR:
-	Inherits: ^Building
-	Inherits@POWER_OUTAGE: ^DisabledByPowerOutage
-	Inherits@shape: ^3x2Building+Bib
-	HitShape:
-		TargetableOffsets: -355,-1024,0
-	Building:
-		Footprint: xxx Xxx ===
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 110
-		Prerequisites: dome, ~structures.ra, ~!structures.russia
-		Description: Provides double the power of\na standard Power Plant.
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Advanced Power Plant
-	ProvidesPrerequisite:
-		Prerequisite: anypower
-	Health:
-		HP: 70000
-	RevealsShroud:
-		Range: 5c0
-	Power:
-		Amount: 200
-		RequiresCondition: !being-warped
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, PowerInfiltrate
-	ScalePowerWithHealth:
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-	InfiltrateForPowerOutage:
-		Types: SpyInfiltrate, PowerInfiltrate
-
-TPWR:
-	Inherits: APWR
-	Buildable:
-		Prerequisites: dome, ~structures.russia
-		Description: Provides double the power of\na standard Power Plant.\n  Special Ability: Overload (Toggle)\n  Warning: Unstable when damaged and overloaded.
-	Valued:
-		Cost: 600
-	Tooltip:
-		Name: Tesla Reactor
-	WithIdleOverlay@POWER:
-		Offset: -20,-70,0
-		Sequence: power
-		RequiresCondition: overcharge && !(empdisable || being-warped || build-incomplete)
-	GrantTimedCondition@LOCKOUT:
-		Duration: 1500
-		Condition: lockout
-		RequiresCondition: overcharge
-	GrantTimedCondition@COOLDOWN:
-		Duration: 250
-		Condition: cooldown
-		RequiresCondition: !overcharge
-	TimedConditionBar@LOCKOUT:
-		Condition: lockout
-		Color: FF0000
-	TimedConditionBar@COOLDOWN:
-		Condition: cooldown
-		Color: FFFF0080
-	GrantConditionOnDeploy@OVERCHARGE:
-		DeploySounds: btesat1a.aud
-		UndeploySounds: btesat1a.aud
-		DeployedCondition: overcharge
-		PauseOnCondition: lockout || cooldown
-		SkipMakeAnimation: true
-		RequiresCondition: !(empdisable || being-warped || build-incomplete) && !(owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
-	GrantConditionOnDamageState@VOLATILE:
-		Condition: volatile
-		ValidDamageStates: Heavy, Critical
-	GrantConditionOnDamageState@CRITICAL:
-		Condition: critical
-		ValidDamageStates: Critical
-	PowerMultiplier:
-		Modifier: 200
-		RequiresCondition: overcharge
-	PeriodicExplosion:
-		Weapon: TPWRZap
-		RequiresCondition: overcharge && volatile
-	SoundOnDamageTransition:
-		DamagedSounds: bpowdiea.aud
-		DestroyedSounds: bpowdieb.aud
-	GrantPeriodicCondition@BOTHELPER:
-		Condition: overcharge
-		CooldownDuration: 300
-		ActiveDuration: 900
-		StartsGranted: false
-		ShowSelectionBar: false
-		ActiveColor: 0080FF60
-		CooldownColor: FFFF0080
-		RequiresCondition: !critical && (owned-by-brutal-ai || owned-by-hard-ai || owned-by-normal-ai || owned-by-easy-ai || owned-by-naval-ai)
-
 STEK:
-	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits@BASE: ^ScienceBuilding
+	Inherits@TECHLEVEL: ^TechLevelBuilding
+	Inherits@TIER: ^Tier3Tech
+	Inherits@DISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@SHAPE: ^3x2Building+Bib
+	-WithBuildingBib:
+	RenderSprites:
+		Image: stek.soviet
 	HitShape:
 		TargetableOffsets: 420,-768,0, 420,768,0, -770,-768,0, -770,768,0
 	Buildable:
@@ -1144,15 +735,18 @@ STEK:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
 
 BARR:
-	Inherits: ^Building
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^InfantryProduction
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits@BASE: ^Building
+	Inherits@SHAPE: ^3x2Building
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@PRODUCTION: ^InfantryProduction
+	RenderSprites:
+		Image: barr.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 490,-470,0, 355,512,0, -355,-512,0, -630,512,0
 	Building:
-		Footprint: xx xx ++
+		Footprint: xxx xxx
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 30
@@ -1174,12 +768,12 @@ BARR:
 	Exit@1:
 		RequiresCondition: !being-captured
 		SpawnOffset: -170,810,0
-		ExitCell: 1,2
+		ExitCell: 1,1
 		ProductionTypes: Soldier, Infantry
 	Exit@2:
 		RequiresCondition: !being-captured
 		SpawnOffset: -725,640,0
-		ExitCell: 0,2
+		ExitCell: 0,1
 		ProductionTypes: Soldier, Infantry
 	ProvidesPrerequisite@infantryany:
 		Prerequisite: infantry.any
@@ -1223,8 +817,8 @@ BARR:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
 
 KENN:
-	Inherits: ^Building
-	Inherits: ^PrimaryBuilding
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^PrimaryBuilding
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 175
@@ -1239,9 +833,16 @@ KENN:
 		HP: 30000
 	RevealsShroud:
 		Range: 4c0
-	WithBuildingBib:
-		Sequence: bibSilo
-		HasMinibib: True
+	RenderSprites:
+		Image: kenn.soviet
+	IsometricSelectable:
+		DecorationBounds: 905, 905, 0, 0
+		DecorationHeight: 70
+	WithIdleOverlay@SOVIETBIB:
+		Image: sovietbib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
 	RallyPoint:
 	Exit@1:
 		RequiresCondition: !being-captured
@@ -1265,15 +866,28 @@ KENN:
 	ProvidesPrerequisite@buildingname:
 
 TENT:
-	Inherits: ^Building
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^InfantryProduction
+	Inherits@shadow: ^AlliedBuildingShadow
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^3x2Building+Bib
+	Inherits@visuals: ^Allied3x3Visuals
+	-WithBuildingBib:
+	Inherits@GRID3: ^PrimaryBuilding
+	Inherits@GRID4: ^InfantryProduction
+	RenderSprites:
+		Image: tent.allies
+	IsometricSelectable:
+		-DecorationBounds:
+		DecorationHeight: 64
+	Building:
+		Footprint: xxx xxx ===
+		Dimensions: 3,3
+		LocalCenterOffset: 362,-362,0
+	WithIdleOverlay@ALLIEDBIB:
+		# Body-local -> world -362,362,0; keep the 3x3 bib centered on its site.
+		Offset: -567,-362,0
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
-	Building:
-		Footprint: xx xx ++
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 20
@@ -1354,68 +968,8 @@ TENT:
 	Targetable:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, SabInfiltrate
 
-FIX:
-	Inherits: ^Building
-	Inherits: ^3x3Shape
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 100
-		Prerequisites: weap, ~structures.ra
-		Description: Repairs vehicles.
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: Service Depot
-	Building:
-		Footprint: _+_ +++ _+_
-		Dimensions: 3,3
-	Health:
-		HP: 80000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Reservable:
-	RallyPoint:
-	RepairsUnits:
-		ValuePercentage: 0
-		HpPerStep: 1000
-		Interval: 7
-		StartRepairingNotification: Repairing
-		FinishRepairingNotification: UnitRepaired
-		PlayerExperience: 15
-		RequiresCondition: !forceshield && !invulnerability && !being-warped
-	WithBuildingBib:
-		HasMinibib: true
-		Sequence: bibFix
-	WithResupplyAnimation:
-		RequiresCondition: !build-incomplete
-	Power:
-		Amount: -30
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@buildingname:
-	ProvidesPrerequisite@repair:
-		Prerequisite: repair
-	HitShape:
-		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
-		Type: Polygon
-			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
-	ProximityExternalCondition@AIRCRAFTREPAIR:
-		Condition: aircraft-repair
-		Range: 10c0
-	WithRangeCircle@AIRCRAFTREPAIR:
-		Color: 888899AA
-		Range: 10c0
-
 SBAG:
 	Inherits: ^Wall
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 10
-		Prerequisites: ~structures.sandbag
-		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -1435,11 +989,6 @@ SBAG:
 
 FENC:
 	Inherits: ^Wall
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 20
-		Prerequisites: fact, ~structures.soviet
-		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -1457,11 +1006,6 @@ FENC:
 
 BRIK:
 	Inherits: ^Wall
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 30
-		Prerequisites: anypower
-		Description: Stops units and blocks enemy fire.
 	Valued:
 		Cost: 200
 	CustomSellValue:
@@ -1486,11 +1030,6 @@ BRIK:
 CHAIN:
 	Inherits: ^Wall
 	Inherits: ^WoodArmor
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 20
-		Prerequisites: afac, ~structures.nod
-		Description: Stops infantry and light vehicles.\n  Can be crushed by tanks.
 	Valued:
 		Cost: 30
 	CustomSellValue:
@@ -1698,85 +1237,6 @@ PYLE:
 		Proxy: barracks.upgraded
 		Types: SpyInfiltrate
 
-HAND:
-	Inherits: ^BuildingTD
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^InfantryProduction
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 630,-512,0, 355,512,0, -281,-512,0, -630,512,0
-	Building:
-		Footprint: xx xx ++
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 20
-		Prerequisites: anypower, ~structures.nod
-		IconPalette: chrometd
-		Description: Trains infantry.
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Hand of Nod
-	Health:
-		HP: 60000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Exit@1:
-		RequiresCondition: !being-captured
-		SpawnOffset: 512,1024,0
-		ExitCell: 1,2
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	ProvidesPrerequisite@infantryany:
-		Prerequisite: infantry.any
-	ProvidesPrerequisite@infantrytd:
-		Prerequisite: infantry.human
-	ProvidesPrerequisite@nod:
-		Factions: nod, blackh, marked, legion
-		Prerequisite: infantry.nod
-	ProvidesPrerequisite@nodvanilla:
-		Factions: nod
-		Prerequisite: infantry.nodvanilla
-	ProvidesPrerequisite@blackh:
-		Factions: blackh
-		Prerequisite: infantry.blackh
-	ProvidesPrerequisite@marked:
-		Factions: marked
-		Prerequisite: infantry.marked
-	ProvidesPrerequisite@legion:
-		Factions: legion
-		Prerequisite: infantry.legion
-	ProvidesPrerequisite@nodstructure:
-		RequiresPrerequisites: structures.nod
-		Prerequisite: infantry.nod
-	ProvidesPrerequisite@nodvanillastructure:
-		RequiresPrerequisites: structures.nodvanilla
-		Prerequisite: infantry.nodvanilla
-	ProvidesPrerequisite@blackhstructure:
-		RequiresPrerequisites: structures.blackh
-		Prerequisite: infantry.blackh
-	ProvidesPrerequisite@markedstructure:
-		RequiresPrerequisites: structures.marked
-		Prerequisite: infantry.marked
-	ProvidesPrerequisite@legionstructure:
-		RequiresPrerequisites: structures.legion
-		Prerequisite: infantry.legion
-	InfiltrateForSupportPower@inf:
-		Types: SabInfiltrate
-		Proxy: inf.nod.stolen
-	Power:
-		Amount: -20
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@buildingname:
-	InfiltrateForSupportPower@spy:
-		Proxy: barracks.upgraded
-		Types: SpyInfiltrate
-
 WEAP.TD:
 	Inherits: ^BuildingTD
 	Inherits@shape: ^3x2Building+Bib
@@ -1833,276 +1293,9 @@ WEAP.TD:
 	SequencePlaceBuildingPreview:
 		Sequence: place
 
-AIRS:
-	Inherits: ^BuildingTD
-	Inherits: ^PrimaryBuilding
-	Inherits: ^VehicleProduction
-	Inherits: ^4x2Building+Bib
-	RenderSprites:
-		Image: astrip
-	HitShape:
-		TargetableOffsets: 0,0,0, 0,-512,256, 0,-1451,384, 0,512,128, 0,1536,85
-		Type: Rectangle
-			TopLeft: -2048, -1024
-			BottomRight: 2048, 1024
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 80
-		Prerequisites: proc.td, ~structures.nod, ~!structures.legion
-		IconPalette: chrometd
-		Description: Provides a dropzone\nfor vehicle reinforcements
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: Airstrip
-	Building:
-		Footprint: XXX+ xxx+ ++++
-
-	Health:
-		HP: 220000
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 7c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-	WithIdleOverlay@DISH:
-		Sequence: idle-dish
-		RequiresCondition: !build-incomplete
-	Exit@1:
-		SpawnOffset: -1024,0,0
-		ExitCell: 3,1
-	-Production:
-	ProductionAirdropCA:
-		Produces: Vehicle
-		PauseOnCondition: forceshield || invulnerability || being-warped
-		ActorType: c17.cargo
-		EntryType: DropSiteClosestEdge
-		ExitType: StraightAhead
-		LandingFacing: 64
-		ReadyAudio: ReinforcementsArrived
-		RequiresCondition: !vehiclesdisabled
-	WithDeliveryAnimation:
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate, SpyInfiltrate
-	Power:
-		Amount: -30
-		RequiresCondition: !being-warped
-	InfiltrateForSupportPower@veh:
-		Types: SabInfiltrate
-		Proxy: veh.nod.stolen
-	ProvidesPrerequisite@buildingname:
-	InfiltrateForSupportPower@spy:
-		Proxy: vehicles.upgraded
-		Types: SpyInfiltrate
-
-NUKE:
-	Inherits: ^BuildingTD
-	Inherits: ^DisabledByPowerOutage
-	Inherits: ^2x2Building+Bib
-	HitShape:
-		TargetableOffsets: 630,299,0
-	RenderSprites:
-		FactionImages:
-			nod: nodnuke
-			blackh: nodnuke
-			marked: nodnuke
-			legion: nodnuke
-	WithSpriteBody:
-		PauseOnCondition: disabled
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 10
-		Prerequisites: ~structures.td
-		IconPalette: chrometd
-		Description: Provides power for other structures.
-	Valued:
-		Cost: 300
-	Tooltip:
-		Name: Nuclear Power Plant
-	ProvidesPrerequisite:
-		Prerequisite: anypower
-	Building:
-		Footprint: xX xx ==
-	Health:
-		HP: 40000
-	RevealsShroud:
-		Range: 4c0
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-		DeathSequencePalette: overlayplayertd
-	Power:
-		Amount: 100
-		RequiresCondition: !forceshield || !being-warped
-	ProvidesPrerequisite:
-		Prerequisite: anypower
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, PowerInfiltrate
-	ScalePowerWithHealth:
-	ProvidesPrerequisite@buildingname:
-	InfiltrateForPowerOutage:
-		Types: SpyInfiltrate, PowerInfiltrate
-
-NUK2:
-	Inherits: ^BuildingTD
-	Inherits: ^DisabledByPowerOutage
-	Inherits: ^2x2Building+Bib
-	HitShape:
-		TargetableOffsets: 630,299,0
-	RenderSprites:
-		FactionImages:
-			nod: nodnuk2
-			blackh: nodnuk2
-			marked: nodnuk2
-			legion: nodnuk2
-	WithSpriteBody:
-		PauseOnCondition: disabled
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 110
-		Prerequisites: hq, ~structures.td
-		IconPalette: chrometd
-		Description: Provides double the power of\na standard Nuclear Power Plant.
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Advanced Nuclear Power Plant
-	ProvidesPrerequisite:
-		Prerequisite: anypower
-	Building:
-		Footprint: xX xx ==
-	Health:
-		HP: 70000
-	RevealsShroud:
-		Range: 5c0
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-		DeathSequencePalette: overlayplayertd
-	Power:
-		Amount: 200
-		RequiresCondition: !forceshield || !being-warped
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate, PowerInfiltrate
-	ProvidesPrerequisite@buildingname:
-	ScalePowerWithHealth:
-	InfiltrateForPowerOutage:
-		Types: SpyInfiltrate, PowerInfiltrate
-
-AFAC:
-	Inherits: ^BuildingTD
-	Inherits: ^3x3Building+Bib
-	Inherits: ^ConcreteArmor
-	Inherits: ^StructureProduction
-	Inherits: ^BotFallbackInsurance
-	RenderSprites:
-		FactionImages:
-			nod: nodfact
-			blackh: nodfact
-			marked: nodfact
-			legion: nodfact
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 1000
-		Prerequisites: ~conyardbuildable, ~structures.td, repair
-		IconPalette: chrometd
-		Description: Produces structures.
-	Health:
-		HP: 150000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Valued:
-		Cost: 2500
-	Tooltip:
-		Name: Construction Yard
-	Transforms:
-		RequiresCondition: factundeploy
-		PauseOnCondition: chrono-vortex || being-captured || c4 || build-incomplete || being-warped
-		IntoActor: amcv
-		Offset: 1,1
-		Facing: 384
-	TransformsIntoMobile:
-		RequiresCondition: factundeploy
-		Locomotor: heavywheeled
-		RequiresForceMove: true
-	TransformsIntoPassenger:
-		RequiresCondition: factundeploy
-		CargoType: Vehicle
-		RequiresForceMove: true
-	TransformsIntoRepairable:
-		RequiresCondition: factundeploy
-		RepairActors: fix, rep
-		RequiresForceMove: true
-	TransformsIntoTransforms:
-		RequiresCondition: factundeploy && build-incomplete
-	Sellable:
-		RequiresCondition: !build-incomplete && !chrono-vortex && !being-captured && !c4 && !being-warped
-	GrantConditionOnPrerequisite@GLOBALFACTUNDEPLOY:
-		Condition: factundeploy
-		Prerequisites: global-factundeploy
-	ProvidesPrerequisite@cnc:
-		Factions: gdi, talon, zocom, eagle, nod, blackh, marked, legion
-		Prerequisite: structures.td
-	ProvidesPrerequisite@tdfaction:
-		Factions: gdi, talon, zocom, eagle, nod, blackh, marked, legion
-		Prerequisite: td
-	ProvidesPrerequisite@gdi:
-		Factions: gdi, talon, zocom, eagle
-		Prerequisite: structures.gdi
-	ProvidesPrerequisite@talon:
-		Factions: talon
-		Prerequisite: structures.talon
-	ProvidesPrerequisite@zocom:
-		Factions: zocom
-		Prerequisite: structures.zocom
-	ProvidesPrerequisite@eagle:
-		Factions: eagle
-		Prerequisite: structures.eagle
-	ProvidesPrerequisite@nod:
-		Factions: nod, blackh, marked, legion
-		Prerequisite: structures.nod
-	ProvidesPrerequisite@blackh:
-		Factions: blackh
-		Prerequisite: structures.blackh
-	ProvidesPrerequisite@marked:
-		Factions: marked
-		Prerequisite: structures.marked
-	ProvidesPrerequisite@legion:
-		Factions: legion
-		Prerequisite: structures.legion
-	ProvidesPrerequisite@weap.tdFAC:
-		Factions: gdi, talon, zocom, eagle, legion
-		Prerequisite: structures.weap.td
-	ProvidesPrerequisite@sandbag:
-		Factions: gdi, talon, zocom, eagle
-		Prerequisite: structures.sandbag
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-		DeathSequencePalette: overlayplayertd
-	WithBuildingPlacedAnimation:
-		RequiresCondition: !build-incomplete && !chrono-vortex
-	Power:
-		Amount: 0
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite:
-		Prerequisite: afac
-		Condition: invulnerability
-	SpawnActorsOnSell@GDI:
-		ActorTypes: mercenary,mercenary,mercenary,mercenary,engineer
-		RequiresCondition: structures.gdi
-	SpawnActorsOnSell@Default:
-		ActorTypes: adept,adept,adept,adept,engineer
-		RequiresCondition: !structures.gdi
-
 AFAC.Nukular:
-	Inherits: AFAC
-	Inherits: ^NukularConyard
+	Inherits@FACT: AFAC
+	Inherits@NUKULAR: ^NukularConyard
 	RenderSprites:
 		Image: AFAC
 	Transforms:
@@ -2110,13 +1303,18 @@ AFAC.Nukular:
 
 NSAM:
 	Inherits: ^DefenseTD
+	WithIdleOverlay@NODBIB:
+		Image: nodbib1x1
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
 	Inherits@IDISABLE: ^DisableOnLowPowerOrPowerDown
 	Inherits@AUTOTARGET: ^AutoTargetAir
-	Inherits@shape: ^2x1Shape
+	Inherits@shape: ^1x1Shape
 	HitShape:
 		Type: Rectangle
-			TopLeft: -768,-512
-			BottomRight: 768,512
+			TopLeft: -512,-512
+			BottomRight: 512,512
 	Buildable:
 		Queue: Defense
 		IconPalette: chrome
@@ -2128,8 +1326,8 @@ NSAM:
 	Tooltip:
 		Name: SAM Site
 	Building:
-		Footprint: xx
-		Dimensions: 2,1
+		Footprint: x
+		Dimensions: 1,1
 	Health:
 		HP: 40000
 	RevealsShroud:
@@ -2138,25 +1336,68 @@ NSAM:
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 5c0
+	RenderSprites:
+		Image: nsam.native
 	Turreted:
 		TurnSpeed: 120
-		InitialFacing: 0
+		InitialFacing: 896
 		RealignDelay: -1
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
-		PauseOnCondition: disabled || empdisable || being-warped
-	AttackPopupTurreted:
+		Offset: 0,-88,611
+	WithSpriteBody:
+		Sequence: base
+	WithSpriteTurret@4:
+		Sequence: turret-4
+		RequiresCondition: !build-incomplete && (!sam-active || sam-ammo == 4)
+		Recoils: false
+	WithSpriteTurret@3:
+		Sequence: turret-3
+		RequiresCondition: !build-incomplete && sam-active && sam-ammo == 3
+		Recoils: false
+	WithSpriteTurret@2:
+		Sequence: turret-2
+		RequiresCondition: !build-incomplete && sam-active && sam-ammo == 2
+		Recoils: false
+	WithSpriteTurret@1:
+		Sequence: turret-1
+		RequiresCondition: !build-incomplete && sam-active && sam-ammo == 1
+		Recoils: false
+	WithSpriteTurret@0:
+		Sequence: turret-0
+		RequiresCondition: !build-incomplete && sam-active && sam-ammo == 0
+		Recoils: false
+	GrantCondition@sam-active:
+		Condition: sam-active
+	AmmoPool:
+		Ammo: 4
+		Armaments: primary
+		AmmoCondition: sam-ammo
+	ReloadAmmoPool:
+		Delay: 30
+		Count: 4
+		ResetOnFire: true
+	AttackTurreted:
 		RequiresCondition: !build-incomplete
 		PauseOnCondition: disabled || empdisable || being-warped
 	Armament:
-		Weapon: Nike
+		Weapon: Nike.Nod
+		# Engine selects barrel Burst % 4: indices 0,3,2,1 -> missile slots 2,3,0,1.
+		LocalOffset: 112,60,913, 375,-60,913, 188,-94,913, 298,94,913
+		PauseOnCondition: !sam-ammo
 		MuzzleSequence: muzzle
 	WithMuzzleOverlay:
 	Power:
 		Amount: -40
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
+		CameraPitch: 85
+		QuantizedFacings: 32
+		UseClassicPerspectiveFudge: false
+	IsometricSelectable:
+		Bounds: 950, 977, 0, -55
+		Height: 60
+		DecorationBounds: 950, 977, 0, -55
+		DecorationHeight: 60
 	-ActorPreviewPlaceBuildingPreview:
 	SequencePlaceBuildingPreview:
 		Sequence: place
@@ -2165,8 +1406,8 @@ NSAM:
 		RequiresCondition: !(disabled || empdisable || being-warped)
 
 GTWR:
-	Inherits: ^DefenseTD
-	Inherits: ^AutoTargetGround
+	Inherits@DEFENSE: ^DefenseTD
+	Inherits@TARGET: ^AutoTargetGround
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 50
@@ -2206,70 +1447,13 @@ GTWR:
 		Amount: -20
 		RequiresCondition: !being-warped
 
-HQ:
-	Inherits: ^BuildingTD
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier2Tech
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^RadarStation
-	RenderSprites:
-		FactionImages:
-			nod: nodhq
-			blackh: nodhq
-			marked: nodhq
-			legion: nodhq
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 90
-		Prerequisites: proc.td, ~structures.td, ~!techlevel.low
-		IconPalette: chrometd
-		Description: Provides an overview of the battlefield.\n  Requires power to operate.
-	Valued:
-		Cost: 1800
-	Tooltip:
-		Name: Comm. Center
-	Building:
-		Footprint: X_ xx ==
-	WithSpriteBody:
-		PauseOnCondition: disabled || being-warped
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate,  SabInfiltrate
-	Health:
-		HP: 100000
-	RevealsShroud:
-		MinRange: 6c0
-		Range: 10c0
-		RequiresCondition: !disabled
-		RevealGeneratedShroud: False
-	RevealsShroud@Offline:
-		Range: 5c0
-		RequiresCondition: disabled
-	RevealsShroud@GAPGEN:
-		Range: 6c0
-		RequiresCondition: !disabled
-	InfiltrateForExploration:
-		Types: SpyInfiltrate, SabInfiltrate
-	Power:
-		Amount: -40
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@radar:
-		Prerequisite: radar
-	ProvidesPrerequisite@gdirad:
-		Factions: gdi, zocom, talon, eagle
-		Prerequisite: radar.gdi
-	ProvidesPrerequisite@buildingname:
-	InfiltrateForSupportPower@tec:
-		Types: SabInfiltrate
-		Proxy: rad.gdi.stolen
-
 EYE:
-	Inherits: ^ScienceBuildingTD
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Building+Bib
-	Inherits: ^RadarStation
-	Inherits: ^SuperWeapon
-	Inherits: ^GDISuperweaponBig
+	Inherits@BASE: ^ScienceBuildingTD
+	Inherits@DISABLE: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@SHAPE: ^2x2Building+Bib
+	Inherits@RADAR: ^RadarStation
+	Inherits@SUPERWEAPON: ^SuperWeapon
+	Inherits@GDISUPERWEAPON: ^GDISuperweaponBig
 	Building:
 		Footprint: xx xx ==
 	Buildable:
@@ -2310,226 +1494,6 @@ EYE:
 	MustBeDestroyed:
 		RequiredForShortGame: false
 
-REP:
-	Inherits: ^BuildingTD
-	Inherits: ^3x3Building
-	HitShape:
-		TargetableOffsets: 840,0,0, 598,-640,0, 598,640,0, -1060,0,0, -768,-640,0, -768,640,0
-		Type: Polygon
-			Points: -1536,-300, -640,-811, 640,-811, 1536,-300, 1536,555, 640,1110, -640,1110, -1536,555
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 100
-		Prerequisites: vehicles.td, ~structures.td
-		IconPalette: chrometd
-		Description: Repairs vehicles.
-	Valued:
-		Cost: 1200
-	Tooltip:
-		Name: Repair Facility
-	Building:
-		Footprint: _+_ +++ _+_
-		Dimensions: 3,3
-	Health:
-		HP: 80000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	WithBuildingBib:
-		Sequence: bibFix
-		HasMinibib: true
-	Reservable:
-	RallyPoint:
-	RepairsUnits:
-		ValuePercentage: 0
-		HpPerStep: 1000
-		Interval: 7
-		StartRepairingNotification: Repairing
-		FinishRepairingNotification: UnitRepaired
-		PlayerExperience: 15
-		RequiresCondition: !forceshield && !invulnerability && !being-warped
-	WithResupplyAnimation:
-		RequiresCondition: !build-incomplete
-	Power:
-		Amount: -30
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@buildingname:
-	ProvidesPrerequisite@repair:
-		Prerequisite: repair
-	ProximityExternalCondition@AIRCRAFTREPAIR:
-		Condition: aircraft-repair
-		Range: 10c0
-	WithRangeCircle@AIRCRAFTREPAIR:
-		Color: 888899AA
-		Range: 10c0
-
-HPAD.TD:
-	Inherits: ^BuildingTD
-	Inherits: ^2x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	Inherits: ^RepairsAircraftWithRepairBay
-	Inherits: ^AircraftProduction
-	Inherits: ^GDIUpgradeProducer
-	RenderSprites:
-		Image: hpad2
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 768,-512,0, 768,512,0, -281,-512,0, -630,512,0
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 120
-		Prerequisites: radar, ~structures.td
-		IconPalette: chrometd
-		Description: Produces and reloads\nhelicopters.
-	Valued:
-		Cost: 500
-	Tooltip:
-		Name: Helipad
-	Building:
-		Footprint: xx xx ==
-	Health:
-		HP: 80000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Exit@1:
-		SpawnOffset: 0,-256,0
-		ExitCell: 0,0
-		Facing: 224
-	Reservable:
-	Power:
-		Amount: -10
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@all:
-		Factions: allies, england, france, germany, soviet, russia, nkorea, iraq, gdi, talon, zocom, eagle, nod, blackh, marked, legion
-		Prerequisite: aircraft.all
-	ProvidesPrerequisite@gdi:
-		Factions: gdi, zocom, talon, eagle
-		Prerequisite: aircraft.gdi
-	ProvidesPrerequisite@gdistructure:
-		RequiresPrerequisites: structures.gdi
-		Prerequisite: aircraft.gdi
-	ProvidesPrerequisite@nod:
-		Factions: nod, marked, blackh, legion
-		Prerequisite: aircraft.nod
-	ProvidesPrerequisite@nodstructure:
-		RequiresPrerequisites: structures.nod
-		Prerequisite: aircraft.nod
-	ProvidesPrerequisite@blackh:
-		Factions: blackh
-		Prerequisite: aircraft.blackh
-	ProvidesPrerequisite@blackhstructure:
-		RequiresPrerequisites: structures.blackh
-		Prerequisite: aircraft.blackh
-	ProvidesPrerequisite@legion:
-		Factions: legion
-		Prerequisite: aircraft.legion
-	ProvidesPrerequisite@legionstructure:
-		RequiresPrerequisites: structures.legion
-		Prerequisite: aircraft.legion
-	ProvidesPrerequisite@marked:
-		Factions: marked
-		Prerequisite: aircraft.marked
-	ProvidesPrerequisite@markedstructure:
-		RequiresPrerequisites: structures.marked
-		Prerequisite: aircraft.marked
-	ProvidesPrerequisite@zocom:
-		Factions: zocom
-		Prerequisite: aircraft.zocom
-	ProvidesPrerequisite@zocomstructure:
-		RequiresPrerequisites: structures.zocom
-		Prerequisite: aircraft.zocom
-	ProvidesPrerequisite@talon:
-		Factions: talon
-		Prerequisite: aircraft.talon
-	ProvidesPrerequisite@talonstructure:
-		RequiresPrerequisites: structures.talon
-		Prerequisite: aircraft.talon
-	ProvidesPrerequisite@eagle:
-		Factions: eagle
-		Prerequisite: aircraft.eagle
-	ProvidesPrerequisite@eaglestructure:
-		RequiresPrerequisites: structures.eagle
-		Prerequisite: aircraft.eagle
-	ProvidesPrerequisite@buildingname:
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SpyInfiltrate
-	WithResupplyAnimation:
-		RequiresCondition: !build-incomplete
-	InfiltrateForSupportPower:
-		Types: SpyInfiltrate
-		Proxy: powerproxy.paratroopers2
-
-PROC.TD:
-	Inherits: ^BuildingTD
-	Inherits: ^BotIncome
-	Inherits: ^3x3Building+Bib
-	Inherits: ^Refinery
-	DockHost:
-		DockAngle: 448
-		DockOffset: -1c0, 1c0, 0
-		IsDragRequired: True
-		DragOffset: -554,512,0
-		DragLength: 12
-	HitShape:
-		Type: Rectangle
-			TopLeft: -1536, -512
-			BottomRight: 1536, 853
-	HitShape@TOP:
-		Type: Rectangle
-			TopLeft: -512, -1450
-			BottomRight: 896, -512
-	RenderSprites:
-		Image: proc2
-		FactionImages:
-			nod: nodproc
-			blackh: nodproc
-			marked: nodproc
-			legion: nodproc
-	Building:
-		Footprint: _x_ xxx === ===
-	Valued:
-		Cost: 2000
-	Tooltip:
-		Name: Refinery
-	Buildable:
-		BuildPaletteOrder: 60
-		Prerequisites: anypower, ~structures.td
-		Queue: Building
-		IconPalette: chrometd
-		Description: Processes raw Tiberium, Ore and Gems\ninto useable resources
-	Health:
-		HP: 90000
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, ThiefInfiltrate
-	DrawLineToTarget:
-	WithDeathAnimation:
-		DeathSequence: dead
-		UseDeathTypeSuffix: false
-		DeathSequencePalette: overlayplayertd
-	FreeActor:
-		Actor: HAR2
-		SpawnOffset: 1,2
-		Facing: 64
-	WithResourceLevelOverlay:
-		RequiresCondition: !build-incomplete
-	Power:
-		Amount: -30
-		RequiresCondition: !being-warped
-	ProvidesPrerequisite@buildingname:
-	SpawnActorsOnSell@GDI:
-		ActorTypes: mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,mercenary,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
-		RequiresCondition: structures.gdi
-	SpawnActorsOnSell@Default:
-		ActorTypes: adept,adept,adept,adept,adept,adept,adept,adept,adept,adept,c1,c1,c1,c1,c7,c7,c7,c7,c10,c10
-		RequiresCondition: !structures.gdi
-
 SILO.TD:
 	Inherits: ^BuildingTD
 	Inherits: ^2x1Shape
@@ -2541,7 +1505,7 @@ SILO.TD:
 		Name: Silo
 	Buildable:
 		BuildPaletteOrder: 35
-		Prerequisites: proc.td, ~structures.td
+		Prerequisites: proc.td, ~structures.td, ~disabled
 		Queue: Defense
 		IconPalette: chrometd
 		Description: Stores processed Tiberium, Ore and Gems
@@ -2578,12 +1542,12 @@ SILO.TD:
 		PipCount: 5
 
 AFLD.GDI:
-	Inherits: ^Building
-	Inherits: ^3x2Shape
-	Inherits: ^PrimaryBuilding
-	Inherits: ^RepairsAircraftWithRepairBay
-	Inherits: ^AircraftProduction
-	Inherits: ^GDIUpgradeProducer
+	Inherits@BUILDING: ^Building
+	Inherits@SHAPE: ^3x2Shape
+	Inherits@PRIMARY: ^PrimaryBuilding
+	Inherits@REPAIR: ^RepairsAircraftWithRepairBay
+	Inherits@PRODUCTION: ^AircraftProduction
+	Inherits@UPGRADES: ^GDIUpgradeProducer
 	RenderSprites:
 		Image: afldgdi
 	HitShape:
@@ -2654,13 +1618,26 @@ AFLD.GDI:
 		Proxy: powerproxy.airstrike
 
 AFLD.allies:
-	Inherits: ^Building
-	Inherits: ^3x2Shape
-	Inherits: ^PrimaryBuilding
-	Inherits: ^RepairsAircraftWithRepairBay
-	Inherits: ^AircraftProduction
+	Inherits@shadow: ^AlliedBuildingShadow
+	Inherits@GRID1: ^Building
+	Inherits@GRID2: ^3x2Shape
+	Inherits@GRID3: ^PrimaryBuilding
+	Inherits@GRID4: ^RepairsAircraftWithRepairBay
+	Inherits@GRID5: ^AircraftProduction
 	RenderSprites:
-		Image: afld.allies
+		Image: afld.allies.custom
+	Inherits@visuals: ^Allied3x3Visuals
+	IsometricSelectable:
+		-DecorationBounds:
+		DecorationHeight: 83
+		# Decoration only: retain the 3x2 gameplay body and original mouse bounds.
+		DecorationFootprint: 4,2
+		# Extend the 2-cell axis by 1/4 cell: approximately 16px left / 8px down.
+		DecorationFootprintExtraDepth: 181
+	WithIdleOverlay@ALLIEDBIB:
+		Image: alliedbib4x3
+		# Body-local -> world 0,724,0, preserving the existing 3x2 body pivot.
+		Offset: -1134,0,0
 	HitShape:
 		UseTargetableCellsOffsets: false
 		TargetableOffsets: 0,0,0, 420,0,0, 420,-1024,0, 420,1024,0, -777,0,0, -777,-1024,0, -777,1024,0
@@ -2674,8 +1651,9 @@ AFLD.allies:
 	Tooltip:
 		Name: Airfield
 	Building:
-		Footprint: xxx xxx
-		Dimensions: 3,2
+		Footprint: xxx= xxx= ====
+		Dimensions: 4,3
+		LocalCenterOffset: 0,-724,0
 	Health:
 		HP: 100000
 	RevealsShroud:
@@ -2726,11 +1704,11 @@ AFLD.allies:
 		Proxy: powerproxy.airstrike
 
 GTEK:
-	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
+	Inherits@BUILDING: ^ScienceBuilding
+	Inherits@TECH: ^TechLevelBuilding
+	Inherits@TIER: ^Tier3Tech
+	Inherits@POWER: ^DisableOnLowPowerOrForceDisabled
+	Inherits@SHAPE: ^3x2Building+Bib
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 150
@@ -2767,55 +1745,6 @@ GTEK:
 	ProvidesPrerequisite@buildingname:
 	SupportPowerChargeBar:
 
-TMPL:
-	Inherits: ^ScienceBuildingTD
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier3Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
-	HitShape:
-		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 0,-896,0, 0,896,0, 840,0,0, -706,0,0, -706,-768,0, -706,640,0
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: Temple of Nod
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 140
-		Prerequisites: hq, ~vehicles.nod, ~structures.nod, ~!techlevel.medium
-		IconPalette: chrometd
-		Description: Provides Nod advanced technologies.\n  Requires power to operate.\n  Special Ability: Cluster Missile
-	Building:
-		Footprint: xxx xxx ===
-	Health:
-		HP: 70000
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RequiresCondition: !disabled
-		RevealGeneratedShroud: False
-	RevealsShroud@Offline:
-		Range: 5c0
-		RequiresCondition: disabled
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-		RequiresCondition: !disabled
-	SupportPowerChargeBar:
-	Power:
-		Amount: -150
-		RequiresCondition: !being-warped
-	MustBeDestroyed:
-		RequiredForShortGame: false
-	WithSupportPowerActivationAnimation:
-		RequiresCondition: !build-incomplete
-	Targetable:
-		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
-	InfiltrateForSupportPower@tec:
-		Types: SabInfiltrate
-		Proxy: tec.nod.stolen
-	ProvidesPrerequisite@buildingname:
-
 SPEN.nod:
 	Inherits: ^Building
 	Inherits@PRIMARY: ^PrimaryBuilding
@@ -2825,6 +1754,8 @@ SPEN.nod:
 	RenderSprites:
 		Image: SPENNOD
 		PlayerPalette: playernavy
+	IsometricSelectable:
+		DecorationHeight: 160
 	InfiltrateForSupportPower:
 		Types: SpyInfiltrate
 		Proxy: powerproxy.sonarpulse
@@ -2961,66 +1892,11 @@ SYRD.gdi:
 	-SpawnRandomActorOnDeath:
 	-SpawnActorsOnSell:
 
-SGEN:
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^3x2Building+Bib
-	Inherits: ^SuperWeapon
-	Inherits: ^NodSuperweaponSmall
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 130
-		Prerequisites: tmpl, ~structures.nod, ~techlevel.superw
-		BuildLimit: 1
-		IconPalette: chrometd
-		Description: Makes a group of units invisible for a short time.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Tiberium Stealth
-	Valued:
-		Cost: 1500
-	Tooltip:
-		Name: Stealth Generator
-	Building:
-		Footprint: xxx xx+
-		Dimensions: 3,2
-		LocalCenterOffset: 0,0,0
-	Health:
-		HP: 100000
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RequiresCondition: !disabled
-		RevealGeneratedShroud: False
-	RevealsShroud@Offline:
-		Range: 5c0
-		RequiresCondition: disabled
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-		RequiresCondition: !disabled
-	SupportPowerChargeBar:
-	Power:
-		Amount: -200
-		RequiresCondition: !being-warped
-	MustBeDestroyed:
-		RequiredForShortGame: false
-	HitShape:
-		UseTargetableCellsOffsets: true
-		Type: Rectangle
-			TopLeft: -1536, -1024
-			BottomRight: 1024, 1024
-	InfiltrateForSupportPowerReset:
-		Types: SpyInfiltrate, SabInfiltrate
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-
 LASP:
 	Inherits: ^Building
 	Inherits: ^BrickArmor
 	Inherits: ^DisableOnLowPowerOrPowerDown
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 30
-		Prerequisites: ~structures.nod, nuk2
-		IconPalette: chrometd
-		Description: Stops infantry and blocks enemy fire.\n   Cannot be crushed by tanks.
+	-Buildable:
 	Valued:
 		Cost: 200
 	CustomSellValue:
@@ -3119,11 +1995,11 @@ LASF:
 		Bounds: 2048, 1024
 
 PATR:
-	Inherits: ^DefenseTD
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Shape
-	Inherits: ^SuperWeapon
-	Inherits: ^GDISuperweaponSmall
+	Inherits@GRID1: ^DefenseTD
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID3: ^2x2Shape
+	Inherits@GRID4: ^SuperWeapon
+	Inherits@GRID5: ^GDISuperweaponSmall
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -3151,47 +2027,48 @@ PATR:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 		RequiresCondition: !disabled
-	Turreted:
-		TurnSpeed: 8
-		InitialFacing: 0
-		RealignDelay: -1
-	-WithSpriteBody:
-	WithEmbeddedTurretSpriteBody:
+	RenderSprites:
+		Image: patr.gdi.png
+	WithSpriteBody:
+		Sequence: empty
 		PauseOnCondition: disabled || empdisable || being-warped
 	WithIdleAnimation:
-		Sequences: empty
+		Sequences: idle
 		Interval: 0
-		RequiresCondition: !loaded-rocket
-	AttackTurreted:
+		RequiresCondition: loaded-rocket && !build-incomplete
+	AttackOmni:
 		PauseOnCondition: disabled || empdisable || being-warped
 		RequiresCondition: !build-incomplete && !reloading
-		OpportunityFire: False
-		PersistentTargeting: False
 		ForceFireIgnoresActors: True
 	Armament:
-		Weapon: THLauncher
-		PauseOnCondition: disabled || empdisable || being-warped
-		LocalOffset: 1000,0,500
+		Weapon: THLauncher.Fixed
+		PauseOnCondition: disabled || empdisable || being-warped || !loaded-rocket
+		LocalOffset: 0,-931,3249
+		LocalYaw: 256
 		ReloadingCondition: reloading
 	AmmoPool:
 		Ammo: 1
+		InitialAmmo: 0
 		ReloadCount: 1
 		AmmoCondition: loaded-rocket
-	ReloadAmmoPool:
-		Delay: 100
-		Count: 1
+	ReloadAmmoOnSupportPowerCharged:
 	SupportPowerChargeBar:
 	Power:
 		Amount: -150
 		RequiresCondition: !being-warped
 	BodyOrientation:
-		UseClassicFacings: True
+		UseClassicFacings: False
 	FireWarheadsOnDeathCA:
 		Weapon: BuildingExplode
 		EmptyWeapon: BuildingExplode
-	WithBuildingBib:
-		Sequence: bibSam2
-		HasMinibib: true
+	IsometricSelectable:
+		DecorationBounds: 2534, 2534, 0, 0
+		DecorationHeight: 165
+	WithIdleOverlay@GDIBIB:
+		Image: gdibib3x3.emp
+		Sequence: idle
+		RequiresCondition: !build-incomplete
+		IsDecoration: true
 	RejectsOrders:
 		Except: Sell, PowerDown
 	InfiltrateForSupportPowerReset:
@@ -3203,11 +2080,15 @@ PATR:
 		RequiresSelection: true
 
 INDP:
-	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier4Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x3Building+Bib
+	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits@BASE: ^ScienceBuilding
+	Inherits@TECHLEVEL: ^TechLevelBuilding
+	Inherits@TIER: ^Tier4Tech
+	Inherits@DISABLE: ^DisableOnLowPowerOrForceDisabled
+	Inherits@SHAPE: ^3x3Building+Bib
+	-WithBuildingBib:
+	RenderSprites:
+		Image: indp.soviet
 	WithSpriteBody:
 		PauseOnCondition: disabled || being-warped
 	HitShape:
@@ -3258,20 +2139,25 @@ INDP:
 		RequiresCondition: !build-incomplete && !c4 && !being-warped
 
 OREP:
-	Inherits: ^ScienceBuilding
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier4Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
+	Inherits@shadow: ^AlliedBuildingShadow
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^TechLevelBuilding
+	Inherits@GRID3: ^Tier4Tech
+	Inherits@GRID4: ^DisableOnLowPowerOrForceDisabled
+	Inherits@GRID5: ^3x2Building+Bib
+	RenderSprites:
+		Image: orep.allies
+	Inherits@visuals: ^Allied2x2DriveableBib
+	-WithBuildingBib:
+	IsometricSelectable:
+		DecorationHeight: 112
 	HitShape:
 		TargetableOffsets: -355,-1024,0
-	Building:
-		Footprint: xxx xxx ===
 	Health:
 		HP: 80000
 	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
+		MinRange: 3c0
+		Range: 4c0
 		RevealGeneratedShroud: False
 	RevealsShroud@GAPGEN:
 		Range: 4c0
@@ -3297,9 +2183,6 @@ OREP:
 	ResourcePurifier@orep2:
 		Modifier: 5
 		RequiresCondition: !disabled && !being-warped && orep2
-	RevealsShroud:
-		Range: 4c0
-		MinRange: 3c0
 	Power:
 		Amount: -150
 		RequiresCondition: !being-warped
@@ -3318,134 +2201,18 @@ OREP:
 		Delay: 3
 		RequiresCondition: !disabled && !empdisable && !being-warped
 
-BIO.Nod:
-	Inherits: ^BuildingTD
-	Inherits: ^TechLevelBuilding
-	Inherits: ^Tier4Tech
-	Inherits: ^DisableOnLowPowerOrForceDisabled
-	Inherits: ^3x2Building+Bib
-	Inherits: ^PrimaryBuilding
-	RenderSprites:
-		Image: tmpp
-		PlayerPalette: overlayplayertd
-	HitShape:
-		TargetableOffsets: 0,0,0, 0,1024,0, 0,-1024,0
-		Type: Rectangle
-			TopLeft: -1536, -1024
-			BottomRight: 1536, 512
-	Building:
-		Footprint: XxX xxx X+X
-		Dimensions: 3,3
-	Health:
-		HP: 80000
-	RevealsShroud:
-		MinRange: 4c0
-		Range: 5c0
-		RevealGeneratedShroud: False
-	RevealsShroud@GAPGEN:
-		Range: 4c0
-	Buildable:
-		Queue: Building
-		BuildPaletteOrder: 200
-		IconPalette: chrometd
-		Prerequisites: ~structures.nod, tmpl
-		Description: Replaces basic infantry with cyborgs.\n  Maximum 1 can be built.\n  Cannot be captured.\n  Special Ability: Cyborg Converter
-		BuildLimit: 1
-	-Capturable:
-	-CaptureNotification:
-	-CapturableProgressBar:
-	-CapturableProgressBlink:
-	-CaptureManager:
-	Valued:
-		Cost: 2500
-	Tooltip:
-		Name: Temple Prime
-	Power:
-		Amount: -150
-		RequiresCondition: !being-warped
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack
-	WithDeathAnimation:
-		DeathSequence: dead
-		DeathSequencePalette: overlayplayertd
-		UseDeathTypeSuffix: false
-	ProvidesPrerequisite@Name:
-		RequiresCondition: !being-warped
-	Sellable:
-		RequiresCondition: !build-incomplete && !c4 && !being-warped
-	Production:
-		Produces: Infantry, Cyborg
-		PauseOnCondition: forceshield || invulnerability || being-warped
-	Exit@1:
-		SpawnOffset: -170,1310,0
-		ExitCell: 1,3
-		ProductionTypes: Cyborg, Infantry
-	RallyPoint:
-	UnitConverter:
-		Type: Cyborg
-		ReadyAudio: UnitUpgraded
-		NoCashAudio: InsufficientFunds
-		BlockedAudio: OnHold
-		RequiresCondition: true
-		CostDifferenceRequired: true
-		EjectOnInsufficientFunds: true
-
-MSLO.Nod:
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x1Shape
-	Inherits: ^SuperWeapon
-	Inherits: ^NodSuperweaponBig
-	RenderSprites:
-		Image: nmslo
-	Valued:
-		Cost: 2500
-	Tooltip:
-		Name: Missile Silo
-	Buildable:
-		Queue: Defense
-		BuildPaletteOrder: 140
-		IconPalette: chrometd
-		Prerequisites: tmpl, ~techlevel.superw, ~structures.nod
-		BuildLimit: 1
-		Description: Provides a chemical missile.\n  Requires power to operate.\n  Maximum 1 can be built.\n  Special Ability: Chemical Missile
-	Building:
-		Footprint: xx
-		Dimensions: 2,1
-		LocalCenterOffset: 0,-512,0
-	Health:
-		HP: 100000
-	RevealsShroud:
-		MinRange: 5c0
-		Range: 6c0
-		RequiresCondition: !disabled
-		RevealGeneratedShroud: False
-	RevealsShroud@Offline:
-		Range: 5c0
-		RequiresCondition: disabled
-	RevealsShroud@GAPGEN:
-		Range: 5c0
-		RequiresCondition: !disabled
-	SupportPowerChargeBar:
-	Power:
-		Amount: -150
-		RequiresCondition: !being-warped
-	MustBeDestroyed:
-		RequiredForShortGame: false
-	WithSupportPowerActivationAnimation:
-		RequiresCondition: !build-incomplete
-	ProvidesPrerequisite@buildingname:
-	InfiltrateForSupportPowerReset:
-		Types: SpyInfiltrate, SabInfiltrate
-	Targetable:
-		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-
 WEAT:
-	Inherits: ^ScienceBuilding
-	Inherits: ^DisableOnLowPowerOrPowerDownOrForceDisable
-	Inherits: ^2x2Shape
-	Inherits: ^SuperWeapon
-	Inherits: ^AlliesSuperweaponBig
+	Inherits@shadow: ^AlliedBuildingShadow
+	Inherits@GRID1: ^ScienceBuilding
+	Inherits@GRID2: ^DisableOnLowPowerOrPowerDownOrForceDisable
+	Inherits@GRID3: ^2x2Shape
+	Inherits@GRID4: ^SuperWeapon
+	Inherits@GRID5: ^AlliesSuperweaponBig
+	RenderSprites:
+		Image: weat.allies
+	Inherits@visuals: ^Allied2x2DriveableBib
+	IsometricSelectable:
+		DecorationHeight: 81
 	Buildable:
 		Queue: Defense
 		BuildPaletteOrder: 130
@@ -3456,9 +2223,6 @@ WEAT:
 		Cost: 2500
 	Tooltip:
 		Name: Weather Control Device
-	Building:
-		Footprint: xx xx
-		Dimensions: 2,2
 	Health:
 		HP: 100000
 	RevealsShroud:
@@ -3472,9 +2236,6 @@ WEAT:
 	RevealsShroud@GAPGEN:
 		Range: 5c0
 		RequiresCondition: !disabled
-	WithBuildingBib:
-		HasMinibib: true
-		Sequence: bibIron
 	WithIdleOverlay@ACTIVE:
 		Sequence: active-overlay
 		Palette: d2keffect
@@ -3492,7 +2253,6 @@ WEAT:
 		Types: SpyInfiltrate, SabInfiltrate
 	Targetable:
 		TargetTypes: Ground, Structure, C4, DetonateAttack, SpyInfiltrate, SabInfiltrate
-
 
 PDLT:
 	Inherits: ^DefenseTD

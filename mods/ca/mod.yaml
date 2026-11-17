@@ -1,11 +1,13 @@
-﻿Metadata:
+Metadata:
 	Title: You Must Contruct Additional...
-	Version: 61290389ccbcc5070d8029110887b62bdb1edb39
+	Version: 5d2aa3f1561f0d37b5750de85877007f6fe304ad
 	Website: https://www.moddb.com/mods/you-must-construct-additional1
 	WebIcon32: https://www.openra.net/images/icons/ra_32x32.png
 	WindowTitle: OpenRA You Must Contruct Additional...
 
 WebServices:
+	GameNews: https://raw.githubusercontent.com/patrickwieth/YMCA/tournament-bot/mods/ca/news.yaml
+	GameNewsFileName: ymca-news.yaml
 	UpdateManifest: https://raw.githubusercontent.com/patrickwieth/YMCA/tournament-bot/update/stable.yaml
 
 PackageFormats: Mix
@@ -34,6 +36,7 @@ FileSystem: ContentInstallerFileSystem
 		~./ts/scores01.mix
 		~./ra2/theme.mix
 		~./ra2/thememd.mix
+		~./ra2/expandmd08.mix
 		~hires1.mix
 		ca|bits
 		ca|bits/desert
@@ -70,9 +73,17 @@ FileSystem: ContentInstallerFileSystem
 
 MapFolders:
 	ca|maps: System
-	~^EngineDir|../tools: User
+	~^SupportDir|maps/ca/modular: User
+	~^SupportDir|maps/ca/generated: User
 
 Rules:
+	ca|rules/rubberduck-terrain.yaml
+	ca|rules/rubberduck-bridges.yaml
+	ca|rules/rubberduck-plateau.yaml
+	ca|rules/rubberduck-native-cliffs.yaml
+	ca|rules/rubberduck-closed-cliffs.yaml
+	ca|rules/rubberduck-mountains.yaml
+	ca|rules/rubberduck-coasts.yaml
 	ca|rules/misc.yaml
 	ca|rules/ai/brutal.yaml
 	ca|rules/ai/defaults.yaml
@@ -93,6 +104,7 @@ Rules:
 	ca|rules/misc/ships.yaml
 	ca|rules/fakes.yaml
 	ca|rules/bridges.yaml
+	ca|rules/autotile.yaml
 	ca|rules/commander-tree.yaml
 	ca|rules/misc/aircraft.yaml
 	ca|rules/misc/overlays.yaml
@@ -114,6 +126,8 @@ Rules:
 	ca|rules/soviet/husks.yaml
 	ca|rules/soviet/infantry.yaml
 	ca|rules/soviet/misc.yaml
+	ca|rules/soviet/building-bases.yaml
+	ca|rules/soviet/building-art.yaml
 	ca|rules/soviet/structures.yaml
 	ca|rules/soviet/supportpowers.yaml
 	ca|rules/soviet/vehicles.yaml
@@ -177,8 +191,34 @@ Rules:
 	ca|rules/yuri/supportpowers.yaml
 	ca|rules/yuri/vehicles.yaml
 	ca|rules/world.yaml
+	ca|rules/gdi/building-art.yaml
+	ca|rules/soviet/building-alignment.yaml
+	ca|rules/china-scrin-building-art.yaml
+	ca|rules/china/gatling-art.yaml
+	ca|rules/new-faction-building-art.yaml
+	ca|rules/scrin/shard-launcher-art.yaml
+	ca|rules/scrin/plasma-cannon-art.yaml
+	ca|rules/scrin/supplied-building-art.yaml
+	ca|rules/scrin/bibs.yaml
+	ca|rules/bib-grid-alignment.yaml
+	ca|rules/building-position-feedback.yaml
+	ca|rules/bib-occupancy.yaml
+	ca|rules/faction-mcvs.yaml
+	ca|rules/building-ground-masks.yaml
+	ca|rules/upgrade-center-presentation.yaml
+	ca|rules/gdi/missile-tower-art.yaml
+	ca|rules/china-war-factory-selection.yaml
+	ca|rules/soviet/chemical-tower-art.yaml
+	ca|rules/crate-aircraft.yaml
 
 Sequences:
+	ca|sequences/rubberduck-terrain.yaml
+	ca|sequences/rubberduck-bridges.yaml
+	ca|sequences/rubberduck-plateau.yaml
+	ca|sequences/rubberduck-native-cliffs.yaml
+	ca|sequences/rubberduck-closed-cliffs.yaml
+	ca|sequences/rubberduck-mountains.yaml
+	ca|sequences/rubberduck-coasts.yaml
 	ca|sequences/defaults.yaml
 	ca|sequences/ships.yaml
 	ca|sequences/vehicles.yaml
@@ -196,14 +236,42 @@ Sequences:
 	ca|sequences/china.yaml
 	ca|sequences/soviet.yaml
 	ca|sequences/gla.yaml
+	ca|sequences/gdi-building-art.yaml
+	ca|sequences/gdi-building-placement.yaml
+	ca|sequences/soviet-building-art.yaml
+	ca|sequences/soviet-building-placement.yaml
+	ca|sequences/allied-building-placement.yaml
+	ca|sequences/building-construction.yaml
+	ca|sequences/nod-building-art.yaml
+	ca|sequences/nod-sam.yaml
+	ca|sequences/scrin-shard-launcher.yaml
+	ca|sequences/scrin-plasma-cannon.yaml
+	ca|sequences/chinese-gatling.yaml
+	ca|sequences/new-faction-buildings.yaml
+	ca|sequences/scrin-bibs.yaml
+	ca|sequences/scrin-supplied-buildings.yaml
+	ca|sequences/sonic-building-art.yaml
+	ca|sequences/soviet-flak-sprite.yaml
+	ca|sequences/soviet-sam.yaml
+	ca|sequences/soviet-kennel.yaml
+	ca|sequences/gdi-emp-launcher.yaml
+	ca|sequences/china-scrin-building-scale.yaml
+	ca|sequences/building-position-feedback.yaml
+	ca|sequences/upgrade-center-presentation.yaml
+	ca|sequences/gdi-missile-tower.yaml
+	ca|sequences/soviet-service-depot.yaml
+	ca|sequences/soviet-chemical-tower.yaml
 
 ModelSequences:
 	ca|sequences/voxels.yaml
 
 TileSets:
+	ca|tilesets/temperat.yaml
+	ca|tilesets/omegabolt-temperate.yaml
+	ca|tilesets/rubberduck-temperate.yaml
+	ca|tilesets/rubberduck-temperate-shaded.yaml
 	ca|tilesets/snow.yaml
 	ca|tilesets/interior.yaml
-	ca|tilesets/temperat.yaml
 	ca|tilesets/desert.yaml
 	ca|tilesets/jungle.yaml
 	ca|tilesets/winter.yaml
@@ -214,10 +282,12 @@ Cursors:
 
 Chrome:
 	ca|chrome.yaml
+	ca|chrome-map-previews.yaml
 
 Assemblies: OpenRA.Mods.AS.dll, OpenRA.Mods.CA.dll, OpenRA.Mods.Cameo.dll, OpenRA.Mods.Cnc.dll, OpenRA.Mods.D2k.dll, OpenRA.Mods.Common.dll
 
 ChromeLayout:
+	ca|chrome/custom-faction.yaml
 	common|chrome/ingame.yaml
 	common|chrome/ingame-chat.yaml
 	common|chrome/ingame-transients.yaml
@@ -263,12 +333,13 @@ ChromeLayout:
 	common|chrome/gamesave-browser.yaml
 	ca|chrome/gamesave-loading.yaml
 	common|chrome/dropdowns.yaml
+	ca|chrome/battlefield-news.yaml
 	common|chrome/musicplayer.yaml
 	ca|chrome/tooltips.yaml
 	common|chrome/assetbrowser.yaml
 	common|chrome/missionbrowser.yaml
 	common|chrome/confirmation-dialogs.yaml
-	common|chrome/editor.yaml
+	ca|chrome/editor.yaml
 	common|chrome/playerprofile.yaml
 	common|chrome/text-notifications.yaml
 
@@ -334,7 +405,7 @@ LoadScreen: FitImageLoadScreen
 
 ServerTraits:
 	LobbyCommands
-	SkirmishLogic
+	CustomFactionSkirmishLogic
 	PlayerPinger:
 		ConnTimeout: 500000
 	MasterServerPinger
@@ -382,8 +453,12 @@ Missions:
 	ca|missions.yaml
 
 MapGrid:
-	TileSize: 48,48
-	Type: Rectangular
+	Type: RectangularIsometric
+	TileSize: 128,64
+	EnableDepthBuffer: False
+	DefaultSubCell: 2
+	MaximumTerrainHeight: 16
+	SubCellOffsets: 0,0,0, -256,128,0, 0,-128,0, 256,128,0
 
 WorldViewportSizes:
 	DefaultScale: 0.5
@@ -396,7 +471,7 @@ SupportsMapsFrom: ca, ra, cnc
 
 SoundFormats: Aud, Wav, Mp3
 
-SpriteFormats: ShpD2, R8, ShpTD, TmpRA, TmpTD, ShpTS, PngSheet
+SpriteFormats: ShpD2, ShpTD, TmpRA, TmpTD, TmpTS, ShpTS, R8, PngSheet
 
 SpriteSequenceFormat: ClassicTilesetSpecificSpriteSequence
 

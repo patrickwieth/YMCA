@@ -1,5 +1,6 @@
 ^BaseWorld:
 	Inherits: ^Palettes
+	TiberiumResourceCompatibility:
 	AlwaysVisible:
 	ActorMap:
 	ScreenMap:
@@ -18,6 +19,8 @@
 		SharesCell: true
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 90
+			Sand: 80
 			Rough: 90
 			Road: 110
 			Bridge: 100
@@ -33,6 +36,8 @@
 		SharesCell: true
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 90
+			Sand: 80
 			Rough: 90
 			Road: 110
 			Bridge: 100
@@ -47,6 +52,8 @@
 		Crushes: mine, crate, beacon
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 75
+			Sand: 50
 			Rough: 75
 			Road: 125
 			Bridge: 125
@@ -61,6 +68,8 @@
 		Crushes: wall, mine, crate, infantry, beacon, lightwall
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 88
+			Sand: 45
 			Rough: 88
 			Road: 120
 			Bridge: 110
@@ -75,6 +84,8 @@
 		Crushes: wall, mine, crate, beacon, lightwall
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 88
+			Sand: 88
 			Rough: 88
 			Road: 125
 			Bridge: 125
@@ -89,6 +100,8 @@
 		Crushes: wall, infantry, mine, crate, beacon, lightwall
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 88
+			Sand: 88
 			Rough: 88
 			Road: 125
 			Bridge: 125
@@ -103,6 +116,8 @@
 		Crushes: wall, infantry, mine, crate, heavywall, lightwall, beacon
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 88
+			Sand: 88
 			Rough: 88
 			Road: 125
 			Bridge: 125
@@ -117,6 +132,8 @@
 		Crushes: wall, infantry, tank, mine, crate, heavywall, lightwall, beacon
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 88
+			Sand: 88
 			Rough: 88
 			Road: 125
 			Bridge: 125
@@ -139,6 +156,7 @@
 		Crushes: crate, mine
 		TerrainSpeeds:
 			Water: 100
+			Sand: 70
 			Beach: 70
 			Ford: 70
 			Bridge: 100
@@ -148,6 +166,8 @@
 		Crushes: wall, infantry, mine, crate, beacon, lightwall
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 88
+			Sand: 88
 			Rough: 88
 			Road: 125
 			Bridge: 125
@@ -164,6 +184,8 @@
 		Crushes: mine, crate, beacon
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 88
+			Sand: 88
 			Rough: 88
 			Road: 125
 			Bridge: 125
@@ -180,6 +202,8 @@
 		Crushes: wall, infantry, mine, crate, beacon, lightwall
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 88
+			Sand: 88
 			Rough: 88
 			Road: 125
 			Bridge: 125
@@ -195,6 +219,8 @@
 		SharesCell: true
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 100
+			Sand: 100
 			Rough: 100
 			Road: 100
 			Bridge: 100
@@ -219,6 +245,8 @@
 		SharesCell: true
 		TerrainSpeeds:
 			Clear: 100
+			Dirt: 90
+			Sand: 80
 			Rough: 90
 			Road: 110
 			Bridge: 100
@@ -230,10 +258,14 @@
 			Beach: 80
 			Water: 50
 	TerrainRenderer:
+	RubberduckMaterialTransitions:
 	ShroudRenderer:
-		FogVariants: shroud
-		Index: 255, 16, 32, 48, 64, 80, 96, 112, 128, 144, 160, 176, 192, 208, 224, 240, 20, 40, 56, 65, 97, 130, 148, 194, 24, 33, 66, 132, 28, 41, 67, 134, 1, 2, 4, 8, 3, 6, 12, 9, 7, 14, 13, 11, 5, 10, 15, 255
-		UseExtendedIndex: true
+		ShroudVariants: shroud
+		FogVariants: fog
+		Index: 12, 9, 6, 3, 11, 7, 13, 14, 4, 8, 2, 1
+		UseExtendedIndex: false
+		OverrideFullShroud: shroudfull
+		OverrideFullFog: fogfull
 	FactionCA@random:
 		Name: Any
 		InternalName: Random
@@ -306,14 +338,6 @@
 		Description: world-baseworld.factionca-at-randomnotchina-description
 	ResourceRenderer:
 		ResourceTypes:
-			Ore:
-				Sequences: gold01, gold02, gold03, gold04
-				Palette: player
-				Name: Valuable Minerals
-			Gems:
-				Sequences: gem01, gem02, gem03, gem04
-				Palette: player
-				Name: Valuable Minerals
 			Tiberium:
 				Sequences: ti1,ti2,ti3,ti4,ti5,ti6,ti7,ti8,ti9,ti10,ti11,ti12
 				Palette: tiberiumpalette
@@ -323,9 +347,11 @@
 				Palette: bluetiberium
 				Name: Azure Tiberium
 	TerrainLighting:
+	TiberiumTerrainLight:
 
 World:
 	Inherits: ^BaseWorld
+	ExtendedWorldZoom:
 	ChatCommands:
 	DevCommands:
 	DebugVisualizationCommands:
@@ -343,7 +369,7 @@ World:
 		Bridges: bridge1, bridge2, br1, br2, br3, sbridge1, sbridge2, sbridge3, sbridge4, sbridge5, brg1, brg2, brg3, brv1, brv2, brv3, brh1, brh2, brh3
 	CustomTerrainDebugOverlay:
 	CrateSpawner:
-		DeliveryAircraft: c17
+		DeliveryAircraft: c17.crate
 		QuantizedFacings: 16
 		Minimum: 1
 		Maximum: 5
@@ -353,6 +379,7 @@ World:
 		CheckboxDisplayOrder: 1
 		CheckboxEnabled: true
 	SmudgeLayer@SCORCH:
+		Palette: legacy-smudge
 		Type: Scorch
 		Sequence: scorches
 		SmokeChance: 35
@@ -360,6 +387,7 @@ World:
 		SmokeSequences: medium_flame, small_flame, smoke
 		MaxSmokeOffsetDistance: 213
 	SmudgeLayer@SCORCHNF:
+		Palette: legacy-smudge
 		Type: Scorch-NoFlame
 		Sequence: scorches
 		SmokeChance: 35
@@ -367,6 +395,7 @@ World:
 		SmokeSequences: smoke
 		MaxSmokeOffsetDistance: 213
 	SmudgeLayer@SCORCHBLACK:
+		Palette: legacy-smudge
 		Type: Scorch-Black
 		Sequence: scorches
 		SmokeChance: 35
@@ -375,6 +404,7 @@ World:
 		MaxSmokeOffsetDistance: 213
 		SmokePalette: scrineffect
 	SmudgeLayer@CRATER:
+		Palette: legacy-smudge
 		Type: Crater
 		Sequence: craters
 		SmokeChance: 25
@@ -383,26 +413,17 @@ World:
 		MaxSmokeOffsetDistance: 213
 	ResourceLayer:
 		RecalculateResourceDensity: true
+		# Legacy map indices are normalized before the resource layer loads.
 		ResourceTypes:
-			Ore:
-				ResourceIndex: 1
-				TerrainType: Ore
-				AllowedTerrainTypes: Clear, Road
-				MaxDensity: 12
-			Gems:
-				ResourceIndex: 2
-				TerrainType: Gems
-				AllowedTerrainTypes: Clear, Road
-				MaxDensity: 3
 			Tiberium:
 				ResourceIndex: 3
 				TerrainType: Tiberium
-				AllowedTerrainTypes: Clear, Road
+				AllowedTerrainTypes: Clear, Road, Dirt
 				MaxDensity: 12
 			BlueTiberium:
 				ResourceIndex: 4
 				TerrainType: BlueTiberium
-				AllowedTerrainTypes: Clear, Road
+				AllowedTerrainTypes: Clear, Road, Dirt
 				MaxDensity: 12
 	ResourceClaimLayer:
 	TintedCellsLayer@RAD:
@@ -439,7 +460,7 @@ World:
 	SpawnStartingUnits:
 		DropdownDisplayOrder: 1
 	NukularDoubleStartingUnits:
-	PathFinder:
+	PlateauPathFinder:
 	ValidateOrder:
 	DebugPauseState:
 	RadarPings:
@@ -515,25 +536,15 @@ EditorWorld:
 	EditorResourceLayer:
 		RecalculateResourceDensity: true
 		ResourceTypes:
-			Ore:
-				ResourceIndex: 1
-				TerrainType: Ore
-				AllowedTerrainTypes: Clear, Road
-				MaxDensity: 12
-			Gems:
-				ResourceIndex: 2
-				TerrainType: Gems
-				AllowedTerrainTypes: Clear, Road
-				MaxDensity: 3
 			Tiberium:
 				ResourceIndex: 3
 				TerrainType: Tiberium
-				AllowedTerrainTypes: Clear, Road
+				AllowedTerrainTypes: Clear, Road, Dirt
 				MaxDensity: 12
 			BlueTiberium:
 				ResourceIndex: 4
 				TerrainType: BlueTiberium
-				AllowedTerrainTypes: Clear, Road
+				AllowedTerrainTypes: Clear, Road, Dirt
 				MaxDensity: 12
 	LoadWidgetAtGameStart:
 	EditorActionManager:

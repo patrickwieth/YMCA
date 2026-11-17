@@ -26,6 +26,9 @@ namespace OpenRA.Mods.CA.Traits.Render
 
 		public IEnumerable<IActorPreview> RenderPreviewSprites(ActorPreviewInitializer init, string image, int facings, PaletteReference p)
 		{
+			if (!EnabledByDefault)
+				yield break;
+
 			var anim = new Animation(init.World, image);
 			anim.PlayFetchIndex(RenderSprites.NormalizeSequence(anim, init.GetDamageState(), Sequence), () => 0);
 

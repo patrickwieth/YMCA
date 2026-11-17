@@ -1,0 +1,59 @@
+ReloadDelay: 120
+Range: 300c0
+MinRange: 3c0
+Report: icbm1.aud
+Projectile: MissileCA
+	Blockable: false
+	Shadow: true
+	Inaccuracy: 0
+	Image: emp-launch-missile
+	Palette: effect
+	IsPlayerPalette: false
+	TrailImage: smokey2
+	TrailPalette: tseffect-ignore-lighting-alpha75
+	Speed: 300
+	LockOnInaccuracy: 0
+	MinimumLaunchAngle: 72
+	MaximumLaunchAngle: 72
+	MinimumLaunchSpeed: 180
+	MaximumLaunchSpeed: 180
+	Acceleration: 12
+	HorizontalRateOfTurn: 32
+	VerticalRateOfTurn: 24
+	HomingActivationDelay: 6
+	InitializeFacingFromVelocity: true
+	CruiseAltitude: 4c0
+	RangeLimit: 320c0
+	TrailInterval: 2
+Warhead@1Dam: SpreadDamage
+	Range: 0, 1c1, 2c1, 3c1, 3c512, 4c1, 4c512
+	Damage: 900
+	Falloff: 1000, 368, 135, 90, 68, 37, 10
+	DamageTypes: Prone50Percent, TriggerProne, ElectricityDeath
+Warhead@2Dam: SpreadDamage
+	Range: 1c0
+	Damage: 3000
+	Falloff: 1000
+	DamageTypes: Prone50Percent, TriggerProne, ExplosionDeath
+Warhead@2Eff: CreateEffect
+	ExplosionPalette: tseffect-ignore-lighting-alpha75
+	Explosions: pulse_explosion
+	ImpactSounds: empexpl.aud
+Warhead@emp: GrantExternalCondition
+	Range: 5c0
+	Duration: 600
+	Condition: empdisable
+	ValidTargets: Ground, Vehicle, Air
+Warhead@2Smu_impact: LeaveSmudge
+	SmudgeType: Crater
+Warhead@3Smu_area: LeaveSmudge
+	SmudgeType: Scorch
+	InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Size: 1
+	Delay: 3
+Warhead@4Smu_area2: LeaveSmudge
+	SmudgeType: Scorch
+	InvalidTargets: Vehicle, Structure, Wall, Husk, Trees
+	Size: 2,1
+	Delay: 6
+

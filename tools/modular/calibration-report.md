@@ -1,0 +1,270 @@
+# Vehicle calibration report
+
+EXPERIMENTAL scalar fit, not a complete gameplay-equivalence test.
+Legacy target source blocks audited at 9d8a9dec. Rows are independent candidates.
+Base states without isotope stability, horde, uranium or veterancy bonuses. Isotope stability now applies 90% received damage as well as death-explosion suppression; not modeled as extra HP.
+CP, tech and catalog columns are NEW design values, not audited legacy targets.
+
+Global credit value per CP: 300 (experimental).
+
+## Existing vehicle vs configured vehicle
+
+| Reference / configured candidate | Credits old -> new | HP old -> new | Speed old -> new | New CP / catalog / tech | Hardware x manufacturing - CP = price |
+|---|---|---|---|---|---|
+| Hum-Vee baseline | 400 -> 400 (+0.0%) | 15000 -> 15000 (+0.0%) | 157 -> 157 (+0.0%) | 0 / 1 / 1 | 400 x 1 - 0 = 400 |
+| Buggy baseline | 350 -> 350 (+0.0%) | 14000 -> 14000 (+0.0%) | 157 -> 157 (+0.0%) | 0 / 1 / 1 | 350 x 1 - 0 = 350 |
+| Nod Light Tank baseline | 625 -> 625 (+0.0%) | 41250 -> 41250 (+0.0%) | 100 -> 100 (+0.0%) | 0 / 1 / 1 | 625 x 1 - 0 = 625 |
+| T-34 baseline | 600 -> 600 (+0.0%) | 42000 -> 42000 (+0.0%) | 100 -> 100 (+0.0%) | 0 / 1 / 1 | 600 x 1 - 0 = 600 |
+| Devil Tank baseline | 700 -> 700 (+0.0%) | 45000 -> 45000 (+0.0%) | 90 -> 90 (+0.0%) | 0 / 1 / 1 | 700 x 1 - 0 = 700 |
+| GDI Battle Tank baseline | 900 -> 900 (+0.0%) | 52000 -> 52000 (+0.0%) | 82 -> 82 (+0.0%) | 0 / 1 / 1 | 900 x 1 - 0 = 900 |
+| Allied Medium Tank prototype | 800 -> 800 (+0.0%) | 45000 -> 45000 (+0.0%) | 82 -> 82 (+0.0%) | 0 / 1 / 1 | 800 x 1 - 0 = 800 |
+| Challenger baseline | 800 -> 800 (+0.0%) | 45000 -> 45000 (+0.0%) | 82 -> 82 (+0.0%) | 0 / 1 / 1 | 800 x 1 - 0 = 800 |
+| Leclerc baseline | 800 -> 800 (+0.0%) | 45000 -> 45000 (+0.0%) | 82 -> 82 (+0.0%) | 0 / 1 / 1 | 800 x 1 - 0 = 800 |
+| Leopard baseline | 800 -> 800 (+0.0%) | 45000 -> 45000 (+0.0%) | 82 -> 82 (+0.0%) | 0 / 1 / 1 | 800 x 1 - 0 = 800 |
+| Soviet Heavy Tank baseline | 1100 -> 1100 (+0.0%) | 65000 -> 65000 (+0.0%) | 68 -> 68 (+0.0%) | 0 / 2 / 2 | 1100 x 1 - 0 = 1100 |
+| Allied Artillery baseline | 550 -> 550 (+0.0%) | 10000 -> 10000 (+0.0%) | 56 -> 56 (+0.0%) | 0 / 1 / 1 | 550 x 1 - 0 = 550 |
+| Overlord Gatling | 2000 -> 2000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 54 (-3.6%) | 1 / 5 / 3 | 2300 x 1 - 300 = 2000 |
+| Overlord Gatling PDL | 2800 -> 2650 (-5.4%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 3250 x 1 - 600 = 2650 |
+| Overlord Gatling Reflector | 2000 -> 2000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 2600 x 1 - 600 = 2000 |
+| Overlord Bunker | 3000 -> 3000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 1 / 5 / 3 | 3300 x 1 - 300 = 3000 |
+| Overlord Bunker PDL | 3600 -> 3650 (+1.4%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 4250 x 1 - 600 = 3650 |
+| Overlord Bunker Reflector | 3000 -> 3000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 3600 x 1 - 600 = 3000 |
+| Overlord baseline | 2000 -> 2000 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 0 / 4 / 2 | 2000 x 1 - 0 = 2000 |
+| Overlord Nuclear Shells | 2500 -> 2500 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 1 / 5 / 3 | 2800 x 1 - 300 = 2500 |
+| Overlord Nuclear Shells PDL | 3000 -> 3150 (+5.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 2 / 8 / 3 | 3750 x 1 - 600 = 3150 |
+| Overlord Nuclear Shells Reflector | 2500 -> 2500 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 56 (+0.0%) | 2 / 8 / 3 | 3100 x 1 - 600 = 2500 |
+| Overlord Propaganda | 2200 -> 2200 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 53 (-5.4%) | 1 / 5 / 3 | 2500 x 1 - 300 = 2200 |
+| Overlord Propaganda PDL | 2800 -> 2850 (+1.8%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 3450 x 1 - 600 = 2850 |
+| Overlord Propaganda Reflector | 2200 -> 2200 (+0.0%) | 95000 -> 95000 (+0.0%) | 56 -> 55 (-1.8%) | 2 / 8 / 3 | 2800 x 1 - 600 = 2200 |
+| Dragon Tank | 600 -> 600 (+0.0%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 0 / 1 / 1 | 600 x 1 - 0 = 600 |
+| Dragon Tank PDL | 1200 -> 1250 (+4.2%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 1 / 4 / 3 | 1550 x 1 - 300 = 1250 |
+| Dragon Tank Reflector | 600 -> 600 (+0.0%) | 28000 -> 28000 (+0.0%) | 103 -> 103 (+0.0%) | 1 / 4 / 3 | 900 x 1 - 300 = 600 |
+| Gatling Tank | 800 -> 800 (+0.0%) | 30000 -> 30000 (+0.0%) | 108 -> 108 (+0.0%) | 0 / 1 / 1 | 800 x 1 - 0 = 800 |
+| Gatling Tank PDL | 1400 -> 1450 (+3.6%) | 30000 -> 30000 (+0.0%) | 108 -> 108 (+0.0%) | 1 / 4 / 3 | 1750 x 1 - 300 = 1450 |
+| Gatling Tank Reflector | 800 -> 800 (+0.0%) | 30000 -> 30000 (+0.0%) | 108 -> 108 (+0.0%) | 1 / 4 / 3 | 1100 x 1 - 300 = 800 |
+| Battlemaster Nuclear Shells | 950 -> 950 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 1 / 2 / 1 | 1250 x 1 - 300 = 950 |
+| Battlemaster Nuclear Shells PDL | 1600 -> 1600 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 2 / 5 / 3 | 2200 x 1 - 600 = 1600 |
+| Battlemaster Nuclear Shells Reflector | 950 -> 950 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 2 / 5 / 3 | 1550 x 1 - 600 = 950 |
+| Battlemaster Mass Production | 600 -> 602.5 (+0.4%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 1 / 1 / 1 | 950 x 0.95 - 300 = 602.5 |
+| Battlemaster Mass Production PDL | 1000 -> 1205 (+20.5%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 2 / 4 / 3 | 1900 x 0.95 - 600 = 1205 |
+| Battlemaster Mass Production Reflector | 600 -> 587.5 (-2.1%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 2 / 4 / 3 | 1250 x 0.95 - 600 = 587.5 |
+| Battlemaster Autoloader | 950 -> 950 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 1 / 2 / 1 | 1250 x 1 - 300 = 950 |
+| Battlemaster Autoloader PDL | 1600 -> 1600 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 2 / 5 / 3 | 2200 x 1 - 600 = 1600 |
+| Battlemaster Autoloader Reflector | 950 -> 950 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 2 / 5 / 3 | 1550 x 1 - 600 = 950 |
+| Battlemaster baseline | 950 -> 950 (+0.0%) | 40000 -> 40000 (+0.0%) | 100 -> 100 (+0.0%) | 0 / 1 / 1 | 950 x 1 - 0 = 950 |
+| Battlemaster nuclear drive | 950 -> 950 (+0.0%) | 40000 -> 40000 (+0.0%) | 125 -> 125 (+0.0%) | 1 / 2 / 2 | 1250 x 1 - 300 = 950 |
+| Juggernaut baseline | 2000 -> 2000 (+0.0%) | 60000 -> 60000 (+0.0%) | 50 -> 50 (+0.0%) | 0 / 3 / 3 | 2000 x 1 - 0 = 2000 |
+| Juggernaut EMP / baseline | 2000 -> 1800 (-10.0%) | 60000 -> 60000 (+0.0%) | 50 -> 45 (-10.0%) | 1 / 4 / 3 | 2100 x 1 - 300 = 1800 |
+| Juggernaut EMP / efficient | 2000 -> 2000 (+0.0%) | 60000 -> 60000 (+0.0%) | 50 -> 50 (+0.0%) | 1 / 5 / 3 | 2300 x 1 - 300 = 2000 |
+| Heavy Tesla Tank baseline | 1350 -> 1350 (+0.0%) | 48000 -> 48000 (+0.0%) | 100 -> 100 (+0.0%) | 0 / 3 / 2 | 1350 x 1 - 0 = 1350 |
+
+## Running gear (separate component)
+
+Hull defaults are selected unless the design explicitly overrides running_gear.
+No automatic tracked/wheeled conversion: compatibility and artwork must be approved first.
+Turn rate is the minimum of hull and running-gear limits. Terrain profiles reuse world.yaml.
+
+| Design | Gear | Engine locomotor | Body turn rate |
+|---|---|---|---:|
+| Hum-Vee baseline | wheels-light | wheeled | 80 |
+| Buggy baseline | wheels-light | wheeled | 48 |
+| Nod Light Tank baseline | tracks-standard | tracked | 48 |
+| T-34 baseline | tracks-standard | tracked | 48 |
+| Devil Tank baseline | tracks-standard | tracked | 48 |
+| GDI Battle Tank baseline | tracks-standard | tracked | 48 |
+| Allied Medium Tank prototype | tracks-standard | tracked | 48 |
+| Challenger baseline | tracks-standard | tracked | 48 |
+| Leclerc baseline | tracks-standard | tracked | 48 |
+| Leopard baseline | tracks-standard | tracked | 48 |
+| Soviet Heavy Tank baseline | tracks-standard | tracked | 48 |
+| Allied Artillery baseline | tracks-light-artillery | lighttracked | 16 |
+| Overlord Mortar Roof / draft | tracks-superheavy | sheavytracked | 8 |
+| Overlord Mortar Roof PDL / draft | tracks-superheavy | sheavytracked | 8 |
+| Overlord Mortar Roof Reflector / draft | tracks-superheavy | sheavytracked | 8 |
+| Overlord Flame Roof / draft | tracks-superheavy | sheavytracked | 8 |
+| Overlord Flame Roof PDL / draft | tracks-superheavy | sheavytracked | 8 |
+| Overlord Flame Roof Reflector / draft | tracks-superheavy | sheavytracked | 8 |
+| Overlord Gatling | tracks-superheavy | sheavytracked | 8 |
+| Overlord Gatling PDL | tracks-superheavy | sheavytracked | 8 |
+| Overlord Gatling Reflector | tracks-superheavy | sheavytracked | 8 |
+| Overlord Bunker / mixed crew | tracks-superheavy | sheavytracked | 8 |
+| Overlord Bunker / empty | tracks-superheavy | sheavytracked | 8 |
+| Overlord Bunker / partial crew | tracks-superheavy | sheavytracked | 8 |
+| Overlord Bunker | tracks-superheavy | sheavytracked | 8 |
+| Overlord Bunker PDL | tracks-superheavy | sheavytracked | 8 |
+| Overlord Bunker Reflector | tracks-superheavy | sheavytracked | 8 |
+| Overlord baseline | tracks-superheavy | sheavytracked | 8 |
+| Overlord Nuclear Shells | tracks-superheavy | sheavytracked | 8 |
+| Overlord Nuclear Shells PDL | tracks-superheavy | sheavytracked | 8 |
+| Overlord Nuclear Shells Reflector | tracks-superheavy | sheavytracked | 8 |
+| Overlord Propaganda | tracks-superheavy | sheavytracked | 8 |
+| Overlord Propaganda PDL | tracks-superheavy | sheavytracked | 8 |
+| Overlord Propaganda Reflector | tracks-superheavy | sheavytracked | 8 |
+| Dragon Tank | tracks-standard | tracked | 48 |
+| Dragon Tank PDL | tracks-standard | tracked | 48 |
+| Dragon Tank Reflector | tracks-standard | tracked | 48 |
+| Gatling Tank | tracks-standard | tracked | 48 |
+| Gatling Tank PDL | tracks-standard | tracked | 48 |
+| Gatling Tank Reflector | tracks-standard | tracked | 48 |
+| Battlemaster Nuclear Shells | tracks-standard | tracked | 48 |
+| Battlemaster Nuclear Shells PDL | tracks-standard | tracked | 48 |
+| Battlemaster Nuclear Shells Reflector | tracks-standard | tracked | 48 |
+| Battlemaster Mass Production | tracks-standard | tracked | 48 |
+| Battlemaster Mass Production PDL | tracks-standard | tracked | 48 |
+| Battlemaster Mass Production Reflector | tracks-standard | tracked | 48 |
+| Battlemaster Autoloader | tracks-standard | tracked | 48 |
+| Battlemaster Autoloader PDL | tracks-standard | tracked | 48 |
+| Battlemaster Autoloader Reflector | tracks-standard | tracked | 48 |
+| Battlemaster baseline | tracks-standard | tracked | 48 |
+| Battlemaster nuclear drive | tracks-standard | tracked | 48 |
+| Battlemaster PDL / baseline generator | tracks-standard | tracked | 48 |
+| Battlemaster PDL / efficient generator | tracks-standard | tracked | 48 |
+| Battlemaster reflector / efficient | tracks-standard | tracked | 48 |
+| Battlemaster PDL + reflector / efficient | tracks-standard | tracked | 48 |
+| Juggernaut baseline | walker-heavy | sheavytracked | 16 |
+| Juggernaut EMP / baseline | walker-heavy | sheavytracked | 16 |
+| Juggernaut EMP / efficient | walker-heavy | sheavytracked | 16 |
+| Heavy Tesla Tank baseline | tracks-standard | tracked | 48 |
+
+## Hardware cost breakdown
+
+Armor modifies chassis price before hardware is summed. Credits are not deducted per component.
+
+| Reference candidate | Hardware contributions (credits) | Total - CP credit = price |
+|---|---|---|
+| Hum-Vee baseline | humvee-hull: 125; diesel-light: 60; baseline-generator: 0; scout-mg-mount: 25; scout-mg: 65; scout-mg-rounds: 25; scout-sensors: 50; wheels-light: 50 | 400 x 1 - 0 x 300 = 400 |
+| Buggy baseline | buggy-hull: 75; diesel-light: 60; baseline-generator: 0; scout-mg-mount: 25; scout-mg: 65; scout-mg-rounds: 25; scout-sensors: 50; wheels-light: 50 | 350 x 1 - 0 x 300 = 350 |
+| Nod Light Tank baseline | nod-light-hull: 125; diesel: 100; baseline-generator: 0; light-cannon-mount: 75; light-cannon: 175; light-tank-shell: 50; tracks-standard: 100 | 625 x 1 - 0 x 300 = 625 |
+| T-34 baseline | t34-hull: 100; diesel: 100; baseline-generator: 0; light-cannon-mount: 75; light-cannon: 175; light-tank-shell: 50; tracks-standard: 100 | 600 x 1 - 0 x 300 = 600 |
+| Devil Tank baseline | devil-hull: 200; diesel: 100; baseline-generator: 0; light-cannon-mount: 75; light-cannon: 175; light-tank-shell: 50; tracks-standard: 100 | 700 x 1 - 0 x 300 = 700 |
+| GDI Battle Tank baseline | gdi-battle-hull: 350; diesel: 100; baseline-generator: 0; medium-cannon-mount: 100; medium-cannon: 200; medium-tank-shell: 50; tracks-standard: 100 | 900 x 1 - 0 x 300 = 900 |
+| Allied Medium Tank prototype | allied-medium-hull: 250; diesel: 100; baseline-generator: 0; medium-cannon-mount: 100; medium-cannon: 200; medium-tank-shell: 50; tracks-standard: 100 | 800 x 1 - 0 x 300 = 800 |
+| Challenger baseline | allied-medium-hull: 250; diesel: 100; baseline-generator: 0; medium-cannon-mount: 100; medium-cannon: 200; medium-tank-shell: 50; tracks-standard: 100 | 800 x 1 - 0 x 300 = 800 |
+| Leclerc baseline | allied-medium-hull: 250; diesel: 100; baseline-generator: 0; medium-cannon-mount: 100; medium-cannon: 200; medium-tank-shell: 50; tracks-standard: 100 | 800 x 1 - 0 x 300 = 800 |
+| Leopard baseline | allied-medium-hull: 250; diesel: 100; baseline-generator: 0; medium-cannon-mount: 100; medium-cannon: 200; medium-tank-shell: 50; tracks-standard: 100 | 800 x 1 - 0 x 300 = 800 |
+| Soviet Heavy Tank baseline | soviet-heavy-hull: 450; diesel: 100; baseline-generator: 0; soviet-twin-mount: 200; medium-cannon: 200; medium-tank-shell: 50; tracks-standard: 100 | 1100 x 1 - 0 x 300 = 1100 |
+| Allied Artillery baseline | field-artillery-hull: 75; diesel: 100; baseline-generator: 0; field-artillery-mount: 50; field-artillery: 200; field-artillery-he: 50; tracks-light-artillery: 75 | 550 x 1 - 0 x 300 = 550 |
+| Overlord Gatling | overlord-chassis: 750; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; tracks-superheavy: 250; gatling-roof-carrier: 50; gatling-gun: 150; gatling-rounds: 100 | 2300 x 1 - 1 x 300 = 2000 |
+| Overlord Gatling PDL | overlord-chassis: 750; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; pdl: 650; tracks-superheavy: 250; gatling-roof-carrier: 50; gatling-gun: 150; gatling-rounds: 100 | 3250 x 1 - 2 x 300 = 2650 |
+| Overlord Gatling Reflector | overlord-chassis: 750; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; tracks-superheavy: 250; gatling-roof-carrier: 50; gatling-gun: 150; gatling-rounds: 100 | 2600 x 1 - 2 x 300 = 2000 |
+| Overlord Bunker | overlord-chassis: 750; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 100; tracks-superheavy: 250; start crew: 1200 | 3300 x 1 - 1 x 300 = 3000 |
+| Overlord Bunker PDL | overlord-chassis: 750; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 100; pdl: 650; tracks-superheavy: 250; start crew: 1200 | 4250 x 1 - 2 x 300 = 3650 |
+| Overlord Bunker Reflector | overlord-chassis: 750; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; firing-bunker: 100; tracks-superheavy: 250; start crew: 1200 | 3600 x 1 - 2 x 300 = 3000 |
+| Overlord baseline | overlord-chassis: 750; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; tracks-superheavy: 250 | 2000 x 1 - 0 x 300 = 2000 |
+| Overlord Nuclear Shells | overlord-chassis: 750; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950; tracks-superheavy: 250 | 2800 x 1 - 1 x 300 = 2500 |
+| Overlord Nuclear Shells PDL | overlord-chassis: 750; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950; pdl: 650; tracks-superheavy: 250 | 3750 x 1 - 2 x 300 = 3150 |
+| Overlord Nuclear Shells Reflector | overlord-chassis: 750; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-nuclear-shell: 950; tracks-superheavy: 250 | 3100 x 1 - 2 x 300 = 2500 |
+| Overlord Propaganda | overlord-chassis: 750; diesel-heavy: 300; baseline-generator: 0; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; propaganda-speaker: 500; tracks-superheavy: 250 | 2500 x 1 - 1 x 300 = 2200 |
+| Overlord Propaganda PDL | overlord-chassis: 750; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; propaganda-speaker: 500; pdl: 650; tracks-superheavy: 250 | 3450 x 1 - 2 x 300 = 2850 |
+| Overlord Propaganda Reflector | overlord-chassis: 750; diesel-heavy-boost: 400; efficient-generator: 200; heavy-twin-turret: 250; overlord-cannon: 300; heavy-shell: 150; propaganda-speaker: 500; tracks-superheavy: 250 | 2800 x 1 - 2 x 300 = 2200 |
+| Dragon Tank | dragon-chassis: 150; diesel: 100; baseline-generator: 0; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50; tracks-standard: 100 | 600 x 1 - 0 x 300 = 600 |
+| Dragon Tank PDL | dragon-chassis: 150; diesel-large: 200; efficient-generator: 200; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50; pdl: 650; tracks-standard: 100 | 1550 x 1 - 1 x 300 = 1250 |
+| Dragon Tank Reflector | dragon-chassis: 150; diesel-large: 200; efficient-generator: 200; flame-turret: 75; dragon-flamer: 125; flame-fuel: 50; tracks-standard: 100 | 900 x 1 - 1 x 300 = 600 |
+| Gatling Tank | gatling-chassis: 250; diesel: 100; baseline-generator: 0; gatling-turret: 100; gatling-gun: 150; gatling-rounds: 100; tracks-standard: 100 | 800 x 1 - 0 x 300 = 800 |
+| Gatling Tank PDL | gatling-chassis: 250; diesel-large: 200; efficient-generator: 200; gatling-turret: 100; gatling-gun: 150; gatling-rounds: 100; pdl: 650; tracks-standard: 100 | 1750 x 1 - 1 x 300 = 1450 |
+| Gatling Tank Reflector | gatling-chassis: 250; diesel-large: 200; efficient-generator: 200; gatling-turret: 100; gatling-gun: 150; gatling-rounds: 100; tracks-standard: 100 | 1100 x 1 - 1 x 300 = 800 |
+| Battlemaster Nuclear Shells | battlemaster: 400; diesel: 100; baseline-generator: 0; cannon-turret: 100; cannon: 200; nuclear-shell: 350; tracks-standard: 100 | 1250 x 1 - 1 x 300 = 950 |
+| Battlemaster Nuclear Shells PDL | battlemaster: 400; diesel-large: 200; efficient-generator: 200; cannon-turret: 100; cannon: 200; nuclear-shell: 350; pdl: 650; tracks-standard: 100 | 2200 x 1 - 2 x 300 = 1600 |
+| Battlemaster Nuclear Shells Reflector | battlemaster: 400; diesel-large: 200; efficient-generator: 200; cannon-turret: 100; cannon: 200; nuclear-shell: 350; tracks-standard: 100 | 1550 x 1 - 2 x 300 = 950 |
+| Battlemaster Mass Production | battlemaster: 400; diesel: 100; baseline-generator: 0; cannon-turret: 100; cannon: 200; shell: 50; mass-production: 0; tracks-standard: 100 | 950 x 0.95 - 1 x 300 = 602.5 |
+| Battlemaster Mass Production PDL | battlemaster: 400; diesel-large: 200; efficient-generator: 200; cannon-turret: 100; cannon: 200; shell: 50; pdl: 650; mass-production: 0; tracks-standard: 100 | 1900 x 0.95 - 2 x 300 = 1205 |
+| Battlemaster Mass Production Reflector | battlemaster: 400; diesel-large: 200; efficient-generator: 200; cannon-turret: 100; cannon: 200; shell: 50; mass-production: 0; tracks-standard: 100 | 1250 x 0.95 - 2 x 300 = 587.5 |
+| Battlemaster Autoloader | battlemaster: 400; diesel: 100; baseline-generator: 0; autoloader-turret: 400; cannon: 200; shell: 50; tracks-standard: 100 | 1250 x 1 - 1 x 300 = 950 |
+| Battlemaster Autoloader PDL | battlemaster: 400; diesel-large: 200; efficient-generator: 200; autoloader-turret: 400; cannon: 200; shell: 50; pdl: 650; tracks-standard: 100 | 2200 x 1 - 2 x 300 = 1600 |
+| Battlemaster Autoloader Reflector | battlemaster: 400; diesel-large: 200; efficient-generator: 200; autoloader-turret: 400; cannon: 200; shell: 50; tracks-standard: 100 | 1550 x 1 - 2 x 300 = 950 |
+| Battlemaster baseline | battlemaster: 400; diesel: 100; baseline-generator: 0; cannon-turret: 100; cannon: 200; shell: 50; tracks-standard: 100 | 950 x 1 - 0 x 300 = 950 |
+| Battlemaster nuclear drive | battlemaster: 400; nuclear: 400; baseline-generator: 0; cannon-turret: 100; cannon: 200; shell: 50; tracks-standard: 100 | 1250 x 1 - 1 x 300 = 950 |
+| Juggernaut baseline | juggernaut: 800; diesel: 100; baseline-generator: 0; fixed-triple: 300; artillery: 300; artillery-shell: 200; walker-heavy: 300 | 2000 x 1 - 0 x 300 = 2000 |
+| Juggernaut EMP / baseline | juggernaut: 800; diesel: 100; baseline-generator: 0; fixed-triple: 300; artillery: 300; emp-shell: 300; walker-heavy: 300 | 2100 x 1 - 1 x 300 = 1800 |
+| Juggernaut EMP / efficient | juggernaut: 800; diesel: 100; efficient-generator: 200; fixed-triple: 300; artillery: 300; emp-shell: 300; walker-heavy: 300 | 2300 x 1 - 1 x 300 = 2000 |
+| Heavy Tesla Tank baseline | heavy-tesla: 500; diesel: 100; baseline-generator: 0; twin-coil: 200; tesla: 350; discharge: 100; tracks-standard: 100 | 1350 x 1 - 0 x 300 = 1350 |
+
+## Selectable starting crew
+
+Empty bunker and selected infantry are charged separately, exactly once.
+Manufacturing currently scales loaded package cost too; personnel treatment remains provisional.
+
+| Design | Starting units | Crew cost | Crew mass kg |
+|---|---|---:|---:|
+| Overlord Bunker / mixed crew | 2 x che3, 2 x che1 | 760 | 400 |
+| Overlord Bunker / empty | empty | 0 | 0 |
+| Overlord Bunker / partial crew | 2 x minigunner | 400 | 200 |
+| Overlord Bunker | 4 x che3 | 1200 | 400 |
+| Overlord Bunker PDL | 4 x che3 | 1200 | 400 |
+| Overlord Bunker Reflector | 4 x che3 | 1200 | 400 |
+
+## Audited Battlemaster variant fields (old -> configured)
+
+Rule-data comparison only, not engine firing/armor simulation. Damage is the raw warhead value.
+Tech 1 means no explicit tier2/tier3 requirement, not waived factory prerequisites.
+Single-shot interval 0 denotes not applicable, not an audited engine default.
+
+| Design | CP | Tech | Armor | Burst | Shot interval | Reload | Range (cells) | Raw damage |
+|---|---|---|---|---|---|---|---|---|
+| Battlemaster Nuclear Shells | 1 -> 1 | 1 -> 1 | Heavy -> Heavy | 1 -> 1 | 0 -> 0 | 50 -> 50 | 4 -> 4 | 10000 -> 10000 |
+| Battlemaster Nuclear Shells PDL | 2 -> 2 | 3 -> 3 | Heavy -> Heavy | 1 -> 1 | 0 -> 0 | 50 -> 50 | 4 -> 4 | 10000 -> 10000 |
+| Battlemaster Nuclear Shells Reflector | 2 -> 2 | 3 -> 3 | Reflector -> Reflector | 1 -> 1 | 0 -> 0 | 50 -> 50 | 4 -> 4 | 10000 -> 10000 |
+| Battlemaster Mass Production | 1 -> 1 | 1 -> 1 | Heavy -> Heavy | 1 -> 1 | 0 -> 0 | 50 -> 50 | 4 -> 4 | 5000 -> 5000 |
+| Battlemaster Mass Production PDL | 2 -> 2 | 3 -> 3 | Heavy -> Heavy | 1 -> 1 | 0 -> 0 | 50 -> 50 | 4 -> 4 | 5000 -> 5000 |
+| Battlemaster Mass Production Reflector | 2 -> 2 | 3 -> 3 | Reflector -> Reflector | 1 -> 1 | 0 -> 0 | 50 -> 50 | 4 -> 4 | 5000 -> 5000 |
+| Battlemaster Autoloader | 1 -> 1 | 1 -> 1 | Heavy -> Heavy | 3 -> 3 | 5 -> 5 | 50 -> 50 | 4 -> 4 | 5000 -> 5000 |
+| Battlemaster Autoloader PDL | 2 -> 2 | 3 -> 3 | Heavy -> Heavy | 3 -> 3 | 5 -> 5 | 50 -> 50 | 4 -> 4 | 5000 -> 5000 |
+| Battlemaster Autoloader Reflector | 2 -> 2 | 3 -> 3 | Reflector -> Reflector | 3 -> 3 | 5 -> 5 | 50 -> 50 | 4 -> 4 | 5000 -> 5000 |
+
+## Shared defense-package price increments
+
+| Family | PDL increment old / new | Reflector increment old / new |
+|---|---|---|
+| Battlemaster Autoloader | +650 / +650 | +0 / +0 |
+| Battlemaster Nuclear Shells | +650 / +650 | +0 / +0 |
+| Battlemaster Mass Production | +400 / +602.5 | +0 / -15 |
+| Dragon Tank | +600 / +650 | +0 / +0 |
+| Gatling Tank | +600 / +650 | +0 / +0 |
+| Overlord Nuclear Shells | +500 / +650 | +0 / +0 |
+| Overlord Propaganda | +600 / +650 | +0 / +0 |
+| Overlord Bunker | +600 / +650 | +0 / +0 |
+| Overlord Gatling | +800 / +650 | +0 / +0 |
+
+Manufacturing scales hardware increments, never the global CP deduction.
+One shared manufacturing factor still leaves visible residuals against legacy prices.
+
+## Experimental combinations without an exact legacy counterpart
+
+No legacy-equivalence claim. Rows labeled draft explicitly opt into unverified mounting graphics.
+
+| Design | Credits | HP | Speed | Armor | CP / catalog / tech |
+|---|---:|---:|---:|---|---|
+| Overlord Mortar Roof / draft | 2650 | 95000 | 54 | Heavy | 0 / 6 / 3 |
+| Overlord Mortar Roof PDL / draft | 3300 | 95000 | 55 | Heavy | 1 / 9 / 3 |
+| Overlord Mortar Roof Reflector / draft | 2650 | 95000 | 55 | Reflector | 1 / 9 / 3 |
+| Overlord Flame Roof / draft | 2250 | 95000 | 55 | Heavy | 0 / 4 / 2 |
+| Overlord Flame Roof PDL / draft | 2900 | 95000 | 55 | Heavy | 1 / 7 / 3 |
+| Overlord Flame Roof Reflector / draft | 2250 | 95000 | 55 | Reflector | 1 / 7 / 3 |
+| Overlord Bunker / mixed crew | 2560 | 95000 | 55 | Heavy | 1 / 5 / 3 |
+| Overlord Bunker / empty | 1800 | 95000 | 55 | Heavy | 1 / 5 / 3 |
+| Overlord Bunker / partial crew | 2200 | 95000 | 55 | Heavy | 1 / 5 / 3 |
+| Battlemaster PDL / baseline generator | 1300 | 40000 | 76 | Heavy | 1 / 2 / 3 |
+| Battlemaster PDL / efficient generator | 1500 | 40000 | 95 | Heavy | 1 / 3 / 3 |
+| Battlemaster reflector / efficient | 850 | 40000 | 94 | Reflector | 1 / 3 / 3 |
+| Battlemaster PDL + reflector / baseline | INVALID: Generator output exceeded | | | | |
+| Battlemaster PDL + reflector / efficient | 1200 | 40000 | 86 | Reflector | 2 / 4 / 3 |
+
+## Auxiliary weapon data (separate from retained main gun)
+
+Configured template fields, not simulated DPS or an in-game compositing test.
+Gatling columns represent cold ground fire only; its full template also has AA/spin-up.
+
+| Design | Weapon / ammunition | Range / minimum cells | Reload ticks | Burst | Fire delay ticks | Raw damage |
+|---|---|---|---:|---:|---:|---:|
+| Overlord Mortar Roof / draft | roof-mortar / mortar-he | 11 / 1 | 60 | 1 | 15 | 5500 |
+| Overlord Mortar Roof PDL / draft | roof-mortar / mortar-he | 11 / 1 | 60 | 1 | 15 | 5500 |
+| Overlord Mortar Roof Reflector / draft | roof-mortar / mortar-he | 11 / 1 | 60 | 1 | 15 | 5500 |
+| Overlord Flame Roof / draft | dragon-flamer / flame-fuel | 5 / 0 | 45 | 8 | 0 | 2500 |
+| Overlord Flame Roof PDL / draft | dragon-flamer / flame-fuel | 5 / 0 | 45 | 8 | 0 | 2500 |
+| Overlord Flame Roof Reflector / draft | dragon-flamer / flame-fuel | 5 / 0 | 45 | 8 | 0 | 2500 |
+| Overlord Gatling | gatling-gun / gatling-rounds | 6 / 0 | 12 | 1 | 0 | 350 |
+| Overlord Gatling PDL | gatling-gun / gatling-rounds | 6 / 0 | 12 | 1 | 0 | 350 |
+| Overlord Gatling Reflector | gatling-gun / gatling-rounds | 6 / 0 | 12 | 1 | 0 | 350 |
+
+All CP contributions use the same global credit value. No component or design rebates.
+The discount applies to every configuration, including cheaper/slower alternatives.
