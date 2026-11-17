@@ -14,9 +14,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 {
 	// Keep the engine's menu/navigation behavior. The CA layout deliberately uses
 	// YMCA_NEWS_BG instead of its optional NEWS_BG, so only this news loader runs.
-	public sealed class MainMenuLogicCA : MainMenuLogic
+	public class YmcaNewsMainMenuLogic : MainMenuLogic
 	{
-		static readonly Dictionary<string, Task<BattlefieldNewsItem[]>> Downloads = new();
 		static readonly HashSet<string> AnnouncedDownloads = new();
 		readonly ModData modData;
 		readonly ScrollPanelWidget panel;
@@ -28,13 +27,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		bool panelOpen;
 
 		[ObjectCreator.UseCtor]
-		public MainMenuLogicCA(Widget widget, World world, ModData modData)
+		public YmcaNewsMainMenuLogic(Widget widget, World world, ModData modData)
 			: base(widget, world, modData)
 		{
 			this.modData = modData;
 			var background = widget.Get("YMCA_NEWS_BG");
 			background.IsVisible = () => Game.Settings.Game.FetchNews && menuType != MenuType.None && menuType != MenuType.StartupPrompts;
 			button = background.Get<DropDownButtonWidget>("NEWS_BUTTON");
+			background.Get<ButtonWidget>("YMCA_DISCORD_BUTTON").OnClick = () => OpenLink(ReleaseNotesFeed.DiscordUrl);
 			panel = Ui.LoadWidget<ScrollPanelWidget>("YMCA_NEWS_PANEL", null, new WidgetArgs());
 			template = panel.Get("NEWS_ITEM_TEMPLATE");
 			status = panel.Get<LabelWidget>("NEWS_STATUS");
@@ -72,26 +72,25 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			BattlefieldNewsItem[] initial = null;
 			try
 			{
-				using var reader = new StreamReader(modData.DefaultFileSystem.Open("ca|news.yaml"));
-				initial = BattlefieldNewsFeed.Parse(reader.ReadToEnd());
+				using var reader = new StreamReader(modData.DefaultFileSystem.Open("ca|release-notes.json"));
+				initial = ReleaseNotesFeed.Parse(reader.ReadToEnd());
 			}
 			catch (Exception ex) { Log.Write("debug", "Bundled YMCA news could not be loaded: " + ex.Message); }
 
-			var services = modData.Manifest.Get<WebServices>();
-			var cache = Path.Combine(Platform.SupportDir, services.GameNewsFileName);
+			var cache = Path.Combine(Platform.SupportDir, ReleaseNotesFeed.CacheFile);
 			var seenDates = new HashSet<DateTime>();
 			try
 			{
 				if (File.Exists(cache))
 				{
-					initial = BattlefieldNewsFeed.Parse(File.ReadAllText(cache));
+					initial = ReleaseNotesFeed.Parse(File.ReadAllText(cache));
 					seenDates.UnionWith(initial.Select(n => n.Date));
 				}
 			}
 			catch (Exception ex) { Log.Write("debug", "Cached YMCA news could not be loaded: " + ex.Message); }
 
 			Display(initial ?? Array.Empty<BattlefieldNewsItem>());
-			LoadRemote(services.GameNews, cache, seenDates);
+			LoadRemote(ReleaseNotesFeed.Url, cache, seenDates);
 		}
 
 		async void LoadRemote(string url, string cache, HashSet<DateTime> seenDates)
@@ -99,13 +98,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			try
 			{
 				var key = url + "|" + cache;
-				if (!Downloads.TryGetValue(key, out var download))
-				{
-					download = BattlefieldNewsFeed.FetchAsync(url, cache);
-					Downloads.Add(key, download);
-				}
-
-				var news = await download;
+				var news = await ReleaseNotesFeed.FetchAsync(cache);
 				Game.RunAfterTick(() =>
 				{
 					if (disposed)
@@ -121,6 +114,15 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				// Leave cached/bundled news visible on HTTP, network or parsing failures.
 				Log.Write("debug", "YMCA news download failed; keeping offline news: " + ex.Message);
 			}
+			finally
+			{
+				// Pick up edits to the published release notes without rebuilding or restarting.
+				Game.RunAfterTick(() => Game.RunAfterDelay(300000, () =>
+				{
+					if (!disposed && Game.Settings.Game.FetchNews)
+						LoadRemote(url, cache, seenDates);
+				}));
+			}
 		}
 
 		void Display(BattlefieldNewsItem[] news)
@@ -128,7 +130,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			panel.RemoveChildren();
 			if (news.Length == 0)
 			{
-				status.GetText = () => "No Battlefield News.";
+				status.GetText = () => "YMCA release notes are currently unavailable.";
 				panel.AddChild(status);
 				panel.Bounds.Height = maxHeight;
 				return;
