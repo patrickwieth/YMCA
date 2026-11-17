@@ -1,0 +1,54 @@
+--- a/engine/OpenRA.Game/Manifest.cs
++++ b/engine/OpenRA.Game/Manifest.cs
+@@ -74,6 +74,7 @@
+ 			ChromeMetrics, MapCompatibility, Missions, Hotkeys;
+ 
+ 		public readonly IReadOnlyDictionary<string, string> MapFolders;
++		public readonly string ShellmapName;
+ 		public readonly MiniYaml FileSystem;
+ 		public readonly MiniYaml LoadScreen;
+ 		public readonly string DefaultOrderGenerator;
+@@ -92,7 +93,7 @@
+ 
+ 		readonly string[] reservedModuleNames =
+ 		{
+-			"Include", "Metadata", "FileSystem", "MapFolders", "Rules",
++			"Include", "Metadata", "FileSystem", "MapFolders", "ShellmapName", "Rules",
+ 			"Sequences", "ModelSequences", "Cursors", "Chrome", "Assemblies", "ChromeLayout", "Weapons",
+ 			"Voices", "Notifications", "Music", "FluentMessages", "TileSets", "ChromeMetrics", "Missions", "Hotkeys",
+ 			"ServerTraits", "LoadScreen", "DefaultOrderGenerator", "SupportsMapsFrom", "SoundFormats", "SpriteFormats", "VideoFormats",
+@@ -166,6 +167,9 @@
+ 
+ 			MapCompatibility = compat.ToArray();
+ 
++			if (yaml.TryGetValue("ShellmapName", out entry))
++				ShellmapName = entry.Value;
++
+ 			if (yaml.TryGetValue("DefaultOrderGenerator", out entry))
+ 				DefaultOrderGenerator = entry.Value;
+ 
+--- a/engine/OpenRA.Game/Game.cs
++++ b/engine/OpenRA.Game/Game.cs
+@@ -625,6 +625,10 @@
+ 		{
+ 			var shellmaps = ModData.MapCache
+ 				.Where(m => m.Status == MapStatus.Available && m.Visibility.HasFlag(MapVisibility.Shellmap))
++				// Mods may pin a bundled shellmap so stale installed/user maps never win the random selection.
++				.Where(m => string.IsNullOrEmpty(ModData.Manifest.ShellmapName) ||
++					(m.Class == MapClassification.System && string.Equals(Path.GetFileName(m.PackageName.TrimEnd(
++						Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)), ModData.Manifest.ShellmapName, StringComparison.Ordinal)))
+ 				.Select(m => m.Uid);
+ 
+ 			var shellmap = shellmaps.RandomOrDefault(CosmeticRandom);
+--- a/engine/OpenRA.Game/Map/MapPreview.cs
++++ b/engine/OpenRA.Game/Map/MapPreview.cs
+@@ -416,7 +416,8 @@
+ 			if (yaml.TryGetValue("MapFormat", out temp))
+ 				newData.MapFormat = FieldLoader.GetValue<int>("MapFormat", temp.Value);
+ 
+-			newData.Status = mapCompatibility == null || mapCompatibility.Contains(requiresMod) ?
++			newData.Status = (mapCompatibility == null || mapCompatibility.Contains(requiresMod)) &&
++				!string.IsNullOrEmpty(newData.TileSet) && modData.DefaultTerrainInfo.ContainsKey(newData.TileSet) ?
+ 				MapStatus.Available : MapStatus.Unavailable;
+ 
+ 			try
