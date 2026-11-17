@@ -61,6 +61,17 @@ jobs:
       - name: Prepare Environment
         run: echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> ${GITHUB_ENV}
 
+      - name: Install Mono SDK for legacy macOS bundle
+        run: |
+          MONO_BIN=/Library/Frameworks/Mono.framework/Versions/Current/Commands
+          if [ ! -x "$MONO_BIN/msbuild" ]; then
+            curl --fail --location --retry 3 -o "$RUNNER_TEMP/mono.pkg" https://download.mono-project.com/archive/6.12.0/macos-10-universal/MonoFramework-MDK-6.12.0.206.macos10.xamarin.universal.pkg
+            sudo installer -pkg "$RUNNER_TEMP/mono.pkg" -target /
+          fi
+          echo "$MONO_BIN" >> "$GITHUB_PATH"
+          "$MONO_BIN/mono" --version
+          "$MONO_BIN/msbuild" -version
+
       - name: Package Disk Image
         env:
           MACOS_DEVELOPER_IDENTITY: ${{ secrets.MACOS_DEVELOPER_IDENTITY }}
