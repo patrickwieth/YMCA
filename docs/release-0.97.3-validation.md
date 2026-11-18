@@ -35,5 +35,16 @@ Public notes are concise English player-facing Features / Bug Fixes. Bot Docker
 host version is advanced to v0.97.3; deployment must retain both active-match
 checks and verify Discord registration plus the actual game version.
 
-Publication, package build, stable manifest and actual deployment results must
-be recorded after the workflow completes; a pushed tag alone is not completion.
+## Verified publication and deployment
+
+- Release/tag v0.97.3 points to merge commit 9883b9f0 and includes isometric through
+  c833f596. Release is public, non-draft and non-prerelease.
+- Packaging run 44259557387 succeeded: Windows portable/installer, Linux AppImage,
+  macOS DMG, stable manifest publication and game-server deployment.
+- The public master list independently advertised ca@v0.97.3 on
+  45.136.28.158:1234 and :1235; both were empty waiting lobbies with eight slots.
+- Stable manifest is v0.97.3 (publication commit 4d05989d).
+- Separate tournament deployment run 44262335547 succeeded. Its logs verified
+  current-container Discord connection/command registration and actual tournament
+  host version v0.97.3 at 2026-11-18T07:57Z.
+- Both active-match checks stayed enabled; no force override was used.
