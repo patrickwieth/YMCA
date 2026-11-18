@@ -69,7 +69,11 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			void Capture(string name) => Game.Renderer.SaveScreenshot(Path.Combine(output, name + ".png"));
 			var steps = new Queue<(int Delay, Action Work)>(new (int, Action)[]
 			{
-				(6000, () => menu.Get<ButtonWidget>("SKIRMISH_BUTTON").OnClick()),
+				(1200, () =>
+				{
+					menu.Get<ButtonWidget>("SINGLEPLAYER_BUTTON").OnClick();
+					menu.Get<ButtonWidget>("SKIRMISH_BUTTON").OnClick();
+				}),
 				(1200, () => { Capture("modes"); Click("Strategic"); }),
 				(1200, () =>
 				{
@@ -218,7 +222,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					catch (Exception e) { Game.ConnectionStateChanged -= connected; File.AppendAllText(log, "FAIL " + e + "\n"); }
 				});
 			}
-			Next();
+			// Startup can take longer than a fixed timer; its final UI reset would
+			// otherwise close the wizard immediately after the probe opens it.
+			void StartAfterShellmap()
+			{
+				Game.OnShellmapLoaded -= StartAfterShellmap;
+				Next();
+			}
+			Game.OnShellmapLoaded += StartAfterShellmap;
 		}
 	}
 }

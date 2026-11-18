@@ -114,6 +114,7 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 		{
 			get
 			{
+				if (OpenRA.Mods.CA.Server.MapSelectionLobbyCommands.IsPlaceholder(map)) return false;
 				if ((mapStatus & Session.MapStatus.Playable) == Session.MapStatus.Playable)
 					return true;
 
@@ -215,7 +216,17 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 				},
 			});
 
-			mapContainer.IsVisible = () => panel != PanelType.Servers;
+			mapContainer.IsVisible = () => panel != PanelType.Servers &&
+				!OpenRA.Mods.CA.Server.MapSelectionLobbyCommands.IsPlaceholder(map);
+			lobby.Get("MAP_PREVIEW_ROOT").AddChild(new LabelWidget(modData)
+			{
+				Id = "PLEASE_SELECT_MAP",
+				Bounds = new WidgetBounds(mapContainer.Bounds.X, mapContainer.Bounds.Y, mapContainer.Bounds.Width, mapContainer.Bounds.Height),
+				Font = "Bold",
+				Align = TextAlign.Center,
+				GetText = () => "Please select a map",
+				IsVisible = () => panel != PanelType.Servers && OpenRA.Mods.CA.Server.MapSelectionLobbyCommands.IsPlaceholder(map),
+			});
 
 			UpdateCurrentMap();
 

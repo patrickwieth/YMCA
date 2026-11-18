@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common.Traits;
+using OpenRA.Mods.Common.Traits.Render;
 using OpenRA.Primitives;
 using OpenRA.Traits;
 
@@ -29,6 +30,14 @@ namespace OpenRA.Mods.CA.Traits
 			var world = self.World;
 			if (frames < 20)
 				wr.Viewport.Center(world.Map.CenterOfCell(new CPos(111, -24)));
+			if (frames == 120)
+			{
+				foreach (var actor in world.Actors.Where(a => a.Info.Name == info.Building))
+					File.AppendAllText(info.ResultPath, actor.Info.Name + " faction=" + actor.Owner.Faction.InternalName +
+						" center=" + actor.CenterPosition + " overlays=" + string.Join(",", actor.TraitsImplementing<WithIdleOverlay>()
+						.Select(b => b.Info.Image + ":disabled=" + b.IsTraitDisabled)) + "\n");
+				Game.TakeScreenshot();
+			}
 			if (frames == 180)
 			{
 				Check(world, 8, "initial cardinal/diagonal connections and owner isolation");

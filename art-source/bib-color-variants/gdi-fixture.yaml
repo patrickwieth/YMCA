@@ -1,0 +1,107 @@
+MapFormat: 12
+RequiresMod: ca
+Title: GDI fixed-grid foundation review
+Author: YMCA
+Tileset: RUBBERDUCK-TEMPERATE
+MapSize: 130,146
+Bounds: 1,17,128,128
+Visibility: Lobby
+Categories: Test
+Players:
+	PlayerReference@Neutral:
+		Name: Neutral
+		OwnsWorld: True
+		NonCombatant: True
+		Faction: russia
+	PlayerReference@Multi0:
+		Name: Multi0
+		Playable: True
+		Faction: russia
+	PlayerReference@BibRed:
+		Name: BibRed
+		NonCombatant: True
+		Faction: russia
+		Color: FF3030
+	PlayerReference@BibBlue:
+		Name: BibBlue
+		NonCombatant: True
+		Faction: russia
+		Color: 4080FF
+	PlayerReference@BibGreen:
+		Name: BibGreen
+		NonCombatant: True
+		Faction: russia
+		Color: 40FF60
+	PlayerReference@Grid2:
+		Name: Grid2
+		Color: 40FFFF
+		NonCombatant: True
+		Faction: gdi
+	PlayerReference@Grid4:
+		Name: Grid4
+		Color: FFC030
+		NonCombatant: True
+		Faction: gdi
+	PlayerReference@Grid5:
+		Name: Grid5
+		Color: B050FF
+		NonCombatant: True
+		Faction: gdi
+Actors:
+	DiagonalLeft: gtwr
+		Owner: BibGreen
+		Location: 103,-24
+	DiagonalRight: gtwr
+		Owner: BibGreen
+		Location: 105,-26
+	Spawn0: mpspawn
+		Owner: Neutral
+		Location: 111,-24
+	RedLeft: nuke
+		Owner: BibRed
+		Location: 108,-30
+	RedRight: nuke
+		Owner: BibRed
+		Location: 112,-30
+	BlueLeft: nuke
+		Owner: BibBlue
+		Location: 108,-22
+	BlueRight: nuke
+		Owner: BibBlue
+		Location: 112,-22
+	SmallLeft: gtwr
+		Owner: BibRed
+		Location: 108,-14
+	SmallRight: gtwr
+		Owner: BibRed
+		Location: 110,-14
+	MixedLeft: gtwr
+		Owner: BibRed
+		Location: 117,-14
+	MixedRight: gtwr
+		Owner: BibBlue
+		Location: 119,-14
+	Grid2: ion_defense
+		Owner: Grid2
+		Location: 106,-18
+	Grid4: afac
+		Owner: Grid4
+		Location: 99,-27
+	Grid5: afld.gdi
+		Owner: Grid5
+		Location: 118,-21
+Rules:
+	World:
+		-SpawnStartingUnits:
+		-NukularDoubleStartingUnits:
+		BibConnectionTestProbe:
+			ResultPath: E:/src/YMCA/Game/.art-validation/gdi-bib-colors/lifecycle.txt
+			Building: nuke
+			Defense: gtwr
+	Player:
+		-ConquestVictoryConditions:
+		Shroud:
+			FogCheckboxEnabled: false
+			ExploredMapCheckboxEnabled: true
+			FogCheckboxLocked: true
+			ExploredMapCheckboxLocked: true

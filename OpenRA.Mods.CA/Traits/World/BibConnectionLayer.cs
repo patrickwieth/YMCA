@@ -96,7 +96,7 @@ namespace OpenRA.Mods.CA.Traits
 
 					var image = match.Groups[1].Value + "bib1x1";
 					var remap = actor.TraitOrDefault<WithBibRemap>();
-					var palette = remap?.Matches(bib.Info.Image) == true ? remap.Info.Palette : null;
+					var palette = remap?.Matches(bib.Info.Image) == true && remap.Info.RemapConnections ? remap.Info.Palette : null;
 					sources[actor.ActorID] = (actor, image, palette);
 					for (var x = 0; x < width; x++)
 						for (var y = 0; y < height; y++)

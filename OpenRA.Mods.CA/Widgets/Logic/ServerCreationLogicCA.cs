@@ -160,7 +160,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 
 		void ConfigureMap(bool createAfterSelection)
 		{
-			Game.OpenWindow("SKIRMISH_SETUP", new WidgetArgs
+			SkirmishSetupLogic.Open(new WidgetArgs
 			{
 				{ "onSelect", (Action<string>)(uid =>
 				{

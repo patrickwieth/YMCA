@@ -1,0 +1,91 @@
+MapFormat: 12
+RequiresMod: ca
+Title: Bib connections - local lifecycle test
+Author: YMCA
+Tileset: RUBBERDUCK-TEMPERATE
+MapSize: 130,146
+Bounds: 1,17,128,128
+Visibility: Lobby
+Categories: Test
+Players:
+	PlayerReference@Neutral:
+		Name: Neutral
+		OwnsWorld: True
+		NonCombatant: True
+		Faction: blackh
+	PlayerReference@Multi0:
+		Name: Multi0
+		Playable: True
+		Faction: blackh
+	PlayerReference@BibRed:
+		Name: BibRed
+		NonCombatant: True
+		Faction: blackh
+		Color: FF3030
+	PlayerReference@BibBlue:
+		Name: BibBlue
+		NonCombatant: True
+		Faction: blackh
+		Color: 4080FF
+	PlayerReference@BibGreen:
+		Name: BibGreen
+		NonCombatant: True
+		Faction: blackh
+		Color: 40FF60
+	PlayerReference@Grid4:
+		Name: Grid4
+		NonCombatant: True
+		Faction: blackh
+		Color: FFC030
+Actors:
+	DiagonalLeft: gun.nod
+		Owner: BibGreen
+		Location: 103,-24
+	DiagonalRight: gun.nod
+		Owner: BibGreen
+		Location: 105,-26
+	Spawn0: mpspawn
+		Owner: Neutral
+		Location: 111,-24
+	RedLeft: nuke.nod
+		Owner: BibRed
+		Location: 108,-30
+	RedRight: nuke.nod
+		Owner: BibRed
+		Location: 112,-30
+	BlueLeft: nuke.nod
+		Owner: BibBlue
+		Location: 108,-22
+	BlueRight: nuke.nod
+		Owner: BibBlue
+		Location: 112,-22
+	SmallLeft: gun.nod
+		Owner: BibRed
+		Location: 108,-14
+	SmallRight: gun.nod
+		Owner: BibRed
+		Location: 110,-14
+	MixedLeft: gun.nod
+		Owner: BibRed
+		Location: 117,-14
+	MixedRight: gun.nod
+		Owner: BibBlue
+		Location: 119,-14
+	Grid4: weap.nod
+		Owner: Grid4
+		Location: 99,-27
+Rules:
+	World:
+		-SpawnStartingUnits:
+		-NukularDoubleStartingUnits:
+		BibConnectionTestProbe:
+			ResultPath: E:/src/YMCA/Game/.art-validation/nod-bib-colors/lifecycle.txt
+			Building: nuke.nod
+			Defense: gun.nod
+	Player:
+		-ConquestVictoryConditions:
+		Shroud:
+			FogCheckboxEnabled: false
+			ExploredMapCheckboxEnabled: true
+			FogCheckboxLocked: true
+			ExploredMapCheckboxLocked: true

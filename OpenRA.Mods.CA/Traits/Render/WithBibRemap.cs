@@ -13,6 +13,8 @@ namespace OpenRA.Mods.CA.Traits
 	public class WithBibRemapInfo : TraitInfo, Requires<RenderSpritesInfo>, Requires<BodyOrientationInfo>, IRenderActorPreviewSpritesInfo
 	{
 		public readonly string ImagePrefix = "sovietbib";
+		[Desc("Also apply the mask to gap fillers. Disable for building-only corner accents.")]
+		public readonly bool RemapConnections = true;
 		[PaletteReference(true)]
 		public readonly string Palette = "bibplayer";
 

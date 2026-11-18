@@ -18,8 +18,9 @@ height boundaries are checked. Moving units can drive over the decoration withou
 making it flicker. Links are not rendered using hidden enemy building state, and
 are hidden in fog; they do not have their own persistent frozen-under-fog actor.
 
-Supported source families: Allied, Soviet (including the neutral shared artwork
-used by China), GDI, Nod and Scrin. Source geometry follows resolved overlay world
+Supported source families: Allied, Soviet/China, GDI, Nod and Scrin.
+China now explicitly opts into the Soviet fixed grid and owner-color masks at the
+user's request; see [China bibs](china-bibs.md). Source geometry follows resolved overlay world
 offsets and sprite registration, including raised Nod/Scrin top planes. A link
 uses the first stable source actor's faction artwork. Player-color accents are only used when the source's `WithBibRemap` matches
 that foundation family. Soviet joints use `bibplayer`; the later Allied black-rim
@@ -55,14 +56,14 @@ Soviet now uses a `grid` sequence: larger bibs are composed from integer transla
 of the native 128x64 1x1 tile, giving fixed 64x32 half-cell panel spacing. No stretching
 or per-building rescaling. Thus lines meet at building/filler boundaries, including
 mixed sizes. Original canvas dimensions, alpha silhouettes, scale and offsets are
-retained. China still uses the original `idle` sequences. The kennel explicitly
+retained. China now also uses the `grid` sequences. The kennel explicitly
 receives the Soviet grid/remap too; it did not inherit the shared bib template.
 
 The five original `bits/soviet/buildings/bib*.png` files are unchanged. Derivatives
 live in `bits/soviet/buildings/remap/` (masks) and `grid/` (fixed-grid bases), generated
 by `tools/art/generate_soviet_bib_remap.py`, with source and output hashes in
-`remap/manifest.json`. The original idle sequence bindings are unchanged. China can continue using the
-shared Soviet PNGs **without** the new player-color accents.
+`remap/manifest.json`. Original idle assets remain unchanged. China explicitly selects the generated
+fixed-grid assets and player-color accents; supplied originals are not overwritten.
 
 ## Validation and review
 
