@@ -1,4 +1,6 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
+# Ubuntu 22.04 retains an active package repository; Bullseye security packages
+# are no longer reliably available for rebuilding this .NET 6 host.
+FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS build
 
 ARG YMCA_VERSION=v0.97.2
 
@@ -23,7 +25,7 @@ RUN sh tools/prepare-engine-patches.sh \
         --output /out/bot \
         --no-self-contained
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-jammy AS runtime
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
