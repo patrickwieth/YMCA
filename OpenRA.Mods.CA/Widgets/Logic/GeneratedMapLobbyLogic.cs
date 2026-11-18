@@ -33,7 +33,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			bool CanChange() => !disposed && orderManager.LocalClient?.IsAdmin == true && !button.IsDisabled();
 			button.OnClick = () =>
 			{
-				if (!CanChange() || !skirmishMode && !orderManager.LobbyInfo.GlobalSettings.Dedicated) { chooseExisting(); return; }
+				if (!CanChange()) { chooseExisting(); return; }
 				modData.MapCache.UpdateMaps();
 				var originalMap = orderManager.LobbyInfo.GlobalSettings.Map;
 				var args = new WidgetArgs
@@ -67,12 +67,13 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				SkirmishSetupLogic.Open(args);
 			};
 			DedicatedMapGeneratorProbe.Start(widget, modData, orderManager);
+			LanMapGeneratorProbe.StartLobby(widget, modData, orderManager);
 		}
 
 		void SynchronizeGeneratedMap()
 		{
 			var settings = orderManager.LobbyInfo.GlobalSettings;
-			if (disposed || !HasGeneratedMapRecipe(settings)) return;
+			if (disposed || TournamentMapDownloadLogic.HasDownload(settings) || !HasGeneratedMapRecipe(settings)) return;
 			var uid = settings.Map;
 			if (modData.MapCache[uid].Status == MapStatus.Available || !attempted.Add(uid)) return;
 			var recipe = settings.LobbyOptions[GeneratedMapRecipe.Selection].Value.Substring(uid.Length + 1);

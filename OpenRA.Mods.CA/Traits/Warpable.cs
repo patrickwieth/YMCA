@@ -103,13 +103,13 @@ namespace OpenRA.Mods.CA.Traits
 
 		float ISelectionBar.GetValue()
 		{
-			if (!info.ShowSelectionBar)
+			if (!info.ShowSelectionBar || recievedDamage <= 0)
 				return 0;
 
-			if (info.ScaleWithCurrentHealthPercentage)
-				return (float)recievedDamage / ScalingRequiredDamage;
-
-			return (float)recievedDamage / requiredDamage;
+			// Low HP can round the scaled threshold to zero. Keep this UI-only:
+			// do not change temporal damage, erase thresholds or synchronized state.
+			var threshold = info.ScaleWithCurrentHealthPercentage ? ScalingRequiredDamage : requiredDamage;
+			return threshold > 0 ? System.Math.Min(1f, (float)recievedDamage / threshold) : 0f;
 		}
 
 		bool ISelectionBar.DisplayWhenEmpty { get { return false; } }

@@ -684,7 +684,8 @@ namespace OpenRA.Mods.Cameo.Widgets.Logic
 				orderManager.IssueOrder(Order.Command($"state {Session.ClientState.NotReady}"));
 
 			else if (map.Status != MapStatus.DownloadAvailable && Game.Settings.Game.AllowDownloading &&
-				!OpenRA.Mods.CA.Widgets.Logic.GeneratedMapLobbyLogic.HasGeneratedMapRecipe(orderManager.LobbyInfo.GlobalSettings))
+				!OpenRA.Mods.CA.Widgets.Logic.GeneratedMapLobbyLogic.HasGeneratedMapRecipe(orderManager.LobbyInfo.GlobalSettings) &&
+				!OpenRA.Mods.CA.Widgets.Logic.TournamentMapDownloadLogic.HasDownload(orderManager.LobbyInfo.GlobalSettings))
 				modData.MapCache.QueryRemoteMapDetails(services.MapRepository, new[] { uid });
 		}
 

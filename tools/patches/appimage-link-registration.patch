@@ -1,0 +1,19 @@
+--- a/engine/packaging/linux/openra.appimage.in
++++ b/engine/packaging/linux/openra.appimage.in
+@@ -9,6 +9,16 @@
+ if [ -n "${APPIMAGE}" ]; then
+ 	LAUNCHER=${APPIMAGE}
+ 
++	# Registration is per-user and opt-in; never block the game if desktop tools
++	# are unavailable. Explicit registration does not start a game instance.
++	if [ "${1:-}" = --register-links ]; then
++		"${HERE}/ymca-register-links" "${APPIMAGE}" --register
++		exit $?
++	fi
++	if [ -x "${HERE}/ymca-register-links" ]; then
++		"${HERE}/ymca-register-links" "${APPIMAGE}" --prompt || :
++	fi
++
+ 	APPIMAGEID=$(printf "file://%s" "${APPIMAGE}" | md5sum | cut -d' ' -f1)
+ 	test -n "${APPIMAGEID}"
+ 	LAUNCHER_NAME="appimagekit_${APPIMAGEID}-openra-{MODID}.desktop"

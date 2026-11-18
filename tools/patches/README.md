@@ -21,8 +21,7 @@ instead of overwriting local changes. See `docs/ci-engine-patch-fix.md`.
 For manual builds after fetching a fresh engine, run from the Game repository root **before building**:
 
 ```sh
-git apply --check --ignore-space-change tools/patches/isometric-selection-decoration.patch
-git apply --ignore-space-change tools/patches/isometric-selection-decoration.patch
+sh tools/prepare-engine-patches.sh
 ```
 
 The current working engine already contains this patch. To check that case:
@@ -32,3 +31,24 @@ git apply --reverse --check --ignore-space-change tools/patches/isometric-select
 ```
 
 Do not reapply it or automatically overwrite an independently modified engine.
+
+## Portable replay maps (local follow-up)
+
+`portable-replay-maps.patch` is applied after the existing selection and legacy-map
+patches by `tools/prepare-engine-patches.sh`. It adds optional embedded map data,
+mod-provided recovery hooks and missing-map replay-browser support. Rebuild the
+engine and mods together; installing only the new CA DLL into an old engine is
+not supported. See `docs/portable-replay-maps.md`.
+
+## Additional v0.97.4 corrections
+
+- `stable-generated-map-folder.patch`: version stamping must preserve the stable
+  generated-map directory used by tournament hosting and clients.
+- `appimage-link-registration.patch`: opt-in user-local `ymca://` desktop handler;
+  the package builder also installs `packaging/linux/register-links.sh`.
+- `map-cache-local-priority.patch`: delayed repository responses cannot replace a
+  locally installed map. Remote metadata is committed atomically before callbacks.
+
+The preparation script applies all patches and rejects incompatible local source.
+The complete stack has been checked against the pinned engine, including repeat
+application detection. See `docs/release-0.97.4-validation.md` for test evidence.

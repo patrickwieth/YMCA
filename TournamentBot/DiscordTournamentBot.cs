@@ -733,11 +733,10 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             var openRaName = modal.Data.Components
                 .First(component => component.CustomId == "openra-name")
                 .Value;
-            await coordinator.RegisterAsync(
-                modal.User.Id,
+            var tournament = await coordinator.RegisterAndJoinTournamentAsync(
+                parts[1], modal.User.Id,
                 modal.User.GlobalName ?? modal.User.Username,
                 openRaName);
-            var tournament = await coordinator.JoinTournamentAsync(parts[1], modal.User.Id);
             await modal.RespondAsync(
                 $"Registered as **{Escape(openRaName)}** and joined **{Escape(tournament.Name)}** (`{tournament.Id}`). " +
                 $"Entrants: **{tournament.Entrants.Count}**.",
