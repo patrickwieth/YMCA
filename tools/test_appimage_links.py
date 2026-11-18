@@ -99,6 +99,16 @@ esac
         self.assertEqual((self.root / 'received').read_text().strip(), uri)
         self.assertFalse((self.root / 'owned').exists())
 
+    @unittest.skipUnless(os.name != 'nt' and shutil.which('xdg-mime'), 'Native Linux xdg-utils required')
+    def test_real_xdg_registration_in_isolated_user_directories(self):
+        self.env['PATH'] = os.environ['PATH']
+        home = self.root / 'home'; home.mkdir()
+        self.env['HOME'] = str(home)
+        self.env.pop('DISPLAY', None); self.env.pop('WAYLAND_DISPLAY', None)
+        self.run_registration('--register')
+        actual = subprocess.check_output(['xdg-mime', 'query', 'default', 'x-scheme-handler/ymca'], env=self.env, text=True)
+        self.assertEqual(actual.strip(), 'ymca-appimage.desktop')
+
     @unittest.skipUnless(os.name != 'nt' and shutil.which('gio'), 'Native Linux GIO required')
     def test_real_desktop_launch_preserves_uri_and_special_path_characters(self):
         image = self.app('YMCA "quoted" $HOME `touch owned` % back\\slash.AppImage')
