@@ -1,4 +1,4 @@
-name: Inspect M0020 (read-only)
+name: Recover M0020 safely
 on:
   workflow_dispatch:
 permissions:
@@ -7,39 +7,104 @@ jobs:
   inspect:
     runs-on: ubuntu-latest
     steps:
-      - name: Read failed match logs and resource state only
+      - name: Restore generated-map search path and requeue only M0020
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          command_timeout: 3m
+          command_timeout: 6m
           script: |
             set -eu
             cd ~/src/YMCA-tournament/TournamentBot/deploy
-            docker ps --filter name=ymca-tournament-bot --format '{{.Names}} {{.Status}}'
-            docker inspect --format 'OOMKilled={{.State.OOMKilled}} Restarts={{.RestartCount}} MemoryLimit={{.HostConfig.Memory}}' ymca-tournament-bot
-            free -m
-            docker stats --no-stream --format '{{.Name}} {{.MemUsage}}' ymca-tournament-bot
-            docker top ymca-tournament-bot -eo pid,ppid,comm,rss
-            docker exec ymca-tournament-bot sh -c "grep -A5 '^MapFolders:' /app/game/mods/ca/mod.yaml; find /data/matches/M0020/maps -type f -exec sha256sum {} \;"
             python3 - <<'PY'
-            import json,pathlib,re
-            root=pathlib.Path('data')
-            state=json.loads((root/'tournament-state.json').read_text())
-            for key in ('Tournaments','Matches','Series'):
-                values=state.get(key,state.get(key[0].lower()+key[1:],{}))
-                if isinstance(values,dict): values=values.values()
-                for x in values:
-                    fields=['Id','Status','TournamentId','Round','MapUid','MapTitle','Port','FailureReason','CurrentRound','SeriesId','SupportDirectory','GeneratedMapPath','GeneratedMapSha256','Generation']
-                    print(key,{k:x.get(k,x.get(k[0].lower()+k[1:])) for k in fields if k in x or k[0].lower()+k[1:] in x})
-            match=root/'matches/M0020'
-            for name in ['process-error.log','process-output.log','Logs/dedicated-debug.log','Logs/dedicated-server.log']:
-                p=match/name
-                print('\n--- '+name+' ---')
-                if p.exists():
-                    text=p.read_text(errors='replace')[-18000:]
-                    print(re.sub(r'(?i)(password|token)(\s*[=:]\s*)\S+',r'\1\2[REDACTED]',text))
-                else: print('not found')
+            import copy,datetime,hashlib,json,os,pathlib,re,shutil,subprocess,time,uuid
+            root=pathlib.Path.cwd()
+            statepath=root/'data/tournament-state.json'
+            container='ymca-tournament-bot'
+            uid='93bb080d4c65f274a1040b11d4ee065c2e8bac03'
+            def run(args,check=True):
+                return subprocess.run(args,check=check,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            def field(x,name): return x.get(name,x.get(name[0].lower()+name[1:]))
+            def key(x,name): return name if name in x else name[0].lower()+name[1:]
+            def inspect():
+                state=json.loads(statepath.read_text())
+                matches=field(state,'Matches');m=matches['M0020']
+                assert field(m,'Status')=='Failed', 'M0020 is no longer failed; aborting'
+                assert field(m,'TournamentId')=='T009' and field(m,'SeriesId')=='S0001'
+                assert field(m,'MapUid')==uid
+                assert field(field(state,'Tournaments')['T009'],'Status')=='Running'
+                busy=[field(v,'Id') for v in matches.values() if field(v,'Status') in ['Queued','StartingServer','WaitingForPlayers','Playing']]
+                assert not busy, 'Other matches are active; aborting: '+str(busy)
+                return state,m
+            def no_children():
+                rows=run(['docker','top',container,'-eo','pid,ppid,comm']).stdout.strip().splitlines()
+                assert len(rows)==2 and 'dotnet' in rows[1], 'Container has additional processes; will not stop it'
+            state,match=inspect();no_children()
+            stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-'+uuid.uuid4().hex[:8]
+            backup=root/'data/recovery'/('M0020-'+stamp)
+            backup.mkdir(parents=True,mode=0o700)
+            os.chmod(backup,0o700)
+            run(['docker','cp',container+':/app/game/mods/ca/mod.yaml',str(backup/'mod.yaml.before')])
+            original=(backup/'mod.yaml.before').read_text()
+            lines=original.splitlines(keepends=True);start=next(i for i,s in enumerate(lines) if s.strip()=='MapFolders:')
+            end=start+1
+            while end<len(lines) and (not lines[end].strip() or lines[end].startswith((' ','\t'))): end+=1
+            assert not any('maps/ca/generated:' in s for s in lines[start:end]), 'Manifest already repaired; re-evaluate instead'
+            assert any('maps/ca/v0.97.3:' in s for s in lines[start:end])
+            lines.insert(end,'\t~^SupportDir|maps/ca/generated: User\n\n')
+            patched=''.join(lines)
+            (backup/'mod.yaml.after').write_text(patched)
+            run(['docker','cp',str(backup/'mod.yaml.after'),container+':/app/game/mods/ca/mod.yaml'])
+            # Check the exact deployed Linux binary before touching tournament state.
+            probe='/tmp/ymca-M0020-preflight-'+uuid.uuid4().hex
+            source='/data/matches/M0020/maps/ca/generated/'+uid+'.oramap'
+            command='mkdir -p '+probe+'/maps/ca/generated && cp '+source+' '+probe+'/maps/ca/generated/'+uid+'.oramap && exec timeout --signal=TERM --kill-after=5s 25s dotnet /app/game/engine/bin/OpenRA.Server.dll Game.Mod=ca Engine.EngineDir=/app/game/engine Engine.SupportDir='+probe+' Server.Name=M0020-Isolated-Preflight Server.Map='+uid+' Server.MapPool='+uid+' Server.ListenPort=12409 Server.AdvertiseOnline=false Server.EnableNat=false Server.QueryMapRepository=false Server.AllowedPlayerNames=DiagnosticA,DiagnosticB Server.TeamOnePlayerNames=DiagnosticA Server.TeamTwoPlayerNames=DiagnosticB Server.RequiredPlayerCount=2'
+            result=run(['docker','exec','-e','MOD_SEARCH_PATHS=/app/game/mods,/app/game/engine/mods','-w','/app/game',container,'sh','-c',command],check=False)
+            (backup/'preflight-output.log').write_text(result.stdout+'\n'+result.stderr)
+            log=run(['docker','exec',container,'cat',probe+'/Logs/dedicated-server.log'],check=False).stdout
+            (backup/'preflight-server.log').write_text(log)
+            if result.returncode not in (0,124) or 'Initial map: '+uid not in log:
+                run(['docker','cp',str(backup/'mod.yaml.before'),container+':/app/game/mods/ca/mod.yaml'])
+                raise RuntimeError('Linux preflight failed; original manifest restored; tournament state untouched')
+            print('PASS deployed Linux binary accepts the exact M0020 map after manifest repair',flush=True)
+            # Recheck immediately before the only bot restart; never override a busy match.
+            state,match=inspect();no_children()
+            stopped=False
+            try:
+                run(['docker','stop','--time','30',container]);stopped=True
+                state,match=inspect()
+                shutil.copy2(statepath,backup/'tournament-state.before.json')
+                updated=copy.deepcopy(state)
+                target=field(updated,'Matches')['M0020']
+                target[key(target,'Status')]='Queued'
+                target[key(target,'FailureReason')]=None
+                restored=copy.deepcopy(updated);field(restored,'Matches')['M0020']=copy.deepcopy(match)
+                assert restored==state, 'Unexpected mutation outside target match'
+                attributes=statepath.stat()
+                temporary=statepath.with_name(statepath.name+'.recovery-'+uuid.uuid4().hex)
+                temporary.write_text(json.dumps(updated,indent=2))
+                os.chmod(temporary,attributes.st_mode & 0o777)
+                os.chown(temporary,attributes.st_uid,attributes.st_gid)
+                os.replace(temporary,statepath)
+                (backup/'tournament-state.requeued.json').write_text(json.dumps(updated,indent=2))
+                run(['docker','start',container]);stopped=False
+            finally:
+                if stopped: run(['docker','start',container],check=False)
+            for attempt in range(90):
+                time.sleep(2)
+                current=json.loads(statepath.read_text());m=field(current,'Matches')['M0020']
+                status=field(m,'Status')
+                if status in ['WaitingForPlayers','Playing','Completed']:
+                    assert field(m,'MapUid')==uid and field(m,'GeneratedMapSha256')==field(match,'GeneratedMapSha256')
+                    for k in ['PlayerOneDiscordId','PlayerTwoDiscordId','TournamentId','SeriesId','TournamentRound','SeriesGameNumber']:
+                        assert field(m,k)==field(match,k), 'Match identity changed: '+k
+                    log=(root/'data/matches/M0020/Logs/dedicated-server.log').read_text()
+                    assert 'Initial map: '+uid in log
+                    print('RECOVERED M0020 status='+status+' port='+str(field(m,'Port'))+' tournament=T009 series=S0001 map='+uid,flush=True)
+                    print('Backup directory: '+str(backup),flush=True)
+                    break
+                if status=='Failed': raise RuntimeError('M0020 failed again: '+str(field(m,'FailureReason')))
+            else: raise RuntimeError('Timed out waiting for recovered match; bot left running, state retained')
             PY
