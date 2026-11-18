@@ -23,6 +23,7 @@ jobs:
             free -m
             docker stats --no-stream --format '{{.Name}} {{.MemUsage}}' ymca-tournament-bot
             docker top ymca-tournament-bot -eo pid,ppid,comm,rss
+            docker exec ymca-tournament-bot sh -c "grep -A5 '^MapFolders:' /app/game/mods/ca/mod.yaml; find /data/matches/M0020/maps -type f -exec sha256sum {} \;"
             python3 - <<'PY'
             import json,pathlib,re
             root=pathlib.Path('data')
@@ -31,7 +32,7 @@ jobs:
                 values=state.get(key,state.get(key[0].lower()+key[1:],{}))
                 if isinstance(values,dict): values=values.values()
                 for x in values:
-                    fields=['Id','Status','TournamentId','Round','MapUid','MapTitle','Port','FailureReason','CurrentRound','SeriesId']
+                    fields=['Id','Status','TournamentId','Round','MapUid','MapTitle','Port','FailureReason','CurrentRound','SeriesId','SupportDirectory','GeneratedMapPath','GeneratedMapSha256','Generation']
                     print(key,{k:x.get(k,x.get(k[0].lower()+k[1:])) for k in fields if k in x or k[0].lower()+k[1:] in x})
             match=root/'matches/M0020'
             for name in ['process-error.log','process-output.log','Logs/dedicated-debug.log','Logs/dedicated-server.log']:
