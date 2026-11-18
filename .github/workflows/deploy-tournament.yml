@@ -26,7 +26,7 @@ jobs:
             python3 - <<'PY'
             import json,pathlib,re
             root=pathlib.Path('data')
-            state=json.loads((root/'state.json').read_text())
+            state=json.loads((root/'tournament-state.json').read_text())
             for key in ('Tournaments','Matches','Series'):
                 values=state.get(key,state.get(key[0].lower()+key[1:],{}))
                 if isinstance(values,dict): values=values.values()
