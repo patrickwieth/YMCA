@@ -1,0 +1,189 @@
+diff --git a/engine/OpenRA.Game/FileFormats/ReplayMapSupport.cs b/engine/OpenRA.Game/FileFormats/ReplayMapSupport.cs
+new file mode 100644
+--- /dev/null
++++ b/engine/OpenRA.Game/FileFormats/ReplayMapSupport.cs
+@@ -0,0 +1,35 @@
++using System;
++using System.Linq;
++
++namespace OpenRA.FileFormats
++{
++	// Implemented by mods that support portable replay maps and legacy recipes.
++	public interface IReplayMapProvider
++	{
++		byte[] Capture(ModData mod, string mapUid);
++		bool Restore(ModData mod, ReplayMetadata replay);
++	}
++
++	public static class ReplayMapSupport
++	{
++		static IReplayMapProvider Provider(ModData mod)
++		{
++			var type = mod.ObjectCreator.GetTypesImplementing<IReplayMapProvider>().FirstOrDefault(t => !t.IsAbstract && !t.IsInterface);
++			return type == null ? null : (IReplayMapProvider)Activator.CreateInstance(type);
++		}
++
++		public static byte[] Capture(ModData mod, string mapUid)
++		{
++			try { return Provider(mod)?.Capture(mod, mapUid); }
++			catch (Exception e) { Log.Write("debug", "Could not embed replay map: " + e); return null; }
++		}
++
++		public static bool Restore(ModData mod, ReplayMetadata replay)
++		{
++			if (replay == null) return false;
++			if (mod.MapCache[replay.GameInfo.MapUid].Status == MapStatus.Available) return true;
++			try { return Provider(mod)?.Restore(mod, replay) ?? false; }
++			catch (Exception e) { Log.Write("debug", "Could not restore replay map: " + e); return false; }
++		}
++	}
++}
+diff --git a/engine/OpenRA.Game/FileFormats/ReplayMetadata.cs b/engine/OpenRA.Game/FileFormats/ReplayMetadata.cs
+--- a/engine/OpenRA.Game/FileFormats/ReplayMetadata.cs
++++ b/engine/OpenRA.Game/FileFormats/ReplayMetadata.cs
+@@ -21,6 +21,35 @@
+ 		public const int MetaStartMarker = -1;
+ 		public const int MetaEndMarker = -2;
+ 		public const int MetaVersion = 0x00000001;
++
++		public const int MaxEmbeddedMapBytes = 16 * 1024 * 1024;
++		const int MapArchiveMarker = 0x50414D59;
++		long embeddedMapOffset;
++		int embeddedMapLength;
++		byte[] embeddedMap;
++
++		// Lazy: browsing a replay directory must not load every embedded archive.
++		public byte[] EmbeddedMap
++		{
++			get
++			{
++				if (embeddedMap == null && embeddedMapLength > 0)
++				{
++					using var file = File.OpenRead(FilePath);
++					file.Position = embeddedMapOffset;
++					using var reader = new BinaryReader(file);
++					embeddedMap = reader.ReadBytes(embeddedMapLength);
++					if (embeddedMap.Length != embeddedMapLength) throw new EndOfStreamException();
++				}
++
++				return embeddedMap;
++			}
++			set
++			{
++				if (value != null && value.Length > MaxEmbeddedMapBytes) throw new InvalidDataException("Replay map archive is too large.");
++				embeddedMap = value;
++			}
++		}
+ 
+ 		public readonly GameInformation GameInfo;
+ 		public string FilePath { get; private set; }
+@@ -49,6 +78,15 @@
+ 			// Read game info (max 100K limit as a safeguard against corrupted files)
+ 			var data = fs.ReadLengthPrefixedString(Encoding.UTF8, 1024 * 100);
+ 			GameInfo = GameInformation.Deserialize(data, path);
++			if (fs.Position < fs.Length - 8)
++			{
++				if (fs.ReadInt32() != MapArchiveMarker) throw new InvalidDataException("Invalid replay map extension.");
++				embeddedMapLength = fs.ReadInt32();
++				embeddedMapOffset = fs.Position;
++				if (embeddedMapLength <= 0 || embeddedMapLength > MaxEmbeddedMapBytes ||
++					embeddedMapLength != fs.Length - 8 - fs.Position)
++					throw new InvalidDataException("Invalid replay map archive length.");
++			}
+ 		}
+ 
+ 		public void Write(BinaryWriter writer)
+@@ -63,6 +101,14 @@
+ 				// Write lobby info data
+ 				writer.Flush();
+ 				dataLength += writer.BaseStream.WriteLengthPrefixedString(Encoding.UTF8, GameInfo.Serialize());
++			}
++
++			if (EmbeddedMap != null)
++			{
++				writer.Write(MapArchiveMarker);
++				writer.Write(EmbeddedMap.Length);
++				writer.Write(EmbeddedMap);
++				dataLength += 8 + EmbeddedMap.Length;
+ 			}
+ 
+ 			// Write total length & end marker
+@@ -81,7 +127,7 @@
+ 		{
+ 			try
+ 			{
+-				using (var fs = new FileStream(path, FileMode.Open))
++				using (var fs = File.OpenRead(path))
+ 				{
+ 					if (!fs.CanSeek)
+ 						return null;
+@@ -91,6 +137,8 @@
+ 
+ 					fs.Seek(-(4 + 4), SeekOrigin.End);
+ 					var dataLength = fs.ReadInt32();
++					if (dataLength < 4 || dataLength > MaxEmbeddedMapBytes + 1024 * 100 + 12 || dataLength > fs.Length - 16)
++						return null;
+ 					if (fs.ReadInt32() == MetaEndMarker)
+ 					{
+ 						// Go back by (end marker + length storage + data + version + start marker) bytes
+diff --git a/engine/OpenRA.Game/Game.cs b/engine/OpenRA.Game/Game.cs
+--- a/engine/OpenRA.Game/Game.cs
++++ b/engine/OpenRA.Game/Game.cs
+@@ -106,6 +106,8 @@
+ 
+ 		public static void JoinReplay(string replayFile)
+ 		{
++			// Also covers direct launch/download paths that bypass the replay browser.
++			FileFormats.ReplayMapSupport.Restore(ModData, FileFormats.ReplayMetadata.Read(replayFile));
+ 			JoinInner(new OrderManager(new ReplayConnection(replayFile)));
+ 		}
+ 
+diff --git a/engine/OpenRA.Game/Server/Server.cs b/engine/OpenRA.Game/Server/Server.cs
+--- a/engine/OpenRA.Game/Server/Server.cs
++++ b/engine/OpenRA.Game/Server/Server.cs
+@@ -1408,7 +1408,7 @@
+ 						gameInfo.Players.Add(p);
+ 
+ 				if (recorder != null)
+-					recorder.Metadata = new ReplayMetadata(gameInfo);
++					recorder.Metadata = new ReplayMetadata(gameInfo) { EmbeddedMap = ReplayMapSupport.Capture(ModData, gameInfo.MapUid) };
+ 
+ 				SyncLobbyInfo();
+ 
+diff --git a/engine/OpenRA.Game/World.cs b/engine/OpenRA.Game/World.cs
+--- a/engine/OpenRA.Game/World.cs
++++ b/engine/OpenRA.Game/World.cs
+@@ -304,7 +304,7 @@
+ 			gameInfo.StartTimeUtc = DateTime.UtcNow;
+ 
+ 			if (OrderManager.Connection is NetworkConnection nc && nc.Recorder != null)
+-				nc.Recorder.Metadata = new ReplayMetadata(gameInfo);
++				nc.Recorder.Metadata = new ReplayMetadata(gameInfo) { EmbeddedMap = ReplayMapSupport.Capture(modData, gameInfo.MapUid) };
+ 		}
+ 
+ 		public void PostLoadComplete(WorldRenderer wr)
+diff --git a/engine/OpenRA.Mods.Common/Widgets/Logic/ReplayBrowserLogic.cs b/engine/OpenRA.Mods.Common/Widgets/Logic/ReplayBrowserLogic.cs
+--- a/engine/OpenRA.Mods.Common/Widgets/Logic/ReplayBrowserLogic.cs
++++ b/engine/OpenRA.Mods.Common/Widgets/Logic/ReplayBrowserLogic.cs
+@@ -148,7 +148,8 @@
+ 				ThreadPool.QueueUserWorkItem(_ => LoadReplays(dir, template));
+ 
+ 			var watch = panel.Get<ButtonWidget>("WATCH_BUTTON");
+-			watch.IsDisabled = () => selectedReplay == null || map.Status != MapStatus.Available;
++			// Missing maps may be embedded in the replay or restored by the mod.
++			watch.IsDisabled = () => selectedReplay == null;
+ 			watch.OnClick = WatchReplay;
+ 
+ 			var mapPreviewRoot = panel.Get("MAP_PREVIEW_ROOT");
+diff --git a/engine/OpenRA.Mods.Common/Widgets/Logic/ReplayUtils.cs b/engine/OpenRA.Mods.Common/Widgets/Logic/ReplayUtils.cs
+--- a/engine/OpenRA.Mods.Common/Widgets/Logic/ReplayUtils.cs
++++ b/engine/OpenRA.Mods.Common/Widgets/Logic/ReplayUtils.cs
+@@ -63,7 +63,7 @@
+ 			if (Game.Mods[mod].Metadata.Version != version)
+ 				return IncompatibleReplayDialog(modData, onCancel, IncompatibleVersion, "version", version);
+ 
+-			if (replayMeta.GameInfo.MapPreview.Status != MapStatus.Available)
++			if (!ReplayMapSupport.Restore(modData, replayMeta))
+ 				return IncompatibleReplayDialog(modData, onCancel, UnvailableMap, "map", replayMeta.GameInfo.MapUid);
+ 
+ 			return true;

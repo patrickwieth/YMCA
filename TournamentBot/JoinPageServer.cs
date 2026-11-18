@@ -209,11 +209,11 @@ public sealed class JoinPageServer : IAsyncDisposable
     }
 
     static string MapInstallationNotice(MatchRecord match) => match.Generation == null ? "" :
-        $"<p><strong>Generated tournament map — install before joining:</strong> " +
+        $"<p><strong>Generated tournament map — automatic download in the lobby with an updated YMCA client.</strong> " +
         $"<a href=\"/map/{Uri.EscapeDataString(match.Id)}/download\">Download map (.oramap)</a>.</p>" +
-        "<p>Save it in your OpenRA support folder under <code>maps/ca/generated/</code>, " +
-        "then restart YMCA and use the join button. Both players and spectators need this map. " +
-        "Tournament-hosted maps must be installed from this download before joining.</p>" +
+        "<p>Players and spectators receive the verified map when they join; no copying or restart is required. " +
+        "If your older client does not support automatic downloads, update YMCA or use the download link " +
+        "and the map folder for your installed game version.</p>" +
         $"<p>Map ID: <code>{WebUtility.HtmlEncode(match.MapUid)}</code><br>SHA-256: <code>{WebUtility.HtmlEncode(match.GeneratedMapSha256)}</code></p>";
 
     async Task DownloadMapAsync(HttpContext context, string matchId)
@@ -228,6 +228,8 @@ public sealed class JoinPageServer : IAsyncDisposable
         }
         context.Response.ContentType = "application/octet-stream";
         context.Response.Headers.ContentDisposition = $"attachment; filename=\"YMCA-{match.Generation.Id}.oramap\"";
+        context.Response.ContentLength = new FileInfo(match.GeneratedMapPath).Length;
+        context.Response.Headers.ETag = "\"" + match.GeneratedMapSha256 + "\"";
         await context.Response.SendFileAsync(match.GeneratedMapPath);
     }
 

@@ -25,6 +25,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				{ "onSelect", (Action<string>)StartConfiguredSkirmish },
 			});
 			SkirmishSetupUiProbe.Start(menu);
+			LanMapGeneratorProbe.StartMenu(menu);
 		}
 
 		// Also used by the designer: its frozen map must bypass the map wizard.

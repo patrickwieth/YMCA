@@ -63,22 +63,24 @@ public sealed class TournamentCoordinator
     }
 
     public Task<RegisteredPlayer> RegisterAsync(ulong discordId, string displayName, string openRaName) =>
-        store.UpdateAsync(state =>
-        {
-            if (state.Players.Values.Any(player => player.DiscordUserId != discordId
-                && player.OpenRaName.Equals(openRaName.Trim(), StringComparison.OrdinalIgnoreCase)))
-                throw new InvalidOperationException("This OpenRA name is already registered by another Discord user.");
+        store.UpdateAsync(state => RegisterPlayer(state, discordId, displayName, openRaName));
 
-            var player = new RegisteredPlayer
-            {
-                DiscordUserId = discordId,
-                DiscordDisplayName = displayName,
-                OpenRaName = openRaName.Trim(),
-                RegisteredAtUtc = DateTime.UtcNow
-            };
-            state.Players[discordId] = player;
-            return player;
-        });
+    static RegisteredPlayer RegisterPlayer(TournamentState state, ulong discordId, string displayName, string openRaName)
+    {
+        if (state.Players.Values.Any(player => player.DiscordUserId != discordId
+            && player.OpenRaName.Equals(openRaName.Trim(), StringComparison.OrdinalIgnoreCase)))
+            throw new InvalidOperationException("This OpenRA name is already registered by another Discord user.");
+
+        var player = new RegisteredPlayer
+        {
+            DiscordUserId = discordId,
+            DiscordDisplayName = displayName,
+            OpenRaName = openRaName.Trim(),
+            RegisteredAtUtc = DateTime.UtcNow
+        };
+        state.Players[discordId] = player;
+        return player;
+    }
 
     public async Task<MatchRecord> CreateMatchAsync(
         ulong playerOneId,
@@ -200,17 +202,35 @@ public sealed class TournamentCoordinator
     public Task<TournamentRecord> JoinTournamentAsync(string tournamentId, ulong playerId) =>
         store.UpdateAsync(state =>
         {
-            var tournament = GetTournament(state, tournamentId);
-            if (tournament.Status != TournamentStatus.Registration)
-                throw new InvalidOperationException("Tournament registration is closed.");
-            if (tournament.Mode != TournamentMode.OneVsOne)
-                throw new InvalidOperationException("Use /tournament-team-join to enter a 2v2 tournament.");
-            if (!state.Players.ContainsKey(playerId))
-                throw new InvalidOperationException("Register your OpenRA name first using /register.");
-            if (!tournament.Entrants.Contains(playerId))
-                tournament.Entrants.Add(playerId);
+            var tournament = ValidateJoin(state, tournamentId, playerId, true);
+            tournament.Entrants.Add(playerId);
             return tournament;
         });
+
+    // A stale/double-submitted registration modal must not rename an entrant
+    // before discovering that its join has already been accepted.
+    public Task<TournamentRecord> RegisterAndJoinTournamentAsync(string tournamentId, ulong playerId, string displayName, string openRaName) =>
+        store.UpdateAsync(state =>
+        {
+            var tournament = ValidateJoin(state, tournamentId, playerId, false);
+            RegisterPlayer(state, playerId, displayName, openRaName);
+            tournament.Entrants.Add(playerId);
+            return tournament;
+        });
+
+    static TournamentRecord ValidateJoin(TournamentState state, string tournamentId, ulong playerId, bool requireRegistered)
+    {
+        var tournament = GetTournament(state, tournamentId);
+        if (tournament.Status != TournamentStatus.Registration)
+            throw new InvalidOperationException("Tournament registration is closed.");
+        if (tournament.Mode != TournamentMode.OneVsOne)
+            throw new InvalidOperationException("Use /tournament-team-join to enter a 2v2 tournament.");
+        if (tournament.Entrants.Contains(playerId))
+            throw new InvalidOperationException("You are already registered for this tournament.");
+        if (requireRegistered && !state.Players.ContainsKey(playerId))
+            throw new InvalidOperationException("Register your OpenRA name first using /register.");
+        return tournament;
+    }
 
     public Task<TournamentTeam> InviteTeamAsync(
         string tournamentId,

@@ -11,6 +11,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     readonly OpenRaServerConfiguration config;
     readonly ReplayMetadataReader replayReader;
     readonly TournamentMapGenerator mapGenerator;
+    readonly string? mapDownloadBaseUrl;
     readonly Channel<MatchRecord> queue = Channel.CreateUnbounded<MatchRecord>();
     readonly CancellationTokenSource shutdown = new();
     readonly List<Task> workers = new();
@@ -21,8 +22,9 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     public event Func<MatchRecord, ReplayResult, Task>? ResultAvailable;
     public event Func<MatchRecord, string, Task>? ServerFailed;
 
-    public OpenRaServerPool(OpenRaServerConfiguration config, ReplayMetadataReader replayReader)
+    public OpenRaServerPool(OpenRaServerConfiguration config, ReplayMetadataReader replayReader, string? mapDownloadBaseUrl = null)
     {
+        this.mapDownloadBaseUrl = mapDownloadBaseUrl;
         this.config = config;
         this.replayReader = replayReader;
         mapGenerator = new TournamentMapGenerator(config);
@@ -84,6 +86,8 @@ public sealed class OpenRaServerPool : IAsyncDisposable
             Directory.CreateDirectory(maps);
             File.Copy(artifact.Path, Path.Combine(maps, artifact.Uid + ".oramap"), true);
         }
+
+        TournamentMapDownloads.WriteReceipt(match, mapDownloadBaseUrl);
 
         // Persist the resolved UID and immutable package before clients receive join links.
         await InvokeAsync(ServerStarting, match);

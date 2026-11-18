@@ -22,15 +22,26 @@ namespace OpenRA.Mods.CA.Server
 		readonly Dictionary<string, string> recipes = new();
 		readonly TemporaryGeneratedMapFiles files = new();
 
+		static bool SupportsNetworkGeneration(S server) => server.Type == ServerType.Dedicated || server.Type == ServerType.Multiplayer;
+
 		void INotifyServerStart.ServerStarted(S server)
 		{
-			if (server.Type == ServerType.Dedicated)
-				server.LobbyInfo.GlobalSettings.LobbyOptions[GeneratedMapRecipe.Capability] =
-					new Session.LobbyOptionState { Value = server.Settings.MapPool.Length == 0 ? GeneratedMapRecipe.Version : "map-pool", IsLocked = true };
+			if (!SupportsNetworkGeneration(server)) return;
+			var settings = server.LobbyInfo.GlobalSettings;
+			settings.LobbyOptions[GeneratedMapRecipe.Capability] =
+				new Session.LobbyOptionState { Value = server.Settings.MapPool.Length == 0 ? GeneratedMapRecipe.Version : "map-pool", IsLocked = true };
+			if (GeneratedMapInstallation.TryGetRecipe(server.ModData, settings.Map, out var initialRecipe))
+			{
+				recipes[settings.Map] = initialRecipe;
+				settings.LobbyOptions[GeneratedMapRecipe.Selection] = new Session.LobbyOptionState
+					{ Value = settings.Map + ":" + initialRecipe, IsLocked = true };
+			}
 		}
 
 		void INotifyServerShutdown.ServerShutdown(S server)
 		{
+			// Peer-hosted maps belong to the shared client cache until game exit.
+			if (server.Type != ServerType.Dedicated) return;
 			foreach (var uid in recipes.Keys) server.ModData.MapCache[uid].DisposePackage();
 			files.Cleanup(message => Log.Write("server", message));
 		}
@@ -38,7 +49,10 @@ namespace OpenRA.Mods.CA.Server
 		void INotifySyncLobbyInfo.LobbyInfoSynced(S server)
 		{
 			var settings = server.LobbyInfo.GlobalSettings;
-			if (server.State != ServerState.WaitingPlayers || !recipes.TryGetValue(settings.Map, out var selectedRecipe)) return;
+			if (!SupportsNetworkGeneration(server) || server.State != ServerState.WaitingPlayers) return;
+			if (!recipes.TryGetValue(settings.Map, out var selectedRecipe) &&
+				!GeneratedMapInstallation.TryGetRecipe(server.ModData, settings.Map, out selectedRecipe)) return;
+			recipes[settings.Map] = selectedRecipe;
 			var value = settings.Map + ":" + selectedRecipe;
 			if (settings.LobbyOptions.TryGetValue(GeneratedMapRecipe.Selection, out var current) && current.Value == value) return;
 			settings.LobbyOptions[GeneratedMapRecipe.Selection] = new Session.LobbyOptionState { Value = value, IsLocked = true };
@@ -50,7 +64,7 @@ namespace OpenRA.Mods.CA.Server
 		bool IInterpretCommand.InterpretCommand(S server, Connection conn, Session.Client client, string cmd)
 		{
 			if (!cmd.StartsWith(GeneratedMapRecipe.Command, StringComparison.Ordinal)) return false;
-			if (server.Type != ServerType.Dedicated || server.State != ServerState.WaitingPlayers || client == null || !client.IsAdmin)
+			if (!SupportsNetworkGeneration(server) || server.State != ServerState.WaitingPlayers || client == null || !client.IsAdmin)
 			{
 				Message(server, conn, "Only the lobby administrator can generate a map before the match starts.");
 				return true;
@@ -103,8 +117,8 @@ namespace OpenRA.Mods.CA.Server
 					server.GetClient(requester)?.IsAdmin != true || server.GetClient(requester).IsReady ||
 					server.LobbyInfo.GlobalSettings.Map != previousMap)
 					return;
-				var uid = GeneratedMapInstallation.Install(server.ModData, plan, options, clientCleanup: false);
-				files.Register(server.ModData.MapCache[uid].PackageName);
+				var uid = GeneratedMapInstallation.Install(server.ModData, plan, options, clientCleanup: server.Type != ServerType.Dedicated);
+				if (server.Type == ServerType.Dedicated) files.Register(server.ModData.MapCache[uid].PackageName);
 				// Persist with lobby state so existing clients and late joiners reproduce exactly this map.
 				recipes[uid] = recipe;
 				// QueryMapRepository=false creates an automatic local pool. Extend that
