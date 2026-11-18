@@ -43,13 +43,22 @@ if [ "$mode" = --prompt ]; then
         if [ "$answer" != accepted ]; then printf 'declined\n' > "$choice"; exit 0; fi
     fi
 fi
-mkdir -p "$data/applications" "$config"
+mkdir -p "$data/applications" "$data/ymca-appimage" "$config"
+# Keep the executable in Exec free of field codes. GIO may check executable
+# existence before expanding %% in an AppImage filename. A fixed /bin/sh and
+# a user-local launcher also handle spaces and percent characters correctly.
+launcher=$(readlink -f "$data/ymca-appimage/launch")
+literal=$(printf '%s' "$image" | sed "s/'/'\\\\''/g")
+launch_tmp=$(mktemp "$data/ymca-appimage/.launch.XXXXXX")
+printf '#!/bin/sh\nexec '\''%s'\'' "$@"\n' "$literal" > "$launch_tmp"
+chmod 700 "$launch_tmp"
+mv "$launch_tmp" "$launcher"
 # Two escaping layers: the Exec quoted argument, then the desktop-entry string.
 # %% is a literal percent in an Exec field. The URI remains its own %u argument.
-escaped=$(printf '%s' "$image" | sed 's/\\/\\\\/g; s/["`$]/\\&/g; s/%/%%/g' | sed 's/\\/\\\\/g')
+escaped=$(printf '%s' "$launcher" | sed 's/\\/\\\\/g; s/["`$]/\\&/g; s/%/%%/g' | sed 's/\\/\\\\/g')
 temporary=$(mktemp "$data/applications/.ymca-links.XXXXXX")
 trap 'rm -f "$temporary"' 0 HUP INT TERM
-printf '[Desktop Entry]\nType=Application\nName=YMCA\nExec="%s" %%u\nIcon=applications-games\nTerminal=false\nCategories=Game;StrategyGame;\nMimeType=x-scheme-handler/ymca;\nX-YMCA-AppImage-Registration=true\n' "$escaped" > "$temporary"
+printf '[Desktop Entry]\nType=Application\nName=YMCA\nExec=/bin/sh "%s" %%u\nIcon=applications-games\nTerminal=false\nCategories=Game;StrategyGame;\nMimeType=x-scheme-handler/ymca;\nX-YMCA-AppImage-Registration=true\n' "$escaped" > "$temporary"
 chmod 644 "$temporary"
 mv "$temporary" "$entry"
 if command -v update-desktop-database >/dev/null 2>&1; then update-desktop-database "$data/applications" || :; fi

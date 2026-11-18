@@ -61,10 +61,11 @@ esac
     def test_accept_and_refresh_after_move(self):
         self.run_registration()
         self.assertIn('MimeType=x-scheme-handler/ymca;', self.desktop.read_text())
-        self.assertIn('spaces %%.AppImage" %u', self.desktop.read_text())
+        self.assertIn('Exec=/bin/sh ', self.desktop.read_text())
+        self.assertIn('" %u', self.desktop.read_text())
         moved = self.app('YMCA moved.AppImage')
         self.run_registration(image=moved)
-        self.assertIn('YMCA moved.AppImage', self.desktop.read_text())
+        self.assertIn('YMCA moved.AppImage', (self.root / 'data/ymca-appimage/launch').read_text())
         self.assertEqual((self.root / 'prompts').read_text().splitlines(), ['asked'])
 
     def test_existing_handler_is_not_stolen(self):
@@ -89,6 +90,14 @@ esac
         self.run_registration()
         self.assertFalse(self.desktop.exists())
         self.assertFalse((self.root / 'prompts').exists())
+
+    def test_launcher_quotes_apostrophes_and_keeps_uri_as_data(self):
+        image = self.app("YMCA O'Brien $HOME `touch owned` %.AppImage")
+        self.run_registration('--register', image)
+        uri = 'ymca://127.0.0.1:1234?name=Alice%20Bob&value=$(touch owned)'
+        subprocess.run([shutil.which('sh'), str(self.root / 'data/ymca-appimage/launch'), uri], env=self.env, check=True)
+        self.assertEqual((self.root / 'received').read_text().strip(), uri)
+        self.assertFalse((self.root / 'owned').exists())
 
     @unittest.skipUnless(os.name != 'nt' and shutil.which('gio'), 'Native Linux GIO required')
     def test_real_desktop_launch_preserves_uri_and_special_path_characters(self):
