@@ -20,7 +20,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			menu = widget;
 			var button = widget.Get<ButtonWidget>("SKIRMISH_BUTTON");
 			button.Disabled = false;
-			button.OnClick = () => Game.OpenWindow("SKIRMISH_SETUP", new WidgetArgs
+			button.OnClick = () => SkirmishSetupLogic.Open(new WidgetArgs
 			{
 				{ "onSelect", (Action<string>)StartConfiguredSkirmish },
 			});
@@ -61,8 +61,19 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		bool busy;
 		string status = "";
 
+		// ObjectCreator requires every named argument; C# optional defaults do not apply.
+		internal static WidgetArgs PrepareArguments(WidgetArgs args)
+		{
+			var prepared = new WidgetArgs(args);
+			if (!prepared.ContainsKey("onGenerateRecipe")) prepared.Add("onGenerateRecipe", null);
+			if (!prepared.ContainsKey("onChooseExisting")) prepared.Add("onChooseExisting", null);
+			return prepared;
+		}
+
+		public static void Open(WidgetArgs args) => Game.OpenWindow("SKIRMISH_SETUP", PrepareArguments(args));
+
 		[ObjectCreator.UseCtor]
-		public SkirmishSetupLogic(Widget widget, ModData modData, Action<string> onSelect, Action<string> onGenerateRecipe = null, Action onChooseExisting = null)
+		public SkirmishSetupLogic(Widget widget, ModData modData, Action<string> onSelect, Action<string> onGenerateRecipe, Action onChooseExisting)
 		{
 			this.modData = modData;
 			this.onSelect = onSelect;

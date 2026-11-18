@@ -64,7 +64,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					}));
 				}
 
-				Game.OpenWindow("SKIRMISH_SETUP", args);
+				SkirmishSetupLogic.Open(args);
 			};
 			DedicatedMapGeneratorProbe.Start(widget, modData, orderManager);
 		}
