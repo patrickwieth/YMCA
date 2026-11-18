@@ -1,27 +1,19 @@
-name: Deploy Tournament Bot
-
+name: Native Linux AppImage link tests
 on:
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
-  deploy:
+  linux-links:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy tournament bot without interrupting matches
-        uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v4
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          command_timeout: 45m
-          script: |
-            set -eu
-            cd ~/src/YMCA-tournament
-            git fetch origin tournament-bot
-            git checkout tournament-bot
-            git pull --ff-only origin tournament-bot
-            ./TournamentBot/deploy/deploy.sh
+          sparse-checkout: |
+            packaging/linux/register-links.sh
+            tools/test_appimage_links.py
+          sparse-checkout-cone-mode: false
+      - name: Verify native desktop launcher and isolated registration
+        run: |
+          command -v gio
+          python3 tools/test_appimage_links.py -v
