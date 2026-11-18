@@ -95,7 +95,8 @@ esac
         image = self.app('YMCA "quoted" $HOME `touch owned` % back\\slash.AppImage')
         self.run_registration('--register', image)
         uri = 'ymca://127.0.0.1:1234?name=Alice%20Bob&password=abc%25'
-        subprocess.run(['gio', 'launch', str(self.desktop), uri], env=self.env, check=True, capture_output=True)
+        result = subprocess.run(['gio', 'launch', str(self.desktop), uri], env=self.env, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr + '\n' + self.desktop.read_text())
         received = self.root / 'received'
         for _ in range(50):
             if received.exists(): break
