@@ -1,4 +1,4 @@
-name: Retire authorized T009 and update bot
+name: Verify updated bot without tournament changes
 on:
   workflow_dispatch:
 permissions:
@@ -7,7 +7,7 @@ jobs:
   maintenance:
     runs-on: ubuntu-latest
     steps:
-      - name: Back up and retire T009, then deploy with normal safety guards
+      - name: Validate deployed Linux generator, hosts and HTTPS maps
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -19,48 +19,33 @@ jobs:
             set -eu
             cd ~/src/YMCA-tournament/TournamentBot/deploy
             python3 - <<'PY'
-            import copy,datetime,json,os,pathlib,shutil,subprocess,uuid
-            root=pathlib.Path.cwd();p=root/'data/tournament-state.json';container='ymca-tournament-bot'
-            def run(args):return subprocess.run(args,check=True,text=True,capture_output=True)
+            import json,pathlib,subprocess,uuid,urllib.request,hashlib
+            root=pathlib.Path.cwd();container='ymca-tournament-bot'
+            def run(args,check=True):return subprocess.run(args,check=check,text=True,capture_output=True)
             def f(x,n):return x.get(n,x.get(n[0].lower()+n[1:]))
-            def k(x,n):return n if n in x else n[0].lower()+n[1:]
-            def check():
-             s=json.loads(p.read_text());t=f(s,'Tournaments')['T009'];assert f(t,'Status') in ['Running','Cancelled']
-             for m in f(s,'Matches').values():
-              status=f(m,'Status')
-              assert status!='Playing','A game is playing; aborting without interruption'
-              if status in ['Queued','StartingServer','WaitingForPlayers']:
-               assert f(m,'TournamentId')=='T009','Another tournament/match is active'
-               assert status=='WaitingForPlayers','Match is transitioning; retry when stable'
-               lobby=root/'data/matches'/f(m,'Id')/'lobby-status.json'
-               assert lobby.is_file() and f(json.loads(lobby.read_text()),'State')=='WaitingPlayers','Lobby is not waiting'
-             return s
-            s=check()
-            backup=root/'data/recovery'/('retire-T009-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-'+uuid.uuid4().hex[:8]);backup.mkdir(parents=True,mode=0o700)
-            shutil.copy2(p,backup/'tournament-state.before-stop.json')
-            check();stopped=False
-            try:
-             run(['docker','stop','--time','30',container]);stopped=True
-             s=json.loads(p.read_text());shutil.copy2(p,backup/'tournament-state.stopped.json')
-             assert not any(f(m,'Status')=='Playing' for m in f(s,'Matches').values()),'Game transitioned to Playing; state left unchanged'
-             updated=copy.deepcopy(s);t=f(updated,'Tournaments')['T009'];t[k(t,'Status')]='Cancelled'
-             changed=[]
-             for mid,m in f(updated,'Matches').items():
-              if f(m,'TournamentId')=='T009' and f(m,'Status') not in ['Completed','Cancelled']:
-               m[k(m,'Status')]='Cancelled';changed.append(mid)
-             # Preserve all player records, results, map receipts and bracket history.
-             assert f(updated,'Players')==f(s,'Players') and f(updated,'Series')==f(s,'Series')
-             attrs=p.stat();tmp=p.with_suffix('.retiring-'+uuid.uuid4().hex)
-             tmp.write_text(json.dumps(updated,indent=2));os.chmod(tmp,attrs.st_mode & 0o777);os.chown(tmp,attrs.st_uid,attrs.st_gid);os.replace(tmp,p)
-             shutil.copy2(p,backup/'tournament-state.cancelled.json')
-             print('T009 retired with user authorization; cancelled matches:',','.join(changed));print('Backup:',backup)
-            except BaseException:
-             if stopped:subprocess.run(['docker','start',container],check=False,capture_output=True)
-             raise
+            s=json.loads((root/'data/tournament-state.json').read_text());assert f(f(s,'Tournaments')['T009'],'Status')=='Cancelled';assert f(f(s,'Matches')['M0020'],'Status')=='Cancelled'
+            assert not any(f(m,'Status') in ['Queued','StartingServer','WaitingForPlayers','Playing'] for m in f(s,'Matches').values()),'New match active: do not run diagnostics'
+            before=hashlib.sha256((root/'data/tournament-state.json').read_bytes()).hexdigest()
+            manifest=run(['docker','exec',container,'cat','/app/game/mods/ca/mod.yaml']).stdout
+            assert 'Version: v0.97.4' in manifest and '~^SupportDir|maps/ca/generated: User' in manifest
+            assert 'TournamentMapDownloadServer' in manifest
+            print('PASS live bot v0.97.4, generated folder and download trait; T009/M0020 cancelled; no active matches')
+            base='/tmp/ymca-release-check-'+uuid.uuid4().hex
+            for players in [2,4]:
+             out=base+'/generated-'+str(players);support=base+'/support-'+str(players)
+             cmd=['docker','exec','-e','MOD_SEARCH_PATHS=/app/game/mods,/app/game/engine/mods','-w','/app/game',container]
+             generated=run(cmd+['dotnet','/app/game/engine/bin/OpenRA.Utility.dll','ca','--generate-tournament-map','MountainValleys','409274986',str(players),out])
+             receipt=json.loads(run(cmd+['cat',out+'/map.json']).stdout);assert receipt['EngineVersion']=='v0.97.4';uid=receipt['Uid']
+             run(cmd+['sh','-c','mkdir -p '+support+'/maps/ca/generated && cp '+out+'/generated.oramap '+support+'/maps/ca/generated/test.oramap'])
+             args=['timeout','--signal=TERM','--kill-after=5s','18s','dotnet','/app/game/engine/bin/OpenRA.Server.dll','Game.Mod=ca','Engine.EngineDir=/app/game/engine','Engine.SupportDir='+support,'Server.Map='+uid,'Server.MapPool='+uid,'Server.ListenPort=12409','Server.AdvertiseOnline=false','Server.EnableNat=false','Server.QueryMapRepository=false','Server.Name=IsolatedReleaseValidation']
+             result=run(cmd+args,check=False);assert result.returncode==124,(result.stdout+result.stderr)[-2000:]
+             log=run(cmd+['cat',support+'/Logs/dedicated-server.log']).stdout;assert 'Initial map: '+uid in log
+             print('PASS deployed Linux generator + dedicated host, players='+str(players)+', exact UID='+uid)
+            # Public archive remains byte-identical and response carries the immutable checksum.
+            m=f(s,'Matches')['M0020']
+            with urllib.request.urlopen('https://tournament.crowdcontrol.network/map/M0020/download',timeout=30) as response:
+             data=response.read();assert hashlib.sha256(data).hexdigest()==f(m,'GeneratedMapSha256');assert int(response.headers['Content-Length'])==len(data);assert response.headers['ETag'].strip('"')==f(m,'GeneratedMapSha256')
+            print('PASS public HTTPS map length, SHA-256 and ETag')
+            assert before==hashlib.sha256((root/'data/tournament-state.json').read_bytes()).hexdigest(),'Tournament state changed during validation; review before claiming unchanged'
+            print('PASS tournament state unchanged during isolated diagnostics; no tournament created')
             PY
-            trap 'docker start ymca-tournament-bot >/dev/null 2>&1 || true' EXIT
-            cd ../..
-            git fetch origin tournament-bot
-            git checkout tournament-bot
-            git pull --ff-only origin tournament-bot
-            ./TournamentBot/deploy/deploy.sh
