@@ -9,6 +9,18 @@ namespace Ymca.TournamentBot.Tests;
 public sealed class TournamentServerConfigurationTests
 {
     [Test]
+    public void HostPackagingVersionMatchesClientRelease()
+    {
+        var root = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
+        while (root != null && !File.Exists(Path.Combine(root.FullName, "mod.config"))) root = root.Parent;
+        Assert.That(root, Is.Not.Null, "Repository root must be available for packaging checks.");
+        using var notes = System.Text.Json.JsonDocument.Parse(File.ReadAllText(Path.Combine(root!.FullName, "mods/ca/release-notes.json")));
+        var version = notes.RootElement.GetProperty("tag_name").GetString();
+        Assert.That(File.ReadAllText(Path.Combine(root.FullName, "TournamentBot/Dockerfile")), Does.Contain("ARG YMCA_VERSION=" + version));
+        Assert.That(File.ReadAllText(Path.Combine(root.FullName, "TournamentBot/deploy/docker-compose.yml")), Does.Contain("YMCA_VERSION: " + version));
+    }
+
+    [Test]
     public async Task AssignedMapIsTheOnlyAllowedLobbyMap()
     {
         var config = new OpenRaServerConfiguration

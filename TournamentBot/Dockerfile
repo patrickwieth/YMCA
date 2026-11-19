@@ -2,7 +2,7 @@
 # are no longer reliably available for rebuilding this .NET 6 host.
 FROM mcr.microsoft.com/dotnet/sdk:6.0-jammy AS build
 
-ARG YMCA_VERSION=v0.97.4
+ARG YMCA_VERSION=v0.97.5
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates curl make python3 unzip \
