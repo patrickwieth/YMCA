@@ -23,5 +23,11 @@ autocomplete add/remove/filtering, empty pools, unknown/duplicate/concurrent
 commands, legacy-mode isolation and pending versus running tournament behavior.
 This is a bot-only correction; clients remain compatible with v0.97.4.
 
-Rollout: pending guarded deployment; no tournament cancellation or state reset is
-part of this correction.
+Validation: 36 ordinary bot tests passed (the two opt-in native host tests were
+not rerun for this bot-only correction). Source commit `47c70b40` was deployed
+through the normal guarded workflow, without cancelling/resetting tournaments:
+https://github.com/patrickwieth/YMCA/actions/runs/44472936653 .
+Deployment succeeded on November 19, 2026 at 06:34 UTC; Discord login/command
+registration and tournament host v0.97.4 were verified. No new client package or
+game-server deployment was needed. Actual Discord user autocomplete interaction
+is not automated by this test harness; the callback uses the tested helper.
