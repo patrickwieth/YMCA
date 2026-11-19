@@ -40,9 +40,9 @@ jobs:
              generated=run(cmd+['dotnet','/app/game/engine/bin/OpenRA.Utility.dll','ca','--generate-tournament-map','MountainValleys','409274986',str(players),out])
              receipt=json.loads(run(cmd+['cat',out+'/map.json']).stdout);assert receipt['EngineVersion']=='v0.97.4';uid=receipt['Uid']
              run(cmd+['sh','-c','mkdir -p '+support+'/maps/ca/generated && cp '+out+'/generated.oramap '+support+'/maps/ca/generated/test.oramap'])
-             args=['timeout','--signal=TERM','--kill-after=5s','18s','dotnet','/app/game/engine/bin/OpenRA.Server.dll','Game.Mod=ca','Engine.EngineDir=/app/game/engine','Engine.SupportDir='+support,'Server.Map='+uid,'Server.MapPool='+uid,'Server.ListenPort=12409','Server.AdvertiseOnline=false','Server.EnableNat=false','Server.QueryMapRepository=false','Server.Name=IsolatedReleaseValidation']
+             args=['timeout','--signal=TERM','--kill-after=5s','18s','dotnet','/app/game/engine/bin/OpenRA.Server.dll','Game.Mod=ca','Engine.EngineDir=/app/game/engine','Engine.SupportDir='+support,'Server.Map='+uid,'Server.MapPool='+uid,'Server.ListenPort=12409','Server.AdvertiseOnline=false','Server.EnableNat=false','Server.QueryMapRepository=false','Server.Name=IsolatedReleaseValidation','Server.AllowedPlayerNames='+','.join(['ValidationA','ValidationB','ValidationC','ValidationD'][:players]),'Server.RequiredPlayerCount='+str(players)]
              result=run(cmd+args,check=False);assert result.returncode==124,(result.stdout+result.stderr)[-2000:]
-             log=run(cmd+['cat',support+'/Logs/dedicated-server.log']).stdout;assert 'Initial map: '+uid in log
+             log=run(cmd+['cat',support+'/Logs/dedicated-server.log']).stdout;assert 'Initial map: '+uid in log,log[-2000:]
              print('PASS deployed Linux generator + dedicated host, players='+str(players)+', exact UID='+uid)
             # Public archive remains byte-identical and response carries the immutable checksum.
             m=f(s,'Matches')['M0020']
