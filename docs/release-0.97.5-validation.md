@@ -48,9 +48,30 @@ COPY, before rollout. Both following read-only checks confirmed the existing bot
 container remained up for eight hours, unchanged. No match/state changes occurred.
 The corrected maintenance workflow is read-only.
 
-## Publication status
+## Published and verified
 
-Release pipeline and live deployment verification are pending. Tag must originate
-on tournament-bot; all three platform builds precede stable manifest publication
-and game-server deployment. Tournament-host deployment is separate and guarded.
-Do not report servers/packages ready until actual workflow/live checks succeed.
+- Tag `v0.97.5`: `bc8604c4`, on tournament-bot with master/isometric ancestry.
+- Packaging run **44600367576**: Linux, macOS, Windows, stable manifest publication
+  and public game-server deployment all succeeded. The server restart guard passed.
+- Windows installer/portable ZIP, AppImage and DMG are available. All three stable
+  manifest checksums match the GitHub asset SHA256 digests.
+- Downloaded Windows portable package was inspected for v0.97.5, refinery rules,
+  attendance server and matching engine silhouette API. Its native full/partial/ramp
+  pixel comparisons and resolved refinery utility checks passed. Portable ZIP SHA256:
+  `827320e2ccac405908b1dea181ca63ef4d08daff8ab6e377d8f1726874aae308`.
+- Live public ports 1234 and 1235 both advertise v0.97.5 with zero connected players
+  or spectators at the final check. Only YMCA1/YMCA2 were restarted; Cameo is outside
+  the script's restart scope.
+- First separate bot rollout **44604225578** revealed the Docker/Compose host version
+  was still pinned to v0.97.4. No active matches were present. Follow-up commit
+  `9de05030` aligns the host with v0.97.5 and adds a client-release/host-packaging
+  version consistency regression (96 bot tests now pass). Published game packages
+  and tag remain unchanged.
+- Corrected guarded bot rollout **44605113405** succeeded, including Discord command
+  registration and explicit v0.97.5 host verification. Read-only check **44605792236**
+  at 20:09 UTC confirmed v0.97.5, the attendance trait and no active/retained matches.
+- Public tournament index and T010 bracket return HTTP 200 with CSP. No attendance
+  timer was activated, tournament created, match result changed, or safety guard
+  bypassed during this release.
+
+Release: https://github.com/patrickwieth/YMCA/releases/tag/v0.97.5

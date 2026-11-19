@@ -1,6 +1,7 @@
 # Refinery access and scorch palettes — November 19, 2026
 
-Local Game / isometric changes only. No release, deployment, commit or push.
+Implemented in Game / isometric, merged to master and published in v0.97.5.
+See `../release-0.97.5-validation.md` for package and deployment verification.
 
 ## Refinery docking
 

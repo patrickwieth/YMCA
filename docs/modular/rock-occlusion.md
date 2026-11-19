@@ -1,6 +1,7 @@
 # Rock occlusion: units and resources
 
-Implemented locally in Game / isometric. No commit, push, release or deployment.
+Implemented in Game / isometric, approved after the ramp/occlusion correction,
+merged to master and published in v0.97.5. See `../release-0.97.5-validation.md`.
 
 ## Reproduced defect
 
@@ -73,7 +74,9 @@ retain their normal body color without white tint. Native pictures were inspecte
 Evidence: `art-source/rock-occlusion-review/correction/` from
 `.tmp/rock-slopes-baseline04` and `.tmp/rock-slopes04`. The separate movement, cloak,
 fog and resource-depletion fixture also passes at `.tmp/rock-correction-regression`.
-Normal Release build and 365 Modular tests pass. Nothing was published.
+Normal Release build and 365 Modular tests pass. This correction was approved by
+the player and is included in v0.97.5; the downloaded Windows package also passed
+the native full/partial/ramp pixel comparisons.
 
 ```
 powershell -File tools/test-rock-occlusion.ps1 -EngineDirectory ENGINE -OutputDirectory BASELINE -Slopes -Baseline

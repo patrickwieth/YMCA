@@ -1,8 +1,8 @@
 # GDI foundation joints — November 19, 2026
 
 User requested replacing player-colored corner panels with player-colored joints,
-matching Soviet/China treatment. Implemented locally in Game / isometric; no release,
-commit or push.
+matching Soviet/China treatment. Implemented in Game / isometric, merged to master and published in v0.97.5.
+See `../release-0.97.5-validation.md`.
 
 - All five GDI foundation sizes (1x1, 2x2, 3x3, 4x4, 4x5) now bind new indexed
   `bib*-joint-remap.png` overlays. EMP inherits the same mask with its existing offset.
