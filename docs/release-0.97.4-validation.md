@@ -77,11 +77,28 @@ run rather than claiming that entire historical audit is green.
 - Release: https://github.com/patrickwieth/YMCA/releases/tag/v0.97.4 . Public notes
   are concise English, grouped under Features and Bug Fixes.
 
-**Tournament bot rollout remains pending.** At the last read-only check (23:36
-UTC), T009/M0020 was still WaitingForPlayers. Permission to renew this waiting
-lobby during the version update was requested; no response had been received at
-publication. The bot deployment was NOT run and its match guard was NOT bypassed.
-The running tournament host remains on v0.97.3, with the prior live map-search-path
-repair. New automatic tournament downloads require the bot/host update as well
-as updated clients. The earlier recovery/backup is documented in
-`tournament-M0020-recovery.md`. Recheck all matches immediately before any update.
+**Tournament bot rollout completed on November 19.** The user explicitly cancelled
+T009 and requested readiness confirmation before creating a replacement. After
+checking no game was playing and no other match was active, T009 and M0020 were
+marked Cancelled with before/after backups; player registrations, completed
+results, bracket history and map archives were preserved. Backup directory:
+`data/recovery/retire-T009-20261119T060513Z-9bba7301/`.
+
+The normal guarded deployment succeeded without FORCE_DEPLOY or bypassing its
+match guard: https://github.com/patrickwieth/YMCA/actions/runs/44469584179 .
+Discord login/command registration and live tournament host v0.97.4 were verified.
+
+Post-deployment validation succeeded:
+https://github.com/patrickwieth/YMCA/actions/runs/44470864796 . The actual deployed
+Linux engine generated both 2- and 4-player maps and started isolated dedicated
+hosts with their exact UIDs. The public HTTPS archive returned matching length,
+SHA-256 and ETag. Tournament state was unchanged by these diagnostics. Preliminary
+probe attempts omitted production ENGINE_DIR and reserved-player startup settings;
+the harness was corrected rather than changing the working production settings.
+
+Fresh native GUI profiles downloaded from the updated live HTTPS endpoint, passed
+player/late-spectator/explicit-opt-in cases and started an actual local test match
+without manual map installation. Evidence: temp `ymca-map-download-probes/live0974-final`.
+No replacement tournament was created by the assistant. All participants must use
+v0.97.4 for the updated tournament host. The earlier recovery is documented in
+`tournament-M0020-recovery.md`.
