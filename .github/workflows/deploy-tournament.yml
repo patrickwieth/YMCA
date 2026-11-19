@@ -21,7 +21,10 @@ jobs:
             python3 - <<'PY'
             import json,pathlib,subprocess,uuid,urllib.request,hashlib
             root=pathlib.Path.cwd();container='ymca-tournament-bot'
-            def run(args,check=True):return subprocess.run(args,check=check,text=True,capture_output=True)
+            def run(args,check=True):
+             result=subprocess.run(args,text=True,capture_output=True)
+             if check and result.returncode:raise RuntimeError(str(result.returncode)+' '+result.stdout[-3000:]+' '+result.stderr[-3000:])
+             return result
             def f(x,n):return x.get(n,x.get(n[0].lower()+n[1:]))
             s=json.loads((root/'data/tournament-state.json').read_text());assert f(f(s,'Tournaments')['T009'],'Status')=='Cancelled';assert f(f(s,'Matches')['M0020'],'Status')=='Cancelled'
             assert not any(f(m,'Status') in ['Queued','StartingServer','WaitingForPlayers','Playing'] for m in f(s,'Matches').values()),'New match active: do not run diagnostics'
@@ -33,7 +36,7 @@ jobs:
             base='/tmp/ymca-release-check-'+uuid.uuid4().hex
             for players in [2,4]:
              out=base+'/generated-'+str(players);support=base+'/support-'+str(players)
-             cmd=['docker','exec','-e','MOD_SEARCH_PATHS=/app/game/mods,/app/game/engine/mods','-w','/app/game',container]
+             cmd=['docker','exec','-e','ENGINE_DIR=/app/game/engine','-e','MOD_SEARCH_PATHS=/app/game/mods,/app/game/engine/mods','-w','/app/game',container]
              generated=run(cmd+['dotnet','/app/game/engine/bin/OpenRA.Utility.dll','ca','--generate-tournament-map','MountainValleys','409274986',str(players),out])
              receipt=json.loads(run(cmd+['cat',out+'/map.json']).stdout);assert receipt['EngineVersion']=='v0.97.4';uid=receipt['Uid']
              run(cmd+['sh','-c','mkdir -p '+support+'/maps/ca/generated && cp '+out+'/generated.oramap '+support+'/maps/ca/generated/test.oramap'])
