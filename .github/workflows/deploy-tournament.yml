@@ -7,7 +7,7 @@ jobs:
   maintenance:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate deployed Linux generator, hosts and HTTPS maps
+      - name: Inspect series and game numbers without changing state
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -19,36 +19,18 @@ jobs:
             set -eu
             cd ~/src/YMCA-tournament/TournamentBot/deploy
             python3 - <<'PY'
-            import json,pathlib,subprocess,uuid,urllib.request,hashlib
-            root=pathlib.Path.cwd();container='ymca-tournament-bot'
-            def run(args,check=True):
-             result=subprocess.run(args,text=True,capture_output=True)
-             if check and result.returncode:raise RuntimeError(str(result.returncode)+' '+result.stdout[-3000:]+' '+result.stderr[-3000:])
-             return result
+            import json,pathlib
+            s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
             def f(x,n):return x.get(n,x.get(n[0].lower()+n[1:]))
-            s=json.loads((root/'data/tournament-state.json').read_text());assert f(f(s,'Tournaments')['T009'],'Status')=='Cancelled';assert f(f(s,'Matches')['M0020'],'Status')=='Cancelled'
-            assert not any(f(m,'Status') in ['Queued','StartingServer','WaitingForPlayers','Playing'] for m in f(s,'Matches').values()),'New match active: do not run diagnostics'
-            before=hashlib.sha256((root/'data/tournament-state.json').read_bytes()).hexdigest()
-            manifest=run(['docker','exec',container,'cat','/app/game/mods/ca/mod.yaml']).stdout
-            assert 'Version: v0.97.4' in manifest and '~^SupportDir|maps/ca/generated: User' in manifest
-            assert 'TournamentMapDownloadServer' in manifest
-            print('PASS live bot v0.97.4, generated folder and download trait; T009/M0020 cancelled; no active matches')
-            base='/tmp/ymca-release-check-'+uuid.uuid4().hex
-            for players in [2,4]:
-             out=base+'/generated-'+str(players);support=base+'/support-'+str(players)
-             cmd=['docker','exec','-e','ENGINE_DIR=/app/game/engine','-e','MOD_SEARCH_PATHS=/app/game/mods,/app/game/engine/mods','-w','/app/game',container]
-             generated=run(cmd+['dotnet','/app/game/engine/bin/OpenRA.Utility.dll','ca','--generate-tournament-map','MountainValleys','409274986',str(players),out])
-             receipt=json.loads(run(cmd+['cat',out+'/map.json']).stdout);assert receipt['EngineVersion']=='v0.97.4';uid=receipt['Uid']
-             run(cmd+['sh','-c','mkdir -p '+support+'/maps/ca/generated && cp '+out+'/generated.oramap '+support+'/maps/ca/generated/test.oramap'])
-             args=['timeout','--signal=TERM','--kill-after=5s','18s','dotnet','/app/game/engine/bin/OpenRA.Server.dll','Game.Mod=ca','Engine.EngineDir=/app/game/engine','Engine.SupportDir='+support,'Server.Map='+uid,'Server.MapPool='+uid,'Server.ListenPort=12409','Server.AdvertiseOnline=false','Server.EnableNat=false','Server.QueryMapRepository=false','Server.Name=IsolatedReleaseValidation','Server.AllowedPlayerNames='+','.join(['ValidationA','ValidationB','ValidationC','ValidationD'][:players]),'Server.RequiredPlayerCount='+str(players)]
-             result=run(cmd+args,check=False);assert result.returncode==124,(result.stdout+result.stderr)[-2000:]
-             log=run(cmd+['cat',support+'/Logs/dedicated-server.log']).stdout;assert 'Initial map: '+uid in log,log[-2000:]
-             print('PASS deployed Linux generator + dedicated host, players='+str(players)+', exact UID='+uid)
-            # Public archive remains byte-identical and response carries the immutable checksum.
-            m=f(s,'Matches')['M0020']
-            with urllib.request.urlopen('https://tournament.crowdcontrol.network/map/M0020/download',timeout=30) as response:
-             data=response.read();assert hashlib.sha256(data).hexdigest()==f(m,'GeneratedMapSha256');assert int(response.headers['Content-Length'])==len(data);assert response.headers['ETag'].strip('"')==f(m,'GeneratedMapSha256')
-            print('PASS public HTTPS map length, SHA-256 and ETag')
-            assert before==hashlib.sha256((root/'data/tournament-state.json').read_bytes()).hexdigest(),'Tournament state changed during validation; review before claiming unchanged'
-            print('PASS tournament state unchanged during isolated diagnostics; no tournament created')
+            ts=f(s,'Tournaments');ss=f(s,'Series');ms=f(s,'Matches')
+            for t in list(ts.values())[-4:]:
+             print('TOURNAMENT',f(t,'Id'),'status',f(t,'Status'),'round',f(t,'RoundNumber'),'wins-required',f(t,'WinsRequired'),'selection',f(t,'MapSelection') or 'PlayerChoice(default)')
+             for sid in (f(t,'SeriesIds') or [])[-8:]:
+              v=ss[sid];a=str(f(v,'PlayerOneDiscordId'));b=str(f(v,'PlayerTwoDiscordId'))
+              wins=f(v,'Wins') or {};picks=f(v,'MapPicks') or {}
+              print(' SERIES',sid,'round',f(v,'TournamentRound'),'status',f(v,'Status'),'score',wins.get(a,0),wins.get(b,0),'pick-counts',len(picks.get(a,[])),len(picks.get(b,[])))
+              print(' MAPS',[(f(x,'Title'),f(x,'Uid')) for x in f(v,'Maps') or []])
+              for mid in f(v,'MatchIds') or []:
+               m=ms[mid];winner=f(m,'FinalWinnerDiscordId');side='one' if str(winner)==a else 'two' if str(winner)==b else '-'
+               print('  MATCH',mid,'game',f(m,'SeriesGameNumber'),'status',f(m,'Status'),'winner-side',side,'parent',f(m,'ParentMatchId'),'map',f(m,'MapTitle'),'generation',f(f(m,'Generation') or {},'Id'))
             PY
