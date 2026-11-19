@@ -83,6 +83,12 @@ Native testing found the lingering dedicated-process issue and fixed it before
 rollout. The initial replay poll probe also needed to tolerate an unfinished
 metadata footer; no production error was suppressed.
 
-Rollout pending: at the latest read-only check (November 19, 08:59 UTC), T010
-was running and M0024 was WaitingForPlayers (M0023 had completed). Do not cancel
-a tournament, edit results, or bypass deployment guards for this update.
+Rollout was held while T010/M0024 was active. After T010 completed naturally,
+the combined web/post-game/resolve/attendance update was deployed through normal
+guards: https://github.com/patrickwieth/YMCA/actions/runs/44516265491 .
+Discord command registration and host v0.97.4 were verified on November 19 at
+11:38 UTC. Public `/tournaments`, `/tournament/T010` and the script endpoint respond
+successfully. T010's three actual rounds and completed matches were checked in the
+live HTML and rendered in an isolated headless browser; no participant credentials
+are exposed. The 11:41 UTC read-only check confirmed no active matches or timers.
+No tournament/results were changed for deployment; no new client release needed.

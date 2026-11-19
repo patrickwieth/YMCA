@@ -63,5 +63,12 @@ Native fixtures use a short explicitly injected deadline; the real bot command's
 or start any production timer. The harness retains process handles to verify exit
 codes for quickly terminating owned servers.
 
-Implementation is pending the normal guarded rollout with the public tournament
-page/post-game changes. Do not interrupt or cancel active matches to install it.
+Deployed after T010 completed, together with the public-page/post-game changes.
+Source commits: `a4496dc4`, `4c91a094`; Windows .NET, Linux .NET and Linux Mono CI
+succeeded. Normal guarded deployment succeeded without cancellation/force:
+https://github.com/patrickwieth/YMCA/actions/runs/44516265491 .
+Discord command registration and host v0.97.4 were verified at 11:38 UTC on
+November 19. Follow-up read-only verification at 11:41 UTC confirmed no active
+matches, no pending attendance timers and the deployed attendance trait:
+https://github.com/patrickwieth/YMCA/actions/runs/44517021570 .
+No production attendance timer was activated by the assistant.
