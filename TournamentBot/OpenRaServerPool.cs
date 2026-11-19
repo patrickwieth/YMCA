@@ -20,6 +20,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     public event Func<MatchRecord, Task>? ServerReady;
     public event Func<MatchRecord, Task>? MatchStarted;
     public event Func<MatchRecord, Task>? ServerStopped;
+    public event Func<MatchRecord, OpenRA.Mods.CA.MapGeneration.TournamentAttendanceDecision, Task<bool>>? AttendanceDecisionAvailable;
     public event Func<MatchRecord, ReplayResult, Task>? ResultAvailable;
     public event Func<MatchRecord, string, Task>? ServerFailed;
 
@@ -73,6 +74,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         match.SpectatorPassword = match.AllowSpectators ? CreatePassword() : "";
         match.SupportDirectory = Path.Combine(config.MatchDirectory, match.Id);
         Directory.CreateDirectory(match.SupportDirectory);
+        TournamentAttendanceFiles.Clear(match);
 
         if (match.Generation != null)
         {
@@ -116,6 +118,13 @@ public sealed class OpenRaServerPool : IAsyncDisposable
                 {
                     gameStarted = true;
                     await InvokeAsync(MatchStarted, match);
+                }
+
+                var attendance = TournamentAttendanceFiles.Read(match);
+                if (attendance?.Outcome is "OneWins" or "TwoWins")
+                {
+                    if (AttendanceDecisionAvailable != null && await AttendanceDecisionAvailable(match, attendance))
+                        return; // The authoritative lobby-thread decision already stopped this host.
                 }
 
                 foreach (var replay in Directory.EnumerateFiles(match.SupportDirectory, "*.orarep", SearchOption.AllDirectories)

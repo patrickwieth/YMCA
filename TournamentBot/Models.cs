@@ -63,6 +63,17 @@ public sealed class RegisteredPlayer
     public DateTime RegisteredAtUtc { get; set; }
 }
 
+public sealed class MatchAttendanceTimer
+{
+    public string Id { get; set; } = "";
+    public ulong StartedByDiscordId { get; set; }
+    public DateTime StartedAtUtc { get; set; }
+    public DateTime DeadlineUtc { get; set; }
+    public bool EligibleForForfeit { get; set; }
+    public bool WarningSent { get; set; }
+    public string Outcome { get; set; } = "Pending";
+}
+
 public sealed class MatchRecord
 {
     public GeneratedMapSpec? Generation { get; set; }
@@ -86,6 +97,8 @@ public sealed class MatchRecord
     public string Password { get; set; } = "";
     public bool AllowSpectators { get; set; }
     public string SpectatorPassword { get; set; } = "";
+    public MatchAttendanceTimer? AttendanceTimer { get; set; }
+    public string? ForfeitReason { get; set; }
     public string SupportDirectory { get; set; } = "";
     public DateTime? ServerRetainUntilUtc { get; set; }
     public string? ReplayPath { get; set; }

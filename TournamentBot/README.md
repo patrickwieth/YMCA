@@ -15,6 +15,7 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 - `/tournament-delete tournament-id` — admin: delete a tournament that is not running.
 - `/tournament-start tournament-id` — admin: close registration and queue the first round.
 - `/tournament-status [tournament-id]` — show entrants, losses, and champion.
+- `/tournament-timer tournament-id` — admin: start a 15-minute attendance timer for that tournament's currently open games. No automatic timers.
 
 ## Setup
 
@@ -52,6 +53,10 @@ Admins maintain one shared tournament map/archetype pool, which each tournament 
 - **Random — fixed for each round** (`round-random`): the bot fixes the complete BO1/BO3/BO5 map sequence before starting the round. Every pairing uses the same map for game 1, game 2, and so on, including identical generated-map seeds. There are no pick DMs. Sequences persist across restarts; subsequent rounds receive a new sequence. Types cycle through the pool before repeating; small pools are supported.
 
 Only games needed to decide a series are queued. Technical rematches retain the exact map and seed. Existing tournaments keep their original selection mode.
+
+## Admin attendance timer
+
+An admin can explicitly start `/tournament-timer` for all currently open games in a running tournament. Players receive the deadline and a two-minute warning. At expiry, if exactly one full side is present and the other is absent, the absent side loses the game automatically. Spectators do not count. Both present (including not Ready), both absent, partial teams and technical uncertainty require admin review instead. Games already running and games created afterward are unaffected. Queue/host outages never cause an automatic loss. See `docs/tournament-attendance-timer.md` for persistence and safety details.
 
 ## Public tournament pages
 

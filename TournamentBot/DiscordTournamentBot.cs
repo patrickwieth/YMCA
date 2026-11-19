@@ -54,13 +54,14 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         await client.StartAsync();
         await coordinator.StartAsync();
         var releaseWatcher = WatchReleaseAnnouncementsAsync(cancellationToken);
+        var attendanceWatcher = coordinator.WatchAttendanceTimersAsync(cancellationToken);
 
         using var registration = cancellationToken.Register(() => stopped.TrySetResult());
         await stopped.Task;
         await client.StopAsync();
         try
         {
-            await releaseWatcher;
+            await Task.WhenAll(releaseWatcher, attendanceWatcher);
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -187,6 +188,11 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .AddOption(TournamentOption("Choose an open tournament", true))
                 .Build(),
             new SlashCommandBuilder()
+                .WithName("tournament-timer")
+                .WithDescription("Admin: give all currently open games 15 minutes to join and start.")
+                .AddOption(TournamentOption("Tournament whose open games receive the timer", true))
+                .Build(),
+            new SlashCommandBuilder()
                 .WithName("tournament-status")
                 .WithDescription("Show tournament standings and current state.")
                 .AddOption(TournamentOption("Choose a tournament", false))
@@ -299,6 +305,12 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                     break;
                 case "tournament-start":
                     await StartTournamentAsync(command);
+                    break;
+                case "tournament-timer":
+                    EnsureAdmin(command.User);
+                    await command.DeferAsync(ephemeral: true);
+                    var timed = await coordinator.StartAttendanceTimerAsync(GetString(command, "tournament-id"), command.User.Id);
+                    await command.FollowupAsync($"15-minute attendance timer started for {timed.Count} open game(s). Running games are unchanged.", ephemeral: true);
                     break;
                 case "tournament-status":
                     await ShowTournamentAsync(command);
@@ -596,6 +608,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 {
                     "tournament-join" or "tournament-team-join" or "tournament-start" => tournaments.Where(value => value.Status == TournamentStatus.Registration),
                     "tournament-leave" => tournaments.Where(value => value.Status == TournamentStatus.Registration),
+                    "tournament-timer" => tournaments.Where(value => value.Status == TournamentStatus.Running),
                     _ => tournaments
                 };
 
@@ -872,11 +885,13 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         var text = isRematch
             ? $"Both players requested a rematch for **{match.Id}**. A new match was queued."
             : $"Match **{match.Id}** completed. Winner: {winner}." +
+                (match.ForfeitReason == null ? "" : $"\nForfeit: {Escape(match.ForfeitReason)}") +
                 (replayUrl == null ? "" : $"\nReplay: {replayUrl}");
         await SendAdminAsync(text);
 
         if (!isRematch)
             await SendAnnouncementAsync($"🏁 **{match.Id}** — Winner: {winner}" +
+                (match.ForfeitReason == null ? "" : $"\nForfeit: {Escape(match.ForfeitReason)}") +
                 (replayUrl == null ? "" : $"\n▶️ [Watch replay in YMCA]({replayUrl})"));
     }
 
@@ -891,6 +906,30 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         await RemoveAllMatchButtonsAsync(match);
         await SendAdminAsync($"❌ Server for match **{match.Id}** failed: {Escape(reason)}");
     }
+
+    public async Task AttendanceTimerStartedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> matches, DateTime deadline)
+    {
+        var text = $"⏱️ **{Escape(tournament.Name)}** — an admin started a 15-minute attendance timer. " +
+            $"Join and start by <t:{new DateTimeOffset(deadline).ToUnixTimeSeconds()}:T> (<t:{new DateTimeOffset(deadline).ToUnixTimeSeconds()}:R>).\n" +
+            "If only one complete side is present, the absent side loses. Both present, both absent, partial teams or technical problems require admin review.\n" +
+            "Applies only to these currently open games: " + string.Join(", ", matches.Take(25).Select(m => $"`{m.Id}`")) +
+            (matches.Count > 25 ? $" and {matches.Count - 25} more." : "");
+        await SendAnnouncementAsync(text);
+        foreach (var match in matches)
+            foreach (var player in MatchParticipantIds(match))
+                try { await SendDmAsync(player, text + $"\nYour game: `{match.Id}`" + (config.JoinPage.Enabled && match.Port != null ? $"\n{joinPage.GetPublicJoinUrl(match.Id, player)}" : "\nLobby not yet available: no automatic loss for queue/host delays.")); }
+                catch (Exception ex) { Console.Error.WriteLine("Attendance DM failed: " + ex.Message); }
+    }
+
+    public async Task AttendanceTimerWarningAsync(MatchRecord match, DateTime deadline)
+    {
+        foreach (var player in MatchParticipantIds(match))
+            try { await SendDmAsync(player, $"⏱️ Game `{match.Id}`: approximately two minutes remain on the admin attendance timer. Deadline <t:{new DateTimeOffset(deadline).ToUnixTimeSeconds()}:T>."); }
+            catch (Exception ex) { Console.Error.WriteLine("Attendance warning DM failed: " + ex.Message); }
+    }
+
+    public Task AttendanceReviewAsync(MatchRecord match, string reason) =>
+        SendAdminAsync($"⏱️ Attendance timer for `{match.Id}` ended without an automatic winner: {Escape(reason)} Use `/resolve` if needed.");
 
     public async Task SeriesMapPicksRequestedAsync(TournamentRecord tournament, TournamentSeries series)
     {

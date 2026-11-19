@@ -62,6 +62,9 @@ public static class TournamentWebPage
                     if (!state.Matches.TryGetValue(mid, out var m) || m.TournamentId != t.Id) continue;
                     body.Append($"<li>Game {m.SeriesGameNumber}: {E(m.MapTitle)}<br><small>{E(m.Id)} · {E(Status(m.Status))}");
                     if (m.FinalWinnerDiscordId is ulong winner) body.Append($" · Winner: {E(Name(winner))}");
+                    if (m.ForfeitReason != null) body.Append(" · " + E(m.ForfeitReason));
+                    if (m.AttendanceTimer is { Outcome: "Pending" } timer)
+                        body.Append(" · Admin attendance deadline: " + E(timer.DeadlineUtc.ToString("HH:mm 'UTC'")));
                     if (m.ParentMatchId != null) body.Append(" · Rematch");
                     if (m.Status == MatchStatus.WaitingForPlayers && m.AllowSpectators && m.Port != null && !string.IsNullOrEmpty(m.SpectatorPassword))
                         body.Append($" · <a href='/spectate/{E(Uri.EscapeDataString(m.Id))}'>Spectate</a>");

@@ -121,6 +121,7 @@ public sealed class JoinPageServer : IAsyncDisposable
   {MapInstallationNotice(match)}
   <p>Match status: <strong>{WebUtility.HtmlEncode(liveState)}</strong></p>
   {countdown}
+  {(match.AttendanceTimer is { Outcome: "Pending" } timer ? $"<p class='countdown'>Admin attendance deadline: {WebUtility.HtmlEncode(timer.DeadlineUtc.ToString("HH:mm 'UTC'"))}. Join and start before the deadline.</p>" : "")}
   <table><thead><tr><th>Player</th><th>Tournament team</th><th>Connection</th><th>Ready</th><th>Team</th><th>Spawn</th></tr></thead>
   <tbody>{playerRows}</tbody></table>
   <p class=""muted"">This page refreshes every four seconds.</p>

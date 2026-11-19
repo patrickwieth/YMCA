@@ -12,9 +12,12 @@ public interface ITournamentNotifier
     Task SeriesMapPicksRequestedAsync(TournamentRecord tournament, TournamentSeries series);
     Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches);
     Task TournamentCompletedAsync(TournamentRecord tournament);
+    Task AttendanceTimerStartedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> matches, DateTime deadline);
+    Task AttendanceTimerWarningAsync(MatchRecord match, DateTime deadline);
+    Task AttendanceReviewAsync(MatchRecord match, string reason);
 }
 
-public sealed class TournamentCoordinator
+public sealed partial class TournamentCoordinator
 {
     readonly BotConfiguration config;
     readonly StateStore store;
@@ -32,6 +35,7 @@ public sealed class TournamentCoordinator
         serverPool.ResultAvailable += OnResultAvailableAsync;
         serverPool.ServerStopped += OnServerStoppedAsync;
         serverPool.ServerFailed += OnServerFailedAsync;
+        serverPool.AttendanceDecisionAvailable += OnAttendanceDecisionAsync;
     }
 
     public void SetNotifier(ITournamentNotifier value) => notifier = value;
@@ -49,6 +53,9 @@ public sealed class TournamentCoordinator
                 .ToList();
             foreach (var match in matches)
             {
+                // Preserve the admin deadline, but never penalize players for a host restart.
+                if (match.AttendanceTimer is { Outcome: "Pending" } timer)
+                    timer.EligibleForForfeit = false;
                 match.Status = MatchStatus.Queued;
                 match.Port = null;
                 match.Password = "";
@@ -61,6 +68,14 @@ public sealed class TournamentCoordinator
 
         foreach (var match in unfinished)
             await serverPool.EnqueueAsync(match);
+
+        // Recover a crash between persisting a result/forfeit and advancing its series.
+        var unprocessed = await store.ReadAsync(state => state.Matches.Values.Where(match =>
+            match.Status == MatchStatus.Completed && match.FinalWinnerDiscordId != null && match.TournamentId != null &&
+            state.Tournaments.TryGetValue(match.TournamentId, out var tournament) && tournament.Status == TournamentStatus.Running &&
+            !tournament.ProcessedMatchIds.Contains(match.Id)).ToList());
+        foreach (var match in unprocessed)
+            await AdvanceTournamentAsync(match);
     }
 
     public Task<RegisteredPlayer> RegisterAsync(ulong discordId, string displayName, string openRaName) =>
