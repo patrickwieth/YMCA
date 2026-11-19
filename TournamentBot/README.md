@@ -9,7 +9,7 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 - `/matches` — show recent matches.
 - `/resolve match-id winner` — admin: resolve a disputed match.
 - `/map-add map`, `/map-remove map`, `/map-pool` — choose official YMCA maps from autocomplete and manage the shared round map pool.
-- `/tournament-create name format mode best-of spectators` — admin: open a BO1, BO3, or BO5 single- or double-elimination tournament.
+- `/tournament-create name format mode best-of spectators [map-selection]` — admin: open a BO1, BO3, or BO5 tournament with player choices (default) or a fixed random map sequence per round.
 - `/tournament-join tournament-id` — enter an open tournament.
 - `/tournament-leave tournament-id` — leave before the tournament starts.
 - `/tournament-delete tournament-id` — admin: delete a tournament that is not running.
@@ -46,7 +46,12 @@ Automatic replay results are not final until player feedback agrees. Conflicting
 
 Tournament scheduling supports single elimination and double elimination. In double elimination a player moves to the losers pool after the first loss and is eliminated after the second. If the one-loss finalist beats the undefeated finalist, the bot schedules the required grand-final reset. Odd player counts receive automatic byes between rounds.
 
-Admins maintain one shared tournament map pool, which each tournament snapshots when it starts. BO1 uses one random map shared by the whole round. In BO3 each side chooses one map by DM and a shared random round map is used as the decider. In BO5 each side chooses two maps and the fifth map is the shared random decider. Every dropdown also offers **I don't care** for an automatic pick. Maps do not repeat within a series while enough alternatives remain, and technical rematches retain the same map.
+Admins maintain one shared tournament map/archetype pool, which each tournament snapshots when it starts. The optional `map-selection` setting chooses:
+
+- **Player choice (as before)** (`player-choice`, default): BO1 uses one random map shared by the round. In BO3 each side chooses one map by DM; in BO5 each chooses two. The deciding map is random and shared across the round. Pick menus also offer **I don't care**.
+- **Random — fixed for each round** (`round-random`): the bot fixes the complete BO1/BO3/BO5 map sequence before starting the round. Every pairing uses the same map for game 1, game 2, and so on, including identical generated-map seeds. There are no pick DMs. Sequences persist across restarts; subsequent rounds receive a new sequence. Types cycle through the pool before repeating; small pools are supported.
+
+Only games needed to decide a series are queued. Technical rematches retain the exact map and seed. Existing tournaments keep their original selection mode.
 
 ## Generated tournament maps
 

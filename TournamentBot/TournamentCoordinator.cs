@@ -182,7 +182,8 @@ public sealed class TournamentCoordinator
         TournamentFormat format,
         TournamentMode mode = TournamentMode.OneVsOne,
         bool allowSpectators = false,
-        int winsRequired = 1) => store.UpdateAsync(state =>
+        int winsRequired = 1,
+        TournamentMapSelection mapSelection = TournamentMapSelection.PlayerChoice) => store.UpdateAsync(state =>
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new InvalidOperationException("A tournament name is required.");
@@ -190,6 +191,9 @@ public sealed class TournamentCoordinator
             throw new InvalidOperationException("Add at least one map to the tournament map pool first.");
         if (winsRequired is < 1 or > 3)
             throw new InvalidOperationException("Required wins must be between one and three.");
+
+        if (!Enum.IsDefined(typeof(TournamentMapSelection), mapSelection))
+            throw new InvalidOperationException("Unknown tournament map selection mode.");
 
         var id = $"T{state.NextTournamentNumber++:000}";
         var tournament = new TournamentRecord
@@ -202,6 +206,7 @@ public sealed class TournamentCoordinator
             WinsRequired = winsRequired,
             Status = TournamentStatus.Registration,
             UseGeneratedMaps = config.Server.GenerateTournamentMaps,
+            MapSelection = mapSelection,
             MapPool = ActiveMapPool(state, config.Server.GenerateTournamentMaps).Select(map => new TournamentMap
             {
                 Uid = map.Uid,
@@ -391,7 +396,7 @@ public sealed class TournamentCoordinator
             if (!state.Series.TryGetValue(seriesId.Trim().ToUpperInvariant(), out var series))
                 throw new InvalidOperationException("Tournament series not found.");
             var tournament = GetTournament(state, series.TournamentId);
-            if (series.Status != TournamentSeriesStatus.AwaitingMapPicks)
+            if (tournament.MapSelection != TournamentMapSelection.PlayerChoice || series.Status != TournamentSeriesStatus.AwaitingMapPicks)
                 throw new InvalidOperationException("Map selection for this series is closed.");
             if (playerId != series.PlayerOneDiscordId && playerId != series.PlayerTwoDiscordId)
                 throw new InvalidOperationException("Only the team representatives can select maps.");
@@ -668,11 +673,18 @@ public sealed class TournamentCoordinator
         if (pairings.Count == 0)
             throw new InvalidOperationException($"Tournament {tournament.Id} cannot schedule its next round.");
 
-        var roundMap = SelectRoundMap(tournament);
+        var randomRound = tournament.MapSelection == TournamentMapSelection.RoundRandom;
+        // Freeze the whole round before enqueueing any match. Every pairing reuses
+        // these exact requests, including generated seeds and package identities.
+        var roundMaps = Enumerable.Range(0, randomRound ? tournament.WinsRequired * 2 - 1 : 1)
+            .Select(_ => SelectRoundMap(tournament)).ToList();
+        var roundMap = roundMaps[0];
         tournament.RoundNumber++;
         tournament.MapUid = roundMap.Uid;
         tournament.MapTitle = roundMap.Title;
-        tournament.RandomMapByRound[tournament.RoundNumber] = roundMap;
+        tournament.RandomMapByRound[tournament.RoundNumber] = roundMaps[^1];
+        if (randomRound)
+            tournament.MapsByRound[tournament.RoundNumber] = roundMaps;
 
         if (tournament.Format == TournamentFormat.SingleElimination && active.Count == 2
             && tournament.ThirdPlaceDiscordId == null
@@ -707,7 +719,7 @@ public sealed class TournamentCoordinator
                 TournamentRound = tournament.RoundNumber,
                 IsThirdPlaceMatch = isThirdPlaceMatch,
                 WinsRequired = tournament.WinsRequired,
-                Status = tournament.WinsRequired == 1
+                Status = randomRound || tournament.WinsRequired == 1
                     ? TournamentSeriesStatus.Playing
                     : TournamentSeriesStatus.AwaitingMapPicks,
                 MapPicks = new Dictionary<ulong, List<string>>
@@ -721,9 +733,9 @@ public sealed class TournamentCoordinator
                     [pairing.Second] = 0
                 }
             };
-            if (tournament.WinsRequired == 1)
+            if (randomRound || tournament.WinsRequired == 1)
             {
-                series.Maps.Add(roundMap);
+                series.Maps.AddRange(roundMaps);
                 matches.Add(CreateSeriesMatch(state, tournament, series, 1));
             }
 
@@ -745,10 +757,11 @@ public sealed class TournamentCoordinator
             .ToList();
         if (available.Count == 0)
         {
+            var previous = tournament.MapHistory.LastOrDefault() ?? tournament.MapUid;
             tournament.MapHistory.Clear();
             available = tournament.MapPool
                 .Where(map => tournament.MapPool.Count == 1
-                    || !map.Uid.Equals(tournament.MapUid, StringComparison.OrdinalIgnoreCase))
+                    || !map.Uid.Equals(previous, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
 

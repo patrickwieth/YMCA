@@ -34,6 +34,12 @@ public enum TournamentMode
     TwoVsTwo
 }
 
+public enum TournamentMapSelection
+{
+    PlayerChoice,
+    RoundRandom
+}
+
 public enum TournamentStatus
 {
     Registration,
@@ -137,6 +143,8 @@ public sealed class TournamentSeries
 public sealed class TournamentRecord
 {
     public bool UseGeneratedMaps { get; set; }
+    public TournamentMapSelection MapSelection { get; set; } = TournamentMapSelection.PlayerChoice;
+    public Dictionary<int, List<TournamentMap>> MapsByRound { get; set; } = new();
     public string Id { get; set; } = "";
     public string Name { get; set; } = "";
     public TournamentFormat Format { get; set; }

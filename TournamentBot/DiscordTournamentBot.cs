@@ -149,6 +149,13 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                     .AddChoice("BO5 — three wins", 3))
                 .AddOption("spectators", ApplicationCommandOptionType.Boolean,
                     "Allow public spectator joins and announce live matches", true)
+                .AddOption(new SlashCommandOptionBuilder()
+                    .WithName("map-selection")
+                    .WithDescription("Player choices (default), or the same random map sequence for everyone each round")
+                    .WithType(ApplicationCommandOptionType.String)
+                    .WithRequired(false)
+                    .AddChoice("Player choice (as before)", "player-choice")
+                    .AddChoice("Random — fixed for each round", "round-random"))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-team-join")
@@ -395,7 +402,13 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             : TournamentMode.OneVsOne;
         var winsRequired = checked((int)GetLong(command, "best-of"));
         var allowSpectators = GetBool(command, "spectators");
-        var tournament = await coordinator.CreateTournamentAsync(name, format, mode, allowSpectators, winsRequired);
+        var mapSelection = GetOptionalString(command, "map-selection") switch
+        {
+            null or "player-choice" => TournamentMapSelection.PlayerChoice,
+            "round-random" => TournamentMapSelection.RoundRandom,
+            _ => throw new InvalidOperationException("Unknown map selection mode.")
+        };
+        var tournament = await coordinator.CreateTournamentAsync(name, format, mode, allowSpectators, winsRequired, mapSelection);
 
         await command.RespondAsync(
             $"Tournament **{Escape(tournament.Name)}** (`{tournament.Id}`) created in the announcements channel.",
@@ -407,7 +420,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             $"🏆 **{Escape(tournament.Name)}** is open for registration!\n" +
             $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}** — **BO{tournament.WinsRequired * 2 - 1}**\n" +
             $"Public spectators: **{(tournament.AllowSpectators ? "Yes" : "No")}**\n" +
-            "Series maps are selected privately; the deciding random map is shared across the round.\n\n" +
+            MapSelectionDescription(tournament) + "\n\n" +
             (tournament.Mode == TournamentMode.TwoVsTwo
                 ? "Create a team using `/tournament-team-join`; your teammate must accept the invitation.\n"
                 : "Press **Join tournament** below. If needed, the bot will ask for your exact YMCA/OpenRA player name.\n") +
@@ -538,11 +551,12 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         if (tournament.ThirdPlaceDiscordId is ulong thirdPlaceId)
             podium += $"\n🥉 {DisplayEntrant(thirdPlaceId)}";
         var mapStatus = tournament.RoundNumber > 0
-            ? $"Round {tournament.RoundNumber} map: **{Escape(tournament.MapTitle)}**"
+            ? RoundMapDescription(tournament)
             : $"Map pool: **{tournament.MapPool.Count}** map(s) will be snapshotted when the tournament starts";
         var text = $"**{Escape(tournament.Name)}** (`{tournament.Id}`)\n" +
             $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}** — **BO{tournament.WinsRequired * 2 - 1}**\n" +
             $"Public spectators: **{(tournament.AllowSpectators ? "Yes" : "No")}**\n" +
+            MapSelectionDescription(tournament) + "\n" +
             $"Status: **{tournament.Status}**\n{mapStatus}\n" +
             $"Entrants: **{tournament.Entrants.Count}**\n{entrants}{podium}";
         await command.RespondAsync(text.Length <= 2000 ? text : text[..1997] + "...", ephemeral: true);
@@ -921,7 +935,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             ? $"BO{tournament.WinsRequired * 2 - 1} map choices have been requested by DM."
             : pairings + "\n\nPlayers will receive their server details by DM.";
         return SendAnnouncementAsync(
-            $"⚔️ **{Escape(tournament.Name)}** — Round {tournament.RoundNumber}\n{details}");
+            $"⚔️ **{Escape(tournament.Name)}** — Round {tournament.RoundNumber}\n" +
+            (tournament.MapSelection == TournamentMapSelection.RoundRandom ? RoundMapDescription(tournament) + "\n\n" : "") + details);
     }
 
     public Task TournamentCompletedAsync(TournamentRecord tournament)
@@ -1101,6 +1116,16 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     static string FormatTournamentFormat(TournamentFormat format) => format == TournamentFormat.DoubleElimination
         ? "Double Elimination"
         : "Single Elimination";
+    static string MapSelectionDescription(TournamentRecord tournament) =>
+        tournament.MapSelection == TournamentMapSelection.RoundRandom
+            ? "Maps: **Random per round** — everyone plays the same fixed sequence; no player picks."
+            : "Maps: **Player choice** — private choices, with a shared random deciding map per round.";
+
+    static string RoundMapDescription(TournamentRecord tournament) =>
+        tournament.MapSelection == TournamentMapSelection.RoundRandom && tournament.MapsByRound.TryGetValue(tournament.RoundNumber, out var maps)
+            ? $"Round {tournament.RoundNumber} maps: " + string.Join(" → ", maps.Select((map, index) => $"{index + 1}. **{Escape(map.Title)}**"))
+            : $"Round {tournament.RoundNumber} map: **{Escape(tournament.MapTitle)}**";
+
     static string FormatTournamentMode(TournamentMode mode) => mode == TournamentMode.TwoVsTwo ? "2v2" : "1v1";
     static string Truncate(string text, int length) => text.Length <= length ? text : text[..(length - 3)] + "...";
 
