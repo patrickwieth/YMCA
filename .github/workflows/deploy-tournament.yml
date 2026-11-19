@@ -1,27 +1,33 @@
-name: Deploy Tournament Bot
-
+name: Read-only release host verification
 on:
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
-  deploy:
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy tournament bot without interrupting matches
-        uses: appleboy/ssh-action@master
+      - uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          command_timeout: 45m
           script: |
             set -eu
-            cd ~/src/YMCA-tournament
-            git fetch origin tournament-bot
-            git checkout tournament-bot
-            git pull --ff-only origin tournament-bot
-            ./TournamentBot/deploy/deploy.sh
+            python3 - <<'PY'
+            import pathlib,json,subprocess,re,hashlib
+            root=pathlib.Path.home()
+            state=json.loads((root/'src/YMCA-tournament/TournamentBot/deploy/data/tournament-state.json').read_text())
+            print('ACTIVE_MATCHES',[(m['Id'],m['Status'],m.get('ServerRetainUntilUtc')) for m in state['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing'] or (m.get('ServerRetainUntilUtc') and not m.get('ServerStopped'))])
+            print('CONTAINERS',subprocess.check_output(['docker','ps','--format','{{.Names}} {{.Status}}'],text=True))
+            script=root/'deploy-ymca-server.sh'
+            text=script.read_text()
+            print('DEPLOY_SCRIPT_SHA256',hashlib.sha256(script.read_bytes()).hexdigest())
+            for line in text.splitlines():
+              if re.search(r'password|secret|token|credential|docker login',line,re.I):continue
+              if re.search(r'player|match|force|sleep|exit|docker |curl |safety|guard|busy',line,re.I):print('DEPLOY_GUARD',line)
+            manifest=subprocess.check_output(['docker','exec','ymca-tournament-bot','cat','/app/game/mods/ca/mod.yaml'],text=True)
+            print('TOURNAMENT_HOST',next(l.strip() for l in manifest.splitlines() if l.strip().startswith('Version:')))
+            print('ATTENDANCE_TRAIT', 'TournamentAttendanceServer' in manifest)
+            PY
