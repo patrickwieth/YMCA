@@ -26,7 +26,7 @@ jobs:
             print('DEPLOY_SCRIPT_SHA256',hashlib.sha256(script.read_bytes()).hexdigest())
             for line in text.splitlines():
               if re.search(r'password|secret|token|credential|docker login',line,re.I):continue
-              if re.search(r'player|match|force|sleep|exit|docker |curl |safety|guard|busy',line,re.I):print('DEPLOY_GUARD',line)
+              if re.search(r'player|match|force|sleep|exit|docker |curl |safety|guard|busy|systemctl|kill|stop|start|screen|tmux|\.sh|cd |pushd|rm ',line,re.I):print('DEPLOY_GUARD',line)
             manifest=subprocess.check_output(['docker','exec','ymca-tournament-bot','cat','/app/game/mods/ca/mod.yaml'],text=True)
             print('TOURNAMENT_HOST',next(l.strip() for l in manifest.splitlines() if l.strip().startswith('Version:')))
             print('ATTENDANCE_TRAIT', 'TournamentAttendanceServer' in manifest)
