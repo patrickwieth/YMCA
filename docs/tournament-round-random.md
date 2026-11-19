@@ -27,5 +27,8 @@ early series completion, one-/two-type pools, old JSON defaults and rejection of
 invalid modes/player picks. The opt-in native host tests are not rerun for this
 bot scheduling/UI change. Actual Discord user interactions are not automated.
 
-Bot-only update; game clients remain v0.97.4. Deployment pending the normal match
-safety guard. No existing tournament should be cancelled or reset for this update.
+Bot-only update; game clients remain v0.97.4. Source commit `8270cfa7` was
+successfully deployed with the normal match safety guard, without cancelling or
+resetting tournaments: https://github.com/patrickwieth/YMCA/actions/runs/44474533553 .
+Discord login/command registration and host v0.97.4 were verified on November 19,
+2026 at 06:48 UTC. No client release or public game-server deployment was needed.
