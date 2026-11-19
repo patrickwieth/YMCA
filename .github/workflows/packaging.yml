@@ -209,4 +209,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: ./deploy-ymca-server.sh
+          script: |
+            set -eu
+            command -v ss >/dev/null
+            connected=$(ss -Htn state established '( sport = :1234 or sport = :1235 )')
+            if [ -n "$connected" ]; then
+              echo 'YMCA players/spectators are connected; deployment deferred. Retry when both public servers are empty.'
+              exit 1
+            fi
+            ./deploy-ymca-server.sh

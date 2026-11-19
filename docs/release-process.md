@@ -22,7 +22,10 @@ Failed or skipped prerequisites prevent automatic deployment. Draft/prerelease r
 rejected by the stable publication step. A release pipeline concurrency group prevents overlapping
 build/publication/deployment runs. Automatic and manual deployments also share a deployment lock.
 This is an ordering change, not a rewrite of the remote deployment script or its match/restart
-behavior; no FORCE_DEPLOY override is added.
+behavior; no FORCE_DEPLOY override is added. From v0.97.5, both SSH entry points
+fail closed if `ss` cannot be queried or any TCP client is connected to public YMCA
+ports 1234/1235. Busy public servers defer deployment until a later retry. Cameo ports
+1236–1238 and tournament workers are not restarted by this script.
 
 The separate Deploy workflow is manual-only (`workflow_dispatch`) and requires explicit confirmation.
 Editing descriptions of future releases using these workflow files no longer triggers deployment.

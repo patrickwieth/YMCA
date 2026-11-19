@@ -32,6 +32,22 @@ the corrected rock silhouettes on 19 November 2026.
 - Existing unrelated broad bib occupancy failure (`ftur: unreserved bib cell`) is
   not claimed fixed. Existing NuGet advisory and compiler warnings remain.
 
+## Live preflight and deployment safety
+
+Read-only host checks 44599505830 and 44599836012 confirmed no active/retained
+tournament matches, unchanged v0.97.4 tournament container uptime, and a public
+restart scope limited to screen sessions YMCA1/YMCA2 (ports 1234/1235). Cameo has
+an active match on 1236 and must remain untouched. Public YMCA listings were empty.
+The remote public script itself had no player guard, so both release/manual SSH
+entry points now fail closed on occupied ports or a failed `ss` query. Local mocked
+empty/occupied/query-error checks exercise both entry points.
+
+An initial maintenance workflow content upload failed; the subsequently dispatched
+run 44599395540 used the old deployment definition. It was cancelled during Docker
+COPY, before rollout. Both following read-only checks confirmed the existing bot
+container remained up for eight hours, unchanged. No match/state changes occurred.
+The corrected maintenance workflow is read-only.
+
 ## Publication status
 
 Release pipeline and live deployment verification are pending. Tag must originate
