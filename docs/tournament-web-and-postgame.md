@@ -62,6 +62,10 @@ map is already fixed. Stale pick requests are suppressed outside the pick phase.
   exclusion, persistence visibility, result immediacy, late admin-result safety,
   match-specific winner choices and a generated BO3 1:1 frozen-decider regression.
 - Python tests cover active hosts, post-game leases, expiry and fail-closed guards.
+- All three opt-in native host tests passed (2-/4-player generated hosts plus the
+  retained-port/result callback probe).
+- Source commit `d7894eed` was pushed. Windows .NET, Linux .NET and Linux Mono CI
+  succeeded: https://github.com/patrickwieth/YMCA/actions/runs/44492102039 .
 - Native postgame-03: two real GUI clients finished a match, the completed replay
   became readable promptly, both clients remained connected in the post-game UI
   at 170 seconds, and the owned server process exited at approximately three
@@ -79,6 +83,6 @@ Native testing found the lingering dedicated-process issue and fixed it before
 rollout. The initial replay poll probe also needed to tolerate an unfinished
 metadata footer; no production error was suppressed.
 
-Rollout pending: at the latest read-only check (November 19, 08:54 UTC), T010
+Rollout pending: at the latest read-only check (November 19, 08:59 UTC), T010
 was running and M0024 was WaitingForPlayers (M0023 had completed). Do not cancel
 a tournament, edit results, or bypass deployment guards for this update.
