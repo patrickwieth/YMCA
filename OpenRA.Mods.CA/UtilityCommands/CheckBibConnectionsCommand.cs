@@ -73,7 +73,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					{
 						var remap = actor.TraitInfoOrDefault<WithBibRemapInfo>();
 						if (remap == null || remap.ImagePrefix != family || remap.Palette != family + "player" ||
-							remap.RemapConnections != (family == "nodbib"))
+							!remap.RemapConnections)
 							throw new InvalidDataException("Incorrect color variant: " + actor.Name);
 						_ = actor.TraitsInConstructOrder().ToArray();
 						Console.WriteLine("BIB_VARIANT " + actor.Name + " " + family);
@@ -117,7 +117,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				if (rules.TryGetValue(name, out var actor) && actor.HasTraitInfo<WithBibRemapInfo>() &&
 					actor.TraitInfos<WithIdleOverlayInfo>().Any(b => b.Image?.StartsWith(actor.TraitInfo<WithBibRemapInfo>().ImagePrefix) == true))
 					throw new InvalidDataException("Unexpected faction remap: " + name);
-			Console.WriteLine("Bib connectors and Soviet/China joints, Allied rims, GDI corners and Nod lower-edge masks resolved.");
+			Console.WriteLine("Bib connectors and Soviet/China joints, Allied rims, GDI joints and Nod lower-edge masks resolved.");
 		}
 	}
 }

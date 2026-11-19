@@ -1,0 +1,59 @@
+# Isometric service cells, resolved after the artwork/footprint layers.
+# DockOffset is a WORLD vector from CenterPosition, not a footprint cell offset.
+# Main bays: (1,2), except China's (2,1). Extra bays use reserved, passable cells.
+PROC:
+	DockHost:
+		DockOffset: -724,724,0
+	SpawnNeighboringActors@dockhelper1:
+		Locations: 2,2
+
+Soviet_Refinery:
+	DockHost:
+		DockOffset: -724,724,0
+	SpawnNeighboringActors@dockhelper1:
+		Locations: 2,2
+
+PROC.TD:
+	DockHost:
+		DockOffset: -724,724,0
+		IsDragRequired: false
+		DragOffset: 0,0,0
+		DragLength: 0
+	SpawnNeighboringActors@dockhelper1:
+		Locations: 2,2
+
+PROC.TD.Nod:
+	DockHost:
+		DockOffset: -724,566,0
+	SpawnNeighboringActors@dockhelper1:
+		Locations: 2,2
+
+PROC.SCRIN:
+	DockHost:
+		DockOffset: -724,724,0
+	SpawnNeighboringActors@dockhelper1:
+		Locations: 2,2
+
+chsupply:
+	# Retain four docks without putting a helper in the occupied (0,2) corner.
+	# Reserve a right-side service bay; compensate the center so artwork stays fixed.
+	Building:
+		Dimensions: 4,3
+		Footprint: xxx_ xx+= x==_
+		LocalCenterOffset: -362,-362,0
+	DockHost:
+		DockOffset: 724,724,0
+	FreeActor@1:
+		SpawnOffset: 2,1
+	SpawnNeighboringActors@dockhelper1:
+		Locations: 1,2
+	SpawnNeighboringActors@dockhelper2:
+		Locations: 2,2
+	SpawnNeighboringActors@dockhelper3:
+		Locations: 3,1
+
+refinery.dockhelper:
+	Building:
+		Footprint: =
+	DockHost:
+		DockOffset: 0,0,0

@@ -310,6 +310,7 @@ if ($command -eq "all" -or $command -eq "clean" -or $command -eq "check")
 
 	if ($currentEngine -ne "" -and $currentEngine -eq $env:ENGINE_VERSION)
 	{
+		if ($command -ne "clean") { & "$templateDir/tools/prepare-engine-patches.ps1" -EngineDirectory $env:ENGINE_DIRECTORY }
 		cd $env:ENGINE_DIRECTORY
 		Invoke-Expression ".\make.cmd $command"
 		if ($LASTEXITCODE -ne 0) { throw "Engine command failed (exit code $LASTEXITCODE)." }
@@ -368,6 +369,7 @@ if ($command -eq "all" -or $command -eq "clean" -or $command -eq "check")
 
 		rm $env:AUTOMATIC_ENGINE_EXTRACT_DIRECTORY -r
 
+		if ($command -ne "clean") { & "$templateDir/tools/prepare-engine-patches.ps1" -EngineDirectory $env:ENGINE_DIRECTORY }
 		cd $env:ENGINE_DIRECTORY
 		Invoke-Expression ".\make.cmd version $env:ENGINE_VERSION"
 		if ($LASTEXITCODE -ne 0) { throw "Engine version command failed (exit code $LASTEXITCODE)." }

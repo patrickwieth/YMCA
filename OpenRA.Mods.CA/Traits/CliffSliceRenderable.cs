@@ -9,6 +9,7 @@ namespace OpenRA.Mods.CA.Traits
 	sealed class CliffSliceRenderable : IPalettedRenderable, IModifyableRenderable, IFinalizedRenderable
 	{
 		readonly Sprite[] slices;
+		internal Sprite[] Slices => slices;
 		public WPos Pos { get; }
 		public int ZOffset { get; }
 		public bool IsDecoration => true;

@@ -7,14 +7,15 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 - `/register openra-name` — associate a Discord account with an exact OpenRA player name. Unregistered users can also press a tournament join button and complete the registration modal.
 - `/match player-one player-two map-uid [map-title]` — admin: queue a match.
 - `/matches` — show recent matches.
-- `/resolve match-id winner` — admin: resolve a disputed match.
-- `/map-add map`, `/map-remove map`, `/map-pool` — choose official YMCA maps from autocomplete and manage the shared round map pool.
-- `/tournament-create name format mode best-of spectators` — admin: open a BO1, BO3, or BO5 single- or double-elimination tournament.
+- `/resolve match-id winner` — admin: select a match, then choose its actual winning player/team from autocomplete.
+- `/map-add map`, `/map-remove map`, `/map-pool` — manage the shared map/archetype pool using mode-specific autocomplete.
+- `/tournament-create name format mode best-of spectators [map-selection]` — admin: open a BO1, BO3, or BO5 tournament with player choices (default) or a fixed random map sequence per round.
 - `/tournament-join tournament-id` — enter an open tournament.
 - `/tournament-leave tournament-id` — leave before the tournament starts.
 - `/tournament-delete tournament-id` — admin: delete a tournament that is not running.
 - `/tournament-start tournament-id` — admin: close registration and queue the first round.
 - `/tournament-status [tournament-id]` — show entrants, losses, and champion.
+- `/tournament-timer tournament-id` — admin: start a 15-minute attendance timer for that tournament's currently open games. No automatic timers.
 
 ## Setup
 
@@ -40,13 +41,26 @@ Set `releaseAnnouncements.enabled` and its Discord channel ID to let YMCA Overlo
 
 The `maxConcurrentServers` workers each own one port. Matches beyond this limit remain queued. A worker starts `OpenRA.Server`, waits until its TCP port accepts connections, then the bot DMs both players a HTTPS join button plus manual host/password details.
 
-Each match gets an isolated `Engine.SupportDir`, so its logs and server replay cannot collide with other matches. Once a completed replay can be read with `OpenRA.Utility --replay-metadata`, the server process is terminated and the slot is returned to the queue.
+Each match gets an isolated `Engine.SupportDir`, so its logs and server replay cannot collide with other matches. The completed replay is finalized shortly after game over and result reporting starts immediately. The server remains open for three minutes after game over so players can view statistics or leave voluntarily. Its worker/port is released only when the process exits. Free ports can host the next matches in parallel; fully occupied pools queue new games without delaying result reporting. Deployment is blocked during this statistics window.
 
 Automatic replay results are not final until player feedback agrees. Conflicting reports, explicit disputes, missing players, and ambiguous OpenRA outcomes are sent to the admin channel for manual review. A technical rematch is queued automatically only when both players request one and does not advance the bracket.
 
 Tournament scheduling supports single elimination and double elimination. In double elimination a player moves to the losers pool after the first loss and is eliminated after the second. If the one-loss finalist beats the undefeated finalist, the bot schedules the required grand-final reset. Odd player counts receive automatic byes between rounds.
 
-Admins maintain one shared tournament map pool, which each tournament snapshots when it starts. BO1 uses one random map shared by the whole round. In BO3 each side chooses one map by DM and a shared random round map is used as the decider. In BO5 each side chooses two maps and the fifth map is the shared random decider. Every dropdown also offers **I don't care** for an automatic pick. Maps do not repeat within a series while enough alternatives remain, and technical rematches retain the same map.
+Admins maintain one shared tournament map/archetype pool, which each tournament snapshots when it starts. The optional `map-selection` setting chooses:
+
+- **Player choice (as before)** (`player-choice`, default): BO1 uses one random map shared by the round. In BO3 each side chooses one map by DM; in BO5 each chooses two. The deciding map is random and shared across the round. Pick menus also offer **I don't care**.
+- **Random — fixed for each round** (`round-random`): the bot fixes the complete BO1/BO3/BO5 map sequence before starting the round. Every pairing uses the same map for game 1, game 2, and so on, including identical generated-map seeds. There are no pick DMs. Sequences persist across restarts; subsequent rounds receive a new sequence. Types cycle through the pool before repeating; small pools are supported.
+
+Only games needed to decide a series are queued. Technical rematches retain the exact map and seed. Existing tournaments keep their original selection mode.
+
+## Admin attendance timer
+
+An admin can explicitly start `/tournament-timer` for all currently open games in a running tournament. Players receive the deadline and a two-minute warning. At expiry, if exactly one full side is present and the other is absent, the absent side loses the game automatically. Spectators do not count. Both present (including not Ready), both absent, partial teams and technical uncertainty require admin review instead. Games already running and games created afterward are unaffected. Queue/host outages never cause an automatic loss. See `docs/tournament-attendance-timer.md` for persistence and safety details.
+
+## Public tournament pages
+
+The join-page service also serves `/tournaments` and `/tournament/T010` (replace the ID as needed). Pages show the round-by-round bracket, series scores, match results, and eligible spectator/replay links, refreshing every ten seconds. Discord registration and status messages include the public bracket link. Player names/results are public; private join credentials and Discord IDs are not exposed.
 
 ## Generated tournament maps
 
