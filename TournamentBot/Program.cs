@@ -20,7 +20,8 @@ internal static class Program
                 await mapCatalog.LoadAsync(shutdown.Token);
             var store = new StateStore(config.StateFile);
             var replayReader = new ReplayMetadataReader(config.Server);
-            await using var serverPool = new OpenRaServerPool(config.Server, replayReader);
+            await using var serverPool = new OpenRaServerPool(config.Server, replayReader,
+                config.JoinPage.Enabled ? config.JoinPage.PublicBaseUrl : null);
             var coordinator = new TournamentCoordinator(config, store, serverPool);
             await using var joinPage = new JoinPageServer(config, coordinator);
             await using var discord = new DiscordTournamentBot(config, store, coordinator, joinPage, mapCatalog);

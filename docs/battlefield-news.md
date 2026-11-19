@@ -1,8 +1,8 @@
 # YMCA Battlefield News
 
-Status: implemented locally in Game-master; not released or pushed. Existing v0.96.22 clients
-still use the engine's OpenRA news feed. Carry this implementation into the next approved release;
-do not defer it again merely because it changes the news UI.
+Status: present on the current release line and retained for the authorized v0.97.2
+release. The earlier v0.96.22 clients still use the engine's OpenRA news feed.
+Do not drop the YMCA feed, bundled fallback or clickable announcement during integration.
 
 ## Implementation
 
@@ -25,9 +25,9 @@ do not defer it again merely because it changes the news UI.
 - Only explicit clicks open links, and only absolute HTTPS URLs without embedded credentials are
   accepted. Titles/content/link labels are wrapped to fit the existing 400-pixel dropdown.
 
-The live URL will not have this file until an authorized push includes it on tournament-bot.
-Local testing therefore uses the bundled announcement even if the remote request returns 404.
-Do not publish a release or touch modular/isometric work merely to enable local testing.
+The live URL tracks the committed file on tournament-bot. Local testing also uses the
+bundled announcement if the remote feed is unavailable. Announcement dates remain timely
+for the November 2026 release preparation; recheck before later releases.
 
 ## Editing news after the first compatible release
 

@@ -2,12 +2,52 @@ using System.Net;
 using System.Net.Sockets;
 using NUnit.Framework;
 using Ymca.TournamentBot;
+using OpenRA.Mods.CA.MapGeneration;
 
 namespace Ymca.TournamentBot.Tests;
 
 [TestFixture]
 public sealed class GeneratedMapHostSmokeTests
 {
+    [Test, Explicit("Uses an owned native server and a completed diagnostic replay to verify worker/port retention.")]
+    public async Task ReadableResultDoesNotReleaseTheLiveServersPort()
+    {
+        var root = Environment.GetEnvironmentVariable("YMCA_TOURNAMENT_ENGINE_SMOKE") ?? throw new InvalidOperationException("Missing smoke root");
+        var replay = Environment.GetEnvironmentVariable("YMCA_POSTGAME_REPLAY") ?? throw new InvalidOperationException("Missing completed probe replay");
+        var directory = Path.Combine(Path.GetTempPath(), "ymca-postgame-pool", Guid.NewGuid().ToString("N"));
+        var listener = new TcpListener(IPAddress.Loopback, 0); listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port; listener.Stop();
+        var config = new OpenRaServerConfiguration { WorkingDirectory = root, MatchDirectory = directory, EngineDirectory = Path.Combine(root, "engine"),
+            ServerExecutable = Path.Combine(root, "engine/bin/OpenRA.Server.dll"), UtilityExecutable = Path.Combine(root, "engine/bin/OpenRA.Utility.dll"),
+            UseDotNetHost = true, ModSearchPaths = Path.Combine(root, "mods") + "," + Path.Combine(root, "engine/mods"), FirstPort = port,
+            MaxConcurrentServers = 1, StartupTimeoutSeconds = 90, ReplayPollSeconds = 1, GenerateTournamentMaps = true };
+        var selected = GeneratedTournamentMaps.Freeze(GeneratedTournamentMaps.Archetypes[0], TournamentMode.OneVsOne);
+        selected.Generation!.Seed = 97001;
+        MatchRecord Match(string id) => new() { Id = id, Generation = selected.Generation, MapUid = selected.Uid, MapTitle = selected.Title,
+            PlayerOneOpenRaName = "ProbeOne", PlayerTwoOpenRaName = "ProbeTwo" };
+        var first = Match("M97011"); var second = Match("M97012");
+        var ready = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var result = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var started = 0; var stopped = 0;
+        await using var pool = new OpenRaServerPool(config, new ReplayMetadataReader(config));
+        pool.ServerStarting += _ => { Interlocked.Increment(ref started); return Task.CompletedTask; };
+        pool.ServerReady += _ => { ready.TrySetResult(true); return Task.CompletedTask; };
+        pool.ResultAvailable += (_, _) => { result.TrySetResult(true); return Task.CompletedTask; };
+        pool.ServerStopped += _ => { Interlocked.Increment(ref stopped); return Task.CompletedTask; };
+        pool.ServerFailed += (_, error) => { ready.TrySetException(new Exception(error)); result.TrySetException(new Exception(error)); return Task.CompletedTask; };
+        pool.Start(); await pool.EnqueueAsync(first);
+        await ready.Task.WaitAsync(TimeSpan.FromSeconds(180));
+        File.Copy(replay, Path.Combine(first.SupportDirectory, "provided-result.orarep"));
+        await pool.EnqueueAsync(second);
+        await result.Task.WaitAsync(TimeSpan.FromSeconds(15));
+        await Task.Delay(2000);
+        Assert.That(started, Is.EqualTo(1), "Reporting must not release the occupied port");
+        Assert.That(stopped, Is.Zero);
+        Assert.That(second.Port, Is.Null);
+        using var client = new TcpClient(); await client.ConnectAsync(IPAddress.Loopback, port);
+        Assert.That(client.Connected, Is.True, "Owned server remains available after result callback");
+    }
+
     [TestCase(2), TestCase(4)]
     [Explicit("Set YMCA_TOURNAMENT_ENGINE_SMOKE to a built game worktree; starts only its own local, unadvertised server.")]
     public async Task HostGeneratesMapAndStartsDedicatedServerWithExactUid(int players)
@@ -32,13 +72,13 @@ public sealed class GeneratedMapHostSmokeTests
         selected.Generation!.Seed = 97001;
         var match = new MatchRecord
         {
-            Id = "SMOKE", Generation = selected.Generation, MapUid = selected.Uid, MapTitle = selected.Title,
+            Id = "M97001", Generation = selected.Generation, MapUid = selected.Uid, MapTitle = selected.Title,
             PlayerOneDiscordId = 1, PlayerTwoDiscordId = 2, PlayerOneOpenRaName = "ProbeOne", PlayerTwoOpenRaName = "ProbeTwo",
             PlayerOneTeammateDiscordId = players == 4 ? 3UL : null, PlayerTwoTeammateDiscordId = players == 4 ? 4UL : null,
             PlayerOneTeammateOpenRaName = players == 4 ? "ProbeThree" : "", PlayerTwoTeammateOpenRaName = players == 4 ? "ProbeFour" : ""
         };
         var ready = new TaskCompletionSource<MatchRecord>(TaskCreationOptions.RunContinuationsAsynchronously);
-        await using var pool = new OpenRaServerPool(config, new ReplayMetadataReader(config));
+        await using var pool = new OpenRaServerPool(config, new ReplayMetadataReader(config), TournamentMapDownloadInfo.TrustedOrigin);
         pool.ServerReady += m => { ready.TrySetResult(m); return Task.CompletedTask; };
         pool.ServerFailed += (_, error) => { ready.TrySetException(new Exception(error)); return Task.CompletedTask; };
         pool.Start();
@@ -46,6 +86,10 @@ public sealed class GeneratedMapHostSmokeTests
         var resolved = await ready.Task.WaitAsync(TimeSpan.FromSeconds(200));
         Assert.That(resolved.MapUid, Does.Match("^[0-9a-f]{40}$"));
         Assert.That(File.Exists(resolved.GeneratedMapPath), Is.True);
+        Assert.That(TournamentMapDownloadInfo.TryParse(File.ReadAllText(Path.Combine(resolved.SupportDirectory,
+            TournamentMapDownloadInfo.ReceiptFilename)), out var downloadInfo), Is.True);
+        Assert.That(downloadInfo.Uid, Is.EqualTo(resolved.MapUid));
+        Assert.That(downloadInfo.Sha256, Is.EqualTo(resolved.GeneratedMapSha256));
         Assert.That(File.Exists(Path.Combine(resolved.SupportDirectory, "maps/ca/generated", resolved.MapUid + ".oramap")), Is.True);
         using var log = new StreamReader(new FileStream(Path.Combine(resolved.SupportDirectory, "Logs/dedicated-server.log"),
             FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
@@ -65,10 +109,11 @@ public sealed class GeneratedMapHostSmokeTests
         await using var pages = new JoinPageServer(botConfig, coordinator);
         await pages.StartAsync(CancellationToken.None);
         using var http = new HttpClient { BaseAddress = new Uri(botConfig.JoinPage.PublicBaseUrl) };
-        var html = await http.GetStringAsync("/join/SMOKE?player=1");
-        Assert.That(html, Does.Contain("/map/SMOKE/download"));
-        Assert.That(html, Does.Contain("maps/ca/generated/"));
-        var downloaded = await http.GetByteArrayAsync("/map/SMOKE/download");
+        var html = await http.GetStringAsync("/join/M97001?player=1");
+        Assert.That(html, Does.Contain("/map/M97001/download"));
+        Assert.That(html, Does.Contain("automatic download in the lobby"));
+        Assert.That(html, Does.Not.Contain("install before joining"));
+        var downloaded = await http.GetByteArrayAsync("/map/M97001/download");
         Assert.That(Convert.ToHexString(System.Security.Cryptography.SHA256.HashData(downloaded)).ToLowerInvariant(), Is.EqualTo(resolved.GeneratedMapSha256));
         Assert.That((await http.GetAsync("/map/UNKNOWN/download")).StatusCode, Is.EqualTo(HttpStatusCode.NotFound));
         TestContext.Progress.WriteLine($"Generated host and HTTP map download verified: {resolved.MapUid}; evidence retained at {directory}");

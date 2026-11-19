@@ -12,9 +12,12 @@ public interface ITournamentNotifier
     Task SeriesMapPicksRequestedAsync(TournamentRecord tournament, TournamentSeries series);
     Task TournamentUpdatedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> newMatches);
     Task TournamentCompletedAsync(TournamentRecord tournament);
+    Task AttendanceTimerStartedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> matches, DateTime deadline);
+    Task AttendanceTimerWarningAsync(MatchRecord match, DateTime deadline);
+    Task AttendanceReviewAsync(MatchRecord match, string reason);
 }
 
-public sealed class TournamentCoordinator
+public sealed partial class TournamentCoordinator
 {
     readonly BotConfiguration config;
     readonly StateStore store;
@@ -30,7 +33,9 @@ public sealed class TournamentCoordinator
         serverPool.ServerReady += OnServerReadyAsync;
         serverPool.MatchStarted += OnMatchStartedAsync;
         serverPool.ResultAvailable += OnResultAvailableAsync;
+        serverPool.ServerStopped += OnServerStoppedAsync;
         serverPool.ServerFailed += OnServerFailedAsync;
+        serverPool.AttendanceDecisionAvailable += OnAttendanceDecisionAsync;
     }
 
     public void SetNotifier(ITournamentNotifier value) => notifier = value;
@@ -48,6 +53,9 @@ public sealed class TournamentCoordinator
                 .ToList();
             foreach (var match in matches)
             {
+                // Preserve the admin deadline, but never penalize players for a host restart.
+                if (match.AttendanceTimer is { Outcome: "Pending" } timer)
+                    timer.EligibleForForfeit = false;
                 match.Status = MatchStatus.Queued;
                 match.Port = null;
                 match.Password = "";
@@ -60,25 +68,35 @@ public sealed class TournamentCoordinator
 
         foreach (var match in unfinished)
             await serverPool.EnqueueAsync(match);
+
+        // Recover a crash between persisting a result/forfeit and advancing its series.
+        var unprocessed = await store.ReadAsync(state => state.Matches.Values.Where(match =>
+            match.Status == MatchStatus.Completed && match.FinalWinnerDiscordId != null && match.TournamentId != null &&
+            state.Tournaments.TryGetValue(match.TournamentId, out var tournament) && tournament.Status == TournamentStatus.Running &&
+            !tournament.ProcessedMatchIds.Contains(match.Id)).ToList());
+        foreach (var match in unprocessed)
+            await AdvanceTournamentAsync(match);
     }
 
     public Task<RegisteredPlayer> RegisterAsync(ulong discordId, string displayName, string openRaName) =>
-        store.UpdateAsync(state =>
-        {
-            if (state.Players.Values.Any(player => player.DiscordUserId != discordId
-                && player.OpenRaName.Equals(openRaName.Trim(), StringComparison.OrdinalIgnoreCase)))
-                throw new InvalidOperationException("This OpenRA name is already registered by another Discord user.");
+        store.UpdateAsync(state => RegisterPlayer(state, discordId, displayName, openRaName));
 
-            var player = new RegisteredPlayer
-            {
-                DiscordUserId = discordId,
-                DiscordDisplayName = displayName,
-                OpenRaName = openRaName.Trim(),
-                RegisteredAtUtc = DateTime.UtcNow
-            };
-            state.Players[discordId] = player;
-            return player;
-        });
+    static RegisteredPlayer RegisterPlayer(TournamentState state, ulong discordId, string displayName, string openRaName)
+    {
+        if (state.Players.Values.Any(player => player.DiscordUserId != discordId
+            && player.OpenRaName.Equals(openRaName.Trim(), StringComparison.OrdinalIgnoreCase)))
+            throw new InvalidOperationException("This OpenRA name is already registered by another Discord user.");
+
+        var player = new RegisteredPlayer
+        {
+            DiscordUserId = discordId,
+            DiscordDisplayName = displayName,
+            OpenRaName = openRaName.Trim(),
+            RegisteredAtUtc = DateTime.UtcNow
+        };
+        state.Players[discordId] = player;
+        return player;
+    }
 
     public async Task<MatchRecord> CreateMatchAsync(
         ulong playerOneId,
@@ -134,6 +152,14 @@ public sealed class TournamentCoordinator
 
     public Task<TournamentMap> AddMapAsync(string uid, string title, int playerCount = 0) => store.UpdateAsync(state =>
     {
+        if (config.Server.GenerateTournamentMaps)
+        {
+            var archetype = GeneratedTournamentMaps.Archetypes.FirstOrDefault(map => map.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidOperationException("Select a known map archetype.");
+            if (state.DisabledMapArchetypes.RemoveAll(value => value.Equals(archetype.Uid, StringComparison.OrdinalIgnoreCase)) == 0)
+                throw new InvalidOperationException("This archetype is already in the tournament pool.");
+            return archetype;
+        }
         if (string.IsNullOrWhiteSpace(uid))
             throw new InvalidOperationException("A map UID is required.");
         if (state.MapPool.Any(map => map.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase)))
@@ -151,28 +177,39 @@ public sealed class TournamentCoordinator
 
     public Task<TournamentMap> RemoveMapAsync(string uid) => store.UpdateAsync(state =>
     {
-        var map = state.MapPool.FirstOrDefault(value => value.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase))
-            ?? throw new InvalidOperationException("Map not found in the tournament pool.");
-        state.MapPool.Remove(map);
+        var map = ActiveMapPool(state, config.Server.GenerateTournamentMaps).FirstOrDefault(value => value.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase))
+            ?? throw new InvalidOperationException("Map or archetype not found in the tournament pool.");
+        if (config.Server.GenerateTournamentMaps)
+            state.DisabledMapArchetypes.Add(map.Uid);
+        else
+            state.MapPool.Remove(map);
         return map;
     });
 
     public Task<IReadOnlyList<TournamentMap>> GetMapPoolAsync() =>
-        store.ReadAsync<IReadOnlyList<TournamentMap>>(state => state.MapPool.ToList());
+        store.ReadAsync<IReadOnlyList<TournamentMap>>(state => ActiveMapPool(state, config.Server.GenerateTournamentMaps).ToList());
+
+    static IEnumerable<TournamentMap> ActiveMapPool(TournamentState state, bool generated) => generated
+        ? GeneratedTournamentMaps.Archetypes.Where(map => !state.DisabledMapArchetypes.Contains(map.Uid, StringComparer.OrdinalIgnoreCase))
+        : state.MapPool;
 
     public Task<TournamentRecord> CreateTournamentAsync(
         string name,
         TournamentFormat format,
         TournamentMode mode = TournamentMode.OneVsOne,
         bool allowSpectators = false,
-        int winsRequired = 1) => store.UpdateAsync(state =>
+        int winsRequired = 1,
+        TournamentMapSelection mapSelection = TournamentMapSelection.PlayerChoice) => store.UpdateAsync(state =>
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new InvalidOperationException("A tournament name is required.");
-        if (!config.Server.GenerateTournamentMaps && state.MapPool.Count == 0)
+        if (!ActiveMapPool(state, config.Server.GenerateTournamentMaps).Any())
             throw new InvalidOperationException("Add at least one map to the tournament map pool first.");
         if (winsRequired is < 1 or > 3)
             throw new InvalidOperationException("Required wins must be between one and three.");
+
+        if (!Enum.IsDefined(typeof(TournamentMapSelection), mapSelection))
+            throw new InvalidOperationException("Unknown tournament map selection mode.");
 
         var id = $"T{state.NextTournamentNumber++:000}";
         var tournament = new TournamentRecord
@@ -185,7 +222,8 @@ public sealed class TournamentCoordinator
             WinsRequired = winsRequired,
             Status = TournamentStatus.Registration,
             UseGeneratedMaps = config.Server.GenerateTournamentMaps,
-            MapPool = (config.Server.GenerateTournamentMaps ? GeneratedTournamentMaps.Archetypes : state.MapPool).Select(map => new TournamentMap
+            MapSelection = mapSelection,
+            MapPool = ActiveMapPool(state, config.Server.GenerateTournamentMaps).Select(map => new TournamentMap
             {
                 Uid = map.Uid,
                 Title = map.Title,
@@ -200,17 +238,35 @@ public sealed class TournamentCoordinator
     public Task<TournamentRecord> JoinTournamentAsync(string tournamentId, ulong playerId) =>
         store.UpdateAsync(state =>
         {
-            var tournament = GetTournament(state, tournamentId);
-            if (tournament.Status != TournamentStatus.Registration)
-                throw new InvalidOperationException("Tournament registration is closed.");
-            if (tournament.Mode != TournamentMode.OneVsOne)
-                throw new InvalidOperationException("Use /tournament-team-join to enter a 2v2 tournament.");
-            if (!state.Players.ContainsKey(playerId))
-                throw new InvalidOperationException("Register your OpenRA name first using /register.");
-            if (!tournament.Entrants.Contains(playerId))
-                tournament.Entrants.Add(playerId);
+            var tournament = ValidateJoin(state, tournamentId, playerId, true);
+            tournament.Entrants.Add(playerId);
             return tournament;
         });
+
+    // A stale/double-submitted registration modal must not rename an entrant
+    // before discovering that its join has already been accepted.
+    public Task<TournamentRecord> RegisterAndJoinTournamentAsync(string tournamentId, ulong playerId, string displayName, string openRaName) =>
+        store.UpdateAsync(state =>
+        {
+            var tournament = ValidateJoin(state, tournamentId, playerId, false);
+            RegisterPlayer(state, playerId, displayName, openRaName);
+            tournament.Entrants.Add(playerId);
+            return tournament;
+        });
+
+    static TournamentRecord ValidateJoin(TournamentState state, string tournamentId, ulong playerId, bool requireRegistered)
+    {
+        var tournament = GetTournament(state, tournamentId);
+        if (tournament.Status != TournamentStatus.Registration)
+            throw new InvalidOperationException("Tournament registration is closed.");
+        if (tournament.Mode != TournamentMode.OneVsOne)
+            throw new InvalidOperationException("Use /tournament-team-join to enter a 2v2 tournament.");
+        if (tournament.Entrants.Contains(playerId))
+            throw new InvalidOperationException("You are already registered for this tournament.");
+        if (requireRegistered && !state.Players.ContainsKey(playerId))
+            throw new InvalidOperationException("Register your OpenRA name first using /register.");
+        return tournament;
+    }
 
     public Task<TournamentTeam> InviteTeamAsync(
         string tournamentId,
@@ -312,11 +368,11 @@ public sealed class TournamentCoordinator
             if (tournament.Entrants.Count < 2)
                 throw new InvalidOperationException("At least two players are required.");
 
-            if (!tournament.UseGeneratedMaps && state.MapPool.Count == 0)
+            if (!ActiveMapPool(state, tournament.UseGeneratedMaps).Any())
                 throw new InvalidOperationException("The tournament map pool is empty.");
 
             Shuffle(tournament.Entrants);
-            tournament.MapPool = (tournament.UseGeneratedMaps ? GeneratedTournamentMaps.Archetypes : state.MapPool)
+            tournament.MapPool = ActiveMapPool(state, tournament.UseGeneratedMaps)
                 .Where(map => tournament.Mode == TournamentMode.OneVsOne || map.PlayerCount == 0 || map.PlayerCount >= 4)
                 .Select(map => new TournamentMap { Uid = map.Uid, Title = map.Title, PlayerCount = map.PlayerCount })
                 .ToList();
@@ -340,6 +396,10 @@ public sealed class TournamentCoordinator
             .OrderByDescending(tournament => tournament.CreatedAtUtc)
             .ToList());
 
+    public Task<string> GetTournamentIndexPageAsync() => store.ReadAsync(TournamentWebPage.Index);
+
+    public Task<string?> GetTournamentPageAsync(string id) => store.ReadAsync(state => TournamentWebPage.Tournament(state, id));
+
     public Task<RegisteredPlayer?> GetPlayerAsync(ulong discordId) =>
         store.ReadAsync(state => state.Players.GetValueOrDefault(discordId));
 
@@ -356,7 +416,7 @@ public sealed class TournamentCoordinator
             if (!state.Series.TryGetValue(seriesId.Trim().ToUpperInvariant(), out var series))
                 throw new InvalidOperationException("Tournament series not found.");
             var tournament = GetTournament(state, series.TournamentId);
-            if (series.Status != TournamentSeriesStatus.AwaitingMapPicks)
+            if (tournament.MapSelection != TournamentMapSelection.PlayerChoice || series.Status != TournamentSeriesStatus.AwaitingMapPicks)
                 throw new InvalidOperationException("Map selection for this series is closed.");
             if (playerId != series.PlayerOneDiscordId && playerId != series.PlayerTwoDiscordId)
                 throw new InvalidOperationException("Only the team representatives can select maps.");
@@ -633,11 +693,18 @@ public sealed class TournamentCoordinator
         if (pairings.Count == 0)
             throw new InvalidOperationException($"Tournament {tournament.Id} cannot schedule its next round.");
 
-        var roundMap = SelectRoundMap(tournament);
+        var randomRound = tournament.MapSelection == TournamentMapSelection.RoundRandom;
+        // Freeze the whole round before enqueueing any match. Every pairing reuses
+        // these exact requests, including generated seeds and package identities.
+        var roundMaps = Enumerable.Range(0, randomRound ? tournament.WinsRequired * 2 - 1 : 1)
+            .Select(_ => SelectRoundMap(tournament)).ToList();
+        var roundMap = roundMaps[0];
         tournament.RoundNumber++;
         tournament.MapUid = roundMap.Uid;
         tournament.MapTitle = roundMap.Title;
-        tournament.RandomMapByRound[tournament.RoundNumber] = roundMap;
+        tournament.RandomMapByRound[tournament.RoundNumber] = roundMaps[^1];
+        if (randomRound)
+            tournament.MapsByRound[tournament.RoundNumber] = roundMaps;
 
         if (tournament.Format == TournamentFormat.SingleElimination && active.Count == 2
             && tournament.ThirdPlaceDiscordId == null
@@ -671,8 +738,11 @@ public sealed class TournamentCoordinator
                 PlayerTwoDiscordId = pairing.Second,
                 TournamentRound = tournament.RoundNumber,
                 IsThirdPlaceMatch = isThirdPlaceMatch,
+                Bracket = isThirdPlaceMatch ? "Third place" : active.Count == 2 ? "Final"
+                    : tournament.Format == TournamentFormat.DoubleElimination && tournament.Losses[pairing.First] > 0
+                        ? "Lower bracket" : "Upper bracket",
                 WinsRequired = tournament.WinsRequired,
-                Status = tournament.WinsRequired == 1
+                Status = randomRound || tournament.WinsRequired == 1
                     ? TournamentSeriesStatus.Playing
                     : TournamentSeriesStatus.AwaitingMapPicks,
                 MapPicks = new Dictionary<ulong, List<string>>
@@ -686,9 +756,9 @@ public sealed class TournamentCoordinator
                     [pairing.Second] = 0
                 }
             };
-            if (tournament.WinsRequired == 1)
+            if (randomRound || tournament.WinsRequired == 1)
             {
-                series.Maps.Add(roundMap);
+                series.Maps.AddRange(roundMaps);
                 matches.Add(CreateSeriesMatch(state, tournament, series, 1));
             }
 
@@ -710,10 +780,11 @@ public sealed class TournamentCoordinator
             .ToList();
         if (available.Count == 0)
         {
+            var previous = tournament.MapHistory.LastOrDefault() ?? tournament.MapUid;
             tournament.MapHistory.Clear();
             available = tournament.MapPool
                 .Where(map => tournament.MapPool.Count == 1
-                    || !map.Uid.Equals(tournament.MapUid, StringComparison.OrdinalIgnoreCase))
+                    || !map.Uid.Equals(previous, StringComparison.OrdinalIgnoreCase))
                 .ToList();
         }
 
@@ -884,25 +955,40 @@ public sealed class TournamentCoordinator
             var stored = state.Matches[match.Id];
             stored.ReplayPath = result.ReplayPath;
             stored.AutomaticWinnerDiscordId = DetermineWinner(stored, result);
-            stored.Status = MatchStatus.AwaitingConfirmation;
-            return stored;
+            var notify = stored.Status is not (MatchStatus.Completed or MatchStatus.Cancelled or MatchStatus.RematchRequested);
+            if (notify)
+                stored.Status = MatchStatus.AwaitingConfirmation;
+            // Conservative lease for deployment safety; cleared as soon as the process exits.
+            stored.ServerRetainUntilUtc = DateTime.UtcNow.AddMinutes(3);
+            return (Match: stored, Notify: notify);
         });
 
-        await NotifyAsync(value => value.ResultReadyAsync(updated, result));
+        if (updated.Notify)
+            await NotifyAsync(value => value.ResultReadyAsync(updated.Match, result));
     }
+
+    Task OnServerStoppedAsync(MatchRecord match) => store.UpdateAsync(state =>
+    {
+        if (state.Matches.TryGetValue(match.Id, out var stored))
+            stored.ServerRetainUntilUtc = null;
+    });
 
     async Task OnServerFailedAsync(MatchRecord match, string reason)
     {
-        var updated = await store.UpdateAsync(state =>
+        var updated = await store.UpdateAsync<MatchRecord?>(state =>
         {
             var stored = state.Matches[match.Id];
+            if (stored.Status is MatchStatus.Completed or MatchStatus.Cancelled or MatchStatus.RematchRequested
+                or MatchStatus.AwaitingConfirmation or MatchStatus.Disputed)
+                return null; // Host cleanup must not undo a recorded result or admin decision.
             stored.Status = MatchStatus.Failed;
             stored.FailureReason = reason;
             stored.FinishedAtUtc = DateTime.UtcNow;
             return stored;
         });
 
-        await NotifyAsync(value => value.MatchFailedAsync(updated, reason));
+        if (updated != null)
+            await NotifyAsync(value => value.MatchFailedAsync(updated, reason));
     }
 
     async Task NotifyAsync(Func<ITournamentNotifier, Task> notification)

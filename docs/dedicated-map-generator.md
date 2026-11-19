@@ -13,7 +13,9 @@ permissions/current map are checked again when submitting the dialog.
 
 Non-admin players retain the original read-only map browser. Hand Made Map uses
 the existing server-aware chooser, including its map pool. Local skirmish
-behavior is retained; ordinary peer-hosted multiplayer keeps its existing chooser.
+behavior is retained. v0.97.3 left peer-hosted multiplayer on the old chooser;
+the local [LAN follow-up](lan-map-generation-fix.md) now extends recipe sync and
+the administrator's generator to that path as well (not yet released).
 
 The previous failure was the `if (!skirmishMode) return` guard in
 `GeneratedMapLobbyLogic`. Removing that guard alone would have offered generation

@@ -1,0 +1,47 @@
+--- a/engine/OpenRA.Game/Map/MapPreview.cs
++++ b/engine/OpenRA.Game/Map/MapPreview.cs
+@@ -471,7 +471,13 @@
+ 
+ 		public void UpdateRemoteSearch(MapStatus status, MiniYaml yaml, string[] mapCompatibility, Action<MapPreview> parseMetadata = null)
+ 		{
+-			var newData = innerData.Clone();
++			var previousData = innerData;
++			// A repository response may arrive after a map was installed locally.
++			// Never turn that available map back into a missing/remote preview.
++			if (previousData.Status == MapStatus.Available || previousData.Status == MapStatus.Downloading)
++				return;
++
++			var newData = previousData.Clone();
+ 			newData.Status = status;
+ 			newData.Class = MapClassification.Remote;
+ 
+@@ -536,17 +542,21 @@
+ 					Log.Write("debug", e);
+ 				}
+ 
+-				// Commit updated data before running the callbacks
+-				innerData = newData;
+-
+-				if (innerData.Preview != null)
++			}
++
++			// If local installation won the race while parsing metadata, discard
++			// this response. Interlocked supplies the required memory barriers.
++#pragma warning disable CS0420
++			if (!ReferenceEquals(Interlocked.CompareExchange(ref innerData, newData, previousData), previousData))
++				return;
++#pragma warning restore CS0420
++
++			if (status == MapStatus.DownloadAvailable)
++			{
++				if (newData.Preview != null)
+ 					cache.CacheMinimap(this);
+-
+ 				parseMetadata?.Invoke(this);
+ 			}
+-
+-			// Update the status and class unconditionally
+-			innerData = newData;
+ 		}
+ 
+ 		public void Install(string mapRepositoryUrl, Action onSuccess)

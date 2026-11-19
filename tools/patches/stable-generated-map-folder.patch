@@ -1,0 +1,12 @@
+--- a/engine/packaging/functions.sh
++++ b/engine/packaging/functions.sh
+@@ -217,7 +217,8 @@
+ 	while [ -n "${1}" ]; do
+ 		MOD_YAML_PATH="${1}"
+ 		awk -v v="${VERSION}" '{sub("Version:.*$", "Version: " v); print $0}' "${MOD_YAML_PATH}" > "${MOD_YAML_PATH}.tmp"
+-		awk -v v="${VERSION}" '{sub("/[^/]*: User$", "/"v ": User"); print $0}' "${MOD_YAML_PATH}.tmp" > "${MOD_YAML_PATH}"
++		# Generated packages use a stable path shared by the lobby and tournament host.
++		awk -v v="${VERSION}" '{if ($0 !~ /\/generated: User$/) sub("/[^/]*: User$", "/"v ": User"); print $0}' "${MOD_YAML_PATH}.tmp" > "${MOD_YAML_PATH}"
+ 		rm "${MOD_YAML_PATH}.tmp"
+ 		shift
+ 	done

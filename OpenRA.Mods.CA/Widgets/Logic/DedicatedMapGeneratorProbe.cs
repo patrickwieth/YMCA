@@ -23,6 +23,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var log = Path.Combine(output, "results.txt");
 			File.WriteAllText(log, "START " + role + "\n");
 			var initialMap = manager.LobbyInfo.GlobalSettings.Map;
+			var chooseExisting = Environment.GetEnvironmentVariable("YMCA_DEDICATED_MAP_PROBE_EXISTING") == "1";
 			void Record(string text) => File.AppendAllText(log, text + "\n");
 			void Check(bool condition, string text) { if (!condition) throw new InvalidOperationException("Dedicated map probe: " + text); Record("PASS " + text); }
 			void Click(string text) => Ui.CurrentWindow().Get("CONTENT").Children.OfType<ButtonWidget>().Single(b => b.GetText() == text).OnClick();
@@ -36,11 +37,14 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				});
 			}
 
-			void WaitForMap() => Poll(() => GeneratedMapLobbyLogic.HasGeneratedMapRecipe(manager.LobbyInfo.GlobalSettings) &&
+			void WaitForMap() => Poll(() => (chooseExisting || GeneratedMapLobbyLogic.HasGeneratedMapRecipe(manager.LobbyInfo.GlobalSettings)) &&
+				!OpenRA.Mods.CA.Server.MapSelectionLobbyCommands.IsPlaceholder(mod.MapCache[manager.LobbyInfo.GlobalSettings.Map]) &&
 				mod.MapCache[manager.LobbyInfo.GlobalSettings.Map].Status == MapStatus.Available && manager.LocalClient?.State == Session.ClientState.NotReady,
 				() =>
 				{
 					Check(role == "late" || manager.LobbyInfo.GlobalSettings.Map != initialMap, "server changed the existing lobby map");
+					Check(!lobby.Get<LabelWidget>("PLEASE_SELECT_MAP").IsVisible(), "waiting prompt disappears after selection");
+					if (role == "host") Check(!lobby.Get<ButtonWidget>("START_GAME_BUTTON").IsDisabled(), "real selected map enables Start");
 					Record("MAP_READY " + manager.LobbyInfo.GlobalSettings.Map);
 					Game.Renderer.SaveScreenshot(Path.Combine(output, "ready.png"));
 				});
@@ -50,6 +54,11 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			{
 				initialMap = manager.LobbyInfo.GlobalSettings.Map;
 				if (role == "late") { WaitForMap(); return; }
+				Check(OpenRA.Mods.CA.Server.MapSelectionLobbyCommands.IsPlaceholder(mod.MapCache[initialMap]), "dedicated lobby starts on hidden waiting map");
+				Check(lobby.Get<LabelWidget>("PLEASE_SELECT_MAP").IsVisible(), "Please select a map prompt visible");
+				Check(lobby.Get<ButtonWidget>("START_GAME_BUTTON").IsDisabled(), "Start disabled before map selection");
+				Game.Renderer.SaveScreenshot(Path.Combine(output, "waiting.png"));
+				manager.IssueOrder(Order.Command("state Ready, Ready"));
 				if (role == "guest")
 				{
 					Check(!manager.LocalClient.IsAdmin, "guest has no map-change rights");
@@ -66,9 +75,23 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					return;
 				}
 
-				Poll(() => manager.LobbyInfo.Clients.Count(c => c.Bot == null) >= 2, () => Game.RunAfterDelay(12000, () =>
+				Poll(() => manager.LobbyInfo.Clients.Count(c => c.Bot == null) >= 2, () =>
 				{
+					manager.IssueOrder(Order.Command("state Ready"));
+					manager.IssueOrder(Order.Command("startgame"));
+					Game.RunAfterDelay(12000, () =>
+					{
+					Check(!manager.GameStarted && manager.LobbyInfo.Clients.All(c => !c.IsReady), "server rejects forged ready/start commands on waiting map");
 					Check(manager.LocalClient.IsAdmin, "remote lobby admin has map-change rights");
+					if (chooseExisting)
+					{
+						var target = mod.MapCache.Single(m => m.Status == MapStatus.Available && m.PackageName.Contains("dedicated-generator-test-"));
+						if (manager.LobbyInfo.GlobalSettings.LobbyOptions[GeneratedMapRecipe.Capability].Value == "map-pool")
+							Check(manager.ServerMapPool != null && manager.ServerMapPool.SetEquals(new[] { target.Uid }), "configured map pool remains unchanged");
+						manager.IssueOrder(Order.Command("map " + target.Uid));
+						WaitForMap();
+						return;
+					}
 					lobby.Get<ButtonWidget>("CHANGEMAP_BUTTON").OnClick();
 					foreach (var mode in new[] { "Tactical", "Operational", "Strategic" })
 					{
@@ -90,7 +113,8 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					Game.Renderer.SaveScreenshot(Path.Combine(output, "generator-options.png"));
 					Ui.CurrentWindow().Get<ButtonWidget>("GENERATE_PRESET").OnClick();
 					WaitForMap();
-				}));
+					});
+				});
 			});
 		}
 	}

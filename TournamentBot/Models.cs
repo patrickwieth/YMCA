@@ -34,6 +34,12 @@ public enum TournamentMode
     TwoVsTwo
 }
 
+public enum TournamentMapSelection
+{
+    PlayerChoice,
+    RoundRandom
+}
+
 public enum TournamentStatus
 {
     Registration,
@@ -55,6 +61,17 @@ public sealed class RegisteredPlayer
     public string DiscordDisplayName { get; set; } = "";
     public string OpenRaName { get; set; } = "";
     public DateTime RegisteredAtUtc { get; set; }
+}
+
+public sealed class MatchAttendanceTimer
+{
+    public string Id { get; set; } = "";
+    public ulong StartedByDiscordId { get; set; }
+    public DateTime StartedAtUtc { get; set; }
+    public DateTime DeadlineUtc { get; set; }
+    public bool EligibleForForfeit { get; set; }
+    public bool WarningSent { get; set; }
+    public string Outcome { get; set; } = "Pending";
 }
 
 public sealed class MatchRecord
@@ -80,7 +97,10 @@ public sealed class MatchRecord
     public string Password { get; set; } = "";
     public bool AllowSpectators { get; set; }
     public string SpectatorPassword { get; set; } = "";
+    public MatchAttendanceTimer? AttendanceTimer { get; set; }
+    public string? ForfeitReason { get; set; }
     public string SupportDirectory { get; set; } = "";
+    public DateTime? ServerRetainUntilUtc { get; set; }
     public string? ReplayPath { get; set; }
     public ulong? AutomaticWinnerDiscordId { get; set; }
     public ulong? FinalWinnerDiscordId { get; set; }
@@ -125,6 +145,7 @@ public sealed class TournamentSeries
     public ulong PlayerOneDiscordId { get; set; }
     public ulong PlayerTwoDiscordId { get; set; }
     public int TournamentRound { get; set; }
+    public string Bracket { get; set; } = "";
     public bool IsThirdPlaceMatch { get; set; }
     public int WinsRequired { get; set; } = 1;
     public TournamentSeriesStatus Status { get; set; }
@@ -137,6 +158,8 @@ public sealed class TournamentSeries
 public sealed class TournamentRecord
 {
     public bool UseGeneratedMaps { get; set; }
+    public TournamentMapSelection MapSelection { get; set; } = TournamentMapSelection.PlayerChoice;
+    public Dictionary<int, List<TournamentMap>> MapsByRound { get; set; } = new();
     public string Id { get; set; } = "";
     public string Name { get; set; } = "";
     public TournamentFormat Format { get; set; }
@@ -175,6 +198,8 @@ public sealed class TournamentState
     public Dictionary<string, TournamentSeries> Series { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, TournamentRecord> Tournaments { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public List<TournamentMap> MapPool { get; set; } = new();
+    // Separate from the legacy fixed-map pool; older state files enable all archetypes.
+    public List<string> DisabledMapArchetypes { get; set; } = new();
     public int NextMatchNumber { get; set; } = 1;
     public int NextSeriesNumber { get; set; } = 1;
     public int NextTournamentNumber { get; set; } = 1;

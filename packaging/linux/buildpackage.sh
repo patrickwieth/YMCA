@@ -131,6 +131,7 @@ for i in 16x16 32x32 48x48 64x64 128x128 256x256 512x512 1024x1024; do
 done
 
 install -d "${APPDIR}/usr/bin"
+install -m 0755 "${PACKAGING_DIR}/register-links.sh" "${APPDIR}/usr/bin/ymca-register-links"
 
 sed "s/{MODID}/${MOD_ID}/g" "${TEMPLATE_ROOT}/${ENGINE_DIRECTORY}/packaging/linux/openra.appimage.in" | sed "s/{TAG}/${TAG}/g" | sed "s/{MODNAME}/${PACKAGING_DISPLAY_NAME}/g" | sed "s/{MODINSTALLERNAME}/${PACKAGING_INSTALLER_NAME}/g" | sed "s|{MODFAQURL}|${PACKAGING_FAQ_URL}|g" > "${APPDIR}/usr/bin/openra-${MOD_ID}"
 chmod 0755 "${APPDIR}/usr/bin/openra-${MOD_ID}"

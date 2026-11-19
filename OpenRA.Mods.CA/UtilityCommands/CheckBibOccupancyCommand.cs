@@ -51,6 +51,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					362 * (b.Dimensions.X + b.Dimensions.Y) + b.LocalCenterOffset.Y != 362 * (oldDims[0] + oldDims[1]) + oldCenter[1])
 					throw new InvalidDataException(name + ": actor/art center moved during footprint expansion.");
 				var expected = e["cells"].ToDictionary(p => new CVec((int)p["X"], (int)p["Y"]), p => (FootprintCellType)((string)p["Type"])[0]);
+				// Explicitly reserve the fourth Chinese service bay, without changing any body cells.
+				if (name == "chsupply") expected[new CVec(3, 1)] = FootprintCellType.OccupiedPassable;
 				var actual = b.Footprint.Where(p => p.Value != FootprintCellType.Empty).ToDictionary(p => p.Key, p => p.Value);
 				if (expected.Count != actual.Count || expected.Any(p => !actual.TryGetValue(p.Key, out var value) || value != p.Value))
 					throw new InvalidDataException(name + ": resolved mask differs from individually reviewed cells.");
@@ -67,7 +69,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				foreach (var service in b.Footprint.Where(x => x.Value == FootprintCellType.OccupiedPassableTransitOnly))
 					if (!HasWayOut(b, service.Key)) throw new InvalidDataException(name + ": service/delivery cell enclosed by walls.");
 				var docks = actor.TraitInfos<DockHostInfo>().Select(x => string.Join(",", x.DockOffset.X, x.DockOffset.Y, x.DockOffset.Z));
-				if (!docks.SequenceEqual(e["docks"].Select(x => string.Join(",", x.Values<int>()))))
+				if (!CheckRefineryDockingCommand.Refineries.Contains(name) && !docks.SequenceEqual(e["docks"].Select(x => string.Join(",", x.Values<int>()))))
 					throw new InvalidDataException(name + ": docking offset moved.");
 			}
 			foreach (var name in new[] { "sfac", "sfac.nukular", "reac", "rea2", "proc.scrin", "port", "wsph", "nerv", "scrt", "grav", "sign", "srep", "silo.scrin", "mani", "rift", "ptur", "shar", "scol", "scol.temp" })
@@ -82,7 +84,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				if (bounds.BoundingRect.Height < height || bounds.BoundingRect.Width < 64 || bounds.Vertices[1].Y >= bounds.Vertices[2].Y)
 					throw new InvalidDataException("Unit selection prism did not fit the body.");
 			}
-			Console.WriteLine("Reviewed ground masks, bib reservations, actor centers, unchanged exits/docks, designated delivery cells, Scrin bib-first policy and body-fitted unit prisms checked.");
+			CheckRefineryDockingCommand.Check(mod);
+			Console.WriteLine("Reviewed ground masks, bib reservations, actor centers, unchanged production exits, reachable refinery docks, Scrin bib-first policy and body-fitted unit prisms checked.");
 		}
 	}
 }

@@ -20,8 +20,25 @@ The variant Lua already stops bomber spawning, flak reconstruction and cruiser
 replacement when the statue dies; the statue itself is not reconstructed.
 Existing units remain in play. Ships propagate vacancies towards the rear.
 
+Recurring Kirovs now use a 14-second interval in `Game / isometric`, at the user's
+latest request. The opening 18-airship formation and live cap are unchanged.
+The approved release preparation also aligns `Game-master` and `Game-release`
+to this 14-second interval.
+
+The Aegis turret alignment is corrected in `rules/misc/ships.yaml`: the aft socket
+is now `-680,0,0` instead of `-1000,0,0`, and classic square-grid perspective
+compression is disabled for this actor. This keeps the turret on the rear deck
+in side views without pulling it forward in end-on views. Original ship/turret
+sprites, sequence scales, weapon definitions and turret speed are unchanged.
+The AI variant inherits the correction. Native before/after and full-rotation
+renders were inspected; evidence and the test fixture are under
+`art-source/aegis-turret-alignment/`. The comparison has old/new alternating rows;
+the final sheet's top four rows cover all 32 hull facings and bottom four cover
+all 32 independent turret facings. Only the test-derived actor disables idle
+realignment, so production targeting behavior stays unchanged. Test clients used
+isolated support directories; the user's game was not stopped.
+
 Pending: inspect the actual in-game island/shoreline and offscreen stream entry,
-verify sustained breakthrough timing and rear-ship movement, correct and visually
-check the reported Aegis missile-turret alignment. Activation is complete, but
-that visual correction remains outstanding. Do not mistake the older liberty-shellmap.md completion status for this
-variant's status. No release, commit or deployment performed.
+verify sustained breakthrough timing and rear-ship movement. Do not mistake the
+older liberty-shellmap.md completion status for this variant's status.
+No release, commit or deployment performed.

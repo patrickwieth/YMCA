@@ -3,7 +3,9 @@ param(
     [Parameter(Mandatory = $true)][string]$FixtureMap,
     [Parameter(Mandatory = $true)][string]$OutputDirectory,
     [int]$Port = 57349,
-    [int]$TimeoutSec = 300
+    [int]$TimeoutSec = 300,
+    [switch]$RestrictedMapPool,
+    [switch]$QueryMapRepository
 )
 # Local-only smoke test: remote admin UI, rejected non-admin request, two isolated
 # clients reproducing a server-generated map, and a third client joining afterward.
@@ -41,7 +43,8 @@ try {
             $exe = Join-Path $engine 'bin/OpenRA.Server.exe'
             $env:YMCA_DEDICATED_MAP_PROBE = $null
             $env:YMCA_DEDICATED_MAP_PROBE_ROLE = $null
-            $arguments += @('Server.Name=LocalGeneratorTest', "Server.ListenPort=$Port", 'Server.AdvertiseOnline=false', 'Server.EnableNat=false', 'Server.QueryMapRepository=false', "Server.Map=$uid")
+            $arguments += @('Server.Name=LocalGeneratorTest', "Server.ListenPort=$Port", 'Server.AdvertiseOnline=false', 'Server.EnableNat=false', "Server.QueryMapRepository=$($QueryMapRepository.IsPresent)", "Server.Map=$uid")
+            if ($RestrictedMapPool) { $arguments += "Server.MapPool=$uid" }
         } else {
             $exe = Join-Path $engine 'bin/OpenRA.exe'
             $env:YMCA_DEDICATED_MAP_PROBE = $support
@@ -78,9 +81,10 @@ try {
     Start-TestProcess 'late'
     Wait-For { Has-Result 'late' '^MAP_READY ' } 'late joiner generated the map'
     $uids = @('host', 'guest', 'late') | ForEach-Object { ((Select-String -Path (Join-Path $output "$_/results.txt") -Pattern '^MAP_READY ').Line -split ' ')[1] }
-    if (@($uids | Select-Object -Unique).Count -ne 1 -or $uids[0] -eq $uid) { throw 'Client generated-map checksums differ or map did not change.' }
+    $existing = $env:YMCA_DEDICATED_MAP_PROBE_EXISTING -eq '1'
+    if (@($uids | Select-Object -Unique).Count -ne 1 -or ($existing -and $uids[0] -ne $uid) -or (-not $existing -and $uids[0] -eq $uid)) { throw 'Clients did not receive the expected selected map.' }
     if (-not (Has-Result 'guest' '^PASS server rejected non-admin')) { throw 'Missing permissions check.' }
-    $result = "PASS: dedicated admin generator UI, non-admin rejection, identical generated UID on two clients plus late joiner: $($uids[0])"
+    $result = "PASS: waiting lobby/start guard, admin map selection (existing=$existing), non-admin rejection, identical UID on two clients plus late joiner: $($uids[0])"
     Set-Content -Path (Join-Path $output 'results.txt') -Value $result
     Write-Output $result
 } finally {

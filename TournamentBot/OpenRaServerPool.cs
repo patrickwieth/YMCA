@@ -11,6 +11,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     readonly OpenRaServerConfiguration config;
     readonly ReplayMetadataReader replayReader;
     readonly TournamentMapGenerator mapGenerator;
+    readonly string? mapDownloadBaseUrl;
     readonly Channel<MatchRecord> queue = Channel.CreateUnbounded<MatchRecord>();
     readonly CancellationTokenSource shutdown = new();
     readonly List<Task> workers = new();
@@ -18,11 +19,14 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     public event Func<MatchRecord, Task>? ServerStarting;
     public event Func<MatchRecord, Task>? ServerReady;
     public event Func<MatchRecord, Task>? MatchStarted;
+    public event Func<MatchRecord, Task>? ServerStopped;
+    public event Func<MatchRecord, OpenRA.Mods.CA.MapGeneration.TournamentAttendanceDecision, Task<bool>>? AttendanceDecisionAvailable;
     public event Func<MatchRecord, ReplayResult, Task>? ResultAvailable;
     public event Func<MatchRecord, string, Task>? ServerFailed;
 
-    public OpenRaServerPool(OpenRaServerConfiguration config, ReplayMetadataReader replayReader)
+    public OpenRaServerPool(OpenRaServerConfiguration config, ReplayMetadataReader replayReader, string? mapDownloadBaseUrl = null)
     {
+        this.mapDownloadBaseUrl = mapDownloadBaseUrl;
         this.config = config;
         this.replayReader = replayReader;
         mapGenerator = new TournamentMapGenerator(config);
@@ -70,6 +74,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         match.SpectatorPassword = match.AllowSpectators ? CreatePassword() : "";
         match.SupportDirectory = Path.Combine(config.MatchDirectory, match.Id);
         Directory.CreateDirectory(match.SupportDirectory);
+        TournamentAttendanceFiles.Clear(match);
 
         if (match.Generation != null)
         {
@@ -84,6 +89,8 @@ public sealed class OpenRaServerPool : IAsyncDisposable
             Directory.CreateDirectory(maps);
             File.Copy(artifact.Path, Path.Combine(maps, artifact.Uid + ".oramap"), true);
         }
+
+        TournamentMapDownloads.WriteReceipt(match, mapDownloadBaseUrl);
 
         // Persist the resolved UID and immutable package before clients receive join links.
         await InvokeAsync(ServerStarting, match);
@@ -113,6 +120,13 @@ public sealed class OpenRaServerPool : IAsyncDisposable
                     await InvokeAsync(MatchStarted, match);
                 }
 
+                var attendance = TournamentAttendanceFiles.Read(match);
+                if (attendance?.Outcome is "OneWins" or "TwoWins")
+                {
+                    if (AttendanceDecisionAvailable != null && await AttendanceDecisionAvailable(match, attendance))
+                        return; // The authoritative lobby-thread decision already stopped this host.
+                }
+
                 foreach (var replay in Directory.EnumerateFiles(match.SupportDirectory, "*.orarep", SearchOption.AllDirectories)
                     .OrderByDescending(File.GetLastWriteTimeUtc))
                 {
@@ -121,11 +135,21 @@ public sealed class OpenRaServerPool : IAsyncDisposable
                         continue;
 
                     match.ReplayPath = replay;
+                    // Reporting/confirmation proceeds now, not after the statistics window.
+                    // This worker retains its port until the dedicated process really exits.
                     await InvokeAsync(ResultAvailable, match, result);
+                    try
+                    {
+                        await process.WaitForExitAsync(cancellationToken).WaitAsync(TimeSpan.FromSeconds(185), cancellationToken);
+                    }
+                    catch (TimeoutException)
+                    {
+                        Console.Error.WriteLine($"Post-game server {match.Id} did not exit; retiring the owned process after the grace period.");
+                    }
                     return;
                 }
 
-                // ExitOnGameOver closes and finalizes the replay before terminating the server.
+                // ExitOnGameOver finalizes the replay before the post-game grace period ends.
                 // Always try the replay first so a successful match is not reported as a crash.
                 if (process.HasExited)
                     throw new InvalidOperationException($"OpenRA.Server exited with code {process.ExitCode} without a readable replay.");
@@ -142,6 +166,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
             }
 
             await Task.WhenAll(IgnoreCancellation(copyOutput), IgnoreCancellation(copyError));
+            await InvokeAsync(ServerStopped, match);
         }
     }
 
@@ -182,7 +207,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         AddArgument(info, "Server.LobbyStatusFile", Path.Combine(match.SupportDirectory, "lobby-status.json"));
         AddArgument(info, "Server.RecordReplays", "True");
         AddArgument(info, "Server.ExitOnGameOver", "True");
-        AddArgument(info, "Server.GameOverShutdownDelaySeconds", "5");
+        AddArgument(info, "Server.GameOverShutdownDelaySeconds", "180");
         AddArgument(info, "Server.RequireAuthentication", "False");
         AddArgument(info, "Server.Map", match.MapUid);
         // A tournament match must retain its assigned map, even for lobby admins.

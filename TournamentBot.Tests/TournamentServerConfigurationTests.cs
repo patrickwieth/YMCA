@@ -27,5 +27,7 @@ public sealed class TournamentServerConfigurationTests
         var info = (ProcessStartInfo)create.Invoke(pool, new object[] { match })!;
         Assert.That(info.ArgumentList, Does.Contain("Server.Map=" + match.MapUid));
         Assert.That(info.ArgumentList, Does.Contain("Server.MapPool=" + match.MapUid));
+        Assert.That(info.ArgumentList, Does.Contain("Server.ExitOnGameOver=True"));
+        Assert.That(info.ArgumentList, Does.Contain("Server.GameOverShutdownDelaySeconds=180"));
     }
 }
