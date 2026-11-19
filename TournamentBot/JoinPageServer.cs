@@ -27,12 +27,26 @@ public sealed class JoinPageServer : IAsyncDisposable
         var builder = WebApplication.CreateBuilder();
         builder.WebHost.UseUrls(config.JoinPage.ListenUrl);
         application = builder.Build();
+        application.MapGet("/", () => Results.Redirect("/tournaments"));
+        application.MapGet("/tournaments", async (HttpContext context) => await WriteTournamentPageAsync(context, await coordinator.GetTournamentIndexPageAsync()));
+        application.MapGet("/tournament/{id}", async (HttpContext context, string id) => await WriteTournamentPageAsync(context, await coordinator.GetTournamentPageAsync(id)));
+        application.MapGet("/tournament-assets.js", () => Results.Text(TournamentWebPage.Script, "text/javascript; charset=utf-8"));
         application.MapGet("/join/{matchId}", RenderJoinPageAsync);
         application.MapGet("/spectate/{matchId}", RenderSpectatorPageAsync);
         application.MapGet("/replay/{matchId}", RenderReplayPageAsync);
         application.MapGet("/replay/{matchId}/download", DownloadReplayAsync);
         application.MapGet("/map/{matchId}/download", DownloadMapAsync);
         await application.StartAsync(cancellationToken);
+    }
+
+    static async Task WriteTournamentPageAsync(HttpContext context, string? html)
+    {
+        context.Response.Headers.CacheControl = "no-store";
+        context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+        context.Response.Headers["Content-Security-Policy"] = "default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'";
+        context.Response.StatusCode = html == null ? StatusCodes.Status404NotFound : StatusCodes.Status200OK;
+        context.Response.ContentType = "text/html; charset=utf-8";
+        await context.Response.WriteAsync(html ?? "Tournament not found.");
     }
 
     async Task RenderJoinPageAsync(HttpContext context, string matchId)
@@ -294,6 +308,9 @@ public sealed class JoinPageServer : IAsyncDisposable
         return $"<tr><td>{WebUtility.HtmlEncode(expectedName)}</td><td>{WebUtility.HtmlEncode(teamName)}</td><td>{connection}</td>" +
             $"<td class=\"{readyClass}\">{ready}</td><td>{team}</td><td>{spawn}</td></tr>";
     }
+
+    public string GetPublicTournamentUrl(string tournamentId) =>
+        $"{config.JoinPage.PublicBaseUrl}/tournament/{Uri.EscapeDataString(tournamentId)}";
 
     public string GetPublicJoinUrl(string matchId, ulong playerId) =>
         $"{config.JoinPage.PublicBaseUrl}/join/{Uri.EscapeDataString(matchId)}?player={playerId}";

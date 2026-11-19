@@ -49,6 +49,14 @@ not supported. See `docs/portable-replay-maps.md`.
 - `map-cache-local-priority.patch`: delayed repository responses cannot replace a
   locally installed map. Remote metadata is committed atomically before callbacks.
 
+## Tournament post-game statistics window
+
+`tournament-postgame-replay.patch` publishes the final replay independently of the
+configured post-game shutdown delay and lets ExitOnGameOver dedicated processes
+exit after their server thread has completed cleanup. The tournament bot uses a
+180-second statistics window while processing results promptly. Rebuild the
+engine/host together; see `docs/tournament-web-and-postgame.md` for native evidence.
+
 The preparation script applies all patches and rejects incompatible local source.
 The complete stack has been checked against the pinned engine, including repeat
 application detection. See `docs/release-0.97.4-validation.md` for test evidence.

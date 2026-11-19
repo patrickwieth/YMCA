@@ -74,8 +74,23 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					Game.Renderer.SaveScreenshot(Path.Combine(output, "ready.png"));
 					if (role != "host" && role != "optin") return;
 					Poll(() => HasResult("optin", "MAP_READY"), () => manager.IssueOrder(Order.Command("state Ready")));
-					Poll(() => manager.GameStarted && manager.World != null && manager.World.WorldTick >= 100,
-						() => File.AppendAllText(log, "MATCH_STARTED\n"));
+					Poll(() => manager.GameStarted && manager.World != null && manager.World.WorldTick >= 100, () =>
+					{
+						File.AppendAllText(log, "MATCH_STARTED\n");
+						if (Environment.GetEnvironmentVariable("YMCA_POSTGAME_PROBE") != "1") return;
+						if (role == "host") manager.World.IssueOrder(new Order("Surrender", manager.World.LocalPlayer.PlayerActor, false));
+						Poll(() => manager.World.IsGameOver, () =>
+						{
+							File.AppendAllText(log, "GAME_OVER " + DateTime.UtcNow.ToString("O") + "\n");
+							Game.RunAfterDelay(170000, () =>
+							{
+								Check(manager.Connection is NetworkConnection connection && connection.ConnectionState == ConnectionState.Connected,
+									"still connected 170 seconds after game over");
+								Game.Renderer.SaveScreenshot(Path.Combine(output, "postgame.png"));
+								File.AppendAllText(log, "STATS_STILL_CONNECTED\n");
+							});
+						});
+					});
 				});
 			});
 		}

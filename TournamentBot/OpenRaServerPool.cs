@@ -19,6 +19,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     public event Func<MatchRecord, Task>? ServerStarting;
     public event Func<MatchRecord, Task>? ServerReady;
     public event Func<MatchRecord, Task>? MatchStarted;
+    public event Func<MatchRecord, Task>? ServerStopped;
     public event Func<MatchRecord, ReplayResult, Task>? ResultAvailable;
     public event Func<MatchRecord, string, Task>? ServerFailed;
 
@@ -125,11 +126,21 @@ public sealed class OpenRaServerPool : IAsyncDisposable
                         continue;
 
                     match.ReplayPath = replay;
+                    // Reporting/confirmation proceeds now, not after the statistics window.
+                    // This worker retains its port until the dedicated process really exits.
                     await InvokeAsync(ResultAvailable, match, result);
+                    try
+                    {
+                        await process.WaitForExitAsync(cancellationToken).WaitAsync(TimeSpan.FromSeconds(185), cancellationToken);
+                    }
+                    catch (TimeoutException)
+                    {
+                        Console.Error.WriteLine($"Post-game server {match.Id} did not exit; retiring the owned process after the grace period.");
+                    }
                     return;
                 }
 
-                // ExitOnGameOver closes and finalizes the replay before terminating the server.
+                // ExitOnGameOver finalizes the replay before the post-game grace period ends.
                 // Always try the replay first so a successful match is not reported as a crash.
                 if (process.HasExited)
                     throw new InvalidOperationException($"OpenRA.Server exited with code {process.ExitCode} without a readable replay.");
@@ -146,6 +157,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
             }
 
             await Task.WhenAll(IgnoreCancellation(copyOutput), IgnoreCancellation(copyError));
+            await InvokeAsync(ServerStopped, match);
         }
     }
 
@@ -186,7 +198,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
         AddArgument(info, "Server.LobbyStatusFile", Path.Combine(match.SupportDirectory, "lobby-status.json"));
         AddArgument(info, "Server.RecordReplays", "True");
         AddArgument(info, "Server.ExitOnGameOver", "True");
-        AddArgument(info, "Server.GameOverShutdownDelaySeconds", "5");
+        AddArgument(info, "Server.GameOverShutdownDelaySeconds", "180");
         AddArgument(info, "Server.RequireAuthentication", "False");
         AddArgument(info, "Server.Map", match.MapUid);
         // A tournament match must retain its assigned map, even for lobby admins.

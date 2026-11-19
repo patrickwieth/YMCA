@@ -94,8 +94,10 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             new SlashCommandBuilder()
                 .WithName("resolve")
                 .WithDescription("Resolve a disputed match as tournament admin.")
-                .AddOption("match-id", ApplicationCommandOptionType.String, "Match ID", true)
-                .AddOption("winner", ApplicationCommandOptionType.User, "Winning player", true)
+                .AddOption(new SlashCommandOptionBuilder().WithName("match-id").WithDescription("Select the match to resolve")
+                    .WithType(ApplicationCommandOptionType.String).WithRequired(true).WithAutocomplete(true))
+                .AddOption(new SlashCommandOptionBuilder().WithName("winner").WithDescription("Winning player or team from the selected match")
+                    .WithType(ApplicationCommandOptionType.String).WithRequired(true).WithAutocomplete(true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("map-add")
@@ -348,9 +350,10 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     {
         EnsureAdmin(command.User);
         var matchId = GetString(command, "match-id");
-        var winner = GetUser(command, "winner");
-        await coordinator.ResolveAsync(matchId, winner.Id);
-        await command.RespondAsync($"Match **{matchId}** resolved for {winner.Mention}.", ephemeral: true);
+        var match = await coordinator.GetMatchAsync(matchId) ?? throw new InvalidOperationException("Match not found.");
+        var winner = MatchResolutionChoices.Winner(match, GetString(command, "winner"));
+        await coordinator.ResolveAsync(matchId, winner);
+        await command.RespondAsync($"Match **{match.Id}** resolved for **{Escape(MatchResolutionChoices.SideName(match, winner == match.PlayerOneDiscordId))}**.", ephemeral: true);
     }
 
     async Task AddMapAsync(SocketSlashCommand command)
@@ -420,7 +423,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             $"🏆 **{Escape(tournament.Name)}** is open for registration!\n" +
             $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}** — **BO{tournament.WinsRequired * 2 - 1}**\n" +
             $"Public spectators: **{(tournament.AllowSpectators ? "Yes" : "No")}**\n" +
-            MapSelectionDescription(tournament) + "\n\n" +
+            MapSelectionDescription(tournament) + "\n" +
+            (config.JoinPage.Enabled ? $"[Live tournament bracket]({joinPage.GetPublicTournamentUrl(tournament.Id)})\n\n" : "\n") +
             (tournament.Mode == TournamentMode.TwoVsTwo
                 ? "Create a team using `/tournament-team-join`; your teammate must accept the invitation.\n"
                 : "Press **Join tournament** below. If needed, the bot will ask for your exact YMCA/OpenRA player name.\n") +
@@ -557,6 +561,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             $"Format: **{FormatTournamentFormat(tournament.Format)}** — **{FormatTournamentMode(tournament.Mode)}** — **BO{tournament.WinsRequired * 2 - 1}**\n" +
             $"Public spectators: **{(tournament.AllowSpectators ? "Yes" : "No")}**\n" +
             MapSelectionDescription(tournament) + "\n" +
+            (config.JoinPage.Enabled ? $"[Live tournament bracket]({joinPage.GetPublicTournamentUrl(tournament.Id)})\n" : "") +
             $"Status: **{tournament.Status}**\n{mapStatus}\n" +
             $"Entrants: **{tournament.Entrants.Count}**\n{entrants}{podium}";
         await command.RespondAsync(text.Length <= 2000 ? text : text[..1997] + "...", ephemeral: true);
@@ -567,6 +572,23 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         try
         {
             var query = interaction.Data.Current.Value?.ToString()?.Trim() ?? "";
+            if (interaction.Data.CommandName == "resolve")
+            {
+                if (interaction.Data.Current.Name == "winner")
+                {
+                    var id = interaction.Data.Options.FirstOrDefault(option => option.Name == "match-id")?.Value?.ToString() ?? "";
+                    var match = await coordinator.GetMatchAsync(id);
+                    await interaction.RespondAsync(MatchResolutionChoices.Winners(match, query).Select(choice => new AutocompleteResult(choice.Name, choice.Value)));
+                }
+                else
+                {
+                    var matches = await coordinator.GetRecentMatchesAsync(100);
+                    await interaction.RespondAsync(matches.Where(match => match.Status is not (MatchStatus.Completed or MatchStatus.Cancelled))
+                        .Where(match => (match.Id + " " + MatchResolutionChoices.SideName(match, true) + " " + MatchResolutionChoices.SideName(match, false)).Contains(query, StringComparison.OrdinalIgnoreCase))
+                        .Take(25).Select(match => new AutocompleteResult(Truncate($"{match.Id}: {MatchResolutionChoices.SideName(match, true)} vs {MatchResolutionChoices.SideName(match, false)} — {match.Status}", 100), match.Id)));
+                }
+                return;
+            }
             if (interaction.Data.CommandName.StartsWith("tournament-", StringComparison.Ordinal))
             {
                 IEnumerable<TournamentRecord> tournaments = await coordinator.GetTournamentsAsync();
@@ -824,7 +846,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
         var text = $"**Result for match {match.Id}**" +
             (match.WinsRequired > 1 ? $" — BO{match.WinsRequired * 2 - 1}, game {match.SeriesGameNumber}" : "") +
-            $"\n{automaticResult}\nPlease report your result.";
+            $"\nRound {match.TournamentRound} · Series `{match.SeriesId}` · Game {match.SeriesGameNumber}\n" +
+            $"{automaticResult}\nPlease report your result now; the server stays open for three minutes after game over so you can view statistics.";
         var resultMessages = new Dictionary<ulong, ulong>();
         foreach (var participant in MatchParticipantIds(match))
         {
@@ -877,10 +900,13 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
 
     async Task SendMapPickRequestAsync(TournamentRecord tournament, TournamentSeries series, ulong playerId)
     {
+        if (tournament.MapSelection != TournamentMapSelection.PlayerChoice || series.Status != TournamentSeriesStatus.AwaitingMapPicks)
+            return;
         var pickNumber = series.MapPicks[playerId].Count + 1;
         var required = series.WinsRequired - 1;
         await SendDmAsync(playerId,
-            $"**{Escape(tournament.Name)}** — map choice {pickNumber}/{required} for series `{series.Id}`.\n" +
+            $"**{Escape(tournament.Name)}** — Round {series.TournamentRound}, new BO{series.WinsRequired * 2 - 1} series `{series.Id}` (0:0).\n" +
+            $"Choose map {pickNumber}/{required} before game 1. The deciding map is already fixed; it will not be selected again before the deciding game.\n" +
             (tournament.UseGeneratedMaps
                 ? "Choose a map archetype. The match host will generate a fresh map. The deciding map is fixed for this whole round."
                 : "Choose a map, or select **I don't care** to let YMCA Overlord choose one for you."),
@@ -929,13 +955,14 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     {
         var pairings = string.Join('\n', newMatches.Select(match =>
             $"• `{match.Id}`: {MatchSide(match, true)} vs {MatchSide(match, false)} — " +
-            $"game {match.SeriesGameNumber}, **{Escape(match.MapTitle)}**" +
+            $"series `{match.SeriesId}`, game {match.SeriesGameNumber} of BO{match.WinsRequired * 2 - 1}, **{Escape(match.MapTitle)}**" +
             (match.IsThirdPlaceMatch ? " — **Third-place playoff**" : "")));
         var details = newMatches.Count == 0
             ? $"BO{tournament.WinsRequired * 2 - 1} map choices have been requested by DM."
             : pairings + "\n\nPlayers will receive their server details by DM.";
         return SendAnnouncementAsync(
             $"⚔️ **{Escape(tournament.Name)}** — Round {tournament.RoundNumber}\n" +
+            (config.JoinPage.Enabled ? $"[Live tournament bracket]({joinPage.GetPublicTournamentUrl(tournament.Id)})\n" : "") +
             (tournament.MapSelection == TournamentMapSelection.RoundRandom ? RoundMapDescription(tournament) + "\n\n" : "") + details);
     }
 

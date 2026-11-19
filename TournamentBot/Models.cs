@@ -87,6 +87,7 @@ public sealed class MatchRecord
     public bool AllowSpectators { get; set; }
     public string SpectatorPassword { get; set; } = "";
     public string SupportDirectory { get; set; } = "";
+    public DateTime? ServerRetainUntilUtc { get; set; }
     public string? ReplayPath { get; set; }
     public ulong? AutomaticWinnerDiscordId { get; set; }
     public ulong? FinalWinnerDiscordId { get; set; }
@@ -131,6 +132,7 @@ public sealed class TournamentSeries
     public ulong PlayerOneDiscordId { get; set; }
     public ulong PlayerTwoDiscordId { get; set; }
     public int TournamentRound { get; set; }
+    public string Bracket { get; set; } = "";
     public bool IsThirdPlaceMatch { get; set; }
     public int WinsRequired { get; set; } = 1;
     public TournamentSeriesStatus Status { get; set; }

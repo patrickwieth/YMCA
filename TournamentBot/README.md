@@ -7,8 +7,8 @@ Discord tournament orchestration for YMCA/OpenRA. The bot registers players, que
 - `/register openra-name` — associate a Discord account with an exact OpenRA player name. Unregistered users can also press a tournament join button and complete the registration modal.
 - `/match player-one player-two map-uid [map-title]` — admin: queue a match.
 - `/matches` — show recent matches.
-- `/resolve match-id winner` — admin: resolve a disputed match.
-- `/map-add map`, `/map-remove map`, `/map-pool` — choose official YMCA maps from autocomplete and manage the shared round map pool.
+- `/resolve match-id winner` — admin: select a match, then choose its actual winning player/team from autocomplete.
+- `/map-add map`, `/map-remove map`, `/map-pool` — manage the shared map/archetype pool using mode-specific autocomplete.
 - `/tournament-create name format mode best-of spectators [map-selection]` — admin: open a BO1, BO3, or BO5 tournament with player choices (default) or a fixed random map sequence per round.
 - `/tournament-join tournament-id` — enter an open tournament.
 - `/tournament-leave tournament-id` — leave before the tournament starts.
@@ -40,7 +40,7 @@ Set `releaseAnnouncements.enabled` and its Discord channel ID to let YMCA Overlo
 
 The `maxConcurrentServers` workers each own one port. Matches beyond this limit remain queued. A worker starts `OpenRA.Server`, waits until its TCP port accepts connections, then the bot DMs both players a HTTPS join button plus manual host/password details.
 
-Each match gets an isolated `Engine.SupportDir`, so its logs and server replay cannot collide with other matches. Once a completed replay can be read with `OpenRA.Utility --replay-metadata`, the server process is terminated and the slot is returned to the queue.
+Each match gets an isolated `Engine.SupportDir`, so its logs and server replay cannot collide with other matches. The completed replay is finalized shortly after game over and result reporting starts immediately. The server remains open for three minutes after game over so players can view statistics or leave voluntarily. Its worker/port is released only when the process exits. Free ports can host the next matches in parallel; fully occupied pools queue new games without delaying result reporting. Deployment is blocked during this statistics window.
 
 Automatic replay results are not final until player feedback agrees. Conflicting reports, explicit disputes, missing players, and ambiguous OpenRA outcomes are sent to the admin channel for manual review. A technical rematch is queued automatically only when both players request one and does not advance the bracket.
 
@@ -52,6 +52,10 @@ Admins maintain one shared tournament map/archetype pool, which each tournament 
 - **Random — fixed for each round** (`round-random`): the bot fixes the complete BO1/BO3/BO5 map sequence before starting the round. Every pairing uses the same map for game 1, game 2, and so on, including identical generated-map seeds. There are no pick DMs. Sequences persist across restarts; subsequent rounds receive a new sequence. Types cycle through the pool before repeating; small pools are supported.
 
 Only games needed to decide a series are queued. Technical rematches retain the exact map and seed. Existing tournaments keep their original selection mode.
+
+## Public tournament pages
+
+The join-page service also serves `/tournaments` and `/tournament/T010` (replace the ID as needed). Pages show the round-by-round bracket, series scores, match results, and eligible spectator/replay links, refreshing every ten seconds. Discord registration and status messages include the public bracket link. Player names/results are public; private join credentials and Discord IDs are not exposed.
 
 ## Generated tournament maps
 

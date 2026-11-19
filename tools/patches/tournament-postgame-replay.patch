@@ -1,0 +1,73 @@
+--- a/engine/OpenRA.Game/Server/Server.cs
++++ b/engine/OpenRA.Game/Server/Server.cs
+@@ -156,6 +156,9 @@
+ 		readonly List<GameInformation.Player> worldPlayers = new();
+ 		readonly Stopwatch pingUpdated = Stopwatch.StartNew();
+ 		DateTime? gameOverShutdownAtUtc;
++		DateTime? gameOverReplayFinalizeAtUtc;
++		bool shutdownComplete;
++		public bool ShutdownComplete => Volatile.Read(ref shutdownComplete);
+ 
+ 		public readonly VoteKickTracker VoteKickTracker;
+ 		readonly PlayerMessageTracker playerMessageTracker;
+@@ -378,6 +381,15 @@
+ 						foreach (var t in serverTraits.WithInterface<ITick>())
+ 							t.Tick(this);
+ 
++						// Publish the completed replay independently of the statistics-viewing
++						// grace period. Keep the existing five-second sync/defeat settling window.
++						if (gameOverReplayFinalizeAtUtc <= DateTime.UtcNow)
++						{
++							recorder?.Dispose();
++							recorder = null;
++							gameOverReplayFinalizeAtUtc = null;
++						}
++
+ 						if (gameOverShutdownAtUtc <= DateTime.UtcNow)
+ 							Shutdown();
+ 
+@@ -411,6 +423,7 @@
+ 					c.Dispose();
+ 
+ 				Conns.Clear();
++				Volatile.Write(ref shutdownComplete, true);
+ 			})
+ 			{ IsBackground = true }.Start();
+ 		}
+@@ -812,8 +825,12 @@
+ 					winner.OutcomeTimestampUtc = now;
+ 				}
+ 
+-				if (Type == ServerType.Dedicated && Settings.ExitOnGameOver)
+-					gameOverShutdownAtUtc = now.AddSeconds(Math.Max(0, Settings.GameOverShutdownDelaySeconds));
++				if (Type == ServerType.Dedicated && Settings.ExitOnGameOver && gameOverShutdownAtUtc == null)
++				{
++					var delay = Math.Max(0, Settings.GameOverShutdownDelaySeconds);
++					gameOverShutdownAtUtc = now.AddSeconds(delay);
++					gameOverReplayFinalizeAtUtc = now.AddSeconds(Math.Min(5, delay));
++				}
+ 			}
+ 		}
+ 
+--- a/engine/OpenRA.Server/Program.cs
++++ b/engine/OpenRA.Server/Program.cs
+@@ -100,11 +100,18 @@
+ 				while (true)
+ 				{
+ 					Thread.Sleep(1000);
++					if (settings.ExitOnGameOver && server.ShutdownComplete)
++					{
++						modData.Dispose();
++						return;
++					}
++
+ 					if (server.State == ServerState.GameStarted && server.Conns.Count < 1)
+ 					{
+ 						WriteLineWithTimeStamp("No one is playing, shutting down...");
+ 						server.Shutdown();
+-						break;
++						if (!settings.ExitOnGameOver)
++							break;
+ 					}
+ 				}
+ 

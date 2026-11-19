@@ -202,6 +202,27 @@ public sealed class GeneratedTournamentMapTests
     }
 
     [Test]
+    public async Task OneToOneScoreQueuesFrozenDeciderWithoutAnotherMapChoice()
+    {
+        var tournament = await Start(2);
+        var series = (await coordinator.GetSeriesAsync(tournament.SeriesIds.Single()))!;
+        var decider = tournament.RandomMapByRound[1].Generation!;
+        await coordinator.SubmitSeriesMapPickAsync(series.Id, series.PlayerOneDiscordId, "archetype:TwoSides");
+        await coordinator.SubmitSeriesMapPickAsync(series.Id, series.PlayerTwoDiscordId, "archetype:Arabia");
+        var first = (await coordinator.GetRecentMatchesAsync()).Single();
+        await coordinator.ResolveAsync(first.Id, series.PlayerOneDiscordId);
+        var second = (await coordinator.GetRecentMatchesAsync()).Single(m => m.SeriesGameNumber == 2);
+        await coordinator.ResolveAsync(second.Id, series.PlayerTwoDiscordId);
+        var third = (await coordinator.GetRecentMatchesAsync()).Single(m => m.SeriesGameNumber == 3);
+        Assert.That(third.SeriesId, Is.EqualTo(series.Id));
+        Assert.That(third.Generation!.Id, Is.EqualTo(decider.Id));
+        Assert.That(third.Generation.Seed, Is.EqualTo(decider.Seed));
+        Assert.That(tournament.SeriesIds.Count, Is.EqualTo(1));
+        Assert.That(series.Status, Is.EqualTo(TournamentSeriesStatus.Playing));
+        Assert.ThrowsAsync<InvalidOperationException>(() => coordinator.SubmitSeriesMapPickAsync(series.Id, series.PlayerOneDiscordId, "__random__"));
+    }
+
+    [Test]
     public async Task SeriesEndingEarlyDoesNotQueueTheDecider()
     {
         var tournament = await Start(2);

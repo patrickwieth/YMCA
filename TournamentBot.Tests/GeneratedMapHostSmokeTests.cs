@@ -9,6 +9,45 @@ namespace Ymca.TournamentBot.Tests;
 [TestFixture]
 public sealed class GeneratedMapHostSmokeTests
 {
+    [Test, Explicit("Uses an owned native server and a completed diagnostic replay to verify worker/port retention.")]
+    public async Task ReadableResultDoesNotReleaseTheLiveServersPort()
+    {
+        var root = Environment.GetEnvironmentVariable("YMCA_TOURNAMENT_ENGINE_SMOKE") ?? throw new InvalidOperationException("Missing smoke root");
+        var replay = Environment.GetEnvironmentVariable("YMCA_POSTGAME_REPLAY") ?? throw new InvalidOperationException("Missing completed probe replay");
+        var directory = Path.Combine(Path.GetTempPath(), "ymca-postgame-pool", Guid.NewGuid().ToString("N"));
+        var listener = new TcpListener(IPAddress.Loopback, 0); listener.Start();
+        var port = ((IPEndPoint)listener.LocalEndpoint).Port; listener.Stop();
+        var config = new OpenRaServerConfiguration { WorkingDirectory = root, MatchDirectory = directory, EngineDirectory = Path.Combine(root, "engine"),
+            ServerExecutable = Path.Combine(root, "engine/bin/OpenRA.Server.dll"), UtilityExecutable = Path.Combine(root, "engine/bin/OpenRA.Utility.dll"),
+            UseDotNetHost = true, ModSearchPaths = Path.Combine(root, "mods") + "," + Path.Combine(root, "engine/mods"), FirstPort = port,
+            MaxConcurrentServers = 1, StartupTimeoutSeconds = 90, ReplayPollSeconds = 1, GenerateTournamentMaps = true };
+        var selected = GeneratedTournamentMaps.Freeze(GeneratedTournamentMaps.Archetypes[0], TournamentMode.OneVsOne);
+        selected.Generation!.Seed = 97001;
+        MatchRecord Match(string id) => new() { Id = id, Generation = selected.Generation, MapUid = selected.Uid, MapTitle = selected.Title,
+            PlayerOneOpenRaName = "ProbeOne", PlayerTwoOpenRaName = "ProbeTwo" };
+        var first = Match("M97011"); var second = Match("M97012");
+        var ready = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var result = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var started = 0; var stopped = 0;
+        await using var pool = new OpenRaServerPool(config, new ReplayMetadataReader(config));
+        pool.ServerStarting += _ => { Interlocked.Increment(ref started); return Task.CompletedTask; };
+        pool.ServerReady += _ => { ready.TrySetResult(true); return Task.CompletedTask; };
+        pool.ResultAvailable += (_, _) => { result.TrySetResult(true); return Task.CompletedTask; };
+        pool.ServerStopped += _ => { Interlocked.Increment(ref stopped); return Task.CompletedTask; };
+        pool.ServerFailed += (_, error) => { ready.TrySetException(new Exception(error)); result.TrySetException(new Exception(error)); return Task.CompletedTask; };
+        pool.Start(); await pool.EnqueueAsync(first);
+        await ready.Task.WaitAsync(TimeSpan.FromSeconds(180));
+        File.Copy(replay, Path.Combine(first.SupportDirectory, "provided-result.orarep"));
+        await pool.EnqueueAsync(second);
+        await result.Task.WaitAsync(TimeSpan.FromSeconds(15));
+        await Task.Delay(2000);
+        Assert.That(started, Is.EqualTo(1), "Reporting must not release the occupied port");
+        Assert.That(stopped, Is.Zero);
+        Assert.That(second.Port, Is.Null);
+        using var client = new TcpClient(); await client.ConnectAsync(IPAddress.Loopback, port);
+        Assert.That(client.Connected, Is.True, "Owned server remains available after result callback");
+    }
+
     [TestCase(2), TestCase(4)]
     [Explicit("Set YMCA_TOURNAMENT_ENGINE_SMOKE to a built game worktree; starts only its own local, unadvertised server.")]
     public async Task HostGeneratesMapAndStartsDedicatedServerWithExactUid(int players)

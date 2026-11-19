@@ -30,6 +30,7 @@ public sealed class TournamentCoordinator
         serverPool.ServerReady += OnServerReadyAsync;
         serverPool.MatchStarted += OnMatchStartedAsync;
         serverPool.ResultAvailable += OnResultAvailableAsync;
+        serverPool.ServerStopped += OnServerStoppedAsync;
         serverPool.ServerFailed += OnServerFailedAsync;
     }
 
@@ -380,6 +381,10 @@ public sealed class TournamentCoordinator
             .OrderByDescending(tournament => tournament.CreatedAtUtc)
             .ToList());
 
+    public Task<string> GetTournamentIndexPageAsync() => store.ReadAsync(TournamentWebPage.Index);
+
+    public Task<string?> GetTournamentPageAsync(string id) => store.ReadAsync(state => TournamentWebPage.Tournament(state, id));
+
     public Task<RegisteredPlayer?> GetPlayerAsync(ulong discordId) =>
         store.ReadAsync(state => state.Players.GetValueOrDefault(discordId));
 
@@ -718,6 +723,9 @@ public sealed class TournamentCoordinator
                 PlayerTwoDiscordId = pairing.Second,
                 TournamentRound = tournament.RoundNumber,
                 IsThirdPlaceMatch = isThirdPlaceMatch,
+                Bracket = isThirdPlaceMatch ? "Third place" : active.Count == 2 ? "Final"
+                    : tournament.Format == TournamentFormat.DoubleElimination && tournament.Losses[pairing.First] > 0
+                        ? "Lower bracket" : "Upper bracket",
                 WinsRequired = tournament.WinsRequired,
                 Status = randomRound || tournament.WinsRequired == 1
                     ? TournamentSeriesStatus.Playing
@@ -932,25 +940,40 @@ public sealed class TournamentCoordinator
             var stored = state.Matches[match.Id];
             stored.ReplayPath = result.ReplayPath;
             stored.AutomaticWinnerDiscordId = DetermineWinner(stored, result);
-            stored.Status = MatchStatus.AwaitingConfirmation;
-            return stored;
+            var notify = stored.Status is not (MatchStatus.Completed or MatchStatus.Cancelled or MatchStatus.RematchRequested);
+            if (notify)
+                stored.Status = MatchStatus.AwaitingConfirmation;
+            // Conservative lease for deployment safety; cleared as soon as the process exits.
+            stored.ServerRetainUntilUtc = DateTime.UtcNow.AddMinutes(3);
+            return (Match: stored, Notify: notify);
         });
 
-        await NotifyAsync(value => value.ResultReadyAsync(updated, result));
+        if (updated.Notify)
+            await NotifyAsync(value => value.ResultReadyAsync(updated.Match, result));
     }
+
+    Task OnServerStoppedAsync(MatchRecord match) => store.UpdateAsync(state =>
+    {
+        if (state.Matches.TryGetValue(match.Id, out var stored))
+            stored.ServerRetainUntilUtc = null;
+    });
 
     async Task OnServerFailedAsync(MatchRecord match, string reason)
     {
-        var updated = await store.UpdateAsync(state =>
+        var updated = await store.UpdateAsync<MatchRecord?>(state =>
         {
             var stored = state.Matches[match.Id];
+            if (stored.Status is MatchStatus.Completed or MatchStatus.Cancelled or MatchStatus.RematchRequested
+                or MatchStatus.AwaitingConfirmation or MatchStatus.Disputed)
+                return null; // Host cleanup must not undo a recorded result or admin decision.
             stored.Status = MatchStatus.Failed;
             stored.FailureReason = reason;
             stored.FinishedAtUtc = DateTime.UtcNow;
             return stored;
         });
 
-        await NotifyAsync(value => value.MatchFailedAsync(updated, reason));
+        if (updated != null)
+            await NotifyAsync(value => value.MatchFailedAsync(updated, reason));
     }
 
     async Task NotifyAsync(Func<ITournamentNotifier, Task> notification)
