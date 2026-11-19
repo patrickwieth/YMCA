@@ -1,6 +1,7 @@
 """Exercise the public-server SSH guard without SSH, servers or deployment."""
 from pathlib import Path
 import subprocess
+import shutil
 import unittest
 import yaml
 
@@ -19,7 +20,7 @@ class PublicDeploymentGuardTests(unittest.TestCase):
                                          ('occupied', "echo 'ESTAB connected-client'", False),
                                          ('query-error', 'return 2', False)]:
                 with self.subTest(workflow=filename, state=label):
-                    result = subprocess.run(['bash', '-c', 'ss() { ' + stub + '; };\n' + script],
+                    result = subprocess.run([shutil.which('bash'), '-c', 'ss() { ' + stub + '; };\n' + script],
                                             text=True, capture_output=True)
                     self.assertEqual('DEPLOY_CALLED' in result.stdout, allowed)
                     self.assertEqual(result.returncode == 0, allowed)
