@@ -1,36 +1,66 @@
-name: Verify M0020 (read-only)
+name: Retire authorized T009 and update bot
 on:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  inspect:
+  maintenance:
     runs-on: ubuntu-latest
     steps:
-      - name: Verify recovered participant links and lobby without changing state
+      - name: Back up and retire T009, then deploy with normal safety guards
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          command_timeout: 3m
+          command_timeout: 45m
           script: |
             set -eu
             cd ~/src/YMCA-tournament/TournamentBot/deploy
             python3 - <<'PY'
-            import json,pathlib,urllib.request
-            s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
+            import copy,datetime,json,os,pathlib,shutil,subprocess,uuid
+            root=pathlib.Path.cwd();p=root/'data/tournament-state.json';container='ymca-tournament-bot'
+            def run(args):return subprocess.run(args,check=True,text=True,capture_output=True)
             def f(x,n):return x.get(n,x.get(n[0].lower()+n[1:]))
-            m=f(s,'Matches')['M0020']
-            print('Match:',f(m,'Id'),'status:',f(m,'Status'),'tournament:',f(m,'TournamentId'),'series:',f(m,'SeriesId'),'port:',f(m,'Port'))
-            print('Join DMs stored:',len(f(m,'JoinDmMessageIds') or {}))
-            for n in ['PlayerOneDiscordId','PlayerTwoDiscordId']:
-             with urllib.request.urlopen('http://127.0.0.1:15080/join/M0020?player='+str(f(m,n)),timeout=10) as r:
-              page=r.read().decode();assert r.status==200 and 'M0020' in page and (':'+str(f(m,'Port'))) in page
-              print(n+': participant join page HTTP 200, correct match/port')
-            p=pathlib.Path('data/matches/M0020/lobby-status.json')
-            if p.exists():
-             lobby=json.loads(p.read_text());print('Lobby state:',f(lobby,'State'))
-            print('Match map:',f(m,'MapUid'))
+            def k(x,n):return n if n in x else n[0].lower()+n[1:]
+            def check():
+             s=json.loads(p.read_text());t=f(s,'Tournaments')['T009'];assert f(t,'Status') in ['Running','Cancelled']
+             for m in f(s,'Matches').values():
+              status=f(m,'Status')
+              assert status!='Playing','A game is playing; aborting without interruption'
+              if status in ['Queued','StartingServer','WaitingForPlayers']:
+               assert f(m,'TournamentId')=='T009','Another tournament/match is active'
+               assert status=='WaitingForPlayers','Match is transitioning; retry when stable'
+               lobby=root/'data/matches'/f(m,'Id')/'lobby-status.json'
+               assert lobby.is_file() and f(json.loads(lobby.read_text()),'State')=='WaitingPlayers','Lobby is not waiting'
+             return s
+            s=check()
+            backup=root/'data/recovery'/('retire-T009-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-'+uuid.uuid4().hex[:8]);backup.mkdir(parents=True,mode=0o700)
+            shutil.copy2(p,backup/'tournament-state.before-stop.json')
+            check();stopped=False
+            try:
+             run(['docker','stop','--time','30',container]);stopped=True
+             s=json.loads(p.read_text());shutil.copy2(p,backup/'tournament-state.stopped.json')
+             assert not any(f(m,'Status')=='Playing' for m in f(s,'Matches').values()),'Game transitioned to Playing; state left unchanged'
+             updated=copy.deepcopy(s);t=f(updated,'Tournaments')['T009'];t[k(t,'Status')]='Cancelled'
+             changed=[]
+             for mid,m in f(updated,'Matches').items():
+              if f(m,'TournamentId')=='T009' and f(m,'Status') not in ['Completed','Cancelled']:
+               m[k(m,'Status')]='Cancelled';changed.append(mid)
+             # Preserve all player records, results, map receipts and bracket history.
+             assert f(updated,'Players')==f(s,'Players') and f(updated,'Series')==f(s,'Series')
+             attrs=p.stat();tmp=p.with_suffix('.retiring-'+uuid.uuid4().hex)
+             tmp.write_text(json.dumps(updated,indent=2));os.chmod(tmp,attrs.st_mode & 0o777);os.chown(tmp,attrs.st_uid,attrs.st_gid);os.replace(tmp,p)
+             shutil.copy2(p,backup/'tournament-state.cancelled.json')
+             print('T009 retired with user authorization; cancelled matches:',','.join(changed));print('Backup:',backup)
+            except BaseException:
+             if stopped:subprocess.run(['docker','start',container],check=False,capture_output=True)
+             raise
             PY
+            trap 'docker start ymca-tournament-bot >/dev/null 2>&1 || true' EXIT
+            cd ../..
+            git fetch origin tournament-bot
+            git checkout tournament-bot
+            git pull --ff-only origin tournament-bot
+            ./TournamentBot/deploy/deploy.sh
