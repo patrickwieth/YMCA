@@ -7,7 +7,7 @@ jobs:
   maintenance:
     runs-on: ubuntu-latest
     steps:
-      - name: Inspect series and game numbers without changing state
+      - name: Verify updated host and timer state without changes
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -19,18 +19,13 @@ jobs:
             set -eu
             cd ~/src/YMCA-tournament/TournamentBot/deploy
             python3 - <<'PY'
-            import json,pathlib
+            import json,pathlib,subprocess
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
-            def f(x,n):return x.get(n,x.get(n[0].lower()+n[1:]))
-            ts=f(s,'Tournaments');ss=f(s,'Series');ms=f(s,'Matches')
-            for t in list(ts.values())[-4:]:
-             print('TOURNAMENT',f(t,'Id'),'status',f(t,'Status'),'round',f(t,'RoundNumber'),'wins-required',f(t,'WinsRequired'),'selection',f(t,'MapSelection') or 'PlayerChoice(default)')
-             for sid in (f(t,'SeriesIds') or [])[-8:]:
-              v=ss[sid];a=str(f(v,'PlayerOneDiscordId'));b=str(f(v,'PlayerTwoDiscordId'))
-              wins=f(v,'Wins') or {};picks=f(v,'MapPicks') or {}
-              print(' SERIES',sid,'round',f(v,'TournamentRound'),'status',f(v,'Status'),'score',wins.get(a,0),wins.get(b,0),'pick-counts',len(picks.get(a,[])),len(picks.get(b,[])))
-              print(' MAPS',[(f(x,'Title'),f(x,'Uid')) for x in f(v,'Maps') or []])
-              for mid in f(v,'MatchIds') or []:
-               m=ms[mid];winner=f(m,'FinalWinnerDiscordId');side='one' if str(winner)==a else 'two' if str(winner)==b else '-'
-               print('  MATCH',mid,'game',f(m,'SeriesGameNumber'),'status',f(m,'Status'),'winner-side',side,'parent',f(m,'ParentMatchId'),'map',f(m,'MapTitle'),'generation',f(f(m,'Generation') or {},'Id'))
+            active=[m['Id'] for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']]
+            pending=[m['Id'] for m in s['Matches'].values() if (m.get('AttendanceTimer') or {}).get('Outcome')=='Pending']
+            print('Active matches:',active);print('Pending admin attendance timers:',pending)
+            print('T010 status:',s['Tournaments']['T010']['Status'])
+            manifest=subprocess.check_output(['docker','exec','ymca-tournament-bot','cat','/app/game/mods/ca/mod.yaml'],text=True)
+            assert 'TournamentAttendanceServer' in manifest and 'Version: v0.97.4' in manifest
+            print('PASS deployed host contains attendance server trait and version v0.97.4')
             PY
