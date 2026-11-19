@@ -136,6 +136,14 @@ public sealed class TournamentCoordinator
 
     public Task<TournamentMap> AddMapAsync(string uid, string title, int playerCount = 0) => store.UpdateAsync(state =>
     {
+        if (config.Server.GenerateTournamentMaps)
+        {
+            var archetype = GeneratedTournamentMaps.Archetypes.FirstOrDefault(map => map.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidOperationException("Select a known map archetype.");
+            if (state.DisabledMapArchetypes.RemoveAll(value => value.Equals(archetype.Uid, StringComparison.OrdinalIgnoreCase)) == 0)
+                throw new InvalidOperationException("This archetype is already in the tournament pool.");
+            return archetype;
+        }
         if (string.IsNullOrWhiteSpace(uid))
             throw new InvalidOperationException("A map UID is required.");
         if (state.MapPool.Any(map => map.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase)))
@@ -153,14 +161,21 @@ public sealed class TournamentCoordinator
 
     public Task<TournamentMap> RemoveMapAsync(string uid) => store.UpdateAsync(state =>
     {
-        var map = state.MapPool.FirstOrDefault(value => value.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase))
-            ?? throw new InvalidOperationException("Map not found in the tournament pool.");
-        state.MapPool.Remove(map);
+        var map = ActiveMapPool(state, config.Server.GenerateTournamentMaps).FirstOrDefault(value => value.Uid.Equals(uid.Trim(), StringComparison.OrdinalIgnoreCase))
+            ?? throw new InvalidOperationException("Map or archetype not found in the tournament pool.");
+        if (config.Server.GenerateTournamentMaps)
+            state.DisabledMapArchetypes.Add(map.Uid);
+        else
+            state.MapPool.Remove(map);
         return map;
     });
 
     public Task<IReadOnlyList<TournamentMap>> GetMapPoolAsync() =>
-        store.ReadAsync<IReadOnlyList<TournamentMap>>(state => state.MapPool.ToList());
+        store.ReadAsync<IReadOnlyList<TournamentMap>>(state => ActiveMapPool(state, config.Server.GenerateTournamentMaps).ToList());
+
+    static IEnumerable<TournamentMap> ActiveMapPool(TournamentState state, bool generated) => generated
+        ? GeneratedTournamentMaps.Archetypes.Where(map => !state.DisabledMapArchetypes.Contains(map.Uid, StringComparer.OrdinalIgnoreCase))
+        : state.MapPool;
 
     public Task<TournamentRecord> CreateTournamentAsync(
         string name,
@@ -171,7 +186,7 @@ public sealed class TournamentCoordinator
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new InvalidOperationException("A tournament name is required.");
-        if (!config.Server.GenerateTournamentMaps && state.MapPool.Count == 0)
+        if (!ActiveMapPool(state, config.Server.GenerateTournamentMaps).Any())
             throw new InvalidOperationException("Add at least one map to the tournament map pool first.");
         if (winsRequired is < 1 or > 3)
             throw new InvalidOperationException("Required wins must be between one and three.");
@@ -187,7 +202,7 @@ public sealed class TournamentCoordinator
             WinsRequired = winsRequired,
             Status = TournamentStatus.Registration,
             UseGeneratedMaps = config.Server.GenerateTournamentMaps,
-            MapPool = (config.Server.GenerateTournamentMaps ? GeneratedTournamentMaps.Archetypes : state.MapPool).Select(map => new TournamentMap
+            MapPool = ActiveMapPool(state, config.Server.GenerateTournamentMaps).Select(map => new TournamentMap
             {
                 Uid = map.Uid,
                 Title = map.Title,
@@ -332,11 +347,11 @@ public sealed class TournamentCoordinator
             if (tournament.Entrants.Count < 2)
                 throw new InvalidOperationException("At least two players are required.");
 
-            if (!tournament.UseGeneratedMaps && state.MapPool.Count == 0)
+            if (!ActiveMapPool(state, tournament.UseGeneratedMaps).Any())
                 throw new InvalidOperationException("The tournament map pool is empty.");
 
             Shuffle(tournament.Entrants);
-            tournament.MapPool = (tournament.UseGeneratedMaps ? GeneratedTournamentMaps.Archetypes : state.MapPool)
+            tournament.MapPool = ActiveMapPool(state, tournament.UseGeneratedMaps)
                 .Where(map => tournament.Mode == TournamentMode.OneVsOne || map.PlayerCount == 0 || map.PlayerCount >= 4)
                 .Select(map => new TournamentMap { Uid = map.Uid, Title = map.Title, PlayerCount = map.PlayerCount })
                 .ToList();

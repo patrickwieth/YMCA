@@ -99,17 +99,17 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("map-add")
-                .WithDescription("Add an official YMCA map to the shared tournament map pool.")
+                .WithDescription("Add a map or archetype to the shared tournament pool.")
                 .AddOption(new SlashCommandOptionBuilder()
                     .WithName("map")
-                    .WithDescription("Start typing an official map name")
+                    .WithDescription("Start typing a map or archetype name")
                     .WithType(ApplicationCommandOptionType.String)
                     .WithRequired(true)
                     .WithAutocomplete(true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("map-remove")
-                .WithDescription("Remove a map from the shared tournament map pool.")
+                .WithDescription("Remove a map or archetype from the shared tournament pool.")
                 .AddOption(new SlashCommandOptionBuilder()
                     .WithName("map")
                     .WithDescription("Start typing a map-pool name")
@@ -349,30 +349,33 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     async Task AddMapAsync(SocketSlashCommand command)
     {
         EnsureAdmin(command.User);
-        if (config.Server.GenerateTournamentMaps)
-            throw new InvalidOperationException("Generated tournaments use archetypes; /map-pool lists the available types.");
-        var selected = mapCatalog.Get(GetString(command, "map"))
-            ?? throw new InvalidOperationException("Select an official YMCA map from the autocomplete list.");
+        var uid = GetString(command, "map");
+        var selected = config.Server.GenerateTournamentMaps
+            ? GeneratedTournamentMaps.Archetypes.Where(map => map.Uid.Equals(uid, StringComparison.OrdinalIgnoreCase))
+                .Select(map => new OfficialMap(map.Uid, map.PlayerCount, map.Title)).FirstOrDefault()
+            : mapCatalog.Get(uid);
+        if (selected == null)
+            throw new InvalidOperationException("Select a map or archetype from the autocomplete list.");
         var map = await coordinator.AddMapAsync(selected.Uid, selected.Title, selected.PlayerCount);
         await command.RespondAsync(
-            $"Added **{Escape(map.Title)}** (`{map.Uid}`) to the tournament map pool.",
+            $"Added **{Escape(map.Title)}** (`{map.Uid}`) to the tournament map pool. " +
+            "Applies to future tournament starts; running tournaments are unchanged.",
             ephemeral: true);
     }
 
     async Task RemoveMapAsync(SocketSlashCommand command)
     {
         EnsureAdmin(command.User);
-        if (config.Server.GenerateTournamentMaps)
-            throw new InvalidOperationException("Generated tournaments use archetypes; the legacy map pool is unchanged.");
         var map = await coordinator.RemoveMapAsync(GetString(command, "map"));
         await command.RespondAsync(
-            $"Removed **{Escape(map.Title)}** from the tournament map pool.",
+            $"Removed **{Escape(map.Title)}** from the tournament map pool. " +
+            "Applies to future tournament starts; running tournaments are unchanged.",
             ephemeral: true);
     }
 
     async Task ShowMapPoolAsync(SocketSlashCommand command)
     {
-        var maps = config.Server.GenerateTournamentMaps ? GeneratedTournamentMaps.Archetypes : await coordinator.GetMapPoolAsync();
+        var maps = await coordinator.GetMapPoolAsync();
         var text = maps.Count == 0
             ? "The tournament map pool is empty."
             : (config.Server.GenerateTournamentMaps ? "**Generated tournament archetypes**\n" : "**Tournament map pool**\n")
@@ -574,33 +577,16 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 return;
             }
 
-            IEnumerable<OfficialMap> candidates;
-            if (interaction.Data.CommandName == "map-add")
-            {
-                var pool = await coordinator.GetMapPoolAsync();
-                candidates = mapCatalog.Maps.Where(map =>
-                    pool.All(existing => !existing.Uid.Equals(map.Uid, StringComparison.OrdinalIgnoreCase)));
-            }
-            else if (interaction.Data.CommandName == "map-remove")
-            {
-                var pool = await coordinator.GetMapPoolAsync();
-                candidates = pool.Select(map => mapCatalog.Get(map.Uid)
-                    ?? new OfficialMap(map.Uid, 0, map.Title));
-            }
-            else
+            if (interaction.Data.CommandName is not ("map-add" or "map-remove"))
             {
                 await interaction.RespondAsync(Array.Empty<AutocompleteResult>());
                 return;
             }
 
-            var results = candidates
-                .Where(map => query.Length == 0 || map.Title.Contains(query, StringComparison.OrdinalIgnoreCase))
-                .OrderByDescending(map => map.Title.StartsWith(query, StringComparison.OrdinalIgnoreCase))
-                .ThenBy(map => map.Title, StringComparer.OrdinalIgnoreCase)
-                .Take(25)
-                .Select(map => new AutocompleteResult(
-                    Truncate($"{map.Title} ({map.PlayerCount} players)", 100),
-                    map.Uid));
+            var pool = await coordinator.GetMapPoolAsync();
+            var results = MapPoolAutocomplete.Search(config.Server.GenerateTournamentMaps,
+                interaction.Data.CommandName == "map-add", pool, mapCatalog.Maps, query)
+                .Select(choice => new AutocompleteResult(choice.Name, choice.Value));
             await interaction.RespondAsync(results);
         }
         catch (Exception ex)

@@ -175,6 +175,8 @@ public sealed class TournamentState
     public Dictionary<string, TournamentSeries> Series { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public Dictionary<string, TournamentRecord> Tournaments { get; set; } = new(StringComparer.OrdinalIgnoreCase);
     public List<TournamentMap> MapPool { get; set; } = new();
+    // Separate from the legacy fixed-map pool; older state files enable all archetypes.
+    public List<string> DisabledMapArchetypes { get; set; } = new();
     public int NextMatchNumber { get; set; } = 1;
     public int NextSeriesNumber { get; set; } = 1;
     public int NextTournamentNumber { get; set; } = 1;
