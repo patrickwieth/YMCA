@@ -1,4 +1,4 @@
-"""Indexed GDI corner-surface and Nod lower-edge masks; preserve supplied art."""
+"""Indexed GDI joint and Nod lower-edge masks; preserve supplied art and old masks."""
 from pathlib import Path
 import hashlib
 import json
@@ -10,21 +10,24 @@ GDI_SIZES = [(1,1),(2,2),(3,3),(4,4),(4,5)]
 NOD_SIZES = [(1,1),(2,2),(3,3),(4,3)]
 CONCRETE = (106,114,128)
 NOD_SIDES = {(28,28,36): 1, (47,51,60): 2}
-
-
-def corner(x, y, nx, ny):
-    u = ((y + .5) / 32 + (x + .5 - ny * 64) / 64) / 2
-    v = ((y + .5) / 32 - (x + .5 - ny * 64) / 64) / 2
-    return (0 <= u < .5 or nx - .5 <= u < nx) and (0 <= v < .5 or ny - .5 <= v < ny)
+# Authored joint/shadow/highlight colors only; the broad concrete faces stay neutral.
+GDI_JOINTS = [(0,0,0), (21,30,56), (37,50,83), (49,62,89), (145,152,157),
+              (9,18,45), (67,79,101), (152,163,178), (78,93,120)]
 
 
 def mask_for(image, family, nx, ny):
     mask = Image.new('P', image.size)
     palette = [0] * 768
-    # Opaque, source-like tonal steps; alpha is in the indexed palette, not a wrapper.
-    shades = [128] if family == 'gdi' else [96,144]
+    # Source-like tonal steps; alpha is in the indexed palette, not a wrapper.
+    shades = [128] * len(GDI_JOINTS) if family == 'gdi' else [96,144]
     for i, shade in enumerate(shades, 1):
-        palette[i*3:i*3+3] = [shade] * 3
+        if family == 'gdi':
+            rgb = GDI_JOINTS[i-1]
+            # Same premultiplied 65% joint treatment as Soviet/China masks;
+            # lift the black outline so it can carry a dark player-color edge.
+            palette[i*3:i*3+3] = [128]*3 if rgb == (0,0,0) else [round(c*166/255) for c in rgb]
+        else:
+            palette[i*3:i*3+3] = [shade] * 3
     mask.putpalette(palette)
     for x in range(image.width):
         opaque = [y for y in range(image.height) if image.getpixel((x,y))[3] == 255]
@@ -33,11 +36,11 @@ def mask_for(image, family, nx, ny):
         bottom = max(opaque)
         for y in opaque:
             rgb = image.getpixel((x,y))[:3]
-            index = (1 if rgb == CONCRETE and corner(x,y,nx,ny) else 0) if family == 'gdi' else (
+            index = (GDI_JOINTS.index(rgb)+1 if rgb in GDI_JOINTS else 0) if family == 'gdi' else (
                 NOD_SIDES.get(rgb,0) if y >= bottom - 6 else 0)
             if index:
                 mask.putpixel((x,y), index)
-    return mask, bytes([0] + [255] * len(shades))
+    return mask, bytes([0,255] + [166]*(len(shades)-1)) if family == 'gdi' else bytes([0] + [255]*len(shades))
 
 
 def generate():
@@ -48,7 +51,7 @@ def generate():
         for nx, ny in sizes:
             bib = f'bib{nx}x{ny}'
             source = folder / (bib + ('-grid.png' if family == 'gdi' and nx > 1 else '.png'))
-            target = folder / (bib + ('-corner-remap.png' if family == 'gdi' else '-edge-remap.png'))
+            target = folder / (bib + ('-joint-remap.png' if family == 'gdi' else '-edge-remap.png'))
             image = Image.open(source).convert('RGBA')
             mask, alpha = mask_for(image, family, nx, ny)
             mask.save(target, transparency=alpha)

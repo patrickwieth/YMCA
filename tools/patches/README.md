@@ -18,7 +18,18 @@ before building in all three jobs (.NET, Mono and Windows). A reverse check skip
 an already-applied patch; an incompatible or partially applied patch fails the job
 instead of overwriting local changes. See `docs/ci-engine-patch-fix.md`.
 
-For manual builds after fetching a fresh engine, run from the Game repository root **before building**:
+Windows `make.ps1 all` / `check` prepares the complete patch stack before compiling
+both an existing and a newly downloaded engine. PowerShell and shell preparation
+share the ordered list in `tools/engine-patches.txt`. Git for Windows must be on PATH.
+Repeated preparation is a no-op; conflicting local source aborts before compilation.
+
+This fixes the local `IReplayMapProvider` build failure caused by a mod using the
+portable replay API while the generated engine still lacked its patch. The actual
+`Game/engine` and mod were rebuilt together in Release successfully. Regression
+coverage: `python tools/test_windows_engine_patches.py -v` (fresh engine, paths with
+spaces, repeated preparation, and preserving conflicting local edits).
+
+For manual builds outside `make.ps1`, run from the Game repository root **before building**:
 
 ```sh
 sh tools/prepare-engine-patches.sh
@@ -56,6 +67,14 @@ configured post-game shutdown delay and lets ExitOnGameOver dedicated processes
 exit after their server thread has completed cleanup. The tournament bot uses a
 180-second statistics window while processing results promptly. Rebuild the
 engine/host together; see `docs/tournament-web-and-postgame.md` for native evidence.
+
+## Rock occlusion rendering
+
+`rock-silhouette-model.patch` exposes the existing resource drawing pass for the
+mod's occlusion-aware subclass and permits shadow-free voxel silhouette copies.
+Normal model rendering is unchanged. The shared patch list includes this extension
+for Windows and shell builds; rebuild engine and mod together. See
+`docs/modular/rock-occlusion.md` for native validation and scope.
 
 The preparation script applies all patches and rejects incompatible local source.
 The complete stack has been checked against the pinned engine, including repeat
