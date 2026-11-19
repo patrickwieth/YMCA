@@ -60,11 +60,28 @@ run rather than claiming that entire historical audit is green.
 
 ## Rollout status
 
-Source preparation complete; commit/tag, package publication, stable manifest,
-public game-server deployment and separate tournament-bot rollout must each be
-verified and recorded below. Do not infer deployment from release creation.
+- Isometric source commit: `c24b85eb`; release preparation: `cb343bac`;
+  release merge/tag `v0.97.4`: `bfe6a7793c556fe2d0faf3ecfbc3e27012bca15b`.
+  Isometric and tournament-bot branches plus tag were pushed atomically.
+- Packaging run https://github.com/patrickwieth/YMCA/actions/runs/44423406905
+  succeeded for Windows installer/portable, Linux AppImage and macOS DMG, followed
+  by stable manifest publication and the regular game-server deployment.
+- All three branch/tag CI runs succeeded (Linux Mono, Linux .NET, Windows .NET).
+- Stable publication commit: `00cbc86b`. The raw public URL initially returned an
+  older CDN-cached response; API and a fresh public request subsequently confirmed
+  v0.97.4 (2026-11-19 00:01 UTC).
+- Independent TCP handshakes on 45.136.28.158:1234 and :1235 advertised v0.97.4.
+- The actual published Windows portable ZIP was downloaded and inspected: both
+  versioned and generated map folders, the automatic-download server trait, exact
+  approved radar PNG bytes and ATWR foundation binding were present.
+- Release: https://github.com/patrickwieth/YMCA/releases/tag/v0.97.4 . Public notes
+  are concise English, grouped under Features and Bug Fixes.
 
-At 23:36 UTC, T009/M0020 was still WaitingForPlayers. The user has been asked for
-permission to renew that waiting lobby during the version update, only if no game
-has started; the bot deployment guard must remain respected. The earlier M0020
-live repair and backup are documented in `tournament-M0020-recovery.md`.
+**Tournament bot rollout remains pending.** At the last read-only check (23:36
+UTC), T009/M0020 was still WaitingForPlayers. Permission to renew this waiting
+lobby during the version update was requested; no response had been received at
+publication. The bot deployment was NOT run and its match guard was NOT bypassed.
+The running tournament host remains on v0.97.3, with the prior live map-search-path
+repair. New automatic tournament downloads require the bot/host update as well
+as updated clients. The earlier recovery/backup is documented in
+`tournament-M0020-recovery.md`. Recheck all matches immediately before any update.
