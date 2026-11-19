@@ -26,6 +26,7 @@ namespace OpenRA.Mods.CA.Server
                 var request = JsonConvert.DeserializeObject<TournamentAttendanceRequest>(File.ReadAllText(path));
                 if (request == null || request.Id == handled || !Guid.TryParseExact(request.Id, "N", out _) ||
                     request.MapUid != server.LobbyInfo.GlobalSettings.Map || request.DeadlineUtc.Kind != DateTimeKind.Utc) return;
+                now = DateTime.UtcNow; // Slow filesystem reads must not extend the forfeit decision window.
                 if (server.State == ServerState.WaitingPlayers && now < request.DeadlineUtc) return;
                 var outcome = "Review";
                 if (server.State == ServerState.GameStarted) outcome = "Started";
