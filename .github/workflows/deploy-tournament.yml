@@ -1,12 +1,34 @@
 name: Deploy Tournament Bot
 on:
   workflow_dispatch:
+    inputs:
+      resend:
+        description: 'Send map-choice reminders to pending players only'
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
+      - name: Send missing map-choice reminders without restarting
+        if: inputs.resend
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            set -eu
+            cd ~/src/YMCA-tournament
+            git fetch origin maintenance/tournament0976-pause
+            script=$(mktemp /tmp/ymca-remind-XXXXXX.py)
+            trap 'rm -f "$script"' EXIT
+            git show FETCH_HEAD:tools/tournament-reset-20261120.py > "$script"
+            cd TournamentBot/deploy
+            python3 "$script" remind
       - name: Read-only championship verification
         uses: appleboy/ssh-action@master
         with:

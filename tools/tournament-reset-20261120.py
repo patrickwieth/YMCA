@@ -94,7 +94,7 @@ if mode == 'prepare':
     (RECOVERY/'new-id.txt').write_text(new_id)
     print('RESET_PREPARED',new_id,'entrants',16,'series',8,'retired',retired)
     subprocess.run(['docker-compose','start','tournament-bot'],check=True)
-elif mode == 'invite':
+elif mode in ('invite','remind'):
     s=load(); new_id=(RECOVERY/'new-id.txt').read_text(); t=s['Tournaments'][new_id]
     inspect=json.loads(subprocess.check_output(['docker','inspect','ymca-tournament-bot'],text=True))[0]
     env=dict(v.split('=',1) for v in inspect['Config']['Env'] if '=' in v)
@@ -102,14 +102,16 @@ elif mode == 'invite':
     token=env.get('YMCA_TOURNAMENT_DISCORD_TOKEN') or config.get('discordToken')
     assert token
     base=config['joinPage']['publicBaseUrl'].rstrip('/')
-    receipt_path=RECOVERY/'invitations.json'
+    round_number=t['RoundNumber']
+    receipt_path=RECOVERY/('invitations.json' if mode=='invite' else f'round-{round_number}-reminders.json')
     receipts=json.loads(receipt_path.read_text()) if receipt_path.exists() else {}
-    decider=t['RandomMapByRound']['1']['Uid']
+    decider=t['RandomMapByRound'][str(round_number)]['Uid']
     maps=sorted([m for m in t['MapPool'] if len(t['MapPool'])<=1 or m['Uid'].lower()!=decider.lower()],key=lambda m:m['Title'])[:124]
     chunks=[maps[:24]]+[maps[i:i+25] for i in range(24,len(maps),25)]
     failures=[]
     for sid in t['SeriesIds']:
-        series=s['Series'][sid]
+        series=load()['Series'][sid]
+        if mode=='remind' and (series['TournamentRound']!=round_number or series['Status']!='AwaitingMapPicks'):continue
         components=[]
         for row,chunk in enumerate(chunks):
             options=[{'label':m['Title'][:100],'value':m['Uid']} for m in chunk]
@@ -117,6 +119,8 @@ elif mode == 'invite':
             components.append({'type':1,'components':[{'type':3,'custom_id':f'series-map:{sid}:{row}', 'placeholder':'Choose your map archetype','min_values':1,'max_values':1,'options':options}]})
         for pid,opp in [(series['PlayerOneDiscordId'],series['PlayerTwoDiscordId']),(series['PlayerTwoDiscordId'],series['PlayerOneDiscordId'])]:
             if str(pid) in receipts: continue
+            current=load()['Series'][sid]
+            if mode=='remind' and (current['Status']!='AwaitingMapPicks' or len(current['MapPicks'].get(str(pid),[]))>=current['WinsRequired']-1):continue
             p=s['Players'][str(pid)]; opponent=s['Players'][str(opp)]['OpenRaName']
             try:
                 channel=discord_api(token,'POST','/users/@me/channels',{'recipient_id':str(pid)})['id']
@@ -124,13 +128,21 @@ elif mode == 'invite':
                     f"Your opponent: **{opponent}**\nYour player name: **{p['OpenRaName']}**\nRound 1 · BO3 · Series **{sid}**\n"
                     f"Please update to **YMCA v0.97.6**. Choose your map below (or I don't care). Once both players have chosen, the bot sends a NEW game invitation with the current password.\n"
                     f"Bracket: {base}/tournament/{new_id}")
+                if mode=='remind':
+                    previous=discord_api(token,'GET',f'/channels/{channel}/messages?limit=100')
+                    prior=sum(sid in msg.get('content','') and any(sid in c.get('custom_id','') for row in msg.get('components',[]) for c in row.get('components',[])) for msg in previous)
+                    print('PREVIOUS_MAP_PICK_MESSAGES',p['OpenRaName'],sid,prior)
+                    text=(f"**YMCA World Championship — Round {round_number} reminder ({new_id})**\n"
+                          f"Your opponent: **{opponent}** · BO3 · Series **{sid}**\n"
+                          f"Your map choice is still pending. Please choose a map below (or I don't care). Once BOTH players have chosen, you will receive the game-server invitation.\n"
+                          f"Only the map choice is being requested again; the tournament and results have NOT been reset.\nBracket: {base}/tournament/{new_id}")
                 message=discord_api(token,'POST',f'/channels/{channel}/messages',{'content':text,'components':components,'allowed_mentions':{'parse':[]}})
                 receipts[str(pid)]={'channel':channel,'message':message['id'],'series':sid}
                 receipt_path.write_text(json.dumps(receipts,indent=2))
                 print('INVITATION_DELIVERED',p['OpenRaName'],sid)
             except Exception as e:
                 failures.append(p['OpenRaName']);print('INVITATION_FAILED',p['OpenRaName'],str(e))
-    print('DELIVERED',len(receipts),'OF',len(t['Entrants']),'FAILURES',failures)
+    print('DELIVERED',len(receipts),'MODE',mode,'ROUND',round_number,'FAILURES',failures)
     if failures:sys.exit(1)
 else:
     raise SystemExit('Unknown mode')
