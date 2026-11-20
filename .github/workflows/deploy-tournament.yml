@@ -1,41 +1,34 @@
 name: Deploy Tournament Bot
 on:
   workflow_dispatch:
-    inputs:
-      confirmation:
-        description: 'Type RESET-T012-16 to replace T012 with the same 16 entrants and send new invitations'
-        required: true
 permissions:
   contents: read
 jobs:
-  reset:
-    if: inputs.confirmation == 'RESET-T012-16'
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Authorized backed-up tournament reset and invitations
+      - name: Read-only championship verification
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          command_timeout: 15m
           script: |
             set -eu
-            cd ~/src/YMCA-tournament
-            git fetch origin maintenance/tournament0976-pause
-            script=$(mktemp /tmp/ymca-reset-XXXXXX.py)
-            trap 'rm -f "$script"' EXIT
-            git show FETCH_HEAD:tools/tournament-reset-20261120.py > "$script"
-            cd TournamentBot/deploy
-            test -f data/recovery/reset-T012-20261120/new-id.txt
-            test "$(cat data/recovery/reset-T012-20261120/new-id.txt)" = T013
-            started=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)
-            i=0
-            until docker logs --since "$started" ymca-tournament-bot 2>&1 | grep -q 'Registered tournament commands in '; do
-              i=$((i+1))
-              test "$i" -lt 60
-              sleep 2
-            done
-            curl --fail --silent --output /dev/null http://127.0.0.1:15080/tournaments
-            python3 "$script" invite
+            cd ~/src/YMCA-tournament/TournamentBot/deploy
+            python3 - <<'PY'
+            import json,pathlib,subprocess
+            s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
+            t=s['Tournaments']['T013']
+            old=json.loads(pathlib.Path('data/recovery/reset-T012-20261120/quiescent.json').read_text())
+            print('ROSTER_PRESERVED',set(t['Entrants'])==set(old['Tournaments']['T012']['Entrants']))
+            print('OLD_TOURNAMENT',s['Tournaments']['T012']['Status'])
+            print('INVITATION_RECEIPTS',len(json.loads(pathlib.Path('data/recovery/reset-T012-20261120/invitations.json').read_text())))
+            top=subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','pid,args'],text=True)
+            for m in s['Matches'].values():
+                if m.get('TournamentId')!='T013':continue
+                lines=[l for l in top.splitlines() if 'Server.Name=YMCA Tournament '+m['Id']+' ' in l]
+                print('NEW_MATCH',m['Id'],m['Status'],'join_dms',len(m.get('JoinDmMessageIds',{})),'password_matches',bool(lines) and ('Server.Password='+m['Password']+' ') in lines[0])
+            print('OLD_ACTIVE_MATCHES',[m['Id'] for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing'] and s['Tournaments'].get(m.get('TournamentId'),{}).get('Status') in ['Completed','Cancelled']])
+            PY
