@@ -99,9 +99,9 @@ elif mode == 'invite':
     inspect=json.loads(subprocess.check_output(['docker','inspect','ymca-tournament-bot'],text=True))[0]
     env=dict(v.split('=',1) for v in inspect['Config']['Env'] if '=' in v)
     config=json.loads(pathlib.Path('tournament-bot.json').read_text())
-    token=env.get('YMCA_TOURNAMENT_DISCORD_TOKEN') or config.get('DiscordToken')
+    token=env.get('YMCA_TOURNAMENT_DISCORD_TOKEN') or config.get('discordToken')
     assert token
-    base=config['JoinPage']['PublicBaseUrl'].rstrip('/')
+    base=config['joinPage']['publicBaseUrl'].rstrip('/')
     receipt_path=RECOVERY/'invitations.json'
     receipts=json.loads(receipt_path.read_text()) if receipt_path.exists() else {}
     decider=t['RandomMapByRound']['1']['Uid']

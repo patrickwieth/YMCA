@@ -28,7 +28,8 @@ jobs:
             trap 'rm -f "$script"' EXIT
             git show FETCH_HEAD:tools/tournament-reset-20261120.py > "$script"
             cd TournamentBot/deploy
-            python3 "$script" prepare
+            test -f data/recovery/reset-T012-20261120/new-id.txt
+            test "$(cat data/recovery/reset-T012-20261120/new-id.txt)" = T013
             started=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)
             i=0
             until docker logs --since "$started" ymca-tournament-bot 2>&1 | grep -q 'Registered tournament commands in '; do
