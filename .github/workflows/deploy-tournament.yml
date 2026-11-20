@@ -24,5 +24,14 @@ jobs:
             old=json.loads(pathlib.Path('data/recovery/pause0976-20261120T200532Z/state-quiescent.json').read_text())
             for k in ['Entrants','Losses','ProcessedMatchIds','ProcessedSeriesIds','SeriesIds','RoundNumber']:
                 print('T012_PRESERVED',k,s['Tournaments']['T012'].get(k)==old['Tournaments']['T012'].get(k))
-            print('MATCHES',[(m['Id'],m['Status'],m.get('FailureReason')) for m in s['Matches'].values() if m.get('TournamentId')=='T012'])
+            for mid in ['M0032','M0033','M0034','M0035','M0036']:
+                m=s['Matches'].get(mid,{})
+                print('MATCH_DETAIL', {k:m.get(k) for k in ['Id','TournamentId','SeriesId','TournamentRound','Status','PlayerOneOpenRaName','PlayerTwoOpenRaName','CreatedAtUtc','FinishedAtUtc']})
+                print('BEFORE_UPDATE',mid,old['Matches'].get(mid,{}).get('Status'))
+                t=s['Tournaments'].get(m.get('TournamentId'),{})
+                print('TOURNAMENT', {k:t.get(k) for k in ['Id','Name','Status']})
+                for side in ['PlayerOneDiscordId','PlayerTwoDiscordId']:
+                    pid=m.get(side)
+                    p=s.get('Players',{}).get(str(pid),{})
+                    print('PARTICIPANT',side,{k:p.get(k) for k in ['DiscordDisplayName','OpenRaName']})
             PY
