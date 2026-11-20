@@ -25,6 +25,10 @@ jobs:
             print('ROSTER_PRESERVED',set(t['Entrants'])==set(old['Tournaments']['T012']['Entrants']))
             print('OLD_TOURNAMENT',s['Tournaments']['T012']['Status'])
             print('INVITATION_RECEIPTS',len(json.loads(pathlib.Path('data/recovery/reset-T012-20261120/invitations.json').read_text())))
+            logs=subprocess.check_output(['docker','logs','--since','15m','ymca-tournament-bot'],text=True,stderr=subprocess.STDOUT)
+            for line in logs.splitlines():
+                if 'Tournament notification failed:' in line or 'Cannot send messages' in line or 'Invalid Form Body' in line:
+                    print('NOTIFICATION_ERROR',line)
             top=subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','pid,args'],text=True)
             for m in s['Matches'].values():
                 if m.get('TournamentId')!='T013':continue
