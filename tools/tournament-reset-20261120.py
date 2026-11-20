@@ -78,7 +78,7 @@ if mode == 'prepare':
     assert not RECOVERY.exists(), 'Reset already prepared; refuse duplicate operation'
     before=load()
     plan(before) # Validate before touching the running container.
-    top=subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','args'],text=True)
+    top=subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','pid,args'],text=True)
     for m in before['Matches'].values():
         if m.get('TournamentId')=='T012' and m.get('Port'):
             lines=[l for l in top.splitlines() if 'Server.Name=YMCA Tournament '+m['Id']+' ' in l]
