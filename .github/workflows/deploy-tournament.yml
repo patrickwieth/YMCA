@@ -21,6 +21,11 @@ jobs:
             import json,pathlib,subprocess,urllib.request,urllib.parse,html,re
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
             t=s['Tournaments']['T013']
+            series=s['Series']['S0022']
+            print('TARGET_SERIES',series['Status'],'wins',list(series['Wins'].values()),'matches',series['MatchIds'])
+            for mid in series['MatchIds']:
+                m=s['Matches'][mid]
+                print('TARGET_MATCH',{k:m.get(k) for k in ['Id','Status','SeriesGameNumber','FailureReason','ServerRetainUntilUtc','MapTitle']},'join_dm_players',[s['Players'].get(str(p),{}).get('OpenRaName') for p in m.get('JoinDmMessageIds',{})],'reports',list(m.get('PlayerReports',{}).values()))
             for pid,p in s['Players'].items():
                 if 'first' in (p.get('OpenRaName','')+' '+p.get('DiscordDisplayName','')).lower():
                     print('PLAYER_LOOKUP',p.get('OpenRaName'),p.get('DiscordDisplayName'),'entrant',int(pid) in t['Entrants'])
