@@ -21,6 +21,11 @@ jobs:
             import json,pathlib,subprocess,urllib.request,urllib.parse,html,re
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
             t=s['Tournaments']['T013']
+            print('CURRENT_ROUND',t['RoundNumber'],t['Status'])
+            for sid in t['SeriesIds']:
+                r=s['Series'][sid]
+                if r['TournamentRound']==t['RoundNumber']:
+                    print('ROUND_SERIES',sid,r['Status'],[(s['Players'][str(r[k])]['OpenRaName'],len(r['MapPicks'].get(str(r[k]),[]))) for k in ['PlayerOneDiscordId','PlayerTwoDiscordId']],r['MatchIds'])
             series=s['Series']['S0021']
             print('TARGET_SERIES',series['Status'],'wins',list(series['Wins'].values()),'matches',series['MatchIds'])
             for mid in series['MatchIds']:
@@ -37,7 +42,7 @@ jobs:
             print('ROSTER_PRESERVED',set(t['Entrants'])==set(old['Tournaments']['T012']['Entrants']))
             print('OLD_TOURNAMENT',s['Tournaments']['T012']['Status'])
             print('INVITATION_RECEIPTS',len(json.loads(pathlib.Path('data/recovery/reset-T012-20261120/invitations.json').read_text())))
-            logs=subprocess.check_output(['docker','logs','--since','15m','ymca-tournament-bot'],text=True,stderr=subprocess.STDOUT)
+            logs=subprocess.check_output(['docker','logs','--since','30m','ymca-tournament-bot'],text=True,stderr=subprocess.STDOUT)
             for line in logs.splitlines():
                 if 'Tournament notification failed:' in line or 'Cannot send messages' in line or 'Invalid Form Body' in line:
                     print('NOTIFICATION_ERROR',line)
