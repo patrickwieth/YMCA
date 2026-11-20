@@ -18,7 +18,7 @@ jobs:
             set -eu
             cd ~/src/YMCA-tournament/TournamentBot/deploy
             python3 - <<'PY'
-            import json,pathlib,subprocess
+            import json,pathlib,subprocess,urllib.request,urllib.parse,html,re
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
             t=s['Tournaments']['T013']
             old=json.loads(pathlib.Path('data/recovery/reset-T012-20261120/quiescent.json').read_text())
@@ -34,5 +34,20 @@ jobs:
                 if m.get('TournamentId')!='T013':continue
                 lines=[l for l in top.splitlines() if 'Server.Name=YMCA Tournament '+m['Id']+' ' in l]
                 print('NEW_MATCH',m['Id'],m['Status'],'join_dms',len(m.get('JoinDmMessageIds',{})),'password_matches',bool(lines) and ('Server.Password='+m['Password']+' ') in lines[0])
+            m=s['Matches']['M0041']
+            for side in ['PlayerOneDiscordId','PlayerTwoDiscordId']:
+                url='http://127.0.0.1:15080/join/M0041?player='+str(m[side])
+                try:
+                    page=urllib.request.urlopen(url).read().decode()
+                    links=re.findall(r'href="(ymca://[^"]+)"',page)
+                    for link in links:
+                        u=urllib.parse.urlparse(html.unescape(link));q=urllib.parse.parse_qs(u.query)
+                        print('JOIN_PAGE_CHECK',side,'port_matches',u.port==m['Port'],'password_matches',q.get('password')==[m['Password']],'spectator',q.get('spectator'))
+                except Exception as e:print('JOIN_PAGE_ERROR',str(e))
+            for path in pathlib.Path('data/matches/M0041').rglob('*.log'):
+                for line in path.read_text(errors='replace').splitlines():
+                    if any(x in line.lower() for x in ['password','rejected connection','hiraku']):
+                        line=re.sub(r'password[=:][^ ,;]+','password=[REDACTED]',line,flags=re.I)
+                        print('MATCH_LOG',path.name,line)
             print('OLD_ACTIVE_MATCHES',[m['Id'] for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing'] and s['Tournaments'].get(m.get('TournamentId'),{}).get('Status') in ['Completed','Cancelled']])
             PY
