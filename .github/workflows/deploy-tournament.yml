@@ -1,16 +1,18 @@
 name: Deploy Tournament Bot
-
 on:
   workflow_dispatch:
-
+    inputs:
+      confirmation:
+        description: 'Type PAUSE-UPDATE-0976 to authorize interrupting tournament games'
+        required: true
 permissions:
   contents: read
-
 jobs:
   deploy:
+    if: inputs.confirmation == 'PAUSE-UPDATE-0976'
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy tournament bot without interrupting matches
+      - name: Authorized tournament pause, backup and update
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -24,4 +26,20 @@ jobs:
             git fetch origin tournament-bot
             git checkout tournament-bot
             git pull --ff-only origin tournament-bot
-            ./TournamentBot/deploy/deploy.sh
+            cd TournamentBot/deploy
+            test "$(awk '$1 == "YMCA_VERSION:" {print $2; exit}' docker-compose.yml)" = v0.97.6
+            backup="data/recovery/pause0976-$(date -u +%Y%m%dT%H%M%SZ)"
+            mkdir -p "$backup"
+            chmod 700 "$backup"
+            cp data/tournament-state.json "$backup/state-before-stop.json"
+            docker inspect --format '{{.Image}}' ymca-tournament-bot > "$backup/previous-image.txt"
+            docker-compose stop tournament-bot
+            cp data/tournament-state.json "$backup/state-quiescent.json"
+            echo "Turnierpause active; state backed up in $backup"
+            FORCE_DEPLOY=1 ./deploy.sh
+            python3 - <<'PY'
+            import json,pathlib
+            s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
+            print('ACTIVE_MATCHES',[(m['Id'],m['Status']) for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']])
+            print('TOURNAMENTS',[(t['Id'],t['Status']) for t in s['Tournaments'].values()])
+            PY
