@@ -1,37 +1,40 @@
 name: Deploy Tournament Bot
 on:
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type RESET-T012-16 to replace T012 with the same 16 entrants and send new invitations'
+        required: true
 permissions:
   contents: read
 jobs:
-  verify:
+  reset:
+    if: inputs.confirmation == 'RESET-T012-16'
     runs-on: ubuntu-latest
     steps:
-      - name: Read-only post-update verification
+      - name: Authorized backed-up tournament reset and invitations
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          command_timeout: 15m
           script: |
             set -eu
-            cd ~/src/YMCA-tournament/TournamentBot/deploy
-            docker exec ymca-tournament-bot awk '$1 == "Version:" {print; exit}' /app/game/mods/ca/mod.yaml
-            python3 - <<'PY'
-            import json,pathlib
-            s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
-            old=json.loads(pathlib.Path('data/recovery/pause0976-20261120T200532Z/state-quiescent.json').read_text())
-            for k in ['Entrants','Losses','ProcessedMatchIds','ProcessedSeriesIds','SeriesIds','RoundNumber']:
-                print('T012_PRESERVED',k,s['Tournaments']['T012'].get(k)==old['Tournaments']['T012'].get(k))
-            for mid in ['M0032','M0033','M0034','M0035','M0036']:
-                m=s['Matches'].get(mid,{})
-                print('MATCH_DETAIL', {k:m.get(k) for k in ['Id','TournamentId','SeriesId','TournamentRound','Status','PlayerOneOpenRaName','PlayerTwoOpenRaName','CreatedAtUtc','FinishedAtUtc']})
-                print('BEFORE_UPDATE',mid,old['Matches'].get(mid,{}).get('Status'))
-                t=s['Tournaments'].get(m.get('TournamentId'),{})
-                print('TOURNAMENT', {k:t.get(k) for k in ['Id','Name','Status']})
-                for side in ['PlayerOneDiscordId','PlayerTwoDiscordId']:
-                    pid=m.get(side)
-                    p=s.get('Players',{}).get(str(pid),{})
-                    print('PARTICIPANT',side,{k:p.get(k) for k in ['DiscordDisplayName','OpenRaName']})
-            PY
+            cd ~/src/YMCA-tournament
+            git fetch origin maintenance/tournament0976-pause
+            script=$(mktemp /tmp/ymca-reset-XXXXXX.py)
+            trap 'rm -f "$script"' EXIT
+            git show FETCH_HEAD:tools/tournament-reset-20261120.py > "$script"
+            cd TournamentBot/deploy
+            python3 "$script" prepare
+            started=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)
+            i=0
+            until docker logs --since "$started" ymca-tournament-bot 2>&1 | grep -q 'Registered tournament commands in '; do
+              i=$((i+1))
+              test "$i" -lt 60
+              sleep 2
+            done
+            curl --fail --silent --output /dev/null http://127.0.0.1:15080/tournaments
+            python3 "$script" invite
