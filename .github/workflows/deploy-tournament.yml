@@ -40,7 +40,20 @@ jobs:
             set -eu
             cd ~/src/YMCA-tournament/TournamentBot/deploy
             python3 - <<'PY'
-            import json,pathlib,subprocess,urllib.request,urllib.parse,html,re
+            import json,pathlib,subprocess,urllib.request,urllib.parse,html,re,time
+            print('HOST_UPTIME',subprocess.check_output(['uptime'],text=True))
+            print('HOST_MEMORY',subprocess.check_output(['free','-m'],text=True))
+            print('HOST_CPUS',subprocess.check_output(['nproc'],text=True))
+            print('VMSTAT',subprocess.check_output(['vmstat','1','6'],text=True))
+            for i in range(3):
+                print('CONTAINER_STATS',subprocess.check_output(['docker','stats','--no-stream','--format','{{.Name}} CPU={{.CPUPerc}} RAM={{.MemUsage}} RAMpct={{.MemPerc}} PIDS={{.PIDs}}'],text=True))
+                print('BOT_PROCESSES',subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','pid,ppid,pcpu,pmem,rss,etime,comm'],text=True))
+                time.sleep(3)
+            info=json.loads(subprocess.check_output(['docker','inspect','ymca-tournament-bot'],text=True))[0]
+            print('CONTAINER_LIMITS',{k:info['HostConfig'].get(k) for k in ['Memory','MemorySwap','NanoCpus','CpuQuota','CpuPeriod','CpusetCpus','PidsLimit']},'OOMKilled',info['State']['OOMKilled'])
+            for f in ['cpu','memory','io']:
+                p=pathlib.Path('/proc/pressure')/f
+                if p.exists():print('HOST_PRESSURE',f,p.read_text())
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
             t=s['Tournaments']['T013']
             print('CURRENT_ROUND',t['RoundNumber'],t['Status'])
