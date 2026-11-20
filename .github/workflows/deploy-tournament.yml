@@ -1,61 +1,35 @@
 name: Deploy Tournament Bot
 on:
   workflow_dispatch:
-    inputs:
-      confirmation:
-        description: 'ENABLE-REMOTE-NEW-GAMES installs a live relay for future launches without restarting the bot'
-        required: true
 permissions:
   contents: read
 jobs:
-  enable-remote:
-    if: inputs.confirmation == 'ENABLE-REMOTE-NEW-GAMES'
+  verify-remote:
     runs-on: ubuntu-latest
     steps:
-      - name: Route future game launches remotely without restarting active games
+      - name: Verify live remote bridge without restarting any process
         uses: appleboy/ssh-action@master
-        env:
-          GAME_HOST_TOKEN: ${{ secrets.YMCA_GAME_HOST_TOKEN }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          envs: GAME_HOST_TOKEN
-          command_timeout: 10m
           script: |
             set -eu
-            umask 077
-            cd ~/src/YMCA-tournament
-            git fetch origin feature/tournament-remote-host
-            root="$PWD/TournamentBot/deploy/data/remote-host-bridge"
-            mkdir -p "$root"
-            test ! -f "$root/installed"
-            git show FETCH_HEAD:TournamentBot/deploy/remote-relay.py > "$root/dotnet"
-            git show FETCH_HEAD:TournamentBot/deploy/remote-relay.example.json > "$root/config.json"
-            printf '%s' "$GAME_HOST_TOKEN" > "$root/token"
+            cd ~/src/YMCA-tournament/TournamentBot/deploy
+            docker exec ymca-tournament-bot sh -c 'test "$(command -v dotnet)" = /usr/local/bin/dotnet; dotnet --list-runtimes'
+            echo "BOT_STARTED_AT=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)"
             python3 - <<'PY'
-            import os,json,urllib.request
-            token=os.environ['GAME_HOST_TOKEN']
-            assert len(token)>=32
-            r=urllib.request.Request('https://ymca-worlds.echtkpvl.de/game-host/v1/health',headers={'Authorization':'Bearer '+token})
-            h=json.load(urllib.request.urlopen(r,timeout=15))
-            assert h['Protocol']==1 and h['GameVersion']=='v0.97.6' and h['PublicHost']=='ymca-worlds.echtkpvl.de'
-            print('REMOTE_HEALTH',h)
+            import pathlib,json,subprocess,hashlib
+            root=pathlib.Path('data/remote-host-bridge')
+            installed=subprocess.check_output(['docker','exec','ymca-tournament-bot','sha256sum','/usr/local/bin/dotnet'],text=True).split()[0]
+            assert installed==hashlib.sha256((root/'dotnet').read_bytes()).hexdigest()
+            s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
+            for m in s['Matches'].values():
+                if m['Status'] not in ['Queued','StartingServer','WaitingForPlayers','Playing']:continue
+                marker=pathlib.Path('data/matches')/m['Id']/'remote-relay.json'
+                print('ACTIVE_MATCH',m['Id'],m['Status'],'REMOTE' if marker.exists() else 'LOCAL',m.get('FailureReason'))
+            print('BOT_PROCESSES',subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','pid,ppid,etime,comm'],text=True))
+            print('BRIDGE_PASSTHROUGH_VERIFIED')
             PY
-            started=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)
-            docker exec -u 0 ymca-tournament-bot sh -c 'test ! -e /usr/local/bin/dotnet; test -x /usr/bin/dotnet; echo "ORIGINAL_DOTNET=$(command -v dotnet)"; echo "PATH=$PATH"'
-            if ! docker exec ymca-tournament-bot sh -c 'command -v python3 >/dev/null'; then
-              docker exec -u 0 -e DEBIAN_FRONTEND=noninteractive ymca-tournament-bot sh -c 'apt-get update -qq && apt-get install -y --no-install-recommends python3' > "$root/python-install.log" 2>&1
-            fi
-            docker exec -u 0 ymca-tournament-bot mkdir -p /app/remote-relay
-            docker cp "$root/config.json" ymca-tournament-bot:/app/remote-relay/config.json
-            docker cp "$root/token" ymca-tournament-bot:/app/remote-relay/token
-            docker cp "$root/dotnet" ymca-tournament-bot:/app/remote-relay/dotnet
-            docker exec -u 0 ymca-tournament-bot sh -c 'chown -R 1000:1000 /app/remote-relay; chmod 700 /app/remote-relay; chmod 600 /app/remote-relay/config.json /app/remote-relay/token; chmod 755 /app/remote-relay/dotnet; python3 -m py_compile /app/remote-relay/dotnet'
-            # Atomic activation. Already-running native children and the bot are untouched.
-            docker exec -u 0 ymca-tournament-bot mv /app/remote-relay/dotnet /usr/local/bin/dotnet
-            docker exec ymca-tournament-bot sh -c 'test "$(command -v dotnet)" = /usr/local/bin/dotnet; dotnet --version'
-            test "$started" = "$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)"
-            date -u > "$root/installed"
-            echo 'REMOTE_BRIDGE_ENABLED: existing processes untouched; future tournament launches use the new host.'
+            date -u > data/remote-host-bridge/installed
