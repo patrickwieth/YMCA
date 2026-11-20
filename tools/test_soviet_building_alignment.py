@@ -9,6 +9,21 @@ from test_supplied_building_art import block
 CONFIG=json.loads((ROOT/'tools/soviet-building-alignment.json').read_text())['entries']
 
 class SovietBuildingAlignmentTests(unittest.TestCase):
+ def test_tesla_current_three_cell_bib(self):
+  geometry=json.loads((ROOT/'docs/modular/soviet-building-alignment-geometry.json').read_text())
+  e=next(e for e in geometry if e['Actor']=='tpwr')
+  c=next(c for c in CONFIG if c['Actor']=='tpwr')
+  self.assertEqual(json.loads(json.dumps(propose_soviet(e))),c)
+  self.assertEqual(c['BibCells'],[3,3]);self.assertEqual(c['Offset'],[1,-25])
+  self.assertEqual(e['GroundCorners'],polygon(c)[0]);self.assertEqual(e['SelectionPolygon'],polygon(c)[1])
+  self.assertEqual(hashlib.sha256((ROOT/'mods/ca'/c['File']).read_bytes()).hexdigest(),c['SourceSHA256'])
+  result=measure({'File':c['File'],'Scale':'1','Anchor':'Bottom','Offset':'1,-25','SelectionPolygon':polygon(c)[1]})
+  self.assertEqual(result['outside'],0)
+  sequence=block((ROOT/'mods/ca/sequences/soviet-building-placement.yaml').read_text(),'tpwr.soviet')
+  self.assertEqual(sequence.count('Offset: 1,-25'),2)
+  rule=block((ROOT/'mods/ca/rules/soviet/building-alignment.yaml').read_text(),'TPWR')
+  self.assertIn('DecorationBounds: 3077, 3077, 0, -634',rule)
+
  def test_native_sources_and_contact_pixels(self):
   self.assertEqual(len(CONFIG),18)
   for e in CONFIG:

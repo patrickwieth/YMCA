@@ -76,6 +76,13 @@ Normal model rendering is unchanged. The shared patch list includes this extensi
 for Windows and shell builds; rebuild engine and mod together. See
 `docs/modular/rock-occlusion.md` for native validation and scope.
 
+## Selection-frame zoom preference
+
+`selection-box-zoom.patch` adds a persisted client-side zoom cutoff, optional Display
+settings slider binding/reset, and guards both rectangular and isometric selection
+frame rendering. Health bars and selection behavior are unchanged. The shared patch
+list includes it for normal Windows/shell builds. See `docs/modular/selection-box-zoom.md`.
+
 The preparation script applies all patches and rejects incompatible local source.
 The complete stack has been checked against the pinned engine, including repeat
 application detection. See `docs/release-0.97.4-validation.md` for test evidence.

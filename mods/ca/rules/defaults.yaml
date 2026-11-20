@@ -5818,12 +5818,15 @@ BuildBoost.Dummy:
 		Prerequisite: missile_sub
 
 ^BiologicalDamage:
+	GrantConditionOnPrerequisite@TIBERIUMDAMAGE:
+		Condition: tiberium-damage-enabled
+		Prerequisites: global.tiberiumdamage
 	DamagedByTerrain@TIB:
 		Terrain: Tiberium, BlueTiberium
 		Damage: 100
 		DamageInterval: 16
 		DamageTypes: ToxinDeath
-		RequiresCondition: !(hazmatsuits || being-warped)
+		RequiresCondition: tiberium-damage-enabled && !(hazmatsuits || being-warped)
 	DamagedByTintedCells@RAD:
 		Damage: 500
 		DamageInterval: 8

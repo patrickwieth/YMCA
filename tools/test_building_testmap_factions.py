@@ -34,6 +34,9 @@ class BuildingTestMapFactionTests(unittest.TestCase):
                 body = re.search(r'^\tActor' + str(number) + r':[^\n]*\n((?:\t\t[^\n]*\n)*)', text, re.M)[1]
                 self.assertIn('Owner: Multi0', body)
                 return tuple(map(int, re.search(r'Location: (-?\d+),(-?\d+)', body).groups()))
+            normalized = text.replace('\r\n', '\n')
+            self.assertIn('\tTestTeslaReactor: tpwr\n\t\tOwner: Multi0\n\t\tLocation: 122,-58\n\t\tFaction: russia\n', normalized)
+            self.assertEqual(len(re.findall(r'(?m)^\t[^:]+: tpwr$', normalized)), 1)
             self.assertNotRegex(text, r'(?m)^\tFTUR:')
             self.assertNotIn('Actor9', after)
             self.assertNotIn('sentry.soviet.voxel', text)

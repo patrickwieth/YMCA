@@ -1,0 +1,66 @@
+--- a/engine/OpenRA.Game/Settings.cs
++++ b/engine/OpenRA.Game/Settings.cs
+@@ -340,6 +340,14 @@
+ 		public bool EnableDiscordService = true;
+ 
+ 		public bool SelectionTooltip = true;
++
++		[Desc("Hide selection frames below this battlefield zoom; zero always shows them. Health bars are independent.")]
++		public float SelectionBoxMinimumZoom = 1f;
++
++		public float EffectiveSelectionBoxMinimumZoom => float.IsNaN(SelectionBoxMinimumZoom) || float.IsInfinity(SelectionBoxMinimumZoom)
++			? 1f : Math.Max(0f, Math.Min(2f, SelectionBoxMinimumZoom));
++
++		public bool ShowSelectionBoxes(float zoom) => zoom + .0001f >= EffectiveSelectionBoxMinimumZoom;
+ 
+ 		public TextNotificationPoolFilters TextNotificationPoolFilters = TextNotificationPoolFilters.Feedback | TextNotificationPoolFilters.Transients;
+ 	}
+--- a/engine/OpenRA.Mods.Common/Graphics/IsometricSelectionBoxAnnotationRenderable.cs
++++ b/engine/OpenRA.Mods.Common/Graphics/IsometricSelectionBoxAnnotationRenderable.cs
+@@ -59,6 +59,9 @@
+ 
+ 		public void Render(WorldRenderer wr)
+ 		{
++			if (!Game.Settings.Game.ShowSelectionBoxes(wr.Viewport.Zoom))
++				return;
++
+ 			var screen = bounds.Vertices.Select(v => wr.Viewport.WorldToViewPx(v).ToFloat2()).ToArray();
+ 
+ 			var tl = new float2(-12, -6);
+--- a/engine/OpenRA.Mods.Common/Graphics/SelectionBoxAnnotationRenderable.cs
++++ b/engine/OpenRA.Mods.Common/Graphics/SelectionBoxAnnotationRenderable.cs
+@@ -41,6 +41,9 @@
+ 		public IFinalizedRenderable PrepareRender(WorldRenderer wr) { return this; }
+ 		public void Render(WorldRenderer wr)
+ 		{
++			if (!Game.Settings.Game.ShowSelectionBoxes(wr.Viewport.Zoom))
++				return;
++
+ 			var tl = wr.Viewport.WorldToViewPx(new float2(decorationBounds.Left, decorationBounds.Top)).ToFloat2();
+ 			var br = wr.Viewport.WorldToViewPx(new float2(decorationBounds.Right, decorationBounds.Bottom)).ToFloat2();
+ 			var tr = new float2(br.X, tl.Y);
+--- a/engine/OpenRA.Mods.Common/Widgets/Logic/Settings/DisplaySettingsLogic.cs
++++ b/engine/OpenRA.Mods.Common/Widgets/Logic/Settings/DisplaySettingsLogic.cs
+@@ -144,6 +144,14 @@
+ 			var scrollPanel = panel.Get<ScrollPanelWidget>("SETTINGS_SCROLLPANEL");
+ 
+ 			SettingsUtils.BindCheckboxPref(panel, "SELECTIONTOOLTIP_CHECKBOX", gs, "SelectionTooltip");
++			var selectionZoom = panel.GetOrNull<SliderWidget>("SELECTION_BOX_ZOOM_SLIDER");
++			if (selectionZoom != null)
++			{
++				selectionZoom.GetValue = () => gs.EffectiveSelectionBoxMinimumZoom;
++				selectionZoom.OnChange += value => gs.SelectionBoxMinimumZoom = (float)Math.Round(value * 20) / 20;
++				panel.Get<LabelWidget>("SELECTION_BOX_ZOOM_VALUE").GetText = () => gs.EffectiveSelectionBoxMinimumZoom == 0
++					? "Always show" : $"Below {Math.Round(gs.EffectiveSelectionBoxMinimumZoom * 100)}% zoom";
++			}
+ 			SettingsUtils.BindCheckboxPref(panel, "CURSORDOUBLE_CHECKBOX", ds, "CursorDouble");
+ 			SettingsUtils.BindCheckboxPref(panel, "VSYNC_CHECKBOX", ds, "VSync");
+ 			SettingsUtils.BindCheckboxPref(panel, "FRAME_LIMIT_CHECKBOX", ds, "CapFramerate");
+@@ -344,6 +352,7 @@
+ 				ps.Name = dps.Name;
+ 
+ 				gs.TextNotificationPoolFilters = dgs.TextNotificationPoolFilters;
++				gs.SelectionBoxMinimumZoom = dgs.SelectionBoxMinimumZoom;
+ 			};
+ 		}
+ 

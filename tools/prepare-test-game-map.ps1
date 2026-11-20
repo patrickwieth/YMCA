@@ -111,6 +111,22 @@ try {
     }
     Write-Host "Test map: assigned $($sovietSlots.Count) Soviet display slots, including the Sentry above the helipad."
 
+    # Tesla Reactor is a separate Russian power building, not APWR.Soviet.
+    # Add a dedicated slot screen-above the nuclear plant; retain both existing
+    # power plants and never modify the authoritative source map.
+    if (-not [regex]::IsMatch($actorText, '(?mi)^\t[^\t\r\n:]+:[ \t]*tpwr[ \t]*\r?$')) {
+        if ([regex]::IsMatch($actorText, '(?m)^\tTestTeslaReactor:')) {
+            throw 'TestTeslaReactor ID is already used by another actor.'
+        }
+        $actorText += (@(
+            "`tTestTeslaReactor: tpwr"
+            "`t`tOwner: Multi0"
+            "`t`tLocation: 122,-58"
+            "`t`tFaction: russia"
+        ) -join $newline) + $newline
+        Write-Host 'Test map: added Tesla Reactor above the Soviet nuclear power plant.'
+    }
+
     # Side-by-side real voxel comparison, same screen row, two isometric cells right.
     # Only the approved sprite Sentry is displayed, never the voxel study.
 

@@ -81,7 +81,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			foreach (var name in new[] { "world", "editorworld" })
 				if (!rules[name].HasTraitInfo<BibConnectionLayerInfo>())
 					throw new InvalidDataException("Missing connection layer: " + name);
-			foreach (var name in new[] { "fact.soviet", "powr.soviet", "ftur", "ttur", "sam", "fix.soviet", "kenn" })
+			foreach (var name in new[] { "fact.soviet", "powr.soviet", "apwr.soviet", "tpwr", "soviet_refinery", "ftur", "ttur", "sam", "fix.soviet", "kenn" })
 			{
 				if (!rules[name].HasTraitInfo<WithBibRemapInfo>() || rules[name].TraitInfo<WithBibRemapInfo>().ImagePrefix != "sovietbib" ||
 					rules[name].TraitInfo<WithBibRemapInfo>().Palette != "bibplayer")
@@ -100,6 +100,9 @@ namespace OpenRA.Mods.CA.UtilityCommands
 
 			foreach (var actor in rules.Values.Where(a => !a.Name.StartsWith("^") && a.HasTraitInfo<WithBibRemapInfo>()))
 			{
+				if (actor.TraitInfos<WithIdleOverlayInfo>().Any(b => b.Image?.StartsWith("sovietbib") == true) &&
+					(actor.TraitInfo<WithBibRemapInfo>().ImagePrefix != "sovietbib" || actor.TraitInfo<WithBibRemapInfo>().Palette != "bibplayer"))
+					throw new InvalidDataException("Soviet foundation inherited a foreign remap: " + actor.Name);
 				if (actor.TraitInfos<WithIdleOverlayInfo>().Any(b => b.Image?.StartsWith("sovietbib") == true && b.Sequence != "grid"))
 					throw new InvalidDataException("Soviet remap actor missing fixed grid: " + actor.Name);
 				Console.WriteLine("Remap actor: " + actor.Name);

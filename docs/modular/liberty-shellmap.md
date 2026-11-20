@@ -59,7 +59,8 @@ No release, push or new commit. Production/release worktrees were not changed.
 
 ## Other user requests still pending
 
-- Hide selection frames at a sufficiently zoomed-out level, retaining health bars.
+- Selection-frame zoom cutoff: subsequently implemented locally with a configurable
+  Display settings slider; see `selection-box-zoom.md`. Health bars remain visible.
 - Multiplayer creation should use the singleplayer map setup wizard.
 - Remove non-Rubberduck tilesets/maps from the active mod, retaining backups.
   Only preliminary unused copies for the multiplayer UI exist; these requests
