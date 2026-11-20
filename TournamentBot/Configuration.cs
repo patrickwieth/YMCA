@@ -85,6 +85,7 @@ public sealed class JoinPageConfiguration
 
 public sealed class OpenRaServerConfiguration
 {
+    public RemoteHostConfiguration? RemoteHost { get; set; }
     public bool GenerateTournamentMaps { get; set; }
     public int MapGenerationTimeoutSeconds { get; set; } = 180;
     public int MaxConcurrentServers { get; set; } = 2;
@@ -104,6 +105,7 @@ public sealed class OpenRaServerConfiguration
 
     public void NormalizeAndValidate()
     {
+        RemoteHost?.Validate();
         if (MapGenerationTimeoutSeconds < 1)
             throw new InvalidDataException("MapGenerationTimeoutSeconds must be positive.");
         if (MaxConcurrentServers < 1)

@@ -4,7 +4,9 @@ internal static class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        var configPath = args.Length > 0 ? args[0] : "tournament-bot.json";
+        var hostMode = args.FirstOrDefault() == "--game-host";
+        var configPath = hostMode ? args.ElementAtOrDefault(1) ?? "game-host.json"
+            : args.Length > 0 ? args[0] : "tournament-bot.json";
         using var shutdown = new CancellationTokenSource();
         Console.CancelKeyPress += (_, eventArgs) =>
         {
@@ -14,6 +16,17 @@ internal static class Program
 
         try
         {
+            if (hostMode)
+            {
+                var hostConfig = System.Text.Json.JsonSerializer.Deserialize<GameHostConfiguration>(
+                    await File.ReadAllTextAsync(configPath, shutdown.Token), JsonOptions.Default)
+                    ?? throw new InvalidDataException("Empty game host configuration.");
+                await using var host = new RemoteGameHost(hostConfig);
+                await host.StartAsync(shutdown.Token);
+                Console.WriteLine("Remote game host ready (authenticated API).");
+                await Task.Delay(Timeout.Infinite, shutdown.Token);
+                return 0;
+            }
             var config = BotConfiguration.Load(configPath);
             var mapCatalog = new OfficialMapCatalog(config.Server);
             if (!config.Server.GenerateTournamentMaps)

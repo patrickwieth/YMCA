@@ -76,6 +76,10 @@ public sealed class MatchAttendanceTimer
 
 public sealed class MatchRecord
 {
+    // Once assigned, a match never silently falls back to a different host.
+    public string HostingHostId { get; set; } = "";
+    public string HostingPublicHost { get; set; } = "";
+    public string RemoteRequestId { get; set; } = "";
     public GeneratedMapSpec? Generation { get; set; }
     public string GeneratedMapPath { get; set; } = "";
     public string GeneratedMapSha256 { get; set; } = "";

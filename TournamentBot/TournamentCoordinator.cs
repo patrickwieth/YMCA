@@ -53,13 +53,17 @@ public sealed partial class TournamentCoordinator
                 .ToList();
             foreach (var match in matches)
             {
-                // Preserve the admin deadline, but never penalize players for a host restart.
-                if (match.AttendanceTimer is { Outcome: "Pending" } timer)
-                    timer.EligibleForForfeit = false;
+                OpenRaServerPool.AssignHost(match, config.Server);
+                if (match.HostingHostId == "local")
+                {
+                    // Local processes restart; remote ones are reattached, not restarted.
+                    if (match.AttendanceTimer is { Outcome: "Pending" } timer)
+                        timer.EligibleForForfeit = false;
+                    match.Port = null;
+                    match.Password = "";
+                    match.SpectatorPassword = "";
+                }
                 match.Status = MatchStatus.Queued;
-                match.Port = null;
-                match.Password = "";
-                match.SpectatorPassword = "";
                 match.FailureReason = null;
             }
 
@@ -908,6 +912,9 @@ public sealed partial class TournamentCoordinator
     Task OnServerStartingAsync(MatchRecord match) => store.UpdateAsync(state =>
     {
         var stored = state.Matches[match.Id];
+        stored.HostingHostId = match.HostingHostId;
+        stored.HostingPublicHost = match.HostingPublicHost;
+        stored.RemoteRequestId = match.RemoteRequestId;
         stored.MapUid = match.MapUid;
         stored.Generation = match.Generation;
         stored.GeneratedMapPath = match.GeneratedMapPath;
@@ -932,7 +939,7 @@ public sealed partial class TournamentCoordinator
             stored.StartedAtUtc = DateTime.UtcNow;
         });
 
-        var joinUri = $"ymca://{config.Server.PublicHost}:{match.Port}?password={Uri.EscapeDataString(match.Password)}";
+        var joinUri = $"ymca://{RemoteHostProtocol.PublicHost(match, config.Server)}:{match.Port}?password={Uri.EscapeDataString(match.Password)}";
         await NotifyAsync(value => value.ServerReadyAsync(match, joinUri));
     }
 

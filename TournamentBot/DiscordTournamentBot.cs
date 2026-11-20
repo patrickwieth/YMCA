@@ -797,7 +797,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             $"Map: **{Escape(match.MapTitle)}**\n" +
             (match.Generation == null ? "" : "**Generated map:** open the join page and install the map download before joining.\n") +
             $"Join using this exact player name: `{playerName}`\n" +
-            $"Server: `{config.Server.PublicHost}:{match.Port}`\n" +
+            $"Server: `{RemoteHostProtocol.PublicHost(match, config.Server)}:{match.Port}`\n" +
             $"Password: `{match.Password}`\n\n" +
             $"Join link: `{joinUri}&name={Uri.EscapeDataString(playerName)}`\n\n" +
             "Manual join: YMCA → Multiplayer → Direct Connect, then enter the player name, server, and password shown above.";
@@ -824,7 +824,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             await SendJoinAsync(secondTeammate, MatchSide(match, true), match.PlayerTwoTeammateOpenRaName);
         if (joinMessages.Count != 0)
             await coordinator.RecordMatchMessagesAsync(match.Id, joinMessages: joinMessages);
-        await SendAdminAsync($"Server for **{match.Id}** is ready on `{config.Server.PublicHost}:{match.Port}`.");
+        await SendAdminAsync($"Server for **{match.Id}** is ready on `{RemoteHostProtocol.PublicHost(match, config.Server)}:{match.Port}`.");
 
         if (match.AllowSpectators && config.JoinPage.Enabled)
         {

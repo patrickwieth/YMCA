@@ -83,7 +83,7 @@ public sealed class JoinPageServer : IAsyncDisposable
         }
 
         var tournament = match.TournamentId == null ? null : await coordinator.GetTournamentAsync(match.TournamentId);
-        var host = config.Server.PublicHost;
+        var host = RemoteHostProtocol.PublicHost(match, config.Server);
         var joinUri = $"ymca://{host}:{match.Port}?password={Uri.EscapeDataString(match.Password)}&name={Uri.EscapeDataString(playerName)}";
         var lobby = ReadLobbyStatus(match);
         var playerRows = RenderPlayerRow(match.PlayerOneOpenRaName, match.PlayerOneTeamName, lobby)
@@ -149,7 +149,7 @@ public sealed class JoinPageServer : IAsyncDisposable
             return;
         }
 
-        var spectatorUri = $"ymca://{config.Server.PublicHost}:{match.Port}" +
+        var spectatorUri = $"ymca://{RemoteHostProtocol.PublicHost(match, config.Server)}:{match.Port}" +
             $"?password={Uri.EscapeDataString(match.SpectatorPassword)}&spectator=true";
         var lobby = ReadLobbyStatus(match);
         var liveState = lobby?.State == "GameStarted" ? "Playing — spectator joining is closed" : "Waiting for players";

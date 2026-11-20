@@ -6,13 +6,16 @@ using System.Threading.Channels;
 
 namespace Ymca.TournamentBot;
 
-public sealed class OpenRaServerPool : IAsyncDisposable
+public sealed partial class OpenRaServerPool : IAsyncDisposable
 {
     readonly OpenRaServerConfiguration config;
     readonly ReplayMetadataReader replayReader;
     readonly TournamentMapGenerator mapGenerator;
     readonly string? mapDownloadBaseUrl;
+    readonly bool preserveSuppliedCredentials;
+    readonly bool allowPreparedMaps;
     readonly Channel<MatchRecord> queue = Channel.CreateUnbounded<MatchRecord>();
+    readonly Channel<MatchRecord> remoteQueue = Channel.CreateUnbounded<MatchRecord>();
     readonly CancellationTokenSource shutdown = new();
     readonly List<Task> workers = new();
 
@@ -24,8 +27,10 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     public event Func<MatchRecord, ReplayResult, Task>? ResultAvailable;
     public event Func<MatchRecord, string, Task>? ServerFailed;
 
-    public OpenRaServerPool(OpenRaServerConfiguration config, ReplayMetadataReader replayReader, string? mapDownloadBaseUrl = null)
+    public OpenRaServerPool(OpenRaServerConfiguration config, ReplayMetadataReader replayReader, string? mapDownloadBaseUrl = null, bool preserveSuppliedCredentials = false, bool allowPreparedMaps = false)
     {
+        this.allowPreparedMaps = allowPreparedMaps;
+        this.preserveSuppliedCredentials = preserveSuppliedCredentials;
         this.mapDownloadBaseUrl = mapDownloadBaseUrl;
         this.config = config;
         this.replayReader = replayReader;
@@ -43,10 +48,47 @@ public sealed class OpenRaServerPool : IAsyncDisposable
             var port = config.FirstPort + i;
             workers.Add(Task.Run(() => WorkerAsync(port, shutdown.Token)));
         }
+        if (config.RemoteHost != null)
+            for (var i = 0; i < config.RemoteHost.MaxConcurrentServers; i++)
+                workers.Add(Task.Run(() => RemoteWorkerAsync(shutdown.Token)));
     }
 
-    public ValueTask EnqueueAsync(MatchRecord match, CancellationToken cancellationToken = default) =>
-        queue.Writer.WriteAsync(match, cancellationToken);
+    public ValueTask EnqueueAsync(MatchRecord match, CancellationToken cancellationToken = default)
+    {
+        AssignHost(match, config);
+        return (match.HostingHostId == "local" ? queue : remoteQueue).Writer.WriteAsync(match, cancellationToken);
+    }
+
+    public static void AssignHost(MatchRecord match, OpenRaServerConfiguration configuration)
+    {
+        if (string.IsNullOrEmpty(match.HostingHostId))
+        {
+            var marker = Path.Combine(configuration.MatchDirectory, match.Id, "remote-relay.json");
+            if (RemoteHostProtocol.ValidMatchId(match.Id) && File.Exists(marker))
+            {
+                using var relay = JsonDocument.Parse(File.ReadAllText(marker));
+                var data = relay.RootElement;
+                var host = configuration.RemoteHost;
+                if (host == null || data.GetProperty("HostId").GetString() != host.Id ||
+                    data.GetProperty("PublicHost").GetString() != host.PublicHost)
+                    throw new InvalidDataException("Legacy relay host is not configured; refusing local restart.");
+                match.RemoteRequestId = data.GetProperty("RequestId").GetString()!;
+                if (!Guid.TryParseExact(match.RemoteRequestId, "N", out _))
+                    throw new InvalidDataException("Invalid relay request identity.");
+                match.HostingHostId = host.Id;
+                match.HostingPublicHost = host.PublicHost;
+                match.Port = data.TryGetProperty("RemotePort", out var port) ? port.GetInt32() : null;
+                return;
+            }
+            // Legacy active matches are local. Only genuinely new jobs use the new host.
+            var remote = match.Port == null ? configuration.RemoteHost : null;
+            match.HostingHostId = remote?.Id ?? "local";
+            match.HostingPublicHost = remote?.PublicHost ?? configuration.PublicHost;
+            if (remote != null) match.RemoteRequestId = Guid.NewGuid().ToString("N");
+        }
+        if (match.HostingHostId != "local" && match.HostingHostId != configuration.RemoteHost?.Id)
+            throw new InvalidDataException("The match's assigned host is not configured; refusing local fallback.");
+    }
 
     async Task WorkerAsync(int port, CancellationToken cancellationToken)
     {
@@ -70,15 +112,26 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     async Task RunMatchAsync(MatchRecord match, int port, CancellationToken cancellationToken)
     {
         match.Port = port;
-        match.Password = CreatePassword();
-        match.SpectatorPassword = match.AllowSpectators ? CreatePassword() : "";
+        if (!preserveSuppliedCredentials || string.IsNullOrEmpty(match.Password))
+            match.Password = CreatePassword();
+        if (!preserveSuppliedCredentials || string.IsNullOrEmpty(match.SpectatorPassword))
+            match.SpectatorPassword = match.AllowSpectators ? CreatePassword() : "";
         match.SupportDirectory = Path.Combine(config.MatchDirectory, match.Id);
         Directory.CreateDirectory(match.SupportDirectory);
         TournamentAttendanceFiles.Clear(match);
 
         if (match.Generation != null)
         {
-            var artifact = await mapGenerator.GetAsync(match.Generation, cancellationToken);
+            GeneratedMapArtifact artifact;
+            if (allowPreparedMaps && !string.IsNullOrEmpty(match.GeneratedMapPath))
+            {
+                await using var input = File.OpenRead(match.GeneratedMapPath);
+                using var sha = SHA256.Create();
+                var hash = Convert.ToHexString(await sha.ComputeHashAsync(input, cancellationToken)).ToLowerInvariant();
+                if (hash != match.GeneratedMapSha256) throw new InvalidDataException("Uploaded map checksum mismatch.");
+                artifact = new GeneratedMapArtifact(match.GeneratedMapPath, match.MapUid, hash);
+            }
+            else artifact = await mapGenerator.GetAsync(match.Generation, cancellationToken);
             if ((!match.MapUid.StartsWith("generated:", StringComparison.Ordinal) && match.MapUid != artifact.Uid) ||
                 (match.GeneratedMapSha256.Length != 0 && match.GeneratedMapSha256 != artifact.Sha256))
                 throw new InvalidDataException("Generated map differs from the previously hosted match.");
@@ -331,6 +384,7 @@ public sealed class OpenRaServerPool : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         queue.Writer.TryComplete();
+        remoteQueue.Writer.TryComplete();
         shutdown.Cancel();
         try { await Task.WhenAll(workers); }
         catch (OperationCanceledException) { }
