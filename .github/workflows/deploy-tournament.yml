@@ -40,7 +40,7 @@ jobs:
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
             assert not [m for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']]
             assert not [x for x in list(s['Series'].values())+list(s['Matches'].values()) if (x.get('MapChoiceTimer') or x.get('AttendanceTimer') or {}).get('Outcome')=='Pending'], 'Pending timer: do not interrupt deadline'
-            assert 'OpenRA.Server.dll' not in subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','args'],text=True)
+            assert 'OpenRA.Server.dll' not in subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','pid,args'],text=True)
             print('IDLE_WITHOUT_PENDING_TIMERS_VERIFIED')
             PY
             cp docker-compose.override.yml "$stage/override-before.yml"
