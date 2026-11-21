@@ -45,6 +45,37 @@ public sealed class MapChoiceTimerTests
     async Task<TournamentSeries> First(TournamentRecord t) => (await coordinator.GetSeriesAsync(t.SeriesIds[0]))!;
     Task Pick(TournamentSeries s, ulong p) => coordinator.SubmitSeriesMapPickAsync(s.Id,p,"__random__");
 
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task AdminCanResolveWholeSeriesWithoutPicksAndCannotScoreItTwice(bool timerStarted)
+    {
+        var t = await Create(); var s = await First(t);
+        if (timerStarted) await coordinator.StartTournamentTimerAsync(t.Id, 999);
+        var choice = (await coordinator.GetResolutionChoicesAsync()).Single(m => m.Id == s.Id);
+        Assert.That(MatchResolutionChoices.Winners(choice, ""), Has.Count.EqualTo(2));
+        var winner = MatchResolutionChoices.Winner(choice, s.Id + ":two");
+        Assert.ThrowsAsync<InvalidOperationException>(() => coordinator.ResolveAsync(s.Id, 888));
+        await coordinator.ResolveAsync(" " + s.Id.ToLowerInvariant() + " ", winner);
+        Assert.That(s.ForfeitWinnerDiscordId, Is.EqualTo(s.PlayerTwoDiscordId));
+        Assert.That(s.Wins[winner], Is.EqualTo(2));
+        Assert.That(s.MatchIds, Is.Empty);
+        Assert.That(t.Losses[s.PlayerOneDiscordId], Is.EqualTo(1));
+        Assert.ThrowsAsync<InvalidOperationException>(() => coordinator.ResolveAsync(s.Id, winner));
+        await coordinator.CheckAttendanceTimersAsync(DateTime.UtcNow.AddHours(1));
+        Assert.That(t.Losses[s.PlayerOneDiscordId], Is.EqualTo(1));
+        Assert.That((await coordinator.GetResolutionChoicesAsync()).Any(m => m.Id == s.Id), Is.False);
+        Assert.That(await coordinator.GetRecentMatchesAsync(), Is.Empty);
+    }
+
+    [Test]
+    public async Task SeriesResolutionRejectsStaleSelectionAfterBothPicksArrived()
+    {
+        var t = await Create(); var s = await First(t);
+        await Pick(s, s.PlayerOneDiscordId); await Pick(s, s.PlayerTwoDiscordId);
+        Assert.ThrowsAsync<InvalidOperationException>(() => coordinator.ResolveAsync(s.Id, s.PlayerOneDiscordId));
+        Assert.That(t.Losses.Values.All(n => n == 0), Is.True);
+    }
+
     [Test]
     public async Task ExplicitTimerIncludesMapChoicesEvenWithoutAnyGameServer()
     {

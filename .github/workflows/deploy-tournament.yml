@@ -4,28 +4,65 @@ on:
 permissions:
   contents: read
 jobs:
-  verify:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Read-only tournament hosting verification
+      - name: Build and preflight series resolution update before touching idle bot
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          command_timeout: 10m
           script: |
             set -eu
-            cd ~/src/YMCA-tournament/TournamentBot/deploy
-            curl --fail --silent --output /dev/null http://127.0.0.1:15080/tournaments
+            umask 077
+            cd ~/src/YMCA-tournament
+            git fetch origin feature/tournament-remote-host
+            revision=$(git rev-parse FETCH_HEAD)
+            deploy="$PWD/TournamentBot/deploy"
+            stage="$deploy/data/recovery/series-resolve-$(date -u +%Y%m%dT%H%M%SZ)"
+            mkdir -p "$stage/code" "$stage/image/bot"
+            git archive "$revision" TournamentBot OpenRA.Mods.CA/MapGeneration/TournamentAttendanceProtocol.cs OpenRA.Mods.CA/MapGeneration/TournamentMapDownloadInfo.cs | tar -x -C "$stage/code"
+            docker run --rm --cpus=1 --memory=1536m -v "$stage/code:/src" -v "$stage/image/bot:/out" -w /src mcr.microsoft.com/dotnet/sdk:6.0-jammy dotnet publish TournamentBot/TournamentBot.csproj -c Release -o /out --no-self-contained /p:UseAppHost=false > "$stage/build.log" 2>&1
+            base=$(docker inspect --format '{{.Image}}' ymca-tournament-bot)
+            image="ymca-tournament-bot:series-resolve-$(printf '%s' "$revision" | cut -c1-12)"
+            printf 'FROM %s\nCOPY --chown=1000:1000 bot/ /app/bot/\n' "$base" > "$stage/image/Dockerfile"
+            docker build -t "$image" "$stage/image" > "$stage/image-build.log" 2>&1
+            cd "$deploy"
+            printf 'version: "3.7"\nservices:\n  tournament-bot:\n    image: %s\n' "$image" > "$stage/override-candidate.yml"
+            docker-compose -f "$deploy/docker-compose.yml" -f "$stage/override-candidate.yml" config --quiet
+            docker run --rm --entrypoint dotnet "$image" --list-runtimes
+            python3 ./check-match-safety.py data/tournament-state.json
             python3 - <<'PY'
-            import pathlib,json,subprocess
+            import json,pathlib,subprocess
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
-            c=json.loads(pathlib.Path('tournament-bot.json').read_text())
-            print('DEPLOYED_REVISION',pathlib.Path('data/map-choice-timer-deployed-revision').read_text().strip())
-            print('NATIVE_REMOTE_HOST',c['server'].get('remoteHost',{}).get('publicHost'))
-            print('ACTIVE_MATCHES',[(m['Id'],m['Status'],m.get('HostingHostId'),m.get('FailureReason')) for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']])
-            t=s['Tournaments']['T013']
-            print('MAP_CHOICES',[(sid,s['Series'][sid].get('MapChoiceTimer')) for sid in t['SeriesIds'] if s['Series'][sid]['Status']=='AwaitingMapPicks'])
-            print('BOT_STARTED_AT',subprocess.check_output(['docker','inspect','--format','{{.State.StartedAt}}','ymca-tournament-bot'],text=True).strip())
+            assert not [m for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']]
+            assert not [x for x in list(s['Series'].values())+list(s['Matches'].values()) if (x.get('MapChoiceTimer') or x.get('AttendanceTimer') or {}).get('Outcome')=='Pending'], 'Pending timer: do not interrupt deadline'
+            assert 'OpenRA.Server.dll' not in subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','args'],text=True)
+            print('IDLE_WITHOUT_PENDING_TIMERS_VERIFIED')
+            PY
+            cp docker-compose.override.yml "$stage/override-before.yml"
+            cp data/tournament-state.json "$stage/state-before.json"
+            cp "$stage/override-candidate.yml" docker-compose.override.yml
+            docker-compose up -d --no-build tournament-bot
+            started=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)
+            i=0
+            until docker logs --since "$started" ymca-tournament-bot 2>&1 | grep -q 'Registered tournament commands in '; do
+              i=$((i+1)); test "$i" -lt 60; sleep 2
+            done
+            curl --fail --silent --output /dev/null http://127.0.0.1:15080/tournaments
+            docker exec herd nginx -t
+            docker exec herd nginx -s reload
+            curl --fail --silent --output /dev/null https://tournament.crowdcontrol.network/tournament/T013
+            expected=$(sha256sum "$stage/image/bot/TournamentBot.dll" | cut -d' ' -f1)
+            actual=$(docker exec ymca-tournament-bot sha256sum /app/bot/TournamentBot.dll | cut -d' ' -f1)
+            test "$expected" = "$actual"
+            printf '%s\n' "$revision" > data/map-choice-timer-deployed-revision
+            echo "SERIES_RESOLVE_DEPLOYED $revision"
+            python3 - <<'PY'
+            import pathlib,json
+            s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
+            print('S0027',s['Series']['S0027']['Status'],s['Series']['S0027']['MatchIds'])
             PY

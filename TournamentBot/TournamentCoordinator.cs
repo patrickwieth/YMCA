@@ -555,6 +555,12 @@ public sealed partial class TournamentCoordinator
 
     public async Task ResolveAsync(string matchId, ulong winnerId)
     {
+        matchId = matchId.Trim().ToUpperInvariant();
+        if (matchId.StartsWith("S", StringComparison.Ordinal))
+        {
+            await ResolvePendingSeriesAsync(matchId, winnerId);
+            return;
+        }
         var match = await store.UpdateAsync(state =>
         {
             if (!state.Matches.TryGetValue(matchId.Trim().ToUpperInvariant(), out var existing))

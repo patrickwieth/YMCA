@@ -95,7 +95,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
             new SlashCommandBuilder()
                 .WithName("resolve")
                 .WithDescription("Resolve a disputed match as tournament admin.")
-                .AddOption(new SlashCommandOptionBuilder().WithName("match-id").WithDescription("Select the match to resolve")
+                .AddOption(new SlashCommandOptionBuilder().WithName("match-id").WithDescription("Select a game or a whole series awaiting map choices")
                     .WithType(ApplicationCommandOptionType.String).WithRequired(true).WithAutocomplete(true))
                 .AddOption(new SlashCommandOptionBuilder().WithName("winner").WithDescription("Winning player or team from the selected match")
                     .WithType(ApplicationCommandOptionType.String).WithRequired(true).WithAutocomplete(true))
@@ -362,10 +362,12 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     {
         EnsureAdmin(command.User);
         var matchId = GetString(command, "match-id");
-        var match = await coordinator.GetMatchAsync(matchId) ?? throw new InvalidOperationException("Match not found.");
+        var match = (await coordinator.GetResolutionChoicesAsync()).FirstOrDefault(m => m.Id.Equals(matchId.Trim(), StringComparison.OrdinalIgnoreCase))
+            ?? throw new InvalidOperationException("Open game or pending map-choice series not found.");
         var winner = MatchResolutionChoices.Winner(match, GetString(command, "winner"));
+        await command.DeferAsync(ephemeral: true);
         await coordinator.ResolveAsync(matchId, winner);
-        await command.RespondAsync($"Match **{match.Id}** resolved for **{Escape(MatchResolutionChoices.SideName(match, winner == match.PlayerOneDiscordId))}**.", ephemeral: true);
+        await command.FollowupAsync($"{(match.Id.StartsWith("S") ? "Entire series" : "Match")} **{match.Id}** resolved for **{Escape(MatchResolutionChoices.SideName(match, winner == match.PlayerOneDiscordId))}**.", ephemeral: true);
     }
 
     async Task AddMapAsync(SocketSlashCommand command)
@@ -589,15 +591,15 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 if (interaction.Data.Current.Name == "winner")
                 {
                     var id = interaction.Data.Options.FirstOrDefault(option => option.Name == "match-id")?.Value?.ToString() ?? "";
-                    var match = await coordinator.GetMatchAsync(id);
+                    var match = (await coordinator.GetResolutionChoicesAsync()).FirstOrDefault(m => m.Id.Equals(id.Trim(), StringComparison.OrdinalIgnoreCase));
                     await interaction.RespondAsync(MatchResolutionChoices.Winners(match, query).Select(choice => new AutocompleteResult(choice.Name, choice.Value)));
                 }
                 else
                 {
-                    var matches = await coordinator.GetRecentMatchesAsync(100);
+                    var matches = await coordinator.GetResolutionChoicesAsync();
                     await interaction.RespondAsync(matches.Where(match => match.Status is not (MatchStatus.Completed or MatchStatus.Cancelled))
                         .Where(match => (match.Id + " " + MatchResolutionChoices.SideName(match, true) + " " + MatchResolutionChoices.SideName(match, false)).Contains(query, StringComparison.OrdinalIgnoreCase))
-                        .Take(25).Select(match => new AutocompleteResult(Truncate($"{match.Id}: {MatchResolutionChoices.SideName(match, true)} vs {MatchResolutionChoices.SideName(match, false)} — {match.Status}", 100), match.Id)));
+                        .Take(25).Select(match => new AutocompleteResult(Truncate($"{match.Id}: {MatchResolutionChoices.SideName(match, true)} vs {MatchResolutionChoices.SideName(match, false)} — {(match.Id.StartsWith("S") ? "Entire series / map choices pending" : match.Status.ToString())}", 100), match.Id)));
                 }
                 return;
             }
