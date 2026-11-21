@@ -189,8 +189,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-timer")
-                .WithDescription("Admin: give all currently open games 15 minutes to join and start.")
-                .AddOption(TournamentOption("Tournament whose open games receive the timer", true))
+                .WithDescription("Admin: give pending map choices and open games a 15-minute deadline.")
+                .AddOption(TournamentOption("Tournament whose pending map choices and open games receive the timer", true))
                 .Build(),
             new SlashCommandBuilder()
                 .WithName("tournament-status")
@@ -309,8 +309,8 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
                 case "tournament-timer":
                     EnsureAdmin(command.User);
                     await command.DeferAsync(ephemeral: true);
-                    var timed = await coordinator.StartAttendanceTimerAsync(GetString(command, "tournament-id"), command.User.Id);
-                    await command.FollowupAsync($"15-minute attendance timer started for {timed.Count} open game(s). Running games are unchanged.", ephemeral: true);
+                    var timed = await coordinator.StartTournamentTimerAsync(GetString(command, "tournament-id"), command.User.Id);
+                    await command.FollowupAsync($"15-minute timer started for {timed.Series.Count} matchup(s) awaiting map choices and {timed.Matches.Count} open game(s). Missing map choices forfeit the entire matchup when only the other side has completed its choices. Running games are unchanged.", ephemeral: true);
                     break;
                 case "tournament-status":
                     await ShowTournamentAsync(command);
@@ -931,6 +931,52 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
     public Task AttendanceReviewAsync(MatchRecord match, string reason) =>
         SendAdminAsync($"⏱️ Attendance timer for `{match.Id}` ended without an automatic winner: {Escape(reason)} Use `/resolve` if needed.");
 
+    public async Task MapChoiceTimerStartedAsync(TournamentRecord tournament, IReadOnlyList<TournamentSeries> series, DateTime deadline)
+    {
+        var text = $"⏱️ **{Escape(tournament.Name)}** — an admin started a **15-minute map-choice deadline**, ending <t:{new DateTimeOffset(deadline).ToUnixTimeSeconds()}:T> (<t:{new DateTimeOffset(deadline).ToUnixTimeSeconds()}:R>).\n" +
+            "Complete ALL your map choices in time. If only the other side completes its choices, you lose the **entire BO matchup**, not just one game. Neither side complete: admin review.\n" +
+            "Applies to: " + string.Join(", ", series.Take(25).Select(s => $"`{s.Id}`"));
+        try { await SendAnnouncementAsync(text); }
+        catch (Exception ex) { Console.Error.WriteLine("Map-choice timer announcement failed: " + ex.Message); }
+        foreach (var current in series)
+            foreach (var player in new[] { current.PlayerOneDiscordId, current.PlayerTwoDiscordId })
+                try
+                {
+                    var pending = !TournamentCoordinator.HasAllMapChoices(current, player);
+                    await SendDmAsync(player, text + $"\nYour series: **{current.Id}**. " +
+                        (pending ? "Choose below (or use I don't care)." : "Your map choices are already complete; waiting for your opponent."),
+                        pending ? BuildMapPickComponents(tournament, current) : null);
+                }
+                catch (Exception ex) { Console.Error.WriteLine("Map-choice timer DM failed: " + ex.Message); }
+    }
+
+    public async Task MapChoiceTimerWarningAsync(TournamentRecord tournament, TournamentSeries series, DateTime deadline)
+    {
+        foreach (var player in new[] { series.PlayerOneDiscordId, series.PlayerTwoDiscordId }.Where(p => !TournamentCoordinator.HasAllMapChoices(series, p)))
+            try
+            {
+                await SendDmAsync(player, $"⏱️ **{series.Id}**: approximately two minutes left to complete your map choices (deadline <t:{new DateTimeOffset(deadline).ToUnixTimeSeconds()}:T>). Missing choices can forfeit the entire matchup. Choose below.",
+                    BuildMapPickComponents(tournament, series));
+            }
+            catch (Exception ex) { Console.Error.WriteLine("Map-choice warning DM failed: " + ex.Message); }
+    }
+
+    public async Task MapChoiceTimerResolvedAsync(TournamentRecord tournament, TournamentSeries series, string reason)
+    {
+        var text = $"⏱️ **{tournament.Id} / {series.Id}** — {Escape(reason)}";
+        if (series.ForfeitWinnerDiscordId is ulong winner)
+        {
+            var name = tournament.Mode == TournamentMode.TwoVsTwo && tournament.Teams.TryGetValue(winner, out var team)
+                ? team.Name : (await coordinator.GetPlayerAsync(winner))?.OpenRaName ?? winner.ToString();
+            text += $"\n**{Escape(name)} wins the entire BO{series.WinsRequired * 2 - 1} series by walkover.**";
+            await SendAnnouncementAsync(text);
+        }
+        await SendAdminAsync(text);
+        foreach (var player in new[] { series.PlayerOneDiscordId, series.PlayerTwoDiscordId })
+            try { await SendDmAsync(player, text); }
+            catch (Exception ex) { Console.Error.WriteLine("Map-choice result DM failed: " + ex.Message); }
+    }
+
     public async Task SeriesMapPicksRequestedAsync(TournamentRecord tournament, TournamentSeries series)
     {
         await SendMapPickRequestAsync(tournament, series, series.PlayerOneDiscordId);
@@ -946,6 +992,7 @@ public sealed class DiscordTournamentBot : ITournamentNotifier, IAsyncDisposable
         await SendDmAsync(playerId,
             $"**{Escape(tournament.Name)}** — Round {series.TournamentRound}, new BO{series.WinsRequired * 2 - 1} series `{series.Id}` (0:0).\n" +
             $"Choose map {pickNumber}/{required} before game 1. The deciding map is already fixed; it will not be selected again before the deciding game.\n" +
+            (series.MapChoiceTimer is { Outcome: "Pending" } timer ? $"**Map-choice deadline: <t:{new DateTimeOffset(timer.DeadlineUtc).ToUnixTimeSeconds()}:T>. Missing choices can forfeit this entire matchup.**\n" : "") +
             (tournament.UseGeneratedMaps
                 ? "Choose a map archetype. The match host will generate a fresh map. The deciding map is fixed for this whole round."
                 : "Choose a map, or select **I don't care** to let YMCA Overlord choose one for you."),

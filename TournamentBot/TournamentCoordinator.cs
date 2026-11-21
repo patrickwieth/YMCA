@@ -15,6 +15,9 @@ public interface ITournamentNotifier
     Task AttendanceTimerStartedAsync(TournamentRecord tournament, IReadOnlyList<MatchRecord> matches, DateTime deadline);
     Task AttendanceTimerWarningAsync(MatchRecord match, DateTime deadline);
     Task AttendanceReviewAsync(MatchRecord match, string reason);
+    Task MapChoiceTimerStartedAsync(TournamentRecord tournament, IReadOnlyList<TournamentSeries> series, DateTime deadline);
+    Task MapChoiceTimerWarningAsync(TournamentRecord tournament, TournamentSeries series, DateTime deadline);
+    Task MapChoiceTimerResolvedAsync(TournamentRecord tournament, TournamentSeries series, string reason);
 }
 
 public sealed partial class TournamentCoordinator
@@ -47,6 +50,9 @@ public sealed partial class TournamentCoordinator
 
         var unfinished = await store.UpdateAsync(state =>
         {
+            // A disconnected bot cannot accept choices: do not turn downtime into a walkover.
+            foreach (var series in state.Series.Values.Where(s => s.MapChoiceTimer?.Outcome == "Pending"))
+                series.MapChoiceTimer!.EligibleForForfeit = false;
             var matches = state.Matches.Values
                 .Where(match => match.Status is MatchStatus.Queued or MatchStatus.StartingServer
                     or MatchStatus.WaitingForPlayers or MatchStatus.Playing)
@@ -425,6 +431,8 @@ public sealed partial class TournamentCoordinator
             if (playerId != series.PlayerOneDiscordId && playerId != series.PlayerTwoDiscordId)
                 throw new InvalidOperationException("Only the team representatives can select maps.");
 
+            if (series.MapChoiceTimer is { Outcome: "Pending" or "Review" } timer && DateTime.UtcNow >= timer.DeadlineUtc)
+                throw new InvalidOperationException("The map-choice deadline has expired. Wait for the timer decision or ask an admin to restart the timer.");
             var required = tournament.WinsRequired - 1;
             var picks = series.MapPicks[playerId];
             if (picks.Count >= required)
@@ -458,6 +466,7 @@ public sealed partial class TournamentCoordinator
             MatchRecord? match = null;
             if (ready)
             {
+                if (series.MapChoiceTimer != null) series.MapChoiceTimer.Outcome = "Completed";
                 series.Maps = BuildSeriesMaps(tournament, series);
                 series.Status = TournamentSeriesStatus.Playing;
                 match = CreateSeriesMatch(state, tournament, series, 1);
@@ -598,31 +607,29 @@ public sealed partial class TournamentCoordinator
             var loser = match.FinalWinnerDiscordId == match.PlayerOneDiscordId
                 ? match.PlayerTwoDiscordId
                 : match.PlayerOneDiscordId;
-            if (match.IsThirdPlaceMatch)
-            {
-                tournament.ThirdPlaceDiscordId = match.FinalWinnerDiscordId;
-                tournament.FourthPlaceDiscordId = loser;
-            }
-            else
-            {
-                tournament.Losses[loser] = tournament.Losses.GetValueOrDefault(loser) + 1;
-                var eliminationLosses = tournament.Format == TournamentFormat.DoubleElimination ? 2 : 1;
-                if (tournament.Losses[loser] >= eliminationLosses)
-                {
-                    tournament.EliminatedInRound[loser] = match.TournamentRound;
-                    var survivors = tournament.Entrants.Count(player =>
-                        tournament.Losses.GetValueOrDefault(player) < eliminationLosses);
-                    if (survivors == 1)
-                        tournament.RunnerUpDiscordId = loser;
-                    else if (survivors == 2 && tournament.Format == TournamentFormat.DoubleElimination)
-                        tournament.ThirdPlaceDiscordId = loser;
-                }
-            }
+            ApplyTournamentResult(tournament, match.FinalWinnerDiscordId.Value, loser, match.TournamentRound, match.IsThirdPlaceMatch);
 
             return ScheduleNextRound(state, tournament);
         });
 
         await StartScheduledMatchesAsync(transition);
+    }
+
+    static void ApplyTournamentResult(TournamentRecord tournament, ulong winner, ulong loser, int round, bool thirdPlace)
+    {
+        if (thirdPlace)
+        {
+            tournament.ThirdPlaceDiscordId = winner;
+            tournament.FourthPlaceDiscordId = loser;
+            return;
+        }
+        tournament.Losses[loser] = tournament.Losses.GetValueOrDefault(loser) + 1;
+        var eliminationLosses = tournament.Format == TournamentFormat.DoubleElimination ? 2 : 1;
+        if (tournament.Losses[loser] < eliminationLosses) return;
+        tournament.EliminatedInRound[loser] = round;
+        var survivors = tournament.Entrants.Count(player => tournament.Losses.GetValueOrDefault(player) < eliminationLosses);
+        if (survivors == 1) tournament.RunnerUpDiscordId = loser;
+        else if (survivors == 2 && tournament.Format == TournamentFormat.DoubleElimination) tournament.ThirdPlaceDiscordId = loser;
     }
 
     async Task StartScheduledMatchesAsync(TournamentTransition transition)

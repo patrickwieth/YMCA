@@ -142,8 +142,23 @@ public sealed class TournamentTeam
     public ulong? InvitationMessageId { get; set; }
 }
 
+public sealed class SeriesMapChoiceTimer
+{
+    public string Id { get; set; } = "";
+    public ulong StartedByDiscordId { get; set; }
+    public DateTime StartedAtUtc { get; set; }
+    public DateTime DeadlineUtc { get; set; }
+    public bool WarningSent { get; set; }
+    public bool EligibleForForfeit { get; set; } = true;
+    public string Outcome { get; set; } = "Pending";
+}
+
 public sealed class TournamentSeries
 {
+    public SeriesMapChoiceTimer? MapChoiceTimer { get; set; }
+    public ulong? ForfeitWinnerDiscordId { get; set; }
+    public string? ForfeitReason { get; set; }
+    public DateTime? ForfeitedAtUtc { get; set; }
     public string Id { get; set; } = "";
     public string TournamentId { get; set; } = "";
     public ulong PlayerOneDiscordId { get; set; }

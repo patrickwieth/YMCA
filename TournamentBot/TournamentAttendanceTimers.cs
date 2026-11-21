@@ -4,7 +4,12 @@ namespace Ymca.TournamentBot;
 
 public sealed partial class TournamentCoordinator
 {
-    public async Task<IReadOnlyList<MatchRecord>> StartAttendanceTimerAsync(string tournamentId, ulong adminId)
+    public sealed record TournamentTimerStartResult(IReadOnlyList<MatchRecord> Matches, IReadOnlyList<TournamentSeries> Series, DateTime DeadlineUtc);
+
+    public async Task<IReadOnlyList<MatchRecord>> StartAttendanceTimerAsync(string tournamentId, ulong adminId) =>
+        (await StartTournamentTimerAsync(tournamentId, adminId)).Matches;
+
+    public async Task<TournamentTimerStartResult> StartTournamentTimerAsync(string tournamentId, ulong adminId)
     {
         var now = DateTime.UtcNow;
         var started = await store.UpdateAsync(state =>
@@ -14,18 +19,28 @@ public sealed partial class TournamentCoordinator
                 throw new InvalidOperationException("The tournament must be running.");
             var matches = state.Matches.Values.Where(m => m.TournamentId == tournament.Id &&
                 m.Status is MatchStatus.Queued or MatchStatus.StartingServer or MatchStatus.WaitingForPlayers).ToList();
-            if (matches.Count == 0) throw new InvalidOperationException("There are no open games waiting to start.");
-            if (matches.Any(m => m.AttendanceTimer?.Outcome == "Pending"))
+            var series = tournament.SeriesIds.Where(state.Series.ContainsKey).Select(id => state.Series[id])
+                .Where(s => s.Status == TournamentSeriesStatus.AwaitingMapPicks && s.WinsRequired > 1 &&
+                    (!HasAllMapChoices(s, s.PlayerOneDiscordId) || !HasAllMapChoices(s, s.PlayerTwoDiscordId))).ToList();
+            if (matches.Count == 0 && series.Count == 0)
+                throw new InvalidOperationException("There are no pending map choices or open games waiting to start.");
+            if (matches.Any(m => m.AttendanceTimer?.Outcome == "Pending") || series.Any(s => s.MapChoiceTimer?.Outcome == "Pending"))
                 throw new InvalidOperationException("An attendance timer is already active. It will not be silently reset.");
             foreach (var match in matches)
                 match.AttendanceTimer = new MatchAttendanceTimer { Id = Guid.NewGuid().ToString("N"), StartedByDiscordId = adminId,
                     StartedAtUtc = now, DeadlineUtc = now.AddMinutes(15), EligibleForForfeit = match.Status == MatchStatus.WaitingForPlayers };
-            return (Tournament: tournament, Matches: matches);
+            foreach (var current in series)
+                current.MapChoiceTimer = new SeriesMapChoiceTimer { Id = Guid.NewGuid().ToString("N"), StartedByDiscordId = adminId,
+                    StartedAtUtc = now, DeadlineUtc = now.AddMinutes(15) };
+            return (Tournament: tournament, Matches: matches, Series: series);
         });
         // Persist before arming the local hosts or notifying players.
         foreach (var match in started.Matches) TryArmAttendance(match);
-        await NotifyAsync(n => n.AttendanceTimerStartedAsync(started.Tournament, started.Matches, now.AddMinutes(15)));
-        return started.Matches;
+        if (started.Matches.Count != 0)
+            await NotifyAsync(n => n.AttendanceTimerStartedAsync(started.Tournament, started.Matches, now.AddMinutes(15)));
+        if (started.Series.Count != 0)
+            await NotifyAsync(n => n.MapChoiceTimerStartedAsync(started.Tournament, started.Series, now.AddMinutes(15)));
+        return new TournamentTimerStartResult(started.Matches, started.Series, now.AddMinutes(15));
     }
 
     static void TryArmAttendance(MatchRecord match)
@@ -50,6 +65,7 @@ public sealed partial class TournamentCoordinator
     public async Task CheckAttendanceTimersAsync(DateTime? observedAtUtc = null)
     {
         var now = observedAtUtc ?? DateTime.UtcNow;
+        await CheckMapChoiceTimersAsync(now);
         var matches = await store.ReadAsync(s => s.Matches.Values.Where(m => m.AttendanceTimer?.Outcome == "Pending").ToList());
         foreach (var match in matches)
         {

@@ -56,7 +56,14 @@ public static class TournamentWebPage
                     var wins = s.Wins.GetValueOrDefault(player);
                     body.Append($"<div class='side {(wins >= s.WinsRequired ? "winner" : "")}'><span>{E(Name(player))}</span><strong>{wins}</strong></div>");
                 }
-                body.Append($"<p class='muted'>{E(status)}</p><ol class='games'>");
+                body.Append($"<p class='muted'>{E(status)}</p>");
+                if (s.MapChoiceTimer is { Outcome: "Pending" } choiceTimer)
+                    body.Append($"<p>Map-choice deadline: {E(choiceTimer.DeadlineUtc.ToString("HH:mm 'UTC'"))}. Missing choices can forfeit this entire matchup.</p>");
+                if (s.MapChoiceTimer?.Outcome == "Review")
+                    body.Append("<p>Map-choice deadline expired: admin review required.</p>");
+                if (s.ForfeitWinnerDiscordId is ulong forfeitWinner)
+                    body.Append($"<p>Walkover: {E(Name(forfeitWinner))} wins the entire series.<br>{E(s.ForfeitReason)}</p>");
+                body.Append("<ol class='games'>");
                 foreach (var mid in s.MatchIds)
                 {
                     if (!state.Matches.TryGetValue(mid, out var m) || m.TournamentId != t.Id) continue;

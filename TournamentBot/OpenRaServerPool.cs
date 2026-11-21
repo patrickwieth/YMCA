@@ -42,6 +42,11 @@ public sealed partial class OpenRaServerPool : IAsyncDisposable
         if (workers.Count != 0)
             return;
 
+        if (config.RemoteHost != null)
+        {
+            config.RemoteHost.Validate();
+            _ = config.RemoteHost.GetToken(); // Fail startup visibly, not inside an unobserved worker task.
+        }
         Directory.CreateDirectory(config.MatchDirectory);
         for (var i = 0; i < config.MaxConcurrentServers; i++)
         {
