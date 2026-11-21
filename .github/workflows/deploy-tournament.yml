@@ -1,102 +1,38 @@
 name: Deploy Tournament Bot
 on:
   workflow_dispatch:
-    inputs:
-      confirmation:
-        description: 'DEPLOY-MAP-CHOICE-TIMER builds bot-only update and waits for a safe idle window'
-        required: true
 permissions:
   contents: read
 jobs:
-  guarded-update:
-    if: inputs.confirmation == 'DEPLOY-MAP-CHOICE-TIMER'
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Build and deploy timer plus native remote controller only when idle
+      - name: Read-only timer deployment and match status
         uses: appleboy/ssh-action@master
-        env:
-          GAME_HOST_TOKEN: ${{ secrets.YMCA_GAME_HOST_TOKEN }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          envs: GAME_HOST_TOKEN
-          command_timeout: 35m
           script: |
             set -eu
-            umask 077
-            cd ~/src/YMCA-tournament
-            git fetch origin feature/tournament-remote-host
-            revision=$(git rev-parse FETCH_HEAD)
-            deploy="$PWD/TournamentBot/deploy"
-            stage="$deploy/data/recovery/map-choice-$(date -u +%Y%m%dT%H%M%SZ)"
-            mkdir -p "$stage/code" "$stage/image/bot"
-            git archive "$revision" TournamentBot OpenRA.Mods.CA/MapGeneration/TournamentAttendanceProtocol.cs OpenRA.Mods.CA/MapGeneration/TournamentMapDownloadInfo.cs | tar -x -C "$stage/code"
-            docker run --rm --cpus=1 --memory=1536m -v "$stage/code:/src" -v "$stage/image/bot:/out" -w /src mcr.microsoft.com/dotnet/sdk:6.0-jammy dotnet publish TournamentBot/TournamentBot.csproj -c Release -o /out --no-self-contained /p:UseAppHost=false > "$stage/build.log" 2>&1
-            base=$(docker inspect --format '{{.Image}}' ymca-tournament-bot)
-            image="ymca-tournament-bot:map-choice-$(printf '%s' "$revision" | cut -c1-12)"
-            printf 'FROM %s\nCOPY --chown=1000:1000 bot/ /app/bot/\n' "$base" > "$stage/image/Dockerfile"
-            docker build -t "$image" "$stage/image" > "$stage/image-build.log" 2>&1
-            echo "BOT_IMAGE_READY $image; waiting for safe window (no forced restart)."
-            cd "$deploy"
-            test ! -e docker-compose.override.yml
+            cd ~/src/YMCA-tournament/TournamentBot/deploy
             python3 - <<'PY'
-            import os,json,urllib.request
-            req=urllib.request.Request('https://ymca-worlds.echtkpvl.de/game-host/v1/health',headers={'Authorization':'Bearer '+os.environ['GAME_HOST_TOKEN']})
-            h=json.load(urllib.request.urlopen(req,timeout=20))
-            assert h['GameVersion']=='v0.97.6' and h['PublicHost']=='ymca-worlds.echtkpvl.de'
-            print('REMOTE_HOST_READY',h['GameVersion'])
-            PY
-            safe() {
-              python3 ./check-match-safety.py data/tournament-state.json && python3 - <<'PY'
-            import subprocess,sys
-            args=subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','pid,args'],text=True)
-            sys.exit(1 if 'OpenRA.Server.dll' in args else 0)
-            PY
-            }
-            i=0
-            until safe; do
-              i=$((i+1))
-              if [ "$i" -ge 120 ]; then
-                echo 'DEPLOYMENT_NOT_APPLIED: active matches did not reach a safe window within 20 minutes.'
-                exit 1
-              fi
-              sleep 10
-            done
-            cp tournament-bot.json "$stage/config-before.json"
-            cp .env "$stage/env-before"
-            cp data/tournament-state.json "$stage/state-before.json"
-            printf '%s\n' "$base" > "$stage/image-before.txt"
-            safe
-            docker-compose stop tournament-bot
-            cp data/tournament-state.json "$stage/state-quiescent.json"
-            python3 - <<'PY'
-            import pathlib,json,os,re
-            token=os.environ['GAME_HOST_TOKEN'];assert re.fullmatch('[a-zA-Z0-9_-]{32,128}',token)
-            p=pathlib.Path('tournament-bot.json');c=json.loads(p.read_text())
-            c['server']['remoteHost']={'id':'worlds','baseUrl':'https://ymca-worlds.echtkpvl.de/game-host/','publicHost':'ymca-worlds.echtkpvl.de','expectedGameVersion':'v0.97.6','tokenEnvironmentVariable':'YMCA_GAME_HOST_TOKEN','maxConcurrentServers':8}
-            p.write_text(json.dumps(c,indent=2))
-            p=pathlib.Path('.env');lines=[l for l in p.read_text().splitlines() if not l.startswith('YMCA_GAME_HOST_TOKEN=')]
-            p.write_text('\n'.join(lines)+ '\nYMCA_GAME_HOST_TOKEN='+token+'\n');p.chmod(0o600)
-            PY
-            printf 'services:\n  tournament-bot:\n    image: %s\n' "$image" > docker-compose.override.yml
-            docker-compose up -d --no-build tournament-bot
-            started=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)
-            i=0
-            until docker logs --since "$started" ymca-tournament-bot 2>&1 | grep -q 'Registered tournament commands in '; do
-              i=$((i+1)); test "$i" -lt 90; sleep 2
-            done
-            curl --fail --silent --output /dev/null http://127.0.0.1:15080/tournaments
-            expected=$(sha256sum "$stage/image/bot/TournamentBot.dll" | cut -d' ' -f1)
-            actual=$(docker exec ymca-tournament-bot sha256sum /app/bot/TournamentBot.dll | cut -d' ' -f1)
-            test "$expected" = "$actual"
-            printf '%s\n' "$revision" > data/map-choice-timer-deployed-revision
-            echo "DEPLOYMENT_VERIFIED: map-choice timer and native remote controller; backup $stage"
-            python3 - <<'PY'
-            import json,pathlib
+            import pathlib,json,subprocess
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
+            c=json.loads(pathlib.Path('tournament-bot.json').read_text())
+            revision=pathlib.Path('data/map-choice-timer-deployed-revision')
+            print('DEPLOYED_REVISION',revision.read_text().strip() if revision.exists() else 'not yet deployed')
+            print('NATIVE_REMOTE_CONFIGURED',bool(c['server'].get('remoteHost')))
+            print('ACTIVE_MATCHES',[(m['Id'],m['Status'],m.get('HostingHostId'),m.get('FailureReason')) for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']])
             t=s['Tournaments']['T013']
-            print('T013',t['Status'],'round',t['RoundNumber'],'entrants',len(t['Entrants']))
-            print('MAP_TIMERS',[(sid,s['Series'][sid].get('MapChoiceTimer')) for sid in t['SeriesIds'] if s['Series'][sid]['Status']=='AwaitingMapPicks'])
+            print('MAP_CHOICES',[(sid,s['Series'][sid]['Status'],s['Series'][sid].get('MapChoiceTimer')) for sid in t['SeriesIds'] if s['Series'][sid]['Status']=='AwaitingMapPicks'])
+            stages=sorted(pathlib.Path('data/recovery').glob('map-choice-*'))
+            if stages:
+                stage=stages[-1]
+                print('STAGING',str(stage),'built', (stage/'image-build.log').exists(),'stopped_for_update',(stage/'state-quiescent.json').exists())
+                for name in ['build.log','image-build.log']:
+                    p=stage/name
+                    if p.exists():print('BUILD_TAIL',name,'\n'.join(p.read_text(errors='replace').splitlines()[-5:]))
+            print('BOT_STARTED_AT',subprocess.check_output(['docker','inspect','--format','{{.State.StartedAt}}','ymca-tournament-bot'],text=True).strip())
             PY
