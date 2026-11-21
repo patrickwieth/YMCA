@@ -1,5 +1,7 @@
 # Admin map-choice deadline
 
+**Live as of 2026-11-21 12:58 UTC**, source `aa867b48c5fd...`, verified recovery run **44906521381**. Original run 44905181409 safely stopped the idle bot after retention ended but failed on Compose v1 override schema mismatch; adding `version: "3.7"` to match the base restored service. Public HTTP 200, Discord registration and new binary hash verified; T013 participants/results/round/series preserved. S0027 remains awaiting picks with no timer automatically armed. User must trigger `/tournament-timer` again.
+
 `/tournament-timer` now includes both pending map-choice series and previously supported queued/starting/waiting individual games. It remains an explicit admin action; no automatic timer on registration, new rounds, or future games.
 
 ## Rules
