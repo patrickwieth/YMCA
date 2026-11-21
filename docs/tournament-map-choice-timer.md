@@ -1,5 +1,11 @@
 # Admin map-choice deadline
 
+## Direct admin resolution (live 2026-11-21 13:06 UTC)
+
+`/resolve` now offers pending-map-choice series (`S…`) alongside individual games (`M…`). Select S0027 / Boris–Fux and then the winning side to award the ENTIRE series without any map pick or timer. This does not create fictitious games, gives the losing side one tournament loss, closes any series timer and advances the bracket normally. Started/queued series cannot be resolved through a stale S-selection; use their individual game instead. Completed/cancelled tournaments and repeated resolutions are rejected. Discord acknowledgement is deferred while result notifications run.
+
+Deployed source `2cc6f35a3d681a369c2615764807a831aafc6890`, successful workflow **44907162472**; image `ymca-tournament-bot:series-resolve-2cc6f35a3d68`. Idle/no-pending-timer checks passed, Compose/runtime validated before recreation, updated binary hash and Discord command registration verified, public HTTP 200. S0027 remained unmodified AwaitingMapPicks with zero matches: no winner selected automatically. 123 tests pass (one optional smoke skipped). First attempted rollout failed CLOSED on Docker's required PID output column; bot was untouched, then probe was corrected.
+
 **Live as of 2026-11-21 12:58 UTC**, source `aa867b48c5fd...`, verified recovery run **44906521381**. Original run 44905181409 safely stopped the idle bot after retention ended but failed on Compose v1 override schema mismatch; adding `version: "3.7"` to match the base restored service. Public HTTP 200, Discord registration and new binary hash verified; T013 participants/results/round/series preserved. S0027 remains awaiting picks with no timer automatically armed. User must trigger `/tournament-timer` again.
 
 `/tournament-timer` now includes both pending map-choice series and previously supported queued/starting/waiting individual games. It remains an explicit admin action; no automatic timer on registration, new rounds, or future games.
