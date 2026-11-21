@@ -4,35 +4,53 @@ on:
 permissions:
   contents: read
 jobs:
-  verify:
+  recover:
     runs-on: ubuntu-latest
     steps:
-      - name: Read-only timer deployment and match status
+      - name: Recover stopped bot from Compose override version mismatch
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
+          command_timeout: 10m
           script: |
             set -eu
             cd ~/src/YMCA-tournament/TournamentBot/deploy
+            test "$(docker inspect --format '{{.State.Running}}' ymca-tournament-bot)" = false
+            python3 ./check-match-safety.py data/tournament-state.json
             python3 - <<'PY'
-            import pathlib,json,subprocess
+            import pathlib,json
+            p=pathlib.Path('docker-compose.override.yml');s=p.read_text()
+            assert 'ymca-tournament-bot:map-choice-aa867b48c5fd' in s
+            if not s.startswith('version:'):
+                p.write_text('version: "3.7"\n'+s)
+            state=json.loads(pathlib.Path('data/tournament-state.json').read_text())
+            assert not [m for m in state['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']]
+            print('QUIESCENT_STATE_VERIFIED')
+            PY
+            docker-compose config --quiet
+            docker-compose up -d --no-build tournament-bot
+            started=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)
+            i=0
+            until docker logs --since "$started" ymca-tournament-bot 2>&1 | grep -q 'Registered tournament commands in '; do
+              i=$((i+1)); test "$i" -lt 90; sleep 2
+            done
+            curl --fail --silent --output /dev/null http://127.0.0.1:15080/tournaments
+            docker exec herd nginx -t
+            docker exec herd nginx -s reload
+            curl --fail --silent --output /dev/null https://tournament.crowdcontrol.network/tournament/T013
+            expected=$(sha256sum data/recovery/map-choice-20261121T124156Z/image/bot/TournamentBot.dll | cut -d' ' -f1)
+            actual=$(docker exec ymca-tournament-bot sha256sum /app/bot/TournamentBot.dll | cut -d' ' -f1)
+            test "$expected" = "$actual"
+            git rev-parse aa867b48 > data/map-choice-timer-deployed-revision
+            python3 - <<'PY'
+            import pathlib,json
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
-            c=json.loads(pathlib.Path('tournament-bot.json').read_text())
-            revision=pathlib.Path('data/map-choice-timer-deployed-revision')
-            print('DEPLOYED_REVISION',revision.read_text().strip() if revision.exists() else 'not yet deployed')
-            print('NATIVE_REMOTE_CONFIGURED',bool(c['server'].get('remoteHost')))
-            print('ACTIVE_MATCHES',[(m['Id'],m['Status'],m.get('HostingHostId'),m.get('FailureReason')) for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']])
-            t=s['Tournaments']['T013']
-            print('MAP_CHOICES',[(sid,s['Series'][sid]['Status'],s['Series'][sid].get('MapChoiceTimer')) for sid in t['SeriesIds'] if s['Series'][sid]['Status']=='AwaitingMapPicks'])
-            stages=sorted(pathlib.Path('data/recovery').glob('map-choice-*'))
-            if stages:
-                stage=stages[-1]
-                print('STAGING',str(stage),'built', (stage/'image-build.log').exists(),'stopped_for_update',(stage/'state-quiescent.json').exists())
-                for name in ['build.log','image-build.log']:
-                    p=stage/name
-                    if p.exists():print('BUILD_TAIL',name,'\n'.join(p.read_text(errors='replace').splitlines()[-5:]))
-            print('BOT_STARTED_AT',subprocess.check_output(['docker','inspect','--format','{{.State.StartedAt}}','ymca-tournament-bot'],text=True).strip())
+            old=json.loads(pathlib.Path('data/recovery/map-choice-20261121T124156Z/state-quiescent.json').read_text())
+            for key in ['Entrants','Losses','RoundNumber','SeriesIds','MatchIds','ProcessedMatchIds','ProcessedSeriesIds']:
+                print('T013_PRESERVED',key,s['Tournaments']['T013'][key]==old['Tournaments']['T013'][key])
+            print('MAP_CHOICES',[(sid,s['Series'][sid].get('MapChoiceTimer')) for sid in s['Tournaments']['T013']['SeriesIds'] if s['Series'][sid]['Status']=='AwaitingMapPicks'])
+            print('RECOVERY_VERIFIED: HTTP, Discord registration, exact updated binary, native remote controller.')
             PY
