@@ -4,75 +4,28 @@ on:
 permissions:
   contents: read
 jobs:
-  retire-host:
+  verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Archive remote host and return idle controller to local hosting
+      - name: Read-only tournament hosting verification
         uses: appleboy/ssh-action@master
-        env:
-          RETIREMENT_KEY: ${{ secrets.YMCA_WORLDS_RETIREMENT_KEY }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          envs: RETIREMENT_KEY
-          command_timeout: 10m
           script: |
             set -eu
-            umask 077
             cd ~/src/YMCA-tournament/TournamentBot/deploy
-            backup="data/recovery/worlds-retired-$(date -u +%Y%m%dT%H%M%SZ)"
-            mkdir -p "$backup"
-            key=$(mktemp)
-            known=$(mktemp)
-            trap 'rm -f "$key" "$known"' EXIT
-            printf '%s' "$RETIREMENT_KEY" | base64 -d > "$key"
-            ssh-keyscan -t ed25519 ymca-worlds.echtkpvl.de > "$known" 2>/dev/null
-            ssh-keygen -lf "$known" | grep -q 'SHA256:ArUOC1Y/vx0qyUQ7dztubA4DrMxzY6kU977JCsomg70'
-            ssh -i "$key" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile="$known" root@ymca-worlds.echtkpvl.de backup > "$backup/worlds-host.tar.gz"
-            export BACKUP_DIR="$backup"
-            python3 - <<'PY'
-            import os,pathlib,tarfile,json,hashlib,subprocess
-            b=pathlib.Path(os.environ['BACKUP_DIR']);r=pathlib.Path('data')
-            local={hashlib.sha256(p.read_bytes()).hexdigest() for p in (r/'matches').rglob('*.orarep')}
-            with tarfile.open(b/'worlds-host.tar.gz','r:gz') as t:
-                replays=[m for m in t.getmembers() if m.isfile() and m.name.startswith('./data/matches/') and m.name.endswith('.orarep')]
-                assert len(replays)==30, 'Replay inventory changed; review before retirement'
-                assert all(hashlib.sha256(t.extractfile(m).read()).hexdigest() in local for m in replays)
-                host=json.load(t.extractfile('./data/host-state.json'))
-                assert not [k for k,v in host.items() if not v.get('Stopped') and v['Match']['Status'] not in ['WaitingForPlayers','AwaitingConfirmation']], 'Remote game still active'
-                assert t.getmember('./host.env') and t.getmember('./game-host.json') and t.getmember('./compose.yml')
-                print('ARCHIVE_VERIFIED',len(replays),'replays identical to controller; configuration, logs and host state archived')
-            state=json.loads((r/'tournament-state.json').read_text())
-            assert not [m for m in state['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']]
-            assert not [x for x in list(state['Series'].values())+list(state['Matches'].values()) if (x.get('MapChoiceTimer') or x.get('AttendanceTimer') or {}).get('Outcome')=='Pending']
-            assert 'OpenRA.Server.dll' not in subprocess.check_output(['docker','top','ymca-tournament-bot','-eo','pid,args'],text=True)
-            p=pathlib.Path('tournament-bot.json');c=json.loads(p.read_text())
-            assert c['server'].get('publicHost') and c['server']['publicHost']!='ymca-worlds.echtkpvl.de'
-            assert c['server'].get('maxConcurrentServers',1)>0
-            (b/'controller-config-before.json').write_bytes(p.read_bytes())
-            (b/'tournament-state-before.json').write_bytes((r/'tournament-state.json').read_bytes())
-            c['server'].pop('remoteHost',None)
-            p.write_text(json.dumps(c,indent=2))
-            print('LOCAL_HOST_CONFIG',c['server']['publicHost'],'capacity',c['server'].get('maxConcurrentServers'))
-            PY
-            docker-compose config --quiet
-            docker-compose restart tournament-bot
-            started=$(docker inspect --format '{{.State.StartedAt}}' ymca-tournament-bot)
-            i=0
-            until docker logs --since "$started" ymca-tournament-bot 2>&1 | grep -q 'Registered tournament commands in '; do
-              i=$((i+1)); test "$i" -lt 60; sleep 2
-            done
             curl --fail --silent --output /dev/null http://127.0.0.1:15080/tournaments
-            curl --fail --silent --output /dev/null https://tournament.crowdcontrol.network/tournament/T013
             python3 - <<'PY'
-            import os,pathlib,json
-            b=pathlib.Path(os.environ['BACKUP_DIR'])
-            old=json.loads((b/'tournament-state-before.json').read_text());new=json.loads(pathlib.Path('data/tournament-state.json').read_text())
-            for key in ['Entrants','Losses','RoundNumber','SeriesIds','MatchIds','ProcessedMatchIds','ProcessedSeriesIds','Status']:
-                assert old['Tournaments']['T013'][key]==new['Tournaments']['T013'][key],key
-            print('T013_RESULTS_PRESERVED',new['Tournaments']['T013']['Status'])
-            print('BACKUP_LOCATION',b/'worlds-host.tar.gz')
-            print('BACKUP_BYTES',(b/'worlds-host.tar.gz').stat().st_size)
+            import pathlib,json,subprocess
+            s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
+            c=json.loads(pathlib.Path('tournament-bot.json').read_text())
+            print('DEPLOYED_REVISION',pathlib.Path('data/map-choice-timer-deployed-revision').read_text().strip())
+            print('NATIVE_REMOTE_HOST',c['server'].get('remoteHost',{}).get('publicHost'))
+            print('ACTIVE_MATCHES',[(m['Id'],m['Status'],m.get('HostingHostId'),m.get('FailureReason')) for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']])
+            t=s['Tournaments']['T013']
+            print('MAP_CHOICES',[(sid,s['Series'][sid].get('MapChoiceTimer')) for sid in t['SeriesIds'] if s['Series'][sid]['Status']=='AwaitingMapPicks'])
+            print('BOT_STARTED_AT',subprocess.check_output(['docker','inspect','--format','{{.State.StartedAt}}','ymca-tournament-bot'],text=True).strip())
             PY
