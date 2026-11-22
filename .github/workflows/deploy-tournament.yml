@@ -19,7 +19,7 @@ jobs:
             cd ~/src/YMCA-tournament/TournamentBot/deploy
             curl --fail --silent --output /dev/null http://127.0.0.1:15080/tournaments
             python3 - <<'PY'
-            import pathlib,json,subprocess
+            import pathlib,json,subprocess,hashlib
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
             c=json.loads(pathlib.Path('tournament-bot.json').read_text())
             print('DEPLOYED_REVISION',pathlib.Path('data/map-choice-timer-deployed-revision').read_text().strip())
@@ -27,5 +27,14 @@ jobs:
             print('ACTIVE_MATCHES',[(m['Id'],m['Status'],m.get('HostingHostId'),m.get('FailureReason')) for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']])
             t=s['Tournaments']['T013']
             print('MAP_CHOICES',[(sid,s['Series'][sid].get('MapChoiceTimer')) for sid in t['SeriesIds'] if s['Series'][sid]['Status']=='AwaitingMapPicks'])
+            print('TOURNAMENT_STATUS',t['Status'])
+            root=pathlib.Path('data')
+            for pattern,kind in [('*.orarep','REPLAY'),('*.oramap','MAP')]:
+                for p in root.rglob(pattern):
+                    if 'recovery' in p.parts: continue
+                    print('FILE_INVENTORY',kind,p.relative_to(root).as_posix(),p.stat().st_size,hashlib.sha256(p.read_bytes()).hexdigest())
+            for m in s['Matches'].values():
+                if m.get('HostingHostId')=='worlds':
+                    print('REMOTE_MATCH_DATA',m['Id'],m['Status'],m.get('ReplayPath'),m.get('GeneratedMapPath'))
             print('BOT_STARTED_AT',subprocess.check_output(['docker','inspect','--format','{{.State.StartedAt}}','ymca-tournament-bot'],text=True).strip())
             PY
