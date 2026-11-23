@@ -1,0 +1,50 @@
+const {chromium}=require(process.env.YMCA_PLAYWRIGHT || 'playwright');
+const http=require('http'),fs=require('fs'),path=require('path'),assert=require('assert');
+(async()=>{
+ const root=path.resolve(process.env.YMCA_WEB_PREVIEW || '.tmp/bracket-preview');
+ const server=http.createServer((req,res)=>{const file=path.join(root,req.url==='/tournament-assets.js'?'tournament-assets.js':'large.html');res.setHeader('Content-Type',file.endsWith('.js')?'application/javascript':'text/html');res.end(fs.readFileSync(file));});
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ const browser=await chromium.launch({executablePath:process.env.YMCA_BROWSER_EXECUTABLE,headless:true});
+ try{
+  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(`http://127.0.0.1:${server.address().port}/large.html`);
+  await page.waitForTimeout(300);
+  assert.equal(await page.locator('.bracket-lane').count(),3);
+  assert((await page.locator('.connections path').count())>0);
+  assert(await page.locator('.connections path').evaluateAll(paths=>paths.every(p=>{
+   const from=document.getElementById(p.dataset.source),to=document.getElementById(p.dataset.target);
+   const rounds=[...to.closest('.tree').querySelectorAll('.round')];
+   return from.closest('.tree')===to.closest('.tree')&&rounds.indexOf(to.closest('.round'))===rounds.indexOf(from.closest('.round'))+1;
+  })));
+  await page.locator('#series-S0005 .side').first().hover();
+  assert((await page.locator('.connections path.active').count())>0);
+  await page.locator('#series-S0005 summary').click();
+  assert(await page.locator('#details-S0005').evaluate(e=>e.open));
+  await page.evaluate(()=>refresh());
+  assert(await page.locator('#details-S0005').evaluate(e=>e.open));
+  assert.equal(await page.evaluate(()=>document.activeElement.closest('details')?.id),'details-S0005');
+  assert.equal(await page.locator('#series-S0005 a[href="/replay/M0005"]').count(),1);
+  await page.locator('#series-S0007 .source-link').first().click();
+  assert.equal(await page.evaluate(()=>document.activeElement.closest('details')?.id),'details-S0001');
+  await page.locator('#series-S0005 summary').click();
+  await page.mouse.move(1400,10);await page.locator('h1').click();
+  await page.screenshot({path:root+'/desktop.png',fullPage:true});
+  await page.setViewportSize({width:390,height:844});
+  const scroll=page.locator('.tree-scroll').first();
+  await scroll.evaluate(e=>{e.scrollLeft=250;e.focus();});
+  const before=await scroll.evaluate(e=>e.scrollLeft);
+  await page.evaluate(()=>refresh());
+  assert.equal(await scroll.evaluate(e=>e.scrollLeft),before);
+  assert(await scroll.evaluate(e=>e===document.activeElement));
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  await page.screenshot({path:root+'/mobile.png',fullPage:true});
+  assert.deepEqual(errors,[]);
+  const noJs=await browser.newPage({javaScriptEnabled:false});
+  await noJs.goto(`http://127.0.0.1:${server.address().port}/large.html`);
+  await noJs.locator('#series-S0005 summary').click();
+  assert(await noJs.locator('#series-S0005 a[href="/replay/M0005"]').isVisible());
+  await noJs.close();
+  console.log('Browser passed: lanes, edges, hover, details, unchanged replay href, source navigation, refresh state/focus/scroll, mobile overflow, no JS errors');
+ }finally{await browser.close();server.close();}
+})().catch(e=>{console.error(e);process.exit(1)});

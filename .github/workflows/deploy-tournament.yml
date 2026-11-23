@@ -1,10 +1,19 @@
 name: Deploy Tournament Bot
 on:
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Leave empty for read-only verification; DEPLOY-BOT-ONLY for guarded rollout'
+        required: false
+        default: ''
+concurrency:
+  group: tournament-controller-maintenance
+  cancel-in-progress: false
 permissions:
   contents: read
 jobs:
   verify:
+    if: inputs.confirmation != 'DEPLOY-BOT-ONLY'
     runs-on: ubuntu-latest
     steps:
       - name: Read-only tournament hosting verification
@@ -22,10 +31,36 @@ jobs:
             import pathlib,json,subprocess
             s=json.loads(pathlib.Path('data/tournament-state.json').read_text())
             c=json.loads(pathlib.Path('tournament-bot.json').read_text())
-            print('DEPLOYED_REVISION',pathlib.Path('data/map-choice-timer-deployed-revision').read_text().strip())
+            revision=pathlib.Path('data/bot-only-deployed-revision')
+            if not revision.exists(): revision=pathlib.Path('data/map-choice-timer-deployed-revision')
+            print('DEPLOYED_REVISION',revision.read_text().strip())
             print('NATIVE_REMOTE_HOST',c['server'].get('remoteHost',{}).get('publicHost'))
             print('ACTIVE_MATCHES',[(m['Id'],m['Status'],m.get('HostingHostId'),m.get('FailureReason')) for m in s['Matches'].values() if m['Status'] in ['Queued','StartingServer','WaitingForPlayers','Playing']])
             t=s['Tournaments']['T013']
             print('MAP_CHOICES',[(sid,s['Series'][sid].get('MapChoiceTimer')) for sid in t['SeriesIds'] if s['Series'][sid]['Status']=='AwaitingMapPicks'])
             print('BOT_STARTED_AT',subprocess.check_output(['docker','inspect','--format','{{.State.StartedAt}}','ymca-tournament-bot'],text=True).strip())
             PY
+  guarded-update:
+    if: inputs.confirmation == 'DEPLOY-BOT-ONLY'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy only bot binaries over the pinned game image after safety checks
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          command_timeout: 25m
+          script: |
+            set -eu
+            umask 077
+            repo="$HOME/src/YMCA-tournament"
+            cd "$repo"
+            git fetch origin feature/tournament-remote-host
+            revision='${{ github.sha }}'
+            git merge-base --is-ancestor "$revision" FETCH_HEAD
+            script=$(mktemp)
+            trap 'rm -f "$script"' EXIT
+            git show "$revision:TournamentBot/deploy/update-bot-only.sh" > "$script"
+            sh "$script" "$revision" "$repo"

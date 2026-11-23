@@ -382,6 +382,8 @@ public sealed partial class TournamentCoordinator
                 throw new InvalidOperationException("The tournament map pool is empty.");
 
             Shuffle(tournament.Entrants);
+            if (tournament.Format == TournamentFormat.DoubleElimination)
+                tournament.BracketRoutingVersion = 1;
             tournament.MapPool = ActiveMapPool(state, tournament.UseGeneratedMaps)
                 .Where(map => tournament.Mode == TournamentMode.OneVsOne || map.PlayerCount == 0 || map.PlayerCount >= 4)
                 .Select(map => new TournamentMap { Uid = map.Uid, Title = map.Title, PlayerCount = map.PlayerCount })
@@ -681,7 +683,19 @@ public sealed partial class TournamentCoordinator
         }
 
         var pairings = new List<(ulong First, ulong Second)>();
-        if (tournament.Format == TournamentFormat.SingleElimination)
+        var slots = new Dictionary<(ulong, ulong), string>();
+        if (tournament.Format == TournamentFormat.DoubleElimination && tournament.BracketRoutingVersion != 0)
+        {
+            if (tournament.BracketRoutingVersion != 1)
+                throw new InvalidOperationException("Unsupported bracket routing version.");
+            foreach (var pairing in DoubleEliminationRouting.Ready(tournament,
+                tournament.SeriesIds.Select(id => state.Series[id])))
+            {
+                pairings.Add((pairing.First, pairing.Second));
+                slots[(pairing.First, pairing.Second)] = pairing.SlotId;
+            }
+        }
+        else if (tournament.Format == TournamentFormat.SingleElimination)
         {
             var pairingCount = active.Count / 2;
             if (tournament.RoundNumber == 0 && (active.Count & (active.Count - 1)) != 0)
@@ -755,6 +769,7 @@ public sealed partial class TournamentCoordinator
                 PlayerTwoDiscordId = pairing.Second,
                 TournamentRound = tournament.RoundNumber,
                 IsThirdPlaceMatch = isThirdPlaceMatch,
+                BracketSlotId = slots.GetValueOrDefault(pairing, ""),
                 Bracket = isThirdPlaceMatch ? "Third place" : active.Count == 2 ? "Final"
                     : tournament.Format == TournamentFormat.DoubleElimination && tournament.Losses[pairing.First] > 0
                         ? "Lower bracket" : "Upper bracket",

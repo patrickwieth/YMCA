@@ -19,10 +19,23 @@ public static class MatchResolutionChoices
             .Select(choice => choice with { Name = choice.Name.Length <= 100 ? choice.Name : choice.Name[..97] + "..." }).ToList();
     }
 
-    public static ulong Winner(MatchRecord match, string choice) => choice switch
+    public static ulong Winner(MatchRecord match, string choice)
     {
-        var value when value == match.Id + ":one" => match.PlayerOneDiscordId,
-        var value when value == match.Id + ":two" => match.PlayerTwoDiscordId,
-        _ => throw new InvalidOperationException("Select a winning side from this match's autocomplete choices.")
-    };
+        choice = choice.Trim();
+        if (choice.Equals(match.Id + ":one", StringComparison.OrdinalIgnoreCase)) return match.PlayerOneDiscordId;
+        if (choice.Equals(match.Id + ":two", StringComparison.OrdinalIgnoreCase)) return match.PlayerTwoDiscordId;
+        // Never reinterpret stale structured selections from a different pairing as a name.
+        if (!System.Text.RegularExpressions.Regex.IsMatch(choice, @"^[MS]\d+:(one|two)$",
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+        {
+            bool Matches(bool one) => new[] { SideName(match, one),
+                one ? match.PlayerOneOpenRaName : match.PlayerTwoOpenRaName,
+                one ? match.PlayerOneTeammateOpenRaName : match.PlayerTwoTeammateOpenRaName,
+                one ? match.PlayerOneTeamName : match.PlayerTwoTeamName }
+                .Any(name => !string.IsNullOrWhiteSpace(name) && name.Equals(choice, StringComparison.OrdinalIgnoreCase));
+            var first = Matches(true); var second = Matches(false);
+            if (first != second) return first ? match.PlayerOneDiscordId : match.PlayerTwoDiscordId;
+        }
+        throw new InvalidOperationException($"Winner is unknown or ambiguous for {match.Id}. Select the winner again from this pairing's suggestions, or enter the exact player/team name.");
+    }
 }

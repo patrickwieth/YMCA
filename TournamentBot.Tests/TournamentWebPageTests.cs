@@ -28,6 +28,20 @@ public sealed class TournamentWebPageTests
     }
 
     [Test]
+    public void WalkoverHighlightsWinnerAndSourceWithoutFabricatingGameWins()
+    {
+        var state = Fixture();
+        state.Series["S0001"].Wins.Clear();
+        state.Series["S0001"].MatchIds.Clear();
+        state.Series["S0001"].ForfeitWinnerDiscordId = 1;
+        var html = TournamentWebPage.Tournament(state, "T001")!;
+        Assert.That(html, Does.Contain("class='side winner' data-player='1'"));
+        Assert.That(html, Does.Contain("← Winner S0001").And.Contain("← Loser S0001"));
+        Assert.That(html, Does.Not.Contain("/replay/M0001"));
+        Assert.That(state.Series["S0001"].Wins, Is.Empty);
+    }
+
+    [Test]
     public void BracketEscapesNamesShowsRealConnectionsAndNeverLeaksCredentials()
     {
         var html = TournamentWebPage.Tournament(Fixture(), "t001")!;
@@ -68,6 +82,48 @@ public sealed class TournamentWebPageTests
         t.Status = TournamentStatus.Registration;
         Assert.That(TournamentWebPage.Tournament(state, t.Id), Does.Contain("bracket will appear"));
         Assert.That(TournamentWebPage.Index(state), Does.Contain("/tournament/T001").And.Not.Contain("PRIVATE_"));
+    }
+
+    [Test]
+    public async Task SeparateLanesAndExpandableDetailsPreserveHistoricalStateAndReplayUrls()
+    {
+        var state = new TournamentState();
+        var t = new TournamentRecord { Id = "PREVIEW", Name = "Bracket layout preview — synthetic results", Format = TournamentFormat.DoubleElimination,
+            Status = TournamentStatus.Completed, WinsRequired = 2, ChampionDiscordId = 1 };
+        state.Tournaments[t.Id] = t;
+        for (ulong p = 1; p <= 8; p++)
+        {
+            state.Players[p] = new RegisteredPlayer { OpenRaName = new[] { "LördenMcFairGenü", "DavidWasLos", "Boris", "Fux", "der Peer", "Todesbrezel", "VivaLaPanik", "yesyoulike" }[p - 1] };
+            t.Entrants.Add(p);
+        }
+        void Add(int round, string lane, ulong one, ulong two)
+        {
+            var id = "S" + (state.Series.Count + 1).ToString("D4"); var mid = "M" + (state.Series.Count + 1).ToString("D4");
+            t.SeriesIds.Add(id);
+            state.Series[id] = new TournamentSeries { Id = id, TournamentId = t.Id, TournamentRound = round, Bracket = lane,
+                PlayerOneDiscordId = one, PlayerTwoDiscordId = two, WinsRequired = 2, Status = TournamentSeriesStatus.Completed,
+                Wins = new() { [one] = 2, [two] = 1 }, MatchIds = new() { mid } };
+            state.Matches[mid] = new MatchRecord { Id = mid, TournamentId = t.Id, SeriesGameNumber = 1,
+                Status = MatchStatus.Completed, FinalWinnerDiscordId = one, MapTitle = "Tactical Two Sides", ReplayPath = "/private/replay.orarep" };
+        }
+        Add(1,"Upper bracket",1,2); Add(1,"Upper bracket",3,4); Add(1,"Upper bracket",5,6); Add(1,"Upper bracket",7,8);
+        Add(2,"Upper bracket",1,3); Add(2,"Upper bracket",5,7); Add(2,"Lower bracket",2,4); Add(2,"Lower bracket",6,8);
+        Add(3,"Upper bracket",1,5); Add(3,"Lower bracket",2,7); Add(3,"Lower bracket",6,3);
+        Add(4,"Lower bracket",2,6); Add(5,"Lower bracket",2,5); Add(6,"Final",1,2);
+        var before = System.Text.Json.JsonSerializer.Serialize(state);
+        var html = TournamentWebPage.Tournament(state,t.Id)!;
+        Assert.That(System.Text.Json.JsonSerializer.Serialize(state), Is.EqualTo(before));
+        Assert.That(System.Text.RegularExpressions.Regex.Matches(html,"class='bracket-lane'").Count, Is.EqualTo(3));
+        Assert.That(html, Does.Contain("<details id='details-S0001'>").And.Contain("href='#series-S0001'"));
+        foreach (var mid in state.Matches.Keys) Assert.That(html, Does.Contain("/replay/"+mid));
+        Assert.That(html, Does.Not.Contain("/private/"));
+        var evidence = Environment.GetEnvironmentVariable("YMCA_WEB_PREVIEW");
+        if (!string.IsNullOrEmpty(evidence))
+        {
+            Directory.CreateDirectory(evidence);
+            await File.WriteAllTextAsync(Path.Combine(evidence,"large.html"),html);
+            await File.WriteAllTextAsync(Path.Combine(evidence,"tournament-assets.js"),TournamentWebPage.Script);
+        }
     }
 
     [Test]

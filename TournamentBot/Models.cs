@@ -165,6 +165,7 @@ public sealed class TournamentSeries
     public ulong PlayerTwoDiscordId { get; set; }
     public int TournamentRound { get; set; }
     public string Bracket { get; set; } = "";
+    public string BracketSlotId { get; set; } = "";
     public bool IsThirdPlaceMatch { get; set; }
     public int WinsRequired { get; set; } = 1;
     public TournamentSeriesStatus Status { get; set; }
@@ -176,6 +177,8 @@ public sealed class TournamentSeries
 
 public sealed class TournamentRecord
 {
+    // Missing in historical state => retain the original loss-group scheduler.
+    public int BracketRoutingVersion { get; set; }
     public bool UseGeneratedMaps { get; set; }
     public TournamentMapSelection MapSelection { get; set; } = TournamentMapSelection.PlayerChoice;
     public Dictionary<int, List<TournamentMap>> MapsByRound { get; set; } = new();

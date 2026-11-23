@@ -22,6 +22,24 @@ public sealed class MatchResolutionChoicesTests
     }
 
     [Test]
+    public void ExactNamesAreAcceptedOnlyWhenUniqueAndNeverOverrideStaleSelections()
+    {
+        var match = Match();
+        Assert.That(MatchResolutionChoices.Winner(match, " alice "), Is.EqualTo(111));
+        Assert.That(MatchResolutionChoices.Winner(match, "m0023:TWO"), Is.EqualTo(222));
+        Assert.Throws<InvalidOperationException>(() => MatchResolutionChoices.Winner(match, "Ali"));
+        match.PlayerOneTeamName = "Blue";
+        match.PlayerOneTeammateOpenRaName = "Charlie";
+        Assert.That(MatchResolutionChoices.Winner(match, "Charlie"), Is.EqualTo(111));
+        Assert.That(MatchResolutionChoices.Winner(match, "blue"), Is.EqualTo(111));
+        match.PlayerTwoOpenRaName = "Charlie";
+        Assert.Throws<InvalidOperationException>(() => MatchResolutionChoices.Winner(match, "Charlie"));
+        match.PlayerOneOpenRaName = "S0002:one";
+        Assert.Throws<InvalidOperationException>(() => MatchResolutionChoices.Winner(match, "S0002:one"));
+        Assert.That(MatchResolutionChoices.Winner(match, "M0023:one"), Is.EqualTo(111));
+    }
+
+    [Test]
     public void TeamsResolveToRepresentativesAndCompletedMatchesAreNotOffered()
     {
         var match = Match(); match.PlayerOneTeamName = "Blue"; match.PlayerOneTeammateOpenRaName = "Charlie";

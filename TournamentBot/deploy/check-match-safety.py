@@ -3,7 +3,23 @@
 import datetime
 import json
 import pathlib
+import re
 import sys
+
+
+def parse_retention(value):
+    # Python 3.9 accepts 3/6 fractional digits, .NET emits seven. Round UP
+    # sub-microsecond precision so normalization cannot release a host early.
+    match = re.fullmatch(r'(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,7}))?(Z|[+-]\d{2}:\d{2})', value)
+    if not match:
+        raise ValueError('Invalid timezone-aware retention timestamp')
+    base, fraction, zone = match.groups()
+    fraction = fraction or ''
+    normalized = base + '.' + fraction[:6].ljust(6, '0') + zone.replace('Z', '+00:00')
+    parsed = datetime.datetime.fromisoformat(normalized)
+    if any(c != '0' for c in fraction[6:]):
+        parsed += datetime.timedelta(microseconds=1)
+    return parsed.astimezone(datetime.timezone.utc)
 
 
 def is_busy(state, now):
@@ -16,7 +32,7 @@ def is_busy(state, now):
         if match.get('Status') in ('Queued', 'StartingServer', 'WaitingForPlayers', 'Playing'):
             return True
         retain = match.get('ServerRetainUntilUtc')
-        if retain and datetime.datetime.fromisoformat(retain.replace('Z', '+00:00')).astimezone(datetime.timezone.utc) > now:
+        if retain and parse_retention(retain) > now:
             return True
     return False
 
