@@ -1,10 +1,10 @@
-# Bracket UI redesign — local, not deployed
+# Bracket UI redesign — deployed 2026-11-23
 
 User priorities: (1) standard fixed double-elimination routing/cross-feeds that delay rematches, especially in the lower bracket; (2) a readable interactive bracket, inspired by the BieberLAN tournament tree; (3) existing Discord replay links must remain usable.
 
 The supplied reference URL returned a Cloudflare challenge to the available HTTP client. No claim is made to have inspected its rendered UI. Implementation follows the user's described interaction goals, not copied third-party assets.
 
-## Implemented locally
+## Implemented
 
 - Separate sections and navigation for upper bracket, lower bracket, final and third place (where recorded).
 - Compact series summaries with players, scores and status. Native expandable details show maps, individual games, deadlines, walkovers and unchanged replay/spectator links. Details and links work without JavaScript.
@@ -18,11 +18,11 @@ The supplied reference URL returned a Cloudflare challenge to the available HTTP
 
 Rendering is read-only. No tournament state migration, re-seeding, new match IDs, result edits, replay relocation, deletion or route changes. Regression test serializes the full fixture before/after rendering and checks every original `/replay/M...` href. Existing deployed replay pages/downloads remain untouched.
 
-**Pairing algorithm task #1 is still pending.** These changes do not pretend to correct historical pairings or introduce a new double-elimination scheduler. Historical source links are inferred from each player's last recorded earlier-round series, as before. Future fixed-bracket implementation should provide explicit slot/source metadata and version its scheduling so completed tournaments are never recalculated.
+**Versioned fixed routing is also deployed**; see `tournament-fixed-routing.md`. Historical pairings remain unchanged. Source links reflect each player's last recorded earlier-round series; new tournaments additionally persist fixed slot IDs. Completed tournaments are never recalculated.
 
 ## Validation
 
-- .NET suite: 124 passed, one optional remote smoke skipped.
+- Pre-deployment .NET suite: 133 passed, one optional remote smoke skipped.
 - Browser: isolated headless Edge, desktop 1440x1000 and mobile 390x844. Verified separate lanes; same-lane adjacent edges only; hover highlights; source navigation; details; unchanged replay hrefs; refresh retention of expanded state/focus/scroll; no page-wide mobile overflow; no JavaScript errors; replay access through native details with JavaScript disabled.
 - Inspected actual desktop/mobile screenshots, generated from explicitly labeled synthetic fixtures (not real T013 results).
 
@@ -35,4 +35,4 @@ YMCA_PLAYWRIGHT='E:/src/YMCA/.tmp/bracket-browser/node_modules/playwright' YMCA_
 
 Browser test requires Playwright; paths are environment-configurable. Local Node 18 required Playwright 1.48.2; it uses the installed Edge executable, not a browser downloaded by the package. Prefer current Node/Playwright for CI. Neither is a production dependency.
 
-Changes are local in the tournament feature worktree. No commit/push/deployment or bot restart performed for this UI change. Existing unrelated pending `MatchResolutionChoices.cs` edit is not part of this task.
+Published with the authorized bot-only rollout **45249852873**, source `61f9a49aeeb58ab04b90aa5998f981260440f5da`, along with fixed routing, exact-name resolution and timestamp safety. Live T013 desktop/mobile checks passed; all 62 public replays and 62 maps remain byte-identical. Game binaries/assets were not changed.
