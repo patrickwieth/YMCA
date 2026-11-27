@@ -50,7 +50,9 @@ of the same total (distance,x,y) priority. Duplicate priorities describe the sam
 cell and were already skipped by the visited set, so removing queued duplicates
 does not change traversal order. Building-audit output, the 30-case economy report,
 and all six 4P seed42 Plains planning/debug files remain byte-identical before/after.
-The isolated CA build passes. Check the next CI run before claiming Mono success.
+The isolated CA build passes. Follow-up `942f86fc` was pushed; CI run
+`46002260370` completed successfully, including Mono. This is development CI success,
+not a release/deployment or completion of the still-local urban art work.
 
 ## Still unfinished
 

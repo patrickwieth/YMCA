@@ -83,13 +83,28 @@ must fit the artwork; do not distort source pieces to force incompatible joins.
   Tile-edge snow overdraw was found in review and removed by drawing all asphalt
   overlays after the ground layer. Large buildings are given larger lots, and test
   vehicles are placed off the main streets.
+- Source-cut lane dashes now cover both street axes; copied zebra-stripe pieces
+  form a crossing in one orientation. A bounded exact-palette mask removes asphalt
+  and pole remnants without recoloring the retained paint. `marking_stamps` records
+  every placement; markings are clipped to existing road coverage, not used to
+  expand roads. Reverse/other crossing orientations remain to be sourced.
+- `source-cuts-batch04.json` also isolates a genuine rounded east-facing pavement
+  corner, a plain paving strip, and a curb strip beyond the original drain.
+  `tools/prepare_urban_sidewalk_sources.py` checks repeated straight runs in both
+  native axes. Keeping the original drain-containing strip separate avoids repeated
+  drains along an entire block. These source runs are not yet four-sided loops.
 - This is an internal Pillow assembly, **not an engine render or finished street
-  kit**. Curbs, sidewalks, markings, material transitions, more building variety,
+  kit**. Complete curb/sidewalk joins, the remaining marking variants, material transitions, more building variety,
   collision footprints, garrison ports and native runtime registration remain
   pending. The uniform asphalt core is not presented as final urban street art.
 - `tools/test_urban_source_cuts.py` checks donor provenance, source replacement
-  rejection, reproducible source pixels, snow alpha preservation and connected road
-  masks. These checks do not establish artistic acceptance, gameplay or pathfinding.
+  rejection, reproducible source pixels, snow alpha preservation, connected road
+  masks and source-only marking composition without changing road alpha coverage. These checks do not establish artistic acceptance, gameplay or pathfinding.
+- After development checkpoint `87dd31d0` (pushed to `isometric`), extraction
+  continued with two native-density sidewalk/curb source strips in the two street
+  axes (`source-cuts-batch03.json`). These are isolated source fragments, not yet
+  seamless edge modules. Repeated drains/details, end cuts and corner joins still
+  require review before they are added to the road assembly.
 - Winter setting and supplied menu-preview source are recorded in
   `urban-warfare-map.md`. The suggested sand-to-snow color-shift exception applies
   only to terrain, not to generating/repainting buildings or vehicles.

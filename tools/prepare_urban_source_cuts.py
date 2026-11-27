@@ -82,6 +82,11 @@ def extract(spec):
             x, y = point
             pixels[x, y] = (*pixels[x, y][:3], 0)
             queue.extend([(x-1,y),(x+1,y),(x,y-1),(x,y+1)])
+    if 'retain_rgb' in spec:
+        # Optional exact source-palette selection within the hand-bounded mask,
+        # e.g. paint without its surrounding asphalt. This only removes alpha.
+        allowed = {tuple(rgb) for rgb in spec['retain_rgb']}
+        masked.putdata([p if p[:3] in allowed else (*p[:3],0) for p in masked.getdata()])
     bounds = masked.getbbox()
     assert bounds is not None
     cut = masked.crop(bounds)

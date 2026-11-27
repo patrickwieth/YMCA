@@ -8,7 +8,7 @@ from pathlib import Path
 from PIL import Image
 
 from prepare_urban_source_cuts import CUTS, SOURCE_HASHES, extract, source_image, source_reference
-from prepare_urban_road_core import DIRECTIONS, road_mask
+from prepare_urban_road_core import DIRECTIONS, mark_road, road_mask
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -75,6 +75,23 @@ class UrbanSourceCutsTests(unittest.TestCase):
         snow = Image.open(directory/'snow-from-sand.png').convert('RGBA')
         self.assertEqual(sand.size, snow.size)
         self.assertEqual(sand.getchannel('A').tobytes(), snow.getchannel('A').tobytes())
+
+    def test_source_markings_reproduce_without_changing_road_coverage(self):
+        directory = ROOT/'art-source/urban-warfare/road-core'
+        catalog = {r['id']:r for r in json.loads((ROOT/'art-source/urban-warfare/cutout-catalog.json').read_text())}
+        colors = set()
+        for name in ['street-dash-fall-east','street-dash-rise-east','crosswalk-stripe-rise-east']:
+            sprite = Image.open(ROOT/catalog[name]['output']).convert('RGBA')
+            colors.update(p[:3] for p in sprite.getdata() if p[3])
+        for connections,crossing,suffix in [(5,False,'05'),(10,False,'0a'),(5,True,'05-crosswalk')]:
+            core = Image.open(directory/f'road-{connections:02x}.png').convert('RGBA')
+            marked, _ = mark_road(core,connections,catalog,crossing)
+            saved = Image.open(directory/f'marked-road-{suffix}.png').convert('RGBA')
+            self.assertEqual(marked.tobytes(),saved.tobytes())
+            self.assertEqual(marked.getchannel('A').tobytes(),core.getchannel('A').tobytes())
+            for pixel,base in zip(marked.getdata(),core.getdata()):
+                if pixel[3] and pixel[:3] != base[:3]:
+                    self.assertIn(pixel[:3],colors)
 
     def test_road_connections_have_no_pixel_gap(self):
         for bit, (du,dv) in enumerate(DIRECTIONS):

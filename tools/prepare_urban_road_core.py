@@ -1,14 +1,14 @@
 """Internal native-grid assembly test: cut/paste asphalt plus allowed sand color shift.
 
-No runtime tileset registration. This is the road connectivity/core stage, not a
-finished street kit: sidewalk/curb joins and road markings still need source cuts.
-All asphalt RGB comes from a bounded source rectangle, without synthetic noise.
+No runtime tileset registration. Source-cut markings are now applied separately;
+continuous four-sided sidewalks/curb joins remain unfinished. All asphalt RGB comes
+from a bounded source rectangle; paint is pasted from source, without synthetic noise.
 """
 import hashlib
 import json
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / 'art-source/urban-warfare'
@@ -42,6 +42,35 @@ def road_mask(connections):
     return mask
 
 
+def mark_road(tile, connections, catalog, crossing=False):
+    """Paste native source dashes/bars; never draw vector replacement paint."""
+    overlay = Image.new('RGBA', tile.size)
+    instances = []
+    def stamp(name, center):
+        record = catalog[name]
+        sprite = Image.open(ROOT/record['output']).convert('RGBA')
+        gx,gy = record['ground_in_cutout']
+        at = (center[0]-gx, center[1]-gy)
+        overlay.alpha_composite(sprite, at)
+        instances.append(dict(asset=name, at=list(at)))
+    if crossing and connections == 5:
+        # Source stripe runs across the u-axis road. Three overlapping source
+        # copies span its width; four separately pasted bars form the crossing.
+        for row in range(4):
+            for part in (-1,0,1):
+                stamp('crosswalk-stripe-rise-east', (82-6*row+12*part,41-3*row-6*part))
+    elif connections == 5:
+        for point in [(48,24),(80,40)]:
+            stamp('street-dash-fall-east', point)
+    elif connections == 10:
+        for point in [(48,40),(80,24)]:
+            stamp('street-dash-rise-east', point)
+    overlay.putalpha(ImageChops.multiply(overlay.getchannel('A'),tile.getchannel('A')))
+    result = tile.copy()
+    result.alpha_composite(overlay)
+    return result, instances
+
+
 def prepare():
     OUT.mkdir(parents=True, exist_ok=True)
     hashes = {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -71,6 +100,14 @@ def prepare():
         tile.save(OUT / f'road-{connections:02x}.png')
         tiles[connections] = tile
 
+    catalog = {r['id']:r for r in json.loads((ART/'cutout-catalog.json').read_text())}
+    marked, stamps = {}, {}
+    for connections in (5,10):
+        marked[connections], stamps[str(connections)] = mark_road(tiles[connections], connections, catalog)
+        marked[connections].save(OUT/f'marked-road-{connections:02x}.png')
+    crossing, stamps['5-crosswalk'] = mark_road(tiles[5],5,catalog,crossing=True)
+    crossing.save(OUT/'marked-road-05-crosswalk.png')
+
     # Unscaled source assets in a freely recomposed 128x64 native-grid test.
     # A visual development assembly, not evidence of engine passability or balance.
     board = Image.new('RGBA', (1536,864), (34,42,48,255))
@@ -88,8 +125,10 @@ def prepare():
     for u,v in sorted(roads, key=lambda p: sum(p)):
         connections = sum(1 << bit for bit,(du,dv) in enumerate(DIRECTIONS)
                           if (u+du,v+dv) in roads)
-        board.alpha_composite(tiles[connections], origin(u,v))
-    catalog = {r['id']:r for r in json.loads((ART/'cutout-catalog.json').read_text())}
+        surface = marked.get(connections,tiles[connections])
+        if connections == 5 and u+1 in (1,5,9):
+            surface = crossing
+        board.alpha_composite(surface, origin(u,v))
     placements = [
         ('city-shop-block',3,3),
         ('village-cottage-porch',7,3), ('snow-log-house',6.5,8),
@@ -106,11 +145,14 @@ def prepare():
         gx,gy = record['ground_in_cutout']
         board.alpha_composite(cut,(x+64-gx,y+32-gy))
     board.save(OUT/'native-grid-assembly.png')
-    manifest = dict(status='internal road-core assembly; no sidewalks/curbs or runtime registration',
+    manifest = dict(status='internal source-marked road assembly; continuous sidewalks/curbs and runtime registration pending',
                     sources=hashes, asphalt_crop=list(ROAD_CROP), tile_size=[128,64],
                     asphalt_method='repeat exact 16x16 source crop; binary grid masks only',
                     snow_method='luma=(77R+150G+29B)//256; RGB=luma+(59,72,79), capped at255; source alpha',
-                    connections={'1':'u-','2':'v+','4':'u+','8':'v-'}, placements=placements)
+                    connections={'1':'u-','2':'v+','4':'u+','8':'v-'}, placements=placements,
+                    marking_stamps=stamps,
+                    marking_sources={name:catalog[name] for name in
+                        ['street-dash-fall-east','street-dash-rise-east','crosswalk-stripe-rise-east']})
     (OUT/'provenance.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
     for name,digest in hashes.items():
         assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest() == digest
