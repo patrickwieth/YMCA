@@ -35,6 +35,15 @@ This is not a release, tag, deployment or merge into Game-master/Game-release.
 - Workflows inspected: branch push does not invoke release packaging (tags only)
   or deployment (manual). No release validation or live deployment is claimed.
 
+## CI follow-up
+
+Checkpoint `87dd31d0` was pushed to `isometric`. CI run `45997669015` built the
+engine and mod but failed when Modular.Tests tried copying the relocated lab from
+its old path. Corrected the project input to
+`mods/ca/development-maps/modular-gdi-lab.oramap`; all 365 Modular.Tests pass in an
+isolated local output directory. This is a test-fixture path correction, not a map
+content change. The follow-up CI outcome must still be checked after pushing it.
+
 ## Still unfinished
 
 Urban Warfare is not a playable map or registered runtime art set. The current
