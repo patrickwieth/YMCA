@@ -32,8 +32,6 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		static bool TryGenerate(MapPlan plan, MapGenerationOptions options, MersenneTwister random)
 		{
-			var centerX = (plan.Width - 1) / 2.0;
-			var centerY = (plan.Height - 1) / 2.0;
 			// Native isometric axes have slope +/-2 in staggered MPos, not +/-1.
 			// Follow those axes so long cliff faces join directly instead of placing
 			// an inside/outside corner at almost every cell along a shallow raster line.
@@ -51,49 +49,27 @@ namespace OpenRA.Mods.CA.MapGeneration
 				return across - Math.Sin(along / (double)Math.Min(plan.Width, plan.Height) * Math.PI * 2 + wavePhase) * waveAmplitude / 2;
 			}
 
-			double ChannelY(double x)
-			{
-				return centerY + (x - centerX) * channelSlope +
-					Math.Sin((x - centerX) / plan.Width * Math.PI * 2 + wavePhase) * waveAmplitude;
-			}
-
 			for (var y = 0; y < plan.Height; y++)
 				for (var x = 0; x < plan.Width; x++)
 					if (Math.Abs(BankDistance(x, y)) <= halfWaterWidth / 2.0)
 						plan.SetTerrain(x, y, PlannedTerrain.Water);
 
-			// Cross the water at a shallow random angle. Shallow crossings stay long while
-			// varying the direction and silhouette of the contested causeway between seeds.
-			var channelAngle = Math.Atan(channelSlope);
-			var crossingDelta = (18 + random.NextFloat() * 17) * Math.PI / 180;
-			if (random.Next(2) == 0)
-				crossingDelta = -crossingDelta;
-			var causewayAngle = channelAngle + crossingDelta;
-			var causewayCenterY = ChannelY(centerX);
-			var causewayHalfLength = (int)Math.Ceiling((halfWaterWidth + 9) / Math.Sin(Math.Abs(crossingDelta)));
-			causewayHalfLength = Math.Clamp(causewayHalfLength, 28, (int)(Math.Min(plan.Width, plan.Height) * 0.43));
-			var causewayHalfWidth = Math.Clamp(Math.Min(plan.Width, plan.Height) / 32, 4, 6);
-			var causewayCos = Math.Cos(causewayAngle);
-			var causewaySin = Math.Sin(causewayAngle);
-			var curveAmplitude = random.NextFloat() * Math.Min(10, halfWaterWidth * 0.7);
-			var secondCurveAmplitude = (random.NextFloat() - 0.5) * curveAmplitude * 0.7;
-			for (var step = -causewayHalfLength * 2; step <= causewayHalfLength * 2; step++)
+			// Specify the diagonal in native world-cell axes, not the anisotropic
+			// staggered debug grid: three cells along the river per cell across it.
+			var tangent = bankNormal.X == 0 ? new CVec(1, 0) : new CVec(0, 1);
+			var crossingOffset = (int)(Math.Min(plan.Width, plan.Height) * 0.18) * (random.Next(2) == 0 ? -1 : 1);
+			var diagonal = random.Next(2) == 0 ? -3.0 : 3.0;
+			for (var y = 0; y < plan.Height; y++)
+			for (var x = 0; x < plan.Width; x++)
 			{
-				var along = step / 2.0;
-				var normalized = along / causewayHalfLength;
-				var curveOffset =
-					curveAmplitude * Math.Sin(normalized * Math.PI) +
-					secondCurveAmplitude * Math.Sin(normalized * Math.PI * 2);
-				var x = (int)Math.Round(centerX + along * causewayCos - curveOffset * causewaySin);
-				var y = (int)Math.Round(causewayCenterY + along * causewaySin + curveOffset * causewayCos);
-				PaintDisk(plan, new PlanPoint(x, y), causewayHalfWidth, (px, py) =>
-				{
-					if (plan.TerrainAt(px, py) != PlannedTerrain.Water)
-						return;
-
-					plan.SetTerrain(px, py, PlannedTerrain.ShallowWater);
-					plan.AddFeature(px, py, PlannedFeature.Bottleneck);
-				});
+				if (plan.TerrainAt(x, y) != PlannedTerrain.Water) continue;
+				var cell = MountainPlateauPlanner.Cell(x, y);
+				var along = tangent.X == 0 ? cell.Y - nativeCenter.Y : cell.X - nativeCenter.X;
+				var across = BankDistance(x, y);
+				// One constant-width strip avoids scalloped edges from stamping rounded disks.
+				if (Math.Abs(across - (along - crossingOffset) / diagonal) / Math.Sqrt(1 + 1 / (diagonal * diagonal)) > 2) continue;
+				plan.SetTerrain(x, y, PlannedTerrain.ShallowWater);
+				plan.AddFeature(x, y, PlannedFeature.Bottleneck);
 			}
 
 			PlaceTeamSpawns(plan, options.Players, bankNormal, halfWaterWidth);
@@ -207,7 +183,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 			var center = MountainPlateauPlanner.Cell(plan.Width / 2, plan.Height / 2);
 			var tangent = bankNormal.X == 0 ? new CVec(1, 0) : new CVec(0, 1);
-			var depth = halfWaterWidth / 2 + Math.Clamp(Math.Min(plan.Width, plan.Height) / 6, 14, 32);
+			var depth = halfWaterWidth / 2 + Math.Clamp(Math.Min(plan.Width, plan.Height) / 5, 20, 40);
 			var bankCenter = center + bankNormal * (lowerBank ? depth : -depth);
 			var reach = Math.Max(plan.Width, plan.Height);
 			var available = Enumerable.Range(-reach, 2 * reach + 1).Where(along =>
@@ -253,11 +229,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 			{
 				var firstTeamPlayers = (options.Players + 1) / 2;
 				var patchRadius = 7;
-				if (!PlaceAllResourcePatches(plan, options.Players, firstTeamPlayers, patchRadius, random, bankNormal))
+				if (!PlaceAllResourcePatches(plan, options.Players, firstTeamPlayers, patchRadius, random, bankNormal, !options.FiniteResources) ||
+					!PlaceDistributedResourcePatches(plan, firstTeamPlayers, patchRadius, random, bankNormal, !options.FiniteResources))
 					return false;
 			}
 
-			if (options.Resources != ResourceFieldLayout.None && !options.FiniteResources)
+			if (options.Resources == ResourceFieldLayout.Glitter && !options.FiniteResources)
 				PlaceSymmetricActors(plan, PlannedFeature.ResourceGenerator, Math.Max(1, options.Players / 4), random);
 
 			if (options.TechBuildings == TechBuildingDensity.Sparse)
@@ -280,7 +257,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 		}
 
 		static bool PlaceAllResourcePatches(
-			MapPlan plan, int playerCount, int firstTeamPlayers, int radius, MersenneTwister random, CVec bankNormal)
+			MapPlan plan, int playerCount, int firstTeamPlayers, int radius, MersenneTwister random, CVec bankNormal, bool generators, int approach = 11)
 		{
 			var centers = new List<PlanPoint>();
 			for (var player = 0; player < plan.Spawns.Count; player++)
@@ -294,7 +271,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 					var angle = attempt < 41
 						? outwardAngle + (attempt % 2 == 0 ? -1 : 1) * ((attempt + 1) / 2) * 0.025
 						: random.NextFloat() * Math.PI * 2;
-					var distance = radius + 11;
+					var distance = radius + approach;
 					var center = new PlanPoint(
 						(int)Math.Round(spawn.X + Math.Cos(angle) * distance),
 						(int)Math.Round(spawn.Y + Math.Sin(angle) * distance));
@@ -310,7 +287,52 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}
 
 			foreach (var center in centers)
+			{
 				PaintResourcePatch(plan, center, radius);
+				if (generators) plan.AddFeature(center.X, center.Y, PlannedFeature.ResourceGenerator);
+			}
+			return true;
+		}
+
+		static bool PlaceDistributedResourcePatches(MapPlan plan, int firstTeamPlayers, int radius, MersenneTwister random, CVec bankNormal, bool generators)
+		{
+			var middle = MountainPlateauPlanner.Cell(plan.Width / 2, plan.Height / 2);
+			for (var bank = 0; bank < 2; bank++)
+			for (var field = 0; field < 2 * (bank == 0 ? firstTeamPlayers : plan.Spawns.Count - firstTeamPlayers); field++)
+			{
+				// Maximize separation from already placed fields rather than selecting
+				// another point on a small ring around each player's starting patch.
+				var distance = Enumerable.Repeat(int.MaxValue, plan.Width * plan.Height).ToArray();
+				var pending = new Queue<MPos>();
+				for (var y = 0; y < plan.Height; y++) for (var x = 0; x < plan.Width; x++)
+					if (plan.HasFeature(x, y, PlannedFeature.Resource))
+					{ distance[x + y * plan.Width] = 0; pending.Enqueue(new MPos(x, y)); }
+				while (pending.Count > 0)
+				{
+					var current = pending.Dequeue(); var nextDistance = distance[current.U + current.V * plan.Width] + 1;
+					foreach (var next in NativeNeighbors(current.U, current.V))
+						if (plan.Contains(next.U, next.V) && distance[next.U + next.V * plan.Width] > nextDistance)
+						{ distance[next.U + next.V * plan.Width] = nextDistance; pending.Enqueue(next); }
+				}
+				var choices = new List<(PlanPoint Center, int Distance, int Tie)>();
+				for (var y = radius + 3; y < plan.Height - radius - 3; y++)
+				for (var x = radius + 3; x < plan.Width - radius - 3; x++)
+				{
+					var cell = MountainPlateauPlanner.Cell(x, y);
+					var side = bankNormal.X == 0 ? cell.Y - middle.Y : cell.X - middle.X;
+					if ((bank == 0 ? side >= 0 : side <= 0) || distance[x + y * plan.Width] < radius + 8) continue;
+					if (plan.Spawns.Any(s => (MountainPlateauPlanner.Cell(s.X, s.Y) - cell).LengthSquared < 18 * 18)) continue;
+					var center = new PlanPoint(x, y);
+					if (plan.TerrainAt(x, y) == PlannedTerrain.Land) choices.Add((center, distance[x + y * plan.Width], random.Next()));
+				}
+				// Test full footprints in score order; scanning every candidate's footprint
+				// before sorting makes large-player-count generation needlessly expensive.
+				var chosen = choices.OrderByDescending(c => c.Distance).ThenBy(c => c.Tie)
+					.FirstOrDefault(c => CanPlaceResourcePatch(plan, c.Center, radius));
+				if (chosen.Distance == 0) return false;
+				PaintResourcePatch(plan, chosen.Center, radius);
+				if (generators) plan.AddFeature(chosen.Center.X, chosen.Center.Y, PlannedFeature.ResourceGenerator);
+			}
 			return true;
 		}
 
@@ -388,7 +410,6 @@ namespace OpenRA.Mods.CA.MapGeneration
 					if (!InsideResourcePatch(x - center.X, y - center.Y, radius))
 						continue;
 					plan.AddFeature(x, y, PlannedFeature.Resource);
-					plan.RemoveFeature(x, y, PlannedFeature.LaunchShore | PlannedFeature.CliffShore);
 				}
 		}
 
@@ -401,10 +422,15 @@ namespace OpenRA.Mods.CA.MapGeneration
 						continue;
 					if (!plan.Contains(x, y) || plan.TerrainAt(x, y) != PlannedTerrain.Land ||
 						plan.HasFeature(x, y, PlannedFeature.Resource | PlannedFeature.BuildClearance |
-							PlannedFeature.Bottleneck))
+							PlannedFeature.Bottleneck | PlannedFeature.LaunchShore | PlannedFeature.CliffShore))
 						return false;
 				}
 
+			// Leave a real gap between separately placed patch groups.
+			for (var y = center.Y - radius - 2; y <= center.Y + radius + 2; y++)
+				for (var x = center.X - radius - 2; x <= center.X + radius + 2; x++)
+					if (plan.Contains(x, y) && InsideResourcePatch(x - center.X, y - center.Y, radius + 2) && plan.HasFeature(x, y, PlannedFeature.Resource))
+						return false;
 			return true;
 		}
 
@@ -424,6 +450,11 @@ namespace OpenRA.Mods.CA.MapGeneration
 				{
 					var x = random.Next(8, plan.Width / 2);
 					var y = random.Next(8, plan.Height - 8);
+					if (feature == PlannedFeature.TechBuilding)
+					{
+						if (SymmetricOilPlacement.TryPlacePair(plan, new PlanPoint(x, y))) break;
+						continue;
+					}
 					var mirrorX = plan.Width - 1 - x;
 					var mirrorY = plan.Height - 1 - y;
 					if (plan.TerrainAt(x, y) != PlannedTerrain.Land ||
@@ -452,19 +483,14 @@ namespace OpenRA.Mods.CA.MapGeneration
 						continue;
 
 					var count = random.Next(4, 7);
-					for (var i = 0; i < count; i++)
+					var placed = 0;
+					for (var candidate = 0; candidate < 300 && placed < count; candidate++)
 					{
-						var dx = random.Next(-3, 4);
-						var dy = random.Next(-3, 4);
-						if (plan.Contains(center.X + dx, center.Y + dy) &&
-							plan.TerrainAt(center.X + dx, center.Y + dy) == PlannedTerrain.Land)
-							plan.AddFeature(center.X + dx, center.Y + dy, PlannedFeature.TechBuilding);
-						if (plan.Contains(mirror.X - dx, mirror.Y - dy) &&
-							plan.TerrainAt(mirror.X - dx, mirror.Y - dy) == PlannedTerrain.Land)
-							plan.AddFeature(mirror.X - dx, mirror.Y - dy, PlannedFeature.TechBuilding);
+						var point = new PlanPoint(center.X + random.Next(-5, 6), center.Y + random.Next(-5, 6));
+						if (SymmetricOilPlacement.TryPlacePair(plan, point)) placed++;
 					}
 
-					break;
+					if (placed != 0) break;
 				}
 			}
 		}

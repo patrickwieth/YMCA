@@ -1,0 +1,30 @@
+diff --git a/engine/OpenRA.Mods.Common/Traits/Buildings/BridgePlaceholder.cs b/engine/OpenRA.Mods.Common/Traits/Buildings/BridgePlaceholder.cs
+--- a/engine/OpenRA.Mods.Common/Traits/Buildings/BridgePlaceholder.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Buildings/BridgePlaceholder.cs
+@@ -36,6 +36,7 @@
+ 		public readonly BridgePlaceholderInfo Info;
+ 		readonly Actor self;
+ 		readonly BridgeLayer bridgeLayer;
++		bool repairQueued;
+ 
+ 		public BridgePlaceholder(Actor self, BridgePlaceholderInfo info)
+ 		{
+@@ -56,11 +57,17 @@
+ 
+ 		void IBridgeSegment.Repair(Actor repairer)
+ 		{
+-			if (Info.ReplaceWithActor == null)
++			if (Info.ReplaceWithActor == null || repairQueued || !self.IsInWorld)
+ 				return;
+ 
++			// Both bank huts can request repair in the same frame. Consume this
++			// placeholder once, not once per request, before deferred replacement.
++			repairQueued = true;
+ 			self.World.AddFrameEndTask(w =>
+ 			{
++				if (!self.IsInWorld)
++					return;
++
+ 				self.Dispose();
+ 
+ 				w.CreateActor(Info.ReplaceWithActor, new TypeDictionary

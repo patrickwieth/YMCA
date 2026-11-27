@@ -59,7 +59,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				card.HandleMouseInput(new MouseInput(MouseInputEvent.Up, MouseButton.Left, point, int2.Zero, Modifiers.None, 1));
 				var panel = Ui.CurrentWindow().Get("CONTENT");
 				var generate = Ui.CurrentWindow().Get<ButtonWidget>("GENERATE_PRESET");
-				if (!generate.IsVisible() || panel.Children.OfType<ButtonWidget>().Where(b => b.GetText() == "Custom Map Parameters" || b.GetText() == "Hand Made Map")
+				if (!generate.IsVisible() || panel.Children.OfType<ButtonWidget>().Where(b => b.GetText() == "Custom Map Parameters" || b.GetText() == "Handcrafted Maps")
 					.Any(b => b.RenderBounds.Y + b.RenderBounds.Height >= generate.RenderBounds.Y) ||
 					!panel.Children.OfType<SkirmishPresetButtonWidget>().Any(b => b.GetText() == text && b.IsHighlighted()) ||
 					!panel.Children.OfType<LabelWidget>().Any(l => l.GetText() == "Players (automatic size)"))
@@ -67,6 +67,20 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			}
 			void Back() => Ui.CurrentWindow().Get<ButtonWidget>("BACK").OnClick();
 			void Capture(string name) => Game.Renderer.SaveScreenshot(Path.Combine(output, name + ".png"));
+			if (Environment.GetEnvironmentVariable("YMCA_HANDCRAFTED_PICKER_ONLY") == "1")
+			{
+				Game.RunAfterDelay(1200, () => { menu.Get<ButtonWidget>("SINGLEPLAYER_BUTTON").OnClick(); menu.Get<ButtonWidget>("SKIRMISH_BUTTON").OnClick(); });
+				Game.RunAfterDelay(2500, () => Click("Tactical"));
+				Game.RunAfterDelay(3500, () => Click("Handcrafted Maps"));
+				Game.RunAfterDelay(4500, () =>
+				{
+					if (Ui.CurrentWindow().GetOrNull<ButtonWidget>("REMOTE_MAPS_TAB_BUTTON") == null || Game.ModData.MapCache.Count(SkirmishSetupLogic.IsHandcraftedMap) != 3)
+						throw new InvalidOperationException("Curated handcrafted chooser mismatch.");
+					Capture("handcrafted-only");
+					File.AppendAllText(log,"CHOOSER PASS: only the three curated handcrafted packages.\n");
+				});
+				return;
+			}
 			var steps = new Queue<(int Delay, Action Work)>(new (int, Action)[]
 			{
 				(1200, () =>
@@ -78,16 +92,17 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				(1200, () =>
 				{
 					var texts = Ui.CurrentWindow().Get("CONTENT").Children.OfType<ButtonWidget>().Select(b => b.GetText()).ToArray();
-					if (texts.Contains("Normal Map") || texts.Contains("Custom Map") || !texts.Contains("Hand Made Map") || texts.Contains("Continents"))
+					if (texts.Contains("Normal Map") || texts.Contains("Custom Map") || !texts.Contains("Handcrafted Maps") || texts.Contains("Continents"))
 						throw new InvalidOperationException("Unexpected Strategic preset page.");
-					if (!texts.Contains("Plains") || texts.Contains("Arabia"))
-						throw new InvalidOperationException("Preset page did not apply the Plains display name.");
-					CheckPreviews(5); Capture("strategic-presets"); Click("Hand Made Map");
+					if (!texts.Contains("Desert") || texts.Contains("Arabia"))
+						throw new InvalidOperationException("Preset page did not apply the Desert display name.");
+					CheckPreviews(5); Capture("strategic-presets"); Click("Handcrafted Maps");
 				}),
 				(1200, () =>
 				{
-					if (Ui.CurrentWindow().GetOrNull<ButtonWidget>("REMOTE_MAPS_TAB_BUTTON") == null) throw new InvalidOperationException("Hand Made Map did not open the chooser.");
-					Capture("hand-made-chooser"); Ui.CloseWindow(); Click("Custom Map Parameters");
+					if (Ui.CurrentWindow().GetOrNull<ButtonWidget>("REMOTE_MAPS_TAB_BUTTON") != null || !Ui.CurrentWindow().Get<LabelWidget>("STATUS").GetText().Contains("No handcrafted maps"))
+						throw new InvalidOperationException("Strategic picker must not fall back to test/generated maps.");
+					Capture("handcrafted-empty-strategic"); Click("Custom Map Parameters");
 				}),
 				(1200, () =>
 				{
@@ -126,7 +141,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				(1200, () =>
 				{
 					CheckPreviews(9); Choose("Players (automatic size)", "6"); Choose("Players (automatic size)", "4");
-					Capture("operational-presets"); ClickPreview("Plains"); Back(); Click("Tactical");
+					Capture("operational-presets"); ClickPreview("Desert"); Back(); Click("Tactical");
 				}),
 				(1200, () =>
 				{
@@ -166,19 +181,19 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					if (lobby.LobbyInfo.GlobalSettings.Map != originalMap)
 						throw new InvalidOperationException("Cancel changed the lobby map.");
 					Ui.CurrentWindow().Get<ButtonWidget>("CHANGEMAP_BUTTON").OnClick();
-					Click("Tactical"); Click("Hand Made Map");
+					Click("Tactical"); Click("Handcrafted Maps");
 					if (Ui.CurrentWindow().GetOrNull<ButtonWidget>("REMOTE_MAPS_TAB_BUTTON") == null)
 						throw new InvalidOperationException("Change Map lost the existing-map chooser.");
-					Ui.CloseWindow(); Click("Plains"); Click("Generate and enter lobby");
+					Ui.CloseWindow(); Click("Desert"); Click("Generate and enter lobby");
 				}));
 				steps.Enqueue((60000, () =>
 				{
 					Capture("changed-map-lobby");
 					var uid = lobby.LobbyInfo.GlobalSettings.Map;
 					if (lobby != originalLobby || uid == originalMap ||
-						!Game.ModData.MapCache[uid].Title.Contains("Plains"))
+						!Game.ModData.MapCache[uid].Title.Contains("Desert"))
 						throw new InvalidOperationException($"Change Map failed: sameLobby={lobby == originalLobby}, uid={uid}, original={originalMap}, saved={Game.Settings.Server.Map}, title={Game.ModData.MapCache[uid].Title}.");
-					File.AppendAllText(log, "CHANGE MAP PASS wizard reopened, cancel retained map, hand-made chooser accessible, Plains generated in the same lobby.\n");
+					File.AppendAllText(log, "CHANGE MAP PASS wizard reopened, cancel retained map, curated handcrafted chooser accessible, Desert generated in the same lobby.\n");
 					Ui.CurrentWindow().Get<ButtonWidget>("CHANGEMAP_BUTTON").OnClick();
 					Click("Tactical"); Click("Two Sides"); Click("Generate and enter lobby");
 				}));
@@ -189,7 +204,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					if (human.Team == 0 || bot.Team == human.Team || human.SpawnPoint > 2 || bot.SpawnPoint <= 2)
 						throw new InvalidOperationException($"Map change put the opponent on the home bank: human={human.Team}/{human.SpawnPoint}; bot={bot.Team}/{bot.SpawnPoint}.");
 					Capture("two-sides-opponent");
-					File.AppendAllText(log, $"CHANGE MAP COMPLETE existing opponent retained across Plains -> Two Sides: human={human.Team}/{human.SpawnPoint}; bot={bot.Team}/{bot.SpawnPoint}.\n");
+					File.AppendAllText(log, $"CHANGE MAP COMPLETE existing opponent retained across Desert -> Two Sides: human={human.Team}/{human.SpawnPoint}; bot={bot.Team}/{bot.SpawnPoint}.\n");
 				}));
 			}
 			if (Environment.GetEnvironmentVariable("YMCA_SKIRMISH_DEBUG_PROBE") == "1")

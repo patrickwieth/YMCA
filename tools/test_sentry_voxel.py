@@ -39,7 +39,7 @@ class SentryVoxelTests(unittest.TestCase):
   self.assertNotIn('WithSpriteTurret',voxel);self.assertIn('WithVoxelTurret',voxel)
   self.assertIn('Palette: sentry-voxel-source',voxel['RenderVoxels']);self.assertNotIn('Buildable',voxel)
   for key in ('Armament','AttackTurreted','Building','Turreted','IsometricSelectable','RenderSprites'):self.assertEqual(sprite[key],voxel[key],key)
-  source=ROOT/'mods/ca/maps/testmap1.oramap';before=source.read_bytes()
+  source=ROOT/'mods/ca/development-maps/testmap1.oramap';before=source.read_bytes()
   with tempfile.TemporaryDirectory() as d:
    target=Path(d)/'testmap1-debug.oramap'
    subprocess.run(['powershell','-NoProfile','-ExecutionPolicy','Bypass','-File',str(ROOT/'tools/prepare-test-game-map.ps1'),'-SourceMap',str(source),'-DestinationMap',str(target)],check=True)

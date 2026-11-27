@@ -1,0 +1,13 @@
+diff --git a/engine/OpenRA.Game/Map/MapCache.cs b/engine/OpenRA.Game/Map/MapCache.cs
+--- a/engine/OpenRA.Game/Map/MapCache.cs
++++ b/engine/OpenRA.Game/Map/MapCache.cs
+@@ -390,7 +390,8 @@
+ 
+ 		bool IsSuitableInitialMap(MapPreview map)
+ 		{
+-			if (map.Status != MapStatus.Available || !map.Visibility.HasFlag(MapVisibility.Lobby))
++			if (map.Status != MapStatus.Available || !map.Visibility.HasFlag(MapVisibility.Lobby) ||
++				(map.Class != MapClassification.System && map.Class != MapClassification.User))
+ 				return false;
+ 
+ 			// Other map types may have confusing settings or gameplay

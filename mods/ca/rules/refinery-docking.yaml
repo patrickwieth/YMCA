@@ -35,22 +35,23 @@ PROC.SCRIN:
 		Locations: 2,2
 
 chsupply:
-	# Retain four docks without putting a helper in the occupied (0,2) corner.
-	# Reserve a right-side service bay; compensate the center so artwork stays fixed.
+	# 3x3 building, two external bays in front and two behind.
+	# This center equals the former compensated 4x3 center: artwork stays fixed.
+	# Keep both approaches clear when placing neighboring buildings.
 	Building:
-		Dimensions: 4,3
-		Footprint: xxx_ xx+= x==_
-		LocalCenterOffset: -362,-362,0
+		Dimensions: 3,3
+		Footprint: xxx xx= x==
+		LocalCenterOffset: 0,0,0
 	DockHost:
-		DockOffset: 724,724,0
+		DockOffset: -724,2172,0
 	FreeActor@1:
-		SpawnOffset: 2,1
+		SpawnOffset: 2,3
 	SpawnNeighboringActors@dockhelper1:
-		Locations: 1,2
+		Locations: 1,3
 	SpawnNeighboringActors@dockhelper2:
-		Locations: 2,2
+		Locations: 0,-1
 	SpawnNeighboringActors@dockhelper3:
-		Locations: 3,1
+		Locations: 1,-1
 
 refinery.dockhelper:
 	Building:

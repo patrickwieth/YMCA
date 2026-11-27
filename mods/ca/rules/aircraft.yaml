@@ -560,15 +560,23 @@ OCAR:
 	SpawnActorOnDeath@EMP:
 		Actor: OCAR.Husk.EMP
 		RequiresCondition: empdisable && !being-warped
-	Inherits: ^DualRotors
-	WithIdleOverlay@ROTOR1AIR:
-		Offset: 100,-575,100
-	WithIdleOverlay@ROTOR1GROUND:
-		Offset: 100,-575,100
-	WithIdleOverlay@ROTOR2AIR:
-		Offset: 100,575,100
-	WithIdleOverlay@ROTOR2GROUND:
-		Offset: 100,575,100
+	# Register to the V22 nacelles using voxel projection, not stretched terrain projection.
+	WithVoxelRotorOverlay@ROTOR1AIR:
+		Offset: 102,-611,81
+		Sequence: rotor
+		RequiresCondition: airborne
+	WithVoxelRotorOverlay@ROTOR1GROUND:
+		Offset: 102,-611,81
+		Sequence: slow-rotor
+		RequiresCondition: !airborne
+	WithVoxelRotorOverlay@ROTOR2AIR:
+		Offset: 102,611,81
+		Sequence: rotor2
+		RequiresCondition: airborne
+	WithVoxelRotorOverlay@ROTOR2GROUND:
+		Offset: 102,611,81
+		Sequence: slow-rotor2
+		RequiresCondition: !airborne
 	Voiced:
 		VoiceSet: CarryAllVoice
 	SpeedMultiplier@EagleBonus:

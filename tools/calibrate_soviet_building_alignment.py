@@ -54,6 +54,10 @@ def centered_ground(entry):
  return result
 
 def propose_soviet(entry):
+ if entry['Actor']=='tpwr':
+  raise ValueError('Tesla Reactor now uses the reviewed 2x2 body / 3x3 passable-bib registration. Do not overwrite its 1,9 source offset or centered selection with the old envelope fit; see docs/soviet-building-followup.md.')
+ if entry['Actor']=='apwr.soviet' and entry['File'].endswith('/nuclear-power-plant.png'):
+  raise ValueError('The supplied nuclear complex uses reviewed Center-anchor/scale1.0 placement. The legacy scale1/Bottom-anchor calibrator must not overwrite it; see docs/soviet-nuclear-plant-art.md.')
  if entry['Actor'] in ('fact.soviet','powr.soviet'):return centered_ground(entry)
  extra=[f'bits/soviet/buildings/missile silo {i}.png' for i in range(1,7)] if entry['Actor']=='mslo' else []
  if entry['Actor']!='tsla':return propose(entry,GROUND_CONTACTS,'sovietbib',extra)

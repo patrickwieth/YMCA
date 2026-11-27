@@ -79,7 +79,7 @@ def check(path):
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--map', type=Path, default=REPO / 'mods/ca/maps/modular-gdi-lab.oramap')
+    p.add_argument('--map', type=Path, default=REPO / 'mods/ca/development-maps/modular-gdi-lab.oramap')
     p.add_argument('--output', type=Path)
     args = p.parse_args()
     text, failed = check(args.map)

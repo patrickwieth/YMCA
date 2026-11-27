@@ -26,7 +26,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		public static string PrepareGame(ModData modData, CustomFactionDesign compiler, CustomFactionRoster roster)
 		{
 			byte[] lab;
-			using (var stream = modData.DefaultFileSystem.Open("ca|maps/modular-gdi-lab.oramap"))
+			using (var stream = modData.DefaultFileSystem.Open("ca|development-maps/modular-gdi-lab.oramap"))
 			using (var memory = new MemoryStream()) { stream.CopyTo(memory); lab = memory.ToArray(); }
 			var bytes = compiler.CompileRosterMap(roster, lab);
 			var directory = Path.Combine(Platform.SupportDir, "maps", "ca", "modular");

@@ -50,7 +50,11 @@ namespace OpenRA.Mods.CA.MapGeneration
 				try
 				{
 					StrategicCheckpointPlanner.Place(plan, options);
-					if (twoSides) RubberduckMapExporter.ValidateTwoSidesCoasts(plan, options);
+					if (twoSides)
+					{
+						RubberduckMapExporter.ValidateTwoSidesCoasts(plan, options);
+						SymmetricOilPlacement.Validate(plan);
+					}
 				}
 				catch (InvalidOperationException e)
 				{

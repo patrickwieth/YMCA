@@ -126,9 +126,9 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			{
 				options.MountainLines = true;
 				options.WaterPatches = false;
-				options.Resources = ResourceFieldLayout.Patches;
-				options.FiniteResources = false;
-				options.TechBuildings = TechBuildingDensity.Sparse;
+				if (!values.ContainsKey("resources")) options.Resources = ResourceFieldLayout.Patches;
+				if (!values.ContainsKey("finite")) options.FiniteResources = false;
+				if (!values.ContainsKey("tech")) options.TechBuildings = TechBuildingDensity.Sparse;
 			}
 			else if (options.Preset == MapGenerationPreset.WaterBasins)
 			{
@@ -167,7 +167,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 		static MapGenerationPreset ParsePreset(string value)
 		{
 			var normalized = value.Replace("-", "", StringComparison.Ordinal);
-			if (normalized.Equals("plains", StringComparison.OrdinalIgnoreCase)) return MapGenerationPreset.Arabia;
+			if (normalized.Equals("plains", StringComparison.OrdinalIgnoreCase) || normalized.Equals("desert", StringComparison.OrdinalIgnoreCase)) return MapGenerationPreset.Arabia;
 			return ParseEnum<MapGenerationPreset>("preset", normalized);
 		}
 
@@ -189,8 +189,12 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				16 => 192,
 				_ => throw new ArgumentException("Automatic map sizing supports 2–12 or 16 players."),
 			};
+			// Duel mountain homes need room for lateral exits and a longer valley approach.
+			if (options.Preset == MapGenerationPreset.MountainValleys && options.Players == 2) size = 112;
 			// Six neutral oil islands must fit full foundations plus dry shore margins.
 			if (options.Preset == MapGenerationPreset.Archipelago) size = Math.Max(size, 96);
+			// Two Sides needs room behind each bank and a longer, narrow crossing.
+			if (options.Preset == MapGenerationPreset.TwoSides) size += 32;
 			// Migration needs a wider sea ring for separated home and oil islands.
 			if (options.Preset == MapGenerationPreset.Migration) size += 32;
 			options.Width = size;

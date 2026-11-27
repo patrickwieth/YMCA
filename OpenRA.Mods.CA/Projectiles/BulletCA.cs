@@ -266,12 +266,16 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		bool ShouldExplode(World world)
 		{
+			var terrainBlocked = TerrainFireControl.TryBlock(world, args.Weapon, lastPos, pos, out var terrainHit);
+			if (terrainBlocked) pos = terrainHit;
 			// Check for walls or other blocking obstacles
 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, args.SourceActor.Owner, lastPos, pos, info.Width, out var blockedPos))
 			{
 				pos = blockedPos;
 				return true;
 			}
+
+			if (terrainBlocked) return true;
 
 			if (!string.IsNullOrEmpty(info.TrailImage) && --smokeTicks < 0)
 			{
@@ -316,7 +320,7 @@ namespace OpenRA.Mods.CA.Projectiles
 				return true;
 
 			// Driving into cell with higher height level
-			if (world.Map.DistanceAboveTerrain(pos).Length < 0)
+			if (TerrainFireControl.BelowTerrain(world, args.Weapon, pos))
 				return true;
 
 			// After first bounce, check for targets each tick

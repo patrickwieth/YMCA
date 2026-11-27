@@ -9,6 +9,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 	{
 		public static void Validate(MapPlan plan, MapGenerationOptions options)
 		{
+			BalancedStartingEconomy.ValidateFields(plan);
+			if (options.Preset == MapGenerationPreset.Arabia) PlainsOilClusters.Validate(plan, options.TechBuildings);
 			if (plan.Spawns.Count != options.Players)
 				throw new InvalidOperationException($"Expected {options.Players} spawns, but generated {plan.Spawns.Count}.");
 
@@ -64,7 +66,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 			plan.ValidationMessages.Add($"Gameplay structure validated: {plan.Spawns.Count} unique traversable starts and no actor overlaps.");
 			if (resourceCells.Count > 0)
-				AddResourceDistanceReport(plan, resourceCells);
+				AddResourceDistanceReport(plan, resourceCells, options.Preset is MapGenerationPreset.Arabia or MapGenerationPreset.MountainValleys);
 			else
 				plan.ValidationMessages.Add("No resource fields requested or generated.");
 			plan.ValidationMessages.Add($"Economy actors: {resourceGenerators} resource generators and {techBuildings} Tech Buildings.");
@@ -110,11 +112,17 @@ namespace OpenRA.Mods.CA.MapGeneration
 				throw new InvalidOperationException($"Multiple actors occupy {x},{y}.");
 		}
 
-		static void AddResourceDistanceReport(MapPlan plan, List<PlanPoint> resources)
+		static void AddResourceDistanceReport(MapPlan plan, List<PlanPoint> resources, bool nativePaths)
 		{
 			var nearestDistances = new List<double>();
 			foreach (var spawn in plan.Spawns)
 			{
+				if (nativePaths)
+				{
+					var distances = StartBalanceMetrics.Distances(plan, spawn);
+					nearestDistances.Add(resources.Select(r => distances[r.X + r.Y * plan.Width]).Where(d => d >= 0).DefaultIfEmpty(-1).Min());
+					continue;
+				}
 				var nearestSquared = resources.Min(resource =>
 				{
 					var dx = resource.X - spawn.X;
@@ -129,7 +137,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 			var average = nearestDistances.Average();
 			plan.ValidationMessages.Add(string.Format(
 				CultureInfo.InvariantCulture,
-				"Nearest-resource distance across starts: min {0:0.0}, average {1:0.0}, max {2:0.0} cells.",
+				(nativePaths ? "Native cardinal-path resource distance across starts" : "Nearest-resource distance across starts") +
+				": min {0:0.0}, average {1:0.0}, max {2:0.0} cells.",
 				minimum, average, maximum));
 		}
 	}

@@ -51,7 +51,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 		readonly ModData modData;
 		readonly Action<string> onSelect;
 		readonly Action<string> onGenerateRecipe;
-		readonly Action onChooseExisting;
+		readonly HashSet<string> allowedMapPool;
 		GeneratedMapMode mode;
 		MapGenerationPreset preset;
 		MapGenerationOptions options;
@@ -68,18 +68,19 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var prepared = new WidgetArgs(args);
 			if (!prepared.ContainsKey("onGenerateRecipe")) prepared.Add("onGenerateRecipe", null);
 			if (!prepared.ContainsKey("onChooseExisting")) prepared.Add("onChooseExisting", null);
+			if (!prepared.ContainsKey("allowedMapPool")) prepared.Add("allowedMapPool", null);
 			return prepared;
 		}
 
 		public static void Open(WidgetArgs args) => Game.OpenWindow("SKIRMISH_SETUP", PrepareArguments(args));
 
 		[ObjectCreator.UseCtor]
-		public SkirmishSetupLogic(Widget widget, ModData modData, Action<string> onSelect, Action<string> onGenerateRecipe, Action onChooseExisting)
+		public SkirmishSetupLogic(Widget widget, ModData modData, Action<string> onSelect, Action<string> onGenerateRecipe, Action onChooseExisting, HashSet<string> allowedMapPool)
 		{
 			this.modData = modData;
 			this.onSelect = onSelect;
 			this.onGenerateRecipe = onGenerateRecipe;
-			this.onChooseExisting = onChooseExisting;
+			this.allowedMapPool = allowedMapPool;
 			content = widget.Get("CONTENT");
 			widget.Get<ButtonWidget>("BACK").OnClick = () =>
 			{
@@ -219,7 +220,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					if (!customSettings.Compatible(mode)) customSettings = new CustomMapSettings();
 					customize = true; ResetOptions(); stage = 2; Show();
 				});
-				Button("Hand Made Map", 405, 385, 250, ChooseMap);
+				Button("Handcrafted Maps", 405, 385, 250, ChooseMap);
 			}
 			else ShowCustomization();
 		}
@@ -289,18 +290,31 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			Button(onGenerateRecipe == null ? "Generate and enter lobby" : "Generate and change map", 220, 385, 400, Generate);
 		}
 
+		internal static bool IsSelectableMap(MapPreview map) => map.Status == MapStatus.Available &&
+			map.Class != MapClassification.Unknown && map.Visibility.HasFlag(MapVisibility.Lobby);
+
+		internal static bool IsHandcraftedPackage(string package, IEnumerable<string> categories)
+		{
+			// A review copy can inherit the production title/category. Only the curated
+			// runtime package names belong in this picker, never arbitrary test copies.
+			var name = Path.GetFileName(package?.Replace('\\', '/') ?? "");
+			return (name == "handcrafted-all-that-glitters-barren.oramap" ||
+				name == "handcrafted-dune-patrol.oramap" || name == "handcrafted-two-sides-naval.oramap") &&
+				categories.Contains("Handcrafted Maps", StringComparer.OrdinalIgnoreCase) &&
+				!categories.Any(c => new[] { "Test", "Debug", "Diagnostic", "Preview" }.Contains(c, StringComparer.OrdinalIgnoreCase));
+		}
+
+		internal static bool IsHandcraftedMap(MapPreview map) => IsSelectableMap(map) && map.Class == MapClassification.System &&
+			IsHandcraftedPackage(map.PackageName, map.Categories) &&
+			!(map.Title ?? "").Contains("[REVIEW", StringComparison.OrdinalIgnoreCase);
+
 		void ChooseMap()
 		{
-			if (onChooseExisting != null)
-			{
-				Ui.CloseWindow();
-				onChooseExisting();
-				return;
-			}
 
-			var pool = new HashSet<string>(modData.MapCache.Where(m => m.Status == MapStatus.Available &&
-				m.Visibility.HasFlag(MapVisibility.Lobby) && Matches(m)).Select(m => m.Uid));
-			if (pool.Count == 0) { status = "No installed maps match " + mode + ". Select a preset to generate one."; return; }
+			// Unknown packages are historical/development maps: retain UID lookup for
+			// replays, but never promote them into this chooser's remote-map pool.
+			var pool = new HashSet<string>(modData.MapCache.Where(m => IsHandcraftedMap(m) && Matches(m) && (allowedMapPool == null || allowedMapPool.Contains(m.Uid))).Select(m => m.Uid));
+			if (pool.Count == 0) { status = "No handcrafted maps available for " + mode + " in this map pool."; return; }
 			// Reuse the engine's restricted-map-pool support, including its random selector.
 			Game.OpenWindow("MAPCHOOSER_PANEL", new WidgetArgs
 			{
@@ -309,7 +323,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				{ "onExit", (Action)(() => { }) },
 				{ "onSelect", (Action<string>)(uid => { if (uid != null && pool.Contains(uid) && Matches(modData.MapCache[uid])) { Ui.CloseWindow(); onSelect(uid); } }) },
 			});
-			Ui.CurrentWindow().Get<ButtonWidget>("REMOTE_MAPS_TAB_BUTTON").GetText = () => mode + " Maps";
+			Ui.CurrentWindow().Get<ButtonWidget>("REMOTE_MAPS_TAB_BUTTON").GetText = () => "Handcrafted Maps";
 		}
 
 		void Generate()

@@ -1,0 +1,403 @@
+--- /dev/null
++++ b/engine/OpenRA.Mods.Common/Traits/World/TerrainFireControl.cs
+@@ -0,0 +1,35 @@
++using System.Collections.Generic;
++using OpenRA.Activities;
++using OpenRA.GameRules;
++using OpenRA.Traits;
++
++namespace OpenRA.Mods.Common.Traits
++{
++	// Optional mod policy. Mods without this world trait retain existing behavior.
++	public interface ITerrainFireControl
++	{
++		bool Handles(WeaponInfo weapon);
++		bool TryBlock(WeaponInfo weapon, WPos from, WPos to, out WPos hit);
++		bool CanFire(Actor self, Armament armament, Target target, WPos position);
++		Activity FindFiringPosition(Actor self, IEnumerable<Armament> armaments, Target target);
++	}
++
++	public static class TerrainFireControl
++	{
++		public static bool TryBlock(World world, WeaponInfo weapon, WPos from, WPos to, out WPos hit)
++		{
++			hit = to;
++			return world.WorldActor.TraitOrDefault<ITerrainFireControl>()?.TryBlock(weapon, from, to, out hit) == true;
++		}
++		public static bool ActiveFor(World world, WeaponInfo weapon) => world.WorldActor.TraitOrDefault<ITerrainFireControl>()?.Handles(weapon) == true;
++		public static bool BelowTerrain(World world, WeaponInfo weapon, WPos position)
++		{
++			var policy = world.WorldActor.TraitOrDefault<ITerrainFireControl>();
++			return policy != null && policy.Handles(weapon) ? policy.TryBlock(weapon, position, position, out _) : world.Map.DistanceAboveTerrain(position).Length < 0;
++		}
++		public static bool CanFire(Actor self, Armament armament, Target target, WPos position) =>
++			self.World.WorldActor.TraitOrDefault<ITerrainFireControl>()?.CanFire(self, armament, target, position) ?? true;
++		public static Activity FindFiringPosition(Actor self, IEnumerable<Armament> armaments, Target target) =>
++			self.World.WorldActor.TraitOrDefault<ITerrainFireControl>()?.FindFiringPosition(self, armaments, target);
++	}
++}
+--- a/engine/OpenRA.Mods.Common/Traits/Armament.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Armament.cs
+@@ -316,7 +316,7 @@
+ 			if (!Weapon.IsValidAgainst(target, self.World, self))
+ 				return false;
+ 
+-			return true;
++			return TerrainFireControl.CanFire(self, this, target, self.CenterPosition);
+ 		}
+ 
+ 		// Note: facing is only used by the legacy positioning code
+--- a/engine/OpenRA.Mods.Common/Traits/AutoTarget.cs
++++ b/engine/OpenRA.Mods.Common/Traits/AutoTarget.cs
+@@ -442,7 +442,8 @@
+ 				if (!allowMove)
+ 					armaments = armaments.Where(arm =>
+ 						target.IsInRange(self.CenterPosition, arm.MaxRange()) &&
+-						!target.IsInRange(self.CenterPosition, arm.Weapon.MinRange));
++						!target.IsInRange(self.CenterPosition, arm.Weapon.MinRange) &&
++						TerrainFireControl.CanFire(self, arm, target, self.CenterPosition));
+ 
+ 				if (!armaments.Any())
+ 					continue;
+--- a/engine/OpenRA.Mods.Common/Activities/Attack.cs
++++ b/engine/OpenRA.Mods.Common/Activities/Attack.cs
+@@ -32,6 +32,8 @@
+ 		readonly IFacing facing;
+ 		readonly IPositionable positionable;
+ 		readonly bool forceAttack;
++		readonly AttackSource source;
++		bool terrainMoveQueued;
+ 		readonly Color? targetLineColor;
+ 		readonly MoveCooldownHelper moveCooldownHelper;
+ 
+@@ -46,12 +48,13 @@
+ 		WDist maxRange;
+ 		AttackStatus attackStatus = AttackStatus.UnableToAttack;
+ 
+-		public Attack(Actor self, in Target target, bool allowMovement, bool forceAttack, Color? targetLineColor = null)
++		public Attack(Actor self, in Target target, bool allowMovement, bool forceAttack, Color? targetLineColor = null, AttackSource source = AttackSource.Default)
+ 		{
+ 			ActivityType = ActivityType.Attack;
+ 			this.target = target;
+ 			this.targetLineColor = targetLineColor;
+ 			this.forceAttack = forceAttack;
++			this.source = source;
+ 
+ 			attackTraits = self.TraitsImplementing<AttackFrontal>().ToArray().Where(t => !t.IsTraitDisabled);
+ 			revealsShroud = self.TraitsImplementing<RevealsShroud>().ToArray();
+@@ -95,6 +98,7 @@
+ 
+ 		public override bool Tick(Actor self)
+ 		{
++			terrainMoveQueued = false;
+ 			if (IsCanceling)
+ 				return true;
+ 
+@@ -208,6 +212,18 @@
+ 			}
+ 
+ 			var pos = self.CenterPosition;
++			if (activeArmaments.Count > 0 && target.IsInRange(pos, maxRange) && (minRange == WDist.Zero || !target.IsInRange(pos, minRange)) &&
++				!activeArmaments.Any(a => TerrainFireControl.CanFire(self, a, target, pos)))
++			{
++				if (move == null) return AttackStatus.UnableToAttack;
++				var reposition = TerrainFireControl.FindFiringPosition(self, activeArmaments, target);
++				if (reposition == null) return AttackStatus.UnableToAttack;
++				attackStatus |= AttackStatus.NeedsToMove;
++				moveCooldownHelper.NotifyMoveQueued();
++				terrainMoveQueued = true;
++				QueueChild(reposition);
++				return AttackStatus.NeedsToMove;
++			}
+ 			if (!target.IsInRange(pos, maxRange)
+ 				|| (minRange.Length != 0 && target.IsInRange(pos, minRange))
+ 				|| (mobile != null && !mobile.CanInteractWithGroundLayer(self)))
+@@ -260,6 +276,11 @@
+ 
+ 		void IActivityNotifyStanceChanged.StanceChanged(Actor self, AutoTarget autoTarget, UnitStance oldStance, UnitStance newStance)
+ 		{
++			if (terrainMoveQueued && source == AttackSource.AutoTarget && newStance <= UnitStance.Defend)
++			{
++				Cancel(self);
++				return;
++			}
+ 			// Cancel non-forced targets when switching to a more restrictive stance if they are no longer valid for auto-targeting
+ 			if (newStance > oldStance || forceAttack)
+ 				return;
+--- a/engine/OpenRA.Mods.Common/Traits/Attack/AttackFollow.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Attack/AttackFollow.cs
+@@ -96,7 +96,8 @@
+ 			foreach (var a in armaments)
+ 				if (target.IsInRange(pos, a.MaxRange()) &&
+ 					(a.Weapon.MinRange == WDist.Zero || !target.IsInRange(pos, a.Weapon.MinRange)) &&
+-					TargetInFiringArc(self, target, Info.FacingTolerance))
++					TargetInFiringArc(self, target, Info.FacingTolerance) &&
++					TerrainFireControl.CanFire(self, a, target, pos))
+ 					return true;
+ 
+ 			return false;
+@@ -248,6 +249,7 @@
+ 			BitSet<TargetableType> lastVisibleTargetTypes;
+ 			Player lastVisibleOwner;
+ 			bool hasTicked;
++			bool terrainMoveQueued;
+ 			bool returnToBase = false;
+ 
+ 			public AttackActivity(Actor self, AttackSource source, in Target target, bool allowMove, bool forceAttack, Color? targetLineColor = null)
+@@ -290,6 +292,7 @@
+ 			public override bool Tick(Actor self)
+ 			{
+ 				returnToBase = false;
++				terrainMoveQueued = false;
+ 
+ 				if (IsCanceling)
+ 					return true;
+@@ -404,6 +407,16 @@
+ 					if (useLastVisibleTarget)
+ 						return true;
+ 
++					var arms = attacks.SelectMany(a => a.ChooseArmamentsForTarget(target, forceAttack)).Where(a => !a.IsTraitPaused).ToArray();
++					if (arms.Length > 0 && !arms.Any(a => TerrainFireControl.CanFire(self, a, target, pos)))
++					{
++						if (move == null) return true;
++						var reposition = TerrainFireControl.FindFiringPosition(self, arms, target);
++						if (reposition == null) return true;
++						moveCooldownHelper.NotifyMoveQueued();
++						terrainMoveQueued = true;
++						QueueChild(reposition);
++					}
+ 					return false;
+ 				}
+ 
+@@ -425,6 +438,11 @@
+ 
+ 			void IActivityNotifyStanceChanged.StanceChanged(Actor self, AutoTarget autoTarget, UnitStance oldStance, UnitStance newStance)
+ 			{
++				if (terrainMoveQueued && source == AttackSource.AutoTarget && newStance <= UnitStance.Defend)
++				{
++					Cancel(self);
++					return;
++				}
+ 				// Cancel non-forced targets when switching to a more restrictive stance if they are no longer valid for auto-targeting
+ 				if (newStance > oldStance || forceAttack)
+ 					return;
+--- a/engine/OpenRA.Mods.Common/Traits/Attack/AttackFrontal.cs
++++ b/engine/OpenRA.Mods.Common/Traits/Attack/AttackFrontal.cs
+@@ -42,7 +42,7 @@
+ 		public override Activity GetAttackActivity(
+ 			Actor self, AttackSource source, in Target newTarget, bool allowMove, bool forceAttack, Color? targetLineColor = null)
+ 		{
+-			return new Activities.Attack(self, newTarget, allowMove, forceAttack, targetLineColor);
++			return new Activities.Attack(self, newTarget, allowMove, forceAttack, targetLineColor, source);
+ 		}
+ 	}
+ }
+--- a/engine/OpenRA.Mods.Common/Projectiles/Bullet.cs
++++ b/engine/OpenRA.Mods.Common/Projectiles/Bullet.cs
+@@ -262,12 +262,16 @@
+ 
+ 		bool ShouldExplode(World world)
+ 		{
++			var terrainBlocked = TerrainFireControl.TryBlock(world, Args.Weapon, lastPos, pos, out var terrainHit);
++			if (terrainBlocked) pos = terrainHit;
+ 			// Check for walls or other blocking obstacles
+ 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, Args.SourceActor.Owner, lastPos, pos, info.Width, out var blockedPos))
+ 			{
+ 				pos = blockedPos;
+ 				return true;
+ 			}
++
++			if (terrainBlocked) return true;
+ 
+ 			if (!string.IsNullOrEmpty(info.TrailImage) && --smokeTicks < 0)
+ 			{
+@@ -312,7 +316,7 @@
+ 				return true;
+ 
+ 			// Driving into cell with higher height level
+-			if (world.Map.DistanceAboveTerrain(pos).Length < 0)
++			if (TerrainFireControl.BelowTerrain(world, Args.Weapon, pos))
+ 				return true;
+ 
+ 			// After first bounce, check for targets each tick
+--- a/engine/OpenRA.Mods.Common/Projectiles/Missile.cs
++++ b/engine/OpenRA.Mods.Common/Projectiles/Missile.cs
+@@ -894,7 +894,8 @@
+ 				pos += move;
+ 
+ 			// Check for walls or other blocking obstacles
+-			var shouldExplode = false;
++			var shouldExplode = TerrainFireControl.TryBlock(world, args.Weapon, lastPos, pos, out var terrainHit);
++			if (shouldExplode) pos = terrainHit;
+ 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, args.SourceActor.Owner, lastPos, pos, info.Width, out var blockedPos))
+ 			{
+ 				pos = blockedPos;
+@@ -921,7 +922,7 @@
+ 			distanceCovered += new WDist(speed);
+ 			var cell = world.Map.CellContaining(pos);
+ 			var height = world.Map.DistanceAboveTerrain(pos);
+-			shouldExplode |= height.Length < 0 // Hit the ground
++			shouldExplode |= TerrainFireControl.BelowTerrain(world, args.Weapon, pos) // Hit the ground
+ 				|| relTarDist < info.CloseEnough.Length // Within range
+ 				|| (info.ExplodeWhenEmpty && rangeLimit >= WDist.Zero && distanceCovered > rangeLimit) // Ran out of fuel
+ 				|| !world.Map.Contains(cell) // This also avoids an IndexOutOfRangeException in GetTerrainInfo below.
+--- a/engine/OpenRA.Mods.Common/Projectiles/LaserZap.cs
++++ b/engine/OpenRA.Mods.Common/Projectiles/LaserZap.cs
+@@ -120,6 +120,8 @@
+ 
+ 		[Sync]
+ 		WPos target;
++		[Sync]
++		WPos unblockedTarget;
+ 
+ 		[Sync]
+ 		WPos source;
+@@ -146,6 +148,7 @@
+ 			}
+ 
+ 			hasLaunchEffect = !string.IsNullOrEmpty(info.LaunchEffectImage) && !string.IsNullOrEmpty(info.LaunchEffectSequence);
++			unblockedTarget = target;
+ 		}
+ 
+ 		public void Tick(World world)
+@@ -156,9 +159,14 @@
+ 				world.AddFrameEndTask(w => w.Add(new SpriteEffect(args.CurrentSource, args.CurrentMuzzleFacing, world,
+ 					info.LaunchEffectImage, info.LaunchEffectSequence, info.LaunchEffectPalette)));
+ 
++			target = unblockedTarget;
+ 			// Beam tracks target
+ 			if (info.TrackTarget && args.GuidedTarget.IsValidFor(args.SourceActor))
+ 				target = args.Weapon.TargetActorCenter ? args.GuidedTarget.CenterPosition : args.GuidedTarget.Positions.ClosestToIgnoringPath(source);
++
++			unblockedTarget = target;
++			if (TerrainFireControl.TryBlock(world, args.Weapon, source, target, out var terrainHit))
++				target = terrainHit;
+ 
+ 			// Check for blocking actors
+ 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, args.SourceActor.Owner, source, target, info.Width, out var blockedPos))
+--- a/engine/OpenRA.Mods.Common/Projectiles/Railgun.cs
++++ b/engine/OpenRA.Mods.Common/Projectiles/Railgun.cs
+@@ -150,6 +150,8 @@
+ 
+ 		void CalculateVectors()
+ 		{
++			if (TerrainFireControl.TryBlock(args.SourceActor.World, args.Weapon, args.Source, target, out var terrainHit))
++				target = terrainHit;
+ 			// Check for blocking actors
+ 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(args.SourceActor.World, args.SourceActor.Owner, target, args.Source,
+ 					info.BeamWidth, out var blockedPos))
+@@ -162,7 +164,7 @@
+ 
+ 			// Forward step, pointing from src to target.
+ 			// QuantizationCont * forwardStep == One cycle of beam in src2target direction.
+-			ForwardStep = info.HelixPitch.Length * SourceToTarget / (info.QuantizationCount * SourceToTarget.Length);
++			ForwardStep = info.HelixPitch.Length * SourceToTarget / (info.QuantizationCount * System.Math.Max(1, SourceToTarget.Length));
+ 
+ 			// An easy vector to find which is perpendicular vector to forwardStep, with 0 Z component
+ 			LeftVector = new WVec(ForwardStep.Y, -ForwardStep.X, 0);
+--- a/engine/OpenRA.Mods.Common/Projectiles/AreaBeam.cs
++++ b/engine/OpenRA.Mods.Common/Projectiles/AreaBeam.cs
+@@ -232,6 +232,14 @@
+ 					tailPos = WPos.LerpQuadratic(args.Source, target, WAngle.Zero, tailTicks, length);
+ 			}
+ 
++			if (TerrainFireControl.TryBlock(world, args.Weapon, args.Source, headPos, out var terrainHit))
++			{
++				headPos = target = terrainHit;
++				length = Math.Min(headTicks, length);
++				if ((tailPos - args.Source).Length > (headPos - args.Source).Length) tailPos = headPos;
++				StopTargeting();
++			}
++
+ 			// Check for blocking actors
+ 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, args.SourceActor.Owner, tailPos, headPos, info.Width, out var blockedPos))
+ 			{
+--- a/engine/OpenRA.Mods.Common/Projectiles/InstantHit.cs
++++ b/engine/OpenRA.Mods.Common/Projectiles/InstantHit.cs
+@@ -74,6 +74,9 @@
+ 			if (target.Type == TargetType.Invalid)
+ 				target = Target.FromPos(args.PassiveTarget);
+ 
++			if (TerrainFireControl.TryBlock(world, args.Weapon, args.Source, target.CenterPosition, out var terrainHit))
++				target = Target.FromPos(terrainHit);
++
+ 			// Check for blocking actors
+ 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(
+ 				world, args.SourceActor.Owner, args.Source, target.CenterPosition, info.Width, out var blockedPos))
+--- a/engine/OpenRA.Mods.Cnc/Projectiles/TeslaZap.cs
++++ b/engine/OpenRA.Mods.Cnc/Projectiles/TeslaZap.cs
+@@ -65,6 +65,8 @@
+ 
+ 		[Sync]
+ 		WPos target;
++		[Sync]
++		WPos unblockedTarget;
+ 
+ 		public TeslaZap(TeslaZapInfo info, ProjectileArgs args)
+ 		{
+@@ -72,7 +74,7 @@
+ 			this.info = info;
+ 			ticksUntilRemove = info.Duration;
+ 			damageDuration = info.DamageDuration > info.Duration ? info.Duration : info.DamageDuration;
+-			target = args.PassiveTarget;
++			target = unblockedTarget = args.PassiveTarget;
+ 		}
+ 
+ 		public void Tick(World world)
+@@ -80,12 +82,17 @@
+ 			if (ticksUntilRemove-- <= 0)
+ 				world.AddFrameEndTask(w => w.Remove(this));
+ 
++			target = unblockedTarget;
+ 			// Zap tracks target
+ 			if (info.TrackTarget && args.GuidedTarget.IsValidFor(args.SourceActor))
+ 				target = args.Weapon.TargetActorCenter ? args.GuidedTarget.CenterPosition : args.GuidedTarget.Positions.ClosestToIgnoringPath(args.Source);
+ 
++			unblockedTarget = target;
++			if (OpenRA.Mods.Common.Traits.TerrainFireControl.TryBlock(world, args.Weapon, args.Source, target, out var terrainHit))
++				target = terrainHit;
++
+ 			if (damageDuration-- > 0)
+-				args.Weapon.Impact(Target.FromPos(target), new WarheadArgs(args));
++				args.Weapon.Impact(Target.FromPos(target), new WarheadArgs(args) { ImpactPosition = target });
+ 		}
+ 
+ 		public IEnumerable<IRenderable> Render(WorldRenderer wr)
+--- a/engine/OpenRA.Mods.AS/Projectiles/ElectricBolt.cs
++++ b/engine/OpenRA.Mods.AS/Projectiles/ElectricBolt.cs
+@@ -94,11 +94,13 @@
+ 
+ 			target = args.PassiveTarget;
+ 			source = args.Source;
++			if (OpenRA.Mods.Common.Traits.TerrainFireControl.TryBlock(args.SourceActor.World, args.Weapon, source, target, out var terrainHit))
++				target = terrainHit;
+ 			random = args.SourceActor.World.LocalRandom;
+ 
+ 			hasLaunchEffect = !string.IsNullOrEmpty(info.LaunchEffectImage) && !string.IsNullOrEmpty(info.LaunchEffectSequence);
+ 
+-			var direction = args.PassiveTarget - args.Source;
++			var direction = target - source;
+ 
+ 			if (info.Distortion != 0)
+ 			{
+@@ -122,7 +124,7 @@
+ 				var numSegments = (direction.Length - 1) / info.SegmentLength.Length + 1;
+ 				var offsets = new WPos[numSegments + 1];
+ 				offsets[0] = args.Source;
+-				offsets[^1] = args.PassiveTarget;
++				offsets[^1] = target;
+ 
+ 				var angle = new WAngle(-info.Angle.Angle / 2 + random.Next(info.Angle.Angle));
+ 
+--- a/engine/OpenRA.Mods.AS/Projectiles/RadBeam.cs
++++ b/engine/OpenRA.Mods.AS/Projectiles/RadBeam.cs
+@@ -90,6 +90,9 @@
+ 			if (args.GuidedTarget.IsValidFor(args.SourceActor))
+ 				target = args.GuidedTarget.CenterPosition;
+ 
++			if (Common.Traits.TerrainFireControl.TryBlock(world, args.Weapon, args.Source, target, out var terrainHit))
++				target = terrainHit;
++
+ 			if (!doneDamage)
+ 			{
+ 				if (hitanim != null)

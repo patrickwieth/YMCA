@@ -14,7 +14,8 @@ namespace OpenRA.Mods.CA.Traits
 	{
 		public readonly bool NativeWater = true;
 		public readonly bool AuthoredShores = true;
-		public override object Create(ActorInitializer init) => new RubberduckMaterialTransitions(NativeWater, AuthoredShores);
+		public readonly bool AuthoredDryJoins = true;
+		public override object Create(ActorInitializer init) => new RubberduckMaterialTransitions(NativeWater, AuthoredShores, AuthoredDryJoins);
 	}
 
 	public sealed class RubberduckMaterialTransitions : IWorldLoaded, IPostWorldLoaded, IRenderOverlay, IRender, INotifyActorDisposing
@@ -35,16 +36,18 @@ namespace OpenRA.Mods.CA.Traits
 		Sprite empty, legacyGrassBase;
 		readonly bool nativeWater;
 		readonly bool authoredShores;
+		readonly bool authoredDryJoins;
 		RubberduckAuthoredShoreLayer shoreLayer;
 		internal string ValidateAuthoredShoreCache() => shoreLayer?.ValidateCache() ?? "SHORE CACHE disabled";
 		internal string AuthoredShoreSnapshot => shoreLayer?.Snapshot() ?? "disabled";
 		internal bool AuthoredShoreAt(CPos cell) => shoreLayer?.GroundExclusion(cell) != null;
 		byte[][] waterPhases, secondaryWaterPhases;
 		readonly Dictionary<int, Sprite> waterSprites = new();
-		public RubberduckMaterialTransitions(bool nativeWater = true, bool authoredShores = true)
+		public RubberduckMaterialTransitions(bool nativeWater = true, bool authoredShores = true, bool authoredDryJoins = true)
 		{
 			this.nativeWater = nativeWater;
 			this.authoredShores = authoredShores;
+			this.authoredDryJoins = authoredDryJoins;
 		}
 		byte[] grass, grassB, sand, dirt, water;
 		internal int CachedSpriteCount => sprites.Count;
@@ -305,10 +308,10 @@ namespace OpenRA.Mods.CA.Traits
 				if (material == 7 || secondaryWaterMask != 0 || shoreWater == 2) EnsureSecondaryWater();
 				if (secondaryWaterLayer != null) UpdateNativeWater(c, material == 7 || shoreWater == 2, secondaryWaterMask, true);
 			}
-			if (shoreLayer != null && material == 2 && (grassMask | grassBMask) != 0) key |= 1 << 24;
+			if (authoredDryJoins && shoreLayer != null && material == 2 && (grassMask | grassBMask) != 0) key |= 1 << 24;
 			// Keep multi-material junctions on the existing blend; pure grass/dirt
 			// joins use native source silhouettes instead of rectangular masks.
-			if (shoreLayer != null && (material == 4 || material == 6) && (grassMask | grassBMask) != 0 && sandMask == 0 && dirtMask == 0)
+			if (authoredDryJoins && shoreLayer != null && (material == 4 || material == 6) && (grassMask | grassBMask) != 0 && sandMask == 0 && dirtMask == 0)
 				key |= 1 << (material == 4 ? 25 : 26);
 			var baseSprite = RubberduckShoreTopology.IsLegacyGrassSand(map.Tiles[c].Type) || RubberduckShoreTopology.IsLegacyGrassDirt(map.Tiles[c].Type) ? legacyGrassBase : null;
 			if (key == 0) { cellKeys.Remove(c); layer.Update(c, baseSprite, null); return; }

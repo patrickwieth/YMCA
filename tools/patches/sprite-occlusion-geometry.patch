@@ -1,0 +1,16 @@
+--- a/engine/OpenRA.Game/Graphics/SpriteRenderable.cs
++++ b/engine/OpenRA.Game/Graphics/SpriteRenderable.cs
+@@ -68,6 +68,13 @@
+ 			: this(sprite, pos, offset, zOffset, palette, scale, alpha, tint, tintModifiers, isDecoration, WAngle.Zero) { }
+ 
++		/// <summary>The sprite used by this renderable, for pixel-accurate occlusion.</summary>
++		public Sprite Sprite => sprite;
++
++		/// <summary>Projected corners in texture order, including scale, offset and rotation.</summary>
++		public float3[] ScreenCorners(WorldRenderer wr) =>
++			Util.RotateQuad(ScreenPosition(wr) + scale * sprite.Offset, scale * sprite.Size, rotation.RendererRadians());
++
+ 		public WPos Pos => pos + Offset;
+ 		public WVec Offset { get; }
+ 		public PaletteReference Palette { get; }
+ 		public int ZOffset { get; }

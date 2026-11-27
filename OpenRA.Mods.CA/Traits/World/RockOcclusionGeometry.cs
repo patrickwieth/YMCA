@@ -89,6 +89,43 @@ namespace OpenRA.Mods.CA.Traits
 			return mask;
 		}
 
+		// Use the drawn pixels, not a building footprint or its rectangular bounds.
+		// Shadow palette entries, transparent PNG margins and decorations must not
+		// turn nearby units into white rectangles.
+		public static bool[] BuildingPixels(WorldRenderer wr, SpriteRenderable renderable, Rectangle bounds)
+		{
+			var mask = new bool[bounds.Width * bounds.Height];
+			var sprite = renderable.Sprite;
+			if (renderable.IsDecoration || renderable.Alpha < .94f || sprite.BlendMode != BlendMode.Alpha) return mask;
+			var corners = renderable.ScreenCorners(wr);
+			var origin = corners[0]; var u = corners[1] - origin; var v = corners[3] - origin;
+			var determinant = u.X * v.Y - u.Y * v.X;
+			if (Math.Abs(determinant) < .001f) return mask;
+			var left = Math.Max(bounds.Left, (int)Math.Floor(corners.Min(p => p.X)));
+			var right = Math.Min(bounds.Right, (int)Math.Ceiling(corners.Max(p => p.X)));
+			var top = Math.Max(bounds.Top, (int)Math.Floor(corners.Min(p => p.Y)));
+			var bottom = Math.Min(bounds.Bottom, (int)Math.Ceiling(corners.Max(p => p.Y)));
+			if (left >= right || top >= bottom) return mask;
+			var bytes = SheetPixels.GetValue(sprite.Sheet, sheet => sheet.GetData());
+			for (var y = top; y < bottom; y++)
+				for (var x = left; x < right; x++)
+				{
+					var dx = x + .5f - origin.X; var dy = y + .5f - origin.Y;
+					var s = (dx * v.Y - dy * v.X) / determinant;
+					var t = (u.X * dy - u.Y * dx) / determinant;
+					if (s < 0 || s >= 1 || t < 0 || t >= 1) continue;
+					var sx = (int)((sprite.Left + s * (sprite.Right - sprite.Left)) * sprite.Sheet.Size.Width);
+					var sy = (int)((sprite.Top + t * (sprite.Bottom - sprite.Top)) * sprite.Sheet.Size.Height);
+					var index = (sy * sprite.Sheet.Size.Width + sx) * 4;
+					// CPU sheet data is BGRA; palette channels are named in GPU RGBA order.
+					var channel = sprite.Channel == TextureChannel.Red ? 2 : sprite.Channel == TextureChannel.Blue ? 0 : (int)sprite.Channel;
+					var alpha = sprite.Channel == TextureChannel.RGBA ? bytes[index + 3] :
+						(renderable.Palette?.Palette[bytes[index + channel]] >> 24 ?? 0);
+					if (alpha * renderable.Alpha >= 240) mask[(y - bounds.Top) * bounds.Width + x - bounds.Left] = true;
+				}
+			return mask;
+		}
+
 		public static Rectangle[] Regions(bool[] mask, Rectangle bounds, bool occluded)
 		{
 			var excluded = mask.Select(value => value != occluded).ToArray();

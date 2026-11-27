@@ -29,7 +29,7 @@ def prepare(text):
  return text
 if __name__=='__main__':
  path=Path(sys.argv[1]).resolve()
- if path==(ROOT/'mods/ca/maps/testmap1.oramap').resolve():raise ValueError('Refusing to modify authoritative source map')
+ if path==(ROOT/'mods/ca/development-maps/testmap1.oramap').resolve():raise ValueError('Refusing to modify authoritative source map')
  with ZipFile(path) as z:files={n:z.read(n) for n in z.namelist()}
  files['map.yaml']=prepare(files['map.yaml'].decode('utf-8-sig')).encode('utf-8')
  with ZipFile(path,'w',ZIP_DEFLATED) as z:

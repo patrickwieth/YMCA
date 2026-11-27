@@ -18,6 +18,28 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				mod.DefaultTerrainInfo.Keys.Any(k => !k.StartsWith("RUBBERDUCK-", StringComparison.Ordinal)))
 				throw new InvalidDataException("Expected pinned Liberty and Rubberduck-only terrain.");
 			mod.MapCache.LoadMaps();
+			using (var fixtures = mod.ModFiles.OpenPackage("ca|development-maps"))
+				foreach (var name in fixtures.Contents.Where(n => n.EndsWith(".oramap", StringComparison.OrdinalIgnoreCase)))
+				{
+					using var package = fixtures.OpenPackage(name, mod.ModFiles);
+					var preview = mod.MapCache[Map.ComputeUID(package)];
+					if (preview.Class != MapClassification.Unknown)
+						throw new InvalidDataException("Development map leaked into the normal map list: " + name);
+				}
+			var suitable = typeof(MapCache).GetMethod("IsSuitableInitialMap", BindingFlags.NonPublic | BindingFlags.Instance);
+			foreach (var map in mod.MapCache.Where(m => m.Class == MapClassification.Unknown))
+				if ((bool)suitable.Invoke(mod.MapCache, new object[] { map }))
+					throw new InvalidDataException("Development map can be randomly selected as initial map: " + map.Title);
+			foreach (var map in mod.MapCache.Where(m => m.Class == MapClassification.Unknown))
+				if (Widgets.Logic.SkirmishSetupLogic.IsSelectableMap(map))
+					throw new InvalidDataException("Archived map leaked into the custom chooser: " + map.Title);
+			var handcrafted = mod.MapCache.Where(Widgets.Logic.SkirmishSetupLogic.IsHandcraftedMap).ToArray();
+			foreach (var fake in new[] { "testmap1.oramap", "handcrafted-review.oramap", "refinery-probe.oramap", "handcrafted-all-that-glitters-barren-review.oramap" })
+				if (Widgets.Logic.SkirmishSetupLogic.IsHandcraftedPackage(fake, new[] { "Handcrafted Maps", "Tactical" }))
+					throw new InvalidDataException("A diagnostic copy inherited access to the curated picker: " + fake);
+			if (handcrafted.Length != 3 || handcrafted.Select(m => m.Title).Distinct().Count() != 3)
+				throw new InvalidDataException("Expected exactly three distinct selectable handcrafted maps.");
+			Console.WriteLine("Development maps: preserved by UID, excluded from selection tabs, custom chooser and initial-map fallback.");
 			var current = mod.MapCache.Single(m => m.Status == MapStatus.Available &&
 				m.Class == MapClassification.System && Path.GetFileName(m.PackageName) == mod.Manifest.ShellmapName);
 			var expected = current.Uid;

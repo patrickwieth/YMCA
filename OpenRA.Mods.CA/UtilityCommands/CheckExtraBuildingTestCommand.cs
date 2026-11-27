@@ -93,6 +93,25 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					bibSequences[bib.Sequence].ResolveSprites(cache);
 				}
 			}
+			var oilNodes = map.ActorDefinitions.Where(n => n.Key == "TestOilPlatform" && n.Value.Value.Equals("oil_platform", StringComparison.OrdinalIgnoreCase)).ToArray();
+			if (oilNodes.Length != 1) throw new InvalidDataException("Expected one oil-platform display.");
+			var oil = new ActorReference("oil_platform", oilNodes[0].Value.ToDictionary());
+			var oilLocation = oil.Get<LocationInit>().Value;
+			var oilInfo = map.Rules.Actors["oil_platform"].TraitInfo<BuildingInfo>();
+			for (var y = -1; y <= oilInfo.Dimensions.Y; y++) for (var x = -1; x <= oilInfo.Dimensions.X; x++)
+			{
+				var cell = oilLocation + new CVec(x, y);
+				if (!map.Contains(cell) || map.GetTerrainInfo(cell).Type != "Water")
+					throw new InvalidDataException("Oil platform needs a complete water footprint and border.");
+				if (positions.TryGetValue(cell, out var occupants) && occupants.Any(id => id != "TestOilPlatform"))
+					throw new InvalidDataException("Oil platform pool overlaps another building.");
+			}
+			var oilNode = nodes["oil_platform"];
+			var oilStates = new MiniYamlNode(oilNode.Key, new MiniYaml(null, oilNode.Value.Nodes.Where(n => new[] { "Defaults", "idle", "damaged-idle" }.Contains(n.Key))));
+			var oilSequences = mod.SpriteSequenceLoader.ParseSequences(mod, map.Tileset, cache, oilStates);
+			cache.LoadReservations(mod);
+			foreach (var sequence in oilSequences.Values) sequence.ResolveSprites(cache);
+			Console.WriteLine("Oil Platform: body sprites loaded; separate 4x4 water footprint plus border, no overlaps.");
 			Console.WriteLine("China18 / Scrin17: actual map/rules/sprites loaded; all new footprints inside bounds, on valid terrain and non-overlapping. Live review pending.");
 		}
 	}

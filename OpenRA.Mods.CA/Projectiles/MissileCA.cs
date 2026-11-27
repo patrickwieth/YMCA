@@ -73,6 +73,9 @@ namespace OpenRA.Mods.CA.Projectiles
 		[Desc("Is the missile aware of terrain height levels. Only needed for mods with real, non-visual height levels.")]
 		public readonly bool TerrainHeightAware = false;
 
+		[Desc("Measure cruise altitude above the terrain below the missile, without granting obstacle lookahead or firing-position exemptions.")]
+		public readonly bool CruiseRelativeToTerrain = true;
+
 		[Desc("Width of projectile (used for finding blocking actors).")]
 		public readonly WDist Width = new WDist(1);
 
@@ -374,7 +377,7 @@ namespace OpenRA.Mods.CA.Projectiles
 			var tarDistVec = targetPosition + offset - pos;
 			var relTarHorDist = tarDistVec.HorizontalLength;
 
-			var predClfHgt = 0;
+			var predClfHgt = info.CruiseRelativeToTerrain ? TerrainAltitude(world.Map, pos) : 0;
 			var predClfDist = 0;
 			var lastHt = 0;
 
@@ -783,7 +786,7 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		WVec HomingTick(World world, in WVec tarDistVec, int relTarHorDist)
 		{
-			int predClfHgt = 0;
+			int predClfHgt = info.CruiseRelativeToTerrain ? TerrainAltitude(world.Map, pos) : 0;
 			int predClfDist = 0;
 			int lastHtChg = 0;
 			int lastHt = 0;
@@ -899,7 +902,8 @@ namespace OpenRA.Mods.CA.Projectiles
 				pos += move;
 
 			// Check for walls or other blocking obstacles
-			var shouldExplode = false;
+			var shouldExplode = TerrainFireControl.TryBlock(world, args.Weapon, lastPos, pos, out var terrainHit);
+			if (shouldExplode) pos = terrainHit;
 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, args.SourceActor.Owner, lastPos, pos, info.Width, out var blockedPos))
 			{
 				pos = blockedPos;
@@ -921,7 +925,7 @@ namespace OpenRA.Mods.CA.Projectiles
 			distanceCovered += new WDist(speed);
 			var cell = world.Map.CellContaining(pos);
 			var height = world.Map.DistanceAboveTerrain(pos);
-			shouldExplode |= height.Length < 0 // Hit the ground
+			shouldExplode |= TerrainFireControl.BelowTerrain(world, args.Weapon, pos) // Hit the ground
 				|| relTarDist < info.CloseEnough.Length // Within range
 				|| (info.ExplodeWhenEmpty && rangeLimit >= WDist.Zero && distanceCovered > rangeLimit) // Ran out of fuel
 				|| !world.Map.Contains(cell) // This also avoids an IndexOutOfRangeException in GetTerrainInfo below.

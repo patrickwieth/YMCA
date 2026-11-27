@@ -132,16 +132,20 @@ POWR.Soviet:
 		Prerequisite: powr
 
 APWR.Soviet:
-	Inherits@SOVIETBIB: ^Soviet4x4Bib
+	Inherits@SOVIETBIB: ^Soviet4x3Bib
 	Inherits: ^SovietAdvancedPowerBase
+	WithIdleOverlay@SOVIETBIB:
+		# Cancel the shared service-depot sequence's +32,-16px registration.
+		# BodyOrientation transforms this to world -362,+362 (screen -32,+16).
+		Offset: -567,-362,0
 	Building:
-		Dimensions: 4,4
-		Footprint: xxxx xxxx xxxx xxxx
-		LocalCenterOffset: 0,-724,0
+		Dimensions: 4,3
+		Footprint: xxxx xxxx xxxx
+		LocalCenterOffset: 0,0,0
 	HitShape:
 		Type: Rectangle
-			TopLeft: -2048,-2048
-			BottomRight: 2048,2048
+			TopLeft: -2048,-1536
+			BottomRight: 2048,1536
 	IsometricSelectable:
 		DecorationHeight: 30
 	RenderSprites:
@@ -420,19 +424,22 @@ TSLA:
 TPWR:
 	Inherits@SOVIETBIB: ^Soviet3x3Bib
 	Inherits: APWR
+	# Match the active 2x2 body / 3x3 site; keep the bib centered on the site.
+	WithIdleOverlay@SOVIETBIB:
+		Offset: -1134,0,0
 	# APWR inherits Allied mask fields; explicitly restore the Soviet joints.
 	WithBibRemap:
 		ImagePrefix: sovietbib
 		Palette: bibplayer
 	-WithShadow@BUILDINGTRIAL:
 	Building:
-		Dimensions: 4,4
-		Footprint: xxxx xxxx xxxx xxxx
+		Dimensions: 3,3
+		Footprint: xx= xx= ===
 		LocalCenterOffset: 0,-724,0
 	HitShape:
 		Type: Rectangle
-			TopLeft: -2048,-2048
-			BottomRight: 2048,2048
+			TopLeft: -1024,-1024
+			BottomRight: 1024,1024
 	-WithIdleOverlay@ALLIEDBIB:
 	IsometricSelectable:
 		-DecorationBounds:

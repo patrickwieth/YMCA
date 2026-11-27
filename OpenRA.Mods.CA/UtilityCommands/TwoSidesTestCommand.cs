@@ -68,7 +68,10 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					foreach (var cp in plan.StrategicCheckpoints)
 						if (!StrategicCheckpointPlanner.FitsUnmodifiedCheckpointArea(plan, cp.Point))
 							throw new InvalidDataException("Checkpoint does not fit its original native footprint and approach.");
-					Console.WriteLine($"TWO SIDES PASS players={players} seed={seed} native banks, unchanged coast/economy, deterministic checkpoints.");
+					var fordSteps = FordSteps(plan, firstBank);
+					var riverWidth = Math.Clamp(Math.Min(plan.Width, plan.Height) / 9, 10, 18);
+					if (fordSteps < riverWidth * 1.4) throw new InvalidDataException($"Ford is too short: {players}/{seed}: {fordSteps} wet steps for width {riverWidth}.");
+					Console.WriteLine($"TWO SIDES PASS players={players} seed={seed} native banks, unchanged coast/economy, deterministic checkpoints; ford wet steps={fordSteps}.");
 					count++;
 				}
 			foreach (var pair in new[] { (3, 46), (6, 44), (12, 40), (9, 42) })
@@ -80,6 +83,33 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					RubberduckShoreTopology.SourceFrames(edges, 0).Any(f => f >= 40))
 					throw new InvalidDataException("Half-cell wedges erase a narrow spit or isolated land cell.");
 			Console.WriteLine($"TWO SIDES COMPLETE cases={count}; 16 diagonal direction/variant checks and narrow-land controls.");
+		}
+
+		static int FordSteps(MapPlan plan, HashSet<PlanPoint> firstBank)
+		{
+			var pending = new Queue<(CPos Cell, int Steps)>(); var seen = new HashSet<CPos>();
+			IEnumerable<CPos> Neighbors(CPos c)
+			{
+				for (var y = -1; y <= 1; y++) for (var x = -1; x <= 1; x++)
+					if (x != 0 || y != 0) yield return c + new CVec(x, y);
+			}
+			foreach (var p in firstBank)
+			foreach (var c in Neighbors(MountainPlateauPlanner.Cell(p.X, p.Y)))
+			{
+				var q = MountainPlateauPlanner.Point(c);
+				if (plan.Contains(q.U, q.V) && plan.TerrainAt(q.U, q.V) == PlannedTerrain.ShallowWater && seen.Add(c)) pending.Enqueue((c, 1));
+			}
+			while (pending.Count > 0)
+			{
+				var item = pending.Dequeue();
+				foreach (var c in Neighbors(item.Cell))
+				{
+					var p = MountainPlateauPlanner.Point(c); if (!plan.Contains(p.U, p.V)) continue;
+					if (plan.TerrainAt(p.U, p.V) == PlannedTerrain.Land && !firstBank.Contains(new PlanPoint(p.U, p.V))) return item.Steps;
+					if (plan.TerrainAt(p.U, p.V) == PlannedTerrain.ShallowWater && seen.Add(c)) pending.Enqueue((c, item.Steps + 1));
+				}
+			}
+			throw new InvalidDataException("Ford does not connect both banks.");
 		}
 
 		static HashSet<PlanPoint> DryBank(MapPlan plan, PlanPoint start)

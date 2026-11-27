@@ -35,8 +35,17 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					var sequence = mod.SpriteSequenceLoader.ParseSequences(mod, "TEMPERAT", cache, selected)[name];
 					cache.LoadReservations(mod);
 					sequence.ResolveSprites(cache);
-					var area = building.Dimensions.X * building.Dimensions.Y;
-					var size = area <= 2 ? "small" : area <= 9 ? "medium" : "big";
+					// Footprints have been refined independently of the approved animation timing.
+					// Validate the selected stage family, rather than silently resizing animations.
+					var firstFrame = node.Value.Nodes.First(n => n.Key == name).Value.Nodes.First(n => n.Key == "Combine")
+						.Value.Nodes.First().Value.Nodes.First(n => n.Key == "Filename").Value.Value;
+					var size = firstFrame switch
+					{
+						"make-small1.png" => "small",
+						"make-medium1.png" => "medium",
+						"make-big1.png" => "big",
+						_ => throw new InvalidDataException(pair.Key + ": unknown construction stage family.")
+					};
 					var stages = size == "small" ? 2 : size == "medium" ? 3 : 4;
 					if (sequence.Length != stages * 5 || sequence.Facings != 1 || sequence.Scale != 1)
 						throw new InvalidDataException(pair.Key + ": invalid construction sequence.");

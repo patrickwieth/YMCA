@@ -149,7 +149,7 @@ namespace OpenRA.Mods.CA.Projectiles
 		bool recalculateOffsets;
 
 		[Sync]
-		WPos target, source, lastTarget, lastSource;
+		WPos target, source, lastTarget, lastSource, unblockedTarget;
 
 		public PlasmaBeam(ProjectileArgs args, PlasmaBeamInfo info)
 		{
@@ -193,8 +193,10 @@ namespace OpenRA.Mods.CA.Projectiles
 			offsets = new WPos[numSegments + 1];
 			distortions = new WVec[numSegments + 1];
 
-			// Check for blocking actors
+			// Preserve the intended endpoint; clipping must affect every beam segment.
+			unblockedTarget = target;
 			CheckBlocked();
+			direction = target - source;
 			CalculateColors(direction);
 			CalculateBeam(direction);
 			DoImpacts();
@@ -211,6 +213,8 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		void CheckBlocked()
 		{
+			if (TerrainFireControl.TryBlock(args.SourceActor.World, args.Weapon, source, target, out var terrainHit))
+				target = terrainHit;
 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(args.SourceActor.World, args.SourceActor.Owner, source, target, info.CenterBeamWidth, out var blockedPos))
 				target = blockedPos;
 		}
@@ -362,11 +366,13 @@ namespace OpenRA.Mods.CA.Projectiles
 			if (info.MaxFacingDeviation.Angle < 512 && !OpenRA.Mods.Common.Util.FacingWithinTolerance(args.CurrentMuzzleFacing(), initialMuzzleFacing, info.MaxFacingDeviation))
 				world.AddFrameEndTask(w => w.Remove(this));
 
-			var direction = target - source;
-
+			target = unblockedTarget;
 			TrackTarget();
+			var direction = target - source;
 			UpdateOffset(direction);
+			unblockedTarget = target;
 			CheckBlocked();
+			direction = target - source;
 			CalculateColors(direction);
 
 			if (++ticks >= info.Duration || args.SourceActor.IsDead)

@@ -1,0 +1,150 @@
+diff --git a/engine/OpenRA.Mods.Common/Widgets/ObserverArmyIconsWidget.cs b/engine/OpenRA.Mods.Common/Widgets/ObserverArmyIconsWidget.cs
+--- a/engine/OpenRA.Mods.Common/Widgets/ObserverArmyIconsWidget.cs
++++ b/engine/OpenRA.Mods.Common/Widgets/ObserverArmyIconsWidget.cs
+@@ -109,7 +109,8 @@
+ 				var centerPosition = iconTopLeft;
+ 
+ 				var palette = unit.IconPaletteIsPlayerPalette ? unit.IconPalette + player.InternalName : unit.IconPalette;
+-				WidgetUtils.DrawSpriteCentered(icon.Image, worldRenderer.Palette(palette), centerPosition + 0.5f * iconSize, 0.5f);
++				WidgetUtils.DrawSpriteCentered(icon.Image, worldRenderer.Palette(palette), centerPosition + 0.5f * iconSize,
++					Math.Min(iconSize.X / icon.Image.Size.X, iconSize.Y / icon.Image.Size.Y));
+ 
+ 				armyIcons.Add(new ArmyIcon
+ 				{
+diff --git a/engine/OpenRA.Mods.Common/Widgets/ObserverProductionIconsWidget.cs b/engine/OpenRA.Mods.Common/Widgets/ObserverProductionIconsWidget.cs
+--- a/engine/OpenRA.Mods.Common/Widgets/ObserverProductionIconsWidget.cs
++++ b/engine/OpenRA.Mods.Common/Widgets/ObserverProductionIconsWidget.cs
+@@ -148,7 +148,8 @@
+ 				var centerPosition = iconTopLeft + 0.5f * iconSize;
+ 
+ 				var palette = bi.IconPaletteIsPlayerPalette ? bi.IconPalette + player.InternalName : bi.IconPalette;
+-				WidgetUtils.DrawSpriteCentered(icon.Image, worldRenderer.Palette(palette), centerPosition, 0.5f);
++				WidgetUtils.DrawSpriteCentered(icon.Image, worldRenderer.Palette(palette), centerPosition,
++					Math.Min(iconSize.X / icon.Image.Size.X, iconSize.Y / icon.Image.Size.Y));
+ 
+ 				var rect = new Rectangle((int)iconTopLeft.X, (int)iconTopLeft.Y, (int)iconSize.X, (int)iconSize.Y);
+ 				var productionIcon = new ProductionIcon
+@@ -165,7 +166,7 @@
+ 					productionIcon.Buttonize = seq.Buttonize;
+ 					productionIcon.ButtonStyle = seq.ButtonStyle;
+ 					productionIcon.ButtonLabel = seq.ButtonLabel;
+-					productionIcon.ButtonLabelFont = seq.ButtonLabelFont;
++					productionIcon.ButtonLabelFont = icon.Image.Size.X > 64 && seq.ButtonLabelFont != "OsShp" ? "TinyBold" : seq.ButtonLabelFont;
+ 					productionIcon.ButtonLabelOffset = seq.ButtonLabelOffset;
+ 				}
+ 
+diff --git a/engine/OpenRA.Mods.Common/Widgets/ProductionIconButtonizer.cs b/engine/OpenRA.Mods.Common/Widgets/ProductionIconButtonizer.cs
+--- a/engine/OpenRA.Mods.Common/Widgets/ProductionIconButtonizer.cs
++++ b/engine/OpenRA.Mods.Common/Widgets/ProductionIconButtonizer.cs
+@@ -161,7 +161,7 @@
+ 			if (!Game.Renderer.Fonts.TryGetValue(fontName, out var font))
+ 				font = Game.Renderer.Fonts[fallbackFont];
+ 
+-			var barHeight = Math.Max(4, Math.Min(BarHeight, rect.Height / 3));
++			var barHeight = Math.Max(4, Math.Min(Math.Max(BarHeight, font.Measure("Ag").Y + 2), rect.Height / 3));
+ 			var bar = new Rectangle(rect.Left, rect.Bottom - barHeight + VerticalOffset, rect.Width + VerticalOffset, barHeight);
+ 			WidgetUtils.FillRectWithColor(bar, style.BarTopColor, style.BarTopColor, style.BarBottomColor, style.BarBottomColor);
+ 
+@@ -213,8 +213,10 @@
+ 				if (lines.Count == 0)
+ 					return false;
+ 
+-				var padding = lines.Count == 1 ? 1 : 4;
+-				var textHeight = lines.Count * VisibleHeight;
++				var scale = Math.Max(1f, rect.Width / 64f);
++				var lineHeight = (int)Math.Ceiling(VisibleHeight * scale);
++				var padding = (int)Math.Ceiling((lines.Count == 1 ? 1 : 4) * scale);
++				var textHeight = lines.Count * lineHeight;
+ 				var barHeight = Math.Min(rect.Height, textHeight + padding);
+ 				if (lines.Count > 1)
+ 					barHeight = Math.Max(4, barHeight - 2);
+@@ -224,14 +226,14 @@
+ 				var firstLineTop = bar.Bottom - textHeight;
+ 				for (var i = 0; i < lines.Count; i++)
+ 				{
+-					var lineTop = firstLineTop + i * VisibleHeight;
+-					DrawLine(lines[i], bar, lineTop);
++					var lineTop = firstLineTop + i * lineHeight;
++					DrawLine(lines[i], bar, lineTop, scale);
+ 				}
+ 
+ 				return true;
+ 			}
+ 
+-			static void DrawLine(string text, Rectangle bar, int lineTop)
++			static void DrawLine(string text, Rectangle bar, int lineTop, float scale)
+ 			{
+ 				var runs = BuildGlyphRuns(text);
+ 				if (runs.Count == 0)
+@@ -241,15 +243,16 @@
+ 				foreach (var run in runs)
+ 					totalWidth += run.Advance;
+ 
+-				var x = bar.Left + (bar.Width - totalWidth) / 2;
++				var x = bar.Left + (bar.Width - totalWidth * scale) / 2;
+ 				var y = lineTop;
+ 
+ 				foreach (var run in runs)
+ 				{
+ 					if (run.Sprite != null)
+-						WidgetUtils.DrawSprite(run.Sprite, new float2(x, y));
+-
+-					x += run.Advance;
++						WidgetUtils.DrawSprite(run.Sprite, new float2(x, y),
++							scale * new float2(run.Sprite.Size.X, run.Sprite.Size.Y));
++
++					x += run.Advance * scale;
+ 				}
+ 			}
+ 
+diff --git a/engine/OpenRA.Mods.Common/Widgets/ProductionPaletteWidget.cs b/engine/OpenRA.Mods.Common/Widgets/ProductionPaletteWidget.cs
+--- a/engine/OpenRA.Mods.Common/Widgets/ProductionPaletteWidget.cs
++++ b/engine/OpenRA.Mods.Common/Widgets/ProductionPaletteWidget.cs
+@@ -55,6 +55,7 @@
+ 		public readonly int2 IconSize = new(64, 48);
+ 		public readonly int2 IconMargin = int2.Zero;
+ 		public readonly int2 IconSpriteOffset = int2.Zero;
++		public readonly bool FitIconsToCell = false;
+ 
+ 		public readonly float2 QueuedOffset = new(4, 2);
+ 		public readonly TextAlign QueuedTextAlign = TextAlign.Left;
+@@ -569,6 +570,9 @@
+ 				OnIconCountChanged(oldIconCount, DisplayedIconCount);
+ 		}
+ 
++		float IconScale(Sprite sprite) => FitIconsToCell
++			? Math.Min(IconSize.X / sprite.Size.X, IconSize.Y / sprite.Size.Y) : 1f;
++
+ 		public override void Draw()
+ 		{
+ 			timeOffset = iconOffset - overlayFont.Measure(WidgetUtils.FormatTime(0, World.Timestep)) / 2;
+@@ -582,11 +586,14 @@
+ 			Game.Renderer.EnableAntialiasingFilter();
+ 			foreach (var icon in icons.Values)
+ 			{
+-				WidgetUtils.DrawSpriteCentered(icon.Sprite, icon.Palette, icon.Pos + iconOffset);
++				WidgetUtils.DrawSpriteCentered(icon.Sprite, icon.Palette, icon.Pos + iconOffset, IconScale(icon.Sprite));
+ 
+ 				// Draw the ProductionIconOverlay's sprites
++				var overlayScale = FitIconsToCell ? Math.Min(IconSize.X / 64f, IconSize.Y / 48f) : 1f;
++				var overlaySize = FitIconsToCell ? new int2(64, 48) : IconSize;
+ 				foreach (var pio in pios.Where(p => p.IsOverlayActive(icon.Actor, icon.ProductionQueue.Actor)))
+-					WidgetUtils.DrawSpriteCentered(pio.Sprite, worldRenderer.Palette(pio.Palette), icon.Pos + iconOffset + pio.Offset(IconSize));
++					WidgetUtils.DrawSpriteCentered(pio.Sprite, worldRenderer.Palette(pio.Palette),
++						icon.Pos + iconOffset + overlayScale * pio.Offset(overlaySize), overlayScale);
+ 
+ 				// Build progress
+ 				if (icon.Queued.Count > 0)
+@@ -597,10 +604,10 @@
+ 							* (clock.CurrentSequence.Length - 1) / first.TotalTime);
+ 					clock.Tick();
+ 
+-					WidgetUtils.DrawSpriteCentered(clock.Image, icon.IconClockPalette, icon.Pos + iconOffset);
++					WidgetUtils.DrawSpriteCentered(clock.Image, icon.IconClockPalette, icon.Pos + iconOffset, IconScale(clock.Image));
+ 				}
+ 				else if (!buildableItems.Any(a => a.Name == icon.Name))
+-					WidgetUtils.DrawSpriteCentered(cantBuild.Image, icon.IconDarkenPalette, icon.Pos + iconOffset);
++					WidgetUtils.DrawSpriteCentered(cantBuild.Image, icon.IconDarkenPalette, icon.Pos + iconOffset, IconScale(cantBuild.Image));
+ 
+ 				var rect = new Rectangle((int)icon.Pos.X, (int)icon.Pos.Y, IconSize.X, IconSize.Y);
+ 				ProductionIconButtonizer.Draw(icon, rect, icon.Name, OverlayFont);

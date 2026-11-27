@@ -1,0 +1,90 @@
+diff --git a/engine/OpenRA.Mods.Common/Traits/World/TerrainLighting.cs b/engine/OpenRA.Mods.Common/Traits/World/TerrainLighting.cs
+--- a/engine/OpenRA.Mods.Common/Traits/World/TerrainLighting.cs
++++ b/engine/OpenRA.Mods.Common/Traits/World/TerrainLighting.cs
+@@ -59,6 +59,37 @@
+ 		readonly SpatiallyPartitioned<LightSource> partitionedLightSources;
+ 		readonly float3 globalTint;
+ 		int nextLightSourceToken = 1;
++		int updateDepth;
++		readonly HashSet<MPos> pendingChanged = new();
++		readonly Dictionary<WPos, float3> notificationTints = new();
++		bool notifyingBatch;
++
++		sealed class UpdateScope : IDisposable
++		{
++			TerrainLighting lighting;
++			public UpdateScope(TerrainLighting lighting) { this.lighting = lighting; lighting.updateDepth++; }
++			public void Dispose()
++			{
++				if (lighting == null) return;
++				var owner = lighting; lighting = null;
++				if (--owner.updateDepth != 0) return;
++				var cells = new MPos[owner.pendingChanged.Count];
++				owner.pendingChanged.CopyTo(cells); owner.pendingChanged.Clear();
++				var wasNotifying = owner.notifyingBatch;
++				owner.notifyingBatch = true;
++				try { foreach (var cell in cells) owner.CellChanged?.Invoke(cell); }
++				finally { owner.notifyingBatch = wasNotifying; owner.notificationTints.Clear(); }
++			}
++		}
++
++		// Notify each affected cell once, after the final state of a render-local batch.
++		public IDisposable BatchUpdates() => new UpdateScope(this);
++
++		void NotifyChanged(MPos cell)
++		{
++			if (updateDepth != 0) pendingChanged.Add(cell);
++			else CellChanged?.Invoke(cell);
++		}
+ 
+ 		public event Action<MPos> CellChanged = null;
+ 
+@@ -84,6 +115,7 @@
+ 
+ 		public int AddLightSource(WPos pos, WDist range, float intensity, in float3 tint)
+ 		{
++			notificationTints.Clear();
+ 			var token = nextLightSourceToken++;
+ 			var source = new LightSource(pos, map.CellContaining(pos), range, intensity, tint);
+ 			var bounds = Bounds(source);
+@@ -92,7 +124,7 @@
+ 
+ 			if (CellChanged != null)
+ 				foreach (var c in map.FindTilesInCircle(source.Cell, (source.Range.Length + 1023) / 1024))
+-					CellChanged(c.ToMPos(map));
++					NotifyChanged(c.ToMPos(map));
+ 
+ 			return token;
+ 		}
+@@ -102,15 +134,19 @@
+ 			if (!lightSources.TryGetValue(token, out var source))
+ 				return;
+ 
++			notificationTints.Clear();
+ 			lightSources.Remove(token);
+ 			partitionedLightSources.Remove(source);
+ 			if (CellChanged != null)
+ 				foreach (var c in map.FindTilesInCircle(source.Cell, (source.Range.Length + 1023) / 1024))
+-					CellChanged(c.ToMPos(map));
++					NotifyChanged(c.ToMPos(map));
+ 		}
+ 
+ 		float3 ITerrainLighting.TintAt(WPos pos)
+ 		{
++			// Several terrain layers query the same corners during a notification batch.
++			// Cache only while that immutable final light state is being dispatched.
++			if (notifyingBatch && notificationTints.TryGetValue(pos, out var cached)) return cached;
+ 			using (new PerfSample("terrain_lighting"))
+ 			{
+ 				var uv = map.CellContaining(pos).ToMPos(map);
+@@ -134,7 +170,9 @@
+ 					}
+ 				}
+ 
+-				return intensity * tint;
++				var result = intensity * tint;
++				if (notifyingBatch) notificationTints[pos] = result;
++				return result;
+ 			}
+ 		}
+ 	}

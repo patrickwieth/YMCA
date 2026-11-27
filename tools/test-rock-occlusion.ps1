@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$EngineDirectory,[Parameter(Mandatory=$true)][string]$OutputDirectory,[switch]$Baseline,[switch]$Slopes)
+param([Parameter(Mandatory=$true)][string]$EngineDirectory,[Parameter(Mandatory=$true)][string]$OutputDirectory,[switch]$Baseline,[switch]$Slopes,[switch]$Buildings,[switch]$Gdi,[switch]$China,[switch]$Voxel)
 $ErrorActionPreference='Stop'
 $root=Split-Path -Parent $PSScriptRoot
 $engine=[IO.Path]::GetFullPath($EngineDirectory)
@@ -8,7 +8,7 @@ $oldEngine=$env:ENGINE_DIR;$oldSearch=$env:MOD_SEARCH_PATHS;$oldProbe=$env:YMCA_
 Push-Location $root
 try {
  $env:ENGINE_DIR=$engine;$env:MOD_SEARCH_PATHS="$root/mods,$engine/mods";$env:YMCA_ROCK_OCCLUSION_PROBE='1'
- $mode=if($Slopes){if($Baseline){'slope-baseline'}else{'slopes'}}elseif($Baseline){'baseline'}else{'fixed'}
+ $mode=if($Buildings){$name=if($Voxel){'buildings-voxel'}elseif($China){'buildings-china'}elseif($Gdi){'buildings-gdi'}else{'buildings'};if($Baseline){"$name-baseline"}else{$name}}elseif($Slopes){if($Baseline){'slope-baseline'}else{'slopes'}}elseif($Baseline){'baseline'}else{'fixed'}
  & dotnet "$engine/bin/OpenRA.Utility.dll" ca --create-rock-occlusion-probe "$output.oramap" "$output/results.txt" $mode
  if($LASTEXITCODE -ne 0){throw 'Fixture generation/validation failed.'}
  & "$PSScriptRoot/test-refinery-docking.ps1" -EngineDirectory $engine -MapPackage "$output.oramap" -OutputDirectory $output

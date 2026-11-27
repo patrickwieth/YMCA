@@ -175,14 +175,14 @@ def build(output):
     digest = hashlib.sha256(json.dumps(catalog, sort_keys=True).encode() +
                             json.dumps(prototype, sort_keys=True).encode() + Path(__file__).read_bytes()).hexdigest()
     source_paths = sorted((REPO / 'mods/ca/rules').rglob('*.yaml')) + sorted((REPO / 'mods/ca/weapons').rglob('*.yaml'))
-    source_paths += [REPO / 'engine/VERSION', REPO / 'mods/ca/maps/testmap2.oramap']
+    source_paths += [REPO / 'engine/VERSION', REPO / 'mods/ca/development-maps/testmap2.oramap']
     sources = {p.relative_to(REPO).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in source_paths}
     manifest = dict(schema=1, input_sha256=digest, source_sha256=sources,
                     scope='map-only prototype; no designer UI or general trait composition', designs=summary)
     files = {'map.yaml': map_yaml(summary).encode(), 'modular-rules.yaml': rules.encode(),
              'modular-weapons.yaml': weapons.encode(),
              'modular-manifest.json': (json.dumps(manifest, indent=2) + '\n').encode()}
-    with zipfile.ZipFile(REPO / 'mods/ca/maps/testmap2.oramap') as terrain:
+    with zipfile.ZipFile(REPO / 'mods/ca/development-maps/testmap2.oramap') as terrain:
         for name in ('map.bin', 'map.png'):
             files[name] = terrain.read(name)
     # Reproducible map content. Refuse to replace user-modified maps.

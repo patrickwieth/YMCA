@@ -16,6 +16,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			public int RadiusY;
 			public double Rotation;
 			public bool Raised;
+			public PlanPoint? RampAvoidTarget;
 			public double[] GateAngles = Array.Empty<double>();
 			public double[] BorderAngles = Array.Empty<double>();
 			public double GateHalfAngle;
@@ -39,7 +40,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 				// Every committed plateau already owns its complete footprint. Do not
 				// run the legacy apron expansion or rebuild an unused partial actor graph.
-				PlaceResources(plan, options, random);
+				if (!PlaceResources(plan, options, random)) { Failed("balanced starting economy"); continue; }
 				if (Validate(plan, options))
 					return plan;
 				Failed("height connectivity or construction area");
@@ -82,6 +83,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				{
 					Center = center,
 					Raised = true,
+					RampAvoidTarget = options.Players == 2 ? spawnCenters[1 - slot] : null,
 					RadiusX = homeRadius,
 					RadiusY = homeRadius,
 					Rotation = inwardAngle + Math.PI,
@@ -540,14 +542,14 @@ namespace OpenRA.Mods.CA.MapGeneration
 				if (!plan.PlateauSurfaces.ContainsKey(new MPos(p.X, p.Y))) plan.AddFeature(p.X, p.Y, interiorFeature);
 			foreach (var p in entrances) plan.AddFeature(p.U, p.V, PlannedFeature.Entrance);
 			if (interiorFeature == PlannedFeature.Home)
-				return MountainPlateauPlanner.AddHome(plan, plateauFootprint, site.Center, homeOwner);
+				return MountainPlateauPlanner.AddHome(plan, plateauFootprint, site.Center, homeOwner, avoidTarget: site.RampAvoidTarget);
 			return open || MountainPlateauPlanner.AddIsland(plan, plateauFootprint, site.Rotation);
 		}
 
 		internal static bool PaintExpansionRim(MapPlan plan, IReadOnlyList<PlanPoint> rim, ISet<MPos> protectedCells = null) =>
 			ClosedExpansionRimPlanner.Place(plan, rim, protectedCells ?? new HashSet<MPos>());
 
-		static void PlaceResources(MapPlan plan, MapGenerationOptions options, MersenneTwister random)
+		static bool PlaceResources(MapPlan plan, MapGenerationOptions options, MersenneTwister random)
 		{
 			switch (options.Resources)
 			{
@@ -558,30 +560,33 @@ namespace OpenRA.Mods.CA.MapGeneration
 								plan.AddFeature(x, y, PlannedFeature.Resource);
 					break;
 				case ResourceFieldLayout.Patches:
-					PlaceResourcePatches(plan, options.Players * 2, random);
+					if (!BalancedStartingEconomy.PlaceFields(plan, 5, !options.FiniteResources, random)) return false;
+					// Replace half the old random patches with equal, owned starting fields.
+					PlaceResourcePatches(plan, options.Players, random);
 					break;
 			}
 
-			if (options.Resources != ResourceFieldLayout.None && !options.FiniteResources)
+			if (options.Resources == ResourceFieldLayout.Glitter && !options.FiniteResources)
 				PlaceSingletons(plan, PlannedFeature.ResourceGenerator, Math.Max(1, options.Players / 2), random);
 
-			switch (options.TechBuildings)
-			{
-				case TechBuildingDensity.Sparse:
-					PlaceSingletons(plan, PlannedFeature.TechBuilding, Math.Max(1, options.Players / 3), random);
-					break;
-				case TechBuildingDensity.Dense:
-					PlaceTechClusters(plan, Math.Max(1, options.Players / 3), random);
-					break;
-			}
+			return BalancedStartingEconomy.PlaceOil(plan, options.TechBuildings, options.Resources == ResourceFieldLayout.Glitter, random);
 		}
 
 		static void PlaceResourcePatches(MapPlan plan, int count, MersenneTwister random)
 		{
+			var nearStarts = new bool[plan.Width * plan.Height];
+			foreach (var field in plan.StartingFields)
+			{
+				var distances = StartBalanceMetrics.Distances(plan, field.Start);
+				for (var i = 0; i < distances.Length; i++)
+					if (distances[i] >= 0 && distances[i] <= field.InitialEdgeDistance + 8) nearStarts[i] = true;
+			}
 			for (var patch = 0; patch < count; patch++)
 			{
-				if (!TryFindLandCell(plan, random, out var center))
-					return;
+				var center = default(PlanPoint); var found = false;
+				for (var attempt = 0; attempt < 100 && !found; attempt++)
+					found = TryFindLandCell(plan, random, out center) && !nearStarts[center.X + center.Y * plan.Width];
+				if (!found) return;
 
 				var radiusX = random.Next(3, 9);
 				var radiusY = random.Next(3, 9);
@@ -591,7 +596,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 						var normalized =
 							(x - center.X) * (x - center.X) / (double)(radiusX * radiusX) +
 							(y - center.Y) * (y - center.Y) / (double)(radiusY * radiusY);
-						if (normalized <= 1 && CanPlaceResource(plan, x, y) && random.Next(100) < 88)
+						if (normalized <= 1 && CanPlaceResource(plan, x, y) && !nearStarts[x + y * plan.Width] && random.Next(100) < 88)
 							plan.AddFeature(x, y, PlannedFeature.Resource);
 					}
 			}
@@ -617,37 +622,10 @@ namespace OpenRA.Mods.CA.MapGeneration
 				}
 		}
 
-		static void PlaceTechClusters(MapPlan plan, int sites, MersenneTwister random)
-		{
-			for (var site = 0; site < sites; site++)
-			{
-				var center = default(PlanPoint);
-				var found = false;
-				for (var attempt = 0; attempt < 500 && !found; attempt++)
-					found = TryFindLandCell(plan, random, out center) && CanPlaceEconomyBuilding(plan, center.X, center.Y);
-				if (!found) return;
-
-				var target = random.Next(4, 7);
-				plan.AddFeature(center.X, center.Y, PlannedFeature.TechBuilding);
-				var placed = 1;
-				for (var attempt = 0; attempt < 50 && placed < target; attempt++)
-				{
-					var x = center.X + random.Next(-3, 4);
-					var y = center.Y + random.Next(-3, 4);
-					if (!CanPlaceEconomyBuilding(plan, x, y) || plan.HasFeature(x, y, PlannedFeature.TechBuilding | PlannedFeature.ResourceGenerator))
-						continue;
-
-					plan.AddFeature(x, y, PlannedFeature.TechBuilding);
-					placed++;
-				}
-				if (placed < target) PlaceSingletons(plan, PlannedFeature.TechBuilding, target - placed, random);
-			}
-		}
-
 		static bool CanPlaceEconomyBuilding(MapPlan plan, int x, int y)
 		{
-			// Oil derricks occupy 2x2 CPos cells. Protect the entire footprint and
-			// its approach, not just the anchor, from slopes and plateau edges.
+			// Retain the old clearance for Glitter regeneration sites. Owned oils
+			// use BalancedStartingEconomy and full native footprint validation.
 			var cell = MountainPlateauPlanner.Cell(x, y);
 			for (var dy = -3; dy <= 3; dy++)
 				for (var dx = -3; dx <= 3; dx++)
@@ -682,6 +660,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 		static bool Validate(MapPlan plan, MapGenerationOptions options)
 		{
+			try { BalancedStartingEconomy.ValidateFields(plan); }
+			catch (InvalidOperationException) { return false; }
 			var reachable = FindReachable(plan, plan.Spawns[0]);
 			foreach (var spawn in plan.Spawns)
 				if (!reachable[spawn.X + spawn.Y * plan.Width])

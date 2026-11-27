@@ -20,6 +20,15 @@ namespace OpenRA.Mods.CA.Traits
 		readonly Dictionary<CPos, IFinalizedRenderable[]> rendered = new();
 		WorldRenderer renderer;
 		long revision;
+		long flatRevision = -1;
+		bool flatTerrain;
+		void RefreshFlatTerrain()
+		{
+			var current = TerrainRenderRevision.Get(World.Map);
+			if (flatRevision == current) return;
+			flatTerrain = !World.Map.AllCells.Any(c => World.Map.Height[c] != 0 || World.Map.Ramp[c] != 0);
+			flatRevision = current;
+		}
 		public int ClippedCells { get; private set; }
 		readonly HashSet<CPos> clipped = new();
 		readonly HashSet<CPos> populated = new();
@@ -32,6 +41,14 @@ namespace OpenRA.Mods.CA.Traits
 			if (renderer == null) return;
 			if (content.Type == null || content.Density <= 0) { base.UpdateRenderedSprite(cell,content); return; }
 			populated.Add(cell);
+			RefreshFlatTerrain();
+			// A flat map has no higher surface to clip against. Avoid allocating and
+			// scanning per-sprite pixel masks when thousands of resources become visible.
+			if (flatTerrain || !((OccludedResourceRendererInfo)Info).ClipToRaisedTerrain)
+			{
+				base.UpdateRenderedSprite(cell, content);
+				return;
+			}
 			var sequence=content.Sequence;
 			var frame=int2.Lerp(0,sequence.Length-1,content.Density,ResourceLayer.GetMaxDensity(content.Type));
 			var pos=World.Map.CenterOfCell(cell)-new WVec(0,0,World.Map.Grid.Ramps[World.Map.Ramp[cell]].CenterHeightOffset);

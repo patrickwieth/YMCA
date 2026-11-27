@@ -124,7 +124,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 			return false;
 		}
 
-		public static bool AddHome(MapPlan plan, IEnumerable<PlanPoint> footprint, PlanPoint center, int owner, bool insetRamp = false, int rampCount = 1)
+		public static bool AddHome(MapPlan plan, IEnumerable<PlanPoint> footprint, PlanPoint center, int owner, bool insetRamp = false, int rampCount = 1, PlanPoint? avoidTarget = null)
 		{
 			var cells = footprint.Select(p => Cell(p.X, p.Y)).ToHashSet();
 			if (cells.Any(c => plan.PlateauSurfaces.ContainsKey(Point(c)) ||
@@ -144,8 +144,20 @@ namespace OpenRA.Mods.CA.MapGeneration
 					if (!coarse.Contains(origin + new CVec(x, y))) fieldsFit = false;
 			var originalCells = cells;
 			var middle = Cell(plan.Width / 2, plan.Height / 2);
-			var directions = Enumerable.Range(0, 4).OrderByDescending(d =>
+			IEnumerable<int> directions = Enumerable.Range(0, 4).OrderByDescending(d =>
 				(middle.X - origin.X) * PlateauTopology.Directions[d].X + (middle.Y - origin.Y) * PlateauTopology.Directions[d].Y);
+			if (avoidTarget.HasValue)
+			{
+				// Compare in native cell axes, not the staggered map-storage coordinates.
+				// Prefer the most lateral exit in the non-enemy-facing half-plane.
+				// Never silently fall back to a forward ramp if this roof does not fit.
+				var target = Cell(avoidTarget.Value.X, avoidTarget.Value.Y);
+				int Facing(int d) => (target.X - origin.X) * PlateauTopology.Directions[d].X +
+					(target.Y - origin.Y) * PlateauTopology.Directions[d].Y;
+				directions = Enumerable.Range(0, 4).Where(d => Facing(d) <= 0).OrderBy(d => Math.Abs(Facing(d)))
+					.ThenByDescending(d => (target.X - origin.X) * PlateauTopology.Directions[d].Y -
+						(target.Y - origin.Y) * PlateauTopology.Directions[d].X);
+			}
 			foreach (var (fitCoarse, direction) in new[] { true, false }.SelectMany(coarseFit => directions.Select(d => (coarseFit, d))))
 			{
 				cells = fitCoarse && fieldsFit && coarse.Contains(origin) ? coarse : originalCells;

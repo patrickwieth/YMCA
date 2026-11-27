@@ -2,7 +2,7 @@
 from pathlib import Path
 from zipfile import ZipFile,ZIP_DEFLATED
 import os,re,subprocess,tempfile,unittest
-from prepare_extra_faction_buildings import GROUPS,placements,prepare
+from prepare_extra_faction_buildings import GROUPS,placements,prepare,OIL_PLATFORM
 ROOT=Path(__file__).resolve().parents[1]
 class ExtraFactionBuildingTests(unittest.TestCase):
  def test_complete_standalone_inventory(self):
@@ -12,25 +12,30 @@ class ExtraFactionBuildingTests(unittest.TestCase):
    actors={n.lower() for n in re.findall(r'^([\w.]+):',text,re.M)}
    self.assertEqual(actors-excluded[group],set(GROUPS[group][2]))
  def test_idempotent_and_existing_actors_unchanged(self):
-  with ZipFile(ROOT/'mods/ca/maps/testmap1.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig').replace('\r\n','\n')
+  with ZipFile(ROOT/'mods/ca/development-maps/testmap1.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig').replace('\r\n','\n')
   updated=prepare(text)
   self.assertEqual(updated,prepare(updated))
   for block in re.findall(r'(?m)^\tActor\d+: [^\n]+\n(?:\t\t[^\n]*\n)*',text):self.assertIn(block,updated)
   self.assertEqual(len(list(placements())),35)
+  actor,name,(x,y),faction=OIL_PLATFORM
+  self.assertEqual(updated.count(f'\t{actor}: {name}\n'),1)
+  self.assertIn(f'\t{actor}: {name}\n\t\tOwner: Multi0\n\t\tLocation: {x},{y}\n\t\tFaction: {faction}',updated)
   for actor,name,(x,y),faction in placements():
    self.assertIn(f'\t{actor}: {name}\n\t\tOwner: Multi0\n\t\tLocation: {x},{y}\n\t\tFaction: {faction}',updated)
    self.assertLess(x+y,76)
    u=(x-y)//2
    self.assertTrue(24<=u<=48 if actor.startswith('TestChina') else 78<=u<=102)
  def test_disposable_map_engine_validation(self):
-  source=ROOT/'mods/ca/maps/testmap1.oramap';before=source.read_bytes()
+  source=ROOT/'mods/ca/development-maps/testmap1.oramap';before=source.read_bytes()
   env=dict(os.environ,ENGINE_DIR=str(ROOT/'engine'),MOD_SEARCH_PATHS=f'{ROOT/"mods"},{ROOT/"engine/mods"}')
   with tempfile.TemporaryDirectory() as temp:
    target=Path(temp)/'testmap1-debug.oramap'
    subprocess.run(['powershell','-NoProfile','-ExecutionPolicy','Bypass','-File',str(ROOT/'tools/prepare-test-game-map.ps1'),'-SourceMap',str(source),'-DestinationMap',str(target)],check=True)
    for command in ('--prepare-building-test-water','--check-extra-building-test'):
     result=subprocess.check_output(['dotnet',str(ROOT/'engine/bin/OpenRA.Utility.dll'),str(ROOT/'mods/ca'),command,str(target)],env=env,cwd=ROOT,text=True)
-    if command.endswith('water'):self.assertIn('5 Naval Yard(s)',result)
+    if command.endswith('water'):
+     self.assertIn('5 Naval Yard(s)',result)
+     self.assertIn('1 Oil Platform(s)',result)
     else:self.assertIn('China18 / Scrin17',result)
    # Keep the checker strict: missing required bibs and unexpected bunker bibs
    # must fail by actor name, not via an uninformative LINQ Single() exception.

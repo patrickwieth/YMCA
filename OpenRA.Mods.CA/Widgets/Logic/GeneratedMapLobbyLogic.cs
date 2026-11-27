@@ -38,6 +38,7 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 				var originalMap = orderManager.LobbyInfo.GlobalSettings.Map;
 				var args = new WidgetArgs
 				{
+					{ "allowedMapPool", orderManager.ServerMapPool },
 					{ "onSelect", (Action<string>)(uid =>
 					{
 						if (string.IsNullOrEmpty(uid) || !CanChange() || uid == orderManager.LobbyInfo.GlobalSettings.Map) return;

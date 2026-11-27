@@ -37,5 +37,24 @@ The last command constructs all relevant actors' trait dependencies and loads th
 actual construction sprite reservations/frames. `engine-check.tsv` records the
 validated image/size bindings. Utility assembly was built into the isolated
 `.construction-utility` directory, without stopping/replacing the running game.
-Live placement/construction/selling review is still pending. Restart the game to
-load the changed YAML; existing matches retain their original rules.
+The original inventory is a historical size-selection snapshot; later footprint
+refinements do not silently change approved stage families or animation lengths.
+The checker now validates the actually selected stage family and its frames.
+
+Current ground registration is supplied by the final
+`sequences/construction-alignment.yaml` layer. PNG anchors include source alpha
+margins, Bottom-anchor correction, final offsets and scale; legacy SHP anchors
+come from resolved engine sprites. Reproduce after visual placement changes:
+
+```
+OpenRA.Utility ca --audit-building-icons audit.json
+OpenRA.Utility ca --export-legacy-construction-anchors legacy.json
+python tools/prepare_construction_alignment.py audit.json.sequences.json legacy.json
+```
+
+The latest local native review covers construction start, middle and completion
+for ten representative actors, including legacy Swiss Bank/Grand Cannon. It also
+confirms Scrin's intentionally hidden construction remains hidden. Stage timing,
+reverse selling behavior and callbacks were not changed. See
+`../../building-finish-review.md`. Restart through `tools/test-game.cmd` to compile
+and load current changes; existing matches retain their original rules.

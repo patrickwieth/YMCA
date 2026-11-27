@@ -47,7 +47,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 	static class MapGenerationPresetNames
 	{
 		// Keep the serialized enum/old CLI identifier stable for existing content.
-		public static string DisplayName(this MapGenerationPreset preset) => preset == MapGenerationPreset.Arabia ? "Plains" : preset.ToString();
+		public static string DisplayName(this MapGenerationPreset preset) => preset == MapGenerationPreset.Arabia ? "Desert" : preset.ToString();
 	}
 
 	sealed class MapGenerationOptions

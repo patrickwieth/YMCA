@@ -1,7 +1,7 @@
 ﻿OILP:
 	Inherits: ^BuildingTD
-	Inherits: ^DisableOnLowPower
-	Inherits: ^1x1Shape
+	Inherits@POWER: ^DisableOnLowPower
+	Inherits@SHAPE: ^1x1Shape
 	RenderSprites:
 		Palette: player
 	Buildable:
@@ -34,7 +34,7 @@
 
 Oil_Platform:
 	Inherits: ^BuildingTD
-	Inherits: ^4x4Shape
+	Inherits@SHAPE: ^4x4Shape
 	WithShadow:
 		Offset: 100, 256, 0
 		ZOffset: -256
@@ -67,12 +67,6 @@ Oil_Platform:
 	Power:
 		Amount: -50
 		RequiresCondition: !being-warped
-	WithIdleOverlay@crane:
-		Sequence: crane
-		Interval: 0
-	WithIdleOverlay@waves:
-		Sequence: waves
-		Interval: 0
 	-SpawnActorsOnSell@default:
 	-SpawnActorsOnSell:
 	-SpawnActorOnDeath@default:
@@ -110,9 +104,63 @@ Oil_Platform:
 
 Swiss_Bank:
 	Inherits: ^BuildingTD
-	Inherits: ^DisableOnLowPowerOrPowerDown
-	Inherits: ^2x2Shape
+	Inherits@POWER: ^DisableOnLowPowerOrPowerDown
+	Inherits@SHAPE: ^2x2Shape
 	Inherits@visuals: ^Allied2x2DriveableBib
+	# Keep the builder's faction style, including explicit FactionInit from production.
+	GrantConditionOnFaction@BANKSOVIET:
+		Condition: bank-soviet-bib
+		Factions: soviet, russia, nkorea, iraq, china, chinainf, chinatnk, chinaatom
+	GrantConditionOnFaction@BANKGDI:
+		Condition: bank-gdi-bib
+		Factions: gdi, talon, zocom, eagle
+	GrantConditionOnFaction@BANKNOD:
+		Condition: bank-nod-bib
+		Factions: nod, blackh, marked, legion
+	GrantConditionOnFaction@BANKSCRIN:
+		Condition: bank-scrin-bib
+		Factions: scrin, reaper, traveler, harvester
+	WithBibRemap:
+		AdditionalPalettes:
+			sovietbib: bibplayer
+			gdibib: gdibibplayer
+			nodbib: nodbibplayer
+	-WithIdleOverlay@ALLIEDBIB:
+	WithFactionBibOverlay@BANKALLIEDBIB:
+		Image: alliedbib3x3
+		Sequence: idle
+		Offset: -1134,0,0
+		IsDecoration: true
+		ExcludeFactions: soviet, russia, nkorea, iraq, china, chinainf, chinatnk, chinaatom, gdi, talon, zocom, eagle, nod, blackh, marked, legion, scrin, reaper, traveler, harvester
+		RequiresCondition: !bank-soviet-bib && !bank-gdi-bib && !bank-nod-bib && !bank-scrin-bib && !build-incomplete
+	WithFactionBibOverlay@BANKSOVIETBIB:
+		Factions: soviet, russia, nkorea, iraq, china, chinainf, chinatnk, chinaatom
+		Image: sovietbib3x3
+		Sequence: grid
+		Offset: -1134,0,0
+		RequiresCondition: bank-soviet-bib && !build-incomplete
+		IsDecoration: true
+	WithFactionBibOverlay@BANKGDIBIB:
+		Factions: gdi, talon, zocom, eagle
+		Image: gdibib3x3
+		Sequence: idle
+		Offset: -1134,0,0
+		RequiresCondition: bank-gdi-bib && !build-incomplete
+		IsDecoration: true
+	WithFactionBibOverlay@BANKNODBIB:
+		Factions: nod, blackh, marked, legion
+		Image: nodbib3x3
+		Sequence: idle
+		Offset: -1134,0,0
+		RequiresCondition: bank-nod-bib && !build-incomplete
+		IsDecoration: true
+	WithFactionBibOverlay@BANKSCRINBIB:
+		Factions: scrin, reaper, traveler, harvester
+		Image: scrinbib3x3
+		Sequence: idle
+		Offset: -1134,0,0
+		RequiresCondition: bank-scrin-bib && !build-incomplete
+		IsDecoration: true
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 200

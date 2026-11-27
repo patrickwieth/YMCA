@@ -79,7 +79,7 @@ class SentryV13GameTests(unittest.TestCase):
    else:self.assertEqual(old[name].rstrip(),new[name].rstrip())
 
  def test_independent_sentry_does_not_override_flame_tower(self):
-  source=ROOT/'mods/ca/maps/testmap1.oramap';before=source.read_bytes()
+  source=ROOT/'mods/ca/development-maps/testmap1.oramap';before=source.read_bytes()
   default=traits(resolved('--resolved-rules','FTUR'))
   self.assertIn('Image: ftur.soviet',default['RenderSprites'])
   self.assertNotIn('ftur.soviet.v13',default['RenderSprites'])

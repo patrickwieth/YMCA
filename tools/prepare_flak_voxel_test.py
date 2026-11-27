@@ -3,7 +3,7 @@ from pathlib import Path
 from zipfile import ZipFile,ZIP_DEFLATED
 import hashlib
 from prepare_air_defense_targets import prepare
-ROOT=Path(__file__).resolve().parents[1];source=ROOT/'mods/ca/maps/testmap1.oramap';dest=ROOT/'mods/ca/maps/soviet-flak-voxel-test.oramap';before=hashlib.sha256(source.read_bytes()).hexdigest()
+ROOT=Path(__file__).resolve().parents[1];source=ROOT/'mods/ca/development-maps/testmap1.oramap';dest=ROOT/'mods/ca/development-maps/soviet-flak-voxel-test.oramap';before=hashlib.sha256(source.read_bytes()).hexdigest()
 with ZipFile(source) as z:files={name:z.read(name) for name in z.namelist()}
 text=files['map.yaml'].decode('utf-8-sig');assert ': sam\n' in text
 text=text.replace('Title: Building Grid Test (All Factions)','Title: Flak Sprite Test (local art)')

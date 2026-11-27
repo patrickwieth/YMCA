@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using OpenRA.GameRules;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common;
+using OpenRA.Mods.Common.Traits;
 using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Projectiles
@@ -84,6 +85,7 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		[Sync]
 		WPos pos, visualPos, target, source;
+		readonly int visualGroundOffset;
 		int ticks;
 		int intervalTicks;
 		int totalDistanceTravelled;
@@ -109,7 +111,11 @@ namespace OpenRA.Mods.CA.Projectiles
 			pos = visualPos = args.Source;
 
 			if (info.ForceGround)
-				pos = new WPos(pos.X, pos.Y, 0);
+				pos = TerrainFireControl.ActiveFor(world, args.Weapon)
+					? pos - new WVec(0, 0, world.Map.DistanceAboveTerrain(pos).Length)
+					: new WPos(pos.X, pos.Y, 0);
+
+			visualGroundOffset = visualPos.Z - pos.Z;
 
 			// initially no distance has been travelled by the pulse
 			totalDistanceTravelled = 0;
@@ -152,7 +158,17 @@ namespace OpenRA.Mods.CA.Projectiles
 			anim?.Tick();
 
 			var directionalSpeed = speed.Rotate(WRot.FromYaw(facing));
-			pos = pos + directionalSpeed;
+			var nextPos = pos + directionalSpeed;
+			if (info.ForceGround && TerrainFireControl.ActiveFor(world, args.Weapon) && world.Map.Contains(world.Map.CellContaining(nextPos)))
+				nextPos -= new WVec(0, 0, world.Map.DistanceAboveTerrain(nextPos).Length);
+			if (TerrainFireControl.TryBlock(world, args.Weapon, pos, nextPos, out var terrainHit))
+			{
+				pos = visualPos = terrainHit;
+				if (totalDistanceTravelled >= info.MinimumImpactDistance.Length) Explode(world);
+				world.AddFrameEndTask(w => w.Remove(this));
+				return;
+			}
+			pos = nextPos;
 
 			var visualDirectionalSpeed = directionalSpeed;
 			if (info.VisualSpeed != info.Speed)
@@ -160,7 +176,10 @@ namespace OpenRA.Mods.CA.Projectiles
 				visualDirectionalSpeed = visualSpeed.Rotate(WRot.FromYaw(facing));
 			}
 
-			visualPos = visualPos + visualDirectionalSpeed;
+			var nextVisual = visualPos + visualDirectionalSpeed;
+			if (info.ForceGround && TerrainFireControl.ActiveFor(world, args.Weapon) && world.Map.Contains(world.Map.CellContaining(nextVisual)))
+				nextVisual -= new WVec(0, 0, world.Map.DistanceAboveTerrain(nextVisual).Length - visualGroundOffset);
+			visualPos = TerrainFireControl.TryBlock(world, args.Weapon, visualPos, nextVisual, out var visualHit) ? visualHit : nextVisual;
 
 			totalDistanceTravelled += info.Speed.Length;
 			totalVisualDistanceTravelled += info.VisualSpeed != WDist.Zero && info.VisualSpeed != info.Speed ? info.VisualSpeed.Length : info.Speed.Length;

@@ -16,6 +16,8 @@ GROUPS={
   'wsph','nerv','scrt','grav','sign',
   'srep','mani','rift','ptur','shar',
   'scol','swal'])}
+# Dedicated water display to the right of the Soviet block (native CPos).
+OIL_PLATFORM = ('TestOilPlatform', 'oil_platform', (164, -64), 'russia')
 # Not stand-alone player buildings: radar plug, AI duplicates, temporary cloud/column,
 # docking helper, nonbuildable Nukular variants; disabled resource silos remain omitted.
 def placements():
@@ -28,9 +30,9 @@ def placements():
 def prepare(text):
  text=text.replace('\r\n','\n')
  # Idempotent, only replace our own generated actor IDs.
- text=re.sub(r'(?m)^\tTest(?:China|Scrin)\d+: [^\n]+\n(?:\t\t[^\n]*\n)*','',text)
+ text=re.sub(r'(?m)^\t(?:Test(?:China|Scrin)\d+|TestOilPlatform): [^\n]+\n(?:\t\t[^\n]*\n)*','',text)
  start=text.index('Actors:\n')+len('Actors:\n')
- actors=''.join(f'\t{actor}: {name}\n\t\tOwner: Multi0\n\t\tLocation: {x},{y}\n\t\tFaction: {faction}\n' for actor,name,(x,y),faction in placements())
+ actors=''.join(f'\t{actor}: {name}\n\t\tOwner: Multi0\n\t\tLocation: {x},{y}\n\t\tFaction: {faction}\n' for actor,name,(x,y),faction in [*placements(), OIL_PLATFORM])
  text=text[:start]+actors+text[start:]
  # Rubberduck terrain has no 'Wall' preview color. Keep the live wall, omit only
  # its generated minimap signature in this disposable map (no global trait edit).
@@ -40,9 +42,9 @@ def prepare(text):
 
 if __name__=='__main__':
  path=Path(sys.argv[1]).resolve()
- if path==(ROOT/'mods/ca/maps/testmap1.oramap').resolve():raise ValueError('Source map is immutable')
+ if path==(ROOT/'mods/ca/development-maps/testmap1.oramap').resolve():raise ValueError('Source map is immutable')
  with ZipFile(path) as z:files={n:z.read(n) for n in z.namelist()}
  files['map.yaml']=prepare(files['map.yaml'].decode('utf-8-sig')).encode()
  with ZipFile(path,'w',ZIP_DEFLATED) as z:
   for n,data in files.items():z.writestr(n,data)
- print('Building test: China upper-left (18), Scrin upper-right (17); existing positions preserved.')
+ print('Building test: China upper-left (18), Scrin upper-right (17); oil platform right of Soviet block; existing positions preserved.')

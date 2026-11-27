@@ -1,0 +1,53 @@
+--- a/engine/OpenRA.Mods.Common/Projectiles/Missile.cs
++++ b/engine/OpenRA.Mods.Common/Projectiles/Missile.cs
+@@ -70,6 +70,9 @@
+ 
+ 		[Desc("Is the missile aware of terrain height levels. Only needed for mods with real, non-visual height levels.")]
+ 		public readonly bool TerrainHeightAware = false;
++
++		[Desc("Measure cruise altitude above local physical terrain without enabling obstacle lookahead.")]
++		public readonly bool CruiseRelativeToTerrain = false;
+ 
+ 		[Desc("Width of projectile (used for finding blocking actors).")]
+ 		public readonly WDist Width = new(1);
+@@ -372,7 +375,7 @@
+ 			var tarDistVec = targetPosition + offset - pos;
+ 			var relTarHorDist = tarDistVec.HorizontalLength;
+ 
+-			var predClfHgt = 0;
++			var predClfHgt = info.CruiseRelativeToTerrain ? pos.Z - world.Map.DistanceAboveTerrain(pos).Length : 0;
+ 			var predClfDist = 0;
+ 			var lastHt = 0;
+ 
+@@ -520,16 +523,18 @@
+ 			var posProbe = pos;
+ 			var curDist = 0;
+ 			var tickLimit = System.Math.Min(maxLookaheadDistance, distCheck) / StepSize;
+-			var prevHt = 0;
+-
+-			// TODO: Make sure cell on map!!!
++			// Use physical world altitude (including slopes), not an assumed
++			// 512 world units per logical height step. Isometric CA uses 724.
++			var prevHt = posProbe.Z - world.Map.DistanceAboveTerrain(posProbe).Length;
++
++			// Stop at the playable boundary before sampling terrain.
+ 			for (var tick = 0; tick <= tickLimit; tick++)
+ 			{
+ 				posProbe += step;
+ 				if (!world.Map.Contains(world.Map.CellContaining(posProbe)))
+ 					break;
+ 
+-				var ht = world.Map.Height[world.Map.CellContaining(posProbe)] * 512;
++				var ht = posProbe.Z - world.Map.DistanceAboveTerrain(posProbe).Length;
+ 
+ 				curDist += StepSize;
+ 				if (ht > predClfHgt)
+@@ -778,7 +783,7 @@
+ 
+ 		WVec HomingTick(World world, in WVec tarDistVec, int relTarHorDist)
+ 		{
+-			var predClfHgt = 0;
++			var predClfHgt = info.CruiseRelativeToTerrain ? pos.Z - world.Map.DistanceAboveTerrain(pos).Length : 0;
+ 			var predClfDist = 0;
+ 			var lastHtChg = 0;
+ 			var lastHt = 0;

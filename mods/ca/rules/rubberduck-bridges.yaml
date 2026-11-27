@@ -37,3 +37,36 @@ EditorWorld:
 	RubberduckBridgeCollapse:
 	AppearsOnMapPreview:
 		Terrain: Clear
+
+^RubberduckBridgeRemains:
+	AlwaysVisible:
+	Building:
+		Dimensions: 1,1
+		Footprint: =
+	BodyOrientation:
+		QuantizedFacings: 1
+	BridgePlaceholder:
+		Type: RubberduckBridge
+		DamageState: Dead
+
+^RubberduckBridgeRepairHut:
+	Inherits@BIB: ^Soviet1x1Bib
+	AlwaysVisible:
+	Building:
+		Dimensions: 1,1
+		Footprint: x
+	BodyOrientation:
+		QuantizedFacings: 1
+	RenderSprites:
+		Image: rubberduck-bridge-repair-hut
+		Palette: terrain
+	WithSpriteBody:
+	Interactable:
+	Tooltip:
+		Name: Bridge Repair Hut
+		ShowOwnerRow: false
+	Targetable:
+		TargetTypes: BridgeHut
+	BridgeHut:
+		Types: RubberduckBridge
+		RepairPropagationDelay: 0

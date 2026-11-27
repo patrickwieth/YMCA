@@ -65,7 +65,8 @@ namespace OpenRA.Mods.CA.Widgets
 		{
 			if (actor != null)
 			{
-				WidgetUtils.DrawSpriteCentered(icon.Image, worldRenderer.Palette(palette), RenderOrigin, 2.0f);
+				var scale = 2f * Math.Min(IconSize.X / icon.Image.Size.X, IconSize.Y / icon.Image.Size.Y);
+				WidgetUtils.DrawSpriteCentered(icon.Image, worldRenderer.Palette(palette), RenderOrigin, scale);
 
 				foreach (var pio in pios.Where(p => p.IsOverlayActive(actor.Info)))
 					WidgetUtils.DrawSpriteCentered(pio.Sprite, worldRenderer.Palette(pio.Palette), RenderOrigin + 2*pio.Offset(IconSize ), 2.0f);

@@ -1,0 +1,268 @@
+diff --git a/engine/OpenRA.Game/Map/Map.cs b/engine/OpenRA.Game/Map/Map.cs
+--- a/engine/OpenRA.Game/Map/Map.cs
++++ b/engine/OpenRA.Game/Map/Map.cs
+@@ -150,7 +150,7 @@
+ 		}
+ 	}
+ 
+-	public sealed class Map : IReadOnlyFileSystem, IDisposable
++	public sealed partial class Map : IReadOnlyFileSystem, IDisposable
+ 	{
+ 		public const int SupportedMapFormat = 11;
+ 		public const int CurrentMapFormat = 12;
+@@ -166,6 +166,8 @@
+ 			new("Tileset"),
+ 			new("MapSize"),
+ 			new("Bounds"),
++			new("CellBounds", required: false, ignoreIfValue: "0,0,0,0"),
++			new("BaseTerrainOverrides", required: false),
+ 			new("Visibility"),
+ 			new("Categories"),
+ 			new("LockPreview", required: false, ignoreIfValue: "False"),
+@@ -457,6 +459,8 @@
+ 			var tl = new MPos(0, 0).ToCPos(this);
+ 			var br = new MPos(MapSize.X - 1, MapSize.Y - 1).ToCPos(this);
+ 			AllCells = new CellRegion(Grid.Type, tl, br);
++			ValidateCellBounds();
++			InitializeBaseTerrainOverrides();
+ 
+ 			var btl = new PPos(Bounds.Left, Bounds.Top);
+ 			var bbr = new PPos(Bounds.Right - 1, Bounds.Bottom - 1);
+@@ -811,6 +815,8 @@
+ 				for (var x = 0; x < width; x++)
+ 				{
+ 					var uv = new MPos(x + Bounds.Left, y + top);
++					if (HasCellBounds && !CellBoundsContains(uv))
++						continue;
+ 
+ 					// TryGetValue will return Color.Transparent if not found
+ 					colorsByPosition.TryGetValue(uv, out var actorColor);
+@@ -882,6 +888,9 @@
+ 
+ 		public bool Contains(CPos cell)
+ 		{
++			if (HasCellBounds && !CellBounds.Contains(cell.X, cell.Y))
++				return false;
++
+ 			if (Grid.Type == MapGridType.RectangularIsometric)
+ 			{
+ 				// .ToMPos() returns the same result if the X and Y coordinates
+@@ -903,6 +912,9 @@
+ 
+ 		public bool Contains(MPos uv)
+ 		{
++			if (HasCellBounds && !CellBoundsContains(uv))
++				return false;
++
+ 			// The first check ensures that the cell is within the valid map region, avoiding
+ 			// potential crashes in deeper code.  All CellLayers have the same geometry, and
+ 			// CustomTerrain is convenient.
+@@ -937,7 +949,7 @@
+ 
+ 		public bool Contains(PPos puv)
+ 		{
+-			return Bounds.Contains(puv.U, puv.V);
++			return Bounds.Contains(puv.U, puv.V) && (!HasCellBounds || CellBoundsContains((MPos)puv));
+ 		}
+ 
+ 		public WPos CenterOfCell(CPos cell)
+@@ -1160,7 +1172,8 @@
+ 			if (terrainIndex == InvalidCachedTerrainIndex)
+ 			{
+ 				var custom = CustomTerrain[uv];
+-				terrainIndex = cachedTerrainIndexes[uv] = custom != byte.MaxValue ? custom : Rules.TerrainInfo.GetTerrainInfo(Tiles[uv]).TerrainType;
++				terrainIndex = cachedTerrainIndexes[uv] = custom != byte.MaxValue ? custom :
++					baseTerrainOverrides.TryGetValue(cell, out var original) ? original : Rules.TerrainInfo.GetTerrainInfo(Tiles[uv]).TerrainType;
+ 			}
+ 
+ 			return (byte)terrainIndex;
+@@ -1173,11 +1186,17 @@
+ 
+ 		public CPos Clamp(CPos cell)
+ 		{
++			if (HasCellBounds)
++				return ClampToCellBounds(cell);
++
+ 			return Clamp(cell.ToMPos(this)).ToCPos(this);
+ 		}
+ 
+ 		public MPos Clamp(MPos uv)
+ 		{
++			if (HasCellBounds)
++				return ClampToCellBounds(uv.ToCPos(Grid.Type)).ToMPos(Grid.Type);
++
+ 			if (Grid.MaximumTerrainHeight == 0)
+ 				return (MPos)Clamp((PPos)uv);
+ 
+@@ -1238,12 +1257,17 @@
+ 
+ 		public PPos Clamp(PPos puv)
+ 		{
++			// Viewport rectangles must enclose the entire logical diamond. Gameplay
++			// targets use the CPos/MPos overloads, which enforce CellBounds instead.
+ 			var bounds = new Rectangle(Bounds.X, Bounds.Y, Bounds.Width - 1, Bounds.Height - 1);
+ 			return puv.Clamp(bounds);
+ 		}
+ 
+ 		public CPos ChooseRandomCell(MersenneTwister rand)
+ 		{
++			if (HasCellBounds)
++				return new CPos(rand.Next(CellBounds.Left, CellBounds.Right), rand.Next(CellBounds.Top, CellBounds.Bottom));
++
+ 			List<MPos> cells;
+ 			do
+ 			{
+@@ -1264,6 +1288,9 @@
+ 
+ 		public MPos ChooseClosestEdgeCell(MPos uv)
+ 		{
++			if (HasCellBounds)
++				return ClosestCellBoundsEdge(uv.ToCPos(Grid.Type)).ToMPos(Grid.Type);
++
+ 			var allProjected = ProjectedCellsCovering(uv);
+ 
+ 			PPos edge;
+@@ -1315,6 +1342,9 @@
+ 
+ 		List<CPos> UpdateEdgeCells()
+ 		{
++			if (HasCellBounds)
++				return CellBoundsEdges();
++
+ 			var edgeCells = new List<CPos>();
+ 			var unProjected = new List<MPos>();
+ 			var bottom = Bounds.Bottom - 1;
+@@ -1350,6 +1380,9 @@
+ 
+ 		public WDist DistanceToEdge(WPos pos, in WVec dir)
+ 		{
++			if (HasCellBounds)
++				return DistanceToCellBoundsEdge(pos, dir);
++
+ 			var projectedPos = pos - new WVec(0, pos.Z, pos.Z);
+ 			var x = dir.X == 0 ? int.MaxValue : ((dir.X < 0 ? ProjectedTopLeft.X : ProjectedBottomRight.X) - projectedPos.X) / dir.X;
+ 			var y = dir.Y == 0 ? int.MaxValue : ((dir.Y < 0 ? ProjectedTopLeft.Y : ProjectedBottomRight.Y) - projectedPos.Y) / dir.Y;
+diff --git a/engine/OpenRA.Game/Map/MapCellBounds.cs b/engine/OpenRA.Game/Map/MapCellBounds.cs
+new file mode 100644
+--- /dev/null
++++ b/engine/OpenRA.Game/Map/MapCellBounds.cs
+@@ -0,0 +1,119 @@
++#region Copyright & License Information
++/*
++ * Copyright (c) The OpenRA Developers and Contributors
++ * This file is part of OpenRA, which is free software. It is made
++ * available to you under the terms of the GNU General Public License
++ * as published by the Free Software Foundation, either version 3 of
++ * the License, or (at your option) any later version. For more
++ * information, see COPYING.
++ */
++#endregion
++
++using System;
++using System.Collections.Generic;
++using System.IO;
++using System.Linq;
++using OpenRA.Primitives;
++
++namespace OpenRA
++{
++	public sealed partial class Map
++	{
++		/// <summary>Optional flat logical-cell rectangle inside the projected bounds; empty retains normal map behavior.</summary>
++		public Rectangle CellBounds;
++
++		/// <summary>Persistent gameplay terrain independent of visual tiles; resource/bridge overrides still take precedence.</summary>
++		public MiniYaml BaseTerrainOverrides;
++
++		readonly Dictionary<CPos, byte> baseTerrainOverrides = new();
++
++		void InitializeBaseTerrainOverrides()
++		{
++			baseTerrainOverrides.Clear();
++			if (BaseTerrainOverrides == null)
++				return;
++
++			foreach (var node in BaseTerrainOverrides.Nodes)
++			{
++				var cell = FieldLoader.GetValue<CPos>("BaseTerrainOverrides", node.Key);
++				var uv = cell.ToMPos(Grid.Type);
++				if (!Tiles.Contains(uv) || !baseTerrainOverrides.TryAdd(cell, Rules.TerrainInfo.GetTerrainIndex(node.Value.Value)))
++					throw new InvalidDataException("Duplicate or out-of-storage base terrain override: " + cell);
++			}
++		}
++
++		/// <summary>Whether this flat map uses an explicit logical-cell playable rectangle.</summary>
++		public bool HasCellBounds => CellBounds.Width > 0 && CellBounds.Height > 0;
++
++		bool CellBoundsContains(MPos uv)
++		{
++			var cell = uv.ToCPos(Grid.Type);
++			return CellBounds.Contains(cell.X, cell.Y);
++		}
++
++		void ValidateCellBounds()
++		{
++			if (CellBounds.Width == 0 && CellBounds.Height == 0)
++				return;
++
++			if (!HasCellBounds || Grid.Type != MapGridType.RectangularIsometric)
++				throw new InvalidDataException("CellBounds requires a positive flat isometric logical rectangle.");
++
++			foreach (var cell in AllCells)
++				if (Height[cell] != 0)
++					throw new InvalidDataException("CellBounds does not support raised terrain.");
++
++			foreach (var cell in CellBoundsEdges())
++			{
++				var uv = cell.ToMPos(Grid.Type);
++				if (cell.X < cell.Y || !Tiles.Contains(uv) || !Bounds.Contains(uv.U, uv.V))
++					throw new InvalidDataException("CellBounds exceeds map storage or projected bounds.");
++			}
++		}
++
++		CPos ClampToCellBounds(CPos cell) => new(
++			cell.X.Clamp(CellBounds.Left, CellBounds.Right - 1),
++			cell.Y.Clamp(CellBounds.Top, CellBounds.Bottom - 1));
++
++		CPos ClosestCellBoundsEdge(CPos cell)
++		{
++			var p = ClampToCellBounds(cell);
++			return new[] { new CPos(CellBounds.Left, p.Y), new CPos(CellBounds.Right - 1, p.Y),
++				new CPos(p.X, CellBounds.Top), new CPos(p.X, CellBounds.Bottom - 1) }
++				.OrderBy(c => (c - cell).LengthSquared).First();
++		}
++
++		List<CPos> CellBoundsEdges()
++		{
++			var result = new HashSet<CPos>();
++			for (var x = CellBounds.Left; x < CellBounds.Right; x++)
++			{
++				result.Add(new CPos(x, CellBounds.Top));
++				result.Add(new CPos(x, CellBounds.Bottom - 1));
++			}
++
++			for (var y = CellBounds.Top; y < CellBounds.Bottom; y++)
++			{
++				result.Add(new CPos(CellBounds.Left, y));
++				result.Add(new CPos(CellBounds.Right - 1, y));
++			}
++
++			return result.OrderBy(c => c.Y).ThenBy(c => c.X).ToList();
++		}
++
++		WDist DistanceToCellBoundsEdge(WPos pos, in WVec dir)
++		{
++			if (dir.Length == 0)
++				return WDist.Zero;
++
++			var projected = pos - new WVec(0, pos.Z, pos.Z);
++			var x = (projected.X + (double)projected.Y) / 1448 - 1;
++			var y = (projected.Y - (double)projected.X) / 1448;
++			var dx = (dir.X + (double)dir.Y) / 1448;
++			var dy = (dir.Y - (double)dir.X) / 1448;
++			var tx = dx == 0 ? double.PositiveInfinity : ((dx < 0 ? CellBounds.Left - .5 : CellBounds.Right - .5) - x) / dx;
++			var ty = dy == 0 ? double.PositiveInfinity : ((dy < 0 ? CellBounds.Top - .5 : CellBounds.Bottom - .5) - y) / dy;
++			return new WDist((int)Math.Max(0, Math.Min(int.MaxValue, Math.Min(tx, ty) * dir.Length)));
++		}
++	}
++}

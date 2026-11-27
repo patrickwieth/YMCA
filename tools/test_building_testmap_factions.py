@@ -17,7 +17,7 @@ def actors(path):
 
 class BuildingTestMapFactionTests(unittest.TestCase):
     def test_soviet_slots_only_and_immutable_source(self):
-        source = ROOT / 'mods/ca/maps/testmap1.oramap'
+        source = ROOT / 'mods/ca/development-maps/testmap1.oramap'
         original = source.read_bytes()
         before = actors(source)
         expected = {10: 'weap.nod', 23: 'fact.soviet', 24: 'powr.soviet', 25: 'apwr.soviet',
@@ -35,6 +35,16 @@ class BuildingTestMapFactionTests(unittest.TestCase):
                 self.assertIn('Owner: Multi0', body)
                 return tuple(map(int, re.search(r'Location: (-?\d+),(-?\d+)', body).groups()))
             normalized = text.replace('\r\n', '\n')
+            player = re.search(r'(?m)^\tPlayerReference@Multi0:\n(?:\t\t[^\n]*\n)*', normalized)[0]
+            self.assertIn('\t\tFaction: england\n', player)
+            self.assertIn('\t\tLockFaction: True\n', player)
+            launcher = (ROOT / 'tools/test-game.cmd').read_text()
+            self.assertIn('PlayerFaction.Multi0=england', launcher)
+            self.assertNotIn('PlayerFaction.Multi0=blackh', launcher)
+            for number in (3,4,5,6,8,10,11,12,13,14,15,16,17,18,19,20,21,22):
+                body = re.search(r'^\tActor' + str(number) + r':[^\n]*\n((?:\t\t[^\n]*\n)*)', normalized, re.M)[1]
+                self.assertIn('\t\tFaction: blackh\n', body, f'Nod display Actor{number}')
+                self.assertIn('\t\tOwner: Multi0\n', body)
             self.assertIn('\tTestTeslaReactor: tpwr\n\t\tOwner: Multi0\n\t\tLocation: 122,-58\n\t\tFaction: russia\n', normalized)
             self.assertEqual(len(re.findall(r'(?m)^\t[^:]+: tpwr$', normalized)), 1)
             self.assertNotRegex(text, r'(?m)^\tFTUR:')

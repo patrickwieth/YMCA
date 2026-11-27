@@ -34,7 +34,7 @@ class SovietFlakSpriteTests(unittest.TestCase):
   self.assertIn('WithMuzzleOverlay',fields);self.assertIn('MuzzleSequence: muzzle-cluster',fields['Armament'])
   sam=traits(resolved('--resolved-rules','SAM'));self.assertIn('Image: sam.soviet',sam['RenderSprites']);self.assertIn('Weapon: Nike',sam['Armament'])
  def test_dedicated_map_uses_sprite_replacement(self):
-  with ZipFile(ROOT/'mods/ca/maps/soviet-flak-voxel-test.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig')
+  with ZipFile(ROOT/'mods/ca/development-maps/soviet-flak-voxel-test.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig')
   self.assertIn('Title: Flak Sprite Test (local art)',text);self.assertIn('Actor37: flak.soviet.sprite',text)
   self.assertNotIn('flak.soviet.voxel',text.lower())
   self.assertIn('Weapon: SOVIET-CLUSTER-AA.Test',text)

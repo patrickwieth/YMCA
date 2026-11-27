@@ -55,6 +55,7 @@ SPEN:
 	Inherits@SHAPE: ^3x3Shape
 	Inherits@PREREQUISITES: ^ShipPrerequisites
 	Inherits@PRODUCTION: ^ShipProduction
+	-WithMakeAnimation:
 	RenderSprites:
 		PlayerPalette: playernavy
 		Image: spen.soviet
@@ -118,6 +119,7 @@ SYRD:
 	Inherits@shape: ^3x3Shape
 	Inherits@Shipyard: ^ShipPrerequisites
 	Inherits@ShipProd: ^ShipProduction
+	-WithMakeAnimation:
 	RenderSprites:
 		Image: syrd.allies
 		PlayerPalette: playernavy
@@ -320,7 +322,7 @@ PBOX:
 
 HBOX:
 	Inherits: ^Defense
-	Inherits: ^AutoTargetAll
+	Inherits@AUTOTARGET: ^AutoTargetAll
 	Inherits@visuals: ^Allied1x1Visuals
 	Inherits@shadow: ^AlliedBuildingShadow
 	RenderSprites:
@@ -735,18 +737,22 @@ STEK:
 		TargetTypes: Ground, C4, DetonateAttack, Structure, SabInfiltrate
 
 BARR:
-	Inherits@SOVIETBIB: ^Soviet3x3Bib
+	Inherits@SOVIETBIB: ^Soviet2x2Bib
 	Inherits@BASE: ^Building
-	Inherits@SHAPE: ^3x2Building
+	Inherits@SHAPE: ^2x2Building
 	Inherits@PRIMARY: ^PrimaryBuilding
 	Inherits@PRODUCTION: ^InfantryProduction
 	RenderSprites:
 		Image: barr.soviet
 	HitShape:
 		UseTargetableCellsOffsets: false
-		TargetableOffsets: 0,0,0, 490,-470,0, 355,512,0, -355,-512,0, -630,512,0
+		TargetableOffsets: 0,-512,0
+		Type: Rectangle
+			TopLeft: -1024,-1024
+			BottomRight: 1024,0
 	Building:
-		Footprint: xxx xxx
+		Footprint: xx ==
+		LocalCenterOffset: 0,0,0
 	Buildable:
 		Queue: Building
 		BuildPaletteOrder: 30
@@ -1752,6 +1758,7 @@ SPEN.nod:
 	Inherits@shape: ^3x3Shape
 	Inherits@Shipyard: ^ShipPrerequisites
 	Inherits@ShipProd: ^ShipProduction
+	-WithMakeAnimation:
 	RenderSprites:
 		Image: SPENNOD
 		PlayerPalette: playernavy
@@ -1836,6 +1843,7 @@ SYRD.gdi:
 	Inherits@shape: ^3x3Shape
 	Inherits@Shipyard: ^ShipPrerequisites
 	Inherits@ShipProd: ^ShipProduction
+	-WithMakeAnimation:
 	RenderSprites:
 		Image: GSYRD
 		PlayerPalette: playernavy

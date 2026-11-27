@@ -9,6 +9,16 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 PATCHES = [ROOT / line for line in (ROOT / 'tools/engine-patches.txt').read_text().splitlines() if line]
 
+class EnginePatchPathTests(unittest.TestCase):
+    def test_registered_paths_match_windows_strip_depth(self):
+        for patch in PATCHES:
+            headers = [line for line in patch.read_text().splitlines() if line.startswith(('--- ', '+++ '))]
+            self.assertTrue(headers, patch.name)
+            for header in headers:
+                path = header[4:].split('\t', 1)[0]
+                prefix = 'a/engine/' if header.startswith('--- ') else 'b/engine/'
+                self.assertTrue(path == '/dev/null' or path.startswith(prefix), f'{patch.name}: {header}')
+
 @unittest.skipUnless(shutil.which('powershell.exe') and shutil.which('git'), 'Windows PowerShell and Git required')
 class WindowsEnginePatchTests(unittest.TestCase):
     def setUp(self):

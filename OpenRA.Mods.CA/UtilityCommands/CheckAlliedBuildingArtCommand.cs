@@ -222,7 +222,7 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				(Image: "weat.allies", File: "weather control.png"),
 				(Image: "atek.allies", File: "tech center.png"),
 				(Image: "hpad.allies", File: "helipad.png"),
-				(Image: "dome.allies", File: "radar.png")
+				(Image: "dome.allies", File: "radar dome.png")
 			})
 				foreach (var state in entry.Image == "atek.allies" ? new[] { "idle", "damaged-idle", "active", "damaged-active", "false-active", "damaged-false-active" } :
 					new[] { "pris.allies", "pdox.allies", "weat.allies", "hpad.allies" }.Contains(entry.Image) ? new[] { "idle", "damaged-idle", "active", "damaged-active" } : new[] { "idle", "damaged-idle" })
@@ -242,8 +242,8 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				(Image: "pris.allies", Offset: "0,-6"), (Image: "powr.allies", Offset: "0,38"),
 				(Image: "apwr.allies", Offset: "0,29"), (Image: "proc.allies", Offset: "0,-5"),
 				(Image: "tent.allies", Offset: "4,-7"), (Image: "gap.allies", Offset: "5,-21"),
-				(Image: "pdox.allies", Offset: "-4,35"), (Image: "hpad.allies", Offset: "0,7"),
-				(Image: "dome.allies", Offset: "0,17"), (Image: "atek.allies", Offset: "0,32"),
+				(Image: "pdox.allies", Offset: "-4,35"), (Image: "hpad.allies", Offset: "-10,59"),
+				(Image: "dome.allies", Offset: "0,25"), (Image: "atek.allies", Offset: "0,32"),
 				(Image: "weat.allies", Offset: "4,15"), (Image: "fix.allies", Offset: "6,-45"),
 				(Image: "orep.allies", Offset: "0,32"),
 				(Image: "syrd.allies", Offset: "0,-52"), (Image: "afld.allies.custom", Offset: "-20,-20")

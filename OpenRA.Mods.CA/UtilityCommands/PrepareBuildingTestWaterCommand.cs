@@ -7,7 +7,7 @@ using OpenRA.Mods.Common.Terrain;
 
 namespace OpenRA.Mods.CA.UtilityCommands
 {
-	[Desc("--prepare-building-test-water PATH", "Put water under Naval Yards in the disposable building-test map only.")]
+	[Desc("--prepare-building-test-water PATH", "Put water under Naval Yards and the oil platform in the disposable building-test map only.")]
 	public sealed class PrepareBuildingTestWaterCommand : IUtilityCommand
 	{
 		string IUtilityCommand.Name => "--prepare-building-test-water";
@@ -39,12 +39,14 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			}
 			var changed = 0;
 			var yards = 0;
+			var platforms = 0;
 			foreach (var node in map.ActorDefinitions.Where(n =>
 				n.Value.Value.Equals("syrd", StringComparison.OrdinalIgnoreCase) ||
 				n.Value.Value.Equals("syrd.gdi", StringComparison.OrdinalIgnoreCase) ||
 				n.Value.Value.Equals("chsyrd", StringComparison.OrdinalIgnoreCase) ||
 				n.Value.Value.Equals("spen", StringComparison.OrdinalIgnoreCase) ||
-				n.Value.Value.Equals("spen.nod", StringComparison.OrdinalIgnoreCase)))
+				n.Value.Value.Equals("spen.nod", StringComparison.OrdinalIgnoreCase) ||
+				n.Value.Value.Equals("oil_platform", StringComparison.OrdinalIgnoreCase)))
 			{
 				var actor = new ActorReference(node.Value.Value, node.Value.ToDictionary());
 				var location = actor.Get<LocationInit>().Value;
@@ -62,13 +64,14 @@ namespace OpenRA.Mods.CA.UtilityCommands
 						changed++;
 					}
 
-				yards++;
+				if (node.Value.Value.Equals("oil_platform", StringComparison.OrdinalIgnoreCase)) platforms++;
+				else yards++;
 			}
 
 			if (yards == 0)
 				throw new InvalidDataException("No Allied/GDI Naval Yard or Nod Sub Pen found in the test map.");
 			map.Save((IReadWritePackage)package);
-			Console.WriteLine($"Building test water prepared: {yards} Naval Yard(s), {changed} cells; original map untouched.");
+			Console.WriteLine($"Building test water prepared: {yards} Naval Yard(s), {platforms} Oil Platform(s), {changed} cells; original map untouched.");
 		}
 	}
 }

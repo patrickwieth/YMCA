@@ -29,9 +29,10 @@ namespace OpenRA.Mods.CA.UtilityCommands
 			map.PlayerDefinitions=players.ToMiniYaml();
 			foreach (var cell in map.AllCells) map.Tiles[cell]=new TerrainTile(1000,0);
 			var center=new CPos(110,-25);
+			var buildings=args[3].StartsWith("building",StringComparison.Ordinal);
 			var slopes=args[3].StartsWith("slope",StringComparison.Ordinal);
 			var surfaces=slopes ? PlateauTopology.CalibrationPlateau(center) : new Dictionary<CPos,PlateauSurface>();
-			if (!slopes) for (var x=-4;x<=4;x++) for (var y=-4;y<=4;y++) surfaces[center+new CVec(x,y)]=new PlateauSurface(4,0);
+			if (!slopes && !buildings) for (var x=-4;x<=4;x++) for (var y=-4;y<=4;y++) surfaces[center+new CVec(x,y)]=new PlateauSurface(4,0);
 			var actors=new List<MiniYamlNode>();
 			RubberduckPlateauRenderer.ComposeNative(map,surfaces,actors,new HashSet<(CPos,int)>(),Array.Empty<(CPos,int)>(),"Rock",true);
 			void Add(string id,string type,int x,int y,string owner="Multi0")
@@ -40,7 +41,20 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				if (mod.DefaultRules.Actors[type].HasTraitInfo<AutoTargetInfo>()) a.Add(new StanceInit(mod.DefaultRules.Actors[type].TraitInfo<AutoTargetInfo>(),UnitStance.HoldFire));
 				actors.Add(new MiniYamlNode(id,a.Save()));
 			}
-			if (slopes)
+			if (buildings)
+			{
+				Add("Spawn", "mpspawn", -6, -6, "Neutral");
+				var china = args[3].Contains("china", StringComparison.Ordinal);
+				Add("Building", args[3].Contains("voxel", StringComparison.Ordinal) ? "atwr" : china ? "chcommand" : args[3].Contains("gdi", StringComparison.Ordinal) ? "proc.td" : "proc", 0, 0);
+				var rear = args[3].Contains("gdi", StringComparison.Ordinal) ? 0 : -1;
+				Add("RearTank", china ? "chnmcv" : "mtnk", rear, rear);
+				Add("RearSprite", "2tnk", -1, 0);
+				Add("RearInfantry", "mercenary", 0, -1);
+				Add("FrontTank", "mtnk", 5, 5);
+				Add("CloakedEnemy", "stnk", -1, -3, "Multi1");
+				Add("FogEnemy", "ltnk", -20, -20, "Multi1");
+			}
+			else if (slopes)
 			{
 				Add("Spawn","mpspawn",-12,-12,"Neutral");
 				Add("FullyHidden","mtnk",-8,-8);
@@ -67,14 +81,16 @@ namespace OpenRA.Mods.CA.UtilityCommands
 				map.Resources[center+new CVec(x,y)]=new ResourceTile((byte)((x+y)%2==0 ? 3 : 4),12);
 			}
 			map.ActorDefinitions=actors;
-			var enabled=!args[3].EndsWith("baseline",StringComparison.Ordinal) ? "true" : "false";
+			var baseline = args[3].EndsWith("baseline", StringComparison.Ordinal);
+			var enabled = !baseline || args[3].Contains("voxel", StringComparison.Ordinal) ? "true" : "false";
+			var voxelEnabled = !baseline ? "true" : "false";
 			map.RuleDefinitions=new MiniYaml("",MiniYaml.FromString($@"
 World:
 	-SpawnStartingUnits:
 	-NukularDoubleStartingUnits:
-	RockOcclusionProbe:
+	{(buildings ? "BuildingOcclusionProbe" : "RockOcclusionProbe")}:
 		ResultPath: {Path.GetFullPath(args[2]).Replace('\\','/')}
-		Baseline: {enabled == "false"}
+		Baseline: {baseline}
 		SlopeCases: {slopes}
 	OccludedResourceRenderer:
 		ClipToRaisedTerrain: {enabled}
@@ -83,15 +99,19 @@ Player:
 	Shroud:
 		ExploredMapCheckboxEnabled: true
 		FogCheckboxEnabled: true
+{(enabled == "false" ? "^ConstructionVehicle:\n\tWithRockOcclusion:\n\t\tEnabled: false" : "")}
 ^SelectableCombatUnit:
 	WithRockOcclusion:
 		Enabled: {enabled}
+		VoxelBuildings: {voxelEnabled}
 ^SelectableSupportUnit:
 	WithRockOcclusion:
 		Enabled: {enabled}
+		VoxelBuildings: {voxelEnabled}
 ^SelectableEconomicUnit:
 	WithRockOcclusion:
 		Enabled: {enabled}
+		VoxelBuildings: {voxelEnabled}
 ", "rock-occlusion-probe"));
 			Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(args[1])));
 			using (var package=ZipFileLoader.Create(args[1])) map.Save(package);

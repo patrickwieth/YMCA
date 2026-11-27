@@ -3,6 +3,19 @@
 Implemented in Game / isometric, merged to master and published in v0.97.5.
 See `../release-0.97.5-validation.md` for package and deployment verification.
 
+## Local follow-up (not included in the historical release above)
+
+China now has a 3×3 building with two external bays in front `(1,3),(2,3)` and two
+behind `(0,-1),(1,-1)`, as requested. Main dock/free spawn is `(2,3)`;
+DockOffset is `-724,2172,0`. Center compensation is removed because the 3×3 center
+already equals the former compensated 4×3 center: the artwork does not move.
+Keep the external approaches clear; these are not four service cells inside the
+3×3 building site. Four docks and queue capacities remain. Fresh native testing
+again passed 42 deliveries/departures across all six refineries, including China's
+four bays with the minefield condition enabled. See `../building-finish-review.md`.
+The following section records the earlier released arrangement, now superseded
+for China only.
+
 ## Refinery docking
 
 `rules/refinery-docking.yaml` is loaded after the final ground-mask layer, not

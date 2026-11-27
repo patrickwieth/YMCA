@@ -25,6 +25,6 @@ class NodConyardAlignmentTests(unittest.TestCase):
   gun=traits(resolved('--resolved-rules','GUN.Nod'));laser=traits(resolved('--resolved-rules','LTUR'))
   self.assertIn('~disabled',gun['Buildable'])
   self.assertNotIn('~disabled',laser['Buildable'])
-  with ZipFile(ROOT/'mods/ca/maps/testmap1.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig')
+  with ZipFile(ROOT/'mods/ca/development-maps/testmap1.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig')
   self.assertIn('Actor15: gun.nod',text)
 if __name__=='__main__':unittest.main()

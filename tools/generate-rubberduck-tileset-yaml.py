@@ -827,7 +827,8 @@ Templates:
                 )
             )
 
-    output.write_text(header + "\n\n".join(templates) + "\n", encoding="ascii")
+    from handcrafted_terrain_types import add_types
+    output.write_text(add_types(header + "\n\n".join(templates) + "\n"), encoding="ascii")
 
 
 def generate_autotile_yaml(output: Path) -> None:

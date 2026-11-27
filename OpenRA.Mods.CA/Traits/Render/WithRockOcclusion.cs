@@ -9,11 +9,12 @@ using OpenRA.Traits;
 
 namespace OpenRA.Mods.CA.Traits
 {
-	[Desc("Clip units behind raised ground and show translucent white silhouettes through rock pixels only.")]
+	[Desc("Clip units behind raised ground and show translucent white silhouettes through occluding rock and building pixels.")]
 	public sealed class WithRockOcclusionInfo : TraitInfo
 	{
 		public readonly float Alpha = .35f;
 		public readonly bool Enabled = true;
+		public readonly bool VoxelBuildings = true;
 		public override object Create(ActorInitializer init) => new WithRockOcclusion(this);
 	}
 	public sealed class WithRockOcclusion : IRenderModifier
@@ -31,7 +32,7 @@ namespace OpenRA.Mods.CA.Traits
 		{
 			SilhouetteRegions=0; GroundClipped=false;
 			var sources=renderables.ToArray();
-			if (!info.Enabled) return sources;
+			if (!info.Enabled || self.Info.HasTraitInfo<BuildingInfo>()) return sources;
 			if (sources.Length == 0 || self.IsDead || self.Disposed || wr.World.Type == WorldType.Editor) return sources;
 			// Explicit viewer/visibility checks supplement the actor's normal render modifiers.
 			// Even detected/own cloaked units do not get a brighter outline here.
@@ -51,10 +52,21 @@ namespace OpenRA.Mods.CA.Traits
 			var ground=cachedGround;
 			var groundHidden=ground.Any(v => v);
 			GroundClipped=groundHidden;
-			var rocks=new List<(CliffSliceRenderable Rock, bool[] Mask)>();
+			var rocks=new List<(IRenderable Rock, bool[] Mask)>();
 			if (reveal)
 				foreach (var actor in wr.World.ScreenMap.RenderableActorsInBox(new int2(bounds.Left,bounds.Top),new int2(bounds.Right,bounds.Bottom)))
 				{
+					if (actor != self && actor.Info.HasTraitInfo<BuildingInfo>() && actor.IsInWorld && !actor.IsDead &&
+						actor.CanBeViewedByPlayer(wr.World.RenderPlayer) && !actor.TraitsImplementing<Cloak>().Any(c => c.Cloaked))
+						foreach (var building in actor.Render(wr).Where(r => r is SpriteRenderable || (info.VoxelBuildings && r is ModelRenderable)))
+						{
+							if (building.IsDecoration || WorldRenderer.RenderableZPositionComparisonKey(building) <=
+								sources.Min(WorldRenderer.RenderableZPositionComparisonKey)) continue;
+							var mask = building is SpriteRenderable sprite
+								? RockOcclusionGeometry.BuildingPixels(wr, sprite, bounds)
+								: ModelOcclusionGeometry.Pixels(wr, actor, (ModelRenderable)building, bounds);
+							if (mask.Any(v => v)) rocks.Add((building, mask));
+						}
 					if (!actor.Info.HasTraitInfo<NativeCliffBodyInfo>() && !actor.Info.HasTraitInfo<PlateauFaceBodyInfo>() && !actor.Info.HasTraitInfo<RockCoastBodyInfo>()) continue;
 					foreach (var rock in actor.Render(wr).OfType<CliffSliceRenderable>())
 					{

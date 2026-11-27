@@ -34,6 +34,20 @@ try {
         $reader.Dispose()
     }
 
+    # The source locks Multi0's faction, so update the disposable player block
+    # as well as the launch argument. Preserve explicit display-actor factions;
+    # missing Nod initializers are supplied below so its bibs do not follow Multi0.
+    $players = [regex]::Matches($yaml, '(?m)^\tPlayerReference@Multi0:\r?\n(?:\t\t[^\r\n]*\r?\n)*')
+    if ($players.Count -ne 1) {
+        throw "Expected exactly one Multi0 player in the test map."
+    }
+    $player = $players[0]
+    if ([regex]::Matches($player.Value, '(?m)^\t\tFaction: [^\r\n]+').Count -ne 1) {
+        throw "Expected exactly one Multi0 faction in the test map."
+    }
+    $alliedPlayer = [regex]::Replace($player.Value, '(?m)^(\t\tFaction: )[^\r\n]+', '${1}england')
+    $yaml = $yaml.Remove($player.Index, $player.Length).Insert($player.Index, $alliedPlayer)
+
     $needle = "`t`t-ConquestVictoryConditions:"
     $needleIndex = $yaml.IndexOf($needle, [System.StringComparison]::Ordinal)
     if ($needleIndex -lt 0 -or $yaml.IndexOf($needle, $needleIndex + $needle.Length, [System.StringComparison]::Ordinal) -ge 0) {
@@ -79,6 +93,30 @@ try {
         throw "Nod factory display slot changed; refusing ambiguous replacement."
     }
     $actorText = [regex]::Replace($actorText, $nodFactoryPattern, '${1}weap.nod${3}')
+
+    # Multi0 now starts as England. Nod's faction-gated foundations must still
+    # receive a Nod FactionInit on the display actors (ownership stays Multi0).
+    # These exact legacy slots are validated so no other faction block is changed.
+    $nodDisplaySlots = @{
+        Actor3 = 'afac.nod'; Actor4 = 'nuke.nod'; Actor5 = 'nuk2.nod';
+        Actor6 = 'proc.td.nod'; Actor8 = 'hand'; Actor9 = 'airs';
+        Actor10 = 'weap.nod'; Actor11 = 'hq.nod'; Actor12 = 'rep.nod';
+        Actor13 = 'hpad.td.nod'; Actor14 = 'nsam'; Actor15 = 'gun.nod';
+        Actor16 = 'ltur'; Actor17 = 'obli'; Actor18 = 'tmpl';
+        Actor19 = 'sgen'; Actor20 = 'bio.nod'; Actor21 = 'mslo.nod'; Actor22 = 'spen.nod'
+    }
+    foreach ($id in $nodDisplaySlots.Keys) {
+        $pattern = '(?m)^(\t' + [regex]::Escape($id) + ':[ \t]*' +
+            [regex]::Escape($nodDisplaySlots[$id]) + '\r?\n)((?:\t\t[^\r\n]*(?:\r?\n|\z))*)'
+        $matches = [regex]::Matches($actorText, $pattern)
+        if ($matches.Count -ne 1) { throw "Nod display slot $id changed; refusing ambiguous faction assignment." }
+        $match = $matches[0]
+        if ($match.Groups[2].Value -notmatch '(?m)^\t\tFaction:') {
+            $replacement = $match.Value.TrimEnd("`r", "`n") + $newline + "`t`tFaction: blackh" + $newline
+            $actorText = $actorText.Remove($match.Index, $match.Length).Insert($match.Index, $replacement)
+        }
+    }
+    Write-Host 'Test map: assigned explicit Nod display factions independently of the England player.'
 
     # The Soviet display block in this legacy map still uses Allied actor IDs.
     # Replace only these exact slots, never all instances of the shared names.

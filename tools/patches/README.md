@@ -86,3 +86,27 @@ list includes it for normal Windows/shell builds. See `docs/modular/selection-bo
 The preparation script applies all patches and rejects incompatible local source.
 The complete stack has been checked against the pinned engine, including repeat
 application detection. See `docs/release-0.97.4-validation.md` for test evidence.
+
+## Current development (Game only)
+
+`handcrafted-map-geometry.patch` adds optional flat logical `CellBounds` and
+persistent `BaseTerrainOverrides`. These preserve the original maps' logical
+neighbours and terrain semantics while rendering the new tileset. Ordinary maps
+retain their existing bounds and serialized metadata. Gameplay clamps/edges
+respect the logical rectangle; viewport clamps still use its projected enclosure.
+See `docs/handcrafted-layout-conversion.md` for native acceptance evidence.
+
+`hidden-development-maps.patch` also excludes archived development fixtures from
+random initial-map selection. See `docs/development-map-visibility.md`.
+
+`terrain-lighting-batch.patch` adds scoped, nested light-notification batching and
+transient tint reuse during dispatch. Tiberium reveal updates use this render-only
+path to avoid the multi-second full-map reveal stall. See `docs/map-reveal-stutter.md`.
+
+`missile-physical-height.patch` adds an opt-in local-terrain cruise reference to
+common Missile (default off for other mods) and corrects explicit lookahead to use
+physical world altitude instead of a fixed 512 units per logical step. CA uses the
+relative reference without granting ordinary missiles a firing-position exemption.
+See `docs/missile-height-policy.md` for native and patch-idempotence checks.
+
+These changes belong to Game development, not Game-master until an approved release.

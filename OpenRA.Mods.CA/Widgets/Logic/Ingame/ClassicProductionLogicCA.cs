@@ -265,10 +265,11 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 			var sidebarProductionHeight = containerWidget.Bounds.Y;
 
 			// Check if icon heights exceed y resolution
-			var maxItemsHeight = screenHeight - sidebarProductionHeight;
-
-			var maxIconRowOffest = maxItemsHeight / productionPalette.IconSize.Y - 1;
-			productionPalette.MaxIconRowOffset = Math.Min(maxIconRowOffest, productionPalette.MaximumRows);
+			var maxItemsHeight = screenHeight - sidebarProductionHeight - 20;
+			var rowHeight = productionPalette.IconSize.Y + productionPalette.IconMargin.Y;
+			var maxIconRowOffset = Math.Max(1, maxItemsHeight / rowHeight);
+			productionPalette.MaxIconRowOffset = Math.Min(maxIconRowOffset, productionPalette.MaximumRows);
+			productionPalette.MinimumRows = Math.Min(productionPalette.MinimumRows, productionPalette.MaxIconRowOffset);
 		}
 	}
 }

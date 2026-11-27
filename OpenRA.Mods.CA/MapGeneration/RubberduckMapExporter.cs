@@ -22,10 +22,12 @@ namespace OpenRA.Mods.CA.MapGeneration
 		const byte BlueTiberiumResource = 4;
 
 		readonly ModData modData;
+		readonly bool includeBiomeScenery;
 
-		public RubberduckMapExporter(ModData modData)
+		public RubberduckMapExporter(ModData modData, bool includeBiomeScenery = true)
 		{
 			this.modData = modData;
+			this.includeBiomeScenery = includeBiomeScenery;
 		}
 
 		internal static void ValidateTwoSidesCoasts(MapPlan plan, MapGenerationOptions options)
@@ -117,6 +119,11 @@ namespace OpenRA.Mods.CA.MapGeneration
 						if ((maximumHeight & 1) != 0) throw new InvalidDataException("Plateau export requires even projection-border parity.");
 						var surfaces = plan.PlateauSurfaces.ToDictionary(
 							pair => ToMapPosition(pair.Key.U, pair.Key.V, maximumHeight).ToCPos(map), pair => pair.Value);
+						// Nexus keeps its accepted contour and low-ground topology. Its flat
+						// roofs are usable ground; the reserved cliff feet stay blocked.
+						if (options.Preset == MapGenerationPreset.BattleNexus)
+							foreach (var pair in plan.PlateauSurfaces.Where(p => p.Value.Height == 4 && p.Value.Ramp == 0 && plan.ContainsPlayable(p.Key.U, p.Key.V)))
+								surfaces[ToMapPosition(pair.Key.U, pair.Key.V, maximumHeight).ToCPos(map)] = new PlateauSurface(4);
 						if (plan.RequireClosedPlateaus)
 						{
 							var closed = new RubberduckClosedCliffSelection(map, surfaces);
@@ -134,6 +141,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 					(x, y) => ToMapPosition(x, y, maximumHeight).ToCPos(map), options.Preset == MapGenerationPreset.TwoSides);
 				if (coastSegments != 0) Console.WriteLine($"Flat rock coast: {coastSegments} protected-topology segments.");
 				RubberduckBridgeExporter.Apply(map, plan, actors, maximumHeight);
+				if (includeBiomeScenery) GeneratedBiomeScenery.Apply(modData, map, plan, options, actors, (x,y) => ToMapPosition(x,y,maximumHeight).ToCPos(map));
 				map.ActorDefinitions = actors;
 
 				var modePrefix = options.Mode == GeneratedMapMode.Tactical

@@ -14,8 +14,53 @@ movement/health lifecycle. Units walk on the height-zero deck between the two
 sprite layers. The piers provide visual elevation, like the existing flat-bank
 terrain. There is **no second movement layer or ship underpass while intact**.
 After destruction the actual underlying water becomes available again. Elevated
-plateau-to-plateau bridges, partial-span destruction, repair huts and separate
-rubble/damaged artwork are not claimed by this implementation.
+plateau-to-plateau bridges, partial-span destruction and separate rubble/damaged
+artwork are not claimed by this implementation. Repair huts are now implemented
+for newly generated maps (see the follow-up below).
+
+## Engineer repair follow-up — locally installed, 2026-11-25
+
+New exports add two indestructible neutral **Bridge Repair Huts**, one on each bank,
+using the supplied `bridge_repair_hut-447710944-0.png` cutout. The original is archived
+under `art-source/bridge-repair-hut/`; trees, the steel bridge and loose debris are
+excluded without repainting the hut. Runtime PNG:
+`mods/ca/bits/terrain/environment/bridge-repair-hut.png`.
+
+Huts occupy clear 1×1 land cells outside the bridge/approach corridor, resource fields,
+full 2×2 derrick footprints and protected home areas. The user requested closer huts
+and a bib: broad shoreline-planning flags no longer unnecessarily push huts several
+cells inland when the actual native tile is clear, dry and flat. Each hut now uses
+the existing 1×1 Soviet concrete bib. Real cliffs/water remain excluded by the tile
+and height checks; bridge and approach cells stay unobstructed. Both orientations
+passed real repair/traffic tests again. Existing saved hut locations need a freshly
+generated map to move closer. Placement search uses
+opposite ordering at the two ends so half-turn-related banks retain mirrored choices.
+No terrain or economy is cleared to make room. Each hut links to its own bridge via
+native cell offsets, not sprite bounds.
+
+Destruction creates an invisible `BridgePlaceholder` with the same passable footprint;
+it does not install deck terrain. An ordinary engineer **RepairBridge** order on either
+hut restores the full span and HP. Existing engineer consumption rules apply. Water
+is usable between destruction and repair; the ground-level bridge still has no ship
+underpass while intact. Existing engine collision semantics apply on reconstruction:
+naval traffic occupying the restored deck can be destroyed. Damaged, intact spans
+can also be repaired. No automatic repair or income is added.
+
+A native concurrency regression reproduced duplicate bridge actors when both huts
+requested repair in one frame. Registered engine patch
+`tools/patches/bridge-repair-idempotence.patch` makes placeholder replacement one-shot.
+
+Validation: 40 deterministic plan cases, 18 current exports (Tactical/Operational,
+2/4/8/16 players, seeds42/202, plus 3/4-team layouts), native X/Y repair scenarios,
+and a final installed-build run. Each native run covers two real engineer repairs
+from opposite banks, three actual ship crossings through the destroyed span, three
+tank crossings after reconstruction and simultaneous repair requests yielding one
+bridge. Engine tests:148 passed. The 2P seed42 exported terrain/height/resource binary
+is byte-identical to the previous build. Evidence:
+`art-source/bridge-repair-hut/validation/`.
+
+Restart the game and generate a **new Continents map** to get huts and repairable
+spans. Existing/replay packages remain untouched. No release or deployment.
 
 ## Artwork and drawing order
 

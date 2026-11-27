@@ -12,10 +12,14 @@ namespace OpenRA.Mods.CA.Traits
 	[Desc("Projects native coast faces against the existing bank plane, shared with editor previews.")]
 	public class RockCoastBodyInfo : TraitInfo, IRenderActorPreviewInfo
 	{
-		public override object Create(ActorInitializer init) => new RockCoastBody();
+		public readonly string OccludingTerrain = null;
+		public readonly ushort[] OccludingTiles = Array.Empty<ushort>();
+		public readonly bool ClipToMap = false;
+		public readonly bool ClosedSideFaces = false;
+		public override object Create(ActorInitializer init) => new RockCoastBody(OccludingTerrain, OccludingTiles, ClipToMap, ClosedSideFaces);
 		public IEnumerable<IActorPreview> RenderPreview(ActorPreviewInitializer init)
 		{
-			yield return new CliffEditorPreview((map, cell) => RockCoastBody.Build(map, cell, init.Actor.Name));
+			yield return new CliffEditorPreview((map, cell) => RockCoastBody.Build(map, cell, init.Actor.Name, OccludingTerrain, OccludingTiles, ClipToMap, ClosedSideFaces));
 		}
 	}
 
@@ -25,7 +29,12 @@ namespace OpenRA.Mods.CA.Traits
 		IRenderable[] renderables;
 		long revision = -1;
 		WPos position;
-		internal static Sprite[] Build(Map map, CPos location, string image)
+		readonly string occludingTerrain;
+		readonly ushort[] occludingTiles;
+		readonly bool clipToMap, closedSideFaces;
+		public RockCoastBody(string occludingTerrain = null, ushort[] occludingTiles = null, bool clipToMap = false, bool closedSideFaces = false)
+		{ this.occludingTerrain = occludingTerrain; this.occludingTiles = occludingTiles; this.clipToMap = clipToMap; this.closedSideFaces = closedSideFaces; }
+		internal static Sprite[] Build(Map map, CPos location, string image, string occludingTerrain = null, ushort[] occludingTiles = null, bool clipToMap = false, bool closedSideFaces = false)
 		{
 			if (!map.Contains(location)) return Array.Empty<Sprite>();
 			var sprite = map.Sequences.GetSequence(image, "idle").GetSprite(0);
@@ -38,12 +47,15 @@ namespace OpenRA.Mods.CA.Traits
 			var lowCap = image.Contains("coast-abutment-", StringComparison.Ordinal) || image.Contains("coast-piece-28.", StringComparison.Ordinal);
 			var sideCorner = image.Contains("coast-piece-26.", StringComparison.Ordinal) || image.Contains("coast-piece-27.", StringComparison.Ordinal) ||
 				image.Contains("coast-piece-30.", StringComparison.Ordinal) || image.Contains("coast-piece-31.", StringComparison.Ordinal);
+			var closedSide = closedSideFaces && (image.Contains("coast-piece-26.", StringComparison.Ordinal) || image.Contains("coast-piece-30.", StringComparison.Ordinal));
 			var offset = sprite.Offset + new float3(0, direction >= 2 || rearCorner ? 64 : frontCorner ? -64 : 0, 0);
+			CPos CellAt(double x, double y) => location + new CVec((int)Math.Floor(x / 128 + y / 64 + 0.5), (int)Math.Floor(y / 64 - x / 128 + 0.5));
 			bool Land(double x, double y)
 			{
-				var cell = location + new CVec((int)Math.Floor(x / 128 + y / 64 + 0.5), (int)Math.Floor(y / 64 - x / 128 + 0.5));
+				var cell = CellAt(x, y);
 				return map.Contains(cell) && map.Tiles[cell].Type != MapGeneration.RubberduckRockCoastPlan.BlockedWater &&
-					map.GetTerrainInfo(cell).Type != "Water" && map.Height[cell] >= map.Height[location];
+					(occludingTiles != null && occludingTiles.Length != 0 ? occludingTiles.Contains(map.Tiles[cell].Type) :
+					occludingTerrain == null ? map.GetTerrainInfo(cell).Type != "Water" : map.GetTerrainInfo(cell).Type == occludingTerrain) && map.Height[cell] >= map.Height[location];
 			}
 
 			// Occlude the cliff interior where the existing near bank actually lies.
@@ -58,10 +70,10 @@ namespace OpenRA.Mods.CA.Traits
 				{
 					var px = offset.X - 64 + x + 0.5;
 					var py = offset.Y - 128 + y + 0.5;
-					hidden[y * 128 + x] = Land(px, py) && Land(px, py - 6) && Land(px - 4, py) && Land(px + 4, py) ||
+					hidden[y * 128 + x] = clipToMap && !map.Contains(CellAt(px, py)) || Land(px, py) && Land(px, py - 6) && Land(px - 4, py) && Land(px + 4, py) ||
 						direction == 3 && x > 65 || direction == 2 && x < 62 ||
 						rearCorner && y + 0.5 > 128 - Math.Abs(x + 0.5 - 64) / 2 + 4 ||
-						(rearBank || sideCorner || rearCorner || lowCap) && !Land(px, py) && !Land(px - 16, py) && !Land(px + 16, py) &&
+						(rearBank || sideCorner && !closedSide || rearCorner || lowCap) && !Land(px, py) && !Land(px - 16, py) && !Land(px + 16, py) &&
 						!Land(px, py - 12) && !Land(px, py + 12);
 				}
 			return RubberduckMaterialLayer.ExclusionRectangles(hidden, 128, 256).Select(r => new Sprite(sprite.Sheet,
@@ -99,7 +111,7 @@ namespace OpenRA.Mods.CA.Traits
 			var current = TerrainRenderRevision.Get(self.World.Map);
 			if (sprites == null || revision != current)
 			{
-				sprites = Build(self.World.Map, self.Location, self.Info.Name);
+				sprites = Build(self.World.Map, self.Location, self.Info.Name, occludingTerrain, occludingTiles, clipToMap, closedSideFaces);
 				revision = current; renderables = null;
 			}
 			if (renderables == null || position != self.CenterPosition)

@@ -128,7 +128,7 @@ The following sections document earlier stages; the current entry point is the e
 
 ## Earlier: first in-game map prototype
 
-**`mods/ca/maps/modular-gdi-lab.oramap`** contains three generated GDI actors:
+**`mods/ca/development-maps/modular-gdi-lab.oramap`** contains three generated GDI actors:
 normal tank (900 credits), hover test (1100) and stationary platform (850).
 A manual Carryall, original MTNK and enemy target are placed alongside them.
 Read **`docs/modular/playable-prototype.md`** for launch/test instructions and limits.
@@ -141,8 +141,8 @@ The new mobility parts live in `prototype.json`; the broad catalog and old Excel
 snapshots are unchanged. No factory production of the stationary actor yet.
 
 ```sh
-python tools/modular/compile_prototype.py --output mods/ca/maps/modular-gdi-lab-v2.oramap
-python tools/modular/check_prototype.py --map mods/ca/maps/modular-gdi-lab-v2.oramap
+python tools/modular/compile_prototype.py --output mods/ca/development-maps/modular-gdi-lab-v2.oramap
+python tools/modular/check_prototype.py --map mods/ca/development-maps/modular-gdi-lab-v2.oramap
 ```
 
 Use a new output path: existing maps are never overwritten. Both special vehicles

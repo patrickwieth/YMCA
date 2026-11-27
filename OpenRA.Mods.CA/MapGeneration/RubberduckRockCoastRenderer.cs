@@ -39,7 +39,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				});
 		}
 
-		public static List<MiniYamlNode> Actors(Map map, IEnumerable<CPos> cells, string prefix, Func<CPos, ushort> terrainType = null, bool legacyCaps = false, bool naturalJoints = false, bool clipMapEdge = false, bool lowRearEnds = false)
+		public static List<MiniYamlNode> Actors(Map map, IEnumerable<CPos> cells, string prefix, Func<CPos, ushort> terrainType = null, bool legacyCaps = false, bool naturalJoints = false, bool clipMapEdge = false, bool lowRearEnds = false, bool allowPointContacts = false)
 		{
 			terrainType ??= c => map.Tiles[c].Type;
 			var faces = cells.Distinct().SelectMany(c => Enumerable.Range(0, 4).Where(d => map.Contains(c + PlateauTopology.Directions[d]) &&
@@ -73,7 +73,18 @@ namespace OpenRA.Mods.CA.MapGeneration
 			}
 			var result = new List<MiniYamlNode>(); var replaced = new HashSet<Face>();
 			var joints = new List<(CPos Cell, string Image)>();
-			foreach (var pair in vertices)
+			// Authored legacy rocks can touch at a vertex without sharing a traversable edge.
+			// Keep the two cell-local corners separate instead of changing the original terrain.
+			var joins = vertices.SelectMany(pair =>
+			{
+				if (!allowPointContacts || pair.Value.Count <= 2)
+					return new[] { pair };
+				var groups = pair.Value.GroupBy(f => f.Cell).ToArray();
+				if (pair.Value.Count != 4 || groups.Length != 2 || groups.Any(g => g.Count() != 2))
+					throw new InvalidOperationException("Unsupported authored rock junction.");
+				return groups.Select(g => new KeyValuePair<CPos, List<Face>>(pair.Key, g.ToList())).ToArray();
+			});
+			foreach (var pair in joins)
 			{
 				var touching = pair.Value;
 				if (touching.Count > 2) throw new InvalidOperationException("Rock coast branches at a shared vertex; leave a shore gap.");

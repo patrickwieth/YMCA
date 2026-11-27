@@ -40,8 +40,8 @@ if "!ENGINE_DIRECTORY!"=="" goto badconfig
 set TEMPLATE_DIR=%~dp0..
 set MAP_SOURCE=testmap1.oramap
 set MAP_PACKAGE=testmap1-debug.oramap
-set MAP_SOURCE_PATH=%TEMPLATE_DIR%\mods\ca\maps\%MAP_SOURCE%
-set MAP_PACKAGE_PATH=%TEMPLATE_DIR%\mods\ca\maps\%MAP_PACKAGE%
+set MAP_SOURCE_PATH=%TEMPLATE_DIR%\mods\ca\development-maps\%MAP_SOURCE%
+set MAP_PACKAGE_PATH=%TEMPLATE_DIR%\mods\ca\development-maps\%MAP_PACKAGE%
 set MOD_SEARCH_PATHS=%TEMPLATE_DIR%\mods,%~dp0mods,./mods
 
 if not exist "%MAP_SOURCE_PATH%" goto nomap
@@ -77,7 +77,7 @@ if /I "%~1"=="--check-only" (
 
 cd /d "%~dp0..\engine"
 
-    bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Launch.Map=%MAP_PACKAGE%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%" "PlayerFaction.Multi0=blackh" "PlayerType.Multi0=Human"
+    bin\OpenRA.exe "Game.Mod=%MOD_ID%" "Launch.Map=%MAP_PACKAGE%" "Engine.EngineDir=.." "Engine.LaunchPath=%TEMPLATE_DIR%\tools\test-game.cmd" "Engine.ModSearchPaths=%MOD_SEARCH_PATHS%" "PlayerFaction.Multi0=england" "PlayerType.Multi0=Human"
 set ERROR=%ERRORLEVEL%
 cd /d "%TEMPLATE_DIR%"
 del /f /q "%MAP_PACKAGE_PATH%" >nul 2>&1

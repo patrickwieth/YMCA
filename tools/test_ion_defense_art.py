@@ -44,7 +44,7 @@ class IonDefenseArtTests(unittest.TestCase):
   for name in ('idle','damaged-idle','turret','damaged-turret'):self.assertIn('Facings: 32',new[name]);self.assertIn('UseClassicFacings: False',new[name])
 
  def test_existing_testmap_slot_uses_actual_actor(self):
-  source=ROOT/'mods/ca/maps/testmap1.oramap';before=source.read_bytes()
+  source=ROOT/'mods/ca/development-maps/testmap1.oramap';before=source.read_bytes()
   with tempfile.TemporaryDirectory() as d:
    target=Path(d)/'testmap1-debug.oramap'
    subprocess.run(['powershell','-NoProfile','-ExecutionPolicy','Bypass','-File',str(ROOT/'tools/prepare-test-game-map.ps1'),'-SourceMap',str(source),'-DestinationMap',str(target)],check=True)

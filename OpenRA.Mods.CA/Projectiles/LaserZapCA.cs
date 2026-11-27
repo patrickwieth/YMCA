@@ -118,6 +118,8 @@ namespace OpenRA.Mods.CA.Projectiles
 
 		[Sync]
 		WPos target;
+		[Sync]
+		WPos unblockedTarget;
 
 		[Sync]
 		WPos source;
@@ -144,6 +146,7 @@ namespace OpenRA.Mods.CA.Projectiles
 			}
 
 			hasLaunchEffect = !string.IsNullOrEmpty(info.LaunchEffectImage) && !string.IsNullOrEmpty(info.LaunchEffectSequence);
+			unblockedTarget = target;
 		}
 
 		public void Tick(World world)
@@ -154,9 +157,14 @@ namespace OpenRA.Mods.CA.Projectiles
 				world.AddFrameEndTask(w => w.Add(new SpriteEffect(args.CurrentSource, args.CurrentMuzzleFacing, world,
 					info.LaunchEffectImage, info.LaunchEffectSequence, info.LaunchEffectPalette)));
 
+			target = unblockedTarget;
 			// Beam tracks target
 			if (info.TrackTarget && args.GuidedTarget.IsValidFor(args.SourceActor))
 				target = args.Weapon.TargetActorCenter ? args.GuidedTarget.CenterPosition : args.GuidedTarget.Positions.ClosestToIgnoringPath(source);
+
+			unblockedTarget = target;
+			if (TerrainFireControl.TryBlock(world, args.Weapon, source, target, out var terrainHit))
+				target = terrainHit;
 
 			// Check for blocking actors
 			if (info.Blockable && BlocksProjectiles.AnyBlockingActorsBetween(world, args.SourceActor.Owner, source, target, info.Width, out var blockedPos))

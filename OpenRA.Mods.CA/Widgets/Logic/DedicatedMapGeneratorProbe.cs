@@ -104,12 +104,10 @@ namespace OpenRA.Mods.CA.Widgets.Logic
 					}
 
 					Click("Tactical");
-					Click("Hand Made Map");
-					Check(Ui.CurrentWindow().GetOrNull<ButtonWidget>("REMOTE_MAPS_TAB_BUTTON") != null, "admin retains the server's ordinary map chooser");
+					Click("Handcrafted Maps");
+					Check(Ui.CurrentWindow().GetOrNull<ButtonWidget>("REMOTE_MAPS_TAB_BUTTON") != null, "admin sees curated handcrafted maps within the server pool");
 					Ui.CloseWindow();
-					lobby.Get<ButtonWidget>("CHANGEMAP_BUTTON").OnClick();
-					Click("Tactical");
-					Click("Plains");
+					Click("Desert");
 					Game.Renderer.SaveScreenshot(Path.Combine(output, "generator-options.png"));
 					Ui.CurrentWindow().Get<ButtonWidget>("GENERATE_PRESET").OnClick();
 					WaitForMap();

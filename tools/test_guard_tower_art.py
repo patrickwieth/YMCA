@@ -26,7 +26,7 @@ class GuardTowerArtTests(unittest.TestCase):
   for key in ('icon','muzzle'):self.assertEqual(old[key].strip(),new[key].strip())
   for key in ('idle','damaged-idle','dead'):
    for field in ('Filename: bits/gdi/buildings/guard tower.png','Start: 0','Scale: 1','Anchor: Center','Offset: -1,-56'):self.assertIn(field,new[key])
-  with zipfile.ZipFile(ROOT/'mods/ca/maps/testmap1.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig')
+  with zipfile.ZipFile(ROOT/'mods/ca/development-maps/testmap1.oramap') as z:text=z.read('map.yaml').decode('utf-8-sig')
   self.assertRegex(text,r'Actor75: gtwr\r?\n\t\tOwner: Multi0\r?\n\t\tLocation: 141,-15')
 
 if __name__=='__main__':unittest.main()

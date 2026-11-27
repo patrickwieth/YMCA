@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using OpenRA.Graphics;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Primitives;
@@ -12,6 +13,9 @@ namespace OpenRA.Mods.CA.Traits
 	{
 		public readonly WDist Range = new WDist(1536);
 		public readonly float Intensity = 0.025f;
+		// Cosmetic light only; visibility, units and simulation are never deferred.
+		public readonly int MaxUpdatesPerTick = 128;
+		public readonly int MaxUpdateMilliseconds = 2;
 		public override object Create(ActorInitializer init) { return new TiberiumTerrainLight(init.Self, this); }
 	}
 
@@ -48,10 +52,16 @@ namespace OpenRA.Mods.CA.Traits
 
 		internal (string Type, int Density) KnownResource(CPos cell) => lights.TryGetValue(cell, out var light) ? (light.Type, light.Density) : (null, 0);
 
+		internal double LastUpdateMilliseconds { get; private set; }
+		internal int PendingCells => dirty.Count;
 		void ITickRender.TickRender(WorldRenderer wr, Actor self)
 		{
+			var clock = Stopwatch.StartNew();
+			using (lighting.BatchUpdates())
 			foreach (var cell in dirty)
 			{
+				if (info.MaxUpdatesPerTick > 0 && processed.Count >= info.MaxUpdatesPerTick ||
+					info.MaxUpdateMilliseconds > 0 && processed.Count > 0 && clock.ElapsedMilliseconds >= info.MaxUpdateMilliseconds) break;
 				// Do not query current density until visible. Hidden harvesting/growth must
 				// neither change remembered light nor illuminate a previously unknown field.
 				if (!resources.IsVisible(cell)) continue;
@@ -75,12 +85,14 @@ namespace OpenRA.Mods.CA.Traits
 
 			foreach (var cell in processed) dirty.Remove(cell);
 			processed.Clear();
+			LastUpdateMilliseconds = clock.Elapsed.TotalMilliseconds;
 		}
 
 		void INotifyActorDisposing.Disposing(Actor self)
 		{
 			if (enabled) resources.CellChanged -= Changed;
-			foreach (var light in lights.Values) lighting.RemoveLightSource(light.Token);
+			using (lighting.BatchUpdates())
+				foreach (var light in lights.Values) lighting.RemoveLightSource(light.Token);
 			lights.Clear();
 			dirty.Clear();
 		}

@@ -22,7 +22,7 @@ All Allied building PNGs and bibs use scale 1 (explicitly or the engine default)
 | WEAT | weather control.png | 3x3 | 2x2 |
 | ATEK | tech center.png | 3x3 | 2x2 |
 | HPAD | helipad.png | 3x3 | 2x2 |
-| DOME | radar.png | 3x3 | 2x2 |
+| DOME | radar dome.png | 3x3 | 2x2 |
 | FIX | service depot.png | 3x3 | original passable repair footprint |
 | AFLD.allies | airfield.png | 4x3 | rear 3x2 gameplay body; 4x2+ decoration |
 

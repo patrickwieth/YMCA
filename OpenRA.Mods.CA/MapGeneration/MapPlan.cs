@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenRA.Mods.CA.MapGeneration
 {
@@ -68,6 +69,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 		public int Seed { get; internal set; }
 		public int GenerationAttempt { get; internal set; }
 		public int SymmetrySlotCount { get; internal set; }
+		public List<StartingResourceField> StartingFields { get; } = new();
+		public List<PlainsOilCluster> OilClusters { get; } = new();
 		public bool RequireClosedPlateaus { get; internal set; }
 		public bool PreserveObjectiveTerrain { get; internal set; }
 		// Terrain backing outside the playable rectangle (not additional playable area).
@@ -106,6 +109,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 			Array.Copy(features, copy.features, features.Length);
 			Array.Copy(homeOwners, copy.homeOwners, homeOwners.Length);
 			copy.Bridges.AddRange(Bridges);
+			copy.StartingFields.AddRange(StartingFields);
+			copy.OilClusters.AddRange(OilClusters.Select(c => new PlainsOilCluster(c.Target, c.Towers.ToArray())));
 			copy.Spawns.AddRange(Spawns); copy.ExpansionCenters.AddRange(ExpansionCenters);
 			copy.StrategicCheckpoints.AddRange(StrategicCheckpoints); copy.Plateaus.AddRange(Plateaus);
 			copy.StrategicRoute.AddRange(StrategicRoute); copy.StrategicReservations.UnionWith(StrategicReservations);

@@ -421,7 +421,7 @@ Container@PLAYER_WIDGETS:
 							ImageName: hold-fire
 		Container@MUTE_INDICATOR:
 			Logic: MuteIndicatorLogic
-			X: WINDOW_WIDTH - WIDTH - 260
+			X: WINDOW_WIDTH - WIDTH - 362
 			Y: 10
 			Width: 200
 			Height: 25
@@ -439,11 +439,11 @@ Container@PLAYER_WIDGETS:
 					Align: Right
 					Text: Audio Muted
 					Contrast: true
-		Image@SIDEBAR_BACKGROUND_TOP:
+		SidebarImage@SIDEBAR_BACKGROUND_TOP:
 			Logic: AddFactionSuffixLogic
-			X: WINDOW_WIDTH - 250
+			X: WINDOW_WIDTH - 352
 			Y: 10
-			Width: 238
+			Width: 340
 			Height: 262
 			ImageCollection: sidebar
 			ImageName: background-top
@@ -515,7 +515,7 @@ Container@PLAYER_WIDGETS:
 									ImageCollection: order-icons
 						MenuButton@OPTIONS_BUTTON:
 							Logic: AddFactionSuffixLogic
-							X: 192
+							X: 294
 							Width: 28
 							Height: 28
 							Background: sidebar-button
@@ -530,22 +530,25 @@ Container@PLAYER_WIDGETS:
 									Y: 6
 									ImageCollection: order-icons
 									ImageName: options
-				Image@RADAR:
+				SidebarImage@RADAR:
 					Logic: AddFactionSuffixLogic, IngameRadarDisplayLogic
+					PreserveAspect: true
 					X: 8
 					Y: 40
+					Width: 324
+					Height: 222
 					ImageCollection: sidebar
 					ImageName: radar
 					Children:
 						LogicTicker@RADAR_TICKER:
 						ColorBlock@RADAR_FADETOBLACK:
-							Width: 222
+							Width: 324
 							Height: 222
 						Radar@RADAR_MINIMAP:
 							WorldInteractionController: INTERACTION_CONTROLLER
 							X: 1
 							Y: 1
-							Width: 220
+							Width: 322
 							Height: 220
 							SoundUp: RadarUp
 							SoundDown: RadarDown
@@ -553,29 +556,29 @@ Container@PLAYER_WIDGETS:
 						VideoPlayer@PLAYER:
 							X: 1
 							Y: 1
-							Width: 220
+							Width: 322
 							Height: 220
 							Skippable: false
 		Container@SIDEBAR_PRODUCTION:
 			Logic: ClassicProductionLogicCA
-			X: WINDOW_WIDTH - 250
+			X: WINDOW_WIDTH - 352
 			Y: 300
-			Width: 238
+			Width: 340
 			Height: 250
 			Children:
 				Container@PALETTE_BACKGROUND:
 					Children:
-						Image@ROW_TEMPLATE:
+						SidebarImage@ROW_TEMPLATE:
 							Logic: AddFactionSuffixLogic
 							X: 40
-							Width: 190
-							Height: 47
+							Width: 292
+							Height: 73
 							ClickThrough: false
 							ImageCollection: sidebar
 							ImageName: background-iconbg
-						Image@BOTTOM_CAP:
+						SidebarImage@BOTTOM_CAP:
 							Logic: AddFactionSuffixLogic
-							Width: 238
+							Width: 340
 							Height: 8
 							ClickThrough: false
 							ImageCollection: sidebar
@@ -587,18 +590,22 @@ Container@PLAYER_WIDGETS:
 					TooltipContainer: TOOLTIP_CONTAINER
 					ReadyText: READY
 					HoldText: ON HOLD
-					IconSize: 62, 46
+					IconSize: 96, 72
 					IconMargin: 1, 1
-					IconSpriteOffset: -1, -1
+					IconSpriteOffset: 0, 0
+					FitIconsToCell: true
+					OverlayFont: Bold
+					QueuedOffset: 6, 3
 					HotkeyPrefix: Production
 					HotkeyCount: 24
 					SelectProductionBuildingHotkey: SelectProductionBuilding
 				Container@PALETTE_FOREGROUND:
 					Children:
-						Image@ROW_TEMPLATE:
+						SidebarImage@ROW_TEMPLATE:
 							Logic: AddFactionSuffixLogic
-							Width: 238
-							Height: 47
+							FixedLeft: 40
+							Width: 340
+							Height: 73
 							IgnoreMouseOver: true
 							ImageCollection: sidebar
 							ImageName: background-iconrow
@@ -749,11 +756,11 @@ Container@PLAYER_WIDGETS:
 									Y: 3
 									ImageCollection: scrollpanel-decorations
 									ImageName: down
-		Image@SIDEBAR_MONEYBIN:
+		SidebarImage@SIDEBAR_MONEYBIN:
 			Logic: AddFactionSuffixLogic
-			X: WINDOW_WIDTH - 250
+			X: WINDOW_WIDTH - 352
 			Y: 272
-			Width: 238
+			Width: 340
 			Height: 27
 			ImageCollection: sidebar
 			ImageName: background-moneybin
@@ -802,7 +809,7 @@ Container@PLAYER_WIDGETS:
 							ImageName: power-normal
 		Container@HPF_OVERLAY:
 			Logic: HierarchicalPathFinderOverlayLogic
-			X: WINDOW_WIDTH - WIDTH - 260
+			X: WINDOW_WIDTH - WIDTH - 362
 			Y: 40
 			Width: 175
 			Height: 60

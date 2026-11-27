@@ -17,12 +17,22 @@ namespace OpenRA.Mods.CA.Traits
 		public readonly bool RemapConnections = true;
 		[PaletteReference(true)]
 		public readonly string Palette = "bibplayer";
+		[Desc("Optional extra foundation prefixes and their player-palette prefixes for shared buildings.")]
+		public readonly Dictionary<string, string> AdditionalPalettes = new();
+
+		public string PaletteFor(string image)
+		{
+			if (image == null) return null;
+			foreach (var pair in AdditionalPalettes)
+				if (image.StartsWith(pair.Key, System.StringComparison.Ordinal)) return pair.Value;
+			return image.StartsWith(ImagePrefix, System.StringComparison.Ordinal) ? Palette : null;
+		}
 
 		public override object Create(ActorInitializer init) => new WithBibRemap(this);
 
 		public IEnumerable<IActorPreview> RenderPreviewSprites(ActorPreviewInitializer init, string image, int facings, PaletteReference p)
 		{
-			foreach (var bib in init.Actor.TraitInfos<WithIdleOverlayInfo>().Where(b => b.Image?.StartsWith(ImagePrefix, System.StringComparison.Ordinal) == true && b.EnabledByDefault))
+			foreach (var bib in init.Actor.TraitInfos<WithIdleOverlayInfo>().Where(b => PaletteFor(b.Image) != null && (b is WithFactionBibOverlayInfo factionBib ? factionBib.MatchesPreview(init) : b.EnabledByDefault)))
 			{
 				var animation = new Animation(init.World, bib.Image) { IsDecoration = true };
 				animation.PlayRepeating("remap");
@@ -31,7 +41,7 @@ namespace OpenRA.Mods.CA.Traits
 				WVec Offset() => body.LocalToWorld(bib.Offset.Rotate(body.QuantizeOrientation(WRot.FromYaw(facing), facings)));
 				int ZOffset() { var offset = Offset(); return offset.Y + offset.Z + 2; }
 				yield return new SpriteActorPreview(animation, Offset, ZOffset,
-					init.WorldRenderer.Palette(Palette + init.Get<OwnerInit>().InternalName));
+					init.WorldRenderer.Palette(PaletteFor(bib.Image) + init.Get<OwnerInit>().InternalName));
 			}
 		}
 	}
@@ -40,7 +50,7 @@ namespace OpenRA.Mods.CA.Traits
 	{
 		public readonly WithBibRemapInfo Info;
 		public WithBibRemap(WithBibRemapInfo info) { Info = info; }
-		public bool Matches(string image) => image?.StartsWith(Info.ImagePrefix, System.StringComparison.Ordinal) == true;
+		public bool Matches(string image) => Info.PaletteFor(image) != null;
 
 		void INotifyCreated.Created(Actor self)
 		{
@@ -53,7 +63,7 @@ namespace OpenRA.Mods.CA.Traits
 				sprites.Add(new AnimationWithOffset(animation,
 					() => body.LocalToWorld(bib.Info.Offset.Rotate(body.QuantizeOrientation(self.Orientation))),
 					() => bib.IsTraitDisabled,
-					p => RenderUtils.ZOffsetFromCenter(self, p, 2)), Info.Palette, true);
+					p => RenderUtils.ZOffsetFromCenter(self, p, 2)), Info.PaletteFor(bib.Info.Image), true);
 			}
 		}
 	}

@@ -61,7 +61,9 @@ namespace OpenRA.Mods.CA.MapGeneration
 
 			if (options.MountainLines)
 			{
-				if (!PlaceResources(plan, options, slots, random))
+				// Broad glitter must follow obstacle planning; otherwise almost every
+				// candidate rock footprint is already occupied by scattered resources.
+				if (options.Resources != ResourceFieldLayout.Glitter && !PlaceResources(plan, options, slots, random))
 					return false;
 				if (options.Preset == MapGenerationPreset.Arabia)
 				{
@@ -71,6 +73,7 @@ namespace OpenRA.Mods.CA.MapGeneration
 				// Existing native Arabia contours are a no-op; custom raw mountain
 				// lines use the same fitter and must respect the reserved economy.
 				if (!RubberduckMountainTopology.Prepare(plan)) return false;
+				if (options.Resources == ResourceFieldLayout.Glitter && !PlaceResources(plan, options, slots, random)) return false;
 			}
 			else
 			{
@@ -85,6 +88,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 				if (!PlaceResources(plan, options, slots, random))
 					return false;
 			}
+			if (options.Preset == MapGenerationPreset.Arabia)
+				return PlainsOilClusters.Place(plan, options.TechBuildings, options.Resources == ResourceFieldLayout.Glitter, random);
 			PlaceTechBuildings(plan, options.TechBuildings, options.Players, random);
 			return true;
 		}
@@ -264,12 +269,15 @@ namespace OpenRA.Mods.CA.MapGeneration
 				// Water Basins shares this generator but retains its separate placement.
 				var closeStartingFields = options.Preset == MapGenerationPreset.Arabia;
 				var startingRadius = random.Next(5, 8);
-				if (!PlaceRotatedPatchGroup(plan, symmetrySlots, startingRadius,
-					closeStartingFields ? startingRadius + 11 : 18, closeStartingFields ? startingRadius + 13 : 24,
-					Math.PI, !options.FiniteResources, random, closeStartingFields) ||
-					!PlaceRotatedPatchGroup(plan, symmetrySlots, random.Next(4, 7), 28, 37,
-						Math.PI, !options.FiniteResources, random, expansionField: closeStartingFields))
+				if (!(closeStartingFields ? BalancedStartingEconomy.PlaceFields(plan, startingRadius, !options.FiniteResources, random) :
+					PlaceRotatedPatchGroup(plan, symmetrySlots, startingRadius, 18, 24, Math.PI, !options.FiniteResources, random)) ||
+					!(closeStartingFields ? BalancedStartingEconomy.PlaceFields(plan, random.Next(4, 7), !options.FiniteResources, random, expansion: true, resourceGap: 2) :
+						PlaceRotatedPatchGroup(plan, symmetrySlots, random.Next(4, 7), 28, 37, Math.PI, !options.FiniteResources, random)))
 					return Reject("patch placement");
+				if (closeStartingFields &&
+					(!BalancedStartingEconomy.PlaceFields(plan, 4, !options.FiniteResources, random, expansion: true, resourceGap: 2) ||
+					 !BalancedStartingEconomy.PlaceContestedFields(plan, !options.FiniteResources, random)))
+					return Reject("additional Plains patches");
 			}
 			return true;
 		}
@@ -425,6 +433,8 @@ namespace OpenRA.Mods.CA.MapGeneration
 		{
 			if (plan.Spawns.Count != options.Players)
 				return false;
+			try { BalancedStartingEconomy.ValidateFields(plan); }
+			catch (InvalidOperationException e) { return Reject(e.Message); }
 			var reachable = MountainValleysGenerator.FindReachable(plan, plan.Spawns[0]);
 			foreach (var spawn in plan.Spawns)
 				if (!reachable[spawn.X + spawn.Y * plan.Width])

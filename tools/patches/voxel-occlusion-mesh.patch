@@ -1,0 +1,56 @@
+--- a/engine/OpenRA.Game/Graphics/Model.cs
++++ b/engine/OpenRA.Game/Graphics/Model.cs
+@@ -42,12 +42,15 @@
+ 		public readonly int Start;
+ 		public readonly int Count;
+ 		public readonly Sheet Sheet;
++		/// <summary>Optional CPU mesh for pixel-accurate render-only occlusion.</summary>
++		public readonly ModelVertex[] Vertices;
+ 
+-		public ModelRenderData(int start, int count, Sheet sheet)
++		public ModelRenderData(int start, int count, Sheet sheet, ModelVertex[] vertices = null)
+ 		{
+ 			Start = start;
+ 			Count = count;
+ 			Sheet = sheet;
++			Vertices = vertices;
+ 		}
+ 	}
+ 
+--- a/engine/OpenRA.Mods.Cnc/Graphics/VoxelLoader.cs
++++ b/engine/OpenRA.Mods.Cnc/Graphics/VoxelLoader.cs
+@@ -189,7 +189,7 @@
+ 			var start = totalVertexCount;
+ 			var count = v.Length;
+ 			totalVertexCount += count;
+-			return new ModelRenderData(start, count, sheetBuilder.Current);
++			return new ModelRenderData(start, count, sheetBuilder.Current, v);
+ 		}
+ 
+ 		public void RefreshBuffer()
+--- a/engine/OpenRA.Mods.Cnc/Graphics/ModelRenderable.cs
++++ b/engine/OpenRA.Mods.Cnc/Graphics/ModelRenderable.cs
+@@ -130,6 +130,23 @@
+ 			return new FinalizedModelRenderable(wr, this);
+ 		}
+ 
++		/// <summary>Visible model meshes with the same screen transform as the voxel renderer, excluding shadows.</summary>
++		public IEnumerable<(ModelRenderData Data, float[] Transform)> OcclusionMeshes(WorldRenderer wr)
++		{
++			var cameraTransform = Util.MakeFloatMatrix(camera.AsMatrix());
++			var scaleTransform = Util.ScaleMatrix(scale, scale, scale);
++			foreach (var animation in models.Where(m => m.IsVisible))
++			{
++				var rotation = Util.MakeFloatMatrix(animation.RotationFunc().AsMatrix());
++				var transform = Util.MatrixMultiply(cameraTransform, Util.MatrixMultiply(scaleTransform, rotation));
++				var offset = wr.ScreenVectorComponents(animation.OffsetFunc());
++				transform = Util.MatrixMultiply(Util.TranslationMatrix(offset.X, offset.Y, offset.Z), transform);
++				for (uint section = 0; section < animation.Model.Sections; section++)
++					yield return (animation.Model.RenderData(section), Util.MatrixMultiply(transform,
++						animation.Model.TransformationMatrix(section, animation.FrameFunc())));
++			}
++		}
++
+ 		sealed class FinalizedModelRenderable : IFinalizedRenderable
+ 		{
+ 			readonly ModelRenderable model;
