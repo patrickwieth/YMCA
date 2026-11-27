@@ -26,7 +26,11 @@ namespace OpenRA.Mods.CA.UtilityCommands
 					(parent.StartsWith("Buildable", StringComparison.Ordinal) && n.Key == "Icon")) return "";
 				return n.Key + ":" + n.Value.Value + "[" + string.Join("", n.Value.Nodes.Select(c => Stable(c, n.Key)).OrderBy(s => s, StringComparer.Ordinal)) + "]";
 			}
-			string Hash(string s) => Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(s))).ToLowerInvariant();
+			string Hash(string s)
+			{
+				using var sha = SHA256.Create();
+				return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(s))).Replace("-", "").ToLowerInvariant();
+			}
 			var records = new List<object>();
 			foreach (var entry in mod.DefaultRules.Actors.OrderBy(a => a.Key))
 			{

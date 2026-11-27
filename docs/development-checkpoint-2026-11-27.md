@@ -42,7 +42,15 @@ engine and mod but failed when Modular.Tests tried copying the relocated lab fro
 its old path. Corrected the project input to
 `mods/ca/development-maps/modular-gdi-lab.oramap`; all 365 Modular.Tests pass in an
 isolated local output directory. This is a test-fixture path correction, not a map
-content change. The follow-up CI outcome must still be checked after pushing it.
+content change. Follow-up `21d6b522` passed the .NET jobs but exposed Mono's
+netstandard2.1 API limitations: the audit used .NET 6 hashing helpers and resource
+field gathering used .NET 6 PriorityQueue. Replaced hashing with SHA256.Create /
+ComputeHash and lowercase BitConverter hex; replaced the queue with a sorted set
+of the same total (distance,x,y) priority. Duplicate priorities describe the same
+cell and were already skipped by the visited set, so removing queued duplicates
+does not change traversal order. Building-audit output, the 30-case economy report,
+and all six 4P seed42 Plains planning/debug files remain byte-identical before/after.
+The isolated CA build passes. Check the next CI run before claiming Mono success.
 
 ## Still unfinished
 

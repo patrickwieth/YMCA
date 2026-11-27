@@ -122,18 +122,23 @@ namespace OpenRA.Mods.CA.MapGeneration
 		static PlanPoint[] GatherField(MapPlan plan, bool[] eligible, PlanPoint center, int budget, int radius)
 		{
 			var origin = MountainPlateauPlanner.Cell(center.X, center.Y);
-			var pending = new PriorityQueue<CPos, (int Distance, int X, int Y)>();
+			// The coordinate tie-break is total: duplicate queue entries refer to the
+			// same cell and would be discarded by seen. SortedSet retains that exact
+			// traversal order without requiring .NET 6 PriorityQueue on Mono.
+			var pending = new SortedSet<(int Distance, int X, int Y)>();
 			var seen = new HashSet<CPos>(); var cells = new List<PlanPoint>();
-			pending.Enqueue(origin, (0, origin.X, origin.Y));
+			pending.Add((0, origin.X, origin.Y));
 			while (pending.Count > 0 && cells.Count < budget)
 			{
-				var c = pending.Dequeue(); var p = MountainPlateauPlanner.Point(c);
+				var first = pending.Min;
+				pending.Remove(first);
+				var c = new CPos(first.X, first.Y); var p = MountainPlateauPlanner.Point(c);
 				if (!seen.Add(c) || !plan.Contains(p.U, p.V) || !eligible[p.U + p.V * plan.Width]) continue;
 				cells.Add(new PlanPoint(p.U, p.V));
 				foreach (var d in PlateauTopology.Directions)
 				{
 					var next = c + d; var distance = (next - origin).LengthSquared;
-					if (distance <= radius * radius && !seen.Contains(next)) pending.Enqueue(next, (distance, next.X, next.Y));
+					if (distance <= radius * radius && !seen.Contains(next)) pending.Add((distance, next.X, next.Y));
 				}
 			}
 			return cells.ToArray();
